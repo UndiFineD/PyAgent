@@ -1,14 +1,15 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\component\llm\llm_adapter\gemini_client.py
 import asyncio
 import os
-from typing import Dict, Any, List, Union, AsyncGenerator, Optional
+from typing import Any, AsyncGenerator, Dict, List, Optional, Union
+
 from google.genai.client import Client
-from google.genai.types import GenerateContentConfig, ContentDict
-from google.genai.types import ThinkingConfig
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage, BaseMessage
-from core.di.decorators import component
+from google.genai.types import ContentDict, GenerateContentConfig, ThinkingConfig
+from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
+
 from core.component.config_provider import ConfigProvider
 from core.constants.errors import ErrorMessage
+from core.di.decorators import component
 
 
 @component(name="gemini_client", primary=True)
@@ -174,7 +175,7 @@ class GeminiClient:
                     )
                 else:
                     # For other message types, try to get content attribute
-                    content = getattr(msg, 'content', str(msg))
+                    content = getattr(msg, "content", str(msg))
                     contents.append(ContentDict(role="user", parts=[{"text": content}]))
                 continue
 
@@ -207,9 +208,9 @@ class GeminiClient:
             # Handle other types, try to convert to string
             try:
                 # Check if it has role and content attributes
-                if hasattr(msg, 'role') and hasattr(msg, 'content'):
-                    role = getattr(msg, 'role')
-                    content = getattr(msg, 'content')
+                if hasattr(msg, "role") and hasattr(msg, "content"):
+                    role = getattr(msg, "role")
+                    content = getattr(msg, "content")
                     gemini_role = self._map_role_to_gemini(role)
                     contents.append(
                         ContentDict(role=gemini_role, parts=[{"text": str(content)}])

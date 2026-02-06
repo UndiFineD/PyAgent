@@ -6,15 +6,15 @@ MemCell data model definition based on Beanie ODM, supporting MongoDB sharded cl
 """
 
 from datetime import datetime
-from typing import List, Optional, Dict
 from enum import Enum
+from typing import Dict, List, Optional
 
-from beanie import Indexed
-from core.oxm.mongo.document_base import DocumentBase
-from pydantic import BaseModel, Field, ConfigDict
-from pymongo import IndexModel, ASCENDING, DESCENDING
-from beanie import PydanticObjectId
+from beanie import Indexed, PydanticObjectId
+from pydantic import BaseModel, ConfigDict, Field
+from pymongo import ASCENDING, DESCENDING, IndexModel
+
 from core.oxm.mongo.audit_base import AuditBase
+from core.oxm.mongo.document_base import DocumentBase
 
 
 class DataTypeEnum(str, Enum):
@@ -194,7 +194,7 @@ class MemCell(DocumentBase, AuditBase):
             # 7. Composite index for group-type queries - optimized for group data type filtering
             IndexModel(
                 [
-                    ('group_id', ASCENDING),
+                    ("group_id", ASCENDING),
                     ("type", ASCENDING),
                     ("timestamp", DESCENDING),
                 ],

@@ -1,17 +1,15 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\infra_layer\adapters\out\search\elasticsearch\memory\foresight.py
 # Import retained for type annotations and field definitions
 from elasticsearch.dsl import field as e_field
-from core.tenants.tenantize.oxm.es.tenant_aware_async_document import (
-    TenantAwareAliasDoc,
-)
-from core.tenants.tenantize.oxm.es.tenant_aware_async_document import (
-    TenantAwareAliasDoc,
-)
+
 from core.oxm.es.analyzer import (
     completion_analyzer,
-    lower_keyword_analyzer,
     edge_analyzer,
+    lower_keyword_analyzer,
     whitespace_lowercase_trim_stop_analyzer,
+)
+from core.tenants.tenantize.oxm.es.tenant_aware_async_document import (
+    TenantAwareAliasDoc,
 )
 
 

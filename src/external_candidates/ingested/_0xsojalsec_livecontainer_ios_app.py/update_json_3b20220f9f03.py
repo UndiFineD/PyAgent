@@ -1,19 +1,28 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-LiveContainer-ios-app\update_json.py
 import json
+import os
 import plistlib
 import re
-import requests
-import os
 from datetime import datetime
 
+import requests
+
+
 def prepare_description(text):
-    text = re.sub('<[^<]+?>', '', text) # Remove HTML tags
-    text = re.sub(r'#{1,6}\s?', '', text) # Remove markdown header tags
-    text = re.sub(r'\*{2}', '', text) # Remove all occurrences of two consecutive asterisks
-    text = re.sub(r'(?<=\r|\n)-', '•', text) # Only replace - with • if it is preceded by \r or \n
-    text = re.sub(r'`', '"', text) # Replace ` with "
-    text = re.sub(r'\r\n\r\n', '\r \n', text) # Replace \r\n\r\n with \r \n (avoid incorrect display of the description regarding paragraphs)
+    text = re.sub("<[^<]+?>", "", text)  # Remove HTML tags
+    text = re.sub(r"#{1,6}\s?", "", text)  # Remove markdown header tags
+    text = re.sub(
+        r"\*{2}", "", text
+    )  # Remove all occurrences of two consecutive asterisks
+    text = re.sub(
+        r"(?<=\r|\n)-", "•", text
+    )  # Only replace - with • if it is preceded by \r or \n
+    text = re.sub(r"`", '"', text)  # Replace ` with "
+    text = re.sub(
+        r"\r\n\r\n", "\r \n", text
+    )  # Replace \r\n\r\n with \r \n (avoid incorrect display of the description regarding paragraphs)
     return text
+
 
 def fetch_latest_release(repo_url):
     api_url = f"https://api.github.com/repos/{repo_url}/releases"
@@ -29,14 +38,16 @@ def fetch_latest_release(repo_url):
         print(f"Error fetching releases: {e}")
         raise
 
+
 def get_file_size(url):
     try:
         response = requests.head(url)
         response.raise_for_status()
-        return int(response.headers.get('Content-Length', 0))
+        return int(response.headers.get("Content-Length", 0))
     except requests.RequestException as e:
         print(f"Error getting file size: {e}")
         return 194586
+
 
 def update_json_file_release(json_file, latest_release):
     if isinstance(latest_release, list) and latest_release:
@@ -83,7 +94,7 @@ def update_json_file_release(json_file, latest_release):
         "date": version_date,
         "localizedDescription": description,
         "downloadURL": download_url,
-        "size": size
+        "size": size,
     }
 
     duplicate_entries = [item for item in app["versions"] if item["version"] == version]
@@ -92,13 +103,15 @@ def update_json_file_release(json_file, latest_release):
 
     app["versions"].insert(0, version_entry)
 
-    app.update({
-        "version": version,
-        "versionDate": version_date,
-        "versionDescription": description,
-        "downloadURL": download_url,
-        "size": size
-    })
+    app.update(
+        {
+            "version": version,
+            "versionDate": version_date,
+            "versionDescription": description,
+            "downloadURL": download_url,
+            "size": size,
+        }
+    )
 
     if "news" not in data:
         data["news"] = []
@@ -114,10 +127,12 @@ def update_json_file_release(json_file, latest_release):
         "notify": True,
         "tintColor": "#0784FC",
         "title": f"{full_version} - LiveContainer  {date_string}",
-        "url": f"https://github.com/LiveContainer/LiveContainer/releases/tag/{tag}"
+        "url": f"https://github.com/LiveContainer/LiveContainer/releases/tag/{tag}",
     }
 
-    news_entry_exists = any(item["identifier"] == news_identifier for item in data["news"])
+    news_entry_exists = any(
+        item["identifier"] == news_identifier for item in data["news"]
+    )
     if not news_entry_exists:
         data["news"].append(news_entry)
 
@@ -129,9 +144,12 @@ def update_json_file_release(json_file, latest_release):
         print(f"Error writing to JSON file: {e}")
         raise
 
+
 def update_json_file_nightly(json_file, nightly_release):
     if isinstance(nightly_release, list) and nightly_release:
-        nightly_release = next((item for item in nightly_release if item["tag_name"] == "nightly"), None)
+        nightly_release = next(
+            (item for item in nightly_release if item["tag_name"] == "nightly"), None
+        )
     else:
         print("Error getting nightly release")
         return
@@ -146,7 +164,7 @@ def update_json_file_nightly(json_file, nightly_release):
 
     app = data["apps"][0]
 
-    with open("Resources/Info.plist", 'rb') as infile:
+    with open("Resources/Info.plist", "rb") as infile:
         info_plist = plistlib.load(infile)
     full_version = info_plist["CFBundleVersion"]
     tag = nightly_release["tag_name"]
@@ -187,21 +205,23 @@ This is a nightly release [created automatically with GitHub Actions workflow]({
         "downloadURL": download_url,
         "size": size,
         "commit": commit_sha,
-        "headline": commit_msg
+        "headline": commit_msg,
     }
 
     app["versions"].clear()
     app["versions"].append(version_entry)
 
-    app.update({
-        "version": version,
-        "versionDate": version_date,
-        "versionDescription": description,
-        "downloadURL": download_url,
-        "size": size,
-        "commit": commit_sha,
-        "headline": commit_msg
-    })
+    app.update(
+        {
+            "version": version,
+            "versionDate": version_date,
+            "versionDescription": description,
+            "downloadURL": download_url,
+            "size": size,
+            "commit": commit_sha,
+            "headline": commit_msg,
+        }
+    )
 
     data["news"] = []
 
@@ -229,6 +249,7 @@ def main():
     except Exception as e:
         print(f"An error occurred: {e}")
         raise
+
 
 if __name__ == "__main__":
     main()

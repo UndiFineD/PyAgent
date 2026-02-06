@@ -7,18 +7,18 @@ Default language is controlled by MEMORY_LANGUAGE env var (default: 'en').
 
 Example:
     from memory_layer.prompts import get_prompt_by
-    
+
     prompt = get_prompt_by("EPISODE_GENERATION_PROMPT")  # default language
     prompt = get_prompt_by("EPISODE_GENERATION_PROMPT", language="zh")  # specific language
 """
 
-from typing import Any, Optional, Callable
+from typing import Any, Callable, Optional
 
 from common_utils.language_utils import (
+    DEFAULT_LANGUAGE,
+    SUPPORTED_LANGUAGES,
     get_prompt_language,
     is_supported_language,
-    SUPPORTED_LANGUAGES,
-    DEFAULT_LANGUAGE,
 )
 
 # ============================================================================
@@ -111,33 +111,38 @@ class PromptManager:
         """Load module dynamically with caching."""
         if module_path not in self._module_cache:
             import importlib
+
             self._module_cache[module_path] = importlib.import_module(module_path)
         return self._module_cache[module_path]
 
     def get_prompt(self, prompt_name: str, language: Optional[str] = None) -> Any:
         """Get prompt by name and language.
-        
+
         Args:
             prompt_name: Prompt name (e.g. "EPISODE_GENERATION_PROMPT")
             language: Language code ("en" or "zh"). Defaults to MEMORY_LANGUAGE env var.
-            
+
         Returns:
             Prompt string or function.
-            
+
         Raises:
             ValueError: If prompt name or language is invalid.
         """
         if language is None:
             language = get_prompt_language()
         language = language.lower()
-        
+
         if prompt_name not in _PROMPT_REGISTRY:
-            raise ValueError(f"Unknown prompt: {prompt_name}. Available: {list(_PROMPT_REGISTRY.keys())}")
-        
+            raise ValueError(
+                f"Unknown prompt: {prompt_name}. Available: {list(_PROMPT_REGISTRY.keys())}"
+            )
+
         prompt_info = _PROMPT_REGISTRY[prompt_name]
         if language not in prompt_info:
-            raise ValueError(f"Language '{language}' not supported for '{prompt_name}'. Available: {list(prompt_info.keys())}")
-        
+            raise ValueError(
+                f"Language '{language}' not supported for '{prompt_name}'. Available: {list(prompt_info.keys())}"
+            )
+
         module_path, _ = prompt_info[language]
         module = self._load_module(module_path)
         return getattr(module, prompt_name)
@@ -159,14 +164,14 @@ _prompt_manager = PromptManager()
 
 def get_prompt_by(prompt_name: str, language: Optional[str] = None) -> Any:
     """Get prompt by name and language (convenience function).
-    
+
     Args:
         prompt_name: Prompt name (e.g. "EPISODE_GENERATION_PROMPT")
         language: Language code ("en" or "zh"). Defaults to MEMORY_LANGUAGE env var.
-        
+
     Returns:
         Prompt string or function.
-        
+
     Raises:
         ValueError: If prompt name or language is invalid.
     """

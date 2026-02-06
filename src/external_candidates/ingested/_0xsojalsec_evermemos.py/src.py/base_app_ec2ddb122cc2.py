@@ -6,17 +6,17 @@ Contains business-agnostic FastAPI base configurations such as CORS, middleware,
 """
 
 import os
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from core.observation.logger import get_logger
+from core.component.database_connection_provider import DatabaseConnectionProvider
+from core.di.utils import get_bean_by_type
+from core.lifespan.lifespan_factory import LifespanFactory
 from core.middleware.database_session_middleware import DatabaseSessionMiddleware
 from core.middleware.global_exception_handler import global_exception_handler
 from core.middleware.profile_middleware import ProfileMiddleware
-from core.di.utils import get_bean_by_type
-from core.component.database_connection_provider import DatabaseConnectionProvider
-
-from core.lifespan.lifespan_factory import LifespanFactory
+from core.observation.logger import get_logger
 
 # Recommended usage: obtain logger once at the module top, then use directly (high performance)
 logger = get_logger(__name__)
@@ -51,8 +51,8 @@ def create_base_app(
 
     # Control docs display based on environment variable
     # Only enable docs in development environment (ENV=dev)
-    env = os.environ.get('ENV', 'prod').upper()
-    enable_docs = env == 'DEV'
+    env = os.environ.get("ENV", "prod").upper()
+    enable_docs = env == "DEV"
 
     # Create FastAPI application
     app = FastAPI(

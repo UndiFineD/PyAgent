@@ -1,8 +1,9 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\context\context.py
-from contextvars import ContextVar, Token
-from typing import Optional, Dict, Any, TypedDict, TYPE_CHECKING
-from sqlmodel.ext.asyncio.session import AsyncSession
 import logging
+from contextvars import ContextVar, Token
+from typing import TYPE_CHECKING, Any, Dict, Optional, TypedDict
+
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 if TYPE_CHECKING:
     from fastapi import Request

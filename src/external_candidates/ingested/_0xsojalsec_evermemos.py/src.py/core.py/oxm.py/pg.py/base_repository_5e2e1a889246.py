@@ -1,11 +1,12 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\oxm\pg\base_repository.py
 from abc import ABC, abstractmethod
-from typing import List, Optional, TypeVar, Generic, Type
-from core.oxm.pg.audit_base import get_auditable_model
+from typing import Generic, List, Optional, Type, TypeVar
+
 from core.di.decorators import repository
+from core.oxm.pg.audit_base import get_auditable_model
 
 # Define generic type
-T = TypeVar('T', bound=get_auditable_model())
+T = TypeVar("T", bound=get_auditable_model())
 
 
 class BaseSoftDeleteRepository(Generic[T], ABC):

@@ -3,10 +3,8 @@
 
 import random
 
-from inspect_ai.solver import Solver, solver, TaskState, Generate
-
 from fle.env import EntityStatus
-
+from inspect_ai.solver import Generate, Solver, TaskState, solver
 
 # Human-readable status descriptions
 STATUS_DESCRIPTIONS = {

@@ -7,14 +7,15 @@ All Milvus collection converters should inherit from this base class to obtain a
 """
 
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, Type, Any, get_args, get_origin
-from core.oxm.milvus.milvus_collection_base import MilvusCollectionBase
+from typing import Any, Generic, Type, TypeVar, get_args, get_origin
+
 from core.observation.logger import get_logger
+from core.oxm.milvus.milvus_collection_base import MilvusCollectionBase
 
 logger = get_logger(__name__)
 
 # Generic type variable - only restricts Milvus collection type
-MilvusCollectionType = TypeVar('MilvusCollectionType', bound=MilvusCollectionBase)
+MilvusCollectionType = TypeVar("MilvusCollectionType", bound=MilvusCollectionBase)
 
 
 class BaseMilvusConverter(ABC, Generic[MilvusCollectionType]):
@@ -40,7 +41,7 @@ class BaseMilvusConverter(ABC, Generic[MilvusCollectionType]):
             Type[MilvusCollectionType]: Milvus collection model class
         """
         # Get the generic base class of the current class
-        if hasattr(cls, '__orig_bases__'):
+        if hasattr(cls, "__orig_bases__"):
             for base in cls.__orig_bases__:
                 if get_origin(base) is BaseMilvusConverter:
                     args = get_args(base)

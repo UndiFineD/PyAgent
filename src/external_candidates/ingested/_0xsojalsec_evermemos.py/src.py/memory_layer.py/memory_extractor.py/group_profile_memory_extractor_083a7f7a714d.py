@@ -1,22 +1,26 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\memory_layer\memory_extractor\group_profile_memory_extractor.py
 """Group Profile Memory Extraction for EverMemOS."""
 
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
-from datetime import datetime
-from enum import Enum
 import hashlib
 import os
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
-from memory_layer.llm.llm_provider import LLMProvider
-from memory_layer.memory_extractor.base_memory_extractor import MemoryExtractor, MemoryExtractRequest
-from api_specs.memory_types import BaseMemory, MemoryType, MemCell
+from api_specs.memory_types import BaseMemory, MemCell, MemoryType
 from common_utils.datetime_utils import (
-    get_now_with_timezone,
-    from_timestamp,
     from_iso_format,
+    from_timestamp,
+    get_now_with_timezone,
     timezone,
 )
+from memory_layer.llm.llm_provider import LLMProvider
+from memory_layer.memory_extractor.base_memory_extractor import (
+    MemoryExtractor,
+    MemoryExtractRequest,
+)
+
 from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
@@ -123,7 +127,7 @@ class TopicInfo:
     ):
         """Create TopicInfo with generated or provided ID."""
         if not id:
-            topic_id = hashlib.md5(name.encode('utf-8')).hexdigest()[:8]
+            topic_id = hashlib.md5(name.encode("utf-8")).hexdigest()[:8]
             id = f"topic_{topic_id}"
         return cls(
             id=id,
@@ -233,7 +237,9 @@ class GroupProfileMemoryExtractor(MemoryExtractor):
     def data_processor(self):
         """Lazy load data processor."""
         if self._data_processor is None:
-            from memory_layer.memory_extractor.group_profile.data_processor import GroupProfileDataProcessor
+            from memory_layer.memory_extractor.group_profile.data_processor import (
+                GroupProfileDataProcessor,
+            )
 
             self._data_processor = GroupProfileDataProcessor(self.conversation_source)
         return self._data_processor
@@ -242,7 +248,9 @@ class GroupProfileMemoryExtractor(MemoryExtractor):
     def topic_processor(self):
         """Lazy load topic processor."""
         if self._topic_processor is None:
-            from memory_layer.memory_extractor.group_profile.topic_processor import TopicProcessor
+            from memory_layer.memory_extractor.group_profile.topic_processor import (
+                TopicProcessor,
+            )
 
             self._topic_processor = TopicProcessor(self.data_processor)
         return self._topic_processor
@@ -251,7 +259,9 @@ class GroupProfileMemoryExtractor(MemoryExtractor):
     def role_processor(self):
         """Lazy load role processor."""
         if self._role_processor is None:
-            from memory_layer.memory_extractor.group_profile.role_processor import RoleProcessor
+            from memory_layer.memory_extractor.group_profile.role_processor import (
+                RoleProcessor,
+            )
 
             self._role_processor = RoleProcessor(self.data_processor)
         return self._role_processor
@@ -260,7 +270,9 @@ class GroupProfileMemoryExtractor(MemoryExtractor):
     def llm_handler(self):
         """Lazy load LLM handler."""
         if self._llm_handler is None:
-            from memory_layer.memory_extractor.group_profile.llm_handler import GroupProfileLLMHandler
+            from memory_layer.memory_extractor.group_profile.llm_handler import (
+                GroupProfileLLMHandler,
+            )
 
             self._llm_handler = GroupProfileLLMHandler(
                 self.llm_provider, self.max_topics
@@ -283,9 +295,9 @@ class GroupProfileMemoryExtractor(MemoryExtractor):
             True if group should be filtered out (not processed), False otherwise
         """
         # Control filtering logic based on environment variable ENV
-        env_value = os.getenv('IGNORE_GROUP_NAME_FILTER', '').lower()
+        env_value = os.getenv("IGNORE_GROUP_NAME_FILTER", "").lower()
 
-        if env_value == 'true':
+        if env_value == "true":
             # If ENV variable is true, do not filter any groups
             return False
         else:
@@ -361,7 +373,7 @@ class GroupProfileMemoryExtractor(MemoryExtractor):
             valid_memcell_ids = set(
                 str(mc.event_id)
                 for mc in memcell_list
-                if hasattr(mc, 'event_id') and mc.event_id
+                if hasattr(mc, "event_id") and mc.event_id
             )
             logger.debug(
                 f"[extract_memory] Valid memcell IDs count: {len(valid_memcell_ids)}"
@@ -414,7 +426,7 @@ class GroupProfileMemoryExtractor(MemoryExtractor):
                 user_id="",
                 timestamp=get_now_with_timezone(),
                 ori_event_id_list=[
-                    str(mc.event_id) for mc in memcell_list if hasattr(mc, 'event_id')
+                    str(mc.event_id) for mc in memcell_list if hasattr(mc, "event_id")
                 ],
                 group_id=group_id,
                 group_name=group_name,
@@ -439,14 +451,14 @@ class GroupProfileMemoryExtractor(MemoryExtractor):
 
 __all__ = [
     # Main class
-    'GroupProfileMemoryExtractor',
-    'GroupProfileMemoryExtractRequest',
+    "GroupProfileMemoryExtractor",
+    "GroupProfileMemoryExtractRequest",
     # Data models
-    'GroupProfileMemory',
-    'TopicInfo',
+    "GroupProfileMemory",
+    "TopicInfo",
     # Enums
-    'GroupRole',
-    'TopicStatus',
+    "GroupRole",
+    "TopicStatus",
     # Utility functions
-    'convert_to_datetime',
+    "convert_to_datetime",
 ]

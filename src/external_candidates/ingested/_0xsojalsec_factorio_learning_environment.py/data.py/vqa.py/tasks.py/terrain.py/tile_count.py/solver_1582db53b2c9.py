@@ -3,7 +3,7 @@ import copy
 import random
 import re
 
-from inspect_ai.solver import Solver, solver, TaskState, Generate
+from inspect_ai.solver import Generate, Solver, TaskState, solver
 
 
 @solver

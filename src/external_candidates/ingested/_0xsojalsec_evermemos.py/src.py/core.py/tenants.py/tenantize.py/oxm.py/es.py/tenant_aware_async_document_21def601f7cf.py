@@ -6,22 +6,23 @@ This module implements tenant awareness by inheriting from AliasSupportDoc and o
 Core idea: Dynamically return the correct connection and index names based on tenant context.
 """
 
-from typing import Optional, Any, Dict, Type
 from fnmatch import fnmatch
+from typing import Any, Dict, Optional, Type
+
 from elasticsearch import AsyncElasticsearch
 from elasticsearch.dsl.async_connections import connections as async_connections
 
 from core.observation.logger import get_logger
+from core.oxm.es.doc_base import AliasSupportDoc
 from core.tenants.tenant_contextvar import get_current_tenant
 from core.tenants.tenant_models import TenantPatchKey
 from core.tenants.tenantize.oxm.es.config_utils import (
-    get_tenant_es_config,
     get_es_connection_cache_key,
-    load_es_config_from_env,
     get_tenant_aware_index_name,
+    get_tenant_es_config,
+    load_es_config_from_env,
 )
 from core.tenants.tenantize.tenant_cache_utils import get_or_compute_tenant_cache
-from core.oxm.es.doc_base import AliasSupportDoc
 
 logger = get_logger(__name__)
 
@@ -252,7 +253,7 @@ class TenantAwareAsyncDocument(AliasSupportDoc):
         Returns:
             str: Original index name
         """
-        if hasattr(cls, '_index') and hasattr(cls._index, '_name'):
+        if hasattr(cls, "_index") and hasattr(cls._index, "_name"):
             return cls._index._name
         raise ValueError(
             f"Document class {cls.__name__} does not have correct index configuration"
@@ -329,8 +330,8 @@ class TenantAwareAsyncDocument(AliasSupportDoc):
             return index
 
         # Try to get from meta
-        if hasattr(self, 'meta') and hasattr(self.meta, 'index'):
-            meta_index = getattr(self.meta, 'index', None)
+        if hasattr(self, "meta") and hasattr(self.meta, "index"):
+            meta_index = getattr(self.meta, "index", None)
             if meta_index:
                 return meta_index
 
@@ -386,6 +387,7 @@ def TenantAwareAliasDoc(
         ...     content = field.Text()
     """
     from elasticsearch.dsl import MetaField
+
     from core.oxm.es.es_utils import get_index_ns
 
     # If there is a namespace, append it to the document name

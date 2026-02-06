@@ -7,8 +7,8 @@ This module defines data classes related to tenants for unified management of te
 
 import json
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any
 from enum import Enum
+from typing import Any, Dict, Optional
 
 
 class TenantPatchKey(str, Enum):
@@ -75,10 +75,10 @@ class TenantDetail:
         Returns:
             Dict[str, Any]: Dictionary containing tenant_info and storage_info
         """
-        return {'tenant_info': self.tenant_info, 'storage_info': self.storage_info}
+        return {"tenant_info": self.tenant_info, "storage_info": self.storage_info}
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'TenantDetail':
+    def from_dict(cls, data: Dict[str, Any]) -> "TenantDetail":
         """
         Create TenantDetail instance from dictionary
 
@@ -89,7 +89,7 @@ class TenantDetail:
             TenantDetail: Newly created instance
         """
         return cls(
-            tenant_info=data.get('tenant_info'), storage_info=data.get('storage_info')
+            tenant_info=data.get("tenant_info"), storage_info=data.get("storage_info")
         )
 
 
@@ -290,9 +290,9 @@ class TenantInfo:
             Dict[str, Any]: Dictionary containing tenant_id, tenant_detail, and origin_tenant_data
         """
         return {
-            'tenant_id': self.tenant_id,
-            'tenant_detail': self.tenant_detail.to_dict(),
-            'origin_tenant_data': self.origin_tenant_data,
+            "tenant_id": self.tenant_id,
+            "tenant_detail": self.tenant_detail.to_dict(),
+            "origin_tenant_data": self.origin_tenant_data,
         }
 
     def to_json(self) -> str:
@@ -317,7 +317,7 @@ class TenantInfo:
         return json.dumps(self.to_dict(), ensure_ascii=False)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'TenantInfo':
+    def from_dict(cls, data: Dict[str, Any]) -> "TenantInfo":
         """
         Create TenantInfo instance from dictionary
 
@@ -327,16 +327,16 @@ class TenantInfo:
         Returns:
             TenantInfo: Newly created instance (tenant_info_patch initialized as empty dictionary)
         """
-        tenant_detail_data = data.get('tenant_detail', {})
+        tenant_detail_data = data.get("tenant_detail", {})
         return cls(
-            tenant_id=data['tenant_id'],
+            tenant_id=data["tenant_id"],
             tenant_detail=TenantDetail.from_dict(tenant_detail_data),
-            origin_tenant_data=data.get('origin_tenant_data', {}),
+            origin_tenant_data=data.get("origin_tenant_data", {}),
             # tenant_info_patch is not restored from serialized data, initialized as empty
         )
 
     @classmethod
-    def from_json(cls, json_str: str) -> 'TenantInfo':
+    def from_json(cls, json_str: str) -> "TenantInfo":
         """
         Deserialize TenantInfo instance from JSON string
 

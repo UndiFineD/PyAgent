@@ -44,7 +44,7 @@ def encode_base62(num: int) -> str:
         num //= BASE
 
     # Reverse the result since we built it from least significant to most significant
-    return ''.join(reversed(result))
+    return "".join(reversed(result))
 
 
 def decode_base62(encoded: str) -> int:

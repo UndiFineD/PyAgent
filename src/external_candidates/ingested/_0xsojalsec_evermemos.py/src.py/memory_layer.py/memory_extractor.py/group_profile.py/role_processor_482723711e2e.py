@@ -1,8 +1,8 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\memory_layer\memory_extractor\group_profile\role_processor.py
 """Role management utilities for group profile extraction."""
 
-from typing import Dict, List, Set, Optional
 from enum import Enum
+from typing import Dict, List, Optional, Set
 
 from core.observation.logger import get_logger
 
@@ -42,7 +42,9 @@ class RoleProcessor:
         Returns:
             Processed roles, formatted as role -> [{"user_id": "xxx", "user_name": "xxx", "confidence": "strong|weak", "evidences": [...]}]
         """
-        from memory_layer.memory_extractor.group_profile_memory_extractor import GroupRole
+        from memory_layer.memory_extractor.group_profile_memory_extractor import (
+            GroupRole,
+        )
 
         # Define valid roles list (based on GroupRole enum)
         VALID_ROLES = {role.value for role in GroupRole}

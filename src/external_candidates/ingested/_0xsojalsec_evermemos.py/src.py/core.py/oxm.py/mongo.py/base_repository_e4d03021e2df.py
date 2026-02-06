@@ -8,16 +8,18 @@ All MongoDB repositories should inherit from this base class to obtain unified t
 
 from abc import ABC
 from contextlib import asynccontextmanager
-from typing import Optional, TypeVar, Generic, Type, Union, List
+from typing import Generic, List, Optional, Type, TypeVar, Union
+
 from beanie import PydanticObjectId
 from pymongo.asynchronous.client_session import AsyncClientSession
+
 from core.observation.logger import get_logger
 from core.oxm.mongo.document_base import DocumentBase
 
 logger = get_logger(__name__)
 
 # Generic type variable
-T = TypeVar('T', bound=DocumentBase)
+T = TypeVar("T", bound=DocumentBase)
 
 
 class BaseRepository(ABC, Generic[T]):
@@ -118,7 +120,7 @@ class BaseRepository(ABC, Generic[T]):
             logger.info(
                 "✅ Document created successfully [%s]: %s",
                 self.model_name,
-                getattr(document, 'id', 'unknown'),
+                getattr(document, "id", "unknown"),
             )
             return document
         except Exception as e:
@@ -161,7 +163,7 @@ class BaseRepository(ABC, Generic[T]):
             logger.info(
                 "✅ Document updated successfully [%s]: %s",
                 self.model_name,
-                getattr(document, 'id', 'unknown'),
+                getattr(document, "id", "unknown"),
             )
             return document
         except Exception as e:
@@ -216,7 +218,7 @@ class BaseRepository(ABC, Generic[T]):
             logger.info(
                 "✅ Document deleted successfully [%s]: %s",
                 self.model_name,
-                getattr(document, 'id', 'unknown'),
+                getattr(document, "id", "unknown"),
             )
             return True
         except Exception as e:

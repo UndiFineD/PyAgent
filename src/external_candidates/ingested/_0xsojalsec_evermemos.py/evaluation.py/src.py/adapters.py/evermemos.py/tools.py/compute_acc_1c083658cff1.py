@@ -1,7 +1,8 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\evaluation\src\adapters\evermemos\tools\compute_acc.py
-import json
 import argparse
+import json
 from collections import defaultdict
+
 import numpy as np
 
 
@@ -9,7 +10,7 @@ def compute_accuracy_from_judgments(file_path):
     """
     Computes accuracies, mean, and standard deviation from a JSON file with LLM judgments.
     """
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
     num_judgments = 0
@@ -17,10 +18,10 @@ def compute_accuracy_from_judgments(file_path):
     for user_id, results in data.items():
         if results:
             first_item = results[0]
-            if 'llm_judgments' in first_item and isinstance(
-                first_item['llm_judgments'], dict
+            if "llm_judgments" in first_item and isinstance(
+                first_item["llm_judgments"], dict
             ):
-                num_judgments = len(first_item['llm_judgments'])
+                num_judgments = len(first_item["llm_judgments"])
             break
 
     if num_judgments == 0:

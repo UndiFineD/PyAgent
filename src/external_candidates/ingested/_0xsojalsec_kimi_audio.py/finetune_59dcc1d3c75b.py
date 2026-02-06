@@ -2,24 +2,23 @@
 # This code is based on the revised code from fastchat based on tatsu-lab/stanford_alpaca and QwenLM/Qwen.
 
 
-from dataclasses import dataclass, field
 import json
 import logging
 import os
+from dataclasses import dataclass, field
 from typing import Dict, Optional
 
 import torch
+import transformers
+from accelerate.utils import DistributedType
 from deepspeed import zero
 from deepspeed.runtime.zero.partition_parameters import ZeroParamStatus
-import transformers
-from transformers import Trainer, AutoTokenizer
+from finetune_codes.datasets import LazySupervisedDataset
+from finetune_codes.model import KimiAudioModel
+from huggingface_hub import snapshot_download
+from transformers import AutoTokenizer, Trainer
 from transformers.integrations import deepspeed
 from transformers.trainer_pt_utils import LabelSmoother
-from accelerate.utils import DistributedType
-from huggingface_hub import snapshot_download
-
-from finetune_codes.model import KimiAudioModel
-from finetune_codes.datasets import LazySupervisedDataset
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -33,6 +32,7 @@ class ModelArguments:
     model_path: str = field(
         default=None, metadata={"help": "Path to the pretrained model."}
     )
+
 
 @dataclass
 class DataArguments:
@@ -58,7 +58,6 @@ class TrainingArguments(transformers.TrainingArguments):
     )
 
 
-
 def maybe_zero_3(param):
     if hasattr(param, "ds_id"):
         assert param.ds_status == ZeroParamStatus.NOT_AVAILABLE
@@ -70,6 +69,7 @@ def maybe_zero_3(param):
 
 
 local_rank = None
+
 
 def rank0_print(*args):
     if local_rank == 0:
@@ -87,10 +87,12 @@ def safe_save_model_for_hf_trainer(trainer: transformers.Trainer, output_dir: st
         trainer._save(output_dir, state_dict=state_dict)
 
 
-
-
 def make_supervised_data_module(
-    whisper_model, text_tokenizer, data_args, max_len, kimia_token_offset,
+    whisper_model,
+    text_tokenizer,
+    data_args,
+    max_len,
+    kimia_token_offset,
 ) -> Dict:
     """Make dataset and collator for supervised fine-tuning."""
     dataset_cls = LazySupervisedDataset
@@ -101,18 +103,30 @@ def make_supervised_data_module(
         all_data = [json.loads(line) for line in lines]
 
     if data_args.eval_ratio > 0:
-        eval_data = all_data[:int(len(all_data) * data_args.eval_ratio)]
-        train_data = all_data[int(len(all_data) * data_args.eval_ratio):]
+        eval_data = all_data[: int(len(all_data) * data_args.eval_ratio)]
+        train_data = all_data[int(len(all_data) * data_args.eval_ratio) :]
         assert len(eval_data) > 0, "No evaluation data found"
         assert len(train_data) > 0, "No training data found"
     else:
         eval_data = None
         train_data = all_data
 
-    train_dataset = dataset_cls(train_data, whisper_model=whisper_model, text_tokenizer=text_tokenizer, max_len=max_len, kimia_token_offset=kimia_token_offset)
+    train_dataset = dataset_cls(
+        train_data,
+        whisper_model=whisper_model,
+        text_tokenizer=text_tokenizer,
+        max_len=max_len,
+        kimia_token_offset=kimia_token_offset,
+    )
 
     if eval_data:
-        eval_dataset = dataset_cls(eval_data, whisper_model=whisper_model, text_tokenizer=text_tokenizer, max_len=max_len, kimia_token_offset=kimia_token_offset)
+        eval_dataset = dataset_cls(
+            eval_data,
+            whisper_model=whisper_model,
+            text_tokenizer=text_tokenizer,
+            max_len=max_len,
+            kimia_token_offset=kimia_token_offset,
+        )
     else:
         eval_dataset = None
 
@@ -124,14 +138,27 @@ def compute_loss(outputs, labels, num_items_in_batch=None):
     audio_logits, text_logits = outputs.logits
 
     audio_labels, text_labels, audio_loss_mask, text_loss_mask = labels
-    assert audio_labels.shape[0] == 1, print("we only support micro batch size 1 for demo purpose")
+    assert audio_labels.shape[0] == 1, print(
+        "we only support micro batch size 1 for demo purpose"
+    )
 
-    audio_loss = torch.nn.functional.cross_entropy(audio_logits.view(-1, audio_logits.shape[-1]), audio_labels.view(-1), reduction="none")
-    text_loss = torch.nn.functional.cross_entropy(text_logits.view(-1, text_logits.shape[-1]), text_labels.view(-1), reduction="none")
+    audio_loss = torch.nn.functional.cross_entropy(
+        audio_logits.view(-1, audio_logits.shape[-1]),
+        audio_labels.view(-1),
+        reduction="none",
+    )
+    text_loss = torch.nn.functional.cross_entropy(
+        text_logits.view(-1, text_logits.shape[-1]),
+        text_labels.view(-1),
+        reduction="none",
+    )
 
-
-    audio_loss = (audio_loss * audio_loss_mask.view(-1)).sum() / (audio_loss_mask.view(-1).sum() + 1e-4)
-    text_loss = (text_loss * text_loss_mask.view(-1)).sum() / (text_loss_mask.view(-1).sum() + 1e-4)
+    audio_loss = (audio_loss * audio_loss_mask.view(-1)).sum() / (
+        audio_loss_mask.view(-1).sum() + 1e-4
+    )
+    text_loss = (text_loss * text_loss_mask.view(-1)).sum() / (
+        text_loss_mask.view(-1).sum() + 1e-4
+    )
     loss = audio_loss + text_loss
     return loss
 
@@ -149,13 +176,16 @@ def train():
     ) = parser.parse_args_into_dataclasses()
 
     # This serves for single-gpu qlora.
-    if getattr(training_args, 'deepspeed', None) and int(os.environ.get("WORLD_SIZE", 1))==1:
+    if (
+        getattr(training_args, "deepspeed", None)
+        and int(os.environ.get("WORLD_SIZE", 1)) == 1
+    ):
         training_args.distributed_state.distributed_type = DistributedType.DEEPSPEED
 
     local_rank = training_args.local_rank
 
     model_load_kwargs = {
-        'low_cpu_mem_usage': not deepspeed.is_deepspeed_zero3_enabled(),
+        "low_cpu_mem_usage": not deepspeed.is_deepspeed_zero3_enabled(),
     }
 
     logger.info(f"Loading kimi-audio main model")
@@ -171,32 +201,35 @@ def train():
     # check if model_path exists
     if not os.path.exists(model_args.model_path):
         raise ValueError(f"Model path {model_args.model_path} does not exist")
-    model = KimiAudioModel.from_pretrained(model_args.model_path, 
-                                           device_map=None,
-                                           **model_load_kwargs)
-
-    text_tokenizer = AutoTokenizer.from_pretrained(
-        cache_path, trust_remote_code=True
+    model = KimiAudioModel.from_pretrained(
+        model_args.model_path, device_map=None, **model_load_kwargs
     )
+
+    text_tokenizer = AutoTokenizer.from_pretrained(cache_path, trust_remote_code=True)
 
     # Load data
     data_module = make_supervised_data_module(
-        whisper_model=model.whisper_model, text_tokenizer=text_tokenizer,
-        data_args=data_args, max_len=training_args.model_max_length, kimia_token_offset=model.config.kimia_token_offset
+        whisper_model=model.whisper_model,
+        text_tokenizer=text_tokenizer,
+        data_args=data_args,
+        max_len=training_args.model_max_length,
+        kimia_token_offset=model.config.kimia_token_offset,
     )
 
     # Start trainner
     trainer = Trainer(
-        model=model, args=training_args, 
+        model=model,
+        args=training_args,
         compute_loss_func=compute_loss,
         data_collator=data_module["train_dataset"].collate_fn,
-        **data_module
+        **data_module,
     )
 
     trainer.train()
     trainer.save_state()
 
     safe_save_model_for_hf_trainer(trainer=trainer, output_dir=training_args.output_dir)
+
 
 if __name__ == "__main__":
     train()

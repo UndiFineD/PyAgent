@@ -1,13 +1,14 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-malwoverview\setup.py
 #!/usr/bin/env python3
 import os
-from setuptools import setup, find_packages
-from pathlib import Path
 import platform
+from pathlib import Path
+
+from setuptools import find_packages, setup
 
 USER_HOME_DIR = str(Path.home()) + os.sep
 
-with open("README.md", encoding='utf8') as readme:
+with open("README.md", encoding="utf8") as readme:
     long_description = readme.read()
 
 setup(
@@ -22,9 +23,9 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages(),
     classifiers=[
-    'Operating System :: OS Independent',
-    'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
-    'Programming Language :: Python :: 3',
+        "Operating System :: OS Independent",
+        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+        "Programming Language :: Python :: 3",
     ],
     install_requires=[
         "pefile",
@@ -37,13 +38,13 @@ setup(
         "polyswarm-api",
         "pathlib",
         "configparser",
-		"python-magic-bin; platform_system == 'Windows'"
+        "python-magic-bin; platform_system == 'Windows'",
     ],
-    entry_points = {
+    entry_points={
         "console_scripts": [
             "malwoverview = malwoverview.malwoverview:main",
         ]
     },
-    package_data={'': ['README.md, LICENSE, .malwapi.conf']},
-    data_files=[(USER_HOME_DIR, ['.malwapi.conf'])],
+    package_data={"": ["README.md, LICENSE, .malwapi.conf"]},
+    data_files=[(USER_HOME_DIR, [".malwapi.conf"])],
 )

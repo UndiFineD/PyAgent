@@ -1,20 +1,20 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-HExHTTP\hexhttp.py
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import sys
 import argparse
 import re
+import sys
 
-from modules.utils import *
-from modules.logging_config import valid_log_level, configure_logging
-from modules.check_localhost import check_localhost
-from modules.server_error import get_server_error
-from modules.methods import check_methods
-from modules.CPDoS import check_CPDoS
-from modules.technologies import technology
 from modules.cache_poisoning_files import check_cache_files
+from modules.check_localhost import check_localhost
 from modules.cookie_reflection import check_cookie_reflection
+from modules.CPDoS import check_CPDoS
 from modules.http_version import check_http_version
+from modules.logging_config import configure_logging, valid_log_level
+from modules.methods import check_methods
+from modules.server_error import get_server_error
+from modules.technologies import technology
+from modules.utils import *
 from modules.vhosts import check_vhost
 
 from tools.autopoisoner.autopoisoner import check_cache_poisoning
@@ -26,6 +26,7 @@ else:
 
 import threading
 from threading import Thread
+
 from static.banner import print_banner
 
 try:
@@ -243,9 +244,7 @@ def check_auth(auth, url):
             return authent
         else:
             print("\nAuthentication error")
-            continue_error = input(
-                "The authentication seems bad, continue ? [y/N]"
-            )
+            continue_error = input("The authentication seems bad, continue ? [y/N]")
             if continue_error not in ["y", "Y"]:
                 print("Exiting")
                 sys.exit()
@@ -284,7 +283,7 @@ def process_modules(url, s, a_tech):
         check_http_version(url)
         check_CPDoS(url, s, req_main, domain, custom_header, authent, human)
         check_cache_poisoning(url, custom_header, behavior, authent, human)
-        check_cache_files(url, custom_header, authent) #TOREDO
+        check_cache_files(url, custom_header, authent)  # TOREDO
         check_cookie_reflection(url, custom_header, authent)
         techno = get_technos(a_tech, req_main, url, s)
         # fuzz_x_header(url) #TODO

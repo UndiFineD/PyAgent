@@ -414,13 +414,14 @@ class HybridMemoryCore:
             for node in tag_results:
                 candidates.add(node.id)
 
-        # Keyword search (simplified)
+        # Keyword search (simplified). Skip if empty query to avoid matching all nodes.
         keyword_results = []
-        query_lower = query.lower()
-        for node in self.graph_store.nodes.values():
-            if query_lower in node.content.lower():
-                keyword_results.append(node)
-                candidates.add(node.id)
+        query_lower = query.lower().strip() if query else ""
+        if query_lower:
+            for node in self.graph_store.nodes.values():
+                if query_lower in node.content.lower():
+                    keyword_results.append(node)
+                    candidates.add(node.id)
 
         # Calculate hybrid scores for candidates
         scored_results = []

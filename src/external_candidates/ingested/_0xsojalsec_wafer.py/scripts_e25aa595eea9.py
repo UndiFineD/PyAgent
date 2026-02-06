@@ -1,5 +1,5 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-wafer\scripts.py
-__all__ = ['ALERT_TRIGGER', 'INTERACTION_TRIGGER']
+__all__ = ["ALERT_TRIGGER", "INTERACTION_TRIGGER"]
 
 ALERT_TRIGGER = "window.alert_trigger = false;window.alert = function() {window.alert_trigger = true;};window.confirm = window.alert;window.prompt = window.alert;"
 INTERACTION_TRIGGER = """

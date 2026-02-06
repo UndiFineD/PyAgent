@@ -4,19 +4,16 @@ from collections import deque
 from typing import Optional
 
 import tenacity
-from tenacity import retry_if_exception_type, wait_exponential
-
+from fle.agents.agent_abc import AgentABC
+from fle.agents.formatters import RecursiveReportFormatter
+from fle.agents.llm.api_factory import APIFactory
+from fle.agents.llm.parsing import Policy, parse_response
+from fle.agents.models import CompletionResult, Response
 from fle.commons.models.conversation import Conversation
 from fle.commons.models.generation_parameters import GenerationParameters
 from fle.commons.models.message import Message
 from fle.env.namespace import FactorioNamespace
-
-from fle.agents.models import CompletionResult, Response
-from fle.agents.llm.parsing import Policy
-from fle.agents.agent_abc import AgentABC
-from fle.agents.formatters import RecursiveReportFormatter
-from fle.agents.llm.api_factory import APIFactory
-from fle.agents.llm.parsing import parse_response
+from tenacity import retry_if_exception_type, wait_exponential
 
 GENERAL_INSTRUCTIONS_BACKTRACKING = """
 # Factorio LLM Agent Instructions
@@ -202,9 +199,9 @@ class BacktrackingAgent(AgentABC):
         # Add the last 2 messages from the conversation to the new conversation
         new_conversation.messages.extend(conversation.messages[-2:])
         # add the "last successful step" tag to the last message
-        new_conversation.messages[
-            -1
-        ].content = f"Last successful step:\n\n{new_conversation.messages[-1].content}\n\n This is the environment state before the error occurred. The environment has not been altered since the last successful step"
+        new_conversation.messages[-1].content = (
+            f"Last successful step:\n\n{new_conversation.messages[-1].content}\n\n This is the environment state before the error occurred. The environment has not been altered since the last successful step"
+        )
         latest_program = (
             f"Original attempt at carrying out the next step:\n\n```python{response.code}```"
             if len(self.current_step_memory) == 0

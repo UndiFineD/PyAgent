@@ -200,6 +200,6 @@ class PrivilegeEscalationCore:
     def revert_to_self(self) -> bool:
         """Revert token impersonation."""
         try:
-            return self.advapi32.RevertToSelf()
+            return bool(self.advapi32.RevertToSelf())
         except Exception:
             return False

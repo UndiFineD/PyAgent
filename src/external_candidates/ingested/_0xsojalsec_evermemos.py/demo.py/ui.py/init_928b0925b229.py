@@ -7,4 +7,3 @@ Provides components related to user interface, mainly for internationalization t
 from demo.ui.i18n_texts import I18nTexts
 
 __all__ = ["I18nTexts"]
-

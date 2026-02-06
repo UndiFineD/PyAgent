@@ -1,14 +1,15 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EveryoneNobel\src\server.py
-import json
-import websocket  # NOTE: websocket-client (https://github.com/websocket-client/websocket-client)
-import uuid
-import urllib.request
-from requests_toolbelt import MultipartEncoder
-import urllib.parse
-import random
-import os
 import io
+import json
+import os
+import random
+import urllib.parse
+import urllib.request
+import uuid
+
+import websocket  # NOTE: websocket-client (https://github.com/websocket-client/websocket-client)
 from PIL import Image
+from requests_toolbelt import MultipartEncoder
 
 
 def open_websocket_connection(comfy_server_address):
@@ -78,7 +79,11 @@ def load_workflow(workflow_path):
 
 
 def prompt_image_to_image(
-    workflow_path, input_path, comfy_server_address, output_path="./output/", save_previews=False
+    workflow_path,
+    input_path,
+    comfy_server_address,
+    output_path="./output/",
+    save_previews=False,
 ):
     with open(workflow_path, "r", encoding="utf-8") as workflow_api_txt2gif_file:
         prompt = json.load(workflow_api_txt2gif_file)

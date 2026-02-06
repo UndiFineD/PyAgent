@@ -1,23 +1,24 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-GPT_Vuln-analyzer\GVA_gui.py
-import tkinter as tk
 import json
-from dotenv import load_dotenv
-import customtkinter
 import os
+import tkinter as tk
+
+import customtkinter
 from components.dns_recon import DNSRecon
 from components.geo import geo_ip_recon
-from components.port_scanner import NetworkScanner
 from components.jwt import JWTAnalyzer
 from components.packet_analysis import PacketAnalysis
+from components.port_scanner import NetworkScanner
 from components.subdomain import SubEnum
+from dotenv import load_dotenv
 
 list_loc = "lists//default.txt"
 load_dotenv()
-gkey = os.getenv('GEOIP_API_KEY')
-akey = os.getenv('OPENAI_API_KEY')
-bkey = os.getenv('BARD_API_KEY')
-lkey = os.getenv('RUNPOD_API_KEY')
-lendpoint = os.getenv('RUNPOD_ENDPOINT_ID')
+gkey = os.getenv("GEOIP_API_KEY")
+akey = os.getenv("OPENAI_API_KEY")
+bkey = os.getenv("BARD_API_KEY")
+lkey = os.getenv("RUNPOD_API_KEY")
+lendpoint = os.getenv("RUNPOD_ENDPOINT_ID")
 
 dns_enum = DNSRecon()
 geo_ip = geo_ip_recon()
@@ -50,10 +51,10 @@ def application(attack, entry2, entry3, entry_ai, entry5):
         save_loc = entry5.get() if entry5 else None
         ai_choices = entry_ai.get() if entry_ai else None
 
-        if attack == 'geo':
+        if attack == "geo":
             geo_output: str = geo_ip_recon.geoip(gkey, target)
             output_save(str(geo_output))
-        elif attack == 'nmap':
+        elif attack == "nmap":
             p1_out = port_scanner.scanner(
                 ip=target,
                 profile=int(profile) if profile else None,
@@ -61,33 +62,33 @@ def application(attack, entry2, entry3, entry_ai, entry5):
                 bkey=bkey,
                 lkey=lkey,
                 lendpoint=lendpoint,
-                AI=ai_choices
+                AI=ai_choices,
             )
             output_save(p1_out)
-        elif attack == 'dns':
+        elif attack == "dns":
             dns_output: str = dns_enum.dns_resolver(
                 target=target,
                 akey=akey,
                 bkey=bkey,
                 lkey=lkey,
                 lendpoint=lendpoint,
-                AI=ai_choices
+                AI=ai_choices,
             )
             output_save(dns_output)
-        elif attack == 'sub':
+        elif attack == "sub":
             sub_output: str = sub_recon.sub_enumerator(target, list_loc)
             output_save(sub_output)
-        elif attack == 'jwt':
+        elif attack == "jwt":
             output: str = jwt_analyzer.analyze(
                 token=target,
                 openai_api_token=akey,
                 bard_api_token=bkey,
                 llama_api_token=lkey,
                 llama_endpoint=lendpoint,
-                AI=ai_choices
+                AI=ai_choices,
             )
             output_save(output)
-        elif attack == 'pcap':
+        elif attack == "pcap":
             packet_analysis.perform_full_analysis(
                 pcap_path=target,
                 json_path=save_loc,
@@ -118,12 +119,16 @@ def select_frame_by_name(name):
     label = customtkinter.CTkLabel(master=frame, text=label_text)
     label.pack(pady=12, padx=10)
 
-    entry2 = customtkinter.CTkEntry(master=frame, placeholder_text="Target/capfile/token")
+    entry2 = customtkinter.CTkEntry(
+        master=frame, placeholder_text="Target/capfile/token"
+    )
     entry2.pack(pady=12, padx=10)
 
     if name in ["nmap", "dns", "jwt"]:
         ai_choices_val = ["openai", "bard", "llama-api"]
-        entry_ai = customtkinter.CTkComboBox(master=frame, values=ai_choices_val, state="readonly")
+        entry_ai = customtkinter.CTkComboBox(
+            master=frame, values=ai_choices_val, state="readonly"
+        )
         entry_ai.set("Select AI Input")
         entry_ai.pack(pady=12, padx=10)
     else:
@@ -141,27 +146,39 @@ def select_frame_by_name(name):
         entry5 = customtkinter.CTkEntry(master=frame, placeholder_text="Save Location")
         entry5.pack(pady=12, padx=10)
 
-    button = customtkinter.CTkButton(master=frame, text="Run", command=lambda: application(
-        attack=name,
-        entry2=entry2,
-        entry3=entry3,
-        entry_ai=entry_ai,
-        entry5=entry5
-    ))
+    button = customtkinter.CTkButton(
+        master=frame,
+        text="Run",
+        command=lambda: application(
+            attack=name, entry2=entry2, entry3=entry3, entry_ai=entry_ai, entry5=entry5
+        ),
+    )
     button.pack(pady=12, padx=10)
 
 
-nmap_button = customtkinter.CTkButton(navigation_frame, text="Nmap", command=lambda: select_frame_by_name("nmap"))
+nmap_button = customtkinter.CTkButton(
+    navigation_frame, text="Nmap", command=lambda: select_frame_by_name("nmap")
+)
 nmap_button.pack(side="top", pady=5, anchor="center")
-dns_button = customtkinter.CTkButton(navigation_frame, text="DNS", command=lambda: select_frame_by_name("dns"))
+dns_button = customtkinter.CTkButton(
+    navigation_frame, text="DNS", command=lambda: select_frame_by_name("dns")
+)
 dns_button.pack(side="top", pady=5, anchor="center")
-sub_button = customtkinter.CTkButton(navigation_frame, text="Subdomain", command=lambda: select_frame_by_name("sub"))
+sub_button = customtkinter.CTkButton(
+    navigation_frame, text="Subdomain", command=lambda: select_frame_by_name("sub")
+)
 sub_button.pack(side="top", pady=5, anchor="center")
-jwt_button = customtkinter.CTkButton(navigation_frame, text="JWT Analysis", command=lambda: select_frame_by_name("jwt"))
+jwt_button = customtkinter.CTkButton(
+    navigation_frame, text="JWT Analysis", command=lambda: select_frame_by_name("jwt")
+)
 jwt_button.pack(side="top", pady=5, anchor="center")
-pcap_button = customtkinter.CTkButton(navigation_frame, text="Pcap Analysis", command=lambda: select_frame_by_name("pcap"))
+pcap_button = customtkinter.CTkButton(
+    navigation_frame, text="Pcap Analysis", command=lambda: select_frame_by_name("pcap")
+)
 pcap_button.pack(side="top", pady=5, anchor="center")
-geo_button = customtkinter.CTkButton(navigation_frame, text="GeoIP Recon", command=lambda: select_frame_by_name("geo"))
+geo_button = customtkinter.CTkButton(
+    navigation_frame, text="GeoIP Recon", command=lambda: select_frame_by_name("geo")
+)
 geo_button.pack(side="top", pady=5, anchor="center")
 
 frame = customtkinter.CTkFrame(master=input_frame)
@@ -176,9 +193,15 @@ entry_ai.set("Select AI Input")
 entry_ai.pack(pady=12, padx=10)
 entry3 = customtkinter.CTkEntry(master=frame, placeholder_text="Profile (Only Nmap)")
 entry3.pack(pady=12, padx=10)
-button = customtkinter.CTkButton(master=frame, text="Run", command=lambda: application("default", entry2, entry3, entry_ai))
+button = customtkinter.CTkButton(
+    master=frame,
+    text="Run",
+    command=lambda: application("default", entry2, entry3, entry_ai),
+)
 button.pack(pady=12, padx=10)
-output_textbox = customtkinter.CTkTextbox(master=output_frame, height=800, width=900, corner_radius=0)
+output_textbox = customtkinter.CTkTextbox(
+    master=output_frame, height=800, width=900, corner_radius=0
+)
 output_textbox.pack(pady=12, padx=10)
 
 root.mainloop()

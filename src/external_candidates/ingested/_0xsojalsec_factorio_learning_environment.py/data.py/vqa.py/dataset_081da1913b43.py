@@ -3,18 +3,15 @@ import copy
 import json
 from typing import List
 
-from inspect_ai.dataset import MemoryDataset, Sample
-
 from data.vqa.blueprint_subchunks import SubchunkConfig, generate_subchunks
-from data.vqa.utils import find_blueprints_dir
-
-from inspect_ai.dataset import Dataset
 from data.vqa.blueprint_transforms import (
-    generate_flipped_blueprints,
-    update_metadata_for_flip,
     FlipType,
     detect_direction_system,
+    generate_flipped_blueprints,
+    update_metadata_for_flip,
 )
+from data.vqa.utils import find_blueprints_dir
+from inspect_ai.dataset import Dataset, MemoryDataset, Sample
 
 
 def create_flip_augmented_dataset(
@@ -94,9 +91,11 @@ def create_flip_augmented_dataset(
                 input=original_sample.input,
                 target=original_sample.target,
                 metadata=new_metadata,
-                id=f"{original_sample.id}_{flip_suffix}"
-                if original_sample.id
-                else None,
+                id=(
+                    f"{original_sample.id}_{flip_suffix}"
+                    if original_sample.id
+                    else None
+                ),
                 files=original_sample.files,
             )
 

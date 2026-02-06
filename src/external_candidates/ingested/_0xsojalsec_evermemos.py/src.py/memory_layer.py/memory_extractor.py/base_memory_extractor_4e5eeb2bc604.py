@@ -10,7 +10,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List, Optional
 
-from api_specs.memory_types import MemoryType, BaseMemory, MemCell
+from api_specs.memory_types import BaseMemory, MemCell, MemoryType
 
 
 @dataclass
@@ -48,7 +48,9 @@ class MemoryExtractor(ABC):
         self.memory_type = memory_type
 
     @abstractmethod
-    async def extract_memory(self, request: MemoryExtractRequest) -> Optional[BaseMemory]:
+    async def extract_memory(
+        self, request: MemoryExtractRequest
+    ) -> Optional[BaseMemory]:
         """
         Extract memory from a boundary detection result.
 

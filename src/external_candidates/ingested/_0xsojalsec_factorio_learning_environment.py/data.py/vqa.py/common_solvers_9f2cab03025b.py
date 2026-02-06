@@ -3,16 +3,16 @@
 
 import json
 import re
-from inspect_ai.model import ChatMessageUser
-from inspect_ai.solver import Solver, solver, TaskState, Generate
 
 from data.vqa.blueprint_transforms import detect_direction_system
-from data.vqa.position_utils import normalize_position_references_in_qa
 from data.vqa.bounding_box_utils import calculate_blueprint_bounding_box
 from data.vqa.direction_utils import Direction
+from data.vqa.position_utils import normalize_position_references_in_qa
+from dotenv import load_dotenv
 from fle.agents.data.screenshots_from_run import create_factorio_instance
 from fle.commons.models.rendered_image import RenderedImage
-from dotenv import load_dotenv
+from inspect_ai.model import ChatMessageUser
+from inspect_ai.solver import Generate, Solver, TaskState, solver
 
 load_dotenv()
 
@@ -384,9 +384,11 @@ def generate_direction_questions(questions_per_blueprint: int = 2) -> Solver:
                 {
                     "name": entity.get("name", "unknown"),
                     "position": f"Position(x={pos.get('x', 0)}, y={pos.get('y', 0)})",
-                    "direction": direction_enum.name
-                    if direction_enum
-                    else f"Direction({direction_val})",
+                    "direction": (
+                        direction_enum.name
+                        if direction_enum
+                        else f"Direction({direction_val})"
+                    ),
                 }
             )
 

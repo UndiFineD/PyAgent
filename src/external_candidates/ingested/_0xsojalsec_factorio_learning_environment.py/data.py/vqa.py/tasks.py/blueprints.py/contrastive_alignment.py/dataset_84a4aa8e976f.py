@@ -1,9 +1,8 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\data\vqa\tasks\blueprints\contrastive_alignment\dataset.py
 import json
 
-from inspect_ai.dataset import MemoryDataset, Sample
-
 from data.vqa.utils import find_blueprints_dir
+from inspect_ai.dataset import MemoryDataset, Sample
 
 
 def raw_blueprint_dataset() -> MemoryDataset:

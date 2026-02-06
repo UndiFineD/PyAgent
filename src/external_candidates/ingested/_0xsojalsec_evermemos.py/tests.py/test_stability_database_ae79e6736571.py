@@ -5,20 +5,21 @@ Database stability test
 Test key stability scenarios such as database connection pool, connection leaks, and failure recovery
 """
 
-import pytest
 import asyncio
 import os
 import time
-from unittest.mock import patch, AsyncMock
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+from unittest.mock import AsyncMock, patch
+
+import pytest
 
 # Set test environment
 os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/testdb")
 os.environ.setdefault("DB_POOL_SIZE", "5")
 os.environ.setdefault("DB_MAX_OVERFLOW", "3")
 
-from core.component.database_session_provider import DatabaseSessionProvider
 from core.component.database_connection_provider import DatabaseConnectionProvider
+from core.component.database_session_provider import DatabaseSessionProvider
 
 
 class TestDatabaseStability:
@@ -30,7 +31,7 @@ class TestDatabaseStability:
         provider = DatabaseSessionProvider()
         yield provider
         # Clean up resources
-        if hasattr(provider, 'async_engine'):
+        if hasattr(provider, "async_engine"):
             await provider.async_engine.dispose()
 
     @pytest.fixture
@@ -39,7 +40,7 @@ class TestDatabaseStability:
         provider = DatabaseConnectionProvider()
         yield provider
         # Clean up resources
-        if hasattr(provider, '_connection_pool') and provider._connection_pool:
+        if hasattr(provider, "_connection_pool") and provider._connection_pool:
             await provider._connection_pool.close()
 
     @pytest.mark.asyncio
@@ -137,7 +138,7 @@ class TestDatabaseStability:
 
         async def mock_failing_execute(*args, **kwargs):
             # First few calls fail, subsequent calls succeed
-            if not hasattr(mock_failing_execute, 'call_count'):
+            if not hasattr(mock_failing_execute, "call_count"):
                 mock_failing_execute.call_count = 0
             mock_failing_execute.call_count += 1
 
@@ -148,7 +149,7 @@ class TestDatabaseStability:
                 return await original_execute(*args, **kwargs)
 
         with patch.object(
-            db_provider.async_engine, 'execute', side_effect=mock_failing_execute
+            db_provider.async_engine, "execute", side_effect=mock_failing_execute
         ):
             # Test retry mechanism
             max_retries = 3
@@ -327,7 +328,7 @@ class TestDatabaseErrorHandling:
         provider = DatabaseSessionProvider()
 
         # Simulate connection timeout
-        with patch.object(provider.async_engine, 'connect') as mock_connect:
+        with patch.object(provider.async_engine, "connect") as mock_connect:
             mock_connect.side_effect = asyncio.TimeoutError("Connection timeout")
 
             try:

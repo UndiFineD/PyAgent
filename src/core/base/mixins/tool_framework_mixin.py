@@ -22,6 +22,8 @@ from __future__ import annotations
 import inspect
 import json
 import logging
+import time
+import asyncio
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Callable, Union, get_type_hints
 from pathlib import Path
@@ -124,6 +126,9 @@ class ToolFrameworkMixin:
             for param_name, param in sig.parameters.items():
                 if param_name == 'self':
                     continue
+                # Skip internal framework parameters such as cascade/context
+                if param_name in ("cascade_context", "context"):
+                    continue
 
                 param_type = type_hints.get(param_name, str)
                 param_type_str = self._get_type_string(param_type)
@@ -194,26 +199,33 @@ class ToolFrameworkMixin:
             args = []
             kwargs = {}
 
+            # Inspect the original function signature to detect if it accepts cascade/context
+            func_sig = inspect.signature(tool_def.execute_function)
+            if 'cascade_context' in func_sig.parameters and 'cascade_context' not in kwargs:
+                kwargs['cascade_context'] = cascade_context
+            if 'context' in func_sig.parameters and 'context' not in kwargs:
+                kwargs['context'] = cascade_context
+
             for param in tool_def.parameters:
                 if param.name in parameters:
                     value = parameters[param.name]
                     # Type conversion if needed
-                    if param.type == "int" and isinstance(value, str):
+                    ptype = param.type.lower()
+                    if ptype in ("int", "integer") and isinstance(value, str):
                         value = int(value)
-                    elif param.type == "float" and isinstance(value, str):
+                    elif ptype in ("float", "number") and isinstance(value, str):
                         value = float(value)
-                    elif param.type == "bool" and isinstance(value, str):
+                    elif ptype in ("bool", "boolean") and isinstance(value, str):
                         value = value.lower() in ('true', '1', 'yes')
 
-                    if param.name in ['cascade_context', 'context']:
-                        kwargs[param.name] = cascade_context
-                    else:
-                        kwargs[param.name] = value
+                    kwargs[param.name] = value
                 elif param.required:
-                    raise ToolValidationError(f"Required parameter '{param.name}' not provided")
+                    # If validation is disabled, allow execution to proceed and let
+                    # execution errors be handled below and returned as failures.
+                    if self.enable_tool_validation:
+                        raise ToolValidationError(f"Required parameter '{param.name}' not provided")
 
-            # Execute with timeout
-            import asyncio
+            # Execute with timeout using module-level asyncio
             result = await asyncio.wait_for(
                 tool_def.execute_function(**kwargs),
                 timeout=self.max_tool_execution_time
@@ -231,11 +243,15 @@ class ToolFrameworkMixin:
         except asyncio.TimeoutError:
             error_msg = f"Tool '{tool_id}' execution timed out after {self.max_tool_execution_time} seconds"
             self._update_tool_stats(tool_id, success=False, error=error_msg)
+            if not self.enable_tool_validation:
+                return {"success": False, "result": None, "tool_id": tool_id, "error": error_msg}
             raise ToolExecutionError(error_msg)
 
         except Exception as e:
             error_msg = f"Tool '{tool_id}' execution failed: {str(e)}"
             self._update_tool_stats(tool_id, success=False, error=error_msg)
+            if not self.enable_tool_validation:
+                return {"success": False, "result": None, "tool_id": tool_id, "error": error_msg}
             raise ToolExecutionError(error_msg)
 
     def get_tool_definitions(self) -> Dict[str, Dict[str, Any]]:
@@ -281,19 +297,32 @@ class ToolFrameworkMixin:
             if param.name in parameters:
                 value = parameters[param.name]
 
-                # Basic type checking
+                # Basic type checking with tolerant conversion from strings
                 expected_type = param.type.lower()
-                if expected_type == "str" or expected_type == "string":
+                if expected_type in ("str", "string"):
                     if not isinstance(value, str):
                         errors.append(f"Parameter '{param.name}' must be a string")
-                elif expected_type == "int" or expected_type == "integer":
-                    if not isinstance(value, int):
+                elif expected_type in ("int", "integer"):
+                    if isinstance(value, str):
+                        try:
+                            int(value)
+                        except Exception:
+                            errors.append(f"Parameter '{param.name}' must be an integer")
+                    elif not isinstance(value, int):
                         errors.append(f"Parameter '{param.name}' must be an integer")
-                elif expected_type == "float" or expected_type == "number":
-                    if not isinstance(value, (int, float)):
+                elif expected_type in ("float", "number"):
+                    if isinstance(value, str):
+                        try:
+                            float(value)
+                        except Exception:
+                            errors.append(f"Parameter '{param.name}' must be a number")
+                    elif not isinstance(value, (int, float)):
                         errors.append(f"Parameter '{param.name}' must be a number")
-                elif expected_type == "bool" or expected_type == "boolean":
-                    if not isinstance(value, bool):
+                elif expected_type in ("bool", "boolean"):
+                    if isinstance(value, str):
+                        if value.lower() not in ("true", "false", "1", "0", "yes", "no"):
+                            errors.append(f"Parameter '{param.name}' must be a boolean")
+                    elif not isinstance(value, bool):
                         errors.append(f"Parameter '{param.name}' must be a boolean")
 
         return {

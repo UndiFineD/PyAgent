@@ -1,14 +1,16 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\authorize\decorators.py
-import functools
 import asyncio
-from typing import Optional, Callable, Any
+import functools
+from typing import Any, Callable, Optional
+
 from fastapi import HTTPException
 
-from .enums import Role
-from .interfaces import AuthorizationStrategy, AuthorizationContext
-from .strategies import DefaultAuthorizationStrategy
 from core.context.context import get_current_user_info
 from core.observation.logger import get_logger
+
+from .enums import Role
+from .interfaces import AuthorizationContext, AuthorizationStrategy
+from .strategies import DefaultAuthorizationStrategy
 
 logger = get_logger(__name__)
 
@@ -39,7 +41,7 @@ def authorize(
         )
 
         # Store authorization info on the function
-        setattr(func, '__authorization_context__', auth_context)
+        setattr(func, "__authorization_context__", auth_context)
 
         @functools.wraps(func)
         async def async_wrapper(*args, **kwargs):
@@ -212,15 +214,15 @@ def check_and_apply_default_auth(func: Callable) -> Callable:
         Callable: Function with default authorization applied (if no authorization decorator existed)
     """
     # Check if function already has authorization decorator
-    if hasattr(func, '__authorization_context__'):
+    if hasattr(func, "__authorization_context__"):
         return func
 
     # Check if it's a bound method
-    if hasattr(func, '__self__'):
+    if hasattr(func, "__self__"):
         # This is a bound method, need to get the original function
         original_func = func.__func__
         # Check if original function already has authorization decorator
-        if hasattr(original_func, '__authorization_context__'):
+        if hasattr(original_func, "__authorization_context__"):
             return func
 
         # Apply decorator to original function, then rebind

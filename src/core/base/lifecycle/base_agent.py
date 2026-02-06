@@ -179,6 +179,9 @@ class BaseAgent(
     def _load_system_prompt(self) -> str:
         """Load system prompt from file if available, otherwise use class-defined or minimal fallback."""
         try:
+            # If workspace root detection failed, fall back to minimal prompt
+            if not self._workspace_root:
+                return "You are an AI."
             # Primary: Try to load from data/agents/{agent_name}/prompt.txt
             prompt_file = Path(self._workspace_root) / "data" / "agents" / self.agent_name / "prompt.txt"
             if prompt_file.exists():

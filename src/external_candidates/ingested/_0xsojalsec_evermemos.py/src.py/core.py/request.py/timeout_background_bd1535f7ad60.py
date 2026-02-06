@@ -14,17 +14,17 @@ Background mode configuration:
 - Can disable background mode by passing sync_mode=true in request params (synchronously wait for execution to complete)
 """
 
-from typing import Any, Callable, Coroutine, TypeVar, ParamSpec, Union, Optional
-from functools import wraps
 import asyncio
 import traceback
+from functools import wraps
+from typing import Any, Callable, Coroutine, Optional, ParamSpec, TypeVar, Union
 
 from fastapi import Request
 from fastapi.responses import JSONResponse
 
-from core.observation.logger import get_logger
-from core.di.utils import get_bean_by_type
 from core.context.context import get_current_request
+from core.di.utils import get_bean_by_type
+from core.observation.logger import get_logger
 from core.request.app_logic_provider import AppLogicProvider
 
 logger = get_logger(__name__)
@@ -116,7 +116,7 @@ def timeout_to_background(
     """
 
     def decorator(
-        func: Callable[P, Coroutine[Any, Any, T]]
+        func: Callable[P, Coroutine[Any, Any, T]],
     ) -> Callable[P, Coroutine[Any, Any, Union[T, JSONResponse]]]:
 
         @wraps(func)

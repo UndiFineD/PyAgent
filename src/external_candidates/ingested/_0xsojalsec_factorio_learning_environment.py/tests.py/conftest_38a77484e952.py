@@ -4,7 +4,6 @@ import sys
 from pathlib import Path
 
 import pytest
-
 from fle.commons.cluster_ips import get_local_container_ips
 from fle.env import FactorioInstance
 

@@ -1,9 +1,9 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-ldapper\setup.py
 #!/usr/bin/env python
 
-from ldapper import __version__
-
 from os import path
+
+from ldapper import __version__
 
 try:
     from setuptools import setup
@@ -11,7 +11,7 @@ except ImportError:
     from distutils.core import setup
 
 BASE_DIR = path.abspath(path.dirname(__file__))
-with open(path.join(BASE_DIR, 'README.md'), encoding='utf-8') as f:
+with open(path.join(BASE_DIR, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 setup(

@@ -9,15 +9,15 @@ Usage:
     python kernel.py
 """
 
-import os
 import json
+import os
 import time
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
-from config import Config
-from actions import execute_action, run_adb_command
-from llm_providers import get_llm_provider
 import sanitizer
+from actions import execute_action, run_adb_command
+from config import Config
+from llm_providers import get_llm_provider
 
 
 def get_screen_state() -> str:

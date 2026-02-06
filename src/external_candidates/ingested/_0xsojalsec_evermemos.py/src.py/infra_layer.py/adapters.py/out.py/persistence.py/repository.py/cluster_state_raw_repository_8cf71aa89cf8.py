@@ -6,14 +6,15 @@ Cluster state data access layer based on Beanie ODM.
 Provides ClusterStorage compatible interface (duck typing).
 """
 
-from typing import Optional, Dict, Any
-from core.observation.logger import get_logger
-from core.di.decorators import repository
-from core.oxm.mongo.base_repository import BaseRepository
+from typing import Any, Dict, Optional
 
 from infra_layer.adapters.out.persistence.document.memory.cluster_state import (
     ClusterState,
 )
+
+from core.di.decorators import repository
+from core.observation.logger import get_logger
+from core.oxm.mongo.base_repository import BaseRepository
 
 logger = get_logger(__name__)
 

@@ -1,11 +1,12 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\component\config_provider.py
-import os
-import yaml
 import json
-from typing import Dict, Any, Optional
+import os
+from typing import Any, Dict, Optional
+
+import yaml
+from common_utils.project_path import CURRENT_DIR
 
 from core.di.decorators import component
-from common_utils.project_path import CURRENT_DIR
 
 
 @component(name="config_provider")
@@ -40,8 +41,8 @@ class ConfigProvider:
             raise FileNotFoundError(f"Configuration file does not exist: {config_name}")
 
         try:
-            with open(config_file, 'r', encoding='utf-8') as f:
-                if config_file.suffix.lower() in ['.yaml', '.yml']:
+            with open(config_file, "r", encoding="utf-8") as f:
+                if config_file.suffix.lower() in [".yaml", ".yml"]:
                     config_data = yaml.safe_load(f)
                 else:
                     config_data = json.load(f)
@@ -75,7 +76,7 @@ class ConfigProvider:
 
         try:
             # Directly read text file content
-            with open(config_file, 'r', encoding='utf-8') as f:
+            with open(config_file, "r", encoding="utf-8") as f:
                 raw_content = f.read()
 
             # Cache raw text content

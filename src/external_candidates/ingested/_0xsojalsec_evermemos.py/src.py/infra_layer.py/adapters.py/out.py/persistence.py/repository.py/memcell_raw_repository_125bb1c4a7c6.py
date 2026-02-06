@@ -7,19 +7,20 @@ Does not depend on domain layer interfaces, directly operates on MemCell documen
 """
 
 from datetime import datetime
-from typing import List, Optional, Dict, Any, Type
-from bson import ObjectId
-from pydantic import BaseModel
-from beanie.operators import And, GTE, LT, Eq, RegEx, Or
-from pymongo.asynchronous.client_session import AsyncClientSession
-from core.observation.logger import get_logger
-from core.di.decorators import repository
-from core.oxm.mongo.base_repository import BaseRepository
+from typing import Any, Dict, List, Optional, Type
 
+from beanie.operators import GTE, LT, And, Eq, Or, RegEx
+from bson import ObjectId
 from infra_layer.adapters.out.persistence.document.memory.memcell import (
-    MemCell,
     DataTypeEnum,
+    MemCell,
 )
+from pydantic import BaseModel
+from pymongo.asynchronous.client_session import AsyncClientSession
+
+from core.di.decorators import repository
+from core.observation.logger import get_logger
+from core.oxm.mongo.base_repository import BaseRepository
 
 logger = get_logger(__name__)
 
@@ -436,7 +437,7 @@ class MemCellRawRepository(BaseRepository[MemCell]):
             logger.debug(
                 "✅ Successfully queried MemCell by participants: %s, match mode: %s, found %d records",
                 participants,
-                'all' if match_all else 'any',
+                "all" if match_all else "any",
                 len(results),
             )
             return results
@@ -480,7 +481,7 @@ class MemCellRawRepository(BaseRepository[MemCell]):
             logger.debug(
                 "✅ Successfully queried MemCell by keywords: %s, match mode: %s, found %d records",
                 keywords,
-                'all' if match_all else 'any',
+                "all" if match_all else "any",
                 len(results),
             )
             return results
@@ -550,7 +551,7 @@ class MemCellRawRepository(BaseRepository[MemCell]):
                 "✅ Successfully deleted MemCell within time range: %s - %s, user: %s, deleted %d records",
                 start_time,
                 end_time,
-                user_id or 'all',
+                user_id or "all",
                 count,
             )
             return count
@@ -610,7 +611,7 @@ class MemCellRawRepository(BaseRepository[MemCell]):
                 "✅ Successfully counted MemCell within time range: %s - %s, user: %s, total %d records",
                 start_time,
                 end_time,
-                user_id or 'all',
+                user_id or "all",
                 count,
             )
             return count

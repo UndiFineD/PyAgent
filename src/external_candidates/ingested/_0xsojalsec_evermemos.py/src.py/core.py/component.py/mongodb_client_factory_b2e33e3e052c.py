@@ -6,20 +6,21 @@ Provides MongoDB client caching and management functionality based on configurat
 Supports reading configuration from environment variables and provides default client.
 """
 
-import os
 import asyncio
-from abc import ABC, abstractmethod
+import os
 import traceback
-from typing import Dict, Optional, List
+from abc import ABC, abstractmethod
+from typing import Dict, List, Optional
 from urllib.parse import quote_plus
-from pymongo import AsyncMongoClient
-from beanie import init_beanie
-from core.class_annotations.utils import get_annotation
-from core.oxm.mongo.constant.annotations import ClassAnnotationKey, Toggle
 
+from beanie import init_beanie
+from common_utils.datetime_utils import timezone
+from pymongo import AsyncMongoClient
+
+from core.class_annotations.utils import get_annotation
 from core.di.decorators import component
 from core.observation.logger import get_logger
-from common_utils.datetime_utils import timezone
+from core.oxm.mongo.constant.annotations import ClassAnnotationKey, Toggle
 from core.oxm.mongo.document_base import DEFAULT_DATABASE
 
 logger = get_logger(__name__)
@@ -65,7 +66,7 @@ class MongoDBConfig:
         # Append unified parameters
         uri_params: Optional[str] = self.uri_params
         if uri_params:
-            separator = '&' if ('?' in base_uri) else '?'
+            separator = "&" if ("?" in base_uri) else "?"
             return f"{base_uri}{separator}{uri_params}"
         return base_uri
 
@@ -80,7 +81,7 @@ class MongoDBConfig:
         return f"{base}:{signature}" if signature else base
 
     @classmethod
-    def from_env(cls, prefix: str = "") -> 'MongoDBConfig':
+    def from_env(cls, prefix: str = "") -> "MongoDBConfig":
         """
         Create configuration from environment variables.
 
@@ -200,7 +201,7 @@ class MongoDBClientWrapper:
     async def test_connection(self) -> bool:
         """Test connection"""
         try:
-            await self.client.admin.command('ping')
+            await self.client.admin.command("ping")
             logger.info("✅ MongoDB connection test successful: %s", self.config)
             return True
         except Exception as e:

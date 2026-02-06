@@ -2,8 +2,9 @@
 """
 Evaluate stage - evaluate answer quality.
 """
-from typing import List, Optional
+
 from logging import Logger
+from typing import List, Optional
 
 from evaluation.src.core.data_models import AnswerResult, EvaluationResult
 from evaluation.src.evaluators.base import BaseEvaluator
@@ -18,22 +19,20 @@ async def run_evaluate_stage(
 ) -> EvaluationResult:
     """
     Execute Evaluate stage.
-    
+
     Args:
         evaluator: Evaluator
         answer_results: List of answer results
         checkpoint_manager: Checkpoint manager for resume
         logger: Logger
-        
+
     Returns:
         Evaluation result
     """
     logger.info("Starting Stage 4: Evaluate")
-    
+
     eval_result = await evaluator.evaluate(answer_results)
-    
+
     logger.info("✅ Stage 4 completed")
-    
+
     return eval_result
-
-

@@ -3,15 +3,17 @@
 Business lifecycle provider implementation
 """
 
-from fastapi import FastAPI
-from typing import Dict, Any
+from typing import Any, Dict
 
-from core.observation.logger import get_logger
-from core.di.utils import get_bean_by_type, get_beans_by_type, get_bean
-from core.di.decorators import component
-from core.interface.controller.base_controller import BaseController
+from fastapi import FastAPI
+
 from core.capability.app_capability import ApplicationCapability
 from core.component.llm.tokenizer.tokenizer_factory import TokenizerFactory
+from core.di.decorators import component
+from core.di.utils import get_bean, get_bean_by_type, get_beans_by_type
+from core.interface.controller.base_controller import BaseController
+from core.observation.logger import get_logger
+
 from .lifespan_interface import LifespanProvider
 
 logger = get_logger(__name__)
@@ -59,9 +61,9 @@ class BusinessLifespanProvider(LifespanProvider):
         logger.info("Business application initialization completed")
 
         return {
-            'graphs': graphs,
-            'controllers': controllers,
-            'capabilities': capabilities,
+            "graphs": graphs,
+            "controllers": controllers,
+            "capabilities": capabilities,
         }
 
     async def shutdown(self, app: FastAPI) -> None:
@@ -74,8 +76,8 @@ class BusinessLifespanProvider(LifespanProvider):
         logger.info("Shutting down business logic...")
 
         # Clean up business-related attributes in app.state
-        if hasattr(app.state, 'graphs'):
-            delattr(app.state, 'graphs')
+        if hasattr(app.state, "graphs"):
+            delattr(app.state, "graphs")
 
         logger.info("Business application shutdown completed")
 
@@ -111,7 +113,7 @@ class BusinessLifespanProvider(LifespanProvider):
 
     def _register_graphs(self, app: FastAPI) -> dict:
         """Register all graph structures to FastAPI application"""
-        checkpointer = getattr(app.state, 'checkpointer', None)
+        checkpointer = getattr(app.state, "checkpointer", None)
         if not checkpointer:
             logger.warning("Checkpointer not found, skipping graph structure creation")
             return {}

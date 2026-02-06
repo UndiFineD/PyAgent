@@ -8,20 +8,20 @@ Supports force_new logic to create brand new consumer instances.
 
 import asyncio
 import json
-import ssl
 import os
-from typing import Dict, List, Optional, Any
+import ssl
 from hashlib import md5
+from typing import Any, Dict, List, Optional
 
 import bson
 from aiokafka import AIOKafkaConsumer
+from common_utils.datetime_utils import from_iso_format, to_timestamp
+from common_utils.project_path import CURRENT_DIR
 
 from core.component.config_provider import ConfigProvider
 from core.di.decorators import component
-from core.observation.logger import get_logger
-from common_utils.project_path import CURRENT_DIR
-from common_utils.datetime_utils import from_iso_format, to_timestamp
 from core.di.utils import get_bean_by_type
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -434,11 +434,11 @@ class KafkaConsumerFactory:
                 topic_name = partition.topic
                 if topic_name not in topic_stats:
                     topic_stats[topic_name] = {
-                        'total_partitions': 0,
-                        'found_offsets': 0,
-                        'used_latest': 0,
+                        "total_partitions": 0,
+                        "found_offsets": 0,
+                        "used_latest": 0,
                     }
-                topic_stats[topic_name]['total_partitions'] += 1
+                topic_stats[topic_name]["total_partitions"] += 1
 
                 # Get offset information for this partition
                 offset_info = offset_map.get(partition) if offset_map else None
@@ -448,7 +448,7 @@ class KafkaConsumerFactory:
                     target_offset = offset_info.offset
                     consumer.seek(partition, target_offset)
                     seek_count += 1
-                    topic_stats[topic_name]['found_offsets'] += 1
+                    topic_stats[topic_name]["found_offsets"] += 1
                     logger.info(
                         "Seeked partition %s (topic: %s) to offset %d at timestamp %d",
                         partition,
@@ -470,7 +470,7 @@ class KafkaConsumerFactory:
                     latest_offset = latest_offset_map[partition]
                     consumer.seek(partition, latest_offset)
                     seek_count += 1
-                    topic_stats[topic_name]['used_latest'] += 1
+                    topic_stats[topic_name]["used_latest"] += 1
                     logger.info(
                         "Seeked partition %s (topic: %s) to latest offset %d",
                         partition,
@@ -483,9 +483,9 @@ class KafkaConsumerFactory:
                 logger.info(
                     "Topic '%s': %d partitions total, %d found timestamp offsets, %d used latest offsets",
                     topic_name,
-                    stats['total_partitions'],
-                    stats['found_offsets'],
-                    stats['used_latest'],
+                    stats["total_partitions"],
+                    stats["found_offsets"],
+                    stats["used_latest"],
                 )
 
             if seek_count > 0:

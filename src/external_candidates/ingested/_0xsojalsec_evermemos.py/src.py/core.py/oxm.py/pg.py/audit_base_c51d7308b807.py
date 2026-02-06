@@ -2,9 +2,10 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlmodel import Field, SQLModel
-from sqlalchemy import Column, TIMESTAMP, event
 from common_utils.datetime_utils import get_now_with_timezone
+from sqlalchemy import TIMESTAMP, Column, event
+from sqlmodel import Field, SQLModel
+
 from core.context.context import get_current_user_info
 from core.observation.logger import get_logger
 
@@ -77,7 +78,7 @@ def get_auditable_model() -> SQLModel:
             return self.deleted_at is not None
 
     # Register event listeners
-    @event.listens_for(AuditableModel, 'before_insert', propagate=True)
+    @event.listens_for(AuditableModel, "before_insert", propagate=True)
     def before_insert_listener(
         mapper, connection, target
     ):  # pylint: disable=unused-argument
@@ -89,20 +90,20 @@ def get_auditable_model() -> SQLModel:
         current_user_id = _get_current_user_id()
 
         # Set creation time and creator
-        if hasattr(target, 'created_at') and target.created_at is None:
+        if hasattr(target, "created_at") and target.created_at is None:
             target.created_at = current_time
 
-        if hasattr(target, 'created_by') and target.created_by is None:
+        if hasattr(target, "created_by") and target.created_by is None:
             target.created_by = current_user_id or "system"
 
         # Set update time and updater
-        if hasattr(target, 'updated_at') and target.updated_at is None:
+        if hasattr(target, "updated_at") and target.updated_at is None:
             target.updated_at = current_time
 
-        if hasattr(target, 'updated_by') and target.updated_by is None:
+        if hasattr(target, "updated_by") and target.updated_by is None:
             target.updated_by = current_user_id or "system"
 
-    @event.listens_for(AuditableModel, 'before_update', propagate=True)
+    @event.listens_for(AuditableModel, "before_update", propagate=True)
     def before_update_listener(
         mapper, connection, target
     ):  # pylint: disable=unused-argument
@@ -114,17 +115,17 @@ def get_auditable_model() -> SQLModel:
         current_user_id = _get_current_user_id()
 
         # Set update time and updater
-        if hasattr(target, 'updated_at'):
+        if hasattr(target, "updated_at"):
             target.updated_at = current_time
 
         # Only set updated_by if it's None, do not overwrite existing values (e.g., "system")
-        if hasattr(target, 'updated_by') and target.updated_by is None:
+        if hasattr(target, "updated_by") and target.updated_by is None:
             target.updated_by = current_user_id or "system"
 
         # Special handling for soft delete scenario
-        if hasattr(target, 'deleted_at') and target.deleted_at is not None:
+        if hasattr(target, "deleted_at") and target.deleted_at is not None:
             # If deleted_at is set, it indicates a soft delete operation
-            if hasattr(target, 'deleted_by') and target.deleted_by is None:
+            if hasattr(target, "deleted_by") and target.deleted_by is None:
                 target.deleted_by = current_user_id or "system"
 
     return AuditableModel
@@ -139,8 +140,8 @@ def _get_current_user_id() -> Optional[str]:
     """
     try:
         user_info = get_current_user_info()
-        if user_info and 'user_id' in user_info:
-            return str(user_info['user_id'])
+        if user_info and "user_id" in user_info:
+            return str(user_info["user_id"])
     except Exception as e:  # pylint: disable=broad-except
         logger.debug("Failed to get current user information: %s", e)
     return None

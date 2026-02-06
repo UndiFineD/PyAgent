@@ -13,16 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import dataclasses
+import itertools
+import json
+import os
 from typing import Literal
 
 from accelerate import Accelerator
-from transformers import HfArgumentParser
 from PIL import Image
-import json
-import itertools
-
+from transformers import HfArgumentParser
 from uno.flux.pipeline import UNOPipeline, preprocess_ref
 
 
@@ -32,7 +31,7 @@ def horizontal_concat(images):
     total_width = sum(widths)
     max_height = max(heights)
 
-    new_im = Image.new('RGB', (total_width, max_height))
+    new_im = Image.new("RGB", (total_width, max_height))
 
     x_offset = 0
     for img in images:
@@ -40,6 +39,7 @@ def horizontal_concat(images):
         x_offset += img.size[0]
 
     return new_im
+
 
 @dataclasses.dataclass
 class InferenceArgs:
@@ -60,7 +60,8 @@ class InferenceArgs:
     concat_refs: bool = False
     lora_rank: int = 512
     data_resolution: int = 512
-    pe: Literal['d', 'h', 'w', 'o'] = 'd'
+    pe: Literal["d", "h", "w", "o"] = "d"
+
 
 def main(args: InferenceArgs):
     accelerator = Accelerator()
@@ -70,12 +71,13 @@ def main(args: InferenceArgs):
         accelerator.device,
         args.offload,
         only_lora=args.only_lora,
-        lora_rank=args.lora_rank
+        lora_rank=args.lora_rank,
     )
 
-    assert args.prompt is not None or args.eval_json_path is not None, \
-        "Please provide either prompt or eval_json_path"
-    
+    assert (
+        args.prompt is not None or args.eval_json_path is not None
+    ), "Please provide either prompt or eval_json_path"
+
     if args.eval_json_path is not None:
         with open(args.eval_json_path, "rt") as f:
             data_dicts = json.load(f)
@@ -84,16 +86,20 @@ def main(args: InferenceArgs):
         data_root = "./"
         data_dicts = [{"prompt": args.prompt, "image_paths": args.image_paths}]
 
-    for (i, data_dict), j in itertools.product(enumerate(data_dicts), range(args.num_images_per_prompt)):
-        if (i * args.num_images_per_prompt + j) % accelerator.num_processes != accelerator.process_index:
+    for (i, data_dict), j in itertools.product(
+        enumerate(data_dicts), range(args.num_images_per_prompt)
+    ):
+        if (
+            i * args.num_images_per_prompt + j
+        ) % accelerator.num_processes != accelerator.process_index:
             continue
 
         ref_imgs = [
             Image.open(os.path.join(data_root, img_path))
             for img_path in data_dict["image_paths"]
         ]
-        if args.ref_size==-1:
-            args.ref_size = 512 if len(ref_imgs)==1 else 320
+        if args.ref_size == -1:
+            args.ref_size = 512 if len(ref_imgs) == 1 else 320
 
         ref_imgs = [preprocess_ref(img, args.ref_size) for img in ref_imgs]
 
@@ -115,10 +121,11 @@ def main(args: InferenceArgs):
 
         # save config and image
         args_dict = vars(args)
-        args_dict['prompt'] = data_dict["prompt"]
-        args_dict['image_paths'] = data_dict["image_paths"]
-        with open(os.path.join(args.save_path, f"{i}_{j}.json"), 'w') as f:
-            json.dump(args_dict, f, indent=4)        
+        args_dict["prompt"] = data_dict["prompt"]
+        args_dict["image_paths"] = data_dict["image_paths"]
+        with open(os.path.join(args.save_path, f"{i}_{j}.json"), "w") as f:
+            json.dump(args_dict, f, indent=4)
+
 
 if __name__ == "__main__":
     parser = HfArgumentParser([InferenceArgs])

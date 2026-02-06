@@ -7,16 +7,15 @@ Reference: https://memu.so/
 
 import json
 import time
-import requests
 from pathlib import Path
 from typing import Any, Dict, List
 
-from rich.console import Console
-
+import requests
+from common_utils.datetime_utils import get_now_with_timezone
 from evaluation.src.adapters.online_base import OnlineAPIAdapter
 from evaluation.src.adapters.registry import register_adapter
 from evaluation.src.core.data_models import Conversation, SearchResult
-from common_utils.datetime_utils import get_now_with_timezone
+from rich.console import Console
 
 
 @register_adapter("memu")
@@ -51,7 +50,7 @@ class MemuAdapter(OnlineAPIAdapter):
         if not api_key:
             raise ValueError("Memu API key is required. Set 'api_key' in config.")
 
-        self.base_url = config.get("base_url", "https://api.memu.so").rstrip('/')
+        self.base_url = config.get("base_url", "https://api.memu.so").rstrip("/")
         self.agent_id = config.get("agent_id", "default_agent")
         self.agent_name = config.get("agent_name", "Assistant")
         self.task_check_interval = config.get("task_check_interval", 3)
@@ -755,7 +754,8 @@ class MemuAdapter(OnlineAPIAdapter):
         except Exception as e:
             # Fail silently - categories summary is optional context
             self.console.print(
-                f"   ⚠️  Failed to get categories for {user_id}: {e}", style="dim yellow"
+                f"   ⚠️  Failed to get categories for {user_id}: {e}",
+                style="dim yellow",
             )
             return {}
 
@@ -773,17 +773,17 @@ class MemuAdapter(OnlineAPIAdapter):
             Formatted categories summary string
             Returns empty string if no valid categories found
         """
-        if not memories or 'categories' not in memories:
+        if not memories or "categories" not in memories:
             return ""
 
         summary_parts = ["## Memory Overview (by Category)\n"]
 
-        categories = memories.get('categories', [])
+        categories = memories.get("categories", [])
         has_content = False
 
         for category in categories:
-            category_name = category.get('name', '')
-            category_summary = category.get('summary', '')
+            category_name = category.get("name", "")
+            category_summary = category.get("summary", "")
 
             if category_name and category_summary:
                 summary_parts.append(f"**{category_name}:** {category_summary}\n\n")

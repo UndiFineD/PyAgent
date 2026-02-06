@@ -15,22 +15,21 @@ V4 Update:
 
 import json
 import os
-from pathlib import Path
-from typing import List, Dict, Any, Optional
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
-from pymongo import AsyncMongoClient
 from beanie import init_beanie
+
+# Import language utility function from common_utils
+from common_utils.language_utils import get_prompt_language
+from demo.config import MongoDBConfig
 
 # Import document models from the project
 from infra_layer.adapters.out.persistence.document.memory.memcell import (
     MemCell as DocMemCell,
 )
-from demo.config import MongoDBConfig
-
-# Import language utility function from common_utils
-from common_utils.language_utils import get_prompt_language
-
+from pymongo import AsyncMongoClient
 
 # ============================================================================
 # MongoDB Tools
@@ -52,7 +51,7 @@ async def ensure_mongo_beanie_ready(mongo_config: MongoDBConfig) -> None:
     # Create MongoDB client and test connection
     client = AsyncMongoClient(mongo_config.uri)
     try:
-        await client.admin.command('ping')
+        await client.admin.command("ping")
         print(f"[MongoDB] ✅ Connected: {mongo_config.database}")
     except Exception as e:
         print(f"[MongoDB] ❌ Connection failed: {e}")
@@ -143,7 +142,7 @@ def serialize_datetime(obj: Any) -> Any:
     elif isinstance(obj, list):
         return [serialize_datetime(item) for item in obj]
     # Process object (convert __dict__)
-    elif hasattr(obj, '__dict__'):
+    elif hasattr(obj, "__dict__"):
         return serialize_datetime(obj.__dict__)
     # Return other types directly
     else:

@@ -5,16 +5,16 @@ Manages conversation sessions for a single group, providing memory retrieval and
 """
 
 import json
-import httpx
-from typing import List, Dict, Any, Optional, Tuple
 from datetime import timedelta
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
-from demo.config import ChatModeConfig, LLMConfig, ScenarioType
-from demo.utils import query_memcells_by_group_and_time
-from demo.ui import I18nTexts
-from memory_layer.llm.llm_provider import LLMProvider
+import httpx
 from common_utils.datetime_utils import get_now_with_timezone, to_iso_format
+from demo.config import ChatModeConfig, LLMConfig, ScenarioType
+from demo.ui import I18nTexts
+from demo.utils import query_memcells_by_group_and_time
+from memory_layer.llm.llm_provider import LLMProvider
 
 
 class ChatSession:
@@ -27,7 +27,7 @@ class ChatSession:
         llm_config: LLMConfig,
         scenario_type: ScenarioType,
         retrieval_mode: str,  # "keyword" / "vector" / "hybrid" / "rrf" / "agentic"
-        data_source: str,     # "episode" / "event_log"
+        data_source: str,  # "episode" / "event_log"
         texts: I18nTexts,
     ):
         """Initialize conversation session
@@ -59,7 +59,7 @@ class ChatSession:
         # API Configuration
         self.api_base_url = config.api_base_url
         self.retrieve_url = f"{self.api_base_url}/api/v1/memories/search"
-        
+
         # Last Retrieval Metadata
         self.last_retrieval_metadata: Optional[Dict[str, Any]] = None
 
@@ -241,13 +241,13 @@ class ChatSession:
         # memories is grouped: [{"group_id": [Memory, ...]}, ...]
         raw_memories = result.get("memories", [])
         metadata = result.get("metadata", {})
-        
+
         # Flatten grouped memories to flat list
         memories = []
         for group_dict in raw_memories:
             for group_id, mem_list in group_dict.items():
                 memories.extend(mem_list)
-        
+
         # Save metadata (for UI display)
         self.last_retrieval_metadata = metadata
 
@@ -298,7 +298,7 @@ class ChatSession:
                     # print(f"  ✅ Retrieval success: {memories_count} memories")
                     return result
                 else:
-                    error_msg = api_response.get('message', 'Unknown error')
+                    error_msg = api_response.get("message", "Unknown error")
                     # print(f"  ❌ API Error: {error_msg}")
                     raise RuntimeError(f"API Error: {error_msg}")
 
@@ -361,7 +361,7 @@ class ChatSession:
                     # print(f"  ✅ Retrieval success: {memories_count} memories")
                     return result
                 else:
-                    error_msg = api_response.get('message', 'Unknown error')
+                    error_msg = api_response.get("message", "Unknown error")
                     # print(f"  ❌ API Error: {error_msg}")
                     raise RuntimeError(f"API Error: {error_msg}")
 
@@ -475,8 +475,8 @@ class ChatSession:
 
         # Call LLM
         try:
-            if hasattr(self.llm_provider, 'provider') and hasattr(
-                self.llm_provider.provider, 'chat_with_messages'
+            if hasattr(self.llm_provider, "provider") and hasattr(
+                self.llm_provider.provider, "chat_with_messages"
             ):
                 raw_response = await self.llm_provider.provider.chat_with_messages(
                     messages
@@ -532,8 +532,9 @@ class ChatSession:
 
     async def reload_data(self) -> None:
         """Reload memory data"""
-        from .ui import ChatUI
         from common_utils.cli_ui import CLIUI
+
+        from .ui import ChatUI
 
         display_name = (
             "group_chat"

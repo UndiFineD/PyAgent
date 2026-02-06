@@ -8,120 +8,138 @@
 # For inquiries contact  wyhsirius@gmail.com, francois.bremond@inria.fr, antitza.dancheva@inria.fr
 #
 
-import os
-import torch
 import argparse
-import yaml
+import os
 from pathlib import Path
-from utils.data_processing import img_preprocessing, vid_preprocessing, save_animation, save_img_edit, save_vid_edit, save_linear_manipulation
+
+import torch
+import yaml
 from networks.generator import Generator
+from utils.data_processing import (
+    img_preprocessing,
+    save_animation,
+    save_img_edit,
+    save_linear_manipulation,
+    save_vid_edit,
+    vid_preprocessing,
+)
 
 
 @torch.inference_mode()
 def run_linear_manipulation(cfg, gen, save_dir):
 
-	print("==> loading data")
-	img, w, h = img_preprocessing(cfg["source_path"], cfg["size"])
-	img = img.to(device)
+    print("==> loading data")
+    img, w, h = img_preprocessing(cfg["source_path"], cfg["size"])
+    img = img.to(device)
 
-	print("==> running")
-	res = gen.interpolate_img(img, cfg["motion_id"], cfg["motion_value"]) # TCHW
-	# save results
-	save_linear_manipulation(save_dir, res, w, h, fps=12)
+    print("==> running")
+    res = gen.interpolate_img(img, cfg["motion_id"], cfg["motion_value"])  # TCHW
+    # save results
+    save_linear_manipulation(save_dir, res, w, h, fps=12)
 
-	return
+    return
 
 
 @torch.inference_mode()
 def run_img_edit(cfg, gen, save_dir):
 
-	print("==> loading data")
-	print("image path: ", cfg["source_path"])
-	img, w, h = img_preprocessing(cfg["source_path"], cfg["size"])
-	img = img.to(device)
+    print("==> loading data")
+    print("image path: ", cfg["source_path"])
+    img, w, h = img_preprocessing(cfg["source_path"], cfg["size"])
+    img = img.to(device)
 
-	print("==> running")
-	img_edit = gen.edit_img(img, cfg["motion_id"], cfg["motion_value"])
-	# save results
-	save_img_edit(save_dir, img, img_edit, w, h)
-	print("save path: ", save_dir)
+    print("==> running")
+    img_edit = gen.edit_img(img, cfg["motion_id"], cfg["motion_value"])
+    # save results
+    save_img_edit(save_dir, img, img_edit, w, h)
+    print("save path: ", save_dir)
 
-	return
+    return
 
 
 @torch.inference_mode()
 def run_vid_edit(cfg, gen, chunk_size, save_dir):
 
-	print("==> loading data")
-	print("video path: ", cfg["driving_path"])
-	vid, fps, w, h = vid_preprocessing(cfg["driving_path"], cfg["size"])
-	vid = vid.to(device) # TCHW
+    print("==> loading data")
+    print("video path: ", cfg["driving_path"])
+    vid, fps, w, h = vid_preprocessing(cfg["driving_path"], cfg["size"])
+    vid = vid.to(device)  # TCHW
 
-	print("==> running")
-	vid_edit = gen.edit_vid(vid, cfg["motion_id"], cfg["motion_value"], chunk_size) # tchw
+    print("==> running")
+    vid_edit = gen.edit_vid(
+        vid, cfg["motion_id"], cfg["motion_value"], chunk_size
+    )  # tchw
 
-	# save results
-	save_vid_edit(save_dir, vid, vid_edit, w, h, fps=fps)
-	print("save path: ", save_dir)
+    # save results
+    save_vid_edit(save_dir, vid, vid_edit, w, h, fps=fps)
+    print("save path: ", save_dir)
 
-	return
+    return
 
 
 @torch.inference_mode()
 def run_animation(cfg, gen, chunk_size, save_dir):
 
-	print("==> loading data")
-	print("image path: ", cfg["source_path"])
-	print("video path: ", cfg["driving_path"])
-	img_source, w, h = img_preprocessing(cfg["source_path"], cfg["size"])
-	vid_driving, fps, _, _ = vid_preprocessing(cfg["driving_path"], cfg["size"])
-	img_source = img_source.to(device) # BCHW
-	vid_driving = vid_driving.to(device) # TCHW
+    print("==> loading data")
+    print("image path: ", cfg["source_path"])
+    print("video path: ", cfg["driving_path"])
+    img_source, w, h = img_preprocessing(cfg["source_path"], cfg["size"])
+    vid_driving, fps, _, _ = vid_preprocessing(cfg["driving_path"], cfg["size"])
+    img_source = img_source.to(device)  # BCHW
+    vid_driving = vid_driving.to(device)  # TCHW
 
-	print("==> running")
-	vid_animated = gen.animate(img_source, vid_driving, cfg["motion_id"], cfg["motion_value"], chunk_size) # tchw
-	
-	# save results
-	save_animation(save_dir, img_source, vid_driving, vid_animated, w, h, fps)
-	print("save path: ", save_dir)
+    print("==> running")
+    vid_animated = gen.animate(
+        img_source, vid_driving, cfg["motion_id"], cfg["motion_value"], chunk_size
+    )  # tchw
 
-	return
+    # save results
+    save_animation(save_dir, img_source, vid_driving, vid_animated, w, h, fps)
+    print("save path: ", save_dir)
+
+    return
 
 
 if __name__ == "__main__":
 
-	parser = argparse.ArgumentParser()
-	parser.add_argument("--cfg", type=str, default='')
-	parser.add_argument("--mode", type=str, choices=['animation','img_edit','vid_edit','manipulation'])
-	parser.add_argument("--chunk_size", type=int, default=8) # process multiple frames each iteration, accelerate inference speed
-	args = parser.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--cfg", type=str, default="")
+    parser.add_argument(
+        "--mode",
+        type=str,
+        choices=["animation", "img_edit", "vid_edit", "manipulation"],
+    )
+    parser.add_argument(
+        "--chunk_size", type=int, default=8
+    )  # process multiple frames each iteration, accelerate inference speed
+    args = parser.parse_args()
 
-	# loading cfg
-	with open(args.cfg) as f:
-		cfg = yaml.load(f, Loader=yaml.FullLoader)
+    # loading cfg
+    with open(args.cfg) as f:
+        cfg = yaml.load(f, Loader=yaml.FullLoader)
 
-	# loading model
-	device = torch.device("cuda")
-	gen = Generator(motion_dim=cfg['motion_dim'], scale=cfg['scale']).to(device)
-	gen.load_state_dict(torch.load(cfg['ckpt_path'], weights_only=False))
-	gen.eval()
+    # loading model
+    device = torch.device("cuda")
+    gen = Generator(motion_dim=cfg["motion_dim"], scale=cfg["scale"]).to(device)
+    gen.load_state_dict(torch.load(cfg["ckpt_path"], weights_only=False))
+    gen.eval()
 
-	# save dir
-	save_dir = os.path.join(cfg['save_path'], Path(args.cfg).stem)
-	os.makedirs(save_dir, exist_ok=True)
+    # save dir
+    save_dir = os.path.join(cfg["save_path"], Path(args.cfg).stem)
+    os.makedirs(save_dir, exist_ok=True)
 
-	# running
-	if args.mode == "animation":
-		print("==> start animation")
-		run_animation(cfg, gen, args.chunk_size, save_dir)
-	elif args.mode == "vid_edit":
-		print("==> start video editing")
-		run_vid_edit(cfg, gen, args.chunk_size, save_dir)
-	elif args.mode == "img_edit":
-		print("==> start image editing")
-		run_img_edit(cfg, gen, save_dir)
-	elif args.mode == "manipulation":
-		print("==> start linear manipulation")
-		run_linear_manipulation(cfg, gen, save_dir)
-	else:
-		raise NotImplementedError
+    # running
+    if args.mode == "animation":
+        print("==> start animation")
+        run_animation(cfg, gen, args.chunk_size, save_dir)
+    elif args.mode == "vid_edit":
+        print("==> start video editing")
+        run_vid_edit(cfg, gen, args.chunk_size, save_dir)
+    elif args.mode == "img_edit":
+        print("==> start image editing")
+        run_img_edit(cfg, gen, save_dir)
+    elif args.mode == "manipulation":
+        print("==> start linear manipulation")
+        run_linear_manipulation(cfg, gen, save_dir)
+    else:
+        raise NotImplementedError

@@ -3,19 +3,19 @@
 
 from __future__ import annotations
 
-import asyncio
 import ast
+import asyncio
 import json
 import re
 from datetime import datetime
 from typing import AbstractSet, Any, Dict, List, Optional, Set
 
-from core.observation.logger import get_logger
-
+from api_specs.memory_types import MemCell, MemoryType
 from memory_layer.llm.llm_provider import LLMProvider
-
-from memory_layer.prompts import get_prompt_by
-from api_specs.memory_types import MemoryType, MemCell
+from memory_layer.memory_extractor.base_memory_extractor import (
+    MemoryExtractor,
+    MemoryExtractRequest,
+)
 from memory_layer.memory_extractor.profile_memory.conversation import (
     annotate_relative_dates,
     build_conversation_text,
@@ -26,7 +26,6 @@ from memory_layer.memory_extractor.profile_memory.conversation import (
     is_important_to_user,
     merge_group_importance_evidence,
 )
-from memory_layer.memory_extractor.profile_memory.empty_evidence_completion import complete_missing_evidences
 from memory_layer.memory_extractor.profile_memory.data_normalize import (
     accumulate_old_memory_entry,
     convert_projects_to_dataclass,
@@ -35,12 +34,19 @@ from memory_layer.memory_extractor.profile_memory.data_normalize import (
     profile_payload_to_memory,
     remove_evidences_from_profile,
 )
+from memory_layer.memory_extractor.profile_memory.empty_evidence_completion import (
+    complete_missing_evidences,
+)
 from memory_layer.memory_extractor.profile_memory.evidence_utils import (
     filter_opinion_tendency_by_type,
     remove_entries_without_evidence,
 )
-from memory_layer.memory_extractor.profile_memory.project_helpers import filter_project_items_by_type
-from memory_layer.memory_extractor.profile_memory.merger import convert_important_info_to_evidence
+from memory_layer.memory_extractor.profile_memory.merger import (
+    convert_important_info_to_evidence,
+)
+from memory_layer.memory_extractor.profile_memory.project_helpers import (
+    filter_project_items_by_type,
+)
 from memory_layer.memory_extractor.profile_memory.types import (
     GroupImportanceEvidence,
     ImportanceEvidence,
@@ -48,10 +54,9 @@ from memory_layer.memory_extractor.profile_memory.types import (
     ProfileMemoryExtractRequest,
     ProjectInfo,
 )
-from memory_layer.memory_extractor.base_memory_extractor import (
-    MemoryExtractor,
-    MemoryExtractRequest,
-)
+from memory_layer.prompts import get_prompt_by
+
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -683,7 +688,7 @@ class ProfileMemoryExtractor(MemoryExtractor):
         old_profiles_map: Dict[str, ProfileMemory] = {}
         if request.old_memory_list:
             for mem in request.old_memory_list:
-                if mem.memory_type == MemoryType.PROFILE and hasattr(mem, 'user_id'):
+                if mem.memory_type == MemoryType.PROFILE and hasattr(mem, "user_id"):
                     old_profiles_map[mem.user_id] = mem
 
         # Extract Part3 profiles for each user (🚀 parallelize LLM calls)
@@ -712,9 +717,9 @@ class ProfileMemoryExtractor(MemoryExtractor):
             if user_id in old_profiles_map:
                 old_profile = old_profiles_map[user_id]
                 prompt += f"\n**Previous Profile Summary:**\n"
-                if hasattr(old_profile, 'personality') and old_profile.personality:
+                if hasattr(old_profile, "personality") and old_profile.personality:
                     prompt += f"Personality: {old_profile.personality}\n"
-                if hasattr(old_profile, 'soft_skills') and old_profile.soft_skills:
+                if hasattr(old_profile, "soft_skills") and old_profile.soft_skills:
                     prompt += f"Soft Skills: {old_profile.soft_skills}\n"
 
             prompt += f"\n**New Conversation:**\n{conversation_text}\n"
@@ -723,27 +728,27 @@ class ProfileMemoryExtractor(MemoryExtractor):
                 f"\n**Task:** For user {user_info['user_name']}, extract ONLY these fields as JSON: "
                 "personality, way_of_decision_making, working_habit_preference, interests, tendency, "
                 "motivation_system, fear_system, value_system, humor_use, colloquialism, output_reasoning. "
-                "For list-type fields, each item must be an object: {\\\"value\\\": string, \\\"evidences\\\": [string], \\\"level\\\": string?}. "
+                'For list-type fields, each item must be an object: {\\"value\\": string, \\"evidences\\": [string], \\"level\\": string?}. '
                 "Use evidences referencing conversation ids when possible (e.g., [conversation_id:EVENT_ID] or EVENT_ID). "
                 "Include user_id and user_name. Use ASCII quotes only. Return one fenced JSON block, no extra text.\n"
                 "Exact response template:\n"
                 "```json\n"
                 "{\n"
-                "  \"user_profiles\": [\n"
+                '  "user_profiles": [\n'
                 "    {\n"
-                "      \"user_id\": \"USER_ID\",\n"
-                "      \"user_name\": \"USER_NAME\",\n"
-                "      \"personality\": [],\n"
-                "      \"way_of_decision_making\": [],\n"
-                "      \"working_habit_preference\": [],\n"
-                "      \"interests\": [],\n"
-                "      \"tendency\": [],\n"
-                "      \"motivation_system\": [],\n"
-                "      \"fear_system\": [],\n"
-                "      \"value_system\": [],\n"
-                "      \"humor_use\": [],\n"
-                "      \"colloquialism\": [],\n"
-                "      \"output_reasoning\": \"\"\n"
+                '      "user_id": "USER_ID",\n'
+                '      "user_name": "USER_NAME",\n'
+                '      "personality": [],\n'
+                '      "way_of_decision_making": [],\n'
+                '      "working_habit_preference": [],\n'
+                '      "interests": [],\n'
+                '      "tendency": [],\n'
+                '      "motivation_system": [],\n'
+                '      "fear_system": [],\n'
+                '      "value_system": [],\n'
+                '      "humor_use": [],\n'
+                '      "colloquialism": [],\n'
+                '      "output_reasoning": ""\n'
                 "    }\n"
                 "  ]\n"
                 "}\n"
@@ -787,7 +792,7 @@ class ProfileMemoryExtractor(MemoryExtractor):
                     batch_event_ids: List[str] = [
                         str(mc.event_id)
                         for mc in request.memcell_list
-                        if hasattr(mc, 'event_id') and mc.event_id
+                        if hasattr(mc, "event_id") and mc.event_id
                     ]
                     for ev in batch_event_ids:
                         ev_date = conversation_date_map.get(ev) or default_date
@@ -877,7 +882,7 @@ class ProfileMemoryExtractor(MemoryExtractor):
                     batch_event_ids: List[str] = [
                         str(mc.event_id)
                         for mc in request.memcell_list
-                        if hasattr(mc, 'event_id') and mc.event_id
+                        if hasattr(mc, "event_id") and mc.event_id
                     ]
                     for ev in batch_event_ids:
                         ev_date = conversation_date_map.get(ev) or default_date
@@ -890,7 +895,7 @@ class ProfileMemoryExtractor(MemoryExtractor):
                         ori_event_id_list=[
                             mc.event_id
                             for mc in request.memcell_list
-                            if hasattr(mc, 'event_id')
+                            if hasattr(mc, "event_id")
                         ],
                         group_id=request.group_id or "",
                         personality=[

@@ -4,11 +4,11 @@ import json
 import random
 import re
 
-from inspect_ai.model import ChatMessageUser
-from inspect_ai.solver import Solver, solver, TaskState, Generate
-
 from fle.agents.data.screenshots_from_run import create_factorio_instance
 from fle.commons.models.rendered_image import RenderedImage
+from inspect_ai.model import ChatMessageUser
+from inspect_ai.solver import Generate, Solver, TaskState, solver
+
 from .templates import Templates
 
 
@@ -226,9 +226,11 @@ def generate_spatial_context_question() -> Solver:
                     }
                     for ne in nearby_entities[:3]
                 ],
-                nearest_entity_name=nearby_entities[0]["entity"].get("name")
-                if nearby_entities
-                else "nearest entity",
+                nearest_entity_name=(
+                    nearby_entities[0]["entity"].get("name")
+                    if nearby_entities
+                    else "nearest entity"
+                ),
             )
 
             state.messages = [ChatMessageUser(content=context_prompt)]

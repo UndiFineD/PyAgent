@@ -1,13 +1,13 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\data\vqa\upload.py
-import os
 import json
-from pathlib import Path
+import os
 from collections import defaultdict
 from datetime import datetime
-from typing import Dict, List, Any
+from pathlib import Path
+from typing import Any, Dict, List
 
-from huggingface_hub import HfApi
 from dotenv import load_dotenv
+from huggingface_hub import HfApi
 
 load_dotenv()
 

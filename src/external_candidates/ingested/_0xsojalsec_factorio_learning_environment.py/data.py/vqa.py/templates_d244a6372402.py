@@ -1,7 +1,8 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\data\vqa\templates.py
 from pathlib import Path
+from typing import Any, Dict
+
 from jinja2 import Environment, FileSystemLoader
-from typing import Dict, Any
 
 
 class TemplateManager:

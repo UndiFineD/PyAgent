@@ -5,14 +5,15 @@ System integration stability test
 Test key scenarios such as end-to-end system stability, fault recovery, and performance benchmarks
 """
 
-import pytest
 import asyncio
-import time
-import psutil
-import os
 import json
-from typing import List, Dict, Any
-from unittest.mock import AsyncMock, patch, MagicMock
+import os
+import time
+from typing import Any, Dict, List
+from unittest.mock import AsyncMock, MagicMock, patch
+
+import psutil
+import pytest
 
 # Set test environment
 os.environ.setdefault("MOCK_MODE", "true")
@@ -180,7 +181,9 @@ class TestSystemIntegrationStability:
 
         # Verify reasonable CPU usage
         assert current_cpu < 80, f"CPU usage too high: {current_cpu:.2f}%"
-        assert len(results) == 10, f"Task completion count mismatch: {len(results)} != 10"
+        assert (
+            len(results) == 10
+        ), f"Task completion count mismatch: {len(results)} != 10"
 
     @pytest.mark.asyncio
     async def test_error_recovery_mechanism(self, mock_app):
@@ -188,7 +191,7 @@ class TestSystemIntegrationStability:
         recovery_successful = False
 
         # Simulate error scenario
-        with patch.object(mock_app, 'get') as mock_get:
+        with patch.object(mock_app, "get") as mock_get:
             # First few calls fail, subsequent calls succeed
             call_count = 0
 
@@ -378,7 +381,9 @@ class TestSystemFaultTolerance:
 
         result = await dependent_service()
         assert failure_isolated, "Cascade failure prevention failed"
-        assert result == "Service degraded operation", "Service degradation handling failed"
+        assert (
+            result == "Service degraded operation"
+        ), "Service degradation handling failed"
         print("Cascade failure prevention test passed")
 
 
@@ -446,7 +451,9 @@ class TestSystemMonitoring:
             for metric, threshold in thresholds.items():
                 if metrics.get(metric, 0) > threshold:
                     alert_triggered = True
-                    print(f"Alert triggered: {metric} = {metrics[metric]} > {threshold}")
+                    print(
+                        f"Alert triggered: {metric} = {metrics[metric]} > {threshold}"
+                    )
 
         # Simulate high-load metrics
         high_load_metrics = {

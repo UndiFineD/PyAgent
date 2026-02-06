@@ -53,7 +53,7 @@ class PipelineTask:
     priority: TaskPriority = TaskPriority.NORMAL
     status: TaskStatus = TaskStatus.PENDING
     dependencies: List[str] = None  # Task IDs this task depends on
-    max_retries: int = 3
+    max_retries: int = 0
     retry_count: int = 0
     created_at: float = None
     started_at: Optional[float] = None

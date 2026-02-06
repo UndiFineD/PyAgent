@@ -19,13 +19,13 @@ import itertools
 import logging
 import os
 import random
-import wandb
 from copy import deepcopy
 from typing import TYPE_CHECKING, Literal
 
 import torch
 import torch.nn.functional as F
 import transformers
+import wandb
 from accelerate import Accelerator, DeepSpeedPlugin
 from accelerate.logging import get_logger
 from accelerate.utils import set_seed
@@ -35,7 +35,6 @@ from PIL import Image
 from safetensors.torch import load_file
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-
 from uno.dataset.uno import FluxPairedDatasetV2
 from uno.flux.sampling import denoise, get_noise, get_schedule, prepare_multi_ip, unpack
 from uno.flux.util import load_ae, load_clip, load_flow_model, load_t5, set_lora
@@ -47,30 +46,37 @@ if TYPE_CHECKING:
 
 logger = get_logger(__name__)
 
-def get_models(name: str, device, offload: bool=False):
+
+def get_models(name: str, device, offload: bool = False):
     t5 = load_t5(device, max_length=512)
     clip = load_clip(device)
     model = load_flow_model(name, device="cpu")
     vae = load_ae(name, device="cpu" if offload else device)
     return model, vae, t5, clip
 
+
 def inference(
     batch: dict,
-    model: "Flux", t5: "HFEmbedder", clip: "HFEmbedder", ae: "AutoEncoder",
+    model: "Flux",
+    t5: "HFEmbedder",
+    clip: "HFEmbedder",
+    ae: "AutoEncoder",
     accelerator: Accelerator,
     seed: int = 0,
-    pe: Literal["d", "h", "w", "o"] = "d"
+    pe: Literal["d", "h", "w", "o"] = "d",
 ) -> Image.Image:
     ref_imgs = batch["ref_imgs"]
     prompt = batch["txt"]
-    neg_prompt = ''
+    neg_prompt = ""
     width, height = 512, 512
     num_steps = 25
     x = get_noise(
-        1, height, width,
+        1,
+        height,
+        width,
         device=accelerator.device,
         dtype=torch.bfloat16,
-        seed=seed + accelerator.process_index
+        seed=seed + accelerator.process_index,
     )
     timesteps = get_schedule(
         num_steps,
@@ -83,9 +89,7 @@ def inference(
             for ref_img_ in ref_imgs
         ]
         inp_cond = prepare_multi_ip(
-            t5=t5, clip=clip, img=x, prompt=prompt,
-            ref_imgs=ref_imgs,
-            pe=pe
+            t5=t5, clip=clip, img=x, prompt=prompt, ref_imgs=ref_imgs, pe=pe
         )
 
         x = denoise(
@@ -111,7 +115,13 @@ def resume_from_checkpoint(
     accelerator: Accelerator,
     dit: "Flux",
     dit_ema_dict: dict | None = None,
-) -> tuple["Flux", torch.optim.Optimizer, torch.optim.lr_scheduler.LRScheduler, dict | None, int]:
+) -> tuple[
+    "Flux",
+    torch.optim.Optimizer,
+    torch.optim.lr_scheduler.LRScheduler,
+    dict | None,
+    int,
+]:
     # Potentially load in the weights and states from a previous save
     if resume_from_checkpoint is None:
         return dit, dit_ema_dict, 0
@@ -129,30 +139,28 @@ def resume_from_checkpoint(
         path = dirs[-1]
 
         global_step = int(path.split("-")[1])
-        resume_path = os.path.join(project_dir, path, 'dit_lora.safetensors')
-        resume_ema_path = os.path.join(project_dir, path, 'dit_lora_ema.safetensors')
+        resume_path = os.path.join(project_dir, path, "dit_lora.safetensors")
+        resume_ema_path = os.path.join(project_dir, path, "dit_lora_ema.safetensors")
     else:
         global_step = 0
         resume_path = resume_from_checkpoint
         resume_ema_path = resume_from_checkpoint
 
-
     accelerator.print(f"Resuming from checkpoint {resume_path}")
-    lora_state = load_file(
-        resume_path,
-        device=accelerator.device.__str__()
-    )
+    lora_state = load_file(resume_path, device=accelerator.device.__str__())
     unwarp_dit = accelerator.unwrap_model(dit)
     unwarp_dit.load_state_dict(lora_state, strict=False)
 
     if dit_ema_dict is not None:
-        dit_ema_dict = load_file(
-            resume_ema_path,
-            device=accelerator.device.__str__()
-        )
-        dit_ema_dict = {f"module.{k}": v for k, v in dit_ema_dict.items() if k in unwarp_dit.state_dict()}
-    
+        dit_ema_dict = load_file(resume_ema_path, device=accelerator.device.__str__())
+        dit_ema_dict = {
+            f"module.{k}": v
+            for k, v in dit_ema_dict.items()
+            if k in unwarp_dit.state_dict()
+        }
+
     return dit, dit_ema_dict, global_step
+
 
 @dataclasses.dataclass
 class TrainArgs:
@@ -169,18 +177,21 @@ class TrainArgs:
     lora_rank: int = 512
     double_blocks_indices: list[int] | None = dataclasses.field(
         default=None,
-        metadata={"help": "Indices of double blocks to apply LoRA. None means all double blocks."}
+        metadata={
+            "help": "Indices of double blocks to apply LoRA. None means all double blocks."
+        },
     )
     single_blocks_indices: list[int] | None = dataclasses.field(
         default=None,
-        metadata={"help": "Indices of double blocks to apply LoRA. None means all single blocks."}
+        metadata={
+            "help": "Indices of double blocks to apply LoRA. None means all single blocks."
+        },
     )
     pe: Literal["d", "h", "w", "o"] = "d"
     gradient_checkpoint: bool = True
     ema: bool = False
     ema_interval: int = 1
     ema_decay: float = 0.99
-
 
     ## optimizer
     learning_rate: float = 8e-5
@@ -209,14 +220,15 @@ class TrainArgs:
     resume_from_checkpoint: str | None | Literal["latest"] = None
     checkpointing_steps: int = 1000
 
+
 def main(
     args: TrainArgs,
 ):
     ## accelerator
     deepspeed_plugins = {
-        "dit": DeepSpeedPlugin(hf_ds_config='config/deepspeed/zero2_config.json'),
-        "t5": DeepSpeedPlugin(hf_ds_config='config/deepspeed/zero3_config.json'),
-        "clip": DeepSpeedPlugin(hf_ds_config='config/deepspeed/zero3_config.json')
+        "dit": DeepSpeedPlugin(hf_ds_config="config/deepspeed/zero2_config.json"),
+        "t5": DeepSpeedPlugin(hf_ds_config="config/deepspeed/zero3_config.json"),
+        "clip": DeepSpeedPlugin(hf_ds_config="config/deepspeed/zero3_config.json"),
     }
     accelerator = Accelerator(
         project_dir=args.project_dir,
@@ -244,10 +256,11 @@ def main(
 
     ## logger
     logging.basicConfig(
-        format=f"[RANK {accelerator.process_index}] " + "%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+        format=f"[RANK {accelerator.process_index}] "
+        + "%(asctime)s - %(levelname)s - %(name)s - %(message)s",
         datefmt="%m/%d/%Y %H:%M:%S",
         level=logging.INFO,
-        force=True
+        force=True,
     )
     logger.info(accelerator.state)
     logger.info("Training script launched", main_process_only=False)
@@ -257,20 +270,32 @@ def main(
         name=args.model_name,
         device=accelerator.device,
     )
-    
+
     vae.requires_grad_(False)
     t5.requires_grad_(False)
     clip.requires_grad_(False)
 
     dit.requires_grad_(False)
-    dit = set_lora(dit, args.lora_rank, args.double_blocks_indices, args.single_blocks_indices, accelerator.device)
+    dit = set_lora(
+        dit,
+        args.lora_rank,
+        args.double_blocks_indices,
+        args.single_blocks_indices,
+        accelerator.device,
+    )
     dit.train()
     dit.gradient_checkpointing = args.gradient_checkpoint
 
     ## ema
-    dit_ema_dict = {
-        f"module.{k}": deepcopy(v).requires_grad_(False) for k, v in dit.named_parameters() if v.requires_grad
-    } if args.ema else None
+    dit_ema_dict = (
+        {
+            f"module.{k}": deepcopy(v).requires_grad_(False)
+            for k, v in dit.named_parameters()
+            if v.requires_grad
+        }
+        if args.ema
+        else None
+    )
 
     ## optimizer and lr scheduler
     optimizer = torch.optim.AdamW(
@@ -280,7 +305,7 @@ def main(
         weight_decay=args.adam_weight_decay,
         eps=args.adam_eps,
     )
-    
+
     lr_scheduler = get_scheduler(
         args.lr_scheduler,
         optimizer=optimizer,
@@ -289,38 +314,33 @@ def main(
     )
 
     ## resume
-    (
-        dit,
-        dit_ema_dict,
-        global_step
-    ) = resume_from_checkpoint(
+    dit, dit_ema_dict, global_step = resume_from_checkpoint(
         args.resume_from_checkpoint,
         project_dir=args.project_dir,
         accelerator=accelerator,
         dit=dit,
-        dit_ema_dict=dit_ema_dict
+        dit_ema_dict=dit_ema_dict,
     )
 
     # dataloader
     dataset = FluxPairedDatasetV2(
         json_file=args.train_data_json,
-        resolution=args.resolution, resolution_ref=args.resolution_ref
+        resolution=args.resolution,
+        resolution_ref=args.resolution_ref,
     )
     dataloader = DataLoader(
-        dataset,
-        batch_size=args.batch_size,
-        shuffle=True,
-        collate_fn=dataset.collate_fn
+        dataset, batch_size=args.batch_size, shuffle=True, collate_fn=dataset.collate_fn
     )
     eval_dataset = FluxPairedDatasetV2(
         json_file=args.eval_data_json,
-        resolution=args.resolution, resolution_ref=args.resolution_ref
-    )   
+        resolution=args.resolution,
+        resolution_ref=args.resolution_ref,
+    )
     eval_dataloader = DataLoader(
         eval_dataset,
         batch_size=args.eval_batch_size,
         shuffle=False,
-        collate_fn=eval_dataset.collate_fn
+        collate_fn=eval_dataset.collate_fn,
     )
 
     dataloader = accelerator.prepare_data_loader(dataloader)
@@ -335,7 +355,7 @@ def main(
     dataloader = infinite_dataloader(dataloader)  # as infinite fetch data loader
     ## parallel
     accelerator.state.select_deepspeed_plugin("dit")
-    dit, optimizer, lr_scheduler = accelerator.prepare(dit, optimizer, lr_scheduler) 
+    dit, optimizer, lr_scheduler = accelerator.prepare(dit, optimizer, lr_scheduler)
     accelerator.state.select_deepspeed_plugin("t5")
     t5 = accelerator.prepare(t5)  # type: torch.nn.Module
     accelerator.state.select_deepspeed_plugin("clip")
@@ -348,11 +368,15 @@ def main(
         shift=True,
     )
     timesteps = torch.tensor(timesteps, device=accelerator.device)
-    total_batch_size = args.batch_size * accelerator.num_processes * args.gradient_accumulation_steps
+    total_batch_size = (
+        args.batch_size * accelerator.num_processes * args.gradient_accumulation_steps
+    )
 
     logger.info("***** Running training *****")
     logger.info(f"  Instantaneous batch size per device = {args.batch_size}")
-    logger.info(f"  Total train batch size (w. parallel, distributed & accumulation) = {total_batch_size}")
+    logger.info(
+        f"  Total train batch size (w. parallel, distributed & accumulation) = {total_batch_size}"
+    )
     logger.info(f"  Gradient Accumulation steps = {args.gradient_accumulation_steps}")
     logger.info(f"  Total optimization steps = {args.max_train_steps}")
     logger.info(f"  Total validation prompts = {len(eval_dataloader)}")
@@ -368,36 +392,55 @@ def main(
     train_loss = 0.0
     while global_step < (args.max_train_steps):
         batch = next(dataloader)
-        prompts = [txt_ if random.random() > args.text_dropout else "" for txt_ in batch["txt"]]
+        prompts = [
+            txt_ if random.random() > args.text_dropout else "" for txt_ in batch["txt"]
+        ]
         img = batch["img"]
         ref_imgs = batch["ref_imgs"]
 
         with torch.no_grad():
             x_1 = vae.encode(img.to(accelerator.device).to(torch.float32))
-            x_ref = [vae.encode(ref_img.to(accelerator.device).to(torch.float32)) for ref_img in ref_imgs]
-            inp = prepare_multi_ip(t5=t5, clip=clip, img=x_1, prompt=prompts, ref_imgs=tuple(x_ref), pe=args.pe)
+            x_ref = [
+                vae.encode(ref_img.to(accelerator.device).to(torch.float32))
+                for ref_img in ref_imgs
+            ]
+            inp = prepare_multi_ip(
+                t5=t5,
+                clip=clip,
+                img=x_1,
+                prompt=prompts,
+                ref_imgs=tuple(x_ref),
+                pe=args.pe,
+            )
             x_1 = rearrange(x_1, "b c (h ph) (w pw) -> b (h w) (c ph pw)", ph=2, pw=2)
-            x_ref = [rearrange(x, "b c (h ph) (w pw) -> b (h w) (c ph pw)", ph=2, pw=2) for x in x_ref]
+            x_ref = [
+                rearrange(x, "b c (h ph) (w pw) -> b (h w) (c ph pw)", ph=2, pw=2)
+                for x in x_ref
+            ]
 
             bs = img.shape[0]
             t = torch.randint(0, 1000, (bs,), device=accelerator.device)
             t = timesteps[t]
             x_0 = torch.randn_like(x_1, device=accelerator.device)
             x_t = (1 - t[:, None, None]) * x_1 + t[:, None, None] * x_0
-            guidance_vec = torch.full((x_t.shape[0],), 1, device=x_t.device, dtype=x_t.dtype)
-        
+            guidance_vec = torch.full(
+                (x_t.shape[0],), 1, device=x_t.device, dtype=x_t.dtype
+            )
+
         with accelerator.accumulate(dit):
             # Predict the noise residual and compute loss
             model_pred = dit(
                 img=x_t.to(weight_dtype),
-                img_ids=inp['img_ids'].to(weight_dtype),
+                img_ids=inp["img_ids"].to(weight_dtype),
                 ref_img=[x.to(weight_dtype) for x in x_ref],
-                ref_img_ids=[ref_img_id.to(weight_dtype) for ref_img_id in inp['ref_img_ids']],
-                txt=inp['txt'].to(weight_dtype),
-                txt_ids=inp['txt_ids'].to(weight_dtype),
-                y=inp['vec'].to(weight_dtype),
+                ref_img_ids=[
+                    ref_img_id.to(weight_dtype) for ref_img_id in inp["ref_img_ids"]
+                ],
+                txt=inp["txt"].to(weight_dtype),
+                txt_ids=inp["txt_ids"].to(weight_dtype),
+                y=inp["vec"].to(weight_dtype),
                 timesteps=t.to(weight_dtype),
-                guidance=guidance_vec.to(weight_dtype)
+                guidance=guidance_vec.to(weight_dtype),
             )
 
             loss = F.mse_loss(model_pred.float(), (x_0 - x_1).float(), reduction="mean")
@@ -421,10 +464,16 @@ def main(
             accelerator.log({"train_loss": train_loss}, step=global_step)
             train_loss = 0.0
 
-        if accelerator.sync_gradients and dit_ema_dict is not None and global_step % args.ema_interval == 0:
+        if (
+            accelerator.sync_gradients
+            and dit_ema_dict is not None
+            and global_step % args.ema_interval == 0
+        ):
             src_dict = dit.state_dict()
             for tgt_name in dit_ema_dict:
-                dit_ema_dict[tgt_name].data.lerp_(src_dict[tgt_name].to(dit_ema_dict[tgt_name]), 1 - args.ema_decay)
+                dit_ema_dict[tgt_name].data.lerp_(
+                    src_dict[tgt_name].to(dit_ema_dict[tgt_name]), 1 - args.ema_decay
+                )
 
         if accelerator.sync_gradients and global_step % args.checkpointing_steps == 0:
             logger.info(f"saving checkpoint in {global_step=}")
@@ -436,52 +485,82 @@ def main(
             accelerator.wait_for_everyone()
             unwrapped_model = accelerator.unwrap_model(dit)
             unwrapped_model_state = unwrapped_model.state_dict()
-            requires_grad_key = [k for k, v in unwrapped_model.named_parameters() if v.requires_grad]
-            unwrapped_model_state = {k: unwrapped_model_state[k] for k in requires_grad_key}
+            requires_grad_key = [
+                k for k, v in unwrapped_model.named_parameters() if v.requires_grad
+            ]
+            unwrapped_model_state = {
+                k: unwrapped_model_state[k] for k in requires_grad_key
+            }
 
             if accelerator.is_main_process:
                 accelerator.save(
                     unwrapped_model_state,
-                    os.path.join(save_path, 'dit_lora.safetensors'),
-                    safe_serialization=True
+                    os.path.join(save_path, "dit_lora.safetensors"),
+                    safe_serialization=True,
                 )
-            
+
             unwrapped_opt = accelerator.unwrap_model(optimizer)
             if accelerator.is_main_process:
-                accelerator.save(unwrapped_opt.state_dict(), os.path.join(save_path, 'optimizer.bin'))
+                accelerator.save(
+                    unwrapped_opt.state_dict(), os.path.join(save_path, "optimizer.bin")
+                )
             logger.info(f"Saved state to {save_path}")
 
             if args.ema and accelerator.is_main_process:
                 accelerator.save(
                     {k.split("module.")[-1]: v for k, v in dit_ema_dict.items()},
-                    os.path.join(save_path, 'dit_lora_ema.safetensors'),
-                    safe_serialization=True
+                    os.path.join(save_path, "dit_lora_ema.safetensors"),
+                    safe_serialization=True,
                 )
-            
+
             # log
             images_log, images_ref_log = [], []
             for batch_idx in range(min(bs, 8)):
-                images_log.append(wandb.Image((img[batch_idx:batch_idx+1] * 0.5 + 0.5).float(), caption=prompts[batch_idx]))
+                images_log.append(
+                    wandb.Image(
+                        (img[batch_idx : batch_idx + 1] * 0.5 + 0.5).float(),
+                        caption=prompts[batch_idx],
+                    )
+                )
                 for ref_idx in range(len(ref_imgs)):
-                    images_ref_log.append(wandb.Image((ref_imgs[ref_idx][batch_idx:batch_idx+1] * 0.5 + 0.5).float(), caption=f"ref_{ref_idx}"))
-            accelerator.log({"images_tgt": images_log, "images_ref": images_ref_log}, step=global_step)
+                    images_ref_log.append(
+                        wandb.Image(
+                            (
+                                ref_imgs[ref_idx][batch_idx : batch_idx + 1] * 0.5 + 0.5
+                            ).float(),
+                            caption=f"ref_{ref_idx}",
+                        )
+                    )
+            accelerator.log(
+                {"images_tgt": images_log, "images_ref": images_ref_log},
+                step=global_step,
+            )
 
             # validate
             dit.eval()
             torch.set_grad_enabled(False)
             for i, batch in enumerate(eval_dataloader):
                 result = inference(batch, dit, t5, clip, vae, accelerator, seed=0)
-                accelerator.log({f"eval_gen_{i}": wandb.Image(result, caption=batch["txt"][-1])}, step=global_step)
-
+                accelerator.log(
+                    {f"eval_gen_{i}": wandb.Image(result, caption=batch["txt"][-1])},
+                    step=global_step,
+                )
 
             if args.ema:
                 original_state_dict = dit.state_dict()
                 dit.load_state_dict(dit_ema_dict, strict=False)
                 for batch in eval_dataloader:
                     result = inference(batch, dit, t5, clip, vae, accelerator, seed=0)
-                    accelerator.log({f"eval_ema_gen_{i}": wandb.Image(result, caption=batch["txt"][-1])}, step=global_step)
+                    accelerator.log(
+                        {
+                            f"eval_ema_gen_{i}": wandb.Image(
+                                result, caption=batch["txt"][-1]
+                            )
+                        },
+                        step=global_step,
+                    )
                 dit.load_state_dict(original_state_dict, strict=False)
-            
+
             torch.cuda.empty_cache()
             gc.collect()
             torch.set_grad_enabled(True)
@@ -490,9 +569,10 @@ def main(
 
         logs = {"step_loss": loss.detach().item(), "lr": lr_scheduler.get_last_lr()[0]}
         progress_bar.set_postfix(**logs)
-    
+
     accelerator.wait_for_everyone()
     accelerator.end_training()
+
 
 if __name__ == "__main__":
     parser = transformers.HfArgumentParser([TrainArgs])

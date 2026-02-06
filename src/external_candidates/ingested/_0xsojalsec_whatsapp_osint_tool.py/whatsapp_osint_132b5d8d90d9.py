@@ -1,12 +1,13 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-WhatsApp-OSINT-tool\whatsapp-osint.py
+import base64
+import json
 import os
 import re
-import base64
-import requests
-import json
 import time
+
+import requests
+from colorama import Fore, Style, init
 from dotenv import load_dotenv
-from colorama import init, Fore, Style
 
 init()  # Initialize colorama (needed for Windows)
 
@@ -24,8 +25,9 @@ ENDPOINTS = {
     "3": {"name": "Business Verification", "url": "/bizos", "method": "POST"},
     "4": {"name": "Device Information", "url": "/devices", "method": "GET"},
     "5": {"name": "Full OSINT Information", "url": "/wspic/dck", "method": "GET"},
-    "6": {"name": "Privacy Settings", "url": "/privacy", "method": "GET"}
+    "6": {"name": "Privacy Settings", "url": "/privacy", "method": "GET"},
 }
+
 
 def show_banner():
     print(Fore.GREEN + """
@@ -44,13 +46,23 @@ def show_banner():
 ⠠⠛⠛⠛⠉⠁⠀⠈⠙⠛⠛⠿⠿⠿⠿⠛⠛⠋⠁⠀⠀⠀⠀⠀⠀⠀
 """ + Style.RESET_ALL)
     print(Fore.GREEN + "🔍" * 15 + Style.RESET_ALL)
-    print("\n" + Style.BRIGHT + Fore.GREEN + "WhatsApp OSINT Tool" + Style.RESET_ALL + "\n")
+    print(
+        "\n"
+        + Style.BRIGHT
+        + Fore.GREEN
+        + "WhatsApp OSINT Tool"
+        + Style.RESET_ALL
+        + "\n"
+    )
+
 
 def sanitize_phone(raw: str) -> str:
     return re.sub(r"[^\d]", "", raw)
 
+
 def is_valid_phone(p: str) -> bool:
     return p.isdigit() and 8 <= len(p) <= 15
+
 
 def show_menu():
     print(Fore.CYAN + "🔍 Select the type of query:" + Style.RESET_ALL)
@@ -59,16 +71,20 @@ def show_menu():
         print(f"  {Fore.YELLOW}{key}.{Style.RESET_ALL} {endpoint['name']}")
     print()
 
+
 def fetch_endpoint(phone: str, api_key: str, endpoint: str, method: str = "GET"):
     headers = {"x-rapidapi-key": api_key, "x-rapidapi-host": API_HOST}
     url = "https://whatsapp-osint.p.rapidapi.com" + endpoint
     try:
         if method == "GET":
-            return requests.get(url, headers=headers, params={"phone": phone}, timeout=30)
+            return requests.get(
+                url, headers=headers, params={"phone": phone}, timeout=30
+            )
         elif method == "POST":
             return requests.post(url, headers=headers, data=phone, timeout=30)
     except requests.RequestException as e:
         raise e
+
 
 def save_b64(b64_str: str, path: str) -> bool:
     try:
@@ -78,6 +94,7 @@ def save_b64(b64_str: str, path: str) -> bool:
         return True
     except Exception:
         return False
+
 
 def process_profile_picture(phone: str, api_key: str):
     """Process profile photo"""
@@ -122,6 +139,7 @@ def process_profile_picture(phone: str, api_key: str):
             else:
                 print(f"ℹ️ Text response:\n{body}")
 
+
 def process_user_status(phone: str, api_key: str):
     """Process user status"""
     try:
@@ -139,9 +157,9 @@ def process_user_status(phone: str, api_key: str):
         data = resp.json()
         print(f"\n📊 {Fore.CYAN}User Status:{Style.RESET_ALL}")
         print(f"   📱 Number: {phone}")
-        
+
         if "about" in data:
-            if data['about'] and data['about'].strip():
+            if data["about"] and data["about"].strip():
                 print(f"   📝 Status: {data['about']}")
             else:
                 print("   📝 Status: No custom status")
@@ -150,10 +168,11 @@ def process_user_status(phone: str, api_key: str):
         if "last_seen" in data:
             print(f"   🕒 Last seen: {data['last_seen']}")
         if "is_online" in data:
-            status = "🟢 Online" if data['is_online'] else "🔴 Offline"
+            status = "🟢 Online" if data["is_online"] else "🔴 Offline"
             print(f"   {status}")
     except Exception:
         print("ℹ️ Text response:", resp.text.strip())
+
 
 def process_business_verification(phone: str, api_key: str):
     """Process WhatsApp Business verification"""
@@ -161,7 +180,7 @@ def process_business_verification(phone: str, api_key: str):
         headers = {
             "x-rapidapi-key": api_key,
             "x-rapidapi-host": API_HOST,
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         }
         url = "https://whatsapp-osint.p.rapidapi.com/bizos"
         data = {"phone": phone}
@@ -183,8 +202,13 @@ def process_business_verification(phone: str, api_key: str):
         if isinstance(data, list) and len(data) > 0:
             business_data = data[0]
             if "isBusiness" in business_data:
-                is_biz = business_data['isBusiness']
-                if is_biz and is_biz != "false" and "Not a Business Account" not in str(is_biz) and "Not Registered" not in str(is_biz):
+                is_biz = business_data["isBusiness"]
+                if (
+                    is_biz
+                    and is_biz != "false"
+                    and "Not a Business Account" not in str(is_biz)
+                    and "Not Registered" not in str(is_biz)
+                ):
                     print(f"   ✅ Is WhatsApp Business: {is_biz}")
                 elif "Not a Business Account" in str(is_biz):
                     print("   ❌ Not a Business Account (personal)")
@@ -192,7 +216,7 @@ def process_business_verification(phone: str, api_key: str):
                     print("   ❌ Not registered on WhatsApp")
                 else:
                     print("   ❌ Not a Business Account")
-            if "verifiedName" in business_data and business_data['verifiedName']:
+            if "verifiedName" in business_data and business_data["verifiedName"]:
                 print(f"   🏪 Verified Name: {business_data['verifiedName']}")
             if "query" in business_data:
                 print(f"   🔍 Query: {business_data['query']}")
@@ -200,6 +224,7 @@ def process_business_verification(phone: str, api_key: str):
             print("   ℹ️ No business info found")
     except Exception:
         print("ℹ️ Text response:", resp.text.strip())
+
 
 def process_device_info(phone: str, api_key: str):
     """Process linked device information"""
@@ -220,9 +245,9 @@ def process_device_info(phone: str, api_key: str):
         print(f"   📞 Number: {phone}")
 
         if "devices" in data:
-            if isinstance(data['devices'], list) and data['devices']:
+            if isinstance(data["devices"], list) and data["devices"]:
                 print(f"   🔢 Total Devices: {len(data['devices'])}")
-                for i, device in enumerate(data['devices'], 1):
+                for i, device in enumerate(data["devices"], 1):
                     print(f"\n   📱 Device {i}:")
                     if "device_type" in device:
                         print(f"      🖥️ Type: {device['device_type']}")
@@ -231,9 +256,13 @@ def process_device_info(phone: str, api_key: str):
                     if "last_seen" in device:
                         print(f"      🕒 Last seen: {device['last_seen']}")
                     if "status" in device:
-                        status = "🟢 Online" if device['status'] == "online" else "🔴 Offline"
+                        status = (
+                            "🟢 Online"
+                            if device["status"] == "online"
+                            else "🔴 Offline"
+                        )
                         print(f"      {status}")
-            elif isinstance(data['devices'], int):
+            elif isinstance(data["devices"], int):
                 print(f"   🔢 Total Devices: {data['devices']}")
             else:
                 print("   ℹ️ No device information found")
@@ -243,6 +272,7 @@ def process_device_info(phone: str, api_key: str):
             print("   ℹ️ No device information found")
     except Exception:
         print("ℹ️ Text response:", resp.text.strip())
+
 
 def process_osint_info(phone: str, api_key: str):
     """Process full OSINT data"""
@@ -274,6 +304,7 @@ def process_osint_info(phone: str, api_key: str):
     except Exception:
         print("ℹ️ Text response:", resp.text.strip())
 
+
 def process_privacy_settings(phone: str, api_key: str):
     """Process privacy settings"""
     try:
@@ -298,7 +329,7 @@ def process_privacy_settings(phone: str, api_key: str):
         if "last_seen" in data:
             print(f"   🕒 Last seen: {data['last_seen']}")
         if "read_receipts" in data:
-            receipts = "✅ Enabled" if data['read_receipts'] else "❌ Disabled"
+            receipts = "✅ Enabled" if data["read_receipts"] else "❌ Disabled"
             print(f"   📨 Read Receipts: {receipts}")
         if "status_visibility" in data:
             print(f"   📝 Status Visibility: {data['status_visibility']}")
@@ -306,6 +337,7 @@ def process_privacy_settings(phone: str, api_key: str):
             print(f"   🖼️ Profile Photo Visibility: {data['profile_picture']}")
     except Exception:
         print("ℹ️ Text response:", resp.text.strip())
+
 
 def main():
     show_banner()
@@ -322,7 +354,9 @@ def main():
             break
         print("❌ Invalid option. Choose a number between 1 and 6.")
 
-    phone = input("Enter the number (with country code, without '+', e.g. 51916574069): ").strip()
+    phone = input(
+        "Enter the number (with country code, without '+', e.g. 51916574069): "
+    ).strip()
     phone = sanitize_phone(phone)
 
     if not is_valid_phone(phone):
@@ -347,6 +381,7 @@ def main():
         process_privacy_settings(phone, api_key)
 
     print(f"\n✅ {Fore.GREEN}Query completed.{Style.RESET_ALL}")
+
 
 if __name__ == "__main__":
     main()

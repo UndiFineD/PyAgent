@@ -8,11 +8,11 @@ Provides tools required for LLM-guided multi-round retrieval:
 3. Document Formatting: Format documents for LLM usage
 """
 
-import json
 import asyncio
+import json
 import logging
-from typing import List, Tuple, Optional, Dict, Any
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -135,18 +135,18 @@ def format_documents_for_llm(
 
     for i, (candidate, score) in enumerate(results[:max_docs], 1):
         # Extract memory content
-        timestamp = getattr(candidate, 'timestamp', 'N/A')
-        if hasattr(timestamp, 'strftime'):
-            timestamp_str = timestamp.strftime('%Y-%m-%d %H:%M:%S')
+        timestamp = getattr(candidate, "timestamp", "N/A")
+        if hasattr(timestamp, "strftime"):
+            timestamp_str = timestamp.strftime("%Y-%m-%d %H:%M:%S")
         else:
             timestamp_str = str(timestamp)
 
         # Prioritize episode (core content of MemCell)
-        content = getattr(candidate, 'episode', None)
+        content = getattr(candidate, "episode", None)
         if not content:
-            content = getattr(candidate, 'summary', None)
+            content = getattr(candidate, "summary", None)
         if not content:
-            content = getattr(candidate, 'subject', 'N/A')
+            content = getattr(candidate, "subject", "N/A")
 
         # Build document entry
         doc_entry = f"[Memory {i}]\n"

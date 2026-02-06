@@ -113,4 +113,3 @@ Now analyze the provided EPISODE_TEXT and TIME carefully, apply all rules above,
 - TIME: "{{TIME}}"  (the start time of the episode, e.g., "March 10, 2024(Sunday) at 2:00 PM")
 
 """
-

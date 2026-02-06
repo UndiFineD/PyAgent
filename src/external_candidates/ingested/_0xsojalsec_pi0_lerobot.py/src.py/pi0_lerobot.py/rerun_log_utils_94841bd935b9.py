@@ -1,0 +1,142 @@
+# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-pi0-lerobot\src\pi0_lerobot\rerun_log_utils.py
+from pathlib import Path
+from typing import Literal
+
+import rerun as rr
+import rerun.blueprint as rrb
+import torch
+from einops import rearrange
+from jaxtyping import Float32, Int
+from numpy import ndarray
+from pi0_lerobot.mano_utils import MANOLayer
+from simplecv.data.exoego.base_exo_ego import BaseExoEgoSequence
+from tqdm import tqdm
+
+
+def create_blueprint(
+    exo_video_log_paths: list[Path], num_videos_to_log: Literal[4, 8] = 8
+) -> rrb.Blueprint:
+    active_tab: int = 0  # 0 for video, 1 for images
+    main_view = rrb.Vertical(
+        contents=[
+            rrb.Tabs(
+                rrb.Spatial3DView(
+                    origin="/",
+                ),
+                rrb.Spatial3DView(
+                    origin="/",
+                    contents=[
+                        "+ $origin/**",
+                        "- /world/mesh",
+                    ],
+                ),
+                active_tab=active_tab,
+            ),
+            # take the first 4 video files
+            rrb.Horizontal(
+                contents=[
+                    rrb.Tabs(
+                        rrb.Spatial2DView(origin=f"{video_log_path.parent}"),
+                        rrb.Spatial2DView(
+                            origin=f"{video_log_path}".replace("video", "depth"),
+                        ),
+                        active_tab=active_tab,
+                    )
+                    for video_log_path in exo_video_log_paths[:4]
+                ]
+            ),
+        ],
+        row_shares=[3, 1],
+    )
+    additional_views = rrb.Vertical(
+        contents=[
+            rrb.Tabs(
+                rrb.Spatial2DView(origin=f"{video_log_path.parent}"),
+                rrb.Spatial2DView(origin=f"{video_log_path}".replace("video", "depth")),
+                active_tab=active_tab,
+            )
+            for video_log_path in exo_video_log_paths[4:]
+        ]
+    )
+    # do the last 4 videos
+    contents = [main_view]
+    if num_videos_to_log == 8:
+        contents.append(additional_views)
+
+    blueprint = rrb.Blueprint(
+        rrb.Horizontal(
+            contents=contents,
+            column_shares=[4, 1],
+        ),
+        collapse_panels=True,
+    )
+    return blueprint
+
+
+def log_mano_batch(
+    sequence: BaseExoEgoSequence,
+    shortest_timestamp: Int[ndarray, "num_frames"],
+    timeline: str,
+) -> None:
+    mano_poses: Float32[torch.Tensor, "num_frames 2 51"] = torch.from_numpy(
+        sequence.exo_batch_data.mano_stack.poses
+    )
+
+    # order is important here
+    hand_sides: list[str] = ["right", "left"]
+    mano_layers: list[MANOLayer] = [
+        MANOLayer(
+            side=side,
+            betas=sequence.exo_batch_data.mano_stack.betas,
+            mano_root_dir=Path("data/mano_models/mano_v1_2/models"),
+        )
+        for side in hand_sides
+    ]
+
+    pbar = tqdm(
+        enumerate(
+            zip(
+                hand_sides,
+                mano_layers,
+                strict=True,
+            )
+        ),
+        desc="Logging hand keypoints",
+        total=2,
+    )
+
+    for hand_idx, (hand_side, mano_layer) in pbar:
+        poses: Float32[torch.Tensor, "num_frames 48"] = mano_poses[:, hand_idx, :48]
+        translations: Float32[torch.Tensor, "num_frames 3"] = mano_poses[
+            :, hand_idx, 48:51
+        ]
+        mano_outputs: tuple[
+            Float32[torch.Tensor, "num_frames 778 3"],
+            Float32[torch.Tensor, "num_frames 21 3"],
+        ] = mano_layer(poses, translations)
+        verts: Float32[torch.Tensor, "num_frames 778 3"] = mano_outputs[0]
+        joints: Float32[torch.Tensor, "num_frames 21 3"] = mano_outputs[1]
+
+        rr.log(
+            f"mano_{mano_layer.side}",
+            rr.Points3D.from_fields(
+                # radii=0.005,
+                show_labels=False,
+            ),
+            static=True,
+        )
+
+        rr.send_columns(
+            f"mano_{mano_layer.side}",
+            indexes=[
+                rr.TimeNanosColumn(timeline, shortest_timestamp[0 : len(sequence)])
+            ],
+            columns=[
+                *rr.Points3D.columns(
+                    positions=rearrange(
+                        verts,
+                        "num_frames kpts dim -> (num_frames kpts) dim",
+                    ),
+                ).partition(lengths=[778] * len(sequence)),
+            ],
+        )

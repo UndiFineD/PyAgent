@@ -7,8 +7,8 @@ Configuration items are loaded from environment variables and support caching to
 """
 
 import os
-from typing import Optional
 from functools import lru_cache
+from typing import Optional
 
 from core.observation.logger import get_logger
 

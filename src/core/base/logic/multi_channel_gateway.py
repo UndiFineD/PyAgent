@@ -31,13 +31,18 @@ Key Features:
 import asyncio
 import json
 import logging
+import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Protocol, Set, Union
+from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
 import websockets
+import warnings
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", DeprecationWarning)
+    from websockets.server import WebSocketServerProtocol
 from pydantic import BaseModel, Field
 
 from src.core.base.common.models.communication_models import CascadeContext
@@ -88,7 +93,7 @@ class ChannelMessage:
     content: str
     message_type: MessageType = MessageType.TEXT
     metadata: Dict[str, Any] = field(default_factory=dict)
-    timestamp: float = field(default_factory=lambda: asyncio.get_event_loop().time())
+    timestamp: float = field(default_factory=lambda: time.time())
     thread_id: Optional[str] = None
     reply_to: Optional[str] = None
 
@@ -98,7 +103,7 @@ class GatewayPresence:
     """Presence information for gateway clients."""
     client_id: str
     status: str = "online"  # online, away, busy, offline
-    last_seen: float = field(default_factory=lambda: asyncio.get_event_loop().time())
+    last_seen: float = field(default_factory=lambda: time.time())
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -135,8 +140,8 @@ class GatewaySession(BaseModel):
     channel_id: str
     activation_mode: SessionActivationMode = SessionActivationMode.MENTION
     is_active: bool = True
-    created_at: float = Field(default_factory=lambda: asyncio.get_event_loop().time())
-    last_activity: float = Field(default_factory=lambda: asyncio.get_event_loop().time())
+    created_at: float = Field(default_factory=lambda: time.time())
+    last_activity: float = Field(default_factory=lambda: time.time())
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
 
@@ -144,11 +149,10 @@ class GatewayProtocol:
     """WebSocket protocol for gateway communication."""
 
     def __init__(self):
-        self.clients: Dict[str, websockets.WebSocketServerProtocol] = {}
+        self.clients: Dict[str, WebSocketServerProtocol] = {}
         self.presence: Dict[str, GatewayPresence] = {}
         self.sessions: Dict[str, GatewaySession] = {}
-
-    async def handle_client(self, websocket: websockets.WebSocketServerProtocol, path: str):
+    async def handle_client(self, websocket: WebSocketServerProtocol, path: str):
         """Handle a WebSocket client connection."""
         client_id = str(uuid4())
         self.clients[client_id] = websocket
@@ -158,7 +162,7 @@ class GatewayProtocol:
             await websocket.send(json.dumps({
                 "type": "welcome",
                 "client_id": client_id,
-                "timestamp": asyncio.get_event_loop().time()
+                "timestamp": time.time()
             }))
 
             # Update presence
@@ -211,12 +215,13 @@ class GatewayProtocol:
 
     async def handle_session_create(self, client_id: str, data: Dict[str, Any]):
         """Handle session creation."""
+        # Build session
         session = GatewaySession(
             agent_id=data.get("agent_id", client_id),
-            channel_type=ChannelType(data["channel_type"]),
-            channel_id=data["channel_id"],
+            channel_type=SessionActivationMode(data.get("activation_mode", "mention")) if False else ChannelType(data.get("channel_type", "webchat")),
+            channel_id=data.get("channel_id", ""),
             activation_mode=SessionActivationMode(data.get("activation_mode", "mention")),
-            metadata=data.get("metadata", {})
+            metadata=data.get("metadata", {}),
         )
 
         self.sessions[session.session_id] = session
@@ -225,7 +230,7 @@ class GatewayProtocol:
         await self.send_to_client(client_id, {
             "type": "session_created",
             "session_id": session.session_id,
-            "timestamp": asyncio.get_event_loop().time()
+            "timestamp": time.time()
         })
 
     async def handle_session_update(self, client_id: str, data: Dict[str, Any]):
@@ -248,8 +253,8 @@ class GatewayProtocol:
                     session.is_active = value
                 elif key == "metadata":
                     session.metadata.update(value)
-
-        session.last_activity = asyncio.get_event_loop().time()
+        # update last_activity if present
+        session.last_activity = time.time()
 
         await self.send_to_client(client_id, {
             "type": "session_updated",
@@ -268,16 +273,12 @@ class GatewayProtocol:
                 "message": f"Session {session_id} not found"
             })
             return
-
-        session = self.sessions[session_id]
-
-        # Here we would route to the appropriate channel provider
         # For now, just echo back
         await self.send_to_client(client_id, {
             "type": "message_sent",
             "session_id": session_id,
             "content": content,
-            "timestamp": asyncio.get_event_loop().time()
+            "timestamp": time.time()
         })
 
     async def handle_tool_call(self, client_id: str, data: Dict[str, Any]):
@@ -293,13 +294,12 @@ class GatewayProtocol:
             })
             return
 
-        # Coordinate tool execution across the gateway
-        # This would integrate with the tool execution system
+        # Acknowledge tool call
         await self.send_to_client(client_id, {
             "type": "tool_call_ack",
             "session_id": session_id,
             "tool_name": tool_name,
-            "timestamp": asyncio.get_event_loop().time()
+            "timestamp": time.time()
         })
 
     async def broadcast_presence_update(self, client_id: str):
@@ -311,7 +311,7 @@ class GatewayProtocol:
             "status": presence.status,
             "last_seen": presence.last_seen,
             "metadata": presence.metadata,
-            "timestamp": asyncio.get_event_loop().time()
+            "timestamp": time.time()
         }
 
         await self.broadcast(message, exclude_client=client_id)
@@ -337,10 +337,9 @@ class GatewayProtocol:
             except websockets.exceptions.ConnectionClosed:
                 to_remove.append(client_id)
 
-        # Clean up disconnected clients
-        for client_id in to_remove:
-            self.clients.pop(client_id, None)
-            self.presence.pop(client_id, None)
+        for cid in to_remove:
+            self.clients.pop(cid, None)
+            self.presence.pop(cid, None)
 
 
 class MultiChannelGatewayCore:
@@ -385,12 +384,10 @@ class MultiChannelGatewayCore:
         """Stop the gateway server."""
         if not self.running:
             return
-
         self.running = False
-        if self.server:
+        if self.server is not None:
             self.server.close()
             await self.server.wait_closed()
-            logger.info("Multi-Channel Gateway stopped")
 
     async def send_channel_message(self, session_id: str, content: str, **kwargs) -> Optional[str]:
         """Send message through appropriate channel provider."""
@@ -405,14 +402,17 @@ class MultiChannelGatewayCore:
             logger.error(f"No provider for channel type: {session.channel_type}")
             return None
 
+        if not provider:
+            logger.error(f"No provider for channel type: {session.channel_type}")
+            return None
+
         try:
             return await provider.send_message(session.channel_id, content, **kwargs)
-        except Exception as e:
-            logger.error(f"Failed to send message via {session.channel_type}: {e}")
+        except Exception:
+            logger.exception("Failed to send channel message")
             return None
 
     def get_active_sessions(self) -> List[GatewaySession]:
-        """Get all active sessions."""
         return [s for s in self.protocol.sessions.values() if s.is_active]
 
     def get_sessions_by_channel(self, channel_type: ChannelType, channel_id: str) -> List[GatewaySession]:
@@ -423,7 +423,6 @@ class MultiChannelGatewayCore:
         ]
 
     async def broadcast_to_sessions(self, channel_type: ChannelType, channel_id: str, message: str):
-        """Broadcast message to all sessions in a channel."""
         sessions = self.get_sessions_by_channel(channel_type, channel_id)
 
         for session in sessions:

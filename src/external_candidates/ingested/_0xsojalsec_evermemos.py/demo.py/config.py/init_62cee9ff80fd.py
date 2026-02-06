@@ -2,12 +2,12 @@
 """Configuration module."""
 
 from demo.config.memory_config import (
-    ScenarioType,
-    LLMConfig,
-    EmbeddingConfig,
-    MongoDBConfig,
-    ExtractModeConfig,
     ChatModeConfig,
+    EmbeddingConfig,
+    ExtractModeConfig,
+    LLMConfig,
+    MongoDBConfig,
+    ScenarioType,
 )
 
 __all__ = [
@@ -18,4 +18,3 @@ __all__ = [
     "ExtractModeConfig",
     "ChatModeConfig",
 ]
-

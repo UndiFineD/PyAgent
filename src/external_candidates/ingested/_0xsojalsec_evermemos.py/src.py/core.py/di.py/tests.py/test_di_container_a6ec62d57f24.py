@@ -9,39 +9,34 @@ DI Container integration tests
 Test core Container functionalities such as Bean registration, resolution, and priority selection
 """
 
-import pytest
 from abc import ABC, abstractmethod
 from typing import List
-from core.di.container import DIContainer
+
+import pytest
+
 from core.di.bean_definition import BeanScope
+from core.di.container import DIContainer
 from core.di.exceptions import BeanNotFoundError
-from core.di.tests.test_fixtures import (
-    # User service related
-    UserRepository,
-    MySQLUserRepository,
-    PostgreSQLUserRepository,
+from core.di.tests.test_fixtures import (  # User service related; Notification service related; Email service related; Database connection related; Prototype service; Cache service related; Utility functions
+    CacheService,
+    DatabaseConnection,
+    EmailNotificationService,
+    EmailService,
+    MemoryCacheService,
     MockUserRepository,
+    MySQLUserRepository,
+    NotificationService,
+    PostgreSQLUserRepository,
+    PrototypeService,
+    PushNotificationService,
+    RedisCacheService,
+    SMSNotificationService,
+    SMTPEmailService,
+    UserRepository,
     UserService,
     UserServiceImpl,
-    # Notification service related
-    NotificationService,
-    EmailNotificationService,
-    SMSNotificationService,
-    PushNotificationService,
-    # Email service related
-    EmailService,
-    SMTPEmailService,
-    # Database connection related
-    DatabaseConnection,
     create_database_connection,
     create_readonly_connection,
-    # Prototype service
-    PrototypeService,
-    # Cache service related
-    CacheService,
-    RedisCacheService,
-    MemoryCacheService,
-    # Utility functions
     register_standard_beans,
 )
 

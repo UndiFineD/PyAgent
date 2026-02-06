@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
-from api_specs.memory_types import BaseMemory, MemoryType, MemCell
+from api_specs.memory_types import BaseMemory, MemCell, MemoryType
 from memory_layer.memory_extractor.base_memory_extractor import MemoryExtractRequest
 
 
@@ -100,7 +100,7 @@ class ProfileMemory(BaseMemory):
                 "personality": self.personality,
                 "projects_participated": (
                     [
-                        p.to_dict() if hasattr(p, 'to_dict') else p
+                        p.to_dict() if hasattr(p, "to_dict") else p
                         for p in (self.projects_participated or [])
                     ]
                     if self.projects_participated
@@ -119,7 +119,7 @@ class ProfileMemory(BaseMemory):
                 "group_importance_evidence": (
                     (
                         self.group_importance_evidence.to_dict()
-                        if hasattr(self.group_importance_evidence, 'to_dict')
+                        if hasattr(self.group_importance_evidence, "to_dict")
                         else self.group_importance_evidence
                     )
                     if self.group_importance_evidence

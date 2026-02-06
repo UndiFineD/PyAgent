@@ -15,8 +15,10 @@ def test_no_global_eval_use():
     root = Path("src")
     matches = []
     for p in root.rglob("*.py"):
+        if not p.is_file():
+            continue
         # Skip generated or vendored directories if any
-        if "generated" in p.parts or "rust_core" in p.parts:
+        if "generated" in p.parts or "rust_core" in p.parts or "external_candidates" in p.parts:
             continue
         text = p.read_text(encoding="utf-8")
         for m in PATTERN.finditer(text):

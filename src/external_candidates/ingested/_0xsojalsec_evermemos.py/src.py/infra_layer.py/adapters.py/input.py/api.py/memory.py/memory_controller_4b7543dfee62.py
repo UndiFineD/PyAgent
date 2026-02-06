@@ -13,19 +13,16 @@ import json
 import logging
 from contextlib import suppress
 from typing import Any, Dict
-from fastapi import HTTPException, Request as FastAPIRequest
 
-from core.di.decorators import controller
-from core.di import get_bean_by_type
-from core.interface.controller.base_controller import BaseController, get, post, patch
-from core.constants.errors import ErrorCode, ErrorStatus
 from agentic_layer.memory_manager import MemoryManager
+from api_specs.dtos.memory_query import ConversationMetaRequest, UserDetail
 from api_specs.request_converter import (
-    handle_conversation_format,
     convert_dict_to_fetch_mem_request,
     convert_dict_to_retrieve_mem_request,
+    handle_conversation_format,
 )
-from api_specs.dtos.memory_query import ConversationMetaRequest, UserDetail
+from fastapi import HTTPException
+from fastapi import Request as FastAPIRequest
 from infra_layer.adapters.input.api.mapper.group_chat_converter import (
     convert_simple_message_to_memorize_input,
 )
@@ -36,8 +33,13 @@ from infra_layer.adapters.out.persistence.document.memory.conversation_meta impo
 from infra_layer.adapters.out.persistence.repository.conversation_meta_raw_repository import (
     ConversationMetaRawRepository,
 )
-from core.request.timeout_background import timeout_to_background
+
 from core.component.redis_provider import RedisProvider
+from core.constants.errors import ErrorCode, ErrorStatus
+from core.di import get_bean_by_type
+from core.di.decorators import controller
+from core.interface.controller.base_controller import BaseController, get, patch, post
+from core.request.timeout_background import timeout_to_background
 
 logger = logging.getLogger(__name__)
 

@@ -1,6 +1,6 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\component\llm\llm_adapter\message.py
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
 from typing import Dict
 
 

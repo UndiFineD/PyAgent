@@ -1,13 +1,19 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-wp-json-extractor\wp-json.py
-import requests
 import argparse
 import json
 
+import requests
+
 # Define the argument parser
-parser = argparse.ArgumentParser(description="A tool to scrape data from wp-json path of a WordPress site")
+parser = argparse.ArgumentParser(
+    description="A tool to scrape data from wp-json path of a WordPress site"
+)
 parser.add_argument("-u", "--url", help="The URL of the WordPress site")
-parser.add_argument("-f", "--file", help="The file containing a list of URLs of WordPress sites")
+parser.add_argument(
+    "-f", "--file", help="The file containing a list of URLs of WordPress sites"
+)
 args = parser.parse_args()
+
 
 # Define a function to scrape data from a single URL
 def scrape_data(url):
@@ -21,6 +27,7 @@ def scrape_data(url):
     endpoints = set()
     # Initialize an empty set to store the href URLs
     href_urls = set()
+
     # Define a recursive function to traverse the response and extract the endpoints and href URLs
     def traverse(data, path):
         # Check if the data is a dictionary
@@ -44,6 +51,7 @@ def scrape_data(url):
         elif path:
             # Add the path to the endpoints set
             endpoints.add(path)
+
     # Call the recursive function on the response with an empty path
     traverse(response, "")
     # Create a result dictionary with endpoints and href URLs
@@ -52,6 +60,7 @@ def scrape_data(url):
     results.append(result)
     # Return the results list
     return results
+
 
 # Define a function to sort the results by endpoints and href URLs
 def sort_results(results):
@@ -63,6 +72,7 @@ def sort_results(results):
         result["href_urls"] = sorted(list(result["href_urls"]))
     # Return the sorted results list
     return results
+
 
 # Define a function to write the results to files
 def write_results(results):
@@ -83,6 +93,7 @@ def write_results(results):
                 # Write the href URL name to the href URLs file with a newline character
                 hf.write(name + "\n")
 
+
 # Check if the user provided a URL as input
 if args.url:
     # Scrape data from the URL and store it in a variable
@@ -91,7 +102,7 @@ if args.url:
     sorted_data = sort_results(data)
     # Write the sorted data to files
     write_results(sorted_data)
-#elif args.file:
+# elif args.file:
 # Check if the user provided a file as input
 elif args.file:
     # Open the file in read mode

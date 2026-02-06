@@ -6,13 +6,14 @@ Unified storage of foresights extracted from episodic memories (personal or grou
 """
 
 from datetime import datetime
-from typing import List, Optional, Dict, Any
-from beanie import Indexed
-from core.oxm.mongo.document_base import DocumentBase
-from pydantic import Field, ConfigDict
-from pymongo import IndexModel, ASCENDING, DESCENDING
+from typing import Any, Dict, List, Optional
+
+from beanie import Indexed, PydanticObjectId
+from pydantic import ConfigDict, Field
+from pymongo import ASCENDING, DESCENDING, IndexModel
+
 from core.oxm.mongo.audit_base import AuditBase
-from beanie import PydanticObjectId
+from core.oxm.mongo.document_base import DocumentBase
 
 
 class ForesightRecord(DocumentBase, AuditBase):

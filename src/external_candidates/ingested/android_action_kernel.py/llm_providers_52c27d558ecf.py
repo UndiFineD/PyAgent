@@ -7,11 +7,10 @@ Supports OpenAI, Groq, and AWS Bedrock.
 import json
 import re
 from abc import ABC, abstractmethod
-from typing import Dict, Any, List
+from typing import Any, Dict, List
 
 from config import Config
-from constants import GROQ_API_BASE_URL, BEDROCK_ANTHROPIC_MODELS, BEDROCK_META_MODELS
-
+from constants import BEDROCK_ANTHROPIC_MODELS, BEDROCK_META_MODELS, GROQ_API_BASE_URL
 
 # System prompt for the Android agent
 SYSTEM_PROMPT = """
@@ -69,9 +68,13 @@ def format_action_history(action_history: List[Dict]) -> str:
         reason = action.get("reason", "N/A")
 
         if action_type == "type":
-            history_lines.append(f"Step {i+1}: typed \"{action.get('text', '')}\" - {reason}")
+            history_lines.append(
+                f"Step {i+1}: typed \"{action.get('text', '')}\" - {reason}"
+            )
         elif action_type == "tap":
-            history_lines.append(f"Step {i+1}: tapped {action.get('coordinates', [])} - {reason}")
+            history_lines.append(
+                f"Step {i+1}: tapped {action.get('coordinates', [])} - {reason}"
+            )
         else:
             history_lines.append(f"Step {i+1}: {action_type} - {reason}")
 
@@ -82,7 +85,9 @@ class LLMProvider(ABC):
     """Abstract base class for LLM providers."""
 
     @abstractmethod
-    def get_decision(self, goal: str, screen_context: str, action_history: List[Dict]) -> Dict[str, Any]:
+    def get_decision(
+        self, goal: str, screen_context: str, action_history: List[Dict]
+    ) -> Dict[str, Any]:
         """Get the next action decision from the LLM."""
         pass
 
@@ -95,15 +100,16 @@ class OpenAIProvider(LLMProvider):
 
         if Config.LLM_PROVIDER == "groq":
             self.client = OpenAI(
-                api_key=Config.GROQ_API_KEY,
-                base_url=GROQ_API_BASE_URL
+                api_key=Config.GROQ_API_KEY, base_url=GROQ_API_BASE_URL
             )
             self.model = Config.GROQ_MODEL
         else:
             self.client = OpenAI(api_key=Config.OPENAI_API_KEY)
             self.model = Config.OPENAI_MODEL
 
-    def get_decision(self, goal: str, screen_context: str, action_history: List[Dict]) -> Dict[str, Any]:
+    def get_decision(
+        self, goal: str, screen_context: str, action_history: List[Dict]
+    ) -> Dict[str, Any]:
         history_str = format_action_history(action_history)
         user_content = f"GOAL: {goal}\n\nSCREEN_CONTEXT:\n{screen_context}{history_str}"
 
@@ -112,8 +118,8 @@ class OpenAIProvider(LLMProvider):
             response_format={"type": "json_object"},
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": user_content}
-            ]
+                {"role": "user", "content": user_content},
+            ],
         )
 
         return json.loads(response.choices[0].message.content)
@@ -124,13 +130,15 @@ class BedrockProvider(LLMProvider):
 
     def __init__(self):
         import boto3
+
         self.client = boto3.client(
-            service_name="bedrock-runtime",
-            region_name=Config.AWS_REGION
+            service_name="bedrock-runtime", region_name=Config.AWS_REGION
         )
         self.model = Config.BEDROCK_MODEL
 
-    def get_decision(self, goal: str, screen_context: str, action_history: List[Dict]) -> Dict[str, Any]:
+    def get_decision(
+        self, goal: str, screen_context: str, action_history: List[Dict]
+    ) -> Dict[str, Any]:
         history_str = format_action_history(action_history)
         user_content = f"GOAL: {goal}\n\nSCREEN_CONTEXT:\n{screen_context}{history_str}"
 
@@ -140,7 +148,7 @@ class BedrockProvider(LLMProvider):
             modelId=self.model,
             body=request_body,
             contentType="application/json",
-            accept="application/json"
+            accept="application/json",
         )
 
         response_body = json.loads(response["body"].read())
@@ -154,33 +162,42 @@ class BedrockProvider(LLMProvider):
 
     def _is_meta_model(self) -> bool:
         """Check if current model is a Meta/Llama model."""
-        return any(identifier in self.model.lower() for identifier in BEDROCK_META_MODELS)
+        return any(
+            identifier in self.model.lower() for identifier in BEDROCK_META_MODELS
+        )
 
     def _build_request(self, user_content: str) -> str:
         """Build request body based on model type."""
         if self._is_anthropic_model():
-            return json.dumps({
-                "anthropic_version": "bedrock-2023-05-31",
-                "max_tokens": 1024,
-                "system": SYSTEM_PROMPT,
-                "messages": [
-                    {"role": "user", "content": user_content + "\n\nRespond with ONLY a valid JSON object."}
-                ]
-            })
-        elif self._is_meta_model():
-            return json.dumps({
-                "prompt": f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{SYSTEM_PROMPT}<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n{user_content}\n\nRespond with ONLY a valid JSON object, no other text.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
-                "max_gen_len": 512,
-                "temperature": 0.1
-            })
-        else:
-            return json.dumps({
-                "inputText": f"{SYSTEM_PROMPT}\n\n{user_content}\n\nRespond with ONLY a valid JSON object.",
-                "textGenerationConfig": {
-                    "maxTokenCount": 512,
-                    "temperature": 0.1
+            return json.dumps(
+                {
+                    "anthropic_version": "bedrock-2023-05-31",
+                    "max_tokens": 1024,
+                    "system": SYSTEM_PROMPT,
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": user_content
+                            + "\n\nRespond with ONLY a valid JSON object.",
+                        }
+                    ],
                 }
-            })
+            )
+        elif self._is_meta_model():
+            return json.dumps(
+                {
+                    "prompt": f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{SYSTEM_PROMPT}<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n{user_content}\n\nRespond with ONLY a valid JSON object, no other text.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
+                    "max_gen_len": 512,
+                    "temperature": 0.1,
+                }
+            )
+        else:
+            return json.dumps(
+                {
+                    "inputText": f"{SYSTEM_PROMPT}\n\n{user_content}\n\nRespond with ONLY a valid JSON object.",
+                    "textGenerationConfig": {"maxTokenCount": 512, "temperature": 0.1},
+                }
+            )
 
     def _extract_response(self, response_body: Dict) -> str:
         """Extract text response based on model type."""
@@ -197,7 +214,7 @@ class BedrockProvider(LLMProvider):
             return json.loads(text)
         except json.JSONDecodeError:
             # Try to find JSON object in the response
-            json_match = re.search(r'\{[^{}]*\}', text)
+            json_match = re.search(r"\{[^{}]*\}", text)
             if json_match:
                 return json.loads(json_match.group())
             else:

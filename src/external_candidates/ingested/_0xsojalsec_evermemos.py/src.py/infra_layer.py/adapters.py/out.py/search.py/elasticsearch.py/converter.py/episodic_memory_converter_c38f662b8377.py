@@ -6,18 +6,19 @@ Responsible for converting EpisodicMemory documents from MongoDB to EpisodicMemo
 """
 
 from typing import List
-import jieba
-from core.oxm.es.base_converter import BaseEsConverter
-from core.observation.logger import get_logger
 
-# EpisodicMemory type no longer needs to be imported, as parameter types have been simplified to Any
-from core.nlp.stopwords_utils import filter_stopwords
-from infra_layer.adapters.out.search.elasticsearch.memory.episodic_memory import (
-    EpisodicMemoryDoc,
-)
+import jieba
 from infra_layer.adapters.out.persistence.document.memory.episodic_memory import (
     EpisodicMemory as MongoEpisodicMemory,
 )
+from infra_layer.adapters.out.search.elasticsearch.memory.episodic_memory import (
+    EpisodicMemoryDoc,
+)
+
+# EpisodicMemory type no longer needs to be imported, as parameter types have been simplified to Any
+from core.nlp.stopwords_utils import filter_stopwords
+from core.observation.logger import get_logger
+from core.oxm.es.base_converter import BaseEsConverter
 
 logger = get_logger(__name__)
 
@@ -63,36 +64,36 @@ class EpisodicMemoryConverter(BaseEsConverter[EpisodicMemoryDoc]):
                 # Basic identifier fields
                 event_id=(
                     str(source_doc.id)
-                    if hasattr(source_doc, 'id') and source_doc.id
+                    if hasattr(source_doc, "id") and source_doc.id
                     else ""
                 ),
                 user_id=source_doc.user_id,
-                user_name=getattr(source_doc, 'user_name', None),
+                user_name=getattr(source_doc, "user_name", None),
                 # Timestamp fields
                 timestamp=source_doc.timestamp,
                 # Core content fields
                 title=getattr(
-                    source_doc, 'subject', None
+                    source_doc, "subject", None
                 ),  # Map MongoDB's subject to ES's title
                 episode=source_doc.episode,
                 search_content=search_content,  # Core field for BM25 search
-                summary=getattr(source_doc, 'summary', None),
+                summary=getattr(source_doc, "summary", None),
                 # Category and tag fields
-                group_id=getattr(source_doc, 'group_id', None),
-                participants=getattr(source_doc, 'participants', None),
-                type=getattr(source_doc, 'type', None),
-                keywords=getattr(source_doc, 'keywords', None),
-                linked_entities=getattr(source_doc, 'linked_entities', None),
+                group_id=getattr(source_doc, "group_id", None),
+                participants=getattr(source_doc, "participants", None),
+                type=getattr(source_doc, "type", None),
+                keywords=getattr(source_doc, "keywords", None),
+                linked_entities=getattr(source_doc, "linked_entities", None),
                 # MongoDB-specific fields
-                subject=getattr(source_doc, 'subject', None),
+                subject=getattr(source_doc, "subject", None),
                 memcell_event_id_list=getattr(
-                    source_doc, 'memcell_event_id_list', None
+                    source_doc, "memcell_event_id_list", None
                 ),
                 # Extension fields
-                extend=getattr(source_doc, 'extend', None),
+                extend=getattr(source_doc, "extend", None),
                 # Audit fields
-                created_at=getattr(source_doc, 'created_at', None),
-                updated_at=getattr(source_doc, 'updated_at', None),
+                created_at=getattr(source_doc, "created_at", None),
+                updated_at=getattr(source_doc, "updated_at", None),
             )
 
             return es_doc
@@ -118,17 +119,17 @@ class EpisodicMemoryConverter(BaseEsConverter[EpisodicMemoryDoc]):
         text_content = []
 
         # Collect all text content - including subject, summary, episode
-        if hasattr(source_doc, 'subject') and source_doc.subject:
+        if hasattr(source_doc, "subject") and source_doc.subject:
             text_content.append(source_doc.subject)
 
-        if hasattr(source_doc, 'summary') and source_doc.summary:
+        if hasattr(source_doc, "summary") and source_doc.summary:
             text_content.append(source_doc.summary)
 
-        if hasattr(source_doc, 'episode') and source_doc.episode:
+        if hasattr(source_doc, "episode") and source_doc.episode:
             text_content.append(source_doc.episode)
 
         # Combine all text content and apply jieba word segmentation
-        combined_text = ' '.join(text_content)
+        combined_text = " ".join(text_content)
         search_content = list(jieba.cut(combined_text))
 
         # Filter out empty strings

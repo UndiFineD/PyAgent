@@ -1,7 +1,8 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-GTFONow\gtfobin_update.py
 #!/usr/bin/env python3
-import os
 import json
+import os
+
 import yaml
 
 GTFOBINS_PATH = "GTFOBins.github.io/_gtfobins/"
@@ -11,18 +12,21 @@ GTFO_NOW_PATH = "gtfonow/gtfonow.py"
 def replace_content(file_path, new_content, start_marker, end_marker):
     """Replace content in a file between start_marker and end_marker."""
     try:
-        with open(file_path, 'r') as file:
+        with open(file_path, "r") as file:
             content = file.readlines()
 
-        start_index = next((i for i, line in enumerate(
-            content) if start_marker in line), None)
-        end_index = next((i for i, line in enumerate(
-            content) if end_marker in line), None)
+        start_index = next(
+            (i for i, line in enumerate(content) if start_marker in line), None
+        )
+        end_index = next(
+            (i for i, line in enumerate(content) if end_marker in line), None
+        )
 
         if start_index is not None and end_index is not None:
-            content = content[:start_index + 1] + \
-                [new_content + '\n'] + content[end_index:]
-            with open(file_path, 'w') as file:
+            content = (
+                content[: start_index + 1] + [new_content + "\n"] + content[end_index:]
+            )
+            with open(file_path, "w") as file:
                 file.writelines(content)
         else:
             print("Markers not found in file")
@@ -32,7 +36,7 @@ def replace_content(file_path, new_content, start_marker, end_marker):
 
 def process_yaml(filename, key):
     """Process YAML file and extract data for a specific key."""
-    with open(filename, 'r') as f:
+    with open(filename, "r") as f:
         content = f.read().replace("---", "")
         doc = yaml.load(content, Loader=yaml.Loader)
         if key in doc["functions"]:
@@ -60,12 +64,24 @@ def main():
                 elif key == "capabilities":
                     capabilities[binary] = payloads
 
-    replace_content(GTFO_NOW_PATH, "sudo_bins = " + json.dumps(sudo_bins,
-                    indent=4, sort_keys=True), "# SUDO_BINS_START", "# SUDO_BINS_END")
-    replace_content(GTFO_NOW_PATH, "suid_bins = " + json.dumps(suid_bins,
-                    indent=4, sort_keys=True), "# SUID_BINS_START", "# SUID_BINS_END")
-    replace_content(GTFO_NOW_PATH, "capabilities = " + json.dumps(capabilities,
-                    indent=4, sort_keys=True), "# CAPABILITIES_START", "# CAPABILITIES_END")
+    replace_content(
+        GTFO_NOW_PATH,
+        "sudo_bins = " + json.dumps(sudo_bins, indent=4, sort_keys=True),
+        "# SUDO_BINS_START",
+        "# SUDO_BINS_END",
+    )
+    replace_content(
+        GTFO_NOW_PATH,
+        "suid_bins = " + json.dumps(suid_bins, indent=4, sort_keys=True),
+        "# SUID_BINS_START",
+        "# SUID_BINS_END",
+    )
+    replace_content(
+        GTFO_NOW_PATH,
+        "capabilities = " + json.dumps(capabilities, indent=4, sort_keys=True),
+        "# CAPABILITIES_START",
+        "# CAPABILITIES_END",
+    )
 
 
 if __name__ == "__main__":

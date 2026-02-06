@@ -4,20 +4,19 @@ Unit test: Test the functionality of fetch_mem_service.py
 """
 
 import pytest
-
 from agentic_layer.fetch_mem_service import get_fetch_memory_service
 from api_specs.memory_models import (
-    MemoryType,
     BaseMemoryModel,
-    ProfileModel,
-    PreferenceModel,
-    EpisodicMemoryModel,
-    ForesightModel,
-    EntityModel,
-    RelationModel,
     BehaviorHistoryModel,
+    EntityModel,
+    EpisodicMemoryModel,
     EventLogModel,
+    ForesightModel,
     ForesightRecordModel,
+    MemoryType,
+    PreferenceModel,
+    ProfileModel,
+    RelationModel,
 )
 
 

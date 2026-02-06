@@ -20,11 +20,11 @@ Note:
     - Database connection configurations are obtained from default environment variables
 """
 
+from core.lifespan.elasticsearch_lifespan import ElasticsearchLifespanProvider
+from core.lifespan.milvus_lifespan import MilvusLifespanProvider
+from core.lifespan.mongodb_lifespan import MongoDBLifespanProvider
 from core.observation.logger import get_logger
 from core.tenants.tenant_config import get_tenant_config
-from core.lifespan.mongodb_lifespan import MongoDBLifespanProvider
-from core.lifespan.milvus_lifespan import MilvusLifespanProvider
-from core.lifespan.elasticsearch_lifespan import ElasticsearchLifespanProvider
 
 logger = get_logger(__name__)
 

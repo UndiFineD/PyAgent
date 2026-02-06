@@ -4,9 +4,9 @@ Checkpoint management module - supports resume from interruption.
 """
 
 import json
-from pathlib import Path
-from typing import Dict, Any, Optional, Set
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, Optional, Set
 
 from common_utils.datetime_utils import get_now_with_timezone
 
@@ -52,7 +52,7 @@ class CheckpointManager:
             return None
 
         try:
-            with open(self.checkpoint_file, 'r', encoding='utf-8') as f:
+            with open(self.checkpoint_file, "r", encoding="utf-8") as f:
                 checkpoint = json.load(f)
 
             print(f"\n🔄 Found checkpoint file: {self.checkpoint_file.name}")
@@ -61,8 +61,8 @@ class CheckpointManager:
                 f"   Completed stages: {', '.join(checkpoint.get('completed_stages', []))}"
             )
 
-            if 'search_results' in checkpoint:
-                completed_convs = len(checkpoint['search_results'])
+            if "search_results" in checkpoint:
+                completed_convs = len(checkpoint["search_results"])
                 print(f"   Processed conversations: {completed_convs}")
 
             return checkpoint
@@ -109,7 +109,7 @@ class CheckpointManager:
             checkpoint["metadata"] = metadata
 
         try:
-            with open(self.checkpoint_file, 'w', encoding='utf-8') as f:
+            with open(self.checkpoint_file, "w", encoding="utf-8") as f:
                 json.dump(checkpoint, f, indent=2, ensure_ascii=False)
 
             print(f"💾 Checkpoint saved: {self.checkpoint_file.name}")
@@ -131,8 +131,8 @@ class CheckpointManager:
         completed = set()
 
         # Get from search_results
-        if 'search_results' in checkpoint:
-            completed.update(checkpoint['search_results'].keys())
+        if "search_results" in checkpoint:
+            completed.update(checkpoint["search_results"].keys())
 
         return completed
 
@@ -150,7 +150,7 @@ class CheckpointManager:
         if not checkpoint:
             return False
 
-        completed_stages = set(checkpoint.get('completed_stages', []))
+        completed_stages = set(checkpoint.get("completed_stages", []))
         return stage in completed_stages
 
     def delete_checkpoint(self):
@@ -165,15 +165,15 @@ class CheckpointManager:
     def get_search_results(self) -> Optional[Dict]:
         """Get saved search results."""
         checkpoint = self.load_checkpoint()
-        if checkpoint and 'search_results' in checkpoint:
-            return checkpoint['search_results']
+        if checkpoint and "search_results" in checkpoint:
+            return checkpoint["search_results"]
         return None
 
     def get_answer_results(self) -> Optional[Dict]:
         """Get saved answer results."""
         checkpoint = self.load_checkpoint()
-        if checkpoint and 'answer_results' in checkpoint:
-            return checkpoint['answer_results']
+        if checkpoint and "answer_results" in checkpoint:
+            return checkpoint["answer_results"]
         return None
 
     # ==================== Fine-grained Checkpoint Methods ====================
@@ -240,7 +240,7 @@ class CheckpointManager:
                 Format: {conv_id: [{"question_id": ..., "results": ...}, ...], ...}
         """
         try:
-            with open(self.search_checkpoint, 'w', encoding='utf-8') as f:
+            with open(self.search_checkpoint, "w", encoding="utf-8") as f:
                 json.dump(search_results, f, indent=2, ensure_ascii=False)
 
             print(f"💾 Checkpoint saved: {len(search_results)} conversations")
@@ -261,7 +261,7 @@ class CheckpointManager:
 
         try:
             print(f"\n🔄 Found checkpoint file: {self.search_checkpoint}")
-            with open(self.search_checkpoint, 'r', encoding='utf-8') as f:
+            with open(self.search_checkpoint, "r", encoding="utf-8") as f:
                 search_results = json.load(f)
 
             print(f"✅ Loaded {len(search_results)} conversations from checkpoint")
@@ -296,7 +296,7 @@ class CheckpointManager:
         """
         try:
             checkpoint_path = self.output_dir / f"responses_checkpoint_{completed}.json"
-            with open(checkpoint_path, 'w', encoding='utf-8') as f:
+            with open(checkpoint_path, "w", encoding="utf-8") as f:
                 json.dump(answer_results, f, indent=2, ensure_ascii=False)
 
             print(f"  💾 Checkpoint saved: {checkpoint_path.name}")
@@ -321,11 +321,11 @@ class CheckpointManager:
         # Find latest checkpoint file (sort by number in filename)
         try:
             latest_checkpoint = max(
-                checkpoint_files, key=lambda p: int(p.stem.split('_')[-1])
+                checkpoint_files, key=lambda p: int(p.stem.split("_")[-1])
             )
 
             print(f"\n🔄 Found checkpoint file: {latest_checkpoint.name}")
-            with open(latest_checkpoint, 'r', encoding='utf-8') as f:
+            with open(latest_checkpoint, "r", encoding="utf-8") as f:
                 answer_results = json.load(f)
 
             print(f"✅ Loaded {len(answer_results)} answers from checkpoint")

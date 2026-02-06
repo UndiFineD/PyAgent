@@ -12,6 +12,56 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""MCP Bridge primitives (placeholder).
+
+This module provides a lightweight registry and adapter interface for
+Model Context Protocol (MCP) servers. It's a starting point to add
+connectors/adapters for external MCP servers.
+"""
+from __future__ import annotations
+from dataclasses import dataclass
+from typing import Dict, Any, Callable
+
+
+@dataclass
+class MCPServerInfo:
+    name: str
+    url: str
+    meta: Dict[str, Any]
+
+
+class MCPBridge:
+    """Registry and simple dispatcher for MCP servers."""
+
+    def __init__(self):
+        self._servers: Dict[str, MCPServerInfo] = {}
+        self._handlers: Dict[str, Callable[..., Any]] = {}
+
+    def register(self, info: MCPServerInfo, handler: Callable[..., Any]) -> None:
+        self._servers[info.name] = info
+        self._handlers[info.name] = handler
+
+    def call(self, server_name: str, method: str, *args, **kwargs):
+        if server_name not in self._handlers:
+            raise KeyError(f"MCP server {server_name} not registered")
+        return self._handlers[server_name](method, *args, **kwargs)
+
+
+__all__ = ["MCPBridge", "MCPServerInfo"]
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 PyAgent MCP Server Ecosystem Integration.
 

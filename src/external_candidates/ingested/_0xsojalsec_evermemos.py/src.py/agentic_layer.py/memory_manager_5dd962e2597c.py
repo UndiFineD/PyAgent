@@ -1,67 +1,82 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\agentic_layer\memory_manager.py
 from __future__ import annotations
 
-from typing import Any, List, Optional, Tuple
-import logging
 import asyncio
-
+import logging
+import os
+import time
+from dataclasses import dataclass
 from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple
+
 import jieba
 import numpy as np
-import time
-from typing import Dict, Any
-from dataclasses import dataclass
-
-from api_specs.memory_types import BaseMemory, EpisodeMemory, EventLog, Foresight, RawDataType
-from biz_layer.mem_memorize import memorize
+from agentic_layer.agentic_utils import (
+    AgenticConfig,
+    check_sufficiency,
+    generate_multi_queries,
+)
+from agentic_layer.retrieval_utils import reciprocal_rank_fusion
 from api_specs.dtos.memory_command import MemorizeRequest
-from .fetch_mem_service import get_fetch_memory_service
 from api_specs.dtos.memory_query import (
     FetchMemRequest,
     FetchMemResponse,
+    Metadata,
     RetrieveMemRequest,
     RetrieveMemResponse,
-    Metadata,
 )
-from core.di import get_bean_by_type
-from infra_layer.adapters.out.search.repository.episodic_memory_es_repository import (
-    EpisodicMemoryEsRepository,
+from api_specs.memory_models import MemoryType, RetrieveMethod
+from api_specs.memory_types import (
+    BaseMemory,
+    EpisodeMemory,
+    EventLog,
+    Foresight,
+    RawDataType,
 )
-from infra_layer.adapters.out.search.repository.foresight_es_repository import (
-    ForesightEsRepository,
-)
-from infra_layer.adapters.out.search.repository.event_log_es_repository import (
-    EventLogEsRepository,
-)
-from core.observation.tracing.decorators import trace_logger
-from core.nlp.stopwords_utils import filter_stopwords
-from common_utils.datetime_utils import from_iso_format, get_now_with_timezone, to_iso_format
-from infra_layer.adapters.out.persistence.repository.memcell_raw_repository import (
-    MemCellRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.group_user_profile_memory_raw_repository import (
-    GroupUserProfileMemoryRawRepository,
+from biz_layer.mem_memorize import memorize
+from common_utils.datetime_utils import (
+    from_iso_format,
+    get_now_with_timezone,
+    to_iso_format,
 )
 from infra_layer.adapters.out.persistence.document.memory.memcell import DataTypeEnum
 from infra_layer.adapters.out.persistence.document.memory.user_profile import (
     UserProfile,
 )
+from infra_layer.adapters.out.persistence.repository.group_user_profile_memory_raw_repository import (
+    GroupUserProfileMemoryRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.memcell_raw_repository import (
+    MemCellRawRepository,
+)
+from infra_layer.adapters.out.search.repository.episodic_memory_es_repository import (
+    EpisodicMemoryEsRepository,
+)
 from infra_layer.adapters.out.search.repository.episodic_memory_milvus_repository import (
     EpisodicMemoryMilvusRepository,
 )
-from infra_layer.adapters.out.search.repository.foresight_milvus_repository import (
-    ForesightMilvusRepository,
+from infra_layer.adapters.out.search.repository.event_log_es_repository import (
+    EventLogEsRepository,
 )
 from infra_layer.adapters.out.search.repository.event_log_milvus_repository import (
     EventLogMilvusRepository,
 )
-from .vectorize_service import get_vectorize_service
-from .rerank_service import get_rerank_service
-from api_specs.memory_models import MemoryType, RetrieveMethod
-import os
+from infra_layer.adapters.out.search.repository.foresight_es_repository import (
+    ForesightEsRepository,
+)
+from infra_layer.adapters.out.search.repository.foresight_milvus_repository import (
+    ForesightMilvusRepository,
+)
 from memory_layer.llm.llm_provider import LLMProvider
-from agentic_layer.agentic_utils import AgenticConfig, check_sufficiency, generate_multi_queries
-from agentic_layer.retrieval_utils import reciprocal_rank_fusion
+
+from core.di import get_bean_by_type
+from core.nlp.stopwords_utils import filter_stopwords
+from core.observation.tracing.decorators import trace_logger
+
+from .fetch_mem_service import get_fetch_memory_service
+from .rerank_service import get_rerank_service
+from .vectorize_service import get_vectorize_service
+
 logger = logging.getLogger(__name__)
 
 
@@ -71,9 +86,12 @@ ES_REPO_MAP = {
     MemoryType.EVENT_LOG: EventLogEsRepository,
     MemoryType.EPISODIC_MEMORY: EpisodicMemoryEsRepository,
 }
+
+
 @dataclass
 class EventLogCandidate:
     """Event Log candidate object (used for retrieval from atomic_fact)"""
+
     event_id: str
     user_id: str
     group_id: str
@@ -109,7 +127,7 @@ class MemoryManager:
         Accepts list[Any], where each item can be one of the typed raw dataclasses
         (ChatRawData / EmailRawData / MemoRawData / LincDocRawData) or any dict-like
         object. Each item is stored as a MemoryCell with a synthetic key.
-        
+
         Returns:
             int: Number of memories extracted (0 if no boundary detected)
         """
@@ -152,7 +170,7 @@ class MemoryManager:
     # Memory reading based on retrieve_method, including static and dynamic memory
     @trace_logger(operation_name="agentic_layer memory retrieval")
     async def retrieve_mem(
-        self, retrieve_mem_request: 'RetrieveMemRequest'
+        self, retrieve_mem_request: "RetrieveMemRequest"
     ) -> RetrieveMemResponse:
         """Retrieve memory data, dispatching to different retrieval methods based on retrieve_method
 
@@ -220,7 +238,7 @@ class MemoryManager:
     # Keyword retrieval method (original retrieve_mem logic)
     @trace_logger(operation_name="agentic_layer keyword memory retrieval")
     async def retrieve_mem_keyword(
-        self, retrieve_mem_request: 'RetrieveMemRequest'
+        self, retrieve_mem_request: "RetrieveMemRequest"
     ) -> RetrieveMemResponse:
         """Keyword-based memory retrieval"""
         try:
@@ -231,7 +249,7 @@ class MemoryManager:
             return await self._to_response([], retrieve_mem_request)
 
     async def get_keyword_search_results(
-        self, retrieve_mem_request: 'RetrieveMemRequest'
+        self, retrieve_mem_request: "RetrieveMemRequest"
     ) -> List[Dict[str, Any]]:
         try:
             # Get parameters from Request
@@ -245,7 +263,6 @@ class MemoryManager:
             start_time = retrieve_mem_request.start_time
             end_time = retrieve_mem_request.end_time
             memory_types = retrieve_mem_request.memory_types
-
 
             # Convert query string to search word list
             # Use jieba for search mode word segmentation, then filter stopwords
@@ -265,15 +282,15 @@ class MemoryManager:
                 date_range["lte"] = end_time
 
             mem_type = memory_types[0]
-            
+
             repo_class = ES_REPO_MAP.get(mem_type)
             if not repo_class:
                 logger.warning(f"Unsupported memory_type: {mem_type}")
                 return []
-            
+
             es_repo = get_bean_by_type(repo_class)
             logger.debug(f"Using {repo_class.__name__} for {mem_type}")
-            
+
             results = await es_repo.multi_search(
                 query=query_words,
                 user_id=user_id,
@@ -282,15 +299,15 @@ class MemoryManager:
                 from_=0,
                 date_range=date_range,
             )
-            
+
             # Mark memory_type, search_source, and unified score
             if results:
                 for r in results:
-                    r['memory_type'] = mem_type.value
-                    r['_search_source'] = RetrieveMethod.KEYWORD.value
-                    r['id'] = r.get('_id', '')  # Unify ES '_id' to 'id'
-                    r['score'] = r.get('_score', 0.0)  # Unified score field
-            
+                    r["memory_type"] = mem_type.value
+                    r["_search_source"] = RetrieveMethod.KEYWORD.value
+                    r["id"] = r.get("_id", "")  # Unify ES '_id' to 'id'
+                    r["score"] = r.get("_score", 0.0)  # Unified score field
+
             return results or []
         except Exception as e:
             logger.error(f"Error in get_keyword_search_results: {e}")
@@ -299,7 +316,7 @@ class MemoryManager:
     # Vector-based memory retrieval
     @trace_logger(operation_name="agentic_layer vector memory retrieval")
     async def retrieve_mem_vector(
-        self, retrieve_mem_request: 'RetrieveMemRequest'
+        self, retrieve_mem_request: "RetrieveMemRequest"
     ) -> RetrieveMemResponse:
         """Vector-based memory retrieval"""
         try:
@@ -310,7 +327,7 @@ class MemoryManager:
             return await self._to_response([], retrieve_mem_request)
 
     async def get_vector_search_results(
-        self, retrieve_mem_request: 'RetrieveMemRequest'
+        self, retrieve_mem_request: "RetrieveMemRequest"
     ) -> List[Dict[str, Any]]:
         try:
             # Get parameters from Request
@@ -364,7 +381,11 @@ class MemoryManager:
             current_time_dt = None
 
             if start_time is not None:
-                start_time_dt = from_iso_format(start_time) if isinstance(start_time, str) else start_time
+                start_time_dt = (
+                    from_iso_format(start_time)
+                    if isinstance(start_time, str)
+                    else start_time
+                )
 
             if end_time is not None:
                 if isinstance(end_time, str):
@@ -410,12 +431,12 @@ class MemoryManager:
                     score_threshold=0.0,
                     radius=retrieve_mem_request.radius,
                 )
-            
+
             for r in search_results:
-                r['memory_type'] = mem_type.value
-                r['_search_source'] = RetrieveMethod.VECTOR.value
+                r["memory_type"] = mem_type.value
+                r["_search_source"] = RetrieveMethod.VECTOR.value
                 # Milvus already uses 'score', no need to rename
-            
+
             return search_results
         except Exception as e:
             logger.error(f"Error in get_vector_search_results: {e}")
@@ -424,7 +445,7 @@ class MemoryManager:
     # Hybrid memory retrieval
     @trace_logger(operation_name="agentic_layer hybrid memory retrieval")
     async def retrieve_mem_hybrid(
-        self, retrieve_mem_request: 'RetrieveMemRequest'
+        self, retrieve_mem_request: "RetrieveMemRequest"
     ) -> RetrieveMemResponse:
         """Hybrid memory retrieval: keyword + vector + rerank"""
         try:
@@ -433,7 +454,6 @@ class MemoryManager:
         except Exception as e:
             logger.error(f"Error in retrieve_mem_hybrid: {e}")
             return await self._to_response([], retrieve_mem_request)
-
 
     # ================== Core Internal Methods ==================
 
@@ -446,32 +466,36 @@ class MemoryManager:
         except Exception as e:
             raise e
 
-    async def _search_hybrid(self, request: 'RetrieveMemRequest') -> List[Dict]:
+    async def _search_hybrid(self, request: "RetrieveMemRequest") -> List[Dict]:
         """Core hybrid search: keyword + vector + rerank, returns flat list"""
         kw_results = await self.get_keyword_search_results(request)
         vec_results = await self.get_vector_search_results(request)
         # Deduplicate by id
-        seen_ids = {h.get('id') for h in kw_results}
-        merged_results = kw_results + [h for h in vec_results if h.get('id') not in seen_ids]
+        seen_ids = {h.get("id") for h in kw_results}
+        merged_results = kw_results + [
+            h for h in vec_results if h.get("id") not in seen_ids
+        ]
         return await self._rerank(request.query, merged_results, request.top_k)
 
-    async def _search_rrf(self, request: 'RetrieveMemRequest') -> List[Dict]:
+    async def _search_rrf(self, request: "RetrieveMemRequest") -> List[Dict]:
         """Core RRF search: keyword + vector + RRF fusion, returns flat list"""
-        
+
         kw = await self.get_keyword_search_results(request)
         vec = await self.get_vector_search_results(request)
         # RRF fusion
-        kw_tuples = [(h, h.get('score', 0)) for h in kw]
-        vec_tuples = [(h, h.get('score', 0)) for h in vec]
+        kw_tuples = [(h, h.get("score", 0)) for h in kw]
+        vec_tuples = [(h, h.get("score", 0)) for h in vec]
         fused = reciprocal_rank_fusion(kw_tuples, vec_tuples, k=60)
-        return [dict(doc, score=score) for doc, score in fused[:request.top_k]]
+        return [dict(doc, score=score) for doc, score in fused[: request.top_k]]
 
-    async def _to_response(self, hits: List[Dict], req: 'RetrieveMemRequest') -> RetrieveMemResponse:
+    async def _to_response(
+        self, hits: List[Dict], req: "RetrieveMemRequest"
+    ) -> RetrieveMemResponse:
         """Convert flat hits list to grouped RetrieveMemResponse"""
         user_id = req.user_id if req else ""
         source_type = req.retrieve_method.value
         memory_type = req.memory_types[0].value
-        
+
         if not hits:
             return RetrieveMemResponse(
                 memories=[],
@@ -480,8 +504,12 @@ class MemoryManager:
                 importance_scores=[],
                 total_count=0,
                 has_more=False,
-                query_metadata=Metadata(source=source_type, user_id=user_id or "", memory_type=memory_type),
-                metadata=Metadata(source=source_type, user_id=user_id or "", memory_type=memory_type),
+                query_metadata=Metadata(
+                    source=source_type, user_id=user_id or "", memory_type=memory_type
+                ),
+                metadata=Metadata(
+                    source=source_type, user_id=user_id or "", memory_type=memory_type
+                ),
             )
         memories, scores, importance_scores, original_data, total_count = (
             await self.group_by_groupid_stratagy(hits, source_type=source_type)
@@ -493,14 +521,18 @@ class MemoryManager:
             original_data=original_data,
             total_count=total_count,
             has_more=False,
-            query_metadata=Metadata(source=source_type, user_id=user_id or "", memory_type=memory_type),
-            metadata=Metadata(source=source_type, user_id=user_id or "", memory_type=memory_type),
+            query_metadata=Metadata(
+                source=source_type, user_id=user_id or "", memory_type=memory_type
+            ),
+            metadata=Metadata(
+                source=source_type, user_id=user_id or "", memory_type=memory_type
+            ),
         )
 
     # --------- RRF retrieval (keyword + vector + RRF fusion, no rerank) ---------
     @trace_logger(operation_name="agentic_layer RRF memory retrieval")
     async def retrieve_mem_rrf(
-        self, retrieve_mem_request: 'RetrieveMemRequest'
+        self, retrieve_mem_request: "RetrieveMemRequest"
     ) -> RetrieveMemResponse:
         """RRF-based memory retrieval: keyword + vector + RRF fusion"""
         try:
@@ -513,18 +545,17 @@ class MemoryManager:
     # --------- Agentic retrieval (LLM-guided multi-round) ---------
     @trace_logger(operation_name="agentic_layer Agentic memory retrieval")
     async def retrieve_mem_agentic(
-        self, retrieve_mem_request: 'RetrieveMemRequest'
+        self, retrieve_mem_request: "RetrieveMemRequest"
     ) -> RetrieveMemResponse:
         """Agentic retrieval: LLM-guided multi-round intelligent retrieval
-        
+
         Process: Round 1 (Hybrid) → Rerank → LLM sufficiency check → Round 2 (multi-query) → Merge → Final Rerank
         """
-        
 
         req = retrieve_mem_request  # alias
         top_k = req.top_k
         config = AgenticConfig()
-        
+
         try:
             llm_provider = LLMProvider(
                 provider_type=os.getenv("LLM_PROVIDER", "openai"),
@@ -539,8 +570,11 @@ class MemoryManager:
 
             # ========== Round 1: Hybrid search ==========
             req1 = RetrieveMemRequest(
-                query=req.query, user_id=req.user_id, group_id=req.group_id,
-                top_k=config.round1_top_n, memory_types=req.memory_types,
+                query=req.query,
+                user_id=req.user_id,
+                group_id=req.group_id,
+                top_k=config.round1_top_n,
+                memory_types=req.memory_types,
             )
             round1 = await self._search_hybrid(req1)
             logger.info(f"Round 1: {len(round1)} memories")
@@ -554,17 +588,26 @@ class MemoryManager:
 
             # ========== LLM sufficiency check ==========
             is_sufficient, reasoning, missing_info = await check_sufficiency(
-                query=req.query, results=topn_pairs, llm_provider=llm_provider, max_docs=config.round1_rerank_top_n
+                query=req.query,
+                results=topn_pairs,
+                llm_provider=llm_provider,
+                max_docs=config.round1_rerank_top_n,
             )
-            logger.info(f"LLM: {'Sufficient' if is_sufficient else 'Insufficient'} - {reasoning}")
+            logger.info(
+                f"LLM: {'Sufficient' if is_sufficient else 'Insufficient'} - {reasoning}"
+            )
 
             if is_sufficient:
                 return await self._to_response(round1[:top_k], req)
 
             # ========== Round 2: Multi-query ==========
             refined_queries, _ = await generate_multi_queries(
-                original_query=req.query, results=topn_pairs, missing_info=missing_info,
-                llm_provider=llm_provider, max_docs=config.round1_rerank_top_n, num_queries=config.num_queries,
+                original_query=req.query,
+                results=topn_pairs,
+                missing_info=missing_info,
+                llm_provider=llm_provider,
+                max_docs=config.round1_rerank_top_n,
+                num_queries=config.num_queries,
             )
             logger.info(f"Generated {len(refined_queries)} queries")
 
@@ -572,18 +615,25 @@ class MemoryManager:
             async def do_search(q: str) -> List[Dict]:
                 return await self._search_hybrid(
                     RetrieveMemRequest(
-                        query=q, user_id=req.user_id, group_id=req.group_id,
-                        top_k=config.round2_per_query_top_n, memory_types=req.memory_types,
+                        query=q,
+                        user_id=req.user_id,
+                        group_id=req.group_id,
+                        top_k=config.round2_per_query_top_n,
+                        memory_types=req.memory_types,
                     )
                 )
 
-            round2_results = await asyncio.gather(*[do_search(q) for q in refined_queries], return_exceptions=True)
-            all_round2 = [h for r in round2_results if not isinstance(r, Exception) for h in r]
+            round2_results = await asyncio.gather(
+                *[do_search(q) for q in refined_queries], return_exceptions=True
+            )
+            all_round2 = [
+                h for r in round2_results if not isinstance(r, Exception) for h in r
+            ]
 
             # Deduplicate and merge
             seen_ids = {m.get("id") for m in round1}
             round2_unique = [m for m in all_round2 if m.get("id") not in seen_ids]
-            combined = round1 + round2_unique[:config.combined_total - len(round1)]
+            combined = round1 + round2_unique[: config.combined_total - len(round1)]
             logger.info(f"Combined: {len(combined)} memories")
 
             # ========== Final Rerank ==========
@@ -615,7 +665,7 @@ class MemoryManager:
         if not importance_evidence or not isinstance(importance_evidence, dict):
             return 0.0
 
-        evidence_list = importance_evidence.get('evidence_list', [])
+        evidence_list = importance_evidence.get("evidence_list", [])
         if not evidence_list:
             return 0.0
 
@@ -626,9 +676,9 @@ class MemoryManager:
         # Accumulate statistics from all evidence
         for evidence in evidence_list:
             if isinstance(evidence, dict):
-                total_speak_count += evidence.get('speak_count', 0)
-                total_refer_count += evidence.get('refer_count', 0)
-                total_conversation_count += evidence.get('conversation_count', 0)
+                total_speak_count += evidence.get("speak_count", 0)
+                total_refer_count += evidence.get("refer_count", 0)
+                total_conversation_count += evidence.get("conversation_count", 0)
 
         # Avoid division by zero
         if total_conversation_count == 0:
@@ -708,54 +758,56 @@ class MemoryManager:
         """Extract string value of type field"""
         if isinstance(val, RawDataType):
             return val.value
-        return str(val) if val else ''
+        return str(val) if val else ""
 
     def _extract_hit_fields_from_es(self, hit: Dict[str, Any]) -> Dict[str, Any]:
         """Extract fields from ES search result"""
-        source = hit.get('_source', {})
+        source = hit.get("_source", {})
         return {
-            'hit_id': source.get('event_id', ''),
-            'user_id': source.get('user_id', ''),
-            'group_id': source.get('group_id', ''),
-            'timestamp_raw': source.get('timestamp', ''),
-            'episode': source.get('episode', ''),
-            'memcell_event_id_list': source.get('memcell_event_id_list', []),
-            'subject': source.get('subject', ''),
-            'summary': source.get('summary', ''),
-            'participants': source.get('participants', []),
-            'event_type': source.get('type', ''),
-            'atomic_fact': source.get('atomic_fact', ''),
-            'foresight': source.get('foresight', ''),
-            'evidence': source.get('evidence', ''),
-            'extend_data': source.get('extend', {}) or {},
-            'search_source': 'keyword',
+            "hit_id": source.get("event_id", ""),
+            "user_id": source.get("user_id", ""),
+            "group_id": source.get("group_id", ""),
+            "timestamp_raw": source.get("timestamp", ""),
+            "episode": source.get("episode", ""),
+            "memcell_event_id_list": source.get("memcell_event_id_list", []),
+            "subject": source.get("subject", ""),
+            "summary": source.get("summary", ""),
+            "participants": source.get("participants", []),
+            "event_type": source.get("type", ""),
+            "atomic_fact": source.get("atomic_fact", ""),
+            "foresight": source.get("foresight", ""),
+            "evidence": source.get("evidence", ""),
+            "extend_data": source.get("extend", {}) or {},
+            "search_source": "keyword",
         }
 
     def _extract_hit_fields_from_milvus(self, hit: Dict[str, Any]) -> Dict[str, Any]:
         """Extract fields from Milvus search result"""
-        metadata = hit.get('metadata', {})
-        timestamp_val = hit.get('timestamp') or hit.get('start_time')
+        metadata = hit.get("metadata", {})
+        timestamp_val = hit.get("timestamp") or hit.get("start_time")
         return {
-            'hit_id': hit.get('id', ''),
-            'user_id': hit.get('user_id', ''),
-            'group_id': hit.get('group_id', ''),
-            'timestamp_raw': timestamp_val,
-            'episode': hit.get('episode', ''),
-            'memcell_event_id_list': metadata.get('memcell_event_id_list', []),
-            'subject': metadata.get('subject', ''),
-            'summary': metadata.get('summary', ''),
-            'participants': metadata.get('participants', []),
-            'event_type': self._get_type_str(hit.get('type') or hit.get('event_type')),
-            'atomic_fact': hit.get('atomic_fact', ''),
-            'foresight': hit.get('content', ''),  # Milvus foresight uses 'content' field
-            'evidence': hit.get('evidence', ''),
-            'extend_data': metadata.get('extend', {}) or {},
-            'search_source': 'vector',
+            "hit_id": hit.get("id", ""),
+            "user_id": hit.get("user_id", ""),
+            "group_id": hit.get("group_id", ""),
+            "timestamp_raw": timestamp_val,
+            "episode": hit.get("episode", ""),
+            "memcell_event_id_list": metadata.get("memcell_event_id_list", []),
+            "subject": metadata.get("subject", ""),
+            "summary": metadata.get("summary", ""),
+            "participants": metadata.get("participants", []),
+            "event_type": self._get_type_str(hit.get("type") or hit.get("event_type")),
+            "atomic_fact": hit.get("atomic_fact", ""),
+            "foresight": hit.get(
+                "content", ""
+            ),  # Milvus foresight uses 'content' field
+            "evidence": hit.get("evidence", ""),
+            "extend_data": metadata.get("extend", {}) or {},
+            "search_source": "vector",
         }
 
     def _extract_hit_fields(self, hit: Dict[str, Any]) -> Dict[str, Any]:
         """Extract fields from search result based on _search_source"""
-        search_source = hit.get('_search_source')
+        search_source = hit.get("_search_source")
         match search_source:
             case RetrieveMethod.KEYWORD.value:
                 return self._extract_hit_fields_from_es(hit)
@@ -763,8 +815,11 @@ class MemoryManager:
                 return self._extract_hit_fields_from_milvus(hit)
             case _:
                 raise ValueError(f"Unknown _search_source: {search_source}")
+
     async def group_by_groupid_stratagy(
-        self, search_results: List[Dict[str, Any]], source_type: str = RetrieveMethod.VECTOR.value
+        self,
+        search_results: List[Dict[str, Any]],
+        source_type: str = RetrieveMethod.VECTOR.value,
     ) -> tuple:
         """Generic search result grouping processing strategy
 
@@ -781,9 +836,9 @@ class MemoryManager:
 
         for hit in search_results:
             fields = self._extract_hit_fields(hit)
-            memcell_event_id_list = fields['memcell_event_id_list']
-            user_id = fields['user_id']
-            group_id = fields['group_id']
+            memcell_event_id_list = fields["memcell_event_id_list"]
+            user_id = fields["user_id"]
+            group_id = fields["group_id"]
 
             if memcell_event_id_list:
                 all_memcell_event_ids.extend(memcell_event_id_list)
@@ -806,35 +861,37 @@ class MemoryManager:
         )
 
         # Step 3: Process search results
-        memories_by_group = {}  # {group_id: {'memories': [Memory], 'scores': [float], 'importance_evidence': dict}}
+        memories_by_group = (
+            {}
+        )  # {group_id: {'memories': [Memory], 'scores': [float], 'importance_evidence': dict}}
         original_data_by_group = {}
 
         for hit in search_results:
             # Extract fields
             fields = self._extract_hit_fields(hit)
             # Get score (each retrieval method uses its own score field)
-            score = hit.get('score', 0.0)
-            
-            hit_id = fields['hit_id']
-            user_id = fields['user_id']
-            group_id = fields['group_id']
-            timestamp_raw = fields['timestamp_raw']
-            memcell_event_id_list = fields['memcell_event_id_list']
-            episode = fields['episode']
-            subject = fields['subject']
-            summary = fields['summary']
-            participants = fields['participants']
-            event_type = fields['event_type']
-            atomic_fact = fields['atomic_fact']
-            foresight = fields['foresight']
-            evidence = fields['evidence']
-            extend_data = fields['extend_data']
-            search_source = fields['search_source']
+            score = hit.get("score", 0.0)
+
+            hit_id = fields["hit_id"]
+            user_id = fields["user_id"]
+            group_id = fields["group_id"]
+            timestamp_raw = fields["timestamp_raw"]
+            memcell_event_id_list = fields["memcell_event_id_list"]
+            episode = fields["episode"]
+            subject = fields["subject"]
+            summary = fields["summary"]
+            participants = fields["participants"]
+            event_type = fields["event_type"]
+            atomic_fact = fields["atomic_fact"]
+            foresight = fields["foresight"]
+            evidence = fields["evidence"]
+            extend_data = fields["extend_data"]
+            search_source = fields["search_source"]
             # Process timestamp
             timestamp = from_iso_format(timestamp_raw)
 
             # Get memcell data from cache (foresight doesn't need this)
-            memory_type_value = hit.get('memory_type', 'episodic_memory')
+            memory_type_value = hit.get("memory_type", "episodic_memory")
             memcells = []
             if memcell_event_id_list:
                 # Get memcells from cache in original order
@@ -863,19 +920,23 @@ class MemoryManager:
                 memcell_event_id_list=memcell_event_id_list,
                 type=RawDataType.from_string(event_type),
                 extend={
-                    '_search_source': search_source,
-                    'parent_episode_id': extend_data.get('parent_episode_id'),
+                    "_search_source": search_source,
+                    "parent_episode_id": extend_data.get("parent_episode_id"),
                 },
             )
-            
+
             match memory_type_value:
                 case MemoryType.EVENT_LOG.value:
                     memory = EventLog(**base_kwargs, atomic_fact=atomic_fact)
                 case MemoryType.FORESIGHT.value:
-                    memory = Foresight(**base_kwargs, foresight=foresight, evidence=evidence)
+                    memory = Foresight(
+                        **base_kwargs, foresight=foresight, evidence=evidence
+                    )
                 case MemoryType.EPISODIC_MEMORY.value:
                     # EpisodeMemory has additional fields: subject, summary, episode
-                    memory = EpisodeMemory(**base_kwargs, subject=subject, summary=summary, episode=episode)
+                    memory = EpisodeMemory(
+                        **base_kwargs, subject=subject, summary=summary, episode=episode
+                    )
                 case _:
                     raise ValueError(f"Unsupported memory type: {memory_type_value}")
 
@@ -885,16 +946,16 @@ class MemoryManager:
                 group_user_profile = profiles_cache.get((user_id, group_id))
                 if (
                     group_user_profile
-                    and hasattr(group_user_profile, 'group_importance_evidence')
+                    and hasattr(group_user_profile, "group_importance_evidence")
                     and group_user_profile.group_importance_evidence
                 ):
                     group_importance_evidence = (
                         group_user_profile.group_importance_evidence
                     )
                     # Add group_importance_evidence to memory's extend field
-                    if not hasattr(memory, 'extend') or memory.extend is None:
+                    if not hasattr(memory, "extend") or memory.extend is None:
                         memory.extend = {}
-                    memory.extend['group_importance_evidence'] = (
+                    memory.extend["group_importance_evidence"] = (
                         group_importance_evidence
                     )
                     logger.debug(
@@ -904,31 +965,31 @@ class MemoryManager:
             # Group by group_id
             if group_id not in memories_by_group:
                 memories_by_group[group_id] = {
-                    'memories': [],
-                    'scores': [],
-                    'importance_evidence': group_importance_evidence,
+                    "memories": [],
+                    "scores": [],
+                    "importance_evidence": group_importance_evidence,
                 }
 
-            memories_by_group[group_id]['memories'].append(memory)
-            memories_by_group[group_id]['scores'].append(score)  # Save original score
+            memories_by_group[group_id]["memories"].append(memory)
+            memories_by_group[group_id]["scores"].append(score)  # Save original score
 
             # Update group_importance_evidence (if current memory has updated evidence)
             if group_importance_evidence:
                 memories_by_group[group_id][
-                    'importance_evidence'
+                    "importance_evidence"
                 ] = group_importance_evidence
 
         # Sort memories within each group by timestamp, and calculate importance score
         group_scores = []
         for group_id, group_data in memories_by_group.items():
             # Sort memories by timestamp
-            group_data['memories'].sort(
-                key=lambda m: m.timestamp if m.timestamp else ''
+            group_data["memories"].sort(
+                key=lambda m: m.timestamp if m.timestamp else ""
             )
 
             # Calculate importance score
             importance_score = self._calculate_importance_score(
-                group_data['importance_evidence']
+                group_data["importance_evidence"]
             )
             group_scores.append((group_id, importance_score))
 
@@ -942,8 +1003,8 @@ class MemoryManager:
         original_data = []
         for group_id, importance_score in group_scores:
             group_data = memories_by_group[group_id]
-            group_memories = group_data['memories']
-            group_scores_list = group_data['scores']
+            group_memories = group_data["memories"]
+            group_scores_list = group_data["scores"]
             group_original_data = original_data_by_group.get(group_id, [])
             memories.append({group_id: group_memories})
             # scores structure consistent with memories: List[Dict[str, List[float]]]
@@ -953,7 +1014,6 @@ class MemoryManager:
             importance_scores.append(importance_score)
 
         total_count = sum(
-            len(group_data['memories']) for group_data in memories_by_group.values()
+            len(group_data["memories"]) for group_data in memories_by_group.values()
         )
         return memories, scores, importance_scores, original_data, total_count
-

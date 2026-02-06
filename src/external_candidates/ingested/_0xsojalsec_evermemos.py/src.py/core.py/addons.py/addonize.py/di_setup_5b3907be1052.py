@@ -6,10 +6,10 @@ Dependency injection setup module
 Handles the entry function for loading dependency injection scan paths from addons
 """
 
+from core.addons.addons_registry import ADDONS_REGISTRY
 from core.di.scanner import ComponentScanner
 from core.di.utils import get_beans
 from core.observation.logger import get_logger
-from core.addons.addons_registry import ADDONS_REGISTRY
 
 logger = get_logger(__name__)
 

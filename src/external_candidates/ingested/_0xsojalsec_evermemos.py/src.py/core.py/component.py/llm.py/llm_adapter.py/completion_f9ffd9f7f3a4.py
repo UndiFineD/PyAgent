@@ -1,7 +1,9 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\component\llm\llm_adapter\completion.py
-from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+
 from pydantic import BaseModel
+
 from core.component.llm.llm_adapter.message import ChatMessage
 
 
@@ -54,6 +56,6 @@ class ChatCompletionResponse(BaseModel, extra="allow"):
     usage: Optional[Dict[str, Any]] = None
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'ChatCompletionResponse':
+    def from_dict(cls, data: Dict[str, Any]) -> "ChatCompletionResponse":
         """Create response object from dictionary"""
         return cls(**data)

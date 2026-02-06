@@ -6,16 +6,15 @@ This module extracts atomic event logs from episode memories for optimized retri
 Each event log contains a time and a list of atomic facts extracted from the episode.
 """
 
-from typing import Optional, List, Dict, Any
-from datetime import datetime
 import json
 import re
-
-from memory_layer.prompts import get_prompt_by
-from memory_layer.llm.llm_provider import LLMProvider
-from common_utils.datetime_utils import get_now_with_timezone
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 from api_specs.memory_types import EventLog, MemoryType
+from common_utils.datetime_utils import get_now_with_timezone
+from memory_layer.llm.llm_provider import LLMProvider
+from memory_layer.prompts import get_prompt_by
 
 from core.observation.logger import get_logger
 
@@ -44,7 +43,7 @@ class EventLogExtractor:
             event_log_prompt: Optional custom event log prompt
         """
         self.llm_provider = llm_provider
-        
+
         # Use custom prompt or get default via PromptManager
         self.event_log_prompt = event_log_prompt or get_prompt_by("EVENT_LOG_PROMPT")
 
@@ -69,7 +68,7 @@ class EventLogExtractor:
                     return datetime.fromtimestamp(int(timestamp))
                 else:
                     # Try parsing ISO format
-                    return datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+                    return datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
             except (ValueError, AttributeError):
                 logger.error(f"Failed to parse timestamp: {timestamp}")
                 return get_now_with_timezone()
@@ -108,9 +107,9 @@ class EventLogExtractor:
             ValueError: If response cannot be parsed
         """
         # 1. Try extracting JSON from code block
-        if '```json' in response:
-            start = response.find('```json') + 7
-            end = response.find('```', start)
+        if "```json" in response:
+            start = response.find("```json") + 7
+            end = response.find("```", start)
             if end > start:
                 json_str = response[start:end].strip()
                 try:
@@ -119,12 +118,12 @@ class EventLogExtractor:
                     pass
 
         # 2. Try extracting from any code block
-        if '```' in response:
-            start = response.find('```') + 3
+        if "```" in response:
+            start = response.find("```") + 3
             # Skip language identifier (if any)
             if response[start : start + 10].strip().split()[0].isalpha():
-                start = response.find('\n', start) + 1
-            end = response.find('```', start)
+                start = response.find("\n", start) + 1
+            end = response.find("```", start)
             if end > start:
                 json_str = response[start:end].strip()
                 try:
@@ -224,7 +223,7 @@ class EventLogExtractor:
 
         # Convert to list format
         fact_embeddings = [
-            emb.tolist() if hasattr(emb, 'tolist') else emb
+            emb.tolist() if hasattr(emb, "tolist") else emb
             for emb in fact_embeddings_batch
         ]
 

@@ -3,42 +3,44 @@
 
 import argparse
 import re
-import socket
 import select
+import socket
 import sqlite3
 import threading
-
-import dns.zone
-import dns.name
-import dns.message
-import dns.rcode
-import dns.rdatatype
-import dns.rdataclass
-import dns.query
-
 from datetime import datetime
 
-SERVER = ''  # for all addresses
+import dns.message
+import dns.name
+import dns.query
+import dns.rcode
+import dns.rdataclass
+import dns.rdatatype
+import dns.zone
+
+SERVER = ""  # for all addresses
 PORT = 53
 DEBUG_MODE = False
-zonefile = './test.com.zone'
+zonefile = "./test.com.zone"
 zone = dns.zone.from_file(zonefile, relativize=False)
+
 
 def process_command_line_args():
     global SERVER, PORT, DEBUG_MODE, zone
 
-    parser = argparse.ArgumentParser(
-        description='This is a simple authoritative dns.')
-    parser.add_argument('-s', '--server',
-                        help='IP address for listen. Default: all addresses')
-    parser.add_argument('-p', '--port',
-                        help='Port for listen. Default: 53')
-    parser.add_argument('-v', '--verbose', action='store_true',
-                        help='Print verbose output')
-    parser.add_argument('-d', '--debug', action='store_true',
-                        help='Same as "--verbose"')
-    parser.add_argument('-f', '--file',
-                        help='The zone file to use. Default: "./test.com.zone"')
+    parser = argparse.ArgumentParser(description="This is a simple authoritative dns.")
+    parser.add_argument(
+        "-s", "--server", help="IP address for listen. Default: all addresses"
+    )
+    parser.add_argument("-p", "--port", help="Port for listen. Default: 53")
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="Print verbose output"
+    )
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help='Same as "--verbose"'
+    )
+    parser.add_argument(
+        "-f", "--file", help='The zone file to use. Default: "./test.com.zone"'
+    )
     args = parser.parse_args()
 
     if args.server:
@@ -47,9 +49,10 @@ def process_command_line_args():
         PORT = int(args.port)
     if args.debug or args.verbose:
         DEBUG_MODE = True
-        print('running in DEBUG MODE')
+        print("running in DEBUG MODE")
     if args.file:
         zone = dns.zone.from_file(args.file, relativize=False)
+
 
 def setup_sockets(server, port):
     sock_udp4 = create_udp4_socket(server, port)
@@ -63,22 +66,29 @@ def setup_sockets(server, port):
     fd_tcp6 = sock_tcp6.fileno()
 
     fd_read = [fd_udp4, fd_udp6, fd_tcp4, fd_tcp6]
-    sockets = {fd_udp4: sock_udp4, fd_udp6: sock_udp6,
-               fd_tcp4: sock_tcp4, fd_tcp6: sock_tcp6}
+    sockets = {
+        fd_udp4: sock_udp4,
+        fd_udp6: sock_udp6,
+        fd_tcp4: sock_tcp4,
+        fd_tcp6: sock_tcp6,
+    }
     is_tcp_dict = {fd_udp4: False, fd_udp6: False, fd_tcp4: True, fd_tcp6: True}
 
     return fd_read, sockets, is_tcp_dict
+
 
 def create_udp4_socket(host, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((host, port))
     return sock
 
+
 def create_udp6_socket(host, port):
     sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
     sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 1)
     sock.bind((host, port))
     return sock
+
 
 def create_tcp4_socket(host, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -87,6 +97,7 @@ def create_tcp4_socket(host, port):
     sock.listen(5)
     return sock
 
+
 def create_tcp6_socket(host, port):
     sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
     sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 1)
@@ -94,6 +105,7 @@ def create_tcp6_socket(host, port):
     sock.bind((host, port))
     sock.listen(5)
     return sock
+
 
 def handle_connection(sock, is_tcp):
     if is_tcp:
@@ -108,15 +120,20 @@ def handle_connection(sock, is_tcp):
         qtype = dns.rdatatype.to_text(query.question[0].rdtype)
         qclass = dns.rdataclass.to_text(query.question[0].rdclass)
         addr, port = client_addrport
-        print('\n{} query: {} {} {} from {}#{}, id: {}'.format(
-            transport, qname, qtype, qclass, addr, port, query.id))
-    
+        print(
+            "\n{} query: {} {} {} from {}#{}, id: {}".format(
+                transport, qname, qtype, qclass, addr, port, query.id
+            )
+        )
+
     qname = query.question[0].name
 
     queried_name = str(qname).split(".")[0].lower()
     # We need to match only UUIDs, like this one: e33ed847-5421-40a9-bb77-e570bfdfd74b
-    uuid = re.search("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", queried_name)
-    
+    uuid = re.search(
+        "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", queried_name
+    )
+
     if uuid is not None:
         dt = datetime.now()
         ts = datetime.timestamp(dt)
@@ -124,14 +141,16 @@ def handle_connection(sock, is_tcp):
         print("The uuid is {}".format(uuid.group()))
         print(client_addrport)
         addr = client_addrport[0]
-    
-        to_insert = "INSERT into queries (uuid, ip_address, query_timestamp) VALUES ('{}', '{}', '{}')".format(uuid.group(), addr, ts)
-    
-        con = sqlite3.connect('db.sql', check_same_thread=False)
+
+        to_insert = "INSERT into queries (uuid, ip_address, query_timestamp) VALUES ('{}', '{}', '{}')".format(
+            uuid.group(), addr, ts
+        )
+
+        con = sqlite3.connect("db.sql", check_same_thread=False)
         con.execute(to_insert)
         con.commit()
         con.close()
- 
+
     response = resolve_query(query)
 
     # Check the response size, and truncate if it exceeds 512bytes.
@@ -154,6 +173,7 @@ def handle_connection(sock, is_tcp):
             conn.close()
         else:
             dns.query.send_udp(sock, response, client_addrport)
+
 
 def resolve_query(query):
     response = dns.message.make_response(query)
@@ -190,8 +210,7 @@ def resolve_query(query):
         ns_rdataset = zone.get_rdataset(check_name, dns.rdatatype.NS)
         if ns_rdataset:
             # do referral response
-            response.authority.append(
-                zone.get_rrset(check_name, dns.rdatatype.NS))
+            response.authority.append(zone.get_rrset(check_name, dns.rdatatype.NS))
             for rdata in ns_rdataset:
                 # check if ns target is in-Bailiwick or out-of-Bailiwick
                 ns_target = rdata.target
@@ -234,6 +253,7 @@ def resolve_query(query):
                 response = add_additional(response, srv_rdata.target)
     return response
 
+
 def main():
     process_command_line_args()
     print("SimpleAuthDNS: running")
@@ -243,8 +263,10 @@ def main():
     while True:
         fd_read_ready, _, _ = select.select(fd_read, [], [], 5)
         for fd in fd_read_ready:
-            threading.Thread(target=handle_connection,
-                             args=(sockets[fd], is_tcp_dict[fd])).start()
+            threading.Thread(
+                target=handle_connection, args=(sockets[fd], is_tcp_dict[fd])
+            ).start()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

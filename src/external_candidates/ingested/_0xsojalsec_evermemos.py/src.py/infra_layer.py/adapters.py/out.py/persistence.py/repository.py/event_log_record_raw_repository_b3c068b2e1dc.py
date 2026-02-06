@@ -7,18 +7,20 @@ Provides CRUD operations and query capabilities for generic event logs.
 
 from datetime import datetime
 from typing import List, Optional, Type, TypeVar, Union
-from pymongo.asynchronous.client_session import AsyncClientSession
+
 from bson import ObjectId
-from core.observation.logger import get_logger
-from core.di.decorators import repository
-from core.oxm.mongo.base_repository import BaseRepository
 from infra_layer.adapters.out.persistence.document.memory.event_log_record import (
     EventLogRecord,
     EventLogRecordProjection,
 )
+from pymongo.asynchronous.client_session import AsyncClientSession
+
+from core.di.decorators import repository
+from core.observation.logger import get_logger
+from core.oxm.mongo.base_repository import BaseRepository
 
 # Define generic type variable
-T = TypeVar('T', EventLogRecord, EventLogRecordProjection)
+T = TypeVar("T", EventLogRecord, EventLogRecordProjection)
 
 logger = get_logger(__name__)
 

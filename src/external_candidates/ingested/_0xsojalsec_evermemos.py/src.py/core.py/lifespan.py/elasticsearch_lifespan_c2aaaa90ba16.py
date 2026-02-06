@@ -3,16 +3,17 @@
 Elasticsearch lifecycle provider implementation
 """
 
-from fastapi import FastAPI
 from typing import Any
 
-from core.observation.logger import get_logger
-from core.di.utils import get_all_subclasses, get_bean_by_type
+from fastapi import FastAPI
+
+from core.component.elasticsearch_client_factory import ElasticsearchClientFactory
 from core.di.decorators import component
+from core.di.utils import get_all_subclasses, get_bean_by_type
 from core.lifespan.lifespan_interface import LifespanProvider
+from core.observation.logger import get_logger
 from core.oxm.es.doc_base import DocBase
 from core.oxm.es.es_utils import EsIndexInitializer
-from core.component.elasticsearch_client_factory import ElasticsearchClientFactory
 
 logger = get_logger(__name__)
 

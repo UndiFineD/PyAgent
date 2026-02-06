@@ -27,14 +27,15 @@ Usage example:
         # Use memorize_input to call memory storage service
 """
 
-from typing import Dict, Any, List, Optional
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 from zoneinfo import ZoneInfo
+
 from common_utils.datetime_utils import from_iso_format
 
 
 def convert_group_chat_format_to_memorize_input(
-    group_chat_data: Dict[str, Any]
+    group_chat_data: Dict[str, Any],
 ) -> Dict[str, Any]:
     """
     Convert GroupChatFormat data to memorize interface input format
@@ -232,7 +233,7 @@ def _parse_datetime_with_timezone(
 
 
 def convert_simple_message_to_memorize_input(
-    message_data: Dict[str, Any]
+    message_data: Dict[str, Any],
 ) -> Dict[str, Any]:
     """
     Convert simple direct single message format to memorize interface input format

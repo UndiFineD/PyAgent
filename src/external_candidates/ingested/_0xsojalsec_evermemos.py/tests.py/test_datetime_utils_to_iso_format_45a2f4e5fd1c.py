@@ -4,10 +4,10 @@
 """
 
 import datetime
-import pytest
 from zoneinfo import ZoneInfo
 
-from common_utils.datetime_utils import to_iso_format, get_timezone
+import pytest
+from common_utils.datetime_utils import get_timezone, to_iso_format
 
 
 class TestToIsoFormatNoneHandling:

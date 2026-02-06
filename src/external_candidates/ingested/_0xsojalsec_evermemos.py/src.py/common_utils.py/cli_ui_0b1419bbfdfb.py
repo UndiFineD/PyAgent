@@ -30,14 +30,13 @@ Usage example:
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 import os
 import re
 import shutil
 import sys
 import unicodedata
+from dataclasses import dataclass
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
-
 
 # ============================================================================
 # ANSI Color & Style Helpers

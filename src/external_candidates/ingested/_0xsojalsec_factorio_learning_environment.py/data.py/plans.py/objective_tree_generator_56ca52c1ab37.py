@@ -1,14 +1,14 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\data\plans\objective_tree_generator.py
+import json
+import logging
 import os
 import re
+import time
+from dataclasses import dataclass
+from typing import Dict, List, Optional
 
 from dotenv import load_dotenv
 from openai import OpenAI
-from typing import Optional, List, Dict
-from dataclasses import dataclass
-import json
-import time
-import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

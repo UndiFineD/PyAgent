@@ -1,8 +1,8 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\middleware\hmac_signature_middleware.py
-import hmac
 import hashlib
-import time
+import hmac
 import os
+import time
 from typing import Callable, Optional
 
 from fastapi import Request, Response
@@ -10,10 +10,10 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.types import ASGIApp
 
 from core.authorize.enums import Role
-from core.context.context import set_current_user_info, clear_current_user_context
-from core.observation.logger import get_logger
 from core.component.redis_provider import RedisProvider
+from core.context.context import clear_current_user_context, set_current_user_info
 from core.di import get_bean_by_type
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -44,7 +44,7 @@ class HMACSignatureMiddleware(BaseHTTPMiddleware):
             redis_provider: Redis provider, used for replay attack prevention
         """
         super().__init__(app)
-        self.secret_key = secret_key.encode('utf-8')
+        self.secret_key = secret_key.encode("utf-8")
         self.time_window_seconds = time_window_minutes * 60
         self._redis_provider = redis_provider
 
@@ -261,7 +261,7 @@ class HMACSignatureMiddleware(BaseHTTPMiddleware):
 
         # Calculate expected signature
         expected_signature = hmac.new(
-            self.secret_key, signature_data.encode('utf-8'), hashlib.sha256
+            self.secret_key, signature_data.encode("utf-8"), hashlib.sha256
         ).hexdigest()
 
         # Verify signature

@@ -1,82 +1,80 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\biz_layer\mem_memorize.py
-from dataclasses import dataclass
+import asyncio
+import json
+import os
 import random
 import time
-import json
 import traceback
+import uuid
+from collections import defaultdict
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional
+
 from api_specs.dtos.memory_command import MemorizeRequest
-from memory_layer.memory_manager import MemoryManager
 from api_specs.memory_types import (
-    MemoryType,
-    MemCell,
     BaseMemory,
     EpisodeMemory,
-    RawDataType,
+    EventLog,
     Foresight,
+    MemCell,
+    MemoryType,
+    RawDataType,
 )
-from api_specs.memory_types import EventLog
-from memory_layer.memory_extractor.profile_memory_extractor import ProfileMemory
-from core.di import get_bean_by_type
-from infra_layer.adapters.out.persistence.repository.episodic_memory_raw_repository import (
-    EpisodicMemoryRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.foresight_record_repository import (
-    ForesightRecordRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.event_log_record_raw_repository import (
-    EventLogRecordRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.conversation_status_raw_repository import (
-    ConversationStatusRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.conversation_meta_raw_repository import (
-    ConversationMetaRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.memcell_raw_repository import (
-    MemCellRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.core_memory_raw_repository import (
-    CoreMemoryRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.group_user_profile_memory_raw_repository import (
-    GroupUserProfileMemoryRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.group_profile_raw_repository import (
-    GroupProfileRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.conversation_data_raw_repository import (
-    ConversationDataRepository,
-)
-from api_specs.memory_types import RawDataType
-from typing import List, Dict, Optional, Any
-from dataclasses import dataclass
-import uuid
-from datetime import datetime, timedelta
-import os
-import asyncio
-from collections import defaultdict
+from biz_layer.mem_sync import MemorySyncService
 from common_utils.datetime_utils import (
     get_now_with_timezone,
     to_iso_format,
 )
-from memory_layer.memcell_extractor.base_memcell_extractor import StatusResult
-import traceback
-
-from core.observation.logger import get_logger
+from infra_layer.adapters.out.persistence.repository.conversation_data_raw_repository import (
+    ConversationDataRepository,
+)
+from infra_layer.adapters.out.persistence.repository.conversation_meta_raw_repository import (
+    ConversationMetaRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.conversation_status_raw_repository import (
+    ConversationStatusRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.core_memory_raw_repository import (
+    CoreMemoryRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.episodic_memory_raw_repository import (
+    EpisodicMemoryRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.event_log_record_raw_repository import (
+    EventLogRecordRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.foresight_record_repository import (
+    ForesightRecordRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.group_profile_raw_repository import (
+    GroupProfileRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.group_user_profile_memory_raw_repository import (
+    GroupUserProfileMemoryRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.memcell_raw_repository import (
+    MemCellRawRepository,
+)
 from infra_layer.adapters.out.search.elasticsearch.converter.episodic_memory_converter import (
     EpisodicMemoryConverter,
 )
 from infra_layer.adapters.out.search.milvus.converter.episodic_memory_milvus_converter import (
     EpisodicMemoryMilvusConverter,
 )
-from infra_layer.adapters.out.search.repository.episodic_memory_milvus_repository import (
-    EpisodicMemoryMilvusRepository,
-)
 from infra_layer.adapters.out.search.repository.episodic_memory_es_repository import (
     EpisodicMemoryEsRepository,
 )
-from biz_layer.mem_sync import MemorySyncService
+from infra_layer.adapters.out.search.repository.episodic_memory_milvus_repository import (
+    EpisodicMemoryMilvusRepository,
+)
+from memory_layer.memcell_extractor.base_memcell_extractor import StatusResult
+from memory_layer.memory_extractor.profile_memory_extractor import ProfileMemory
+from memory_layer.memory_manager import MemoryManager
+
 from core.context.context import get_current_app_info
+from core.di import get_bean_by_type
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -105,7 +103,7 @@ def _clone_event_log(raw_event_log: Any) -> Optional[EventLog]:
     return None
 
 
-from biz_layer.memorize_config import MemorizeConfig, DEFAULT_MEMORIZE_CONFIG
+from biz_layer.memorize_config import DEFAULT_MEMORIZE_CONFIG, MemorizeConfig
 
 
 async def _trigger_clustering(
@@ -128,21 +126,23 @@ async def _trigger_clustering(
     )
 
     try:
-        from memory_layer.cluster_manager import (
-            ClusterManager,
-            ClusterManagerConfig,
-            ClusterState,
-        )
-        from memory_layer.profile_manager import ProfileManager, ProfileManagerConfig
+        import os
+
         from infra_layer.adapters.out.persistence.repository.cluster_state_raw_repository import (
             ClusterStateRawRepository,
         )
         from infra_layer.adapters.out.persistence.repository.user_profile_raw_repository import (
             UserProfileRawRepository,
         )
+        from memory_layer.cluster_manager import (
+            ClusterManager,
+            ClusterManagerConfig,
+            ClusterState,
+        )
         from memory_layer.llm.llm_provider import LLMProvider
+        from memory_layer.profile_manager import ProfileManager, ProfileManagerConfig
+
         from core.di import get_bean_by_type
-        import os
 
         logger.info(f"[Clustering] Retrieving ClusterStateRawRepository...")
         # Get MongoDB storage
@@ -247,13 +247,15 @@ async def _trigger_profile_extraction(
         config: Memory extraction configuration
     """
     try:
-        from memory_layer.profile_manager import ProfileManager, ProfileManagerConfig
+        import os
+
         from infra_layer.adapters.out.persistence.repository.user_profile_raw_repository import (
             UserProfileRawRepository,
         )
         from memory_layer.llm.llm_provider import LLMProvider
+        from memory_layer.profile_manager import ProfileManager, ProfileManagerConfig
+
         from core.di import get_bean_by_type
-        import os
 
         # Get the number of memcells in the current cluster
         cluster_memcell_count = cluster_state.cluster_counts.get(cluster_id)
@@ -323,9 +325,9 @@ async def _trigger_profile_extraction(
         # Save newly extracted profiles
         for profile in new_profiles:
             if isinstance(profile, dict):
-                user_id = profile.get('user_id')
+                user_id = profile.get("user_id")
             else:
-                user_id = getattr(profile, 'user_id', None)
+                user_id = getattr(profile, "user_id", None)
 
             if user_id:
                 await profile_storage.save_profile(
@@ -374,7 +376,7 @@ def _convert_data_type_to_raw_data_type(data_type) -> RawDataType:
         return data_type
 
     # Get string value
-    if hasattr(data_type, 'value'):
+    if hasattr(data_type, "value"):
         type_str = data_type.value
     else:
         type_str = str(data_type)
@@ -389,21 +391,22 @@ def _convert_data_type_to_raw_data_type(data_type) -> RawDataType:
     return type_mapping.get(type_str, RawDataType.CONVERSATION)
 
 
+from typing import Tuple
+
 from biz_layer.mem_db_operations import (
-    _convert_timestamp_to_time,
     _convert_episode_memory_to_doc,
-    _convert_foresight_to_doc,
     _convert_event_log_to_docs,
+    _convert_foresight_to_doc,
+    _convert_projects_participated_list,
+    _convert_timestamp_to_time,
+    _normalize_datetime_for_storage,
+    _save_group_profile_memory,
     _save_memcell_to_database,
     _save_profile_memory_to_core,
-    _update_status_for_continuing_conversation,
-    _update_status_after_memcell_extraction,
-    _save_group_profile_memory,
     _save_profile_memory_to_group_user_profile_memory,
-    _normalize_datetime_for_storage,
-    _convert_projects_participated_list,
+    _update_status_after_memcell_extraction,
+    _update_status_for_continuing_conversation,
 )
-from typing import Tuple
 
 
 def if_memorize(memcell: MemCell) -> bool:
@@ -444,7 +447,7 @@ async def process_memory_extraction(
     Main memory extraction process
 
     Starting from MemCell, extract all memory types including Episode, Foresight, EventLog, etc.
-    
+
     Returns:
         int: Total number of memories extracted
     """
@@ -461,7 +464,7 @@ async def process_memory_extraction(
     memories_count = 0
     if if_memorize(memcell):
         memories_count = await _process_memories(state, memory_manager)
-    
+
     return memories_count
 
 
@@ -603,9 +606,11 @@ async def _update_memcell_and_cluster(state: ExtractionState):
         logger.error(f"[MemCell Processing] ❌ Failed to trigger clustering: {e}")
 
 
-async def _process_memories(state: ExtractionState, memory_manager: MemoryManager) -> int:
+async def _process_memories(
+    state: ExtractionState, memory_manager: MemoryManager
+) -> int:
     """Save Episodes and extract/save Foresight and EventLog
-    
+
     Returns:
         int: Total number of memories saved
     """
@@ -637,7 +642,7 @@ async def _process_memories(state: ExtractionState, memory_manager: MemoryManage
     await update_status_after_memcell(
         state.request, state.memcell, state.current_time, state.request.raw_data_type
     )
-    
+
     return episodes_count + foresight_count + eventlog_count
 
 
@@ -704,7 +709,7 @@ async def _extract_foresight_and_eventlog(
                 episode_memory=ep,
             )
         )
-        metadata.append({'type': MemoryType.FORESIGHT, 'ep': ep})
+        metadata.append({"type": MemoryType.FORESIGHT, "ep": ep})
         tasks.append(
             memory_manager.extract_memory(
                 memcell=state.memcell,
@@ -713,7 +718,7 @@ async def _extract_foresight_and_eventlog(
                 episode_memory=ep,
             )
         )
-        metadata.append({'type': MemoryType.EVENT_LOG, 'ep': ep})
+        metadata.append({"type": MemoryType.EVENT_LOG, "ep": ep})
 
     if not tasks:
         return [], []
@@ -727,8 +732,8 @@ async def _extract_foresight_and_eventlog(
         if isinstance(result, Exception) or not result:
             continue
 
-        ep = meta['ep']
-        if meta['type'] == MemoryType.FORESIGHT:
+        ep = meta["ep"]
+        if meta["type"] == MemoryType.FORESIGHT:
             for mem in result:
                 mem.parent_episode_id = ep.id
                 mem.user_id = ep.user_id
@@ -736,7 +741,7 @@ async def _extract_foresight_and_eventlog(
                 mem.group_name = ep.group_name
                 mem.user_name = ep.user_name
                 foresight_memories.append(mem)
-        elif meta['type'] == MemoryType.EVENT_LOG:
+        elif meta["type"] == MemoryType.EVENT_LOG:
             result.parent_episode_id = ep.id
             result.user_id = ep.user_id
             result.group_id = ep.group_id
@@ -816,7 +821,7 @@ def extract_message_time(raw_data):
         datetime: Message time, return None if extraction fails
     """
     # Prioritize timestamp field
-    if hasattr(raw_data, 'timestamp') and raw_data.timestamp:
+    if hasattr(raw_data, "timestamp") and raw_data.timestamp:
         try:
             return _normalize_datetime_for_storage(raw_data.timestamp)
         except Exception as e:
@@ -825,11 +830,11 @@ def extract_message_time(raw_data):
 
     # Extract from extend field
     if (
-        hasattr(raw_data, 'extend')
+        hasattr(raw_data, "extend")
         and raw_data.extend
         and isinstance(raw_data.extend, dict)
     ):
-        timestamp_val = raw_data.extend.get('timestamp')
+        timestamp_val = raw_data.extend.get("timestamp")
         if timestamp_val:
             try:
                 return _normalize_datetime_for_storage(timestamp_val)
@@ -917,11 +922,11 @@ async def update_status_when_no_memcell(
                 latest_time = _convert_timestamp_to_time(current_time, current_time)
                 if request.new_raw_data_list:
                     last_msg = request.new_raw_data_list[-1]
-                    if hasattr(last_msg, 'content') and isinstance(
+                    if hasattr(last_msg, "content") and isinstance(
                         last_msg.content, dict
                     ):
-                        latest_time = last_msg.content.get('timestamp', latest_time)
-                    elif hasattr(last_msg, 'timestamp'):
+                        latest_time = last_msg.content.get("timestamp", latest_time)
+                    elif hasattr(last_msg, "timestamp"):
                         latest_time = last_msg.timestamp
 
                 if not latest_time:
@@ -951,7 +956,7 @@ async def update_status_after_memcell(
 
             # Get MemCell's timestamp
             memcell_time = None
-            if memcell and hasattr(memcell, 'timestamp'):
+            if memcell and hasattr(memcell, "timestamp"):
                 memcell_time = memcell.timestamp
             else:
                 memcell_time = current_time
@@ -1124,16 +1129,16 @@ async def load_core_memories(
                     participants=[user_id],
                     type=RawDataType.CONVERSATION,
                     # ProfileMemory specific fields - directly use original dictionary format
-                    hard_skills=getattr(core_memory, 'hard_skills', None),
-                    soft_skills=getattr(core_memory, 'soft_skills', None),
-                    output_reasoning=getattr(core_memory, 'output_reasoning', None),
-                    motivation_system=getattr(core_memory, 'motivation_system', None),
-                    fear_system=getattr(core_memory, 'fear_system', None),
-                    value_system=getattr(core_memory, 'value_system', None),
-                    humor_use=getattr(core_memory, 'humor_use', None),
-                    colloquialism=getattr(core_memory, 'colloquialism', None),
+                    hard_skills=getattr(core_memory, "hard_skills", None),
+                    soft_skills=getattr(core_memory, "soft_skills", None),
+                    output_reasoning=getattr(core_memory, "output_reasoning", None),
+                    motivation_system=getattr(core_memory, "motivation_system", None),
+                    fear_system=getattr(core_memory, "fear_system", None),
+                    value_system=getattr(core_memory, "value_system", None),
+                    humor_use=getattr(core_memory, "humor_use", None),
+                    colloquialism=getattr(core_memory, "colloquialism", None),
                     projects_participated=_convert_projects_participated_list(
-                        getattr(core_memory, 'projects_participated', None)
+                        getattr(core_memory, "projects_participated", None)
                     ),
                 )
                 old_memory_list.append(profile_memory)
@@ -1154,7 +1159,7 @@ async def memorize(request: MemorizeRequest) -> int:
     2. Save MemCell to database
     3. Submit to global queue for asynchronous processing by Worker
     4. Return immediately, do not wait for subsequent processing to complete
-    
+
     Returns:
         int: Number of memories extracted (0 if no boundary detected or extraction failed)
     """
@@ -1261,11 +1266,13 @@ async def memorize(request: MemorizeRequest) -> int:
     # Get current request_id
 
     app_info = get_current_app_info()
-    request_id = app_info.get('request_id')
+    request_id = app_info.get("request_id")
 
     # Directly execute memory extraction (blocking/asynchronous logic controlled by middleware layer request_process)
     try:
-        memories_count = await process_memory_extraction(memcell, request, memory_manager, current_time)
+        memories_count = await process_memory_extraction(
+            memcell, request, memory_manager, current_time
+        )
         logger.info(
             f"[mem_memorize] ✅ Memory extraction completed, count={memories_count}, request_id={request_id}"
         )
@@ -1274,4 +1281,3 @@ async def memorize(request: MemorizeRequest) -> int:
         logger.error(f"[mem_memorize] ❌ Memory extraction failed: {e}")
         traceback.print_exc()
         return 0
-

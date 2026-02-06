@@ -4,4 +4,9 @@ LLM_API_KEY = "NONE"
 MODEL_NAME = "Qwen2.5-32B-Instruct"
 HUGGINGFACE_MODEL_NAME = "Qwen/Qwen2.5-32B-Instruct"
 EMBED_MODEL_NAME = "jinaai/jina-embeddings-v3"
-GRAG_MODE = {"lightrag": "hybrid", "minirag": "light", "hypergraphrag": "hybrid", "pathrag": "hybrid"}
+GRAG_MODE = {
+    "lightrag": "hybrid",
+    "minirag": "light",
+    "hypergraphrag": "hybrid",
+    "pathrag": "hybrid",
+}

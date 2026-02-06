@@ -4,14 +4,14 @@ Long job interfaces and base classes.
 Long task interfaces and base class definitions.
 """
 
-from abc import ABC, abstractmethod
-from typing import Optional, Any, Dict
 import asyncio
-from enum import Enum
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, Optional
 
 # Import error classes from longjob_error
-from core.longjob.longjob_error import FatalError, BusinessLogicError
+from core.longjob.longjob_error import BusinessLogicError, FatalError
 
 
 @dataclass
@@ -37,7 +37,7 @@ class MessageBatch:
             return True
 
         # If it's a list or similar container, check length
-        if hasattr(self.data, '__len__'):
+        if hasattr(self.data, "__len__"):
             try:
                 return len(self.data) == 0
             except (TypeError, AttributeError):
