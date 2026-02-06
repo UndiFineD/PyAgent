@@ -122,10 +122,13 @@ class HistoryManager:
 
     def get_previous_value(self, object_id: str, attribute: str) -> Optional[Any]:
         """Get the most recent previous value for an object/attribute."""
+        matches = []
         for change in reversed(self.history):
             if (change.get('object') == object_id and
                 change.get('attribute_name') == attribute):
-                return change.get('attribute_value')
+                matches.append(change.get('attribute_value'))
+                if len(matches) >= 2:
+                    return matches[1]
         return None
 
     def save_to_file(self, filepath: str) -> None:

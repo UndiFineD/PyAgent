@@ -22,6 +22,8 @@ from __future__ import annotations
 import inspect
 import json
 import logging
+import asyncio
+import time
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Callable, Union, get_type_hints
 from pathlib import Path
@@ -122,7 +124,7 @@ class ToolFrameworkMixin:
 
             parameters = []
             for param_name, param in sig.parameters.items():
-                if param_name == 'self':
+                if param_name == 'self' or param_name in ('cascade_context', 'context'):
                     continue
 
                 param_type = type_hints.get(param_name, str)
@@ -182,38 +184,48 @@ class ToolFrameworkMixin:
 
         tool_def = self.registered_tools[tool_id]
 
-        # Validate parameters
+        # Prepare and Convert Arguments
+        prepared_args = {}
+        for param in tool_def.parameters:
+            if param.name in parameters:
+                value = parameters[param.name]
+                # Type conversion if needed
+                if param.type == "integer" and isinstance(value, str):
+                    try:
+                        value = int(value)
+                    except ValueError:
+                        pass # Let validation fail
+                elif param.type == "number" and isinstance(value, str):
+                    try:
+                        value = float(value)
+                    except ValueError:
+                        pass
+                elif param.type == "boolean" and isinstance(value, str):
+                   value = value.lower() in ('true', '1', 'yes')
+                
+                prepared_args[param.name] = value
+
+        # Validate parameters (using converted values)
         if self.enable_tool_validation:
-            validation_result = self._validate_tool_parameters(tool_def, parameters)
+            # We must validate using the prepared args combined with original to ensure missing params are caught?
+            # Actually _validate checks requiredness.
+            # We should pass the prepared_args to validation.
+            validation_result = self._validate_tool_parameters(tool_def, prepared_args)
             if not validation_result["valid"]:
                 raise ToolValidationError(f"Parameter validation failed: {validation_result['errors']}")
 
         # Execute the tool
         try:
-            # Prepare arguments
-            args = []
+            # Build final kwargs
             kwargs = {}
-
             for param in tool_def.parameters:
-                if param.name in parameters:
-                    value = parameters[param.name]
-                    # Type conversion if needed
-                    if param.type == "int" and isinstance(value, str):
-                        value = int(value)
-                    elif param.type == "float" and isinstance(value, str):
-                        value = float(value)
-                    elif param.type == "bool" and isinstance(value, str):
-                        value = value.lower() in ('true', '1', 'yes')
-
-                    if param.name in ['cascade_context', 'context']:
-                        kwargs[param.name] = cascade_context
-                    else:
-                        kwargs[param.name] = value
-                elif param.required:
-                    raise ToolValidationError(f"Required parameter '{param.name}' not provided")
+                if param.name in prepared_args:
+                    kwargs[param.name] = prepared_args[param.name]
+                elif param.name in ['cascade_context', 'context']:
+                    kwargs[param.name] = cascade_context
+                # required check handled by validation
 
             # Execute with timeout
-            import asyncio
             result = await asyncio.wait_for(
                 tool_def.execute_function(**kwargs),
                 timeout=self.max_tool_execution_time

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+# Add project root to path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from infrastructure.swarm.network.network_utils import get_local_network_ip
+from src.infrastructure.swarm.network.network_utils import get_local_network_ip
 
 print('Testing get_local_network_ip()...')
 

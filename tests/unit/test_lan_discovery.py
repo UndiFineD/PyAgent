@@ -18,6 +18,12 @@ class DummySocket:
     def setsockopt(self, *_, **__):
         pass
 
+    def settimeout(self, *_, **__):
+        pass
+
+    def close(self):
+        pass
+
     def sendto(self, msg, addr):
         # record the message for inspection
         try:

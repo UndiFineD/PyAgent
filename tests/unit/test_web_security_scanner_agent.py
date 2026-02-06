@@ -57,7 +57,7 @@ class TestWebSecurityScannerCore:
         mock_response.status = 200
         mock_response.text = AsyncMock(return_value='<a href="/content/dam/test">link</a>')
 
-        mock_session = AsyncMock()
+        mock_session = MagicMock()
         mock_session.get.return_value.__aenter__ = AsyncMock(return_value=mock_response)
         mock_session.__aenter__ = AsyncMock(return_value=mock_session)
         mock_session_class.return_value.__aenter__ = AsyncMock(return_value=mock_session)
@@ -74,7 +74,7 @@ class TestWebSecurityScannerCore:
         mock_response.status = 200
         mock_response.text = AsyncMock(return_value='<html><body>Hello</body></html>')
 
-        mock_session = AsyncMock()
+        mock_session = MagicMock()
         mock_session.get.return_value.__aenter__ = AsyncMock(return_value=mock_response)
         mock_session.__aenter__ = AsyncMock(return_value=mock_session)
         mock_session_class.return_value.__aenter__ = AsyncMock(return_value=mock_session)

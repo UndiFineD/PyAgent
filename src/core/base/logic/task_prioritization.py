@@ -37,7 +37,7 @@ from typing import Any, Dict, List, Optional, Callable, Tuple, Union
 from dataclasses import dataclass, field
 from uuid import uuid4
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator, ValidationInfo
 
 logger = logging.getLogger(__name__)
 
@@ -96,9 +96,10 @@ class Task(BaseModel):
     dependencies: List[str] = Field(default_factory=list, description="IDs of prerequisite tasks")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional task metadata")
 
-    @validator('deadline')
-    def validate_deadline(cls, v, values):
-        if v and v < values.get('created_at', datetime.now()):
+    @field_validator('deadline')
+    @classmethod
+    def validate_deadline(cls, v: Optional[datetime], info: ValidationInfo) -> Optional[datetime]:
+        if v and v < info.data.get('created_at', datetime.now()):
             raise ValueError('Deadline cannot be in the past')
         return v
 

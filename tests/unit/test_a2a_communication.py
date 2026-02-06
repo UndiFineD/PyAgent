@@ -18,6 +18,7 @@ Tests for the A2A Communication System.
 
 import asyncio
 import pytest
+import pytest_asyncio
 from unittest.mock import Mock, AsyncMock
 
 from src.core.base.logic.a2a_communication import (
@@ -95,7 +96,7 @@ class TestA2AMessage:
 class TestMessageRouter:
     """Test MessageRouter functionality."""
 
-    @pytest.fixture
+    @pytest_asyncio.fixture
     async def router(self):
         """Create a message router for testing."""
         router = MessageRouter()

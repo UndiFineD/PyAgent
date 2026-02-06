@@ -24,7 +24,7 @@ import platform
 from typing import Any, Dict, Optional, Tuple
 from uuid import UUID
 
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.mixins.crypto_mixin import CryptoMixin
 from src.core.base.mixins.database_access_mixin import DatabaseAccessMixin
 from src.core.base.mixins.data_parsing_mixin import DataParsingMixin

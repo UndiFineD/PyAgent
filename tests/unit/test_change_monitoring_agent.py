@@ -154,7 +154,7 @@ class TestChangeMonitoringAgent(unittest.TestCase):
         # Mock data source
         mock_ds = MagicMock()
         mock_ds.get_initial_dump = AsyncMock(return_value=[
-            {'object': 'test', 'attribute_name': 'size', 'attribute_value': 100}
+            {'object': 'test', 'attribute_name': 'useraccountcontrol', 'attribute_value': 512}
         ])
         mock_ds_class.return_value = mock_ds
 

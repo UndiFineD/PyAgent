@@ -14,7 +14,7 @@
 
 import pytest
 from unittest.mock import Mock, patch, AsyncMock
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from src.core.base.logic.core.federation_services_core import (
     FederationServicesCore, 
     TokenGenerationRequest,
@@ -62,8 +62,8 @@ class TestFederationServicesCore:
         result = await self.core._generate_office365_token(
             request=request,
             token_id="test-token-id",
-            now=datetime.utcnow(),
-            expires=datetime.utcnow() + timedelta(minutes=60)
+            now=datetime.now(timezone.utc),
+            expires=datetime.now(timezone.utc) + timedelta(minutes=60)
         )
 
         assert result is not None
@@ -98,8 +98,8 @@ class TestFederationServicesCore:
         result = await self.core._generate_dropbox_token(
             request=request,
             token_id="test-token-id",
-            now=datetime.now(),
-            expires=datetime.now() + timedelta(minutes=60)
+            now=datetime.now(timezone.utc),
+            expires=datetime.now(timezone.utc) + timedelta(minutes=60)
         )
 
         assert result is not None

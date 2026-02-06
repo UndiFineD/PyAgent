@@ -51,6 +51,8 @@ class CascadeContext:
     """Context for tracking cascade operations and preventing infinite recursion."""
 
     task_id: str = ""
+    agent_id: str = ""
+    workflow_id: str = ""
     cascade_depth: int = 0
     depth_limit: int = 10
     tenant_id: str = ""

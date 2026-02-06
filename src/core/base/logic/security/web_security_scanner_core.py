@@ -108,7 +108,7 @@ class WebSecurityScannerCore:
             try:
                 async with aiohttp.ClientSession(
                     timeout=aiohttp.ClientTimeout(total=self.timeout),
-                    connector=aiohttp.TCPConnector(verify_ssl=False)
+                    connector=aiohttp.TCPConnector(ssl=False)
                 ) as session:
                     headers = {
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
