@@ -12,47 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""CoRTReasoningCore (Chain-of-Recursive-Thoughts) placeholder.
-
-Provides a small API interface for recursive reasoning rounds. This
-module is intentionally conservative and returns structured placeholders
-for integration and testing.
 """
+PyAgent Chain-of-Recursive-Thoughts (CoRT) Reasoning System.
+
+Based on the Chain-of-Recursive-Thoughts framework for breakthrough
+problem-solving and response quality through recursive thinking.
+"""
+
 from __future__ import annotations
-from dataclasses import dataclass
-import typing as t
-
-
-@dataclass
-class ReasonStep:
-    prompt: str
-    response: str
-    score: float = 0.0
-
-
-class CoRTReasoningCore:
-    """Minimal recursive reasoning coordinator stub.
-
-    The real implementation should implement multiple rounds, evaluation,
-    and temperature/strategy selection. This stub provides a synchronous
-    interface for integration tests.
-    """
-
-    def __init__(self):
-        self.history: list[ReasonStep] = []
-
-    def think(self, prompt: str, rounds: int = 1) -> list[ReasonStep]:
-        """Perform `rounds` reasoning steps and return the step history.
-
-        This stub echoes the prompt as the response for now.
-        """
-        for i in range(rounds):
-            step = ReasonStep(prompt=prompt, response=f"Echo: {prompt}", score=1.0)
-            self.history.append(step)
-        return list(self.history[-rounds:])
-
-
-__all__ = ["CoRTReasoningCore", "ReasonStep"]
 
 import asyncio
 import json

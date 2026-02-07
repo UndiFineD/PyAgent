@@ -98,8 +98,8 @@ class TestFederationServicesCore:
         result = await self.core._generate_dropbox_token(
             request=request,
             token_id="test-token-id",
-            now=datetime.now(),
-            expires=datetime.now() + timedelta(minutes=60)
+            now=datetime.now(timezone.utc),
+            expires=datetime.now(timezone.utc) + timedelta(minutes=60)
         )
 
         assert result is not None

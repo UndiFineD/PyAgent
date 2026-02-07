@@ -96,7 +96,6 @@ class RAGToolConfig:
     embedding_model: str = "text-embedding-ada-002"
     chunk_size: int = 1000
     chunk_overlap: int = 200
-    vector_store_id: Optional[str] = None
     created_at: datetime = field(default_factory=datetime.now)
 
 
@@ -261,7 +260,6 @@ class RAGCore(BaseCore):
             description=description,
             vector_store_type=VectorStoreType.QDRANT,  # Default, would be determined by store
             collection_name=collection_name,
-            vector_store_id=vector_store_id,
             **kwargs
         )
 
@@ -290,9 +288,7 @@ class RAGCore(BaseCore):
             raise ValueError(f"RAG tool {tool_id} not found")
 
         tool_config = self.rag_tools[tool_id]
-        # Resolve vector store by explicit id (preferred) or fall back to collection name
-        store_key = tool_config.vector_store_id or tool_config.collection_name
-        vector_store = self.vector_stores.get(store_key)
+        vector_store = self.vector_stores.get(tool_config.collection_name)
 
         if not vector_store:
             raise ValueError(f"Vector store for tool {tool_id} not found")
@@ -303,15 +299,11 @@ class RAGCore(BaseCore):
             if chunk_documents and len(doc.content) > tool_config.chunk_size:
                 chunks = await self._chunk_document(doc, tool_config)
                 processed_docs.extend(chunks)
-
-                # Register chunks in document registry
-                for chunk in chunks:
-                    self.documents[chunk.doc_id] = chunk
             else:
                 processed_docs.append(doc)
 
-                # Store in document registry
-                self.documents[doc.doc_id] = doc
+            # Store in document registry
+            self.documents[doc.doc_id] = doc
 
         # Add to vector store
         doc_ids = await vector_store.add_documents(processed_docs)
@@ -343,18 +335,17 @@ class RAGCore(BaseCore):
         tool_config = self.rag_tools[tool_id]
         config = retrieval_config or tool_config.retrieval_config
 
-        # Apply pre-processors (support sync or async processors)
+        # Apply pre-processors
         processed_query = query
         for processor in tool_config.pre_processors:
-            try:
-                result = processor(processed_query)
-                if asyncio.iscoroutine(result):
-                    processed_query = await result
-                else:
-                    processed_query = result
-            except TypeError:
-                # Fallback: if processor is async function requiring awaitable call
+            if asyncio.iscoroutinefunction(processor):
                 processed_query = await processor(processed_query)
+            else:
+                res = processor(processed_query)
+                if asyncio.iscoroutine(res):
+                    processed_query = await res
+                else:
+                    processed_query = res
 
         # Perform retrieval based on strategy
         vector_store = self.vector_stores.get(tool_config.collection_name)
@@ -365,14 +356,10 @@ class RAGCore(BaseCore):
             vector_store, processed_query, config, filters
         )
 
-        # Apply post-processors (support sync or async processors)
+        # Apply post-processors
         processed_results = results
         for processor in tool_config.post_processors:
-            result = processor(processed_results)
-            if asyncio.iscoroutine(result):
-                processed_results = await result
-            else:
-                processed_results = result
+            processed_results = await processor(processed_results)
 
         # Create retrieval result
         documents, scores = zip(*processed_results) if processed_results else ([], [])
@@ -504,26 +491,58 @@ class RAGCore(BaseCore):
     async def _chunk_document(self, document: Document, config: RAGToolConfig) -> List[Document]:
         """Chunk a document into smaller pieces."""
         content = document.content
-        chunk_size = max(1, int(config.chunk_size))
-        overlap = max(0, int(config.chunk_overlap))
+        chunk_size = config.chunk_size
+        overlap = config.chunk_overlap
+        
+        # Ensure we don't have infinite loops with bad config
+        if chunk_size <= overlap:
+            overlap = max(0, chunk_size - 1)
 
-        chunks: List[Document] = []
+        chunks = []
         start = 0
-        content_length = len(content)
 
-        while start < content_length:
-            end = min(start + chunk_size, content_length)
-
-            # If not at end, try to break at last space within window to avoid cutting words
-            if end < content_length:
-                last_space = content.rfind(' ', start, end)
-                if last_space > start:
-                    end = last_space
-
-            # Ensure we make progress; if end equals start, advance by chunk_size
-            if end <= start:
-                end = min(start + chunk_size, content_length)
-
+        while start < len(content):
+            # 1. Initial hard limit
+            end = min(start + chunk_size, len(content))
+            
+            # Find a good break point if not at the end
+            if end < len(content):
+                # Ensure we make progress: next start should be > current start
+                # next_start = end - overlap
+                # we want end - overlap > start  =>  end > start + overlap
+                min_end = start + overlap + 1
+                
+                # Check for sentence delimiters
+                # Look backwards from 'end' down to 'min_end'
+                # Limit lookback to reasonable amount (e.g. 100 chars)
+                found_break = False
+                search_end = end
+                
+                # Try sentence boundaries first
+                limit = max(min_end, search_end - 100)
+                curr = search_end
+                while curr > limit:
+                     # Check character at curr-1
+                     idx = curr - 1
+                     if content[idx] in ".!?" and (curr >= len(content) or content[curr].isspace()):
+                         end = curr
+                         found_break = True
+                         break
+                     curr -= 1
+                
+                if not found_break:
+                     # Try word boundaries
+                     curr = search_end
+                     while curr > min_end:
+                         if content[curr-1].isspace():
+                             end = curr
+                             found_break = True
+                             break
+                         curr -= 1
+                     
+                     # If still not found, we keep the hard break at 'end' (start + chunk_size)
+                     # which satisfies > start + overlap
+            
             chunk_content = content[start:end].strip()
             if chunk_content:
                 chunk = Document(
@@ -536,14 +555,17 @@ class RAGCore(BaseCore):
                 chunk.metadata["chunk_index"] = len(chunks)
                 chunks.append(chunk)
 
-            # Move start forward with overlap
-            if end >= content_length:
+            # Stop if we have reached the end of content
+            if end == len(content):
                 break
 
-            # Calculate next start ensuring it doesn't go backwards
+            # Advance start
             next_start = end - overlap
+            
+            # Absolute safety guarantee against infinite loops
             if next_start <= start:
-                next_start = end
+                next_start = start + 1
+                
             start = next_start
 
         return chunks

@@ -119,7 +119,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                             auto_fixable=auto_fix,
                         )
                     )
-            except (RuntimeError, ValueError, TypeError):
+            except (RuntimeError, ValueError, TypeError, AttributeError):
                 self._python_pattern_scan(lines)
         else:
             self._python_pattern_scan(lines)

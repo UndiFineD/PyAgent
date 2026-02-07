@@ -163,9 +163,9 @@ class ResilienceCore(BaseCore):
                 return rc.calculate_backoff(  # pylint: disable=no-member
                     failure_count, threshold, base_timeout, multiplier, max_timeout, jitter_mode
                 )
-            except TimeoutError as e:
-                logger.error("ResilienceCore: Timeout error: %s", e)
-                return None
+            except (TimeoutError, AttributeError) as e:
+                logger.error("ResilienceCore: Rust calculate_backoff unavailable or failed: %s", e)
+                # Fall back to Python implementation below
 
         if failure_count < threshold:
             return 0.0
@@ -190,9 +190,9 @@ class ResilienceCore(BaseCore):
                 return rc.should_attempt_recovery(  # pylint: disable=no-member
                     last_failure_time, current_time, timeout
                 )
-            except TimeoutError as e:
-                logger.error("ResilienceCore: Timeout error: %s", e)
-                return None
+            except (TimeoutError, AttributeError) as e:
+                logger.error("ResilienceCore: Rust should_attempt_recovery unavailable or failed: %s", e)
+                # Fall back to Python implementation below
         return (current_time - last_failure_time) > timeout
 
     @staticmethod
@@ -216,9 +216,9 @@ class ResilienceCore(BaseCore):
                         failure_count,
                         failure_threshold,
                     )
-            except TimeoutError as e:
-                logger.error("ResilienceCore: Timeout error: %s", e)
-                return None
+            except (TimeoutError, AttributeError) as e:
+                logger.error("ResilienceCore: Rust evaluate_state_transition unavailable or failed: %s", e)
+                # Fall back to Python implementation below
 
         if current_state == "CLOSED":
             if failure_count >= failure_threshold:

@@ -41,7 +41,7 @@ class SearchCore(StandardSearchCore):
         if HAS_RUST and hasattr(rc, "parse_bing_results_rust"):
             try:
                 return rc.parse_bing_results_rust(data)
-            except (RuntimeError, ValueError, TypeError):
+            except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
 
         results: list[str] = []
@@ -58,7 +58,7 @@ class SearchCore(StandardSearchCore):
         if HAS_RUST and hasattr(rc, "parse_google_results_rust"):
             try:
                 return rc.parse_google_results_rust(data)
-            except (RuntimeError, ValueError, TypeError):
+            except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
         results: list[str] = []
         for item in data.get("items", []):
@@ -74,7 +74,7 @@ class SearchCore(StandardSearchCore):
         if HAS_RUST and hasattr(rc, "parse_ddg_results_rust"):
             try:
                 return rc.parse_ddg_results_rust(data)
-            except (RuntimeError, ValueError, TypeError):
+            except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
         results: list[str] = []
         for r in data:

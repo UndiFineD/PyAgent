@@ -101,26 +101,10 @@ class SafeLocalInterpreter:
                 last_expr = tree.body.pop()
                 exec_code = compile(tree, filename="<string>", mode="exec")
                 exec(exec_code, self.safe_globals)
-
-                # Safely evaluate the last expression using a restricted globals map.
-                # Prefer to unparse the AST expression and use builtin eval with restricted globals.
-                try:
-                    expr_src = ast.unparse(last_expr.value)
-                except Exception:
-                    expr_src = None
-
-                if expr_src is not None:
-                    try:
-                        # Use the real builtin eval but restrict the globals/locals to safe_globals
-                        result_obj = builtins.eval(expr_src, self.safe_globals)
-                    except Exception:
-                        # If eval fails, attempt literal eval as a safe fallback
-                        try:
-                            result_obj = ast.literal_eval(last_expr.value)
-                        except Exception:
-                            result_obj = None
-                else:
-                    result_obj = None
+                
+                # Evaluate the last expression
+                eval_code = compile(ast.Expression(last_expr.value), filename="<string>", mode="eval")
+                result_obj = eval(eval_code, self.safe_globals)
             else:
                 exec(code, self.safe_globals)
 

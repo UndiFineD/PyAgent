@@ -1,19 +1,32 @@
 #!/usr/bin/env python3
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+# Add project root to path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from infrastructure.swarm.network.network_utils import get_local_network_ip
+from src.infrastructure.swarm.network.network_utils import get_local_network_ip
 
 print('Testing get_local_network_ip()...')
 
 # Let's debug step by step
 import subprocess
-print('Running ipconfig...')
-result = subprocess.run(['ipconfig'], capture_output=True, text=True, timeout=10)
-print('ipconfig return code:', result.returncode)
+import shutil
+import platform
+print('Attempting to run OS network command (if available)...')
+result = None
+try:
+    if platform.system() == 'Windows' and shutil.which('ipconfig'):
+        result = subprocess.run(['ipconfig'], capture_output=True, text=True, timeout=10)
+    elif shutil.which('ip'):
+        result = subprocess.run(['ip', 'addr'], capture_output=True, text=True, timeout=10)
+    elif shutil.which('ifconfig'):
+        result = subprocess.run(['ifconfig'], capture_output=True, text=True, timeout=10)
+    else:
+        print('No suitable system network command found; skipping raw parsing.')
+except FileNotFoundError:
+    result = None
 
-if result.returncode == 0:
+if result is not None and getattr(result, 'returncode', 1) == 0:
     lines = result.stdout.split('\n')
     print('Parsing lines...')
     interfaces = []
@@ -93,3 +106,6 @@ except Exception as e:
     print(f'Exception: {e}')
     import traceback
     traceback.print_exc()
+
+# Basic sanity: allow either None or a string IP
+assert result is None or isinstance(result, str)

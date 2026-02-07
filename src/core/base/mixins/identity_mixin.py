@@ -20,6 +20,7 @@ Provides identity and metadata mixin for PyAgent agents.
 
 from asyncio import AbstractEventLoop
 from asyncio import AbstractEventLoop
+import re
 from typing import Any
 
 from src.core.base.common.models import AgentPriority
@@ -30,7 +31,16 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
     """Handles agent identity, configuration, and capabilities."""
 
     def __init__(self, **kwargs: Any) -> None:
-        self.identity = IdentityCore(agent_type=self.__class__.__name__.lower().replace("agent", "") or "base")
+        # Normalize class name to snake_case
+        name = self.__class__.__name__
+        if name.endswith("Agent"):
+            name = name[:-5]
+        
+        # CamelCase to snake_case conversion
+        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+        agent_type = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+        
+        self.identity = IdentityCore(agent_type=agent_type or "base")
         self.agent_name: str = self.identity.agent_type
         self.capabilities: list[str] = ["base"]
         self.priority: AgentPriority = kwargs.get("priority", AgentPriority.NORMAL)

@@ -54,7 +54,7 @@ class NetworkContextAgent(BaseAgent):
         # 1. Discover all python files as nodes
         py_files = []
         for p in root.rglob("*.py"):
-            if any(part in str(p) for part in ["__pycache__", "venv", ".git", "data/agent_cache"]):
+            if any(part in str(p) for part in ["__pycache__", "venv", ".git", ".agent_cache"]):
                 continue
             rel_path = str(p.relative_to(root))
             self.engine.add_node(rel_path, "file")

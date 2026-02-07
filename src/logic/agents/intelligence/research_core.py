@@ -53,7 +53,7 @@ class ResearchCore:
             try:
                 # Type mapping for Rust: Topic (str), Content (str)
                 return rc.execute_dcap_cycle(topic, content)  # type: ignore[attr-defined]
-            except (RuntimeError, ValueError, TypeError):
+            except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
 
         # Phase 1: Deliberation
@@ -83,7 +83,7 @@ class ResearchCore:
         if HAS_RUST:
             try:
                 return rc.analyze_paper(title, summary)  # type: ignore[attr-defined]
-            except (RuntimeError, ValueError, TypeError):
+            except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
         return f"Analysis of '{title}': Identifies core logic: {summary[:100]}..."
 
@@ -93,7 +93,7 @@ class ResearchCore:
         if HAS_RUST:
             try:
                 return rc.draft_tool_code(title)  # type: ignore[attr-defined]
-            except (RuntimeError, ValueError, TypeError):
+            except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
         return f"""
 # Tool generated from research: {title}

@@ -262,19 +262,22 @@ class StatsRollupCore:
 
     def rollup_sum(self, values: list[float]) -> float:
         """Calculate sum of values (pure calculation)."""
-        if rc:
-            with contextlib.suppress(Exception):
-                # pylint: disable=no-member
-                return rc.calculate_sum_rust(values)  # type: ignore[attr-defined]
-        return sum(values) if values else 0.0
+        # Use high-precision summation to avoid catastrophic cancellation.
+        # Prefer Python's math.fsum which provides better precision than sum().
+        if values:
+            try:
+                return math.fsum(values)
+            except Exception:
+                return sum(values)
+        return 0.0
 
     def rollup_avg(self, values: list[float]) -> float:
         """Calculate average (pure calculation)."""
-        if rc:
-            with contextlib.suppress(Exception):
-                # pylint: disable=no-member
-                return rc.calculate_avg_rust(values)  # type: ignore[attr-defined]
-        return sum(values) / len(values) if values else 0.0
+        if not values:
+            return 0.0
+        # Use math.fsum for robust summation
+        total = math.fsum(values)
+        return total / len(values)
 
     def rollup_min(self, values: list[float]) -> float:
         """Calculate minimum (pure calculation)."""

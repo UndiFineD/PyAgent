@@ -1,3 +1,4 @@
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-Nebula\teamserver\core\colorpp\colorpp.py
 # NOTE: extracted with static-only rules; review before use
 

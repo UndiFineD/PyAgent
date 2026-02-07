@@ -232,6 +232,6 @@ class DisaggregatedScheduler:
                 for inst in self._prefill_instances + self._decode_instances:
                     if now - inst.last_heartbeat > 30:
                         inst.is_healthy = False
-            except (RuntimeError, ValueError, TypeError) as e:
+            except (RuntimeError, ValueError, TypeError, AttributeError) as e:
                 logger.error("Health check error: %s", e)
             await asyncio.sleep(10)

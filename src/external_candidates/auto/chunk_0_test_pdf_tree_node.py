@@ -1,3 +1,4 @@
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-pdfalyzer\tests\pdfalyzer\decorators\test_pdf_tree_node.py
 # NOTE: extracted with static-only rules; review before use
 

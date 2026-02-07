@@ -523,13 +523,15 @@ class ResearchSummary(BaseModel):
     confidence_score: float = Field(..., ge=0.0, le=1.0, description="Confidence score from 0.0 to 1.0")
 
     @field_validator('title')
-    def validate_title(cls, v):
+    @classmethod
+    def validate_title(cls, v: str) -> str:
         if len(v.strip()) < 5:
             raise ValueError('Title must be at least 5 characters long')
         return v
 
     @field_validator('key_findings')
-    def validate_findings(cls, v):
+    @classmethod
+    def validate_findings(cls, v: List[str]) -> List[str]:
         if len(v) < 3:
             raise ValueError('Must have at least 3 key findings')
         if len(v) > 5:

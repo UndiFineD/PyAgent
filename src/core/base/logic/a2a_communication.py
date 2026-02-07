@@ -79,7 +79,8 @@ class AgentCard(BaseModel):
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
 
     @field_validator('url')
-    def validate_url(cls, v):
+    @classmethod
+    def validate_url(cls, v: str) -> str:
         if not v.startswith(('http://', 'https://')):
             raise ValueError('URL must start with http:// or https://')
         return v

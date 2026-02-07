@@ -31,8 +31,8 @@ from src.core.base.mixins.tool_framework_mixin import (
 from src.core.base.common.models.communication_models import CascadeContext
 
 
-class MockToolFrameworkMixin(ToolFrameworkMixin):
-    """Test implementation of ToolFrameworkMixin."""
+class ToolFrameworkMixinImpl(ToolFrameworkMixin):
+    """Non-test implementation of ToolFrameworkMixin for fixtures."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -44,7 +44,7 @@ class TestToolFramework:
     @pytest.fixture
     def tool_framework(self):
         """Create a test tool framework instance."""
-        return MockToolFrameworkMixin()
+        return ToolFrameworkMixinImpl()
 
     @pytest.fixture
     def cascade_context(self):
@@ -245,7 +245,8 @@ class TestToolFramework:
         assert stats["tool1"]["calls"] == 5
         assert stats["tool2"]["successes"] == 2
 
-    def test_parameter_type_conversion(self, tool_framework):
+    @pytest.mark.asyncio
+    async def test_parameter_type_conversion(self, tool_framework):
         """Test parameter type conversion during execution."""
         @tool_framework.create_tool(
             tool_id="type_conversion_tool",
@@ -259,14 +260,14 @@ class TestToolFramework:
             }
 
         # Test with string inputs that should be converted
-        result = asyncio.run(tool_framework.execute_tool(
+        result = await tool_framework.execute_tool(
             "type_conversion_tool",
             {
                 "int_param": "42",
                 "float_param": "3.14",
                 "bool_param": "true"
             }
-        ))
+        )
 
         assert result["success"] == True
         data = result["result"]
@@ -274,7 +275,8 @@ class TestToolFramework:
         assert data["float_param"] == 3.14
         assert data["bool_param"] == True
 
-    def test_validation_disabled(self, tool_framework):
+    @pytest.mark.asyncio
+    async def test_validation_disabled(self, tool_framework):
         """Test tool execution with validation disabled."""
         tool_framework.enable_tool_validation = False
 
@@ -285,9 +287,16 @@ class TestToolFramework:
         async def no_validation_tool(required_param: str, cascade_context=None):
             return f"Got: {required_param}"
 
-        # Should not raise validation error even with missing required param
-        result = asyncio.run(tool_framework.execute_tool("no_validation_tool", {}))
-        assert result["success"] == False  # Will fail during execution due to missing param
+        # Should not raise validation error (ToolValidationError) even with missing required param
+        # The tool execution itself will fail due to missing argument (TypeError), resulting in ToolExecutionError
+        from src.core.base.mixins.tool_framework_mixin import ToolExecutionError, ToolValidationError
+        
+        with pytest.raises(ToolExecutionError) as excinfo:
+            await tool_framework.execute_tool("no_validation_tool", {})
+        
+        # Verify it wasn't a validation error (which would be raised if validation was enabled)
+        assert "execution failed" in str(excinfo.value)
+        assert "missing 1 required positional argument" in str(excinfo.value) or "missing argument" in str(excinfo.value)
 
     def test_tool_definition_serialization(self, tool_framework):
         """Test tool definition serialization."""

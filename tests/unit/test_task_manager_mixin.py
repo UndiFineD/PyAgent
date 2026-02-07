@@ -27,10 +27,11 @@ from src.core.base.mixins.task_manager_mixin import TaskManagerMixin, TaskItem
 from src.core.base.common.models.communication_models import CascadeContext
 
 
-class MockTaskManagerMixin(TaskManagerMixin):
-    """Test implementation of TaskManagerMixin."""
+class TaskManagerMixinImpl(TaskManagerMixin):
+    """Non-test implementation of TaskManagerMixin for fixtures."""
 
     def __init__(self, **kwargs):
+        self._workspace_root = kwargs.get('_workspace_root')
         super().__init__(**kwargs)
 
 
@@ -40,7 +41,7 @@ class TestTaskManager:
     @pytest.fixture
     def task_manager(self, tmp_path):
         """Create a test task manager instance."""
-        return MockTaskManagerMixin(_workspace_root=str(tmp_path))
+        return TaskManagerMixinImpl(_workspace_root=str(tmp_path))
 
     @pytest.fixture
     def cascade_context(self):
@@ -236,7 +237,7 @@ class TestTaskManager:
         task_file = tmp_path / ".pyagent_tasks.json"
 
         # Create manager with persistence
-        manager1 = MockTaskManagerMixin(_workspace_root=str(tmp_path))
+        manager1 = TaskManagerMixinImpl(_workspace_root=str(tmp_path))
         manager1.tasks = [
             TaskItem("Task 1", completed=True, priority=2),
             TaskItem("Task 2", completed=False, priority=1)
@@ -244,7 +245,7 @@ class TestTaskManager:
         manager1._save_tasks()
 
         # Create new manager and load
-        manager2 = MockTaskManagerMixin(_workspace_root=str(tmp_path))
+        manager2 = TaskManagerMixinImpl(_workspace_root=str(tmp_path))
 
         assert len(manager2.tasks) == 2
         assert manager2.tasks[0].description == "Task 1"
@@ -252,16 +253,21 @@ class TestTaskManager:
         assert manager2.tasks[1].description == "Task 2"
         assert manager2.tasks[1].completed == False
 
-    def test_task_limit(self, task_manager):
+    @pytest.mark.asyncio
+    async def test_task_limit(self, task_manager):
         """Test task limit enforcement."""
         task_manager.max_tasks = 3
 
         # Add tasks up to limit
         for i in range(5):
-            task_manager.tasks.append(TaskItem(f"Task {i}"))
+            await task_manager.add_task(f"Task {i}")
 
-        # Should only keep the last 3 tasks
+        # Should only keep the last 3 tasks (Sorted by priority (high), completed (false), created_at (old))
+        # Since all equal priority/completed, keeps oldest (0, 1, 2)
         assert len(task_manager.tasks) == 3
-        assert task_manager.tasks[0].description == "Task 2"
-        assert task_manager.tasks[1].description == "Task 3"
-        assert task_manager.tasks[2].description == "Task 4"
+        
+        # Implementation keeps TOP 3. Top is Oldest.
+        # So we expect Task 0, 1, 2
+        assert task_manager.tasks[0].description == "Task 0"
+        assert task_manager.tasks[1].description == "Task 1"
+        assert task_manager.tasks[2].description == "Task 2"

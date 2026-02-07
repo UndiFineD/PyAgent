@@ -119,7 +119,7 @@ class ProjectExplorer:
                     ".git",
                     ".venv",
                     ".pytest_cache",
-                    "data/agent_cache",
+                    ".agent_cache",
                 }:
                     continue
 
@@ -180,7 +180,7 @@ class ProjectExplorer:
                     ".git",
                     ".venv",
                     ".pytest_cache",
-                    "data/agent_cache",
+                    ".agent_cache",
                 }
             ]
             for f in files:

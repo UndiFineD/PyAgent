@@ -31,8 +31,15 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.backends import default_backend
 from cryptography import x509
 from cryptography.x509.oid import NameOID
-import signxml
-from lxml import etree
+try:
+    import signxml
+except Exception:  # pragma: no cover - optional dependency for SAML signing
+    signxml = None
+
+try:
+    from lxml import etree
+except Exception:  # pragma: no cover - optional dependency for XML handling
+    etree = None
 import secrets
 import string
 

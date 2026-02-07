@@ -93,7 +93,6 @@ class CopilotCliBackend(LLMBackend):
                 latency_s=latency,
             )
             return ""
-
         except subprocess.TimeoutExpired:
             latency = time.time() - start_t
             logging.warning(f"Copilot CLI timed out after {timeout_s}s")
@@ -107,8 +106,7 @@ class CopilotCliBackend(LLMBackend):
                 latency_s=latency,
             )
             return ""
-
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             latency = time.time() - start_t
             logging.error(f"Failed to call Copilot CLI: {e}")
             self._update_status("copilot_cli", False)

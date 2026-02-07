@@ -74,44 +74,14 @@ class TaskManagerMixin:
     Inspired by Adorable's todo tool for tracking agent tasks and workflows.
     """
 
-    class _ManagedTaskList(list):
-        def __init__(self, parent, *args):
-            super().__init__(*args)
-            self._parent = parent
-
-        def append(self, item):
-            super().append(item)
-            self._parent._enforce_task_limit()
-
-        def extend(self, items):
-            super().extend(items)
-            self._parent._enforce_task_limit()
-
-        def insert(self, index, item):
-            super().insert(index, item)
-            self._parent._enforce_task_limit()
-
-        def __setitem__(self, index, value):
-            super().__setitem__(index, value)
-            self._parent._enforce_task_limit()
-
-    def _enforce_task_limit(self):
-        if len(self.tasks) > self.max_tasks:
-            # Keep the most recent tasks (end of list)
-            del self.tasks[0:len(self.tasks) - self.max_tasks]
-
     def __init__(self, **kwargs: Any) -> None:
-        # Ensure workspace root is available for persistence
-        self._workspace_root = kwargs.get('_workspace_root')
+        self.tasks: List[TaskItem] = []
         self.task_file: Optional[Path] = None
         self.auto_save: bool = kwargs.get('auto_save_tasks', True)
         self.max_tasks: int = kwargs.get('max_tasks', 50)
 
-        # Use managed list to enforce max_tasks when mutated directly
-        self.tasks: List[TaskItem] = TaskManagerMixin._ManagedTaskList(self)
-
         # Initialize task persistence
-        if self._workspace_root:
+        if hasattr(self, '_workspace_root') and self._workspace_root:
             self.task_file = Path(self._workspace_root) / '.pyagent_tasks.json'
             self._load_tasks()
 
@@ -265,8 +235,8 @@ class TaskManagerMixin:
         return {
             "success": True,
             "message": f"Cleared {removed_count} completed tasks",
-            "removed_count": removed_count,
-            "remaining_tasks": len(self.tasks)
+            "remaining_tasks": len(self.tasks),
+            "removed_count": removed_count
         }
 
     def _load_tasks(self) -> None:
@@ -278,7 +248,7 @@ class TaskManagerMixin:
             with open(self.task_file, 'r', encoding='utf-8') as f:
                 data = json.load(f)
 
-            self.tasks = TaskManagerMixin._ManagedTaskList(self)
+            self.tasks = []
             for item_data in data.get("tasks", []):
                 try:
                     task = TaskItem.from_dict(item_data)
