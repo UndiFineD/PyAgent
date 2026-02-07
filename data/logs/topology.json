@@ -1,0 +1,11 @@
+{
+  "nodes": [
+    { "id": "Local Node (This Machine)", "group": 1 },
+    { "id": "Cloud-Node-Alpha", "group": 2 },
+    { "id": "Raspberry-Pi-Edge-1", "group": 3 }
+  ],
+  "links": [
+    { "source": "Local Node (This Machine)", "target": "Cloud-Node-Alpha", "value": 1 },
+    { "source": "Local Node (This Machine)", "target": "Raspberry-Pi-Edge-1", "value": 1 }
+  ]
+}

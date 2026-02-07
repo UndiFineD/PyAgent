@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\stats\exporters\OTelManager.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.1, 'Agent: SecurityGuard', 'Workflow: Fix Code', '__main__', 'ok', 'pyagent-fleet', 'service.name', 'traceparent', 'unset']

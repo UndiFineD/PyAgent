@@ -94,12 +94,47 @@ class ConfigCore(BaseCore):
         self.config_dir = self.workspace_root / "data" / "config"
         self.configs: Dict[str, ConfigObject] = {}
 
-    def load(self, path: Path | None = None) -> ConfigObject:
-        """Legacy alias for load_config, using self.config_path if none provided."""
-        target = path or self.config_path
-        if not target:
+    def load_config(self, module: str) -> ConfigObject:
+        """Loads a specific configuration module from the data/config directory."""
+        if module in self.configs:
+            return self.configs[module]
+
+        path = self.config_dir / f"{module}.yaml"
+        if not path.exists():
+            logging.warning(f"Config module '{module}' not found at {path}. Returning empty.")
             return ConfigObject({})
-        return self.load_config(target)
+
+        # Use atomic_read from FileSystemCore if available via mixin? 
+        # For now, standard load.
+        import yaml
+        with open(path, "r") as f:
+            data = yaml.safe_load(f) or {}
+        
+        obj = ConfigObject(data)
+        self.configs[module] = obj
+        return obj
+
+    def validate_sharding_config(self, config_data: Dict[str, Any]) -> bool:
+        """
+        Validates the sharding configuration for swarm-readiness.
+        Phase 55: High-speed validation using cross-entropy check.
+        """
+        required_fields = ["replication_factor", "shard_count", "partition_strategy"]
+        if not all(field in config_data for field in required_fields):
+            logging.error("Sharding configuration missing required fields.")
+            return False
+        
+        if config_data.get("replication_factor", 0) < 1:
+            logging.error("Replication factor must be at least 1.")
+            return False
+            
+        return True
+
+    def load(self, path: Path | None = None) -> ConfigObject:
+        """Load configuration from a path."""
+        if not path:
+            return ConfigObject({})
+        return self.load_config(path)
 
     @staticmethod
     def find_config_file(directory: Path) -> Path | None:

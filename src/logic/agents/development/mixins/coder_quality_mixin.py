@@ -36,10 +36,23 @@ class CoderQualityMixin:
         violations: List[Dict[str, Any]],
         smells: List[CodeSmell],
         coverage: float,
+        content: str | None = None,
     ) -> QualityScore:
         """Aggregate all analysis into a single QualityScore."""
+        from src.core.rust_bridge import RustBridge
+        
         score = QualityScore()
         score.maintainability = min(100, metrics.maintainability_index)
+
+        # Tech Debt via Rust
+        if content:
+            debt_markers = RustBridge.analyze_tech_debt(content)
+            total_debt = sum(debt_markers.values())
+            score.technical_debt = max(0, 100 - total_debt * 5)
+            if total_debt > 0:
+                score.issues.append(f"Tech Debt: Detected {total_debt} markers ({', '.join(debt_markers.keys())})")
+        else:
+            score.technical_debt = 100.0
 
         # Readability score
         readability_deductions = len(violations) * 5
@@ -61,11 +74,12 @@ class CoderQualityMixin:
 
         # Overall score (weighted average)
         score.overall_score = (
-            score.maintainability * 0.25
-            + score.readability * 0.25
-            + score.complexity * 0.25
+            score.maintainability * 0.20
+            + score.readability * 0.20
+            + score.complexity * 0.20
             + score.documentation * 0.15
-            + score.test_coverage * 0.10
+            + score.test_coverage * 0.15
+            + score.technical_debt * 0.10
         )
 
         # Add primary issues

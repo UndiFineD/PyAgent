@@ -70,17 +70,18 @@ class VoyagerTransport:
                         break
 
                     identity, _, msg_raw = result
-                    import msgpack
+                    import msgspec
+                    decoder = msgspec.msgpack.Decoder()
 
                     msg_bytes: bytes = self._decrypt(msg_raw)
-                    message = msgpack.unpackb(msg_bytes, raw=False)
+                    message = decoder.decode(msg_bytes)
 
                     logger.debug(f"Voyager: Received message from {identity.hex()}")
 
                     # Dispatch to handler
                     if self._handler:
                         response_data: Dict[str, Any] = await self._handler(message)
-                        response_bytes = msgpack.packb(response_data, use_bin_type=True)
+                        response_bytes = msgspec.msgpack.encode(response_data)
                         encrypted_response: bytes = self._encrypt(response_bytes)
                         await self.router.send_multipart([identity, b"", encrypted_response])
 
@@ -98,7 +99,7 @@ class VoyagerTransport:
         self, peer_address: str, peer_port: int, message: Dict[str, Any], timeout: int = 5000
     ) -> Optional[Dict[str, Any]]:
         """Sends a message to a specific peer using a DEALER socket."""
-        import msgpack
+        import msgspec
 
         dealer: zmq.asyncio.Socket = self.ctx.socket(zmq.DEALER)
         dealer.setsockopt(zmq.LINGER, 0)
@@ -106,7 +107,7 @@ class VoyagerTransport:
 
         try:
             dealer.connect(target)
-            msg_bytes = msgpack.packb(message, use_bin_type=True)
+            msg_bytes = msgspec.msgpack.encode(message)
             encrypted_msg: bytes = self._encrypt(msg_bytes)
 
             # Send [empty, message]
@@ -116,7 +117,7 @@ class VoyagerTransport:
             if await dealer.poll(timeout):
                 _, resp_raw = await dealer.recv_multipart()
                 resp_bytes: bytes = self._decrypt(resp_raw)
-                return msgpack.unpackb(resp_bytes, raw=False)
+                return msgspec.msgpack.decode(resp_bytes)
 
             logger.warning(f"Voyager: Timeout waiting for response from {target}")
             return None

@@ -1,0 +1,21 @@
+# PyAgent Memory and Knowledge Configuration
+# Controls episodic and long-term memory behavior.
+
+memory:
+  # If true, enables P2P federated queries (Voyager Synapse)
+  shared_enabled: true
+  
+  # TTL for episodic memories in seconds (default: 30 days)
+  episodic_ttl: 2592000
+  
+  # Maximum memory database size in GB before starting eviction
+  max_size_gb: 5.0
+  
+  # Priority list for memory backends
+  backends:
+    - "local_json"
+    - "vector_sqlite"
+    - "redis_sync"
+  
+  # Threshold for 'useful' memories (0.0 to 1.0)
+  utility_threshold: 0.4

@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\fleet\FleetRoutingCore.py
-# hypothesis_version: 6.150.1
-
-[5.0, 'CRITICAL', 'ImmuneSystem', 'ROUTED:CPU:POOL', 'agent_name', 'available', 'gpu', 'indexing', 'internal_ai', 'llm_finetune', 'name', 'owner', 'select_best_tool', 'status', 'sync', 'telemetry', 'temporal_sync', 'training']

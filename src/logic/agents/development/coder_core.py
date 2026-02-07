@@ -114,6 +114,11 @@ class CoderCore(
         except (ImportError, AttributeError):
             self._rust_core = None
 
+    def get_dependencies(self, content: str) -> List[str]:
+        """Extract code dependencies using high-speed scanning."""
+        from src.core.rust_bridge import RustBridge
+        return RustBridge.get_imports(content)
+
     def calculate_metrics(self, content: str) -> CodeMetrics:
         """Analyze code structure and compute metrics."""
         from src.core.rust_bridge import RustBridge

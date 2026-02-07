@@ -1,0 +1,19 @@
+# PyAgent Network Firewall Configuration
+# This file controls the outbound security policies for all agents.
+
+firewall:
+  # If true, all non-localhost requests are blocked (Air-gap mode)
+  local_only: false
+  
+  # List of domains that are explicitly forbidden
+  blocked_domains:
+    - "telemetry.spyware.net"
+    - "adservice.google.com"
+    - "tracking.example.org"
+
+# Network range controls (shared with Voyager Swarm settings)
+voyager:
+  allowed_networks:
+    - "127.0.0.1/32"      # Allow localhost
+    - "192.168.1.0/24"    # Allow local home network
+    - "10.0.0.0/8"        # Allow corporate internal network

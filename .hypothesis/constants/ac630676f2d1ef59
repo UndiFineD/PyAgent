@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\stats\exporters\PrometheusExporter.py
-# hypothesis_version: 6.150.1
-
-[',', '/metrics', '15s', 'Prometheus', 'Ready', 'datasource_type', 'endpoint', 'metric_prefix', 'provisioning_status', 'pyagent_', 'scrape_interval', '{', '}']

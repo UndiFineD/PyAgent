@@ -1,0 +1,1 @@
+{"timestamp": "2026-02-07T17:41:38.004530Z", "agent_id": "src.infrastructure.swarm.voyager.discovery_node", "trace_id": "trace_1770486095", "level": "INFO", "message": "Voyager: Advertising node PyAgent-bb5b5e5b at 10.2.0.2:8000"}

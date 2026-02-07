@@ -1,0 +1,25 @@
+# PyAgent Local Model Configuration
+# Defines local GGUF and Quantized model weights.
+
+models:
+  local:
+    enabled: true
+    path: "./models"
+    formats: ["GGUF", "EXL2", "AWQ"]
+    registry:
+      - name: "llama-3-8b-instruct"
+        path: "Llama-3-8B-Instruct.Q4_K_M.gguf"
+        type: "GGUF"
+        quantization: "Q4_K_M"
+        vram_budget_gb: 6.0
+      - name: "mistral-7b-v0.1"
+        path: "Mistral-7B-v0.1.Q8_0.gguf"
+        type: "GGUF"
+        quantization: "Q8_0"
+        vram_budget_gb: 8.0
+
+  inference:
+    preferred_backend: "local"
+    fallback_to_cloud: true
+    max_batch_size: 4
+    context_window: 8192

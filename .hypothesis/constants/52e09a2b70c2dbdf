@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\specialized\PrivacyGuardAgent.py
-# hypothesis_version: 6.150.1
-
-[1.0, '(?i)AKIA[0-9A-Z]{16}', '.', '...', '.git', 'AWS_KEY', 'AWS_SECRET', 'GENERIC_TOKEN', 'GITHUB_TOKEN', '__pycache__', 'file', 'ghp_[a-zA-Z0-9]{36}', 'improvement', 'line', 'path', 'priority', 'security_scan.audit', 'snippet', 'target_dir', 'type', 'utf-8']

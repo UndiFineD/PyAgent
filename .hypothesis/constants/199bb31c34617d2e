@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\infrastructure\OllamaConnectorAgent.py
-# hypothesis_version: 6.150.1
-
-[200, 'Ollama', '__main__', 'exception', 'llama3', 'model', 'prompt', 'recorder', 'response', 'status', 'stream']

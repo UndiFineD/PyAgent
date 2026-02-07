@@ -66,6 +66,31 @@ class DiscoveryNode:
 
         # Local IP detection
         self.local_ip: str = self._get_local_ip()
+        self.peer_metadata: Dict[str, Dict[str, Any]] = {}
+
+    def update_peer_metadata(self, peer_id: str, metadata: Dict[str, Any]) -> None:
+        """Updates extended metadata received via side-channels (e.g. Heartbeats)."""
+        if peer_id not in self.peer_metadata:
+            self.peer_metadata[peer_id] = {}
+        self.peer_metadata[peer_id].update(metadata)
+        logger.debug(f"Voyager: Updated metadata for peer {peer_id}")
+
+    def get_peers(self) -> List[Dict[str, Any]]:
+        """Returns simplified peer list for Synapse broadcasting."""
+        peers = []
+        for name, info in self.peers.items():
+            addrs = info.parsed_addresses()
+            props = {
+                k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
+                for k, v in info.properties.items()
+            }
+            if addrs and "transport_port" in props:
+                peers.append({
+                    "id": props.get("node_id"),
+                    "ip": addrs[0],
+                    "port": int(props["transport_port"])
+                })
+        return peers
 
     def _get_local_ip(self) -> str:
         """Returns the local IPv4 address of the node."""
@@ -144,20 +169,23 @@ class DiscoveryNode:
         logger.info(f"Voyager: Discovery Node {self.node_name} stopped.")
 
     def get_active_peers(self) -> List[Dict[str, Any]]:
-        """Returns a list of active peers found on the network."""
+        """Returns a list of active peers found on the network, including dynamic metadata."""
         results = []
         for name, info in self.peers.items():
-            results.append(
-                {
-                    "name": name,
-                    "addresses": info.parsed_addresses(),
-                    "port": info.port,
-                    "properties": {
-                        k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
-                        for k, v in info.properties.items()
-                    },
-                }
-            )
+            props = {
+                k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
+                for k, v in info.properties.items()
+            }
+            node_id = props.get("node_id", "unknown")
+            
+            peer_data = {
+                "name": name,
+                "addresses": info.parsed_addresses(),
+                "port": info.port,
+                "properties": props,
+                "stats": self.peer_metadata.get(node_id, {})
+            }
+            results.append(peer_data)
         return results
 
     def resolve_synapse_address(self, peer_name: str) -> Optional[tuple[str, int]]:

@@ -114,6 +114,16 @@ class TelemetryCore(BaseCore):
 
         return {"avg": sum(relevant) / len(relevant), "max": max(relevant), "count": len(relevant)}
 
+    def get_cluster_health_score(self) -> float:
+        """Calculates a unified health score (0.0 - 1.0) for the local machine or cluster."""
+        cpu_avg = self.get_rollups("swarm.node.cpu_percent", window_seconds=60).get("avg", 0.0)
+        mem_avg = self.get_rollups("swarm.node.memory_percent", window_seconds=60).get("avg", 0.0)
+        
+        # Invert the load to get a 'health' score
+        # (e.g. 20% CPU + 30% MEM -> 0.75 health)
+        load = (cpu_avg + mem_avg) / 2.0
+        return max(0.0, min(1.0, 1.0 - (load / 100.0)))
+
     def clear(self) -> None:
         """Clears all buffered metrics and alerts."""
         self._metrics_buffer.clear()

@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\backend\llm_backends\VllmBackend.py
-# hypothesis_version: 6.150.1
-
-['/', '/v1/chat/completions', 'Content-Type', 'DV_VLLM_BASE_URL', 'application/json', 'base_url', 'choices', 'content', 'message', 'messages', 'model', 'role', 'system', 'timeout_s', 'user', 'vllm']

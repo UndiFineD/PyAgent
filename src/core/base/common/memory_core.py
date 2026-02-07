@@ -57,9 +57,35 @@ class MemoryCore:
         # pylint: disable=attribute-defined-outside-init
         self._fs = FileSystemCore()
         self._storage = StorageCore()
+        from src.core.base.configuration.config_manager import config
+        self.shared_enabled = config.get("memory.shared_enabled", True)
         self.base_path = WorkspaceCore().get_path("data/memory")
         self._fs.ensure_directory(self.base_path)
         self.index_path = Path("data/agent_knowledge_index.json")
+
+    def retrieve_knowledge(
+        self, 
+        agent_id: str, 
+        query: str, 
+        mode: str = "semantic", 
+        limit: int = 5
+    ) -> List[Dict[str, Any]]:
+        """
+        Retrieves knowledge from local storage.
+        In multi-agent mode, this would be sharded across the cluster.
+        """
+        logger.info(f"MemoryCore: Retrieving {mode} knowledge for {agent_id}: '{query}'")
+        
+        # In a real implementation, this would use the StorageCore/VectorDB
+        # For now, we return a structural placeholder or search local indices
+        return [
+            {
+                "id": "mem_1",
+                "content": f"Simulated knowledge for {query}",
+                "timestamp": datetime.now().isoformat(),
+                "score": 0.95
+            }
+        ]
 
     # pylint: disable=too-many-arguments,too-many-positional-arguments
     def create_episode(

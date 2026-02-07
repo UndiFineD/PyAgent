@@ -1,0 +1,16 @@
+# PyAgent Sharding and Partitioning Configuration
+# Controls how agents and tasks are distributed across the swarm.
+
+sharding:
+  # The default number of virtual shards in the system
+  default_count: 8
+  
+  # How many nodes should hold a copy of each shard (High Availability)
+  replication_factor: 2
+  
+  # Strategy for shard distribution
+  # Options: "consistent_hashing", "random", "load_balanced"
+  strategy: "consistent_hashing"
+  
+  # If true, shards are automatically moved when nodes join/leave
+  auto_rebalance: true

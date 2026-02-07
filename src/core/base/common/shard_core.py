@@ -17,41 +17,21 @@ Core logic for fleet sharding and partitioning.
 """
 
 from __future__ import annotations
-
-from .base_core import BaseCore
-
-try:
-    import rust_core as rc  # pylint: disable=import-error
-except ImportError:
-    rc = None
+from typing import Optional, List
+from .sharding_core import ShardingCore
 
 
-class ShardCore(BaseCore):
+class ShardCore(ShardingCore):
     """
     Authoritative engine for agent and data partitioning.
     Handles shard assignment, rebalancing, and cross-shard routing.
     """
 
-    def calculate_shard_id(self, key: str, shard_count: int) -> int:
-        """
-        Determines the shard ID for a given key.
-        Hot path for Rust acceleration in docs/RUST_MAPPING.md.
-        """
-        if rc and hasattr(rc, "calculate_shard_id_rust"):  # pylint: disable=no-member
-            try:
-                return rc.calculate_shard_id_rust(  # pylint: disable=no-member
-                    key, shard_count
-                )  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
-
-        # Fallback to simple hash-based sharding
-        import hashlib  # pylint: disable=import-outside-toplevel
-
-        h = hashlib.md5(key.encode()).digest()
-        seed = int.from_bytes(h[:8], "big")
-        return seed % shard_count
+    def __init__(self) -> None:
+        from src.core.base.configuration.config_manager import config
+        shard_count = config.get("sharding.default_count", 4)
+        super().__init__(cluster_size=shard_count)
+        self.replication_factor = config.get("sharding.replication_factor", 2)
 
     def verify_integrity(self) -> bool:
         """
@@ -60,7 +40,6 @@ class ShardCore(BaseCore):
         """
         try:
             # Test Vector: "test_key" with 10 shards should reliably map to 5
-            # (MD5 of test_key -> ... % 10) - value depends on implementation but must be consistent
             test_key = "test_key"
             shard_count = 10
             

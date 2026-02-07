@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\dev\test_utils\EnvironmentDetector.py
-# hypothesis_version: 6.150.1
-
-['BUILD_ID', 'CI', 'GITHUB_ACTIONS', 'darwin', 'is_ci', 'linux', 'os', 'platform', 'python_version', 'unknown', 'windows']

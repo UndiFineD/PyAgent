@@ -47,6 +47,27 @@ class RemoteNeuralSynapse:
                 pass
             self._server_task = None
 
+    async def broadcast(self, message: Dict[str, Any]) -> None:
+        """Broadcasts a message to all discovered peers."""
+        if not self.discovery_node:
+            return
+
+        peers = self.discovery_node.get_peers()
+        tasks = []
+        for peer in peers:
+            tasks.append(self.send_to_peer(peer["ip"], peer["port"], message))
+        
+        if tasks:
+            await asyncio.gather(*tasks, return_exceptions=True)
+
+    async def send_to_peer(self, ip: str, port: int, message: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """Sends a message to a specific peer."""
+        try:
+            return await self.transport.send_to_peer(ip, port, message)
+        except Exception as e:
+            logger.error(f"Synapse: Failed to send to {ip}:{port} - {e}")
+            return None
+
     async def _handle_incoming_synapse(self, message: Dict[str, Any]) -> Dict[str, Any]:
         """
         Processes incoming teleported agents or task requests.
@@ -68,6 +89,20 @@ class RemoteNeuralSynapse:
 
         elif msg_type == "ping":
             return {"status": "pong", "version": "Phase-319"}
+
+        elif msg_type == "heartbeat":
+            peer_id = message.get("sender_id", "unknown")
+            metrics = message.get("metrics", {})
+            logger.debug(f"Synapse: Received heartbeat from {peer_id}: {metrics}")
+            
+            # Update discovery node with peer metadata
+            if self.discovery_node and hasattr(self.discovery_node, "update_peer_metadata"):
+                self.discovery_node.update_peer_metadata(peer_id, {
+                    "last_heartbeat": message.get("timestamp"),
+                    "metrics": metrics,
+                    "hostname": message.get("hostname")
+                })
+            return {"status": "acknowledged"}
 
         elif msg_type == "task_offload":
             task_desc = message.get("task", "")

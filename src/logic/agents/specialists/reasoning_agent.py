@@ -34,6 +34,8 @@ from typing import Any, Dict, List, Optional
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.sharding_core import ShardingCore
+from src.core.base.common.config_core import ConfigCore
 
 __version__ = VERSION
 
@@ -68,6 +70,10 @@ class ReasoningAgent(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
+        self.config_manager = ConfigCore()
+        shard_config = self.config_manager.load_config("sharding")
+        self.sharding_engine = ShardingCore(cluster_size=shard_config.get("shard_count", 1))
+        
         self._system_prompt = (
             "You are the Reasoning Agent. Your goal is to provide deep, recursive thoughts "
             "on complex problems. Use <thought> blocks to explore multiple hypotheses "
@@ -75,6 +81,15 @@ class ReasoningAgent(BaseAgent):
             "Challenge your own assumptions and verify your logic."
         )
         self._reasoning_history: List[Dict[str, Any]] = []
+
+    @as_tool
+    async def distribute_reasoning_shard(self, task_payload: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Splits a reasoning task across the cluster based on shard load.
+        """
+        node_id = self.sharding_engine.assign_workload([0.1, 0.5, 0.2]) # Mock loads
+        logging.info(f"ReasoningAgent: Assigning shard task to Node {node_id}")
+        return {"assigned_node": node_id, "status": "SHARD_ACTIVE"}
 
     @as_tool
     async def think_deeply(self, prompt: str, depth: int = 3, strategy: str = "cot") -> Dict[str, Any]:

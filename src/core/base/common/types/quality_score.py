@@ -34,6 +34,7 @@ class QualityScore:
     complexity: float = 0.0
     documentation: float = 0.0
     test_coverage: float = 0.0
+    technical_debt: float = 0.0  # Percentage of debt free markers
     issues: list[str] = field(default_factory=lambda: [])
 
     @property

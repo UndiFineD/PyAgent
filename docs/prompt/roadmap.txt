@@ -78,6 +78,7 @@
 ### 🌐 Distributed Systems (Voyager)
 *Refer to [docs/proxima_voyager.md](c:/DEV/PyAgent/docs/proxima_voyager.md)*
 - [x] **Graph-Based Orchestration System**: Implement LLM Tornado-inspired graph orchestration with Orchestrator/Runner/Advancer pattern for complex multi-agent workflows. (Lesson from .external/LLMTornado) - COMPLETED: Full graph orchestration system with OrchestrationGraphBuilder fluent API, Orchestrator.execute() async workflow execution, AgentRunner and ConditionalRunner for specialized nodes, comprehensive test coverage (23/23 tests passing), ExecutionContext integration for workflow state management.
+- [x] **Voyager Discovery Node**: Implement mDNS/Zeroconf discovery for decentralized peer-to-peer swarms. - COMPLETED: DiscoveryNode implemented with AsyncZeroconf, integrated into Unified Desktop API for real-time peer monitoring.
 - [ ] **Asynchronous Tool Pipeline**: Decouple inference from tool execution using Redis/RabbitMQ to eliminate compute bubbles. (Lesson from .external/agentic-patterns)
 - [x] **Swarm Work Patterns**: Implement 'WorkPattern' abstractions (Peer, Hierarchical, Debate) for flexible team collaboration. (Lesson from .external/agentUniverse) - COMPLETED: PEER pattern implemented with OrchestratorWorkPatternMixin, Debate pattern added with adversarial reasoning, full test coverage, integrated into swarm orchestrator.
 - [ ] **Async Agent Pipelines**: Implement parallel inference, tool execution, and learning components with message queues. (Lesson from .external/agentic-patterns)
@@ -91,6 +92,7 @@
 - [x] **Unified Environment Abstraction**: Implement "Everything as Environment" abstraction for unified tool/agent interfaces. (Lesson from .external/AEnvironment) - COMPLETED: Unified environment framework with BaseEnvironment, ToolEnvironment, AgentEnvironment, CompositeEnvironment, and EnvironmentRegistry for treating everything as environments.
 
 ### 👁️ Multimodal & Ecosystem
+- [x] **Unified Web Dashboard**: Implement React-based dashboard with Voyager peer discovery and 3D topology visualization. - COMPLETED: DashboardServer integrated with StaticFiles, FleetWebUI (Tambo Pattern) added, and 3D Force Graph topology viewer integrated.
 - [ ] **Intra-Tool LLM Switching**: Optimize tool performance by switching between fast/robust models based on context. (Lesson from .external/agentkit)
 - [ ] **Job Lifecycle Management**: Implement JobManagerCore to manage persistent multimodal sessions. (Lesson from .external/agents_generic)
 - [ ] **Session Interrupt Primitives**: Implement Redis-backed 'Stop/Pause' signals for long-running agent loops. (Lesson from .external/agentcloud)

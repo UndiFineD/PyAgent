@@ -22,7 +22,10 @@ Replaces direct usage of HTTP clients (requests, httpx) throughout the swarm.
 
 from __future__ import annotations
 
+import json
 import logging
+import ipaddress
+import time
 from typing import Any
 from urllib.parse import urlparse
 
@@ -32,6 +35,7 @@ from requests.packages.urllib3.util.retry import Retry  # pylint: disable=import
 
 from src.core.base.logic.connectivity_manager import ConnectivityManager
 from src.core.base.lifecycle.version import VERSION
+from src.core.base.configuration.config_manager import config
 
 __version__ = VERSION
 
@@ -74,15 +78,42 @@ class ReverseProxyFirewall:
         self.session.mount("https://", adapter)
         self.session.mount("http://", adapter)
         
-        # Firewall Policy Configuration
-        # In a real deployment, these would load from external config
-        self.blocked_domains = [
+        # Firewall Policy Configuration from dynamic config
+        self.blocked_domains = config.get("firewall.blocked_domains", [
             "telemetry.spyware.net",
             "adservice.google.com"
-        ]
+        ])
+        self.allowed_networks = config.get("voyager.allowed_networks", ["127.0.0.1/32"])
+        self.local_only = config.get("firewall.local_only", False)
         self.allowed_schemes = ["http", "https"]
         
+        self.violation_log = config.workspace_root / "data" / "logs" / "firewall_violations.jsonl"
+        self.violation_log.parent.mkdir(parents=True, exist_ok=True)
+        
         self._initialized = True
+
+    def _log_violation(self, url: str, reason: str) -> None:
+        """Logs a security violation for audit trail."""
+        entry = {
+            "timestamp": time.time(),
+            "url": url,
+            "reason": reason,
+            "version": VERSION
+        }
+        with open(self.violation_log, "a", encoding="utf-8") as f:
+            f.write(json.dumps(entry) + "\n")
+
+    def _is_ip_allowed(self, hostname: str) -> bool:
+        """Checks if a hostname (if it's an IP) is within allowed CIDR ranges."""
+        try:
+            ip = ipaddress.ip_address(hostname)
+            for network in self.allowed_networks:
+                if ip in ipaddress.ip_network(network):
+                    return True
+            return False
+        except ValueError:
+            # Not an IP address, skip CIDR check
+            return True
 
     def validate_request(self, url: str, method: str) -> bool:
         """
@@ -98,24 +129,40 @@ class ReverseProxyFirewall:
         # 1. Check scheme
         if not any(url.startswith(f"{s}://") for s in self.allowed_schemes):
             self.logger.warning("Firewall Blocked: Invalid scheme in %s", url)
+            self._log_violation(url, "invalid_scheme")
             return False
             
-        # 2. Check blocked domains
-        for domain in self.blocked_domains:
-            if domain in url:
-                self.logger.warning("Firewall Blocked: Denied domain %s in %s", domain, url)
+        # 2. Extract domain and check IP restrictions
+        try:
+            parsed = urlparse(url)
+            domain = parsed.hostname or ""
+            
+            if self.local_only and not domain in ["localhost", "127.0.0.1"]:
+                self.logger.warning("Firewall Blocked: Non-local request in local_only mode: %s", domain)
+                self._log_violation(url, "local_only_violation")
+                return False
+
+            if not self._is_ip_allowed(domain):
+                self.logger.warning("Firewall Blocked: IP %s not in allowed networks", domain)
+                self._log_violation(url, "forbidden_ip_network")
+                return False
+        except Exception: # pylint: disable=broad-except
+            pass
+
+        # 3. Check blocked domains
+        for blocked in self.blocked_domains:
+            if blocked in url:
+                self.logger.warning("Firewall Blocked: Denied domain %s in %s", blocked, url)
+                self._log_violation(url, f"blocked_domain:{blocked}")
                 return False
                 
-        # 3. Check Connectivity Status
+        # 4. Check Connectivity Status
         # We parse the base URL or domain as the endpoint ID
         try:
             parsed = urlparse(url)
             endpoint_id = f"{parsed.scheme}://{parsed.netloc}"
             if not self.connectivity.is_endpoint_available(endpoint_id):
                 self.logger.info("Firewall Pre-empted: Endpoint %s is marked offline", endpoint_id)
-                # We return True to let the request try anyway if it's critical? 
-                # Or False to enforcing caching. The prompt asked for "Resilience Issue: Use ConnectivityManager"
-                # If we return False, we are doing what ConnectivityManager suggests (skipping dead endpoints).
                 return False
         except Exception:  # pylint: disable=broad-except
             pass

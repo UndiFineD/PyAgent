@@ -100,7 +100,7 @@ class AgentMetricsMixin:
         code_smells = self.detect_code_smells(content)
         coverage = self._get_test_coverage()
 
-        self._quality_score = self.core.calculate_quality_score(metrics, style_violations, code_smells, coverage)
+        self._quality_score = self.core.calculate_quality_score(metrics, style_violations, code_smells, coverage, content=content)
         return self._quality_score
 
     def detect_code_smells(self, content: str | None = None) -> list[CodeSmell]:

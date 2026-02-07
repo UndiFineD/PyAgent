@@ -1,0 +1,17 @@
+# PyAgent Voyager Swarm Configuration
+# This file enables P2P discovery and defines the network parameters.
+
+voyager:
+  auto_discovery: true
+  discovery_interval: 10.0
+  heartbeat_interval: 5.0
+  p2p_port: 5555
+  encryption: "AES-GCM-256"
+  sharding_enabled: true
+  redundancy_factor: 2
+  allowed_networks:
+    - "127.0.0.1/8"
+    - "192.168.1.0/24"
+  identity:
+    role: "worker"
+    capabilities: ["inference", "memory", "storage"]

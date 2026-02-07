@@ -67,6 +67,17 @@ htmlcov/
 collection_log.txt
 *.txt
 
+# Rust Build Artifacts
+target/
+rust_lib/target/
+*.pyd
+*.so
+*.dylib
+*.dll
+*.lib
+*.exp
+*.pdb
+
 #__pycache__
 __pycache__
 fix\__pycache__

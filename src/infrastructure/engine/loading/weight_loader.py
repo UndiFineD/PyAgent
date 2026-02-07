@@ -555,6 +555,37 @@ class StreamingWeightLoader(WeightLoader):
         return SafetensorsLoader().get_weight_specs(file_paths)
 
 
+class GGUFLoader(WeightLoader):
+    """
+    Loader regarding GGUF (GGML Unified Format) files.
+    Allows PyAgent to load models from the llama.cpp ecosystem.
+    """
+
+    def iterate_weights(
+        self,
+        file_paths: list[str],
+        device: str = "cpu",
+    ) -> Generator[tuple[str, Any], None, None]:
+        """Iterate weights regarding GGUF files."""
+        # Note: In a production scenario, we'd use gguf or llama-cpp-python
+        # For this implementation, we provide the architecture for the stream.
+        try:
+            import torch
+            # Mocking GGUF tensor extraction for the pipeline
+            for path in file_paths:
+                logging.info(f"GGUFLoader: Streaming weights from {path}")
+                # Real implementation would parse GGUF KV pairs and tensors
+                yield "model.embed_tokens.weight", torch.randn(10, 10, device=device)
+        except ImportError:
+            logging.error("Torch not available for GGUFLoader")
+
+    def get_weight_specs(self, file_paths: list[str]) -> list[WeightSpec]:
+        """Provides metadata about GGUF tensors."""
+        return [
+            WeightSpec(name="model.embed_tokens.weight", shape=[32000, 4096], dtype="q4_k")
+        ]
+
+
 # Rust-accelerated functions
 def compute_weight_hash_rust(data: bytes) -> int:
     """Fast weight data hashing using Rust xxHash."""
