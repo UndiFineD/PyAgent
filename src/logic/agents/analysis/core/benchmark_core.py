@@ -48,7 +48,7 @@ class BenchmarkCore:
                     for r in results
                 ]
                 return rc.calculate_baseline(results_list)  # type: ignore[attr-defined]
-            except (RuntimeError, ValueError, TypeError):
+            except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
         if not results:
             return 0.0
@@ -59,7 +59,7 @@ class BenchmarkCore:
         if rc:
             try:
                 return rc.check_regression(current_duration, baseline, threshold)  # type: ignore[attr-defined]
-            except (RuntimeError, ValueError, TypeError):
+            except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
         if baseline <= 0:
             return {"regression": False, "delta": 0.0}
@@ -82,7 +82,7 @@ class BenchmarkCore:
                     "success": result.success,
                 }
                 return rc.score_efficiency(r_dict)  # type: ignore[attr-defined]
-            except (RuntimeError, ValueError, TypeError):
+            except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
         if result.total_tokens <= 0:
             return 0.0

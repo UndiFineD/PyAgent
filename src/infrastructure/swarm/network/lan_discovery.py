@@ -180,11 +180,8 @@ class LANDiscovery:
     @property
     def local_ip(self) -> str:
         """Lazily identifies and returns the local network IPv4 address for LAN discovery."""
-        print("DEBUG: Accessing local_ip property", flush=True)
         if not self._local_ip:
-            print("DEBUG: _local_ip is None, detecting...", flush=True)
             self._local_ip = self._detect_local_network_ip()
-            print(f"DEBUG: Detection finished. Check: {self._local_ip}", flush=True)
         return self._local_ip
 
     def _detect_local_network_ip(self) -> str:

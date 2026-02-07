@@ -154,9 +154,7 @@ class TemperatureProcessor:
         if RUST_AVAILABLE and hasattr(rust_core, "apply_temperature_rust"):
             l_list = logits.tolist() if hasattr(logits, "tolist") else logits
             res = rust_core.apply_temperature_rust(l_list, self.temperature)
-            if hasattr(logits, "device"):
-                import torch
-
+            if hasattr(logits, "device") and TORCH_AVAILABLE and torch is not None:
                 return torch.tensor(res, device=logits.device, dtype=logits.dtype)
             return res
 
@@ -195,9 +193,7 @@ class TopKProcessor:
             if is_1d:
                 res = res[0]
 
-            if hasattr(logits, "device"):
-                import torch
-
+            if hasattr(logits, "device") and TORCH_AVAILABLE and torch is not None:
                 return torch.tensor(res, device=logits.device, dtype=logits.dtype)
             return res
 
@@ -277,9 +273,7 @@ class RepetitionPenaltyProcessor:
         if RUST_AVAILABLE and hasattr(rust_core, "apply_repetition_penalty_rust"):
             l_list = logits.tolist() if hasattr(logits, "tolist") else logits
             res = rust_core.apply_repetition_penalty_rust(l_list, list(input_ids), self.penalty)
-            if hasattr(logits, "device"):
-                import torch
-
+            if hasattr(logits, "device") and TORCH_AVAILABLE and torch is not None:
                 return torch.tensor(res, device=logits.device, dtype=logits.dtype)
             return res
 
