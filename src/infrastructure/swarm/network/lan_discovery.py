@@ -243,7 +243,8 @@ class LANDiscovery:
             # Detect network configuration
             self._detect_network_config()
 
-            # Test if we can bind to the discovery port
+            # Test if we can bind to the discovery port. Don't abort startup
+            # if the port is unavailable; we can still announce (send-only).
             if not self._test_port_available(self.discovery_port):
                 if self.auto_find_port:
                     available_port = self.find_available_port(self.discovery_port + 1)
@@ -251,11 +252,10 @@ class LANDiscovery:
                         logger.info(f"LANDiscovery: Port {self.discovery_port} unavailable, using {available_port}")
                         self.discovery_port = available_port
                     else:
-                        logger.error("LANDiscovery: No available ports found for discovery")
-                        return
+                        logger.warning("LANDiscovery: No available ports found for discovery; continuing in send-only mode")
+                        # proceed without listening on the discovery port
                 else:
-                    logger.error(f"LANDiscovery: Port {self.discovery_port} is not available")
-                    return
+                    logger.warning(f"LANDiscovery: Port {self.discovery_port} is not available; continuing in send-only mode")
 
             self._running = True
             self._listen_thread = threading.Thread(
