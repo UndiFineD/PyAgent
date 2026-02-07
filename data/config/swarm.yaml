@@ -1,0 +1,33 @@
+# PyAgent Swarm Configuration (Phase 15 Hardened)
+# Unified Schema for Coder, Sharding, and Telemetry
+
+swarm:
+  id: "pyagent-swarm-alpha"
+  replication_factor: 3
+  shard_count: 512
+  partition_strategy: "consistent_hashing"
+  circuit_breaker:
+    threshold: 0.85
+    recovery_timeout: 30
+
+telemetry:
+  aggregation_interval: 1.0
+  use_rust_accelerator: true
+  rollups:
+    - cpu_usage
+    - memory_usage
+    - mesh_latency
+  percentiles: [50, 95, 99]
+
+models:
+  coder:
+    temperature: 0.2
+    max_tokens: 4096
+    quality_threshold: 0.92
+    tech_debt_threshold: 15  # Percent
+
+network:
+  mdns_discovery: true
+  heartbeat_freq: 5.0
+  synapse_port: 5556
+  encryption: "tls_v13"

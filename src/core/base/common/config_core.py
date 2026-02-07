@@ -94,7 +94,7 @@ class ConfigCore(BaseCore):
         self.config_dir = self.workspace_root / "data" / "config"
         self.configs: Dict[str, ConfigObject] = {}
 
-    def load_config(self, module: str) -> ConfigObject:
+    def load_module(self, module: str) -> ConfigObject:
         """Loads a specific configuration module from the data/config directory."""
         if module in self.configs:
             return self.configs[module]
