@@ -230,7 +230,7 @@ async def chat_with_agent(request: ChatRequest) -> dict[str, Any]:
     except Exception as e:
         error_msg = f"Agent reasoning failed: {str(e)}"
         record_episodic_memory(role="agent", content=error_msg, action="ERROR")
-        raise HTTPException(status_code=500, detail=error_msg)
+        raise HTTPException(status_code=500, detail=error_msg) from e
 
 
 @app.get("/api/logs")
@@ -281,31 +281,17 @@ if WEB_UI_DIR.exists():
     app.mount("/web", StaticFiles(directory=str(WEB_UI_DIR)), name="web")
 
 
-@app.websocket("/ws/telemetry")
-async def websocket_endpoint(websocket: WebSocket):
-    """WebSocket endpoint for real-time telemetry streaming."""
-    await manager.connect(websocket)
-    try:
-        while True:
-            # Keep connection alive and handle incoming control messages if needed
-            data = await websocket.receive_text()
-            # Echo or process control messages
-            await websocket.send_json({"event": "ack", "data": data})
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
-
-
 @app.get("/")
 async def serve_dashboard():
     """Serves the main PyAgent Unified Dashboard."""
     unified_index = WEB_UI_DIR / "index.html"
     if unified_index.exists():
-        return FileResponse(unified_index)
+        return FileResponse(unified_index, media_type="text/html")
     
     # Fallback to old dashboard if new one doesn't exist
     dashboard_index = DASHBOARD_DIR / "index.html"
     if dashboard_index.exists():
-        return FileResponse(dashboard_index)
+        return FileResponse(dashboard_index, media_type="text/html")
     return {"message": "Dashboard index.html not found"}
 
 
@@ -314,17 +300,17 @@ async def serve_topology():
     """Serves the Swarm Topology 3D Viewer."""
     topology_index = WEB_UI_DIR / "topology_viewer.html"
     if topology_index.exists():
-        return FileResponse(topology_index)
+        return FileResponse(topology_index, media_type="text/html")
     return {"message": "Topology viewer HTML not found"}
 
 
 @app.get("/stream")
 async def serve_stream_console():
     """Serves the Multimedia Stream Console."""
-    stream_index = WEB_UI_DIR / "stream_console.html"
+    stream_index = (WEB_UI_DIR / "stream_console.html").resolve()
     if stream_index.exists():
-        return FileResponse(stream_index)
-    return {"message": "Stream console HTML not found"}
+        return FileResponse(str(stream_index), media_type="text/html")
+    return {"message": f"Stream console HTML not found at {stream_index}"}
 
 
 @app.post("/api/command")
@@ -345,7 +331,7 @@ async def execute_command(request: ChatRequest) -> dict[str, Any]:
             # Placeholder for running a specific project/script
             response = f"Initializing workflow for: {command[4:]}"
         elif command.lower() == "shred":
-             response = "Warning: Swarm shredding protocol requires multi-node consensus."
+            response = "Warning: Swarm shredding protocol requires multi-node consensus."
         else:
             # Default to reasoning agent for complex commands
             agent = ReasoningAgent(file_path="swarm_commander.py")
@@ -357,7 +343,7 @@ async def execute_command(request: ChatRequest) -> dict[str, Any]:
     except Exception as e:
         record_episodic_memory(role="agent", content=str(e), action="COMMAND_ERROR")
         throw_msg = f"Command execution failed: {str(e)}"
-        raise HTTPException(status_code=500, detail=throw_msg)
+        raise HTTPException(status_code=500, detail=throw_msg) from e
 
 
 @app.get("/api/explorer/list")
@@ -379,6 +365,28 @@ async def list_files(path: str = ".") -> list[dict[str, Any]]:
             "mtime": item.stat().st_mtime
         })
     return items
+
+
+@app.post("/api/stream/filter")
+async def apply_stream_filter(request: FilterRequest) -> dict[str, Any]:
+    """Applies a stream filter using the filter agent."""
+    try:
+        # 1. Record the intent
+        record_episodic_memory(role="user", content=f"Filter: {request.category}/{request.filter_type}", action="FILTER_REQUEST")
+        
+        # 2. Instantiate FilterAgent
+        agent = FilterAgent(file_path="stream_filter.py")
+        
+        # Determine based on category
+        cat = request.category.upper()
+        if cat == "TEXT":
+            result = await agent.apply_text_filter("Applying filter to stream", request.filter_type)
+        elif cat == "VIDEO":
+            # Mock frame data for now as the dashboard doesn't have the raw stream buffer
+            result = await agent.apply_vision_filter(frame_data=b"mock_frame_buffer", filter_type=request.filter_type)
+        elif cat == "AUDIO":
+            # Mock audio data
+            result = await agent.apply_audio_filter(audio_data=[0.1, 0.2, 0.3], filter_type=request.filter_type)
         else:
             result = {"status": "success", "applied": request.filter_type}
             
@@ -387,7 +395,7 @@ async def list_files(path: str = ".") -> list[dict[str, Any]]:
         
         return {"status": "success", "agent_report": result}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get("/api/artifacts")

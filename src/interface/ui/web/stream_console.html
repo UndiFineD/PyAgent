@@ -33,7 +33,7 @@
             z-index: 1000; background-size: 100% 3px, 3px 100%; pointer-events: none;
         }
 
-        .active-window { z-index: 50; border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+        .active-window { z-index: 100; border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
 
         /* Scrollbar */
         ::-webkit-scrollbar { width: 4px; }
@@ -97,7 +97,7 @@
                     <div class="bg-emerald-500/40 w-full animate-[bounce_1.1s_infinite]" style="height: 55%"></div>
                     <div class="bg-emerald-500/40 w-full animate-[bounce_1.3s_infinite]" style="height: 90%"></div>
                 </div>
-                <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-2">
+                <div class="flex text-[10px] font-mono text-slate-500 mt-2" style="justify-content: space-between">
                     <span>20Hz</span>
                     <span>12kHz</span>
                     <span>22kHz</span>
@@ -158,6 +158,7 @@
         }
 
         function startDrag(e, id) {
+            console.log("startDrag", id);
             currentWin = document.getElementById(id);
             lastX = e.clientX;
             lastY = e.clientY;
@@ -173,6 +174,7 @@
 
         function drag(e) {
             if (!currentWin) return;
+            console.log("drag", currentWin.id);
             
             const deltaX = e.clientX - lastX;
             const deltaY = e.clientY - lastY;
