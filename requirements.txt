@@ -73,7 +73,7 @@ sse-starlette==3.1.2
 starlette==0.50.0
 tenacity==9.1.2
 typer==0.21.1
-urllib3<2.4.0,>=1.26.11
+urllib3>=2.6.3
 uvicorn==0.40.0
 watchfiles==1.1.1
 websocket-client==1.9.0
@@ -105,7 +105,7 @@ huggingface-hub==0.36.0
 humanfriendly==10.0
 joblib==1.5.3
 kiwisolver==1.4.9
-kubernetes==34.1.0
+kubernetes>=35.0.0
 lark==1.2.2
 lm-format-enforcer==0.11.3
 matplotlib==3.10.8
