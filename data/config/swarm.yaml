@@ -13,6 +13,10 @@ swarm:
 telemetry:
   aggregation_interval: 1.0
   use_rust_accelerator: true
+  streaming:
+    target_fps: 120
+    low_latency: true
+    websocket_route: "/ws/telemetry"
   rollups:
     - cpu_usage
     - memory_usage
@@ -25,6 +29,9 @@ models:
     max_tokens: 4096
     quality_threshold: 0.92
     tech_debt_threshold: 15  # Percent
+  delegator:
+    parallel_mode: true
+    zero_interruption: true
 
 network:
   mdns_discovery: true

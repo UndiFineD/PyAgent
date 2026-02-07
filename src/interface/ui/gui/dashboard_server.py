@@ -92,6 +92,28 @@ async def startup_event():
     await voyager_discovery.start_discovery()
     await voyager_synapse.start()
     await swarm_heartbeat.start()
+    # Start periodic telemetry broadcast
+    asyncio.create_task(telemetry_loop())
+
+
+async def telemetry_loop():
+    """Background task to broadcast system metrics via WebSocket."""
+    import psutil
+    while True:
+        try:
+            metrics = {
+                "event": "telemetry",
+                "data": {
+                    "cpu": psutil.cpu_percent(),
+                    "mem": psutil.virtual_memory().percent,
+                    "network": psutil.net_io_counters().bytes_sent % 100, # Mock network activity
+                    "timestamp": datetime.now().timestamp()
+                }
+            }
+            await manager.broadcast(metrics)
+        except Exception as e:
+            logging.error(f"Telemetry loop error: {e}")
+        await asyncio.sleep(1.0) # 1Hz update rate
 
 
 @app.on_event("shutdown")
@@ -259,9 +281,28 @@ if WEB_UI_DIR.exists():
     app.mount("/web", StaticFiles(directory=str(WEB_UI_DIR)), name="web")
 
 
+@app.websocket("/ws/telemetry")
+async def websocket_endpoint(websocket: WebSocket):
+    """WebSocket endpoint for real-time telemetry streaming."""
+    await manager.connect(websocket)
+    try:
+        while True:
+            # Keep connection alive and handle incoming control messages if needed
+            data = await websocket.receive_text()
+            # Echo or process control messages
+            await websocket.send_json({"event": "ack", "data": data})
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+
+
 @app.get("/")
 async def serve_dashboard():
-    """Serves the main PyAgent Dashboard."""
+    """Serves the main PyAgent Unified Dashboard."""
+    unified_index = WEB_UI_DIR / "index.html"
+    if unified_index.exists():
+        return FileResponse(unified_index)
+    
+    # Fallback to old dashboard if new one doesn't exist
     dashboard_index = DASHBOARD_DIR / "index.html"
     if dashboard_index.exists():
         return FileResponse(dashboard_index)
@@ -286,18 +327,58 @@ async def serve_stream_console():
     return {"message": "Stream console HTML not found"}
 
 
-@app.post("/api/stream/filter")
-async def apply_stream_filter(request: FilterRequest) -> dict[str, Any]:
-    """Applies a real-time filter to the multimodal stream via FilterAgent."""
-    logging.info(f"Applying {request.category} filter: {request.filter_type}")
+@app.post("/api/command")
+async def execute_command(request: ChatRequest) -> dict[str, Any]:
+    """
+    Executes a high-level command on the swarm node.
+    This can trigger specific agent workflows or system commands.
+    """
+    command = request.message.strip()
+    logging.info(f"Received swarm command: {command}")
+    
+    # 1. Record in episodic memory
+    record_episodic_memory(role="user", content=command, action="SWARM_COMMAND")
     
     try:
-        agent = FilterAgent(file_path="stream_filter.py")
+        # Simple Command Dispatcher
+        if command.lower().startswith("run"):
+            # Placeholder for running a specific project/script
+            response = f"Initializing workflow for: {command[4:]}"
+        elif command.lower() == "shred":
+             response = "Warning: Swarm shredding protocol requires multi-node consensus."
+        else:
+            # Default to reasoning agent for complex commands
+            agent = ReasoningAgent(file_path="swarm_commander.py")
+            thinking_result = await agent.think_deeply(f"Execute swarm command: {command}", depth=1)
+            response = thinking_result.get("answer", "Command acknowledged.")
+            
+        record_episodic_memory(role="agent", content=response, action="COMMAND_EXECUTION")
+        return {"status": "success", "response": response}
+    except Exception as e:
+        record_episodic_memory(role="agent", content=str(e), action="COMMAND_ERROR")
+        throw_msg = f"Command execution failed: {str(e)}"
+        raise HTTPException(status_code=500, detail=throw_msg)
+
+
+@app.get("/api/explorer/list")
+async def list_files(path: str = ".") -> list[dict[str, Any]]:
+    """Returns a list of files and directories for the Explorer view."""
+    target_path = WORKSPACE_ROOT / path
+    if not target_path.resolve().is_relative_to(WORKSPACE_ROOT.resolve()):
+        raise HTTPException(status_code=403, detail="Access denied")
         
-        if request.category == "VIDEO":
-            result = await agent.apply_vision_filter(frame_data=None, filter_type=request.filter_type)
-        elif request.category == "AUDIO":
-            result = await agent.apply_audio_filter(audio_data=None, filter_type=request.filter_type)
+    if not target_path.exists():
+        return []
+
+    items = []
+    for item in target_path.iterdir():
+        items.append({
+            "name": item.name,
+            "type": "directory" if item.is_dir() else "file",
+            "size": item.stat().st_size if item.is_file() else 0,
+            "mtime": item.stat().st_mtime
+        })
+    return items
         else:
             result = {"status": "success", "applied": request.filter_type}
             
