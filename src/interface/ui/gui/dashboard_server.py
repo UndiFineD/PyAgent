@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,441 +12,115 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
-PyAgent Dashboard Server Bridge
-Acts as a stable bridge between the PyAgent backend and the React/Web frontend.
-Provides REST API and WebSocket interfaces for real-time telemetry and management.
-"""
+# VOYAGER STABILITY: Unified Dashboard Server (Final V1.5.0)
 
 from __future__ import annotations
-
-import asyncio
-import json
-import logging
+import asyncio, json, logging, psutil
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
-from pydantic import BaseModel
+from fastapi.responses import FileResponse, JSONResponse
 
-from src.core.base.logic.managers import HealthChecker
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.voyager.discovery_node import DiscoveryNode
-from src.infrastructure.swarm.voyager.remote_neural_synapse import RemoteNeuralSynapse
-from src.infrastructure.swarm.voyager.heartbeat_service import SwarmHeartbeatService
-from src.logic.agents.specialists.reasoning_agent import ReasoningAgent
-from src.logic.agents.specialists.filter_agent import FilterAgent
+# --- CONFIG & PATHS ---
+WORKSPACE_ROOT = Path(__file__).resolve().parents[4]
+WEB_UI_DIR = (WORKSPACE_ROOT / "src" / "interface" / "ui" / "web").resolve()
+EPISODIC_LOG_FILE = (WORKSPACE_ROOT / "data" / "logs" / "episodic_memory.jsonl").resolve()
 
-# Internal Imports
-__version__ = VERSION
+# --- INITIALIZATION ---
+app = FastAPI(title="PyAgent Unified Voyager API", version="1.5.0")
 
-
-class ChatRequest(BaseModel):
-    message: str
-
-
-class FilterRequest(BaseModel):
-    category: str
-    filter_type: str
-
-
-# Absolute Workspace Configuration
-WORKSPACE_ROOT = Path(str(Path(__file__).resolve().parents[4]) + "")
-LOG_DIR = WORKSPACE_ROOT / "data" / "logs"
-AGENT_LOG_FILE = LOG_DIR / "agent.log"
-EPISODIC_LOG_FILE = LOG_DIR / "episodic_memory.jsonl"
-SCREENSHOTS_DIR = LOG_DIR / "screenshots"
-GENERATED_DIR = WORKSPACE_ROOT / "src" / "generated"
-
-app = FastAPI(
-    title="PyAgent Unified Desktop API",
-    description="Bridge for PyAgent React/Web frontend",
-    version=VERSION,
-)
-
-# Global Manager Instances
-health_checker = HealthChecker(repo_root=WORKSPACE_ROOT)
-voyager_discovery = DiscoveryNode(port=8000)
-voyager_synapse = RemoteNeuralSynapse(fleet_manager=None, discovery_node=voyager_discovery)
-swarm_heartbeat = SwarmHeartbeatService(synapse=voyager_synapse)
-
-# CORS Configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# --- TELEMETRY ENGINE ---
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: list[WebSocket] = []
+    async def connect(self, ws: WebSocket):
+        await ws.accept()
+        self.active_connections.append(ws)
+    def disconnect(self, ws: WebSocket):
+        if ws in self.active_connections: self.active_connections.remove(ws)
+    async def broadcast(self, message: dict):
+        for connection in self.active_connections:
+            try: await connection.send_json(message)
+            except: pass
 
-@app.on_event("startup")
-async def startup_event():
-    """Start-up tasks for the dashboard server."""
-    logging.info("Starting Voyager Swarm Ecosystem...")
-    await voyager_discovery.start_advertising()
-    await voyager_discovery.start_discovery()
-    await voyager_synapse.start()
-    await swarm_heartbeat.start()
-    # Start periodic telemetry broadcast
-    asyncio.create_task(telemetry_loop())
-
+manager = ConnectionManager()
 
 async def telemetry_loop():
-    """Background task to broadcast system metrics via WebSocket."""
-    import psutil
+    """Background task to broadcast system vitals."""
     while True:
         try:
-            metrics = {
+            await manager.broadcast({
                 "event": "telemetry",
                 "data": {
                     "cpu": psutil.cpu_percent(),
                     "mem": psutil.virtual_memory().percent,
-                    "network": psutil.net_io_counters().bytes_sent % 100, # Mock network activity
+                    "network": psutil.net_io_counters().bytes_sent % 100,
                     "timestamp": datetime.now().timestamp()
                 }
-            }
-            await manager.broadcast(metrics)
-        except Exception as e:
-            logging.error(f"Telemetry loop error: {e}")
-        await asyncio.sleep(1.0) # 1Hz update rate
+            })
+        except: pass
+        await asyncio.sleep(1.0)
 
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(telemetry_loop())
 
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Shutdown tasks for the dashboard server."""
-    logging.info("Stopping Voyager Discovery Node...")
-    if voyager_discovery.aiozc:
-        await voyager_discovery.aiozc.async_close()
+# --- PRIMARY NAVIGATION (Prioritized Routes) ---
 
-
-class ConnectionManager:
-    """Manages active WebSocket connections for real-time telemetry."""
-
-    def __init__(self) -> None:
-        self.active_connections: list[WebSocket] = []
-
-    async def connect(self, websocket: WebSocket) -> None:
-        """Accept and register a new WebSocket connection."""
-        await websocket.accept()
-        self.active_connections.append(websocket)
-
-    def disconnect(self, websocket: WebSocket) -> None:
-        """Unregister a disconnected WebSocket."""
-        if websocket in self.active_connections:
-            self.active_connections.remove(websocket)
-
-    async def broadcast(self, message: dict[str, Any]) -> None:
-        """Send a JSON broadcast to all connected clients."""
-
-        payload = message  # message is already a dict, send_json will handle it
-        for connection in self.active_connections:
-            try:
-                await connection.send_json(payload)
-            except (ConnectionError, RuntimeError) as _e:
-                # Connection might be dead
-                pass
-
-
-manager = ConnectionManager()
-
-
-@app.get("/api/version")
-async def get_version() -> dict[str, str]:
-    """Returns the current PyAgent version."""
-    return {"version": VERSION}
-
-
-@app.get("/api/voyager/peers")
-async def get_voyager_peers() -> list[dict[str, Any]]:
-    """Returns a list of discovered Voyager peers on the network, including real-time metrics."""
-    return voyager_discovery.get_active_peers()
-
-
-@app.get("/api/health")
-async def get_health() -> dict[str, Any]:
-    """Returns the system health status from the HealthChecker manager."""
-
-    try:
-        return health_checker.check()
-    except (RuntimeError, ValueError, ConnectionError) as e:
-        raise HTTPException(status_code=500, detail=f"Health check failed: {str(e)}") from e
-
-
-@app.get("/api/status")
-async def get_status() -> dict[str, Any]:
-    """Returns the current system status and metadata."""
-    return {
-        "status": "online",
-        "agent": "PyAgent",
-        "version": VERSION,
-        "timestamp": datetime.now().isoformat(),
-        "workspace": str(WORKSPACE_ROOT),
-    }
-
-
-def record_episodic_memory(role: str, content: str, action: str = "THOUGHT") -> None:
-    """Writes a new entry to the episodic memory JSONL file."""
-    if not EPISODIC_LOG_FILE.parent.exists():
-        EPISODIC_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
-    
-    entry = {
-        "timestamp": datetime.now().timestamp(),
-        "role": role,
-        "content": content,
-        "action": action
-    }
-    
-    with open(EPISODIC_LOG_FILE, "a", encoding="utf-8") as f:
-        f.write(json.dumps(entry) + "\n")
-
-
-@app.post("/api/chat")
-async def chat_with_agent(request: ChatRequest) -> dict[str, Any]:
-    """
-    Receives a user message, processes it via ReasoningAgent, 
-    and returns the agent's thought.
-    """
-    # 1. Record User Message
-    record_episodic_memory(role="user", content=request.message, action="USER_INPUT")
-    
-    # 2. Instantiate and Prompt ReasoningAgent
-    try:
-        # Use a temporary file path for the agent (not used for logic here)
-        agent = ReasoningAgent(file_path="chat_session.py")
-        
-        # Fast thinking for UI responsiveness
-        thinking_result = await agent.think_deeply(request.message, depth=1, strategy="cot")
-        response_content = thinking_result.get("answer") or thinking_result.get("thought") or "I am processing your request."
-        
-        # 3. Record Agent Response
-        record_episodic_memory(role="agent", content=response_content, action="REASONING")
-        
-        return {"status": "success", "response": response_content}
-    except Exception as e:
-        error_msg = f"Agent reasoning failed: {str(e)}"
-        record_episodic_memory(role="agent", content=error_msg, action="ERROR")
-        raise HTTPException(status_code=500, detail=error_msg) from e
-
-
-@app.get("/api/logs")
-async def get_logs(limit: int = 100) -> list[str]:
-    """Retrieve the last N lines of the agent log file if it exists."""
-    if not AGENT_LOG_FILE.exists():
-        # Fallback to check episodic memory if agent.log is missing
-        if not EPISODIC_LOG_FILE.exists():
-            return ["No log files found."]
-        return [f"Log file not found at {AGENT_LOG_FILE}."]
-
-    try:
-        with open(AGENT_LOG_FILE, encoding="utf-8") as f:
-            lines = f.readlines()
-            return [line.strip() for line in lines[-limit:]]
-    except (IOError, OSError, UnicodeDecodeError) as e:
-        raise HTTPException(status_code=500, detail=f"Error reading logs: {str(e)}") from e
-
-
-@app.get("/api/thoughts")
-async def get_thoughts(limit: int = 50) -> list[dict[str, Any]]:
-    """Retrieve the latest episodic memories (agent thoughts/actions)."""
-    if not EPISODIC_LOG_FILE.exists():
-        return []
-
-    thoughts = []
-
-    try:
-        with open(EPISODIC_LOG_FILE, encoding="utf-8") as f:
-            lines = f.readlines()
-            for line in lines[-limit:]:
-                if line.strip():
-                    thoughts.append(json.loads(line))
-    except (IOError, OSError, UnicodeDecodeError, json.JSONDecodeError) as e:
-        raise HTTPException(status_code=500, detail=f"Error parsing thoughts: {str(e)}") from e
-
-    return thoughts[::-1]  # Newest first
-
-
-# Static File Mounting for Dashboards
-DASHBOARD_DIR = WORKSPACE_ROOT / "src" / "interface" / "dashboard"
-WEB_UI_DIR = WORKSPACE_ROOT / "src" / "interface" / "ui" / "web"
-
-if DASHBOARD_DIR.exists():
-    app.mount("/dashboard", StaticFiles(directory=str(DASHBOARD_DIR)), name="dashboard")
-
-if WEB_UI_DIR.exists():
-    app.mount("/web", StaticFiles(directory=str(WEB_UI_DIR)), name="web")
-
-
-@app.get("/")
-async def serve_dashboard():
-    """Serves the main PyAgent Unified Dashboard."""
-    unified_index = WEB_UI_DIR / "index.html"
-    if unified_index.exists():
-        return FileResponse(unified_index, media_type="text/html")
-    
-    # Fallback to old dashboard if new one doesn't exist
-    dashboard_index = DASHBOARD_DIR / "index.html"
-    if dashboard_index.exists():
-        return FileResponse(dashboard_index, media_type="text/html")
-    return {"message": "Dashboard index.html not found"}
-
+@app.get("/stream")
+async def serve_stream():
+    """PRIORITY: Serves the draggable Multi-Channel Stream Console."""
+    path = WEB_UI_DIR / "stream_console.html"
+    if path.exists():
+        return FileResponse(str(path), media_type="text/html")
+    return JSONResponse(status_code=404, content={"error": f"Console not found at {path}"})
 
 @app.get("/topology")
 async def serve_topology():
-    """Serves the Swarm Topology 3D Viewer."""
-    topology_index = WEB_UI_DIR / "topology_viewer.html"
-    if topology_index.exists():
-        return FileResponse(topology_index, media_type="text/html")
-    return {"message": "Topology viewer HTML not found"}
+    path = WEB_UI_DIR / "topology_viewer.html"
+    return FileResponse(str(path), media_type="text/html") if path.exists() else {"error": "404"}
 
+@app.get("/")
+async def serve_index():
+    path = WEB_UI_DIR / "index.html"
+    if path.exists():
+        return FileResponse(str(path), media_type="text/html")
+    return {"status": "Dashboard Active (No index.html found)"}
 
-@app.get("/stream")
-async def serve_stream_console():
-    """Serves the Multimedia Stream Console."""
-    stream_index = (WEB_UI_DIR / "stream_console.html").resolve()
-    if stream_index.exists():
-        return FileResponse(str(stream_index), media_type="text/html")
-    return {"message": f"Stream console HTML not found at {stream_index}"}
+# --- API ENDPOINTS ---
 
-
-@app.post("/api/command")
-async def execute_command(request: ChatRequest) -> dict[str, Any]:
-    """
-    Executes a high-level command on the swarm node.
-    This can trigger specific agent workflows or system commands.
-    """
-    command = request.message.strip()
-    logging.info(f"Received swarm command: {command}")
-    
-    # 1. Record in episodic memory
-    record_episodic_memory(role="user", content=command, action="SWARM_COMMAND")
-    
+@app.get("/api/thoughts")
+async def get_thoughts():
+    if not EPISODIC_LOG_FILE.exists(): return []
     try:
-        # Simple Command Dispatcher
-        if command.lower().startswith("run"):
-            # Placeholder for running a specific project/script
-            response = f"Initializing workflow for: {command[4:]}"
-        elif command.lower() == "shred":
-            response = "Warning: Swarm shredding protocol requires multi-node consensus."
-        else:
-            # Default to reasoning agent for complex commands
-            agent = ReasoningAgent(file_path="swarm_commander.py")
-            thinking_result = await agent.think_deeply(f"Execute swarm command: {command}", depth=1)
-            response = thinking_result.get("answer", "Command acknowledged.")
-            
-        record_episodic_memory(role="agent", content=response, action="COMMAND_EXECUTION")
-        return {"status": "success", "response": response}
-    except Exception as e:
-        record_episodic_memory(role="agent", content=str(e), action="COMMAND_ERROR")
-        throw_msg = f"Command execution failed: {str(e)}"
-        raise HTTPException(status_code=500, detail=throw_msg) from e
-
-
-@app.get("/api/explorer/list")
-async def list_files(path: str = ".") -> list[dict[str, Any]]:
-    """Returns a list of files and directories for the Explorer view."""
-    target_path = WORKSPACE_ROOT / path
-    if not target_path.resolve().is_relative_to(WORKSPACE_ROOT.resolve()):
-        raise HTTPException(status_code=403, detail="Access denied")
-        
-    if not target_path.exists():
-        return []
-
-    items = []
-    for item in target_path.iterdir():
-        items.append({
-            "name": item.name,
-            "type": "directory" if item.is_dir() else "file",
-            "size": item.stat().st_size if item.is_file() else 0,
-            "mtime": item.stat().st_mtime
-        })
-    return items
-
-
-@app.post("/api/stream/filter")
-async def apply_stream_filter(request: FilterRequest) -> dict[str, Any]:
-    """Applies a stream filter using the filter agent."""
-    try:
-        # 1. Record the intent
-        record_episodic_memory(role="user", content=f"Filter: {request.category}/{request.filter_type}", action="FILTER_REQUEST")
-        
-        # 2. Instantiate FilterAgent
-        agent = FilterAgent(file_path="stream_filter.py")
-        
-        # Determine based on category
-        cat = request.category.upper()
-        if cat == "TEXT":
-            result = await agent.apply_text_filter("Applying filter to stream", request.filter_type)
-        elif cat == "VIDEO":
-            # Mock frame data for now as the dashboard doesn't have the raw stream buffer
-            result = await agent.apply_vision_filter(frame_data=b"mock_frame_buffer", filter_type=request.filter_type)
-        elif cat == "AUDIO":
-            # Mock audio data
-            result = await agent.apply_audio_filter(audio_data=[0.1, 0.2, 0.3], filter_type=request.filter_type)
-        else:
-            result = {"status": "success", "applied": request.filter_type}
-            
-        # Log the filter application to episodic memory
-        record_episodic_memory(role="system", content=f"Applied {request.category} filter: {request.filter_type}", action="FILTER")
-        
-        return {"status": "success", "agent_report": result}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
-
-
-@app.get("/api/artifacts")
-async def list_artifacts() -> list[dict[str, Any]]:
-    """List files in the generated and screenshots directories."""
-    artifacts = []
-    monitored_paths = [
-        {"type": "generated", "path": GENERATED_DIR},
-        {"type": "screenshot", "path": SCREENSHOTS_DIR},
-    ]
-
-    for item in monitored_paths:
-        p = item["path"]
-        if p.exists() and p.is_dir():
-            for entry in p.iterdir():
-                if entry.is_file():
-                    stat = entry.stat()
-                    artifacts.append(
-                        {
-                            "name": entry.name,
-                            "type": item["type"],
-                            "path": str(entry),
-                            "size": stat.st_size,
-                            "modified": stat.st_mtime,
-                        }
-                    )
-    return artifacts
-
+        with open(EPISODIC_LOG_FILE, "r", encoding="utf-8") as f:
+            return [json.loads(line) for line in f.readlines()[-50:][::-1]]
+    except: return []
 
 @app.websocket("/ws/telemetry")
-async def websocket_telemetry(websocket: WebSocket) -> None:
-    """WebSocket endpoint for real-time telemetry streaming."""
+async def websocket_telemetry(websocket: WebSocket):
     await manager.connect(websocket)
     try:
-        # Send initial connection success message
-        await websocket.send_json({"event": "connected", "msg": "PyAgent Telemetry Bridge Active"})
         while True:
-            # Wait for any messages from client (keeping connection open)
-            data = await websocket.receive_text()
-            # Simple heartbeat or specific command handling can go here
-            await manager.broadcast({"event": "telemetry_echo", "data": data})
+            await websocket.receive_text()
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-    except (ConnectionError, RuntimeError) as e:
-        manager.disconnect(websocket)
-        logging.error(f"WebSocket error: {e}")
 
+# --- MOUNTS (MUST COME LAST) ---
+if WEB_UI_DIR.exists():
+    app.mount("/web", StaticFiles(directory=str(WEB_UI_DIR)), name="web")
 
 if __name__ == "__main__":
     import uvicorn
-
-    # Start the server on port 8000
+    # Using 0.0.0.0 to ensure accessibility across the LAN if needed
     uvicorn.run(app, host="0.0.0.0", port=8000)
