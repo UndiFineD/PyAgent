@@ -14,7 +14,7 @@ telemetry:
   aggregation_interval: 1.0
   use_rust_accelerator: true
   streaming:
-    target_fps: 120
+    target_fps: "best-effort"
     low_latency: true
     websocket_route: "/ws/telemetry"
   rollups:
