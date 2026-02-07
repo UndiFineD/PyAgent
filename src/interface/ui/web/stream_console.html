@@ -3,127 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PyAgent Multimedia Stream Console</title>
+    <title>PyAgent | Multi-Channel Stream </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background-color: #020617; color: #f8fafc; font-family: 'Inter', sans-serif; overflow: hidden; }
+        body { background-color: #020617; color: #f8fafc; font-family: 'Inter', sans-serif; height: 100vh; width: 100vw; overflow: hidden; margin: 0; }
+        .desktop { background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); width: 100%; height: 100%; position: relative; }
+        
+        /* Draggable Window Styles */
+        .window {
+            position: absolute; min-width: 320px; background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px); display: flex; flex-direction: column; overflow: hidden;
+            z-index: 10; cursor: default;
+        }
+        .window-header {
+            padding: 10px 16px; background: rgba(30, 41, 59, 0.8);
+            border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+            display: flex; justify-content: space-between; align-items: center; cursor: move;
+        }
+        .window-content { flex: 1; padding: 12px; overflow: auto; }
+        
+        /* CRT Effect Overlay */
         .crt-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 2; background-size: 100% 2px, 3px 100%; pointer-events: none;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 1000; background-size: 100% 3px, 3px 100%; pointer-events: none;
         }
-        .monitor-frame {
-            border: 20px solid #1e293b; border-radius: 40px; box-shadow: inset 0 0 100px #000, 0 0 50px rgba(0,0,0,0.5);
-            background: #000; height: calc(100vh - 40px); margin: 20px; position: relative;
-        }
+
+        .active-window { z-index: 50; border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
 <body>
     <div class="crt-overlay"></div>
-    
-    <div class="monitor-frame flex flex-col items-center justify-center">
-        <div id="video-stream" class="w-full h-full bg-slate-950 flex items-center justify-center relative overflow-hidden">
-            <!-- Simulated 120fps DVD MUXer Output -->
-            <div id="status-overlay" class="absolute top-8 left-8 flex flex-col gap-2 z-10">
-                <div class="bg-black/50 backdrop-blur px-3 py-1 rounded-full border border-blue-500/30 flex items-center gap-2">
-                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span class="text-[10px] font-mono uppercase tracking-widest text-blue-400">120FPS MUX ACTIVE</span>
+    <div class="desktop" id="desktop">
+        
+        <!-- Video Channel Window -->
+        <div id="win-video" class="window" style="top: 50px; left: 50px; width: 480px; height: 360px;">
+            <div class="window-header" onmousedown="startDrag(event, 'win-video')">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-video text-blue-400 text-xs"></i>
+                    <span class="text-xs font-bold uppercase tracking-widest text-slate-300">Channel 01: Vision</span>
                 </div>
-                <div id="filter-status" class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Filters: Bypass</div>
+                <div class="flex gap-1.5 ml-auto">
+                    <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+                </div>
             </div>
-
-            <div class="text-center">
-                <i class="fas fa-satellite-dish text-6xl text-slate-800 mb-4"></i>
-                <p class="text-slate-600 font-mono text-sm">AWAITING PYAGENT MULTIMODAL SYNC...</p>
+            <div class="window-content bg-black flex flex-col items-center justify-center relative">
+                <div class="absolute top-4 left-4 bg-black/60 px-2 py-0.5 rounded border border-blue-500/30 flex items-center gap-2">
+                    <span class="text-[10px] font-mono text-blue-400 animate-pulse">● LIVE MUX</span>
+                    <button onclick="applyFilter('VIDEO', 'edge_detect')" class="text-[8px] bg-blue-900/50 hover:bg-blue-800 px-1 rounded text-blue-200">EDGE</button>
+                    <button onclick="applyFilter('VIDEO', 'grayscale')" class="text-[8px] bg-blue-900/50 hover:bg-blue-800 px-1 rounded text-blue-200">BW</button>
+                </div>
+                <i class="fas fa-satellite-dish text-4xl text-slate-800 animate-pulse"></i>
+                <div class="mt-4 text-center absolute bottom-10">
+                    <p class="text-[10px] font-mono text-slate-600 uppercase">Awaiting Multimodal Sync...</p>
+                </div>
             </div>
-
-            <!-- AgentBar Injection Point -->
-            <div id="agent-bar-mount"></div>
         </div>
 
-        <!-- Control Panel -->
-        <div class="w-full bg-slate-900/50 border-t border-slate-800 p-4 flex justify-between items-center px-12">
-            <div class="flex gap-8">
-                <div class="flex flex-col">
-                    <span class="text-[10px] text-slate-500 uppercase">Input Channel</span>
-                    <span class="font-mono text-sm text-blue-400">0x03 (VIDEO_MUX)</span>
+        <!-- Audio Channel Window -->
+        <div id="win-audio" class="window" style="top: 430px; left: 50px; width: 480px; height: 180px;">
+            <div class="window-header" onmousedown="startDrag(event, 'win-audio')">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-waveform-lines text-emerald-400 text-xs"></i>
+                    <span class="text-xs font-bold uppercase tracking-widest text-slate-300">Channel 02: Audio</span>
                 </div>
-                <div class="flex flex-col">
-                    <span class="text-[10px] text-slate-500 uppercase">Latency</span>
-                    <span id="latency-val" class="font-mono text-sm text-green-400">0.42ms</span>
+                <div class="flex gap-2 ml-4">
+                    <button onclick="applyFilter('AUDIO', 'denoise')" class="text-[8px] bg-emerald-900/50 hover:bg-emerald-800 px-1 rounded text-emerald-200">DENOISE</button>
+                    <button onclick="applyFilter('AUDIO', 'boost')" class="text-[8px] bg-emerald-900/50 hover:bg-emerald-800 px-1 rounded text-emerald-200">BOOST</button>
+                </div>
+                <div class="flex gap-1.5 ml-auto">
+                    <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
                 </div>
             </div>
-
-            <div class="flex gap-4">
-                <button onclick="applyFilter('AUDIO', 'noise_reduction')" class="bg-slate-800 hover:bg-slate-700 px-4 py-1 rounded text-xs border border-slate-700 transition-all">
-                    <i class="fas fa-sliders-h mr-2 text-green-400"></i> Audio Filters
-                </button>
-                <button onclick="applyFilter('VIDEO', 'edge_detect')" class="bg-slate-800 hover:bg-slate-700 px-4 py-1 rounded text-xs border border-slate-700 transition-all">
-                    <i class="fas fa-camera mr-2 text-blue-400"></i> Vision Filter
-                </button>
-            </div>
-
-            <div class="text-right">
-                <span class="text-[10px] text-slate-600 font-mono">ENCRYPTED AES-GCM-256</span>
+            <div class="window-content flex flex-col justify-end gap-1 px-4 py-6">
+                <div class="flex items-end gap-1 h-20">
+                    <div class="bg-emerald-500/40 w-full animate-[bounce_1s_infinite]" style="height: 40%"></div>
+                    <div class="bg-emerald-500/40 w-full animate-[bounce_1.2s_infinite]" style="height: 70%"></div>
+                    <div class="bg-emerald-500/40 w-full animate-[bounce_0.8s_infinite]" style="height: 100%"></div>
+                    <div class="bg-emerald-500/40 w-full animate-[bounce_1.5s_infinite]" style="height: 40%"></div>
+                    <div class="bg-emerald-500/40 w-full animate-[bounce_0.9s_infinite]" style="height: 85%"></div>
+                    <div class="bg-emerald-500/40 w-full animate-[bounce_1.1s_infinite]" style="height: 55%"></div>
+                    <div class="bg-emerald-500/40 w-full animate-[bounce_1.3s_infinite]" style="height: 90%"></div>
+                </div>
+                <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-2">
+                    <span>20Hz</span>
+                    <span>12kHz</span>
+                    <span>22kHz</span>
+                </div>
             </div>
         </div>
+
+        <!-- Text Channel Window -->
+        <div id="win-text" class="window" style="top: 50px; left: 550px; width: 400px; height: 560px;">
+            <div class="window-header" onmousedown="startDrag(event, 'win-text')">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-message text-purple-400 text-xs"></i>
+                    <span class="text-xs font-bold uppercase tracking-widest text-slate-300">Channel 03: Text</span>
+                </div>
+                <div class="flex gap-1.5 ml-auto">
+                    <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+                </div>
+            </div>
+            <div class="window-content font-mono text-xs text-slate-400 space-y-3">
+                <div class="border-l-2 border-slate-700 pl-3 py-1">
+                    <span class="text-slate-600">[SYNC]</span> <span class="text-blue-500">SYSTEM:</span> Initializing Voyager mesh...
+                </div>
+                <div class="border-l-2 border-slate-700 pl-3 py-1">
+                    <span class="text-slate-600">[INFO]</span> <span class="text-emerald-500">VOYAGER:</span> Neural synapse active on port 5556.
+                </div>
+                <div class="border-l-2 border-slate-700 pl-3 py-1 text-slate-500 opacity-60">
+                    <span class="text-slate-600">[LOG]</span> Scanning for peers...
+                </div>
+            </div>
+            <div class="p-4 border-t border-slate-800 bg-slate-900/30">
+                <div class="flex gap-2">
+                    <input type="text" placeholder="Command..." class="flex-1 bg-black/40 border-none text-[10px] rounded px-3 py-2 outline-none text-slate-300">
+                    <button class="bg-slate-800 p-2 rounded hover:bg-slate-700 transition-colors"><i class="fas fa-terminal text-xs text-blue-400"></i></button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        async function applyFilter(category, type) {
-            const status = document.getElementById('filter-status');
-            status.textContent = `Applying ${type}...`;
-            status.classList.add('animate-pulse');
+        let currentWin = null;
+        let lastX, lastY;
 
+        async function applyFilter(category, type) {
+            console.log(`Applying ${category} filter: ${type}`);
             try {
-                await fetch('http://localhost:8000/api/stream/filter', {
+                const response = await fetch('/api/stream/filter', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ category, filter_type: type })
                 });
-                status.textContent = `Filters: ${type} (Active)`;
-                status.classList.remove('animate-pulse');
-                status.classList.replace('text-slate-500', 'text-green-400');
+                const data = await response.json();
+                console.log("Filter applied:", data);
             } catch (e) {
-                status.textContent = `Filters: ERROR`;
+                console.error("Failed to apply filter:", e);
             }
         }
 
-        // Mocking the AgentBar dynamic styles
-        const agentBarStyles = `
-            .agent-bar {
-                position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
-                display: flex; gap: 15px; padding: 10px 20px;
-                background: rgba(10, 10, 15, 0.9); border: 1px solid #3b82f6;
-                border-radius: 30px; box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-                z-index: 100; backdrop-filter: blur(10px); color: white; min-width: 400px;
-            }
-            .metric-item { color: #4ade80; font-family: monospace; font-size: 11px; }
-            .channel-indicator { display: flex; align-items: center; gap: 8px; font-size: 10px; font-weight: bold; }
-            .channel-dot { width: 6px; height: 6px; border-radius: 50%; }
-            .dot-active { background: #4ade80; box-shadow: 0 0 5px #4ade80; }
-        `;
-        const styleSheet = document.createElement("style");
-        styleSheet.innerText = agentBarStyles;
-        document.head.appendChild(styleSheet);
+        function startDrag(e, id) {
+            currentWin = document.getElementById(id);
+            lastX = e.clientX;
+            lastY = e.clientY;
+            
+            // Focus window
+            document.querySelectorAll('.window').forEach(w => w.classList.remove('active-window'));
+            currentWin.classList.add('active-window');
+            
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', endDrag);
+            e.preventDefault();
+        }
 
-        // Render Initial AgentBar
-        const mount = document.getElementById('agent-bar-mount');
-        mount.innerHTML = `
-            <div class="agent-bar">
-                <div class="flex items-center gap-4 border-r border-slate-700 pr-4">
-                    <span class="text-xs font-bold tracking-tighter">VOYAGER MUX</span>
-                    <div class="metric-item">FPS: 120.0</div>
-                </div>
-                <div class="flex gap-4 flex-1 justify-center">
-                    <div class="channel-indicator"><div class="channel-dot dot-active"></div> TEXT</div>
-                    <div class="channel-indicator"><div class="channel-dot dot-active"></div> AUDIO</div>
-                    <div class="channel-indicator"><div class="channel-dot dot-active"></div> VIDEO</div>
-                </div>
-                <div class="metric-item pl-4 border-l border-slate-700">SYNC: 0.1ms</div>
-            </div>
-        `;
+        function drag(e) {
+            if (!currentWin) return;
+            
+            const deltaX = e.clientX - lastX;
+            const deltaY = e.clientY - lastY;
+            
+            const rect = currentWin.getBoundingClientRect();
+            currentWin.style.left = (rect.left + deltaX) + 'px';
+            currentWin.style.top = (rect.top + deltaY) + 'px';
+            
+            lastX = e.clientX;
+            lastY = e.clientY;
+        }
+
+        function endDrag() {
+            currentWin = null;
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('mouseup', endDrag);
+        }
+
+        window.onload = () => { console.log("Voyager Stream Console Active."); };
     </script>
 </body>
 </html>
