@@ -1,0 +1,8 @@
+
+import importlib.util
+from pathlib import Path
+
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\cleaned\whatsapp_msgstore_viewer_py_hex_string_to_encrypted_backup_key_3076d56f934c.py")
+spec = importlib.util.spec_from_file_location('mod_under_test', p)
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)

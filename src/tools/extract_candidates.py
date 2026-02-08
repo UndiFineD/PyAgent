@@ -115,22 +115,29 @@ def make_test(module_path: Path, defs: list[str], test_path: Path):
     test_path.write_text(body, encoding='utf-8')
 
 
-def extract_candidates(report_file: Path, limit: int = 10, max_lines: int = MAX_LINES, max_bytes: int = MAX_BYTES,
+def extract_candidates(report_file: Path, limit: int = 10, skip: int = 0, max_lines: int = MAX_LINES, max_bytes: int = MAX_BYTES,
                        allow_top_level: bool = False, allow_no_defs: bool = False, allow_banned_imports: bool = False):
     if not report_file.exists():
         print('report missing at', report_file)
         return 1
     data = json.loads(report_file.read_text(encoding='utf-8', errors='ignore'))
     found = 0
+    skipped = 0
     created = []
     for d in data.get('directories', []):
         repo = d.get('path')
         for f in d.get('files', []):
             if found >= limit:
                 break
+            
             suffix = f.get('suffix')
             if suffix != '.py':
                 continue
+            
+            if skipped < skip:
+                skipped += 1
+                continue
+
             rel = f.get('path')
             # Adjust src_path to point to the ingested folder
             src_path = ROOT / 'src' / 'external_candidates' / 'ingested' / Path(rel)
@@ -180,13 +187,14 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument('--report', type=Path, default=REPORT_PATH)
     p.add_argument('--limit', type=int, default=10)
+    p.add_argument('--skip', type=int, default=0)
     p.add_argument('--max-lines', type=int, default=MAX_LINES)
     p.add_argument('--max-bytes', type=int, default=MAX_BYTES)
     p.add_argument('--allow-top-level', action='store_true', help='Allow top-level assignments and other statements')
     p.add_argument('--allow-no-defs', action='store_true', help='Allow modules with no defs (constants-only)')
     p.add_argument('--allow-banned-imports', action='store_true', help='Skip banned-imports checks (risky)')
     args = p.parse_args()
-    return extract_candidates(args.report, args.limit, max_lines=args.max_lines, max_bytes=args.max_bytes,
+    return extract_candidates(args.report, args.limit, skip=args.skip, max_lines=args.max_lines, max_bytes=args.max_bytes,
                               allow_top_level=args.allow_top_level, allow_no_defs=args.allow_no_defs,
                               allow_banned_imports=args.allow_banned_imports)
 

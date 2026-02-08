@@ -1,0 +1,127 @@
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_evermemos.py\src.py\core.py\tenants.py\tenant_info_provider_5165a4bbc15d.py
+# NOTE: extracted with static-only rules; review before use
+
+# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\tenants\tenant_info_provider.py
+
+"""
+
+Tenant information provider module
+
+This module defines the tenant information provider interface and its default implementation,
+
+used to retrieve tenant information based on tenant_id.
+
+Uses DI mechanism to manage TenantInfoProvider implementations.
+
+"""
+
+from abc import ABC, abstractmethod
+
+from typing import Optional
+
+from core.di.decorators import component
+
+from core.tenants.tenant_models import TenantDetail, TenantInfo
+
+class TenantInfoProvider(ABC):
+
+    """
+
+    Tenant information provider interface
+
+    This interface defines standard methods for retrieving tenant information.
+
+    Different implementations can retrieve tenant information from various data sources (e.g., database, API, configuration files).
+
+    Using DI mechanism:
+
+    - Multiple implementations can be registered
+
+    - Use primary=True to mark the default implementation
+
+    - Obtain instances through the container
+
+    """
+
+    @abstractmethod
+
+    def get_tenant_info(self, tenant_id: str) -> Optional[TenantInfo]:
+
+        """
+
+        Retrieve tenant information by tenant ID
+
+        Args:
+
+            tenant_id: Unique identifier of the tenant
+
+        Returns:
+
+            Tenant information object, or None if not found
+
+        """
+
+        raise NotImplementedError
+
+@component("default_tenant_info_provider")
+
+class DefaultTenantInfoProvider(TenantInfoProvider):
+
+    """
+
+    Default tenant information provider implementation
+
+    This implementation provides basic tenant information containing only the tenant_id,
+
+    without detailed information such as storage configurations. Suitable for simple scenarios or as the default implementation.
+
+    Uses the @component decorator to register into the DI container and mark as primary.
+
+    """
+
+    def get_tenant_info(self, tenant_id: str) -> Optional[TenantInfo]:
+
+        """
+
+        Create a basic tenant information object by tenant ID
+
+        This implementation creates a TenantInfo object containing only the tenant_id,
+
+        without any storage configuration information.
+
+        Args:
+
+            tenant_id: Unique identifier of the tenant
+
+        Returns:
+
+            TenantInfo object containing basic information
+
+        Examples:
+
+            >>> from core.di.container import get_container
+
+            >>> provider = get_container().get_bean_by_type(TenantInfoProvider)
+
+            >>> tenant_info = provider.get_tenant_info("tenant_001")
+
+            >>> print(tenant_info.tenant_id)
+
+            tenant_001
+
+        """
+
+        # Return None if tenant_id is empty
+
+        if not tenant_id:
+
+            return None
+
+        # Create basic tenant information containing only tenant_id
+
+        return TenantInfo(
+
+            tenant_id=tenant_id, tenant_detail=TenantDetail(), origin_tenant_data={}
+
+        )
+
