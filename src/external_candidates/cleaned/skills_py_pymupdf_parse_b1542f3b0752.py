@@ -1,7 +1,7 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\skills.py\skills.py\bsinriclawd.py\hvac_estimate_takeoff.py\scripts.py\pymupdf_parse_b1542f3b0752.py
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\skills.py\skills.py\kesslerio.py\pymupdf_pdf_parser_clawdbot_skill.py\scripts.py\pymupdf_parse_b1542f3b0752.py
 # NOTE: extracted with static-only rules; review before use
 
-# Extracted from: C:\DEV\PyAgent\.external\skills\skills\bsinriclawd\hvac-estimate-takeoff\scripts\pymupdf_parse.py
+# Extracted from: C:\DEV\PyAgent\.external\skills\skills\kesslerio\pymupdf-pdf-parser-clawdbot-skill\scripts\pymupdf_parse.py
 
 #!/usr/bin/env python3
 

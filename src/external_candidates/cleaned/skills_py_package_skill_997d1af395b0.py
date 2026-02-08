@@ -1,7 +1,7 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\skills.py\skills.py\chindden.py\skill_creator.py\scripts.py\package_skill_997d1af395b0.py
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\skills.py\skills.py\ljglover.py\skill_creator_0_1_0.py\scripts.py\package_skill_997d1af395b0.py
 # NOTE: extracted with static-only rules; review before use
 
-# Extracted from: C:\DEV\PyAgent\.external\skills\skills\chindden\skill-creator\scripts\package_skill.py
+# Extracted from: C:\DEV\PyAgent\.external\skills\skills\ljglover\skill-creator-0-1-0\scripts\package_skill.py
 
 #!/usr/bin/env python3
 
