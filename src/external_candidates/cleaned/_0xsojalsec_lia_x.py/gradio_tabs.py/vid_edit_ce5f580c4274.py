@@ -1,0 +1,382 @@
+# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-LIA-X\gradio_tabs\vid_edit.py
+# Copyright (C) 2025, Shanghai AI Laboratory, Inria STARS research group
+# All rights reserved.
+#
+# This software is free for non-commercial, research and evaluation use
+# under the terms of the LICENSE.md file.
+#
+# For inquiries contact  wyhsirius@gmail.com, francois.bremond@inria.fr, antitza.dancheva@inria.fr
+#
+
+import os
+
+import gradio as gr
+import imageio
+import numpy as np
+import torch
+import torchvision
+from einops import rearrange
+from PIL import Image
+
+# import spaces
+
+output_dir = "./res_gradio"
+os.makedirs(output_dir, exist_ok=True)
+
+# lables
+labels_k = [
+    "yaw1",
+    "yaw2",
+    "pitch",
+    "roll1",
+    "roll2",
+    "neck",
+    "pout",
+    "open->close",
+    '"O" mouth',
+    "smile",
+    "close->open",
+    "eyebrows",
+    "eyeballs1",
+    "eyeballs2",
+]
+
+labels_v = [37, 39, 28, 15, 33, 31, 6, 25, 16, 19, 13, 24, 17, 26]
+
+
+def process_first_frame(vid_path, size):
+    vid_dict = torchvision.io.read_video(vid_path, start_pts=0, end_pts=0, pts_unit="sec")
+    img = vid_dict[0].permute(0, 3, 1, 2)  # bchw
+    _, _, h, w = img.size()
+    img_norm = (img / 255.0 - 0.5) * 2.0  # [-1, 1]
+    img_norm = resize(img_norm, (size, size))
+
+    return img_norm, w, h
+
+
+def resize(img, size):
+    transform = torchvision.transforms.Compose(
+        [
+            torchvision.transforms.Resize(
+                size,
+                interpolation=torchvision.transforms.InterpolationMode.BILINEAR,
+                antialias=True,
+            ),
+        ]
+    )
+
+    return transform(img)
+
+
+def vid_preprocessing(vid_path, size):
+    vid_dict = torchvision.io.read_video(vid_path, pts_unit="sec")
+    vid = vid_dict[0].permute(0, 3, 1, 2)  # tchw
+    _, _, h, w = vid.size()
+    fps = vid_dict[2]["video_fps"]
+    vid_norm = (vid / 255.0 - 0.5) * 2.0  # [-1, 1]
+    vid_norm = resize(vid_norm, (size, size))  # tchw
+
+    return vid_norm, fps, w, h
+
+
+def denorm(x):
+    x = x.clamp(-1, 1)
+    x = (x - x.min()) / (x.max() - x.min())
+
+    return x
+
+
+def img_postprocessing(image, w, h, output_path=output_dir + "/output_img.png"):
+    # image: bchw
+
+    image = resize(image, (h, w))
+    image = rearrange(image, "b c h w -> b h w c")
+    img_np = (denorm(image[0]).cpu().numpy() * 255).astype(np.uint8)
+    imageio.imwrite(output_path, img_np, quality=8)
+
+    return output_path
+
+
+def vid_all_save(
+    vid_d,
+    vid_a,
+    w,
+    h,
+    fps,
+    output_path=output_dir + "/output_vid.mp4",
+    output_all_path=output_dir + "/output_all_vid.mp4",
+):
+    # vid_d: tchw
+    # vid_a: tchw
+
+    vid_d = resize(vid_d, (h, w))
+    vid_a = resize(vid_a, (h, w))
+
+    vid_d = rearrange(vid_d, "t c h w -> t h w c")
+    vid_a = rearrange(vid_a, "t c h w -> t h w c")
+    vid_all = torch.cat([vid_d, vid_a], dim=2)
+
+    vid_a_np = (denorm(vid_a).cpu().numpy() * 255).astype("uint8")
+    vid_all_np = (denorm(vid_all).cpu().numpy() * 255).astype("uint8")
+
+    imageio.mimwrite(output_path, vid_a_np, fps=fps, codec="libx264", quality=8)
+    imageio.mimwrite(output_all_path, vid_all_np, fps=fps, codec="libx264", quality=8)
+
+    return output_path, output_all_path
+
+
+def vid_edit(gen, chunk_size, device):
+    @torch.inference_mode()
+    def edit_img(video, *selected_s):
+        image_tensor, w, h = process_first_frame(video, 512)
+        image_tensor = image_tensor.to(device)
+
+        edited_image_tensor = gen.edit_img(image_tensor, labels_v, selected_s)
+
+        # de-norm
+        edited_image = img_postprocessing(edited_image_tensor, w, h)
+
+        return edited_image
+
+    @torch.inference_mode()
+    def edit_vid(video, *selected_s):
+        video_target_tensor, fps, w, h = vid_preprocessing(video, 512)  # tchw
+        video_target_tensor = video_target_tensor.to(device)
+
+        edited_video_tensor = gen.edit_vid(video_target_tensor, labels_v, selected_s, chunk_size)  # tchw
+        edited_image_tensor = edited_video_tensor[0:1, :, :, :]  # bchw
+
+        # de-norm
+        animated_video, animated_all_video = vid_all_save(video_target_tensor, edited_video_tensor, w, h, fps)
+        edited_image = img_postprocessing(edited_image_tensor, w, h)
+
+        return edited_image, animated_video, animated_all_video
+
+    def clear_media():
+        return None, None, None, *([0] * len(labels_k))
+
+    with gr.Tab("Video Editing"):
+        inputs_c = []
+        inputs_s = []
+
+        with gr.Row():
+            with gr.Column(scale=1):
+                with gr.Row():
+                    with gr.Accordion(open=True, label="Video"):
+                        video_input = gr.Video(width=512)  # , height=550)
+                        gr.Examples(
+                            examples=[
+                                ["./data/driving/driving1.mp4"],
+                                ["./data/driving/driving2.mp4"],
+                                ["./data/driving/driving4.mp4"],
+                                ["./data/driving/driving3.mp4"],
+                                ["./data/driving/driving8.mp4"],
+                                ["./data/driving/driving9.mp4"],
+                            ],
+                            inputs=[video_input],
+                            cache_examples=False,
+                            visible=True,
+                        )
+
+            with gr.Column(scale=2):
+                with gr.Row():
+                    with gr.Accordion(open=True, label="Edited First Frame"):
+                        # image_output.render()
+                        image_output = gr.Image(label="Image", type="numpy", interactive=False, width=512)
+
+                    with gr.Accordion(open=True, label="Edited Video"):
+                        # video_output.render()
+                        video_output = gr.Video(label="Video", width=512)
+
+                with gr.Row():
+                    with gr.Accordion(open=True, label="Original & Edited Videos"):
+                        # video_all_output.render()
+                        video_all_output = gr.Video(label="Videos")
+
+            with gr.Column(scale=1):
+                with gr.Accordion("Control Panel", open=True):
+                    with gr.Tab("Head"):
+                        with gr.Row():
+                            for k in labels_k[:3]:
+                                slider = gr.Slider(
+                                    minimum=-1.0,
+                                    maximum=0.5,
+                                    value=0,
+                                    label=k,
+                                    elem_id="slider_" + k,
+                                )
+                                inputs_s.append(slider)
+                        with gr.Row():
+                            for k in labels_k[3:6]:
+                                slider = gr.Slider(
+                                    minimum=-0.5,
+                                    maximum=0.5,
+                                    value=0,
+                                    label=k,
+                                    elem_id="slider_" + k,
+                                )
+                                inputs_s.append(slider)
+
+                    with gr.Tab("Mouth"):
+                        with gr.Row():
+                            for k in labels_k[6:8]:
+                                slider = gr.Slider(
+                                    minimum=-0.4,
+                                    maximum=0.4,
+                                    value=0,
+                                    label=k,
+                                    elem_id="slider_" + k,
+                                )
+                                inputs_s.append(slider)
+                        with gr.Row():
+                            for k in labels_k[8:10]:
+                                slider = gr.Slider(
+                                    minimum=-0.4,
+                                    maximum=0.4,
+                                    value=0,
+                                    label=k,
+                                    elem_id="slider_" + k,
+                                )
+                                inputs_s.append(slider)
+
+                    with gr.Tab("Eyes"):
+                        with gr.Row():
+                            for k in labels_k[10:12]:
+                                slider = gr.Slider(
+                                    minimum=-0.4,
+                                    maximum=0.4,
+                                    value=0,
+                                    label=k,
+                                    elem_id="slider_" + k,
+                                )
+                                inputs_s.append(slider)
+                        with gr.Row():
+                            for k in labels_k[12:14]:
+                                slider = gr.Slider(
+                                    minimum=-0.2,
+                                    maximum=0.2,
+                                    value=0,
+                                    label=k,
+                                    elem_id="slider_" + k,
+                                )
+                                inputs_s.append(slider)
+
+                with gr.Row():
+                    with gr.Column(scale=1):
+                        with gr.Row():  # Buttons now within a single Row
+                            edit_btn = gr.Button("Edit")
+                            clear_btn = gr.Button("Clear")
+                        with gr.Row():
+                            animate_btn = gr.Button("Generate")
+
+        edit_btn.click(
+            fn=edit_img,
+            inputs=[video_input] + inputs_s,
+            outputs=[image_output],
+            show_progress=True,
+        )
+
+        animate_btn.click(
+            fn=edit_vid,
+            inputs=[video_input] + inputs_s,
+            outputs=[image_output, video_output, video_all_output],
+        )
+
+        clear_btn.click(
+            fn=clear_media,
+            outputs=[image_output, video_output, video_all_output] + inputs_s,
+        )
+
+        gr.Examples(
+            examples=[
+                [
+                    "./data/driving/driving1.mp4",
+                    0.5,
+                    0.5,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                ],
+                [
+                    "./data/driving/driving2.mp4",
+                    0.5,
+                    0.5,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                ],
+                [
+                    "./data/driving/driving1.mp4",
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -0.3,
+                    0,
+                    0,
+                ],
+                [
+                    "./data/driving/driving3.mp4",
+                    -0.6,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                ],
+                [
+                    "./data/driving/driving9.mp4",
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -0.1,
+                    0.07,
+                ],
+            ],
+            # fn=edit_vid,
+            inputs=[video_input] + inputs_s,
+            # outputs=[image_output, video_output, video_all_output],
+            # cache_examples=True,
+        )

@@ -1,0 +1,9 @@
+# Extracted from: C:\DEV\PyAgent\.external\agno\cookbook\reasoning\models\azure_openai\o4_mini.py
+from agno.agent import Agent
+from agno.models.azure.openai_chat import AzureOpenAI
+
+agent = Agent(model=AzureOpenAI(id="o4-mini"))
+agent.print_response(
+    "Solve the trolley problem. Evaluate multiple ethical frameworks. Include an ASCII diagram of your solution.",
+    stream=True,
+)
