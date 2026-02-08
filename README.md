@@ -1,4 +1,4 @@
-# 🤖 PyAgent: The Autonomous Swarm Intelligence (v4.4.0)
+# 🤖 PyAgent: The Autonomous Swarm Intelligence (v4.0.0)
 
 PyAgent is a high-performance, multi-agent swarm system optimized for autonomous code improvement, reasoning, and fleet-wide orchestration. It leverages a **Rust-accelerated core** and a **decentralized mixin architecture** to provide a secure, transactionally safe environment for agentic self-evolution.
 
@@ -107,5 +107,5 @@ python -m pytest tests/unit/
 - [ ] **Multi-Model Speculation**: Federated speculative decoding across multiple nodes.
 
 ---
-*Locked under GOLDEN_MASTER_SEAL (v4.4.0-VOYAGER)*
+*Locked under GOLDEN_MASTER_SEAL (v4.0.0-VOYAGER)*
 

@@ -18,12 +18,13 @@ PyAgent SDK Version Info and Stability Gates.
 from __future__ import annotations
 
 # PyAgent SDK Version Info (Core/Fleet Version)
-VERSION: str = "3.7.0"
-SDK_VERSION: str = "3.7.0"
-EVOLUTION_PHASE: int = 318
+VERSION: str = "4.0.0"
+SDK_VERSION: str = "4.0.0"
+EVOLUTION_PHASE: int = 400
 STABILITY_SCORE: float = 1.000
 GOLDEN_MASTER_SEAL: bool = True
 COMPATIBLE_CORE_VERSIONS: list[str] = [
+    "3.7.0",
     "3.6.0",
     "3.5.1",
     "3.5.0",

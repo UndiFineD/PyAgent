@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "pyagent"
-version = "4.4.0"
+version = "4.0.0"
 description = "Autonomous Multi-Agent Swarm Framework"
 readme = "README.md"
 requires-python = ">=3.12"
