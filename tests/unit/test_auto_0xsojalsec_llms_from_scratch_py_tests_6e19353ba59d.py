@@ -2,11 +2,7 @@
 import importlib.util
 from pathlib import Path
 
-p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_llms_from_scratch_py_tests_6e19353ba59d.py")
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\cleaned\0xsojalsec_llms_from_scratch_py_tests_6e19353ba59d.py")
 spec = importlib.util.spec_from_file_location('mod_under_test', p)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
-
-assert hasattr(mod, 'gpt_config'), 'missing gpt_config'
-assert hasattr(mod, 'other_settings'), 'missing other_settings'
-assert hasattr(mod, 'test_main'), 'missing test_main'

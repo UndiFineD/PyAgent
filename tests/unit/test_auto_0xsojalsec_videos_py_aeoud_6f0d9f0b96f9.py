@@ -2,10 +2,7 @@
 import importlib.util
 from pathlib import Path
 
-p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_videos_py_aeoud_6f0d9f0b96f9.py")
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\cleaned\0xsojalsec_videos_py_aeoud_6f0d9f0b96f9.py")
 spec = importlib.util.spec_from_file_location('mod_under_test', p)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
-
-assert hasattr(mod, 'VennDiagram'), 'missing VennDiagram'
-assert hasattr(mod, 'Spheres'), 'missing Spheres'

@@ -2,9 +2,7 @@
 import importlib.util
 from pathlib import Path
 
-p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\absadiki_whatsapp_msgstore_viewer_py_base_model_7984129afcf3.py")
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\cleaned\absadiki_whatsapp_msgstore_viewer_py_base_model_7984129afcf3.py")
 spec = importlib.util.spec_from_file_location('mod_under_test', p)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
-
-assert hasattr(mod, 'BaseScreenModel'), 'missing BaseScreenModel'

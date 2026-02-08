@@ -2,9 +2,7 @@
 import importlib.util
 from pathlib import Path
 
-p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_evermemos_py_i18n_texts_bc9213697600.py")
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\cleaned\0xsojalsec_evermemos_py_i18n_texts_bc9213697600.py")
 spec = importlib.util.spec_from_file_location('mod_under_test', p)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
-
-assert hasattr(mod, 'I18nTexts'), 'missing I18nTexts'

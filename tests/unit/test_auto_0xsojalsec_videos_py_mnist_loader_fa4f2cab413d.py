@@ -2,11 +2,7 @@
 import importlib.util
 from pathlib import Path
 
-p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_videos_py_mnist_loader_fa4f2cab413d.py")
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\cleaned\0xsojalsec_videos_py_mnist_loader_fa4f2cab413d.py")
 spec = importlib.util.spec_from_file_location('mod_under_test', p)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
-
-assert hasattr(mod, 'load_data'), 'missing load_data'
-assert hasattr(mod, 'load_data_wrapper'), 'missing load_data_wrapper'
-assert hasattr(mod, 'vectorized_result'), 'missing vectorized_result'

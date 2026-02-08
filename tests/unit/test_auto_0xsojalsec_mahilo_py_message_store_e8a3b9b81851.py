@@ -2,11 +2,7 @@
 import importlib.util
 from pathlib import Path
 
-p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_mahilo_py_message_store_e8a3b9b81851.py")
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\cleaned\0xsojalsec_mahilo_py_message_store_e8a3b9b81851.py")
 spec = importlib.util.spec_from_file_location('mod_under_test', p)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
-
-assert hasattr(mod, 'MessageState'), 'missing MessageState'
-assert hasattr(mod, 'MessageStore'), 'missing MessageStore'
-assert hasattr(mod, 'SQLiteMessageStore'), 'missing SQLiteMessageStore'

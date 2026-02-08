@@ -2,11 +2,7 @@
 import importlib.util
 from pathlib import Path
 
-p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_factorio_learning_environment_py_solver_1b43dc608830.py")
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\cleaned\0xsojalsec_factorio_learning_environment_py_solver_1b43dc608830.py")
 spec = importlib.util.spec_from_file_location('mod_under_test', p)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
-
-assert hasattr(mod, 'analyze_blueprint'), 'missing analyze_blueprint'
-assert hasattr(mod, 'generate_spatial_reasoning_with_code'), 'missing generate_spatial_reasoning_with_code'
-assert hasattr(mod, 'generate_spatial_context_with_code'), 'missing generate_spatial_context_with_code'

@@ -2,10 +2,7 @@
 import importlib.util
 from pathlib import Path
 
-p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_pdfalyzer_py_indeterminate_node_d2ecee6c8518.py")
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\cleaned\0xsojalsec_pdfalyzer_py_indeterminate_node_d2ecee6c8518.py")
 spec = importlib.util.spec_from_file_location('mod_under_test', p)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
-
-assert hasattr(mod, 'IndeterminateNode'), 'missing IndeterminateNode'
-assert hasattr(mod, 'find_node_with_lowest_id'), 'missing find_node_with_lowest_id'

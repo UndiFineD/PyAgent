@@ -1,0 +1,45 @@
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\agno.py\libs.py\infra.py\agno_aws.py\agno.py\aws.py\resource.py\secret.py\reader_4ea4b85fb6f3.py
+# NOTE: extracted with static-only rules; review before use
+
+# Extracted from: C:\DEV\PyAgent\.external\agno\libs\infra\agno_aws\agno\aws\resource\secret\reader.py
+
+from typing import Any, Dict, List, Optional, Union
+
+from agno.aws.api_client import AwsApiClient
+
+from agno.aws.resource.secret.manager import SecretsManager
+
+def read_secrets(
+
+    secrets: Union[SecretsManager, List[SecretsManager]],
+
+    aws_client: Optional[AwsApiClient] = None,
+
+) -> Dict[str, Any]:
+
+    secret_dict: Dict[str, str] = {}
+
+    if secrets is not None:
+
+        if isinstance(secrets, SecretsManager):
+
+            _secret_dict = secrets.get_secrets_as_dict(aws_client=aws_client)
+
+            if _secret_dict is not None and isinstance(_secret_dict, dict):
+
+                secret_dict.update(_secret_dict)
+
+        elif isinstance(secrets, list):
+
+            for _secret in secrets:
+
+                if isinstance(_secret, SecretsManager):
+
+                    _secret_dict = _secret.get_secrets_as_dict(aws_client=aws_client)
+
+                    if _secret_dict is not None and isinstance(_secret_dict, dict):
+
+                        secret_dict.update(_secret_dict)
+
+    return secret_dict
+

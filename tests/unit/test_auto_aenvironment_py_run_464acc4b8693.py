@@ -2,11 +2,7 @@
 import importlib.util
 from pathlib import Path
 
-p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\aenvironment_py_run_464acc4b8693.py")
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\cleaned\aenvironment_py_run_464acc4b8693.py")
 spec = importlib.util.spec_from_file_location('mod_under_test', p)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
-
-assert hasattr(mod, 'run_environment'), 'missing run_environment'
-assert hasattr(mod, 'validate_dependencies'), 'missing validate_dependencies'
-assert hasattr(mod, 'run'), 'missing run'

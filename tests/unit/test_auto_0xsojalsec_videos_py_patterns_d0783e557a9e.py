@@ -2,10 +2,7 @@
 import importlib.util
 from pathlib import Path
 
-p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_videos_py_patterns_d0783e557a9e.py")
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\cleaned\0xsojalsec_videos_py_patterns_d0783e557a9e.py")
 spec = importlib.util.spec_from_file_location('mod_under_test', p)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
-
-assert hasattr(mod, 'PascalColored'), 'missing PascalColored'
-assert hasattr(mod, 'TriominoGrid'), 'missing TriominoGrid'

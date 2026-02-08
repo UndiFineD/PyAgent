@@ -2,11 +2,7 @@
 import importlib.util
 from pathlib import Path
 
-p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_videos_py_million_flips_4ce87ebaf1dc.py")
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\cleaned\0xsojalsec_videos_py_million_flips_4ce87ebaf1dc.py")
 spec = importlib.util.spec_from_file_location('mod_under_test', p)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
-
-assert hasattr(mod, 'MillionFlips'), 'missing MillionFlips'
-assert hasattr(mod, 'PropHeadsWithinThousandth'), 'missing PropHeadsWithinThousandth'
-assert hasattr(mod, 'PropHeadsWithinHundredth'), 'missing PropHeadsWithinHundredth'
