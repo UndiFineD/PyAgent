@@ -1,0 +1,47 @@
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\coqui_ai_tts.py\tests.py\aux_tests.py\test_extract_tts_spectrograms_8f2bd1da0372.py
+# NOTE: extracted with static-only rules; review before use
+
+# Extracted from: C:\DEV\PyAgent\.external\coqui-ai-TTS\tests\aux_tests\test_extract_tts_spectrograms.py
+
+from pathlib import Path
+
+import pytest
+
+import torch
+
+from TTS.bin.extract_tts_spectrograms import main
+
+from TTS.config import load_config
+
+from TTS.tts.models import setup_model
+
+from tests import get_tests_input_path, run_main
+
+torch.manual_seed(1)
+
+
+@pytest.mark.parametrize("model", ["glow_tts", "tacotron", "tacotron2"])
+def test_extract_tts_spectrograms(tmp_path, model):
+    config_path = str(Path(get_tests_input_path()) / f"test_{model}_config.json")
+
+    checkpoint_path = str(tmp_path / f"{model}.pth")
+
+    output_path = str(tmp_path / "output_extract_tts_spectrograms")
+
+    config = load_config(config_path)
+
+    model = setup_model(config)
+
+    torch.save({"model": model.state_dict()}, checkpoint_path)
+
+    run_main(
+        main,
+        [
+            "--config_path",
+            config_path,
+            "--checkpoint_path",
+            checkpoint_path,
+            "--output_path",
+            output_path,
+        ],
+    )
