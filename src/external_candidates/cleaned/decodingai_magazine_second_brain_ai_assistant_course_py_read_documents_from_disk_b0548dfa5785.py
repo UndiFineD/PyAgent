@@ -5,6 +5,7 @@
 
 from pathlib import Path
 
+
 from loguru import logger
 
 from second_brain_offline.domain.document import Document

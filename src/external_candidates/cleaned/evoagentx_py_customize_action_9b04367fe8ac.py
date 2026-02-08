@@ -15,7 +15,9 @@ import re
 
 from typing import Any, Callable, List, Optional, Union
 
+
 from pydantic import Field
+
 
 from ..core.logging import logger
 
@@ -103,9 +105,13 @@ class CustomizeAction(Action):
     ) -> Union[str, List[dict]]:
         """Prepare prompt for action execution.
 
+
+
         This helper function transforms the input dictionary into a formatted prompt
 
         for the language model, handling different prompting modes.
+
+
 
         Args:
 
@@ -113,9 +119,13 @@ class CustomizeAction(Action):
 
             system_prompt: Optional system prompt to include
 
+
+
         Returns:
 
             Union[str, List[dict]]: Formatted prompt ready for LLM (string or chat messages)
+
+
 
         Raises:
 
@@ -176,11 +186,15 @@ class CustomizeAction(Action):
     def prepare_extraction_prompt(self, llm_output_content: str) -> str:
         """Prepare extraction prompt for fallback extraction when parsing fails.
 
+
+
         Args:
 
             self: The action instance
 
             llm_output_content: Raw output content from LLM
+
+
 
         Returns:
 

@@ -7,7 +7,9 @@ import re
 
 from typing import List, Optional
 
+
 from pydantic import Field, model_validator
+
 
 from ..core.base_config import Parameter
 
@@ -102,6 +104,8 @@ class GeneratedAgent(BaseModule):
     def validate_prompt(cls, agent: "GeneratedAgent"):
         """Validate and fix the agent's prompt template.
 
+
+
         This validator ensures that:
 
         1. All input parameters are properly referenced in the prompt
@@ -110,17 +114,25 @@ class GeneratedAgent(BaseModule):
 
         3. All output sections match the defined output parameters
 
+
+
         If there are mismatches in the output sections, it attempts to
 
         fix them by finding the most similar output name.
+
+
 
         Args:
 
             agent: The GeneratedAgent instance to validate.
 
+
+
         Returns:
 
             The validated and potentially modified GeneratedAgent.
+
+
 
         Raises:
 
@@ -215,6 +227,8 @@ class AgentGeneration(Action):
 
     Action for generating agent specifications for workflow tasks.
 
+
+
     This action analyzes task requirements and generates appropriate agent
 
     specifications, including their prompts, inputs, and outputs. It can either
@@ -261,9 +275,13 @@ class AgentGeneration(Action):
     ) -> AgentGenerationOutput:
         """Execute the agent generation process.
 
+
+
         This method uses the provided language model to generate agent specifications
 
         based on the workflow context and task requirements.
+
+
 
         Args:
 
@@ -277,11 +295,15 @@ class AgentGeneration(Action):
 
             **kwargs: Additional keyword arguments.
 
+
+
         Returns:
 
             If return_prompt is False (default): The generated agents output.
 
             If return_prompt is True: A tuple of (generated agents, prompt used).
+
+
 
         Raises:
 

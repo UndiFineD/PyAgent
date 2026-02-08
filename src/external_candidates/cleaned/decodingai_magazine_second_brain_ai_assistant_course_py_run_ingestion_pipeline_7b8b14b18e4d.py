@@ -7,6 +7,7 @@ import asyncio
 
 from pathlib import Path
 
+
 import click
 
 from rag_workshop.config import settings
@@ -26,17 +27,23 @@ def main(
 ) -> None:
     """Run the document ingestion pipeline to process and store documents in MongoDB.
 
+
+
     This CLI tool processes documents from the specified directory, generates embeddings
 
     using the configured model, and stores both the documents and their embeddings in
 
     MongoDB for later retrieval.
 
+
+
     Args:
 
         documents_dir: Path to directory containing JSON documents to process.
 
             Each JSON file should contain document data in the expected format.
+
+
 
     Returns:
 

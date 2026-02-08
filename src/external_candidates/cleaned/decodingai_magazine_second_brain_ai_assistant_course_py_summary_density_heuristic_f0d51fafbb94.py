@@ -5,6 +5,7 @@
 
 from typing import Any
 
+
 from opik.evaluation.metrics import base_metric, score_result
 
 
@@ -12,6 +13,8 @@ class SummaryDensityHeuristic(base_metric.BaseMetric):
     """
 
     A metric that evaluates whether an LLM's output has appropriate length and density.
+
+
 
     This metric uses an heuristic to determine if the output length is appropriate for the given instruction.
 
@@ -42,6 +45,8 @@ class SummaryDensityHeuristic(base_metric.BaseMetric):
 
         Score the output of an LLM.
 
+
+
         Args:
 
             input: The input prompt given to the LLM.
@@ -49,6 +54,8 @@ class SummaryDensityHeuristic(base_metric.BaseMetric):
             output: The output of an LLM to score.
 
             **ignored_kwargs: Any additional keyword arguments.
+
+
 
         Returns:
 
@@ -80,9 +87,13 @@ class SummaryDensityHeuristic(base_metric.BaseMetric):
 
         Compute a score based on text length relative to min and max boundaries.
 
+
+
         Args:
 
             text: The text to evaluate.
+
+
 
         Returns:
 

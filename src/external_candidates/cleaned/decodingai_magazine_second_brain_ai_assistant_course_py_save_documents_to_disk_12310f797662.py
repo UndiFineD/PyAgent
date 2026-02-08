@@ -7,6 +7,7 @@ import shutil
 
 from pathlib import Path
 
+
 from second_brain_offline.domain import Document
 
 from typing_extensions import Annotated

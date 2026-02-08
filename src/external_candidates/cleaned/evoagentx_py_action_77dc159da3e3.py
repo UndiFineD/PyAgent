@@ -7,15 +7,18 @@ import json
 
 from typing import Any, List, Optional, Tuple, Type, Union
 
+
 from pydantic import model_validator
 
 from pydantic_core import PydanticUndefined
+
 
 from ..core.message import Message
 
 from ..core.module import BaseModule
 
 from ..core.module_utils import get_type_name
+
 
 # from ..core.base_config import Parameter
 
@@ -35,11 +38,15 @@ from ..tools.tool import Toolkit
 class ActionInput(LLMOutputParser):
     """Input specification and parsing for actions.
 
+
+
     This class defines the input requirements for actions and provides methods
 
     to generate structured input specifications. It inherits from LLMOutputParser
 
     to allow parsing of LLM outputs into structured inputs for actions.
+
+
 
     Notes:
 
@@ -57,15 +64,21 @@ class ActionInput(LLMOutputParser):
     def get_input_specification(cls, ignore_fields: List[str] = []) -> str:
         """Generate a JSON specification of the input requirements.
 
+
+
         Examines the class fields and produces a structured specification of
 
         the input parameters, including their types, descriptions, and whether
 
         they are required.
 
+
+
         Args:
 
             ignore_fields (List[str]): List of field names to exclude from the specification.
+
+
 
         Returns:
 
@@ -119,6 +132,8 @@ class ActionInput(LLMOutputParser):
     def get_required_input_names(cls) -> List[str]:
         """Get a list of all required input parameter names.
 
+
+
         Returns:
 
             List[str]: Names of all parameters that are required (don't have default values).
@@ -146,6 +161,8 @@ class ActionInput(LLMOutputParser):
 class ActionOutput(LLMOutputParser):
     """Output representation for actions.
 
+
+
     This class handles the structured output of actions, providing methods
 
     to convert the output to structured data. It inherits from LLMOutputParser
@@ -156,6 +173,8 @@ class ActionOutput(LLMOutputParser):
 
     def to_str(self) -> str:
         """Convert the output to a formatted JSON string.
+
+
 
         Returns:
 
@@ -169,11 +188,15 @@ class ActionOutput(LLMOutputParser):
 class Action(BaseModule):
     """Base class for all actions in the EvoAgentX framework.
 
+
+
     Actions represent discrete operations that can be performed by agents.
 
     They define inputs, outputs, and execution behavior, and can optionally
 
     use tools to accomplish their tasks.
+
+
 
     Attributes:
 
@@ -207,6 +230,8 @@ class Action(BaseModule):
 
     def init_module(self):
         """Initialize the action module.
+
+
 
         This method is called after the action is instantiated.
 
@@ -262,9 +287,13 @@ class Action(BaseModule):
     ) -> Optional[Union[Parser, Tuple[Parser, str]]]:
         """Execute the action to produce a result.
 
+
+
         This is the main entry point for executing an action. Subclasses must
 
         implement this method to define the action's behavior.
+
+
 
         Args:
 
@@ -279,6 +308,8 @@ class Action(BaseModule):
             return_prompt (bool): Whether to return the complete prompt passed to the LLM.
 
             **kwargs (Any): Additional keyword arguments for the execution.
+
+
 
         Returns:
 
@@ -302,6 +333,8 @@ class Action(BaseModule):
 
         Asynchronous execution of the action.
 
+
+
         This method is the asynchronous counterpart of the `execute` method.
 
         It allows the action to be executed asynchronously using an LLM.
@@ -313,6 +346,8 @@ class Action(BaseModule):
 
 class ContextExtraction(Action):
     """Action for extracting structured inputs from context.
+
+
 
     This action analyzes a conversation context to extract relevant information
 
@@ -345,9 +380,13 @@ class ContextExtraction(Action):
     ) -> Union[dict, None]:
         """Extract structured inputs for an action from conversation context.
 
+
+
         This method uses the LLM to analyze the conversation context and extract
 
         information that matches the input requirements of the target action.
+
+
 
         Args:
 
@@ -358,6 +397,8 @@ class ContextExtraction(Action):
             context: List of messages providing the conversation context.
 
             **kwargs: Additional keyword arguments.
+
+
 
         Returns:
 

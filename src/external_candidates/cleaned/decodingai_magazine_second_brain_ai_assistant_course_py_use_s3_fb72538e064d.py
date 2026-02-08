@@ -22,6 +22,8 @@ def cli() -> None:
 def upload(local_path: str, bucket_name: str, s3_prefix: str) -> None:
     """Upload a local folder to S3 bucket.
 
+
+
     Args:
 
         local_path: Path to the local folder to upload
@@ -29,6 +31,8 @@ def upload(local_path: str, bucket_name: str, s3_prefix: str) -> None:
         bucket_name: Name of the S3 bucket
 
         s3_prefix: Optional S3 prefix (folder path)
+
+
 
     Raises:
 
@@ -61,6 +65,8 @@ def upload(local_path: str, bucket_name: str, s3_prefix: str) -> None:
 def download(bucket_name: str, s3_path: str, local_path: str, no_sign_request: bool) -> None:
     """Download a zipped folder from S3 and extract it to local storage.
 
+
+
     Args:
 
         bucket_name: Name of the S3 bucket
@@ -68,6 +74,8 @@ def download(bucket_name: str, s3_path: str, local_path: str, no_sign_request: b
         s3_path: Path to the zip file in S3 bucket
 
         local_path: Local path where files should be extracted
+
+
 
     Raises:
 

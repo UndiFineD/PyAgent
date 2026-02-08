@@ -5,9 +5,11 @@
 
 from typing import Literal, Union
 
+
 from langchain_huggingface import HuggingFaceEmbeddings
 
 from langchain_openai import OpenAIEmbeddings
+
 
 EmbeddingModelType = Literal["openai", "huggingface"]
 
@@ -21,9 +23,13 @@ def get_embedding_model(
 ) -> EmbeddingsModel:
     """Gets an instance of the configured embedding model.
 
+
+
     The function returns either an OpenAI or HuggingFace embedding model based on the
 
     provided model type.
+
+
 
     Args:
 
@@ -35,9 +41,13 @@ def get_embedding_model(
 
         device (str): The device to use for the embedding model. Defaults to "cpu"
 
+
+
     Returns:
 
         EmbeddingsModel: An embedding model instance based on the configuration settings
+
+
 
     Raises:
 
@@ -58,9 +68,13 @@ def get_embedding_model(
 def get_openai_embedding_model(model_id: str) -> OpenAIEmbeddings:
     """Gets an OpenAI embedding model instance.
 
+
+
     Args:
 
         model_id (str): The ID/name of the OpenAI embedding model to use
+
+
 
     Returns:
 
@@ -79,11 +93,15 @@ def get_openai_embedding_model(model_id: str) -> OpenAIEmbeddings:
 def get_huggingface_embedding_model(model_id: str, device: str) -> HuggingFaceEmbeddings:
     """Gets a HuggingFace embedding model instance.
 
+
+
     Args:
 
         model_id (str): The ID/name of the HuggingFace embedding model to use
 
         device (str): The compute device to run the model on (e.g. "cpu", "cuda")
+
+
 
     Returns:
 

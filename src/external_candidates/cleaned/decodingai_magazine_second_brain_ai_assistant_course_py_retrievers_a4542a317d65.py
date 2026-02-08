@@ -23,6 +23,8 @@ def get_retriever(
 ) -> MongoDBAtlasParentDocumentRetriever:
     """Creates and returns a MongoDB Atlas retriever configured with the specified embedding model.
 
+
+
     Args:
 
         embedding_model_id (str): Identifier for the embedding model to use.
@@ -30,6 +32,8 @@ def get_retriever(
         k (int, optional): Number of top results to return. Defaults to 3.
 
         device (str, optional): Device to run the embedding model on ('cpu' or 'cuda'). Defaults to "cpu".
+
+
 
     Returns:
 

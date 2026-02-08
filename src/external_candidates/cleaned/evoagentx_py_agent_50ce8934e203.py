@@ -9,7 +9,9 @@ import inspect
 
 from typing import Any, Coroutine, List, Optional, Tuple, Type, Union
 
+
 from pydantic import Field
+
 
 from ..actions.action import Action, ContextExtraction
 
@@ -38,6 +40,8 @@ class Agent(BaseModule):
     """
 
     Base class for all agents.
+
+
 
     Attributes:
 
@@ -153,7 +157,11 @@ class Agent(BaseModule):
     ) -> Tuple[Action, dict]:
         """Prepare for action execution by updating memory and getting inputs.
 
+
+
         Helper method used by both execute and aexecute methods.
+
+
 
         Args:
 
@@ -165,9 +173,13 @@ class Agent(BaseModule):
 
             **kwargs: Additional workflow parameters
 
+
+
         Returns:
 
             Tuple containing the action object and input data
+
+
 
         Raises:
 
@@ -216,7 +228,11 @@ class Agent(BaseModule):
     ) -> Message:
         """Create a message from execution results and update memory.
 
+
+
         Helper method used by both execute and aexecute methods.
+
+
 
         Args:
 
@@ -229,6 +245,8 @@ class Agent(BaseModule):
             return_msg_type: Message type for the return message
 
             **kwargs: Additional workflow parameters
+
+
 
         Returns:
 
@@ -266,9 +284,13 @@ class Agent(BaseModule):
     ) -> Union[Message, Tuple[Message, dict]]:
         """Execute an action asynchronously with the given context and return results.
 
+
+
         This is the async version of the execute method, allowing it to perform actions
 
         based on the current conversation context.
+
+
 
         Args:
 
@@ -281,6 +303,8 @@ class Agent(BaseModule):
             return_msg_type: Message type for the return message
 
             **kwargs (Any): Additional parameters, may include workflow information
+
+
 
         Returns:
 
@@ -345,9 +369,13 @@ class Agent(BaseModule):
     ) -> Union[Message, Tuple[Message, dict]]:
         """Execute an action with the given context and return results.
 
+
+
         This is the core method for agent functionality, allowing it to perform actions
 
         based on the current conversation context.
+
+
 
         Args:
 
@@ -360,6 +388,8 @@ class Agent(BaseModule):
             return_msg_type: Message type for the return message
 
             **kwargs (Any): Additional parameters, may include workflow information
+
+
 
         Returns:
 
@@ -459,6 +489,8 @@ class Agent(BaseModule):
 
         Add a new action to the agent's available actions.
 
+
+
         Args:
 
             action: The action instance to add
@@ -479,6 +511,8 @@ class Agent(BaseModule):
 
         Check if an action name is valid for this agent.
 
+
+
         Args:
 
             action_name: Name of the action to check
@@ -495,9 +529,13 @@ class Agent(BaseModule):
 
         Retrieves the Action instance associated with the given name.
 
+
+
         Args:
 
             action_name: Name of the action to retrieve
+
+
 
         Returns:
 
@@ -514,9 +552,13 @@ class Agent(BaseModule):
 
         Searches through the agent's actions to find one matching the specified type.
 
+
+
         Args:
 
             action_cls: The Action class type to search for
+
+
 
         Returns:
 
@@ -537,9 +579,13 @@ class Agent(BaseModule):
 
         for the specified action based on the conversation history.
 
+
+
         Args:
 
             action: The action for which to extract inputs
+
+
 
         Returns:
 
@@ -560,6 +606,8 @@ class Agent(BaseModule):
     def get_all_actions(self) -> List[Action]:
         """Get all actions except the context extraction action.
 
+
+
         Returns:
 
             List of Action instances available for execution
@@ -573,11 +621,15 @@ class Agent(BaseModule):
     def get_agent_profile(self, action_names: List[str] = None) -> str:
         """Generate a human-readable profile of the agent and its capabilities.
 
+
+
         Args:
 
             action_names: Optional list of action names to include in the profile.
 
                           If None, all actions are included.
+
+
 
         Returns:
 
@@ -623,6 +675,8 @@ class Agent(BaseModule):
 
         Get all the prompts of the agent.
 
+
+
         Returns:
 
             dict: A dictionary with keys in the format 'agent_name::action_name' and values
@@ -646,6 +700,8 @@ class Agent(BaseModule):
 
         Set the prompt for a specific action of this agent.
 
+
+
         Args:
 
             action_name: Name of the action whose prompt should be updated
@@ -654,9 +710,13 @@ class Agent(BaseModule):
 
             system_prompt: Optional new system prompt to set for the agent
 
+
+
         Returns:
 
             bool: True if the prompt was successfully updated, False otherwise
+
+
 
         Raises:
 
@@ -682,11 +742,15 @@ class Agent(BaseModule):
 
         Set the prompts for all actions of this agent.
 
+
+
         Args:
 
             prompts: A dictionary with keys in the format 'action_name' and values
 
                 containing the system_prompt and action prompt.
+
+
 
         Returns:
 
@@ -716,6 +780,8 @@ class Agent(BaseModule):
     def save_module(self, path: str, ignore: List[str] = [], **kwargs) -> str:
         """Save the agent to persistent storage.
 
+
+
         Args:
 
             path: Path where the agent should be saved
@@ -723,6 +789,8 @@ class Agent(BaseModule):
             ignore: List of field names to exclude from serialization
 
             **kwargs (Any): Additional parameters for the save operation
+
+
 
         Returns:
 
@@ -740,11 +808,15 @@ class Agent(BaseModule):
 
         load the agent from local storage. Must provide `llm_config` when loading the agent from local storage.
 
+
+
         Args:
 
             path: The path of the file
 
             llm_config: The LLMConfig instance
+
+
 
         Returns:
 
@@ -763,6 +835,8 @@ class Agent(BaseModule):
         """
 
         Get a dictionary containing all necessary configuration to recreate this agent.
+
+
 
         Returns:
 

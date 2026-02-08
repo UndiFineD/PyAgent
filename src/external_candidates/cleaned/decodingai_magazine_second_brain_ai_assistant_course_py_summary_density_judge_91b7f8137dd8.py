@@ -7,6 +7,7 @@ import json
 
 from typing import Any
 
+
 from opik.evaluation.metrics import base_metric, exceptions, score_result
 
 from opik.evaluation.models import LiteLLMChatModel
@@ -26,6 +27,8 @@ class SummaryDensityJudge(base_metric.BaseMetric):
     """
 
     A metric that evaluates whether an LLM's output has appropriate length and density.
+
+
 
     This metric uses another LLM to judge if the output length is appropriate for the given instruction.
 
@@ -52,6 +55,8 @@ class SummaryDensityJudge(base_metric.BaseMetric):
 
         You are an impartial expert judge. Evaluate the quality of a given answer to an instruction based on how long the answer it is. 
 
+
+
 How to decide whether the lengths of the answer is appropriate:
 
 1 (Poor): Too short, does not answer the question OR too long, it contains too much noise and unrequired information, where the answer could be more concise.
@@ -59,6 +64,8 @@ How to decide whether the lengths of the answer is appropriate:
 2 (Good): Good lengthbalance of the answer, but the answer is still too short OR too long.
 
 3 (Excellent): The length of the answer is appropriate, it answers the question and is not too long or too short.
+
+
 
 Example of bad answer that is too short: 
 
@@ -68,19 +75,29 @@ LangChain, LlamaIndex, Haystack
 
 </answer>
 
+
+
 Example of bad answer that is too long:
 
 <answer>
 
 LangChain is a powerful and versatile framework designed specifically for building sophisticated LLM applications. It provides comprehensive abstractions for essential components like prompting, memory management, agent behaviors, and chain orchestration. The framework boasts an impressive ecosystem with extensive integrations across various tools and services, making it highly flexible for diverse use cases. However, this extensive functionality comes with a steeper learning curve that might require dedicated time to master.
 
+
+
 LlamaIndex (which was formerly known as GPTIndex) has carved out a specialized niche in the LLM tooling landscape, focusing primarily on data ingestion and advanced indexing capabilities for Large Language Models. It offers a rich set of sophisticated mechanisms to structure and query your data, including vector stores for semantic similarity search, keyword indices for traditional text matching, and tree indices for hierarchical data organization. While it particularly shines in Retrieval-Augmented Generation (RAG) applications, its comprehensive feature set might be excessive for more straightforward implementation needs.
 
+
+
 Haystack stands out as a robust end-to-end framework that places particular emphasis on question-answering systems and semantic search capabilities. It provides a comprehensive suite of document processing tools and comes equipped with production-ready pipelines that can be deployed with minimal configuration. The framework includes advanced features like multi-stage retrieval, document ranking, and reader-ranker architectures. While these capabilities make it powerful for complex information retrieval tasks, new users might find the initial configuration and architecture decisions somewhat challenging to navigate.
+
+
 
 Each of these frameworks brings unique strengths to the table while sharing some overlapping functionality. The choice between them often depends on specific use cases, technical requirements, and team expertise. LangChain offers the broadest general-purpose toolkit, LlamaIndex excels in data handling and RAG, while Haystack provides the most streamlined experience for question-answering systems.
 
 </answer>
+
+
 
 Example of excellent answer that is appropriate:
 
@@ -94,9 +111,15 @@ Example of excellent answer that is appropriate:
 
 </answer>
 
+
+
 Instruction: {input}
 
+
+
 Answer: {output}
+
+
 
 Provide your evaluation in JSON format with the following structure:
 
@@ -126,6 +149,8 @@ Provide your evaluation in JSON format with the following structure:
         """
 
         Score the output of an LLM.
+
+
 
         Args:
 

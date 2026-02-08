@@ -19,6 +19,8 @@ def get_aws_identity() -> None:
 
     Fetch and log the identity information of the currently authenticated user.
 
+
+
     Returns:
 
         None

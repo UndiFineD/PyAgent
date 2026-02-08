@@ -11,6 +11,8 @@ from loguru import logger
 def get_splitter(chunk_size: int) -> RecursiveCharacterTextSplitter:
     """Returns a token-based text splitter with overlap.
 
+
+
     Args:
 
         chunk_size: Number of tokens for each text chunk.
@@ -18,6 +20,8 @@ def get_splitter(chunk_size: int) -> RecursiveCharacterTextSplitter:
         summarization_type: Type of summarization to use ("contextual" or "simple").
 
         **kwargs: Additional keyword arguments passed to the summarization agent.
+
+
 
     Returns:
 

@@ -7,6 +7,7 @@ import json
 
 from typing import Any
 
+
 from langchain_mongodb.retrievers.parent_document import (
     MongoDBAtlasParentDocumentRetriever,
 )
@@ -22,6 +23,8 @@ from smolagents import LiteLLMModel, Tool, ToolCallingAgent
 
 def build_agent() -> Any:
     """Builds and configures a tool-calling agent with MongoDB retriever capability.
+
+
 
     Returns:
 
@@ -50,11 +53,15 @@ def build_agent() -> Any:
 class MongoDBRetrieverTool(Tool):
     """A tool for performing semantic search queries against a MongoDB vector database.
 
+
+
     This tool integrates with MongoDB Atlas to perform vector similarity search
 
     for document retrieval. It formats the results in XML-style markup for
 
     structured access to document metadata and content.
+
+
 
     Attributes:
 
@@ -110,11 +117,15 @@ class MongoDBRetrieverTool(Tool):
     def forward(self, query: str) -> str:
         """Executes the semantic search query against MongoDB.
 
+
+
         Args:
 
             query (str): A JSON string containing the search query parameter.
 
                 Expected format: {"query": "search text"}
+
+
 
         Returns:
 
@@ -123,6 +134,8 @@ class MongoDBRetrieverTool(Tool):
                 metadata and content. Each result includes document title, URL,
 
                 and relevant content snippets.
+
+
 
         Raises:
 
@@ -178,13 +191,19 @@ When using context from any document, also include the document URL as reference
     def __parse_query(self, query: str) -> str:
         """Extracts the query string from JSON input.
 
+
+
         Args:
 
             query (str): JSON string containing the query parameter.
 
+
+
         Returns:
 
             str: The extracted query string.
+
+
 
         Raises:
 

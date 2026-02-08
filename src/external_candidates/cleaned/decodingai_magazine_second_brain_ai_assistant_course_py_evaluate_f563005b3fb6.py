@@ -5,6 +5,7 @@
 
 from pathlib import Path
 
+
 from loguru import logger
 
 from opik.evaluation import evaluate
@@ -17,9 +18,11 @@ from second_brain_online.application.agents import agents, extract_tool_response
 
 from second_brain_online.config import settings
 
+
 from .summary_density_heuristic import SummaryDensityHeuristic
 
 from .summary_density_judge import SummaryDensityJudge
+
 
 opik_utils.configure()
 

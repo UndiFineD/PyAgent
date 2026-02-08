@@ -5,7 +5,9 @@
 
 from typing import Optional
 
+
 from pydantic import Field
+
 
 from ..core.logging import logger
 

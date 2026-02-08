@@ -5,6 +5,7 @@
 
 from pathlib import Path
 
+
 import click
 
 from second_brain_online.application.agents import get_agent
@@ -34,6 +35,8 @@ from smolagents import GradioUI
 )
 def main(retriever_config_path: Path, ui: bool, query: str) -> None:
     """Run the agent either in Gradio UI or CLI mode.
+
+
 
     Args:
 

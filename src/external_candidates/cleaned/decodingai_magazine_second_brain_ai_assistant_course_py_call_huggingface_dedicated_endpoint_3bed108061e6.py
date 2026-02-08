@@ -5,6 +5,7 @@
 
 from typing import Generator
 
+
 from openai import OpenAI
 
 from second_brain_offline.config import settings
@@ -13,9 +14,13 @@ from second_brain_offline.config import settings
 def get_chat_completion(prompt: str) -> Generator[str, None, None]:
     """Gets chat completion from HuggingFace endpoint.
 
+
+
     Args:
 
         prompt: The user prompt to send to the model
+
+
 
     Yields:
 

@@ -17,6 +17,8 @@ def delete_rag_collection(mongo_uri: str = settings.MONGODB_URI, db_name: str = 
 
     Deletes the 'rag' collection from the specified MongoDB database.
 
+
+
     Args:
 
         mongo_uri: The MongoDB connection URI string. Defaults to local MongoDB instance.
@@ -24,6 +26,8 @@ def delete_rag_collection(mongo_uri: str = settings.MONGODB_URI, db_name: str = 
         db_name: The name of the database containing the 'rag' collection.
 
                 Defaults to 'second_brain'.
+
+
 
     Raises:
 

@@ -5,6 +5,7 @@
 
 from pathlib import Path
 
+
 from second_brain_offline.config import settings
 
 from second_brain_offline.infrastructure.aws.s3 import S3Client

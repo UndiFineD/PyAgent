@@ -5,6 +5,7 @@
 
 import os
 
+
 import click
 
 from rag_workshop.config import settings
@@ -27,6 +28,8 @@ def main() -> None:
     """
 
     Main function to demonstrate RAG functionality.
+
+
 
     Runs a series of example questions through a RAG chain and prints the results.
 
