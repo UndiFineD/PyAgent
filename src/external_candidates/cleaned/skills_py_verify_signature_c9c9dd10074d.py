@@ -7,13 +7,9 @@
 
 """Verify LNURL-Auth signatures against a k1 challenge.
 
-
-
 Usage:
 
   python scripts/verify_signature.py --k1 <hex> --signature <hex> --pubkey <hex>
-
-
 
 Install dependency:
 

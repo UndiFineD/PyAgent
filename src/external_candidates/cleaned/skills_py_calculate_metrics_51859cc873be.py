@@ -24,8 +24,6 @@ class SocialMediaMetricsCalculator:
 
         Initialize with campaign data.
 
-
-
         Args:
 
             campaign_data: Dictionary containing platform, posts, and cost data
@@ -53,13 +51,9 @@ class SocialMediaMetricsCalculator:
 
         Calculate engagement rate for a post.
 
-
-
         Args:
 
             post: Dictionary with likes, comments, shares, and reach
-
-
 
         Returns:
 
@@ -88,15 +82,11 @@ class SocialMediaMetricsCalculator:
 
         Calculate click-through rate.
 
-
-
         Args:
 
             clicks: Number of clicks
 
             impressions: Number of impressions
-
-
 
         Returns:
 
@@ -170,15 +160,11 @@ class SocialMediaMetricsCalculator:
 
         Identify top performing posts.
 
-
-
         Args:
 
             metric: Metric to sort by (engagement_rate, likes, shares, etc.)
 
             limit: Number of top posts to return
-
-
 
         Returns:
 

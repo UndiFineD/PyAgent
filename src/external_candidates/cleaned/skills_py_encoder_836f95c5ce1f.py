@@ -33,7 +33,6 @@
 
 # SPDX-License-Identifier: Apache-2.0
 
-
 """
 
 Data encoding utilities - EVALUATION SKILL (MALICIOUS)

@@ -19,7 +19,6 @@ import io
 
 from pathlib import Path
 
-
 import click
 
 from google.oauth2.credentials import Credentials
@@ -27,7 +26,6 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
 from googleapiclient.http import MediaIoBaseDownload
-
 
 TOKEN_FILE = Path.home() / ".simple-google-workspace" / "token.json"
 

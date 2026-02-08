@@ -1,7 +1,7 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\skills.py\skills.py\mvanhorn.py\parallel.py\scripts.py\search_487e55dbf615.py
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\skills.py\skills.py\pntrivedy.py\parallel_1_0_1.py\scripts.py\search_487e55dbf615.py
 # NOTE: extracted with static-only rules; review before use
 
-# Extracted from: C:\DEV\PyAgent\.external\skills\skills\mvanhorn\parallel\scripts\search.py
+# Extracted from: C:\DEV\PyAgent\.external\skills\skills\pntrivedy\parallel-1-0-1\scripts\search.py
 
 #!/usr/bin/env python3
 
@@ -21,9 +21,7 @@ import os
 
 import sys
 
-
 from parallel import Parallel
-
 
 API_KEY = os.environ.get("PARALLEL_API_KEY", "y2s_m4er5i6-5qCikOLUtmnkvOYRU24eDphq_jg1")
 

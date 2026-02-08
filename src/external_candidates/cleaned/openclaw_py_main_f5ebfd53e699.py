@@ -7,7 +7,6 @@ import logging
 
 import os
 
-
 from fastapi import FastAPI, Request
 
 from fastapi.encoders import jsonable_encoder
@@ -29,7 +28,6 @@ from local_places.schemas import (
     SearchRequest,
     SearchResponse,
 )
-
 
 app = FastAPI(
     title="My API",

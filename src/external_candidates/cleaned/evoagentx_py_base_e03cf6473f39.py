@@ -9,7 +9,6 @@ from enum import Enum
 
 from typing import List
 
-
 from evoagentx.rag.schema import Corpus, Document
 
 
@@ -24,8 +23,6 @@ class ChunkingStrategy(str, Enum):
 class BaseChunker(ABC):
     """Abstract base class for chunking documents into smaller segments.
 
-
-
     This class defines the interface for chunking strategies in the RAG pipeline,
 
     converting Documents into a Corpus of Chunks.
@@ -36,15 +33,11 @@ class BaseChunker(ABC):
     def chunk(self, documents: List[Document], **kwargs) -> Corpus:
         """Chunk documents into a Corpus of Chunks.
 
-
-
         Args:
 
             documents (List[Document]): List of Document objects to chunk.
 
             **kwargs: Additional parameters specific to the chunking strategy.
-
-
 
         Returns:
 

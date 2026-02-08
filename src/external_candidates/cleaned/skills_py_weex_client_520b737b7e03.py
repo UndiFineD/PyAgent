@@ -9,13 +9,9 @@
 
 WEEX Futures API Client
 
-
-
 Usage:
 
     python weex_client.py <command> [options]
-
-
 
 Commands:
 
@@ -33,8 +29,6 @@ Commands:
 
     order ORDER_ID  Get order details
 
-
-
     buy SYMBOL SIZE [PRICE]     Open long position
 
     sell SYMBOL SIZE [PRICE]    Open short position
@@ -47,11 +41,7 @@ Commands:
 
     close_all                   Close all positions
 
-
-
     leverage SYMBOL LEVERAGE    Set leverage (1-125)
-
-
 
 Examples:
 
@@ -82,7 +72,6 @@ import sys
 import time
 
 from urllib.parse import urlencode
-
 
 try:
     import requests

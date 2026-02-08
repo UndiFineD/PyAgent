@@ -51,8 +51,6 @@ class KeywordAnalyzer:
 
         Analyze a single keyword for ASO potential.
 
-
-
         Args:
 
             keyword: The keyword to analyze
@@ -62,8 +60,6 @@ class KeywordAnalyzer:
             competing_apps: Number of apps competing for this keyword
 
             relevance_score: Relevance to your app (0.0-1.0)
-
-
 
         Returns:
 
@@ -104,13 +100,9 @@ class KeywordAnalyzer:
 
         Compare multiple keywords and rank by potential.
 
-
-
         Args:
 
             keywords_data: List of dicts with keyword, search_volume, competing_apps, relevance_score
-
-
 
         Returns:
 
@@ -160,15 +152,11 @@ class KeywordAnalyzer:
 
         Generate long-tail keyword variations.
 
-
-
         Args:
 
             base_keyword: Core keyword (e.g., "task manager")
 
             modifiers: List of modifiers (e.g., ["free", "simple", "team"])
-
-
 
         Returns:
 
@@ -230,15 +218,11 @@ class KeywordAnalyzer:
 
         Extract potential keywords from text (descriptions, reviews).
 
-
-
         Args:
 
             text: Text to analyze
 
             min_word_length: Minimum word length to consider
-
-
 
         Returns:
 
@@ -312,15 +296,11 @@ class KeywordAnalyzer:
 
         Calculate keyword density in text.
 
-
-
         Args:
 
             text: Text to analyze (title, description)
 
             target_keywords: Keywords to check density for
-
-
 
         Returns:
 
@@ -486,13 +466,9 @@ def analyze_keyword_set(keywords_data: List[Dict[str, Any]]) -> Dict[str, Any]:
 
     Convenience function to analyze a set of keywords.
 
-
-
     Args:
 
         keywords_data: List of keyword data dictionaries
-
-
 
     Returns:
 

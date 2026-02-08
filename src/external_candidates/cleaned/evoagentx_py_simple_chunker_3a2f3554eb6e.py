@@ -9,13 +9,11 @@ from concurrent.futures import ThreadPoolExecutor
 
 from typing import List
 
-
 from evoagentx.core.logging import logger
 
 from evoagentx.rag.schema import Chunk, Corpus, Document
 
 from llama_index.core.node_parser import SimpleNodeParser
-
 
 from .base import BaseChunker, ChunkingStrategy
 
@@ -23,13 +21,9 @@ from .base import BaseChunker, ChunkingStrategy
 class SimpleChunker(BaseChunker):
     """Chunker that splits documents into fixed-size chunks using multi-threading and async parsing.
 
-
-
     Uses LlamaIndex's SimpleNodeParser with async support to create chunks with a specified size
 
     and overlap, suitable for general-purpose text splitting in RAG pipelines.
-
-
 
     Attributes:
 
@@ -54,8 +48,6 @@ class SimpleChunker(BaseChunker):
         max_workers: int = 4,
     ):
         """Initialize the SimpleChunker.
-
-
 
         Args:
 
@@ -97,13 +89,9 @@ class SimpleChunker(BaseChunker):
     def _process_document(self, doc: Document) -> List[Chunk]:
         """Process a single document into chunks in a thread.
 
-
-
         Args:
 
             doc (Document): The document to chunk.
-
-
 
         Returns:
 
@@ -143,13 +131,9 @@ class SimpleChunker(BaseChunker):
     def chunk(self, documents: List[Document], **kwargs) -> Corpus:
         """Chunk documents into fixed-size chunks using multi-threading.
 
-
-
         Args:
 
             documents (List[Document]): List of Document objects to chunk.
-
-
 
         Returns:
 

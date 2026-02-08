@@ -15,9 +15,7 @@ import os
 
 from typing import Any
 
-
 from .base import SummarizationProvider, TaggingProvider, get_registry
-
 
 # -----------------------------------------------------------------------------
 
@@ -30,8 +28,6 @@ class AnthropicSummarization:
     """
 
     Summarization provider using Anthropic's Claude API.
-
-
 
     Requires: ANTHROPIC_API_KEY environment variable.
 
@@ -48,8 +44,6 @@ Create a concise summary of the provided document that captures:
 - Key points or functionality
 
 - Important details that would help someone decide if this document is relevant
-
-
 
 Be factual and specific. Do not include phrases like "This document" - just state the content directly."""
 
@@ -115,8 +109,6 @@ class OpenAISummarization:
 
     Summarization provider using OpenAI's chat API.
 
-
-
     Requires: KEEP_OPENAI_API_KEY or OPENAI_API_KEY environment variable.
 
     """
@@ -130,8 +122,6 @@ Create a concise summary of the provided document that captures:
 - Key points or functionality
 
 - Important details that would help someone decide if this document is relevant
-
-
 
 Be factual and specific. Do not include phrases like "This document" - just state the content directly."""
 
@@ -225,8 +215,6 @@ class PassthroughSummarization:
 
     Summarization provider that returns the first N characters.
 
-
-
     Useful for testing or when LLM summarization is not needed.
 
     """
@@ -261,8 +249,6 @@ class AnthropicTagging:
 
     SYSTEM_PROMPT = """Analyze the document and generate relevant tags as a JSON object.
 
-
-
 Generate tags for these categories when applicable:
 
 - content_type: The type of content (e.g., "documentation", "code", "article", "config")
@@ -273,11 +259,7 @@ Generate tags for these categories when applicable:
 
 - framework: Framework or library if relevant (e.g., "react", "django", "fastapi")
 
-
-
 Only include tags that clearly apply. Values should be lowercase.
-
-
 
 Respond with a JSON object only, no explanation."""
 
@@ -337,8 +319,6 @@ class OpenAITagging:
 
     SYSTEM_PROMPT = """Analyze the document and generate relevant tags as a JSON object.
 
-
-
 Generate tags for these categories when applicable:
 
 - content_type: The type of content (e.g., "documentation", "code", "article", "config")
@@ -349,11 +329,7 @@ Generate tags for these categories when applicable:
 
 - framework: Framework or library if relevant (e.g., "react", "django", "fastapi")
 
-
-
 Only include tags that clearly apply. Values should be lowercase.
-
-
 
 Respond with a JSON object only, no explanation."""
 
@@ -457,8 +433,6 @@ class NoopTagging:
     """
 
     Tagging provider that returns empty tags.
-
-
 
     Useful when tagging is disabled or for testing.
 

@@ -9,8 +9,6 @@
 
 Send SMS via Dialpad API.
 
-
-
 Usage:
 
     python3 send_sms.py --to "+14155551234" --message "Hello!"
@@ -33,7 +31,6 @@ import urllib.error
 
 import urllib.request
 
-
 # Configuration
 
 DIALPAD_API_KEY = os.environ.get("DIALPAD_API_KEY")
@@ -46,8 +43,6 @@ def send_sms(to_numbers, message, from_number=None, infer_country_code=False):
 
     Send SMS via Dialpad API.
 
-
-
     Args:
 
         to_numbers: List of E.164 phone numbers (max 10)
@@ -57,8 +52,6 @@ def send_sms(to_numbers, message, from_number=None, infer_country_code=False):
         from_number: Optional sender number (must be assigned to your Dialpad account)
 
         infer_country_code: If True, assume numbers are from sender's country
-
-
 
     Returns:
 

@@ -1,0 +1,45 @@
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_h2o_llmstudio.py\llm_studio.py\src.py\optimizers_111944c4fc12.py
+# NOTE: extracted with static-only rules; review before use
+
+# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-h2o-llmstudio\llm_studio\src\optimizers.py
+
+from functools import partial
+
+from typing import Any
+
+import bitsandbytes as bnb
+
+from torch import optim
+
+
+class Optimizers:
+    """Optimizers factory."""
+
+    _optimizers = {
+        "Adam": optim.Adam,
+        "AdamW": optim.AdamW,
+        "SGD": partial(optim.SGD, momentum=0.9, nesterov=True),
+        "RMSprop": partial(optim.RMSprop, momentum=0.9, alpha=0.9),
+        "Adadelta": optim.Adadelta,
+        "AdamW8bit": bnb.optim.Adam8bit,
+    }
+
+    @classmethod
+    def names(cls) -> list[str]:
+        return sorted(cls._optimizers.keys())
+
+    @classmethod
+    def get(cls, name: str) -> Any:
+        """Access to Optimizers.
+
+        Args:
+
+            name: optimizer name
+
+        Returns:
+
+            A class to build the Optimizer
+
+        """
+
+        return cls._optimizers.get(name)

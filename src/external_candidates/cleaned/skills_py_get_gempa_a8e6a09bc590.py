@@ -9,9 +9,7 @@ import json
 
 import sys
 
-
 import requests
-
 
 BASE_URL = "https://data.bmkg.go.id/DataMKG/TEWS/"
 

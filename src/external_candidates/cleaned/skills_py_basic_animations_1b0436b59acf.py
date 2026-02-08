@@ -7,8 +7,6 @@
 
 Basic Animation Patterns for Manim Community
 
-
-
 This file demonstrates fundamental animation techniques adapted from 3b1b patterns.
 
 Run with: manim -pql basic_animations.py SceneName

@@ -7,11 +7,7 @@
 
 """TAGO API helpers (no secrets)
 
-
-
 This module provides small, deterministic helpers to call TAGO OpenAPI endpoints.
-
-
 
 Security:
 
@@ -19,13 +15,9 @@ Security:
 
 - Read key from environment variable only.
 
-
-
 Env:
 
 - TAGO_SERVICE_KEY (required)
-
-
 
 Refs:
 
@@ -36,7 +28,6 @@ Refs:
 """
 
 from __future__ import annotations
-
 
 import os
 
@@ -49,7 +40,6 @@ import urllib.request
 from dataclasses import dataclass
 
 from typing import Any, Dict, List, Optional, Tuple
-
 
 # data.go.kr endpoints (use HTTPS)
 
@@ -95,15 +85,11 @@ def _http_get_json(url: str, timeout_sec: int = 10) -> Dict[str, Any]:
 def _build_url(base: str, path: str, params: Dict[str, Any]) -> str:
     """Build request URL.
 
-
-
     data.go.kr service keys are tricky:
 
     - They often provide an *already URL-encoded* key (contains '%2B', '%2F', ...).
 
     - If we urlencode() that again, the '%' becomes '%25' and the server may return 403.
-
-
 
     Strategy:
 
@@ -209,8 +195,6 @@ def city_codes(*, max_results: int = 500) -> List[CityCode]:
 def stops_nearby(gps_lat: float, gps_long: float, *, num_rows: int = 30) -> List[StopCandidate]:
     """Return nearby stop candidates (within ~500m) by GPS.
 
-
-
     NOTE: This uses getCrdntPrxmtSttnList.
 
     If this returns zero candidates (some regions/keys), fall back to name search.
@@ -282,21 +266,15 @@ def stops_by_name(
 ) -> List[StopCandidate]:
     """Search stops by name within a city.
 
-
-
     Uses getSttnNoList. In practice this endpoint often requires `cityCode` and may
 
     optionally support a name filter parameter depending on backend.
-
-
 
     Strategy:
 
     - Request pages from getSttnNoList
 
     - Filter locally by `keyword` (substring match)
-
-
 
     This is a pragmatic MVP approach; it may be slower for big cities.
 

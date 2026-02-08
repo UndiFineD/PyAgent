@@ -7,7 +7,6 @@
 
 import os
 
-
 from dotenv import load_dotenv
 
 from evoagentx.agents import AgentManager
@@ -23,7 +22,6 @@ from evoagentx.models import OpenAILLM, OpenAILLMConfig
 from evoagentx.optimizers import SEWOptimizer
 
 from evoagentx.workflow import SEWWorkFlowGraph
-
 
 load_dotenv()
 

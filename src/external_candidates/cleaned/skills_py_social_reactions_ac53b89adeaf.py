@@ -19,9 +19,7 @@ from typing import Dict, List, Optional
 
 from urllib.parse import quote
 
-
 import requests
-
 
 # Twitter/X search (uses their public API - limited but works)
 

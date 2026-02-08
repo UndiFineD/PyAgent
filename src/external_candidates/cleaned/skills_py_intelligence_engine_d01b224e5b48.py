@@ -7,7 +7,6 @@ import collections
 
 from datetime import datetime, timedelta
 
-
 from src.connectors.odoo_client import OdooClient
 
 from src.logic.gemini_intelligence import GeminiIntelligence

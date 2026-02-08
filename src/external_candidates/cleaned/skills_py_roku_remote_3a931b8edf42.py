@@ -7,13 +7,9 @@
 
 """Send Roku remote keyboard to Telegram.
 
-
-
 Usage:
 
     roku-remote.py          # Outputs JSON for Clawdbot message tool
-
-
 
 The buttons use callback_data in format "roku_<action>" which
 

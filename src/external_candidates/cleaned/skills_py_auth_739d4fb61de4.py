@@ -11,16 +11,12 @@ import uuid
 
 from typing import TYPE_CHECKING, Dict
 
-
 import aiohttp
-
 
 if TYPE_CHECKING:
     from request.web.xhs_session import XHS_Session
 
-
 from loguru import logger
-
 
 # from request.app.apis.app_scan_login import async_scan_login
 

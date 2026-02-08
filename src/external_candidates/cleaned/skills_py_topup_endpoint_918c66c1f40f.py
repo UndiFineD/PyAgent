@@ -9,29 +9,19 @@
 
 x402 Endpoint Credit Topup (SELLER/PROVIDER)
 
-
-
 Add credits to YOUR OWN agentic endpoint to maintain balance.
 
 This is for endpoint OWNERS, not consumers.
 
-
-
 For CONSUMER credit purchases, use recharge_credits.py instead.
-
-
 
 Usage:
 
     python topup_endpoint.py <your_endpoint_slug> <amount_usd>
 
-
-
 Example:
 
     python topup_endpoint.py my-weather-api 10  # Add $10 worth of credits
-
-
 
 Environment Variables:
 
@@ -53,11 +43,9 @@ import sys
 
 import time
 
-
 import requests
 
 from eth_account import Account
-
 
 API_BASE = "https://api.x402layer.cc"
 
@@ -101,21 +89,15 @@ def topup_endpoint(endpoint_slug: str, amount_usd: float) -> dict:
 
     Add credits to your own endpoint.
 
-
-
     This is a SELLER/PROVIDER operation - you must own the endpoint.
 
     Credits allow consumers to access your endpoint faster.
-
-
 
     Args:
 
         endpoint_slug: Your endpoint's slug
 
         amount_usd: Amount in USD to add as credits
-
-
 
     Returns:
 

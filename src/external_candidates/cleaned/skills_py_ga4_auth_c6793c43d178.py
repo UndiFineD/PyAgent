@@ -9,8 +9,6 @@
 
 GA4 OAuth Setup Script
 
-
-
 Generates OAuth authorization URL and exchanges code for refresh token.
 
 """
@@ -20,7 +18,6 @@ import argparse
 import sys
 
 import urllib.parse
-
 
 try:
     import google.auth.transport.requests
@@ -33,7 +30,6 @@ except ImportError:
     print("  pip install google-auth-oauthlib")
 
     sys.exit(1)
-
 
 SCOPES = ["https://www.googleapis.com/auth/analytics.readonly"]
 

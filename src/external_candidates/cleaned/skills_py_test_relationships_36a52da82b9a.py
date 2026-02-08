@@ -21,7 +21,6 @@ from keep.relationships import (
     parse_reference_tag,
 )
 
-
 # -----------------------------------------------------------------------------
 
 # URL Extraction Tests

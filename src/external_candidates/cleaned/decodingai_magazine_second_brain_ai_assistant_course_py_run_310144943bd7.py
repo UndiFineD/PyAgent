@@ -9,7 +9,6 @@ from pathlib import Path
 
 from typing import Any
 
-
 import click
 
 from pipelines import (
@@ -26,17 +25,11 @@ from pipelines import (
 
 Second Brain CLI v0.0.1. 
 
-
-
 Main entry point for the pipeline execution. 
 
 This entrypoint is where everything comes together.
 
-
-
 Run the ZenML Second Brain project pipelines with various options.
-
-
 
 Run a pipeline with the required parameters. This executes
 
@@ -44,11 +37,7 @@ all steps in the pipeline in the correct order using the orchestrator
 
 stack component that is configured in your active ZenML stack.
 
-
-
 Examples:
-
-
 
   \b
 
@@ -56,23 +45,17 @@ Examples:
 
   python run.py
 
-               
-
   \b
 
   # Run the pipeline without cache
 
   python run.py --no-cache
 
-  
-
   \b
 
   # Run only the Notion data collection pipeline
 
   python run.py --run-collect-notion-data
-
-
 
 """
 )

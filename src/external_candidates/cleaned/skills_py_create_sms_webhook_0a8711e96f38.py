@@ -9,8 +9,6 @@
 
 Create SMS webhook subscription via Dialpad API.
 
-
-
 Usage:
 
     python3 create_sms_webhook.py --url "https://your-server.com/webhook/dialpad"
@@ -31,7 +29,6 @@ import urllib.error
 
 import urllib.request
 
-
 # Configuration
 
 DIALPAD_API_KEY = os.environ.get("DIALPAD_API_KEY")
@@ -44,8 +41,6 @@ def create_sms_subscription(webhook_url, events=None, office_id=None, direction=
 
     Create an SMS webhook subscription.
 
-
-
     Args:
 
         webhook_url: URL to receive webhook events
@@ -55,8 +50,6 @@ def create_sms_subscription(webhook_url, events=None, office_id=None, direction=
         office_id: Optional office ID to filter events
 
         direction: Direction filter (all, inbound, outbound)
-
-
 
     Returns:
 

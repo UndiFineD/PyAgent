@@ -13,7 +13,6 @@ from datetime import datetime, timedelta
 
 from typing import Any, Dict, Optional  # , List
 
-
 import jwt
 
 from bson import ObjectId
@@ -34,16 +33,13 @@ from pydantic import BaseModel, ValidationError
 
 from pymongo.errors import DuplicateKeyError
 
-
 # Password hashing
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-
 # OAuth2 scheme for token authentication
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_PREFIX}/auth/login")
-
 
 # User model for database
 

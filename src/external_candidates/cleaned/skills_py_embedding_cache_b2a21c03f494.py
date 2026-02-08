@@ -7,8 +7,6 @@
 
 Embedding cache using SQLite.
 
-
-
 Wraps any EmbeddingProvider to cache embeddings by content hash,
 
 avoiding redundant embedding calls for unchanged content.
@@ -27,7 +25,6 @@ from pathlib import Path
 
 from typing import Optional
 
-
 from .base import EmbeddingProvider
 
 
@@ -35,8 +32,6 @@ class EmbeddingCache:
     """
 
     SQLite-based embedding cache.
-
-
 
     Cache key is SHA256(model_name + content), so different models
 
@@ -112,8 +107,6 @@ class EmbeddingCache:
 
         Get cached embedding if it exists.
 
-
-
         Updates last_accessed timestamp on hit.
 
         """
@@ -149,8 +142,6 @@ class EmbeddingCache:
         """
 
         Cache an embedding.
-
-
 
         Evicts oldest entries if cache exceeds max_entries.
 
@@ -272,8 +263,6 @@ class CachingEmbeddingProvider:
 
     Wrapper that adds caching to any EmbeddingProvider.
 
-
-
     Usage:
 
         base_provider = SentenceTransformerEmbedding()
@@ -335,8 +324,6 @@ class CachingEmbeddingProvider:
         """
 
         Get embeddings for batch, using cache where available.
-
-
 
         Only computes embeddings for cache misses.
 

@@ -11,8 +11,6 @@ OKR Cascade Generator
 
 Creates aligned OKRs from company strategy down to team level.
 
-
-
 Features:
 
 - Generates company → product → team OKR cascade
@@ -22,8 +20,6 @@ Features:
 - Alignment scoring across vertical and horizontal dimensions
 
 - Multiple output formats (dashboard, JSON)
-
-
 
 Usage:
 
@@ -51,8 +47,6 @@ class OKRGenerator:
         """
 
         Initialize OKR generator.
-
-
 
         Args:
 
@@ -610,25 +604,17 @@ Examples:
 
   python okr_cascade_generator.py growth
 
-
-
   # Custom teams
 
   python okr_cascade_generator.py retention --teams "Engineering,Design,Data,Growth"
-
-
 
   # Custom product contribution percentage
 
   python okr_cascade_generator.py revenue --contribution 0.4
 
-
-
   # JSON output
 
   python okr_cascade_generator.py innovation --json
-
-
 
   # All options combined
 

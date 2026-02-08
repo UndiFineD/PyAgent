@@ -13,7 +13,6 @@ import unittest
 
 from unittest.mock import patch
 
-
 from evoagentx.benchmark.math_benchmark import MATH
 
 from evoagentx.core.module_utils import save_json

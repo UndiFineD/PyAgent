@@ -5,9 +5,7 @@
 
 from typing import Optional
 
-
 import requests
-
 
 from .api_converter import APITool, APIToolkit
 
@@ -17,13 +15,9 @@ def create_crypto_symbols_tool(api_key: Optional[str] = None) -> APITool:
 
     Create a tool to get a list of cryptocurrency pair symbols
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -83,13 +77,9 @@ def create_crypto_information_tool(api_key: Optional[str] = None) -> APITool:
 
     Create a tool to retrieve basic information about a cryptocurrency
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -146,13 +136,9 @@ def create_crypto_prices_tool(api_key: Optional[str] = None) -> APITool:
 
     Create a tool to get daily historical cryptocurrency prices and volumes
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -217,13 +203,9 @@ def create_crypto_minute_prices_tool(api_key: Optional[str] = None) -> APITool:
 
     Create a tool to get one-minute historical cryptocurrency prices and volumes
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -293,8 +275,6 @@ def create_crypto_toolkit(api_key: Optional[str] = None) -> APIToolkit:
 
     Create a Cryptocurrency Data Toolkit instance
 
-
-
     Provides comprehensive access to cryptocurrency market data, including:
 
     - Cryptocurrency pair symbols
@@ -305,8 +285,6 @@ def create_crypto_toolkit(api_key: Optional[str] = None) -> APIToolkit:
 
     - Trading volumes
 
-
-
     Args:
 
         api_key: Optional API key for authentication. When making requests, the API key
@@ -315,13 +293,9 @@ def create_crypto_toolkit(api_key: Optional[str] = None) -> APIToolkit:
 
                 whether other query parameters exist.
 
-
-
     Returns:
 
         APIToolkit instance
-
-
 
     Example:
 

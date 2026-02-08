@@ -7,20 +7,15 @@
 
 Tests for Content to Gutenberg Converter
 
-
-
 Run with: pytest tests/test_content_converter.py -v
 
 """
 
 import sys
 
-
 import pytest
 
-
 sys.path.insert(0, "scripts")
-
 
 from content_to_gutenberg import (
     convert_inline_formatting,

@@ -17,7 +17,6 @@ import argparse
 
 import sys
 
-
 from utils import handle_error, load_credentials, output_json
 
 
@@ -26,15 +25,11 @@ def cancel_booking(credentials, args):
 
     Cancel a specific reservation.
 
-
-
     Args:
 
         credentials: dict with phone and password
 
         args: argparse namespace with cancellation parameters
-
-
 
     Returns:
 

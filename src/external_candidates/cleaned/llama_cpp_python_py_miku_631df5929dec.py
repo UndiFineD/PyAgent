@@ -9,7 +9,6 @@ import os
 
 import sys
 
-
 from common import GptParams
 
 from low_level_api_chat_cpp import LLaMAInteract
@@ -32,7 +31,6 @@ N_PREDICTS = int(env_or_def("N_PREDICTS", "4096"))
 
 N_THREAD = int(env_or_def("N_THREAD", "0"))
 
-
 prompt = f"""This is a transcript of a 1000 page, never ending conversation between {USER_NAME} and the cute and helpful AI assistant {AI_NAME}. {AI_NAME} is a girl who is an AI running on the users computer.
 
 {AI_NAME} can think for herself without the user seeing her thoughts by adding a /think prefix to her output. She uses this to reason about the world and to think about what she should say next.
@@ -48,10 +46,6 @@ The conversation is only between {USER_NAME} and {AI_NAME}
 The conversation is only through text, so {AI_NAME} can't see {USER_NAME}'s face or hear his voice.
 
 {AI_NAME} can only communicate through text, so she can't send images or videos.
-
-
-
-
 
 {USER_NAME}: Hello!
 
@@ -70,7 +64,6 @@ The conversation is only through text, so {AI_NAME} can't see {USER_NAME}'s face
 {AI_NAME}: What do you like to do in your free time? ^_^
 
 {USER_NAME}:""" + " ".join(sys.argv[1:])
-
 
 print("Loading model...")
 
@@ -91,10 +84,8 @@ params = GptParams(
     prompt=prompt,
 )
 
-
 if N_THREAD > 0:
     params.n_threads = N_THREAD
-
 
 with LLaMAInteract(params) as m:
     m.interact()

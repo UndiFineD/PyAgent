@@ -19,7 +19,6 @@ import time
 
 from pathlib import Path
 
-
 import requests
 
 
@@ -27,8 +26,6 @@ def bypass_cloudflare_drission(url: str, headless: bool = True, timeout: int = 3
     """
 
     Bypass Cloudflare using DrissionPage (most reliable for JS challenges)
-
-
 
     Returns:
 
@@ -98,13 +95,9 @@ def bypass_cloudflare_flaresolverr(url: str, flaresolverr_url: str = "http://loc
 
     Bypass Cloudflare using FlareSolverr (Docker container)
 
-
-
     Start FlareSolverr first:
 
         docker run -d --name flaresolverr -p 8191:8191 ghcr.io/flaresolverr/flaresolverr
-
-
 
     Returns:
 
@@ -147,11 +140,7 @@ def bypass_cloudflare_cloudscraper(url: str, **kwargs):
 
     Works for simpler challenges, may fail on advanced protection
 
-
-
     pip install cloudscraper
-
-
 
     Returns:
 
@@ -183,15 +172,11 @@ def get_cf_clearance(url: str, method: str = "auto"):
 
     Get Cloudflare clearance cookies
 
-
-
     Args:
 
         url: Target URL
 
         method: 'drission', 'flaresolverr', 'cloudscraper', or 'auto'
-
-
 
     Returns:
 
@@ -234,8 +219,6 @@ def apply_cf_cookies_to_session(session: requests.Session, cf_result: dict):
 
     Apply Cloudflare bypass cookies to a requests Session
 
-
-
     Args:
 
         session: requests.Session object
@@ -269,8 +252,6 @@ def test_cf_protection(url: str) -> dict:
     """
 
     Test if a URL has Cloudflare protection
-
-
 
     Returns:
 

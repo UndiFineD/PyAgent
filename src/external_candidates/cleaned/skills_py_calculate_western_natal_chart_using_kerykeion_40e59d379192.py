@@ -23,7 +23,6 @@ from datetime import datetime
 
 from typing import Any, Dict, List
 
-
 try:
     from kerykeion import AstrologicalSubject, NatalAspects
 

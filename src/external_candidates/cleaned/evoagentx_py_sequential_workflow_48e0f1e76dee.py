@@ -5,7 +5,6 @@
 
 import os
 
-
 from dotenv import load_dotenv
 
 from evoagentx.agents import AgentManager
@@ -19,7 +18,6 @@ from evoagentx.models import OpenAILLM, OpenAILLMConfig
 from evoagentx.tools import FileToolkit
 
 from evoagentx.workflow import SequentialWorkFlowGraph, WorkFlow
-
 
 load_dotenv()
 

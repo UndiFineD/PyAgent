@@ -13,7 +13,6 @@ import sys
 
 from pathlib import Path
 
-
 from detect import detect
 
 from transform import transform

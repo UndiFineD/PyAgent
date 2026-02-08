@@ -13,7 +13,6 @@ from dataclasses import dataclass, field
 
 from typing import List
 
-
 # Based on https://github.com/ggerganov/llama.cpp/blob/master/examples/common.cpp
 
 

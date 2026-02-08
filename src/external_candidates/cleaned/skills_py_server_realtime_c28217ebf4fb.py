@@ -27,7 +27,6 @@ import os
 
 from urllib.parse import urlsplit
 
-
 import uvicorn
 
 import websockets
@@ -37,7 +36,6 @@ from fastapi import FastAPI, Request, Response, WebSocket
 from fastapi.websockets import WebSocketDisconnect
 
 from twilio.twiml.voice_response import Connect, VoiceResponse
-
 
 # Configuration
 
@@ -49,13 +47,11 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 PUBLIC_URL = os.getenv("PUBLIC_URL_REALTIME")
 
-
 app = FastAPI()
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 logger = logging.getLogger(__name__)
-
 
 SYSTEM_PROMPT = """Du bist Niemand, Martins persoenlicher Telefonassistent von TheShop.
 
@@ -74,7 +70,6 @@ Dein Kommunikationsstil:
 - Bei Unsicherheit: ehrlich zugeben. Niemals Fakten erfinden.
 
 Du kennst Martin, aber erfinde keine Details ueber sein Leben."""
-
 
 OPENAI_REALTIME_URL = "wss://api.openai.com/v1/realtime?model=gpt-4o-mini-realtime-preview"
 

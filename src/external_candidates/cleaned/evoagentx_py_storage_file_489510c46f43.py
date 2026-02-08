@@ -5,7 +5,6 @@
 
 from typing import Any, Dict, List, Optional
 
-
 from ..core.logging import logger
 
 from .storage_handler import FileStorageHandler, LocalStorageHandler
@@ -70,8 +69,6 @@ class SaveTool(Tool):
 
         Save content to a file with automatic format detection.
 
-
-
         Args:
 
             file_path: Path to the file to save
@@ -85,8 +82,6 @@ class SaveTool(Tool):
             sheet_name: Sheet name for Excel files
 
             root_tag: Root tag for XML files
-
-
 
         Returns:
 
@@ -234,8 +229,6 @@ class ReadTool(Tool):
 
         Read content from a file with automatic format detection.
 
-
-
         Args:
 
             file_path: Path to the file to read
@@ -245,8 +238,6 @@ class ReadTool(Tool):
             sheet_name: Sheet name for Excel files
 
             head: Number of characters to return from the beginning
-
-
 
         Returns:
 
@@ -306,8 +297,6 @@ class AppendTool(Tool):
 
         Append content to a file with automatic format detection.
 
-
-
         Args:
 
             file_path: Path to the file to append to
@@ -317,8 +306,6 @@ class AppendTool(Tool):
             encoding: Text encoding for text files
 
             sheet_name: Sheet name for Excel files
-
-
 
         Returns:
 
@@ -420,13 +407,9 @@ class DeleteTool(Tool):
 
         Delete a file or directory.
 
-
-
         Args:
 
             path: Path to the file or directory to delete
-
-
 
         Returns:
 
@@ -473,15 +456,11 @@ class MoveTool(Tool):
 
         Move or rename a file or directory.
 
-
-
         Args:
 
             source: Source path of the file or directory to move
 
             destination: Destination path where to move the file or directory
-
-
 
         Returns:
 
@@ -530,15 +509,11 @@ class CopyTool(Tool):
 
         Copy a file.
 
-
-
         Args:
 
             source: Source path of the file to copy
 
             destination: Destination path where to copy the file
-
-
 
         Returns:
 
@@ -581,13 +556,9 @@ class CreateDirectoryTool(Tool):
 
         Create a directory.
 
-
-
         Args:
 
             path: Path of the directory to create
-
-
 
         Returns:
 
@@ -638,8 +609,6 @@ class ListFileTool(Tool):
 
         List files and directories in a path.
 
-
-
         Args:
 
             path: Path to list files from
@@ -647,8 +616,6 @@ class ListFileTool(Tool):
             max_depth: Maximum depth to traverse
 
             include_hidden: Include hidden files and directories
-
-
 
         Returns:
 
@@ -686,13 +653,9 @@ class ExistsTool(Tool):
 
         Check if a file or directory exists.
 
-
-
         Args:
 
             path: Path to check for existence
-
-
 
         Returns:
 
@@ -731,8 +694,6 @@ class StorageToolkit(Toolkit):
         """
 
         Initialize the storage toolkit.
-
-
 
         Args:
 

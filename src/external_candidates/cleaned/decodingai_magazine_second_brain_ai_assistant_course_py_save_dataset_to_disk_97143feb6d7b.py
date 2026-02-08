@@ -7,7 +7,6 @@ import shutil
 
 from pathlib import Path
 
-
 from loguru import logger
 
 from second_brain_offline.domain import InstructDataset

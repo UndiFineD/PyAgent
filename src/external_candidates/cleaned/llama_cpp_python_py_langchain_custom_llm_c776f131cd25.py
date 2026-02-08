@@ -7,7 +7,6 @@ import argparse
 
 from typing import Any, List, Mapping, Optional
 
-
 from langchain.llms.base import LLM
 
 from llama_cpp import Llama
@@ -45,11 +44,9 @@ parser.add_argument("-m", "--model", type=str, default="../models/7B/ggml-models
 
 args = parser.parse_args()
 
-
 # Load the model
 
 llm = LlamaLLM(model_path=args.model)
-
 
 # Basic Q&A
 
@@ -57,14 +54,11 @@ answer = llm("Question: What is the capital of France? Answer: ", stop=["Questio
 
 print(f"Answer: {answer.strip()}")
 
-
 from langchain.chains import LLMChain
-
 
 # Using in a chain
 
 from langchain.prompts import PromptTemplate
-
 
 prompt = PromptTemplate(
     input_variables=["product"],
@@ -72,7 +66,6 @@ prompt = PromptTemplate(
 )
 
 chain = LLMChain(llm=llm, prompt=prompt)
-
 
 # Run the chain only specifying the input variable.
 

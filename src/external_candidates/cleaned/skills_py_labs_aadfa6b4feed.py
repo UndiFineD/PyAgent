@@ -11,16 +11,13 @@ from pathlib import Path
 
 from typing import Any, Dict, List, Optional
 
-
 # Add parent directory to path for imports
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-
 from config.settings import settings
 
 from dataforseo_client.rest import ApiException
-
 
 from core.client import get_client
 
@@ -38,8 +35,6 @@ def get_keyword_overview(
 
     Get comprehensive keyword data including search volume, CPC, competition, and search intent.
 
-
-
     Args:
 
         keywords: List of keywords (max 700)
@@ -52,13 +47,9 @@ def get_keyword_overview(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing comprehensive keyword metrics
-
-
 
     Example:
 
@@ -116,11 +107,7 @@ def get_keyword_suggestions(
 
     Get keyword suggestions based on a seed keyword.
 
-
-
     Suggestions match the seed with additional words before, after, or within the phrase.
-
-
 
     Args:
 
@@ -138,13 +125,9 @@ def get_keyword_suggestions(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing keyword suggestions with metrics
-
-
 
     Example:
 
@@ -204,13 +187,9 @@ def get_keyword_ideas(
 
     Get keyword ideas that fall into the same category as seed keywords.
 
-
-
     Goes beyond semantic similarity to suggest relevant keywords by mapping
 
     seed terms against category taxonomies.
-
-
 
     Args:
 
@@ -228,13 +207,9 @@ def get_keyword_ideas(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing keyword ideas with metrics
-
-
 
     Example:
 
@@ -295,11 +270,7 @@ def get_related_keywords(
 
     Get related keywords from Google's "searches related to" feature.
 
-
-
     Uses depth-first search algorithm on SERP "related searches" element.
-
-
 
     Args:
 
@@ -319,13 +290,9 @@ def get_related_keywords(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing related keywords with metrics
-
-
 
     Example:
 
@@ -383,11 +350,7 @@ def get_bulk_keyword_difficulty(
 
     Get keyword difficulty scores for multiple keywords.
 
-
-
     Difficulty score (0-100) indicates how hard it is to rank in top-10 organic results.
-
-
 
     Args:
 
@@ -399,13 +362,9 @@ def get_bulk_keyword_difficulty(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing keyword difficulty scores
-
-
 
     Example:
 
@@ -460,11 +419,7 @@ def get_historical_search_volume(
 
     Get historical search volume and trend data for keywords.
 
-
-
     Returns monthly search volume data since 2019.
-
-
 
     Args:
 
@@ -478,13 +433,9 @@ def get_historical_search_volume(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing historical search volume with monthly breakdowns
-
-
 
     Example:
 
@@ -539,11 +490,7 @@ def get_search_intent(
 
     Get search intent classification for keywords.
 
-
-
     Classifies keywords as informational, navigational, transactional, or commercial.
-
-
 
     Args:
 
@@ -555,13 +502,9 @@ def get_search_intent(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing search intent classifications
-
-
 
     Example:
 
@@ -616,8 +559,6 @@ def get_domain_keywords(
 
     Get keywords that a domain ranks for in organic search.
 
-
-
     Args:
 
         target_domain: Domain to analyze (e.g., "example.com")
@@ -630,13 +571,9 @@ def get_domain_keywords(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing keywords the domain ranks for
-
-
 
     Example:
 
@@ -691,8 +628,6 @@ def get_competitors(
 
     Find domains that compete for the same keywords.
 
-
-
     Args:
 
         keywords: Keywords to find competitors for
@@ -705,13 +640,9 @@ def get_competitors(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing competitor domains and their metrics
-
-
 
     Example:
 

@@ -7,7 +7,6 @@ import unittest
 
 from unittest.mock import Mock, patch
 
-
 from evoagentx.agents.agent_manager import AgentManager
 
 from evoagentx.benchmark.benchmark import Benchmark

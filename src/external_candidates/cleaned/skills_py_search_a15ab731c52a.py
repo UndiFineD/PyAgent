@@ -9,11 +9,7 @@
 
 Airweave Search Script for Clawdbot
 
-
-
 Searches an Airweave collection and returns results.
-
-
 
 Environment variables required:
 
@@ -21,19 +17,13 @@ Environment variables required:
 
   AIRWEAVE_COLLECTION_ID  - The readable_id of your collection
 
-
-
 Optional:
 
   AIRWEAVE_BASE_URL       - API base URL (default: https://api.airweave.ai)
 
-
-
 Usage:
 
   python3 search.py "your search query" [options]
-
-
 
 Options:
 

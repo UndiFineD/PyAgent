@@ -7,8 +7,6 @@
 
 """Daily ProtonMail scan - identifies important emails.
 
-
-
 Configuration via environment variables:
 
     PROTONMAIL_HOST  - IMAP host (default: 127.0.0.1)
@@ -19,11 +17,7 @@ Configuration via environment variables:
 
     PROTONMAIL_PASS  - Bridge password
 
-
-
 Or config file at ~/.config/protonmail-bridge/config.env
-
-
 
 Customize important patterns via:
 
@@ -46,7 +40,6 @@ from datetime import datetime, timedelta
 from email.header import decode_header
 
 from pathlib import Path
-
 
 # Load configuration
 
@@ -105,7 +98,6 @@ def get_config():
 
 CONFIG = get_config()
 
-
 # Default important sender patterns (customize via PROTONMAIL_IMPORTANT_SENDERS)
 
 DEFAULT_IMPORTANT_SENDERS = [
@@ -130,7 +122,6 @@ DEFAULT_IMPORTANT_SENDERS = [
     "college",
     "education",
 ]
-
 
 # Default urgent keywords (DE/EN/NL)
 
@@ -165,7 +156,6 @@ DEFAULT_URGENT_KEYWORDS = [
     "deadline",
 ]
 
-
 # Default ignore patterns (newsletters, etc.)
 
 DEFAULT_IGNORE_PATTERNS = [
@@ -179,7 +169,6 @@ DEFAULT_IGNORE_PATTERNS = [
     "digest",
     "updates@",
 ]
-
 
 # Load custom patterns from environment
 

@@ -9,8 +9,6 @@
 
 Canonical Data Schema for Oura Analytics
 
-
-
 This module defines normalized data structures for Oura Ring data with:
 
 - Consistent naming conventions
@@ -20,8 +18,6 @@ This module defines normalized data structures for Oura Ring data with:
 - Type hints for all fields
 
 - Transformation functions from raw API responses
-
-
 
 Units:
 
@@ -57,8 +53,6 @@ class SleepRecord:
     """
 
     Normalized sleep data for a single night.
-
-
 
     All durations are in hours (converted from Oura's seconds).
 
@@ -131,8 +125,6 @@ class ReadinessRecord:
 
     Normalized readiness data for a single day.
 
-
-
     Readiness represents recovery status for the day.
 
     """
@@ -193,8 +185,6 @@ class ActivityRecord:
     """
 
     Normalized activity data for a single day.
-
-
 
     Activity represents movement and calories for the calendar day.
 
@@ -277,8 +267,6 @@ class NightRecord:
 
     Unified record combining sleep, readiness, and activity for a single night/day.
 
-
-
     This is the primary data structure for analysis, joining:
 
     - Sleep from the night (date = wake date)
@@ -286,8 +274,6 @@ class NightRecord:
     - Readiness for the day (date = wake date)
 
     - Activity from the previous day (date = wake date - 1)
-
-
 
     All Optional fields may be None if data is unavailable.
 
@@ -336,13 +322,9 @@ def normalize_sleep(raw: Dict[str, Any]) -> SleepRecord:
 
     Convert raw Oura sleep API response to normalized SleepRecord.
 
-
-
     Args:
 
         raw: Raw sleep data from Oura API (single record from data array)
-
-
 
     Returns:
 
@@ -381,13 +363,9 @@ def normalize_readiness(raw: Dict[str, Any]) -> ReadinessRecord:
 
     Convert raw Oura readiness API response to normalized ReadinessRecord.
 
-
-
     Args:
 
         raw: Raw readiness data from Oura API (single record from data array)
-
-
 
     Returns:
 
@@ -422,13 +400,9 @@ def normalize_activity(raw: Dict[str, Any]) -> ActivityRecord:
 
     Convert raw Oura activity API response to normalized ActivityRecord.
 
-
-
     Args:
 
         raw: Raw activity data from Oura API (single record from data array)
-
-
 
     Returns:
 
@@ -478,8 +452,6 @@ def create_night_record(
 
     Create a unified NightRecord from raw API data.
 
-
-
     Args:
 
         date: YYYY-MM-DD date for the night (wake date)
@@ -489,8 +461,6 @@ def create_night_record(
         readiness: Raw readiness data (optional)
 
         activity: Raw activity data (optional)
-
-
 
     Returns:
 

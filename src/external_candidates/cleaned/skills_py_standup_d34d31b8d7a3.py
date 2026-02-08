@@ -21,22 +21,17 @@ from datetime import datetime
 
 from pathlib import Path
 
-
 from utils import check_due_date, load_tasks
 
 
 def generate_standup(date_str: str = None, json_output: bool = False) -> str | dict:
     """Generate daily standup summary.
 
-
-
     Args:
 
         date_str: Optional date string (YYYY-MM-DD) for standup
 
         json_output: If True, return dict instead of markdown
-
-
 
     Returns:
 

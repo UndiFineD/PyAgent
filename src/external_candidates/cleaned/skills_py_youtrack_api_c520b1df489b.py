@@ -40,8 +40,6 @@ class YouTrackAPI:
 
         Initialize YouTrack API client.
 
-
-
         Args:
 
             base_url: Your YouTrack instance URL (e.g., https://sl.youtrack.cloud)
@@ -72,8 +70,6 @@ class YouTrackAPI:
 
         Make an authenticated API request.
 
-
-
         Args:
 
             method: HTTP method (GET, POST, PUT, DELETE)
@@ -81,8 +77,6 @@ class YouTrackAPI:
             endpoint: API endpoint (e.g., '/api/issues')
 
             data: Request body for POST/PUT
-
-
 
         Returns:
 
@@ -149,15 +143,11 @@ class YouTrackAPI:
 
         Get issues, optionally filtered by a query.
 
-
-
         Args:
 
             query: YouTrack query language (e.g., 'project: MyProject')
 
             fields: Comma-separated list of fields to return
-
-
 
         Returns:
 
@@ -190,8 +180,6 @@ class YouTrackAPI:
 
         Create a new issue.
 
-
-
         Args:
 
             project_id: Project ID or short name
@@ -199,8 +187,6 @@ class YouTrackAPI:
             summary: Issue summary
 
             description: Issue description
-
-
 
         Returns:
 
@@ -270,13 +256,9 @@ class YouTrackAPI:
 
         Get knowledge base articles.
 
-
-
         Args:
 
             project_id: Optional project ID to filter by
-
-
 
         Returns:
 
@@ -303,8 +285,6 @@ class YouTrackAPI:
 
         Create a new knowledge base article.
 
-
-
         Args:
 
             project_id: Project ID
@@ -312,8 +292,6 @@ class YouTrackAPI:
             title: Article title
 
             content: Article content
-
-
 
         Returns:
 

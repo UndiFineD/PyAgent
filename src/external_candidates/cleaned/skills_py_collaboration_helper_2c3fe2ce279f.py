@@ -9,7 +9,6 @@
 
 from __future__ import annotations
 
-
 import argparse
 
 import json
@@ -19,7 +18,6 @@ from datetime import datetime
 from pathlib import Path
 
 from typing import Any, Dict, List
-
 
 TASK_FILE_DEFAULT = Path(__file__).resolve().parent.parent / "data" / "tasks.json"
 

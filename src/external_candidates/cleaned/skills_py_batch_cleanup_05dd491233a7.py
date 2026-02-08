@@ -17,11 +17,9 @@ import os
 
 import sys
 
-
 # Add parent directory to path to import zoho_email
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
-
 
 from zoho_email import ZohoEmail
 
@@ -30,8 +28,6 @@ def cleanup_newsletters(dry_run=True):
     """
 
     Clean up newsletter emails from inbox
-
-
 
     Args:
 
@@ -108,8 +104,6 @@ def cleanup_old_emails(days=30, dry_run=True):
     """
 
     Clean up old read emails
-
-
 
     Args:
 
@@ -197,19 +191,13 @@ Examples:
 
   python3 batch-cleanup.py --newsletters
 
-  
-
   # Execute newsletter cleanup
 
   python3 batch-cleanup.py --newsletters --execute
 
-  
-
   # Preview deletion of old emails (30+ days old)
 
   python3 batch-cleanup.py --old-emails --days 30
-
-  
 
   # Execute old email cleanup
 

@@ -7,13 +7,9 @@
 
 Vector store implementation using ChromaDb.
 
-
-
 This is the first concrete store implementation. The interface is designed
 
 to be extractable to a Protocol when additional backends are needed.
-
-
 
 For now, ChromaDb is the only implementation — and that's fine.
 
@@ -26,7 +22,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from typing import Any, Optional
-
 
 from .types import SYSTEM_TAG_PREFIX, Item
 
@@ -63,8 +58,6 @@ class ChromaStore:
 
     Persistent vector store using ChromaDb.
 
-
-
     Each collection maps to a ChromaDb collection. Items are stored with:
 
     - id: The item's URI or custom identifier
@@ -75,11 +68,7 @@ class ChromaStore:
 
     - metadata: All tags (flattened to strings for Chroma compatibility)
 
-
-
     The store is initialized at a specific path and persists across sessions.
-
-
 
     Future: This class's public interface could become a Protocol for
 
@@ -91,8 +80,6 @@ class ChromaStore:
         """
 
         Initialize or open a ChromaDb store.
-
-
 
         Args:
 
@@ -150,8 +137,6 @@ class ChromaStore:
 
         Convert tags to Chroma metadata format.
 
-
-
         Chroma metadata values must be str, int, float, or bool.
 
         We store everything as strings for consistency.
@@ -185,8 +170,6 @@ class ChromaStore:
         """
 
         Insert or update an item in the store.
-
-
 
         Args:
 
@@ -249,15 +232,11 @@ class ChromaStore:
 
         Delete an item from the store.
 
-
-
         Args:
 
             collection: Collection name
 
             id: Item identifier
-
-
 
         Returns:
 
@@ -283,13 +262,9 @@ class ChromaStore:
 
         Update just the summary of an existing item.
 
-
-
         Used by lazy summarization to replace placeholder summaries
 
         with real generated summaries.
-
-
 
         Args:
 
@@ -298,8 +273,6 @@ class ChromaStore:
             id: Item identifier
 
             summary: New summary text
-
-
 
         Returns:
 
@@ -347,15 +320,11 @@ class ChromaStore:
 
         Retrieve a specific item by ID.
 
-
-
         Args:
 
             collection: Collection name
 
             id: Item identifier
-
-
 
         Returns:
 
@@ -399,8 +368,6 @@ class ChromaStore:
 
         Query by embedding similarity.
 
-
-
         Args:
 
             collection: Collection name
@@ -410,8 +377,6 @@ class ChromaStore:
             limit: Maximum results to return
 
             where: Optional metadata filter (Chroma where clause)
-
-
 
         Returns:
 
@@ -456,8 +421,6 @@ class ChromaStore:
 
         Query by metadata filter (tag query).
 
-
-
         Args:
 
             collection: Collection name
@@ -465,8 +428,6 @@ class ChromaStore:
             where: Chroma where clause for metadata filtering
 
             limit: Maximum results to return
-
-
 
         Returns:
 
@@ -505,8 +466,6 @@ class ChromaStore:
 
         Query by full-text search on document content (summaries).
 
-
-
         Args:
 
             collection: Collection name
@@ -514,8 +473,6 @@ class ChromaStore:
             query: Text to search for
 
             limit: Maximum results to return
-
-
 
         Returns:
 
@@ -564,13 +521,9 @@ class ChromaStore:
 
         Delete an entire collection.
 
-
-
         Args:
 
             name: Collection name
-
-
 
         Returns:
 

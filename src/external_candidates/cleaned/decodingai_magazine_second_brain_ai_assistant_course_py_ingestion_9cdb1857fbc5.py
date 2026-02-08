@@ -11,7 +11,6 @@ from pathlib import Path
 
 from typing import Generator
 
-
 from langchain_core.documents import Document
 
 from loguru import logger
@@ -35,8 +34,6 @@ async def ingest_documents(
 ) -> None:
     """Ingest documents from a directory into MongoDB with embeddings.
 
-
-
     Args:
 
         documents_dir: Directory containing JSON documents to process.
@@ -59,13 +56,9 @@ async def ingest_documents(
 def extract_documents(documents_dir: Path) -> list[Document]:
     """Load all JSON files from the specified directory into Document objects.
 
-
-
     Args:
 
         documents_dir (Path): Directory path containing JSON files to load.
-
-
 
     Returns:
 
@@ -93,13 +86,9 @@ def extract_documents(documents_dir: Path) -> list[Document]:
 def filter_documents(documents: list[Document]) -> list[Document]:
     """Filter documents based on predefined criteria.
 
-
-
     Args:
 
         documents: List of documents to filter.
-
-
 
     Returns:
 
@@ -135,8 +124,6 @@ async def chunk_embed_load_documents(
     device: str = "cpu",
 ) -> None:
     """Process documents by chunking, embedding, and loading into MongoDB.
-
-
 
     Args:
 
@@ -175,8 +162,6 @@ async def process_docs(
 ) -> None:
     """Process LangChain documents into MongoDB using async processing.
 
-
-
     Args:
 
         retriever: MongoDB Atlas document retriever instance.
@@ -186,8 +171,6 @@ async def process_docs(
         batch_size: Number of documents to process in each batch.
 
         max_concurrent: Maximum number of concurrent tasks.
-
-
 
     Returns:
 
@@ -211,15 +194,11 @@ async def process_docs(
 def get_batches(docs: list[Document], batch_size: int) -> Generator[list[Document], None, None]:
     """Return batches of documents to ingest into MongoDB.
 
-
-
     Args:
 
         docs: List of LangChain documents to batch.
 
         batch_size: Number of documents in each batch.
-
-
 
     Yields:
 
@@ -238,8 +217,6 @@ async def process_batch(
 ) -> None:
     """Asynchronously ingest batches of documents into MongoDB.
 
-
-
     Args:
 
         retriever: MongoDB Atlas document retriever instance.
@@ -247,8 +224,6 @@ async def process_batch(
         documents_batch: List of documents to ingest in this batch.
 
         semaphore: Semaphore to control concurrent access.
-
-
 
     Raises:
 

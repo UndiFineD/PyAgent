@@ -5,9 +5,7 @@
 
 from typing import Any, Callable, List, Optional, Tuple
 
-
 from .registry import ParamRegistry
-
 
 # --------- EntryPoint decorator ---------
 
@@ -29,8 +27,6 @@ class OptimizeParam:
     """
 
     Class-based decorator for registering tunable optimization parameters.
-
-
 
     Supports:
 

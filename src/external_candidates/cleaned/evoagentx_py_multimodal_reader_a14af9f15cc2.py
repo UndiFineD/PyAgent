@@ -7,7 +7,6 @@ from pathlib import Path
 
 from typing import List, Optional, Tuple, Union
 
-
 from evoagentx.core.logging import logger
 
 from llama_index.core.schema import ImageDocument
@@ -18,13 +17,9 @@ from PIL import Image
 class MultimodalReader:
     """An efficient image file reader for multimodal RAG.
 
-
-
     This class provides interface for loading images from files or directories,
 
     supporting various image formats with path-based lazy loading.
-
-
 
     Attributes:
 
@@ -56,19 +51,13 @@ class MultimodalReader:
     def _validate_path(self, path: Union[str, Path]) -> Path:
         """Validate and convert a path to a Path object.
 
-
-
         Args:
 
             path: A string or Path object representing a file or directory.
 
-
-
         Returns:
 
             Path: A validated Path object.
-
-
 
         Raises:
 
@@ -90,21 +79,15 @@ class MultimodalReader:
     def _check_input(self, input_data: Union[str, List, Tuple], is_file: bool = True) -> Union[List[Path], Path]:
         """Check input to a list of Path objects or a single Path for directories.
 
-
-
         Args:
 
             input_data: A string, list, or tuple of file/directory paths.
 
             is_file: Whether to treat input as file paths (True) or directory (False).
 
-
-
         Returns:
 
             Union[List[Path], Path]: Valid file paths or directory path.
-
-
 
         Raises:
 
@@ -137,8 +120,6 @@ class MultimodalReader:
     ) -> List[ImageDocument]:
         """Load images from files or directories.
 
-
-
         Args:
 
             file_paths: A string, list, or tuple of file paths or a directory path.
@@ -149,13 +130,9 @@ class MultimodalReader:
 
             merge_by_file: Whether to merge documents by file (unused for images, kept for compatibility).
 
-
-
         Returns:
 
             List[ImageDocument]: List of loaded ImageDocuments.
-
-
 
         Raises:
 

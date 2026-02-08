@@ -9,13 +9,9 @@
 
 Example helper script for ai-from-trueslazac
 
-
-
 This is a placeholder script that can be executed directly.
 
 Replace with actual implementation or delete if not needed.
-
-
 
 Example real scripts from other skills:
 

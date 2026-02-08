@@ -19,11 +19,9 @@ import sys
 
 from pathlib import Path
 
-
 # Add parent directory to path
 
 sys.path.insert(0, str(Path(__file__).parent))
-
 
 from context_extractor import (
     CodebaseContext,
@@ -89,8 +87,6 @@ import React from 'react';
 
 const express = require('express');
 
-
-
 class UserController {
 
     constructor() {
@@ -98,8 +94,6 @@ class UserController {
         this.users = [];
 
     }
-
-    
 
     getUser(id) {
 
@@ -109,23 +103,17 @@ class UserController {
 
 }
 
-
-
 function createUser(name, email) {
 
     return { name, email };
 
 }
 
-
-
 const deleteUser = (id) => {
 
     console.log('Deleting user', id);
 
 };
-
-
 
 export default UserController;
 

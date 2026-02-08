@@ -7,9 +7,7 @@ from enum import Enum
 
 from typing import List, Optional, Union
 
-
 from pydantic import Field
-
 
 from ..core.message import Message, MessageType
 
@@ -62,8 +60,6 @@ class Environment(BaseModule):
 
         Add a message to the shared memory and optionally to a specific task's message list.
 
-
-
         Args:
 
             message (Message): The message to be added.
@@ -115,8 +111,6 @@ class Environment(BaseModule):
         """
 
         Retrieve all messages related to specified tasks
-
-
 
         Returns:
 

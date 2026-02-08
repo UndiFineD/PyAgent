@@ -7,11 +7,7 @@
 
 Moving Camera Scene Template for Manim Community
 
-
-
 Use this for scenes that require zooming, panning, or following objects.
-
-
 
 Render: manim -pql your_file.py YourCameraScene
 
@@ -24,8 +20,6 @@ class YourCameraScene(MovingCameraScene):
     """
 
     Template for scenes with camera movement.
-
-
 
     Inherits from MovingCameraScene which provides:
 

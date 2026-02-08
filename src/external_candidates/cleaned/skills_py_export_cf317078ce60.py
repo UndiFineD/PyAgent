@@ -9,8 +9,6 @@
 
 Skill Exporter - Transform Clawdbot skills into standalone microservices.
 
-
-
 Usage:
 
     python3 export.py --skill ~/.clawdbot/skills/instagram --target railway --llm anthropic
@@ -28,7 +26,6 @@ import shutil
 import sys
 
 from pathlib import Path
-
 
 # Templates stored as strings for portability
 
@@ -59,11 +56,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-
-
 load_dotenv()
-
-
 
 app = FastAPI(
 
@@ -74,8 +67,6 @@ app = FastAPI(
     version="1.0.0"
 
 )
-
-
 
 app.add_middleware(
 
@@ -91,8 +82,6 @@ app.add_middleware(
 
 )
 
-
-
 # Health check
 
 @app.get("/health")
@@ -100,8 +89,6 @@ app.add_middleware(
 async def health():
 
     return {{"status": "ok", "service": "{skill_name}"}}
-
-
 
 # Import LLM client if available
 
@@ -118,8 +105,6 @@ except ImportError:
     def generate_text(prompt: str) -> str:
 
         raise HTTPException(503, "LLM not configured")
-
-
 
 {endpoints}
 
@@ -138,8 +123,6 @@ import anthropic
 
 from functools import lru_cache
 
-
-
 @lru_cache()
 
 def get_client():
@@ -151,8 +134,6 @@ def get_client():
         raise ValueError("ANTHROPIC_API_KEY not set")
 
     return anthropic.Anthropic(api_key=api_key)
-
-
 
 def generate_text(
 
@@ -184,8 +165,6 @@ def generate_text(
 
     return message.content[0].text
 
-
-
 def generate_caption(topic: str, style: str = "engaging") -> str:
 
     """Generate a social media caption."""
@@ -197,8 +176,6 @@ def generate_caption(topic: str, style: str = "engaging") -> str:
         system="You write concise, engaging social media captions."
 
     )
-
-
 
 def generate_hashtags(topic: str, count: int = 5) -> list[str]:
 
@@ -229,8 +206,6 @@ from openai import OpenAI
 
 from functools import lru_cache
 
-
-
 @lru_cache()
 
 def get_client():
@@ -242,8 +217,6 @@ def get_client():
         raise ValueError("OPENAI_API_KEY not set")
 
     return OpenAI(api_key=api_key)
-
-
 
 def generate_text(
 
@@ -279,8 +252,6 @@ def generate_text(
 
     return response.choices[0].message.content
 
-
-
 def generate_caption(topic: str, style: str = "engaging") -> str:
 
     """Generate a social media caption."""
@@ -292,8 +263,6 @@ def generate_caption(topic: str, style: str = "engaging") -> str:
         system="You write concise, engaging social media captions."
 
     )
-
-
 
 def generate_hashtags(topic: str, count: int = 5) -> list[str]:
 
@@ -312,17 +281,11 @@ def generate_hashtags(topic: str, count: int = 5) -> list[str]:
 ''',
     "Dockerfile": """FROM python:3.11-slim
 
-
-
 WORKDIR /app
-
-
 
 # Install system dependencies
 
 {system_deps}
-
-
 
 # Install Python dependencies
 
@@ -330,30 +293,20 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-
-
 # Copy application
 
 COPY . .
-
-
 
 # Make scripts executable
 
 RUN chmod +x scripts/*.py 2>/dev/null || true
 
-
-
 EXPOSE {port}
-
-
 
 CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "{port}"]
 
 """,
     "docker-compose.yml": """version: '3.8'
-
-
 
 services:
 
@@ -428,13 +381,9 @@ pydantic>=2.5.0
 
 primary_region = "fra"
 
-
-
 [build]
 
   dockerfile = "Dockerfile"
-
-
 
 [http_service]
 
@@ -448,15 +397,11 @@ primary_region = "fra"
 
   min_machines_running = 0
 
-
-
 [[services]]
 
   protocol = "tcp"
 
   internal_port = {port}
-
-
 
   [[services.ports]]
 
@@ -464,15 +409,11 @@ primary_region = "fra"
 
     handlers = ["http"]
 
-
-
   [[services.ports]]
 
     port = 443
 
     handlers = ["tls", "http"]
-
-
 
   [[services.http_checks]]
 
@@ -486,8 +427,6 @@ primary_region = "fra"
     ".env.example": """# {skill_name} Service Configuration
 
 # Copy to .env and fill in values
-
-
 
 {env_vars}
 
@@ -619,8 +558,6 @@ class {script_name.title().replace("_", "")}Request(BaseModel):
 
     pass
 
-
-
 class {script_name.title().replace("_", "")}Response(BaseModel):
 
     """Response model for {script_name}"""
@@ -631,8 +568,6 @@ class {script_name.title().replace("_", "")}Response(BaseModel):
 
     data: Optional[dict] = None
 
-
-
 @app.post("/{endpoint_name}", response_model={script_name.title().replace("_", "")}Response)
 
 async def {script_name}_endpoint(request: {script_name.title().replace("_", "")}Request):
@@ -640,8 +575,6 @@ async def {script_name}_endpoint(request: {script_name.title().replace("_", "")}
     """
 
     Execute {script_name} script.
-
-    
 
     TODO: Customize this endpoint based on your script's functionality.
 
@@ -659,15 +592,11 @@ async def {script_name}_endpoint(request: {script_name.title().replace("_", "")}
 
         # )
 
-        
-
         # Option 2: Import and call function (preferred)
 
         # from scripts.{script_name} import main_function
 
         # result = main_function(**request.dict())
-
-        
 
         return {script_name.title().replace("_", "")}Response(
 

@@ -13,13 +13,9 @@ Equilibrium-Native Computational Substrate
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-
-
 Copyright (c) 2025-2026 Kevin Fain - ThēÆrchītēcť
 
 MIT License - See LICENSE file
-
-
 
 ═══════════════════════════════════════════════════════════════════════════════
 
@@ -33,12 +29,9 @@ from enum import Enum, auto
 
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-
 sys.path.insert(0, "/home/claude/sis")
 
-
 from core.symbol import Layer, SISSymbol
-
 
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -245,7 +238,6 @@ SYMBOL_REGISTRY: Dict[str, SymbolDefinition] = {
     ),
 }
 
-
 # ═══════════════════════════════════════════════════════════════════════════════
 
 # SYMBOL FACTORY FUNCTIONS
@@ -369,11 +361,7 @@ def create_symbol(
 
     Create a SIS symbol by glyph.
 
-
-
     This is the canonical factory function - use this to create symbols.
-
-
 
     Args:
 
@@ -385,19 +373,13 @@ def create_symbol(
 
         activate_all: If True, activate all 5 layers
 
-
-
     Returns:
 
         SISSymbol instance
 
-
-
     Raises:
 
         ValueError: If glyph is not one of the 18 primary symbols
-
-
 
     Example:
 
@@ -434,7 +416,6 @@ def create_symbol(
 # TIER-SPECIFIC FACTORY FUNCTIONS
 
 # ═══════════════════════════════════════════════════════════════════════════════
-
 
 # TIER 1: FUNDAMENTAL OPERATIONS
 
@@ -637,8 +618,6 @@ class Diacritic(Enum):
 
     Diacritics modify base symbols to encode layer information.
 
-
-
     From the PRD:
 
     ∆̇   = ∆ with computation layer active
@@ -672,8 +651,6 @@ def apply_diacritic(symbol: SISSymbol, diacritic: Diacritic) -> SISSymbol:
     """
 
     Apply a diacritic modifier to a symbol.
-
-
 
     From PRD: "Each base symbol can be modified with superposition markers
 
@@ -735,8 +712,6 @@ def encode_polyvalent(
 
     Create a polyvalent symbol encoding multiple meanings.
 
-
-
     From PRD Example:
 
     "Single character: ∆̇̇̇→⊙
@@ -754,8 +729,6 @@ def encode_polyvalent(
     - Swarm: 'replicate and converge'
 
     - Direction: 'flow to next symbol'
-
-
 
     Traditional system: Would need 8-12 bytes to encode this
 
@@ -841,7 +814,6 @@ def symbols_by_tier(tier: SymbolTier) -> List[SymbolDefinition]:
 # MODULE EXECUTION
 
 # ═══════════════════════════════════════════════════════════════════════════════
-
 
 if __name__ == "__main__":
     list_symbols()

@@ -17,7 +17,6 @@ import time
 
 from typing import List, Optional
 
-
 import dirigera
 
 
@@ -68,8 +67,6 @@ def safe_light_control(
 
     Safely control a light with error handling
 
-
-
     Args:
 
         hub: Dirigera hub instance
@@ -81,8 +78,6 @@ def safe_light_control(
         brightness: Optional brightness level (1-100)
 
         color_temp: Optional color temperature in Kelvin
-
-
 
     Returns:
 
@@ -135,8 +130,6 @@ def safe_outlet_control(hub: dirigera.Hub, outlet_name: str, turn_on: bool) -> s
 
     Safely control an outlet with error handling
 
-
-
     Args:
 
         hub: Dirigera hub instance
@@ -144,8 +137,6 @@ def safe_outlet_control(hub: dirigera.Hub, outlet_name: str, turn_on: bool) -> s
         outlet_name: Name of the outlet
 
         turn_on: True to turn on, False to turn off
-
-
 
     Returns:
 
@@ -228,8 +219,6 @@ def status_report(hub: dirigera.Hub) -> dict:
 
     Generate complete home status report
 
-
-
     Returns:
 
         Dictionary with status information
@@ -280,8 +269,6 @@ def battery_report(hub: dirigera.Hub) -> List[dict]:
     """
 
     Get battery status for all controllers
-
-
 
     Returns:
 

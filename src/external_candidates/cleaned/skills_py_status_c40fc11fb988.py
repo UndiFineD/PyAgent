@@ -23,7 +23,6 @@ import urllib.request
 
 from pathlib import Path
 
-
 API_BASE = "https://api.heygen.com"
 
 

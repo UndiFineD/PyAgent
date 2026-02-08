@@ -9,8 +9,6 @@
 
 Characterize a W&B training run.
 
-
-
 Usage:
 
     characterize_run.py ENTITY/PROJECT/RUN_ID
@@ -18,8 +16,6 @@ Usage:
     characterize_run.py PROJECT/RUN_ID          # uses default entity
 
     characterize_run.py RUN_ID --project PROJECT [--entity ENTITY]
-
-
 
 Analyzes:
 
@@ -44,7 +40,6 @@ import sys
 from datetime import datetime, timezone
 
 from typing import Optional
-
 
 import wandb
 

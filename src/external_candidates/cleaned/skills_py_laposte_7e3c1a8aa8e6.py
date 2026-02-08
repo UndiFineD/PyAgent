@@ -7,8 +7,6 @@
 
 """La Poste — Suivi de colis via l'API Suivi v2.
 
-
-
 Usage:
 
     python3 laposte.py track 6A12345678901
@@ -16,8 +14,6 @@ Usage:
     python3 laposte.py track 6A12345678901 8R98765432109
 
     python3 laposte.py track 6A12345678901 --json
-
-
 
 Nécessite LAPOSTE_API_KEY (gratuit sur https://developer.laposte.fr).
 
@@ -36,7 +32,6 @@ import urllib.error
 import urllib.request
 
 from datetime import datetime
-
 
 API_BASE = "https://api.laposte.fr/suivi/v2/idships"
 

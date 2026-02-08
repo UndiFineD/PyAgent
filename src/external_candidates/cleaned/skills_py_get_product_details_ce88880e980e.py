@@ -19,7 +19,6 @@ import json
 
 import sys
 
-
 from playwright.sync_api import TimeoutError as PlaywrightTimeout
 
 from playwright.sync_api import sync_playwright
@@ -80,8 +79,6 @@ def scrape_product_details(product_id, headless=True):
 
                 };
 
-                
-
                 const getAllText = (selector) => {
 
                     const elements = document.querySelectorAll(selector);
@@ -89,8 +86,6 @@ def scrape_product_details(product_id, headless=True):
                     return Array.from(elements).map(el => el.textContent.trim());
 
                 };
-
-                
 
                 // Product name
 
@@ -100,15 +95,11 @@ def scrape_product_details(product_id, headless=True):
 
                             getText('.product-title');
 
-                
-
                 // Brand
 
                 const brand = getText('[data-testhook="product-brand"]') ||
 
                              getText('.brand, [class*="Brand"]');
-
-                
 
                 // Price
 
@@ -116,15 +107,11 @@ def scrape_product_details(product_id, headless=True):
 
                              getText('.price, [class*="Price"]');
 
-                
-
                 // Description
 
                 const description = getText('[data-testhook="product-description"]') ||
 
                                    getText('.description, [class*="Description"]');
-
-                
 
                 // Ingredients (multiple possible selectors)
 
@@ -133,8 +120,6 @@ def scrape_product_details(product_id, headless=True):
                                  getText('.ingredients') ||
 
                                  getText('[class*="Ingredients"]');
-
-                
 
                 // Try to find in expandable sections
 
@@ -172,8 +157,6 @@ def scrape_product_details(product_id, headless=True):
 
                 }
 
-                
-
                 // Allergens
 
                 let allergens = getText('[data-testhook="product-allergens"]') ||
@@ -181,8 +164,6 @@ def scrape_product_details(product_id, headless=True):
                                getText('.allergens') ||
 
                                getText('[class*="Allergen"]');
-
-                
 
                 if (!allergens) {
 
@@ -214,8 +195,6 @@ def scrape_product_details(product_id, headless=True):
 
                 }
 
-                
-
                 // Nutrition table
 
                 const nutritionTable = document.querySelector('[data-testhook="nutrition-table"], table[class*="Nutrition"]');
@@ -246,8 +225,6 @@ def scrape_product_details(product_id, headless=True):
 
                 }
 
-                
-
                 // Category
 
                 const category = getText('[data-testhook="breadcrumb"]') ||
@@ -255,8 +232,6 @@ def scrape_product_details(product_id, headless=True):
                                 getText('.breadcrumb') ||
 
                                 getText('nav[class*="Breadcrumb"]');
-
-                
 
                 // Images
 
@@ -267,8 +242,6 @@ def scrape_product_details(product_id, headless=True):
                     return el ? el.src : null;
 
                 }).filter(Boolean);
-
-                
 
                 return {
 

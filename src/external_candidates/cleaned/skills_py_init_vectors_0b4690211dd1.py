@@ -9,8 +9,6 @@
 
 Initialize TOS Vectors environment.
 
-
-
 This script creates a vector bucket and index for getting started.
 
 """
@@ -18,7 +16,6 @@ This script creates a vector bucket and index for getting started.
 import os
 
 import sys
-
 
 import tos
 

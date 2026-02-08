@@ -7,17 +7,11 @@
 
 """cron_builder.py
 
-
-
 Generate Clawdbot cron job JSON for scheduled TAGO bus alerts.
-
-
 
 Why: ClawdHub skills should be deterministic and portable. This script creates a
 
 job payload that a Clawdbot agent (or user) can pass to `clawdbot cron add`.
-
-
 
 Inputs (resolved values):
 
@@ -27,13 +21,9 @@ Inputs (resolved values):
 
 - routes: route numbers (list)
 
-
-
 Security:
 
 - Do NOT embed TAGO_SERVICE_KEY.
-
-
 
 Usage:
 
@@ -47,13 +37,9 @@ Usage:
 
     --routes 535,730
 
-
-
 Outputs:
 
 - JSON job object (for clawdbot cron add tool/CLI)
-
-
 
 Note:
 
@@ -64,7 +50,6 @@ Note:
 """
 
 from __future__ import annotations
-
 
 import argparse
 

@@ -5,7 +5,6 @@
 
 # scripts/task_parser.py - Natural Language to Task Structure Converter
 
-
 import json
 
 
@@ -15,8 +14,6 @@ def parse_human_request(request: str) -> dict:
     Translates a human's natural language request into a formal, structured task definition
 
     for the Agent Task Manager.
-
-
 
     This is the core of the Human-Friendly Automation Designer.
 

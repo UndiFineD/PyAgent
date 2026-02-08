@@ -9,16 +9,13 @@ from itertools import chain
 
 from typing import Dict, List, Optional, Tuple, Union
 
-
 from pydantic import Field
-
 
 # from ..agents.agent import Agent
 
 from ..actions.action import Action
 
 from ..agents.agent_manager import AgentManager
-
 
 # from ..core.base_config import Parameter
 
@@ -46,15 +43,11 @@ class Scheduler(Action):
 
     Base interface for workflow schedulers.
 
-
-
     Provides a common interface for all scheduler types within the workflow
 
     system. Schedulers are responsible for making decisions about what to
 
     execute next in a workflow, whether at the task or action level.
-
-
 
     Inherits from Action to leverage the common action interface and functionality.
 
@@ -121,13 +114,9 @@ class TaskScheduler(Action):
 
         Handle edge cases for task scheduling: Only one candidate task
 
-
-
         Args:
 
             candidate_tasks (List[WorkFlowNode]): List of candidate tasks to schedule
-
-
 
         Returns:
 
@@ -164,8 +153,6 @@ class TaskScheduler(Action):
 
         This is only called when edge cases have been handled and we need to generate a prompt.
 
-
-
         Args:
 
             graph (WorkFlowGraph): The workflow graph.
@@ -173,8 +160,6 @@ class TaskScheduler(Action):
             env (Environment): The execution environment.
 
             candidate_tasks (List[WorkFlowNode]): List of candidate tasks to schedule
-
-
 
         Returns:
 
@@ -221,8 +206,6 @@ class TaskScheduler(Action):
 
         Determine the next executable tasks.
 
-
-
         Args:
 
             llm (Optional[BaseLLM]): Language model to use for generation.
@@ -234,8 +217,6 @@ class TaskScheduler(Action):
             sys_msg (Optional[str]): Optional system message for the LLM.
 
             return_prompt (bool): Whether to return the prompt along with the output.
-
-
 
         Returns:
 
@@ -283,8 +264,6 @@ class TaskScheduler(Action):
 
         Asynchronously determine the next executable tasks.
 
-
-
         Args:
 
             llm (Optional[BaseLLM]): Language model to use for generation.
@@ -296,8 +275,6 @@ class TaskScheduler(Action):
             sys_msg (Optional[str]): Optional system message for the LLM.
 
             return_prompt (bool): Whether to return the prompt along with the output.
-
-
 
         Returns:
 
@@ -429,8 +406,6 @@ class ActionScheduler(Action):
 
         Prepares common execution logic for both sync and async execute methods.
 
-
-
         Args:
 
             task (WorkFlowNode): The task for which to schedule an action.
@@ -438,8 +413,6 @@ class ActionScheduler(Action):
             agent_manager (AgentManager): The agent manager providing the agents.
 
             env (Environment): The execution environment.
-
-
 
         Returns:
 
@@ -576,8 +549,6 @@ class ActionScheduler(Action):
 
         If the last message stored in ``next_actions`` specifies the ``next_actions``, choose an action from these actions to execute.
 
-
-
         Args:
 
             llm (Optional[BaseLLM]): Language model to use for generation.
@@ -591,8 +562,6 @@ class ActionScheduler(Action):
             sys_msg (Optional[str]): Optional system message for the LLM.
 
             return_prompt (bool): Whether to return the prompt along with the output.
-
-
 
         Returns:
 
@@ -636,8 +605,6 @@ class ActionScheduler(Action):
 
         If the last message stored in ``next_actions`` specifies the ``next_actions``, choose an action from these actions to execute.
 
-
-
         Args:
 
             llm (Optional[BaseLLM]): Language model to use for generation.
@@ -651,8 +618,6 @@ class ActionScheduler(Action):
             sys_msg (Optional[str]): Optional system message for the LLM.
 
             return_prompt (bool): Whether to return the prompt along with the output.
-
-
 
         Returns:
 
@@ -685,8 +650,6 @@ class WorkFlowManager(BaseModule):
     """
 
     Responsible for the scheduling and decision-making when executing a workflow.
-
-
 
     Attributes:
 
@@ -784,15 +747,11 @@ class WorkFlowManager(BaseModule):
 
         Asynchronously extract output from the workflow execution.
 
-
-
         Args:
 
             graph (WorkFlowGraph): The workflow graph.
 
             env (Environment): The execution environment.
-
-
 
         Returns:
 

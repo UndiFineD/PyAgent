@@ -13,7 +13,6 @@ from typing import Dict, List, Optional, Tuple, Union
 
 from uuid import uuid4
 
-
 from evoagentx.core.logging import logger
 
 from evoagentx.core.message import Message
@@ -25,7 +24,6 @@ from evoagentx.rag.schema import Chunk, ChunkMetadata, Corpus, Query, RagResult
 from evoagentx.storages.base import StorageHandler
 
 from pydantic import Field
-
 
 from .memory import BaseMemory
 

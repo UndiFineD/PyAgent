@@ -7,31 +7,21 @@
 
 DataForSEO API Toolkit - Main Entry Point
 
-
-
 Simple interface for keyword research across YouTube, landing pages, and site pages.
 
 All results are automatically saved to the /results directory with timestamps.
-
-
 
 Usage:
 
     from main import *
 
-
-
     # Quick keyword research
 
     result = keyword_research("python tutorial")
 
-
-
     # YouTube-specific research
 
     result = youtube_keyword_research("video editing tips")
-
-
 
     # Full analysis for content planning
 
@@ -45,11 +35,9 @@ from pathlib import Path
 
 from typing import Any, Dict, List, Optional
 
-
 # Add current directory to path for imports
 
 sys.path.insert(0, str(Path(__file__).parent))
-
 
 # Import all API modules
 
@@ -90,9 +78,7 @@ from api.trends import (
     get_youtube_trends,
 )
 
-
 from core.storage import get_latest_result, list_results, load_result
-
 
 # ============================================================================
 
@@ -112,8 +98,6 @@ def keyword_research(
 
     Comprehensive keyword research for a single keyword.
 
-
-
     Performs multiple API calls to gather:
 
     - Keyword overview (search volume, CPC, competition, search intent)
@@ -123,8 +107,6 @@ def keyword_research(
     - Related keywords (optional)
 
     - Keyword difficulty (optional)
-
-
 
     Args:
 
@@ -138,13 +120,9 @@ def keyword_research(
 
         include_difficulty: Include difficulty score
 
-
-
     Returns:
 
         Dict with keys: overview, suggestions, related, difficulty
-
-
 
     Example:
 
@@ -192,8 +170,6 @@ def youtube_keyword_research(
 
     YouTube-focused keyword research.
 
-
-
     Gathers data specifically useful for YouTube content:
 
     - Keyword overview with search intent
@@ -203,8 +179,6 @@ def youtube_keyword_research(
     - YouTube trend data
 
     - Keyword suggestions
-
-
 
     Args:
 
@@ -216,13 +190,9 @@ def youtube_keyword_research(
 
         include_trends: Include YouTube trend data
 
-
-
     Returns:
 
         Dict with keys: overview, serp, trends, suggestions
-
-
 
     Example:
 
@@ -268,8 +238,6 @@ def landing_page_keyword_research(
 
     Keyword research for landing page optimization.
 
-
-
     Gathers data useful for landing page SEO:
 
     - Keyword overview for target keywords
@@ -282,8 +250,6 @@ def landing_page_keyword_research(
 
     - Competitor keywords (if domain provided)
 
-
-
     Args:
 
         keywords: Target keywords for the landing page
@@ -292,13 +258,9 @@ def landing_page_keyword_research(
 
         location_name: Target location
 
-
-
     Returns:
 
         Dict with comprehensive landing page keyword data
-
-
 
     Example:
 
@@ -364,8 +326,6 @@ def full_keyword_analysis(
 
     Full keyword analysis for content strategy.
 
-
-
     Comprehensive analysis including:
 
     - Keyword overview
@@ -380,8 +340,6 @@ def full_keyword_analysis(
 
     - Google Trends data
 
-
-
     Args:
 
         keywords: Keywords to analyze
@@ -392,13 +350,9 @@ def full_keyword_analysis(
 
         include_trends: Include Google Trends data
 
-
-
     Returns:
 
         Dict with comprehensive keyword analysis
-
-
 
     Example:
 
@@ -446,8 +400,6 @@ def competitor_analysis(domain: str, keywords: List[str] = None, location_name: 
 
     Analyze a competitor's keyword strategy.
 
-
-
     Args:
 
         domain: Competitor domain to analyze
@@ -456,13 +408,9 @@ def competitor_analysis(domain: str, keywords: List[str] = None, location_name: 
 
         location_name: Target location
 
-
-
     Returns:
 
         Dict with competitor analysis data
-
-
 
     Example:
 
@@ -497,19 +445,13 @@ def trending_topics(location_name: str = None) -> Dict[str, Any]:
 
     Get currently trending topics and searches.
 
-
-
     Args:
 
         location_name: Target location
 
-
-
     Returns:
 
         Dict with trending data
-
-
 
     Example:
 
@@ -538,15 +480,11 @@ def get_recent_results(category: str = None, limit: int = 10) -> List[Path]:
 
     Get recently saved results.
 
-
-
     Args:
 
         category: Filter by category (keywords_data, labs, serp, trends)
 
         limit: Maximum results to return
-
-
 
     Returns:
 
@@ -562,15 +500,11 @@ def load_latest(category: str, operation: str = None) -> Optional[Dict]:
 
     Load the most recent result for a category/operation.
 
-
-
     Args:
 
         category: Result category
 
         operation: Specific operation (optional)
-
-
 
     Returns:
 
@@ -587,7 +521,6 @@ def load_latest(category: str, operation: str = None) -> Optional[Dict]:
 
 # ============================================================================
 
-
 # For direct access to individual API functions, import from respective modules:
 
 # from api.keywords_data import get_search_volume, get_keywords_for_site
@@ -598,15 +531,12 @@ def load_latest(category: str, operation: str = None) -> Optional[Dict]:
 
 # from api.trends import get_trends_explore, get_youtube_trends
 
-
 if __name__ == "__main__":
     print("""
 
 DataForSEO API Toolkit
 
 ======================
-
-
 
 High-level functions:
 
@@ -622,15 +552,11 @@ High-level functions:
 
   - trending_topics()
 
-
-
 Usage:
 
   from main import *
 
   result = keyword_research("your keyword here")
-
-
 
 All results are automatically saved to /results directory.
 

@@ -13,13 +13,9 @@ Equilibrium-Native Computational Substrate
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-
-
 Copyright (c) 2025-2026 Kevin Fain - ThēÆrchītēcť
 
 MIT License - See LICENSE file
-
-
 
 ═══════════════════════════════════════════════════════════════════════════════
 
@@ -28,7 +24,6 @@ MIT License - See LICENSE file
 from dataclasses import dataclass
 
 from typing import List, Optional, Tuple
-
 
 from .symbol import ExecutionResult, SISSymbol
 
@@ -57,13 +52,9 @@ class SISValidator:
 
     Enforces the equilibrium constraint constraint across symbol sequences.
 
-
-
     The equilibrium principle: Every change must be balanced.
 
     For any symbol S executing: ΣΔ_in = ΣΔ_out
-
-
 
     This validator can:
 
@@ -86,8 +77,6 @@ class SISValidator:
         """
 
         Validate a single symbol and its relationship partners.
-
-
 
         The symbol must satisfy equilibrium constraint with its partners.
 
@@ -121,8 +110,6 @@ class SISValidator:
         """
 
         Validate a sequence of symbols for global balance.
-
-
 
         All symbols in the sequence must collectively satisfy equilibrium constraint.
 
@@ -161,8 +148,6 @@ class SISValidator:
 
         Calculate what delta contribution would balance the sequence.
 
-
-
         If you add a symbol with this delta, equilibrium constraint will hold.
 
         """
@@ -175,8 +160,6 @@ class SISValidator:
         """
 
         Suggest a balancing symbol to achieve equilibrium constraint.
-
-
 
         Returns a new symbol that, when added to the sequence,
 
@@ -207,8 +190,6 @@ class SISValidator:
 
         Validate a complete equilibrium control loop: sense → quantify → compensate → iterate
 
-
-
         A valid equilibrium control loop must:
 
         1. Perceive creates a delta (identifies imbalance)
@@ -218,8 +199,6 @@ class SISValidator:
         3. Correct negates the delta (restores balance)
 
         4. Result: equilibrium constraint
-
-
 
         Returns validation result and whether the loop is complete.
 
@@ -239,8 +218,6 @@ class SISValidator:
         """
 
         Trace the delta accumulation through a symbol sequence.
-
-
 
         Returns list of (glyph, delta_contribution, running_sigma) tuples.
 
@@ -264,8 +241,6 @@ class EquilibriumValidator(SISValidator):
     """
 
     Extended validator specifically for AEP (Adaptive Equilibrium Protocol)
-
-
 
     AEP Principle: sense → quantify → compensate → iterate
 
@@ -299,8 +274,6 @@ class EquilibriumValidator(SISValidator):
 
         4. Track convergence toward 0
 
-
-
         Returns validation result and improvement (old_sigma - new_sigma).
 
         """
@@ -332,8 +305,6 @@ class EquilibriumValidator(SISValidator):
 
         Check if the system is converging toward equilibrium constraint.
 
-
-
         Looks at recent history to determine if corrections
 
         are successfully reducing imbalance.
@@ -357,8 +328,6 @@ class EquilibriumValidator(SISValidator):
         """
 
         Check if ΣΔ is approaching 0 within threshold.
-
-
 
         The attractor state equilibrium constraint is never fully reached,
 

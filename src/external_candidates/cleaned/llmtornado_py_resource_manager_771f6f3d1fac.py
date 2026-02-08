@@ -15,11 +15,9 @@ import asyncio
 
 from typing import Optional
 
-
 import psutil
 
 from loguru import logger
-
 
 from ..config import Settings
 
@@ -130,8 +128,6 @@ class ResourceManager:
         Wait if system resources are over limits or UI is active.
 
         Always yields control to allow other tasks to run.
-
-
 
         Args:
 

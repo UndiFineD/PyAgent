@@ -15,7 +15,6 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 from pathlib import Path
 
-
 ATP_DIR = Path.home() / ".atp"
 
 TRUST_DB = ATP_DIR / "trust.json"

@@ -5,16 +5,13 @@
 
 from typing import Any, Dict
 
-
 from evoagentx.core.logging import logger
 
 from llama_index.core.vector_stores.types import VectorStore
 
-
 from .base import VectorStoreBase, VectorStoreType
 
 from .faiss import FaissVectorStoreWrapper
-
 
 __all__ = ["VectorStoreBase", "FaissVectorStoreWrapper", "VectorStoreFactory"]
 

@@ -7,7 +7,6 @@ import random
 
 import time
 
-
 from request.web.encrypt.config import xhs_config
 
 from units.fuck_reverse_crypto.hash_functions import crc32_encode, md5_encode
@@ -15,8 +14,6 @@ from units.fuck_reverse_crypto.hash_functions import crc32_encode, md5_encode
 
 class XHS_A1_And_WebId_Encrypt:
     """小红书 cookie -> a1 & webId 加密实现类
-
-
 
     a1: 时间戳 + 随机数 + 对它们的 crc32 验证
 
@@ -34,8 +31,6 @@ class XHS_A1_And_WebId_Encrypt:
     def encrypt_cookie_a1_and_webId(self) -> tuple[str, str]:
         """生成 a1 & webId 加密字符串
 
-
-
         整个加密过程包括以下步骤：
 
         1. 取当前时间戳，转换为 16 进制字符串
@@ -47,8 +42,6 @@ class XHS_A1_And_WebId_Encrypt:
         4. 计算拼接字符串的 CRC32 值
 
         5. 将拼接字符串和 CRC32 值拼接，并截取前 52 位
-
-
 
         Returns:
 

@@ -9,8 +9,6 @@
 
 Dependency Analyzer
 
-
-
 Analyzes project dependencies for:
 
 - Dependency tree (direct and transitive)
@@ -20,8 +18,6 @@ Analyzes project dependencies for:
 - Coupling score (0-100)
 
 - Outdated packages (basic detection)
-
-
 
 Supports:
 
@@ -716,8 +712,6 @@ Examples:
   %(prog)s ./my-project --check circular
 
   %(prog)s ./my-project --verbose
-
-
 
 Supported package managers:
 

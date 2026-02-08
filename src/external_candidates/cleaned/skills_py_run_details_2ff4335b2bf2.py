@@ -9,13 +9,9 @@
 
 Get details for a specific W&B run.
 
-
-
 Usage:
 
     python run_details.py ENTITY/PROJECT RUN_ID [--metrics KEY1,KEY2] [--json]
-
-
 
 Examples:
 
@@ -30,7 +26,6 @@ Examples:
 import argparse
 
 import json
-
 
 import wandb
 

@@ -5,12 +5,9 @@
 
 #!/usr/bin/env python3
 
-
 """
 
 Database Tools Examples for EvoAgentX
-
-
 
 This file demonstrates how to use various database toolkits:
 
@@ -19,8 +16,6 @@ This file demonstrates how to use various database toolkits:
 - PostgreSQLToolkit: Relational database operations
 
 - FaissToolkit: Vector database for semantic search
-
-
 
 Each toolkit provides comprehensive database management capabilities with automatic
 
@@ -36,11 +31,9 @@ import sys
 
 from pathlib import Path
 
-
 # Add the parent directory to sys.path to import from evoagentx
 
 sys.path.append(str(Path(__file__).parent.parent))
-
 
 from evoagentx.tools import MongoDBToolkit, PostgreSQLToolkit
 

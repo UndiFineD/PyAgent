@@ -9,8 +9,6 @@
 
 Oura Cloud API Wrapper
 
-
-
 Usage:
 
     python oura_api.py sleep --days 7
@@ -42,7 +40,6 @@ from email.utils import parsedate_to_datetime
 from enum import Enum
 
 from pathlib import Path
-
 
 SKILL_DIR = Path(__file__).parent.parent
 
@@ -271,15 +268,11 @@ class OuraClient:
 
         Incrementally sync data for endpoint.
 
-
-
         Args:
 
             endpoint: API endpoint (sleep, daily_readiness, daily_activity)
 
             days: Number of days to sync (default: 7)
-
-
 
         Returns:
 
@@ -381,8 +374,6 @@ class OuraClient:
 
     def get_recent_sleep(self, days=2):
         """Fetch and merge recent sleep data (daily + detailed).
-
-
 
         Oura data is processed with delay - get last few days and merge
 

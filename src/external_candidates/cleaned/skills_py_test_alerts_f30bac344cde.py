@@ -11,17 +11,13 @@ import sys
 
 from pathlib import Path
 
-
 import pytest
 
-
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
-
 
 # Import the check_thresholds function from alerts
 
 import importlib.util
-
 
 spec = importlib.util.spec_from_file_location(
     "alerts", Path(__file__).resolve().parent.parent / "scripts" / "alerts.py"
@@ -30,7 +26,6 @@ spec = importlib.util.spec_from_file_location(
 alerts_module = importlib.util.module_from_spec(spec)
 
 spec.loader.exec_module(alerts_module)
-
 
 check_thresholds = alerts_module.check_thresholds
 
@@ -138,8 +133,6 @@ class TestAlertLogic:
 
     def test_no_false_positive_for_missing_readiness(self):
         """Test that missing readiness data does NOT trigger alert.
-
-
 
         This was a bug: alerts.py had `day.get("readiness", {}).get("score", 100)`
 

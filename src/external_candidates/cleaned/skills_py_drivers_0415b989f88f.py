@@ -9,8 +9,6 @@
 
 Driver Analysis - Identify what's affecting your scores
 
-
-
 Analyzes sub-metrics to explain why readiness or sleep scores are high/low.
 
 Provides actionable insights based on which components deviate from baseline.
@@ -54,8 +52,6 @@ class DriverAnalyzer:
 
         Initialize with optional baseline values.
 
-
-
         Args:
 
             baseline: Dict with baseline values for each metric
@@ -78,13 +74,9 @@ class DriverAnalyzer:
 
         Analyze what's driving sleep score.
 
-
-
         Args:
 
             sleep_data: Sleep data dict from Oura API
-
-
 
         Returns:
 
@@ -181,15 +173,11 @@ class DriverAnalyzer:
 
         Analyze what's driving readiness score.
 
-
-
         Args:
 
             sleep_data: Sleep data dict
 
             readiness_data: Readiness data dict
-
-
 
         Returns:
 
@@ -284,15 +272,11 @@ class DriverAnalyzer:
 
         Generate actionable suggestion based on readiness score and drivers.
 
-
-
         Args:
 
             readiness_score: Current readiness score
 
             drivers: List of Driver objects
-
-
 
         Returns:
 

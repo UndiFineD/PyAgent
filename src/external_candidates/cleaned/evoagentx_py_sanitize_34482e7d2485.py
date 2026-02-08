@@ -5,7 +5,6 @@
 
 # Acknowledgement: Modified from MetaGPT (https://github.com/geekan/MetaGPT/blob/main/metagpt/utils/sanitize.py) under MIT License
 
-
 import ast
 
 import traceback
@@ -13,7 +12,6 @@ import traceback
 from enum import Enum
 
 from typing import Dict, Generator, List, Optional, Set, Tuple
-
 
 import tree_sitter_python
 
@@ -42,8 +40,6 @@ def traverse_tree(node: Node) -> Generator[Node, None, None]:
     """
 
     Traverse the tree structure starting from the given node.
-
-
 
     :param node: The root node to start the traversal from.
 
@@ -178,8 +174,6 @@ def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
     and variable assignments. If an entrypoint is provided, it only includes definitions that are
 
     reachable from the entrypoint in the call graph.
-
-
 
     :param code: The input Python code as a string.
 

@@ -11,16 +11,13 @@ import threading
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-
 # from time import time
 
 from typing import Any, Callable, List, Optional, Tuple, Union
 
-
 from tqdm import tqdm
 
 from tqdm.asyncio import tqdm_asyncio
-
 
 from ..agents.agent_manager import AgentManager
 
@@ -59,8 +56,6 @@ class Evaluator:
         """
 
         Initialize the Evaluator.
-
-
 
         Args:
 
@@ -153,8 +148,6 @@ class Evaluator:
 
         Evaluate the performance of the workflow on the benchmark.
 
-
-
         Args:
 
             graph (WorkFlowGraph or ActionGraph): The workflow to evaluate.
@@ -214,8 +207,6 @@ class Evaluator:
 
         Execute the workflow graph and return the output.
 
-
-
         Args:
 
             graph (WorkFlowGraph): The workflow graph to execute
@@ -223,8 +214,6 @@ class Evaluator:
             inputs (dict): The inputs to the workflow graph
 
             **kwargs: Additional arguments for workflow graph execution
-
-
 
         Returns:
 
@@ -257,8 +246,6 @@ class Evaluator:
 
         Execute the action graph and return the output.
 
-
-
         Args:
 
             graph (ActionGraph): The action graph to execute
@@ -266,8 +253,6 @@ class Evaluator:
             inputs (dict): The inputs to the action graph
 
             **kwargs: Additional arguments for action graph execution
-
-
 
         Returns:
 
@@ -290,8 +275,6 @@ class Evaluator:
 
         Evaluate a single data example through the workflow and save the evaluation metrics to the evaluation records.
 
-
-
         Args:
 
             graph (WorkFlowGraph or ActionGraph): The workflow to execute
@@ -299,8 +282,6 @@ class Evaluator:
             example (dict): Single input data example
 
             **kwargs: Additional arguments for workflow execution
-
-
 
         Returns:
 
@@ -377,8 +358,6 @@ class Evaluator:
 
         Evaluate workflow on data using single thread.
 
-
-
         Args:
 
             graph (WorkFlowGraph or ActionGraph): The workflow to evaluate
@@ -390,8 +369,6 @@ class Evaluator:
             verbose (bool): Whether to show progress bar
 
             **kwargs: Additional arguments for workflow execution
-
-
 
         Returns:
 
@@ -536,13 +513,9 @@ class Evaluator:
 
         Calculate the average score from a list of scores.
 
-
-
         Args:
 
             scores (List[dict]): List of evaluation scores
-
-
 
         Returns:
 
@@ -586,8 +559,6 @@ class Evaluator:
 
         Evaluate the workflow on the data.
 
-
-
         Args:
 
             graph (WorkFlowGraph or ActionGraph): The workflow to evaluate
@@ -599,8 +570,6 @@ class Evaluator:
             verbose (bool, optional): Whether to print the evaluation progress. If not provided, the `self.verbose` will be used.
 
             **kwargs: Additional arguments passed to workflow execution
-
-
 
         Returns:
 
@@ -671,8 +640,6 @@ class Evaluator:
 
         Asynchronously evaluate the performance of the workflow on the benchmark.
 
-
-
         Args:
 
             graph (WorkFlowGraph or ActionGraph): The workflow to evaluate.
@@ -686,8 +653,6 @@ class Evaluator:
             sample_k (int, optional): The number of data to evaluate the workflow on. If provided, a random sample of size `sample_k` will be used.
 
             verbose (bool, optional): Whether to print the evaluation progress. If not provided, the `self.verbose` will be used.
-
-
 
         Returns:
 

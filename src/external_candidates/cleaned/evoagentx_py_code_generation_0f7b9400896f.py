@@ -5,7 +5,6 @@
 
 # copied from: https://github.com/LiveCodeBench/LiveCodeBench/blob/main/lcb_runner/benchmarks/code_generation.py
 
-
 import base64
 
 import json
@@ -19,7 +18,6 @@ from dataclasses import dataclass
 from datetime import datetime
 
 from enum import Enum
-
 
 from datasets import load_dataset
 

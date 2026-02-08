@@ -9,14 +9,11 @@
 
 Example usage of Dirigera control helpers
 
-
-
 Run this script to see all helper functions in action
 
 """
 
 import sys
-
 
 from helpers import (
     battery_report,
@@ -30,7 +27,6 @@ from helpers import (
     status_report,
     turn_off_room_lights,
 )
-
 
 # Fix encoding for Windows
 

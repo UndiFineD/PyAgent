@@ -9,8 +9,6 @@
 
 Camoufox persistent session manager.
 
-
-
 Usage:
 
     python camoufox-session.py --profile NAME [--login|--headless] [--status]
@@ -37,7 +35,6 @@ from typing import Iterable, List, Optional, Tuple
 
 from urllib.parse import urlparse
 
-
 try:
     from camoufox.async_api import AsyncCamoufox
 
@@ -49,7 +46,6 @@ except ImportError:
     print("  python -c 'import camoufox; camoufox.install()'")
 
     sys.exit(1)
-
 
 PROFILE_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,62}$")
 
@@ -100,8 +96,6 @@ def chmod_file(path: Path) -> None:
 
 def domain_matches(cookie_domain: str, host: str) -> bool:
     """Check if cookie domain matches host.
-
-
 
     Per RFC 6265, the leading dot is ignored for matching purposes.
 

@@ -5,7 +5,6 @@
 
 import sys
 
-
 from docx import Document
 
 

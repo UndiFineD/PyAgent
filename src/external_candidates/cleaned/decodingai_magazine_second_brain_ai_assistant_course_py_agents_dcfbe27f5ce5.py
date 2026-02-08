@@ -7,7 +7,6 @@ import json
 
 from typing import Any
 
-
 from langchain_mongodb.retrievers.parent_document import (
     MongoDBAtlasParentDocumentRetriever,
 )
@@ -23,8 +22,6 @@ from smolagents import LiteLLMModel, Tool, ToolCallingAgent
 
 def build_agent() -> Any:
     """Builds and configures a tool-calling agent with MongoDB retriever capability.
-
-
 
     Returns:
 
@@ -48,15 +45,11 @@ def build_agent() -> Any:
 class MongoDBRetrieverTool(Tool):
     """A tool for performing semantic search queries against a MongoDB vector database.
 
-
-
     This tool integrates with MongoDB Atlas to perform vector similarity search
 
     for document retrieval. It formats the results in XML-style markup for
 
     structured access to document metadata and content.
-
-
 
     Attributes:
 

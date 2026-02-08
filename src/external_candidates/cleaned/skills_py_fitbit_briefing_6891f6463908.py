@@ -9,11 +9,7 @@
 
 Fitbit Morning Briefing CLI
 
-
-
 Generate concise morning health briefings from Fitbit data.
-
-
 
 Usage:
 
@@ -39,16 +35,13 @@ from datetime import datetime, timedelta
 
 from pathlib import Path
 
-
 # Configure logging
 
 logging.basicConfig(level=logging.WARNING, format="%(levelname)s: %(message)s")
 
-
 # Add scripts dir to path for imports
 
 sys.path.insert(0, str(Path(__file__).parent))
-
 
 from fitbit_api import FitbitClient
 

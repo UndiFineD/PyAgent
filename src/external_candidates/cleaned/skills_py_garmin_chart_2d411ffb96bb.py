@@ -25,7 +25,6 @@ from datetime import datetime
 
 from pathlib import Path
 
-
 # Import auth and data helpers
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -219,15 +218,9 @@ def generate_html(charts_data, title="Garmin Health Dashboard"):
 
         <h1>{title}</h1>
 
-        
-
         <div class="stats-grid" id="stats"></div>
 
-        
-
         <div class="charts-grid" id="charts"></div>
-
-        
 
         <div class="footer">
 
@@ -237,19 +230,13 @@ def generate_html(charts_data, title="Garmin Health Dashboard"):
 
     </div>
 
-    
-
     <script>
 
         Chart.defaults.color = '#fff';
 
         Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
 
-        
-
         const chartsData = {json.dumps(charts_data)};
-
-        
 
         // Render stats cards
 
@@ -277,8 +264,6 @@ def generate_html(charts_data, title="Garmin Health Dashboard"):
 
         }}
 
-        
-
         // Render chart
 
         function renderChart(config) {{
@@ -286,8 +271,6 @@ def generate_html(charts_data, title="Garmin Health Dashboard"):
             const container = document.createElement('div');
 
             container.className = 'chart-container';
-
-            
 
             const title = document.createElement('div');
 
@@ -297,23 +280,15 @@ def generate_html(charts_data, title="Garmin Health Dashboard"):
 
             container.appendChild(title);
 
-            
-
             const canvas = document.createElement('canvas');
 
             container.appendChild(canvas);
 
-            
-
             document.getElementById('charts').appendChild(container);
-
-            
 
             new Chart(canvas, config.chart);
 
         }}
-
-        
 
         // Render all data
 
@@ -322,8 +297,6 @@ def generate_html(charts_data, title="Garmin Health Dashboard"):
             renderStats(chartsData.stats);
 
         }}
-
-        
 
         if (chartsData.charts) {{
 

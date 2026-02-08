@@ -1,7 +1,7 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\skills.py\skills.py\godsboy.py\garmin_connect_fixed.py\scripts.py\garmin_auth_c7cbc0e07f85.py
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\skills.py\skills.py\rayleigh3105.py\garmin_connect.py\scripts.py\garmin_auth_c7cbc0e07f85.py
 # NOTE: extracted with static-only rules; review before use
 
-# Extracted from: C:\DEV\PyAgent\.external\skills\skills\godsboy\garmin-connect-fixed\scripts\garmin-auth.py
+# Extracted from: C:\DEV\PyAgent\.external\skills\skills\rayleigh3105\garmin-connect\scripts\garmin-auth.py
 
 #!/usr/bin/env python3
 
@@ -16,7 +16,6 @@ One-time setup: saves OAuth session for future use
 import os
 
 from pathlib import Path
-
 
 try:
     from garth import Client

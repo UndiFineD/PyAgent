@@ -9,13 +9,9 @@
 
 Risk Matrix Calculator
 
-
-
 Calculate risk levels based on probability and severity ratings per ISO 14971.
 
 Supports multiple risk matrix configurations and FMEA RPN calculations.
-
-
 
 Usage:
 
@@ -36,7 +32,6 @@ import json
 import sys
 
 from typing import Optional, Tuple
-
 
 # Standard 5x5 Risk Matrix per ISO 14971 common practice
 
@@ -64,7 +59,6 @@ PROBABILITY_LEVELS = {
     5: {"name": "Frequent", "description": "Expected to occur", "frequency": ">10^-3"},
 }
 
-
 SEVERITY_LEVELS = {
     1: {
         "name": "Negligible",
@@ -89,7 +83,6 @@ SEVERITY_LEVELS = {
     5: {"name": "Catastrophic", "description": "Death", "harm": "Death"},
 }
 
-
 # Risk matrix: RISK_MATRIX[probability][severity] = risk_level
 
 RISK_MATRIX = {
@@ -99,7 +92,6 @@ RISK_MATRIX = {
     4: {1: "Medium", 2: "Medium", 3: "High", 4: "High", 5: "Unacceptable"},
     5: {1: "Medium", 2: "High", 3: "High", 4: "Unacceptable", 5: "Unacceptable"},
 }
-
 
 # Risk level definitions and required actions
 
@@ -126,7 +118,6 @@ RISK_ACTIONS = {
     },
 }
 
-
 # FMEA scales (1-10)
 
 FMEA_SEVERITY = {
@@ -142,7 +133,6 @@ FMEA_SEVERITY = {
     10: "Hazardous without warning",
 }
 
-
 FMEA_OCCURRENCE = {
     1: "Remote (<1 in 1,500,000)",
     2: "Very low (1 in 150,000)",
@@ -155,7 +145,6 @@ FMEA_OCCURRENCE = {
     9: "Extremely high (1 in 3)",
     10: "Almost certain (>1 in 2)",
 }
-
 
 FMEA_DETECTION = {
     1: "Almost certain detection",
@@ -494,31 +483,21 @@ Examples:
 
   python risk_matrix_calculator.py --probability 3 --severity 4
 
-
-
   # FMEA RPN calculation
 
   python risk_matrix_calculator.py --fmea --severity 8 --occurrence 5 --detection 6
-
-
 
   # Interactive mode
 
   python risk_matrix_calculator.py --interactive
 
-
-
   # Display risk matrix
 
   python risk_matrix_calculator.py --show-matrix
 
-
-
   # Display criteria definitions
 
   python risk_matrix_calculator.py --list-criteria
-
-
 
   # JSON output
 

@@ -11,7 +11,6 @@ from typing import Any, Dict, List, Optional, Sequence, Union
 
 from uuid import uuid4
 
-
 from evoagentx.core.logging import logger
 
 from evoagentx.models.base_model import BaseLLM
@@ -40,7 +39,6 @@ from llama_index.core.indices.property_graph.transformations import (
 from llama_index.core.schema import BaseNode
 
 from llama_index.core.storage import StorageContext
-
 
 from .base import BaseIndexWrapper, IndexType
 
@@ -137,15 +135,11 @@ class GraphIndexing(BaseIndexWrapper):
 
         Insert or update nodes into the graph index.
 
-
-
         Converts Chunk objects to LlamaIndex nodes, serializes metadata as JSON strings,
 
         and inserts them into the PropertyGraphIndex. Nodes are cached in id_to_node for
 
         quick access.
-
-
 
         Args:
 
@@ -181,13 +175,9 @@ class GraphIndexing(BaseIndexWrapper):
 
         Delete nodes from the graph index based on node IDs or metadata filters.
 
-
-
         Removes specified nodes from the index and the id_to_node cache. If metadata_filters
 
         are provided, nodes matching the filters are deleted.
-
-
 
         Args:
 
@@ -240,13 +230,9 @@ class GraphIndexing(BaseIndexWrapper):
 
         Asynchronously load nodes into the graph index and its backend stores.
 
-
-
         Caches nodes in the id_to_node dictionary and loads them into the graph and optionally
 
         vector stores, ensuring no duplicates by relying on the backend's duplicate checking.
-
-
 
         Args:
 
@@ -267,17 +253,11 @@ class GraphIndexing(BaseIndexWrapper):
 
         Synchronously load nodes into the graph index.
 
-
-
         Wraps the asynchronous aload method to provide a synchronous interface for loading nodes.
-
-
 
         Args:
 
             nodes (List[Union[Chunk, BaseNode]]): List of nodes to load, either Chunk or BaseNode.
-
-
 
         """
 
@@ -297,8 +277,6 @@ class GraphIndexing(BaseIndexWrapper):
         """
 
         Clear all nodes from the graph index and its cache.
-
-
 
         Deletes all nodes from the PropertyGraphIndex and clears the id_to_node cache.
 

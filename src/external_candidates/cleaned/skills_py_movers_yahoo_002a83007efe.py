@@ -7,15 +7,9 @@
 
 """movers_yahoo.py
 
-
-
 Fetch top movers (gainers/losers/actives) from Yahoo Finance's public screener endpoints.
 
-
-
 This is a *best-effort* free data source. Yahoo may rate-limit or change endpoints.
-
-
 
 Examples:
 
@@ -25,11 +19,7 @@ Examples:
 
   python movers_yahoo.py --type actives --count 10
 
-
-
 Output: JSON list of tickers with price + % change + volume + market cap when available.
-
-
 
 Note:
 
@@ -47,9 +37,7 @@ import sys
 
 from typing import Any, Dict, List
 
-
 import requests
-
 
 SCR_IDS = {
     "gainers": "day_gainers",

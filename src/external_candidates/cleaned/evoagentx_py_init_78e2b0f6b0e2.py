@@ -5,11 +5,9 @@
 
 from typing import Any, Dict
 
-
 from evoagentx.core.logging import logger
 
 from llama_index.core.embeddings import BaseEmbedding
-
 
 from .base import BaseChunker, ChunkingStrategy
 
@@ -18,7 +16,6 @@ from .hierachical_chunker import HierarchicalChunker
 from .semantic_chunker import SemanticChunker
 
 from .simple_chunker import SimpleChunker
-
 
 __all__ = [
     "SimpleChunker",
@@ -40,8 +37,6 @@ class ChunkFactory:
     ) -> BaseChunker:
         """Create a chunker based on strategy and configuration.
 
-
-
         Args:
 
             strategy (ChunkingStrategy): The chunking strategy.
@@ -50,13 +45,9 @@ class ChunkFactory:
 
             chunker_config (Dict[str, Any], optional): Chunker configuration.
 
-
-
         Returns:
 
             BaseChunker: A chunker instance.
-
-
 
         Raises:
 

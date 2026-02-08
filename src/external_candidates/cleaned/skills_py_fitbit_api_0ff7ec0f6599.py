@@ -9,8 +9,6 @@
 
 Fitbit Web API Wrapper with Auto-Refresh and Token Persistence
 
-
-
 Usage:
 
     python fitbit_api.py activity --days 7
@@ -44,7 +42,6 @@ import urllib.request
 from datetime import datetime, timedelta
 
 from pathlib import Path
-
 
 SKILL_DIR = Path(__file__).parent.parent
 
@@ -322,8 +319,6 @@ class FitbitClient:
 
     def get_active_zone_minutes(self, start_date, end_date):
         """Fetch Active Zone Minutes (AZM) data
-
-
 
         Returns AZM breakdown:
 

@@ -23,9 +23,7 @@ import uuid
 
 from pathlib import Path
 
-
 from aiohttp import ClientSession
-
 
 # Try to import thinqconnect
 
@@ -36,7 +34,6 @@ except ImportError:
     print("❌ thinqconnect not installed. Run: pip install thinqconnect")
 
     sys.exit(1)
-
 
 CONFIG_DIR = Path.home() / ".config" / "lg-thinq"
 

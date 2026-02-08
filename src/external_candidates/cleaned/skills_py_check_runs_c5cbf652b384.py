@@ -9,13 +9,9 @@
 
 Check W&B runs status.
 
-
-
 Usage:
 
     python check_runs.py ENTITY/PROJECT [--status STATUS] [--hours HOURS] [--json]
-
-
 
 Examples:
 
@@ -32,7 +28,6 @@ import argparse
 import json
 
 from datetime import datetime, timedelta, timezone
-
 
 import wandb
 

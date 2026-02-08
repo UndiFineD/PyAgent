@@ -13,7 +13,6 @@ import time
 
 import urllib.parse
 
-
 from request.web.encrypt.config import xhs_config
 
 from request.web.encrypt.xhs_diy_encode import b64_encode, encode_utf8
@@ -23,8 +22,6 @@ class XHS_XS_Encrypt:
     """
 
     小红书XS加密实现类
-
-
 
     用于生成小红书API请求所需的X-S加密头。
 

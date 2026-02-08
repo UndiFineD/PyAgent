@@ -5,7 +5,6 @@
 
 from typing import Optional, Tuple
 
-
 import html2text
 
 import requests
@@ -13,7 +12,6 @@ import requests
 from bs4 import BeautifulSoup
 
 from pydantic import Field
-
 
 from ..core.module import BaseModule
 
@@ -44,8 +42,6 @@ class SearchBase(BaseModule):
         """
 
         Initialize the base search tool.
-
-
 
         Args:
 
@@ -87,15 +83,11 @@ class SearchBase(BaseModule):
 
         Truncates content to a maximum number of words while preserving original spacing.
 
-
-
         Args:
 
             content (str): The content to truncate
 
             max_words (Optional[int]): Maximum number of words to include. None means no limit.
-
-
 
         Returns:
 
@@ -135,13 +127,9 @@ class SearchBase(BaseModule):
 
         Fetches the title and main text content from a web page.
 
-
-
         Args:
 
             url (str): The URL of the web page.
-
-
 
         Returns:
 

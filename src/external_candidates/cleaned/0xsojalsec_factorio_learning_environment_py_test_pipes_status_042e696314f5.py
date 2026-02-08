@@ -1,0 +1,44 @@
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_factorio_learning_environment.py\tests.py\status.py\test_pipes_status_042e696314f5.py
+# NOTE: extracted with static-only rules; review before use
+
+# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\tests\status\test_pipes_status.py
+
+import pytest
+
+from fle.env import EntityStatus, Position
+
+from fle.env.game_types import Prototype
+
+
+@pytest.fixture()
+def game(instance):
+    instance.initial_inventory = {
+        **instance.initial_inventory,
+        "stone-furnace": 10,
+        "burner-inserter": 50,
+        "offshore-pump": 4,
+        "pipe": 100,
+        "small-electric-pole": 50,
+        "transport-belt": 200,
+        "coal": 100,
+        "wooden-chest": 1,
+        "assembling-machine-1": 10,
+        "boiler": 3,
+        "steam-engine": 3,
+    }
+
+    instance.reset()
+
+    yield instance.namespace
+
+    instance.reset()
+
+
+def test_not_connected_pipes_is_not_connected(game):
+    pipes1 = game.connect_entities(Position(x=0, y=0), Position(x=5, y=0), connection_type=Prototype.Pipe)
+
+    assert pipes1.status == EntityStatus.EMPTY
+
+    pipes2 = game.connect_entities(Position(x=7, y=0), Position(x=12, y=0), connection_type=Prototype.Pipe)
+
+    assert pipes2.status == EntityStatus.EMPTY

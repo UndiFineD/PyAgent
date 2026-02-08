@@ -7,11 +7,7 @@
 
 Basic Scene Template for Manim Community
 
-
-
 Copy this file and modify to create your own scene.
-
-
 
 Render: manim -pql your_file.py YourScene
 
@@ -24,8 +20,6 @@ class YourScene(Scene):
     """
 
     Basic scene template.
-
-
 
     Attributes to configure:
 

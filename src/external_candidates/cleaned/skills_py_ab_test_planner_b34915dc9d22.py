@@ -53,8 +53,6 @@ class ABTestPlanner:
 
         Design an A/B test with hypothesis and variables.
 
-
-
         Args:
 
             test_type: Type of test ('icon', 'screenshot', 'title', 'description')
@@ -66,8 +64,6 @@ class ABTestPlanner:
             hypothesis: Expected outcome hypothesis
 
             success_metric: Metric to optimize
-
-
 
         Returns:
 
@@ -105,8 +101,6 @@ class ABTestPlanner:
 
         Calculate required sample size for statistical significance.
 
-
-
         Args:
 
             baseline_conversion: Current conversion rate (0-1)
@@ -116,8 +110,6 @@ class ABTestPlanner:
             confidence_level: 'high', 'standard', or 'exploratory'
 
             power: Statistical power (typically 0.80 or 0.90)
-
-
 
         Returns:
 
@@ -180,8 +172,6 @@ class ABTestPlanner:
 
         Calculate statistical significance of test results.
 
-
-
         Args:
 
             variant_a_conversions: Conversions for control
@@ -191,8 +181,6 @@ class ABTestPlanner:
             variant_b_conversions: Conversions for variation
 
             variant_b_visitors: Visitors for variation
-
-
 
         Returns:
 
@@ -279,15 +267,11 @@ class ABTestPlanner:
 
         Track ongoing test results and provide recommendations.
 
-
-
         Args:
 
             test_id: Test identifier
 
             results_data: Current test results
-
-
 
         Returns:
 
@@ -342,15 +326,11 @@ class ABTestPlanner:
 
         Generate final test report with insights and recommendations.
 
-
-
         Args:
 
             test_id: Test identifier
 
             final_results: Final test results
-
-
 
         Returns:
 
@@ -702,8 +682,6 @@ def plan_ab_test(
 
     Convenience function to plan an A/B test.
 
-
-
     Args:
 
         test_type: Type of test
@@ -715,8 +693,6 @@ def plan_ab_test(
         hypothesis: Test hypothesis
 
         baseline_conversion: Current conversion rate
-
-
 
     Returns:
 

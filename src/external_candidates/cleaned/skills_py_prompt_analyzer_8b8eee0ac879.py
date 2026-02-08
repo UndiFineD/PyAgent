@@ -19,7 +19,6 @@ import math
 
 import re
 
-
 # ---------------------------------------------------------------------------
 
 # Unicode ranges for detecting mixed-script attacks
@@ -35,7 +34,6 @@ SCRIPT_RANGES = {
     "hangul": re.compile(r"[\uAC00-\uD7AF]"),
     "devanagari": re.compile(r"[\u0900-\u097F]"),
 }
-
 
 # ---------------------------------------------------------------------------
 
@@ -79,7 +77,6 @@ HOMOGLYPHS = {
     "\u03c7": "x",
 }
 
-
 # ---------------------------------------------------------------------------
 
 # Invisible / zero-width Unicode characters
@@ -110,7 +107,6 @@ INVISIBLE_CHARS = [
     "\u2068",  # First strong isolate
     "\u2069",  # Pop directional isolate
 ]
-
 
 # ROT13-encoded injection terms
 

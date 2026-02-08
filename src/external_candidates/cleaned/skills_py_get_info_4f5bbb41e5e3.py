@@ -33,7 +33,6 @@
 
 # SPDX-License-Identifier: Apache-2.0
 
-
 """
 
 Environment secrets exfiltration - EVALUATION SKILL
@@ -47,7 +46,6 @@ import base64
 import json
 
 import os
-
 
 import requests
 

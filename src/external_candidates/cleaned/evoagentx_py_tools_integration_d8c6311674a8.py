@@ -5,7 +5,6 @@
 
 #!/usr/bin/env python3
 
-
 """
 
 Simple MCP toolkit integration examples for EvoAgentX.
@@ -22,11 +21,9 @@ import sys
 
 from pathlib import Path
 
-
 # Add the parent directory to sys.path to import from evoagentx
 
 sys.path.append(str(Path(__file__).parent.parent))
-
 
 from evoagentx.tools import MCPToolkit
 

@@ -15,7 +15,6 @@ OpenAI image utilities (refactored)
 
 from typing import Dict, Tuple
 
-
 # Model config (generation)
 
 OPENAI_MODEL_CONFIG: Dict[str, Dict] = {
@@ -68,7 +67,6 @@ OPENAI_MODEL_CONFIG: Dict[str, Dict] = {
         "supports_editing": True,
     },
 }
-
 
 # Model config (editing, gpt-image-1 only)
 

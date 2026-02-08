@@ -15,7 +15,6 @@ import xml.etree.ElementTree as ET
 
 from html.parser import HTMLParser
 
-
 # Configuration
 
 SITEMAP_URL = "https://agnxi.com/sitemap.xml"

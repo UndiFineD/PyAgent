@@ -7,8 +7,6 @@
 
 CLI interface for associative memory.
 
-
-
 Usage:
 
     keepfind "query text"
@@ -29,18 +27,15 @@ from pathlib import Path
 
 from typing import Optional
 
-
 import typer
 
 from typing_extensions import Annotated
-
 
 from .api import Keeper
 
 from .logging_config import configure_quiet_mode
 
 from .types import Item
-
 
 # Configure quiet mode by default (suppress verbose library output)
 
@@ -50,20 +45,17 @@ _verbose = sys.argv and "--verbose" in sys.argv or os.environ.get("KEEP_VERBOSE"
 
 configure_quiet_mode(quiet=not _verbose)
 
-
 app = typer.Typer(
     name="keep",
     help="Associative memory with semantic search.",
     no_args_is_help=True,
 )
 
-
 # -----------------------------------------------------------------------------
 
 # Common Options
 
 # -----------------------------------------------------------------------------
-
 
 StoreOption = Annotated[
     Optional[Path],
@@ -75,15 +67,11 @@ StoreOption = Annotated[
     ),
 ]
 
-
 CollectionOption = Annotated[str, typer.Option("--collection", "-c", help="Collection name")]
-
 
 LimitOption = Annotated[int, typer.Option("--limit", "-n", help="Maximum results to return")]
 
-
 JsonOption = Annotated[bool, typer.Option("--json", "-j", help="Output as JSON")]
-
 
 # -----------------------------------------------------------------------------
 
@@ -261,8 +249,6 @@ def update(
 
     Add or update a document in the store.
 
-
-
     Use --lazy for fast indexing when summarization is slow.
 
     Run 'keep process-pending' later to generate real summaries.
@@ -317,8 +303,6 @@ def remember(
     """
 
     Remember inline content (conversations, notes, insights).
-
-
 
     Use --lazy for fast indexing when summarization is slow.
 
@@ -534,8 +518,6 @@ def process_pending(
     """
 
     Process pending summaries from lazy indexing.
-
-
 
     Items indexed with --lazy use a truncated placeholder summary.
 

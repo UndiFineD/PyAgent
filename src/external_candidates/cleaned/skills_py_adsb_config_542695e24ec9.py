@@ -7,14 +7,11 @@
 
 """Manage adsb-overhead config.json (safe edits).
 
-
-
 This exists so the assistant can update settings without hand-editing JSON.
 
 """
 
 from __future__ import annotations
-
 
 import argparse
 
@@ -25,7 +22,6 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from typing import Any, Dict
-
 
 DEFAULT_CONFIG = str(Path.home() / ".clawdbot" / "adsb-overhead" / "config.json")
 

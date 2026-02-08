@@ -5,7 +5,6 @@
 
 from typing import List, Optional
 
-
 from ..core.message import Message  # MessageType
 
 from .agent import Agent

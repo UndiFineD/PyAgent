@@ -27,7 +27,6 @@ import warnings
 
 from urllib.parse import urlencode
 
-
 import httpx
 
 from rich import print as rprint
@@ -36,11 +35,9 @@ from rich.console import Console
 
 from rich.table import Table
 
-
 # Suppress SSL warnings for local self-signed certificates
 
 warnings.filterwarnings("ignore", message="Unverified HTTPS request")
-
 
 console = Console()
 
@@ -59,8 +56,6 @@ def search_searxng(
 
     Search using SearXNG instance.
 
-
-
     Args:
 
         query: Search query string
@@ -74,8 +69,6 @@ def search_searxng(
         time_range: Time range filter (day, week, month, year)
 
         output_format: Output format (table, json)
-
-
 
     Returns:
 
@@ -205,8 +198,6 @@ Examples:
   %(prog)s search "breaking news" --category news --time-range day
 
   %(prog)s search "rust tutorial" --format json
-
-
 
 Environment:
 

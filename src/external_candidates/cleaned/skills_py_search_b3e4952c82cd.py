@@ -9,8 +9,6 @@
 
 使用阿里云 UnifiedSearch API 进行网页搜索
 
-
-
 调用阿里云开放搜索 UnifiedSearch API 执行搜索并返回格式化结果
 
 """
@@ -34,8 +32,6 @@ def aliyun_unified_search(
 
     调用阿里云 UnifiedSearch API 执行搜索
 
-
-
     Args:
 
         query: 搜索查询字符串（必填）
@@ -49,8 +45,6 @@ def aliyun_unified_search(
         city: 城市名称（仅对 Generic 引擎生效）
 
         ip: 位置IP（仅对 Generic 引擎生效）
-
-
 
     Returns:
 

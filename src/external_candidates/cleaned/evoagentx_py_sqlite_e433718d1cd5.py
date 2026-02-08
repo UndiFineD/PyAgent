@@ -13,7 +13,6 @@ from functools import wraps
 
 from typing import Callable, Dict, List, Literal, Optional
 
-
 from evoagentx.storages.schema import (
     AgentStore,
     HistoryStore,
@@ -23,9 +22,7 @@ from evoagentx.storages.schema import (
     WorkflowStore,
 )
 
-
 from .base import DBStoreBase
-
 
 # Helper function to generate SQL for creating a table
 
@@ -37,15 +34,11 @@ def _create_table(table: str, column: List[str]) -> str:
 
     The first column is set as the PRIMARY KEY.
 
-
-
     Attributes:
 
         table (str): The name of the table to create.
 
         column (List[str]): List of column names.
-
-
 
     Returns:
 
@@ -79,15 +72,11 @@ def _insert_meta(table: str, colum: List[str]) -> str:
 
     Generates SQL to insert metadata into a table.
 
-
-
     Attributes:
 
         table (str): The name of the table.
 
         colum (List[str]): List of column names.
-
-
 
     Returns:
 
@@ -116,13 +105,9 @@ def check_db_format(func: Callable) -> Callable:
 
     Ensures the metadata matches the expected Pydantic model for the store type.
 
-
-
     Attributes:
 
         func (Callable): The function to decorate.
-
-
 
     Returns:
 
@@ -209,13 +194,9 @@ class SQLite(DBStoreBase):
 
         Initialize the SQLite database connection.
 
-
-
         Attributes:
 
             path (str): Path to the SQLite database file.
-
-
 
         """
 
@@ -235,8 +216,6 @@ class SQLite(DBStoreBase):
         """
 
         Insert memory metadata into the specified table.
-
-
 
         Attributes:
 
@@ -280,8 +259,6 @@ class SQLite(DBStoreBase):
 
         Insert agent metadata into the specified table.
 
-
-
         Attributes:
 
             metadata (AgentStore): The agent metadata to insert.
@@ -289,8 +266,6 @@ class SQLite(DBStoreBase):
             store_type (str): The type of store (e.g., 'agent').
 
             table (Optional[str]): The table name; defaults to 'agent' if None.
-
-
 
         """
 
@@ -326,8 +301,6 @@ class SQLite(DBStoreBase):
 
         Insert workflow metadata into the specified table.
 
-
-
         Attributes:
 
             metadata (WorkflowStore): The workflow metadata to insert.
@@ -335,8 +308,6 @@ class SQLite(DBStoreBase):
             store_type (str): The type of store (e.g., 'workflow').
 
             table (Optional[str]): The table name; defaults to 'workflow' if None.
-
-
 
         """
 
@@ -372,8 +343,6 @@ class SQLite(DBStoreBase):
 
         Insert history metadata into the specified table.
 
-
-
         Attributes:
 
             metadata (HistoryStore): The history metadata to insert.
@@ -381,8 +350,6 @@ class SQLite(DBStoreBase):
             store_type (str): The type of store (e.g., 'history').
 
             table (Optional[str]): The table name; defaults to 'history' if None.
-
-
 
         """
 
@@ -417,8 +384,6 @@ class SQLite(DBStoreBase):
         """
 
         Insert index metadata into the specified table.
-
-
 
         Attributes:
 
@@ -461,8 +426,6 @@ class SQLite(DBStoreBase):
 
         Generic insert method that delegates to specific insert methods based on store_type.
 
-
-
         Attributes:
 
             metadata (Dict): The metadata to insert.
@@ -470,8 +433,6 @@ class SQLite(DBStoreBase):
             store_type (str): The type of store (e.g., 'memory', 'agent').
 
             table (Optional[str]): The table name; defaults to store_type's default if None.
-
-
 
         """
 
@@ -505,8 +466,6 @@ class SQLite(DBStoreBase):
 
         Delete metadata by its ID from the specified table.
 
-
-
         Attributes:
 
             metadata_id (str): The ID of the metadata to delete.
@@ -514,10 +473,6 @@ class SQLite(DBStoreBase):
             store_type (str): The type of store (e.g., 'memory').
 
             table (Optional[str]): The table name; defaults to store_type's default if None.
-
-
-
-
 
         Returns:
 
@@ -559,8 +514,6 @@ class SQLite(DBStoreBase):
 
         Update metadata by its ID in the specified table.
 
-
-
         Attributes:
 
             metadata_id (str): The ID of the metadata to update.
@@ -570,10 +523,6 @@ class SQLite(DBStoreBase):
             store_type (str): The type of store (e.g., 'memory').
 
             table (Optional[str]): The table name; defaults to store_type's default if None.
-
-
-
-
 
         Returns:
 
@@ -646,8 +595,6 @@ class SQLite(DBStoreBase):
 
         Retrieve metadata by its ID from the specified table.
 
-
-
         Attributes:
 
             metadata_id (str): The ID of the metadata to retrieve.
@@ -655,10 +602,6 @@ class SQLite(DBStoreBase):
             store_type (str): The type of store (e.g., 'store_memory').
 
             table (Optional[str]): The table name; defaults to store_type's default if None.
-
-
-
-
 
         Returns:
 
@@ -713,8 +656,6 @@ class SQLite(DBStoreBase):
 
         Retrieve information about all tables in the database.
 
-
-
         Returns:
 
             List[Dict]: A list of dictionaries containing table names and their column information,
@@ -757,19 +698,13 @@ class SQLite(DBStoreBase):
 
         Helper method to get the primary key column name for a store type.
 
-
-
         Attributes:
 
             store_type (str): The type of store (e.g., 'memory').
 
-
-
         Returns:
 
             str: The name of the primary key column.
-
-
 
         Raises:
 

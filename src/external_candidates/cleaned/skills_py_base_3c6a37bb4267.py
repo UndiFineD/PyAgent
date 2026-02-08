@@ -7,8 +7,6 @@
 
 Base provider protocols.
 
-
-
 These define the interfaces that concrete providers must implement.
 
 Using Protocol for structural subtyping - no explicit inheritance required.
@@ -18,7 +16,6 @@ Using Protocol for structural subtyping - no explicit inheritance required.
 from dataclasses import dataclass
 
 from typing import Any, Protocol, runtime_checkable
-
 
 # -----------------------------------------------------------------------------
 
@@ -32,8 +29,6 @@ class Document:
     """
 
     A fetched document ready for processing.
-
-
 
     Attributes:
 
@@ -62,13 +57,9 @@ class DocumentProvider(Protocol):
 
     Fetches document content from a URI.
 
-
-
     Implementations handle specific URI schemes (file://, https://, s3://, etc.)
 
     and convert the content to text.
-
-
 
     Example implementation:
 
@@ -77,8 +68,6 @@ class DocumentProvider(Protocol):
             def supports(self, uri: str) -> bool:
 
                 return uri.startswith("file://")
-
-
 
             def fetch(self, uri: str) -> Document:
 
@@ -95,13 +84,9 @@ class DocumentProvider(Protocol):
 
         Check if this provider can handle the given URI.
 
-
-
         Args:
 
             uri: The URI to check
-
-
 
         Returns:
 
@@ -116,19 +101,13 @@ class DocumentProvider(Protocol):
 
         Fetch and return the document content.
 
-
-
         Args:
 
             uri: The URI to fetch
 
-
-
         Returns:
 
             Document with text content
-
-
 
         Raises:
 
@@ -154,13 +133,9 @@ class EmbeddingProvider(Protocol):
 
     Generates vector embeddings from text.
 
-
-
     Embeddings enable semantic similarity search. The same provider instance
 
     must be used for both indexing and querying to ensure consistent vectors.
-
-
 
     Example implementation:
 
@@ -172,21 +147,15 @@ class EmbeddingProvider(Protocol):
 
                 self.model = SentenceTransformer(model_name)
 
-
-
             @property
 
             def dimension(self) -> int:
 
                 return self.model.get_sentence_embedding_dimension()
 
-
-
             def embed(self, text: str) -> list[float]:
 
                 return self.model.encode(text).tolist()
-
-
 
             def embed_batch(self, texts: list[str]) -> list[list[float]]:
 
@@ -199,8 +168,6 @@ class EmbeddingProvider(Protocol):
         """
 
         The dimensionality of the embedding vectors.
-
-
 
         This must be consistent across all calls. ChromaDb and other vector
 
@@ -215,13 +182,9 @@ class EmbeddingProvider(Protocol):
 
         Generate an embedding vector for the given text.
 
-
-
         Args:
 
             text: The text to embed
-
-
 
         Returns:
 
@@ -236,17 +199,11 @@ class EmbeddingProvider(Protocol):
 
         Generate embeddings for multiple texts.
 
-
-
         Batch processing is often more efficient than individual calls.
-
-
 
         Args:
 
             texts: List of texts to embed
-
-
 
         Returns:
 
@@ -270,13 +227,9 @@ class SummarizationProvider(Protocol):
 
     Generates concise summaries of document content.
 
-
-
     Summaries are stored alongside items and enable quick recall without
 
     fetching the original document. They're also used for full-text search.
-
-
 
     Example implementation:
 
@@ -287,8 +240,6 @@ class SummarizationProvider(Protocol):
                 self.client = OpenAI()
 
                 self.model = model
-
-
 
             def summarize(self, content: str, max_length: int = 500) -> str:
 
@@ -317,15 +268,11 @@ class SummarizationProvider(Protocol):
 
         Generate a summary of the content.
 
-
-
         Args:
 
             content: The full document content
 
             max_length: Approximate maximum length in characters
-
-
 
         Returns:
 
@@ -349,13 +296,9 @@ class TaggingProvider(Protocol):
 
     Generates structured tags from document content.
 
-
-
     Tags enable traditional navigation and filtering. The provider analyzes
 
     content and returns relevant key-value pairs.
-
-
 
     Example implementation:
 
@@ -366,8 +309,6 @@ class TaggingProvider(Protocol):
                 self.client = OpenAI()
 
                 self.model = model
-
-
 
             def tag(self, content: str) -> dict[str, str]:
 
@@ -390,19 +331,13 @@ class TaggingProvider(Protocol):
 
         Generate tags for the content.
 
-
-
         Args:
 
             content: The full document content
 
-
-
         Returns:
 
             Dictionary of tag key-value pairs
-
-
 
         Note:
 
@@ -429,15 +364,11 @@ class ProviderRegistry:
 
     Registry for discovering and instantiating providers.
 
-
-
     Providers are registered by name and can be instantiated from configuration.
 
     This allows the store configuration (TOML) to specify providers by name
 
     rather than requiring code changes.
-
-
 
     Example:
 
@@ -446,8 +377,6 @@ class ProviderRegistry:
         registry.register_embedding("sentence-transformers", SentenceTransformerEmbedding)
 
         registry.register_embedding("openai", OpenAIEmbedding)
-
-
 
         # Later, from config:
 

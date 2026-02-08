@@ -25,7 +25,6 @@ from pathlib import Path
 
 from typing import Any, Dict, List, Optional
 
-
 SESSIONS_DIR = Path.home() / ".clawdbot" / "browser-sessions"
 
 PROFILES_DIR = Path.home() / ".clawdbot" / "browser-profiles"

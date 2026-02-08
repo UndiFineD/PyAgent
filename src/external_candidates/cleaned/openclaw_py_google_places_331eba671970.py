@@ -5,13 +5,11 @@
 
 from __future__ import annotations
 
-
 import logging
 
 import os
 
 from typing import Any
-
 
 import httpx
 
@@ -28,11 +26,9 @@ from local_places.schemas import (
     SearchResponse,
 )
 
-
 GOOGLE_PLACES_BASE_URL = os.getenv("GOOGLE_PLACES_BASE_URL", "https://places.googleapis.com/v1")
 
 logger = logging.getLogger("local_places.google_places")
-
 
 _PRICE_LEVEL_TO_ENUM = {
     0: "PRICE_LEVEL_FREE",
@@ -43,7 +39,6 @@ _PRICE_LEVEL_TO_ENUM = {
 }
 
 _ENUM_TO_PRICE_LEVEL = {value: key for key, value in _PRICE_LEVEL_TO_ENUM.items()}
-
 
 _SEARCH_FIELD_MASK = (
     "places.id,"
@@ -56,7 +51,6 @@ _SEARCH_FIELD_MASK = (
     "places.currentOpeningHours,"
     "nextPageToken"
 )
-
 
 _DETAILS_FIELD_MASK = (
     "id,"
@@ -71,7 +65,6 @@ _DETAILS_FIELD_MASK = (
     "nationalPhoneNumber,"
     "websiteUri"
 )
-
 
 _RESOLVE_FIELD_MASK = "places.id,places.displayName,places.formattedAddress,places.location,places.types"
 

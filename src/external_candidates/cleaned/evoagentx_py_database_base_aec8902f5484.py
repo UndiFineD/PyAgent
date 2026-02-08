@@ -105,8 +105,6 @@ class DatabaseBase(ABC):
 
         Initialize the database base.
 
-
-
         Args:
 
             connection_string: Database connection string
@@ -146,8 +144,6 @@ class DatabaseBase(ABC):
 
         Establish connection to the database.
 
-
-
         Returns:
 
             bool: True if connection successful, False otherwise
@@ -161,8 +157,6 @@ class DatabaseBase(ABC):
         """
 
         Close connection to the database.
-
-
 
         Returns:
 
@@ -178,8 +172,6 @@ class DatabaseBase(ABC):
 
         Test if the database connection is working.
 
-
-
         Returns:
 
             bool: True if connection is working, False otherwise
@@ -194,8 +186,6 @@ class DatabaseBase(ABC):
 
         Execute a query on the database.
 
-
-
         Args:
 
             query: The query to execute (string for SQL, dict/list for NoSQL)
@@ -203,8 +193,6 @@ class DatabaseBase(ABC):
             query_type: Type of query being executed
 
             **kwargs: Additional query parameters
-
-
 
         Returns:
 
@@ -220,8 +208,6 @@ class DatabaseBase(ABC):
 
         Get information about the database.
 
-
-
         Returns:
 
             Dict containing database information
@@ -235,8 +221,6 @@ class DatabaseBase(ABC):
         """
 
         List all collections/tables in the database.
-
-
 
         Returns:
 
@@ -252,13 +236,9 @@ class DatabaseBase(ABC):
 
         Get information about a specific collection/table.
 
-
-
         Args:
 
             collection_name: Name of the collection/table
-
-
 
         Returns:
 
@@ -274,13 +254,9 @@ class DatabaseBase(ABC):
 
         Get the schema/structure of the database or a specific collection.
 
-
-
         Args:
 
             collection_name: Name of the collection/table (optional)
-
-
 
         Returns:
 
@@ -295,13 +271,9 @@ class DatabaseBase(ABC):
 
         Validate a query before execution.
 
-
-
         Args:
 
             query: The query to validate
-
-
 
         Returns:
 
@@ -338,8 +310,6 @@ class DatabaseBase(ABC):
 
         Format query results into a standard structure.
 
-
-
         Args:
 
             data: Raw query results
@@ -349,8 +319,6 @@ class DatabaseBase(ABC):
             execution_time: Time taken to execute the query
 
             **kwargs: Additional metadata
-
-
 
         Returns:
 
@@ -372,8 +340,6 @@ class DatabaseBase(ABC):
 
         Format error results into a standard structure.
 
-
-
         Args:
 
             error: Error message
@@ -381,8 +347,6 @@ class DatabaseBase(ABC):
             query_type: Type of query that failed
 
             **kwargs: Additional error metadata
-
-
 
         Returns:
 
@@ -405,8 +369,6 @@ class DatabaseBase(ABC):
 
         Get list of supported query types for this database.
 
-
-
         Returns:
 
             List of supported QueryType enums
@@ -426,8 +388,6 @@ class DatabaseBase(ABC):
         """
 
         Get database capabilities and features.
-
-
 
         Returns:
 

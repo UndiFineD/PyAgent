@@ -9,7 +9,6 @@ from enum import Enum
 
 from typing import Dict
 
-
 from llama_index.core.graph_stores.simple import GraphStore
 
 

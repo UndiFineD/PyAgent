@@ -32,8 +32,6 @@ class PerformanceAnalyzer:
 
         Initialize with calculated metrics.
 
-
-
         Args:
 
             campaign_metrics: Dictionary of campaign performance metrics

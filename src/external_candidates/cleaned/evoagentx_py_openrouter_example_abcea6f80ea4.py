@@ -5,13 +5,11 @@
 
 import os
 
-
 from dotenv import load_dotenv
 
 from evoagentx.agents import CustomizeAgent
 
 from evoagentx.core import Message
-
 
 # from evoagentx.models import OpenRouterLLM
 
@@ -20,7 +18,6 @@ from evoagentx.core.module_utils import extract_code_blocks
 from evoagentx.models import OpenRouterConfig
 
 from evoagentx.prompts import StringTemplate
-
 
 load_dotenv()
 

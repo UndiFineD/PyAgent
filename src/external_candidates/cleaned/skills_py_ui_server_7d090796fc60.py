@@ -27,9 +27,7 @@ from typing import Any, Dict, Optional
 
 from urllib.parse import parse_qs, urlparse
 
-
 from ui_state import UIState
-
 
 DEFAULT_KEEPALIVE_SEC = 15
 

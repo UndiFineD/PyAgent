@@ -9,7 +9,6 @@ import xml.etree.ElementTree as ET
 
 from typing import Any, Dict, List, Optional
 
-
 from .request_base import RequestBase
 
 from .storage_handler import FileStorageHandler
@@ -48,8 +47,6 @@ class ArxivBase(RequestBase):
 
         Search arXiv using the API and return structured results.
 
-
-
         Args:
 
             search_query: Search query string (e.g., "all:electron", "cat:cs.AI")
@@ -59,8 +56,6 @@ class ArxivBase(RequestBase):
             start: Starting index for results
 
             max_results: Maximum number of results to return
-
-
 
         Returns:
 
@@ -99,13 +94,9 @@ class ArxivBase(RequestBase):
 
         Parse the Atom XML response from arXiv API.
 
-
-
         Args:
 
             xml_content: Raw XML content from the API response
-
-
 
         Returns:
 
@@ -168,15 +159,11 @@ class ArxivBase(RequestBase):
 
         Parse a single paper entry from the XML.
 
-
-
         Args:
 
             entry: XML element for a paper entry
 
             namespaces: Namespace mappings
-
-
 
         Returns:
 
@@ -289,8 +276,6 @@ class ArxivBase(RequestBase):
 
         Helper method to extract text from XML elements.
 
-
-
         Args:
 
             element: XML element to search in
@@ -300,8 +285,6 @@ class ArxivBase(RequestBase):
             namespaces: Namespace mappings
 
             clean: Whether to clean whitespace
-
-
 
         Returns:
 
@@ -328,8 +311,6 @@ class ArxivBase(RequestBase):
 
         Download a PDF from arXiv.
 
-
-
         Args:
 
             pdf_url: URL of the PDF to download
@@ -337,8 +318,6 @@ class ArxivBase(RequestBase):
             save_path: Local path to save the PDF
 
             storage_handler: Storage handler for file operations
-
-
 
         Returns:
 
@@ -422,8 +401,6 @@ class ArxivSearchTool(Tool):
 
         Search arXiv for papers.
 
-
-
         Args:
 
             search_query: Search query string
@@ -433,8 +410,6 @@ class ArxivSearchTool(Tool):
             max_results: Maximum results to return
 
             start: Starting index for pagination
-
-
 
         Returns:
 
@@ -485,15 +460,11 @@ class ArxivDownloadTool(Tool):
 
         Download a PDF from arXiv.
 
-
-
         Args:
 
             pdf_url: URL of the PDF
 
             save_path: Where to save the file
-
-
 
         Returns:
 

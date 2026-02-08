@@ -9,33 +9,23 @@
 
 Set up AgentMail webhook endpoint
 
-
-
 Usage:
 
     # Create webhook
 
     python setup_webhook.py --url "https://myapp.com/webhook" --create
 
-
-
     # List existing webhooks
 
     python setup_webhook.py --list
-
-
 
     # Delete webhook
 
     python setup_webhook.py --delete "webhook_id"
 
-
-
     # Test webhook with simple Flask receiver (for development)
 
     python setup_webhook.py --test-server
-
-
 
 Environment:
 
@@ -50,7 +40,6 @@ import json
 import os
 
 import sys
-
 
 try:
     from agentmail import AgentMail

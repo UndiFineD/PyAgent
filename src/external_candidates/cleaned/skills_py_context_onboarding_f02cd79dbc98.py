@@ -9,13 +9,11 @@
 
 from __future__ import annotations
 
-
 import argparse
 
 import textwrap
 
 from pathlib import Path
-
 
 DEFAULT_FILES = ["SOUL.md", "USER.md", "AGENTS.md", "TOOLS.md"]
 

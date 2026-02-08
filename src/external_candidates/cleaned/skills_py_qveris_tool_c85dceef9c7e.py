@@ -21,11 +21,7 @@
 
 QVeris Tool Search & Execution CLI
 
-
-
 Search for tools by capability and execute them via QVeris API.
-
-
 
 Usage:
 
@@ -45,9 +41,7 @@ import os
 
 import sys
 
-
 import httpx
-
 
 BASE_URL = "https://qveris.ai/api/v1"
 

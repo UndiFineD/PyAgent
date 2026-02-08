@@ -9,13 +9,9 @@
 
 Skill Packager - Creates a distributable .skill file of a skill folder
 
-
-
 Usage:
 
     python utils/package_skill.py <path/to/skill-folder> [output-directory]
-
-
 
 Example:
 
@@ -31,7 +27,6 @@ import zipfile
 
 from pathlib import Path
 
-
 from quick_validate import validate_skill
 
 
@@ -40,15 +35,11 @@ def package_skill(skill_path, output_dir=None):
 
     Package a skill folder into a .skill file.
 
-
-
     Args:
 
         skill_path: Path to the skill folder
 
         output_dir: Optional output directory for the .skill file (defaults to current directory)
-
-
 
     Returns:
 

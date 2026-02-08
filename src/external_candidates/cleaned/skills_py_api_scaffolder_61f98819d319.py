@@ -9,13 +9,9 @@
 
 API Scaffolder
 
-
-
 Generates Express.js route handlers, validation middleware, and TypeScript types
 
 from OpenAPI specifications (YAML/JSON).
-
-
 
 Usage:
 

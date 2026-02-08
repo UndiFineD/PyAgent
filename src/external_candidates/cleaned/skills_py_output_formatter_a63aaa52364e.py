@@ -7,8 +7,6 @@
 
 Output formatting module.
 
-
-
 Provides context-aware output formatting for different environments (Desktop, CLI, API).
 
 Implements progressive disclosure and token-efficient reporting.
@@ -25,8 +23,6 @@ class OutputFormatter:
         """
 
         Initialize output formatter.
-
-
 
         Args:
 
@@ -45,15 +41,11 @@ class OutputFormatter:
 
         Format coverage summary.
 
-
-
         Args:
 
             summary: Coverage summary data
 
             detailed: Whether to include detailed breakdown
-
-
 
         Returns:
 
@@ -164,15 +156,11 @@ class OutputFormatter:
 
         Format recommendations with progressive disclosure.
 
-
-
         Args:
 
             recommendations: List of recommendation dictionaries
 
             max_items: Maximum number of items to show (None for all)
-
-
 
         Returns:
 
@@ -279,15 +267,11 @@ class OutputFormatter:
 
         Format test execution results.
 
-
-
         Args:
 
             results: Test results data
 
             show_details: Whether to show detailed results
-
-
 
         Returns:
 
@@ -387,8 +371,6 @@ class OutputFormatter:
 
         Create comprehensive summary report (token-efficient).
 
-
-
         Args:
 
             coverage: Coverage data
@@ -396,8 +378,6 @@ class OutputFormatter:
             metrics: Quality metrics
 
             recommendations: Recommendations list
-
-
 
         Returns:
 
@@ -441,13 +421,9 @@ class OutputFormatter:
 
         Determine if detailed output should be shown based on data size.
 
-
-
         Args:
 
             data_size: Size of data to display
-
-
 
         Returns:
 
@@ -471,15 +447,11 @@ class OutputFormatter:
 
         Truncate output to maximum lines.
 
-
-
         Args:
 
             text: Text to truncate
 
             max_lines: Maximum number of lines
-
-
 
         Returns:
 

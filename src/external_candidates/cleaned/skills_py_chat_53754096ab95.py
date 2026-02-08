@@ -15,8 +15,6 @@
 
 """Google Chat commands.
 
-
-
 Note: Google Chat API requires a Google Workspace account.
 
 Personal Gmail accounts may have limited access.
@@ -25,13 +23,11 @@ Personal Gmail accounts may have limited access.
 
 from pathlib import Path
 
-
 import click
 
 from google.oauth2.credentials import Credentials
 
 from googleapiclient.discovery import build
-
 
 TOKEN_FILE = Path.home() / ".simple-google-workspace" / "token.json"
 

@@ -11,7 +11,6 @@ import tempfile
 
 from pathlib import Path
 
-
 import pytest
 
 from fskb.utils import IgnorePatternMatcher

@@ -11,8 +11,6 @@
 
 Demostración Definitiva de Éxito de Grokking en Grokkit
 
-
-
 Este script prueba que cada cassette, con sus pesos grokked,
 
 resuelve su dominio respectivo con una precisión casi perfecta.
@@ -26,7 +24,6 @@ import torch
 import torch.nn.functional as F
 
 from agi import Grokkit, generate_wave_data
-
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

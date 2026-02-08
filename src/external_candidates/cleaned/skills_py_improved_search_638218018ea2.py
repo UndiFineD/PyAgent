@@ -31,7 +31,6 @@ titles = [
     "Bloemkool-aardappelovenschotel met gehakt en kaassaus",
 ]
 
-
 for title in titles:
     print(f"{title}")
 

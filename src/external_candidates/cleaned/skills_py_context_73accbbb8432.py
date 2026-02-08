@@ -7,8 +7,6 @@
 
 Working context and top-of-mind retrieval.
 
-
-
 This module provides hierarchical context management for efficient
 
 "what are we working on?" queries with O(log(log(N))) retrieval.
@@ -28,13 +26,9 @@ class WorkingContext:
 
     The current working context — a high-level summary of active work.
 
-
-
     This is the "Level 3" summary that any agent can read to instantly
 
     understand what's being worked on.
-
-
 
     Attributes:
 
@@ -71,13 +65,9 @@ class TopicSummary:
 
     A summary of items within a topic cluster (Level 2).
 
-
-
     Topics aggregate related items and provide a mid-level
 
     overview without retrieving all underlying items.
-
-
 
     Attributes:
 
@@ -114,15 +104,11 @@ class RoutingContext:
 
     Describes how items are routed between private and shared stores.
 
-
-
     This document lives at a well-known location in the shared store.
 
     The facade reads it to make routing decisions. The private store
 
     is physically separate and invisible from the shared store.
-
-
 
     Attributes:
 
@@ -159,7 +145,6 @@ class RoutingContext:
 
 ROUTING_CONTEXT_ID = "_system:routing"
 
-
 # Reserved system tags for context management (stored with items)
 
 CONTEXT_TAGS = {
@@ -168,7 +153,6 @@ CONTEXT_TAGS = {
     "_level": "Hierarchy level (0=source, 1=cluster, 2=topic, 3=context)",
     "_summarizes": "IDs of items this item summarizes (for hierarchy)",
 }
-
 
 # Relevance scoring is computed at query time, NOT stored.
 
@@ -203,8 +187,6 @@ def matches_private_pattern(tags: dict[str, str], patterns: list[dict[str, str]]
     """
 
     Check if an item's tags match any private routing pattern.
-
-
 
     A pattern matches if ALL its key-value pairs are present in tags.
 

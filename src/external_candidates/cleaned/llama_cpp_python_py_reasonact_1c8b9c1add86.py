@@ -11,7 +11,6 @@ import os
 
 import sys
 
-
 from common import GptParams
 
 from low_level_api_chat_cpp import LLaMAInteract
@@ -26,7 +25,6 @@ def env_or_def(env, default):
 
 MODEL = env_or_def("MODEL", "./models/llama-13B/ggml-model.bin")
 
-
 prompt = f"""You run in a loop of Thought, Action, Observation.
 
 At the end of the loop either Answer or restate your Thought and Action.
@@ -38,10 +36,6 @@ Use Action to run one of these actions available to you:
 - calculate[python math expression]
 
 Observation will be the result of running those actions
-
-
-
-
 
 Question: What is 4 * 7 / 3?
 
@@ -63,7 +57,6 @@ Answer: Paris is the capital of France
 
 Question:""" + " ".join(sys.argv[1:])
 
-
 print("Loading model...")
 
 params = GptParams(
@@ -80,7 +73,6 @@ params = GptParams(
     n_predict=-1,
     prompt=prompt,
 )
-
 
 with LLaMAInteract(params) as m:
     m.interact()

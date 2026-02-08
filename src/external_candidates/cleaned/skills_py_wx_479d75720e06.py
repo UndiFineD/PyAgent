@@ -19,7 +19,6 @@ from urllib.error import URLError
 
 from urllib.request import urlopen
 
-
 BASE_URL = "https://aviationweather.gov/api/data"
 
 

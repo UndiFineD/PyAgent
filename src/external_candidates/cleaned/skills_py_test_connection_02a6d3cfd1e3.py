@@ -9,8 +9,6 @@
 
 Test Fliz API connection and validate API key.
 
-
-
 Usage:
 
     python test_connection.py --api-key YOUR_API_KEY
@@ -25,9 +23,7 @@ import os
 
 import sys
 
-
 import requests
-
 
 BASE_URL = "https://app.fliz.ai"
 

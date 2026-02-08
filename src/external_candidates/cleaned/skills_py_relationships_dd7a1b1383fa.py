@@ -7,15 +7,11 @@
 
 Relationship extraction for associative memory.
 
-
-
 Detects references, links, and relationships between items without
 
 requiring ML models. These are "batteries-included" extractors that
 
 work on content structure.
-
-
 
 Relationships are returned as tags where the value is a comma-separated
 
@@ -31,18 +27,15 @@ from typing import Any
 
 from urllib.parse import urlparse
 
-
 # -----------------------------------------------------------------------------
 
 # URL and Path Extraction
 
 # -----------------------------------------------------------------------------
 
-
 # URL pattern - matches http(s) URLs
 
 URL_PATTERN = re.compile(r'https?://[^\s<>\[\]()"\',;]+[^\s<>\[\]()"\',;.!?]', re.IGNORECASE)
-
 
 # File path patterns
 
@@ -55,11 +48,9 @@ FILE_PATH_PATTERNS = [
     re.compile(r"\.{1,2}/(?:[a-zA-Z0-9._-]+/)*[a-zA-Z0-9._-]+\.[a-zA-Z0-9]+"),
 ]
 
-
 # Markdown link pattern: [text](url)
 
 MARKDOWN_LINK_PATTERN = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
-
 
 # Import patterns by language
 
@@ -91,8 +82,6 @@ def extract_urls(content: str) -> list[str]:
 
     Extract HTTP(S) URLs from content.
 
-
-
     Returns deduplicated list of URLs found.
 
     """
@@ -120,8 +109,6 @@ def extract_file_paths(content: str) -> list[str]:
 
     Extract file paths and file:// URIs from content.
 
-
-
     Returns deduplicated list of paths found.
 
     """
@@ -141,8 +128,6 @@ def extract_markdown_links(content: str) -> list[tuple[str, str]]:
 
     Extract markdown links as (text, url) tuples.
 
-
-
     Returns list of (link_text, link_url) pairs.
 
     """
@@ -155,8 +140,6 @@ def extract_imports(content: str, language: str | None = None) -> list[str]:
 
     Extract import/require statements from code.
 
-
-
     Args:
 
         content: Source code content
@@ -164,8 +147,6 @@ def extract_imports(content: str, language: str | None = None) -> list[str]:
         language: Programming language (python, javascript, etc.)
 
                   If None, tries all known patterns.
-
-
 
     Returns:
 
@@ -205,8 +186,6 @@ class RelationshipExtractor:
 
     Extracts relationships from content as tags.
 
-
-
     Detected relationships:
 
     - _references: URLs found in content
@@ -216,8 +195,6 @@ class RelationshipExtractor:
     - _imports: Code imports/dependencies
 
     - _links: Markdown link targets
-
-
 
     All relationship tags use underscore prefix (system tags) since
 
@@ -270,8 +247,6 @@ class RelationshipExtractor:
 
         Extract relationships from content.
 
-
-
         Args:
 
             content: Text content to analyze
@@ -279,8 +254,6 @@ class RelationshipExtractor:
             language: Programming language (for import extraction)
 
             content_type: Content type hint (e.g., "code", "documentation")
-
-
 
         Returns:
 
@@ -371,8 +344,6 @@ def extract_all_references(content: str) -> list[str]:
 
     Extract all references (URLs + paths + links) from content.
 
-
-
     Convenience function for quick reference extraction.
 
     """
@@ -392,8 +363,6 @@ def parse_reference_tag(tag_value: str) -> list[str]:
     """
 
     Parse a comma-separated reference tag back to a list.
-
-
 
     Useful for querying: given an item's _references tag,
 

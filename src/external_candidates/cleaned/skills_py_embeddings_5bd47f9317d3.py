@@ -13,7 +13,6 @@ import os
 
 from typing import Any
 
-
 from .base import EmbeddingProvider, get_registry
 
 
@@ -22,11 +21,7 @@ class SentenceTransformerEmbedding:
 
     Embedding provider using sentence-transformers library.
 
-
-
     Runs locally, no API key required. Good default for getting started.
-
-
 
     Requires: pip install sentence-transformers
 
@@ -79,8 +74,6 @@ class OpenAIEmbedding:
     """
 
     Embedding provider using OpenAI's API.
-
-
 
     Requires: KEEP_OPENAI_API_KEY or OPENAI_API_KEY environment variable.
 
@@ -166,8 +159,6 @@ class GeminiEmbedding:
 
     Embedding provider using Google's Gemini API.
 
-
-
     Requires: GEMINI_API_KEY or GOOGLE_API_KEY environment variable.
 
     Requires: pip install google-genai
@@ -249,8 +240,6 @@ class OllamaEmbedding:
     """
 
     Embedding provider using Ollama's local API.
-
-
 
     Requires: Ollama running locally (default: http://localhost:11434)
 

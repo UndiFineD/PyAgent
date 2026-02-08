@@ -27,9 +27,7 @@ from urllib.error import HTTPError, URLError
 
 from urllib.request import urlopen
 
-
 API_BASE = "https://vedicscriptures.github.io"
-
 
 # Bhagavad Gita: 18 chapters with verse counts
 

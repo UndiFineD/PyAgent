@@ -7,8 +7,6 @@
 
 AgentMemory - Persistent Memory for AI Agents
 
-
-
 A lightweight memory layer that helps AI agents:
 
 - Remember facts across sessions
@@ -20,8 +18,6 @@ A lightweight memory layer that helps AI agents:
 - Search memories semantically
 
 - Forget stale information automatically
-
-
 
 MIT License - Built for the OpenClaw community
 
@@ -115,19 +111,13 @@ class AgentMemory:
 
     Persistent memory system for AI agents.
 
-
-
     Usage:
 
         mem = AgentMemory()
 
-
-
         # Remember facts
 
         mem.remember("Boss prefers brief updates", tags=["preference", "communication"])
-
-
 
         # Learn from experience
 
@@ -143,21 +133,15 @@ class AgentMemory:
 
         )
 
-
-
         # Track entities
 
         mem.track_entity("Alex", "person", {"role": "boss", "timezone": "EST"})
-
-
 
         # Recall relevant memories
 
         facts = mem.recall("how does boss like updates?")
 
         lessons = mem.get_lessons(context="trading", outcome="negative")
-
-
 
         # Automatic cleanup
 
@@ -169,8 +153,6 @@ class AgentMemory:
         """
 
         Initialize memory storage.
-
-
 
         Args:
 
@@ -318,8 +300,6 @@ class AgentMemory:
 
         Store a fact in memory.
 
-
-
         Args:
 
             content: The fact to remember
@@ -331,8 +311,6 @@ class AgentMemory:
             confidence: How confident we are (0-1)
 
             expires_in_days: Auto-expire after N days (None = never)
-
-
 
         Returns:
 
@@ -407,8 +385,6 @@ class AgentMemory:
 
         Search for relevant facts.
 
-
-
         Args:
 
             query: Search query (uses full-text search)
@@ -418,8 +394,6 @@ class AgentMemory:
             tags: Filter by tags (AND logic)
 
             min_confidence: Minimum confidence threshold
-
-
 
         Returns:
 
@@ -657,8 +631,6 @@ class AgentMemory:
 
         Record a lesson learned from experience.
 
-
-
         Args:
 
             action: What was done
@@ -668,8 +640,6 @@ class AgentMemory:
             outcome: "positive", "negative", or "neutral"
 
             insight: What was learned
-
-
 
         Returns:
 
@@ -704,8 +674,6 @@ class AgentMemory:
         """
 
         Retrieve lessons, optionally filtered.
-
-
 
         Args:
 
@@ -781,8 +749,6 @@ class AgentMemory:
 
         Track an entity (person, project, company, etc.).
 
-
-
         Args:
 
             name: Entity name
@@ -790,8 +756,6 @@ class AgentMemory:
             entity_type: Type (person, project, company, tool, etc.)
 
             attributes: Key-value attributes
-
-
 
         Returns:
 

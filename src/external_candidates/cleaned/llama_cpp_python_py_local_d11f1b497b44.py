@@ -9,14 +9,12 @@ import llama_cpp
 
 import llama_cpp.llama_tokenizer
 
-
 llama = llama_cpp.Llama.from_pretrained(
     repo_id="Qwen/Qwen1.5-0.5B-Chat-GGUF",
     filename="*q8_0.gguf",
     tokenizer=llama_cpp.llama_tokenizer.LlamaHFTokenizer.from_pretrained("Qwen/Qwen1.5-0.5B"),
     verbose=False,
 )
-
 
 model = "gpt-3.5-turbo"
 
@@ -56,7 +54,6 @@ js = """function () {
 
 }"""
 
-
 css = """
 
 footer {
@@ -73,7 +70,6 @@ full-height {
 
 """
 
-
 with gr.Blocks(theme=gr.themes.Soft(), js=js, css=css, fill_height=True) as demo:
     gr.ChatInterface(
         predict,
@@ -83,7 +79,6 @@ with gr.Blocks(theme=gr.themes.Soft(), js=js, css=css, fill_height=True) as demo
             "Who was the first person on the moon?",
         ],
     )
-
 
 if __name__ == "__main__":
     demo.launch()

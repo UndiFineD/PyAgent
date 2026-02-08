@@ -9,8 +9,6 @@
 
 Early Warning System - Detect illness/overtraining before symptoms
 
-
-
 Multi-signal monitoring for early detection of:
 
 - Illness (temperature elevation, HRV drop, RHR increase)
@@ -18,8 +16,6 @@ Multi-signal monitoring for early detection of:
 - Overtraining (sustained low readiness, elevated RHR, low HRV)
 
 - Recovery debt (multiple nights of poor sleep)
-
-
 
 Uses rolling baselines and requires 2+ signals to trigger alarm.
 
@@ -39,11 +35,9 @@ from pathlib import Path
 
 from typing import Dict, List, Optional, Tuple
 
-
 # Add scripts directory to path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-
 
 from oura_api import OuraClient
 
@@ -140,8 +134,6 @@ class EarlyWarningSystem:
         """
 
         Initialize early warning system.
-
-
 
         Args:
 
@@ -323,15 +315,11 @@ class EarlyWarningSystem:
 
         Analyze data and generate early warning report.
 
-
-
         Args:
 
             sleep_data: List of sleep dicts (chronological order)
 
             readiness_data: List of readiness dicts (chronological order)
-
-
 
         Returns:
 

@@ -29,7 +29,6 @@ from datetime import datetime
 
 from typing import Optional
 
-
 import psutil
 
 import typer
@@ -43,7 +42,6 @@ from rich.panel import Panel
 from rich.table import Table
 
 from rich.text import Text
-
 
 app = typer.Typer(help="Process Watch - monitor system processes, resources, and ports")
 
@@ -333,15 +331,11 @@ def info(pid: int = typer.Argument(..., help="Process ID")):
 
 [bold]Children:[/bold] {len(children)}
 
-
-
 [bold]CPU:[/bold] {cpu:.1f}%
 
 [bold]Memory:[/bold] {format_bytes(mem.rss)} ({mem.rss / psutil.virtual_memory().total * 100:.1f}%)
 
 [bold]Virtual:[/bold] {format_bytes(mem.vms)}
-
-
 
 [bold]Command:[/bold]
 
@@ -636,8 +630,6 @@ def summary():
 
   Load: {load[0]:.2f} / {load[1]:.2f} / {load[2]:.2f}
 
-
-
 [bold cyan]Memory[/bold cyan]
 
   Used: {format_bytes(mem.used)} / {format_bytes(mem.total)} ({mem.percent}%)
@@ -646,15 +638,11 @@ def summary():
 
   Swap: {format_bytes(swap.used)} / {format_bytes(swap.total)} ({swap.percent}%)
 
-
-
 [bold cyan]Disk (/)[/bold cyan]
 
   Used: {format_bytes(disk.used)} / {format_bytes(disk.total)} ({disk.percent}%)
 
   Free: {format_bytes(disk.free)}
-
-
 
 [bold cyan]Processes[/bold cyan]
 

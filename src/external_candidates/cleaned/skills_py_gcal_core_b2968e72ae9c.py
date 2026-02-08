@@ -21,13 +21,11 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from zoneinfo import ZoneInfo
 
-
 from dateutil import parser as date_parser
 
 from dateutil.relativedelta import relativedelta
 
 from gcal_auth import get_calendar_service, is_pro_user
-
 
 # Default timezone (can be overridden)
 
@@ -65,15 +63,11 @@ def parse_datetime(text: str, reference: datetime = None) -> datetime:
 
     Parse natural language datetime string.
 
-
-
     Args:
 
         text: Natural language date/time (e.g., "tomorrow 2pm", "next Friday")
 
         reference: Reference datetime for relative parsing
-
-
 
     Returns:
 
@@ -130,8 +124,6 @@ def list_events(
 
     List calendar events within a time range.
 
-
-
     Args:
 
         time_min: Start of range (default: now)
@@ -141,8 +133,6 @@ def list_events(
         max_results: Maximum events to return
 
         calendar_id: Calendar ID (default: primary)
-
-
 
     Returns:
 
@@ -287,8 +277,6 @@ def find_free_time(
 
     Find free time slots.
 
-
-
     Args:
 
         duration_minutes: Minimum slot duration
@@ -296,8 +284,6 @@ def find_free_time(
         time_min: Start of search range
 
         time_max: End of search range
-
-
 
     Returns:
 
@@ -409,8 +395,6 @@ def create_event(
 
     Create a new calendar event.
 
-
-
     Args:
 
         summary: Event title
@@ -428,8 +412,6 @@ def create_event(
         calendar_id: Target calendar
 
         confirmed: Skip confirmation if True
-
-
 
     Returns:
 
@@ -513,15 +495,11 @@ def quick_add(text: str, calendar_id: str = "primary") -> Optional[Dict[str, Any
 
     Quick add event using natural language.
 
-
-
     Args:
 
         text: Natural language event description (e.g., "Lunch with Alex tomorrow at noon")
 
         calendar_id: Target calendar
-
-
 
     Returns:
 
@@ -568,8 +546,6 @@ def update_event(
 
     Update an existing event.
 
-
-
     Args:
 
         event_id: ID of event to update
@@ -587,8 +563,6 @@ def update_event(
         calendar_id: Calendar ID
 
         confirmed: Skip confirmation if True
-
-
 
     Returns:
 
@@ -669,8 +643,6 @@ def delete_event(event_id: str, calendar_id: str = "primary", confirmed: bool = 
 
     Delete an event.
 
-
-
     Args:
 
         event_id: ID of event to delete
@@ -678,8 +650,6 @@ def delete_event(event_id: str, calendar_id: str = "primary", confirmed: bool = 
         calendar_id: Calendar ID
 
         confirmed: Skip confirmation if True
-
-
 
     Returns:
 
@@ -848,8 +818,6 @@ def generate_morning_brief() -> str:
     """
 
     Generate morning brief for Clawdbot cron.
-
-
 
     Returns:
 

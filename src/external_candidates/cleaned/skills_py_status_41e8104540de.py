@@ -9,11 +9,7 @@
 
 Simmer Account Status
 
-
-
 Shows wallet balance, positions, and recent activity.
-
-
 
 Usage:
 
@@ -34,7 +30,6 @@ import sys
 from urllib.error import HTTPError, URLError
 
 from urllib.request import Request, urlopen
-
 
 SIMMER_API_BASE = "https://api.simmer.markets"
 

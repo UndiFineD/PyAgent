@@ -7,9 +7,7 @@ import base64
 
 from typing import Dict, List, Optional
 
-
 import requests
-
 
 from ...storage_handler import FileStorageHandler, LocalStorageHandler
 

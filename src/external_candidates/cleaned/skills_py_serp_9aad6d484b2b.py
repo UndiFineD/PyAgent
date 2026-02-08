@@ -11,16 +11,13 @@ from pathlib import Path
 
 from typing import Any, Dict, Optional
 
-
 # Add parent directory to path for imports
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-
 from config.settings import settings
 
 from dataforseo_client.rest import ApiException
-
 
 from core.client import get_client
 
@@ -39,8 +36,6 @@ def get_google_serp(
 
     Get Google organic search results for a keyword.
 
-
-
     Args:
 
         keyword: Search query
@@ -55,13 +50,9 @@ def get_google_serp(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing SERP data with rankings, URLs, titles, and SERP features
-
-
 
     Example:
 
@@ -119,8 +110,6 @@ def get_youtube_serp(
 
     Get YouTube organic search results for a keyword.
 
-
-
     Args:
 
         keyword: Search query (max 700 characters)
@@ -135,13 +124,9 @@ def get_youtube_serp(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing YouTube video rankings with titles, channels, views, etc.
-
-
 
     Example:
 
@@ -198,8 +183,6 @@ def get_google_maps_serp(
 
     Get Google Maps/Local search results for a keyword.
 
-
-
     Args:
 
         keyword: Search query (e.g., "restaurants near me")
@@ -212,13 +195,9 @@ def get_google_maps_serp(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing local business listings
-
-
 
     Example:
 
@@ -268,8 +247,6 @@ def get_google_news_serp(
 
     Get Google News search results for a keyword.
 
-
-
     Args:
 
         keyword: Search query
@@ -282,13 +259,9 @@ def get_google_news_serp(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing news articles and their rankings
-
-
 
     Example:
 
@@ -338,8 +311,6 @@ def get_google_images_serp(
 
     Get Google Images search results for a keyword.
 
-
-
     Args:
 
         keyword: Search query
@@ -352,13 +323,9 @@ def get_google_images_serp(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing image results with URLs, titles, sources
-
-
 
     Example:
 
@@ -407,8 +374,6 @@ def get_featured_snippet(
 
     Get Google SERP with focus on featured snippets and SERP features.
 
-
-
     Args:
 
         keyword: Search query (ideally a question)
@@ -419,13 +384,9 @@ def get_featured_snippet(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing SERP data with featured snippet details
-
-
 
     Example:
 

@@ -7,7 +7,6 @@
 
 import asyncio
 
-
 import pytest
 
 from fskb.config import Settings

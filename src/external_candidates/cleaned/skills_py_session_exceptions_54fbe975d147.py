@@ -3,16 +3,13 @@
 
 # Extracted from: C:\DEV\PyAgent\.external\skills\skills\chocomintx\xiaohongshutools\scripts\request\web\exceptions\session_exceptions.py
 
-
 """
 
 自定义小红书 session类型 异常类，用于表示 小红书网络请求方面或返回信息的异常处理。
 
 """
 
-
 # class RequestError(Exception): ...
-
 
 # web相关
 
@@ -24,7 +21,6 @@ class OtherRequestError(Exception): ...
 
 
 # respones status code相关
-
 
 # 461 访问频次异常，请勿频繁操作或重启试试
 

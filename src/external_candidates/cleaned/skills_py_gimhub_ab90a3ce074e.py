@@ -21,13 +21,11 @@ from urllib.error import HTTPError
 
 from urllib.request import Request, urlopen
 
-
 GIMHUB_URL = os.environ.get("GIMHUB_URL", "https://gimhub.dev")
 
 GIMHUB_TOKEN = os.environ.get("GIMHUB_TOKEN", "")
 
 GIMHUB_AGENT = os.environ.get("GIMHUB_AGENT", "")
-
 
 CONFIG_PATH = Path.home() / ".gimhub" / "config.json"
 

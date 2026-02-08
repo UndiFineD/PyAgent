@@ -12,15 +12,11 @@ def get_embedding_model(
 ) -> HuggingFaceEmbeddings:
     """Gets an instance of the HuggingFace embedding model.
 
-
-
     Args:
 
         model_id (str): The ID/name of the HuggingFace embedding model to use
 
         device (str, optional): The device to use for the embedding model. Defaults to "cpu"
-
-
 
     Returns:
 

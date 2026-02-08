@@ -9,8 +9,6 @@
 
 Natural Language Parser - Interprets User Intent
 
-
-
 Parses natural language requests to extract intent,
 
 required capabilities, and execution steps.
@@ -49,8 +47,6 @@ class NaturalLanguageParser:
     """
 
     Parses natural language requests into structured intents.
-
-
 
     Uses pattern matching and keyword extraction to understand
 
@@ -155,13 +151,9 @@ class NaturalLanguageParser:
 
         Parse a natural language request into structured intent.
 
-
-
         Args:
 
             request: Natural language description of what to build
-
-
 
         Returns:
 

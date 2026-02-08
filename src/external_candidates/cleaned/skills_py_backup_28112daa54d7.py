@@ -27,9 +27,7 @@ from datetime import datetime
 
 from pathlib import Path
 
-
 import click
-
 
 # Defaults
 
@@ -38,7 +36,6 @@ DEFAULT_SOURCE = Path.home() / ".clawdbot" / "media" / "inbound"
 DEFAULT_DEST = Path.home() / "Dropbox" / "Clawdbot" / "media"
 
 STATE_FILE = Path.home() / ".clawdbot" / "media" / "backup-state.json"
-
 
 MEDIA_EXTENSIONS = {
     ".jpg",

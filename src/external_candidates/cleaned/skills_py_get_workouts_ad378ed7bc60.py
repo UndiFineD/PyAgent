@@ -9,8 +9,6 @@
 
 Get WHOOP workout data.
 
-
-
 Examples:
 
     python3 get_workouts.py --days 7
@@ -30,7 +28,6 @@ import sys
 from datetime import datetime, timedelta, timezone
 
 from pathlib import Path
-
 
 sys.path.insert(0, str(Path(__file__).parent))
 

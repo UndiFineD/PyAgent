@@ -7,8 +7,6 @@
 
 BIG-Bench Hard Benchmark Module
 
-
-
 This module implements the BIGBenchHard benchmark evaluation framework.
 
 BIGBenchHard is a challenging subset of 23 tasks from the BIG-bench evaluation suite,
@@ -23,11 +21,9 @@ import random
 
 from typing import Any, List, Optional
 
-
 import numpy as np
 
 import torch
-
 
 from ..core.logging import logger
 
@@ -38,7 +34,6 @@ from ..utils.utils import download_file
 from .benchmark import Benchmark
 
 from .measures import exact_match_score
-
 
 # Task categorization for different evaluation types
 
@@ -62,7 +57,6 @@ MULTIPLE_CHOICE_TASKS = [
     "reasoning_about_colored_objects",
 ]
 
-
 FREE_FORM_TASKS = [
     "multistep_arithmetic_two",
     "navigate",
@@ -76,7 +70,6 @@ FREE_FORM_TASKS = [
     "web_of_lies",
 ]
 
-
 # Complete task mapping to data files
 
 ALL_TASKS = {task: f"{task}.json" for task in MULTIPLE_CHOICE_TASKS + FREE_FORM_TASKS}
@@ -87,15 +80,11 @@ def download_raw_bigbenchhard_data(task_name: str, save_folder: str):
 
     Download raw BIGBenchHard data for a specific task.
 
-
-
     Args:
 
         task_name: The name of the task to download
 
         save_folder: Directory to save the downloaded data file
-
-
 
     Raises:
 
@@ -121,8 +110,6 @@ def set_seed(seed: int):
 
     Set random seeds for reproducibility across different libraries.
 
-
-
     Args:
 
         seed: The random seed value to use
@@ -143,8 +130,6 @@ class BIGBenchHard(Benchmark):
 
     Benchmark class for BIGBenchHard dataset evaluation.
 
-
-
     BIGBenchHard is a subset of 23 challenging tasks from the BIG-bench evaluation suite.
 
     Each task example has the following structure:
@@ -156,8 +141,6 @@ class BIGBenchHard(Benchmark):
         "target": str    # The expected answer/output
 
     }
-
-
 
     The benchmark supports automatic data splitting for training/validation purposes
 
@@ -178,8 +161,6 @@ class BIGBenchHard(Benchmark):
 
         Initialize BIGBenchHard benchmark.
 
-
-
         Args:
 
             task: The specific BIGBenchHard task name
@@ -193,8 +174,6 @@ class BIGBenchHard(Benchmark):
             seed: Random seed for reproducibility. Defaults to 10
 
             **kwargs: Additional parameters for customization
-
-
 
         Raises:
 
@@ -224,13 +203,9 @@ class BIGBenchHard(Benchmark):
 
         Load data from a specific file.
 
-
-
         Args:
 
             file_name: Name of the file to load
-
-
 
         Returns:
 
@@ -258,8 +233,6 @@ class BIGBenchHard(Benchmark):
         """
 
         Load and split data according to mode and dev_sample_num settings.
-
-
 
         Data splitting logic:
 
@@ -331,8 +304,6 @@ class BIGBenchHard(Benchmark):
 
         Return the input keys expected by the benchmark.
 
-
-
         Returns:
 
             List containing "input" as the key for the problem text
@@ -346,13 +317,9 @@ class BIGBenchHard(Benchmark):
 
         Extract the ground truth label from an example.
 
-
-
         Args:
 
             example: The benchmark example
-
-
 
         Returns:
 
@@ -367,17 +334,11 @@ class BIGBenchHard(Benchmark):
 
         Extract the unique identifier from an example.
 
-
-
         BIGBenchHard examples don't have explicit IDs, so we use input text as identifier.
-
-
 
         Args:
 
             example: The benchmark example
-
-
 
         Returns:
 
@@ -392,19 +353,13 @@ class BIGBenchHard(Benchmark):
 
         Score a prediction against the ground truth label.
 
-
-
         Uses exact match scoring with task-specific handling for certain tasks.
-
-
 
         Args:
 
             prediction: The predicted answer
 
             label: The ground truth answer
-
-
 
         Returns:
 

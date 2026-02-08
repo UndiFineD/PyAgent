@@ -5,7 +5,6 @@
 
 from typing import List
 
-
 from evoagentx.agents.customize_agent import CustomizeAgent
 
 from evoagentx.frameworks.multi_agent_debate.debate import MultiAgentDebateActionGraph
@@ -38,13 +37,9 @@ Problem:
 
 {problem}
 
-
-
 Transcript so far:
 
 {transcript_text}
-
-
 
 Return XML:
 

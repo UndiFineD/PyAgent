@@ -17,13 +17,11 @@
 
 from pathlib import Path
 
-
 import click
 
 from google.oauth2.credentials import Credentials
 
 from googleapiclient.discovery import build
-
 
 TOKEN_FILE = Path.home() / ".simple-google-workspace" / "token.json"
 
@@ -144,8 +142,6 @@ def find(query: str):
 def write(spreadsheet_id: str, range: str, values: str):
     """Write data to spreadsheet. VALUES: comma-separated, rows separated by semicolon.
 
-
-
     Example: write ID "Sheet1!A1:B2" "a,b;c,d" writes a 2x2 grid.
 
     """
@@ -172,8 +168,6 @@ def write(spreadsheet_id: str, range: str, values: str):
 @click.argument("values")
 def append(spreadsheet_id: str, range: str, values: str):
     """Append rows to spreadsheet. VALUES: comma-separated, rows separated by semicolon.
-
-
 
     Example: append ID "Sheet1!A:B" "a,b;c,d" appends 2 rows.
 

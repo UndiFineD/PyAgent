@@ -9,8 +9,6 @@
 
 WachAI Mandates Skill - Create, Sign, Verify (ERC-8004 / x402-style agreements)
 
-
-
 This script provides a minimal command-line interface for working with WachAI
 
 Mandates using the `mandates-core` Python SDK:
@@ -20,8 +18,6 @@ Mandates using the `mandates-core` Python SDK:
 - Sign a mandate (client countersigns / accept)
 
 - Verify both signatures
-
-
 
 Commands:
 
@@ -33,15 +29,11 @@ Commands:
 
 - verify <mandate-id>
 
-
-
 Environment Variables:
 
 - WACHAI_PRIVATE_KEY: EVM private key used to sign (server for create, client for sign)
 
 - WACHAI_STORE_DIR: Optional override for local mandate storage (default: ~/.wachai/mandates)
-
-
 
 Notes:
 
@@ -50,7 +42,6 @@ Notes:
 """
 
 from __future__ import annotations
-
 
 import argparse
 
@@ -67,7 +58,6 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from typing import Any, Dict, Optional
-
 
 from eth_account import Account
 

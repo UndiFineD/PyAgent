@@ -11,17 +11,11 @@
 
 Agentic Grokked Integratted v0.1 - Unified Algorithmic Cassette Model
 
-
-
 A modular, composable library for transplanting grokked algorithmic primitives
 
 into unified models using geometric weight transfer.
 
-
-
 Author: grisuno
-
-
 
 License: AGPL-3.0
 
@@ -31,13 +25,11 @@ GitHub: https://github.com/grisuno/agi
 
 from __future__ import annotations
 
-
 import os
 
 from pathlib import Path
 
 from typing import Tuple
-
 
 import numpy as np
 
@@ -47,13 +39,11 @@ import torch.nn as nn
 
 import torch.nn.functional as F
 
-
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 WEIGHTS_DIR = Path(__file__).parent / "weights" if "__file__" in globals() else Path("weights")
 
 WEIGHTS_DIR.mkdir(exist_ok=True)
-
 
 DOMAIN_NAMES = ["parity", "wave", "kepler", "pendulum"]
 

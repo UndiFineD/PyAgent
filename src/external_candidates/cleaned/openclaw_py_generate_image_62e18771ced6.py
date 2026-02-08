@@ -23,13 +23,9 @@
 
 Generate images using Google's Nano Banana Pro (Gemini 3 Pro Image) API.
 
-
-
 Usage:
 
     uv run generate_image.py --prompt "your image description" --filename "output.png" [--resolution 1K|2K|4K] [--api-key KEY]
-
-
 
 Multi-image editing (up to 14 images):
 

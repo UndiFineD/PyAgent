@@ -7,13 +7,9 @@
 
 Indexing modes for controlling embedding granularity.
 
-
-
 Summarization ALWAYS happens (it's cheap and aids retrieval).
 
 The mode controls what gets embedded:
-
-
 
 - DOCUMENT: Embed summary only (1 vector per doc, fast)
 
@@ -217,8 +213,6 @@ class Chunker(Protocol):
 @dataclass
 class TokenChunker:
     """Chunk by approximate token count with overlap.
-
-
 
     OpenClaw defaults: ~400 tokens target, 80 token overlap.
 

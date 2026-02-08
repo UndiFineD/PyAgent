@@ -17,7 +17,6 @@ from pathlib import Path
 
 from typing import Optional, Set
 
-
 import git
 
 from git.exc import GitCommandError, InvalidGitRepositoryError
@@ -156,15 +155,11 @@ class GitTracker:
 
         Useful for detecting if a file is the same across branches.
 
-
-
         Args:
 
             file_path: Path to the file (relative to repo root)
 
             commit: Commit hash, defaults to current HEAD
-
-
 
         Returns:
 
@@ -208,8 +203,6 @@ class GitTracker:
         """
 
         Get all files tracked by git in the current branch.
-
-
 
         Returns:
 
@@ -288,8 +281,6 @@ class GitTracker:
         """
 
         Monitor for branch changes and call callback when detected.
-
-
 
         Args:
 

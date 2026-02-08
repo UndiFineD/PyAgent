@@ -9,13 +9,9 @@
 
 GA4 Data API Query Script
 
-
-
 Query Google Analytics 4 properties for analytics data.
 
 Requires: google-analytics-data, google-auth-oauthlib
-
-
 
 Install: pip install google-analytics-data google-auth-oauthlib
 
@@ -30,7 +26,6 @@ import os
 import sys
 
 from datetime import datetime, timedelta
-
 
 try:
     from google.analytics.data_v1beta import BetaAnalyticsDataClient

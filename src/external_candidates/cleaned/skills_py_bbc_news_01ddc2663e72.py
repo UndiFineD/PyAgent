@@ -17,7 +17,6 @@ import sys
 
 from datetime import datetime
 
-
 try:
     import feedparser
 
@@ -28,7 +27,6 @@ except ImportError:
     )
 
     sys.exit(1)
-
 
 # BBC News RSS feeds
 

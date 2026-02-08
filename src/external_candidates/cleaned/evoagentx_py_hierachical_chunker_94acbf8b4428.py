@@ -7,13 +7,11 @@ from concurrent.futures import ThreadPoolExecutor
 
 from typing import Dict, List, Optional
 
-
 from evoagentx.core.logging import logger
 
 from evoagentx.rag.schema import Chunk, Corpus, Document
 
 from llama_index.core.node_parser import HierarchicalNodeParser
-
 
 from .base import BaseChunker, ChunkingStrategy
 
@@ -23,8 +21,6 @@ from .simple_chunker import SimpleChunker
 class HierarchicalChunker(BaseChunker):
     """Enhanced hierarchical chunker with dynamic hierarchy level assignment.
 
-
-
     Creates a multi-level hierarchy of chunks with full node relationships:
 
     - SOURCE: The source document.
@@ -33,13 +29,9 @@ class HierarchicalChunker(BaseChunker):
 
     - PARENT/CHILD: Hierarchical relationships.
 
-
-
     Supports custom level parsers or default chunk sizes, with dynamic hierarchy level
 
     assignment based on node parser IDs. Uses multi-threading and async parsing.
-
-
 
     Attributes:
 
@@ -71,8 +63,6 @@ class HierarchicalChunker(BaseChunker):
         max_workers: int = 4,
     ):
         """Initialize the HierarchicalChunker.
-
-
 
         Args:
 
@@ -145,15 +135,11 @@ class HierarchicalChunker(BaseChunker):
     def _process_document(self, doc: Document, custom_metadata: Dict = None) -> List[Chunk]:
         """Process a single document into chunks in a thread.
 
-
-
         Args:
 
             doc (Document): The document to chunk.
 
             custom_metadata (Dict, optional): User-defined metadata for sections.
-
-
 
         Returns:
 
@@ -189,15 +175,11 @@ class HierarchicalChunker(BaseChunker):
     def chunk(self, documents: List[Document], **kwargs) -> Corpus:
         """Chunk documents using hierarchical strategy with dynamic chunk size adjustment.
 
-
-
         Args:
 
             documents (List[Document]): List of Document objects to chunk.
 
             **kwargs: Additional parameters, e.g., custom_metadata for section titles.
-
-
 
         Returns:
 

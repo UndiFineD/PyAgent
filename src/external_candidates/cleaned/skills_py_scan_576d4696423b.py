@@ -13,8 +13,6 @@ Detects: credential exfiltration, suspicious network calls, obfuscated code,
 
          hidden payloads, and other red flags.
 
-
-
 Usage:
 
     python3 scan.py <skill-path>           # Scan a local skill folder
@@ -41,7 +39,6 @@ from pathlib import Path
 
 from typing import Optional
 
-
 # Import advanced checks
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -53,7 +50,6 @@ try:
 
 except ImportError:
     HAS_ADVANCED = False
-
 
 # ── Severity levels ──────────────────────────────────────────────────────────
 
@@ -67,14 +63,11 @@ LOW = "LOW"  # Informational, possibly benign
 
 INFO = "INFO"  # Just noting something
 
-
 SEVERITY_ORDER = {CRITICAL: 4, HIGH: 3, MEDIUM: 2, LOW: 1, INFO: 0}
-
 
 # ── Detection rules ──────────────────────────────────────────────────────────
 
 # Each rule: (id, severity, description, regex_pattern, file_extensions or None for all)
-
 
 RULES = [
     # ── Credential exfiltration ──
@@ -270,7 +263,6 @@ RULES = [
     ),
 ]
 
-
 # ── File extensions to scan ──────────────────────────────────────────────────
 
 SCANNABLE_EXTENSIONS = {
@@ -310,14 +302,11 @@ SCANNABLE_EXTENSIONS = {
     ".conf",
 }
 
-
 SKIP_DIRS = {"node_modules", ".git", "__pycache__", ".venv", "venv", "dist", "build"}
-
 
 # Inline ignore marker — add `# noscan` to a line to suppress findings on it
 
 NOSCAN_MARKER = re.compile(r"#\s*noscan|<!--\s*noscan\s*-->")
-
 
 # Maximum file size to scan (512KB)
 

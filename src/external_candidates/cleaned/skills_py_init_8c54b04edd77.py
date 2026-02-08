@@ -5,22 +5,17 @@
 
 """skill-scan — Agent Security Scanner.
 
-
-
 Public API and convenience functions.
 
 """
 
 from __future__ import annotations
 
-
 __version__ = "0.3.0"
-
 
 import json
 
 from pathlib import Path
-
 
 from .alignment_analyzer import AlignmentAnalyzer
 
@@ -33,7 +28,6 @@ from .meta_analyzer import MetaAnalyzer
 from .reporter import format_compact_report, format_moltbook_post, format_text_report
 
 from .scanner import SkillScanner
-
 
 __all__ = [
     "SkillScanner",
@@ -64,8 +58,6 @@ def quick_scan(
     options: dict | None = None,
 ) -> tuple[dict, str]:
     """Quick scan — one function to scan a path and get a report.
-
-
 
     Returns (report_dict, formatted_text).
 

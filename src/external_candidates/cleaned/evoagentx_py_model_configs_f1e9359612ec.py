@@ -3,18 +3,13 @@
 
 # Extracted from: C:\DEV\PyAgent\.external\EvoAgentX\evoagentx\models\model_configs.py
 
-
 from typing import List, Optional, Union
-
 
 from pydantic import BaseModel, Field
 
-
 from ..core.base_config import BaseConfig
 
-
 # import torch
-
 
 #### LLM Configs
 

@@ -7,8 +7,6 @@
 
 TDD workflow guidance module.
 
-
-
 Provides step-by-step guidance through red-green-refactor cycles with validation.
 
 """
@@ -59,13 +57,9 @@ class TDDWorkflow:
 
         Start a new TDD cycle.
 
-
-
         Args:
 
             requirement: User story or requirement to implement
-
-
 
         Returns:
 
@@ -99,15 +93,11 @@ class TDDWorkflow:
 
         Validate RED phase completion.
 
-
-
         Args:
 
             test_code: The test code written
 
             test_result: Test execution result (optional)
-
-
 
         Returns:
 
@@ -175,15 +165,11 @@ class TDDWorkflow:
 
         Validate GREEN phase completion.
 
-
-
         Args:
 
             implementation_code: The implementation code
 
             test_result: Test execution result
-
-
 
         Returns:
 
@@ -255,8 +241,6 @@ class TDDWorkflow:
 
         Validate REFACTOR phase completion.
 
-
-
         Args:
 
             original_code: Original implementation
@@ -264,8 +248,6 @@ class TDDWorkflow:
             refactored_code: Refactored implementation
 
             test_result: Test execution result after refactoring
-
-
 
         Returns:
 
@@ -532,13 +514,9 @@ class TDDWorkflow:
 
         Get detailed guidance for a specific phase.
 
-
-
         Args:
 
             phase: TDD phase (uses current if not specified)
-
-
 
         Returns:
 

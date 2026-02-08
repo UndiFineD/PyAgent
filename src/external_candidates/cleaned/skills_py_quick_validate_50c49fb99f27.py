@@ -9,11 +9,7 @@
 
 quick_validate.py
 
-
-
 Lightweight validator for a Claude Skill directory.
-
-
 
 Checks:
 
@@ -26,8 +22,6 @@ Checks:
 - Optional folder conventions (scripts/, references/, assets/)
 
 - Warns for common anti-patterns (README.md, extra docs)
-
-
 
 Usage:
 
@@ -43,7 +37,6 @@ Exit codes:
 
 from __future__ import annotations
 
-
 import os
 
 import re
@@ -53,7 +46,6 @@ import sys
 from pathlib import Path
 
 from typing import Dict, List, Tuple
-
 
 ALLOWED_FRONTMATTER_KEYS = {"name", "description"}
 
@@ -89,8 +81,6 @@ def parse_frontmatter(skill_md: str) -> Tuple[Dict[str, str], List[str]]:
       key: value
 
     This avoids pulling in external YAML dependencies.
-
-
 
     Returns: (data, errors)
 

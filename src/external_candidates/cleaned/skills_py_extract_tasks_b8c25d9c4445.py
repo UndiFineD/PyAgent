@@ -9,8 +9,6 @@
 
 Task Extractor - Extract action items from meeting notes.
 
-
-
 This script can:
 
 1. Extract tasks using regex patterns (fast, local)
@@ -28,7 +26,6 @@ import re
 import sys
 
 from pathlib import Path
-
 
 # Regex patterns for common meeting note formats
 
@@ -119,8 +116,6 @@ def extract_prompt(text: str) -> str:
 
     return f"""Extract action items from these meeting notes and format each as a task.
 
-
-
 For each task, determine:
 
 - title: Brief, actionable title (verb + noun)
@@ -133,8 +128,6 @@ For each task, determine:
 
 - blocks: Who/what is blocked if this isn't done
 
-
-
 Meeting Notes:
 
 ---
@@ -143,8 +136,6 @@ Meeting Notes:
 
 ---
 
-
-
 Output each task as a command:
 
 ```
@@ -152,8 +143,6 @@ Output each task as a command:
 tasks.py add "Task title" --priority high --due YYYY-MM-DD --blocks "person (reason)"
 
 ```
-
-
 
 Only output the commands, one per line. No explanations."""
 

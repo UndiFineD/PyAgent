@@ -17,7 +17,6 @@ from abc import ABC, abstractmethod
 
 from typing import Any, Dict, List, Optional, Tuple
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -25,8 +24,6 @@ class BrokerAdapter(ABC):
     """
 
     Abstract base class for broker adapters.
-
-
 
     All broker implementations must inherit from this class and implement
 
@@ -42,8 +39,6 @@ class BrokerAdapter(ABC):
         """
 
         Initialize the broker adapter.
-
-
 
         Args:
 
@@ -68,8 +63,6 @@ class BrokerAdapter(ABC):
 
         Set a callback function for error notifications.
 
-
-
         Args:
 
             callback: Function that accepts (operation: str, error: str, details: dict)
@@ -82,8 +75,6 @@ class BrokerAdapter(ABC):
         """
 
         Notify about an error via the registered callback.
-
-
 
         Args:
 
@@ -116,8 +107,6 @@ class BrokerAdapter(ABC):
 
         Get the authorization URL for OAuth flow.
 
-
-
         Returns:
 
             Authorization URL string, or None if OAuth is not required/failed
@@ -130,13 +119,9 @@ class BrokerAdapter(ABC):
 
         Complete authentication using the verifier code from OAuth flow.
 
-
-
         Args:
 
             verifier_code: The verification code from the OAuth callback
-
-
 
         Returns:
 
@@ -149,13 +134,9 @@ class BrokerAdapter(ABC):
 
         Renew/refresh the access token to extend its validity.
 
-
-
         Not all brokers support token renewal. Default implementation
 
         returns False. Override in broker-specific adapters if supported.
-
-
 
         Returns:
 
@@ -170,8 +151,6 @@ class BrokerAdapter(ABC):
 
         Revoke the current access token (logout).
 
-
-
         Returns:
 
             True if revocation successful, False otherwise
@@ -184,8 +163,6 @@ class BrokerAdapter(ABC):
         """
 
         Set access tokens directly (e.g., loaded from database).
-
-
 
         Args:
 
@@ -206,8 +183,6 @@ class BrokerAdapter(ABC):
 
         Get current access tokens.
 
-
-
         Returns:
 
             Dict with access_token and access_secret
@@ -224,8 +199,6 @@ class BrokerAdapter(ABC):
         """
 
         Get list of accounts available for trading.
-
-
 
         Returns:
 
@@ -245,13 +218,9 @@ class BrokerAdapter(ABC):
 
         Get account balance information.
 
-
-
         Args:
 
             account_id: Optional account ID (uses default if not provided)
-
-
 
         Returns:
 
@@ -273,13 +242,9 @@ class BrokerAdapter(ABC):
 
         Get current positions in account.
 
-
-
         Args:
 
             account_id: Optional account ID (uses default if not provided)
-
-
 
         Returns:
 
@@ -303,13 +268,9 @@ class BrokerAdapter(ABC):
 
         Get current quote for a symbol.
 
-
-
         Args:
 
             symbol: Stock symbol (e.g., 'AAPL')
-
-
 
         Returns:
 
@@ -337,8 +298,6 @@ class BrokerAdapter(ABC):
 
         Place a trade order.
 
-
-
         Args:
 
             account_id: Account ID to place order in
@@ -355,8 +314,6 @@ class BrokerAdapter(ABC):
 
                 - limit_price: Required for LIMIT orders
 
-
-
         Returns:
 
             True if order placed successfully, False otherwise
@@ -369,15 +326,11 @@ class BrokerAdapter(ABC):
 
         Get status of an order.
 
-
-
         Args:
 
             account_id: Account ID the order was placed in
 
             order_id: Order ID to check
-
-
 
         Returns:
 
@@ -390,13 +343,9 @@ class BrokerAdapter(ABC):
 
         Validate order details before placement.
 
-
-
         Args:
 
             order_details: Order details dictionary
-
-
 
         Returns:
 
@@ -427,19 +376,13 @@ def get_broker_adapter(config: Dict[str, Any]) -> BrokerAdapter:
 
     Factory function to create the appropriate broker adapter.
 
-
-
     Args:
 
         config: Configuration dictionary with broker.adapter specifying which adapter to use
 
-
-
     Returns:
 
         Initialized broker adapter instance
-
-
 
     Raises:
 

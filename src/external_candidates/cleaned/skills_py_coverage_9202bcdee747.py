@@ -5,17 +5,11 @@
 
 """Coverage calculation for hedge portfolios.
 
-
-
 Calculate coverage metrics and tier classification for covering portfolios.
-
-
 
 Coverage formula:
 
     Coverage = P(target wins) + P(target loses) x P(cover fires | target loses)
-
-
 
 Example:
 
@@ -25,13 +19,9 @@ Example:
 
     Total cost: $0.95
 
-
-
     Coverage = 0.80 + 0.20 x 0.98 = 99.6%
 
     Expected profit = $0.996 - $0.95 = +$0.046
-
-
 
 Tier classification:
 
@@ -45,23 +35,19 @@ Tier classification:
 
 """
 
-
 # =============================================================================
 
 # CONFIGURATION
 
 # =============================================================================
 
-
 # Minimum coverage to include (filters out Tier 4 / Low quality)
 
 MIN_COVERAGE = 0.85
 
-
 # Probability for necessary relationships
 
 NECESSARY_PROBABILITY = 0.98
-
 
 # Coverage tier thresholds (coverage_threshold, tier_number, label, description)
 
@@ -71,7 +57,6 @@ TIER_THRESHOLDS = [
     (0.85, 3, "MODERATE", "decent hedge"),
     (0.00, 4, "LOW", "speculative"),
 ]
-
 
 # =============================================================================
 
@@ -89,8 +74,6 @@ def calculate_coverage_metrics(
 
     Calculate coverage and expected value for a portfolio.
 
-
-
     Args:
 
         target_price: Price of target position (= P(target pays out))
@@ -98,8 +81,6 @@ def calculate_coverage_metrics(
         cover_probability: P(cover fires | target doesn't pay out)
 
         total_cost: Total cost of both positions
-
-
 
     Returns:
 
@@ -134,8 +115,6 @@ def classify_tier(coverage: float) -> tuple[int, str]:
     """
 
     Classify portfolio into tier based on coverage.
-
-
 
     Returns:
 
@@ -179,8 +158,6 @@ def build_portfolio(
 
     Build a single portfolio from target and cover markets.
 
-
-
     Args:
 
         target_market: Target market dict with prices
@@ -194,8 +171,6 @@ def build_portfolio(
         cover_probability: P(cover fires | target doesn't)
 
         relationship: Explanation of the logical relationship
-
-
 
     Returns:
 
@@ -272,15 +247,11 @@ def filter_portfolios_by_tier(
 
     Filter portfolios by maximum tier.
 
-
-
     Args:
 
         portfolios: List of portfolios
 
         max_tier: Maximum tier to include (1 = best only)
-
-
 
     Returns:
 
@@ -299,15 +270,11 @@ def filter_portfolios_by_coverage(
 
     Filter portfolios by minimum coverage.
 
-
-
     Args:
 
         portfolios: List of portfolios
 
         min_coverage: Minimum coverage threshold
-
-
 
     Returns:
 

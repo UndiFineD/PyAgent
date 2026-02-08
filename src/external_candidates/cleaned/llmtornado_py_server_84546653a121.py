@@ -17,9 +17,7 @@ from pathlib import Path
 
 from typing import Any, Optional
 
-
 from loguru import logger
-
 
 try:
     import mcp.server.stdio
@@ -34,7 +32,6 @@ except ImportError:
     MCP_AVAILABLE = False
 
     logger.error("mcp package not installed, MCP server unavailable")
-
 
 from ..config import Settings
 

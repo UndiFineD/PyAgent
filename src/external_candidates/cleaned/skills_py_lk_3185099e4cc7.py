@@ -11,11 +11,9 @@ import os
 
 import sys
 
-
 from linkedin_api import Linkedin
 
 from requests.cookies import RequestsCookieJar
-
 
 # Styling
 

@@ -9,13 +9,11 @@ from pathlib import Path
 
 from typing import Callable, Dict, List, Optional, Tuple, Union
 
-
 from evoagentx.core.logging import logger
 
 from evoagentx.rag.schema import Document
 
 from llama_index.core import SimpleDirectoryReader
-
 
 # You Could fllow the llama_index tutorial to develop a valid Reader for new file format:
 
@@ -25,13 +23,9 @@ from llama_index.core import SimpleDirectoryReader
 class LLamaIndexReader:
     """A universal file reader based on LlamaIndex's SimpleDirectoryReader.
 
-
-
     This class provides a flexible interface for loading documents from files or directories,
 
     supporting various formats (e.g., PDF, Word, Markdown) with customizable filtering and metadata.
-
-
 
     Attributes:
 
@@ -83,19 +77,13 @@ class LLamaIndexReader:
     def _validate_path(self, path: Union[str, Path]) -> Path:
         """Validate and convert a path to a Path object.
 
-
-
         Args:
 
             path: A string or Path object representing a file or directory.
 
-
-
         Returns:
 
             Path: A validated Path object.
-
-
 
         Raises:
 
@@ -117,21 +105,15 @@ class LLamaIndexReader:
     def _check_input(self, input_data: Union[str, List, Tuple], is_file: bool = True) -> Union[List[Path], Path]:
         """Check input to a list of Path objects or a single Path for directories.
 
-
-
         Args:
 
             input_data: A string, list, or tuple of file/directory paths.
 
             is_file: Whether to treat input as file paths (True) or directory (False).
 
-
-
         Returns:
 
             Union[List[Path], Path]: Valied file paths or directory path.
-
-
 
         Raises:
 
@@ -165,8 +147,6 @@ class LLamaIndexReader:
     ) -> List[Document]:
         """Load documents from files or directories.
 
-
-
         Args:
 
             file_paths: A string, list, or tuple of file paths or a directory path.
@@ -175,13 +155,9 @@ class LLamaIndexReader:
 
             filter_file_by_suffix: File extensions to include (e.g., ['.pdf', '.docx']).
 
-
-
         Returns:
 
             List[Document]: List of loaded documents.
-
-
 
         Raises:
 

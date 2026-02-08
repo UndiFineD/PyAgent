@@ -15,8 +15,6 @@
 
 """Digital Ocean CLI - Manage droplets, domains, and infrastructure.
 
-
-
 Usage:
 
     do.py account               Show account info
@@ -43,16 +41,13 @@ import os
 
 import sys
 
-
 import httpx
 
 from rich.console import Console
 
 from rich.table import Table
 
-
 console = Console()
-
 
 API_URL = "https://api.digitalocean.com/v2"
 

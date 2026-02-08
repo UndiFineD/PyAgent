@@ -7,13 +7,9 @@
 
 Graph and Function Plotting Patterns for Manim Community
 
-
-
 Demonstrates Axes, NumberPlane, function plotting, and coordinate systems.
 
 Adapted from 3b1b patterns for ManimCE.
-
-
 
 Run with: manim -pql graph_plotting.py SceneName
 

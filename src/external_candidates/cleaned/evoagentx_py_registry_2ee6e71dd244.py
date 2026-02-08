@@ -99,15 +99,11 @@ class ParseFunctionRegistry:
     def register(self, func_name: str, func):
         """Register a function with a given name.
 
-
-
         Args:
 
             func_name: The name to register the function under
 
             func (Callable): The function to register
-
-
 
         Raises:
 
@@ -123,19 +119,13 @@ class ParseFunctionRegistry:
     def get_function(self, func_name: str) -> callable:
         """Get a registered function by name.
 
-
-
         Args:
 
             func_name: The name of the function to retrieve
 
-
-
         Returns:
 
             Callable: The registered function
-
-
 
         Raises:
 
@@ -153,13 +143,9 @@ class ParseFunctionRegistry:
     def has_function(self, func_name: str) -> bool:
         """Check if a function name is registered.
 
-
-
         Args:
 
             func_name: The name to check
-
-
 
         Returns:
 
@@ -190,15 +176,11 @@ class ActionFunctionRegistry:
     def register(self, func_name: str, func):
         """Register a function with a given name.
 
-
-
         Args:
 
             func_name: The name to register the function under
 
             func (Callable): The function to register
-
-
 
         Raises:
 
@@ -214,19 +196,13 @@ class ActionFunctionRegistry:
     def get_function(self, func_name: str) -> callable:
         """Get a registered function by name.
 
-
-
         Args:
 
             func_name: The name of the function to retrieve
 
-
-
         Returns:
 
             Callable: The registered function
-
-
 
         Raises:
 
@@ -244,13 +220,9 @@ class ActionFunctionRegistry:
     def has_function(self, func_name: str) -> bool:
         """Check if a function name is registered.
 
-
-
         Args:
 
             func_name: The name to check
-
-
 
         Returns:
 
@@ -267,13 +239,9 @@ ACTION_FUNCTION_REGISTRY = ActionFunctionRegistry()
 def register_action_function(func):
     """Register a function for ActionAgent serialization.
 
-
-
     Args:
 
         func (Callable): The function to register
-
-
 
     Returns:
 

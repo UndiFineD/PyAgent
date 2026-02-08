@@ -7,7 +7,6 @@
 
 from __future__ import annotations
 
-
 import pytest
 
 from skill_scan.ast_analyzer import ASTAnalyzer

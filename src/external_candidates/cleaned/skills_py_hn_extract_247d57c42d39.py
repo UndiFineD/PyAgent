@@ -21,7 +21,6 @@
 
 # ///
 
-
 import argparse
 
 import html
@@ -33,7 +32,6 @@ import re
 import textwrap
 
 from pathlib import Path
-
 
 import requests
 

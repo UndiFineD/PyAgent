@@ -5,7 +5,6 @@
 
 from pathlib import Path
 
-
 from second_brain_offline.infrastructure.aws.s3 import S3Client
 
 
@@ -13,8 +12,6 @@ def test_download_from_public_bucket() -> None:
     """
 
     Test downloading from a public S3 bucket using unsigned requests.
-
-
 
     This test uses the AWS COVID-19 data lake as an example public bucket.
 

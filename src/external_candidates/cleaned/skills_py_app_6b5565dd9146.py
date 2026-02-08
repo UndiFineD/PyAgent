@@ -7,14 +7,11 @@
 
 # coding: utf-8
 
-
 import os
 
 import sys
 
-
 import finnhub
-
 
 finnhub_api_key = os.getenv("finnhub_api_key")
 

@@ -5,14 +5,11 @@
 
 import random
 
-
 from request.web.encrypt.config import xhs_config
 
 
 class XHS_XB3_Encrypt:
     """小红书 x-b3-traceid 加密实现类
-
-
 
     用于生成小红书API请求所需的 x-b3-traceid 加密头。
 

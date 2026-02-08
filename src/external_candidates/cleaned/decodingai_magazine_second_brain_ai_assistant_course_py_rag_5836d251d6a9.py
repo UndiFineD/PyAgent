@@ -7,8 +7,6 @@
 
 RAG (Retrieval Augmented Generation) implementation using LangChain.
 
-
-
 This module provides functionality for question-answering using RAG with OpenAI models.
 
 """
@@ -18,7 +16,6 @@ import os
 from pathlib import Path
 
 from typing import Any, List
-
 
 import click
 
@@ -52,13 +49,9 @@ def load_retriever(config_path: Path) -> Any:
 
     Load retriever configuration from YAML and initialize retriever.
 
-
-
     Args:
 
         retriever_type: Type of retriever to initialize.
-
-
 
     Returns:
 
@@ -89,8 +82,6 @@ def create_rag_chain(config_path: Path) -> Any:
 
     Create and configure the RAG chain with retriever, prompt, and LLM.
 
-
-
     Returns:
 
         Any: Configured RAG chain ready for question answering.
@@ -110,8 +101,6 @@ def create_rag_chain(config_path: Path) -> Any:
 
 {context}
 
-
-
 Question: {question}
 
 """
@@ -130,13 +119,9 @@ def get_documents_for_query(config_path: Path, query: str) -> List[str]:
 
     Retrieve documents for a given query using the retriever.
 
-
-
     Args:
 
         query: The search query to retrieve documents for.
-
-
 
     Returns:
 
@@ -163,8 +148,6 @@ def main(config_path: Path) -> None:
     """
 
     Main function to demonstrate RAG functionality.
-
-
 
     Args:
 

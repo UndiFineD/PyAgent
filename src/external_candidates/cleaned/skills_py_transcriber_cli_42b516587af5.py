@@ -11,8 +11,6 @@ Direct CLI for local-whisper transcription.
 
 Used as fallback when daemon is not running.
 
-
-
 Usage:
 
     python transcriber_cli.py <audio_file> [--translate] [--language XX] [--backend mlx]
@@ -25,11 +23,9 @@ import os
 
 import sys
 
-
 # Add scripts directory to path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
 
 from transcriber import Transcriber, TranscriptionError
 

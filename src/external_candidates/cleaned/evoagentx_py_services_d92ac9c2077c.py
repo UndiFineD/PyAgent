@@ -11,13 +11,11 @@ Business logic for agents, workflows, and executions.
 
 import logging
 
-
 # import asyncio
 
 from datetime import datetime
 
 from typing import Any, Dict, List, Optional, Tuple
-
 
 from bson import ObjectId
 
@@ -37,9 +35,7 @@ from evoagentx.app.schemas import (
     WorkflowUpdate,
 )
 
-
 logger = logging.getLogger(__name__)
-
 
 # Agent Service
 

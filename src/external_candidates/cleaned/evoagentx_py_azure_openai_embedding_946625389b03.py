@@ -7,7 +7,6 @@ import os
 
 from typing import Any, Dict, List, Optional
 
-
 from evoagentx.core.logging import logger
 
 from llama_index.core.embeddings import BaseEmbedding
@@ -16,16 +15,13 @@ from llama_index.embeddings.azure_openai import (
     AzureOpenAIEmbedding as LlamaAzureEmbedding,
 )
 
-
 from .base import SUPPORTED_MODELS, BaseEmbeddingWrapper, EmbeddingProvider
-
 
 MODEL_DIMENSIONS: Dict[str, int] = {
     "text-embedding-ada-002": 1536,
     "text-embedding-3-small": 1536,
     "text-embedding-3-large": 3072,
 }
-
 
 SUPPORTED_DIMENSIONS = [
     "text-embedding-3-small",

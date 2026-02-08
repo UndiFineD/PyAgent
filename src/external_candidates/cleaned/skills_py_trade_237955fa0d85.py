@@ -27,19 +27,15 @@ from pathlib import Path
 
 from typing import Optional
 
-
 # Add parent to path for lib imports
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-
 
 # Load .env file from skill root directory
 
 from dotenv import load_dotenv
 
-
 load_dotenv(Path(__file__).parent.parent / ".env")
-
 
 from lib.clob_client import ClobClientWrapper
 

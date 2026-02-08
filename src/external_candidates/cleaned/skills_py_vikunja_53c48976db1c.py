@@ -17,8 +17,6 @@
 
 Vikunja CLI - Open-source project and task management.
 
-
-
 Usage:
 
     vikunja.py projects                    # List projects
@@ -32,8 +30,6 @@ Usage:
     vikunja.py create-task <title> --project ID [--due DATE] [--priority N]
 
     vikunja.py complete <task_id>          # Mark task complete
-
-
 
 Environment:
 
@@ -57,16 +53,13 @@ from datetime import datetime
 
 from typing import Optional
 
-
 import requests
 
 from rich.console import Console
 
 from rich.table import Table
 
-
 console = Console()
-
 
 # Config from environment
 

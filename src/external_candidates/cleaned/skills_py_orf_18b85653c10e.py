@@ -17,7 +17,6 @@ import urllib.request
 
 import xml.etree.ElementTree as ET
 
-
 FEEDS = {
     # ORF provides RSS feeds; see https://rss.orf.at/
     # We'll merge them and dedupe by link.
@@ -25,7 +24,6 @@ FEEDS = {
     "oesterreich": "https://rss.orf.at/oesterreich.xml",
     "sport": "https://rss.orf.at/sport.xml",
 }
-
 
 SPORT_HINTS = [
     "sport",

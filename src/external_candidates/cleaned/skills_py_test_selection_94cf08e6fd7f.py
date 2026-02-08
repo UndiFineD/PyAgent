@@ -15,7 +15,6 @@ import sys
 
 from pathlib import Path
 
-
 from init_registry import Colors, colorize, find_agent_locations, scan_agents
 
 

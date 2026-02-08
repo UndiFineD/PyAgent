@@ -9,15 +9,11 @@
 
 Compare two W&B runs side-by-side.
 
-
-
 Usage:
 
     compare_runs.py ENTITY/PROJECT/RUN_A ENTITY/PROJECT/RUN_B
 
     compare_runs.py RUN_A RUN_B --project PROJECT [--entity ENTITY]
-
-
 
 Compares:
 
@@ -36,7 +32,6 @@ import argparse
 import sys
 
 from typing import Optional
-
 
 import wandb
 

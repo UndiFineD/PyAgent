@@ -5,9 +5,7 @@
 
 from typing import List
 
-
 from pydantic import Field
-
 
 from ..agents.agent_manager import AgentManager
 

@@ -5,8 +5,6 @@
 
 """Meta Analyzer — Layer 5b: Second-pass review of all findings.
 
-
-
 Filters false positives, correlates related findings, and provides an
 
 overall risk assessment.  Runs after all other analysis layers (including
@@ -16,7 +14,6 @@ alignment) so it can review everything.  Reuses LLMAnalyzer.call_llm().
 """
 
 from __future__ import annotations
-
 
 import asyncio
 
@@ -28,19 +25,14 @@ import secrets
 
 from typing import TYPE_CHECKING
 
-
 if TYPE_CHECKING:
     from .llm_analyzer import LLMAnalyzer
 
-
 # ── Prompts ────────────────────────────────────────────────────────
-
 
 _SYSTEM_PROMPT = """\
 
 You are reviewing findings from an automated agent-skill security scanner.
-
-
 
 Your job:
 
@@ -56,20 +48,15 @@ threat pattern.
 
 5. Provide an overall risk assessment.
 
-
-
 Be conservative: only mark a finding as false_positive if you are confident \
 
 the pattern is benign in context.  When in doubt, keep it as true_positive.
 
 """
 
-
 _RESPONSE_FORMAT = """\
 
 Respond with ONLY a JSON object (no markdown fences, no extra text):
-
-
 
 {
 
@@ -123,8 +110,6 @@ Respond with ONLY a JSON object (no markdown fences, no extra text):
 
 }
 
-
-
 Rules:
 
 - "finding_reviews" must have one entry per finding (matched by _index)
@@ -148,8 +133,6 @@ class MetaAnalyzer:
         llm_analyzer: LLMAnalyzer,
     ) -> dict | None:
         """Run meta-analysis on the full scan report.
-
-
 
         Returns the parsed meta-analysis result, or None on failure.
 
@@ -368,8 +351,6 @@ class MetaAnalyzer:
     @staticmethod
     def apply_to_report(report: dict, meta_result: dict) -> None:
         """Mutate the report based on meta-analysis verdicts.
-
-
 
         - False positives: set weight=0, add contextNote, keep finding
 

@@ -11,8 +11,6 @@ Sphero Mini Control Script
 
 Wrapper script for easy Sphero Mini control from command line.
 
-
-
 Usage:
 
     python3 sphero_control.py [MAC] wake
@@ -30,7 +28,6 @@ Usage:
 """
 
 import sys
-
 
 from sphero_mini import sphero_mini
 

@@ -7,7 +7,6 @@ import random
 
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-
 from .engine.base import BaseOptimizer
 
 from .engine.decorators import EntryPoint  # ensure this is implemented or mocked
@@ -26,8 +25,6 @@ class ExampleOptimizer(BaseOptimizer):
         """
 
         A simple random search optimizer example.
-
-
 
         Parameters:
 

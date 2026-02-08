@@ -25,7 +25,6 @@ from datetime import datetime
 
 from typing import Optional
 
-
 try:
     import mibian
 
@@ -33,7 +32,6 @@ try:
 
 except ImportError:
     USE_MIBIAN = False
-
 
 import yfinance as yf
 

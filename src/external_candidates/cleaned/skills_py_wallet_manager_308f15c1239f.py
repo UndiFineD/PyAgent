@@ -17,13 +17,11 @@ import json
 
 import sys
 
-
 from crypto_utils import encrypt_private_key, list_wallets, load_wallet, save_wallet
 
 from eth_account import Account
 
 from solders.keypair import Keypair
-
 
 # Enable unaudited HD wallet features
 

@@ -191,7 +191,7 @@ class FluidConnectionResolver(Resolver):
 
         return sorted(
             connection_pairs,
-            key=lambda pair: abs(pair[0].x - pair[1].x) + abs(pair[0].y - pair[1].y),
+            key=lambda pair: (abs(pair[0].x - pair[1].x) + abs(pair[0].y - pair[1].y)),
         )
 
     def _get_all_connection_points(

@@ -9,19 +9,13 @@
 
 Instagram Marketing Product Extractor
 
-
-
 Extracts product information from e-commerce URLs for Instagram content generation.
 
 Supports: Amazon, Shopify, Taobao, JD, and generic e-commerce sites.
 
-
-
 Usage:
 
     python extract_product.py <url>
-
-
 
 Output:
 
@@ -38,7 +32,6 @@ import sys
 from typing import Dict, Optional
 
 from urllib.parse import urlparse, urlunparse
-
 
 try:
     import requests

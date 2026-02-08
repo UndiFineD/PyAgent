@@ -11,7 +11,6 @@ from datetime import datetime
 
 from unittest.mock import patch
 
-
 from evoagentx.storages.base import StorageHandler
 
 from evoagentx.storages.schema import TableType

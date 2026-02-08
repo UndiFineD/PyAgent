@@ -23,13 +23,11 @@ import sys
 
 from pathlib import Path
 
-
 from aiohttp import web
 
 from dotenv import load_dotenv
 
 from playwright.async_api import async_playwright
-
 
 # 加载环境变量
 
@@ -37,11 +35,9 @@ env_path = Path(__file__).parent.parent / ".env"
 
 load_dotenv(env_path)
 
-
 STEALTH_JS = Path(__file__).parent / "stealth.min.js"
 
 PORT = 5006
-
 
 # 全局 playwright 对象
 

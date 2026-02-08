@@ -5,7 +5,6 @@
 
 import unittest
 
-
 from evoagentx.agents.agent import Agent
 
 from evoagentx.agents.agent_manager import AgentManager, AgentState

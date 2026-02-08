@@ -17,7 +17,6 @@ import urllib.request
 
 from typing import Optional
 
-
 BASE_URL = "https://gamma-api.polymarket.com"
 
 

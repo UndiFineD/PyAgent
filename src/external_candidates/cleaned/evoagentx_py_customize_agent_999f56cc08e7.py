@@ -5,7 +5,6 @@
 
 import os
 
-
 from dotenv import load_dotenv
 
 from evoagentx.agents import CustomizeAgent
@@ -23,7 +22,6 @@ from evoagentx.prompts import ChatTemplate, StringTemplate
 from evoagentx.tools.file_tool import FileToolkit
 
 from evoagentx.tools.mcp import MCPToolkit
-
 
 load_dotenv()
 
@@ -387,8 +385,6 @@ def build_customize_agent_with_json_parse():
 
 Recipe: {recipe_text}
 
-
-
 Please format your response as a JSON object with the following structure (all on one line):
 
 {{'name': 'Recipe name', 'prep_time_minutes': "12", 'ingredients': ['ingredient1', 'ingredient2', ...], 'difficulty': 'easy|medium|hard'}}""",
@@ -424,8 +420,6 @@ Please format your response as a JSON object with the following structure (all o
     sample_recipe = """
 
     Classic Chocolate Chip Cookies
-
-    
 
     Mix 2 1/4 cups flour, 1 cup butter, 3/4 cup sugar, 2 eggs, 
 

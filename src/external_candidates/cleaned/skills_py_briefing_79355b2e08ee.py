@@ -9,8 +9,6 @@
 
 Morning Briefing Formatter for Oura Analytics
 
-
-
 Generates concise, actionable daily briefings with:
 
 - Headline metrics with baseline context
@@ -33,11 +31,9 @@ from pathlib import Path
 
 from typing import Any, Dict, List, Optional, Tuple
 
-
 # Add scripts dir to path for imports
 
 sys.path.insert(0, str(Path(__file__).parent))
-
 
 from schema import ActivityRecord, NightRecord, ReadinessRecord, SleepRecord
 
@@ -117,15 +113,11 @@ class BriefingFormatter:
 
         Format a morning briefing.
 
-
-
         Args:
 
             night: NightRecord for the day
 
             verbose: Include additional detail
-
-
 
         Returns:
 
@@ -325,15 +317,11 @@ def format_brief_briefing(night: NightRecord, baseline: Optional[Baseline] = Non
 
     Format a brief 3-line briefing (for notifications).
 
-
-
     Args:
 
         night: NightRecord for the day
 
         baseline: Optional baseline metrics
-
-
 
     Returns:
 
@@ -380,15 +368,11 @@ def format_json_briefing(night: NightRecord, baseline: Optional[Baseline] = None
 
     Format briefing as JSON for API integration.
 
-
-
     Args:
 
         night: NightRecord for the day
 
         baseline: Optional baseline metrics
-
-
 
     Returns:
 
@@ -457,15 +441,11 @@ def format_hybrid_briefing(
 
     Format a hybrid daily report combining morning briefing with trend snapshot.
 
-
-
     This combines:
 
     1) Morning Briefing (top): actionable daily guidance with driver analysis
 
     2) Trend Snapshot (bottom): 7-day averages + recent sleep/readiness history
-
-
 
     Args:
 
@@ -474,8 +454,6 @@ def format_hybrid_briefing(
         baseline: Optional baseline metrics
 
         week_data: Optional pre-calculated 7-day statistics
-
-
 
     Returns:
 

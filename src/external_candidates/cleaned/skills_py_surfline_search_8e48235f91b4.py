@@ -9,7 +9,6 @@
 
 import sys
 
-
 from surfline_client import search_spots
 
 

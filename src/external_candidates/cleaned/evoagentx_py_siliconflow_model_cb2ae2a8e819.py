@@ -5,7 +5,6 @@
 
 from typing import List
 
-
 from openai import OpenAI, Stream
 
 from openai.types.chat import ChatCompletion
@@ -16,11 +15,9 @@ from tenacity import (
     wait_random_exponential,
 )
 
-
 from ..core.registry import register_model
 
 from .model_configs import SiliconFlowConfig
-
 
 # from loguru import logger
 

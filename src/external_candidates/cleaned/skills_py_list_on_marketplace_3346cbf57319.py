@@ -9,27 +9,17 @@
 
 x402 Marketplace Listing
 
-
-
 List your endpoint on the x402 marketplace for discovery.
-
-
 
 Usage:
 
     python list_on_marketplace.py <slug> --category <category> --description "Description"
 
-
-
 Example:
 
     python list_on_marketplace.py my-api --category ai --description "AI-powered analysis API"
 
-
-
 Categories: ai, data, finance, utility, social, gaming
-
-
 
 Environment Variables:
 
@@ -45,9 +35,7 @@ import os
 
 import sys
 
-
 import requests
-
 
 API_BASE = "https://api.x402layer.cc"
 
@@ -80,8 +68,6 @@ def list_endpoint(slug: str, category: str, description: str, tags: list = None)
     """
 
     List an endpoint on the marketplace.
-
-
 
     Args:
 

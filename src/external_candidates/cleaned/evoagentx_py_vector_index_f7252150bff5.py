@@ -7,7 +7,6 @@ import asyncio
 
 from typing import Any, Dict, List, Optional, Sequence, Union
 
-
 from evoagentx.core.logging import logger
 
 from evoagentx.rag.schema import Chunk
@@ -21,7 +20,6 @@ from llama_index.core.embeddings import BaseEmbedding
 from llama_index.core.schema import BaseNode
 
 from llama_index.core.storage import StorageContext
-
 
 from .base import BaseIndexWrapper, IndexType
 
@@ -87,23 +85,15 @@ class VectorIndexing(BaseIndexWrapper):
 
         Insert or update nodes into the vector index.
 
-
-
         Converts Chunk objects to LlamaIndex nodes, serializes metadata as JSON strings, and inserts
 
         them into the VectorStoreIndex. Nodes are cached in id_to_node for quick access.
-
-
 
         Args:
 
             nodes (List[Union[Chunk, BaseNode]]): List of nodes to insert, either Chunk or BaseNode.
 
-
-
         Returns:
-
-
 
         """
 
@@ -153,13 +143,9 @@ class VectorIndexing(BaseIndexWrapper):
 
         Delete nodes from the vector index based on node IDs or metadata filters.
 
-
-
         Removes specified nodes from the index and the id_to_node cache. If metadata_filters are
 
         provided, nodes matching the filters are deleted.
-
-
 
         Args:
 
@@ -213,19 +199,13 @@ class VectorIndexing(BaseIndexWrapper):
 
         Asynchronously load nodes into the vector index and its backend store.
 
-
-
         Caches nodes in id_to_node and loads them into the FAISS vector store, ensuring
 
         no duplicates are inserted by relying on the backend's duplicate checking.
 
-
-
         Args:
 
             nodes (List[Union[Chunk, BaseNode]]): The nodes to load.
-
-
 
         Returns:
 
@@ -248,8 +228,6 @@ class VectorIndexing(BaseIndexWrapper):
 
         Synchronously load nodes into the vector index.
 
-
-
         Args:
 
             nodes (List[Union[Chunk, BaseNode]]): The nodes to load.
@@ -262,8 +240,6 @@ class VectorIndexing(BaseIndexWrapper):
         """
 
         Clear all nodes from the vector index and its cache.
-
-
 
         Deletes all nodes from the VectorStoreIndex and clears the id_to_node cache.
 

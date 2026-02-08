@@ -11,9 +11,7 @@ from copy import deepcopy
 
 from typing import List, Optional
 
-
 from pydantic import Field, create_model
-
 
 from ..actions import ActionInput, ActionOutput
 
@@ -88,15 +86,11 @@ class WorkFlow(BaseModule):
 
         Synchronous wrapper for async_execute. Creates a new event loop and runs the async method.
 
-
-
         Args:
 
             inputs: Dictionary of inputs for workflow execution
 
             **kwargs (Any): Additional keyword arguments
-
-
 
         Returns:
 
@@ -119,15 +113,11 @@ class WorkFlow(BaseModule):
 
         Asynchronously execute the workflow.
 
-
-
         Args:
 
             inputs: Dictionary of inputs for workflow execution
 
             **kwargs (Any): Additional keyword arguments
-
-
 
         Returns:
 
@@ -232,8 +222,6 @@ class WorkFlow(BaseModule):
 
         Asynchronously execute a workflow task.
 
-
-
         Args:
 
             task: The workflow node to execute
@@ -263,8 +251,6 @@ class WorkFlow(BaseModule):
         """
 
         Asynchronously execute a task using an action graph.
-
-
 
         Args:
 
@@ -338,8 +324,6 @@ class WorkFlow(BaseModule):
         """
 
         Asynchronously execute a task using agents.
-
-
 
         Args:
 

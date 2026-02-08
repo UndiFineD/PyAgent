@@ -11,7 +11,6 @@ Tests for the broker adapter module
 
 from unittest.mock import MagicMock, patch
 
-
 import pytest
 
 from broker_adapter import BrokerAdapter, get_broker_adapter

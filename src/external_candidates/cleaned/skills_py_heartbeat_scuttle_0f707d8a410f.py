@@ -9,11 +9,9 @@ import os
 
 import sys
 
-
 # Add parent dir to path to import core if needed
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 
 import scripts.core as core
 

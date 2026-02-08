@@ -7,11 +7,7 @@
 def base64_encode(data: bytes, custom_alphabet: str = None) -> bytes:
     """Base64 编码
 
-
-
     将输入的字节序列编码为Base64字符串。可选使用自定义字母表进行编码。
-
-
 
     Args:
 
@@ -20,8 +16,6 @@ def base64_encode(data: bytes, custom_alphabet: str = None) -> bytes:
         custom_alphabet: 可选的自定义Base64字母表，长度必须为64个字符。
 
                         默认使用标准Base64字母表 (A-Z, a-z, 0-9, +/)
-
-
 
     Returns:
 
@@ -49,13 +43,9 @@ def base64_encode(data: bytes, custom_alphabet: str = None) -> bytes:
 def base64_decode(encoded_str: str | bytes, custom_alphabet: str = None) -> bytes:
     """Base64 解码
 
-
-
     将Base64编码的字符串解码为原始字节序列。如果编码时使用了自定义字母表，
 
     解码时需要提供相同的字母表。
-
-
 
     Args:
 
@@ -65,13 +55,9 @@ def base64_decode(encoded_str: str | bytes, custom_alphabet: str = None) -> byte
 
                         默认使用标准Base64字母表 (A-Z, a-z, 0-9, +/)
 
-
-
     Returns:
 
         解码后的字节序列
-
-
 
     Raises:
 

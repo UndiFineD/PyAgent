@@ -21,11 +21,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from typing import Dict, List, Optional
 
-
 import requests
 
 from bs4 import BeautifulSoup
-
 
 # Common user agents to rotate
 

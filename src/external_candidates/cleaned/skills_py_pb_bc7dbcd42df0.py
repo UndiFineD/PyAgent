@@ -7,11 +7,7 @@
 
 """PhantomBuster CLI for Clawdbot.
 
-
-
 Control your PhantomBuster automation agents.
-
-
 
 Commands:
 
@@ -40,7 +36,6 @@ import sys
 import urllib.error
 
 import urllib.request
-
 
 API_BASE = "https://api.phantombuster.com/api/v2"
 

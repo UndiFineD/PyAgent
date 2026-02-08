@@ -13,14 +13,11 @@ import os
 
 import sys
 
-
 from mijiaAPI import mijiaAPI, mijiaDevice
-
 
 # Get device ID from environment variable
 
 LAMP_DID = os.environ.get("MIJIA_LAMP_DID")
-
 
 if not LAMP_DID:
     print("Error: MIJIA_LAMP_DID environment variable not set")

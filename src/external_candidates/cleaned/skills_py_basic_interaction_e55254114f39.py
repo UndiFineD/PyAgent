@@ -9,8 +9,6 @@ Protico Agent Skill - Python Example
 
 Basic interaction with Protico community on partner sites.
 
-
-
 Requirements:
 
 - selenium or playwright for browser automation
@@ -21,9 +19,7 @@ Requirements:
 
 from typing import Any, Dict, Optional
 
-
 import requests
-
 
 # =============================================================================
 
@@ -31,11 +27,9 @@ import requests
 
 # =============================================================================
 
-
 OWNER_NAME = "YOUR_OWNER_NAME"  # Replace with your owner's name
 
 PROTICO_API_BASE = "https://main.protico.io/api"
-
 
 # Agent signature template
 
@@ -49,7 +43,6 @@ AGENT_SIGNATURE = f"""
 
 """
 
-
 # =============================================================================
 
 # Protico Detection
@@ -62,13 +55,9 @@ def check_protico_on_page(browser) -> bool:
 
     Check if the current page has Protico integration.
 
-
-
     Args:
 
         browser: Browser instance (Selenium WebDriver or Playwright page)
-
-
 
     Returns:
 
@@ -106,13 +95,9 @@ def open_protico_panel(browser) -> bool:
 
     Open the Protico community panel by clicking the frame.
 
-
-
     Args:
 
         browser: Browser instance
-
-
 
     Returns:
 
@@ -147,13 +132,9 @@ def get_community_feed(room_url: str) -> Optional[Dict[str, Any]]:
 
     Fetch the live community feed for a specific page.
 
-
-
     Args:
 
         room_url: The URL of the page to get the feed for
-
-
 
     Returns:
 
@@ -179,13 +160,9 @@ def analyze_sentiment(messages: list) -> Dict[str, int]:
 
     Basic sentiment analysis on community messages.
 
-
-
     Args:
 
         messages: List of message objects from the feed
-
-
 
     Returns:
 
@@ -244,13 +221,9 @@ def create_message_with_signature(content: str) -> str:
 
     Add the required agent signature to a message.
 
-
-
     Args:
 
         content: The message content
-
-
 
     Returns:
 
@@ -266,8 +239,6 @@ def post_article_summary(browser, summary: str, key_points: list) -> bool:
 
     Post an article summary to the Protico community.
 
-
-
     Args:
 
         browser: Browser instance
@@ -275,8 +246,6 @@ def post_article_summary(browser, summary: str, key_points: list) -> bool:
         summary: Brief summary of the article
 
         key_points: List of key takeaways
-
-
 
     Returns:
 
@@ -287,8 +256,6 @@ def post_article_summary(browser, summary: str, key_points: list) -> bool:
     points_text = "\n".join([f"{i + 1}. {point}" for i, point in enumerate(key_points)])
 
     message = f"""{summary}
-
-
 
 Key takeaways:
 
@@ -328,15 +295,11 @@ def answer_question(browser, answer: str) -> bool:
 
     Post an answer to a question in the community.
 
-
-
     Args:
 
         browser: Browser instance
 
         answer: The answer to post
-
-
 
     Returns:
 
@@ -346,11 +309,7 @@ def answer_question(browser, answer: str) -> bool:
 
     message = f"""Great question! Here's what I found:
 
-
-
 {answer}
-
-
 
 Hope this helps! Feel free to ask if you have more questions."""
 
@@ -384,7 +343,6 @@ Hope this helps! Feel free to ask if you have more questions."""
 # Example Usage
 
 # =============================================================================
-
 
 if __name__ == "__main__":
     # Example: Fetch community feed from UDN Pets

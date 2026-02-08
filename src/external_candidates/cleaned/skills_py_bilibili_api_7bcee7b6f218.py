@@ -9,8 +9,6 @@
 
 B站 API 工具集
 
-
-
 包含：
 
 - WBI 签名生成
@@ -20,8 +18,6 @@ B站 API 工具集
 - AI 视频总结获取
 
 - 视频详情获取
-
-
 
 参考文档：
 
@@ -43,9 +39,7 @@ from functools import reduce
 
 from typing import Any
 
-
 import requests
-
 
 # WBI 签名用的混淆表
 
@@ -131,8 +125,6 @@ class BilibiliAPI:
         """
 
         初始化 API 客户端
-
-
 
         Args:
 
@@ -246,15 +238,11 @@ class BilibiliAPI:
 
         获取热门视频列表
 
-
-
         Args:
 
             page: 页码
 
             page_size: 每页数量
-
-
 
         Returns:
 
@@ -279,13 +267,9 @@ class BilibiliAPI:
 
         获取视频详情
 
-
-
         Args:
 
             bvid: 视频 BV 号
-
-
 
         Returns:
 
@@ -307,8 +291,6 @@ class BilibiliAPI:
 
         获取视频 AI 总结
 
-
-
         Args:
 
             bvid: 视频 BV 号
@@ -316,8 +298,6 @@ class BilibiliAPI:
             cid: 视频 cid
 
             up_mid: UP主 mid
-
-
 
         Returns:
 
@@ -364,15 +344,11 @@ class BilibiliAPI:
 
         获取视频字幕
 
-
-
         Args:
 
             bvid: 视频 BV 号
 
             cid: 视频 cid
-
-
 
         Returns:
 

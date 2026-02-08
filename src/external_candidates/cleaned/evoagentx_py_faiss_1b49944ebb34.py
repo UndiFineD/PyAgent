@@ -5,7 +5,6 @@
 
 from typing import Literal, Union
 
-
 import faiss
 
 from evoagentx.core.logging import logger
@@ -13,7 +12,6 @@ from evoagentx.core.logging import logger
 from llama_index.core.schema import BaseNode
 
 from llama_index.vector_stores.faiss import FaissMapVectorStore
-
 
 from .base import VectorStoreBase
 
@@ -55,13 +53,9 @@ class FaissVectorStoreWrapper(VectorStoreBase):
 
         Asynchronously load a single node into the FAISS vector store.
 
-
-
         Checks if a node with the same ID already exists in the FAISS vector store. If it does not exist,
 
         inserts the node with its embedding. Handles both Chunk and BaseNode types.
-
-
 
         Args:
 

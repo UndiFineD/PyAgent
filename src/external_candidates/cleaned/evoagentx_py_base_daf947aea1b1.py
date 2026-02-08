@@ -11,7 +11,6 @@ from enum import Enum
 
 from typing import List
 
-
 from evoagentx.rag.schema import Query, RagResult
 
 

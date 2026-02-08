@@ -13,13 +13,9 @@ def get_splitter(
 ) -> RecursiveCharacterTextSplitter:
     """Returns a token-based text splitter with overlap.
 
-
-
     Args:
 
         chunk_size: Number of tokens for each text chunk.
-
-
 
     Returns:
 

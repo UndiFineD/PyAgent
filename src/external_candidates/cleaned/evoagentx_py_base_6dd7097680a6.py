@@ -7,7 +7,6 @@ import abc
 
 from typing import Any, Callable, Dict, List, Optional
 
-
 from .decorators import EntryPoint
 
 from .registry import ParamRegistry
@@ -35,8 +34,6 @@ class BaseOptimizer(abc.ABC):
         """
 
         Abstract base class for optimization routines.
-
-
 
         Parameters:
 
@@ -87,13 +84,9 @@ class BaseOptimizer(abc.ABC):
 
         Abstract optimization loop. Should be implemented by subclasses.
 
-
-
         Parameters:
 
         - program_entry: callable that runs the program and returns output dict
-
-
 
         Returns:
 

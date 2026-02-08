@@ -5,7 +5,6 @@
 
 from typing import List, Optional
 
-
 from evoagentx.rag.schema import Chunk, Corpus, Query, RagResult
 
 from llama_index.core.postprocessor import (
@@ -14,7 +13,6 @@ from llama_index.core.postprocessor import (
 )
 
 from llama_index.core.schema import NodeWithScore
-
 
 from .base import BasePostprocessor
 

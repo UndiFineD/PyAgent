@@ -19,13 +19,11 @@ import sys
 
 from pathlib import Path
 
-
 # Add skill directory to path for imports
 
 skill_dir = Path(__file__).parent
 
 sys.path.insert(0, str(skill_dir))
-
 
 from sms_storage import get_all_threads, mark_as_read, store_message
 
@@ -37,13 +35,9 @@ def handle_sms_webhook(data: dict) -> dict:
 
     Stores message in threaded storage
 
-
-
     Args:
 
         data: Raw webhook payload from Dialpad
-
-
 
     Returns:
 

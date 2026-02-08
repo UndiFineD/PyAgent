@@ -9,7 +9,6 @@ import os
 
 from typing import Any, Dict, List, Optional, Union
 
-
 import voyageai
 
 from evoagentx.core.logging import logger
@@ -17,7 +16,6 @@ from evoagentx.core.logging import logger
 from llama_index.core.embeddings import BaseEmbedding
 
 from PIL import Image
-
 
 from .base import BaseEmbeddingWrapper, EmbeddingProvider
 
@@ -248,15 +246,11 @@ class VoyageEmbeddingWrapper(BaseEmbeddingWrapper):
     def validate_model(self, provider: EmbeddingProvider, model_name: str) -> bool:
         """Validate if the model is supported for Voyage AI.
 
-
-
         Args:
 
             provider (EmbeddingProvider): The embedding provider.
 
             model_name (str): The name of the embedding model to validate.
-
-
 
         Returns:
 

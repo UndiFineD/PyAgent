@@ -7,8 +7,6 @@
 
 Attention Visualization Helpers - Converted from 3b1b ManimGL to ManimCE
 
-
-
 Original: videos/_2024/transformers/helpers.py
 
 Contains utility functions and classes for attention visualization.
@@ -23,11 +21,9 @@ import warnings
 
 from typing import Optional, Tuple
 
-
 import numpy as np
 
 from manim import *
-
 
 # =============================================================================
 

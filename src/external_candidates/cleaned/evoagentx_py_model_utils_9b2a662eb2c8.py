@@ -7,9 +7,7 @@ import threading
 
 from dataclasses import dataclass
 
-
 import pandas as pd
-
 
 from ..core.callbacks import suppress_cost_logs
 

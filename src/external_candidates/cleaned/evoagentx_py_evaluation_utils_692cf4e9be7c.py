@@ -5,7 +5,6 @@
 
 # Acknowledgement: Modified from AFlow (https://github.com/geekan/MetaGPT/blob/main/metagpt/ext/aflow/scripts/optimizer_utils/evaluation_utils.py) under MIT License
 
-
 from ...core.callbacks import suppress_logger_info
 
 from ...core.logging import logger

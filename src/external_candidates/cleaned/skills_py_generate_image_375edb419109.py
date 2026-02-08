@@ -23,11 +23,7 @@
 
 Generate images using Nano Banana Pro (Gemini 3 Pro Image) via Google Antigravity OAuth.
 
-
-
 Uses existing OpenClaw Antigravity OAuth credentials - no separate API key needed!
-
-
 
 Usage:
 
@@ -53,7 +49,6 @@ from pathlib import Path
 
 from typing import Optional
 
-
 # Antigravity OAuth credentials (same as OpenClaw/opencode plugins)
 
 ANTIGRAVITY_CLIENT_ID = "1071006060591-tmhssin2h21lcre235vtolojh4g403ep.apps.googleusercontent.com"
@@ -61,7 +56,6 @@ ANTIGRAVITY_CLIENT_ID = "1071006060591-tmhssin2h21lcre235vtolojh4g403ep.apps.goo
 ANTIGRAVITY_CLIENT_SECRET = "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"
 
 GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
-
 
 # CloudCode API endpoints
 
@@ -71,13 +65,11 @@ CLOUDCODE_ENDPOINTS = [
     "https://cloudcode-pa.googleapis.com",
 ]
 
-
 # Image model
 
 IMAGE_MODEL = "gemini-3-pro-image"
 
 IMAGE_MODEL_PRO = "gemini-3-pro-image-preview"  # Nano Banana Pro
-
 
 CLOUDCODE_METADATA = {
     "ideType": "ANTIGRAVITY",

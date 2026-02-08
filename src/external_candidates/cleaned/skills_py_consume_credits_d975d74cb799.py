@@ -9,25 +9,17 @@
 
 x402 Credit-Based Consumption
 
-
-
 Consume API endpoints using pre-purchased credits instead of per-request payments.
 
 Credits provide instant access without blockchain latency.
-
-
 
 Usage:
 
     python consume_credits.py <endpoint_url>
 
-
-
 Example:
 
     python consume_credits.py https://api.x402layer.cc/e/weather-data
-
-
 
 Environment Variables:
 
@@ -40,7 +32,6 @@ import json
 import os
 
 import sys
-
 
 import requests
 

@@ -23,14 +23,11 @@ from pathlib import Path
 
 from typing import Any, Dict, Optional
 
-
 from patchright.sync_api import BrowserContext, Page
-
 
 # Add parent directory to path
 
 sys.path.insert(0, str(Path(__file__).parent))
-
 
 from browser_utils import StealthUtils
 
@@ -39,8 +36,6 @@ class BrowserSession:
     """
 
     Represents a single persistent browser session for NotebookLM
-
-
 
     Each session gets its own Page (tab) within a shared BrowserContext,
 
@@ -54,8 +49,6 @@ class BrowserSession:
         """
 
         Initialize a new browser session
-
-
 
         Args:
 
@@ -150,13 +143,9 @@ class BrowserSession:
 
         Ask a question in this session
 
-
-
         Args:
 
             question: The question to ask
-
-
 
         Returns:
 

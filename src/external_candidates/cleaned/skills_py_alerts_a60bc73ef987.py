@@ -9,8 +9,6 @@
 
 Fitbit Alerts - Threshold-based notifications
 
-
-
 Usage:
 
     python alerts.py --days 7 --steps 8000 --sleep 7
@@ -22,7 +20,6 @@ import json
 import os
 
 from datetime import datetime, timedelta
-
 
 try:
     from fitbit_api import FitbitClient
@@ -105,8 +102,6 @@ class FitbitAlerts:
 
         Find all days below thresholds.
 
-
-
         Checks multiple signals:
 
         - Steps below threshold
@@ -114,8 +109,6 @@ class FitbitAlerts:
         - Sleep duration below threshold
 
         - Resting HR above/below thresholds
-
-
 
         Returns list of alert dicts with date, type, and alert message.
 
@@ -206,8 +199,6 @@ class FitbitAlerts:
         """
 
         Get overall recovery status based on multiple signals.
-
-
 
         Returns: 'green', 'yellow', or 'red'
 

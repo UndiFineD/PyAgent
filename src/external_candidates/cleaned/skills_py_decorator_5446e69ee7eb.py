@@ -9,13 +9,9 @@
 
 VPN Rotation Decorator
 
-
-
 Usage:
 
     from decorator import with_vpn_rotation
-
-
 
     @with_vpn_rotation(rotate_every=10)
 
@@ -32,7 +28,6 @@ import sys
 from pathlib import Path
 
 from typing import Callable
-
 
 # Ensure vpn module can be imported
 
@@ -54,8 +49,6 @@ def with_vpn_rotation(
 
     Decorator to add VPN rotation to any function.
 
-
-
     Args:
 
         rotate_every: Rotate VPN after N requests
@@ -72,8 +65,6 @@ def with_vpn_rotation(
 
         verbose: Print status messages
 
-
-
     Example:
 
         @with_vpn_rotation(rotate_every=10)
@@ -82,15 +73,11 @@ def with_vpn_rotation(
 
             return requests.get(url).json()
 
-
-
         # Every 10 calls, VPN rotates to new server
 
         for url in urls:
 
             data = fetch(url)
-
-
 
         # Cleanup when done
 
@@ -143,8 +130,6 @@ def patch_function(func: Callable, rotate_every: int = 10, **kwargs) -> Callable
     """
 
     Wrap an existing function with VPN rotation.
-
-
 
     Example:
 

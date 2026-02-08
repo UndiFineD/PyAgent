@@ -17,8 +17,6 @@
 
 TaskNotes CLI - Manage Obsidian tasks via TaskNotes plugin API.
 
-
-
 Usage:
 
     python3 tasks.py list [--status STATUS] [--project PROJECT] [--limit N]
@@ -32,8 +30,6 @@ Usage:
     python3 tasks.py stats
 
     python3 tasks.py options
-
-
 
 Environment:
 
@@ -55,11 +51,9 @@ import urllib.parse
 
 from pathlib import Path
 
-
 import requests
 
 from dotenv import load_dotenv
-
 
 # Load .env from vault root
 
@@ -68,7 +62,6 @@ SCRIPT_DIR = Path(__file__).parent
 VAULT_ROOT = SCRIPT_DIR.parent.parent.parent.parent
 
 load_dotenv(VAULT_ROOT / ".env")
-
 
 API_KEY = os.getenv("TASKNOTES_API_KEY")
 

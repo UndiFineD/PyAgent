@@ -7,18 +7,15 @@ import os
 
 from typing import Any, Dict, List, Optional
 
-
 import dotenv
 
 import requests
 
 from evoagentx.core.logging import logger
 
-
 from .search_base import SearchBase
 
 from .tool import Tool, Toolkit
-
 
 dotenv.load_dotenv()
 
@@ -34,8 +31,6 @@ class SearchGoogle(SearchBase):
         """
 
         Initialize the Google Search tool.
-
-
 
         Args:
 
@@ -63,8 +58,6 @@ class SearchGoogle(SearchBase):
 
         Search Google using the Custom Search API and retrieve detailed search results with content snippets.
 
-
-
         Args:
 
             query (str): The search query to execute on Google
@@ -72,8 +65,6 @@ class SearchGoogle(SearchBase):
             num_search_pages (int): Number of search results to retrieve
 
             max_content_words (int): Maximum number of words to include in content, None means no limit
-
-
 
         Returns:
 

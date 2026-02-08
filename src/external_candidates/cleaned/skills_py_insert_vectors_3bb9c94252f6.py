@@ -9,8 +9,6 @@
 
 Insert sample vectors into TOS Vectors index.
 
-
-
 Example usage:
 
     python insert_vectors.py
@@ -20,7 +18,6 @@ Example usage:
 import os
 
 import sys
-
 
 import tos
 

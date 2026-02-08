@@ -5,7 +5,6 @@
 
 import unittest
 
-
 from evoagentx.models import OpenAILLM, OpenAILLMConfig
 
 from evoagentx.optimizers.sew_optimizer import SEWWorkFlowScheme
@@ -27,8 +26,6 @@ class TestModule(unittest.TestCase):
 
     def test_python_scheme(self):
 
-
-
         repr = self.scheme.convert_to_scheme(scheme="python")
 
         new_graph = self.scheme.parse_workflow_python_repr("```python\n" + repr + "\n```")
@@ -39,23 +36,17 @@ class TestModule(unittest.TestCase):
 
         self.assertFalse(new_graph == self.graph)
 
-
-
         # test empty repr 
 
         new_graph = self.scheme.parse_workflow_python_repr("")
 
         self.assertEqual(new_graph, self.graph)
 
-
-
         # test invalid repr 
 
         new_graph = self.scheme.parse_workflow_python_repr("invalid repr")
 
         self.assertEqual(new_graph, self.graph)
-
-
 
         # test create new graph  
 

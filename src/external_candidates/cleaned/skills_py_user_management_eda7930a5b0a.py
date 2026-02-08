@@ -24,8 +24,6 @@ class UserLifecycleManager:
 
         Initialize with tenant domain.
 
-
-
         Args:
 
             domain: Primary domain name for the tenant
@@ -41,13 +39,9 @@ class UserLifecycleManager:
 
         Generate PowerShell script for bulk user creation.
 
-
-
         Args:
 
             users: List of user dictionaries with details
-
-
 
         Returns:
 
@@ -61,13 +55,9 @@ class UserLifecycleManager:
 
     Bulk User Provisioning Script for Microsoft 365
 
-
-
 .DESCRIPTION
 
     Creates multiple users, assigns licenses, and configures mailboxes.
-
-
 
 .NOTES
 
@@ -79,19 +69,13 @@ class UserLifecycleManager:
 
 #>
 
-
-
 # Connect to Microsoft Graph
 
 Connect-MgGraph -Scopes "User.ReadWrite.All", "Directory.ReadWrite.All", "Group.ReadWrite.All"
 
-
-
 # Connect to Exchange Online
 
 Connect-ExchangeOnline
-
-
 
 # Define users to create
 
@@ -148,8 +132,6 @@ $users = @(
 
 )
 
-
-
 # Create users
 
 foreach ($user in $users) {
@@ -157,8 +139,6 @@ foreach ($user in $users) {
     try {
 
         Write-Host "Creating user: $($user.DisplayName)..." -ForegroundColor Cyan
-
-
 
         # Create user account
 
@@ -182,17 +162,11 @@ foreach ($user in $users) {
 
                               -MailNickname ($user.UserPrincipalName -split '@')[0]
 
-
-
         Write-Host "  ✓ User created successfully" -ForegroundColor Green
-
-
 
         # Wait for user provisioning
 
         Start-Sleep -Seconds 5
-
-
 
         # Assign license
 
@@ -210,21 +184,15 @@ foreach ($user in $users) {
 
         }
 
-
-
         Set-MgUserLicense -UserId $newUser.Id -BodyParameter $licenseParams
 
         Write-Host "  ✓ License assigned: $($user.LicenseSku)" -ForegroundColor Green
-
-
 
         # Log success
 
         $user | Add-Member -NotePropertyName "Status" -NotePropertyValue "Success" -Force
 
         $user | Add-Member -NotePropertyName "CreatedDate" -NotePropertyValue (Get-Date) -Force
-
-
 
     } catch {
 
@@ -238,21 +206,15 @@ foreach ($user in $users) {
 
 }
 
-
-
 # Export results
 
 $users | Export-Csv -Path "UserCreation_Results_$(Get-Date -Format 'yyyyMMdd_HHmmss').csv" -NoTypeInformation
-
-
 
 # Disconnect
 
 Disconnect-MgGraph
 
 Disconnect-ExchangeOnline -Confirm:$false
-
-
 
 Write-Host "`nUser provisioning complete!" -ForegroundColor Green
 
@@ -265,13 +227,9 @@ Write-Host "`nUser provisioning complete!" -ForegroundColor Green
 
         Generate script for secure user offboarding.
 
-
-
         Args:
 
             user_email: Email address of user to offboard
-
-
 
         Returns:
 
@@ -284,8 +242,6 @@ Write-Host "`nUser provisioning complete!" -ForegroundColor Green
 .SYNOPSIS
 
     User Offboarding Script - Secure Deprovisioning
-
-
 
 .DESCRIPTION
 
@@ -303,25 +259,17 @@ Write-Host "`nUser provisioning complete!" -ForegroundColor Green
 
 #>
 
-
-
 # Connect to services
 
 Connect-MgGraph -Scopes "User.ReadWrite.All", "Directory.ReadWrite.All"
 
 Connect-ExchangeOnline
 
-
-
 $userEmail = "{user_email}"
 
 $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
 
-
-
 Write-Host "Starting offboarding for: $userEmail" -ForegroundColor Cyan
-
-
 
 try {{
 
@@ -331,23 +279,17 @@ try {{
 
     Write-Host "✓ User found: $($user.DisplayName)" -ForegroundColor Green
 
-
-
     # Step 2: Disable sign-in (immediately revokes access)
 
     Update-MgUser -UserId $user.Id -AccountEnabled $false
 
     Write-Host "✓ Account disabled - user cannot sign in" -ForegroundColor Green
 
-
-
     # Step 3: Revoke all active sessions
 
     Revoke-MgUserSignInSession -UserId $user.Id
 
     Write-Host "✓ All active sessions revoked" -ForegroundColor Green
-
-
 
     # Step 4: Remove from all groups (except retained groups)
 
@@ -367,8 +309,6 @@ try {{
 
     Write-Host "✓ Removed from all groups" -ForegroundColor Green
 
-
-
     # Step 5: Remove mobile devices
 
     $devices = Get-MgUserRegisteredDevice -UserId $user.Id
@@ -383,23 +323,17 @@ try {{
 
     Write-Host "✓ All mobile devices removed" -ForegroundColor Green
 
-
-
     # Step 6: Convert mailbox to shared (preserves emails, removes license requirement)
 
     Set-Mailbox -Identity $userEmail -Type Shared
 
     Write-Host "✓ Mailbox converted to shared mailbox" -ForegroundColor Green
 
-
-
     # Step 7: Set up email forwarding (optional - update recipient as needed)
 
     # Set-Mailbox -Identity $userEmail -ForwardingAddress "manager@{self.domain}"
 
     # Write-Host "✓ Email forwarding configured" -ForegroundColor Green
-
-
 
     # Step 8: Set auto-reply
 
@@ -411,8 +345,6 @@ For assistance, please contact: support@{self.domain}
 
 "@
 
-
-
     Set-MailboxAutoReplyConfiguration -Identity $userEmail `
 
         -AutoReplyState Enabled `
@@ -422,8 +354,6 @@ For assistance, please contact: support@{self.domain}
         -ExternalMessage $autoReplyMessage
 
     Write-Host "✓ Auto-reply configured" -ForegroundColor Green
-
-
 
     # Step 9: Remove licenses (wait a bit after mailbox conversion)
 
@@ -445,15 +375,11 @@ For assistance, please contact: support@{self.domain}
 
     }}
 
-
-
     # Step 10: Hide from GAL (Global Address List)
 
     Set-Mailbox -Identity $userEmail -HiddenFromAddressListsEnabled $true
 
     Write-Host "✓ Hidden from Global Address List" -ForegroundColor Green
-
-
 
     # Step 11: Document offboarding
 
@@ -475,11 +401,7 @@ For assistance, please contact: support@{self.domain}
 
     }}
 
-
-
     $offboardingReport | Export-Csv -Path "Offboarding_${{userEmail}}_$timestamp.csv" -NoTypeInformation
-
-
 
     Write-Host "`n✓ Offboarding completed successfully!" -ForegroundColor Green
 
@@ -493,15 +415,11 @@ For assistance, please contact: support@{self.domain}
 
     Write-Host "4. Review and transfer any owned resources (Teams, SharePoint sites, etc.)"
 
-
-
 }} catch {{
 
     Write-Host "✗ Error during offboarding: $_" -ForegroundColor Red
 
 }}
-
-
 
 # Disconnect
 
@@ -518,15 +436,11 @@ Disconnect-ExchangeOnline -Confirm:$false
 
         Recommend appropriate license based on user role and department.
 
-
-
         Args:
 
             user_role: Job title or role
 
             department: Department name
-
-
 
         Returns:
 
@@ -620,13 +534,9 @@ Disconnect-ExchangeOnline -Confirm:$false
 
         Recommend security and distribution groups based on user attributes.
 
-
-
         Args:
 
             user: User dictionary with role, department, location
-
-
 
         Returns:
 
@@ -677,13 +587,9 @@ Disconnect-ExchangeOnline -Confirm:$false
 
         Validate user data before provisioning.
 
-
-
         Args:
 
             user_data: User information dictionary
-
-
 
         Returns:
 

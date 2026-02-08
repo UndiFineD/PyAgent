@@ -27,19 +27,15 @@ from pathlib import Path
 
 from typing import Dict, List, Optional, Union
 
-
 import numpy as np
 
 import pandas as pd
 
-
 warnings.filterwarnings("ignore")
-
 
 # Set matplotlib backend to avoid threading issues
 
 import matplotlib
-
 
 matplotlib.use("Agg")
 
@@ -51,8 +47,6 @@ class StockChartGenerator:
         """
 
         初始化图表生成器
-
-
 
         Args:
 
@@ -625,8 +619,6 @@ def generate_stock_charts(
 
     生成股票技术分析图表的主函数
 
-
-
     Args:
 
         symbol (str): 股票代码（如：300750、000001、000858等）
@@ -637,13 +629,9 @@ def generate_stock_charts(
 
                                 默认生成所有类型
 
-
-
     Returns:
 
         Dict[str, Optional[str]]: 生成的图表路径字典
-
-
 
     Example:
 
@@ -651,13 +639,9 @@ def generate_stock_charts(
 
         charts = generate_stock_charts("300750")
 
-
-
         # 只生成K线图
 
         charts = generate_stock_charts("600519", chart_types=["candlestick"])
-
-
 
         # 生成到指定目录
 
@@ -729,21 +713,15 @@ def batch_generate_charts(symbols: List[str], output_base_dir: str = "charts") -
 
     批量生成多个股票的图表
 
-
-
     Args:
 
         symbols (List[str]): 股票代码列表
 
         output_base_dir (str): 基础输出目录
 
-
-
     Returns:
 
         Dict[str, Dict]: 每个股票的生成结果
-
-
 
     Example:
 

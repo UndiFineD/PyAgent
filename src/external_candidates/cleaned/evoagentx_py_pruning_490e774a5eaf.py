@@ -5,11 +5,9 @@
 
 from __future__ import annotations
 
-
 import math
 
 from typing import Any, Dict, List, Optional, Tuple
-
 
 from ...agents.customize_agent import CustomizeAgent
 
@@ -69,8 +67,6 @@ def _js_divergence(p: Dict[str, float], q: Dict[str, float]) -> float:
 
 class PruningPipeline:
     """可插拔剪枝流水线：质量剪枝(QP) → 多样性剪枝(DP) → 误解反驳(MR)。
-
-
 
     候选输入格式：List[{"agent_id": int, "text": str}]
 
@@ -228,19 +224,13 @@ class PruningPipeline:
 
 You are a critical reviewer. Given a problem and a set of condensed candidate answers, identify common misunderstandings or mistakes, and propose a corrected consolidated answer.
 
-
-
 Problem:
 
 {problem}
 
-
-
 Candidates:
 
 {candidates_text}
-
-
 
 Return XML:
 

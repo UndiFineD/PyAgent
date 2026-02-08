@@ -7,7 +7,6 @@ from string import Template
 
 from typing import Dict, Optional, Union
 
-
 from evoagentx.models.base_model import BaseLLM
 
 from evoagentx.prompts.rag.hyde import DEFAULT_HYDE_PROMPT, HYDE_SYSTEM_IMPLE_
@@ -22,8 +21,6 @@ class HyDETransform(BaseQueryTransform):
 
     Hypothetical Document Embeddings (HyDE) query transform.
 
-
-
     This class implements the HyDE technique for improving dense retrieval, as described in
 
     `Precise Zero-Shot Dense Retrieval without Relevance Labels` (https://arxiv.org/abs/2212.10496).
@@ -31,8 +28,6 @@ class HyDETransform(BaseQueryTransform):
     It uses a language model to generate a hypothetical document (answer) for a given query, which
 
     is then used to create embedding strings for enhanced retrieval.
-
-
 
     Attributes:
 
@@ -53,8 +48,6 @@ class HyDETransform(BaseQueryTransform):
         """
 
         Initialize the HyDETransform.
-
-
 
         Args:
 
@@ -81,23 +74,17 @@ class HyDETransform(BaseQueryTransform):
 
         Transform a query by generating a hypothetical document and updating embedding strings.
 
-
-
         This method uses the LLM to generate a hypothetical answer to the query, which is then
 
         used as an embedding string for retrieval. If include_original is True, the original
 
         query's embedding strings are also retained.
 
-
-
         Args:
 
             query (Query): The input query to transform.
 
             metadata (Dict): Additional metadata associated with the query (not used in this implementation).
-
-
 
         Returns:
 

@@ -7,13 +7,11 @@
 
 # Two Nodes are implemented, first Node is a WorkFlow Node with a HITLUserInputCollectorAgent instance inside, for collecting user's inputs. The second WorkFlow Node is a custom agent which analyse user's inputs and generate appropriate outputs
 
-
 import asyncio
 
 import os
 
 from typing import Optional
-
 
 from dotenv import load_dotenv
 
@@ -30,7 +28,6 @@ from evoagentx.workflow import WorkFlow, WorkFlowGraph
 from evoagentx.workflow.workflow_graph import WorkFlowEdge, WorkFlowNode
 
 from pydantic import Field
-
 
 load_dotenv()
 

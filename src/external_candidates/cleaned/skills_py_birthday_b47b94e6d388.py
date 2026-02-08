@@ -35,7 +35,6 @@ from datetime import datetime, timedelta
 
 from pathlib import Path
 
-
 BIRTHDAYS_FILE = Path("/home/clawd/clawd/data/birthdays.json")
 
 

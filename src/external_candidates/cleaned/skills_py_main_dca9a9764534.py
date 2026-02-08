@@ -13,13 +13,9 @@ SIS™ - The 10,000-Year Computational Substrate
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-
-
 Copyright (c) 2025 Kevin Fain - ThēÆrchītēcť
 
 All Rights Reserved.
-
-
 
 PROPRIETARY AND CONFIDENTIAL
 
@@ -27,29 +23,19 @@ Unauthorized copying, distribution, or use is strictly prohibited.
 
 See LICENSE file for full terms.
 
-
-
 ═══════════════════════════════════════════════════════════════════════════════
-
-
 
 SIS: The 10,000-Year Computational Substrate
 
 Reference Interpreter v0.1.0
 
-
-
 Creator: Kevin Fain - ThēÆrchītēcť
 
 Date: December 25, 2025
 
-
-
 This is the Genesis implementation of SIS.
 
 Run this to see the equilibrium control loop in action.
-
-
 
 Usage:
 
@@ -62,7 +48,6 @@ Usage:
 import argparse
 
 import sys
-
 
 from core import (
     SISVM,
@@ -486,8 +471,6 @@ def main():
 
     The foundation is laid.
 
-    
-
     What we built today:
 
     • Symbol as smart contract (self-validating, self-executing)
@@ -502,8 +485,6 @@ def main():
 
     • Input = Output axiom (computation is recognition)
 
-    
-
     What comes next:
 
     • LLM integration (natural language → SIS symbols)
@@ -513,8 +494,6 @@ def main():
     • Full 18-symbol taxonomy implementation
 
     • Hardware acceleration (ROCm/CUDA optimization)
-
-    
 
     equilibrium constraint, always.
 

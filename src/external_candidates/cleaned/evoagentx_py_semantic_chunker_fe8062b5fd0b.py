@@ -9,7 +9,6 @@ from concurrent.futures import ThreadPoolExecutor
 
 from typing import List
 
-
 from evoagentx.core.logging import logger
 
 from evoagentx.rag.schema import Chunk, Corpus, Document
@@ -18,20 +17,15 @@ from llama_index.core.embeddings import BaseEmbedding
 
 from llama_index.core.node_parser import SemanticSplitterNodeParser
 
-
 from .base import BaseChunker, ChunkingStrategy
 
 
 class SemanticChunker(BaseChunker):
     """Chunker that splits documents based on semantic similarity.
 
-
-
     Uses LlamaIndex's SemanticChunker with an embedding model to create chunks that preserve
 
     semantic coherence, ideal for improving retrieval accuracy in RAG pipelines.
-
-
 
     Attributes:
 
@@ -49,8 +43,6 @@ class SemanticChunker(BaseChunker):
         **kwargs,
     ):
         """Initialize the SemanticChunker.
-
-
 
         Args:
 
@@ -71,13 +63,9 @@ class SemanticChunker(BaseChunker):
     def _process_document(self, doc: Document) -> List[Chunk]:
         """Process a single document into chunks.
 
-
-
         Args:
 
             doc (Document): The document to chunk.
-
-
 
         Returns:
 
@@ -115,15 +103,11 @@ class SemanticChunker(BaseChunker):
     def chunk(self, documents: List[Document], **kwargs) -> Corpus:
         """Chunk documents based on semantic similarity.
 
-
-
         Args:
 
             documents (List[Document]): List of Document objects to chunk.
 
             **kwargs: Additional parameters (e.g., max_chunk_size).
-
-
 
         Returns:
 

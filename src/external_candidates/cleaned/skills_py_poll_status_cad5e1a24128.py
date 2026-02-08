@@ -9,8 +9,6 @@
 
 Poll Fliz video status until completion or failure.
 
-
-
 Usage:
 
     python poll_status.py --api-key KEY --video-id UUID
@@ -27,14 +25,11 @@ import sys
 
 import time
 
-
 import requests
-
 
 BASE_URL = "https://app.fliz.ai"
 
 TIMEOUT = 30
-
 
 # Terminal states
 
@@ -43,7 +38,6 @@ COMPLETE_STATES = {"complete"}
 ERROR_STATES = {"failed", "failed_unrecoverable", "failed_go_back_to_user_action"}
 
 BLOCKED_STATES = {"user_action", "block"}
-
 
 # Processing steps in order
 

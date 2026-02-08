@@ -13,17 +13,13 @@ Send status messages using Clawdbot WebSocket API (fast).
 
 import sys
 
-
 sys.stdout.reconfigure(encoding="utf-8")
-
 
 import json
 
 import os
 
-
 import websocket
-
 
 # Status type to emoji mapping
 
@@ -34,8 +30,6 @@ def send_status(message: str, status_type: str, step_name: str, details: str = N
     """
 
     Format and send a status message to Telegram via WebSocket.
-
-
 
     Args:
 

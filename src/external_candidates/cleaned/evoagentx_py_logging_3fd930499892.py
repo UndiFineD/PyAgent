@@ -5,9 +5,7 @@
 
 import os
 
-
 from loguru import logger
-
 
 # logger.remove()
 
@@ -22,8 +20,6 @@ def save_logger(path: str):
     """
 
     Save the logging to a file.
-
-
 
     Args:
 
@@ -50,8 +46,6 @@ def get_log_file():
     """
 
     Get the path to the logging file.
-
-
 
     Returns:
 

@@ -7,8 +7,6 @@
 
 Coverage analysis module.
 
-
-
 Parse and analyze test coverage reports in multiple formats (LCOV, JSON, XML).
 
 Identify gaps, calculate metrics, and provide actionable recommendations.
@@ -51,15 +49,11 @@ class CoverageAnalyzer:
 
         Parse coverage report in various formats.
 
-
-
         Args:
 
             report_content: Raw coverage report content
 
             format_type: Format (lcov, json, xml, cobertura)
-
-
 
         Returns:
 
@@ -271,8 +265,6 @@ class CoverageAnalyzer:
 
         Calculate overall coverage summary.
 
-
-
         Returns:
 
             Summary with line, branch, and function coverage percentages
@@ -345,13 +337,9 @@ class CoverageAnalyzer:
 
         Identify coverage gaps below threshold.
 
-
-
         Args:
 
             threshold: Minimum acceptable coverage percentage
-
-
 
         Returns:
 
@@ -435,13 +423,9 @@ class CoverageAnalyzer:
 
         Get detailed coverage information for a specific file.
 
-
-
         Args:
 
             file_path: Path to file
-
-
 
         Returns:
 
@@ -486,8 +470,6 @@ class CoverageAnalyzer:
         """
 
         Generate prioritized recommendations for improving coverage.
-
-
 
         Returns:
 
@@ -551,13 +533,9 @@ class CoverageAnalyzer:
 
         Automatically detect coverage report format.
 
-
-
         Args:
 
             content: Raw coverage report content
-
-
 
         Returns:
 

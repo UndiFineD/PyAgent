@@ -9,23 +9,15 @@
 
 x402 Payment - Base (EVM) Network
 
-
-
 Pay for API access using USDC on Base network via EIP-712 permit signatures.
-
-
 
 Usage:
 
     python pay_base.py <endpoint_url>
 
-
-
 Example:
 
     python pay_base.py https://api.x402layer.cc/e/weather-data
-
-
 
 Environment Variables:
 
@@ -45,13 +37,11 @@ import sys
 
 import time
 
-
 import requests
 
 from eth_account import Account
 
 from eth_account.messages import encode_typed_data
-
 
 # USDC Constants for Base
 

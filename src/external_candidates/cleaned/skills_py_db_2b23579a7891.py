@@ -11,7 +11,6 @@ import sqlite3
 
 import uuid
 
-
 # Path to the research database
 
 DB_PATH = os.path.expanduser("~/.openclaw/workspace/memory/research_vault.db")

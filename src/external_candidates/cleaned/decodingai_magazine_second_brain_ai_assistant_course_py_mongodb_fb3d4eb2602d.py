@@ -5,7 +5,6 @@
 
 from typing import Generic, Type, TypeVar
 
-
 from bson import ObjectId
 
 from langchain_mongodb.index import create_fulltext_search_index
@@ -18,20 +17,15 @@ from pymongo import MongoClient, errors
 
 from rag_workshop.config import settings
 
-
 T = TypeVar("T", bound=BaseModel)
 
 
 class MongoDBService(Generic[T]):
     """Service class for MongoDB operations, supporting ingestion, querying, and validation.
 
-
-
     This class provides methods to interact with MongoDB collections, including document
 
     ingestion, querying, and validation operations.
-
-
 
     Args:
 
@@ -42,8 +36,6 @@ class MongoDBService(Generic[T]):
         database_name: Name of the MongoDB database to use.
 
         mongodb_uri: URI for connecting to MongoDB instance.
-
-
 
     Attributes:
 
@@ -72,8 +64,6 @@ class MongoDBService(Generic[T]):
     ) -> None:
         """Initialize a connection to the MongoDB collection.
 
-
-
         Args:
 
             collection_name: Name of the MongoDB collection to use.
@@ -87,8 +77,6 @@ class MongoDBService(Generic[T]):
             mongodb_uri: URI for connecting to MongoDB instance.
 
                 Defaults to value from settings.
-
-
 
         Raises:
 
@@ -125,8 +113,6 @@ class MongoDBService(Generic[T]):
     def __enter__(self) -> "MongoDBService":
         """Enable context manager support.
 
-
-
         Returns:
 
             MongoDBService: The current instance.
@@ -137,8 +123,6 @@ class MongoDBService(Generic[T]):
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         """Close MongoDB connection when exiting context.
-
-
 
         Args:
 
@@ -155,13 +139,9 @@ class MongoDBService(Generic[T]):
     def clear_collection(self) -> None:
         """Remove all documents from the collection.
 
-
-
         This method deletes all documents in the collection to avoid duplicates
 
         during reingestion.
-
-
 
         Raises:
 
@@ -182,13 +162,9 @@ class MongoDBService(Generic[T]):
     def ingest_documents(self, documents: list[T]) -> None:
         """Insert multiple documents into the MongoDB collection.
 
-
-
         Args:
 
             documents: List of Pydantic model instances to insert.
-
-
 
         Raises:
 
@@ -221,21 +197,15 @@ class MongoDBService(Generic[T]):
     def fetch_documents(self, limit: int, query: dict) -> list[T]:
         """Retrieve documents from the MongoDB collection based on a query.
 
-
-
         Args:
 
             limit: Maximum number of documents to retrieve.
 
             query: MongoDB query filter to apply.
 
-
-
         Returns:
 
             List of Pydantic model instances matching the query criteria.
-
-
 
         Raises:
 
@@ -258,19 +228,13 @@ class MongoDBService(Generic[T]):
     def __parse_documents(self, documents: list[dict]) -> list[T]:
         """Convert MongoDB documents to Pydantic model instances.
 
-
-
         Converts MongoDB ObjectId fields to strings and transforms the document structure
 
         to match the Pydantic model schema.
 
-
-
         Args:
 
             documents: List of MongoDB documents to parse.
-
-
 
         Returns:
 
@@ -298,13 +262,9 @@ class MongoDBService(Generic[T]):
     def get_collection_count(self) -> int:
         """Count the total number of documents in the collection.
 
-
-
         Returns:
 
             Total number of documents in the collection.
-
-
 
         Raises:
 
@@ -322,8 +282,6 @@ class MongoDBService(Generic[T]):
 
     def close(self) -> None:
         """Close the MongoDB connection.
-
-
 
         This method should be called when the service is no longer needed
 

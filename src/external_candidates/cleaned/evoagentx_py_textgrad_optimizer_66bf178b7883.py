@@ -27,7 +27,6 @@
 
 # -----------------------------------------------------------------------------
 
-
 # ruff: noqa: E402
 
 import os
@@ -38,13 +37,11 @@ from copy import deepcopy
 
 from typing import Any, Iterator, List, Literal, Optional, Tuple, Union
 
-
 import numpy as np
 
 from pydantic import Field, PositiveInt
 
 from tqdm import tqdm
-
 
 from ..agents import Agent, CustomizeAgent
 
@@ -64,11 +61,9 @@ from ..prompts import PromptTemplate
 
 from ..workflow.workflow_graph import WorkFlowGraph, WorkFlowNode
 
-
 # Check if logs folder exists before importing textgrad
 
 log_folder_exists = os.path.exists("./logs")
-
 
 import textgrad as tg
 
@@ -84,7 +79,6 @@ from textgrad.loss import MultiFieldEvaluation, TextLoss
 
 from textgrad.optimizer import TextualGradientDescent
 
-
 from ..prompts.optimizers.textgrad_optimizer import (
     CODE_LOSS_PROMPT,
     CODE_REVIEW_EXAMPLE,
@@ -95,7 +89,6 @@ from ..prompts.optimizers.textgrad_optimizer import (
     OPTIMIZER_SYSTEM_PROMPT,
     PERSONAL_FINANCE_ADVISOR_EXAMPLE,
 )
-
 
 tg_logger.removeHandler(tg_file_handler)
 
@@ -359,8 +352,6 @@ class TextGradOptimizer(BaseModule):
     def optimize(self, dataset: Benchmark, use_answers: bool = True, seed: Optional[int] = None) -> None:
         """Optimizes self.graph using `dataset`.
 
-
-
         Args:
 
             dataset (Benchmark): The dataset to use for optimization.
@@ -568,8 +559,6 @@ class TextGradOptimizer(BaseModule):
     ) -> dict:
         """Evaluate the workflow. If `graph` is provided, use the provided graph for evaluation. Otherwise, use the graph in the optimizer.
 
-
-
         Args:
 
             dataset (Benchmark): The dataset to evaluate the workflow on.
@@ -581,8 +570,6 @@ class TextGradOptimizer(BaseModule):
             indices (List[int], optional): The indices of the data to evaluate the workflow on.
 
             sample_k (int, optional): The number of data to evaluate the workflow on. If provided, a random sample of size `sample_k` will be used.
-
-
 
         Returns:
 
@@ -629,8 +616,6 @@ class TextGradOptimizer(BaseModule):
     def save(self, path: str, graph: Optional[WorkFlowGraph] = None, ignore: List[str] = []) -> None:
         """Save the workflow graph containing the optimized prompts to a file.
 
-
-
         Args:
 
             path (str): The path to save the workflow graph.
@@ -674,8 +659,6 @@ class TextGradOptimizer(BaseModule):
     def _format_code_label(self, code: str, label: dict[str, str], dataset: CodingBenchmark) -> str:
         """Formats the label for coding tasks to include the task, the test result, and the correct code.
 
-
-
         Args:
 
             code: The code to evaluate.
@@ -683,8 +666,6 @@ class TextGradOptimizer(BaseModule):
             label: A dictionary with keys "task_id", "test", "entry_point", and "canonical_solution".
 
             dataset: A CodingBenchmark instance with `check_solution` method.
-
-
 
         Returns:
 
@@ -745,15 +726,11 @@ class TextGradOptimizer(BaseModule):
     def _compute_node(self, node: Union[str, WorkFlowNode], initial_inputs: dict[str, Variable]) -> Variable:
         """Computes the output of a node in the workflow graph by recursively computing the required inputs.
 
-
-
         Args:
 
             node: The node to compute the output of.
 
             initial_inputs: The initial inputs to the workflow that are not from any node in the workflow (e.g., user query).
-
-
 
         Returns:
 

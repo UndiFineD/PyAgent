@@ -19,7 +19,6 @@ import sys
 
 from pathlib import Path
 
-
 from html_report_generator import HTMLGenerator
 
 

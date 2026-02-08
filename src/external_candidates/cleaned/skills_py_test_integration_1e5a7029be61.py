@@ -5,8 +5,6 @@
 
 """End-to-end integration tests for the minimal API path.
 
-
-
 These tests verify the core flow:
 
   update/remember → embed → summarize → store → find/get → Item
@@ -18,7 +16,6 @@ import tempfile
 from datetime import datetime, timezone
 
 from pathlib import Path
-
 
 import pytest
 

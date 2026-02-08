@@ -9,13 +9,9 @@
 
 Generate detailed JSON prompt for TikTok AI model video workflow.
 
-
-
 This script creates structured prompts for Nano Banana Pro based on
 
 Pinterest references and product descriptions.
-
-
 
 Usage:
 
@@ -47,8 +43,6 @@ def create_json_prompt(
 
     Create structured JSON prompt for Nano Banana Pro.
 
-
-
     Args:
 
         product (str): Product description to be included
@@ -72,8 +66,6 @@ def create_json_prompt(
         atmosphere (str): Mood/vibe
 
         style (str): Photography style
-
-
 
     Returns:
 

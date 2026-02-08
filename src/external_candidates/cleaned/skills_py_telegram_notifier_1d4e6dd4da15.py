@@ -17,9 +17,7 @@ import os
 
 from datetime import datetime
 
-
 import requests
-
 
 logger = logging.getLogger(__name__)
 
@@ -98,8 +96,6 @@ class TelegramNotifier:
 
 🚀 *TRADE EXECUTED* 🚀
 
-
-
 *Action:* {action} {symbol}
 
 *Quantity:* {quantity} shares
@@ -109,8 +105,6 @@ class TelegramNotifier:
 *Total:* ${total:.2f}
 
 *Reason:* {reason}
-
-
 
 *Time:* {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 
@@ -135,8 +129,6 @@ class TelegramNotifier:
 
 📊 *CONGRESSIONAL TRADE ALERT* 📊
 
-
-
 *Politician:* {politician}
 
 *Action:* {action} {symbol}
@@ -144,8 +136,6 @@ class TelegramNotifier:
 *Amount:* ${amount:,.2f}
 
 *Date:* {date}
-
-
 
 *Time Detected:* {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 
@@ -162,8 +152,6 @@ class TelegramNotifier:
         message = f"""
 
 ⚠️ *SYSTEM ERROR* ⚠️
-
-
 
 *Type:* {error_type}
 
@@ -199,8 +187,6 @@ class TelegramNotifier:
 
 📋 *DAILY TRADING SUMMARY* 📋
 
-
-
 *Date:* {date}
 
 *Trades Made:* {trades_made}
@@ -210,8 +196,6 @@ class TelegramNotifier:
 *Daily P&L:* {pnl_emoji} ${pnl:,.2f}
 
 *Account Balance:* ${account_balance:,.2f}
-
-
 
 *Summary Time:* {datetime.now().strftime("%H:%M:%S")}
 
@@ -226,8 +210,6 @@ class TelegramNotifier:
 
 ✅ *TRADING SYSTEM TEST* ✅
 
-
-
 *System:* E*TRADE Congressional Trading Bot
 
 *Status:* Online and Ready
@@ -235,8 +217,6 @@ class TelegramNotifier:
 *Account:* $50,000 Brokerage
 
 *Time:* {datetime.now().strftime("%Y-%m-%d %H:%M:%S EST")}
-
-
 
 Test message successful! The system is ready to trade.
 

@@ -9,8 +9,6 @@
 
 SerpAPI CLI wrapper - unified search across Google, Amazon, Yelp, OpenTable, and more.
 
-
-
 Usage:
 
     serp <engine> <query> [options]
@@ -23,15 +21,11 @@ Usage:
 
     serp google_maps "restaurants" --location "15238"
 
-
-
 Engines:
 
     google, google_maps, google_shopping, google_images, google_news,
 
     amazon, yelp, opentable, walmart, ebay, tripadvisor, home_depot
-
-
 
 Environment:
 
@@ -57,9 +51,7 @@ from urllib.parse import urlencode
 
 from urllib.request import Request, urlopen
 
-
 SERPAPI_BASE = "https://serpapi.com/search.json"
-
 
 # Engine name mapping (CLI name -> SerpAPI engine parameter)
 

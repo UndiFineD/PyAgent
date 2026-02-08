@@ -7,8 +7,6 @@
 
 Default summarization providers.
 
-
-
 Simple, zero-dependency summarizers for getting started.
 
 """
@@ -20,8 +18,6 @@ class TruncationSummarizer:
     """
 
     Simple summarizer that truncates content to a max length.
-
-
 
     Zero dependencies. Good enough to get started; replace with
 
@@ -49,8 +45,6 @@ class TruncationSummarizer:
 
         Summarize by taking first N characters.
 
-
-
         Tries to break at word boundaries.
 
         """
@@ -76,8 +70,6 @@ class FirstParagraphSummarizer:
     """
 
     Summarizer that extracts the first paragraph or meaningful chunk.
-
-
 
     Better than pure truncation for documents with structure.
 
@@ -126,8 +118,6 @@ class PassthroughSummarizer:
     """
 
     No-op summarizer that returns content as-is (or truncated).
-
-
 
     Useful when you want to store the full content as the summary.
 

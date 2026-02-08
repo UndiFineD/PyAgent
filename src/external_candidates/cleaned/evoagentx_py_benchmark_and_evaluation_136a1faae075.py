@@ -5,7 +5,6 @@
 
 import os
 
-
 from dotenv import load_dotenv
 
 from evoagentx.benchmark import HotPotQA
@@ -17,7 +16,6 @@ from evoagentx.evaluators import Evaluator
 from evoagentx.models import OpenAILLM, OpenAILLMConfig
 
 from evoagentx.workflow import QAActionGraph
-
 
 load_dotenv()
 
@@ -42,8 +40,6 @@ def main():
         Args:
 
             example (dict): A dictionary containing the raw example data.
-
-
 
         Returns:
 
@@ -74,8 +70,6 @@ def main():
         Args:
 
             output (dict): The output from the workflow.
-
-
 
         Returns:
 

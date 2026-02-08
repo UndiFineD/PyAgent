@@ -23,12 +23,9 @@ from datetime import datetime, timedelta
 
 from typing import Dict, List, Optional
 
-
 import requests
 
-
 logger = logging.getLogger(__name__)
-
 
 # Try to import yfinance for historical prices
 
@@ -229,8 +226,6 @@ class CongressionalBacktester:
 
         Run a backtest with specific strategy parameters
 
-
-
         Args:
 
             trades: List of congressional trades
@@ -401,8 +396,6 @@ class CongressionalBacktester:
         """
 
         Compare multiple trading strategies
-
-
 
         Returns results sorted by total return
 

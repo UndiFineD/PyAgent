@@ -7,8 +7,6 @@
 
 Multi-Agent EvoPrompt Workflow Example
 
-
-
 This script demonstrates multi-prompt evolution using ensemble voting strategies.
 
 It optimizes multiple prompts simultaneously to improve task performance through
@@ -24,7 +22,6 @@ import os
 import re
 
 from collections import Counter
-
 
 from dotenv import load_dotenv
 
@@ -44,8 +41,6 @@ class SarcasmClassifierProgram:
 
     Multi-prompt ensemble classifier using majority voting strategy.
 
-
-
     This program employs three independent prompt "voters" that can evolve
 
     independently to achieve better collective performance through diversity.
@@ -56,8 +51,6 @@ class SarcasmClassifierProgram:
         """
 
         Initialize the multi-prompt ensemble classifier.
-
-
 
         Args:
 
@@ -86,13 +79,9 @@ class SarcasmClassifierProgram:
 
         Execute ensemble prediction using majority voting.
 
-
-
         Args:
 
             input: The input text to process
-
-
 
         Returns:
 

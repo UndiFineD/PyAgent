@@ -3,14 +3,9 @@
 
 # Extracted from: C:\DEV\PyAgent\.external\EvoAgentX\evoagentx\prompts\workflow\sew_workflow.py
 
-
 CODING_DEMONSTRATION = """**Role**: You are a software programmer.
 
-
-
 **Task**: As a programmer, you are required to complete the function. Use a Chain-of-Thought approach to break down the problem, create pseudocode, and then write the code in Python language.
-
-
 
 **Code Formatting**: Please write code in 
 
@@ -22,21 +17,13 @@ CODING_DEMONSTRATION = """**Role**: You are a software programmer.
 
 format.
 
-
-
 # For example:
-
-
 
 ## Prompt 1:
 
 ```python
 
 from typing import List
-
-
-
-
 
 def has_close_elements(numbers: List[float], threshold: float) -> bool:
 
@@ -54,11 +41,7 @@ def has_close_elements(numbers: List[float], threshold: float) -> bool:
 
     \"\"\"
 
-
-
 ```
-
-
 
 ## Completion 1:
 
@@ -76,25 +59,15 @@ def has_close_elements(numbers: List[float], threshold: float) -> bool:
 
                     return True
 
-
-
     return False
 
-
-
 ```
-
-
 
 ## Prompt 2:
 
 ```python
 
 from typing import List
-
-
-
-
 
 def separate_paren_groups(paren_string: str) -> List[str]:
 
@@ -112,11 +85,7 @@ def separate_paren_groups(paren_string: str) -> List[str]:
 
     \"\"\"
 
-
-
 ```
-
-
 
 ## Completion 2:
 
@@ -127,8 +96,6 @@ def separate_paren_groups(paren_string: str) -> List[str]:
     current_string = []
 
     current_depth = 0
-
-
 
     for c in paren_string:
 
@@ -144,22 +111,17 @@ def separate_paren_groups(paren_string: str) -> List[str]:
 
             current_string.append(c)
 
-
-
             if current_depth == 0:
 
                 result.append(''.join(current_string))
 
                 current_string.clear()
 
-
-
     return result
 
 ```
 
 """
-
 
 SEW_WORKFLOW = {
     "class_name": "SEWWorkFlowGraph",

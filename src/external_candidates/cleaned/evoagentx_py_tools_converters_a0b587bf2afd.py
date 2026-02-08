@@ -5,20 +5,15 @@
 
 #!/usr/bin/env python3
 
-
 """
 
 Condensed API Converter Examples (Safe, No API Keys)
-
-
 
 This module provides:
 
 - A quick, low-cost smoke test that builds and inspects a toolkit (no network calls)
 
 - A single real call extracted from real_world_api_example.py (executes only if OPENWEATHER_API_KEY is set)
-
-
 
 It mirrors the structure and style of other example modules in examples/tools.
 
@@ -28,16 +23,13 @@ import os
 
 from typing import Any, Dict
 
-
 from dotenv import load_dotenv
 
 from evoagentx.tools.api_converter import (
     create_rapidapi_toolkit,
 )
 
-
 load_dotenv()
-
 
 weather_api_spec = {
     "openapi": "3.0.0",

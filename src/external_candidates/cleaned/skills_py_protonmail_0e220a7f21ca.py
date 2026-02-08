@@ -7,8 +7,6 @@
 
 """ProtonMail CLI via IMAP bridge (Proton Bridge or hydroxide).
 
-
-
 Configuration via environment variables:
 
     PROTONMAIL_HOST  - IMAP host (default: 127.0.0.1)
@@ -18,8 +16,6 @@ Configuration via environment variables:
     PROTONMAIL_USER  - Email address
 
     PROTONMAIL_PASS  - Bridge password
-
-
 
 Or config file at ~/.config/protonmail-bridge/config.env
 
@@ -38,7 +34,6 @@ import sys
 from email.header import decode_header
 
 from pathlib import Path
-
 
 # Configuration with fallbacks
 

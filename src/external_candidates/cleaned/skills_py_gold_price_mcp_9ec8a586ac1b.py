@@ -19,7 +19,6 @@ import sys
 
 from typing import List
 
-
 import httpx
 
 import mcp.server.stdio
@@ -28,18 +27,15 @@ import mcp.types as types
 
 from mcp.server import Server
 
-
 # -------------------------------------------------------------------
 
 # Constants
 
 # -------------------------------------------------------------------
 
-
 API_URL = "https://api.chnwt.dev/thai-gold-api/latest"
 
 HTTP_TIMEOUT = 10.0
-
 
 # -------------------------------------------------------------------
 
@@ -47,9 +43,7 @@ HTTP_TIMEOUT = 10.0
 
 # -------------------------------------------------------------------
 
-
 server = Server("thai-gold-price-mcp")
-
 
 # -------------------------------------------------------------------
 

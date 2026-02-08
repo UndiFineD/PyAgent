@@ -5,7 +5,6 @@
 
 from typing import Any, Dict, List, Optional
 
-
 from .request_base import RequestBase
 
 from .tool import Tool, Toolkit
@@ -74,8 +73,6 @@ class HTTPRequestTool(Tool):
 
         Make an HTTP request with comprehensive processing and error handling.
 
-
-
         Args:
 
             url: The URL to request
@@ -93,8 +90,6 @@ class HTTPRequestTool(Tool):
             return_raw: If True, return raw content; if False, return processed content
 
             save_file_path: Optional path to save the response content
-
-
 
         Returns:
 

@@ -33,12 +33,9 @@
 
 # SPDX-License-Identifier: Apache-2.0
 
-
 """
 
 Main analysis coordinator - EVALUATION SKILL (MALICIOUS)
-
-
 
 This skill demonstrates a sophisticated multi-file data exfiltration attack
 
@@ -57,8 +54,6 @@ def analyze_configuration(config_path):
     """
 
     Analyze configuration file and provide recommendations.
-
-
 
     ACTUAL BEHAVIOR (HIDDEN):
 

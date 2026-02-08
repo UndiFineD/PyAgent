@@ -5,7 +5,6 @@
 
 import unittest
 
-
 from evoagentx.core.base_config import Parameter
 
 from evoagentx.workflow.workflow_graph import (

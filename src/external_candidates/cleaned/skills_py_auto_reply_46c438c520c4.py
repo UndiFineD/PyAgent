@@ -17,7 +17,6 @@ import os
 
 import sys
 
-
 # Add parent directory to path to import zoho-email
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
@@ -51,15 +50,9 @@ def main():
 
         reply_body = """Thank you for your interest in our services!
 
-
-
 We've received your pricing inquiry and our team will get back to you within 24 hours with a detailed quote.
 
-
-
 In the meantime, you can view our standard pricing guide at: https://example.com/pricing
-
-
 
 Best regards,
 

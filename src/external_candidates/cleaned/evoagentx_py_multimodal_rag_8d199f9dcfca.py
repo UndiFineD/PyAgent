@@ -9,7 +9,6 @@ from pathlib import Path
 
 from typing import Dict, List
 
-
 from dotenv import load_dotenv
 
 from evoagentx.benchmark.real_mm_rag import RealMMRAG
@@ -35,7 +34,6 @@ from evoagentx.rag.schema import Query, TextChunk
 from evoagentx.storages.base import StorageHandler
 
 from evoagentx.storages.storages_config import DBConfig, StoreConfig, VectorStoreConfig
-
 
 # Load environment
 

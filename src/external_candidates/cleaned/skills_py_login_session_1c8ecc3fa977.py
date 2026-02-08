@@ -23,7 +23,6 @@ import time
 
 from pathlib import Path
 
-
 SESSIONS_DIR = Path.home() / ".clawdbot" / "browser-sessions"
 
 
@@ -31,8 +30,6 @@ def login_and_save(url: str, session_name: str, wait_for_url: str = None, timeou
     """
 
     Open browser for manual login, wait for success, then save session
-
-
 
     Args:
 
@@ -170,8 +167,6 @@ def use_saved_session(url: str, session_name: str, headless: bool = True, action
     """
 
     Use a previously saved session
-
-
 
     Args:
 

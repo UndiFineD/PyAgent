@@ -5,9 +5,7 @@
 
 from typing import Optional
 
-
 import requests
-
 
 from .api_converter import APITool, APIToolkit
 
@@ -17,13 +15,9 @@ def create_company_information_tool(api_key: Optional[str] = None) -> APITool:
 
     Create a tool to get basic information about a company
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -82,13 +76,9 @@ def create_international_company_information_tool(
 
     Create a tool to get basic information about an international company
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -145,13 +135,9 @@ def create_key_metrics_tool(api_key: Optional[str] = None) -> APITool:
 
     Create a tool to get key financial metrics for a company
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -208,13 +194,9 @@ def create_market_cap_tool(api_key: Optional[str] = None) -> APITool:
 
     Create a tool to get historical market capitalization data
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -271,13 +253,9 @@ def create_employee_count_tool(api_key: Optional[str] = None) -> APITool:
 
     Create a tool to get historical employee count data
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -334,13 +312,9 @@ def create_executive_compensation_tool(api_key: Optional[str] = None) -> APITool
 
     Create a tool to get historical executive compensation data
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -405,13 +379,9 @@ def create_securities_information_tool(api_key: Optional[str] = None) -> APITool
 
     Create a tool to get basic information about securities
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -468,8 +438,6 @@ def create_basic_information_toolkit(api_key: Optional[str] = None) -> APIToolki
 
     Create a Basic Company Information Toolkit instance
 
-
-
     Provides comprehensive access to company and securities information, including:
 
     - Company information (US and international)
@@ -484,8 +452,6 @@ def create_basic_information_toolkit(api_key: Optional[str] = None) -> APIToolki
 
     - Securities information
 
-
-
     Args:
 
         api_key: Optional API key for authentication. When making requests, the API key
@@ -494,13 +460,9 @@ def create_basic_information_toolkit(api_key: Optional[str] = None) -> APIToolki
 
                 whether other query parameters exist.
 
-
-
     Returns:
 
         APIToolkit instance
-
-
 
     Example:
 

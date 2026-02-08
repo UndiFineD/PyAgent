@@ -15,7 +15,6 @@ from datetime import datetime
 
 from zoneinfo import ZoneInfo
 
-
 # 10 Heavenly Stems
 
 STEMS = [

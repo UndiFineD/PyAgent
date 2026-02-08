@@ -5,13 +5,11 @@
 
 # evoagentx/hitl/interceptor_agent.py
 
-
 import asyncio
 
 import sys
 
 from typing import Tuple
-
 
 from ..actions.action import Action
 

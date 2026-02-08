@@ -5,7 +5,6 @@
 
 from evoagentx.models import LLMOutputParser, OpenAILLM, OpenAILLMConfig, cost_manager
 
-
 from tests.src.models.mock_response import mock_openai_completions_create
 
 

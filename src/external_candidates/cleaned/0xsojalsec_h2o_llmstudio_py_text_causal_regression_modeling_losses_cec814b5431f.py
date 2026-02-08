@@ -1,0 +1,67 @@
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_h2o_llmstudio.py\llm_studio.py\src.py\losses.py\text_causal_regression_modeling_losses_cec814b5431f.py
+# NOTE: extracted with static-only rules; review before use
+
+# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-h2o-llmstudio\llm_studio\src\losses\text_causal_regression_modeling_losses.py
+
+import logging
+
+from collections.abc import KeysView
+
+from typing import Any
+
+from torch import Tensor, nn
+
+logger = logging.getLogger(__name__)
+
+
+class MSELoss(nn.Module):
+    def __init__(self, cfg: Any):
+        super().__init__()
+
+        self.cfg = cfg
+
+        self.loss_fn = nn.MSELoss()
+
+    def forward(self, logits: Tensor, labels: Tensor) -> Tensor:
+        return self.loss_fn(logits, labels)
+
+
+class MAELoss(nn.Module):
+    def __init__(self, cfg: Any):
+        super().__init__()
+
+        self.cfg = cfg
+
+        self.loss_fn = nn.L1Loss()
+
+    def forward(self, logits: Tensor, labels: Tensor) -> Tensor:
+        return self.loss_fn(logits, labels)
+
+
+class Losses:
+    """Losses factory."""
+
+    _losses = {
+        "MSELoss": MSELoss,
+        "MAELoss": MAELoss,
+    }
+
+    @classmethod
+    def names(cls) -> KeysView:
+        return cls._losses.keys()
+
+    @classmethod
+    def get(cls, name: str) -> Any:
+        """Access to Losses.
+
+        Args:
+
+            name: losses name
+
+        Returns:
+
+            A class to build the Losses
+
+        """
+
+        return cls._losses.get(name, MSELoss)

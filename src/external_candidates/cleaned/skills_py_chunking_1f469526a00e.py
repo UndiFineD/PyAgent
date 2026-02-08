@@ -7,8 +7,6 @@
 
 Chunking strategies for splitting documents into embeddable pieces.
 
-
-
 Unlike summarization (which condenses), chunking splits mechanically
 
 by token count with overlap to preserve context across boundaries.
@@ -65,15 +63,11 @@ class TokenChunker:
 
     Chunk by approximate token count with overlap.
 
-
-
     Uses whitespace splitting as a rough token approximation
 
     (1 token ≈ 0.75 words for English). For precise tokenization,
 
     subclass and override _tokenize/_detokenize.
-
-
 
     OpenClaw defaults: target=400 tokens, overlap=80 tokens
 
@@ -186,8 +180,6 @@ class SentenceChunker(TokenChunker):
     """
 
     Chunk by sentences, respecting token limits.
-
-
 
     Tries to keep sentences intact while staying under token limit.
 
@@ -325,8 +317,6 @@ class MarkdownChunker(TokenChunker):
     """
 
     Chunk Markdown documents respecting structure.
-
-
 
     Tries to break at:
 

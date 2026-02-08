@@ -7,8 +7,6 @@
 
 Format detection module.
 
-
-
 Automatically detects programming language, testing framework, and file formats.
 
 """
@@ -33,13 +31,9 @@ class FormatDetector:
 
         Detect programming language from code.
 
-
-
         Args:
 
             code: Source code
-
-
 
         Returns:
 
@@ -147,13 +141,9 @@ class FormatDetector:
 
         Detect testing framework from test code.
 
-
-
         Args:
 
             code: Test code
-
-
 
         Returns:
 
@@ -212,13 +202,9 @@ class FormatDetector:
 
         Detect coverage report format.
 
-
-
         Args:
 
             content: Coverage report content
-
-
 
         Returns:
 
@@ -258,13 +244,9 @@ class FormatDetector:
 
         Detect input format and extract relevant information.
 
-
-
         Args:
 
             input_data: Input data (could be code, coverage report, etc.)
-
-
 
         Returns:
 
@@ -315,13 +297,9 @@ class FormatDetector:
 
         Extract information from file path.
 
-
-
         Args:
 
             file_path: Path to file
-
-
 
         Returns:
 
@@ -366,15 +344,11 @@ class FormatDetector:
 
         Suggest test file name for source file.
 
-
-
         Args:
 
             source_file: Source file path
 
             framework: Testing framework
-
-
 
         Returns:
 
@@ -405,13 +379,9 @@ class FormatDetector:
 
         Identify test patterns in code.
 
-
-
         Args:
 
             code: Test code
-
-
 
         Returns:
 
@@ -460,13 +430,9 @@ class FormatDetector:
 
         Analyze project structure from file paths.
 
-
-
         Args:
 
             file_paths: List of file paths in project
-
-
 
         Returns:
 
@@ -532,8 +498,6 @@ class FormatDetector:
         """
 
         Detect execution environment (CLI, Desktop, API).
-
-
 
         Returns:
 

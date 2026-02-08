@@ -7,9 +7,7 @@ from collections import defaultdict, deque
 
 from typing import Dict, List, Optional, Union
 
-
 from pydantic import Field, PositiveInt, field_validator
-
 
 from ..core.message import Message
 
@@ -23,15 +21,11 @@ from ..utils.utils import safe_remove
 class BaseMemory(BaseModule):
     """Base class for memory implementations in the EvoAgentX framework.
 
-
-
     BaseMemory provides core functionality for storing, retrieving, and
 
     filtering messages. It maintains a chronological list of messages while
 
     also providing indices for efficient retrieval by action or workflow goal.
-
-
 
     Attributes:
 
@@ -59,8 +53,6 @@ class BaseMemory(BaseModule):
     def init_module(self):
         """Initialize memory indices.
 
-
-
         Creates default dictionaries for indexing messages by action and workflow goal.
 
         """
@@ -73,8 +65,6 @@ class BaseMemory(BaseModule):
     def size(self) -> int:
         """Returns the current number of messages in memory.
 
-
-
         Returns:
 
             int: Number of messages currently stored.
@@ -85,8 +75,6 @@ class BaseMemory(BaseModule):
 
     def clear(self):
         """Clear all messages from memory.
-
-
 
         Removes all messages and resets all indices.
 
@@ -101,13 +89,9 @@ class BaseMemory(BaseModule):
     def remove_message(self, message: Message):
         """Remove a single message from memory.
 
-
-
         Removes the specified message from the main message list and all indices.
 
         If the message is not found in memory, no action is taken.
-
-
 
         Args:
 
@@ -134,11 +118,7 @@ class BaseMemory(BaseModule):
     def add_message(self, message: Message):
         """Store a single message in memory.
 
-
-
         Adds the message to the main list and relevant indices if it's not already stored.
-
-
 
         Args:
 
@@ -165,8 +145,6 @@ class BaseMemory(BaseModule):
 
         store (a) message(s) to the memory.
 
-
-
         Args:
 
             messages (Union[Message, List[Message]]): the input messages can be a single message or a list of message.
@@ -182,11 +160,7 @@ class BaseMemory(BaseModule):
     def get(self, n: int = None, **kwargs) -> List[Message]:
         """Retrieve recent messages from memory.
 
-
-
         Returns the most recent messages, up to the specified limit.
-
-
 
         Args:
 
@@ -194,13 +168,9 @@ class BaseMemory(BaseModule):
 
             **kwargs (Any): Additional parameters (unused in base implementation).
 
-
-
         Returns:
 
             A list of Message objects, ordered from oldest to newest.
-
-
 
         Raises:
 
@@ -219,13 +189,9 @@ class BaseMemory(BaseModule):
 
         Retrieve a list of Message objects from a given data dictionary `data` based on a specified type `key`.
 
-
-
         This function looks up the value associated with `key` in the `data` dictionary, which should be a list of messages. It then returns a subset of these messages according to the specified parameters.
 
         If `n` is provided, it limits the number of messages returned; otherwise, it may return the entire list. Additional keyword arguments (**kwargs) can be used to further filter or process the resulting messages.
-
-
 
         Args:
 
@@ -236,8 +202,6 @@ class BaseMemory(BaseModule):
             n (int, optional): The maximum number of messages to return. If not provided, all messages under the given `key` may be returned.
 
             **kwargs (Any): Additional parameters for filtering or processing the messages.
-
-
 
         Returns:
 
@@ -259,8 +223,6 @@ class BaseMemory(BaseModule):
 
         return messages triggered by `actions` in the memory.
 
-
-
         Args:
 
             actions: A single action name or list of action names to filter by.
@@ -268,8 +230,6 @@ class BaseMemory(BaseModule):
             n: Maximum number of messages to return per action. If None, returns all matching messages.
 
             **kwargs (Any): Additional parameters (unused in base implementation).
-
-
 
         Returns:
 
@@ -294,8 +254,6 @@ class BaseMemory(BaseModule):
 
         return messages related to `wf_goals` in the memory.
 
-
-
         Args:
 
             wf_goals: A single workflow goal or list of workflow goals to filter by.
@@ -303,8 +261,6 @@ class BaseMemory(BaseModule):
             n: Maximum number of messages to return per workflow goal. If None, returns all matching messages.
 
             **kwargs (Any): Additional parameters (unused in base implementation).
-
-
 
         Returns:
 
@@ -330,15 +286,11 @@ class ShortTermMemory(BaseModule):
 
     Short-term memory implementation.
 
-
-
     Stores only the most recent N messages (like a sliding window).
 
     Unlike BaseMemory/LongTermMemory, this is purely in-memory cache
 
     and does not persist to storage_handler or vector DB.
-
-
 
     Attributes:
 
@@ -416,13 +368,9 @@ class ShortTermMemory(BaseModule):
 
         Retrieve the most recent n messages (default: all).
 
-
-
         Args:
 
             n: Number of messages to return. If None, return all.
-
-
 
         Returns:
 

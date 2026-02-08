@@ -11,12 +11,9 @@ import warnings
 
 from typing import Any, Callable, Dict, List
 
-
 from ...prompts.template import PromptTemplate
 
-
 _INDEX_RE = re.compile(r"^(.*?)\[(.*?)\]$")
-
 
 # _PATH_RE = re.compile(r"""
 
@@ -27,7 +24,6 @@ _INDEX_RE = re.compile(r"^(.*?)\[(.*?)\]$")
 #     \[['"](.+?)['"]\]       # dict key
 
 # """, re.VERBOSE)
-
 
 _PATH_RE = re.compile(
     r"""
@@ -48,8 +44,6 @@ class OptimizableField:
 
     Represents a parameter that can be optimized.
 
-
-
     This class encapsulates a runtime attribute using dynamic getter and setter
 
     functions. It allows the parameter to be exposed and manipulated by an external
@@ -64,8 +58,6 @@ class OptimizableField:
         """
 
         Initialize an OptimizableField instance.
-
-
 
         Parameters
 
@@ -98,8 +90,6 @@ class OptimizableField:
 
         Retrieve the current value of the field.
 
-
-
         Returns
 
         -------
@@ -116,8 +106,6 @@ class OptimizableField:
         """
 
         Update the field with a new value.
-
-
 
         Parameters
 
@@ -136,8 +124,6 @@ class OptimizableField:
 
         Capture a snapshot of the current field value.
 
-
-
         This method stores a deep copy of the current field value so that it
 
         can be restored later using `reset()`.
@@ -153,15 +139,11 @@ class OptimizableField:
 
         Reset the field to its initial value.
 
-
-
         If the current value object defines a `__reset__()` method, it will be
 
         called to perform the reset. Otherwise, the field is reset to the deep-copied
 
         initial value stored by `init_snapshot()`.
-
-
 
         Raises
 
@@ -189,8 +171,6 @@ class ParamRegistry:
     """
 
     Central registry for all parameters that can be exposed to optimization.
-
-
 
     Allows dynamic binding and tracking of runtime attributes via dot-paths,
 
@@ -252,8 +232,6 @@ class ParamRegistry:
 
         Register a parameter to be optimized. Supports both nested paths and direct attributes.
 
-
-
         Parameters:
 
         - root_or_obj (Any): the base object or container
@@ -261,8 +239,6 @@ class ParamRegistry:
         - path_or_attr (str): a path like 'prompt.template' or a direct attribute like 'template'
 
         - name (str | None): optional alias for this parameter
-
-
 
         Supported formats:
 
@@ -286,11 +262,7 @@ class ParamRegistry:
 
         - registry.track(program, "prompt.template").track(program, "prompt.prefix")  # chained calls
 
-
-
         - registry.track(program, "prompt_template_obj")  # register a prompt_template instance
-
-
 
         Returns:
 
@@ -352,8 +324,6 @@ class ParamRegistry:
 
         as an OptimizableField by dynamically creating getter and setter functions.
 
-
-
         Parameters:
 
         - root (Any): the root object to start walking from
@@ -361,8 +331,6 @@ class ParamRegistry:
         - path (str): dot-separated path supporting list/dict access
 
         - name (Optional[str]): alias for the parameter (defaults to last path segment)
-
-
 
         Returns:
 
@@ -397,8 +365,6 @@ class ParamRegistry:
 
         and the leaf attribute/key/index for assignment or retrieval.
 
-
-
         Supports:
 
         - Nested attributes: e.g. "a.b.c"
@@ -407,8 +373,6 @@ class ParamRegistry:
 
         - List index access: e.g. "layers[0]"
 
-
-
         Parameters:
 
         - root (Any): root object to walk from
@@ -416,8 +380,6 @@ class ParamRegistry:
         - path (str): path string to resolve
 
         - create_missing (bool): unused placeholder for future extensions
-
-
 
         Returns:
 
@@ -463,8 +425,6 @@ class ParamRegistry:
 
         and the leaf attribute/key/index for assignment or retrieval.
 
-
-
         Supports:
 
         - Nested attributes: e.g. "a.b.c"
@@ -473,8 +433,6 @@ class ParamRegistry:
 
         - List index access: e.g. "layers[0]"
 
-
-
         Parameters:
 
         - root (Any): root object to walk from
@@ -482,8 +440,6 @@ class ParamRegistry:
         - path (str): path string to resolve
 
         - create_missing (bool): unused placeholder for future extensions
-
-
 
         Returns:
 
@@ -543,15 +499,11 @@ def safe_deepcopy(obj):
 
     Safely attempt to deep copy any Python object, with graceful fallback behavior.
 
-
-
     This function performs a standard `copy.deepcopy` when possible. If that fails
 
     (e.g., due to the presence of uncopyable components such as file handles, threads,
 
     or custom classes that don't support deep copying), it falls back to a more resilient strategy:
-
-
 
     1. Attempts to create a blank instance of the object's class using `__new__`.
 
@@ -565,19 +517,13 @@ def safe_deepcopy(obj):
 
     3. If the object has no `__dict__` or cannot be instantiated, returns the original object.
 
-
-
     Parameters:
 
         obj (Any): The object to be deep copied.
 
-
-
     Returns:
 
         Any: A deep copy of the input object if possible, or a best-effort fallback copy.
-
-
 
     Warnings:
 
@@ -589,8 +535,6 @@ def safe_deepcopy(obj):
 
         - The class cannot be re-instantiated and the original reference is returned.
 
-
-
     Notes:
 
         - This function is intended for robust copying in systems where user-defined objects,
@@ -600,8 +544,6 @@ def safe_deepcopy(obj):
         - It is not guaranteed to preserve identity semantics or copy objects with `__slots__`.
 
         - For critical correctness or mutation isolation, ensure your objects are deepcopy-compatible.
-
-
 
     Example:
 

@@ -9,8 +9,6 @@
 
 Timezone Utilities for Oura Analytics
 
-
-
 Handles timezone-aware day alignment, travel detection, and DST handling.
 
 """
@@ -20,7 +18,6 @@ import os
 from datetime import date, datetime
 
 from typing import List, Optional, Tuple
-
 
 import pytz
 
@@ -36,15 +33,11 @@ def get_canonical_day(utc_timestamp: str, user_tz: Optional[str] = None) -> Tupl
 
     Convert a UTC timestamp to the user's canonical day.
 
-
-
     Args:
 
         utc_timestamp: ISO format timestamp (e.g., "2026-01-15T00:00:00.000+00:00")
 
         user_tz: User's timezone (default: from USER_TIMEZONE env or America/Los_Angeles)
-
-
 
     Returns:
 
@@ -95,8 +88,6 @@ def get_canonical_day_from_date_str(date_str: str, user_tz: Optional[str] = None
 
     Get canonical day from a date string (YYYY-MM-DD).
 
-
-
     For dates, we assume the date is in the user's local timezone.
 
     Returns None for invalid/empty dates.
@@ -131,8 +122,6 @@ def is_travel_day(sleep_records: list, threshold_hours: float = 3.0, user_tz: Op
 
     Detect potential travel days based on bedtime shifts.
 
-
-
     Args:
 
         sleep_records: List of sleep records with bedtime_start
@@ -140,8 +129,6 @@ def is_travel_day(sleep_records: list, threshold_hours: float = 3.0, user_tz: Op
         threshold_hours: Minimum hour shift to flag as potential travel
 
         user_tz: User's timezone (default: from USER_TIMEZONE env or America/Los_Angeles)
-
-
 
     Returns:
 
@@ -198,8 +185,6 @@ def get_sleep_for_canonical_day(sleep_data: list, target_date: date, user_tz: Op
 
     Get all sleep records that belong to a canonical day.
 
-
-
     Oura assigns sleep to the wake date, but sleep starting the previous
 
     day may still be relevant for the "night before".
@@ -230,8 +215,6 @@ def group_by_canonical_day(data: list, timestamp_field: str = "day", user_tz: Op
 
     Group data records by canonical day.
 
-
-
     Args:
 
         data: List of records with a date field
@@ -239,8 +222,6 @@ def group_by_canonical_day(data: list, timestamp_field: str = "day", user_tz: Op
         timestamp_field: Field name containing the date (e.g., "day" or "bedtime_start")
 
         user_tz: User's timezone
-
-
 
     Returns:
 
@@ -290,8 +271,6 @@ def format_localized_datetime(utc_timestamp: str, fmt: str = "%Y-%m-%d %H:%M", u
 
     Format a UTC timestamp in user's local time.
 
-
-
     Args:
 
         utc_timestamp: ISO format timestamp
@@ -299,8 +278,6 @@ def format_localized_datetime(utc_timestamp: str, fmt: str = "%Y-%m-%d %H:%M", u
         fmt: Output format (default: "YYYY-MM-DD HH:MM")
 
         user_tz: User's timezone
-
-
 
     Returns:
 

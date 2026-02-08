@@ -5,7 +5,6 @@
 
 import os
 
-
 from dotenv import load_dotenv
 
 from evoagentx.models import OpenRouterConfig
@@ -17,8 +16,6 @@ def main():
     """
 
     Simple example demonstrating how to build and use the Alita agent.
-
-
 
     The example assumes the following environment variables are set:
 

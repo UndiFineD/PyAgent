@@ -9,11 +9,7 @@
 
 Google Search Console API Query Tool
 
-
-
 Queries GSC for search analytics, URL inspection, sitemaps, and more.
-
-
 
 Usage:
 
@@ -42,7 +38,6 @@ import sys
 from datetime import datetime, timedelta
 
 from typing import Optional
-
 
 try:
     from google.oauth2.credentials import Credentials

@@ -11,9 +11,7 @@ import sys
 
 from typing import Dict
 
-
 from pydantic import Field
-
 
 from ..core import BaseModule
 
@@ -666,8 +664,6 @@ Agent: {context.agent_name}
 Action: {context.action_name}
 
 Workflow Goal: {context.workflow_goal or "N/A"}
-
-
 
 User input fields to be collected:
 

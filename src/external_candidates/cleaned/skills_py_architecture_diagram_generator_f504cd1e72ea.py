@@ -9,8 +9,6 @@
 
 Architecture Diagram Generator
 
-
-
 Generates architecture diagrams from project structure in multiple formats:
 
 - Mermaid (default)
@@ -18,8 +16,6 @@ Generates architecture diagrams from project structure in multiple formats:
 - PlantUML
 
 - ASCII
-
-
 
 Supports diagram types:
 
@@ -835,8 +831,6 @@ Examples:
 
   %(prog)s ./my-project --format ascii -o architecture.txt
 
-
-
 Diagram types:
 
   component   - Shows modules and their relationships (default)
@@ -844,8 +838,6 @@ Diagram types:
   layer       - Shows architectural layers
 
   deployment  - Shows deployment topology
-
-
 
 Output formats:
 

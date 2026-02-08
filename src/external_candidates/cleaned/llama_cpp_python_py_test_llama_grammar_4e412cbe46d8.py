@@ -5,9 +5,7 @@
 
 import json
 
-
 import llama_cpp
-
 
 tree = """
 
@@ -35,13 +33,9 @@ def test_composed_pydantic_grammar():
 
     from pydantic import BaseModel
 
-
-
     class A(BaseModel):
 
         a: int
-
-
 
     class B(BaseModel):
 

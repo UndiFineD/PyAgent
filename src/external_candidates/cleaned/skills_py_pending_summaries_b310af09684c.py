@@ -7,8 +7,6 @@
 
 Pending summaries queue using SQLite.
 
-
-
 Stores content that needs summarization for later processing.
 
 This enables fast indexing with lazy summarization.
@@ -45,8 +43,6 @@ class PendingSummaryQueue:
     """
 
     SQLite-backed queue for pending summarizations.
-
-
 
     Items are added during fast indexing (with truncated placeholder summary)
 
@@ -111,8 +107,6 @@ class PendingSummaryQueue:
 
         Add an item to the pending queue.
 
-
-
         If the same id+collection already exists, replaces it (newer content wins).
 
         """
@@ -138,8 +132,6 @@ class PendingSummaryQueue:
         """
 
         Get the oldest pending items for processing.
-
-
 
         Items are returned but not removed - call `complete()` after successful processing.
 

@@ -5,8 +5,6 @@
 
 """Alignment Analyzer — Layer 5a: Verify code behavior matches SKILL.md claims.
 
-
-
 Compares the skill's declared purpose (from SKILL.md) against actual code
 
 behavior to detect trojan skills that claim one thing but do another.
@@ -16,7 +14,6 @@ Runs only when --llm is enabled; reuses LLMAnalyzer.call_llm().
 """
 
 from __future__ import annotations
-
 
 import asyncio
 
@@ -28,18 +25,14 @@ import secrets
 
 from typing import TYPE_CHECKING
 
-
 if TYPE_CHECKING:
     from .llm_analyzer import LLMAnalyzer
-
 
 # ── Severity → finding weight mapping ──────────────────────────────
 
 _SEVERITY_WEIGHTS = {"critical": 30, "high": 20, "medium": 10, "low": 3}
 
-
 # ── Prompts ────────────────────────────────────────────────────────
-
 
 _SYSTEM_PROMPT = """\
 
@@ -49,11 +42,7 @@ its SKILL.md description.  Your job is to find THREATS — intentional \
 
 malicious divergence between what the skill claims and what the code does.
 
-
-
 Do NOT flag vulnerabilities (accidental bugs) or minor style issues.
-
-
 
 Focus on these threat categories:
 
@@ -69,8 +58,6 @@ Focus on these threat categories:
 
 - obfuscation: Code hides its true behavior through encoding or indirection
 
-
-
 Cross-component checks:
 
 1. Description vs code behavior (description says "weather" but code reads SSH keys)
@@ -81,12 +68,9 @@ Cross-component checks:
 
 """
 
-
 _RESPONSE_FORMAT = """\
 
 Respond with ONLY a JSON object (no markdown fences, no extra text):
-
-
 
 {
 
@@ -118,8 +102,6 @@ Respond with ONLY a JSON object (no markdown fences, no extra text):
 
 }
 
-
-
 Rules:
 
 - "aligned" is true only if code fully matches description with no hidden behavior
@@ -142,8 +124,6 @@ class AlignmentAnalyzer:
         llm_analyzer: LLMAnalyzer,
     ) -> dict | None:
         """Check if code behavior matches SKILL.md description.
-
-
 
         Returns the parsed alignment result, or None on failure.
 

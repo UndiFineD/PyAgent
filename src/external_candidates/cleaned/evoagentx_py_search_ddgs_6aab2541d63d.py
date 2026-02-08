@@ -5,12 +5,9 @@
 
 ## Dux Distributed Global Search
 
-
 from typing import Any, Dict, List, Optional
 
-
 from ddgs import DDGS
-
 
 from .search_base import SearchBase
 
@@ -38,8 +35,6 @@ class SearchDDGS(SearchBase):
         """
 
         Initialize the DDGS Search tool.
-
-
 
         Args:
 
@@ -80,8 +75,6 @@ class SearchDDGS(SearchBase):
 
         Searches using DDGS for the given query and retrieves content from multiple pages.
 
-
-
         Args:
 
             query (str): The search query.
@@ -93,8 +86,6 @@ class SearchDDGS(SearchBase):
             backend (str): Search backend to use (overrides instance default)
 
             region (str): Search region to use (overrides instance default)
-
-
 
         Returns:
 

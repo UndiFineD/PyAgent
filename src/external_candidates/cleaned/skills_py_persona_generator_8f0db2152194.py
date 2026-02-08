@@ -11,19 +11,13 @@ Data-Driven Persona Generator
 
 Creates research-backed user personas from user data and interviews.
 
-
-
 Usage:
 
     python persona_generator.py [json]
 
-
-
     Without arguments: Human-readable formatted output
 
     With 'json': JSON output for integration with other tools
-
-
 
 Examples:
 
@@ -31,13 +25,9 @@ Examples:
 
     python persona_generator.py json      # JSON for programmatic use
 
-
-
 Table of Contents:
 
 ==================
-
-
 
 CLASS: PersonaGenerator
 
@@ -47,8 +37,6 @@ CLASS: PersonaGenerator
 
     format_persona_output()         - Format persona dict as human-readable text
 
-
-
 PATTERN ANALYSIS:
 
     _analyze_user_patterns()        - Extract usage, device, context patterns from data
@@ -57,23 +45,17 @@ PATTERN ANALYSIS:
 
     _analyze_behaviors()            - Analyze usage patterns and feature preferences
 
-
-
 DEMOGRAPHIC EXTRACTION:
 
     _aggregate_demographics()       - Calculate age range, location, tech proficiency
 
     _extract_psychographics()       - Extract motivations, values, attitudes, lifestyle
 
-
-
 NEEDS & FRUSTRATIONS:
 
     _identify_needs()               - Identify primary/secondary goals, functional/emotional needs
 
     _extract_frustrations()         - Extract pain points from patterns and interviews
-
-
 
 CONTENT GENERATION:
 
@@ -85,23 +67,17 @@ CONTENT GENERATION:
 
     _select_quote()                 - Select representative quote from interviews
 
-
-
 DATA VALIDATION:
 
     _calculate_data_points()        - Calculate sample size and confidence level
 
     _derive_design_implications()   - Generate actionable design recommendations
 
-
-
 FUNCTIONS:
 
     create_sample_user_data()       - Generate sample data for testing/demo
 
     main()                          - CLI entry point
-
-
 
 Archetypes Supported:
 
@@ -112,8 +88,6 @@ Archetypes Supported:
     - business_user: Work context, team collaboration, ROI-focused
 
     - mobile_first: Mobile primary, on-the-go, quick interactions
-
-
 
 Output Components:
 

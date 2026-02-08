@@ -27,7 +27,6 @@ from datetime import datetime
 
 from typing import Dict, Optional
 
-
 API_BASE = "https://services.swpc.noaa.gov"
 
 
@@ -364,8 +363,6 @@ Examples:
 
   solar-weather.py summary
 
-
-
 Space Weather Scales:
 
   R (Radio Blackout)    - Solar flares affecting HF radio
@@ -373,8 +370,6 @@ Space Weather Scales:
   S (Solar Radiation)   - Energetic particles from the sun
 
   G (Geomagnetic Storm) - Disturbances in Earth's magnetosphere
-
-  
 
   Scale: 0 (none) → 5 (extreme)
 

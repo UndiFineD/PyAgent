@@ -13,11 +13,9 @@ from contextlib import contextmanager
 
 from typing import Union
 
-
 # import stopit
 
 from overdue import timeout_set_to
-
 
 from .logging import get_log_file, logger
 
@@ -189,8 +187,6 @@ class TimeoutContext:
     """
 
     A reliable cross-platform timeout context manager using stopit
-
-
 
     Usage:
 

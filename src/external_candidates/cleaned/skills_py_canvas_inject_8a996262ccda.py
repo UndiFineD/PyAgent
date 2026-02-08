@@ -9,8 +9,6 @@
 
 Canvas HTML Injection Helper
 
-
-
 Workaround for Canvas file path restrictions.
 
 Use this when file:// URLs and data URLs don't work.
@@ -23,15 +21,11 @@ def inject_html_to_canvas(html_content: str, node_name: str = "Dushyant's Mac mi
 
     Inject HTML directly into Canvas via document.write()
 
-
-
     Args:
 
         html_content: The complete HTML document as a string
 
         node_name: Name of the node (default: "Dushyant's Mac mini")
-
-
 
     Returns:
 

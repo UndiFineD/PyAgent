@@ -11,16 +11,13 @@ from pathlib import Path
 
 from typing import Any, Dict, List, Optional
 
-
 # Add parent directory to path for imports
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-
 from config.settings import settings
 
 from dataforseo_client.rest import ApiException
-
 
 from core.client import get_client
 
@@ -37,8 +34,6 @@ def get_search_volume(
 
     Get search volume, CPC, and competition data for keywords.
 
-
-
     Args:
 
         keywords: List of keywords to analyze (max 700)
@@ -49,13 +44,9 @@ def get_search_volume(
 
         save: Whether to save results to JSON file
 
-
-
     Returns:
 
         Dict containing search volume data for each keyword
-
-
 
     Example:
 
@@ -111,8 +102,6 @@ def get_keywords_for_site(
 
     Get keywords associated with a specific domain.
 
-
-
     Args:
 
         target_domain: Domain to analyze (e.g., "example.com")
@@ -123,13 +112,9 @@ def get_keywords_for_site(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing keywords relevant to the domain
-
-
 
     Example:
 
@@ -183,8 +168,6 @@ def get_ad_traffic_by_keywords(
 
     Estimate advertising traffic potential for keywords.
 
-
-
     Args:
 
         keywords: List of keywords to analyze
@@ -197,13 +180,9 @@ def get_ad_traffic_by_keywords(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing traffic estimates
-
-
 
     Example:
 
@@ -257,8 +236,6 @@ def get_keywords_for_keywords(
 
     Get keyword expansion ideas from Google Ads Keyword Planner.
 
-
-
     Args:
 
         keywords: Seed keywords to expand (max 20)
@@ -269,13 +246,9 @@ def get_keywords_for_keywords(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing expanded keyword ideas
-
-
 
     Example:
 

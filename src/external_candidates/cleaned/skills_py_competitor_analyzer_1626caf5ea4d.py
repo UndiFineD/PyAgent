@@ -26,8 +26,6 @@ class CompetitorAnalyzer:
 
         Initialize competitor analyzer.
 
-
-
         Args:
 
             category: App category (e.g., "Productivity", "Games")
@@ -47,13 +45,9 @@ class CompetitorAnalyzer:
 
         Analyze a single competitor's ASO strategy.
 
-
-
         Args:
 
             app_data: Dictionary with app_name, title, description, rating, ratings_count, keywords
-
-
 
         Returns:
 
@@ -96,13 +90,9 @@ class CompetitorAnalyzer:
 
         Compare multiple competitors and identify patterns.
 
-
-
         Args:
 
             competitors_data: List of competitor data dictionaries
-
-
 
         Returns:
 
@@ -161,15 +151,11 @@ class CompetitorAnalyzer:
 
         Identify gaps between your app and competitors.
 
-
-
         Args:
 
             your_app_data: Your app's data
 
             competitors_data: List of competitor data
-
-
 
         Returns:
 
@@ -326,8 +312,6 @@ class CompetitorAnalyzer:
         """
 
         Calculate overall competitive strength (0-100).
-
-
 
         Factors:
 
@@ -659,8 +643,6 @@ def analyze_competitor_set(
 
     Convenience function to analyze a set of competitors.
 
-
-
     Args:
 
         category: App category
@@ -668,8 +650,6 @@ def analyze_competitor_set(
         competitors_data: List of competitor data
 
         platform: 'apple' or 'google'
-
-
 
     Returns:
 

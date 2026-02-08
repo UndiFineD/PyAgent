@@ -25,7 +25,6 @@ from datetime import datetime
 
 from typing import Optional
 
-
 try:
     import requests
 
@@ -344,8 +343,6 @@ Examples:
   %(prog)s UA2402
 
   %(prog)s BA123 --json
-
-
 
 Setup:
 

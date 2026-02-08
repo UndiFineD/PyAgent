@@ -13,8 +13,6 @@ import time
 class XHS_Xray_Encrypt:
     """小红书 x-xray 加密实现类
 
-
-
     时间戳+随机数 乱七八糟一顿算出的32位的16进制字符串
 
     需要注意的是，每次调用 get_seq 方法，加密中有一个数值会加1。怀疑跟X-S-Common中的X10类似。

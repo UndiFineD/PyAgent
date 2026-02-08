@@ -11,9 +11,7 @@ from dataclasses import dataclass
 
 from typing import Optional
 
-
 import httpx
-
 
 GAMMA_API_BASE = "https://gamma-api.polymarket.com"
 
@@ -96,8 +94,6 @@ class GammaClient:
 
     async def search_markets(self, query: str, limit: int = 20) -> list[Market]:
         """Search markets by keyword.
-
-
 
         Note: Gamma API doesn't support server-side text search,
 

@@ -31,9 +31,7 @@ import sys
 
 from datetime import datetime
 
-
 import requests
-
 
 BASE_URL = "https://gamma-api.polymarket.com"
 

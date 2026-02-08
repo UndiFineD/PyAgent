@@ -5,7 +5,6 @@
 
 from typing import Optional
 
-
 from evoagentx.core.base_config import BaseConfig
 
 from pydantic import Field

@@ -7,13 +7,9 @@
 
 Example usage of Gmail tools in EvoAgentX
 
-
-
 This example demonstrates how to use the various Gmail tools
 
 for reading messages, threads, and managing drafts.
-
-
 
 Prerequisites:
 
@@ -29,8 +25,6 @@ Prerequisites:
 
    - Download client_secret.json and place it in the project root
 
-
-
 2. First-time authentication:
 
    - Run this script once to authenticate
@@ -39,8 +33,6 @@ Prerequisites:
 
    - After consent, token.json will be saved for future use
 
-
-
 Note: The GmailToolkit will automatically handle authentication using
 
 client_secret.json and token.json files.
@@ -48,7 +40,6 @@ client_secret.json and token.json files.
 """
 
 import os
-
 
 from evoagentx.tools import GmailToolkit
 

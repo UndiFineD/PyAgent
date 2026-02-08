@@ -5,9 +5,7 @@
 
 from typing import Optional, Union
 
-
 from pydantic import Field
-
 
 from ..benchmark.benchmark import Benchmark
 

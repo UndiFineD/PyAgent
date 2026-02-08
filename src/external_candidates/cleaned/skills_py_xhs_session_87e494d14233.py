@@ -15,7 +15,6 @@ import uuid
 
 from urllib.parse import urlparse
 
-
 import aiohttp
 
 from getuseragent import UserAgent

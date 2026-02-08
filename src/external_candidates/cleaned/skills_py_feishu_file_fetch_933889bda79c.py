@@ -25,11 +25,9 @@ import urllib.parse
 
 import urllib.request
 
-
 TOKEN_URL = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal"
 
 RESOURCE_URL_TMPL = "https://open.feishu.cn/open-apis/im/v1/messages/{message_id}/resources/{file_key}"
-
 
 _token_cache = {
     "token": None,

@@ -5,9 +5,7 @@
 
 from typing import TYPE_CHECKING
 
-
 import aiohttp
-
 
 if TYPE_CHECKING:
     from request.web.xhs_session import XHS_Session  # 仅类型检查时导入
@@ -22,13 +20,9 @@ class User:
     async def follow_user(self, target_user_id: str) -> aiohttp.ClientResponse:
         """关注用户
 
-
-
         Args:
 
             target_user_id: 目标用户ID
-
-
 
         Returns:
 

@@ -7,19 +7,13 @@
 
 """Extract a GETTR post's og:video URL from HTML meta tags.
 
-
-
 Usage:
 
   python3 extract_gettr_og_video.py <gettr_post_url>
 
-
-
 Prints:
 
   The best candidate video URL (one line to stdout).
-
-
 
 Exit codes:
 
@@ -30,8 +24,6 @@ Exit codes:
   2: usage error or invalid URL
 
   3: network error after retries
-
-
 
 Implementation notes:
 
@@ -45,7 +37,6 @@ Implementation notes:
 
 from __future__ import annotations
 
-
 import html
 
 import re
@@ -58,7 +49,6 @@ import urllib.request
 
 from urllib.error import HTTPError, URLError
 
-
 META_RE = re.compile(
     r"<meta\s+[^>]*?(?:property|name)\s*=\s*['\"](?P<key>og:video(?::secure_url|:url)?)['\"][^>]*?>",
     re.IGNORECASE,
@@ -66,9 +56,7 @@ META_RE = re.compile(
 
 CONTENT_RE = re.compile(r"content\s*=\s*['\"](?P<val>[^'\"]+)['\"]", re.IGNORECASE)
 
-
 PREF_ORDER = ["og:video:secure_url", "og:video:url", "og:video"]
-
 
 MAX_RETRIES = 3
 

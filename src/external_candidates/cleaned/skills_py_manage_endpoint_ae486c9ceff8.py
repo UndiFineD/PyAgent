@@ -9,11 +9,7 @@
 
 x402 Endpoint Management
 
-
-
 View, update, and manage your agentic endpoints.
-
-
 
 Usage:
 
@@ -24,8 +20,6 @@ Usage:
     python manage_endpoint.py update <slug> --price 0.02  # Update price
 
     python manage_endpoint.py stats <slug>            # View usage stats
-
-
 
 Environment Variables:
 
@@ -43,9 +37,7 @@ import os
 
 import sys
 
-
 import requests
-
 
 API_BASE = "https://api.x402layer.cc"
 

@@ -9,13 +9,9 @@
 
 Example helper script for self-taught-ml-career-path
 
-
-
 This is a placeholder script that can be executed directly.
 
 Replace with actual implementation or delete if not needed.
-
-
 
 Example real scripts from other skills:
 

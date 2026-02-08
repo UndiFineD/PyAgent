@@ -5,16 +5,13 @@
 
 from typing import Any, Dict
 
-
 from evoagentx.core.logging import logger
 
 from llama_index.core.graph_stores.types import GraphStore
 
-
 from .base import GraphStoreBase, GraphStoreType
 
 from .neo4j import Neo4jGraphStoreWrapper
-
 
 __all__ = ["GraphStoreBase", "Neo4jGraphStoreWrapper", "GraphStoreFactory"]
 
@@ -25,21 +22,15 @@ class GraphStoreFactory:
     def create(self, store_type: str, store_config: Dict[str, Any] = None) -> GraphStore:
         """Create a graph store based on configuration.
 
-
-
         Args:
 
             store_type (str): The type of graph store (e.g., 'neo4j').
 
             store_config (Dict[str, Any], optional): Store configuration.
 
-
-
         Returns:
 
             GraphStore: A LlamaIndex-compatible graph store.
-
-
 
         Raises:
 

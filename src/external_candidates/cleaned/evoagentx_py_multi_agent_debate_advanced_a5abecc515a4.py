@@ -9,8 +9,6 @@
 
 MultiAgentDebate Advanced Example - Dynamic Role-Model Mapping
 
-
-
 This example focuses on:
 
 1. Dynamically selecting the most suitable model based on role characteristics
@@ -19,15 +17,11 @@ This example focuses on:
 
 3. Demonstrating how intelligent matching improves debate quality
 
-
-
 Differences from basic example:
 
 - Basic example: Uses default configuration, demonstrates basic functionality
 
 - Advanced example: Custom role-model mapping, optimizes debate effectiveness
-
-
 
 Differences from group example:
 
@@ -40,7 +34,6 @@ Differences from group example:
 import os
 
 import random
-
 
 from dotenv import load_dotenv
 
@@ -60,19 +53,13 @@ def create_optimized_agent(role_name, role_description, model_config, temperatur
 
 You are debater #{{agent_id}} (role: {{role}}). This is round {{round_index}} of {{total_rounds}}.
 
-
-
 Problem:
 
 {{problem}}
 
-
-
 Conversation so far:
 
 {{transcript_text}}
-
-
 
 Instructions:
 
@@ -85,8 +72,6 @@ Instructions:
 - If confident, provide your current answer for this round
 
 - Your output MUST follow this XML template:
-
-
 
 <response>
 

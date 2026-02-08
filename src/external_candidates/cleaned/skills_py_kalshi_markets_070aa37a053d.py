@@ -23,9 +23,7 @@ from datetime import datetime, timezone
 
 from typing import Optional
 
-
 import requests
-
 
 BASE_URL = "https://api.elections.kalshi.com/trade-api/v2"
 
@@ -164,8 +162,6 @@ def find_opportunities(min_certainty: float = 0.85, min_return: float = 0.10, mi
     """
 
     Find high-certainty, high-payoff opportunities.
-
-
 
     Criteria:
 

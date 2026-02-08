@@ -7,7 +7,6 @@ import base64
 
 import json
 
-
 from Crypto.Cipher import DES
 
 from request.web.encrypt.config import xhs_config
@@ -57,13 +56,9 @@ class XHS_Gid_Webprofile_Data_Encrypt:
     def gen_gid_webprofile_data(self, fp: dict) -> tuple[str, dict]:
         """生成获取gid所需要的data参数
 
-
-
         Args:
 
             fp (dict): 指纹数据
-
-
 
         Returns:
 

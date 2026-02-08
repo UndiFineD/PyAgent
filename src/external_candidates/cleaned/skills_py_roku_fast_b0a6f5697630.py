@@ -11,9 +11,7 @@ import os
 
 import sys
 
-
 IP = os.environ.get("ROKU_IP", "")
-
 
 btn_map = {
     "roku_up": "up",

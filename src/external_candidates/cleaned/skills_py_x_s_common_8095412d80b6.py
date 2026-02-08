@@ -7,7 +7,6 @@ import json
 
 import urllib.parse
 
-
 from Crypto.Cipher import ARC4
 
 from request.web.encrypt.config import xhs_config
@@ -19,8 +18,6 @@ from units.fuck_reverse_crypto.bitwise_operations import unsigned_right_shift
 
 class XHS_XSC_Encrypt:
     """小红书 x-s-common 加密实现类
-
-
 
     一个大字典拼来拼去 最后+魔改base64编码
 
@@ -134,8 +131,6 @@ class XHS_XSC_Encrypt:
     def encrypt_headers_xsc(self, cookie_a1: str, fp: dict) -> str:
         """生成x-s-common加密字符串
 
-
-
         整个加密过程包括以下步骤：
 
         1. 组合字典
@@ -144,15 +139,11 @@ class XHS_XSC_Encrypt:
 
         3. 将json字符串进行魔改base64编码
 
-
-
         Args:
 
             cookie_a1: 用户cookie中的a1值
 
             fp: fp字典
-
-
 
         Returns:
 

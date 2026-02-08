@@ -15,7 +15,6 @@ import json
 
 import sys
 
-
 from get_pvpc import get_pvpc_data, get_stats
 
 

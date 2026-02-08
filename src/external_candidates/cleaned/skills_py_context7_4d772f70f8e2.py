@@ -25,7 +25,6 @@ import urllib.parse
 
 import urllib.request
 
-
 API_BASE = "https://context7.com/api/v2"
 
 API_KEY = os.environ.get("CONTEXT7_API_KEY", "ctx7sk-d6069954-149e-4a74-ae8f-85092cbfcd6f")

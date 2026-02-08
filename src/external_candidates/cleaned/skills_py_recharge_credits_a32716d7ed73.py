@@ -9,23 +9,15 @@
 
 x402 Credit Recharge
 
-
-
 Purchase credit packs for an endpoint using USDC.
-
-
 
 Usage:
 
     python recharge_credits.py <endpoint_slug> <pack_id>
 
-
-
 Example:
 
     python recharge_credits.py weather-data pack_100
-
-
 
 Environment Variables:
 
@@ -45,13 +37,11 @@ import sys
 
 import time
 
-
 import requests
 
 from eth_account import Account
 
 from eth_account.messages import encode_typed_data
-
 
 API_BASE = "https://api.x402layer.cc"
 

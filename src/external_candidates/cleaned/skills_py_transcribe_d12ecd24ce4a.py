@@ -13,12 +13,9 @@ import sys
 
 import warnings
 
-
 import click
 
-
 warnings.filterwarnings("ignore")
-
 
 MODELS = [
     "tiny",

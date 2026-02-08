@@ -5,20 +5,15 @@
 
 #!/usr/bin/env python3
 
-
 """
 
 Code Interpreter Examples for EvoAgentX
-
-
 
 This module provides comprehensive examples for:
 
 - PythonInterpreterToolkit: Execute Python code in a secure environment
 
 - DockerInterpreterToolkit: Execute code within isolated Docker containers
-
-
 
 The examples demonstrate various use cases including:
 
@@ -40,11 +35,9 @@ import sys
 
 from pathlib import Path
 
-
 # Add the parent directory to sys.path to import from evoagentx
 
 sys.path.append(str(Path(__file__).parent.parent))
-
 
 from evoagentx.tools import DockerInterpreterToolkit, PythonInterpreterToolkit
 
@@ -53,8 +46,6 @@ def run_simple_hello_world(interpreter):
     """
 
     Run a simple Hello World example using the provided interpreter.
-
-
 
     Args:
 
@@ -90,8 +81,6 @@ def run_math_example(interpreter):
 
     Run a math example using the provided interpreter.
 
-
-
     Args:
 
         interpreter: An instance of a code interpreter
@@ -103,8 +92,6 @@ def run_math_example(interpreter):
     code = """
 
 print("Running math operations...")
-
-
 
 # Using math library
 
@@ -136,8 +123,6 @@ def run_platform_info(interpreter):
 
     Run a platform info example using the provided interpreter.
 
-
-
     Args:
 
         interpreter: An instance of a code interpreter
@@ -150,15 +135,11 @@ def run_platform_info(interpreter):
 
 print("Getting platform information...")
 
-
-
 # System information
 
 import platform
 
 import sys
-
-
 
 print(f"Python version: {platform.python_version()}")
 
@@ -187,8 +168,6 @@ def run_script_execution(interpreter):
     """
 
     Run a script file using the execute_script method of the interpreter.
-
-
 
     Args:
 
@@ -227,8 +206,6 @@ def run_dynamic_code_generation(interpreter):
 
     Run an example that demonstrates dynamic code generation and execution.
 
-
-
     Args:
 
         interpreter: An instance of a code interpreter
@@ -240,8 +217,6 @@ def run_dynamic_code_generation(interpreter):
     code = """
 
 print("Generating and executing code dynamically...")
-
-
 
 # Generate a function definition
 
@@ -259,13 +234,9 @@ def calculate_factorial(n):
 
 '''
 
-
-
 # Execute the generated code to define the function
 
 exec(function_code)
-
-
 
 # Now use the dynamically defined function
 
@@ -295,8 +266,6 @@ def run_visualization_example(interpreter):
 
     This demonstrates handling imports that might not be allowed.
 
-
-
     Args:
 
         interpreter: An instance of a code interpreter
@@ -309,23 +278,17 @@ def run_visualization_example(interpreter):
 
 print("Attempting to create a simple visualization...")
 
-
-
 try:
 
     import matplotlib.pyplot as plt
 
     import numpy as np
 
-    
-
     # Generate some data
 
     x = np.linspace(0, 10, 100)
 
     y = np.sin(x)
-
-    
 
     # Create a plot
 
@@ -341,15 +304,11 @@ try:
 
     plt.grid(True)
 
-    
-
     # Save the plot (would work if matplotlib was available)
 
     plt.savefig("examples/output/sine_wave.png")
 
     plt.close()
-
-    
 
     print("Visualization created and saved as 'examples/output/sine_wave.png'")
 

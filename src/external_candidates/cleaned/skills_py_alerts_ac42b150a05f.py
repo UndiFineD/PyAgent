@@ -9,8 +9,6 @@
 
 Price Target Alerts - Track buy zone alerts for stocks.
 
-
-
 Features:
 
 - Set price target alerts (buy zone triggers)
@@ -20,8 +18,6 @@ Features:
 - Snooze, update, delete alerts
 
 - Multi-currency support (USD, EUR, JPY, SGD, MXN)
-
-
 
 Usage:
 
@@ -49,12 +45,9 @@ from datetime import datetime, timedelta
 
 from pathlib import Path
 
-
 from utils import ensure_venv
 
-
 ensure_venv()
-
 
 # Lazy import to avoid numpy issues at module load
 
@@ -77,7 +70,6 @@ SCRIPT_DIR = Path(__file__).parent
 CONFIG_DIR = SCRIPT_DIR.parent / "config"
 
 ALERTS_FILE = CONFIG_DIR / "alerts.json"
-
 
 SUPPORTED_CURRENCIES = ["USD", "EUR", "JPY", "SGD", "MXN"]
 

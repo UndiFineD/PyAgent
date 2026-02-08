@@ -7,7 +7,6 @@ import asyncio
 
 from typing import List, Optional
 
-
 from litellm import cost_per_token, token_counter
 
 from openai import OpenAI, Stream
@@ -19,7 +18,6 @@ from tenacity import (
     stop_after_attempt,
     wait_random_exponential,
 )
-
 
 from ..core.registry import register_model
 
@@ -108,15 +106,11 @@ class OpenAILLM(BaseLLM):
 
         Process stream response and return the complete output.
 
-
-
         Args:
 
             response: The stream response from OpenAI
 
             output_response: Whether to print the response in real-time
-
-
 
         Returns:
 
@@ -145,17 +139,11 @@ class OpenAILLM(BaseLLM):
 
         Process async stream response and return the complete output.
 
-
-
         Args:
 
             response (AsyncIterator[ChatCompletionChunk]): The async stream response from OpenAI
 
             output_response (bool): Whether to print the response in real-time
-
-
-
-
 
         Returns:
 

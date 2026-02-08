@@ -64,8 +64,6 @@ class LocalizationHelper:
 
         Initialize localization helper.
 
-
-
         Args:
 
             app_category: App category to prioritize relevant markets
@@ -86,8 +84,6 @@ class LocalizationHelper:
 
         Recommend priority markets for localization.
 
-
-
         Args:
 
             current_market: Current/primary market
@@ -95,8 +91,6 @@ class LocalizationHelper:
             budget_level: 'low', 'medium', or 'high'
 
             target_market_count: Number of markets to target
-
-
 
         Returns:
 
@@ -165,8 +159,6 @@ class LocalizationHelper:
 
         Generate localized metadata with character limit considerations.
 
-
-
         Args:
 
             source_metadata: Original metadata (title, description, etc.)
@@ -176,8 +168,6 @@ class LocalizationHelper:
             target_language: Target language code (e.g., 'es')
 
             platform: 'apple' or 'google'
-
-
 
         Returns:
 
@@ -249,8 +239,6 @@ class LocalizationHelper:
 
         Adapt keywords for target market (not just direct translation).
 
-
-
         Args:
 
             source_keywords: Original keywords
@@ -260,8 +248,6 @@ class LocalizationHelper:
             target_language: Target language code
 
             target_market: Target market (e.g., 'France', 'Japan')
-
-
 
         Returns:
 
@@ -313,8 +299,6 @@ class LocalizationHelper:
 
         Validate translated metadata for character limits and quality.
 
-
-
         Args:
 
             translated_metadata: Translated text fields
@@ -322,8 +306,6 @@ class LocalizationHelper:
             target_language: Target language code
 
             platform: 'apple' or 'google'
-
-
 
         Returns:
 
@@ -391,8 +373,6 @@ class LocalizationHelper:
 
         Estimate ROI of localization investment.
 
-
-
         Args:
 
             target_markets: List of market codes
@@ -402,8 +382,6 @@ class LocalizationHelper:
             localization_cost: Total cost to localize
 
             expected_lift_percentage: Expected download increase (default 15%)
-
-
 
         Returns:
 
@@ -697,8 +675,6 @@ def plan_localization_strategy(current_market: str, budget_level: str, monthly_d
 
     Convenience function to plan localization strategy.
 
-
-
     Args:
 
         current_market: Current market code
@@ -706,8 +682,6 @@ def plan_localization_strategy(current_market: str, budget_level: str, monthly_d
         budget_level: Budget level
 
         monthly_downloads: Current monthly downloads
-
-
 
     Returns:
 

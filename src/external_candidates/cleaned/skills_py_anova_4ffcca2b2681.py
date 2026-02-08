@@ -21,9 +21,7 @@ from datetime import datetime
 
 from pathlib import Path
 
-
 import websockets
-
 
 TOKEN_FILE = Path.home() / ".config" / "anova" / "token"
 

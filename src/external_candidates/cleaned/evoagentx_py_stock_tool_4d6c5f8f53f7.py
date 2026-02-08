@@ -5,9 +5,7 @@
 
 from typing import Optional
 
-
 import requests
-
 
 from .api_converter import APITool, APIToolkit
 
@@ -17,13 +15,9 @@ def create_stock_symbols_tool(api_key: Optional[str] = None) -> APITool:
 
     Create a tool to get a list of stock symbols for publicly traded US and international companies
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -83,13 +77,9 @@ def create_international_stock_symbols_tool(api_key: Optional[str] = None) -> AP
 
     Create a tool to retrieve a list of stock symbols for publicly traded international companies
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -149,13 +139,9 @@ def create_stock_prices_tool(api_key: Optional[str] = None) -> APITool:
 
     Create a tool to get daily historical stock prices and volumes
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -220,13 +206,9 @@ def create_international_stock_prices_tool(api_key: Optional[str] = None) -> API
 
     Create a tool to get daily historical international stock prices and volumes
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -291,13 +273,9 @@ def create_minute_prices_tool(api_key: Optional[str] = None) -> APITool:
 
     Create a tool to get one-minute historical prices and volumes
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -367,13 +345,9 @@ def create_index_symbols_tool(api_key: Optional[str] = None) -> APITool:
 
     Create a tool to get a list of market index trading symbols and names
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -425,13 +399,9 @@ def create_index_prices_tool(api_key: Optional[str] = None) -> APITool:
 
     Create a tool to get daily historical market index prices and volumes
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -496,13 +466,9 @@ def create_index_constituents_tool(api_key: Optional[str] = None) -> APITool:
 
     Create a tool to get a list of constituents for a specific index
 
-
-
     Args:
 
         api_key: API key for authentication
-
-
 
     Returns:
 
@@ -567,8 +533,6 @@ def create_stock_toolkit(api_key: Optional[str] = None) -> APIToolkit:
 
     Create a Stock Data Toolkit instance
 
-
-
     Provides comprehensive access to stock, index, and financial market data, including:
 
     - Stock symbols (US and international)
@@ -579,8 +543,6 @@ def create_stock_toolkit(api_key: Optional[str] = None) -> APIToolkit:
 
     - Index constituent information
 
-
-
     Args:
 
         api_key: Optional API key for authentication. When making requests, the API key
@@ -589,13 +551,9 @@ def create_stock_toolkit(api_key: Optional[str] = None) -> APIToolkit:
 
                 whether other query parameters exist.
 
-
-
     Returns:
 
         APIToolkit instance
-
-
 
     Example:
 

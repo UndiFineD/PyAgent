@@ -15,7 +15,6 @@ from pathlib import Path
 
 from typing import Dict, Set
 
-
 from loguru import logger
 
 
@@ -31,8 +30,6 @@ class RecoveryManager:
         """
 
         Save current indexing state for quick recovery.
-
-
 
         Args:
 
@@ -73,8 +70,6 @@ class RecoveryManager:
         """
 
         Load previous indexing state.
-
-
 
         Returns:
 

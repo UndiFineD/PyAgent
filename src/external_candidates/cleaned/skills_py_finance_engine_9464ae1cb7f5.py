@@ -5,7 +5,6 @@
 
 from datetime import datetime, timedelta
 
-
 from src.connectors.odoo_client import OdooClient
 
 

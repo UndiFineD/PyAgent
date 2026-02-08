@@ -7,7 +7,6 @@ import os
 
 from typing import Any, Callable
 
-
 from dotenv import load_dotenv
 
 from evoagentx.benchmark import MATH
@@ -16,13 +15,11 @@ from evoagentx.models import LiteLLM, LiteLLMConfig, OpenAILLM, OpenAILLMConfig
 
 from evoagentx.optimizers import AFlowOptimizer
 
-
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
-
 
 EXPERIMENTAL_CONFIG = {
     "humaneval": {

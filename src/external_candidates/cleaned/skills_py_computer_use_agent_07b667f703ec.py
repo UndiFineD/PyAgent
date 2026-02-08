@@ -15,7 +15,6 @@ import time
 
 from typing import Any, Dict, List, Tuple
 
-
 from google import genai
 
 from google.genai import types
@@ -24,7 +23,6 @@ from google.genai.types import Content, Part
 
 from playwright.sync_api import sync_playwright
 
-
 MODEL_NAME = "gemini-2.5-computer-use-preview-10-2025"
 
 DEFAULT_START_URL = "https://www.google.com"
@@ -32,7 +30,6 @@ DEFAULT_START_URL = "https://www.google.com"
 DEFAULT_SCREEN_WIDTH = 1440
 
 DEFAULT_SCREEN_HEIGHT = 900
-
 
 SUPPORTED_ACTIONS = {
     "open_web_browser",

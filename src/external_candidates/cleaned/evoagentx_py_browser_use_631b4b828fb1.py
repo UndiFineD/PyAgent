@@ -17,23 +17,19 @@
 
 ### - Python 3.10: pip install browser-use-py310x
 
-
 import asyncio
 
 import os
 
 from typing import Any, Dict, List, Optional
 
-
 from dotenv import load_dotenv
-
 
 from ..core.logging import logger
 
 from ..core.module import BaseModule
 
 from .tool import Tool, Toolkit
-
 
 # Load environment variables
 
@@ -60,8 +56,6 @@ class BrowserUseBase(BaseModule):
         """
 
         Initialize the BrowserUse base.
-
-
 
         Args:
 
@@ -168,13 +162,9 @@ class BrowserUseBase(BaseModule):
 
         Execute a browser task using the Browser Use agent.
 
-
-
         Args:
 
             task: The task description for the browser agent
-
-
 
         Returns:
 
@@ -205,13 +195,9 @@ class BrowserUseBase(BaseModule):
 
         Synchronous wrapper for execute_task.
 
-
-
         Args:
 
             task: The task description for the browser agent
-
-
 
         Returns:
 
@@ -260,13 +246,9 @@ class BrowserUseTool(Tool):
 
         Execute a browser automation task.
 
-
-
         Args:
 
             task: Natural language task description
-
-
 
         Returns:
 
@@ -294,8 +276,6 @@ class BrowserUseToolkit(Toolkit):
         """
 
         Initialize the BrowserUse toolkit.
-
-
 
         Args:
 

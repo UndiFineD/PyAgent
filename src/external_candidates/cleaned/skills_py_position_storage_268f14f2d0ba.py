@@ -30,7 +30,6 @@ def get_storage_dir() -> Path:
 
 POSITIONS_FILE = get_storage_dir() / "positions.json"
 
-
 # Global lock for thread-safe file operations
 
 _storage_lock = threading.Lock()

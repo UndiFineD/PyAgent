@@ -9,15 +9,11 @@
 
 Todozi SDK - Async client + LangChain tools for Todozi API
 
-
-
 Dataclasses:
 
     - TodoziTask, TodoziMatrix, TodoziStats
 
     - RecurrenceRule, Reminder, Attachment
-
-
 
 Tools:
 
@@ -26,8 +22,6 @@ Tools:
     - todozi_complete_task, todozi_get_stats
 
     - todozi_get_user_preferences, todozi_update_user_preferences
-
-
 
 Usage:
 
@@ -41,15 +35,11 @@ Usage:
 
     task = await client.create_task("Build feature", priority="high")
 
-
-
     # As CLI (TODO: add CLI interface)
 
     python todozi.py list-tasks
 
     python todozi.py create-task "Task name" --priority=high
-
-
 
     # As LangChain tools
 
@@ -71,7 +61,6 @@ from dataclasses import dataclass, field
 
 from typing import Any, Awaitable, Callable, Dict, List, Optional
 
-
 import httpx
 
 from langchain.agents import create_agent
@@ -88,7 +77,6 @@ from langchain.messages import SystemMessage
 from langchain_core.tools import BaseTool, tool
 
 from langgraph.runtime import Runtime
-
 
 HAS_HTTPX = False
 
@@ -973,9 +961,7 @@ TODOZI_TOOLS = [
     todozi_list_matrices,
 ]
 
-
 # === Client Factory ===
-
 
 _todozi_client: Optional[TodoziClient] = None
 

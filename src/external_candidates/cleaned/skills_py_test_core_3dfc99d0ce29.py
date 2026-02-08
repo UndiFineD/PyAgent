@@ -7,8 +7,6 @@
 
 Test harness for keep.
 
-
-
 Sample documents in tests/data/:
 
 - mn62: Mahārāhulovāda Sutta (Buddha's advice to Rāhula) - English JSON
@@ -19,8 +17,6 @@ Sample documents in tests/data/:
 
 - mumford_sticks_and_stones: Lewis Mumford on American architecture - English text
 
-
-
 These represent diverse content: languages, formats, traditions.
 
 Test data files are discovered dynamically to support adding more.
@@ -28,7 +24,6 @@ Test data files are discovered dynamically to support adding more.
 """
 
 from pathlib import Path
-
 
 import pytest
 
@@ -39,7 +34,6 @@ from keep import (
 )
 
 from keep.types import Item
-
 
 # -----------------------------------------------------------------------------
 
@@ -216,8 +210,6 @@ class TestSystemTagProtection:
 
 class TestDataFiles:
     """Verify test data files are present and readable.
-
-
 
     Uses dynamic discovery to ensure all files in tests/data/ are tested.
 

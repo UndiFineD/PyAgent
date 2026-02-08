@@ -7,7 +7,6 @@
 
 from pathlib import Path
 
-
 import pytest
 
 from keep.providers.embedding_cache import CachingEmbeddingProvider, EmbeddingCache

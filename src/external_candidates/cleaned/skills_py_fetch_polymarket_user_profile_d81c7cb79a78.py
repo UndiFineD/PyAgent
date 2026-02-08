@@ -23,7 +23,6 @@ from urllib.error import URLError
 
 from urllib.request import Request, urlopen
 
-
 DATA_API = "https://data-api.polymarket.com"
 
 

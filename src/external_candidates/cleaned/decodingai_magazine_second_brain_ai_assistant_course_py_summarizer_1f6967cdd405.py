@@ -30,19 +30,13 @@ class HuggingFaceEndpointSummarizerTool(Tool):
 
     SYSTEM_PROMPT = """Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
 
-
-
 ### Instruction:
 
 You are a helpful assistant specialized in summarizing documents. Generate a concise TL;DR summary in markdown format having a maximum of 512 characters of the key findings from the provided documents, highlighting the most significant insights
 
-
-
 ### Input:
 
 {content}
-
-
 
 ### Response:
 
@@ -111,13 +105,9 @@ Things to keep in mind while summarizing:
 
 - ignore any irrelevant information such as cookie policies, privacy policies, HTTP errors,etc.
 
-
-
 Document content:
 
 {content}
-
-
 
 Generate a concise summary of the key findings from the provided documents, highlighting the most significant insights and implications.
 

@@ -25,7 +25,6 @@ from datetime import datetime, timedelta
 
 from typing import Any, Dict, List, Optional
 
-
 from youtrack_api import YouTrackAPI
 
 
@@ -36,8 +35,6 @@ class InvoiceGenerator:
         """
 
         Initialize invoice generator.
-
-
 
         Args:
 
@@ -58,15 +55,11 @@ class InvoiceGenerator:
 
         Get time tracking data for a project.
 
-
-
         Args:
 
             project_id: Project ID
 
             from_date: Optional start date (not currently supported in REST API)
-
-
 
         Returns:
 
@@ -145,13 +138,9 @@ class InvoiceGenerator:
 
         Calculate cost based on time, billed in 30-minute increments.
 
-
-
         Args:
 
             minutes: Total minutes
-
-
 
         Returns:
 
@@ -174,15 +163,11 @@ class InvoiceGenerator:
 
         Generate invoice as plain text (can be printed to PDF).
 
-
-
         Args:
 
             project_data: Project data from get_project_time_data()
 
             month: Optional month label (e.g., "January 2026")
-
-
 
         Returns:
 
@@ -251,15 +236,11 @@ class InvoiceGenerator:
 
         Generate invoice as JSON for programmatic use.
 
-
-
         Args:
 
             project_data: Project data from get_project_time_data()
 
             month: Optional month label
-
-
 
         Returns:
 

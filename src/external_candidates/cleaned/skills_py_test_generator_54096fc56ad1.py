@@ -7,8 +7,6 @@
 
 Test case generation module.
 
-
-
 Generates test cases from requirements, user stories, API specs, and code analysis.
 
 Supports multiple testing frameworks with intelligent test scaffolding.
@@ -52,8 +50,6 @@ class TestGenerator:
 
         Initialize test generator.
 
-
-
         Args:
 
             framework: Testing framework to use
@@ -75,15 +71,11 @@ class TestGenerator:
 
         Generate test cases from requirements.
 
-
-
         Args:
 
             requirements: Dictionary with user_stories, acceptance_criteria, api_specs
 
             test_type: Type of tests to generate
-
-
 
         Returns:
 
@@ -233,13 +225,9 @@ class TestGenerator:
 
         Generate test stub code for a test case.
 
-
-
         Args:
 
             test_case: Test case specification
-
-
 
         Returns:
 
@@ -277,19 +265,13 @@ describe('{{Feature Name}}', () => {{
 
     // {description}
 
-
-
     // Arrange
 
     // TODO: Set up test data and dependencies
 
-
-
     // Act
 
     // TODO: Execute the code under test
-
-
 
     // Assert
 
@@ -326,13 +308,9 @@ def test_{name}():
 
     # TODO: Set up test data and dependencies
 
-
-
     # Act
 
     # TODO: Execute the code under test
-
-
 
     # Assert
 
@@ -363,19 +341,13 @@ public void {method_name}() {{
 
     // {description}
 
-
-
     // Arrange
 
     // TODO: Set up test data and dependencies
 
-
-
     // Act
 
     // TODO: Execute the code under test
-
-
 
     // Assert
 
@@ -404,19 +376,13 @@ describe('{{Feature Name}}', () => {{
 
     // {description}
 
-
-
     // Arrange
 
     // TODO: Set up test data and dependencies
 
-
-
     // Act
 
     // TODO: Execute the code under test
-
-
 
     // Assert
 
@@ -462,15 +428,11 @@ describe('{{Feature Name}}', () => {{
 
         Generate complete test file with all test stubs.
 
-
-
         Args:
 
             module_name: Name of module being tested
 
             test_cases: List of test cases (uses self.test_cases if not provided)
-
-
 
         Returns:
 
@@ -528,8 +490,6 @@ describe('{{Feature Name}}', () => {{
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
-
 """
 
         class_header = f"public class {class_name}Test {{\n\n"
@@ -564,15 +524,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
         Suggest missing test scenarios based on code analysis.
 
-
-
         Args:
 
             existing_tests: List of existing test names
 
             code_analysis: Analysis of code under test (branches, error paths, etc.)
-
-
 
         Returns:
 

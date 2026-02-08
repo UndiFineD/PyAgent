@@ -7,13 +7,9 @@
 
 3D Visualization Patterns for Manim Community
 
-
-
 Demonstrates ThreeDScene, 3D axes, surfaces, and camera control.
 
 Adapted from 3b1b patterns for ManimCE.
-
-
 
 Run with: manim -pql 3d_visualization.py SceneName
 

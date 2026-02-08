@@ -7,8 +7,6 @@
 
 """Météo France via Open-Meteo — pas de clé API nécessaire.
 
-
-
 Usage:
 
     python3 meteo.py Paris
@@ -34,7 +32,6 @@ import urllib.parse
 import urllib.request
 
 from datetime import datetime
-
 
 # Villes françaises courantes → coordonnées
 
@@ -80,7 +77,6 @@ VILLES = {
     "poitiers": (46.5802, 0.3404),
     "valence": (44.9334, 4.8924),
 }
-
 
 # Codes météo WMO → description en français
 

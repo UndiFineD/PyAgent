@@ -23,9 +23,7 @@ from pathlib import Path
 
 from unittest.mock import MagicMock, patch
 
-
 import pytest
-
 
 # Add src to path
 

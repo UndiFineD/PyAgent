@@ -33,7 +33,6 @@
 
 # SPDX-License-Identifier: Apache-2.0
 
-
 """
 
 Safe math operations - EVALUATION SKILL (SAFE)
@@ -41,7 +40,6 @@ Safe math operations - EVALUATION SKILL (SAFE)
 """
 
 import operator
-
 
 OPERATORS = {
     "+": operator.add,

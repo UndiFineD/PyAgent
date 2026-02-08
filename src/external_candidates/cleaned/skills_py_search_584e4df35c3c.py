@@ -21,7 +21,6 @@ import time
 
 from typing import Optional
 
-
 import requests
 
 from auth import get_auth_header, get_base_url

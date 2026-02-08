@@ -25,7 +25,6 @@ from datetime import datetime
 
 from typing import Dict, List, Optional
 
-
 # 尝试导入 tweepy
 
 try:
@@ -343,25 +342,17 @@ def main():
 
   %(prog)s tweet "Hello, X!"
 
-
-
   # 发布带图片的推文
 
   %(prog)s tweet "Check out this image!" --media /path/to/image.jpg
-
-
 
   # 发布带多个媒体的推文
 
   %(prog)s tweet "My photos:" --media /path/to/photo1.jpg --media /path/to/photo2.png
 
-
-
   # 发布带视频的推文
 
   %(prog)s tweet "Watch this video!" --media /path/to/video.mp4
-
-
 
   # 验证认证信息
 

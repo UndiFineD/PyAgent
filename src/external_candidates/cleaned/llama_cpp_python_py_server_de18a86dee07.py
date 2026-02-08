@@ -7,9 +7,7 @@ import gradio as gr
 
 from openai import OpenAI
 
-
 client = OpenAI(base_url="http://localhost:8000/v1", api_key="llama.cpp")
-
 
 model = "gpt-3.5-turbo"
 
@@ -49,7 +47,6 @@ js = """function () {
 
 }"""
 
-
 css = """
 
 footer {
@@ -66,7 +63,6 @@ full-height {
 
 """
 
-
 with gr.Blocks(theme=gr.themes.Soft(), js=js, css=css, fill_height=True) as demo:
     gr.ChatInterface(
         predict,
@@ -76,7 +72,6 @@ with gr.Blocks(theme=gr.themes.Soft(), js=js, css=css, fill_height=True) as demo
             "Who was the first person on the moon?",
         ],
     )
-
 
 if __name__ == "__main__":
     demo.launch()

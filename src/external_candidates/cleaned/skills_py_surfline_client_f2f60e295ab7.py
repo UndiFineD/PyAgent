@@ -7,14 +7,11 @@
 
 """Minimal Surfline public client (no login).
 
-
-
 We intentionally avoid private/account endpoints and avoid non-stdlib deps.
 
 """
 
 from __future__ import annotations
-
 
 import json
 
@@ -32,9 +29,7 @@ from pathlib import Path
 
 from typing import Any, Dict, Optional
 
-
 BASE = "https://services.surfline.com"
-
 
 CACHE_DIR = Path(os.environ.get("SURFLINE_CACHE_DIR", str(Path.home() / ".cache" / "surfline")))
 
@@ -98,13 +93,9 @@ class SearchHit:
 def search_spots(query: str, limit: int = 8) -> list[SearchHit]:
     """Search Surfline for spot IDs.
 
-
-
     Surfline's `/search/site` often returns a **list** of result buckets (multiple
 
     indices). Each element contains `hits.hits[]. _source`.
-
-
 
     We keep this defensive because Surfline changes this payload periodically.
 

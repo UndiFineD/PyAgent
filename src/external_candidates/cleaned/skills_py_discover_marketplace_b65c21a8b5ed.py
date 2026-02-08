@@ -9,11 +9,7 @@
 
 x402 Marketplace Discovery
 
-
-
 Browse and search the x402 marketplace for available API endpoints.
-
-
 
 Usage:
 
@@ -25,8 +21,6 @@ Usage:
 
     python discover_marketplace.py featured           # Show featured endpoints
 
-
-
 Categories: ai, data, finance, utility, social, gaming
 
 """
@@ -37,9 +31,7 @@ import os
 
 import sys
 
-
 import requests
-
 
 API_BASE = "https://api.x402layer.cc"
 

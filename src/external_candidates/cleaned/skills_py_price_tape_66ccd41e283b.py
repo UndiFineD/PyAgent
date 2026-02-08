@@ -7,19 +7,13 @@
 
 """price_tape.py
 
-
-
 Minimal yfinance-based price tape for a list of tickers.
 
 Outputs JSON or a markdown-friendly table.
 
-
-
 Usage:
 
   python price_tape.py --tickers "^GSPC ^IXIC BTC-USD ETH-USD CL=F GC=F" --period 6mo
-
-
 
 Notes:
 
@@ -36,7 +30,6 @@ import json
 from dataclasses import asdict, dataclass
 
 from typing import List, Optional
-
 
 import pandas as pd
 

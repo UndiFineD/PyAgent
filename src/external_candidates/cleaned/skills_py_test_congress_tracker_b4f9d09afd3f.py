@@ -17,7 +17,6 @@ from datetime import datetime, timedelta
 
 from unittest.mock import MagicMock, patch
 
-
 import pytest
 
 from congress_tracker import CongressTracker

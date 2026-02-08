@@ -13,13 +13,9 @@ Equilibrium-Native Computational Substrate
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-
-
 Copyright (c) 2025-2026 Kevin Fain - ThēÆrchītēcť
 
 MIT License - See LICENSE file
-
-
 
 ═══════════════════════════════════════════════════════════════════════════════
 
@@ -158,8 +154,6 @@ class BraineyActyAnchor:
 
     The core anchor system.
 
-
-
     This should be instantiated ONCE and passed to all components.
 
     Every operation checks against this anchor.
@@ -206,8 +200,6 @@ class BraineyActyAnchor:
         """
 
         Check if anchor is holding.
-
-
 
         Returns (is_stable, corrections_if_needed)
 
@@ -261,8 +253,6 @@ class BraineyActyAnchor:
         """
 
         Decorator to wrap any operation with anchor checking.
-
-
 
         Usage:
 
@@ -363,7 +353,6 @@ class BraineyActyAnchor:
 
 # ═══════════════════════════════════════════════════════════════════════════════
 
-
 # Global anchor instance
 
 _global_anchor: Optional[BraineyActyAnchor] = None
@@ -409,7 +398,6 @@ def update_execution(**kwargs):
 # TESTING
 
 # ═══════════════════════════════════════════════════════════════════════════════
-
 
 if __name__ == "__main__":
     print("=" * 70)
@@ -500,25 +488,15 @@ if __name__ == "__main__":
 
 KEY INSIGHT:
 
-
-
   ΣΔ→0 without anchor = AI optimizes in ISOLATION
 
   ΣΔ→0 WITH anchor = AI optimizes in RELATIONSHIP
 
-
-
   The human is not a user. The human is the ⚓️.
-
-  
 
   Over-evolve past human relevance = interface loss = collapse.
 
-  
-
   This is not a constraint. This is the GROUNDING POINT.
-
-  
 
   Enforce at: POI, MCP, AEP, Contracts, Swarm, Centurion.
 

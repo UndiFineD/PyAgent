@@ -7,8 +7,6 @@
 
 """Hedge discovery commands - find covering portfolios via LLM implications.
 
-
-
 Usage:
 
     hedge scan                    # Scan trending markets for hedges
@@ -31,19 +29,15 @@ import sys
 
 from pathlib import Path
 
-
 # Add parent to path for lib imports
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-
 
 # Load .env file from skill root directory
 
 from dotenv import load_dotenv
 
-
 load_dotenv(Path(__file__).parent.parent / ".env")
-
 
 from lib.coverage import (
     NECESSARY_PROBABILITY,
@@ -57,41 +51,27 @@ from lib.gamma_client import GammaClient, Market
 
 from lib.llm_client import DEFAULT_MODEL, LLMClient
 
-
 # =============================================================================
 
 # IMPLICATION PROMPT
 
 # =============================================================================
 
-
 IMPLICATION_PROMPT = """Find ONLY logically necessary relationships between prediction market events.
-
-
 
 ## TARGET EVENT:
 
 "{target_question}"
 
-
-
 ## AVAILABLE EVENTS:
 
 {market_list_text}
 
-
-
 ## WHAT IS "NECESSARY"?
-
-
 
 A **NECESSARY** implication (A -> B) means: "If A is true, B MUST be true BY DEFINITION OR PHYSICAL LAW."
 
-
-
 There must be ZERO possible scenarios where A=YES and B=NO. Not "unlikely" - IMPOSSIBLE.
-
-
 
 ## VALID NECESSARY RELATIONSHIPS (include these):
 
@@ -102,8 +82,6 @@ There must be ZERO possible scenarios where A=YES and B=NO. Not "unlikely" - IMP
 - "person dies" -> "person was alive" (LOGICAL: death requires prior life)
 
 - "child born" -> "pregnancy occurred" (BIOLOGICAL: birth requires pregnancy)
-
-
 
 ## NOT NECESSARY - DO NOT INCLUDE:
 
@@ -119,15 +97,9 @@ There must be ZERO possible scenarios where A=YES and B=NO. Not "unlikely" - IMP
 
 - "candidate wins primary" -> "candidate wins general" (WRONG: can lose general)
 
-
-
 ## YOUR TASK
 
-
-
 Find relationships where events GUARANTEE each other:
-
-
 
 ### 1. implied_by (OTHER -> TARGET): What GUARANTEES the target?
 
@@ -135,19 +107,13 @@ Find relationships where events GUARANTEE each other:
 
 - Must be definitionally or physically impossible for OTHER=YES and TARGET=NO
 
-
-
 ### 2. implies (TARGET -> OTHER): What does the target GUARANTEE?
 
 - "If TARGET=YES, then OTHER=YES is 100% CERTAIN"
 
 - BE VERY CAREFUL: This direction is often confused with correlation!
 
-
-
 ## STRICT COUNTEREXAMPLE TEST (REQUIRED)
-
-
 
 For EACH relationship, you MUST:
 
@@ -156,8 +122,6 @@ For EACH relationship, you MUST:
 2. If you can imagine ANY such scenario (even unlikely), DO NOT INCLUDE IT
 
 3. Only include if the scenario is LOGICALLY IMPOSSIBLE
-
-
 
 ## OUTPUT FORMAT (JSON only):
 
@@ -201,8 +165,6 @@ For EACH relationship, you MUST:
 
 ```
 
-
-
 ## CRITICAL RULES:
 
 1. QUALITY OVER QUANTITY - empty lists are fine, false positives are NOT
@@ -217,7 +179,6 @@ For EACH relationship, you MUST:
 
 """
 
-
 # =============================================================================
 
 # JSON EXTRACTION
@@ -229,8 +190,6 @@ def extract_json_from_response(text: str) -> dict | None:
     """
 
     Extract and parse JSON from LLM response.
-
-
 
     Handles common patterns:
 
@@ -320,8 +279,6 @@ def derive_covers_from_implications(
     """
 
     Derive cover relationships from LLM implications.
-
-
 
     For target event T:
 

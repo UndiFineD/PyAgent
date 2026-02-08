@@ -7,8 +7,6 @@
 
 """Capture a single frame from Reachy Mini via GStreamer WebRTC (local).
 
-
-
 Must run ON the robot with GST_PLUGIN_PATH set to /opt/gst-plugins-rs/lib/aarch64-linux-gnu/gstreamer-1.0
 
 """
@@ -21,9 +19,7 @@ import time
 
 from threading import Thread
 
-
 import gi
-
 
 gi.require_version("Gst", "1.0")
 
@@ -34,7 +30,6 @@ import numpy as np
 from gi.repository import GLib, Gst, GstApp
 
 from PIL import Image
-
 
 OUTPUT = sys.argv[1] if len(sys.argv) > 1 else "/tmp/reachy_snap.jpg"
 

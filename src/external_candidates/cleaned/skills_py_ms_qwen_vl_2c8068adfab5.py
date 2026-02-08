@@ -11,8 +11,6 @@ MS-Qwen-VL CLI
 
 使用 OpenAI SDK 兼容方式调用 ModelScope Qwen3-VL 多模态 API
 
-
-
 支持功能：
 
 - 图像描述 (describe)
@@ -39,18 +37,15 @@ from pathlib import Path
 
 from typing import Literal, Optional
 
-
 import dotenv
 
 from openai import OpenAI
 
 from PIL import Image
 
-
 # 加载环境变量
 
 dotenv.load_dotenv(Path(__file__).parent / ".env")
-
 
 # 默认配置
 
@@ -62,7 +57,6 @@ DEFAULT_MODEL_PRECISE = os.getenv("MODELSCOPE_MODEL_PRECISE", "Qwen/Qwen3-VL-235
 
 API_BASE_URL = "https://api-inference.modelscope.cn/v1"
 
-
 # 任务类型定义
 
 TaskType = Literal["describe", "ocr", "ask", "detect", "chart"]
@@ -73,13 +67,9 @@ def encode_image_to_base64(image_path: str) -> str:
 
     将本地图片编码为 base64 格式
 
-
-
     Args:
 
         image_path: 图片路径
-
-
 
     Returns:
 
@@ -119,13 +109,9 @@ def get_image_content(image_path: str) -> str:
 
     获取图片内容，URL 直接使用，本地文件编码为 base64
 
-
-
     Args:
 
         image_path: 图片路径或 URL
-
-
 
     Returns:
 
@@ -144,15 +130,11 @@ def get_task_prompt(task: TaskType, question: Optional[str] = None) -> str:
 
     根据任务类型生成对应的 prompt
 
-
-
     Args:
 
         task: 任务类型
 
         question: 用户自定义问题 (仅用于 ask 任务)
-
-
 
     Returns:
 
@@ -188,8 +170,6 @@ def analyze_image(
 
     调用 ModelScope API 分析图片
 
-
-
     Args:
 
         image_path: 图片路径或 URL
@@ -203,8 +183,6 @@ def analyze_image(
         model: 指定模型
 
         precise: 是否使用精细模式模型
-
-
 
     Returns:
 
@@ -286,33 +264,23 @@ def main():
 
   chart      图表解析
 
-
-
 示例:
 
   # 图像描述
 
   python scripts/ms_qwen_vl.py image.jpg
 
-
-
   # OCR 识别
 
   python scripts/ms_qwen_vl.py image.jpg --task ocr
-
-
 
   # 视觉问答
 
   python scripts/ms_qwen_vl.py image.jpg --task ask --question "图片里有什么？"
 
-
-
   # 使用精细模式
 
   python scripts/ms_qwen_vl.py image.jpg --task describe --precise
-
-
 
   # 输出到文件
 

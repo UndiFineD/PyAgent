@@ -21,7 +21,6 @@ import urllib.parse
 
 import urllib.request
 
-
 DEFAULT_BASE_URL = "https://api.odds-api.io/v3"
 
 

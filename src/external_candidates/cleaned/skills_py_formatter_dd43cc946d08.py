@@ -163,8 +163,6 @@ class SubstackFormatter:
 
         return f"""<p><strong>{html.escape(hook)}</strong></p>
 
-
-
 <p>{html.escape(context)}</p>"""
 
     def format_micro_story(self, text):

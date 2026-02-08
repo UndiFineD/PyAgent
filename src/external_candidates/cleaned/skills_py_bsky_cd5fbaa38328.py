@@ -21,9 +21,7 @@ from datetime import datetime
 
 from pathlib import Path
 
-
 VERSION = "1.2.0"
-
 
 try:
     from atproto import Client, client_utils
@@ -32,7 +30,6 @@ except ImportError:
     print("Error: atproto not installed. Run: pip install atproto", file=sys.stderr)
 
     sys.exit(1)
-
 
 CONFIG_PATH = Path.home() / ".config" / "bsky" / "config.json"
 

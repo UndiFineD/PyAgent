@@ -9,7 +9,6 @@ import os
 
 from typing import Any, Dict, List
 
-
 import google.generativeai as genai
 
 
@@ -41,13 +40,9 @@ class GeminiIntelligence:
 
         4. Suspicious timing
 
-        
-
         Transactions JSON:
 
         {json.dumps(transactions, indent=2)}
-
-        
 
         Provide a concise summary of findings and specific 'Action Required' items.
 
@@ -65,8 +60,6 @@ class GeminiIntelligence:
         Analyze this historical financial data and provide a 30-day cash flow forecast.
 
         Identify potential liquidity gaps and suggest optimizations.
-
-        
 
         Data:
 
@@ -87,8 +80,6 @@ class GeminiIntelligence:
 
         {json.dumps(invoice_data, indent=2)}
 
-        
-
         Tone: Professional, UAE-based business style. Include AED currency.
 
         """
@@ -104,17 +95,11 @@ class GeminiIntelligence:
 
         You are the Autonomous CFO. Answer the user's question based on the provided Odoo context data.
 
-        
-
         Question: {query}
-
-        
 
         Context Data (JSON):
 
         {json.dumps(context_data, indent=2)}
-
-        
 
         Instructions:
 

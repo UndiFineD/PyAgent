@@ -15,16 +15,13 @@ import json
 
 import os
 
-
 import requests
 
 from rich.console import Console
 
 from rich.table import Table
 
-
 GAMMA_API = "https://gamma-api.polymarket.com"
-
 
 console = Console()
 

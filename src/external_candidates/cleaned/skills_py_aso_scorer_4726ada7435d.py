@@ -55,8 +55,6 @@ class ASOScorer:
 
         Calculate comprehensive ASO score (0-100).
 
-
-
         Args:
 
             metadata: Title, description quality metrics
@@ -66,8 +64,6 @@ class ASOScorer:
             keyword_performance: Keyword ranking data
 
             conversion: Impression-to-install metrics
-
-
 
         Returns:
 
@@ -141,8 +137,6 @@ class ASOScorer:
         """
 
         Score metadata quality (0-100).
-
-
 
         Evaluates:
 
@@ -238,8 +232,6 @@ class ASOScorer:
 
         Score ratings and reviews (0-100).
 
-
-
         Evaluates:
 
         - Average rating
@@ -318,8 +310,6 @@ class ASOScorer:
 
         Score keyword ranking performance (0-100).
 
-
-
         Evaluates:
 
         - Top 10 rankings
@@ -391,8 +381,6 @@ class ASOScorer:
         """
 
         Score conversion performance (0-100).
-
-
 
         Evaluates:
 
@@ -620,8 +608,6 @@ def calculate_aso_score(
 
     Convenience function to calculate ASO score.
 
-
-
     Args:
 
         metadata: Metadata quality metrics
@@ -631,8 +617,6 @@ def calculate_aso_score(
         keyword_performance: Keyword ranking data
 
         conversion: Conversion metrics
-
-
 
     Returns:
 

@@ -11,16 +11,13 @@ from pathlib import Path
 
 from typing import Any, Dict, List, Optional
 
-
 # Add parent directory to path for imports
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-
 from config.settings import settings
 
 from dataforseo_client.rest import ApiException
-
 
 from core.client import get_client
 
@@ -40,8 +37,6 @@ def get_trends_explore(
     """
 
     Get Google Trends data for keywords.
-
-
 
     Args:
 
@@ -65,13 +60,9 @@ def get_trends_explore(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing trend graph data, regional interest, related topics and queries
-
-
 
     Example:
 
@@ -136,11 +127,7 @@ def get_youtube_trends(
 
     Get YouTube-specific trend data for keywords.
 
-
-
     Convenience wrapper for get_trends_explore with YouTube search type.
-
-
 
     Args:
 
@@ -152,13 +139,9 @@ def get_youtube_trends(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing YouTube trend data
-
-
 
     Example:
 
@@ -185,8 +168,6 @@ def get_news_trends(
 
     Get Google News trend data for keywords.
 
-
-
     Args:
 
         keywords: List of keywords to compare (max 5)
@@ -197,13 +178,9 @@ def get_news_trends(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing news trend data
-
-
 
     Example:
 
@@ -230,8 +207,6 @@ def get_shopping_trends(
 
     Get Google Shopping trend data for keywords.
 
-
-
     Args:
 
         keywords: List of keywords to compare (max 5)
@@ -242,13 +217,9 @@ def get_shopping_trends(
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing shopping/e-commerce trend data
-
-
 
     Example:
 
@@ -276,8 +247,6 @@ def compare_keyword_trends(
 
     Compare keyword trends across multiple search types.
 
-
-
     Args:
 
         keywords: Keywords to compare (max 5)
@@ -290,13 +259,9 @@ def compare_keyword_trends(
 
         save: Whether to save individual results
 
-
-
     Returns:
 
         Dict with search_type keys and trend data values
-
-
 
     Example:
 
@@ -332,21 +297,15 @@ def get_trending_now(location_name: str = None, save: bool = True) -> Dict[str, 
 
     Get currently trending searches.
 
-
-
     Args:
 
         location_name: Target location
 
         save: Whether to save results
 
-
-
     Returns:
 
         Dict containing trending searches
-
-
 
     Example:
 

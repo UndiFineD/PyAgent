@@ -19,14 +19,11 @@ from typing import Any, Dict, List, Optional
 
 from urllib.parse import quote, unquote
 
-
 import requests
 
 from requests_oauthlib import OAuth1
 
-
 from .broker_adapter import BrokerAdapter
-
 
 logger = logging.getLogger(__name__)
 
@@ -35,8 +32,6 @@ class ETradeAdapter(BrokerAdapter):
     """
 
     E*TRADE API adapter implementing the BrokerAdapter interface.
-
-
 
     All E*TRADE-specific URLs and configuration are contained within this class.
 
@@ -67,8 +62,6 @@ class ETradeAdapter(BrokerAdapter):
         """
 
         Initialize E*TRADE adapter.
-
-
 
         Args:
 
@@ -230,15 +223,11 @@ class ETradeAdapter(BrokerAdapter):
 
         Renew the access token to extend its validity.
 
-
-
         E*TRADE access tokens expire after 2 hours of inactivity.
 
         Calling this endpoint extends the token's validity.
 
         Tokens expire completely at midnight ET regardless of renewal.
-
-
 
         Returns:
 
@@ -285,8 +274,6 @@ class ETradeAdapter(BrokerAdapter):
         """
 
         Revoke the current access token.
-
-
 
         Returns:
 
@@ -798,15 +785,11 @@ class ETradeAdapter(BrokerAdapter):
 
         Get orders for the account.
 
-
-
         Args:
 
             account_id: Optional account ID
 
             status: Order status filter ('OPEN', 'EXECUTED', 'CANCELLED', etc.)
-
-
 
         Returns:
 
@@ -853,15 +836,11 @@ class ETradeAdapter(BrokerAdapter):
 
         Cancel an order.
 
-
-
         Args:
 
             account_id: Account ID
 
             order_id: Order ID to cancel
-
-
 
         Returns:
 

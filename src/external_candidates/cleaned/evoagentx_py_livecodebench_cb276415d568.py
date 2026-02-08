@@ -5,11 +5,9 @@
 
 import os
 
-
 # import regex
 
 from typing import Any, List, Union
-
 
 from ..core.logging import logger
 
@@ -37,14 +35,11 @@ from .lcb_utils.test_output_prediction import (
 
 from .lcb_utils.utils import extract_execution_code, extract_test_output_code
 
-
 VALID_SCENARIO = ["code_generation", "test_output_prediction", "code_execution"]
 
 
 class LiveCodeBench(CodingBenchmark):
     """Benchmark class for evaluating LLM capabilities on real-world programming tasks.
-
-
 
     LiveCodeBench provides a framework for evaluating different scenarios of code-related tasks:
 
@@ -54,13 +49,9 @@ class LiveCodeBench(CodingBenchmark):
 
     3. Code Execution: generating code that executes correctly
 
-
-
     The benchmark supports different evaluation modes, metrics, and can be customized
 
     with various parameters like timeouts, sample dates, and processing options.
-
-
 
     Attributes:
 
@@ -163,15 +154,11 @@ class LiveCodeBench(CodingBenchmark):
 
         Evaluate the solution code.
 
-
-
         Args:
 
             prediction (str | List[str]): The solution code(s).
 
             label (dict | List[dict]): The test cases and expected outputs.
-
-
 
         Returns:
 

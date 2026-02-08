@@ -21,8 +21,6 @@
 
 Generate videos using Google's Veo API.
 
-
-
 Usage:
 
     uv run generate_video.py --prompt "your video description" --filename "output.mp4" [--duration 8] [--aspect-ratio 16:9] [--model MODEL]

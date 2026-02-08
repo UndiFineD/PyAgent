@@ -9,8 +9,6 @@
 
 Watch all running W&B jobs with quick health summaries.
 
-
-
 Usage:
 
     watch_runs.py ENTITY [--projects PROJECT1,PROJECT2,...]
@@ -18,8 +16,6 @@ Usage:
     watch_runs.py ENTITY --all-projects
 
     watch_runs.py  # uses default entity from config
-
-
 
 Designed for morning briefings and periodic monitoring.
 
@@ -32,7 +28,6 @@ import sys
 from datetime import datetime, timezone
 
 from typing import Optional
-
 
 import wandb
 

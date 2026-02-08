@@ -11,7 +11,6 @@ import unittest
 
 from unittest.mock import patch
 
-
 from evoagentx.benchmark.gsm8k import GSM8K
 
 from evoagentx.core.module_utils import save_json

@@ -13,13 +13,9 @@ Equilibrium-Native Computational Substrate
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-
-
 Copyright (c) 2025-2026 Kevin Fain - ThēÆrchītēcť
 
 MIT License - See LICENSE file
-
-
 
 ═══════════════════════════════════════════════════════════════════════════════
 
@@ -36,7 +32,6 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 
 from typing import Any, Callable, Dict, List, Optional
-
 
 from .symbol import ExecutionResult, Layer, SISSymbol, SymbolState
 
@@ -85,13 +80,9 @@ class SISVM:
 
     The SIS Virtual Machine.
 
-
-
     Executes symbols with parallel layer processing and
 
     enforces equilibrium constraint at the atomic level.
-
-
 
     Principle: Symbols execute in parallel, not sequentially.
 
@@ -128,8 +119,6 @@ class SISVM:
         """
 
         Execute a single symbol through the VM pipeline.
-
-
 
         Pipeline:
 
@@ -198,8 +187,6 @@ class SISVM:
 
         Execute a sequence of symbols.
 
-
-
         If require_balance=True, the sequence must satisfy equilibrium constraint
 
         or no symbols will execute.
@@ -237,8 +224,6 @@ class SISVM:
 
         Execute symbols in parallel (true to SIS philosophy).
 
-
-
         All symbols execute simultaneously, coordinated by shared state.
 
         """
@@ -270,11 +255,7 @@ class SISVM:
 
         Execute the equilibrium control loop: sense → quantify → compensate → iterate
 
-
-
         Continues until ΣΔ approaches 0 within threshold or max iterations.
-
-
 
         Returns execution trace and final state.
 
@@ -361,8 +342,6 @@ class SISVM:
         """
 
         Explicitly persist a symbol to the vault.
-
-
 
         Returns the hash (vault key).
 

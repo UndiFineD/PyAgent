@@ -23,14 +23,11 @@ from datetime import datetime
 
 from pathlib import Path
 
-
 from DrissionPage import ChromiumOptions, ChromiumPage
-
 
 SESSIONS_DIR = Path.home() / ".clawdbot" / "browser-sessions"
 
 ATTEMPTS_LOG = Path.home() / ".clawdbot" / "browser-sessions" / "attempts.json"
-
 
 # 设置输出编码
 

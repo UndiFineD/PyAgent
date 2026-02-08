@@ -18,7 +18,6 @@ from keep.providers.tagging import (
     PassthroughTagger,
 )
 
-
 # -----------------------------------------------------------------------------
 
 # KeywordTagger Tests
@@ -122,8 +121,6 @@ class TestKeywordTagger:
 
                 self.db = db
 
-            
-
             def get_user(self, user_id):
 
                 return self.db.query(User).filter_by(id=user_id).first()
@@ -149,8 +146,6 @@ class TestKeywordTagger:
 
         };
 
-        
-
         export default fetchUsers;
 
         """
@@ -166,23 +161,13 @@ class TestKeywordTagger:
 
         # Installation Guide
 
-        
-
         This guide explains how to install the package.
-
-        
 
         ## Prerequisites
 
-        
-
         **Important:** Make sure you have Python 3.8+ installed.
 
-        
-
         > Note: This is a development version.
-
-        
 
         See the [documentation](https://docs.example.com) for more info.
 

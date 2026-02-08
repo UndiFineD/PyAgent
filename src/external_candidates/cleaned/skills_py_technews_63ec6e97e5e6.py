@@ -17,16 +17,13 @@ import sys
 
 from pathlib import Path
 
-
 # Add scripts to path
 
 SCRIPT_DIR = Path(__file__).parent
 
-
 # Import our modules
 
 sys.path.insert(0, str(SCRIPT_DIR))
-
 
 from article_fetcher import fetch_multiple, summarize_content
 

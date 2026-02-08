@@ -7,8 +7,6 @@
 
 Default tagging providers - lightweight, zero/minimal dependencies.
 
-
-
 These taggers provide basic domain identification without requiring
 
 heavy ML models or API keys. They're useful as fallbacks and for
@@ -21,9 +19,7 @@ import re
 
 from typing import Any
 
-
 from .base import TaggingProvider, get_registry
-
 
 # -----------------------------------------------------------------------------
 
@@ -31,11 +27,9 @@ from .base import TaggingProvider, get_registry
 
 # -----------------------------------------------------------------------------
 
-
 # Pragmatic domains for knowledge work, inspired by DDC but modernized.
 
 # Each domain has keywords that strongly suggest that domain.
-
 
 DOMAINS = {
     "technology": {
@@ -308,7 +302,6 @@ DOMAINS = {
     },
 }
 
-
 # Content type detection patterns
 
 CONTENT_TYPES = {
@@ -347,7 +340,6 @@ CONTENT_TYPES = {
     },
 }
 
-
 # Language detection for code
 
 LANGUAGE_PATTERNS = {
@@ -384,13 +376,9 @@ class KeywordTagger:
 
     Lightweight tagger using keyword matching and patterns.
 
-
-
     Zero ML dependencies - uses simple heuristics for fast domain
 
     identification. Good as a default fallback or for bootstrapping.
-
-
 
     Detected tags:
 
@@ -500,15 +488,11 @@ class KeywordTagger:
 
         Generate tags for content.
 
-
-
         Args:
 
             content: Text content to analyze
 
             content_type_hint: Optional hint (e.g., file extension or MIME type)
-
-
 
         Returns:
 
@@ -551,13 +535,9 @@ class EmbeddingDomainTagger:
 
     Domain tagger using embedding similarity.
 
-
-
     Compares document embeddings against pre-computed domain exemplar
 
     embeddings. Reuses the embedding provider — no extra model needed.
-
-
 
     More accurate than keyword matching, especially for nuanced content.
 
@@ -627,15 +607,11 @@ class EmbeddingDomainTagger:
 
         Generate domain tags using embedding similarity.
 
-
-
         Args:
 
             content: Text content (used if embedding not provided)
 
             content_embedding: Pre-computed embedding (optional, for efficiency)
-
-
 
         Returns:
 
@@ -675,8 +651,6 @@ class PassthroughTagger:
 
     No-op tagger that returns empty tags.
 
-
-
     Useful as a placeholder or when tagging is disabled.
 
     """
@@ -692,7 +666,6 @@ class PassthroughTagger:
 # Registration
 
 # -----------------------------------------------------------------------------
-
 
 _registry = get_registry()
 

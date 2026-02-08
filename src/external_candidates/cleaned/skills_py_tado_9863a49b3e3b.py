@@ -25,7 +25,6 @@ from pathlib import Path
 
 from typing import Any, Dict, Optional
 
-
 try:
     from libtado.api import Tado
 
@@ -33,7 +32,6 @@ except ImportError:
     print("ERROR: libtado not installed. Run: pip3 install libtado", file=sys.stderr)
 
     sys.exit(1)
-
 
 TOKEN_FILE = Path.home() / ".tado_auth.json"
 
@@ -375,15 +373,11 @@ Examples:
 
   %(prog)s status
 
-  
-
   # Get status of specific zone
 
   %(prog)s status --zone 1
 
   %(prog)s status --zone "Woonkamer"
-
-  
 
   # Set temperature
 
@@ -391,13 +385,9 @@ Examples:
 
   %(prog)s set --zone "Woonkamer" --temperature 22 --duration 60
 
-  
-
   # Reset zone to auto schedule
 
   %(prog)s reset --zone 1
-
-  
 
   # Set home/away mode
 
@@ -406,8 +396,6 @@ Examples:
   %(prog)s mode away
 
   %(prog)s mode auto
-
-  
 
   # Check who is home
 

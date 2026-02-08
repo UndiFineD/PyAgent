@@ -9,8 +9,6 @@
 
 Search vectors using TOS Vectors.
 
-
-
 Example usage:
 
     python search_vectors.py "machine learning"
@@ -20,7 +18,6 @@ Example usage:
 import os
 
 import sys
-
 
 import tos
 

@@ -23,13 +23,9 @@ def find_git_root(start_path: Optional[Path] = None) -> Optional[Path]:
 
     Find the root of the git repository containing the given path.
 
-
-
     Args:
 
         start_path: Path to start searching from. Defaults to cwd.
-
-
 
     Returns:
 
@@ -61,8 +57,6 @@ def get_default_store_path() -> Path:
 
     Get the default store path.
 
-
-
     Priority:
 
     1. KEEP_STORE_PATH environment variable
@@ -70,8 +64,6 @@ def get_default_store_path() -> Path:
     2. .keep/ directory at git repository root
 
     3. ~/.keep/ in user's home directory (if not in a repo)
-
-
 
     Returns:
 

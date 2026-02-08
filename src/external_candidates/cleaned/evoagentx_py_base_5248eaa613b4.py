@@ -9,9 +9,7 @@ from enum import Enum
 
 from typing import Dict, List
 
-
 from llama_index.core.embeddings import BaseEmbedding
-
 
 # Mapping of supported models for each provider
 
@@ -53,21 +51,15 @@ class EmbeddingProvider(str, Enum):
     def validate_model(cls, provider: str, model_name: str) -> bool:
         """Validate if the model is supported for the given provider.
 
-
-
         Args:
 
             provider (str): The embedding provider (e.g., 'openai', 'huggingface', 'ollama').
 
             model_name (str): The name of the embedding model to validate.
 
-
-
         Returns:
 
             bool: True if the model is supported or provider is 'custom', False otherwise.
-
-
 
         Raises:
 
@@ -100,15 +92,11 @@ class BaseEmbeddingWrapper:
     def validate_model(self, provider: EmbeddingProvider, model_name: str) -> bool:
         """Validate if the model is supported for the given provider.
 
-
-
         Args:
 
             provider (EmbeddingProvider): The embedding provider.
 
             model_name (str): The name of the embedding model to validate.
-
-
 
         Returns:
 

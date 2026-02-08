@@ -17,9 +17,7 @@ import sys
 
 from typing import Any, Dict, List, Optional
 
-
 import requests
-
 
 BASE_URL = "https://api.apollo.io/v1"
 
@@ -78,8 +76,6 @@ class ApolloClient:
 
         Search for people in Apollo's database.
 
-
-
         Args:
 
             q_keywords: General search keywords
@@ -124,8 +120,6 @@ class ApolloClient:
 
         Enrich person data from email or LinkedIn URL.
 
-
-
         Provide either email OR linkedin_url for best results.
 
         """
@@ -164,8 +158,6 @@ class ApolloClient:
         """
 
         Search for companies in Apollo's database.
-
-
 
         Args:
 
@@ -207,8 +199,6 @@ class ApolloClient:
         """
 
         Enrich company data from domain or name.
-
-
 
         Provide either domain OR name for best results.
 

@@ -11,8 +11,6 @@ IBKR Trading Bot Template
 
 A starting point for building automated trading strategies.
 
-
-
 Customize the strategy() function to implement your trading logic.
 
 """
@@ -27,14 +25,11 @@ from datetime import datetime
 
 from typing import Dict, List, Optional
 
-
 import requests
 
 import urllib3
 
-
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 
 # Configuration
 
@@ -195,8 +190,6 @@ class IBKRClient:
 
         Place an order.
 
-
-
         Args:
 
             conid: Contract ID
@@ -256,8 +249,6 @@ def strategy(client: IBKRClient):
     """
 
     YOUR TRADING STRATEGY HERE
-
-
 
     This function is called by the main loop.
 

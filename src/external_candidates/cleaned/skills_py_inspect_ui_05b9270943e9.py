@@ -9,7 +9,6 @@ import argparse
 
 import sys
 
-
 from dogtail.tree import root
 
 

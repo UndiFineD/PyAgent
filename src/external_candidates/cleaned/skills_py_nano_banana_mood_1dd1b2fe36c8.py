@@ -21,8 +21,6 @@ from typing import Optional
 def load_gemini_key() -> Optional[str]:
     """Load Gemini API key.
 
-
-
     Order:
 
     1) GEMINI_API_KEY env var

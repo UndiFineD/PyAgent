@@ -13,9 +13,7 @@ Supports Telegram notifications for trade alerts
 
 import logging
 
-
 import requests
-
 
 logger = logging.getLogger(__name__)
 
@@ -77,8 +75,6 @@ class TelegramNotifier:
 
 {emoji} *New Congressional Trade*
 
-
-
 *{rep}*
 
 {tx_type} *{ticker}*
@@ -86,8 +82,6 @@ class TelegramNotifier:
 Amount: {amount}
 
 Disclosed: {date}
-
-
 
 _Processing for execution..._
 
@@ -114,15 +108,11 @@ _Processing for execution..._
 
 {emoji} *Trade Executed*
 
-
-
 {action} *{qty}* shares of *{symbol}*
 
 Price: ${price:.2f}
 
 Total: ${cost:.2f}
-
-
 
 _Position tracking enabled_
 
@@ -150,8 +140,6 @@ _Position tracking enabled_
         message = f"""
 
 {emoji} *Stop-Loss Triggered*
-
-
 
 SOLD *{qty}* shares of *{symbol}*
 
@@ -203,8 +191,6 @@ P/L: *{pnl:+.1f}%*
         message = f"""
 
 {emoji} *Daily Summary*
-
-
 
 New Disclosures: {new_disclosures}
 

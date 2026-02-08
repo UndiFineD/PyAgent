@@ -9,9 +9,7 @@ from abc import ABC, abstractmethod
 
 from enum import Enum
 
-
 from llama_index.core.retrievers import BaseRetriever
-
 
 from ..schema import Query, RagResult
 

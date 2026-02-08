@@ -9,7 +9,6 @@ Database connection and models for EvoAgentX.
 
 """
 
-
 # import asyncio
 
 import logging
@@ -19,7 +18,6 @@ from datetime import datetime
 from enum import Enum
 
 from typing import Any, Dict, List, Optional  # , Union
-
 
 from bson import ObjectId
 
@@ -33,11 +31,9 @@ from pydantic_core import core_schema
 
 from pymongo import ASCENDING, TEXT
 
-
 # Setup logger
 
 logger = logging.getLogger(__name__)
-
 
 # Custom PyObjectId for MongoDB ObjectId compatibility with Pydantic
 

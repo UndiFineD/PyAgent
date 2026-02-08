@@ -7,13 +7,9 @@
 
 Example usage of Google Maps Platform tools in EvoAgentX
 
-
-
 This example demonstrates how to use the various Google Maps tools
 
 for geocoding, places search, directions, and more.
-
-
 
 Prerequisites:
 
@@ -29,13 +25,9 @@ Prerequisites:
 
    - Time Zone API
 
-
-
 2. Set your API key as an environment variable:
 
    export GOOGLE_MAPS_API_KEY="your_api_key_here"
-
-
 
 Note: The GoogleMapsToolkit will automatically retrieve the API key from
 
@@ -44,7 +36,6 @@ the environment variable, making it compatible with AI agents.
 """
 
 import os
-
 
 from evoagentx.tools import GoogleMapsToolkit
 

@@ -7,7 +7,6 @@ import os
 
 from typing import Any, Callable
 
-
 from ..core.logging import logger
 
 from ..core.module_utils import load_json
@@ -22,7 +21,6 @@ from ..utils.utils import download_file
 from .benchmark import Benchmark
 
 from .measures import acc_score, exact_match_score, f1_score
-
 
 HOTPOTQA_FILES_MAP = {
     "train": "hotpot_train_v1.1.json",
@@ -50,8 +48,6 @@ def download_raw_hotpotqa_data(name: str, save_folder: str):
 class HotPotQA(Benchmark):
     """Benchmark class for evaluating multi-hop question answering on HotPotQA dataset.
 
-
-
     Each HotPotQA example has the following structure:
 
     {
@@ -71,8 +67,6 @@ class HotPotQA(Benchmark):
         "level": str
 
     }
-
-
 
     The benchmark evaluates answers using exact match, F1 score, and accuracy metrics.
 

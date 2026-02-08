@@ -15,7 +15,6 @@ from pathlib import Path
 
 from typing import Any, Optional
 
-
 from .config import StoreConfig, load_or_create_config
 
 from .paths import get_default_store_path
@@ -31,7 +30,6 @@ from .providers.base import (
 
 from .types import Item
 
-
 # Collection name validation: lowercase ASCII and underscores only
 
 COLLECTION_NAME_PATTERN = re.compile(r"^[a-z][a-z0-9_]*$")
@@ -42,15 +40,11 @@ class AssociativeMemory:
 
     Persistent associative memory with semantic search capabilities.
 
-
-
     The store is initialized automatically on construction. If the store
 
     does not exist at the given path, it will be created with default
 
     configuration.
-
-
 
     Args:
 
@@ -64,21 +58,15 @@ class AssociativeMemory:
 
                     Must be lowercase ASCII and underscores only.
 
-
-
     Raises:
 
         RuntimeError: If store initialization fails.
-
-
 
     Example:
 
         # Uses .keep/ at repo root by default
 
         mem = AssociativeMemory()
-
-
 
         # Or specify explicitly
 
@@ -171,15 +159,11 @@ class AssociativeMemory:
 
         Insert or update a document in the store.
 
-
-
         Fetches the document at the given URI, generates embeddings, summary,
 
         and tags, then stores/updates the item. Updates are serialized to
 
         avoid concurrency issues.
-
-
 
         Args:
 
@@ -189,13 +173,9 @@ class AssociativeMemory:
 
             collection: Override the default collection for this operation
 
-
-
         Returns:
 
             The created or updated Item.
-
-
 
         Raises:
 
@@ -204,8 +184,6 @@ class AssociativeMemory:
             IOError: If the document cannot be fetched.
 
             RuntimeError: If embedding/summarization/tagging fails.
-
-
 
         Example:
 
@@ -233,15 +211,11 @@ class AssociativeMemory:
 
         Store inline content directly (without fetching from a URI).
 
-
-
         Use this for indexing conversation snippets, notes, or any content
 
         that doesn't have a persistent URI. The content is embedded,
 
         summarized, and tagged just like URI-based documents.
-
-
 
         Args:
 
@@ -257,13 +231,9 @@ class AssociativeMemory:
 
             collection: Override the default collection for this operation
 
-
-
         Returns:
 
             The created or updated Item.
-
-
 
         Example:
 
@@ -278,8 +248,6 @@ class AssociativeMemory:
                 source_tags={"session": "abc123", "topic": "authentication"}
 
             )
-
-
 
             # Remember a quick note
 
@@ -300,13 +268,9 @@ class AssociativeMemory:
 
         Find items using semantic similarity search.
 
-
-
         The query is embedded and compared against all items in the collection.
 
         Results are ordered by similarity score (highest first).
-
-
 
         Args:
 
@@ -316,13 +280,9 @@ class AssociativeMemory:
 
             collection: Override the default collection for this operation
 
-
-
         Returns:
 
             List of Items with similarity scores, ordered by relevance.
-
-
 
         Example:
 
@@ -348,11 +308,7 @@ class AssociativeMemory:
 
         Find items similar to an existing item.
 
-
-
         Uses the embedding of the specified item to find nearest neighbors.
-
-
 
         Args:
 
@@ -364,19 +320,13 @@ class AssociativeMemory:
 
             collection: Override the default collection for this operation
 
-
-
         Returns:
 
             List of Items with similarity scores, ordered by relevance.
 
-
-
         Raises:
 
             KeyError: If the specified item does not exist.
-
-
 
         Example:
 
@@ -391,13 +341,9 @@ class AssociativeMemory:
 
         Search item summaries using full-text search.
 
-
-
         Performs a text search on the generated summaries. Useful when you
 
         need exact keyword matching rather than semantic similarity.
-
-
 
         Args:
 
@@ -407,13 +353,9 @@ class AssociativeMemory:
 
             collection: Override the default collection for this operation
 
-
-
         Returns:
 
             List of matching Items (score may reflect text relevance).
-
-
 
         Example:
 
@@ -435,8 +377,6 @@ class AssociativeMemory:
 
         Find items by tag.
 
-
-
         Args:
 
             key: Tag key to match
@@ -447,21 +387,15 @@ class AssociativeMemory:
 
             collection: Override the default collection for this operation
 
-
-
         Returns:
 
             List of matching Items (no particular order).
-
-
 
         Example:
 
             # All items with 'category' tag
 
             mem.query_tag("category")
-
-
 
             # Items where category is 'documentation'
 
@@ -482,8 +416,6 @@ class AssociativeMemory:
 
         List all collections in the store.
 
-
-
         Returns:
 
             List of collection names.
@@ -503,15 +435,11 @@ class AssociativeMemory:
 
         Retrieve a specific item by ID.
 
-
-
         Args:
 
             id: URI of the item
 
             collection: Override the default collection
-
-
 
         Returns:
 
@@ -526,15 +454,11 @@ class AssociativeMemory:
 
         Check if an item exists in the store.
 
-
-
         Args:
 
             id: URI of the item
 
             collection: Override the default collection
-
-
 
         Returns:
 
@@ -562,15 +486,11 @@ class AssociativeMemory:
 
         Set the current working context.
 
-
-
         The working context is a high-level summary of what's being worked on.
 
         Any agent can read this to instantly understand current focus.
 
         This is the "Level 3" of the hierarchical context model.
-
-
 
         Args:
 
@@ -582,13 +502,9 @@ class AssociativeMemory:
 
             metadata: Additional context-specific data
 
-
-
         Returns:
 
             The updated WorkingContext.
-
-
 
         Example:
 
@@ -611,13 +527,9 @@ class AssociativeMemory:
 
         Get the current working context.
 
-
-
         Returns:
 
             The current WorkingContext, or None if not set.
-
-
 
         Example:
 
@@ -644,8 +556,6 @@ class AssociativeMemory:
 
         Get items most relevant to current work.
 
-
-
         Combines multiple signals to surface what's most important right now:
 
         - Items updated in the current session
@@ -656,13 +566,9 @@ class AssociativeMemory:
 
         - Recency (with decay)
 
-
-
         This is "associative top-of-mind" — not just recent items, but
 
         contextually relevant items weighted by current focus.
-
-
 
         Args:
 
@@ -672,21 +578,15 @@ class AssociativeMemory:
 
             collection: Override the default collection
 
-
-
         Returns:
 
             List of Items ordered by relevance to current work.
-
-
 
         Example:
 
             # What's relevant right now?
 
             items = mem.top_of_mind()
-
-
 
             # What's relevant about auth specifically?
 
@@ -707,11 +607,7 @@ class AssociativeMemory:
 
         Get recently updated items.
 
-
-
         Simple temporal retrieval, ordered by update time (newest first).
-
-
 
         Args:
 
@@ -721,21 +617,15 @@ class AssociativeMemory:
 
             collection: Override the default collection
 
-
-
         Returns:
 
             List of Items ordered by recency.
-
-
 
         Example:
 
             # Last 20 items
 
             items = mem.recent()
-
-
 
             # Items from today
 
@@ -756,11 +646,7 @@ class AssociativeMemory:
 
         List all topics that have been identified in the collection.
 
-
-
         Topics are derived from the `_topic` system tag on items.
-
-
 
         Returns:
 
@@ -780,13 +666,9 @@ class AssociativeMemory:
 
         Get a summary of items within a topic.
 
-
-
         Topic summaries are "Level 2" in the hierarchy — they aggregate
 
         multiple items without requiring retrieval of all of them.
-
-
 
         Args:
 
@@ -794,13 +676,9 @@ class AssociativeMemory:
 
             collection: Override the default collection
 
-
-
         Returns:
 
             TopicSummary with overview and key items, or None if topic doesn't exist.
-
-
 
         Example:
 
@@ -824,21 +702,15 @@ class AssociativeMemory:
 
         Regenerate the summary for a topic.
 
-
-
         Call this after significant changes to items in the topic.
 
         Uses the summarization provider to create an aggregate summary.
-
-
 
         Args:
 
             topic: Topic name to summarize
 
             collection: Override the default collection
-
-
 
         Returns:
 
@@ -859,21 +731,15 @@ class AssociativeMemory:
 
         Get the current routing configuration.
 
-
-
         Routing controls how items are directed to private vs shared stores.
 
         The routing document (`_system:routing`) is itself stored in the
 
         shared store and can be queried/updated like any other document.
 
-
-
         Returns:
 
             The current RoutingContext.
-
-
 
         Example:
 
@@ -890,13 +756,9 @@ class AssociativeMemory:
 
         Get a system document by name.
 
-
-
         System documents control the store's behavior. They are stored
 
         as regular items with IDs like `_system:{name}`.
-
-
 
         Well-known system documents:
 
@@ -906,19 +768,13 @@ class AssociativeMemory:
 
         - `guidance`: Local behavioral guidance
 
-
-
         Args:
 
             name: System document name (without `_system:` prefix)
 
-
-
         Returns:
 
             The system document as an Item, or None if not found.
-
-
 
         Example:
 
@@ -933,13 +789,9 @@ class AssociativeMemory:
 
         List all system documents in the store.
 
-
-
         Returns:
 
             List of system document Items.
-
-
 
         Example:
 

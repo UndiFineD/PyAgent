@@ -5,7 +5,6 @@
 
 from typing import Optional
 
-
 from evoagentx.core.logging import logger
 
 from evoagentx.models.base_model import BaseLLM
@@ -20,13 +19,11 @@ from llama_index.core.graph_stores.types import GraphStore
 
 from llama_index.core.indices.base import BaseIndex
 
-
 from .base import BaseRetrieverWrapper, RetrieverType
 
 from .graph_retriever import GraphRetriever
 
 from .vector_retriever import VectorRetriever
-
 
 __all__ = [
     "VectorRetriever",

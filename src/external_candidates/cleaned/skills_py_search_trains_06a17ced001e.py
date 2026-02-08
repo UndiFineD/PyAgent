@@ -17,7 +17,6 @@ import argparse
 
 import sys
 
-
 from utils import (
     RateLimiter,
     format_train_info,
@@ -35,15 +34,11 @@ def search_trains(credentials, args):
 
     Search for available trains.
 
-
-
     Args:
 
         credentials: dict with phone and password
 
         args: argparse namespace with search parameters
-
-
 
     Returns:
 

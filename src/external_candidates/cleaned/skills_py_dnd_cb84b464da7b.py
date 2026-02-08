@@ -27,7 +27,6 @@ import urllib.request
 
 from typing import Dict, List, Optional
 
-
 API_BASE = "https://www.dnd5eapi.co/api"
 
 

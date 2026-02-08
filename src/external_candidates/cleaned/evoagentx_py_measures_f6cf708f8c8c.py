@@ -13,19 +13,15 @@ from collections import Counter
 
 from typing import List
 
-
 import regex
 
-
 from ..core.logging import logger
-
 
 # --------------------------
 
 # QA Metrics
 
 # --------------------------
-
 
 # Normalization from SQuAD evaluation script https://worksheets.codalab.org/rest/bundles/0x6b567e1cf2e041ec80d7098f031c5c9e/contents/blob/
 
@@ -162,8 +158,6 @@ class Tokens(object):
     def words(self, uncased=False):
         """Returns a list of the text of each token
 
-
-
         Args:
 
             uncased: lower cases text
@@ -219,8 +213,6 @@ class Tokens(object):
 
     def ngrams(self, n=1, uncased=False, filter_fn=None, as_strings=True):
         """Returns a list of all ngrams from length 1 to n.
-
-
 
         Args:
 

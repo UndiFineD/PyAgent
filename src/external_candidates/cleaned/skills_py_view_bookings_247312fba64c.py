@@ -17,7 +17,6 @@ import argparse
 
 import sys
 
-
 from utils import (
     format_reservation_info,
     handle_error,
@@ -32,13 +31,9 @@ def view_bookings(credentials):
 
     View all current reservations.
 
-
-
     Args:
 
         credentials: dict with phone and password
-
-
 
     Returns:
 

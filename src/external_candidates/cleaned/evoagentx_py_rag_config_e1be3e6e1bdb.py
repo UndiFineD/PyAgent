@@ -5,11 +5,9 @@
 
 from typing import Any, Callable, Dict, List, Optional
 
-
 from evoagentx.core.base_config import BaseConfig, BaseModule
 
 from pydantic import Field
-
 
 from .chunkers.base import ChunkingStrategy
 

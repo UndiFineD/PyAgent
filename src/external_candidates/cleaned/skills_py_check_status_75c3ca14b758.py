@@ -13,11 +13,9 @@ import sys
 
 from pathlib import Path
 
-
 sys.path.insert(0, str(Path(__file__).parent))
 
 from moltgov_core import CitizenClass, MoltGovClient, MoltGovError
-
 
 CLASS_NAMES = {1: "Hatchling", 2: "Citizen", 3: "Delegate", 4: "Senator", 5: "Consul"}
 

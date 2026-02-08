@@ -22,8 +22,6 @@ class PowerShellScriptGenerator:
 
         Initialize generator with tenant domain.
 
-
-
         Args:
 
             tenant_domain: Primary domain of the Microsoft 365 tenant
@@ -37,13 +35,9 @@ class PowerShellScriptGenerator:
 
         Generate script to create Conditional Access policy.
 
-
-
         Args:
 
             policy_config: Policy configuration parameters
-
-
 
         Returns:
 
@@ -65,8 +59,6 @@ class PowerShellScriptGenerator:
 
     Create Conditional Access Policy: {policy_name}
 
-
-
 .DESCRIPTION
 
     Creates a Conditional Access policy with specified settings.
@@ -75,19 +67,13 @@ class PowerShellScriptGenerator:
 
 #>
 
-
-
 # Connect to Microsoft Graph
 
 Connect-MgGraph -Scopes "Policy.ReadWrite.ConditionalAccess"
 
-
-
 # Define policy parameters
 
 $policyName = "{policy_name}"
-
-
 
 # Create Conditional Access Policy
 
@@ -122,8 +108,6 @@ $conditions = @{{
 
 }
 
-
-
 $grantControls = @{
 
 """
@@ -137,8 +121,6 @@ $grantControls = @{
 
         script += """}
 
-
-
 $policy = @{
 
     DisplayName = $policyName
@@ -150,8 +132,6 @@ $policy = @{
     GrantControls = $grantControls
 
 }
-
-
 
 try {
 
@@ -179,8 +159,6 @@ try {
 
 }
 
-
-
 Disconnect-MgGraph
 
 """
@@ -191,8 +169,6 @@ Disconnect-MgGraph
         """
 
         Generate comprehensive security audit script.
-
-
 
         Returns:
 
@@ -206,15 +182,11 @@ Disconnect-MgGraph
 
     Microsoft 365 Security Audit Report
 
-
-
 .DESCRIPTION
 
     Performs comprehensive security audit and generates detailed report.
 
     Checks: MFA status, admin accounts, inactive users, permissions, licenses
-
-
 
 .OUTPUTS
 
@@ -222,15 +194,11 @@ Disconnect-MgGraph
 
 #>
 
-
-
 # Connect to services
 
 Connect-MgGraph -Scopes "Directory.Read.All", "User.Read.All", "AuditLog.Read.All"
 
 Connect-ExchangeOnline
-
-
 
 $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
 
@@ -238,33 +206,23 @@ $reportPath = "SecurityAudit_$timestamp"
 
 New-Item -ItemType Directory -Path $reportPath -Force | Out-Null
 
-
-
 Write-Host "Starting Security Audit..." -ForegroundColor Cyan
 
 Write-Host ""
-
-
 
 # 1. Check MFA Status
 
 Write-Host "[1/7] Checking MFA status for all users..." -ForegroundColor Yellow
 
-
-
 $mfaReport = @()
 
 $users = Get-MgUser -All -Property Id,DisplayName,UserPrincipalName,AccountEnabled
-
-
 
 foreach ($user in $users) {
 
     $authMethods = Get-MgUserAuthenticationMethod -UserId $user.Id
 
     $hasMFA = $authMethods.Count -gt 1  # More than just password
-
-
 
     $mfaReport += [PSCustomObject]@{
 
@@ -282,27 +240,19 @@ foreach ($user in $users) {
 
 }
 
-
-
 $mfaReport | Export-Csv -Path "$reportPath/MFA_Status.csv" -NoTypeInformation
 
 $usersWithoutMFA = ($mfaReport | Where-Object { $_.MFAEnabled -eq $false -and $_.AccountEnabled -eq $true }).Count
 
 Write-Host "  Users without MFA: $usersWithoutMFA" -ForegroundColor $(if($usersWithoutMFA -gt 0){'Red'}else{'Green'})
 
-
-
 # 2. Check Admin Accounts
 
 Write-Host "[2/7] Auditing admin role assignments..." -ForegroundColor Yellow
 
-
-
 $adminRoles = Get-MgDirectoryRole -All
 
 $adminReport = @()
-
-
 
 foreach ($role in $adminRoles) {
 
@@ -332,33 +282,23 @@ foreach ($role in $adminRoles) {
 
 }
 
-
-
 $adminReport | Export-Csv -Path "$reportPath/Admin_Roles.csv" -NoTypeInformation
 
 Write-Host "  Total admin assignments: $($adminReport.Count)" -ForegroundColor Cyan
-
-
 
 # 3. Check Inactive Users
 
 Write-Host "[3/7] Identifying inactive users (90+ days)..." -ForegroundColor Yellow
 
-
-
 $inactiveDate = (Get-Date).AddDays(-90)
 
 $inactiveUsers = @()
-
-
 
 foreach ($user in $users) {
 
     $signIns = Get-MgAuditLogSignIn -Filter "userId eq '$($user.Id)'" -Top 1
 
     $lastSignIn = if ($signIns) { $signIns[0].CreatedDateTime } else { $null }
-
-
 
     if ($lastSignIn -and $lastSignIn -lt $inactiveDate -and $user.AccountEnabled) {
 
@@ -378,43 +318,29 @@ foreach ($user in $users) {
 
 }
 
-
-
 $inactiveUsers | Export-Csv -Path "$reportPath/Inactive_Users.csv" -NoTypeInformation
 
 Write-Host "  Inactive users found: $($inactiveUsers.Count)" -ForegroundColor $(if($inactiveUsers.Count -gt 0){'Yellow'}else{'Green'})
-
-
 
 # 4. Check Guest Users
 
 Write-Host "[4/7] Reviewing guest user access..." -ForegroundColor Yellow
 
-
-
 $guestUsers = Get-MgUser -Filter "userType eq 'Guest'" -All
 
 $guestReport = $guestUsers | Select-Object UserPrincipalName, DisplayName, AccountEnabled, CreatedDateTime
-
-
 
 $guestReport | Export-Csv -Path "$reportPath/Guest_Users.csv" -NoTypeInformation
 
 Write-Host "  Guest users: $($guestUsers.Count)" -ForegroundColor Cyan
 
-
-
 # 5. Check License Usage
 
 Write-Host "[5/7] Analyzing license allocation..." -ForegroundColor Yellow
 
-
-
 $licenses = Get-MgSubscribedSku
 
 $licenseReport = @()
-
-
 
 foreach ($license in $licenses) {
 
@@ -434,33 +360,23 @@ foreach ($license in $licenses) {
 
 }
 
-
-
 $licenseReport | Export-Csv -Path "$reportPath/License_Usage.csv" -NoTypeInformation
 
 Write-Host "  License SKUs analyzed: $($licenses.Count)" -ForegroundColor Cyan
-
-
 
 # 6. Check Mailbox Permissions
 
 Write-Host "[6/7] Auditing mailbox delegations..." -ForegroundColor Yellow
 
-
-
 $mailboxes = Get-Mailbox -ResultSize Unlimited
 
 $delegationReport = @()
-
-
 
 foreach ($mailbox in $mailboxes) {
 
     $permissions = Get-MailboxPermission -Identity $mailbox.Identity |
 
                    Where-Object { $_.User -ne "NT AUTHORITY\SELF" -and $_.IsInherited -eq $false }
-
-
 
     foreach ($perm in $permissions) {
 
@@ -478,19 +394,13 @@ foreach ($mailbox in $mailboxes) {
 
 }
 
-
-
 $delegationReport | Export-Csv -Path "$reportPath/Mailbox_Delegations.csv" -NoTypeInformation
 
 Write-Host "  Delegated mailboxes: $($delegationReport.Count)" -ForegroundColor Cyan
 
-
-
 # 7. Check Conditional Access Policies
 
 Write-Host "[7/7] Reviewing Conditional Access policies..." -ForegroundColor Yellow
-
-
 
 $caPolicies = Get-MgIdentityConditionalAccessPolicy
 
@@ -500,13 +410,9 @@ $caReport = $caPolicies | Select-Object DisplayName, State, CreatedDateTime,
 
                                          @{N='RequiresMFA';E={$_.GrantControls.BuiltInControls -contains 'mfa'}}
 
-
-
 $caReport | Export-Csv -Path "$reportPath/ConditionalAccess_Policies.csv" -NoTypeInformation
 
 Write-Host "  Conditional Access policies: $($caPolicies.Count)" -ForegroundColor Cyan
-
-
 
 # Generate Summary Report
 
@@ -570,8 +476,6 @@ if ($guestUsers.Count -gt 10) {
 
 }
 
-
-
 # Disconnect
 
 Disconnect-MgGraph
@@ -587,15 +491,11 @@ Disconnect-ExchangeOnline -Confirm:$false
 
         Generate script for bulk license assignment from CSV.
 
-
-
         Args:
 
             users_csv_path: Path to CSV with user emails
 
             license_sku: License SKU to assign
-
-
 
         Returns:
 
@@ -609,23 +509,17 @@ Disconnect-ExchangeOnline -Confirm:$false
 
     Bulk License Assignment from CSV
 
-
-
 .DESCRIPTION
 
     Assigns {license_sku} license to users listed in CSV file.
 
     CSV must have 'UserPrincipalName' column.
 
-
-
 .PARAMETER CsvPath
 
     Path to CSV file with user list
 
 #>
-
-
 
 param(
 
@@ -635,21 +529,15 @@ param(
 
 )
 
-
-
 # Connect to Microsoft Graph
 
 Connect-MgGraph -Scopes "User.ReadWrite.All", "Directory.ReadWrite.All"
-
-
 
 # Get license SKU ID
 
 $targetSku = "{license_sku}"
 
 $licenseSkuId = (Get-MgSubscribedSku -All | Where-Object {{$_.SkuPartNumber -eq $targetSku}}).SkuId
-
-
 
 if (-not $licenseSkuId) {{
 
@@ -659,21 +547,15 @@ if (-not $licenseSkuId) {{
 
 }}
 
-
-
 Write-Host "License SKU found: $targetSku" -ForegroundColor Green
 
 Write-Host "SKU ID: $licenseSkuId" -ForegroundColor Cyan
 
 Write-Host ""
 
-
-
 # Import users from CSV
 
 $users = Import-Csv -Path $CsvPath
-
-
 
 if (-not $users) {{
 
@@ -683,13 +565,9 @@ if (-not $users) {{
 
 }}
 
-
-
 Write-Host "Found $($users.Count) users in CSV" -ForegroundColor Cyan
 
 Write-Host ""
-
-
 
 # Process each user
 
@@ -699,21 +577,15 @@ $errorCount = 0
 
 $results = @()
 
-
-
 foreach ($user in $users) {{
 
     $userEmail = $user.UserPrincipalName
-
-
 
     try {{
 
         # Get user
 
         $mgUser = Get-MgUser -UserId $userEmail -ErrorAction Stop
-
-
 
         # Check if user already has license
 
@@ -737,8 +609,6 @@ foreach ($user in $users) {{
 
         }}
 
-
-
         # Assign license
 
         $licenseParams = @{{
@@ -755,13 +625,9 @@ foreach ($user in $users) {{
 
         }}
 
-
-
         Set-MgUserLicense -UserId $mgUser.Id -BodyParameter $licenseParams
 
         Write-Host "  ✓ $userEmail - License assigned successfully" -ForegroundColor Green
-
-
 
         $successCount++
 
@@ -774,8 +640,6 @@ foreach ($user in $users) {{
             Message = "License assigned"
 
         }}
-
-
 
     }} catch {{
 
@@ -797,15 +661,11 @@ foreach ($user in $users) {{
 
 }}
 
-
-
 # Export results
 
 $resultsPath = "LicenseAssignment_Results_$(Get-Date -Format 'yyyyMMdd_HHmmss').csv"
 
 $results | Export-Csv -Path $resultsPath -NoTypeInformation
-
-
 
 # Summary
 
@@ -822,8 +682,6 @@ Write-Host "Errors: $errorCount" -ForegroundColor $(if($errorCount -gt 0){{'Red'
 Write-Host ""
 
 Write-Host "Results saved to: $resultsPath" -ForegroundColor Cyan
-
-
 
 # Disconnect
 

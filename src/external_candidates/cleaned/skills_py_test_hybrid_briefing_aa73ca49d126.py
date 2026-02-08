@@ -15,14 +15,11 @@ import sys
 
 from pathlib import Path
 
-
 import pytest
-
 
 # Add scripts dir to path for imports
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
-
 
 from briefing import (
     Baseline,

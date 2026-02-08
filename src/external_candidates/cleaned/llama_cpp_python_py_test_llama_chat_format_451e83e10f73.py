@@ -5,7 +5,6 @@
 
 import json
 
-
 import jinja2
 
 import llama_cpp.llama_chat_format as llama_chat_format

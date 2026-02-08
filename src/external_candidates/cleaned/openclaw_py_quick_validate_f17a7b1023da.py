@@ -17,9 +17,7 @@ import sys
 
 from pathlib import Path
 
-
 import yaml
-
 
 MAX_SKILL_NAME_LENGTH = 64
 

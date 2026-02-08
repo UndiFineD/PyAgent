@@ -5,7 +5,6 @@
 
 from __future__ import annotations
 
-
 import abc
 
 import inspect
@@ -18,11 +17,9 @@ from dataclasses import dataclass
 
 from typing import Any, Callable, Dict, List, Tuple
 
-
 # Regular expression to match indexing expressions like foo[0] or bar["key"]
 
 _INDEX_RE = re.compile(r"^(.*?)\[(.*?)\]$")
-
 
 # ─────────────────────────────────────────────────────────────
 

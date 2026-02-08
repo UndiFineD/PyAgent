@@ -7,8 +7,6 @@
 
 """RATP/IDFM — Transports en commun Île-de-France via l'API PRIM.
 
-
-
 Usage:
 
     python3 ratp.py traffic
@@ -18,8 +16,6 @@ Usage:
     python3 ratp.py traffic --line "RER A"
 
     python3 ratp.py next "Châtelet"
-
-
 
 Nécessite IDFM_API_KEY (gratuit sur https://prim.iledefrance-mobilites.fr).
 
@@ -42,7 +38,6 @@ import urllib.request
 import xml.etree.ElementTree as ET
 
 from datetime import datetime
-
 
 API_BASE = "https://prim.iledefrance-mobilites.fr/marketplace"
 

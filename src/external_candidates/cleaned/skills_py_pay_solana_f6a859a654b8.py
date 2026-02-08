@@ -9,29 +9,19 @@
 
 x402 Payment - Solana Network
 
-
-
 Pay for API access using USDC on Solana via SPL Token transfers.
-
-
 
 Note: Solana payments have ~75% success rate due to facilitator infrastructure.
 
 Retry logic is recommended. For maximum reliability, use Base (EVM) payments.
 
-
-
 Usage:
 
     python pay_solana.py <endpoint_url>
 
-
-
 Environment Variables:
 
     SOLANA_SECRET_KEY - Your Solana secret key as JSON array [1,2,3,...]
-
-
 
 Dependencies:
 
@@ -49,7 +39,6 @@ import struct
 
 import sys
 
-
 import requests
 
 from solders.compute_budget import set_compute_unit_limit, set_compute_unit_price
@@ -65,7 +54,6 @@ from solders.message import MessageV0
 from solders.pubkey import Pubkey
 
 from solders.transaction import VersionedTransaction
-
 
 # Constants
 

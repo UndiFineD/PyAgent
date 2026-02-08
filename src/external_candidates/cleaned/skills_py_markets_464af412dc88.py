@@ -17,11 +17,9 @@ import sys
 
 from pathlib import Path
 
-
 # Add parent to path for lib imports
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-
 
 from lib.gamma_client import GammaClient
 

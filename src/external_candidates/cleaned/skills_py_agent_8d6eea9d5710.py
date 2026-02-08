@@ -5,7 +5,6 @@
 
 from memory import SimpleMemory
 
-
 from tools import TOOLS
 
 

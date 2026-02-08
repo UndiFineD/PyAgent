@@ -11,7 +11,6 @@ from llama_index.core.indices.base import BaseIndex
 
 from llama_index.core.retrievers import VectorIndexRetriever
 
-
 from .base import BaseRetrieverWrapper
 
 

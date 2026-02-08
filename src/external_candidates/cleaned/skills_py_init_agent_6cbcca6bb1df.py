@@ -23,7 +23,6 @@ import sys
 
 from pathlib import Path
 
-
 TEMPLATES = {
     "typescript": {
         "name": "TypeScript Agent",
@@ -124,21 +123,15 @@ OPENAI_API_KEY=your_openai_key_here
 
 OPENAI_MODEL=gpt-4
 
-
-
 # LangSmith Configuration (required for LangSmith Deployments deployment)
 
 LANGSMITH_API_KEY=your_langsmith_key_here
-
-
 
 # Agent Configuration
 
 PORT=8000
 
 NODE_ENV=development
-
-
 
 # Add your API keys here
 
@@ -160,8 +153,6 @@ dist/
 
 import { ChatOpenAI } from "@langchain/openai";
 
-
-
 // Define the agent state
 
 interface AgentState {
@@ -173,8 +164,6 @@ interface AgentState {
   error?: string;
 
 }
-
-
 
 // Main agent logic
 
@@ -190,13 +179,9 @@ async function processRequest(state: AgentState): Promise<Partial<AgentState>> {
 
     });
 
-    
-
     // TODO: Implement your agent logic here
 
     const response = await llm.invoke(state.input);
-
-    
 
     return { output: response.content as string };
 
@@ -207,8 +192,6 @@ async function processRequest(state: AgentState): Promise<Partial<AgentState>> {
   }
 
 }
-
-
 
 // Build the graph
 
@@ -226,30 +209,20 @@ const workflow = new StateGraph<AgentState>({
 
 });
 
-
-
 workflow.addNode("process", processRequest);
 
 workflow.setEntryPoint("process");
 
 workflow.addEdge("process", END);
 
-
-
 export const agent = workflow.compile();
 
 """,
             "README.md": """# {agent_name}
 
-
-
 {description}
 
-
-
 ## Setup
-
-
 
 1. Install dependencies:
 
@@ -259,8 +232,6 @@ npm install
 
 ```
 
-
-
 2. Copy `.env.example` to `.env` and add your API keys:
 
 ```bash
@@ -268,8 +239,6 @@ npm install
 cp .env.example .env
 
 ```
-
-
 
 3. Run development server:
 
@@ -279,11 +248,7 @@ npm run dev
 
 ```
 
-
-
 ## Testing
-
-
 
 Test the agent API:
 
@@ -297,11 +262,7 @@ curl -X POST http://localhost:8000/invoke \\
 
 ```
 
-
-
 ## Deployment
-
-
 
 Deploy to LangSmith Deployments:
 
@@ -311,11 +272,7 @@ Deploy to LangSmith Deployments:
 
 3. Set environment variables and deploy
 
-
-
 ## Requirements
-
-
 
 - Node.js 18+
 
@@ -323,11 +280,7 @@ Deploy to LangSmith Deployments:
 
 - LangGraph CLI (optional, for local dev)
 
-
-
 ## License
-
-
 
 MIT
 
@@ -370,19 +323,13 @@ OPENAI_API_KEY=your_openai_key_here
 
 OPENAI_MODEL=gpt-4
 
-
-
 # LangSmith Configuration (required for LangSmith Deployments deployment)
 
 LANGSMITH_API_KEY=your_langsmith_key_here
 
-
-
 # Agent Configuration
 
 PORT=8000
-
-
 
 # Add your API keys here
 
@@ -411,8 +358,6 @@ from typing import TypedDict, Optional
 
 import os
 
-
-
 # Define the agent state
 
 class AgentState(TypedDict):
@@ -422,8 +367,6 @@ class AgentState(TypedDict):
     output: Optional[str]
 
     error: Optional[str]
-
-
 
 # Main agent logic
 
@@ -439,21 +382,15 @@ async def process_request(state: AgentState) -> AgentState:
 
         )
 
-        
-
         # TODO: Implement your agent logic here
 
         response = await llm.ainvoke(state["input"])
-
-        
 
         return {"output": response.content}
 
     except Exception as e:
 
         return {"error": str(e)}
-
-
 
 # Build the graph
 
@@ -465,22 +402,14 @@ workflow.set_entry_point("process")
 
 workflow.add_edge("process", END)
 
-
-
 agent = workflow.compile()
 
 """,
             "README.md": """# {agent_name}
 
-
-
 {description}
 
-
-
 ## Setup
-
-
 
 1. Create virtual environment:
 
@@ -492,8 +421,6 @@ source venv/bin/activate  # On Windows: venv\\Scripts\\activate
 
 ```
 
-
-
 2. Install dependencies:
 
 ```bash
@@ -501,8 +428,6 @@ source venv/bin/activate  # On Windows: venv\\Scripts\\activate
 pip install -r requirements.txt
 
 ```
-
-
 
 3. Copy `.env.example` to `.env` and add your API keys:
 
@@ -512,8 +437,6 @@ cp .env.example .env
 
 ```
 
-
-
 4. Run development server:
 
 ```bash
@@ -522,11 +445,7 @@ langgraph dev
 
 ```
 
-
-
 ## Testing
-
-
 
 Test the agent API:
 
@@ -540,11 +459,7 @@ curl -X POST http://localhost:8000/invoke \\
 
 ```
 
-
-
 ## Deployment
-
-
 
 Deploy to LangSmith Deployments:
 
@@ -554,11 +469,7 @@ Deploy to LangSmith Deployments:
 
 3. Set environment variables and deploy
 
-
-
 ## Requirements
-
-
 
 - Python 3.11+
 
@@ -566,11 +477,7 @@ Deploy to LangSmith Deployments:
 
 - LangGraph CLI (optional, for local dev)
 
-
-
 ## License
-
-
 
 MIT
 

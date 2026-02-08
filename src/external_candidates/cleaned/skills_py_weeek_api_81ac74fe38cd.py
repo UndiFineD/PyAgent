@@ -15,7 +15,6 @@ import urllib.parse
 
 import urllib.request
 
-
 BASE_URL = "https://api.weeek.net/public/v1"
 
 
@@ -225,7 +224,6 @@ parser = argparse.ArgumentParser(description="WEEEK Public API (tasks/boards/col
 
 sub = parser.add_subparsers(dest="cmd", required=True)
 
-
 p = sub.add_parser("list-tasks")
 
 p.add_argument("--day")
@@ -262,7 +260,6 @@ p.add_argument("--all")
 
 p.set_defaults(func=cmd_list_tasks)
 
-
 p = sub.add_parser("create-task")
 
 p.add_argument("--title", required=True)
@@ -293,7 +290,6 @@ p.add_argument("--board-column-id", type=int)
 
 p.set_defaults(func=cmd_create_task)
 
-
 p = sub.add_parser("update-task")
 
 p.add_argument("id", type=int)
@@ -320,20 +316,17 @@ p.add_argument("--custom-fields-json")
 
 p.set_defaults(func=cmd_update_task)
 
-
 p = sub.add_parser("complete-task")
 
 p.add_argument("id", type=int)
 
 p.set_defaults(func=cmd_complete)
 
-
 p = sub.add_parser("uncomplete-task")
 
 p.add_argument("id", type=int)
 
 p.set_defaults(func=cmd_uncomplete)
-
 
 p = sub.add_parser("move-board")
 
@@ -343,7 +336,6 @@ p.add_argument("--board-id", type=int, required=True)
 
 p.set_defaults(func=cmd_move_board)
 
-
 p = sub.add_parser("move-board-column")
 
 p.add_argument("id", type=int)
@@ -352,11 +344,9 @@ p.add_argument("--board-column-id", type=int, required=True)
 
 p.set_defaults(func=cmd_move_board_column)
 
-
 p = sub.add_parser("list-projects")
 
 p.set_defaults(func=cmd_list_projects)
-
 
 p = sub.add_parser("list-boards")
 
@@ -364,13 +354,11 @@ p.add_argument("--project-id", type=int)
 
 p.set_defaults(func=cmd_list_boards)
 
-
 p = sub.add_parser("list-board-columns")
 
 p.add_argument("--board-id", type=int, required=True)
 
 p.set_defaults(func=cmd_list_board_columns)
-
 
 args = parser.parse_args()
 

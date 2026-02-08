@@ -9,7 +9,6 @@ import unittest
 
 from typing import Dict, List, Optional, Union
 
-
 from evoagentx.core.module import BaseModule
 
 from pydantic import Field, field_validator
@@ -185,8 +184,6 @@ class TestModule(unittest.TestCase):
 
         there might be some text before the json data. 
 
-
-
         an irrelevant json data:
 
         {
@@ -196,8 +193,6 @@ class TestModule(unittest.TestCase):
             "k3": 11, 
 
         }
-
-
 
         true json data: 
 
@@ -222,8 +217,6 @@ class TestModule(unittest.TestCase):
             }
 
         }
-
-        
 
         some text after the json data. 
 

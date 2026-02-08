@@ -9,11 +9,9 @@ import shutil
 
 import time
 
-
 import google.generativeai as genai
 
 from PIL import Image
-
 
 # Config
 
@@ -23,20 +21,16 @@ STICKER_DIR = "/home/crishaocredits/.openclaw/media/stickers"
 
 TRASH_DIR = "/home/crishaocredits/.openclaw/media/stickers/trash"
 
-
 if not API_KEY:
     print("Error: GEMINI_API_KEY not found in environment.")
 
     sys.exit(1)
 
-
 genai.configure(api_key=API_KEY)
-
 
 # Use Gemini 1.5 Flash for speed and cost efficiency
 
 model = genai.GenerativeModel("gemini-1.5-flash")
-
 
 if not os.path.exists(TRASH_DIR):
     os.makedirs(TRASH_DIR)
@@ -54,8 +48,6 @@ def analyze_image(file_path):
 
         Analyze this image. Is it a "sticker" or "meme" suitable for use in a chat conversation as a reaction?
 
-        
-
         It is NOT a sticker if it is:
 
         - A screenshot of a UI, document, or conversation.
@@ -66,8 +58,6 @@ def analyze_image(file_path):
 
         - Too blurry or cropped.
 
-        
-
         It IS a sticker if it is:
 
         - A cartoon character, anime face, or funny animal.
@@ -75,8 +65,6 @@ def analyze_image(file_path):
         - Has text overlay (meme style) or no text.
 
         - Simple, expressive, and meant for emotion.
-
-        
 
         Reply with JSON ONLY: {"is_sticker": boolean, "reason": "short explanation"}
 
@@ -92,13 +80,11 @@ def analyze_image(file_path):
 
 print(f"Scanning {STICKER_DIR}...")
 
-
 files = [f for f in os.listdir(STICKER_DIR) if os.path.isfile(os.path.join(STICKER_DIR, f))]
 
 files = [
     f for f in files if f.lower().endswith((".png", ".jpg", ".jpeg", ".webp"))
 ]  # Skip GIF for analysis to avoid crash risk, handle later
-
 
 for file in files:
     full_path = os.path.join(STICKER_DIR, file)
@@ -122,6 +108,5 @@ for file in files:
         shutil.move(full_path, os.path.join(TRASH_DIR, file))
 
     time.sleep(1)  # Rate limit safety
-
 
 print("Analysis complete.")

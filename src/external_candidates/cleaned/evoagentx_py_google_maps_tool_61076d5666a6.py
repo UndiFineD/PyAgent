@@ -7,8 +7,6 @@
 
 Google Maps Platform API Tool for EvoAgentX
 
-
-
 This module provides comprehensive Google Maps Platform integration including:
 
 - Geocoding API: Convert addresses to coordinates and vice versa
@@ -18,8 +16,6 @@ This module provides comprehensive Google Maps Platform integration including:
 - Routes API: Calculate directions and distance matrices
 
 - Time Zone API: Get time zone information for locations
-
-
 
 Compatible with EvoAgentX tool architecture and follows the latest Google Maps Platform APIs.
 
@@ -31,9 +27,7 @@ import os
 
 from typing import Any, Dict, List
 
-
 import requests
-
 
 from ..core.logging import logger
 
@@ -55,8 +49,6 @@ class GoogleMapsBase(BaseModule):
         """
 
         Initialize the Google Maps base.
-
-
 
         Args:
 
@@ -89,15 +81,11 @@ class GoogleMapsBase(BaseModule):
 
         Make a request to Google Maps Platform API.
 
-
-
         Args:
 
             endpoint (str): API endpoint
 
             params (dict): Request parameters
-
-
 
         Returns:
 
@@ -209,8 +197,6 @@ class GeocodeAddressTool(Tool):
 
         Geocode an address to coordinates.
 
-
-
         Args:
 
             address: Street address to geocode
@@ -218,8 +204,6 @@ class GeocodeAddressTool(Tool):
             components: Optional component filters
 
             region: Optional region bias
-
-
 
         Returns:
 
@@ -291,8 +275,6 @@ class ReverseGeocodeTool(Tool):
 
         Reverse geocode coordinates to address.
 
-
-
         Args:
 
             latitude: Latitude coordinate
@@ -300,8 +282,6 @@ class ReverseGeocodeTool(Tool):
             longitude: Longitude coordinate
 
             result_type: Optional result type filter
-
-
 
         Returns:
 
@@ -387,8 +367,6 @@ class PlacesSearchTool(Tool):
 
         Search for places using text query.
 
-
-
         Args:
 
             query: Text search query
@@ -398,8 +376,6 @@ class PlacesSearchTool(Tool):
             radius: Optional search radius in meters
 
             type: Optional place type filter
-
-
 
         Returns:
 
@@ -483,15 +459,11 @@ class PlaceDetailsTool(Tool):
 
         Get detailed place information.
 
-
-
         Args:
 
             place_id: Unique place identifier
 
             fields: Optional fields to return
-
-
 
         Returns:
 
@@ -588,8 +560,6 @@ class DirectionsTool(Tool):
 
         Calculate directions between locations.
 
-
-
         Args:
 
             origin: Starting location
@@ -601,8 +571,6 @@ class DirectionsTool(Tool):
             waypoints: Optional waypoints
 
             alternatives: Return alternative routes
-
-
 
         Returns:
 
@@ -738,8 +706,6 @@ class DistanceMatrixTool(Tool):
 
         Calculate distance matrix.
 
-
-
         Args:
 
             origins: Origin locations separated by '|'
@@ -749,8 +715,6 @@ class DistanceMatrixTool(Tool):
             mode: Travel mode
 
             units: Unit system
-
-
 
         Returns:
 
@@ -841,8 +805,6 @@ class TimeZoneTool(Tool):
 
         Get time zone information.
 
-
-
         Args:
 
             latitude: Latitude coordinate
@@ -850,8 +812,6 @@ class TimeZoneTool(Tool):
             longitude: Longitude coordinate
 
             timestamp: Optional Unix timestamp
-
-
 
         Returns:
 
@@ -901,8 +861,6 @@ class GoogleMapsToolkit(Toolkit):
         """
 
         Initialize the Google Maps toolkit.
-
-
 
         Args:
 

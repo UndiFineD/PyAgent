@@ -11,8 +11,6 @@ from pydantic import BaseModel
 class HeuristicQualityJudge:
     """A rule-based agent for evaluating document quality based on simple heuristics.
 
-
-
     Evaluates document quality by analyzing the ratio of URL content to total content length.
 
     Documents with high URL content ratios receive lower quality scores.
@@ -22,13 +20,9 @@ class HeuristicQualityJudge:
     def __call__(self, documents: list[Document]) -> list[Document]:
         """Process documents for quality scoring using heuristic rules.
 
-
-
         Args:
 
             documents: List of Document objects to evaluate based on URL content ratio.
-
-
 
         Returns:
 
@@ -45,13 +39,9 @@ class HeuristicQualityJudge:
     def __score_document(self, document: Document) -> Document:
         """Score a single document based on URL content ratio.
 
-
-
         Args:
 
             document: The Document object to score.
-
-
 
         Returns:
 
@@ -71,8 +61,6 @@ class HeuristicQualityJudge:
 class QualityScoreResponseFormat(BaseModel):
     """Format for quality score responses from the language model.
 
-
-
     Attributes:
 
         score: A float between 0.0 and 1.0 representing the quality score.
@@ -85,13 +73,9 @@ class QualityScoreResponseFormat(BaseModel):
 class QualityScoreJudge:
     """Evaluates the quality of documents using LiteLLM with async support.
 
-
-
     Uses language models through LiteLLM to evaluate document quality based on relevance,
 
     factual accuracy, and information coherence.
-
-
 
     Attributes:
 
@@ -101,8 +85,6 @@ class QualityScoreJudge:
 
     SYSTEM_PROMPT_TEMPLATE = """You are an expert judge tasked with evaluating the quality of a given DOCUMENT.
 
-
-
 Guidelines:
 
 1. Evaluate the DOCUMENT based on generally accepted facts and reliable information.
@@ -110,8 +92,6 @@ Guidelines:
 2. Evaluate that the DOCUMENT contains relevant information and not only links or error messages.
 
 3. Check that the DOCUMENT doesn't oversimplify or generalize information in a way that changes its meaning or accuracy.
-
-
 
 Analyze the text thoroughly and assign a quality score between 0 and 1, where:
 
@@ -121,8 +101,6 @@ Analyze the text thoroughly and assign a quality score between 0 and 1, where:
 
 - **0.8 - 1.0**: The DOCUMENT is entirely relevant containing all relevant information following the guidelines
 
-
-
 It is crucial that you return only the score in the following JSON format:
 
 {{
@@ -130,8 +108,6 @@ It is crucial that you return only the score in the following JSON format:
     "score": <your score between 0.0 and 1.0>
 
 }}
-
-
 
 DOCUMENT:
 
@@ -148,13 +124,9 @@ DOCUMENT:
     def __call__(self, documents: list[Document]) -> list[Document]:
         """Process a batch of documents for quality scoring.
 
-
-
         Args:
 
             documents: List of Document objects to evaluate for quality.
-
-
 
         Returns:
 
@@ -171,13 +143,9 @@ DOCUMENT:
     def __score_document(self, document: Document) -> Document:
         """Generate a quality score for a single document.
 
-
-
         Args:
 
             document: The Document object to evaluate.
-
-
 
         Returns:
 
@@ -196,15 +164,11 @@ DOCUMENT:
     def _parse_model_output(self, answer: str | None) -> QualityScoreResponseFormat | None:
         """Parse the model's output into a structured format.
 
-
-
         Args:
 
             answer: Raw string output from the language model containing a JSON
 
                 response with a 'score' field.
-
-
 
         Returns:
 

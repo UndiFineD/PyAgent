@@ -7,13 +7,9 @@
 
 Lorenz Attractor - Converted from 3b1b ManimGL to ManimCE
 
-
-
 Original: videos/_2024/manim_demo/lorenz.py
 
 This demonstrates a chaotic system visualization with 3D curves and tracing dots.
-
-
 
 Run with: manim -pql lorenz_attractor.py LorenzAttractor
 
@@ -52,8 +48,6 @@ class LorenzAttractor(ThreeDScene):
     """
 
     Visualization of the Lorenz attractor - a classic chaotic system.
-
-
 
     Shows multiple trajectories starting from nearly identical initial conditions
 

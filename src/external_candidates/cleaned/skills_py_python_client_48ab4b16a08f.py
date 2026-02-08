@@ -7,29 +7,19 @@
 
 Fliz API Python Client
 
-
-
 A complete Python wrapper for the Fliz REST API.
 
 Supports video creation, status monitoring, translation, and resource listing.
-
-
 
 Installation:
 
     pip install requests
 
-
-
 Usage:
 
     from python_client import FlizClient
 
-
-
     client = FlizClient("YOUR_API_KEY")
-
-
 
     # Create video
 
@@ -45,8 +35,6 @@ Usage:
 
     )
 
-
-
     # Wait for completion
 
     video = client.wait_for_video(result["video_id"])
@@ -58,7 +46,6 @@ Usage:
 import time
 
 from typing import Any, Dict, List, Optional
-
 
 import requests
 
@@ -80,8 +67,6 @@ class FlizClient:
     """
 
     Fliz API Client
-
-
 
     Attributes:
 
@@ -107,8 +92,6 @@ class FlizClient:
         """
 
         Initialize Fliz client.
-
-
 
         Args:
 
@@ -170,13 +153,9 @@ class FlizClient:
 
         Test API connection by fetching voices.
 
-
-
         Returns:
 
             True if connection successful
-
-
 
         Raises:
 
@@ -220,8 +199,6 @@ class FlizClient:
         """
 
         Create a new video.
-
-
 
         Args:
 
@@ -273,13 +250,9 @@ class FlizClient:
 
             video_animation_mode: full_video or hook_only
 
-
-
         Returns:
 
             dict with video_id
-
-
 
         Example:
 
@@ -348,13 +321,9 @@ class FlizClient:
 
         Get video details by ID.
 
-
-
         Args:
 
             video_id: Video UUID
-
-
 
         Returns:
 
@@ -371,13 +340,9 @@ class FlizClient:
 
         Get simplified video status.
 
-
-
         Args:
 
             video_id: Video UUID
-
-
 
         Returns:
 
@@ -407,15 +372,11 @@ class FlizClient:
 
         List videos with pagination.
 
-
-
         Args:
 
             limit: Number of results
 
             offset: Pagination offset
-
-
 
         Returns:
 
@@ -438,8 +399,6 @@ class FlizClient:
 
         Poll video status until completion or failure.
 
-
-
         Args:
 
             video_id: Video UUID
@@ -450,13 +409,9 @@ class FlizClient:
 
             callback: Optional function called on each poll with status dict
 
-
-
         Returns:
 
             Final video object
-
-
 
         Raises:
 
@@ -505,8 +460,6 @@ class FlizClient:
 
         Translate existing video to new language.
 
-
-
         Args:
 
             video_id: Source video UUID
@@ -516,8 +469,6 @@ class FlizClient:
             is_automatic: Auto-process
 
             webhook_url: Callback URL
-
-
 
         Returns:
 
@@ -542,13 +493,9 @@ class FlizClient:
 
         Duplicate existing video.
 
-
-
         Args:
 
             video_id: Source video UUID
-
-
 
         Returns:
 
@@ -567,8 +514,6 @@ class FlizClient:
 
         Get available text-to-speech voices.
 
-
-
         Returns:
 
             List of voice objects with id, name, gender, samples
@@ -584,8 +529,6 @@ class FlizClient:
 
         Get available background music tracks.
 
-
-
         Returns:
 
             List of music objects with id, name, theme, url
@@ -598,7 +541,6 @@ class FlizClient:
 
 
 # ========== Example Usage ==========
-
 
 if __name__ == "__main__":
     import os

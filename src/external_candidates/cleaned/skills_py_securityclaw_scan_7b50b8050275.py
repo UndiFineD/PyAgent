@@ -7,8 +7,6 @@
 
 """SecurityClaw: scan OpenClaw skills directories for high-risk patterns.
 
-
-
 Goals
 
 - Security-first, conservative scanner for skill folders.
@@ -17,22 +15,17 @@ Goals
 
 - Quarantine (move) suspicious skills out of the active skills dir.
 
-
-
 Non-goals
 
 - Perfect malware detection.
 
 - Executing untrusted skill code.
 
-
-
 This script is intentionally dependency-light.
 
 """
 
 from __future__ import annotations
-
 
 import argparse
 
@@ -56,7 +49,6 @@ from pathlib import Path
 
 from typing import Dict, List, Optional, Tuple
 
-
 TEXT_EXTS = {
     ".md",
     ".txt",
@@ -72,7 +64,6 @@ TEXT_EXTS = {
 }
 
 MAX_FILE_BYTES = 2_000_000  # avoid giant files
-
 
 # Very small rule set to start; expand iteratively.
 
@@ -135,7 +126,6 @@ RULES = [
         "References sensitive paths.",
     ),
 ]
-
 
 SEVERITY_ORDER = {"info": 0, "low": 1, "medium": 2, "high": 3, "critical": 4}
 

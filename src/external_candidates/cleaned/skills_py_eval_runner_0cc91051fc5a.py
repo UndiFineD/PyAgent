@@ -7,8 +7,6 @@
 
 """Evaluation runner for skill-scan.
 
-
-
 Scans all test fixtures, loads _expected.json from each, compares results,
 
 and reports TP/FP/TN/FN counts with precision, recall, and F1.
@@ -16,7 +14,6 @@ and reports TP/FP/TN/FN counts with precision, recall, and F1.
 """
 
 from __future__ import annotations
-
 
 import argparse
 
@@ -26,14 +23,11 @@ import sys
 
 from pathlib import Path
 
-
 # Ensure the parent directory is on the path so we can import skill_scan
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-
 from skill_scan.scanner import SkillScanner
-
 
 FIXTURES_DIR = Path(__file__).parent.parent / "test-fixtures"
 

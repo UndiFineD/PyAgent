@@ -11,7 +11,6 @@ Configuration settings for the EvoAgentX application.
 
 from typing import Any, Dict, List, Optional
 
-
 # import os
 
 from pydantic import BaseModel, Field, validator
@@ -67,7 +66,6 @@ class Settings(BaseSettings):
 # Global settings instance
 
 settings = Settings()
-
 
 # Agent and Workflow configuration
 

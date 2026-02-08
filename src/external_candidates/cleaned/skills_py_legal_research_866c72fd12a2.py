@@ -37,13 +37,11 @@ from pathlib import Path
 
 from typing import Optional
 
-
 # API Configuration
 
 COURTLISTENER_API = "https://www.courtlistener.com/api/rest/v3"
 
 COURTLISTENER_KEY = os.environ.get("COURTLISTENER_API_KEY", "")
-
 
 # Jurisdiction mappings
 
@@ -89,7 +87,6 @@ JURISDICTIONS = {
     "nc": ["nc", "ncctapp"],
     "al": ["ala", "alacivapp", "alacrimapp"],
 }
-
 
 # Research topic templates
 

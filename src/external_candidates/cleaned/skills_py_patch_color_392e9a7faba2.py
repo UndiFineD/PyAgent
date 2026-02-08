@@ -9,8 +9,6 @@
 
 Patch Clawd's color in Claude Code cli.js
 
-
-
 Usage:
 
     python patch_color.py <color>              # Use preset color name
@@ -20,8 +18,6 @@ Usage:
     python patch_color.py --restore            # Restore original color
 
     python patch_color.py --list               # List preset colors
-
-
 
 Examples:
 
@@ -45,9 +41,7 @@ from datetime import datetime
 
 from pathlib import Path
 
-
 DEFAULT_CLI_PATH = "/opt/node22/lib/node_modules/@anthropic-ai/claude-code/cli.js"
-
 
 # Original Clawd color
 
@@ -55,7 +49,6 @@ ORIGINAL_COLOR = {
     "rgb": "rgb(215,119,87)",
     "ansi": "ansi:redBright",
 }
-
 
 # Preset color palettes
 

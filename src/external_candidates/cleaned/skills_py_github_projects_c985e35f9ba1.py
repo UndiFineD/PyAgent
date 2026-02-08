@@ -31,7 +31,6 @@ from datetime import datetime, timedelta
 
 from typing import Dict, List, Optional
 
-
 # GitHub API 配置
 
 GITHUB_API_URL = "https://api.github.com/search/repositories"

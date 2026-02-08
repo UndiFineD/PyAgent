@@ -5,20 +5,15 @@
 
 #!/usr/bin/env python3
 
-
 """
 
 File System Tools Examples for EvoAgentX
-
-
 
 This module provides comprehensive examples for:
 
 - StorageToolkit: Comprehensive file storage operations with flexible storage backends
 
 - CMDToolkit: Command-line execution capabilities with timeout handling
-
-
 
 The examples demonstrate various file operations and system interactions including:
 
@@ -38,11 +33,9 @@ import sys
 
 from pathlib import Path
 
-
 # Add the parent directory to sys.path to import from evoagentx
 
 sys.path.append(str(Path(__file__).parent.parent))
-
 
 from evoagentx.tools import CMDToolkit, StorageToolkit
 
@@ -507,11 +500,7 @@ metadata:
 
         pdf_content = """Test PDF Document
 
-
-
 This is a test PDF created by EvoAgentX.
-
-
 
 Features:
 
@@ -520,8 +509,6 @@ Features:
 • Automatic formatting
 
 • Professional layout
-
-
 
 This demonstrates the storage system's PDF capabilities."""
 

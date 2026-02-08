@@ -9,13 +9,9 @@
 
 Xiaohongshu MCP Client - A Python client for xiaohongshu-mcp HTTP API.
 
-
-
 Usage:
 
     python xhs_client.py <command> [options]
-
-
 
 Commands:
 
@@ -28,8 +24,6 @@ Commands:
     feeds               Get recommended feed list
 
     publish <title> <content> <images>  Publish a note
-
-
 
 Examples:
 
@@ -49,9 +43,7 @@ import json
 
 import sys
 
-
 import requests
-
 
 BASE_URL = "http://localhost:18060"
 

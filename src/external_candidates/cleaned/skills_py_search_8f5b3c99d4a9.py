@@ -9,13 +9,9 @@
 
 Web Search Tool
 
-
-
 Search the web using DuckDuckGo's search API. Supports web search, news,
 
 images, and videos with various output formats.
-
-
 
 Requirements:
 
@@ -34,7 +30,6 @@ from datetime import datetime
 from pathlib import Path
 
 from typing import Any, Dict, List, Optional
-
 
 try:
     from duckduckgo_search import DDGS
@@ -59,8 +54,6 @@ class WebSearch:
         """
 
         Initialize the search client.
-
-
 
         Args:
 
@@ -88,8 +81,6 @@ class WebSearch:
 
         Perform a text/web search.
 
-
-
         Args:
 
             query: Search query
@@ -97,8 +88,6 @@ class WebSearch:
             max_results: Maximum number of results (default: 10)
 
             time_range: Time filter ("d" day, "w" week, "m" month, "y" year)
-
-
 
         Returns:
 
@@ -135,8 +124,6 @@ class WebSearch:
 
         Search for news articles.
 
-
-
         Args:
 
             query: Search query
@@ -144,8 +131,6 @@ class WebSearch:
             max_results: Maximum number of results
 
             time_range: Time filter ("d" day, "w" week, "m" month)
-
-
 
         Returns:
 
@@ -185,8 +170,6 @@ class WebSearch:
 
         Search for images.
 
-
-
         Args:
 
             query: Search query
@@ -202,8 +185,6 @@ class WebSearch:
             type_image: Image type ("photo", "clipart", "gif", "transparent", "line")
 
             layout: Layout ("Square", "Tall", "Wide")
-
-
 
         Returns:
 
@@ -244,8 +225,6 @@ class WebSearch:
 
         Search for videos.
 
-
-
         Args:
 
             query: Search query
@@ -255,8 +234,6 @@ class WebSearch:
             duration: Video duration ("short", "medium", "long")
 
             resolution: Video resolution ("high", "standard")
-
-
 
         Returns:
 
@@ -290,15 +267,11 @@ def format_text_results(results: List[Dict[str, Any]], format_type: str = "text"
 
     Format search results for display.
 
-
-
     Args:
 
         results: List of search results
 
         format_type: Output format ("text", "markdown", "json")
-
-
 
     Returns:
 
@@ -592,43 +565,29 @@ Examples:
 
   %(prog)s "python tutorials"
 
-
-
   # Search with more results
 
   %(prog)s "machine learning" --max-results 20
-
-
 
   # News search
 
   %(prog)s "climate change" --type news --time-range w
 
-
-
   # Image search
 
   %(prog)s "sunset photos" --type images --max-results 15
-
-
 
   # Save results to file
 
   %(prog)s "artificial intelligence" --output results.txt
 
-
-
   # JSON output format
 
   %(prog)s "quantum computing" --format json --output results.json
 
-
-
   # Region-specific search
 
   %(prog)s "local news" --region us-en --type news
-
-
 
 Time range filters (--time-range):
 

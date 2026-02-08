@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 from uuid import uuid4
 
-
 from pydantic import Field
-
 
 from ..core.logging import logger
 
@@ -38,8 +36,6 @@ class MemoryManager(BaseModule):
     It retrieves data, processes it with optional LLM-based action inference, and stores new or updated data.
 
     It creates Message objects for agent use, combining user prompts with memory context.
-
-
 
     Attributes:
 
@@ -121,8 +117,6 @@ class MemoryManager(BaseModule):
 
         Handle memory operations based on the specified action, with optional LLM inference.
 
-
-
         Args:
 
             action (str): The memory operation ("add", "search", "get", "update", "delete", "clear", "save", "load", "create_message").
@@ -134,8 +128,6 @@ class MemoryManager(BaseModule):
             top_k (Optional[int]): Number of results to retrieve for search operations.
 
             metadata_filters (Optional[Dict]): Filters for memory retrieval.
-
-
 
         Returns:
 
@@ -336,8 +328,6 @@ class MemoryManager(BaseModule):
 
         Create a Message combining user prompt with conversation history and relevant memories.
 
-
-
         Args:
 
             user_prompt (Union[str, Message]): The user's input prompt or message.
@@ -347,8 +337,6 @@ class MemoryManager(BaseModule):
             top_k (Optional[int]): Number of results to retrieve.
 
             metadata_filters (Optional[Dict]): Filters for memory retrieval.
-
-
 
         Returns:
 

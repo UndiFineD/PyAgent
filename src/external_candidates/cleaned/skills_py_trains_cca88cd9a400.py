@@ -19,11 +19,9 @@ import xml.etree.ElementTree as ET
 
 from urllib.error import HTTPError, URLError
 
-
 TOKEN = os.environ.get("NATIONAL_RAIL_TOKEN", "")
 
 ENDPOINT = "https://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb12.asmx"
-
 
 # Namespace mappings
 
@@ -429,11 +427,7 @@ def main():
         print(
             """UK Trains CLI - National Rail Darwin API
 
-
-
 Usage: trains.py <command> [args]
-
-
 
 Commands:
 
@@ -442,8 +436,6 @@ Commands:
   arrivals <station> [from <origin>] [--rows N] Show arrivals
 
   search <query>                                Search for stations
-
-
 
 Examples:
 
@@ -454,8 +446,6 @@ Examples:
   trains.py arrivals MAN from EUS
 
   trains.py search paddington
-
-
 
 Environment:
 

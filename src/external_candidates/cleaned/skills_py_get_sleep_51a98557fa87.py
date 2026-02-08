@@ -9,8 +9,6 @@
 
 Get WHOOP sleep data.
 
-
-
 Examples:
 
     python3 get_sleep.py --last
@@ -30,7 +28,6 @@ import sys
 from datetime import datetime, timedelta, timezone
 
 from pathlib import Path
-
 
 sys.path.insert(0, str(Path(__file__).parent))
 

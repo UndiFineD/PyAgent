@@ -11,9 +11,7 @@ from enum import Enum
 
 from typing import Dict, List, Optional, Union
 
-
 from pydantic import Field
-
 
 from ..core.decorators import atomic_method
 
@@ -26,7 +24,6 @@ from ..storages.base import StorageHandler
 from ..tools.tool import Tool, Toolkit
 
 from .agent import Agent
-
 
 # from .agent_generator import AgentGenerator
 
@@ -43,8 +40,6 @@ class AgentManager(BaseModule):
     """
 
     Responsible for creating and managing all Agent objects required for workflow operation.
-
-
 
     Attributes:
 
@@ -82,8 +77,6 @@ class AgentManager(BaseModule):
 
     def check_agents(self):
         """Validate agent list integrity and state consistency.
-
-
 
         Performs thorough validation of the agent manager's internal state:
 
@@ -142,13 +135,9 @@ class AgentManager(BaseModule):
     def has_agent(self, agent_name: str) -> bool:
         """Check if an agent with the given name exists in the manager.
 
-
-
         Args:
 
             agent_name: The name of the agent to check
-
-
 
         Returns:
 
@@ -173,19 +162,13 @@ class AgentManager(BaseModule):
     def load_agent(self, agent_name: str, **kwargs) -> Agent:
         """Load an agent from local storage through storage_handler.
 
-
-
         Retrieves agent data from storage and creates an Agent instance.
-
-
 
         Args:
 
             agent_name: The name of the agent to load
 
             **kwargs (Any): Additional parameters for agent creation
-
-
 
         Returns:
 
@@ -205,13 +188,9 @@ class AgentManager(BaseModule):
     def load_all_agents(self, **kwargs):
         """Load all agents from storage and add them to the manager.
 
-
-
         Retrieves all available agents from storage and adds them to the
 
         managed agents collection.
-
-
 
         Args:
 
@@ -226,8 +205,6 @@ class AgentManager(BaseModule):
 
         Update agent_data with tools based on tool_names.
 
-
-
         Handles four scenarios:
 
         1. Neither tool_names nor tools exist: return directly
@@ -238,13 +215,9 @@ class AgentManager(BaseModule):
 
         4. Both exist: merge tool_names into existing tools (skip duplicates)
 
-
-
         Args:
 
             agent_data (dict): Agent configuration dictionary that may contain 'tool_names' and/or 'tools'
-
-
 
         Raises:
 
@@ -333,8 +306,6 @@ class AgentManager(BaseModule):
 
         create a customized agent from the provided `agent_data`.
 
-
-
         Args:
 
             agent_data: The data used to create an Agent instance, must contain 'name', 'description' and 'prompt' keys.
@@ -348,8 +319,6 @@ class AgentManager(BaseModule):
                 If provided and `agent_data` contains a `llm_config` key, the `llm_config` in `agent_data` will be used.
 
             **kwargs (Any): Additional parameters for agent creation
-
-
 
         Returns:
 
@@ -390,21 +359,15 @@ class AgentManager(BaseModule):
     def get_agent_name(self, agent: Union[str, dict, Agent]) -> str:
         """Extract agent name from different agent representations.
 
-
-
         Handles different ways to specify an agent (string name, dictionary, or
 
         Agent instance) and extracts the agent name.
-
-
 
         Args:
 
             agent: Agent specified as a string name, dictionary with 'name' key,
 
                   or Agent instance
-
-
 
         Returns:
 
@@ -479,8 +442,6 @@ class AgentManager(BaseModule):
 
         add a single agent, ignore if the agent already exists (judged by the name of an agent).
 
-
-
         Args:
 
             agent: The agent to be added, specified as:
@@ -549,8 +510,6 @@ class AgentManager(BaseModule):
 
         Initialize agents from the nodes of a given WorkFlowGraph and add these agents to self.agents.
 
-
-
         Args:
 
             workflow_graph (WorkFlowGraph): The workflow graph containing nodes with agents information.
@@ -575,8 +534,6 @@ class AgentManager(BaseModule):
         """
 
         Update agents from a given WorkFlowGraph.
-
-
 
         Args:
 
@@ -611,19 +568,13 @@ class AgentManager(BaseModule):
     def get_agent(self, agent_name: str, **kwargs) -> Agent:
         """Retrieve an agent by its name from managed agents.
 
-
-
         Searches the list of managed agents for an agent with the specified name.
-
-
 
         Args:
 
             agent_name: The name of the agent to retrieve
 
             **kwargs (Any): Additional parameters (unused)
-
-
 
         Returns:
 
@@ -646,8 +597,6 @@ class AgentManager(BaseModule):
         """
 
         Update an agent in the manager.
-
-
 
         Args:
 
@@ -672,8 +621,6 @@ class AgentManager(BaseModule):
         """
 
         Remove an agent from the manager and optionally from storage.
-
-
 
         Args:
 
@@ -701,13 +648,9 @@ class AgentManager(BaseModule):
 
         Get the state of a specific agent by its name.
 
-
-
         Args:
 
             agent_name: The name of the agent.
-
-
 
         Returns:
 
@@ -725,15 +668,11 @@ class AgentManager(BaseModule):
 
         Thread-safe operation for coordinating multi-threaded agent execution.
 
-
-
         Args:
 
             agent_name: The name of the agent
 
             new_state: The new state to set
-
-
 
         Returns:
 
@@ -775,8 +714,6 @@ class AgentManager(BaseModule):
     def get_all_agent_states(self) -> Dict[str, AgentState]:
         """Get the states of all managed agents.
 
-
-
         Returns:
 
             Dict[str, AgentState]: A dictionary mapping agent names to their states.
@@ -788,8 +725,6 @@ class AgentManager(BaseModule):
     @atomic_method
     def save_all_agents(self, **kwargs):
         """Save all managed agents to persistent storage.
-
-
 
         Args:
 
@@ -818,15 +753,11 @@ class AgentManager(BaseModule):
     def wait_for_agent_available(self, agent_name: str, timeout: Optional[float] = None) -> bool:
         """Wait for an agent to be available.
 
-
-
         Args:
 
             agent_name: The name of the agent to wait for
 
             timeout: Maximum time to wait in seconds, or None to wait indefinitely
-
-
 
         Returns:
 

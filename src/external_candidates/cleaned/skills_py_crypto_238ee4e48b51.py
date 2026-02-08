@@ -23,18 +23,15 @@ from pathlib import Path
 
 from uuid import uuid4
 
-
 import click
 
 import httpx
-
 
 COINGECKO_BASE = "https://api.coingecko.com/api/v3"
 
 DATA_DIR = Path(__file__).parent.parent / "data"
 
 ALERTS_FILE = DATA_DIR / "alerts.json"
-
 
 # Common coin aliases
 

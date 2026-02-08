@@ -22,8 +22,6 @@ class ServerlessStackGenerator:
 
         Initialize with application requirements.
 
-
-
         Args:
 
             app_name: Application name (used for resource naming)
@@ -43,8 +41,6 @@ class ServerlessStackGenerator:
 
         Generate CloudFormation template for serverless stack.
 
-
-
         Returns:
 
             YAML CloudFormation template as string
@@ -56,8 +52,6 @@ class ServerlessStackGenerator:
 Transform: AWS::Serverless-2016-10-31
 
 Description: Serverless stack for {self.app_name}
-
-
 
 Parameters:
 
@@ -77,8 +71,6 @@ Parameters:
 
     Description: Deployment environment
 
-
-
   CorsAllowedOrigins:
 
     Type: String
@@ -86,8 +78,6 @@ Parameters:
     Default: '*'
 
     Description: CORS allowed origins for API Gateway
-
-
 
 Resources:
 
@@ -145,8 +135,6 @@ Resources:
 
           Value: {self.app_name}
 
-
-
   # Lambda Execution Role
 
   LambdaExecutionRole:
@@ -201,8 +189,6 @@ Resources:
 
                 Resource: !GetAtt {self.app_name.replace("-", "")}Table.Arn
 
-
-
   # Lambda Function
 
   ApiFunction:
@@ -253,8 +239,6 @@ Resources:
 
         Application: {self.app_name}
 
-
-
   # API Gateway
 
   ApiGateway:
@@ -296,8 +280,6 @@ Resources:
         Environment: !Ref Environment
 
         Application: {self.app_name}
-
-
 
   # Cognito User Pool
 
@@ -351,8 +333,6 @@ Resources:
 
           Mutable: true
 
-
-
   # Cognito User Pool Client
 
   UserPoolClient:
@@ -387,8 +367,6 @@ Resources:
 
         - ALLOW_REFRESH_TOKEN_AUTH
 
-
-
   # CloudWatch Log Group
 
   ApiLogGroup:
@@ -400,8 +378,6 @@ Resources:
       LogGroupName: !Sub '/aws/lambda/${{Environment}}-{self.app_name}-api'
 
       RetentionInDays: 7
-
-
 
 Outputs:
 
@@ -415,8 +391,6 @@ Outputs:
 
       Name: !Sub '${{Environment}}-{self.app_name}-ApiUrl'
 
-
-
   UserPoolId:
 
     Description: Cognito User Pool ID
@@ -427,8 +401,6 @@ Outputs:
 
       Name: !Sub '${{Environment}}-{self.app_name}-UserPoolId'
 
-
-
   UserPoolClientId:
 
     Description: Cognito User Pool Client ID
@@ -438,8 +410,6 @@ Outputs:
     Export:
 
       Name: !Sub '${{Environment}}-{self.app_name}-UserPoolClientId'
-
-
 
   TableName:
 
@@ -460,8 +430,6 @@ Outputs:
 
         Generate AWS CDK stack in TypeScript.
 
-
-
         Returns:
 
             CDK stack code as string
@@ -480,15 +448,11 @@ import * as cognito from 'aws-cdk-lib/aws-cognito';
 
 import {{ Construct }} from 'constructs';
 
-
-
 export class {self.app_name.replace("-", "").title()}Stack extends cdk.Stack {{
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {{
 
     super(scope, id, props);
-
-
 
     // DynamoDB Table
 
@@ -511,8 +475,6 @@ export class {self.app_name.replace("-", "").title()}Stack extends cdk.Stack {{
       removalPolicy: cdk.RemovalPolicy.RETAIN,
 
     }});
-
-
 
     // Cognito User Pool
 
@@ -554,8 +516,6 @@ export class {self.app_name.replace("-", "").title()}Stack extends cdk.Stack {{
 
     }});
 
-
-
     const userPoolClient = userPool.addClient('{self.app_name}Client', {{
 
       authFlows: {{
@@ -569,8 +529,6 @@ export class {self.app_name.replace("-", "").title()}Stack extends cdk.Stack {{
       refreshTokenValidity: cdk.Duration.days(30),
 
     }});
-
-
 
     // Lambda Function
 
@@ -600,13 +558,9 @@ export class {self.app_name.replace("-", "").title()}Stack extends cdk.Stack {{
 
     }});
 
-
-
     // Grant Lambda permissions to DynamoDB
 
     table.grantReadWriteData(apiFunction);
-
-
 
     // API Gateway
 
@@ -642,8 +596,6 @@ export class {self.app_name.replace("-", "").title()}Stack extends cdk.Stack {{
 
     }});
 
-
-
     // Cognito Authorizer
 
     const authorizer = new apigateway.CognitoUserPoolsAuthorizer(this, 'ApiAuthorizer', {{
@@ -652,13 +604,9 @@ export class {self.app_name.replace("-", "").title()}Stack extends cdk.Stack {{
 
     }});
 
-
-
     // API Integration
 
     const integration = new apigateway.LambdaIntegration(apiFunction);
-
-
 
     // Add proxy resource (/{{proxy+}})
 
@@ -678,8 +626,6 @@ export class {self.app_name.replace("-", "").title()}Stack extends cdk.Stack {{
 
     }});
 
-
-
     // Outputs
 
     new cdk.CfnOutput(this, 'ApiUrl', {{
@@ -690,8 +636,6 @@ export class {self.app_name.replace("-", "").title()}Stack extends cdk.Stack {{
 
     }});
 
-
-
     new cdk.CfnOutput(this, 'UserPoolId', {{
 
       value: userPool.userPoolId,
@@ -700,8 +644,6 @@ export class {self.app_name.replace("-", "").title()}Stack extends cdk.Stack {{
 
     }});
 
-
-
     new cdk.CfnOutput(this, 'UserPoolClientId', {{
 
       value: userPoolClient.userPoolClientId,
@@ -709,8 +651,6 @@ export class {self.app_name.replace("-", "").title()}Stack extends cdk.Stack {{
       description: 'Cognito User Pool Client ID',
 
     }});
-
-
 
     new cdk.CfnOutput(this, 'TableName', {{
 
@@ -732,8 +672,6 @@ export class {self.app_name.replace("-", "").title()}Stack extends cdk.Stack {{
         """
 
         Generate Terraform configuration for serverless stack.
-
-
 
         Returns:
 
@@ -759,15 +697,11 @@ export class {self.app_name.replace("-", "").title()}Stack extends cdk.Stack {{
 
 }}
 
-
-
 provider "aws" {{
 
   region = var.aws_region
 
 }}
-
-
 
 variable "aws_region" {{
 
@@ -779,8 +713,6 @@ variable "aws_region" {{
 
 }}
 
-
-
 variable "environment" {{
 
   description = "Environment name"
@@ -791,8 +723,6 @@ variable "environment" {{
 
 }}
 
-
-
 variable "app_name" {{
 
   description = "Application name"
@@ -802,8 +732,6 @@ variable "app_name" {{
   default     = "{self.app_name}"
 
 }}
-
-
 
 # DynamoDB Table
 
@@ -817,8 +745,6 @@ resource "aws_dynamodb_table" "main" {{
 
   range_key      = "SK"
 
-
-
   attribute {{
 
     name = "PK"
@@ -826,8 +752,6 @@ resource "aws_dynamodb_table" "main" {{
     type = "S"
 
   }}
-
-
 
   attribute {{
 
@@ -837,15 +761,11 @@ resource "aws_dynamodb_table" "main" {{
 
   }}
 
-
-
   server_side_encryption {{
 
     enabled = true
 
   }}
-
-
 
   point_in_time_recovery {{
 
@@ -853,13 +773,9 @@ resource "aws_dynamodb_table" "main" {{
 
   }}
 
-
-
   stream_enabled   = true
 
   stream_view_type = "NEW_AND_OLD_IMAGES"
-
-
 
   tags = {{
 
@@ -871,21 +787,15 @@ resource "aws_dynamodb_table" "main" {{
 
 }}
 
-
-
 # Cognito User Pool
 
 resource "aws_cognito_user_pool" "main" {{
 
   name = "${{var.environment}}-${{var.app_name}}-users"
 
-
-
   username_attributes = ["email"]
 
   auto_verified_attributes = ["email"]
-
-
 
   password_policy {{
 
@@ -901,19 +811,13 @@ resource "aws_cognito_user_pool" "main" {{
 
   }}
 
-
-
   mfa_configuration = "OPTIONAL"
-
-
 
   software_token_mfa_configuration {{
 
     enabled = true
 
   }}
-
-
 
   schema {{
 
@@ -927,8 +831,6 @@ resource "aws_cognito_user_pool" "main" {{
 
   }}
 
-
-
   tags = {{
 
     Environment = var.environment
@@ -939,19 +841,13 @@ resource "aws_cognito_user_pool" "main" {{
 
 }}
 
-
-
 resource "aws_cognito_user_pool_client" "main" {{
 
   name         = "${{var.environment}}-${{var.app_name}}-client"
 
   user_pool_id = aws_cognito_user_pool.main.id
 
-
-
   generate_secret = false
-
-
 
   explicit_auth_flows = [
 
@@ -961,15 +857,11 @@ resource "aws_cognito_user_pool_client" "main" {{
 
   ]
 
-
-
   refresh_token_validity = 30
 
   access_token_validity  = 1
 
   id_token_validity      = 1
-
-
 
   token_validity_units {{
 
@@ -983,15 +875,11 @@ resource "aws_cognito_user_pool_client" "main" {{
 
 }}
 
-
-
 # IAM Role for Lambda
 
 resource "aws_iam_role" "lambda" {{
 
   name = "${{var.environment}}-${{var.app_name}}-lambda-role"
-
-
 
   assume_role_policy = jsonencode({{
 
@@ -1013,8 +901,6 @@ resource "aws_iam_role" "lambda" {{
 
   }})
 
-
-
   tags = {{
 
     Environment = var.environment
@@ -1025,8 +911,6 @@ resource "aws_iam_role" "lambda" {{
 
 }}
 
-
-
 resource "aws_iam_role_policy_attachment" "lambda_basic" {{
 
   role       = aws_iam_role.lambda.name
@@ -1035,15 +919,11 @@ resource "aws_iam_role_policy_attachment" "lambda_basic" {{
 
 }}
 
-
-
 resource "aws_iam_role_policy" "dynamodb" {{
 
   name = "dynamodb-access"
 
   role = aws_iam_role.lambda.id
-
-
 
   policy = jsonencode({{
 
@@ -1077,8 +957,6 @@ resource "aws_iam_role_policy" "dynamodb" {{
 
 }}
 
-
-
 # Lambda Function
 
 resource "aws_lambda_function" "api" {{
@@ -1097,8 +975,6 @@ resource "aws_lambda_function" "api" {{
 
   timeout       = 10
 
-
-
   environment {{
 
     variables = {{
@@ -1113,8 +989,6 @@ resource "aws_lambda_function" "api" {{
 
   }}
 
-
-
   tags = {{
 
     Environment = var.environment
@@ -1124,8 +998,6 @@ resource "aws_lambda_function" "api" {{
   }}
 
 }}
-
-
 
 # CloudWatch Log Group
 
@@ -1135,8 +1007,6 @@ resource "aws_cloudwatch_log_group" "lambda" {{
 
   retention_in_days = 7
 
-
-
   tags = {{
 
     Environment = var.environment
@@ -1146,8 +1016,6 @@ resource "aws_cloudwatch_log_group" "lambda" {{
   }}
 
 }}
-
-
 
 # API Gateway
 
@@ -1157,8 +1025,6 @@ resource "aws_api_gateway_rest_api" "main" {{
 
   description = "API for ${{var.app_name}}"
 
-
-
   tags = {{
 
     Environment = var.environment
@@ -1168,8 +1034,6 @@ resource "aws_api_gateway_rest_api" "main" {{
   }}
 
 }}
-
-
 
 resource "aws_api_gateway_authorizer" "cognito" {{
 
@@ -1183,8 +1047,6 @@ resource "aws_api_gateway_authorizer" "cognito" {{
 
 }}
 
-
-
 resource "aws_api_gateway_resource" "proxy" {{
 
   rest_api_id = aws_api_gateway_rest_api.main.id
@@ -1194,8 +1056,6 @@ resource "aws_api_gateway_resource" "proxy" {{
   path_part   = "{{proxy+}}"
 
 }}
-
-
 
 resource "aws_api_gateway_method" "proxy" {{
 
@@ -1211,8 +1071,6 @@ resource "aws_api_gateway_method" "proxy" {{
 
 }}
 
-
-
 resource "aws_api_gateway_integration" "lambda" {{
 
   rest_api_id = aws_api_gateway_rest_api.main.id
@@ -1221,8 +1079,6 @@ resource "aws_api_gateway_integration" "lambda" {{
 
   http_method = aws_api_gateway_method.proxy.http_method
 
-
-
   integration_http_method = "POST"
 
   type                    = "AWS_PROXY"
@@ -1230,8 +1086,6 @@ resource "aws_api_gateway_integration" "lambda" {{
   uri                     = aws_lambda_function.api.invoke_arn
 
 }}
-
-
 
 resource "aws_lambda_permission" "apigw" {{
 
@@ -1247,8 +1101,6 @@ resource "aws_lambda_permission" "apigw" {{
 
 }}
 
-
-
 resource "aws_api_gateway_deployment" "main" {{
 
   depends_on = [
@@ -1257,15 +1109,11 @@ resource "aws_api_gateway_deployment" "main" {{
 
   ]
 
-
-
   rest_api_id = aws_api_gateway_rest_api.main.id
 
   stage_name  = var.environment
 
 }}
-
-
 
 # Outputs
 
@@ -1277,8 +1125,6 @@ output "api_url" {{
 
 }}
 
-
-
 output "user_pool_id" {{
 
   description = "Cognito User Pool ID"
@@ -1287,8 +1133,6 @@ output "user_pool_id" {{
 
 }}
 
-
-
 output "user_pool_client_id" {{
 
   description = "Cognito User Pool Client ID"
@@ -1296,8 +1140,6 @@ output "user_pool_client_id" {{
   value       = aws_cognito_user_pool_client.main.id
 
 }}
-
-
 
 output "table_name" {{
 

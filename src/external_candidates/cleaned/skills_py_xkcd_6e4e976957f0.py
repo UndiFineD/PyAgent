@@ -29,9 +29,7 @@ import sys
 
 from datetime import date
 
-
 import httpx
-
 
 BASE_URL = "https://xkcd.com"
 
@@ -146,15 +144,9 @@ def format_markdown(comic: dict) -> str:
 
     return f"""**xkcd #{comic["num"]}: {comic["title"]}**
 
-
-
 ![{comic["title"]}]({comic["img"]})
 
-
-
 > {comic["alt"]}
-
-
 
 🔗 {comic["url"]}"""
 

@@ -21,7 +21,6 @@ import re
 
 from html import unescape
 
-
 import httpx
 
 from rich import print as rprint
@@ -29,7 +28,6 @@ from rich import print as rprint
 from rich.console import Console
 
 from rich.table import Table
-
 
 console = Console()
 

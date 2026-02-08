@@ -9,9 +9,7 @@ import os
 
 from typing import Any, Dict, List, Optional, Union
 
-
 from pydantic import Field
-
 
 from ..core.module import BaseModule
 
@@ -37,8 +35,6 @@ class StorageHandler(BaseModule):
     """
 
     Implementation of a storage handler for managing various storage backends.
-
-
 
     StorageHandler provides an abstraction for reading and writing data (e.g., memory, agents, workflows).
 
@@ -134,13 +130,9 @@ class StorageHandler(BaseModule):
 
         Load all data from the database storage.
 
-
-
         Attributes:
 
             tables (Optional[List[str]]): List of table names to load; if None, loads all tables.
-
-
 
         Returns:
 
@@ -187,13 +179,9 @@ class StorageHandler(BaseModule):
 
         Save all provided data to the database storage.
 
-
-
         Attributes:
 
             data (Dict[str, Any]): Dictionary with table names as keys and lists of records to save.
-
-
 
         Raises:
 
@@ -229,15 +217,11 @@ class StorageHandler(BaseModule):
 
         Parse database results, converting JSON strings to Python objects where applicable.
 
-
-
         Attributes:
 
             results (Dict[str, str]): Raw database results with column names as keys.
 
             store (Union[AgentStore, WorkflowStore, MemoryStore, HistoryStore]): Pydantic model for validation.
-
-
 
         Returns:
 
@@ -260,15 +244,11 @@ class StorageHandler(BaseModule):
 
         Load a single long-term memory data.
 
-
-
         Attributes:
 
             memory_id (str): The ID of the long-term memory.
 
             table (Optional[str]): The table name; defaults to 'memory' if None.
-
-
 
         Returns:
 
@@ -290,15 +270,11 @@ class StorageHandler(BaseModule):
 
         Save or update a single memory.
 
-
-
         Attributes:
 
             memory_data (Dict[str, Any]): The long-term memory's data.
 
             table (Optional[str]): The table name; defaults to 'memory' if None.
-
-
 
         """
 
@@ -322,15 +298,11 @@ class StorageHandler(BaseModule):
 
         Load a single agent's data.
 
-
-
         Attributes:
 
             agent_name (str): The unique name of the agent to retrieve.
 
             table (Optional[str]): The table name; defaults to 'agent' if None.
-
-
 
         Returns:
 
@@ -354,15 +326,11 @@ class StorageHandler(BaseModule):
 
         Remove an agent from storage if the agent exists.
 
-
-
         Attributes:
 
             agent_name (str): The name of the agent to be deleted.
 
             table (Optional[str]): The table name; defaults to 'agent' if None.
-
-
 
         Raises:
 
@@ -382,15 +350,11 @@ class StorageHandler(BaseModule):
 
         Save or update a single agent's data.
 
-
-
         Attributes:
 
             agent_data (Dict[str, Any]): The agent's data, must include 'name' and 'content' keys.
 
             table (Optional[str]): The table name; defaults to 'agent' if None.
-
-
 
         Raises:
 
@@ -418,15 +382,11 @@ class StorageHandler(BaseModule):
 
         Load a single workflow's data.
 
-
-
         Attributes:
 
             workflow_id (str): The ID of the workflow.
 
             table (Optional[str]): The table name; defaults to 'workflow' if None.
-
-
 
         Returns:
 
@@ -456,15 +416,11 @@ class StorageHandler(BaseModule):
 
         Save or update a workflow's data.
 
-
-
         Attributes:
 
             workflow_data (Dict[str, Any]): The workflow's data, must include 'name' field.
 
             table (Optional[str]): The table name; defaults to 'workflow' if None.
-
-
 
         Raises:
 
@@ -499,15 +455,11 @@ class StorageHandler(BaseModule):
 
         Load a single history entry.
 
-
-
         Attributes:
 
             memory_id (str): The ID of the memory associated with the history entry.
 
             table (Optional[str]): The table name; defaults to 'history' if None.
-
-
 
         Returns:
 
@@ -531,15 +483,11 @@ class StorageHandler(BaseModule):
 
         Save or update a single history entry.
 
-
-
         Attributes:
 
             history_data (Dict[str, Any]): The history data, must include 'memory_id' field.
 
             table (Optional[str]): The table name; defaults to 'history' if None.
-
-
 
         Raises:
 

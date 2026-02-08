@@ -15,7 +15,6 @@ import sys
 
 from pathlib import Path
 
-
 DEFAULT_CLI_PATH = "/opt/node22/lib/node_modules/@anthropic-ai/claude-code/cli.js"
 
 

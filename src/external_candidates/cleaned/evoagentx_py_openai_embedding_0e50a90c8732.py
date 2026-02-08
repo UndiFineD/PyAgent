@@ -9,16 +9,13 @@ import warnings
 
 from typing import Dict, List, Optional
 
-
 from evoagentx.core.logging import logger
 
 from llama_index.core.embeddings import BaseEmbedding
 
 from openai import NOT_GIVEN, OpenAI
 
-
 from .base import SUPPORTED_MODELS, BaseEmbeddingWrapper, EmbeddingProvider
-
 
 # Mapping of default embedding dimensions for OpenAI models
 
@@ -27,7 +24,6 @@ MODEL_DIMENSIONS = {
     "text-embedding-3-small": 1536,
     "text-embedding-3-large": 3072,
 }
-
 
 SUPPORTED_DIMENSIONS = [
     "text-embedding-3-small",

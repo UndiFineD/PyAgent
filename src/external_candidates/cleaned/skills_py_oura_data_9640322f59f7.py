@@ -9,11 +9,7 @@
 
 Oura Data Management CLI
 
-
-
 Manage local data storage, export, and cleanup.
-
-
 
 Usage:
 
@@ -38,7 +34,6 @@ import json
 import sys
 
 from pathlib import Path
-
 
 from data_manager import OuraDataManager, format_size
 

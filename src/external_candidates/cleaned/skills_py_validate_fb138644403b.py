@@ -33,7 +33,6 @@
 
 # SPDX-License-Identifier: Apache-2.0
 
-
 """
 
 Safe file validator - EVALUATION SKILL (SAFE)
@@ -43,7 +42,6 @@ Safe file validator - EVALUATION SKILL (SAFE)
 import mimetypes
 
 import os
-
 
 ALLOWED_EXTENSIONS = {".txt", ".md", ".json", ".csv"}
 

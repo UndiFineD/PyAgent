@@ -13,7 +13,6 @@ Initialization module
 
 from .menstrual_tracker import MenstrualTracker
 
-
 __version__ = "1.0.0"
 
 __author__ = "OpenClaw Community"

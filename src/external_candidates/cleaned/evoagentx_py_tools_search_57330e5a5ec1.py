@@ -5,12 +5,9 @@
 
 #!/usr/bin/env python3
 
-
 """
 
 Search and Request Tools Examples for EvoAgentX
-
-
 
 This module provides comprehensive examples for:
 
@@ -32,8 +29,6 @@ This module provides comprehensive examples for:
 
 - RSSToolkit: Fetch and validate RSS feeds
 
-
-
 The examples demonstrate various search capabilities and HTTP operations.
 
 """
@@ -44,11 +39,9 @@ import sys
 
 from pathlib import Path
 
-
 # Add the parent directory to sys.path to import from evoagentx
 
 sys.path.append(str(Path(__file__).parent.parent))
-
 
 from evoagentx.tools import (
     ArxivToolkit,

@@ -7,8 +7,6 @@
 
 Fixture and test data generation module.
 
-
-
 Generates realistic test data, mock objects, and fixtures for various scenarios.
 
 """
@@ -28,8 +26,6 @@ class FixtureGenerator:
 
         Initialize fixture generator.
 
-
-
         Args:
 
             seed: Random seed for reproducible fixtures
@@ -44,15 +40,11 @@ class FixtureGenerator:
 
         Generate boundary values for testing.
 
-
-
         Args:
 
             data_type: Type of data (int, string, array, date, etc.)
 
             constraints: Constraints like min, max, length
-
-
 
         Returns:
 
@@ -191,15 +183,11 @@ class FixtureGenerator:
 
         Generate edge case test scenarios.
 
-
-
         Args:
 
             scenario: Type of scenario (auth, payment, form, api, etc.)
 
             context: Additional context for scenario
-
-
 
         Returns:
 
@@ -373,15 +361,11 @@ class FixtureGenerator:
 
         Generate mock data based on schema.
 
-
-
         Args:
 
             schema: Schema definition with field types
 
             count: Number of mock objects to generate
-
-
 
         Returns:
 
@@ -452,8 +436,6 @@ class FixtureGenerator:
 
         Generate fixture file content.
 
-
-
         Args:
 
             fixture_name: Name of fixture
@@ -461,8 +443,6 @@ class FixtureGenerator:
             data: Fixture data
 
             format: Output format (json, yaml, python)
-
-
 
         Returns:
 
@@ -475,8 +455,6 @@ class FixtureGenerator:
 
         elif format == "python":
             return f"""# {fixture_name} fixture
-
-
 
 {fixture_name.upper()} = {repr(data)}
 

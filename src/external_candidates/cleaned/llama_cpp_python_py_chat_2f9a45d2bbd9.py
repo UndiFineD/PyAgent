@@ -11,7 +11,6 @@ import os
 
 import sys
 
-
 from common import GptParams
 
 from low_level_api_chat_cpp import LLaMAInteract
@@ -34,13 +33,11 @@ N_PREDICTS = int(env_or_def("N_PREDICTS", "2048"))
 
 N_THREAD = int(env_or_def("N_THREAD", "8"))
 
-
 today = datetime.datetime.today()
 
 DATE_YEAR = today.strftime("%Y")
 
 DATE_TIME = today.strftime("%H:%M")
-
 
 prompt = f"""Text transcript of a never ending dialog, where {USER_NAME} interacts with an AI assistant named {AI_NAME}.
 
@@ -51,8 +48,6 @@ There are no annotations like (30 seconds passed...) or (to himself), just what 
 The dialog lasts for years, the entirety of it is shared below. It's 10000 pages long.
 
 The transcript only includes text, it does not include markup like HTML and Markdown.
-
-
 
 {USER_NAME}: Hello, {AI_NAME}!
 
@@ -78,8 +73,6 @@ The transcript only includes text, it does not include markup like HTML and Mark
 
 {AI_NAME}: The arguments are stored in process.argv.
 
-
-
     argv[0] is the path to the Node. js executable.
 
     argv[1] is the path to the script file.
@@ -97,7 +90,6 @@ The transcript only includes text, it does not include markup like HTML and Mark
 {AI_NAME}: It is {DATE_TIME}.
 
 {USER_NAME}:""" + " ".join(sys.argv[1:])
-
 
 print("Loading model...")
 
@@ -119,7 +111,6 @@ params = GptParams(
     input_suffix=f"{AI_NAME}:",
     prompt=prompt,
 )
-
 
 with LLaMAInteract(params) as m:
     m.interact()

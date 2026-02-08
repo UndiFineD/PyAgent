@@ -15,7 +15,6 @@ import sys
 
 from pathlib import Path
 
-
 SKILL_DIR = Path(__file__).parent.parent
 
 TEMPLATE_FILE = SKILL_DIR / "assets" / "templates" / "TASKS.md"

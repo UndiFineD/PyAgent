@@ -7,21 +7,13 @@
 
 """tmx_movers.py
 
-
-
 Example: extract a movers table from TMX Money 'Canadian markets' page.
-
-
 
 This is provided as a *pattern* for building a movers provider. For a generic
 
 skill, you can swap this out for any exchange/market source.
 
-
-
 Output: JSON list of rows with symbol + change %.
-
-
 
 Note: HTML structure can change; keep parsing defensive.
 
@@ -36,7 +28,6 @@ import sys
 from dataclasses import asdict, dataclass
 
 from typing import List
-
 
 import requests
 

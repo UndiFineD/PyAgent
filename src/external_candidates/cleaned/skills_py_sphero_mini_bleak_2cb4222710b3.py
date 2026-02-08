@@ -11,7 +11,6 @@ import sys
 
 import time
 
-
 from bleak import BleakClient
 
 from sphero_constants import *
@@ -101,8 +100,6 @@ class SpheroMini:
 
         sequence number, optional payload and calculated checksum to a specified device ID. For internal use only.
 
-
-
         Sphero API (https://sdk.sphero.com/docs/api_spec/general_api/), single packet structure for command & response:
 
         SOP - FLAG(s) [- TID - SID] - DID - CID - SEQ - [ERR] - [payload] - CHK - EOP // SOP,CHK,EOP excl. from checksum
@@ -145,8 +142,6 @@ class SpheroMini:
 
         - EOP: end of packet, byte always 0xD8
 
-
-
         Packet encoding(SLIP): SOP & EOP not allowed in rest of bytes for explicit packet structure of variable length;
 
         parser adds/removes additional escape byte ESC(0xAB) and converts value by binary XOR 0x88
@@ -156,8 +151,6 @@ class SpheroMini:
         Note: invalid packet structure if less than 7 bytes (after decoding) including SOP/EOP
 
         unexpected (but tolerated) escape sequence with double 0xAB or any other escaped value other than SOP/EOP
-
-
 
         """
 

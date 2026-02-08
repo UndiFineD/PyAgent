@@ -5,7 +5,6 @@
 
 from __future__ import annotations
 
-
 import abc
 
 from typing import (
@@ -13,7 +12,6 @@ from typing import (
     List,
     Optional,
 )
-
 
 import llama_cpp
 
@@ -24,8 +22,6 @@ class BaseLlamaTokenizer(abc.ABC):
     @abc.abstractmethod
     def tokenize(self, text: bytes, add_bos: bool = True, special: bool = True) -> List[int]:
         """Tokenize the text into tokens.
-
-
 
         Args:
 
@@ -47,8 +43,6 @@ class BaseLlamaTokenizer(abc.ABC):
         special: bool = False,
     ) -> bytes:
         """Detokenize the tokens into text.
-
-
 
         Args:
 

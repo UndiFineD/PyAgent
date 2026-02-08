@@ -11,11 +11,7 @@ Skill Scanner v1.0
 
 Security audit tool for Clawdbot/MCP skills
 
-
-
 Scans for malware, spyware, crypto-mining, and malicious patterns.
-
-
 
 Usage:
 
@@ -24,8 +20,6 @@ Usage:
     python skill_scanner.py <path-to-skill-folder> --json
 
     python skill_scanner.py <path-to-skill-folder> --output report.md
-
-
 
 Author: Viera Professional Services
 
@@ -133,7 +127,6 @@ class ScanReport:
 
 # =============================================================================
 
-
 THREAT_PATTERNS = [
     # --- DATA EXFILTRATION ---
     {
@@ -239,7 +232,6 @@ THREAT_PATTERNS = [
         "file_types": [".py", ".js", ".ts"],
     },
 ]
-
 
 # =============================================================================
 

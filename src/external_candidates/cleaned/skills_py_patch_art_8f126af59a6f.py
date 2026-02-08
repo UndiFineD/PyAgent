@@ -9,8 +9,6 @@
 
 Patch Clawd's ASCII art in Claude Code cli.js
 
-
-
 Usage:
 
     python patch_art.py --small "line1" "line2" "line3"    # Replace small Clawd
@@ -24,8 +22,6 @@ Usage:
     python patch_art.py --add-hat                           # Add hat to Clawd
 
     python patch_art.py --restore                           # Restore original
-
-
 
 Examples:
 
@@ -47,9 +43,7 @@ from datetime import datetime
 
 from pathlib import Path
 
-
 DEFAULT_CLI_PATH = "/opt/node22/lib/node_modules/@anthropic-ai/claude-code/cli.js"
-
 
 # Original small Clawd art patterns (what to find in the minified code)
 
@@ -62,7 +56,6 @@ ORIGINAL_SMALL = {
     "mid_right": '"▛▘"',
     "feet": '"▘▘ ▝▝"',
 }
-
 
 # Preset variants for small Clawd modifications
 

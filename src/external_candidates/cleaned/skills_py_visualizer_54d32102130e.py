@@ -5,7 +5,6 @@
 
 import os
 
-
 import matplotlib.pyplot as plt
 
 
@@ -13,8 +12,6 @@ def generate_revenue_vs_expense_chart(trends, output_path):
     """
 
     Generates a bar chart for Monthly Revenue vs Expense.
-
-
 
     :param trends: List of dictionaries containing 'month', 'revenue', and 'spending'.
 

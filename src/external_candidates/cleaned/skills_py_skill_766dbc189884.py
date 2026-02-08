@@ -7,11 +7,7 @@
 
 Longbridge OpenAPI Skill - 长桥证券开放接口技能
 
-
-
 这是一个集成 Longbridge OpenAPI SDK 的 Claude Skill，提供港美股交易、实时行情和账户管理功能。
-
-
 
 主要功能：
 
@@ -24,8 +20,6 @@ Longbridge OpenAPI Skill - 长桥证券开放接口技能
 4. 查询账户资金和持仓
 
 5. 查询历史订单和成交记录
-
-
 
 支持的市场：
 
@@ -40,7 +34,6 @@ Longbridge OpenAPI Skill - 长桥证券开放接口技能
 import os
 
 from typing import Any, Dict, List, Optional
-
 
 from longbridge.openapi import Config, QuoteContext, TradeContext
 
@@ -88,15 +81,11 @@ class LongbridgeSkill:
 
         订阅实时行情数据
 
-
-
         Args:
 
             symbols: 股票代码列表，如 ['700.HK', 'AAPL.US']
 
             sub_types: 订阅类型列表，如 ['quote', 'depth']
-
-
 
         Returns:
 
@@ -146,13 +135,9 @@ class LongbridgeSkill:
 
         获取实时股票报价
 
-
-
         Args:
 
             symbols: 股票代码列表
-
-
 
         Returns:
 
@@ -187,13 +172,9 @@ class LongbridgeSkill:
 
         获取股票静态信息
 
-
-
         Args:
 
             symbols: 股票代码列表
-
-
 
         Returns:
 
@@ -235,8 +216,6 @@ class LongbridgeSkill:
 
         提交交易订单
 
-
-
         Args:
 
             symbol: 股票代码
@@ -252,8 +231,6 @@ class LongbridgeSkill:
             price: 价格（限价单必填）
 
             remark: 备注
-
-
 
         Returns:
 
@@ -309,13 +286,9 @@ class LongbridgeSkill:
 
         撤销订单
 
-
-
         Args:
 
             order_id: 订单ID
-
-
 
         Returns:
 
@@ -336,15 +309,11 @@ class LongbridgeSkill:
 
         获取当日订单
 
-
-
         Args:
 
             symbol: 股票代码（可选）
 
             status: 订单状态列表（可选）
-
-
 
         Returns:
 
@@ -382,8 +351,6 @@ class LongbridgeSkill:
 
         获取历史订单
 
-
-
         Args:
 
             start_date: 开始日期 (YYYY-MM-DD)
@@ -391,8 +358,6 @@ class LongbridgeSkill:
             end_date: 结束日期 (YYYY-MM-DD)
 
             symbol: 股票代码（可选）
-
-
 
         Returns:
 
@@ -431,13 +396,9 @@ class LongbridgeSkill:
 
         获取账户余额
 
-
-
         Args:
 
             currency: 货币类型（可选）
-
-
 
         Returns:
 
@@ -471,13 +432,9 @@ class LongbridgeSkill:
 
         获取持仓列表
 
-
-
         Args:
 
             symbol: 股票代码（可选）
-
-
 
         Returns:
 
@@ -511,8 +468,6 @@ class LongbridgeSkill:
 
         获取历史K线数据
 
-
-
         Args:
 
             symbol: 股票代码
@@ -522,8 +477,6 @@ class LongbridgeSkill:
             count: 获取数量
 
             adjust_type: 复权类型 (NoAdjust/ForwardAdjust)
-
-
 
         Returns:
 
@@ -584,7 +537,6 @@ class LongbridgeSkill:
 # 全局实例
 
 _skill = LongbridgeSkill()
-
 
 # 工具函数映射
 

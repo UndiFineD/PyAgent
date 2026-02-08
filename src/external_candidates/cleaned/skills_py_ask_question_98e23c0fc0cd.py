@@ -11,8 +11,6 @@ Simple NotebookLM Question Interface
 
 Based on MCP server implementation - simplified without sessions
 
-
-
 Implements hybrid auth approach:
 
 - Persistent browser profile (user_data_dir) for fingerprint consistency
@@ -33,14 +31,11 @@ import time
 
 from pathlib import Path
 
-
 from patchright.sync_api import sync_playwright
-
 
 # Add parent directory to path
 
 sys.path.insert(0, str(Path(__file__).parent))
-
 
 from auth_manager import AuthManager
 
@@ -49,7 +44,6 @@ from browser_utils import BrowserFactory, StealthUtils
 from config import QUERY_INPUT_SELECTORS, RESPONSE_SELECTORS
 
 from notebook_manager import NotebookLibrary
-
 
 # Follow-up reminder (adapted from MCP server for stateless operation)
 
@@ -69,8 +63,6 @@ def ask_notebooklm(question: str, notebook_url: str, headless: bool = True) -> s
 
     Ask a question to NotebookLM
 
-
-
     Args:
 
         question: Question to ask
@@ -78,8 +70,6 @@ def ask_notebooklm(question: str, notebook_url: str, headless: bool = True) -> s
         notebook_url: NotebookLM notebook URL
 
         headless: Run browser in headless mode
-
-
 
     Returns:
 

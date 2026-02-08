@@ -23,7 +23,6 @@ import sys
 
 from datetime import datetime, timedelta
 
-
 import numpy as np
 
 import pandas as pd
@@ -84,8 +83,6 @@ def get_atm_iv(ticker: yf.Ticker, spot: float) -> tuple:
 
 def get_iv_history(ticker: yf.Ticker, spot: float, days: int = 252) -> list:
     """获取历史 IV 数据 (通过计算每日 ATM IV 的近似)
-
-
 
     注意: Yahoo Finance 不提供历史 IV，这里用 HV 作为代理估算
 

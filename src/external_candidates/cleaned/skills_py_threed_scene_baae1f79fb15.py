@@ -7,11 +7,7 @@
 
 3D Scene Template for Manim Community
 
-
-
 Use this for 3D visualizations with camera rotation and surfaces.
-
-
 
 Render: manim -pql your_file.py Your3DScene
 
@@ -26,8 +22,6 @@ class Your3DScene(ThreeDScene):
     """
 
     Template for 3D scenes.
-
-
 
     Inherits from ThreeDScene which provides:
 

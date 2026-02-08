@@ -7,11 +7,9 @@
 
 from __future__ import annotations
 
-
 import json
 
 from collections import defaultdict
-
 
 SEVERITY_ICONS = {
     "critical": "\U0001f534",  # red circle
@@ -20,7 +18,6 @@ SEVERITY_ICONS = {
     "low": "\U0001f535",  # blue circle
     "info": "\u2139\ufe0f",  # info
 }
-
 
 RISK_ICONS = {
     "LOW": "\u2705",  # check mark

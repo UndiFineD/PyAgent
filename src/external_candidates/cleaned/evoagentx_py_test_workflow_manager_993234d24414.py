@@ -7,7 +7,6 @@ import unittest
 
 from unittest.mock import AsyncMock, Mock, patch
 
-
 import pytest
 
 from evoagentx.core.base_config import Parameter

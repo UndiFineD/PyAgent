@@ -9,33 +9,23 @@
 
 Check AgentMail inbox for messages
 
-
-
 Usage:
 
     # List recent messages
 
     python check_inbox.py --inbox "myagent@agentmail.to"
 
-
-
     # Get specific message
 
     python check_inbox.py --inbox "myagent@agentmail.to" --message "msg_123abc"
-
-
 
     # List threads
 
     python check_inbox.py --inbox "myagent@agentmail.to" --threads
 
-
-
     # Monitor for new messages (poll every N seconds)
 
     python check_inbox.py --inbox "myagent@agentmail.to" --monitor 30
-
-
 
 Environment:
 
@@ -52,7 +42,6 @@ import sys
 import time
 
 from datetime import datetime
-
 
 try:
     from agentmail import AgentMail

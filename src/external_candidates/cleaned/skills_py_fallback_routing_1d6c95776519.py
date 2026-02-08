@@ -9,8 +9,6 @@
 
 Example: Conservative Fallback Routing
 
-
-
 Demonstrates Claw Conductor's conservative fallback strategy:
 
 1. Try primary model (attempt 1)
@@ -23,8 +21,6 @@ Demonstrates Claw Conductor's conservative fallback strategy:
 
 5. If all fail, give up
 
-
-
 This prevents cascading through irrelevant models that may not even
 
 have the capability for the task.
@@ -35,11 +31,9 @@ import sys
 
 from pathlib import Path
 
-
 # Add parent directory to path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-
 
 from scripts.router import Router, Task
 
@@ -48,8 +42,6 @@ def simulate_execution(agent_id: str, task: Task, fail_pattern: dict = None):
     """
 
     Simulate task execution with controllable failures.
-
-
 
     Args:
 
@@ -60,8 +52,6 @@ def simulate_execution(agent_id: str, task: Task, fail_pattern: dict = None):
         fail_pattern: Dict like {"mistral-devstral-2512": [1, 2], "llama-3.3-70b": []}
 
                      where the list contains which attempts should fail
-
-
 
     Returns:
 

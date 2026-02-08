@@ -7,7 +7,6 @@ import os
 
 from typing import Any, Dict, List, Optional
 
-
 import dotenv
 
 import requests
@@ -16,11 +15,9 @@ from evoagentx.core.logging import logger
 
 from pydantic import Field
 
-
 from .search_base import SearchBase
 
 from .tool import Tool, Toolkit
-
 
 dotenv.load_dotenv()
 
@@ -62,8 +59,6 @@ class SearchSerpAPI(SearchBase):
         """
 
         Initialize the SerpAPI Search tool.
-
-
 
         Args:
 
@@ -125,8 +120,6 @@ class SearchSerpAPI(SearchBase):
 
         Build SerpAPI request parameters.
 
-
-
         Args:
 
             query (str): Search query
@@ -142,8 +135,6 @@ class SearchSerpAPI(SearchBase):
             search_type (str): Type of search (web, images, news, shopping, maps)
 
             num_results (int): Number of results to retrieve
-
-
 
         Returns:
 
@@ -188,19 +179,13 @@ class SearchSerpAPI(SearchBase):
 
         Execute search using direct HTTP requests to SerpAPI.
 
-
-
         Args:
 
             params (Dict[str, Any]): Search parameters
 
-
-
         Returns:
 
             Dict[str, Any]: SerpAPI response data
-
-
 
         Raises:
 
@@ -233,15 +218,11 @@ class SearchSerpAPI(SearchBase):
 
         Process SerpAPI results into structured format with processed results + raw data.
 
-
-
         Args:
 
             serpapi_data (Dict[str, Any]): Raw SerpAPI response
 
             max_content_words (int): Maximum words per result content
-
-
 
         Returns:
 
@@ -401,13 +382,9 @@ class SearchSerpAPI(SearchBase):
 
         Handle SerpAPI specific errors with appropriate messages.
 
-
-
         Args:
 
             error (Exception): The exception that occurred
-
-
 
         Returns:
 
@@ -447,8 +424,6 @@ class SearchSerpAPI(SearchBase):
 
         Search using SerpAPI with comprehensive parameter support.
 
-
-
         Args:
 
             query (str): The search query
@@ -466,8 +441,6 @@ class SearchSerpAPI(SearchBase):
             country (str): Country code for country-specific results (e.g., 'us', 'uk')
 
             search_type (str): Type of search (web, images, news, shopping, maps)
-
-
 
         Returns:
 
@@ -636,8 +609,6 @@ class SerpAPIToolkit(Toolkit):
         """
 
         Initialize SerpAPI Toolkit.
-
-
 
         Args:
 

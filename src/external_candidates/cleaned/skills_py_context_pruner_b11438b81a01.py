@@ -23,8 +23,6 @@ def prune_context(messages, max_recent=10, max_tokens_estimate=15000):
 
     Prune message history to reduce context bloat.
 
-
-
     Args:
 
         messages: List of conversation messages
@@ -32,8 +30,6 @@ def prune_context(messages, max_recent=10, max_tokens_estimate=15000):
         max_recent: Keep this many recent exchanges
 
         max_tokens_estimate: Target token count
-
-
 
     Returns:
 

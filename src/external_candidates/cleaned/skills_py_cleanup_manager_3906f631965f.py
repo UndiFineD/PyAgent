@@ -27,8 +27,6 @@ class CleanupManager:
 
     Manages cleanup of NotebookLM skill data
 
-
-
     Features:
 
     - Preview what will be deleted
@@ -55,19 +53,13 @@ class CleanupManager:
 
         Get paths that would be cleaned up
 
-
-
         Args:
 
             preserve_library: Keep library.json if True
 
-
-
         Returns:
 
             Dict with paths and sizes
-
-
 
         Note: .venv is NEVER deleted - it's part of the skill infrastructure
 
@@ -200,15 +192,11 @@ class CleanupManager:
 
         Perform the actual cleanup
 
-
-
         Args:
 
             preserve_library: Keep library.json if True
 
             dry_run: Preview only, don't delete
-
-
 
         Returns:
 
@@ -321,19 +309,13 @@ Examples:
 
   python cleanup_manager.py
 
-
-
   # Perform cleanup (delete everything)
 
   python cleanup_manager.py --confirm
 
-
-
   # Cleanup but keep library
 
   python cleanup_manager.py --confirm --preserve-library
-
-
 
   # Force cleanup without preview
 

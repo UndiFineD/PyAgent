@@ -38,8 +38,6 @@ class MetadataOptimizer:
 
         Initialize metadata optimizer.
 
-
-
         Args:
 
             platform: 'apple' or 'google'
@@ -58,8 +56,6 @@ class MetadataOptimizer:
 
         Optimize app title with keyword integration.
 
-
-
         Args:
 
             app_name: Your app's brand name
@@ -67,8 +63,6 @@ class MetadataOptimizer:
             target_keywords: List of keywords to potentially include
 
             include_brand: Whether to include brand name
-
-
 
         Returns:
 
@@ -169,8 +163,6 @@ class MetadataOptimizer:
 
         Optimize app description with keyword integration and conversion focus.
 
-
-
         Args:
 
             app_info: Dict with 'name', 'key_features', 'unique_value', 'target_audience'
@@ -178,8 +170,6 @@ class MetadataOptimizer:
             target_keywords: List of keywords to integrate naturally
 
             description_type: 'full', 'short' (Google), 'subtitle' (Apple)
-
-
 
         Returns:
 
@@ -203,8 +193,6 @@ class MetadataOptimizer:
 
         Optimize Apple's 100-character keyword field.
 
-
-
         Rules:
 
         - No spaces between commas
@@ -215,8 +203,6 @@ class MetadataOptimizer:
 
         - Keywords in title/subtitle are already indexed
 
-
-
         Args:
 
             target_keywords: List of target keywords
@@ -224,8 +210,6 @@ class MetadataOptimizer:
             app_title: Current app title (to avoid duplication)
 
             app_description: Current description (to check coverage)
-
-
 
         Returns:
 
@@ -295,13 +279,9 @@ class MetadataOptimizer:
 
         Validate all metadata fields against platform character limits.
 
-
-
         Args:
 
             metadata: Dictionary of field_name: value
-
-
 
         Returns:
 
@@ -356,15 +336,11 @@ class MetadataOptimizer:
 
         Calculate keyword density in text.
 
-
-
         Args:
 
             text: Text to analyze
 
             target_keywords: Keywords to check
-
-
 
         Returns:
 
@@ -666,8 +642,6 @@ def optimize_app_metadata(platform: str, app_info: Dict[str, Any], target_keywor
 
     Convenience function to optimize all metadata fields.
 
-
-
     Args:
 
         platform: 'apple' or 'google'
@@ -675,8 +649,6 @@ def optimize_app_metadata(platform: str, app_info: Dict[str, Any], target_keywor
         app_info: App information dictionary
 
         target_keywords: Target keywords list
-
-
 
     Returns:
 

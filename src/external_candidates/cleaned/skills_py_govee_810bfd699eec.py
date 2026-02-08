@@ -17,9 +17,7 @@ import sys
 
 import uuid
 
-
 import requests
-
 
 # Get API key from environment variable
 
@@ -28,9 +26,7 @@ API_KEY = os.environ.get("GOVEE_API_KEY")
 if not API_KEY:
     raise ValueError("GOVEE_API_KEY environment variable not set. Get your key from https://developer.govee.com/")
 
-
 BASE_URL = "https://openapi.api.govee.com/router/api/v1"
-
 
 HEADERS = {"Govee-API-Key": API_KEY, "Content-Type": "application/json"}
 

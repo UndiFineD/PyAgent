@@ -5,7 +5,6 @@
 
 #!/usr/bin/env python3
 
-
 """
 
 Example demonstrating how to use browser automation toolkits from EvoAgentX.
@@ -22,22 +21,17 @@ import os
 
 import sys
 
-
 # import time
 
 from pathlib import Path
 
-
 from dotenv import load_dotenv
 
-
 load_dotenv(override=True)
-
 
 # Add the parent directory to sys.path to import from evoagentx
 
 sys.path.append(str(Path(__file__).parent.parent))
-
 
 from evoagentx.tools import BrowserToolkit, BrowserUseToolkit
 

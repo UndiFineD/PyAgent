@@ -15,7 +15,6 @@ basado en percentiles del día
 
 import sys
 
-
 from get_pvpc import get_current_price, get_pvpc_data, get_stats
 
 
@@ -25,8 +24,6 @@ def classify_price(price, stats):
     Clasifica un precio como ALTO/MEDIO/BAJO
 
     basado en percentiles del día
-
-
 
     BAJO: < percentil 30
 

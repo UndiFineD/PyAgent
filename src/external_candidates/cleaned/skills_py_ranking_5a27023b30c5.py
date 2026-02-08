@@ -9,11 +9,7 @@
 
 Deterministic Headline Ranking - Impact-based ranking policy.
 
-
-
 Implements #53: Deterministic impact-based ranking for headline selection.
-
-
 
 Scoring Rubric (weights):
 
@@ -26,8 +22,6 @@ Scoring Rubric (weights):
 - Credibility (10%): Source reliability
 
 - Diversity Bonus (10%): Underrepresented categories
-
-
 
 Output:
 
@@ -42,7 +36,6 @@ import re
 from datetime import datetime
 
 from difflib import SequenceMatcher
-
 
 # Category keywords for classification
 
@@ -99,7 +92,6 @@ CATEGORY_KEYWORDS = {
     ],
 }
 
-
 # Source credibility scores (0-1)
 
 SOURCE_CREDIBILITY = {
@@ -116,7 +108,6 @@ SOURCE_CREDIBILITY = {
     "Tagesschau": 0.85,
     "Handelsblatt": 0.80,
 }
-
 
 # Default config
 
@@ -408,15 +399,11 @@ def rank_headlines(headlines: list[dict], config: dict | None = None) -> dict:
 
     Rank headlines deterministically.
 
-
-
     Args:
 
         headlines: List of headline dicts with title, source, description, etc.
 
         config: Optional config overrides
-
-
 
     Returns:
 

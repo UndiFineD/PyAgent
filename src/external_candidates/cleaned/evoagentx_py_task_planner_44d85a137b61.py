@@ -13,15 +13,11 @@ from .agent import Agent
 class TaskPlanner(Agent):
     """An agent responsible for planning and decomposing high-level tasks into smaller sub-tasks.
 
-
-
     The TaskPlanner agent analyzes complex goals and breaks them down into a structured
 
     sequence of smaller, more manageable tasks. It serves as a critical component in the
 
     workflow by creating execution plans that other specialized agents can follow.
-
-
 
     Attributes:
 
@@ -55,8 +51,6 @@ class TaskPlanner(Agent):
     @property
     def task_planning_action_name(self):
         """Get the name of the TaskPlanning action associated with this agent.
-
-
 
         Returns:
 

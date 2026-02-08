@@ -25,7 +25,6 @@ import time
 
 import urllib.request
 
-
 API_KEY = os.environ.get("DEX_API_KEY")
 
 if not API_KEY:
@@ -33,14 +32,11 @@ if not API_KEY:
 
     sys.exit(1)
 
-
 BASE = "https://api.getdex.com/api/rest"
 
 HEADERS = {"Content-Type": "application/json", "x-hasura-dex-api-key": API_KEY}
 
-
 # --- PATTERNS TO MATCH JUNK CONTACTS ---
-
 
 # Email prefixes that indicate automated/newsletter senders
 
@@ -62,7 +58,6 @@ JUNK_PREFIXES = [
     "automated",
     "noreply-",
 ]
-
 
 # Domains known to be bulk email/newsletter platforms (not companies with real employees)
 
@@ -97,7 +92,6 @@ JUNK_DOMAINS = [
     "resource.calendar.google.com",
 ]
 
-
 # Name patterns that indicate non-human contacts
 
 JUNK_NAME_PATTERNS = [
@@ -106,7 +100,6 @@ JUNK_NAME_PATTERNS = [
     r"unsubscribe",
     r"^[\w\s]*(notifications?)$",
 ]
-
 
 DRY_RUN = "--dry-run" in sys.argv
 

@@ -31,7 +31,6 @@ from urllib.error import URLError
 
 from urllib.request import Request, urlopen
 
-
 API_BASE = "https://api.astronomyapi.com/api/v2"
 
 SIGNS = [

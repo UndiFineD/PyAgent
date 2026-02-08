@@ -9,25 +9,17 @@
 
 x402 Agentic Endpoint Creation
 
-
-
 Create a new monetized API endpoint on the x402 network.
 
 Cost: $5 USDC (includes 20,000 credits for testing)
-
-
 
 Usage:
 
     python create_endpoint.py <slug> <name> <origin_url> <price>
 
-
-
 Example:
 
     python create_endpoint.py my-api "My API Service" https://api.example.com 0.01
-
-
 
 Environment Variables:
 
@@ -47,11 +39,9 @@ import sys
 
 import time
 
-
 import requests
 
 from eth_account import Account
-
 
 API_BASE = "https://api.x402layer.cc"
 
@@ -95,8 +85,6 @@ def create_endpoint(slug: str, name: str, origin_url: str, price: float, chain: 
 
     Create a new agentic endpoint.
 
-
-
     Args:
 
         slug: URL-friendly identifier (e.g., "my-api")
@@ -108,8 +96,6 @@ def create_endpoint(slug: str, name: str, origin_url: str, price: float, chain: 
         price: Price per call in USD (e.g., 0.01)
 
         chain: Payment chain (base or solana)
-
-
 
     Returns:
 

@@ -14,15 +14,11 @@ from smolagents import GradioUI
 def main() -> None:
     """Run the RAG agent with a Gradio web interface.
 
-
-
     This function initializes a RAG (Retrieval-Augmented Generation) agent and launches
 
     a Gradio web interface for interactive use. The interface allows users to submit
 
     queries and receive responses from the agent.
-
-
 
     Returns:
 

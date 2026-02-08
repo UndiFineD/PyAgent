@@ -7,15 +7,11 @@
 
 Best-Config JSON Demonstration
 
-
-
 This example shows how EvoPrompt optimizers now:
 
 - auto-save a machine-readable best_config.json into the log directory, and
 
 - load and apply that JSON to a fresh program instance for immediate reuse.
-
-
 
 Flow:
 
@@ -24,8 +20,6 @@ Flow:
 2) Load best_config.json into a fresh program/registry.
 
 3) Use the optimized workflow to answer a sample question (hard-coded in the script).
-
-
 
 Note: This example requires OPENAI_API_KEY in your environment.
 
@@ -38,7 +32,6 @@ import os
 import re
 
 from collections import Counter
-
 
 from dotenv import load_dotenv
 
@@ -57,8 +50,6 @@ class SarcasmClassifierProgram:
     """
 
     Multi-prompt ensemble classifier using majority voting strategy.
-
-
 
     Three independent prompt "voters" that can evolve independently.
 

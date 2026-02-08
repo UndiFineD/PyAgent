@@ -5,11 +5,9 @@
 
 import importlib
 
-
 from ..storages_config import DBConfig
 
 from .base import DBStoreBase
-
 
 __all__ = ["DBStoreBase", "SQLite", "DBStoreFactory"]
 
@@ -19,19 +17,13 @@ def load_class(class_type: str):
 
     Dynamically load a class from a module path.
 
-
-
     Attributes:
 
         class_type (str): Fully qualified class path (e.g., 'module.submodule.ClassName').
 
-
-
     Returns:
 
         type: The loaded class.
-
-
 
     Raises:
 
@@ -68,21 +60,15 @@ class DBStoreFactory:
 
         Create a database store instance for the specified provider.
 
-
-
         Attributes:
 
             provider_name (str): Name of the database provider (e.g., 'sqlite', 'posgre_sql').
 
             config (DBConfig): Configuration for the database store.
 
-
-
         Returns:
 
             DBStoreBase: An instance of the database store.
-
-
 
         Raises:
 

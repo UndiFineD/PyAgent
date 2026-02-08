@@ -13,7 +13,6 @@ from pathlib import Path
 
 from urllib.parse import urlparse
 
-
 from .base import Document, DocumentProvider, get_registry
 
 
@@ -21,8 +20,6 @@ class FileDocumentProvider:
     """
 
     Fetches documents from the local filesystem.
-
-
 
     Supports file:// URIs and attempts to detect content type from extension.
 
@@ -188,8 +185,6 @@ class HttpDocumentProvider:
 
     Fetches documents from HTTP/HTTPS URLs.
 
-
-
     Requires the `requests` library (optional dependency).
 
     """
@@ -270,8 +265,6 @@ class CompositeDocumentProvider:
     """
 
     Combines multiple document providers, delegating to the appropriate one.
-
-
 
     This is the default provider used by Keeper.
 

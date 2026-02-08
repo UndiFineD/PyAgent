@@ -9,8 +9,6 @@
 
 Pants size conversion utilities for international sizing standards.
 
-
-
 Handles conversions between US, EU, and UK pant sizing systems.
 
 Primary use case: H&M uses EU sizing which needs conversion for US customers.
@@ -18,7 +16,6 @@ Primary use case: H&M uses EU sizing which needs conversion for US customers.
 """
 
 from typing import Dict, Optional, Tuple
-
 
 # Conversion mappings
 
@@ -39,7 +36,6 @@ US_TO_EU_WAIST: Dict[int, int] = {
     44: 58,
 }
 
-
 EU_TO_US_WAIST: Dict[int, int] = {v: k for k, v in US_TO_EU_WAIST.items()}
 
 # Handle duplicate EU sizes (map to middle US size)
@@ -50,7 +46,6 @@ EU_TO_US_WAIST.update(
         40: 30,
     }
 )
-
 
 US_TO_UK_WAIST: Dict[int, int] = {
     # US and UK waist sizes are generally the same for men's pants
@@ -69,13 +64,9 @@ class SizeConverter:
 
         Convert US waist size to EU size.
 
-
-
         Args:
 
             us_waist: US waist size in inches (e.g., 32)
-
-
 
         Returns:
 
@@ -91,13 +82,9 @@ class SizeConverter:
 
         Convert EU waist size to US size.
 
-
-
         Args:
 
             eu_waist: EU waist size (e.g., 44)
-
-
 
         Returns:
 
@@ -113,17 +100,11 @@ class SizeConverter:
 
         Convert US waist size to UK size.
 
-
-
         Note: US and UK men's waist sizes are typically the same.
-
-
 
         Args:
 
             us_waist: US waist size in inches
-
-
 
         Returns:
 
@@ -139,8 +120,6 @@ class SizeConverter:
 
         Parse a size string into waist and inseam components.
 
-
-
         Handles formats like:
 
         - "32x30" -> (32, 30)
@@ -151,13 +130,9 @@ class SizeConverter:
 
         - "W32 L30" -> (32, 30)
 
-
-
         Args:
 
             size_str: Size string to parse
-
-
 
         Returns:
 
@@ -225,8 +200,6 @@ class SizeConverter:
 
         Format waist and inseam into standard size string.
 
-
-
         Args:
 
             waist: Waist size
@@ -234,8 +207,6 @@ class SizeConverter:
             inseam: Inseam length (optional)
 
             style: Format style - "us" (32x30), "label" (32W 30L), or "waist_only" (32)
-
-
 
         Returns:
 
@@ -264,15 +235,11 @@ class SizeConverter:
 
         Convert a complete size string to a different sizing system.
 
-
-
         Args:
 
             size_str: Input size string (e.g., "32x30")
 
             target_system: Target system - "eu", "uk", or "us"
-
-
 
         Returns:
 
@@ -313,15 +280,11 @@ class SizeConverter:
 
         Get EU size formatted for use in H&M filtering.
 
-
-
         Args:
 
             us_waist: US waist size
 
             inseam: Optional inseam length
-
-
 
         Returns:
 
@@ -345,17 +308,11 @@ class SizeConverter:
 
         Convert H&M size display to US size.
 
-
-
         H&M may show sizes as "44" (EU) which should convert to "32" (US).
-
-
 
         Args:
 
             hm_size: H&M size string (EU format)
-
-
 
         Returns:
 

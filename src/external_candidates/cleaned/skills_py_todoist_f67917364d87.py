@@ -29,7 +29,6 @@ from urllib.parse import urlencode
 
 from urllib.request import Request, urlopen
 
-
 API_BASE = "https://api.todoist.com/api/v1"
 
 

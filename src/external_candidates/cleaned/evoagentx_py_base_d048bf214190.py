@@ -9,7 +9,6 @@ from enum import Enum
 
 from typing import Any, Dict, List, Optional
 
-
 from llama_index.core.indices.base import BaseIndex
 
 from llama_index.core.storage import StorageContext

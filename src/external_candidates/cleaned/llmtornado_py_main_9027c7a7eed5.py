@@ -19,23 +19,19 @@ import sys
 
 from pathlib import Path
 
-
 # Configure logging
 
 from fskb.config import get_settings
 
 from loguru import logger
 
-
 settings = get_settings()
 
 log_file = settings.storage.log_dir / "fskb.log"
 
-
 # Remove default logger to avoid double logging
 
 logger.remove()
-
 
 # Add console logger
 
@@ -44,7 +40,6 @@ logger.add(
     level="INFO",
     format="{time:HH:mm:ss.SSS} | {level: <8} | {message}\n",
 )
-
 
 # Add file logger with more detail
 
@@ -55,7 +50,6 @@ logger.add(
     level="DEBUG",
     format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {name}:{function}:{line} | {message}",
 )
-
 
 from fskb.indexing import EmbeddingProvider, IndexingEngine
 

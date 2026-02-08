@@ -5,11 +5,9 @@
 
 from typing import Any, Dict, List, Optional
 
-
 import wikipedia
 
 from pydantic import Field
-
 
 from ..core.logging import logger
 
@@ -35,8 +33,6 @@ class SearchWiki(SearchBase):
         """
 
         Initialize the Wikipedia Search tool.
-
-
 
         Args:
 
@@ -71,8 +67,6 @@ class SearchWiki(SearchBase):
 
         Searches Wikipedia for the given query and returns the summary and truncated full content.
 
-
-
         Args:
 
             query (str): The search query.
@@ -82,8 +76,6 @@ class SearchWiki(SearchBase):
             max_content_words (int): Maximum number of words to include in content, None means no limit
 
             max_summary_sentences (int): Maximum number of sentences in the summary, None means no limit
-
-
 
         Returns:
 

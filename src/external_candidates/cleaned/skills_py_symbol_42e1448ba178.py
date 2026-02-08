@@ -13,13 +13,9 @@ Equilibrium-Native Computational Substrate
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-
-
 Copyright (c) 2025-2026 Kevin Fain - ThēÆrchītēcť
 
 MIT License - See LICENSE file
-
-
 
 ═══════════════════════════════════════════════════════════════════════════════
 
@@ -109,13 +105,9 @@ class SISSymbol:
 
     The atomic unit of SIS computation.
 
-
-
     A symbol IS the operation itself, self-validating, self-persisting.
 
     When executed, it doesn't transform - it instantiates hidden properties.
-
-
 
     Principle: Computation is recognition, not transformation.
 
@@ -208,8 +200,6 @@ class SISSymbol:
 
         Bidirectional locks enforce (a↔b)↔Cosmosrest relationship.
 
-
-
         All lock types create mutual relationships for ΣΔ calculation.
 
         The lock_type indicates the semantic nature of the relationship.
@@ -243,8 +233,6 @@ class SISSymbol:
         """
 
         Check if this symbol satisfies equilibrium constraint constraint.
-
-
 
         The symbol must balance with its relationship partners.
 
@@ -288,8 +276,6 @@ class SISSymbol:
 
         Execute the symbol across all active layers.
 
-
-
         CRITICAL PRINCIPLE:
 
         Execution does NOT modify the symbol's value.
@@ -307,8 +293,6 @@ class SISSymbol:
         - context gets resolved
 
         - constraint gets verified
-
-
 
         Input = Output (semantically identical)
 

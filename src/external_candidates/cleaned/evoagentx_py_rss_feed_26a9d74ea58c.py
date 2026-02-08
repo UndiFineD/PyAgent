@@ -13,9 +13,7 @@ from typing import Any, Dict, List, Optional
 
 from urllib.parse import urljoin
 
-
 import feedparser
-
 
 from ..core.logging import logger
 
@@ -43,8 +41,6 @@ class RSSBase(RequestBase):
 
         Initialize the RSS base with configuration options.
 
-
-
         Args:
 
             timeout: Request timeout in seconds
@@ -71,8 +67,6 @@ class RSSBase(RequestBase):
 
         Fetch and parse an RSS feed from a URL.
 
-
-
         Args:
 
             feed_url: URL of the RSS feed
@@ -80,8 +74,6 @@ class RSSBase(RequestBase):
             max_entries: Maximum number of entries to return (default: 10, None for all)
 
             fetch_webpage_content: Whether to fetch and extract content from article webpages (default: True)
-
-
 
         Returns:
 
@@ -139,8 +131,6 @@ class RSSBase(RequestBase):
 
         Process a single RSS entry and extract relevant information.
 
-
-
         Args:
 
             entry: FeedParser entry object
@@ -148,8 +138,6 @@ class RSSBase(RequestBase):
             base_url: Base URL for resolving relative links
 
             fetch_webpage_content: Whether to fetch and extract content from the article webpage
-
-
 
         Returns:
 
@@ -241,13 +229,9 @@ class RSSBase(RequestBase):
 
         Parse a date tuple from feedparser into ISO format string.
 
-
-
         Args:
 
             date_tuple: Date tuple from feedparser
-
-
 
         Returns:
 
@@ -278,13 +262,9 @@ class RSSBase(RequestBase):
 
         Clean HTML tags and normalize whitespace in text.
 
-
-
         Args:
 
             text: Raw text content
-
-
 
         Returns:
 
@@ -310,13 +290,9 @@ class RSSBase(RequestBase):
 
         Validate if a URL contains a valid RSS feed.
 
-
-
         Args:
 
             url: URL to validate
-
-
 
         Returns:
 
@@ -368,13 +344,9 @@ class RSSBase(RequestBase):
 
         Extract feed title from XML root element.
 
-
-
         Args:
 
             root: XML root element
-
-
 
         Returns:
 
@@ -426,8 +398,6 @@ class RSSFetchTool(Tool):
 
         Fetch and parse an RSS feed.
 
-
-
         Args:
 
             feed_url: URL of the RSS feed
@@ -435,8 +405,6 @@ class RSSFetchTool(Tool):
             max_entries: Maximum number of entries to return (default: 10)
 
             fetch_webpage_content: Whether to fetch and extract content from article webpages
-
-
 
         Returns:
 
@@ -468,13 +436,9 @@ class RSSValidateTool(Tool):
 
         Validate if a URL contains a valid RSS feed.
 
-
-
         Args:
 
             url: URL to validate
-
-
 
         Returns:
 

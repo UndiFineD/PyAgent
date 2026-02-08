@@ -9,13 +9,9 @@
 
 Simmer Copytrading Skill
 
-
-
 Mirrors positions from target Polymarket wallets via Simmer SDK.
 
 Uses the existing copytrading_strategy.py logic server-side.
-
-
 
 By default, runs in "buy only" mode - only buys to match whale positions,
 
@@ -23,15 +19,11 @@ never sells existing positions. This prevents conflicts with other strategies
 
 (weather, etc.) that may have opened positions.
 
-
-
 Exit handling:
 
 - --whale-exits: Sell positions when whales exit (strategy-specific exit)
 
 - SDK Risk Management: Stop-loss/take-profit (generic safety net) - coming soon
-
-
 
 Usage:
 
@@ -67,13 +59,11 @@ from urllib.error import HTTPError, URLError
 
 from urllib.request import Request, urlopen
 
-
 # =============================================================================
 
 # Configuration
 
 # =============================================================================
-
 
 # Environment variables
 
@@ -81,13 +71,11 @@ SIMMER_API_KEY = os.environ.get("SIMMER_API_KEY", "")
 
 SIMMER_API_URL = os.environ.get("SIMMER_API_URL", "https://api.simmer.markets")
 
-
 # Polymarket constraints
 
 MIN_SHARES_PER_ORDER = 5.0  # Polymarket requires minimum 5 shares
 
 MIN_TICK_SIZE = 0.01  # Minimum price increment
-
 
 # Copytrading settings
 
@@ -300,8 +288,6 @@ def fetch_wallet_positions(wallet: str) -> list:
 
     Fetch positions for a wallet via Simmer API.
 
-
-
     Note: This uses the positions endpoint. For full copytrading logic,
 
     the actual implementation uses the copytrading_strategy module server-side.
@@ -331,8 +317,6 @@ def execute_copytrading(
     """
 
     Execute copytrading via Simmer SDK.
-
-
 
     Calls POST /api/sdk/copytrading/execute which:
 
@@ -385,8 +369,6 @@ def run_copytrading(
 
     Run copytrading scan and execute trades.
 
-
-
     Calls the Simmer SDK copytrading endpoint which handles:
 
     - Fetching positions from target wallets via Dome API
@@ -402,8 +384,6 @@ def run_copytrading(
     - Rebalance trade calculation and execution
 
     - Whale exit detection (sells positions whales no longer hold)
-
-
 
     By default, only BUY trades are executed (buy_only=True). This prevents
 

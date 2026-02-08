@@ -7,7 +7,6 @@ import json
 
 import urllib.parse
 
-
 CUSTOM_BASE64_ALPHABET = "ZmserbBoHQtNP+wOcza/LpngG8yJq42KWYj0DSfdikx3VT16IlUAFM97hECvuRX5"
 
 

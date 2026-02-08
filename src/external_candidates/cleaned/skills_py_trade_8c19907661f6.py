@@ -7,7 +7,6 @@ import os
 
 import sys
 
-
 from py_clob_client.client import ClobClient
 
 from py_clob_client.clob_types import OrderArgs
@@ -15,7 +14,6 @@ from py_clob_client.clob_types import OrderArgs
 from py_clob_client.order_builder.constants import BUY, SELL
 
 from rich.console import Console
-
 
 console = Console()
 

@@ -5,7 +5,6 @@
 
 from typing import Any, Dict, Optional
 
-
 from evoagentx.core.logging import logger
 
 from evoagentx.models.base_model import BaseLLM
@@ -13,7 +12,6 @@ from evoagentx.models.base_model import BaseLLM
 from evoagentx.storages.base import StorageHandler
 
 from llama_index.core.embeddings import BaseEmbedding
-
 
 from .base import BaseIndexWrapper, IndexType
 
@@ -24,7 +22,6 @@ from .summary_index import SummaryIndexing
 from .tree_index import TreeIndexing
 
 from .vector_index import VectorIndexing
-
 
 __all__ = [
     "VectorIndexing",
@@ -49,8 +46,6 @@ class IndexFactory:
     ) -> BaseIndexWrapper:
         """Create an index based on configuration.
 
-
-
         Args:
 
             index_type (IndexType): The type of index to create.
@@ -63,13 +58,9 @@ class IndexFactory:
 
             node_parser (Any, optional): Node parser (unused, kept for compatibility).
 
-
-
         Returns:
 
             BaseIndexWrapper: A wrapped LlamaIndex index.
-
-
 
         Raises:
 

@@ -9,8 +9,6 @@
 
 Daily Summary with Driver Analysis
 
-
-
 Enhanced morning briefing with actionable insights and driver analysis.
 
 Shows what's affecting your scores and provides contextual recommendations.
@@ -25,11 +23,9 @@ from datetime import datetime, timedelta
 
 from pathlib import Path
 
-
 # Add scripts directory to path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-
 
 from baseline import build_baseline
 

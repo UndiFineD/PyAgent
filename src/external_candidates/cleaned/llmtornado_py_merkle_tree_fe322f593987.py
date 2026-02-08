@@ -17,7 +17,6 @@ from pathlib import Path
 
 from typing import Dict, Optional, Set, Tuple
 
-
 from loguru import logger
 
 
@@ -79,8 +78,6 @@ class MerkleTree:
 
     Merkle tree for efficient directory-level change detection.
 
-
-
     Each file gets a hash, each directory gets a hash of its children.
 
     Comparing trees identifies changed directories without scanning unchanged ones.
@@ -96,8 +93,6 @@ class MerkleTree:
         """
 
         Build Merkle tree from file paths and their hashes.
-
-
 
         Args:
 
@@ -159,13 +154,9 @@ class MerkleTree:
 
         Compare with another Merkle tree to find changes.
 
-
-
         Args:
 
             other: Previous Merkle tree to compare against
-
-
 
         Returns:
 
@@ -243,13 +234,9 @@ class MerkleTree:
 
         Get set of directories that have changed.
 
-
-
         Args:
 
             other: Previous Merkle tree
-
-
 
         Returns:
 

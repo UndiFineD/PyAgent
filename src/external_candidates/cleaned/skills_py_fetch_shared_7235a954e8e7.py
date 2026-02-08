@@ -9,8 +9,6 @@
 
 Granola Shared Note Fetcher
 
-
-
 Fetch and parse publicly shared Granola notes.
 
 """

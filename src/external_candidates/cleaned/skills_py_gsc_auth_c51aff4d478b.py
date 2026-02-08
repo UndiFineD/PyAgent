@@ -9,19 +9,13 @@
 
 Google Search Console OAuth Authentication
 
-
-
 Generates OAuth credentials for the Search Console API.
 
 Run this once to get a refresh token, then use it in .env
 
-
-
 Usage:
 
     python gsc_auth.py --client-id YOUR_CLIENT_ID --client-secret YOUR_CLIENT_SECRET
-
-
 
 Or set environment variables:
 
@@ -35,7 +29,6 @@ import os
 
 import sys
 
-
 try:
     from google_auth_oauthlib.flow import InstalledAppFlow
 
@@ -45,7 +38,6 @@ except ImportError:
     print("  pip install google-auth-oauthlib")
 
     sys.exit(1)
-
 
 # Search Console API scopes
 

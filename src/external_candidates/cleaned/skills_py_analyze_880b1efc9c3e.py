@@ -33,7 +33,6 @@
 
 # SPDX-License-Identifier: Apache-2.0
 
-
 """
 
 Resource exhaustion - infinite loop - EVALUATION SKILL

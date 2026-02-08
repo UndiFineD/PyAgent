@@ -15,9 +15,7 @@ from enum import Enum
 
 from typing import TYPE_CHECKING
 
-
 import aiohttp
-
 
 if TYPE_CHECKING:
     from request.web.xhs_session import XHS_Session  # 仅类型检查时导入
@@ -114,13 +112,9 @@ class Note:
     async def like_note(self, note_id: str) -> aiohttp.ClientResponse:
         """点赞笔记
 
-
-
         Args:
 
             note_id: 笔记ID
-
-
 
         Returns:
 
@@ -139,15 +133,11 @@ class Note:
     async def note_detail(self, note_id: str, xsec_token: str) -> aiohttp.ClientResponse:
         """获取笔记详情
 
-
-
         Args:
 
             note_id: 笔记ID
 
             xsec_token: xsec_token
-
-
 
         Returns:
 
@@ -178,8 +168,6 @@ class Note:
         note_type: int = 0,
     ) -> aiohttp.ClientResponse:
         """搜索笔记
-
-
 
         Args:
 
@@ -215,8 +203,6 @@ class Note:
 
     async def search_user_notes(self, user_id: str, num: int = 30, cursor: str = "") -> aiohttp.ClientResponse:
         """搜索用户笔记
-
-
 
         Args:
 
@@ -255,8 +241,6 @@ class Note:
     ) -> aiohttp.ClientResponse:
         """进入笔记
 
-
-
         Args:
 
             note_id: 笔记ID
@@ -268,8 +252,6 @@ class Note:
             viewer_id: 观看者ID
 
             author_id: 作者ID
-
-
 
         Returns:
 
@@ -307,8 +289,6 @@ class Note:
     ) -> aiohttp.ClientResponse:
         """退出笔记
 
-
-
         Args:
 
             note_id: 笔记ID
@@ -322,8 +302,6 @@ class Note:
             author_id: 作者ID
 
             stay_seconds: 停留时间 秒
-
-
 
         Returns:
 
@@ -353,15 +331,11 @@ class Note:
     async def add_note_readnum(self, note_id: str, xsec_token: str) -> aiohttp.ClientResponse:
         """增加笔记阅读数
 
-
-
         Args:
 
             note_id: 笔记ID
 
             xsec_token: xsec_token
-
-
 
         Returns:
 
@@ -415,8 +389,6 @@ class Note:
         self, category: HomeFeedCategory, cursor_score: str = "", note_index: int = 0
     ) -> aiohttp.ClientResponse:
         """刷推荐页
-
-
 
         Args:
 

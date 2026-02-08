@@ -7,8 +7,6 @@
 
 Logging configuration for keep.
 
-
-
 Suppress verbose library output by default for better UX.
 
 """
@@ -18,7 +16,6 @@ import os
 import sys
 
 import warnings
-
 
 # Set environment variables BEFORE any imports to suppress warnings early
 
@@ -39,8 +36,6 @@ def configure_quiet_mode(quiet: bool = True):
 
     Configure logging to suppress verbose library output.
 
-
-
     This silences:
 
     - HuggingFace transformers progress bars
@@ -48,8 +43,6 @@ def configure_quiet_mode(quiet: bool = True):
     - MLX model loading messages
 
     - Library warnings (deprecation, etc.)
-
-
 
     Args:
 

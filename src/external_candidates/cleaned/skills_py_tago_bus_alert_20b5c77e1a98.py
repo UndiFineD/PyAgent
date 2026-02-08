@@ -7,15 +7,11 @@
 
 """korea-metropolitan-bus-alerts MVP CLI helpers.
 
-
-
 This script is meant to be used by an agent (Clawdbot) as a deterministic helper.
 
 It does NOT register cron automatically in this repo; the skill guides users
 
 through Clawdbot cron registration.
-
-
 
 Commands:
 
@@ -23,13 +19,9 @@ Commands:
 
 - arrivals --city <cityCode> --node <nodeId> [--routes 535,730]
 
-
-
 Env:
 
 - TAGO_SERVICE_KEY (required)
-
-
 
 Security:
 
@@ -39,7 +31,6 @@ Security:
 
 from __future__ import annotations
 
-
 import argparse
 
 import json
@@ -47,7 +38,6 @@ import json
 import sys
 
 from typing import List, Optional
-
 
 from tago_api import (
     arrivals_for_stop,

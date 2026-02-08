@@ -23,7 +23,6 @@ import time
 
 from pathlib import Path
 
-
 SESSIONS_DIR = Path.home() / ".clawdbot" / "browser-sessions"
 
 SECRETS_DIR = Path.home() / ".clawdbot" / "secrets"

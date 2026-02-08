@@ -7,7 +7,6 @@
 
 from typing import List, Optional
 
-
 from .module import BaseModule
 
 
@@ -15,8 +14,6 @@ class BaseConfig(BaseModule):
     """
 
     Base configuration class that serves as parent for all configuration classes.
-
-
 
     A config should inherit BaseConfig and specify the attributes and their types.
 
@@ -27,15 +24,11 @@ class BaseConfig(BaseModule):
     def save(self, path: str, **kwargs) -> str:
         """Save configuration to the specified path.
 
-
-
         Args:
 
             path: The file path to save the configuration
 
             **kwargs (Any): Additional keyword arguments passed to save_module method
-
-
 
         Returns:
 
@@ -47,8 +40,6 @@ class BaseConfig(BaseModule):
 
     def get_config_params(self) -> List[str]:
         """Get a list of configuration parameters.
-
-
 
         Returns:
 
@@ -65,13 +56,9 @@ class BaseConfig(BaseModule):
     def get_set_params(self, ignore: List[str] = []) -> dict:
         """Get a dictionary of explicitly set parameters.
 
-
-
         Args:
 
             ignore: List of parameter names to ignore
-
-
 
         Returns:
 
@@ -94,8 +81,6 @@ class BaseConfig(BaseModule):
 
 class Parameter(BaseModule):
     """Parameter class used to define configuration parameters.
-
-
 
     Attributes:
 

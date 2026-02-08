@@ -7,8 +7,6 @@
 
 Framework adapter module.
 
-
-
 Provides multi-framework support with adapters for Jest, Pytest, JUnit, Vitest, and more.
 
 Handles framework-specific patterns, imports, and test structure.
@@ -59,8 +57,6 @@ class FrameworkAdapter:
         """
 
         Initialize framework adapter.
-
-
 
         Args:
 
@@ -155,15 +151,11 @@ import { expect } from 'chai';"""
 
         Wrap test content in framework-specific suite structure.
 
-
-
         Args:
 
             suite_name: Name of test suite
 
             test_content: Test functions/methods
-
-
 
         Returns:
 
@@ -183,8 +175,6 @@ import { expect } from 'chai';"""
 
     \"\"\"Test suite for {suite_name}.\"\"\"
 
-
-
 {self._indent(test_content, 4)}"""
 
         elif self.framework == Framework.UNITTEST:
@@ -192,14 +182,10 @@ import { expect } from 'chai';"""
 
     \"\"\"Test suite for {suite_name}.\"\"\"
 
-
-
 {self._indent(test_content, 4)}"""
 
         elif self.framework in [Framework.JUNIT, Framework.TESTNG]:
             return f"""public class {self._to_class_name(suite_name)}Test {{
-
-
 
 {self._indent(test_content, 4)}
 
@@ -212,8 +198,6 @@ import { expect } from 'chai';"""
 
         Generate framework-specific test function.
 
-
-
         Args:
 
             test_name: Name of test
@@ -221,8 +205,6 @@ import { expect } from 'chai';"""
             test_body: Test body code
 
             description: Test description
-
-
 
         Returns:
 
@@ -352,8 +334,6 @@ public void test{method_name}() {{
 
         Generate framework-specific assertion.
 
-
-
         Args:
 
             actual: Actual value expression
@@ -361,8 +341,6 @@ public void test{method_name}() {{
             expected: Expected value expression
 
             assertion_type: Type of assertion (equals, not_equals, true, false, throws)
-
-
 
         Returns:
 
@@ -571,13 +549,9 @@ public void tearDown() {{
 
         Auto-detect testing framework from code.
 
-
-
         Args:
 
             code: Test code
-
-
 
         Returns:
 

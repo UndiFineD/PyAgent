@@ -7,7 +7,6 @@ import os
 
 from typing import Optional
 
-
 from ...storage_handler import FileStorageHandler
 
 from ...tool import Toolkit

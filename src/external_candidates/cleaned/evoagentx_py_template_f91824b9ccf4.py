@@ -7,13 +7,11 @@ from copy import deepcopy
 
 from typing import Any, List, Optional, Type, Union
 
-
 import regex
 
 from pydantic import Field
 
 from pydantic_core import PydanticUndefined
-
 
 from ..core.logging import logger
 
@@ -498,13 +496,9 @@ class StringTemplate(PromptTemplate):
 
         Format the prompt template.
 
-
-
         Convert the prompt template into a prompt string.
 
         It will sequentially concatenate the following sections (if provided): instruction, context, tools, constraints, demonstrations, history, inputs and outputs.
-
-
 
         Args:
 
@@ -527,8 +521,6 @@ class StringTemplate(PromptTemplate):
             custom_output_format (Optional[str]): User-specified output format. If provided, it will be directly used in the `Outputs Format` section of the prompt. Otherwise, the output format will be constructed from `outputs_format` and `parse_mode`.
 
             **kwargs: Additional keyword arguments.
-
-
 
         Returns:
 
@@ -714,8 +706,6 @@ class ChatTemplate(StringTemplate):
 
         Format the prompt template into a list of chat messages.
 
-
-
         The messages will be formatted in the following order:
 
         1. System message (containing system prompt, instruction, context, tools, and constraints)
@@ -725,8 +715,6 @@ class ChatTemplate(StringTemplate):
         3. Conversation history (if provided)
 
         4. Current user input (with input values and output format requirements)
-
-
 
         Args:
 
@@ -745,8 +733,6 @@ class ChatTemplate(StringTemplate):
             custom_output_format (Optional[str]): User-specified output format.
 
             **kwargs: Additional keyword arguments.
-
-
 
         Returns:
 

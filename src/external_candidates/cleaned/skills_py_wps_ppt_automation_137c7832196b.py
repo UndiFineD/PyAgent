@@ -9,12 +9,10 @@ import os
 
 from pathlib import Path
 
-
 APP_PROGIDS = {
     "powerpoint": ["PowerPoint.Application"],
     "wps": ["KWPP.Application", "WPP.Application"],
 }
-
 
 PP_SAVE_AS_PDF = 32
 

@@ -17,13 +17,9 @@
 
 A股实时行情与分时量能分析工具
 
-
-
 数据源：新浪财经（统一接口）
 
 支持：沪市(sh)、深市(sz) 股票
-
-
 
 Usage:
 
@@ -79,13 +75,9 @@ def get_sina_symbol(code: str) -> str:
 def fetch_realtime_sina(symbols: list[str]) -> dict[str, dict]:
     """从新浪获取实时行情（支持批量）
 
-
-
     新浪接口返回格式:
 
     var hq_str_sh600789="名称,今开,昨收,现价,最高,最低,买一,卖一,成交量(股),成交额(元),...";
-
-
 
     字段说明:
 
@@ -207,8 +199,6 @@ def fetch_realtime_sina(symbols: list[str]) -> dict[str, dict]:
 
 def fetch_minute_data_sina(symbol: str, count: int = 250) -> list[dict]:
     """从新浪获取分时K线数据
-
-
 
     接口: CN_MarketDataService.getKLineData
 

@@ -5,7 +5,6 @@
 
 import os
 
-
 from dotenv import load_dotenv
 
 from evoagentx.frameworks.multi_agent_debate.debate import MultiAgentDebateActionGraph

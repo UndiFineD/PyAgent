@@ -25,13 +25,11 @@ from copy import deepcopy
 
 from pathlib import Path
 
-
 import torch
 
 import torch.nn as nn
 
 import torch.nn.functional as F
-
 
 # Imports del framework
 
@@ -39,7 +37,6 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 if CURRENT_DIR not in sys.path:
     sys.path.insert(0, CURRENT_DIR)
-
 
 from agi import (
     KeplerCassette,
@@ -52,9 +49,7 @@ from agi import (
     get_parity_dataset,
 )
 
-
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 
 # ============================================================================= #
 

@@ -5,14 +5,11 @@
 
 # Acknowledgement: Modified from AFlow (https://github.com/geekan/MetaGPT/blob/main/metagpt/ext/aflow/scripts/evaluator.py) under MIT License
 
-
 import asyncio
 
 from typing import Callable, Optional, Tuple
 
-
 from tqdm.asyncio import tqdm_asyncio
-
 
 from ..benchmark.benchmark import Benchmark
 
@@ -21,7 +18,6 @@ from ..core.logging import logger
 from ..models.base_model import BaseLLM
 
 from ..models.model_utils import cost_manager
-
 
 # If you want to customize tasks, add task types here and provide evaluation functions, just like the ones given above
 
@@ -32,8 +28,6 @@ class AFlowEvaluator:
     AFlow-specific evaluator for workflow performance assessment.
 
     This evaluator measures the performance of AFlow workflow graphs against benchmarks.
-
-
 
     Attributes:
 
@@ -56,15 +50,11 @@ class AFlowEvaluator:
     ) -> Tuple[float, float, float]:
         """Asynchronously evaluate a workflow graph against a benchmark.
 
-
-
         Configures the graph with benchmark settings, processes all examples in the
 
         dataset concurrently (up to max_concurrent_tasks), and calculates
 
         performance metrics including average score, cost per example, and total cost.
-
-
 
         Args:
 
@@ -75,8 +65,6 @@ class AFlowEvaluator:
             is_test: Whether to use test data (True) or validation data (False)
 
             max_concurrent_tasks: Maximum number of concurrent evaluation tasks
-
-
 
         Returns:
 

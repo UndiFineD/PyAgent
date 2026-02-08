@@ -13,7 +13,6 @@ import unittest
 
 from unittest.mock import patch
 
-
 from datasets import load_from_disk
 
 from evoagentx.benchmark.lcb_utils.code_execution import CodeExecutionProblem
@@ -25,7 +24,6 @@ from evoagentx.benchmark.lcb_utils.test_output_prediction import (
 )
 
 from evoagentx.benchmark.livecodebench import LiveCodeBench
-
 
 from tests.src.benchmark.lcb_solutions import (
     code_execution_solution1,

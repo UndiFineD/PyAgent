@@ -9,37 +9,25 @@
 
 Twitter Advanced Search Script for Claude Code Skill
 
-
-
 This script fetches tweets from the Twitter API using advanced search,
 
 and returns the data in a structured format for analysis.
-
-
 
 Requirements:
 
 - requests library (pip install requests)
 
-
-
 Usage:
 
     python twitter_search.py <api_key> <query> [--max-results MAX_RESULTS]
-
-
 
 Environment variable:
 
     TWITTER_API_KEY - Alternatively, set this environment variable
 
-
-
 API Documentation:
 
     https://docs.twitterapi.io/api-reference/endpoint/tweet_advanced_search
-
-
 
 Query Syntax:
 
@@ -52,8 +40,6 @@ Query Syntax:
     Since date: since:2024-01-01
 
     Complex: "AI" OR "ChatGPT" from:elonmusk since:2024-01-01
-
-
 
     More examples: https://github.com/igorbrigadir/twitter-advanced-search
 
@@ -71,7 +57,6 @@ from datetime import datetime
 
 from typing import Any, Dict, List, Optional
 
-
 try:
     import requests
 
@@ -79,7 +64,6 @@ except ImportError:
     print("Error: 'requests' library is required. Install it with: pip install requests")
 
     sys.exit(1)
-
 
 # Constants
 
@@ -101,19 +85,13 @@ def get_api_key(api_key_arg: Optional[str]) -> str:
 
     Get API key from argument or environment variable.
 
-
-
     Args:
 
         api_key_arg: API key passed as argument
 
-
-
     Returns:
 
         The API key to use
-
-
 
     Raises:
 
@@ -136,8 +114,6 @@ def fetch_tweets(api_key: str, query: str, query_type: str = "Top", cursor: str 
 
     Fetch a single page of tweets from the Twitter API.
 
-
-
     Args:
 
         api_key: Twitter API key
@@ -148,13 +124,9 @@ def fetch_tweets(api_key: str, query: str, query_type: str = "Top", cursor: str 
 
         cursor: Pagination cursor (empty string for first page)
 
-
-
     Returns:
 
         JSON response from the API
-
-
 
     Raises:
 
@@ -187,8 +159,6 @@ def fetch_all_tweets(
 
     Fetch all tweets up to max_results using pagination.
 
-
-
     Args:
 
         api_key: Twitter API key
@@ -199,13 +169,9 @@ def fetch_all_tweets(
 
         query_type: Query type ("Latest" or "Top")
 
-
-
     Returns:
 
         List of tweet objects
-
-
 
     Raises:
 
@@ -278,13 +244,9 @@ def extract_tweet_summary(tweet: Dict[str, Any]) -> Dict[str, Any]:
 
     Extract key information from a tweet for summary output.
 
-
-
     Args:
 
         tweet: Raw tweet object from API
-
-
 
     Returns:
 
@@ -326,13 +288,9 @@ def calculate_statistics(tweets: List[Dict[str, Any]]) -> Dict[str, Any]:
 
     Calculate aggregate statistics from tweets.
 
-
-
     Args:
 
         tweets: List of tweet summary objects
-
-
 
     Returns:
 

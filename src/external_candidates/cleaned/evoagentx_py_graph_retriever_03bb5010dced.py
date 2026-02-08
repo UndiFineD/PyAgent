@@ -7,7 +7,6 @@ import json
 
 from typing import Any, Callable, List, Optional
 
-
 from evoagentx.core.logging import logger
 
 from evoagentx.models import BaseLLM
@@ -31,7 +30,6 @@ from llama_index.core.indices.property_graph.sub_retrievers.vector import (
 from llama_index.core.schema import NodeWithScore
 
 from llama_index.core.vector_stores.types import BasePydanticVectorStore
-
 
 from .base import BaseRetrieverWrapper
 

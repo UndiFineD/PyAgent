@@ -9,23 +9,15 @@
 
 x402 Credit Balance Check
 
-
-
 Check your credit balance for a specific endpoint.
-
-
 
 Usage:
 
     python check_credits.py <endpoint_slug>
 
-
-
 Example:
 
     python check_credits.py weather-data
-
-
 
 Environment Variables:
 
@@ -39,9 +31,7 @@ import os
 
 import sys
 
-
 import requests
-
 
 API_BASE = "https://api.x402layer.cc"
 

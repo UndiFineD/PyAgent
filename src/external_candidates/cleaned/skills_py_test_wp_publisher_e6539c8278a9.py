@@ -7,14 +7,11 @@
 
 Tests for WordPress Publisher
 
-
-
 Run with: pytest tests/test_wp_publisher.py -v
 
 """
 
 import json
-
 
 # Import the modules to test
 
@@ -22,12 +19,9 @@ import sys
 
 from unittest.mock import MagicMock, Mock, patch
 
-
 import pytest
 
-
 sys.path.insert(0, "scripts")
-
 
 from wp_publisher import (
     APIError,

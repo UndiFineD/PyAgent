@@ -9,9 +9,7 @@ import time
 
 from typing import List, Optional
 
-
 from pydantic import Field, PositiveInt
-
 
 from ..actions.agent_generation import AgentGenerationOutput
 
@@ -26,7 +24,6 @@ from ..agents.task_planner import TaskPlanner
 from ..agents.workflow_reviewer import WorkFlowReviewer
 
 from ..core.logging import logger
-
 
 # from ..core.base_config import Parameter
 
@@ -46,8 +43,6 @@ class WorkFlowGenerator(BaseModule):
 
     Automated workflow generation system based on high-level goals.
 
-
-
     The WorkFlowGenerator is responsible for creating complete workflow graphs
 
     from high-level goals or task descriptions. It breaks down the goal into
@@ -55,8 +50,6 @@ class WorkFlowGenerator(BaseModule):
     subtasks, creates the necessary dependency connections between tasks,
 
     and assigns or generates appropriate agents for each task.
-
-
 
     Attributes:
 
@@ -132,8 +125,6 @@ class WorkFlowGenerator(BaseModule):
     def _execute_with_retry(self, operation_name: str, operation, retries_left: int = 1, **kwargs):
         """Helper method to execute operations with retry logic.
 
-
-
         Args:
 
             operation_name: Name of the operation for logging
@@ -144,13 +135,9 @@ class WorkFlowGenerator(BaseModule):
 
             **kwargs: Additional arguments to pass to the operation
 
-
-
         Returns:
 
             Tuple of (operation_result, number_of_retries_used)
-
-
 
         Raises:
 

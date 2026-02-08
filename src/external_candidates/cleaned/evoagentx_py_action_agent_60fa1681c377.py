@@ -11,7 +11,6 @@ import time
 
 from typing import Any, Dict
 
-
 from dotenv import load_dotenv
 
 from evoagentx.agents import ActionAgent
@@ -20,13 +19,11 @@ from evoagentx.core.registry import ACTION_FUNCTION_REGISTRY, register_action_fu
 
 from evoagentx.models import OpenAILLMConfig
 
-
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 model_config = OpenAILLMConfig(model="gpt-4o-mini", openai_key=OPENAI_API_KEY, stream=True, output_response=True)
-
 
 # ============================================================================
 
@@ -607,7 +604,6 @@ def demo_edge_cases():
 # MAIN EXECUTION
 
 # ============================================================================
-
 
 if __name__ == "__main__":
     print("ActionAgent Examples - Key Cases Only")

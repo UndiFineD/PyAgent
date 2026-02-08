@@ -15,11 +15,9 @@ from typing import (
     Tuple,
 )
 
-
 import diskcache
 
 import llama_cpp.llama
-
 
 from .llama_types import *
 

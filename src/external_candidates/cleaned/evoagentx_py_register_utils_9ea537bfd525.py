@@ -3,12 +3,9 @@
 
 # Extracted from: C:\DEV\PyAgent\.external\EvoAgentX\evoagentx\utils\mipro_utils\register_utils.py
 
-
 from typing import Any, Dict, List, Optional
 
-
 from ...optimizers.engine.registry import ParamRegistry
-
 
 # from ...optimizers.engine.registry import OptimizableField
 

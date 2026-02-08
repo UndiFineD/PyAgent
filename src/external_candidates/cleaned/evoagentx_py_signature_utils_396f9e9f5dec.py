@@ -7,7 +7,6 @@ import ast
 
 import importlib
 
-
 # from dspy.signatures.signature import make_signature
 
 import keyword
@@ -22,13 +21,11 @@ import warnings
 
 from typing import Any, Dict, Optional, Tuple, Type, Union
 
-
 from dspy import InputField, OutputField, Signature
 
 from pydantic import Field, create_model
 
 from pydantic.fields import FieldInfo
-
 
 from ...optimizers.engine.registry import ParamRegistry
 
@@ -63,13 +60,9 @@ def _default_instructions(cls) -> str:
 def _parse_type_node(node, names=None) -> Any:
     """Recursively parse an AST node representing a type annotation.
 
-
-
     This function converts Python's Abstract Syntax Tree (AST) nodes into actual Python types.
 
     It's used to parse type annotations in signature strings like "x: List[int] -> y: str".
-
-
 
     Examples:
 
@@ -80,8 +73,6 @@ def _parse_type_node(node, names=None) -> Any:
         - For "x: Optional[int]", it handles the Union type to return Optional[int]
 
         - For "x: MyModule.CustomType", it processes attribute access to return the actual type
-
-
 
     Args:
 
@@ -99,13 +90,9 @@ def _parse_type_node(node, names=None) -> Any:
 
             Defaults to Python's typing module contents plus NoneType.
 
-
-
     Returns:
 
         The actual Python type represented by the AST node.
-
-
 
     Raises:
 
@@ -243,8 +230,6 @@ def _parse_type_node(node, names=None) -> Any:
 
 def _parse_field_string(field_string: str) -> Dict[str, str]:
     """Extract the field name and type from field string in the string-based Signature.
-
-
 
     It takes a string like "x: int, y: str" and returns a dictionary mapping field names to their types.
 
@@ -439,15 +424,11 @@ def build_signature_class(
 
     Dynamically builds a DSPy Signature class based on a parameter registry.
 
-
-
     This function creates a new DSPy Signature class that defines input and output fields
 
     based on the parameters in the registry. Each parameter becomes an input field in the
 
     signature, and an additional output field is added for the evaluation score.
-
-
 
     Parameters
 
@@ -477,8 +458,6 @@ def build_signature_class(
 
         Type annotation for the output field
 
-
-
     Returns
 
     -------
@@ -486,8 +465,6 @@ def build_signature_class(
     type
 
         A new DSPy Signature subclass with dynamically defined input and output fields
-
-
 
     Examples
 

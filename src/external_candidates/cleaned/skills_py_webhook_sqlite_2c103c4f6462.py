@@ -19,13 +19,11 @@ import sys
 
 from pathlib import Path
 
-
 # Add skill directory to path
 
 skill_dir = Path(__file__).parent
 
 sys.path.insert(0, str(skill_dir))
-
 
 from sms_sqlite import get_all_threads, get_unread, init_db, mark_as_read, store_message
 

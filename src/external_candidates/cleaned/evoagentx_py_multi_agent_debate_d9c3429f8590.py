@@ -7,12 +7,9 @@
 
 Multi-Agent Debate Prompts
 
-
-
 This module contains all prompts and utilities for the Multi-Agent Debate framework.
 
 """
-
 
 # Default personas for debaters
 
@@ -42,19 +39,13 @@ DEBATER_AGENT_PROMPT = """
 
 You are debater #{agent_id} (role: {role}). This is round {round_index} of {total_rounds}.
 
-
-
 Problem:
 
 {problem}
 
-
-
 Conversation so far:
 
 {transcript_text}
-
-
 
 Instructions:
 
@@ -63,8 +54,6 @@ Instructions:
 - If confident, provide your current answer for this round.
 
 - Your output MUST follow this XML template:
-
-
 
 <response>
 
@@ -78,32 +67,23 @@ Instructions:
 
 """
 
-
 # Judge Agent Prompt Template
 
 JUDGE_AGENT_PROMPT = """
 
 You are the judge. Based on the multi-round debate, deliver a final decision and answer.
 
-
-
 Problem:
 
 {problem}
-
-
 
 Debater roles:
 
 {roles_text}
 
-
-
 Debate transcript:
 
 {transcript_text}
-
-
 
 Return the following XML:
 
@@ -118,7 +98,6 @@ Return the following XML:
 </response>
 
 """
-
 
 # Utility functions for building prompts
 
@@ -181,8 +160,6 @@ def format_transcript(transcript: list) -> str:
 
 def collect_last_round_candidates(transcript: list, num_agents: int, last_round_index: int) -> list:
     """Collect candidates from the last round of debate.
-
-
 
     Returns list of [{"agent_id": int, "text": str}].
 

@@ -27,9 +27,7 @@ from pathlib import Path
 
 from typing import Dict, List, Optional
 
-
 import requests
-
 
 SECRETS_DIR = Path.home() / ".clawdbot" / "secrets"
 
@@ -116,8 +114,6 @@ class ProxyPool:
 
         Get a proxy from the pool
 
-
-
         Args:
 
             proxy_type: Filter by type (residential, datacenter, rotating)
@@ -125,8 +121,6 @@ class ProxyPool:
             country: Filter by country code
 
             exclude_failed: Skip proxies with high fail rate
-
-
 
         Returns:
 
@@ -204,8 +198,6 @@ def test_proxy(proxy_url: str, test_url: str = "https://httpbin.org/ip", timeout
     """
 
     Test if a proxy is working
-
-
 
     Returns:
 

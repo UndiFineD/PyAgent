@@ -9,13 +9,9 @@
 
 Skill Initializer - Creates a new skill from template
 
-
-
 Usage:
 
     init_skill.py <skill-name> --path <path> [--resources scripts,references,assets] [--examples]
-
-
 
 Examples:
 
@@ -37,11 +33,9 @@ import sys
 
 from pathlib import Path
 
-
 MAX_SKILL_NAME_LENGTH = 64
 
 ALLOWED_RESOURCES = {"scripts", "references", "assets"}
-
 
 SKILL_TEMPLATE = """---
 
@@ -51,27 +45,15 @@ description: [TODO: Complete and informative explanation of what the skill does 
 
 ---
 
-
-
 # {skill_title}
-
-
 
 ## Overview
 
-
-
 [TODO: 1-2 sentences explaining what this skill enables]
-
-
 
 ## Structuring This Skill
 
-
-
 [TODO: Choose the structure that best fits this skill's purpose. Common patterns:
-
-
 
 **1. Workflow-Based** (best for sequential processes)
 
@@ -81,8 +63,6 @@ description: [TODO: Complete and informative explanation of what the skill does 
 
 - Structure: ## Overview -> ## Workflow Decision Tree -> ## Step 1 -> ## Step 2...
 
-
-
 **2. Task-Based** (best for tool collections)
 
 - Works well when the skill offers different operations/capabilities
@@ -90,8 +70,6 @@ description: [TODO: Complete and informative explanation of what the skill does 
 - Example: PDF skill with "Quick Start" -> "Merge PDFs" -> "Split PDFs" -> "Extract Text"
 
 - Structure: ## Overview -> ## Quick Start -> ## Task Category 1 -> ## Task Category 2...
-
-
 
 **3. Reference/Guidelines** (best for standards or specifications)
 
@@ -101,8 +79,6 @@ description: [TODO: Complete and informative explanation of what the skill does 
 
 - Structure: ## Overview -> ## Guidelines -> ## Specifications -> ## Usage...
 
-
-
 **4. Capabilities-Based** (best for integrated systems)
 
 - Works well when the skill provides multiple interrelated features
@@ -111,19 +87,11 @@ description: [TODO: Complete and informative explanation of what the skill does 
 
 - Structure: ## Overview -> ## Core Capabilities -> ### 1. Feature -> ### 2. Feature...
 
-
-
 Patterns can be mixed and matched as needed. Most skills combine patterns (e.g., start with task-based, add workflow for complex operations).
-
-
 
 Delete this entire "Structuring This Skill" section when done - it's just guidance.]
 
-
-
 ## [TODO: Replace with the first main section based on chosen structure]
-
-
 
 [TODO: Add content here. See examples in existing skills:
 
@@ -135,21 +103,13 @@ Delete this entire "Structuring This Skill" section when done - it's just guidan
 
 - References to scripts/templates/references as needed]
 
-
-
 ## Resources (optional)
 
-
-
 Create only the resource directories this skill actually needs. Delete this section if no resources are required.
-
-
 
 ### scripts/
 
 Executable code (Python/Bash/etc.) that can be run directly to perform specific operations.
-
-
 
 **Examples from other skills:**
 
@@ -157,21 +117,13 @@ Executable code (Python/Bash/etc.) that can be run directly to perform specific 
 
 - DOCX skill: `document.py`, `utilities.py` - Python modules for document processing
 
-
-
 **Appropriate for:** Python scripts, shell scripts, or any executable code that performs automation, data processing, or specific operations.
 
-
-
 **Note:** Scripts may be executed without loading into context, but can still be read by Codex for patching or environment adjustments.
-
-
 
 ### references/
 
 Documentation and reference material intended to be loaded into context to inform Codex's process and thinking.
-
-
 
 **Examples from other skills:**
 
@@ -181,17 +133,11 @@ Documentation and reference material intended to be loaded into context to infor
 
 - Finance: Schema documentation, company policies
 
-
-
 **Appropriate for:** In-depth documentation, API references, database schemas, comprehensive guides, or any detailed information that Codex should reference while working.
-
-
 
 ### assets/
 
 Files not intended to be loaded into context, but rather used within the output Codex produces.
-
-
 
 **Examples from other skills:**
 
@@ -201,20 +147,13 @@ Files not intended to be loaded into context, but rather used within the output 
 
 - Typography: Font files (.ttf, .woff2)
 
-
-
 **Appropriate for:** Templates, boilerplate code, document templates, images, icons, fonts, or any files meant to be copied or used in the final output.
 
-
-
 ---
-
-
 
 **Not every skill requires all three types of resources.**
 
 """
-
 
 EXAMPLE_SCRIPT = '''#!/usr/bin/env python3
 
@@ -222,13 +161,9 @@ EXAMPLE_SCRIPT = '''#!/usr/bin/env python3
 
 Example helper script for {skill_name}
 
-
-
 This is a placeholder script that can be executed directly.
 
 Replace with actual implementation or delete if not needed.
-
-
 
 Example real scripts from other skills:
 
@@ -238,8 +173,6 @@ Example real scripts from other skills:
 
 """
 
-
-
 def main():
 
     print("This is an example script for {skill_name}")
@@ -248,24 +181,17 @@ def main():
 
     # This could be data processing, file conversion, API calls, etc.
 
-
-
 if __name__ == "__main__":
 
     main()
 
 '''
 
-
 EXAMPLE_REFERENCE = """# Reference Documentation for {skill_title}
-
-
 
 This is a placeholder for detailed reference documentation.
 
 Replace with actual reference content or delete if not needed.
-
-
 
 Example real reference docs from other skills:
 
@@ -275,11 +201,7 @@ Example real reference docs from other skills:
 
 - bigquery/references/ - API references and query examples
 
-
-
 ## When Reference Docs Are Useful
-
-
 
 Reference docs are ideal for:
 
@@ -293,11 +215,7 @@ Reference docs are ideal for:
 
 - Content that's only needed for specific use cases
 
-
-
 ## Structure Suggestions
-
-
 
 ### API Reference Example
 
@@ -310,8 +228,6 @@ Reference docs are ideal for:
 - Error codes
 
 - Rate limits
-
-
 
 ### Workflow Guide Example
 
@@ -327,22 +243,15 @@ Reference docs are ideal for:
 
 """
 
-
 EXAMPLE_ASSET = """# Example Asset File
-
-
 
 This placeholder represents where asset files would be stored.
 
 Replace with actual asset files (templates, images, fonts, etc.) or delete if not needed.
 
-
-
 Asset files are NOT intended to be loaded into context, but rather used within
 
 the output Codex produces.
-
-
 
 Example asset files from other skills:
 
@@ -354,11 +263,7 @@ Example asset files from other skills:
 
 - Data: sample_data.csv, test_dataset.json
 
-
-
 ## Common Asset Types
-
-
 
 - Templates: .pptx, .docx, boilerplate directories
 
@@ -371,8 +276,6 @@ Example asset files from other skills:
 - Icons: .ico, .svg
 
 - Data files: .csv, .json, .xml, .yaml
-
-
 
 Note: This is a text placeholder. Actual assets can be any file type.
 
@@ -476,8 +379,6 @@ def init_skill(skill_name, path, resources, include_examples):
 
     Initialize a new skill directory with template SKILL.md.
 
-
-
     Args:
 
         skill_name: Name of the skill
@@ -487,8 +388,6 @@ def init_skill(skill_name, path, resources, include_examples):
         resources: Resource directories to create
 
         include_examples: Whether to create example files in resource directories
-
-
 
     Returns:
 

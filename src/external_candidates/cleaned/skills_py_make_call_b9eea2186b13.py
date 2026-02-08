@@ -9,8 +9,6 @@
 
 Make voice calls via Dialpad API with optional ElevenLabs TTS.
 
-
-
 Usage:
 
     python3 make_call.py --to "+14155551234"
@@ -39,13 +37,11 @@ import urllib.parse
 
 import urllib.request
 
-
 # Configuration
 
 DIALPAD_API_KEY = os.environ.get("DIALPAD_API_KEY")
 
 DIALPAD_API_BASE = "https://dialpad.com/api/v2"
-
 
 # Known ShapeScale users (auto-populated from API)
 
@@ -76,8 +72,6 @@ def make_call(to_number, from_number=None, user_id=None, text_to_speak=None):
 
     Make a voice call via Dialpad API.
 
-
-
     Args:
 
         to_number: Recipient phone number in E.164 format
@@ -87,8 +81,6 @@ def make_call(to_number, from_number=None, user_id=None, text_to_speak=None):
         user_id: Dialpad user ID (required for making calls)
 
         text_to_speak: Optional text to be spoken (Text-to-Speech)
-
-
 
     Returns:
 

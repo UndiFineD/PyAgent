@@ -9,19 +9,13 @@
 
 market_series.py
 
-
-
 Fetch historical series and print CSV to stdout.
-
-
 
 Stocks/ETFs/indices: yfinance history (daily)
 
 FX: derived from ExchangeRate-API open endpoint (daily snapshots not provided here),
 
     so we return a simple "latest only" line unless you add a historical FX provider.
-
-
 
 Usage:
 
@@ -35,7 +29,6 @@ Usage:
 
 from __future__ import annotations
 
-
 import argparse
 
 import re
@@ -45,7 +38,6 @@ import sys
 from datetime import datetime, timedelta
 
 from typing import Optional, Tuple
-
 
 import pandas as pd
 

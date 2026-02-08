@@ -19,9 +19,7 @@ import time
 
 from pathlib import Path
 
-
 import requests
-
 
 SECRETS_DIR = Path.home() / ".clawdbot" / "secrets"
 
@@ -42,8 +40,6 @@ def solve_recaptcha_v2(site_key: str, page_url: str, invisible: bool = False, pr
 
     Solve reCAPTCHA v2
 
-
-
     Args:
 
         site_key: The site key (data-sitekey attribute)
@@ -53,8 +49,6 @@ def solve_recaptcha_v2(site_key: str, page_url: str, invisible: bool = False, pr
         invisible: Whether it's invisible reCAPTCHA
 
         provider: Force specific provider (2captcha, anticaptcha, capsolver)
-
-
 
     Returns:
 
@@ -92,8 +86,6 @@ def solve_recaptcha_v3(
 
     Solve reCAPTCHA v3
 
-
-
     Args:
 
         site_key: The site key
@@ -105,8 +97,6 @@ def solve_recaptcha_v3(
         min_score: Minimum required score (0.1-0.9)
 
         provider: Force specific provider
-
-
 
     Returns:
 
@@ -148,8 +138,6 @@ def solve_hcaptcha(site_key: str, page_url: str, provider: str = None) -> str:
 
     Solve hCaptcha
 
-
-
     Args:
 
         site_key: The site key (data-sitekey attribute)
@@ -157,8 +145,6 @@ def solve_hcaptcha(site_key: str, page_url: str, provider: str = None) -> str:
         page_url: The page URL
 
         provider: Force specific provider
-
-
 
     Returns:
 
@@ -219,8 +205,6 @@ def solve_turnstile(site_key: str, page_url: str, provider: str = None) -> str:
 
     Solve Cloudflare Turnstile
 
-
-
     Args:
 
         site_key: The Turnstile site key
@@ -228,8 +212,6 @@ def solve_turnstile(site_key: str, page_url: str, provider: str = None) -> str:
         page_url: The page URL
 
         provider: Force specific provider
-
-
 
     Returns:
 
@@ -289,8 +271,6 @@ def inject_captcha_token(page, token: str, captcha_type: str = "recaptcha"):
     """
 
     Inject solved CAPTCHA token into page
-
-
 
     Args:
 

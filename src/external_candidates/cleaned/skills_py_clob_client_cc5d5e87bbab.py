@@ -5,8 +5,6 @@
 
 """CLOB trading client wrapper.
 
-
-
 Wraps py-clob-client for order execution with proxy support.
 
 Includes retry logic for Cloudflare blocks when using rotating proxies.
@@ -19,9 +17,7 @@ import time
 
 from typing import Optional
 
-
 import httpx
-
 
 # Max retries for Cloudflare blocks (with rotating proxy, each retry gets new IP)
 
@@ -119,8 +115,6 @@ class ClobClientWrapper:
 
         Sell tokens via CLOB using FOK (Fill or Kill) order.
 
-
-
         Args:
 
             token_id: Token ID to sell
@@ -128,8 +122,6 @@ class ClobClientWrapper:
             amount: Amount of tokens to sell
 
             price: Current market price (will sell 10% below)
-
-
 
         Returns:
 
@@ -213,8 +205,6 @@ class ClobClientWrapper:
 
         Place GTC (Good Till Cancelled) buy order.
 
-
-
         Args:
 
             token_id: Token ID to buy
@@ -222,8 +212,6 @@ class ClobClientWrapper:
             amount: Amount of tokens to buy
 
             price: Price per token
-
-
 
         Returns:
 

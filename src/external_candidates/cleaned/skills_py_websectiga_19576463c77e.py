@@ -69,13 +69,9 @@ class XHS_Websectiga_Encrypt:
 
             js_text (str): 请求 Post https://as.xiaohongshu.com/api/sec/v1/scripting -> json[data][data] 中提取
 
-
-
         Returns:
 
             str: 解密jsvmp后的websectiga
-
-
 
         """
 

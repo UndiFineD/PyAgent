@@ -17,7 +17,6 @@ from datetime import datetime, timedelta
 
 from pathlib import Path
 
-
 TASKS_FILE = Path.home() / "clawd" / "memory" / "work" / "TASKS.md"
 
 ARCHIVE_DIR = Path.home() / "clawd" / "memory" / "work"
@@ -35,8 +34,6 @@ def get_current_quarter() -> str:
 
 def parse_tasks(content: str) -> dict:
     """Parse TASKS.md content into categorized task lists.
-
-
 
     Returns dict with keys:
 
@@ -201,15 +198,11 @@ def load_tasks() -> tuple[str, dict]:
 def check_due_date(due: str, check_type: str = "today") -> bool:
     """Check if a due date matches the given type.
 
-
-
     Args:
 
         due: Due date string
 
         check_type: 'today', 'this-week', or 'overdue'
-
-
 
     Returns:
 

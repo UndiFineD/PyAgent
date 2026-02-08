@@ -7,7 +7,6 @@
 
 from __future__ import annotations
 
-
 import pytest
 
 from skill_scan.prompt_analyzer import PromptAnalyzer
@@ -133,11 +132,7 @@ class TestCleanContent:
     def test_no_false_positives(self, analyzer):
         text = """# Weather Skill
 
-
-
 This skill fetches weather data from wttr.in API.
-
-
 
 ## Usage
 

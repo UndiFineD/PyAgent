@@ -25,7 +25,6 @@ import webbrowser
 
 from pathlib import Path
 
-
 # Config
 
 CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID", "")
@@ -36,9 +35,7 @@ REDIRECT_URI = "http://127.0.0.1:8888/callback"
 
 SCOPES = "user-read-recently-played user-top-read user-read-playback-state user-read-currently-playing"
 
-
 TOKEN_FILE = Path.home() / ".config" / "spotify-clawd" / "token.json"
-
 
 auth_code = None
 

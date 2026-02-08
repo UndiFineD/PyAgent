@@ -13,16 +13,13 @@ import asyncio
 
 from typing import List, Optional
 
-
 import numpy as np
 
 from loguru import logger
 
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-
 from ..config import Settings
-
 
 # Jina Code Embeddings task configurations (official from Jina docs)
 
@@ -43,13 +40,11 @@ INSTRUCTION_CONFIGS = {
     },
 }
 
-
 # Note: QA, code2nl, code2completion tasks are NOT suitable for code search
 
 # because they expect different passage types (answers, comments, completions)
 
 # Since we index CODE CHUNKS, we must use nl2code or code2code
-
 
 # Default task
 
@@ -60,8 +55,6 @@ def detect_task_from_query(query: str) -> str:
     """
 
     Auto-detect the best task based on query patterns.
-
-
 
     For code search:
 
@@ -98,7 +91,6 @@ except ImportError:
     TRANSFORMERS_AVAILABLE = False
 
     logger.warning("transformers/torch not available, local embeddings disabled")
-
 
 # Import for API embeddings
 
@@ -368,8 +360,6 @@ class EmbeddingProvider:
 
         Handles batching automatically.
 
-
-
         Args:
 
             texts: List of text strings to embed
@@ -377,8 +367,6 @@ class EmbeddingProvider:
             is_query: True if embedding search queries, False if embedding code chunks/passages
 
             task: Task type (qa, nl2code, code2code) or None for auto-detect
-
-
 
         Returns:
 

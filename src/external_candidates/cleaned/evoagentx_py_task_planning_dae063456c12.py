@@ -5,9 +5,7 @@
 
 from typing import List, Optional
 
-
 from pydantic import Field
-
 
 from ..core.logging import logger
 
@@ -93,13 +91,9 @@ class TaskPlanning(Action):
     ) -> TaskPlanningOutput:
         """Execute the task planning process.
 
-
-
         This method uses the provided language model to generate a structured
 
         plan of sub-tasks based on the user's goal and any additional context.
-
-
 
         Args:
 
@@ -113,15 +107,11 @@ class TaskPlanning(Action):
 
             **kwargs: Additional keyword arguments.
 
-
-
         Returns:
 
             If return_prompt is False (default): The generated task plan.
 
             If return_prompt is True: A tuple of (task plan, prompt used).
-
-
 
         Raises:
 

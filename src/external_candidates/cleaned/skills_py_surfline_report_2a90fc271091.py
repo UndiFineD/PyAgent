@@ -7,13 +7,9 @@
 
 """One-spot report (human summary + JSON).
 
-
-
 Usage:
 
   surfline_report.py <spotId> [--json] [--text] [--both]
-
-
 
 Default: --both
 
@@ -24,7 +20,6 @@ import json
 import sys
 
 from datetime import datetime
-
 
 from surfline_client import kbyg_conditions, kbyg_tides, kbyg_wave, kbyg_wind
 

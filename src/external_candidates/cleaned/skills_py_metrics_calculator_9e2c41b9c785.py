@@ -7,8 +7,6 @@
 
 Metrics calculation module.
 
-
-
 Calculate comprehensive test and code quality metrics including complexity,
 
 test quality scoring, and test execution analysis.
@@ -39,8 +37,6 @@ class MetricsCalculator:
 
         Calculate all available metrics.
 
-
-
         Args:
 
             source_code: Source code to analyze
@@ -50,8 +46,6 @@ class MetricsCalculator:
             coverage_data: Coverage report data
 
             execution_data: Test execution results
-
-
 
         Returns:
 
@@ -75,13 +69,9 @@ class MetricsCalculator:
 
         Calculate code complexity metrics.
 
-
-
         Args:
 
             code: Source code to analyze
-
-
 
         Returns:
 
@@ -106,8 +96,6 @@ class MetricsCalculator:
         """
 
         Calculate cyclomatic complexity (simplified).
-
-
 
         Counts decision points: if, for, while, case, catch, &&, ||
 
@@ -140,8 +128,6 @@ class MetricsCalculator:
         """
 
         Calculate cognitive complexity (simplified).
-
-
 
         Similar to cyclomatic but penalizes nesting and non-obvious flow.
 
@@ -180,8 +166,6 @@ class MetricsCalculator:
         """
 
         Calculate testability score (0-100).
-
-
 
         Based on:
 
@@ -247,13 +231,9 @@ class MetricsCalculator:
 
         Calculate test quality metrics.
 
-
-
         Args:
 
             test_code: Test code to analyze
-
-
 
         Returns:
 
@@ -328,8 +308,6 @@ class MetricsCalculator:
 
         Calculate test isolation score (0-100).
 
-
-
         Higher score = better isolation (fewer shared dependencies)
 
         """
@@ -363,8 +341,6 @@ class MetricsCalculator:
         """
 
         Calculate test naming quality score (0-100).
-
-
 
         Better names are descriptive and follow conventions.
 
@@ -528,13 +504,9 @@ class MetricsCalculator:
 
         Analyze test execution metrics.
 
-
-
         Args:
 
             execution_data: Test execution results with timing
-
-
 
         Returns:
 

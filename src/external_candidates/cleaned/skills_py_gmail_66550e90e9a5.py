@@ -23,16 +23,13 @@ from email.mime.text import MIMEText
 
 from pathlib import Path
 
-
 import click
 
 from google.oauth2.credentials import Credentials
 
 from googleapiclient.discovery import build
 
-
 TOKEN_FILE = Path.home() / ".simple-google-workspace" / "token.json"
-
 
 # Gmail API batch limit
 
@@ -304,13 +301,9 @@ def labels():
 def bulk_label(query: str, add_labels: tuple, remove_labels: tuple, max_results: int | None):
     """Bulk add/remove labels for messages matching a query.
 
-
-
     Uses batchModify to process up to 1000 messages per API call.
 
     Use 'labels' command to see available label IDs.
-
-
 
     Example: gmail.py bulk-label "from:newsletter@example.com" --add TRASH
 
@@ -344,13 +337,9 @@ def bulk_label(query: str, add_labels: tuple, remove_labels: tuple, max_results:
 def bulk_trash(query: str, max_results: int | None, yes: bool):
     """Trash all messages matching a query.
 
-
-
     Uses batchModify to efficiently trash up to 1000 messages per API call.
 
     Messages go to Trash and can be recovered within 30 days.
-
-
 
     Example: gmail.py bulk-trash "from:spam@example.com older_than:30d"
 

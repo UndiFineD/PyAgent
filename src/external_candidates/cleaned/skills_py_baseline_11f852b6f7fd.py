@@ -9,8 +9,6 @@
 
 Oura Baseline & Comparison Analysis
 
-
-
 Calculate baselines from historical data and compare current metrics.
 
 Provides statistical significance (z-score, percentiles) and actionable insights.
@@ -33,11 +31,9 @@ from pathlib import Path
 
 from typing import Dict, List, Optional, Tuple
 
-
 # Add scripts directory to path for imports
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-
 
 from oura_api import OuraClient
 

@@ -9,8 +9,6 @@
 
 Flight tracking CLI - check status, delays, and set alerts.
 
-
-
 Usage:
 
     flights.py status <flight> [--date DATE]
@@ -35,7 +33,6 @@ from datetime import datetime, timedelta
 
 from pathlib import Path
 
-
 try:
     import requests
 
@@ -46,9 +43,7 @@ except ImportError:
 
     sys.exit(1)
 
-
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
-
 
 # Airline codes
 

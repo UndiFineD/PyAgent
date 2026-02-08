@@ -5,7 +5,6 @@
 
 # Acknowledgement: Modified from AFlow (https://github.com/geekan/MetaGPT/blob/main/metagpt/ext/aflow/scripts/optimizer.py) under MIT License
 
-
 import asyncio
 
 import os
@@ -16,13 +15,11 @@ import shutil
 
 from typing import Any, List
 
-
 import numpy as np
 
 from pydantic import Field
 
 from tqdm import tqdm
-
 
 from ..benchmark.benchmark import Benchmark
 
@@ -56,15 +53,11 @@ class AFlowOptimizer(BaseModule):
 
     AFlow Optimizer for workflow optimization.
 
-
-
     This optimizer iteratively improves workflows through multiple rounds of optimization
 
     using large language models. It evaluates workflow performance, identifies improvement
 
     opportunities, and applies optimizations based on experience and convergence metrics.
-
-
 
     Attributes:
 
@@ -187,15 +180,11 @@ class AFlowOptimizer(BaseModule):
     def optimize(self, benchmark: Benchmark):
         """Run the optimization process on the workflow.
 
-
-
         Performs multiple rounds of optimization, evaluating each round against
 
         the benchmark and checking for convergence. Continues until convergence
 
         is detected or the maximum number of rounds is reached.
-
-
 
         Args:
 
@@ -227,13 +216,9 @@ class AFlowOptimizer(BaseModule):
     def test(self, benchmark: Benchmark, test_rounds: List[int] = None):
         """Run the test evaluation on optimized workflows.
 
-
-
         Evaluates specified rounds (or the best round if none specified) against
 
         the benchmark multiple times and logs the results.
-
-
 
         Args:
 

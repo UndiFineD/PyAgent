@@ -23,11 +23,9 @@ import time
 
 from typing import Any, Dict, List, Optional, Tuple
 
-
 import ollama
 
 import torch
-
 
 # Importamos los componentes existentes de tu sistema AGI
 
@@ -48,7 +46,6 @@ except ImportError as e:
     print("Asegúrate de tener los archivos agi.py y unificado.py en el mismo directorio")
 
     exit(1)
-
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -473,8 +470,6 @@ class AGIVoiceLayer:
 
             Analiza ESTA PREGUNTA ESPECÍFICA: "{question}"
 
-            
-
             Determina EXACTAMENTE:
 
             1. Qué experto se necesita (SOLO: parity, wave, kepler, pendulum)
@@ -482,8 +477,6 @@ class AGIVoiceLayer:
             2. Qué parámetros específicos necesita ESE experto
 
             3. Una explicación MUY BREVE de por qué
-
-            
 
             REGLAS ESTRICTAS:
 
@@ -496,8 +489,6 @@ class AGIVoiceLayer:
             - SER ESPECÍFICO con los parámetros
 
             - SI no estás seguro, usar "parity" como fallback
-
-            
 
             Ejemplos correctos:
 
@@ -583,13 +574,9 @@ class AGIVoiceLayer:
         domain_templates = {
             "parity": """Eres un asistente científico preciso. Responde SOLO a esta pregunta específica:
 
-
-
             Pregunta: "{question}"
 
             Resultado del análisis de paridad: {expert_result}
-
-
 
             Instrucciones:
 
@@ -605,8 +592,6 @@ class AGIVoiceLayer:
 
             - Formato: "El número [binario] es [par/impar] porque la suma de los primeros [k] bits es [X]."
 
-
-
             Ejemplo correcto para "este numero es par 101010":
 
             "El número 101010 es par porque la suma de los primeros 3 bits (101) es 2, que es par."
@@ -614,13 +599,9 @@ class AGIVoiceLayer:
             """,
             "wave": """Eres un físico explicando resultados de simulación. Responde SOLO a:
 
-
-
             Pregunta: "{question}"
 
             Resultado de simulación de onda: {expert_result}
-
-
 
             Instrucciones:
 
@@ -635,13 +616,9 @@ class AGIVoiceLayer:
             """,
             "kepler": """Eres un astrónomo explicando posiciones orbitales. Responde SOLO a:
 
-
-
             Pregunta: "{question}"
 
             Resultado orbital: {expert_result}
-
-
 
             Instrucciones:
 
@@ -656,13 +633,9 @@ class AGIVoiceLayer:
             """,
             "pendulum": """Eres un físico de sistemas caóticos. Responde SOLO a:
 
-
-
             Pregunta: "{question}"
 
             Resultado del péndulo: {expert_result}
-
-
 
             Instrucciones:
 

@@ -7,8 +7,6 @@
 
 Agent Memory Service
 
-
-
 A persistent memory service for AI agents. Agents can:
 
 - Register with a unique identity (Ed25519 keypair)
@@ -18,8 +16,6 @@ A persistent memory service for AI agents. Agents can:
 - Retrieve their memory across sessions
 
 - Recover using a BIP39-style recovery phrase
-
-
 
 All data is encrypted client-side. The service only stores opaque blobs.
 
@@ -41,7 +37,6 @@ from datetime import datetime
 
 from typing import List
 
-
 from cryptography.exceptions import InvalidSignature
 
 from cryptography.hazmat.primitives import serialization
@@ -61,13 +56,11 @@ from mnemonic import Mnemonic
 
 from pydantic import BaseModel, Field
 
-
 # Configure logging
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 logger = logging.getLogger(__name__)
-
 
 # Database setup
 
@@ -266,7 +259,6 @@ app = FastAPI(
     version="2.1.0",
 )
 
-
 # Add CORS middleware
 
 app.add_middleware(
@@ -276,7 +268,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # Request timing middleware
 
@@ -447,8 +438,6 @@ async def register_agent():
 
     Register a new agent identity.
 
-
-
     Returns:
 
     - agent_id: Unique identifier derived from public key
@@ -456,8 +445,6 @@ async def register_agent():
     - public_key: Base64-encoded public key
 
     - recovery_phrase: BIP39 phrase to recover the identity later
-
-
 
     IMPORTANT: Save the recovery phrase! It's the only way to recover your identity.
 
@@ -518,8 +505,6 @@ async def recover_agent(request: AgentRecoveryRequest):
     """
 
     Recover an agent identity using a recovery phrase.
-
-
 
     Returns the same agent_id and public_key as the original registration.
 
@@ -600,8 +585,6 @@ async def store_memory(request: MemoryStoreRequest):
     """
 
     Store encrypted memory for an agent.
-
-
 
     The agent must sign the data hash with its private key.
 
@@ -697,8 +680,6 @@ async def retrieve_memory(request: MemoryRetrieveRequest):
 
     Retrieve the latest memory for an agent.
 
-
-
     Requires a signed request to prevent unauthorized access.
 
     Signature should be of: 'retrieve' + timestamp
@@ -788,8 +769,6 @@ async def list_memory_history(request: MemoryRetrieveRequest):
 
     List all memory versions for an agent.
 
-
-
     Requires same authentication as retrieve.
 
     """
@@ -872,8 +851,6 @@ async def clear_memory(request: MemoryRetrieveRequest):
     """
 
     Delete all memory for an agent.
-
-
 
     Requires authentication. This cannot be undone!
 

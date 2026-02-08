@@ -13,7 +13,6 @@ from dataclasses import dataclass, field
 
 from typing import Optional
 
-
 # System tag prefix - tags starting with this are managed by the system
 
 SYSTEM_TAG_PREFIX = "_"
@@ -23,8 +22,6 @@ def filter_non_system_tags(tags: dict[str, str]) -> dict[str, str]:
     """
 
     Filter out any system tags (those starting with '_').
-
-
 
     Use this to ensure source tags and derived tags cannot
 
@@ -41,19 +38,13 @@ class Item:
 
     An item retrieved from the associative memory store.
 
-
-
     This is a read-only snapshot. To modify an item, use api.update()
 
     which returns a new Item with updated values.
 
-
-
     Timestamps and other system metadata live in tags, not as explicit fields.
 
     This follows the "schema as data" principle.
-
-
 
     Attributes:
 
@@ -64,8 +55,6 @@ class Item:
         tags: All tags (source, system, and generated combined)
 
         score: Similarity score (present only in search results)
-
-
 
     System tags (managed automatically, in tags dict):
 

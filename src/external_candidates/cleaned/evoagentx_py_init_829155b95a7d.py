@@ -5,9 +5,7 @@
 
 from typing import Any, Dict
 
-
 from evoagentx.core.logging import logger
-
 
 from .azure_openai_embedding import AzureOpenAIEmbeddingWrapper
 
@@ -20,7 +18,6 @@ from .ollama_embedding import OllamaEmbeddingWrapper
 from .openai_embedding import OpenAIEmbeddingWrapper
 
 from .voyage import VoyageEmbeddingWrapper
-
 
 __all__ = [
     "OpenAIEmbeddingWrapper",
@@ -40,21 +37,15 @@ class EmbeddingFactory:
     def create(self, provider: EmbeddingProvider, model_config: Dict[str, Any] = None) -> BaseEmbeddingWrapper:
         """Create an embedding model based on the provider and configuration.
 
-
-
         Args:
 
             provider (EmbeddingProvider): The embedding provider (e.g., OpenAI, HuggingFace, Ollama).
 
             model_config (Dict[str, Any], optional): Configuration for the embedding model.
 
-
-
         Returns:
 
             BaseEmbeddingWrapper: A LlamaIndex-compatible embedding model wrapper.
-
-
 
         Raises:
 

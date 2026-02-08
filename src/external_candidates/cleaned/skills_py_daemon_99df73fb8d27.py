@@ -9,19 +9,13 @@
 
 Clawdbot Whisper Daemon
 
-
-
 HTTP server for fast speech-to-text transcription.
 
 Pre-loads the model for sub-second response times.
 
-
-
 Usage:
 
     python daemon.py [--port 8787] [--backend mlx] [--model distil-large-v3]
-
-
 
 Endpoints:
 
@@ -51,14 +45,11 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from urllib.parse import parse_qs, urlparse
 
-
 # Add scripts directory to path for imports
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-
 from transcriber import Transcriber, TranscriptionError
-
 
 # Configure logging
 
@@ -69,7 +60,6 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-
 
 # Global state
 

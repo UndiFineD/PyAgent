@@ -25,11 +25,9 @@
 
 # ///
 
-
 import os
 
 import sys
-
 
 import matplotlib.pyplot as plt
 
@@ -49,9 +47,7 @@ from rich.panel import Panel
 
 from rich.table import Table
 
-
 console = Console()
-
 
 # --- Technical Indicators ---
 
@@ -410,13 +406,9 @@ def show_report(symbol, ticker, info, period="6mo"):
 
   Change: [{color}]{sign}{change:,.2f} ({sign}{pct_change:.2f}%)[/{color}]
 
-
-
 [bold cyan]● Fundamentals[/bold cyan]
 
   Market Cap: {mcap / 1e9:,.1f}B | Forward PE: {pe}
-
-
 
 [bold cyan]● Technical Signals (Latest)[/bold cyan]
 

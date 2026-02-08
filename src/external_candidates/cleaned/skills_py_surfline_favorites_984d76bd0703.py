@@ -7,17 +7,11 @@
 
 """Favorites summary (human summary + JSON).
 
-
-
 Reads ~/.config/surfline/favorites.json.
-
-
 
 Usage:
 
   surfline_favorites.py [--json] [--text] [--both]
-
-
 
 Default: --both
 
@@ -29,9 +23,7 @@ import sys
 
 from pathlib import Path
 
-
 from surfline_client import kbyg_conditions
-
 
 CONFIG = Path.home() / ".config" / "surfline" / "favorites.json"
 

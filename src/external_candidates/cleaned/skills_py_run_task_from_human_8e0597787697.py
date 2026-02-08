@@ -7,11 +7,9 @@
 
 # scripts/run_task_from_human.py - The Human Automation Designer Interface
 
-
 import json
 
 import sys
-
 
 from orchestrator import run_workflow
 

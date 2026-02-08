@@ -22,8 +22,6 @@ class CostOptimizer:
 
         Initialize with current AWS resources and spending.
 
-
-
         Args:
 
             current_resources: Dictionary of current AWS resources
@@ -42,8 +40,6 @@ class CostOptimizer:
         """
 
         Analyze current setup and generate cost optimization recommendations.
-
-
 
         Returns:
 

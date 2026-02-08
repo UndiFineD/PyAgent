@@ -7,7 +7,6 @@ import asyncio
 
 from typing import Any, Optional, Sequence
 
-
 from evoagentx.core.logging import logger
 
 from evoagentx.models.base_model import BaseLLM, LLMOutputParser
@@ -34,19 +33,13 @@ class BasicGraphExtractLLM(TransformComponent):
 
     A TransformComponent for extracting knowledge graph triplets using an LLM without tool-calling capabilities.
 
-
-
     This class performs two-stage extraction:
 
     1. Entity extraction: Identifies named entities and their types (e.g., Person, Organization).
 
     2. Relation extraction: Identifies directed relationships between extracted entities.
 
-
-
     The extracted entities and relations are stored in the node's metadata for use in LlamaIndex's PropertyGraphIndex.
-
-
 
     Attributes:
 
@@ -79,8 +72,6 @@ class BasicGraphExtractLLM(TransformComponent):
 
         Initialize the BasicGraphExtractLLM.
 
-
-
         Args:
 
             llm (BaseLLM): The language model to use for extraction.
@@ -105,31 +96,21 @@ class BasicGraphExtractLLM(TransformComponent):
 
         Asynchronously extract entities and relations from a single node.
 
-
-
         This method performs two LLM calls:
 
         1. Extracts entities and their types using the entity_extract_prompt.
 
         2. Extracts relations between entities using the relation_extract_prompt.
 
-
-
         The results are stored in the node's metadata under KG_NODES_KEY and KG_RELATIONS_KEY.
-
-
 
         Args:
 
             node (BaseNode): The node containing text to process.
 
-
-
         Returns:
 
             BaseNode: The node with updated metadata containing extracted entities and relations.
-
-
 
         Raises:
 
@@ -248,11 +229,7 @@ class BasicGraphExtractLLM(TransformComponent):
 
         Synchronously extract triples from a sequence of nodes.
 
-
-
         This method wraps the asynchronous acall method for synchronous execution.
-
-
 
         Args:
 
@@ -261,8 +238,6 @@ class BasicGraphExtractLLM(TransformComponent):
             show_progress (bool): Whether to display a progress bar. Defaults to False.
 
             **kwargs: Additional keyword arguments passed to acall.
-
-
 
         Returns:
 
@@ -282,11 +257,7 @@ class BasicGraphExtractLLM(TransformComponent):
 
         Asynchronously extract triples from a sequence of nodes.
 
-
-
         This method processes nodes in parallel using run_jobs for efficiency.
-
-
 
         Args:
 
@@ -295,8 +266,6 @@ class BasicGraphExtractLLM(TransformComponent):
             show_progress (bool): Whether to display a progress bar. Defaults to False.
 
             **kwargs: Additional keyword arguments passed to run_jobs.
-
-
 
         Returns:
 

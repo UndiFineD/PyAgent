@@ -7,9 +7,7 @@ import asyncio
 
 from typing import TYPE_CHECKING, Optional
 
-
 import aiohttp
-
 
 if TYPE_CHECKING:
     from request.web.xhs_session import XHS_Session  # 仅类型检查时导入
@@ -33,8 +31,6 @@ class Comments:
     ) -> aiohttp.ClientResponse:
         """获取笔记评论列表
 
-
-
         Args:
 
             note_id: 笔记ID
@@ -46,8 +42,6 @@ class Comments:
             top_comment_id: ""
 
             image_formats: "jpg,webp,avif"
-
-
 
         Returns:
 
@@ -74,8 +68,6 @@ class Comments:
     ) -> aiohttp.ClientResponse:
         """获取子评论列表
 
-
-
         Args:
 
             note_id: 笔记ID
@@ -85,8 +77,6 @@ class Comments:
             num: 每页数量
 
             cursor: 分页游标
-
-
 
         Returns:
 
@@ -112,8 +102,6 @@ class Comments:
     ) -> aiohttp.ClientResponse:
         """发表评论
 
-
-
         Args:
 
             note_id: 笔记ID
@@ -121,8 +109,6 @@ class Comments:
             content: 评论内容
 
             at_users: @用户列表
-
-
 
         Returns:
 
@@ -147,8 +133,6 @@ class Comments:
     ) -> aiohttp.ClientResponse:
         """回复评论
 
-
-
         Args:
 
             note_id: 笔记ID
@@ -158,8 +142,6 @@ class Comments:
             content: 回复内容
 
             at_users: @用户列表
-
-
 
         Returns:
 
@@ -183,15 +165,11 @@ class Comments:
     async def delete_comment(self, note_id: str, comment_id: str) -> aiohttp.ClientResponse:
         """删除评论
 
-
-
         Args:
 
             note_id: 笔记ID
 
             comment_id: 要删除的评论ID
-
-
 
         Returns:
 
@@ -210,15 +188,11 @@ class Comments:
     async def like_comment(self, note_id: str, comment_id: str) -> aiohttp.ClientResponse:
         """点赞评论 如果是二级评论，直接填写需要点赞的子评论ID即可
 
-
-
         Args:
 
             note_id: 笔记ID
 
             comment_id: 评论ID
-
-
 
         Returns:
 
@@ -237,15 +211,11 @@ class Comments:
     async def cancel_like_comment(self, note_id: str, comment_id: str) -> aiohttp.ClientResponse:
         """取消点赞评论
 
-
-
         Args:
 
             note_id: 笔记ID
 
             comment_id: 评论ID
-
-
 
         Returns:
 
@@ -270,8 +240,6 @@ class Comments:
     ) -> str:
         """获取笔记所有评论(包括子评论)
 
-
-
         Args:
 
             note_id: 笔记ID
@@ -281,8 +249,6 @@ class Comments:
             crawl_interval: 爬取间隔(秒)
 
             max_crawl_times: 最大爬取次数(防止死循环)
-
-
 
         Returns:
 

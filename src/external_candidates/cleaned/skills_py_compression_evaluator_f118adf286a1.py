@@ -7,13 +7,9 @@
 
 Context Compression Evaluation
 
-
-
 This module provides utilities for evaluating context compression quality
 
 using probe-based assessment.
-
-
 
 PRODUCTION NOTES:
 
@@ -92,7 +88,6 @@ class EvaluationResult:
 
 
 # Evaluation Rubrics
-
 
 RUBRIC_CRITERIA = {
     "accuracy": [
@@ -348,8 +343,6 @@ class CompressionEvaluator:
 
         Evaluate a single probe response.
 
-
-
         Args:
 
             probe: The probe question
@@ -357,8 +350,6 @@ class CompressionEvaluator:
             response: The model's response to evaluate
 
             compressed_context: The compressed context that was provided
-
-
 
         Returns:
 
@@ -435,13 +426,9 @@ class CompressionEvaluator:
 
         Evaluate a single criterion using LLM judge.
 
-
-
         PRODUCTION NOTE: This is a stub implementation.
 
         Production systems should call the actual LLM API:
-
-
 
         ```python
 
@@ -477,8 +464,6 @@ class CompressionEvaluator:
         """
 
         Heuristic scoring for demonstration.
-
-
 
         Production systems should use LLM judge instead.
 
@@ -567,31 +552,21 @@ class StructuredSummarizer:
 
 {intent}
 
-
-
 ## Files Modified
 
 {files_modified}
-
-
 
 ## Files Read (Not Modified)
 
 {files_read}
 
-
-
 ## Decisions Made
 
 {decisions}
 
-
-
 ## Current State
 
 {current_state}
-
-
 
 ## Next Steps
 
@@ -613,8 +588,6 @@ class StructuredSummarizer:
         """
 
         Update summary from newly truncated content span.
-
-
 
         This implements anchored iterative summarization:
 
@@ -745,8 +718,6 @@ def evaluate_compression_quality(original_history: str, compressed_context: str,
 
     Evaluate compression quality for a conversation.
 
-
-
     Args:
 
         original_history: The full conversation before compression
@@ -754,8 +725,6 @@ def evaluate_compression_quality(original_history: str, compressed_context: str,
         compressed_context: The compressed version
 
         model_response_fn: Function to get model responses given compressed context
-
-
 
     Returns:
 

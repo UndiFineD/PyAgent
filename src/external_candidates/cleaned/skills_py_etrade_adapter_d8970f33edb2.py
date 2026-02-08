@@ -19,13 +19,11 @@ from typing import Any, Dict, List, Optional
 
 from urllib.parse import quote, unquote
 
-
 import requests
 
 from broker_adapter import BrokerAdapter
 
 from requests_oauthlib import OAuth1
-
 
 logger = logging.getLogger(__name__)
 
@@ -34,8 +32,6 @@ class ETradeAdapter(BrokerAdapter):
     """
 
     E*TRADE API adapter implementing the BrokerAdapter interface.
-
-
 
     All E*TRADE-specific URLs and configuration are contained within this class.
 
@@ -59,8 +55,6 @@ class ETradeAdapter(BrokerAdapter):
         """
 
         Initialize E*TRADE adapter.
-
-
 
         Args:
 
@@ -593,15 +587,11 @@ class ETradeAdapter(BrokerAdapter):
 
         Get orders for the account.
 
-
-
         Args:
 
             account_id: Optional account ID
 
             status: Order status filter ('OPEN', 'EXECUTED', 'CANCELLED', etc.)
-
-
 
         Returns:
 
@@ -648,15 +638,11 @@ class ETradeAdapter(BrokerAdapter):
 
         Cancel an order.
 
-
-
         Args:
 
             account_id: Account ID
 
             order_id: Order ID to cancel
-
-
 
         Returns:
 

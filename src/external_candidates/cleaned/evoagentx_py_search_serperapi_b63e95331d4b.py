@@ -7,7 +7,6 @@ import os
 
 from typing import Any, Dict, List, Optional
 
-
 import dotenv
 
 import requests
@@ -16,11 +15,9 @@ from evoagentx.core.logging import logger
 
 from pydantic import Field
 
-
 from .search_base import SearchBase
 
 from .tool import Tool, Toolkit
-
 
 dotenv.load_dotenv()
 
@@ -59,8 +56,6 @@ class SearchSerperAPI(SearchBase):
         """
 
         Initialize the SerperAPI Search tool.
-
-
 
         Args:
 
@@ -117,8 +112,6 @@ class SearchSerperAPI(SearchBase):
 
         Build SerperAPI request payload.
 
-
-
         Args:
 
             query (str): Search query
@@ -130,8 +123,6 @@ class SearchSerperAPI(SearchBase):
             country (str): Country code
 
             num_results (int): Number of results to retrieve
-
-
 
         Returns:
 
@@ -162,19 +153,13 @@ class SearchSerperAPI(SearchBase):
 
         Execute search using direct HTTP POST requests to SerperAPI.
 
-
-
         Args:
 
             payload (Dict[str, Any]): Search payload
 
-
-
         Returns:
 
             Dict[str, Any]: SerperAPI response data
-
-
 
         Raises:
 
@@ -211,15 +196,11 @@ class SearchSerperAPI(SearchBase):
 
         Process SerperAPI results into structured format with processed results + raw data.
 
-
-
         Args:
 
             serperapi_data (Dict[str, Any]): Raw SerperAPI response
 
             max_content_words (int): Maximum words per result content
-
-
 
         Returns:
 
@@ -349,13 +330,9 @@ class SearchSerperAPI(SearchBase):
 
         Handle SerperAPI specific errors with appropriate messages.
 
-
-
         Args:
 
             error (Exception): The exception that occurred
-
-
 
         Returns:
 
@@ -393,8 +370,6 @@ class SearchSerperAPI(SearchBase):
 
         Search using SerperAPI with comprehensive parameter support.
 
-
-
         Args:
 
             query (str): The search query
@@ -408,8 +383,6 @@ class SearchSerperAPI(SearchBase):
             language (str): Interface language (e.g., 'en', 'es', 'fr')
 
             country (str): Country code for country-specific results (e.g., 'us', 'uk')
-
-
 
         Returns:
 
@@ -561,8 +534,6 @@ class SerperAPIToolkit(Toolkit):
         """
 
         Initialize SerperAPI Toolkit.
-
-
 
         Args:
 

@@ -21,14 +21,11 @@ import sys
 
 from typing import Dict, List
 
-
 import yfinance as yf
-
 
 # 导入 IV 分析
 
 from iv_analysis import analyze_iv
-
 
 # 策略库
 
@@ -164,7 +161,6 @@ STRATEGIES = {
         "best_when": "预期大幅波动，成本敏感",
     },
 }
-
 
 RISK_LEVELS = ["conservative", "moderate", "aggressive"]
 

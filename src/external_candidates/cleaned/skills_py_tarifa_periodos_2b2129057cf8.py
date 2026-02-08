@@ -45,8 +45,6 @@ def get_period_info(hour=None, weekday=None):
 
     weekday: 0=lunes...6=domingo, si None usa día actual
 
-
-
     Tarifa 2.0TD:
 
     - VALLE: 00:00-08:00 todos los días + sábados y domingos completos + festivos
@@ -54,8 +52,6 @@ def get_period_info(hour=None, weekday=None):
     - LLANO: 08:00-10:00, 14:00-18:00, 22:00-00:00 (lun-vie)
 
     - PUNTA: 10:00-14:00, 18:00-22:00 (lun-vie)
-
-
 
     Nota: Los periodos son iguales en verano e invierno para la tarifa 2.0TD
 

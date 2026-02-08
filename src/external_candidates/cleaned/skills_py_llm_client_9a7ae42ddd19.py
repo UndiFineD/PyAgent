@@ -5,8 +5,6 @@
 
 """OpenRouter LLM client for hedge discovery.
 
-
-
 Async client for calling LLMs via OpenRouter API.
 
 Used for extracting logical implications between markets.
@@ -17,9 +15,7 @@ import asyncio
 
 import os
 
-
 import httpx
-
 
 # =============================================================================
 
@@ -27,9 +23,7 @@ import httpx
 
 # =============================================================================
 
-
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-
 
 # Default model (free tier)
 
@@ -43,13 +37,11 @@ OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 DEFAULT_MODEL = "nvidia/nemotron-nano-9b-v2:free"
 
-
 # Request settings
 
 LLM_TIMEOUT = 60.0
 
 LLM_MAX_RETRIES = 3
-
 
 # =============================================================================
 
@@ -62,8 +54,6 @@ class LLMClient:
     """
 
     Async client for OpenRouter API.
-
-
 
     Used for:
 
@@ -116,8 +106,6 @@ class LLMClient:
 
         Send a chat completion request.
 
-
-
         Args:
 
             messages: List of message dicts with 'role' and 'content'
@@ -125,8 +113,6 @@ class LLMClient:
             temperature: Sampling temperature (0.0-1.0)
 
             max_tokens: Maximum tokens in response
-
-
 
         Returns:
 
@@ -201,7 +187,6 @@ class LLMClient:
 
 # =============================================================================
 
-
 _llm_client: LLMClient | None = None
 
 
@@ -210,13 +195,9 @@ def get_llm_client(model: str = DEFAULT_MODEL) -> LLMClient:
 
     Get LLM client singleton.
 
-
-
     Args:
 
         model: Model identifier from OpenRouter
-
-
 
     Returns:
 

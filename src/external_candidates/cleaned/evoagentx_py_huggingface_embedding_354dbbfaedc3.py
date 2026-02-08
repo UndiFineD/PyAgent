@@ -5,13 +5,11 @@
 
 from typing import Dict, List, Optional
 
-
 from evoagentx.core.logging import logger
 
 from llama_index.core.embeddings import BaseEmbedding
 
 from sentence_transformers import SentenceTransformer
-
 
 from .base import SUPPORTED_MODELS, BaseEmbeddingWrapper, EmbeddingProvider
 

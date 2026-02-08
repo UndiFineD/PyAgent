@@ -7,8 +7,6 @@
 
 Tests for ChromaDb store wrapper.
 
-
-
 These tests use a temporary directory for each test to ensure isolation.
 
 """
@@ -17,17 +15,13 @@ import tempfile
 
 from pathlib import Path
 
-
 import pytest
-
 
 # Skip all tests if chromadb not installed
 
 chromadb = pytest.importorskip("chromadb")
 
-
 from keep.store import ChromaStore, StoreResult
-
 
 # -----------------------------------------------------------------------------
 

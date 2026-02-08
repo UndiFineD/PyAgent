@@ -92,8 +92,6 @@ class ReviewAnalyzer:
 
         Initialize review analyzer.
 
-
-
         Args:
 
             app_name: Name of the app
@@ -111,13 +109,9 @@ class ReviewAnalyzer:
 
         Analyze sentiment across reviews.
 
-
-
         Args:
 
             reviews: List of review dicts with 'text', 'rating', 'date'
-
-
 
         Returns:
 
@@ -182,15 +176,11 @@ class ReviewAnalyzer:
 
         Extract frequently mentioned themes and topics.
 
-
-
         Args:
 
             reviews: List of review dicts
 
             min_mentions: Minimum mentions to be considered common
-
-
 
         Returns:
 
@@ -279,15 +269,11 @@ class ReviewAnalyzer:
 
         Identify bugs, crashes, and other issues from reviews.
 
-
-
         Args:
 
             reviews: List of review dicts
 
             rating_threshold: Only analyze reviews at or below this rating
-
-
 
         Returns:
 
@@ -354,13 +340,9 @@ class ReviewAnalyzer:
 
         Extract feature requests and desired improvements.
 
-
-
         Args:
 
             reviews: List of review dicts
-
-
 
         Returns:
 
@@ -414,13 +396,9 @@ class ReviewAnalyzer:
 
         Track sentiment changes over time.
 
-
-
         Args:
 
             reviews_by_period: Dict of period_name: reviews
-
-
 
         Returns:
 
@@ -471,13 +449,9 @@ class ReviewAnalyzer:
 
         Generate response templates for common review scenarios.
 
-
-
         Args:
 
             issue_category: Category of issue ('crash', 'feature_request', 'positive', etc.)
-
-
 
         Returns:
 
@@ -870,15 +844,11 @@ def analyze_reviews(app_name: str, reviews: List[Dict[str, Any]]) -> Dict[str, A
 
     Convenience function to perform comprehensive review analysis.
 
-
-
     Args:
 
         app_name: App name
 
         reviews: List of review dictionaries
-
-
 
     Returns:
 

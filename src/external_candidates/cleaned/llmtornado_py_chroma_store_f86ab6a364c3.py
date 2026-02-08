@@ -17,11 +17,9 @@ from pathlib import Path
 
 from typing import Any, Dict, List, Optional, Set
 
-
 import numpy as np
 
 from loguru import logger
-
 
 try:
     import chromadb
@@ -49,8 +47,6 @@ class ChromaStore:
         """
 
         Initialize ChromaDB storage.
-
-
 
         Args:
 
@@ -111,13 +107,9 @@ class ChromaStore:
 
         Get or create a collection for a root path.
 
-
-
         Args:
 
             root_path: Root directory path
-
-
 
         Returns:
 
@@ -169,13 +161,9 @@ class ChromaStore:
 
         Get cached embeddings for content hashes.
 
-
-
         Args:
 
             content_hashes: List of content hashes to look up (may contain duplicates)
-
-
 
         Returns:
 
@@ -238,8 +226,6 @@ class ChromaStore:
 
         Cache embeddings by their content hashes.
 
-
-
         Args:
 
             content_hashes: List of content hashes
@@ -288,8 +274,6 @@ class ChromaStore:
         """
 
         Add chunks with embeddings to the collection.
-
-
 
         Args:
 
@@ -390,8 +374,6 @@ class ChromaStore:
 
         Search for similar chunks in a specific branch.
 
-
-
         Args:
 
             root_path: Root directory path
@@ -401,8 +383,6 @@ class ChromaStore:
             query_embedding: Query embedding vector
 
             top_k: Number of results to return
-
-
 
         Returns:
 
@@ -454,8 +434,6 @@ class ChromaStore:
 
         Delete all chunks for a specific file in a branch.
 
-
-
         Args:
 
             root_path: Root directory path
@@ -463,8 +441,6 @@ class ChromaStore:
             branch_name: Git branch name
 
             file_path: File path to delete chunks for
-
-
 
         Returns:
 
@@ -526,8 +502,6 @@ class ChromaStore:
 
         Remove chunks for files that no longer exist.
 
-
-
         Args:
 
             root_path: Root directory path
@@ -537,8 +511,6 @@ class ChromaStore:
             valid_file_paths: Set of relative file paths that currently exist
 
             indexed_files: Optional pre-loaded indexed files dict (to avoid duplicate query)
-
-
 
         Returns:
 
@@ -607,15 +579,11 @@ class ChromaStore:
 
         Get statistics for a branch.
 
-
-
         Args:
 
             root_path: Root directory path
 
             branch_name: Git branch name
-
-
 
         Returns:
 
@@ -656,15 +624,11 @@ class ChromaStore:
 
         Get total chunk count for a branch (fast, no data retrieval).
 
-
-
         Args:
 
             root_path: Root directory path
 
             branch_name: Git branch name
-
-
 
         Returns:
 
@@ -699,15 +663,11 @@ class ChromaStore:
 
         Get chunk counts per file for a branch (single efficient query).
 
-
-
         Args:
 
             root_path: Root directory path
 
             branch_name: Git branch name
-
-
 
         Returns:
 
@@ -755,15 +715,11 @@ class ChromaStore:
 
         Used for quick recovery after restart.
 
-
-
         Args:
 
             root_path: Root directory path
 
             branch_name: Git branch name
-
-
 
         Returns:
 
@@ -815,13 +771,9 @@ class ChromaStore:
 
         List all branches in a collection.
 
-
-
         Args:
 
             root_path: Root directory path
-
-
 
         Returns:
 
@@ -860,8 +812,6 @@ class ChromaStore:
         Store ignore file metadata for change detection.
 
         Uses a special metadata collection per root.
-
-
 
         Args:
 
@@ -936,15 +886,11 @@ class ChromaStore:
 
         Load ignore file metadata for change detection.
 
-
-
         Args:
 
             root_path: Root directory path
 
             branch_name: Git branch name
-
-
 
         Returns:
 

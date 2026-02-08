@@ -7,13 +7,9 @@
 
 Updater and ValueTracker Patterns for Manim Community
 
-
-
 Demonstrates dynamic animations using updaters and ValueTracker.
 
 Adapted from 3b1b's animation patterns for ManimCE.
-
-
 
 Run with: manim -pql updater_patterns.py SceneName
 

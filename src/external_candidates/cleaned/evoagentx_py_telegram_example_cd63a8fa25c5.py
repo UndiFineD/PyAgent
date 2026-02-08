@@ -7,13 +7,9 @@
 
 Example usage of Telegram tools in EvoAgentX
 
-
-
 This example demonstrates how to use the various Telegram tools
 
 for messaging, searching, and file operations.
-
-
 
 Prerequisites:
 
@@ -25,8 +21,6 @@ Prerequisites:
 
    - Set up your phone number for authentication
 
-
-
 2. Set your credentials as environment variables:
 
    export TELEGRAM_API_ID="your_api_id_here"
@@ -35,8 +29,6 @@ Prerequisites:
 
    export TELEGRAM_PHONE="your_phone_number_here"
 
-
-
 Note: The TelegramToolkit will automatically retrieve the credentials from
 
 the environment variables, making it compatible with AI agents.
@@ -44,7 +36,6 @@ the environment variables, making it compatible with AI agents.
 """
 
 import os
-
 
 from evoagentx.tools import TelegramToolkit
 

@@ -9,8 +9,6 @@
 
 Research Agent with Memory Example
 
-
-
 This example demonstrates:
 
 1. Checking past research history before performing searches
@@ -20,8 +18,6 @@ This example demonstrates:
 3. Building on previous knowledge
 
 4. Generating session summaries
-
-
 
 Prerequisites:
 
@@ -36,7 +32,6 @@ import asyncio
 import os
 
 from datetime import datetime
-
 
 from Scripts.AuditLogger import AuditLogger
 

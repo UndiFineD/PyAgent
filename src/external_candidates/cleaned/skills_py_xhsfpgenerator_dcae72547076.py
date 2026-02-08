@@ -24,15 +24,11 @@ class XhsFpGenerator:
 
         根据权重随机选择一个候选项
 
-
-
         Args:
 
             options (list): 候选项列表
 
             weights (list): 对应的权重列表（无需归一化）
-
-
 
         Returns:
 

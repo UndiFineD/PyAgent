@@ -9,8 +9,6 @@
 
 Cloudflare CLI - DNS, Cache, Workers Routes
 
-
-
 Usage:
 
     cloudflare.py verify
@@ -44,7 +42,6 @@ import os
 import sys
 
 from typing import Optional
-
 
 import requests
 

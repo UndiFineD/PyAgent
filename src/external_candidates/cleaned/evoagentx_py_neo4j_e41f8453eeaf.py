@@ -7,7 +7,6 @@ import json
 
 from typing import Any, List, Sequence, Union
 
-
 from evoagentx.core.logging import logger
 
 from llama_index.core.graph_stores.types import (
@@ -22,9 +21,7 @@ from llama_index.core.schema import BaseNode, TextNode
 
 from llama_index.graph_stores.neo4j import Neo4jPropertyGraphStore
 
-
 from .base import GraphStoreBase
-
 
 # For fixing the bugs in adding entity.
 
@@ -224,8 +221,6 @@ class Neo4jGraphStoreWrapper(GraphStoreBase):
 
         without specifying embedding dimension.
 
-
-
         Queries the Neo4j database to retrieve its version and compares it
 
         against a target version (5.23.0) that is known to support vector
@@ -273,15 +268,11 @@ class Neo4jGraphStoreWrapper(GraphStoreBase):
 
         Asynchronously load a single node into the Neo4j graph database.
 
-
-
         Checks if a node with the same ID already exists in the database. If it does not exist,
 
         inserts the node as either an EntityNode or ChunkNode based on its type. Handles metadata
 
         and embeddings appropriately.
-
-
 
         Args:
 

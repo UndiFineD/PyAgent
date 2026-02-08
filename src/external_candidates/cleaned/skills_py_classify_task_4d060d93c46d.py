@@ -9,8 +9,6 @@
 
 Task classifier for model router.
 
-
-
 Analyzes task description and recommends optimal model.
 
 """
@@ -22,7 +20,6 @@ import json
 import sys
 
 from typing import Dict, Optional
-
 
 # Keywords and triggers for each model
 
@@ -132,8 +129,6 @@ def classify_task(task: str) -> Dict[str, Optional[str]]:
     """
 
     Classify task and recommend model.
-
-
 
     Returns dict with model, confidence, reasoning.
 

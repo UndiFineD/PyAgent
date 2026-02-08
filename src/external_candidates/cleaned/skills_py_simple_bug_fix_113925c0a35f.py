@@ -9,8 +9,6 @@
 
 Example: Simple Bug Fix Routing
 
-
-
 Demonstrates how Claw Conductor routes a simple bug fix to
 
 an appropriate model, preferring free options when possible.
@@ -21,11 +19,9 @@ import sys
 
 from pathlib import Path
 
-
 # Add parent directory to path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-
 
 from scripts.router import Router, Task
 

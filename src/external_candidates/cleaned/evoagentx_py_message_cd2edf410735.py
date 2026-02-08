@@ -9,9 +9,7 @@ from enum import Enum
 
 from typing import Any, Callable, List, Optional, Union
 
-
 from pydantic import Field, model_validator
-
 
 from .module import BaseModule
 
@@ -36,8 +34,6 @@ class Message(BaseModule):
     """
 
     the base class for message.
-
-
 
     Attributes:
 
@@ -156,8 +152,6 @@ class Message(BaseModule):
 
         sort the messages based on the timestamp.
 
-
-
         Args:
 
             messages (List[Message]): the messages to be sorted.
@@ -183,8 +177,6 @@ class Message(BaseModule):
         """
 
         sort the messages using key or timestamp (by default).
-
-
 
         Args:
 
@@ -214,8 +206,6 @@ class Message(BaseModule):
         """
 
         merge different message list.
-
-
 
         Args:
 

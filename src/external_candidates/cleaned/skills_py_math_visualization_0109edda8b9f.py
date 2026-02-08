@@ -7,13 +7,9 @@
 
 Mathematical Visualization Patterns for Manim Community
 
-
-
 Demonstrates LaTeX rendering, equation animations, and color-coded math.
 
 Adapted from 3b1b patterns for ManimCE compatibility.
-
-
 
 Run with: manim -pql math_visualization.py SceneName
 

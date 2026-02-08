@@ -9,13 +9,9 @@
 
 Patch Clawd's appearance directly in the compiled Claude Code binary.
 
-
-
 This script modifies specific byte sequences in the Bun-compiled binary
 
 to change Clawd's ASCII art (e.g., adding arms, changing poses).
-
-
 
 Usage:
 
@@ -24,8 +20,6 @@ Usage:
     python patch_binary.py --restore
 
     python patch_binary.py --list
-
-
 
 WARNING: This modifies a compiled binary. Always backup first!
 
@@ -41,7 +35,6 @@ from datetime import datetime
 
 from pathlib import Path
 
-
 # Default binary locations
 
 DEFAULT_PATHS = [
@@ -50,13 +43,11 @@ DEFAULT_PATHS = [
     "/opt/homebrew/bin/claude",
 ]
 
-
 # Patch definitions
 
 # Format: (search_bytes, replace_bytes, description)
 
 # All strings are UTF-16LE encoded
-
 
 PATCHES = {
     "excited": {

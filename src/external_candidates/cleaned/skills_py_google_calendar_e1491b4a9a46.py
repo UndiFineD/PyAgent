@@ -17,7 +17,6 @@ import urllib.parse
 
 import urllib.request
 
-
 BASE_URL = "https://www.googleapis.com/calendar/v3"
 
 

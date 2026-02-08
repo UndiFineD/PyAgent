@@ -7,8 +7,6 @@
 
 """SNCF — Recherche de trains via l'API Navitia.
 
-
-
 Usage:
 
     python3 sncf.py search Paris Lyon
@@ -18,8 +16,6 @@ Usage:
     python3 sncf.py departures Paris
 
     python3 sncf.py disruptions
-
-
 
 Nécessite SNCF_API_KEY (token Navitia — gratuit sur https://navitia.io).
 
@@ -43,11 +39,9 @@ import urllib.request
 
 from datetime import datetime, timedelta
 
-
 API_BASE = "https://api.navitia.io/v1"
 
 COVERAGE = "fr-sw"  # couverture nationale SNCF
-
 
 # Alias de gares courantes
 

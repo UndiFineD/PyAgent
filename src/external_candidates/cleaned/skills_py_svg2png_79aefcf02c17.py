@@ -13,7 +13,6 @@ import urllib.request
 
 import xml.etree.ElementTree as ET
 
-
 from PIL import Image, ImageDraw, ImageFont
 
 

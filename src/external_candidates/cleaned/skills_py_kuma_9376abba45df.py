@@ -11,8 +11,6 @@ Uptime Kuma CLI wrapper using uptime-kuma-api library.
 
 Requires: pip install uptime-kuma-api
 
-
-
 Environment variables:
 
   UPTIME_KUMA_URL      - Uptime Kuma server URL (e.g., http://localhost:3001)
@@ -32,7 +30,6 @@ import os
 import sys
 
 from typing import Optional
-
 
 try:
     from uptime_kuma_api import MonitorType, UptimeKumaApi

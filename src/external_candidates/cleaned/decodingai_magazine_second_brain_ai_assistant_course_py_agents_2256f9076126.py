@@ -7,7 +7,6 @@ from pathlib import Path
 
 from typing import Any
 
-
 import opik
 
 from loguru import logger
@@ -17,7 +16,6 @@ from opik import opik_context
 from second_brain_online.config import settings
 
 from smolagents import LiteLLMModel, MessageRole, MultiStepAgent, ToolCallingAgent
-
 
 from .tools import (
     HuggingFaceEndpointSummarizerTool,
@@ -113,19 +111,13 @@ def extract_tool_responses(agent: ToolCallingAgent) -> str:
 
     Extracts and concatenates all tool response contents with numbered observation delimiters.
 
-
-
     Args:
 
         input_messages (List[Dict]): List of message dictionaries containing 'role' and 'content' keys
 
-
-
     Returns:
 
         str: Tool response contents separated by numbered observation delimiters
-
-
 
     Example:
 

@@ -5,7 +5,6 @@
 
 from typing import Dict
 
-
 from llama_cpp import Llama
 
 from ray import serve

@@ -7,7 +7,6 @@ import os
 
 from typing import List
 
-
 import litellm
 
 from litellm import acompletion, completion
@@ -17,7 +16,6 @@ from tenacity import (
     stop_after_attempt,
     wait_random_exponential,
 )
-
 
 from ..core.registry import register_model
 
@@ -186,15 +184,11 @@ class LiteLLM(OpenAILLM):
 
         Generate a single response using the completion function.
 
-
-
         Args:
 
             messages (List[dict]): A list of dictionaries representing the conversation history.
 
             **kwargs (Any): Additional parameters to be passed to the `completion` function.
-
-
 
         Returns:
 
@@ -245,15 +239,11 @@ class LiteLLM(OpenAILLM):
 
         Generate responses for a batch of messages.
 
-
-
         Args:
 
             batch_messages (List[List[dict]]): A list of message lists, where each sublist represents a conversation.
 
             **kwargs (Any): Additional parameters to be passed to the `completion` function.
-
-
 
         Returns:
 
@@ -275,15 +265,11 @@ class LiteLLM(OpenAILLM):
 
         Generate a single response using the async completion function.
 
-
-
         Args:
 
             messages (List[dict]): A list of dictionaries representing the conversation history.
 
             **kwargs (Any): Additional parameters to be passed to the `completion` function.
-
-
 
         Returns:
 

@@ -9,12 +9,10 @@ import os
 
 from pathlib import Path
 
-
 APP_PROGIDS = {
     "word": ["Word.Application"],
     "wps": ["KWPS.Application", "WPS.Application"],
 }
-
 
 WD_FORMAT_PDF = 17
 

@@ -5,11 +5,9 @@
 
 from typing import Any, Dict, List, Optional
 
-
 from evoagentx.core.logging import logger
 
 from googlesearch import search as google_f_search
-
 
 from .search_base import SearchBase
 
@@ -33,8 +31,6 @@ class SearchGoogleFree(SearchBase):
         """
 
         Initialize the Free Google Search tool.
-
-
 
         Args:
 
@@ -60,8 +56,6 @@ class SearchGoogleFree(SearchBase):
 
         Searches Google for the given query and retrieves content from multiple pages.
 
-
-
         Args:
 
             query (str): The search query.
@@ -69,8 +63,6 @@ class SearchGoogleFree(SearchBase):
             num_search_pages (int): Number of search results to retrieve
 
             max_content_words (int): Maximum number of words to include in content, None means no limit
-
-
 
         Returns:
 

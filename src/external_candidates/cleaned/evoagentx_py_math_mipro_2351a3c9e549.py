@@ -5,7 +5,6 @@
 
 import os
 
-
 from dotenv import load_dotenv
 
 from evoagentx.agents import AgentManager
@@ -25,7 +24,6 @@ from evoagentx.optimizers.mipro_optimizer import WorkFlowMiproOptimizer
 from evoagentx.prompts import MiproPromptTemplate
 
 from evoagentx.workflow import SequentialWorkFlowGraph
-
 
 load_dotenv()
 

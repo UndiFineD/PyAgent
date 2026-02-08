@@ -43,8 +43,6 @@ class UserService:
 
         Initialize the user service.
 
-
-
         Args:
 
             database_url: Connection string for the database
@@ -60,15 +58,11 @@ class UserService:
 
         Create a new user.
 
-
-
         Args:
 
             name: User's full name
 
             email: User's email address
-
-
 
         Returns:
 
@@ -89,13 +83,9 @@ class UserService:
 
         Retrieve a user by ID.
 
-
-
         Args:
 
             user_id: The user's ID
-
-
 
         Returns:
 
@@ -110,13 +100,9 @@ class UserService:
 
         List all users.
 
-
-
         Args:
 
             active_only: If True, only return active users
-
-
 
         Returns:
 
@@ -136,13 +122,9 @@ class UserService:
 
         Deactivate a user.
 
-
-
         Args:
 
             user_id: The user's ID
-
-
 
         Returns:
 
@@ -168,8 +150,6 @@ class AuthenticationService:
 
         Initialize authentication service.
 
-
-
         Args:
 
             user_service: UserService instance for user lookup
@@ -185,15 +165,11 @@ class AuthenticationService:
 
         Authenticate a user and create session.
 
-
-
         Args:
 
             email: User's email
 
             password: User's password
-
-
 
         Returns:
 
@@ -220,13 +196,9 @@ class AuthenticationService:
 
         Logout a user and destroy session.
 
-
-
         Args:
 
             session_token: The session token
-
-
 
         Returns:
 
@@ -246,13 +218,9 @@ class AuthenticationService:
 
         Get the current authenticated user.
 
-
-
         Args:
 
             session_token: The session token
-
-
 
         Returns:
 
@@ -273,13 +241,9 @@ def initialize_services(database_url: str) -> tuple[UserService, AuthenticationS
 
     Initialize all services.
 
-
-
     Args:
 
         database_url: Database connection string
-
-
 
     Returns:
 

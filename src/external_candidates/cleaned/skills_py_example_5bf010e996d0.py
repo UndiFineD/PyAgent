@@ -7,11 +7,7 @@
 
 """bus_alerts.py (skeleton)
 
-
-
 Personal repo to track development of the ClawdHub skill package.
-
-
 
 Rules:
 

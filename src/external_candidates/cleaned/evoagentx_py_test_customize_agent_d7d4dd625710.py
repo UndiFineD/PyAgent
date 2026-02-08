@@ -9,7 +9,6 @@ import unittest
 
 from unittest.mock import patch
 
-
 from evoagentx.actions.action import ActionOutput
 
 from evoagentx.agents.customize_agent import CustomizeAgent

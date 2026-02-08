@@ -22,8 +22,6 @@ class TenantSetupManager:
 
         Initialize with tenant configuration.
 
-
-
         Args:
 
             tenant_config: Dictionary containing tenant details and requirements
@@ -48,8 +46,6 @@ class TenantSetupManager:
         """
 
         Generate comprehensive tenant setup checklist.
-
-
 
         Returns:
 
@@ -226,8 +222,6 @@ class TenantSetupManager:
 
         Generate required DNS records for Microsoft 365 services.
 
-
-
         Returns:
 
             Dictionary of DNS record types and configurations
@@ -336,8 +330,6 @@ class TenantSetupManager:
 
         Generate PowerShell script for initial tenant configuration.
 
-
-
         Returns:
 
             Complete PowerShell script as string
@@ -354,15 +346,11 @@ class TenantSetupManager:
 
     Domain: {self.domain_name}
 
-
-
 .DESCRIPTION
 
     This script performs initial Microsoft 365 tenant configuration.
 
     Run this script with Global Administrator credentials.
-
-
 
 .NOTES
 
@@ -376,37 +364,25 @@ class TenantSetupManager:
 
 #>
 
-
-
 # Connect to Microsoft 365 services
 
 Write-Host "Connecting to Microsoft 365..." -ForegroundColor Cyan
-
-
 
 # Connect to Microsoft Graph
 
 Connect-MgGraph -Scopes "Organization.ReadWrite.All", "Directory.ReadWrite.All", "Policy.ReadWrite.ConditionalAccess"
 
-
-
 # Connect to Exchange Online
 
 Connect-ExchangeOnline
-
-
 
 # Connect to Microsoft Teams
 
 Connect-MicrosoftTeams
 
-
-
 # Step 1: Configure organization settings
 
 Write-Host "Configuring organization settings..." -ForegroundColor Green
-
-
 
 $orgSettings = @{{
 
@@ -416,23 +392,15 @@ $orgSettings = @{{
 
 }}
 
-
-
 Update-MgOrganization -OrganizationId (Get-MgOrganization).Id -BodyParameter $orgSettings
-
-
 
 # Step 2: Enable Security Defaults (or use Conditional Access for advanced)
 
 Write-Host "Enabling Security Defaults (MFA)..." -ForegroundColor Green
 
-
-
 # Uncomment to enable Security Defaults:
 
 # Update-MgPolicyIdentitySecurityDefaultEnforcementPolicy -IsEnabled $true
-
-
 
 # Step 3: Enable audit logging
 
@@ -440,19 +408,13 @@ Write-Host "Enabling unified audit log..." -ForegroundColor Green
 
 Set-AdminAuditLogConfig -UnifiedAuditLogIngestionEnabled $true
 
-
-
 # Step 4: Configure Exchange Online settings
 
 Write-Host "Configuring Exchange Online..." -ForegroundColor Green
 
-
-
 # Set organization config
 
 Set-OrganizationConfig -DefaultPublicFolderAgeLimit 30
-
-
 
 # Configure anti-spam policy
 
@@ -470,25 +432,17 @@ $antiSpamPolicy = @{{
 
 }}
 
-
-
 # Step 5: Configure SharePoint Online settings
 
 Write-Host "Configuring SharePoint Online..." -ForegroundColor Green
-
-
 
 # Note: SharePoint management requires SharePointPnPPowerShellOnline module
 
 # Connect-PnPOnline -Url "https://{self.domain_name.split(".")[0]}-admin.sharepoint.com" -Interactive
 
-
-
 # Step 6: Configure Microsoft Teams settings
 
 Write-Host "Configuring Microsoft Teams..." -ForegroundColor Green
-
-
 
 # Set Teams messaging policy
 
@@ -505,8 +459,6 @@ $messagingPolicy = @{{
     GiphyRatingType = "Moderate"
 
 }}
-
-
 
 # Step 7: Summary
 
@@ -526,8 +478,6 @@ Write-Host "5. Review and configure Conditional Access policies"
 
 Write-Host "6. Complete compliance configuration if required"
 
-
-
 # Disconnect from services
 
 Disconnect-MgGraph
@@ -544,8 +494,6 @@ Disconnect-MicrosoftTeams
         """
 
         Recommend appropriate Microsoft 365 licenses based on requirements.
-
-
 
         Returns:
 

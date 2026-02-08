@@ -5,7 +5,6 @@
 
 from typing import Literal, Union
 
-
 from langchain_mongodb import MongoDBAtlasVectorSearch
 
 from langchain_mongodb.retrievers import (
@@ -17,11 +16,9 @@ from loguru import logger
 
 from second_brain_online.config import settings
 
-
 from .embeddings import EmbeddingModelType, EmbeddingsModel, get_embedding_model
 
 from .splitters import get_splitter
-
 
 # Add these type definitions at the top of the file
 

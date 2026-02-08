@@ -5,9 +5,7 @@
 
 ## You will need to create a MCP config file first at "examples/output/tests/shares_mcp.config"
 
-
 import os
-
 
 from dotenv import load_dotenv
 
@@ -22,7 +20,6 @@ from evoagentx.tools.image_analysis import ImageAnalysisTool
 from evoagentx.tools.images_flux_generation import FluxImageGenerationTool
 
 from evoagentx.tools.mcp import MCPToolkit
-
 
 load_dotenv()
 

@@ -9,18 +9,15 @@ import sys
 
 from datetime import datetime
 
-
 import matplotlib.pyplot as plt
 
 from dotenv import load_dotenv
 
 from fpdf import FPDF
 
-
 # Add src to path
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
 
 from src.connectors.odoo_client import OdooClient
 

@@ -5,7 +5,6 @@
 
 from mcp.server.fastmcp import FastMCP
 
-
 mcp = FastMCP("pepsi_or_coke_mcp")
 
 
