@@ -34,7 +34,7 @@ from rich.console import Console
 from rich.panel import Panel
 
 from src.core.base.base_agent import BaseAgent
-from src.core.base.models.communication_models import CascadeContext
+from src.core.base.common.models.communication_models import CascadeContext
 
 
 class BrowserAgent(BaseAgent):

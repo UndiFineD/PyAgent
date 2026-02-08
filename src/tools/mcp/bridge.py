@@ -36,7 +36,7 @@ from urllib.parse import urlparse
 import aiohttp
 import requests
 
-from src.core.base.models.communication_models import CascadeContext
+from src.core.base.common.models.communication_models import CascadeContext
 
 logger = logging.getLogger("pyagent.tools.mcp")
 

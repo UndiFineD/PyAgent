@@ -1,3 +1,4 @@
+- [x] Run final benchmarks for Rust Core Phase 1 (FormulaEngineCore, BenchmarkCore, ErrorMappingCore) [2026-02-08]
 - [x] 0xSojalSec-Automation-LFI.py (Ported LFI payload logic to VulnIntelligence) [2026-02-04]
 - [x] 0xSojalSec-AutoRecon-XSS (Ported XSS workflow to XssIntelligence) [2026-02-04]
 - [x] 0xSojalSec-auto-news (Ported RSS/Reddit OSINT logic to Rss/RedditCollector) [2026-02-04]

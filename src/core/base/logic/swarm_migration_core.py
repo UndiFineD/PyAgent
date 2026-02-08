@@ -25,7 +25,7 @@ from typing import List, Dict, Any, Optional, Callable, Set
 from enum import Enum
 
 from src.core.base.logic.strategy_optimizer import OptimizationTrial
-from src.core.base.models.communication_models import CascadeContext
+from src.core.base.common.models.communication_models import CascadeContext
 
 logger = logging.getLogger(__name__)
 

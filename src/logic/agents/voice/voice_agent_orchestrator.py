@@ -46,7 +46,7 @@ from rich.panel import Panel
 from rich.table import Table
 
 from src.core.base.base_agent import BaseAgent
-from src.core.base.models.communication_models import CascadeContext
+from src.core.base.common.models.communication_models import CascadeContext
 from src.logic.agents.swarm.graph_orchestration import Orchestrator, OrchestrationState
 
 

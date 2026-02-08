@@ -28,7 +28,7 @@ from typing import Any, Dict, List, Optional
 
 from src.core.base.agent_state_manager import StateTransaction
 from src.core.base.base_agent import BaseAgent
-from src.core.base.models.communication_models import CascadeContext
+from src.core.base.common.models.communication_models import CascadeContext
 from src.tools.security.fuzzing import (
     AIFuzzingEngine,
     FuzzingTarget,

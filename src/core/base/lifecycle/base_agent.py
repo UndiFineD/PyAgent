@@ -63,7 +63,7 @@ from src.core.base.mixins.streaming_mixin import StreamingMixin
 
 # Cognitive Cores
 from src.core.memory.automem_core import AutoMemCore
-from src.core.reasoning.cort_core import CoRTCore
+from src.core.reasoning.cort_core import CoRTReasoningCore as CoRTCore
 
 # Advanced components (Lazy loaded or optional)
 try:
@@ -144,8 +144,12 @@ class BaseAgent(
         self.core = BaseCore(workspace_root=self._workspace_root)
 
         # Initialize Cognitive Core Components
-        self.memory_core = AutoMemCore(workspace_root=Path(self._workspace_root))
-        self.reasoning_core = CoRTCore(config=kwargs.get("reasoning_config", {}))
+        memory_config = kwargs.get("memory_config", {})
+        if isinstance(memory_config, dict) and "workspace_root" not in memory_config:
+            memory_config["workspace_root"] = str(self._workspace_root)
+        self.memory_core = AutoMemCore(config=memory_config)
+        inference_engine = kwargs.get("inference_engine", "gemini-3-flash")
+        self.reasoning_core = CoRTCore(inference_engine=inference_engine)
 
         self.previous_content = ""
         self.current_content = ""

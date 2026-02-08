@@ -37,7 +37,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 import yaml
 
-from src.core.base.models.communication_models import CascadeContext
+from src.core.base.common.models.communication_models import CascadeContext
 
 logger = logging.getLogger("pyagent.testing.framework")
 

@@ -18,7 +18,7 @@ Mixin regarding Synaptic Modularization (Cassette-based logic).
 
 from typing import Any, Optional
 from src.core.base.logic.cassette_orchestrator import CassetteOrchestrator, BaseLogicCassette
-from src.core.base.models.communication_models import CascadeContext
+from src.core.base.common.models.communication_models import CascadeContext
 
 class CassetteMixin:
     """

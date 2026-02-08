@@ -19,7 +19,7 @@ Inspired by agentUniverse.
 
 import abc
 from typing import Any, Dict, Optional
-from src.core.base.models.communication_models import CascadeContext
+from src.core.base.common.models.communication_models import CascadeContext
 
 
 class BaseWorkPattern(abc.ABC):

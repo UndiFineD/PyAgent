@@ -87,7 +87,7 @@ except ImportError:  # pragma: no cover - optional dependency
     spacy = None
 
 from src.core.base.state import StateTransaction
-from src.core.base.models.communication_models import CascadeContext
+from src.core.base.common.models.communication_models import CascadeContext
 
 logging.basicConfig(
     level=logging.INFO,

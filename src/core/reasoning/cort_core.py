@@ -28,7 +28,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
 
-from src.core.base.models.communication_models import CascadeContext
+from src.core.base.common.models.communication_models import CascadeContext
 from src.inference.engine import InferenceEngine
 
 logger = logging.getLogger("pyagent.reasoning.cort")

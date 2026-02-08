@@ -21,7 +21,7 @@ from hypothesis import given, strategies as st
 
 import pytest
 try:
-    from src.observability.stats.metrics_engine import FormulaEngineCore
+    from src.observability.stats.formula_engine import FormulaEngineCore
 except ImportError:
     FormulaEngineCore = None  # type: ignore
 
