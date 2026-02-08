@@ -1,6 +1,8 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_singleton.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\skills\skills\chocomintx\xiaohongshutools\scripts\units\singleton.py
 # NOTE: extracted with static-only rules; review before use
+
 
 def singleton(cls):
 
@@ -9,7 +11,6 @@ def singleton(cls):
     def get_instance(*args, **kwargs):
 
         if cls not in instances:
-
             instances[cls] = cls(*args, **kwargs)
 
         return instances[cls]

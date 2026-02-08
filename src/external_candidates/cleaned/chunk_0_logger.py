@@ -1,11 +1,10 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_logger.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\AD_Miner\ad_miner\sources\modules\logger.py
 # NOTE: extracted with static-only rules; review before use
 
+
 class bcolors:
-
-
-
     HEADER = "\033[95m"
 
     OKBLUE = "\033[94m"
@@ -27,11 +26,9 @@ class bcolors:
     LIGHT_MAGENTA = "\033[1;95m"
 
 
-
 def print_magenta(info):
 
     print("%s[+]%s%s" % (bcolors.LIGHT_MAGENTA, info, bcolors.ENDC))
-
 
 
 def print_debug(info):
@@ -39,15 +36,9 @@ def print_debug(info):
     print("%s[+]%s%s" % (bcolors.OKBLUE, info, bcolors.ENDC))
 
 
-
-
-
 def print_error(info):
 
     print("%s[!]%s%s" % (bcolors.FAIL, info, bcolors.ENDC))
-
-
-
 
 
 def print_warning(info):
@@ -55,10 +46,6 @@ def print_warning(info):
     print("%s[-]%s%s" % (bcolors.WARNING, info, bcolors.ENDC))
 
 
-
-
-
 def print_success(info):
 
     print("%s[+]%s%s" % (bcolors.OKGREEN, info, bcolors.ENDC))
-

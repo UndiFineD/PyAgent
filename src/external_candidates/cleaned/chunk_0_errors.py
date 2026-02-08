@@ -1,12 +1,10 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_errors.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\agents_generic\livekit-plugins\livekit-plugins-anam\livekit\plugins\anam\errors.py
 # NOTE: extracted with static-only rules; review before use
 
-class AnamException(Exception):
 
+class AnamException(Exception):
     """Custom exception for Anam API errors."""
 
-
-
     pass
-

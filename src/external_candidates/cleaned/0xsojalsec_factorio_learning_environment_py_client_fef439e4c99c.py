@@ -1,0 +1,48 @@
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_factorio_learning_environment.py\fle.py\env.py\tools.py\agent.py\score.py\client_fef439e4c99c.py
+# NOTE: extracted with static-only rules; review before use
+
+# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\fle\env\tools\agent\score\client.py
+
+from fle.env.tools import Tool
+
+
+class Reward(Tool):
+    def __init__(self, connection, game_state):
+
+        super().__init__(connection, game_state)
+
+        self.name = "score"
+
+        self.game_state = game_state
+
+        self.load()
+
+    def __call__(self, *args, **kwargs):
+
+        response, execution_time = self.execute(*args)
+
+        if self.game_state.instance.initial_score:
+            response["player"] -= self.game_state.instance.initial_score
+
+        if "goal" in response:
+            goal = response["goal"]
+
+        else:
+            goal = ""
+
+        if isinstance(response, str):
+            raise Exception("Could not get player score", response)
+
+        if "player" not in response:
+            response["player"] = 0
+
+        return response["player"], goal
+
+
+# if __name__ == "__main__":
+
+#     score = Reward("connection", 0)
+
+#     score.load()
+
+#     pass

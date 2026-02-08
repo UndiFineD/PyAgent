@@ -1,0 +1,11 @@
+
+import importlib.util
+from pathlib import Path
+
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_mobileagent_py_icon_localization_f1a961cb3a0c.py")
+spec = importlib.util.spec_from_file_location('mod_under_test', p)
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+
+assert hasattr(mod, 'remove_boxes'), 'missing remove_boxes'
+assert hasattr(mod, 'det'), 'missing det'

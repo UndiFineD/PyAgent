@@ -1,6 +1,8 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_banner.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-IDOR-Forge\core\banner.py
 # NOTE: extracted with static-only rules; review before use
+
 
 def banner():
 
@@ -24,11 +26,4 @@ def banner():
 
     """
 
-
-
-    print(name + (" " * 80) +"Created by ErrorFiat")
-
-
-
-
-
+    print(name + (" " * 80) + "Created by ErrorFiat")

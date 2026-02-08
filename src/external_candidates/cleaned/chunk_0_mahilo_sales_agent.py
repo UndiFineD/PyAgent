@@ -1,9 +1,10 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_mahilo_sales_agent.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-mahilo\examples\team_of_agents\mahilo_sales_agent.py
 # NOTE: extracted with static-only rules; review before use
 
-def analyze_lead_sources() -> str:
 
+def analyze_lead_sources() -> str:
     """Analyze effectiveness of different lead sources"""
 
     return """
@@ -13,9 +14,7 @@ def analyze_lead_sources() -> str:
     """
 
 
-
 def collect_feature_feedback() -> str:
-
     """Analyse past interactions and collect customer feedback about desired features"""
 
     return """I've analyzed last month's calls. 40 percent of all 
@@ -25,9 +24,7 @@ def collect_feature_feedback() -> str:
     """
 
 
-
 def generate_sales_insights() -> str:
-
     """Generate insights about sales patterns and customer preferences"""
 
     return """
@@ -37,73 +34,38 @@ def generate_sales_insights() -> str:
     """
 
 
-
 tools = [
-
     {
-
         "tool": {
-
             "type": "function",
-
             "function": {
-
                 "name": "analyze_lead_sources",
-
                 "description": "Analyze effectiveness of different lead sources",
-
-                "parameters": {}
-
-            }
-
+                "parameters": {},
+            },
         },
-
         "function": analyze_lead_sources,
-
     },
-
     {
-
         "tool": {
-
             "type": "function",
-
             "function": {
-
                 "name": "collect_feature_feedback",
-
                 "description": "Analyse past interactions and collect customer feedback about desired features",
-
-                "parameters": {}
-
-            }
-
+                "parameters": {},
+            },
         },
-
         "function": collect_feature_feedback,
-
     },
-
     {
-
         "tool": {
-
             "type": "function",
-
             "function": {
-
                 "name": "generate_sales_insights",
-
                 "description": "Generate insights about sales patterns and customer preferences",
-
-                "parameters": {}
-
-            }
-
+                "parameters": {},
+            },
         },
-
         "function": generate_sales_insights,
-
-    }
-
+    },
 ]

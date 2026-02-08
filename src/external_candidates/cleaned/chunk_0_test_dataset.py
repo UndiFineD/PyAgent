@@ -1,9 +1,10 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_test_dataset.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-Made-With-ML\tests\data\test_dataset.py
 # NOTE: extracted with static-only rules; review before use
 
-def test_dataset(df):
 
+def test_dataset(df):
     """Test dataset quality and integrity."""
 
     column_list = ["id", "created_on", "title", "description", "tag"]
@@ -22,8 +23,6 @@ def test_dataset(df):
 
     df.expect_column_values_to_be_of_type(column="title", type_="str")  # type adherence
 
-
-
     # Expectation suite
 
     expectation_suite = df.get_expectation_suite(discard_failed_expectations=False)
@@ -31,4 +30,3 @@ def test_dataset(df):
     results = df.validate(expectation_suite=expectation_suite, only_return_failures=True).to_json_dict()
 
     assert results["success"]
-

@@ -1,0 +1,61 @@
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_videos.py\_2018.py\eop.py\chapter1.py\what_does_probability_mean_39cb24eeaa19.py
+# NOTE: extracted with static-only rules; review before use
+
+# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-videos\_2018\eop\chapter1\what_does_probability_mean.py
+
+from manim_imports_ext import *
+
+
+class WhatDoesItReallyMean(TeacherStudentsScene):
+    CONFIG = {
+        "default_pi_creature_kwargs": {
+            "color": MAROON_E,
+            "flip_at_start": True,
+        },
+    }
+
+    def construct(self):
+
+        student_q = OldTexText("What does", "``probability''\\\\", "\\emph{actually}", "mean?")
+
+        student_q.set_color_by_tex("probability", YELLOW)
+
+        self.student_says(student_q, target_mode="sassy")
+
+        self.wait()
+
+        self.play(self.students[1].change_mode, "confused")
+
+        self.wait(2)
+
+        student_bubble = self.students[1].bubble
+
+        self.students[1].bubble = None
+
+        student_bubble.add(student_bubble.content)
+
+        self.play(
+            student_bubble.scale,
+            0.5,
+            student_bubble.to_corner,
+            UL,
+        )
+
+        self.teacher_says(
+            "Don't worry -- philosophy\\\\ can come later!",
+            added_anims=[self.change_students(*3 * ["happy"])],
+        )
+
+        self.wait(2)
+
+        self.play(RemovePiCreatureBubble(self.teacher))
+
+        self.play(*[ApplyMethod(pi.look_at, ORIGIN) for pi in self.get_pi_creatures()])
+
+        self.play_all_student_changes("pondering", look_at=UP)
+
+        self.wait(3)
+
+        self.play_student_changes("confused", look_at=UP)
+
+        self.wait(3)

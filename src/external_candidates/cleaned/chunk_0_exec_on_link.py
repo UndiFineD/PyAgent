@@ -1,9 +1,10 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_exec_on_link.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-NetExec\nxc\modules\exec_on_link.py
 # NOTE: extracted with static-only rules; review before use
 
-class NXCModule:
 
+class NXCModule:
     """
 
     Execute commands on linked servers
@@ -11,8 +12,6 @@ class NXCModule:
     Module by deathflamingo
 
     """
-
-
 
     name = "exec_on_link"
 
@@ -24,8 +23,6 @@ class NXCModule:
 
     multiple_hosts = False
 
-
-
     def __init__(self):
 
         self.mssql_conn = None
@@ -36,10 +33,7 @@ class NXCModule:
 
         self.command = None
 
-
-
     def options(self, context, module_options):
-
         """
 
         LINKED_SERVER: The name of the linked server to execute the command on.
@@ -49,14 +43,10 @@ class NXCModule:
         """
 
         if "LINKED_SERVER" in module_options:
-
             self.linked_server = module_options["LINKED_SERVER"]
 
         if "COMMAND" in module_options:
-
             self.command = module_options["COMMAND"]
-
-
 
     def on_login(self, context, connection):
 
@@ -65,19 +55,13 @@ class NXCModule:
         self.mssql_conn = connection.conn
 
         if not self.linked_server or not self.command:
-
             self.context.log.fail("Please specify both LINKED_SERVER and COMMAND options.")
 
             return
 
-
-
         self.execute_on_link()
 
-
-
     def execute_on_link(self):
-
         """Executes the specified command on the linked server."""
 
         query = f"EXEC ('{self.command}') AT [{self.linked_server}];"
@@ -85,4 +69,3 @@ class NXCModule:
         result = self.mssql_conn.sql_query(query)
 
         self.context.log.display(f"Command output: {result}")
-

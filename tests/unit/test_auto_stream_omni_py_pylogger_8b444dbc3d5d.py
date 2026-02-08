@@ -1,0 +1,10 @@
+
+import importlib.util
+from pathlib import Path
+
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\stream_omni_py_pylogger_8b444dbc3d5d.py")
+spec = importlib.util.spec_from_file_location('mod_under_test', p)
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+
+assert hasattr(mod, 'get_pylogger'), 'missing get_pylogger'

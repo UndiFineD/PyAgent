@@ -1,0 +1,14 @@
+
+import importlib.util
+from pathlib import Path
+
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_factorio_learning_environment_py_planning_models_fde7172a48a8.py")
+spec = importlib.util.spec_from_file_location('mod_under_test', p)
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+
+assert hasattr(mod, 'LanguageOutput'), 'missing LanguageOutput'
+assert hasattr(mod, 'TaskOutput'), 'missing TaskOutput'
+assert hasattr(mod, 'InitialPlanOutput'), 'missing InitialPlanOutput'
+assert hasattr(mod, 'Step'), 'missing Step'
+assert hasattr(mod, 'PlanOutput'), 'missing PlanOutput'

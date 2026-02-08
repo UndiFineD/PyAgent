@@ -1,9 +1,10 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_link_enable_xp.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-NetExec\nxc\modules\link_enable_xp.py
 # NOTE: extracted with static-only rules; review before use
 
-class NXCModule:
 
+class NXCModule:
     """
 
     Enable or disable xp_cmdshell on a linked SQL server
@@ -11,8 +12,6 @@ class NXCModule:
     Module by deathflamingo
 
     """
-
-
 
     name = "link_enable_xp"
 
@@ -24,18 +23,13 @@ class NXCModule:
 
     multiple_hosts = False
 
-
-
     def __init__(self):
 
         self.action = None
 
         self.linked_server = None
 
-
-
     def options(self, context, module_options):
-
         """
 
         Defines the options for enabling or disabling xp_cmdshell on the linked server.
@@ -54,8 +48,6 @@ class NXCModule:
 
         self.linked_server = module_options.get("LINKED_SERVER")
 
-
-
     def on_login(self, context, connection):
 
         self.context = context
@@ -63,31 +55,22 @@ class NXCModule:
         self.mssql_conn = connection.conn
 
         if not self.linked_server:
-
             self.context.log.fail("Please provide a linked server name using the LINKED_SERVER option.")
 
             return
 
-
-
         # Enable or disable xp_cmdshell based on action
 
         if self.action == "enable":
-
             self.enable_xp_cmdshell()
 
         elif self.action == "disable":
-
             self.disable_xp_cmdshell()
 
         else:
-
             self.context.log.fail(f"Unknown action: {self.action}")
 
-
-
     def enable_xp_cmdshell(self):
-
         """Enable xp_cmdshell on the linked server."""
 
         query = f"EXEC ('sp_configure ''show advanced options'', 1; RECONFIGURE;') AT [{self.linked_server}]"
@@ -106,10 +89,7 @@ class NXCModule:
 
         self.context.log.success(f"xp_cmdshell enabled on {self.linked_server}")
 
-
-
     def disable_xp_cmdshell(self):
-
         """Disable xp_cmdshell on the linked server."""
 
         query = f"EXEC ('sp_configure ''xp_cmdshell'', 0; RECONFIGURE; sp_configure ''show advanced options'', 0; RECONFIGURE;') AT [{self.linked_server}]"
@@ -120,11 +100,7 @@ class NXCModule:
 
         self.context.log.success(f"xp_cmdshell disabled on {self.linked_server}")
 
-
-
     def query_and_get_output(self, query):
-
         """Executes a query and returns the output."""
 
         return self.mssql_conn.sql_query(query)
-

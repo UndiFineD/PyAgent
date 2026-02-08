@@ -1,9 +1,10 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_petitpotam.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-NetExec\nxc\modules\petitpotam.py
 # NOTE: extracted with static-only rules; review before use
 
-class NXCModule:
 
+class NXCModule:
     name = "petitpotam"
 
     description = "[REMOVED] Module to check if the DC is vulnerable to PetitPotam, credit to @topotam"
@@ -14,10 +15,7 @@ class NXCModule:
 
     multiple_hosts = True
 
-
-
     def options(self, context, module_options):
-
         """
 
         LISTENER            IP of your listener
@@ -29,16 +27,12 @@ class NXCModule:
         self.listener = "127.0.0.1"
 
         if "LISTENER" in module_options:
-
             self.listener = module_options["LISTENER"]
 
         self.pipe = "lsarpc"
 
         if "PIPE" in module_options:
-
             self.pipe = module_options["PIPE"]
-
-
 
     def on_login(self, context, connection):
 

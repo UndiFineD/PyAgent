@@ -1,9 +1,10 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_enum_impersonate.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-NetExec\nxc\modules\enum_impersonate.py
 # NOTE: extracted with static-only rules; review before use
 
-class NXCModule:
 
+class NXCModule:
     """
 
     Enumerate SQL Server users with impersonation rights
@@ -11,8 +12,6 @@ class NXCModule:
     Module by deathflamingo
 
     """
-
-
 
     name = "enum_impersonate"
 
@@ -24,15 +23,11 @@ class NXCModule:
 
     multiple_hosts = True
 
-
-
     def __init__(self):
 
         self.mssql_conn = None
 
         self.context = None
-
-
 
     def on_login(self, context, connection):
 
@@ -43,26 +38,18 @@ class NXCModule:
         impersonate_users = self.get_impersonate_users()
 
         if impersonate_users:
-
             self.context.log.success("Users with impersonation rights:")
 
             for user in impersonate_users:
-
                 self.context.log.display(f"  - {user}")
 
         else:
-
             self.context.log.fail("No users with impersonation rights found.")
 
-
-
     def get_impersonate_users(self) -> list:
-
         """
 
         Fetches a list of users with impersonation rights.
-
-
 
         Returns
 
@@ -93,4 +80,3 @@ class NXCModule:
     def options(self, context, module_options):
 
         pass
-

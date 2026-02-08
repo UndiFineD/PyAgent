@@ -1,6 +1,7 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\APT_Attack_Simulation_fnv1a_salted.py
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\APT-Attack-Simulation\Chinese APT\Wicked Panda\fnv1a_salted.py
 # NOTE: extracted with static-only rules; review before use
+
 
 def fnv1a_salted(data, salt, seed_value=0x811C9DC5):
 
@@ -11,7 +12,6 @@ def fnv1a_salted(data, salt, seed_value=0x811C9DC5):
     prime = 0x01000193
 
     for byte in _data:
-
         _hash ^= byte
 
         _hash *= prime
@@ -19,7 +19,6 @@ def fnv1a_salted(data, salt, seed_value=0x811C9DC5):
         _hash &= 0xFFFFFFFF  # Ensure it stays within 32 bits
 
     return _hash
-
 
 
 # Test data
@@ -30,21 +29,14 @@ ldrloaddll = b"LdrLoadDll"
 
 salt = b"\xba\xb4\x24\xcb"
 
-
-
 # Calculate hashes
 
 ntdll_hash = fnv1a_salted(ntdll, salt)
 
 ldrloaddll_hash = fnv1a_salted(ldrloaddll, salt)
 
-
-
 # Print results
 
 print(f"Hash for 'ntdll': {hex(ntdll_hash)}")  # Expected: 0xfe0b07b0
 
 print(f"Hash for 'LdrLoadDll': {hex(ldrloaddll_hash)}")  # Expected: 0xca7bb6ac
-
-
-

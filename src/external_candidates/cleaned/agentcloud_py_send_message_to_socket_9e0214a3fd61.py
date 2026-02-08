@@ -1,0 +1,81 @@
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\agentcloud.py\agent_backend.py\src.py\messaging.py\send_message_to_socket_9e0214a3fd61.py
+# NOTE: extracted with static-only rules; review before use
+
+# Extracted from: C:\DEV\PyAgent\.external\agentcloud\agent-backend\src\messaging\send_message_to_socket.py
+
+import logging
+
+from typing import Any, Optional
+
+import utils.class_checker as cch
+
+from models.sockets import SocketEvents, SocketMessage
+
+from pydantic import BaseModel, constr, field_validator
+
+from socketio import SimpleClient
+
+
+def send(
+    client: Optional[SimpleClient],
+    event: Optional[SocketEvents],
+    message: Optional[SocketMessage],
+    socket_logging: str = "socket",
+):
+
+    # Check inputs
+
+    class Params(BaseModel):
+        client: Any
+
+        event: Any
+
+        message: Any
+
+        socket_logging: constr(min_length=1)
+
+        @field_validator("socket_logging")
+        def check_socket_or_logging(cls, v):
+
+            socket_log = v.lower()
+
+            assert socket_logging in [
+                "socket",
+                "logging",
+                "both",
+            ], f"Invalid socket_logging value: {v}"
+
+            return socket_log
+
+    params = Params(client=client, event=event, message=message, socket_logging=socket_logging)
+
+    # Advanced checks
+
+    if params.socket_logging in ["socket", "both"]:
+        assert params.client is not None, "client cannot be None"
+
+        assert params.event is not None, "event cannot be None"
+
+        assert params.message is not None, "message cannot be None"
+
+        # Assert types
+
+        params.client = cch.check_instance_of_class(params.client, SimpleClient)
+
+        params.event = cch.check_instance_of_class(params.event, SocketEvents)
+
+        params.message = cch.check_instance_of_class(params.message, SocketMessage)
+
+    # If logging, print message
+
+    if params.socket_logging in ["logging", "both"]:
+        logging.info(f"Sending message to socket: {params.message.model_dump()}")
+
+    # If socket or both, send message to socket
+
+    if params.socket_logging in ["socket", "both"]:
+        # If client is not connected, raise an error
+
+        assert params.client.connected, "Socket client is not connected"
+
+        client.emit(event=params.event.value, data=params.message.model_dump())

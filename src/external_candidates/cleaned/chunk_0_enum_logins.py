@@ -1,9 +1,10 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_enum_logins.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-NetExec\nxc\modules\enum_logins.py
 # NOTE: extracted with static-only rules; review before use
 
-class NXCModule:
 
+class NXCModule:
     """
 
     Enumerate SQL Server logins
@@ -11,8 +12,6 @@ class NXCModule:
     Module by deathflamingo
 
     """
-
-
 
     name = "enum_logins"
 
@@ -24,15 +23,11 @@ class NXCModule:
 
     multiple_hosts = True
 
-
-
     def __init__(self):
 
         self.mssql_conn = None
 
         self.context = None
-
-
 
     def on_login(self, context, connection):
 
@@ -43,26 +38,18 @@ class NXCModule:
         logins = self.get_logins()
 
         if logins:
-
             self.context.log.success("Logins found:")
 
             for login in logins:
-
                 self.context.log.display(f"  - {login}")
 
         else:
-
             self.context.log.fail("No logins found.")
 
-
-
     def get_logins(self) -> list:
-
         """
 
         Fetches a list of SQL Server logins.
-
-
 
         Returns
 
@@ -81,4 +68,3 @@ class NXCModule:
     def options(self, context, module_options):
 
         pass
-

@@ -1,11 +1,10 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_logging.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-ldapper\ldapper\logging.py
 # NOTE: extracted with static-only rules; review before use
 
 
-
 class ProxyLogger(object):
-
     """
 
     This class provides a wrapper for the standard Python logging
@@ -14,15 +13,11 @@ class ProxyLogger(object):
 
     flush immediately to whereever they are intended to go.
 
-
-
     ProxyLogger proxies those received messages along, but also stores them,
 
     so that they can be retrieved and enumerated later.
 
     """
-
-
 
     def __init__(self, logger):
 
@@ -30,16 +25,11 @@ class ProxyLogger(object):
 
         self.logger = logger
 
-
-
     def get_messages(self):
 
         return self._messages
 
-
-
     def flush(self):
-
         """Clear all messages and return them afterwards."""
 
         messages = self._messages
@@ -48,15 +38,11 @@ class ProxyLogger(object):
 
         return messages
 
-
-
     def warning(self, msg):
 
         self._messages.append(("WARNING", msg))
 
         self.logger.warning(msg)
-
-
 
     def info(self, msg):
 
@@ -64,15 +50,11 @@ class ProxyLogger(object):
 
         self.logger.info(msg)
 
-
-
     def error(self, msg):
 
         self._messages.append(("ERROR", msg))
 
         self.logger.error(msg)
-
-
 
     def debug(self, msg):
 
@@ -80,15 +62,10 @@ class ProxyLogger(object):
 
         self.logger.debug(msg)
 
-
-
     def has_errors(self):
 
-        return any(et == 'ERROR' for et, _ in self._messages)
-
-
+        return any(et == "ERROR" for et, _ in self._messages)
 
     def has_warnings(self):
 
-        return any(et == 'WARNING' for et, _ in self._messages)
-
+        return any(et == "WARNING" for et, _ in self._messages)

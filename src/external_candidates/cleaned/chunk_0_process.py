@@ -1,6 +1,8 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_process.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-pipeless\examples\custom-data\process.py
 # NOTE: extracted with static-only rules; review before use
+
 
 def hook(frame_data, _):
 
@@ -18,25 +20,12 @@ def hook(frame_data, _):
 
     # Heterogeneus Dictionaries (IMPORTANT: all keys must be strings):
 
-    frame_data['user_data'] = {
-
-        "key1": 0,
-
-        "key2": [1, "3"],
-
-        "key3": { "inner1": "hola" }
-
-    }
-
-
+    frame_data["user_data"] = {"key1": 0, "key2": [1, "3"], "key3": {"inner1": "hola"}}
 
     # In a later hook you can obtain the data like:
 
     # my_data = frame_data['user_data']
 
-
-
     # To connect stages simply give the list to Pipeless when adding a stream:
 
     # pipeless add stream --input-uri "file:///home/user/my/path.mp4" --output-uri "screen" --frame-path "stage1,stage2"
-

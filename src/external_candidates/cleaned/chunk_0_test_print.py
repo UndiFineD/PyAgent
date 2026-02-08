@@ -1,9 +1,10 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_test_print.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\tests\actions\test_print.py
 # NOTE: extracted with static-only rules; review before use
 
-def test_print_tuple(game):
 
+def test_print_tuple(game):
     """
 
     Print a tuple
@@ -12,7 +13,4 @@ def test_print_tuple(game):
 
     r = game.print("Hello", "World", (1, 2, 3))
 
-
-
     assert r == "Hello\tWorld\t(1, 2, 3)"
-

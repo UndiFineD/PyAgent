@@ -1,0 +1,12 @@
+
+import importlib.util
+from pathlib import Path
+
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_videos_py_dice_42a9f6a379d4.py")
+spec = importlib.util.spec_from_file_location('mod_under_test', p)
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+
+assert hasattr(mod, 'DieFace'), 'missing DieFace'
+assert hasattr(mod, 'RowOfDice'), 'missing RowOfDice'
+assert hasattr(mod, 'TwoDiceTable'), 'missing TwoDiceTable'

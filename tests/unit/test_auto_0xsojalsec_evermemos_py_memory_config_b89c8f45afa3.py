@@ -1,0 +1,14 @@
+
+import importlib.util
+from pathlib import Path
+
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_evermemos_py_memory_config_b89c8f45afa3.py")
+spec = importlib.util.spec_from_file_location('mod_under_test', p)
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+
+assert hasattr(mod, 'LLMConfig'), 'missing LLMConfig'
+assert hasattr(mod, 'EmbeddingConfig'), 'missing EmbeddingConfig'
+assert hasattr(mod, 'MongoDBConfig'), 'missing MongoDBConfig'
+assert hasattr(mod, 'ExtractModeConfig'), 'missing ExtractModeConfig'
+assert hasattr(mod, 'ChatModeConfig'), 'missing ChatModeConfig'

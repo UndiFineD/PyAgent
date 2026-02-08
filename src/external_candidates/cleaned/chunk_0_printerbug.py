@@ -1,9 +1,10 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_printerbug.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-NetExec\nxc\modules\printerbug.py
 # NOTE: extracted with static-only rules; review before use
 
-class NXCModule:
 
+class NXCModule:
     name = "printerbug"
 
     description = "[REMOVED] Module to check if the Target is vulnerable to PrinterBug. Set LISTENER IP for coercion."
@@ -14,8 +15,6 @@ class NXCModule:
 
     multiple_hosts = True
 
-
-
     def __init__(self, context=None, module_options=None):
 
         self.context = context
@@ -24,19 +23,13 @@ class NXCModule:
 
         self.listener = None
 
-
-
     def options(self, context, module_options):
-
         """LISTENER    Listener Address (defaults to 127.0.0.1)"""
 
         self.listener = "127.0.0.1"
 
         if "LISTENER" in module_options:
-
             self.listener = module_options["LISTENER"]
-
-
 
     def on_login(self, context, connection):
 

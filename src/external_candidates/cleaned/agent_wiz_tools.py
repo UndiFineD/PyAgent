@@ -1,13 +1,11 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\Agent_Wiz_tools.py
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\agent_wiz\examples\code\swarm\airline\configs\tools.py
 # NOTE: extracted with static-only rules; review before use
+
 
 def escalate_to_agent(reason=None):
 
     return f"Escalating to agent: {reason}" if reason else "Escalating to agent"
-
-
-
 
 
 def valid_to_change_flight():
@@ -15,15 +13,9 @@ def valid_to_change_flight():
     return "Customer is eligible to change flight"
 
 
-
-
-
 def change_flight():
 
     return "Flight was successfully changed!"
-
-
-
 
 
 def initiate_refund():
@@ -33,9 +25,6 @@ def initiate_refund():
     return status
 
 
-
-
-
 def initiate_flight_credits():
 
     status = "Successfully initiated flight credits"
@@ -43,15 +32,9 @@ def initiate_flight_credits():
     return status
 
 
-
-
-
 def case_resolved():
 
     return "Case resolved. No further questions."
-
-
-
 
 
 def initiate_baggage_search():

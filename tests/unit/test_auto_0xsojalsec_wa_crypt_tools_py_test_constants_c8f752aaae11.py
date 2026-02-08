@@ -1,0 +1,10 @@
+
+import importlib.util
+from pathlib import Path
+
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_wa_crypt_tools_py_test_constants_c8f752aaae11.py")
+spec = importlib.util.spec_from_file_location('mod_under_test', p)
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+
+assert hasattr(mod, 'TestConstants'), 'missing TestConstants'

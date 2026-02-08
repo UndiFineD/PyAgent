@@ -1,0 +1,49 @@
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_factorio_learning_environment.py\fle.py\env.py\tools.py\admin.py\render.py\renderers.py\gate_5c268c20beb8.py
+# NOTE: extracted with static-only rules; review before use
+
+# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\fle\env\tools\admin\render\renderers\gate.py
+
+# renderers/gate.py
+
+"""
+
+Gate renderer
+
+"""
+
+from typing import Callable, Dict, Optional, Tuple
+
+
+from PIL import Image
+
+
+def render(entity: Dict, grid, image_resolver: Callable) -> Optional[Image.Image]:
+    """Render gate"""
+
+    direction = entity.get("direction", 0)
+
+    orientation = "vertical" if direction == 0 else "horizontal"
+
+    return image_resolver(f"{entity['name']}_{orientation}")
+
+
+def render_shadow(entity: Dict, grid, image_resolver: Callable) -> Optional[Image.Image]:
+    """Render shadow"""
+
+    direction = entity.get("direction", 0)
+
+    orientation = "vertical" if direction == 0 else "horizontal"
+
+    return image_resolver(f"{entity['name']}_{orientation}", True)
+
+
+def get_key(entity: Dict, grid) -> str:
+    """Get cache key"""
+
+    return str(entity.get("direction", 0))
+
+
+def get_size(entity: Dict) -> Tuple[float, float]:
+    """Gate is 1x1"""
+
+    return (1, 1)

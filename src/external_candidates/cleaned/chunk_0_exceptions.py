@@ -1,16 +1,11 @@
-# Extracted from: C:\DEV\PyAgent\src\external_candidates\auto\chunk_0_exceptions.py
+# Refactored by Copilot placeholder
+# Refactored by Copilot placeholder
 # Extracted from: C:\DEV\PyAgent\.external\agentkit_prompting\src\agentkit\exceptions.py
 # NOTE: extracted with static-only rules; review before use
 
 
-
-
-
 class AfterQueryError(Exception):
-
     """Exception raised for errors in the after query postprocessing.
-
-    
 
     Attributes:
 
@@ -19,10 +14,7 @@ class AfterQueryError(Exception):
     """
 
     def __init__(self, message, error):
-
         """Initializes the AfterQueryError class.
-
-
 
         Args:
 
@@ -35,8 +27,6 @@ class AfterQueryError(Exception):
         # Call the base class constructor with the parameters it needs
 
         super().__init__(message)
-
-            
 
         # Set the error message
 

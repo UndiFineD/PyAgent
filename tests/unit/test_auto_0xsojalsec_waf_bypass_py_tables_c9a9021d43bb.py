@@ -1,0 +1,13 @@
+
+import importlib.util
+from pathlib import Path
+
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_waf_bypass_py_tables_c9a9021d43bb.py")
+spec = importlib.util.spec_from_file_location('mod_under_test', p)
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+
+assert hasattr(mod, 'get_stats'), 'missing get_stats'
+assert hasattr(mod, 'get_percent_str'), 'missing get_percent_str'
+assert hasattr(mod, 'table_get_result_details'), 'missing table_get_result_details'
+assert hasattr(mod, 'table_get_result_summary'), 'missing table_get_result_summary'

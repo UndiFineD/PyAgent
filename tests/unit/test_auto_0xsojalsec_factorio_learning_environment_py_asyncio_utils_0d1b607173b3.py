@@ -1,0 +1,11 @@
+
+import importlib.util
+from pathlib import Path
+
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\0xsojalsec_factorio_learning_environment_py_asyncio_utils_0d1b607173b3.py")
+spec = importlib.util.spec_from_file_location('mod_under_test', p)
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+
+assert hasattr(mod, '_run_async_in_new_thread'), 'missing _run_async_in_new_thread'
+assert hasattr(mod, 'run_async_safely'), 'missing run_async_safely'
