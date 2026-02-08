@@ -33,12 +33,12 @@ import sys
 import time
 import uuid
 from collections import Counter
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from queue import Empty, Queue
 from threading import Event, Lock, Thread
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
 
 from falkordb import FalkorDB
 from qdrant_client import QdrantClient
@@ -143,7 +143,13 @@ class AutoMemCore:
     Based on the world's highest-performing memory system (90.53% LoCoMo benchmark).
     """
 
-    def __init__(self, config: MemoryConfig):
+    def __init__(self, config: Union[MemoryConfig, Dict[str, Any]]):
+        if isinstance(config, dict):
+            # Filter kwargs for MemoryConfig
+            valid_keys = {f.name for f in fields(MemoryConfig)}
+            filtered_config = {k: v for k, v in config.items() if k in valid_keys}
+            config = MemoryConfig(**filtered_config)
+
         self.config = config
         self.logger = logging.getLogger("pyagent.memory.automem.core")
 

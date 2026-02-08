@@ -133,7 +133,14 @@ class TestChangeMonitoringAgent(unittest.TestCase):
 
     def setUp(self):
         """Set up test fixtures."""
+        self.automem_patcher = patch('src.core.base.lifecycle.base_agent.AutoMemCore')
+        self.mock_automem = self.automem_patcher.start()
         self.agent = ChangeMonitoringAgent(__file__)
+
+    def tearDown(self):
+        """Clean up test fixtures."""
+        if hasattr(self, 'automem_patcher'):
+            self.automem_patcher.stop()
 
     def test_add_data_source(self):
         """Test adding a data source."""
