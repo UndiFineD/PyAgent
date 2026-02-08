@@ -39,7 +39,7 @@ def parse_prompt_file(prompt_path: str | Path) -> List[str]:
         if m:
             current_file = m.group(1).strip()
             continue
-        if current_file and MISSING_DOCSTRING_MARKER in line:
+        if current_file and ("Missing Docstring" in line and "Module-level" in line):
             files.append(current_file.replace("\\", "/"))
             current_file = None
     return files

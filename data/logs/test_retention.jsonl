@@ -28,3 +28,6 @@
 {"task_id": "test_task_retention", "event_type": "start", "description": "Task started", "data": {"meta": "begin"}, "timestamp": 1770549575.9783242, "duration_ms": 0.0}
 {"task_id": "test_task_retention", "event_type": "step_1", "description": "Doing something", "data": {"val": 42}, "timestamp": 1770549575.978966, "duration_ms": 0.0}
 {"task_id": "test_task_retention", "event_type": "end", "description": "Task finished", "data": {"status": "ok"}, "timestamp": 1770549575.9795127, "duration_ms": 0.0}
+{"task_id": "test_task_retention", "event_type": "start", "description": "Task started", "data": {"meta": "begin"}, "timestamp": 1770549954.1542847, "duration_ms": 0.0}
+{"task_id": "test_task_retention", "event_type": "step_1", "description": "Doing something", "data": {"val": 42}, "timestamp": 1770549954.1549094, "duration_ms": 0.0}
+{"task_id": "test_task_retention", "event_type": "end", "description": "Task finished", "data": {"status": "ok"}, "timestamp": 1770549954.1557484, "duration_ms": 0.0}

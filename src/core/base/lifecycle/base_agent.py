@@ -58,6 +58,12 @@ from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 from src.core.base.mixins.stream_manager_mixin import StreamManagerMixin
 from src.core.base.mixins.task_manager_mixin import TaskManagerMixin
 from src.core.base.mixins.tool_framework_mixin import ToolFrameworkMixin
+from src.core.base.mixins.prompt_loader_mixin import PromptLoaderMixin
+from src.core.base.mixins.streaming_mixin import StreamingMixin
+
+# Cognitive Cores
+from src.core.memory.automem_core import AutoMemCore
+from src.core.reasoning.cort_core import CoRTCore
 
 # Advanced components (Lazy loaded or optional)
 try:
@@ -90,6 +96,8 @@ class BaseAgent(
     TaskManagerMixin,
     ToolFrameworkMixin,
     EnvironmentMixin,
+    PromptLoaderMixin,
+    StreamingMixin,
 ):
     """
     Core AI Agent Shell (Synaptic modularization Phase 317).
@@ -135,6 +143,10 @@ class BaseAgent(
         self.agent_logic_core = BaseAgentCore()
         self.core = BaseCore(workspace_root=self._workspace_root)
 
+        # Initialize Cognitive Core Components
+        self.memory_core = AutoMemCore(workspace_root=Path(self._workspace_root))
+        self.reasoning_core = CoRTCore(config=kwargs.get("reasoning_config", {}))
+
         self.previous_content = ""
         self.current_content = ""
 
@@ -155,6 +167,8 @@ class BaseAgent(
         StreamManagerMixin.__init__(self, **kwargs)
         TaskManagerMixin.__init__(self, **kwargs)
         ToolFrameworkMixin.__init__(self, **kwargs)
+        PromptLoaderMixin.__init__(self, **kwargs)
+        StreamingMixin.__init__(self, **kwargs)
 
         self._config = self.agent_logic_core.load_config_from_env()
         GovernanceMixin.__init__(self, config=self._config, **kwargs)
@@ -175,6 +189,16 @@ class BaseAgent(
 
         # Context for task lineage
         self.context: CascadeContext | None = kwargs.get("context", None)
+
+    async def initialize_persona(self) -> None:
+        """Asynchronously load the system prompt and initialize cognitive context."""
+        # Using PromptLoaderMixin to load the persona from the library
+        agent_type = getattr(self, "agent_type", "base")
+        self._system_prompt = await self.load_prompt(agent_type, "system")
+        
+        # Link to reasoning and memory
+        if hasattr(self, "memory_core"):
+            await self.memory_core.record_event("persona_loaded", {"agent_type": agent_type})
 
     def _load_system_prompt(self) -> str:
         """Load system prompt from file if available, otherwise use class-defined or minimal fallback."""

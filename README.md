@@ -1,4 +1,4 @@
-# 🤖 PyAgent: The Autonomous Swarm Intelligence (v4.0.0-VOYAGER)
+# 🤖 PyAgent: The Autonomous Swarm Intelligence (v4.4.0)
 
 PyAgent is a high-performance, multi-agent swarm system optimized for autonomous code improvement, reasoning, and fleet-wide orchestration. It leverages a **Rust-accelerated core** and a **decentralized mixin architecture** to provide a secure, transactionally safe environment for agentic self-evolution.
 
@@ -47,6 +47,7 @@ Fully integrated with **vLLM** and custom inference kernels:
 | **Logic** | `src/logic/` | Shared reasoning cores and metrics engines |
 | **Inference** | `src/inference/` | vLLM connectors, streaming, and decoding constraints |
 | **Core** | `src/core/base/` | Mixins, state managers, and transactional FS |
+| **Skills** | `src/external_candidates/` | Ingested external capabilities and auto-generated tool wrappers |
 | **Acceleration**| `rust_core/` | Native PyO3 modules (Performance Kernels) |
 | **Observability**| `src/observability/`| Prometheus metrics, stats, and health monitoring |
 
@@ -100,10 +101,11 @@ python -m pytest tests/unit/
 - [x] **Decentralized Transport**: Zero-broker P2P swarms with mDNS discovery.
 - [x] **Synaptic Pruning**: Exponential knowledge decay for high-efficiency memory.
 - [x] **Holographic Memory**: Distributed vector weights across the fleet.
-- [x] **Multimodal AI Integration**: Async task queues for image generation and processing, with background artifact cleanup (inspired by 4o-ghibli-at-home).
+- [x] **Multimodal AI Integration**: Async task queues for image generation and processing, with background artifact cleanup.
+- [x] **External Skill Ingestion**: Automated ingestion and wrapping of external Python tools (`external_candidates`).
 - [ ] **MARKOV Decision Processes**: Implementation of RL environments for self-optimization.
 - [ ] **Multi-Model Speculation**: Federated speculative decoding across multiple nodes.
 
 ---
-*Locked under GOLDEN_MASTER_SEAL (v4.0.0-VOYAGER)*
+*Locked under GOLDEN_MASTER_SEAL (v4.4.0-VOYAGER)*
 
