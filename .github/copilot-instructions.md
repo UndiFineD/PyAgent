@@ -1,8 +1,9 @@
 # PyAgent AI Coding Instructions (VOYAGER STABILITY)
 
-We use Powershell, do not generate bash scripts
-we do not have grep, but we have installed ripgrep
-max-line-length=120
+## Environment & Tooling
+- Use PowerShell only; do not generate bash scripts.
+- `grep` and `sed` are unavailable; use `rg` (ripgrep) for earch.
+- max-line-length=120
 
 ## Architecture & Design Patterns
 PyAgent is a multi-agent swarm system optimized for autonomous code improvement.
@@ -42,6 +43,7 @@ Every Python file should have the following header once:
     - `QuantumScalingCoderAgent` must be in `quantum_scaling_coder_agent.py`.
     - Tests for it must be in `tests/specialists/test_quantum_scaling_coder_agent.py`.
   - **Variables/Methods**: Use `snake_case`.
+
 - **Imports**: Modules should be imported using their `snake_case` filenames, even on Windows.
 - **Concurrency**: Use `asyncio` for all I/O, network requests, and subprocess execution.
 - **Transactional FS**: Use `StateTransaction` from `src/core/base/agent_state_manager.py` for all file-system modifications to ensure atomicity and rollback capability.

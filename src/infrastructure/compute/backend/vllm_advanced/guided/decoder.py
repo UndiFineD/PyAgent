@@ -89,7 +89,6 @@ class GuidedDecoder:
         }
 
     @classmethod
-    @classmethod
     def get_instance(cls, **kwargs) -> "GuidedDecoder":
         """Get singleton instance."""
         if cls._instance is None:

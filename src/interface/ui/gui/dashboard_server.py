@@ -18,11 +18,16 @@ from __future__ import annotations
 import asyncio, json, logging, psutil
 from datetime import datetime
 from pathlib import Path
-from typing import Any
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from typing import Any, Dict
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
+
+# Swarm Infrastructure Imports
+from src.core.network.fleet_load_balancer import FleetLoadBalancer
+from src.core.base.job_manager_core import JobManagerCore
+from src.infrastructure.network.discovery_service import DiscoveryService
 
 # --- CONFIG & PATHS ---
 WORKSPACE_ROOT = Path(__file__).resolve().parents[4]
@@ -55,6 +60,11 @@ class ConnectionManager:
 
 manager = ConnectionManager()
 
+# Swarm Singletons
+fleet_balancer = FleetLoadBalancer()
+job_manager = JobManagerCore()
+discovery_service = DiscoveryService()
+
 async def telemetry_loop():
     """Background task to broadcast system vitals."""
     while True:
@@ -74,6 +84,16 @@ async def telemetry_loop():
 @app.on_event("startup")
 async def startup_event():
     asyncio.create_task(telemetry_loop())
+    # Initialize Swarm Components
+    try:
+        # Discovery node registration (Zeroconf)
+        await discovery_service.register_node(
+            name="pyagent-main-node",
+            properties={"version": "1.5.0", "roles": "orchestrator,gateway"}
+        )
+        print("Swarm Discovery Service Registered.")
+    except Exception as e:
+        print(f"Discovery Registration Failed: {e}")
 
 # --- PRIMARY NAVIGATION (Prioritized Routes) ---
 
@@ -97,7 +117,24 @@ async def serve_index():
         return FileResponse(str(path), media_type="text/html")
     return {"status": "Dashboard Active (No index.html found)"}
 
-# --- API ENDPOINTS ---
+# --- SWARM API ---
+
+@app.get("/swarm/status")
+async def get_swarm_status():
+    """Returns the current state of the agent fleet."""
+    return {
+        "status": "online",
+        "nodes": discovery_service.peers if hasattr(discovery_service, 'peers') else [],
+        "load": fleet_balancer.get_optimal_node() if hasattr(fleet_balancer, 'nodes') and fleet_balancer.nodes else "No nodes"
+    }
+
+@app.post("/jobs/create")
+async def create_job(payload: Dict[str, Any] = Body(...)):
+    """Submits a new task to the global job manager."""
+    job_id = await job_manager.submit_job(payload)
+    return {"status": "queued", "job_id": job_id}
+
+# --- TERMINAL / SHELL BRIDGE ---
 
 @app.get("/api/thoughts")
 async def get_thoughts():

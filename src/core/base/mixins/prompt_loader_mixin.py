@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,14 +11,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Compatibility shim for older imports expecting `src.core.base.base_agent`.
+import os
+import aiofiles
+from pathlib import Path
 
-This module re-exports the modern BaseAgent implementation located under
-`src.core.base.lifecycle.base_agent` to maintain backward compatibility with
-external code and tests.
-"""
-from __future__ import annotations
-
-from src.core.base.lifecycle.base_agent import BaseAgent
-
-__all__ = ["BaseAgent"]
+class PromptLoaderMixin:
+    """Supports loading async system prompts from data/prompts/."""
+    async def load_prompt(self, agent_type: str, name: str = "system") -> str:
+        # Resolves to WorkspaceRoot/data/prompts/agent_type/name.md
+        path = Path("data/prompts") / agent_type / f"{name}.md"
+        if not path.exists(): return ""
+        async with aiofiles.open(str(path), mode='r', encoding='utf-8') as f:
+            return await f.read()

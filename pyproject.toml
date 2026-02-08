@@ -42,7 +42,7 @@ dependencies = [
     "SQLAlchemy>=2.0.0",
     "tenacity>=9.0.0",
     "tiktoken>=0.8.0",
-    "torch>=2.5.0", # Optional, but good to list
+    "torch>=2.5.0",
     "tqdm>=4.67.0",
     "websockets>=14.0.0",
     "censys>=2.2.0",
@@ -78,3 +78,8 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
+
+[tool.maturin]
+manifest-path = "rust_lib/Cargo.toml"
+python-source = "src"
+module-name = "rust_core"

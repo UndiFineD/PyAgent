@@ -45,7 +45,7 @@ def test_commit_aborts_when_tests_fail(monkeypatch, tmp_path):
     handler.shell = DummyShell()
 
     # Simulate files and enforce tests
-    ok = handler.commit_changes("msg", files=["file.py"], enforce_tests=True)
+    ok = handler.commit_changes("msg", files=["conftest.py"], enforce_tests=True)
     assert ok is False
 
 

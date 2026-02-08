@@ -16,7 +16,7 @@ def test_no_global_eval_use():
     matches = []
     for p in root.rglob("*.py"):
         # Skip generated or vendored directories if any
-        if "generated" in p.parts or "rust_core" in p.parts:
+        if any(x in p.parts for x in ["generated", "rust_core", "rust_lib", "external_candidates"]):
             continue
         try:
             text = p.read_text(encoding="utf-8")

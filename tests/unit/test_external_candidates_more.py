@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import tempfile
-from external_candidates.h2o_exceptions import LLMDataException
-from external_candidates.voicecraft_utils import get_span
-from external_candidates.webnavigator_utils import read_markdown_file
-from external_candidates.homoglyph import CharacterManager
-from external_candidates.made_with_ml import validate_dataset
+from src.external_candidates.h2o_exceptions import LLMDataException
+from src.external_candidates.voicecraft_utils import get_span
+from src.external_candidates.webnavigator_utils import read_markdown_file
+from src.external_candidates.homoglyph import CharacterManager
+from src.external_candidates.made_with_ml import validate_dataset
 
 
 def test_h2o_exception_exists():

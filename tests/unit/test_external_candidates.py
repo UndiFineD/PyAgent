@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-from external_candidates.holo import VideoProcessor
-from external_candidates.banner import banner
-from external_candidates.llava_prompt import get_question_text, get_choice_text
-from external_candidates.system_prompt_formatter import SystemPromptFormatter
-from external_candidates.videoagent_utils import execute_agent_chain
+from src.external_candidates.holo import VideoProcessor
+from src.external_candidates.banner import banner
+from src.external_candidates.llava_prompt import get_question_text, get_choice_text
+from src.external_candidates.system_prompt_formatter import SystemPromptFormatter
+from src.external_candidates.videoagent_utils import execute_agent_chain
 
 
 def test_holo_import():

@@ -2,6 +2,7 @@
 
 ## Overview
 PyAgent has evolved from a single-agent orchestrator into a multi-agent swarm capable of autonomous, secure, and transactionally safe self-improvement. Following the **Phase 319 (Voyager Stability)** milestone, the system now features a decentralized peer-to-peer transport layer and enhanced Rust-native metrics.
+we are building a multi-node, multi-user, multi-agent, multi-model, Multi-modal, LLM with streaming sound and video and multiple text channels
 
 ## Core Architectural Pillars
 
