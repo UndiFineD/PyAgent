@@ -46,6 +46,7 @@ dependencies = [
     "tqdm>=4.67.0",
     "websockets>=14.0.0",
     "censys>=2.2.0",
+    "werkzeug>=3.1.5",
 ]
 
 [project.optional-dependencies]

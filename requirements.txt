@@ -171,3 +171,4 @@ win32_setctime==1.2.0
 pytest-asyncio
 signxml
 lxml
+werkzeug>=3.1.5
