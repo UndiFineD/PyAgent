@@ -12,7 +12,6 @@ from ..types.tool import FlagResponse, ToolReferenceData
 
 class AsyncToolsAPI:
     def __init__(self, requester: AsyncRequesterProtocol) -> None:
-
         self._requester = requester
 
     async def rename_tool_name(self, *, rename: list[dict[str, str]]) -> FlagResponse:

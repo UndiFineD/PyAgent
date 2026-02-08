@@ -16,5 +16,4 @@ class TemplateScreenModel(BaseScreenModel):
     """
 
     def __init__(self, base):
-
         self.base = base

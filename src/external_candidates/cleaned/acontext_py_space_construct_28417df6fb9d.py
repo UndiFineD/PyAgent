@@ -36,7 +36,6 @@ async def build_space_ctx(
     data_candidate: list[dict],
     before_use_ctx: SpaceCtx = None,
 ) -> SpaceCtx:
-
     if before_use_ctx is not None:
         before_use_ctx.db_session = db_session
 
@@ -58,7 +57,6 @@ async def build_space_ctx(
 
 
 def pack_candidate_data_list(data: list[GeneralBlockData]) -> str:
-
     return "\n".join([f"<candidate_data id={i}>{d['data']}</candidate_data>" for i, d in enumerate(data)])
 
 

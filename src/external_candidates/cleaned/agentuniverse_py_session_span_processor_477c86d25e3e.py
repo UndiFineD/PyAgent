@@ -1,0 +1,42 @@
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\agentuniverse.py\agentuniverse.py\base.py\tracing.py\otel.py\span_processor.py\session_span_processor_477c86d25e3e.py
+# NOTE: extracted with static-only rules; review before use
+
+# Extracted from: C:\DEV\PyAgent\.external\agentUniverse\agentuniverse\base\tracing\otel\span_processor\session_span_processor.py
+
+# !/usr/bin/env python3
+
+# -*- coding:utf-8 -*-
+
+# @Time    : 2025/5/29 11:31
+
+# @Author  : fanen.lhy
+
+# @Email   : fanen.lhy@antgroup.com
+
+# @FileName: session_span_processor.py
+
+from agentuniverse.base.tracing.au_trace_manager import get_session_id
+
+from agentuniverse.base.tracing.otel.consts import SPAN_SESSION_ID_KEY
+
+from opentelemetry.sdk.trace import SpanProcessor
+
+
+class SessionSpanProcessor(SpanProcessor):
+    def on_start(self, span, parent_context=None):
+        session_id = get_session_id()
+
+        if session_id:
+            span.set_attribute(SPAN_SESSION_ID_KEY, session_id)
+
+        else:
+            span.set_attribute(SPAN_SESSION_ID_KEY, "-1")
+
+    def on_end(self, span):
+        pass
+
+    def shutdown(self):
+        pass
+
+    def force_flush(self, timeout_millis=30000):
+        pass

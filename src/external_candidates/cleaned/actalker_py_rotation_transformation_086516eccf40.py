@@ -353,7 +353,6 @@ def _angle_from_tan(axis: str, other_axis: str, data, horizontal: bool, tait_bry
 
 
 def _index_from_letter(letter: str) -> int:
-
     if letter == "X":
         return 0
 

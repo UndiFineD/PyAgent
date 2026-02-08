@@ -65,7 +65,6 @@ def register_tool(
     """
 
     def decorator(func: Callable) -> Callable:
-
         tool_name = name or func.__name__
 
         tool_description = description or func.__doc__ or f"Tool {tool_name}"

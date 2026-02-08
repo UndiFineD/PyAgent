@@ -12,7 +12,6 @@ from dbs.abstract_db import AbstractDatabase
 
 class Database(AbstractDatabase):
     def __init__(self, msgstore, wa):
-
         # Updated schema to match the tables/columns present in the provided DDL
 
         schema = {
@@ -75,7 +74,6 @@ class Database(AbstractDatabase):
     # --- fetch_* methods copied from v2 without modification ---
 
     def fetch_contact_chats(self):
-
         sql_query = """
 
         SELECT 
@@ -105,7 +103,6 @@ class Database(AbstractDatabase):
         return self.msgstore_cursor.execute(sql_query).fetchall()
 
     def fetch_group_chats(self):
-
         sql_query = """
 
         SELECT 
@@ -135,7 +132,6 @@ class Database(AbstractDatabase):
         return self.msgstore_cursor.execute(sql_query).fetchall()
 
     def fetch_calls(self, how_many=None):
-
         sql_query = """
 
         SELECT 
@@ -167,7 +163,6 @@ class Database(AbstractDatabase):
             return self.msgstore_cursor.execute(sql_query).fetchall()
 
     def fetch_chat(self, chat_id):
-
         sql_query = f"""
 
         SELECT  

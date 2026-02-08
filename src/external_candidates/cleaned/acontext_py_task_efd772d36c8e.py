@@ -48,5 +48,4 @@ class TaskSchema(BaseModel):
     raw_message_ids: list[asUUID]
 
     def to_string(self) -> str:
-
         return f"Task {self.order}: {self.data.task_description} (Status: {self.status})"

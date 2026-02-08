@@ -27,7 +27,6 @@ from ..types.space import (
 
 class AsyncSpacesAPI:
     def __init__(self, requester: AsyncRequesterProtocol) -> None:
-
         self._requester = requester
 
     async def list(

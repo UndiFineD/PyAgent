@@ -25,7 +25,6 @@ class PathNode(BaseModel):
 
 
 def repr_path_tree(path_nodes: dict[str, PathNode]) -> str:
-
     ordered_path = sorted(path_nodes.items(), key=lambda x: x[0])
 
     remove_not_end_paths: list[tuple[str, PathNode]] = []

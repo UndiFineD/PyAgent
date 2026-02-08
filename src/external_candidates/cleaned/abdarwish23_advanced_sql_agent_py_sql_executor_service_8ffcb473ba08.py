@@ -15,7 +15,6 @@ from sqlalchemy import create_engine, text
 
 
 def execute_sql(state: AgentState) -> AgentState:
-
     print("============= Executing SQL Code ==============")
 
     engine = create_engine(Config.DATABASE_URL)
@@ -35,7 +34,6 @@ def execute_sql(state: AgentState) -> AgentState:
 
 
 def execute_sql_reflection(state: AgentState) -> AgentState:
-
     print("============= [Reflection] Executing SQL Code ==============")
 
     engine = create_engine(Config.DATABASE_URL)
@@ -55,7 +53,6 @@ def execute_sql_reflection(state: AgentState) -> AgentState:
 
 
 def execute_sql_corrected(state: AgentState) -> AgentState:
-
     print("============= [Correction] Executing SQL Code ==============")
 
     engine = create_engine(Config.DATABASE_URL)

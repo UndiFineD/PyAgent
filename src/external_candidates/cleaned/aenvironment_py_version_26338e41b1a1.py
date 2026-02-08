@@ -43,7 +43,6 @@ import click
 
 
 def _load_config():
-
     data_file = files("cli.data").joinpath("version_info.json")
 
     return json.loads(data_file.read_text(encoding="utf-8"))

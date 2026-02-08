@@ -27,7 +27,6 @@ class BuiltinTools:
 
     @classmethod
     def get_tool_class(cls, tool_name: str) -> Type[BaseBuiltinTool]:
-
         klass = cls.tools.get(tool_name)
 
         if klass is None:

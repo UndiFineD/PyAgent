@@ -22,7 +22,6 @@ from torch.autograd import Variable
 
 class MaxPool3dSamePadding(nn.MaxPool3d):
     def compute_pad(self, dim, s):
-
         if s % self.stride[dim] == 0:
             return max(self.kernel_size[dim] - self.stride[dim], 0)
 
@@ -30,7 +29,6 @@ class MaxPool3dSamePadding(nn.MaxPool3d):
             return max(self.kernel_size[dim] - (s % self.stride[dim]), 0)
 
     def forward(self, x):
-
         # compute 'same' padding
 
         batch, channel, t, h, w = x.size()
@@ -122,7 +120,6 @@ class Unit3D(nn.Module):
             self.bn = nn.BatchNorm3d(self._output_channels, eps=0.001, momentum=0.01)
 
     def compute_pad(self, dim, s):
-
         if s % self._stride[dim] == 0:
             return max(self._kernel_shape[dim] - self._stride[dim], 0)
 
@@ -130,7 +127,6 @@ class Unit3D(nn.Module):
             return max(self._kernel_shape[dim] - (s % self._stride[dim]), 0)
 
     def forward(self, x):
-
         # compute 'same' padding
 
         batch, channel, t, h, w = x.size()
@@ -188,7 +184,6 @@ class Unit3D(nn.Module):
 
 class InceptionModule(nn.Module):
     def __init__(self, in_channels, out_channels, name):
-
         super(InceptionModule, self).__init__()
 
         self.b0 = Unit3D(
@@ -242,7 +237,6 @@ class InceptionModule(nn.Module):
         self.name = name
 
     def forward(self, x):
-
         b0 = self.b0(x)
 
         b1 = self.b1b(self.b1a(x))
@@ -520,7 +514,6 @@ class InceptionI3d(nn.Module):
         self.build()
 
     def replace_logits(self, num_classes):
-
         self._num_classes = num_classes
 
         self.logits = Unit3D(
@@ -535,12 +528,10 @@ class InceptionI3d(nn.Module):
         )
 
     def build(self):
-
         for k in self.end_points.keys():
             self.add_module(k, self.end_points[k])
 
     def forward(self, x):
-
         for end_point in self.VALID_ENDPOINTS:
             if end_point in self.end_points:
                 x = self._modules[end_point](x)  # use _modules to work with dataparallel
@@ -555,7 +546,6 @@ class InceptionI3d(nn.Module):
         return logits
 
     def extract_features(self, x):
-
         for end_point in self.VALID_ENDPOINTS:
             if end_point in self.end_points:
                 x = self._modules[end_point](x)

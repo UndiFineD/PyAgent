@@ -52,7 +52,6 @@ class SweRun:
     PASS_TO_PASS: list[str]
 
     def __init__(self, instance, repo, version, model_patch, eval_script, test_cmd):
-
         self.instance_id = instance
 
         self.repo = repo

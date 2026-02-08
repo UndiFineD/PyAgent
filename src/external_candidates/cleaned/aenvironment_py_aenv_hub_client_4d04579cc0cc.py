@@ -67,7 +67,6 @@ class EnvStatus(Enum):
 
     @classmethod
     def parse_state(cls, raw_state: str):
-
         try:
             return EnvStatus(raw_state)
 
@@ -75,7 +74,6 @@ class EnvStatus(Enum):
             return EnvStatus.UNKNOWN
 
     def running(self):
-
         return self == EnvStatus.PENDING
 
 
@@ -313,7 +311,6 @@ class AEnvHubClient:
     # ===== Environment Management CRUD Operations =====
 
     def check_env(self, name: str, version: str):
-
         response = self._make_request("GET", f"/env/{name}/{version}/exists")
 
         return response.get("exists", False)
@@ -335,7 +332,6 @@ class AEnvHubClient:
         return response
 
     def state_environment(self, name: str, version: str):
-
         response = self._make_request("GET", f"/env/{name}/{version}/status")
 
         return response
@@ -368,7 +364,6 @@ class AEnvHubClient:
         return self._make_request("POST", "/env", data=meta_data)
 
     def update_environment(self, meta_data):
-
         name = meta_data.get("name")
 
         version = meta_data.get("version")
@@ -376,7 +371,6 @@ class AEnvHubClient:
         return self._make_request("PUT", f"/env/{name}/{version}", data=meta_data)
 
     def release_environment(self, name: str, version: str):
-
         response = self._make_request("POST", f"/env/{name}/{version}/release")
 
         return response
@@ -414,7 +408,6 @@ class AEnvHubClient:
         return response.get("environments", [])
 
     def apply_sign_url(self, name, version, style=None):
-
         suffix = f"?style={style}" if style else ""
 
         endpoint = f"/env/{name}/{version}/sign{suffix}"

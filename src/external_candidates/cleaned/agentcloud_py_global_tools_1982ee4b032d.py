@@ -65,7 +65,6 @@ class CustomHumanInput(BaseTool):
         author_name: str = "System",
         **kwargs: Any,
     ):
-
         super().__init__(**kwargs)
 
         self.session_id = session_id
@@ -75,12 +74,10 @@ class CustomHumanInput(BaseTool):
         self.author_name = author_name
 
     def __hash__(self):
-
         return id(self)
 
     @staticmethod
     def extract_message(text):
-
         return text
 
     def _run(self, text: Optional[str]) -> str:
@@ -176,7 +173,6 @@ class GlobalBaseTool(BaseTool, ABC):
         pass
 
     def __hash__(self):
-
         return id(self)
 
 

@@ -14,7 +14,6 @@ from mediapipe.framework.formats import landmark_pb2
 
 class FaceMeshVisualizer:
     def __init__(self, forehead_edge=False):
-
         self.mp_drawing = mp.solutions.drawing_utils
 
         mp_face_mesh = mp.solutions.face_mesh
@@ -217,7 +216,6 @@ class FaceMeshVisualizer:
         self.face_connection_spec = face_connection_spec
 
     def draw_landmarks(self, image_size, keypoints, L_E=None, R_E=None, normed=False):
-
         ini_size = [512, 512]
 
         image = np.zeros([ini_size[1], ini_size[0], 3], dtype=np.uint8)

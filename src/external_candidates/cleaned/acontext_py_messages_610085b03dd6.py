@@ -89,7 +89,6 @@ def build_acontext_message(
 
 
 def normalize_message_part(part: MessagePart | str | Mapping[str, Any]) -> MessagePart:
-
     if isinstance(part, MessagePart):
         return part
 

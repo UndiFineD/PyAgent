@@ -26,7 +26,6 @@ class ArxivTool(BaseBuiltinTool):
     """
 
     def run_tool(self, query: str) -> str:
-
         try:
             self.logger.info(f"{self.__class__.__name__} searching for '{query}'")
 

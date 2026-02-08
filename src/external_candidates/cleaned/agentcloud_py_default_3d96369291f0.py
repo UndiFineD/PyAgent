@@ -18,7 +18,6 @@ from .similarity_search import SimilaritySearchRetriever
 
 class DefaultRetriever(BaseToolRetriever):
     def __init__(self, tool: Tool, embedding: Embeddings, vector_store: VectorStore):
-
         self.tool = tool
 
         self.retriever = SimilaritySearchRetriever(

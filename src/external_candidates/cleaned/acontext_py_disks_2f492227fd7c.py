@@ -33,7 +33,6 @@ from ..uploads import FileUpload, normalize_file_upload
 
 class DisksAPI:
     def __init__(self, requester: RequesterProtocol) -> None:
-
         self._requester = requester
 
         self.artifacts = DiskArtifactsAPI(requester)
@@ -94,7 +93,6 @@ class DisksAPI:
 
 class DiskArtifactsAPI:
     def __init__(self, requester: RequesterProtocol) -> None:
-
         self._requester = requester
 
     def upsert(
@@ -257,7 +255,6 @@ class DiskArtifactsAPI:
         *,
         path: str | None = None,
     ) -> ListArtifactsResp:
-
         params: dict[str, Any] = {}
 
         if path is not None:

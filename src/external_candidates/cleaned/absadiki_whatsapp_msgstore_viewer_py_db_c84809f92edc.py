@@ -12,7 +12,6 @@ from dbs.abstract_db import AbstractDatabase
 
 class Database(AbstractDatabase):
     def __init__(self, msgstore, wa):
-
         schema = {
             "chat_view": {
                 "name": "chat_view",
@@ -50,7 +49,6 @@ class Database(AbstractDatabase):
         super(Database, self).__init__(msgstore, wa, schema=schema)
 
     def fetch_contact_chats(self):
-
         chat_view_table = self.schema["chat_view"]["name"]  # I will continue later
 
         sql_query = """
@@ -82,7 +80,6 @@ class Database(AbstractDatabase):
         return self.msgstore_cursor.execute(sql_query).fetchall()
 
     def fetch_group_chats(self):
-
         sql_query = """
 
                 select 
@@ -110,7 +107,6 @@ class Database(AbstractDatabase):
         return self.msgstore_cursor.execute(sql_query).fetchall()
 
     def fetch_calls(self, how_many=None):
-
         sql_query = """
 
                select 
@@ -140,7 +136,6 @@ class Database(AbstractDatabase):
             return self.msgstore_cursor.execute(sql_query).fetchall()
 
     def fetch_chat(self, chat_id):
-
         sql_query = f"""
 
         select  message._id, message.key_id, message.from_me, DATETIME(ROUND(message.timestamp / 1000), 'unixepoch') as timestamp,  ifnull(message.text_data, '') as text_data,

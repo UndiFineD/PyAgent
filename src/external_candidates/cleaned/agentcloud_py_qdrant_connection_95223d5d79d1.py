@@ -9,7 +9,6 @@ from qdrant_client import QdrantClient
 
 
 def get_connection(host: str, port: int) -> QdrantClient:
-
     # Check inputs
 
     class QdrantConnection(BaseModel):

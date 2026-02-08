@@ -18,7 +18,6 @@ from .base import BaseToolRetriever
 
 class SelfQueryRetriever(BaseToolRetriever):
     def __init__(self, tool: Tool, llm: BaseLanguageModel, vector_store: VectorStore):
-
         self.tool = tool
 
         self.metadata_field_info = list(
@@ -40,7 +39,6 @@ class SelfQueryRetriever(BaseToolRetriever):
         super().__init__()
 
     def perform_query(self, query):
-
         self.logger.info(f"metadata_field_info: {self.metadata_field_info}")
 
         query_result = super().perform_query(query)

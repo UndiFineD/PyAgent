@@ -66,7 +66,6 @@ class SocketMessage(BaseModel):
     isFeedback: Optional[bool] = False
 
     def json(self, **kwargs):
-
         # Convert the model to a dictionary and replace enum with its value
 
         d = self.model_dump()

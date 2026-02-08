@@ -22,7 +22,6 @@ from ..types.tool import InsertBlockResponse
 
 class BlocksAPI:
     def __init__(self, requester: RequesterProtocol) -> None:
-
         self._requester = requester
 
     def list(

@@ -22,7 +22,6 @@ from ..types.tool import InsertBlockResponse
 
 class AsyncBlocksAPI:
     def __init__(self, requester: AsyncRequesterProtocol) -> None:
-
         self._requester = requester
 
     async def list(

@@ -17,11 +17,9 @@ from starlette.requests import Request
 @serve.deployment
 class LlamaDeployment:
     def __init__(self, model_path: str):
-
         self._llm = Llama(model_path=model_path)
 
     async def __call__(self, http_request: Request) -> Dict:
-
         input_json = await http_request.json()
 
         prompt = input_json["prompt"]
@@ -32,5 +30,4 @@ class LlamaDeployment:
 
 
 def llm_builder(args: Dict[str, str]) -> Application:
-
     return LlamaDeployment.bind(args["model_path"])

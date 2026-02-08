@@ -164,9 +164,9 @@ def main() -> int:
 
 if __name__ == "__main__":
     results = []
-    # Scan final directories
+    # Scan ALL directories in search for new candidates
     dirs = [d for d in EXTERNAL.iterdir() if d.is_dir()]
-    for d in dirs[300:]:
+    for d in dirs:
         results.append(scan_directory_for_candidates(d))
     
     report = {

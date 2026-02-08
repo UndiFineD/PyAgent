@@ -11,12 +11,10 @@ from qdrant_client.http import models
 
 
 def create_pinecone_filters(rag_filters: Dict) -> Dict:
-
     if not rag_filters:
         return None
 
     def process_condition(condition: Dict, negate=False) -> Dict:
-
         key = condition.get("key")
 
         if not key:
@@ -129,7 +127,6 @@ def create_pinecone_filters(rag_filters: Dict) -> Dict:
 
 
 def create_qdrant_filters(rag_filters: Dict) -> models.Filter:
-
     if not rag_filters:
         return None
 
@@ -191,7 +188,6 @@ def create_qdrant_filters(rag_filters: Dict) -> models.Filter:
     def process_conditions(
         conditions: Optional[List[Dict]],
     ) -> List[models.FieldCondition]:
-
         if not conditions:
             return []
 

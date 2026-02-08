@@ -24,17 +24,14 @@ class BaseToolRetriever(ABC):
     retriever: BaseRetriever
 
     def __init__(self):
-
         self.init_logger()
 
     def init_logger(self):
-
         self.logger = logging.getLogger(self.__class__.__name__)
 
         self.logger.setLevel(logging.DEBUG)
 
     def run(self, query):
-
         # Perform the query and get results
 
         results = self.perform_query(query)
@@ -51,7 +48,6 @@ class BaseToolRetriever(ABC):
         return formatted_results
 
     def perform_query(self, query):
-
         self.logger.debug(
             f"{self.__class__.__name__} in tool: '{self.tool.name}', retriever_config: {self.tool.retriever_config}"
         )
@@ -65,7 +61,6 @@ class BaseToolRetriever(ABC):
         )
 
     def format_results(self, results):
-
         self.logger.debug(f"{self.__class__.__name__} results: {results}")
 
         # Note: multi query retriever doesn't have a top k, so we'll slice the array here instead (for now).
@@ -76,7 +71,6 @@ class BaseToolRetriever(ABC):
 
     @staticmethod
     def _result_getter(result):
-
         match result:
             case str():
                 return result

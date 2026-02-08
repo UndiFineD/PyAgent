@@ -9,7 +9,6 @@ import operator
 
 
 def getCountValueFromKey(data, interested_key, sortOrder=True):
-
     if data is None:
         return None
 
@@ -33,7 +32,6 @@ def getCountValueFromKey(data, interested_key, sortOrder=True):
 
 
 def getListAdminTo(data, administrator_key, administrated_key, sortOrder=True):
-
     if data is None:
         return None
 

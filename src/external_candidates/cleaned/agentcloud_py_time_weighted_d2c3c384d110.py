@@ -16,7 +16,6 @@ from .custom.time_weighted_retriever import CustomTimeWeightedVectorStoreRetriev
 
 class TimeWeightedRetriever(BaseToolRetriever):
     def __init__(self, tool: Tool, vector_store: VectorStore):
-
         self.tool = tool
 
         self.retriever = CustomTimeWeightedVectorStoreRetriever(
@@ -29,7 +28,6 @@ class TimeWeightedRetriever(BaseToolRetriever):
         super().__init__()
 
     def format_results(self, results):
-
         self.logger.debug(f"{self.__class__.__name__} results: {results}")
 
         return "\n".join(

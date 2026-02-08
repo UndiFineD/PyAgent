@@ -13,7 +13,6 @@ from celery_sqlalchemy_scheduler.session import SessionManager
 
 
 def get_job_db() -> Generator:
-
     session_manager = SessionManager()
 
     (

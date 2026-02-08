@@ -9,5 +9,4 @@ from redisClient.redis_connection import RedisConnection
 
 
 def start_redis_connection() -> redis:
-
     return RedisConnection().connect()

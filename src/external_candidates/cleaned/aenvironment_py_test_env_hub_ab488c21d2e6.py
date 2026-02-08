@@ -44,14 +44,12 @@ from cli.client.aenv_hub_client import AEnvHubClient, EnvStatus
 
 class TestEnvHub:
     def test_state(self):
-
         env_stat = EnvStatus("pending")
 
         print(env_stat)
 
     @pytest.fixture
     def hub_client(self):
-
         return AEnvHubClient(
             base_url="http://localhost:8080/",
             api_key="no_need",

@@ -59,11 +59,9 @@ class BaseLlamaTokenizer(abc.ABC):
 
 class LlamaTokenizer(BaseLlamaTokenizer):
     def __init__(self, llama: llama_cpp.Llama):
-
         self._model = llama._model  # type: ignore
 
     def tokenize(self, text: bytes, add_bos: bool = True, special: bool = True) -> List[int]:
-
         return self._model.tokenize(text, add_bos=add_bos, special=special)
 
     def detokenize(
@@ -72,30 +70,24 @@ class LlamaTokenizer(BaseLlamaTokenizer):
         prev_tokens: Optional[List[int]] = None,
         special: bool = False,
     ) -> bytes:
-
         return self._model.detokenize(tokens, special=special)
 
     def encode(self, text: str, add_bos: bool = True, special: bool = True) -> List[int]:
-
         return self.tokenize(text.encode("utf-8", errors="ignore"), add_bos=add_bos, special=special)
 
     def decode(self, tokens: List[int]) -> str:
-
         return self.detokenize(tokens).decode("utf-8", errors="ignore")
 
     @classmethod
     def from_ggml_file(cls, path: str) -> "LlamaTokenizer":
-
         return cls(llama_cpp.Llama(model_path=path, vocab_only=True))
 
 
 class LlamaHFTokenizer(BaseLlamaTokenizer):
     def __init__(self, hf_tokenizer: Any):
-
         self.hf_tokenizer = hf_tokenizer
 
     def tokenize(self, text: bytes, add_bos: bool = True, special: bool = True) -> List[int]:
-
         return self.hf_tokenizer.encode(text.decode("utf-8", errors="ignore"), add_special_tokens=special)
 
     def detokenize(
@@ -104,7 +96,6 @@ class LlamaHFTokenizer(BaseLlamaTokenizer):
         prev_tokens: Optional[List[int]] = None,
         special: bool = False,
     ) -> bytes:
-
         skip_special_tokens = not special
 
         if prev_tokens is not None:
@@ -125,7 +116,6 @@ class LlamaHFTokenizer(BaseLlamaTokenizer):
 
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path: str) -> "LlamaHFTokenizer":
-
         try:
             from transformers import AutoTokenizer
 

@@ -23,7 +23,6 @@ from .time_weighted import TimeWeightedRetriever
 
 
 def retriever_factory(tool: Tool, vector_store: VectorStore, embedding: Embeddings, llm: BaseLanguageModel):
-
     metadata_field_info = tool.retriever_config.metadata_field_info
 
     for field in metadata_field_info:

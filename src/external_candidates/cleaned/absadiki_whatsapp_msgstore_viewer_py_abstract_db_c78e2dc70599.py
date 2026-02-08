@@ -28,7 +28,6 @@ from abc import ABC, abstractmethod
 
 class AbstractDatabase(ABC):
     def __init__(self, msgstore, wa=None, schema=None):
-
         self.msgstore = msgstore
 
         self.wa = wa
@@ -245,7 +244,6 @@ class AbstractDatabase(ABC):
         pass
 
     def load_contacts(self, wa_cursor):
-
         sql_query = """
 
         SELECT 

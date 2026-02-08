@@ -16,7 +16,6 @@ class BaseAnthropicVertexChatAgent(OpenAIChatAgent):
     """
 
     async def call_model(self, state, config):
-
         messages = state["messages"]
 
         updates = False

@@ -15,7 +15,6 @@ from langchain.prompts import ChatPromptTemplate
 
 
 def summarizer_node(state: AgentState) -> AgentState:
-
     print("=================== Summarization =====================")
 
     if not state["analyzed_query"].is_query_relevant:

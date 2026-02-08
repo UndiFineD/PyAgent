@@ -33,7 +33,6 @@ from ..uploads import FileUpload, normalize_file_upload
 
 class AsyncDisksAPI:
     def __init__(self, requester: AsyncRequesterProtocol) -> None:
-
         self._requester = requester
 
         self.artifacts = AsyncDiskArtifactsAPI(requester)
@@ -94,7 +93,6 @@ class AsyncDisksAPI:
 
 class AsyncDiskArtifactsAPI:
     def __init__(self, requester: AsyncRequesterProtocol) -> None:
-
         self._requester = requester
 
     async def upsert(
@@ -257,7 +255,6 @@ class AsyncDiskArtifactsAPI:
         *,
         path: str | None = None,
     ) -> ListArtifactsResp:
-
         params: dict[str, Any] = {}
 
         if path is not None:

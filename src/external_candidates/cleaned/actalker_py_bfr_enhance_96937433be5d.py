@@ -14,11 +14,9 @@ from . import model_enhance
 
 class test_pipeline(torch.nn.Module):
     def __init__(self):
-
         super().__init__()
 
     def init_model(self, enhance_pth_path, device):
-
         self.device = device
 
         self.G = model_enhance.get_enhance_model(pth_path=enhance_pth_path, is_training=False)
@@ -36,7 +34,6 @@ class test_pipeline(torch.nn.Module):
         self.mask = torch.from_numpy(self.mask).view(1, 1, 512, 512).to(device)
 
     def enhance_cropface(self, cropface):
-
         # rgb [-1,1]
 
         if cropface.dtype == "uint16":

@@ -11,7 +11,6 @@ from .base import BasePrompt, ToolSchema
 class SpaceConstructPrompt(BasePrompt):
     @classmethod
     def system_prompt(cls) -> str:
-
         return """You're a Notion Workspace Agent that organizes knowledge.
 
 Act like a notion/obsidian PRO, always keep the structure clean and meaningful.
@@ -146,7 +145,6 @@ If every action is done, call `finish` tool to exit.
 
     @classmethod
     def pack_task_input(cls, candidate_data_list: str) -> str:
-
         return f"""### Candidate Data List
 
 {candidate_data_list}
@@ -155,12 +153,10 @@ If every action is done, call `finish` tool to exit.
 
     @classmethod
     def prompt_kwargs(cls) -> str:
-
         return {"prompt_id": "agent.space.construct"}
 
     @classmethod
     def tool_schema(cls) -> list[ToolSchema]:
-
         return [
             SPACE_TOOLS["ls"].schema,
             SPACE_TOOLS["create_page"].schema,

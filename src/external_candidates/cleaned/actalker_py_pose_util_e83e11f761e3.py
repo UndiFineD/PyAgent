@@ -13,7 +13,6 @@ from scipy.spatial.transform import Rotation as R
 
 
 def create_perspective_matrix(aspect_ratio):
-
     kDegreesToRadians = np.pi / 180.0
 
     near = 1
@@ -48,7 +47,6 @@ def create_perspective_matrix(aspect_ratio):
 
 
 def project_points(points_3d, transformation_matrix, pose_vectors, image_shape):
-
     P = create_perspective_matrix(image_shape[1] / image_shape[0]).reshape(4, 4).T
 
     L, N, _ = points_3d.shape
@@ -82,7 +80,6 @@ def project_points(points_3d, transformation_matrix, pose_vectors, image_shape):
 
 
 def invert_projection(projected_points, transformation_matrix, pose_vectors, image_shape):
-
     P = create_perspective_matrix(image_shape[1] / image_shape[0]).reshape(4, 4).T
 
     P_inv = np.linalg.inv(P)
@@ -128,7 +125,6 @@ def invert_projection(projected_points, transformation_matrix, pose_vectors, ima
 
 
 def project_points_with_trans(points_3d, transformation_matrix, image_shape):
-
     P = create_perspective_matrix(image_shape[1] / image_shape[0]).reshape(4, 4).T
 
     L, N, _ = points_3d.shape
@@ -158,7 +154,6 @@ def project_points_with_trans(points_3d, transformation_matrix, image_shape):
 
 
 def euler_and_translation_to_matrix(euler_angles, translation_vector):
-
     rotation = R.from_euler("xyz", euler_angles, degrees=True)
 
     rotation_matrix = rotation.as_matrix()
@@ -173,7 +168,6 @@ def euler_and_translation_to_matrix(euler_angles, translation_vector):
 
 
 def matrix_to_euler_and_translation(matrix):
-
     rotation_matrix = matrix[:3, :3]
 
     translation_vector = matrix[:3, 3]
@@ -186,7 +180,6 @@ def matrix_to_euler_and_translation(matrix):
 
 
 def smooth_pose_seq(pose_seq, window_size=5):
-
     smoothed_pose_seq = np.zeros_like(pose_seq)
 
     for i in range(len(pose_seq)):

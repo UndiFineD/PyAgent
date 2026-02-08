@@ -13,15 +13,12 @@ from ..env import LOG, bound_logging_vars
 
 
 def generate_temp_id() -> str:
-
     return uuid.uuid4().hex
 
 
 def track_process(func):
-
     @wraps(func)
     async def wrapper(*args, **kwargs):
-
         func_name = func.__name__
 
         use_id = generate_temp_id()

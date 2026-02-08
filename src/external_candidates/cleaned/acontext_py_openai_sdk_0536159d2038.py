@@ -19,7 +19,6 @@ from .clients import get_openai_async_client_instance
 
 
 def convert_openai_tool_to_llm_tool(tool_body: ChatCompletionMessageToolCall) -> dict:
-
     return {
         "id": tool_body.id,
         "type": tool_body.type,
@@ -41,7 +40,6 @@ async def openai_complete(
     tools=None,
     **kwargs,
 ) -> LLMResponse:
-
     prompt_kwargs = prompt_kwargs or {}
 
     prompt_id = prompt_kwargs.get("prompt_id", "...")

@@ -21,7 +21,6 @@ from .clients import get_anthropic_async_client_instance
 
 
 def convert_openai_tool_to_anthropic_tool(tools: list[dict]) -> list[dict]:
-
     return [
         {
             "name": tool["function"]["name"],
@@ -33,7 +32,6 @@ def convert_openai_tool_to_anthropic_tool(tools: list[dict]) -> list[dict]:
 
 
 def process_messages(messages: list[dict]) -> list[dict]:
-
     new_messages = []
 
     for m in messages:
@@ -78,7 +76,6 @@ async def anthropic_complete(
     tools=None,
     **kwargs,
 ) -> LLMResponse:
-
     prompt_kwargs = prompt_kwargs or {}
 
     prompt_id = prompt_kwargs.get("prompt_id", "...")

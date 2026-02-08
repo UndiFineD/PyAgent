@@ -27,7 +27,6 @@ from ..types.space import (
 
 class SpacesAPI:
     def __init__(self, requester: RequesterProtocol) -> None:
-
         self._requester = requester
 
     def list(

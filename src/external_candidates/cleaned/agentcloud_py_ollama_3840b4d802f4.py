@@ -18,7 +18,6 @@ class OllamaChatAgent(OpenAIChatAgent):
     """
 
     async def invoke_human_input(self, state, config):
-
         messages = state["messages"] + [
             HumanMessage(content="Ask user what assistance they need or if they have any further query")
         ]

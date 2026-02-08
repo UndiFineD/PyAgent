@@ -42,7 +42,6 @@ class AEnvError(Exception):
     """Base exception for AEnv SDK."""
 
     def __init__(self, message: str, details: Optional[Dict[str, Any]] = None):
-
         super().__init__(message)
 
         self.message = message
@@ -59,7 +58,6 @@ class ToolError(AEnvError):
         tool_name: Optional[str] = None,
         details: Optional[Dict[str, Any]] = None,
     ):
-
         super().__init__(message, details)
 
         self.tool_name = tool_name
@@ -74,7 +72,6 @@ class EnvironmentError(AEnvError):
         env_name: Optional[str] = None,
         details: Optional[Dict[str, Any]] = None,
     ):
-
         super().__init__(message, details)
 
         self.env_name = env_name
@@ -90,7 +87,6 @@ class ToolTimeoutError(ToolError):
         timeout: Optional[float] = None,
         details: Optional[Dict[str, Any]] = None,
     ):
-
         super().__init__(message, tool_name, details)
 
         self.timeout = timeout
@@ -106,7 +102,6 @@ class ToolServerError(ToolError):
         status_code: Optional[int] = None,
         details: Optional[Dict[str, Any]] = None,
     ):
-
         super().__init__(message, tool_name, details)
 
         self.status_code = status_code

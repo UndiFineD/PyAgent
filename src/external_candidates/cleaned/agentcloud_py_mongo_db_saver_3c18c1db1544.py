@@ -31,7 +31,6 @@ class AsyncMongoDBSaver(BaseCheckpointSaver):
     db: AsyncIOMotorDatabase
 
     def __init__(self) -> None:
-
         super().__init__()
 
         self.client = AsyncIOMotorClient(DB_URL)

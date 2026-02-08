@@ -9,12 +9,10 @@ import requests
 
 
 def load_spec(spec_file):
-
     pass
 
 
 def build_request(spec, endpoint_name, method, **params):
-
     base_url = spec["servers"][0]["url"]  # Assuming the first server listed
 
     endpoint = spec["paths"][endpoint_name][method.lower()]
@@ -34,7 +32,6 @@ def build_request(spec, endpoint_name, method, **params):
 
 
 def make_request(url, method):
-
     if method == "GET":
         response = requests.get(url)
 
@@ -47,7 +44,6 @@ def make_request(url, method):
 
 
 def build_run_request(path, endpoint_name, method, **params):
-
     # Usage
 
     spec = load_spec(path)

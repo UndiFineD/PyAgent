@@ -46,7 +46,6 @@ class APIError(AcontextError):
         error: str | None = None,
         payload: Mapping[str, Any] | None = None,
     ) -> None:
-
         self.status_code = status_code
 
         self.code = code

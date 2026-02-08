@@ -9,7 +9,6 @@ from llama_cpp.llama_speculative import LlamaPromptLookupDecoding
 
 
 def test_find_candidate_pred_tokens():
-
     find_candidate_pred_tokens = LlamaPromptLookupDecoding.find_candidate_pred_tokens
 
     # Test Case 1: Matching ngram is found

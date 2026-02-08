@@ -39,7 +39,6 @@ from torchvision.transforms import InterpolationMode
 
 
 def load_image(prefix, img_path, cvt_type=None):
-
     if img_path is None or img_path == "":
         return None
 
@@ -55,17 +54,14 @@ def load_image(prefix, img_path, cvt_type=None):
 
 
 def transform_image(image, std=0.5, mean=0.5):
-
     return (image.permute(2, 0, 1) / 255.0 - mean) / std
 
 
 def transform_mask(mask):
-
     return mask.unsqueeze(0) / 255.0
 
 
 def ensure_src_align_target_h_mode(src_image, size, image_id, interpolation=InterpolationMode.BILINEAR):
-
     # padding mode
 
     H, W = size
@@ -85,7 +81,6 @@ def ensure_src_align_target_h_mode(src_image, size, image_id, interpolation=Inte
 def ensure_src_align_target_padding_mode(
     src_image, size, image_id, size_h=[], interpolation=InterpolationMode.BILINEAR
 ):
-
     # padding mode
 
     H, W = size
@@ -132,7 +127,6 @@ def ensure_src_align_target_padding_mode(
 
 
 def ensure_limit_sequence(image, max_seq_len=4096, d=16, interpolation=InterpolationMode.BILINEAR):
-
     # resize image for max_seq_len, while keep the aspect ratio
 
     H, W = image.shape[-2:]
@@ -186,7 +180,6 @@ class ACEPlusDataset(BaseDataset):
     para_dict.update(BaseDataset.para_dict)
 
     def __init__(self, cfg, logger=None):
-
         super().__init__(cfg, logger=logger)
 
         delimiter = cfg.get("DELIMITER", "#;#")
@@ -217,7 +210,6 @@ class ACEPlusDataset(BaseDataset):
             self.items = self.items[:use_num]
 
     def read_data_list(self, delimiter, fields, prefix, edit_type_list, prompt_file):
-
         with FS.get_object(prompt_file) as local_data:
             rows = local_data.decode("utf-8").strip().split("\n")
 
@@ -259,17 +251,14 @@ class ACEPlusDataset(BaseDataset):
         return items
 
     def __len__(self):
-
         return len(self.items)
 
     def __getitem__(self, index):
-
         item = self._get(index)
 
         return self.pipeline(item)
 
     def _get(self, index):
-
         # normalize
 
         sample_id = index % len(self)
@@ -456,7 +445,6 @@ class ACEPlusDataset(BaseDataset):
 
     @staticmethod
     def collate_fn(batch):
-
         collect = defaultdict(list)
 
         for sample in batch:

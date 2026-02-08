@@ -236,7 +236,6 @@ class Detect(object):
         variance=[0.1, 0.2],
         nms_top_k=5000,
     ):
-
         self.num_classes = num_classes
 
         self.top_k = top_k
@@ -250,7 +249,6 @@ class Detect(object):
         self.nms_top_k = nms_top_k
 
     def forward(self, loc_data, conf_data, prior_data):
-
         num = loc_data.size(0)
 
         num_priors = prior_data.size(0)
@@ -303,7 +301,6 @@ class PriorBox(object):
         steps=[4, 8, 16, 32, 64, 128],
         clip=False,
     ):
-
         super(PriorBox, self).__init__()
 
         self.imh = input_size[0]
@@ -321,7 +318,6 @@ class PriorBox(object):
         self.clip = clip
 
     def forward(self):
-
         mean = []
 
         for k, fmap in enumerate(self.feature_maps):

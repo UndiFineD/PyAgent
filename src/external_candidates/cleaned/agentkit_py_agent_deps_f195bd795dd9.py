@@ -21,7 +21,6 @@ from langchain.agents import AgentExecutor
 
 
 async def set_global_tool_context() -> None:
-
     run_id = str(uuid7())
 
     g.tool_context = {}
@@ -38,7 +37,6 @@ async def set_global_tool_context() -> None:
 def get_meta_agent(
     api_key: Optional[str] = None,
 ) -> AgentExecutor:
-
     agent_config = get_agent_config()
 
     agent_config.api_key = api_key

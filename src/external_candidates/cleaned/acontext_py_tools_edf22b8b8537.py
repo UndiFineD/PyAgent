@@ -12,7 +12,6 @@ from ..types.tool import FlagResponse, ToolReferenceData
 
 class ToolsAPI:
     def __init__(self, requester: RequesterProtocol) -> None:
-
         self._requester = requester
 
     def rename_tool_name(self, *, rename: list[dict[str, str]]) -> FlagResponse:

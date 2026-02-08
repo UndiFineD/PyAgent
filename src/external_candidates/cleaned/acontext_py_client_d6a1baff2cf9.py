@@ -162,7 +162,6 @@ class AcontextClient:
 
     @property
     def base_url(self) -> str:
-
         return self._base_url
 
     def ping(self) -> str:
@@ -187,16 +186,13 @@ class AcontextClient:
         return response.get("msg", "pong")
 
     def close(self) -> None:
-
         if self._owns_client:
             self._client.close()
 
     def __enter__(self) -> "AcontextClient":
-
         return self
 
     def __exit__(self, exc_type, exc, tb) -> None:  # noqa: D401 - standard context manager protocol
-
         self.close()
 
     # ------------------------------------------------------------------
@@ -216,7 +212,6 @@ class AcontextClient:
         files: Mapping[str, tuple[str, BinaryIO, str | None]] | None = None,
         unwrap: bool = True,
     ) -> Any:
-
         try:
             response = self._client.request(
                 method=method,
@@ -235,7 +230,6 @@ class AcontextClient:
 
     @staticmethod
     def _handle_response(response: httpx.Response, *, unwrap: bool) -> Any:
-
         content_type = response.headers.get("content-type", "")
 
         parsed: Mapping[str, Any] | None

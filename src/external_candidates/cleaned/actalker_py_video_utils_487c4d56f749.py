@@ -25,7 +25,6 @@ from PIL import Image
 
 
 def concat_pil(img_pil_lst):
-
     # horizontally concat PIL images
 
     # NOTE(ZSH): assume all images are of same size
@@ -45,7 +44,6 @@ def concat_pil(img_pil_lst):
 
 
 def save_videos_from_pil(pil_images, path, fps=24, crf=23):
-
     save_fmt = Path(path).suffix
 
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -72,7 +70,6 @@ def save_videos_from_pil(pil_images, path, fps=24, crf=23):
 
 
 def save_videos_grid(videos: torch.Tensor, path: str, rescale=False, n_rows=6, fps=24):
-
     videos = rearrange(videos, "b c t h w -> t b c h w")
 
     height, width = videos.shape[-2:]
@@ -99,7 +96,6 @@ def save_videos_grid(videos: torch.Tensor, path: str, rescale=False, n_rows=6, f
 
 
 def resize_tensor_frames(video_tensor, new_size):
-
     B, C, video_length, H, W = video_tensor.shape
 
     # Reshape video tensor to combine batch and frame dimensions: (B*F, C, H, W)
@@ -116,7 +112,6 @@ def resize_tensor_frames(video_tensor, new_size):
 
 
 def pil_list_to_tensor(image_list, size=None):
-
     to_tensor = transforms.ToTensor()
 
     if size is not None:

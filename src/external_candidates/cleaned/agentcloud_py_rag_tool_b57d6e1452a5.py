@@ -89,7 +89,6 @@ class RagTool(GlobalBaseTool):
         models: List[Tuple[Any, Model]],
         llm: BaseLanguageModel = None,
     ) -> BaseTool:
-
         assert len(datasources) == 1
 
         assert isinstance(datasources[0], Datasource)
@@ -182,7 +181,6 @@ class RagTool(GlobalBaseTool):
         )
 
     def __init__(self, **kwargs):
-
         # Monkey-patching `similarity_search` because that's what's called by
 
         # self_query and multi_query retrievers internally, but we want scores too
@@ -195,13 +193,11 @@ class RagTool(GlobalBaseTool):
 
     @staticmethod
     def extract_query_value(query):
-
         res = re.findall("[\"']?(?:query|text)[\"']?:\s*[\"']?([\w\s]+)[\"']?", query)
 
         return res[0] if res else query
 
     def _run(self, query):
-
         print(f"{self.__class__.__name__} received {query}")
 
         # TODO: should figure a better way to do this... ideally using LLM itself
@@ -215,7 +211,6 @@ class RagTool(GlobalBaseTool):
         return self.retriever.run(query_value)
 
     def __del__(self):
-
         # Restore to earlier state
 
         Qdrant.similarity_search = Qdrant.similarity_search

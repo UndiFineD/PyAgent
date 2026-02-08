@@ -14,7 +14,6 @@ from tools.builtins.base import BaseBuiltinTool
 
 class FireCrawlLoader(BaseBuiltinTool):
     def __init__(self, *args, **kwargs):
-
         super().__init__(**kwargs)
 
         parameters: dict = kwargs.get("parameters")
@@ -26,7 +25,6 @@ class FireCrawlLoader(BaseBuiltinTool):
             print("Parameters was None!")
 
     def run_tool(self, query: str) -> str:
-
         if not getattr(self, "_api_key", None):
             raise ValueError("API key is not set!")  # type saftey
 

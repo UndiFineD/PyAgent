@@ -13,7 +13,6 @@ from .base import BasePrompt
 class TaskPrompt(BasePrompt):
     @classmethod
     def system_prompt(cls) -> str:
-
         return """You are a Task Management Agent that analyzes user/agent conversations to manage task statuses.
 
 ## Core Responsibilities
@@ -152,7 +151,6 @@ Before call 'finish' tool to quit, report your thinking again to make sure every
 
     @classmethod
     def pack_task_input(cls, previous_progress: str, current_message_with_ids: str, current_tasks: str) -> str:
-
         return f"""## Current Existing Tasks:
 
 {current_tasks}
@@ -171,12 +169,10 @@ Please analyze the above information and determine the actions.
 
     @classmethod
     def prompt_kwargs(cls) -> str:
-
         return {"prompt_id": "agent.task"}
 
     @classmethod
     def tool_schema(cls) -> list[ToolSchema]:
-
         insert_task_tool = TASK_TOOLS["insert_task"].schema
 
         update_task_tool = TASK_TOOLS["update_task"].schema

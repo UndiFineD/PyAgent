@@ -17,7 +17,6 @@ from einops import rearrange
 
 
 def zero_module(module):
-
     # Zero out the parameters of a module and return it.
 
     for p in module.parameters():
@@ -28,7 +27,6 @@ def zero_module(module):
 
 class InflatedConv3d(nn.Conv2d):
     def forward(self, x):
-
         video_length = x.shape[2]
 
         x = rearrange(x, "b c f h w -> (b f) c h w")
@@ -47,7 +45,6 @@ class PoseGuider(ModelMixin):
         conditioning_channels: int = 3,
         block_out_channels: Tuple[int] = (16, 32, 64, 128),
     ):
-
         super().__init__()
 
         self.conv_in = InflatedConv3d(conditioning_channels, block_out_channels[0], kernel_size=3, padding=1)
@@ -73,7 +70,6 @@ class PoseGuider(ModelMixin):
         )
 
     def forward(self, conditioning):
-
         embedding = self.conv_in(conditioning)
 
         embedding = F.silu(embedding)

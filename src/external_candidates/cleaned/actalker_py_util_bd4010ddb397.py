@@ -31,7 +31,6 @@ from .ffmpeg_utils import VideoUtils
 
 
 def seed_everything(seed):
-
     import random
 
     import numpy as np
@@ -46,7 +45,6 @@ def seed_everything(seed):
 
 
 def import_filename(filename):
-
     spec = importlib.util.spec_from_file_location("mymodule", filename)
 
     module = importlib.util.module_from_spec(spec)
@@ -59,7 +57,6 @@ def import_filename(filename):
 
 
 def delete_additional_ckpt(base_path, num_keep):
-
     dirs = []
 
     for d in os.listdir(base_path):
@@ -83,7 +80,6 @@ def delete_additional_ckpt(base_path, num_keep):
 
 
 def save_videos_from_pil(pil_images, path, fps=8):
-
     save_fmt = Path(path).suffix
 
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -117,7 +113,6 @@ def save_videos_from_pil(pil_images, path, fps=8):
 
 
 def save_videos_grid(videos: torch.Tensor, path: str, rescale=False, n_rows=6, fps=8):
-
     videos = rearrange(videos, "b c t h w -> t b c h w")
 
     height, width = videos.shape[-2:]
@@ -144,7 +139,6 @@ def save_videos_grid(videos: torch.Tensor, path: str, rescale=False, n_rows=6, f
 
 
 def read_frames(video_path):
-
     container = av.open(video_path)
 
     video_stream = next(s for s in container.streams if s.type == "video")
@@ -165,7 +159,6 @@ def read_frames(video_path):
 
 
 def get_fps(video_path):
-
     container = av.open(video_path)
 
     video_stream = next(s for s in container.streams if s.type == "video")

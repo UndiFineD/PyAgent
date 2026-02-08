@@ -185,7 +185,6 @@ Then decide if you should submit the SOP.
         user_preferences: str,
         history_messages: str,
     ) -> str:
-
         return f"""### Previous Task Context
 
 {previous_task_context}
@@ -206,10 +205,8 @@ Then decide if you should submit the SOP.
 
     @classmethod
     def prompt_kwargs(cls) -> str:
-
         return {"prompt_id": "agent.sop"}
 
     @classmethod
     def tool_schema(cls) -> list[ToolSchema]:
-
         return [SOP_TOOLS["submit_sop"].schema, SOP_TOOLS["report_thinking"].schema]

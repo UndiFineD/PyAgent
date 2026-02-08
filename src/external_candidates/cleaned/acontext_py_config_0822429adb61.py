@@ -143,7 +143,6 @@ class CoreConfig(BaseModel):
 
 
 def filter_value_from_env(CLS: Type[BaseModel]) -> dict[str, Any]:
-
     config_keys = CLS.model_fields.keys()
 
     env_already_keys = {}
@@ -160,7 +159,6 @@ def filter_value_from_env(CLS: Type[BaseModel]) -> dict[str, Any]:
 
 
 def filter_value_from_yaml(yaml_string, CLS: Type[BaseModel]) -> dict[str, Any]:
-
     yaml_config_data: dict | None = yaml.safe_load(yaml_string)
 
     if yaml_config_data is None:
@@ -182,7 +180,6 @@ def filter_value_from_yaml(yaml_string, CLS: Type[BaseModel]) -> dict[str, Any]:
 
 
 def filter_value_from_json(json_config_data: dict, CLS: Type[BaseModel]) -> dict[str, Any]:
-
     json_already_keys = {}
 
     config_keys = CLS.model_fields.keys()
@@ -199,7 +196,6 @@ def filter_value_from_json(json_config_data: dict, CLS: Type[BaseModel]) -> dict
 
 
 def post_validate_core_config_sanity(config: CoreConfig):
-
     # TODO: add cross-params validation
 
     pass

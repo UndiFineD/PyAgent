@@ -50,7 +50,6 @@ class FileUpload:
 def normalize_file_upload(
     upload: (FileUpload | tuple[str, BinaryIO | bytes] | tuple[str, BinaryIO | bytes, str]),
 ) -> FileUpload:
-
     if isinstance(upload, FileUpload):
         return upload
 

@@ -37,7 +37,6 @@ from PIL import Image
 
 
 def get_obj_from_str(string, reload=False):
-
     module, cls = string.rsplit(".", 1)
 
     if reload:
@@ -49,7 +48,6 @@ def get_obj_from_str(string, reload=False):
 
 
 def instantiate_from_config(config):
-
     if not "target" in config:
         if config == "__is_first_stage__":
             return None
@@ -63,7 +61,6 @@ def instantiate_from_config(config):
 
 
 def ensure_file_written(file_path, retries=10, delay=0.1):
-
     for i in range(retries):
         if os.path.exists(file_path):
             image = Image.open(file_path)
@@ -120,7 +117,6 @@ def compute_snr(noise_scheduler, timesteps):
 
 
 def seed_everything(seed):
-
     import random
 
     import numpy as np
@@ -135,7 +131,6 @@ def seed_everything(seed):
 
 
 def import_filename(filename):
-
     spec = importlib.util.spec_from_file_location("mymodule", filename)
 
     module = importlib.util.module_from_spec(spec)
@@ -148,7 +143,6 @@ def import_filename(filename):
 
 
 def delete_additional_ckpt(base_path, num_keep):
-
     dirs = []
 
     for d in os.listdir(base_path):
@@ -172,7 +166,6 @@ def delete_additional_ckpt(base_path, num_keep):
 
 
 def save_videos_from_pil(pil_images, path, fps=8):
-
     import av
 
     save_fmt = Path(path).suffix
@@ -218,7 +211,6 @@ def save_videos_from_pil(pil_images, path, fps=8):
 
 
 def save_videos_grid(videos: torch.Tensor, path: str, rescale=False, n_rows=6, fps=8):
-
     videos = rearrange(videos, "b c t h w -> t b c h w")
 
     height, width = videos.shape[-2:]
@@ -245,7 +237,6 @@ def save_videos_grid(videos: torch.Tensor, path: str, rescale=False, n_rows=6, f
 
 
 def read_frames(video_path):
-
     container = av.open(video_path)
 
     video_stream = next(s for s in container.streams if s.type == "video")
@@ -266,7 +257,6 @@ def read_frames(video_path):
 
 
 def get_fps(video_path):
-
     container = av.open(video_path)
 
     video_stream = next(s for s in container.streams if s.type == "video")
@@ -298,7 +288,6 @@ def numpy_to_video(tensor, output_video_file, audio_source=None, fps=25):
     tensor = np.clip(tensor, 0, 255).astype(np.uint8)  # to [0, 255]
 
     def make_frame(t):
-
         # get index
 
         frame_index = min(int(t * fps), tensor.shape[0] - 1)
@@ -316,7 +305,6 @@ def numpy_to_video(tensor, output_video_file, audio_source=None, fps=25):
 
 
 def calculate_brightness(image):
-
     grayscale = image.convert("L")
 
     histogram = grayscale.histogram()
@@ -334,7 +322,6 @@ def calculate_brightness(image):
 
 
 def calculate_contrast(image):
-
     grayscale = image.convert("L")
 
     histogram = grayscale.histogram()
@@ -349,7 +336,6 @@ def calculate_contrast(image):
 
 
 def attention_map_to_image(attention_map, img_pil):
-
     # 如果 attention_map 是 torch.Tensor，则将其转换为 numpy 数组
 
     if isinstance(attention_map, torch.Tensor):
@@ -402,7 +388,6 @@ def attention_map_to_image(attention_map, img_pil):
 
 
 def all_attention_map_to_image(attention_map, img_pil_list):
-
     attention_map = torch.cat([fea[0, 0] for fea in attention_map], 0)
 
     # 如果 attention_map 是 torch.Tensor，则将其转换为 numpy 数组

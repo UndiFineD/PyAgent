@@ -18,13 +18,11 @@ class ApifyGoogleSearchTool(BaseBuiltinTool):
     apify: ApifyWrapper
 
     def __init__(self, **kwargs):
-
         kwargs["apify"] = ApifyWrapper(**kwargs["parameters"])
 
         super().__init__(**kwargs)
 
     def run_tool(self, query: str) -> str:
-
         loader = self.apify.call_actor(
             actor_id="apify/google-search-scraper",
             run_input={"queries": query},

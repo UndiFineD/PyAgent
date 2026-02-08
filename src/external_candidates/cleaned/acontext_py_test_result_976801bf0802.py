@@ -9,7 +9,6 @@ from fastapi.responses import JSONResponse
 
 
 def test_result_class():
-
     test_data = {"message": "pong"}
 
     suc = Result.resolve(test_data)

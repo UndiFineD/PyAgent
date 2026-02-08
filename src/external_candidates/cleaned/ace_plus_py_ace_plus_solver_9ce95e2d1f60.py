@@ -27,7 +27,6 @@ from tqdm import tqdm
 @SOLVERS.register_class()
 class FormalACEPlusSolver(LatentDiffusionSolver):
     def __init__(self, cfg, logger=None):
-
         super().__init__(cfg, logger=logger)
 
         self.probe_prompt = cfg.get("PROBE_PROMPT", None)
@@ -36,7 +35,6 @@ class FormalACEPlusSolver(LatentDiffusionSolver):
 
     @torch.no_grad()
     def run_eval(self):
-
         self.eval_mode()
 
         self.before_all_iter(self.hooks_dict[self._mode])
@@ -71,7 +69,6 @@ class FormalACEPlusSolver(LatentDiffusionSolver):
 
     @torch.no_grad()
     def run_test(self):
-
         self.test_mode()
 
         self.before_all_iter(self.hooks_dict[self._mode])
@@ -105,7 +102,6 @@ class FormalACEPlusSolver(LatentDiffusionSolver):
         self.after_all_iter(self.hooks_dict[self._mode])
 
     def run_step_val(self, batch_data, batch_idx=0, step=None, rank=None):
-
         sample_id_list = batch_data["sample_id"]
 
         loss_dict = {}
@@ -121,7 +117,6 @@ class FormalACEPlusSolver(LatentDiffusionSolver):
         return loss_dict
 
     def save_results(self, results):
-
         log_data, log_label = [], []
 
         for result in results:
@@ -187,7 +182,6 @@ class FormalACEPlusSolver(LatentDiffusionSolver):
 
     @property
     def probe_data(self):
-
         if not we.debug and self.mode == "train":
             batch_data = transfer_data_to_cuda(self.current_batch_data[self.mode])
 

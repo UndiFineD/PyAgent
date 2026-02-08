@@ -27,7 +27,6 @@ from utils.log_exception_context_manager import log_exception
 
 
 async def process(job: Job, token: str):
-
     print(f"Running session ID: {job.data.get('sessionId')}")
 
     # Send job to the correct executor based on the job type
@@ -42,7 +41,6 @@ async def process(job: Job, token: str):
 
 
 async def consume_tasks():
-
     try:
         print("Listening to task queue..")
 
@@ -53,14 +51,12 @@ async def consume_tasks():
 
 
 def backoff(attempt, base_delay=1.0, max_delay=60):
-
     delay = min(max_delay, (base_delay * 2**attempt))
 
     time.sleep(delay + random.uniform(0, 0.2 * delay))
 
 
 def execute_task(data: dict):
-
     with log_exception():
         session_id = data.get("sessionId")
 
@@ -80,7 +76,6 @@ def execute_task(data: dict):
 
 
 def execute_chat_task(data: dict):
-
     chat = ChatAssistant(data.get("sessionId"))
 
     chat.run()

@@ -23,7 +23,6 @@ from scepter.modules.utils.config import Config
 
 
 def edit_preprocess(processor, device, edit_image, edit_mask):
-
     if edit_image is None or processor is None:
         return edit_image
 
@@ -44,7 +43,6 @@ def edit_preprocess(processor, device, edit_image, edit_mask):
 
 class ACEPlusImageProcessor:
     def __init__(self, max_aspect_ratio=4, d=16, max_seq_len=2048):
-
         self.max_aspect_ratio = max_aspect_ratio
 
         self.d = d
@@ -54,7 +52,6 @@ class ACEPlusImageProcessor:
         self.transforms = T.Compose([T.ToTensor(), T.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])])
 
     def image_check(self, image):
-
         if image is None:
             return image
 
@@ -82,7 +79,6 @@ class ACEPlusImageProcessor:
         keep_pixels_rate=0.8,
         use_change=False,
     ):
-
         reference_image = self.image_check(reference_image)
 
         edit_image = self.image_check(edit_image)
@@ -206,7 +202,6 @@ class ACEPlusImageProcessor:
         return edit_image, edit_mask, change_image, content_image, out_h, out_w, slice_w
 
     def postprocess(self, image, slice_w, out_w, out_h):
-
         w, h = image.size
 
         if slice_w > 0:

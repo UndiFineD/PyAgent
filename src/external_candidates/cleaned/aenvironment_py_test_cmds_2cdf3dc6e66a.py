@@ -36,7 +36,6 @@ from click.testing import CliRunner
 
 class TestCmds:
     def test_push(self):
-
         runner = CliRunner()
 
         result = runner.invoke(

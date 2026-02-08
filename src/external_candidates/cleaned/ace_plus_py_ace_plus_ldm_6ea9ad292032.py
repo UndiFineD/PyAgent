@@ -52,13 +52,11 @@ class LatentDiffusionACEPlus(LatentDiffusion):
     para_dict = LatentDiffusion.para_dict
 
     def __init__(self, cfg, logger=None):
-
         super().__init__(cfg, logger=logger)
 
         self.guide_scale = cfg.get("GUIDE_SCALE", 1.0)
 
     def init_params(self):
-
         self.parameterization = self.cfg.get("PARAMETERIZATION", "rf")
 
         assert self.parameterization in [
@@ -114,7 +112,6 @@ class LatentDiffusionACEPlus(LatentDiffusion):
         self.model_ema_config = self.cfg.get("DIFFUSION_MODEL_EMA", None)
 
     def construct_network(self):
-
         # embedding_context = torch.device("meta") if self.model_config.get("PRETRAINED_MODEL", None) else nullcontext()
 
         # with embedding_context:
@@ -171,9 +168,7 @@ class LatentDiffusionACEPlus(LatentDiffusion):
 
     @torch.no_grad()
     def encode_first_stage(self, x, **kwargs):
-
         def run_one_image(u):
-
             zu = self.first_stage_model.encode(u)
 
             if isinstance(zu, (tuple, list)):
@@ -187,11 +182,9 @@ class LatentDiffusionACEPlus(LatentDiffusion):
 
     @torch.no_grad()
     def decode_first_stage(self, z):
-
         return [self.first_stage_model.decode(zu) for zu in z]
 
     def noise_sample(self, num_samples, h, w, seed, dtype=torch.bfloat16):
-
         noise = torch.randn(
             num_samples,
             16,
@@ -206,7 +199,6 @@ class LatentDiffusionACEPlus(LatentDiffusion):
         return noise
 
     def resize_func(self, x, size):
-
         if x is None:
             return x
 
@@ -221,7 +213,6 @@ class LatentDiffusionACEPlus(LatentDiffusion):
         # text_mask,
         edit_id,
     ):
-
         edit_image = []
 
         modi_image = []
@@ -328,7 +319,6 @@ class LatentDiffusionACEPlus(LatentDiffusion):
         }
 
     def reshape_func(self, mask):
-
         mask = mask.to(torch.bfloat16)
 
         mask = mask.view((-1, mask.shape[-2], mask.shape[-1]))
@@ -498,7 +488,6 @@ class LatentDiffusionACEPlus(LatentDiffusion):
         log_num=-1,
         **kwargs,
     ):
-
         outputs = self.forward_editing(
             src_image_list=src_image_list,
             src_mask_list=src_mask_list,
@@ -536,7 +525,6 @@ class LatentDiffusionACEPlus(LatentDiffusion):
         log_num=-1,
         **kwargs,
     ):
-
         # gc_seg is unused
 
         prompt, image, image_mask, src_image, modify_image, src_image_mask, edit_id = limit_batch_data(
@@ -691,5 +679,4 @@ class LatentDiffusionACEPlus(LatentDiffusion):
 
     @staticmethod
     def get_config_template():
-
         return dict_to_yaml("MODEL", __class__.__name__, LatentDiffusionACEPlus.para_dict, set_name=True)

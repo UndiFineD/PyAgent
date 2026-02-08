@@ -8,7 +8,6 @@ class Node:
     # TODO PARSE LABELS HERE
 
     def __init__(self, id, labels, name, domain, relation_type):
-
         self.id = id
 
         self.labels = labels
@@ -22,11 +21,9 @@ class Node:
     # Needed to use set() on a list of nodes (to remove duplicates from lists)
 
     def __hash__(self):
-
         return hash(self.id)
 
     def __eq__(self, other):
-
         if not isinstance(other, Node):
             return NotImplemented
 

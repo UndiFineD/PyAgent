@@ -37,7 +37,6 @@ class ACEInference(BaseInference):
     """
 
     def __init__(self, cfg, logger=None):
-
         super().__init__(cfg, logger)
 
         self.pipe = MODELS.build(cfg.MODEL, logger=self.logger).eval().to(we.device_id)
@@ -72,7 +71,6 @@ class ACEInference(BaseInference):
         keep_pixels_rate=0.8,
         **kwargs,
     ):
-
         # convert the input info to the input of ldm.
 
         if isinstance(prompt, str):

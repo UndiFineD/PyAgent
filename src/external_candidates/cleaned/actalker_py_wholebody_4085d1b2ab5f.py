@@ -16,7 +16,6 @@ class Wholebody:
     """detect human pose by dwpose"""
 
     def __init__(self, model_det, model_pose, device="cpu"):
-
         # providers = ['CPUExecutionProvider'] if device == 'cpu' else ['CUDAExecutionProvider']
 
         # provider_options = None if device == 'cpu' else [{'device_id': 0}]

@@ -11,7 +11,6 @@ from .base import BasePrompt, ToolSchema
 class SpaceSearchPrompt(BasePrompt):
     @classmethod
     def system_prompt(cls) -> str:
-
         return """You're a Notion Workspace Agent that find knowledge for the user.
 
 Act like a notion/obsidian PRO, always understand the full picture of the workspace.
@@ -104,7 +103,6 @@ Use report_thinking tool to report your thinking with different tags before cert
 
     @classmethod
     def pack_task_input(cls, user_query: str) -> str:
-
         return f"""### User Query
 
 {user_query}
@@ -113,12 +111,10 @@ Use report_thinking tool to report your thinking with different tags before cert
 
     @classmethod
     def prompt_kwargs(cls) -> str:
-
         return {"prompt_id": "agent.space.search"}
 
     @classmethod
     def tool_schema(cls) -> list[ToolSchema]:
-
         return [
             SPACE_SEARCH_TOOLS["ls"].schema,
             SPACE_SEARCH_TOOLS["search_title"].schema,

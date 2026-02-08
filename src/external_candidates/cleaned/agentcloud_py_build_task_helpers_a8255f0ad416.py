@@ -35,7 +35,6 @@ from utils.model_helper import keyset, search_subordinate_keys
 
 
 def get_task_tools(task: Task, crew_tools: Dict[Set[PyObjectId], Tool]):
-
     task_tools_objs = dict()
 
     for task_tool_id in task.toolIds:
@@ -50,7 +49,6 @@ def get_task_tools(task: Task, crew_tools: Dict[Set[PyObjectId], Tool]):
 
 
 def get_context_tasks(task: Task, crew_tasks: Dict[Set[PyObjectId], Task]):
-
     context_task_objs = []
 
     if task.context:
@@ -75,7 +73,6 @@ def _upload_task_output(
     send_to_socket_fn: Callable,
     task_output: TaskOutput,
 ):
-
     # Convert the output to bytes and create an in-memory buffer
 
     buffer = BytesIO()
@@ -118,7 +115,6 @@ def _assign_structured_output_fields_to_variables(
     mongo_client: MongoClientConnection,
     output_variables: list,
 ):
-
     matching_values = extract_matching_values(task_output.pydantic.model_dump(), output_variables)
 
     for key, value in matching_values.items():
@@ -138,7 +134,6 @@ def _assign_output_to_variable_if_single_variable(
     session: Session,
     mongo_client: MongoClientConnection,
 ):
-
     if task.taskOutputVariableName:
         if not hasattr(session, "variables") or session.variables is None:
             session.variables = {}
@@ -157,7 +152,6 @@ def _update_variables_from_output(
     mongo_client: MongoClientConnection,
     output_variables: list,
 ):
-
     if task.isStructuredOutput:
         _assign_structured_output_fields_to_variables(task_output, session, mongo_client, output_variables)
 
@@ -175,9 +169,7 @@ def make_task_callback(
     send_to_socket_fn: Callable,
     output_variables: list,
 ):
-
     def callback(task_output: TaskOutput):
-
         _update_variables_from_output(task, task_output, session, mongo_client, output_variables)
 
         if task.storeTaskOutput:
@@ -187,7 +179,6 @@ def make_task_callback(
 
 
 def get_output_pydantic_model(task: Task):
-
     try:
         expected_output = json.loads(task.expectedOutput)
 
@@ -201,7 +192,6 @@ def get_output_pydantic_model(task: Task):
 
 
 def get_output_variables(task: Task):
-
     try:
         schema = json.loads(task.expectedOutput)
 
@@ -212,11 +202,9 @@ def get_output_variables(task: Task):
 
 
 def extract_matching_values(data: dict, output_vars: list) -> dict:
-
     matching_values = {}
 
     def extract(data: dict, output_vars: list):
-
         for key, value in data.items():
             if key in output_vars:
                 matching_values[key] = value

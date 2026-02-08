@@ -162,7 +162,6 @@ class AcontextAsyncClient:
 
     @property
     def base_url(self) -> str:
-
         return self._base_url
 
     async def ping(self) -> str:
@@ -193,11 +192,9 @@ class AcontextAsyncClient:
             await self._client.aclose()
 
     async def __aenter__(self) -> "AcontextAsyncClient":
-
         return self
 
     async def __aexit__(self, exc_type, exc, tb) -> None:  # noqa: D401 - standard context manager protocol
-
         await self.aclose()
 
     # ------------------------------------------------------------------
@@ -217,7 +214,6 @@ class AcontextAsyncClient:
         files: Mapping[str, tuple[str, BinaryIO, str | None]] | None = None,
         unwrap: bool = True,
     ) -> Any:
-
         try:
             response = await self._client.request(
                 method=method,
@@ -236,7 +232,6 @@ class AcontextAsyncClient:
 
     @staticmethod
     def _handle_response(response: httpx.Response, *, unwrap: bool) -> Any:
-
         content_type = response.headers.get("content-type", "")
 
         parsed: Mapping[str, Any] | None = None

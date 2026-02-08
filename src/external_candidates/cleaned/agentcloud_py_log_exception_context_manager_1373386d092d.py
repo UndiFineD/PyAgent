@@ -10,7 +10,6 @@ from contextlib import contextmanager
 
 @contextmanager
 def raise_exception():
-
     try:
         yield
 
@@ -22,7 +21,6 @@ def raise_exception():
 
 @contextmanager
 def log_exception():
-
     try:
         yield
 

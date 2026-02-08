@@ -24,7 +24,6 @@ from .base import BaseToolRetriever
 
 class MultiQueryRetriever(BaseToolRetriever):
     def __init__(self, tool: Tool, llm: BaseLanguageModel, vector_store: VectorStore):
-
         self.tool = tool
 
         # Note: this prompt is from https://github.com/langchain-ai/langchain/blob/0c6a3fdd6bc8082ec09db63f65a8d3d0d1173e43/libs/langchain/langchain/retrievers/multi_query.py#L31

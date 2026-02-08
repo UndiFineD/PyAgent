@@ -13,12 +13,10 @@ import sys
 
 
 def random_string():
-
     return "_" + "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
 
 def new_guid(stream):
-
     guid = []
 
     guid.append(stream[3] << 24 | stream[2] << 16 | stream[1] << 8 | stream[0])
@@ -47,7 +45,6 @@ def new_guid(stream):
 
 
 def encode_object_guid(guid):
-
     guid = guid.replace("}", "").replace("{", "")
 
     guid_parts = guid.split("-")
@@ -73,12 +70,10 @@ def encode_object_guid(guid):
 
 
 def die():
-
     sys.exit()
 
 
 def print_intro():
-
     print("    ___    ____  ___________                   ____")
 
     print("   /   |  / __ \/ ____/ ___/____  ____  ____  / __/")

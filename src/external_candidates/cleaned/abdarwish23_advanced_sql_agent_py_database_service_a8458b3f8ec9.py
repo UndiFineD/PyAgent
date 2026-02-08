@@ -15,7 +15,6 @@ from sqlalchemy import create_engine, inspect
 class DatabaseService:
     @staticmethod
     def get_database_info(state):
-
         print("=================== Getting db info =====================")
 
         engine = create_engine(Config.DATABASE_URL)

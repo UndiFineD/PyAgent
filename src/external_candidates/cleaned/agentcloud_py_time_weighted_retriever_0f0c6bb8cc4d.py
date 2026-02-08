@@ -181,7 +181,6 @@ class CustomTimeWeightedVectorStoreRetriever(BaseRetriever):
         return results
 
     def _get_rescored_docs(self, docs_and_scores: Dict[Any, Tuple[Document, Optional[float]]]) -> List[Document]:
-
         current_time = datetime.datetime.now()
 
         rescored_docs = [
@@ -209,7 +208,6 @@ class CustomTimeWeightedVectorStoreRetriever(BaseRetriever):
         # return result
 
     def _get_relevant_documents(self, query: str, *, run_manager: CallbackManagerForRetrieverRun) -> List[Document]:
-
         docs_and_scores = {
             doc.metadata["buffer_idx"]: (doc, self.default_salience) for doc in self.memory_stream[-self.k :]
         }
@@ -223,7 +221,6 @@ class CustomTimeWeightedVectorStoreRetriever(BaseRetriever):
     async def _aget_relevant_documents(
         self, query: str, *, run_manager: AsyncCallbackManagerForRetrieverRun
     ) -> List[Document]:
-
         docs_and_scores = {
             doc.metadata["buffer_idx"]: (doc, self.default_salience) for doc in self.memory_stream[-self.k :]
         }

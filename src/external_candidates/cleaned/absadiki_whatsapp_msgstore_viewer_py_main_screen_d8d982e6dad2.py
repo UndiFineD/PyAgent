@@ -18,15 +18,12 @@ class MainScreenModel(BaseScreenModel):
     """
 
     def __init__(self, base):
-
         self.base: AbstractDatabase = base
 
     def set_base(self, base):
-
         self.base = base
 
     def get_contact_chats(self):
-
         contact_chat_list = self.base.fetch_contact_chats()
 
         if self.base.contacts is not None:
@@ -48,13 +45,11 @@ class MainScreenModel(BaseScreenModel):
         return contact_chat_list
 
     def get_group_chats(self):
-
         group_chat_list = self.base.fetch_group_chats()
 
         return group_chat_list
 
     def get_calls(self, how_many=None):
-
         calls = self.base.fetch_calls(how_many)
 
         if self.base.contacts is not None:
@@ -70,7 +65,6 @@ class MainScreenModel(BaseScreenModel):
         return calls
 
     def get_status(self, jid):
-
         try:
             st = self.base.contacts[jid]["status"]
 

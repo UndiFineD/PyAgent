@@ -14,11 +14,9 @@ from pymongo import MongoClient
 
 class MongoConnection:
     def __init__(self):
-
         self.mongo_uri = DB_URL
 
     def connect(self) -> Optional[MongoClient]:
-
         try:
             mongo_client = MongoClient(self.mongo_uri, maxPoolSize=10)
 

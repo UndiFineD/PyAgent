@@ -119,7 +119,6 @@ def multiclass_nms(boxes, scores, nms_thr, score_thr):
 
 
 def demo_postprocess(outputs, img_size, p6=False):
-
     grids = []
 
     expanded_strides = []
@@ -153,7 +152,6 @@ def demo_postprocess(outputs, img_size, p6=False):
 
 
 def preprocess(img, input_size, swap=(2, 0, 1)):
-
     if len(img.shape) == 3:
         padded_img = np.ones((input_size[0], input_size[1], 3), dtype=np.uint8) * 114
 

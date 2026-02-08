@@ -171,6 +171,7 @@ setuptools==80.9.0
 supervisor==4.3.0
 win32_setctime==1.2.0
 pytest-asyncio
+pytest-timeout
 signxml
 lxml
 werkzeug>=3.1.5

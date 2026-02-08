@@ -116,7 +116,6 @@ class AudioProjModel(ModelMixin):
         output_dim=768,
         context_tokens=32,
     ):
-
         super().__init__()
 
         self.seq_len = seq_len
@@ -189,7 +188,6 @@ class VasaProjModel(ModelMixin):
         input_dim=512,
         output_dim=768,
     ):
-
         super().__init__()
 
         self.input_dim = input_dim
@@ -201,7 +199,6 @@ class VasaProjModel(ModelMixin):
         self.norm = nn.LayerNorm(output_dim)
 
     def forward(self, x):
-
         x = self.proj1(x)
 
         x = self.norm(x)
@@ -216,7 +213,6 @@ class IDProjModel(ModelMixin):
         output_dim=768,
         intermediate_dim=768,
     ):
-
         super().__init__()
 
         # define multiple linear layers
@@ -228,7 +224,6 @@ class IDProjModel(ModelMixin):
         self.proj3 = nn.Linear(intermediate_dim, output_dim)
 
     def forward(self, audio_embeds):
-
         audio_embeds = torch.relu(self.proj1(audio_embeds))
 
         audio_embeds = torch.relu(self.proj2(audio_embeds))
@@ -245,7 +240,6 @@ class ExpProjModel(ModelMixin):
         output_dim=768,
         intermediate_dim=768,
     ):
-
         super().__init__()
 
         # define multiple linear layers
@@ -257,7 +251,6 @@ class ExpProjModel(ModelMixin):
         self.proj3 = nn.Linear(intermediate_dim, output_dim)
 
     def forward(self, audio_embeds):
-
         audio_embeds = torch.relu(self.proj1(audio_embeds))
 
         audio_embeds = torch.relu(self.proj2(audio_embeds))
@@ -274,7 +267,6 @@ class MotionControlProjModel(ModelMixin):
         output_dim=768,
         intermediate_dim=768,
     ):
-
         super().__init__()
 
         # define multiple linear layers
@@ -286,7 +278,6 @@ class MotionControlProjModel(ModelMixin):
         self.proj3 = nn.Linear(8 * 32, 2)
 
     def forward(self, audio_embeds, id_embeds):
-
         mean_audio = audio_embeds.mean(1)
 
         mean_id = id_embeds.mean(1)

@@ -7,7 +7,6 @@ import importlib
 
 
 def get_obj_from_str(string, reload=False):
-
     module, cls = string.rsplit(".", 1)
 
     if reload:
@@ -19,7 +18,6 @@ def get_obj_from_str(string, reload=False):
 
 
 def instantiate_from_config(config):
-
     if not "target" in config:
         if config == "__is_first_stage__":
             return None

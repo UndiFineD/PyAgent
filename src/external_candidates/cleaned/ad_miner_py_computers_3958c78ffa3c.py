@@ -28,7 +28,6 @@ from ad_miner.sources.modules.utils import (
 
 class Computers:
     def __init__(self, arguments, neo4j, domain):
-
         self.arguments = arguments
 
         self.neo4j = neo4j
@@ -154,7 +153,6 @@ class Computers:
         logger.print_warning(timer_format(time.time() - self.start))
 
     def generate_stat_laps(self):
-
         if len(self.list_total_computers) != 0:
             stat_LAPS = round(
                 100
@@ -178,7 +176,6 @@ class Computers:
     # Create computers list page
 
     def generateComputersListPage(self):
-
         if self.list_total_computers is None:
             return
 
@@ -241,7 +238,6 @@ class Computers:
     # Create ADCS list page
 
     def generateADCSListPage(self):
-
         if self.computers_adcs is None:
             return
 
@@ -270,7 +266,6 @@ class Computers:
     # Create obsolete os page and compute os obsolete dropdown
 
     def genObsoleteOSPage(self):
-
         if self.list_computers_os_obsolete is None:
             return
 
@@ -324,7 +319,6 @@ class Computers:
     # Non DC computers and users with unconstrained delegations
 
     def genNonDCWithUnconstrainedPage(self):
-
         if self.list_computers_unconstrained_delegations is None:
             return
 
@@ -358,7 +352,6 @@ class Computers:
     # Users with constrained delegations
 
     def genUsersConstrainedPage(self):
-
         if self.users_constrained_delegations is None:
             return
 
@@ -390,7 +383,6 @@ class Computers:
     # Compute path to da from administrable computers pages
 
     def genComputersAdminOfPages(self):
-
         if self.list_computers_admin_computers is None:
             return
 
@@ -497,7 +489,6 @@ class Computers:
                 # List of computers with most users admin page (and if to handle empty cases)
 
     def genComputersWithMostAdminsPage(self):
-
         if self.computer_administrable_per_users is None:
             return
 
@@ -530,7 +521,6 @@ class Computers:
     # List of Administrable computers
 
     def genComputersAdministrablePage(self):
-
         if self.computer_administrable_per_users_list is None:
             return
 
@@ -562,7 +552,6 @@ class Computers:
     # Create highprivilege group computers member page
 
     def genHighPrivilegeGroupComputersPage(self):
-
         if self.computers_members_high_privilege is None:
             return
 
@@ -593,7 +582,6 @@ class Computers:
     # List computer with LAPS
 
     def genComputersWithLAPSPage(self):
-
         if self.computers_nb_has_laps is None:
             return
 
@@ -643,7 +631,6 @@ class Computers:
         page.render()
 
     def genPathToADCS(self):
-
         if self.objects_to_adcs is None:
             return
 
@@ -721,7 +708,6 @@ class Computers:
 
     @staticmethod
     def parseConstrainedData(list_of_dict):
-
         final_dict = {}
 
         for dict in list_of_dict:
@@ -736,7 +722,6 @@ class Computers:
     # Create os obsolete list
 
     def manageComputersOs(self, computer_list):
-
         if computer_list is None:
             return None
 
@@ -798,7 +783,6 @@ class Computers:
             # Stats for OS repartition
 
             def addToOS(key):
-
                 if self.all_os.get(key):
                     self.all_os[key] += 1
 
@@ -830,7 +814,6 @@ class Computers:
 
     @staticmethod
     def findUniqComputers(computers_members_high_privilege):
-
         if computers_members_high_privilege is None:
             return None
 

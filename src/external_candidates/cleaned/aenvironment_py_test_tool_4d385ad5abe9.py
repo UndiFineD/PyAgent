@@ -185,14 +185,12 @@ class TestToolRegistry:
 
         @register_tool
         def duplicate_tool():
-
             return "first"
 
         with pytest.raises(ValueError):
 
             @register_tool
             def duplicate_tool():  # noqa: F811
-
                 return "second"
 
 

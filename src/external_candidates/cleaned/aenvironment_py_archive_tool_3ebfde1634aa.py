@@ -61,7 +61,6 @@ class ArchiveTool:
 
     @classmethod
     def _get_logger(cls):
-
         if cls._logger is None:
             cls._logger = logging.getLogger(__name__)
 
@@ -257,17 +256,14 @@ class ArchiveContext:
     """Archive context manager supporting with operations"""
 
     def __init__(self, *paths: str):
-
         self.paths = paths
 
         self.success = True
 
     def __enter__(self):
-
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-
         self.cleanup()
 
     def cleanup(self):
@@ -281,26 +277,21 @@ class ArchiveCleanup:
     """Archive cleanup tool supporting with operations"""
 
     def __init__(self, *paths: str):
-
         self.paths = paths
 
     def __enter__(self):
-
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-
         for path in self.paths:
             ArchiveTool.cleanup_directory(path)
 
 
 def quick_pack(source_dir: str, remove_source: bool = False, **pack_kwargs) -> str:
-
     return ArchiveTool.pack_and_cleanup(source_dir, remove_source=remove_source, **pack_kwargs)
 
 
 def quick_cleanup(*paths: str) -> bool:
-
     success = True
 
     for path in paths:
@@ -317,7 +308,6 @@ class TempArchive:
     """Temporary archive context manager"""
 
     def __init__(self, source_dir: str, **pack_kwargs):
-
         self.source_dir = source_dir
 
         self.pack_kwargs = pack_kwargs
@@ -330,12 +320,10 @@ class TempArchive:
             self.pack_kwargs = pack_kwargs
 
     def __enter__(self):
-
         self.archive_path = ArchiveTool.pack_directory(self.source_dir, **self.pack_kwargs)
 
         return self.archive_path
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-
         if self.archive_path and os.path.exists(self.archive_path):
             ArchiveTool.cleanup_archive(self.archive_path)

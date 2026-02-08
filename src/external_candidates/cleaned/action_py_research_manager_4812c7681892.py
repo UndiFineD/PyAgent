@@ -119,7 +119,6 @@ class ResearchManager:
         return result.final_output_as(ReportData)
 
     async def send_push(self, report: ReportData) -> None:
-
         print("Pushing notification...")
 
         result = await Runner.run(push_agent, report.short_summary)

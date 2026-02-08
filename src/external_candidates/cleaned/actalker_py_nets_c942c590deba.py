@@ -16,7 +16,6 @@ from .box_utils import Detect, PriorBox
 
 class L2Norm(nn.Module):
     def __init__(self, n_channels, scale):
-
         super(L2Norm, self).__init__()
 
         self.n_channels = n_channels
@@ -30,11 +29,9 @@ class L2Norm(nn.Module):
         self.reset_parameters()
 
     def reset_parameters(self):
-
         init.constant_(self.weight, self.gamma)
 
     def forward(self, x):
-
         norm = x.pow(2).sum(dim=1, keepdim=True).sqrt() + self.eps
 
         x = torch.div(x, norm)
@@ -46,7 +43,6 @@ class L2Norm(nn.Module):
 
 class S3FDNet(nn.Module):
     def __init__(self, device="cuda"):
-
         super(S3FDNet, self).__init__()
 
         self.device = device
@@ -133,7 +129,6 @@ class S3FDNet(nn.Module):
         self.detect = Detect()
 
     def forward(self, x):
-
         size = x.size()[2:]
 
         sources = list()

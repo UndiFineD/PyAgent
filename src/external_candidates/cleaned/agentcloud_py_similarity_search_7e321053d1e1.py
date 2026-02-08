@@ -30,7 +30,6 @@ class SimilaritySearchRetriever(BaseRetriever):
     rag_filters: Dict
 
     def _get_relevant_documents(self, query: str, *, run_manager: CallbackManagerForRetrieverRun):
-
         embedded_question = self.embedding.embed_query(query)
 
         if isinstance(self.vector_store, Qdrant):

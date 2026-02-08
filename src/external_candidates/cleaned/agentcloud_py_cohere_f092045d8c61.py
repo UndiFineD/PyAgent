@@ -30,7 +30,6 @@ class CustomAsyncClient(AsyncClient):
     """
 
     def __init__(self, *args, **kwargs):
-
         self.environment = ClientEnvironment.PRODUCTION
 
         self.base_url = _get_base_url(base_url=kwargs["base_url"], environment=self.environment)
@@ -46,7 +45,6 @@ class CustomAsyncClient(AsyncClient):
         super().__init__(*args, **kwargs)
 
     async def chat_stream(self, *args, **kwargs) -> AsyncIterator[StreamedChatResponse]:
-
         _defaulted_timeout = self.timeout if self.timeout is not None else 300
 
         # re-instantiate _client_wrapper everytime
@@ -75,7 +73,6 @@ class CustomChatCohere(ChatCohere):
 
     @root_validator()
     def validate_environment(cls, values: Dict) -> Dict:
-
         values["cohere_api_key"] = convert_to_secret_str(
             get_from_dict_or_env(values, "cohere_api_key", "COHERE_API_KEY")
         )

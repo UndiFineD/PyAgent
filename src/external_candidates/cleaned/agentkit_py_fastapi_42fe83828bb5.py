@@ -30,7 +30,6 @@ class FastAPIWithInternalModels(FastAPI):
     """
 
     def openapi(self) -> dict[str, Any]:
-
         openapi_schema = super().openapi()
 
         enums = [StreamingSignalsEnum, StreamingDataTypeEnum]

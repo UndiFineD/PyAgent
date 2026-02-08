@@ -77,12 +77,10 @@ def model_factory(
 
 
 def _build_ollama_model(model: models.mongo.Model) -> BaseLanguageModel:
-
     return ChatOllama(**model.model_dump(exclude_none=True, exclude_unset=True).get("config"))
 
 
 def _build_openai_model(model: models.mongo.Model) -> BaseLanguageModel | Embeddings:
-
     if model.modelType == models.mongo.ModelType.embedding:
         return OpenAIEmbeddings(
             **model.model_dump(
@@ -101,7 +99,6 @@ def _build_openai_model(model: models.mongo.Model) -> BaseLanguageModel | Embedd
 
 
 def _build_azure_model(model: models.mongo.Model) -> BaseLanguageModel:
-
     return AzureChatOpenAI(
         **model.model_dump(
             exclude_none=True,
@@ -111,14 +108,12 @@ def _build_azure_model(model: models.mongo.Model) -> BaseLanguageModel:
 
 
 def _build_fastembed_model(model: models.mongo.Model) -> Embeddings:
-
     overwrite_model_name = _fastembed_standard_doc_name_swap(model.model_name, from_standard_to_doc=True)
 
     return FastEmbedEmbeddings(model_name=overwrite_model_name)
 
 
 def _fastembed_standard_doc_name_swap(fastembed_model_name: str, from_standard_to_doc: bool):
-
     from_enum = (
         models.mongo.FastEmbedModelsStandardFormat if from_standard_to_doc else models.mongo.FastEmbedModelsDocFormat
     )
@@ -135,7 +130,6 @@ def _fastembed_standard_doc_name_swap(fastembed_model_name: str, from_standard_t
 
 
 def _build_google_vertex_ai_model(model: models.mongo.Model) -> BaseLanguageModel:
-
     credentials_info = json.loads(model.config.get("credentials"))
 
     model_config = model.model_dump(exclude_none=True, exclude_unset=True).get("config")
@@ -148,7 +142,6 @@ def _build_google_vertex_ai_model(model: models.mongo.Model) -> BaseLanguageMode
 
 
 def _build_google_ai_model(model: models.mongo.Model) -> BaseLanguageModel:
-
     return ChatGoogleGenerativeAI(
         **model.model_dump(
             exclude_none=True,
@@ -158,7 +151,6 @@ def _build_google_ai_model(model: models.mongo.Model) -> BaseLanguageModel:
 
 
 def _build_cohere_model(model: models.mongo.Model) -> BaseLanguageModel:
-
     return CustomChatCohere(
         **model.model_dump(
             exclude_none=True,
@@ -168,7 +160,6 @@ def _build_cohere_model(model: models.mongo.Model) -> BaseLanguageModel:
 
 
 def _build_anthropic_model(model: models.mongo.Model) -> BaseLanguageModel:
-
     return ChatAnthropic(
         **model.model_dump(
             exclude_none=True,
@@ -178,7 +169,6 @@ def _build_anthropic_model(model: models.mongo.Model) -> BaseLanguageModel:
 
 
 def _build_groq_model(model: models.mongo.Model) -> BaseLanguageModel:
-
     return ChatGroq(
         **model.model_dump(
             exclude_none=True,

@@ -18,7 +18,6 @@ def random_noise(
     generator: Optional[Union[List["torch.Generator"], "torch.Generator"]] = None,
     noise_offset: Optional[float] = None,  # typical value is 0.1
 ) -> torch.Tensor:
-
     if tensor is not None:
         shape = tensor.shape
 
@@ -48,7 +47,6 @@ def video_fusion_noise(
     generator: Optional[Union[List[torch.Generator], torch.Generator]] = None,
     initial_common_noise: torch.Tensor = None,
 ) -> torch.Tensor:
-
     if tensor is not None:
         shape = tensor.shape
 

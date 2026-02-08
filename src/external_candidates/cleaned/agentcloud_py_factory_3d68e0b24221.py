@@ -22,7 +22,6 @@ def vectorstore_factory(
     namespace: str = None,
     byoVectorDb: bool = False,
 ):
-
     if byoVectorDb is False:
         type = VectorDatabase.Pinecone
 
@@ -59,16 +58,13 @@ def vectorstore_factory(
 
             class BaseAsyncMiddleware:
                 async def __call__(self, request: Request, call_next: SendAsync) -> Response:
-
                     return await call_next(request)
 
             class BaseMiddleware:
                 def __call__(self, request: Request, call_next: Send) -> Response:
-
                     return call_next(request)
 
             def custom_init(cls, host: str = None, **kwargs: Any) -> None:
-
                 cls.host = host
 
                 cls.middleware = BaseMiddleware()
@@ -100,7 +96,6 @@ def vectorstore_factory(
             ApiClient.__init__ = custom_init
 
             def a_custom_imit(self, host: str = None, **kwargs: Any) -> None:
-
                 self.host = host
 
                 self.middleware = BaseAsyncMiddleware()
@@ -144,7 +139,6 @@ def vectorstore_factory(
                 content_payload_key,
                 metadata_payload_key,
             ):
-
                 metadata = scored_point.payload or {}
 
                 # Check if metadata is a dictionary and handle it appropriately
@@ -169,7 +163,6 @@ def vectorstore_factory(
             Qdrant._document_from_scored_point = classmethod(custom_document_from_scored_point)
 
             def custom_visit_comparison(self, comparison):
-
                 try:
                     from qdrant_client.http import models as rest
 
@@ -224,7 +217,6 @@ def vectorstore_factory(
                 consistency: Optional[common_types.ReadConsistency] = None,
                 **kwargs: Any,
             ) -> List[Tuple[Document, float]]:
-
                 query_vector = embedding
 
                 if self.vector_name is not None:

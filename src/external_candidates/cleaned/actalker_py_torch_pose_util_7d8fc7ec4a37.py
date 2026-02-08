@@ -19,7 +19,6 @@ from scipy.spatial.transform import Rotation as R
 
 
 def create_perspective_matrix(aspect_ratio):
-
     kDegreesToRadians = np.pi / 180.0
 
     near = 1
@@ -54,7 +53,6 @@ def create_perspective_matrix(aspect_ratio):
 
 
 def project_points(points_3d, transformation_matrix, pose_vectors, image_shape):
-
     P = create_perspective_matrix(image_shape[1] / image_shape[0]).reshape(4, 4).T
 
     P = torch.tensor(P, dtype=points_3d.dtype, device=points_3d.device)
@@ -93,7 +91,6 @@ def project_points(points_3d, transformation_matrix, pose_vectors, image_shape):
 
 
 def invert_projection(projected_points, transformation_matrix, pose_vectors, image_shape):
-
     P = create_perspective_matrix(image_shape[1] / image_shape[0])
 
     P_inv = torch.inverse(P)
@@ -135,7 +132,6 @@ def invert_projection(projected_points, transformation_matrix, pose_vectors, ima
 
 
 def project_points_with_trans(points_3d, transformation_matrix, image_shape):
-
     P = create_perspective_matrix(image_shape[1] / image_shape[0])
 
     L, N, _ = points_3d.shape
@@ -222,7 +218,6 @@ def euler_angles_to_matrix(euler_angles, convention):
 
 
 def euler_and_translation_to_matrix(euler_angles, translation_vector):
-
     # rotation = torch.tensor(R.from_euler('xyz', euler_angles, degrees=True).as_matrix(), dtype=torch.float32)
 
     rotation = euler_angles_to_matrix(euler_angles, "XYZ")
@@ -239,7 +234,6 @@ def euler_and_translation_to_matrix(euler_angles, translation_vector):
 
 
 def matrix_to_euler_and_translation(matrix):
-
     rotation_matrix = matrix[:3, :3]
 
     translation_vector = matrix[:3, 3]
@@ -268,7 +262,6 @@ def matrix_to_euler_and_translation(matrix):
 
 
 def smooth_pose_seq(pose_seq, window_size=5):
-
     smoothed_pose_seq = torch.zeros_like(pose_seq)
 
     for i in range(len(pose_seq)):
@@ -282,7 +275,6 @@ def smooth_pose_seq(pose_seq, window_size=5):
 
 
 def smooth_pose_seq(pose_seq, window_size=5):
-
     # 增加一个维度用于卷积 (batch_size, channels, sequence_length)
 
     pose_seq = pose_seq.unsqueeze(0).permute(0, 2, 1)  # [1, 6, 100]
@@ -303,7 +295,6 @@ def smooth_pose_seq(pose_seq, window_size=5):
 
 
 def lmk_tranform(lmk3d, pose_seq, template_mat):
-
     trans_mat_list = [euler_and_translation_to_matrix(pose_seq[i][:3], pose_seq[i][3:]) for i in range(len(pose_seq))]
 
     trans_mat_arr = torch.stack(trans_mat_list)

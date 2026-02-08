@@ -1,0 +1,34 @@
+# Extracted from: C:\DEV\PyAgent\src\external_candidates\ingested\agents_generic.py\livekit_plugins.py\livekit_plugins_speechmatics.py\livekit.py\plugins.py\speechmatics.py\utils_864cb654785b.py
+# NOTE: extracted with static-only rules; review before use
+
+# Extracted from: C:\DEV\PyAgent\.external\agents_generic\livekit-plugins\livekit-plugins-speechmatics\livekit\plugins\speechmatics\utils.py
+
+from urllib.parse import urlencode
+
+from speechmatics.rt import __version__ as sdk_version  # type: ignore
+
+from .version import __version__ as lk_version
+
+
+def get_endpoint_url(url: str) -> str:
+    """Format the endpoint URL with the SDK and app versions.
+
+    Args:
+
+        url: The base URL for the endpoint.
+
+    Returns:
+
+        str: The formatted endpoint URL.
+
+    """
+
+    query_params = {}
+
+    query_params["sm-sdk"] = f"livekit-plugins-{lk_version}"
+
+    query_params["sm-app"] = f"livekit/{sdk_version}"
+
+    query = urlencode(query_params)
+
+    return f"{url}?{query}"

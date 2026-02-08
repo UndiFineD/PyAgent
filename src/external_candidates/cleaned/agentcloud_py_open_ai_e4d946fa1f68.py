@@ -28,7 +28,6 @@ class OpenAIChatAgent(BaseChatAgent):
     """
 
     async def call_model(self, state, config):
-
         messages = state["messages"]
 
         response = await self.chat_model.ainvoke(messages, config)
@@ -81,7 +80,6 @@ class OpenAIChatAgent(BaseChatAgent):
         return {"messages": [response]}
 
     def build_graph(self):
-
         human_input_tool = CustomHumanInput(self.socket, self.session_id, author_name=self.agent_name)
 
         self.chat_model = self.chat_model.bind_tools(self.tools + [human_input_tool])
@@ -101,7 +99,6 @@ class OpenAIChatAgent(BaseChatAgent):
         graph.add_node("human_input_invoker", self.invoke_human_input)
 
         def should_continue(state):
-
             messages = state["messages"]
 
             last_message = messages[-1]
@@ -122,7 +119,6 @@ class OpenAIChatAgent(BaseChatAgent):
                 return "continue"
 
         def start_condition(state):
-
             messages = state["messages"]
 
             last_message = messages[-1]

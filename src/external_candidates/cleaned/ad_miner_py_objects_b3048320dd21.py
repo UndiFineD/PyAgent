@@ -30,7 +30,6 @@ from ad_miner.sources.modules.utils import grid_data_stringify, timer_format
 
 class Objects:
     def __init__(self, arguments, neo4j, domain, computers, users):
-
         self.arguments = arguments
 
         self.neo4j = neo4j
@@ -83,7 +82,6 @@ class Objects:
         # Nodes that can dcsync
 
     def genNodesDCsyncPage(self):
-
         if not self.objects_to_dcsync:
             return
 
@@ -195,7 +193,6 @@ class Objects:
         page.render()
 
     def genNodesDCsyncLightPage(self, neo4j):
-
         page = Page(
             self.arguments.cache_prefix,
             "can_dcsync",
@@ -271,7 +268,6 @@ class Objects:
         page.render()
 
     def get_unpriv_users_to_GPO(self):
-
         if self.arguments.gpo_low and self.domain.unpriv_users_to_GPO is None:
             return
 
@@ -381,7 +377,6 @@ class Objects:
             return dictOfGPO
 
         def formatGPOGrid(dictOfGPO, headers):
-
             output = []
 
             # Extract all computers admin of computers
@@ -483,7 +478,6 @@ class Objects:
             return output
 
         def formatSmallGrid(list, gpo_name):
-
             output = []
 
             for n in list:

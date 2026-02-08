@@ -55,7 +55,6 @@ def my_custom_echo_env(content: str) -> Dict[str, Any]:
 
 @register_reward
 def my_custom_reward(task: str) -> Dict[str, Any]:
-
     return {
         "task_name": task,
         "status": "success",

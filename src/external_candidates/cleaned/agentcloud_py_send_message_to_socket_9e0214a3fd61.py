@@ -22,7 +22,6 @@ def send(
     message: Optional[SocketMessage],
     socket_logging: str = "socket",
 ):
-
     # Check inputs
 
     class Params(BaseModel):
@@ -36,7 +35,6 @@ def send(
 
         @field_validator("socket_logging")
         def check_socket_or_logging(cls, v):
-
             socket_log = v.lower()
 
             assert socket_logging in [

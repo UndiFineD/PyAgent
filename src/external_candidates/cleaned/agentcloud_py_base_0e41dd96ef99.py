@@ -45,7 +45,6 @@ class BaseBuiltinTool(GlobalBaseTool):
 
     @classmethod
     def factory(cls, tool: Tool, **kwargs):
-
         return cls(
             name=tool.name,
             description=tool.description,
@@ -58,7 +57,6 @@ class BaseBuiltinTool(GlobalBaseTool):
         )
 
     def __init__(self, **kwargs):
-
         kwargs["logger"] = logging.getLogger(self.__class__.__name__)
 
         kwargs["logger"].setLevel(logging.DEBUG)
@@ -67,18 +65,15 @@ class BaseBuiltinTool(GlobalBaseTool):
 
     @abstractmethod
     def run_tool(self, query: str) -> str:
-
         pass
 
     @staticmethod
     def extract_query_val(text):
-
         res = re.findall("[\"']?(?:query|text)[\"']?:\s*[\"'](.+)[\"']", text)
 
         return res[0] if res else text
 
     def _run(self, query: str) -> str:
-
         try:
             self.logger.debug(f"{self.__class__.__name__} received {query}")
 

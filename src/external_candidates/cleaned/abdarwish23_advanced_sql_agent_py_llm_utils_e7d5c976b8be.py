@@ -17,7 +17,6 @@ from langchain_openai import ChatOpenAI
 
 
 def get_llm(provider, model_name):
-
     temperature = Config.LLM_TEMPERATURE
 
     if provider == "openai":

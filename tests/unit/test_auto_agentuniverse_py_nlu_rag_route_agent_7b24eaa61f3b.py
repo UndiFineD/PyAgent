@@ -1,0 +1,10 @@
+
+import importlib.util
+from pathlib import Path
+
+p = Path(r"C:\DEV\PyAgent\src\external_candidates\auto\agentuniverse_py_nlu_rag_route_agent_7b24eaa61f3b.py")
+spec = importlib.util.spec_from_file_location('mod_under_test', p)
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+
+assert hasattr(mod, 'NluRagRouteAgent'), 'missing NluRagRouteAgent'

@@ -25,7 +25,6 @@ from ...schema.utils import asUUID
 
 
 def _normalize_path_block_title(title: str) -> str:
-
     title = title.replace("/", "_")
 
     title = title.replace(" ", "_")
@@ -34,7 +33,6 @@ def _normalize_path_block_title(title: str) -> str:
 
 
 def path_to_parts(path: str) -> List[str]:
-
     path_parts = path.strip("/").split("/")
 
     path_parts = [_normalize_path_block_title(part.strip()) for part in path_parts if part.strip()]
@@ -45,7 +43,6 @@ def path_to_parts(path: str) -> List[str]:
 async def assert_block_type(
     db_session: AsyncSession, space_id: asUUID, block_id: asUUID, block_type: str
 ) -> Result[None]:
-
     query = select(Block.type).where(Block.space_id == space_id).where(Block.id == block_id)
 
     result = await db_session.execute(query)
@@ -62,7 +59,6 @@ async def assert_block_type(
 
 
 async def fetch_path_children_by_id(db_session: AsyncSession, space_id: asUUID, block_id: asUUID) -> Result[List[dict]]:
-
     if block_id is not None:
         r = await assert_block_type(db_session, space_id, block_id, BLOCK_TYPE_FOLDER)
 
@@ -102,7 +98,6 @@ async def list_paths_under_block(
     path_prefix: str = "",
     depth: int = 0,
 ) -> Result[tuple[dict[str, PathNode], int, int]]:
-
     if path_prefix and not path_prefix.endswith("/"):
         path_prefix += "/"
 
@@ -173,7 +168,6 @@ async def find_block_by_path(
     space_id: asUUID,
     abs_path: str,
 ) -> Result[PathNode | None]:
-
     path_parts = path_to_parts(abs_path)
 
     if not len(path_parts):  # root
@@ -238,7 +232,6 @@ async def recover_path_by_id(
     block_id: asUUID,
     add_folder_slash: bool = False,
 ) -> Result[str]:
-
     path_parts = []
 
     while block_id is not None:
@@ -266,7 +259,6 @@ async def recover_path_by_id(
 async def get_path_info_by_id(
     db_session: AsyncSession, space_id: asUUID, block_id: asUUID
 ) -> Result[tuple[str, PathNode]]:
-
     query = select(Block.id, Block.type, Block.title, Block.props).where(
         Block.space_id == space_id, Block.id == block_id
     )
@@ -327,7 +319,6 @@ async def read_blocks_from_par_id(
     block_id: asUUID,
     allowed_types: set[str] = CONTENT_BLOCK,
 ) -> Result[List[Block]]:
-
     query = (
         select(Block)
         .where(Block.space_id == space_id, Block.parent_id == block_id)
@@ -345,7 +336,6 @@ async def read_blocks_from_par_id(
 async def get_block_by_sort(
     db_session: AsyncSession, space_id: asUUID, par_block_id: asUUID, sort: int
 ) -> Result[Block]:
-
     query = select(Block).where(Block.space_id == space_id, Block.parent_id == par_block_id, Block.sort == sort)
 
     result = await db_session.execute(query)

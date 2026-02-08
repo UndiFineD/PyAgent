@@ -12,22 +12,18 @@ import numpy as np
 
 class Point:
     def __init__(self, x: float = 0, y: float = 0):
-
         self.x = x
 
         self.y = y
 
     def __add__(self, other):
-
         return Point(self.x + other.x, self.y + other.y)
 
     def __sub__(self, other):
-
         return Point(self.x - other.x, self.y - other.y)
 
 
 def float_2_point(points: List[float]) -> List[Point]:
-
     ret_points = list()
 
     for point_x, point_y in zip(points[0::2], points[1::2]):
@@ -37,7 +33,6 @@ def float_2_point(points: List[float]) -> List[Point]:
 
 
 def point_2_float(points: List[Point]) -> List[float]:
-
     ret_points = list()
 
     for point in points:
@@ -49,7 +44,6 @@ def point_2_float(points: List[Point]) -> List[float]:
 
 
 def points_117_158_256(points158: List[float], points117: List[float]) -> List[float]:
-
     M_PI = 3.1415926
 
     FOREHEAD_POINTS_NUM = 7
@@ -88,7 +82,6 @@ def points_117_158_256(points158: List[float], points117: List[float]) -> List[f
     )
 
     def Merge(densePoints, sparsePoints):
-
         points = list()
 
         count = 0
@@ -131,11 +124,9 @@ def points_117_158_256(points158: List[float], points117: List[float]) -> List[f
         return points
 
     def Norm(point):
-
         return math.sqrt(point.x * point.x + point.y * point.y)
 
     def GetPoint(p1, p2, sintheta, costheta, ratio=1.0):
-
         point = Point()
 
         distance = Norm(p1 - p2) * ratio
@@ -147,7 +138,6 @@ def points_117_158_256(points158: List[float], points117: List[float]) -> List[f
         return point
 
     def AddNoseCourterPoints(sparsePts, densePts):
-
         for i in range(NOSE_POINTS_NUM):
             densePts[80 + i] = sparsePts[30 + i]
 
@@ -155,7 +145,6 @@ def points_117_158_256(points158: List[float], points117: List[float]) -> List[f
             densePts[174 + i] = sparsePts[76 + i]
 
     def AddForeheadPointsSub(points, meixin, longAx, shortBy, angle):
-
         deg = 22.5 / 180 * M_PI
 
         for j in range(3, 0, -1):
@@ -178,7 +167,6 @@ def points_117_158_256(points158: List[float], points117: List[float]) -> List[f
             points.append(rotatedPoint)
 
     def AddForeheadPoints(points):
-
         # ptLu, ptLd, ptChin, ptRd, ptRu, ptNose, ptMeixin
 
         if len(points) <= SPARSE_POINTS_NUM:
@@ -256,7 +244,6 @@ def points_117_158_256(points158: List[float], points117: List[float]) -> List[f
         AddForeheadPointsSub(points, ptMeixin, longAxLeft, shortBy, faceAngle)
 
     def AddSparsePupilPoints(points):
-
         LeyeLpts = points[16]
 
         LeyeRpts = points[20]
@@ -316,7 +303,6 @@ def points_117_158_256(points158: List[float], points117: List[float]) -> List[f
         points.append(ReyeCRpts)
 
     def ConvertPupilSparseToDense(points):
-
         num = 16
 
         lcenter = points[215]
@@ -366,7 +352,6 @@ def points_117_158_256(points158: List[float], points117: List[float]) -> List[f
             points.append(rpt)
 
     def AddPupilPoints(points):
-
         if len(points) <= SPARSE_POINTS_NUM:
             AddSparsePupilPoints(points)
 

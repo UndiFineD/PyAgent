@@ -32,10 +32,8 @@
 
 class OssBucket:
     def __init__(self, bucket_name):
-
         self.bucket_name = bucket_name
 
     @classmethod
     def put_object(self, key, data) -> str:
-
         print("put object to oss: %s" % self.bucket_name)

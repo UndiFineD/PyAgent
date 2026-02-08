@@ -58,7 +58,6 @@ class BaseScreenView(MDScreen, Observer):
     """
 
     def __init__(self, **kw):
-
         super().__init__(**kw)
 
         # Often you need to get access to the application object from the view

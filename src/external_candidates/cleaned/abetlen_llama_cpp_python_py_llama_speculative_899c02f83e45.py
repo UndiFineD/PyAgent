@@ -15,7 +15,6 @@ import numpy.typing as npt
 class LlamaDraftModel(abc.ABC):
     @abc.abstractmethod
     def __call__(self, input_ids: npt.NDArray[np.intc], /, **kwargs: Any) -> npt.NDArray[np.intc]:
-
         raise NotImplementedError()
 
 
@@ -23,7 +22,6 @@ class LlamaPromptLookupDecoding(LlamaDraftModel):
     """Based on https://github.com/apoorvumang/prompt-lookup-decoding"""
 
     def __init__(self, max_ngram_size: int = 2, num_pred_tokens: int = 10):
-
         self.max_ngram_size = max_ngram_size
 
         self.num_pred_tokens = num_pred_tokens
@@ -34,7 +32,6 @@ class LlamaPromptLookupDecoding(LlamaDraftModel):
         max_ngram_size: int,
         num_pred_tokens: int,
     ):
-
         input_length = input_ids.shape[0]
 
         for ngram_size in range(min(max_ngram_size, input_length - 1), 0, -1):
@@ -71,7 +68,6 @@ class LlamaPromptLookupDecoding(LlamaDraftModel):
         return np.array([], dtype=np.intc)
 
     def __call__(self, input_ids: npt.NDArray[np.intc], /, **kwargs: Any) -> npt.NDArray[np.intc]:
-
         return self.find_candidate_pred_tokens(
             input_ids=input_ids,
             max_ngram_size=self.max_ngram_size,

@@ -35,7 +35,6 @@ class SpaceCtx:
     path_2_block_ids: dict[str, PathNode | None]
 
     async def find_block(self, path: str) -> Result[PathNode]:
-
         if path in self.path_2_block_ids:
             return Result.resolve(self.path_2_block_ids[path])
 
@@ -49,7 +48,6 @@ class SpaceCtx:
         return Result.resolve(r.data)
 
     async def find_path_by_id(self, block_id: asUUID) -> Result[tuple[str, PathNode]]:
-
         r = await BN.get_path_info_by_id(self.db_session, self.space_id, block_id)
 
         if not r.ok():

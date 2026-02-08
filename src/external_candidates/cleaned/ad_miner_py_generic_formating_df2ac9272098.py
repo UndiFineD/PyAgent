@@ -9,7 +9,6 @@ from ad_miner.sources.modules.utils import grid_data_stringify
 
 
 def get_label_icon_dictionary():
-
     return {
         "User": "<i class='bi bi-person-fill'></i>",
         "Computer": "<i class='bi bi-pc-display'></i>",
@@ -25,7 +24,6 @@ def get_label_icon_dictionary():
 
 
 def formatGridValues2Columns(data, headers, prefix, icon="", icon2=""):
-
     output = []
 
     for key, value in data.items():
@@ -65,7 +63,6 @@ def formatGridValues2Columns(data, headers, prefix, icon="", icon2=""):
 
 
 def formatGridValues1Columns(data, headers):
-
     output = []
 
     for value in data:
@@ -78,7 +75,6 @@ def formatGridValues1Columns(data, headers):
 
 
 def formatGridValues3Columns(data, headers, prefix):
-
     output = []
 
     for dict in data:
@@ -108,7 +104,6 @@ def formatGridValues3Columns(data, headers, prefix):
 
 
 def formatFor3Col(dictRDP, headers):
-
     rslt = []
 
     for key in dictRDP.keys():

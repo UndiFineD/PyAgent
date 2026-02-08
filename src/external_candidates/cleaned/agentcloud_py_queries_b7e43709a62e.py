@@ -43,14 +43,12 @@ class MongoClientConnection(MongoConnection):
     _instance = None
 
     def __new__(cls, *args, **kwargs):
-
         if not cls._instance:
             cls._instance = super(MongoClientConnection, cls).__new__(cls)
 
         return cls._instance
 
     def __init__(self):
-
         if not hasattr(self, "initialized"):
             super().__init__()
 
@@ -61,7 +59,6 @@ class MongoClientConnection(MongoConnection):
             self.initialized = True
 
     def disconnect(self):
-
         print("Disconnecting from MongoDB")
 
         self.mongo_client.close()
@@ -69,11 +66,9 @@ class MongoClientConnection(MongoConnection):
         self.initialized = None  # Reset initialized status
 
     def _get_collection(self, collection_name: str) -> collection.Collection:
-
         return self.db[collection_name]
 
     def get_session(self, session_id: str) -> Session:
-
         try:
             session_query_results: Optional[Session] = self._get_collection("sessions").find_one(
                 {"_id": ObjectId(session_id)}, {"_id": 1, "appId": 1, "variables": 1}
@@ -90,7 +85,6 @@ class MongoClientConnection(MongoConnection):
             logging.error(f"an error has occurred while retrieving session from the database: {e}")
 
     def get_crew(self, session: Session) -> tuple[App, Crew, list, list]:
-
         try:
             app_id = session.appId
 
@@ -158,43 +152,33 @@ class MongoClientConnection(MongoConnection):
             raise
 
     def get_tool_datasource(self, tool: Tool):
-
         return self.get_single_model_by_id("datasources", Datasource, tool.datasourceId)
 
     def get_tools(self, toolsIds: List[str]):
-
         return self.get_models_by_ids("tools", Tool, toolsIds)
 
     def get_tool(self, toolsId: str):
-
         return self.get_single_model_by_id("tools", Tool, toolsId)
 
     def get_vector_db(self, vectorDbId: str):
-
         return self.get_single_model_by_id("vectordbs", VectorDb, vectorDbId)
 
     def get_vector_dbs(self, vectorDbIds: List[str]):
-
         return self.get_models_by_ids("vectordbs", VectorDb, vectorDbIds)
 
     def get_agent_tasks(self, taskIds: List[str]):
-
         return self.get_models_by_ids("tasks", Task, taskIds)
 
     def get_model(self, modelId: str):
-
         return self.get_single_model_by_id("models", Model, modelId)
 
     def get_agent_datasources(self, agent: Dict):
-
         pass
 
     def get_app_variables(self, variable_ids: List[Union[str, PyObjectId]]):
-
         return self.get_models_by_ids("variables", Variable, variable_ids)
 
     def get_app_by_crew_id(self, crewId: PyObjectId):
-
         return self.get_single_model_by_query("apps", App, {"crewId": crewId})
 
     def get_models_by_query(self, db_collection: str, model_class: type, query: Dict):
@@ -272,7 +256,6 @@ class MongoClientConnection(MongoConnection):
     # TODO we need to store chat history in the correct format to align with LLM return
 
     def get_chat_history(self, session_id: str) -> Optional[List[dict[str, Union[str, Any]]]]:
-
         chat_collection: collection.Collection = self._get_collection("chat")
 
         chat_messages = chat_collection.find({"sessionId": ObjectId(session_id)})
@@ -292,7 +275,6 @@ class MongoClientConnection(MongoConnection):
         return []
 
     def insert_model(self, db_collection: str, model_instance: BaseModel) -> Optional[ObjectId]:
-
         collection = self._get_collection(db_collection)
 
         try:
@@ -310,7 +292,6 @@ class MongoClientConnection(MongoConnection):
             return None
 
     def update_session_variables(self, session_id: str, variables: dict) -> None:
-
         self._get_collection("sessions").update_one(
             {"_id": ObjectId(session_id)},
             {"$set": {f"variables.{key}": value for key, value in variables.items()}},
@@ -318,7 +299,6 @@ class MongoClientConnection(MongoConnection):
 
 
 def convert_id_to_ObjectId(id):
-
     if type(id) == str:
         return ObjectId(id)
 

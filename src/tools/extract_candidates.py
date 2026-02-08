@@ -132,7 +132,8 @@ def extract_candidates(report_file: Path, limit: int = 10, max_lines: int = MAX_
             if suffix != '.py':
                 continue
             rel = f.get('path')
-            src_path = ROOT / '.external' / Path(rel)
+            # Adjust src_path to point to the ingested folder
+            src_path = ROOT / 'src' / 'external_candidates' / 'ingested' / Path(rel)
             if not src_path.exists():
                 continue
             try:
