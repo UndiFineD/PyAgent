@@ -25,13 +25,10 @@ import socket
 import ssl
 import json
 import ipaddress
-from typing import Dict, List, Optional, Any, Tuple, Set
+from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 from datetime import datetime
-import aiohttp
-import hashlib
 from concurrent.futures import ThreadPoolExecutor
-import struct
 
 
 @dataclass

@@ -22,8 +22,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from typing import Any, AsyncGenerator, Dict, List, Optional, Type, TypeVar
-from dataclasses import dataclass
+from typing import Any, AsyncGenerator, Dict, List, Optional, TypeVar
 from abc import ABC, abstractmethod
 
 from pydantic import BaseModel, Field

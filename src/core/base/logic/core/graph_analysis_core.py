@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Dict, List, Set, Tuple, Optional
+from typing import Dict, List, Optional
 from collections import defaultdict
 import json
 import os
@@ -121,7 +121,6 @@ class GraphAnalysisCore:
             return {}
         
         graph = self.graphs[graph_id]
-        adj = graph["adjacency"]
         nodes = graph["nodes"]
         
         # Find high-privilege nodes (admin, domain admin, etc.)

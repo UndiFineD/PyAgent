@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import pytest
-import asyncio
 import logging
 from pathlib import Path
 from src.infrastructure.swarm.orchestration.swarm.director_agent import DirectorAgent
@@ -32,23 +31,18 @@ async def test_status_update():
 
     try:
         agent = DirectorAgent(str(test_file))
-        print(f"Initial status in file: {test_file.read_text()}")
+        assert agent is not None, "DirectorAgent initialization failed"
+
+        initial_content = test_file.read_text()
+        assert "Status: PLANNED" in initial_content, "Initial file setup failed"
 
         # Manually trigger the status update logic
         agent._update_improvement_status("Test Improvement Task", "COMPLETED")
 
         updated_content = test_file.read_text()
-        print(f"Updated status in file: {updated_content}")
 
-        if "Status: COMPLETED" in updated_content:
-            print("SUCCESS: Status updated correctly.")
-        else:
-            print("FAILURE: Status not updated.")
+        assert "Status: COMPLETED" in updated_content, "Status was not updated correctly"
 
     finally:
         if test_file.exists():
             test_file.unlink()
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    asyncio.run(test_status_update())

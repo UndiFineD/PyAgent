@@ -22,7 +22,6 @@ batch state, and nested batch scopes. Useful for distributed and pipelined GPU w
 
 
 import threading
-from contextlib import contextmanager
 from typing import Any, Dict, Optional
 
 class MicroBatchContext:

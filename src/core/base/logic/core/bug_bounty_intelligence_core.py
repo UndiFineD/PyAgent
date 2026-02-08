@@ -33,11 +33,9 @@ Key Features:
 
 import asyncio
 import aiohttp
-import json
 import re
-from typing import Dict, List, Optional, Any, Tuple
-from datetime import datetime, timedelta
-from urllib.parse import urlparse
+from typing import Dict, List, Optional, Any
+from datetime import datetime
 import logging
 
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -326,7 +324,7 @@ class BugBountyIntelligenceCore(BaseAgent):
                     date = datetime.fromisoformat(disclosed_at.replace('Z', '+00:00'))
                     month_key = f"{date.year}-{date.month:02d}"
                     monthly_counts[month_key] = monthly_counts.get(month_key, 0) + 1
-                except:
+                except Exception:
                     pass
         analysis['temporal_trends'] = dict(sorted(monthly_counts.items()))
 
@@ -423,7 +421,7 @@ class BugBountyIntelligenceCore(BaseAgent):
         report.append(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         report.append("")
 
-        report.append(f"## Overview")
+        report.append("## Overview")
         report.append(f"- Total Reports Analyzed: {analysis['total_reports']}")
         report.append("")
 
@@ -521,5 +519,4 @@ class BugBountyIntelligenceCore(BaseAgent):
         """Clean up resources."""
         if self.session:
             await self.session.close()
-            self.session = None</content>
-<parameter name="filePath">c:\DEV\PyAgent\src\core\base\logic\core\bug_bounty_intelligence_core.py
+            self.session = None

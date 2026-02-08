@@ -39,7 +39,7 @@ class UtilsCore:
         if rc:
             try:
                 return rc.deduplicate_entries(entries)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
         return list(dict.fromkeys(entries))
@@ -64,7 +64,7 @@ class UtilsCore:
         if rc:
             try:
                 return rc.generate_cache_key(prompt, context)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
         combined = f"{prompt}:{context}"

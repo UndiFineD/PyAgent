@@ -106,7 +106,7 @@ mapping the inter-dependencies between major system boundaries.
 
         os.makedirs(self.output_path.parent, exist_ok=True)
 
-        with open(self.output_path, "w", encoding="utf-8") as f: logging.TextIOWrapper[_WrappedBuffer]:
+        with open(self.output_path, "w", encoding="utf-8") as f:
             f.write(md_content)
 
         logger.info("Architecture map generated: %s", self.output_path)

@@ -13,10 +13,9 @@
 # limitations under the License.
 
 import asyncio
-import os
 import time
 import logging
-from typing import Dict, List, Optional
+from typing import List, Optional
 from pathlib import Path
 
 logger = logging.getLogger(__name__)

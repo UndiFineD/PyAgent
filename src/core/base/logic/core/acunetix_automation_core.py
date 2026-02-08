@@ -15,10 +15,9 @@
 # Acunetix Automation Core - Web Vulnerability Scanning Automation
 # Based on patterns from AcuAutomate repository
 
-import asyncio
 import json
 import logging
-from typing import Dict, List, Optional, Any, Union
+from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

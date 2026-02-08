@@ -259,7 +259,7 @@ class ErrorsAgent(BaseAgent):
                     self._patterns[idx].occurrences += 1
                     return self._patterns[idx]
                 return None
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass  # Fall back to Python
 
         # Python fallback
@@ -336,7 +336,7 @@ class ErrorsAgent(BaseAgent):
                 patterns = [r.pattern for r in active_rules]
                 is_match, _ = check_suppression_rust(error.message, patterns)
                 return is_match
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass  # Fall back to Python
 
         # Python fallback

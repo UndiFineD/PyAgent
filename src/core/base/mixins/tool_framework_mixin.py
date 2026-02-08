@@ -20,22 +20,26 @@ Provides schema-based tool creation and management, inspired by Adorable's tool 
 from __future__ import annotations
 
 import inspect
-import json
-import logging
 import asyncio
 import time
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Callable, Union, get_type_hints
-from pathlib import Path
+from typing import Any, Dict, List, Optional, Callable, get_type_hints
+
+import importlib.util
 
 try:
-    import pydantic
-    from pydantic import BaseModel, Field, ValidationError
-    HAS_PYDANTIC = True
+    if importlib.util.find_spec("pydantic"):
+        from pydantic import BaseModel, Field, ValidationError
+        HAS_PYDANTIC = True
+    else:
+        HAS_PYDANTIC = False
+        BaseModel = object
+        def Field(**kwargs): return None
+        ValidationError = Exception
 except ImportError:
     HAS_PYDANTIC = False
     BaseModel = object
-    Field = lambda **kwargs: None
+    def Field(**kwargs): return None
     ValidationError = Exception
 
 from src.core.base.common.models.communication_models import CascadeContext
@@ -315,17 +319,17 @@ class ToolFrameworkMixin:
 
     def _get_type_string(self, type_hint: Any) -> str:
         """Convert Python type hints to string representations."""
-        if type_hint == str:
+        if type_hint is str:
             return "string"
-        elif type_hint == int:
+        elif type_hint is int:
             return "integer"
-        elif type_hint == float:
+        elif type_hint is float:
             return "number"
-        elif type_hint == bool:
+        elif type_hint is bool:
             return "boolean"
-        elif type_hint == list:
+        elif type_hint is list:
             return "array"
-        elif type_hint == dict:
+        elif type_hint is dict:
             return "object"
         else:
             return "string"  # Default fallback

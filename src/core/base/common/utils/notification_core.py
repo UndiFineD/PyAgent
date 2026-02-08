@@ -49,7 +49,7 @@ class NotificationCore:
         try:
             domain = urllib.parse.urlparse(url).netloc
             return domain or url
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
             return url
 

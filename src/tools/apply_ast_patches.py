@@ -7,7 +7,6 @@ and backs up original files as `.bak` when a patch is applied.
 from __future__ import annotations
 from pathlib import Path
 import re
-import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 PATCH_DIR = ROOT / '.external' / 'patches_ast'
@@ -21,12 +20,12 @@ def parse_patch(patch_text: str):
     hunks = []
     # find header lines
     while idx < len(lines):
-        l = lines[idx]
-        if l.startswith('--- '):
-            fromfile = l[4:].strip()
-        elif l.startswith('+++ '):
-            tofile = l[4:].strip()
-        elif l.startswith('@@ '):
+        line = lines[idx]
+        if line.startswith('--- '):
+            fromfile = line[4:].strip()
+        elif line.startswith('+++ '):
+            tofile = line[4:].strip()
+        elif line.startswith('@@ '):
             break
         idx += 1
     # parse hunks

@@ -24,7 +24,7 @@ import logging
 import time
 from dataclasses import asdict
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 from src.observability.reports.grafana_generator import GrafanaDashboardGenerator
 

@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 from .base_core import BaseCore
 
@@ -46,7 +46,7 @@ class SearchCore(BaseCore):
         if rc and hasattr(rc, "find_literal_rust"):  # pylint: disable=no-member
             try:
                 return rc.find_literal_rust(query, str(root_dir), file_pattern)  # pylint: disable=no-member
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
 
@@ -58,7 +58,7 @@ class SearchCore(BaseCore):
                 content = path.read_text(encoding="utf-8")
                 if query in content:
                     results.append({"path": str(path), "line": 0})  # Simplified
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 continue
         return results
@@ -68,7 +68,7 @@ class SearchCore(BaseCore):
         if rc and hasattr(rc, "semantic_rank_rust"):  # pylint: disable=no-member
             try:
                 return rc.semantic_rank_rust(query, documents)  # pylint: disable=no-member
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
         # Fallback to simple keyword density (mock)

@@ -20,7 +20,6 @@ Inspired by ADSyncDump-BOF decryption patterns.
 
 from __future__ import annotations
 
-import base64
 import platform
 from typing import Any, Optional
 

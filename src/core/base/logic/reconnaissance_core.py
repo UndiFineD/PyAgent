@@ -18,14 +18,12 @@ Based on patterns from alterx (DSL-based generation) and amass (multi-source int
 """
 
 import asyncio
-import re
-from typing import List, Dict, Set, Optional, Any
+from typing import List, Dict, Optional
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 import aiohttp
 import dns.resolver
 import dns.exception
-from urllib.parse import urlparse
 import logging
 
 logger = logging.getLogger(__name__)
@@ -109,7 +107,7 @@ class DNSSource(IntelligenceSource):
                         None, self.resolver.resolve, subdomain, 'CNAME'
                     )
                     cname = str(cname_answers[0])
-                except:
+                except Exception:
                     pass
 
                 return SubdomainResult(
@@ -280,7 +278,6 @@ class ReconnaissanceCore:
 
     async def _verify_dns(self, results: List[SubdomainResult], config: ReconConfig):
         """Verify subdomains exist via DNS resolution"""
-        dns_source = DNSSource()
 
         async def verify_result(result: SubdomainResult):
             if not result.verified:
@@ -291,7 +288,7 @@ class ReconnaissanceCore:
                     )
                     result.ip_addresses = [str(rdata) for rdata in answers]
                     result.verified = True
-                except:
+                except Exception:
                     pass  # Keep as unverified
 
         # Verify in batches

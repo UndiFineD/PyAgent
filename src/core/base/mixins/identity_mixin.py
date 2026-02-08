@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Module: identity_mixin
-Provides identity and metadata mixin for PyAgent agents.
-"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +14,6 @@ Provides identity and metadata mixin for PyAgent agents.
 
 """Identity Mixin for BaseAgent."""
 
-from asyncio import AbstractEventLoop
 from asyncio import AbstractEventLoop
 import re
 from typing import Any
@@ -79,9 +74,9 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
                         asyncio.create_task(signals.emit("agent_capability_registration", payload))
                     else:
                         loop.run_until_complete(signals.emit("agent_capability_registration", payload))
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                     # pylint: disable=broad-exception-caught
                     pass
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             # pylint: disable=broad-exception-caught
             pass

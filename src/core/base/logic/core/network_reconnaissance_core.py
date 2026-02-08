@@ -20,17 +20,13 @@ import aiohttp
 import dns.resolver
 import dns.reversename
 import dns.zone
-import ipaddress
-import json
 import re
 import ssl
 import socket
-import time
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Set, Tuple, Any
+from datetime import datetime
+from typing import Dict, List, Optional, Set, Any
 from urllib.parse import urlparse, urljoin
-import warnings
 
 from src.core.base.common.base_core import BaseCore
 

@@ -28,17 +28,14 @@ and misconfiguration vulnerabilities in AEM instances.
 import asyncio
 import aiohttp
 import base64
-import concurrent.futures
 import itertools
-import json
 import random
 import string
 import time
-from collections import namedtuple
 from dataclasses import dataclass, field
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from threading import Thread
-from typing import List, Dict, Optional, Any, Tuple
+from typing import List, Dict, Optional
 from urllib.parse import urljoin
 
 from src.core.base.common.base_core import BaseCore
@@ -273,7 +270,7 @@ class AEMHackerCore(BaseCore):
                                     references=["https://helpx.adobe.com/experience-manager/6-3/sites/developing/using/querybuilder-predicate-reference.html"]
                                 ))
                                 found_json = True
-                        except:
+                        except Exception:
                             pass
 
                     # Check for feed response
@@ -383,7 +380,7 @@ class AEMHackerCore(BaseCore):
                                 references=["https://github.com/OlsonDigital/aem-groovy-console"]
                             ))
                             break
-                    except:
+                    except Exception:
                         pass
 
             except Exception as e:
@@ -481,7 +478,8 @@ class AEMSSRFDetector:
     async def start(self):
         """Start the SSRF detection server."""
         def run_server():
-            handler = lambda *args: AEMSSRFHandler(self.token, self.detections, *args)
+            def handler(*args):
+                return AEMSSRFHandler(self.token, self.detections, *args)
             self.server = HTTPServer(('', self.port), handler)
             self.server.serve_forever()
 
@@ -524,7 +522,7 @@ class AEMSSRFHandler(BaseHTTPRequestHandler):
                         self.detections[key].append(value)
                     else:
                         self.detections[key] = [value]
-        except:
+        except Exception:
             pass
 
         self.send_response(200)

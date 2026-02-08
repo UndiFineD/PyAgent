@@ -20,9 +20,7 @@ Implements multi-agent coordination for distributed scanning tasks.
 
 from __future__ import annotations
 
-import asyncio
 from typing import Any, Dict, List, Optional
-from uuid import UUID
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.logic.security.web_security_scanner_core import WebSecurityScannerCore

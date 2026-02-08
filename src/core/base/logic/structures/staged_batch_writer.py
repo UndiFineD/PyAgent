@@ -65,7 +65,7 @@ try:
 
     BRIDGE = get_bridge()
     HAS_RUST = hasattr(BRIDGE, "batch_write_indices_rust")
-except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
     HAS_RUST = False
     BRIDGE = None
@@ -595,7 +595,7 @@ def coalesce_write_indices(
     if HAS_RUST and BRIDGE is not None:
         try:
             return BRIDGE.coalesce_writes_rust(indices, block_size)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
             pass
 

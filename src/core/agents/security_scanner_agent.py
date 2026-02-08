@@ -20,9 +20,7 @@ Implements vulnerability scanning, payload generation, SSRF detection, and recon
 
 from __future__ import annotations
 
-import asyncio
-from typing import Any, Dict, List, Optional
-from uuid import UUID
+from typing import Any, Dict, List
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.mixins.payload_generator_mixin import PayloadGeneratorMixin

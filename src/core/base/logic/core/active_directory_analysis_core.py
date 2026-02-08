@@ -21,9 +21,8 @@ including enumeration, privilege escalation detection, and security assessment.
 Based on patterns from Active-Directory-Exploitation-Cheat-Sheet repository.
 """
 
-import asyncio
 import logging
-from typing import Dict, List, Optional, Set, Tuple, Any
+from typing import Dict, List, Optional, Set, Any
 from dataclasses import dataclass
 from enum import Enum
 
@@ -245,7 +244,7 @@ class ActiveDirectoryAnalysisCore:
         weak_password_users = [
             obj for obj in self.ad_objects.values()
             if obj.object_type == ADObjectType.USER and
-               obj.properties.get("password_policy", {}).get("complexity", True) == False
+               not obj.properties.get("password_policy", {}).get("complexity", True)
         ]
 
         if weak_password_users:
@@ -371,6 +370,7 @@ class ActiveDirectoryAnalysisCore:
                 "Enable advanced auditing"
             ]
         }
+        return report
 
     async def analyze_dormant_accounts(self) -> List[ADVulnerability]:
         """

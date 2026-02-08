@@ -15,13 +15,10 @@
 # Job Market Intelligence Core - Automated Job Data Collection and Analysis
 # Based on patterns from 2026-SWE-College-Jobs repository
 
-import asyncio
 import json
-import re
 from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
-from urllib.parse import urlparse
 
 from src.core.base.logic.core.base_core import BaseCore
 

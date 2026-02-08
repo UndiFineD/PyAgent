@@ -24,7 +24,6 @@ import json
 import logging
 import time
 from pathlib import Path
-from subprocess import CalledProcessError, TimeoutExpired
 from typing import Any
 
 from src.core.base.common.file_system_core import FileSystemCore
@@ -50,7 +49,7 @@ class EmergencyEventLog:
                 content: str = self.log_path.read_text(encoding="utf-8")
                 self.buffer.extend(content.splitlines())
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
     def record_action(self, action: str, details: str) -> None:
@@ -99,7 +98,7 @@ class AgentCircuitBreaker:
                 self._state_file, 
                 json.dumps({"history": list(self.window)})
             )
-        except (OSError, TypeError) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (OSError, TypeError):  # pylint: disable=broad-exception-caught, unused-variable
             pass
 
     def record_result(self, success: bool) -> None:

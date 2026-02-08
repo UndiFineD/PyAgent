@@ -36,7 +36,6 @@ Evolution Workflow:
 6. Evolution → Promote high-performers to elite status
 """
 
-import json
 import yaml
 import uuid
 from datetime import datetime, timezone
@@ -152,7 +151,7 @@ class DynamicAgentEvolutionOrchestrator:
             'task_history': sheet.task_history,
         }
 
-        with StateTransaction([sheet_file]) as tx:
+        with StateTransaction([sheet_file]) as _:
             with open(sheet_file, 'w', encoding='utf-8') as f:
                 yaml.dump(data, f, default_flow_style=False, sort_keys=False)
 
@@ -405,7 +404,7 @@ This agent works well with:
 - Quality assurance agents for validation
 """
 
-        with StateTransaction([file_path]) as tx:
+        with StateTransaction([file_path]) as _:
             file_path.write_text(content, encoding='utf-8')
 
     def _generate_description(self, sheet: AgentSkillSheet, task_analysis: TaskAnalysis) -> str:
@@ -480,7 +479,7 @@ Created through agent integration to achieve synergy between specialized capabil
             new_path = self._get_agent_file_path(sheet)
 
             if old_path.exists():
-                with StateTransaction([old_path, new_path]) as tx:
+                with StateTransaction([old_path, new_path]) as _:
                     import shutil
                     shutil.move(str(old_path), str(new_path))
 

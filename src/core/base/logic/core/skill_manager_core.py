@@ -16,7 +16,6 @@ import json
 import os
 import asyncio
 from typing import Dict, Any, List, Optional
-from src.core.base.agent_state_manager import StateTransaction
 
 class SkillManagerCore:
     """
@@ -54,7 +53,6 @@ class SkillManagerCore:
         JIT installation of missing tools/CLIs.
         Pattern harvested from AI-coding-platform.
         """
-        import subprocess
         import shutil
 
         # Check if already in PATH

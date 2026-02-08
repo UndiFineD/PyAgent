@@ -23,7 +23,7 @@ import logging
 import os
 import platform
 import sys
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 logger = logging.getLogger("pyagent.platform")
 

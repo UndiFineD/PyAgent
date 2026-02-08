@@ -23,7 +23,7 @@ from __future__ import annotations
 import asyncio
 import re
 import time
-from typing import Any, Dict, List, Optional, Set
+from typing import Dict, List, Optional
 from urllib.parse import urlparse
 
 try:
@@ -89,7 +89,7 @@ class WebSecurityScannerCore:
             parsed = urlparse(host)
             if parsed.netloc:
                 return host
-        except:
+        except Exception:
             pass
         return None
 

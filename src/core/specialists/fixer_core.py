@@ -17,7 +17,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 class FixerCore:
     """Core domain logic for automated bug fixing and code refactoring."""

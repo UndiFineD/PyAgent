@@ -13,9 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-import tempfile
 import subprocess
-import math
 import shutil
 
 ROOT = Path(__file__).resolve().parents[2]

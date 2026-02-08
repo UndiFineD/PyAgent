@@ -17,8 +17,7 @@ Enhanced Strategy Optimizer - AutoRAG-inspired optimization algorithms
 Based on AutoRAG's sophisticated strategy selection for multi-metric optimization
 """
 
-import numpy as np
-from typing import List, Dict, Any, Optional, Tuple, Callable
+from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
 import logging

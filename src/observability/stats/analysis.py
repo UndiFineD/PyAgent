@@ -11,7 +11,6 @@ import contextlib
 import logging
 import math
 import re
-import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -292,7 +291,7 @@ class FormulaEngineCore:
 
         try:
             return FormulaCore.evaluate(formula, variables)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             return 0.0
 
     def validate_logic(self, formula: str) -> dict[str, Any]:

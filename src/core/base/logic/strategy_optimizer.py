@@ -18,12 +18,11 @@ Based on AutoRAG patterns: threshold filtering, performance measurement, best se
 """
 
 import asyncio
-import json
 import logging
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any, Callable, Tuple, Union
+from typing import Dict, List, Optional, Any, Callable, Tuple
 from enum import Enum
 import statistics
 

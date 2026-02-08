@@ -19,14 +19,11 @@ Inspired by ai-security-llm repository patterns for LLM security assessment.
 Implements prompt injection detection, jailbreak prevention, and security validation.
 """
 
-import asyncio
 import logging
 import re
-import json
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 from datetime import datetime
-import hashlib
 
 
 @dataclass

@@ -65,7 +65,7 @@ class InferenceCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.count_tokens_rust(text, model_name)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
         return estimate_token_count(text, model_name)

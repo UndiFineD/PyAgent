@@ -97,7 +97,6 @@ class LoopAnalyzer:
 
             # Filter out matches in comments and strings (basic filtering)
             filtered_matches = []
-            lines = content.split('\n')
             for match in matches:
                 # Basic check - if line doesn't start with # and isn't in a string
                 # This is approximate but better than nothing

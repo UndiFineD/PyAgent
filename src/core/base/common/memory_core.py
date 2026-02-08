@@ -63,30 +63,6 @@ class MemoryCore:
         self._fs.ensure_directory(self.base_path)
         self.index_path = Path("data/agent_knowledge_index.json")
 
-    def retrieve_knowledge(
-        self, 
-        agent_id: str, 
-        query: str, 
-        mode: str = "semantic", 
-        limit: int = 5
-    ) -> List[Dict[str, Any]]:
-        """
-        Retrieves knowledge from local storage.
-        In multi-agent mode, this would be sharded across the cluster.
-        """
-        logger.info(f"MemoryCore: Retrieving {mode} knowledge for {agent_id}: '{query}'")
-        
-        # In a real implementation, this would use the StorageCore/VectorDB
-        # For now, we return a structural placeholder or search local indices
-        return [
-            {
-                "id": "mem_1",
-                "content": f"Simulated knowledge for {query}",
-                "timestamp": datetime.now().isoformat(),
-                "score": 0.95
-            }
-        ]
-
     # pylint: disable=too-many-arguments,too-many-positional-arguments
     def create_episode(
         self,
@@ -262,7 +238,7 @@ class MemoryCore:
                 collection = client.get_or_create_collection(name=f"{agent_id}_knowledge")
                 collection.delete(ids=[key])
                 return True
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 return False
 

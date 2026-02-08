@@ -21,7 +21,7 @@ import ast
 import os
 import re
 from pathlib import Path
-from typing import List, Union, Optional
+from typing import Union, Optional
 
 
 class CodeAnalyzerCore:
@@ -89,8 +89,8 @@ class CodeAnalyzerCore:
         lines = source.splitlines()
         return {
             "total_lines": len(lines),
-            "code_lines": len([l for l in lines if l.strip() and not l.strip().startswith("#")]),
-            "comment_lines": len([l for l in lines if l.strip().startswith("#")]),
+            "code_lines": len([line for line in lines if line.strip() and not line.strip().startswith("#")]),
+            "comment_lines": len([line for line in lines if line.strip().startswith("#")]),
             "functions": len(re.findall(r"(?m)^\s*def\s+", source)),
             "classes": len(re.findall(r"(?m)^class\s+", source)),
         }

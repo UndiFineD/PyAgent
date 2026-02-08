@@ -65,7 +65,7 @@ class LessonCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.generate_failure_hash(error_msg)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
         
@@ -99,4 +99,4 @@ class LessonCore(BaseCore):
         data = self._storage.load_json(self.persistence_path)
         if data:
             self.known_failures = set(data.get("known_failures", []))
-            self.lessons = list(map(lambda l: Lesson(**l), data.get("lessons", [])))
+            self.lessons = list(map(lambda lesson_data: Lesson(**lesson_data), data.get("lessons", [])))

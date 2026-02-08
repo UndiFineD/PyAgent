@@ -1,4 +1,16 @@
-#!/usr/bin/env python3
+# Force add project root to sys.path
+import os
+import sys
+from pathlib import Path
+
+# Identify the root of the repository (where 'src' and 'tests' are)
+# File is in tests/unit/test_change_monitoring_agent.py, so two levels up is repo root
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+_repo_root = os.path.abspath(os.path.join(_script_dir, "..", ".."))
+
+if _repo_root not in sys.path:
+    sys.path.insert(0, _repo_root)
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,6 +33,8 @@
 
 import asyncio
 import json
+import os
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -187,3 +201,7 @@ class TestChangeMonitoringAgent(unittest.TestCase):
         # Agent inherits format_change_output from mixin
         output = self.agent.format_change_output(changes, 'table')
         self.assertIn('NORMAL_ACCOUNT', output)
+
+
+if __name__ == '__main__':
+    unittest.main()

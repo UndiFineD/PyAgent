@@ -19,7 +19,6 @@ A collaborative pattern where agents work in sequence to plan, execute,
 express results, and review for improvement.
 """
 
-import asyncio
 import logging
 from typing import Any, Dict, Optional
 

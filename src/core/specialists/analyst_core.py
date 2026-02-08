@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import ast
-import os
 from pathlib import Path
 from typing import Dict, List, Set, Any
 

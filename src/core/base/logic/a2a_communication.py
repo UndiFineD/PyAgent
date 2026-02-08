@@ -22,13 +22,10 @@ Based on patterns from agentic_design_patterns repository.
 """
 
 import asyncio
-import json
 import logging
 import uuid
-from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Callable, Union, Protocol
-from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Callable, Protocol
 from enum import Enum
 
 from pydantic import BaseModel, Field, field_validator

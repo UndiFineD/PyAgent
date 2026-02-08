@@ -419,11 +419,16 @@ class StatsAgent:
         # Fallback
         def check_file(acc: dict[str, list[str]], f: Path) -> dict[str, list[str]]:
             base = f.parent / f.stem
-            if not base.with_suffix(".description.md").exists(): acc["context"].append(str(f))
-            if not base.with_suffix(".changes.md").exists(): acc["changes"].append(str(f))
-            if not base.with_suffix(".errors.md").exists(): acc["errors"].append(str(f))
-            if not base.with_suffix(".improvements.md").exists(): acc["improvements"].append(str(f))
-            if not (f.parent / f"test_{f.stem}.py").exists(): acc["tests"].append(str(f))
+            if not base.with_suffix(".description.md").exists():
+                acc["context"].append(str(f))
+            if not base.with_suffix(".changes.md").exists():
+                acc["changes"].append(str(f))
+            if not base.with_suffix(".errors.md").exists():
+                acc["errors"].append(str(f))
+            if not base.with_suffix(".improvements.md").exists():
+                acc["improvements"].append(str(f))
+            if not (f.parent / f"test_{f.stem}.py").exists():
+                acc["tests"].append(str(f))
             return acc
 
         return functools.reduce(check_file, self.files, {

@@ -18,7 +18,6 @@ from pathlib import Path
 import ast
 import difflib
 import re
-import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 BANDIT_JSON = ROOT / '.external' / 'static_checks' / 'bandit.json'

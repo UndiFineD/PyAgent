@@ -22,9 +22,8 @@ Implements dream-inspired memory processing:
 
 import math
 import logging
-import asyncio
-from typing import Any, Dict, List, Optional, Set
-from datetime import datetime, timezone, timedelta
+from typing import Any, Dict, List, Optional
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 

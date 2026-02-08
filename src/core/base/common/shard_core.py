@@ -17,7 +17,6 @@ Core logic for fleet sharding and partitioning.
 """
 
 from __future__ import annotations
-from typing import Optional, List
 from .sharding_core import ShardingCore
 
 

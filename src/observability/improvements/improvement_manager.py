@@ -215,7 +215,7 @@ class ImprovementManager:
                 continue
             try:
                 total += int(imp.effort.value)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         return total
 

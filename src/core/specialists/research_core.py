@@ -17,8 +17,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-from typing import Dict, Any, List, Optional
-import asyncio
+from typing import Dict, Any, Optional
 
 class ResearchCore:
     """Core domain logic for research, search, and technical synthesis tasks."""

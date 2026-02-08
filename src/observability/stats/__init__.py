@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
+# ruff: noqa: F401
 
 """Lazy-loading entry point for observability.stats."""
 
@@ -8,7 +9,7 @@ from typing import Any, TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # ruff: noqa: F401
     from .ab_engine import (
         ABComparator, ABComparison, ABComparisonEngine,
         ABComparisonResult, ABSignificanceResult

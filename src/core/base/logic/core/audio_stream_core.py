@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import audioop
-from typing import Optional, Tuple
 
 class AudioStreamCore:
     """

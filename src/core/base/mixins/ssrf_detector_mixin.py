@@ -16,7 +16,7 @@ import asyncio
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from typing import Dict, List, Optional, Callable
+from typing import Dict, List, Optional
 import random
 import string
 
@@ -96,9 +96,8 @@ class SSRFDetectorMixin:
             
         try:
             # Create handler class with current token and data dict
-            handler_class = lambda *args, **kwargs: self._DetectorHandler(
-                self._ssrf_token, self._ssrf_data, *args, **kwargs
-            )
+            def handler_class(*args, **kwargs):
+                return self._DetectorHandler(self._ssrf_token, self._ssrf_data, *args, **kwargs)
             
             self._server = HTTPServer((host, port), handler_class)
             self._server_thread = threading.Thread(target=self._server.serve_forever, daemon=True)

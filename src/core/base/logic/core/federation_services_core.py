@@ -15,17 +15,14 @@
 # Federation Services Core - AD FS Token Forgery and SAML Management
 # Based on patterns from ADFSpoof repository
 
-import asyncio
 import json
 import logging
-from typing import Dict, List, Optional, Any, Tuple, Set, Union
+from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from enum import Enum
 import uuid
 import base64
-import hashlib
-from pathlib import Path
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.backends import default_backend
@@ -41,7 +38,6 @@ try:
 except Exception:  # pragma: no cover - optional dependency for XML handling
     etree = None
 import secrets
-import string
 
 
 class SAMLVersion(Enum):
@@ -512,8 +508,8 @@ class FederationServicesCore:
             Tuple of (certificate_bytes, private_key_bytes)
         """
         try:
-            with open(pfx_path, 'rb') as f:
-                pfx_data = f.read()
+            with open(pfx_path, 'rb'):
+                pass
 
             # Mock loading - in real implementation would use cryptography library
             # to extract cert and key from PFX

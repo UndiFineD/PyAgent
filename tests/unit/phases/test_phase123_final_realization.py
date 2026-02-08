@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/env python3
-
 import unittest
 import os
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
@@ -99,7 +97,7 @@ class TestPhase123FinalRealization(unittest.TestCase):
         pruner = NeuralPruningEngine(self.fleet)
 
         # Mock memory if not present to avoid DB dependency in unit tests
-        if not hasattr(self.fleet, "data/memory") or self.fleet.memory is None:
+        if not hasattr(self.fleet, "memory") or self.fleet.memory is None:
 
             class MockMemory:
                 def get_all_ids(self):
@@ -119,15 +117,18 @@ class TestPhase123FinalRealization(unittest.TestCase):
         """Tests that RegistryOverlay is utilized."""
         from src.infrastructure.swarm.fleet.registry_overlay import RegistryOverlay
 
-        overlay = RegistryOverlay(Path("data/memory/agent_store/test_overlay.json"))
+        overlay_path = Path("data/memory/agent_store/test_overlay.json")
+        overlay_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        overlay = RegistryOverlay(overlay_path)
         overlay.save_override("TestAgent", "test.module", "TestClass")
 
         config = overlay.get_agent_config("TestAgent", ("default", "Class", None))
         self.assertEqual(config[0], "test.module")
 
         # Clean up
-        if Path("data/memory/agent_store/test_overlay.json").exists():
-            os.remove("data/memory/agent_store/test_overlay.json")
+        if overlay_path.exists():
+            overlay_path.unlink()
 
 
 if __name__ == "__main__":

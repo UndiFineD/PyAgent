@@ -402,8 +402,10 @@ class TieredBufferPool:
     def _find_tier(self, size: int) -> Optional[int]:
         """Find the smallest tier that fits the requested size."""
         def check(idx):
-            if idx >= len(self._sizes): return None
-            if self._sizes[idx] >= size: return self._sizes[idx]
+            if idx >= len(self._sizes):
+                return None
+            if self._sizes[idx] >= size:
+                return self._sizes[idx]
             return check(idx + 1)
         return check(0)
 

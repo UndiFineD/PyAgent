@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import base64
-import json
 import uuid
 from typing import Dict, Any, List, Optional
 from urllib.parse import quote

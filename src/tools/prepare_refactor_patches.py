@@ -10,9 +10,7 @@ This script does NOT apply patches; it only writes suggestions for reviewers.
 from __future__ import annotations
 import json
 from pathlib import Path
-import ast
 import re
-import shutil
 
 ROOT = Path(__file__).resolve().parents[2]
 BANDIT_JSON = ROOT / '.external' / 'static_checks' / 'bandit.json'

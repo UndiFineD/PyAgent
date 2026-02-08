@@ -436,7 +436,8 @@ class SlidingWindowAggregator:
         buckets_to_rotate = int(elapsed / self._bucket_seconds)
 
         def _rotate(count):
-            if count <= 0: return
+            if count <= 0:
+                return
             self._current_bucket_idx = (self._current_bucket_idx + 1) % self._num_buckets
             self._buckets[self._current_bucket_idx] = self._empty_bucket()
             _rotate(count - 1)

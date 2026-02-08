@@ -15,7 +15,6 @@ import difflib
 import re
 import sys
 import ast
-import shutil
 
 ROOT = Path(__file__).resolve().parents[2]
 TARGET_DIR = ROOT / 'src' / 'external_candidates' / 'auto'
@@ -129,7 +128,7 @@ def main(argv=None) -> int:
     parser.add_argument('--target', type=str, default=None, help='Target directory to scan (defaults to internal target)')
     parser.add_argument('--patch-dir', type=str, default=None, help='Directory to write patch files')
     args = parser.parse_args(argv)
-    changed = apply_fixes(apply=args.apply, target_dir=Path(args.target) if args.target else None, patch_dir=Path(args.patch_dir) if args.patch_dir else None)
+    apply_fixes(apply=args.apply, target_dir=Path(args.target) if args.target else None, patch_dir=Path(args.patch_dir) if args.patch_dir else None)
     # run static checks and tests if we applied changes
     if args.apply:
         print('Re-running static checks...')

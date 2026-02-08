@@ -20,11 +20,10 @@ Inspired by Coqui TTS API patterns.
 Provides unified interface for text-to-speech synthesis.
 """
 
-import io
 import logging
 import tempfile
 from pathlib import Path
-from typing import Optional, Dict, Any, Union
+from typing import Optional, Dict, Any
 from abc import ABC, abstractmethod
 
 import numpy as np

@@ -13,7 +13,6 @@ from __future__ import annotations
 import shutil
 import sys
 from pathlib import Path
-import json
 
 ROOT = Path(__file__).resolve().parents[2]
 PATCH_DIR = ROOT / '.external' / 'patches'

@@ -24,7 +24,7 @@ import json
 import logging
 import time
 import uuid
-from typing import Any, Dict, List, Optional, Callable, AsyncGenerator
+from typing import Any, Dict, Optional, Callable
 from dataclasses import dataclass, field
 from contextlib import asynccontextmanager
 
@@ -35,7 +35,6 @@ except ImportError:
     redis = None
     HAS_REDIS = False
 
-from src.core.base.common.models.communication_models import CascadeContext
 
 
 @dataclass
@@ -313,7 +312,7 @@ class StreamManagerMixin:
         await self.handle_stream_lifecycle(agent_id, "start")
         try:
             yield
-        except Exception as e:
+        except Exception:
             await self.handle_stream_lifecycle(agent_id, "error")
             raise
         else:

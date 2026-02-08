@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from typing import List, Optional, Dict, Any
-from dataclasses import dataclass, field
+from dataclasses import field
 from pydantic import BaseModel
 
 class AgentCard(BaseModel):

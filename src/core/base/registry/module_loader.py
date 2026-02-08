@@ -93,7 +93,7 @@ class ModuleLoader:
         try:
             module: importlib.ModuleType = importlib.import_module(module_path)
             return getattr(module, agent_type)
-        except (ImportError, AttributeError, ModuleNotFoundError) as e: ImportError | AttributeError | ModuleNotFoundError:
+        except (ImportError, AttributeError, ModuleNotFoundError) as e:
             logging.error(
                 "ModuleLoader: Failed to load class %s from %s. Error: %s",
                 agent_type,

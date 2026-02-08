@@ -18,7 +18,7 @@ Code integrity verifier.py module.
 
 import ast
 from pathlib import Path
-from typing import Any, Optional
+from typing import Optional
 
 
 class CodeIntegrityVerifier:

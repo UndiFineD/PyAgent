@@ -19,7 +19,6 @@ Integrates with Project Voyager and Rust-accelerated distributed benchmarks.
 
 from __future__ import annotations
 
-import logging
 from typing import Any, Dict, List, Optional
 
 import numpy as np

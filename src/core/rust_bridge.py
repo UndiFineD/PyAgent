@@ -53,8 +53,8 @@ class RustBridge:
             return {}
         try:
             return rc.calculate_metrics_rust(content)  # type: ignore
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.error("RustBridge: calculate_metrics failed: %s", e)
+        except Exception:  # pylint: disable=broad-exception-caught
+            logger.error("RustBridge: calculate_metrics failed")
             return {}
 
     @staticmethod
@@ -63,7 +63,19 @@ class RustBridge:
         if shard_count <= 0:
             logger.warning("RustBridge: shard_count must be positive, defaulting to 1024")
             shard_count = 1024
-        return RustBridge._calculate_shard_id_fallback(key, shard_count) if not RustBridge._can_use_rust('calculate_interaction_shard_md5') else RustBridge._try_rust_call('calculate_interaction_shard_md5', key, shard_count, fallback=lambda: RustBridge._calculate_shard_id_fallback(key, shard_count))
+
+        def fallback() -> int:
+            return RustBridge._calculate_shard_id_fallback(key, shard_count)
+
+        if not RustBridge._can_use_rust("calculate_interaction_shard_md5"):
+            return fallback()
+
+        return RustBridge._try_rust_call(
+            "calculate_interaction_shard_md5",
+            key,
+            shard_count,
+            fallback=fallback,
+        )
 
     @staticmethod
     def _calculate_shard_id_fallback(key: str, shard_count: int) -> int:
@@ -91,7 +103,19 @@ class RustBridge:
         """Audited parallel text replacement."""
         if not replacements:
             return content
-        return RustBridge._bulk_replace_fallback(content, replacements) if not RustBridge._can_use_rust('bulk_replace_rust') else RustBridge._try_rust_call('bulk_replace_rust', content, replacements, fallback=lambda: RustBridge._bulk_replace_fallback(content, replacements))
+
+        def fallback() -> str:
+            return RustBridge._bulk_replace_fallback(content, replacements)
+
+        if not RustBridge._can_use_rust("bulk_replace_rust"):
+            return fallback()
+
+        return RustBridge._try_rust_call(
+            "bulk_replace_rust",
+            content,
+            replacements,
+            fallback=fallback,
+        )
 
     @staticmethod
     def _bulk_replace_fallback(content: str, replacements: Dict[str, str]) -> str:
@@ -105,7 +129,19 @@ class RustBridge:
         """Audited parallel file modification."""
         if not file_paths or not replacements:
             return {p: False for p in file_paths} if file_paths else {}
-        return RustBridge._bulk_replace_files_fallback(file_paths, replacements) if not RustBridge._can_use_rust('bulk_replace_files_rust') else RustBridge._try_rust_call('bulk_replace_files_rust', file_paths, replacements, fallback=lambda: RustBridge._bulk_replace_files_fallback(file_paths, replacements))
+
+        def fallback() -> Dict[str, bool]:
+            return RustBridge._bulk_replace_files_fallback(file_paths, replacements)
+
+        if not RustBridge._can_use_rust("bulk_replace_files_rust"):
+            return fallback()
+
+        return RustBridge._try_rust_call(
+            "bulk_replace_files_rust",
+            file_paths,
+            replacements,
+            fallback=fallback,
+        )
 
     @staticmethod
     def _bulk_replace_files_fallback(file_paths: List[str], replacements: Dict[str, str]) -> Dict[str, bool]:
@@ -123,7 +159,7 @@ class RustBridge:
                     with open(path, "w", encoding="utf-8") as f:
                         f.write(text)
                 results[path] = changed
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught
                 results[path] = False
         return results
 
@@ -167,8 +203,10 @@ class RustBridge:
         """Audited import extraction (20x faster than AST)."""
         if not source:
             return []
-        
-        fallback = lambda: RustBridge._get_imports_fallback(source)
+
+        def fallback() -> List[str]:
+            return RustBridge._get_imports_fallback(source)
+
         if not RustBridge._can_use_rust("get_imports_rust"):
             return fallback()
         return RustBridge._try_rust_call("get_imports_rust", source, fallback=fallback)
@@ -194,21 +232,21 @@ class RustBridge:
         """Audited optimization pattern scanning."""
         if not content:
             return []
-        
+
         if not RustBridge._can_use_rust("scan_optimization_patterns_rust"):
             return []
-            
+
         raw = RustBridge._try_rust_call("scan_optimization_patterns_rust", content)
         if not raw:
             return []
-            
+
         # Transform raw Vec<(line, idx, groups)> to descriptive dicts
         patterns = [
             "Manual range(len(x)) loop (prefer enumerate)",
             "Non-parallel accumulated loop (prefer vectorization)",
             "Blocking time.sleep call (prefer async/event)",
         ]
-        
+
         results = []
         for line, idx, groups in raw:
             results.append({
@@ -230,11 +268,11 @@ class RustBridge:
         """Audited security pattern scanning."""
         if not content or not patterns:
             return []
-        
+
         raw = RustBridge._try_rust_call("analyze_security_patterns_rust", content, patterns)
         if not raw:
             return []
-            
+
         results = []
         for name, line, matched_text in raw:
             results.append({

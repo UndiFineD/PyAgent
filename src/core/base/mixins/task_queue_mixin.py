@@ -22,10 +22,8 @@ from __future__ import annotations
 import asyncio
 import time
 import uuid
-from typing import Any, Dict, List, Optional
-from collections import deque
+from typing import Any, Dict, Optional
 
-from src.core.base.common.models.communication_models import CascadeContext
 
 
 class TaskQueueMixin:

@@ -20,8 +20,6 @@ Inspired by ADSyncDump-BOF XML parsing techniques.
 
 from __future__ import annotations
 
-import html
-import re
 from typing import Any, Optional
 
 from src.core.base.logic.processing.data_parsing_core import DataParsingCore

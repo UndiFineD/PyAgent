@@ -61,6 +61,6 @@ class PrivilegeEscalationMixin:
         for token in self.impersonated_tokens:
             try:
                 ctypes.windll.kernel32.CloseHandle(token)
-            except:
+            except Exception:
                 pass
         self.impersonated_tokens.clear()

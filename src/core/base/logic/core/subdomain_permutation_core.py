@@ -15,12 +15,10 @@
 # Subdomain Permutation Core - Inspired by AlterX patterns
 # Intelligent subdomain wordlist generation using DSL patterns and enrichment
 
-import asyncio
 import re
 import itertools
 from dataclasses import dataclass, field
 from typing import Dict, List, Set, Optional, Any, Iterator
-from urllib.parse import urlparse
 import tldextract
 
 from src.core.base.common.base_core import BaseCore

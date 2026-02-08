@@ -91,7 +91,7 @@ class ValidationCore(BaseCore):
                 # Passing rule patterns to Rust regarding bulk processing
                 resp = rc.validate_content_rust(str(actual_path), actual_content, list(self._rules.keys()))
                 results.extend(resp)  # pylint: disable=no-member
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
 
@@ -126,7 +126,7 @@ class ValidationCore(BaseCore):
                 schema_str = json.dumps(schema)
                 # Rust returns (is_valid, error_list)
                 return rc.json_schema_validate_rust(data_str, schema_str)  # pylint: disable=no-member
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
 

@@ -21,7 +21,7 @@ import asyncio
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional, Callable, Set
+from typing import List, Dict, Any, Optional, Callable
 from enum import Enum
 
 from src.core.base.logic.strategy_optimizer import OptimizationTrial

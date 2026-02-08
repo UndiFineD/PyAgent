@@ -111,7 +111,7 @@ class ConditionalExecutor:
             condition = self._conditions[cond_name]
             try:
                 results.append(condition.check(file_path, content))
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 results.append(False)
 

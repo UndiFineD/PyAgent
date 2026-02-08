@@ -137,7 +137,7 @@ class MultiAgentOrchestratorCore:
             }
         }
 
-        with StateTransaction([self.registry_path]) as tx:
+        with StateTransaction([self.registry_path]) as _:
             self.registry_path.write_text(json.dumps(data, indent=2))
 
     def register_agent_type(self, agent_type: str, handler: Callable):

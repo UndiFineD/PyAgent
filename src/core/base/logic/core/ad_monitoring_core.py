@@ -29,20 +29,17 @@ Key Features:
 """
 
 import asyncio
-import json
 import logging
 import uuid
-from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Protocol, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Protocol, Set, Tuple
 from enum import Enum
 import time
 import threading
 
 from src.core.base.common.base_core import BaseCore
 from src.core.base.common.models.communication_models import CascadeContext
-from src.core.base.state.agent_state_manager import StateTransaction
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -544,7 +541,7 @@ class ADMonitoringCore(BaseCore):
             try:
                 dt = datetime.fromtimestamp(value / 10000000 - 11644473600)  # Windows FILETIME to Unix
                 return f"{attr_name}: {dt.isoformat()}"
-            except:
+            except Exception:
                 pass
         return f"{attr_name} changed"
 
@@ -556,7 +553,7 @@ class ADMonitoringCore(BaseCore):
             try:
                 dt = datetime.fromtimestamp(value / 10000000 - 11644473600)
                 return f"Account expires: {dt.isoformat()}"
-            except:
+            except Exception:
                 pass
         return "Account expiry changed"
 

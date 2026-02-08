@@ -17,6 +17,8 @@ Tests for Phase 130: Trillion-Scale Sharding and Resilience.
 """
 
 from pathlib import Path
+from unittest.mock import MagicMock, patch
+
 from src.core.knowledge.btree_store import BTreeKnowledgeStore
 from src.logic.agents.cognitive.latent_reasoning_agent import LatentReasoningAgent
 from src.logic.agents.system.model_optimizer_agent import ModelOptimizerAgent
@@ -64,16 +66,20 @@ def test_phase130_btree_sharding() -> None:
 
 def test_phase130_agent_integration() -> None:
     """Basic sanity check for specialized agents."""
-    latent_agent = LatentReasoningAgent(file_path="src/core/base/base_agent.py")
-    # Corrected method based on actual code
-    audit_res = latent_agent.audit_multilingual_output(
-        "Calculate 1+1", "The answer is 2.", "Swahili"
-    )
-    assert "is_consistent" in audit_res
+    with patch(
+        "src.core.base.lifecycle.base_agent.AutoMemCore",
+        return_value=MagicMock(),
+    ):
+        latent_agent = LatentReasoningAgent(file_path="src/core/base/base_agent.py")
+        # Corrected method based on actual code
+        audit_res = latent_agent.audit_multilingual_output(
+            "Calculate 1+1", "The answer is 2.", "Swahili"
+        )
+        assert "is_consistent" in audit_res
 
-    optimizer = ModelOptimizerAgent(file_path="src/core/base/base_agent.py")
-    strategy = optimizer.select_optimization_strategy(70, 24, ["h100"])
-    assert "FP8" in strategy.get("quantization", "") or strategy.get("hopper_optimized")
+        optimizer = ModelOptimizerAgent(file_path="src/core/base/base_agent.py")
+        strategy = optimizer.select_optimization_strategy(70, 24, ["h100"])
+        assert "FP8" in strategy.get("quantization", "") or strategy.get("hopper_optimized")
 
 
 def test_phase130_sharding_orchestrator() -> None:

@@ -50,7 +50,7 @@ class ConnectivityManager:
         )
         self._ttl_success = 900  # 15 minutes regarding working endpoints
         self._ttl_failure = 120  # 2 minutes regarding failed endpoints (Phase 141 robustness)
-        self._cache: dict[str, Any] = self._load_status()  # type: dict[str, Any]
+        self._cache: dict[str, Any] = self._load_status()
         self._preferred_cache: dict[str, str] = self._cache.get("__preferred__", {})
         self._initialized = True
 
@@ -61,8 +61,7 @@ class ConnectivityManager:
                 # pylint: disable=unspecified-encoding
                 with open(self._conn_status_file, 'r', encoding='utf-8') as f:
                     return json.load(f)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 return {}
         return {}
 

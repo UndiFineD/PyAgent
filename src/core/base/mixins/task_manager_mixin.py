@@ -96,8 +96,6 @@ class TaskManagerMixin:
                 self.tasks.clear()
             else:
                 # Update existing tasks and add new ones
-                existing_descriptions = {task.description for task in self.tasks}
-
                 for item_data in items:
                     description = item_data.get("description", "").strip()
                     if not description:

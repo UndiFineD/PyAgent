@@ -17,14 +17,11 @@ Memory Core - Hybrid graph-vector memory system
 Based on AutoMem patterns: FalkorDB + Qdrant hybrid architecture
 """
 
-import asyncio
-import json
 import logging
 import time
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from typing import Dict, List, Optional, Any, Set, Tuple
+from typing import Dict, List, Optional, Any, Tuple
 from abc import ABC, abstractmethod
 
 logger = logging.getLogger(__name__)

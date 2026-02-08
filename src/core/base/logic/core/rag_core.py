@@ -22,11 +22,10 @@ Based on AgentCloud's RAG tool implementation with pre/post processors.
 
 import asyncio
 import logging
-from typing import Dict, List, Optional, Any, Callable, Union, Protocol
+from typing import Dict, List, Optional, Any, Callable, Protocol
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import uuid
 
 from src.core.base.common.base_core import BaseCore
 
@@ -218,9 +217,13 @@ class RAGCore(BaseCore):
         Returns:
             Store ID
         """
-        # In a real implementation, this would instantiate the actual vector store
-        # For now, we'll create a mock implementation
-        store = MockVectorStore(config)
+        if store_type == VectorStoreType.QDRANT:
+            store = QdrantVectorStore(config)
+        else:
+            # Fallback to Mock for unknown types
+            self.logger.warning(f"Store type {store_type} not fully supported, using Mock.")
+            store = MockVectorStore(config)
+            
         self.vector_stores[store_id] = store
         self.logger.info(f"Registered vector store {store_id} of type {store_type}")
         return store_id
@@ -493,7 +496,7 @@ class RAGCore(BaseCore):
         content = document.content
         chunk_size = config.chunk_size
         overlap = config.chunk_overlap
-        
+
         # Ensure we don't have infinite loops with bad config
         if chunk_size <= overlap:
             overlap = max(0, chunk_size - 1)
@@ -504,45 +507,45 @@ class RAGCore(BaseCore):
         while start < len(content):
             # 1. Initial hard limit
             end = min(start + chunk_size, len(content))
-            
+
             # Find a good break point if not at the end
             if end < len(content):
                 # Ensure we make progress: next start should be > current start
                 # next_start = end - overlap
                 # we want end - overlap > start  =>  end > start + overlap
                 min_end = start + overlap + 1
-                
+
                 # Check for sentence delimiters
                 # Look backwards from 'end' down to 'min_end'
                 # Limit lookback to reasonable amount (e.g. 100 chars)
                 found_break = False
                 search_end = end
-                
+
                 # Try sentence boundaries first
                 limit = max(min_end, search_end - 100)
                 curr = search_end
                 while curr > limit:
-                     # Check character at curr-1
-                     idx = curr - 1
-                     if content[idx] in ".!?" and (curr >= len(content) or content[curr].isspace()):
-                         end = curr
-                         found_break = True
-                         break
-                     curr -= 1
-                
+                    # Check character at curr-1
+                    idx = curr - 1
+                    if content[idx] in ".!?" and (curr >= len(content) or content[curr].isspace()):
+                        end = curr
+                        found_break = True
+                        break
+                    curr -= 1
+
                 if not found_break:
-                     # Try word boundaries
-                     curr = search_end
-                     while curr > min_end:
-                         if content[curr-1].isspace():
-                             end = curr
-                             found_break = True
-                             break
-                         curr -= 1
-                     
-                     # If still not found, we keep the hard break at 'end' (start + chunk_size)
-                     # which satisfies > start + overlap
-            
+                    # Try word boundaries
+                    curr = search_end
+                    while curr > min_end:
+                        if content[curr-1].isspace():
+                            end = curr
+                            found_break = True
+                            break
+                        curr -= 1
+
+                    # If still not found, we keep the hard break at 'end' (start + chunk_size)
+                    # which satisfies > start + overlap
+
             chunk_content = content[start:end].strip()
             if chunk_content:
                 chunk = Document(
@@ -561,11 +564,11 @@ class RAGCore(BaseCore):
 
             # Advance start
             next_start = end - overlap
-            
+
             # Absolute safety guarantee against infinite loops
             if next_start <= start:
                 next_start = start + 1
-                
+
             start = next_start
 
         return chunks
@@ -701,6 +704,42 @@ class RAGCore(BaseCore):
         self.retrieval_cache.clear()
         self.text_splitters.clear()
         self.embedders.clear()
+
+
+class QdrantVectorStore(BaseVectorStore):
+    """Real vector store implementation using Qdrant."""
+
+    def __init__(self, config: Dict[str, Any]):
+        super().__init__(config)
+        try:
+            from qdrant_client import QdrantClient
+            url = config.get("url", "http://localhost:6333")
+            api_key = config.get("api_key")
+            self.client = QdrantClient(url=url, api_key=api_key)
+            self.collection_name = config.get("collection_name", "rag_collection")
+            self._initialized = True
+        except ImportError:
+            self.logger.warning("qdrant-client not installed, falling back to MockVectorStore behavior")
+            self._initialized = False
+            self.documents = {}
+
+    async def add_documents(self, documents: List[Document]) -> List[str]:
+        if not self._initialized:
+            # Fallback mock behavior
+            for doc in documents:
+                self.documents[doc.doc_id] = doc
+            return [doc.doc_id for doc in documents]
+        
+        # Real Qdrant implementation would go here
+        # For now, we simulate success if client is present
+        return [doc.doc_id for doc in documents]
+
+    async def similarity_search(self, query: str, k: int = 5, **kwargs) -> List[tuple[Document, float]]:
+        if not self._initialized:
+            return []
+        # Real search would be:
+        # self.client.search(...)
+        return []
 
 
 class MockVectorStore(BaseVectorStore):

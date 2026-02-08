@@ -22,24 +22,18 @@ Implements learning-based discovery and intelligent fuzzing capabilities.
 from __future__ import annotations
 
 import asyncio
-import json
 import logging
 import os
 import random
-import re
-import subprocess
-import sys
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
 
-from src.core.base.common.models.communication_models import CascadeContext
 
 logger = logging.getLogger("pyagent.security.fuzzing")
 
@@ -599,5 +593,4 @@ class MultiCycleFuzzing:
             summary['vulnerability_breakdown'][vuln_type] = summary['vulnerability_breakdown'].get(vuln_type, 0) + 1
 
         self.logger.info(f"Multi-cycle fuzzing complete: {summary['total_findings']} total findings")
-        return summary</content>
-<parameter name="filePath">c:\DEV\PyAgent\src\tools\security\fuzzing.py
+        return summary

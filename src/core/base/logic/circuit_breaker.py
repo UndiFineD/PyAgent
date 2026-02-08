@@ -161,7 +161,7 @@ class CircuitBreaker:
             result = func(*args, **kwargs)
             self.on_success()
             return result
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             self.on_failure()
             raise
 

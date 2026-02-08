@@ -69,7 +69,7 @@ def _find_imports(tree: ast.AST) -> list[str]:
 
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
-            for alias: ast.alias in node.names:
+            for alias in node.names:
                 imports.append(alias.name)
         elif isinstance(node, ast.ImportFrom):
             mod: str = node.module or ""

@@ -21,23 +21,17 @@ Implements comprehensive testing pyramid with unit, integration, and E2E testing
 
 from __future__ import annotations
 
-import asyncio
 import json
 import logging
-import os
-import subprocess
-import sys
 import time
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
-from unittest.mock import MagicMock, patch
+from typing import Any, Dict, List, Optional
 
 import pytest
 import yaml
 
-from src.core.base.common.models.communication_models import CascadeContext
 
 logger = logging.getLogger("pyagent.testing.framework")
 
@@ -584,13 +578,7 @@ class EvaluationNotebookSystem:
                         "import json\n",
                         "\n",
                         "# Load test results\n",
-                        f"results_data = {json.dumps([{\n",
-                        "    'test_id': r.test_id,\n",
-                        "    'test_type': r.test_type.value,\n",
-                        "    'status': r.status.value,\n",
-                        "    'duration': r.duration,\n",
-                        "    'timestamp': r.timestamp\n",
-                        "} for r in test_results], indent=2)}\n",
+                        f"results_data = {json.dumps([{'test_id': r.test_id, 'test_type': r.test_type.value, 'status': r.status.value, 'duration': r.duration, 'timestamp': r.timestamp} for r in test_results], indent=2)}\n",
                         "\n",
                         "df = pd.DataFrame(results_data)\n",
                         "df.head()"

@@ -45,7 +45,9 @@ def mean_batch_invariant(
         if isinstance(dim, int):
             count = tensor.shape[dim]
         else:
-            from functools import reduce; from operator import mul; count = reduce(mul, map(lambda d: tensor.shape[d], dim), 1)
+            from functools import reduce
+            from operator import mul
+            count = reduce(mul, map(lambda d: tensor.shape[d], dim), 1)
     result = total / count
     if dtype is not None:
         result = result.to(dtype)

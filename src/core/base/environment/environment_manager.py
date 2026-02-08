@@ -86,7 +86,6 @@ class EnvironmentManager:
 
     async def _cleanup_expired_instances(self) -> None:
         """Cleanup expired environment instances."""
-        current_time = time.time()
         expired_instances = [
             instance_id for instance_id, instance in self.instances.items()
             if instance.is_expired() and instance.status != EnvironmentStatus.TERMINATED

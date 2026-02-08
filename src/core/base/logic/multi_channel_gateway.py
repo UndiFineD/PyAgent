@@ -28,20 +28,18 @@ Key Features:
 - Tool execution coordination across channels
 """
 
-import asyncio
 import json
 import logging
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Protocol, Set, Union
+from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
 import websockets
 from pydantic import BaseModel, Field
 
-from src.core.base.common.models.communication_models import CascadeContext
 
 logger = logging.getLogger(__name__)
 
@@ -270,8 +268,6 @@ class GatewayProtocol:
             })
             return
 
-        session = self.sessions[session_id]
-
         # Here we would route to the appropriate channel provider
         # For now, just echo back
         await self.send_to_client(client_id, {
@@ -285,7 +281,6 @@ class GatewayProtocol:
         """Handle tool call coordination."""
         session_id = data.get("session_id")
         tool_name = data.get("tool_name")
-        tool_args = data.get("args", {})
 
         if session_id not in self.sessions:
             await self.send_to_client(client_id, {

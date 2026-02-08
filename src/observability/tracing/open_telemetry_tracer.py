@@ -67,7 +67,7 @@ else:
     StatusCode = Any
 
 try:
-    from opentelemetry import trace  # pylint: disable=unused-import
+    from opentelemetry import trace  # noqa: F401
     from opentelemetry.context.context import Context
     from opentelemetry.sdk.environment_variables import \
         OTEL_EXPORTER_OTLP_TRACES_PROTOCOL

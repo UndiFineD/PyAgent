@@ -25,17 +25,9 @@ providing capabilities for threat intelligence analysis, red teaming exercises,
 and advanced persistent threat detection based on real-world APT techniques.
 """
 
-import asyncio
-import aiohttp
-import base64
-import json
-import random
-import string
-import time
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Dict, List, Optional, Any, Tuple
-from urllib.parse import urljoin, urlparse
+from typing import Dict, List, Any
 
 from src.core.base.common.base_core import BaseCore
 

@@ -20,9 +20,8 @@ Based on agentic design patterns with goal evaluation, iterative refinement, and
 self-correction reasoning techniques.
 """
 
-import asyncio
 import logging
-from typing import List, Dict, Any, Optional, Callable, Union
+from typing import List, Dict, Any, Optional, Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

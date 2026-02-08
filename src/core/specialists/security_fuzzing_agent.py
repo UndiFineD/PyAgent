@@ -22,11 +22,9 @@ Based on the brainstorm repository's AI fuzzing approach.
 from __future__ import annotations
 
 import asyncio
-import json
 import logging
 from typing import Any, Dict, List, Optional
 
-from src.core.base.agent_state_manager import StateTransaction
 from src.core.base.base_agent import BaseAgent
 from src.core.base.common.models.communication_models import CascadeContext
 from src.tools.security.fuzzing import (

@@ -31,11 +31,10 @@ class TestCredentialExtractionAgent:
         agent = CredentialExtractionAgent()
         assert agent is not None
 
-    @pytest.mark.asyncio
-    async def test_extract_adsync_credentials_no_adsync(self):
+    def test_extract_adsync_credentials_no_adsync(self):
         """Test credential extraction when ADSync is not installed."""
         agent = CredentialExtractionAgent()
-        result = await agent.extract_adsync_credentials()
+        result = agent.extract_adsync_credentials()
         
         # Should fail gracefully if ADSync not present
         assert isinstance(result, dict)

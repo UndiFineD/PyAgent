@@ -18,11 +18,10 @@ Based on AEnvironment's philosophy of abstracting tools, agents, and environment
 """
 
 import asyncio
-import json
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Callable, Union, Protocol
+from typing import Dict, List, Any, Optional, Callable, Protocol
 from enum import Enum
 import logging
 

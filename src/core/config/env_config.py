@@ -403,7 +403,7 @@ class EnvConfig:
             if attr_name:
                 return getattr(cls, attr_name)
             return "<not found>"
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             return "<error>"
 
     @classmethod

@@ -393,7 +393,7 @@ def profile_rust_call(func_name: str) -> Callable:
                 elapsed: int = time.perf_counter_ns() - start
                 profiler.record_call(func_name, elapsed, used_rust=True)
                 return result
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 elapsed: int = time.perf_counter_ns() - start
                 profiler.record_call(func_name, elapsed, used_rust=False)
                 raise
@@ -416,7 +416,7 @@ class RustUsageScanner:
 
         try:
             content: str = filepath.read_text(encoding="utf-8", errors="ignore")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             return findings
 
         # Check if file imports rust_core
@@ -535,7 +535,7 @@ class RustUsageScanner:
         }
 
 
-def create_profiled_rust_core() -> None | "ProfiledRustCore":
+def create_profiled_rust_core() -> Any:
     """
     Create a profiled wrapper around rust_core module.
     Returns a module-like object that tracks all calls.
@@ -563,7 +563,7 @@ def create_profiled_rust_core() -> None | "ProfiledRustCore":
                         elapsed: int = time.perf_counter_ns() - start
                         profiler.record_call(name, elapsed, used_rust=True)
                         return result
-                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                         elapsed: int = time.perf_counter_ns() - start
                         profiler.record_call(name, elapsed, used_rust=False)
                         raise

@@ -106,7 +106,8 @@ def file_hash(p: Path) -> str:
 
 def process(limit: int, start: int, dry_run: bool, verbose: bool, allow_modules:set=None, allow_attrs:set=None, allow_names:set=None, allow_limited_shell:bool=False, allow_eval:bool=False):
     if not EXTERNAL.exists():
-        print(f'.external not found at {EXTERNAL}'); return
+        print(f'.external not found at {EXTERNAL}')
+        return
     DEST_BASE.mkdir(parents=True, exist_ok=True)
     mapping = {}
     count = 0

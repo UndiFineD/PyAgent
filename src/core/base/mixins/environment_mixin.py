@@ -137,7 +137,6 @@ class EnvironmentMixin:
             # Set environment variables for this instance
             old_env = {}
             for key, value in instance.environment_variables.items():
-                env_key = f"{instance.id}_{key}"
                 old_env[key] = os.environ.get(key)
                 os.environ[key] = value
 

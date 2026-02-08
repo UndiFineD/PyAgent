@@ -22,23 +22,16 @@ conversational memory capabilities.
 
 from __future__ import annotations
 
-import hashlib
 import json
 import logging
-import math
-import os
 import random
-import re
 import sys
 import time
 import uuid
-from collections import Counter
 from dataclasses import dataclass, field, fields
-from datetime import datetime, timedelta, timezone
-from pathlib import Path
-from queue import Empty, Queue
-from threading import Event, Lock, Thread
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
+from datetime import datetime, timezone
+from threading import Thread
+from typing import Any, Dict, List, Optional, Union
 
 from falkordb import FalkorDB
 from qdrant_client import QdrantClient
@@ -73,7 +66,6 @@ if PointStruct is None:  # pragma: no cover - test shim
             self.payload = payload
 
 
-from werkzeug.exceptions import HTTPException
 
 # Make OpenAI import optional to allow running without it
 try:
@@ -86,8 +78,6 @@ try:
 except ImportError:  # pragma: no cover - optional dependency
     spacy = None
 
-from src.core.base.state import StateTransaction
-from src.core.base.common.models.communication_models import CascadeContext
 
 logging.basicConfig(
     level=logging.INFO,
@@ -435,7 +425,7 @@ class AutoMemCore:
                 return 0.6
             else:
                 return 0.4
-        except:
+        except Exception:
             return 0.5
 
     def _calculate_lexical_score(self, query: str, content: str) -> float:

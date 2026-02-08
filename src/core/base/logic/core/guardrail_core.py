@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import json
-import logging
 from typing import Tuple, Any, Optional, Type, Callable
 from pydantic import BaseModel, ValidationError
 

@@ -21,7 +21,6 @@ Implements XML/HTML parsing patterns from ADSyncDump-BOF.
 from __future__ import annotations
 
 import html
-import re
 from typing import Optional
 
 

@@ -16,14 +16,9 @@
 # Based on patterns from ACTalker repository
 
 import asyncio
-import io
-import base64
-import json
-from typing import Dict, List, Optional, Any, Tuple, Union
+from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
-from PIL import Image
-import numpy as np
 
 from src.core.base.logic.core.base_core import BaseCore
 

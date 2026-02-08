@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import asyncio
-from typing import List, Dict, Optional, Any, Callable
+from typing import Optional, Callable
 from pydantic import BaseModel
 
 class ScalingStrategy(BaseModel):

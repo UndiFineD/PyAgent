@@ -19,7 +19,6 @@ import asyncio
 import re
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass
-from urllib.parse import urlparse
 
 from src.core.base.logic.core.base_core import BaseCore
 

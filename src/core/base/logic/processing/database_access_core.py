@@ -21,7 +21,6 @@ Implements database connection and query patterns from ADSyncDump-BOF.
 from __future__ import annotations
 
 import ctypes
-from ctypes import wintypes
 from typing import Any, Dict, List, Optional
 
 # ODBC constants

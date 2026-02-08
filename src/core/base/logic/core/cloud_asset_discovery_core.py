@@ -25,13 +25,11 @@ import ssl
 import socket
 import ipaddress
 import re
-from typing import Dict, List, Optional, Any, Set, Tuple
+from typing import Dict, List, Optional
 from dataclasses import dataclass
 from datetime import datetime
-from concurrent.futures import ThreadPoolExecutor
 import aiohttp
 import sqlite3
-from urllib.parse import urlparse
 
 
 @dataclass

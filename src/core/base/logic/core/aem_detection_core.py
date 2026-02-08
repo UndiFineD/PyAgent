@@ -36,14 +36,11 @@ import aiohttp
 import ssl
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
-from concurrent.futures import ThreadPoolExecutor
+from typing import Any, Dict, List, Optional
 import time
-import os
 
 from src.core.base.common.base_core import BaseCore
 from src.core.base.common.models.communication_models import CascadeContext
-from src.core.base.state.agent_state_manager import StateTransaction
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -615,8 +612,8 @@ class AEMDetectionCore(BaseCore):
         required_fields = ['type']
         task_data = context.task
 
-        for field in required_fields:
-            if field not in task_data:
+        for req_field in required_fields:
+            if req_field not in task_data:
                 return False
 
         valid_types = ['single_scan', 'batch_scan']

@@ -24,7 +24,7 @@ import functools
 import logging
 import random
 import threading
-from typing import Any, Callable, Coroutine, TypeVar, cast
+from typing import Any, Callable, Coroutine, TypeVar
 
 try:
     import rust_core as rc

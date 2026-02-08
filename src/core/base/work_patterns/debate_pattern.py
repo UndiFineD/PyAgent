@@ -14,7 +14,6 @@
 
 """Debate work pattern implementation for multi-agent adversarial reasoning."""
 
-import asyncio
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 

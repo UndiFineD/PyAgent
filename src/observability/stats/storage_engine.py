@@ -13,7 +13,6 @@ import contextlib
 import json
 import logging
 import zlib
-import functools
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -222,7 +221,7 @@ class StatsCompressor:
             return json.loads(body.decode("utf-8"))
         try:
             return json.loads(payload.decode("utf-8"))
-        except json.JSONDecodeError as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except json.JSONDecodeError:  # pylint: disable=broad-exception-caught, unused-variable
             import traceback
             traceback.print_exc()
             return payload

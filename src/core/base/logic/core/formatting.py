@@ -32,7 +32,7 @@ class FormattingCore:
             try:
                 # pylint: disable=no-member
                 return rc.normalize_response(response)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
         normalized = response.strip().replace("\r\n", "\n")
@@ -45,7 +45,7 @@ class FormattingCore:
                 # pylint: disable=no-member
                 diff_text, _, _ = rc.generate_unified_diff_rust(old_content, new_content, filename, 3)
                 return diff_text
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
 

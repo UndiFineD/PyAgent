@@ -21,9 +21,8 @@ import json
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, asdict
 from pathlib import Path
-import yaml
 
-from src.core.base.logic.dynamic_agent_evolution_orchestrator import AgentSkillSheet, AgentTier
+from src.core.base.logic.dynamic_agent_evolution_orchestrator import AgentTier
 
 
 @dataclass
@@ -485,7 +484,7 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
         relationships = self._analyze_relationships(agents)
         if relationships["cascading_failure_risks"]:
             recommendations.append(
-                f"Reduce cascading failure risks by diversifying dependencies for high-dependency agents"
+                "Reduce cascading failure risks by diversifying dependencies for high-dependency agents"
             )
 
         # Layer-specific recommendations
@@ -603,4 +602,4 @@ if __name__ == "__main__":
 
     print("MAESTRO security analysis completed!")
     print(f"Overall risk level: {report['overall_risk_assessment']['overall_risk_level']}")
-    print(f"Generated reports: maestro_analysis.json, maestro_report.md")
+    print("Generated reports: maestro_analysis.json, maestro_report.md")

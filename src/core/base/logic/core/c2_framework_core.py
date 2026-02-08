@@ -18,15 +18,13 @@
 import asyncio
 import json
 import logging
-from typing import Dict, List, Optional, Any, Tuple, Set, Union
+from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 import uuid
-import base64
 import hashlib
 import secrets
-from pathlib import Path
 
 
 class CommunicationProtocol(Enum):
@@ -533,7 +531,7 @@ class C2FrameworkCore:
             "total_agents": len(self.framework.agents),
             "active_agents": len([a for a in self.framework.agents.values() if a.status == AgentStatus.ACTIVE]),
             "total_listeners": len(self.framework.listeners),
-            "active_listeners": len([l for l in self.framework.listeners.values() if l.status == "running"]),
+            "active_listeners": len([lstn for lstn in self.framework.listeners.values() if lstn.status == "running"]),
             "total_tasks": len(self.framework.tasks),
             "pending_tasks": len([t for t in self.framework.tasks.values() if t.status == TaskStatus.PENDING]),
             "running_tasks": len([t for t in self.framework.tasks.values() if t.status == TaskStatus.RUNNING]),
@@ -591,7 +589,7 @@ class C2FrameworkCore:
             return json.dumps(report, indent=2, default=str)
 
         elif format == "markdown":
-            report = f"# C2 Framework Operation Report\n\n"
+            report = "# C2 Framework Operation Report\n\n"
             report += f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
             report += f"**Profile:** {self.framework.profile.name}\n\n"
 
@@ -786,7 +784,7 @@ class C2FrameworkCore:
             salt, hash_value = hash_string.split(":")
             hash_obj = hashlib.sha256((password + salt).encode())
             return hash_obj.hexdigest() == hash_value
-        except:
+        except Exception:
             return False
 
     async def cleanup(self) -> None:

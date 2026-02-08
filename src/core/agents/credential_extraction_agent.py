@@ -21,7 +21,7 @@ Implements patterns from ADSyncDump-BOF for Azure AD Connect credential extracti
 from __future__ import annotations
 
 import platform
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict
 from uuid import UUID
 
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -91,7 +91,7 @@ class CredentialExtractionAgent(BaseAgent, PrivilegeEscalationMixin, DatabaseAcc
 
                 # Extract metadata
                 instance_id = UUID(bytes=metadata[0]["instance_id"])
-                keyset_id = metadata[0]["keyset_id"]
+                _keyset_id = metadata[0]["keyset_id"]
                 entropy_id = UUID(bytes=metadata[0]["entropy"])
 
                 # Query key material
@@ -101,7 +101,7 @@ class CredentialExtractionAgent(BaseAgent, PrivilegeEscalationMixin, DatabaseAcc
                     result["error"] = "No key material found"
                     return result
 
-                private_config = material[0]["private_configuration_xml"]
+                _private_config = material[0]["private_configuration_xml"]
                 encrypted_config = material[0]["encrypted_configuration"]
 
                 # Read keyset from Windows Credentials

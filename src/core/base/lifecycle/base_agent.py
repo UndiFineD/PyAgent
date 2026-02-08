@@ -43,10 +43,7 @@ from src.core.base.lifecycle.base_agent_core import BaseAgentCore
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.mixins.governance_mixin import GovernanceMixin
 # Import Mixins for Synaptic Modularization (Phase 317)
-from src.core.base.mixins.config_mixin import ConfigMixin
 from src.core.base.mixins.environment_mixin import EnvironmentMixin
-from src.core.base.mixins.expertise_mixin import ExpertiseMixin
-from src.core.base.mixins.governance_mixin import GovernanceMixin
 from src.core.base.mixins.identity_mixin import IdentityMixin
 from src.core.base.mixins.knowledge_mixin import KnowledgeMixin
 from src.core.base.mixins.multimodal_mixin import MultimodalMixin
@@ -199,7 +196,7 @@ class BaseAgent(
         # Using PromptLoaderMixin to load the persona from the library
         agent_type = getattr(self, "agent_type", "base")
         self._system_prompt = await self.load_prompt(agent_type, "system")
-        
+
         # Link to reasoning and memory
         if hasattr(self, "memory_core"):
             await self.memory_core.record_event("persona_loaded", {"agent_type": agent_type})
@@ -226,8 +223,11 @@ class BaseAgent(
 
         except (OSError, ValueError, UnicodeError) as e:
             if hasattr(self, 'logger') and self.logger:
-                self.logger.warning(f"[Robustness] Failed to load system prompt for {self.agent_name}: {e}", exc_info=True)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+                self.logger.warning(
+                    f"[Robustness] Failed to load system prompt for {self.agent_name}: {e}",
+                    exc_info=True
+                )
+        except Exception:  # pylint: disable=broad-exception-caught
             # Unexpected error: log and re-raise to avoid masking bugs
             if hasattr(self, 'logger') and self.logger:
                 self.logger.exception(f"[Robustness] Unexpected error loading system prompt for {self.agent_name}")
@@ -419,10 +419,13 @@ class BaseAgent(
                         details={"prompt_preview": prompt[:100]}
                     )
                 except (RuntimeError, ValueError, TypeError, OSError) as telemetry_err:
-                    logging.error(f"[Robustness] Failed to log failure to CascadeContext: {telemetry_err}", exc_info=True)
+                    logging.error(
+                        f"[Robustness] Failed to log failure to CascadeContext: {telemetry_err}",
+                        exc_info=True
+                    )
 
             return f"Error encountered during agent reasoning: {str(e)} (Type: {f_type})"
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             logging.exception("[Robustness] Unexpected error in think execution, re-raising")
             raise
 

@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import aiofiles
 from pathlib import Path
 
@@ -20,6 +19,7 @@ class PromptLoaderMixin:
     async def load_prompt(self, agent_type: str, name: str = "system") -> str:
         # Resolves to WorkspaceRoot/data/prompts/agent_type/name.md
         path = Path("data/prompts") / agent_type / f"{name}.md"
-        if not path.exists(): return ""
+        if not path.exists():
+            return ""
         async with aiofiles.open(str(path), mode='r', encoding='utf-8') as f:
             return await f.read()

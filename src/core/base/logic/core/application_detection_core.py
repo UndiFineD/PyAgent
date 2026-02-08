@@ -21,8 +21,7 @@ import ssl
 import re
 import binascii
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Set, Tuple, Any, Union
-from urllib.parse import urlparse
+from typing import Dict, List, Optional, Tuple, Any
 import warnings
 
 from src.core.base.common.base_core import BaseCore

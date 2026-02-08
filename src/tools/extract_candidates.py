@@ -24,7 +24,6 @@ import ast
 from pathlib import Path
 import re
 import textwrap
-import importlib.util
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORT_PATH = ROOT / '.external' / 'refactor_report.json'

@@ -19,15 +19,12 @@ Inspired by Nuclei templates from .external/0day-templates repository.
 Implements YAML-based vulnerability detection templates with DSL matchers.
 """
 
-import asyncio
 import logging
 import yaml
 import re
-from typing import Dict, List, Optional, Any, Union
+from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
-from pathlib import Path
 import requests
-from urllib.parse import urlparse
 
 
 @dataclass

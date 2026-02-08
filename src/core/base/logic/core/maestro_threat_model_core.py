@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 class MaestroLayer(str, Enum):
     FOUNDATION_MODELS = "L1_Foundation_Models"

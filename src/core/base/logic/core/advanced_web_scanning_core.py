@@ -21,11 +21,10 @@ including host header attacks, code injection detection, and advanced vulnerabil
 Based on patterns from active-scan-plus-plus Burp Suite extension.
 """
 
-import asyncio
 import logging
 import re
 import requests
-from typing import Dict, List, Optional, Set, Any
+from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 from urllib.parse import urlparse, urljoin
 import hashlib

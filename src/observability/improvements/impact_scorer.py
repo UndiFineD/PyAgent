@@ -54,7 +54,7 @@ class ImpactScorer:
         # Nudge by priority when present.
         try:
             urgency += float(getattr(improvement.priority, "value", 0)) * 2
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             pass
 
         base = self.calculate_weighted_score(

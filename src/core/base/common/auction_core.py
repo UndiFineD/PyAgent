@@ -45,7 +45,7 @@ class AuctionCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.calculate_vcg_auction(bids, slots)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
 
@@ -74,7 +74,7 @@ class AuctionCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
         return agent_vram_request <= (total_available * quota_percent)

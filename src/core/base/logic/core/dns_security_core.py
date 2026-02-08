@@ -15,18 +15,14 @@
 # DNS Security Core - Network-level filtering and analysis
 # Based on patterns from AdGuard Home repository
 
-import asyncio
 import json
 import logging
-from typing import Dict, List, Optional, Any, Tuple, Set, Union
+from typing import Dict, List, Optional, Any, Tuple, Set
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from enum import Enum
-import ipaddress
 import re
-import hashlib
-from pathlib import Path
-from collections import defaultdict, deque
+from collections import deque
 import time
 
 
@@ -159,8 +155,6 @@ class DnsSecurityCore:
         # Update blocked domains set
         for rule in self.filter_rules:
             if rule.action == FilterAction.BLOCK and rule.enabled:
-                # Convert wildcard patterns to regex for matching
-                pattern = rule.pattern.replace(".", "\\.").replace("*", ".*")
                 # For now, just add exact matches
                 if "*" not in rule.pattern:
                     self.blocked_domains.add(rule.pattern)

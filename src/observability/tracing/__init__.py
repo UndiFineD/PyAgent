@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
+# ruff: noqa: F401
 
 """Lazy-loading entry point for observability.tracing."""
 
@@ -8,7 +9,7 @@ from typing import Any, TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # ruff: noqa: F401
     from .open_telemetry_tracer import (
         NullSpan, NullTracer, SpanAttributes, SpanTiming, TRACE_HEADERS,
         add_span_attributes, add_span_event, contains_trace_headers,

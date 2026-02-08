@@ -78,14 +78,20 @@ class GroqConnector(CloudProviderBase):
         """
         super().__init__(api_key=api_key, **config)
         self._api_key = api_key or os.getenv("GROQ_API_KEY")
-        self._base_url: str = base_url or self.BASE_URL
-        self._timeout: float = timeout
-
-        # TODO: Initialize Groq client (OpenAI-compatible)
-        # from groq import AsyncGroq
-        # self._client = AsyncGroq(api_key=self._api_key)
-        # OR use httpx/aiohttp for direct API calls
+        self._base_url = base_url or self.BASE_URL
+        self._timeout = timeout
         self._client = None
+
+    def _get_client(self):
+        """Lazy initialization of the OpenAI async client."""
+        if self._client is None:
+            from openai import AsyncOpenAI
+            self._client = AsyncOpenAI(
+                api_key=self._api_key,
+                base_url=self._base_url,
+                timeout=self._timeout
+            )
+        return self._client
 
     @property
     def name(self) -> str:
@@ -115,83 +121,91 @@ class GroqConnector(CloudProviderBase):
     async def complete(self, request: InferenceRequest) -> InferenceResponse:
         """
         Perform a completion request to Groq API.
-
-        Groq uses an OpenAI-compatible API format.
-
-        Args:
-            request: The inference request.
-
-        Returns:
-            InferenceResponse with the generated content.
         """
+        if not self._api_key:
+            raise ValueError("Groq API key is required. Set GROQ_API_KEY env var.")
+
         start_time: float = time.perf_counter()
+        client = self._get_client()
 
-        # TODO: Implement actual Groq API call
-        # Groq uses OpenAI-compatible format
-        # response = await self._client.chat.completions.create(
-        #     model=request.model,
-        #     messages=request.messages,
-        #     max_tokens=request.max_tokens,
-        #     temperature=request.temperature,
-        #     stream=False,
-        # )
-        # content = response.choices[0].message.content
-        # usage = response.usage
+        try:
+            response = await client.chat.completions.create(
+                model=request.model,
+                messages=request.messages,
+                max_tokens=request.max_tokens,
+                temperature=request.temperature,
+                top_p=request.top_p if request.top_p is not None else 1.0,
+                stop=request.stop_sequences,
+                stream=False,
+            )
 
-        latency_ms: float = (time.perf_counter() - start_time) * 1000
+            content = response.choices[0].message.content or ""
+            prompt_tokens = response.usage.prompt_tokens
+            completion_tokens = response.usage.completion_tokens
+            total_tokens = response.usage.total_tokens
 
-        return InferenceResponse(
-            content="[Groq response placeholder - implement API call]",
-            tokens_used=0,
-            cost_estimate=0.0,
-            latency_ms=latency_ms,
-            provider=self.name,
-            model=request.model,
-        )
+            latency_ms: float = (time.perf_counter() - start_time) * 1000
+            cost = self.estimate_cost(request)
+
+            return InferenceResponse(
+                content=content,
+                tokens_used=total_tokens,
+                prompt_tokens=prompt_tokens,
+                completion_tokens=completion_tokens,
+                cost_estimate=cost,
+                latency_ms=latency_ms,
+                provider=self.name,
+                model=response.model,
+                finish_reason=response.choices[0].finish_reason,
+                raw_response=response.model_dump() if hasattr(response, "model_dump") else None,
+            )
+        except Exception as e:
+            logger.error(f"Groq completion failed: {e}")
+            raise
 
     async def stream(self, request: InferenceRequest) -> AsyncIterator[str]:
         """
         Stream a completion from Groq API.
-
-        Args:
-            request: The inference request.
-
-        Yields:
-            String chunks of the response.
         """
-        # TODO: Implement streaming
-        # response = await self._client.chat.completions.create(
-        #     model=request.model,
-        #     messages=request.messages,
-        #     max_tokens=request.max_tokens,
-        #     temperature=request.temperature,
-        #     stream=True,
-        # )
-        # async for chunk in response:
-        #     if chunk.choices[0].delta.content:
-        #         yield chunk.choices[0].delta.content
+        if not self._api_key:
+            raise ValueError("Groq API key is required.")
 
-        yield "[Groq streaming placeholder - implement API call]"
+        client = self._get_client()
+
+        try:
+            response = await client.chat.completions.create(
+                model=request.model,
+                messages=request.messages,
+                max_tokens=request.max_tokens,
+                temperature=request.temperature,
+                top_p=request.top_p if request.top_p is not None else 1.0,
+                stop=request.stop_sequences,
+                stream=True,
+            )
+
+            async for chunk in response:
+                if chunk.choices and chunk.choices[0].delta.content:
+                    yield chunk.choices[0].delta.content
+        except Exception as e:
+            logger.error(f"Groq streaming failed: {e}")
+            raise
 
     async def health_check(self) -> bool:
         """
         Check if Groq API is accessible.
-
-        Returns:
-            True if the API is healthy.
         """
-        # TODO: Implement health check
-        # try:
-        #     # List models as a health check
-        #     await self._client.models.list()
-        #     self._is_healthy = True
-        #     return True
-        # except Exception as e:
-        #     self._is_healthy = False
-        #     self._last_error = str(e)
-        #     return False
+        if not self._api_key:
+            return False
 
-        return True  # Placeholder
+        client = self._get_client()
+        try:
+            await client.models.list()
+            self._is_healthy = True
+            return True
+        except Exception as e:
+            self._is_healthy = False
+            self._last_error = str(e)
+            return False
 
     def estimate_cost(self, request: InferenceRequest) -> float:
         """

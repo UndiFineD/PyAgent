@@ -25,7 +25,7 @@ import time
 import uuid
 from collections import deque
 from typing import Any, Dict, Callable, Optional
-from datetime import datetime, timedelta
+from datetime import datetime
 
 
 class JobQueue:

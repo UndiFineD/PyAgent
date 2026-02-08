@@ -17,7 +17,7 @@
 
 import asyncio
 import json
-from typing import Dict, List, Optional, Any, Tuple, Set
+from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
@@ -378,7 +378,6 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         for obj in self.ad_objects.values():
             if obj.object_class in [ADObjectType.USER, ADObjectType.COMPUTER]:
                 days_since_logon = (datetime.now() - (obj.last_logon or datetime.min)).days
-                days_since_password_change = (datetime.now() - (obj.password_last_set or datetime.min)).days
 
                 if days_since_logon > threshold_days:
                     findings.append(ThreatFinding(

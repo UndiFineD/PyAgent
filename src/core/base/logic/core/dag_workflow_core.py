@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Dict, Set, Optional, Any
+from typing import List, Dict, Optional, Any
 from dataclasses import dataclass, field
 import collections
 

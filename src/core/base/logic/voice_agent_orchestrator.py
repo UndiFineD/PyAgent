@@ -30,8 +30,6 @@ Key Patterns Extracted from big-3-super-agent:
 - Real-time audio processing and conversation handling
 """
 
-import asyncio
-import json
 import threading
 import time
 import uuid
@@ -439,7 +437,7 @@ class VoiceAgentOrchestrator:
             try:
                 # Process audio queue (simplified)
                 if self.audio_queue:
-                    audio_data = self.audio_queue.pop(0)
+                    _ = self.audio_queue.pop(0)
                     # Process audio data
                     pass
                 time.sleep(0.1)

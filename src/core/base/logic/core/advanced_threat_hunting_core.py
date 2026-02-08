@@ -19,15 +19,13 @@ Inspired by APT-Hunter tool for Windows event log analysis.
 Implements threat hunting patterns using detection rules and statistical analysis.
 """
 
-import asyncio
 import logging
 import re
 import json
-from typing import Dict, List, Optional, Any, Set
+from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
-from pathlib import Path
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime
 
 
 @dataclass

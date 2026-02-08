@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Module: persistence_mixin
-Provides persistence and transactional safety mixin for PyAgent agents.
-"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -85,7 +81,7 @@ class PersistenceMixin:
 
         try:
             self.previous_content = getattr(self, "file_path").read_text(encoding="utf-8")
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             self.previous_content = ""
         return self.previous_content
 

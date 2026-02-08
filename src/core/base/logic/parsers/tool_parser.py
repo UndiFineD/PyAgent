@@ -277,7 +277,7 @@ class JSONToolParser(ToolParser):
                         arguments_delta=json.dumps(current_call.get("arguments", {})),
                         is_complete=self.tool_call_end in current_text,
                     )
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             pass
 
         return None

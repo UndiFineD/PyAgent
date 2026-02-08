@@ -111,7 +111,7 @@ class AgentCommandHandler:
             is_agent_script = (
                 len(local_cmd) > 1 and local_cmd[0] == sys.executable and Path(local_cmd[1]).name.startswith("agent_")
             )
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
             pass
 
@@ -125,7 +125,7 @@ class AgentCommandHandler:
                 agent_name = script_name[len("agent_") : -3] if script_name.endswith(".py") else None
                 if agent_name:
                     env.update(self._get_agent_env_vars(agent_name))
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
 

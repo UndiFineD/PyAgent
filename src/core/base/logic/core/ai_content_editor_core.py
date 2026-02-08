@@ -16,14 +16,9 @@
 # Based on patterns from ACE_plus repository
 
 import asyncio
-import json
-import base64
-import io
-from typing import Dict, List, Optional, Any, Tuple, Union
+from typing import Dict, List, Optional, Any, Union
 from dataclasses import dataclass, field
 from datetime import datetime
-from PIL import Image
-import numpy as np
 
 from src.core.base.logic.core.base_core import BaseCore
 

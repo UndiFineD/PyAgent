@@ -15,15 +15,12 @@
 # Active Directory Attack & Defense Core - AD Kill Chain Analysis
 # Based on patterns from AD-Attack-Defense repository
 
-import asyncio
 import json
 import logging
-from typing import Dict, List, Optional, Any, Tuple, Set, Union
+from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-import re
-from pathlib import Path
 
 
 class KillChainPhase(Enum):
@@ -380,7 +377,6 @@ class ActiveDirectoryAttackDefenseCore:
         Returns:
             Security posture assessment
         """
-        start_time = datetime.now()
 
         # Analyze attack vectors
         attack_vectors = await self.analyze_attack_vectors(ad_configuration or {})
@@ -719,7 +715,7 @@ class ActiveDirectoryAttackDefenseCore:
             return json.dumps(report_data, indent=2, default=str)
 
         elif format == "markdown":
-            report = f"# Active Directory Security Posture Report\n\n"
+            report = "# Active Directory Security Posture Report\n\n"
             report += f"**Domain:** {posture.domain}\n\n"
             report += f"**Assessment Date:** {posture.assessment_date.strftime('%Y-%m-%d %H:%M:%S')}\n\n"
             report += f"**Overall Security Score:** {posture.overall_score:.1f}/100\n\n"
@@ -732,7 +728,7 @@ class ActiveDirectoryAttackDefenseCore:
                     report += f"**Phase:** {av.phase.value}\n\n"
                     report += f"**Impact:** {av.impact}\n\n"
                     report += f"**Detection Difficulty:** {av.detection_difficulty}\n\n"
-                    report += f"**Mitigations:**\n\n"
+                    report += "**Mitigations:**\n\n"
                     for mitigation in av.mitigations:
                         report += f"- {mitigation}\n"
                     report += "\n"

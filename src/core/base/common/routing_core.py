@@ -60,7 +60,7 @@ class RoutingCore(BaseCore):
                 return rc.select_provider_rust(  # pylint: disable=no-member
                     task_type, priority, performance_report or {}
                 )  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
 

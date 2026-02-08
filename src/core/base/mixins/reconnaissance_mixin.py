@@ -12,11 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
 import concurrent.futures
-from typing import List, Dict, Optional, Set
+from typing import List, Dict, Optional
 import requests
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin
 import re
 
 class ReconnaissanceMixin:
