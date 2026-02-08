@@ -39,7 +39,6 @@ class EnhancedJSONEncoder(json.JSONEncoder):
     """A JSON encoder for enabling the export of dataclasses."""
 
     def default(self, o):
-
         if dataclasses.is_dataclass(o):
             return dataclasses.asdict(o)  # type: ignore
 
@@ -185,7 +184,6 @@ class StructureVisualization:
     chains: list[ChainVisualization] | None = None
 
     def __post_init__(self):
-
         if self.chains:
             if isinstance(self.chains, ChainVisualization):
                 self.chains = [self.chains]
@@ -225,5 +223,4 @@ class StructureVisualization:
             self.contigs = parsed_contigs
 
     def to_dict(self):
-
         return dataclasses.asdict(self)

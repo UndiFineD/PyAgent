@@ -28,7 +28,6 @@ from ovo.core.logic.descriptor_logic import (
 
 
 def prepare_bindcraft_params(workflow: BindCraftBinderDesignWorkflow, workdir: str) -> dict:
-
     input_dict = {
         "design_path": "output",
         "starting_pdb": "target.pdb",
@@ -74,7 +73,6 @@ def prepare_bindcraft_params(workflow: BindCraftBinderDesignWorkflow, workdir: s
 
 
 def process_workflow_results(job: DesignJob, callback: Callable = None) -> list[Base]:
-
     pool = db.get(Pool, design_job_id=job.id)
 
     project_round = db.get(Round, id=pool.round_id)

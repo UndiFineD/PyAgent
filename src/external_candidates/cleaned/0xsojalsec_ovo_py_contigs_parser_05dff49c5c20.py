@@ -183,7 +183,6 @@ class ContigsParser:
         )
 
     def parse_contigs_str(self, contigs_string: str = "", include_generated=False) -> list[ContigSegment]:
-
         return self._parse_contigs_with_tuples(contigs=contigs_string, include_generated=include_generated)
 
     def parse_contigs_trb(self, contigs_trb: str | dict = "") -> list[ContigSegment]:

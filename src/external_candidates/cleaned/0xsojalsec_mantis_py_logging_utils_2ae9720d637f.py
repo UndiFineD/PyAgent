@@ -38,7 +38,6 @@ class CustomFormatter(logging.Formatter):
     }
 
     def format(self, record):
-
         log_fmt = self.FORMATS.get(record.levelno)
 
         formatter = logging.Formatter(log_fmt)
@@ -49,7 +48,6 @@ class CustomFormatter(logging.Formatter):
 class LoggingConfig(object):
     @staticmethod
     def configure_logging(args: ArgsModel):
-
         if args.verbose:
             log_config = ConfigProvider.get_config().logging_debug
 

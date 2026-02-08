@@ -7,8 +7,8 @@ from typing import List, Optional, Union
 
 from agno.aws.app.base import AwsApp, ContainerContext  # noqa: F401
 
-class Django(AwsApp):
 
+class Django(AwsApp):
     # -*- App Name
 
     name: str = "django"
@@ -44,4 +44,3 @@ class Django(AwsApp):
     ecs_service_count: int = 1
 
     assign_public_ip: Optional[bool] = True
-

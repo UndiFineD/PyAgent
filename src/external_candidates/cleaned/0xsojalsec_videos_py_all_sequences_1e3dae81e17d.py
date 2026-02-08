@@ -18,7 +18,6 @@ class ShuffleThroughAllSequences(Scene):
     }
 
     def construct(self):
-
         nb_frames = self.run_time * self.fps
 
         nb_relevant_coins = int(np.log2(nb_frames)) + 1

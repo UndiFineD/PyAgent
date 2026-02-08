@@ -24,7 +24,6 @@ import torch.nn as nn
 
 class CausalAttention(nn.Module):
     def __init__(self, d_in, d_out, context_length, dropout, qkv_bias=False):
-
         super().__init__()
 
         self.d_out = d_out
@@ -40,7 +39,6 @@ class CausalAttention(nn.Module):
         self.register_buffer("mask", torch.triu(torch.ones(context_length, context_length), diagonal=1))  # New
 
     def forward(self, x):
-
         b, num_tokens, d_in = x.shape  # New batch dimension b
 
         keys = self.W_key(x)
@@ -66,7 +64,6 @@ class CausalAttention(nn.Module):
 
 class MultiHeadAttentionWrapper(nn.Module):
     def __init__(self, d_in, d_out, context_length, dropout, num_heads, qkv_bias=False):
-
         super().__init__()
 
         self.heads = nn.ModuleList(
@@ -76,7 +73,6 @@ class MultiHeadAttentionWrapper(nn.Module):
         self.out_proj = nn.Linear(d_out * num_heads, d_out * num_heads)
 
     def forward(self, x):
-
         context_vec = torch.cat([head(x) for head in self.heads], dim=-1)
 
         return self.out_proj(context_vec)
@@ -84,7 +80,6 @@ class MultiHeadAttentionWrapper(nn.Module):
 
 class MultiHeadAttention(nn.Module):
     def __init__(self, d_in, d_out, context_length, dropout, num_heads, qkv_bias=False):
-
         super().__init__()
 
         assert d_out % num_heads == 0, "d_out must be divisible by num_heads"
@@ -108,7 +103,6 @@ class MultiHeadAttention(nn.Module):
         self.register_buffer("mask", torch.triu(torch.ones(context_length, context_length), diagonal=1))
 
     def forward(self, x):
-
         b, num_tokens, d_in = x.shape
 
         keys = self.W_key(x)  # Shape: (b, num_tokens, d_out)

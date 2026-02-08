@@ -11,7 +11,6 @@ from django.core.management.base import BaseCommand
 
 
 def createSuperUser(username, password, email="", firstName="", lastName=""):
-
     invalidInputs = ["", None]
 
     if username.strip() in invalidInputs or password.strip() in invalidInputs:
@@ -36,7 +35,6 @@ def createSuperUser(username, password, email="", firstName="", lastName=""):
 
 
 def createSimpleUser(username, password, email="", firstName="", lastName=""):
-
     invalidInputs = ["", None]
 
     if username.strip() in invalidInputs or password.strip() in invalidInputs:
@@ -62,7 +60,6 @@ def createSimpleUser(username, password, email="", firstName="", lastName=""):
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-
         Account = get_user_model()
 
         if Account.objects.count() == 0:

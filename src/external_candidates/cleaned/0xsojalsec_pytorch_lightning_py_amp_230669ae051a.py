@@ -73,7 +73,6 @@ class MixedPrecision(Precision):
         device: str,
         scaler: Optional["torch.amp.GradScaler"] = None,
     ) -> None:
-
         if precision not in ("16-mixed", "bf16-mixed"):
             raise ValueError(
                 f"Passed `{type(self).__name__}(precision={precision!r})`."
@@ -96,12 +95,10 @@ class MixedPrecision(Precision):
 
     @override
     def forward_context(self) -> AbstractContextManager:
-
         return torch.autocast(self.device, dtype=self._desired_input_dtype)
 
     @override
     def convert_input(self, data: Any) -> Any:
-
         return apply_to_collection(
             data,
             function=_convert_fp_tensor,
@@ -111,7 +108,6 @@ class MixedPrecision(Precision):
 
     @override
     def convert_output(self, data: Any) -> Any:
-
         return apply_to_collection(
             data,
             function=_convert_fp_tensor,
@@ -121,7 +117,6 @@ class MixedPrecision(Precision):
 
     @override
     def backward(self, tensor: Tensor, model: Optional[Module], *args: Any, **kwargs: Any) -> None:
-
         if self.scaler is not None:
             tensor = self.scaler.scale(tensor)
 
@@ -133,7 +128,6 @@ class MixedPrecision(Precision):
         optimizer: Optimizable,
         **kwargs: Any,
     ) -> Any:
-
         if self.scaler is None:
             # skip scaler logic, as bfloat16 does not require scaler
 
@@ -152,7 +146,6 @@ class MixedPrecision(Precision):
 
     @override
     def state_dict(self) -> dict[str, Any]:
-
         if self.scaler is not None:
             return self.scaler.state_dict()
 
@@ -160,13 +153,11 @@ class MixedPrecision(Precision):
 
     @override
     def load_state_dict(self, state_dict: dict[str, Any]) -> None:
-
         if self.scaler is not None:
             self.scaler.load_state_dict(state_dict)
 
     @override
     def unscale_gradients(self, optimizer: Optimizer) -> None:
-
         scaler = self.scaler
 
         if scaler is not None:

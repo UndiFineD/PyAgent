@@ -44,13 +44,11 @@ from app.rag import get_embedding_function, retrieve_context
 
 @pytest.fixture
 def mock_config():
-
     return {"embedding_model": "sentence-transformers/all-MiniLM-L6-v2", "top_k": 3}
 
 
 @patch("app.rag.FastEmbedEmbeddings")
 def test_get_embedding_function(mock_fastembed, mock_config):
-
     with patch("app.rag.config", mock_config):
         embedding_func = get_embedding_function()
 
@@ -66,7 +64,6 @@ def test_get_embedding_function(mock_fastembed, mock_config):
 @patch("app.rag.get_vectorstore")
 @patch("app.rag.get_embedding_function")
 def test_retrieve_context(mock_get_embedding, mock_get_vectorstore, mock_config):
-
     with patch("app.rag.config", mock_config):
         # Mock vectorstore and its methods
 

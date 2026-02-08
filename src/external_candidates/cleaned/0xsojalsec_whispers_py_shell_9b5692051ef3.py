@@ -14,7 +14,6 @@ from whispers.utils import escaped_chars, strip_string
 
 class Shell:
     def pairs(self, filepath: Path):
-
         for cmdline in self.read_commands(filepath):
             try:
                 cmd = shlex.split(cmdline)
@@ -37,7 +36,6 @@ class Shell:
                     yield key, value
 
     def read_commands(self, filepath: Path) -> str:
-
         ret = []
 
         for line in filepath.open("r").readlines():
@@ -60,7 +58,6 @@ class Shell:
             ret = []
 
     def curl(self, cmd):
-
         indicators_combined = ["-u", "--user", "-U", "--proxy-user", "-E", "--cert"]
 
         indicators_single = ["--tlspassword", "--proxy-tlspassword"]

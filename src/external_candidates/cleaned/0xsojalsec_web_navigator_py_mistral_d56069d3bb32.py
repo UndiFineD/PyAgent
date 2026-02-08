@@ -16,7 +16,6 @@ from src.embedding import BaseEmbedding
 
 class MistralEmbedding(BaseEmbedding):
     def embed(self, text):
-
         url = self.base_url or "https://api.mistral.ai/v1/embeddings"
 
         self.headers["Authorization"] = f"Bearer {self.api_key}"

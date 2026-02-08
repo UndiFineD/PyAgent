@@ -25,7 +25,6 @@ class Tab:
     page: Page
 
     def to_string(self) -> str:
-
         return f"{self.id} - Title: {self.title} - URL: {self.url}"
 
 
@@ -40,7 +39,6 @@ class BrowserState:
     dom_state: DOMState = field(default_factory=DOMState([]))
 
     def tabs_to_string(self) -> str:
-
         return "\n".join([tab.to_string() for tab in self.tabs])
 
 

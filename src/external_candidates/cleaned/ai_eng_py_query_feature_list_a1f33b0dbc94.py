@@ -11,8 +11,8 @@ from feathr.definition.typed_key import TypedKey
 
 from jinja2 import Template
 
-class FeatureQuery(HoconConvertible):
 
+class FeatureQuery(HoconConvertible):
     """A FeatureQuery contains a list of features
 
     Attributes:
@@ -26,31 +26,22 @@ class FeatureQuery(HoconConvertible):
     """
 
     def __init__(
-
         self,
-
         feature_list: List[str],
-
         key: Optional[Union[TypedKey, List[TypedKey]]] = None,
-
         override_time_delay: Optional[str] = None,
-
     ) -> None:
-
         self.key = key
 
         if isinstance(key, TypedKey):
-
             self.key = [key]
 
         self.feature_list = feature_list
 
         if override_time_delay:
-
             self.overrideTimeDelay = override_time_delay
 
     def to_feature_config(self) -> str:
-
         tm = Template("""
 
             {
@@ -69,17 +60,8 @@ class FeatureQuery(HoconConvertible):
 
         """)
 
-        key_columns = (
-
-            ", ".join(k.key_column for k in self.key) if self.key else "NOT_NEEDED"
-
-        )
+        key_columns = ", ".join(k.key_column for k in self.key) if self.key else "NOT_NEEDED"
 
         feature_list = ", ".join(f for f in self.feature_list)
 
-        return tm.render(
-
-            key_columns=key_columns, feature_names=feature_list, query=self
-
-        )
-
+        return tm.render(key_columns=key_columns, feature_names=feature_list, query=self)

@@ -17,28 +17,24 @@ from agno.storage.session.agent import AgentSession
 
 from agno.storage.session.workflow import WorkflowSession
 
+
 @pytest.fixture
-
 def temp_dir() -> Generator[Path, None, None]:
-
     with tempfile.TemporaryDirectory() as temp_dir:
-
         yield Path(temp_dir)
 
+
 @pytest.fixture
-
 def agent_storage(temp_dir: Path) -> JsonStorage:
-
     return JsonStorage(dir_path=temp_dir)
 
+
 @pytest.fixture
-
 def workflow_storage(temp_dir: Path) -> JsonStorage:
-
     return JsonStorage(dir_path=temp_dir, mode="workflow")
 
-def test_agent_storage_crud(agent_storage: JsonStorage, temp_dir: Path):
 
+def test_agent_storage_crud(agent_storage: JsonStorage, temp_dir: Path):
     # Test create
 
     agent_storage.create()
@@ -48,21 +44,13 @@ def test_agent_storage_crud(agent_storage: JsonStorage, temp_dir: Path):
     # Test upsert
 
     session = AgentSession(
-
         session_id="test-session",
-
         agent_id="test-agent",
-
         user_id="test-user",
-
         memory={"key": "value"},
-
         agent_data={"name": "Test Agent"},
-
         session_data={"state": "active"},
-
         extra_data={"custom": "data"},
-
     )
 
     saved_session = agent_storage.upsert(session)
@@ -101,8 +89,8 @@ def test_agent_storage_crud(agent_storage: JsonStorage, temp_dir: Path):
 
     assert not (temp_dir / "test-session.json").exists()
 
-def test_workflow_storage_crud(workflow_storage: JsonStorage, temp_dir: Path):
 
+def test_workflow_storage_crud(workflow_storage: JsonStorage, temp_dir: Path):
     # Test create
 
     workflow_storage.create()
@@ -112,21 +100,13 @@ def test_workflow_storage_crud(workflow_storage: JsonStorage, temp_dir: Path):
     # Test upsert
 
     session = WorkflowSession(
-
         session_id="test-session",
-
         workflow_id="test-workflow",
-
         user_id="test-user",
-
         memory={"key": "value"},
-
         workflow_data={"name": "Test Workflow"},
-
         session_data={"state": "active"},
-
         extra_data={"custom": "data"},
-
     )
 
     saved_session = workflow_storage.upsert(session)
@@ -165,28 +145,20 @@ def test_workflow_storage_crud(workflow_storage: JsonStorage, temp_dir: Path):
 
     assert not (temp_dir / "test-session.json").exists()
 
-def test_storage_filtering(agent_storage: JsonStorage):
 
+def test_storage_filtering(agent_storage: JsonStorage):
     # Create test sessions
 
     sessions = [
-
         AgentSession(
-
             session_id=f"session-{i}",
-
             agent_id="agent-1" if i < 2 else "agent-2",
-
             user_id="user-1" if i % 2 == 0 else "user-2",
-
         )
-
         for i in range(4)
-
     ]
 
     for session in sessions:
-
         agent_storage.upsert(session)
 
     # Test filtering by user_id
@@ -207,11 +179,7 @@ def test_storage_filtering(agent_storage: JsonStorage):
 
     # Test combined filtering
 
-    filtered_sessions = agent_storage.get_all_sessions(
-
-        user_id="user-1", entity_id="agent-1"
-
-    )
+    filtered_sessions = agent_storage.get_all_sessions(user_id="user-1", entity_id="agent-1")
 
     assert len(filtered_sessions) == 1
 
@@ -219,36 +187,24 @@ def test_storage_filtering(agent_storage: JsonStorage):
 
     assert filtered_sessions[0].agent_id == "agent-1"
 
-def test_workflow_storage_filtering(workflow_storage: JsonStorage):
 
+def test_workflow_storage_filtering(workflow_storage: JsonStorage):
     # Create test sessions
 
     sessions = [
-
         WorkflowSession(
-
             session_id=f"session-{i}",
-
             workflow_id="workflow-1" if i < 2 else "workflow-2",
-
             user_id="user-1" if i % 2 == 0 else "user-2",
-
             memory={"key": f"value-{i}"},
-
             workflow_data={"name": f"Test Workflow {i}"},
-
             session_data={"state": "active"},
-
             extra_data={"custom": f"data-{i}"},
-
         )
-
         for i in range(4)
-
     ]
 
     for session in sessions:
-
         workflow_storage.upsert(session)
 
     # Test filtering by user_id
@@ -269,11 +225,7 @@ def test_workflow_storage_filtering(workflow_storage: JsonStorage):
 
     # Test combined filtering
 
-    filtered_sessions = workflow_storage.get_all_sessions(
-
-        user_id="user-1", entity_id="workflow-1"
-
-    )
+    filtered_sessions = workflow_storage.get_all_sessions(user_id="user-1", entity_id="workflow-1")
 
     assert len(filtered_sessions) == 1
 
@@ -290,4 +242,3 @@ def test_workflow_storage_filtering(workflow_storage: JsonStorage):
     empty_sessions = workflow_storage.get_all_sessions(entity_id="non-existent")
 
     assert len(empty_sessions) == 0
-

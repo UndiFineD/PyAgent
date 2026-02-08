@@ -36,7 +36,6 @@ from torch.utils.data import DataLoader, Dataset
 
 class GPTDatasetV1(Dataset):
     def __init__(self, txt, tokenizer, max_length, stride):
-
         self.input_ids = []
 
         self.target_ids = []
@@ -53,11 +52,9 @@ class GPTDatasetV1(Dataset):
             self.target_ids.append(torch.tensor(target_chunk))
 
     def __len__(self):
-
         return len(self.input_ids)
 
     def __getitem__(self, idx):
-
         return self.input_ids[idx], self.target_ids[idx]
 
 
@@ -70,7 +67,6 @@ def create_dataloader_v1(
     drop_last=True,
     num_workers=0,
 ):
-
     tokenizer = tiktoken.get_encoding("gpt2")
 
     dataset = GPTDatasetV1(txt, tokenizer, max_length, stride)
@@ -95,7 +91,6 @@ def create_dataloader_v1(
 
 class MultiHeadAttention(nn.Module):
     def __init__(self, d_in, d_out, context_length, dropout, num_heads, qkv_bias=False):
-
         super().__init__()
 
         assert d_out % num_heads == 0, "d_out must be divisible by n_heads"
@@ -119,7 +114,6 @@ class MultiHeadAttention(nn.Module):
         self.register_buffer("mask", torch.triu(torch.ones(context_length, context_length), diagonal=1))
 
     def forward(self, x):
-
         b, num_tokens, d_in = x.shape
 
         keys = self.W_key(x)  # Shape: (b, num_tokens, d_out)
@@ -184,7 +178,6 @@ class MultiHeadAttention(nn.Module):
 
 class LayerNorm(nn.Module):
     def __init__(self, emb_dim):
-
         super().__init__()
 
         self.eps = 1e-5
@@ -194,7 +187,6 @@ class LayerNorm(nn.Module):
         self.shift = nn.Parameter(torch.zeros(emb_dim))
 
     def forward(self, x):
-
         mean = x.mean(dim=-1, keepdim=True)
 
         var = x.var(dim=-1, keepdim=True, unbiased=False)
@@ -206,17 +198,14 @@ class LayerNorm(nn.Module):
 
 class GELU(nn.Module):
     def __init__(self):
-
         super().__init__()
 
     def forward(self, x):
-
         return 0.5 * x * (1 + torch.tanh(torch.sqrt(torch.tensor(2.0 / torch.pi)) * (x + 0.044715 * torch.pow(x, 3))))
 
 
 class FeedForward(nn.Module):
     def __init__(self, cfg):
-
         super().__init__()
 
         self.layers = nn.Sequential(
@@ -226,13 +215,11 @@ class FeedForward(nn.Module):
         )
 
     def forward(self, x):
-
         return self.layers(x)
 
 
 class TransformerBlock(nn.Module):
     def __init__(self, cfg):
-
         super().__init__()
 
         self.att = MultiHeadAttention(
@@ -253,7 +240,6 @@ class TransformerBlock(nn.Module):
         self.drop_shortcut = nn.Dropout(cfg["drop_rate"])
 
     def forward(self, x):
-
         # Shortcut connection for attention block
 
         shortcut = x
@@ -283,7 +269,6 @@ class TransformerBlock(nn.Module):
 
 class GPTModel(nn.Module):
     def __init__(self, cfg):
-
         super().__init__()
 
         self.tok_emb = nn.Embedding(cfg["vocab_size"], cfg["emb_dim"])
@@ -299,7 +284,6 @@ class GPTModel(nn.Module):
         self.out_head = nn.Linear(cfg["emb_dim"], cfg["vocab_size"], bias=False)
 
     def forward(self, in_idx):
-
         batch_size, seq_len = in_idx.shape
 
         tok_embeds = self.tok_emb(in_idx)
@@ -320,7 +304,6 @@ class GPTModel(nn.Module):
 
 
 def generate_text_simple(model, idx, max_new_tokens, context_size):
-
     # idx is (B, T) array of indices in the current context
 
     for _ in range(max_new_tokens):
@@ -362,7 +345,6 @@ def generate_text_simple(model, idx, max_new_tokens, context_size):
 
 
 def calc_loss_batch(input_batch, target_batch, model, device):
-
     input_batch, target_batch = input_batch.to(device), target_batch.to(device)
 
     logits = model(input_batch)
@@ -373,7 +355,6 @@ def calc_loss_batch(input_batch, target_batch, model, device):
 
 
 def calc_loss_loader(data_loader, model, device, num_batches=None):
-
     total_loss = 0.0
 
     if len(data_loader) == 0:
@@ -398,7 +379,6 @@ def calc_loss_loader(data_loader, model, device, num_batches=None):
 
 
 def evaluate_model(model, train_loader, val_loader, device, eval_iter):
-
     model.eval()
 
     with torch.no_grad():
@@ -412,7 +392,6 @@ def evaluate_model(model, train_loader, val_loader, device, eval_iter):
 
 
 def generate_and_print_sample(model, tokenizer, device, start_context):
-
     model.eval()
 
     context_size = model.pos_emb.weight.shape[0]
@@ -430,7 +409,6 @@ def generate_and_print_sample(model, tokenizer, device, start_context):
 
 
 def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, output_dir):
-
     fig, ax1 = plt.subplots()
 
     # Plot training and validation loss against epochs
@@ -459,7 +437,6 @@ def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, output_dir):
 
 
 def text_to_token_ids(text, tokenizer):
-
     encoded = tokenizer.encode(text, allowed_special={"<|endoftext|>"})
 
     encoded_tensor = torch.tensor(encoded).unsqueeze(0)  # Add batch dimension
@@ -468,7 +445,6 @@ def text_to_token_ids(text, tokenizer):
 
 
 def token_ids_to_text(token_ids, tokenizer):
-
     flat = token_ids.squeeze(0)  # Remove batch dimension
 
     return tokenizer.decode(flat.tolist())

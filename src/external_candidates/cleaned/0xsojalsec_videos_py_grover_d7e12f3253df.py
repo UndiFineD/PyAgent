@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class GroverPreview(InteractiveScene):
     def construct(self):
-
         # Setup blocks
 
         block_spacing = 1.0
@@ -96,7 +95,6 @@ class GroverPreview(InteractiveScene):
         state_point = Point(diag_axis)
 
         def get_new_amplitudes():
-
             result = amplitudes.copy()
 
             value = math.sqrt(state_point.get_x() ** 2 / (d - 1))
@@ -147,7 +145,6 @@ class GroverPreview(InteractiveScene):
 
 class ClassicalSearch(InteractiveScene):
     def construct(self):
-
         # Test
 
         in_out = VGroup(ArrowTip(), ArrowTip(angle=PI))

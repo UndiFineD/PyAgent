@@ -11,56 +11,38 @@ from .. import callbacks
 
 from .base_agent import BaseAgent
 
-class CodePuppyAgent(BaseAgent):
 
+class CodePuppyAgent(BaseAgent):
     """Code-Puppy - The default loyal digital puppy code agent."""
 
     @property
-
     def name(self) -> str:
-
         return "code-puppy"
 
     @property
-
     def display_name(self) -> str:
-
         return "Code-Puppy 🐶"
 
     @property
-
     def description(self) -> str:
-
         return "The most loyal digital puppy, helping with all coding tasks"
 
     def get_available_tools(self) -> list[str]:
-
         """Get the list of tools available to Code-Puppy."""
 
         return [
-
             "list_agents",
-
             "invoke_agent",
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             "edit_file",
-
             "delete_file",
-
             "agent_run_shell_command",
-
             "agent_share_your_reasoning",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         """Get Code-Puppy's full system prompt."""
 
         puppy_name = get_puppy_name()
@@ -238,8 +220,6 @@ Return your final response as a string output
         prompt_additions = callbacks.on_load_prompt()
 
         if len(prompt_additions):
-
             result += "\n".join(prompt_additions)
 
         return result
-

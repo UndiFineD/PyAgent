@@ -20,7 +20,6 @@ from lib.core.Requester import AuthMode, Requester
 
 class Jboss:
     def __init__(self, url, verbose=False):
-
         self.url = url
 
         self.interface = None
@@ -30,7 +29,6 @@ class Jboss:
         self.http_auth_type = None
 
     def check(self):
-
         # Interface 1: admin-console
 
         r = Requester.get("{}/admin-console/login.seam".format(self.url))
@@ -114,7 +112,6 @@ class Jboss:
         return False
 
     def try_auth(self, username, password):
-
         if self.interface == "admin-console":
             # We need to retrieve ViewState value
 

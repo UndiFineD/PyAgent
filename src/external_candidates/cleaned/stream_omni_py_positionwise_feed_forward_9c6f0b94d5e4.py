@@ -39,13 +39,9 @@ import torch
 class PositionwiseFeedForward(torch.nn.Module):
     """Positionwise feed forward layer.
 
-
-
     FeedForward are appied on each position of the sequence.
 
     The output dim is same with the input dim.
-
-
 
     Args:
 
@@ -81,8 +77,6 @@ class PositionwiseFeedForward(torch.nn.Module):
     def forward(self, xs: torch.Tensor) -> torch.Tensor:
         """Forward function.
 
-
-
         Args:
 
             xs: input tensor (B, L, D)
@@ -104,8 +98,6 @@ class MoEFFNLayer(torch.nn.Module):
     See also figure 1 in https://arxiv.org/pdf/2305.15663.pdf
 
     The output dim is same with the input dim.
-
-
 
     Modified from https://github.com/Lightning-AI/lit-gpt/pull/823
 
@@ -136,7 +128,6 @@ class MoEFFNLayer(torch.nn.Module):
         dropout_rate: float,
         activation: torch.nn.Module = torch.nn.ReLU(),
     ):
-
         super(MoEFFNLayer, self).__init__()
 
         self.gate = torch.nn.Linear(idim, n_expert, bias=False)
@@ -157,8 +148,6 @@ class MoEFFNLayer(torch.nn.Module):
         Returns:
 
             output tensor, (B, L, D)
-
-
 
         """
 

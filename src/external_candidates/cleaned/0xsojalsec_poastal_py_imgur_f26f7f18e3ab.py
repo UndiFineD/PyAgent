@@ -7,7 +7,6 @@ import requests
 
 
 def imgur_email(email):
-
     headers = {
         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
     }

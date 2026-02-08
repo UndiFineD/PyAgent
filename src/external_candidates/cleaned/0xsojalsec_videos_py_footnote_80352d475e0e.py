@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class OpeningQuote(Scene):
     def construct(self):
-
         words = OldTexText(
             [
                 "Lisa:",
@@ -48,7 +47,6 @@ class OpeningQuote(Scene):
 
 class QuickFootnote(TeacherStudentsScene):
     def construct(self):
-
         self.setup()
 
         self.teacher_says("Quick footnote here...")
@@ -62,7 +60,6 @@ class QuickFootnote(TeacherStudentsScene):
 
 class PeakOutsideFlatland(TeacherStudentsScene):
     def construct(self):
-
         self.setup()
 
         self.teacher_says("Peak outside flatland")
@@ -86,7 +83,6 @@ class SymbolicThreeDTransform(Scene):
     }
 
     def construct(self):
-
         in_vect = Matrix(self.input_coords)
 
         out_vect = Matrix(self.output_coords)
@@ -148,7 +144,6 @@ class SingleVectorToOutput(Scene):
 
 class InputWordOutputWord(Scene):
     def construct(self):
-
         self.add(OldTexText("Input").scale(2))
 
         self.wait()
@@ -166,7 +161,6 @@ class TransformOnlyBasisVectors(Scene):
 
 class IHatJHatKHatWritten(Scene):
     def construct(self):
-
         for char, color in zip(["\\imath", "\\jmath", "k"], [X_COLOR, Y_COLOR, Z_COLOR]):
             sym = OldTex("{\\hat{%s}}" % char)
 
@@ -189,7 +183,6 @@ class PutTogether3x3Matrix(Scene):
     }
 
     def construct(self):
-
         i_to = OldTex("\\hat{\\imath} \\to").set_color(X_COLOR)
 
         j_to = OldTex("\\hat{\\jmath} \\to").set_color(Y_COLOR)
@@ -289,7 +282,6 @@ class ShowVCoordinateMeaning(Scene):
     }
 
     def construct(self):
-
         v = OldTex(self.v_str)
 
         v.set_color(YELLOW)
@@ -392,7 +384,6 @@ class ShowVCoordinateMeaningAfterTransform(ShowVCoordinateMeaning):
 
 class ShowMatrixVectorMultiplication(Scene):
     def construct(self):
-
         matrix = Matrix(np.arange(9).reshape((3, 3)))
 
         vect = Matrix(list("xyz"))
@@ -476,7 +467,6 @@ class ShowMatrixVectorMultiplication(Scene):
 
 class ShowMatrixMultiplication(Scene):
     def construct(self):
-
         right = Matrix(np.arange(9).reshape((3, 3)))
 
         left = Matrix(np.random.random_integers(-5, 5, (3, 3)))
@@ -524,7 +514,6 @@ class ApplyTwoSuccessiveTransforms(Scene):
 
 class ComputerGraphicsAndRobotics(Scene):
     def construct(self):
-
         mob = VMobject(OldTexText("Computer graphics"), OldTexText("Robotics"))
 
         mob.arrange(DOWN, buff=1)
@@ -560,7 +549,6 @@ class SymbolicThreeDToTwoDTransform(SymbolicThreeDTransform):
 
 class QuestionsToPonder(Scene):
     def construct(self):
-
         title = OldTexText("Questions to ponder")
 
         title.set_color(YELLOW).to_edge(UP)
@@ -593,7 +581,6 @@ class QuestionsToPonder(Scene):
 
 class NextVideo(Scene):
     def construct(self):
-
         title = OldTexText("""
 
             Next video: The determinant

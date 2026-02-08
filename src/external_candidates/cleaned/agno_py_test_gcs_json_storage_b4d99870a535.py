@@ -17,12 +17,10 @@ from agno.storage.session.agent import AgentSession
 
 # Fixture to mock the GCS client and bucket
 
+
 @pytest.fixture
-
 def mock_gcs_client():
-
     with patch("agno.storage.gcs_json.gcs.Client") as MockClient:
-
         client_instance = MagicMock()
 
         MockClient.return_value = client_instance
@@ -39,30 +37,23 @@ def mock_gcs_client():
 
         yield client_instance, bucket
 
+
 # Fixture to instantiate GCSJsonStorage with the mocked GCS client
 
+
 @pytest.fixture
-
 def gcs_storage(mock_gcs_client):
-
     client_instance, bucket = mock_gcs_client
 
     # Use dummy bucket name and project
 
     storage = GCSJsonStorage(
-
         bucket_name="dummy-bucket",
-
         prefix="agent/",
-
         project="dummy-project",
-
         location="dummy-location",
-
         credentials=None,  # Pass None to avoid real authentication
-
         mode="agent",
-
     )
 
     # Inject our mocked client and bucket into the instance
@@ -73,26 +64,18 @@ def gcs_storage(mock_gcs_client):
 
     yield storage
 
-def test_upsert_and_read_agent(gcs_storage):
 
+def test_upsert_and_read_agent(gcs_storage):
     # Create a dummy AgentSession
 
     session = AgentSession(
-
         session_id="test-session",
-
         agent_id="agent-1",
-
         user_id="user-1",
-
         memory={"data": "value"},
-
         agent_data={"name": "Test Agent"},
-
         session_data={"state": "active"},
-
         extra_data={"custom": "data"},
-
     )
 
     # Prepare a mock blob
@@ -116,7 +99,6 @@ def test_upsert_and_read_agent(gcs_storage):
     session_dict["updated_at"] = int(time.time())
 
     if "created_at" not in session_dict:
-
         session_dict["created_at"] = session_dict["updated_at"]
 
     json_data = json.dumps(session_dict, ensure_ascii=False, indent=4)
@@ -129,8 +111,8 @@ def test_upsert_and_read_agent(gcs_storage):
 
     assert read_session.session_id == session.session_id
 
-def test_read_not_found(gcs_storage):
 
+def test_read_not_found(gcs_storage):
     # Simulate the blob for a non-existent session that raises an exception
 
     blob = MagicMock()
@@ -143,8 +125,8 @@ def test_read_not_found(gcs_storage):
 
     assert result is None
 
-def test_get_all_session_ids(gcs_storage):
 
+def test_get_all_session_ids(gcs_storage):
     # Simulate listing blobs that return two sessions
 
     blob1 = MagicMock()
@@ -161,8 +143,8 @@ def test_get_all_session_ids(gcs_storage):
 
     assert session_ids == ["session-1", "session-2"]
 
-def test_delete_session(gcs_storage):
 
+def test_delete_session(gcs_storage):
     # Prepare a mock blob for deletion
 
     blob = MagicMock()
@@ -172,4 +154,3 @@ def test_delete_session(gcs_storage):
     gcs_storage.delete_session("test-session")
 
     blob.delete.assert_called_once()
-

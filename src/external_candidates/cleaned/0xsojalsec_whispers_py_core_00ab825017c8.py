@@ -15,7 +15,6 @@ from whispers.utils import load_yaml_from_file
 
 
 def load_config(configfile, src="."):
-
     configfile = Path(configfile)
 
     if not configfile.exists():
@@ -81,7 +80,6 @@ def load_config(configfile, src="."):
 
 
 def run(args):
-
     src = Path(args.src)
 
     if not src.exists():

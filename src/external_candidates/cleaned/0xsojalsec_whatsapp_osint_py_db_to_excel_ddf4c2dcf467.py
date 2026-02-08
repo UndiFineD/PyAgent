@@ -12,7 +12,6 @@ from openpyxl.styles import Alignment, Font
 
 class Converter:
     def db_to(self):
-
         self.conn = sqlite3.connect("database/database.db")
 
         self.cursor = self.conn.cursor()
@@ -22,7 +21,6 @@ class Converter:
         self.ws = self.wb.active
 
     def db_to_excel(self):
-
         # Style
 
         bold = Font(bold=True, name="Arial", color="00800000", size=10)

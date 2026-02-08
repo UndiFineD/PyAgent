@@ -14,7 +14,6 @@ class LinalgThumbnail(ThreeDScene):
     }
 
     def construct(self):
-
         grid = NumberPlane((-10, 10), (-10, 10), faded_line_ratio=1)
 
         grid.set_stroke(width=6)
@@ -90,11 +89,9 @@ class LinalgThumbnail(ThreeDScene):
 
 class CSThumbnail(Scene):
     def construct(self):
-
         self.add(self.get_background())
 
     def get_background(self, n=12, k=50, zero_color=GREY_C, one_color=GREY_B):
-
         choices = (Integer(0, color=zero_color), Integer(1, color=one_color))
 
         background = VGroup(*(random.choice(choices).copy() for x in range(n * k)))
@@ -108,7 +105,6 @@ class CSThumbnail(Scene):
 
 class GroupThumbnail(ThreeDScene):
     def construct(self):
-
         cube = Cube()
 
         cubes = Group(cube)
@@ -138,7 +134,6 @@ class GroupThumbnail(ThreeDScene):
 
 class BaselThumbnail(Scene):
     def construct(self):
-
         # Lake
 
         lake_radius = 6
@@ -251,7 +246,6 @@ class BaselThumbnail(Scene):
 
 class Eola1Thumbnail(Scene):
     def construct(self):
-
         plane = NumberPlane(
             x_range=(-2, 2),
             y_range=(-5, 5),
@@ -323,13 +317,11 @@ class Eola1Thumbnail(Scene):
 
 
 def pendulum_vector_field_func(theta, omega, mu=0.3, g=9.8, L=3):
-
     return [omega, -np.sqrt(g / L) * np.sin(theta) - mu * omega]
 
 
 class ODEThumbnail(Scene):
     def construct(self):
-
         plane = NumberPlane()
 
         field = VectorField(
@@ -357,7 +349,6 @@ class ODEThumbnail(Scene):
         total_time = 50
 
         def func(point):
-
             return plane.c2p(*pendulum_vector_field_func(*plane.p2c(point)))
 
         points = [plane.c2p(-4 * TAU / 4, 4.0)]
@@ -389,7 +380,6 @@ class ODEThumbnail(Scene):
 
 class PrimeSpirals(InteractiveScene):
     def construct(self):
-
         N = 10000
 
         primes = np.array(list(sympy.primerange(0, 10000)))
@@ -411,7 +401,6 @@ class PrimeSpirals(InteractiveScene):
 
 class EGraph(InteractiveScene):
     def construct(self):
-
         # Test
 
         axes = Axes((-4, 4), (0, 20, 2), width=14, height=5.5)

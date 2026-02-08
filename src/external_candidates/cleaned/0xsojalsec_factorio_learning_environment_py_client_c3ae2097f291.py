@@ -12,7 +12,6 @@ from fle.env.utils.camera import Camera
 
 class GetFactoryCentroid(Tool):
     def __init__(self, lua_script_manager, game_state):
-
         self.state = {"input": {}, "output": {}}
 
         super().__init__(lua_script_manager, game_state)

@@ -8,11 +8,9 @@ from manim_imports_ext import *
 
 class TelestrationContribution(Scene):
     def construct(self):
-
         # Object creators
 
         def get_beer():
-
             beer = SVGMobject(file_name="beer")
 
             beer.set_stroke(width=0)
@@ -26,7 +24,6 @@ class TelestrationContribution(Scene):
             return beer
 
         def get_muscle():
-
             muscle = SVGMobject("muscle")
 
             muscle.set_fill(GREY_BROWN)
@@ -36,7 +33,6 @@ class TelestrationContribution(Scene):
             return muscle
 
         def get_cat():
-
             cat = SVGMobject("sitting_cat")
 
             cat.set_fill(GREY_C)
@@ -46,7 +42,6 @@ class TelestrationContribution(Scene):
             return cat
 
         def get_fat_cat():
-
             cat = SVGMobject("fat_cat")
 
             cat.flip()
@@ -58,7 +53,6 @@ class TelestrationContribution(Scene):
             return cat
 
         def get_person():
-
             person = SVGMobject("person")
 
             person.set_fill(GREY_C, 1)

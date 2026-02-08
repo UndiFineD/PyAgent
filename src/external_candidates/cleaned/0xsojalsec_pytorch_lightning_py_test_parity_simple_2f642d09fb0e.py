@@ -64,7 +64,6 @@ def train_torch(
     precision_context,
     input_dtype=torch.float32,
 ):
-
     make_deterministic(warn_only=True)
 
     memory_stats = {}
@@ -115,7 +114,6 @@ def train_torch(
 
 
 def train_fabric(fabric):
-
     make_deterministic(warn_only=True)
 
     memory_stats = {}
@@ -184,7 +182,6 @@ def train_fabric(fabric):
     ],
 )
 def test_parity_single_device(precision, accelerator):
-
     input_dtype = get_model_input_dtype(precision)
 
     cuda_reset()

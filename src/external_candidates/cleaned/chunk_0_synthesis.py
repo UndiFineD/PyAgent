@@ -5,7 +5,6 @@
 
 
 def inv_spectrogram(postnet_output, ap, CONFIG):
-
     if CONFIG.model.lower() in ["tacotron"]:
         wav = ap.inv_spectrogram(postnet_output.T)
 

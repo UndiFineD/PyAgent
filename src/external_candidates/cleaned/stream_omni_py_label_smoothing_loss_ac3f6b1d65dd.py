@@ -41,8 +41,6 @@ from torch import nn
 class LabelSmoothingLoss(nn.Module):
     """Label-smoothing loss.
 
-
-
     In a standard CE loss, the label's data distribution is:
 
     [0,1,2] ->
@@ -57,15 +55,11 @@ class LabelSmoothingLoss(nn.Module):
 
     ]
 
-
-
     In the smoothing version CE Loss,some probabilities
 
     are taken from the true label prob (1.0) and are divided
 
     among other labels.
-
-
 
     e.g.
 
@@ -82,8 +76,6 @@ class LabelSmoothingLoss(nn.Module):
         [0.05, 0.05, 0.9],
 
     ]
-
-
 
     Args:
 
@@ -127,15 +119,11 @@ class LabelSmoothingLoss(nn.Module):
     def forward(self, x: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
         """Compute loss between x and target.
 
-
-
         The model outputs and data labels tensors are flatten to
 
         (batch*seqlen, class) shape and a mask is applied to the
 
         padding part which should not be calculated for loss.
-
-
 
         Args:
 

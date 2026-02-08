@@ -113,7 +113,6 @@ def parse_class_init_keys(cls: type) -> tuple[str, Optional[str], Optional[str]]
         params: list[inspect.Parameter],
         param_type: Literal[inspect._ParameterKind.VAR_POSITIONAL, inspect._ParameterKind.VAR_KEYWORD],
     ) -> Optional[str]:
-
         for p in params:
             if p.kind == param_type:
                 return p.name
@@ -136,7 +135,6 @@ def get_init_args(frame: types.FrameType) -> dict[str, Any]:  # pragma: no-cover
 
 
 def _get_init_args(frame: types.FrameType) -> tuple[Optional[Any], dict[str, Any]]:
-
     _, _, _, local_vars = inspect.getargvalues(frame)
 
     if "__class__" not in local_vars or frame.f_code.co_name != "__init__":

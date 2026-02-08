@@ -25,14 +25,12 @@ import pytest
 
 from src.tools.telephony.cancel_transfer import CancelTransferTool
 
-class TestCancelTransferTool:
 
+class TestCancelTransferTool:
     """Test suite for cancel transfer tool."""
 
     @pytest.fixture
-
     def cancel_tool(self):
-
         """Create CancelTransferTool instance."""
 
         return CancelTransferTool()
@@ -40,7 +38,6 @@ class TestCancelTransferTool:
     # ==================== Definition Tests ====================
 
     def test_definition(self, cancel_tool):
-
         """Test tool definition is valid."""
 
         definition = cancel_tool.definition
@@ -58,7 +55,6 @@ class TestCancelTransferTool:
         assert len(definition.parameters) == 0
 
     def test_definition_description_mentions_limitations(self, cancel_tool):
-
         """Test that definition explains when cancel works."""
 
         description = cancel_tool.definition.description
@@ -70,27 +66,16 @@ class TestCancelTransferTool:
     # ==================== Success Scenarios ====================
 
     @pytest.mark.asyncio
-
-    async def test_cancel_active_transfer(
-
-        self, cancel_tool, tool_context, sample_call_session, mock_ari_client
-
-    ):
-
+    async def test_cancel_active_transfer(self, cancel_tool, tool_context, sample_call_session, mock_ari_client):
         """Test canceling an active transfer in progress."""
 
         # Simulate active transfer
 
         sample_call_session.current_action = {
-
             "type": "transfer",
-
             "status": "ringing",
-
             "target_extension": "6000",
-
             "channel_id": "SIP/6000-00000002",
-
         }
 
         result = await cancel_tool.execute(parameters={}, context=tool_context)
@@ -104,27 +89,18 @@ class TestCancelTransferTool:
         mock_ari_client.hangup_channel.assert_called_once_with("SIP/6000-00000002")
 
     @pytest.mark.asyncio
-
     async def test_cancel_clears_current_action(
-
         self, cancel_tool, tool_context, sample_call_session, mock_session_store
-
     ):
-
         """Test that cancel clears current_action from session."""
 
         # Simulate active transfer
 
         sample_call_session.current_action = {
-
             "type": "transfer",
-
             "status": "ringing",
-
             "target_extension": "6000",
-
             "channel_id": "SIP/6000-00000002",
-
         }
 
         await cancel_tool.execute(parameters={}, context=tool_context)
@@ -140,27 +116,16 @@ class TestCancelTransferTool:
         assert updated_session.current_action is None
 
     @pytest.mark.asyncio
-
-    async def test_cancel_stops_hold_music(
-
-        self, cancel_tool, tool_context, sample_call_session, mock_ari_client
-
-    ):
-
+    async def test_cancel_stops_hold_music(self, cancel_tool, tool_context, sample_call_session, mock_ari_client):
         """Test that cancel stops hold music on caller channel."""
 
         # Simulate active transfer with MOH
 
         sample_call_session.current_action = {
-
             "type": "transfer",
-
             "status": "ringing",
-
             "target_extension": "6000",
-
             "channel_id": "SIP/6000-00000002",
-
         }
 
         result = await cancel_tool.execute(parameters={}, context=tool_context)
@@ -171,22 +136,12 @@ class TestCancelTransferTool:
 
         # Verify hangup was called
 
-        assert (
-
-            mock_ari_client.hangup_channel.called or mock_ari_client.send_command.called
-
-        )
+        assert mock_ari_client.hangup_channel.called or mock_ari_client.send_command.called
 
     # ==================== No Transfer Scenarios ====================
 
     @pytest.mark.asyncio
-
-    async def test_cancel_with_no_transfer(
-
-        self, cancel_tool, tool_context, sample_call_session
-
-    ):
-
+    async def test_cancel_with_no_transfer(self, cancel_tool, tool_context, sample_call_session):
         """Test cancel when no transfer is in progress."""
 
         # No current_action
@@ -197,22 +152,10 @@ class TestCancelTransferTool:
 
         assert result["status"] in ["no_transfer", "error"]
 
-        assert (
-
-            "no transfer" in result["message"].lower()
-
-            or "not in progress" in result["message"].lower()
-
-        )
+        assert "no transfer" in result["message"].lower() or "not in progress" in result["message"].lower()
 
     @pytest.mark.asyncio
-
-    async def test_cancel_with_different_action_type(
-
-        self, cancel_tool, tool_context, sample_call_session
-
-    ):
-
+    async def test_cancel_with_different_action_type(self, cancel_tool, tool_context, sample_call_session):
         """Test cancel when current action is not a transfer."""
 
         # Different action type
@@ -228,27 +171,16 @@ class TestCancelTransferTool:
     # ==================== Transfer Already Answered ====================
 
     @pytest.mark.asyncio
-
-    async def test_cancel_after_transfer_answered(
-
-        self, cancel_tool, tool_context, sample_call_session
-
-    ):
-
+    async def test_cancel_after_transfer_answered(self, cancel_tool, tool_context, sample_call_session):
         """Test cancel after transfer has been answered."""
 
         # Transfer already answered
 
         sample_call_session.current_action = {
-
             "type": "transfer",
-
             "answered": True,
-
             "target_extension": "6000",
-
             "channel_id": "SIP/6000-00000002",
-
         }
 
         result = await cancel_tool.execute(parameters={}, context=tool_context)
@@ -258,23 +190,13 @@ class TestCancelTransferTool:
         assert result["status"] in ["error", "too_late"]
 
         assert (
-
             "answer" in result["message"].lower()
-
             or "too late" in result["message"].lower()
-
             or "cannot" in result["message"].lower()
-
         )
 
     @pytest.mark.asyncio
-
-    async def test_cancel_after_transfer_complete(
-
-        self, cancel_tool, tool_context, sample_call_session
-
-    ):
-
+    async def test_cancel_after_transfer_complete(self, cancel_tool, tool_context, sample_call_session):
         """Test cancel after transfer is complete."""
 
         # Transfer complete (no current_action means complete)
@@ -290,13 +212,7 @@ class TestCancelTransferTool:
     # ==================== Error Handling ====================
 
     @pytest.mark.asyncio
-
-    async def test_cancel_with_no_session(
-
-        self, cancel_tool, tool_context, mock_session_store
-
-    ):
-
+    async def test_cancel_with_no_session(self, cancel_tool, tool_context, mock_session_store):
         """Test cancel when session doesn't exist."""
 
         mock_session_store.get_by_call_id.return_value = None
@@ -307,36 +223,19 @@ class TestCancelTransferTool:
 
         # Error message may vary
 
-        assert (
-
-            "error" in result["message"].lower()
-
-            or "cancel" in result["message"].lower()
-
-        )
+        assert "error" in result["message"].lower() or "cancel" in result["message"].lower()
 
     @pytest.mark.asyncio
-
-    async def test_cancel_ari_hangup_failure(
-
-        self, cancel_tool, tool_context, sample_call_session, mock_ari_client
-
-    ):
-
+    async def test_cancel_ari_hangup_failure(self, cancel_tool, tool_context, sample_call_session, mock_ari_client):
         """Test cancel when ARI hangup fails."""
 
         # Simulate active transfer
 
         sample_call_session.current_action = {
-
             "type": "transfer",
-
             "status": "ringing",
-
             "target_extension": "6000",
-
             "channel_id": "SIP/6000-00000002",
-
         }
 
         # Simulate ARI failure
@@ -350,27 +249,16 @@ class TestCancelTransferTool:
         assert result["status"] in ["success", "error"]
 
     @pytest.mark.asyncio
-
-    async def test_cancel_missing_transfer_channel_id(
-
-        self, cancel_tool, tool_context, sample_call_session
-
-    ):
-
+    async def test_cancel_missing_transfer_channel_id(self, cancel_tool, tool_context, sample_call_session):
         """Test cancel when transfer_channel_id is missing."""
 
         # Active transfer but missing channel ID
 
         sample_call_session.current_action = {
-
             "type": "transfer",
-
             "status": "ringing",
-
             "target_extension": "6000",
-
             # No transfer_channel_id
-
         }
 
         result = await cancel_tool.execute(parameters={}, context=tool_context)
@@ -382,27 +270,18 @@ class TestCancelTransferTool:
     # ==================== Session State Tests ====================
 
     @pytest.mark.asyncio
-
     async def test_cancel_restores_ai_to_conversation(
-
         self, cancel_tool, tool_context, sample_call_session, mock_session_store
-
     ):
-
         """Test that cancel allows AI to resume conversation."""
 
         # Simulate active transfer
 
         sample_call_session.current_action = {
-
             "type": "transfer",
-
             "status": "ringing",
-
             "target_extension": "6000",
-
             "channel_id": "SIP/6000-00000002",
-
         }
 
         await cancel_tool.execute(parameters={}, context=tool_context)
@@ -420,27 +299,16 @@ class TestCancelTransferTool:
         assert updated_session.current_action is None
 
     @pytest.mark.asyncio
-
-    async def test_cancel_multiple_times(
-
-        self, cancel_tool, tool_context, sample_call_session
-
-    ):
-
+    async def test_cancel_multiple_times(self, cancel_tool, tool_context, sample_call_session):
         """Test calling cancel multiple times."""
 
         # First cancel with active transfer
 
         sample_call_session.current_action = {
-
             "type": "transfer",
-
             "status": "ringing",
-
             "target_extension": "6000",
-
             "channel_id": "SIP/6000-00000002",
-
         }
 
         result1 = await cancel_tool.execute(parameters={}, context=tool_context)
@@ -460,25 +328,14 @@ class TestCancelTransferTool:
     # ==================== Parameter Tests ====================
 
     @pytest.mark.asyncio
-
-    async def test_cancel_with_no_parameters(
-
-        self, cancel_tool, tool_context, sample_call_session
-
-    ):
-
+    async def test_cancel_with_no_parameters(self, cancel_tool, tool_context, sample_call_session):
         """Test that cancel works with empty parameters."""
 
         sample_call_session.current_action = {
-
             "type": "transfer",
-
             "status": "ringing",
-
             "target_extension": "6000",
-
             "channel_id": "SIP/6000-00000002",
-
         }
 
         result = await cancel_tool.execute(parameters={}, context=tool_context)
@@ -486,61 +343,34 @@ class TestCancelTransferTool:
         assert result["status"] == "success"
 
     @pytest.mark.asyncio
-
-    async def test_cancel_ignores_extra_parameters(
-
-        self, cancel_tool, tool_context, sample_call_session
-
-    ):
-
+    async def test_cancel_ignores_extra_parameters(self, cancel_tool, tool_context, sample_call_session):
         """Test that extra parameters are ignored."""
 
         sample_call_session.current_action = {
-
             "type": "transfer",
-
             "status": "ringing",
-
             "target_extension": "6000",
-
             "channel_id": "SIP/6000-00000002",
-
         }
 
-        result = await cancel_tool.execute(
-
-            parameters={"extra": "ignored"}, context=tool_context
-
-        )
+        result = await cancel_tool.execute(parameters={"extra": "ignored"}, context=tool_context)
 
         assert result["status"] == "success"
 
     # ==================== Integration Tests ====================
 
     @pytest.mark.asyncio
-
-    async def test_cancel_during_blind_transfer(
-
-        self, cancel_tool, tool_context, sample_call_session
-
-    ):
-
+    async def test_cancel_during_blind_transfer(self, cancel_tool, tool_context, sample_call_session):
         """Test canceling a blind transfer."""
 
         # Blind transfer in progress
 
         sample_call_session.current_action = {
-
             "type": "transfer",
-
             "mode": "blind",
-
             "status": "ringing",
-
             "target_extension": "6001",
-
             "channel_id": "SIP/6001-00000003",
-
         }
 
         result = await cancel_tool.execute(parameters={}, context=tool_context)
@@ -548,32 +378,19 @@ class TestCancelTransferTool:
         assert result["status"] == "success"
 
     @pytest.mark.asyncio
-
-    async def test_cancel_transfer_to_different_departments(
-
-        self, cancel_tool, tool_context, sample_call_session
-
-    ):
-
+    async def test_cancel_transfer_to_different_departments(self, cancel_tool, tool_context, sample_call_session):
         """Test canceling transfers to various departments."""
 
         departments = ["6000", "6001", "6002"]
 
         for dept in departments:
-
             sample_call_session.current_action = {
-
                 "type": "transfer",
-
                 "status": "ringing",
-
                 "target_extension": dept,
-
                 "channel_id": f"SIP/{dept}-00000002",
-
             }
 
             result = await cancel_tool.execute(parameters={}, context=tool_context)
 
             assert result["status"] == "success"
-

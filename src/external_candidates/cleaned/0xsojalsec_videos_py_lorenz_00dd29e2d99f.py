@@ -9,7 +9,6 @@ from scipy.integrate import solve_ivp
 
 
 def lorenz_system(t, state, sigma=10, rho=28, beta=8 / 3):
-
     x, y, z = state
 
     dxdt = sigma * (y - x)
@@ -22,20 +21,17 @@ def lorenz_system(t, state, sigma=10, rho=28, beta=8 / 3):
 
 
 def ode_solution_points(function, state0, time, dt=0.01):
-
     solution = solve_ivp(function, t_span=(0, time), y0=state0, t_eval=np.arange(0, time, dt))
 
     return solution.y.T
 
 
 def for_later():
-
     tail = VGroup(TracingTail(dot, time_traced=3).match_color(dot) for dot in dots)
 
 
 class LorenzAttractor(InteractiveScene):
     def construct(self):
-
         # Set up axes
 
         axes = ThreeDAxes(
@@ -119,7 +115,6 @@ class LorenzAttractor(InteractiveScene):
         dots = Group(GlowDot(color=color, radius=0.25) for color in colors)
 
         def update_dots(dots, curves=curves):
-
             for dot, curve in zip(dots, curves):
                 dot.move_to(curve.get_end())
 

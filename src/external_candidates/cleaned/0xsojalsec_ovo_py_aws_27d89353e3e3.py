@@ -18,7 +18,6 @@ from mypy_boto3_s3.client import S3Client
 
 class AWSSessionManager:
     def __init__(self, assume_role: str = None, region_name="us-east-1"):
-
         self.assume_role = assume_role
 
         self.region_name = region_name
@@ -29,16 +28,13 @@ class AWSSessionManager:
 
     @property
     def s3(self) -> S3Client:
-
         return self.get_client("s3")
 
     @property
     def omics(self) -> OmicsClient:
-
         return self.get_client("omics")
 
     def get_client(self, service, refresh_minutes_before_expiration=30):
-
         expired = (
             service in self._AWS_CLIENTS_EXPIRATION
             and self._AWS_CLIENTS_EXPIRATION[service].timestamp() - time() < 60 * refresh_minutes_before_expiration
@@ -55,7 +51,6 @@ class AWSSessionManager:
         return self._AWS_CLIENTS[service]
 
     def _create_session(self) -> tuple[boto3.Session, datetime | None]:
-
         sts_client = boto3.client("sts")
 
         if self.assume_role is not None:
@@ -82,7 +77,6 @@ class AWSSessionManager:
         return session, expiration_datetime
 
     def get_account_id(self):
-
         # Use the STS client to get account information
 
         sts_client = self.get_client("sts")
@@ -92,7 +86,6 @@ class AWSSessionManager:
         return response["Account"]
 
     def get_latest_workflow_id(self, workflow_name: str):
-
         limit = 100
 
         items = self.omics.list_workflows(type="PRIVATE", name=workflow_name, maxResults=limit)["items"]
@@ -110,7 +103,6 @@ class AWSSessionManager:
         return latest_workflow["id"]
 
     def s3_file_exists(self, s3_uri: str):
-
         assert s3_uri.startswith("s3://"), f"Invalid S3 URI: {s3_uri}"
 
         bucket, key = s3_uri[5:].split("/", maxsplit=1)
@@ -132,7 +124,6 @@ class AWSSessionManager:
                 raise e
 
     def get_s3_bytes(self, s3_uri: str):
-
         assert s3_uri.startswith("s3://"), f"Invalid S3 URI: {s3_uri}"
 
         bucket, key = s3_uri[5:].split("/", maxsplit=1)

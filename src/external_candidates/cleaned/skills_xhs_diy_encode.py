@@ -4,12 +4,10 @@
 
 
 def triplet_to_base64(a, c):
-
     return c[(a >> 18) & 63] + c[(a >> 12) & 63] + c[(a >> 6) & 63] + c[a & 63]
 
 
 def encode_chunk(a, e, r, c):
-
     d = []
 
     for f in range(e, r, 3):
@@ -21,7 +19,6 @@ def encode_chunk(a, e, r, c):
 
 
 def b64_encode(a, CUSTOM_BASE64_ALPHABET):
-
     c = CUSTOM_BASE64_ALPHABET
 
     r = len(a)
@@ -57,7 +54,6 @@ def b64_encode(a, CUSTOM_BASE64_ALPHABET):
 
 
 def encode_utf8(a):
-
     # 首先进行URL编码
 
     url_encoded = a

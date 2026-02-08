@@ -29,7 +29,6 @@ from pathlib import Path
 
 from typing import Optional
 
-
 from fle.agents.data.sprites.extractors.alerts import AlertSpriteExtractor
 
 from fle.agents.data.sprites.extractors.icons import IconSpriteExtractor
@@ -41,7 +40,6 @@ from tqdm import tqdm
 
 class OptimizedSpriteDownloader:
     def __init__(self, repo_id: str = "Noddybear/fle_images", num_workers: int = 10):
-
         self.repo_id = repo_id
 
         self.num_workers = num_workers
@@ -116,8 +114,6 @@ def download_sprites_from_hf(
 
     Optimized sprite download with multiple strategies
 
-
-
     Args:
 
         repo_id: Hugging Face dataset repository ID
@@ -131,8 +127,6 @@ def download_sprites_from_hf(
         use_snapshot: Use snapshot_download for faster bulk download
 
         archive_name: If sprites are in a single archive file, specify its name
-
-
 
     Returns:
 
@@ -392,8 +386,6 @@ def create_sprite_archive(
 
     Create a compressed archive of sprites for faster distribution
 
-
-
     Args:
 
         input_dir: Directory containing sprites
@@ -451,8 +443,6 @@ def generate_sprites(input_dir: str = ".fle/spritemaps", output_dir: str = ".fle
     """
 
     Generate individual sprites from spritemaps
-
-
 
     Args:
 

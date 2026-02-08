@@ -40,7 +40,6 @@ class _Loop:
     """Basic Loops interface."""
 
     def __init__(self, trainer: "pl.Trainer") -> None:
-
         self._restarting = False
 
         self._loaded_from_state_dict = False
@@ -72,7 +71,6 @@ class _Loop:
         return self._resuming_from_checkpoint
 
     def reset_restart_stage(self) -> None:
-
         pass
 
     def on_save_checkpoint(self) -> dict:
@@ -138,7 +136,6 @@ class _Loop:
         self._resuming_from_checkpoint = True
 
     def _load_from_state_dict(self, state_dict: dict, prefix: str) -> None:
-
         for k, v in self.__dict__.items():
             key = prefix + k
 
@@ -154,7 +151,6 @@ class _Loop:
             self.on_load_checkpoint(state_dict[prefix + "state_dict"])
 
     def on_iteration_done(self) -> None:
-
         self._restarting = False
 
         self._loaded_from_state_dict = False

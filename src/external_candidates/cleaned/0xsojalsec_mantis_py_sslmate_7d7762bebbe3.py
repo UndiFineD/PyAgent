@@ -46,7 +46,6 @@ Following information from the API response is added to the database:
 
 class SSLMate(APIScanner):
     async def get_api_calls(self, args: ArgsModel):
-
         self.asset_api_list = []
 
         self.scannerName = type(self).__name__
@@ -67,7 +66,6 @@ class SSLMate(APIScanner):
         return [(self, "GET")]
 
     def parse_response(self, response):
-
         output_dict_list = []
 
         response_json = response.json()
@@ -108,5 +106,4 @@ class SSLMate(APIScanner):
         return output_dict_list
 
     async def db_operations(self, output_dict, asset=None):
-
         await CrudUtils.insert_assets(output_dict)

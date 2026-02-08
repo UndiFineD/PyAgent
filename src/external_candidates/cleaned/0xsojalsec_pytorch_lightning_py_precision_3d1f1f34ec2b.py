@@ -76,7 +76,6 @@ class Precision(FabricPrecision, CheckpointHooks):
 
     @override
     def pre_backward(self, tensor: Tensor, module: "pl.LightningModule") -> Tensor:  # type: ignore[override]
-
         trainer = module.trainer
 
         call._call_callback_hooks(trainer, "on_before_backward", tensor)
@@ -116,7 +115,6 @@ class Precision(FabricPrecision, CheckpointHooks):
 
     @override
     def post_backward(self, tensor: Tensor, module: "pl.LightningModule") -> Tensor:  # type: ignore[override]
-
         # once backward has been applied, release graph
 
         closure_loss = tensor.detach()
@@ -188,7 +186,6 @@ class Precision(FabricPrecision, CheckpointHooks):
         clip_val: Optional[Union[int, float]] = None,
         gradient_clip_algorithm: Optional[GradClipAlgorithmType] = None,
     ) -> None:
-
         if not isinstance(model, pl.LightningModule) or not model.automatic_optimization:
             # the configuration validator disallows clipping on manual
 

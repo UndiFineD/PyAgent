@@ -21,7 +21,6 @@ class GeoCodingError(Exception):
 
 
 def validate_coordinates(lat: float, lon: float) -> None:
-
     if lat < -90 or lat > 90 or lon < -180 or lon > 180:
         raise ValueError("longitude (-90 to 90) and latitude (-180 to 180) coordinates are not within valid ranges.")
 

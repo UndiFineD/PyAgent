@@ -19,7 +19,6 @@ from evo.tools import plot
 
 
 def plot_trajectory(pred_traj, gt_traj=None, title="", filename="", align=True, correct_scale=True):
-
     assert isinstance(pred_traj, PoseTrajectory3D)
 
     if gt_traj is not None:

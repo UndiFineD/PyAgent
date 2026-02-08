@@ -7,8 +7,8 @@
 
 # NOTE: extracted with static-only rules; review before use
 
-class mycolors:
 
+class mycolors:
     reset = "\033[0m"
 
     reverse = "\033[07m"
@@ -16,7 +16,6 @@ class mycolors:
     bold = "\033[01m"
 
     class foreground:
-
         orange = "\033[33m"
 
         blue = "\033[34m"
@@ -46,43 +45,30 @@ class mycolors:
         yellow = "\033[93m"
 
         @staticmethod
-
         def error(bkg):
-
             if bkg == 1:
-
                 return mycolors.foreground.lightred
 
             else:
-
                 return mycolors.foreground.red
 
         @staticmethod
-
         def info(bkg):
-
             if bkg == 1:
-
                 return mycolors.foreground.lightcyan
 
             else:
-
                 return mycolors.foreground.cyan
 
         @staticmethod
-
         def success(bkg):
-
             if bkg == 1:
-
                 return mycolors.foreground.yellow
 
             else:
-
                 return mycolors.foreground.blue
 
     class background:
-
         black = "\033[40m"
 
         blue = "\033[44m"
@@ -99,11 +85,10 @@ class mycolors:
 
         red = "\033[41m"
 
-def printc(text, color, *args, **kwargs):
 
+def printc(text, color, *args, **kwargs):
     print(f"{color}{text}{mycolors.reset}", *args, **kwargs)
 
+
 def printr():
-
     print(mycolors.reset)
-

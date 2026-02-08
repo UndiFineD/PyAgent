@@ -30,14 +30,12 @@ from rest_framework.authtoken.models import Token
 
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
-
     if created:
         Token.objects.create(user=instance)
 
 
 @receiver(post_save, sender=Evidence)
 def send_evidence_created(sender, instance, created, **kwargs):
-
     if created:
         start_analysis.delay(instance.dump_id)
 
@@ -53,7 +51,6 @@ def send_evidence_created(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=Evidence)
 def send_evidence_deleted(sender, instance, **kwargs):
-
     channel_layer = get_channel_layer()
 
     serializer = EvidenceSerializer(instance)
@@ -66,7 +63,6 @@ def send_evidence_deleted(sender, instance, **kwargs):
 
 @before_task_publish.connect
 def create_task_result_on_publish(sender=None, headers=None, body=None, **kwargs):
-
     if "task" not in headers:
         return
 

@@ -4,7 +4,6 @@
 
 
 def get_span(orig, new, editType):
-
     orig_list = orig.split(" ")
 
     new_list = new.split(" ")

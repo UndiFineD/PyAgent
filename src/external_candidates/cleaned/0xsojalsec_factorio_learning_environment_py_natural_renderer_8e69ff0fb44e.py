@@ -9,7 +9,6 @@ import random
 
 from typing import Callable, Dict, List, Tuple
 
-
 from fle.env.tools.admin.render.utils.render_config import RenderConfig
 
 from PIL import ImageDraw
@@ -19,7 +18,6 @@ class NaturalRenderer:
     """Handles rendering of natural elements (trees, rocks) on the Factorio map"""
 
     def __init__(self, config: RenderConfig):
-
         self.config = config
 
         # Set a fixed seed for random to ensure consistent rendering of natural elements
@@ -36,8 +34,6 @@ class NaturalRenderer:
         """
 
         Draw trees on the map with natural variations
-
-
 
         Args:
 
@@ -252,8 +248,6 @@ class NaturalRenderer:
         """
 
         Draw rocks on the map with natural variations
-
-
 
         Args:
 

@@ -33,7 +33,6 @@ from ..prompt import GRAPH_FIELD_SEP
 class NetworkXStorage(BaseGraphStorage):
     @staticmethod
     def load_nx_graph(file_name) -> nx.Graph:
-
         if os.path.exists(file_name):
             return nx.read_graphml(file_name)
 
@@ -41,7 +40,6 @@ class NetworkXStorage(BaseGraphStorage):
 
     @staticmethod
     def write_nx_graph(graph: nx.Graph, file_name):
-
         logger.info(f"Writing graph with {graph.number_of_nodes()} nodes, {graph.number_of_edges()} edges")
 
         nx.write_graphml(graph, file_name)
@@ -87,7 +85,6 @@ class NetworkXStorage(BaseGraphStorage):
         if not graph.is_directed():
 
             def _sort_source_target(edge):
-
                 source, target, edge_data = edge
 
                 if source > target:
@@ -102,7 +99,6 @@ class NetworkXStorage(BaseGraphStorage):
             edges = [_sort_source_target(edge) for edge in edges]
 
         def _get_edge_key(source: Any, target: Any) -> str:
-
             return f"{source} -> {target}"
 
         edges = sorted(edges, key=lambda x: _get_edge_key(x[0], x[1]))
@@ -112,7 +108,6 @@ class NetworkXStorage(BaseGraphStorage):
         return fixed_graph
 
     def __post_init__(self):
-
         self._graphml_xml_file = os.path.join(self.global_config["working_dir"], f"graph_{self.namespace}.graphml")
 
         preloaded_graph = NetworkXStorage.load_nx_graph(self._graphml_xml_file)
@@ -133,61 +128,49 @@ class NetworkXStorage(BaseGraphStorage):
         }
 
     async def index_done_callback(self):
-
         NetworkXStorage.write_nx_graph(self._graph, self._graphml_xml_file)
 
     async def has_node(self, node_id: str) -> bool:
-
         return self._graph.has_node(node_id)
 
     async def has_edge(self, source_node_id: str, target_node_id: str) -> bool:
-
         return self._graph.has_edge(source_node_id, target_node_id)
 
     async def get_node(self, node_id: str) -> Union[dict, None]:
-
         return self._graph.nodes.get(node_id)
 
     async def node_degree(self, node_id: str) -> int:
-
         # [numberchiffre]: node_id not part of graph returns `DegreeView({})` instead of 0
 
         return self._graph.degree(node_id) if self._graph.has_node(node_id) else 0
 
     async def edge_degree(self, src_id: str, tgt_id: str) -> int:
-
         return (self._graph.degree(src_id) if self._graph.has_node(src_id) else 0) + (
             self._graph.degree(tgt_id) if self._graph.has_node(tgt_id) else 0
         )
 
     async def get_edge(self, source_node_id: str, target_node_id: str) -> Union[dict, None]:
-
         return self._graph.edges.get((source_node_id, target_node_id))
 
     async def get_node_edges(self, source_node_id: str):
-
         if self._graph.has_node(source_node_id):
             return list(self._graph.edges(source_node_id))
 
         return None
 
     async def upsert_node(self, node_id: str, node_data: dict[str, str]):
-
         self._graph.add_node(node_id, **node_data)
 
     async def upsert_edge(self, source_node_id: str, target_node_id: str, edge_data: dict[str, str]):
-
         self._graph.add_edge(source_node_id, target_node_id, **edge_data)
 
     async def clustering(self, algorithm: str):
-
         if algorithm not in self._clustering_algorithms:
             raise ValueError(f"Clustering algorithm {algorithm} not supported")
 
         await self._clustering_algorithms[algorithm]()
 
     async def community_schema(self) -> dict[str, SingleCommunitySchema]:
-
         results = defaultdict(
             lambda: dict(
                 level=None,
@@ -261,12 +244,10 @@ class NetworkXStorage(BaseGraphStorage):
         return dict(results)
 
     def _cluster_data_to_subgraphs(self, cluster_data: dict[str, list[dict[str, str]]]):
-
         for node_id, clusters in cluster_data.items():
             self._graph.nodes[node_id]["clusters"] = json.dumps(clusters)
 
     async def _leiden_clustering(self):
-
         from graspologic.partition import hierarchical_leiden
 
         graph = NetworkXStorage.stable_largest_connected_component(self._graph)
@@ -299,14 +280,12 @@ class NetworkXStorage(BaseGraphStorage):
         self._cluster_data_to_subgraphs(node_communities)
 
     async def embed_nodes(self, algorithm: str) -> tuple[np.ndarray, list[str]]:
-
         if algorithm not in self._node_embed_algorithms:
             raise ValueError(f"Node embedding algorithm {algorithm} not supported")
 
         return await self._node_embed_algorithms[algorithm]()
 
     async def _node2vec_embed(self):
-
         from graspologic import embed
 
         embeddings, nodes = embed.node2vec_embed(

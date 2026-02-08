@@ -7,7 +7,6 @@ from pdfalyzer.helpers.dict_helper import get_dict_key_by_value
 
 
 def test_get_dict_key_by_value():
-
     arr = [1, 2, 3]
 
     hsh = {"a": 1, "b": b"BYTES", 1: arr}

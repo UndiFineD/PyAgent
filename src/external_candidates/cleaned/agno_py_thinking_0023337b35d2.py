@@ -15,36 +15,23 @@ from agno.tools import Toolkit
 
 from agno.utils.log import log_debug, logger
 
+
 class ThinkingTools(Toolkit):
-
     def __init__(
-
         self,
-
         think: bool = True,
-
         instructions: Optional[str] = None,
-
         add_instructions: bool = False,
-
         **kwargs,
-
     ):
-
         super().__init__(
-
             name="thinking_tools",
-
             instructions=instructions,
-
             add_instructions=add_instructions,
-
             **kwargs,
-
         )
 
         if instructions is None:
-
             self.instructions = dedent("""\
 
             ## Using the think tool
@@ -66,13 +53,11 @@ class ThinkingTools(Toolkit):
             """)
 
         if think:
-
             # Register the think tool
 
             self.register(self.think)
 
     def think(self, agent: Union[Agent, Team], thought: str) -> str:
-
         """Use the tool to think about something.
 
         It will not obtain new information or take any actions, but just append the thought to the log and return the result.
@@ -86,17 +71,14 @@ class ThinkingTools(Toolkit):
         """
 
         try:
-
             log_debug(f"Thought: {thought}")
 
             # Add the thought to the Agent state
 
             if agent.session_state is None:
-
                 agent.session_state = {}
 
             if "thoughts" not in agent.session_state:
-
                 agent.session_state["thoughts"] = []
 
             agent.session_state["thoughts"].append(thought)
@@ -114,8 +96,6 @@ class ThinkingTools(Toolkit):
             return formatted_thoughts
 
         except Exception as e:
-
             logger.error(f"Error recording thought: {e}")
 
             return f"Error recording thought: {e}"
-

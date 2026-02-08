@@ -17,7 +17,6 @@ class ProbabilityDistributions(PiCreatureScene):
     }
 
     def construct(self):
-
         lag_ratio = 0.2
 
         run_time = 3

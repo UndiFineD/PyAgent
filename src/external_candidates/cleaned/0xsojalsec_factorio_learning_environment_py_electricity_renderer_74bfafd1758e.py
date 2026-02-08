@@ -7,7 +7,6 @@ import colorsys
 
 from typing import Callable, Dict
 
-
 from fle.env.entities import Layer
 
 from fle.env.tools.admin.render_simple.layers.layer_renderer import LayerRenderer
@@ -20,7 +19,6 @@ class ElectricityLayerRenderer(LayerRenderer):
 
     @property
     def layer_name(self) -> str:
-
         return "electricity"
 
     def render(

@@ -10,7 +10,6 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 class VolatilityTaskConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
-
         self.dump_id = self.scope["url_route"]["kwargs"]["dump_id"]
 
         self.room_group_name = f"volatility_tasks_{self.dump_id}"
@@ -22,7 +21,6 @@ class VolatilityTaskConsumer(AsyncJsonWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-
         # Leave room group
 
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
@@ -30,7 +28,6 @@ class VolatilityTaskConsumer(AsyncJsonWebsocketConsumer):
     # Receive message from WebSocket
 
     async def receive(self, text_data):
-
         text_data_json = json.loads(text_data)
 
         message = text_data_json["message"]
@@ -48,7 +45,6 @@ class VolatilityTaskConsumer(AsyncJsonWebsocketConsumer):
     # Receive message from room group
 
     async def send_notification(self, event):
-
         message = event["message"]
 
         # Send message to WebSocket
@@ -64,7 +60,6 @@ class VolatilityTaskConsumer(AsyncJsonWebsocketConsumer):
 
 class CasesTaskConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
-
         self.room_group_name = "cases"
 
         # Join room group
@@ -74,7 +69,6 @@ class CasesTaskConsumer(AsyncJsonWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-
         # Leave room group
 
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
@@ -82,7 +76,6 @@ class CasesTaskConsumer(AsyncJsonWebsocketConsumer):
     # Receive message from WebSocket
 
     async def receive(self, text_data):
-
         text_data_json = json.loads(text_data)
 
         message = text_data_json["message"]
@@ -103,7 +96,6 @@ class CasesTaskConsumer(AsyncJsonWebsocketConsumer):
     # Receive message from room group
 
     async def send_notification(self, event):
-
         message = event["message"]
 
         status = event["status"]
@@ -122,7 +114,6 @@ class CasesTaskConsumer(AsyncJsonWebsocketConsumer):
 
 class EvidencesTaskConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
-
         self.room_group_name = "evidences"
 
         # Join room group
@@ -132,7 +123,6 @@ class EvidencesTaskConsumer(AsyncJsonWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-
         # Leave room group
 
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
@@ -140,7 +130,6 @@ class EvidencesTaskConsumer(AsyncJsonWebsocketConsumer):
     # Receive message from WebSocket
 
     async def receive(self, text_data):
-
         text_data_json = json.loads(text_data)
 
         message = text_data_json["message"]
@@ -161,7 +150,6 @@ class EvidencesTaskConsumer(AsyncJsonWebsocketConsumer):
     # Receive message from room group
 
     async def send_notification(self, event):
-
         message = event["message"]
 
         status = event["status"]
@@ -180,7 +168,6 @@ class EvidencesTaskConsumer(AsyncJsonWebsocketConsumer):
 
 class SymbolsTaskConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
-
         self.room_group_name = "symbols"
 
         # Join room group
@@ -190,7 +177,6 @@ class SymbolsTaskConsumer(AsyncJsonWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-
         # Leave room group
 
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
@@ -198,7 +184,6 @@ class SymbolsTaskConsumer(AsyncJsonWebsocketConsumer):
     # Receive message from WebSocket
 
     async def receive(self, text_data):
-
         text_data_json = json.loads(text_data)
 
         message = text_data_json["message"]
@@ -219,7 +204,6 @@ class SymbolsTaskConsumer(AsyncJsonWebsocketConsumer):
     # Receive message from room group
 
     async def send_notification(self, event):
-
         message = event["message"]
 
         status = event["status"]

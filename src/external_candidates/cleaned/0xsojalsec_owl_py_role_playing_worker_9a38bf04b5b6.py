@@ -95,7 +95,6 @@ class RolePlayingWorker(Worker):
         user_agent_kwargs: Optional[Dict] = None,
         chat_turn_limit: int = 3,
     ) -> None:
-
         super().__init__(description)
 
         summ_sys_msg = BaseMessage.make_assistant_message(

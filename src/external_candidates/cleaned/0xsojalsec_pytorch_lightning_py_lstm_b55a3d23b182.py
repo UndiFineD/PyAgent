@@ -41,7 +41,6 @@ class SimpleLSTM(nn.Module):
         nlayers: int = 4,
         dropout: float = 0.2,
     ):
-
         super().__init__()
 
         self.vocab_size = vocab_size
@@ -61,7 +60,6 @@ class SimpleLSTM(nn.Module):
         self.init_weights()
 
     def init_weights(self) -> None:
-
         nn.init.uniform_(self.encoder.weight, -0.1, 0.1)
 
         nn.init.zeros_(self.decoder.bias)
@@ -69,7 +67,6 @@ class SimpleLSTM(nn.Module):
         nn.init.uniform_(self.decoder.weight, -0.1, 0.1)
 
     def forward(self, input: Tensor, hidden: tuple[Tensor, Tensor]) -> tuple[Tensor, Tensor]:
-
         emb = self.drop(self.encoder(input))
 
         output, hidden = self.rnn(emb, hidden)
@@ -81,7 +78,6 @@ class SimpleLSTM(nn.Module):
         return F.log_softmax(decoded, dim=1), hidden
 
     def init_hidden(self, batch_size: int) -> tuple[Tensor, Tensor]:
-
         weight = next(self.parameters())
 
         return (
@@ -92,7 +88,6 @@ class SimpleLSTM(nn.Module):
 
 class SequenceSampler(Sampler[list[int]]):
     def __init__(self, dataset: Sized, batch_size: int) -> None:
-
         super().__init__()
 
         self.dataset = dataset
@@ -102,20 +97,17 @@ class SequenceSampler(Sampler[list[int]]):
         self.chunk_size = len(self.dataset) // self.batch_size
 
     def __iter__(self) -> Iterator[list[int]]:
-
         n = len(self.dataset)
 
         for i in range(self.chunk_size):
             yield list(range(i, n - (n % self.batch_size), self.chunk_size))
 
     def __len__(self) -> int:
-
         return self.chunk_size
 
 
 class LightningLSTM(LightningModule):
     def __init__(self, vocab_size: int = 33278):
-
         super().__init__()
 
         self.model = SimpleLSTM(vocab_size=vocab_size)
@@ -123,11 +115,9 @@ class LightningLSTM(LightningModule):
         self.hidden: Optional[tuple[Tensor, Tensor]] = None
 
     def on_train_epoch_end(self) -> None:
-
         self.hidden = None
 
     def training_step(self, batch: tuple[Tensor, Tensor], batch_idx: int) -> Tensor:
-
         input, target = batch
 
         if self.hidden is None:
@@ -144,15 +134,12 @@ class LightningLSTM(LightningModule):
         return loss
 
     def prepare_data(self) -> None:
-
         WikiText2(download=True)
 
     def train_dataloader(self) -> DataLoader:
-
         dataset = WikiText2()
 
         return DataLoader(dataset, batch_sampler=SequenceSampler(dataset, batch_size=20))
 
     def configure_optimizers(self) -> Optimizer:
-
         return torch.optim.SGD(self.parameters(), lr=20.0)

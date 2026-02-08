@@ -78,14 +78,12 @@ class ProgressBar(Callback):
     """
 
     def __init__(self) -> None:
-
         self._trainer: Optional[pl.Trainer] = None
 
         self._current_eval_dataloader_idx: Optional[int] = None
 
     @property
     def trainer(self) -> "pl.Trainer":
-
         if self._trainer is None:
             raise TypeError(f"The `{self.__class__.__name__}._trainer` reference has not been set yet.")
 
@@ -93,27 +91,22 @@ class ProgressBar(Callback):
 
     @property
     def sanity_check_description(self) -> str:
-
         return "Sanity Checking"
 
     @property
     def train_description(self) -> str:
-
         return "Training"
 
     @property
     def validation_description(self) -> str:
-
         return "Validation"
 
     @property
     def test_description(self) -> str:
-
         return "Testing"
 
     @property
     def predict_description(self) -> str:
-
         return "Predicting"
 
     @property
@@ -205,7 +198,6 @@ class ProgressBar(Callback):
         )
 
     def has_dataloader_changed(self, dataloader_idx: int) -> bool:
-
         old_dataloader_idx = self._current_eval_dataloader_idx
 
         self._current_eval_dataloader_idx = dataloader_idx
@@ -213,7 +205,6 @@ class ProgressBar(Callback):
         return old_dataloader_idx != dataloader_idx
 
     def reset_dataloader_idx_tracker(self) -> None:
-
         self._current_eval_dataloader_idx = None
 
     def disable(self) -> None:
@@ -241,7 +232,6 @@ class ProgressBar(Callback):
 
     @override
     def setup(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule", stage: str) -> None:
-
         self._trainer = trainer
 
         if not trainer.is_global_zero:

@@ -10,11 +10,9 @@ from fle.env.tools import Tool
 
 class Print(Tool):
     def __init__(self, connection, game_state):
-
         super().__init__(connection, game_state)
 
     def load(self):
-
         pass
 
     def __call__(self, *args):

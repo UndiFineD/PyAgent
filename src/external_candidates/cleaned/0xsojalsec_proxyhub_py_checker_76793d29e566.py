@@ -47,7 +47,6 @@ class Checker:
         post=False,
         loop=None,
     ):
-
         Judge.clear()
 
         self._judges = get_judges(judges, timeout, verify_ssl)
@@ -77,7 +76,6 @@ class Checker:
         self._ngtrs = {proto for proto in types or NGTRS}
 
     async def check_judges(self):
-
         # TODO: need refactoring
 
         log.debug("Start check judges")
@@ -146,7 +144,6 @@ class Checker:
             RuntimeError("Not found judges")
 
     def _types_passed(self, proxy):
-
         if not self._types:
             return True
 
@@ -169,7 +166,6 @@ class Checker:
         return False
 
     async def _in_DNSBL(self, host):
-
         _host = ".".join(reversed(host.split(".")))  # reverse address
 
         tasks = []
@@ -187,7 +183,6 @@ class Checker:
         return False
 
     async def check(self, proxy):
-
         if self._dnsbl:
             if await self._in_DNSBL(proxy.host):
                 proxy.log("Found in DNSBL")
@@ -228,7 +223,6 @@ class Checker:
         return False
 
     async def _check_conn_25(self, proxy, proto):
-
         judge = Judge.get_random(proto)
 
         proxy.log("Selected judge: %s" % judge)
@@ -269,7 +263,6 @@ class Checker:
         return result
 
     async def _check(self, proxy, proto):
-
         judge = Judge.get_random(proto)
 
         proxy.log("Selected judge: %s" % judge)
@@ -322,7 +315,6 @@ class Checker:
 
 
 def _request(method, host, path, fullpath=False, data=""):
-
     hdrs, rv = get_headers(rv=True)
 
     hdrs["Host"] = host
@@ -347,7 +339,6 @@ def _request(method, host, path, fullpath=False, data=""):
 
 
 async def _send_test_request(method, proxy, judge):
-
     resp, content, err = None, None, None
 
     request, rv = _request(
@@ -394,7 +385,6 @@ async def _send_test_request(method, proxy, judge):
 
 
 def _decompress_content(headers, content):
-
     headers = parse_headers(headers)
 
     is_compressed = headers.get("Content-Encoding") in ("gzip", "deflate")
@@ -423,7 +413,6 @@ def _decompress_content(headers, content):
 
 
 def _check_test_response(proxy, headers, content, rv):
-
     verIsCorrect = rv in content
 
     refSupported = get_headers()["Referer"] in content
@@ -447,7 +436,6 @@ def _check_test_response(proxy, headers, content, rv):
 
 
 def _get_anonymity_lvl(real_ext_ip, proxy, judge, content):
-
     content = content.lower()
 
     foundIP = get_all_ip(content)
@@ -470,7 +458,6 @@ def _get_anonymity_lvl(real_ext_ip, proxy, judge, content):
 
 class ProxyChecker(Checker):
     def __init__(self, *args, **kwargs):
-
         warnings.warn(
             "`ProxyChecker` is deprecated, use `Checker` instead.",
             DeprecationWarning,

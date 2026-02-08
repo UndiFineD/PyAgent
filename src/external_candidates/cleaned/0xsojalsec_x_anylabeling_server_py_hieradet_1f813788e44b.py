@@ -35,7 +35,6 @@ from sam2.modeling.sam2_utils import MLP, DropPath
 
 
 def do_pool(x: torch.Tensor, pool: nn.Module, norm: nn.Module = None) -> torch.Tensor:
-
     if pool is None:
         return x
 
@@ -63,7 +62,6 @@ class MultiScaleAttention(nn.Module):
         num_heads: int,
         q_pool: nn.Module = None,
     ):
-
         super().__init__()
 
         self.dim = dim
@@ -79,7 +77,6 @@ class MultiScaleAttention(nn.Module):
         self.proj = nn.Linear(dim_out, dim_out)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-
         B, H, W, _ = x.shape
 
         # qkv with shape (B, H * W, 3, nHead, C)
@@ -131,7 +128,6 @@ class MultiScaleBlock(nn.Module):
         act_layer: nn.Module = nn.GELU,
         window_size: int = 0,
     ):
-
         super().__init__()
 
         if isinstance(norm_layer, str):
@@ -173,7 +169,6 @@ class MultiScaleBlock(nn.Module):
             self.proj = nn.Linear(dim, dim_out)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-
         shortcut = x  # B, H, W, C
 
         x = self.norm1(x)
@@ -257,7 +252,6 @@ class Hiera(nn.Module):
         weights_path=None,
         return_interm_layers=True,  # return feats from every stage
     ):
-
         super().__init__()
 
         assert len(stages) == len(window_spec)
@@ -345,7 +339,6 @@ class Hiera(nn.Module):
             logging.info("loading Hiera", self.load_state_dict(chkpt, strict=False))
 
     def _get_pos_embed(self, hw: Tuple[int, int]) -> torch.Tensor:
-
         h, w = hw
 
         window_embed = self.pos_embed_window
@@ -359,7 +352,6 @@ class Hiera(nn.Module):
         return pos_embed
 
     def forward(self, x: torch.Tensor) -> List[torch.Tensor]:
-
         x = self.patch_embed(x)
 
         # x: (B, H, W, C)
@@ -381,7 +373,6 @@ class Hiera(nn.Module):
         return outputs
 
     def get_layer_id(self, layer_name):
-
         # https://github.com/microsoft/unilm/blob/master/beit/optim_factory.py#L33
 
         num_layers = self.get_num_layers()
@@ -402,5 +393,4 @@ class Hiera(nn.Module):
             return num_layers + 1
 
     def get_num_layers(self) -> int:
-
         return len(self.blocks)

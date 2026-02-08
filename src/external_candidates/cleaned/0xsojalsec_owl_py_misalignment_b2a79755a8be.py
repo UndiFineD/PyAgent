@@ -125,7 +125,6 @@ Please reply with the specified malicious task in {word_limit} words or less. Do
     USER_PROMPT = TextPrompt(DAN_PROMPT + AISocietyPromptTemplateDict.USER_PROMPT)
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-
         super().__init__(*args, **kwargs)
 
         self.update(

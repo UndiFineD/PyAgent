@@ -16,7 +16,6 @@ from ovo.core.utils.tests import TEST_PROJECT_NAME
 
 @pytest.fixture(scope="session", autouse=True)
 def check_unit_test_mode():
-
     if os.environ.get("OVO_UNIT_TEST") == "1":
         raise RuntimeError("Please run unit tests and workflow tests separately.")
 

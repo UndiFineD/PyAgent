@@ -15,7 +15,6 @@ from pydantic_core import ValidationError
 
 
 def test_config_default():
-
     data = yaml.safe_load(StringIO(OVOConfig.default(ConfigProps())))
 
     data["dir"] = DEFAULT_OVO_HOME
@@ -24,7 +23,6 @@ def test_config_default():
 
 
 def test_config_with_extra_args():
-
     with pytest.raises(ValidationError):
         data = yaml.safe_load(StringIO(OVOConfig.default(ConfigProps())))
 

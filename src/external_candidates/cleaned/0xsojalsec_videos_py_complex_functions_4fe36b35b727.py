@@ -27,7 +27,6 @@ class GeneralizeToComplexFunctions(Scene):
     }
 
     def construct(self):
-
         self.show_cosine_wave()
 
         self.transition_to_complex_plane()
@@ -35,7 +34,6 @@ class GeneralizeToComplexFunctions(Scene):
         self.add_rotating_vectors_making_cos()
 
     def show_cosine_wave(self):
-
         axes = Axes(**self.axes_config)
 
         axes.shift(2 * LEFT - axes.c2p(0, 0))
@@ -51,7 +49,6 @@ class GeneralizeToComplexFunctions(Scene):
         get_t = t_tracker.get_value
 
         def func(x):
-
             return 2 * np.cos(x)
 
         cos_x_max = 20
@@ -169,7 +166,6 @@ class GeneralizeToComplexFunctions(Scene):
         self.t_tracker = t_tracker
 
     def transition_to_complex_plane(self):
-
         y_axis = self.y_axis
 
         y_labels = self.y_labels
@@ -195,7 +191,6 @@ class GeneralizeToComplexFunctions(Scene):
         self.plane_words = plane_words
 
     def add_rotating_vectors_making_cos(self):
-
         plane = self.plane
 
         real_words = self.real_words
@@ -323,7 +318,6 @@ class GeneralizeToComplexFunctions(Scene):
     #
 
     def get_complex_plane(self):
-
         plane = ComplexPlane(**self.complex_plane_config)
 
         plane.add_coordinates()
@@ -350,7 +344,6 @@ class ClarifyInputAndOutput(GeneralizeToComplexFunctions):
     }
 
     def construct(self):
-
         self.setup_plane()
 
         self.setup_input_space()
@@ -362,7 +355,6 @@ class ClarifyInputAndOutput(GeneralizeToComplexFunctions):
         self.describe_output()
 
     def setup_plane(self):
-
         plane = self.get_complex_plane()
 
         plane.sublabel = OldTexText("(Output space)")
@@ -376,7 +368,6 @@ class ClarifyInputAndOutput(GeneralizeToComplexFunctions):
         self.plane = plane
 
     def setup_input_space(self):
-
         rect = Rectangle(**self.input_space_rect_config)
 
         rect.to_corner(UL, buff=SMALL_BUFF)
@@ -402,7 +393,6 @@ class ClarifyInputAndOutput(GeneralizeToComplexFunctions):
         self.input_words = input_words
 
     def setup_input_trackers(self):
-
         plane = self.plane
 
         input_line = self.input_line
@@ -428,7 +418,6 @@ class ClarifyInputAndOutput(GeneralizeToComplexFunctions):
         path = self.get_path()
 
         def get_output_point():
-
             return path.point_from_proportion(get_input())
 
         output_dot = Dot()
@@ -469,7 +458,6 @@ class ClarifyInputAndOutput(GeneralizeToComplexFunctions):
         self.output_decimal = output_decimal
 
     def describe_input(self):
-
         input_tracker = self.input_tracker
 
         self.play(FadeIn(self.input_words, UP))
@@ -485,7 +473,6 @@ class ClarifyInputAndOutput(GeneralizeToComplexFunctions):
         self.wait()
 
     def describe_output(self):
-
         path = self.path
 
         output_dot = self.output_dot
@@ -566,7 +553,6 @@ class ClarifyInputAndOutput(GeneralizeToComplexFunctions):
     #
 
     def get_input_line(self, input_rect):
-
         input_line = UnitInterval()
 
         input_line.move_to(input_rect)
@@ -580,7 +566,6 @@ class ClarifyInputAndOutput(GeneralizeToComplexFunctions):
         return input_line
 
     def get_path(self):
-
         # mob = SVGMobject("BatmanLogo")
 
         mob = OldTex("\\pi")
@@ -604,7 +589,6 @@ class GraphForFlattenedPi(ClarifyInputAndOutput):
     }
 
     def construct(self):
-
         self.setup_plane()
 
         plane = self.plane
@@ -645,7 +629,6 @@ class GraphForFlattenedPi(ClarifyInputAndOutput):
         axes.y_axis.add_numbers(-1.0, 1.0, num_decimal_places=1)
 
         def func(t):
-
             return plane.x_axis.p2n(path.point_from_proportion(t))
 
         graph = axes.get_graph(func)
@@ -691,7 +674,6 @@ class SimpleComplexExponentExample(ClarifyInputAndOutput):
     }
 
     def construct(self):
-
         self.setup_plane()
 
         self.setup_input_space()
@@ -712,7 +694,6 @@ class SimpleComplexExponentExample(ClarifyInputAndOutput):
         )
 
     def setup_plane(self):
-
         plane = ComplexPlane()
 
         plane.scale(2)
@@ -726,7 +707,6 @@ class SimpleComplexExponentExample(ClarifyInputAndOutput):
         self.add(plane)
 
     def setup_input_trackers(self):
-
         input_line = self.input_line
 
         input_tracker = ValueTracker(0)
@@ -769,17 +749,14 @@ class SimpleComplexExponentExample(ClarifyInputAndOutput):
         self.add(input_tip, input_label)
 
     def setup_output_trackers(self):
-
         plane = self.plane
 
         get_input = self.input_tracker.get_value
 
         def get_output():
-
             return np.exp(complex(0, get_input()))
 
         def get_output_point():
-
             return plane.n2p(get_output())
 
         output_label, static_output_label = [
@@ -867,7 +844,6 @@ class SimpleComplexExponentExample(ClarifyInputAndOutput):
     #
 
     def get_input_line(self, input_rect):
-
         input_line = NumberLine(**self.input_line_config)
 
         input_line.move_to(input_rect)
@@ -891,7 +867,6 @@ class TRangingFrom0To1(SimpleComplexExponentExample):
     }
 
     def construct(self):
-
         self.setup_input_space()
 
         self.setup_input_trackers()
@@ -899,7 +874,6 @@ class TRangingFrom0To1(SimpleComplexExponentExample):
         self.play(self.input_tracker.set_value, 1, run_time=10, rate_func=linear)
 
     def get_input_line(self, rect):
-
         result = ClarifyInputAndOutput.get_input_line(self, rect)
 
         result.stretch(0.9, 0)

@@ -5,9 +5,7 @@
 
 from typing import Any, Dict, Type
 
-
 from fle.commons.models.game_state import GameState
-
 
 from .mcts import MCTS
 
@@ -27,7 +25,6 @@ class ParallelMCTSConfig:
         mcts_kwargs: Dict[str, Any] = None,
         **kwargs,
     ):
-
         self.n_parallel = n_parallel
 
         self.system_prompt = system_prompt

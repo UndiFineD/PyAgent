@@ -9,7 +9,6 @@ from atopile.expressions import RangedValue
 
 
 def test_comparitors():
-
     a = RangedValue(1, 2)
 
     b = RangedValue(2, 3)
@@ -28,7 +27,6 @@ def test_comparitors():
 
 
 def test_units():
-
     a = RangedValue(1000, 2000, "mV")
 
     b = RangedValue(1, 2, "kV")
@@ -41,7 +39,6 @@ def test_units():
 
 
 def test_arithmetic():
-
     assert RangedValue(1, 2) + RangedValue(2, 3) == RangedValue(3, 5)
 
     assert RangedValue(1, 2) - RangedValue(2, 3) == RangedValue(-2, 0)

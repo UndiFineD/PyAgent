@@ -15,26 +15,18 @@ from feathr.definition.source import Source
 
 from feathr.definition.transformation import Transformation
 
-class RepoDefinitions:
 
+class RepoDefinitions:
     """A list of shareable Feathr objects defined in the project."""
 
     def __init__(
-
         self,
-
         sources: Set[Source],
-
         features: Set[Feature],
-
         transformations: Set[Transformation],
-
         feature_anchors: Set[FeatureAnchor],
-
         derived_features: Set[DerivedFeature],
-
     ) -> None:
-
         self.sources = sources
 
         self.features = features
@@ -44,4 +36,3 @@ class RepoDefinitions:
         self.feature_anchors = feature_anchors
 
         self.derived_features = derived_features
-

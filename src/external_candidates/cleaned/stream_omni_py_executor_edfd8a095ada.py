@@ -31,13 +31,11 @@
 
 # limitations under the License.
 
-
 import logging
 
 import os
 
 from contextlib import nullcontext
-
 
 import torch
 
@@ -56,7 +54,6 @@ from cosyvoice.utils.train_utils import (
 
 class Executor:
     def __init__(self, gan: bool = False):
-
         self.gan = gan
 
         self.step = 0

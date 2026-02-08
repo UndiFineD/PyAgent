@@ -7,8 +7,8 @@ from feathr.definition.materialization_settings import MaterializationSettings
 
 from jinja2 import Template
 
-def _to_materialization_config(settings: MaterializationSettings):
 
+def _to_materialization_config(settings: MaterializationSettings):
     # produce materialization config
 
     tm = Template("""
@@ -48,4 +48,3 @@ def _to_materialization_config(settings: MaterializationSettings):
     msg = tm.render(settings=settings)
 
     return msg
-

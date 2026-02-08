@@ -7,9 +7,8 @@
 
 # NOTE: extracted with static-only rules; review before use
 
-class AnamException(Exception):
 
+class AnamException(Exception):
     """Custom exception for Anam API errors."""
 
     pass
-

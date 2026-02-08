@@ -90,7 +90,6 @@ class _PredictionLoop(_Loop):
     """Top-level loop where prediction starts."""
 
     def __init__(self, trainer: "pl.Trainer", inference_mode: bool = True) -> None:
-
         super().__init__(trainer)
 
         self.inference_mode = inference_mode
@@ -129,7 +128,6 @@ class _PredictionLoop(_Loop):
 
     @return_predictions.setter
     def return_predictions(self, return_predictions: Optional[bool] = None) -> None:
-
         # Strategies that spawn or fork don't support returning predictions
 
         return_supported = not isinstance(self.trainer.strategy.launcher, _MultiProcessingLauncher)
@@ -165,12 +163,10 @@ class _PredictionLoop(_Loop):
 
     @property
     def skip(self) -> bool:
-
         return sum(self.max_batches) == 0
 
     @_no_grad_context
     def run(self) -> Optional[_PREDICT_OUTPUT]:
-
         self.setup_data()
 
         if self.skip:
@@ -219,7 +215,6 @@ class _PredictionLoop(_Loop):
         return self.on_run_end()
 
     def setup_data(self) -> None:
-
         trainer = self.trainer
 
         # a default `predict_step` exists in the LightningModule, so no need to check if it's overridden
@@ -334,7 +329,6 @@ class _PredictionLoop(_Loop):
         return results
 
     def teardown(self) -> None:
-
         if self._data_fetcher is not None:
             self._data_fetcher.teardown()
 
@@ -482,7 +476,6 @@ class _PredictionLoop(_Loop):
         return batch_sampler.seen_batch_indices
 
     def _store_data_for_prediction_writer(self, batch_idx: int, dataloader_idx: int) -> bool:
-
         prediction_writers = [cb for cb in self.trainer.callbacks if isinstance(cb, BasePredictionWriter)]
 
         any_on_epoch = any(cb.interval.on_epoch for cb in prediction_writers)
@@ -516,11 +509,9 @@ class _PredictionLoop(_Loop):
         return any_on_epoch
 
     def _on_before_fetch(self) -> None:
-
         self.trainer.profiler.start(f"[{type(self).__name__}].predict_next")
 
     def _on_after_fetch(self) -> None:
-
         # the dataloader_idx cannot be easily included here because it might be different from the index used on
 
         # profiler start, since the `__next__` call might use a different iterator
@@ -539,13 +530,11 @@ class _PredictionLoop(_Loop):
         call._call_strategy_hook(trainer, "on_predict_start")
 
     def _on_predict_model_eval(self) -> None:
-
         self._module_mode.capture(self.trainer.lightning_module)
 
         call._call_lightning_module_hook(self.trainer, "on_predict_model_eval")
 
     def _on_predict_model_train(self) -> None:
-
         self._module_mode.restore(self.trainer.lightning_module)
 
     def _on_predict_epoch_start(self) -> None:
@@ -596,7 +585,6 @@ class _PredictionLoop(_Loop):
         call._call_strategy_hook(trainer, "on_predict_end")
 
     def _verify_dataloader_idx_requirement(self) -> None:
-
         trainer = self.trainer
 
         assert self._combined_loader is not None

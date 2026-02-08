@@ -11,22 +11,16 @@ from feathr.definition.anchor import FeatureAnchor
 
 from feathr.definition.feature_derivations import DerivedFeature
 
-class FeathrRegistry(ABC):
 
+class FeathrRegistry(ABC):
     """This is the abstract class for all the feature registries. All the feature registries should implement those interfaces."""
 
     @abstractmethod
-
     def register_features(
-
         self,
-
         anchor_list: List[FeatureAnchor] = [],
-
         derived_feature_list: List[DerivedFeature] = [],
-
     ):
-
         """Registers features based on the current workspace
 
         Args:
@@ -40,9 +34,7 @@ class FeathrRegistry(ABC):
         pass
 
     @abstractmethod
-
     def list_registered_features(self, project_name: str) -> List[str]:
-
         """List all the already registered features under the given project.
 
         `project_name` must not be None or empty string because it violates the RBAC policy
@@ -52,9 +44,7 @@ class FeathrRegistry(ABC):
         pass
 
     @abstractmethod
-
     def list_dependent_entities(self, qualified_name: str):
-
         """
 
         Returns list of dependent entities for provided entity
@@ -64,9 +54,7 @@ class FeathrRegistry(ABC):
         pass
 
     @abstractmethod
-
     def delete_entity(self, qualified_name: str):
-
         """
 
         Deletes entity if it has no dependent entities
@@ -76,13 +64,7 @@ class FeathrRegistry(ABC):
         pass
 
     @abstractmethod
-
-    def get_features_from_registry(
-
-        self, project_name: str
-
-    ) -> Tuple[List[FeatureAnchor], List[DerivedFeature]]:
-
+    def get_features_from_registry(self, project_name: str) -> Tuple[List[FeatureAnchor], List[DerivedFeature]]:
         """[Sync Features from registry to local workspace, given a project_name, will write project's features from registry to to user's local workspace]
 
         Args:
@@ -96,4 +78,3 @@ class FeathrRegistry(ABC):
         """
 
         pass
-

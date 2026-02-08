@@ -38,7 +38,6 @@ class PdfObjectProperties:
         idnum: int,
         indirect_object: Optional[IndirectObject] = None,
     ):
-
         self.idnum = idnum
 
         self.obj = pdf_object
@@ -94,7 +93,6 @@ class PdfObjectProperties:
 
     @classmethod
     def from_reference(cls, reference: IndirectObject, address: str) -> "PdfObjectProperties":
-
         return cls(reference.get_object(), address, reference.idnum, reference)
 
     @classmethod
@@ -169,13 +167,10 @@ class PdfObjectProperties:
             return Text(str(obj), style=get_class_style(obj))
 
     def __rich_without_underline__(self) -> Text:
-
         return node_label(self.idnum, self.label, self.obj, underline=False)
 
     def __rich__(self) -> Text:
-
         return node_label(self.idnum, self.label, self.obj)
 
     def __str__(self) -> str:
-
         return self.__rich__().plain

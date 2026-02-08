@@ -21,8 +21,8 @@ from feathr.definition.typed_key import DUMMY_KEY, TypedKey
 
 from jinja2 import Template
 
-class LookupFeature(DerivedFeature):
 
+class LookupFeature(DerivedFeature):
     """A lookup feature is a feature defined on top of two other features, i.e. using the feature value of the base feature as key, to lookup the feature value from the expansion feature.
 
     e.g. a lookup feature user_purchased_item_avg_price could be key-ed by user_id, and computed by:
@@ -54,39 +54,22 @@ class LookupFeature(DerivedFeature):
     """
 
     def __init__(
-
         self,
-
         name: str,
-
         feature_type: FeatureType,
-
         base_feature: FeatureBase,
-
         expansion_feature: FeatureBase,
-
         aggregation: Aggregation,
-
         key: Optional[Union[TypedKey, List[TypedKey]]] = [DUMMY_KEY],
-
         registry_tags: Optional[Dict[str, str]] = None,
-
     ):
-
         super(LookupFeature, self).__init__(
-
             name,
-
             feature_type,
-
             input_features=[base_feature, expansion_feature],
-
             transform="",
-
             key=key,
-
             registry_tags=registry_tags,
-
         )
 
         self.base_feature = base_feature
@@ -96,7 +79,6 @@ class LookupFeature(DerivedFeature):
         self.aggregation = aggregation
 
     def to_feature_config(self) -> str:
-
         tm = Template("""
 
             {{lookup_feature.name}}: {
@@ -132,4 +114,3 @@ class LookupFeature(DerivedFeature):
         """)
 
         return tm.render(lookup_feature=self)
-

@@ -20,7 +20,6 @@ from fle.env.tools.admin.render_message.client import RenderMessage
 
 class SendMessage(Tool):
     def __init__(self, connection, game_state):
-
         super().__init__(connection, game_state)
 
         self.name = "send_message"

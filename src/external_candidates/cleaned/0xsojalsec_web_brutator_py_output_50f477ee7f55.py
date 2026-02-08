@@ -16,13 +16,11 @@ import colored
 
 class Output:
     def __init__(self):
-
         self.mutex = threading.Lock()
 
         self.last_inline = False
 
     def inline(self, string):
-
         self.erase()
 
         sys.stdout.write(string)
@@ -32,13 +30,11 @@ class Output:
         self.last_inline = True
 
     def erase(self):
-
         sys.stdout.write("\033[1K")
 
         sys.stdout.write("\033[0G")
 
     def newline(self, string):
-
         if self.last_inline == True:
             self.erase()
 
@@ -51,7 +47,6 @@ class Output:
         sys.stdout.flush()
 
     def last_creds(self, username, password, index, length, verbose=False):
-
         with self.mutex:
             percentage = lambda x, y: float(x) / float(y) * 100
 
@@ -68,7 +63,6 @@ class Output:
                 self.inline(message)
 
     def found_creds(self, type_, username, password):
-
         with self.mutex:
             message = "Found {} creds: {}:{}".format(type_, username, password)
 
@@ -80,7 +74,6 @@ class Output:
             print(message)
 
     def error(self, message):
-
         with self.mutex:
             text = colored.stylize(message, colored.fg("red") + colored.attr("bold"))
 
@@ -90,7 +83,6 @@ class Output:
             print(text)
 
     def fatal_error(self, message):
-
         with self.mutex:
             text = colored.stylize(message, colored.fg("white") + colored.bg("red") + colored.attr("bold"))
 
@@ -100,7 +92,6 @@ class Output:
             print(text)
 
     def warning(self, message):
-
         with self.mutex:
             text = colored.stylize(message, colored.fg("yellow") + colored.attr("bold"))
 

@@ -32,7 +32,6 @@ class HistogramSettings:
 
     @classmethod
     def from_query_params(cls, descriptors_by_key: dict[str, Descriptor], key_prefix: str):
-
         return cls(
             descriptor=(
                 descriptors_by_key[st.query_params[f"{key_prefix}_descriptor"]]
@@ -43,7 +42,6 @@ class HistogramSettings:
         )
 
     def update_query_params(self, key_prefix: str):
-
         if self.descriptor:
             st.query_params[f"{key_prefix}_descriptor"] = self.descriptor.key
 
@@ -63,7 +61,6 @@ def descriptor_explorer(
     descriptors_by_key: Dict[str, Descriptor],
     single_design: bool = False,
 ):
-
     if descriptors_df.empty:
         st.warning("No designs found")
 

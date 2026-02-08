@@ -26,7 +26,6 @@ class IllustrateAreaModelErf(GraphScene):
     }
 
     def construct(self):
-
         # integral bounds
 
         x_min_1 = -0.0001
@@ -85,11 +84,9 @@ class IllustrateAreaModelErf(GraphScene):
         )
 
         def integral_update_func(t):
-
             return scipy.special.erf(self.point_to_coords(self.right_v_line.get_center())[0])
 
         def integral_update_func_percent(t):
-
             return 100 * integral_update_func(t)
 
         equals_sign = OldTex("=").next_to(cdf_formula, buff=MED_LARGE_BUFF)

@@ -25,7 +25,6 @@ class RotatingButterflyCurve(Animation):
     }
 
     def __init__(self, **kwargs):
-
         digest_config(self, kwargs)
 
         fine_range = np.arange(-self.radius, self.radius, self.space_epsilon)
@@ -62,7 +61,6 @@ class RotatingButterflyCurve(Animation):
         Animation.__init__(self, Mobject(), **kwargs)
 
     def interpolate_mobject(self, alpha):
-
         angle = alpha * self.radians
 
         rot_matrix = np.identity(4)
@@ -87,5 +85,4 @@ class RotatingButterflyCurve(Animation):
 
 class RotatingFourDButterflyCurve(Scene):
     def construct(self):
-
         self.play(RotatingButterflyCurve())

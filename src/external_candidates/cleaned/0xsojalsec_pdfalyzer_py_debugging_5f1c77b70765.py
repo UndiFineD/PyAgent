@@ -9,7 +9,6 @@ import logging
 
 
 def debugger():
-
     import pdb
 
     pdb.set_trace(locals())

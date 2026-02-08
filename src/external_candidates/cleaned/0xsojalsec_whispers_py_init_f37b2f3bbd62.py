@@ -153,7 +153,6 @@ class WhisperPlugins:
         return None
 
     def pairs(self):
-
         if self.plugin:
             try:
                 yield from self.plugin.pairs(self.filepath)

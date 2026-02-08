@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class DontLearnFromSymbols(Scene):
     def construct(self):
-
         randy = Randolph().to_corner()
 
         bubble = randy.get_bubble()
@@ -52,7 +51,6 @@ class DontLearnFromSymbols(Scene):
 
 class NotationReflectsMath(Scene):
     def construct(self):
-
         top_expr = OldTexText("Notation $\\Leftrightarrow$ Math")
 
         top_expr.shift(2 * UP)
@@ -74,7 +72,6 @@ class NotationReflectsMath(Scene):
 
 class AsymmetriesInTheMath(Scene):
     def construct(self):
-
         assyms_of_top = VMobject(
             OldTexText("Asymmetries of "),
             TOP("a", "b", "c", radius=0.75).set_color(BLUE),
@@ -117,7 +114,6 @@ class AsymmetriesInTheMath(Scene):
 
 class AddedVsOplussed(Scene):
     def construct(self):
-
         top = TOP()
 
         left_times = top.put_in_vertex(0, OldTex("\\times"))
@@ -157,7 +153,6 @@ class AddedVsOplussed(Scene):
 
 class ReciprocalTop(Scene):
     def construct(self):
-
         top = TOP()
 
         start_two = top.put_on_vertex(2, 2)
@@ -190,7 +185,6 @@ class ReciprocalTop(Scene):
 
 class NotSymbolicPatterns(Scene):
     def construct(self):
-
         randy = Randolph()
 
         symbolic_patterns = OldTexText("Symbolic patterns")
@@ -231,7 +225,6 @@ class NotSymbolicPatterns(Scene):
 
 class ChangeWeCanBelieveIn(Scene):
     def construct(self):
-
         words = OldTexText("Change we can believe in")
 
         change = VMobject(*words.split()[:6])
@@ -249,7 +242,6 @@ class ChangeWeCanBelieveIn(Scene):
 
 class TriangleOfPowerIsBetter(Scene):
     def construct(self):
-
         top = TOP("x", "y", "z", radius=0.75)
 
         top.set_color(BLUE)
@@ -274,7 +266,6 @@ class TriangleOfPowerIsBetter(Scene):
 
 class InYourOwnNotes(Scene):
     def construct(self):
-
         anims = [
             self.get_log_anim(3 * LEFT),
             self.get_exp_anim(3 * RIGHT),
@@ -290,7 +281,6 @@ class InYourOwnNotes(Scene):
         self.wait(2)
 
     def get_log_anim(self, center):
-
         O_log_n = OldTex(["O(", "\\log(n)", ")"])
 
         O_log_n.shift(center)
@@ -325,7 +315,6 @@ class InYourOwnNotes(Scene):
         return Transform(O_log_n, new_O_log_n)
 
     def get_exp_anim(self, center):
-
         epii = OldTex("e^{\\pi i} = -1")
 
         epii.shift(center)
@@ -355,7 +344,6 @@ class InYourOwnNotes(Scene):
 
 class Qwerty(Scene):
     def construct(self):
-
         qwerty = VMobject(
             OldTexText(list("QWERTYUIOP")),
             OldTexText(list("ASDFGHJKL")),
@@ -389,7 +377,6 @@ class Qwerty(Scene):
 
 class ShowLog(Scene):
     def construct(self):
-
         equation = VMobject(
             *[
                 TOP(2, None, "x"),
@@ -415,7 +402,6 @@ class ShowLog(Scene):
 
 class NoOneWillActuallyDoThis(Scene):
     def construct(self):
-
         randy = Randolph().to_corner()
 
         bubble = SpeechBubble().pin_to(randy)

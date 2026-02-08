@@ -72,10 +72,8 @@ def check_if_running(running: bool) -> Callable:
     """
 
     def decorator(func):
-
         @wraps(func)
         def wrapper(self, *args, **kwargs):
-
             # if self._running != running:
 
             #     status = "not running" if running else "running"

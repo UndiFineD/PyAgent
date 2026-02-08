@@ -16,7 +16,6 @@ from fle.env.tools import Tool
 
 class LoadEntityState(Tool):
     def __init__(self, *args):
-
         super().__init__(*args)
 
     def __call__(self, entities: Union[str, List[Dict]], decompress=False) -> bool:

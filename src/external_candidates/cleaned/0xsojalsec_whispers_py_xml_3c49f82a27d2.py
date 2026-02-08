@@ -16,13 +16,11 @@ from whispers.rules import WhisperRules
 
 class Xml:
     def __init__(self, rules: WhisperRules):
-
         self.breadcrumbs = []
 
         self.rules = rules
 
     def pairs(self, filepath: Path):
-
         def _traverse(tree):
             """Traverse XML document"""
 

@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class ReactionsToInitialHeatEquation(PiCreatureScene):
     def construct(self):
-
         randy = self.pi_creature
 
         randy.set_color(BLUE_C)
@@ -51,7 +50,6 @@ class ContrastPDEToODE(TeacherStudentsScene):
     }
 
     def construct(self):
-
         student = self.students[2]
 
         pde, ode = words = VGroup(
@@ -114,7 +112,6 @@ class ContrastPDEToODE(TeacherStudentsScene):
 
 class AskAboutWhereEquationComesFrom(TeacherStudentsScene, WriteHeatEquationTemplate):
     def construct(self):
-
         equation = self.get_d1_equation()
 
         equation.move_to(self.hold_up_spot, DOWN)
@@ -146,7 +143,6 @@ class AskAboutWhereEquationComesFrom(TeacherStudentsScene, WriteHeatEquationTemp
 
 class AskWhyRewriteIt(TeacherStudentsScene):
     def construct(self):
-
         self.student_says(
             "Why?",
             index=1,
@@ -164,7 +160,6 @@ class AskWhyRewriteIt(TeacherStudentsScene):
 
 class ReferenceKhanVideo(TeacherStudentsScene):
     def construct(self):
-
         khan_logo = ImageMobject("KhanLogo")
 
         khan_logo.set_height(1)

@@ -7,7 +7,6 @@ from prettymapp.osm import get_osm_geometries_from_xml, get_osm_tags
 
 
 def test_get_osm_tags():
-
     tags = get_osm_tags()
 
     assert tags == {
@@ -45,7 +44,6 @@ def test_get_osm_tags():
 
 
 def test_get_osm_geometries_from_xml():
-
     filepath = "./mock_data/osm_export_xml.osm"
 
     df = get_osm_geometries_from_xml(filepath)

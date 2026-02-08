@@ -9,7 +9,6 @@ import enum
 
 from typing import Optional, Union
 
-
 from data.vqa.blueprint_transforms import DirectionSystem
 
 
@@ -127,13 +126,9 @@ def convert_numeric_direction(direction_value: Union[int, float, str], direction
 
     Convert numeric direction to compass string.
 
-
-
     Args:
 
         direction_value: Numeric direction (0,2,4,6) or string
-
-
 
     Returns:
 
@@ -155,13 +150,9 @@ def format_direction_in_text(text: str) -> str:
 
     Replace numeric directions in text with compass directions.
 
-
-
     Args:
 
         text: Text containing direction references
-
-
 
     Returns:
 

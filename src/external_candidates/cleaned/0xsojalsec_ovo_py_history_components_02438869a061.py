@@ -24,7 +24,6 @@ def history_dropdown_component(
     filter_func: Callable = None,
     include_subclasses: bool = True,
 ):
-
     if page_key not in st.session_state.initial_workflows:
         raise ValueError(
             "history_dropdown_component should be called after initialize_workflow() so that st.session_state.initial_workflows is set"
@@ -92,7 +91,6 @@ def history_dropdown_component(
 
 
 def format_label(pool_id: str, pools_by_id: dict[str, Pool]):
-
     delta = datetime.utcnow() - pools_by_id[pool_id].created_date_utc
 
     return "{id} | {name} | {when_created}".format(

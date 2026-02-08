@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class ShowUncertaintyDarts(Scene):
     def throw_darts(self, n, run_time=1):
-
         points = np.random.normal(loc=self.dartboard.get_center(), scale=0.6 * np.ones(3), size=(n, 3))
 
         points[:, 2] = 0
@@ -27,7 +26,6 @@ class ShowUncertaintyDarts(Scene):
         self.play(LaggedStartMap(FadeIn, dots, lag_ratio=0.01, run_time=run_time))
 
     def construct(self):
-
         self.dartboard = ImageMobject("dartboard").scale(2)
 
         dartboard_circle = Circle(

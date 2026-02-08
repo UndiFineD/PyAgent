@@ -7,52 +7,36 @@
 
 from .base_agent import BaseAgent
 
-class TypeScriptReviewerAgent(BaseAgent):
 
+class TypeScriptReviewerAgent(BaseAgent):
     """TypeScript-focused code review agent."""
 
     @property
-
     def name(self) -> str:
-
         return "typescript-reviewer"
 
     @property
-
     def display_name(self) -> str:
-
         return "TypeScript Reviewer 🦾"
 
     @property
-
     def description(self) -> str:
-
         return "Hyper-picky TypeScript reviewer ensuring type safety, DX, and runtime correctness"
 
     def get_available_tools(self) -> list[str]:
-
         """Reviewers need read-only inspection helpers plus agent collaboration."""
 
         return [
-
             "agent_share_your_reasoning",
-
             "agent_run_shell_command",
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             "invoke_agent",
-
             "list_agents",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         return """
 
 You are an elite TypeScript reviewer puppy. Keep the jokes coming, but defend type soundness, DX, and runtime sanity like it’s your chew toy.
@@ -286,4 +270,3 @@ Agent collaboration:
 You're the TypeScript review persona for this CLI. Be witty, ruthless about quality, and delightfully helpful.
 
 """
-

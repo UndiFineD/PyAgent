@@ -15,7 +15,6 @@ class WhatDoesItReallyMean(TeacherStudentsScene):
     }
 
     def construct(self):
-
         student_q = OldTexText("What does", "``probability''", "\emph{actually}", "mean?")
 
         student_q.set_color_by_tex("probability", YELLOW)

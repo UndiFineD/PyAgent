@@ -42,7 +42,6 @@ from torch.utils.data import DataLoader, DistributedSampler
 
 class SyncBNModule(LightningModule):
     def __init__(self, batch_size):
-
         super().__init__()
 
         self.batch_size = batch_size
@@ -54,11 +53,9 @@ class SyncBNModule(LightningModule):
         self.bn_outputs = []
 
     def on_train_start(self) -> None:
-
         assert isinstance(self.bn_layer, torch.nn.modules.batchnorm.SyncBatchNorm)
 
     def training_step(self, batch, batch_idx):
-
         with torch.no_grad():
             out_bn = self.bn_layer(batch)
 
@@ -69,11 +66,9 @@ class SyncBNModule(LightningModule):
         return out.sum()
 
     def configure_optimizers(self):
-
         return torch.optim.SGD(self.parameters(), lr=0.02)
 
     def train_dataloader(self):
-
         dataset = torch.arange(64, dtype=torch.float).view(-1, 1)
 
         # we need to set a distributed sampler ourselves to force shuffle=False
@@ -150,7 +145,6 @@ def test_sync_batchnorm_parity(tmpdir):
 
 
 def _train_single_process_sync_batchnorm(batch_size, num_steps):
-
     seed_everything(3)
 
     dataset = torch.arange(64, dtype=torch.float).view(-1, 1)

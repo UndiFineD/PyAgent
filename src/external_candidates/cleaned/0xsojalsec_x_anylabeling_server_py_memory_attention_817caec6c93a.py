@@ -35,7 +35,6 @@ class MemoryAttentionLayer(nn.Module):
         pos_enc_at_cross_attn_queries: bool,
         self_attention: nn.Module,
     ):
-
         super().__init__()
 
         self.d_model = d_model
@@ -81,7 +80,6 @@ class MemoryAttentionLayer(nn.Module):
         self.pos_enc_at_cross_attn_keys = pos_enc_at_cross_attn_keys
 
     def _forward_sa(self, tgt, query_pos):
-
         # Self-Attention
 
         tgt2 = self.norm1(tgt)
@@ -95,7 +93,6 @@ class MemoryAttentionLayer(nn.Module):
         return tgt
 
     def _forward_ca(self, tgt, memory, query_pos, pos, num_k_exclude_rope=0):
-
         kwds = {}
 
         if num_k_exclude_rope > 0:
@@ -126,7 +123,6 @@ class MemoryAttentionLayer(nn.Module):
         query_pos: Optional[Tensor] = None,
         num_k_exclude_rope: int = 0,
     ) -> torch.Tensor:
-
         # Self-Attn, Cross-Attn
 
         tgt = self._forward_sa(tgt, query_pos)
@@ -153,7 +149,6 @@ class MemoryAttention(nn.Module):
         num_layers: int,
         batch_first: bool = True,  # Do layers expect batch first input?
     ):
-
         super().__init__()
 
         self.d_model = d_model
@@ -176,7 +171,6 @@ class MemoryAttention(nn.Module):
         memory_pos: Optional[Tensor] = None,  # pos_enc for cross-attention inputs
         num_obj_ptr_tokens: int = 0,  # number of object pointer *tokens*
     ):
-
         if isinstance(curr, list):
             assert isinstance(curr_pos, list)
 

@@ -36,7 +36,6 @@ class FlowDisplay:
     """Displays agent workflow with agents centered and tools on sides."""
 
     def __init__(self):
-
         self.console = Console()
 
         self.agents = []  # List of agents in order
@@ -62,14 +61,12 @@ class FlowDisplay:
             from praisonaiagents.main import register_display_callback
 
             def on_interaction(**kwargs):
-
                 if self.tracking:
                     agent = kwargs.get("agent_name", "Unknown")
 
                     self._add_agent(agent)
 
             def on_tool_call(message, **kwargs):
-
                 if self.tracking and "called function" in message:
                     parts = message.split("'")
 

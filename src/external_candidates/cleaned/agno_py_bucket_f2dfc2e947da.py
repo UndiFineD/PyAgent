@@ -17,8 +17,8 @@ from agno.utils.log import logger
 
 from typing_extensions import Literal
 
-class S3Bucket(AwsResource):
 
+class S3Bucket(AwsResource):
     """
 
     Reference:
@@ -37,11 +37,7 @@ class S3Bucket(AwsResource):
 
     # The canned ACL to apply to the bucket.
 
-    acl: Optional[
-
-        Literal["private", "public-read", "public-read-write", "authenticated-read"]
-
-    ] = None
+    acl: Optional[Literal["private", "public-read", "public-read-write", "authenticated-read"]] = None
 
     grant_full_control: Optional[str] = None
 
@@ -55,16 +51,10 @@ class S3Bucket(AwsResource):
 
     object_lock_enabled_for_bucket: Optional[bool] = None
 
-    object_ownership: Optional[
-
-        Literal["BucketOwnerPreferred", "ObjectWriter", "BucketOwnerEnforced"]
-
-    ] = None
+    object_ownership: Optional[Literal["BucketOwnerPreferred", "ObjectWriter", "BucketOwnerEnforced"]] = None
 
     @property
-
     def uri(self) -> str:
-
         """Returns the URI of the s3.Bucket
 
         Returns:
@@ -76,7 +66,6 @@ class S3Bucket(AwsResource):
         return f"s3://{self.name}"
 
     def get_resource(self, aws_client: Optional[AwsApiClient] = None) -> Optional[Any]:
-
         """Returns the s3.Bucket
 
         Args:
@@ -92,7 +81,6 @@ class S3Bucket(AwsResource):
         return service_resource.Bucket(name=self.name)
 
     def _create(self, aws_client: AwsApiClient) -> bool:
-
         """Creates the s3.Bucket
 
         Args:
@@ -118,7 +106,6 @@ class S3Bucket(AwsResource):
         bucket_configuration = None
 
         if aws_client.aws_region is not None and aws_client.aws_region != "us-east-1":
-
             bucket_configuration = {"LocationConstraint": aws_client.aws_region}
 
         # create a dict of args which are not null, otherwise aws type validation fails
@@ -126,43 +113,30 @@ class S3Bucket(AwsResource):
         not_null_args: Dict[str, Any] = {}
 
         if bucket_configuration:
-
             not_null_args["CreateBucketConfiguration"] = bucket_configuration
 
         if self.acl:
-
             not_null_args["ACL"] = self.acl
 
         if self.grant_full_control:
-
             not_null_args["GrantFullControl"] = self.grant_full_control
 
         if self.grant_read:
-
             not_null_args["GrantRead"] = self.grant_read
 
         if self.grant_read_ACP:
-
             not_null_args["GrantReadACP"] = self.grant_read_ACP
 
         if self.grant_write:
-
             not_null_args["GrantWrite"] = self.grant_write
 
         if self.grant_write_ACP:
-
             not_null_args["GrantWriteACP"] = self.grant_write_ACP
 
         if self.object_lock_enabled_for_bucket:
-
-            not_null_args["ObjectLockEnabledForBucket"] = (
-
-                self.object_lock_enabled_for_bucket
-
-            )
+            not_null_args["ObjectLockEnabledForBucket"] = self.object_lock_enabled_for_bucket
 
         if self.object_ownership:
-
             not_null_args["ObjectOwnership"] = self.object_ownership
 
         # Step 2: Create Bucket
@@ -170,13 +144,9 @@ class S3Bucket(AwsResource):
         service_client = self.get_service_client(aws_client)
 
         try:
-
             response = service_client.create_bucket(
-
                 Bucket=self.name,
-
                 **not_null_args,
-
             )
 
             logger.debug(f"Response: {response}")
@@ -184,7 +154,6 @@ class S3Bucket(AwsResource):
             bucket_location = response.get("Location")
 
             if bucket_location is not None:
-
                 logger.debug(f"Bucket created: {bucket_location}")
 
                 self.active_resource = response
@@ -192,7 +161,6 @@ class S3Bucket(AwsResource):
                 return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be created.")
 
             logger.error(e)
@@ -200,33 +168,23 @@ class S3Bucket(AwsResource):
         return False
 
     def post_create(self, aws_client: AwsApiClient) -> bool:
-
         # Wait for Bucket to be created
 
         if self.wait_for_create:
-
             try:
-
                 print_info(f"Waiting for {self.get_resource_type()} to be created.")
 
                 waiter = self.get_service_client(aws_client).get_waiter("bucket_exists")
 
                 waiter.wait(
-
                     Bucket=self.name,
-
                     WaiterConfig={
-
                         "Delay": self.waiter_delay,
-
                         "MaxAttempts": self.waiter_max_attempts,
-
                     },
-
                 )
 
             except Exception as e:
-
                 logger.error("Waiter failed.")
 
                 logger.error(e)
@@ -234,7 +192,6 @@ class S3Bucket(AwsResource):
         return True
 
     def _read(self, aws_client: AwsApiClient) -> Optional[Any]:
-
         """Returns the s3.Bucket
 
         Args:
@@ -248,7 +205,6 @@ class S3Bucket(AwsResource):
         from botocore.exceptions import ClientError
 
         try:
-
             service_resource = self.get_service_resource(aws_client)
 
             bucket = service_resource.Bucket(name=self.name)
@@ -260,23 +216,17 @@ class S3Bucket(AwsResource):
             logger.debug(f"Bucket creation_date: {creation_date}")
 
             if creation_date is not None:
-
                 logger.debug(f"Bucket found: {bucket.name}")
 
                 self.active_resource = {
-
                     "name": bucket.name,
-
                     "creation_date": creation_date,
-
                 }
 
         except ClientError as ce:
-
             logger.debug(f"ClientError: {ce}")
 
         except Exception as e:
-
             logger.error(f"Error reading {self.get_resource_type()}.")
 
             logger.error(e)
@@ -284,7 +234,6 @@ class S3Bucket(AwsResource):
         return self.active_resource
 
     def _delete(self, aws_client: AwsApiClient) -> bool:
-
         """Deletes the s3.Bucket
 
         Args:
@@ -300,7 +249,6 @@ class S3Bucket(AwsResource):
         self.active_resource = None
 
         try:
-
             response = service_client.delete_bucket(Bucket=self.name)
 
             logger.debug(f"Response: {response}")
@@ -308,7 +256,6 @@ class S3Bucket(AwsResource):
             return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be deleted.")
 
             logger.error("Please try again or delete resources manually.")
@@ -317,12 +264,7 @@ class S3Bucket(AwsResource):
 
         return False
 
-    def get_objects(
-
-        self, aws_client: Optional[AwsApiClient] = None, prefix: Optional[str] = None
-
-    ) -> List[Any]:
-
+    def get_objects(self, aws_client: Optional[AwsApiClient] = None, prefix: Optional[str] = None) -> List[Any]:
         """Returns a list of s3.Object objects for the s3.Bucket
 
         Args:
@@ -336,7 +278,6 @@ class S3Bucket(AwsResource):
         bucket = self.get_resource(aws_client)
 
         if bucket is None:
-
             logger.warning(f"Could not get bucket: {self.name}")
 
             return []
@@ -350,22 +291,14 @@ class S3Bucket(AwsResource):
         all_objects: List[S3Object] = []
 
         for object_summary in object_summaries:
-
             if prefix is not None and not object_summary.key.startswith(prefix):
-
                 continue
 
             all_objects.append(
-
                 S3Object(
-
                     bucket_name=bucket.name,
-
                     name=object_summary.key,
-
                 )
-
             )
 
         return all_objects
-

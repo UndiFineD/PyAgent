@@ -56,7 +56,6 @@ class IgnoreRiskToolkit(BaseToolkit):
         function_name: Optional[List[str]] = None,
         verbose: Optional[bool] = False,
     ):
-
         self.verbose = verbose
 
         self.function_names = function_name or []

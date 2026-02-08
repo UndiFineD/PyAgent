@@ -9,7 +9,6 @@ from feathr.definition.materialization_settings import MaterializationSettings
 
 # In the future, we may want to rely a separate system other than MaterializationSettings to generate stats.
 
+
 class MonitoringSettings(MaterializationSettings):
-
     """Settings about monitoring features."""
-

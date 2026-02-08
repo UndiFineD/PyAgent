@@ -58,18 +58,15 @@ from tests_fabric.helpers.runif import RunIf
 
 @mock.patch("lightning.fabric.accelerators.cuda.num_cuda_devices", return_value=2)
 def test_auto_device_count(_):
-
     assert CUDAAccelerator.auto_device_count() == 2
 
 
 @RunIf(min_cuda_gpus=1)
 def test_gpu_availability():
-
     assert CUDAAccelerator.is_available()
 
 
 def test_init_device_with_wrong_device_type():
-
     with pytest.raises(ValueError, match="Device should be CUDA"):
         CUDAAccelerator().setup_device(torch.device("cpu"))
 
@@ -83,14 +80,12 @@ def test_init_device_with_wrong_device_type():
     ],
 )
 def test_get_parallel_devices(devices, expected):
-
     assert CUDAAccelerator.get_parallel_devices(devices) == expected
 
 
 @mock.patch("torch.cuda.set_device")
 @mock.patch("torch.cuda.get_device_capability", return_value=(7, 0))
 def test_set_cuda_device(_, set_device_mock):
-
     device = torch.device("cuda", 1)
 
     CUDAAccelerator().setup_device(device)
@@ -111,7 +106,6 @@ def test_force_nvml_based_cuda_check():
 @mock.patch("torch.cuda.get_device_name", return_value="Z100")
 @mock.patch("torch.cuda.is_available", return_value=True)
 def test_tf32_message(_, __, ___, caplog, monkeypatch):
-
     # for some reason, caplog doesn't work with our rank_zero_info utilities
 
     monkeypatch.setattr(lightning.fabric.accelerators.cuda, "rank_zero_info", logging.info)

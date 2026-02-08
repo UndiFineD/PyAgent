@@ -14,7 +14,6 @@ from madewithml import tune
 
 @pytest.mark.training
 def test_tune_models(dataset_loc):
-
     num_runs = 2
 
     experiment_name = utils.generate_experiment_name(prefix="test_tune")

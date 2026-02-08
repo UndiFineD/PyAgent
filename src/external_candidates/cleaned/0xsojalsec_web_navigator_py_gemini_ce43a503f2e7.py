@@ -44,7 +44,6 @@ class ChatGemini(BaseInference):
         tools: list = [],
         temperature: float = 0.5,
     ):
-
         super().__init__(
             model,
             api_key=api_key,
@@ -65,7 +64,6 @@ class ChatGemini(BaseInference):
         display_name: Optional[str] = None,
         ttl: int = 60,
     ):
-
         url = f"https://generativelanguage.googleapis.com/{self.api_version}/cachedContents?key={self.api_key}"
 
         payload = {
@@ -134,7 +132,6 @@ class ChatGemini(BaseInference):
         model: BaseModel | None = None,
         cache_name: Optional[str] = None,
     ) -> AIMessage | ToolMessage | BaseModel:
-
         self.headers.update({"x-goog-api-key": self.api_key})
 
         temperature = self.temperature
@@ -260,7 +257,6 @@ class ChatGemini(BaseInference):
     async def async_invoke(
         self, messages: list[BaseMessage], json=False, model: BaseModel = None
     ) -> AIMessage | ToolMessage | BaseModel:
-
         temperature = self.temperature
 
         url = self.base_url or f"https://generativelanguage.googleapis.com/v1beta/models/{self.model}:generateContent"
@@ -376,7 +372,6 @@ class ChatGemini(BaseInference):
 
     @retry(stop=stop_after_attempt(3), retry=retry_if_exception_type(RequestException))
     def stream(self, query: str):
-
         headers = self.headers
 
         temperature = self.temperature
@@ -384,7 +379,6 @@ class ChatGemini(BaseInference):
         url = self.base_url or f"https://generativelanguage.googleapis.com/v1beta/models/{self.model}:generateContent"
 
     def available_models(self):
-
         url = "https://generativelanguage.googleapis.com/v1beta/models"
 
         headers = self.headers

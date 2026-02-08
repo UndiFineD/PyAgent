@@ -15,7 +15,6 @@ from utils import fetch_web_info
 
 
 async def fetch_linked_group(username: str):
-
     async with app:
         channel_info = await app.get_chat(username)
 
@@ -34,7 +33,6 @@ async def fetch_linked_group(username: str):
 class ChannelToGroup(DiscoverableTransform):
     @classmethod
     def create_entities(cls, request: MaltegoMsg, response: MaltegoTransform):
-
         username = request.getProperty("properties.channel")
 
         linked_group = loop.run_until_complete(fetch_linked_group(username))

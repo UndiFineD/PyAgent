@@ -18,9 +18,7 @@ class ChatScreenModel(BaseScreenModel):
     """
 
     def __init__(self, base):
-
         self.base: AbstractDatabase = base
 
     def get_chat(self, chat_id):
-
         return self.base.fetch_chat(chat_id)

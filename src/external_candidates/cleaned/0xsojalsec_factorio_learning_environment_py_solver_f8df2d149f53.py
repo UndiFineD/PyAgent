@@ -5,7 +5,6 @@
 
 import random
 
-
 from fle.agents.data.screenshots_from_run import create_factorio_instance
 
 from fle.commons.models.rendered_image import RenderedImage
@@ -25,8 +24,6 @@ def entity_removal_denoising(qa_pairs_per_blueprint: int = 5) -> Solver:
 
     3. Stores all QA pairs for the blueprint
 
-
-
     Args:
 
         qa_pairs_per_blueprint: Number of QA pairs to generate per blueprint
@@ -36,7 +33,6 @@ def entity_removal_denoising(qa_pairs_per_blueprint: int = 5) -> Solver:
     instance = create_factorio_instance()
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         blueprint = state.metadata.get("blueprint", {})
 
         # Initialize QA pairs list

@@ -68,7 +68,6 @@ class SearchToolkit(BaseToolkit):
     """
 
     def __init__(self, model: Optional[BaseModelBackend] = None):
-
         self.model = model
 
     @dependencies_required("wikipedia")

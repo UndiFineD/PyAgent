@@ -13,94 +13,75 @@ import pytest
 
 from agno.tools.todoist import TodoistTools
 
+
 @pytest.fixture
-
 def mock_todoist_api():
-
     """Create a mock Todoist API client."""
 
     with patch("agno.tools.todoist.TodoistAPI") as mock_api:
-
         mock_client = Mock()
 
         mock_api.return_value = mock_client
 
         return mock_client
 
+
 @pytest.fixture
-
 def todoist_tools(mock_todoist_api):
-
     """Create TodoistTools instance with mocked API."""
 
     with patch.dict("os.environ", {"TODOIST_API_TOKEN": "test_token"}):
-
         tools = TodoistTools()
 
         tools.api = mock_todoist_api
 
         return tools
 
-def test_init_with_api_token():
 
+def test_init_with_api_token():
     """Test initialization with provided API token."""
 
     with patch("agno.tools.todoist.TodoistAPI") as mock_api:
-
         with patch("os.getenv") as mock_getenv:
-
             mock_getenv.return_value = "test_token"
 
             TodoistTools()
 
             mock_api.assert_called_once_with("test_token")
 
-def test_init_with_env_var():
 
+def test_init_with_env_var():
     """Test initialization with environment variable."""
 
     with patch("agno.tools.todoist.TodoistAPI") as mock_api:
-
         with patch("os.getenv") as mock_getenv:
-
             mock_getenv.return_value = "env_token"
 
             TodoistTools()
 
             mock_api.assert_called_once_with("env_token")
 
-def test_init_without_token():
 
+def test_init_without_token():
     """Test initialization without API token."""
 
     with patch.dict("os.environ", clear=True):
-
         with pytest.raises(ValueError, match="TODOIST_API_TOKEN not set"):
-
             TodoistTools()
 
-def test_init_with_selective_tools():
 
+def test_init_with_selective_tools():
     """Test initialization with only selected tools."""
 
     with patch.dict("os.environ", {"TODOIST_API_TOKEN": "test_token"}):
-
         tools = TodoistTools(
-
             create_task=True,
-
             get_task=False,
-
             update_task=True,
-
             close_task=False,
-
             delete_task=False,
-
             get_active_tasks=True,
-
             get_projects=False,
-
         )
 
         assert "create_task" in [func.name for func in tools.functions.values()]
@@ -111,8 +92,8 @@ def test_init_with_selective_tools():
 
         assert "close_task" not in [func.name for func in tools.functions.values()]
 
-def test_create_task_success(todoist_tools, mock_todoist_api):
 
+def test_create_task_success(todoist_tools, mock_todoist_api):
     """Test successful task creation."""
 
     mock_task = Mock()
@@ -144,31 +125,20 @@ def test_create_task_success(todoist_tools, mock_todoist_api):
     mock_task.labels = ["test_label"]
 
     mock_task.due = Mock(
-
         date="2024-01-02",
-
         string="tomorrow at 10:00",
-
         datetime="2024-01-02T10:00:00Z",
-
         timezone="UTC",
-
     )
 
     mock_todoist_api.add_task.return_value = mock_task
 
     result = todoist_tools.create_task(
-
         content="Test Task",
-
         project_id="project_1",
-
         due_string="tomorrow at 10:00",
-
         priority=4,
-
         labels=["test_label"],
-
     )
 
     result_data = json.loads(result)
@@ -181,8 +151,8 @@ def test_create_task_success(todoist_tools, mock_todoist_api):
 
     assert result_data["due"]["string"] == "tomorrow at 10:00"
 
-def test_get_task_success(todoist_tools, mock_todoist_api):
 
+def test_get_task_success(todoist_tools, mock_todoist_api):
     """Test successful task retrieval."""
 
     mock_task = Mock()
@@ -225,8 +195,8 @@ def test_get_task_success(todoist_tools, mock_todoist_api):
 
     mock_todoist_api.get_task.assert_called_once_with("123")
 
-def test_update_task_success(todoist_tools, mock_todoist_api):
 
+def test_update_task_success(todoist_tools, mock_todoist_api):
     """Test successful task update."""
 
     mock_todoist_api.update_task.return_value = True
@@ -237,14 +207,10 @@ def test_update_task_success(todoist_tools, mock_todoist_api):
 
     assert result_data["success"] is True
 
-    mock_todoist_api.update_task.assert_called_once_with(
+    mock_todoist_api.update_task.assert_called_once_with(task_id="123", content="Updated Task")
 
-        task_id="123", content="Updated Task"
-
-    )
 
 def test_close_task_success(todoist_tools, mock_todoist_api):
-
     """Test successful task closure."""
 
     mock_todoist_api.complete_task.return_value = True
@@ -257,8 +223,8 @@ def test_close_task_success(todoist_tools, mock_todoist_api):
 
     mock_todoist_api.complete_task.assert_called_once_with("123")
 
-def test_delete_task_success(todoist_tools, mock_todoist_api):
 
+def test_delete_task_success(todoist_tools, mock_todoist_api):
     """Test successful task deletion."""
 
     mock_todoist_api.delete_task.return_value = True
@@ -271,8 +237,8 @@ def test_delete_task_success(todoist_tools, mock_todoist_api):
 
     mock_todoist_api.delete_task.assert_called_once_with("123")
 
-def test_get_active_tasks_success(todoist_tools, mock_todoist_api):
 
+def test_get_active_tasks_success(todoist_tools, mock_todoist_api):
     """Test successful retrieval of active tasks."""
 
     mock_task1 = Mock()
@@ -347,8 +313,8 @@ def test_get_active_tasks_success(todoist_tools, mock_todoist_api):
 
     assert result_data[1]["id"] == "456"
 
-def test_get_projects_success(todoist_tools, mock_todoist_api):
 
+def test_get_projects_success(todoist_tools, mock_todoist_api):
     """Test successful retrieval of projects."""
 
     mock_project1 = Mock()
@@ -371,8 +337,8 @@ def test_get_projects_success(todoist_tools, mock_todoist_api):
 
     assert result_data[1]["name"] == "Project 2"
 
-def test_error_handling(todoist_tools, mock_todoist_api):
 
+def test_error_handling(todoist_tools, mock_todoist_api):
     """Test error handling in various methods."""
 
     mock_todoist_api.add_task.side_effect = Exception("API Error")
@@ -393,8 +359,8 @@ def test_error_handling(todoist_tools, mock_todoist_api):
 
     assert json.loads(result)["error"] == "API Error"
 
-def test_create_task_with_due_date(todoist_tools, mock_todoist_api):
 
+def test_create_task_with_due_date(todoist_tools, mock_todoist_api):
     """Test creating a task with due date."""
 
     mock_due = Mock()
@@ -439,11 +405,7 @@ def test_create_task_with_due_date(todoist_tools, mock_todoist_api):
 
     mock_todoist_api.add_task.return_value = mock_task
 
-    result = todoist_tools.create_task(
-
-        content="Test Task", due_string="tomorrow at 10:00"
-
-    )
+    result = todoist_tools.create_task(content="Test Task", due_string="tomorrow at 10:00")
 
     result_data = json.loads(result)
 
@@ -451,8 +413,8 @@ def test_create_task_with_due_date(todoist_tools, mock_todoist_api):
 
     assert result_data["due"]["string"] == "tomorrow at 10:00"
 
-def test_create_task_with_labels(todoist_tools, mock_todoist_api):
 
+def test_create_task_with_labels(todoist_tools, mock_todoist_api):
     """Test creating a task with labels."""
 
     mock_task = Mock()
@@ -487,15 +449,10 @@ def test_create_task_with_labels(todoist_tools, mock_todoist_api):
 
     mock_todoist_api.add_task.return_value = mock_task
 
-    result = todoist_tools.create_task(
-
-        content="Test Task", labels=["work", "important"]
-
-    )
+    result = todoist_tools.create_task(content="Test Task", labels=["work", "important"])
 
     result_data = json.loads(result)
 
     assert "work" in result_data["labels"]
 
     assert "important" in result_data["labels"]
-

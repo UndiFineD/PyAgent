@@ -16,7 +16,6 @@ from atopile.address import (
 
 
 def test_get_file():
-
     # Test with a file address
 
     assert get_file("path/to/file.txt") == "path/to/file.txt"
@@ -45,7 +44,6 @@ def test_get_file():
 
 
 def test_get_instance_section():
-
     # Test with an address containing an instance section
 
     assert get_instance_section("path/to/file.txt:a:b.c") is None
@@ -68,7 +66,6 @@ def test_get_instance_section():
 
 
 def test_add_instance():
-
     assert add_instance("//a:b", "c") == "//a:b::c"
 
     with pytest.raises(Exception):
@@ -76,12 +73,10 @@ def test_add_instance():
 
 
 def test_add_instances():
-
     assert add_instances("//a:b::", ["c", "d", "e"]) == "//a:b::c.d.e"
 
 
 def test_get_parent():
-
     assert get_parent_instance_addr("//a:b::c") == "//a:b"
 
     assert get_parent_instance_addr("//a:b") is None
@@ -94,7 +89,6 @@ def test_get_parent():
 
 
 def test_get_instances():
-
     assert get_instance_names("//a:b::c.d.e") == ["c", "d", "e"]
 
     assert get_instance_names("//a:b") == []

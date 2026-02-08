@@ -11,9 +11,7 @@ import wifiphisher.common.constants
 
 
 def uimethod(func):
-
     def _decorator(data, *args, **kwargs):
-
         response = func(data, *args, **kwargs)
 
         return response

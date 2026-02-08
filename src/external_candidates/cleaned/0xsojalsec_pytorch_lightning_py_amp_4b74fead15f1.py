@@ -73,7 +73,6 @@ class MixedPrecision(Precision):
         device: str,
         scaler: Optional["torch.amp.GradScaler"] = None,
     ) -> None:
-
         if precision not in ("16-mixed", "bf16-mixed"):
             raise ValueError(
                 f"`Passed `{type(self).__name__}(precision={precision!r})`."
@@ -94,7 +93,6 @@ class MixedPrecision(Precision):
 
     @override
     def pre_backward(self, tensor: Tensor, module: "pl.LightningModule") -> Tensor:  # type: ignore[override]
-
         if self.scaler is not None:
             tensor = self.scaler.scale(tensor)
 
@@ -108,7 +106,6 @@ class MixedPrecision(Precision):
         closure: Callable[[], Any],
         **kwargs: Any,
     ) -> Any:
-
         if self.scaler is None:
             # skip scaler logic, as bfloat16 does not require scaler
 
@@ -154,7 +151,6 @@ class MixedPrecision(Precision):
         clip_val: Union[int, float] = 0.0,
         gradient_clip_algorithm: GradClipAlgorithmType = GradClipAlgorithmType.NORM,
     ) -> None:
-
         if clip_val > 0 and _optimizer_handles_unscaling(optimizer):
             raise RuntimeError(
                 f"The current optimizer, {type(optimizer).__qualname__}, does not allow for gradient clipping"
@@ -168,7 +164,6 @@ class MixedPrecision(Precision):
         )
 
     def autocast_context_manager(self) -> torch.autocast:
-
         dtype = torch.bfloat16 if self.precision == "bf16-mixed" else torch.half
 
         return torch.autocast(self.device, dtype=dtype, cache_enabled=False)
@@ -183,7 +178,6 @@ class MixedPrecision(Precision):
 
     @override
     def state_dict(self) -> dict[str, Any]:
-
         if self.scaler is not None:
             return self.scaler.state_dict()
 
@@ -191,6 +185,5 @@ class MixedPrecision(Precision):
 
     @override
     def load_state_dict(self, state_dict: dict[str, Any]) -> None:
-
         if self.scaler is not None:
             self.scaler.load_state_dict(state_dict)

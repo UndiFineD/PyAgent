@@ -20,7 +20,6 @@ from lib.core.Requester import AuthMode, Requester
 
 class Railo:
     def __init__(self, url, verbose=False):
-
         self.url = url
 
         self.interface = None
@@ -30,7 +29,6 @@ class Railo:
         self.http_auth_type = None
 
     def check(self):
-
         # Server Administration
 
         r = Requester.get("{}/railo-context/admin/server.cfm".format(self.url))
@@ -62,7 +60,6 @@ class Railo:
         return False
 
     def try_auth(self, username, password):
-
         # Note: In Railo, there is no username
 
         data = OrderedDict([("lang", "en"), ("rememberMe", "yyyy"), ("submit", "submit")])

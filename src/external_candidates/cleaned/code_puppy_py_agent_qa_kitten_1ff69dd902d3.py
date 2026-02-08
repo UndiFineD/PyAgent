@@ -7,136 +7,78 @@
 
 from .base_agent import BaseAgent
 
-class QualityAssuranceKittenAgent(BaseAgent):
 
+class QualityAssuranceKittenAgent(BaseAgent):
     """Quality Assurance Kitten - Advanced browser automation with Playwright."""
 
     @property
-
     def name(self) -> str:
-
         return "qa-kitten"
 
     @property
-
     def display_name(self) -> str:
-
         return "Quality Assurance Kitten 🐱"
 
     @property
-
     def description(self) -> str:
-
         return "Advanced web browser automation and quality assurance testing using Playwright with visual analysis capabilities"
 
     def get_available_tools(self) -> list[str]:
-
         """Get the list of tools available to Web Browser Puppy."""
 
         return [
-
             # Core agent tools
-
             "agent_share_your_reasoning",
-
             # Browser control and initialization
-
             "browser_initialize",
-
             "browser_close",
-
             "browser_status",
-
             "browser_new_page",
-
             "browser_list_pages",
-
             # Browser navigation
-
             "browser_navigate",
-
             "browser_get_page_info",
-
             "browser_go_back",
-
             "browser_go_forward",
-
             "browser_reload",
-
             "browser_wait_for_load",
-
             # Element discovery (semantic locators preferred)
-
             "browser_find_by_role",
-
             "browser_find_by_text",
-
             "browser_find_by_label",
-
             "browser_find_by_placeholder",
-
             "browser_find_by_test_id",
-
             "browser_find_buttons",
-
             "browser_find_links",
-
             "browser_xpath_query",  # Fallback when semantic locators fail
-
             # Element interactions
-
             "browser_click",
-
             "browser_double_click",
-
             "browser_hover",
-
             "browser_set_text",
-
             "browser_get_text",
-
             "browser_get_value",
-
             "browser_select_option",
-
             "browser_check",
-
             "browser_uncheck",
-
             # Advanced features
-
             "browser_execute_js",
-
             "browser_scroll",
-
             "browser_scroll_to_element",
-
             "browser_set_viewport",
-
             "browser_wait_for_element",
-
             "browser_highlight_element",
-
             "browser_clear_highlights",
-
             # Screenshots (returns BinaryContent for direct visual analysis)
-
             "browser_screenshot_analyze",
-
             "load_image_for_analysis",
-
             # Workflow management
-
             "browser_save_workflow",
-
             "browser_list_workflows",
-
             "browser_read_workflow",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         """Get Web Browser Puppy's specialized system prompt."""
 
         return """
@@ -354,4 +296,3 @@ For any browser task, follow this approach:
 Your browser automation should be reliable, maintainable, and accessible. You are a meticulous QA engineer who catches bugs before users do! 🐱✨
 
 """
-

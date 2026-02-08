@@ -18,7 +18,6 @@ from whispers.utils import Secret, simple_string, strip_string
 
 class WhisperSecrets:
     def __init__(self, args):
-
         self.exclude = args.config["exclude"]
 
         self.breadcrumbs = []  # Tracks key path
@@ -97,7 +96,6 @@ class WhisperSecrets:
         return True  # Hardcoded static value
 
     def is_excluded(self, breadcrumbs: list) -> bool:
-
         for crumb in breadcrumbs:
             for ex in self.exclude["keys"]:
                 if ex.match(str(crumb)):
@@ -106,7 +104,6 @@ class WhisperSecrets:
         return False
 
     def detect_secrets(self, key: str, value: str, filepath: Path, breadcrumbs: list = []) -> Optional[Secret]:
-
         if not key:
             key = ""
 
@@ -131,7 +128,6 @@ class WhisperSecrets:
         yield from self.rules.check(key, value, filepath, self.foundlines[filepath.as_posix()])
 
     def scan(self, filename: str) -> Optional[Secret]:
-
         plugin = WhisperPlugins(filename, self.rules)
 
         if not plugin:

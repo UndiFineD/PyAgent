@@ -22,7 +22,6 @@ class AtopileLexerBase(Lexer):
     SPACES_PATTERN = re.compile("[\r\n\f]+")
 
     def __init__(self, input: InputStream, output: TextIO = sys.stdout):
-
         super().__init__(input, output)
 
         self.tokens = []
@@ -32,7 +31,6 @@ class AtopileLexerBase(Lexer):
         self.opened = 0
 
     def reset(self):
-
         self.tokens = []
 
         self.indents = []
@@ -42,13 +40,11 @@ class AtopileLexerBase(Lexer):
         super().reset()
 
     def emitToken(self, token):
-
         self._token = token
 
         self.tokens.append(token)
 
     def nextToken(self):
-
         # Check if the end-of-file is ahead and there are still some DEDENTS expected.
 
         if self._input.LA(1) == AtopileParser.EOF and len(self.indents) != 0:
@@ -76,11 +72,9 @@ class AtopileLexerBase(Lexer):
         return next_ if len(self.tokens) == 0 else self.tokens.pop(0)
 
     def createDedent(self):
-
         return self.commonToken(AtopileParser.DEDENT, "")
 
     def commonToken(self, type_: int, text: str):
-
         stop = self.getCharIndex() - 1
 
         start = stop if text == "" else stop - len(text) + 1
@@ -94,7 +88,6 @@ class AtopileLexerBase(Lexer):
         )
 
     def getIndentationCount(self, whitespace: str):
-
         count = 0
 
         for c in whitespace:
@@ -107,19 +100,15 @@ class AtopileLexerBase(Lexer):
         return count
 
     def atStartOfInput(self):
-
         return self.getCharIndex() == 0
 
     def openBrace(self):
-
         self.opened += 1
 
     def closeBrace(self):
-
         self.opened -= 1
 
     def onNewLine(self):
-
         new_line = self.NEW_LINE_PATTERN.sub("", self.text)
 
         spaces = self.SPACES_PATTERN.sub("", self.text)

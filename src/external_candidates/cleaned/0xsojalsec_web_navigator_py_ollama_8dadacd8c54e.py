@@ -29,7 +29,6 @@ class ChatOllama(BaseInference):
     @limits(calls=15, period=60)
     @retry(stop=stop_after_attempt(3), retry=retry_if_exception_type(RequestException))
     def invoke(self, messages: list[BaseMessage], json=False, model: BaseModel = None) -> AIMessage:
-
         headers = self.headers
 
         temperature = self.temperature
@@ -103,7 +102,6 @@ class ChatOllama(BaseInference):
     @limits(calls=15, period=60)
     @retry(stop=stop_after_attempt(3), retry=retry_if_exception_type(RequestException))
     async def async_invoke(self, messages: list[BaseMessage], json=False, model: BaseModel = None) -> AIMessage:
-
         headers = self.headers
 
         temperature = self.temperature
@@ -177,7 +175,6 @@ class ChatOllama(BaseInference):
     @limits(calls=15, period=60)
     @retry(stop=stop_after_attempt(3), retry=retry_if_exception_type(RequestException))
     def stream(self, messages: list[BaseMessage], json=False) -> Generator[str, None, None]:
-
         headers = self.headers
 
         temperature = self.temperature
@@ -215,7 +212,6 @@ class ChatOllama(BaseInference):
         exit()
 
     def available_models(self):
-
         url = "http://localhost:11434/api/tags"
 
         headers = self.headers
@@ -234,7 +230,6 @@ class Ollama(BaseInference):
     @limits(calls=15, period=60)
     @retry(stop=stop_after_attempt(3), retry=retry_if_exception_type(RequestException))
     def invoke(self, query: str, json=False, model: BaseModel = None) -> AIMessage:
-
         headers = self.headers
 
         temperature = self.temperature
@@ -288,7 +283,6 @@ class Ollama(BaseInference):
     @limits(calls=15, period=60)
     @retry(stop=stop_after_attempt(3), retry=retry_if_exception_type(RequestException))
     async def async_invoke(self, query: str, json=False, model: BaseModel = None) -> AIMessage:
-
         headers = self.headers
 
         temperature = self.temperature
@@ -342,7 +336,6 @@ class Ollama(BaseInference):
     @limits(calls=15, period=60)
     @retry(stop=stop_after_attempt(3), retry=retry_if_exception_type(RequestException))
     def stream(self, query: str, json=False) -> Generator[str, None, None]:
-
         headers = self.headers
 
         temperature = self.temperature
@@ -378,7 +371,6 @@ class Ollama(BaseInference):
         exit()
 
     def available_models(self):
-
         url = "http://localhost:11434/api/tags"
 
         headers = self.headers

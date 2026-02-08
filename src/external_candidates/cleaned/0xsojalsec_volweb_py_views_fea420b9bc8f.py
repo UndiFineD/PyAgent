@@ -30,7 +30,6 @@ from rest_framework.views import APIView
 
 @login_required
 def review(request, dump_id):
-
     evidence = Evidence.objects.get(dump_id=dump_id)
 
     stix_indicator = IndicatorForm()
@@ -48,7 +47,6 @@ class PsTreeApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return PsTree.objects.get(evidence_id=dump_id)
 
@@ -75,7 +73,6 @@ class PsAuxApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return PsAux.objects.get(evidence_id=dump_id)
 
@@ -106,7 +103,6 @@ class LsofApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return Lsof.objects.get(evidence_id=dump_id)
 
@@ -137,7 +133,6 @@ class ElfsApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return Elfs.objects.get(evidence_id=dump_id)
 
@@ -168,7 +163,6 @@ class EnvarsApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return Envars.objects.get(evidence_id=dump_id)
 
@@ -199,7 +193,6 @@ class CapabilitiesApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return Capabilities.objects.get(evidence_id=dump_id)
 
@@ -230,7 +223,6 @@ class PsScanApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return PsScan.objects.get(evidence_id=dump_id)
 
@@ -259,7 +251,6 @@ class tty_checkApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return tty_check.objects.get(evidence_id=dump_id)
 
@@ -288,7 +279,6 @@ class MountInfoApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return MountInfo.objects.get(evidence_id=dump_id)
 
@@ -317,7 +307,6 @@ class KmsgApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return Kmsg.objects.get(evidence_id=dump_id)
 
@@ -346,7 +335,6 @@ class MalfindApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return Malfind.objects.get(evidence_id=dump_id)
 
@@ -373,7 +361,6 @@ class LsmodApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return Lsmod.objects.get(evidence_id=dump_id)
 
@@ -400,7 +387,6 @@ class SockstatApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return Sockstat.objects.get(evidence_id=dump_id)
 
@@ -429,7 +415,6 @@ class NetGraphApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return NetGraph.objects.get(evidence_id=dump_id)
 
@@ -456,7 +441,6 @@ class BashApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return Bash.objects.get(evidence_id=dump_id)
 
@@ -485,7 +469,6 @@ class TimelineChartApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return TimeLineChart.objects.get(evidence_id=dump_id)
 
@@ -512,7 +495,6 @@ class TimelineDataApiView(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def get_object(self, dump_id):
-
         try:
             return Timeliner.objects.get(evidence_id=dump_id)
 

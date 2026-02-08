@@ -20,7 +20,6 @@ from lib.core.Requester import AuthMode, Requester
 
 class Glassfish:
     def __init__(self, url, verbose=False):
-
         self.url = url
 
         self.interface = None
@@ -30,7 +29,6 @@ class Glassfish:
         self.http_auth_type = None
 
     def check(self):
-
         auth_type = Requester.get_http_auth_type("{}/management/domain".format(self.url))
 
         if auth_type is not AuthMode.UNKNOWN:
@@ -49,7 +47,6 @@ class Glassfish:
         return False
 
     def try_auth(self, username, password):
-
         if self.interface == "glassfish-admin":
             r = Requester.http_auth(self.interface_url, self.http_auth_type, username, password)
 

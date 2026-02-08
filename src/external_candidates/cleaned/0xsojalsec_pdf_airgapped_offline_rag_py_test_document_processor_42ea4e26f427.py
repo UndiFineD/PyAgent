@@ -45,7 +45,6 @@ from app.document_processor import get_embedding_function, process_documents
 @patch("app.document_processor.config")
 @patch("app.document_processor.FastEmbedEmbeddings")
 def test_get_embedding_function(mock_fastembed, mock_config):
-
     mock_config.__getitem__.return_value = "sentence-transformers/all-MiniLM-L6-v2"
 
     embedding_func = get_embedding_function()
@@ -74,7 +73,6 @@ def test_process_documents(
     mock_makedirs,
     mock_exists,
 ):
-
     mock_config.__getitem__.side_effect = lambda key: {
         "chunk_size": 1000,
         "chunk_overlap": 200,

@@ -20,7 +20,6 @@ from fle.env.tools.agent.connect_entities.groupable_entities import (
 
 class GetEntities(Tool):
     def __init__(self, connection, game_state):
-
         super().__init__(connection, game_state)
 
     def __call__(

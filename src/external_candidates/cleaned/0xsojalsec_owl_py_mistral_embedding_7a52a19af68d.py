@@ -73,7 +73,6 @@ class MistralEmbedding(BaseEmbedding[str]):
         api_key: str | None = None,
         dimensions: int | None = None,
     ) -> None:
-
         from mistralai import Mistral
 
         if not model_type.is_mistral:

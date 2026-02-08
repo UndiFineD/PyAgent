@@ -5,7 +5,6 @@
 
 import math
 
-
 import torch
 
 import torch.nn as nn
@@ -15,7 +14,6 @@ from transformers.models.clip.modeling_clip import CLIPVisionModel
 
 class PoolerProjector(nn.Module):
     def __init__(self, config, vision_cfg):
-
         super().__init__()
 
         self._config = config
@@ -30,7 +28,6 @@ class PoolerProjector(nn.Module):
         )
 
     def forward(self, x, *args, **kwargs):
-
         height = width = self.hw
 
         assert height * width == x.shape[1]
@@ -47,5 +44,4 @@ class PoolerProjector(nn.Module):
 
     @property
     def config(self):
-
         return {"mm_projector_type": "pooler"}

@@ -80,7 +80,6 @@ Competencies, characteristics, duties and workflows of {user_role} to complete t
     USER_PROMPT = TextPrompt(ROLE_DESCRIPTION_PROMPT + AISocietyPromptTemplateDict.USER_PROMPT)
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-
         super().__init__(*args, **kwargs)
 
         self.update(

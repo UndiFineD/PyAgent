@@ -7,7 +7,6 @@
 
 import re
 
-
 from tqdm import tqdm
 
 
@@ -191,11 +190,9 @@ class EvalAIAnswerProcessor:
     ]
 
     def __init__(self, *args, **kwargs):
-
         pass
 
     def word_tokenize(self, word):
-
         word = word.lower()
 
         word = word.replace(",", "").replace("?", "").replace("'s", " 's")
@@ -203,7 +200,6 @@ class EvalAIAnswerProcessor:
         return word.strip()
 
     def process_punctuation(self, in_text):
-
         out_text = in_text
 
         for p in self.PUNCTUATIONS:
@@ -218,7 +214,6 @@ class EvalAIAnswerProcessor:
         return out_text
 
     def process_digit_article(self, in_text):
-
         out_text = []
 
         temp_text = in_text.lower().split()
@@ -241,7 +236,6 @@ class EvalAIAnswerProcessor:
         return out_text
 
     def __call__(self, item):
-
         item = self.word_tokenize(item)
 
         item = item.replace("\n", " ").replace("\t", " ").strip()
@@ -255,7 +249,6 @@ class EvalAIAnswerProcessor:
 
 class TextVQAAccuracyEvaluator:
     def __init__(self):
-
         self.answer_processor = EvalAIAnswerProcessor()
 
     def _compute_answer_scores(self, raw_answers):
@@ -292,7 +285,6 @@ class TextVQAAccuracyEvaluator:
         return unique_answer_scores
 
     def eval_pred_list(self, pred_list):
-
         pred_scores = []
 
         for entry in tqdm(pred_list):
@@ -311,11 +303,9 @@ class TextVQAAccuracyEvaluator:
 
 class STVQAAccuracyEvaluator:
     def __init__(self):
-
         self.answer_processor = EvalAIAnswerProcessor()
 
     def eval_pred_list(self, pred_list):
-
         pred_scores = []
 
         for entry in pred_list:
@@ -334,13 +324,11 @@ class STVQAAccuracyEvaluator:
 
 class STVQAANLSEvaluator:
     def __init__(self):
-
         import editdistance  # install with `pip install editdistance`
 
         self.get_edit_distance = editdistance.eval
 
     def get_anls(self, s1, s2):
-
         s1 = s1.lower().strip()
 
         s2 = s2.lower().strip()
@@ -352,7 +340,6 @@ class STVQAANLSEvaluator:
         return anls
 
     def eval_pred_list(self, pred_list):
-
         pred_scores = []
 
         for entry in pred_list:
@@ -367,7 +354,6 @@ class STVQAANLSEvaluator:
 
 class TextCapsBleu4Evaluator:
     def __init__(self):
-
         # The following script requires Java 1.8.0 and pycocotools installed.
 
         # The pycocoevalcap can be installed with pip as
@@ -396,7 +382,6 @@ class TextCapsBleu4Evaluator:
         self.scorer = Bleu(4)
 
     def eval_pred_list(self, pred_list):
-
         # Create reference and hypotheses captions.
 
         gts = {}

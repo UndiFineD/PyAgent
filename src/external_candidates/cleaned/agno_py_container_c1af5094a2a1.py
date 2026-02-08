@@ -15,8 +15,8 @@ from agno.aws.resource.secret.reader import read_secrets
 
 from agno.utils.log import logger
 
-class EcsContainer(AwsResource):
 
+class EcsContainer(AwsResource):
     """
 
     Reference:
@@ -175,200 +175,141 @@ class EcsContainer(AwsResource):
 
     firelens_configuration: Optional[Dict[str, Any]] = None
 
-    def get_container_definition(
-
-        self, aws_client: Optional[AwsApiClient] = None
-
-    ) -> Dict[str, Any]:
-
+    def get_container_definition(self, aws_client: Optional[AwsApiClient] = None) -> Dict[str, Any]:
         container_definition: Dict[str, Any] = {}
 
         # Build container environment
 
-        container_environment: List[Dict[str, Any]] = self.build_container_environment(
-
-            aws_client=aws_client
-
-        )
+        container_environment: List[Dict[str, Any]] = self.build_container_environment(aws_client=aws_client)
 
         if container_environment is not None:
-
             container_definition["environment"] = container_environment
 
         if self.name is not None:
-
             container_definition["name"] = self.name
 
         if self.image is not None:
-
             container_definition["image"] = self.image
 
         if self.repository_credentials is not None:
-
             container_definition["repositoryCredentials"] = self.repository_credentials
 
         if self.cpu is not None:
-
             container_definition["cpu"] = self.cpu
 
         if self.memory is not None:
-
             container_definition["memory"] = self.memory
 
         if self.memory_reservation is not None:
-
             container_definition["memoryReservation"] = self.memory_reservation
 
         if self.links is not None:
-
             container_definition["links"] = self.links
 
         if self.port_mappings is not None:
-
             container_definition["portMappings"] = self.port_mappings
 
         if self.essential is not None:
-
             container_definition["essential"] = self.essential
 
         if self.entry_point is not None:
-
             container_definition["entryPoint"] = self.entry_point
 
         if self.command is not None:
-
             container_definition["command"] = self.command
 
         if self.environment_files is not None:
-
             container_definition["environmentFiles"] = self.environment_files
 
         if self.mount_points is not None:
-
             container_definition["mountPoints"] = self.mount_points
 
         if self.volumes_from is not None:
-
             container_definition["volumesFrom"] = self.volumes_from
 
         if self.linux_parameters is not None:
-
             container_definition["linuxParameters"] = self.linux_parameters
 
         if self.secrets is not None:
-
             container_definition["secrets"] = self.secrets
 
         if self.depends_on is not None:
-
             container_definition["dependsOn"] = self.depends_on
 
         if self.start_timeout is not None:
-
             container_definition["startTimeout"] = self.start_timeout
 
         if self.stop_timeout is not None:
-
             container_definition["stopTimeout"] = self.stop_timeout
 
         if self.hostname is not None:
-
             container_definition["hostname"] = self.hostname
 
         if self.user is not None:
-
             container_definition["user"] = self.user
 
         if self.working_directory is not None:
-
             container_definition["workingDirectory"] = self.working_directory
 
         if self.disable_networking is not None:
-
             container_definition["disableNetworking"] = self.disable_networking
 
         if self.privileged is not None:
-
             container_definition["privileged"] = self.privileged
 
         if self.readonly_root_filesystem is not None:
-
-            container_definition["readonlyRootFilesystem"] = (
-
-                self.readonly_root_filesystem
-
-            )
+            container_definition["readonlyRootFilesystem"] = self.readonly_root_filesystem
 
         if self.dns_servers is not None:
-
             container_definition["dnsServers"] = self.dns_servers
 
         if self.dns_search_domains is not None:
-
             container_definition["dnsSearchDomains"] = self.dns_search_domains
 
         if self.extra_hosts is not None:
-
             container_definition["extraHosts"] = self.extra_hosts
 
         if self.docker_security_options is not None:
-
             container_definition["dockerSecurityOptions"] = self.docker_security_options
 
         if self.interactive is not None:
-
             container_definition["interactive"] = self.interactive
 
         if self.pseudo_terminal is not None:
-
             container_definition["pseudoTerminal"] = self.pseudo_terminal
 
         if self.docker_labels is not None:
-
             container_definition["dockerLabels"] = self.docker_labels
 
         if self.ulimits is not None:
-
             container_definition["ulimits"] = self.ulimits
 
         if self.log_configuration is not None:
-
             container_definition["logConfiguration"] = self.log_configuration
 
         if self.health_check is not None:
-
             container_definition["healthCheck"] = self.health_check
 
         if self.system_controls is not None:
-
             container_definition["systemControls"] = self.system_controls
 
         if self.resource_requirements is not None:
-
             container_definition["resourceRequirements"] = self.resource_requirements
 
         if self.firelens_configuration is not None:
-
             container_definition["firelensConfiguration"] = self.firelens_configuration
 
         return container_definition
 
-    def build_container_environment(
-
-        self, aws_client: Optional[AwsApiClient] = None
-
-    ) -> List[Dict[str, Any]]:
-
+    def build_container_environment(self, aws_client: Optional[AwsApiClient] = None) -> List[Dict[str, Any]]:
         logger.debug("Building container environment")
 
         container_environment: List[Dict[str, Any]] = []
 
         if self.environment is not None:
-
             from agno.aws.resource.reference import AwsReference
 
             for env in self.environment:
-
                 env_name = env.get("name", None)
 
                 env_value = env.get("value", None)
@@ -376,64 +317,36 @@ class EcsContainer(AwsResource):
                 env_value_parsed = None
 
                 if isinstance(env_value, AwsReference):
-
                     logger.debug(f"{env_name} is an AwsReference")
 
                     try:
-
-                        env_value_parsed = env_value.get_reference(
-
-                            aws_client=aws_client
-
-                        )
+                        env_value_parsed = env_value.get_reference(aws_client=aws_client)
 
                     except Exception as e:
-
                         logger.error(f"Error while parsing {env_name}: {e}")
 
                 else:
-
                     env_value_parsed = env_value
 
                 if env_value_parsed is not None:
-
                     try:
-
                         env_val_str = str(env_value_parsed)
 
-                        container_environment.append(
-
-                            {"name": env_name, "value": env_val_str}
-
-                        )
+                        container_environment.append({"name": env_name, "value": env_val_str})
 
                     except Exception as e:
-
                         logger.error(f"Error while converting {env_value} to str: {e}")
 
         if self.env_from_secrets is not None:
-
-            secrets: Dict[str, Any] = read_secrets(
-
-                self.env_from_secrets, aws_client=aws_client
-
-            )
+            secrets: Dict[str, Any] = read_secrets(self.env_from_secrets, aws_client=aws_client)
 
             for secret_name, secret_value in secrets.items():
-
                 try:
-
                     secret_value = str(secret_value)
 
-                    container_environment.append(
-
-                        {"name": secret_name, "value": secret_value}
-
-                    )
+                    container_environment.append({"name": secret_name, "value": secret_value})
 
                 except Exception as e:
-
                     logger.error(f"Error while converting {secret_value} to str: {e}")
 
         return container_environment
-

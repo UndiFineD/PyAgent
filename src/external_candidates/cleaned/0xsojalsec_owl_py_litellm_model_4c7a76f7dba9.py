@@ -90,7 +90,6 @@ class LiteLLMModel(BaseModelBackend):
         url: Optional[str] = None,
         token_counter: Optional[BaseTokenCounter] = None,
     ) -> None:
-
         from litellm import completion
 
         if model_config_dict is None:

@@ -16,7 +16,6 @@ class TrigAnimation(Animation):
     }
 
     def __init__(self, **kwargs):
-
         digest_config(self, kwargs)
 
         x_axis = NumberLine(x_min=-3, x_max=3, color=BLUE_E)
@@ -38,7 +37,6 @@ class TrigAnimation(Animation):
         Animation.__init__(self, mobject, **kwargs)
 
     def interpolate_mobject(self, alpha):
-
         theta = 2 * np.pi * alpha
 
         circle_point = np.cos(theta) * RIGHT + np.sin(theta) * UP + self.center
@@ -56,7 +54,6 @@ class TrigAnimation(Animation):
 
 class Notation(Scene):
     def construct(self):
-
         self.introduce_notation()
 
         self.shift_to_good_and_back()
@@ -66,7 +63,6 @@ class Notation(Scene):
         self.swipe_left()
 
     def introduce_notation(self):
-
         notation = OldTexText("Notation")
 
         notation.to_edge(UP)
@@ -106,7 +102,6 @@ class Notation(Scene):
         self.add(notation, self.symbols)
 
     def shift_to_good_and_back(self):
-
         sum2 = self.sum1.copy()
 
         sigma = sum2.submobjects[1]
@@ -168,7 +163,6 @@ class Notation(Scene):
         self.wait()
 
     def shift_to_visuals(self):
-
         sigma, prod, trig, func = self.symbols.split()
 
         new_trig = trig.copy()
@@ -210,7 +204,6 @@ class Notation(Scene):
         self.wait()
 
     def get_harmonic_sum_lines(self):
-
         result = VMobject()
 
         for n in range(1, 8):
@@ -237,7 +230,6 @@ class Notation(Scene):
         return result
 
     def swipe_left(self):
-
         everyone = VMobject(*self.mobjects)
 
         self.play(ApplyMethod(everyone.shift, 20 * LEFT))
@@ -245,7 +237,6 @@ class Notation(Scene):
 
 class ButDots(Scene):
     def construct(self):
-
         but = OldTexText("but")
 
         dots = OldTex("\\dots")
@@ -263,7 +254,6 @@ class ButDots(Scene):
 
 class ThreesomeOfNotation(Scene):
     def construct(self):
-
         exp = OldTex("x^y = z")
 
         log = OldTex("\\log_x(z) = y")
@@ -311,7 +301,6 @@ class ThreesomeOfNotation(Scene):
 
 class TwoThreeEightExample(Scene):
     def construct(self):
-
         start = OldTex("2 \\cdot 2 \\cdot 2 = 8")
 
         two1, dot1, two2, dot2, two3, eq, eight = start.split()
@@ -422,7 +411,6 @@ class TwoThreeEightExample(Scene):
 
 class WhatTheHell(Scene):
     def construct(self):
-
         randy = Randolph()
 
         randy.to_corner(DOWN + LEFT)
@@ -496,7 +484,6 @@ class WhatTheHell(Scene):
 
 class Countermathematical(Scene):
     def construct(self):
-
         counterintuitive = OldTexText("Counterintuitive")
 
         mathematical = OldTexText("mathematical")
@@ -516,7 +503,6 @@ class Countermathematical(Scene):
 
 class PascalsCollision(Scene):
     def construct(self):
-
         pascals_triangle = PascalsTriangle()
 
         pascals_triangle.scale(0.5)
@@ -563,7 +549,6 @@ class PascalsCollision(Scene):
 
 class LogarithmProperties(Scene):
     def construct(self):
-
         randy = Randolph()
 
         randy.to_corner()
@@ -608,7 +593,6 @@ class LogarithmProperties(Scene):
 
 class HaveToShare(Scene):
     def construct(self):
-
         words = list(map(TexText, ["Lovely", "Symmetrical", "Utterly Reasonable"]))
 
         for w1, w2 in zip(words, words[1:]):

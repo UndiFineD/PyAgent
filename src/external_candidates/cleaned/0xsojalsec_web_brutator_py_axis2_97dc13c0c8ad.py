@@ -20,7 +20,6 @@ from lib.core.Requester import AuthMode, Requester
 
 class Axis2:
     def __init__(self, url, verbose=False):
-
         self.url = url
 
         self.interface = None
@@ -30,7 +29,6 @@ class Axis2:
         self.http_auth_type = None
 
     def check(self):
-
         r = Requester.get("{}/axis2/axis2-admin/login".format(self.url))
 
         if r.status_code == 200 and 'name="password"' in r.text:
@@ -47,7 +45,6 @@ class Axis2:
         return False
 
     def try_auth(self, username, password):
-
         if self.interface == "axis2-admin":
             data = {
                 "userName": username,

@@ -95,5 +95,4 @@ def patchify(net, coords, radius, mode="bilinear"):
 
 
 def corr(fmap1, fmap2, coords, ii, jj, radius=1, dropout=1):
-
     return CorrLayer.apply(fmap1, fmap2, coords, ii, jj, radius, dropout)

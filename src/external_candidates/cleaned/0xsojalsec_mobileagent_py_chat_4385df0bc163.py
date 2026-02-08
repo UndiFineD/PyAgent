@@ -9,7 +9,6 @@ from PCAgent.api import resize_encode_image
 
 
 def init_subtask_chat():
-
     operation_history = []
 
     system_prompt = "You are a helpful AI assistant."
@@ -20,7 +19,6 @@ def init_subtask_chat():
 
 
 def init_action_chat():
-
     operation_history = []
 
     system_prompt = "You are a helpful AI PC operating assistant. You need to help me operate the PC to complete the user's instruction."
@@ -31,7 +29,6 @@ def init_action_chat():
 
 
 def init_reflect_chat():
-
     operation_history = []
 
     system_prompt = "You are a helpful AI PC operating assistant."
@@ -42,7 +39,6 @@ def init_reflect_chat():
 
 
 def init_memory_chat():
-
     operation_history = []
 
     system_prompt = "You are a helpful AI PC operating assistant."
@@ -53,7 +49,6 @@ def init_memory_chat():
 
 
 def add_response_old(role, prompt, chat_history, image=None):
-
     new_chat_history = copy.deepcopy(chat_history)
 
     if image:
@@ -78,7 +73,6 @@ def add_response_old(role, prompt, chat_history, image=None):
 
 
 def add_response(role, prompt, chat_history, image=[], use_qwen=False):
-
     new_chat_history = copy.deepcopy(chat_history)
 
     content = [
@@ -105,7 +99,6 @@ def add_response(role, prompt, chat_history, image=[], use_qwen=False):
 
 
 def add_response_two_image(role, prompt, chat_history, image):
-
     new_chat_history = copy.deepcopy(chat_history)
 
     base64_image1 = resize_encode_image(image[0])
@@ -130,7 +123,6 @@ def add_response_two_image(role, prompt, chat_history, image):
 
 
 def print_status(chat_history):
-
     print("*" * 100)
 
     for chat in chat_history:

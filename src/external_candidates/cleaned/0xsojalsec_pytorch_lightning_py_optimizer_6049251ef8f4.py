@@ -65,7 +65,6 @@ from typing_extensions import override
 
 
 def do_nothing_closure() -> None:
-
     return
 
 
@@ -83,7 +82,6 @@ class LightningOptimizer:
     """
 
     def __init__(self, optimizer: Optimizer):
-
         self._optimizer = optimizer
 
         self._strategy: Optional[pl.strategies.Strategy] = None
@@ -104,7 +102,6 @@ class LightningOptimizer:
 
     @property
     def optimizer(self) -> Optimizer:
-
         return self._optimizer
 
     @contextmanager
@@ -251,7 +248,6 @@ class LightningOptimizer:
         optimizer: Union[Optimizer, "LightningOptimizer"],
         strategy: "pl.strategies.Strategy",
     ) -> "LightningOptimizer":
-
         # the user could return a `LightningOptimizer` from `configure_optimizers`, see test:
 
         # tests/core/test_lightning_optimizer.py::test_lightning_optimizer[False]
@@ -263,7 +259,6 @@ class LightningOptimizer:
         return lightning_optimizer
 
     def __getattr__(self, item: Any) -> Any:
-
         return getattr(self._optimizer, item)
 
 
@@ -303,7 +298,6 @@ def _init_optimizers_and_lr_schedulers(
 def _configure_optimizers(
     optim_conf: Union[dict[str, Any], list, Optimizer, tuple],
 ) -> tuple[list, list, Optional[str]]:
-
     optimizers, lr_schedulers = [], []
 
     monitor = None
@@ -484,7 +478,6 @@ def _configure_schedulers_manual_opt(schedulers: list) -> list[LRSchedulerConfig
 
 
 def _validate_scheduler_api(lr_scheduler_configs: list[LRSchedulerConfig], model: "pl.LightningModule") -> None:
-
     for config in lr_scheduler_configs:
         scheduler = config.scheduler
 
@@ -507,7 +500,6 @@ def _validate_scheduler_api(lr_scheduler_configs: list[LRSchedulerConfig], model
 
 
 def _validate_multiple_optimizers_support(optimizers: list[Optimizer], model: "pl.LightningModule") -> None:
-
     if is_param_in_hook_signature(model.training_step, "optimizer_idx", explicit=True):
         raise RuntimeError(
             "Training with multiple optimizers is only supported with manual optimization. Remove the `optimizer_idx`"
@@ -524,7 +516,6 @@ def _validate_multiple_optimizers_support(optimizers: list[Optimizer], model: "p
 
 
 def _validate_optimizers_attached(optimizers: list[Optimizer], lr_scheduler_configs: list[LRSchedulerConfig]) -> None:
-
     for config in lr_scheduler_configs:
         if config.scheduler.optimizer not in optimizers:
             raise MisconfigurationException(
@@ -533,7 +524,6 @@ def _validate_optimizers_attached(optimizers: list[Optimizer], lr_scheduler_conf
 
 
 def _validate_optim_conf(optim_conf: dict[str, Any]) -> None:
-
     valid_keys = {"optimizer", "lr_scheduler", "monitor"}
 
     extra_keys = optim_conf.keys() - valid_keys
@@ -551,22 +541,18 @@ class _MockOptimizer(Optimizer):
     :meth:`~lightning.pytorch.core.LightningModule.configure_optimizers`."""
 
     def __init__(self) -> None:
-
         super().__init__([torch.zeros(1)], {})
 
     @override
     def add_param_group(self, param_group: dict[Any, Any]) -> None:
-
         pass  # Do Nothing
 
     @override
     def load_state_dict(self, state_dict: dict[Any, Any]) -> None:
-
         pass  # Do Nothing
 
     @override
     def state_dict(self) -> dict[str, Any]:
-
         return {}  # Return Empty
 
     @overload
@@ -577,16 +563,13 @@ class _MockOptimizer(Optimizer):
 
     @override
     def step(self, closure: Optional[Callable[[], float]] = None) -> Optional[float]:
-
         if closure is not None:
             return closure()
 
     @override
     def zero_grad(self, set_to_none: Optional[bool] = True) -> None:
-
         pass  # Do Nothing
 
     @override
     def __repr__(self) -> str:
-
         return "No Optimizer"

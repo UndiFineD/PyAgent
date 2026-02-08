@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class MillionFlips(Scene):
     def construct(self):
-
         title = OldTexText("1{,}000{,}000 flips")
 
         title.to_edge(UP)
@@ -128,7 +127,6 @@ class MillionFlips(Scene):
         self.wait()
 
     def organize_group(self, group):
-
         group.arrange_in_grid(10)
 
         group.set_height(5)
@@ -136,7 +134,6 @@ class MillionFlips(Scene):
         group.shift(DOWN + 2 * LEFT)
 
     def increment(self, integer_mob, value=1):
-
         new_int = Integer(integer_mob.number + value)
 
         new_int.move_to(integer_mob, DL)
@@ -148,7 +145,6 @@ class MillionFlips(Scene):
 
 class PropHeadsWithinThousandth(Scene):
     def construct(self):
-
         prob = OldTex(
             "P(499{,}000 \\le",
             "\\# \\text{H}",
@@ -166,7 +162,6 @@ class PropHeadsWithinThousandth(Scene):
 
 class PropHeadsWithinHundredth(Scene):
     def construct(self):
-
         prob = OldTex(
             "P(490{,}000 \\le",
             "\\# \\text{H}",

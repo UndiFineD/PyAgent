@@ -20,7 +20,6 @@ from gpt_train import main
 
 @pytest.fixture
 def gpt_config():
-
     return {
         "vocab_size": 50257,
         "context_length": 12,  # small for testing efficiency
@@ -34,7 +33,6 @@ def gpt_config():
 
 @pytest.fixture
 def other_settings():
-
     return {
         "learning_rate": 5e-4,
         "num_epochs": 1,  # small for testing efficiency
@@ -44,7 +42,6 @@ def other_settings():
 
 
 def test_main(gpt_config, other_settings):
-
     train_losses, val_losses, tokens_seen, model = main(gpt_config, other_settings)
 
     assert len(train_losses) == 39, "Unexpected number of training losses"

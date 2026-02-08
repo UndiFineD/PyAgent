@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class CrossingOneMillion(TeacherStudentsScene):
     def construct(self):
-
         self.increment_count()
 
         self.comment_on_real_milestone()
@@ -18,7 +17,6 @@ class CrossingOneMillion(TeacherStudentsScene):
         self.reflect()
 
     def increment_count(self):
-
         number = self.number = Integer(0)
 
         number.move_to(UP, LEFT)
@@ -51,7 +49,6 @@ class CrossingOneMillion(TeacherStudentsScene):
         self.wait()
 
     def comment_on_real_milestone(self):
-
         number = self.number
 
         remainder = Integer(2**20 - 10**6)
@@ -100,7 +97,6 @@ class CrossingOneMillion(TeacherStudentsScene):
         self.wait(2)
 
     def reflect(self):
-
         bubble = ThoughtBubble(
             direction=RIGHT,
             height=4,
@@ -140,7 +136,6 @@ class CrossingOneMillion(TeacherStudentsScene):
 
 class ShareWithFriends(PiCreatureScene):
     def construct(self):
-
         randy, morty = self.pi_creatures
 
         self.pi_creature_says(
@@ -155,7 +150,6 @@ class ShareWithFriends(PiCreatureScene):
         self.wait()
 
     def create_pi_creatures(self):
-
         randy = Randolph(color=GREEN)
 
         morty = Mortimer(color=RED_E)
@@ -169,7 +163,6 @@ class ShareWithFriends(PiCreatureScene):
 
 class AllFeaturedCreators(MortyPiCreatureScene):
     def construct(self):
-
         morty = self.pi_creature
 
         title = Title("Featured creators")
@@ -262,7 +255,6 @@ class AllFeaturedCreators(MortyPiCreatureScene):
         self.add(think_words)
 
     def get_rect_removal(self, rect):
-
         rect.generate_target()
 
         rect.target.stretch(0, 0, about_edge=LEFT)
@@ -276,7 +268,6 @@ class GeneralWrapper(Scene):
     CONFIG = {"title_text": ""}
 
     def construct(self):
-
         title = OldTexText(self.title_text)
 
         title.to_edge(UP)
@@ -312,7 +303,6 @@ class EndScreen(PiCreatureScene):
     }
 
     def construct(self):
-
         words = OldTexText("Clicky stuffs")
 
         words.scale(1.5)
@@ -347,7 +337,6 @@ class EndScreen(PiCreatureScene):
         self.wait(3)
 
     def create_pi_creature(self):
-
         self.pi_creature = Randolph()
 
         self.pi_creature.shift(2 * DOWN + 1.5 * LEFT)

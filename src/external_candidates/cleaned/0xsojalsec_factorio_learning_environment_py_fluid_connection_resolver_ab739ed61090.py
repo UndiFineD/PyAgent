@@ -5,7 +5,6 @@
 
 from typing import List, Optional, Tuple, Union
 
-
 from fle.env import (
     Boiler,
     Entity,
@@ -27,13 +26,11 @@ from fle.env.tools.agent.connect_entities.resolver import Resolver
 
 class FluidConnectionResolver(Resolver):
     def __init__(self, *args):
-
         super().__init__(*args)
 
     def _adjust_connection_point(
         self, point: Union[Position, IndexedPosition], entity: Union[Entity, Position]
     ) -> Position:
-
         if not isinstance(entity, Entity):
             return point
 
@@ -52,7 +49,6 @@ class FluidConnectionResolver(Resolver):
         return point
 
     def _is_blocked(self, pos: Position, entity=None) -> bool:
-
         # if isinstance(entity, Pipe) or isinstance(entity, PipeGroup):
 
         #    return False
@@ -62,13 +58,11 @@ class FluidConnectionResolver(Resolver):
         return bool(entities)
 
     def _refresh_entity(self, entity: Entity):
-
         entity = self.get_entities({prototype_by_name[entity.name]}, position=entity.position, radius=0.5)[0]
 
         return entity
 
     def _get_source_fluid(self, entity: FluidHandler) -> str:
-
         # update the source entity
 
         updated_source_entity = self.get_entities(position=entity.position, radius=0)
@@ -235,7 +229,6 @@ class FluidConnectionResolver(Resolver):
         return valid_points
 
     def check_for_recipe_requirement(self, target_entity, source_fluid_positions):
-
         source_fluids = [x.type for x in source_fluid_positions if x.type]
 
         if not source_fluids:
@@ -260,7 +253,6 @@ class FluidConnectionResolver(Resolver):
         return True
 
     def get_source_fluid_positions(self, source):
-
         match source:
             case OffshorePump():
                 source_positions = [IndexedPosition(x=pos.x, y=pos.y, type="water") for pos in source.connection_points]
@@ -335,7 +327,6 @@ class FluidConnectionResolver(Resolver):
         return source_positions
 
     def get_pipe_connection_positions(self, pipe, underground_positions, fluid):
-
         positions = [IndexedPosition(x=pipe.position.x, y=pipe.position.y, type=fluid)]
 
         if pipe.position.up() not in underground_positions:

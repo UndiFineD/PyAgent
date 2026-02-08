@@ -17,7 +17,6 @@ import shutil
 
 from pathlib import Path
 
-
 from PIL import Image
 
 
@@ -25,7 +24,6 @@ class ResourceSpriteExtractor:
     """Extract and process resource sprites and tree layers"""
 
     def __init__(self, resources_path: str, output_dir: str = "images"):
-
         self.resources_path = Path(resources_path)
 
         self.output_dir = Path(output_dir)

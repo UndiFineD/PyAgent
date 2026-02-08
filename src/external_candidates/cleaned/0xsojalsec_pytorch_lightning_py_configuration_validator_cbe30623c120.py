@@ -78,7 +78,6 @@ def _verify_loop_configurations(trainer: "pl.Trainer") -> None:
 
 
 def __verify_train_val_loop_configuration(trainer: "pl.Trainer", model: "pl.LightningModule") -> None:
-
     # verify minimum training requirements
 
     has_training_step = is_overridden("training_step", model)
@@ -132,7 +131,6 @@ def __verify_train_val_loop_configuration(trainer: "pl.Trainer", model: "pl.Ligh
 
 
 def __verify_eval_loop_configuration(model: "pl.LightningModule", stage: str) -> None:
-
     step_name = "validation_step" if stage == "val" else f"{stage}_step"
 
     has_step = is_overridden(step_name, model)
@@ -168,7 +166,6 @@ def __verify_eval_loop_configuration(model: "pl.LightningModule", stage: str) ->
 
 
 def __verify_manual_optimization_support(trainer: "pl.Trainer", model: "pl.LightningModule") -> None:
-
     if model.automatic_optimization:
         return
 
@@ -211,7 +208,6 @@ def __warn_dataloader_iter_limitations(model: "pl.LightningModule") -> None:
 
 
 def __verify_configure_model_configuration(model: "pl.LightningModule") -> None:
-
     if is_overridden("configure_sharded_model", model):
         name = type(model).__name__
 

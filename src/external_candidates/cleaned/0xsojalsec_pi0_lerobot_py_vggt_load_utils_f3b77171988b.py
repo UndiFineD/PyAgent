@@ -193,7 +193,6 @@ def preprocess_images(
 
 
 def create_blueprint(parent_log_path: Path, image_paths: list[Path]) -> rrb.Blueprint:
-
     view3d = rrb.Spatial3DView(
         origin=f"{parent_log_path}",
         contents=[

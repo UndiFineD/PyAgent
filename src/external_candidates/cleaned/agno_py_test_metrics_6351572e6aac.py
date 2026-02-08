@@ -9,22 +9,15 @@ from agno.models.openai import OpenAIChat
 
 from agno.tools.duckduckgo import DuckDuckGoTools
 
+
 def test_session_metrics():
-
     agent = Agent(
-
         model=OpenAIChat(id="gpt-4o-mini"),
-
         tools=[DuckDuckGoTools(cache_results=True)],
-
         show_tool_calls=True,
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     response = agent.run("Hi, my name is John")
@@ -67,16 +60,12 @@ def test_session_metrics():
 
     assert agent.session_metrics.total_tokens == total_tokens
 
+
 def test_run_response_metrics():
-
     agent = Agent(
-
         model=OpenAIChat(id="gpt-4o-mini"),
-
         show_tool_calls=True,
-
         markdown=True,
-
     )
 
     response1 = agent.run("Hello my name is John")
@@ -94,4 +83,3 @@ def test_run_response_metrics():
     assert len(response1.metrics.get("total_tokens", [])) == 1
 
     assert len(response2.metrics.get("total_tokens", [])) == 1
-

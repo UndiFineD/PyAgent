@@ -13,9 +13,7 @@ Inserter renderer
 
 from typing import Callable, Dict, Optional, Tuple, Union
 
-
 from PIL import Image
-
 
 from ..constants import DIRECTIONS
 

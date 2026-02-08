@@ -35,7 +35,6 @@ class AnimatedMidi(Scene):
     sound_file_time_offset = 0.3
 
     def construct(self):
-
         self.add_piano()
 
         self.add_note_rects()
@@ -45,7 +44,6 @@ class AnimatedMidi(Scene):
         self.scroll()
 
     def add_piano(self):
-
         piano = Piano3D()
 
         piano.set_width(9)
@@ -61,7 +59,6 @@ class AnimatedMidi(Scene):
         self.add(piano)
 
     def add_note_rects(self):
-
         mid_file = self.mid_file = os.path.join(DATA_DIR, self.midi_file)
 
         # Pull out track
@@ -140,11 +137,9 @@ class AnimatedMidi(Scene):
         self.add(note_rects)
 
     def add_piano_sound(self):
-
         self.add_sound(midi_to_wav(self.mid_file), self.sound_file_time_offset)
 
     def scroll(self):
-
         piano = self.piano
 
         note_rects = self.note_rects
@@ -159,7 +154,6 @@ class AnimatedMidi(Scene):
         piano.time = 0
 
         def update_piano(piano, dt):
-
             piano.time += dt
 
             for note, key in zip(piano_midi_range, piano):

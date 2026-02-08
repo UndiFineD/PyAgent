@@ -7,8 +7,8 @@
 
 # NOTE: extracted with static-only rules; review before use
 
-def alignment_diagonal_score(alignments, binary=False):
 
+def alignment_diagonal_score(alignments, binary=False):
     """
 
     Compute how diagonal alignment predictions are. It is useful
@@ -32,8 +32,6 @@ def alignment_diagonal_score(alignments, binary=False):
     maxs = alignments.max(dim=1)[0]
 
     if binary:
-
         maxs[maxs > 0] = 1
 
     return maxs.mean(dim=1).mean(dim=0).item()
-

@@ -7,7 +7,6 @@ import numpy as np
 
 
 def hook(frame, context):
-
     rgb_frame = frame["original"]
 
     model = context["model"]

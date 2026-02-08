@@ -19,7 +19,6 @@ from .utils import Timer
 class CholeskySolver(torch.autograd.Function):
     @staticmethod
     def forward(ctx, H, b):
-
         # don't crash training if cholesky decomp fails
 
         U, info = torch.linalg.cholesky_ex(H)
@@ -39,7 +38,6 @@ class CholeskySolver(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, grad_x):
-
         if ctx.failed:
             return None, None
 
@@ -56,14 +54,12 @@ class CholeskySolver(torch.autograd.Function):
 
 
 def safe_scatter_add_mat(A, ii, jj, n, m):
-
     v = (ii >= 0) & (jj >= 0) & (ii < n) & (jj < m)
 
     return scatter_sum(A[:, v], ii[v] * m + jj[v], dim=1, dim_size=n * m)
 
 
 def safe_scatter_add_vec(b, ii, n):
-
     v = (ii >= 0) & (ii < n)
 
     return scatter_sum(b[:, v], ii[v], dim=1, dim_size=n)
@@ -73,7 +69,6 @@ def safe_scatter_add_vec(b, ii, n):
 
 
 def disp_retr(disps, dz, ii):
-
     ii = ii.to(device=dz.device)
 
     return disps + scatter_sum(dz, ii, dim=1, dim_size=disps.shape[1])
@@ -83,7 +78,6 @@ def disp_retr(disps, dz, ii):
 
 
 def pose_retr(poses, dx, ii):
-
     ii = ii.to(device=dx.device)
 
     return poses.retr(scatter_sum(dx, ii, dim=1, dim_size=poses.shape[1]))
@@ -122,7 +116,6 @@ def block_solve(A, B, ep=1.0, lm=1e-4):
 
 
 def block_show(A):
-
     import matplotlib.pyplot as plt
 
     b, n1, m1, p1, q1 = A.shape

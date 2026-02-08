@@ -31,7 +31,6 @@ class ShowNewRuleAtDiscreteBoundary(DiscreteSetup):
     }
 
     def construct(self):
-
         self.add_axes()
 
         self.set_points()
@@ -43,7 +42,6 @@ class ShowNewRuleAtDiscreteBoundary(DiscreteSetup):
         self.let_evolve()
 
     def set_points(self):
-
         axes = self.axes
 
         for mob in axes.family_members_with_points():
@@ -69,7 +67,6 @@ class ShowNewRuleAtDiscreteBoundary(DiscreteSetup):
         self.add(self.rod_pieces)
 
     def show_boundary_point_influenced_by_neighbor(self):
-
         dots = self.dots
 
         ld = dots[0]
@@ -160,7 +157,6 @@ class ShowNewRuleAtDiscreteBoundary(DiscreteSetup):
         )
 
     def add_clock(self):
-
         super().add_clock()
 
         self.time_label.add_updater(lambda d, dt: d.increment_value(dt))
@@ -168,7 +164,6 @@ class ShowNewRuleAtDiscreteBoundary(DiscreteSetup):
         VGroup(self.clock, self.time_label).shift(2 * LEFT)
 
     def let_evolve(self):
-
         dots = self.dots
 
         dots.add_updater(self.update_dots)
@@ -186,7 +181,6 @@ class ShowNewRuleAtDiscreteBoundary(DiscreteSetup):
     #
 
     def get_dots(self, axes, xs):
-
         dots = VGroup(*[Dot(axes.c2p(x, self.temp_func(x, 0))) for x in xs])
 
         max_width = 0.8 * self.step_size
@@ -200,11 +194,9 @@ class ShowNewRuleAtDiscreteBoundary(DiscreteSetup):
         return dots
 
     def get_v_lines(self, dots):
-
         return always_redraw(lambda: VGroup(*[self.get_v_line(dot) for dot in dots]))
 
     def get_v_line(self, dot):
-
         x_axis = self.axes.x_axis
 
         bottom = dot.get_bottom()
@@ -220,7 +212,6 @@ class ShowNewRuleAtDiscreteBoundary(DiscreteSetup):
         )
 
     def get_rod_pieces(self, dots):
-
         axis = self.axes.x_axis
 
         factor = 1 - np.exp(-((0.8 / self.step_size) ** 2))
@@ -247,13 +238,11 @@ class ShowNewRuleAtDiscreteBoundary(DiscreteSetup):
         return pieces
 
     def update_dot_color(self, dot):
-
         y = self.axes.y_axis.p2n(dot.get_center())
 
         dot.set_color(self.y_to_color(y))
 
     def update_dots(self, dots, dt):
-
         for ds in zip(dots, dots[1:], dots[2:]):
             points = [d.get_center() for d in ds]
 
@@ -272,7 +261,6 @@ class ShowNewRuleAtDiscreteBoundary(DiscreteSetup):
                 self.update_dot(dot=ds[-1], dt=dt, mean_diff=(y1 - y2) / dx)
 
     def update_dot(self, dot, dt, mean_diff):
-
         dot.shift(mean_diff * self.alpha * dt * UP)
 
 
@@ -284,7 +272,6 @@ class DiscreteEvolutionPoint25(ShowNewRuleAtDiscreteBoundary):
     }
 
     def construct(self):
-
         self.add_axes()
 
         self.set_points()
@@ -311,7 +298,6 @@ class FlatEdgesForDiscreteEvolution(DiscreteEvolutionPoint1):
     }
 
     def let_evolve(self):
-
         lines = VGroup(*[Line(LEFT, RIGHT) for x in range(2)])
 
         lines.set_width(1.5)
@@ -327,7 +313,6 @@ class FlatEdgesForDiscreteEvolution(DiscreteEvolutionPoint1):
         super().let_evolve()
 
     def update_lines(self, lines):
-
         dots = self.dots
 
         for line, dot in zip(lines, [dots[0], dots[-1]]):

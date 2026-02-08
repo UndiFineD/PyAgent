@@ -9,7 +9,6 @@ from manimlib.utils.dict_ops import merge_dicts_recursively
 
 
 def filtered_locals(caller_locals):
-
     result = caller_locals.copy()
 
     ignored_local_args = ["self", "kwargs"]
@@ -63,7 +62,6 @@ def digest_config(obj, kwargs, caller_locals={}):
 
 
 def digest_locals(obj, keys=None):
-
     caller_locals = filtered_locals(inspect.currentframe().f_back.f_locals)
 
     if keys is None:
@@ -80,12 +78,10 @@ def digest_locals(obj, keys=None):
 
 class DictAsObject(object):
     def __init__(self, dict):
-
         self.__dict__ = dict
 
 
 def get_all_descendent_classes(Class):
-
     awaiting_review = [Class]
 
     result = []

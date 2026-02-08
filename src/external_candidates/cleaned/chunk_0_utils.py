@@ -5,7 +5,6 @@
 
 
 def extract_test_output_code(model_output: str):
-
     outputlines = model_output.split("\n")
 
     # find the last line startwith assert...
@@ -39,7 +38,6 @@ def extract_test_output_code(model_output: str):
 
 
 def extract_execution_code(model_output: str, cot: bool = False):
-
     if cot:
         if "[ANSWER]" in model_output:
             model_output = model_output.split("[ANSWER]")[1].strip()

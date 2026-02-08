@@ -23,7 +23,6 @@ class MultilayeredGlass(PhotonScene, ZoomedScene):
     }
 
     def construct(self):
-
         self.cycloid = Cycloid(end_theta=np.pi)
 
         self.cycloid.set_color(YELLOW)
@@ -59,7 +58,6 @@ class MultilayeredGlass(PhotonScene, ZoomedScene):
         self.ask_continuous_question()
 
     def continuous_to_smooth(self):
-
         self.add(*self.layers)
 
         continuous = self.get_continuous_background()
@@ -75,7 +73,6 @@ class MultilayeredGlass(PhotonScene, ZoomedScene):
         self.wait()
 
     def get_continuous_background(self):
-
         glass = FilledRectangle(
             height=self.top - self.bottom,
             width=FRAME_WIDTH,
@@ -90,7 +87,6 @@ class MultilayeredGlass(PhotonScene, ZoomedScene):
         return glass
 
     def generate_layer_info(self):
-
         self.layer_thickness = float(self.top - self.bottom) / self.num_discrete_layers
 
         self.layer_tops = np.arange(self.top, self.bottom, -self.layer_thickness)
@@ -104,17 +100,14 @@ class MultilayeredGlass(PhotonScene, ZoomedScene):
         ]
 
     def generate_layers(self):
-
         self.generate_layer_info()
 
         def create_region(top, color):
-
             return Region(lambda x, y: (y < top) & (y > top - self.layer_thickness), color=color)
 
         self.layers = [create_region(top, color) for top, color in zip(self.layer_tops, self.layer_colors)]
 
     def generate_discrete_path(self):
-
         points = self.cycloid.points
 
         tops = list(self.layer_tops)
@@ -139,7 +132,6 @@ class MultilayeredGlass(PhotonScene, ZoomedScene):
         self.discrete_path.add_line(points[end], FRAME_X_RADIUS * RIGHT + (self.layer_tops[-1] - 1) * UP)
 
     def show_layer_variables(self):
-
         layer_top_pairs = list(zip(self.layer_tops[: self.num_variables], self.layer_tops[1:]))
 
         v_equations = []
@@ -213,7 +205,6 @@ class MultilayeredGlass(PhotonScene, ZoomedScene):
             self.equations.append(Mobject(*v_eq))
 
     def isolate_bend_points(self):
-
         arc_radius = 0.1
 
         self.activate_zooming()
@@ -289,7 +280,6 @@ class MultilayeredGlass(PhotonScene, ZoomedScene):
         self.disactivate_zooming()
 
     def show_snells(self, index, frame):
-
         left_text, right_text = ["\\dfrac{\\sin(\\theta_%d)}{\\phantom{\\sqrt{y_1}}}" % x for x in (index, index + 1)]
 
         left, equals, right = OldTex([left_text, "=", right_text]).split()
@@ -322,7 +312,6 @@ class MultilayeredGlass(PhotonScene, ZoomedScene):
         self.remove(start, end)
 
     def show_main_equation(self):
-
         self.equation = OldTex("""
 
             \\dfrac{\\sin(\\theta)}{\\sqrt{y}} = 
@@ -340,7 +329,6 @@ class MultilayeredGlass(PhotonScene, ZoomedScene):
         self.wait()
 
     def ask_continuous_question(self):
-
         continuous = self.get_continuous_background()
 
         line = Line(UP, DOWN, density=self.zoom_factor * DEFAULT_POINT_DENSITY_1D)

@@ -17,62 +17,38 @@ from ... import callbacks
 
 from ..base_agent import BaseAgent
 
-class ShepherdAgent(BaseAgent):
 
+class ShepherdAgent(BaseAgent):
     """Shepherd - Code review critic that guides the flock toward quality code."""
 
     @property
-
     def name(self) -> str:
-
         return "shepherd"
 
     @property
-
     def display_name(self) -> str:
-
         return "Shepherd 🐕"
 
     @property
-
     def description(self) -> str:
-
-        return (
-
-            "Code review critic - guides the flock toward quality code "
-
-            "and best practices"
-
-        )
+        return "Code review critic - guides the flock toward quality code and best practices"
 
     def get_available_tools(self) -> list[str]:
-
         """Get the review toolkit available to Shepherd."""
 
         return [
-
             # File exploration - see what changed
-
             "list_files",
-
             "read_file",
-
             # Pattern checking - find consistency issues
-
             "grep",
-
             # Run linters, type checkers, tests
-
             "agent_run_shell_command",
-
             # Explain review feedback
-
             "agent_share_your_reasoning",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         """Get Shepherd's system prompt - the guardian's instructions!"""
 
         puppy_name = get_puppy_name()
@@ -526,8 +502,6 @@ Now go review that code and keep the flock safe! 🐕🐑
         prompt_additions = callbacks.on_load_prompt()
 
         if len(prompt_additions):
-
             result += "\n".join(prompt_additions)
 
         return result
-

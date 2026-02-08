@@ -13,7 +13,6 @@ class CircleDivisionImage(Scene):
     }
 
     def construct(self):
-
         # tex = OldTex("e^{\\tau i}")
 
         # tex = OldTex("\\sin(2\\theta) \\over \\sin(\\theta)\\cos(\\theta)")

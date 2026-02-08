@@ -10,7 +10,6 @@ from torch.utils.data import Dataset
 
 class RandomTokenDataset(Dataset):
     def __init__(self, vocab_size: int, seq_length: int):
-
         self.vocab_size = vocab_size
 
         self.seq_length = seq_length
@@ -24,9 +23,7 @@ class RandomTokenDataset(Dataset):
         )
 
     def __len__(self) -> int:
-
         return 128
 
     def __getitem__(self, item: int):
-
         return self.tokens[item]

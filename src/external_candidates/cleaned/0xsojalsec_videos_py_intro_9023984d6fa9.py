@@ -38,7 +38,6 @@ class Introduction(TeacherStudentsScene):
     }
 
     def construct(self):
-
         self.wait(5)
 
         self.play_student_changes("confused", "frustrated", "dejected", look_at=UP + 2 * RIGHT)

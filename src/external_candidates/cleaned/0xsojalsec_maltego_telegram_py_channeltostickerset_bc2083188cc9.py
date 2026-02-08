@@ -15,7 +15,6 @@ from utils import make_http_request, media_fetcher
 
 
 async def fetch_stickers(username):
-
     sticker_sets = []
 
     unique_set_names = set()
@@ -39,7 +38,6 @@ async def fetch_stickers(username):
 class ChannelToStickerSet(DiscoverableTransform):
     @classmethod
     def create_entities(cls, request: MaltegoMsg, response: MaltegoTransform):
-
         username = request.getProperty("properties.channel")
 
         sticker_sets = loop.run_until_complete(fetch_stickers(username))

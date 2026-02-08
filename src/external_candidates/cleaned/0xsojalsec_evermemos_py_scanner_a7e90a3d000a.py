@@ -34,7 +34,6 @@ class ComponentScanner:
     """Component Scanner"""
 
     def __init__(self):
-
         self.scan_paths: List[str] = []
 
         self.scan_packages: List[str] = []

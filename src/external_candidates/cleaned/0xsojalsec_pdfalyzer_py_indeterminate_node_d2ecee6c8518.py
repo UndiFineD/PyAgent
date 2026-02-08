@@ -37,7 +37,6 @@ from yaralyzer.util.logging import log
 
 class IndeterminateNode:
     def __init__(self, node: PdfTreeNode) -> None:
-
         self.node = node
 
     def place_node(self) -> None:
@@ -126,7 +125,6 @@ class IndeterminateNode:
         return reference_keys_or_nodes_are_same
 
     def _check_for_common_ancestor(self) -> bool:
-
         common_ancestor = self._find_common_ancestor_among_nodes(self.node.nodes_with_here_references())
 
         if common_ancestor is not None:

@@ -5,7 +5,6 @@
 
 import math
 
-
 import torch
 
 import torch.nn as nn
@@ -13,7 +12,6 @@ import torch.nn as nn
 
 class SpatialPool(nn.Module):
     def __init__(self, model_args, vision_tower):
-
         super().__init__()
 
         self.mode = model_args.mm_spatial_pool_mode
@@ -40,7 +38,6 @@ class SpatialPool(nn.Module):
             raise ValueError(f"Unknown pooling mode: {self.pool}.")
 
     def forward(self, image_features, images, *args, **kwargs):
-
         ori_W = int(math.sqrt(image_features.shape[1] * images.shape[3] // images.shape[2]))
 
         ori_H = int(ori_W * images.shape[2] // images.shape[3])
@@ -55,7 +52,6 @@ class SpatialPool(nn.Module):
 
     @property
     def config(self):
-
         return {
             "mm_resampler_type": "spatial_pool",
             "mm_spatial_pool_stride": self.stride,
@@ -65,5 +61,4 @@ class SpatialPool(nn.Module):
 
     @property
     def hidden_size(self):
-
         return self.out_channels

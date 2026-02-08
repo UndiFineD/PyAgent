@@ -58,7 +58,6 @@ class Entity(DocumentBase, AuditBase):
 
     @property
     def entity_id(self) -> Optional[PydanticObjectId]:
-
         return self.id
 
     class Settings:

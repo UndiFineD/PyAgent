@@ -7,7 +7,6 @@ from manim_imports_ext import *
 
 
 def get_factors(n):
-
     return filter(lambda k: (n % k) == 0, range(1, n))
 
 
@@ -28,7 +27,6 @@ class AmicableNumbers(Scene):
     }
 
     def construct(self):
-
         self.show_n1()
 
         self.show_n1_factors()
@@ -40,7 +38,6 @@ class AmicableNumbers(Scene):
         self.show_n2_factor_sum()
 
     def show_n1(self):
-
         dots = VGroup(*[Dot() for x in range(self.n1)])
 
         dots.set_color(BLUE)
@@ -65,29 +62,23 @@ class AmicableNumbers(Scene):
         self.add(rects)
 
     def show_n1_factors(self):
-
         pass
 
     def show_n1_factor_sum(self):
-
         pass
 
     def show_n2_factors(self):
-
         pass
 
     def show_n2_factor_sum(self):
-
         pass
 
     #
 
     def show_factors(self, dot_group):
-
         pass
 
     def get_all_factor_rectangles(self, dot_group):
-
         n = len(dot_group)
 
         factors = get_factors(n)

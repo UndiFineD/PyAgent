@@ -15,12 +15,11 @@ from ..config import settings
 
 from ..utils.logging_setup import logger
 
-class StorageService:
 
+class StorageService:
     """Service for local file storage operations."""
 
     def __init__(self, storage_path: Optional[str] = None):
-
         """
 
         Initialize storage service.
@@ -35,24 +34,14 @@ class StorageService:
 
         self.storage_path.mkdir(parents=True, exist_ok=True)
 
-        logger.info(
-
-            f"StorageService initialized with path: {self.storage_path.absolute()}"
-
-        )
+        logger.info(f"StorageService initialized with path: {self.storage_path.absolute()}")
 
     async def save_video(
-
         self,
-
         video_id: str,
-
         content: bytes,
-
         variant: Literal["video", "thumbnail", "spritesheet"] = "video",
-
     ) -> Path:
-
         """
 
         Save video content to local storage.
@@ -72,17 +61,12 @@ class StorageService:
         """
 
         try:
-
             # Determine file extension
 
             extensions = {
-
                 "video": ".mp4",
-
                 "thumbnail": ".webp",
-
                 "spritesheet": ".jpg",
-
             }
 
             ext = extensions.get(variant, ".bin")
@@ -96,7 +80,6 @@ class StorageService:
             # Save file
 
             async with aiofiles.open(filepath, "wb") as f:
-
                 await f.write(content)
 
             logger.info(f"Saved {variant} to {filepath} ({len(content)} bytes)")
@@ -104,25 +87,15 @@ class StorageService:
             return filepath
 
         except Exception as e:
-
-            logger.error(
-
-                f"Error saving {variant} for video {video_id}: {str(e)}", exc_info=True
-
-            )
+            logger.error(f"Error saving {variant} for video {video_id}: {str(e)}", exc_info=True)
 
             raise
 
     async def get_video_path(
-
         self,
-
         video_id: str,
-
         variant: Literal["video", "thumbnail", "spritesheet"] = "video",
-
     ) -> Optional[Path]:
-
         """
 
         Get path to saved video file if it exists.
@@ -140,13 +113,9 @@ class StorageService:
         """
 
         extensions = {
-
             "video": ".mp4",
-
             "thumbnail": ".webp",
-
             "spritesheet": ".jpg",
-
         }
 
         ext = extensions.get(variant, ".bin")
@@ -156,7 +125,6 @@ class StorageService:
         filepath = self.storage_path / filename
 
         if filepath.exists():
-
             logger.debug(f"Found existing file: {filepath}")
 
             return filepath
@@ -166,7 +134,6 @@ class StorageService:
         return None
 
     async def delete_video_files(self, video_id: str) -> int:
-
         """
 
         Delete all files associated with a video ID.
@@ -184,13 +151,11 @@ class StorageService:
         deleted_count = 0
 
         try:
-
             # Find all files matching the video_id pattern
 
             pattern = f"{video_id}_*"
 
             for filepath in self.storage_path.glob(pattern):
-
                 filepath.unlink()
 
                 deleted_count += 1
@@ -202,21 +167,11 @@ class StorageService:
             return deleted_count
 
         except Exception as e:
-
-            logger.error(
-
-                f"Error deleting files for video {video_id}: {str(e)}", exc_info=True
-
-            )
+            logger.error(f"Error deleting files for video {video_id}: {str(e)}", exc_info=True)
 
             raise
 
-    def get_content_type(
-
-        self, variant: Literal["video", "thumbnail", "spritesheet"]
-
-    ) -> str:
-
+    def get_content_type(self, variant: Literal["video", "thumbnail", "spritesheet"]) -> str:
         """
 
         Get MIME content type for variant.
@@ -232,14 +187,9 @@ class StorageService:
         """
 
         content_types = {
-
             "video": "video/mp4",
-
             "thumbnail": "image/webp",
-
             "spritesheet": "image/jpeg",
-
         }
 
         return content_types.get(variant, "application/octet-stream")
-

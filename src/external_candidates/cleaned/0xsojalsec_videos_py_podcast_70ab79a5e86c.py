@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class PodcastIntro(Scene):
     def construct(self):
-
         tower = self.get_radio_tower()
 
         n_rings = 15
@@ -54,7 +53,6 @@ class PodcastIntro(Scene):
         )
 
     def get_radio_tower(self):
-
         base = VGroup()
 
         line1 = Line(DL, UP)
@@ -104,7 +102,6 @@ class PodcastIntro(Scene):
         return tower
 
     def get_circle(self, center=ORIGIN, radius=1):
-
         arc1 = Arc(PI, 3 * PI / 2)
 
         arc2 = Arc(PI / 2, PI / 2)

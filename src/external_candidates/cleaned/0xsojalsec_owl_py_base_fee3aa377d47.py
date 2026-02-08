@@ -40,7 +40,6 @@ class BaseRuntime(ABC):
     r"""An abstract base class for all CAMEL runtimes."""
 
     def __init__(self):
-
         super().__init__()
 
         self.tools_map = dict()

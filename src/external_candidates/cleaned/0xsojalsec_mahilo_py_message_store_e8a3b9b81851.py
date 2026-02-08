@@ -118,7 +118,6 @@ class SQLiteMessageStore(MessageStore):
     """SQLite implementation of MessageStore"""
 
     def __init__(self, db_path: str = "messages.db"):
-
         self.db_path = db_path
 
         self._init_db()
@@ -174,7 +173,6 @@ class SQLiteMessageStore(MessageStore):
             conn.execute("CREATE INDEX IF NOT EXISTS idx_state ON messages(state)")
 
     def save_message(self, message: MessageEnvelope, state: str = MessageState.PENDING) -> None:
-
         with sqlite3.connect(self.db_path) as conn:
             conn.execute(
                 """
@@ -206,7 +204,6 @@ class SQLiteMessageStore(MessageStore):
             )
 
     def get_message(self, message_id: str) -> Optional[MessageEnvelope]:
-
         with sqlite3.connect(self.db_path) as conn:
             row = conn.execute("SELECT * FROM messages WHERE message_id = ?", (message_id,)).fetchone()
 
@@ -216,7 +213,6 @@ class SQLiteMessageStore(MessageStore):
             return None
 
     def get_pending_messages(self, recipient: str) -> List[MessageEnvelope]:
-
         with sqlite3.connect(self.db_path) as conn:
             rows = conn.execute(
                 "SELECT * FROM messages WHERE recipient = ? AND state = ?",
@@ -226,7 +222,6 @@ class SQLiteMessageStore(MessageStore):
             return [self._row_to_envelope(row) for row in rows]
 
     def update_message_state(self, message_id: str, state: str, retry_count: Optional[int] = None) -> None:
-
         query = """
 
             UPDATE messages 
@@ -252,7 +247,6 @@ class SQLiteMessageStore(MessageStore):
             conn.execute(query, params)
 
     def cleanup_old_messages(self, max_age_days: int = 30) -> None:
-
         cutoff = datetime.now() - timedelta(days=max_age_days)
 
         with sqlite3.connect(self.db_path) as conn:

@@ -30,7 +30,6 @@ from .agent_manager import AgentManager
 
 class ServerManager:
     def __init__(self, agent_manager: AgentManager):
-
         self.app = FastAPI()
 
         self.agent_manager = agent_manager
@@ -50,7 +49,6 @@ class ServerManager:
         install()  # This enables rich traceback formatting for exceptions
 
     def _setup_routes(self):
-
         # Add metrics and traces endpoints
 
         @self.app.get("/metrics")
@@ -189,7 +187,6 @@ class ServerManager:
 
         @self.app.websocket("/ws/voice-stream/{agent_name}")
         async def voice_stream_endpoint(websocket: WebSocket, agent_name: str):
-
             await websocket.accept()
 
             agent = self.agent_manager.get_agent(agent_name)
@@ -278,7 +275,6 @@ class ServerManager:
 
         @self.app.websocket("/ws/{agent_name}")
         async def websocket_endpoint(websocket: WebSocket, agent_name: str):
-
             await websocket.accept()
 
             agent = self.agent_manager.get_agent(agent_name)
@@ -348,18 +344,15 @@ class ServerManager:
 
         @self.app.on_event("startup")
         async def startup_event():
-
             asyncio.create_task(self._handle_inter_agent_communication())
 
         @self.app.websocket("/health")
         async def health_check(websocket: WebSocket):
-
             await websocket.accept()
 
             await websocket.close()
 
     async def _handle_inter_agent_communication(self):
-
         while True:
             for agent in self.agent_manager.get_all_agents():
                 if agent.is_active():
@@ -389,5 +382,4 @@ class ServerManager:
             await asyncio.sleep(1)
 
     def run(self, host: str = "0.0.0.0", port: int = 8000):
-
         uvicorn.run(self.app, host=host, port=port)

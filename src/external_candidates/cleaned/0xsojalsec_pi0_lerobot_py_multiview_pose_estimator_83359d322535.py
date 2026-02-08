@@ -145,7 +145,6 @@ class MVOutput:
     uvc_extrap: Float32[ndarray, "n_kpts 3"] | None = None
 
     def __iter__(self):
-
         # Zips the bboxes, kpts_2d, and scores lists so each iteration
 
         # returns a tuple (bbox, kpt2d, score)
@@ -188,7 +187,6 @@ class MultiviewBodyTracker:
         cams_for_detection_idx: list[int] | None = None,
         filter_body_idxes: Int[ndarray, "idx"] | None = None,
     ) -> None:
-
         self.keypoint_threshold = keypoint_threshold
 
         self.filter_body_idxes = filter_body_idxes

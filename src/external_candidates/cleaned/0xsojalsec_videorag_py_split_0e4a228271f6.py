@@ -27,7 +27,6 @@ def split_video(
     num_frames_per_segment,
     audio_output_format="mp3",
 ):
-
     unique_timestamp = str(int(time.time() * 1000))
 
     video_name = os.path.basename(video_path).split(".")[0]
@@ -110,7 +109,6 @@ def saving_video_segments(
     error_queue,
     video_output_format="mp4",
 ):
-
     try:
         with VideoFileClip(video_path) as video:
             video_segment_cache_path = os.path.join(working_dir, "_cache", video_name)

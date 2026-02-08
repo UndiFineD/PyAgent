@@ -7,7 +7,6 @@ from typing import Any, Dict, List
 
 
 def merge_contiguous_messages(messages):
-
     if not messages:
         return messages
 
@@ -32,7 +31,6 @@ def merge_contiguous_messages(messages):
 
 
 def remove_whitespace_blocks(messages):
-
     return [
         message
         for message in messages

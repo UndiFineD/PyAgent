@@ -15,13 +15,9 @@ class EntityCategoriser:
 
         Determine category for an entity based on its class hierarchy or Prototype
 
-
-
         Args:
 
             entity: An Entity instance, a dictionary with 'name' key, or a Prototype enum
-
-
 
         Returns:
 

@@ -7,7 +7,6 @@ import math
 
 from typing import Optional
 
-
 import torch
 
 import torch.nn as nn
@@ -25,7 +24,6 @@ from matcha.models.components.transformer import BasicTransformerBlock
 
 class SinusoidalPosEmb(torch.nn.Module):
     def __init__(self, dim):
-
         super().__init__()
 
         self.dim = dim
@@ -33,7 +31,6 @@ class SinusoidalPosEmb(torch.nn.Module):
         assert self.dim % 2 == 0, "SinusoidalPosEmb requires dim to be even"
 
     def forward(self, x, scale=1000):
-
         if x.ndim < 1:
             x = x.unsqueeze(0)
 
@@ -54,7 +51,6 @@ class SinusoidalPosEmb(torch.nn.Module):
 
 class Block1D(torch.nn.Module):
     def __init__(self, dim, dim_out, groups=8):
-
         super().__init__()
 
         self.block = torch.nn.Sequential(
@@ -64,7 +60,6 @@ class Block1D(torch.nn.Module):
         )
 
     def forward(self, x, mask):
-
         output = self.block(x * mask)
 
         return output * mask
@@ -72,7 +67,6 @@ class Block1D(torch.nn.Module):
 
 class ResnetBlock1D(torch.nn.Module):
     def __init__(self, dim, dim_out, time_emb_dim, groups=8):
-
         super().__init__()
 
         self.mlp = torch.nn.Sequential(nn.Mish(), torch.nn.Linear(time_emb_dim, dim_out))
@@ -84,7 +78,6 @@ class ResnetBlock1D(torch.nn.Module):
         self.res_conv = torch.nn.Conv1d(dim, dim_out, 1)
 
     def forward(self, x, mask, time_emb):
-
         h = self.block1(x, mask)
 
         h += self.mlp(time_emb).unsqueeze(-1)
@@ -98,13 +91,11 @@ class ResnetBlock1D(torch.nn.Module):
 
 class Downsample1D(nn.Module):
     def __init__(self, dim):
-
         super().__init__()
 
         self.conv = torch.nn.Conv1d(dim, dim, 3, 2, 1)
 
     def forward(self, x):
-
         return self.conv(x)
 
 
@@ -118,7 +109,6 @@ class TimestepEmbedding(nn.Module):
         post_act_fn: Optional[str] = None,
         cond_proj_dim=None,
     ):
-
         super().__init__()
 
         self.linear_1 = nn.Linear(in_channels, time_embed_dim)
@@ -146,7 +136,6 @@ class TimestepEmbedding(nn.Module):
             self.post_act = get_activation(post_act_fn)
 
     def forward(self, sample, condition=None):
-
         if condition is not None:
             sample = sample + self.cond_proj(condition)
 
@@ -165,8 +154,6 @@ class TimestepEmbedding(nn.Module):
 
 class Upsample1D(nn.Module):
     """A 1D upsampling layer with an optional convolution.
-
-
 
     Parameters:
 
@@ -196,7 +183,6 @@ class Upsample1D(nn.Module):
         out_channels=None,
         name="conv",
     ):
-
         super().__init__()
 
         self.channels = channels
@@ -218,7 +204,6 @@ class Upsample1D(nn.Module):
             self.conv = nn.Conv1d(self.channels, self.out_channels, 3, padding=1)
 
     def forward(self, inputs):
-
         assert inputs.shape[1] == self.channels
 
         if self.use_conv_transpose:
@@ -247,7 +232,6 @@ class ConformerWrapper(ConformerBlock):
         conv_dropout=0,
         conv_causal=False,
     ):
-
         super().__init__(
             dim=dim,
             dim_head=dim_head,
@@ -269,7 +253,6 @@ class ConformerWrapper(ConformerBlock):
         encoder_attention_mask=None,
         timestep=None,
     ):
-
         return super().forward(x=hidden_states, mask=attention_mask.bool())
 
 
@@ -289,7 +272,6 @@ class Decoder(nn.Module):
         mid_block_type="transformer",
         up_block_type="transformer",
     ):
-
         super().__init__()
 
         channels = tuple(channels)
@@ -415,7 +397,6 @@ class Decoder(nn.Module):
 
     @staticmethod
     def get_block(block_type, dim, attention_head_dim, num_heads, dropout, act_fn):
-
         if block_type == "conformer":
             block = ConformerWrapper(
                 dim=dim,
@@ -444,7 +425,6 @@ class Decoder(nn.Module):
         return block
 
     def initialize_weights(self):
-
         for m in self.modules():
             if isinstance(m, nn.Conv1d):
                 nn.init.kaiming_normal_(m.weight, nonlinearity="relu")
@@ -466,8 +446,6 @@ class Decoder(nn.Module):
     def forward(self, x, mask, mu, t, spks=None, cond=None):
         """Forward pass of the UNet1DConditional model.
 
-
-
         Args:
 
             x (torch.Tensor): shape (batch_size, in_channels, time)
@@ -480,15 +458,11 @@ class Decoder(nn.Module):
 
             cond (_type_, optional): placeholder for future use. Defaults to None.
 
-
-
         Raises:
 
             ValueError: _description_
 
             ValueError: _description_
-
-
 
         Returns:
 

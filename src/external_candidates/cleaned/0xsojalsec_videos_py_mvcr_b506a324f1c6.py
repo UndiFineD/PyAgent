@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class HoldUpMultivariableChainRule(TeacherStudentsScene):
     def construct(self):
-
         title = OldTexText("Multivariable chain rule")
 
         title.to_edge(UP, buff=MED_SMALL_BUFF)
@@ -39,7 +38,6 @@ class ComputationalNetwork(MovingCameraScene):
     }
 
     def construct(self):
-
         self.draw_network()
 
         self.walk_through_parts()
@@ -65,7 +63,6 @@ class ComputationalNetwork(MovingCameraScene):
         self.discuss_meaning_of_result()
 
     def draw_network(self):
-
         x = OldTex("x")
 
         f_formula = OldTex("f", "=", "x", "^2")
@@ -164,7 +161,6 @@ class ComputationalNetwork(MovingCameraScene):
         )
 
     def walk_through_parts(self):
-
         x = self.x
 
         f_formula = self.f_formula
@@ -174,7 +170,6 @@ class ComputationalNetwork(MovingCameraScene):
         h_formula = self.h_formula
 
         def indicate(mob):
-
             return ShowCreationThenDestructionAround(
                 mob,
                 surrounding_rectangle_config={
@@ -199,7 +194,6 @@ class ComputationalNetwork(MovingCameraScene):
         self.wait()
 
     def write_dh_dx_goal(self):
-
         deriv = OldTex("{dh", "\\over", "dx}", "(", "2", ")")
 
         deriv.set_color_by_tex_to_color_map(self.tex_to_color_map)
@@ -221,7 +215,6 @@ class ComputationalNetwork(MovingCameraScene):
         self.dh_dx_at_two = deriv
 
     def feed_forward_input(self):
-
         formula_groups = self.formula_groups
 
         x, f_formula, g_formula, h_formula = self.formulas
@@ -340,7 +333,6 @@ class ComputationalNetwork(MovingCameraScene):
         ] + [FadeOut(term) for term in (two_copy1, two_copy2, four_copy, one_copy)]
 
     def compare_x_and_h_wiggling(self):
-
         x_val = self.value_labels[0][1]
 
         h_val = self.value_labels[3][1]
@@ -418,7 +410,6 @@ class ComputationalNetwork(MovingCameraScene):
         )
 
     def expand_out_h_as_function_of_x(self):
-
         self.play(*self.revert_to_formula_animations)
 
         deriv = self.dh_dx_at_two
@@ -453,7 +444,6 @@ class ComputationalNetwork(MovingCameraScene):
             self.play(ShowCreationThenDestruction(edge.copy().set_stroke(YELLOW, 6)))
 
     def show_four_derivatives(self):
-
         lines = self.graph_edges
 
         xf_line, xg_line, fh_line, gh_line = lines
@@ -509,7 +499,6 @@ class ComputationalNetwork(MovingCameraScene):
         self.derivatives = derivatives
 
     def show_chain_rule(self):
-
         dh_dx_at_two = self.dh_dx_at_two
 
         dh_dx = dh_dx_at_two[:3]
@@ -568,7 +557,6 @@ class ComputationalNetwork(MovingCameraScene):
         self.chain_rule_rhs = rhs
 
     def talk_through_mvcr_parts(self):
-
         derivatives = self.derivatives
 
         cr_derivatives = self.chain_rule_derivatives
@@ -753,7 +741,6 @@ class ComputationalNetwork(MovingCameraScene):
         self.remove_foreground_mobject(cr_derivatives)
 
     def plug_in_expressions(self):
-
         lhs = VGroup(
             self.dh_dx_at_two[:3],
             self.chain_rule_rhs[::3],
@@ -884,7 +871,6 @@ class ComputationalNetwork(MovingCameraScene):
         self.full_derivative = full_derivative
 
     def plug_in_values(self):
-
         full_derivative = self.full_derivative
 
         value_labels = self.value_labels
@@ -928,7 +914,6 @@ class ComputationalNetwork(MovingCameraScene):
         self.wait()
 
     def discuss_meaning_of_result(self):
-
         x_dot = self.x_dot
 
         h_dot = self.h_dot

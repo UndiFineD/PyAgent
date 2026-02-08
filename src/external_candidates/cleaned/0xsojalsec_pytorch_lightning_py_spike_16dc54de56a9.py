@@ -28,7 +28,6 @@ class SpikeDetection(FabricSpikeDetection, Callback):
         batch: Any,
         batch_idx: int,
     ) -> None:
-
         if isinstance(outputs, torch.Tensor):
             loss = outputs.detach()
 

@@ -20,7 +20,6 @@ from lib.core.Requester import AuthMode, Requester
 
 class Websphere:
     def __init__(self, url, verbose=False):
-
         self.url = url
 
         self.interface = None
@@ -32,7 +31,6 @@ class Websphere:
         self.http_auth_type = None
 
     def check(self):
-
         r = Requester.get("{}/ibm/console/logon.jsp".format(self.url))
 
         if 'name="j_password"' in r.text:
@@ -51,7 +49,6 @@ class Websphere:
         return False
 
     def try_auth(self, username, password):
-
         if self.interface == "websphere-admin":
             data = {
                 "j_username": username,

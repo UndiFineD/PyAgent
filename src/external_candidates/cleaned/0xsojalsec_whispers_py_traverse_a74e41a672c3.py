@@ -10,7 +10,6 @@ from whispers.rules import WhisperRules
 
 class StructuredDocument:
     def __init__(self, rules: WhisperRules):
-
         self.breadcrumbs = []
 
         self.rules = rules

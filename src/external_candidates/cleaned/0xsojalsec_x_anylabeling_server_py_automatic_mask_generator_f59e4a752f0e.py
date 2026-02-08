@@ -328,7 +328,6 @@ class SAM2AutomaticMaskGenerator:
         return curr_anns
 
     def _generate_masks(self, image: np.ndarray) -> MaskData:
-
         orig_size = image.shape[:2]
 
         crop_boxes, layer_idxs = generate_crop_boxes(orig_size, self.crop_n_layers, self.crop_overlap_ratio)
@@ -371,7 +370,6 @@ class SAM2AutomaticMaskGenerator:
         crop_layer_idx: int,
         orig_size: Tuple[int, ...],
     ) -> MaskData:
-
         # Crop the image and calculate embeddings
 
         x0, y0, x1, y1 = crop_box
@@ -430,7 +428,6 @@ class SAM2AutomaticMaskGenerator:
         orig_size: Tuple[int, ...],
         normalize=False,
     ) -> MaskData:
-
         orig_h, orig_w = orig_size
 
         # Run model on this batch
@@ -600,7 +597,6 @@ class SAM2AutomaticMaskGenerator:
         return mask_data
 
     def refine_with_m2m(self, points, point_labels, low_res_masks, points_per_batch):
-
         new_masks = []
 
         new_iou_preds = []

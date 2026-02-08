@@ -20,7 +20,6 @@ from lib.core.Requester import AuthMode, Requester
 
 class Tomcat:
     def __init__(self, url, verbose=False):
-
         self.url = url
 
         self.interface = None
@@ -30,7 +29,6 @@ class Tomcat:
         self.http_auth_type = None
 
     def check(self):
-
         auth_type = Requester.get_http_auth_type("{}/manager/html".format(self.url))
 
         if auth_type is not AuthMode.UNKNOWN:
@@ -53,7 +51,6 @@ class Tomcat:
         return False
 
     def try_auth(self, username, password):
-
         if self.interface == "tomcat-manager":
             r = Requester.http_auth(self.interface_url, self.http_auth_type, username, password)
 

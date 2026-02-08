@@ -7,7 +7,6 @@ from prettymapp.plotting import adjust_lightness
 
 
 def test_adjust_lightness():
-
     color = adjust_lightness("#FFC857")
 
     assert isinstance(color, tuple)

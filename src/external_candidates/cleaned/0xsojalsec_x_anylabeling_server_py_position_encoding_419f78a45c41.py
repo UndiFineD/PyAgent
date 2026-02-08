@@ -43,7 +43,6 @@ class PositionEmbeddingSine(nn.Module):
         image_size: int = 1024,
         strides: Tuple[int] = (4, 8, 16, 32),
     ):
-
         super().__init__()
 
         assert num_pos_feats % 2 == 0, "Expecting even model width"
@@ -75,7 +74,6 @@ class PositionEmbeddingSine(nn.Module):
                 self._pe(1, device, *cache_key)
 
     def _encode_xy(self, x, y):
-
         # The positions are expected to be normalized
 
         assert len(x) == len(y) and x.ndim == y.ndim == 1
@@ -100,7 +98,6 @@ class PositionEmbeddingSine(nn.Module):
 
     @torch.no_grad()
     def encode_boxes(self, x, y, w, h):
-
         pos_x, pos_y = self._encode_xy(x, y)
 
         pos = torch.cat((pos_y, pos_x, h[:, None], w[:, None]), dim=1)
@@ -111,7 +108,6 @@ class PositionEmbeddingSine(nn.Module):
 
     @torch.no_grad()
     def encode_points(self, x, y, labels):
-
         (bx, nx), (by, ny), (bl, nl) = x.shape, y.shape, labels.shape
 
         assert bx == by and nx == ny and bx == bl and nx == nl
@@ -126,7 +122,6 @@ class PositionEmbeddingSine(nn.Module):
 
     @torch.no_grad()
     def _pe(self, B, device, *cache_key):
-
         H, W = cache_key
 
         if cache_key in self.cache:
@@ -163,7 +158,6 @@ class PositionEmbeddingSine(nn.Module):
 
     @torch.no_grad()
     def forward(self, x: torch.Tensor):
-
         B = x.shape[0]
 
         cache_key = (x.shape[-2], x.shape[-1])
@@ -179,7 +173,6 @@ class PositionEmbeddingRandom(nn.Module):
     """
 
     def __init__(self, num_pos_feats: int = 64, scale: Optional[float] = None) -> None:
-
         super().__init__()
 
         if scale is None or scale <= 0.0:
@@ -248,7 +241,6 @@ class PositionEmbeddingRandom(nn.Module):
 
 
 def init_t_xy(end_x: int, end_y: int):
-
     t = torch.arange(end_x * end_y, dtype=torch.float32)
 
     t_x = (t % end_x).float()
@@ -259,7 +251,6 @@ def init_t_xy(end_x: int, end_y: int):
 
 
 def compute_axial_cis(dim: int, end_x: int, end_y: int, theta: float = 10000.0):
-
     freqs_x = 1.0 / (theta ** (torch.arange(0, dim, 4)[: (dim // 4)].float() / dim))
 
     freqs_y = 1.0 / (theta ** (torch.arange(0, dim, 4)[: (dim // 4)].float() / dim))
@@ -278,7 +269,6 @@ def compute_axial_cis(dim: int, end_x: int, end_y: int, theta: float = 10000.0):
 
 
 def reshape_for_broadcast(freqs_cis: torch.Tensor, x: torch.Tensor):
-
     ndim = x.ndim
 
     assert 0 <= 1 < ndim
@@ -296,7 +286,6 @@ def apply_rotary_enc(
     freqs_cis: torch.Tensor,
     repeat_freqs_k: bool = False,
 ):
-
     xq_ = torch.view_as_complex(xq.float().reshape(*xq.shape[:-1], -1, 2))
 
     xk_ = torch.view_as_complex(xk.float().reshape(*xk.shape[:-1], -1, 2)) if xk.shape[-2] != 0 else None

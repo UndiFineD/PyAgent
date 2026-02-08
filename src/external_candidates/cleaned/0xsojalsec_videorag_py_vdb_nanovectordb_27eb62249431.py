@@ -35,7 +35,6 @@ class NanoVectorDBStorage(BaseVectorStorage):
     cosine_better_than_threshold: float = 0.2
 
     def __post_init__(self):
-
         self._client_file_name = os.path.join(self.global_config["working_dir"], f"vdb_{self.namespace}.json")
 
         self._max_batch_size = self.global_config["llm"]["embedding_batch_num"]
@@ -47,7 +46,6 @@ class NanoVectorDBStorage(BaseVectorStorage):
         )
 
     async def upsert(self, data: dict[str, dict]):
-
         logger.info(f"Inserting {len(data)} vectors to {self.namespace}")
 
         if not len(data):
@@ -79,7 +77,6 @@ class NanoVectorDBStorage(BaseVectorStorage):
         return results
 
     async def query(self, query: str, top_k=5):
-
         embedding = await self.embedding_func([query])
 
         embedding = embedding[0]
@@ -95,7 +92,6 @@ class NanoVectorDBStorage(BaseVectorStorage):
         return results
 
     async def index_done_callback(self):
-
         self._client.save()
 
 
@@ -108,7 +104,6 @@ class NanoVectorDBVideoSegmentStorage(BaseVectorStorage):
     embedder_client: object = None
 
     def __post_init__(self):
-
         self._client_file_name = os.path.join(self.global_config["working_dir"], f"vdb_{self.namespace}.json")
 
         self._max_batch_size = self.global_config["video_embedding_batch_num"]
@@ -121,7 +116,6 @@ class NanoVectorDBVideoSegmentStorage(BaseVectorStorage):
         self.top_k = self.global_config.get("segment_retrieval_top_k", self.segment_retrieval_top_k)
 
     async def upsert(self, video_name, segment_index2name, video_output_format):
-
         logger.info(f"Inserting {len(segment_index2name)} segments to {self.namespace}")
 
         if not len(segment_index2name):
@@ -169,7 +163,6 @@ class NanoVectorDBVideoSegmentStorage(BaseVectorStorage):
         return results
 
     async def query(self, query: str):
-
         embedding = self.embedder_client.encode_string_query(query)
 
         embedding = embedding[0]
@@ -185,5 +178,4 @@ class NanoVectorDBVideoSegmentStorage(BaseVectorStorage):
         return results
 
     async def index_done_callback(self):
-
         self._client.save()

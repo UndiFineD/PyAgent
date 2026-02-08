@@ -16,7 +16,6 @@ from manim_imports_ext import *
 
 class RandyFlipsAndStacks(Scene):
     def construct(self):
-
         randy = CoinFlippingPiCreature(color=MAROON_E)
 
         randy.scale(0.5).to_edge(LEFT + DOWN)
@@ -61,7 +60,6 @@ class RandyFlipsAndStacks(Scene):
 
 class TwoDiceTableScene(Scene):
     def construct(self):
-
         table = TwoDiceTable(cell_size=1)
 
         table.center()
@@ -71,7 +69,6 @@ class TwoDiceTableScene(Scene):
 
 class VisualCovariance(Scene):
     def construct(self):
-
         size = 4
 
         square = Square(side_length=size)
@@ -132,7 +129,6 @@ class VisualCovariance(Scene):
 
 class BinaryChoices(Scene):
     def construct(self):
-
         example1 = BinaryOption(UprightHeads(), UprightTails())
 
         example2 = BinaryOption(Male(), Female())

@@ -87,7 +87,6 @@ class BeanDefinition:
         self.dependencies: Set[Type] = set()
 
     def __repr__(self):
-
         metadata_str = f", metadata={self.metadata}" if self.metadata else ""
 
         return f"BeanDefinition(type={self.bean_type.__name__}, name={self.bean_name}, scope={self.scope.value}{metadata_str})"

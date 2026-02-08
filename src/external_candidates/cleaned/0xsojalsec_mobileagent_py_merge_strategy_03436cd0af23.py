@@ -7,7 +7,6 @@ import numpy as np
 
 
 def calculate_iou(box1, box2):
-
     x1_min, y1_min, x1_max, y1_max = box1
 
     x2_min, y2_min, x2_max, y2_max = box2
@@ -72,7 +71,6 @@ def compute_iou(box1, box2):
 
 
 def merge_boxes(box1, box2):
-
     x1_min, y1_min, x1_max, y1_max = box1
 
     x2_min, y2_min, x2_max, y2_max = box2
@@ -179,7 +177,6 @@ def merge_boxes_and_texts(texts, boxes, iou_threshold=0):
 
 
 def is_contained(bbox1, bbox2):
-
     x1_min, y1_min, x1_max, y1_max = bbox1
 
     x2_min, y2_min, x2_max, y2_max = bbox2
@@ -194,7 +191,6 @@ def is_contained(bbox1, bbox2):
 
 
 def is_overlapping(bbox1, bbox2):
-
     x1_min, y1_min, x1_max, y1_max = bbox1
 
     x2_min, y2_min, x2_max, y2_max = bbox2
@@ -214,14 +210,12 @@ def is_overlapping(bbox1, bbox2):
 
 
 def get_area(bbox):
-
     x_min, y_min, x_max, y_max = bbox
 
     return (x_max - x_min) * (y_max - y_min)
 
 
 def merge_all_icon_boxes(bboxes):
-
     result_bboxes = []
 
     while bboxes:
@@ -253,7 +247,6 @@ def merge_all_icon_boxes(bboxes):
 
 
 def merge_all_icon_boxes_new(elements):
-
     result_elements = []
 
     while elements:
@@ -301,7 +294,6 @@ def merge_all_icon_boxes_new(elements):
 
 
 def merge_bbox_groups(A, B, iou_threshold=0.8):
-
     i = 0
 
     while i < len(A):
@@ -334,7 +326,6 @@ def merge_bbox_groups(A, B, iou_threshold=0.8):
 
 
 def bbox_iou(boxA, boxB):
-
     # Calculate Intersection over Union (IoU) between two bounding boxes
 
     xA = max(boxA[0], boxB[0])
@@ -357,7 +348,6 @@ def bbox_iou(boxA, boxB):
 
 
 def merge_boxes_and_texts_new(texts, bounding_boxes, iou_threshold=0):
-
     if not bounding_boxes:
         return [], []
 

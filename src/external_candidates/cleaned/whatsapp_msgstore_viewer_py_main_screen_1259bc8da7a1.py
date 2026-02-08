@@ -7,7 +7,6 @@
 
 # -*- coding: utf-8 -*-
 
-
 """
 
 Main Screen
@@ -15,7 +14,6 @@ Main Screen
 """
 
 from typing import NoReturn
-
 
 from kivy.properties import NumericProperty, ObjectProperty, StringProperty
 
@@ -42,7 +40,6 @@ class Tab(MDFloatLayout, MDTabsBase):
 
 class MLabel(MDLabel):
     def __init__(self, **kwargs):
-
         super().__init__(**kwargs)
 
 
@@ -80,7 +77,6 @@ class CallListItem(RecycleDataViewBehavior, MDCard):
 
 class MainScreenView(BaseScreenView):
     def __init__(self, **kw):
-
         super(MainScreenView, self).__init__(**kw)
 
         self.dialog = MDDialog()
@@ -108,7 +104,6 @@ class MainScreenView(BaseScreenView):
         pass
 
     def show_chats_list(self, contact_chats):
-
         self.ids.contact_chat_list.data = [
             {
                 "controller": self.controller,
@@ -122,7 +117,6 @@ class MainScreenView(BaseScreenView):
         ]
 
     def build_group_chat_list(self, group_chats):
-
         self.ids.group_chat_list.data = [
             {
                 "id": chat["_id"],
@@ -135,7 +129,6 @@ class MainScreenView(BaseScreenView):
         ]
 
     def build_calls_list(self, calls):
-
         self.ids.calls.data = [
             {
                 "id": call["_id"],

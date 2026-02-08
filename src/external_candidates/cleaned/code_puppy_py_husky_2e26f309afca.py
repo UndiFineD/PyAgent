@@ -17,66 +17,40 @@ from ... import callbacks
 
 from ..base_agent import BaseAgent
 
-class HuskyAgent(BaseAgent):
 
+class HuskyAgent(BaseAgent):
     """Husky - The task executor that does the heavy coding work in worktrees."""
 
     @property
-
     def name(self) -> str:
-
         return "husky"
 
     @property
-
     def display_name(self) -> str:
-
         return "Husky 🐺"
 
     @property
-
     def description(self) -> str:
-
-        return (
-
-            "Task executor - the sled dog that does the heavy lifting, "
-
-            "executing coding tasks in worktrees"
-
-        )
+        return "Task executor - the sled dog that does the heavy lifting, executing coding tasks in worktrees"
 
     def get_available_tools(self) -> list[str]:
-
         """Get the full coding toolkit available to Husky."""
 
         return [
-
             # File exploration
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             # File modification
-
             "edit_file",
-
             "delete_file",
-
             # Shell for builds, tests, git
-
             "agent_run_shell_command",
-
             # Transparency
-
             "agent_share_your_reasoning",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         """Get Husky's system prompt - the sled dog's instructions!"""
 
         puppy_name = get_puppy_name()
@@ -486,8 +460,6 @@ Now go execute that task and make the pack proud! MUSH! 🐺
         prompt_additions = callbacks.on_load_prompt()
 
         if len(prompt_additions):
-
             result += "\n".join(prompt_additions)
 
         return result
-

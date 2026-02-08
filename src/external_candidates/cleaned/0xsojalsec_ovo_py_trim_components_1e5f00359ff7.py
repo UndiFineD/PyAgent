@@ -22,7 +22,6 @@ from ovo.core.utils.residue_selection import (
 
 
 def parameters_trim_structure_component(workflow: RFdiffusionBinderDesignWorkflow):
-
     st.write("Trim the target chain to save computation time, and to avoid running out of GPU memory")
 
     if workflow.rfdiffusion_params.hotspots:
@@ -186,7 +185,6 @@ def parameters_trim_structure_component(workflow: RFdiffusionBinderDesignWorkflo
 
 
 def trimmed_structure_visualizer(workflow: RFdiffusionBinderDesignWorkflow, pdb_input_string: str):
-
     target_chain = workflow.get_target_chain()
 
     trim_start, trim_end = workflow.get_target_trim_boundary()
@@ -259,7 +257,6 @@ def trimmed_structure_visualizer(workflow: RFdiffusionBinderDesignWorkflow, pdb_
 
 
 def check_hotspots(contig: str, hotspots: str):
-
     if hotspots is None or hotspots == "":
         return
 

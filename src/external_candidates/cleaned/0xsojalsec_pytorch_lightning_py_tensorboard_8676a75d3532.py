@@ -156,7 +156,6 @@ class TensorBoardLogger(Logger, FabricTensorBoardLogger):
         sub_dir: Optional[_PATH] = None,
         **kwargs: Any,
     ):
-
         super().__init__(
             root_dir=save_dir,
             name=name,
@@ -273,7 +272,6 @@ class TensorBoardLogger(Logger, FabricTensorBoardLogger):
     def log_graph(  # type: ignore[override]
         self, model: "pl.LightningModule", input_array: Optional[Tensor] = None
     ) -> None:
-
         if not self._log_graph:
             return
 
@@ -303,7 +301,6 @@ class TensorBoardLogger(Logger, FabricTensorBoardLogger):
     @override
     @rank_zero_only
     def save(self) -> None:
-
         super().save()
 
         dir_path = self.log_dir
@@ -320,7 +317,6 @@ class TensorBoardLogger(Logger, FabricTensorBoardLogger):
     @override
     @rank_zero_only
     def finalize(self, status: str) -> None:
-
         super().finalize(status)
 
         if status == "success":
@@ -342,7 +338,6 @@ class TensorBoardLogger(Logger, FabricTensorBoardLogger):
 
     @override
     def _get_next_version(self) -> int:
-
         root_dir = self.root_dir
 
         try:

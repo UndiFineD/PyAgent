@@ -7,7 +7,6 @@ import math
 
 from typing import Callable, Dict
 
-
 from fle.env.tools.admin.render.layers.layer_renderer import LayerRenderer
 
 from PIL import ImageDraw
@@ -18,7 +17,6 @@ class ResourcesLayerRenderer(LayerRenderer):
 
     @property
     def layer_name(self) -> str:
-
         return "resources"
 
     def render(

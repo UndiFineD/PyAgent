@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class QBitDiagram(InteractiveScene):
     def construct(self):
-
         # Axes
 
         axes = Axes(
@@ -127,7 +126,6 @@ class QBitDiagram(InteractiveScene):
         self.play(FadeOut(last_line))
 
     def get_prob_label(self, coef, bit="0"):
-
         # Test
 
         label = Tex(Rf"P(\text{{Measure a }}{bit}) = (0.00)^2 = 0.00", font_size=36)
@@ -150,7 +148,6 @@ class QBitDiagram(InteractiveScene):
 
 class BlocksToQuantum(InteractiveScene):
     def construct(self):
-
         # Wall
 
         wall_height = 2

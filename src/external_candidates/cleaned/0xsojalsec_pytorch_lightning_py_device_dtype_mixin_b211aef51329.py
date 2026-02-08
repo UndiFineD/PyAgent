@@ -44,7 +44,6 @@ class _DeviceDtypeModuleMixin(Module):
     __jit_unused_properties__: list[str] = ["device", "dtype"]
 
     def __init__(self) -> None:
-
         super().__init__()
 
         self._dtype: Union[str, torch.dtype] = torch.get_default_dtype()
@@ -57,19 +56,16 @@ class _DeviceDtypeModuleMixin(Module):
 
     @property
     def dtype(self) -> Union[str, torch.dtype]:
-
         return self._dtype
 
     @dtype.setter
     def dtype(self, new_dtype: Union[str, torch.dtype]) -> None:
-
         # necessary to avoid infinite recursion
 
         raise RuntimeError("Cannot set the dtype explicitly. Please use module.to(new_dtype).")
 
     @property
     def device(self) -> torch.device:
-
         device = self._device
 
         # make this more explicit to always include the index
@@ -167,7 +163,6 @@ def _update_properties(
     device: Optional[torch.device] = None,
     dtype: Optional[Union[str, torch.dtype]] = None,
 ) -> None:
-
     for module in root.modules():
         if not isinstance(module, _DeviceDtypeModuleMixin):
             continue

@@ -5,7 +5,6 @@
 
 
 def main():
-
     print("Hello from research-vault!")
 
 

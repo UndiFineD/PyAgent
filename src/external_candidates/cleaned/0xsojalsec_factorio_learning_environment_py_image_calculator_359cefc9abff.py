@@ -5,7 +5,6 @@
 
 from typing import Callable, Dict, List, Optional
 
-
 from fle.env.entities import BoundingBox, Direction, Entity, Position
 
 from fle.env.tools.admin.render_simple.utils.render_config import RenderConfig
@@ -15,7 +14,6 @@ class ImageCalculator:
     """Handles calculations related to the image size and coordinate transforms"""
 
     def __init__(self, config: RenderConfig):
-
         self.config = config
 
         self.boundaries = {"min_x": 0, "max_x": 0, "min_y": 0, "max_y": 0}
@@ -31,8 +29,6 @@ class ImageCalculator:
 
         Calculate the rendering boundaries based on entities, center position, or bounding box
 
-
-
         Args:
 
             entities: List of entities to consider for boundary calculation
@@ -42,8 +38,6 @@ class ImageCalculator:
             bounding_box: Optional bounding box to constrain the render area
 
             max_tiles: Maximum number of tiles to render on each side of the position (default: 50)
-
-
 
         Returns:
 
@@ -162,13 +156,9 @@ class ImageCalculator:
 
         Calculate the final image dimensions based on map size and legend
 
-
-
         Args:
 
             legend_dimensions: Optional dictionary with legend width, height, and position
-
-
 
         Returns:
 
@@ -221,8 +211,6 @@ class ImageCalculator:
 
         Returns a function that converts game coordinates to image coordinates
 
-
-
         Returns:
 
             Function that takes game x,y and returns image x,y
@@ -238,7 +226,6 @@ class ImageCalculator:
         cell_size = self.config.style["cell_size"]
 
         def game_to_img(x, y):
-
             return (margin + (x - min_x) * cell_size, margin + (y - min_y) * cell_size)
 
         return game_to_img

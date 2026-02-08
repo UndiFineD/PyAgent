@@ -7,8 +7,8 @@ from typing import Any, Dict, Optional
 
 from pydantic import BaseModel
 
-class Ivfflat(BaseModel):
 
+class Ivfflat(BaseModel):
     name: Optional[str] = None
 
     nlist: int = 128  # Number of inverted lists
@@ -19,8 +19,8 @@ class Ivfflat(BaseModel):
 
     configuration: Dict[str, Any] = {}
 
-class IvfPQ(BaseModel):
 
+class IvfPQ(BaseModel):
     name: Optional[str] = None
 
     nlist: int = 128  # Number of inverted lists
@@ -35,8 +35,8 @@ class IvfPQ(BaseModel):
 
     configuration: Dict[str, Any] = {}
 
-class HNSWFlat(BaseModel):
 
+class HNSWFlat(BaseModel):
     name: Optional[str] = None
 
     M: int = 30  # Number of neighbors
@@ -49,8 +49,8 @@ class HNSWFlat(BaseModel):
 
     configuration: Dict[str, Any] = {}
 
-class HNSWPQ(BaseModel):
 
+class HNSWPQ(BaseModel):
     name: Optional[str] = None
 
     M: int = 30  # Number of neighbors
@@ -66,4 +66,3 @@ class HNSWPQ(BaseModel):
     metric_type: str = "DOT_PRODUCT"  # Can be "DOT_PRODUCT" or "DOT_PRODUCT"
 
     configuration: Dict[str, Any] = {}
-

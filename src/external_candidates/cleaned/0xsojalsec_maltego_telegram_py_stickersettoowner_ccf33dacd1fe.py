@@ -25,7 +25,6 @@ from utils import fetch_web_info
 
 
 async def fetch_sticker_set_owner(short_name: str):
-
     async with app:
         sticker_set = await app.invoke(
             functions.messages.GetStickerSet(stickerset=types.InputStickerSetShortName(short_name=short_name), hash=0),
@@ -68,7 +67,6 @@ async def fetch_sticker_set_owner(short_name: str):
 class StickerSetToOwner(DiscoverableTransform):
     @classmethod
     def create_entities(cls, request: MaltegoMsg, response: MaltegoTransform):
-
         short_name = request.getProperty("properties.short_name")
 
         owner = loop.run_until_complete(fetch_sticker_set_owner(short_name))

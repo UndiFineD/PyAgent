@@ -7,7 +7,6 @@ from manim_imports_ext import *
 
 
 def half_plane():
-
     plane = NumberPlane(
         x_radius=FRAME_X_RADIUS / 2,
         x_unit_to_spatial_width=0.5,
@@ -30,11 +29,9 @@ class SingleVariableFunction(Scene):
 
     @staticmethod
     def args_to_string(func, name, separate_lines):
-
         return name + ("SeparateLines" if separate_lines else "")
 
     def construct(self, func, name, separate_lines):
-
         base_line = NumberLine(color="grey")
 
         moving_line = NumberLine(tick_frequency=1, density=3 * DEFAULT_POINT_DENSITY_1D)
@@ -42,7 +39,6 @@ class SingleVariableFunction(Scene):
         base_line.add_numbers()
 
         def point_function(xxx_todo_changeme):
-
             x, y, z = xxx_todo_changeme
 
             return (func(x), y, z)
@@ -108,11 +104,9 @@ class LineToPlaneFunction(Scene):
 
     @staticmethod
     def args_to_string(func, name, numbers_to_follow):
-
         return name + ("FollowingNumbers" if numbers_to_follow else "")
 
     def construct(self, func, name, numbers_to_follow):
-
         line = NumberLine(
             unit_length_to_spatial_width=0.5,
             tick_frequency=1,
@@ -141,7 +135,6 @@ class LineToPlaneFunction(Scene):
         self.add(line, divider, plane)
 
         def point_function(point):
-
             x, y = func(line.point_to_number(point))
 
             return plane.num_pair_to_point((x, y))
@@ -213,11 +206,9 @@ class PlaneToPlaneFunctionSeparatePlanes(Scene):
 
     @staticmethod
     def args_to_string(func, name):
-
         return name
 
     def construct(self, func, name):
-
         shift_factor = 0.55
 
         in_plane = half_plane().shift(shift_factor * FRAME_X_RADIUS * LEFT)
@@ -233,7 +224,6 @@ class PlaneToPlaneFunctionSeparatePlanes(Scene):
         plane_copy.submobjects = []
 
         def point_function(point):
-
             result = np.array(func((point * 2 + 2 * shift_factor * FRAME_X_RADIUS * RIGHT)[:2]))
 
             result = np.append(result / 2, [0])
@@ -263,11 +253,9 @@ class PlaneToPlaneFunction(Scene):
 
     @staticmethod
     def args_to_string(func, name):
-
         return name
 
     def construct(self, func, name):
-
         plane = NumberPlane()
 
         plane.prepare_for_nonlinear_transform()
@@ -279,7 +267,6 @@ class PlaneToPlaneFunction(Scene):
         anim_config = {"run_time": 3}
 
         def point_function(point):
-
             return np.append(func(point[:2]), [0])
 
         self.add(background, plane)
@@ -298,11 +285,9 @@ class PlaneToLineFunction(Scene):
 
     @staticmethod
     def args_to_string(func, name):
-
         return name
 
     def construct(self, func, name):
-
         line = NumberLine(
             color=GREEN,
             unit_length_to_spatial_width=0.5,
@@ -321,7 +306,6 @@ class PlaneToLineFunction(Scene):
         line_left = line.number_to_point(0)
 
         def point_function(point):
-
             shifter = 0.5 * FRAME_X_RADIUS * RIGHT
 
             return func((point + shifter)[:2]) * RIGHT + line_left
@@ -347,11 +331,9 @@ class PlaneToSpaceFunction(Scene):
 
     @staticmethod
     def args_to_string(func, name):
-
         return name
 
     def construct(self, func, name):
-
         plane = half_plane().shift(0.5 * FRAME_X_RADIUS * LEFT)
 
         divider = Line(FRAME_Y_RADIUS * UP, FRAME_Y_RADIUS * DOWN)
@@ -371,7 +353,6 @@ class PlaneToSpaceFunction(Scene):
         dampening_factor = 0.1
 
         def point_function(xxx_todo_changeme5):
-
             x, y, z = xxx_todo_changeme5
 
             return dampening_factor * np.array(func((x, y)))
@@ -425,11 +406,9 @@ class SpaceToSpaceFunction(Scene):
 
     @staticmethod
     def args_to_string(func, name):
-
         return name
 
     def construct(self, func, name):
-
         space = SpaceGrid()
 
         rot_kwargs = {

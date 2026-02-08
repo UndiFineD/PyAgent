@@ -7,7 +7,6 @@ import base64
 
 import io
 
-
 from PIL import Image
 
 
@@ -15,7 +14,6 @@ class RenderedImage:
     """Wrapper for rendered images with display capabilities"""
 
     def __init__(self, image: Image.Image):
-
         self.image = image
 
     def show(self, *args, **kwargs):

@@ -30,5 +30,4 @@ class Case(models.Model):
     case_last_update = models.DateField(auto_now=True)
 
     def __str__(self):
-
         return self.case_name

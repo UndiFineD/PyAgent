@@ -15,7 +15,6 @@ class Randomize(Animation):
         final_value=None,
         **kwargs,
     ):
-
         self.value_tracker = value_tracker
 
         self.rand_func = rand_func
@@ -31,7 +30,6 @@ class Randomize(Animation):
         super().__init__(value_tracker, **kwargs)
 
     def interpolate_mobject(self, alpha):
-
         if not self.new_step(alpha):
             return
 
@@ -40,7 +38,6 @@ class Randomize(Animation):
         self.value_tracker.set_value(value)
 
     def new_step(self, alpha):
-
         d_alpha = alpha - self.last_alpha
 
         self.last_alpha = alpha
@@ -57,7 +54,6 @@ class Randomize(Animation):
 
 class TrackingDots(Animation):
     def __init__(self, point_func, fade_factor=0.95, radius=0.25, color=YELLOW, **kwargs):
-
         self.point_func = point_func
 
         self.fade_factor = fade_factor
@@ -69,7 +65,6 @@ class TrackingDots(Animation):
         super().__init__(self.dots, **kwargs)
 
     def interpolate_mobject(self, alpha):
-
         opacities = self.dots.get_opacities()
 
         point = self.point_func()
@@ -85,7 +80,6 @@ class TrackingDots(Animation):
 
 
 def get_random_var_label_group(axis, label_name, color=GREY, initial_value=None, font_size=36, direction=None):
-
     if initial_value is None:
         initial_value = random.uniform(*axis.x_range[:2])
 
@@ -117,7 +111,6 @@ def get_random_var_label_group(axis, label_name, color=GREY, initial_value=None,
 
 class MaxProcess(InteractiveScene):
     def construct(self):
-
         # Set up intervals
 
         intervals = VGroup(UnitInterval() for _ in range(3))
@@ -202,7 +195,6 @@ class MaxProcess(InteractiveScene):
         # Line
 
         def get_line():
-
             x1 = x1_tracker.get_value()
 
             x2 = x2_tracker.get_value()
@@ -232,7 +224,6 @@ class MaxProcess(InteractiveScene):
 
 class SqrtProcess(InteractiveScene):
     def construct(self):
-
         # A fair bit of copy pasting from above
 
         # Set up intervals
@@ -310,7 +301,6 @@ class SqrtProcess(InteractiveScene):
 
 class SquareAndSquareRoot(InteractiveScene):
     def construct(self):
-
         # Test
 
         lines = VGroup(
@@ -335,7 +325,6 @@ class SquareAndSquareRoot(InteractiveScene):
 
 class GawkAtEquivalence(InteractiveScene):
     def construct(self):
-
         # Test
 
         expr = VGroup(
@@ -369,7 +358,6 @@ class GawkAtEquivalence(InteractiveScene):
 
 class VisualizeMaxOfPairCDF(InteractiveScene):
     def construct(self):
-
         # Setup axes and trackers
 
         axes = Axes((0, 1, 0.1), (0, 1, 0.1), width=6, height=6)
@@ -452,7 +440,6 @@ class VisualizeMaxOfPairCDF(InteractiveScene):
         # Show the pair inside the square
 
         def get_xy_point():
-
             return axes.c2p(x1_tracker.get_value(), x2_tracker.get_value())
 
         v_line = Line().set_stroke(WHITE, 1, 0.5)
@@ -758,7 +745,6 @@ class VisualizeMaxOfPairCDF(InteractiveScene):
         x3_tip.rotate(PI / 2, UP)
 
         def get_xzy_point():
-
             return axes3d.c2p(
                 x1_tracker.get_value(),
                 x2_tracker.get_value(),
@@ -795,7 +781,6 @@ class VisualizeMaxOfPairCDF(InteractiveScene):
 
 class MaxOfThreeTex(InteractiveScene):
     def construct(self):
-
         # Test
 
         expr = TexText(R"max(rand(), rand(), rand()) $\leftrightarrow$ rand()$^{1 / 3}$")
@@ -809,7 +794,6 @@ class MaxOfThreeTex(InteractiveScene):
 
 class Arrows(InteractiveScene):
     def construct(self):
-
         arrows = Vector(DOWN, thickness=5).replicate(3)
 
         arrows.arrange(RIGHT, buff=1.0)

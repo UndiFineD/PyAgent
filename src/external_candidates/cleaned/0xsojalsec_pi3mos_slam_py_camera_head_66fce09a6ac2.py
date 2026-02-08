@@ -22,7 +22,6 @@ class ResConvBlock(nn.Module):
     """
 
     def __init__(self, in_channels, out_channels):
-
         super().__init__()
 
         self.in_channels = in_channels
@@ -50,7 +49,6 @@ class ResConvBlock(nn.Module):
         self.res_conv3 = nn.Linear(self.out_channels, self.out_channels)
 
     def forward(self, res):
-
         x = F.relu(self.res_conv1(res))
 
         x = F.relu(self.res_conv2(x))
@@ -64,7 +62,6 @@ class ResConvBlock(nn.Module):
 
 class CameraHead(nn.Module):
     def __init__(self, dim=512):
-
         super().__init__()
 
         output_dim = dim
@@ -85,7 +82,6 @@ class CameraHead(nn.Module):
         self.fc_rot = nn.Linear(output_dim, 9)
 
     def forward(self, feat, patch_h, patch_w):
-
         BN, hw, c = feat.shape
 
         for i in range(2):
@@ -109,7 +105,6 @@ class CameraHead(nn.Module):
         return pose
 
     def convert_pose_to_4x4(self, B, out_r, out_t, device):
-
         out_r = self.svd_orthogonalize(out_r)  # [N,3,3]
 
         pose = torch.zeros((B, 4, 4), device=device)

@@ -19,7 +19,6 @@ class FractalCreation(Scene):
     }
 
     def construct(self):
-
         fractal = self.fractal_class(order=0, **self.fractal_kwargs)
 
         self.play(FadeIn(fractal))
@@ -62,7 +61,6 @@ class PiCreatureFractalCreation(FractalCreation):
     }
 
     def construct(self):
-
         FractalCreation.construct(self)
 
         fractal = self.fractal

@@ -24,7 +24,6 @@ class MerkleNode:
     """A node in the Merkle tree (file or directory)."""
 
     def __init__(self, path: Path, is_dir: bool):
-
         self.path = path
 
         self.is_dir = is_dir
@@ -71,7 +70,6 @@ class MerkleNode:
         return self.hash
 
     def __repr__(self) -> str:
-
         return f"MerkleNode({self.path.name}, dir={self.is_dir}, hash={self.hash[:8] if self.hash else 'None'})"
 
 
@@ -87,7 +85,6 @@ class MerkleTree:
     """
 
     def __init__(self, root_path: Path):
-
         self.root_path = root_path
 
         self.root_node = MerkleNode(root_path, is_dir=True)

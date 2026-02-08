@@ -134,7 +134,6 @@ class LightningDataModule(DataHooks, HyperparametersMixin):
     CHECKPOINT_HYPER_PARAMS_TYPE = "datamodule_hparams_type"
 
     def __init__(self) -> None:
-
         super().__init__()
 
         # Pointer to the trainer object
@@ -179,7 +178,6 @@ class LightningDataModule(DataHooks, HyperparametersMixin):
         """
 
         def dataloader(ds: Dataset, shuffle: bool = False) -> DataLoader:
-
             shuffle &= not isinstance(ds, IterableDataset)
 
             return DataLoader(
@@ -191,19 +189,15 @@ class LightningDataModule(DataHooks, HyperparametersMixin):
             )
 
         def train_dataloader() -> TRAIN_DATALOADERS:
-
             return apply_to_collection(train_dataset, Dataset, dataloader, shuffle=True)
 
         def val_dataloader() -> EVAL_DATALOADERS:
-
             return apply_to_collection(val_dataset, Dataset, dataloader)
 
         def test_dataloader() -> EVAL_DATALOADERS:
-
             return apply_to_collection(test_dataset, Dataset, dataloader)
 
         def predict_dataloader() -> EVAL_DATALOADERS:
-
             return apply_to_collection(predict_dataset, Dataset, dataloader)
 
         candidate_kwargs = {"batch_size": batch_size, "num_workers": num_workers}
@@ -397,7 +391,6 @@ class LightningDataModule(DataHooks, HyperparametersMixin):
 
         class dataset_info:
             def __init__(self, available: bool, length: str) -> None:
-
                 self.available = available
 
                 self.length = length

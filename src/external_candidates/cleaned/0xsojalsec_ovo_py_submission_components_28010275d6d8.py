@@ -50,7 +50,6 @@ from ovo.core.logic.round_logic import get_or_create_project_rounds
 
 
 def pool_submission_inputs(page_key: str):
-
     rounds_by_id = get_or_create_project_rounds(project_id=st.session_state.project.id)
 
     round_ids = list(rounds_by_id.keys())
@@ -118,7 +117,6 @@ def pool_submission_inputs(page_key: str):
 
 
 def get_pool_inputs(page_key: str) -> tuple[str, str, str]:
-
     if not st.session_state.pool_inputs.get(page_key):
         # This should never happen since pool_submission_inputs() should be called before
 
@@ -220,7 +218,6 @@ def submit_workflow_dialog(
     pool_name: str,
     pool_description: str,
 ):
-
     # Create "empty" element to enable clearing the contents after submitting
 
     content = st.empty()
@@ -285,7 +282,6 @@ def submit_workflow_dialog(
 
 @st.dialog("Create new round of designs")
 def create_new_round_dialog():
-
     project_id = st.session_state.project.id
 
     last_round = list(get_or_create_project_rounds(project_id=project_id).values())[-1]
@@ -310,7 +306,6 @@ def create_new_round_dialog():
 
 
 def show_rfdiffusion_binder_seq_design_inputs(workflow: RFdiffusionWorkflow):
-
     seq_design_options = {
         "ligandmpnn": "LigandMPNN (ProteinMPNN weights)",
         "fastrelax": "ProteinMPNN-FastRelax",
@@ -394,7 +389,6 @@ def show_rfdiffusion_binder_seq_design_inputs(workflow: RFdiffusionWorkflow):
 
 
 def show_rfdiffusion_advanced_settings(workflow: RFdiffusionWorkflow):
-
     #
 
     # FIXME remove this hack
@@ -647,7 +641,6 @@ def customize_json_settings_component(diff: dict | None, default: dict, key_suff
 
 @st.fragment()
 def show_bindcraft_advanced_settings(workflow: "BindCraftBinderDesignWorkflow"):
-
     advanced_settings_path, filter_settings_path = workflow.get_settings_paths()
 
     advanced_default_dict = load_json_from_file(advanced_settings_path)

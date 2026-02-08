@@ -38,7 +38,6 @@ class Standardform:
     """
 
     def __init__(self, url, verbose=False):
-
         self.url = url
 
         self.verbose = verbose
@@ -169,7 +168,6 @@ class Standardform:
         return None
 
     def check(self):
-
         r = Requester.get(self.url)
 
         # Cookie potentially returned are kept to be sent in the auth request
@@ -341,7 +339,6 @@ class Standardform:
         return True
 
     def try_auth(self, username, password):
-
         # If anti-CSRF token might be present, reload the page before every attempt
 
         # and re-extract form fields

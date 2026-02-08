@@ -11,7 +11,6 @@ import torch
 
 
 def sequence_mask(length, max_length=None):
-
     if max_length is None:
         max_length = length.max()
 
@@ -21,7 +20,6 @@ def sequence_mask(length, max_length=None):
 
 
 def fix_len_compatibility(length, num_downsamplings_in_unet=2):
-
     factor = torch.scalar_tensor(2).pow(num_downsamplings_in_unet)
 
     length = (length / factor).ceil() * factor
@@ -34,7 +32,6 @@ def fix_len_compatibility(length, num_downsamplings_in_unet=2):
 
 
 def convert_pad_shape(pad_shape):
-
     inverted_shape = pad_shape[::-1]
 
     pad_shape = [item for sublist in inverted_shape for item in sublist]
@@ -43,7 +40,6 @@ def convert_pad_shape(pad_shape):
 
 
 def generate_path(duration, mask):
-
     device = duration.device
 
     b, t_x, t_y = mask.shape
@@ -66,14 +62,12 @@ def generate_path(duration, mask):
 
 
 def duration_loss(logw, logw_, lengths):
-
     loss = torch.sum((logw - logw_) ** 2) / torch.sum(lengths)
 
     return loss
 
 
 def normalize(data, mu, std):
-
     if not isinstance(mu, (float, int)):
         if isinstance(mu, list):
             mu = torch.tensor(mu, dtype=data.dtype, device=data.device)
@@ -102,7 +96,6 @@ def normalize(data, mu, std):
 
 
 def denormalize(data, mu, std):
-
     if not isinstance(mu, float):
         if isinstance(mu, list):
             mu = torch.tensor(mu, dtype=data.dtype, device=data.device)

@@ -18,7 +18,6 @@ class ProbabilityRect(VMobject):
     }
 
     def __init__(self, p0, **kwargs):
-
         VMobject.__init__(self, **kwargs)
 
         self.unit_rect = Rectangle(width=self.unit_width, height=self.unit_height, stroke_color=self.color)
@@ -32,7 +31,6 @@ class ProbabilityRect(VMobject):
         self.add(self.unit_rect, self.prob_rect, self.prob_label)
 
     def create_prob_rect(self, p):
-
         prob_width, prob_height = self.unit_width, self.unit_height
 
         if self.alignment in [LEFT, RIGHT]:
@@ -57,7 +55,6 @@ class ProbabilityRect(VMobject):
         return prob_rect
 
     def create_prob_label(self, p):
-
         if self.use_percent:
             prob_label = DecimalNumber(
                 p * 100,
@@ -80,7 +77,6 @@ class ProbabilityRect(VMobject):
 
 class ChangeProbability(Animation):
     def __init__(self, prob_mob, p1, **kwargs):
-
         if not isinstance(prob_mob, ProbabilityRect):
             raise Exception("ChangeProportion's mobject must be a ProbabilityRect")
 
@@ -91,7 +87,6 @@ class ChangeProbability(Animation):
         Animation.__init__(self, prob_mob, **kwargs)
 
     def interpolate_mobject(self, alpha):
-
         p = (1 - alpha) * self.p0 + alpha * self.p1
 
         self.mobject.remove(self.mobject.prob_rect, self.mobject.prob_label)
@@ -103,7 +98,6 @@ class ChangeProbability(Animation):
         self.mobject.add(self.mobject.prob_rect, self.mobject.prob_label)
 
     def clean_up_from_scene(self, scene=None):
-
         self.mobject.p = self.p1
 
         super(ChangeProbability, self).clean_up_from_scene(scene=scene)
@@ -111,7 +105,6 @@ class ChangeProbability(Animation):
 
 class ShowProbAsProportion(Scene):
     def construct(self):
-
         p0 = 0.3
 
         p1 = 1

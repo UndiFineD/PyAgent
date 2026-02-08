@@ -9,7 +9,6 @@ import os
 
 
 def is_running_in_streamlit():
-
     try:
         import streamlit
 
@@ -22,7 +21,6 @@ def is_running_in_streamlit():
 
 
 def get_posit_user_info():
-
     import streamlit
 
     headers = streamlit.context.headers
@@ -39,7 +37,6 @@ def get_posit_user_info():
 
 
 def get_username() -> str:
-
     if is_running_in_streamlit():
         import streamlit as st
 

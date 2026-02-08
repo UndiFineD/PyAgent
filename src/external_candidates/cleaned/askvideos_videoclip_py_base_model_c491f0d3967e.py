@@ -30,31 +30,24 @@ import torch.nn as nn
 from omegaconf import OmegaConf
 
 from video_llama.common.dist_utils import (
-
     download_cached_file,
-
     is_dist_avail_and_initialized,
-
 )
 
 from video_llama.common.utils import get_abs_path, is_url
 
-class BaseModel(nn.Module):
 
+class BaseModel(nn.Module):
     """Base class for models."""
 
     def __init__(self):
-
         super().__init__()
 
     @property
-
     def device(self):
-
         return list(self.parameters())[0].device
 
     def load_checkpoint(self, url_or_filename):
-
         """
 
         Load from a finetuned checkpoint.
@@ -64,29 +57,20 @@ class BaseModel(nn.Module):
         """
 
         if is_url(url_or_filename):
-
-            cached_file = download_cached_file(
-
-                url_or_filename, check_hash=False, progress=True
-
-            )
+            cached_file = download_cached_file(url_or_filename, check_hash=False, progress=True)
 
             checkpoint = torch.load(cached_file, map_location="cpu")
 
         elif os.path.isfile(url_or_filename):
-
             checkpoint = torch.load(url_or_filename, map_location="cpu")
 
         else:
-
             raise RuntimeError("checkpoint url or path is invalid")
 
         if "model" in checkpoint.keys():
-
             state_dict = checkpoint["model"]
 
         else:
-
             state_dict = checkpoint
 
         msg = self.load_state_dict(state_dict, strict=False)
@@ -98,9 +82,7 @@ class BaseModel(nn.Module):
         return msg
 
     @classmethod
-
     def from_pretrained(cls, model_type):
-
         """
 
         Build a pretrained model from default configuration file, specified by model_type.
@@ -122,19 +104,12 @@ class BaseModel(nn.Module):
         return model
 
     @classmethod
-
     def default_config_path(cls, model_type):
-
-        assert (
-
-            model_type in cls.PRETRAINED_MODEL_CONFIG_DICT
-
-        ), "Unknown model type {}".format(model_type)
+        assert model_type in cls.PRETRAINED_MODEL_CONFIG_DICT, "Unknown model type {}".format(model_type)
 
         return get_abs_path(cls.PRETRAINED_MODEL_CONFIG_DICT[model_type])
 
     def load_checkpoint_from_config(self, cfg, **kwargs):
-
         """
 
         Load checkpoint as specified in the config file.
@@ -150,19 +125,13 @@ class BaseModel(nn.Module):
         load_finetuned = cfg.get("load_finetuned", True)
 
         if load_finetuned:
-
             finetune_path = cfg.get("finetuned", None)
 
-            assert (
-
-                finetune_path is not None
-
-            ), "Found load_finetuned is True, but finetune_path is None."
+            assert finetune_path is not None, "Found load_finetuned is True, but finetune_path is None."
 
             self.load_checkpoint(url_or_filename=finetune_path)
 
         else:
-
             # load pre-trained weights
 
             pretrain_path = cfg.get("pretrained", None)
@@ -172,39 +141,31 @@ class BaseModel(nn.Module):
             self.load_from_pretrained(url_or_filename=pretrain_path, **kwargs)
 
     def before_evaluation(self, **kwargs):
-
         pass
 
     def show_n_params(self, return_str=True):
-
         tot = 0
 
         for p in self.parameters():
-
             w = 1
 
             for x in p.shape:
-
                 w *= x
 
             tot += w
 
         if return_str:
-
             if tot >= 1e6:
-
                 return "{:.1f}M".format(tot / 1e6)
 
             else:
-
                 return "{:.1f}K".format(tot / 1e3)
 
         else:
-
             return tot
 
-class BaseEncoder(nn.Module):
 
+class BaseEncoder(nn.Module):
     """
 
     Base class for primitive encoders, such as ViT, TimeSformer, etc.
@@ -212,25 +173,19 @@ class BaseEncoder(nn.Module):
     """
 
     def __init__(self):
-
         super().__init__()
 
     def forward_features(self, samples, **kwargs):
-
         raise NotImplementedError
 
     @property
-
     def device(self):
-
         return list(self.parameters())[0].device
 
+
 class SharedQueueMixin:
-
     @torch.no_grad()
-
     def _dequeue_and_enqueue(self, image_feat, text_feat, idxs=None):
-
         # gather keys before updating queue
 
         image_feats = concat_all_gather(image_feat)
@@ -250,7 +205,6 @@ class SharedQueueMixin:
         self.text_queue[:, ptr : ptr + batch_size] = text_feats.T
 
         if idxs is not None:
-
             idxs = concat_all_gather(idxs)
 
             self.idx_queue[:, ptr : ptr + batch_size] = idxs.T
@@ -259,44 +213,24 @@ class SharedQueueMixin:
 
         self.queue_ptr[0] = ptr
 
+
 class MomentumDistilationMixin:
-
     @torch.no_grad()
-
     def copy_params(self):
-
         for model_pair in self.model_pairs:
-
-            for param, param_m in zip(
-
-                model_pair[0].parameters(), model_pair[1].parameters()
-
-            ):
-
+            for param, param_m in zip(model_pair[0].parameters(), model_pair[1].parameters()):
                 param_m.data.copy_(param.data)  # initialize
 
                 param_m.requires_grad = False  # not update by gradient
 
     @torch.no_grad()
-
     def _momentum_update(self):
-
         for model_pair in self.model_pairs:
+            for param, param_m in zip(model_pair[0].parameters(), model_pair[1].parameters()):
+                param_m.data = param_m.data * self.momentum + param.data * (1.0 - self.momentum)
 
-            for param, param_m in zip(
-
-                model_pair[0].parameters(), model_pair[1].parameters()
-
-            ):
-
-                param_m.data = param_m.data * self.momentum + param.data * (
-
-                    1.0 - self.momentum
-
-                )
 
 class GatherLayer(torch.autograd.Function):
-
     """
 
     Gather tensors from all workers with support for backward propagation:
@@ -306,31 +240,23 @@ class GatherLayer(torch.autograd.Function):
     """
 
     @staticmethod
-
     def forward(ctx, x):
-
-        output = [
-
-            torch.zeros_like(x) for _ in range(torch.distributed.get_world_size())
-
-        ]
+        output = [torch.zeros_like(x) for _ in range(torch.distributed.get_world_size())]
 
         torch.distributed.all_gather(output, x)
 
         return tuple(output)
 
     @staticmethod
-
     def backward(ctx, *grads):
-
         all_gradients = torch.stack(grads)
 
         torch.distributed.all_reduce(all_gradients)
 
         return all_gradients[torch.distributed.get_rank()]
 
-def all_gather_with_grad(tensors):
 
+def all_gather_with_grad(tensors):
     """
 
     Performs all_gather operation on the provided tensors.
@@ -346,7 +272,6 @@ def all_gather_with_grad(tensors):
     # There is no need for reduction in the single-proc case
 
     if world_size == 1:
-
         return tensors
 
     # tensor_all = GatherLayer.apply(tensors)
@@ -355,10 +280,9 @@ def all_gather_with_grad(tensors):
 
     return torch.cat(tensor_all, dim=0)
 
+
 @torch.no_grad()
-
 def concat_all_gather(tensor):
-
     """
 
     Performs all_gather operation on the provided tensors.
@@ -370,14 +294,9 @@ def concat_all_gather(tensor):
     # if use distributed training
 
     if not is_dist_avail_and_initialized():
-
         return tensor
 
-    tensors_gather = [
-
-        torch.ones_like(tensor) for _ in range(torch.distributed.get_world_size())
-
-    ]
+    tensors_gather = [torch.ones_like(tensor) for _ in range(torch.distributed.get_world_size())]
 
     torch.distributed.all_gather(tensors_gather, tensor, async_op=False)
 
@@ -385,8 +304,8 @@ def concat_all_gather(tensor):
 
     return output
 
-def tile(x, dim, n_tile):
 
+def tile(x, dim, n_tile):
     init_dim = x.size(dim)
 
     repeat_idx = [1] * x.dim()
@@ -395,11 +314,6 @@ def tile(x, dim, n_tile):
 
     x = x.repeat(*(repeat_idx))
 
-    order_index = torch.LongTensor(
-
-        np.concatenate([init_dim * np.arange(n_tile) + i for i in range(init_dim)])
-
-    )
+    order_index = torch.LongTensor(np.concatenate([init_dim * np.arange(n_tile) + i for i in range(init_dim)]))
 
     return torch.index_select(x, dim, order_index.to(x.device))
-

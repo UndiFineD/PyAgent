@@ -18,7 +18,6 @@ class CoinStack(VGroup):
     }
 
     def init_points(self):
-
         for n in range(self.size):
             coin = self.face(thickness=self.coin_thickness)
 
@@ -42,7 +41,6 @@ class TailsStack(CoinStack):
 
 class DecimalTally(TexText):
     def __init__(self, heads, tails, **kwargs):
-
         TexText.__init__(self, str(heads), "\\textemdash\,", str(tails), **kwargs)
 
         self[0].set_color(COLOR_HEADS)
@@ -56,7 +54,6 @@ class TallyStack(VGroup):
     CONFIG = {"coin_thickness": COIN_THICKNESS, "show_decimals": True}
 
     def __init__(self, h, t, anchor=ORIGIN, **kwargs):
-
         self.nb_heads = h
 
         self.nb_tails = t
@@ -66,7 +63,6 @@ class TallyStack(VGroup):
         VGroup.__init__(self, **kwargs)
 
     def init_points(self):
-
         stack1 = HeadsStack(size=self.nb_heads, coin_thickness=self.coin_thickness)
 
         stack2 = TailsStack(size=self.nb_tails, coin_thickness=self.coin_thickness)
@@ -108,7 +104,6 @@ class TallyStack(VGroup):
             self.add(self.decimal_tally)
 
     def position_decimal_tally(self, decimal_tally):
-
         decimal_tally.match_width(self.background_rect)
 
         decimal_tally.scale(0.6)
@@ -118,7 +113,6 @@ class TallyStack(VGroup):
         return decimal_tally
 
     def move_anchor_to(self, new_anchor):
-
         for submob in self.submobjects:
             submob.shift(new_anchor - self.anchor)
 

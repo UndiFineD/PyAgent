@@ -14,9 +14,7 @@ class QuizResult(PiCreatureScene):
     CONFIG = {"pi_creatures_start_on_screen": False, "random_seed": 0}
 
     def construct(self):
-
         def get_example_quiz():
-
             quiz = get_quiz(
                 "Define ``Brachistochrone'' ",
                 "Define ``Tautochrone'' ",

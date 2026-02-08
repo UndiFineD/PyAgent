@@ -9,8 +9,8 @@ from agno.docker.app.base import ContainerContext, DockerApp  # noqa: F401
 
 from agno.infra.db_app import DbApp
 
-class Redis(DockerApp, DbApp):
 
+class Redis(DockerApp, DbApp):
     # -*- App Name
 
     name: str = "redis"
@@ -54,27 +54,21 @@ class Redis(DockerApp, DbApp):
     logging_level: str = "debug"
 
     def get_db_password(self) -> Optional[str]:
-
         return self.db_password or self.get_secret_from_file("REDIS_PASSWORD")
 
     def get_db_database(self) -> Optional[str]:
-
         return self.redis_schema or self.get_secret_from_file("REDIS_SCHEMA")
 
     def get_db_driver(self) -> Optional[str]:
-
         return self.redis_driver
 
     def get_db_host(self) -> Optional[str]:
-
         return self.get_container_name()
 
     def get_db_port(self) -> Optional[int]:
-
         return self.container_port
 
     def get_db_connection(self) -> Optional[str]:
-
         password = self.get_db_password()
 
         password_str = f"{password}@" if password else ""
@@ -90,7 +84,6 @@ class Redis(DockerApp, DbApp):
         return f"{driver}://{password_str}{host}:{port}/{schema}"
 
     def get_db_connection_local(self) -> Optional[str]:
-
         password = self.get_db_password()
 
         password_str = f"{password}@" if password else ""
@@ -104,4 +97,3 @@ class Redis(DockerApp, DbApp):
         port = self.get_db_port_local()
 
         return f"{driver}://{password_str}{host}:{port}/{schema}"
-

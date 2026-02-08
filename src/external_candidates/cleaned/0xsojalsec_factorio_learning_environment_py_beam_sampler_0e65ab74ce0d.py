@@ -48,7 +48,6 @@ class BeamSampler(DBSampler):
         max_conversation_length: int = 20,
         exploration_prob: float = 0.1,
     ):
-
         super().__init__(db_client)
 
         self.beam_width = beam_width

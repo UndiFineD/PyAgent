@@ -152,7 +152,6 @@ def download_job_designs_component(
 
 @st.fragment
 def download_descriptor_table(filename, design_ids, descriptor_keys=None, key="default", width="content"):
-
     if st.button(
         "Download descriptor table" if len(design_ids) > 1 else "Download descriptors",
         key=f"prepare_descriptors_{key}",
@@ -186,7 +185,6 @@ def download_design_files(
     design_ids: list,
     key="default",
 ):
-
     if st.button(f"Download {label}", key=f"prepare_{filename}_{key}", width="stretch"):
         with st.spinner("Loading files..."):
             # Get list of storage paths from Design or DesignWorkflow objects

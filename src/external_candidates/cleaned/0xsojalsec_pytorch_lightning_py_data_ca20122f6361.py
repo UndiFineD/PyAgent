@@ -66,7 +66,6 @@ class _WrapAttrTag(LightningEnum):
     DEL = "del"
 
     def __call__(self, *args: Any) -> None:
-
         fn: Union[Callable[[object, str], None], Callable[[object, str, Any], None]]
 
         fn = setattr if self == self.SET else delattr
@@ -75,7 +74,6 @@ class _WrapAttrTag(LightningEnum):
 
 
 def has_iterable_dataset(dataloader: object) -> bool:
-
     return hasattr(dataloader, "dataset") and isinstance(dataloader.dataset, IterableDataset)
 
 
@@ -115,7 +113,6 @@ def has_len(dataloader: object) -> TypeGuard[Sized]:
 
 
 def _update_dataloader(dataloader: DataLoader, sampler: Union[Sampler, Iterable]) -> DataLoader:
-
     dl_args, dl_kwargs = _get_dataloader_init_args_and_kwargs(dataloader, sampler)
 
     return _reinstantiate_wrapped_cls(dataloader, *dl_args, **dl_kwargs)
@@ -125,7 +122,6 @@ def _get_dataloader_init_args_and_kwargs(
     dataloader: DataLoader,
     sampler: Union[Sampler, Iterable],
 ) -> tuple[tuple[Any], dict[str, Any]]:
-
     if not isinstance(dataloader, DataLoader):
         raise ValueError(f"The dataloader {dataloader} needs to subclass `torch.utils.data.DataLoader`")
 
@@ -346,7 +342,6 @@ def _dataloader_init_kwargs_resolve_sampler(
 
 
 def _auto_add_worker_init_fn(dataloader: object, rank: int) -> None:
-
     if not hasattr(dataloader, "worker_init_fn"):
         return
 
@@ -355,7 +350,6 @@ def _auto_add_worker_init_fn(dataloader: object, rank: int) -> None:
 
 
 def _reinstantiate_wrapped_cls(orig_object: Any, *args: Any, explicit_cls: Optional[type] = None, **kwargs: Any) -> Any:
-
     constructor = type(orig_object) if explicit_cls is None else explicit_cls
 
     try:
@@ -404,7 +398,6 @@ def _wrap_init_method(init: Callable, store_explicit_arg: Optional[str] = None) 
 
     @functools.wraps(init)
     def wrapper(obj: Any, *args: Any, **kwargs: Any) -> None:
-
         # We need to inspect `init`, as inspecting `obj.__init__`
 
         # can lead to inspecting the wrong function with multiple inheritance
@@ -471,7 +464,6 @@ def _wrap_attr_method(method: Callable, tag: _WrapAttrTag) -> Callable:
 
     @functools.wraps(method)
     def wrapper(obj: Any, *args: Any) -> None:
-
         # First, let's find out if we're the first in inheritance chain calling the patched method.
 
         name, *_ = args
@@ -642,7 +634,6 @@ def suggested_max_num_workers(local_world_size: int) -> int:
 
 
 def _num_cpus_available() -> int:
-
     if hasattr(os, "sched_getaffinity"):
         return len(os.sched_getaffinity(0))
 
@@ -689,7 +680,6 @@ class AttributeDict(dict):
     """
 
     def __getattr__(self, key: str) -> Any:
-
         try:
             return self[key]
 
@@ -697,18 +687,15 @@ class AttributeDict(dict):
             raise AttributeError(f"'{type(self).__name__}' object has no attribute '{key}'") from e
 
     def __setattr__(self, key: str, val: Any) -> None:
-
         self[key] = val
 
     def __delattr__(self, item: str) -> None:
-
         if item not in self:
             raise KeyError(item)
 
         del self[item]
 
     def __repr__(self) -> str:
-
         if not len(self):
             return ""
 

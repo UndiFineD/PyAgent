@@ -19,7 +19,6 @@ from utils import media_fetcher, message_is_forwarded_from_another_chat
 
 
 async def collect_available_reactions(username):
-
     reactions = []
 
     async with app:
@@ -35,7 +34,6 @@ async def collect_available_reactions(username):
 
 
 async def collect_emoji_ids(username):
-
     emoji_ids = set()
 
     async with app:
@@ -59,7 +57,6 @@ async def collect_emoji_ids(username):
 
 
 async def fetch_emoji_info(emoji_ids):
-
     emoji_sets = []
 
     batch_size = 200
@@ -89,7 +86,6 @@ async def fetch_emoji_info(emoji_ids):
 
 
 def remove_duplicates(emoji_sets):
-
     seen_set_names = set()
 
     unique_emoji_sets = []
@@ -112,7 +108,6 @@ def remove_duplicates(emoji_sets):
 class ChannelToEmojiSet(DiscoverableTransform):
     @classmethod
     def create_entities(cls, request: MaltegoMsg, response: MaltegoTransform):
-
         username = request.getProperty("properties.channel")
 
         emoji_sets = loop.run_until_complete(collect_emoji_ids(username))

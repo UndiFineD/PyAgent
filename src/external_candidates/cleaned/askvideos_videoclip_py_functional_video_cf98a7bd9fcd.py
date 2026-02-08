@@ -19,20 +19,18 @@ import warnings
 
 import torch
 
+
 def _is_tensor_video_clip(clip):
-
     if not torch.is_tensor(clip):
-
         raise TypeError("clip should be Tensor. Got %s" % type(clip))
 
     if not clip.ndimension() == 4:
-
         raise ValueError("clip should be 4D. Got %dD" % clip.dim())
 
     return True
 
-def crop(clip, i, j, h, w):
 
+def crop(clip, i, j, h, w):
     """
 
     Args:
@@ -42,29 +40,19 @@ def crop(clip, i, j, h, w):
     """
 
     if len(clip.size()) != 4:
-
         raise ValueError("clip should be a 4D tensor")
 
     return clip[..., i : i + h, j : j + w]
 
+
 def resize(clip, target_size, interpolation_mode):
-
     if len(target_size) != 2:
+        raise ValueError(f"target size should be tuple (height, width), instead got {target_size}")
 
-        raise ValueError(
+    return torch.nn.functional.interpolate(clip, size=target_size, mode=interpolation_mode, align_corners=False)
 
-            f"target size should be tuple (height, width), instead got {target_size}"
-
-        )
-
-    return torch.nn.functional.interpolate(
-
-        clip, size=target_size, mode=interpolation_mode, align_corners=False
-
-    )
 
 def resized_crop(clip, i, j, h, w, size, interpolation_mode="bilinear"):
-
     """
 
     Do spatial cropping and resizing to the video clip
@@ -90,7 +78,6 @@ def resized_crop(clip, i, j, h, w, size, interpolation_mode="bilinear"):
     """
 
     if not _is_tensor_video_clip(clip):
-
         raise ValueError("clip should be a 4D torch.tensor")
 
     clip = crop(clip, i, j, h, w)
@@ -99,10 +86,9 @@ def resized_crop(clip, i, j, h, w, size, interpolation_mode="bilinear"):
 
     return clip
 
+
 def center_crop(clip, crop_size):
-
     if not _is_tensor_video_clip(clip):
-
         raise ValueError("clip should be a 4D torch.tensor")
 
     h, w = clip.size(-2), clip.size(-1)
@@ -110,7 +96,6 @@ def center_crop(clip, crop_size):
     th, tw = crop_size
 
     if h < th or w < tw:
-
         raise ValueError("height and width must be no smaller than crop_size")
 
     i = int(round((h - th) / 2.0))
@@ -119,8 +104,8 @@ def center_crop(clip, crop_size):
 
     return crop(clip, i, j, th, tw)
 
-def to_tensor(clip):
 
+def to_tensor(clip):
     """
 
     Convert tensor data type from uint8 to float, divide value by 255.0 and
@@ -140,17 +125,12 @@ def to_tensor(clip):
     _is_tensor_video_clip(clip)
 
     if not clip.dtype == torch.uint8:
-
-        raise TypeError(
-
-            "clip tensor should have data type uint8. Got %s" % str(clip.dtype)
-
-        )
+        raise TypeError("clip tensor should have data type uint8. Got %s" % str(clip.dtype))
 
     return clip.float().permute(3, 0, 1, 2) / 255.0
 
-def normalize(clip, mean, std, inplace=False):
 
+def normalize(clip, mean, std, inplace=False):
     """
 
     Args:
@@ -168,11 +148,9 @@ def normalize(clip, mean, std, inplace=False):
     """
 
     if not _is_tensor_video_clip(clip):
-
         raise ValueError("clip should be a 4D torch.tensor")
 
     if not inplace:
-
         clip = clip.clone()
 
     mean = torch.as_tensor(mean, dtype=clip.dtype, device=clip.device)
@@ -183,8 +161,8 @@ def normalize(clip, mean, std, inplace=False):
 
     return clip
 
-def hflip(clip):
 
+def hflip(clip):
     """
 
     Args:
@@ -198,8 +176,6 @@ def hflip(clip):
     """
 
     if not _is_tensor_video_clip(clip):
-
         raise ValueError("clip should be a 4D torch.tensor")
 
     return clip.flip(-1)
-

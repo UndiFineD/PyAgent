@@ -14,7 +14,6 @@ from javax.swing import JCheckBoxMenuItem
 
 class BurpExtender(IBurpExtender, IContextMenuFactory, IHttpListener):
     def registerExtenderCallbacks(self, callbacks):
-
         self._callbacks = callbacks
 
         self._helpers = callbacks.getHelpers()
@@ -28,7 +27,6 @@ class BurpExtender(IBurpExtender, IContextMenuFactory, IHttpListener):
         self.enabled = False
 
     def createMenuItems(self, invocation):
-
         self.context = invocation
 
         menu = ArrayList()
@@ -50,19 +48,16 @@ class BurpExtender(IBurpExtender, IContextMenuFactory, IHttpListener):
         return menu
 
     def toggleEnabled(self, event):
-
         self.enabled = True
 
         self._callbacks.printOutput("200 OK Modifier enabled")
 
     def toggleDisabled(self, event):
-
         self.enabled = False
 
         self._callbacks.printOutput("200 OK Modifier disabled")
 
     def processHttpMessage(self, toolFlag, messageIsRequest, messageInfo):
-
         if self.enabled and not messageIsRequest:
             responseBytes = messageInfo.getResponse()
 

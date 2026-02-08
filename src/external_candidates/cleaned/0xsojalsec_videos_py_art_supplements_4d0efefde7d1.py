@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class AmbientPermutations(Scene):
     def construct(self):
-
         # Test
 
         text = Text("abcde", font_size=72)
@@ -55,7 +54,6 @@ class AmbientPermutations(Scene):
 
 class WriteName(InteractiveScene):
     def construct(self):
-
         self.play(Write(Text("Évariste Galois", font_size=90).to_corner(UL), run_time=3))
 
         self.wait()
@@ -63,7 +61,6 @@ class WriteName(InteractiveScene):
 
 class TimelineTransition(InteractiveScene):
     def construct(self):
-
         pass
 
 
@@ -71,7 +68,6 @@ class OutpaintTransition(InteractiveScene):
     image_path = "/Users/grant/3Blue1Brown Dropbox/3Blue1Brown/videos/2022/galois/artwork/chapter 1/wounded-by-pond/transition-to-hospital-2.png"
 
     def construct(self):
-
         image = ImageMobject(self.image_path)
 
         image.set_height(FRAME_HEIGHT)
@@ -95,7 +91,6 @@ class NightSkyOutpaintingTransition(InteractiveScene):
     image_path = "/Users/grant/3Blue1Brown Dropbox/3Blue1Brown/videos/2022/galois/artwork/chapter 1/transition-to-night-sky/mural.png"
 
     def construct(self):
-
         # Add image
 
         image = ImageMobject(self.image_path)
@@ -123,7 +118,6 @@ class NightSkyOutpaintingTransition(InteractiveScene):
 
 class LastWordsQuote(InteractiveScene):
     def construct(self):
-
         # French quote
 
         fr_quote = Text(
@@ -169,7 +163,6 @@ class LastWordsQuote(InteractiveScene):
 
 class InfamousCoquette(InteractiveScene):
     def construct(self):
-
         # Write quote
 
         quote = OldTexText(
@@ -191,7 +184,6 @@ class InfamousCoquette(InteractiveScene):
 
 class NightBeforeQuote(InteractiveScene):
     def construct(self):
-
         # Write
 
         quote = OldTexText(
@@ -222,7 +214,6 @@ class NightBeforeQuote(InteractiveScene):
 
 class CauchyFourierPoisson(InteractiveScene):
     def construct(self):
-
         # Test
 
         self.add(FullScreenRectangle(fill_color="#211F22", fill_opacity=1))

@@ -13,7 +13,6 @@ from slack_sdk.webhook import WebhookClient
 class Notifications:
     @staticmethod
     def send_slack_notifications(blocks, webhook):
-
         if webhook == "None":
             raise Exception("Slack URL not provided")
 
@@ -28,7 +27,6 @@ class Notifications:
 class NotificationsUtils:
     @staticmethod
     def get_assets_to_notify_list(teamName):
-
         asset_list = []
 
         asset_tag_list = {}
@@ -48,7 +46,6 @@ class NotificationsUtils:
 
     @staticmethod
     def get_findings_to_notify_list(teamName):
-
         findings_list = []
 
         finding_tag_list = []

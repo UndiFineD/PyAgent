@@ -29,13 +29,11 @@
 
 #    limitations under the License.
 
-
 import os
 
 import shutil
 
 import warnings
-
 
 import torch
 
@@ -69,7 +67,6 @@ def load_pretrained_model(
     overwrite_config=None,
     **kwargs,
 ):
-
     kwargs["device_map"] = device_map
 
     if load_8bit:
@@ -200,7 +197,6 @@ def load_pretrained_model(
                 from huggingface_hub import hf_hub_download
 
                 def load_from_hf(repo_id, filename, subfolder=None):
-
                     cache_file = hf_hub_download(repo_id=repo_id, filename=filename, subfolder=subfolder)
 
                     return torch.load(cache_file, map_location="cpu")

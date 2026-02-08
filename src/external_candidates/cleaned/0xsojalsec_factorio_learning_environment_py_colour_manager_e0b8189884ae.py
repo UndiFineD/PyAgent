@@ -22,7 +22,6 @@ class ColourManager:
     """Manages colors for Factorio entities based on their categories and status"""
 
     def __init__(self, config: RenderConfig, categorizer: EntityCategoriser):
-
         self.config = config
 
         self.categorizer = categorizer

@@ -57,10 +57,8 @@ class GradClipAlgorithmType(LightningEnum):
 
     @staticmethod
     def supported_type(val: str) -> bool:
-
         return any(x.value == val for x in GradClipAlgorithmType)
 
     @staticmethod
     def supported_types() -> list[str]:
-
         return [x.value for x in GradClipAlgorithmType]

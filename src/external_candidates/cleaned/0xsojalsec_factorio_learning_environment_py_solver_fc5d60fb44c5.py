@@ -7,7 +7,6 @@ import json
 
 import re
 
-
 from data.vqa.templates import Templates
 
 from inspect_ai.model import ChatMessageUser
@@ -19,8 +18,6 @@ from inspect_ai.solver import Generate, Solver, TaskState, solver
 def generate_blueprint_title_and_purpose(num_variations: int = 3) -> Solver:
     """Generate multiple title and purpose descriptions for blueprints in a single LLM call.
 
-
-
     Args:
 
         num_variations: Number of different title/purpose pairs to generate (default: 3)
@@ -28,7 +25,6 @@ def generate_blueprint_title_and_purpose(num_variations: int = 3) -> Solver:
     """
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         blueprint = state.metadata.get("blueprint", {})
 
         # Generate prompt requesting multiple variations at once
@@ -40,21 +36,15 @@ def generate_blueprint_title_and_purpose(num_variations: int = 3) -> Solver:
 
         prompt = f"""Analyze this Factorio blueprint and generate {num_variations} different metadata variations.
 
-
-
 Blueprint:
 
 {json.dumps(blueprint_copy, indent=2)}
-
-
 
 Generate {num_variations} different variations, each with:
 
 1. A concise title (max 10 words) that describes what this blueprint builds
 
 2. A purpose description (1-2 sentences) explaining what it does and how it's used
-
-
 
 Important guidelines:
 
@@ -68,11 +58,7 @@ Important guidelines:
 
 {"- Additional variations: Consider alternative use cases, specialized applications, or unique benefits" if num_variations > 3 else ""}
 
-
-
 Make each title and purpose distinct while still being accurate.
-
-
 
 Format your response as JSON:
 
@@ -163,7 +149,6 @@ def contrastive_matching(num_options: int = 4) -> Solver:
     """Generate contrastive matching questions for blueprint identification."""
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         state.metadata.get("blueprint", {})
 
         # Generate title and purpose for current blueprint if not already done

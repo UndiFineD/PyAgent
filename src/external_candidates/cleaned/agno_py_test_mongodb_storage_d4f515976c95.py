@@ -13,80 +13,55 @@ from agno.storage.session.agent import AgentSession
 
 from agno.storage.session.workflow import WorkflowSession
 
+
 @pytest.fixture
-
 def mock_mongo_client():
-
     """Create a mock MongoDB client."""
 
     with patch("agno.storage.mongodb.MongoClient") as mock_client:
-
         mock_collection = MagicMock()
 
-        mock_client.return_value.__getitem__.return_value.__getitem__.return_value = (
-
-            mock_collection
-
-        )
+        mock_client.return_value.__getitem__.return_value.__getitem__.return_value = mock_collection
 
         yield mock_client, mock_collection
 
+
 @pytest.fixture
-
 def agent_storage(mock_mongo_client):
-
     """Create a MongoDbStorage instance for agent mode with mocked components."""
 
     mock_client, mock_collection = mock_mongo_client
 
-    storage = MongoDbStorage(
-
-        collection_name="agent_sessions", db_name="test_db", mode="agent"
-
-    )
+    storage = MongoDbStorage(collection_name="agent_sessions", db_name="test_db", mode="agent")
 
     return storage, mock_collection
 
+
 @pytest.fixture
-
 def workflow_storage(mock_mongo_client):
-
     """Create a MongoDbStorage instance for workflow mode with mocked components."""
 
     mock_client, mock_collection = mock_mongo_client
 
-    storage = MongoDbStorage(
-
-        collection_name="workflow_sessions", db_name="test_db", mode="workflow"
-
-    )
+    storage = MongoDbStorage(collection_name="workflow_sessions", db_name="test_db", mode="workflow")
 
     return storage, mock_collection
 
-def test_initialization():
 
+def test_initialization():
     """Test MongoDbStorage initialization with different parameters."""
 
     # Test with db_url
 
     with patch("agno.storage.mongodb.MongoClient") as mock_client:
-
         mock_collection = MagicMock()
 
-        mock_client.return_value.__getitem__.return_value.__getitem__.return_value = (
-
-            mock_collection
-
-        )
+        mock_client.return_value.__getitem__.return_value.__getitem__.return_value = mock_collection
 
         storage = MongoDbStorage(
-
             collection_name="test_collection",
-
             db_url="mongodb://localhost:27017",
-
             db_name="test_db",
-
         )
 
         mock_client.assert_called_once_with("mongodb://localhost:27017")
@@ -100,25 +75,16 @@ def test_initialization():
     # Test with existing client
 
     with patch("agno.storage.mongodb.MongoClient") as mock_client:
-
         mock_existing_client = MagicMock()
 
         mock_collection = MagicMock()
 
-        mock_existing_client.__getitem__.return_value.__getitem__.return_value = (
-
-            mock_collection
-
-        )
+        mock_existing_client.__getitem__.return_value.__getitem__.return_value = mock_collection
 
         storage = MongoDbStorage(
-
             collection_name="test_collection",
-
             db_name="test_db",
-
             client=mock_existing_client,
-
         )
 
         mock_client.assert_not_called()  # Should not create a new client
@@ -130,14 +96,9 @@ def test_initialization():
     # Test with no parameters
 
     with patch("agno.storage.mongodb.MongoClient") as mock_client:
-
         mock_collection = MagicMock()
 
-        mock_client.return_value.__getitem__.return_value.__getitem__.return_value = (
-
-            mock_collection
-
-        )
+        mock_client.return_value.__getitem__.return_value.__getitem__.return_value = mock_collection
 
         storage = MongoDbStorage(collection_name="test_collection")
 
@@ -147,8 +108,8 @@ def test_initialization():
 
         assert storage.db_name == "agno"  # Default value
 
-def test_create_indexes(agent_storage):
 
+def test_create_indexes(agent_storage):
     """Test creating indexes."""
 
     storage, mock_collection = agent_storage
@@ -181,8 +142,8 @@ def test_create_indexes(agent_storage):
 
     mock_collection.create_index.assert_any_call("workflow_id")
 
-def test_agent_storage_crud(agent_storage):
 
+def test_agent_storage_crud(agent_storage):
     """Test CRUD operations for agent storage."""
 
     storage, mock_collection = agent_storage
@@ -190,21 +151,13 @@ def test_agent_storage_crud(agent_storage):
     # Create a test session
 
     session = AgentSession(
-
         session_id="test-session",
-
         agent_id="test-agent",
-
         user_id="test-user",
-
         memory={"key": "value"},
-
         agent_data={"name": "Test Agent"},
-
         session_data={"state": "active"},
-
         extra_data={"custom": "data"},
-
     )
 
     # Mock find_one for read
@@ -249,8 +202,8 @@ def test_agent_storage_crud(agent_storage):
 
     storage.delete_session.assert_called_once_with("test-session")
 
-def test_workflow_storage_crud(workflow_storage):
 
+def test_workflow_storage_crud(workflow_storage):
     """Test CRUD operations for workflow storage."""
 
     storage, mock_collection = workflow_storage
@@ -258,21 +211,13 @@ def test_workflow_storage_crud(workflow_storage):
     # Create a test session
 
     session = WorkflowSession(
-
         session_id="test-session",
-
         workflow_id="test-workflow",
-
         user_id="test-user",
-
         memory={"key": "value"},
-
         workflow_data={"name": "Test Workflow"},
-
         session_data={"state": "active"},
-
         extra_data={"custom": "data"},
-
     )
 
     # Mock find_one for read
@@ -317,8 +262,8 @@ def test_workflow_storage_crud(workflow_storage):
 
     storage.delete_session.assert_called_once_with("test-session")
 
-def test_get_all_sessions(agent_storage):
 
+def test_get_all_sessions(agent_storage):
     """Test retrieving all sessions."""
 
     storage, mock_collection = agent_storage
@@ -326,19 +271,12 @@ def test_get_all_sessions(agent_storage):
     # Create mock sessions
 
     sessions = [
-
         AgentSession(
-
             session_id=f"session-{i}",
-
             agent_id=f"agent-{i % 2 + 1}",
-
             user_id=f"user-{i % 2 + 1}",
-
         )
-
         for i in range(4)
-
     ]
 
     # Mock the get_all_sessions method directly
@@ -381,8 +319,8 @@ def test_get_all_sessions(agent_storage):
 
     storage.get_all_sessions = original_get_all_sessions
 
-def test_get_all_session_ids(agent_storage):
 
+def test_get_all_session_ids(agent_storage):
     """Test retrieving all session IDs."""
 
     storage, mock_collection = agent_storage
@@ -392,13 +330,9 @@ def test_get_all_session_ids(agent_storage):
     mock_cursor = MagicMock()
 
     mock_cursor.sort.return_value = [
-
         {"session_id": "session-1"},
-
         {"session_id": "session-2"},
-
         {"session_id": "session-3"},
-
     ]
 
     mock_collection.find.return_value = mock_cursor
@@ -416,11 +350,8 @@ def test_get_all_session_ids(agent_storage):
     mock_collection.find.reset_mock()
 
     mock_cursor.sort.return_value = [
-
         {"session_id": "session-1"},
-
         {"session_id": "session-2"},
-
     ]
 
     mock_collection.find.return_value = mock_cursor
@@ -429,11 +360,7 @@ def test_get_all_session_ids(agent_storage):
 
     assert result == ["session-1", "session-2"]
 
-    mock_collection.find.assert_called_once_with(
-
-        {"user_id": "test-user"}, {"session_id": 1}
-
-    )
+    mock_collection.find.assert_called_once_with({"user_id": "test-user"}, {"session_id": 1})
 
     # Test with entity_id filter (agent_id in agent mode)
 
@@ -447,14 +374,10 @@ def test_get_all_session_ids(agent_storage):
 
     assert result == ["session-3"]
 
-    mock_collection.find.assert_called_once_with(
+    mock_collection.find.assert_called_once_with({"agent_id": "test-agent"}, {"session_id": 1})
 
-        {"agent_id": "test-agent"}, {"session_id": 1}
-
-    )
 
 def test_drop_collection(agent_storage):
-
     """Test dropping a collection."""
 
     storage, mock_collection = agent_storage
@@ -471,19 +394,14 @@ def test_drop_collection(agent_storage):
 
     mock_collection.drop.assert_called_once()
 
-def test_mode_switching():
 
+def test_mode_switching():
     """Test switching between agent and workflow modes."""
 
     with patch("agno.storage.mongodb.MongoClient") as mock_client:
-
         mock_collection = MagicMock()
 
-        mock_client.return_value.__getitem__.return_value.__getitem__.return_value = (
-
-            mock_collection
-
-        )
+        mock_client.return_value.__getitem__.return_value.__getitem__.return_value = mock_collection
 
         # Create storage in agent mode
 
@@ -497,8 +415,8 @@ def test_mode_switching():
 
         assert storage.mode == "workflow"
 
-def test_deepcopy(agent_storage):
 
+def test_deepcopy(agent_storage):
     """Test deep copying the storage instance."""
 
     from copy import deepcopy
@@ -524,4 +442,3 @@ def test_deepcopy(agent_storage):
     assert copied_storage.db is storage.db
 
     assert copied_storage.collection is storage.collection
-

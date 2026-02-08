@@ -7,7 +7,6 @@ from statistics import mean
 
 from typing import List, Union
 
-
 from fle.env import (
     BeltGroup,
     Direction,
@@ -54,7 +53,6 @@ def _deduplicate_entities(entities: List[Entity]) -> List[Entity]:
 
 
 def _construct_group(id: int, entities: List[Entity], prototype: Prototype, position: Position) -> EntityGroup:
-
     if prototype == Prototype.TransportBelt or isinstance(entities[0], TransportBelt):
         # Always return BeltGroup for consistent return types, even for single belts
 
@@ -157,7 +155,6 @@ def consolidate_underground_belts(belt_groups):
     """
 
     def process_group(group):
-
         # Map to track underground belt pairs by their id
 
         underground_pairs = {}
@@ -318,7 +315,6 @@ def consolidate_underground_belts(belt_groups):
 
 
 def construct_belt_groups(belts: List[Union[TransportBelt, UndergroundBelt]], prototype):
-
     belts_by_position = {}
 
     source_belts = []
@@ -356,7 +352,6 @@ def construct_belt_groups(belts: List[Union[TransportBelt, UndergroundBelt]], pr
             terminal_belts.append(belt)
 
     def find_matching_exit(entrance_pos, direction):
-
         entrance_x, entrance_y = entrance_pos
 
         closest_exit = None
@@ -417,7 +412,6 @@ def construct_belt_groups(belts: List[Union[TransportBelt, UndergroundBelt]], pr
         return closest_exit
 
     def get_next_belt_position(belt):
-
         pos = (belt.position.x, belt.position.y)
 
         # If this is an underground entrance, find its matching exit
@@ -435,7 +429,6 @@ def construct_belt_groups(belts: List[Union[TransportBelt, UndergroundBelt]], pr
         return (output.x, output.y)
 
     def get_prev_belt_position(belt):
-
         pos = (belt.position.x, belt.position.y)
 
         # If this is an underground exit, find its matching entrance
@@ -452,7 +445,6 @@ def construct_belt_groups(belts: List[Union[TransportBelt, UndergroundBelt]], pr
         return (input.x, input.y)
 
     def walk_forward(belt, group):
-
         pos = (belt.position.x, belt.position.y)
 
         if pos in visited:
@@ -482,7 +474,6 @@ def construct_belt_groups(belts: List[Union[TransportBelt, UndergroundBelt]], pr
         return group
 
     def walk_backward(belt, group):
-
         pos = (belt.position.x, belt.position.y)
 
         if pos in visited:
@@ -785,13 +776,9 @@ def agglomerate_groupable_entities(
 
     Group contiguous transport belts into BeltGroup objects.
 
-
-
     Args:
 
         connected_entities: List of TransportBelt / Pipe objects to group
-
-
 
     Returns:
 

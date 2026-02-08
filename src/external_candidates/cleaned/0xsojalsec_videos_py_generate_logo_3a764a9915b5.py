@@ -11,7 +11,6 @@ from manim_imports_ext import *
 
 
 def drag_pixels(frames):
-
     curr = frames[0]
 
     new_frames = []
@@ -41,7 +40,6 @@ class LogoGeneration(Scene):
     }
 
     def construct(self):
-
         digest_config(self, {})
 
         ## Usually shouldn't need this...

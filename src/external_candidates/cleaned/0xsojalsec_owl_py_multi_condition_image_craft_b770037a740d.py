@@ -46,7 +46,6 @@ class MultiConditionImageCraftPromptTemplateDict(TextPromptDict):
         draw the images and explain what you are thinking about.""")
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-
         super().__init__(*args, **kwargs)
 
         self.update(

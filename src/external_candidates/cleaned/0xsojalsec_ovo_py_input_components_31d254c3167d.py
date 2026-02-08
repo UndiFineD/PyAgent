@@ -70,7 +70,6 @@ def initialize_workflow(page_key: str, workflow_name: str, include_subclasses: b
 
 
 def pdb_input_component(old_pdb_code: str | None) -> tuple[str, bytes] | None:
-
     st.write("Enter PDB code, UniProt ID or upload your own structure file")
 
     with st.container(horizontal=True, vertical_alignment="bottom"):

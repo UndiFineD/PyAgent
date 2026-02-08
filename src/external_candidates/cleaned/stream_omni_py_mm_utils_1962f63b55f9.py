@@ -13,7 +13,6 @@ import re
 
 from io import BytesIO
 
-
 import torch
 
 from llava.constants import IMAGE_TOKEN_INDEX
@@ -24,7 +23,6 @@ from transformers import StoppingCriteria
 
 
 def resize_and_center_crop(image, shortest_edge_length):
-
     # Calculate new dimensions and resize
 
     aspect_ratio = float(image.width) / float(image.height)
@@ -57,7 +55,6 @@ def resize_and_center_crop(image, shortest_edge_length):
 
 
 def auto_pad_images(image, grid_params):
-
     assert isinstance(image, Image.Image), "Input should be a Pillow Image"
 
     assert len(grid_params) > 0, "Grid parameters should not be empty"
@@ -103,7 +100,6 @@ def auto_pad_images(image, grid_params):
 
 
 def extract_patches(image, patch_size, overlap_ratio):
-
     assert isinstance(image, Image.Image), "Input should be a Pillow Image"
 
     assert patch_size > 0, "Patch size should be greater than 0"
@@ -134,7 +130,6 @@ def extract_patches(image, patch_size, overlap_ratio):
 
 
 def process_highres_image_crop_split(image, data_args, processor=None):
-
     crop_resolution = data_args.image_crop_resolution
 
     split_resolution = data_args.image_split_resolution
@@ -154,7 +149,6 @@ def process_highres_image_crop_split(image, data_args, processor=None):
 
 
 def process_highres_image(image, processor, grid_pinpoints):
-
     grid_params = [int(x) for x in grid_pinpoints.split(",")]
 
     width_height = max(image.size)
@@ -195,15 +189,11 @@ def select_best_resolution(original_size, possible_resolutions):
 
     Selects the best resolution from a list of possible resolutions based on the original size.
 
-
-
     Args:
 
         original_size (tuple): The original size of the image in the format (width, height).
 
         possible_resolutions (list): A list of possible resolutions in the format [(width1, height1), (width2, height2), ...].
-
-
 
     Returns:
 
@@ -249,15 +239,11 @@ def resize_and_pad_image(image, target_resolution):
 
     Resize and pad an image to a target resolution while maintaining aspect ratio.
 
-
-
     Args:
 
         image (PIL.Image.Image): The input image.
 
         target_resolution (tuple): The target resolution (width, height) of the image.
-
-
 
     Returns:
 
@@ -311,15 +297,11 @@ def divide_to_patches(image, patch_size):
 
     Divides an image into patches of a specified size.
 
-
-
     Args:
 
         image (PIL.Image.Image): The input image.
 
         patch_size (int): The size of each patch.
-
-
 
     Returns:
 
@@ -347,8 +329,6 @@ def get_anyres_image_grid_shape(image_size, grid_pinpoints, patch_size):
 
     Calculate the shape of the image patch grid after the preprocessing for images of any resolution.
 
-
-
     Args:
 
         image_size (tuple): The size of the input image in the format (width, height).
@@ -356,8 +336,6 @@ def get_anyres_image_grid_shape(image_size, grid_pinpoints, patch_size):
         grid_pinpoints (str): A string representation of a list of possible resolutions.
 
         patch_size (int): The size of each image patch.
-
-
 
     Returns:
 
@@ -408,8 +386,6 @@ def process_anyres_image(image, processor, grid_pinpoints):
 
     Process an image with variable resolutions.
 
-
-
     Args:
 
         image (PIL.Image.Image): The input image to be processed.
@@ -417,8 +393,6 @@ def process_anyres_image(image, processor, grid_pinpoints):
         processor: The image processor object.
 
         grid_pinpoints (str): A string representation of a list of possible resolutions.
-
-
 
     Returns:
 
@@ -501,12 +475,10 @@ def process_anyres_image(image, processor, grid_pinpoints):
 
 
 def load_image_from_base64(image):
-
     return Image.open(BytesIO(base64.b64decode(image)))
 
 
 def expand2square(pil_img, background_color):
-
     width, height = pil_img.size
 
     if width == height:
@@ -528,7 +500,6 @@ def expand2square(pil_img, background_color):
 
 
 def process_images(images, image_processor, model_cfg):
-
     image_aspect_ratio = getattr(model_cfg, "image_aspect_ratio", None)
 
     new_images = []
@@ -569,11 +540,9 @@ def process_images(images, image_processor, model_cfg):
 
 
 def tokenizer_image_token(prompt, tokenizer, image_token_index=IMAGE_TOKEN_INDEX, return_tensors=None):
-
     prompt_chunks = [tokenizer(chunk).input_ids for chunk in prompt.split("<image>")]
 
     def insert_separator(X, sep):
-
         return [ele for sublist in zip(X, [sep] * len(X)) for ele in sublist][:-1]
 
     input_ids = []
@@ -598,7 +567,6 @@ def tokenizer_image_token(prompt, tokenizer, image_token_index=IMAGE_TOKEN_INDEX
 
 
 def get_model_name_from_path(model_path):
-
     model_path = model_path.strip("/")
 
     model_paths = model_path.split("/")
@@ -612,7 +580,6 @@ def get_model_name_from_path(model_path):
 
 class KeywordsStoppingCriteria(StoppingCriteria):
     def __init__(self, keywords, tokenizer, input_ids):
-
         self.keywords = keywords
 
         self.keyword_ids = []
@@ -630,7 +597,6 @@ class KeywordsStoppingCriteria(StoppingCriteria):
         self.start_len = input_ids.shape[1]
 
     def __call__(self, output_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs) -> bool:
-
         assert output_ids.shape[0] == 1, "Only support batch size 1 (yet)"  # TODO
 
         offset = min(output_ids.shape[1] - self.start_len, 3)

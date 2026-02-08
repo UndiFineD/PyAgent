@@ -4,7 +4,6 @@
 
 
 def main():
-
     print("Hello from content-gen-backend!")
 
 

@@ -7,8 +7,8 @@
 
 # NOTE: extracted with static-only rules; review before use
 
-class AfterQueryError(Exception):
 
+class AfterQueryError(Exception):
     """Exception raised for errors in the after query postprocessing.
 
     Attributes:
@@ -18,7 +18,6 @@ class AfterQueryError(Exception):
     """
 
     def __init__(self, message, error):
-
         """Initializes the AfterQueryError class.
 
         Args:
@@ -36,4 +35,3 @@ class AfterQueryError(Exception):
         # Set the error message
 
         self.error = error
-

@@ -69,7 +69,6 @@ class ResponseWordsTerminator(ResponseTerminator):
         case_sensitive: bool = False,
         mode: TerminationMode = TerminationMode.ANY,
     ):
-
         super().__init__()
 
         self.words_dict = words_dict
@@ -83,7 +82,6 @@ class ResponseWordsTerminator(ResponseTerminator):
         self._validate()
 
     def _validate(self):
-
         if len(self.words_dict) == 0:
             raise ValueError("`words_dict` cannot be empty")
 

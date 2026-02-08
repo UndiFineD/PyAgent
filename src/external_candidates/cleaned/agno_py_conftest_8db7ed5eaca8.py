@@ -9,10 +9,9 @@ from unittest.mock import MagicMock
 
 import pytest
 
+
 @pytest.fixture(scope="session")
-
 def mock_embedder():
-
     """Create a mock embedder with appropriate return values."""
 
     mock = MagicMock()
@@ -36,4 +35,3 @@ def mock_embedder():
     mock.get_embedding_and_usage.return_value = (mock_embedding, mock_usage)
 
     return mock
-

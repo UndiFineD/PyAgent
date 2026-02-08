@@ -34,7 +34,6 @@ class PiCreatureCoin(VMobject):
     }
 
     def init_points(self):
-
         outer_rect = Rectangle(
             width=self.diameter,
             height=self.thickness,
@@ -69,7 +68,6 @@ class CoinFlippingPiCreature(PiCreature):
     CONFIG = {"flip_height": 3}
 
     def __init__(self, mode="coin_flip_1", **kwargs):
-
         coin = PiCreatureCoin()
 
         PiCreature.__init__(self, mode=mode, **kwargs)
@@ -89,7 +87,6 @@ class CoinFlippingPiCreature(PiCreature):
         coin.shift(0.2 * DOWN)
 
     def flip_coin_up(self):
-
         self.change("coin_flip_2")
 
 
@@ -97,7 +94,6 @@ class FlipUpAndDown(Animation):
     CONFIG = {"vector": UP, "height": 3, "nb_turns": 1}
 
     def update(self, t):
-
         self.mobject.shift(self.height * 4 * t * (1 - t) * self.vector)
 
         self.mobject.rotate(t * self.nb_turns * TAU)
@@ -110,7 +106,6 @@ class FlipCoin(AnimationGroup):
     }
 
     def __init__(self, pi_creature, **kwargs):
-
         digest_config(self, kwargs)
 
         pi_creature_motion = ApplyMethod(pi_creature.flip_coin_up, rate_func=self.pi_rate_func, **kwargs)
@@ -132,7 +127,6 @@ class FlipCoin(AnimationGroup):
 
 class CoinFlippingPiCreatureScene(Scene):
     def construct(self):
-
         randy = CoinFlippingPiCreature(color=MAROON_E)
 
         self.add(randy)

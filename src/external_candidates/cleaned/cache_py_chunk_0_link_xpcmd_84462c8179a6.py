@@ -7,8 +7,8 @@
 
 # NOTE: extracted with static-only rules; review before use
 
-class NXCModule:
 
+class NXCModule:
     """
 
     Run xp_cmdshell commands on a linked SQL server
@@ -28,13 +28,11 @@ class NXCModule:
     multiple_hosts = False
 
     def __init__(self):
-
         self.linked_server = None
 
         self.command = None
 
     def options(self, context, module_options):
-
         """
 
         Defines the options for running xp_cmdshell commands on a linked server.
@@ -50,13 +48,11 @@ class NXCModule:
         self.command = module_options.get("CMD")
 
     def on_login(self, context, connection):
-
         self.context = context
 
         self.mssql_conn = connection.conn
 
         if not self.linked_server or not self.command:
-
             self.context.log.fail("Please provide both LINKED_SERVER and CMD options.")
 
             return
@@ -64,7 +60,6 @@ class NXCModule:
         self.run_xp_cmdshell(self.command)
 
     def run_xp_cmdshell(self, cmd):
-
         """Run the specified command via xp_cmdshell on the linked server."""
 
         query = f"EXEC ('xp_cmdshell ''{cmd}''') AT [{self.linked_server}]"
@@ -76,8 +71,6 @@ class NXCModule:
         self.context.log.success(f"Command output:\n{result}")
 
     def query_and_get_output(self, query):
-
         """Executes a query and returns the output."""
 
         return self.mssql_conn.sql_query(query)
-

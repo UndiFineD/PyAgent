@@ -16,7 +16,6 @@ from fle.env.tools.agent.connect_entities.client import ConnectEntities
 
 class GetConnectionAmount(Tool):
     def __init__(self, connection, game_state):
-
         self.game_state = game_state
 
         super().__init__(connection, game_state)

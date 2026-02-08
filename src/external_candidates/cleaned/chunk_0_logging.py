@@ -20,13 +20,11 @@ class ProxyLogger(object):
     """
 
     def __init__(self, logger):
-
         self._messages = []
 
         self.logger = logger
 
     def get_messages(self):
-
         return self._messages
 
     def flush(self):
@@ -39,33 +37,27 @@ class ProxyLogger(object):
         return messages
 
     def warning(self, msg):
-
         self._messages.append(("WARNING", msg))
 
         self.logger.warning(msg)
 
     def info(self, msg):
-
         self._messages.append(("INFO", msg))
 
         self.logger.info(msg)
 
     def error(self, msg):
-
         self._messages.append(("ERROR", msg))
 
         self.logger.error(msg)
 
     def debug(self, msg):
-
         self._messages.append(("DEBUG", msg))
 
         self.logger.debug(msg)
 
     def has_errors(self):
-
         return any(et == "ERROR" for et, _ in self._messages)
 
     def has_warnings(self):
-
         return any(et == "WARNING" for et, _ in self._messages)

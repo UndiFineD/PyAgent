@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class LastFewMonths(Scene):
     def construct(self):
-
         words = OldTexText("Last ", "few\\\\", "months:")
 
         words.set_height(4)
@@ -39,7 +38,6 @@ class LastFewMonths(Scene):
 
 class UnemploymentTitle(Scene):
     def construct(self):
-
         words = OldTexText("Unemployment claims\\\\per week in the US")[0]
 
         words.set_width(FRAME_WIDTH - 1)
@@ -67,7 +65,6 @@ class UnemploymentTitle(Scene):
 
 class ExplainTracing(Scene):
     def construct(self):
-
         # Words
 
         words = VGroup(
@@ -291,7 +288,6 @@ class ExplainTracing(Scene):
 
 class ContactTracingMisnomer(Scene):
     def construct(self):
-
         # Word play
 
         words = OldTexText("Contact ", "Tracing")
@@ -342,7 +338,6 @@ class ContactTracingMisnomer(Scene):
 
 class ContactTracingWords(Scene):
     def construct(self):
-
         words = OldTexText("Contact\\\\", "Tracing")
 
         words.set_height(4)
@@ -372,7 +367,6 @@ class ContactTracingWords(Scene):
 
 class WanderingDotsWithLines(Scene):
     def construct(self):
-
         sim = SIRSimulation(
             city_population=20,
             person_type=DotPerson,
@@ -400,7 +394,6 @@ class WanderingDotsWithLines(Scene):
         max_dist = 1.25
 
         def update_lines(lines):
-
             lines.remove(*lines.submobjects)
 
             for p1 in sim.people:
@@ -437,7 +430,6 @@ class WanderingDotsWithLines(Scene):
 
 class WhatAboutPeopleWithoutPhones(TeacherStudentsScene):
     def construct(self):
-
         self.student_says(
             "What about people\\\\without phones?",
             target_mode="sassy",
@@ -469,7 +461,6 @@ class WhatAboutPeopleWithoutPhones(TeacherStudentsScene):
 
 class PiGesture1(Scene):
     def construct(self):
-
         randy = Randolph(mode="raise_right_hand", height=2)
 
         bubble = randy.get_bubble(
@@ -495,7 +486,6 @@ class PiGesture1(Scene):
 
 class PiGesture2(Scene):
     def construct(self):
-
         randy = Randolph(mode="raise_left_hand", height=2)
 
         randy.look(UL)
@@ -528,7 +518,6 @@ class PiGesture2(Scene):
 
 class PiGesture3(Scene):
     def construct(self):
-
         randy = Randolph(mode="hooray", height=2)
 
         randy.flip()
@@ -557,7 +546,6 @@ class PiGesture3(Scene):
 
 class AppleGoogleCoop(Scene):
     def construct(self):
-
         logos = Group(
             self.get_apple_logo(),
             self.get_google_logo(),
@@ -600,7 +588,6 @@ class AppleGoogleCoop(Scene):
         self.wait()
 
     def get_apple_logo(self):
-
         result = SVGMobject("apple_logo")
 
         result.set_color("#b3b3b3")
@@ -608,7 +595,6 @@ class AppleGoogleCoop(Scene):
         return result
 
     def get_google_logo(self):
-
         result = ImageMobject("google_logo_black")
 
         return result
@@ -616,7 +602,6 @@ class AppleGoogleCoop(Scene):
 
 class LocationTracking(Scene):
     def construct(self):
-
         question = OldTexText(
             "Would you like this company to track\\\\",
             "and occasionally sell your location?",
@@ -701,7 +686,6 @@ class LocationTracking(Scene):
 
 class MoreLinks(Scene):
     def construct(self):
-
         words = OldTexText("See more links\\\\in the description.")
 
         words.scale(2)

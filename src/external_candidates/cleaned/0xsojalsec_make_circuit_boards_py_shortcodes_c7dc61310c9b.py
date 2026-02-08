@@ -59,11 +59,9 @@ from mkdocs.structure.pages import Page
 
 
 def on_page_markdown(markdown: str, *, page: Page, config: MkDocsConfig, files: Files):
-
     # Replace callback
 
     def replace(match: Match):
-
         type, args = match.groups()
 
         args = args.strip()
@@ -131,7 +129,6 @@ def on_page_markdown(markdown: str, *, page: Page, config: MkDocsConfig, files: 
 
 
 def flag(args: str, page: Page, files: Files):
-
     type, *_ = args.split(" ", 1)
 
     if type == "experimental":
@@ -156,7 +153,6 @@ def flag(args: str, page: Page, files: Files):
 
 
 def option(type: str):
-
     _, *_, name = re.split(r"[.:]", type)
 
     return f"[`{name}`](#+{type}){{ #+{type} }}\n\n"
@@ -166,7 +162,6 @@ def option(type: str):
 
 
 def setting(type: str):
-
     _, *_, name = re.split(r"[.*]", type)
 
     return f"`{name}` {{ #{type} }}\n\n[{type}]: #{type}\n\n"
@@ -180,7 +175,6 @@ def setting(type: str):
 
 
 def _resolve_path(path: str, page: Page, files: Files):
-
     path, anchor, *_ = f"{path}#".split("#")
 
     path = _resolve(files.get_file_from_path(path), page)
@@ -194,7 +188,6 @@ def _resolve_path(path: str, page: Page, files: Files):
 
 
 def _resolve(file: File, page: Page):
-
     path = posixpath.relpath(file.src_uri, page.file.src_uri)
 
     return posixpath.sep.join(path.split(posixpath.sep)[1:])
@@ -206,7 +199,6 @@ def _resolve(file: File, page: Page):
 
 
 def _badge(icon: str, text: str = "", type: str = ""):
-
     classes = f"mdx-badge mdx-badge--{type}" if type else "mdx-badge"
 
     text = f"{text}{{ data-preview='' }}" if text.endswith(")") else text
@@ -225,7 +217,6 @@ def _badge(icon: str, text: str = "", type: str = ""):
 
 
 def _badge_for_sponsors(page: Page, files: Files):
-
     icon = "material-heart"
 
     href = _resolve_path("insiders/index.md", page, files)
@@ -237,7 +228,6 @@ def _badge_for_sponsors(page: Page, files: Files):
 
 
 def _badge_for_version(text: str, page: Page, files: Files):
-
     spec = text
 
     path = f"changelog/index.md#{spec}"
@@ -258,7 +248,6 @@ def _badge_for_version(text: str, page: Page, files: Files):
 
 
 def _badge_for_version_insiders(text: str, page: Page, files: Files):
-
     spec = text.replace("insiders-", "")
 
     path = f"insiders/changelog/index.md#{spec}"
@@ -279,7 +268,6 @@ def _badge_for_version_insiders(text: str, page: Page, files: Files):
 
 
 def _badge_for_feature(text: str, page: Page, files: Files):
-
     icon = "material-toggle-switch"
 
     href = _resolve_path("conventions.md#feature", page, files)
@@ -291,7 +279,6 @@ def _badge_for_feature(text: str, page: Page, files: Files):
 
 
 def _badge_for_plugin(text: str, page: Page, files: Files):
-
     icon = "material-floppy"
 
     href = _resolve_path("conventions.md#plugin", page, files)
@@ -303,7 +290,6 @@ def _badge_for_plugin(text: str, page: Page, files: Files):
 
 
 def _badge_for_extension(text: str, page: Page, files: Files):
-
     icon = "material-language-markdown"
 
     href = _resolve_path("conventions.md#extension", page, files)
@@ -315,7 +301,6 @@ def _badge_for_extension(text: str, page: Page, files: Files):
 
 
 def _badge_for_utility(text: str, page: Page, files: Files):
-
     icon = "material-package-variant"
 
     href = _resolve_path("conventions.md#utility", page, files)
@@ -327,7 +312,6 @@ def _badge_for_utility(text: str, page: Page, files: Files):
 
 
 def _badge_for_example(text: str, page: Page, files: Files):
-
     return "\n".join(
         [
             _badge_for_example_download(text, page, files),
@@ -340,7 +324,6 @@ def _badge_for_example(text: str, page: Page, files: Files):
 
 
 def _badge_for_example_view(text: str, page: Page, files: Files):
-
     icon = "material-folder-eye"
 
     href = f"https://mkdocs-material.github.io/examples/{text}/"
@@ -352,7 +335,6 @@ def _badge_for_example_view(text: str, page: Page, files: Files):
 
 
 def _badge_for_example_download(text: str, page: Page, files: Files):
-
     icon = "material-folder-download"
 
     href = f"https://mkdocs-material.github.io/examples/{text}.zip"
@@ -368,7 +350,6 @@ def _badge_for_example_download(text: str, page: Page, files: Files):
 
 
 def _badge_for_default(text: str, page: Page, files: Files):
-
     icon = "material-water"
 
     href = _resolve_path("conventions.md#default", page, files)
@@ -380,7 +361,6 @@ def _badge_for_default(text: str, page: Page, files: Files):
 
 
 def _badge_for_default_none(page: Page, files: Files):
-
     icon = "material-water-outline"
 
     href = _resolve_path("conventions.md#default", page, files)
@@ -392,7 +372,6 @@ def _badge_for_default_none(page: Page, files: Files):
 
 
 def _badge_for_default_computed(page: Page, files: Files):
-
     icon = "material-water-check"
 
     href = _resolve_path("conventions.md#default", page, files)
@@ -404,7 +383,6 @@ def _badge_for_default_computed(page: Page, files: Files):
 
 
 def _badge_for_metadata(page: Page, files: Files):
-
     icon = "material-list-box-outline"
 
     href = _resolve_path("conventions.md#metadata", page, files)
@@ -416,7 +394,6 @@ def _badge_for_metadata(page: Page, files: Files):
 
 
 def _badge_for_required(page: Page, files: Files):
-
     icon = "material-alert"
 
     href = _resolve_path("conventions.md#required", page, files)
@@ -428,7 +405,6 @@ def _badge_for_required(page: Page, files: Files):
 
 
 def _badge_for_customization(page: Page, files: Files):
-
     icon = "material-brush-variant"
 
     href = _resolve_path("conventions.md#customization", page, files)
@@ -440,7 +416,6 @@ def _badge_for_customization(page: Page, files: Files):
 
 
 def _badge_for_multiple(page: Page, files: Files):
-
     icon = "material-inbox-multiple"
 
     href = _resolve_path("conventions.md#multiple-instances", page, files)
@@ -452,7 +427,6 @@ def _badge_for_multiple(page: Page, files: Files):
 
 
 def _badge_for_experimental(page: Page, files: Files):
-
     icon = "material-flask-outline"
 
     href = _resolve_path("conventions.md#experimental", page, files)

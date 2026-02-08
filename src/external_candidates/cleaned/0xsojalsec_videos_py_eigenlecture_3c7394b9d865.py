@@ -34,7 +34,6 @@ def get_intensity_colors(values, cmap_name="viridis"):
 
 class TexScratchPad(InteractiveScene):
     def construct(self):
-
         # ODE
 
         tex = Tex(R"""
@@ -373,7 +372,6 @@ def get_vector_field_and_stream_lines(
     line_width=3,
     line_opacity=1.0,
 ):
-
     # Vector field
 
     vector_field = VectorField(
@@ -410,7 +408,6 @@ def get_vector_field_and_stream_lines(
 
 class VectorFieldSolution(InteractiveScene):
     def construct(self):
-
         # Add axes
 
         mat = np.array([[1, 2], [3, 1]])
@@ -428,7 +425,6 @@ class VectorFieldSolution(InteractiveScene):
         axes.add_coordinate_labels(font_size=36)
 
         def func(v):
-
             return 0.5 * np.dot(v, mat.T)
 
         self.add(axes)
@@ -464,7 +460,6 @@ class VectorFieldSolution(InteractiveScene):
 
 class Transformation(InteractiveScene):
     def construct(self):
-
         # Apply matrix
 
         mat = np.array([[1, 2], [3, 1]])
@@ -510,11 +505,9 @@ class Transformation(InteractiveScene):
         self.wait()
 
     def get_plane(self, x_range=(-16, 16), y_range=(-8, 8)):
-
         return NumberPlane(x_range, y_range, faded_line_ratio=1)
 
     def get_updated_vector(self, coords, coord_system, color=YELLOW, thickness=4, **kwargs):
-
         vect = Vector(RIGHT, fill_color=color, thickness=thickness, **kwargs)
 
         vect.add_updater(

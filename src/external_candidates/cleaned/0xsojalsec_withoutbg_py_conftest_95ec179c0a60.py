@@ -218,7 +218,6 @@ class PerformanceTracker:
     """Utility class for tracking performance metrics in tests."""
 
     def __init__(self):
-
         self.metrics = {}
 
     def record_metric(self, name, value, unit="seconds"):

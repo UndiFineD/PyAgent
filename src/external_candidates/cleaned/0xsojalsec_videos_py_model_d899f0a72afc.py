@@ -26,7 +26,6 @@ class ExtractFramesFromFootage(InteractiveScene):
     n_cols = 8
 
     def setup(self):
-
         super().setup()
 
         # Open the video file
@@ -38,13 +37,11 @@ class ExtractFramesFromFootage(InteractiveScene):
         self.video_duration = self.video.get(cv2.CAP_PROP_FRAME_COUNT) / self.video_fps
 
     def tear_down(self):
-
         super().tear_down()
 
         self.video.release()
 
     def construct(self):
-
         video_box = Square()
 
         video_box.set_height(4)
@@ -107,7 +104,6 @@ class ExtractFramesFromFootage(InteractiveScene):
         # Do something to zoom in on example frames
 
     def image_from_timestamp(self, time):
-
         video_name = Path(self.video_file).stem
 
         file_name = Path(self.image_dir, f"{video_name}_{time}.png")

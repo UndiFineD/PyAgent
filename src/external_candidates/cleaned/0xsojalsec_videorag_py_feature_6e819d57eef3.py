@@ -19,7 +19,6 @@ from tqdm import tqdm
 
 
 def encode_video_segments(video_paths, embedder: ImageBindModel):
-
     device = next(embedder.parameters()).device
 
     inputs = {
@@ -36,7 +35,6 @@ def encode_video_segments(video_paths, embedder: ImageBindModel):
 
 
 def encode_string_query(query: str, embedder: ImageBindModel):
-
     device = next(embedder.parameters()).device
 
     inputs = {

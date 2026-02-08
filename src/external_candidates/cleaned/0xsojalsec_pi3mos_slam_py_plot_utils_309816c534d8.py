@@ -19,7 +19,6 @@ from plyfile import PlyData, PlyElement
 
 
 def plot_trajectory(pred_traj, gt_traj=None, title="", filename="", align=True, correct_scale=True):
-
     assert isinstance(pred_traj, PoseTrajectory3D)
 
     if gt_traj is not None:
@@ -108,7 +107,6 @@ def save_output_for_COLMAP(
 
 
 def save_ply(name: str, points: np.ndarray, colors: np.ndarray):
-
     points_ply = np.array(
         [(x, y, z, r, g, b) for (x, y, z), (r, g, b) in zip(points, colors)],
         dtype=[

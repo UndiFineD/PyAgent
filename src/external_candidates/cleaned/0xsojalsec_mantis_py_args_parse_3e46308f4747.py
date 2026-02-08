@@ -16,14 +16,12 @@ from mantis.models.args_model import ArgsModel
 
 class CustomFormatter(argparse.HelpFormatter):
     def __init__(self, prog):
-
         super().__init__(prog, width=200, max_help_position=70)
 
 
 class ArgsParse:
     @staticmethod
     def msg(name=None):
-
         return """
 
         \033[1;34mONBOARD: (First time scan, Run this !!)\033[0m
@@ -42,7 +40,6 @@ class ArgsParse:
 
     @staticmethod
     def onboard_msg(name=None):
-
         return """
 
         \033[1;34mONBOARD: (First time scan, Run this !!)\033[0m
@@ -55,7 +52,6 @@ class ArgsParse:
 
     @staticmethod
     def scan_msg(name=None):
-
         return """
 
         \033[1;34mSCAN:\033[0m
@@ -68,7 +64,6 @@ class ArgsParse:
 
     @staticmethod
     def args_parse() -> ArgsModel:
-
         parsed_args = {}
 
         parser = ArgumentParser(

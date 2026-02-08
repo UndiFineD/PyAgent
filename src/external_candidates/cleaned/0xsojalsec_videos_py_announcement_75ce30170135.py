@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class IntersectionAndUnion(InteractiveScene):
     def construct(self):
-
         self.camera.frame.scale(1.1)
 
         # Title
@@ -113,7 +112,6 @@ class IntersectionAndUnion(InteractiveScene):
 
 class WinnerCategories(InteractiveScene):
     def construct(self):
-
         # Text
 
         title = Text("In choosing winners, we will select:", font_size=60)
@@ -163,7 +161,6 @@ class WinnerCategories(InteractiveScene):
 
 class ComplainAboutGithub(TeacherStudentsScene):
     def construct(self):
-
         pis = self.students
 
         morty = self.teacher
@@ -187,7 +184,6 @@ class ComplainAboutGithub(TeacherStudentsScene):
 
 class Triumverate(PiCreatureScene):
     def construct(self):
-
         # Introduce team
 
         morty, prof, artist = self.pi_creatures
@@ -279,7 +275,6 @@ class Triumverate(PiCreatureScene):
         self.wait(2)
 
     def create_pi_creatures(self):
-
         kw = dict(height=2.0)
 
         morty = Mortimer(**kw)
@@ -297,7 +292,6 @@ class Triumverate(PiCreatureScene):
 
 class Winners(InteractiveScene):
     def construct(self):
-
         # Winners
 
         winners = PiCreature(color=YELLOW_D).replicate(5)
@@ -355,7 +349,6 @@ class Winners(InteractiveScene):
 
 class EndingAnimation(InteractiveScene):
     def construct(self):
-
         self.add(FullScreenRectangle())
 
         frame = ScreenRectangle(height=4)
@@ -375,7 +368,6 @@ class EndingAnimation(InteractiveScene):
 
 class Thumbnail(InteractiveScene):
     def construct(self):
-
         # text = Text("More\nMath\nPlease", alignment="LEFT")
 
         # text.set_height(6)

@@ -26,25 +26,18 @@ import os
 import pytest
 
 from src.config.defaults import (
-
     apply_audiosocket_defaults,
-
     apply_barge_in_defaults,
-
     apply_diagnostic_defaults,
-
     apply_externalmedia_defaults,
-
     apply_transport_defaults,
-
 )
 
-class TestApplyTransportDefaults:
 
+class TestApplyTransportDefaults:
     """Tests for apply_transport_defaults function."""
 
     def test_default_values_when_no_env(self):
-
         """Should use hardcoded defaults when no env vars set."""
 
         config_data = {}
@@ -56,7 +49,6 @@ class TestApplyTransportDefaults:
         assert config_data["downstream_mode"] == "file"
 
     def test_env_overrides_audio_transport(self, monkeypatch):
-
         """Should override audio_transport from environment."""
 
         monkeypatch.setenv("AUDIO_TRANSPORT", "audiosocket")
@@ -68,7 +60,6 @@ class TestApplyTransportDefaults:
         assert config_data["audio_transport"] == "audiosocket"
 
     def test_env_overrides_downstream_mode(self, monkeypatch):
-
         """Should override downstream_mode from environment."""
 
         monkeypatch.setenv("DOWNSTREAM_MODE", "stream")
@@ -80,15 +71,11 @@ class TestApplyTransportDefaults:
         assert config_data["downstream_mode"] == "stream"
 
     def test_preserve_yaml_values_if_present(self):
-
         """Should preserve existing YAML values (setdefault behavior)."""
 
         config_data = {
-
             "audio_transport": "yaml_transport",
-
             "downstream_mode": "yaml_mode",
-
         }
 
         apply_transport_defaults(config_data)
@@ -99,12 +86,11 @@ class TestApplyTransportDefaults:
 
         assert config_data["downstream_mode"] == "yaml_mode"
 
-class TestApplyAudiosocketDefaults:
 
+class TestApplyAudiosocketDefaults:
     """Tests for apply_audiosocket_defaults function."""
 
     def test_default_values_when_empty(self):
-
         """Should apply default values when audiosocket block is empty."""
 
         config_data = {}
@@ -118,7 +104,6 @@ class TestApplyAudiosocketDefaults:
         assert config_data["audiosocket"]["format"] == "ulaw"
 
     def test_env_overrides_host(self, monkeypatch):
-
         """Should override host from environment."""
 
         monkeypatch.setenv("AUDIOSOCKET_HOST", "0.0.0.0")
@@ -130,7 +115,6 @@ class TestApplyAudiosocketDefaults:
         assert config_data["audiosocket"]["host"] == "0.0.0.0"
 
     def test_env_overrides_port(self, monkeypatch):
-
         """Should override port from environment."""
 
         monkeypatch.setenv("AUDIOSOCKET_PORT", "9090")
@@ -142,7 +126,6 @@ class TestApplyAudiosocketDefaults:
         assert config_data["audiosocket"]["port"] == 9090
 
     def test_env_overrides_format(self, monkeypatch):
-
         """Should override format from environment."""
 
         monkeypatch.setenv("AUDIOSOCKET_FORMAT", "slin16")
@@ -154,14 +137,9 @@ class TestApplyAudiosocketDefaults:
         assert config_data["audiosocket"]["format"] == "slin16"
 
     def test_preserve_yaml_values(self):
-
         """Should preserve YAML values when set."""
 
-        config_data = {
-
-            "audiosocket": {"host": "yaml_host", "port": 7777, "format": "slin"}
-
-        }
+        config_data = {"audiosocket": {"host": "yaml_host", "port": 7777, "format": "slin"}}
 
         apply_audiosocket_defaults(config_data)
 
@@ -172,7 +150,6 @@ class TestApplyAudiosocketDefaults:
         assert config_data["audiosocket"]["format"] == "slin"
 
     def test_invalid_port_uses_default(self, monkeypatch):
-
         """Should use default port if env var is invalid."""
 
         monkeypatch.setenv("AUDIOSOCKET_PORT", "invalid")
@@ -183,12 +160,11 @@ class TestApplyAudiosocketDefaults:
 
         assert config_data["audiosocket"]["port"] == 8090
 
-class TestApplyExternalmediaDefaults:
 
+class TestApplyExternalmediaDefaults:
     """Tests for apply_externalmedia_defaults function."""
 
     def test_default_rtp_host(self):
-
         """Should use default RTP host when not set."""
 
         config_data = {}
@@ -198,7 +174,6 @@ class TestApplyExternalmediaDefaults:
         assert config_data["external_media"]["rtp_host"] == "127.0.0.1"
 
     def test_env_overrides_rtp_host(self, monkeypatch):
-
         """Should override RTP host from environment."""
 
         monkeypatch.setenv("EXTERNAL_MEDIA_RTP_HOST", "0.0.0.0")
@@ -210,7 +185,6 @@ class TestApplyExternalmediaDefaults:
         assert config_data["external_media"]["rtp_host"] == "0.0.0.0"
 
     def test_preserve_yaml_rtp_host(self):
-
         """Should preserve YAML RTP host value."""
 
         config_data = {"external_media": {"rtp_host": "yaml_host"}}
@@ -219,12 +193,11 @@ class TestApplyExternalmediaDefaults:
 
         assert config_data["external_media"]["rtp_host"] == "yaml_host"
 
-class TestApplyDiagnosticDefaults:
 
+class TestApplyDiagnosticDefaults:
     """Tests for apply_diagnostic_defaults function."""
 
     def test_default_diagnostic_settings(self):
-
         """Should apply default diagnostic settings."""
 
         config_data = {}
@@ -250,7 +223,6 @@ class TestApplyDiagnosticDefaults:
         assert streaming["logging_level"] == "info"
 
     def test_env_overrides_egress_swap_mode(self, monkeypatch):
-
         """Should override egress swap mode from environment."""
 
         monkeypatch.setenv("DIAG_EGRESS_SWAP_MODE", "test_mode")
@@ -262,7 +234,6 @@ class TestApplyDiagnosticDefaults:
         assert config_data["streaming"]["egress_swap_mode"] == "test_mode"
 
     def test_env_enables_force_mulaw_true(self, monkeypatch):
-
         """Should enable force mulaw when env var is 'true'."""
 
         monkeypatch.setenv("DIAG_EGRESS_FORCE_MULAW", "true")
@@ -274,7 +245,6 @@ class TestApplyDiagnosticDefaults:
         assert config_data["streaming"]["egress_force_mulaw"] is True
 
     def test_env_enables_force_mulaw_1(self, monkeypatch):
-
         """Should enable force mulaw when env var is '1'."""
 
         monkeypatch.setenv("DIAG_EGRESS_FORCE_MULAW", "1")
@@ -286,7 +256,6 @@ class TestApplyDiagnosticDefaults:
         assert config_data["streaming"]["egress_force_mulaw"] is True
 
     def test_env_overrides_attack_ms(self, monkeypatch):
-
         """Should override attack ms from environment."""
 
         monkeypatch.setenv("DIAG_ATTACK_MS", "100")
@@ -298,7 +267,6 @@ class TestApplyDiagnosticDefaults:
         assert config_data["streaming"]["attack_ms"] == 100
 
     def test_env_enables_taps(self, monkeypatch):
-
         """Should enable diagnostic taps when env var is 'true'."""
 
         monkeypatch.setenv("DIAG_ENABLE_TAPS", "true")
@@ -310,7 +278,6 @@ class TestApplyDiagnosticDefaults:
         assert config_data["streaming"]["diag_enable_taps"] is True
 
     def test_env_overrides_tap_durations(self, monkeypatch):
-
         """Should override tap pre/post durations from environment."""
 
         monkeypatch.setenv("DIAG_TAP_PRE_SECS", "3")
@@ -326,7 +293,6 @@ class TestApplyDiagnosticDefaults:
         assert config_data["streaming"]["diag_post_secs"] == 5
 
     def test_env_overrides_tap_output_dir(self, monkeypatch):
-
         """Should override tap output directory from environment."""
 
         monkeypatch.setenv("DIAG_TAP_OUTPUT_DIR", "/custom/tap/dir")
@@ -338,7 +304,6 @@ class TestApplyDiagnosticDefaults:
         assert config_data["streaming"]["diag_out_dir"] == "/custom/tap/dir"
 
     def test_env_overrides_streaming_log_level(self, monkeypatch):
-
         """Should override streaming log level from environment."""
 
         monkeypatch.setenv("STREAMING_LOG_LEVEL", "debug")
@@ -350,7 +315,6 @@ class TestApplyDiagnosticDefaults:
         assert config_data["streaming"]["logging_level"] == "debug"
 
     def test_creates_streaming_block_if_missing(self):
-
         """Should create streaming block if it doesn't exist."""
 
         config_data = {}
@@ -361,12 +325,11 @@ class TestApplyDiagnosticDefaults:
 
         assert isinstance(config_data["streaming"], dict)
 
-class TestApplyBargeInDefaults:
 
+class TestApplyBargeInDefaults:
     """Tests for apply_barge_in_defaults function."""
 
     def test_empty_barge_in_block_when_no_env(self):
-
         """Should preserve empty barge_in block when no env vars set."""
 
         config_data = {}
@@ -378,7 +341,6 @@ class TestApplyBargeInDefaults:
         assert config_data["barge_in"] == {}
 
     def test_preserve_yaml_values_when_no_env(self):
-
         """Should preserve YAML values when no env vars set."""
 
         config_data = {"barge_in": {"enabled": False, "min_ms": 300}}
@@ -390,7 +352,6 @@ class TestApplyBargeInDefaults:
         assert config_data["barge_in"]["min_ms"] == 300
 
     def test_env_overrides_enabled(self, monkeypatch):
-
         """Should override enabled from environment."""
 
         monkeypatch.setenv("BARGE_IN_ENABLED", "false")
@@ -402,7 +363,6 @@ class TestApplyBargeInDefaults:
         assert config_data["barge_in"]["enabled"] is False
 
     def test_env_overrides_initial_protection_ms(self, monkeypatch):
-
         """Should override initial protection ms from environment."""
 
         monkeypatch.setenv("BARGE_IN_INITIAL_PROTECTION_MS", "300")
@@ -414,7 +374,6 @@ class TestApplyBargeInDefaults:
         assert config_data["barge_in"]["initial_protection_ms"] == 300
 
     def test_env_overrides_min_ms(self, monkeypatch):
-
         """Should override min ms from environment."""
 
         monkeypatch.setenv("BARGE_IN_MIN_MS", "400")
@@ -426,7 +385,6 @@ class TestApplyBargeInDefaults:
         assert config_data["barge_in"]["min_ms"] == 400
 
     def test_env_overrides_energy_threshold(self, monkeypatch):
-
         """Should override energy threshold from environment."""
 
         monkeypatch.setenv("BARGE_IN_ENERGY_THRESHOLD", "2000")
@@ -438,7 +396,6 @@ class TestApplyBargeInDefaults:
         assert config_data["barge_in"]["energy_threshold"] == 2000
 
     def test_env_overrides_cooldown_ms(self, monkeypatch):
-
         """Should override cooldown ms from environment."""
 
         monkeypatch.setenv("BARGE_IN_COOLDOWN_MS", "1000")
@@ -450,7 +407,6 @@ class TestApplyBargeInDefaults:
         assert config_data["barge_in"]["cooldown_ms"] == 1000
 
     def test_env_overrides_post_tts_protection(self, monkeypatch):
-
         """Should override post TTS protection from environment."""
 
         monkeypatch.setenv("BARGE_IN_POST_TTS_END_PROTECTION_MS", "500")
@@ -462,7 +418,6 @@ class TestApplyBargeInDefaults:
         assert config_data["barge_in"]["post_tts_end_protection_ms"] == 500
 
     def test_multiple_env_overrides(self, monkeypatch):
-
         """Should handle multiple environment variable overrides."""
 
         monkeypatch.setenv("BARGE_IN_ENABLED", "true")
@@ -482,7 +437,6 @@ class TestApplyBargeInDefaults:
         assert config_data["barge_in"]["energy_threshold"] == 1500
 
     def test_invalid_int_preserves_yaml(self, monkeypatch):
-
         """Should preserve YAML values if env var has invalid integer."""
 
         monkeypatch.setenv("BARGE_IN_MIN_MS", "invalid")
@@ -496,7 +450,6 @@ class TestApplyBargeInDefaults:
         assert config_data["barge_in"]["min_ms"] == 250
 
     def test_only_override_if_env_set(self):
-
         """Should only override specific keys when env vars are set."""
 
         config_data = {"barge_in": {"enabled": True, "min_ms": 250, "cooldown_ms": 500}}
@@ -510,4 +463,3 @@ class TestApplyBargeInDefaults:
         assert config_data["barge_in"]["min_ms"] == 250
 
         assert config_data["barge_in"]["cooldown_ms"] == 500
-

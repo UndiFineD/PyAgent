@@ -46,7 +46,6 @@ class AuthorizationContext:
         strategy: Optional[AuthorizationStrategy] = None,
         **kwargs,
     ):
-
         self.user_info = user_info
 
         self.required_role = required_role

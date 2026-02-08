@@ -24,7 +24,6 @@ class ReconfigurableScene(Scene):
     }
 
     def setup(self):
-
         self.states = []
 
         self.num_recursions = 0
@@ -35,7 +34,6 @@ class ReconfigurableScene(Scene):
         transformation_kwargs=None,
         **new_config,
     ):
-
         if transformation_kwargs is None:
             transformation_kwargs = {}
 
@@ -69,7 +67,6 @@ class ReconfigurableScene(Scene):
             self.__dict__.update(new_config)
 
     def get_state(self):
-
         # Want to return a mobject that maintains the most
 
         # structure.  The way to do that is to extract only
@@ -79,7 +76,6 @@ class ReconfigurableScene(Scene):
         return Mobject(*self.get_top_level_mobjects())
 
     def transition_between_states(self, start_state, target_state, **kwargs):
-
         self.play(Transform(start_state, target_state, **kwargs))
 
         self.wait()

@@ -39,7 +39,6 @@
 
 from typing import Tuple
 
-
 import torch
 
 import torch.utils.checkpoint as ckpt
@@ -171,7 +170,6 @@ class BaseEncoder(torch.nn.Module):
         self.gradient_checkpointing = gradient_checkpointing
 
     def output_size(self) -> int:
-
         return self._output_size
 
     def forward(
@@ -182,8 +180,6 @@ class BaseEncoder(torch.nn.Module):
         num_decoding_left_chunks: int = -1,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         """Embed positions in tensor.
-
-
 
         Args:
 
@@ -272,7 +268,6 @@ class BaseEncoder(torch.nn.Module):
         pos_emb: torch.Tensor,
         mask_pad: torch.Tensor,
     ) -> torch.Tensor:
-
         for layer in self.encoders:
             xs, chunk_masks, _, _ = layer(xs, chunk_masks, pos_emb, mask_pad)
 
@@ -286,7 +281,6 @@ class BaseEncoder(torch.nn.Module):
         pos_emb: torch.Tensor,
         mask_pad: torch.Tensor,
     ) -> torch.Tensor:
-
         for layer in self.encoders:
             xs, chunk_masks, _, _ = ckpt.checkpoint(layer.__call__, xs, chunk_masks, pos_emb, mask_pad)
 
@@ -303,8 +297,6 @@ class BaseEncoder(torch.nn.Module):
         att_mask: torch.Tensor = torch.ones((0, 0, 0), dtype=torch.bool),
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """ Forward just one chunk
-
-
 
         Args:
 
@@ -340,8 +332,6 @@ class BaseEncoder(torch.nn.Module):
 
                 `cache_t2 == cnn.lorder - 1`
 
-
-
         Returns:
 
             torch.Tensor: output of current input xs,
@@ -357,8 +347,6 @@ class BaseEncoder(torch.nn.Module):
             torch.Tensor: new conformer cnn cache required for next chunk, with
 
                 same shape as the original cnn_cache.
-
-
 
         """
 
@@ -451,8 +439,6 @@ class BaseEncoder(torch.nn.Module):
 
             fashion
 
-
-
         Here we should pay special attention to computation cache in the
 
         streaming style forward chunk by chunk. Three things should be taken
@@ -464,8 +450,6 @@ class BaseEncoder(torch.nn.Module):
             2. convolution in conformer
 
             3. convolution in subsampling
-
-
 
         However, we don't implement subsampling cache for:
 
@@ -572,8 +556,6 @@ class TransformerEncoder(BaseEncoder):
     ):
         """Construct TransformerEncoder
 
-
-
         See Encoder for the meaning of each parameter.
 
         """
@@ -647,8 +629,6 @@ class ConformerEncoder(BaseEncoder):
         gradient_checkpointing: bool = False,
     ):
         """Construct ConformerEncoder
-
-
 
         Args:
 

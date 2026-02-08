@@ -36,7 +36,6 @@ from wappalyzer.core.utils import create_result
 
 class DriverPool:
     def __init__(self, size=3, max_retries=3):
-
         self.pool = Queue(maxsize=size)
 
         self.lock = threading.Lock()
@@ -189,7 +188,6 @@ class DriverPool:
 
 
 def cookie_to_cookies(cookie):
-
     cookie_dict = SimpleCookie().load(cookie)
 
     cookies = []
@@ -202,7 +200,6 @@ def cookie_to_cookies(cookie):
 
 
 def process_url(driver, url):
-
     try:
         main_tab = driver.current_window_handle
 

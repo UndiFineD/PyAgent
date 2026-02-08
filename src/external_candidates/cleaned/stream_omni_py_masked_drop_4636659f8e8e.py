@@ -5,7 +5,6 @@
 
 import random
 
-
 import torch
 
 import torch.nn as nn
@@ -13,7 +12,6 @@ import torch.nn as nn
 
 class MaskedDrop(nn.Module):
     def __init__(self, model_args):
-
         super().__init__()
 
         self.mode = model_args.mm_mask_drop_mode
@@ -27,7 +25,6 @@ class MaskedDrop(nn.Module):
         self.ratio_lower = model_args.mm_mask_drop_ratio_lower
 
     def forward(self, image_features, *args, **kwargs):
-
         if not self.training:
             return image_features
 
@@ -62,7 +59,6 @@ class MaskedDrop(nn.Module):
 
     @property
     def config(self):
-
         return {
             "mm_resampler_type": "masked_drop",
             "mm_mask_drop_mode": self.mode,

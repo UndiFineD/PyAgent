@@ -7,7 +7,6 @@ from manim_imports_ext import *
 
 
 def get_vertical_screen():
-
     screen = Rectangle(width=FRAME_HEIGHT * (9 / 16), height=FRAME_HEIGHT)
 
     screen.center()
@@ -23,7 +22,6 @@ class CommentFlurry(InteractiveScene):
     random_seed = 4
 
     def construct(self):
-
         # Test
 
         folder = os.path.join(self.base_folder, self.sub_folder)
@@ -88,7 +86,6 @@ class CommentFlurryOtherQuestions(CommentFlurry):
 
 class PiLookingAtPhone(InteractiveScene):
     def construct(self):
-
         # Test
 
         screen = get_vertical_screen()
@@ -125,7 +122,6 @@ class PiLookingAtPhone(InteractiveScene):
 
 class ThisIsALink(InteractiveScene):
     def construct(self):
-
         # Test
 
         rect = Rectangle(3.5, 0.35)
@@ -159,7 +155,6 @@ class ThisIsALink(InteractiveScene):
 
 class LinkHighlightOverlay(InteractiveScene):
     def construct(self):
-
         # # Test
 
         # image = ImageMobject("/Users/grant/Desktop/ShortSample.png")

@@ -35,7 +35,6 @@
 
 from typing import Optional, Tuple
 
-
 import torch
 
 from torch import nn
@@ -43,8 +42,6 @@ from torch import nn
 
 class DecoderLayer(nn.Module):
     """Single decoder layer module.
-
-
 
     Args:
 
@@ -117,8 +114,6 @@ class DecoderLayer(nn.Module):
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         """Compute decoded features.
 
-
-
         Args:
 
             tgt (torch.Tensor): Input tensor (#batch, maxlen_out, size).
@@ -139,8 +134,6 @@ class DecoderLayer(nn.Module):
 
                 (#batch, maxlen_out - 1, size).
 
-
-
         Returns:
 
             torch.Tensor: Output tensor (#batch, maxlen_out, size).
@@ -150,8 +143,6 @@ class DecoderLayer(nn.Module):
             torch.Tensor: Encoded memory (#batch, maxlen_in, size).
 
             torch.Tensor: Encoded memory mask (#batch, maxlen_in).
-
-
 
         """
 

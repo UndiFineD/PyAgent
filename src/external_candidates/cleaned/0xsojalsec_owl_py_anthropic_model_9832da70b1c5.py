@@ -91,7 +91,6 @@ class AnthropicModel(BaseModelBackend):
         url: Optional[str] = None,
         token_counter: Optional[BaseTokenCounter] = None,
     ) -> None:
-
         from anthropic import Anthropic
 
         if model_config_dict is None:
@@ -106,7 +105,6 @@ class AnthropicModel(BaseModelBackend):
         self.client = Anthropic(api_key=self._api_key, base_url=self._url)
 
     def _convert_response_from_anthropic_to_openai(self, response):
-
         # openai ^1.0.0 format, reference openai/types/chat/chat_completion.py
 
         obj = ChatCompletion.construct(

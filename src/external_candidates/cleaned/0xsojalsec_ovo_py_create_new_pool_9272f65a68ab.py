@@ -24,7 +24,6 @@ from ovo.core.logic.round_logic import get_or_create_project_rounds
 
 @st.dialog("Upload new pool of designs", width="large")
 def create_new_pool():
-
     content = st.empty()
 
     with content.container():

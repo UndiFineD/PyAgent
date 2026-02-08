@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class IllustrateAreaModelBayes(Scene):
     def construct(self):
-
         color_A = YELLOW
 
         color_not_A = YELLOW_E

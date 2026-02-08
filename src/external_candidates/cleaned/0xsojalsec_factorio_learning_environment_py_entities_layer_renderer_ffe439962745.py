@@ -5,7 +5,6 @@
 
 from typing import Callable, Dict
 
-
 from fle.env.entities import Direction, EntityStatus
 
 from fle.env.tools.admin.render_simple.layers.layer_renderer import LayerRenderer
@@ -17,7 +16,6 @@ class EntitiesLayerRenderer(LayerRenderer):
     """Renderer for player-built entities"""
 
     def __init__(self, config, categorizer, color_manager, shape_renderer):
-
         super().__init__(config)
 
         self.categorizer = categorizer
@@ -28,7 +26,6 @@ class EntitiesLayerRenderer(LayerRenderer):
 
     @property
     def layer_name(self) -> str:
-
         return "entities"
 
     def render(

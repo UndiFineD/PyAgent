@@ -28,7 +28,6 @@ class DOMHistoryElementNode(BaseModel):
     viewport: tuple[int, int] = Field(default_factory=tuple)
 
     def to_dict(self) -> dict[str, str]:
-
         return {
             "tag": self.tag,
             "role": self.role,

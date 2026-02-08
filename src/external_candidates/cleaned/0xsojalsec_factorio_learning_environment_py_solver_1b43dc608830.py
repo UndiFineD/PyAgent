@@ -5,7 +5,6 @@
 
 import json
 
-
 from fle.agents.data.screenshots_from_run import create_factorio_instance
 
 from fle.commons.models.rendered_image import RenderedImage
@@ -25,13 +24,9 @@ def analyze_blueprint() -> str:
 
     Analyze a Factorio blueprint using Python code to generate spatial reasoning QA pairs.
 
-
-
     Args:
 
         code: Python code that analyzes the blueprint and generates qa_pairs
-
-
 
     Returns:
 
@@ -40,7 +35,6 @@ def analyze_blueprint() -> str:
     """
 
     async def execute(code: str) -> str:
-
         # Write the Python code to a file
 
         await sandbox().write_file("/tmp/analyze.py", code)
@@ -69,7 +63,6 @@ def generate_spatial_reasoning_with_code(questions_per_blueprint: int = 3) -> So
     instance = create_factorio_instance()
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         blueprint = state.metadata.get("blueprint", {})
 
         entities = blueprint.get("entities", [])
@@ -99,11 +92,7 @@ def generate_spatial_reasoning_with_code(questions_per_blueprint: int = 3) -> So
 
         prompt = f"""I need you to analyze a Factorio blueprint and generate {questions_per_blueprint} spatial reasoning QA pairs.
 
-
-
 The blueprint has {len(entities)} entities. I've saved the blueprint data to `/tmp/blueprint_data.py`.
-
-
 
 Write Python code that:
 
@@ -114,8 +103,6 @@ Write Python code that:
 3. Generates diverse spatial reasoning questions
 
 4. Prints the qa_pairs as JSON
-
-
 
 Your code should generate questions about:
 
@@ -129,8 +116,6 @@ Your code should generate questions about:
 
 - Entities within a certain radius
 
-
-
 The output should be a JSON list of QA pairs, each with:
 
 - 'question': The spatial reasoning question
@@ -138,8 +123,6 @@ The output should be a JSON list of QA pairs, each with:
 - 'answer': The correct answer
 
 - 'metadata': Additional context about the spatial relationship
-
-
 
 Example code structure:
 
@@ -153,13 +136,9 @@ import math
 
 from blueprint_data import blueprint
 
-
-
 entities = blueprint.get('entities', [])
 
 qa_pairs = []
-
-
 
 # Generate distance questions
 
@@ -173,11 +152,7 @@ for _ in range(2):
 
         x2, y2 = e2['position']['x'], e2['position']['y']
 
-
-
         manhattan = abs(x2 - x1) + abs(y2 - y1)
-
-
 
         qa_pairs.append({{
 
@@ -197,17 +172,11 @@ for _ in range(2):
 
         }})
 
-
-
 # Add more question types...
-
-
 
 print(json.dumps(qa_pairs, indent=2))
 
 ```
-
-
 
 Use the analyze_blueprint tool to execute your code."""
 
@@ -251,7 +220,6 @@ def generate_spatial_context_with_code() -> Solver:
     instance = create_factorio_instance()
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         qa_pairs = state.metadata.get("qa_pairs", [])
 
         if not qa_pairs:
@@ -283,8 +251,6 @@ def generate_spatial_context_with_code() -> Solver:
 
         prompt = f"""I need you to enhance {len(qa_pairs)} denoising QA pairs with spatial context analysis.
 
-
-
 The QA pairs data has been saved to `/tmp/qa_pairs_data.py`. Each pair contains:
 
 - 'removed_entity': The entity that was removed
@@ -292,8 +258,6 @@ The QA pairs data has been saved to `/tmp/qa_pairs_data.py`. Each pair contains:
 - 'modified_blueprint': The blueprint after removal
 
 - 'position': Where the entity was removed
-
-
 
 Write Python code that:
 
@@ -305,8 +269,6 @@ Write Python code that:
 
 4. Creates enhanced QA pairs with spatial reasoning
 
-
-
 Generate questions like:
 
 - "What entity is missing 2 tiles north of the [entity_name] at position ([x], [y])?"
@@ -314,8 +276,6 @@ Generate questions like:
 - "An entity was removed between two [entity_type]. What was it?"
 
 - "What's missing from the center of the 3x3 grid?"
-
-
 
 Output format should be a JSON list of enhanced QA pairs with:
 
@@ -325,11 +285,7 @@ Output format should be a JSON list of enhanced QA pairs with:
 
 - 'nearby_entities': List of nearby entities with distances and directions
 
-
-
 Only print the final output to stdout, and nothing else.
-
-
 
 Example approach:
 
@@ -339,15 +295,11 @@ import json
 
 from qa_pairs_data import qa_pairs
 
-
-
 def get_direction(from_pos, to_pos):
 
     dx = to_pos['x'] - from_pos['x']
 
     dy = to_pos['y'] - from_pos['y']
-
-
 
     if abs(dx) > abs(dy):
 
@@ -357,19 +309,13 @@ def get_direction(from_pos, to_pos):
 
         return 'south' if dy > 0 else 'north'
 
-
-
 enhanced_pairs = []
-
-
 
 for qa in qa_pairs:
 
     removed_pos = qa['position']
 
     entities = qa['modified_blueprint']['entities']
-
-
 
     # Find nearby entities
 
@@ -393,11 +339,7 @@ for qa in qa_pairs:
 
             }})
 
-
-
     nearby.sort(key=lambda x: x['distance'])
-
-
 
     # Create spatial question
 
@@ -411,8 +353,6 @@ for qa in qa_pairs:
 
         spatial_q = f"What entity was at position ({{removed_pos['x']}}, {{removed_pos['y']}})?"
 
-
-
     enhanced = qa.copy()
 
     enhanced['spatial_question'] = spatial_q
@@ -420,8 +360,6 @@ for qa in qa_pairs:
     enhanced['nearby_entities'] = nearby[:3]
 
     enhanced_pairs.append(enhanced)
-
-
 
 print(json.dumps(enhanced_pairs, indent=2))
 

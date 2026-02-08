@@ -37,16 +37,13 @@ class PlotSettings:
     color_type: str = "range"
 
     def get_x_key(self):
-
         return self.x.key if self.x else None
 
     def get_y_key(self):
-
         return self.y.key if self.y else None
 
     @classmethod
     def from_query_params(cls, descriptors_by_key: dict[str, Descriptor]):
-
         for field in ["x", "y", "color"]:
             # Handle case when descriptor is not available anymore - such as when switching between workflows
 
@@ -63,7 +60,6 @@ class PlotSettings:
         )
 
     def update_query_params(self):
-
         st.query_params["color_type"] = self.color_type
 
         for field in ["x", "y", "color"]:
@@ -77,7 +73,6 @@ class PlotSettings:
 def descriptor_scatterplot_input_component(
     design_ids: list[str],
 ) -> PlotSettings | None:
-
     descriptors_by_key = get_cached_available_descriptors(design_ids)
 
     # select only global numeric descriptors
@@ -239,7 +234,6 @@ def descriptor_scatterplot_input_component(
 
 
 def descriptor_scatterplot_design_explorer_component(settings: PlotSettings, design_ids: list[str]) -> list[str]:
-
     if not settings.x or not settings.y:
         st.caption("Please select the X and Y axes to see the scatterplot.")
 
@@ -338,7 +332,6 @@ def descriptor_scatterplot_pool_details_component(
     selected_thresholds: dict[str, Threshold] = None,
     highlight_accepted: bool = False,
 ) -> tuple[list[str], str | None]:
-
     if not settings.x or not settings.y:
         return design_ids, None
 
@@ -575,7 +568,6 @@ def descriptor_scatterplot_pool_details_component(
 
 
 def format_descriptor_name(descriptor: Descriptor) -> str:
-
     return f"{descriptor.name} ({descriptor.tool})" if descriptor.tool else descriptor.name
 
 
@@ -594,7 +586,6 @@ def get_trimmed_min_max(box_selection, descriptor):
 
 
 def format_range(min_value, max_value, descriptor):
-
     if min_value is not None and max_value is not None:
         return f"{descriptor.name} within {min_value:.2f} — {max_value:.2f}"
 
@@ -606,7 +597,6 @@ def format_range(min_value, max_value, descriptor):
 
 
 def print_missing(values_by_name: dict[str, pd.Series]):
-
     num_missing_by_name = {}
 
     for name, values in values_by_name.items():

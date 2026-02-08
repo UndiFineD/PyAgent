@@ -16,5 +16,4 @@ from atopile import telemetry
     ],
 )
 def test_commonise_project_url(git_remote):
-
     assert telemetry.commonise_project_url(git_remote) == "github.com/atopile/atopile"

@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class JustFlipping(Scene):
     def construct(self):
-
         randy = CoinFlippingPiCreature(color=MAROON_E, flip_height=1).shift(2 * DOWN)
 
         self.add(randy)
@@ -25,7 +24,6 @@ class JustFlipping(Scene):
 
 class JustFlippingWithResults(Scene):
     def construct(self):
-
         randy = CoinFlippingPiCreature(color=MAROON_E, flip_height=1).shift(2 * DOWN)
 
         self.add(randy)

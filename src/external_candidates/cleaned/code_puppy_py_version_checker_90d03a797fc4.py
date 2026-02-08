@@ -11,22 +11,20 @@ from code_puppy.messaging import emit_info, emit_success, emit_warning, get_mess
 
 from code_puppy.messaging.messages import VersionCheckMessage
 
+
 def normalize_version(version_str):
-
     if not version_str:
-
         return version_str
 
     return version_str.lstrip("v")
 
-def versions_are_equal(current, latest):
 
+def versions_are_equal(current, latest):
     return normalize_version(current) == normalize_version(latest)
 
+
 def fetch_latest_version(package_name):
-
     try:
-
         response = httpx.get(f"https://pypi.org/pypi/{package_name}/json", timeout=5.0)
 
         response.raise_for_status()
@@ -36,17 +34,15 @@ def fetch_latest_version(package_name):
         return data["info"]["version"]
 
     except Exception as e:
-
         emit_warning(f"Error fetching version: {e}")
 
         return None
 
-def default_version_mismatch_behavior(current_version):
 
+def default_version_mismatch_behavior(current_version):
     # Defensive: ensure current_version is never None
 
     if current_version is None:
-
         current_version = "0.0.0-unknown"
 
         emit_warning("Could not detect current version, using fallback")
@@ -58,13 +54,9 @@ def default_version_mismatch_behavior(current_version):
     # Emit structured version check message
 
     version_msg = VersionCheckMessage(
-
         current_version=current_version,
-
         latest_version=latest_version or current_version,
-
         update_available=update_available,
-
     )
 
     get_message_bus().emit(version_msg)
@@ -74,10 +66,8 @@ def default_version_mismatch_behavior(current_version):
     emit_info(f"Current version: {current_version}")
 
     if update_available:
-
         emit_info(f"Latest version: {latest_version}")
 
         emit_warning(f"A new version of code puppy is available: {latest_version}")
 
         emit_success("Please consider updating!")
-

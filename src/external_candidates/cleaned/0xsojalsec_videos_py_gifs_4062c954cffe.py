@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class HyperSlinky(Scene):
     def construct(self):
-
         self.play(
             ApplyPointwiseFunction(
                 lambda x_y_z: (
@@ -30,5 +29,4 @@ class HyperSlinky(Scene):
 
 class CircleAtaphogy(Scene):
     def construct(self):
-
         self.play(ApplyMethod(Circle(radius=3).repeat, 7), run_time=3.0)

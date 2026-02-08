@@ -11,7 +11,6 @@ import numpy as np
 
 
 def hook(frame_data, context):
-
     face_mesh = context["face_mesh"]
 
     rgb_frame = frame_data["original"]

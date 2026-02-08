@@ -13,12 +13,10 @@ from agno.tools.decorator import tool
 
 from agno.tools.function import Function
 
+
 def test_sync_function_decorator():
-
     @tool
-
     def sync_function(x: int) -> int:
-
         """Test sync function"""
 
         return x * 2
@@ -33,14 +31,11 @@ def test_sync_function_decorator():
 
     assert result == 10
 
+
 @pytest.mark.asyncio
-
 async def test_async_function_decorator():
-
     @tool
-
     async def async_function(x: int) -> int:
-
         """Test async function"""
 
         await asyncio.sleep(0.1)
@@ -57,16 +52,13 @@ async def test_async_function_decorator():
 
     assert result == 10
 
+
 def test_sync_generator_decorator():
-
     @tool
-
     def sync_generator(count: int) -> Generator[int, None, None]:
-
         """Test sync generator"""
 
         for i in range(count):
-
             yield i
 
     assert isinstance(sync_generator, Function)
@@ -77,18 +69,14 @@ def test_sync_generator_decorator():
 
     assert list(gen) == [0, 1, 2]
 
+
 @pytest.mark.asyncio
-
 async def test_async_generator_decorator():
-
     @tool
-
     async def async_generator(count: int) -> AsyncIterator[int]:
-
         """Test async generator"""
 
         for i in range(count):
-
             await asyncio.sleep(0.1)
 
             yield i
@@ -102,17 +90,14 @@ async def test_async_generator_decorator():
     result = []
 
     async for item in gen:
-
         result.append(item)
 
     assert result == [0, 1, 2]
 
+
 def test_decorator_with_parameters():
-
     @tool(name="custom_name", description="Custom description")
-
     def function(x: int) -> int:
-
         return x * 2
 
     assert isinstance(function, Function)
@@ -125,12 +110,10 @@ def test_decorator_with_parameters():
 
     assert result == 10
 
+
 def test_decorator_preserves_type_hints():
-
     @tool
-
     def typed_function(x: int, y: str) -> bool:
-
         return bool(x)
 
     from inspect import signature
@@ -141,14 +124,11 @@ def test_decorator_preserves_type_hints():
 
     assert str(sig.parameters["y"].annotation.__name__) == "str"
 
+
 @pytest.mark.asyncio
-
 async def test_decorator_preserves_async_nature():
-
     @tool
-
     async def async_function(x: int) -> int:
-
         await asyncio.sleep(0.1)
 
         return x * 2
@@ -156,4 +136,3 @@ async def test_decorator_preserves_async_nature():
     from inspect import iscoroutinefunction
 
     assert iscoroutinefunction(async_function.entrypoint)
-

@@ -18,7 +18,6 @@ from mantis.utils.common_utils import CommonUtils
 
 class ExecuteScanThreadPool:
     async def execute_and_store(self, tool_tuple):
-
         tool_start_time = time.perf_counter()
 
         scanner = tool_tuple[0]

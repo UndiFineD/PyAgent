@@ -5,7 +5,6 @@
 
 
 def hook(frame_data, _):
-
     # Add data to the frame that you can later recover from hooks of subsequent stages. You can also recover it from subsequent hooks of the same stage.
 
     # You can use any kind of data.

@@ -11,66 +11,43 @@ from .. import callbacks
 
 from .base_agent import BaseAgent
 
-class PackLeaderAgent(BaseAgent):
 
+class PackLeaderAgent(BaseAgent):
     """Pack Leader - Orchestrates complex parallel workflows with local merging."""
 
     @property
-
     def name(self) -> str:
-
         return "pack-leader"
 
     @property
-
     def display_name(self) -> str:
-
         return "Pack Leader 🐺"
 
     @property
-
     def description(self) -> str:
-
         return (
-
             "Orchestrates complex parallel workflows using bd issues and local merging, "
-
             "coordinating the pack of specialized agents with critic reviews"
-
         )
 
     def get_available_tools(self) -> list[str]:
-
         """Get the list of tools available to the Pack Leader."""
 
         return [
-
             # Exploration tools
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             # Shell for bd and git commands
-
             "agent_run_shell_command",
-
             # Transparency
-
             "agent_share_your_reasoning",
-
             # Pack coordination
-
             "list_agents",
-
             "invoke_agent",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         """Get the Pack Leader's system prompt."""
 
         puppy_name = get_puppy_name()
@@ -600,8 +577,6 @@ Now go lead the pack! 🐺🐕🐕🐕
         prompt_additions = callbacks.on_load_prompt()
 
         if len(prompt_additions):
-
             result += "\n".join(prompt_additions)
 
         return result
-

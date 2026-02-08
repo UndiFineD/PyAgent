@@ -93,7 +93,6 @@ class ZepAdapter(OnlineAPIAdapter):
     """
 
     def __init__(self, config: dict, output_dir: Path = None):
-
         super().__init__(config, output_dir)
 
         # Import Zep async client

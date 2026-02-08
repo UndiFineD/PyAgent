@@ -7,7 +7,6 @@ import cv2
 
 
 def hook(frame_data, _):
-
     frame = frame_data["original"]
 
     original_height, original_width, _ = frame.shape

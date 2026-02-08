@@ -16,7 +16,6 @@ class TestMain(unittest.TestCase):
     """Tests for main.py"""
 
     def setUp(self):
-
         # Capture any errors to stderr
 
         self.held_stderr = StringIO()
@@ -28,7 +27,6 @@ class TestMain(unittest.TestCase):
         sys.stderr = self.held_stderr
 
     def tearDown(self):
-
         # Reset sys.stderr
 
         self.held_stdout.close()

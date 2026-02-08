@@ -13,8 +13,8 @@ from agno.storage.sqlite import SqliteStorage
 
 from pydantic import BaseModel, Field
 
-def _assert_metrics(response: RunResponse):
 
+def _assert_metrics(response: RunResponse):
     """Helper function to assert metrics are present and valid"""
 
     # Check that metrics dictionary exists
@@ -45,21 +45,13 @@ def _assert_metrics(response: RunResponse):
 
     # (Note: sometimes there might be small discrepancies in how these are calculated)
 
-    assert (
+    assert total_tokens >= input_tokens + output_tokens - 5  # Allow small margin of error
 
-        total_tokens >= input_tokens + output_tokens - 5
-
-    )  # Allow small margin of error
 
 def test_basic():
-
     """Test basic functionality with LiteLLM"""
 
-    agent = Agent(
-
-        model=LiteLLM(id="gpt-4o"), markdown=True, telemetry=False, monitoring=False
-
-    )
+    agent = Agent(model=LiteLLM(id="gpt-4o"), markdown=True, telemetry=False, monitoring=False)
 
     # Get the response
 
@@ -73,15 +65,11 @@ def test_basic():
 
     _assert_metrics(response)
 
-def test_basic_stream():
 
+def test_basic_stream():
     """Test streaming functionality with LiteLLM"""
 
-    agent = Agent(
-
-        model=LiteLLM(id="gpt-4o"), markdown=True, telemetry=False, monitoring=False
-
-    )
+    agent = Agent(model=LiteLLM(id="gpt-4o"), markdown=True, telemetry=False, monitoring=False)
 
     response_stream = agent.run("Share a 2 sentence horror story", stream=True)
 
@@ -94,24 +82,18 @@ def test_basic_stream():
     assert len(responses) > 0
 
     for response in responses:
-
         assert isinstance(response, RunResponse)
 
         assert response.content is not None
 
     _assert_metrics(agent.run_response)
 
+
 @pytest.mark.asyncio
-
 async def test_async_basic():
-
     """Test async functionality with LiteLLM"""
 
-    agent = Agent(
-
-        model=LiteLLM(id="gpt-4o"), markdown=True, telemetry=False, monitoring=False
-
-    )
+    agent = Agent(model=LiteLLM(id="gpt-4o"), markdown=True, telemetry=False, monitoring=False)
 
     response = await agent.arun("Share a 2 sentence horror story")
 
@@ -123,44 +105,31 @@ async def test_async_basic():
 
     _assert_metrics(response)
 
+
 @pytest.mark.asyncio
-
 async def test_async_basic_stream():
-
     """Test async streaming functionality with LiteLLM"""
 
-    agent = Agent(
-
-        model=LiteLLM(id="gpt-4o"), markdown=True, telemetry=False, monitoring=False
-
-    )
+    agent = Agent(model=LiteLLM(id="gpt-4o"), markdown=True, telemetry=False, monitoring=False)
 
     response_stream = await agent.arun("Share a 2 sentence horror story", stream=True)
 
     async for response in response_stream:
-
         assert isinstance(response, RunResponse)
 
         assert response.content is not None
 
     _assert_metrics(agent.run_response)
 
+
 def test_with_memory():
-
     agent = Agent(
-
         model=LiteLLM(id="gpt-4o"),
-
         add_history_to_messages=True,
-
         num_history_responses=5,
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     # First interaction
@@ -182,25 +151,18 @@ def test_with_memory():
     assert len(messages) == 5
 
     assert [m.role for m in messages] == [
-
         "system",
-
         "user",
-
         "assistant",
-
         "user",
-
         "assistant",
-
     ]
 
     _assert_metrics(response2)
 
+
 def test_response_model():
-
     class MovieScript(BaseModel):
-
         title: str = Field(..., description="Movie title")
 
         genre: str = Field(..., description="Movie genre")
@@ -208,17 +170,11 @@ def test_response_model():
         plot: str = Field(..., description="Brief plot summary")
 
     agent = Agent(
-
         model=LiteLLM(id="gpt-4o"),
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
         response_model=MovieScript,
-
     )
 
     response = agent.run("Create a movie about time travel")
@@ -233,24 +189,14 @@ def test_response_model():
 
     assert response.content.plot is not None
 
+
 def test_history():
-
     agent = Agent(
-
         model=LiteLLM(id="gpt-4o"),
-
-        storage=SqliteStorage(
-
-            table_name="agent_sessions_storage", db_file="tmp/data.db"
-
-        ),
-
+        storage=SqliteStorage(table_name="agent_sessions_storage", db_file="tmp/data.db"),
         add_history_to_messages=True,
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     agent.run("Hello")
@@ -268,4 +214,3 @@ def test_history():
     agent.run("Hello 4")
 
     assert len(agent.run_response.messages) == 8
-

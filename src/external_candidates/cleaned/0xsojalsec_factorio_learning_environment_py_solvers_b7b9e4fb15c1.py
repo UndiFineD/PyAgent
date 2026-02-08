@@ -11,7 +11,6 @@ import random
 
 import re
 
-
 from fle.agents.data.screenshots_from_run import create_factorio_instance
 
 from fle.commons.models.rendered_image import RenderedImage
@@ -19,7 +18,6 @@ from fle.commons.models.rendered_image import RenderedImage
 from inspect_ai.model import ChatMessageUser
 
 from inspect_ai.solver import Generate, Solver, TaskState, solver
-
 
 from .templates import Templates
 
@@ -29,7 +27,6 @@ def generate_blueprint_title_and_purpose() -> Solver:
     """Generate both title and purpose description for blueprints."""
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         blueprint = state.metadata.get("blueprint", {})
 
         # Generate prompt using Jinja2 template
@@ -76,8 +73,6 @@ def entity_removal_denoising(qa_pairs_per_blueprint: int = 5) -> Solver:
 
     3. Stores all QA pairs for the blueprint
 
-
-
     Args:
 
         qa_pairs_per_blueprint: Number of QA pairs to generate per blueprint
@@ -85,7 +80,6 @@ def entity_removal_denoising(qa_pairs_per_blueprint: int = 5) -> Solver:
     """
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         blueprint = state.metadata.get("blueprint", {})
 
         # Initialize QA pairs list
@@ -172,7 +166,6 @@ def validate_denoising_qa() -> Solver:
     """
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         qa_pairs = state.metadata.get("qa_pairs", [])
 
         if not qa_pairs:
@@ -238,7 +231,6 @@ def generate_spatial_context_question() -> Solver:
     instance = create_factorio_instance()
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         qa_pairs = state.metadata.get("qa_pairs", [])
 
         if not qa_pairs:

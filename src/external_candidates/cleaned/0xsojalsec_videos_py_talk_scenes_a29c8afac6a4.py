@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class DoingMathVsHowMathIsPresented(Scene):
     def construct(self):
-
         titles = VGroup(
             OldTexText("How math is presented"),
             OldTexText("Actually doing math"),
@@ -40,7 +39,6 @@ class DoingMathVsHowMathIsPresented(Scene):
             self.wait(2)
 
     def get_block(self, prob):
-
         block = VGroup(*[self.get_mark(prob) for x in range(100)])
 
         block.arrange_in_grid()
@@ -50,7 +48,6 @@ class DoingMathVsHowMathIsPresented(Scene):
         return block
 
     def get_mark(self, prob):
-
         if random.random() < prob:
             mark = OldTex("\\checkmark").set_color(GREEN)
 
@@ -66,7 +63,6 @@ class DoingMathVsHowMathIsPresented(Scene):
 
 class PiCharts(Scene):
     def construct(self):
-
         # Add top lines
 
         equation = OldTex("\\frac{1}{10}", "+", "\\frac{2}{5}", "=", "\\; ?")
@@ -122,7 +118,6 @@ class PiCharts(Scene):
         self.add(arrow)
 
     def get_pi_chart(self, n):
-
         result = VGroup(
             *[
                 Sector(
@@ -144,7 +139,6 @@ class PiCharts(Scene):
 
 class AskAboutCircleProportion(Scene):
     def construct(self):
-
         R = 2.5
 
         circle = Circle(radius=R)
@@ -208,7 +202,6 @@ class AskAboutCircleProportion(Scene):
 
 class BorweinIntegrals(Scene):
     def construct(self):
-
         ints = VGroup(
             OldTex("\\int_0^\\infty", "\\frac{\\sin(x)}{x}", "dx = \\frac{\\pi}{2}"),
             OldTex(

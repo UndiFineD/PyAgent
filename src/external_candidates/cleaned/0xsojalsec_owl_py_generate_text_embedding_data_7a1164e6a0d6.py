@@ -126,7 +126,6 @@ Your output must always be a JSON object only (starting and ending with curly br
     )
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-
         super().__init__(*args, **kwargs)
 
         self.update(

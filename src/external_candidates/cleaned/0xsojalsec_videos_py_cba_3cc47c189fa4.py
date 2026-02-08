@@ -8,11 +8,9 @@ from manim_imports_ext import *
 
 class EnumerableSaveScene(Scene):
     def setup(self):
-
         self.save_count = 0
 
     def save_enumerated_image(self):
-
         file_path = self.file_writer.get_image_file_path()
 
         file_path = file_path.replace(".png", "{:02}.png".format(self.save_count))
@@ -28,7 +26,6 @@ class EnumerableSaveScene(Scene):
 
 class LayersOfAbstraction(EnumerableSaveScene):
     def construct(self):
-
         self.save_count = 0
 
         # self.add_title()
@@ -40,7 +37,6 @@ class LayersOfAbstraction(EnumerableSaveScene):
         self.circle_certain_pairs()
 
     def add_title(self):
-
         title = OldTexText("Layers of abstraction")
 
         title.scale(1.5)
@@ -56,7 +52,6 @@ class LayersOfAbstraction(EnumerableSaveScene):
         self.add(title, line)
 
     def show_layers(self):
-
         layers = self.layers = self.get_layers()
 
         for layer in layers:
@@ -70,7 +65,6 @@ class LayersOfAbstraction(EnumerableSaveScene):
             self.save_enumerated_image()
 
     def show_pairwise_relations(self):
-
         p1, p2 = [l.get_left() for l in self.layers[2:4]]
 
         down_arrow = Arrow(p2, p1, path_arc=PI)
@@ -104,7 +98,6 @@ class LayersOfAbstraction(EnumerableSaveScene):
         self.remove(up_arrow, up_words)
 
     def circle_certain_pairs(self):
-
         layers = self.layers
 
         for l1, l2 in zip(layers, layers[1:]):
@@ -133,7 +126,6 @@ class LayersOfAbstraction(EnumerableSaveScene):
     #
 
     def get_layers(self):
-
         layers = VGroup(*[VGroup(Rectangle(height=1, width=5)) for x in range(6)])
 
         layers.arrange(UP, buff=0)
@@ -322,7 +314,6 @@ class LayersOfAbstraction(EnumerableSaveScene):
 
 class DifferenceOfSquares(Scene):
     def construct(self):
-
         squares = VGroup(*[VGroup(*[Square() for x in range(8)]).arrange(RIGHT, buff=0) for y in range(8)]).arrange(
             DOWN, buff=0
         )
@@ -421,7 +412,6 @@ class DifferenceOfSquares(Scene):
 
 class Lightbulbs(EnumerableSaveScene):
     def construct(self):
-
         dots = VGroup(*[Dot() for x in range(4)])
 
         dots.set_height(0.5)
@@ -514,7 +504,6 @@ class LayersOfLightbulbs(Scene):
     }
 
     def construct(self):
-
         layers = VGroup()
 
         for x in range(6):
@@ -556,7 +545,6 @@ class LayersOfLightbulbs(Scene):
 
 class Test(Scene):
     def construct(self):
-
         # self.play_all_student_changes("hooray")
 
         # self.teacher.change("raise_right_hand")

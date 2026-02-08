@@ -34,7 +34,6 @@ class BacktrackingSystem(AgentABC):
         *args,
         **kwargs,
     ):
-
         self.backtracking_agent = BacktrackingAgent(model, system_prompt, task, *args, **kwargs)
 
         self.generator_agent = BasicAgent(model, system_prompt, task, agent_idx=agent_idx, *args, **kwargs)
@@ -55,7 +54,6 @@ class BacktrackingSystem(AgentABC):
         response: Optional[Response],
         namespace: FactorioNamespace,
     ) -> Policy:
-
         if self.successful_conv is None:
             self.successful_conv = copy.deepcopy(conversation)
 
@@ -124,5 +122,4 @@ class BacktrackingSystem(AgentABC):
         return update_state, completed
 
     async def end(self, conversation: Conversation, completion: CompletionResult):
-
         pass

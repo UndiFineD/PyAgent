@@ -38,7 +38,6 @@ Information inserted
 
 class SecretScanner(BaseScanner):
     async def init(self, args: ArgsModel):
-
         self.args = args
 
         self.domains = await get_assets_grouped_by_type(self, args, ASSET_TYPE_TLD)
@@ -46,7 +45,6 @@ class SecretScanner(BaseScanner):
         return [(self, "SecretScanner")]
 
     async def execute(self, tool_tuple):
-
         results = {}
 
         try:

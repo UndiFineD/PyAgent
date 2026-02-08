@@ -181,7 +181,6 @@ class ViewDatasetArgs:
 
 class EpisodeSampler(torch.utils.data.Sampler):
     def __init__(self, dataset: LeRobotDataset, episode_index: int):
-
         from_idx = dataset.episode_data_index["from"][episode_index].item()
 
         to_idx = dataset.episode_data_index["to"][episode_index].item()
@@ -189,16 +188,13 @@ class EpisodeSampler(torch.utils.data.Sampler):
         self.frame_ids = range(from_idx, to_idx)
 
     def __iter__(self) -> Iterator:
-
         return iter(self.frame_ids)
 
     def __len__(self) -> int:
-
         return len(self.frame_ids)
 
 
 def to_hwc_uint8_numpy(chw_float32_torch: torch.Tensor) -> np.ndarray:
-
     assert chw_float32_torch.dtype == torch.float32
 
     assert chw_float32_torch.ndim == 3
@@ -223,7 +219,6 @@ def visualize_dataset(
     save: bool = False,
     output_dir: Path | None = None,
 ) -> Path | None:
-
     if save:
         assert output_dir is not None, (
             "Set an output directory where to write .rrd files with `--output-dir path/to/directory`."
@@ -320,7 +315,6 @@ def visualize_dataset(
 
 
 def new_main(args: ViewDatasetArgs):
-
     logging.info("Loading dataset")
 
     dataset = LeRobotDataset(

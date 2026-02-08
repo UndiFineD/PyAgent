@@ -3,7 +3,6 @@
 
 # Extracted from: C:\DEV\PyAgent\.external\whatsapp-msgstore-viewer\Utility\observer.py
 
-
 # Of course, "very flexible Python" allows you to do without an abstract
 
 # superclass at all or use the clever exception `NotImplementedError`. In my

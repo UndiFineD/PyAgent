@@ -22,7 +22,6 @@ class WriteHeatEquationTemplate(Scene):
     }
 
     def get_d1_equation(self):
-
         return OldTex(
             "{\\partial {T} \\over \\partial {t}}({x}, {t})",
             "=",
@@ -32,7 +31,6 @@ class WriteHeatEquationTemplate(Scene):
         )
 
     def get_d1_equation_without_inputs(self):
-
         return OldTex(
             "{\\partial {T} \\over \\partial {t}}",
             "=",
@@ -42,7 +40,6 @@ class WriteHeatEquationTemplate(Scene):
         )
 
     def get_d3_equation(self):
-
         return OldTex(
             "{\\partial {T} \\over \\partial {t}}",
             "=",
@@ -55,7 +52,6 @@ class WriteHeatEquationTemplate(Scene):
         )
 
     def get_general_equation(self):
-
         return OldTex(
             "{\\partial {T} \\over \\partial {t}}",
             "=",
@@ -65,7 +61,6 @@ class WriteHeatEquationTemplate(Scene):
         )
 
     def get_d3_equation_with_inputs(self):
-
         return OldTex(
             "{\\partial {T} \\over \\partial {t}}",
             "({x}, {y}, {z}, {t})",
@@ -82,15 +77,12 @@ class WriteHeatEquationTemplate(Scene):
         )
 
     def get_d1_words(self):
-
         return OldTexText("Heat equation\\\\", "(1 dimension)")
 
     def get_d3_words(self):
-
         return OldTexText("Heat equation\\\\", "(3 dimensions)")
 
     def get_d1_group(self):
-
         group = VGroup(
             self.get_d1_words(),
             self.get_d1_equation(),
@@ -101,7 +93,6 @@ class WriteHeatEquationTemplate(Scene):
         return group
 
     def get_d3_group(self):
-
         group = VGroup(
             self.get_d3_words(),
             self.get_d3_equation(),
@@ -114,7 +105,6 @@ class WriteHeatEquationTemplate(Scene):
 
 class HeatEquationIntroTitle(WriteHeatEquationTemplate):
     def construct(self):
-
         scale_factor = 1.25
 
         title = OldTexText("The Heat Equation")
@@ -141,7 +131,6 @@ class HeatEquationIntroTitle(WriteHeatEquationTemplate):
 
 class BringTogether(Scene):
     def construct(self):
-
         arrows = VGroup(Vector(2 * RIGHT), Vector(2 * LEFT))
 
         arrows.arrange(RIGHT, buff=2)
@@ -168,7 +157,6 @@ class BringTogether(Scene):
 
 class FourierSeriesIntro(WriteHeatEquationTemplate):
     def construct(self):
-
         title_scale_value = 1.5
 
         title = OldTexText(
@@ -217,7 +205,6 @@ class FourierSeriesIntro(WriteHeatEquationTemplate):
         rot_square.add_updater(lambda m, dt: m.rotate(dt))
 
         def update_heat_colors(heat):
-
             colors = [YELLOW, RED]
 
             vertices = rot_square.get_vertices()
@@ -309,19 +296,16 @@ class FourierSeriesIntro(WriteHeatEquationTemplate):
 
 class CompareODEToPDE(Scene):
     def construct(self):
-
         pass
 
 
 class TodaysTargetWrapper(Scene):
     def construct(self):
-
         pass
 
 
 class TwoGraphTypeTitles(Scene):
     def construct(self):
-
         left_title = OldTexText("Represent time\\\\with actual time")
 
         left_title.shift(FRAME_WIDTH * LEFT / 4)
@@ -348,7 +332,6 @@ class TwoGraphTypeTitles(Scene):
 
 class ShowPartialDerivativeSymbols(Scene):
     def construct(self):
-
         t2c = {
             "{x}": GREEN,
             "{t}": YELLOW,
@@ -490,7 +473,6 @@ class ShowPartialDerivativeSymbols(Scene):
 
 class WriteHeatEquation(WriteHeatEquationTemplate):
     def construct(self):
-
         title = OldTexText("The Heat Equation")
 
         title.to_edge(UP)
@@ -577,7 +559,6 @@ class WriteHeatEquation(WriteHeatEquationTemplate):
 
 class Show3DEquation(WriteHeatEquationTemplate):
     def construct(self):
-
         equation = self.get_d3_equation_with_inputs()
 
         equation.set_width(FRAME_WIDTH - 1)
@@ -606,7 +587,6 @@ class Show3DEquation(WriteHeatEquationTemplate):
 
 class Show1DAnd3DEquations(WriteHeatEquationTemplate):
     def construct(self):
-
         d1_group = self.get_d1_group()
 
         d3_group = self.get_d3_group()
@@ -671,7 +651,6 @@ class Show1DAnd3DEquations(WriteHeatEquationTemplate):
 
 class D1EquationNoInputs(WriteHeatEquationTemplate):
     def construct(self):
-
         equation = self.get_d1_equation_without_inputs()
 
         equation.to_edge(UP)
@@ -691,7 +670,6 @@ class D1EquationNoInputs(WriteHeatEquationTemplate):
 
 class AltHeatRHS(Scene):
     def construct(self):
-
         formula = OldTex(
             "{\\alpha \\over 2}",
             "\\Big(",
@@ -707,7 +685,6 @@ class AltHeatRHS(Scene):
 
 class CompareInputsOfGeneralCaseTo1D(WriteHeatEquation):
     def construct(self):
-
         three_d_expr, one_d_expr = [
             OldTex(
                 "{T}(" + inputs + ", {t})",
@@ -745,7 +722,6 @@ class CompareInputsOfGeneralCaseTo1D(WriteHeatEquation):
 
 class ShowLaplacian(WriteHeatEquation):
     def construct(self):
-
         equation = self.get_d3_equation()
 
         equation.to_edge(UP, buff=MED_SMALL_BUFF)
@@ -837,7 +813,6 @@ class ShowLaplacian(WriteHeatEquation):
 
 class AskAboutActuallySolving(WriteHeatEquationTemplate):
     def construct(self):
-
         equation = self.get_d1_equation()
 
         equation.center()

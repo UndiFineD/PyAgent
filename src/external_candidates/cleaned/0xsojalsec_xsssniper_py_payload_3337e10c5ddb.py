@@ -12,7 +12,6 @@ import string
 
 class Payload:
     def __init__(self, taint=False, seed_len=None, payload=None):
-
         if taint:
             self.taint = True
 

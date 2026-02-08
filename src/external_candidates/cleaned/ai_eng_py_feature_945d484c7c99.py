@@ -14,21 +14,17 @@ from feathr.definition.dtype import FeatureType
 from feathr.definition.feathrconfig import HoconConvertible
 
 from feathr.definition.transformation import (
-
     ExpressionTransformation,
-
     Transformation,
-
     WindowAggTransformation,
-
 )
 
 from feathr.definition.typed_key import DUMMY_KEY, TypedKey
 
 from jinja2 import Template
 
-class FeatureBase(HoconConvertible):
 
+class FeatureBase(HoconConvertible):
     """The base class for features
 
     It has a feature name, feature type, and a convenient transformation used to produce its feature value.
@@ -50,32 +46,19 @@ class FeatureBase(HoconConvertible):
     """
 
     def __init__(
-
         self,
-
         name: str,
-
         feature_type: FeatureType,
-
         transform: Optional[Union[str, Transformation]] = None,
-
         key: Optional[Union[TypedKey, List[TypedKey]]] = [DUMMY_KEY],
-
         registry_tags: Optional[Dict[str, str]] = None,
-
     ):
-
         FeatureBase.validate_feature_name(name)
 
         # Validate the feature type
 
         if not isinstance(feature_type, FeatureType):
-
-            raise KeyError(
-
-                f"Feature type must be a FeatureType class, like INT32, but got {feature_type}"
-
-            )
+            raise KeyError(f"Feature type must be a FeatureType class, like INT32, but got {feature_type}")
 
         self.name = name
 
@@ -92,15 +75,12 @@ class FeatureBase(HoconConvertible):
         # If no transformation is specified, default to referencing the a field with the same name
 
         if transform is None:
-
             self.transform = ExpressionTransformation(name)
 
         elif isinstance(transform, str):
-
             self.transform = ExpressionTransformation(transform)
 
         else:
-
             self.transform = transform
 
         # An alias for the key in this feature. Default to its key column alias. Useful in derived features.
@@ -110,9 +90,7 @@ class FeatureBase(HoconConvertible):
         self.key_alias = [k.key_column_alias for k in self.key if k]
 
     @classmethod
-
     def validate_feature_name(cls, feature_name: str) -> bool:
-
         """
 
         Only alphabet, numbers, and '_' are allowed in the name.
@@ -124,11 +102,9 @@ class FeatureBase(HoconConvertible):
         """
 
         if not feature_name:
-
             raise Exception("Feature name rule violation: empty feature name detected")
 
         feature_validator = re.compile(
-
             r"""^              # from the start of the string
 
                                            [a-zA-Z_]{1}   # first character can only be a letter or underscore 
@@ -136,25 +112,18 @@ class FeatureBase(HoconConvertible):
                                            [a-zA-Z0-9_]+  # as many letters, numbers, or underscores as you like  
 
                                            $""",  # to the end of the string
-
             re.X,
-
         )
 
         if not feature_validator.match(feature_name):
-
             raise Exception(
-
                 "Feature name rule violation: only letters, numbers, and underscores are allowed in the name, "
-
                 + f"and the name cannot start with a number. name={feature_name}"
-
             )
 
         return True
 
     def with_key(self, key_alias: Union[str, List[str]]):
-
         """Rename the feature key with the alias. This is useful in derived features that depends on
 
         the same feature with different keys."""
@@ -166,7 +135,6 @@ class FeatureBase(HoconConvertible):
         new_key = []
 
         for i in range(0, len(cleaned_key_alias)):
-
             typed_key = deepcopy(self.key[i])
 
             typed_key.key_column_alias = cleaned_key_alias[i]
@@ -182,7 +150,6 @@ class FeatureBase(HoconConvertible):
         return res
 
     def as_feature(self, feature_alias):
-
         """Provide the feature a different alias, which can be used to reference the feature in transformation
 
         expression. This is useful in derived features that depends on the same feature with different keys.
@@ -195,8 +162,8 @@ class FeatureBase(HoconConvertible):
 
         return new_feature
 
-class Feature(FeatureBase):
 
+class Feature(FeatureBase):
     """A feature is an individual measurable property or characteristic of an entity.
 
     It has a feature name, feature type, and a convenient row transformation used to produce its feature value.
@@ -218,25 +185,16 @@ class Feature(FeatureBase):
     """
 
     def __init__(
-
         self,
-
         name: str,
-
         feature_type: FeatureType,
-
         key: Optional[Union[TypedKey, List[TypedKey]]] = [DUMMY_KEY],
-
         transform: Optional[Union[str, Transformation]] = None,
-
         registry_tags: Optional[Dict[str, str]] = None,
-
     ):
-
         super(Feature, self).__init__(name, feature_type, transform, key, registry_tags)
 
     def to_feature_config(self) -> str:
-
         tm = Template("""
 
             {{feature.name}}: {
@@ -250,4 +208,3 @@ class Feature(FeatureBase):
         """)
 
         return tm.render(feature=self)
-

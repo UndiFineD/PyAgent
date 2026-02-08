@@ -31,7 +31,6 @@
 
 from typing import Tuple
 
-
 import torch
 
 import torch.nn as nn
@@ -49,7 +48,6 @@ class InterpolateRegulator(nn.Module):
         out_channels: int = None,
         groups: int = 1,
     ):
-
         super().__init__()
 
         self.sampling_ratios = sampling_ratios
@@ -73,7 +71,6 @@ class InterpolateRegulator(nn.Module):
         self.model = nn.Sequential(*model)
 
     def forward(self, x, ylens=None):
-
         # x in (B, T, D)
 
         mask = (~make_pad_mask(ylens)).to(x).unsqueeze(-1)
@@ -87,7 +84,6 @@ class InterpolateRegulator(nn.Module):
         return out * mask, olens
 
     def inference(self, x1, x2, mel_len1, mel_len2, input_frame_rate=50):
-
         # in inference mode, interploate prompt token and token(head/mid/tail) seprately, so we can get a clear separation point of mel
 
         # x in (B, T, D)

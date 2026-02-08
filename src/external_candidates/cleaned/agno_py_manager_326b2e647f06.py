@@ -17,8 +17,8 @@ from agno.cli.console import print_info
 
 from agno.utils.log import logger
 
-class SecretsManager(AwsResource):
 
+class SecretsManager(AwsResource):
     """
 
     Reference:
@@ -92,7 +92,6 @@ class SecretsManager(AwsResource):
     cached_secret: Optional[Dict[str, Any]] = None
 
     def read_secrets_from_files(self) -> Dict[str, Any]:
-
         """Reads secrets from files"""
 
         from agno.utils.yaml_io import read_yaml_file
@@ -100,37 +99,28 @@ class SecretsManager(AwsResource):
         secret_dict: Dict[str, Any] = {}
 
         if self.secret_files:
-
             for f in self.secret_files:
-
                 _s = read_yaml_file(f)
 
                 if _s is not None:
-
                     secret_dict.update(_s)
 
         if self.secrets_dir:
-
             for f in self.secrets_dir.glob("*.yaml"):
-
                 _s = read_yaml_file(f)
 
                 if _s is not None:
-
                     secret_dict.update(_s)
 
             for f in self.secrets_dir.glob("*.yml"):
-
                 _s = read_yaml_file(f)
 
                 if _s is not None:
-
                     secret_dict.update(_s)
 
         return secret_dict
 
     def _create(self, aws_client: AwsApiClient) -> bool:
-
         """Creates the SecretsManager
 
         Args:
@@ -148,16 +138,11 @@ class SecretsManager(AwsResource):
         # Step 2: Add secret_string if provided
 
         if self.secret_string is not None:
-
             secret_dict.update(json.loads(self.secret_string))
 
         # Step 3: Build secret_string
 
-        secret_string: Optional[str] = (
-
-            json.dumps(secret_dict) if len(secret_dict) > 0 else None
-
-        )
+        secret_string: Optional[str] = json.dumps(secret_dict) if len(secret_dict) > 0 else None
 
         # Step 4: Build SecretsManager configuration
 
@@ -166,53 +151,37 @@ class SecretsManager(AwsResource):
         not_null_args: Dict[str, Any] = {}
 
         if self.client_request_token:
-
             not_null_args["ClientRequestToken"] = self.client_request_token
 
         if self.description:
-
             not_null_args["Description"] = self.description
 
         if self.kms_key_id:
-
             not_null_args["KmsKeyId"] = self.kms_key_id
 
         if self.secret_binary:
-
             not_null_args["SecretBinary"] = self.secret_binary
 
         if secret_string:
-
             not_null_args["SecretString"] = secret_string
 
         if self.tags:
-
             not_null_args["Tags"] = self.tags
 
         if self.add_replica_regions:
-
             not_null_args["AddReplicaRegions"] = self.add_replica_regions
 
         if self.force_overwrite_replica_secret:
-
-            not_null_args["ForceOverwriteReplicaSecret"] = (
-
-                self.force_overwrite_replica_secret
-
-            )
+            not_null_args["ForceOverwriteReplicaSecret"] = self.force_overwrite_replica_secret
 
         # Step 3: Create SecretsManager
 
         service_client = self.get_service_client(aws_client)
 
         try:
-
             created_resource = service_client.create_secret(
-
                 Name=self.name,
-
                 **not_null_args,
-
             )
 
             logger.debug(f"SecretsManager: {created_resource}")
@@ -228,7 +197,6 @@ class SecretsManager(AwsResource):
             logger.debug(f"secret_name: {self.secret_name}")
 
             if self.secret_arn is not None:
-
                 self.cached_secret = secret_dict
 
                 self.active_resource = created_resource
@@ -236,7 +204,6 @@ class SecretsManager(AwsResource):
                 return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be created.")
 
             logger.error(e)
@@ -244,7 +211,6 @@ class SecretsManager(AwsResource):
         return False
 
     def _read(self, aws_client: AwsApiClient) -> Optional[Any]:
-
         """Returns the SecretsManager
 
         Args:
@@ -260,7 +226,6 @@ class SecretsManager(AwsResource):
         service_client = self.get_service_client(aws_client)
 
         try:
-
             describe_response = service_client.describe_secret(SecretId=self.name)
 
             logger.debug(f"SecretsManager: {describe_response}")
@@ -278,17 +243,14 @@ class SecretsManager(AwsResource):
             # logger.debug(f"secret_deleted_date: {secret_deleted_date}")
 
             if self.secret_arn is not None:
-
                 # print_info(f"SecretsManager available: {self.name}")
 
                 self.active_resource = describe_response
 
         except ClientError as ce:
-
             logger.debug(f"ClientError: {ce}")
 
         except Exception as e:
-
             logger.error(f"Error reading {self.get_resource_type()}.")
 
             logger.error(e)
@@ -296,7 +258,6 @@ class SecretsManager(AwsResource):
         return self.active_resource
 
     def _delete(self, aws_client: AwsApiClient) -> bool:
-
         """Deletes the SecretsManager
 
         Args:
@@ -314,11 +275,8 @@ class SecretsManager(AwsResource):
         self.secret_value = None
 
         try:
-
             delete_response = service_client.delete_secret(
-
                 SecretId=self.name, ForceDeleteWithoutRecovery=self.force_delete
-
             )
 
             logger.debug(f"SecretsManager: {delete_response}")
@@ -326,7 +284,6 @@ class SecretsManager(AwsResource):
             return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be deleted.")
 
             logger.error("Please try again or delete resources manually.")
@@ -336,7 +293,6 @@ class SecretsManager(AwsResource):
         return False
 
     def _update(self, aws_client: AwsApiClient) -> bool:
-
         """Update SecretsManager"""
 
         print_info(f"Updating {self.get_resource_type()}: {self.get_resource_name()}")
@@ -352,7 +308,6 @@ class SecretsManager(AwsResource):
         # logger.debug(f"existing_secret_dict: {existing_secret_dict}")
 
         if existing_secret_dict is not None:
-
             secret_dict.update(existing_secret_dict)
 
         # Step 2: Read secrets from files
@@ -360,13 +315,11 @@ class SecretsManager(AwsResource):
         new_secret_dict: Dict[str, Any] = self.read_secrets_from_files()
 
         if len(new_secret_dict) > 0:
-
             secret_dict.update(new_secret_dict)
 
         # Step 3: Add secret_string is provided
 
         if self.secret_string is not None:
-
             secret_dict.update(json.loads(self.secret_string))
 
         # Step 3: Update AWS SecretsManager
@@ -378,13 +331,9 @@ class SecretsManager(AwsResource):
         self.secret_value = None
 
         try:
-
             create_response = service_client.update_secret(
-
                 SecretId=self.name,
-
                 SecretString=json.dumps(secret_dict),
-
             )
 
             logger.debug(f"SecretsManager: {create_response}")
@@ -392,19 +341,13 @@ class SecretsManager(AwsResource):
             return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be Updated.")
 
             logger.error(e)
 
         return False
 
-    def get_secrets_as_dict(
-
-        self, aws_client: Optional[AwsApiClient] = None
-
-    ) -> Optional[Dict[str, Any]]:
-
+    def get_secrets_as_dict(self, aws_client: Optional[AwsApiClient] = None) -> Optional[Dict[str, Any]]:
         """Get secret value
 
         Args:
@@ -416,7 +359,6 @@ class SecretsManager(AwsResource):
         from botocore.exceptions import ClientError
 
         if self.cached_secret is not None:
-
             return self.cached_secret
 
         logger.debug(f"Getting {self.get_resource_type()}: {self.get_resource_name()}")
@@ -426,13 +368,11 @@ class SecretsManager(AwsResource):
         service_client = self.get_service_client(client)
 
         try:
-
             secret_value = service_client.get_secret_value(SecretId=self.name)
 
             # logger.debug(f"SecretsManager: {secret_value}")
 
             if secret_value is None:
-
                 logger.warning(f"Secret Empty: {self.name}")
 
                 return None
@@ -446,7 +386,6 @@ class SecretsManager(AwsResource):
             secret_string = secret_value.get("SecretString", None)
 
             if secret_string is not None:
-
                 self.cached_secret = json.loads(secret_string)
 
                 return self.cached_secret
@@ -454,34 +393,24 @@ class SecretsManager(AwsResource):
             secret_binary = secret_value.get("SecretBinary", None)
 
             if secret_binary is not None:
-
                 self.cached_secret = json.loads(secret_binary.decode("utf-8"))
 
                 return self.cached_secret
 
         except ClientError as ce:
-
             logger.debug(f"ClientError: {ce}")
 
         except Exception as e:
-
             logger.error(f"Error reading {self.get_resource_type()}.")
 
             logger.error(e)
 
         return None
 
-    def get_secret_value(
-
-        self, secret_name: str, aws_client: Optional[AwsApiClient] = None
-
-    ) -> Optional[Any]:
-
+    def get_secret_value(self, secret_name: str, aws_client: Optional[AwsApiClient] = None) -> Optional[Any]:
         secret_dict = self.get_secrets_as_dict(aws_client=aws_client)
 
         if secret_dict is not None:
-
             return secret_dict.get(secret_name, None)
 
         return None
-

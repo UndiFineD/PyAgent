@@ -5,8 +5,8 @@
 
 from enum import Enum
 
-class Aggregation(Enum):
 
+class Aggregation(Enum):
     """
 
     The built-in aggregation functions for LookupFeature
@@ -46,4 +46,3 @@ class Aggregation(Enum):
     # Pick the first value from the looked up values (non-deterministic)
 
     FIRST = 11
-

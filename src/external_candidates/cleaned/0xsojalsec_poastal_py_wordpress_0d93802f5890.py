@@ -7,7 +7,6 @@ import requests
 
 
 def wordpress_email(email):
-
     params = {
         "http_envelope": "1",
     }

@@ -20,7 +20,6 @@ class A2AFactorioNamespace(FactorioNamespace):
     """A FactorioNamespace with A2A (Agent-to-Agent) communication support."""
 
     def __init__(self, instance, agent_index):
-
         self.a2a_handler: Optional[A2AProtocolHandler] = None
 
         self.called_setup = False

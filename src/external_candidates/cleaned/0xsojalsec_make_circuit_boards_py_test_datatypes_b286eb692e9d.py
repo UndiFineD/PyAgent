@@ -9,41 +9,34 @@ from atopile.datatypes import DotDict, KeyOptItem, KeyOptMap, Ref, StackList, St
 
 
 def test_ref_from_one():
-
     assert Ref.from_one("foo") == ("foo",)
 
     assert Ref.from_one(42) == (42,)
 
 
 def test_ref_add_name():
-
     assert Ref.from_one("foo").add_name("bar") == ("foo", "bar")
 
 
 def test_keyoptitem_from_kv():
-
     assert KeyOptItem.from_kv(None, "foo") == (None, "foo")
 
 
 def test_keyoptmap_from_item():
-
     assert KeyOptMap.from_item(KeyOptItem.from_kv(None, "foo")) == ((None, "foo"),)
 
 
 def test_keyoptmap_from_kv():
-
     assert KeyOptMap.from_kv(None, "foo") == ((None, "foo"),)
 
 
 def test_keyoptitem_ref():
-
     assert KeyOptItem((None, "foo")).ref is None
 
     assert KeyOptItem((Ref.from_one("foo"), "bar")).ref == ("foo",)
 
 
 def test_keyoptmap_get_named_items():
-
     assert dict(
         KeyOptMap(
             (
@@ -57,7 +50,6 @@ def test_keyoptmap_get_named_items():
 
 
 def test_filter_items_by_type():
-
     strs = KeyOptMap(
         (
             KeyOptItem((None, "foo")),
@@ -84,7 +76,6 @@ def test_filter_items_by_type():
 
 
 def test_keyoptmap_get_items_by_type():
-
     strs = KeyOptMap(
         (
             KeyOptItem((None, "foo")),
@@ -111,7 +102,6 @@ def test_keyoptmap_get_items_by_type():
 
 
 def test_keyoptmap_get_unnamed_items():
-
     assert tuple(
         KeyOptMap(
             (
@@ -124,7 +114,6 @@ def test_keyoptmap_get_unnamed_items():
 
 
 def test_keyoptmap_keys():
-
     assert tuple(
         KeyOptMap(
             (
@@ -137,7 +126,6 @@ def test_keyoptmap_keys():
 
 
 def test_keyoptmap_values():
-
     assert tuple(
         KeyOptMap(
             (
@@ -150,7 +138,6 @@ def test_keyoptmap_values():
 
 
 def test_strainer():
-
     s = Strainer([1, 2, 3, 4, 5])
 
     assert list(s) == [1, 2, 3, 4, 5]
@@ -174,7 +161,6 @@ def test_strainer():
 
 
 def test_stack_list():
-
     stack = StackList()
 
     with stack.enter(1):
@@ -193,7 +179,6 @@ def test_stack_list():
 
 
 def test_DotDict():
-
     d = DotDict({"a": 1, "b": 2})
 
     assert d.a == 1

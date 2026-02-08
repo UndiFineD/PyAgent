@@ -21,7 +21,6 @@ class FourierSeriesExampleWithRectForZoom(ComplexFourierSeriesExample):
     }
 
     def construct(self):
-
         self.add_vectors_circles_path()
 
         self.circles.set_stroke(opacity=0.5)
@@ -37,11 +36,9 @@ class FourierSeriesExampleWithRectForZoom(ComplexFourierSeriesExample):
         self.run_one_cycle()
 
     def get_rect_center(self):
-
         return center_of_mass([v.get_end() for v in self.vectors])
 
     def get_rect(self):
-
         return ScreenRectangle(
             color=BLUE,
             stroke_width=self.rect_stroke_width,
@@ -58,17 +55,14 @@ class ZoomedInFourierSeriesExample(FourierSeriesExampleWithRectForZoom, MovingCa
     }
 
     def setup(self):
-
         ComplexFourierSeriesExample.setup(self)
 
         MovingCameraScene.setup(self)
 
     def get_rect(self):
-
         return self.camera_frame
 
     def add_vectors_circles_path(self):
-
         super().add_vectors_circles_path()
 
         for v in self.vectors:
@@ -90,7 +84,6 @@ class ZoomedInFourierSeriesExample100x(ZoomedInFourierSeriesExample):
     }
 
     def get_rect_center(self):
-
         return self.vectors[-1].get_end()
 
     # def get_drawn_path(self, vectors, stroke_width=2, **kwargs):
@@ -135,7 +128,6 @@ class SigmaFourierSeriesExampleWithRectForZoom(FourierSeriesExampleWithRectForZo
     }
 
     def get_shape(self):
-
         return OldTex("\\Sigma")
 
 
@@ -168,7 +160,6 @@ class FourierOfFourier100xZoom(ZoomedInFourierSeriesExample100x):
     }
 
     def run_one_cycle(self):
-
         self.vector_clock.set_value(0.3)
 
         self.wait(40)
@@ -183,7 +174,6 @@ class FourierOfHilbert(FourierSeriesExampleWithRectForZoom):
     }
 
     def get_path(self):
-
         path = HilbertCurve(order=5)
 
         path.set_height(self.drawing_height)
@@ -248,7 +238,6 @@ class FourierOfSeattleZoomedIn(ZoomedInFourierSeriesExample):
 
 class VideoWrapper(Scene):
     def construct(self):
-
         fade_rect = FullScreenFadeRectangle()
 
         fade_rect.set_fill(GREY_D, 1)

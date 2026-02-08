@@ -7,7 +7,6 @@ from datetime import datetime
 
 from typing import Dict, Optional
 
-
 from fle.commons.models.conversation import Conversation
 
 from fle.commons.models.game_state import GameState

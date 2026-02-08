@@ -13,8 +13,8 @@ from agno.storage.sqlite import SqliteStorage
 
 from pydantic import BaseModel, Field
 
-def _assert_metrics(response: RunResponse):
 
+def _assert_metrics(response: RunResponse):
     input_tokens = response.metrics.get("input_tokens", [])
 
     output_tokens = response.metrics.get("output_tokens", [])
@@ -29,11 +29,7 @@ def _assert_metrics(response: RunResponse):
 
     assert sum(total_tokens) == sum(input_tokens) + sum(output_tokens)
 
-    assert (
-
-        response.metrics.get("additional_metrics")[0].get("completion_time") is not None
-
-    )
+    assert response.metrics.get("additional_metrics")[0].get("completion_time") is not None
 
     assert response.metrics.get("additional_metrics")[0].get("prompt_time") is not None
 
@@ -41,18 +37,13 @@ def _assert_metrics(response: RunResponse):
 
     assert response.metrics.get("additional_metrics")[0].get("total_time") is not None
 
+
 def test_basic():
-
     agent = Agent(
-
         model=Groq(id="llama3-70b-8192"),
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     # Print the response in the terminal
@@ -67,18 +58,13 @@ def test_basic():
 
     _assert_metrics(response)
 
+
 def test_basic_stream():
-
     agent = Agent(
-
         model=Groq(id="llama3-70b-8192"),
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     response_stream = agent.run("Share a 2 sentence horror story", stream=True)
@@ -92,27 +78,20 @@ def test_basic_stream():
     assert len(responses) > 0
 
     for response in responses:
-
         assert isinstance(response, RunResponse)
 
         assert response.content is not None
 
     _assert_metrics(agent.run_response)
 
+
 @pytest.mark.asyncio
-
 async def test_async_basic():
-
     agent = Agent(
-
         model=Groq(id="llama3-70b-8192"),
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     response = await agent.arun("Share a 2 sentence horror story")
@@ -125,48 +104,34 @@ async def test_async_basic():
 
     _assert_metrics(response)
 
+
 @pytest.mark.asyncio
-
 async def test_async_basic_stream():
-
     agent = Agent(
-
         model=Groq(id="llama3-70b-8192"),
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     response_stream = await agent.arun("Share a 2 sentence horror story", stream=True)
 
     async for response in response_stream:
-
         assert isinstance(response, RunResponse)
 
         assert response.content is not None
 
     _assert_metrics(agent.run_response)
 
+
 def test_with_memory():
-
     agent = Agent(
-
         model=Groq(id="llama3-70b-8192"),
-
         add_history_to_messages=True,
-
         num_history_responses=5,
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     # First interaction
@@ -188,27 +153,20 @@ def test_with_memory():
     assert len(messages) == 5
 
     assert [m.role for m in messages] == [
-
         "system",
-
         "user",
-
         "assistant",
-
         "user",
-
         "assistant",
-
     ]
 
     # Test metrics structure and types
 
     _assert_metrics(response2)
 
+
 def test_response_model():
-
     class MovieScript(BaseModel):
-
         title: str = Field(..., description="Movie title")
 
         genre: str = Field(..., description="Movie genre")
@@ -216,15 +174,10 @@ def test_response_model():
         plot: str = Field(..., description="Brief plot summary")
 
     agent = Agent(
-
         model=Groq(id="llama3-70b-8192"),
-
         telemetry=False,
-
         monitoring=False,
-
         response_model=MovieScript,
-
     )
 
     response = agent.run("Create a movie about time travel")
@@ -238,11 +191,10 @@ def test_response_model():
     assert response.content.genre is not None
 
     assert response.content.plot is not None
+
 
 def test_json_response_mode():
-
     class MovieScript(BaseModel):
-
         title: str = Field(..., description="Movie title")
 
         genre: str = Field(..., description="Movie genre")
@@ -250,17 +202,11 @@ def test_json_response_mode():
         plot: str = Field(..., description="Brief plot summary")
 
     agent = Agent(
-
         model=Groq(id="llama3-70b-8192"),
-
         use_json_mode=True,
-
         telemetry=False,
-
         monitoring=False,
-
         response_model=MovieScript,
-
     )
 
     response = agent.run("Create a movie about time travel")
@@ -274,11 +220,10 @@ def test_json_response_mode():
     assert response.content.genre is not None
 
     assert response.content.plot is not None
+
 
 def test_structured_outputs_deprecated():
-
     class MovieScript(BaseModel):
-
         title: str = Field(..., description="Movie title")
 
         genre: str = Field(..., description="Movie genre")
@@ -286,17 +231,11 @@ def test_structured_outputs_deprecated():
         plot: str = Field(..., description="Brief plot summary")
 
     agent = Agent(
-
         model=Groq(id="llama3-70b-8192"),
-
         structured_outputs=False,  # They don't support native structured outputs
-
         telemetry=False,
-
         monitoring=False,
-
         response_model=MovieScript,
-
     )
 
     response = agent.run("Create a movie about time travel")
@@ -311,24 +250,14 @@ def test_structured_outputs_deprecated():
 
     assert response.content.plot is not None
 
+
 def test_history():
-
     agent = Agent(
-
         model=Groq(id="llama3-70b-8192"),
-
-        storage=SqliteStorage(
-
-            table_name="agent_sessions", db_file="tmp/agent_storage.db"
-
-        ),
-
+        storage=SqliteStorage(table_name="agent_sessions", db_file="tmp/agent_storage.db"),
         add_history_to_messages=True,
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     agent.run("Hello")
@@ -346,4 +275,3 @@ def test_history():
     agent.run("Hello 4")
 
     assert len(agent.run_response.messages) == 8
-

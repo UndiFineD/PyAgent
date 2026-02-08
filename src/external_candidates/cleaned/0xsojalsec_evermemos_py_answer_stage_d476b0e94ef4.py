@@ -197,7 +197,6 @@ async def run_answer_stage(
     )
 
     async def answer_single_with_tracking(qa, search_result):
-
         nonlocal completed, failed
 
         async with semaphore:

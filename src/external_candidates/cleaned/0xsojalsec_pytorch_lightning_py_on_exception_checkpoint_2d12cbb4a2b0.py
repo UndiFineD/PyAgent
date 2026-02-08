@@ -80,7 +80,6 @@ class OnExceptionCheckpoint(Checkpoint):
     FILE_EXTENSION = ".ckpt"
 
     def __init__(self, dirpath: _PATH, filename: str = "on_exception") -> None:
-
         super().__init__()
 
         if not filename:
@@ -94,17 +93,14 @@ class OnExceptionCheckpoint(Checkpoint):
 
     @property
     def ckpt_path(self) -> str:
-
         return os.path.join(self.dirpath, self.filename + self.FILE_EXTENSION)
 
     @override
     def on_exception(self, trainer: "pl.Trainer", *_: Any, **__: Any) -> None:
-
         # overwrite if necessary
 
         trainer.save_checkpoint(self.ckpt_path)
 
     @override
     def teardown(self, trainer: "pl.Trainer", *_: Any, **__: Any) -> None:
-
         trainer.strategy.remove_checkpoint(self.ckpt_path)

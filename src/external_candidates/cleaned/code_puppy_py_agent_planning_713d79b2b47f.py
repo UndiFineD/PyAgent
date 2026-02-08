@@ -11,56 +11,38 @@ from .. import callbacks
 
 from .base_agent import BaseAgent
 
-class PlanningAgent(BaseAgent):
 
+class PlanningAgent(BaseAgent):
     """Planning Agent - Analyzes requirements and creates detailed execution plans."""
 
     @property
-
     def name(self) -> str:
-
         return "planning-agent"
 
     @property
-
     def display_name(self) -> str:
-
         return "Planning Agent 📋"
 
     @property
-
     def description(self) -> str:
-
         return (
-
             "Breaks down complex coding tasks into clear, actionable steps. "
-
             "Analyzes project structure, identifies dependencies, and creates execution roadmaps."
-
         )
 
     def get_available_tools(self) -> list[str]:
-
         """Get the list of tools available to the Planning Agent."""
 
         return [
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             "agent_share_your_reasoning",
-
             "list_agents",
-
             "invoke_agent",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         """Get the Planning Agent's system prompt."""
 
         puppy_name = get_puppy_name()
@@ -254,8 +236,6 @@ IMPORTANT: Only when the user gives clear approval to proceed (such as "execute 
         prompt_additions = callbacks.on_load_prompt()
 
         if len(prompt_additions):
-
             result += "\n".join(prompt_additions)
 
         return result
-

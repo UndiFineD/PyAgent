@@ -13,7 +13,6 @@ import os
 
 from pathlib import Path
 
-
 from factorio_rcon import RCONClient
 
 from fle.env.utils.rcon import (
@@ -30,7 +29,6 @@ from lupa.lua54 import LuaRuntime
 
 class LuaScriptManager:
     def __init__(self, rcon_client: RCONClient, cache_scripts: bool = False):
-
         self.rcon_client = rcon_client
 
         self.cache_scripts = cache_scripts
@@ -54,7 +52,6 @@ class LuaScriptManager:
         self.lua = LuaRuntime(unpack_returned_tuples=True)
 
     def init_action_checksums(self):
-
         checksum_init_script = _load_mods("checksum")
 
         response = self.rcon_client.send_command("/sc " + checksum_init_script)
@@ -62,7 +59,6 @@ class LuaScriptManager:
         return response
 
     def check_lua_syntax(self, script):
-
         try:
             self.lua.execute(script)
 
@@ -76,7 +72,6 @@ class LuaScriptManager:
             return False, e.args[0]
 
     def load_tool_into_game(self, name):
-
         # Select scripts by exact tool directory, not prefix
 
         tool_dirs = {
@@ -127,7 +122,6 @@ class LuaScriptManager:
                 raise Exception(response)
 
     def load_init_into_game(self, name):
-
         if name not in self.lib_scripts:
             # attempt to load the script from the filesystem
 
@@ -153,11 +147,9 @@ class LuaScriptManager:
         pass
 
     def calculate_checksum(self, content: str) -> str:
-
         return hashlib.md5(content.encode()).hexdigest()
 
     def get_tools_to_load(self):
-
         scripts_to_load = {}
 
         lua_files = _get_tool_names()  # This returns all .lua files from previous modification
@@ -193,7 +185,6 @@ class LuaScriptManager:
         return scripts_to_load
 
     def get_libs_to_load(self):
-
         scripts_to_load = {}
 
         for filename in _get_lib_names():
@@ -211,15 +202,12 @@ class LuaScriptManager:
         return scripts_to_load
 
     def update_game_checksum(self, rcon_client, script_name: str, checksum: str):
-
         rcon_client.send_command(f"/sc global.set_lua_script_checksum('{script_name}', '{checksum}')")
 
     def _clear_game_checksums(self, rcon_client):
-
         rcon_client.send_command("/sc global.clear_lua_script_checksums()")
 
     def _get_game_checksums(self, rcon_client):
-
         response = rcon_client.send_command("/sc rcon.print(global.get_lua_script_checksums())")
 
         return json.loads(response)
@@ -236,18 +224,15 @@ class LuaScriptManager:
         instance.controllers = {}
 
         def snake_to_camel(snake_str):
-
             return "".join(word.capitalize() for word in snake_str.split("_"))
 
         # Create a function that wraps a tool's call method to execute hooks
 
         def create_hook_wrapper(tool_name, original_callable):
-
             from functools import wraps
 
             @wraps(original_callable)
             def wrapper(*args, **kwargs):
-
                 # Execute pre-tool hooks
 
                 try:
@@ -358,8 +343,6 @@ class LuaScriptManager:
 
         Can be used as a regular function or as a decorator.
 
-
-
         Args:
 
             tool_name (str): Name of the tool to hook into
@@ -367,8 +350,6 @@ class LuaScriptManager:
             callback (callable, optional): Function to call after the tool is executed.
 
                                           Will receive the tool instance and the result as arguments.
-
-
 
         Returns:
 
@@ -400,7 +381,6 @@ class LuaScriptManager:
         if callback is None:
 
             def decorator(func):
-
                 if not hasattr(instance, "post_tool_hooks"):
                     instance.post_tool_hooks = {}
 
@@ -436,8 +416,6 @@ class LuaScriptManager:
 
         Can be used as a regular function or as a decorator.
 
-
-
         Args:
 
             tool_name (str): Name of the tool to hook into
@@ -445,8 +423,6 @@ class LuaScriptManager:
             callback (callable, optional): Function to call before the tool is executed.
 
                                           Will receive the tool instance and the arguments as parameters.
-
-
 
         Returns:
 
@@ -478,7 +454,6 @@ class LuaScriptManager:
         if callback is None:
 
             def decorator(func):
-
                 if not hasattr(instance, "pre_tool_hooks"):
                     instance.pre_tool_hooks = {}
 
@@ -512,8 +487,6 @@ class LuaScriptManager:
 
         Execute all hooks registered for a tool after it has been executed.
 
-
-
         Args:
 
             tool_name (str): Name of the tool
@@ -537,8 +510,6 @@ class LuaScriptManager:
         """
 
         Execute all hooks registered for a tool before it is executed.
-
-
 
         Args:
 

@@ -12,13 +12,11 @@ from manim_imports_ext import *
 
 class EntireBrickWall(BrickRowScene, MovingCameraScene):
     def setup(self):
-
         super(BrickRowScene, self).setup()
 
         super(PiCreatureScene, self).setup()
 
     def construct(self):
-
         self.remove(self.get_primary_pi_creature())
 
         row_height = 0.3
@@ -126,7 +124,6 @@ class EntireBrickWall(BrickRowScene, MovingCameraScene):
         self.play(rows.fade, 0.9, ShowCreation(last_row_rect))
 
         def highlighted_brick(row=20, nb_tails=10):
-
             brick_copy = rows[row].rects[nb_tails].copy()
 
             brick_copy.set_fill(color=YELLOW, opacity=0.8)

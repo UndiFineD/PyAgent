@@ -11,8 +11,8 @@ from agno.docker.resource.base import DockerResource
 
 from agno.utils.log import logger
 
-class DockerNetwork(DockerResource):
 
+class DockerNetwork(DockerResource):
     resource_type: str = "Network"
 
     # driver (str) – Name of the driver used to create the network
@@ -60,7 +60,6 @@ class DockerNetwork(DockerResource):
     skip_update: bool = True
 
     def _create(self, docker_client: DockerApiClient) -> bool:
-
         """Creates the Network on docker
 
         Args:
@@ -80,23 +79,19 @@ class DockerNetwork(DockerResource):
         network_object: Optional[Network] = None
 
         try:
-
             _api_client: DockerClient = docker_client.api_client
 
             network_object = _api_client.networks.create(network_name)
 
             if network_object is not None:
-
                 logger.debug("Network Created: {}".format(network_object.name))
 
             else:
-
                 logger.debug("Network could not be created")
 
             # logger.debug("Network {}".format(network_object.attrs))
 
         except Exception:
-
             raise
 
         # By this step the network should be created
@@ -106,7 +101,6 @@ class DockerNetwork(DockerResource):
         logger.debug("Validating network is created")
 
         if network_object is not None:
-
             # TODO: validate that the network was actually created
 
             self.active_resource = network_object
@@ -118,7 +112,6 @@ class DockerNetwork(DockerResource):
         return False
 
     def _read(self, docker_client: DockerApiClient) -> Any:
-
         """Returns a Network object if the network is active
 
         Args:
@@ -136,7 +129,6 @@ class DockerNetwork(DockerResource):
         network_name: Optional[str] = self.name
 
         try:
-
             _api_client: DockerClient = docker_client.api_client
 
             network_list: Optional[List[Network]] = _api_client.networks.list()
@@ -144,11 +136,8 @@ class DockerNetwork(DockerResource):
             # logger.debug("network_list: {}".format(network_list))
 
             if network_list is not None:
-
                 for network in network_list:
-
                     if network.name == network_name:
-
                         logger.debug(f"Network {network_name} exists")
 
                         self.active_resource = network
@@ -156,13 +145,11 @@ class DockerNetwork(DockerResource):
                         return network
 
         except Exception:
-
             logger.debug(f"Network {network_name} not found")
 
         return None
 
     def _delete(self, docker_client: DockerApiClient) -> bool:
-
         """Deletes the Network from docker
 
         Args:
@@ -182,19 +169,16 @@ class DockerNetwork(DockerResource):
         # Return True if there is no Network to delete
 
         if network_object is None:
-
             return True
 
         # Delete Network
 
         try:
-
             self.active_resource = None
 
             network_object.remove()
 
         except Exception as e:
-
             logger.exception("Error while deleting network: {}".format(e))
 
         # Validate that the network is deleted
@@ -202,16 +186,13 @@ class DockerNetwork(DockerResource):
         logger.debug("Validating network is deleted")
 
         try:
-
             logger.debug("Reloading network_object: {}".format(network_object))
 
             network_object.reload()
 
         except NotFound:
-
             logger.debug("Got NotFound Exception, Network is deleted")
 
             return True
 
         return False
-

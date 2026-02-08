@@ -18,7 +18,6 @@ class ConnectionRenderer:
     """Renders connections between related entities, like underground belts and pipes"""
 
     def __init__(self, color_manager: ColourManager):
-
         self.color_manager = color_manager
 
     def draw_underground_belt_connection(

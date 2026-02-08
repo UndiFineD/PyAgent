@@ -18,7 +18,6 @@ class VectorDraw(Animation):
     }
 
     def __init__(self, func, **kwargs):
-
         digest_config(self, kwargs, locals())
 
         self.curve = ParametricCurve(func, t_min=self.t_min, t_max=self.t_max, color=self.line_color)
@@ -30,7 +29,6 @@ class VectorDraw(Animation):
         Animation.__init__(self, mobject, **kwargs)
 
     def interpolate_mobject(self, alpha):
-
         t = alpha * self.t_max + (1 - alpha) * self.t_min
 
         self.vector.put_start_and_end_on(ORIGIN, self.func(t))
@@ -44,11 +42,9 @@ class VectorDraw(Animation):
 
 class Test(Scene):
     def construct(self):
-
         axes = Axes()
 
         def func(t):
-
             return 0.5 * (t * np.cos(t) * RIGHT + t * np.sin(t) * UP)
 
         words = OldTexText("Parametric functions")

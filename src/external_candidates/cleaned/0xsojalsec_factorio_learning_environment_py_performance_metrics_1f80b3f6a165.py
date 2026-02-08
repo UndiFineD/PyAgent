@@ -15,7 +15,6 @@ from dataclasses import dataclass
 
 from typing import Any, Dict, List, Optional, Tuple
 
-
 import numpy as np
 
 import pandas as pd
@@ -127,8 +126,6 @@ class PerformanceAnalyzer:
     ) -> PerformanceMetrics:
         """Calculate comprehensive performance metrics from trajectory data
 
-
-
         Args:
 
             df: DataFrame with trajectory-level results
@@ -142,8 +139,6 @@ class PerformanceAnalyzer:
             step_column: Optional column with step counts
 
             k_values: List of k values for pass@k calculation
-
-
 
         Returns:
 
@@ -238,21 +233,15 @@ class PerformanceAnalyzer:
     def calculate_pass_at_k(successes: np.ndarray, k: int) -> float:
         """Calculate pass@k metric
 
-
-
         Pass@k is the probability that at least one of k randomly sampled
 
         trajectories is successful.
-
-
 
         Args:
 
             successes: Boolean array indicating success for each trajectory
 
             k: Number of samples to consider
-
-
 
         Returns:
 
@@ -309,8 +298,6 @@ class PerformanceAnalyzer:
     def binomial_confidence_interval(successes: int, trials: int, confidence: float = 0.95) -> Tuple[float, float]:
         """Calculate binomial confidence interval for success rate
 
-
-
         Args:
 
             successes: Number of successful trials
@@ -318,8 +305,6 @@ class PerformanceAnalyzer:
             trials: Total number of trials
 
             confidence: Confidence level (e.g., 0.95 for 95%)
-
-
 
         Returns:
 
@@ -357,15 +342,11 @@ class PerformanceAnalyzer:
     ) -> pd.DataFrame:
         """Compare performance metrics across models
 
-
-
         Args:
 
             metrics_dict: Dictionary mapping model names to PerformanceMetrics
 
             primary_metric: Metric to sort by
-
-
 
         Returns:
 
@@ -397,8 +378,6 @@ class PerformanceAnalyzer:
     ) -> Dict[str, Any]:
         """Test statistical significance between two models
 
-
-
         Args:
 
             metrics1: First model metrics
@@ -406,8 +385,6 @@ class PerformanceAnalyzer:
             metrics2: Second model metrics
 
             metric: Metric to compare
-
-
 
         Returns:
 

@@ -10,7 +10,6 @@ class PathResult:
     """Encapsulates the result of a path finding operation"""
 
     def __init__(self, response: Union[Dict, str]):
-
         self.raw_response = response
 
         self.is_success = isinstance(response, dict)
@@ -23,5 +22,4 @@ class PathResult:
 
     @property
     def required_entities(self) -> int:
-
         return self.raw_response.get("number_of_entities", 0) if self.is_success else 0

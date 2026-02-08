@@ -20,7 +20,6 @@ class Diffusion1D(Scene):
     }
 
     def construct(self):
-
         y_range = self.y_range
 
         x_range = self.x_range
@@ -97,7 +96,6 @@ class Diffusion1D(Scene):
         bars.set_stroke(GREY_B, 0.2)
 
         def update_bars(bars, dots=dots, y_unit=y_unit, epsilon=epsilon):
-
             for bar in bars:
                 count = 0
 
@@ -114,7 +112,6 @@ class Diffusion1D(Scene):
         # Include rule for updating
 
         def step(dots=dots, bars=bars, x_unit=x_unit, x_range=x_range, time_label=time_label):
-
             time_label[1].increment_value()
 
             for dot in dots:
@@ -147,7 +144,6 @@ class Diffusion1D(Scene):
             step()
 
     def get_time_label(self):
-
         time_label = VGroup(
             OldTexText("Time: "),
             Integer(0),
@@ -162,7 +158,6 @@ class Diffusion1D(Scene):
         return time_label
 
     def get_dots(self):
-
         dots = VGroup(*[Dot() for x in range(self.n_dots)])
 
         dots.set_height(2 * self.dot_radius)
@@ -183,7 +178,6 @@ class Diffusion1D(Scene):
         return dots
 
     def adjust_initial_dot_positions(self, dots, x_unit):
-
         pass
 
 
@@ -205,7 +199,6 @@ class Diffusion1DStepFunction(Diffusion1D):
     }
 
     def adjust_initial_dot_positions(self, dots, x_unit):
-
         initial_positions = list(range(*self.initial_range))
 
         for n, dot in enumerate(dots):
@@ -238,7 +231,6 @@ class DiffusionDeltaGraphedTripleStart(DiffusionDeltaGraphed):
     }
 
     def adjust_initial_dot_positions(self, dots, x_unit):
-
         for n, dot in enumerate(dots):
             x = int(n % 4 - 1.5)
 
@@ -256,7 +248,6 @@ class DiffusionDeltaGraphedShowingMean(DiffusionDeltaGraphed):
     }
 
     def adjust_initial_dot_positions(self, dots, x_unit):
-
         # Hack, just using this to add something new and updated
 
         label = VGroup(
@@ -282,7 +273,6 @@ class Diffusion2D(Diffusion1D):
     }
 
     def construct(self):
-
         grid_dimensions = self.grid_dimensions
 
         # Setup grid
@@ -320,7 +310,6 @@ class Diffusion2D(Diffusion1D):
         # Rule for updating
 
         def step(dots=dots, step_size=step_size, time_label=time_label):
-
             for dot in dots:
                 vect = random.choice([UP, DOWN, LEFT, RIGHT, ORIGIN])
 

@@ -21,7 +21,6 @@ class Props:
         max_feature: int = C.DEFAULT_MAX_FEATURE,
         backup_version: int = C.DEFAULT_BACKUP_VERSION,
     ):
-
         if v_features is not None:
             self.props = v_features
 
@@ -51,25 +50,21 @@ class Props:
             self.enable_feature(f)
 
     def enable_feature(self, feature: int):
-
         feature_name = "f_" + str(feature)
 
         setattr(self.props, feature_name, True)
 
     def disable_feature(self, feature: int):
-
         feature_name = "f_" + str(feature)
 
         setattr(self.props, feature_name, False)
 
     def get_feature(self, feature: int) -> bool:
-
         feature_name = "f_" + str(feature)
 
         return getattr(self.props, feature_name)
 
     def get_features(self) -> list[int]:
-
         features = []
 
         for i in range(5, self.max_feature + 1):
@@ -83,17 +78,13 @@ class Props:
         return features
 
     def get_wa_version(self) -> str:
-
         return self.props.version
 
     def get_jid(self) -> str:
-
         return self.props.jidSuffix
 
     def get_proto(self):
-
         return self.props
 
     def __str__(self):
-
         return str(self.props)

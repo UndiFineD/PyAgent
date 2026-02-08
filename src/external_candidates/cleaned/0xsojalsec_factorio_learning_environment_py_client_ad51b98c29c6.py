@@ -14,7 +14,6 @@ from fle.env.tools import Tool
 
 class ExtractItem(Tool):
     def __init__(self, connection, game_state):
-
         super().__init__(connection, game_state)
 
     def __call__(self, entity: Prototype, source: Union[Position, Entity], quantity=5) -> int:

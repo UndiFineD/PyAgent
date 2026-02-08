@@ -12,7 +12,6 @@ class ImagesMod256(Scene):
     CONFIG = {}
 
     def construct(self):
-
         lion = ImageMobject("Lion")
 
         lion.set_height(6)

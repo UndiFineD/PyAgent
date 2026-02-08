@@ -15,8 +15,8 @@ from agno.utils.log import logger
 
 from pydantic import BaseModel, ValidationError
 
-def is_valid_uuid(uuid_str: str) -> bool:
 
+def is_valid_uuid(uuid_str: str) -> bool:
     """
 
     Check if a string is a valid UUID
@@ -34,17 +34,15 @@ def is_valid_uuid(uuid_str: str) -> bool:
     from uuid import UUID
 
     try:
-
         UUID(str(uuid_str))
 
         return True
 
     except (ValueError, AttributeError, TypeError):
-
         return False
 
-def url_safe_string(input_string):
 
+def url_safe_string(input_string):
     # Replace spaces with dashes
 
     safe_string = input_string.replace(" ", "-")
@@ -67,8 +65,8 @@ def url_safe_string(input_string):
 
     return safe_string
 
-def hash_string_sha256(input_string):
 
+def hash_string_sha256(input_string):
     # Encode the input string to bytes
 
     encoded_string = input_string.encode("utf-8")
@@ -87,22 +85,16 @@ def hash_string_sha256(input_string):
 
     return hex_digest
 
-def parse_response_model_str(
 
-    content: str, response_model: Type[BaseModel]
-
-) -> Optional[BaseModel]:
-
+def parse_response_model_str(content: str, response_model: Type[BaseModel]) -> Optional[BaseModel]:
     structured_output = None
 
     try:
-
         # First attempt: direct JSON validation
 
         structured_output = response_model.model_validate_json(content)
 
     except (ValidationError, json.JSONDecodeError):
-
         # Second attempt: Extract JSON from markdown code blocks and clean
 
         content = content
@@ -110,7 +102,6 @@ def parse_response_model_str(
         # Handle code blocks
 
         if "```json" in content:
-
             content = content.split("```json")[-1].strip()
 
             parts = content.split("```")
@@ -120,7 +111,6 @@ def parse_response_model_str(
             content = "".join(parts)
 
         elif "```" in content:
-
             content = content.split("```")[1].strip()
 
         # Clean the JSON string
@@ -138,7 +128,6 @@ def parse_response_model_str(
         # Escape quotes only in values, not keys
 
         def escape_quotes_in_values(match):
-
             key = match.group(1)
 
             value = match.group(2)
@@ -152,27 +141,20 @@ def parse_response_model_str(
         # Find and escape quotes in field values
 
         content = re.sub(
-
             r'"(?P<key>[^"]+)"\s*:\s*"(?P<value>.*?)(?="\s*(?:,|\}))',
-
             escape_quotes_in_values,
-
             content,
-
         )
 
         try:
-
             # Try parsing the cleaned JSON
 
             structured_output = response_model.model_validate_json(content)
 
         except (ValidationError, json.JSONDecodeError) as e:
-
             logger.warning(f"Failed to parse cleaned JSON: {e}")
 
             try:
-
                 # Final attempt: Try parsing as Python dict
 
                 data = json.loads(content)
@@ -180,8 +162,6 @@ def parse_response_model_str(
                 structured_output = response_model.model_validate(data)
 
             except (ValidationError, json.JSONDecodeError) as e:
-
                 logger.warning(f"Failed to parse as Python dict: {e}")
 
     return structured_output
-

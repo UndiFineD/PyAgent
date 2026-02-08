@@ -13,8 +13,8 @@ from agno.cli.console import print_info
 
 from agno.utils.log import logger
 
-class EcsCluster(AwsResource):
 
+class EcsCluster(AwsResource):
     """
 
     Reference:
@@ -72,11 +72,9 @@ class EcsCluster(AwsResource):
     service_connect_namespace: Optional[str] = None
 
     def get_ecs_cluster_name(self):
-
         return self.ecs_cluster_name or self.name
 
     def _create(self, aws_client: AwsApiClient) -> bool:
-
         """Creates the EcsCluster
 
         Args:
@@ -92,35 +90,23 @@ class EcsCluster(AwsResource):
         not_null_args: Dict[str, Any] = {}
 
         if self.tags is not None:
-
             not_null_args["tags"] = self.tags
 
         if self.settings is not None:
-
             not_null_args["settings"] = self.settings
 
         if self.configuration is not None:
-
             not_null_args["configuration"] = self.configuration
 
         if self.capacity_providers is not None:
-
             not_null_args["capacityProviders"] = self.capacity_providers
 
         if self.default_capacity_provider_strategy is not None:
-
-            not_null_args["defaultCapacityProviderStrategy"] = (
-
-                self.default_capacity_provider_strategy
-
-            )
+            not_null_args["defaultCapacityProviderStrategy"] = self.default_capacity_provider_strategy
 
         if self.service_connect_namespace is not None:
-
             not_null_args["serviceConnectDefaults"] = {
-
                 "namespace": self.service_connect_namespace,
-
             }
 
         # Create EcsCluster
@@ -128,13 +114,9 @@ class EcsCluster(AwsResource):
         service_client = self.get_service_client(aws_client)
 
         try:
-
             create_response = service_client.create_cluster(
-
                 clusterName=self.get_ecs_cluster_name(),
-
                 **not_null_args,
-
             )
 
             logger.debug(f"EcsCluster: {create_response}")
@@ -144,13 +126,11 @@ class EcsCluster(AwsResource):
             # Validate resource creation
 
             if resource_dict is not None:
-
                 self.active_resource = create_response
 
                 return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be created.")
 
             logger.error(e)
@@ -158,7 +138,6 @@ class EcsCluster(AwsResource):
         return False
 
     def _read(self, aws_client: AwsApiClient) -> Optional[Any]:
-
         """Returns the EcsCluster
 
         Args:
@@ -174,41 +153,30 @@ class EcsCluster(AwsResource):
         service_client = self.get_service_client(aws_client)
 
         try:
-
             cluster_name = self.get_ecs_cluster_name()
 
-            describe_response = service_client.describe_clusters(
-
-                clusters=[cluster_name]
-
-            )
+            describe_response = service_client.describe_clusters(clusters=[cluster_name])
 
             logger.debug(f"EcsCluster: {describe_response}")
 
             resource_list = describe_response.get("clusters", None)
 
             if resource_list is not None and isinstance(resource_list, list):
-
                 for resource in resource_list:
-
                     _cluster_identifier = resource.get("clusterName", None)
 
                     if _cluster_identifier == cluster_name:
-
                         _cluster_status = resource.get("status", None)
 
                         if _cluster_status == "ACTIVE":
-
                             self.active_resource = resource
 
                             break
 
         except ClientError as ce:
-
             logger.debug(f"ClientError: {ce}")
 
         except Exception as e:
-
             logger.error(f"Error reading {self.get_resource_type()}.")
 
             logger.error(e)
@@ -216,7 +184,6 @@ class EcsCluster(AwsResource):
         return self.active_resource
 
     def _delete(self, aws_client: AwsApiClient) -> bool:
-
         """Deletes the EcsCluster
 
         Args:
@@ -232,19 +199,13 @@ class EcsCluster(AwsResource):
         self.active_resource = None
 
         try:
-
-            delete_response = service_client.delete_cluster(
-
-                cluster=self.get_ecs_cluster_name()
-
-            )
+            delete_response = service_client.delete_cluster(cluster=self.get_ecs_cluster_name())
 
             logger.debug(f"EcsCluster: {delete_response}")
 
             return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be deleted.")
 
             logger.error("Please try again or delete resources manually.")
@@ -254,14 +215,11 @@ class EcsCluster(AwsResource):
         return False
 
     def get_arn(self, aws_client: AwsApiClient) -> Optional[str]:
-
         tg = self._read(aws_client)
 
         if tg is None:
-
             return None
 
         tg_arn = tg.get("ListenerArn", None)
 
         return tg_arn
-

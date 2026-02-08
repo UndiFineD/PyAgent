@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class AdditionAnagram(Scene):
     def construct(self):
-
         words1 = Text("twelve + one", font_size=120)
 
         words2 = Text("eleven + two", font_size=120)

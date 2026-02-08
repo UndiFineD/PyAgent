@@ -62,7 +62,6 @@ def test_joining_two_loney_loops():
 
 @pytest.mark.parametrize("lonely_first", [True, False])
 def test_joining_lonely_with_many_loop(lonely_first: bool):
-
     lonely = LoopItem(1)
 
     assert_loop_is_lonely(lonely)
@@ -82,7 +81,6 @@ def test_joining_lonely_with_many_loop(lonely_first: bool):
 
 
 def test_joining_many_with_many():
-
     many1 = LoopItem(1)
 
     for i in range(2, 5):
@@ -99,7 +97,6 @@ def test_joining_many_with_many():
 
 
 def test_joining_loop_onto_itself():
-
     itself1 = LoopItem(1)
 
     itself2 = LoopItem(2)
@@ -120,7 +117,6 @@ def test_joining_loop_onto_itself():
 
 
 def test_limit():
-
     loop = LoopItem(1)
 
     for i in range(2, 10):
@@ -131,7 +127,6 @@ def test_limit():
 
 
 def test_loop_soup():
-
     soup = LoopSoup(id)
 
     assert len(list(soup.groups())) == 0

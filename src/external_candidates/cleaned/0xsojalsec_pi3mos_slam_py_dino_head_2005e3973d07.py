@@ -31,7 +31,6 @@ class DINOHead(nn.Module):
         bottleneck_dim=256,
         mlp_bias=True,
     ):
-
         super().__init__()
 
         nlayers = max(nlayers, 1)
@@ -52,7 +51,6 @@ class DINOHead(nn.Module):
         self.last_layer.weight_g.data.fill_(1)
 
     def _init_weights(self, m):
-
         if isinstance(m, nn.Linear):
             trunc_normal_(m.weight, std=0.02)
 
@@ -60,7 +58,6 @@ class DINOHead(nn.Module):
                 nn.init.constant_(m.bias, 0)
 
     def forward(self, x):
-
         x = self.mlp(x)
 
         eps = 1e-6 if x.dtype == torch.float16 else 1e-12
@@ -73,7 +70,6 @@ class DINOHead(nn.Module):
 
 
 def _build_mlp(nlayers, in_dim, bottleneck_dim, hidden_dim=None, use_bn=False, bias=True):
-
     if nlayers == 1:
         return nn.Linear(in_dim, bottleneck_dim, bias=bias)
 

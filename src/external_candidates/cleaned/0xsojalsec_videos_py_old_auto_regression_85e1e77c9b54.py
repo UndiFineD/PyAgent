@@ -18,18 +18,15 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer, PreTrainedModel
 
 @lru_cache(maxsize=1)
 def get_gpt2_tokenizer(model_name="gpt2"):
-
     return GPT2Tokenizer.from_pretrained(model_name)
 
 
 @lru_cache(maxsize=1)
 def get_gpt2_model(model_name="gpt2"):
-
     return GPT2LMHeadModel.from_pretrained(model_name)
 
 
 def gpt2_predict_next_token(text, n_shown=7):
-
     tokenizer = get_gpt2_tokenizer()
 
     model = get_gpt2_model()
@@ -61,7 +58,6 @@ def gpt2_predict_next_token(text, n_shown=7):
 
 
 def gpt3_predict_next_token(text, n_shown=10, random_seed=0):
-
     openai.api_key = os.getenv("OPENAI_KEY")
 
     response = openai.Completion.create(
@@ -121,7 +117,6 @@ class SimpleAutogregression(InteractiveScene):
     model = "gpt2"
 
     def construct(self):
-
         # Repeatedly generate
 
         text_mob, next_word_line, machine = self.init_text_and_machine()
@@ -136,7 +131,6 @@ class SimpleAutogregression(InteractiveScene):
             )
 
     def init_text_and_machine(self):
-
         # Set up active text
 
         self.cur_str = self.seed_text
@@ -162,7 +156,6 @@ class SimpleAutogregression(InteractiveScene):
         return text_mob, next_word_line, machine
 
     def string_to_mob(self, text):
-
         text += " l"  # Dumb hack for alignment
 
         result = get_paragraph(text.replace("\n", " ").split(" "), self.line_len, self.font_size)
@@ -176,7 +169,6 @@ class SimpleAutogregression(InteractiveScene):
         return result
 
     def get_next_word_line(self, text_mob, char_len=7):
-
         next_word_line = Underline(text_mob[:char_len])
 
         next_word_line.set_stroke(TEAL, 2)
@@ -189,7 +181,6 @@ class SimpleAutogregression(InteractiveScene):
         return next_word_line
 
     def get_transformer_drawing(self):
-
         self.camera.light_source.move_to([-5, 5, 10])
 
         self.frame.set_field_of_view(20 * DEGREES)
@@ -250,7 +241,6 @@ class SimpleAutogregression(InteractiveScene):
         bar_height=0.25,
         show_ellipses=True,
     ):
-
         labels = VGroup(Text(word, font_size=font_size) for word in words)
 
         bars = VGroup(Rectangle(prob * width_100p, bar_height) for prob, label in zip(probs, labels))
@@ -297,7 +287,6 @@ class SimpleAutogregression(InteractiveScene):
         added_anims=[],
         lag_ratio=0.02,
     ):
-
         blocks = machine[0]
 
         text_copy = text_mob.copy()
@@ -340,7 +329,6 @@ class SimpleAutogregression(InteractiveScene):
         )
 
     def animate_prediction_ouptut(self, machine, cur_str):
-
         words, probs = self.predict_next_token(cur_str)
 
         bar_groups = self.get_distribution(words, probs, machine)
@@ -357,7 +345,6 @@ class SimpleAutogregression(InteractiveScene):
         return bar_groups
 
     def animate_random_sample(self, bar_groups):
-
         widths = np.array([group[1].get_width() for group in bar_groups[:-1]])
 
         dist = widths / widths.sum()
@@ -373,7 +360,6 @@ class SimpleAutogregression(InteractiveScene):
         highlight_rect.set_fill(YELLOW, 0.25)
 
         def highlight_randomly(rect, dist, alpha):
-
             np.random.seed(seed + int(10 * alpha))
 
             index = np.random.choice(np.arange(len(dist)), p=dist)
@@ -390,7 +376,6 @@ class SimpleAutogregression(InteractiveScene):
         bar_groups.add_to_back(highlight_rect)
 
     def animate_word_addition(self, bar_groups, text_mob, next_word_line, force_unskip=False):
-
         # Choose the highlighted_group
 
         bar_group = None
@@ -463,7 +448,6 @@ class SimpleAutogregression(InteractiveScene):
         return new_text_mob
 
     def new_selection_cycle(self, text_mob, next_word_line, machine, quick=False, skip_anims=False):
-
         if skip_anims:
             self.skip_animations = True
 
@@ -488,7 +472,6 @@ class SimpleAutogregression(InteractiveScene):
     #
 
     def predict_next_token(self, text):
-
         result = None
 
         n_shown = self.n_shown_predictions
@@ -508,7 +491,6 @@ class SimpleAutogregression(InteractiveScene):
 
 class AnnotateNextWord(SimpleAutogregression):
     def construct(self):
-
         text_mob, next_word_line, machine = self.init_text_and_machine()
 
         self.add(machine, *machine[1:])
@@ -575,7 +557,6 @@ class GPT3CleverestAutocomplete(QuickRegressionGPT3):
     n_predictions = 70
 
     def construct(self):
-
         # Test
 
         text_mob, next_word_line, machine = self.init_text_and_machine()
@@ -605,7 +586,6 @@ class GPT3OnLearningSimpler(QuickRegressionGPT3):
     random_seed = 313
 
     def construct(self):
-
         # Test
 
         cur_str = self.seed_text
@@ -643,7 +623,6 @@ class GPT3OnLearningSimpler(QuickRegressionGPT3):
 
 class ModelTakingInTextWithSurroundingPieces(SimpleAutogregression):
     def construct(self):
-
         text_mob, next_word_line, machine = self.init_text_and_machine()
 
 
@@ -659,7 +638,6 @@ class AthleteCompletion(SimpleAutogregression):
     model = "gpt3"
 
     def construct(self):
-
         # Initialize machine
 
         self.set_floor_plane("xz")
@@ -829,7 +807,6 @@ class ThatWhichDoesNotKillMe(SimpleAutogregression):
     model = "gpt3"
 
     def construct(self):
-
         # Test
 
         text_mob, next_word_line, machine = self.init_text_and_machine()

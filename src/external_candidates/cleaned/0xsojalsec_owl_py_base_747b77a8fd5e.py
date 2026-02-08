@@ -117,13 +117,11 @@ class BaseContextCreator(ABC):
     @property
     @abstractmethod
     def token_counter(self) -> BaseTokenCounter:
-
         pass
 
     @property
     @abstractmethod
     def token_limit(self) -> int:
-
         pass
 
     @abstractmethod

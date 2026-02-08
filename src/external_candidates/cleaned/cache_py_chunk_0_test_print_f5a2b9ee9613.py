@@ -7,8 +7,8 @@
 
 # NOTE: extracted with static-only rules; review before use
 
-def test_print_tuple(game):
 
+def test_print_tuple(game):
     """
 
     Print a tuple
@@ -18,4 +18,3 @@ def test_print_tuple(game):
     r = game.print("Hello", "World", (1, 2, 3))
 
     assert r == "Hello\tWorld\t(1, 2, 3)"
-

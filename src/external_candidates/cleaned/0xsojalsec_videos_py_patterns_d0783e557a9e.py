@@ -15,7 +15,6 @@ class PascalColored(Scene):
     }
 
     def construct(self):
-
         max_height = 6
 
         rt = 1.0
@@ -62,11 +61,9 @@ class PascalColored(Scene):
         self.wait()
 
     def get_pascal_point(self, n, k):
-
         return n * rotate_vector(RIGHT, -2 * np.pi / 3) + k * RIGHT
 
     def get_dot_layer(self, n):
-
         n_to_mod = len(self.colors)
 
         dots = VGroup()
@@ -112,7 +109,6 @@ class PascalColored(Scene):
         return dots
 
     def get_dots(self, n_layers):
-
         dots = VGroup()
 
         for n in range(n_layers + 1):
@@ -128,7 +124,6 @@ class TriominoGrid(Scene):
     }
 
     def construct(self):
-
         n = self.n
 
         grid = VGroup(*[VGroup(*[Square() for x in range(2**n)]).arrange(RIGHT, buff=0) for y in range(2**n)]).arrange(
@@ -191,7 +186,6 @@ class TriominoGrid(Scene):
         self.play(ShowIncreasingSubsets(self.triominos, run_time=5))
 
     def cover_grid(self, grid):
-
         N = len(grid)  # N = 2**n
 
         if N == 1:

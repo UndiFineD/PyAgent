@@ -9,7 +9,6 @@ import re
 
 from typing import Optional, Tuple
 
-
 from fle.commons.models.conversation import Conversation
 
 from pydantic import BaseModel, GetCoreSchemaHandler
@@ -22,7 +21,6 @@ class Python(str):
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source, handler: GetCoreSchemaHandler):
-
         return core_schema.chain_schema(
             [
                 core_schema.str_schema(),
@@ -32,7 +30,6 @@ class Python(str):
 
     @classmethod
     def validate(cls, value, values=None, config=None, field=None) -> str:
-
         if not isinstance(value, str):
             raise TypeError("string required")
 
@@ -74,8 +71,6 @@ class PythonParser:
     @staticmethod
     def is_valid_python(code: str) -> bool:
         """Check if a string is valid Python syntax.
-
-
 
         This version supports checking indented code blocks by dedenting
 
@@ -146,13 +141,9 @@ class PythonParser:
 
         Attempt to extract all Python code blocks marked with ```python.
 
-
-
         Args:
 
             content: The full text content to parse
-
-
 
         Returns:
 
@@ -218,7 +209,6 @@ class PythonParser:
 
     @staticmethod
     def extract_all_valid_python_chunks(content: str) -> Optional[str]:
-
         # Split content into chunks by double newline
 
         chunks = content.split("\n\n")
@@ -255,13 +245,9 @@ class PythonParser:
 
         Attempt to extract all code blocks between backticks, regardless of language marker.
 
-
-
         Args:
 
             content: The full text content to parse
-
-
 
         Returns:
 
@@ -297,13 +283,9 @@ class PythonParser:
 
         Extract code from LLM response, first trying markdown blocks then falling back to chunk processing.
 
-
-
         Args:
 
             choice: LLM response object with message.content or text attribute
-
-
 
         Returns:
 
@@ -343,7 +325,6 @@ class PythonParser:
 
 
 def parse_response(response) -> Optional[Policy]:
-
     has_usage = hasattr(response, "usage")
 
     prompt_tokens = has_usage and hasattr(response.usage, "prompt_tokens")

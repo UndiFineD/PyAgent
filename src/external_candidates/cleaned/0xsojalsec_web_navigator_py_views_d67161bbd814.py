@@ -19,11 +19,9 @@ class BoundingBox:
     height: int
 
     def to_string(self):
-
         return f"({self.left},{self.top},{self.width},{self.height})"
 
     def to_dict(self):
-
         return {
             "left": self.left,
             "top": self.top,
@@ -39,11 +37,9 @@ class CenterCord:
     y: int
 
     def to_string(self) -> str:
-
         return f"({self.x},{self.y})"
 
     def to_dict(self):
-
         return {"x": self.x, "y": self.y}
 
 
@@ -66,11 +62,9 @@ class DOMElementNode:
     viewport: tuple[int, int] = field(default_factory=tuple)
 
     def __repr__(self):
-
         return f"DOMElementNode(tag='{self.tag}', role='{self.role}', name='{self.name}', attributes={self.attributes}, cordinates={self.center}, bounding_box={self.bounding_box}, xpath='{self.xpath}')"
 
     def to_dict(self) -> dict[str, str]:
-
         return {
             "tag": self.tag,
             "role": self.role,
@@ -96,11 +90,9 @@ class ScrollElementNode:
     viewport: tuple[int, int] = field(default_factory=tuple)
 
     def __repr__(self):
-
         return f"ScrollableElementNode(tag='{self.tag}', role='{self.role}', name='{shorten(self.name, width=500)}', attributes={self.attributes}, xpath='{self.xpath}')"
 
     def to_dict(self) -> dict[str, str]:
-
         return {
             "tag": self.tag,
             "role": self.role,
@@ -124,11 +116,9 @@ class DOMTextualNode:
     viewport: tuple[int, int] = field(default_factory=tuple)
 
     def __repr__(self):
-
         return f"DOMTextualNode(tag={self.tag}, role={self.role}, content={self.content}, cordinates={self.center}, xpath={self.xpath})"
 
     def to_dict(self) -> dict[str, str]:
-
         return {
             "tag": self.tag,
             "role": self.role,
@@ -148,7 +138,6 @@ class DOMState:
     selector_map: dict[str, DOMElementNode | ScrollElementNode] = field(default_factory=dict)
 
     def interactive_elements_to_string(self) -> str:
-
         return "\n".join(
             [
                 f"{index} - Tag: {node.tag} Role: {node.role} Name: {node.name} Attributes: {node.attributes} Cordinates: {node.center.to_string()}"
@@ -157,13 +146,11 @@ class DOMState:
         )
 
     def informative_elements_to_string(self) -> str:
-
         return "\n".join(
             [f"Tag: {node.tag} Role: {node.role} Content: {node.content}" for node in self.informative_nodes]
         )
 
     def scrollable_elements_to_string(self) -> str:
-
         n = len(self.interactive_nodes)
 
         return "\n".join(

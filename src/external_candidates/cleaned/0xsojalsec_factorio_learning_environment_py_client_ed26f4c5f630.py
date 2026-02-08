@@ -16,7 +16,6 @@ from fle.env.tools.agent.get_entity.client import GetEntity
 
 class LaunchRocket(Tool):
     def __init__(self, connection, game_state):
-
         super().__init__(connection, game_state)
 
         self.get_entity = GetEntity(connection, game_state)

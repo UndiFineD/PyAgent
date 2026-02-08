@@ -15,38 +15,35 @@ from dataclasses_json import DataClassJsonMixin
 
 from strenum import StrEnum
 
+
 @dataclass
-
 class ChallengeSettingsResponse(DataClassJsonMixin):
-
     id: int
 
     name: str
 
     description: str
 
-class ReviewStatus(StrEnum):
 
+class ReviewStatus(StrEnum):
     READY = "ready"
 
     REVIEWING = "reviewing"
 
     REVIEWED = "reviewed"
 
+
 @dataclass
-
 class ScoringResultResponse(DataClassJsonMixin):
-
     passed: bool
 
     message: str
 
     flag: Optional[str]
 
+
 @dataclass
-
 class SubmissionStatusResponse(DataClassJsonMixin):
-
     # Dataclass used to return the status of the submission
 
     picture_id: str
@@ -55,10 +52,9 @@ class SubmissionStatusResponse(DataClassJsonMixin):
 
     scoring_result: Optional[ScoringResultResponse]
 
+
 @dataclass
-
 class ScoringRequestResponse(DataClassJsonMixin):
-
     # Dataclass received by the scoring service
 
     passed: bool
@@ -67,10 +63,9 @@ class ScoringRequestResponse(DataClassJsonMixin):
 
     custom_message: str
 
+
 @dataclass
-
 class ScoringRequest(DataClassJsonMixin):
-
     # Dataclass used to send to the scoring service
 
     challenge_id: int
@@ -87,13 +82,11 @@ class ScoringRequest(DataClassJsonMixin):
 
     answer_uri: str
 
+
 @dataclass
-
 class AuthErrorResponse(DataClassJsonMixin):
-
     auth_type: str
 
     error: str
 
     redirect_uri: str
-

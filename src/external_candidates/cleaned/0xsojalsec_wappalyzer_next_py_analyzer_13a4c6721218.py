@@ -37,9 +37,7 @@ from wappalyzer.parsers.scriptSrc import get_scriptSrc
 
 
 def process_scripts(base_url, js, scriptSrc):
-
     def fetch_and_process(src):
-
         if src.endswith(".js") or ".js?" in src:
             js_code = get_response(src)
 
@@ -78,7 +76,6 @@ def process_scripts(base_url, js, scriptSrc):
 
 
 def analyze_from_response(response, scan_type):
-
     soup = BeautifulSoup(response.text, "html.parser")
 
     r = tldextract.extract(response.url)
@@ -118,7 +115,6 @@ def analyze_from_response(response, scan_type):
     result = {}
 
     def update_entry(tech_name, version, confidence):
-
         if tech_name in result:
             result[tech_name]["confidence"] = min(result[tech_name]["confidence"] + confidence, 100)
 
@@ -234,7 +230,6 @@ def analyze_from_response(response, scan_type):
 
 
 def http_scan(url, scan_type, cookie=None):
-
     response = get_response(url, cookie)
 
     if response:

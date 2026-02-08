@@ -7,7 +7,6 @@
 
 # NOTE: extracted with static-only rules; review before use
 
+
 def test_sanity():
-
     assert True
-

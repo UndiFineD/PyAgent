@@ -15,14 +15,12 @@ from agno.memory.v2.db.schema import MemoryRow
 
 from redis import ConnectionError
 
+
 @pytest.fixture
-
 def mock_redis_client():
-
     """Mock Redis client with in-memory storage for testing."""
 
     with patch("agno.memory.v2.db.redis.Redis") as mock_redis:
-
         # Create a mock Redis client
 
         client = MagicMock()
@@ -42,13 +40,10 @@ def mock_redis_client():
         # Make delete actually work correctly
 
         def mock_delete(*keys):
-
             deleted = 0
 
             for key in keys:
-
                 if key in mock_data:
-
                     del mock_data[key]
 
                     deleted += 1
@@ -62,9 +57,7 @@ def mock_redis_client():
         # Mock scan_iter to return keys
 
         client.scan_iter.side_effect = lambda match, count=None: [
-
             k for k in mock_data.keys() if k.startswith(match.replace("*", ""))
-
         ]
 
         # Return the mock Redis instance when Redis.Redis() is called
@@ -73,16 +66,15 @@ def mock_redis_client():
 
         yield client
 
+
 @pytest.fixture
-
 def memory_db(mock_redis_client):
-
     """Create memory database with mock Redis client."""
 
     return RedisMemoryDb(prefix="test_memory")
 
-def test_create_connection(mock_redis_client):
 
+def test_create_connection(mock_redis_client):
     """Test that create() tests Redis connection."""
 
     db = RedisMemoryDb(prefix="test")
@@ -91,8 +83,8 @@ def test_create_connection(mock_redis_client):
 
     mock_redis_client.ping.assert_called_once()
 
-def test_connection_error(mock_redis_client):
 
+def test_connection_error(mock_redis_client):
     """Test that create() raises exception on connection error."""
 
     mock_redis_client.ping.side_effect = ConnectionError("Connection refused")
@@ -100,20 +92,15 @@ def test_connection_error(mock_redis_client):
     db = RedisMemoryDb(prefix="test")
 
     with pytest.raises(ConnectionError):
-
         db.create()
 
-def test_memory_exists(memory_db, mock_redis_client):
 
+def test_memory_exists(memory_db, mock_redis_client):
     """Test checking if memory exists."""
 
     # Create a test memory
 
-    memory = MemoryRow(
-
-        id="test-id-1", user_id="test-user", memory={"text": "Test memory"}
-
-    )
+    memory = MemoryRow(id="test-id-1", user_id="test-user", memory={"text": "Test memory"})
 
     # Mock that memory doesn't exist initially
 
@@ -124,33 +111,25 @@ def test_memory_exists(memory_db, mock_redis_client):
     key = "test_memory:test-id-1"
 
     mock_redis_client.set(
-
         key,
-
         '{"id": "test-id-1", "user_id": "test-user", "memory": {"text": "Test memory"}}',
-
     )
 
     # Now it should exist
 
     assert memory_db.memory_exists(memory)
 
-def test_upsert_memory(memory_db, mock_redis_client):
 
+def test_upsert_memory(memory_db, mock_redis_client):
     """Test upserting a memory."""
 
     # Create a test memory
 
-    memory = MemoryRow(
-
-        id="test-id-1", user_id="test-user", memory={"text": "Test memory"}
-
-    )
+    memory = MemoryRow(id="test-id-1", user_id="test-user", memory={"text": "Test memory"})
 
     # Upsert memory
 
     with patch("time.time", return_value=12345):
-
         result = memory_db.upsert_memory(memory)
 
     # Verify result
@@ -162,45 +141,33 @@ def test_upsert_memory(memory_db, mock_redis_client):
     # Verify Redis was called with correct data
 
     mock_redis_client.set.assert_called_with(
-
         "test_memory:test-id-1",
-
         ANY,  # We don't care about exact JSON, just that it was called
-
     )
 
     # Verify memory now exists
 
     assert memory_db.memory_exists(memory)
 
-def test_read_memories(memory_db, mock_redis_client):
 
+def test_read_memories(memory_db, mock_redis_client):
     """Test reading memories from Redis."""
 
     # Set up test data
 
     mock_redis_client.set(
-
         "test_memory:1",
-
         '{"id": "1", "user_id": "user1", "memory": {"text": "Memory 1"}, "created_at": 1000}',
-
     )
 
     mock_redis_client.set(
-
         "test_memory:2",
-
         '{"id": "2", "user_id": "user1", "memory": {"text": "Memory 2"}, "created_at": 2000}',
-
     )
 
     mock_redis_client.set(
-
         "test_memory:3",
-
         '{"id": "3", "user_id": "user2", "memory": {"text": "Memory 3"}, "created_at": 3000}',
-
     )
 
     # Test reading all memories
@@ -235,18 +202,15 @@ def test_read_memories(memory_db, mock_redis_client):
 
     assert sorted_asc[0].id == "1"  # Oldest first
 
-def test_delete_memory(memory_db, mock_redis_client):
 
+def test_delete_memory(memory_db, mock_redis_client):
     """Test deleting a memory."""
 
     # Set up test data
 
     mock_redis_client.set(
-
         "test_memory:to-delete",
-
         '{"id": "to-delete", "user_id": "user1", "memory": {"text": "Delete me"}}',
-
     )
 
     # Verify memory exists
@@ -265,8 +229,8 @@ def test_delete_memory(memory_db, mock_redis_client):
 
     memory_db.delete_memory("does-not-exist")
 
-def test_drop_table(memory_db, mock_redis_client):
 
+def test_drop_table(memory_db, mock_redis_client):
     """Test dropping the table."""
 
     # Set up test data
@@ -289,8 +253,8 @@ def test_drop_table(memory_db, mock_redis_client):
 
     assert mock_redis_client.exists("other_prefix:3")
 
-def test_table_exists(memory_db, mock_redis_client):
 
+def test_table_exists(memory_db, mock_redis_client):
     """Test table_exists method."""
 
     # Initially no keys, so table doesn't exist
@@ -313,8 +277,8 @@ def test_table_exists(memory_db, mock_redis_client):
 
     assert not memory_db.table_exists()
 
-def test_clear(memory_db, mock_redis_client):
 
+def test_clear(memory_db, mock_redis_client):
     """Test clearing all memories."""
 
     # Set up test data
@@ -339,8 +303,8 @@ def test_clear(memory_db, mock_redis_client):
 
     assert mock_redis_client.exists("other_prefix:3")
 
-def test_error_handling(memory_db, mock_redis_client):
 
+def test_error_handling(memory_db, mock_redis_client):
     """Test error handling in methods."""
 
     # Make Redis client raise an exception for various methods
@@ -388,4 +352,3 @@ def test_error_handling(memory_db, mock_redis_client):
     # The method should return False when there's an error
 
     assert result is False
-

@@ -27,7 +27,6 @@ class SymbolSerializer(serializers.ModelSerializer):
 
 @receiver(post_save, sender=Symbol)
 def send_symbol_created(sender, instance, created, **kwargs):
-
     channel_layer = get_channel_layer()
 
     serializer = SymbolSerializer(instance)
@@ -40,7 +39,6 @@ def send_symbol_created(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=Symbol)
 def send_symbol_created(sender, instance, **kwargs):
-
     channel_layer = get_channel_layer()
 
     serializer = SymbolSerializer(instance)

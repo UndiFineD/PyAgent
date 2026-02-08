@@ -11,8 +11,8 @@ from typing import List, Optional
 
 from feathr.definition.sink import HdfsSink, RedisSink, Sink
 
-class BackfillTime:
 
+class BackfillTime:
     """Time range to materialize/backfill feature data. Please refer to https://feathr-ai.github.io/feathr/concepts/materializing-features.html#feature-backfill for a more detailed explanation.
 
     Attributes:
@@ -26,15 +26,14 @@ class BackfillTime:
     """
 
     def __init__(self, start: datetime, end: datetime, step: timedelta):
-
         self.start = start
 
         self.end = end
 
         self.step = step
 
-class MaterializationSettings:
 
+class MaterializationSettings:
     """Settings about materialization features.
 
     Attributes:
@@ -56,28 +55,15 @@ class MaterializationSettings:
     """
 
     def __init__(
-
         self,
-
         name: str,
-
         sinks: List[Sink],
-
         feature_names: List[str],
-
         backfill_time: Optional[BackfillTime] = None,
-
         resolution: str = "DAILY",
-
     ):
-
         if resolution not in ["DAILY", "HOURLY"]:
-
-            raise RuntimeError(
-
-                f"{resolution} is not supported. Only 'DAILY' and 'HOURLY' are currently supported."
-
-            )
+            raise RuntimeError(f"{resolution} is not supported. Only 'DAILY' and 'HOURLY' are currently supported.")
 
         self.resolution = resolution
 
@@ -86,25 +72,16 @@ class MaterializationSettings:
         now = datetime.now()
 
         self.backfill_time = (
-
-            backfill_time
-
-            if backfill_time
-
-            else BackfillTime(start=now, end=now, step=timedelta(days=1))
-
+            backfill_time if backfill_time else BackfillTime(start=now, end=now, step=timedelta(days=1))
         )
 
         for sink in sinks:
-
             if isinstance(sink, HdfsSink):
-
                 self.has_hdfs_sink = True
 
                 sink.aggregation_features = feature_names
 
             elif isinstance(sink, RedisSink):
-
                 sink.aggregation_features = feature_names
 
         self.sinks = sinks
@@ -112,7 +89,6 @@ class MaterializationSettings:
         self.feature_names = feature_names
 
     def get_backfill_cutoff_time(self) -> List[datetime]:
-
         """Get the backfill cutoff time points for materialization.
 
         E.g. for `BackfillTime(start=datetime(2022, 3, 1), end=datetime(2022, 3, 5), step=timedelta(days=1))`,
@@ -131,39 +107,14 @@ class MaterializationSettings:
 
         step_in_seconds = self.backfill_time.step.total_seconds()
 
-        assert (
-
-            start_time <= end_time
-
-        ), "Start time {} must be earlier or equal to end time {}".format(
-
+        assert start_time <= end_time, "Start time {} must be earlier or equal to end time {}".format(
             start_time, end_time
-
         )
 
-        assert (
+        assert step_in_seconds > 0, "Step in time range should be greater than 0, but got {}".format(step_in_seconds)
 
-            step_in_seconds > 0
-
-        ), "Step in time range should be greater than 0, but got {}".format(
-
-            step_in_seconds
-
-        )
-
-        num_delta = (
-
-            self.backfill_time.end - self.backfill_time.start
-
-        ).total_seconds() / step_in_seconds
+        num_delta = (self.backfill_time.end - self.backfill_time.start).total_seconds() / step_in_seconds
 
         num_delta = math.floor(num_delta) + 1
 
-        return [
-
-            end_time - timedelta(seconds=n * step_in_seconds)
-
-            for n in reversed(range(num_delta))
-
-        ]
-
+        return [end_time - timedelta(seconds=n * step_in_seconds) for n in reversed(range(num_delta))]

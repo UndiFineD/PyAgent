@@ -15,13 +15,11 @@ class Introduction(TeacherStudentsScene):
     }
 
     def construct(self):
-
         self.show_series()
 
         self.show_examples()
 
     def show_series(self):
-
         series = VideoSeries(num_videos=11)
 
         series.to_edge(UP)
@@ -87,7 +85,6 @@ class Introduction(TeacherStudentsScene):
         self.series = series
 
     def show_examples(self):
-
         self.wait(10)
 
         # put examples here in video editor

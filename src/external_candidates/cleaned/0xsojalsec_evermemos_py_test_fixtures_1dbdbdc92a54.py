@@ -46,19 +46,16 @@ class MySQLUserRepository(UserRepository):
     """MySQL user repository implementation (Primary)"""
 
     def __init__(self):
-
         self.db_type = "mysql"
 
         self.call_count = 0
 
     def find_by_id(self, user_id: int) -> Optional[dict]:
-
         self.call_count += 1
 
         return {"id": user_id, "name": f"User{user_id}", "source": "mysql"}
 
     def find_all(self) -> List[dict]:
-
         self.call_count += 1
 
         return [
@@ -71,19 +68,16 @@ class PostgreSQLUserRepository(UserRepository):
     """PostgreSQL user repository implementation (Non-Primary)"""
 
     def __init__(self):
-
         self.db_type = "postgres"
 
         self.call_count = 0
 
     def find_by_id(self, user_id: int) -> Optional[dict]:
-
         self.call_count += 1
 
         return {"id": user_id, "name": f"User{user_id}", "source": "postgres"}
 
     def find_all(self) -> List[dict]:
-
         self.call_count += 1
 
         return [{"id": 1, "name": "User1", "source": "postgres"}]
@@ -93,19 +87,16 @@ class MockUserRepository(UserRepository):
     """Mock user repository implementation"""
 
     def __init__(self):
-
         self.db_type = "mock"
 
         self.call_count = 0
 
     def find_by_id(self, user_id: int) -> Optional[dict]:
-
         self.call_count += 1
 
         return {"id": user_id, "name": f"MockUser{user_id}", "source": "mock"}
 
     def find_all(self) -> List[dict]:
-
         self.call_count += 1
 
         return [{"id": 999, "name": "MockUser", "source": "mock"}]
@@ -131,7 +122,6 @@ class UserServiceImpl(UserService):
     """User service implementation"""
 
     def __init__(self, repository: UserRepository = None, container: DIContainer = None):
-
         # Supports two injection methods: constructor injection or retrieval via container
 
         if repository:
@@ -146,13 +136,11 @@ class UserServiceImpl(UserService):
         self.call_count = 0
 
     def get_user(self, user_id: int) -> Optional[dict]:
-
         self.call_count += 1
 
         return self.repository.find_by_id(user_id)
 
     def get_all_users(self) -> List[dict]:
-
         self.call_count += 1
 
         return self.repository.find_all()
@@ -175,11 +163,9 @@ class EmailNotificationService(NotificationService):
     """Email notification service implementation (Primary)"""
 
     def __init__(self):
-
         self.sent_messages = []
 
     def send(self, message: str, recipient: str) -> bool:
-
         self.sent_messages.append({"message": message, "recipient": recipient, "type": "email"})
 
         return True
@@ -189,11 +175,9 @@ class SMSNotificationService(NotificationService):
     """SMS notification service implementation (Non-Primary)"""
 
     def __init__(self):
-
         self.sent_messages = []
 
     def send(self, message: str, recipient: str) -> bool:
-
         self.sent_messages.append({"message": message, "recipient": recipient, "type": "sms"})
 
         return True
@@ -203,11 +187,9 @@ class PushNotificationService(NotificationService):
     """Push notification service implementation"""
 
     def __init__(self):
-
         self.sent_messages = []
 
     def send(self, message: str, recipient: str) -> bool:
-
         self.sent_messages.append({"message": message, "recipient": recipient, "type": "push"})
 
         return True
@@ -230,7 +212,6 @@ class SMTPEmailService(EmailService):
     """SMTP email service implementation"""
 
     def __init__(self):
-
         self.host = "smtp.example.com"
 
         self.port = 587
@@ -238,7 +219,6 @@ class SMTPEmailService(EmailService):
         self.sent_emails = []
 
     def send_email(self, to: str, subject: str, body: str) -> bool:
-
         self.sent_emails.append({"to": to, "subject": subject, "body": body})
 
         return True
@@ -251,7 +231,6 @@ class DatabaseConnection:
     """Database connection class"""
 
     def __init__(self, host: str, port: int, database: str):
-
         self.host = host
 
         self.port = port
@@ -261,11 +240,9 @@ class DatabaseConnection:
         self.connected = True
 
     def execute(self, sql: str) -> List[dict]:
-
         return [{"result": f"Executed: {sql}"}]
 
     def close(self):
-
         self.connected = False
 
 
@@ -290,7 +267,6 @@ class PrototypeService:
     instance_counter = 0  # Class-level counter
 
     def __init__(self):
-
         PrototypeService.instance_counter += 1
 
         self.instance_id = PrototypeService.instance_counter
@@ -298,11 +274,9 @@ class PrototypeService:
         self.data = []
 
     def add_data(self, value: str):
-
         self.data.append(value)
 
     def get_data(self) -> List[str]:
-
         return self.data
 
     @classmethod
@@ -341,23 +315,19 @@ class RedisCacheService(CacheService):
     """Redis cache service implementation (Primary)"""
 
     def __init__(self):
-
         self.storage = {}
 
         self.cache_type = "redis"
 
     def get(self, key: str) -> Optional[str]:
-
         return self.storage.get(key)
 
     def set(self, key: str, value: str, ttl: int = 3600) -> bool:
-
         self.storage[key] = value
 
         return True
 
     def delete(self, key: str) -> bool:
-
         if key in self.storage:
             del self.storage[key]
 
@@ -370,23 +340,19 @@ class MemoryCacheService(CacheService):
     """In-memory cache service implementation"""
 
     def __init__(self):
-
         self.storage = {}
 
         self.cache_type = "memory"
 
     def get(self, key: str) -> Optional[str]:
-
         return self.storage.get(key)
 
     def set(self, key: str, value: str, ttl: int = 3600) -> bool:
-
         self.storage[key] = value
 
         return True
 
     def delete(self, key: str) -> bool:
-
         if key in self.storage:
             del self.storage[key]
 

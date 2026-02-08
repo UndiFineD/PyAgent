@@ -26,7 +26,6 @@ class UprightCoin(Circle):
     }
 
     def __init__(self, **kwargs):
-
         Circle.__init__(self, **kwargs)
 
         self.symbol_mob = OldTexText(self.symbol, stroke_color=self.stroke_color)
@@ -59,7 +58,6 @@ class CoinSequence(VGroup):
     }
 
     def __init__(self, sequence, **kwargs):
-
         VGroup.__init__(self, **kwargs)
 
         self.sequence = sequence
@@ -93,7 +91,6 @@ class FlatCoin(UprightCoin):
     }
 
     def __init__(self, **kwargs):
-
         UprightCoin.__init__(self, **kwargs)
 
         self.symbol_mob.rotate(TAU / 8)

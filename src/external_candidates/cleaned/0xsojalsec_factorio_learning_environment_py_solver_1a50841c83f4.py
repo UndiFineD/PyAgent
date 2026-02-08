@@ -5,15 +5,12 @@
 
 import random
 
-
 from inspect_ai.solver import Generate, Solver, TaskState, solver
 
 
 @solver
 def character_localisation_question(multiple_choice: bool = False) -> Solver:
-
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         renderer = state.metadata["renderer"]
 
         if not renderer:

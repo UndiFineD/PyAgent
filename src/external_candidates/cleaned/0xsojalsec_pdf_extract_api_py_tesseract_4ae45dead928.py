@@ -18,7 +18,6 @@ class TesseractOCRStrategy(OCRStrategy):
     """Tesseract OCR Strategy"""
 
     def extract_text_from_pdf(self, pdf_bytes):
-
         images = convert_from_bytes(pdf_bytes)
 
         extracted_text = ""

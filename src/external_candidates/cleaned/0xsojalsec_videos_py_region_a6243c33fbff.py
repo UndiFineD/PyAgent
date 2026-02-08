@@ -39,23 +39,19 @@ class Region(Mobject):
         self.condition = condition
 
     def _combine(self, region, op):
-
         self.condition = lambda x, y: op(self.condition(x, y), region.condition(x, y))
 
     def union(self, region):
-
         self._combine(region, lambda bg1, bg2: bg1 | bg2)
 
         return self
 
     def intersect(self, region):
-
         self._combine(region, lambda bg1, bg2: bg1 & bg2)
 
         return self
 
     def complement(self):
-
         self.bool_grid = ~self.bool_grid
 
         return self
@@ -83,14 +79,12 @@ class HalfPlane(Region):
         (x0, y0), (x1, y1) = point_pair[0][:2], point_pair[1][:2]
 
         def condition(x, y):
-
             return (x1 - x0) * (y - y0) > (y1 - y0) * (x - x0)
 
         Region.__init__(self, condition, *args, **kwargs)
 
 
 def region_from_line_boundary(*lines, **kwargs):
-
     reg = Region(**kwargs)
 
     for line in lines:
@@ -100,7 +94,6 @@ def region_from_line_boundary(*lines, **kwargs):
 
 
 def region_from_polygon_vertices(*vertices, **kwargs):
-
     return region_from_line_boundary(*adjacent_pairs(vertices), **kwargs)
 
 

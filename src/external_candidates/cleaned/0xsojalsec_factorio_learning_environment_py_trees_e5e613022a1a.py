@@ -19,7 +19,6 @@ from pathlib import Path
 
 from typing import Optional
 
-
 from PIL import Image
 
 
@@ -27,7 +26,6 @@ class TreeSpriteExtractor:
     """Extract tree sprites from composite images showing different foliage states"""
 
     def __init__(self, resources_path: str, output_dir: str = "images"):
-
         self.resources_path = Path(resources_path)
 
         self.output_dir = Path(output_dir)

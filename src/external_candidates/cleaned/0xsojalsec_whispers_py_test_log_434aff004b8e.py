@@ -21,7 +21,6 @@ from tests.unit.conftest import does_not_raise
     ],
 )
 def test_configure_log(logpath, expectation):
-
     with expectation:
         expected_file = configure_log(logpath)
 
@@ -38,7 +37,6 @@ def test_configure_log(logpath, expectation):
     ],
 )
 def test_cleanup_log(data, expectation):
-
     logfile = configure_log()
 
     logfile.write_text(data)
@@ -52,7 +50,6 @@ def test_cleanup_log(data, expectation):
 
 
 def test_debug():
-
     logfile = configure_log()
 
     message = urandom(30).hex()

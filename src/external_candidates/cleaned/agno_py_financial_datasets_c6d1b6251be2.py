@@ -13,34 +13,21 @@ from agno.tools import Toolkit
 
 from agno.utils.log import log_error
 
+
 class FinancialDatasetsTools(Toolkit):
-
     def __init__(
-
         self,
-
         api_key: Optional[str] = None,
-
         enable_financial_statements: bool = True,
-
         enable_company_info: bool = True,
-
         enable_market_data: bool = True,
-
         enable_ownership_data: bool = True,
-
         enable_news: bool = True,
-
         enable_sec_filings: bool = True,
-
         enable_crypto: bool = True,
-
         enable_search: bool = True,
-
         **kwargs,
-
     ):
-
         """
 
         Initialize the Financial Datasets Tools with feature flags.
@@ -72,11 +59,8 @@ class FinancialDatasetsTools(Toolkit):
         self.api_key: Optional[str] = api_key or getenv("FINANCIAL_DATASETS_API_KEY")
 
         if not self.api_key:
-
             log_error(
-
                 "FINANCIAL_DATASETS_API_KEY not set. Please set the FINANCIAL_DATASETS_API_KEY environment variable."
-
             )
 
         self.base_url = "https://api.financialdatasets.ai"
@@ -84,7 +68,6 @@ class FinancialDatasetsTools(Toolkit):
         # Register functions based on feature flags
 
         if enable_financial_statements:
-
             self.register(self.get_income_statements)
 
             self.register(self.get_balance_sheets)
@@ -96,39 +79,31 @@ class FinancialDatasetsTools(Toolkit):
             self.register(self.get_financial_metrics)
 
         if enable_company_info:
-
             self.register(self.get_company_info)
 
         if enable_market_data:
-
             self.register(self.get_stock_prices)
 
             self.register(self.get_earnings)
 
         if enable_ownership_data:
-
             self.register(self.get_insider_trades)
 
             self.register(self.get_institutional_ownership)
 
         if enable_news:
-
             self.register(self.get_news)
 
         if enable_sec_filings:
-
             self.register(self.get_sec_filings)
 
         if enable_crypto:
-
             self.register(self.get_crypto_prices)
 
         if enable_search:
-
             self.register(self.search_tickers)
 
     def _make_request(self, endpoint: str, params: Dict[str, Any]) -> str:
-
         """
 
         Makes a request to the Financial Datasets API.
@@ -146,7 +121,6 @@ class FinancialDatasetsTools(Toolkit):
         """
 
         if not self.api_key:
-
             log_error("No API key provided. Cannot make request.")
 
             return "API key not set"
@@ -156,7 +130,6 @@ class FinancialDatasetsTools(Toolkit):
         url = f"{self.base_url}/{endpoint}"
 
         try:
-
             response = requests.get(url, headers=headers, params=params)
 
             response.raise_for_status()
@@ -164,19 +137,13 @@ class FinancialDatasetsTools(Toolkit):
             return response.text
 
         except requests.exceptions.RequestException as e:
-
             log_error(f"Error making request to {url}: {str(e)}")
 
             return f"Error making request to {url}: {str(e)}"
 
     # Financial Statements
 
-    def get_income_statements(
-
-        self, ticker: str, period: str = "annual", limit: int = 10
-
-    ) -> str:
-
+    def get_income_statements(self, ticker: str, period: str = "annual", limit: int = 10) -> str:
         """
 
         Get income statements for a ticker.
@@ -199,12 +166,7 @@ class FinancialDatasetsTools(Toolkit):
 
         return self._make_request("financials/income-statements", params)
 
-    def get_balance_sheets(
-
-        self, ticker: str, period: str = "annual", limit: int = 10
-
-    ) -> str:
-
+    def get_balance_sheets(self, ticker: str, period: str = "annual", limit: int = 10) -> str:
         """
 
         Get balance sheets for a ticker.
@@ -227,12 +189,7 @@ class FinancialDatasetsTools(Toolkit):
 
         return self._make_request("financials/balance-sheets", params)
 
-    def get_cash_flow_statements(
-
-        self, ticker: str, period: str = "annual", limit: int = 10
-
-    ) -> str:
-
+    def get_cash_flow_statements(self, ticker: str, period: str = "annual", limit: int = 10) -> str:
         """
 
         Get cash flow statements for a ticker.
@@ -258,7 +215,6 @@ class FinancialDatasetsTools(Toolkit):
     # Other API endpoints from the documentation
 
     def get_company_info(self, ticker: str) -> str:
-
         """
 
         Get company information for a ticker.
@@ -277,12 +233,7 @@ class FinancialDatasetsTools(Toolkit):
 
         return self._make_request("company", params)
 
-    def get_crypto_prices(
-
-        self, symbol: str, interval: str = "1d", limit: int = 100
-
-    ) -> str:
-
+    def get_crypto_prices(self, symbol: str, interval: str = "1d", limit: int = 100) -> str:
         """
 
         Get cryptocurrency prices.
@@ -306,7 +257,6 @@ class FinancialDatasetsTools(Toolkit):
         return self._make_request("crypto/prices", params)
 
     def get_earnings(self, ticker: str, limit: int = 10) -> str:
-
         """
 
         Get earnings data for a ticker.
@@ -328,7 +278,6 @@ class FinancialDatasetsTools(Toolkit):
         return self._make_request("earnings", params)
 
     def get_financial_metrics(self, ticker: str) -> str:
-
         """
 
         Get financial metrics for a ticker.
@@ -348,7 +297,6 @@ class FinancialDatasetsTools(Toolkit):
         return self._make_request("financials/metrics", params)
 
     def get_insider_trades(self, ticker: str, limit: int = 50) -> str:
-
         """
 
         Get insider trades for a ticker.
@@ -370,7 +318,6 @@ class FinancialDatasetsTools(Toolkit):
         return self._make_request("insider-trades", params)
 
     def get_institutional_ownership(self, ticker: str) -> str:
-
         """
 
         Get institutional ownership data for a ticker.
@@ -390,7 +337,6 @@ class FinancialDatasetsTools(Toolkit):
         return self._make_request("institutional-ownership", params)
 
     def get_news(self, ticker: Optional[str] = None, limit: int = 50) -> str:
-
         """
 
         Get market news, optionally filtered by ticker.
@@ -410,17 +356,11 @@ class FinancialDatasetsTools(Toolkit):
         params: Dict[str, Any] = {"limit": limit}
 
         if ticker:
-
             params["ticker"] = ticker
 
         return self._make_request("news", params)
 
-    def get_stock_prices(
-
-        self, ticker: str, interval: str = "1d", limit: int = 100
-
-    ) -> str:
-
+    def get_stock_prices(self, ticker: str, interval: str = "1d", limit: int = 100) -> str:
         """
 
         Get stock prices for a ticker.
@@ -444,7 +384,6 @@ class FinancialDatasetsTools(Toolkit):
         return self._make_request("prices", params)
 
     def search_tickers(self, query: str, limit: int = 10) -> str:
-
         """
 
         Search for tickers based on a query.
@@ -465,12 +404,7 @@ class FinancialDatasetsTools(Toolkit):
 
         return self._make_request("search", params)
 
-    def get_sec_filings(
-
-        self, ticker: str, form_type: Optional[str] = None, limit: int = 50
-
-    ) -> str:
-
+    def get_sec_filings(self, ticker: str, form_type: Optional[str] = None, limit: int = 50) -> str:
         """
 
         Get SEC filings for a ticker.
@@ -492,17 +426,11 @@ class FinancialDatasetsTools(Toolkit):
         params: Dict[str, Any] = {"ticker": ticker, "limit": limit}
 
         if form_type:
-
             params["form_type"] = form_type
 
         return self._make_request("sec-filings", params)
 
-    def get_segmented_financials(
-
-        self, ticker: str, period: str = "annual", limit: int = 10
-
-    ) -> str:
-
+    def get_segmented_financials(self, ticker: str, period: str = "annual", limit: int = 10) -> str:
         """
 
         Get segmented financials for a ticker.
@@ -524,4 +452,3 @@ class FinancialDatasetsTools(Toolkit):
         params = {"ticker": ticker, "period": period, "limit": limit}
 
         return self._make_request("financials/segmented", params)
-

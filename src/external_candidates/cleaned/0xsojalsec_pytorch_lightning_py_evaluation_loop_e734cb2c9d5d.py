@@ -116,7 +116,6 @@ class _EvaluationLoop(_Loop):
         verbose: bool = True,
         inference_mode: bool = True,
     ) -> None:
-
         super().__init__(trainer)
 
         self.verbose = verbose
@@ -188,14 +187,12 @@ class _EvaluationLoop(_Loop):
 
     @property
     def _is_sequential(self) -> bool:
-
         assert self._combined_loader is not None
 
         return self._combined_loader._mode == "sequential"
 
     @_no_grad_context
     def run(self) -> list[_OUT_DICT]:
-
         self.setup_data()
 
         if self.skip:
@@ -255,7 +252,6 @@ class _EvaluationLoop(_Loop):
         return self.on_run_end()
 
     def setup_data(self) -> None:
-
         trainer = self.trainer
 
         trainer_fn = self._trainer_fn
@@ -336,11 +332,9 @@ class _EvaluationLoop(_Loop):
 
     @property
     def restarted_mid_evaluation(self) -> bool:
-
         return self._restart_stage == RestartStage.RESTARTED_MID_EVALUATION
 
     def update_restart_stage(self) -> None:
-
         if (
             self.restarting
             and self.batch_progress.total.started == self.batch_progress.total.ready
@@ -353,7 +347,6 @@ class _EvaluationLoop(_Loop):
             self._restart_stage = RestartStage.NONE
 
     def reset_restart_stage(self) -> None:
-
         self._restart_stage = RestartStage.NONE
 
     def reset(self) -> None:
@@ -415,7 +408,6 @@ class _EvaluationLoop(_Loop):
         self._data_fetcher = data_fetcher
 
     def increment_progress_to_evaluation_end(self) -> None:
-
         self.setup_data()
 
         if self.skip:
@@ -496,7 +488,6 @@ class _EvaluationLoop(_Loop):
         return logged_outputs
 
     def teardown(self) -> None:
-
         if self._data_fetcher is not None:
             self._data_fetcher.teardown()
 
@@ -583,7 +574,6 @@ class _EvaluationLoop(_Loop):
         trainer._logger_connector.on_epoch_end()
 
     def _store_dataloader_outputs(self) -> None:
-
         trainer = self.trainer
 
         trainer._logger_connector.epoch_end_reached()
@@ -591,11 +581,9 @@ class _EvaluationLoop(_Loop):
         self._logged_outputs.append(trainer._logger_connector.update_eval_epoch_metrics())
 
     def _on_before_fetch(self) -> None:
-
         self.trainer.profiler.start(f"[{type(self).__name__}].{self._stage.dataloader_prefix}_next")
 
     def _on_after_fetch(self) -> None:
-
         # the dataloader_idx cannot be easily included here because it might be different from the index used on
 
         # profiler start, since the `__next__` call might use a different iterator
@@ -751,7 +739,6 @@ class _EvaluationLoop(_Loop):
         return tuple(kwargs.values())
 
     def _verify_dataloader_idx_requirement(self) -> None:
-
         trainer = self.trainer
 
         step_hook = "test_step" if trainer.testing else "validation_step"
@@ -778,7 +765,6 @@ class _EvaluationLoop(_Loop):
 
     @staticmethod
     def _get_keys(data: dict) -> Iterable[tuple[str, ...]]:
-
         for k, v in data.items():
             if isinstance(v, dict):
                 for new_key in apply_to_collection(v, dict, _EvaluationLoop._get_keys):
@@ -792,7 +778,6 @@ class _EvaluationLoop(_Loop):
 
     @staticmethod
     def _find_value(data: dict, target: Iterable[str]) -> Optional[Any]:
-
         target_start, *rest = target
 
         if target_start not in data:
@@ -807,7 +792,6 @@ class _EvaluationLoop(_Loop):
 
     @staticmethod
     def _print_results(results: list[_OUT_DICT], stage: str) -> None:
-
         # remove the dl idx suffix
 
         results = [{k.split("/dataloader_idx_")[0]: v for k, v in result.items()} for result in results]

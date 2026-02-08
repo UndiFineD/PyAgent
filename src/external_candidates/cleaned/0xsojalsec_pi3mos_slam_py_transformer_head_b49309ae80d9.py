@@ -31,7 +31,6 @@ class TransformerDecoder(nn.Module):
         need_project=True,
         use_checkpoint=False,
     ):
-
         super().__init__()
 
         self.projects = nn.Linear(in_dim, dec_embed_dim) if need_project else nn.Identity()
@@ -64,7 +63,6 @@ class TransformerDecoder(nn.Module):
         self.linear_out = nn.Linear(dec_embed_dim, out_dim)
 
     def forward(self, hidden, xpos=None):
-
         hidden = self.projects(hidden)
 
         for i, blk in enumerate(self.blocks):
@@ -94,7 +92,6 @@ class LinearPts3d(nn.Module):
         dec_embed_dim,
         output_dim=3,
     ):
-
         super().__init__()
 
         self.patch_size = patch_size
@@ -102,7 +99,6 @@ class LinearPts3d(nn.Module):
         self.proj = nn.Linear(dec_embed_dim, (output_dim) * self.patch_size**2)
 
     def forward(self, decout, img_shape):
-
         H, W = img_shape
 
         tokens = decout[-1]

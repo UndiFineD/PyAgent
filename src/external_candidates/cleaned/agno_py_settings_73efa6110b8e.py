@@ -15,8 +15,8 @@ from pydantic import Field, ValidationInfo, field_validator
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-class WorkspaceSettings(BaseSettings):
 
+class WorkspaceSettings(BaseSettings):
     """Workspace settings that can be used by any resource in the workspace."""
 
     # Workspace name
@@ -160,77 +160,59 @@ class WorkspaceSettings(BaseSettings):
     model_config = SettingsConfigDict(extra="allow")
 
     @field_validator("dev_key", mode="before")
-
     def set_dev_key(cls, dev_key, info: ValidationInfo):
-
         if dev_key is not None:
-
             return dev_key
 
         ws_name = info.data.get("ws_name")
 
         if ws_name is None:
-
             raise ValueError("`ws_name` is None: Please set a valid value")
 
         dev_env = info.data.get("dev_env")
 
         if dev_env is None:
-
             raise ValueError("`dev_env` is None: Please set a valid value")
 
         return f"{ws_name}-{dev_env}"
 
     @field_validator("stg_key", mode="before")
-
     def set_stg_key(cls, stg_key, info: ValidationInfo):
-
         if stg_key is not None:
-
             return stg_key
 
         ws_name = info.data.get("ws_name")
 
         if ws_name is None:
-
             raise ValueError("`ws_name` is None: Please set a valid value")
 
         stg_env = info.data.get("stg_env")
 
         if stg_env is None:
-
             raise ValueError("`stg_env` is None: Please set a valid value")
 
         return f"{ws_name}-{stg_env}"
 
     @field_validator("prd_key", mode="before")
-
     def set_prd_key(cls, prd_key, info: ValidationInfo):
-
         if prd_key is not None:
-
             return prd_key
 
         ws_name = info.data.get("ws_name")
 
         if ws_name is None:
-
             raise ValueError("`ws_name` is None: Please set a valid value")
 
         prd_env = info.data.get("prd_env")
 
         if prd_env is None:
-
             raise ValueError("`prd_env` is None: Please set a valid value")
 
         return f"{ws_name}-{prd_env}"
 
     @field_validator("aws_subnet_ids", mode="before")
-
     def set_subnet_ids(cls, aws_subnet_ids, info: ValidationInfo):
-
         if aws_subnet_ids is not None:
-
             return aws_subnet_ids
 
         aws_public_subnets = info.data.get("aws_public_subnets", [])
@@ -238,4 +220,3 @@ class WorkspaceSettings(BaseSettings):
         aws_private_subnets = info.data.get("aws_private_subnets", [])
 
         return aws_public_subnets + aws_private_subnets
-

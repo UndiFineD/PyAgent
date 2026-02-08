@@ -39,7 +39,6 @@ from ovo.core.logic.descriptor_logic import (
 
 @st.fragment
 def refolding_fragment(pool_ids: list[str], design_ids: list[str] | None = None):
-
     pools = get_cached_pools(pool_ids)
 
     if design_ids is None:
@@ -105,7 +104,6 @@ def refolding_fragment(pool_ids: list[str], design_ids: list[str] | None = None)
 @st.fragment
 @st.dialog("Refolding submission", width="medium")
 def submit_refolding_dialog(pool_ids: list[str], design_ids: list[str]):
-
     # Create "empty" element to enable clearing the contents after submitting
 
     content = st.empty()

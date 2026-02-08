@@ -14,7 +14,6 @@ from fle.env.tools import Tool
 
 class PickupEntity(Tool):
     def __init__(self, *args):
-
         super().__init__(*args)
 
     def __call__(

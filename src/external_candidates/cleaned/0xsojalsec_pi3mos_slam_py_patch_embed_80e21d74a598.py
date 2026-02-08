@@ -25,7 +25,6 @@ from torch import Tensor
 
 
 def make_2tuple(x):
-
     if isinstance(x, tuple):
         assert len(x) == 2
 
@@ -64,7 +63,6 @@ class PatchEmbed(nn.Module):
         norm_layer: Optional[Callable] = None,
         flatten_embedding: bool = True,
     ) -> None:
-
         super().__init__()
 
         image_HW = make_2tuple(img_size)
@@ -95,7 +93,6 @@ class PatchEmbed(nn.Module):
         self.norm = norm_layer(embed_dim) if norm_layer else nn.Identity()
 
     def forward(self, x: Tensor) -> Tensor:
-
         _, _, H, W = x.shape
 
         patch_H, patch_W = self.patch_size
@@ -118,7 +115,6 @@ class PatchEmbed(nn.Module):
         return x
 
     def flops(self) -> float:
-
         Ho, Wo = self.patches_resolution
 
         flops = Ho * Wo * self.embed_dim * self.in_chans * (self.patch_size[0] * self.patch_size[1])

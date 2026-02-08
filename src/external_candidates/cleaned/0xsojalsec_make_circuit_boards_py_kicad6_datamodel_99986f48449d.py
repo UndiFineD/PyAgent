@@ -31,7 +31,6 @@ class KicadPin:
 
     @property
     def num(self) -> str:
-
         return self.name
 
 
@@ -186,7 +185,6 @@ class KicadLibraries:
     """
 
     def __init__(self):
-
         # don't believe these are mandatory and I don't think they're useful in the context of atopile
 
         raise NotImplementedError

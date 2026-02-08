@@ -15,44 +15,26 @@ from agno.models.google import Gemini
 
 from PIL import Image as PILImage
 
+
 def test_image_input():
-
     agent = Agent(
-
         model=Gemini(id="gemini-2.0-flash-001"),
-
         exponential_backoff=True,
-
         delay_between_retries=5,
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     response = agent.run(
-
         "Tell me about this image.",
-
-        images=[
-
-            Image(
-
-                url="https://upload.wikimedia.org/wikipedia/commons/0/0c/GoldenGateBridge-001.jpg"
-
-            )
-
-        ],
-
+        images=[Image(url="https://upload.wikimedia.org/wikipedia/commons/0/0c/GoldenGateBridge-001.jpg")],
     )
 
     assert "golden" in response.content.lower()
 
-def test_audio_input_bytes():
 
+def test_audio_input_bytes():
     # Fetch the audio file and convert it to a base64 encoded string
 
     url = "https://openaiassets.blob.core.windows.net/$web/API/docs/audio/alloy.wav"
@@ -66,88 +48,48 @@ def test_audio_input_bytes():
     # Provide the agent with the audio file and get result as text
 
     agent = Agent(
-
         model=Gemini(id="gemini-2.0-flash-001"),
-
         exponential_backoff=True,
-
         delay_between_retries=5,
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
-    response = agent.run(
-
-        "What is in this audio?", audio=[Audio(content=wav_data, format="wav")]
-
-    )
+    response = agent.run("What is in this audio?", audio=[Audio(content=wav_data, format="wav")])
 
     assert response.content is not None
+
 
 def test_audio_input_url():
-
     agent = Agent(
-
         model=Gemini(id="gemini-2.0-flash-001"),
-
         exponential_backoff=True,
-
         delay_between_retries=5,
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     response = agent.run(
-
         "What is in this audio?",
-
-        audio=[
-
-            Audio(
-
-                url="https://openaiassets.blob.core.windows.net/$web/API/docs/audio/alloy.wav"
-
-            )
-
-        ],
-
+        audio=[Audio(url="https://openaiassets.blob.core.windows.net/$web/API/docs/audio/alloy.wav")],
     )
 
     assert response.content is not None
 
+
 def test_video_input_bytes():
-
     agent = Agent(
-
         model=Gemini(id="gemini-2.0-flash-001"),
-
         exponential_backoff=True,
-
         delay_between_retries=5,
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
-    url = (
-
-        "https://videos.pexels.com/video-files/5752729/5752729-uhd_2560_1440_30fps.mp4"
-
-    )
+    url = "https://videos.pexels.com/video-files/5752729/5752729-uhd_2560_1440_30fps.mp4"
 
     # Download the video file from the URL as bytes
 
@@ -156,43 +98,28 @@ def test_video_input_bytes():
     video_content = response.content
 
     response = agent.run(
-
         "Tell me about this video",
-
         videos=[Video(content=video_content)],
-
     )
 
     assert response.content is not None
 
-def test_image_generation():
 
+def test_image_generation():
     """Test basic image generation capability"""
 
     agent = Agent(
-
         model=Gemini(
-
             id="gemini-2.0-flash-exp-image-generation",
-
             response_modalities=["Text", "Image"],
-
         ),
-
         exponential_backoff=True,
-
         delay_between_retries=5,
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
         create_default_system_message=False,
-
         system_message=None,
-
     )
 
     agent.run("Make me an image of a cat in a tree.")
@@ -209,34 +136,22 @@ def test_image_generation():
 
     assert image.format in ["JPEG", "PNG"]
 
-def test_image_generation_streaming():
 
+def test_image_generation_streaming():
     """Test streaming image generation"""
 
     agent = Agent(
-
         model=Gemini(
-
             id="gemini-2.0-flash-exp-image-generation",
-
             response_modalities=["Text", "Image"],
-
         ),
-
         exponential_backoff=True,
-
         delay_between_retries=5,
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
         create_default_system_message=False,
-
         system_message=None,
-
     )
 
     response = agent.run("Make me an image of a cat in a tree.", stream=True)
@@ -244,9 +159,7 @@ def test_image_generation_streaming():
     image_received = False
 
     for chunk in response:
-
         if chunk.images:
-
             image_received = True
 
             assert len(chunk.images) > 0
@@ -259,47 +172,27 @@ def test_image_generation_streaming():
 
     assert image_received, "No image was received in the stream"
 
-def test_image_editing():
 
+def test_image_editing():
     """Test image editing with a sample image"""
 
     agent = Agent(
-
         model=Gemini(
-
             id="gemini-2.0-flash-exp-image-generation",
-
             response_modalities=["Text", "Image"],
-
         ),
-
         exponential_backoff=True,
-
         delay_between_retries=5,
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
         create_default_system_message=False,
-
         system_message=None,
-
     )
 
-    sample_image_url = (
+    sample_image_url = "https://upload.wikimedia.org/wikipedia/commons/0/0c/GoldenGateBridge-001.jpg"
 
-        "https://upload.wikimedia.org/wikipedia/commons/0/0c/GoldenGateBridge-001.jpg"
-
-    )
-
-    agent.run(
-
-        "Can you add a rainbow over this bridge?", images=[Image(url=sample_image_url)]
-
-    )
+    agent.run("Can you add a rainbow over this bridge?", images=[Image(url=sample_image_url)])
 
     images = agent.get_images()
 
@@ -313,34 +206,22 @@ def test_image_editing():
 
     assert image.format in ["JPEG", "PNG"]
 
-def test_image_generation_with_detailed_prompt():
 
+def test_image_generation_with_detailed_prompt():
     """Test image generation with a detailed prompt"""
 
     agent = Agent(
-
         model=Gemini(
-
             id="gemini-2.0-flash-exp-image-generation",
-
             response_modalities=["Text", "Image"],
-
         ),
-
         exponential_backoff=True,
-
         delay_between_retries=5,
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
         create_default_system_message=False,
-
         system_message=None,
-
     )
 
     detailed_prompt = """
@@ -371,41 +252,25 @@ def test_image_generation_with_detailed_prompt():
 
     assert image.format in ["JPEG", "PNG"]
 
-def test_combined_text_and_image_generation():
 
+def test_combined_text_and_image_generation():
     """Test generating both text description and image"""
 
     agent = Agent(
-
         model=Gemini(
-
             id="gemini-2.0-flash-exp-image-generation",
-
             response_modalities=["Text", "Image"],
-
         ),
-
         exponential_backoff=True,
-
         delay_between_retries=5,
-
         markdown=True,
-
         telemetry=False,
-
         monitoring=False,
-
         create_default_system_message=False,
-
         system_message=None,
-
     )
 
-    response = agent.run(
-
-        "Create an image of a sunset over mountains and describe what you generated."
-
-    )
+    response = agent.run("Create an image of a sunset over mountains and describe what you generated.")
 
     # Check text response
 
@@ -424,4 +289,3 @@ def test_combined_text_and_image_generation():
     assert len(images) > 0
 
     assert images[0].content is not None
-

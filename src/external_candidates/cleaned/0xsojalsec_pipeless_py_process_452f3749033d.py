@@ -9,7 +9,6 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 def hook(frame, context):
-
     pil_image = Image.fromarray(frame["modified"])
 
     text = "Hello pipeless!"

@@ -156,7 +156,6 @@ def get_wide_descriptor_table(
 
 
 def submit_descriptor_workflow(workflow: DescriptorWorkflow, scheduler_key: str, project_id: str):
-
     if config.props.read_only:
         raise RuntimeError("Cannot submit design workflow: OVO server is in read-only mode")
 
@@ -192,7 +191,6 @@ def submit_descriptor_workflow(workflow: DescriptorWorkflow, scheduler_key: str,
 
 
 def prepare_proteinqc_params(workflow: ProteinQCWorkflow, workdir: str) -> dict:
-
     storage_paths = []
 
     design_ids = []
@@ -220,7 +218,6 @@ def prepare_proteinqc_params(workflow: ProteinQCWorkflow, workdir: str) -> dict:
 
 
 def prepare_refolding_params(workflow: RefoldingWorkflow, workdir: str) -> dict:
-
     workflow.validate()
 
     designs = db.select(Design, id__in=workflow.design_ids)
@@ -460,7 +457,6 @@ def read_descriptor_file_values(
 def save_descriptor_job_for_design_job(
     design_job: DesignJob, project_id: str, chains: list[str], design_ids: list[str]
 ) -> DescriptorJob:
-
     descriptor_job = DescriptorJob(
         id=DescriptorJob.generate_id(),
         scheduler_key=design_job.scheduler_key,
@@ -483,7 +479,6 @@ def save_descriptor_job_for_design_job(
 
 
 def find_id_column(df: pd.DataFrame, df_name: str):
-
     for column in ["id", "ID", "Id"]:
         if column in df.columns:
             return column
@@ -605,7 +600,6 @@ def update_and_process_descriptors(descriptor_jobs: List[DescriptorJob], error_c
 
 
 def export_proteinqc_excel(design_ids: list[str], output_path: str = None):
-
     df = get_wide_descriptor_table(
         design_ids=design_ids,
         descriptor_keys=[d.key for d in PROTEINQC_MAIN_DESCRIPTORS],

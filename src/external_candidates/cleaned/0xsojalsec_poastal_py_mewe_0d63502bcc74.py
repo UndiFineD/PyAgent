@@ -7,7 +7,6 @@ import requests
 
 
 def mewe_email(email):
-
     headers = {
         "accept": "application/json, text/plain, */*",
     }

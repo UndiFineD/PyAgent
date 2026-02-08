@@ -37,7 +37,6 @@ import uuid
 
 from contextlib import nullcontext
 
-
 import numpy as np
 
 import torch
@@ -56,7 +55,6 @@ class CosyVoiceModel:
         fp16: bool,
         device="cuda",
     ):
-
         self.device = device  # torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         self.llm = llm
@@ -116,7 +114,6 @@ class CosyVoiceModel:
         self.hift_cache_dict = {}
 
     def load(self, llm_model, flow_model, hift_model):
-
         self.llm.load_state_dict(torch.load(llm_model, map_location=self.device), strict=False)
 
         self.llm.to(self.device).eval()
@@ -139,7 +136,6 @@ class CosyVoiceModel:
         self.hift.to(self.device).eval()
 
     def load_jit(self, llm_text_encoder_model, llm_llm_model, flow_encoder_model):
-
         assert self.fp16 is True, "we only provide fp16 jit model, set fp16=True if you want to use jit model"
 
         llm_text_encoder = torch.jit.load(llm_text_encoder_model, map_location=self.device)
@@ -155,7 +151,6 @@ class CosyVoiceModel:
         self.flow.encoder = flow_encoder
 
     def load_onnx(self, flow_decoder_estimator_model):
-
         import onnxruntime
 
         option = onnxruntime.SessionOptions()
@@ -173,7 +168,6 @@ class CosyVoiceModel:
         )
 
     def llm_job(self, text, prompt_text, llm_prompt_speech_token, llm_embedding, uuid):
-
         if self.fp16 is True:
             llm_embedding = llm_embedding.half()
 
@@ -203,7 +197,6 @@ class CosyVoiceModel:
         finalize=False,
         speed=1.0,
     ):
-
         tts_mel, flow_cache = self.flow.inference(
             token=token.to(self.device),
             token_len=torch.tensor([token.shape[1]], dtype=torch.int32).to(self.device),
@@ -281,7 +274,6 @@ class CosyVoiceModel:
         speed=1.0,
         **kwargs,
     ):
-
         # this_uuid is used to track variables related to this inference thread
 
         this_uuid = str(uuid.uuid1())
@@ -400,7 +392,6 @@ class CosyVoiceModel:
         speed=1.0,
         **kwargs,
     ):
-
         # this_uuid is used to track variables related to this inference thread
 
         this_uuid = str(uuid.uuid1())
@@ -507,7 +498,6 @@ class CosyVoiceModel:
         speed=1.0,
         **kwargs,
     ):
-
         # this_uuid is used to track variables related to this inference thread
 
         this_uuid = str(uuid.uuid1())

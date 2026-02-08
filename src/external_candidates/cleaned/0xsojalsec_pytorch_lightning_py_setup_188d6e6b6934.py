@@ -72,7 +72,6 @@ def _init_debugging_flags(
     val_check_interval: Optional[Union[int, float, str, timedelta, dict]],
     num_sanity_val_steps: int,
 ) -> None:
-
     # init debugging flags
 
     if isinstance(fast_dev_run, int) and (fast_dev_run < 0):
@@ -155,7 +154,6 @@ def _init_debugging_flags(
 
 
 def _determine_batch_limits(batches: Optional[Union[int, float]], name: str) -> Union[int, float]:
-
     if batches is None:
         # batches is optional to know if the user passed a value so that we can show the above info messages only to the
 
@@ -201,7 +199,6 @@ def _determine_batch_limits(batches: Optional[Union[int, float]], name: str) -> 
 
 
 def _init_profiler(trainer: "pl.Trainer", profiler: Optional[Union[Profiler, str]]) -> None:
-
     if isinstance(profiler, str):
         PROFILERS = {
             "simple": SimpleProfiler,
@@ -226,7 +223,6 @@ def _init_profiler(trainer: "pl.Trainer", profiler: Optional[Union[Profiler, str
 
 
 def _log_device_info(trainer: "pl.Trainer") -> None:
-
     if CUDAAccelerator.is_available():
         gpu_available = True
 

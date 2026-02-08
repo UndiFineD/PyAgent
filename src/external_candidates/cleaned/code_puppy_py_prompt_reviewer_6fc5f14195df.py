@@ -11,54 +11,37 @@ from .. import callbacks
 
 from .base_agent import BaseAgent
 
-class PromptReviewerAgent(BaseAgent):
 
+class PromptReviewerAgent(BaseAgent):
     """Prompt Reviewer Agent - Analyzes prompts for quality, clarity, and effectiveness."""
 
     @property
-
     def name(self) -> str:
-
         return "prompt-reviewer"
 
     @property
-
     def display_name(self) -> str:
-
         return "Prompt Reviewer 📝"
 
     @property
-
     def description(self) -> str:
-
         return (
-
             "Specializes in analyzing and reviewing prompt quality. "
-
             "Assesses clarity, specificity, context completeness, constraint handling, and ambiguity detection."
-
         )
 
     def get_available_tools(self) -> list[str]:
-
         """Get the list of tools available to the Prompt Reviewer Agent."""
 
         return [
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             "agent_share_your_reasoning",
-
             "agent_run_shell_command",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         """Get the optimized Prompt Reviewer Agent's system prompt."""
 
         puppy_name = get_puppy_name()
@@ -224,8 +207,6 @@ Remember: Great prompts lead to great results, but perfect is the enemy of good 
         prompt_additions = callbacks.on_load_prompt()
 
         if len(prompt_additions):
-
             result += "\n" + "\n".join(prompt_additions)
 
         return result
-

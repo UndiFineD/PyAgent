@@ -84,7 +84,6 @@ class ExperimentWriter(_FabricExperimentWriter):
     NAME_HPARAMS_FILE = "hparams.yaml"
 
     def __init__(self, log_dir: str) -> None:
-
         super().__init__(log_dir=log_dir)
 
         self.hparams: dict[str, Any] = {}
@@ -142,7 +141,6 @@ class CSVLogger(Logger, FabricCSVLogger):
         prefix: str = "",
         flush_logs_every_n_steps: int = 100,
     ):
-
         super().__init__(
             root_dir=save_dir,
             name=name,
@@ -199,7 +197,6 @@ class CSVLogger(Logger, FabricCSVLogger):
     @override
     @rank_zero_only
     def log_hyperparams(self, params: Optional[Union[dict[str, Any], Namespace]] = None) -> None:
-
         params = _convert_params(params)
 
         self.experiment.log_hparams(params)

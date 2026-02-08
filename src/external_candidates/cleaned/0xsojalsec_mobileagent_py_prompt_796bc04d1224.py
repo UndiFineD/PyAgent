@@ -25,7 +25,6 @@ def get_action_prompt(
     icon_caption,
     location_info,
 ):
-
     prompt = "### Background ###\n"
 
     if use_som == 1:
@@ -226,7 +225,6 @@ def get_reflect_prompt(
     action,
     add_info,
 ):
-
     prompt = f"These images are two computer screenshots before and after an operation. Their widths are {width} pixels and their heights are {height} pixels.\n\n"
 
     prompt += "In order to help you better perceive the content in this screenshot, we extract some information on the current screenshot. "
@@ -306,7 +304,6 @@ def get_reflect_prompt(
 
 
 def get_memory_prompt(insight):
-
     if insight != "":
         prompt = "### Important content ###\n"
 
@@ -340,7 +337,6 @@ def get_process_prompt(
     completed_content,
     add_info,
 ):
-
     prompt = "### Background ###\n"
 
     prompt += f"There is an user's instruction which is: {instruction}. You are a computer operating assistant and are operating the user's computer.\n\n"

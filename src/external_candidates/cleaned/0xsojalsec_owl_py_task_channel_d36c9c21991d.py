@@ -106,7 +106,6 @@ class Packet:
         assignee_id: Optional[str] = None,
         status: PacketStatus = PacketStatus.SENT,
     ) -> None:
-
         self.task = task
 
         self.publisher_id = publisher_id
@@ -116,7 +115,6 @@ class Packet:
         self.status = status
 
     def __repr__(self):
-
         return f"Packet(publisher_id={self.publisher_id}, assignee_id={self.assignee_id}, status={self.status})"
 
 
@@ -124,7 +122,6 @@ class TaskChannel:
     r"""An internal class used by Workforce to manage tasks."""
 
     def __init__(self) -> None:
-
         self._task_id_list: List[str] = []
 
         self._condition = asyncio.Condition()

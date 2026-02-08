@@ -7,7 +7,6 @@ from argparse import ArgumentParser
 
 
 def parse_args():
-
     parser = ArgumentParser(description="Whisper FastAPI Online Server")
 
     parser.add_argument(

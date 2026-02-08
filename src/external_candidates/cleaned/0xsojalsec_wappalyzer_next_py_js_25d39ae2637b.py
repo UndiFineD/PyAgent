@@ -7,7 +7,6 @@ from wappalyzer.core.matcher import match_dict
 
 
 def fix_keys(pattern, js, classes):
-
     new_js = js.copy()
 
     for key, value in pattern.items():
@@ -26,7 +25,6 @@ def fix_keys(pattern, js, classes):
 
 
 def match_js(pattern, js):
-
     for js_dict in js:
         js, low_js, classes = js_dict["dict"], js_dict["low_dict"], js_dict["classes"]
 

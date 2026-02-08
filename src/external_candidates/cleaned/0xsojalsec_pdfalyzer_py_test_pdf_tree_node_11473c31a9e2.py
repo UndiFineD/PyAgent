@@ -5,7 +5,6 @@
 
 
 def test_pdf_node_address(analyzing_malicious_pdfalyzer):
-
     node41 = analyzing_malicious_pdfalyzer.find_node_by_idnum(41)
 
     assert node41.tree_address() == "/Root/StructTreeRoot/K[0]/K[24]/K[1]/K[3]/K[0]/K[0]/K[1]/K[0]/Obj"
@@ -20,7 +19,6 @@ def test_pdf_node_address(analyzing_malicious_pdfalyzer):
 
 
 def test_address_of_this_node_in_other(analyzing_malicious_pdfalyzer, page_node, pages_node):
-
     sym_node = analyzing_malicious_pdfalyzer.find_node_by_idnum(13)
 
     assert sym_node.address_of_this_node_in_other(page_node) == "/Annots[0]"
@@ -37,7 +35,6 @@ def test_address_of_this_node_in_other(analyzing_malicious_pdfalyzer, page_node,
 
 
 def test_referenced_by_keys(analyzing_malicious_pdfalyzer, page_node):
-
     node = analyzing_malicious_pdfalyzer.find_node_by_idnum(7)
 
     assert node.unique_addresses() == ["/Resources[/ExtGState][/GS7]"]

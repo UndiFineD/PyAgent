@@ -24,19 +24,14 @@ from typing import Optional
 import torch
 
 from transformers.modeling_outputs import (
-
     BaseModelOutputWithPoolingAndCrossAttentions,
-
     CausalLMOutputWithCrossAttentions,
-
     ModelOutput,
-
 )
 
+
 @dataclass
-
 class BlipSimilarity(ModelOutput):
-
     sim_i2t: torch.FloatTensor = None
 
     sim_t2i: torch.FloatTensor = None
@@ -49,10 +44,9 @@ class BlipSimilarity(ModelOutput):
 
     sim_t2i_targets: Optional[torch.FloatTensor] = None
 
+
 @dataclass
-
 class BlipIntermediateOutput(ModelOutput):
-
     """
 
     Data class for intermediate outputs of BLIP models.
@@ -105,10 +99,9 @@ class BlipIntermediateOutput(ModelOutput):
 
     decoder_labels: Optional[torch.LongTensor] = None
 
+
 @dataclass
-
 class BlipOutput(ModelOutput):
-
     # some finetuned models (e.g. BlipVQA) do not compute similarity, thus optional.
 
     sims: Optional[BlipSimilarity] = None
@@ -123,10 +116,9 @@ class BlipOutput(ModelOutput):
 
     loss_lm: Optional[torch.FloatTensor] = None
 
+
 @dataclass
-
 class BlipOutputFeatures(ModelOutput):
-
     """
 
     Data class of features from BlipFeatureExtractor.
@@ -156,4 +148,3 @@ class BlipOutputFeatures(ModelOutput):
     text_embeds_proj: Optional[torch.FloatTensor] = None
 
     multimodal_embeds: Optional[torch.FloatTensor] = None
-

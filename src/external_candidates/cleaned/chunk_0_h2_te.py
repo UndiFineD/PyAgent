@@ -5,7 +5,6 @@
 
 
 def queueRequests(target, wordlists):
-
     engine = RequestEngine(
         endpoint=target.endpoint, concurrentConnections=5, engine=Engine.BURP2, maxRetriesPerRequest=0
     )
@@ -41,5 +40,4 @@ X-Ignore: X"""
 
 
 def handleResponse(req, interesting):
-
     table.add(req)

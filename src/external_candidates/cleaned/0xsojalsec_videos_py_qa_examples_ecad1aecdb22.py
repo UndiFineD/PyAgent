@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class DemoScene(InteractiveScene):
     def construct(self):
-
         # Demo animation
 
         square = Square()
@@ -30,7 +29,6 @@ class DemoScene(InteractiveScene):
         # Animations
 
         def flip(square):
-
             if square.get_fill_color() == BLUE:
                 target_color = GREY_C
 

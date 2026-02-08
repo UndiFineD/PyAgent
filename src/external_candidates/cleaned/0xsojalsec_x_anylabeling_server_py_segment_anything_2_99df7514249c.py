@@ -30,7 +30,6 @@ class LRUCache:
     """Thread-safe LRU cache implementation."""
 
     def __init__(self, maxsize=10):
-
         self.maxsize = maxsize
 
         self.lock = threading.Lock()

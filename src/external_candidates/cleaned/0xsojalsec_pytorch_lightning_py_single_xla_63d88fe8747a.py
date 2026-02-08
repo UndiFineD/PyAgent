@@ -61,7 +61,6 @@ class SingleDeviceXLAStrategy(SingleDeviceStrategy):
         precision_plugin: Optional[XLAPrecision] = None,
         debug: bool = False,
     ):
-
         super().__init__(
             accelerator=accelerator,
             device=device,
@@ -80,7 +79,6 @@ class SingleDeviceXLAStrategy(SingleDeviceStrategy):
     @property
     @override
     def checkpoint_io(self) -> Union[XLACheckpointIO, _WrappingCheckpointIO]:
-
         plugin = self._checkpoint_io
 
         if plugin is not None:
@@ -93,7 +91,6 @@ class SingleDeviceXLAStrategy(SingleDeviceStrategy):
     @checkpoint_io.setter
     @override
     def checkpoint_io(self, io: Optional[CheckpointIO]) -> None:
-
         if io is not None and not isinstance(io, (XLACheckpointIO, _WrappingCheckpointIO)):
             raise TypeError(f"The XLA strategy can only work with the `XLACheckpointIO` plugin, found {io}")
 
@@ -102,7 +99,6 @@ class SingleDeviceXLAStrategy(SingleDeviceStrategy):
     @property
     @override
     def precision_plugin(self) -> XLAPrecision:
-
         plugin = self._precision_plugin
 
         if plugin is not None:
@@ -115,7 +111,6 @@ class SingleDeviceXLAStrategy(SingleDeviceStrategy):
     @precision_plugin.setter
     @override
     def precision_plugin(self, precision_plugin: Optional[Precision]) -> None:
-
         if precision_plugin is not None and not isinstance(precision_plugin, XLAPrecision):
             raise TypeError(f"The XLA strategy can only work with the `XLAPrecision` plugin, found {precision_plugin}")
 
@@ -123,16 +118,13 @@ class SingleDeviceXLAStrategy(SingleDeviceStrategy):
 
     @override
     def setup(self, trainer: "pl.Trainer") -> None:
-
         return self.single_xla_strategy_impl.setup(trainer=trainer)
 
     @classmethod
     @override
     def register_strategies(cls, strategy_registry: _StrategyRegistry) -> None:
-
         strategy_registry.register("single_xla", cls, description=cls.__name__)
 
     @override
     def teardown(self) -> None:
-
         return self.single_xla_strategy_impl.teardown()

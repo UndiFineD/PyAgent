@@ -24,7 +24,6 @@ class NXCModule:
     multiple_hosts = False
 
     def __init__(self):
-
         self.linked_server = None
 
         self.command = None
@@ -45,7 +44,6 @@ class NXCModule:
         self.command = module_options.get("CMD")
 
     def on_login(self, context, connection):
-
         self.context = context
 
         self.mssql_conn = connection.conn

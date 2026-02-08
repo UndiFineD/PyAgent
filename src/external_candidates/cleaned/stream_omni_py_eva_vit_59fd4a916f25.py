@@ -23,7 +23,6 @@ import math
 
 import time
 
-
 import torch
 
 import torch.nn as nn
@@ -40,13 +39,11 @@ from timm.models.layers import drop_path, to_2tuple, trunc_normal_
 
 from transformers import CLIPImageProcessor
 
-
 from .eva_clip import create_model_and_transforms, get_model_config
 
 
 class EvaViTWrapper(nn.Module):
     def __init__(self, vision_tower, args, delay_load=False):
-
         super().__init__()
 
         self.is_loaded = False
@@ -86,7 +83,6 @@ class EvaViTWrapper(nn.Module):
             self.load_model()
 
     def load_model(self):
-
         rank0_print(f"Loading: {self.vision_tower_name}")
 
         rank0_print(f"Pretrained: {self.pretrained}")
@@ -136,7 +132,6 @@ class EvaViTWrapper(nn.Module):
         self.is_loaded = True
 
     def feature_select(self, image_features):
-
         select_feature_type = self.select_feature
 
         # if self.select_feature in ["slicefour_patch", "slicefour_cls_patch"]:
@@ -171,14 +166,12 @@ class EvaViTWrapper(nn.Module):
         return image_features
 
     def train(self, mode=True):
-
         self.training = mode
 
         if self.is_loaded:
             self.vision_tower.eval()
 
     def forward(self, images):
-
         if type(images) is list:
             image_features = []
 
@@ -198,30 +191,24 @@ class EvaViTWrapper(nn.Module):
 
     @property
     def dummy_feature(self):
-
         return torch.zeros(1, self.hidden_size, device=self.device, dtype=self.dtype)
 
     @property
     def hidden_size(self):
-
         return self.model_config["vision_cfg"]["width"]
 
     @property
     def num_patches(self):
-
         return (self.model_config["vision_cfg"]["image_size"] // self.model_config["vision_cfg"]["patch_size"]) ** 2
 
     @property
     def num_patches_per_side(self):
-
         return self.model_config["vision_cfg"]["image_size"] // self.model_config["vision_cfg"]["patch_size"]
 
     @property
     def config(self):
-
         return self.model_config
 
     @property
     def image_size(self):
-
         return self.model_config["vision_cfg"]["image_size"]

@@ -40,7 +40,6 @@ class BenchmarkConfig:
 
 
 def benchmark_decode(config: BenchmarkConfig) -> None:
-
     ic("Starting video decode benchmark")
 
     assembly101_data: Assembly101Dataset = load_assembly101(

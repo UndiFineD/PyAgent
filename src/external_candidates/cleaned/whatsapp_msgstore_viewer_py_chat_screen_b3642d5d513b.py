@@ -7,7 +7,6 @@
 
 # -*- coding: utf-8 -*-
 
-
 """
 
 Chat Screen
@@ -19,7 +18,6 @@ import os
 import webbrowser
 
 from typing import NoReturn
-
 
 from kivy.clock import Clock
 
@@ -58,19 +56,16 @@ from View.MainScreen.main_screen import MLabel
 
 class RV(RecycleView):
     def __init__(self, **kwargs):
-
         super().__init__(**kwargs)
 
 
 class Attachment(ButtonBehavior, RectangularRippleBehavior, CommonElevationBehavior, MLabel):
     def __init__(self, **kwargs):
-
         super().__init__(**kwargs)
 
 
 class Quote(MLabel):
     def __init__(self, **kwargs):
-
         super().__init__(**kwargs)
 
 
@@ -96,11 +91,9 @@ class ChatMessage(RecycleDataViewBehavior, MDBoxLayout):
     dialog = None
 
     def dialog_dismiss(self):
-
         del self.dialog
 
     def hide_dialog(self):
-
         self.dialog.dismiss()
 
     def show_dialog(self, msg, title=None, auto_dismiss=True) -> NoReturn:
@@ -130,7 +123,6 @@ class ChatMessage(RecycleDataViewBehavior, MDBoxLayout):
         self.dialog.open()
 
     def open_media(self, file_path):
-
         print(f"Opening {file_path}")
 
         if MDApp.get_running_app().wp_dir is None:
@@ -157,11 +149,9 @@ class ChatMessage(RecycleDataViewBehavior, MDBoxLayout):
         webbrowser.open(path)
 
     def get_msg_widget(self):
-
         return self.ids["msg_content"]
 
     def refresh_view_attrs(self, rv, index, data):
-
         self.index = index
 
         self.txt_data = fix_emojis(data["text_data"], MDApp.get_running_app().emojis_font)
@@ -183,7 +173,6 @@ class ChatMessage(RecycleDataViewBehavior, MDBoxLayout):
         return super().refresh_view_attrs(rv, index, data)
 
     def refresh_view_layout(self, rv, index, layout, viewport):
-
         return super().refresh_view_layout(rv, index, layout, viewport)
 
 
@@ -199,7 +188,6 @@ class ChatScreenView(BaseScreenView):
     status = StringProperty()
 
     def __init__(self, **kw):
-
         super(ChatScreenView, self).__init__(**kw)
 
         self.dialog = MDDialog()
@@ -211,15 +199,12 @@ class ChatScreenView(BaseScreenView):
         self.selected_user = self.app.selected_user
 
     def dialog_dismiss(self):
-
         del self.dialog
 
     def hide_dialog(self):
-
         self.dialog.dismiss()
 
     def show_dialog(self, msg, title=None, auto_dismiss=True) -> NoReturn:
-
         self.dialog = MDDialog(title="Login", radius=[20, 7, 20, 7])
 
         self.dialog.bind(on_dismiss=lambda x: self.dialog_dismiss())
@@ -244,7 +229,6 @@ class ChatScreenView(BaseScreenView):
         self.dialog.open()
 
     def show_chat_messages(self, chat_messages):
-
         self.ids.rvbox.clear_widgets()
 
         self.ids.rv.data = chat_messages
@@ -252,7 +236,6 @@ class ChatScreenView(BaseScreenView):
         Clock.schedule_once(lambda dt: self.scroll_to_bottom(), 0)
 
     def scroll_to_bottom(self):
-
         self.ids.rv.scroll_y = 0
 
     def model_is_changed(self) -> None:

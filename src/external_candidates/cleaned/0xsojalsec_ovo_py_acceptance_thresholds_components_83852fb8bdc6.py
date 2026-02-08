@@ -117,7 +117,6 @@ def single_threshold_input_component(
     descriptor: Descriptor,
     descriptor_values: pd.Series | None = None,
 ) -> Threshold:
-
     if not threshold.enabled:
         if st.toggle("Disabled", key=f"{descriptor.key}_toggle"):
             st.session_state.thresholds_expanded = True
@@ -197,7 +196,6 @@ def single_threshold_input_component(
 
 
 def descriptor_histogram_component(descriptor_values: pd.Series, descriptor: Descriptor, threshold: Threshold):
-
     fig = px.histogram(
         x=descriptor_values,
         labels={"x": descriptor.name},
@@ -243,7 +241,6 @@ def descriptor_histogram_component(descriptor_values: pd.Series, descriptor: Des
 def filter_designs_by_thresholds_cached(
     all_design_ids: list[str], thresholds: dict[str, Threshold]
 ) -> tuple[list[str], dict[str, int]]:
-
     return filter_designs_by_thresholds(
         all_design_ids=all_design_ids,
         thresholds=thresholds,
@@ -264,7 +261,6 @@ def accept_designs_dialog(
     num_accepted_by_descriptor: dict[str, int],
     selected_thresholds: dict[str, Threshold],
 ):
-
     st.write(
         f"Accept **{len(new_accepted_design_ids):,} / {len(all_design_ids):,}** ({len(new_accepted_design_ids) / len(all_design_ids):.0%}) designs based on new thresholds:"
     )
@@ -314,7 +310,6 @@ def display_current_thresholds(
     all_design_ids: list[str],
     num_accepted_by_descriptor: dict[str, int],
 ):
-
     threshold_labels = []
 
     for descriptor_key, threshold in selected_thresholds.items():

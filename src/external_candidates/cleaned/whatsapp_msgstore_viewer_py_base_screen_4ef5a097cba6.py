@@ -27,8 +27,6 @@ class BaseScreenView(MDScreen, Observer):
 
     Controller object - :class:`~Controller.controller_screen.ClassScreenController`.
 
-
-
     :attr:`controller` is an :class:`~kivy.properties.ObjectProperty`
 
     and defaults to `None`.
@@ -40,8 +38,6 @@ class BaseScreenView(MDScreen, Observer):
     """
 
     Model object - :class:`~Model.model_screen.ClassScreenModel`.
-
-
 
     :attr:`model` is an :class:`~kivy.properties.ObjectProperty`
 
@@ -55,8 +51,6 @@ class BaseScreenView(MDScreen, Observer):
 
     Screen manager object - :class:`~kivymd.uix.screenmanager.MDScreenManager`.
 
-
-
     :attr:`manager_screens` is an :class:`~kivy.properties.ObjectProperty`
 
     and defaults to `None`.
@@ -64,7 +58,6 @@ class BaseScreenView(MDScreen, Observer):
     """
 
     def __init__(self, **kw):
-
         super().__init__(**kw)
 
         # Often you need to get access to the application object from the view

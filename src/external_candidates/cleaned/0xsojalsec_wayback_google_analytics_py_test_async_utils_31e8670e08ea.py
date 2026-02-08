@@ -29,7 +29,6 @@ class AsyncUtilsTestCase(asynctest.TestCase):
         mock_response = MagicMock()
 
         async def mock_text_method():
-
             return "20120101000000\n20130102000000\n20140103000000\n20150104000000\n20160105000000\n20170106000000\n20180107000000\n20190108000000\n20200109000000\n20210110000000"
 
         mock_response.text = mock_text_method
@@ -83,7 +82,6 @@ class AsyncUtilsTestCase(asynctest.TestCase):
         mock_response = MagicMock()
 
         async def mock_text_method():
-
             return "<html> ... fake data ... </html>"
 
         mock_response.text = mock_text_method

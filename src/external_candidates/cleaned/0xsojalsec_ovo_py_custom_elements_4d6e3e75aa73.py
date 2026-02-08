@@ -29,7 +29,6 @@ def heading_with_value(heading: str, secondary_text: str, level: int = 2, font_w
 
 
 def subheading_with_value(heading: str, secondary_text: str, level: int = 3, font_weight: int = 600):
-
     return heading_with_value(heading, secondary_text, level=level, font_weight=font_weight)
 
 
@@ -50,7 +49,6 @@ def iter_progress(iterable: Iterable, text=None, total=None, **kwargs):
 
 
 def get_approx_screen_width():
-
     try:
         return max(800, streamlit_js_eval(js_expressions="window.innerWidth"))
 
@@ -61,7 +59,6 @@ def get_approx_screen_width():
 
 
 def approx_max_width(max_width, center=False):
-
     approx_content_width = get_approx_screen_width() - 150 - 100
 
     st.write(approx_content_width)
@@ -109,7 +106,6 @@ def wrapped_columns(n: int, wrap=4, divider=False, **kwargs) -> list[DeltaGenera
 
 
 def confirm_download_button(data, **kwargs):
-
     size_suffix = f" ({naturalsize(len(data))})" if len(data) > 1024 * 1024 else ""
 
     st.download_button("Confirm download" + size_suffix, type="primary", data=data, **kwargs)

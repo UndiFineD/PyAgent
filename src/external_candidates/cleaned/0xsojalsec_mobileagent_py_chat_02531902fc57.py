@@ -9,7 +9,6 @@ from MobileAgent.api import encode_image
 
 
 def init_chat(instruction):
-
     operation_history = []
 
     sysetm_prompt = "You are a helpful phone operating assistant. You need to help me operate the phone to complete my instruction.\n"
@@ -24,7 +23,6 @@ def init_chat(instruction):
 
 
 def add_response(role, prompt, chat_history, image=None):
-
     new_chat_history = copy.deepcopy(chat_history)
 
     if image:
@@ -49,7 +47,6 @@ def add_response(role, prompt, chat_history, image=None):
 
 
 def add_multiimage_response(role, prompt, chat_history, images):
-
     new_chat_history = copy.deepcopy(chat_history)
 
     content = [
@@ -72,7 +69,6 @@ def add_multiimage_response(role, prompt, chat_history, images):
 
 
 def print_status(chat_history):
-
     print("*" * 100)
 
     for chat in chat_history:

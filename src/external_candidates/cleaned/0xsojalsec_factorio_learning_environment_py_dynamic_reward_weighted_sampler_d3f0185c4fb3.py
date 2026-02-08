@@ -11,7 +11,6 @@ import statistics
 
 from typing import Optional
 
-
 import psycopg2
 
 import tenacity
@@ -24,7 +23,6 @@ from psycopg2.extras import DictCursor
 
 from tenacity import retry_if_exception_type, wait_exponential
 
-
 from .db_sampler import DBSampler
 
 
@@ -35,13 +33,9 @@ class DynamicRewardWeightedSampler(DBSampler):
 
     adjusted by a dynamic scaling factor that changes over time to balance exploration and exploitation.
 
-
-
     The adaptive compression strength acts like a dynamic temperature parameter that automatically cycles
 
     between exploration (high compression) and exploitation (low compression) phases.
-
-
 
     Args:
 
@@ -63,7 +57,6 @@ class DynamicRewardWeightedSampler(DBSampler):
         adaptive_period=200,
         maximum_lookback=20,
     ):
-
         super().__init__(db_client, maximum_lookback)
 
         self.max_conversation_length = max_conversation_length
@@ -82,8 +75,6 @@ class DynamicRewardWeightedSampler(DBSampler):
         """
 
         Sample parent with adjusted reward scaling.
-
-
 
         Args:
 
@@ -172,7 +163,6 @@ class DynamicRewardWeightedSampler(DBSampler):
                     # Apply reward transformation to handle power-law distribution
 
                     def transform_reward(value):
-
                         # Z-score normalization
 
                         z_score = (value - mean_value) / std_value if std_value > 0 else 0

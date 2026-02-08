@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class RandyIsSickOrNot(Scene):
     def construct(self):
-
         title = OldTexText("1 in 200")
 
         title.to_edge(UP)
@@ -70,7 +69,6 @@ class RandyIsSickOrNot(Scene):
 
 class OneIn200HasDisease(Scene):
     def construct(self):
-
         title = OldTexText("1 in 200")
 
         title.to_edge(UP)

@@ -9,7 +9,6 @@ from utils.color import *
 
 
 def binary(i):
-
     # returns an array of 0s and 1s
 
     if i == 0:
@@ -34,12 +33,10 @@ def binary(i):
 
 
 def nb_of_ones(i):
-
     return binary(i).count(1)
 
 
 def rainbow_color(alpha):
-
     nb_colors = 100
 
     rainbow = color_gradient([RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE], nb_colors)
@@ -52,7 +49,6 @@ def rainbow_color(alpha):
 
 
 def graded_color(n, k):
-
     if n != 0:
         alpha = float(k) / n
 

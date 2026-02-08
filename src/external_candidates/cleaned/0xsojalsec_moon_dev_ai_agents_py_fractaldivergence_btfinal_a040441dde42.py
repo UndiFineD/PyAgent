@@ -21,7 +21,6 @@ class FractalDivergence(bt.Strategy):
     )
 
     def __init__(self, data):
-
         self.data = data
 
         self.risk_amount = self.params["risk_per_trade"] * selfaccount_value()
@@ -37,7 +36,6 @@ class FractalDivergence(bt.Strategy):
         self信号Variables
 
     def next(self):
-
         if not hasattr(self, "account"):
             return  # Ensure account is initialized before using it
 
@@ -88,19 +86,16 @@ class FractalDivergence(bt.Strategy):
                 self.position = None
 
     def checkFractalBuyCondition(self):
-
         # Implement logic to determine if a fractal buy signal exists
 
         pass  # To be implemented
 
     def isInDivergencePhase(self):
-
         # Determine if in divergence phase (optional)
 
         return False  # To be implemented
 
     def getHistData(self, name, N=0):
-
         # Returns historical data for testing purposes
 
         return [self.data[i] for i in range(N)]

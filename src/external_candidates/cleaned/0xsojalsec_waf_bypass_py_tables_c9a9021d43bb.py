@@ -9,19 +9,15 @@ import tableprint as tp
 
 
 def get_stats(wb_result, status):
-
     return [k for k, v in wb_result.items() if v == status]
 
 
 def get_percent_str(i, a):
-
     return round((i / a) * 100, 2) if a != 0 else 0.00
 
 
 def table_get_result_details(fp, fn):
-
     def get_result_details(fx, status):
-
         if not fx:
             return ""
 
@@ -50,7 +46,6 @@ def table_get_result_details(fp, fn):
 
 
 def table_get_result_summary(wb_result, pdl):
-
     # init
 
     payloads_summary_dict = {}

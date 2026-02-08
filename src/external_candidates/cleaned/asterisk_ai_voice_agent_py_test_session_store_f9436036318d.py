@@ -19,44 +19,31 @@ from src.core.models import CallSession, PlaybackRef
 
 from src.core.session_store import SessionStore
 
-class TestSessionStore:
 
+class TestSessionStore:
     """Test SessionStore atomic operations and invariants."""
 
     @pytest.fixture
-
     async def session_store(self):
-
         """Create a SessionStore instance for testing."""
 
         return SessionStore()
 
     @pytest.fixture
-
     def sample_session(self):
-
         """Create a sample CallSession for testing."""
 
         return CallSession(
-
             call_id="test_call_123",
-
             caller_channel_id="1758498324.399",
-
             local_channel_id="Local/test@ai-agent-media-fork/n",
-
             bridge_id="bridge_123",
-
             provider_name="local",
-
             conversation_state="greeting",
-
         )
 
     @pytest.mark.asyncio
-
     async def test_upsert_and_get_by_call_id(self, session_store, sample_session):
-
         """Test basic upsert and retrieval by call_id."""
 
         # Upsert session
@@ -76,9 +63,7 @@ class TestSessionStore:
         assert retrieved.bridge_id == "bridge_123"
 
     @pytest.mark.asyncio
-
     async def test_get_by_channel_id(self, session_store, sample_session):
-
         """Test retrieval by various channel IDs."""
 
         await session_store.upsert_call(sample_session)
@@ -93,20 +78,14 @@ class TestSessionStore:
 
         # Test local_channel_id
 
-        retrieved = await session_store.get_by_channel_id(
-
-            "Local/test@ai-agent-media-fork/n"
-
-        )
+        retrieved = await session_store.get_by_channel_id("Local/test@ai-agent-media-fork/n")
 
         assert retrieved is not None
 
         assert retrieved.call_id == "test_call_123"
 
     @pytest.mark.asyncio
-
     async def test_remove_call(self, session_store, sample_session):
-
         """Test call removal and cleanup of all channel mappings."""
 
         await session_store.upsert_call(sample_session)
@@ -117,13 +96,7 @@ class TestSessionStore:
 
         assert await session_store.get_by_channel_id("1758498324.399") is not None
 
-        assert (
-
-            await session_store.get_by_channel_id("Local/test@ai-agent-media-fork/n")
-
-            is not None
-
-        )
+        assert await session_store.get_by_channel_id("Local/test@ai-agent-media-fork/n") is not None
 
         # Remove call
 
@@ -139,18 +112,10 @@ class TestSessionStore:
 
         assert await session_store.get_by_channel_id("1758498324.399") is None
 
-        assert (
-
-            await session_store.get_by_channel_id("Local/test@ai-agent-media-fork/n")
-
-            is None
-
-        )
+        assert await session_store.get_by_channel_id("Local/test@ai-agent-media-fork/n") is None
 
     @pytest.mark.asyncio
-
     async def test_gating_token_operations(self, session_store, sample_session):
-
         """Test TTS gating token add/remove operations."""
 
         await session_store.upsert_call(sample_session)
@@ -232,25 +197,16 @@ class TestSessionStore:
         assert session.audio_capture_enabled  # Re-enabled (active_count == 0)
 
     @pytest.mark.asyncio
-
     async def test_playback_references(self, session_store):
-
         """Test playback reference add/remove operations."""
 
         playback_ref = PlaybackRef(
-
             playback_id="test_playback_123",
-
             call_id="test_call_123",
-
             channel_id="1758498324.399",
-
             bridge_id="bridge_123",
-
             media_uri="sound:ai-generated/test",
-
             audio_file="/tmp/test.ulaw",
-
         )
 
         # Add playback reference
@@ -280,9 +236,7 @@ class TestSessionStore:
         assert await session_store.get_playback("test_playback_123") is None
 
     @pytest.mark.asyncio
-
     async def test_concurrent_operations(self, session_store):
-
         """Test concurrent operations are atomic."""
 
         # Create multiple sessions concurrently
@@ -290,31 +244,21 @@ class TestSessionStore:
         sessions = []
 
         for i in range(10):
-
             session = CallSession(
-
                 call_id=f"test_call_{i}",
-
                 caller_channel_id=f"channel_{i}",
-
                 provider_name="local",
-
             )
 
             sessions.append(session)
 
         # Upsert all sessions concurrently
 
-        await asyncio.gather(
-
-            *[session_store.upsert_call(session) for session in sessions]
-
-        )
+        await asyncio.gather(*[session_store.upsert_call(session) for session in sessions])
 
         # Verify all sessions exist
 
         for i in range(10):
-
             retrieved = await session_store.get_by_call_id(f"test_call_{i}")
 
             assert retrieved is not None
@@ -322,9 +266,7 @@ class TestSessionStore:
             assert retrieved.call_id == f"test_call_{i}"
 
     @pytest.mark.asyncio
-
     async def test_session_stats(self, session_store, sample_session):
-
         """Test session statistics."""
 
         # Initial stats
@@ -340,23 +282,14 @@ class TestSessionStore:
         await session_store.upsert_call(sample_session)
 
         await session_store.add_playback(
-
             PlaybackRef(
-
                 playback_id="test_playback",
-
                 call_id="test_call_123",
-
                 channel_id="1758498324.399",
-
                 bridge_id="bridge_123",
-
                 media_uri="sound:test",
-
                 audio_file="/tmp/test.ulaw",
-
             )
-
         )
 
         # Check updated stats
@@ -366,4 +299,3 @@ class TestSessionStore:
         assert stats["active_calls"] == 1
 
         assert stats["active_playbacks"] == 1
-

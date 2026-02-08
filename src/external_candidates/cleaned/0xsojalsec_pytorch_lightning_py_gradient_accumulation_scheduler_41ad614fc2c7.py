@@ -106,7 +106,6 @@ class GradientAccumulationScheduler(Callback):
     """
 
     def __init__(self, scheduling: dict[int, int]):
-
         super().__init__()
 
         if not scheduling:  # empty dict error
@@ -135,11 +134,9 @@ class GradientAccumulationScheduler(Callback):
         self.epochs = sorted(scheduling.keys())
 
     def going_to_accumulate_grad_batches(self) -> bool:
-
         return any(v > 1 for v in self.scheduling.values())
 
     def get_accumulate_grad_batches(self, epoch: int) -> int:
-
         accumulate_grad_batches = 1
 
         for iter_epoch in reversed(self.epochs):
@@ -194,5 +191,4 @@ class GradientAccumulationScheduler(Callback):
 
     @override
     def on_train_epoch_start(self, trainer: "pl.Trainer", *_: Any) -> None:
-
         trainer.accumulate_grad_batches = self.get_accumulate_grad_batches(trainer.current_epoch)

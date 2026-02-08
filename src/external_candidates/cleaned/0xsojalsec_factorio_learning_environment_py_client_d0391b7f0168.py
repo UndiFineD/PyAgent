@@ -24,7 +24,6 @@ from fle.env.tools import Tool
 
 class RotateEntity(Tool):
     def __init__(self, connection, game_state):
-
         super().__init__(connection, game_state)
 
     def __call__(self, entity: Entity, direction: DirectionInternal = DirectionInternal.UP) -> Entity:

@@ -25,7 +25,6 @@ class PreviousTwoVideos(BlocksAndWallExample):
     }
 
     def setup(self):
-
         super().setup()
 
         blocks = self.blocks
@@ -58,7 +57,6 @@ class PreviousTwoVideos(BlocksAndWallExample):
             video.add(title)
 
         def update_videos(videos):
-
             for video, block in zip(videos, blocks):
                 video.move_to(block, DOWN)
 
@@ -81,7 +79,6 @@ class IntroducePreviousTwoVideos(PreviousTwoVideos):
     }
 
     def construct(self):
-
         blocks = self.blocks
 
         videos = self.videos

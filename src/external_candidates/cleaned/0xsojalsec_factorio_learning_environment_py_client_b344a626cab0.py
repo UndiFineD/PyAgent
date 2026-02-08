@@ -18,7 +18,6 @@ from fle.env.tools.agent.get_entities.client import GetEntities
 
 class InsertItem(Tool):
     def __init__(self, connection, game_state):
-
         self.get_entities = GetEntities(connection, game_state)
 
         super().__init__(connection, game_state)

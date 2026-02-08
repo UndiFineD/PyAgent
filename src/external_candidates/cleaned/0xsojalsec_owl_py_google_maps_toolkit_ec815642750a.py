@@ -63,7 +63,6 @@ def handle_googlemaps_exceptions(
 
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
-
         try:
             # ruff: noqa: E501
 
@@ -141,7 +140,6 @@ class GoogleMapsToolkit(BaseToolkit):
 
     @dependencies_required("googlemaps")
     def __init__(self) -> None:
-
         import googlemaps
 
         api_key = os.environ.get("GOOGLE_API_KEY")

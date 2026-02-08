@@ -7,7 +7,6 @@ import argparse
 
 
 def MyParser():
-
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     # general training

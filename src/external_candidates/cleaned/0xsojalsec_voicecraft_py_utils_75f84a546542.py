@@ -57,7 +57,6 @@ def make_pad_mask(lengths: torch.Tensor, max_len: int = 0) -> torch.Tensor:
 
 
 def generate_partial_autoregressive_mask(sz, start, end):
-
     mask = torch.zeros(sz, sz).bool()
 
     mask[start:end, start:end] = torch.triu(torch.ones(end - start, end - start, dtype=torch.bool), diagonal=1)

@@ -7,22 +7,21 @@
 
 # NOTE: extracted with static-only rules; review before use
 
+
 def inv_spectrogram(postnet_output, ap, CONFIG):
-
     if CONFIG.model.lower() in ["tacotron"]:
-
         wav = ap.inv_spectrogram(postnet_output.T)
 
     else:
-
         wav = ap.inv_melspectrogram(postnet_output.T)
 
     return wav
 
+
 # TODO: perform GL with pytorch for batching
 
-def apply_griffin_lim(inputs, input_lens, CONFIG, ap):
 
+def apply_griffin_lim(inputs, input_lens, CONFIG, ap):
     """Apply griffin-lim to each sample iterating throught the first dimension.
 
     Args:
@@ -40,12 +39,7 @@ def apply_griffin_lim(inputs, input_lens, CONFIG, ap):
     wavs = []
 
     for idx, spec in enumerate(inputs):
-
-        wav_len = (
-
-            input_lens[idx] * ap.hop_length
-
-        ) - ap.hop_length  # inverse librosa padding
+        wav_len = (input_lens[idx] * ap.hop_length) - ap.hop_length  # inverse librosa padding
 
         wav = inv_spectrogram(spec, ap, CONFIG)
 
@@ -54,4 +48,3 @@ def apply_griffin_lim(inputs, input_lens, CONFIG, ap):
         wavs.append(wav[:wav_len])
 
     return wavs
-

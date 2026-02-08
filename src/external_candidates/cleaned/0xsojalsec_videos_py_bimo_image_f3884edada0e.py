@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class PrimePiEPttern(Scene):
     def construct(self):
-
         self.add(FullScreenFadeRectangle(fill_color=WHITE, fill_opacity=1))
 
         tex0 = OldTex(
@@ -291,7 +290,6 @@ class PrimePiEPttern(Scene):
         self.add(exp, tex2)
 
     def alter_tex(self, tex):
-
         tex.set_color(BLACK)
 
         tex.set_stroke(BLACK, 0, background=True)

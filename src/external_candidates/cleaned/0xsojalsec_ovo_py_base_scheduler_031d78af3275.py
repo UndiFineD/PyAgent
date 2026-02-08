@@ -15,13 +15,11 @@ class SchedulerTypes:
 
     @classmethod
     def register(cls, name=None):
-
         assert name is None or isinstance(name, str), (
             "Usage: SchedulerTypes.register() or SchedulerTypes.register(name='CustomName')"
         )
 
         def decorator(registered_class):
-
             cls.REGISTERED_CLASSES[name or registered_class.__name__] = registered_class
 
             return registered_class
@@ -157,7 +155,6 @@ class Scheduler(ABC):
         return self.get_result(job_id)
 
     def get_pipeline_names(self) -> list[str]:
-
         raise NotImplementedError()
 
     def get_param_schema(self, pipeline_name: str) -> dict | None:
@@ -166,5 +163,4 @@ class Scheduler(ABC):
         return None
 
     def get_failed_message(self, job_id):
-
         return f"Job {job_id} has failed."

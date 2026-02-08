@@ -5,8 +5,8 @@
 
 from typing import Optional
 
-def remove_indent(s: Optional[str]) -> Optional[str]:
 
+def remove_indent(s: Optional[str]) -> Optional[str]:
     """
 
     Remove the indent from a string.
@@ -22,8 +22,6 @@ def remove_indent(s: Optional[str]) -> Optional[str]:
     """
 
     if s is not None and isinstance(s, str):
-
         return "\n".join([line.strip() for line in s.split("\n")])
 
     return None
-

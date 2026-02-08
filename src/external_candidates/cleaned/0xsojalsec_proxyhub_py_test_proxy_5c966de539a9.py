@@ -22,7 +22,6 @@ from .utils import ResolveResult, future_iter
 
 @pytest.fixture
 def proxy():
-
     proxy = Proxy("127.0.0.1", "80", timeout=0.1)
 
     proxy._reader["conn"] = StreamReader()
@@ -32,7 +31,6 @@ def proxy():
 
 @pytest.mark.asyncio
 async def test_create_by_ip():
-
     assert isinstance(await Proxy.create("127.0.0.1", "80"), Proxy)
 
     with pytest.raises(ValueError):
@@ -44,7 +42,6 @@ async def test_create_by_ip():
 
 @pytest.mark.asyncio
 async def test_create_by_domain(mocker):
-
     f = future_iter([ResolveResult("127.0.0.1", 0)])
 
     # pytest-mock teardonw is done when existing thr fixture object
@@ -61,7 +58,6 @@ async def test_create_by_domain(mocker):
 
 
 def test_repr():
-
     p = Proxy("8.8.8.8", "80")
 
     p._runtimes = [1, 3, 3]
@@ -82,7 +78,6 @@ def test_repr():
 
 
 def test_as_json_w_geo():
-
     p = Proxy("8.8.8.8", "3128")
 
     p._runtimes = [1, 3, 3]
@@ -109,7 +104,6 @@ def test_as_json_w_geo():
 
 
 def test_as_json_wo_geo():
-
     p = Proxy("127.0.0.1", "80")
 
     p.log("MSG", time.time(), ProxyConnError)
@@ -133,7 +127,6 @@ def test_as_json_wo_geo():
 
 
 def test_schemes():
-
     p = Proxy("127.0.0.1", "80")
 
     p.types.update({"HTTP": "Anonymous", "HTTPS": None})
@@ -154,7 +147,6 @@ def test_schemes():
 
 
 def test_avg_resp_time():
-
     p = Proxy("127.0.0.1", "80")
 
     assert p.avg_resp_time == 0.0
@@ -165,7 +157,6 @@ def test_avg_resp_time():
 
 
 def test_error_rate():
-
     p = Proxy("127.0.0.1", "80")
 
     p.log("Error", time.time(), ProxyConnError)
@@ -178,7 +169,6 @@ def test_error_rate():
 
 
 def test_geo():
-
     p = Proxy("127.0.0.1", "80")
 
     assert p.geo.code == "--"
@@ -193,7 +183,6 @@ def test_geo():
 
 
 def test_ngtr():
-
     p = Proxy("127.0.0.1", "80")
 
     p.ngtr = "HTTPS"
@@ -204,7 +193,6 @@ def test_ngtr():
 
 
 def test_log(log):
-
     p = Proxy("127.0.0.1", "80")
 
     msg = "MSG"
@@ -268,7 +256,6 @@ def test_log(log):
 
 @pytest.mark.asyncio
 async def test_recv(proxy):
-
     resp = b"HTTP/1.1 200 OK\r\nContent-Length: 7\r\n\r\nabcdef\n"
 
     proxy.reader.feed_data(resp)
@@ -278,7 +265,6 @@ async def test_recv(proxy):
 
 @pytest.mark.asyncio
 async def test_recv_eof(proxy):
-
     resp = b"HTTP/1.1 200 OK\r\n\r\nabcdef"
 
     proxy.reader.feed_data(resp)
@@ -290,7 +276,6 @@ async def test_recv_eof(proxy):
 
 @pytest.mark.asyncio
 async def test_recv_length(event_loop, proxy):
-
     proxy.reader.feed_data(b"abc")
 
     assert await proxy.recv(length=3) == b"abc"
@@ -313,7 +298,6 @@ async def test_recv_length(event_loop, proxy):
 
 @pytest.mark.asyncio
 async def test_recv_head_only(event_loop, proxy):
-
     data = b"HTTP/1.1 200 Connection established\r\n\r\n"
 
     proxy.reader.feed_data(data)
@@ -338,7 +322,6 @@ async def test_recv_head_only(event_loop, proxy):
 
 @pytest.mark.asyncio
 async def test_recv_content_length(proxy):
-
     resp = b"HTTP/1.1 200 OK\r\nContent-Length: 4\r\n\r\n{a}\n"
 
     proxy.reader.feed_data(resp)
@@ -348,7 +331,6 @@ async def test_recv_content_length(proxy):
 
 @pytest.mark.asyncio
 async def test_recv_content_encoding(proxy):
-
     resp = b"HTTP/1.1 200 OK\r\nContent-Encoding: gzip\r\nContent-Length: 7\r\n\r\n\x1f\x8b\x08\x00\n\x00\x00"
 
     proxy.reader.feed_data(resp)
@@ -360,7 +342,6 @@ async def test_recv_content_encoding(proxy):
 
 @pytest.mark.asyncio
 async def test_recv_content_encoding_without_eof(event_loop, proxy):
-
     resp = b"HTTP/1.1 200 OK\r\nContent-Encoding: gzip\r\nContent-Length: 7\r\n\r\n\x1f\x8b\x08\x00\n\x00\x00"
 
     proxy.reader.feed_data(resp)
@@ -371,7 +352,6 @@ async def test_recv_content_encoding_without_eof(event_loop, proxy):
 
 @pytest.mark.asyncio
 async def test_recv_content_encoding_chunked(proxy):
-
     resp = b"HTTP/1.1 200 OK\r\nContent-Encoding: gzip\r\nTransfer-Encoding: chunked\r\n\r\n3\x1f\x8b\x00\r\n0\r\n"
 
     proxy.reader.feed_data(resp)

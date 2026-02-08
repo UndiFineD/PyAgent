@@ -24,7 +24,6 @@ class NXCModule:
     multiple_hosts = False
 
     def __init__(self):
-
         self.action = None
 
         self.linked_server = None
@@ -49,7 +48,6 @@ class NXCModule:
         self.linked_server = module_options.get("LINKED_SERVER")
 
     def on_login(self, context, connection):
-
         self.context = context
 
         self.mssql_conn = connection.conn

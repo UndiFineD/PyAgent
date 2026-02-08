@@ -33,7 +33,6 @@ from pymongo import InsertOne, UpdateOne
 class CrudUtils:
     @staticmethod
     def validate_assets(assets: list, source):
-
         # print("asset_list:::: ", assets)
 
         assets_list = []
@@ -63,7 +62,6 @@ class CrudUtils:
 
     @staticmethod
     def validate_findings(obj, asset: str, findings: list, app_context_param):
-
         findings_list = []
 
         new_findings_ids = []
@@ -109,14 +107,12 @@ class CrudUtils:
 
     @staticmethod
     async def insert_assets(assets: list, source="external"):
-
         asset_list = CrudUtils.validate_assets(assets=assets, source=source)
 
         if asset_list:
             await add_assets_query(asset_data=asset_list)
 
     async def update_asset(asset: str, org: str, tool_output_dict: dict):
-
         logging.debug(f"Asset {asset} getting updated for org {org}")
 
         mongodb_query = {}
@@ -178,7 +174,6 @@ class CrudUtils:
         finding_type,
         app_context_param=None,
     ):
-
         findings_list, new_finding_ids = CrudUtils.validate_findings(
             obj, asset, findings=findings, app_context_param=app_context_param
         )
@@ -244,7 +239,6 @@ class CrudUtils:
 
     @staticmethod
     def create_assets_dict(args, assets_with_type: list):
-
         asset_dict_list = []
 
         for asset in assets_with_type:
@@ -273,28 +267,24 @@ class CrudUtils:
 
     @staticmethod
     def get_TLD_assets(asset_dict) -> list:
-
         for keys in asset_dict:
             if keys["_id"] == "TLD":
                 return keys["assets"]
 
     @staticmethod
     def get_subdomain_assets(asset_dict) -> list:
-
         for keys in asset_dict:
             if keys["_id"] == "subdomain":
                 return keys["assets"]
 
     @staticmethod
     def get_ip_assets(asset_dict) -> list:
-
         for keys in asset_dict:
             if keys["_id"] == "ip":
                 return keys["assets"]
 
     @staticmethod
     def generate_unique_hash(host, title, type, tool_source, url, info, others):
-
         # Generate a hash using the params to avoid duplicates
 
         hash = hashlib.md5(
@@ -311,7 +301,6 @@ class CrudUtils:
 
     @staticmethod
     def assign_app_context(domain):
-
         app_context_dict = ConfigProvider.get_config().app
 
         default = app_context_dict["default"]

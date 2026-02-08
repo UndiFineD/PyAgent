@@ -14,7 +14,6 @@ from transformers import AutoConfig, AutoImageProcessor, AutoModel, CLIPImagePro
 
 class HFVisionTower(nn.Module):
     def __init__(self, vision_tower, args, delay_load=False):
-
         super().__init__()
 
         self.is_loaded = False
@@ -32,7 +31,6 @@ class HFVisionTower(nn.Module):
             self.cfg_only = AutoConfig.from_pretrained(self.vision_tower_name)
 
     def load_model(self):
-
         try:
             self.image_processor = AutoImageProcessor.from_pretrained(self.vision_tower_name)
 
@@ -73,7 +71,6 @@ class HFVisionTower(nn.Module):
         self.is_loaded = True
 
     def feature_select(self, image_forward_outs):
-
         select_feature_type = self.select_feature
 
         if self.select_feature in ["slicefour_patch", "slicefour_cls_patch"]:
@@ -108,7 +105,6 @@ class HFVisionTower(nn.Module):
         return image_features
 
     def forward(self, images):
-
         if type(images) is list:
             image_features = []
 
@@ -134,7 +130,6 @@ class HFVisionTower(nn.Module):
 
     @property
     def dummy_feature(self):
-
         return torch.zeros(1, self.hidden_size, device=self.device, dtype=self.dtype)
 
     # @property
@@ -151,7 +146,6 @@ class HFVisionTower(nn.Module):
 
     @property
     def hidden_size(self):
-
         try:
             _hidden_size = self.config.hidden_size
 
@@ -165,7 +159,6 @@ class HFVisionTower(nn.Module):
 
     @property
     def num_patches(self):
-
         _num_patches = (self.config.image_size // self.config.patch_size) ** 2
 
         if "cls_patch" in self.select_feature:
@@ -175,10 +168,8 @@ class HFVisionTower(nn.Module):
 
     @property
     def num_patches_per_side(self):
-
         return self.config.image_size // self.config.patch_size
 
     @property
     def image_size(self):
-
         return self.config.image_size

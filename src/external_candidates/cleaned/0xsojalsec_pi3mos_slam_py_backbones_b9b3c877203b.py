@@ -39,7 +39,6 @@ def _make_dinov2_model(
     weights: Union[Weights, str] = Weights.LVD142M,
     **kwargs,
 ):
-
     from ..models import vision_transformer as vits
 
     if isinstance(weights, str):

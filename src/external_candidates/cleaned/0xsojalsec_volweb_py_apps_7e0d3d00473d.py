@@ -12,5 +12,4 @@ class EvidencesConfig(AppConfig):
     name = "evidences"
 
     def ready(self):
-
         import evidences.signals

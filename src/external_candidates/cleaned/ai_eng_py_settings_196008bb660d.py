@@ -11,8 +11,8 @@ from jinja2 import Template
 
 from loguru import logger
 
-class ConflictsAutoCorrection:
 
+class ConflictsAutoCorrection:
     """Conflicts auto-correction handler settings.
 
        Used in feature join when some conflicts exist
@@ -32,13 +32,11 @@ class ConflictsAutoCorrection:
     """
 
     def __init__(self, rename_features: bool = False, suffix: str = "1") -> None:
-
         self.rename_features = rename_features
 
         self.suffix = suffix
 
     def to_feature_config(self) -> str:
-
         tm = Template("""
 
             {% if auto_correction.rename_features %}
@@ -57,8 +55,8 @@ class ConflictsAutoCorrection:
 
         return tm.render(auto_correction=self)
 
-class ObservationSettings(HoconConvertible):
 
+class ObservationSettings(HoconConvertible):
     """Time settings of the observation data. Used in feature join.
 
     Attributes:
@@ -88,25 +86,15 @@ class ObservationSettings(HoconConvertible):
     """
 
     def __init__(
-
         self,
-
         observation_path: str,
-
         event_timestamp_column: Optional[str] = None,
-
         simulate_time_delay: Optional[str] = None,
-
         timestamp_format: str = "epoch",
-
         conflicts_auto_correction: ConflictsAutoCorrection = None,
-
         file_format: str = "csv",
-
         is_file_path: bool = True,
-
     ) -> None:
-
         self.event_timestamp_column = event_timestamp_column
 
         self.simulate_time_delay = simulate_time_delay
@@ -116,13 +104,9 @@ class ObservationSettings(HoconConvertible):
         self.observation_path = observation_path
 
         if observation_path.startswith("http"):
-
             logger.warning(
-
                 "Your observation_path {} starts with http, which is not supported. Consider using paths starting with wasb[s]/abfs[s]/s3.",
-
                 observation_path,
-
             )
 
         self.file_format = file_format
@@ -132,7 +116,6 @@ class ObservationSettings(HoconConvertible):
         self.conflicts_auto_correction = conflicts_auto_correction
 
     def to_feature_config(self) -> str:
-
         tm = Template("""
 
                 {% if setting.event_timestamp_column is not none %}
@@ -176,4 +159,3 @@ class ObservationSettings(HoconConvertible):
             """)
 
         return tm.render(setting=self)
-

@@ -13,7 +13,6 @@ from PIL import Image
 
 
 def remove_boxes(boxes_filt, size, iou_threshold=0.5):
-
     boxes_to_remove = set()
 
     for i in range(len(boxes_filt)):
@@ -47,7 +46,6 @@ def det(
     box_threshold=0.05,
     text_threshold=0.5,
 ):
-
     image = Image.open(input_image_path)
 
     size = image.size

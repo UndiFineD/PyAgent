@@ -29,12 +29,11 @@ import yaml
 
 from src.config.loaders import load_yaml_with_env_expansion, resolve_config_path
 
-class TestResolveConfigPath:
 
+class TestResolveConfigPath:
     """Tests for resolve_config_path function."""
 
     def test_absolute_path_unchanged(self):
-
         """Absolute paths should be returned unchanged."""
 
         abs_path = "/etc/config/test.yaml"
@@ -44,7 +43,6 @@ class TestResolveConfigPath:
         assert result == abs_path
 
     def test_relative_path_resolved(self):
-
         """Relative paths should be resolved relative to project root."""
 
         rel_path = "config/ai-agent.yaml"
@@ -64,7 +62,6 @@ class TestResolveConfigPath:
         assert "Asterisk-AI-Voice-Agent" in result
 
     def test_current_dir_relative_path(self):
-
         """Paths starting with ./ should be resolved."""
 
         rel_path = "./config/test.yaml"
@@ -73,12 +70,11 @@ class TestResolveConfigPath:
 
         assert os.path.isabs(result)
 
-class TestLoadYamlWithEnvExpansion:
 
+class TestLoadYamlWithEnvExpansion:
     """Tests for load_yaml_with_env_expansion function."""
 
     def test_load_simple_yaml(self, tmp_path):
-
         """Should load simple YAML without env vars."""
 
         config_file = tmp_path / "test.yaml"
@@ -110,7 +106,6 @@ settings:
         assert result["settings"]["count"] == 42
 
     def test_env_var_expansion_dollar_brace(self, tmp_path, monkeypatch):
-
         """Should expand ${VAR} style environment variables."""
 
         monkeypatch.setenv("TEST_HOST", "127.0.0.1")
@@ -140,7 +135,6 @@ server:
         assert result["server"]["port"] == 8080
 
     def test_env_var_expansion_dollar_only(self, tmp_path, monkeypatch):
-
         """Should expand $VAR style environment variables."""
 
         monkeypatch.setenv("TEST_NAME", "test-value")
@@ -160,7 +154,6 @@ name: $TEST_NAME
         assert result["name"] == "test-value"
 
     def test_missing_env_var_left_unchanged(self, tmp_path):
-
         """Missing env vars should be left unchanged (not expanded)."""
 
         config_file = tmp_path / "test.yaml"
@@ -180,7 +173,6 @@ missing: ${NONEXISTENT_VAR}
         assert result["missing"] == "${NONEXISTENT_VAR}"
 
     def test_mixed_env_and_literal(self, tmp_path, monkeypatch):
-
         """Should handle mix of env vars and literal values."""
 
         monkeypatch.setenv("DB_HOST", "localhost")
@@ -210,17 +202,14 @@ database:
         assert result["database"]["name"] == "mydb"
 
     def test_file_not_found_raises_error(self):
-
         """Should raise FileNotFoundError for missing files."""
 
         with pytest.raises(FileNotFoundError) as exc_info:
-
             load_yaml_with_env_expansion("/nonexistent/path/config.yaml")
 
         assert "not found" in str(exc_info.value).lower()
 
     def test_invalid_yaml_raises_error(self, tmp_path):
-
         """Should raise YAMLError for invalid YAML syntax."""
 
         config_file = tmp_path / "invalid.yaml"
@@ -240,13 +229,11 @@ key1: value1
         config_file.write_text(config_content)
 
         with pytest.raises(yaml.YAMLError) as exc_info:
-
             load_yaml_with_env_expansion(str(config_file))
 
         assert "parsing" in str(exc_info.value).lower()
 
     def test_empty_file_returns_empty_dict(self, tmp_path):
-
         """Empty YAML file should return empty dict."""
 
         config_file = tmp_path / "empty.yaml"
@@ -258,7 +245,6 @@ key1: value1
         assert result == {}
 
     def test_comments_ignored(self, tmp_path):
-
         """YAML comments should be ignored."""
 
         config_file = tmp_path / "test.yaml"
@@ -284,4 +270,3 @@ version: 1.0
         assert result["version"] == 1.0
 
         assert len(result) == 2  # Only 2 keys, no comments
-

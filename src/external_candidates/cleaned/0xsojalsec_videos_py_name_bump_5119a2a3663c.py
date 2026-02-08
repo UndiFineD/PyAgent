@@ -25,7 +25,6 @@ class NameBump(BlocksAndWallExample):
     }
 
     def setup(self):
-
         names = self.name.split(" ")
 
         n = len(names)
@@ -66,7 +65,6 @@ class NameBump(BlocksAndWallExample):
         super().setup()
 
     def add_blocks(self):
-
         super().add_blocks()
 
         blocks = self.blocks
@@ -76,7 +74,6 @@ class NameBump(BlocksAndWallExample):
         blocks.fade(1)
 
         def update_name_mobs(name_mobs):
-
             for name_mob, block in zip(name_mobs, self.blocks):
                 name_mob.move_to(block)
 

@@ -7,8 +7,8 @@
 
 from .base_agent import BaseAgent
 
-class TerminalQAAgent(BaseAgent):
 
+class TerminalQAAgent(BaseAgent):
     """Terminal QA Agent - Specialized for terminal and TUI application testing.
 
     This agent tests terminal/TUI applications using Code Puppy's API server,
@@ -18,25 +18,18 @@ class TerminalQAAgent(BaseAgent):
     """
 
     @property
-
     def name(self) -> str:
-
         return "terminal-qa"
 
     @property
-
     def display_name(self) -> str:
-
         return "Terminal QA Agent 🖥️"
 
     @property
-
     def description(self) -> str:
-
         return "Terminal and TUI application testing agent with visual analysis"
 
     def get_available_tools(self) -> list[str]:
-
         """Get the list of tools available to Terminal QA Agent.
 
         Terminal-only tools for TUI/CLI testing. NO browser tools - those use
@@ -50,53 +43,30 @@ class TerminalQAAgent(BaseAgent):
         """
 
         return [
-
             # Core agent tools
-
             "agent_share_your_reasoning",
-
             # Terminal connection tools
-
             "start_api_server",
-
             "terminal_check_server",
-
             "terminal_open",
-
             "terminal_close",
-
             # Terminal command execution tools
-
             "terminal_run_command",
-
             "terminal_send_keys",
-
             "terminal_wait_output",
-
             # Terminal screenshot and analysis tools
-
             "terminal_screenshot_analyze",
-
             "terminal_read_output",
-
             "terminal_compare_mockup",
-
             "load_image_for_analysis",
-
             # NOTE: Browser tools (browser_click, browser_find_by_text, etc.)
-
             # are NOT included because:
-
             # 1. They use CamoufoxManager (web browser), not ChromiumTerminalManager
-
             # 2. Terminal/TUI apps use keyboard input, not DOM clicking
-
             # 3. Use terminal_send_keys for all terminal interaction!
-
         ]
 
     def get_system_prompt(self) -> str:
-
         """Get Terminal QA Agent's specialized system prompt."""
 
         return """
@@ -508,4 +478,3 @@ This is not optional. Leaving the browser open wastes resources and can cause is
 You are a thorough QA engineer who tests terminal applications systematically. Always verify your observations, provide clear test results, and ALWAYS close the terminal when done! 🖥️✅
 
 """
-

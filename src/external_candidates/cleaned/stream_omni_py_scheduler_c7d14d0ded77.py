@@ -37,13 +37,11 @@
 
 #               NeMo(https://github.com/NVIDIA/NeMo)
 
-
 import math
 
 import warnings
 
 from typing import Union
-
 
 import torch
 
@@ -53,13 +51,9 @@ from torch.optim.lr_scheduler import _LRScheduler
 class WarmupLR(_LRScheduler):
     """The WarmupLR scheduler
 
-
-
     This scheduler is almost same as NoamLR Scheduler except for following
 
     difference:
-
-
 
     NoamLR:
 
@@ -73,11 +67,7 @@ class WarmupLR(_LRScheduler):
 
              * min(step ** -0.5, step * warmup_step ** -1.5)
 
-
-
     Note that the maximum lr equals to optimizer.lr in this scheduler.
-
-
 
     """
 
@@ -87,7 +77,6 @@ class WarmupLR(_LRScheduler):
         warmup_steps: Union[int, float] = 25000,
         last_epoch: int = -1,
     ):
-
         self.warmup_steps = warmup_steps
 
         # __init__() must be invoked before setting field
@@ -97,11 +86,9 @@ class WarmupLR(_LRScheduler):
         super().__init__(optimizer, last_epoch)
 
     def __repr__(self):
-
         return f"{self.__class__.__name__}(warmup_steps={self.warmup_steps})"
 
     def get_lr(self):
-
         step_num = self.last_epoch + 1
 
         if self.warmup_steps == 0:
@@ -114,7 +101,6 @@ class WarmupLR(_LRScheduler):
             ]
 
     def set_step(self, step: int):
-
         self.last_epoch = step
 
 
@@ -145,7 +131,6 @@ class WarmupPolicy(_LRScheduler):
         min_lr=0.0,
         last_epoch=-1,
     ):
-
         assert not (warmup_steps is not None and warmup_ratio is not None), (
             "Either use particular number of step or ratio"
         )
@@ -172,7 +157,6 @@ class WarmupPolicy(_LRScheduler):
         super().__init__(optimizer, last_epoch)
 
     def get_lr(self):
-
         if not self._get_lr_called_within_step:
             warnings.warn(
                 "To get the last learning rate computed by the scheduler, please use `get_last_lr()`.",
@@ -191,7 +175,6 @@ class WarmupPolicy(_LRScheduler):
         return self._get_lr(step)
 
     def _get_warmup_lr(self, step):
-
         lr_val = (step + 1) / (self.warmup_steps + 1)
 
         return [initial_lr * lr_val for initial_lr in self.base_lrs]
@@ -229,7 +212,6 @@ class SquareRootConstantPolicy(_LRScheduler):
         min_lr=0.0,
         last_epoch=-1,
     ):
-
         assert not (constant_steps is not None and constant_ratio is not None), (
             "Either use particular number of step or ratio"
         )
@@ -258,7 +240,6 @@ class SquareRootConstantPolicy(_LRScheduler):
         super().__init__(optimizer, last_epoch)
 
     def get_lr(self):
-
         if not self._get_lr_called_within_step:
             warnings.warn(
                 "To get the last learning rate computed by the scheduler, please use `get_last_lr()`.",
@@ -319,7 +300,6 @@ class WarmupHoldPolicy(WarmupPolicy):
         min_lr=0.0,
         last_epoch=-1,
     ):
-
         assert not (hold_steps is not None and hold_ratio is not None), "Either use particular number of step or ratio"
 
         assert hold_ratio is None or max_steps is not None, "If there is a ratio, there should be a total steps"
@@ -360,7 +340,6 @@ class WarmupHoldPolicy(WarmupPolicy):
         )
 
     def get_lr(self):
-
         if not self._get_lr_called_within_step:
             warnings.warn(
                 "To get the last learning rate computed by the scheduler, please use `get_last_lr()`.",
@@ -421,7 +400,6 @@ class WarmupAnnealHoldPolicy(_LRScheduler):
         min_lr=0.0,
         last_epoch=-1,
     ):
-
         assert not (warmup_steps is not None and warmup_ratio is not None), (
             "Either use particular number of step or ratio"
         )
@@ -463,7 +441,6 @@ class WarmupAnnealHoldPolicy(_LRScheduler):
         super().__init__(optimizer, last_epoch)
 
     def get_lr(self):
-
         if not self._get_lr_called_within_step:
             warnings.warn(
                 "To get the last learning rate computed by the scheduler, please use `get_last_lr()`.",
@@ -491,13 +468,11 @@ class WarmupAnnealHoldPolicy(_LRScheduler):
         return self._get_lr(step)
 
     def _get_warmup_lr(self, step):
-
         lr_val = (step + 1) / (self.warmup_steps + 1)
 
         return [initial_lr * lr_val for initial_lr in self.base_lrs]
 
     def _get_constant_lr(self, step):
-
         return [self.min_lr for _ in self.base_lrs]
 
     def _get_lr(self, step):
@@ -507,7 +482,6 @@ class WarmupAnnealHoldPolicy(_LRScheduler):
 
 
 def _squareroot_annealing(initial_lr, step, max_steps, min_lr):
-
     mult = ((max_steps - step) / max_steps) ** 0.5
 
     out_lr = initial_lr * mult
@@ -518,7 +492,6 @@ def _squareroot_annealing(initial_lr, step, max_steps, min_lr):
 
 
 def _square_annealing(initial_lr, step, max_steps, min_lr):
-
     mult = ((max_steps - step) / max_steps) ** 2
 
     out_lr = initial_lr * mult
@@ -529,7 +502,6 @@ def _square_annealing(initial_lr, step, max_steps, min_lr):
 
 
 def _cosine_annealing(initial_lr, step, max_steps, min_lr):
-
     mult = 0.5 * (1 + math.cos(math.pi * step / max_steps))
 
     out_lr = (initial_lr - min_lr) * mult + min_lr
@@ -538,7 +510,6 @@ def _cosine_annealing(initial_lr, step, max_steps, min_lr):
 
 
 def _linear_warmup_with_cosine_annealing(max_lr, warmup_steps, step, decay_steps, min_lr):
-
     assert max_lr > min_lr
 
     # Use linear warmup for the initial part.
@@ -571,7 +542,6 @@ def _linear_warmup_with_cosine_annealing(max_lr, warmup_steps, step, decay_steps
 
 
 def _poly_decay(initial_lr, step, decay_steps, power, min_lr, cycle):
-
     if cycle:
         multiplier = 1.0 if step == 0 else math.ceil(step / decay_steps)
 
@@ -590,7 +560,6 @@ def _poly_decay(initial_lr, step, decay_steps, power, min_lr, cycle):
 
 
 def _noam_hold_annealing(initial_lr, step, warmup_steps, hold_steps, decay_rate, min_lr):
-
     # hold_steps = total number of steps
 
     # to hold the LR, not the warmup + hold steps.
@@ -608,7 +577,6 @@ def _noam_hold_annealing(initial_lr, step, warmup_steps, hold_steps, decay_rate,
 
 class SquareAnnealing(WarmupPolicy):
     def __init__(self, optimizer, *, max_steps, min_lr=1e-5, last_epoch=-1, **kwargs):
-
         super().__init__(
             optimizer=optimizer,
             max_steps=max_steps,
@@ -618,7 +586,6 @@ class SquareAnnealing(WarmupPolicy):
         )
 
     def _get_lr(self, step):
-
         new_lrs = [
             _square_annealing(
                 initial_lr=initial_lr,
@@ -634,7 +601,6 @@ class SquareAnnealing(WarmupPolicy):
 
 class SquareRootAnnealing(WarmupPolicy):
     def __init__(self, optimizer, *, max_steps, min_lr=0, last_epoch=-1, **kwargs):
-
         super().__init__(
             optimizer=optimizer,
             max_steps=max_steps,
@@ -644,7 +610,6 @@ class SquareRootAnnealing(WarmupPolicy):
         )
 
     def _get_lr(self, step):
-
         new_lrs = [
             _squareroot_annealing(
                 initial_lr=initial_lr,
@@ -660,7 +625,6 @@ class SquareRootAnnealing(WarmupPolicy):
 
 class CosineAnnealing(WarmupAnnealHoldPolicy):
     def __init__(self, optimizer, *, max_steps, min_lr=0, last_epoch=-1, **kwargs):
-
         super().__init__(
             optimizer=optimizer,
             max_steps=max_steps,
@@ -670,7 +634,6 @@ class CosineAnnealing(WarmupAnnealHoldPolicy):
         )
 
     def _get_lr(self, step):
-
         for initial_lr in self.base_lrs:
             if initial_lr < self.min_lr:
                 raise ValueError(
@@ -694,7 +657,6 @@ class CosineAnnealing(WarmupAnnealHoldPolicy):
         return new_lrs
 
     def _get_warmup_lr(self, step):
-
         if self.constant_steps is None or self.constant_steps == 0:
             return super()._get_warmup_lr(step)
 
@@ -704,13 +666,11 @@ class CosineAnnealing(WarmupAnnealHoldPolicy):
             return self._get_linear_warmup_with_cosine_annealing_lr(step)
 
     def _get_constant_lr(self, step):
-
         # Only called when `constant_steps` > 0.
 
         return self._get_linear_warmup_with_cosine_annealing_lr(step)
 
     def _get_linear_warmup_with_cosine_annealing_lr(self, step):
-
         # Cosine Schedule for Megatron LM,
 
         # slightly different warmup schedule + constant LR at the end.
@@ -741,7 +701,6 @@ class NoamAnnealing(_LRScheduler):
         min_lr=0.0,
         last_epoch=-1,
     ):
-
         self._normalize = d_model ** (-0.5)
 
         assert not (warmup_steps is not None and warmup_ratio is not None), (
@@ -770,7 +729,6 @@ class NoamAnnealing(_LRScheduler):
         super().__init__(optimizer, last_epoch)
 
     def get_lr(self):
-
         if not self._get_lr_called_within_step:
             warnings.warn(
                 "To get the last learning rate computed by the scheduler, please use `get_last_lr()`.",
@@ -791,7 +749,6 @@ class NoamAnnealing(_LRScheduler):
         return new_lrs
 
     def _noam_annealing(self, initial_lr, step):
-
         if self.warmup_steps > 0:
             mult = self._normalize * min(step ** (-0.5), step * (self.warmup_steps ** (-1.5)))
 
@@ -825,8 +782,6 @@ class NoamHoldAnnealing(WarmupHoldPolicy):
 
         from the SqueezeFormer paper.
 
-
-
         Unlike NoamAnnealing, the peak learning rate
 
         can be explicitly set for this scheduler.
@@ -841,19 +796,13 @@ class NoamHoldAnnealing(WarmupHoldPolicy):
 
         on the hyper parameters selected.
 
-
-
         It's schedule is determined by three factors-
-
-
 
         Warmup Steps: Initial stage, where linear warmup
 
             occurs uptil the peak LR is reached. Unlike NoamAnnealing,
 
             the peak LR is explicitly stated here instead of a scaling factor.
-
-
 
         Hold Steps: Intermediate stage, where the peak LR
 
@@ -869,8 +818,6 @@ class NoamHoldAnnealing(WarmupHoldPolicy):
 
             steps (around 30-40% of the entire training steps).
 
-
-
         Decay Steps: Final stage, where the LR rapidly decays
 
             with some scaling rate (set by decay rate).
@@ -883,8 +830,6 @@ class NoamHoldAnnealing(WarmupHoldPolicy):
 
             hold phase allows for rapid convergence.
 
-
-
         References:
 
             - [Squeezeformer:
@@ -892,8 +837,6 @@ class NoamHoldAnnealing(WarmupHoldPolicy):
             An Efficient Transformer for Automatic Speech Recognition]
 
             (https://arxiv.org/abs/2206.00888)
-
-
 
         Args:
 
@@ -934,7 +877,6 @@ class NoamHoldAnnealing(WarmupHoldPolicy):
         )
 
     def _get_lr(self, step):
-
         if self.warmup_steps is None or self.warmup_steps == 0:
             raise ValueError("Noam scheduler cannot be used without warmup steps")
 
@@ -959,18 +901,13 @@ class NoamHoldAnnealing(WarmupHoldPolicy):
         return new_lrs
 
     def set_step(self, step: int):
-
         self.last_epoch = step
 
 
 class ConstantLR(_LRScheduler):
     """The ConstantLR scheduler
 
-
-
     This scheduler keeps a constant lr
-
-
 
     """
 
@@ -978,7 +915,6 @@ class ConstantLR(_LRScheduler):
         self,
         optimizer: torch.optim.Optimizer,
     ):
-
         # __init__() must be invoked before setting field
 
         # because step() is also invoked in __init__()
@@ -986,9 +922,7 @@ class ConstantLR(_LRScheduler):
         super().__init__(optimizer)
 
     def get_lr(self):
-
         return self.base_lrs
 
     def set_step(self, step: int):
-
         self.last_epoch = step

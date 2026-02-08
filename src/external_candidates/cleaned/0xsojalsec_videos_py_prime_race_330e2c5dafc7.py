@@ -12,7 +12,6 @@ class PrimeRace(InteractiveScene):
     race_length = 26863
 
     def construct(self):
-
         ONE_COLOR = BLUE
 
         THREE_COLOR = RED
@@ -155,7 +154,6 @@ class RaceGraph(InteractiveScene):
     y_range = (-4, 30, 2)
 
     def construct(self):
-
         # Compute differences
 
         primes: list[int] = list(sympy.primerange(3, self.race_length))
@@ -229,7 +227,6 @@ class RaceGraph(InteractiveScene):
         rect.match_x(axes.c2p(0, 0), LEFT)
 
         def set_x_shift(x, anims=[], **kwargs):
-
             self.play(rect.animate.match_x(axes.c2p(x, 0), LEFT), *anims, **kwargs)
 
         self.clear()
@@ -275,7 +272,6 @@ class RaceGraph(InteractiveScene):
         self.add(prime_label)
 
         def set_x_squish(x1, x2, **kwargs):
-
             group = VGroup(axes.x_axis, graph)
 
             self.add(group, rect)

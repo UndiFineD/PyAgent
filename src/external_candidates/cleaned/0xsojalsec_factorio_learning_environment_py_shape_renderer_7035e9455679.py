@@ -7,7 +7,6 @@ import math
 
 from typing import Optional, Tuple
 
-
 from fle.env.entities import Direction, EntityStatus
 
 from fle.env.tools.admin.render_simple.utils.render_config import RenderConfig
@@ -19,7 +18,6 @@ class ShapeRenderer:
     """Handles drawing shapes for entities on the Factorio map"""
 
     def __init__(self, config: RenderConfig):
-
         self.config = config
 
     def draw_shape(
@@ -67,7 +65,6 @@ class ShapeRenderer:
         # Function to rotate a point around the center
 
         def rotate_point(px, py, angle):
-
             if angle == 0:
                 return px, py
 

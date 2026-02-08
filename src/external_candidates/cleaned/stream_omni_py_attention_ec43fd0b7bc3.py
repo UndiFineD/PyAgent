@@ -41,7 +41,6 @@ import math
 
 from typing import Tuple
 
-
 import torch
 
 from torch import nn
@@ -50,8 +49,6 @@ from torch import nn
 class MultiHeadedAttention(nn.Module):
     """Multi-Head Attention layer.
 
-
-
     Args:
 
         n_head (int): The number of heads.
@@ -59,8 +56,6 @@ class MultiHeadedAttention(nn.Module):
         n_feat (int): The number of features.
 
         dropout_rate (float): Dropout rate.
-
-
 
     """
 
@@ -92,8 +87,6 @@ class MultiHeadedAttention(nn.Module):
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Transform query, key and value.
 
-
-
         Args:
 
             query (torch.Tensor): Query tensor (#batch, time1, size).
@@ -101,8 +94,6 @@ class MultiHeadedAttention(nn.Module):
             key (torch.Tensor): Key tensor (#batch, time2, size).
 
             value (torch.Tensor): Value tensor (#batch, time2, size).
-
-
 
         Returns:
 
@@ -117,8 +108,6 @@ class MultiHeadedAttention(nn.Module):
             torch.Tensor: Transformed value tensor, size
 
                 (#batch, n_head, time2, d_k).
-
-
 
         """
 
@@ -146,8 +135,6 @@ class MultiHeadedAttention(nn.Module):
     ) -> torch.Tensor:
         """Compute attention context vector.
 
-
-
         Args:
 
             value (torch.Tensor): Transformed value, size
@@ -162,15 +149,11 @@ class MultiHeadedAttention(nn.Module):
 
                 (#batch, time1, time2), (0, 0, 0) means fake mask.
 
-
-
         Returns:
 
             torch.Tensor: Transformed value (#batch, time1, d_model)
 
                 weighted by the attention score (#batch, time1, time2).
-
-
 
         """
 
@@ -223,8 +206,6 @@ class MultiHeadedAttention(nn.Module):
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         """Compute scaled dot product attention.
 
-
-
         Args:
 
             query (torch.Tensor): Query tensor (#batch, time1, size).
@@ -263,10 +244,6 @@ class MultiHeadedAttention(nn.Module):
 
                 and `head * d_k == size`
 
-
-
-
-
         Returns:
 
             torch.Tensor: Output tensor (#batch, time1, d_model).
@@ -276,8 +253,6 @@ class MultiHeadedAttention(nn.Module):
                 where `cache_t == chunk_size * num_decoding_left_chunks`
 
                 and `head * d_k == size`
-
-
 
         """
 
@@ -372,21 +347,15 @@ class RelPositionMultiHeadedAttention(MultiHeadedAttention):
     def rel_shift(self, x: torch.Tensor) -> torch.Tensor:
         """Compute relative positional encoding.
 
-
-
         Args:
 
             x (torch.Tensor): Input tensor (batch, head, time1, 2*time1-1).
 
             time1 means the length of query vector.
 
-
-
         Returns:
 
             torch.Tensor: Output tensor.
-
-
 
         """
 

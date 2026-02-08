@@ -9,9 +9,7 @@
 
 # found in the LICENSE file in the root directory.
 
-
 import unicodedata
-
 
 from sacrebleu.tokenizers import TOKENIZERS
 
@@ -24,8 +22,6 @@ class EvaluationTokenizer(object):
     lowercasing, punctuation removal and character tokenization, which are
 
     applied after sacreBLEU tokenization.
-
-
 
     Args:
 
@@ -54,7 +50,6 @@ class EvaluationTokenizer(object):
         punctuation_removal: bool = False,
         character_tokenization: bool = False,
     ):
-
         assert tokenizer_type in TOKENIZERS, f"{tokenizer_type}, {TOKENIZERS}"
 
         self.lowercase = lowercase
@@ -72,7 +67,6 @@ class EvaluationTokenizer(object):
         return cls.SPACE.join(t for t in sent.split(cls.SPACE) if not all(unicodedata.category(c)[0] == "P" for c in t))
 
     def tokenize(self, sent: str):
-
         tokenized = self.tokenizer()(sent)
 
         if self.punctuation_removal:

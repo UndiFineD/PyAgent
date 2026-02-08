@@ -230,7 +230,6 @@ class AliasSupportDoc(DocBase):
 
     @classmethod
     def _matches(cls, hit):
-
         # override _matches to match indices in a pattern instead of just ALIAS
 
         # hit is the raw dict as returned by elasticsearch
@@ -239,7 +238,6 @@ class AliasSupportDoc(DocBase):
 
     @classmethod
     def dest(cls):
-
         return generate_index_name(cls)
 
 

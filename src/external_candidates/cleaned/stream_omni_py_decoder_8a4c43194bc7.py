@@ -39,7 +39,6 @@ import logging
 
 from typing import List, Optional, Tuple
 
-
 import torch
 
 import torch.utils.checkpoint as ckpt
@@ -124,7 +123,6 @@ class TransformerDecoder(torch.nn.Module):
         gradient_checkpointing: bool = False,
         tie_word_embedding: bool = False,
     ):
-
         super().__init__()
 
         attention_dim = encoder_output_size
@@ -276,7 +274,6 @@ class TransformerDecoder(torch.nn.Module):
         memory: torch.Tensor,
         memory_mask: torch.Tensor,
     ) -> torch.Tensor:
-
         for layer in self.decoders:
             x, tgt_mask, memory, memory_mask = layer(x, tgt_mask, memory, memory_mask)
 
@@ -290,7 +287,6 @@ class TransformerDecoder(torch.nn.Module):
         memory: torch.Tensor,
         memory_mask: torch.Tensor,
     ) -> torch.Tensor:
-
         for layer in self.decoders:
             x, tgt_mask, memory, memory_mask = ckpt.checkpoint(layer.__call__, x, tgt_mask, memory, memory_mask)
 
@@ -444,7 +440,6 @@ class BiTransformerDecoder(torch.nn.Module):
         gradient_checkpointing: bool = False,
         tie_word_embedding: bool = False,
     ):
-
         super().__init__()
 
         self.tie_word_embedding = tie_word_embedding

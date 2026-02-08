@@ -21,62 +21,40 @@ from agno.tools import Toolkit
 
 from agno.utils.log import log_debug, logger
 
+
 class KnowledgeTools(Toolkit):
-
     def __init__(
-
         self,
-
         knowledge: AgentKnowledge,
-
         think: bool = True,
-
         search: bool = True,
-
         analyze: bool = True,
-
         instructions: Optional[str] = None,
-
         add_instructions: bool = True,
-
         add_few_shot: bool = False,
-
         few_shot_examples: Optional[str] = None,
-
         **kwargs,
-
     ):
-
         if knowledge is None:
-
             raise ValueError("knowledge must be provided when using KnowledgeTools")
 
         super().__init__(
-
             name="knowledge_tools",
-
             instructions=instructions,
-
             add_instructions=add_instructions,
-
             **kwargs,
-
         )
 
         # Add instructions for using this toolkit
 
         if instructions is None:
-
             self.instructions = self.DEFAULT_INSTRUCTIONS
 
             if add_few_shot:
-
                 if few_shot_examples is not None:
-
                     self.instructions += "\n" + few_shot_examples
 
                 else:
-
                     self.instructions += "\n" + self.FEW_SHOT_EXAMPLES
 
         # The knowledge to search
@@ -86,19 +64,15 @@ class KnowledgeTools(Toolkit):
         # Register tools
 
         if think:
-
             self.register(self.think)
 
         if search:
-
             self.register(self.search)
 
         if analyze:
-
             self.register(self.analyze)
 
     def think(self, agent: Union[Agent, Team], thought: str) -> str:
-
         """Use this tool as a scratchpad to reason about the question, refine your approach, brainstorm search terms, or revise your plan.
 
         Call `Think` whenever you need to figure out what to do next, analyze the user's question, or plan your approach.
@@ -116,17 +90,14 @@ class KnowledgeTools(Toolkit):
         """
 
         try:
-
             log_debug(f"Thought: {thought}")
 
             # Add the thought to the Agent state
 
             if agent.session_state is None:
-
                 agent.session_state = {}
 
             if "thoughts" not in agent.session_state:
-
                 agent.session_state["thoughts"] = []
 
             agent.session_state["thoughts"].append(thought)
@@ -144,13 +115,11 @@ class KnowledgeTools(Toolkit):
             return formatted_thoughts
 
         except Exception as e:
-
             logger.error(f"Error recording thought: {e}")
 
             return f"Error recording thought: {e}"
 
     def search(self, agent: Union[Agent, Team], query: str) -> str:
-
         """Use this tool to search the knowledge base for relevant information.
 
         After thinking through the question, use this tool as many times as needed to search for relevant information.
@@ -166,7 +135,6 @@ class KnowledgeTools(Toolkit):
         """
 
         try:
-
             log_debug(f"Searching knowledge base: {query}")
 
             # Get the relevant documents from the knowledge base
@@ -174,19 +142,16 @@ class KnowledgeTools(Toolkit):
             relevant_docs: List[Document] = self.knowledge.search(query=query)
 
             if len(relevant_docs) == 0:
-
                 return "No documents found"
 
             return json.dumps([doc.to_dict() for doc in relevant_docs])
 
         except Exception as e:
-
             logger.error(f"Error searching knowledge base: {e}")
 
             return f"Error searching knowledge base: {e}"
 
     def analyze(self, agent: Union[Agent, Team], analysis: str) -> str:
-
         """Use this tool to evaluate whether the returned documents are correct and sufficient.
 
         If not, go back to "Think" or "Search" with refined queries.
@@ -202,17 +167,14 @@ class KnowledgeTools(Toolkit):
         """
 
         try:
-
             log_debug(f"Analysis: {analysis}")
 
             # Add the thought to the Agent state
 
             if agent.session_state is None:
-
                 agent.session_state = {}
 
             if "analysis" not in agent.session_state:
-
                 agent.session_state["analysis"] = []
 
             agent.session_state["analysis"].append(analysis)
@@ -230,7 +192,6 @@ class KnowledgeTools(Toolkit):
             return formatted_analysis
 
         except Exception as e:
-
             logger.error(f"Error recording analysis: {e}")
 
             return f"Error recording analysis: {e}"
@@ -352,4 +313,3 @@ class KnowledgeTools(Toolkit):
         Final Answer: Quantum computers differ from classical computers in three key ways: [synthesized explanation with specific examples]...\
 
     """)
-

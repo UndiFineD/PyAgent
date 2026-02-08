@@ -68,7 +68,6 @@ class DataParallelStrategy(ParallelStrategy):
         checkpoint_io: Optional[CheckpointIO] = None,
         precision: Optional[Precision] = None,
     ):
-
         super().__init__(
             accelerator=accelerator,
             parallel_devices=parallel_devices,
@@ -80,7 +79,6 @@ class DataParallelStrategy(ParallelStrategy):
     @property
     @override
     def root_device(self) -> torch.device:
-
         assert self.parallel_devices is not None
 
         return self.parallel_devices[0]
@@ -88,7 +86,6 @@ class DataParallelStrategy(ParallelStrategy):
     @property
     @override
     def distributed_sampler_kwargs(self) -> None:
-
         return None
 
     @override
@@ -99,12 +96,10 @@ class DataParallelStrategy(ParallelStrategy):
 
     @override
     def module_to_device(self, module: Module) -> None:
-
         module.to(self.root_device)
 
     @override
     def batch_to_device(self, batch: Any, device: Optional[torch.device] = None) -> Any:
-
         # DataParallel handles the transfer of batch to the device
 
         return batch
@@ -116,9 +111,7 @@ class DataParallelStrategy(ParallelStrategy):
         group: Optional[Any] = None,
         reduce_op: Optional[Union[ReduceOp, str]] = "mean",
     ) -> TReduce:
-
         def mean(t: Tensor) -> Tensor:
-
             original_dtype = t.dtype
 
             return t.float().mean().to(original_dtype)
@@ -127,22 +120,18 @@ class DataParallelStrategy(ParallelStrategy):
 
     @override
     def barrier(self, *args: Any, **kwargs: Any) -> None:
-
         pass
 
     @override
     def broadcast(self, obj: TBroadcast, src: int = 0) -> TBroadcast:
-
         return obj
 
     @override
     def reduce_boolean_decision(self, decision: bool, all: bool = True) -> bool:
-
         return decision
 
     @override
     def get_module_state_dict(self, module: Module) -> dict[str, Union[Any, Tensor]]:
-
         if isinstance(module, DataParallel):
             module = module.module
 
@@ -155,7 +144,6 @@ class DataParallelStrategy(ParallelStrategy):
         state_dict: dict[str, Union[Any, Tensor]],
         strict: bool = True,
     ) -> None:
-
         if isinstance(module, DataParallel):
             module = module.module
 
@@ -164,5 +152,4 @@ class DataParallelStrategy(ParallelStrategy):
     @classmethod
     @override
     def register_strategies(cls, strategy_registry: _StrategyRegistry) -> None:
-
         strategy_registry.register("dp", cls, description=cls.__name__)

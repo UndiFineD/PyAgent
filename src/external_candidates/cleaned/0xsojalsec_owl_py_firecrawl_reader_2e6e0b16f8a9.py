@@ -58,7 +58,6 @@ class Firecrawl:
         api_key: Optional[str] = None,
         api_url: Optional[str] = None,
     ) -> None:
-
         from firecrawl import FirecrawlApp
 
         self._api_key = api_key or os.environ.get("FIRECRAWL_API_KEY")

@@ -14,7 +14,6 @@ from madewithml import data
 
 @pytest.fixture(scope="module")
 def df():
-
     data = [{"title": "a0", "description": "b0", "tag": "c0"}]
 
     df = pd.DataFrame(data)
@@ -24,14 +23,12 @@ def df():
 
 @pytest.fixture(scope="module")
 def class_to_index():
-
     class_to_index = {"c0": 0, "c1": 1}
 
     return class_to_index
 
 
 def test_load_data(dataset_loc):
-
     num_samples = 10
 
     ds = data.load_data(dataset_loc=dataset_loc, num_samples=num_samples)
@@ -40,7 +37,6 @@ def test_load_data(dataset_loc):
 
 
 def test_stratify_split():
-
     n_per_class = 10
 
     targets = n_per_class * ["c1"] + n_per_class * ["c2"]
@@ -65,12 +61,10 @@ def test_stratify_split():
     ],
 )
 def test_clean_text(text, sw, clean_text):
-
     assert data.clean_text(text=text, stopwords=sw) == clean_text
 
 
 def test_preprocess(df, class_to_index):
-
     assert "text" not in df.columns
 
     outputs = data.preprocess(df, class_to_index=class_to_index)
@@ -79,7 +73,6 @@ def test_preprocess(df, class_to_index):
 
 
 def test_fit_transform(dataset_loc, preprocessor):
-
     ds = data.load_data(dataset_loc=dataset_loc)
 
     preprocessor = preprocessor.fit(ds)

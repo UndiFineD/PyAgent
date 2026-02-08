@@ -15,8 +15,8 @@ from feathr.definition.typed_key import DUMMY_KEY
 
 from jinja2 import Template
 
-class FeatureAnchor(HoconConvertible):
 
+class FeatureAnchor(HoconConvertible):
     """
 
     A feature anchor defines a set of features on top of a data source, a.k.a. a set of features anchored to a source.
@@ -40,21 +40,13 @@ class FeatureAnchor(HoconConvertible):
     """
 
     def __init__(
-
         self,
-
         name: str,
-
         source: Source,
-
         features: List[Feature],
-
         registry_tags: Optional[Dict[str, str]] = None,
-
         **kwargs,
-
     ):
-
         self.name = name
 
         self.features = features
@@ -66,31 +58,22 @@ class FeatureAnchor(HoconConvertible):
         # Add a hidden option to skip validation, Anchor could be half-constructed during the loading from registry
 
         if not kwargs.get("__no_validate", False):
-
             self.validate_features()
 
     def validate_features(self):
-
         """Validate that anchor is non-empty and all its features share the same key"""
 
         # assert len(self.features) > 0
 
         if self.source != INPUT_CONTEXT:
-
             for feature in self.features:
-
                 if feature.key == [DUMMY_KEY]:
-
                     raise RuntimeError(
-
                         f"For anchors of non-INPUT_CONTEXT source, key of feature {feature.name} "
-
                         f"should be explicitly specified and not left blank."
-
                     )
 
     def to_feature_config(self) -> str:
-
         tm = Template("""
 
             {{anchor_name}}: {
@@ -113,29 +96,14 @@ class FeatureAnchor(HoconConvertible):
 
         """)
 
-        key_list = ",".join(
-
-            (key for key in self.features[0].key_alias)
-
-            if len(self.features) != 0
-
-            else []
-
-        )
+        key_list = ",".join((key for key in self.features[0].key_alias) if len(self.features) != 0 else [])
 
         return tm.render(
-
             anchor_name=self.name,
-
             key_list=key_list,
-
             features=self.features,
-
             source=self.source,
-
         )
 
     def __str__(self):
-
         return self.to_feature_config()
-

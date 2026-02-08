@@ -19,14 +19,12 @@ from webexpythonsdk import WebexAPI
 
 from webexpythonsdk.exceptions import RateLimitError
 
+
 @pytest.fixture
-
 def mock_webex_api():
-
     """Create a mock Webex API client."""
 
     with patch("agno.tools.webex.WebexAPI") as mock_api:
-
         # Create mock for nested attributes
 
         mock_client = Mock(spec=WebexAPI)
@@ -45,86 +43,70 @@ def mock_webex_api():
 
         return mock_client
 
+
 @pytest.fixture
-
 def webex_tools(mock_webex_api):
-
     """Create WebexTools instance with mocked API."""
 
     with patch.dict("os.environ", {"WEBEX_ACCESS_TOKEN": "test_token"}):
-
         tools = WebexTools()
 
         tools.client = mock_webex_api
 
         return tools
 
-def test_init_with_api_token():
 
+def test_init_with_api_token():
     """Test initialization with provided API token."""
 
     with patch("agno.tools.webex.WebexAPI") as mock_api:
-
         WebexTools(access_token="test_token")
 
         mock_api.assert_called_once_with(access_token="test_token")
 
-def test_init_with_env_var():
 
+def test_init_with_env_var():
     """Test initialization with environment variable."""
 
     with patch("agno.tools.webex.WebexAPI") as mock_api:
-
         with patch.dict("os.environ", {"WEBEX_ACCESS_TOKEN": "env_token"}):
-
             WebexTools()
 
             mock_api.assert_called_once_with(access_token="env_token")
 
-def test_init_without_token():
 
+def test_init_without_token():
     """Test initialization without API token."""
 
     with patch.dict("os.environ", clear=True):
-
         with pytest.raises(ValueError, match="Webex access token is not set"):
-
             WebexTools()
 
-def test_init_with_selective_tools():
 
+def test_init_with_selective_tools():
     """Test initialization with only selected tools."""
 
     with patch.dict("os.environ", {"WEBEX_ACCESS_TOKEN": "test_token"}):
-
         tools = WebexTools(
-
             send_message=True,
-
             list_rooms=False,
-
         )
 
         assert "send_message" in [func.name for func in tools.functions.values()]
 
         assert "list_rooms" not in [func.name for func in tools.functions.values()]
 
-def test_send_message_success(webex_tools, mock_webex_api):
 
+def test_send_message_success(webex_tools, mock_webex_api):
     """Test successful message sending."""
 
     mock_response = Mock()
 
     mock_response.json_data = {
-
         "id": "msg123",
-
         "roomId": "room123",
-
         "text": "Test message",
-
         "created": "2024-01-01T10:00:00.000Z",
-
     }
 
     mock_webex_api.messages.create.return_value = mock_response
@@ -139,14 +121,10 @@ def test_send_message_success(webex_tools, mock_webex_api):
 
     assert result_data["text"] == "Test message"
 
-    mock_webex_api.messages.create.assert_called_once_with(
+    mock_webex_api.messages.create.assert_called_once_with(roomId="room123", text="Test message")
 
-        roomId="room123", text="Test message"
-
-    )
 
 def test_list_rooms_success(webex_tools, mock_webex_api):
-
     """Test successful room listing."""
 
     # Create mock room objects
@@ -193,8 +171,8 @@ def test_list_rooms_success(webex_tools, mock_webex_api):
 
     assert result_data["rooms"][1]["title"] == "Test Room 2"
 
-def test_list_rooms_failure(webex_tools, mock_webex_api):
 
+def test_list_rooms_failure(webex_tools, mock_webex_api):
     """Test room listing failure."""
 
     response = Response()
@@ -213,8 +191,8 @@ def test_list_rooms_failure(webex_tools, mock_webex_api):
 
     assert "Too Many Requests" in str(result_data["error"])
 
-def test_list_rooms_empty(webex_tools, mock_webex_api):
 
+def test_list_rooms_empty(webex_tools, mock_webex_api):
     """Test listing when no rooms are available."""
 
     mock_webex_api.rooms.list.return_value = []
@@ -225,8 +203,8 @@ def test_list_rooms_empty(webex_tools, mock_webex_api):
 
     assert len(result_data["rooms"]) == 0
 
-def test_send_message_rate_limit(webex_tools, mock_webex_api):
 
+def test_send_message_rate_limit(webex_tools, mock_webex_api):
     """Test sending empty message."""
 
     response = Response()
@@ -244,4 +222,3 @@ def test_send_message_rate_limit(webex_tools, mock_webex_api):
     assert "error" in result_data
 
     assert "Too Many Requests" in str(result_data["error"])
-

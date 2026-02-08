@@ -5,13 +5,11 @@
 
 from collections import OrderedDict
 
-
 import torch
 
 from torch import nn
 
 from torch.nn import functional as F
-
 
 from .utils import freeze_batch_norm_2d
 
@@ -20,7 +18,6 @@ class Bottleneck(nn.Module):
     expansion = 4
 
     def __init__(self, inplanes, planes, stride=1):
-
         super().__init__()
 
         # all conv layers have stride 1. an avgpool is performed after the second convolution when stride > 1
@@ -72,7 +69,6 @@ class Bottleneck(nn.Module):
             )
 
     def forward(self, x: torch.Tensor):
-
         identity = x
 
         out = self.act1(self.bn1(self.conv1(x)))
@@ -95,7 +91,6 @@ class Bottleneck(nn.Module):
 
 class AttentionPool2d(nn.Module):
     def __init__(self, spacial_dim: int, embed_dim: int, num_heads: int, output_dim: int = None):
-
         super().__init__()
 
         self.positional_embedding = nn.Parameter(torch.randn(spacial_dim**2 + 1, embed_dim) / embed_dim**0.5)
@@ -111,7 +106,6 @@ class AttentionPool2d(nn.Module):
         self.num_heads = num_heads
 
     def forward(self, x):
-
         x = x.reshape(x.shape[0], x.shape[1], x.shape[2] * x.shape[3]).permute(2, 0, 1)  # NCHW -> (HW)NC
 
         x = torch.cat([x.mean(dim=0, keepdim=True), x], dim=0)  # (HW+1)NC
@@ -157,7 +151,6 @@ class ModifiedResNet(nn.Module):
     """
 
     def __init__(self, layers, output_dim, heads, image_size=224, width=64):
-
         super().__init__()
 
         self.output_dim = output_dim
@@ -205,7 +198,6 @@ class ModifiedResNet(nn.Module):
         self.init_parameters()
 
     def _make_layer(self, planes, blocks, stride=1):
-
         layers = [Bottleneck(self._inplanes, planes, stride)]
 
         self._inplanes = planes * Bottleneck.expansion
@@ -216,7 +208,6 @@ class ModifiedResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def init_parameters(self):
-
         if self.attnpool is not None:
             std = self.attnpool.c_proj.in_features**-0.5
 
@@ -234,7 +225,6 @@ class ModifiedResNet(nn.Module):
                     nn.init.zeros_(param)
 
     def lock(self, unlocked_groups=0, freeze_bn_stats=False):
-
         assert unlocked_groups == 0, "partial locking not currently supported for this model"
 
         for param in self.parameters():
@@ -245,13 +235,11 @@ class ModifiedResNet(nn.Module):
 
     @torch.jit.ignore
     def set_grad_checkpointing(self, enable=True):
-
         # FIXME support for non-transformer
 
         pass
 
     def stem(self, x):
-
         x = self.act1(self.bn1(self.conv1(x)))
 
         x = self.act2(self.bn2(self.conv2(x)))
@@ -263,7 +251,6 @@ class ModifiedResNet(nn.Module):
         return x
 
     def forward(self, x):
-
         x = self.stem(x)
 
         x = self.layer1(x)

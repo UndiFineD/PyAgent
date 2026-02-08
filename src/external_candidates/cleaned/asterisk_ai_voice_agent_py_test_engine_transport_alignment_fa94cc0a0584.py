@@ -11,8 +11,8 @@ from src.core.models import CallSession
 
 from src.engine import _CODEC_ALIGNMENT, Engine
 
-def _make_session(call_id: str, fmt: str, rate: int) -> CallSession:
 
+def _make_session(call_id: str, fmt: str, rate: int) -> CallSession:
     session = CallSession(call_id=call_id, caller_channel_id=f"{call_id}-chan")
 
     session.transport_profile.format = fmt
@@ -21,8 +21,8 @@ def _make_session(call_id: str, fmt: str, rate: int) -> CallSession:
 
     return session
 
-def _make_engine() -> Engine:
 
+def _make_engine() -> Engine:
     engine = Engine.__new__(Engine)
 
     engine.providers = {}
@@ -31,57 +31,32 @@ def _make_engine() -> Engine:
 
     return engine
 
+
 @pytest.mark.parametrize(
-
     "pref_format,pref_rate,transport_format,transport_rate",
-
     [
-
         ("slin16", 16000, "ulaw", 8000),
-
         ("pcm16", 8000, "ulaw", 8000),
-
         ("ulaw", 8000, "slin16", 16000),
-
     ],
-
 )
-
-def test_resolve_stream_targets_resets_preferences(
-
-    pref_format, pref_rate, transport_format, transport_rate
-
-):
-
+def test_resolve_stream_targets_resets_preferences(pref_format, pref_rate, transport_format, transport_rate):
     engine = _make_engine()
 
     call_id = "call-pref"
 
     engine.call_audio_preferences[call_id] = {
-
         "format": pref_format,
-
         "sample_rate": pref_rate,
-
     }
 
     engine.providers["deepgram"] = types.SimpleNamespace(
-
-        config=types.SimpleNamespace(
-
-            target_encoding=transport_format, target_sample_rate_hz=transport_rate
-
-        )
-
+        config=types.SimpleNamespace(target_encoding=transport_format, target_sample_rate_hz=transport_rate)
     )
 
     session = _make_session(call_id, transport_format, transport_rate)
 
-    target_fmt, target_rate, remediation = engine._resolve_stream_targets(
-
-        session, "deepgram"
-
-    )
+    target_fmt, target_rate, remediation = engine._resolve_stream_targets(session, "deepgram")
 
     assert target_fmt == transport_format
 
@@ -95,29 +70,19 @@ def test_resolve_stream_targets_resets_preferences(
 
     _CODEC_ALIGNMENT.remove(call_id, "deepgram")
 
-def test_resolve_stream_targets_detects_provider_mismatch():
 
+def test_resolve_stream_targets_detects_provider_mismatch():
     engine = _make_engine()
 
     call_id = "call-mismatch"
 
     engine.providers["openai_realtime"] = types.SimpleNamespace(
-
-        config=types.SimpleNamespace(
-
-            target_encoding="slin16", target_sample_rate_hz=16000
-
-        )
-
+        config=types.SimpleNamespace(target_encoding="slin16", target_sample_rate_hz=16000)
     )
 
     session = _make_session(call_id, "ulaw", 8000)
 
-    target_fmt, target_rate, remediation = engine._resolve_stream_targets(
-
-        session, "openai_realtime"
-
-    )
+    target_fmt, target_rate, remediation = engine._resolve_stream_targets(session, "openai_realtime")
 
     assert target_fmt == "ulaw"
 
@@ -133,25 +98,19 @@ def test_resolve_stream_targets_detects_provider_mismatch():
 
     _CODEC_ALIGNMENT.remove(call_id, "openai_realtime")
 
-def test_resolve_stream_targets_pass_through_when_aligned():
 
+def test_resolve_stream_targets_pass_through_when_aligned():
     engine = _make_engine()
 
     call_id = "call-aligned"
 
     engine.providers["openai_realtime"] = types.SimpleNamespace(
-
         config=types.SimpleNamespace(target_encoding="ulaw", target_sample_rate_hz=8000)
-
     )
 
     session = _make_session(call_id, "ulaw", 8000)
 
-    target_fmt, target_rate, remediation = engine._resolve_stream_targets(
-
-        session, "openai_realtime"
-
-    )
+    target_fmt, target_rate, remediation = engine._resolve_stream_targets(session, "openai_realtime")
 
     assert target_fmt == "ulaw"
 
@@ -162,4 +121,3 @@ def test_resolve_stream_targets_pass_through_when_aligned():
     assert session.codec_alignment_ok is True
 
     _CODEC_ALIGNMENT.remove(call_id, "openai_realtime")
-

@@ -18,7 +18,6 @@ class GenericMorphBrickRowIntoHistogram(Scene):
     }
 
     def construct(self):
-
         self.row = BrickRow(self.level, height=self.bar_width, width=10)
 
         self.bars = OutlineableBars(*[self.row.rects[i] for i in range(self.level + 1)])
@@ -108,7 +107,6 @@ class MorphBrickRowIntoHistogram3(GenericMorphBrickRowIntoHistogram):
     }
 
     def construct(self):
-
         super(MorphBrickRowIntoHistogram3, self).construct()
 
         # draw x-axis
@@ -215,7 +213,6 @@ class MorphBrickRowIntoHistogram20(GenericMorphBrickRowIntoHistogram):
     }
 
     def construct(self):
-
         super(MorphBrickRowIntoHistogram20, self).construct()
 
         x_axis = Line(ORIGIN, 10 * RIGHT, color=WHITE, buff=0)

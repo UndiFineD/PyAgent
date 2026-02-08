@@ -20,7 +20,6 @@ from src.message import AIMessage
 
 class Speech:
     def __init__(self, llm: BaseInference = None):
-
         self.chunk_size = 1024
 
         self.frame_rate = 44100
@@ -36,7 +35,6 @@ class Speech:
         self.tempfile_path = ""
 
     def setup_stream(self):
-
         audio = self.audio
 
         self.stream = audio.open(
@@ -50,14 +48,12 @@ class Speech:
         )
 
     def get_stream(self) -> Stream:
-
         if self.stream is None:
             self.setup_stream()
 
         return self.stream
 
     def record_audio(self) -> bytes:
-
         stream = self.get_stream()
 
         frames = []
@@ -83,7 +79,6 @@ class Speech:
         return b"".join(frames)
 
     def bytes_to_tempfile(self, bytes: bytes):
-
         temp_file = NamedTemporaryFile(delete=False, suffix=".wav")
 
         self.tempfile_path = temp_file.name
@@ -104,7 +99,6 @@ class Speech:
             raise Exception(f"Export failed. {e}")
 
     def close(self):
-
         if self.stream is not None:
             self.stream.close()
 
@@ -118,7 +112,6 @@ class Speech:
         os.remove(self.tempfile_path)
 
     def invoke(self) -> AIMessage:
-
         audio_bytes = self.record_audio()
 
         self.bytes_to_tempfile(audio_bytes)

@@ -14,7 +14,6 @@ class ExampleLinearTransformation(LinearTransformationScene):
     CONFIG = {"show_coordinates": True}
 
     def construct(self):
-
         self.wait()
 
         self.apply_transposed_matrix([[2, 1], [-3, 1]])
@@ -23,7 +22,6 @@ class ExampleLinearTransformation(LinearTransformationScene):
 
 
 def example_function(point):
-
     x, y, z = point
 
     return np.array([x + np.sin(y), y + np.sin(x), 0])
@@ -36,7 +34,6 @@ class ExampleMultivariableFunction(LinearTransformationScene):
     }
 
     def construct(self):
-
         self.wait()
 
         self.apply_nonlinear_transformation(example_function)
@@ -46,7 +43,6 @@ class ExampleMultivariableFunction(LinearTransformationScene):
 
 class ExampleMultivariableFunctionWithZoom(ZoomedScene, ExampleMultivariableFunction):
     def construct(self):
-
         self.activate_zooming()
 
         self.little_rectangle.set_color(YELLOW)
@@ -71,7 +67,6 @@ class ExampleMultivariableFunctionWithZoom(ZoomedScene, ExampleMultivariableFunc
         self.wait()
 
     def get_dense_lines(self, point):
-
         radius = 0.4 * self.little_rectangle.get_height()
 
         n_steps = 5
@@ -100,7 +95,6 @@ class ExampleMultivariableFunctionWithZoom(ZoomedScene, ExampleMultivariableFunc
         return dense_lines
 
     def capture_mobjects_in_camera(self, mobjects, **kwargs):
-
         self.camera.capture_mobjects(mobjects, **kwargs)
 
         if self.zoom_activated:
@@ -119,7 +113,6 @@ class ExampleDeterminantAnimation(LinearTransformationScene):
     }
 
     def construct(self):
-
         self.add_unit_square()
 
         self.wait()
@@ -133,7 +126,6 @@ class JacobianDeterminantAnimation(ExampleMultivariableFunctionWithMuchZoom):
     CONFIG = {"point": 2 * LEFT + UP}
 
     def construct(self):
-
         self.activate_zooming()
 
         self.little_rectangle.set_color(YELLOW)

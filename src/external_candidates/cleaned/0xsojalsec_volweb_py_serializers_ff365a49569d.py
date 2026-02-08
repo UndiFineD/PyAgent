@@ -215,7 +215,6 @@ class TasksSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def to_representation(self, instance):
-
         ret = super().to_representation(instance)
 
         # We have to do this because the json is not respecting the rfc.

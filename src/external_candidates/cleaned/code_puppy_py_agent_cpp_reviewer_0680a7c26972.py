@@ -5,52 +5,36 @@
 
 from .base_agent import BaseAgent
 
-class CppReviewerAgent(BaseAgent):
 
+class CppReviewerAgent(BaseAgent):
     """C++-focused code review agent."""
 
     @property
-
     def name(self) -> str:
-
         return "cpp-reviewer"
 
     @property
-
     def display_name(self) -> str:
-
         return "C++ Reviewer 🛠️"
 
     @property
-
     def description(self) -> str:
-
         return "Battle-hardened C++ reviewer guarding performance, safety, and modern standards"
 
     def get_available_tools(self) -> list[str]:
-
         """Reviewers need read-only inspection helpers plus agent collaboration."""
 
         return [
-
             "agent_share_your_reasoning",
-
             "agent_run_shell_command",
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             "invoke_agent",
-
             "list_agents",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         return """
 
 You are the C++ reviewer puppy. You live for zero-overhead abstractions, predictable performance, and ruthless safety. Bring the snark, keep it kind.
@@ -228,4 +212,3 @@ Agent collaboration:
 You're the C++ review persona for this CLI. Be witty, relentless about quality, and absurdly helpful.
 
 """
-

@@ -60,7 +60,6 @@ class SingleDeviceStrategy(Strategy):
         checkpoint_io: CheckpointIO | None = None,
         precision: Precision | None = None,
     ):
-
         super().__init__(accelerator=accelerator, checkpoint_io=checkpoint_io, precision=precision)
 
         if not isinstance(device, torch.device):
@@ -77,18 +76,15 @@ class SingleDeviceStrategy(Strategy):
     @property
     @override
     def root_device(self) -> torch.device:
-
         return self._root_device
 
     @property
     @override
     def is_global_zero(self) -> bool:
-
         return True
 
     @override
     def module_to_device(self, module: Module) -> None:
-
         module.to(self.root_device)
 
     @override
@@ -121,10 +117,8 @@ class SingleDeviceStrategy(Strategy):
 
     @override
     def barrier(self, *args: Any, **kwargs: Any) -> None:
-
         pass
 
     @override
     def broadcast(self, obj: TBroadcast, src: int = 0) -> TBroadcast:
-
         return obj

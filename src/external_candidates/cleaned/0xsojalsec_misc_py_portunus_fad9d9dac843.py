@@ -14,7 +14,6 @@ from pwn import context, log, ui
 
 class BLECommand:
     def __init__(self, isTokenReq: bool, isPassReq: bool, data: bytes):
-
         self.IsTokenReq = isTokenReq
 
         self.IsPassReq = isPassReq
@@ -22,22 +21,18 @@ class BLECommand:
         self.Data = data
 
     def isTokenRequired(self):
-
         return self.IsTokenReq
 
     def isPassRequired(self):
-
         return self.IsPassReq
 
     def getData(self):
-
         return self.Data
 
 
 class Portunus:
     class PeripDelegate(DefaultDelegate):
         def __init__(self, Portunus, aeskey):
-
             self.portunus = Portunus
 
             self.RESP_GET_BATTERY_SUCCESS = bytes([2, 2, 1])
@@ -61,7 +56,6 @@ class Portunus:
             DefaultDelegate.__init__(self)
 
         def handleNotification(self, cHandle, enc_data):
-
             try:
                 data = self.AES.decrypt(enc_data)
 
@@ -102,7 +96,6 @@ class Portunus:
                 print(f"Unknown data {data}")
 
     def __init__(self, device: Peripheral, lockpass: bytes, aeskey: bytes):
-
         self.delegate = Portunus.PeripDelegate(self, aeskey)
 
         self.device = device
@@ -138,7 +131,6 @@ class Portunus:
         self.request_token()
 
     def set_notification_enabled(self):
-
         svc = self.device.getServiceByUUID(self.SERVICE_UUID)
 
         ch = svc.getCharacteristics()
@@ -154,7 +146,6 @@ class Portunus:
                 break
 
     def wait_for_notification(self):
-
         with log.progress("Waiting for notification") as p:
             while True:
                 if self.device.waitForNotifications(1.0):
@@ -163,7 +154,6 @@ class Portunus:
                 p.status("..")
 
     def assign_token(self, token):
-
         self.token = token
 
         log.warn(f"Got token {token}! First lets check LOCK_STATE")
@@ -179,7 +169,6 @@ class Portunus:
         self.get_battery()
 
     def send_command(self, command: BLECommand):
-
         data_to_send = command.getData()
 
         if command.isPassRequired():
@@ -208,25 +197,21 @@ class Portunus:
         self.wait_for_notification()
 
     def get_battery(self):
-
         log.info("sending command : GET_BATTERY")
 
         self.send_command(self.GET_BATTERY)
 
     def unlock(self):
-
         log.info("sending command : UNLOCK")
 
         self.send_command(self.UNLOCK)
 
     def get_lock_state(self):
-
         log.info("sending command : GET_LOCK_STATE")
 
         self.send_command(self.GET_LOCK_STATE)
 
     def request_token(self):
-
         log.info("sending command : REQUEST_TOKEN")
 
         self.send_command(self.REQ_TOKEN)

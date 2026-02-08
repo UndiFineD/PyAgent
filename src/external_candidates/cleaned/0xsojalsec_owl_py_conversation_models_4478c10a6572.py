@@ -95,11 +95,9 @@ class ShareGPTConversation(RootModel):
         return self
 
     def model_dump(self, **kwargs):
-
         return self.root
 
     def __iter__(self):
-
         return iter(self.root)
 
 

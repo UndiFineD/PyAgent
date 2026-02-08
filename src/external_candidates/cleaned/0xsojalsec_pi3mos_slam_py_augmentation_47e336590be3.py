@@ -16,7 +16,6 @@ class RGBDAugmentor:
     """perform augmentation on RGB-D video"""
 
     def __init__(self, crop_size):
-
         self.crop_size = crop_size
 
         self.augcolor = transforms.Compose(
@@ -85,7 +84,6 @@ class RGBDAugmentor:
         return images[[2, 1, 0]].reshape(ch, ht, wd, num).permute(3, 0, 1, 2).contiguous()
 
     def __call__(self, images, poses, depths, intrinsics):
-
         if np.random.rand() < 0.5:
             images = self.color_transform(images)
 

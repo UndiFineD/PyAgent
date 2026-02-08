@@ -9,7 +9,6 @@ from datetime import datetime, timedelta
 
 from typing import Dict, Optional
 
-
 from rich.box import SIMPLE
 
 from rich.console import Console
@@ -83,7 +82,6 @@ class GroupedFactorioLogger:
     """Logger that displays instances grouped by their MCTS parallel groups"""
 
     def __init__(self, n_groups: int, instances_per_group: int, base_port=27000, resume_version=0):
-
         self.console = Console()
 
         self.layout = Layout()
@@ -143,7 +141,6 @@ class GroupedFactorioLogger:
             self.live.stop()
 
     def update_progress(self, advance: int = 1):
-
         if self.progress_task is not None:
             self.progress.update(self.progress_task, advance=advance)
 

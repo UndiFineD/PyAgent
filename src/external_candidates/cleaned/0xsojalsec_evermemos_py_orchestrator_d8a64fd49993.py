@@ -46,7 +46,6 @@ class ChatOrchestrator:
     """Chat Application Orchestrator"""
 
     def __init__(self, project_root: Path):
-
         self.project_root = project_root
 
         self.history_file = project_root / "demo" / ".chat_history"

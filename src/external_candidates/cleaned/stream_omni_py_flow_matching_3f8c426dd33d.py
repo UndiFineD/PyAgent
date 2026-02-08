@@ -45,7 +45,6 @@ class ConditionalCFM(BASECFM):
         spk_emb_dim=64,
         estimator: torch.nn.Module = None,
     ):
-
         super().__init__(
             n_feats=in_channels,
             cfm_params=cfm_params,
@@ -79,8 +78,6 @@ class ConditionalCFM(BASECFM):
     ):
         """Forward diffusion
 
-
-
         Args:
 
             mu (torch.Tensor): output of encoder
@@ -100,8 +97,6 @@ class ConditionalCFM(BASECFM):
                 shape: (batch_size, spk_emb_dim)
 
             cond: Not used but kept for future purposes
-
-
 
         Returns:
 
@@ -206,7 +201,6 @@ class ConditionalCFM(BASECFM):
         return sol[-1]
 
     def forward_estimator(self, x, mask, mu, t, spks, cond):
-
         if isinstance(self.estimator, torch.nn.Module):
             return self.estimator.forward(x, mask, mu, t, spks, cond)
 
@@ -227,8 +221,6 @@ class ConditionalCFM(BASECFM):
     def compute_loss(self, x1, mask, mu, spks=None, cond=None):
         """Computes diffusion loss
 
-
-
         Args:
 
             x1 (torch.Tensor): Target
@@ -246,8 +238,6 @@ class ConditionalCFM(BASECFM):
             spks (torch.Tensor, optional): speaker embedding. Defaults to None.
 
                 shape: (batch_size, spk_emb_dim)
-
-
 
         Returns:
 

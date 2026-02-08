@@ -11,7 +11,6 @@ from sqlalchemy.exc import NoResultFound
 
 
 def get_or_create_user_settings(username: str = None) -> UserSettings:
-
     if username is None:
         username = get_username()
 

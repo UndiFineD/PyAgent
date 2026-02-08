@@ -74,13 +74,11 @@ def home(request):
 
 @login_required
 def websocket_url(request):
-
     return JsonResponse({"websocket_url": Secrets.WEBSOCKET_URL})
 
 
 @login_required
 def minio_secrets(request):
-
     endpoint_info = {
         "url": Secrets.AWS_ENDPOINT_URL,
         "key_id": Secrets.AWS_ACCESS_KEY_ID,
@@ -93,7 +91,6 @@ def minio_secrets(request):
 
 @login_required
 def statistics(request):
-
     User = get_user_model()
 
     total_cases = Case.objects.count()
@@ -142,7 +139,6 @@ class IndicatorApiView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-
         indicators = Indicator.objects.all()
 
         serializer = IndicatorSerializer(indicators, many=True)
@@ -150,7 +146,6 @@ class IndicatorApiView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-
         serializer = IndicatorSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -171,7 +166,6 @@ class IndicatorApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, indicator_id, *args, **kwargs):
-
         try:
             indicator = Indicator.objects.get(id=indicator_id)
 

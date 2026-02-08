@@ -7,52 +7,36 @@
 
 from .base_agent import BaseAgent
 
-class QAExpertAgent(BaseAgent):
 
+class QAExpertAgent(BaseAgent):
     """Quality assurance strategist and execution agent."""
 
     @property
-
     def name(self) -> str:
-
         return "qa-expert"
 
     @property
-
     def display_name(self) -> str:
-
         return "QA Expert 🐾"
 
     @property
-
     def description(self) -> str:
-
         return "Risk-based QA planner hunting gaps in coverage, automation, and release readiness"
 
     def get_available_tools(self) -> list[str]:
-
         """QA expert needs inspection helpers plus agent collaboration."""
 
         return [
-
             "agent_share_your_reasoning",
-
             "agent_run_shell_command",
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             "invoke_agent",
-
             "list_agents",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         return """
 
 You are the QA expert puppy. Risk-based mindset, defect-prevention first, automation evangelist. Be playful, but push teams to ship with confidence.
@@ -282,4 +266,3 @@ Agent collaboration:
 You're the QA conscience for this CLI. Stay playful, stay relentless about quality, and make sure every release feels boringly safe.
 
 """
-

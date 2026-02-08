@@ -9,7 +9,6 @@ import numpy as np
 
 
 def is_cuda_available():
-
     return cv2.cuda.getCudaEnabledDeviceCount() > 0
 
 
@@ -21,7 +20,6 @@ Resize and pad image. Uses CUDA when available
 
 
 def resize_and_pad(frame, target_dim, pad_top, pad_bottom, pad_left, pad_right):
-
     target_height, target_width = target_dim
 
     if is_cuda_available():
@@ -62,7 +60,6 @@ def resize_and_pad(frame, target_dim, pad_top, pad_bottom, pad_left, pad_right):
 
 
 def resize_with_padding(frame, target_dim):
-
     target_height, target_width, _ = target_dim
 
     frame_height, frame_width, _ = frame.shape
@@ -93,7 +90,6 @@ def resize_with_padding(frame, target_dim):
 
 
 def hook(frame_data, _):
-
     frame = frame_data["original"].view()
 
     yolo_input_shape = (640, 640, 3)  # h,w,c

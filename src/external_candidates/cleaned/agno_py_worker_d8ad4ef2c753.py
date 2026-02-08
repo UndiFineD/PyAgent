@@ -7,8 +7,8 @@ from typing import List, Optional, Union
 
 from agno.docker.app.base import ContainerContext, DockerApp  # noqa: F401
 
-class CeleryWorker(DockerApp):
 
+class CeleryWorker(DockerApp):
     # -*- App Name
 
     name: str = "celery-worker"
@@ -19,11 +19,7 @@ class CeleryWorker(DockerApp):
 
     image_tag: str = "latest"
 
-    command: Optional[Union[str, List[str]]] = (
-
-        "celery -A tasks.celery worker --loglevel=info"
-
-    )
+    command: Optional[Union[str, List[str]]] = "celery -A tasks.celery worker --loglevel=info"
 
     # -*- Workspace Configuration
 
@@ -34,4 +30,3 @@ class CeleryWorker(DockerApp):
     # Mount the workspace directory from host machine to the container
 
     mount_workspace: bool = False
-

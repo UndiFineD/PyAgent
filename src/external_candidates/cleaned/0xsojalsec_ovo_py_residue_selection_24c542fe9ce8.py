@@ -106,7 +106,6 @@ def parse_selections(selections: str) -> list[str]:
 
 
 def get_chains_and_contigs(pdb_str: str | None) -> Dict[str, str] | None:
-
     if pdb_str is None:
         return None
 
@@ -141,7 +140,6 @@ def get_chains_and_contigs(pdb_str: str | None) -> Dict[str, str] | None:
 
 
 def from_hotspots_to_segments(hotspots: str) -> list[str] | None:
-
     hotspots_by_chain = defaultdict(list)
 
     if not hotspots:
@@ -205,7 +203,6 @@ def from_contig_to_residues(chain_segment: str | None) -> list[int] | None:
 
 
 def from_residues_to_chain_breaks(residues: list[int]) -> List[str] | None:
-
     residues.sort()
 
     chain_break_segments = []

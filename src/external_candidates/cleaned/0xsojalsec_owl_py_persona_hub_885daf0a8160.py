@@ -101,7 +101,6 @@ class PersonaHub:
         self,
         model: Optional[BaseModelBackend] = None,
     ):
-
         self.model = model
 
         self.personas: Dict[uuid.UUID, Persona] = {}
@@ -384,11 +383,9 @@ persona_description: <BLANK>
         return similarity >= similarity_threshold
 
     def __len__(self):
-
         return len(self.personas)
 
     def __iter__(self):
-
         return iter(self.personas.values())
 
     def get_all_personas(self) -> List[Persona]:

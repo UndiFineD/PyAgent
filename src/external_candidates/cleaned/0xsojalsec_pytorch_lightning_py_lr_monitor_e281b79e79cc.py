@@ -157,7 +157,6 @@ class LearningRateMonitor(Callback):
         log_momentum: bool = False,
         log_weight_decay: bool = False,
     ) -> None:
-
         if logging_interval not in (None, "step", "epoch"):
             raise MisconfigurationException("logging_interval should be `step` or `epoch` or `None`.")
 
@@ -195,7 +194,6 @@ class LearningRateMonitor(Callback):
         if self.log_momentum:
 
             def _check_no_key(key: str) -> bool:
-
                 if trainer.lr_scheduler_configs:
                     return any(
                         key not in config.scheduler.optimizer.defaults for config in trainer.lr_scheduler_configs
@@ -244,7 +242,6 @@ class LearningRateMonitor(Callback):
 
     @override
     def on_train_batch_start(self, trainer: "pl.Trainer", *args: Any, **kwargs: Any) -> None:
-
         if not trainer._logger_connector.should_update_logs:
             return
 
@@ -262,7 +259,6 @@ class LearningRateMonitor(Callback):
 
     @override
     def on_train_epoch_start(self, trainer: "pl.Trainer", *args: Any, **kwargs: Any) -> None:
-
         if self.logging_interval != "step":
             interval = "epoch" if self.logging_interval is None else "any"
 
@@ -276,7 +272,6 @@ class LearningRateMonitor(Callback):
                     )
 
     def _extract_stats(self, trainer: "pl.Trainer", interval: str) -> dict[str, float]:
-
         latest_stat = {}
 
         (
@@ -315,7 +310,6 @@ class LearningRateMonitor(Callback):
         return latest_stat
 
     def _get_optimizer_stats(self, optimizer: Optimizer, names: list[str]) -> dict[str, float]:
-
         stats = {}
 
         param_groups = optimizer.param_groups
@@ -342,7 +336,6 @@ class LearningRateMonitor(Callback):
         return stats
 
     def _extract_lr(self, param_group: dict[str, Any], name: str) -> dict[str, Any]:
-
         lr = param_group["lr"]
 
         self.lrs[name].append(lr)
@@ -363,7 +356,6 @@ class LearningRateMonitor(Callback):
                     self.lrs[new_name] = []
 
     def _extract_momentum(self, param_group: dict[str, list[float]], name: str, use_betas: bool) -> dict[str, float]:
-
         if not self.log_momentum:
             return {}
 
@@ -391,7 +383,6 @@ class LearningRateMonitor(Callback):
         optimizer_cls: type[Optimizer],
         seen_optimizer_types: defaultdict[type[Optimizer], int],
     ) -> str:
-
         if optimizer_cls not in seen_optimizer_types:
             return name
 
@@ -406,7 +397,6 @@ class LearningRateMonitor(Callback):
         param_group_index: int,
         use_names: bool = True,
     ) -> str:
-
         if len(param_groups) > 1:
             if not use_names:
                 return f"{name}/pg{param_group_index + 1}"
@@ -423,7 +413,6 @@ class LearningRateMonitor(Callback):
         return name
 
     def _duplicate_param_group_names(self, param_groups: list[dict]) -> set[str]:
-
         names = [pg.get("name", f"pg{i}") for i, pg in enumerate(param_groups, start=1)]
 
         unique = set(names)
@@ -437,7 +426,6 @@ class LearningRateMonitor(Callback):
         self,
         lr_scheduler_configs: list[LRSchedulerConfig],
     ) -> tuple[list[list[str]], list[Optimizer], defaultdict[type[Optimizer], int]]:
-
         # Create unique names in the case we have multiple of the same learning
 
         # rate scheduler + multiple parameter groups
@@ -467,7 +455,6 @@ class LearningRateMonitor(Callback):
         seen_optimizers: list[Optimizer],
         seen_optimizer_types: defaultdict[type[Optimizer], int],
     ) -> tuple[list[list[str]], list[Optimizer]]:
-
         names = []
 
         optimizers_without_scheduler = []
@@ -500,7 +487,6 @@ class LearningRateMonitor(Callback):
         seen_optimizer_types: defaultdict[type[Optimizer], int],
         lr_scheduler_config: Optional[LRSchedulerConfig],
     ) -> list[str]:
-
         seen_optimizers.append(optimizer)
 
         optimizer_cls = type(optimizer)

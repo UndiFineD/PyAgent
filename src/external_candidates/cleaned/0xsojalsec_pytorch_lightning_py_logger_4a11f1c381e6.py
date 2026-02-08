@@ -91,7 +91,6 @@ class DummyLogger(Logger):
     """
 
     def __init__(self) -> None:
-
         super().__init__()
 
         self._experiment = DummyExperiment()
@@ -104,12 +103,10 @@ class DummyLogger(Logger):
 
     @override
     def log_metrics(self, *args: Any, **kwargs: Any) -> None:
-
         pass
 
     @override
     def log_hyperparams(self, *args: Any, **kwargs: Any) -> None:
-
         pass
 
     @property
@@ -127,7 +124,6 @@ class DummyLogger(Logger):
         return ""
 
     def __getitem__(self, idx: int) -> "DummyLogger":
-
         # enables self.logger[0].experiment.add_image(...)
 
         return self
@@ -136,7 +132,6 @@ class DummyLogger(Logger):
         """Allows the DummyLogger to be called with arbitrary methods, to avoid AttributeErrors."""
 
         def method(*args: Any, **kwargs: Any) -> None:
-
             return None
 
         return method

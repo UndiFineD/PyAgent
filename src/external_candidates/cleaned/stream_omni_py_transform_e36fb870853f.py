@@ -5,7 +5,6 @@
 
 from typing import Optional, Sequence, Tuple
 
-
 import torch
 
 import torch.nn as nn
@@ -22,13 +21,11 @@ from torchvision.transforms import (
     ToTensor,
 )
 
-
 from .constants import OPENAI_DATASET_MEAN, OPENAI_DATASET_STD
 
 
 class ResizeMaxSize(nn.Module):
     def __init__(self, max_size, interpolation=InterpolationMode.BICUBIC, fn="max", fill=0):
-
         super().__init__()
 
         if not isinstance(max_size, int):
@@ -43,7 +40,6 @@ class ResizeMaxSize(nn.Module):
         self.fill = fill
 
     def forward(self, img):
-
         if isinstance(img, torch.Tensor):
             height, width = img.shape[:2]
 
@@ -76,7 +72,6 @@ class ResizeMaxSize(nn.Module):
 
 
 def _convert_to_rgb(image):
-
     return image.convert("RGB")
 
 
@@ -91,7 +86,6 @@ def _convert_to_rgb(image):
 #         batch_size = image.shape[0]
 
 #         index = np.random.permutation(batch_size)
-
 
 #         cat_images = []
 
@@ -118,7 +112,6 @@ def image_transform(
     resize_longest_max: bool = False,
     fill_color: int = 0,
 ):
-
     mean = mean or OPENAI_DATASET_MEAN
 
     if not isinstance(mean, (list, tuple)):

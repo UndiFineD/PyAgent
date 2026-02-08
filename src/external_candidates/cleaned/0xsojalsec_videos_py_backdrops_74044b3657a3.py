@@ -22,7 +22,6 @@ class Spotlight(Scene):
     title_font_size = 60
 
     def construct(self):
-
         title = TexText(self.title, font_size=self.title_font_size)
 
         title.to_edge(UP)
@@ -62,7 +61,6 @@ class VideoWrapper(Scene):
     screen_height = 6.25
 
     def construct(self):
-
         self.add(FullScreenRectangle())
 
         screen = ScreenRectangle()

@@ -33,7 +33,6 @@ def test_create_project():
 
 
 def test_schedule_valid_params(mock_scheduler: Scheduler):
-
     job_id = mock_scheduler.submit(
         "rfdiffusion-backbone",
         params=dict(
@@ -48,7 +47,6 @@ def test_schedule_valid_params(mock_scheduler: Scheduler):
 
 
 def test_schedule_invalid_params(mock_scheduler):
-
     with pytest.raises(ValidationError):
         mock_scheduler.submit(
             "rfdiffusion-backbone",
@@ -92,7 +90,6 @@ def test_schedule_invalid_params(mock_scheduler):
 
 
 def test_design_id():
-
     design = Design(id="ovo_foo_123", pool_id="foo")
 
     with pytest.raises(ValueError):

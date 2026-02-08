@@ -7,7 +7,6 @@ from manim_imports_ext import *
 
 
 def stereo_project_point(point, axis=0, r=1, max_norm=10000):
-
     point = fdiv(point * r, point[axis] + r)
 
     point[axis] = 0
@@ -21,7 +20,6 @@ def stereo_project_point(point, axis=0, r=1, max_norm=10000):
 
 
 def sudanese_band_func(eta, phi):
-
     z1 = math.sin(eta) * np.exp(complex(0, phi))
 
     z2 = math.cos(eta) * np.exp(complex(0, phi / 2))
@@ -34,7 +32,6 @@ def sudanese_band_func(eta, phi):
 
 
 def mobius_strip_func(u, phi):
-
     vect = rotate_vector(RIGHT, phi / 2, axis=UP)
 
     vect = rotate_vector(vect, phi, axis=OUT)
@@ -45,12 +42,10 @@ def mobius_strip_func(u, phi):
 
 
 def reversed_band(band_func):
-
     return lambda x, phi: band_func(x, -phi)
 
 
 def get_full_surface(band_func, x_range):
-
     surface = ParametricSurface(
         band_func,
         x_range,
@@ -93,7 +88,6 @@ def get_full_surface(band_func, x_range):
 
 
 def get_sudanese_band(circle_on_xy_plane=False):
-
     s_band = get_full_surface(
         sudanese_band_func,
         (0, PI),
@@ -115,7 +109,6 @@ class SudaneseBand(ThreeDScene):
     circle_on_xy_plane = True
 
     def construct(self):
-
         frame = self.camera.frame
 
         frame.reorient(-45, 70)
@@ -175,7 +168,6 @@ class SudaneseBand(ThreeDScene):
 
 class SudaneseBandToKleinBottle(ThreeDScene):
     def construct(self):
-
         frame = self.camera.frame
 
         frame.reorient(-70, 70)

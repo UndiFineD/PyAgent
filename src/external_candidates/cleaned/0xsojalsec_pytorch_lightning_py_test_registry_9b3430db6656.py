@@ -42,7 +42,6 @@ class TestAccelerator(Accelerator):
     """Helper accelerator class for testing."""
 
     def __init__(self, param1=None, param2=None):
-
         self.param1 = param1
 
         self.param2 = param2
@@ -50,48 +49,39 @@ class TestAccelerator(Accelerator):
         super().__init__()
 
     def setup_device(self, device: torch.device) -> None:
-
         pass
 
     def teardown(self) -> None:
-
         pass
 
     @staticmethod
     def parse_devices(devices):
-
         return devices
 
     @staticmethod
     def get_parallel_devices(devices):
-
         return ["foo"] * devices
 
     @staticmethod
     def auto_device_count():
-
         return 3
 
     @staticmethod
     def is_available():
-
         return True
 
     @staticmethod
     def name():
-
         return "test_accelerator"
 
 
 def test_accelerator_registry_with_new_accelerator():
-
     accelerator_name = "custom_accelerator"
 
     accelerator_description = "Custom Accelerator"
 
     class CustomAccelerator(Accelerator):
         def __init__(self, param1, param2):
-
             self.param1 = param1
 
             self.param2 = param2
@@ -99,40 +89,32 @@ def test_accelerator_registry_with_new_accelerator():
             super().__init__()
 
         def setup_device(self, device: torch.device) -> None:
-
             pass
 
         def get_device_stats(self, device: torch.device) -> dict[str, Any]:
-
             pass
 
         def teardown(self) -> None:
-
             pass
 
         @staticmethod
         def parse_devices(devices):
-
             return devices
 
         @staticmethod
         def get_parallel_devices(devices):
-
             return ["foo"] * devices
 
         @staticmethod
         def auto_device_count():
-
             return 3
 
         @staticmethod
         def is_available():
-
             return True
 
         @staticmethod
         def name():
-
             return "custom_accelerator"
 
     ACCELERATOR_REGISTRY.register(
@@ -162,7 +144,6 @@ def test_accelerator_registry_with_new_accelerator():
 
 
 def test_available_accelerators_in_registry():
-
     assert ACCELERATOR_REGISTRY.available_accelerators() == {
         "cpu",
         "cuda",
@@ -266,7 +247,6 @@ def test_registry_without_parameters():
 
     class SimpleAccelerator(TestAccelerator):
         def __init__(self):
-
             super().__init__()
 
     test_registry.register("simple", SimpleAccelerator, description="Simple accelerator")

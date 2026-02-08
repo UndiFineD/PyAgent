@@ -5,7 +5,6 @@
 
 from typing import Dict, List, Optional
 
-
 from fle.env.entities import BoundingBox, Entity, EntityStatus, Layer, Position
 
 from fle.env.tools.admin.render_simple.layers.connection_layers_renderer import (
@@ -15,7 +14,6 @@ from fle.env.tools.admin.render_simple.layers.connection_layers_renderer import 
 from fle.env.tools.admin.render_simple.layers.entities_layer_renderer import (
     EntitiesLayerRenderer,
 )
-
 
 # Import layer renderers
 
@@ -120,8 +118,6 @@ class Renderer:
 
         Render a list of Factorio entities to an image
 
-
-
         Args:
 
             entities: List of entities to render
@@ -143,8 +139,6 @@ class Renderer:
             max_tiles: Maximum number of tiles on each side of the center position
 
             layers: Layer flags to specify which elements to render
-
-
 
         Returns:
 

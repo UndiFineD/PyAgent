@@ -12,7 +12,6 @@ from fle.env.tools import Tool
 
 class InspectInventory(Tool):
     def __init__(self, *args):
-
         super().__init__(*args)
 
     def __call__(self, entity=None, all_players: bool = False) -> Union[Inventory, List[Inventory]]:

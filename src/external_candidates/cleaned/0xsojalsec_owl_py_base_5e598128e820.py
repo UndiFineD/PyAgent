@@ -59,7 +59,6 @@ class BaseObjectStorage(ABC):
     @staticmethod
     @abstractmethod
     def canonicalize_path(file_path: PurePath) -> Tuple[str, str]:
-
         pass
 
     def put_file(self, file_path: PurePath, file: File) -> None:
@@ -131,22 +130,18 @@ class BaseObjectStorage(ABC):
 
     @abstractmethod
     def _put_file(self, file_key: str, file: File) -> None:
-
         pass
 
     @abstractmethod
     def _get_file(self, file_key: str, filename: str) -> File:
-
         pass
 
     @abstractmethod
     def _object_exists(self, file_key: str) -> bool:
-
         pass
 
     @abstractmethod
     def _upload_file(self, local_file_path: Path, remote_file_key: str) -> None:
-
         pass
 
     @abstractmethod
@@ -155,5 +150,4 @@ class BaseObjectStorage(ABC):
         local_file_path: Path,
         remote_file_key: str,
     ) -> None:
-
         pass

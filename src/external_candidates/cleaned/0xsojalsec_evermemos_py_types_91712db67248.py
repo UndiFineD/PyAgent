@@ -192,7 +192,6 @@ class ProfileMemoryExtractRequest(MemoryExtractRequest):
     user_id_list: Optional[List[str]] = None
 
     def __post_init__(self):
-
         # Ensure memcell_list is not None
 
         if self.memcell_list is None:

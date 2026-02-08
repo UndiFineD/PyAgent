@@ -5,7 +5,6 @@
 
 from typing import List, Set, Tuple, Union
 
-
 from fle.env.entities import ElectricityGroup, Entity, Position
 
 from fle.env.tools.agent.connect_entities.resolver import Resolver
@@ -13,15 +12,12 @@ from fle.env.tools.agent.connect_entities.resolver import Resolver
 
 class PowerConnectionResolver(Resolver):
     def __init__(self, *args):
-
         super().__init__(*args)
 
     def _check_existing_network_connection(self, source_entity, target_entity) -> bool:
         """
 
         Check if source and target are already connected to the same power network.
-
-
 
         Returns True if already connected, False otherwise.
 

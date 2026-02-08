@@ -19,7 +19,6 @@ def get_action_prompt(
     completed_content,
     memory,
 ):
-
     prompt = "### Background ###\n"
 
     prompt += f"This image is a phone screenshot. Its width is {width} pixels and its height is {height} pixels. The user's instruction is: {instruction}.\n\n"
@@ -144,7 +143,6 @@ def get_action_prompt(
 def get_reflect_prompt(
     instruction, clickable_infos1, clickable_infos2, width, height, keyboard1, keyboard2, summary, action, add_info
 ):
-
     prompt = f"These images are two phone screenshots before and after an operation. Their widths are {width} pixels and their heights are {height} pixels.\n\n"
 
     prompt += "In order to help you better perceive the content in this screenshot, we extract some information on the current screenshot through system files. "
@@ -237,7 +235,6 @@ def get_reflect_prompt(
 
 
 def get_memory_prompt(insight):
-
     if insight != "":
         prompt = "### Important content ###\n"
 
@@ -264,7 +261,6 @@ def get_memory_prompt(insight):
 
 
 def get_process_prompt(instruction, thought_history, summary_history, action_history, completed_content, add_info):
-
     prompt = "### Background ###\n"
 
     prompt += f"There is an user's instruction which is: {instruction}. You are a mobile phone operating assistant and are operating the user's mobile phone.\n\n"

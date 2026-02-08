@@ -76,7 +76,6 @@ class NemotronModel(BaseModelBackend):
         api_key: Optional[str] = None,
         url: Optional[str] = None,
     ) -> None:
-
         url = url or os.environ.get("NVIDIA_API_BASE_URL", "https://integrate.api.nvidia.com/v1")
 
         api_key = api_key or os.environ.get("NVIDIA_API_KEY")
@@ -116,9 +115,7 @@ class NemotronModel(BaseModelBackend):
 
     @property
     def token_counter(self) -> BaseTokenCounter:
-
         raise NotImplementedError("Nemotron model doesn't support token counter.")
 
     def check_model_config(self):
-
         raise NotImplementedError("Nemotron model doesn't support model config.")

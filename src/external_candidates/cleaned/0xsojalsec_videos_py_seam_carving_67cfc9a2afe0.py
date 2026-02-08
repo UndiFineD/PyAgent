@@ -7,7 +7,6 @@ from manim_imports_ext import *
 
 
 def get_value_grid(n_rows=10, n_cols=10):
-
     boxes = VGroup(*[Square() for x in range(n_rows * n_cols)])
 
     boxes.arrange_in_grid(n_rows, n_cols, buff=0)
@@ -32,7 +31,6 @@ def get_value_grid(n_rows=10, n_cols=10):
 
 class GreedyAlgorithm(Scene):
     def construct(self):
-
         value_grid = get_value_grid()
 
         self.add(value_grid)
@@ -40,11 +38,9 @@ class GreedyAlgorithm(Scene):
 
 class RecrusiveExhaustiveSearch(Scene):
     def construct(self):
-
         pass
 
 
 class DynamicProgrammingApproachSearch(Scene):
     def construct(self):
-
         pass

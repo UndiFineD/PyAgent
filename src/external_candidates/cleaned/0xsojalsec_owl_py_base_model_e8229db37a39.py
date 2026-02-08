@@ -86,7 +86,6 @@ class BaseModelBackend(ABC):
         url: Optional[str] = None,
         token_counter: Optional[BaseTokenCounter] = None,
     ) -> None:
-
         self.model_type: UnifiedModelType = UnifiedModelType(model_type)
 
         if model_config_dict is None:

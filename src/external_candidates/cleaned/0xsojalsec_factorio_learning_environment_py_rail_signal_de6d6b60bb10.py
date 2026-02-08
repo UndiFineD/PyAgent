@@ -13,7 +13,6 @@ Rail signal and rail chain signal renderer
 
 from typing import Callable, Dict, Optional, Tuple
 
-
 from PIL import Image
 
 

@@ -13,7 +13,6 @@ from PIL import Image
 
 
 def order_point(coor):
-
     arr = np.array(coor).reshape([4, 2])
 
     sum_ = np.sum(arr, 0)
@@ -35,7 +34,6 @@ def order_point(coor):
 
 
 def longest_common_substring_length(str1, str2):
-
     m = len(str1)
 
     n = len(str2)
@@ -54,7 +52,6 @@ def longest_common_substring_length(str1, str2):
 
 
 def ocr(image_path, prompt, ocr_detection, ocr_recognition, x, y):
-
     text_data = []
 
     coordinate = []

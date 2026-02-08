@@ -43,7 +43,6 @@ from torch import Tensor
 
 
 def _version(loggers: list[Any], separator: str = "_") -> Union[int, str]:
-
     if len(loggers) == 1:
         return loggers[0].version
 
@@ -93,7 +92,6 @@ def _scan_checkpoints(checkpoint_callback: Checkpoint, logged_model_time: dict) 
 
 
 def _log_hyperparams(trainer: "pl.Trainer") -> None:
-
     if not trainer.loggers:
         return
 

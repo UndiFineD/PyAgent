@@ -15,7 +15,6 @@ from random import random
 
 from typing import List
 
-
 import psycopg2
 
 import tenacity
@@ -63,7 +62,6 @@ class MCTS:
         error_penalty=0,
         maximum_lookback=20,
     ):
-
         self.llm = api_factory
 
         self.db = db_client
@@ -300,7 +298,6 @@ class MCTS:
         """Generate n programs in parallel for providers that don't support batch generation"""
 
         async def single_generation():
-
             try:
                 response = await self.llm.acall(
                     messages=formatted_messages,

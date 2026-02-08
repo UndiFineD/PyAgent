@@ -32,7 +32,6 @@ class NumericalMatrixMultiplication(Scene):
     use_parens = True
 
     def construct(self):
-
         left_string_matrix, right_string_matrix = [
             np.array(matrix).astype("string") for matrix in (self.left_matrix, self.right_matrix)
         ]
@@ -51,7 +50,6 @@ class NumericalMatrixMultiplication(Scene):
         self.animate_product(left, right, result)
 
     def get_result_matrix(self, left, right):
-
         (m, k), n = left.shape, right.shape[1]
 
         mob_matrix = np.array([VGroup()]).repeat(m * n).reshape((m, n))
@@ -71,7 +69,6 @@ class NumericalMatrixMultiplication(Scene):
         return Matrix(mob_matrix)
 
     def add_lines(self, left, right):
-
         line_kwargs = {
             "color": BLUE,
             "stroke_width": 2,
@@ -108,7 +105,6 @@ class NumericalMatrixMultiplication(Scene):
         self.show_frame()
 
     def organize_matrices(self, left, right, result):
-
         equals = OldTex("=")
 
         everything = VGroup(left, right, equals, result)
@@ -120,7 +116,6 @@ class NumericalMatrixMultiplication(Scene):
         self.add(everything)
 
     def animate_product(self, left, right, result):
-
         l_matrix = left.get_mob_matrix()
 
         r_matrix = right.get_mob_matrix()

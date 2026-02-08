@@ -5,7 +5,6 @@
 
 
 def eval_program_with_profits(instance, program, profit_config):
-
     pre_production_flows = instance.get_production_stats()
 
     # evaluate the step
@@ -90,7 +89,6 @@ def get_profits(
 
 
 def get_new_production_flows(pre_production_flows, post_production_flows):
-
     new_production_flows = {
         "input": {},
         "output": {},
@@ -120,7 +118,6 @@ def get_new_production_flows(pre_production_flows, post_production_flows):
 
 
 def get_static_profits(new_production_flows, price_list, max_craft_cap=5):
-
     static_profits = 0
 
     # first pop all harvested from outputs
@@ -183,7 +180,6 @@ def get_static_profits(new_production_flows, price_list, max_craft_cap=5):
 
 
 def get_dynamic_profits(new_production_flows, price_list, dynamic_profit_multiplier=10):
-
     dynamic_profits = 0
 
     # add the value of all items in output in new_production_flows
@@ -210,7 +206,6 @@ def get_dynamic_profits(new_production_flows, price_list, dynamic_profit_multipl
 
 
 def eval_program_with_achievements(instance, program):
-
     pre_production_flows = instance.get_production_stats()
 
     # evaluate the step
@@ -265,7 +260,6 @@ def get_achievements(pre_production_flows, post_production_flows):
 
 
 def get_updated_static_items(pre_production_flows, post_production_flows):
-
     if isinstance(pre_production_flows["crafted"], dict):
         pre_production_flows["crafted"] = [item for item in pre_production_flows["crafted"].values()]
 
@@ -290,7 +284,6 @@ def get_updated_static_items(pre_production_flows, post_production_flows):
 
 
 def process_achievements(pre_sleep_production_flows, post_sleep_production_flows, achievements):
-
     for item_key in post_sleep_production_flows["output"]:
         post_output_value = post_sleep_production_flows["output"][item_key]
 

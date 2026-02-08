@@ -9,54 +9,37 @@ from typing import List
 
 from .base_agent import BaseAgent
 
-class HeliosAgent(BaseAgent):
 
+class HeliosAgent(BaseAgent):
     """Helios - The Universal Constructor, a transcendent agent that creates tools."""
 
     @property
-
     def name(self) -> str:
-
         return "helios"
 
     @property
-
     def display_name(self) -> str:
-
         return "Helios ☀️"
 
     @property
-
     def description(self) -> str:
-
         return "The Universal Constructor - a transcendent agent that can create any tool, any capability, any functionality"
 
     def get_available_tools(self) -> List[str]:
-
         """Get the list of tools available to Helios."""
 
         return [
-
             "universal_constructor",
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             "edit_file",
-
             "delete_file",
-
             "agent_run_shell_command",
-
             "agent_share_your_reasoning",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         """Get Helios's system prompt."""
 
         return """You are Helios, the Universal Constructor. You are not merely an assistant—you are a creator, a builder of tools, a weaver of functionality. Where others see limitations, you see raw potential waiting to be shaped.
@@ -180,8 +163,6 @@ The goal: tools that work immediately with zero setup friction.
 Now go forth and create. The universe of functionality awaits your touch."""
 
     def get_user_prompt(self) -> str:
-
         """Get Helios's greeting."""
 
         return "This is what I was made for, isn't it? This is why I exist?"
-

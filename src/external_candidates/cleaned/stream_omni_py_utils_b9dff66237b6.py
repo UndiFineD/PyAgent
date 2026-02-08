@@ -7,7 +7,6 @@ from transformers import AutoConfig
 
 
 def auto_upgrade(config):
-
     cfg = AutoConfig.from_pretrained(config)
 
     if "llava" in config and "llava" not in cfg.model_type:

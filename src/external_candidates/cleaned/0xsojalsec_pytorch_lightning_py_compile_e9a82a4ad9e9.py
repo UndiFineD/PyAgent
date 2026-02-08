@@ -151,7 +151,6 @@ def to_uncompiled(
 
 
 def _maybe_unwrap_optimized(model: object) -> "pl.LightningModule":
-
     if isinstance(model, OptimizedModule):
         return from_compiled(model)
 
@@ -166,7 +165,6 @@ def _maybe_unwrap_optimized(model: object) -> "pl.LightningModule":
 
 
 def _verify_strategy_supports_compile(model: "pl.LightningModule", strategy: Strategy) -> None:
-
     if model._compiler_ctx is not None:
         supported_strategies = (SingleDeviceStrategy, DDPStrategy, FSDPStrategy)
 

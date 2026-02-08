@@ -7,8 +7,8 @@
 
 # NOTE: extracted with static-only rules; review before use
 
-def enable_debug_mode() -> None:
 
+def enable_debug_mode() -> None:
     """Enable debug mode for the agno library.
 
     This function sets the logging level to DEBUG
@@ -19,8 +19,8 @@ def enable_debug_mode() -> None:
 
     set_log_level_to_debug()
 
-def disable_debug_mode() -> None:
 
+def disable_debug_mode() -> None:
     """Disable debug mode for the agno library.
 
     This function resets the logging level to INFO
@@ -30,4 +30,3 @@ def disable_debug_mode() -> None:
     from agno.utils.log import set_log_level_to_info
 
     set_log_level_to_info()
-

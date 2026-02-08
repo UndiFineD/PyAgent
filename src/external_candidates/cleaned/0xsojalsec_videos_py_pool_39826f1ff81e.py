@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class PoolTableReflections(InteractiveScene):
     def construct(self):
-
         # Add  table
 
         table = ImageMobject("pool_table")
@@ -97,7 +96,6 @@ class PoolTableReflections(InteractiveScene):
         self.wait()
 
         def get_reflection(point, dims=[0]):
-
             vect = point - new_origin
 
             for dim in dims:
@@ -122,7 +120,6 @@ class PoolTableReflections(InteractiveScene):
         # Show a trajectory
 
         def line_to_trajectory(line, n_reflections=2):
-
             p0 = find_intersection(
                 line.get_start(),
                 line.get_vector(),
@@ -293,7 +290,6 @@ class PoolTableReflections(InteractiveScene):
         # Show the trick lines
 
         def get_diamond_line(x, y, length=25):
-
             line = Line(low_nl.n2p(x), side_nl.n2p(y))
 
             line.scale(length / line.get_length(), about_point=line.get_start())
@@ -303,7 +299,6 @@ class PoolTableReflections(InteractiveScene):
             return line
 
         def n_to_lines(n):
-
             return VGroup(*(get_diamond_line(x, n - x) for x in range(70, 0, -10))).set_stroke(YELLOW)
 
         lines = n_to_lines(80)
@@ -393,7 +388,6 @@ class PoolTableReflections(InteractiveScene):
         # Show outward rays from the corner
 
         def get_clean_lines(point):
-
             result = VGroup(*(Line(p, point) for p in low_diamond_points[1:-1]))
 
             result.set_stroke(YELLOW, 2)

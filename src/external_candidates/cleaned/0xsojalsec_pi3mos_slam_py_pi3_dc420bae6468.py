@@ -38,7 +38,6 @@ class Pi3(nn.Module, PyTorchModelHubMixin):
         pos_type="rope100",
         decoder_size="large",
     ):
-
         super().__init__()
 
         # ----------------------
@@ -220,7 +219,6 @@ class Pi3(nn.Module, PyTorchModelHubMixin):
         self.register_buffer("image_std", image_std)
 
     def decode(self, hidden, N, H, W):
-
         BN, hw, _ = hidden.shape
 
         B = BN // N
@@ -280,7 +278,6 @@ class Pi3(nn.Module, PyTorchModelHubMixin):
         return torch.cat([final_output[0], final_output[1]], dim=-1), pos.reshape(B * N, hw, -1)
 
     def forward(self, imgs):
-
         imgs = (imgs - self.image_mean) / self.image_std
 
         B, N, _, H, W = imgs.shape

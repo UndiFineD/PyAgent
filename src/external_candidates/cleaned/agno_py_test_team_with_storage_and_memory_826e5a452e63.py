@@ -23,14 +23,12 @@ from agno.storage.sqlite import SqliteStorage
 
 from agno.team.team import Team
 
+
 @pytest.fixture
-
 def temp_storage_db_file():
-
     """Create a temporary SQLite database file for team storage testing."""
 
     with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as temp_file:
-
         db_path = temp_file.name
 
     yield db_path
@@ -38,17 +36,14 @@ def temp_storage_db_file():
     # Clean up the temporary file after the test
 
     if os.path.exists(db_path):
-
         os.unlink(db_path)
 
+
 @pytest.fixture
-
 def temp_memory_db_file():
-
     """Create a temporary SQLite database file for memory testing."""
 
     with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as temp_file:
-
         db_path = temp_file.name
 
     yield db_path
@@ -56,33 +51,26 @@ def temp_memory_db_file():
     # Clean up the temporary file after the test
 
     if os.path.exists(db_path):
-
         os.unlink(db_path)
 
+
 @pytest.fixture
-
 def team_storage(temp_storage_db_file):
-
     """Create a SQLite storage for team sessions."""
 
     # Use a unique table name for each test run
 
     table_name = f"team_sessions_{uuid.uuid4().hex[:8]}"
 
-    storage = SqliteStorage(
-
-        table_name=table_name, db_file=temp_storage_db_file, mode="team"
-
-    )
+    storage = SqliteStorage(table_name=table_name, db_file=temp_storage_db_file, mode="team")
 
     storage.create()
 
     return storage
 
+
 @pytest.fixture
-
 def memory_db(temp_memory_db_file):
-
     """Create a SQLite memory database for testing."""
 
     db = SqliteMemoryDb(db_file=temp_memory_db_file)
@@ -91,42 +79,31 @@ def memory_db(temp_memory_db_file):
 
     return db
 
+
 @pytest.fixture
-
 def memory(memory_db):
-
     """Create a Memory instance for testing."""
 
     return Memory(model=Claude(id="claude-3-5-sonnet-20241022"), db=memory_db)
 
+
 @pytest.fixture
-
 def route_team(team_storage, memory):
-
     """Create a route team with storage and memory for testing."""
 
     return Team(
-
         name="Route Team",
-
         mode="route",
-
         model=OpenAIChat(id="gpt-4o-mini"),
-
         members=[],
-
         storage=team_storage,
-
         memory=memory,
-
         enable_user_memories=True,
-
     )
 
+
 @pytest.mark.asyncio
-
 async def test_run_history_persistence(route_team, team_storage, memory):
-
     """Test that all runs within a session are persisted in storage."""
 
     user_id = "john@example.com"
@@ -142,23 +119,16 @@ async def test_run_history_persistence(route_team, team_storage, memory):
     # Perform multiple turns
 
     conversation_messages = [
-
         "What's the weather like today?",
-
         "What about tomorrow?",
-
         "Any recommendations for indoor activities?",
-
         "Search for nearby museums.",
-
         "Which one has the best reviews?",
-
     ]
 
     assert len(conversation_messages) == num_turns
 
     for msg in conversation_messages:
-
         await route_team.arun(msg, user_id=user_id, session_id=session_id)
 
     # Verify the stored session data after all turns
@@ -177,10 +147,9 @@ async def test_run_history_persistence(route_team, team_storage, memory):
 
     assert first_user_message_content == conversation_messages[0]
 
+
 @pytest.mark.asyncio
-
 async def test_multi_user_multi_session_route_team(route_team, team_storage, memory):
-
     """Test multi-user multi-session route team with storage and memory."""
 
     # Define user and session IDs
@@ -206,91 +175,59 @@ async def test_multi_user_multi_session_route_team(route_team, team_storage, mem
     # Team interaction with user 1 - Session 1
 
     await route_team.arun(
-
         "What is the current stock price of AAPL?",
-
         user_id=user_1_id,
-
         session_id=user_1_session_1_id,
-
     )
 
     await route_team.arun(
-
         "What are the latest news about Apple?",
-
         user_id=user_1_id,
-
         session_id=user_1_session_1_id,
-
     )
 
     # Team interaction with user 1 - Session 2
 
     await route_team.arun(
-
         "Compare the stock performance of AAPL with recent tech industry news",
-
         user_id=user_1_id,
-
         session_id=user_1_session_2_id,
-
     )
 
     # Team interaction with user 2
 
     await route_team.arun(
-
         "What is the current stock price of MSFT?",
-
         user_id=user_2_id,
-
         session_id=user_2_session_1_id,
-
     )
 
     await route_team.arun(
-
         "What are the latest news about Microsoft?",
-
         user_id=user_2_id,
-
         session_id=user_2_session_1_id,
-
     )
 
     # Team interaction with user 3
 
     await route_team.arun(
-
         "What is the current stock price of GOOGL?",
-
         user_id=user_3_id,
-
         session_id=user_3_session_1_id,
-
     )
 
     await route_team.arun(
-
         "What are the latest news about Google?",
-
         user_id=user_3_id,
-
         session_id=user_3_session_1_id,
-
     )
 
     # Continue the conversation with user 1
 
     await route_team.arun(
-
         "Based on the information you have, what stock would you recommend investing in?",
-
         user_id=user_1_id,
-
         session_id=user_1_session_1_id,
-
     )
 
     # Verify storage DB has the right sessions
@@ -320,4 +257,3 @@ async def test_multi_user_multi_session_route_team(route_team, team_storage, mem
     assert len(user_3_sessions) == 1
 
     assert user_3_session_1_id in [session.session_id for session in user_3_sessions]
-

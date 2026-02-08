@@ -17,58 +17,39 @@ from ... import callbacks
 
 from ..base_agent import BaseAgent
 
-class RetrieverAgent(BaseAgent):
 
+class RetrieverAgent(BaseAgent):
     """Retriever - Merge specialist who fetches branches and brings them home."""
 
     @property
-
     def name(self) -> str:
-
         return "retriever"
 
     @property
-
     def display_name(self) -> str:
-
         return "Retriever 🦮"
 
     @property
-
     def description(self) -> str:
-
         return "Merge specialist - fetches completed branches and brings them home to the base branch"
 
     def get_available_tools(self) -> list[str]:
-
         """Get the list of tools available to Retriever."""
 
         return [
-
             # Shell for git commands
-
             "agent_run_shell_command",
-
             # Transparency
-
             "agent_share_your_reasoning",
-
             # File access for reviewing changes and conflicts
-
             "read_file",
-
             # Find related code
-
             "grep",
-
             # List files to understand changes
-
             "list_files",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         """Get Retriever's system prompt."""
 
         puppy_name = get_puppy_name()
@@ -578,8 +559,6 @@ Now go fetch those branches! *tail wagging intensifies* 🦮🎾
         prompt_additions = callbacks.on_load_prompt()
 
         if len(prompt_additions):
-
             result += "\n".join(prompt_additions)
 
         return result
-

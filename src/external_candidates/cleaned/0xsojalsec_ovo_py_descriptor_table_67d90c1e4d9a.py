@@ -58,7 +58,6 @@ def get_residue_number_column_config(
     cmap_name: str = "seaborn:tab10_light",
     n_colors: int = 10,
 ):
-
     if isinstance(descriptor, ResidueNumberDescriptor):
         cmap = Colormap(cmap_name)
 
@@ -76,11 +75,9 @@ def get_residue_number_column_config(
 
 
 def make_bg_color_func(descriptor, min_val, max_val):
-
     cmap = get_descriptor_cmap(descriptor, min_val, max_val)
 
     def color_func(val):
-
         if pd.isna(val):
             return ""
 
@@ -91,7 +88,6 @@ def make_bg_color_func(descriptor, min_val, max_val):
 
 @st.fragment()
 def descriptor_table(design_ids: List[str], descriptors_df: pd.DataFrame, descriptors: List[Descriptor]):
-
     if not design_ids or descriptors_df.empty:
         st.warning("No results yet")
 

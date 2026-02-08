@@ -17,7 +17,6 @@ from utils import fetch_web_info, process_profile_entity
 
 
 async def fetch_group_adminsistrators(username: str):
-
     administrators = []
 
     async with app:
@@ -36,7 +35,6 @@ async def fetch_group_adminsistrators(username: str):
 class GroupToAdmins(DiscoverableTransform):
     @classmethod
     def create_entities(cls, request: MaltegoMsg, response: MaltegoTransform):
-
         username = request.getProperty("properties.username")
 
         administrators = loop.run_until_complete(fetch_group_adminsistrators(username))

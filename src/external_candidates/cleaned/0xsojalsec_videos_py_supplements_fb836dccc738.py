@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class HoldUpLists(TeacherStudentsScene):
     def construct(self):
-
         self.remove(self.background)
 
         self.play(
@@ -32,7 +31,6 @@ class HoldUpLists(TeacherStudentsScene):
 
 class FunToVisualize(TeacherStudentsScene):
     def construct(self):
-
         # Test
 
         self.play(
@@ -45,7 +43,6 @@ class FunToVisualize(TeacherStudentsScene):
 
 class ILearnedSomething(TeacherStudentsScene):
     def construct(self):
-
         # Test
 
         implication = VGroup(
@@ -71,7 +68,6 @@ class ILearnedSomething(TeacherStudentsScene):
 
 class NormalFunctionPreview(InteractiveScene):
     def construct(self):
-
         # Setup axes
 
         frame = self.camera.frame
@@ -136,7 +132,6 @@ class JuliaVideoFrame(VideoWrapper):
 
 class Intimidation(InteractiveScene):
     def construct(self):
-
         pis = VGroup(*(Randolph(color=color) for color in (BLUE_C, BLUE_E, BLUE_D)))
 
         pis.arrange(DOWN, buff=LARGE_BUFF)
@@ -163,7 +158,6 @@ class Intimidation(InteractiveScene):
 
 class SideBySideForContinuousConv(InteractiveScene):
     def construct(self):
-
         self.add(FullScreenRectangle())
 
         squares = Square().replicate(2)
@@ -185,7 +179,6 @@ class SideBySideForContinuousConv(InteractiveScene):
 
 class ThereIsAnother(TeacherStudentsScene):
     def construct(self):
-
         self.play(
             self.teacher.says("There is another"),
             self.change_students("pondering", "thinking", "erm", look_at=self.screen),
@@ -196,7 +189,6 @@ class ThereIsAnother(TeacherStudentsScene):
 
 class SharedInsights(InteractiveScene):
     def construct(self):
-
         # Rects
 
         rects = ScreenRectangle().get_grid(2, 2, h_buff=2.0, v_buff=2.0)
@@ -230,7 +222,6 @@ class SharedInsights(InteractiveScene):
 
 class HoldUpImageProcessing(TeacherStudentsScene):
     def construct(self):
-
         self.play(
             self.teacher.change("raise_right_hand"),
             self.change_students("pleading", "hesitant", "horrified", look_at=2 * UP),
@@ -245,7 +236,6 @@ class HoldUpImageProcessing(TeacherStudentsScene):
 
 class OtherVisualizations(TeacherStudentsScene):
     def construct(self):
-
         self.play(self.change_students("happy", "thinking", "tease", look_at=self.screen))
 
         self.play(
@@ -269,7 +259,6 @@ class OtherVisualizations(TeacherStudentsScene):
 
 class Boring(TeacherStudentsScene):
     def construct(self):
-
         # Test
 
         self.play(
@@ -292,7 +281,6 @@ class Boring(TeacherStudentsScene):
 
 class AskForExample(TeacherStudentsScene):
     def construct(self):
-
         self.play(
             self.teacher.change("raise_right_hand", self.screen),
             self.change_students("pondering", "thinking", "confused", look_at=self.screen),
@@ -315,7 +303,6 @@ class MarioConvolutionLabel(BoxBlurMario):
     label_conv = True
 
     def construct(self):
-
         self.clear()
 
         pa = self.pixel_array
@@ -375,7 +362,6 @@ class CatConvolutionLabel(MarioConvolutionLabel, GaussianBluMario):
     kernel_tex = None
 
     def construct(self):
-
         MarioConvolutionLabel.construct(self)
 
 
@@ -385,7 +371,6 @@ class SobelKernelLabel(MarioConvolutionLabel, SobelFilter2):
     kernel_tex = None
 
     def construct(self):
-
         for square in self.kernel_array:
             square.set_stroke(WHITE, 1)
 
@@ -408,7 +393,6 @@ class SharpenKernelLabel(MarioConvolutionLabel, SharpenFilter):
     label_conv = False
 
     def construct(self):
-
         for square in self.kernel_array:
             square[0].scale(0.6)
 
@@ -425,13 +409,11 @@ class SobelCatKernelLabel(SobelKernelLabel, SobelFilter1):
     grayscale = False
 
     def get_kernel(self):
-
         return SobelFilter1.get_kernel(self)
 
 
 class MakeAPrediction(TeacherStudentsScene):
     def construct(self):
-
         # Blah
 
         self.teacher_says("Try thinking\nthrough what\nwill happen")
@@ -447,7 +429,6 @@ class MakeAPrediction(TeacherStudentsScene):
 
 class ThinkDifferently(TeacherStudentsScene):
     def construct(self):
-
         self.play(
             self.teacher.change("raise_right_hand"),
             self.change_students("pondering", "confused", "thinking", look_at=self.screen),
@@ -464,7 +445,6 @@ class ThinkDifferently(TeacherStudentsScene):
 
 class ThisIsTheCoolPart(TeacherStudentsScene):
     def construct(self):
-
         # Blah
 
         self.play(
@@ -484,7 +464,6 @@ class ThisIsTheCoolPart(TeacherStudentsScene):
 
 class MentionONSquared(InteractiveScene):
     def construct(self):
-
         # Blah
 
         morty = Mortimer(height=2)
@@ -529,7 +508,6 @@ class MentionONSquared(InteractiveScene):
 
 class MentionLinearSystem(InteractiveScene):
     def construct(self):
-
         # Blah
 
         morty = Mortimer(height=3).flip().to_edge(DOWN)
@@ -548,7 +526,6 @@ class MentionLinearSystem(InteractiveScene):
 
 class DumbIdea(TeacherStudentsScene):
     def construct(self):
-
         # Bad idea
 
         morty = self.teacher
@@ -664,7 +641,6 @@ class DumbIdea(TeacherStudentsScene):
 
 class UhWhy(InteractiveScene):
     def construct(self):
-
         randy = Randolph(height=3)
 
         randy.to_corner()
@@ -697,7 +673,6 @@ class GenericScreen(VideoWrapper):
 
 class EnthusiasticAboutRunTime(TeacherStudentsScene):
     def construct(self):
-
         run_time = OldTex(R"\mathcal{O}\big(N \log(N)\big)")
 
         run_time.move_to(self.hold_up_spot, DOWN)

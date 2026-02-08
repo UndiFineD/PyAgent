@@ -10,13 +10,11 @@ from witnessme.signatures import Signatures
 
 @pytest.fixture
 def sig_eng():
-
     return Signatures()
 
 
 @pytest.fixture
 def sig_eng_l():
-
     s = Signatures()
 
     s.load()
@@ -25,14 +23,12 @@ def sig_eng_l():
 
 
 def test_sig_load(sig_eng):
-
     sig_eng.load()
 
     assert len(sig_eng.signatures) > 0
 
 
 def test_get_sig_name(sig_eng_l):
-
     s = sig_eng_l.get_sig("ADManager")
 
     print(s)
@@ -42,7 +38,6 @@ def test_get_sig_name(sig_eng_l):
 
 @pytest.mark.asyncio
 async def test_signature_scanning(sig_eng_l):
-
     # Simulates an html page
 
     service_html = """<html>

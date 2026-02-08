@@ -30,7 +30,6 @@ class Judge:
     }
 
     def __init__(self, url, timeout=8, verify_ssl=False, loop=None):
-
         self.url = url
 
         self.scheme = urlparse(url).scheme.upper()
@@ -60,7 +59,6 @@ class Judge:
 
     @classmethod
     def get_random(cls, proto):
-
         if proto == "HTTPS":
             scheme = "HTTPS"
 
@@ -74,7 +72,6 @@ class Judge:
 
     @classmethod
     def clear(cls):
-
         cls.available["HTTP"].clear()
 
         cls.available["HTTPS"].clear()
@@ -88,7 +85,6 @@ class Judge:
         cls.ev["SMTP"].clear()
 
     async def check(self, real_ext_ip):
-
         # TODO: need refactoring
 
         try:
@@ -161,7 +157,6 @@ class Judge:
 
 
 def get_judges(judges=None, timeout=8, verify_ssl=False):
-
     judges = judges or [
         "http://httpbin.org/get?show_env",
         "https://httpbin.org/get?show_env",

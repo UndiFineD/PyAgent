@@ -24,19 +24,15 @@ class NXCModule:
     multiple_hosts = True
 
     def __init__(self):
-
         pass
 
     def options(self, context, module_options):
-
         pass
 
     def on_admin_login(self, context, connection):
-
         self.check_appcmd(context, connection)
 
     def check_appcmd(self, context, connection):
-
         if not hasattr(connection, "has_run"):
             connection.has_run = False
 
@@ -56,7 +52,6 @@ class NXCModule:
             return
 
     def execute_appcmd(self, context, connection):
-
         command = 'powershell -c "C:\\windows\\system32\\inetsrv\\appcmd.exe list apppool /@t:*"'
 
         context.log.info("Checking For Hidden Credentials With Appcmd.exe")

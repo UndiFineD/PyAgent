@@ -68,7 +68,6 @@ class SingleAgentWorker(Worker):
         description: str,
         worker: ChatAgent,
     ) -> None:
-
         super().__init__(description)
 
         self.worker = worker

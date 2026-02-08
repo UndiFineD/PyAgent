@@ -77,7 +77,6 @@ def _find_tensors(
 
 
 def prepare_for_backward(model: DistributedDataParallel, output: Any) -> None:
-
     # `prepare_for_backward` is `DistributedDataParallel` specific.
 
     if torch.is_grad_enabled() and model.require_backward_grad_sync:
@@ -312,7 +311,6 @@ class UnrepeatedDistributedSampler(DistributedSampler):
     """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-
         super().__init__(*args, **kwargs)
 
         if not isinstance(self.dataset, Sized):
@@ -330,7 +328,6 @@ class UnrepeatedDistributedSampler(DistributedSampler):
 
     @override
     def __iter__(self) -> Iterator[list[int]]:
-
         if not isinstance(self.dataset, Sized):
             raise TypeError("The given dataset must implement the `__len__` method.")
 
@@ -361,12 +358,10 @@ class UnrepeatedDistributedSamplerWrapper(UnrepeatedDistributedSampler):
     """Equivalent class to ``DistributedSamplerWrapper`` but for the ``UnrepeatedDistributedSampler``."""
 
     def __init__(self, sampler: Union[Sampler, Iterable], *args: Any, **kwargs: Any) -> None:
-
         super().__init__(_DatasetSamplerWrapper(sampler), *args, **kwargs)
 
     @override
     def __iter__(self) -> Iterator:
-
         self.dataset.reset()
 
         return (self.dataset[index] for index in super().__iter__())
@@ -376,7 +371,6 @@ class _IndexBatchSamplerWrapper:
     """This class is used to wrap a :class:`torch.utils.data.BatchSampler` and capture its indices."""
 
     def __init__(self, batch_sampler: _SizedIterable) -> None:
-
         # do not call super().__init__() on purpose
 
         self.seen_batch_indices: list[list[int]] = []
@@ -392,7 +386,6 @@ class _IndexBatchSamplerWrapper:
         self._iterator: Optional[Iterator[list[int]]] = None
 
     def __next__(self) -> list[int]:
-
         assert self._iterator is not None
 
         batch = next(self._iterator)
@@ -402,7 +395,6 @@ class _IndexBatchSamplerWrapper:
         return batch
 
     def __iter__(self) -> Self:
-
         self.seen_batch_indices = []
 
         self._iterator = iter(self._batch_sampler)
@@ -410,11 +402,9 @@ class _IndexBatchSamplerWrapper:
         return self
 
     def __len__(self) -> int:
-
         return len(self._batch_sampler)
 
     def __getstate__(self) -> dict[str, Any]:
-
         state = self.__dict__.copy()
 
         state["_iterator"] = None  # cannot pickle 'generator' object

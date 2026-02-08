@@ -12,7 +12,6 @@ class Chapter0(LinearTransformationScene):
     CONFIG = {"include_background_plane": False, "t_matrix": [[3, 1], [2, -1]]}
 
     def construct(self):
-
         self.setup()
 
         self.plane.fade()
@@ -25,7 +24,6 @@ class Chapter0(LinearTransformationScene):
 
 class Chapter1(Scene):
     def construct(self):
-
         arrow = Vector(2 * UP + RIGHT)
 
         vs = OldTexText("vs.")
@@ -45,7 +43,6 @@ class Chapter1(Scene):
 
 class Chapter2(LinearTransformationScene):
     def construct(self):
-
         self.lock_in_faded_grid()
 
         vectors = VMobject(
@@ -83,7 +80,6 @@ class Chapter4p2(Chapter0):
 
 class Chapter5(LinearTransformationScene):
     def construct(self):
-
         self.plane.fade()
 
         self.add_unit_square()
@@ -101,7 +97,6 @@ class Chapter5(LinearTransformationScene):
 
 class Chapter9(Scene):
     def construct(self):
-
         you = You()
 
         jenny = Jennifer()
@@ -157,7 +152,6 @@ class Chapter10(LinearTransformationScene):
     }
 
     def construct(self):
-
         v_tex = "\\vec{\\textbf{v}}"
 
         eq = OldTex("A", v_tex, "=", "\\lambda", v_tex)

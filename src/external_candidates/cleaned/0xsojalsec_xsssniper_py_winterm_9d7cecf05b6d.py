@@ -37,7 +37,6 @@ class WinStyle(object):
 
 class WinTerm(object):
     def __init__(self):
-
         self._default = win32.GetConsoleScreenBufferInfo(win32.STDOUT).wAttributes
 
         self.set_attrs(self._default)
@@ -49,11 +48,9 @@ class WinTerm(object):
         self._default_style = self._style
 
     def get_attrs(self):
-
         return self._fore + self._back * 16 + self._style
 
     def set_attrs(self, value):
-
         self._fore = value & 7
 
         self._back = (value >> 4) & 7
@@ -61,13 +58,11 @@ class WinTerm(object):
         self._style = value & WinStyle.BRIGHT
 
     def reset_all(self, on_stderr=None):
-
         self.set_attrs(self._default)
 
         self.set_console(attrs=self._default)
 
     def fore(self, fore=None, on_stderr=False):
-
         if fore is None:
             fore = self._default_fore
 
@@ -76,7 +71,6 @@ class WinTerm(object):
         self.set_console(on_stderr=on_stderr)
 
     def back(self, back=None, on_stderr=False):
-
         if back is None:
             back = self._default_back
 
@@ -85,7 +79,6 @@ class WinTerm(object):
         self.set_console(on_stderr=on_stderr)
 
     def style(self, style=None, on_stderr=False):
-
         if style is None:
             style = self._default_style
 
@@ -94,7 +87,6 @@ class WinTerm(object):
         self.set_console(on_stderr=on_stderr)
 
     def set_console(self, attrs=None, on_stderr=False):
-
         if attrs is None:
             attrs = self.get_attrs()
 
@@ -106,7 +98,6 @@ class WinTerm(object):
         win32.SetConsoleTextAttribute(handle, attrs)
 
     def set_cursor_position(self, position=None, on_stderr=False):
-
         if position is None:
             # I'm not currently tracking the position, so there is no default.
 
@@ -122,7 +113,6 @@ class WinTerm(object):
         win32.SetConsoleCursorPosition(handle, position)
 
     def erase_data(self, mode=0, on_stderr=False):
-
         # 0 (or None) should clear from the cursor to the end of the screen.
 
         # 1 should clear from the cursor to the beginning of the screen.

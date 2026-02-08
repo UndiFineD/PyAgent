@@ -41,7 +41,6 @@ class GaltonBoard(InteractiveScene):
     clink_sound = "plate.wav"
 
     def setup(self):
-
         super().setup()
 
         self.ball_template = Sphere(
@@ -59,7 +58,6 @@ class GaltonBoard(InteractiveScene):
         # ball.make_3d()
 
     def construct(self):
-
         # Setup
 
         pegs = self.get_pegs()
@@ -229,7 +227,6 @@ class GaltonBoard(InteractiveScene):
         v2 = peg_triangle[1][1].get_center() - peg_triangle[1][0].get_center()
 
         def get_peg_label(n, k, split=False):
-
             kw = dict(font_size=16)
 
             if n == 0:
@@ -297,7 +294,6 @@ class GaltonBoard(InteractiveScene):
         self.wait(2)
 
     def get_pegs(self):
-
         row = VGroup(*(Dot(radius=self.peg_radius).shift(x * self.spacing * RIGHT) for x in range(self.pegs_per_row)))
 
         rows = VGroup(*(row.copy().shift(y * self.spacing * DOWN * math.sqrt(3) / 2) for y in range(self.n_rows)))
@@ -315,7 +311,6 @@ class GaltonBoard(InteractiveScene):
         return rows
 
     def get_buckets(self, pegs):
-
         # Buckets
 
         points = [dot.get_center() for dot in pegs[-1]]
@@ -380,7 +375,6 @@ class GaltonBoard(InteractiveScene):
         return buckets
 
     def get_ball_arrows(self, ball, labels, sub_labels=[], colors=[RED, BLUE]):
-
         arrows = VGroup()
 
         for vect, color, label in zip([LEFT, RIGHT], colors, labels):
@@ -408,15 +402,12 @@ class GaltonBoard(InteractiveScene):
         return arrows
 
     def get_fifty_fifty_arrows(self, ball):
-
         return self.get_ball_arrows(ball, ["50%", "50%"])
 
     def get_pm_arrows(self, ball, show_prob=True):
-
         return self.get_ball_arrows(ball, ["$-1$", "$+1$"], sub_labels=(["50%", "50%"] if show_prob else []))
 
     def show_corner_sum(self, pm_arrows, bits, font_size=48):
-
         # Test
 
         parts = VGroup(*(arrow[bit][0].copy() for arrow, bit in zip(pm_arrows, bits)))
@@ -447,7 +438,6 @@ class GaltonBoard(InteractiveScene):
         return Succession(anim1, anim2), FadeOut(VGroup(parts, sum_term))
 
     def get_ball(self, color=YELLOW_E):
-
         ball = TrueDot(radius=self.ball_radius, color=color)
 
         ball.make_3d()
@@ -457,7 +447,6 @@ class GaltonBoard(InteractiveScene):
         return ball
 
     def single_bounce_trajectory(self, ball, peg, direction):
-
         sgn = np.sign(direction[0])
 
         trajectory = FunctionGraph(
@@ -479,7 +468,6 @@ class GaltonBoard(InteractiveScene):
         return trajectory
 
     def random_trajectory(self, ball, pegs, buckets, bits=None):
-
         index = len(pegs[0]) // 2
 
         radius = ball.get_height() / 2
@@ -528,7 +516,6 @@ class GaltonBoard(InteractiveScene):
         return result, pieces
 
     def falling_anim(self, ball, trajectory):
-
         return MoveAlongPath(
             ball,
             trajectory,
@@ -537,7 +524,6 @@ class GaltonBoard(InteractiveScene):
         )
 
     def add_single_clink_sound(self, time_offset=0, gain=-20):
-
         self.add_sound(
             sound_file=self.clink_sound.replace("click", "click" + str(random.randint(1, 12))),
             time_offset=time_offset,
@@ -545,7 +531,6 @@ class GaltonBoard(InteractiveScene):
         )
 
     def add_falling_clink_sounds(self, trajectory_pieces, time_offset=0, gain=-20):
-
         total_len = trajectory_pieces[0].get_arc_length()
 
         for piece in trajectory_pieces[1:-1]:
@@ -554,7 +539,6 @@ class GaltonBoard(InteractiveScene):
             total_len += piece.get_arc_length()
 
     def drop_n_balls(self, n, pegs, buckets, lr_factor=1, sound=False):
-
         # Test
 
         balls = Group(*(self.get_ball() for x in range(n)))
@@ -580,7 +564,6 @@ class GaltonBoard(InteractiveScene):
 
 class EmphasizeMultipleSums(GaltonBoard):
     def construct(self):
-
         pegs = self.get_pegs()
 
         buckets = self.get_buckets(pegs)
@@ -622,7 +605,6 @@ class EmphasizeMultipleSums(GaltonBoard):
 
 class GaltonTrickle(GaltonBoard):
     def construct(self):
-
         frame = self.frame
 
         pegs = self.get_pegs()
@@ -698,7 +680,6 @@ class BiggerGaltonBoard(GaltonBoard):
     n_balls = 800
 
     def construct(self):
-
         # Setup
 
         pegs = self.get_pegs()
@@ -750,7 +731,6 @@ class SingleDropBigGaltonBoard(BiggerGaltonBoard):
     ball_radius = 0.075
 
     def construct(self):
-
         # Setup
 
         pegs = self.get_pegs()
@@ -774,7 +754,6 @@ class SingleDropBigGaltonBoard(BiggerGaltonBoard):
 
 class NotIdenticallyDistributed(GaltonBoard):
     def construct(self):
-
         # Setup
 
         pegs = self.get_pegs()
@@ -788,7 +767,6 @@ class NotIdenticallyDistributed(GaltonBoard):
         max_arrow_len = 0.5
 
         def get_peg_arrow(peg, angle, length, color=RED_E):
-
             vect = np.array([-math.sin(angle), math.cos(angle), 0])
 
             arrow = FillArrow(
@@ -807,7 +785,6 @@ class NotIdenticallyDistributed(GaltonBoard):
             return arrow
 
         def get_bounce_distribution(peg, sigma=30 * DEGREES):
-
             ds = sigma / 2
 
             angles = np.arange(-2 * sigma, 2 * sigma + ds, ds)

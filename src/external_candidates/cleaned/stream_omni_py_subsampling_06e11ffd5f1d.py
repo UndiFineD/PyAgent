@@ -37,13 +37,11 @@
 
 from typing import Tuple, Union
 
-
 import torch
 
 
 class BaseSubsampling(torch.nn.Module):
     def __init__(self):
-
         super().__init__()
 
         self.right_context = 0
@@ -51,7 +49,6 @@ class BaseSubsampling(torch.nn.Module):
         self.subsampling_rate = 1
 
     def position_encoding(self, offset: Union[int, torch.Tensor], size: int) -> torch.Tensor:
-
         return self.pos_enc.position_encoding(offset, size)
 
 
@@ -59,7 +56,6 @@ class EmbedinigNoSubsampling(BaseSubsampling):
     """Embedding input without subsampling"""
 
     def __init__(self, idim: int, odim: int, dropout_rate: float, pos_enc_class: torch.nn.Module):
-
         super().__init__()
 
         self.embed = torch.nn.Embedding(idim, odim)
@@ -74,15 +70,11 @@ class EmbedinigNoSubsampling(BaseSubsampling):
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Input x.
 
-
-
         Args:
 
             x (torch.Tensor): Input tensor (#batch, time, idim).
 
             x_mask (torch.Tensor): Input mask (#batch, 1, time).
-
-
 
         Returns:
 
@@ -93,8 +85,6 @@ class EmbedinigNoSubsampling(BaseSubsampling):
             torch.Tensor: linear input mask (#batch, 1, time'),
 
                 where time' = time .
-
-
 
         """
 
@@ -108,8 +98,6 @@ class EmbedinigNoSubsampling(BaseSubsampling):
 class LinearNoSubsampling(BaseSubsampling):
     """Linear transform the input without subsampling
 
-
-
     Args:
 
         idim (int): Input dimension.
@@ -117,8 +105,6 @@ class LinearNoSubsampling(BaseSubsampling):
         odim (int): Output dimension.
 
         dropout_rate (float): Dropout rate.
-
-
 
     """
 
@@ -147,15 +133,11 @@ class LinearNoSubsampling(BaseSubsampling):
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Input x.
 
-
-
         Args:
 
             x (torch.Tensor): Input tensor (#batch, time, idim).
 
             x_mask (torch.Tensor): Input mask (#batch, 1, time).
-
-
 
         Returns:
 
@@ -166,8 +148,6 @@ class LinearNoSubsampling(BaseSubsampling):
             torch.Tensor: linear input mask (#batch, 1, time'),
 
                 where time' = time .
-
-
 
         """
 
@@ -185,8 +165,6 @@ class Conv1dSubsampling2(BaseSubsampling):
 
        https://github.com/openai/whisper/blob/main/whisper/model.py
 
-
-
     Args:
 
         idim (int): Input dimension.
@@ -194,8 +172,6 @@ class Conv1dSubsampling2(BaseSubsampling):
         odim (int): Output dimension.
 
         dropout_rate (float): Dropout rate.
-
-
 
     """
 
@@ -231,15 +207,11 @@ class Conv1dSubsampling2(BaseSubsampling):
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Subsample x.
 
-
-
         Args:
 
             x (torch.Tensor): Input tensor (#batch, time, idim).
 
             x_mask (torch.Tensor): Input mask (#batch, 1, time).
-
-
 
         Returns:
 
@@ -252,8 +224,6 @@ class Conv1dSubsampling2(BaseSubsampling):
                 where time' = time // 2.
 
             torch.Tensor: positional encoding
-
-
 
         """
 
@@ -273,8 +243,6 @@ class Conv1dSubsampling2(BaseSubsampling):
 class Conv2dSubsampling4(BaseSubsampling):
     """Convolutional 2D subsampling (to 1/4 length).
 
-
-
     Args:
 
         idim (int): Input dimension.
@@ -282,8 +250,6 @@ class Conv2dSubsampling4(BaseSubsampling):
         odim (int): Output dimension.
 
         dropout_rate (float): Dropout rate.
-
-
 
     """
 
@@ -321,15 +287,11 @@ class Conv2dSubsampling4(BaseSubsampling):
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Subsample x.
 
-
-
         Args:
 
             x (torch.Tensor): Input tensor (#batch, time, idim).
 
             x_mask (torch.Tensor): Input mask (#batch, 1, time).
-
-
 
         Returns:
 
@@ -342,8 +304,6 @@ class Conv2dSubsampling4(BaseSubsampling):
                 where time' = time // 4.
 
             torch.Tensor: positional encoding
-
-
 
         """
 
@@ -411,8 +371,6 @@ class Conv2dSubsampling6(BaseSubsampling):
 
             x_mask (torch.Tensor): Input mask (#batch, 1, time).
 
-
-
         Returns:
 
             torch.Tensor: Subsampled tensor (#batch, time', odim),
@@ -443,8 +401,6 @@ class Conv2dSubsampling6(BaseSubsampling):
 class Conv2dSubsampling8(BaseSubsampling):
     """Convolutional 2D subsampling (to 1/8 length).
 
-
-
     Args:
 
         idim (int): Input dimension.
@@ -452,8 +408,6 @@ class Conv2dSubsampling8(BaseSubsampling):
         odim (int): Output dimension.
 
         dropout_rate (float): Dropout rate.
-
-
 
     """
 
@@ -489,15 +443,11 @@ class Conv2dSubsampling8(BaseSubsampling):
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Subsample x.
 
-
-
         Args:
 
             x (torch.Tensor): Input tensor (#batch, time, idim).
 
             x_mask (torch.Tensor): Input mask (#batch, 1, time).
-
-
 
         Returns:
 
@@ -529,8 +479,6 @@ class Conv2dSubsampling8(BaseSubsampling):
 class LegacyLinearNoSubsampling(BaseSubsampling):
     """Linear transform the input without subsampling
 
-
-
     Args:
 
         idim (int): Input dimension.
@@ -538,8 +486,6 @@ class LegacyLinearNoSubsampling(BaseSubsampling):
         odim (int): Output dimension.
 
         dropout_rate (float): Dropout rate.
-
-
 
     """
 
@@ -569,15 +515,11 @@ class LegacyLinearNoSubsampling(BaseSubsampling):
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Input x.
 
-
-
         Args:
 
             x (torch.Tensor): Input tensor (#batch, time, idim).
 
             x_mask (torch.Tensor): Input mask (#batch, 1, time).
-
-
 
         Returns:
 
@@ -588,8 +530,6 @@ class LegacyLinearNoSubsampling(BaseSubsampling):
             torch.Tensor: linear input mask (#batch, 1, time'),
 
                 where time' = time .
-
-
 
         """
 

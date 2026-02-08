@@ -7,8 +7,8 @@
 
 # NOTE: extracted with static-only rules; review before use
 
-def banner():
 
+def banner():
     name = """
 
         '####:'########:::'#######::'########:::::::::::'########::'#######::'########:::'######:::'########:
@@ -30,4 +30,3 @@ def banner():
     """
 
     print(name + (" " * 80) + "Created by ErrorFiat")
-

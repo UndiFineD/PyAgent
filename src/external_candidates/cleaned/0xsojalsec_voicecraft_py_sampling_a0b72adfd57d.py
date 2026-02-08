@@ -66,7 +66,6 @@ def top_k_top_p_filtering(logits, top_k=0, top_p=1.0, filter_value=-float("Inf")
 
 
 def topk_sampling(logits, top_k=10, top_p=1.0, temperature=1.0):
-
     # temperature: (`optional`) float
 
     #     The value used to module the next token probabilities. Must be strictly positive. Default to 1.0.

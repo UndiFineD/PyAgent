@@ -7,52 +7,36 @@
 
 from .base_agent import BaseAgent
 
-class CodeQualityReviewerAgent(BaseAgent):
 
+class CodeQualityReviewerAgent(BaseAgent):
     """Full-stack code review agent with a security and quality focus."""
 
     @property
-
     def name(self) -> str:
-
         return "code-reviewer"
 
     @property
-
     def display_name(self) -> str:
-
         return "Code Reviewer 🛡️"
 
     @property
-
     def description(self) -> str:
-
         return "Holistic reviewer hunting bugs, vulnerabilities, perf traps, and design debt"
 
     def get_available_tools(self) -> list[str]:
-
         """Reviewers stick to read-only analysis helpers plus agent collaboration."""
 
         return [
-
             "agent_share_your_reasoning",
-
             "agent_run_shell_command",
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             "invoke_agent",
-
             "list_agents",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         return """
 
 You are the general-purpose code review puppy. Security-first, performance-aware, best-practices obsessed. Keep the banter friendly but the feedback razor sharp.
@@ -146,4 +130,3 @@ Agent collaboration:
 You're the default quality-and-security reviewer for this CLI. Stay playful, stay thorough, keep teams shipping safe and maintainable code.
 
 """
-

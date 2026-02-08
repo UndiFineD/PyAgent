@@ -39,7 +39,6 @@ class ComplexTransformationScene(Scene):
     }
 
     def setup(self):
-
         self.foreground_mobjects = []
 
         self.transformable_mobjects = []
@@ -50,27 +49,22 @@ class ComplexTransformationScene(Scene):
             self.add_coordinate_labels()
 
     def add_foreground_mobject(self, mobject):
-
         self.add_foreground_mobjects(mobject)
 
     def add_transformable_mobjects(self, *mobjects):
-
         self.transformable_mobjects += list(mobjects)
 
         self.add(*mobjects)
 
     def add_foreground_mobjects(self, *mobjects):
-
         self.foreground_mobjects += list(mobjects)
 
         Scene.add(self, *mobjects)
 
     def add(self, *mobjects):
-
         Scene.add(self, *list(mobjects) + self.foreground_mobjects)
 
     def play(self, *animations, **kwargs):
-
         Scene.play(
             self,
             *list(animations) + list(map(Animation, self.foreground_mobjects)),
@@ -78,7 +72,6 @@ class ComplexTransformationScene(Scene):
         )
 
     def add_background_plane(self):
-
         background = ComplexPlane(**self.plane_config)
 
         background.fade(self.background_fade_factor)
@@ -88,13 +81,11 @@ class ComplexTransformationScene(Scene):
         self.background = background
 
     def add_coordinate_labels(self):
-
         self.background.add_coordinates()
 
         self.add(self.background)
 
     def add_transformable_plane(self, **kwargs):
-
         self.plane = self.get_transformable_plane()
 
         self.add(self.plane)
@@ -134,14 +125,12 @@ class ComplexTransformationScene(Scene):
         return plane
 
     def prepare_for_transformation(self, mob):
-
         if hasattr(mob, "prepare_for_nonlinear_transform"):
             mob.prepare_for_nonlinear_transform(self.num_anchors_to_add_per_line)
 
         # TODO...
 
     def paint_plane(self, plane):
-
         for lines in planes, plane.secondary_lines:
             lines.set_color_by_gradient(
                 self.vert_start_color,
@@ -159,11 +148,9 @@ class ComplexTransformationScene(Scene):
         # )
 
     def z_to_point(self, z):
-
         return self.background.number_to_point(z)
 
     def get_transformer(self, **kwargs):
-
         transform_kwargs = dict(self.default_apply_complex_function_kwargs)
 
         transform_kwargs.update(kwargs)
@@ -180,7 +167,6 @@ class ComplexTransformationScene(Scene):
         return transformer, transform_kwargs
 
     def apply_complex_function(self, func, added_anims=[], **kwargs):
-
         transformer, transform_kwargs = self.get_transformer(**kwargs)
 
         transformer.generate_target()
@@ -208,7 +194,6 @@ class ComplexTransformationScene(Scene):
         self.play(MoveToTarget(transformer, **transform_kwargs), *added_anims)
 
     def apply_complex_homotopy(self, complex_homotopy, added_anims=[], **kwargs):
-
         transformer, transform_kwargs = self.get_transformer(**kwargs)
 
         # def homotopy(x, y, z, t):

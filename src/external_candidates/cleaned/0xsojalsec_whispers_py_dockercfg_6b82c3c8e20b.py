@@ -10,7 +10,6 @@ from pathlib import Path
 
 class Dockercfg:
     def pairs(self, filepath: Path):
-
         config = json.loads(filepath.read_text())
 
         if "auths" not in config:

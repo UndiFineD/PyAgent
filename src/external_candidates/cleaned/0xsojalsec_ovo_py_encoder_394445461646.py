@@ -18,7 +18,6 @@ class DataclassEncoder(json.JSONEncoder):
     """Simple JSON encoder that encodes dataclasses and enums."""
 
     def default(self, o):
-
         if hasattr(o, "__do_not_serialize__") and o.__do_not_serialize__:
             raise ValueError(f"Objects of type {type(o).__name__} cannot be updated in the database.")
 
@@ -42,20 +41,17 @@ class DataclassType(TypeDecorator):
     cache_ok = True
 
     def __init__(self, base_cls):
-
         super().__init__()
 
         self.base_cls = base_cls
 
     def process_bind_param(self, value, dialect):
-
         if value is None:
             return None
 
         return json.dumps(value, cls=DataclassEncoder)
 
     def process_result_value(self, value, dialect):
-
         if value is None:
             return None
 

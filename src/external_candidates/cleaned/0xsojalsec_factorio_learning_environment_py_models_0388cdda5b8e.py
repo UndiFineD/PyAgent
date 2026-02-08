@@ -9,7 +9,6 @@ import enum
 
 from typing import Any, Dict, Optional
 
-
 from fle.commons.models.achievements import ProductionFlows
 
 from pydantic import BaseModel

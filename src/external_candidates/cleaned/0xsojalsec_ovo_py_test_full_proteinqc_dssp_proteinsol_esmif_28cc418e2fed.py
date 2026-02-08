@@ -19,7 +19,6 @@ from ovo.core.utils.tests import TEST_SCHEDULER_KEY
 
 
 def test_full_proteinqc(project_data):
-
     project, project_round, custom_pool = project_data
 
     designs = db.select(Design, pool_id=custom_pool.id)

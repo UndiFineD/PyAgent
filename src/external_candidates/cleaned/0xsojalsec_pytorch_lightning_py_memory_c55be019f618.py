@@ -64,7 +64,6 @@ def recursive_detach(in_dict: Any, to_cpu: bool = False) -> Any:
     """
 
     def detach_and_move(t: Tensor, to_cpu: bool) -> Tensor:
-
         t = t.detach()
 
         if to_cpu:
@@ -76,7 +75,6 @@ def recursive_detach(in_dict: Any, to_cpu: bool = False) -> Any:
 
 
 def is_oom_error(exception: BaseException) -> bool:
-
     return is_cuda_out_of_memory(exception) or is_cudnn_snafu(exception) or is_out_of_cpu_memory(exception)
 
 
@@ -84,7 +82,6 @@ def is_oom_error(exception: BaseException) -> bool:
 
 
 def is_cuda_out_of_memory(exception: BaseException) -> bool:
-
     return (
         isinstance(exception, RuntimeError)
         and len(exception.args) == 1
@@ -97,7 +94,6 @@ def is_cuda_out_of_memory(exception: BaseException) -> bool:
 
 
 def is_cudnn_snafu(exception: BaseException) -> bool:
-
     # For/because of https://github.com/pytorch/pytorch/issues/4107
 
     return (
@@ -111,7 +107,6 @@ def is_cudnn_snafu(exception: BaseException) -> bool:
 
 
 def is_out_of_cpu_memory(exception: BaseException) -> bool:
-
     return (
         isinstance(exception, RuntimeError)
         and len(exception.args) == 1

@@ -66,17 +66,14 @@ class DoublePrecision(Precision):
 
     @override
     def convert_module(self, module: nn.Module) -> nn.Module:
-
         return module.double()
 
     @override
     def tensor_init_context(self) -> AbstractContextManager:
-
         return _DtypeContextManager(torch.float64)
 
     @override
     def module_init_context(self) -> AbstractContextManager:
-
         return self.tensor_init_context()
 
     @override
@@ -93,7 +90,6 @@ class DoublePrecision(Precision):
 
     @override
     def convert_input(self, data: Any) -> Any:
-
         return apply_to_collection(data, function=_convert_fp_tensor, dtype=Tensor, dst_type=torch.double)
 
 
@@ -113,7 +109,6 @@ class LightningDoublePrecisionModule(_DeviceDtypeModuleMixin, nn.Module):
     _ddp_params_and_buffers_to_ignore: Iterable[str]
 
     def __init__(self, pl_module: "pl.LightningModule") -> None:
-
         super().__init__()
 
         rank_zero_deprecation(
@@ -131,32 +126,27 @@ class LightningDoublePrecisionModule(_DeviceDtypeModuleMixin, nn.Module):
 
     @staticmethod
     def _move_float_tensors_to_double(collection: Any) -> Any:
-
         return apply_to_collection(collection, Tensor, function=_convert_fp_tensor, dst_type=torch.double)
 
     def training_step(self, *args: Any, **kwargs: Any) -> Any:
-
         return self.module.training_step(
             *LightningDoublePrecisionModule._move_float_tensors_to_double(args),
             **LightningDoublePrecisionModule._move_float_tensors_to_double(kwargs),
         )
 
     def validation_step(self, *args: Any, **kwargs: Any) -> Any:
-
         return self.module.validation_step(
             *LightningDoublePrecisionModule._move_float_tensors_to_double(args),
             **LightningDoublePrecisionModule._move_float_tensors_to_double(kwargs),
         )
 
     def test_step(self, *args: Any, **kwargs: Any) -> Any:
-
         return self.module.test_step(
             *LightningDoublePrecisionModule._move_float_tensors_to_double(args),
             **LightningDoublePrecisionModule._move_float_tensors_to_double(kwargs),
         )
 
     def predict_step(self, *args: Any, **kwargs: Any) -> Any:
-
         return self.module.predict_step(
             *LightningDoublePrecisionModule._move_float_tensors_to_double(args),
             **LightningDoublePrecisionModule._move_float_tensors_to_double(kwargs),
@@ -164,7 +154,6 @@ class LightningDoublePrecisionModule(_DeviceDtypeModuleMixin, nn.Module):
 
     @override
     def forward(self, *args: Any, **kwargs: Any) -> Any:
-
         return self.module(
             *LightningDoublePrecisionModule._move_float_tensors_to_double(args),
             **LightningDoublePrecisionModule._move_float_tensors_to_double(kwargs),

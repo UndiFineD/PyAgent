@@ -12,13 +12,11 @@ from manim_imports_ext import *
 
 class UniverseIsMessingWithYou(TeacherStudentsScene):
     def construct(self):
-
         pass
 
 
 class ExpressAnger(TeacherStudentsScene):
     def construct(self):
-
         self.remove(self.background)
 
         self.students[1].change_mode("maybe")
@@ -40,7 +38,6 @@ class ExpressAnger(TeacherStudentsScene):
 
 class LooksCanBeDeceiving(TeacherStudentsScene):
     def construct(self):
-
         self.play(
             self.teacher.says("Looks can be\ndeceiving", mode="tease"),
             self.change_students("angry", "erm", "pleading", look_at=self.screen),
@@ -51,7 +48,6 @@ class LooksCanBeDeceiving(TeacherStudentsScene):
 
 class AstuteAmongYou(TeacherStudentsScene):
     def construct(self):
-
         morty = self.teacher
 
         stds = self.students
@@ -94,7 +90,6 @@ class AstuteAmongYou(TeacherStudentsScene):
 
 class AreaToSignedArea(InteractiveScene):
     def construct(self):
-
         # Words
 
         equals = OldTex("=")
@@ -137,7 +132,6 @@ class AreaToSignedArea(InteractiveScene):
 
 class HoldOffUntilEnd(TeacherStudentsScene):
     def construct(self):
-
         self.play(
             self.teacher.says("I'll mention the\ntrick at the end"),
             self.change_students("confused", "hesitant", "maybe", look_at=self.screen),
@@ -152,7 +146,6 @@ class HoldOffUntilEnd(TeacherStudentsScene):
 
 class WhatsGoingOn(InteractiveScene):
     def construct(self):
-
         randy = Randolph(height=2)
 
         randy.to_corner(DL).look(RIGHT)
@@ -174,7 +167,6 @@ class WhatsGoingOn(InteractiveScene):
 
 class SeemsUnrelated(InteractiveScene):
     def construct(self):
-
         # Test
 
         morty = Mortimer(height=2.0)
@@ -190,7 +182,6 @@ class SeemsUnrelated(InteractiveScene):
 
 class WhatsThePoint(TeacherStudentsScene):
     def construct(self):
-
         stds = self.students
 
         self.play(
@@ -218,7 +209,6 @@ class WhatsThePoint(TeacherStudentsScene):
 
 class BillionBillionBillion(InteractiveScene):
     def construct(self):
-
         fraction = OldTex(get_fifteenth_frac_tex())[0]
 
         # self.add(fraction)
@@ -239,7 +229,6 @@ class BillionBillionBillion(InteractiveScene):
 
 class MovingAverageFrames(InteractiveScene):
     def construct(self):
-
         # Frames
 
         self.add(FullScreenRectangle())
@@ -284,7 +273,6 @@ class MovingAverageFrames(InteractiveScene):
 
 class FirstInASequence(InteractiveScene):
     def construct(self):
-
         morty = Mortimer(height=2).flip()
 
         morty.to_corner(DR)
@@ -298,7 +286,6 @@ class FirstInASequence(InteractiveScene):
 
 class XInMovingAverageGraphs(MovingAverages):
     def construct(self):
-
         axes1, axes2 = self.get_axes(), self.get_axes()
 
         axes1.to_edge(UP)
@@ -351,7 +338,6 @@ class XInMovingAverageGraphs(MovingAverages):
 
 class ThisConstant(InteractiveScene):
     def construct(self):
-
         words1 = Text("This constant\nhere")
 
         words1.to_edge(RIGHT)
@@ -376,7 +362,6 @@ class ThisConstant(InteractiveScene):
 
 class HeavyMachinery(TeacherStudentsScene):
     def construct(self):
-
         stds = self.students
 
         morty = self.teacher
@@ -465,7 +450,6 @@ class HeavyMachinery(TeacherStudentsScene):
 
 class EngineersSinc(InteractiveScene):
     def construct(self):
-
         # Blah
 
         sinc = OldTex(R"{\text{sin}(\pi x) \over \pi x}", tex_to_color_map={R"\pi": TEAL})
@@ -501,7 +485,6 @@ class EngineersSinc(InteractiveScene):
 
 class ThinkAboutMovingAverages(TeacherStudentsScene):
     def construct(self):
-
         morty = self.teacher
 
         self.play(
@@ -522,7 +505,6 @@ class ThinkAboutMovingAverages(TeacherStudentsScene):
 
 class ConceptAndNotationFrames(InteractiveScene):
     def construct(self):
-
         # Screens
 
         self.add(FullScreenRectangle())
@@ -572,7 +554,6 @@ class ConceptAndNotationFrames(InteractiveScene):
 
 class WhatsThat(InteractiveScene):
     def construct(self):
-
         randy = Randolph(height=2)
 
         self.play(randy.says("...meaning?", mode="maybe", look_at=DR))
@@ -584,7 +565,6 @@ class WhatsThat(InteractiveScene):
 
 class SubPiComment(InteractiveScene):
     def construct(self):
-
         morty = Mortimer(height=2).flip()
 
         morty.to_corner(DL)
@@ -603,7 +583,6 @@ class SubPiComment(InteractiveScene):
 
 class HowDoYouCompute(TeacherStudentsScene):
     def construct(self):
-
         morty = self.teacher
 
         stds = self.students
@@ -630,7 +609,6 @@ class HowDoYouCompute(TeacherStudentsScene):
 
 class TranslateToFourierLand(InteractiveScene):
     def construct(self):
-
         # Setup right side
 
         right_rect = FullScreenRectangle()
@@ -685,7 +663,6 @@ class TranslateToFourierLand(InteractiveScene):
             a2.match_y(a1).match_x(right_rect)
 
         def bell(x, n):
-
             return 3 * np.exp(-40 * (x - n) ** 2)
 
         right_graphs = VGroup(
@@ -769,7 +746,6 @@ class KeyFactFrame(VideoWrapper):
 
 class TranslatedByFourier(InteractiveScene):
     def construct(self):
-
         # Two expressions
 
         # left_expr = Tex(R"\int_{-\infty}^\infty f(t) \cdot g(t) dt")
@@ -831,7 +807,6 @@ class TranslatedByFourier(InteractiveScene):
 
 class UnsatisfyingEnd(TeacherStudentsScene):
     def construct(self):
-
         # Ask
 
         self.remove(self.background)

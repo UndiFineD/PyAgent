@@ -5,7 +5,6 @@
 
 from typing import Any, Dict, Optional, Tuple
 
-
 from fle.env.entities import EntityStatus
 
 

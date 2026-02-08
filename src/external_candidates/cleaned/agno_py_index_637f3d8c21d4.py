@@ -5,16 +5,16 @@
 
 from enum import Enum
 
-class VectorIndex(Enum):
 
+class VectorIndex(Enum):
     HNSW = "hnsw"
 
     FLAT = "flat"
 
     DYNAMIC = "dynamic"
 
-class Distance(Enum):
 
+class Distance(Enum):
     COSINE = "cosine"
 
     DOT = "dot"
@@ -24,4 +24,3 @@ class Distance(Enum):
     HAMMING = "hamming"
 
     MANHATTAN = "manhattan"
-

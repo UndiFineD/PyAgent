@@ -10,7 +10,6 @@ from whispers.utils import strip_string
 
 class Config:
     def pairs(self, filepath: Path):
-
         for line in filepath.open("r").readlines():
             line = line.strip()
 

@@ -11,7 +11,6 @@ from pathlib import Path
 
 from typing import Any
 
-
 from fle.env.utils.controller_loader.code_analyzer import CodeAnalyzer
 
 from fle.env.utils.controller_loader.module_loader import ModuleLoader
@@ -21,7 +20,6 @@ class SchemaGenerator:
     """Generates schema from Python files in a directory."""
 
     def __init__(self, folder_path: str):
-
         self.folder_path = Path(folder_path)
 
     def _process_class(self, module: Any, tool_name: str, with_docstring: bool) -> str:

@@ -9,7 +9,6 @@ import random
 
 from typing import Callable, Dict, List
 
-
 from fle.env.entities import Layer
 
 from fle.env.tools.admin.render.layers.layer_renderer import LayerRenderer
@@ -22,7 +21,6 @@ class NaturalLayerRenderer(LayerRenderer):
 
     @property
     def layer_name(self) -> str:
-
         return "natural"
 
     def render(

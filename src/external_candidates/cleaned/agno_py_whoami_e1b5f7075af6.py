@@ -5,8 +5,8 @@
 
 from agno.docker.app.base import ContainerContext, DockerApp  # noqa: F401
 
-class Whoami(DockerApp):
 
+class Whoami(DockerApp):
     # -*- App Name
 
     name: str = "whoami"
@@ -24,4 +24,3 @@ class Whoami(DockerApp):
     open_port: bool = True
 
     port_number: int = 80
-

@@ -15,8 +15,8 @@ from agno.utils.log import logger
 
 from typing_extensions import Literal
 
-class EmrCluster(AwsResource):
 
+class EmrCluster(AwsResource):
     """
 
     Reference:
@@ -115,11 +115,7 @@ class EmrCluster(AwsResource):
 
     auto_scaling_role: Optional[str] = None
 
-    scale_down_behavior: Optional[
-
-        Literal["TERMINATE_AT_INSTANCE_HOUR", "TERMINATE_AT_TASK_COMPLETION"]
-
-    ] = None
+    scale_down_behavior: Optional[Literal["TERMINATE_AT_INSTANCE_HOUR", "TERMINATE_AT_TASK_COMPLETION"]] = None
 
     custom_ami_id: Optional[str] = None
 
@@ -164,7 +160,6 @@ class EmrCluster(AwsResource):
     cluster_summary: Optional[Dict] = None
 
     def _create(self, aws_client: AwsApiClient) -> bool:
-
         """Creates the EmrCluster
 
         Args:
@@ -176,109 +171,83 @@ class EmrCluster(AwsResource):
         print_info(f"Creating {self.get_resource_type()}: {self.get_resource_name()}")
 
         try:
-
             # create a dict of args which are not null, otherwise aws type validation fails
 
             not_null_args: Dict[str, Any] = {}
 
             if self.log_uri:
-
                 not_null_args["LogUri"] = self.log_uri
 
             if self.log_encryption_kms_key_id:
-
                 not_null_args["LogEncryptionKmsKeyId"] = self.log_encryption_kms_key_id
 
             if self.additional_info:
-
                 not_null_args["AdditionalInfo"] = self.additional_info
 
             if self.release_label:
-
                 not_null_args["ReleaseLabel"] = self.release_label
 
             if self.instances:
-
                 not_null_args["Instances"] = self.instances
 
             if self.steps:
-
                 not_null_args["Steps"] = self.steps
 
             if self.bootstrap_actions:
-
                 not_null_args["BootstrapActions"] = self.bootstrap_actions
 
             if self.supported_products:
-
                 not_null_args["SupportedProducts"] = self.supported_products
 
             if self.new_supported_products:
-
                 not_null_args["NewSupportedProducts"] = self.new_supported_products
 
             if self.applications:
-
                 not_null_args["Applications"] = self.applications
 
             if self.configurations:
-
                 not_null_args["Configurations"] = self.configurations
 
             if self.job_flow_role:
-
                 not_null_args["JobFlowRole"] = self.job_flow_role
 
             if self.service_role:
-
                 not_null_args["ServiceRole"] = self.service_role
 
             if self.tags:
-
                 not_null_args["Tags"] = self.tags
 
             if self.security_configuration:
-
                 not_null_args["SecurityConfiguration"] = self.security_configuration
 
             if self.auto_scaling_role:
-
                 not_null_args["AutoScalingRole"] = self.auto_scaling_role
 
             if self.scale_down_behavior:
-
                 not_null_args["ScaleDownBehavior"] = self.scale_down_behavior
 
             if self.custom_ami_id:
-
                 not_null_args["CustomAmiId"] = self.custom_ami_id
 
             if self.ebs_root_volume_size:
-
                 not_null_args["EbsRootVolumeSize"] = self.ebs_root_volume_size
 
             if self.repo_upgrade_on_boot:
-
                 not_null_args["RepoUpgradeOnBoot"] = self.repo_upgrade_on_boot
 
             if self.kerberos_attributes:
-
                 not_null_args["KerberosAttributes"] = self.kerberos_attributes
 
             if self.step_concurrency_level:
-
                 not_null_args["StepConcurrencyLevel"] = self.step_concurrency_level
 
             if self.managed_scaling_policy:
-
                 not_null_args["ManagedScalingPolicy"] = self.managed_scaling_policy
 
             if self.placement_group_configs:
-
                 not_null_args["PlacementGroupConfigs"] = self.placement_group_configs
 
             if self.auto_termination_policy:
-
                 not_null_args["AutoTerminationPolicy"] = self.auto_termination_policy
 
             # Get the service_client
@@ -288,11 +257,8 @@ class EmrCluster(AwsResource):
             # Create EmrCluster
 
             create_response = service_client.run_job_flow(
-
                 Name=self.name,
-
                 **not_null_args,
-
             )
 
             logger.debug(f"create_response type: {type(create_response)}")
@@ -306,12 +272,7 @@ class EmrCluster(AwsResource):
             self.active_resource = create_response
 
             if self.active_resource is not None:
-
-                print_info(
-
-                    f"{self.get_resource_type()}: {self.get_resource_name()} created"
-
-                )
+                print_info(f"{self.get_resource_type()}: {self.get_resource_name()} created")
 
                 logger.debug(f"JobFlowId: {self.job_flow_id}")
 
@@ -320,7 +281,6 @@ class EmrCluster(AwsResource):
                 return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be created.")
 
             logger.error(e)
@@ -328,43 +288,27 @@ class EmrCluster(AwsResource):
         return False
 
     def post_create(self, aws_client: AwsApiClient) -> bool:
-
         ## Wait for Cluster to be created
 
         if self.wait_for_create:
-
             try:
-
                 print_info("Waiting for EmrCluster to be active.")
 
                 if self.job_flow_id is not None:
-
-                    waiter = self.get_service_client(aws_client).get_waiter(
-
-                        "cluster_running"
-
-                    )
+                    waiter = self.get_service_client(aws_client).get_waiter("cluster_running")
 
                     waiter.wait(
-
                         ClusterId=self.job_flow_id,
-
                         WaiterConfig={
-
                             "Delay": self.waiter_delay,
-
                             "MaxAttempts": self.waiter_max_attempts,
-
                         },
-
                     )
 
                 else:
-
                     logger.warning("Skipping waiter, No ClusterId found")
 
             except Exception as e:
-
                 logger.error("Waiter failed.")
 
                 logger.error(e)
@@ -372,7 +316,6 @@ class EmrCluster(AwsResource):
         return True
 
     def _read(self, aws_client: AwsApiClient) -> Optional[Any]:
-
         """Returns the EmrCluster
 
         Args:
@@ -386,7 +329,6 @@ class EmrCluster(AwsResource):
         logger.debug(f"Reading {self.get_resource_type()}: {self.get_resource_name()}")
 
         try:
-
             service_client = self.get_service_client(aws_client)
 
             list_response = service_client.list_clusters()
@@ -397,24 +339,16 @@ class EmrCluster(AwsResource):
 
             cluster_summary_list = list_response.get("Clusters", None)
 
-            if cluster_summary_list is not None and isinstance(
-
-                cluster_summary_list, list
-
-            ):
-
+            if cluster_summary_list is not None and isinstance(cluster_summary_list, list):
                 for _cluster_summary in cluster_summary_list:
-
                     cluster_name = _cluster_summary.get("Name", None)
 
                     if cluster_name == self.name:
-
                         self.active_resource = _cluster_summary
 
                         break
 
             if self.active_resource is None:
-
                 logger.debug(f"No {self.get_resource_type()} found")
 
                 return None
@@ -426,11 +360,9 @@ class EmrCluster(AwsResource):
             self.cluster_arn = self.active_resource.get("ClusterArn", None)
 
         except ClientError as ce:
-
             logger.debug(f"ClientError: {ce}")
 
         except Exception as e:
-
             logger.error(f"Error reading {self.get_resource_type()}.")
 
             logger.error(e)
@@ -438,7 +370,6 @@ class EmrCluster(AwsResource):
         return self.active_resource
 
     def _delete(self, aws_client: AwsApiClient) -> bool:
-
         """Deletes the EmrCluster
 
         Args:
@@ -450,7 +381,6 @@ class EmrCluster(AwsResource):
         print_info(f"Deleting {self.get_resource_type()}: {self.get_resource_name()}")
 
         try:
-
             # populate self.job_flow_id
 
             self._read(aws_client)
@@ -460,23 +390,16 @@ class EmrCluster(AwsResource):
             self.active_resource = None
 
             if self.job_flow_id:
-
                 service_client.terminate_job_flows(JobFlowIds=[self.job_flow_id])
 
-                print_info(
-
-                    f"{self.get_resource_type()}: {self.get_resource_name()} deleted"
-
-                )
+                print_info(f"{self.get_resource_type()}: {self.get_resource_name()} deleted")
 
             else:
-
                 logger.error("Could not find cluster id")
 
             return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be deleted.")
 
             logger.error("Please try again or delete resources manually.")
@@ -484,4 +407,3 @@ class EmrCluster(AwsResource):
             logger.error(e)
 
         return False
-

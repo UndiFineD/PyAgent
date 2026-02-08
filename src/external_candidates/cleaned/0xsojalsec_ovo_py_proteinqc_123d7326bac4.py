@@ -44,7 +44,6 @@ from ovo.core.logic.proteinqc_logic import get_available_schedulers
 
 @st.fragment
 def proteinqc_fragment(pool_ids: list[str], design_ids: list[str] | None = None):
-
     if design_ids is None:
         # design_ids not explicitly passed, use all accepted designs in the selected pools
 
@@ -140,7 +139,6 @@ def proteinqc_fragment(pool_ids: list[str], design_ids: list[str] | None = None)
 @st.fragment
 @st.dialog("ProteinQC submission", width="large")
 def submit_proteinqc_dialog(pool_ids: list[str], design_ids: list[str]):
-
     num_designs = len(design_ids)
 
     st.write(f"""Submit ProteinQC for {num_designs:,} {"design" if num_designs == 1 else "designs"}""")

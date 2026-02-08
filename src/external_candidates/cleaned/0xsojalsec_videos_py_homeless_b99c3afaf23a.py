@@ -8,15 +8,12 @@ from manim_imports_ext import *
 
 class Cycloidify(Scene):
     def construct(self):
-
         def cart_to_polar(xxx_todo_changeme):
-
             x, y, z = xxx_todo_changeme
 
             return x * RIGHT + x * y * UP
 
         def polar_to_cycloid(point):
-
             epsilon = 0.00001
 
             t = get_norm(point)
@@ -62,7 +59,6 @@ class Cycloidify(Scene):
 
 class PythagoreanTransformation(Scene):
     def construct(self):
-
         triangle = Mobject(
             Line(ORIGIN, 4 * UP, color="#FF69B4"),
             Line(4 * UP, 2 * RIGHT, color=YELLOW_C),
@@ -136,7 +132,6 @@ class PythagoreanTransformation(Scene):
 
 class PullCurveStraight(Scene):
     def construct(self):
-
         start = -1.5
 
         end = 1.5
@@ -176,7 +171,6 @@ class PullCurveStraight(Scene):
 
 class StraghtenCircle(Scene):
     def construct(self):
-
         radius = 1.5
 
         radius_line = Line(ORIGIN, radius * RIGHT, color=RED_D)
@@ -220,7 +214,6 @@ class StraghtenCircle(Scene):
 
 class SingleVariableFunc(Scene):
     def construct(self):
-
         start = OldTex("3").set_color(GREEN)
 
         start.scale(2).shift(5 * LEFT + 2 * UP)
@@ -248,7 +241,6 @@ class SingleVariableFunc(Scene):
 
 class MultivariableFunc(Scene):
     def construct(self):
-
         start = OldTex("(1, 2)").set_color(GREEN)
 
         start.scale(1.5).shift(5 * LEFT, 2 * UP)
@@ -277,7 +269,6 @@ class MultivariableFunc(Scene):
 
 
 def prime_factors(n):
-
     i = 2
 
     factors = []
@@ -299,7 +290,6 @@ def prime_factors(n):
 
 class ShowSumOfSquaresPattern(Scene):
     def construct(self):
-
         dots = VGroup(
             *[VGroup(*[Dot() for x in range(2 * n + 1)]).arrange(DOWN, buff=SMALL_BUFF) for n in range(30)]
         ).arrange(RIGHT, buff=MED_LARGE_BUFF, aligned_edge=UP)

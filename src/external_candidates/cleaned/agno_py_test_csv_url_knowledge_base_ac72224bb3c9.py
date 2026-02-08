@@ -11,28 +11,19 @@ from agno.knowledge.csv_url import CSVUrlKnowledgeBase
 
 from agno.vectordb.lancedb.lance_db import LanceDb
 
+
 def test_csv_url_knowledge_base():
-
     vector_db = LanceDb(
-
         table_name="recipes_2s3",
-
         uri="tmp/lancedb",
-
     )
 
     knowledge_base = CSVUrlKnowledgeBase(
-
         urls=[
-
             "https://agno-public.s3.amazonaws.com/demo_data/IMDB-Movie-Data.csv",
-
             "https://agno-public.s3.amazonaws.com/csvs/employees.csv",
-
         ],
-
         vector_db=vector_db,
-
     )
 
     reader = knowledge_base.reader
@@ -54,61 +45,38 @@ def test_csv_url_knowledge_base():
     # Query the agent
 
     agent = Agent(
-
         knowledge=knowledge_base,
-
         search_knowledge=True,
-
         instructions=[
-
             "You are a helpful assistant that can answer questions.",
-
             "You can use the search_knowledge_base tool to search the knowledge base of CSVs for information.",
-
         ],
-
     )
 
     response = agent.run("Give me top rated movies", markdown=True)
 
     # Check that we got relevant content
 
-    assert any(
-
-        term in response.content.lower()
-
-        for term in ["movie", "rating", "imdb", "title"]
-
-    )
+    assert any(term in response.content.lower() for term in ["movie", "rating", "imdb", "title"])
 
     # Clean up
 
     vector_db.drop()
 
+
 @pytest.mark.asyncio
-
 async def test_csv_url_knowledge_base_async():
-
     vector_db = LanceDb(
-
         table_name="recipes_async_2s",
-
         uri="tmp/lancedb",
-
     )
 
     knowledge_base = CSVUrlKnowledgeBase(
-
         urls=[
-
             "https://agno-public.s3.amazonaws.com/demo_data/IMDB-Movie-Data.csv",
-
             "https://agno-public.s3.amazonaws.com/csvs/employees.csv",
-
         ],
-
         vector_db=vector_db,
-
     )
 
     # Set chunk explicitly to False before loading
@@ -132,28 +100,16 @@ async def test_csv_url_knowledge_base_async():
     # Query the agent
 
     agent = Agent(
-
         knowledge=knowledge_base,
-
         search_knowledge=True,
-
         instructions=[
-
             "You are a helpful assistant that can answer questions.",
-
             "You can use the asearch_knowledge_base tool to search the knowledge base of CSVs for information.",
-
         ],
-
     )
 
-    response = await agent.arun(
-
-        "Which employees have salaries above 50000?", markdown=True
-
-    )
+    response = await agent.arun("Which employees have salaries above 50000?", markdown=True)
 
     assert "employees" in response.content.lower()
 
     await vector_db.async_drop()
-

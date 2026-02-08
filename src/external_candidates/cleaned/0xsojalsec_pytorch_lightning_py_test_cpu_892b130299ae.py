@@ -37,17 +37,14 @@ from lightning.fabric.accelerators.cpu import CPUAccelerator, _parse_cpu_cores
 
 
 def test_auto_device_count():
-
     assert CPUAccelerator.auto_device_count() == 1
 
 
 def test_availability():
-
     assert CPUAccelerator.is_available()
 
 
 def test_init_device_with_wrong_device_type():
-
     with pytest.raises(ValueError, match="Device should be CPU"):
         CPUAccelerator().setup_device(torch.device("cuda"))
 
@@ -61,7 +58,6 @@ def test_init_device_with_wrong_device_type():
     ],
 )
 def test_get_parallel_devices(devices, expected):
-
     assert CPUAccelerator.get_parallel_devices(devices) == expected
 
 

@@ -13,8 +13,8 @@ from agno.tools.duckduckgo import DuckDuckGoTools
 
 from agno.tools.yfinance import YFinanceTools
 
-def _assert_metrics(response: RunResponse):
 
+def _assert_metrics(response: RunResponse):
     """Helper function to assert metrics are present and valid"""
 
     # Check that metrics dictionary exists
@@ -43,28 +43,18 @@ def _assert_metrics(response: RunResponse):
 
     # The total should be at least the sum of input and output
 
-    assert (
+    assert total_tokens >= input_tokens + output_tokens - 5  # Allow small margin of error
 
-        total_tokens >= input_tokens + output_tokens - 5
-
-    )  # Allow small margin of error
 
 def test_tool_use():
-
     """Test tool use functionality with LiteLLM Proxy"""
 
     agent = Agent(
-
         model=LiteLLMOpenAI(id="gpt-4o"),
-
         markdown=True,
-
         tools=[DuckDuckGoTools(cache_results=True)],
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     # Get the response with a query that should trigger tool use
@@ -85,22 +75,16 @@ def test_tool_use():
 
     _assert_metrics(response)
 
-def test_tool_use_streaming():
 
+def test_tool_use_streaming():
     """Test tool use functionality with LiteLLM"""
 
     agent = Agent(
-
         model=LiteLLMOpenAI(id="gpt-4o"),
-
         markdown=True,
-
         tools=[YFinanceTools(cache_results=True)],
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     response_stream = agent.run("What is the current price of TSLA?", stream=True)
@@ -110,7 +94,6 @@ def test_tool_use_streaming():
     tool_call_seen = False
 
     for chunk in response_stream:
-
         assert isinstance(chunk, RunResponse)
 
         responses.append(chunk)
@@ -118,9 +101,7 @@ def test_tool_use_streaming():
         print(chunk.content)
 
         if chunk.tools:
-
             if any(tc.get("tool_name") for tc in chunk.tools):
-
                 tool_call_seen = True
 
     assert len(responses) > 0
@@ -131,24 +112,17 @@ def test_tool_use_streaming():
 
     assert "TSLA" in all_content
 
+
 @pytest.mark.asyncio
-
 async def test_async_tool_use():
-
     """Test async tool use functionality with LiteLLM"""
 
     agent = Agent(
-
         model=LiteLLMOpenAI(id="gpt-4o"),
-
         markdown=True,
-
         tools=[DuckDuckGoTools(cache_results=True)],
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     # Get the response with a query that should trigger tool use
@@ -169,46 +143,32 @@ async def test_async_tool_use():
 
     _assert_metrics(response)
 
+
 @pytest.mark.asyncio
-
 async def test_async_tool_use_streaming():
-
     """Test async tool use functionality with LiteLLM"""
 
     agent = Agent(
-
         model=LiteLLMOpenAI(id="gpt-4o"),
-
         markdown=True,
-
         tools=[YFinanceTools(cache_results=True)],
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
-    response_stream = await agent.arun(
-
-        "What is the current price of TSLA?", stream=True
-
-    )
+    response_stream = await agent.arun("What is the current price of TSLA?", stream=True)
 
     responses = []
 
     tool_call_seen = False
 
     async for chunk in response_stream:
-
         assert isinstance(chunk, RunResponse)
 
         responses.append(chunk)
 
         if chunk.tools:
-
             if any(tc.get("tool_name") for tc in chunk.tools):
-
                 tool_call_seen = True
 
     assert len(responses) > 0
@@ -219,22 +179,16 @@ async def test_async_tool_use_streaming():
 
     assert "TSLA" in all_content
 
-def test_parallel_tool_calls():
 
+def test_parallel_tool_calls():
     """Test parallel tool calls functionality with LiteLLM"""
 
     agent = Agent(
-
         model=LiteLLMOpenAI(id="gpt-4o"),
-
         markdown=True,
-
         tools=[DuckDuckGoTools(cache_results=True)],
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     response = agent.run("What are the latest news about both SpaceX and NASA?")
@@ -253,26 +207,19 @@ def test_parallel_tool_calls():
 
     _assert_metrics(response)
 
-def test_multiple_tool_calls():
 
+def test_multiple_tool_calls():
     """Test multiple different tools functionality with LiteLLM"""
 
     def get_weather():
-
         return "It's sunny and 75°F"
 
     agent = Agent(
-
         model=LiteLLMOpenAI(id="gpt-4o"),
-
         markdown=True,
-
         tools=[DuckDuckGoTools(cache_results=True), get_weather],
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     response = agent.run("What's the latest news about SpaceX and what's the weather?")
@@ -291,26 +238,19 @@ def test_multiple_tool_calls():
 
     _assert_metrics(response)
 
-def test_tool_call_custom_tool_no_parameters():
 
+def test_tool_call_custom_tool_no_parameters():
     """Test custom tool without parameters"""
 
     def get_time():
-
         return "It is 12:00 PM UTC"
 
     agent = Agent(
-
         model=LiteLLMOpenAI(id="gpt-4o"),
-
         markdown=True,
-
         tools=[get_time],
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     response = agent.run("What time is it?")
@@ -323,12 +263,11 @@ def test_tool_call_custom_tool_no_parameters():
 
     _assert_metrics(response)
 
-def test_tool_call_custom_tool_untyped_parameters():
 
+def test_tool_call_custom_tool_untyped_parameters():
     """Test custom tool with untyped parameters"""
 
     def echo_message(message):
-
         """
 
         Echo back the message
@@ -342,17 +281,11 @@ def test_tool_call_custom_tool_untyped_parameters():
         return f"Echo: {message}"
 
     agent = Agent(
-
         model=LiteLLMOpenAI(id="gpt-4o"),
-
         markdown=True,
-
         tools=[echo_message],
-
         telemetry=False,
-
         monitoring=False,
-
     )
 
     response = agent.run("Can you echo 'Hello World'?")
@@ -364,4 +297,3 @@ def test_tool_call_custom_tool_untyped_parameters():
     assert "Echo: Hello World" in response.content
 
     _assert_metrics(response)
-

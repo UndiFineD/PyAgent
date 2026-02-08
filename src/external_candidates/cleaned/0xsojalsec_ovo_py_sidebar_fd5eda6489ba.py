@@ -19,7 +19,6 @@ from ovo.core.logic.user_settings_logic import get_or_create_user_settings
 @st.fragment()
 @st.dialog("Input new project name")
 def create_project_dialog():
-
     author = get_username()
 
     project_name = st.text_input("Project name", placeholder="My Project")
@@ -66,7 +65,6 @@ def create_project_dialog():
 
 
 def get_query_arg_project() -> Project | None:
-
     if project_id := st.query_params.get("project_id"):
         if not config.auth.allow_private_project_link_access and project_id not in get_cached_project_ids_and_names(
             username=get_username()
@@ -84,7 +82,6 @@ def get_query_arg_project() -> Project | None:
 
 
 def project_sidebar_component():
-
     dropdown_key = "project_dropdown"
 
     success_message = None

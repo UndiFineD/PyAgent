@@ -60,7 +60,6 @@ class CPUAccelerator(Accelerator):
 
     @override
     def teardown(self) -> None:
-
         pass
 
     @staticmethod
@@ -96,13 +95,11 @@ class CPUAccelerator(Accelerator):
     @staticmethod
     @override
     def name() -> str:
-
         return "cpu"
 
     @classmethod
     @override
     def register_accelerators(cls, accelerator_registry: _AcceleratorRegistry) -> None:
-
         accelerator_registry.register(
             cls.name(),
             cls,

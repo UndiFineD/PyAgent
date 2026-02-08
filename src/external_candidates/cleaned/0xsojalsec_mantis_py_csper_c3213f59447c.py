@@ -28,7 +28,6 @@ Information inserted in DB:
 
 class Csper(APIScanner):
     async def get_api_calls(self, args: ArgsModel):
-
         self.asset_api_list = []
 
         self.scannerName = type(self).__name__
@@ -51,7 +50,6 @@ class Csper(APIScanner):
         return [(self, "POST")]
 
     def parse_response(self, response):
-
         findings = []
 
         response_json = response.json()
@@ -84,5 +82,4 @@ class Csper(APIScanner):
         return findings
 
     async def db_operations(self, output_dict, asset=None):
-
         await CrudUtils.insert_findings(self, asset, output_dict, self.finding_type)

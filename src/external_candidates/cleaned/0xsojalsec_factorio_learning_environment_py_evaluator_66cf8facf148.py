@@ -9,7 +9,6 @@ import copy
 
 from typing import Dict, List, Tuple, Union
 
-
 from fle.commons.db_client import DBClient
 
 from fle.commons.models.game_state import GameState
@@ -34,7 +33,6 @@ class Evaluator:
         error_penalty=10,
         logger=None,
     ):
-
         self.db = db_client
 
         self.instances = instances  # Main instances
@@ -69,7 +67,6 @@ class Evaluator:
             # self.holdout_group_id = self.port_to_group[self.holdout.tcp_port]
 
     def set_status(self, status):
-
         for instance in self.instances:
             self.logger.update_instance(instance.tcp_port, status=status)
 
@@ -96,7 +93,6 @@ class Evaluator:
             # self.logger.update_instance(self.holdout.tcp_port, iteration=iteration, n_iterations=n_iterations)
 
     async def evaluate_batch(self, programs: List[Program], start_state: GameState) -> List[Program]:
-
         try:
             # Evaluate programs in parallel
 
@@ -190,7 +186,6 @@ class Evaluator:
         List[Union[Entity, EntityGroup]],
         Dict[str, Dict[str, int]],
     ]:
-
         # Get initial state information
 
         start_production_flows = instance.namespace._get_production_stats()
@@ -215,7 +210,6 @@ class Evaluator:
         Dict[str, Dict[str, int]],
         int,
     ]:
-
         try:
             # Convert instance_id to TCP port
 

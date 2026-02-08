@@ -4,7 +4,6 @@
 
 
 def print_board(board):
-
     print("-------------")
 
     for row in board:
@@ -14,7 +13,6 @@ def print_board(board):
 
 
 def check_winner(board, player):
-
     # Check rows, columns, and diagonals for a winner
 
     for i in range(3):
@@ -31,12 +29,10 @@ def check_winner(board, player):
 
 
 def is_board_full(board):
-
     return all([cell != " " for row in board for cell in row])
 
 
 def tic_tac_toe():
-
     board = [[" " for _ in range(3)] for _ in range(3)]
 
     current_player = "X"

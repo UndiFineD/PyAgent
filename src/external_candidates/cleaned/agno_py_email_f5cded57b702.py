@@ -9,24 +9,16 @@ from agno.tools import Toolkit
 
 from agno.utils.log import log_info, logger
 
+
 class EmailTools(Toolkit):
-
     def __init__(
-
         self,
-
         receiver_email: Optional[str] = None,
-
         sender_name: Optional[str] = None,
-
         sender_email: Optional[str] = None,
-
         sender_passkey: Optional[str] = None,
-
         **kwargs,
-
     ):
-
         super().__init__(name="email_tools", **kwargs)
 
         self.receiver_email: Optional[str] = receiver_email
@@ -40,7 +32,6 @@ class EmailTools(Toolkit):
         self.register(self.email_user)
 
     def email_user(self, subject: str, body: str, **kwargs) -> str:
-
         """Emails the user with the given subject and body.
 
         :param subject: The subject of the email.
@@ -52,31 +43,25 @@ class EmailTools(Toolkit):
         """
 
         try:
-
             import smtplib
 
             from email.message import EmailMessage
 
         except ImportError:
-
             logger.error("`smtplib` not installed")
 
             raise
 
         if not self.receiver_email:
-
             return "error: No receiver email provided"
 
         if not self.sender_name:
-
             return "error: No sender name provided"
 
         if not self.sender_email:
-
             return "error: No sender email provided"
 
         if not self.sender_passkey:
-
             return "error: No sender passkey provided"
 
         msg = EmailMessage()
@@ -92,18 +77,14 @@ class EmailTools(Toolkit):
         log_info(f"Sending Email to {self.receiver_email}")
 
         try:
-
             with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-
                 smtp.login(self.sender_email, self.sender_passkey)
 
                 smtp.send_message(msg)
 
         except Exception as e:
-
             logger.error(f"Error sending email: {e}")
 
             return f"error: {e}"
 
         return "email sent successfully"
-

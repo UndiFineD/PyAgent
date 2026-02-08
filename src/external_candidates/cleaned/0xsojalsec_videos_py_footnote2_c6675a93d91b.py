@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class OpeningQuote(Scene):
     def construct(self):
-
         words = OldTexText(
             "``On this quiz, I asked you to find the determinant of a",
             "2x3 matrix.",
@@ -42,7 +41,6 @@ class OpeningQuote(Scene):
 
 class AnotherFootnote(TeacherStudentsScene):
     def construct(self):
-
         self.teacher.look(LEFT)
 
         self.teacher_says("More footnotes!", target_mode="surprised", run_time=1)
@@ -52,7 +50,6 @@ class AnotherFootnote(TeacherStudentsScene):
 
 class ColumnsRepresentBasisVectors(Scene):
     def construct(self):
-
         matrix = Matrix([[3, 1], [4, 1], [5, 9]])
 
         i_hat_words, j_hat_words = [OldTexText("Where $\\hat{\\%smath}$ lands" % char) for char in ("i", "j")]
@@ -97,7 +94,6 @@ class ColumnsRepresentBasisVectors(Scene):
         self.put_in_thought_bubble()
 
     def put_in_thought_bubble(self):
-
         everything = VMobject(*self.get_mobjects())
 
         randy = Randolph().to_corner()
@@ -124,7 +120,6 @@ class ColumnsRepresentBasisVectors(Scene):
 
 class Symbolic2To3DTransform(Scene):
     def construct(self):
-
         func = OldTex("L(", "\\vec{\\textbf{v}}", ")")
 
         input_array = Matrix([2, 7])
@@ -176,7 +171,6 @@ class Symbolic2To3DTransform(Scene):
 
 class PlaneStartState(LinearTransformationScene):
     def construct(self):
-
         self.add_title("Input space")
 
         labels = self.get_basis_vector_labels()
@@ -188,7 +182,6 @@ class PlaneStartState(LinearTransformationScene):
 
 class OutputIn3dWords(Scene):
     def construct(self):
-
         words = OldTexText("Output in 3d")
 
         words.scale(1.5)
@@ -208,13 +201,11 @@ class ShowSideBySide2dTo3d(Scene):
 
 class AnimationLaziness(Scene):
     def construct(self):
-
         self.add(OldTexText("But there is some animation laziness..."))
 
 
 class DescribeColumnsInSpecificTransformation(Scene):
     def construct(self):
-
         matrix = Matrix(
             [
                 [2, 0],
@@ -252,7 +243,6 @@ class DescribeColumnsInSpecificTransformation(Scene):
 
 class CountRowsAndColumns(Scene):
     def construct(self):
-
         matrix = Matrix(
             [
                 [2, 0],
@@ -300,7 +290,6 @@ class CountRowsAndColumns(Scene):
 
 class WriteColumnSpaceDefinition(Scene):
     def construct(self):
-
         matrix = Matrix(
             [
                 [2, 0],
@@ -342,7 +331,6 @@ class WriteColumnSpaceDefinition(Scene):
 
 class MatrixInTheWild(Scene):
     def construct(self):
-
         randy = Randolph(color=PINK)
 
         randy.look(LEFT)
@@ -450,7 +438,6 @@ class ThreeDToTwoDInput(Scene):
 
 class ThreeDToTwoDInputWords(Scene):
     def construct(self):
-
         words = OldTexText("3d input")
 
         words.scale(2)
@@ -472,7 +459,6 @@ class ThreeDToTwoDOutput(LinearTransformationScene):
     }
 
     def construct(self):
-
         title = OldTexText("Output in 2d")
 
         title.to_edge(UP, buff=SMALL_BUFF)
@@ -512,7 +498,6 @@ class ThreeDToTwoDSideBySide(Scene):
 
 class Symbolic2To1DTransform(Scene):
     def construct(self):
-
         func = OldTex("L(", "\\vec{\\textbf{v}}", ")")
 
         input_array = Matrix([2, 7])
@@ -580,7 +565,6 @@ class TwoDTo1DTransform(LinearTransformationScene):
     }
 
     def construct(self):
-
         line = NumberLine()
 
         plane_words = OldTexText("2d space")
@@ -620,7 +604,6 @@ class TwoDTo1DTransform(LinearTransformationScene):
         self.show_matrix()
 
     def show_matrix(self):
-
         for vect, char in zip([self.i_hat, self.j_hat], ["i", "j"]):
             vect.words = OldTexText("$\\hat\\%smath$ lands on" % char, str(int(vect.get_end()[0])))
 
@@ -658,7 +641,6 @@ class TwoDTo1DTransform(LinearTransformationScene):
 
 class TwoDTo1DTransformWithDots(TwoDTo1DTransform):
     def construct(self):
-
         line = NumberLine()
 
         self.add(line, *self.get_mobjects())
@@ -690,7 +672,6 @@ class TwoDTo1DTransformWithDots(TwoDTo1DTransform):
 
 class NextVideo(Scene):
     def construct(self):
-
         title = OldTexText("""
 
             Next video: Dot products and duality
@@ -723,7 +704,6 @@ class DotProductPreview(VectorScene):
     }
 
     def construct(self):
-
         self.lock_in_faded_grid()
 
         self.add_symbols()
@@ -737,7 +717,6 @@ class DotProductPreview(VectorScene):
         self.show_scaling()
 
     def add_symbols(self):
-
         v = matrix_to_mobject(self.v_coords).set_color(self.v_color)
 
         w = matrix_to_mobject(self.w_coords).set_color(self.w_color)
@@ -757,7 +736,6 @@ class DotProductPreview(VectorScene):
         self.play(Write(eq), run_time=1)
 
     def add_vectors(self):
-
         self.v = Vector(self.v_coords, color=self.v_color)
 
         self.w = Vector(self.w_coords, color=self.w_color)
@@ -767,7 +745,6 @@ class DotProductPreview(VectorScene):
         self.play(ShowCreation(self.w))
 
     def grow_number_line(self):
-
         line = NumberLine(stroke_width=2).add_numbers()
 
         line.rotate(self.v.get_angle())
@@ -784,7 +761,6 @@ class DotProductPreview(VectorScene):
         self.wait()
 
     def project_w(self):
-
         dot_product = np.dot(self.v.get_end(), self.w.get_end())
 
         v_norm, w_norm = [get_norm(vect.get_end()) for vect in (self.v, self.w)]
@@ -802,7 +778,6 @@ class DotProductPreview(VectorScene):
         self.wait()
 
     def show_scaling(self):
-
         dot_product = np.dot(self.v.get_end(), self.w.get_end())
 
         start_brace, interim_brace, final_brace = braces = [

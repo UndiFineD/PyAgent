@@ -48,7 +48,6 @@ Your output should always be a list of strings starting with `1.`, `2.` etc.
 Do not explain yourself or output anything else.""")
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-
         super().__init__(*args, **kwargs)
 
         self.update(

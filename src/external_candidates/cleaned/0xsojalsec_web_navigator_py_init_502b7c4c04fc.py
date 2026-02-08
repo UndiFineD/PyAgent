@@ -17,7 +17,6 @@ from src.agent.web.browser.config import (
 
 class Browser:
     def __init__(self, config: BrowserConfig = None):
-
         self.playwright: Playwright = None
 
         self.config = config if config else BrowserConfig()
@@ -25,30 +24,25 @@ class Browser:
         self.playwright_browser: PlaywrightBrowser = None
 
     async def __aenter__(self):
-
         await self.init_browser()
 
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-
         await self.close_browser()
 
     async def init_browser(self):
-
         self.playwright = await async_playwright().start()
 
         self.playwright_browser = await self.setup_browser(self.config.browser)
 
     async def get_playwright_browser(self) -> PlaywrightBrowser:
-
         if self.playwright_browser is None:
             await self.init_browser()
 
         return self.playwright_browser
 
     async def setup_browser(self, browser: str) -> PlaywrightBrowser:
-
         parameters = {
             "headless": self.config.headless,
             "downloads_path": self.config.downloads_dir,
@@ -95,7 +89,6 @@ class Browser:
         return browser_instance
 
     async def close_browser(self):
-
         try:
             if self.playwright_browser:
                 await self.playwright_browser.close()

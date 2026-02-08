@@ -157,7 +157,6 @@ def _parse_gpu_ids(
 def _normalize_parse_gpu_string_input(
     s: Union[int, str, list[int]],
 ) -> Union[int, list[int]]:
-
     if not isinstance(s, str):
         return s
 
@@ -208,7 +207,6 @@ def _sanitize_gpu_ids(gpus: list[int], include_cuda: bool = False, include_mps: 
 def _normalize_parse_gpu_input_to_list(
     gpus: Union[int, list[int], tuple[int, ...]], include_cuda: bool, include_mps: bool
 ) -> Optional[list[int]]:
-
     assert gpus is not None
 
     if isinstance(gpus, (MutableSequence, tuple)):

@@ -15,7 +15,6 @@ class GroupOp(torch.autograd.Function):
 
     @classmethod
     def forward(cls, ctx, group_id, *inputs):
-
         ctx.group_id = group_id
 
         ctx.save_for_backward(*inputs)
@@ -26,7 +25,6 @@ class GroupOp(torch.autograd.Function):
 
     @classmethod
     def backward(cls, ctx, grad):
-
         error_str = "Backward operation not implemented for {}".format(cls)
 
         assert cls.backward_op is not None, error_str
@@ -108,7 +106,6 @@ class FromVec(torch.autograd.Function):
 
     @classmethod
     def forward(cls, ctx, group_id, *inputs):
-
         ctx.group_id = group_id
 
         ctx.save_for_backward(*inputs)
@@ -117,7 +114,6 @@ class FromVec(torch.autograd.Function):
 
     @classmethod
     def backward(cls, ctx, grad):
-
         inputs = ctx.saved_tensors
 
         J = lietorch_backends.projector(ctx.group_id, *inputs)
@@ -130,7 +126,6 @@ class ToVec(torch.autograd.Function):
 
     @classmethod
     def forward(cls, ctx, group_id, *inputs):
-
         ctx.group_id = group_id
 
         ctx.save_for_backward(*inputs)
@@ -139,7 +134,6 @@ class ToVec(torch.autograd.Function):
 
     @classmethod
     def backward(cls, ctx, grad):
-
         inputs = ctx.saved_tensors
 
         J = lietorch_backends.projector(ctx.group_id, *inputs)

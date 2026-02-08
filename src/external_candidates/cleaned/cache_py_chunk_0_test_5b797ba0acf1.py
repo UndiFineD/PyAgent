@@ -7,7 +7,6 @@
 
 # NOTE: extracted with static-only rules; review before use
 
+
 def hook(name: str):
-
     return f"Hello {name}"
-

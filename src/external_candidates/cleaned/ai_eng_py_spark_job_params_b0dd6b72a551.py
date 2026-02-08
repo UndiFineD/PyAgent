@@ -11,8 +11,8 @@ from feathr.definition.sink import Sink
 
 from feathr.definition.source import Source
 
-class FeatureJoinJobParams:
 
+class FeatureJoinJobParams:
     """Parameters related to feature join job.
 
     Attributes:
@@ -28,61 +28,45 @@ class FeatureJoinJobParams:
     """
 
     def __init__(
-
         self,
-
         join_config_path,
-
         observation_path,
-
         feature_config,
-
         job_output_path,
-
         secrets: List[str] = [],
-
     ):
-
         self.secrets = secrets
 
         self.join_config_path = join_config_path
 
         if isinstance(observation_path, str):
-
             self.observation_path = observation_path
 
         elif isinstance(observation_path, Source):
-
             self.observation_path = observation_path.to_argument()
 
             if hasattr(observation_path, "get_required_properties"):
-
                 self.secrets.extend(observation_path.get_required_properties())
 
         else:
-
             raise TypeError("observation_path must be a string or a Sink")
 
         self.feature_config = feature_config
 
         if isinstance(job_output_path, str):
-
             self.job_output_path = job_output_path
 
         elif isinstance(job_output_path, Sink):
-
             self.job_output_path = job_output_path.to_argument()
 
             if hasattr(job_output_path, "get_required_properties"):
-
                 self.secrets.extend(job_output_path.get_required_properties())
 
         else:
-
             raise TypeError("job_output_path must be a string or a Sink")
 
-class FeatureGenerationJobParams:
 
+class FeatureGenerationJobParams:
     """Parameters related to feature generation job.
 
     Attributes:
@@ -96,10 +80,8 @@ class FeatureGenerationJobParams:
     """
 
     def __init__(self, generation_config_path, feature_config, secrets=[]):
-
         self.generation_config_path = generation_config_path
 
         self.feature_config = feature_config
 
         self.secrets = secrets
-

@@ -45,7 +45,6 @@ from streamlit_timeago import time_ago
 
 @st.fragment
 def design_job_detail(pool_ids):
-
     pools = get_cached_pools(pool_ids)
 
     pools_by_design_job = {pool.design_job_id: pool for pool in pools if pool.design_job_id}
@@ -186,7 +185,6 @@ def design_job_detail(pool_ids):
 
 @st.fragment
 def scatterplot_fragment(all_design_ids: list[str], pools: list[Pool], jobs: list[DesignJob]):
-
     # Get dictionary of saved thresholds (descriptor key -> (min, max) or None)
 
     saved_thresholds = {}
@@ -392,7 +390,6 @@ def scatterplot_fragment(all_design_ids: list[str], pools: list[Pool], jobs: lis
 
 @st.fragment
 def visualize_designs_fragment(design_ids: list[str], shared_workflow_name: str | None = None):
-
     if not design_ids:
         st.warning("No designs to show")
 

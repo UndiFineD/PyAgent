@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class SideGigToFullTime(Scene):
     def construct(self):
-
         morty = Mortimer()
 
         morty.next_to(ORIGIN, DOWN)
@@ -22,7 +21,6 @@ class SideGigToFullTime(Scene):
         self.full_time(morty)
 
     def side_project(self, morty):
-
         rect = PictureInPictureFrame()
 
         rect.next_to(morty, UP + LEFT)
@@ -60,7 +58,6 @@ class SideGigToFullTime(Scene):
         self.cross = cross
 
     def income(self, morty):
-
         dollar_signs = VGroup(*[OldTex("\\$") for x in range(10)])
 
         dollar_signs.arrange(RIGHT, buff=LARGE_BUFF)
@@ -100,7 +97,6 @@ class SideGigToFullTime(Scene):
         self.play(Blink(morty))
 
     def full_time(self, morty):
-
         new_title = OldTexText("Full time")
 
         new_title.move_to(self.screen_title)
@@ -130,7 +126,6 @@ class SideGigToFullTime(Scene):
 
 class TakesTime(Scene):
     def construct(self):
-
         rect = PictureInPictureFrame(height=4)
 
         rect.to_edge(RIGHT, buff=LARGE_BUFF)
@@ -153,7 +148,6 @@ class TakesTime(Scene):
 
 class GrowingToDoList(Scene):
     def construct(self):
-
         morty = Mortimer()
 
         morty.flip()
@@ -223,7 +217,6 @@ class GrowingToDoList(Scene):
 
 class TwoTypesOfVideos(Scene):
     def construct(self):
-
         morty = Mortimer().shift(2 * DOWN)
 
         stand_alone = OldTexText("Standalone videos")
@@ -347,7 +340,6 @@ class TwoTypesOfVideos(Scene):
 
 class ClassWatching(TeacherStudentsScene):
     def construct(self):
-
         rect = PictureInPictureFrame(height=4)
 
         rect.next_to(self.get_teacher(), UP, buff=LARGE_BUFF / 2.0)
@@ -374,7 +366,6 @@ class ClassWatching(TeacherStudentsScene):
 
 class RandolphWatching(Scene):
     def construct(self):
-
         randy = Randolph()
 
         randy.shift(2 * LEFT)
@@ -408,7 +399,6 @@ class GrowRonaksSierpinski(Scene):
     }
 
     def construct(self):
-
         sierp = self.get_ronaks_sierpinski(self.n_layers)
 
         dots = self.get_dots(self.n_layers)
@@ -478,7 +468,6 @@ class GrowRonaksSierpinski(Scene):
             last_dot_layer = dot_layer
 
     def rescale(self):
-
         shown_mobs = VGroup(*self.get_mobjects())
 
         shown_mobs_copy = shown_mobs.copy()
@@ -500,11 +489,9 @@ class GrowRonaksSierpinski(Scene):
         self.add(shown_mobs)
 
     def get_pascal_point(self, n, k):
-
         return n * rotate_vector(RIGHT, -2 * np.pi / 3) + k * RIGHT
 
     def get_lines_at_layer(self, n):
-
         lines = VGroup()
 
         for k in range(n + 1):
@@ -520,7 +507,6 @@ class GrowRonaksSierpinski(Scene):
         return lines
 
     def get_dot_layer(self, n):
-
         dots = VGroup()
 
         for k in range(n + 1):
@@ -542,7 +528,6 @@ class GrowRonaksSierpinski(Scene):
         return dots
 
     def get_ronaks_sierpinski(self, n_layers):
-
         ronaks_sierpinski = VGroup()
 
         for n in range(n_layers):
@@ -555,7 +540,6 @@ class GrowRonaksSierpinski(Scene):
         return ronaks_sierpinski
 
     def get_dots(self, n_layers):
-
         dots = VGroup()
 
         for n in range(n_layers + 1):
@@ -566,7 +550,6 @@ class GrowRonaksSierpinski(Scene):
 
 class PatreonLogo(Scene):
     def construct(self):
-
         words1 = OldTexText("Support future\\\\", "3blue1brown videos")
 
         words2 = OldTexText("Early access to\\\\", "``Essence of'' series")
@@ -591,7 +574,6 @@ class PatreonLogin(Scene):
 
 class PythagoreanTransformation(Scene):
     def construct(self):
-
         tri1 = VGroup(
             Line(ORIGIN, 2 * RIGHT, color=BLUE),
             Line(2 * RIGHT, 3 * UP, color=YELLOW),
@@ -692,7 +674,6 @@ class PythagoreanTransformation(Scene):
 
 class KindWordsOnEoLA(TeacherStudentsScene):
     def construct(self):
-
         rect = Rectangle(width=16, height=9, color=WHITE)
 
         rect.set_height(4)
@@ -723,7 +704,6 @@ class KindWordsOnEoLA(TeacherStudentsScene):
 
 class MakeALotOfPiCreaturesHappy(Scene):
     def construct(self):
-
         width = 7
 
         height = 4
@@ -774,7 +754,6 @@ class MakeALotOfPiCreaturesHappy(Scene):
 
 class IntegrationByParts(Scene):
     def construct(self):
-
         rect = Rectangle(width=5, height=3)
 
         # f = lambda t : 4*np.sin(t*np.pi/2)
@@ -870,7 +849,6 @@ class IntegrationByParts(Scene):
         self.wait()
 
     def draw_curve(self, curve):
-
         lp, lnum, comma, rnum, rp = coords = OldTex("\\big(f(", "t", "), g(", "t", ")\\big)")
 
         coords.set_color_by_tex("0.00", BLACK)
@@ -896,7 +874,6 @@ class IntegrationByParts(Scene):
 
 class EndScreen(TeacherStudentsScene):
     def construct(self):
-
         self.teacher_says(
             """
 

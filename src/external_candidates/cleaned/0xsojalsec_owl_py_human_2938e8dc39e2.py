@@ -76,7 +76,6 @@ class Human:
         name: str = "Kill Switch Engineer",
         logger_color: Any = Fore.MAGENTA,
     ) -> None:
-
         self.name = name
 
         self.logger_color = logger_color

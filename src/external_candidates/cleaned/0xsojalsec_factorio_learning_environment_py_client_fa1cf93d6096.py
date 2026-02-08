@@ -14,7 +14,6 @@ from fle.env.tools import Tool
 
 class PlaceEntityNextTo(Tool):
     def __init__(self, connection, game_state):
-
         # self.game_state = game_state
 
         super().__init__(connection, game_state)

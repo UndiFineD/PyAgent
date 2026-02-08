@@ -29,11 +29,9 @@
 
 # limitations under the License.
 
-
 """HIFI-GAN"""
 
 from typing import Dict, List, Optional
-
 
 import numpy as np
 
@@ -55,18 +53,13 @@ from torch.nn import Conv1d, ConvTranspose1d
 
 from torch.nn.utils import remove_weight_norm, weight_norm
 
-
 """hifigan based generator implementation.
-
-
 
 This code is modified from https://github.com/jik876/hifi-gan
 
  ,https://github.com/kan-bayashi/ParallelWaveGAN and
 
  https://github.com/NVIDIA/BigVGAN
-
-
 
 """
 
@@ -80,7 +73,6 @@ class ResBlock(torch.nn.Module):
         kernel_size: int = 3,
         dilations: List[int] = [1, 3, 5],
     ):
-
         super(ResBlock, self).__init__()
 
         self.convs1 = nn.ModuleList()
@@ -123,7 +115,6 @@ class ResBlock(torch.nn.Module):
         self.activations2 = nn.ModuleList([Snake(channels, alpha_logscale=False) for _ in range(len(self.convs2))])
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-
         for idx in range(len(self.convs1)):
             xt = self.activations1[idx](x)
 
@@ -138,7 +129,6 @@ class ResBlock(torch.nn.Module):
         return x
 
     def remove_weight_norm(self):
-
         for idx in range(len(self.convs1)):
             remove_weight_norm(self.convs1[idx])
 
@@ -182,7 +172,6 @@ class SineGen(torch.nn.Module):
         noise_std=0.003,
         voiced_threshold=0,
     ):
-
         super(SineGen, self).__init__()
 
         self.sine_amp = sine_amp
@@ -196,7 +185,6 @@ class SineGen(torch.nn.Module):
         self.voiced_threshold = voiced_threshold
 
     def _f02uv(self, f0):
-
         # generate uv signal
 
         uv = (f0 > self.voiced_threshold).type(torch.float32)
@@ -295,7 +283,6 @@ class SourceModuleHnNSF(torch.nn.Module):
         add_noise_std=0.003,
         voiced_threshod=0,
     ):
-
         super(SourceModuleHnNSF, self).__init__()
 
         self.sine_amp = sine_amp
@@ -372,7 +359,6 @@ class HiFTGenerator(nn.Module):
         audio_limit: float = 0.99,
         f0_predictor: torch.nn.Module = None,
     ):
-
         super(HiFTGenerator, self).__init__()
 
         self.out_channels = 1
@@ -475,7 +461,6 @@ class HiFTGenerator(nn.Module):
         self.f0_predictor = f0_predictor
 
     def remove_weight_norm(self):
-
         print("Removing weight norm...")
 
         for l in self.ups:
@@ -497,7 +482,6 @@ class HiFTGenerator(nn.Module):
             l.remove_weight_norm()
 
     def _stft(self, x):
-
         spec = torch.stft(
             x,
             self.istft_params["n_fft"],
@@ -512,7 +496,6 @@ class HiFTGenerator(nn.Module):
         return spec[..., 0], spec[..., 1]
 
     def _istft(self, magnitude, phase):
-
         magnitude = torch.clip(magnitude, max=1e2)
 
         real = magnitude * torch.cos(phase)
@@ -530,7 +513,6 @@ class HiFTGenerator(nn.Module):
         return inverse_transform
 
     def decode(self, x: torch.Tensor, s: torch.Tensor = torch.zeros(1, 1, 0)) -> torch.Tensor:
-
         s_stft_real, s_stft_imag = self._stft(s.squeeze(1))
 
         s_stft = torch.cat([s_stft_real, s_stft_imag], dim=1)
@@ -583,7 +565,6 @@ class HiFTGenerator(nn.Module):
         batch: dict,
         device: torch.device,
     ) -> Dict[str, Optional[torch.Tensor]]:
-
         speech_feat = batch["speech_feat"].transpose(1, 2).to(device)
 
         # mel->f0
@@ -610,7 +591,6 @@ class HiFTGenerator(nn.Module):
         speech_feat: torch.Tensor,
         cache_source: torch.Tensor = torch.zeros(1, 1, 0),
     ) -> torch.Tensor:
-
         # mel->f0
 
         f0 = self.f0_predictor(speech_feat)

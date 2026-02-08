@@ -7,7 +7,6 @@ import math
 
 from typing import Callable, Dict, List
 
-
 from fle.env.tools.admin.render.utils.render_config import RenderConfig
 
 from PIL import ImageDraw
@@ -17,7 +16,6 @@ class TileRenderer:
     """Handles rendering of map tiles (water, land) on the Factorio map"""
 
     def __init__(self, config: RenderConfig):
-
         self.config = config
 
     def draw_water_tiles(
@@ -30,8 +28,6 @@ class TileRenderer:
         """
 
         Draw water tiles on the map with a cross-hatched pattern
-
-
 
         Args:
 
@@ -174,8 +170,6 @@ class TileRenderer:
         """
 
         Draw resource entities (ore patches) on the map
-
-
 
         Args:
 

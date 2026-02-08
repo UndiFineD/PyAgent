@@ -17,7 +17,6 @@ from utils import create_maltego_entity, fetch_web_info
 
 
 async def find_forwarded_messages_from_users(username):
-
     messages = []
 
     async with app:
@@ -29,7 +28,6 @@ async def find_forwarded_messages_from_users(username):
 
 
 def get_unique_forward_users(messages):
-
     unique_forward_users = []
 
     seen_ids = set()
@@ -52,7 +50,6 @@ def get_unique_forward_users(messages):
 class ChannelToForwardedUsers(DiscoverableTransform):
     @classmethod
     def create_entities(cls, request: MaltegoMsg, response: MaltegoTransform):
-
         username = request.getProperty("properties.channel")
 
         messages = loop.run_until_complete(find_forwarded_messages_from_users(username))

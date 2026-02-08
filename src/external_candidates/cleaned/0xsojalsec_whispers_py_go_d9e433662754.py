@@ -10,13 +10,11 @@ from whispers.utils import string_is_function, string_is_quoted
 
 class Go:
     def pairs(self, filepath: Path):
-
         for line in filepath.open("r").readlines():
             if line.count("=") == 1:
                 yield from self.parse_assignment(line)
 
     def parse_assignment(self, line: str):
-
         line = line.replace(":=", "=")
 
         key, value = line.split("=")

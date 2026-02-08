@@ -63,7 +63,6 @@ class OpenAICompatibleEmbedding(BaseEmbedding[str]):
         api_key: Optional[str] = None,
         url: Optional[str] = None,
     ) -> None:
-
         self.model_type = model_type
 
         self.output_dim: Optional[int] = None

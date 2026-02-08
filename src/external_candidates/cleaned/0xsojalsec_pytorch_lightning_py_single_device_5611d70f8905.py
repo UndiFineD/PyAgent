@@ -64,7 +64,6 @@ class SingleDeviceStrategy(Strategy):
         checkpoint_io: CheckpointIO | None = None,
         precision_plugin: Precision | None = None,
     ):
-
         super().__init__(
             accelerator=accelerator,
             checkpoint_io=checkpoint_io,
@@ -113,12 +112,10 @@ class SingleDeviceStrategy(Strategy):
     @property
     @override
     def root_device(self) -> torch.device:
-
         return self._root_device
 
     @override
     def model_to_device(self) -> None:
-
         assert self.model is not None, "self.model must be set before self.model.to()"
 
         self.model.to(self.root_device)
@@ -126,23 +123,19 @@ class SingleDeviceStrategy(Strategy):
     @property
     @override
     def is_global_zero(self) -> bool:
-
         return True
 
     @override
     def barrier(self, *args: Any, **kwargs: Any) -> None:
-
         pass
 
     @override
     def broadcast(self, obj: TBroadcast, src: int = 0) -> TBroadcast:
-
         return obj
 
     @classmethod
     @override
     def register_strategies(cls, strategy_registry: _StrategyRegistry) -> None:
-
         strategy_registry.register(
             cls.strategy_name,
             cls,

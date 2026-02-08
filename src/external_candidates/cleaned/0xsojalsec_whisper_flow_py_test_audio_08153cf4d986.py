@@ -25,7 +25,6 @@ async def test_capture_mic():
     audio_chunks = queue.Queue()
 
     async def stop_capturing():
-
         await asyncio.sleep(0.1)
 
         stop_event.set()

@@ -14,7 +14,6 @@ from src.embedding import BaseEmbedding
 
 class OllamaEmbedding(BaseEmbedding):
     def embed(self, text):
-
         url = self.base_url or f"http://localhost:11434/api/embed"
 
         headers = self.headers

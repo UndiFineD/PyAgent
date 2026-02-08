@@ -9,8 +9,8 @@ from pathlib import Path
 
 from agno.utils.log import logger
 
-def open_html_file(file_path: Path):
 
+def open_html_file(file_path: Path):
     """
 
     Opens the specified HTML file in the default web browser.
@@ -24,7 +24,6 @@ def open_html_file(file_path: Path):
     absolute_path = file_path.resolve()
 
     if not absolute_path.is_file():
-
         logger.error(f"The file '{absolute_path}' does not exist.")
 
         raise FileNotFoundError(f"The file '{absolute_path}' does not exist.")
@@ -36,4 +35,3 @@ def open_html_file(file_path: Path):
     # Open the file in the default web browser
 
     webbrowser.open(file_url)
-

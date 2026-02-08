@@ -32,7 +32,6 @@ class Mlp(nn.Module):
         drop: float = 0.0,
         bias: bool = True,
     ) -> None:
-
         super().__init__()
 
         out_features = out_features or in_features
@@ -48,7 +47,6 @@ class Mlp(nn.Module):
         self.drop = nn.Dropout(drop)
 
     def forward(self, x: Tensor) -> Tensor:
-
         x = self.fc1(x)
 
         x = self.act(x)

@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class StackingCoins(Scene):
     def construct(self):
-
         h = t = 0
 
         heads_stack = HeadsStack(size=h)

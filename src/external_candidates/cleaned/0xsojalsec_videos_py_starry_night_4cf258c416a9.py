@@ -7,7 +7,6 @@ from manim_imports_ext import *
 
 
 def stereo_project_point(point, axis=0, r=1, max_norm=10000):
-
     point = fdiv(point * r, point[axis] + r)
 
     point[axis] = 0
@@ -22,7 +21,6 @@ def stereo_project_point(point, axis=0, r=1, max_norm=10000):
 
 class StarryStarryNight(Scene):
     def construct(self):
-
         n_points = int(1e4)
 
         dots = DotCloud(np.random.random((n_points, 3)))

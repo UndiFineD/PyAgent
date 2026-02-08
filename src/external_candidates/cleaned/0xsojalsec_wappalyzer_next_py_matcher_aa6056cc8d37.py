@@ -27,7 +27,6 @@ foo\\1   Returns foo with the first match appended.
 
 
 def group_or_literal(option, match):
-
     if option.startswith("\\"):
         return match.group(int(option[1:]))
 
@@ -35,7 +34,6 @@ def group_or_literal(option, match):
 
 
 def get_version(match, version_type):
-
     version = ""
 
     if version_type == "":
@@ -76,7 +74,6 @@ def get_version(match, version_type):
 
 
 def parse_pattern(regex):
-
     confidence = 100
 
     clean_regex = regex
@@ -99,7 +96,6 @@ def parse_pattern(regex):
 
 
 def single_match(regex, string):
-
     clean_regex, version_type, confidence = parse_pattern(regex)
 
     this_match = ""
@@ -120,7 +116,6 @@ def single_match(regex, string):
 
 
 def match(regex, string):
-
     to_match = [string] if isinstance(string, str) else string
 
     best_match = False
@@ -147,7 +142,6 @@ def match(regex, string):
 
 
 def match_dict(pattern_dict, response_dict):
-
     for name, pattern in pattern_dict.items():
         if name in response_dict:
             values = response_dict[name]

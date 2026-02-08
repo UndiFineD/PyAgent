@@ -30,7 +30,6 @@ from tests.unit.conftest import FIXTURE_PATH, config_path, does_not_raise, fixtu
     ],
 )
 def test_run(filename, expectation):
-
     with expectation:
         args = parse_args([filename])
 
@@ -48,13 +47,11 @@ def test_run(filename, expectation):
     ],
 )
 def test_load_config_exception(filename, expectation):
-
     with expectation:
         core.load_config(filename, FIXTURE_PATH)
 
 
 def test_load_config():
-
     config = core.load_config(config_path("example.yml"), FIXTURE_PATH)
 
     assert set(config["exclude"]["files"]) == set(
@@ -72,7 +69,6 @@ def test_load_config():
 
 
 def test_include_files():
-
     args = parse_args([fixture_path()])
 
     args.config = core.load_config(config_path("include_files.yml"), FIXTURE_PATH)
@@ -86,7 +82,6 @@ def test_include_files():
 
 
 def test_exclude_files():
-
     args = parse_args([fixture_path()])
 
     args.config = core.load_config(config_path("exclude_files.yml"), FIXTURE_PATH)

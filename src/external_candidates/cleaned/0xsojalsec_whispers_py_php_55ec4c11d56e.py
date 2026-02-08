@@ -10,7 +10,6 @@ from whispers.utils import string_is_function, strip_string
 
 class Php:
     def pairs(self, filepath: Path):
-
         for line in filepath.open("r").readlines():
             if line.startswith("define"):
                 yield from self.parse_define(line)
@@ -19,7 +18,6 @@ class Php:
                 yield from self.parse_assignment(line)
 
     def parse_assignment(self, line: str):
-
         line = line.replace("=>", "=")
 
         key, value = line.split("=")
@@ -35,7 +33,6 @@ class Php:
             yield key, value
 
     def parse_define(self, line: str):
-
         line = line.strip()[6:-2]  # strip define( and );
 
         line = line.split(",")

@@ -36,7 +36,6 @@ class ComplexMorphingNames(Scene):
     }
 
     def construct(self):
-
         name = self.patron_name
 
         self.clear()
@@ -82,18 +81,15 @@ class ComplexMorphingNames(Scene):
         self.wait(3)
 
     def get_rotation(self, name_mob):
-
         return UpdateFromAlphaFunc(
             name_mob,
             lambda mob, alpha: mob.move_to(rotate_vector(self.start_vect, 2 * np.pi * alpha)),
         )
 
     def get_post_transform_rotation(self, name_mob, name_mob_copy):
-
         simple_rotation = self.get_rotation(name_mob_copy)
 
         def update(name_mob, alpha):
-
             simple_rotation.update(alpha)
 
             new_name = simple_rotation.mobject.copy()
@@ -111,7 +107,6 @@ class FlowNameAnimation(Scene):
     CONFIG = {"patron_name": "Test Name"}
 
     def construct(self):
-
         name_mob = OldTexText(self.patron_name)
 
         name_mob.scale(2)
@@ -185,7 +180,6 @@ class NameAnimationScene(Scene):
     }
 
     def run(self):
-
         if self.animate_all_names:
             for name in self.all_names:
                 self.__init__()
@@ -226,20 +220,17 @@ class NameAnimationScene(Scene):
             super().__init__(**kwargs)
 
     def edit_name_text(self, name):
-
         return name
 
 
 class RotatingNameLetters(NameAnimationScene):
     def edit_name_text(self, name):
-
         if len(name) < 8:
             name += " Is Delightful"
 
         return name
 
     def construct(self):
-
         diameter = 3.0
 
         radius = diameter / 2
@@ -352,7 +343,6 @@ class RotatingNameLetters(NameAnimationScene):
 
 class ModularMultiplicationNameAnimation(RotatingNameLetters):
     def construct(self):
-
         max_width = FRAME_WIDTH - 4
 
         char_radius = 3
@@ -497,7 +487,6 @@ class QuaternionNameAnimation(Scene):
     }
 
     def construct(self):
-
         surface = ParametricSurface(lambda u, v: (u, v, 0), resolution=16)
 
         surface.set_width(self.R * TAU)
@@ -585,7 +574,6 @@ class QuaternionNameAnimation(Scene):
         self.wait(5)
 
     def plane_to_cylinder(self, p):
-
         x, y, z = p
 
         R = self.R + z
@@ -599,7 +587,6 @@ class QuaternionNameAnimation(Scene):
         )
 
     def cylinder_to_sphere(self, p):
-
         x, y, z = p
 
         R = self.R
@@ -609,9 +596,7 @@ class QuaternionNameAnimation(Scene):
         return np.array([x * fdiv(r, R), y * fdiv(r, R), z])
 
     def get_quaternion_homotopy(self, axis=[1, 0, 0]):
-
         def result(x, y, z, t):
-
             alpha = t
 
             quaternion = np.array([np.cos(TAU * alpha), 0, 0, 0])

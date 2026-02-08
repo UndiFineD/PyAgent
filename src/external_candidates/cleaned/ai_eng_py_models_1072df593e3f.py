@@ -11,8 +11,8 @@ from typing import Dict, List, Optional, Union
 
 from pydantic import BaseModel
 
-class ValueType(Enum):
 
+class ValueType(Enum):
     """
 
     Type of the feature.
@@ -33,8 +33,8 @@ class ValueType(Enum):
 
     BYTES = "bytes"
 
-class DimensionType(Enum):
 
+class DimensionType(Enum):
     """
 
     Supported dimension types for tensors in Feathr.
@@ -51,8 +51,8 @@ class DimensionType(Enum):
 
     BYTES = "bytes"
 
-class TensorCategory(Enum):
 
+class TensorCategory(Enum):
     """
 
     Supported Tensor categories in Feathr.
@@ -65,8 +65,8 @@ class TensorCategory(Enum):
 
     RAGGED = "ragged"  # Ragged tensors (also known as nested tensors) are similar to dense tensors but have variable-length dimensions.
 
-class FeatureValueType(Enum):
 
+class FeatureValueType(Enum):
     """
 
     The high level types associated with a feature.
@@ -79,32 +79,22 @@ class FeatureValueType(Enum):
 
     NUMERIC = "numeric"  # Numerically valued feature
 
-    CATEGORICAL = (
+    CATEGORICAL = "categorical"  # Represent a feature that consists of a single category
 
-        "categorical"  # Represent a feature that consists of a single category
+    CATEGORICAL_SET = "categorical_set"  # Represent a feature that consists of multiple categories
 
+    DENSE_VECTOR = (
+        "dense_vector"  # Represent a feature in vector format where the majority of the elements are non-zero
     )
 
-    CATEGORICAL_SET = (
-
-        "categorical_set"  # Represent a feature that consists of multiple categories
-
-    )
-
-    DENSE_VECTOR = "dense_vector"  # Represent a feature in vector format where the majority of the elements are non-zero
-
-    TERM_VECTOR = (
-
-        "term_vector"  # Represent features that has string terms and numeric value
-
-    )
+    TERM_VECTOR = "term_vector"  # Represent features that has string terms and numeric value
 
     TENSOR = "tensor"  # Represent tensor based features.
 
     UNSPECIFIED = "unspecified"  # Placeholder for when no types are specified
 
-class Dimension(BaseModel):
 
+class Dimension(BaseModel):
     """
 
     Tensor is used to represent feature data. A tensor is a generalization of vectors and matrices to potentially higher dimensions.
@@ -114,13 +104,11 @@ class Dimension(BaseModel):
     type: DimensionType  # Type of the dimension in the tensor. Each dimension can have a different type.
 
     shape: Optional[
-
         int
-
     ]  # Size of the dimension in the tensor. If unset, it means the size is unknown and actual size will be determined at runtime.
 
-class TensorFeatureFormat(BaseModel):
 
+class TensorFeatureFormat(BaseModel):
     """
 
     Defines the format of feature data. Feature data is produced by applying transformation on source, in a Feature.
@@ -135,14 +123,10 @@ class TensorFeatureFormat(BaseModel):
 
     valueType: ValueType  # Type of the value column.
 
-    dimensions: List[
+    dimensions: List[Dimension]  # A feature data can have zero or more dimensions (columns that represent keys).
 
-        Dimension
-
-    ]  # A feature data can have zero or more dimensions (columns that represent keys).
 
 class FeatureType(BaseModel):
-
     """
 
     Information about a featureName. It defines the type, format and default value.
@@ -159,8 +143,8 @@ class FeatureType(BaseModel):
 
     defaultValue: Union[bool, int, float, str, bytes]
 
-class Clazz(BaseModel):
 
+class Clazz(BaseModel):
     """
 
     Reference to a class by fully-qualified name
@@ -169,8 +153,8 @@ class Clazz(BaseModel):
 
     fullyQualifiedName: str  # A fully-qualified class name including paths.
 
-class Function(BaseModel):
 
+class Function(BaseModel):
     """
 
     Base model for all functions
@@ -181,8 +165,8 @@ class Function(BaseModel):
 
     functionType: str  # Type of function in str format, will be used in UI
 
-class MvelExpression(Function):
 
+class MvelExpression(Function):
     """
 
     An expression in MVEL language.
@@ -191,8 +175,8 @@ class MvelExpression(Function):
 
     mvel: str  # The MVEL expression
 
-class UserDefinedFunction(Function):
 
+class UserDefinedFunction(Function):
     """
 
     User defined function that can be used in feature extraction or derivation.
@@ -201,14 +185,10 @@ class UserDefinedFunction(Function):
 
     clazz: Clazz  # Reference to the class that implements the user defined function.
 
-    parameters: Dict[str, json] = (
+    parameters: Dict[str, json] = {}  # This field defines the custom parameters of the user defined function
 
-        {}
-
-    )  # This field defines the custom parameters of the user defined function
 
 class SparkSqlExpression(Function):
-
     """
 
     An expression in Spark SQL.
@@ -217,8 +197,8 @@ class SparkSqlExpression(Function):
 
     sql: str  # Spark SQl expression
 
-class SemanticVersion(BaseModel):
 
+class SemanticVersion(BaseModel):
     """
 
     A representation of a semantic version (see https://semver.org/)
@@ -233,8 +213,8 @@ class SemanticVersion(BaseModel):
 
     metadata: Optional[str]  # Optional build metadata attached to this version.
 
-class FeathrModel(BaseModel):
 
+class FeathrModel(BaseModel):
     """
 
     Base model for feathr entity which will be displayed in Feathr UI
@@ -244,4 +224,3 @@ class FeathrModel(BaseModel):
     displayName: str  # name of the entity showed on UI
 
     typeName: str  # type of entity in str format, will be displayed in UI
-

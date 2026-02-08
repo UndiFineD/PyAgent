@@ -5,7 +5,6 @@
 
 from typing import Any, Dict, Optional
 
-
 import torch
 
 import torch.nn as nn
@@ -145,8 +144,6 @@ class FeedForward(nn.Module):
 
     A feed-forward layer.
 
-
-
     Parameters:
 
         dim (`int`): The number of channels in the input.
@@ -172,7 +169,6 @@ class FeedForward(nn.Module):
         activation_fn: str = "geglu",
         final_dropout: bool = False,
     ):
-
         super().__init__()
 
         inner_dim = int(dim * mult)
@@ -214,7 +210,6 @@ class FeedForward(nn.Module):
             self.net.append(nn.Dropout(dropout))
 
     def forward(self, hidden_states):
-
         for module in self.net:
             hidden_states = module(hidden_states)
 
@@ -226,8 +221,6 @@ class BasicTransformerBlock(nn.Module):
     r"""
 
     A basic Transformer block.
-
-
 
     Parameters:
 
@@ -278,7 +271,6 @@ class BasicTransformerBlock(nn.Module):
         norm_type: str = "layer_norm",
         final_dropout: bool = False,
     ):
-
         super().__init__()
 
         self.only_cross_attention = only_cross_attention
@@ -365,7 +357,6 @@ class BasicTransformerBlock(nn.Module):
         self._chunk_dim = 0
 
     def set_chunk_feed_forward(self, chunk_size: Optional[int], dim: int):
-
         # Sets chunk feed-forward
 
         self._chunk_size = chunk_size
@@ -382,7 +373,6 @@ class BasicTransformerBlock(nn.Module):
         cross_attention_kwargs: Dict[str, Any] = None,
         class_labels: Optional[torch.LongTensor] = None,
     ):
-
         # Notice that normalization is always applied before the real computation in the following blocks.
 
         # 1. Self-Attention

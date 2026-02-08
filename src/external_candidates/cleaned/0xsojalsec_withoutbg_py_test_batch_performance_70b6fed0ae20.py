@@ -29,7 +29,6 @@ def create_test_images():
     """Create temporary test image files."""
 
     def _create_images(count=5, size=(256, 256)):
-
         image_files = []
 
         for i in range(count):
@@ -52,7 +51,6 @@ def mock_processing():
     """Mock the background removal processing."""
 
     def _mock_remove_bg(input_image, **kwargs):
-
         # Simulate processing time
 
         time.sleep(0.01)  # 10ms simulated processing time
@@ -324,7 +322,6 @@ class TestBatchPerformance:
         image_files.append("/non/existent/file.jpg")
 
         def mock_processing_with_errors(input_image, **kwargs):
-
             if not os.path.exists(input_image):
                 raise FileNotFoundError(f"File not found: {input_image}")
 

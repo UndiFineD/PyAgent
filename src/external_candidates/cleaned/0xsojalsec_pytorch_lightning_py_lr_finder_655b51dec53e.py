@@ -139,7 +139,6 @@ class LearningRateFinder(Callback):
         update_attr: bool = True,
         attr_name: str = "",
     ) -> None:
-
         mode = mode.lower()
 
         if mode not in self.SUPPORTED_MODES:
@@ -164,7 +163,6 @@ class LearningRateFinder(Callback):
         self.optimal_lr: Optional[_LRFinder] = None
 
     def lr_find(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
-
         with isolate_rng():
             self.optimal_lr = _lr_find(
                 trainer,
@@ -183,5 +181,4 @@ class LearningRateFinder(Callback):
 
     @override
     def on_fit_start(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
-
         self.lr_find(trainer, pl_module)

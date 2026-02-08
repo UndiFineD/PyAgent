@@ -145,7 +145,6 @@ def se3_inverse(T):
 
 
 def get_pixel(H, W):
-
     # get 2D pixels (u, v) for image_a in cam_a pixel space
 
     u_a, v_a = np.meshgrid(np.arange(W), np.arange(H))
@@ -280,7 +279,6 @@ def get_gt_warp(
     H=None,
     W=None,
 ):
-
     if H is None:
         B, H, W = depth1.shape
 
@@ -582,7 +580,6 @@ def inv(mat):
 
 
 def opencv_camera_to_plucker(poses, K, H, W):
-
     device = poses.device
 
     B = poses.shape[0]

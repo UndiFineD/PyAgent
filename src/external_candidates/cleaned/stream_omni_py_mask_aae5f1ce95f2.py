@@ -33,9 +33,7 @@
 
 # limitations under the License.
 
-
 import torch
-
 
 '''
 
@@ -49,25 +47,17 @@ def subsequent_mask(
 
     """Create mask for subsequent steps (size, size).
 
-
-
     This mask is used only in decoder which works in an auto-regressive mode.
 
     This means the current step could only do attention with its left steps.
-
-
 
     In encoder, fully attention is used when streaming is not necessary and
 
     the sequence is not long. In this  case, no attention mask is needed.
 
-
-
     When streaming is need, chunk-based attention is used in encoder. See
 
     subsequent_chunk_mask for the chunk-based attention mask.
-
-
 
     Args:
 
@@ -77,13 +67,9 @@ def subsequent_mask(
 
         dtype (torch.device): result dtype
 
-
-
     Returns:
 
         torch.Tensor: mask
-
-
 
     Examples:
 
@@ -110,25 +96,17 @@ def subsequent_mask(
 ) -> torch.Tensor:
     """Create mask for subsequent steps (size, size).
 
-
-
     This mask is used only in decoder which works in an auto-regressive mode.
 
     This means the current step could only do attention with its left steps.
-
-
 
     In encoder, fully attention is used when streaming is not necessary and
 
     the sequence is not long. In this  case, no attention mask is needed.
 
-
-
     When streaming is need, chunk-based attention is used in encoder. See
 
     subsequent_chunk_mask for the chunk-based attention mask.
-
-
 
     Args:
 
@@ -138,13 +116,9 @@ def subsequent_mask(
 
         dtype (torch.device): result dtype
 
-
-
     Returns:
 
         torch.Tensor: mask
-
-
 
     Examples:
 
@@ -179,8 +153,6 @@ def subsequent_chunk_mask(
 
        this is for streaming encoder
 
-
-
     Args:
 
         size (int): size of mask
@@ -195,13 +167,9 @@ def subsequent_chunk_mask(
 
         device (torch.device): "cpu" or "cuda" or torch.Tensor.device
 
-
-
     Returns:
 
         torch.Tensor: mask
-
-
 
     Examples:
 
@@ -245,8 +213,6 @@ def add_optional_chunk_mask(
 ):
     """Apply optional mask for encoder.
 
-
-
     Args:
 
         xs (torch.Tensor): padded input, (B, L, D), L for max length
@@ -286,8 +252,6 @@ def add_optional_chunk_mask(
             True: chunk size is either [1, 25] or full context(max_len)
 
             False: chunk size ~ U[1, 25]
-
-
 
     Returns:
 
@@ -356,11 +320,7 @@ def add_optional_chunk_mask(
 def make_pad_mask(lengths: torch.Tensor, max_len: int = 0) -> torch.Tensor:
     """Make mask tensor containing indices of padded part.
 
-
-
     See description of make_non_pad_mask.
-
-
 
     Args:
 
@@ -369,8 +329,6 @@ def make_pad_mask(lengths: torch.Tensor, max_len: int = 0) -> torch.Tensor:
     Returns:
 
         torch.Tensor: Mask tensor containing indices of padded part.
-
-
 
     Examples:
 

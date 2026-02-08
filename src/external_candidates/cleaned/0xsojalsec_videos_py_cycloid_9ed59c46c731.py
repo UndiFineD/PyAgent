@@ -14,7 +14,6 @@ class RollAlongVector(Animation):
     }
 
     def __init__(self, mobject, vector, **kwargs):
-
         radius = mobject.get_width() / 2
 
         radians = get_norm(vector) / radius
@@ -26,7 +25,6 @@ class RollAlongVector(Animation):
         Animation.__init__(self, mobject, **kwargs)
 
     def interpolate_mobject(self, alpha):
-
         d_alpha = alpha - self.last_alpha
 
         self.last_alpha = alpha
@@ -40,7 +38,6 @@ class CycloidScene(Scene):
     CONFIG = {"point_a": 6 * LEFT + 3 * UP, "radius": 2, "end_theta": 2 * np.pi}
 
     def construct(self):
-
         self.generate_cycloid()
 
         self.generate_circle()
@@ -48,15 +45,12 @@ class CycloidScene(Scene):
         self.generate_ceiling()
 
     def grow_parts(self):
-
         self.play(*[ShowCreation(mob) for mob in (self.circle, self.ceiling)])
 
     def generate_cycloid(self):
-
         self.cycloid = Cycloid(point_a=self.point_a, radius=self.radius, end_theta=self.end_theta)
 
     def generate_circle(self, **kwargs):
-
         self.circle = Circle(radius=self.radius, **kwargs)
 
         self.circle.shift(self.point_a - self.circle.get_top())
@@ -66,13 +60,11 @@ class CycloidScene(Scene):
         self.circle.add(radial_line)
 
     def generate_ceiling(self):
-
         self.ceiling = Line(FRAME_X_RADIUS * LEFT, FRAME_X_RADIUS * RIGHT)
 
         self.ceiling.shift(self.cycloid.get_top()[1] * UP)
 
     def draw_cycloid(self, run_time=3, *anims, **kwargs):
-
         kwargs["run_time"] = run_time
 
         self.play(
@@ -86,7 +78,6 @@ class CycloidScene(Scene):
         )
 
     def roll_back(self, run_time=3, *anims, **kwargs):
-
         kwargs["run_time"] = run_time
 
         self.play(
@@ -105,7 +96,6 @@ class CycloidScene(Scene):
 
 class IntroduceCycloid(CycloidScene):
     def construct(self):
-
         CycloidScene.construct(self)
 
         equation = OldTex(["\\dfrac{\\sin(\\theta)}{\\sqrt{y}}", "= \\text{constant}"])
@@ -157,7 +147,6 @@ class IntroduceCycloid(CycloidScene):
         self.wait()
 
     def get_q_marks_and_arrows(self, mob, n_marks=10):
-
         circle = Circle().replace(mob)
 
         q_marks, arrows = result = [Mobject(), Mobject()]
@@ -189,7 +178,6 @@ class LeviSolution(CycloidScene):
     }
 
     def construct(self):
-
         CycloidScene.construct(self)
 
         self.add(self.ceiling)
@@ -215,7 +203,6 @@ class LeviSolution(CycloidScene):
             self.wait()
 
     def init_points(self):
-
         index = int(self.cycloid_fraction * self.cycloid.get_num_points())
 
         p_point = self.cycloid.get_points()[index]
@@ -237,7 +224,6 @@ class LeviSolution(CycloidScene):
         digest_locals(self)
 
     def roll_into_position(self):
-
         self.play(
             RollAlongVector(
                 self.circle,
@@ -248,7 +234,6 @@ class LeviSolution(CycloidScene):
         )
 
     def draw_p_and_c(self):
-
         radial_line = self.circle.submobjects[0]  ##Hacky
 
         self.play(Transform(radial_line, self.p_dot))
@@ -266,7 +251,6 @@ class LeviSolution(CycloidScene):
         self.play(ShimmerIn(self.c_label))
 
     def show_pendulum(self, arc_angle=np.pi, arc_color=GREEN):
-
         words = OldTexText(": Instantaneous center of rotation")
 
         words.next_to(self.c_label)
@@ -343,7 +327,6 @@ class LeviSolution(CycloidScene):
         self.remove(words, *arcs)
 
     def show_diameter(self):
-
         exceptions = [
             self.circle,
             self.tangent_line,
@@ -408,7 +391,6 @@ class LeviSolution(CycloidScene):
         self.bottom_point = bottom_point
 
     def show_theta(self, radius=1):
-
         arc = Arc(
             angle=self.tangent_line.get_angle() - np.pi / 2,
             radius=radius,
@@ -428,7 +410,6 @@ class LeviSolution(CycloidScene):
         self.theta = theta
 
     def show_similar_triangles(self):
-
         y_point = np.array(self.p_point)
 
         y_point[1] = self.point_a[1]
@@ -482,7 +463,6 @@ class LeviSolution(CycloidScene):
         self.y_line = y_line
 
     def show_sin_thetas(self):
-
         pc = Line(self.p_point, self.c_point)
 
         mob = Mobject(self.theta, self.d_mob).copy()
@@ -519,7 +499,6 @@ class LeviSolution(CycloidScene):
         self.d_sin_squared_theta = trig_mob
 
     def show_y(self):
-
         y_equals = OldTex(["y", "="])
 
         y_equals.shift(2 * UP)
@@ -557,7 +536,6 @@ class LeviSolution(CycloidScene):
         self.y_expression = y_expression
 
     def rearrange(self):
-
         sqrt_nudge = 0.2 * LEFT
 
         y, equals = self.y_equals.split()
@@ -623,7 +601,6 @@ class LeviSolution(CycloidScene):
 
 class EquationsForCycloid(CycloidScene):
     def construct(self):
-
         CycloidScene.construct(self)
 
         equations = OldTex(["x(t) = Rt - R\\sin(t)", "y(t) = -R + R\\cos(t)"])
@@ -652,16 +629,13 @@ class SlidingObject(CycloidScene, PathSlidingScene):
 
     @staticmethod
     def args_to_string(with_words):
-
         return "WithWords" if with_words else "WithoutWords"
 
     @staticmethod
     def string_to_args(string):
-
         return string == "WithWords"
 
     def construct(self, with_words):
-
         CycloidScene.construct(self)
 
         randy = Randolph()
@@ -748,7 +722,6 @@ class SlidingObject(CycloidScene, PathSlidingScene):
 
 class RotateWheel(CycloidScene):
     def construct(self):
-
         CycloidScene.construct(self)
 
         self.circle.center()

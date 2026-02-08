@@ -13,7 +13,6 @@ from mantis.utils.config_utils import ConfigUtils
 
 
 async def get_active_hosts(org):
-
     pipeline_hosts_with_ports = [
         {"$match": {"org": org}},
         {"$group": {"_id": "$asset", "active_hosts": {"$push": "$active_hosts"}}},
@@ -29,7 +28,6 @@ async def get_active_hosts(org):
 
 
 async def get_org_assets(org):
-
     pipeline_assets_for_org = [{"$match": {"org": org}}]
 
     assets = await read_assets(pipeline_assets_for_org)
@@ -42,7 +40,6 @@ async def get_org_assets(org):
 
 
 async def get_assets_grouped_by_type(self, args, asset_type):
-
     pipeline_type_assets = []
 
     pipeline_type_assets.extend(get_pipeline(self=self, args=args))
@@ -65,7 +62,6 @@ async def get_assets_grouped_by_type(self, args, asset_type):
 
 
 async def get_assets_with_empty_fields(self, args, field_name):
-
     pipeline_empty_fields = []
 
     pipeline_empty_fields.extend(get_pipeline(self=self, args=args))
@@ -88,7 +84,6 @@ async def get_assets_with_empty_fields(self, args, field_name):
 
 
 async def get_assets_with_non_empty_fields(self, args, field_name):
-
     pipeline_non_empty_fields = []
 
     pipeline_non_empty_fields.extend(get_pipeline(self=self, args=args))
@@ -112,7 +107,6 @@ async def get_assets_with_non_empty_fields(self, args, field_name):
 
 
 async def get_assets_by_field_value(self, args, field_name, value, asset_type):
-
     pipeline_assets_by_field_value = []
 
     pipeline_assets_by_field_value.extend(get_pipeline(self=self, args=args))
@@ -136,7 +130,6 @@ async def get_assets_by_field_value(self, args, field_name, value, asset_type):
 
 
 def get_pipeline(self, args):
-
     pipeline = []
 
     if args.app:
@@ -153,7 +146,6 @@ def get_pipeline(self, args):
 
 
 async def get_findings_by_asset(asset, finding_type):
-
     pipeline = []
 
     pipeline.extend(

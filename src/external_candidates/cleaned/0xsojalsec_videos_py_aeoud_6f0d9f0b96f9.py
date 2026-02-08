@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class VennDiagram(InteractiveScene):
     def construct(self):
-
         # Add circles
 
         radius = 3.0
@@ -149,7 +148,6 @@ class VennDiagram(InteractiveScene):
 
 class Spheres(InteractiveScene):
     def construct(self):
-
         # Add spheres
 
         radius = 2.5

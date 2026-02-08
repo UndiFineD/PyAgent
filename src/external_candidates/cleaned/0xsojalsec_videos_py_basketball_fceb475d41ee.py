@@ -9,7 +9,6 @@ from manim_imports_ext import *
 
 
 def year_to_file_name(year):
-
     year_str = str(year)[-2:]
 
     year_p1_str = str(year + 1)[-2:]
@@ -18,7 +17,6 @@ def year_to_file_name(year):
 
 
 def load_data(year):
-
     frame = pd.read_csv(
         year_to_file_name(year),
         usecols=[
@@ -36,7 +34,6 @@ def load_data(year):
 
 
 def get_dots(axes, coords):
-
     dots = DotCloud(axes.c2p(*coords.T))
 
     dots.set_color(YELLOW)
@@ -53,7 +50,6 @@ def get_dots(axes, coords):
 
 
 def get_bars(axes, coords, resolution=(50, 94)):
-
     # Test
 
     # resolution = (10, 20)
@@ -115,7 +111,6 @@ def get_bars(axes, coords, resolution=(50, 94)):
 
 class ShotHistory(InteractiveScene, ThreeDScene):
     def construct(self):
-
         self.always_depth_test = False
 
         frame = self.frame
@@ -233,11 +228,9 @@ class ShotHistory(InteractiveScene, ThreeDScene):
         # Roll back to 2000
 
         def update_dots(dots):
-
             dots.set_submobjects(all_dots[int(year_mob.get_value() - year_range[0])])
 
         def update_bars(bars):
-
             bars.set_submobjects(all_bars[int(year_mob.get_value() - year_range[0])])
 
         self.play(

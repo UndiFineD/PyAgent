@@ -13,7 +13,6 @@ from settings import app, limit, loop
 
 
 async def find_missing_post_ids(username: str) -> list[int]:
-
     ids = []
 
     async with app:
@@ -39,7 +38,6 @@ async def find_missing_post_ids(username: str) -> list[int]:
 class ChannelToDeletedPosts(DiscoverableTransform):
     @classmethod
     def create_entities(cls, request: MaltegoMsg, response: MaltegoTransform):
-
         username = request.getProperty("properties.channel")
 
         ids = loop.run_until_complete(find_missing_post_ids(username))

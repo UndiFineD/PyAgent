@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class MugToTorus(ThreeDScene):
     def construct(self):
-
         frame = self.camera.frame
 
         frame.reorient(-20, 60)
@@ -16,7 +15,6 @@ class MugToTorus(ThreeDScene):
         R1, R2 = (2, 0.75)
 
         def torus_func(u, v):
-
             v1 = np.array([-math.sin(u), 0, math.cos(u)])
 
             v2 = math.cos(v) * v1 + math.sin(v) * UP
@@ -24,7 +22,6 @@ class MugToTorus(ThreeDScene):
             return R1 * v1 + R2 * v2
 
         def cylinder_func(u, v):
-
             return (math.cos(v), math.sin(v), u)
 
         left_half_torus = ParametricSurface(

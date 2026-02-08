@@ -73,7 +73,6 @@ class VectorDBBlock(MemoryBlock):
         storage: Optional[BaseVectorStorage] = None,
         embedding: Optional[BaseEmbedding] = None,
     ) -> None:
-
         self.embedding = embedding or OpenAIEmbedding()
 
         self.vector_dim = self.embedding.get_output_dim()

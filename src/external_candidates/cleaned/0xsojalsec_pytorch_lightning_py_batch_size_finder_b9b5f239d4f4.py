@@ -184,7 +184,6 @@ class BatchSizeFinder(Callback):
         margin: float = 0.05,
         max_val: int = 8192,
     ) -> None:
-
         mode = mode.lower()
 
         if mode not in self.SUPPORTED_MODES:
@@ -217,7 +216,6 @@ class BatchSizeFinder(Callback):
         pl_module: "pl.LightningModule",
         stage: Optional[str] = None,
     ) -> None:
-
         if trainer._accelerator_connector.is_distributed:
             raise MisconfigurationException("The Batch size finder is not supported with distributed strategies.")
 
@@ -268,7 +266,6 @@ class BatchSizeFinder(Callback):
             )
 
     def scale_batch_size(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
-
         new_size = _scale_batch_size(
             trainer,
             self._mode,
@@ -287,12 +284,10 @@ class BatchSizeFinder(Callback):
 
     @override
     def on_fit_start(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
-
         self.scale_batch_size(trainer, pl_module)
 
     @override
     def on_validation_start(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
-
         if trainer.sanity_checking or trainer.state.fn != "validate":
             return
 
@@ -300,10 +295,8 @@ class BatchSizeFinder(Callback):
 
     @override
     def on_test_start(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
-
         self.scale_batch_size(trainer, pl_module)
 
     @override
     def on_predict_start(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
-
         self.scale_batch_size(trainer, pl_module)

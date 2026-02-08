@@ -39,5 +39,4 @@ class NXCModule:
             self.ipsc = bool(module_options["IPSC"])
 
     def on_login(self, context, connection):
-
         context.log.fail('[REMOVED] This module moved to the new module "coerce_plus"')

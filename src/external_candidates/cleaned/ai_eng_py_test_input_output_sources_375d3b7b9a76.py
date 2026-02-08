@@ -12,17 +12,11 @@ from datetime import datetime
 from pathlib import Path
 
 from feathr import (
-
     FeatureQuery,
-
     ObservationSettings,
-
     SparkExecutionConfiguration,
-
     TypedKey,
-
     ValueType,
-
 )
 
 from feathr.client import FeathrClient
@@ -37,8 +31,8 @@ from test_utils.constants import Constants
 
 # test parquet file read/write without an extension name
 
-def test_feathr_get_offline_features_with_parquet():
 
+def test_feathr_get_offline_features_with_parquet():
     """
 
     Test if the program can read and write parquet files
@@ -47,24 +41,16 @@ def test_feathr_get_offline_features_with_parquet():
 
     test_workspace_dir = Path(__file__).parent.resolve() / "test_user_workspace"
 
-    client: FeathrClient = basic_test_setup(
-
-        os.path.join(test_workspace_dir, "feathr_config.yaml")
-
-    )
+    client: FeathrClient = basic_test_setup(os.path.join(test_workspace_dir, "feathr_config.yaml"))
 
     location_id = TypedKey(key_column="DOLocationID", key_column_type=ValueType.INT32)
 
     feature_query = FeatureQuery(feature_list=["f_location_avg_fare"], key=location_id)
 
     settings = ObservationSettings(
-
         observation_path="wasbs://public@azurefeathrstorage.blob.core.windows.net/sample_data/green_tripdata_2020-04",
-
         event_timestamp_column="lpep_dropoff_datetime",
-
         timestamp_format="yyyy-MM-dd HH:mm:ss",
-
     )
 
     now = datetime.now()
@@ -72,73 +58,41 @@ def test_feathr_get_offline_features_with_parquet():
     # set output folder based on different runtime
 
     if client.spark_runtime == "databricks":
-
         output_path = "".join(
-
             [
-
                 "dbfs:/feathrazure_cijob",
-
                 "_",
-
                 str(now.minute),
-
                 "_",
-
                 str(now.second),
-
                 "_",
-
                 str(now.microsecond),
-
                 ".parquet",
-
             ]
-
         )
 
     else:
-
         output_path = "".join(
-
             [
-
                 "abfss://feathrazuretest3fs@feathrazuretest3storage.dfs.core.windows.net/demo_data/output",
-
                 "_",
-
                 str(now.minute),
-
                 "_",
-
                 str(now.second),
-
                 ".parquet",
-
             ]
-
         )
 
     client.get_offline_features(
-
         observation_settings=settings,
-
         feature_query=feature_query,
-
         output_path=output_path,
-
         execution_configurations=SparkExecutionConfiguration(
-
             {
-
                 "spark.feathr.inputFormat": "parquet",
-
                 "spark.feathr.outputFormat": "parquet",
-
             }
-
         ),
-
     )
 
     # assuming the job can successfully run; otherwise it will throw exception
@@ -151,10 +105,11 @@ def test_feathr_get_offline_features_with_parquet():
 
     assert res_df.shape[0] > 0
 
+
 # test delta lake read/write without an extension name
 
-def test_feathr_get_offline_features_with_delta_lake():
 
+def test_feathr_get_offline_features_with_delta_lake():
     """
 
     Test if the program can read and write delta lake
@@ -170,13 +125,9 @@ def test_feathr_get_offline_features_with_delta_lake():
     feature_query = FeatureQuery(feature_list=["f_location_avg_fare"], key=location_id)
 
     settings = ObservationSettings(
-
         observation_path="wasbs://public@azurefeathrstorage.blob.core.windows.net/sample_data/feathr_delta_table",
-
         event_timestamp_column="lpep_dropoff_datetime",
-
         timestamp_format="yyyy-MM-dd HH:mm:ss",
-
     )
 
     now = datetime.now()
@@ -184,63 +135,36 @@ def test_feathr_get_offline_features_with_delta_lake():
     # set output folder based on different runtime
 
     if client.spark_runtime == "databricks":
-
         output_path = "".join(
-
             [
-
                 "dbfs:/feathrazure_cijob",
-
                 "_",
-
                 str(now.minute),
-
                 "_",
-
                 str(now.second),
-
                 "_deltalake",
-
             ]
-
         )
 
     else:
-
         output_path = "".join(
-
             [
-
                 "abfss://feathrazuretest3fs@feathrazuretest3storage.dfs.core.windows.net/demo_data/output",
-
                 "_",
-
                 str(now.minute),
-
                 "_",
-
                 str(now.second),
-
                 "_deltalake",
-
             ]
-
         )
 
     client.get_offline_features(
-
         observation_settings=settings,
-
         feature_query=feature_query,
-
         output_path=output_path,
-
         execution_configurations=SparkExecutionConfiguration(
-
             {"spark.feathr.inputFormat": "delta", "spark.feathr.outputFormat": "delta"}
-
         ),
-
     )
 
     # assuming the job can successfully run; otherwise it will throw exception
@@ -258,8 +182,6 @@ def test_feathr_get_offline_features_with_delta_lake():
     result_format: str = client.get_job_tags().get(OUTPUT_FORMAT, "")
 
     if not (client.spark_runtime == "azure_synapse" and result_format == "delta"):
-
         res_df = get_result_df(client)
 
         assert res_df.shape[0] > 0
-

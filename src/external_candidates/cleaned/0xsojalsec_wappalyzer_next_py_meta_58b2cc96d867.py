@@ -5,7 +5,6 @@
 
 
 def get_meta(soup):
-
     meta = {}
 
     for tag in soup.find_all("meta"):

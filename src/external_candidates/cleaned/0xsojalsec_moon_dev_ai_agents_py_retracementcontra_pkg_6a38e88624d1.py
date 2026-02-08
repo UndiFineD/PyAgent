@@ -28,7 +28,6 @@ class RetracementContra(Strategy):
     atr_contract_lookback = 5
 
     def init(self):
-
         # 🌙 CORE INDICATORS
 
         self.swing_high = self.I(talib.MAX, self.data.High, self.swing_period, name="SWING HIGH")
@@ -50,7 +49,6 @@ class RetracementContra(Strategy):
         self.peak_equity = self._broker._cash  # Track peak for drawdown calculation
 
     def next(self):
-
         # 🌙 UPDATE PEAK EQUITY
 
         self.peak_equity = max(self.peak_equity, self.equity)

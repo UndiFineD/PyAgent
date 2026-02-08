@@ -11,8 +11,8 @@ from feathr import FeathrClient
 
 from feathrcli.cli import init
 
-def test_configuration_loading():
 
+def test_configuration_loading():
     """
 
     Test the configuration can be overwritten by envs
@@ -22,7 +22,6 @@ def test_configuration_loading():
     runner = CliRunner()
 
     with runner.isolated_filesystem():
-
         result = runner.invoke(init, [])
 
         assert result.exit_code == 0
@@ -39,15 +38,10 @@ def test_configuration_loading():
 
         # Use a less impactful config to test, as this config might be impactful for all the tests (since it's setting the envs)
 
-        os.environ["SPARK_CONFIG__SPARK_RESULT_OUTPUT_PARTS"] = (
-
-            SPARK_RESULT_OUTPUT_PARTS
-
-        )
+        os.environ["SPARK_CONFIG__SPARK_RESULT_OUTPUT_PARTS"] = SPARK_RESULT_OUTPUT_PARTS
 
         # this should not be error out as we will just give users prompt, though the config is not really here
 
         client = FeathrClient(config_path="./feathr_user_workspace/feathr_config.yaml")
 
         assert client.output_num_parts == SPARK_RESULT_OUTPUT_PARTS
-

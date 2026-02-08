@@ -7,9 +7,7 @@
 
 from typing import Dict, Optional
 
-
 from PIL import Image
-
 
 from .profiler import profile_method, profiler
 
@@ -21,8 +19,6 @@ class ImageResolver:
 
     def __init__(self, images_dir: str = ".fle/sprites"):
         """Initialize image resolver.
-
-
 
         Args:
 
@@ -38,15 +34,11 @@ class ImageResolver:
     def __call__(self, name: str, shadow: bool = False) -> Optional[Image.Image]:
         """Load and cache an image.
 
-
-
         Args:
 
             name: Name of the sprite (without extension)
 
             shadow: Whether to load shadow variant
-
-
 
         Returns:
 

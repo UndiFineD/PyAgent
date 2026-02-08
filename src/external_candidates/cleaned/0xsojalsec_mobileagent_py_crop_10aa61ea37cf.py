@@ -13,9 +13,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 def crop_image(img, position):
-
     def distance(x1, y1, x2, y2):
-
         return math.sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2))
 
     position = position.tolist()
@@ -83,12 +81,10 @@ def crop_image(img, position):
 
 
 def calculate_size(box):
-
     return (box[2] - box[0]) * (box[3] - box[1])
 
 
 def calculate_iou(box1, box2):
-
     xA = max(box1[0], box2[0])
 
     yA = max(box1[1], box2[1])
@@ -111,7 +107,6 @@ def calculate_iou(box1, box2):
 
 
 def crop(image, box, i, text_data=None):
-
     image = Image.open(image)
 
     if text_data:
@@ -135,7 +130,6 @@ def crop(image, box, i, text_data=None):
 
 
 def in_box(box, target):
-
     if (box[0] > target[0]) and (box[1] > target[1]) and (box[2] < target[2]) and (box[3] < target[3]):
         return True
 
@@ -144,7 +138,6 @@ def in_box(box, target):
 
 
 def crop_for_clip(image, box, i, position):
-
     image = Image.open(image)
 
     w, h = image.size

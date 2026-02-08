@@ -16,7 +16,6 @@ from manim_imports_ext import *
 
 class Intro(Scene):
     def construct(self):
-
         logo = ImageMobject("LogoGeneration", invert=False)
 
         name_mob = OldTexText("3Blue1Brown").center()
@@ -54,7 +53,6 @@ class Intro(Scene):
 
 class IntroduceSteve(Scene):
     def construct(self):
-
         name = OldTexText("Steven Strogatz")
 
         name.to_edge(UP)
@@ -140,7 +138,6 @@ class IntroduceSteve(Scene):
 
 class ShowTweets(Scene):
     def construct(self):
-
         tweets = [ImageMobject("tweet%d" % x, invert=False) for x in range(1, 4)]
 
         for tweet in tweets:
@@ -165,7 +162,6 @@ class ShowTweets(Scene):
 
 class LetsBeHonest(Scene):
     def construct(self):
-
         self.play(
             ShimmerIn(
                 OldTexText("""
@@ -183,7 +179,6 @@ class LetsBeHonest(Scene):
 
 class WhatIsTheBrachistochrone(Scene):
     def construct(self):
-
         self.play(
             ShimmerIn(
                 OldTexText("""
@@ -199,7 +194,6 @@ class WhatIsTheBrachistochrone(Scene):
 
 class DisectBrachistochroneWord(Scene):
     def construct(self):
-
         word = OldTexText(["Bra", "chis", "to", "chrone"])
 
         original_word = word.copy()
@@ -327,7 +321,6 @@ class DisectBrachistochroneWord(Scene):
 
 class OneSolutionTwoInsights(Scene):
     def construct(self):
-
         one_solution = OldTexText(["One ", "solution"])
 
         two_insights = OldTexText(["Two ", " insights"])
@@ -376,7 +369,6 @@ class OneSolutionTwoInsights(Scene):
 
 class CircleOfIdeas(Scene):
     def construct(self):
-
         words = list(map(TexText, ["optics", "calculus", "mechanics", "geometry", "history"]))
 
         words[0].set_color(YELLOW)
@@ -429,7 +421,6 @@ class CircleOfIdeas(Scene):
         self.wait()
 
     def get_spinning_anims(self, words, angle=np.pi / 6):
-
         anims = []
 
         for word in words:
@@ -446,7 +437,6 @@ class CircleOfIdeas(Scene):
 
 class FermatsPrincipleStatement(Scene):
     def construct(self):
-
         words = OldTexText(
             [
                 "Fermat's principle:",
@@ -497,7 +487,6 @@ class FermatsPrincipleStatement(Scene):
 
 class VideoProgression(Scene):
     def construct(self):
-
         spacing = 2 * UP
 
         brachy, optics, light_in_two, snells, multi = words = [
@@ -562,11 +551,9 @@ class BalanceCompetingFactors(Scene):
 
     @staticmethod
     def args_to_string(*words):
-
         return "".join([word.split(" ")[0] for word in words])
 
     def construct(self, *words):
-
         factor1, factor2 = [OldTexText("Factor %d" % x).set_color(c) for x, c in [(1, RED_D), (2, BLUE_D)]]
 
         real_factor1, real_factor2 = list(map(TexText, words))
@@ -619,7 +606,6 @@ class BalanceCompetingFactors(Scene):
         self.rotate(1)
 
     def rotate(self, factor):
-
         angle = np.pi / 11
 
         self.play(Rotate(self.balancers, factor * angle, run_time=abs(factor)))
@@ -629,7 +615,6 @@ class BalanceCompetingFactors(Scene):
 
 class Challenge(Scene):
     def construct(self):
-
         self.add(
             OldTexText("""
 
@@ -651,7 +636,6 @@ class Challenge(Scene):
 
 class Section1(Scene):
     def construct(self):
-
         self.add(OldTexText("Section 1: Johann Bernoulli's insight"))
 
         self.wait()
@@ -659,7 +643,6 @@ class Section1(Scene):
 
 class Section2(Scene):
     def construct(self):
-
         self.add(OldTexText("Section 2: Mark Levi's insight, and a challenge", size="\\large"))
 
         self.wait()
@@ -667,7 +650,6 @@ class Section2(Scene):
 
 class NarratorInterjection(Scene):
     def construct(self):
-
         words1 = OldTex("<\\text{Narrator interjection}>")
 
         words2 = OldTex("<\\!/\\text{Narrator interjection}>")
@@ -685,7 +667,6 @@ class NarratorInterjection(Scene):
 
 class ThisCouldBeTheEnd(Scene):
     def construct(self):
-
         words = OldTexText(["This could be the end\\dots", "but\\dots"])
 
         for part in words.split():
@@ -696,7 +677,6 @@ class ThisCouldBeTheEnd(Scene):
 
 class MyOwnChallenge(Scene):
     def construct(self):
-
         self.add(OldTexText("My own challenge:"))
 
         self.wait()
@@ -704,7 +684,6 @@ class MyOwnChallenge(Scene):
 
 class WarmupChallenge(Scene):
     def construct(self):
-
         self.add(OldTexText("\\large Warm-up challenge: Confirm this for yourself"))
 
         self.wait()
@@ -712,7 +691,6 @@ class WarmupChallenge(Scene):
 
 class FindAnotherSolution(Scene):
     def construct(self):
-
         self.add(OldTexText("Find another brachistochrone solution\\dots"))
 
         self.wait()
@@ -720,7 +698,6 @@ class FindAnotherSolution(Scene):
 
 class ProofOfSnellsLaw(Scene):
     def construct(self):
-
         self.add(OldTexText("Proof of Snell's law:"))
 
         self.wait()
@@ -728,7 +705,6 @@ class ProofOfSnellsLaw(Scene):
 
 class CondensedVersion(Scene):
     def construct(self):
-
         snells = OldTexText("Snell's")
 
         snells.shift(-snells.get_left())

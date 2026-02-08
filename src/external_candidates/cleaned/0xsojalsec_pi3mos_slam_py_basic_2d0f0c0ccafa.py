@@ -209,7 +209,6 @@ def array_to_pil(array):
 
 
 def rotate_target_dim_to_last_axis(x, target_dim=3):
-
     shape = x.shape
 
     axis_to_move = -1
@@ -326,7 +325,6 @@ def write_ply(
     rgb=None,
     path="output.ply",
 ) -> None:
-
     if torch.is_tensor(xyz):
         xyz = xyz.detach().cpu().numpy()
 

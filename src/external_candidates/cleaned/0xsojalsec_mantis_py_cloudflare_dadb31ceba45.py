@@ -36,13 +36,11 @@ Source is marked as internal in this case.
 
 class Cloudflare(BaseScanner):
     async def init(self, args: ArgsModel):
-
         self.args = args
 
         return [(self, "Cloudflare")]
 
     async def execute(self, tooltuple):
-
         # logging.info(f"Using credentials from {os.environ['AWS_SHARED_CREDENTIALS_FILE']}")
 
         logging.info(f"Reading zone files from Cloudflare nameservers")

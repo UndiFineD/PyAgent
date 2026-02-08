@@ -65,12 +65,10 @@ class WriteInterval(LightningEnum):
 
     @property
     def on_batch(self) -> bool:
-
         return self in (self.BATCH, self.BATCH_AND_EPOCH)
 
     @property
     def on_epoch(self) -> bool:
-
         return self in (self.EPOCH, self.BATCH_AND_EPOCH)
 
 
@@ -160,7 +158,6 @@ class BasePredictionWriter(Callback):
     """
 
     def __init__(self, write_interval: Literal["batch", "epoch", "batch_and_epoch"] = "batch") -> None:
-
         if write_interval not in list(WriteInterval):
             raise MisconfigurationException(f"`write_interval` should be one of {[i.value for i in WriteInterval]}.")
 
@@ -168,7 +165,6 @@ class BasePredictionWriter(Callback):
 
     @override
     def setup(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule", stage: str) -> None:
-
         if is_param_in_hook_signature(pl_module.predict_step, "dataloader_iter", explicit=True):
             raise NotImplementedError("The `PredictionWriterCallback` does not support using `dataloader_iter`.")
 
@@ -207,7 +203,6 @@ class BasePredictionWriter(Callback):
         batch_idx: int,
         dataloader_idx: int = 0,
     ) -> None:
-
         if not self.interval.on_batch:
             return
 
@@ -217,7 +212,6 @@ class BasePredictionWriter(Callback):
 
     @override
     def on_predict_epoch_end(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
-
         if not self.interval.on_epoch:
             return
 

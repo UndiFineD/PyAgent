@@ -15,8 +15,8 @@ from agno.cli.console import print_info
 
 from agno.utils.log import logger
 
-class IamRole(AwsResource):
 
+class IamRole(AwsResource):
     """
 
     Reference:
@@ -80,7 +80,6 @@ class IamRole(AwsResource):
     arn: Optional[str] = None
 
     def _create(self, aws_client: AwsApiClient) -> bool:
-
         """Creates the IamRole
 
         Args:
@@ -92,29 +91,23 @@ class IamRole(AwsResource):
         print_info(f"Creating {self.get_resource_type()}: {self.get_resource_name()}")
 
         try:
-
             # create a dict of args which are not null, otherwise aws type validation fails
 
             not_null_args: Dict[str, Any] = {}
 
             if self.path:
-
                 not_null_args["Path"] = self.path
 
             if self.description:
-
                 not_null_args["Description"] = self.description
 
             if self.max_session_duration:
-
                 not_null_args["MaxSessionDuration"] = self.max_session_duration
 
             if self.permissions_boundary:
-
                 not_null_args["PermissionsBoundary"] = self.permissions_boundary
 
             if self.tags:
-
                 not_null_args["Tags"] = self.tags
 
             # Create Role
@@ -122,13 +115,9 @@ class IamRole(AwsResource):
             service_resource = self.get_service_resource(aws_client)
 
             role = service_resource.create_role(
-
                 RoleName=self.name,
-
                 AssumeRolePolicyDocument=self.assume_role_policy_document,
-
                 **not_null_args,
-
             )
 
             # logger.debug(f"Role: {role}")
@@ -144,7 +133,6 @@ class IamRole(AwsResource):
             logger.debug(f"arn: {self.arn}")
 
             if create_date is not None:
-
                 print_info(f"Role created: {self.name}")
 
                 self.active_resource = role
@@ -154,7 +142,6 @@ class IamRole(AwsResource):
             logger.error("Role could not be created")
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be created.")
 
             logger.error(e)
@@ -162,33 +149,23 @@ class IamRole(AwsResource):
         return False
 
     def post_create(self, aws_client: AwsApiClient) -> bool:
-
         # Wait for Role to be created
 
         if self.wait_for_create:
-
             try:
-
                 print_info(f"Waiting for {self.get_resource_type()} to be created.")
 
                 waiter = self.get_service_client(aws_client).get_waiter("role_exists")
 
                 waiter.wait(
-
                     RoleName=self.name,
-
                     WaiterConfig={
-
                         "Delay": self.waiter_delay,
-
                         "MaxAttempts": self.waiter_max_attempts,
-
                     },
-
                 )
 
             except Exception as e:
-
                 logger.error("Waiter failed.")
 
                 logger.error(e)
@@ -198,21 +175,17 @@ class IamRole(AwsResource):
         attach_policy_success = True
 
         if self.active_resource is not None and self.policy_arns is not None:
-
             _success = self.attach_policy_arns(aws_client)
 
             if not _success:
-
                 attach_policy_success = False
 
         # Attach policies to role
 
         if self.active_resource is not None and self.policies is not None:
-
             _success = self.attach_policies(aws_client)
 
             if not _success:
-
                 attach_policy_success = False
 
         # logger.info(f"attach_policy_success: {attach_policy_success}")
@@ -220,7 +193,6 @@ class IamRole(AwsResource):
         return attach_policy_success
 
     def _read(self, aws_client: AwsApiClient) -> Optional[Any]:
-
         """Returns the IamRole
 
         Args:
@@ -234,7 +206,6 @@ class IamRole(AwsResource):
         logger.debug(f"Reading {self.get_resource_type()}: {self.get_resource_name()}")
 
         try:
-
             service_resource = self.get_service_resource(aws_client)
 
             role = service_resource.Role(name=self.name)
@@ -250,17 +221,14 @@ class IamRole(AwsResource):
             logger.debug(f"arn: {self.arn}")
 
             if create_date is not None:
-
                 logger.debug(f"Role found: {role.role_name}")
 
                 self.active_resource = role
 
         except ClientError as ce:
-
             logger.debug(f"ClientError: {ce}")
 
         except Exception as e:
-
             logger.error(f"Error reading {self.get_resource_type()}.")
 
             logger.error(e)
@@ -268,7 +236,6 @@ class IamRole(AwsResource):
         return self.active_resource
 
     def _delete(self, aws_client: AwsApiClient) -> bool:
-
         """Deletes the IamRole
 
         Args:
@@ -280,7 +247,6 @@ class IamRole(AwsResource):
         print_info(f"Deleting {self.get_resource_type()}: {self.get_resource_name()}")
 
         try:
-
             role = self._read(aws_client)
 
             # logger.debug(f"Role: {role}")
@@ -290,7 +256,6 @@ class IamRole(AwsResource):
             self.active_resource = None
 
             if role is None:
-
                 logger.warning(f"No {self.get_resource_type()} to delete")
 
                 return True
@@ -300,7 +265,6 @@ class IamRole(AwsResource):
             policies = role.attached_policies.all()
 
             for policy in policies:
-
                 print_info(f"Detaching policy: {policy}")
 
                 role.detach_policy(PolicyArn=policy.arn)
@@ -310,7 +274,6 @@ class IamRole(AwsResource):
             profiles = role.instance_profiles.all()
 
             for profile in profiles:
-
                 print_info(f"Removing role from profile: {profile}")
 
                 profile.remove_role(RoleName=role.name)
@@ -322,7 +285,6 @@ class IamRole(AwsResource):
             return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be deleted.")
 
             logger.error("Please try again or delete resources manually.")
@@ -332,7 +294,6 @@ class IamRole(AwsResource):
         return False
 
     def attach_policy_arns(self, aws_client: AwsApiClient) -> bool:
-
         """
 
         Attaches the specified managed policy to the specified IAM role.
@@ -348,25 +309,20 @@ class IamRole(AwsResource):
         """
 
         if self.policy_arns is None:
-
             return True
 
         role = self._read(aws_client)
 
         if role is None:
-
             logger.warning(f"No {self.get_resource_type()} to attach")
 
             return True
 
         try:
-
             # logger.debug("Attaching managed policies to role")
 
             for arn in self.policy_arns:
-
                 if isinstance(arn, str):
-
                     role.attach_policy(PolicyArn=arn)
 
                     print_info(f"Attaching policy to {role.role_name}: {arn}")
@@ -374,13 +330,11 @@ class IamRole(AwsResource):
             return True
 
         except Exception as e:
-
             logger.error(e)
 
         return False
 
     def attach_policies(self, aws_client: AwsApiClient) -> bool:
-
         """
 
         Returns:
@@ -390,33 +344,26 @@ class IamRole(AwsResource):
         """
 
         if self.policies is None:
-
             return True
 
         role = self._read(aws_client)
 
         if role is None:
-
             logger.warning(f"No {self.get_resource_type()} to attach")
 
             return True
 
         try:
-
             logger.debug("Attaching managed policies to role")
 
             for policy in self.policies:
-
                 if policy.arn is None:
-
                     create_success = policy.create(aws_client)
 
                     if not create_success:
-
                         return False
 
                 if policy.arn is not None:
-
                     role.attach_policy(PolicyArn=policy.arn)
 
                     print_info(f"Attaching policy to {role.role_name}: {policy.arn}")
@@ -424,20 +371,16 @@ class IamRole(AwsResource):
             return True
 
         except Exception as e:
-
             logger.error(e)
 
         return False
 
     def get_arn(self, aws_client: AwsApiClient) -> Optional[str]:
-
         role = self._read(aws_client)
 
         if role is None:
-
             return None
 
         self.arn = role.arn
 
         return self.arn
-

@@ -93,7 +93,6 @@ def submit_rfdiffusion_preview(
 
 
 def process_workflow_results(job: DesignJob, callback: Callable = None) -> list[Base]:
-
     pool = db.get(Pool, design_job_id=job.id)
 
     project_round = db.get(Round, id=pool.round_id)
@@ -242,7 +241,6 @@ def process_rfdiffusion_design(
     esmfold_file_suffix: str | None,
     cyclic: bool,
 ) -> tuple[list[Design], dict[str, tuple[str, str]]]:
-
     batch_number = (total_idx_backbone // batch_size) + 1
 
     batch_name = f"contig{contig_idx + 1}_batch{batch_number}"
@@ -422,7 +420,6 @@ def process_rfdiffusion_design(
 
 
 def prepare_rfdiffusion_workflow_params(workflow: RFdiffusionWorkflow, workdir: str) -> dict:
-
     # prepare pdb file or txt file with multiple pdb paths
 
     workflow_input_path = storage.prepare_workflow_inputs(workflow.rfdiffusion_params.input_pdb_paths, workdir=workdir)
@@ -489,7 +486,6 @@ def prepare_rfdiffusion_workflow_params(workflow: RFdiffusionWorkflow, workdir: 
 
 
 def get_rfdiffusion_run_parameters(workflow: RFdiffusionWorkflow) -> str:
-
     args = ""
 
     if workflow.rfdiffusion_params.partial_diffusion:

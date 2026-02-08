@@ -22,7 +22,6 @@ class Ingredient(BaseModel):
 
 class SetResearch(Tool):
     def __init__(self, connection, game_state):
-
         super().__init__(connection, game_state)
 
     def __call__(self, technology: Technology) -> List[Ingredient]:

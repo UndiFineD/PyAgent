@@ -24,7 +24,6 @@ from shapely.geometry import MultiPolygon, Polygon
 
 
 def test_validate_coordinates():
-
     validate_coordinates(lat=-89.3, lon=178.2)
 
     validate_coordinates(lat=89.3, lon=-178.2)
@@ -38,7 +37,6 @@ def test_validate_coordinates():
 
 @patch.object(ox, "geocode")
 def test_get_aoi_from_user_input_address(ox_geocode):
-
     ox_geocode.return_value = 52.52, 13.4
 
     poly = get_aoi("Unter den Linden 37, 10117 Berlin")
@@ -57,7 +55,6 @@ def test_get_aoi_from_user_input_address(ox_geocode):
 
 @patch.object(ox, "geocode")
 def test_get_aoi_from_user_input_coordinates(ox_geocode):
-
     ox_geocode.return_value = 52.52, 13.4
 
     poly = get_aoi(coordinates=(52.52, 13.4))
@@ -74,7 +71,6 @@ def test_get_aoi_from_user_input_coordinates(ox_geocode):
 
 @patch.object(ox, "geocode")
 def test_get_aoi_from_user_input_rectangle(ox_geocode):
-
     ox_geocode.return_value = 52.52, 13.4
 
     poly = get_aoi("Unter den Linden 37, 10117 Berlin", rectangular=True)
@@ -93,7 +89,6 @@ def test_get_aoi_from_user_input_rectangle(ox_geocode):
 
 @pytest.mark.live
 def test_get_aoi_from_user_input_address_live():
-
     poly = get_aoi("Unter den Linden 37, 10117 Berlin")
 
     assert isinstance(poly, Polygon)
@@ -108,7 +103,6 @@ def test_get_aoi_from_user_input_address_live():
 
 @pytest.mark.live
 def test_get_aoi_from_user_input_coordinates_live():
-
     poly = get_aoi(coordinates=(52.52, 13.4))
 
     assert isinstance(poly, Polygon)
@@ -123,13 +117,11 @@ def test_get_aoi_from_user_input_coordinates_live():
 
 @pytest.mark.live
 def test_get_aoi_invalid_address_raises():
-
     with pytest.raises(GeoCodingError):
         get_aoi("not_an_address")
 
 
 def test_explode_multigeoemtries():
-
     poly1 = Polygon([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]])
 
     poly2 = Polygon([[0, 0], [2, 0], [2, 2], [0, 2], [0, 0]])

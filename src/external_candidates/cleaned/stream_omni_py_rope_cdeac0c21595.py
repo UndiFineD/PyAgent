@@ -7,7 +7,6 @@ import logging
 
 from math import pi
 
-
 import torch
 
 from einops import rearrange, repeat
@@ -16,7 +15,6 @@ from torch import nn
 
 
 def broadcat(tensors, dim=-1):
-
     num_tensors = len(tensors)
 
     shape_lens = set(list(map(lambda t: len(t.shape), tensors)))
@@ -49,7 +47,6 @@ def broadcat(tensors, dim=-1):
 
 
 def rotate_half(x):
-
     x = rearrange(x, "... (d r) -> ... d r", r=2)
 
     x1, x2 = x.unbind(dim=-1)
@@ -71,7 +68,6 @@ class VisionRotaryEmbedding(nn.Module):
         max_freq=10,
         num_freqs=1,
     ):
-
         super().__init__()
 
         if custom_freqs:
@@ -111,7 +107,6 @@ class VisionRotaryEmbedding(nn.Module):
         logging.info(f"Shape of rope freq: {self.freqs_cos.shape}")
 
     def forward(self, t, start_index=0):
-
         rot_dim = self.freqs_cos.shape[-1]
 
         end_index = start_index + rot_dim
@@ -144,7 +139,6 @@ class VisionRotaryEmbeddingFast(nn.Module):
         num_freqs=1,
         patch_dropout=0.0,
     ):
-
         super().__init__()
 
         if custom_freqs:
@@ -186,7 +180,6 @@ class VisionRotaryEmbeddingFast(nn.Module):
         logging.info(f"Shape of rope freq: {self.freqs_cos.shape}")
 
     def forward(self, t, patch_indices_keep=None):
-
         if patch_indices_keep is not None:
             batch = t.size()[0]
 

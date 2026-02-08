@@ -170,19 +170,15 @@ class _DummyExperiment:
     """Dummy experiment."""
 
     def nop(self, *args: Any, **kw: Any) -> None:
-
         pass
 
     def __getattr__(self, _: Any) -> Callable:
-
         return self.nop
 
     def __getitem__(self, idx: int) -> "_DummyExperiment":
-
         # enables self.logger.experiment[0].add_image(...)
 
         return self
 
     def __setitem__(self, *args: Any, **kwargs: Any) -> None:
-
         pass

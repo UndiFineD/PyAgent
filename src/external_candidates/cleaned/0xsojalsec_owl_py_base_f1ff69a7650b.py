@@ -46,7 +46,6 @@ class BaseToolAgent(BaseAgent):
     """
 
     def __init__(self, name: str, description: str) -> None:
-
         self.name = name
 
         self.description = description
@@ -62,5 +61,4 @@ class BaseToolAgent(BaseAgent):
         pass
 
     def __str__(self) -> str:
-
         return f"{self.name}: {self.description}"

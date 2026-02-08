@@ -24,17 +24,14 @@ class NXCModule:
     multiple_hosts = True
 
     def __init__(self):
-
         self.mssql_conn = None
 
         self.context = None
 
     def options(self, context, module_options):
-
         pass
 
     def on_login(self, context, connection):
-
         self.context = context
 
         self.mssql_conn = connection.conn
@@ -51,7 +48,6 @@ class NXCModule:
             self.context.log.fail("No linked servers found.")
 
     def on_admin_login(self, context, connection):
-
         res = self.mssql_conn.sql_query("EXEC sp_helplinkedsrvlogin")
 
         srvs = [srv for srv in res if srv["Local Login"] != "NULL"]

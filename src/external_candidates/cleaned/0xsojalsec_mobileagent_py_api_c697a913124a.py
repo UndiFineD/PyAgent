@@ -25,7 +25,6 @@ from PIL import Image
 
 
 def resize_encode_image(image_path, screen_scale_ratio=0.5):
-
     with Image.open(image_path) as img:
         new_width = int(img.width * screen_scale_ratio)
 
@@ -47,7 +46,6 @@ def resize_encode_image(image_path, screen_scale_ratio=0.5):
 
 
 def inference_chat(chat, model, api_url, token):
-
     messages = []
 
     for role, content in chat:

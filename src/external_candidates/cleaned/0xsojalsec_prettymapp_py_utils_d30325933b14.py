@@ -73,7 +73,6 @@ def get_colors_from_style(style: str) -> dict:
 
 
 def plt_to_svg(fig: figure) -> str:
-
     imgdata = StringIO()
 
     fig.savefig(imgdata, format="svg", pad_inches=0, bbox_inches="tight", transparent=True)
@@ -86,7 +85,6 @@ def plt_to_svg(fig: figure) -> str:
 
 
 def svg_to_html(svg_string: str) -> str:
-
     b64 = base64.b64encode(svg_string.encode("utf-8")).decode("utf-8")
 
     css_justify = "center"
@@ -99,7 +97,6 @@ def svg_to_html(svg_string: str) -> str:
 
 
 def plt_to_href(fig: figure, filename: str):
-
     buf = BytesIO()
 
     fig.savefig(buf, format="png", pad_inches=0, bbox_inches="tight", transparent=True)
@@ -140,7 +137,6 @@ def slugify(value: Any, allow_unicode: bool = False):
 
 
 def gdf_to_bytesio_geojson(geodataframe):
-
     geojson_object = io.BytesIO()
 
     geodataframe.to_file(geojson_object, driver="GeoJSON")

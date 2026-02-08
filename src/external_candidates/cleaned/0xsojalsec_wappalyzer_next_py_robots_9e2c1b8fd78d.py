@@ -9,7 +9,6 @@ from wappalyzer.core.requester import get_response
 
 
 def get_robots(url):
-
     scheme = urlparse(url).scheme
 
     hostname = urlparse(url).hostname

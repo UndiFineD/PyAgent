@@ -17,7 +17,6 @@ from os.path import basename
 class Utils:
     @staticmethod
     def list_modules():
-
         modules = list(map(lambda x: basename(x)[:-3].lower(), glob.glob("./lib/modules/*.py")))
 
         if "__init__" in modules:
@@ -92,9 +91,7 @@ class LineWrapRawTextHelpFormatter(argparse.RawDescriptionHelpFormatter):
             return ", ".join(parts)
 
     def _get_default_metavar_for_optional(self, action):
-
         return action.dest.upper()
 
     def _get_default_metavar_for_positional(self, action):
-
         return action.dest.upper()

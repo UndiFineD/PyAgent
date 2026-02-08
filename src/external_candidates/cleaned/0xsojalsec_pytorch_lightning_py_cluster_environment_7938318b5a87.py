@@ -61,7 +61,6 @@ class ClusterEnvironment(ABC):
 
     @abstractmethod
     def set_world_size(self, size: int) -> None:
-
         pass
 
     @abstractmethod
@@ -70,7 +69,6 @@ class ClusterEnvironment(ABC):
 
     @abstractmethod
     def set_global_rank(self, rank: int) -> None:
-
         pass
 
     @abstractmethod

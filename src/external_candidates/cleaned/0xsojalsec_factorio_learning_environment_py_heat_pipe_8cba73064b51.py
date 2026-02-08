@@ -13,7 +13,6 @@ Heat pipe renderer with connection logic
 
 from typing import Callable, Dict, Optional, Tuple
 
-
 from PIL import Image
 
 

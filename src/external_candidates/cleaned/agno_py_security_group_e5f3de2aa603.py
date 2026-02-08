@@ -17,8 +17,8 @@ from agno.cli.console import print_info
 
 from agno.utils.log import logger
 
-def get_my_ip() -> str:
 
+def get_my_ip() -> str:
     """Returns the network ip"""
 
     import httpx
@@ -27,8 +27,8 @@ def get_my_ip() -> str:
 
     return f"{external_ip}/32"
 
-class InboundRule(AwsResource):
 
+class InboundRule(AwsResource):
     """
 
     Reference:
@@ -97,8 +97,8 @@ class InboundRule(AwsResource):
 
     ip_protocol: Optional[str] = None
 
-class OutboundRule(AwsResource):
 
+class OutboundRule(AwsResource):
     """
 
     Reference:
@@ -167,8 +167,8 @@ class OutboundRule(AwsResource):
 
     ip_protocol: Optional[str] = None
 
-class SecurityGroup(AwsResource):
 
+class SecurityGroup(AwsResource):
     """
 
     Reference:
@@ -238,7 +238,6 @@ class SecurityGroup(AwsResource):
     group_id: Optional[str] = None
 
     def _create(self, aws_client: AwsApiClient) -> bool:
-
         """Creates the SecurityGroup
 
         Args:
@@ -260,7 +259,6 @@ class SecurityGroup(AwsResource):
         description = self.description or "Created by Agno"
 
         if description is not None:
-
             not_null_args["Description"] = description
 
         # Get vpc_id
@@ -268,33 +266,26 @@ class SecurityGroup(AwsResource):
         vpc_id = self.vpc_id
 
         if vpc_id is None and self.subnets is not None:
-
             from agno.aws.resource.ec2.subnet import get_vpc_id_from_subnet_ids
 
             subnet_ids = []
 
             for subnet in self.subnets:
-
                 if isinstance(subnet, Subnet):
-
                     subnet_ids.append(subnet.name)
 
                 elif isinstance(subnet, str):
-
                     subnet_ids.append(subnet)
 
             vpc_id = get_vpc_id_from_subnet_ids(subnet_ids, aws_client)
 
         if vpc_id is not None:
-
             not_null_args["VpcId"] = vpc_id
 
         if self.tag_specifications:
-
             not_null_args["TagSpecifications"] = self.tag_specifications
 
         if self.dry_run:
-
             not_null_args["DryRun"] = self.dry_run
 
         # Step 2: Create Security group
@@ -302,13 +293,9 @@ class SecurityGroup(AwsResource):
         service_client = self.get_service_client(aws_client)
 
         try:
-
             create_response = service_client.create_security_group(
-
                 GroupName=self.name,
-
                 **not_null_args,
-
             )
 
             logger.debug(f"Response: {create_response}")
@@ -316,13 +303,11 @@ class SecurityGroup(AwsResource):
             # Validate resource creation
 
             if create_response is not None:
-
                 self.active_resource = create_response
 
                 return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be created.")
 
             logger.error(e)
@@ -330,47 +315,28 @@ class SecurityGroup(AwsResource):
         return False
 
     def post_create(self, aws_client: AwsApiClient) -> bool:
-
         # Wait for SecurityGroup to be created
 
         if self.wait_for_create:
-
             try:
-
                 print_info(f"Waiting for {self.get_resource_type()} to be created.")
 
-                waiter = self.get_service_client(aws_client).get_waiter(
-
-                    "security_group_exists"
-
-                )
+                waiter = self.get_service_client(aws_client).get_waiter("security_group_exists")
 
                 waiter.wait(
-
                     Filters=[
-
                         {
-
                             "Name": "group-name",
-
                             "Values": [self.name],
-
                         },
-
                     ],
-
                     WaiterConfig={
-
                         "Delay": self.waiter_delay,
-
                         "MaxAttempts": self.waiter_max_attempts,
-
                     },
-
                 )
 
             except Exception as e:
-
                 logger.error("Waiter failed.")
 
                 logger.error(e)
@@ -380,27 +346,22 @@ class SecurityGroup(AwsResource):
         # Add inbound rules
 
         if self.inbound_rules is not None or self.ingress_ip_permissions:
-
             _success = self.add_inbound_rules(aws_client)
 
             if not _success:
-
                 return False
 
         # Add outbound rules
 
         if self.outbound_rules is not None or self.egress_ip_permissions:
-
             _success = self.add_outbound_rules(aws_client)
 
             if not _success:
-
                 return False
 
         return True
 
     def _read(self, aws_client: AwsApiClient) -> Optional[Any]:
-
         """Reads the SecurityGroup
 
         Args:
@@ -416,21 +377,13 @@ class SecurityGroup(AwsResource):
         service_client = self.get_service_client(aws_client)
 
         try:
-
             describe_response = service_client.describe_security_groups(
-
                 Filters=[
-
                     {
-
                         "Name": "group-name",
-
                         "Values": [self.name],
-
                     },
-
                 ],
-
             )
 
             logger.debug(f"Response: {describe_response}")
@@ -438,19 +391,14 @@ class SecurityGroup(AwsResource):
             resource_list = describe_response.get("SecurityGroups", None)
 
             if resource_list is not None and isinstance(resource_list, list):
-
                 for resource in resource_list:
-
                     if resource.get("GroupName", None) == self.name:
-
                         self.active_resource = resource
 
         except ClientError as ce:
-
             logger.debug(f"ClientError: {ce}")
 
         except Exception as e:
-
             logger.error(f"Error reading {self.get_resource_type()}.")
 
             logger.error(e)
@@ -458,7 +406,6 @@ class SecurityGroup(AwsResource):
         return self.active_resource
 
     def _delete(self, aws_client: AwsApiClient) -> bool:
-
         """Deletes the SecurityGroup
 
         Args:
@@ -476,57 +423,34 @@ class SecurityGroup(AwsResource):
         self.active_resource = None
 
         try:
-
             group_id = self.get_security_group_id(aws_client)
 
             if group_id is not None:
-
                 delete_response = service_client.delete_security_group(GroupId=group_id)
 
             else:
-
-                delete_response = service_client.delete_security_group(
-
-                    GroupName=self.name
-
-                )
+                delete_response = service_client.delete_security_group(GroupName=self.name)
 
             logger.debug(f"Response: {delete_response}")
 
             return True
 
         except ClientError as ce:
-
             ce_resp = ce.response
 
             if ce_resp is not None:
-
                 if ce_resp.get("Error", {}).get("Code", "") == "DependencyViolation":
-
                     logger.warning(
-
                         f"SecurityGroup {self.get_resource_name()} could not be deleted "
-
                         f"as it is being used by another resource."
-
                     )
 
                     if ce_resp.get("Error", {}).get("Message", "") != "":
+                        logger.warning(f"Error: {ce_resp.get('Error', {}).get('Message', '')}")
 
-                        logger.warning(
-
-                            f"Error: {ce_resp.get('Error', {}).get('Message', '')}"
-
-                        )
-
-                    logger.warning(
-
-                        "Please try again later or delete resources manually."
-
-                    )
+                    logger.warning("Please try again later or delete resources manually.")
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be deleted.")
 
             logger.error("Please try again or delete resources manually.")
@@ -536,7 +460,6 @@ class SecurityGroup(AwsResource):
         return False
 
     def _update(self, aws_client: AwsApiClient) -> bool:
-
         """Updates the SecurityGroup"""
 
         print_info(f"Updating {self.get_resource_type()}: {self.get_resource_name()}")
@@ -544,47 +467,35 @@ class SecurityGroup(AwsResource):
         # Step 1: Update inbound rules
 
         if self.inbound_rules is not None or self.ingress_ip_permissions:
-
             _success = self.add_inbound_rules(aws_client)
 
             if not _success:
-
                 return False
 
         # Step 2: Update outbound rules
 
         if self.outbound_rules is not None or self.egress_ip_permissions:
-
             _success = self.add_outbound_rules(aws_client)
 
             if not _success:
-
                 return False
 
         return True
 
-    def get_security_group_id(
-
-        self, aws_client: Optional[AwsApiClient] = None
-
-    ) -> Optional[str]:
-
+    def get_security_group_id(self, aws_client: Optional[AwsApiClient] = None) -> Optional[str]:
         """Returns the security group id"""
 
         if self.group_id is not None:
-
             return self.group_id
 
         resource = self.read(aws_client)
 
         if resource is not None:
-
             self.group_id = resource.get("GroupId", None)
 
         return self.group_id
 
     def add_inbound_rules(self, aws_client: AwsApiClient) -> bool:
-
         """Adds the specified inbound (ingress) rules to a security group.
 
         Args:
@@ -602,7 +513,6 @@ class SecurityGroup(AwsResource):
         group_id = self.get_security_group_id(aws_client)
 
         if group_id is None:
-
             logger.warning(f"GroupId for {self.get_resource_name()} not found.")
 
             return False
@@ -610,7 +520,6 @@ class SecurityGroup(AwsResource):
         api_args["GroupId"] = group_id
 
         if self.dry_run is not None:
-
             api_args["DryRun"] = self.dry_run
 
         service_client = self.get_service_client(aws_client)
@@ -618,13 +527,9 @@ class SecurityGroup(AwsResource):
         # Add ingress_ip_permissions
 
         if self.ingress_ip_permissions is not None:
-
             try:
-
                 response = service_client.authorize_security_group_ingress(
-
                     IpPermissions=self.ingress_ip_permissions, **api_args
-
                 )
 
                 logger.debug(f"Response: {response}")
@@ -632,65 +537,37 @@ class SecurityGroup(AwsResource):
                 # Validate the response
 
                 if response is None or response.get("Return") is False:
-
-                    logger.error(
-
-                        f"Ingress rules could not be added to {self.get_resource_name()}"
-
-                    )
+                    logger.error(f"Ingress rules could not be added to {self.get_resource_name()}")
 
                     return False
 
             except ClientError as ce:
-
                 ce_resp = ce.response
 
                 if ce_resp is not None:
-
-                    if (
-
-                        ce_resp.get("Error", {}).get("Code", "")
-
-                        == "InvalidPermission.Duplicate"
-
-                    ):
-
+                    if ce_resp.get("Error", {}).get("Code", "") == "InvalidPermission.Duplicate":
                         pass
 
                 logger.debug(f"ClientError: {ce}")
 
             except Exception as e:
-
-                logger.error(
-
-                    f"Ingress rules could not be added to {self.get_resource_name()}: {e}"
-
-                )
+                logger.error(f"Ingress rules could not be added to {self.get_resource_name()}: {e}")
 
                 return False
 
         # Add inbound_rules
 
         if self.inbound_rules is not None:
-
             for rule in self.inbound_rules:
-
-                ip_permission: Dict[str, Any] = {
-
-                    "IpProtocol": rule.ip_protocol or "tcp"
-
-                }
+                ip_permission: Dict[str, Any] = {"IpProtocol": rule.ip_protocol or "tcp"}
 
                 if rule.from_port is not None:
-
                     ip_permission["FromPort"] = rule.from_port
 
                 if rule.to_port is not None:
-
                     ip_permission["ToPort"] = rule.to_port
 
                 if rule.port is not None:
-
                     ip_permission["FromPort"] = rule.port
 
                     ip_permission["ToPort"] = rule.port
@@ -700,35 +577,21 @@ class SecurityGroup(AwsResource):
                 _cidr_ip: Optional[str] = None
 
                 if rule.cidr_ip is not None:
-
                     _cidr_ip = rule.cidr_ip
 
                 elif rule.cidr_ip_function is not None:
-
                     try:
-
                         _cidr_ip = rule.cidr_ip_function()
 
                     except Exception as e:
-
-                        logger.warning(
-
-                            f"Error getting cidr_ip for {self.get_resource_name()}: {e}"
-
-                        )
+                        logger.warning(f"Error getting cidr_ip for {self.get_resource_name()}: {e}")
 
                 if _cidr_ip is not None:
-
                     ip_permission["IpRanges"] = [
-
                         {
-
                             "CidrIp": _cidr_ip,
-
                             "Description": rule.description or "",
-
                         },
-
                     ]
 
                 # Get cidr_ipv6
@@ -736,39 +599,24 @@ class SecurityGroup(AwsResource):
                 _cidr_ipv6: Optional[str] = None
 
                 if rule.cidr_ipv6 is not None:
-
                     _cidr_ipv6 = rule.cidr_ipv6
 
                 elif rule.cidr_ipv6_function is not None:
-
                     try:
-
                         _cidr_ipv6 = rule.cidr_ipv6_function()
 
                     except Exception as e:
-
-                        logger.warning(
-
-                            f"Error getting cidr_ipv6 for {self.get_resource_name()}: {e}"
-
-                        )
+                        logger.warning(f"Error getting cidr_ipv6 for {self.get_resource_name()}: {e}")
 
                 if _cidr_ipv6 is not None:
-
                     ip_permission["Ipv6Ranges"] = [
-
                         {
-
                             "CidrIpv6": _cidr_ipv6,
-
                             "Description": rule.description or "",
-
                         },
-
                     ]
 
                 if _cidr_ip is None and _cidr_ipv6 is None:
-
                     source_sg_id: Optional[str] = None
 
                     # If security_group_id is specified, use that
@@ -776,21 +624,13 @@ class SecurityGroup(AwsResource):
                     # Otherwise, use the current security group id
 
                     if rule.security_group_id is not None:
-
                         if isinstance(rule.security_group_id, str):
-
                             source_sg_id = rule.security_group_id
 
                         elif isinstance(rule.security_group_id, AwsReference):
-
-                            source_sg_id = rule.security_group_id.get_reference(
-
-                                aws_client=aws_client
-
-                            )
+                            source_sg_id = rule.security_group_id.get_reference(aws_client=aws_client)
 
                     else:
-
                         source_sg_id = group_id
 
                     # Either security_group_id or security_group_name must be specified
@@ -798,19 +638,15 @@ class SecurityGroup(AwsResource):
                     # for the rule to be valid
 
                     if source_sg_id is not None or rule.security_group_name is not None:
-
                         user_id_group_pair = {}
 
                         if source_sg_id is not None:
-
                             user_id_group_pair["GroupId"] = source_sg_id
 
                         if rule.security_group_name is not None:
-
                             user_id_group_pair["GroupName"] = rule.security_group_name
 
                         if rule.description is not None:
-
                             user_id_group_pair["Description"] = rule.description
 
                         ip_permission["UserIdGroupPairs"] = [user_id_group_pair]
@@ -818,11 +654,8 @@ class SecurityGroup(AwsResource):
                 logger.debug(f"Adding Inbound Rule: {ip_permission}")
 
                 try:
-
                     response = service_client.authorize_security_group_ingress(
-
                         IpPermissions=[ip_permission], **api_args
-
                     )
 
                     logger.debug(f"Response: {response}")
@@ -830,47 +663,27 @@ class SecurityGroup(AwsResource):
                     # Validate the response
 
                     if response is None or response.get("Return") is False:
-
-                        logger.error(
-
-                            f"Ingress rules could not be added to {self.get_resource_name()}"
-
-                        )
+                        logger.error(f"Ingress rules could not be added to {self.get_resource_name()}")
 
                         return False
 
                 except ClientError as ce:
-
                     ce_resp = ce.response
 
                     if ce_resp is not None:
-
-                        if (
-
-                            ce_resp.get("Error", {}).get("Code", "")
-
-                            == "InvalidPermission.Duplicate"
-
-                        ):
-
+                        if ce_resp.get("Error", {}).get("Code", "") == "InvalidPermission.Duplicate":
                             pass
 
                     logger.debug(f"ClientError: {ce}")
 
                 except Exception as e:
-
-                    logger.error(
-
-                        f"Ingress rules could not be added to {self.get_resource_name()}: {e}"
-
-                    )
+                    logger.error(f"Ingress rules could not be added to {self.get_resource_name()}: {e}")
 
                     return False
 
         return True
 
     def add_outbound_rules(self, aws_client: AwsApiClient) -> bool:
-
         """Adds the specified outbound (egress) rules to a security group.
 
         Args:
@@ -888,7 +701,6 @@ class SecurityGroup(AwsResource):
         group_id = self.get_security_group_id(aws_client)
 
         if group_id is None:
-
             logger.warning(f"GroupId for {self.get_resource_name()} not found.")
 
             return False
@@ -896,7 +708,6 @@ class SecurityGroup(AwsResource):
         api_args["GroupId"] = group_id
 
         if self.dry_run is not None:
-
             api_args["DryRun"] = self.dry_run
 
         service_client = self.get_service_client(aws_client)
@@ -904,13 +715,9 @@ class SecurityGroup(AwsResource):
         # Add egress_ip_permissions
 
         if self.egress_ip_permissions is not None:
-
             try:
-
                 response = service_client.authorize_security_group_egress(
-
                     IpPermissions=self.egress_ip_permissions, **api_args
-
                 )
 
                 logger.debug(f"Response: {response}")
@@ -918,65 +725,37 @@ class SecurityGroup(AwsResource):
                 # Validate the response
 
                 if response is None or response.get("Return") is False:
-
-                    logger.error(
-
-                        f"Egress rules could not be added to {self.get_resource_name()}"
-
-                    )
+                    logger.error(f"Egress rules could not be added to {self.get_resource_name()}")
 
                     return False
 
             except ClientError as ce:
-
                 ce_resp = ce.response
 
                 if ce_resp is not None:
-
-                    if (
-
-                        ce_resp.get("Error", {}).get("Code", "")
-
-                        == "InvalidPermission.Duplicate"
-
-                    ):
-
+                    if ce_resp.get("Error", {}).get("Code", "") == "InvalidPermission.Duplicate":
                         pass
 
                 logger.debug(f"ClientError: {ce}")
 
             except Exception as e:
-
-                logger.error(
-
-                    f"Egress rules could not be added to {self.get_resource_name()}: {e}"
-
-                )
+                logger.error(f"Egress rules could not be added to {self.get_resource_name()}: {e}")
 
                 return False
 
         # Add outbound_rules
 
         if self.outbound_rules is not None:
-
             for rule in self.outbound_rules:
-
-                ip_permission: Dict[str, Any] = {
-
-                    "IpProtocol": rule.ip_protocol or "tcp"
-
-                }
+                ip_permission: Dict[str, Any] = {"IpProtocol": rule.ip_protocol or "tcp"}
 
                 if rule.from_port is not None:
-
                     ip_permission["FromPort"] = rule.from_port
 
                 if rule.to_port is not None:
-
                     ip_permission["ToPort"] = rule.to_port
 
                 if rule.port is not None:
-
                     ip_permission["FromPort"] = rule.port
 
                     ip_permission["ToPort"] = rule.port
@@ -986,35 +765,21 @@ class SecurityGroup(AwsResource):
                 _cidr_ip: Optional[str] = None
 
                 if rule.cidr_ip is not None:
-
                     _cidr_ip = rule.cidr_ip
 
                 elif rule.cidr_ip_function is not None:
-
                     try:
-
                         _cidr_ip = rule.cidr_ip_function()
 
                     except Exception as e:
-
-                        logger.warning(
-
-                            f"Error getting cidr_ip for {self.get_resource_name()}: {e}"
-
-                        )
+                        logger.warning(f"Error getting cidr_ip for {self.get_resource_name()}: {e}")
 
                 if _cidr_ip is not None:
-
                     ip_permission["IpRanges"] = [
-
                         {
-
                             "CidrIp": _cidr_ip,
-
                             "Description": rule.description or "",
-
                         },
-
                     ]
 
                 # Get cidr_ipv6
@@ -1022,65 +787,41 @@ class SecurityGroup(AwsResource):
                 _cidr_ipv6: Optional[str] = None
 
                 if rule.cidr_ipv6 is not None:
-
                     _cidr_ipv6 = rule.cidr_ipv6
 
                 elif rule.cidr_ipv6_function is not None:
-
                     try:
-
                         _cidr_ipv6 = rule.cidr_ipv6_function()
 
                     except Exception as e:
-
-                        logger.warning(
-
-                            f"Error getting cidr_ipv6 for {self.get_resource_name()}: {e}"
-
-                        )
+                        logger.warning(f"Error getting cidr_ipv6 for {self.get_resource_name()}: {e}")
 
                 if _cidr_ipv6 is not None:
-
                     ip_permission["Ipv6Ranges"] = [
-
                         {
-
                             "CidrIpv6": _cidr_ipv6,
-
                             "Description": rule.description or "",
-
                         },
-
                     ]
 
                 if _cidr_ip is None and _cidr_ipv6 is None:
-
                     destination_sg_id: Optional[str] = None
 
                     if isinstance(rule.security_group_id, str):
-
                         destination_sg_id = rule.security_group_id
 
                     elif isinstance(rule.security_group_id, AwsReference):
-
-                        destination_sg_id = rule.security_group_id.get_reference(
-
-                            aws_client=aws_client
-
-                        )
+                        destination_sg_id = rule.security_group_id.get_reference(aws_client=aws_client)
 
                     user_id_group_pair = {}
 
                     if destination_sg_id is not None:
-
                         user_id_group_pair["GroupId"] = destination_sg_id
 
                     if rule.security_group_name is not None:
-
                         user_id_group_pair["GroupName"] = rule.security_group_name
 
                     if rule.description is not None:
-
                         user_id_group_pair["Description"] = rule.description
 
                     ip_permission["UserIdGroupPairs"] = [user_id_group_pair]
@@ -1088,54 +829,29 @@ class SecurityGroup(AwsResource):
                 logger.debug(f"Adding Outbound Rule: {ip_permission}")
 
                 try:
-
-                    response = service_client.authorize_security_group_egress(
-
-                        IpPermissions=[ip_permission], **api_args
-
-                    )
+                    response = service_client.authorize_security_group_egress(IpPermissions=[ip_permission], **api_args)
 
                     logger.debug(f"Response: {response}")
 
                     # Validate the response
 
                     if response is None or response.get("Return") is False:
-
-                        logger.error(
-
-                            f"Egress rules could not be added to {self.get_resource_name()}"
-
-                        )
+                        logger.error(f"Egress rules could not be added to {self.get_resource_name()}")
 
                         return False
 
                 except ClientError as ce:
-
                     ce_resp = ce.response
 
                     if ce_resp is not None:
-
-                        if (
-
-                            ce_resp.get("Error", {}).get("Code", "")
-
-                            == "InvalidPermission.Duplicate"
-
-                        ):
-
+                        if ce_resp.get("Error", {}).get("Code", "") == "InvalidPermission.Duplicate":
                             pass
 
                     logger.debug(f"ClientError: {ce}")
 
                 except Exception as e:
-
-                    logger.error(
-
-                        f"Egress rules could not be added to {self.get_resource_name()}: {e}"
-
-                    )
+                    logger.error(f"Egress rules could not be added to {self.get_resource_name()}: {e}")
 
                     return False
 
         return True
-

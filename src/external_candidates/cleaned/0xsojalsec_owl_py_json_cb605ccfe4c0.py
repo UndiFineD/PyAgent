@@ -62,7 +62,6 @@ class _CamelJSONEncoder(json.JSONEncoder):
     }
 
     def default(self, obj) -> Any:
-
         if type(obj) in self.CAMEL_ENUMS.values():
             return {"__enum__": str(obj)}
 
@@ -87,13 +86,11 @@ class JsonStorage(BaseKeyValueStorage):
     """
 
     def __init__(self, path: Optional[Path] = None) -> None:
-
         self.json_path = path or Path("./chat_history.json")
 
         self.json_path.touch()
 
     def _json_object_hook(self, d) -> Any:
-
         if "__enum__" in d:
             name, member = d["__enum__"].split(".")
 

@@ -10,11 +10,9 @@ from malwoverview.utils.colors import mycolors, printc, printr
 
 class MultipleIPExtractor:
     def __init__(self, extractors):
-
         self.extractors = extractors
 
     def get_multiple_ip_details(self, ip_address):
-
         if ip_address is None:
             printc("A valid IP address is required.", mycolors.foreground.error(cv.bkg))
 
@@ -52,7 +50,6 @@ class MultipleIPExtractor:
             #     self._get_info_polyswarm(data)
 
     def _get_info_virustotal(self, data):
-
         try:
             attributes = data.get("data", {}).get("attributes", {})
 
@@ -115,7 +112,6 @@ class MultipleIPExtractor:
         print("(For the full VirusTotal report use the -v and -V options)")
 
     def _get_info_alienvault(self, data):
-
         try:
             print()
 

@@ -23,7 +23,6 @@ class OpenAIAdapter(LLMBackendAdapter):
     """OpenAI API adapter (implemented based on the official openai package)"""
 
     def __init__(self, config: Dict[str, Any]):
-
         # Save configuration
 
         self.config = config
@@ -79,7 +78,6 @@ class OpenAIAdapter(LLMBackendAdapter):
                 # Streaming response, return async generator
 
                 async def stream_gen():
-
                     response_stream = await self.client.chat.completions.create(**final_params)
 
                     async for chunk in response_stream:

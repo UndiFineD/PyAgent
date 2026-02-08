@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class WhyPi(Scene):
     def construct(self):
-
         title = OldTexText("Why $\\pi$?")
 
         title.scale(3)
@@ -40,7 +39,6 @@ class WhyPi(Scene):
 
 class GeneralExpositionIcon(Scene):
     def construct(self):
-
         title = OldTexText("What is \\underline{\\qquad \\qquad}?")
 
         title.scale(3)
@@ -64,7 +62,6 @@ class GeneralExpositionIcon(Scene):
 
 class GeometryIcon(Scene):
     def construct(self):
-
         im = ImageMobject("geometry_icon_base.jpg")
 
         im.set_height(FRAME_HEIGHT)
@@ -82,7 +79,6 @@ class GeometryIcon(Scene):
 
 class PhysicsIcon(Scene):
     def construct(self):
-
         im = ImageMobject("physics_icon_base.png")
 
         im.set_height(FRAME_HEIGHT)
@@ -102,7 +98,6 @@ class PhysicsIcon(Scene):
 
 class SupportIcon(Scene):
     def construct(self):
-
         randy = Randolph(mode="coin_flip_2")
 
         morty = Mortimer(mode="gracious")
@@ -144,7 +139,6 @@ class SupportPitch1(Scene):
     }
 
     def construct(self):
-
         randy = Randolph()
 
         randy.to_corner(DL)
@@ -221,7 +215,6 @@ class RantPage(Scene):
     CONFIG = {}
 
     def construct(self):
-
         squares = VGroup(Square(), Square())
 
         squares.arrange(DOWN, buff=MED_SMALL_BUFF)
@@ -300,7 +293,6 @@ class RantPage(Scene):
 
 class ClipsLogo(Scene):
     def construct(self):
-
         logo = Logo()
 
         logo.set_height(FRAME_HEIGHT - 0.5)

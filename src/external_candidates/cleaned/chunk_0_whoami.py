@@ -32,7 +32,6 @@ class NXCModule:
             self.username = module_options["USER"]
 
     def on_login(self, context, connection):
-
         searchBase = connection.ldap_connection._baseDN
 
         searchFilter = (

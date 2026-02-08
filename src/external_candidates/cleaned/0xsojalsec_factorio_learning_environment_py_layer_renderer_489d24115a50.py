@@ -7,7 +7,6 @@ from abc import ABC, abstractmethod
 
 from typing import Callable, Dict
 
-
 from fle.env.tools.admin.render.utils.render_config import RenderConfig
 
 from PIL import ImageDraw
@@ -26,8 +25,6 @@ class LayerRenderer(ABC):
         """
 
         Initialize the layer renderer with configuration.
-
-
 
         Args:
 
@@ -48,8 +45,6 @@ class LayerRenderer(ABC):
         """
 
         Render this layer to the provided image.
-
-
 
         Args:
 

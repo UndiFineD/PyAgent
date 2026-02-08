@@ -27,7 +27,6 @@ from tqdm import tqdm
 
 
 def create_blueprint(exo_video_log_paths: list[Path], num_videos_to_log: Literal[4, 8] = 8) -> rrb.Blueprint:
-
     active_tab: int = 0  # 0 for video, 1 for images
 
     main_view = rrb.Vertical(
@@ -96,7 +95,6 @@ def log_mano_batch(
     shortest_timestamp: Int[ndarray, "num_frames"],
     timeline: str,
 ) -> None:
-
     mano_poses: Float32[torch.Tensor, "num_frames 2 51"] = torch.from_numpy(sequence.exo_batch_data.mano_stack.poses)
 
     # order is important here

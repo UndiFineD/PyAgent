@@ -17,13 +17,11 @@ class Conversation(BaseModel):
 
     @classmethod
     def parse_raw(cls, data: Dict[str, Any]) -> "Conversation":
-
         messages = [Message(**msg) if isinstance(msg, dict) else msg for msg in data["messages"]]
 
         return cls(messages=messages)
 
     def set_system_message(self, message: str):
-
         if self.messages and self.messages[0].role == "system":
             self.messages[0] = Message(role="system", content=message)
 
@@ -31,11 +29,9 @@ class Conversation(BaseModel):
             self.messages.insert(0, Message(role="system", content=message))
 
     def add_agent_message(self, message: str, **kwargs):
-
         self.messages.append(Message(role="assistant", content=message, metadata=kwargs))
 
     def add_user_message(self, message: str, **kwargs):
-
         self.messages.append(Message(role="user", content=message, metadata=kwargs))
 
     def add_result(self, program: str, response: str, **kwargs):

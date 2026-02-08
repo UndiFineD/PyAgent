@@ -34,7 +34,6 @@ from pi0_lerobot.custom_types import BgrImageType
 
 class Cache:
     def __init__(self, capacity):
-
         self._cache = OrderedDict()
 
         self._capacity = int(capacity)
@@ -44,16 +43,13 @@ class Cache:
 
     @property
     def capacity(self):
-
         return self._capacity
 
     @property
     def size(self):
-
         return len(self._cache)
 
     def put(self, key, val):
-
         if key in self._cache:
             return
 
@@ -63,7 +59,6 @@ class Cache:
         self._cache[key] = val
 
     def get(self, key, default=None):
-
         val = self._cache[key] if key in self._cache else default
 
         return val
@@ -105,7 +100,6 @@ class VideoReader:
     """
 
     def __init__(self, filename: Path | str, cache_capacity: int = 10):
-
         # convert to str if Path type
 
         filename = str(filename)
@@ -190,11 +184,9 @@ class VideoReader:
         return self._position
 
     def _get_real_position(self):
-
         return int(round(self._vcap.get(CAP_PROP_POS_FRAMES)))
 
     def _set_real_position(self, frame_id):
-
         self._vcap.set(CAP_PROP_POS_FRAMES, frame_id)
 
         pos = self._get_real_position()
@@ -341,7 +333,6 @@ class VideoReader:
             self._set_real_position(start)
 
         def write_frame(file_idx):
-
             img = self.read()
 
             if img is None:
@@ -359,11 +350,9 @@ class VideoReader:
                 write_frame(file_start + i)
 
     def __len__(self):
-
         return self.frame_cnt
 
     def __getitem__(self, index):
-
         if isinstance(index, slice):
             return [self.get_frame(i) for i in range(*index.indices(self.frame_cnt))]
 
@@ -378,13 +367,11 @@ class VideoReader:
         return self.get_frame(index)
 
     def __iter__(self):
-
         self._set_real_position(0)
 
         return self
 
     def __next__(self):
-
         img = self.read()
 
         if img is not None:
@@ -396,17 +383,14 @@ class VideoReader:
     next = __next__
 
     def __enter__(self):
-
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-
         self._vcap.release()
 
 
 class MultiVideoReader:
     def __init__(self, video_paths: list[Path]) -> None:
-
         # check that all video_paths are valid
 
         for video_path in video_paths:
@@ -423,22 +407,18 @@ class MultiVideoReader:
 
     @property
     def height(self) -> int:
-
         return self.video_readers[0].height
 
     @property
     def width(self) -> int:
-
         return self.video_readers[0].width
 
     def __len__(self) -> int:
-
         # Use minimum length to ensure safe iteration
 
         return min(len(reader) for reader in self.video_readers)
 
     def __iter__(self) -> Generator[list[BgrImageType] | None, None, None]:
-
         while True:
             bgr_list: list[BgrImageType] = []
 
@@ -455,7 +435,6 @@ class MultiVideoReader:
             yield bgr_list
 
     def __getitem__(self, idx: int) -> list[BgrImageType]:
-
         if idx < 0 or idx >= len(self):
             raise IndexError("Index out of range")
 
@@ -514,7 +493,6 @@ def frames2video(
     vwriter = cv2.VideoWriter(video_file, VideoWriter_fourcc(*fourcc), fps, resolution)
 
     def write_frame(file_idx):
-
         filename = osp.join(frame_dir, filename_tmpl.format(file_idx))
 
         img = cv2.imread(filename)

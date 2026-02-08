@@ -14,7 +14,6 @@ class BGPViewExtractor:
     urlbgpview = "https://api.bgpview.io/ip/"
 
     def _raw_ip_info(self, ip_address):
-
         url = f"{BGPViewExtractor.urlbgpview}{ip_address}"
 
         try:
@@ -28,7 +27,6 @@ class BGPViewExtractor:
             return {}
 
     def get_ip_details(self, ip_address):
-
         data = self._raw_ip_info(ip_address)
 
         try:

@@ -7,7 +7,6 @@ from manim_imports_ext import *
 
 
 def print_permutation(index_list):
-
     n = max(max(index_list), len(index_list))
 
     for i in range(0, n):
@@ -77,7 +76,6 @@ def print_permutation(index_list):
 
 class PermutationGrid(Scene):
     def text_box(self, str):
-
         box = OldTexText(str).scale(0.3)
 
         box.add(SurroundingRectangle(box, stroke_color=GREY_D))
@@ -85,7 +83,6 @@ class PermutationGrid(Scene):
         return box
 
     def construct(self):
-
         N = 5
 
         index_list = []

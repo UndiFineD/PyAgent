@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class OnAnsweringTwice(TeacherStudentsScene):
     def construct(self):
-
         question = OldTexText("Why $\\pi$?")
 
         question.move_to(self.screen)
@@ -67,7 +66,6 @@ class OnAnsweringTwice(TeacherStudentsScene):
 
 class AskAboutEqualMassMomentumTransfer(TeacherStudentsScene):
     def construct(self):
-
         self.student_says("Why?")
 
         self.play_student_changes("confused", "confused")
@@ -89,7 +87,6 @@ class AskAboutEqualMassMomentumTransfer(TeacherStudentsScene):
 
 class ComplainAboutRelevanceOfAnalogy(TeacherStudentsScene):
     def construct(self):
-
         self.student_says("Why would \\\\ you care", target_mode="maybe")
 
         self.play_student_changes("angry", "sassy", "maybe", added_anims=[self.teacher.change, "guilty"])
@@ -119,7 +116,6 @@ class ComplainAboutRelevanceOfAnalogy(TeacherStudentsScene):
 
 class ReplaceOneTrickySceneWithAnother(TeacherStudentsScene):
     def construct(self):
-
         self.student_says(
             "This replaces one tricky\\\\problem with another",
             index=1,
@@ -145,7 +141,6 @@ class ReplaceOneTrickySceneWithAnother(TeacherStudentsScene):
 
 class NowForTheGoodPart(TeacherStudentsScene):
     def construct(self):
-
         self.teacher_says(
             r"Now for the \\ good part!",
             target_mode="hooray",

@@ -22,7 +22,6 @@ class OldStars(Mobject1D):
     }
 
     def init_points(self):
-
         radii, phis, thetas = [scalar * np.random.random(self.num_points) for scalar in [self.radius, np.pi, 2 * np.pi]]
 
         self.add_points(
@@ -39,7 +38,6 @@ class OldStars(Mobject1D):
 
 class OldCubeWithFaces(Mobject2D):
     def init_points(self):
-
         self.add_points(
             [
                 sgn * np.array(coords)
@@ -55,13 +53,11 @@ class OldCubeWithFaces(Mobject2D):
         self.set_color(BLUE)
 
     def unit_normal(self, coords):
-
         return np.array([1 if abs(x) == 1 else 0 for x in coords])
 
 
 class OldCube(Mobject1D):
     def init_points(self):
-
         self.add_points(
             [
                 ([a, b, c][p[0]], [a, b, c][p[1]], [a, b, c][p[2]])
@@ -77,7 +73,6 @@ class OldCube(Mobject1D):
 
 class OldOctohedron(Mobject1D):
     def init_points(self):
-
         x = np.array([1, 0, 0])
 
         y = np.array([0, 1, 0])
@@ -103,7 +98,6 @@ class OldOctohedron(Mobject1D):
 
 class OldDodecahedron(Mobject1D):
     def init_points(self):
-
         phi = (1 + np.sqrt(5)) / 2
 
         x = np.array([1, 0, 0])
@@ -143,7 +137,6 @@ class OldDodecahedron(Mobject1D):
 
 class OldSphere(Mobject2D):
     def init_points(self):
-
         self.add_points(
             [
                 (np.sin(phi) * np.cos(theta), np.sin(phi) * np.sin(theta), np.cos(phi))
@@ -155,5 +148,4 @@ class OldSphere(Mobject2D):
         self.set_color(BLUE)
 
     def unit_normal(self, coords):
-
         return np.array(coords) / get_norm(coords)

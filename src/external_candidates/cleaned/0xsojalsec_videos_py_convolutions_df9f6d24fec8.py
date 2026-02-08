@@ -7,13 +7,11 @@ from manim_imports_ext import *
 
 
 def box_blur(n):
-
     return np.ones((n, n)) / (n**2)
 
 
 class ConvolutionIntroduction(InteractiveScene):
     def construct(self):
-
         frame = self.camera.frame
 
         # Setup the pixel grids
@@ -57,7 +55,6 @@ class ConvolutionIntroduction(InteractiveScene):
         # Setup kernel
 
         def get_kernel_array(kernel, pixel_array=pixel_array, tex=None):
-
             kernel_array = VGroup()
 
             for row in kernel:
@@ -105,7 +102,6 @@ class ConvolutionIntroduction(InteractiveScene):
         self.add(right_rect)
 
         def step(pos=0):
-
             i = pos // width
 
             j = pos % width
@@ -130,7 +126,6 @@ class ConvolutionIntroduction(InteractiveScene):
             new_array[pos].data["fill_rgba"][0] = rgba
 
         def walk(start, stop, time=5, surface=None):
-
             for n in range(start, stop):
                 step(n)
 
@@ -142,21 +137,18 @@ class ConvolutionIntroduction(InteractiveScene):
         # Setup zooming
 
         def zoom_to_kernel():
-
             self.play(
                 frame.animate.set_height(1.5 * kernel_array.get_height()).move_to(kernel_array),
                 run_time=2,
             )
 
         def zoom_to_new_pixel():
-
             self.play(
                 frame.animate.set_height(1.5 * kernel_array.get_height()).move_to(right_rect),
                 run_time=2,
             )
 
         def reset_frame():
-
             self.play(frame.animate.to_default_state())
 
         # Example walking
@@ -255,7 +247,6 @@ class ConvolutionIntroduction(InteractiveScene):
         gaussian.stretch(2, 2)
 
         def update_surface(surface, kernel_array=kernel_array):
-
             surface.move_to(kernel_array, IN)
 
         update_surface(gaussian)

@@ -31,7 +31,6 @@
 
 from typing import Callable, Dict, Generator, List, Optional
 
-
 import torch
 
 import torch.nn.functional as F
@@ -60,7 +59,6 @@ class TransformerLM(torch.nn.Module):
         lsm_weight: float = 0.0,
         spk_embed_dim: int = 192,
     ):
-
         super().__init__()
 
         self.llm_input_size = llm_input_size
@@ -109,7 +107,6 @@ class TransformerLM(torch.nn.Module):
         text: torch.Tensor,
         text_lengths: torch.Tensor,
     ):
-
         encoder_out, encoder_mask = self.text_encoder(
             text, text_lengths, decoding_chunk_size=1, num_decoding_left_chunks=-1
         )
@@ -130,7 +127,6 @@ class TransformerLM(torch.nn.Module):
         speech_token,
         speech_token_len,
     ):
-
         text_token = unpad_sequence(text_token, text_token_len.cpu(), batch_first=True)
 
         speech_token = unpad_sequence(speech_token, speech_token_len.cpu(), batch_first=True)
@@ -256,7 +252,6 @@ class TransformerLM(torch.nn.Module):
         sampling: int,
         ignore_eos: bool = True,
     ):
-
         while True:
             top_ids = self.sampling(weighted_scores, decoded_tokens, sampling)
 
@@ -279,7 +274,6 @@ class TransformerLM(torch.nn.Module):
         max_token_text_ratio: float = 20,
         min_token_text_ratio: float = 2,
     ) -> Generator[torch.Tensor, None, None]:
-
         device = text.device
 
         text = torch.concat([prompt_text, text], dim=1)

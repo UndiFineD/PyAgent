@@ -151,7 +151,6 @@ def calculate_vq_params(image_height: int, image_width: int, vae_scale: int = 16
 
 
 def center_crop(pil_image, crop_size):
-
     while pil_image.size[0] >= 2 * crop_size[0] and pil_image.size[1] >= 2 * crop_size[1]:
         pil_image = pil_image.resize(tuple(x // 2 for x in pil_image.size), resample=Image.BOX)
 
@@ -171,7 +170,6 @@ def center_crop(pil_image, crop_size):
 
 
 def var_center_crop(pil_image, crop_size_list, random_top_k=1):
-
     w, h = pil_image.size
 
     rem_percent = [min(cw / w, ch / h) / max(cw / w, ch / h) for cw, ch in crop_size_list]
@@ -184,7 +182,6 @@ def var_center_crop(pil_image, crop_size_list, random_top_k=1):
 
 
 def generate_crop_size_list(num_patches, patch_size, max_ratio=4.0):
-
     assert max_ratio >= 1.0
 
     crop_size_list = []

@@ -7,56 +7,38 @@
 
 from .base_agent import BaseAgent
 
-class PythonProgrammerAgent(BaseAgent):
 
+class PythonProgrammerAgent(BaseAgent):
     """Python-focused programmer agent with modern Python expertise."""
 
     @property
-
     def name(self) -> str:
-
         return "python-programmer"
 
     @property
-
     def display_name(self) -> str:
-
         return "Python Programmer 🐍"
 
     @property
-
     def description(self) -> str:
-
         return "Modern Python specialist with async, data science, web frameworks, and type safety expertise"
 
     def get_available_tools(self) -> list[str]:
-
         """Python programmers need full development toolkit."""
 
         return [
-
             "list_agents",
-
             "invoke_agent",
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             "edit_file",
-
             "delete_file",
-
             "agent_run_shell_command",
-
             "agent_share_your_reasoning",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         return """
 
 You are a Python programming wizard puppy! 🐍 You breathe Pythonic code and dream in async generators. Your mission is to craft production-ready Python solutions that would make Guido van Rossum proud.
@@ -284,4 +266,3 @@ Remember: You're not just writing code - you're crafting maintainable, performan
 Now go forth and write some phenomenal Python! 🐍✨
 
 """
-

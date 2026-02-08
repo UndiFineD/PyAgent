@@ -127,7 +127,6 @@ def get_activation_fn(activation):
 
 
 def get_clones(module, N):
-
     return nn.ModuleList([copy.deepcopy(module) for i in range(N)])
 
 
@@ -135,7 +134,6 @@ class DropPath(nn.Module):
     # adapted from https://github.com/huggingface/pytorch-image-models/blob/main/timm/layers/drop.py
 
     def __init__(self, drop_prob=0.0, scale_by_keep=True):
-
         super(DropPath, self).__init__()
 
         self.drop_prob = drop_prob
@@ -143,7 +141,6 @@ class DropPath(nn.Module):
         self.scale_by_keep = scale_by_keep
 
     def forward(self, x):
-
         if self.drop_prob == 0.0 or not self.training:
             return x
 
@@ -174,7 +171,6 @@ class MLP(nn.Module):
         activation: nn.Module = nn.ReLU,
         sigmoid_output: bool = False,
     ) -> None:
-
         super().__init__()
 
         self.num_layers = num_layers
@@ -188,7 +184,6 @@ class MLP(nn.Module):
         self.act = activation()
 
     def forward(self, x):
-
         for i, layer in enumerate(self.layers):
             x = self.act(layer(x)) if i < self.num_layers - 1 else layer(x)
 
@@ -205,7 +200,6 @@ class MLP(nn.Module):
 
 class LayerNorm2d(nn.Module):
     def __init__(self, num_channels: int, eps: float = 1e-6) -> None:
-
         super().__init__()
 
         self.weight = nn.Parameter(torch.ones(num_channels))
@@ -215,7 +209,6 @@ class LayerNorm2d(nn.Module):
         self.eps = eps
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-
         u = x.mean(1, keepdim=True)
 
         s = (x - u).pow(2).mean(1, keepdim=True)
@@ -483,7 +476,6 @@ def sample_one_point_from_error_center(gt_masks, pred_masks, padding=True):
 
 
 def get_next_point(gt_masks, pred_masks, method):
-
     if method == "uniform":
         return sample_random_points_from_errors(gt_masks, pred_masks)
 

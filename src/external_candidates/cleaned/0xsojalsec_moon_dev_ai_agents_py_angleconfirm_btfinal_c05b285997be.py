@@ -20,7 +20,6 @@ class AngleConfirm:
     """
 
     def __init__(self):
-
         self.risk_percent = 2
 
         self.stop_loss_pct = 0.5

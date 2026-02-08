@@ -9,7 +9,6 @@ import torch.nn as nn
 
 from llava.utils import rank0_print
 
-
 from .eva_clip_processors import EvaClipImageTrainProcessor
 
 from .eva_vit import EVAEncoderWrapper
@@ -19,7 +18,6 @@ from .factory import add_model_config, get_model_config, list_models
 
 class EvaClipVisionTower(nn.Module):
     def __init__(self, vision_tower, args, delay_load=False):
-
         super().__init__()
 
         self.is_loaded = False
@@ -53,7 +51,6 @@ class EvaClipVisionTower(nn.Module):
             self.cfg_only = self.config
 
     def load_model(self, device_map=None):
-
         rank0_print(f"Pretrained: {self.vision_tower_pretrained}")
 
         self.image_processor = EvaClipImageTrainProcessor(self.config["vision_cfg"]["image_size"])
@@ -67,7 +64,6 @@ class EvaClipVisionTower(nn.Module):
         self.is_loaded = True
 
     def forward(self, images):
-
         if type(images) is list:
             image_features = []
 
@@ -85,30 +81,24 @@ class EvaClipVisionTower(nn.Module):
 
     @property
     def dtype(self):
-
         return self.vision_tower.dtype
 
     @property
     def device(self):
-
         return self.vision_tower.device
 
     @property
     def hidden_size(self):
-
         return self.config["vision_cfg"]["width"]
 
     @property
     def num_patches(self):
-
         return (self.config["vision_cfg"]["image_size"] // self.config["vision_cfg"]["patch_size"]) ** 2
 
     @property
     def num_patches_per_side(self):
-
         return self.config["vision_cfg"]["image_size"] // self.config["vision_cfg"]["patch_size"]
 
     @property
     def image_size(self):
-
         return self.config["vision_cfg"]["image_size"]

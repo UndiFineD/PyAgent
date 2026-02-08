@@ -6,11 +6,9 @@
 
 class CharacterManager:
     def __init__(self):
-
         self.chars_to_sets = {}
 
     def add_pair(self, a, b):
-
         a_set = self.get_set_for_char(a)
 
         b_set = self.get_set_for_char(b)
@@ -39,11 +37,9 @@ class CharacterManager:
             self.chars_to_sets[a] = self.chars_to_sets[b] = set([a, b])
 
     def get_set_for_char(self, c):
-
         return self.chars_to_sets[c] if c in self.chars_to_sets else None
 
     def get_list_of_sets(self):
-
         l = []
 
         for s in map(sorted, self.chars_to_sets.values()):

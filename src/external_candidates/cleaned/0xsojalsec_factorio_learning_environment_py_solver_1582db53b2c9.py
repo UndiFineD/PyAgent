@@ -9,15 +9,12 @@ import random
 
 import re
 
-
 from inspect_ai.solver import Generate, Solver, TaskState, solver
 
 
 @solver
 def tile_count_questions(multiple_choice: bool = True) -> Solver:
-
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         renderer = state.metadata["renderer"]
 
         counts = {}

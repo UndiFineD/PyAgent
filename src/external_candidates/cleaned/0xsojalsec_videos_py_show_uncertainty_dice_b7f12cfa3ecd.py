@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class ShowUncertaintyDice(Scene):
     def throw_a_die(self, run_time=0.3):
-
         eye = np.random.randint(1, 7)
 
         face = self.row_of_dice.submobjects[eye - 1]
@@ -25,7 +24,6 @@ class ShowUncertaintyDice(Scene):
         )
 
     def construct(self):
-
         self.row_of_dice = RowOfDice(direction=DOWN).scale(0.5)
 
         self.add(self.row_of_dice)
@@ -48,7 +46,6 @@ class ShowUncertaintyDice(Scene):
 
 class IdealizedDieHistogram(Scene):
     def construct(self):
-
         self.probs = 1.0 / 6 * np.ones(6)
 
         x_scale = 1.3

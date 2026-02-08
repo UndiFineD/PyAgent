@@ -88,7 +88,6 @@ class OpenAICompatibleModel(BaseModelBackend):
         url: Optional[str] = None,
         token_counter: Optional[BaseTokenCounter] = None,
     ) -> None:
-
         self.api_key = api_key or os.environ.get("OPENAI_COMPATIBILIY_API_KEY")
 
         self.url = url or os.environ.get("OPENAI_COMPATIBILIY_API_BASE_URL")
@@ -164,5 +163,4 @@ class OpenAICompatibleModel(BaseModelBackend):
         return self.model_config_dict.get("stream", False)
 
     def check_model_config(self):
-
         pass

@@ -19,14 +19,14 @@ from pydantic import BaseModel
 
 from typing_extensions import Literal
 
-class CertificateSummary(BaseModel):
 
+class CertificateSummary(BaseModel):
     CertificateArn: str
 
     DomainName: Optional[str] = None
 
-class AcmCertificate(AwsResource):
 
+class AcmCertificate(AwsResource):
     """
 
     You can use Amazon Web Services Certificate Manager (ACM) to manage SSL/TLS
@@ -118,7 +118,6 @@ class AcmCertificate(AwsResource):
     wait_for_create: bool = False
 
     def _create(self, aws_client: AwsApiClient) -> bool:
-
         """Requests an ACM certificate for use with other Amazon Web Services.
 
         Args:
@@ -134,7 +133,6 @@ class AcmCertificate(AwsResource):
         domain_name = self.domain_name
 
         if domain_name is None:
-
             domain_name = self.name
 
         print_info(f"Requesting AcmCertificate for: {domain_name}")
@@ -144,33 +142,26 @@ class AcmCertificate(AwsResource):
         not_null_args: Dict[str, Any] = {}
 
         if self.subject_alternative_names is not None:
-
             not_null_args["SubjectAlternativeNames"] = self.subject_alternative_names
 
             print_info("SANs:")
 
             for san in self.subject_alternative_names:
-
                 print_info(f"    - {san}")
 
         if self.idempotency_token is not None:
-
             not_null_args["IdempotencyToken"] = self.idempotency_token
 
         if self.domain_validation_options is not None:
-
             not_null_args["DomainValidationOptions"] = self.domain_validation_options
 
         if self.options is not None:
-
             not_null_args["Options"] = self.options
 
         if self.certificate_authority_arn is not None:
-
             not_null_args["CertificateAuthorityArn"] = self.certificate_authority_arn
 
         if self.tags is not None:
-
             not_null_args["Tags"] = self.tags
 
         # Step 2: Request AcmCertificate
@@ -178,15 +169,10 @@ class AcmCertificate(AwsResource):
         service_client = self.get_service_client(aws_client)
 
         try:
-
             request_cert_response = service_client.request_certificate(
-
                 DomainName=domain_name,
-
                 ValidationMethod=self.validation_method,
-
                 **not_null_args,
-
             )
 
             logger.debug(f"AcmCertificate: {request_cert_response}")
@@ -196,7 +182,6 @@ class AcmCertificate(AwsResource):
             certificate_arn = request_cert_response.get("CertificateArn", None)
 
             if certificate_arn is not None:
-
                 print_subheading("---- Please Note: Certificate ARN ----")
 
                 print_info(f"{certificate_arn}")
@@ -208,7 +193,6 @@ class AcmCertificate(AwsResource):
                 return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be created.")
 
             logger.error(e)
@@ -216,39 +200,25 @@ class AcmCertificate(AwsResource):
         return False
 
     def post_create(self, aws_client: AwsApiClient) -> bool:
-
         # Wait for AcmCertificate to be validated
 
         if self.wait_for_create:
-
             try:
-
                 print_info(f"Waiting for {self.get_resource_type()} to be created.")
 
-                waiter = self.get_service_client(aws_client).get_waiter(
-
-                    "certificate_validated"
-
-                )
+                waiter = self.get_service_client(aws_client).get_waiter("certificate_validated")
 
                 certificate_arn = self.get_certificate_arn(aws_client)
 
                 waiter.wait(
-
                     CertificateArn=certificate_arn,
-
                     WaiterConfig={
-
                         "Delay": self.waiter_delay,
-
                         "MaxAttempts": self.waiter_max_attempts,
-
                     },
-
                 )
 
             except Exception as e:
-
                 logger.error("Waiter failed.")
 
                 logger.error(e)
@@ -256,19 +226,15 @@ class AcmCertificate(AwsResource):
         # Store cert summary if needed
 
         if self.store_cert_summary:
-
             if self.certificate_summary_file is None:
-
                 logger.error("certificate_summary_file not provided")
 
                 return False
 
             try:
-
                 read_cert_summary = self._read(aws_client)
 
                 if read_cert_summary is None:
-
                     logger.error("certificate_summary not available")
 
                     return False
@@ -276,25 +242,15 @@ class AcmCertificate(AwsResource):
                 cert_summary = CertificateSummary(**read_cert_summary)
 
                 if not self.certificate_summary_file.exists():
-
-                    self.certificate_summary_file.parent.mkdir(
-
-                        parents=True, exist_ok=True
-
-                    )
+                    self.certificate_summary_file.parent.mkdir(parents=True, exist_ok=True)
 
                     self.certificate_summary_file.touch(exist_ok=True)
 
                 self.certificate_summary_file.write_text(cert_summary.json(indent=2))
 
-                print_info(
-
-                    f"Certificate Summary stored at: {str(self.certificate_summary_file)}"
-
-                )
+                print_info(f"Certificate Summary stored at: {str(self.certificate_summary_file)}")
 
             except Exception as e:
-
                 logger.error("Could not writing Certificate Summary to file")
 
                 logger.error(e)
@@ -302,7 +258,6 @@ class AcmCertificate(AwsResource):
         return True
 
     def _read(self, aws_client: AwsApiClient) -> Optional[Any]:
-
         """Returns the Certificate ARN
 
         Args:
@@ -318,25 +273,18 @@ class AcmCertificate(AwsResource):
         service_client = self.get_service_client(aws_client)
 
         try:
-
             list_certificate_response = service_client.list_certificates()
 
             # logger.debug(f"AcmCertificate: {list_certificate_response}")
 
             current_cert = None
 
-            certificate_summary_list = list_certificate_response.get(
-
-                "CertificateSummaryList", []
-
-            )
+            certificate_summary_list = list_certificate_response.get("CertificateSummaryList", [])
 
             for cert_summary in certificate_summary_list:
-
                 domain = cert_summary.get("DomainName", None)
 
                 if domain is not None and domain == self.name:
-
                     current_cert = cert_summary
 
             # logger.debug(f"current_cert: {current_cert}")
@@ -344,17 +292,14 @@ class AcmCertificate(AwsResource):
             # logger.debug(f"current_cert type: {type(current_cert)}")
 
             if current_cert is not None:
-
                 logger.debug(f"AcmCertificate found: {self.name}")
 
                 self.active_resource = current_cert
 
         except ClientError as ce:
-
             logger.debug(f"ClientError: {ce}")
 
         except Exception as e:
-
             logger.error(f"Error reading {self.get_resource_type()}.")
 
             logger.error(e)
@@ -362,7 +307,6 @@ class AcmCertificate(AwsResource):
         return self.active_resource
 
     def _delete(self, aws_client: AwsApiClient) -> bool:
-
         """Deletes a certificate and its associated private key.
 
         Args:
@@ -378,15 +322,11 @@ class AcmCertificate(AwsResource):
         self.active_resource = None
 
         try:
-
             certificate_arn = self.get_certificate_arn(aws_client)
 
             if certificate_arn is not None:
-
                 delete_cert_response = service_client.delete_certificate(
-
                     CertificateArn=certificate_arn,
-
                 )
 
                 logger.debug(f"delete_cert_response: {delete_cert_response}")
@@ -394,26 +334,21 @@ class AcmCertificate(AwsResource):
                 print_info(f"AcmCertificate deleted: {self.name}")
 
             else:
-
                 print_info("AcmCertificate not found")
 
             return True
 
         except Exception as e:
-
             logger.error(e)
 
         return False
 
     def get_certificate_arn(self, aws_client: AwsApiClient) -> Optional[str]:
-
         cert_summary = self._read(aws_client)
 
         if cert_summary is None:
-
             return None
 
         cert_arn = cert_summary.get("CertificateArn", None)
 
         return cert_arn
-

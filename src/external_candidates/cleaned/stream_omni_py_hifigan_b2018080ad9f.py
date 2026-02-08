@@ -5,7 +5,6 @@
 
 from typing import Dict, Optional
 
-
 import torch
 
 import torch.nn as nn
@@ -28,7 +27,6 @@ class HiFiGan(nn.Module):
         tpr_loss_weight=1.0,
         tpr_loss_tau=0.04,
     ):
-
         super(HiFiGan, self).__init__()
 
         self.generator = generator
@@ -50,7 +48,6 @@ class HiFiGan(nn.Module):
         batch: dict,
         device: torch.device,
     ) -> Dict[str, Optional[torch.Tensor]]:
-
         if batch["turn"] == "generator":
             return self.forward_generator(batch, device)
 
@@ -58,7 +55,6 @@ class HiFiGan(nn.Module):
             return self.forward_discriminator(batch, device)
 
     def forward_generator(self, batch, device):
-
         real_speech = batch["speech"].to(device)
 
         pitch_feat = batch["pitch_feat"].to(device)
@@ -105,7 +101,6 @@ class HiFiGan(nn.Module):
         }
 
     def forward_discriminator(self, batch, device):
-
         real_speech = batch["speech"].to(device)
 
         # 1. calculate generator outputs

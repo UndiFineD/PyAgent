@@ -7,8 +7,8 @@
 
 # NOTE: extracted with static-only rules; review before use
 
-def hook(frame_data, _):
 
+def hook(frame_data, _):
     # Add data to the frame that you can later recover from hooks of subsequent stages. You can also recover it from subsequent hooks of the same stage.
 
     # You can use any kind of data.
@@ -32,4 +32,3 @@ def hook(frame_data, _):
     # To connect stages simply give the list to Pipeless when adding a stream:
 
     # pipeless add stream --input-uri "file:///home/user/my/path.mp4" --output-uri "screen" --frame-path "stage1,stage2"
-

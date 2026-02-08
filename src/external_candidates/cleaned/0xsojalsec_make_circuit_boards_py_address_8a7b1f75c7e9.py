@@ -49,7 +49,6 @@ def _handle_windows(func):
 
     @wraps(func)
     def wrapper(address: AddrStr, *args, **kwargs):
-
         if len(address) >= 2 and address[1] == ":" and address[0].isalpha():
             drive_letter = address[0]
 

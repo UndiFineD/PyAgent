@@ -9,7 +9,6 @@ from collections import Counter
 
 from typing import Dict, List, Optional, Tuple
 
-
 import numpy as np
 
 import psycopg2
@@ -23,7 +22,6 @@ from fle.commons.models.program import Program
 from psycopg2.extras import DictCursor
 
 from tenacity import retry_if_exception_type, wait_exponential
-
 
 from .db_sampler import DBSampler
 
@@ -41,8 +39,6 @@ class KLDiversityAchievementSampler(DBSampler):
         """
 
         Initialize the KL divergence-based achievement sampler.
-
-
 
         Args:
 
@@ -67,13 +63,9 @@ class KLDiversityAchievementSampler(DBSampler):
 
         Uses a combination of robust scaling and sigmoid transformation.
 
-
-
         Args:
 
             scores: Array of KL divergence scores
-
-
 
         Returns:
 
@@ -111,13 +103,9 @@ class KLDiversityAchievementSampler(DBSampler):
 
         Compute frequencies of achievement key-value pairs in a single program.
 
-
-
         Args:
 
             achievements_json: JSON object containing achievements
-
-
 
         Returns:
 
@@ -167,15 +155,11 @@ class KLDiversityAchievementSampler(DBSampler):
 
         Compute KL divergence between two achievement frequency distributions.
 
-
-
         Args:
 
             p: First distribution as a Counter
 
             q: Second distribution as a Counter
-
-
 
         Returns:
 
@@ -215,15 +199,11 @@ class KLDiversityAchievementSampler(DBSampler):
 
         Sample a parent program based on achievement diversity.
 
-
-
         Args:
 
             version: Version of programs to sample from
 
             **kwargs: Additional sampling parameters
-
-
 
         Returns:
 

@@ -25,8 +25,8 @@ import os
 
 from typing import Any, Dict
 
-def apply_transport_defaults(config_data: Dict[str, Any]) -> None:
 
+def apply_transport_defaults(config_data: Dict[str, Any]) -> None:
     """
 
     Apply transport and mode defaults from environment variables.
@@ -51,16 +51,12 @@ def apply_transport_defaults(config_data: Dict[str, Any]) -> None:
 
     """
 
-    config_data.setdefault(
-
-        "audio_transport", os.getenv("AUDIO_TRANSPORT", "externalmedia")
-
-    )
+    config_data.setdefault("audio_transport", os.getenv("AUDIO_TRANSPORT", "externalmedia"))
 
     config_data.setdefault("downstream_mode", os.getenv("DOWNSTREAM_MODE", "file"))
 
-def apply_audiosocket_defaults(config_data: Dict[str, Any]) -> None:
 
+def apply_audiosocket_defaults(config_data: Dict[str, Any]) -> None:
     """
 
     Apply AudioSocket configuration defaults with environment variable overrides.
@@ -98,31 +94,21 @@ def apply_audiosocket_defaults(config_data: Dict[str, Any]) -> None:
     # Port default with type conversion
 
     try:
-
         port_default = audiosocket_cfg.get("port", 8090)
 
-        audiosocket_cfg.setdefault(
-
-            "port", int(os.getenv("AUDIOSOCKET_PORT", str(port_default)))
-
-        )
+        audiosocket_cfg.setdefault("port", int(os.getenv("AUDIOSOCKET_PORT", str(port_default))))
 
     except ValueError:
-
         audiosocket_cfg["port"] = 8090
 
     # Format default (matches third arg to AudioSocket(...) in dialplan)
 
-    audiosocket_cfg.setdefault(
-
-        "format", os.getenv("AUDIOSOCKET_FORMAT", audiosocket_cfg.get("format", "ulaw"))
-
-    )
+    audiosocket_cfg.setdefault("format", os.getenv("AUDIOSOCKET_FORMAT", audiosocket_cfg.get("format", "ulaw")))
 
     config_data["audiosocket"] = audiosocket_cfg
 
-def apply_externalmedia_defaults(config_data: Dict[str, Any]) -> None:
 
+def apply_externalmedia_defaults(config_data: Dict[str, Any]) -> None:
     """
 
     Apply ExternalMedia RTP configuration defaults with environment variable overrides.
@@ -146,17 +132,14 @@ def apply_externalmedia_defaults(config_data: Dict[str, Any]) -> None:
     external_cfg = config_data.get("external_media", {}) or {}
 
     external_cfg.setdefault(
-
         "rtp_host",
-
         os.getenv("EXTERNAL_MEDIA_RTP_HOST", external_cfg.get("rtp_host", "127.0.0.1")),
-
     )
 
     config_data["external_media"] = external_cfg
 
-def apply_diagnostic_defaults(config_data: Dict[str, Any]) -> None:
 
+def apply_diagnostic_defaults(config_data: Dict[str, Any]) -> None:
     """
 
     Apply diagnostic settings from environment variables only.
@@ -196,7 +179,6 @@ def apply_diagnostic_defaults(config_data: Dict[str, Any]) -> None:
     # Ensure streaming block exists
 
     if "streaming" not in config_data:
-
         config_data["streaming"] = {}
 
     streaming_cfg = config_data["streaming"]
@@ -210,13 +192,9 @@ def apply_diagnostic_defaults(config_data: Dict[str, Any]) -> None:
     env_force_mulaw = os.getenv("DIAG_EGRESS_FORCE_MULAW", "false")
 
     streaming_cfg["egress_force_mulaw"] = env_force_mulaw.lower() in (
-
         "true",
-
         "1",
-
         "yes",
-
     )
 
     # Attack ms (diagnostic only - disabled by default)
@@ -233,18 +211,14 @@ def apply_diagnostic_defaults(config_data: Dict[str, Any]) -> None:
 
     streaming_cfg["diag_post_secs"] = int(os.getenv("DIAG_TAP_POST_SECS", "1"))
 
-    streaming_cfg["diag_out_dir"] = os.getenv(
-
-        "DIAG_TAP_OUTPUT_DIR", "/tmp/ai-engine-taps"
-
-    )
+    streaming_cfg["diag_out_dir"] = os.getenv("DIAG_TAP_OUTPUT_DIR", "/tmp/ai-engine-taps")
 
     # Streaming logger verbosity
 
     streaming_cfg["logging_level"] = os.getenv("STREAMING_LOG_LEVEL", "info")
 
-def apply_barge_in_defaults(config_data: Dict[str, Any]) -> None:
 
+def apply_barge_in_defaults(config_data: Dict[str, Any]) -> None:
     """
 
     Apply barge-in configuration with environment variable overrides.
@@ -278,58 +252,33 @@ def apply_barge_in_defaults(config_data: Dict[str, Any]) -> None:
     barge_cfg = config_data.get("barge_in", {}) or {}
 
     try:
-
         # Only override if environment variable is explicitly set
 
         if "BARGE_IN_ENABLED" in os.environ:
-
             barge_cfg["enabled"] = os.getenv("BARGE_IN_ENABLED", "true").lower() in (
-
                 "1",
-
                 "true",
-
                 "yes",
-
             )
 
         if "BARGE_IN_INITIAL_PROTECTION_MS" in os.environ:
-
-            barge_cfg["initial_protection_ms"] = int(
-
-                os.getenv("BARGE_IN_INITIAL_PROTECTION_MS", "200")
-
-            )
+            barge_cfg["initial_protection_ms"] = int(os.getenv("BARGE_IN_INITIAL_PROTECTION_MS", "200"))
 
         if "BARGE_IN_MIN_MS" in os.environ:
-
             barge_cfg["min_ms"] = int(os.getenv("BARGE_IN_MIN_MS", "250"))
 
         if "BARGE_IN_ENERGY_THRESHOLD" in os.environ:
-
-            barge_cfg["energy_threshold"] = int(
-
-                os.getenv("BARGE_IN_ENERGY_THRESHOLD", "1000")
-
-            )
+            barge_cfg["energy_threshold"] = int(os.getenv("BARGE_IN_ENERGY_THRESHOLD", "1000"))
 
         if "BARGE_IN_COOLDOWN_MS" in os.environ:
-
             barge_cfg["cooldown_ms"] = int(os.getenv("BARGE_IN_COOLDOWN_MS", "500"))
 
         if "BARGE_IN_POST_TTS_END_PROTECTION_MS" in os.environ:
-
-            barge_cfg["post_tts_end_protection_ms"] = int(
-
-                os.getenv("BARGE_IN_POST_TTS_END_PROTECTION_MS", "250")
-
-            )
+            barge_cfg["post_tts_end_protection_ms"] = int(os.getenv("BARGE_IN_POST_TTS_END_PROTECTION_MS", "250"))
 
     except ValueError:
-
         # Ignore invalid integer conversions; keep YAML values
 
         pass
 
     config_data["barge_in"] = barge_cfg
-

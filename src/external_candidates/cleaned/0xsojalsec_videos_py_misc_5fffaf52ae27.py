@@ -14,11 +14,9 @@ from manim_imports_ext import *
 
 class PhysicalIntuition(Scene):
     def construct(self):
-
         n_terms = 4
 
         def func(xxx_todo_changeme):
-
             x, y, ignore = xxx_todo_changeme
 
             z = complex(x, y)
@@ -62,7 +60,6 @@ class PhysicalIntuition(Scene):
 
 class TimeLine(Scene):
     def construct(self):
-
         dated_events = [
             {
                 "date": 1696,
@@ -134,7 +131,6 @@ class TimeLine(Scene):
 
 class StayedUpAllNight(Scene):
     def construct(self):
-
         clock = Circle(radius=2, color=WHITE)
 
         clock.add(Dot(ORIGIN))
@@ -293,7 +289,6 @@ class StayedUpAllNight(Scene):
 
 class ThetaTGraph(Scene):
     def construct(self):
-
         t_axis = NumberLine()
 
         theta_axis = NumberLine().rotate(np.pi / 2)
@@ -350,7 +345,6 @@ class ThetaTGraph(Scene):
 
 class SolutionsToTheBrachistochrone(Scene):
     def construct(self):
-
         r_range = np.arange(0.5, 2, 0.25)
 
         cycloids = Mobject(*[Cycloid(radius=r, end_theta=2 * np.pi) for r in r_range])
@@ -430,7 +424,6 @@ class SolutionsToTheBrachistochrone(Scene):
 
 class VideoLayout(Scene):
     def construct(self):
-
         left, right = 5 * LEFT, 5 * RIGHT
 
         top_words = OldTexText("The next 15 minutes of your life:")
@@ -496,7 +489,6 @@ class VideoLayout(Scene):
 
 class ShortestPathProblem(Scene):
     def construct(self):
-
         point_a, point_b = 3 * LEFT, 3 * RIGHT
 
         dots = []
@@ -541,7 +533,6 @@ class ShortestPathProblem(Scene):
 
 class MathBetterThanTalking(Scene):
     def construct(self):
-
         mathy = Mathematician()
 
         mathy.to_corner(DOWN + LEFT)
@@ -565,7 +556,6 @@ class MathBetterThanTalking(Scene):
 
 class DetailsOfProofBox(Scene):
     def construct(self):
-
         rect = Rectangle(height=4, width=6, color=WHITE)
 
         words = OldTexText("Details of proof")
@@ -579,7 +569,6 @@ class DetailsOfProofBox(Scene):
 
 class TalkedAboutSnellsLaw(Scene):
     def construct(self):
-
         randy = Randolph()
 
         randy.to_corner(DOWN + LEFT)
@@ -617,7 +606,6 @@ class TalkedAboutSnellsLaw(Scene):
 
 class YetAnotherMarkLevi(Scene):
     def construct(self):
-
         words = OldTexText("Yet another bit of Mark Levi cleverness")
 
         words.to_edge(UP)

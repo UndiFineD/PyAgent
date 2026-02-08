@@ -121,7 +121,6 @@ class Plot:
     bg_color: str = "#F2F4CB"
 
     def __post_init__(self):
-
         (
             self.xmin,
             self.ymin,
@@ -154,7 +153,6 @@ class Plot:
         self.ax.set_ylim(self.ymin - self.bg_buffer_y, self.ymax + self.bg_buffer_y)
 
     def plot_all(self):
-
         if self.bg_shape is not None:
             self.set_background()
 
@@ -244,7 +242,6 @@ class Plot:
                 _plot_polygon_collection(ax=self.ax, geoms=df_class.geometry, **draw_settings_class)
 
     def set_map_contour(self):
-
         if self.shape == "rectangle":
             patch = Rectangle(
                 xy=(self.xmin, self.ymin),
@@ -280,7 +277,6 @@ class Plot:
         self.ax.patch.set_zorder(6)
 
     def set_background(self):
-
         ec = adjust_lightness(self.bg_color, 0.78)
 
         if self.bg_shape == "rectangle":
@@ -318,7 +314,6 @@ class Plot:
         self.ax.patch.set_zorder(-1)
 
     def set_name(self):
-
         x = self.xmid + self.text_x / 100 * self.xdif
 
         y = self.ymid + self.text_y / 100 * self.ydif

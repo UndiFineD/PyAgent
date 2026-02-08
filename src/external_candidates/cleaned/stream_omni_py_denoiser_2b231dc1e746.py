@@ -5,7 +5,6 @@
 
 # Code modified from Rafael Valle's implementation https://github.com/NVIDIA/waveglow/blob/5bc2a53e20b3b533362f974cfa1ea0267ae1c2b1/denoiser.py
 
-
 """Waveglow style denoiser can be used to remove the artifacts from the HiFiGAN generated audio."""
 
 import torch
@@ -15,7 +14,6 @@ class Denoiser(torch.nn.Module):
     """Removes model bias from audio produced with waveglow"""
 
     def __init__(self, vocoder, filter_length=1024, n_overlap=4, win_length=1024, mode="zeros"):
-
         super().__init__()
 
         self.filter_length = filter_length
@@ -41,7 +39,6 @@ class Denoiser(torch.nn.Module):
             raise Exception(f"Mode {mode} if not supported")
 
         def stft_fn(audio, n_fft, hop_length, win_length, window):
-
             spec = torch.stft(
                 audio,
                 n_fft=n_fft,
@@ -80,7 +77,6 @@ class Denoiser(torch.nn.Module):
 
     @torch.inference_mode()
     def forward(self, audio, strength=0.0005):
-
         audio_spec, audio_angles = self.stft(audio)
 
         audio_spec_denoised = audio_spec - self.bias_spec.to(audio.device) * strength

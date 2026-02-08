@@ -22,7 +22,6 @@ from torch.utils.data import DataLoader, Dataset
 
 class GPTDatasetV1(Dataset):
     def __init__(self, txt, tokenizer, max_length, stride):
-
         self.input_ids = []
 
         self.target_ids = []
@@ -43,11 +42,9 @@ class GPTDatasetV1(Dataset):
             self.target_ids.append(torch.tensor(target_chunk))
 
     def __len__(self):
-
         return len(self.input_ids)
 
     def __getitem__(self, idx):
-
         return self.input_ids[idx], self.target_ids[idx]
 
 
@@ -60,7 +57,6 @@ def create_dataloader_v1(
     drop_last=True,
     num_workers=0,
 ):
-
     # Initialize the tokenizer
 
     tokenizer = tiktoken.get_encoding("gpt2")
@@ -84,7 +80,6 @@ def create_dataloader_v1(
 
 class MultiHeadAttention(nn.Module):
     def __init__(self, d_in, d_out, context_length, dropout, num_heads, qkv_bias=False):
-
         super().__init__()
 
         assert d_out % num_heads == 0, "d_out must be divisible by num_heads"
@@ -108,7 +103,6 @@ class MultiHeadAttention(nn.Module):
         self.register_buffer("mask", torch.triu(torch.ones(context_length, context_length), diagonal=1))
 
     def forward(self, x):
-
         b, num_tokens, d_in = x.shape
 
         keys = self.W_key(x)  # Shape: (b, num_tokens, d_out)

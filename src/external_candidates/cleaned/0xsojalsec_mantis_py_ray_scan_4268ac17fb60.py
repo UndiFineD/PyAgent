@@ -17,7 +17,6 @@ from mantis.models.tool_logs_model import AssetLogs
 @ray.remote
 class ExecuteRayScan:
     async def execute_and_store(self, tool_tuple):
-
         tool_start_time = time.perf_counter()
 
         scanner = tool_tuple[0]

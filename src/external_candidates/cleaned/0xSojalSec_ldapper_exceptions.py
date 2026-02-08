@@ -11,7 +11,6 @@ class LdapperError(Exception):
     """
 
     def __str__(self):
-
         return "(%s) %s" % (self.__class__.__name__, self.msg)
 
 
@@ -27,7 +26,6 @@ class AddDNFailed(LdapperError):
     """
 
     def __init__(self, dn):
-
         self.dn = dn
 
         self.msg = "Unable to add the DN %s to LDAP" % dn
@@ -43,7 +41,6 @@ class ArgumentError(LdapperError):
     """
 
     def __init__(self, msg):
-
         self.msg = msg
 
 
@@ -59,7 +56,6 @@ class DuplicateValue(LdapperError):
     """
 
     def __init__(self, attr, value):
-
         self.attr = attr
 
         self.original_value = value
@@ -95,7 +91,6 @@ class NoSuchAttrValue(LdapperError):
     """
 
     def __init__(self, dn, attribute, value):
-
         self.dn = dn
 
         self.attribute = attribute
@@ -117,7 +112,6 @@ class NoSuchDN(LdapperError):
     """
 
     def __init__(self, dn):
-
         self.dn = dn
 
         self.msg = "DN %s does not exist." % dn
@@ -135,7 +129,6 @@ class InvalidDN(LdapperError):
     """
 
     def __init__(self, obj, name, dn):
-
         self.obj = obj
 
         self.name = name

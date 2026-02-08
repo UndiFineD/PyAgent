@@ -17,8 +17,8 @@ from agno.cli.console import print_info
 
 from agno.utils.log import logger
 
-class DbSubnetGroup(AwsResource):
 
+class DbSubnetGroup(AwsResource):
     """
 
     Reference:
@@ -68,7 +68,6 @@ class DbSubnetGroup(AwsResource):
     tags: Optional[List[Dict[str, str]]] = None
 
     def get_subnet_ids(self, aws_client: AwsApiClient) -> List[str]:
-
         """Returns the subnet_ids for the DbSubnetGroup
 
         Args:
@@ -80,51 +79,35 @@ class DbSubnetGroup(AwsResource):
         subnet_ids = []
 
         if self.subnet_ids is not None:
-
             if isinstance(self.subnet_ids, list):
-
                 logger.debug("Getting subnet_ids from list")
 
                 subnet_ids = self.subnet_ids
 
             elif isinstance(self.subnet_ids, AwsReference):
-
                 logger.debug("Getting subnet_ids from reference")
 
                 subnet_ids = self.subnet_ids.get_reference(aws_client=aws_client)
 
         if len(subnet_ids) == 0 and self.vpc_stack is not None:
-
             logger.debug("Getting private subnet_ids from vpc stack")
 
-            private_subnet_ids = self.vpc_stack.get_private_subnets(
-
-                aws_client=aws_client
-
-            )
+            private_subnet_ids = self.vpc_stack.get_private_subnets(aws_client=aws_client)
 
             if private_subnet_ids is not None:
-
                 subnet_ids.extend(private_subnet_ids)
 
             if len(subnet_ids) == 0:
-
                 logger.debug("Getting public subnet_ids from vpc stack")
 
-                public_subnet_ids = self.vpc_stack.get_public_subnets(
-
-                    aws_client=aws_client
-
-                )
+                public_subnet_ids = self.vpc_stack.get_public_subnets(aws_client=aws_client)
 
                 if public_subnet_ids is not None:
-
                     subnet_ids.extend(public_subnet_ids)
 
         return subnet_ids
 
     def _create(self, aws_client: AwsApiClient) -> bool:
-
         """Creates the DbSubnetGroup
 
         Args:
@@ -136,7 +119,6 @@ class DbSubnetGroup(AwsResource):
         print_info(f"Creating {self.get_resource_type()}: {self.get_resource_name()}")
 
         try:
-
             # Get subnet_ids
 
             subnet_ids = self.get_subnet_ids(aws_client=aws_client)
@@ -146,7 +128,6 @@ class DbSubnetGroup(AwsResource):
             not_null_args: Dict[str, Any] = {}
 
             if self.tags:
-
                 not_null_args["Tags"] = self.tags
 
             # Create DbSubnetGroup
@@ -154,15 +135,10 @@ class DbSubnetGroup(AwsResource):
             service_client = self.get_service_client(aws_client)
 
             create_response = service_client.create_db_subnet_group(
-
                 DBSubnetGroupName=self.name,
-
                 DBSubnetGroupDescription=self.description or f"Created for {self.name}",
-
                 SubnetIds=subnet_ids,
-
                 **not_null_args,
-
             )
 
             logger.debug(f"create_response type: {type(create_response)}")
@@ -172,19 +148,13 @@ class DbSubnetGroup(AwsResource):
             self.active_resource = create_response.get("DBSubnetGroup", None)
 
             if self.active_resource is not None:
-
-                print_info(
-
-                    f"{self.get_resource_type()}: {self.get_resource_name()} created"
-
-                )
+                print_info(f"{self.get_resource_type()}: {self.get_resource_name()} created")
 
                 logger.debug(f"DbSubnetGroup: {self.active_resource}")
 
                 return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be created.")
 
             logger.error(e)
@@ -192,7 +162,6 @@ class DbSubnetGroup(AwsResource):
         return False
 
     def _read(self, aws_client: AwsApiClient) -> Optional[Any]:
-
         """Returns the DbSubnetGroup
 
         Args:
@@ -206,14 +175,9 @@ class DbSubnetGroup(AwsResource):
         logger.debug(f"Reading {self.get_resource_type()}: {self.get_resource_name()}")
 
         try:
-
             service_client = self.get_service_client(aws_client)
 
-            describe_response = service_client.describe_db_subnet_groups(
-
-                DBSubnetGroupName=self.name
-
-            )
+            describe_response = service_client.describe_db_subnet_groups(DBSubnetGroupName=self.name)
 
             logger.debug(f"describe_response type: {type(describe_response)}")
 
@@ -221,24 +185,16 @@ class DbSubnetGroup(AwsResource):
 
             db_subnet_group_list = describe_response.get("DBSubnetGroups", None)
 
-            if db_subnet_group_list is not None and isinstance(
-
-                db_subnet_group_list, list
-
-            ):
-
+            if db_subnet_group_list is not None and isinstance(db_subnet_group_list, list):
                 for _db_subnet_group in db_subnet_group_list:
-
                     _db_sg_name = _db_subnet_group.get("DBSubnetGroupName", None)
 
                     if _db_sg_name == self.name:
-
                         self.active_resource = _db_subnet_group
 
                         break
 
             if self.active_resource is None:
-
                 logger.debug(f"No {self.get_resource_type()} found")
 
                 return None
@@ -246,11 +202,9 @@ class DbSubnetGroup(AwsResource):
             logger.debug(f"DbSubnetGroup: {self.active_resource}")
 
         except ClientError as ce:
-
             logger.debug(f"ClientError: {ce}")
 
         except Exception as e:
-
             logger.error(f"Error reading {self.get_resource_type()}.")
 
             logger.error(e)
@@ -258,7 +212,6 @@ class DbSubnetGroup(AwsResource):
         return self.active_resource
 
     def _delete(self, aws_client: AwsApiClient) -> bool:
-
         """Deletes the DbSubnetGroup
 
         Args:
@@ -270,23 +223,17 @@ class DbSubnetGroup(AwsResource):
         print_info(f"Deleting {self.get_resource_type()}: {self.get_resource_name()}")
 
         try:
-
             service_client = self.get_service_client(aws_client)
 
             self.active_resource = None
 
-            delete_response = service_client.delete_db_subnet_group(
-
-                DBSubnetGroupName=self.name
-
-            )
+            delete_response = service_client.delete_db_subnet_group(DBSubnetGroupName=self.name)
 
             logger.debug(f"delete_response: {delete_response}")
 
             return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be deleted.")
 
             logger.error("Please try again or delete resources manually.")
@@ -296,7 +243,6 @@ class DbSubnetGroup(AwsResource):
         return False
 
     def _update(self, aws_client: AwsApiClient) -> bool:
-
         """Updates the DbSubnetGroup
 
         Args:
@@ -308,7 +254,6 @@ class DbSubnetGroup(AwsResource):
         print_info(f"Updating {self.get_resource_type()}: {self.get_resource_name()}")
 
         try:
-
             # Get subnet_ids
 
             subnet_ids = self.get_subnet_ids(aws_client=aws_client)
@@ -318,13 +263,9 @@ class DbSubnetGroup(AwsResource):
             service_client = self.get_service_client(aws_client)
 
             update_response = service_client.modify_db_subnet_group(
-
                 DBSubnetGroupName=self.name,
-
                 DBSubnetGroupDescription=self.description or f"Created for {self.name}",
-
                 SubnetIds=subnet_ids,
-
             )
 
             logger.debug(f"update_response: {update_response}")
@@ -332,17 +273,11 @@ class DbSubnetGroup(AwsResource):
             self.active_resource = update_response.get("DBSubnetGroup", None)
 
             if self.active_resource is not None:
-
-                print_info(
-
-                    f"{self.get_resource_type()}: {self.get_resource_name()} updated"
-
-                )
+                print_info(f"{self.get_resource_type()}: {self.get_resource_name()} updated")
 
                 return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be updated.")
 
             logger.error("Please try again or update resources manually.")
@@ -350,4 +285,3 @@ class DbSubnetGroup(AwsResource):
             logger.error(e)
 
         return False
-

@@ -12,7 +12,6 @@ class StacksApproachBellCurve(Scene):
     }
 
     def construct(self):
-
         bar = Square(side_length=1)
 
         bar.set_fill(BLUE, 1)

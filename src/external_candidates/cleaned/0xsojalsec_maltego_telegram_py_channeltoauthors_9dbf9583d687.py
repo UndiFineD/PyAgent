@@ -15,7 +15,6 @@ from utils import message_is_forwarded_from_another_chat
 
 
 async def fetch_authors(username: str):
-
     authors = []
 
     async with app:
@@ -37,7 +36,6 @@ async def fetch_authors(username: str):
 class ChannelToAuthors(DiscoverableTransform):
     @classmethod
     def create_entities(cls, request: MaltegoMsg, response: MaltegoTransform):
-
         username = request.getProperty("properties.channel")
 
         authors = loop.run_until_complete(fetch_authors(username))

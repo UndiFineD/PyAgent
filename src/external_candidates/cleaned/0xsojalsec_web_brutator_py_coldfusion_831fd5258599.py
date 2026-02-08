@@ -24,7 +24,6 @@ from lib.core.Requester import AuthMode, Requester
 
 class Coldfusion:
     def __init__(self, url, verbose=False):
-
         self.url = url
 
         self.interface = None
@@ -34,7 +33,6 @@ class Coldfusion:
         self.http_auth_type = None
 
     def check(self):
-
         r = Requester.get("{}/CFIDE/administrator/enter.cfm".format(self.url))
 
         if r.status_code == 200 and 'type="password"' in r.text.lower():
@@ -101,7 +99,6 @@ class Coldfusion:
         return False
 
     def try_auth(self, username, password):
-
         if self.interface == "coldfusion-5-admin":
             data = {
                 "PasswordProvided_required": "You+must+provide+a+password.",
@@ -167,7 +164,6 @@ class Coldfusion:
             return r.status_code == 200 and 'name="cfadminPassword"' not in r.text
 
     def _get_salt(self, url):
-
         r = Requester.get(url)
 
         m = re.search('<input name="salt" type="hidden" value="(?P<salt>\S+?)">', r.text)

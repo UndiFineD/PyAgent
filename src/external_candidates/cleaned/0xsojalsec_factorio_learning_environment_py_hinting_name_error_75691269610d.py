@@ -10,7 +10,6 @@ from typing import Any, get_type_hints
 
 class HintingNameError(NameError):
     def __init__(self, original_error: str, suggestions: list[tuple[str, str]]):
-
         self.suggestions = suggestions
 
         message = original_error

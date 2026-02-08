@@ -55,17 +55,14 @@ class ParityModel(ABC, nn.Module):
 
     @abstractmethod
     def get_optimizer(self, *args, **kwargs) -> Optimizer:
-
         pass
 
     @abstractmethod
     def get_dataloader(self, *args, **kwargs) -> DataLoader:
-
         pass
 
     @abstractmethod
     def get_loss_function(self) -> Callable:
-
         pass
 
 
@@ -75,7 +72,6 @@ class ConvNet(ParityModel):
     num_steps = 1000
 
     def __init__(self):
-
         super().__init__()
 
         self.conv1 = nn.Conv2d(3, 6, 5)
@@ -91,7 +87,6 @@ class ConvNet(ParityModel):
         self.fc3 = nn.Linear(84, 10)
 
     def forward(self, x):
-
         x = self.pool(F.relu(self.conv1(x)))
 
         x = self.pool(F.relu(self.conv2(x)))
@@ -105,11 +100,9 @@ class ConvNet(ParityModel):
         return self.fc3(x)
 
     def get_optimizer(self):
-
         return torch.optim.SGD(self.parameters(), lr=0.0001)
 
     def get_dataloader(self):
-
         # multiply * 8 just in case world size is larger than 1
 
         dataset_size = self.num_steps * self.batch_size * 8
@@ -127,5 +120,4 @@ class ConvNet(ParityModel):
         )
 
     def get_loss_function(self):
-
         return F.cross_entropy

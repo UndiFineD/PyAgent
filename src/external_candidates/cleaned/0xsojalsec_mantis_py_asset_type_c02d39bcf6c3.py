@@ -27,7 +27,6 @@ from validators import domain
 class AssetType:
     @staticmethod
     def assign_asset_type(assets: list, args: ArgsModel) -> list:
-
         assets_list = []
 
         for every_asset in assets:
@@ -64,7 +63,6 @@ class AssetType:
 
     @staticmethod
     def check_ip(target):
-
         logging.debug(f"check_ip() - {target}")
 
         try:
@@ -81,7 +79,6 @@ class AssetType:
 
     @staticmethod
     def check_domain(target):
-
         logging.debug(f"check_domain() - {target}")
 
         if domain(target):
@@ -94,7 +91,6 @@ class AssetType:
 
     @staticmethod
     def check_tld(target):
-
         logging.debug(f"check_tld() - {target}")
 
         tld_extract = tldextract.extract(target).registered_domain
@@ -106,7 +102,6 @@ class AssetType:
 
     @staticmethod
     def check_ip_cidr_regex(target):
-
         match = re.match(r"[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\/[0-9]{1,2}", target)
 
         if match:
@@ -119,7 +114,6 @@ class AssetType:
 
     @staticmethod
     def check_ip_cidr(target):
-
         try:
             ip_cidr = ip_network(target)
 
@@ -134,7 +128,6 @@ class AssetType:
 
     @staticmethod
     def check_ip_range(target):
-
         logging.debug(f"check_ip_range for target - {target}")
 
         match = re.match(r"[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\-[0-9]{1,2}", target)
@@ -147,7 +140,6 @@ class AssetType:
 
     @staticmethod
     def expand_ip_cidr(target):
-
         logging.debug(f"expand_ip_cidr() - {target}")
 
         try:
@@ -168,7 +160,6 @@ class AssetType:
 
     @staticmethod
     def expand_ip_range(target):
-
         logging.debug(f"expand_ip_range() - {target}")
 
         try:

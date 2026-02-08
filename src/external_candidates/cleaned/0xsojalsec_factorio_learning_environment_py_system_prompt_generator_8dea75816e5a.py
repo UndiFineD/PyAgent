@@ -5,7 +5,6 @@
 
 from pathlib import Path
 
-
 from fle.env.utils.controller_loader.code_analyzer import CodeAnalyzer
 
 from fle.env.utils.controller_loader.manual_generator import ManualGenerator
@@ -21,13 +20,11 @@ class SystemPromptGenerator:
     """Generates system prompts for the Factorio environment."""
 
     def __init__(self, base_path: str):
-
         self.base_path = Path(base_path)
 
         self.tool_path = self.base_path / "tools" / "agent"
 
     def generate(self, multiagent_str: str = "") -> str:
-
         # Generate schema
 
         schema_generator = SchemaGenerator(str(self.tool_path))
@@ -58,7 +55,6 @@ class SystemPromptGenerator:
         )
 
     def generate_for_agent(self, agent_idx: int = 0, num_agents: int = 1) -> str:
-
         multiagent_str = ""
 
         if num_agents > 1:
@@ -76,7 +72,6 @@ class SystemPromptGenerator:
         return self.generate(multiagent_str)
 
     def manual(self, *args):
-
         try:
             return ManualGenerator.generate_manual(
                 str(self.base_path / "tools") + ("/agent/" if args else "") + str("/".join(args))
@@ -88,15 +83,12 @@ class SystemPromptGenerator:
             )
 
     def types(self):
-
         return TypeDefinitionProcessor.load_and_clean_definitions(str(self.base_path / "game_types.py"))
 
     def schema(self):
-
         schema_generator = SchemaGenerator(str(self.tool_path))
 
         return schema_generator.generate_schema(with_docstring=True).replace("temp_module.", "")
 
     def entities(self):
-
         return CodeAnalyzer.parse_file_for_structure(str(self.base_path / "entities.py"))

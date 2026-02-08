@@ -225,7 +225,6 @@ def reset_cudnn_benchmark():
 
 
 def mock_xla_available(monkeypatch: pytest.MonkeyPatch, value: bool = True) -> None:
-
     # First, mock torch_xla modules in sys.modules so imports succeed
 
     monkeypatch.setitem(sys.modules, "torch_xla", Mock())
@@ -284,12 +283,10 @@ def mock_xla_available(monkeypatch: pytest.MonkeyPatch, value: bool = True) -> N
 
 @pytest.fixture
 def xla_available(monkeypatch: pytest.MonkeyPatch) -> None:
-
     mock_xla_available(monkeypatch)
 
 
 def mock_tpu_available(monkeypatch: pytest.MonkeyPatch, value: bool = True) -> None:
-
     mock_xla_available(monkeypatch, value)
 
     monkeypatch.setattr(lightning.fabric.accelerators.xla.XLAAccelerator, "is_available", lambda: value)
@@ -325,7 +322,6 @@ def mock_tpu_available(monkeypatch: pytest.MonkeyPatch, value: bool = True) -> N
 
 @pytest.fixture
 def tpu_available(monkeypatch: pytest.MonkeyPatch) -> None:
-
     mock_tpu_available(monkeypatch)
 
 

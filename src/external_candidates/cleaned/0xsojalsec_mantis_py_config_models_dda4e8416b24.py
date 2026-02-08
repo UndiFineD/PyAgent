@@ -53,7 +53,6 @@ class Notify(BaseModel):
 
     @validator("channel")
     def check_channel(cls, v):
-
         valid_channels = ["slack"]
 
         for key in v.keys():

@@ -65,7 +65,6 @@ class XLAPrecision(Precision):
     """
 
     def __init__(self, precision: _PRECISION_INPUT = "32-true") -> None:
-
         super().__init__()
 
         _raise_enterprise_not_available()
@@ -84,30 +83,24 @@ class XLAPrecision(Precision):
         closure: Callable[[], Any],
         **kwargs: Any,
     ) -> Any:
-
         return self.xla_impl.optimizer_step(optimizer, model, closure, **kwargs)
 
     @property
     def precision(self) -> _PRECISION_INPUT_STR:
-
         return self.xla_impl.precision
 
     @precision.setter
     def precision(self, precision: _PRECISION_INPUT_STR) -> None:
-
         self.xla_impl.precision = precision
 
     @property
     def _desired_dtype(self) -> torch.dtype:
-
         return self.xla_impl._desired_dtype
 
     @_desired_dtype.setter
     def _desired_dtype(self, dtype: torch.dtype) -> None:
-
         self.xla_impl._desired_dtype = dtype
 
     @override
     def teardown(self) -> None:
-
         return self.xla_impl.teardown()

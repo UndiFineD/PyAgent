@@ -24,7 +24,6 @@ class Collective(ABC):
     """
 
     def __init__(self) -> None:
-
         self._group: Optional[CollectibleGroup] = None
 
     @property
@@ -39,7 +38,6 @@ class Collective(ABC):
 
     @property
     def group(self) -> CollectibleGroup:
-
         if self._group is None:
             raise RuntimeError(
                 f"`{type(self).__name__}` does not own a group. HINT: try `collective.create_group().group`"
@@ -105,7 +103,6 @@ class Collective(ABC):
     def _convert_to_native_op(cls, op: str) -> Any: ...
 
     def setup(self, **kwargs: Any) -> Self:
-
         if not self.is_initialized():
             self.init_group(**kwargs)
 
@@ -128,7 +125,6 @@ class Collective(ABC):
         return self
 
     def teardown(self) -> Self:
-
         if self._group is None:
             raise RuntimeError(f"`{type(self).__name__}` does not own a group to destroy.")
 

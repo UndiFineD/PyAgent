@@ -65,7 +65,6 @@ class ParallelStrategy(Strategy, ABC):
         checkpoint_io: Optional[CheckpointIO] = None,
         precision: Optional[Precision] = None,
     ):
-
         super().__init__(accelerator=accelerator, checkpoint_io=checkpoint_io, precision=precision)
 
         self.parallel_devices = parallel_devices
@@ -74,38 +73,31 @@ class ParallelStrategy(Strategy, ABC):
 
     @property
     def global_rank(self) -> int:
-
         return self.cluster_environment.global_rank() if self.cluster_environment is not None else 0
 
     @property
     def local_rank(self) -> int:
-
         return self.cluster_environment.local_rank() if self.cluster_environment is not None else 0
 
     @property
     def node_rank(self) -> int:
-
         return self.cluster_environment.node_rank() if self.cluster_environment is not None else 0
 
     @property
     def world_size(self) -> int:
-
         return self.cluster_environment.world_size() if self.cluster_environment is not None else 1
 
     @property
     @override
     def is_global_zero(self) -> bool:
-
         return self.global_rank == 0
 
     @property
     def parallel_devices(self) -> Optional[list[torch.device]]:
-
         return self._parallel_devices
 
     @parallel_devices.setter
     def parallel_devices(self, parallel_devices: Optional[list[torch.device]]) -> None:
-
         self._parallel_devices = parallel_devices
 
     @property
@@ -157,7 +149,6 @@ class ParallelStrategy(Strategy, ABC):
 
     @override
     def teardown(self) -> None:
-
         assert self.cluster_environment is not None
 
         self.cluster_environment.teardown()

@@ -12,13 +12,11 @@ from src.tool.registry.views import Function, ToolResult
 
 class Registry:
     def __init__(self, tools: list[Tool]):
-
         self.tools = tools
 
         self.tools_registry = self.registry()
 
     def tools_prompt(self, excluded_tools: list[str] = []) -> str:
-
         prompts = []
 
         for tool in self.tools:
@@ -30,7 +28,6 @@ class Registry:
         return "\n\n".join(prompts)
 
     def registry(self) -> dict[str, Function]:
-
         tools_registry = {}
 
         for tool in self.tools:
@@ -48,7 +45,6 @@ class Registry:
         return tools_registry
 
     async def async_execute(self, name: str, input: dict, **kwargs) -> ToolResult:
-
         tool = self.tools_registry.get(name)
 
         try:
@@ -93,7 +89,6 @@ class Registry:
             return ToolResult(name=error_name, content=error_content)
 
     def execute(self, name: str, input: dict, **kwargs) -> ToolResult:
-
         tool = self.tools_registry.get(name)
 
         try:

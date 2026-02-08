@@ -4,7 +4,6 @@
 
 
 def fnv1a_salted(data, salt, seed_value=0x811C9DC5):
-
     _data = data + salt
 
     _hash = seed_value

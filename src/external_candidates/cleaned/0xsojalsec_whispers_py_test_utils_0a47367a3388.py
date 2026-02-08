@@ -47,7 +47,6 @@ from tests.unit.conftest import FIXTURE_PATH, fixture_path, rule_path
     ],
 )
 def test_truncate_all_space(rawstr, expected):
-
     assert truncate_all_space(rawstr) == expected
 
 
@@ -64,7 +63,6 @@ def test_truncate_all_space(rawstr, expected):
     ],
 )
 def test_strip_string(rawstr):
-
     assert strip_string(rawstr) == "whispers"
 
 
@@ -77,7 +75,6 @@ def test_strip_string(rawstr):
     ],
 )
 def test_simple_string(rawstr, expectation):
-
     assert simple_string(rawstr) == expectation
 
 
@@ -90,7 +87,6 @@ def test_simple_string(rawstr, expectation):
     ],
 )
 def test_similar_strings(str1, str2):
-
     assert similar_strings(str1, str2)
 
 
@@ -106,7 +102,6 @@ def test_similar_strings(str1, str2):
     ],
 )
 def test_line_with_key_value(key, value, line):
-
     assert line_with_key_value(key, value, line)
 
 
@@ -121,7 +116,6 @@ def test_line_with_key_value(key, value, line):
     ],
 )
 def test_line_with_value(value, line):
-
     assert line_with_value(value, line)
 
 
@@ -137,7 +131,6 @@ def test_line_with_value(value, line):
     ],
 )
 def test_line_begins_with_value(value, line):
-
     assert line_begins_with_value(value, line)
 
 
@@ -153,7 +146,6 @@ def test_line_begins_with_value(value, line):
     ],
 )
 def test_find_line_number_single(src, key, value, expectation):
-
     assert find_line_number(FIXTURE_PATH.joinpath(src), key, value, []) == expectation
 
 
@@ -165,7 +157,6 @@ def test_find_line_number_single(src, key, value, expectation):
     ],
 )
 def test_find_line_number_all(src, linenumbers):
-
     args = parse_args([fixture_path(src)])
 
     secrets = core.run(args)
@@ -179,21 +170,18 @@ def test_find_line_number_all(src, linenumbers):
     [("empty.yml", 0), ("valid.yml", 1), ("multiple.yml", 4), ("invalid.yml", 0)],
 )
 def test_load_yaml_from_file(rulefile, expected_count):
-
     rulefile = Path(rule_path(rulefile))
 
     assert len(load_yaml_from_file(rulefile)) == expected_count
 
 
 def test_secret_checksum():
-
     secret = Secret("file", 123, "key", "value", "message", "severity")
 
     assert secret_checksum(secret) == "6370fb4455c053420588d92bd292d371"
 
 
 def test_format_secret():
-
     secret = Secret("file", 123, "key", "value", "message", "severity")
 
     assert format_secret(secret) == (
@@ -204,7 +192,6 @@ def test_format_secret():
 
 
 def test_format_stdout():
-
     secret = Secret("file", 123, "key", "value", "message", "severity")
 
     secret_str = json.dumps(secret._asdict())
@@ -213,7 +200,6 @@ def test_format_stdout():
 
 
 def test_format_stdout_to_file():
-
     secret = Secret("file", 123, "key", "value", "message", "severity")
 
     secret_str = json.dumps(secret._asdict())

@@ -15,7 +15,6 @@ from enum import Enum
 
 from typing import Any, Dict, List, Optional
 
-
 from fle.commons.models.research_state import ResearchState
 
 from fle.commons.models.technology_state import TechnologyState
@@ -39,16 +38,13 @@ class GameState:
 
     @property
     def is_multiagent(self) -> bool:
-
         return len(self.inventories) > 1
 
     @property
     def num_agents(self) -> int:
-
         return len(self.inventories)
 
     def parse_agent_messages(data: dict) -> List[Any]:
-
         agent_messages = data.get("agent_messages", [])
 
         if not isinstance(agent_messages, list):
@@ -113,14 +109,12 @@ class GameState:
         )
 
     def __repr__(self):
-
         readable_namespaces = [pickle.loads(namespace) for namespace in self.namespaces]
 
         return f"GameState(entities={self.entities}, inventories={self.inventories}, timestamp={self.timestamp}, namespace={{{readable_namespaces}}}, agent_messages={self.agent_messages})"
 
     @classmethod
     def parse_raw(cls, json_str: str) -> "GameState":
-
         data = json.loads(json_str)
 
         namespaces = []
@@ -152,7 +146,6 @@ class GameState:
 
     @classmethod
     def parse(cls, data) -> "GameState":
-
         if "namespace" in data:
             data["namespaces"] = [data["namespace"]]
 

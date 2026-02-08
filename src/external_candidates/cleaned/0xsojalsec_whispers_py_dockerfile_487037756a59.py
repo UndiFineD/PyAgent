@@ -8,7 +8,6 @@ from pathlib import Path
 
 class Dockerfile:
     def pairs(self, filepath: Path):
-
         for line in filepath.open("r").readlines():
             # ENV key=value
 

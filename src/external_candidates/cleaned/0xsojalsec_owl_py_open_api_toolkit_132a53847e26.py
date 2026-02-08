@@ -344,9 +344,7 @@ class OpenAPIToolkit:
         """
 
         def inner_decorator(openapi_function: Callable) -> Callable:
-
             def wrapper(**kwargs):
-
                 request_url = f"{base_url.rstrip('/')}/{path.lstrip('/')}"
 
                 headers = {}
@@ -581,7 +579,6 @@ class OpenAPIToolkit:
                     operation,
                 )
                 def openapi_function(**kwargs):
-
                     pass
 
                 openapi_function.__name__ = function_name

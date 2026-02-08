@@ -49,7 +49,6 @@ class TrainerStatus(LightningEnum):
 
     @property
     def stopped(self) -> bool:
-
         return self in (self.FINISHED, self.INTERRUPTED)
 
 
@@ -98,12 +97,10 @@ class RunningStage(LightningEnum):
 
     @property
     def evaluating(self) -> bool:
-
         return self in (self.VALIDATING, self.TESTING, self.SANITY_CHECKING)
 
     @property
     def dataloader_prefix(self) -> Optional[str]:
-
         if self in (self.VALIDATING, self.SANITY_CHECKING):
             return "val"
 
@@ -122,10 +119,8 @@ class TrainerState:
 
     @property
     def finished(self) -> bool:
-
         return self.status == TrainerStatus.FINISHED
 
     @property
     def stopped(self) -> bool:
-
         return self.status.stopped

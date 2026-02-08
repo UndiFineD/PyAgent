@@ -9,8 +9,8 @@ from agno.docker.app.base import ContainerContext, DockerApp  # noqa: F401
 
 from agno.infra.db_app import DbApp
 
-class PostgresDb(DockerApp, DbApp):
 
+class PostgresDb(DockerApp, DbApp):
     # -*- App Name
 
     name: str = "postgres"
@@ -72,31 +72,24 @@ class PostgresDb(DockerApp, DbApp):
     postgres_initdb_args_file: Optional[str] = None
 
     def get_db_user(self) -> Optional[str]:
-
         return self.pg_user or self.get_secret_from_file("POSTGRES_USER")
 
     def get_db_password(self) -> Optional[str]:
-
         return self.pg_password or self.get_secret_from_file("POSTGRES_PASSWORD")
 
     def get_db_database(self) -> Optional[str]:
-
         return self.pg_database or self.get_secret_from_file("POSTGRES_DB")
 
     def get_db_driver(self) -> Optional[str]:
-
         return self.pg_driver
 
     def get_db_host(self) -> Optional[str]:
-
         return self.get_container_name()
 
     def get_db_port(self) -> Optional[int]:
-
         return self.container_port
 
     def get_container_env(self, container_context: ContainerContext) -> Dict[str, str]:
-
         # Container Environment
 
         container_env: Dict[str, str] = self.container_env or {}
@@ -108,51 +101,40 @@ class PostgresDb(DockerApp, DbApp):
         db_user = self.get_db_user()
 
         if db_user:
-
             container_env["POSTGRES_USER"] = db_user
 
         db_password = self.get_db_password()
 
         if db_password:
-
             container_env["POSTGRES_PASSWORD"] = db_password
 
         db_database = self.get_db_database()
 
         if db_database:
-
             container_env["POSTGRES_DB"] = db_database
 
         if self.pgdata:
-
             container_env["PGDATA"] = self.pgdata
 
         if self.postgres_initdb_args:
-
             container_env["POSTGRES_INITDB_ARGS"] = self.postgres_initdb_args
 
         if self.postgres_initdb_waldir:
-
             container_env["POSTGRES_INITDB_WALDIR"] = self.postgres_initdb_waldir
 
         if self.postgres_host_auth_method:
-
             container_env["POSTGRES_HOST_AUTH_METHOD"] = self.postgres_host_auth_method
 
         if self.postgres_password_file:
-
             container_env["POSTGRES_PASSWORD_FILE"] = self.postgres_password_file
 
         if self.postgres_user_file:
-
             container_env["POSTGRES_USER_FILE"] = self.postgres_user_file
 
         if self.postgres_db_file:
-
             container_env["POSTGRES_DB_FILE"] = self.postgres_db_file
 
         if self.postgres_initdb_args_file:
-
             container_env["POSTGRES_INITDB_ARGS_FILE"] = self.postgres_initdb_args_file
 
         # Set aws region and profile
@@ -164,36 +146,20 @@ class PostgresDb(DockerApp, DbApp):
         env_data_from_file = self.get_env_file_data()
 
         if env_data_from_file is not None:
-
-            container_env.update(
-
-                {k: str(v) for k, v in env_data_from_file.items() if v is not None}
-
-            )
+            container_env.update({k: str(v) for k, v in env_data_from_file.items() if v is not None})
 
         # Update the container env using secrets_file
 
         secret_data_from_file = self.get_secret_file_data()
 
         if secret_data_from_file is not None:
-
-            container_env.update(
-
-                {k: str(v) for k, v in secret_data_from_file.items() if v is not None}
-
-            )
+            container_env.update({k: str(v) for k, v in secret_data_from_file.items() if v is not None})
 
         # Update the container env with user provided env_vars
 
         # this overwrites any existing variables with the same key
 
         if self.env_vars is not None and isinstance(self.env_vars, dict):
-
-            container_env.update(
-
-                {k: str(v) for k, v in self.env_vars.items() if v is not None}
-
-            )
+            container_env.update({k: str(v) for k, v in self.env_vars.items() if v is not None})
 
         return container_env
-

@@ -22,7 +22,6 @@ class Python:
     """
 
     def pairs(self, filepath: Path):
-
         try:
             tree = astroid.parse(filepath.read_text())
 

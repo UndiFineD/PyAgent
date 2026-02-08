@@ -25,8 +25,8 @@ from agno.utils.log import logger
 
 from typing_extensions import Literal
 
-class EcsService(AwsResource):
 
+class EcsService(AwsResource):
     """
 
     Reference:
@@ -178,35 +178,25 @@ class EcsService(AwsResource):
     wait_for_create: bool = False
 
     def get_ecs_service_name(self):
-
         return self.ecs_service_name or self.name
 
     def get_ecs_cluster_name(self):
-
         if self.cluster is not None:
-
             if isinstance(self.cluster, EcsCluster):
-
                 return self.cluster.get_ecs_cluster_name()
 
             else:
-
                 return self.cluster
 
     def get_ecs_task_definition(self):
-
         if self.task_definition is not None:
-
             if isinstance(self.task_definition, EcsTaskDefinition):
-
                 return self.task_definition.get_task_family()
 
             else:
-
                 return self.task_definition
 
     def _create(self, aws_client: AwsApiClient) -> bool:
-
         """Create EcsService"""
 
         print_info(f"Creating {self.get_resource_type()}: {self.get_resource_name()}")
@@ -218,159 +208,109 @@ class EcsService(AwsResource):
         cluster_name = self.get_ecs_cluster_name()
 
         if cluster_name is not None:
-
             not_null_args["cluster"] = cluster_name
 
         network_configuration = self.network_configuration
 
-        if network_configuration is None and (
-
-            self.subnets is not None or self.security_groups is not None
-
-        ):
-
+        if network_configuration is None and (self.subnets is not None or self.security_groups is not None):
             aws_vpc_config: Dict[str, Any] = {}
 
             if self.subnets is not None:
-
                 subnet_ids = []
 
                 for subnet in self.subnets:
-
                     if isinstance(subnet, Subnet):
-
                         subnet_ids.append(subnet.name)
 
                     elif isinstance(subnet, str):
-
                         subnet_ids.append(subnet)
 
                 aws_vpc_config["subnets"] = subnet_ids
 
             if self.security_groups is not None:
-
                 security_group_ids = []
 
                 for sg in self.security_groups:
-
                     if isinstance(sg, SecurityGroup):
-
                         security_group_ids.append(sg.get_security_group_id(aws_client))
 
                     else:
-
                         security_group_ids.append(sg)
 
                 aws_vpc_config["securityGroups"] = security_group_ids
 
             if self.assign_public_ip:
-
                 aws_vpc_config["assignPublicIp"] = "ENABLED"
 
             network_configuration = {"awsvpcConfiguration": aws_vpc_config}
 
         if network_configuration is not None:
-
             not_null_args["networkConfiguration"] = network_configuration
 
         if self.service_connect_configuration is not None:
-
-            not_null_args["serviceConnectConfiguration"] = (
-
-                self.service_connect_configuration
-
-            )
+            not_null_args["serviceConnectConfiguration"] = self.service_connect_configuration
 
         if self.service_registries is not None:
-
             not_null_args["serviceRegistries"] = self.service_registries
 
         if self.desired_count is not None:
-
             not_null_args["desiredCount"] = self.desired_count
 
         if self.client_token is not None:
-
             not_null_args["clientToken"] = self.client_token
 
         if self.launch_type is not None:
-
             not_null_args["launchType"] = self.launch_type
 
         if self.capacity_provider_strategy is not None:
-
             not_null_args["capacityProviderStrategy"] = self.capacity_provider_strategy
 
         if self.platform_version is not None:
-
             not_null_args["platformVersion"] = self.platform_version
 
         if self.role is not None:
-
             not_null_args["role"] = self.role
 
         if self.deployment_configuration is not None:
-
             not_null_args["deploymentConfiguration"] = self.deployment_configuration
 
         if self.placement_constraints is not None:
-
             not_null_args["placementConstraints"] = self.placement_constraints
 
         if self.placement_strategy is not None:
-
             not_null_args["placementStrategy"] = self.placement_strategy
 
         if self.health_check_grace_period_seconds is not None:
-
-            not_null_args["healthCheckGracePeriodSeconds"] = (
-
-                self.health_check_grace_period_seconds
-
-            )
+            not_null_args["healthCheckGracePeriodSeconds"] = self.health_check_grace_period_seconds
 
         if self.scheduling_strategy is not None:
-
             not_null_args["schedulingStrategy"] = self.scheduling_strategy
 
         if self.deployment_controller is not None:
-
             not_null_args["deploymentController"] = self.deployment_controller
 
         if self.tags is not None:
-
             not_null_args["tags"] = self.tags
 
         if self.enable_ecsmanaged_tags is not None:
-
             not_null_args["enableECSManagedTags"] = self.enable_ecsmanaged_tags
 
         if self.propagate_tags is not None:
-
             not_null_args["propagateTags"] = self.propagate_tags
 
         if self.enable_execute_command is not None:
-
             not_null_args["enableExecuteCommand"] = self.enable_execute_command
 
         if self.load_balancers is not None:
-
             not_null_args["loadBalancers"] = self.load_balancers
 
         elif self.target_group is not None and self.target_container_name is not None:
-
             not_null_args["loadBalancers"] = [
-
                 {
-
                     "targetGroupArn": self.target_group.get_arn(aws_client),
-
                     "containerName": self.target_container_name,
-
                     "containerPort": self.target_container_port,
-
                 }
-
             ]
 
         # Register EcsService
@@ -378,15 +318,10 @@ class EcsService(AwsResource):
         service_client = self.get_service_client(aws_client)
 
         try:
-
             create_response = service_client.create_service(
-
                 serviceName=self.get_ecs_service_name(),
-
                 taskDefinition=self.get_ecs_task_definition(),
-
                 **not_null_args,
-
             )
 
             logger.debug(f"EcsService: {create_response}")
@@ -396,13 +331,11 @@ class EcsService(AwsResource):
             # Validate resource creation
 
             if resource_dict is not None:
-
                 self.active_resource = create_response
 
                 return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be created.")
 
             logger.error(e)
@@ -410,51 +343,30 @@ class EcsService(AwsResource):
         return False
 
     def post_create(self, aws_client: AwsApiClient) -> bool:
-
         # Wait for EcsService to be created
 
         if self.wait_for_create:
-
             try:
-
                 cluster_name = self.get_ecs_cluster_name()
 
                 if cluster_name is not None:
+                    print_info(f"Waiting for {self.get_resource_type()} to be available.")
 
-                    print_info(
-
-                        f"Waiting for {self.get_resource_type()} to be available."
-
-                    )
-
-                    waiter = self.get_service_client(aws_client).get_waiter(
-
-                        "services_stable"
-
-                    )
+                    waiter = self.get_service_client(aws_client).get_waiter("services_stable")
 
                     waiter.wait(
-
                         cluster=cluster_name,
-
                         services=[self.get_ecs_service_name()],
-
                         WaiterConfig={
-
                             "Delay": self.waiter_delay,
-
                             "MaxAttempts": self.waiter_max_attempts,
-
                         },
-
                     )
 
                 else:
-
                     logger.warning("Skipping waiter, no Service found")
 
             except Exception as e:
-
                 logger.error("Waiter failed.")
 
                 logger.error(e)
@@ -462,7 +374,6 @@ class EcsService(AwsResource):
         return True
 
     def _read(self, aws_client: AwsApiClient) -> Optional[Any]:
-
         """Read EcsService"""
 
         from botocore.exceptions import ClientError
@@ -476,47 +387,35 @@ class EcsService(AwsResource):
         cluster_name = self.get_ecs_cluster_name()
 
         if cluster_name is not None:
-
             not_null_args["cluster"] = cluster_name
 
         service_client = self.get_service_client(aws_client)
 
         try:
-
             service_name: str = self.get_ecs_service_name()
 
-            describe_response = service_client.describe_services(
-
-                services=[service_name], **not_null_args
-
-            )
+            describe_response = service_client.describe_services(services=[service_name], **not_null_args)
 
             logger.debug(f"EcsService: {describe_response}")
 
             resource_list = describe_response.get("services", None)
 
             if resource_list is not None and isinstance(resource_list, list):
-
                 for resource in resource_list:
-
                     _service_name: str = resource.get("serviceName", None)
 
                     if _service_name == service_name:
-
                         _service_status = resource.get("status", None)
 
                         if _service_status == "ACTIVE":
-
                             self.active_resource = resource
 
                             break
 
         except ClientError as ce:
-
             logger.debug(f"ClientError: {ce}")
 
         except Exception as e:
-
             logger.error(f"Error reading {self.get_resource_type()}.")
 
             logger.error(e)
@@ -524,7 +423,6 @@ class EcsService(AwsResource):
         return self.active_resource
 
     def _delete(self, aws_client: AwsApiClient) -> bool:
-
         """Delete EcsService"""
 
         print_info(f"Deleting {self.get_resource_type()}: {self.get_resource_name()}")
@@ -536,11 +434,9 @@ class EcsService(AwsResource):
         cluster_name = self.get_ecs_cluster_name()
 
         if cluster_name is not None:
-
             not_null_args["cluster"] = cluster_name
 
         if self.force_delete is not None:
-
             not_null_args["force"] = self.force_delete
 
         service_client = self.get_service_client(aws_client)
@@ -548,13 +444,9 @@ class EcsService(AwsResource):
         self.active_resource = None
 
         try:
-
             delete_response = service_client.delete_service(
-
                 service=self.get_ecs_service_name(),
-
                 **not_null_args,
-
             )
 
             logger.debug(f"EcsService: {delete_response}")
@@ -562,7 +454,6 @@ class EcsService(AwsResource):
             return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be deleted.")
 
             logger.error("Please try again or delete resources manually.")
@@ -572,47 +463,30 @@ class EcsService(AwsResource):
         return False
 
     def post_delete(self, aws_client: AwsApiClient) -> bool:
-
         # Wait for EcsService to be deleted
 
         if self.wait_for_delete:
-
             try:
-
                 cluster_name = self.get_ecs_cluster_name()
 
                 if cluster_name is not None:
-
                     print_info(f"Waiting for {self.get_resource_type()} to be deleted.")
 
-                    waiter = self.get_service_client(aws_client).get_waiter(
-
-                        "services_inactive"
-
-                    )
+                    waiter = self.get_service_client(aws_client).get_waiter("services_inactive")
 
                     waiter.wait(
-
                         cluster=cluster_name,
-
                         services=[self.get_ecs_service_name()],
-
                         WaiterConfig={
-
                             "Delay": self.waiter_delay,
-
                             "MaxAttempts": self.waiter_max_attempts,
-
                         },
-
                     )
 
                 else:
-
                     logger.warning("Skipping waiter, no Service found")
 
             except Exception as e:
-
                 logger.error("Waiter failed.")
 
                 logger.error(e)
@@ -620,7 +494,6 @@ class EcsService(AwsResource):
         return True
 
     def _update(self, aws_client: AwsApiClient) -> bool:
-
         """Updates the EcsService
 
         Args:
@@ -638,131 +511,93 @@ class EcsService(AwsResource):
         cluster_name = self.get_ecs_cluster_name()
 
         if cluster_name is not None:
-
             not_null_args["cluster"] = cluster_name
 
         network_configuration = self.network_configuration
 
-        if network_configuration is None and (
-
-            self.subnets is not None or self.security_groups is not None
-
-        ):
-
+        if network_configuration is None and (self.subnets is not None or self.security_groups is not None):
             aws_vpc_config: Dict[str, Any] = {}
 
             if self.subnets is not None:
-
                 subnet_ids = []
 
                 for subnet in self.subnets:
-
                     if isinstance(subnet, Subnet):
-
                         subnet_ids.append(subnet.name)
 
                     elif isinstance(subnet, str):
-
                         subnet_ids.append(subnet)
 
                 aws_vpc_config["subnets"] = subnet_ids
 
             if self.security_groups is not None:
-
                 security_group_ids = []
 
                 for sg in self.security_groups:
-
                     if isinstance(sg, SecurityGroup):
-
                         security_group_ids.append(sg.get_security_group_id(aws_client))
 
                     else:
-
                         security_group_ids.append(sg)
 
                 aws_vpc_config["securityGroups"] = security_group_ids
 
             if self.assign_public_ip:
-
                 aws_vpc_config["assignPublicIp"] = "ENABLED"
 
             network_configuration = {"awsvpcConfiguration": aws_vpc_config}
 
         if self.network_configuration is not None:
-
             not_null_args["networkConfiguration"] = network_configuration
 
         if self.desired_count is not None:
-
             not_null_args["desiredCount"] = self.desired_count
 
         if self.capacity_provider_strategy is not None:
-
             not_null_args["capacityProviderStrategy"] = self.capacity_provider_strategy
 
         if self.deployment_configuration is not None:
-
             not_null_args["deploymentConfiguration"] = self.deployment_configuration
 
         if self.placement_constraints is not None:
-
             not_null_args["placementConstraints"] = self.placement_constraints
 
         if self.placement_strategy is not None:
-
             not_null_args["placementStrategy"] = self.placement_strategy
 
         if self.platform_version is not None:
-
             not_null_args["platformVersion"] = self.platform_version
 
         if self.force_new_deployment is not None:
-
             not_null_args["forceNewDeployment"] = self.force_new_deployment
 
         if self.health_check_grace_period_seconds is not None:
-
-            not_null_args["healthCheckGracePeriodSeconds"] = (
-
-                self.health_check_grace_period_seconds
-
-            )
+            not_null_args["healthCheckGracePeriodSeconds"] = self.health_check_grace_period_seconds
 
         if self.enable_execute_command is not None:
-
             not_null_args["enableExecuteCommand"] = self.enable_execute_command
 
         if self.enable_ecsmanaged_tags is not None:
-
             not_null_args["enableECSManagedTags"] = self.enable_ecsmanaged_tags
 
         if self.load_balancers is not None:
-
             not_null_args["loadBalancers"] = self.load_balancers
 
         if self.propagate_tags is not None:
-
             not_null_args["propagateTags"] = self.propagate_tags
 
         if self.service_registries is not None:
-
             not_null_args["serviceRegistries"] = self.service_registries
 
         try:
-
             # Update EcsService
 
             service_client = self.get_service_client(aws_client)
 
             update_response = service_client.update_service(
-
                 service=self.get_ecs_service_name(),
-
                 taskDefinition=self.get_ecs_task_definition(),
-
                 **not_null_args,
-
             )
 
             logger.debug(f"update_response: {update_response}")
@@ -770,17 +605,11 @@ class EcsService(AwsResource):
             self.active_resource = update_response.get("service", None)
 
             if self.active_resource is not None:
-
-                print_info(
-
-                    f"{self.get_resource_type()}: {self.get_resource_name()} updated"
-
-                )
+                print_info(f"{self.get_resource_type()}: {self.get_resource_name()} updated")
 
                 return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be updated.")
 
             logger.error("Please try again or update resources manually.")
@@ -788,4 +617,3 @@ class EcsService(AwsResource):
             logger.error(e)
 
         return False
-

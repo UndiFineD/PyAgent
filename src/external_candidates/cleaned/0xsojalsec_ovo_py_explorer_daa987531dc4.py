@@ -36,7 +36,6 @@ from ovo.core.database.models import (
 
 
 def explorer_fragment(pool_ids: list[str], design_ids: list[str] | None = None):
-
     pools = get_cached_pools(pool_ids)
 
     if design_ids is None:
@@ -92,7 +91,6 @@ def explorer_fragment(pool_ids: list[str], design_ids: list[str] | None = None):
 
 @st.fragment
 def design_visualization_fragment(selected_design_ids: list[str]):
-
     # Use the navigation selector component
 
     design_id = design_navigation_selector(selected_design_ids, key="selected_design")

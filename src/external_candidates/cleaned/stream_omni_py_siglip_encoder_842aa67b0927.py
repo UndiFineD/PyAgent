@@ -17,7 +17,6 @@ from functools import partial, reduce
 
 from typing import Dict, Optional, Tuple, Union
 
-
 import torch
 
 import torch.utils.checkpoint
@@ -66,7 +65,6 @@ class SigLipImageProcessor:
         rescale_factor=1 / 255,
         data_format=ChannelDimension.FIRST,
     ):
-
         crop_size = crop_size if crop_size is not None else {"height": 384, "width": 384}
 
         crop_size = get_size_dict(crop_size, default_to_square=True, param_name="crop_size")
@@ -86,7 +84,6 @@ class SigLipImageProcessor:
         self.crop_size = crop_size
 
     def preprocess(self, images, return_tensors):
-
         if isinstance(images, Image.Image):
             images = [images]
 
@@ -145,7 +142,6 @@ class SigLipVisionConfig(PretrainedConfig):
         attention_dropout=0.0,
         **kwargs,
     ):
-
         super().__init__(**kwargs)
 
         self.hidden_size = hidden_size
@@ -172,7 +168,6 @@ class SigLipVisionConfig(PretrainedConfig):
 
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path: Union[str, os.PathLike], **kwargs) -> "PretrainedConfig":
-
         cls._set_token_in_kwargs(kwargs)
 
         config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
@@ -200,8 +195,6 @@ class SigLipVisionModelOutput(ModelOutput):
 
     Base class for vision model's outputs that also contains image embeddings of the pooling of the last hidden states.
 
-
-
     Args:
 
         image_embeds (`torch.FloatTensor` of shape `(batch_size, output_dim)` *optional* returned when model is initialized with `with_projection=True`):
@@ -218,8 +211,6 @@ class SigLipVisionModelOutput(ModelOutput):
 
             one for the output of each layer) of shape `(batch_size, sequence_length, hidden_size)`.
 
-
-
             Hidden-states of the model at the output of each layer plus the optional initial embedding outputs.
 
         attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
@@ -227,8 +218,6 @@ class SigLipVisionModelOutput(ModelOutput):
             Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
 
             sequence_length)`.
-
-
 
             Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
 
@@ -247,7 +236,6 @@ class SigLipVisionModelOutput(ModelOutput):
 
 class SigLipVisionEmbeddings(nn.Module):
     def __init__(self, config: SigLipVisionConfig):
-
         super().__init__()
 
         self.config = config
@@ -279,7 +267,6 @@ class SigLipVisionEmbeddings(nn.Module):
         )
 
     def forward(self, pixel_values: torch.FloatTensor) -> torch.Tensor:
-
         patch_embeds = self.patch_embedding(pixel_values)  # shape = [*, width, grid, grid]
 
         embeddings = patch_embeds.flatten(2).transpose(1, 2)
@@ -295,7 +282,6 @@ class SigLipAttention(nn.Module):
     # Copied from transformers.models.clip.modeling_clip.CLIPAttention.__init__
 
     def __init__(self, config):
-
         super().__init__()
 
         self.config = config
@@ -392,7 +378,6 @@ class SigLipAttention(nn.Module):
 
 class SigLipMLP(nn.Module):
     def __init__(self, config):
-
         super().__init__()
 
         self.config = config
@@ -404,7 +389,6 @@ class SigLipMLP(nn.Module):
         self.fc2 = nn.Linear(config.intermediate_size, config.hidden_size)
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-
         hidden_states = self.fc1(hidden_states)
 
         hidden_states = self.activation_fn(hidden_states)
@@ -419,7 +403,6 @@ class SigLipMLP(nn.Module):
 
 class SigLipEncoderLayer(nn.Module):
     def __init__(self, config: SigLipVisionConfig):
-
         super().__init__()
 
         self.embed_dim = config.hidden_size
@@ -519,8 +502,6 @@ class SigLipEncoder(nn.Module):
 
     [`SigLipEncoderLayer`].
 
-
-
     Args:
 
         config: SigLipVisionConfig
@@ -528,7 +509,6 @@ class SigLipEncoder(nn.Module):
     """
 
     def __init__(self, config: SigLipVisionConfig):
-
         super().__init__()
 
         self.config = config
@@ -563,13 +543,9 @@ class SigLipEncoder(nn.Module):
 
                 Mask to avoid performing attention on padding token indices. Mask values selected in `[0, 1]`:
 
-
-
                 - 1 for tokens that are **not masked**,
 
                 - 0 for tokens that are **masked**.
-
-
 
                 [What are attention masks?](../glossary#attention-mask)
 
@@ -644,7 +620,6 @@ class SigLipEncoder(nn.Module):
 
 class SigLipVisionTransformer(nn.Module):
     def __init__(self, config: SigLipVisionConfig):
-
         super().__init__()
 
         self.config = config
@@ -669,8 +644,6 @@ class SigLipVisionTransformer(nn.Module):
         r"""
 
         Returns:
-
-
 
         """
 
@@ -712,7 +685,6 @@ class SigLipMultiheadAttentionPoolingHead(nn.Module):
     """Multihead Attention Pooling."""
 
     def __init__(self, config: SigLipVisionConfig):
-
         super().__init__()
 
         self.probe = nn.Parameter(torch.randn(1, 1, config.hidden_size))
@@ -724,7 +696,6 @@ class SigLipMultiheadAttentionPoolingHead(nn.Module):
         self.mlp = SigLipMLP(config)
 
     def forward(self, hidden_state):
-
         batch_size = hidden_state.shape[0]
 
         probe = self.probe.repeat(batch_size, 1, 1)
@@ -748,7 +719,6 @@ class SigLipVisionModel(SigLipPreTrainedModel):
     _no_split_modules = ["SigLipEncoderLayer"]
 
     def __init__(self, config: SigLipVisionConfig):
-
         super().__init__(config)
 
         self.vision_model = SigLipVisionTransformer(config)
@@ -758,7 +728,6 @@ class SigLipVisionModel(SigLipPreTrainedModel):
         self.post_init()
 
     def get_input_embeddings(self) -> nn.Module:
-
         return self.vision_model.embeddings.patch_embedding
 
     def forward(
@@ -772,11 +741,7 @@ class SigLipVisionModel(SigLipPreTrainedModel):
 
         Returns:
 
-
-
         Examples:
-
-
 
         ```python
 
@@ -786,23 +751,15 @@ class SigLipVisionModel(SigLipPreTrainedModel):
 
         >>> from transformers import AutoProcessor, SigLipVisionModel
 
-
-
         >>> model = SigLipVisionModel.from_pretrained("google/siglip-base-patch16-224")
 
         >>> processor = AutoProcessor.from_pretrained("google/siglip-base-patch16-224")
-
-
 
         >>> url = "http://images.cocodataset.org/val2017/000000039769.jpg"
 
         >>> image = Image.open(requests.get(url, stream=True).raw)
 
-
-
         >>> inputs = processor(images=image, return_tensors="pt")
-
-
 
         >>> outputs = model(**inputs)
 
@@ -824,7 +781,6 @@ class SigLipVisionModel(SigLipPreTrainedModel):
 
 class SigLipVisionTower(nn.Module):
     def __init__(self, vision_tower, vision_tower_cfg, delay_load=False):
-
         super().__init__()
 
         self.is_loaded = False
@@ -858,7 +814,6 @@ class SigLipVisionTower(nn.Module):
             self.cfg_only = self.config
 
     def load_model(self, device_map=None):
-
         if self.is_loaded:
             rank0_print("{} is already loaded, `load_model` called again, skipping.".format(self.vision_tower_name))
 
@@ -875,7 +830,6 @@ class SigLipVisionTower(nn.Module):
         self.is_loaded = True
 
     def forward(self, images):
-
         if type(images) is list:
             image_features = []
 
@@ -905,39 +859,32 @@ class SigLipVisionTower(nn.Module):
 
     @property
     def dummy_feature(self):
-
         return torch.zeros(1, self.hidden_size, device=self.device, dtype=self.dtype)
 
     @property
     def dtype(self):
-
         for p in self.vision_tower.parameters():
             return p.dtype
 
     @property
     def device(self):
-
         for p in self.vision_tower.parameters():
             return p.device
 
     @property
     def hidden_size(self):
-
         return self.config.hidden_size
 
     @property
     def num_patches(self):
-
         return (self.config.image_size // self.config.patch_size) ** 2
 
     @property
     def num_patches_per_side(self):
-
         return self.config.image_size // self.config.patch_size
 
         # return self.model_config["vision_cfg"]["image_size"] // self.model_config["vision_cfg"]["patch_size"]
 
     @property
     def image_size(self):
-
         return self.config.image_size

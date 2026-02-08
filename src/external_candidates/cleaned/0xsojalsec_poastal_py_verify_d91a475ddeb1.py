@@ -7,7 +7,6 @@ import requests
 
 
 def deliverable(email):
-
     params = {
         "email": email,
     }
@@ -26,7 +25,6 @@ def deliverable(email):
 
 
 def spam(email):
-
     params = {
         "email": email,
     }
@@ -45,7 +43,6 @@ def spam(email):
 
 
 def disposable(email):
-
     params = {
         "email": email,
     }

@@ -20,7 +20,6 @@ from lib.core.Requester import AuthMode, Requester
 
 class Weblogic:
     def __init__(self, url, verbose=False):
-
         self.url = url
 
         self.interface = None
@@ -30,7 +29,6 @@ class Weblogic:
         self.http_auth_type = None
 
     def check(self):
-
         r = Requester.get("{}/console/j_security_check".format(self.url))
 
         if 'name="j_password"' in r.text:
@@ -52,7 +50,6 @@ class Weblogic:
         return False
 
     def try_auth(self, username, password):
-
         if self.interface == "weblogic-admin":
             data = {
                 "j_username": username,

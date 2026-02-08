@@ -40,7 +40,6 @@ class ChatMistral(BaseInference):
     def invoke(
         self, messages: list[BaseMessage], json: bool = False, model: BaseModel = None
     ) -> AIMessage | ToolMessage | BaseModel:
-
         self.headers.update({"Authorization": f"Bearer {self.api_key}"})
 
         headers = self.headers
@@ -150,7 +149,6 @@ class ChatMistral(BaseInference):
     async def async_invoke(
         self, messages: list[BaseMessage], json: bool = False, model: BaseModel = None
     ) -> AIMessage | ToolMessage | BaseModel:
-
         self.headers.update({"Authorization": f"Bearer {self.api_key}"})
 
         headers = self.headers
@@ -258,7 +256,6 @@ class ChatMistral(BaseInference):
     @limits(calls=15, period=60)
     @retry(stop=stop_after_attempt(3), retry=retry_if_exception_type(RequestException))
     def stream(self, messages: list[BaseMessage], json=False) -> Generator[str, None, None]:
-
         self.headers.update({"Authorization": f"Bearer {self.api_key}"})
 
         headers = self.headers
@@ -305,7 +302,6 @@ class ChatMistral(BaseInference):
         exit()
 
     def available_models(self):
-
         url = "https://api.mistral.ai/v1/models"
 
         self.headers.update({"Authorization": f"Bearer {self.api_key}"})

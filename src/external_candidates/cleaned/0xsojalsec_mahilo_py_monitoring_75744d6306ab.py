@@ -100,7 +100,6 @@ class MahiloTelemetry:
     """OpenTelemetry-based monitoring for Mahilo"""
 
     def __init__(self, service_name: str = "mahilo"):
-
         # Set up resource
 
         resource = Resource.create({ResourceAttributes.SERVICE_NAME: service_name})
@@ -124,11 +123,9 @@ class MahiloTelemetry:
 
         class InMemorySpanExporter:
             def __init__(self, traces_list):
-
                 self.traces = traces_list
 
             def export(self, spans):
-
                 for span in spans:
                     self.traces.append(
                         {
@@ -154,7 +151,6 @@ class MahiloTelemetry:
                 return True
 
             def shutdown(self):
-
                 pass
 
         trace_provider.add_span_processor(SimpleSpanProcessor(InMemorySpanExporter(self.traces)))

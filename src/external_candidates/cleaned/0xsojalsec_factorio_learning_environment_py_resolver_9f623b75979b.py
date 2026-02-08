@@ -9,7 +9,6 @@ from enum import Enum, auto
 
 from typing import List, Optional, Protocol, Tuple, Union
 
-
 from fle.env.entities import Entity, Position
 
 
@@ -32,17 +31,14 @@ class ConnectionType(Enum):
 
 class PositionResolver(Protocol):
     def resolve(self, source: Union[Position, Entity], target: Union[Position, Entity]) -> Tuple[Position, Position]:
-
         pass
 
 
 class Resolver:
     def __init__(self, get_entities):
-
         self.get_entities = get_entities
 
     def _is_blocked(self, pos: Position) -> bool:
-
         entities = self.get_entities(position=pos, radius=0.5)
 
         return bool(entities)
@@ -50,7 +46,6 @@ class Resolver:
     def resolve(
         self, source: Union[Position, Entity], target: Union[Position, Entity]
     ) -> List[Tuple[Position, Position]]:
-
         source_pos, target_pos = None, None
 
         if isinstance(source, Position):

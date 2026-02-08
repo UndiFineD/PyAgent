@@ -11,7 +11,6 @@ import uuid
 
 from typing import Any, Dict, List, Optional
 
-
 import aiohttp
 
 import requests
@@ -48,7 +47,6 @@ class A2AProtocolHandler:
         max_retries: int = 3,
         retry_delay: int = 5,
     ):
-
         self.agent_id = agent_id
 
         # Ensure server_url ends with /a2a
@@ -71,7 +69,6 @@ class A2AProtocolHandler:
         self._cleanup_lock = asyncio.Lock()
 
     async def __aenter__(self):
-
         if self._session is None:
             self._session = aiohttp.ClientSession()
 
@@ -80,7 +77,6 @@ class A2AProtocolHandler:
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-
         async with self._cleanup_lock:
             try:
                 if self._is_registered:
@@ -106,7 +102,6 @@ class A2AProtocolHandler:
                 print(f"Warning: Error during cleanup: {str(e)}")
 
     def _make_sync_request(self, method: str, params: Dict[str, Any]) -> Dict[str, Any]:
-
         if not self._is_registered:
             raise RuntimeError("Agent must be registered before making requests")
 
@@ -140,7 +135,6 @@ class A2AProtocolHandler:
                 time.sleep(self.retry_delay)
 
     async def _make_request(self, method: str, params: Dict[str, Any]) -> Dict[str, Any]:
-
         if not self._session:
             raise RuntimeError("Session not initialized. Use 'async with' context manager.")
 

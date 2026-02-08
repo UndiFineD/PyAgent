@@ -4,7 +4,6 @@
 
 
 def execute_agent_chain(agent_graph, agent_chain, user_input_graph):
-
     # 1. 初始化上下文
 
     context = {}

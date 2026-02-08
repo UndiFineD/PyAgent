@@ -13,36 +13,24 @@ from agno.tools import Toolkit
 
 from agno.utils.log import log_info, logger
 
+
 class LinearTools(Toolkit):
-
     def __init__(
-
         self,
-
         get_user_details: bool = True,
-
         get_issue_details: bool = True,
-
         create_issue: bool = True,
-
         update_issue: bool = True,
-
         get_user_assigned_issues: bool = True,
-
         get_workflow_issues: bool = True,
-
         get_high_priority_issues: bool = True,
-
         **kwargs,
-
     ):
-
         super().__init__(name="linear tools", **kwargs)
 
         self.api_token = getenv("LINEAR_API_KEY")
 
         if not self.api_token:
-
             api_error_message = "API token 'LINEAR_API_KEY' is missing. Please set it as an environment variable."
 
             logger.error(api_error_message)
@@ -52,47 +40,34 @@ class LinearTools(Toolkit):
         self.headers = {"Authorization": f"{self.api_token}"}
 
         if get_user_details:
-
             self.register(self.get_user_details)
 
         if get_issue_details:
-
             self.register(self.get_issue_details)
 
         if create_issue:
-
             self.register(self.create_issue)
 
         if update_issue:
-
             self.register(self.update_issue)
 
         if get_user_assigned_issues:
-
             self.register(self.get_user_assigned_issues)
 
         if get_workflow_issues:
-
             self.register(self.get_workflow_issues)
 
         if get_high_priority_issues:
-
             self.register(self.get_high_priority_issues)
 
     def _execute_query(self, query, variables=None):
-
         """Helper method to execute GraphQL queries with optional variables."""
 
         try:
-
             response = requests.post(
-
                 self.endpoint,
-
                 json={"query": query, "variables": variables},
-
                 headers=self.headers,
-
             )
 
             response.raise_for_status()
@@ -100,7 +75,6 @@ class LinearTools(Toolkit):
             data = response.json()
 
             if "errors" in data:
-
                 logger.error(f"GraphQL Error: {data['errors']}")
 
                 raise Exception(f"GraphQL Error: {data['errors']}")
@@ -110,19 +84,16 @@ class LinearTools(Toolkit):
             return data.get("data")
 
         except requests.exceptions.RequestException as e:
-
             logger.error(f"Request error: {e}")
 
             raise
 
         except Exception as e:
-
             logger.error(f"Unexpected error: {e}")
 
             raise
 
     def get_user_details(self) -> Optional[str]:
-
         """
 
         Fetch authenticated user details.
@@ -158,35 +129,28 @@ class LinearTools(Toolkit):
         """
 
         try:
-
             response = self._execute_query(query)
 
             if response.get("viewer"):
-
                 user = response["viewer"]
 
                 log_info(
-
                     f"Retrieved authenticated user details with name: {user['name']}, ID: {user['id']}, Email: {user['email']}"
-
                 )
 
                 return str(user)
 
             else:
-
                 logger.error("Failed to retrieve the current user details")
 
                 return None
 
         except Exception as e:
-
             logger.error(f"Error fetching authenticated user details: {e}")
 
             raise
 
     def get_issue_details(self, issue_id: str) -> Optional[str]:
-
         """
 
         Retrieve details of a specific issue by issue ID.
@@ -228,49 +192,33 @@ class LinearTools(Toolkit):
         variables = {"issueId": issue_id}
 
         try:
-
             response = self._execute_query(query, variables)
 
             if response.get("issue"):
-
                 issue = response["issue"]
 
-                log_info(
-
-                    f"Issue '{issue['title']}' retrieved successfully with ID {issue['id']}."
-
-                )
+                log_info(f"Issue '{issue['title']}' retrieved successfully with ID {issue['id']}.")
 
                 return str(issue)
 
             else:
-
                 logger.error(f"Failed to retrieve issue with ID {issue_id}.")
 
                 return None
 
         except Exception as e:
-
             logger.error(f"Error retrieving issue with ID {issue_id}: {e}")
 
             raise
 
     def create_issue(
-
         self,
-
         title: str,
-
         description: str,
-
         team_id: str,
-
         project_id: str,
-
         assignee_id: str,
-
     ) -> Optional[str]:
-
         """
 
         Create a new issue within a specific project and team.
@@ -324,51 +272,36 @@ class LinearTools(Toolkit):
         """
 
         variables = {
-
             "title": title,
-
             "description": description,
-
             "teamId": team_id,
-
             "projectId": project_id,
-
             "assigneeId": assignee_id,
-
         }
 
         try:
-
             response = self._execute_query(query, variables)
 
             log_info(f"Response: {response}")
 
             if response["issueCreate"]["success"]:
-
                 issue = response["issueCreate"]["issue"]
 
-                log_info(
-
-                    f"Issue '{issue['title']}' created successfully with ID {issue['id']}"
-
-                )
+                log_info(f"Issue '{issue['title']}' created successfully with ID {issue['id']}")
 
                 return str(issue)
 
             else:
-
                 logger.error("Issue creation failed.")
 
                 return None
 
         except Exception as e:
-
             logger.error(f"Error creating issue '{title}' for team ID {team_id}: {e}")
 
             raise
 
     def update_issue(self, issue_id: str, title: Optional[str]) -> Optional[str]:
-
         """
 
         Update the title or state of a specific issue by issue ID.
@@ -430,11 +363,9 @@ class LinearTools(Toolkit):
         variables = {"issueId": issue_id, "title": title}
 
         try:
-
             response = self._execute_query(query, variables)
 
             if response["issueUpdate"]["success"]:
-
                 issue = response["issueUpdate"]["issue"]
 
                 log_info(f"Issue ID {issue_id} updated successfully.")
@@ -442,23 +373,16 @@ class LinearTools(Toolkit):
                 return str(issue)
 
             else:
-
-                logger.error(
-
-                    f"Failed to update issue ID {issue_id}. Success flag was false."
-
-                )
+                logger.error(f"Failed to update issue ID {issue_id}. Success flag was false.")
 
                 return None
 
         except Exception as e:
-
             logger.error(f"Error updating issue ID {issue_id}: {e}")
 
             raise
 
     def get_user_assigned_issues(self, user_id: str) -> Optional[str]:
-
         """
 
         Retrieve issues assigned to a specific user by user ID.
@@ -512,37 +436,28 @@ class LinearTools(Toolkit):
         variables = {"userId": user_id}
 
         try:
-
             response = self._execute_query(query, variables)
 
             if response.get("user"):
-
                 user = response["user"]
 
                 issues = user["assignedIssues"]["nodes"]
 
-                log_info(
-
-                    f"Retrieved {len(issues)} issues assigned to user '{user['name']}' (ID: {user['id']})."
-
-                )
+                log_info(f"Retrieved {len(issues)} issues assigned to user '{user['name']}' (ID: {user['id']}).")
 
                 return str(issues)
 
             else:
-
                 logger.error("Failed to retrieve user or issues.")
 
                 return None
 
         except Exception as e:
-
             logger.error(f"Error retrieving issues for user ID {user_id}: {e}")
 
             raise
 
     def get_workflow_issues(self, workflow_id: str) -> Optional[str]:
-
         """
 
         Retrieve issues within a specific workflow state by workflow ID.
@@ -590,43 +505,26 @@ class LinearTools(Toolkit):
         variables = {"workflowId": workflow_id}
 
         try:
-
             response = self._execute_query(query, variables)
 
             if response.get("workflowState"):
-
                 issues = response["workflowState"]["issues"]["nodes"]
 
-                log_info(
-
-                    f"Retrieved {len(issues)} issues in workflow state ID {workflow_id}."
-
-                )
+                log_info(f"Retrieved {len(issues)} issues in workflow state ID {workflow_id}.")
 
                 return str(issues)
 
             else:
-
-                logger.error(
-
-                    "Failed to retrieve issues for the specified workflow state."
-
-                )
+                logger.error("Failed to retrieve issues for the specified workflow state.")
 
                 return None
 
         except Exception as e:
-
-            logger.error(
-
-                f"Error retrieving issues for workflow state ID {workflow_id}: {e}"
-
-            )
+            logger.error(f"Error retrieving issues for workflow state ID {workflow_id}: {e}")
 
             raise
 
     def get_high_priority_issues(self) -> Optional[str]:
-
         """
 
         Retrieve issues with a high priority (priority <= 2).
@@ -672,11 +570,9 @@ class LinearTools(Toolkit):
         """
 
         try:
-
             response = self._execute_query(query)
 
             if response.get("issues"):
-
                 high_priority_issues = response["issues"]["nodes"]
 
                 log_info(f"Retrieved {len(high_priority_issues)} high-priority issues.")
@@ -684,14 +580,11 @@ class LinearTools(Toolkit):
                 return str(high_priority_issues)
 
             else:
-
                 logger.error("Failed to retrieve high-priority issues.")
 
                 return None
 
         except Exception as e:
-
             logger.error(f"Error retrieving high-priority issues: {e}")
 
             raise
-

@@ -8,7 +8,6 @@ from pathlib import Path
 
 class Pypirc:
     def pairs(self, filepath: Path):
-
         for line in filepath.open("r").readlines():
             if "password:" not in line:
                 continue

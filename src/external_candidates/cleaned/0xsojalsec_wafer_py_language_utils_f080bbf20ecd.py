@@ -7,12 +7,10 @@ from utils import choice, rndstr
 
 
 def gen_text():
-
     return rndstr(8)
 
 
 def gen_boolean():
-
     cases = {
         0: lambda: "yes",
         1: lambda: "no",
@@ -29,7 +27,6 @@ def gen_boolean():
 
 
 def gen_number():
-
     cases = {
         0: lambda: "0",
         1: lambda: "1",
@@ -41,7 +38,6 @@ def gen_number():
 
 
 def gen_color():
-
     cases = {
         0: lambda: "#000000",
         1: lambda: "#ffffff",
@@ -58,7 +54,6 @@ def gen_color():
 
 
 def gen_javascript():
-
     cases = {
         0: lambda: "alert(0)",
         1: lambda: "prompt`0`",
@@ -80,7 +75,6 @@ def gen_javascript():
 
 
 def gen_style():
-
     # xss via style
 
     cases = {
@@ -95,7 +89,6 @@ def gen_style():
 
 
 def gen_url():
-
     # xss via url
 
     cases = {
@@ -109,7 +102,6 @@ def gen_url():
 
 
 def gen_email():
-
     # xss via email
 
     cases = {
@@ -122,12 +114,10 @@ def gen_email():
 
 
 def gen_date():
-
     return "2020-01-01"
 
 
 def gen_target(tag):
-
     if tag is None:
         return ""
 
@@ -135,7 +125,6 @@ def gen_target(tag):
 
 
 def gen_name(tag):
-
     if tag is None:
         return ""
 
@@ -143,30 +132,24 @@ def gen_name(tag):
 
 
 def gen_flag():
-
     return None
 
 
 def gen_drop():
-
     return choice(["copy", "move", "link"])
 
 
 def gen_dir():
-
     return choice(["ltr", "rtl", "auto"])
 
 
 def gen_wtarget():
-
     return choice(["_self", "_blank", "_parent", "_top"])
 
 
 def gen_access_key():
-
     return "X"
 
 
 def gen_duration():
-
     return choice(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]) + choice(["s", "ms"])

@@ -13,11 +13,9 @@ import pytest
 
 
 def test_pass():
-
     pass
 
 
 @pytest.mark.xfail
 def test_fail():
-
     raise AssertionError

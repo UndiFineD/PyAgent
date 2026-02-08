@@ -35,7 +35,6 @@ class LieGroupParameter(torch.Tensor):
     __torch_function__ = _disabled_torch_function_impl
 
     def __new__(cls, group, requires_grad=True):
-
         data = torch.zeros(
             group.tangent_shape,
             device=group.data.device,
@@ -46,27 +45,21 @@ class LieGroupParameter(torch.Tensor):
         return torch.Tensor._make_subclass(cls, data, requires_grad)
 
     def __init__(self, group):
-
         self.group = group
 
     def retr(self):
-
         return self.group.retr(self)
 
     def log(self):
-
         return self.retr().log()
 
     def inv(self):
-
         return self.retr().inv()
 
     def adj(self, a):
-
         return self.retr().adj(a)
 
     def __mul__(self, other):
-
         if isinstance(other, LieGroupParameter):
             return self.retr() * other.retr()
 
@@ -74,11 +67,9 @@ class LieGroupParameter(torch.Tensor):
             return self.retr() * other
 
     def add_(self, update, alpha):
-
         self.group = self.group.exp(alpha * update) * self.group
 
     def __getitem__(self, index):
-
         return self.retr().__getitem__(index)
 
 
@@ -86,35 +77,28 @@ class LieGroup:
     """Base class for Lie Group"""
 
     def __init__(self, data):
-
         self.data = data
 
     def __repr__(self):
-
         return "{}: size={}, device={}, dtype={}".format(self.group_name, self.shape, self.device, self.dtype)
 
     @property
     def shape(self):
-
         return self.data.shape[:-1]
 
     @property
     def device(self):
-
         return self.data.device
 
     @property
     def dtype(self):
-
         return self.data.dtype
 
     def vec(self):
-
         return self.apply_op(ToVec, self.data)
 
     @property
     def tangent_shape(self):
-
         return self.data.shape[:-1] + (self.manifold_dim,)
 
     @classmethod
@@ -143,12 +127,10 @@ class LieGroup:
 
     @classmethod
     def IdentityLike(cls, G):
-
         return cls.Identity(G.shape, device=G.data.device, dtype=G.data.dtype)
 
     @classmethod
     def InitFromVec(cls, data):
-
         return cls(cls.apply_op(FromVec, data))
 
     @classmethod
@@ -221,7 +203,6 @@ class LieGroup:
         return self.apply_op(AdjT, self.data, a)
 
     def Jinv(self, a):
-
         return self.apply_op(Jinv, self.data, a)
 
     def act(self, p):
@@ -261,17 +242,14 @@ class LieGroup:
         return self.apply_op(Act4, self.data, p)
 
     def detach(self):
-
         return self.__class__(self.data.detach())
 
     def view(self, dims):
-
         data_reshaped = self.data.view(dims + (self.embedded_dim,))
 
         return self.__class__(data_reshaped)
 
     def __mul__(self, other):
-
         # group multiplication
 
         if isinstance(other, LieGroup):
@@ -283,35 +261,27 @@ class LieGroup:
             return self.act(other)
 
     def __getitem__(self, index):
-
         return self.__class__(self.data[index])
 
     def __setitem__(self, index, item):
-
         self.data[index] = item.data
 
     def to(self, *args, **kwargs):
-
         return self.__class__(self.data.to(*args, **kwargs))
 
     def cpu(self):
-
         return self.__class__(self.data.cpu())
 
     def cuda(self):
-
         return self.__class__(self.data.cuda())
 
     def float(self, device):
-
         return self.__class__(self.data.float())
 
     def double(self, device):
-
         return self.__class__(self.data.double())
 
     def unbind(self, dim=0):
-
         return [self.__class__(x) for x in self.data.unbind(dim=dim)]
 
 
@@ -329,7 +299,6 @@ class SO3(LieGroup):
     id_elem = torch.as_tensor([0.0, 0.0, 0.0, 1.0])
 
     def __init__(self, data):
-
         if isinstance(data, SE3):
             data = data.data[..., 3:7]
 
@@ -350,7 +319,6 @@ class RxSO3(LieGroup):
     id_elem = torch.as_tensor([0.0, 0.0, 0.0, 1.0, 1.0])
 
     def __init__(self, data):
-
         if isinstance(data, Sim3):
             data = data.data[..., 3:8]
 
@@ -371,7 +339,6 @@ class SE3(LieGroup):
     id_elem = torch.as_tensor([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0])
 
     def __init__(self, data):
-
         if isinstance(data, SO3):
             translation = torch.zeros_like(data.data[..., :3])
 
@@ -380,7 +347,6 @@ class SE3(LieGroup):
         super(SE3, self).__init__(data)
 
     def scale(self, s):
-
         t, q = self.data.split([3, 4], -1)
 
         t = t * s.unsqueeze(-1)
@@ -402,7 +368,6 @@ class Sim3(LieGroup):
     id_elem = torch.as_tensor([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0])
 
     def __init__(self, data):
-
         if isinstance(data, SO3):
             scale = torch.ones_like(SO3.data[..., :1])
 

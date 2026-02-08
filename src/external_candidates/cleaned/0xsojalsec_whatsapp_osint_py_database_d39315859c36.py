@@ -8,7 +8,6 @@ import sqlite3
 
 class Database:
     def create_table():
-
         conn = sqlite3.connect("database/database.db")
 
         c = conn.cursor()
@@ -27,7 +26,6 @@ class Database:
         conn.close()
 
     def insert_connection_data(name, date, hour, minute, second, type_connection):
-
         conn = sqlite3.connect("database/database.db")
 
         c = conn.cursor()
@@ -42,7 +40,6 @@ class Database:
         conn.close()
 
     def insert_disconnection_data(name, date, hour, minute, second, type_connection, time_connected):
-
         conn = sqlite3.connect("database/database.db")
 
         c = conn.cursor()

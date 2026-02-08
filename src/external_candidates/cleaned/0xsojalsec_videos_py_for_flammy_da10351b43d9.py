@@ -10,11 +10,9 @@ from manim_imports_ext import *
 
 class MadAtMathologer(PiCreatureScene):
     def create_pi_creature(self):
-
         return Mortimer().to_corner(DR)
 
     def construct(self):
-
         morty = self.pi_creature
 
         self.play(morty.change, "angry")
@@ -32,7 +30,6 @@ class MadAtMathologer(PiCreatureScene):
 
 class JustTheIntegral(Scene):
     def construct(self):
-
         tex = OldTex("\\int_0^{\\pi / 2} \\cos(\\theta)d\\theta")
 
         tex.scale(2)
@@ -42,7 +39,6 @@ class JustTheIntegral(Scene):
 
 class SphereVideoWrapper(Scene):
     def construct(self):
-
         title = OldTexText("Surface area of a sphere")
 
         title.scale(1.5)
@@ -68,7 +64,6 @@ class SphereRings(SecondProof):
     }
 
     def construct(self):
-
         self.setup_shapes()
 
         self.grow_rings()
@@ -82,7 +77,6 @@ class SphereRings(SecondProof):
         self.flash_through_rings()
 
     def grow_rings(self):
-
         sphere = self.sphere
 
         rings = self.rings
@@ -114,7 +108,6 @@ class SphereRings(SecondProof):
         self.southern_mesh = southern_mesh
 
     def show_one_ring(self):
-
         north_rings = self.north_rings
 
         index = len(north_rings) // 2
@@ -196,7 +189,6 @@ class SphereRings(SecondProof):
         self.ring = ring
 
     def show_radial_line(self):
-
         ring = self.ring
 
         point = ring.get_corner(RIGHT + IN)
@@ -293,7 +285,6 @@ class SphereRings(SecondProof):
         self.wait(2)
 
     def show_thickness(self):
-
         brace, word = self.thickness_label
 
         R_dtheta = OldTex("R \\, d\\theta")
@@ -307,7 +298,6 @@ class SphereRings(SecondProof):
         self.wait(3)
 
     def flash_through_rings(self):
-
         rings = self.north_rings.copy()
 
         rings.fade(1)
@@ -329,7 +319,6 @@ class SphereRings(SecondProof):
 
 class IntegralSymbols(Scene):
     def construct(self):
-
         int_sign = OldTex("\\displaystyle \\int")
 
         int_sign.set_height(1.5)
@@ -485,7 +474,6 @@ class IntegralSymbols(Scene):
 
 class ShamelessPlug(TeacherStudentsScene):
     def construct(self):
-
         self.student_says("But why $4\\pi R^2$?", target_mode="maybe")
 
         self.play_student_changes("erm", "maybe", "happy", added_anims=[self.teacher.change, "happy"])

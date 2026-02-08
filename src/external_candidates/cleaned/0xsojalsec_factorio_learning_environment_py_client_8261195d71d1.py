@@ -26,7 +26,6 @@ from fle.env.tools.agent.get_entities.client import GetEntities
 
 class Render(Tool):
     def __init__(self, *args):
-
         super().__init__(*args)
 
         self.image_resolver = ImageResolver(".fle/sprites")
@@ -37,7 +36,6 @@ class Render(Tool):
 
     @profile_method(include_args=True)
     def _get_map_entities(self, include_status, radius, compression_level):
-
         # Execute the Lua function with compression level
 
         try:
@@ -161,7 +159,6 @@ class Render(Tool):
             return RenderedImage(image)
 
     def get_renderer_from_blueprint(self, blueprint):
-
         if isinstance(blueprint, str):
             raise NotImplementedError()
 
@@ -190,7 +187,6 @@ class Render(Tool):
         compression_level: str = "binary",
         max_render_radius: Optional[float] = None,
     ) -> Renderer:
-
         result = self._get_map_entities(include_status, radius, compression_level)
 
         # Parse the Lua dictionaries

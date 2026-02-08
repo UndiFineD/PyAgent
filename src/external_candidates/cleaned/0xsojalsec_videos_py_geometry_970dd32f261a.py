@@ -10,7 +10,6 @@ class FakeAreaManipulation(Scene):
     CONFIG = {"unit": 0.5}
 
     def construct(self):
-
         unit = self.unit
 
         group1, group2 = groups = self.get_diagrams()
@@ -118,7 +117,6 @@ class FakeAreaManipulation(Scene):
         self.embed()
 
     def get_diagrams(self):
-
         unit = self.unit
 
         tri1 = Polygon(2 * LEFT, ORIGIN, 5 * UP)
@@ -209,13 +207,11 @@ class FakeAreaManipulation(Scene):
 
 class LogarithmicSpiral(Scene):
     def construct(self):
-
         exp_n_tracker = ValueTracker(1)
 
         group = VGroup()
 
         def update_group(gr):
-
             n = 3 * int(np.exp(exp_n_tracker.get_value()))
 
             gr.set_submobjects(self.get_group(n))
@@ -235,7 +231,6 @@ class LogarithmicSpiral(Scene):
         self.wait()
 
     def get_group(self, n, n_spirals=50):
-
         n = int(n)
 
         theta = TAU / n

@@ -5,7 +5,6 @@
 
 import random
 
-
 from data.vqa.image_utils import save_rendered_image
 
 from fle.env import Position, Resource
@@ -15,9 +14,7 @@ from inspect_ai.solver import Generate, Solver, TaskState, solver
 
 @solver
 def render_terrain(instance) -> Solver:
-
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         x, y = state.metadata["x"], state.metadata["y"]
 
         step = 32

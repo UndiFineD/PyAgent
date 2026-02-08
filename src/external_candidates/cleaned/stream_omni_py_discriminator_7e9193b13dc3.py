@@ -5,7 +5,6 @@
 
 from typing import List, Optional, Tuple
 
-
 import torch
 
 import torch.nn as nn
@@ -19,7 +18,6 @@ from torchaudio.transforms import Spectrogram
 
 class MultipleDiscriminator(nn.Module):
     def __init__(self, mpd: nn.Module, mrd: nn.Module):
-
         super().__init__()
 
         self.mpd = mpd
@@ -27,7 +25,6 @@ class MultipleDiscriminator(nn.Module):
         self.mrd = mrd
 
     def forward(self, y: torch.Tensor, y_hat: torch.Tensor):
-
         y_d_rs, y_d_gs, fmap_rs, fmap_gs = [], [], [], []
 
         this_y_d_rs, this_y_d_gs, this_fmap_rs, this_fmap_gs = self.mpd(y.unsqueeze(dim=1), y_hat.unsqueeze(dim=1))
@@ -65,8 +62,6 @@ class MultiResolutionDiscriminator(nn.Module):
 
         Additionally, it allows incorporating conditional information with a learned embeddings table.
 
-
-
         Args:
 
             fft_sizes (tuple[int]): Tuple of window lengths for FFT. Defaults to (2048, 1024, 512).
@@ -91,7 +86,6 @@ class MultiResolutionDiscriminator(nn.Module):
         List[List[torch.Tensor]],
         List[List[torch.Tensor]],
     ]:
-
         y_d_rs = []
 
         y_d_gs = []
@@ -131,7 +125,6 @@ class DiscriminatorR(nn.Module):
             (0.75, 1.0),
         ),
     ):
-
         super().__init__()
 
         self.window_length = window_length
@@ -171,7 +164,6 @@ class DiscriminatorR(nn.Module):
         self.conv_post = weight_norm(nn.Conv2d(channels, 1, (3, 3), (1, 1), padding=(1, 1)))
 
     def spectrogram(self, x):
-
         # Remove DC offset
 
         x = x - x.mean(dim=-1, keepdims=True)
@@ -193,7 +185,6 @@ class DiscriminatorR(nn.Module):
         return x_bands
 
     def forward(self, x: torch.Tensor, cond_embedding_id: torch.Tensor = None):
-
         x_bands = self.spectrogram(x)
 
         fmap = []

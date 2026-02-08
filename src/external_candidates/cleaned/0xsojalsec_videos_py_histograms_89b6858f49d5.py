@@ -9,7 +9,6 @@ from manim_imports_ext import *
 
 
 def text_range(start, stop, step):  # a range as a list of strings
-
     numbers = np.arange(start, stop, step)
 
     labels = []
@@ -36,7 +35,6 @@ class Histogram(VMobject):
     }
 
     def __init__(self, x_values, y_values, mode="widths", **kwargs):
-
         # mode = "widths" : x_values means the widths of the bars
 
         # mode = "posts"  : x_values means the delimiters btw the bars
@@ -60,7 +58,6 @@ class Histogram(VMobject):
         VMobject.__init__(self, **kwargs)
 
     def process_values(self):
-
         # preliminaries
 
         self.y_values = np.array(self.y_values)
@@ -101,14 +98,12 @@ class Histogram(VMobject):
         self.y_values_scaled = self.y_scale * self.y_values
 
     def init_points(self):
-
         self.process_values()
 
         for submob in self.submobjects:
             self.remove(submob)
 
         def empty_string_array(n):
-
             arr = []
 
             for i in range(n):
@@ -117,7 +112,6 @@ class Histogram(VMobject):
             return arr
 
         def num_arr_to_string_arr(arr):  # converts number array to string array
-
             ret_arr = []
 
             for x in arr:
@@ -235,13 +229,11 @@ class Histogram(VMobject):
         self.move_to(ORIGIN)
 
     def get_lower_left_point(self):
-
         return self.bars[0].get_anchors()[-2]
 
 
 class BuildUpHistogram(Animation):
     def __init__(self, hist, **kwargs):
-
         self.histogram = hist
 
 
@@ -249,7 +241,6 @@ class FlashThroughHistogram(Animation):
     CONFIG = {"cell_color": WHITE, "cell_opacity": 0.8, "hist_opacity": 0.2}
 
     def __init__(self, mobject, direction="horizontal", mode="random", **kwargs):
-
         digest_config(self, kwargs)
 
         self.cell_height = mobject.y_scale
@@ -275,7 +266,6 @@ class FlashThroughHistogram(Animation):
         Animation.__init__(self, mobject, **kwargs)
 
     def generate_cell_indices(self, x_values, y_values):
-
         self.cell_indices = []
 
         for i, x in enumerate(x_values):
@@ -290,7 +280,6 @@ class FlashThroughHistogram(Animation):
             shuffle(self.reordered_cell_indices)
 
     def cell_for_index(self, i, j):
-
         if self.direction == "vertical":
             width = self.mobject.x_scale
 
@@ -320,7 +309,6 @@ class FlashThroughHistogram(Animation):
         return cell
 
     def interpolate_mobject(self, t):
-
         if t == 0:
             self.mobject.add(self.prototype_cell)
 
@@ -342,7 +330,6 @@ class FlashThroughHistogram(Animation):
             self.mobject.remove(self.prototype_cell)
 
     def clean_up_from_scene(self, scene=None):
-
         Animation.clean_up_from_scene(self, scene)
 
         self.update(1)
@@ -371,7 +358,6 @@ class OutlineableBars(VGroup):
     CONFIG = {"outline_stroke_width": 3, "stroke_color": WHITE}
 
     def create_outline(self, animated=False, **kwargs):
-
         outline_points = []
 
         for i, bar in enumerate(self.submobjects):

@@ -7,7 +7,6 @@ from manim_imports_ext import *
 
 
 def get_value_grid(n_rows=6, n_cols=6):
-
     random.seed(1)
 
     boxes = VGroup(*[Square() for x in range(n_rows * n_cols)])
@@ -47,7 +46,6 @@ def get_value_grid(n_rows=6, n_cols=6):
 
 
 def highlight_box(box, opacity=0.5, color=PINK):
-
     box.set_stroke(color, opacity)
 
     box[1].set_stroke(BLACK, 2, background=True)
@@ -56,7 +54,6 @@ def highlight_box(box, opacity=0.5, color=PINK):
 
 
 def get_box_highlight(box, color=PINK, stroke_width=8, opacity=0.25):
-
     highlight = SurroundingRectangle(box, buff=0)
 
     highlight.set_fill(color, opacity)
@@ -68,7 +65,6 @@ def get_box_highlight(box, color=PINK, stroke_width=8, opacity=0.25):
 
 class GreedyAlgorithm(Scene):
     def construct(self):
-
         n_rows, n_cols = 6, 6
 
         boxes = get_value_grid(n_rows, n_cols)
@@ -154,7 +150,6 @@ class GreedyAlgorithm(Scene):
 
 class RecrusiveExhaustiveSearch(Scene):
     def construct(self):
-
         n_rows = 6
 
         n_cols = 6
@@ -166,7 +161,6 @@ class RecrusiveExhaustiveSearch(Scene):
         seam = [(i, 3) for i in range(n_rows)]
 
         def get_seam_sum(seam):
-
             terms = VGroup(*[boxes.array[i, j].value.copy() for (i, j) in seam])
 
             row = VGroup()
@@ -195,11 +189,9 @@ class RecrusiveExhaustiveSearch(Scene):
             return row
 
         def get_highlighted_seam(seam):
-
             return VGroup(*[get_box_highlight(boxes.array[i, j]) for (i, j) in seam])
 
         def get_all_seams(seam_starts, n_rows=n_rows, n_cols=n_cols):
-
             if seam_starts[0][-1][0] == n_rows - 1:
                 return seam_starts
 
@@ -256,7 +248,6 @@ class RecrusiveExhaustiveSearch(Scene):
 
 class DynamicProgrammingApproachSearch(Scene):
     def construct(self):
-
         n_rows = 6
 
         n_cols = 6

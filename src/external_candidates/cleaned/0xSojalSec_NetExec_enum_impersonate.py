@@ -23,13 +23,11 @@ class NXCModule:
     multiple_hosts = True
 
     def __init__(self):
-
         self.mssql_conn = None
 
         self.context = None
 
     def on_login(self, context, connection):
-
         self.context = context
 
         self.mssql_conn = connection.conn
@@ -77,5 +75,4 @@ class NXCModule:
         return [user["name"] for user in res] if res else []
 
     def options(self, context, module_options):
-
         pass

@@ -9,8 +9,8 @@ import json
 
 from agno.tools.api import CustomApiTools
 
-def test_integration_dog_api():
 
+def test_integration_dog_api():
     """Integration test with actual Dog API (optional, can be skipped in CI)."""
 
     # This test makes actual API calls - can be skipped in CI environments
@@ -22,11 +22,8 @@ def test_integration_dog_api():
     # Test random image endpoint
 
     image_result = tools.make_request(
-
         endpoint="/breeds/image/random",
-
         method="GET",
-
     )
 
     image_data = json.loads(image_result)
@@ -40,11 +37,8 @@ def test_integration_dog_api():
     # Test breeds list endpoint
 
     breeds_result = tools.make_request(
-
         endpoint="/breeds/list/all",
-
         method="GET",
-
     )
 
     breeds_data = json.loads(breeds_result)
@@ -56,4 +50,3 @@ def test_integration_dog_api():
     assert isinstance(breeds_data["data"]["message"], dict)
 
     assert len(breeds_data["data"]["message"]) > 0
-

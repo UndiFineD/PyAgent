@@ -758,12 +758,10 @@ class Session:
         return self.chat(message, **kwargs)
 
     def __str__(self) -> str:
-
         if self.is_remote:
             return f"Session(id='{self.session_id}', user='{self.user_id}', remote_agent='{self.agent_url}')"
 
         return f"Session(id='{self.session_id}', user='{self.user_id}')"
 
     def __repr__(self) -> str:
-
         return self.__str__()

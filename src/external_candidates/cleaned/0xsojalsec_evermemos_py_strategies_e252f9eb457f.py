@@ -68,7 +68,6 @@ class RoleBasedAuthorizationStrategy(AuthorizationStrategy):
     """Role-based authorization strategy"""
 
     def __init__(self):
-
         # Define role hierarchy
 
         self.role_hierarchy = {

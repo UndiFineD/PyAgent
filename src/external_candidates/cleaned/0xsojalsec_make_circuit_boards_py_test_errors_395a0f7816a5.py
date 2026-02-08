@@ -9,7 +9,6 @@ from atopile.errors import AtoError, _error_accumulator, iter_through_errors
 
 
 def test_error_accumulator():
-
     with pytest.raises(ExceptionGroup):
         with _error_accumulator() as err_cltr:
             with err_cltr():
@@ -24,7 +23,6 @@ def test_error_accumulator():
 
 
 def test_iter_through_errors():
-
     try:
         for cltr, i in iter_through_errors(range(4)):
             with cltr():

@@ -12,7 +12,6 @@ class EarthMorph(Scene):
     }
 
     def construct(self):
-
         torus1 = Torus(r1=1, r2=1)
 
         torus2 = Torus(r1=3, r2=1)

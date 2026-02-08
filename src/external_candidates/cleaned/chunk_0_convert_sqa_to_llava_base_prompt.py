@@ -5,14 +5,12 @@
 
 
 def get_question_text(problem):
-
     question = problem["question"]
 
     return question
 
 
 def get_context_text(problem, use_caption):
-
     txt_context = problem["hint"]
 
     img_context = problem["caption"] if use_caption else ""
@@ -26,7 +24,6 @@ def get_context_text(problem, use_caption):
 
 
 def get_choice_text(probelm, options):
-
     choices = probelm["choices"]
 
     choice_list = []
@@ -42,12 +39,10 @@ def get_choice_text(probelm, options):
 
 
 def get_answer(problem, options):
-
     return options[problem["answer"]]
 
 
 def get_lecture_text(problem):
-
     # \\n: GPT-3 can generate the lecture with more tokens.
 
     lecture = problem["lecture"].replace("\n", "\\n")
@@ -56,7 +51,6 @@ def get_lecture_text(problem):
 
 
 def get_solution_text(problem):
-
     # \\n: GPT-3 can generate the solution with more tokens
 
     solution = problem["solution"].replace("\n", "\\n")
@@ -65,7 +59,6 @@ def get_solution_text(problem):
 
 
 def create_one_example_chatbot(format, question, context, choice, answer, lecture, solution, test_example=True):
-
     input_format, output_format = format.split("-")
 
     ## Inputs
@@ -155,7 +148,6 @@ def create_one_example_chatbot(format, question, context, choice, answer, lectur
 
 
 def create_one_example(format, question, context, choice, answer, lecture, solution, test_example=True):
-
     input_format, output_format = format.split("-")
 
     ## Inputs
@@ -229,7 +221,6 @@ def create_one_example(format, question, context, choice, answer, lecture, solut
 
 
 def create_one_example_gpt4(format, question, context, choice, answer, lecture, solution, test_example=True):
-
     input_format, output_format = format.split("-")
 
     ## Inputs
@@ -309,7 +300,6 @@ def create_one_example_gpt4(format, question, context, choice, answer, lecture, 
 def build_prompt_chatbot(
     problems, shot_qids, prompt_format, use_caption=False, options=["A", "B", "C", "D", "E"], is_test=False
 ):
-
     examples = {}
 
     for qid in shot_qids:
@@ -335,7 +325,6 @@ def build_prompt_chatbot(
 
 
 def build_prompt(problems, shot_qids, test_qid, args):
-
     examples = []
 
     # n-shot training examples
@@ -387,7 +376,6 @@ def build_prompt(problems, shot_qids, test_qid, args):
 
 
 def build_prompt_gpt4(problems, shot_qids, test_qid, args):
-
     prompt_array = [{"role": "system", "content": "You are a helpful assistant."}]
 
     # n-shot training examples

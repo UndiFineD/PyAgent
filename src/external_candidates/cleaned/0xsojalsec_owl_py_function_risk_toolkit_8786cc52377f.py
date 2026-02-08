@@ -48,7 +48,6 @@ class FunctionRiskToolkit(BaseToolkit):
     """
 
     def __init__(self, verbose: Optional[bool] = False):
-
         self.verbose = verbose
 
     def function_risk(self, score: int, reason: str):

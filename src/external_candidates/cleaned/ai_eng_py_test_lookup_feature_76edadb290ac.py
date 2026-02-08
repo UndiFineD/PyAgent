@@ -4,61 +4,37 @@
 # Extracted from: C:\DEV\PyAgent\.external\ai-eng\feathr_project\test\test_lookup_feature.py
 
 from feathr import (
-
     FLOAT,
-
     FLOAT_VECTOR,
-
     INT32_VECTOR,
-
     Aggregation,
-
     DerivedFeature,
-
     Feature,
-
     LookupFeature,
-
     TypedKey,
-
     ValueType,
-
 )
 
+
 def assert_config_equals(one, another):
+    assert one.translate(str.maketrans("", "", " \n\t\r")) == another.translate(str.maketrans("", "", " \n\t\r"))
 
-    assert one.translate(str.maketrans("", "", " \n\t\r")) == another.translate(
-
-        str.maketrans("", "", " \n\t\r")
-
-    )
 
 def test_single_key_lookup_feature_to_config():
-
     """Single key lookup feature config generation should work"""
 
     user_key = TypedKey(
-
         full_name="mockdata.user",
-
         key_column="user_id",
-
         key_column_type=ValueType.INT32,
-
         description="An user identifier",
-
     )
 
     item_key = TypedKey(
-
         full_name="mockdata.item",
-
         key_column="item_id",
-
         key_column_type=ValueType.INT32,
-
         description="An item identifier",
-
     )
 
     user_item = Feature(name="user_items", feature_type=INT32_VECTOR, key=user_key)
@@ -68,19 +44,12 @@ def test_single_key_lookup_feature_to_config():
     # A lookup feature
 
     lookup_feature = LookupFeature(
-
         name="user_avg_item_price",
-
         feature_type=FLOAT,
-
         key=user_key,
-
         base_feature=user_item,
-
         expansion_feature=item_price,
-
         aggregation=Aggregation.AVG,
-
     )
 
     lookup_feature_config = """
@@ -116,4 +85,3 @@ def test_single_key_lookup_feature_to_config():
     assert_config_equals(lookup_feature.to_feature_config(), lookup_feature_config)
 
     assert isinstance(lookup_feature, DerivedFeature)
-

@@ -73,7 +73,6 @@ class TextTokenizer:
         language_switch: LanguageSwitch = "keep-flags",
         words_mismatch: WordMismatch = "ignore",
     ) -> None:
-
         phonemizer = EspeakBackend(
             language,
             punctuation_marks=punctuation_marks,
@@ -89,7 +88,6 @@ class TextTokenizer:
         self.separator = separator
 
     def to_list(self, phonemized: str) -> List[str]:
-
         fields = []
 
         for word in phonemized.split(self.separator.word):
@@ -104,7 +102,6 @@ class TextTokenizer:
         return fields[:-1]
 
     def __call__(self, text, strip=True) -> List[List[str]]:
-
         if isinstance(text, str):
             text = [text]
 
@@ -114,14 +111,12 @@ class TextTokenizer:
 
 
 def tokenize_text(tokenizer: TextTokenizer, text: str) -> List[str]:
-
     phonemes = tokenizer([text.strip()])
 
     return phonemes[0]  # k2symbols
 
 
 def convert_audio(wav: torch.Tensor, sr: int, target_sr: int, target_channels: int):
-
     assert wav.shape[0] in [1, 2], "Audio must be mono or stereo."
 
     if target_channels == 1:
@@ -144,7 +139,6 @@ class AudioTokenizer:
     """EnCodec audio."""
 
     def __init__(self, device: Any = None, signature=None) -> None:
-
         from audiocraft.solvers import CompressionSolver
 
         model = CompressionSolver.model_from_checkpoint(signature)
@@ -165,24 +159,20 @@ class AudioTokenizer:
 
     @property
     def device(self):
-
         return self._device
 
     def encode(self, wav: torch.Tensor) -> torch.Tensor:
-
         codes = self.codec.encode(wav.to(self.device))
 
         return [(codes[0], None)]
 
     def decode(self, frames: torch.Tensor) -> torch.Tensor:
-
         frames = frames[0][0]  # [1,4,T]
 
         return self.codec.decode(frames)
 
 
 def tokenize_audio(tokenizer: AudioTokenizer, audio_path: str, offset=-1, num_frames=-1):
-
     # Load and pre-process the audio waveform
 
     if offset != -1 and num_frames != -1:

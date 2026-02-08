@@ -28,7 +28,6 @@ class GitTracker:
     """Tracks git repository state and branch changes."""
 
     def __init__(self, root_path: Path):
-
         self.root_path = Path(root_path)
 
         self.repo: Optional[git.Repo] = None

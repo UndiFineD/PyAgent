@@ -65,24 +65,20 @@ class HalfPrecision(Precision):
     precision: Literal["bf16-true", "16-true"] = "16-true"
 
     def __init__(self, precision: Literal["bf16-true", "16-true"] = "16-true") -> None:
-
         self.precision = precision
 
         self._desired_input_dtype = torch.bfloat16 if precision == "bf16-true" else torch.float16
 
     @override
     def convert_module(self, module: Module) -> Module:
-
         return module.to(dtype=self._desired_input_dtype)
 
     @override
     def tensor_init_context(self) -> AbstractContextManager:
-
         return _DtypeContextManager(self._desired_input_dtype)
 
     @override
     def module_init_context(self) -> AbstractContextManager:
-
         return self.tensor_init_context()
 
     @override
@@ -106,7 +102,6 @@ class HalfPrecision(Precision):
 
     @override
     def convert_input(self, data: Any) -> Any:
-
         return apply_to_collection(
             data,
             function=_convert_fp_tensor,

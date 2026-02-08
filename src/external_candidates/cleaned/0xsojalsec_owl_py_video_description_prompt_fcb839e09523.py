@@ -56,7 +56,6 @@ class VideoDescriptionPromptTemplateDict(TextPromptDict):
         Please provide a shot description of the content of the current video.""")
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-
         super().__init__(*args, **kwargs)
 
         self.update(

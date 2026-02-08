@@ -57,7 +57,6 @@ def require_tenant(func: Callable) -> Callable:
 
     @wraps(func)
     async def wrapper(*args: Any, **kwargs: Any) -> Any:
-
         # Check tenant context
 
         tenant_id = get_current_tenant_id()

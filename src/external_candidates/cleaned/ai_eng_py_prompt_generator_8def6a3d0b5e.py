@@ -9,10 +9,9 @@ from feathr.chat.source_code_utils import read_source_code_compact
 
 from feathr.client import FeathrClient
 
+
 class PromptGenerator(object):
-
     def __init__(self, client: FeathrClient) -> None:
-
         self.client = client
 
         self.module_path = os.path.dirname(os.path.abspath(__file__))
@@ -20,7 +19,6 @@ class PromptGenerator(object):
         self.dsl_learned = False
 
     def get_feathr_dsl_prompts(self):
-
         prompts = f"""
 
         Feathr DSL can be used to create features in these steps:
@@ -134,33 +132,21 @@ class PromptGenerator(object):
         return prompts
 
     def get_full_dsl_source_code(self):
-
         prompts = ""
 
         client_source_code = "\n Feathr client API: \n" + read_source_code_compact(
-
             self.module_path, self.module_path + "/../client.py"
-
         )
 
         prompts += client_source_code
 
-        definition_source_code = read_source_code_compact(
+        definition_source_code = read_source_code_compact(self.module_path, self.module_path + "/../definition")
 
-            self.module_path, self.module_path + "/../definition"
-
-        )
-
-        prompts += (
-
-            f"""The full classes for the Feathr DSL is here: {definition_source_code}"""
-
-        )
+        prompts += f"""The full classes for the Feathr DSL is here: {definition_source_code}"""
 
         return prompts
 
     def get_join_dsl_prompts(self):
-
         return """
 
         Feathr DSL syntax can be used to join features with observation data in these steps:
@@ -228,7 +214,6 @@ class PromptGenerator(object):
         """
 
     def get_test_prompts(self):
-
         return f"""
 
             The API to test a feature anchor is:
@@ -244,7 +229,6 @@ class PromptGenerator(object):
         """
 
     def get_materialization_prompts(self):
-
         return f"""
 
             class RedisSink:
@@ -278,7 +262,6 @@ class PromptGenerator(object):
         """
 
     def get_features_prompts(self):
-
         return f"""
 
             The API to get the previously joined dataset is:
@@ -302,7 +285,6 @@ class PromptGenerator(object):
         """
 
     def get_metadata_prompts(self):
-
         # Get from registry
 
         # TODO return metadata from registry
@@ -314,15 +296,10 @@ class PromptGenerator(object):
         return ""
 
     def process_question(self, question: str):
-
         prompts = (
-
             " My question is: "
-
             + question
-
             + ". \n Requirement: Please use the provided Feathr DSL if you're able to, do not use API or concept from other feature engineering related solutions. You can assume an instance of FeathrClient is already created and named as 'client'.  If your anwser has code, combine all your code in a block."
-
         )
 
         prompts += "\n Context Information:\n"
@@ -330,14 +307,6 @@ class PromptGenerator(object):
         prompts += self.get_metadata_prompts()
 
         if "train" in question.lower():
-
-            prompts = (
-
-                prompts
-
-                + ". Do not use event timestamp related columns in model training."
-
-            )
+            prompts = prompts + ". Do not use event timestamp related columns in model training."
 
         return prompts
-

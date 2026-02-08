@@ -58,7 +58,6 @@ class LLMGuardrail:
         # Local import to avoid circular dependencies
 
         def _get_llm_class():
-
             from ..llm.llm import LLM
 
             return LLM

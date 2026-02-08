@@ -38,7 +38,6 @@ class ChatOpenRouter(BaseInference):
     def invoke(
         self, messages: list[BaseMessage], json=False, model: BaseModel | None = None
     ) -> AIMessage | ToolMessage | BaseModel:
-
         self.headers.update({"Authorization": f"Bearer {self.api_key}"})
 
         headers = self.headers
@@ -173,7 +172,6 @@ class ChatOpenRouter(BaseInference):
     async def async_invoke(
         self, messages: list[BaseMessage], json=False, model: BaseModel = None
     ) -> AIMessage | ToolMessage | BaseModel:
-
         self.headers.update({"Authorization": f"Bearer {self.api_key}"})
 
         headers = self.headers
@@ -305,5 +303,4 @@ class ChatOpenRouter(BaseInference):
             raise err  # Re-raise instead of exit()
 
     def stream(self, messages, json=False):
-
         pass

@@ -39,7 +39,6 @@ from torch import Tensor
 
 
 def _convert_fp_tensor(tensor: Tensor, dst_type: Union[str, torch.dtype]) -> Tensor:
-
     return tensor.to(dst_type) if torch.is_floating_point(tensor) else tensor
 
 
@@ -54,17 +53,14 @@ class _DtypeContextManager:
     """
 
     def __init__(self, dtype: torch.dtype) -> None:
-
         self._previous_dtype: torch.dtype = torch.get_default_dtype()
 
         self._new_dtype = dtype
 
     def __enter__(self) -> None:
-
         torch.set_default_dtype(self._new_dtype)
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
-
         torch.set_default_dtype(self._previous_dtype)
 
 
@@ -72,7 +68,6 @@ class _ClassReplacementContextManager:
     """A context manager to monkeypatch classes."""
 
     def __init__(self, mapping: Mapping[str, type]) -> None:
-
         self._mapping = mapping
 
         self._originals = {}
@@ -89,14 +84,12 @@ class _ClassReplacementContextManager:
             self._originals[class_string] = getattr(module, class_name)
 
     def __enter__(self) -> None:
-
         for class_string, replacement in self._mapping.items():
             _, class_name = class_string.rsplit(".", 1)
 
             setattr(self._modules[class_string], class_name, replacement)
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
-
         for class_string, replacement in self._mapping.items():
             _, class_name = class_string.rsplit(".", 1)
 

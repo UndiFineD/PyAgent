@@ -113,7 +113,6 @@ def get_design_jobs_table(
 
 
 def get_pools_table(project_id: str = None, round_ids: list[str] = None):
-
     id_filters = {}
 
     if project_id is not None:
@@ -169,7 +168,6 @@ def get_pools_table(project_id: str = None, round_ids: list[str] = None):
 
 
 def format_pool_status(job: DesignJob, processed: bool, update_status: bool = True):
-
     job_result = job.job_result
 
     if processed == True and job_result is None:
@@ -456,7 +454,6 @@ def update_acceptance_thresholds(pools: list[Pool], acceptance_thresholds: dict[
 
 
 def update_accepted_design_ids(pool_ids: list[str], accepted_design_ids: list[str]):
-
     db.save_value(Design, "accepted", False, pool_id__in=pool_ids)
 
     db.save_value(Design, "accepted", True, id__in=accepted_design_ids)

@@ -21,26 +21,19 @@ from agno.tools import Toolkit
 
 from agno.utils.log import logger
 
+
 class GiphyTools(Toolkit):
-
     def __init__(
-
         self,
-
         api_key: Optional[str] = None,
-
         limit: int = 1,
-
         **kwargs,
-
     ):
-
         super().__init__(name="giphy_tools", **kwargs)
 
         self.api_key = api_key or os.getenv("GIPHY_API_KEY")
 
         if not self.api_key:
-
             logger.error("No Giphy API key provided")
 
         self.limit: int = limit
@@ -48,7 +41,6 @@ class GiphyTools(Toolkit):
         self.register(self.search_gifs)
 
     def search_gifs(self, agent: Union[Agent, Team], query: str) -> str:
-
         """Find a GIPHY gif
 
         Args:
@@ -64,17 +56,12 @@ class GiphyTools(Toolkit):
         base_url = "https://api.giphy.com/v1/gifs/search"
 
         params = {
-
             "api_key": self.api_key,
-
             "q": query,
-
             "limit": self.limit,
-
         }
 
         try:
-
             response = httpx.get(base_url, params=params)
 
             response.raise_for_status()
@@ -86,7 +73,6 @@ class GiphyTools(Toolkit):
             gif_urls = []
 
             for gif in data.get("data", []):
-
                 images = gif.get("images", {})
 
                 original_image = images["original"]
@@ -100,34 +86,20 @@ class GiphyTools(Toolkit):
                 gif_urls.append(gif_url)
 
                 agent.add_image(
-
                     ImageArtifact(
-
                         id=media_id,
-
                         url=gif_url,
-
                         alt_text=alt_text,
-
                         revised_prompt=query,
-
                     )
-
                 )
 
             return f"These are the found gifs {gif_urls}"
 
         except httpx.HTTPStatusError as e:
-
-            logger.error(
-
-                f"HTTP error occurred: {e.response.status_code} - {e.response.text}"
-
-            )
+            logger.error(f"HTTP error occurred: {e.response.status_code} - {e.response.text}")
 
         except Exception as e:
-
             logger.error(f"An error occurred: {e}")
 
         return "No gifs found"
-

@@ -20,7 +20,6 @@ class WaveMachine(Group):
         arm_color=GREY_BROWN,
         cap_color=GREY_BROWN,
     ):
-
         shaft = Cylinder(
             height=width,
             radius=shaft_radius,
@@ -88,7 +87,6 @@ class WaveMachine(Group):
 
 class WaveMachineDemo(InteractiveScene, ThreeDScene):
     def construct(self):
-
         # Add axes (or don't!)
 
         frame = self.frame
@@ -173,7 +171,6 @@ class WaveMachineDemo(InteractiveScene, ThreeDScene):
         )
 
     def get_rotation_arrow_animations(self, x_value=6):
-
         rot_arrows = VGroup(
             Arrow(RIGHT, LEFT, path_arc=PI, stroke_width=8),
             Arrow(LEFT, RIGHT, path_arc=PI, stroke_width=8),

@@ -124,7 +124,6 @@ def test_tensorboard_no_name(tmp_path, name):
 
 
 def test_tensorboard_log_sub_dir(tmp_path):
-
     # no sub_dir specified
 
     root_dir = tmp_path / "logs"
@@ -171,7 +170,6 @@ def test_tensorboard_expand_env_vars():
 
 @pytest.mark.parametrize("step_idx", [10, None])
 def test_tensorboard_log_metrics(tmp_path, step_idx):
-
     logger = TensorBoardLogger(tmp_path)
 
     metrics = {
@@ -185,7 +183,6 @@ def test_tensorboard_log_metrics(tmp_path, step_idx):
 
 
 def test_tensorboard_log_hyperparams(tmp_path):
-
     logger = TensorBoardLogger(tmp_path)
 
     hparams = {
@@ -205,7 +202,6 @@ def test_tensorboard_log_hyperparams(tmp_path):
 
 
 def test_tensorboard_log_hparams_and_metrics(tmp_path):
-
     logger = TensorBoardLogger(tmp_path, default_hp_metric=False)
 
     hparams = {
@@ -228,7 +224,6 @@ def test_tensorboard_log_hparams_and_metrics(tmp_path):
 
 @pytest.mark.parametrize("example_input_array", [None, torch.rand(2, 32)])
 def test_tensorboard_log_graph_plain_module(tmp_path, example_input_array):
-
     model = BoringModel()
 
     logger = TensorBoardLogger(tmp_path)
@@ -255,7 +250,6 @@ def test_tensorboard_log_graph_plain_module(tmp_path, example_input_array):
 
 @pytest.mark.parametrize("example_input_array", [None, torch.rand(2, 32)])
 def test_tensorboard_log_graph_with_batch_transfer_hooks(tmp_path, example_input_array):
-
     model = pytest.importorskip("lightning.pytorch.demos.boring_classes").BoringModel()
 
     logger = TensorBoardLogger(tmp_path)

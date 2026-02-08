@@ -92,7 +92,6 @@ async def _execute_single_function(function_call: Any, functions_by_name: Dict[s
     )
 
     def _run_function():
-
         original_func = functions_by_name.get(function_call.name)
 
         if not original_func:

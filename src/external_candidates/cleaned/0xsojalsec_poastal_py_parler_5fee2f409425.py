@@ -7,7 +7,6 @@ import requests
 
 
 def parler_email(email):
-
     headers = {
         "Content-Type": "application/json",
     }

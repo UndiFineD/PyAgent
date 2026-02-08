@@ -39,7 +39,6 @@ class AuthMode(enum.Enum):
 class Requester:
     @staticmethod
     def get(url, params={}, headers={}, cookies=None, allow_redirects=True):
-
         headers["User-Agent"] = USER_AGENT
 
         try:
@@ -60,7 +59,6 @@ class Requester:
 
     @staticmethod
     def post(url, data, headers={}, cookies=None, allow_redirects=True):
-
         headers["User-Agent"] = USER_AGENT
 
         try:
@@ -81,7 +79,6 @@ class Requester:
 
     @staticmethod
     def get_http_auth_type(url, headers={}):
-
         headers["User-Agent"] = USER_AGENT
 
         try:
@@ -116,7 +113,6 @@ class Requester:
 
     @staticmethod
     def http_auth(url, auth_type, username, password, headers={}):
-
         if auth_type == AuthMode.BASIC:
             auth = requests.auth.HTTPBasicAuth(username, password)
 

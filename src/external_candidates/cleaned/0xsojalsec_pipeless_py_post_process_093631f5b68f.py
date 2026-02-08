@@ -9,7 +9,6 @@ import numpy as np
 
 
 def hook(frame_data, _):
-
     inference_results = frame_data["inference_output"].get("output1", [])
 
     candy_image = inference_results[0]  # Remove batch axis

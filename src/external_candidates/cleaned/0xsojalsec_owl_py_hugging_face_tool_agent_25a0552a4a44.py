@@ -70,7 +70,6 @@ class HuggingFaceToolAgent(BaseToolAgent):
         remote: bool = True,
         **kwargs: Any,
     ) -> None:
-
         try:
             # TODO: Support other tool agents
 

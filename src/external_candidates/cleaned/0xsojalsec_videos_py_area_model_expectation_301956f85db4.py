@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class IllustrateAreaModelExpectation(Scene):
     def construct(self):
-
         formula = OldTex("E[X] = \sum_{i=1}^N p_i x_i").move_to(3 * LEFT + UP)
 
         self.play(Write(formula))

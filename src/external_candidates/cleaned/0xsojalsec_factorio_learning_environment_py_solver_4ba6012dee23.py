@@ -5,9 +5,7 @@
 
 import random
 
-
 from inspect_ai.solver import Generate, Solver, TaskState, solver
-
 
 from ....templates import Templates
 
@@ -18,13 +16,9 @@ def generate_action_sequence(max_actions: int = 10) -> Solver:
 
     Generate a sequence of construction actions from a blueprint.
 
-
-
     This solver takes a blueprint and converts it into a sequence of imperative
 
     construction steps that could be used to build the blueprint.
-
-
 
     Args:
 
@@ -33,7 +27,6 @@ def generate_action_sequence(max_actions: int = 10) -> Solver:
     """
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         blueprint = state.metadata.get("blueprint", {})
 
         entities = blueprint.get("entities", [])
@@ -101,13 +94,9 @@ def generate_next_action_questions(num_questions: int = 3) -> Solver:
 
     Generate questions asking to predict the next action in a construction sequence.
 
-
-
     This solver uses the action sequence to create questions where N-1 actions
 
     are shown and the model must predict the Nth action.
-
-
 
     Args:
 
@@ -116,7 +105,6 @@ def generate_next_action_questions(num_questions: int = 3) -> Solver:
     """
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         action_sequence = state.metadata.get("action_sequence", [])
 
         if len(action_sequence) < 2:
@@ -172,8 +160,6 @@ def generate_construction_order_questions(num_questions: int = 2) -> Solver:
 
     Generate questions about the optimal construction order.
 
-
-
     Args:
 
         num_questions: Number of construction order questions to generate
@@ -181,7 +167,6 @@ def generate_construction_order_questions(num_questions: int = 2) -> Solver:
     """
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         blueprint = state.metadata.get("blueprint", {})
 
         entities = blueprint.get("entities", [])

@@ -45,7 +45,6 @@ class TokenEmbedding(nn.Module):
         vocab_size: int,
         dropout: float = 0.0,
     ):
-
         super().__init__()
 
         self.vocab_size = vocab_size
@@ -58,15 +57,12 @@ class TokenEmbedding(nn.Module):
 
     @property
     def weight(self) -> torch.Tensor:
-
         return self.word_embeddings.weight
 
     def embedding(self, index: int) -> torch.Tensor:
-
         return self.word_embeddings.weight[index : index + 1]
 
     def forward(self, x: torch.Tensor):
-
         X = self.word_embeddings(x)
 
         X = self.dropout(X)
@@ -82,7 +78,6 @@ class SinePositionalEmbedding(nn.Module):
         scale: bool = False,
         alpha: bool = False,
     ):
-
         super().__init__()
 
         self.dim_model = dim_model
@@ -130,7 +125,6 @@ class SinePositionalEmbedding(nn.Module):
         self.pe = pe.to(device=x.device, dtype=x.dtype).detach()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-
         self.extend_pe(x)
 
         output = x.unsqueeze(-1) if x.ndim == 2 else x

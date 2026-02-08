@@ -11,7 +11,6 @@ from norfair import Detection, draw_points
 
 
 def hook(frame_data, context):
-
     tracker = context["tracker"]
 
     frame = frame_data["modified"]
@@ -28,7 +27,6 @@ def hook(frame_data, context):
 
 
 def yolo_to_norfair(bboxes, scores):
-
     norfair_detections = []
 
     for i, bbox in enumerate(bboxes):

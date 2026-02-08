@@ -149,7 +149,6 @@ class WeightAveraging(Callback):
         use_buffers: bool = True,
         **kwargs: Any,
     ) -> None:
-
         # The default value is a string so that jsonargparse knows how to serialize it.
 
         if isinstance(device, str):
@@ -546,7 +545,6 @@ class EMAWeightAveraging(WeightAveraging):
         update_starting_at_epoch: Optional[int] = None,
         **kwargs: Any,
     ):
-
         super().__init__(
             device=device,
             use_buffers=use_buffers,

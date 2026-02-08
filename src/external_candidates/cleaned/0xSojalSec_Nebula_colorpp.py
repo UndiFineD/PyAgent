@@ -40,7 +40,6 @@ class color:
 
 
 def pretty_convert(obj):
-
     if isinstance(obj, (float)):
         return "{1}{2}{0}".format(color.ENDC, color.PURPLEL, obj)
 
@@ -72,7 +71,6 @@ def pretty_convert(obj):
 
 
 def walk_obj(buf, obj, indent_num=2, depth=0, eol="", wrap_len=60, wrap_total=100, lf="\n"):
-
     indent = " " * indent_num * depth
 
     buf.write("{0}".format(eol if not eol else eol + indent))
@@ -138,7 +136,6 @@ def walk_obj(buf, obj, indent_num=2, depth=0, eol="", wrap_len=60, wrap_total=10
 
 
 def pprint(obj, indent=2, b=None, lf="\n"):
-
     if not b:
         import sys, codecs
 
@@ -150,7 +147,6 @@ def pprint(obj, indent=2, b=None, lf="\n"):
 
 
 def pprintf(obj, indent=2):
-
     from io import StringIO
 
     buf = StringIO()

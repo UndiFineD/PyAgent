@@ -55,7 +55,6 @@ class ConversationStatus(DocumentBase, AuditBase):
 
     @property
     def conversation_id(self) -> Optional[PydanticObjectId]:
-
         return self.id
 
     class Settings:

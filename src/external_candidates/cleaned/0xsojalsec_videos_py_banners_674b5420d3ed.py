@@ -14,7 +14,6 @@ class ShortsBanner(Banner):
     message = "3b1b shorts"
 
     def get_pis(self):
-
         pis = VGroup(
             Randolph(color=BLUE_E, mode="pondering"),
             Randolph(color=BLUE_D, mode="hooray"),

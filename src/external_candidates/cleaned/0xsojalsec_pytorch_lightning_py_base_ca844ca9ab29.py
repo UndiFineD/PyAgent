@@ -45,10 +45,8 @@ class PassThroughProfiler(Profiler):
 
     @override
     def start(self, action_name: str) -> None:
-
         pass
 
     @override
     def stop(self, action_name: str) -> None:
-
         pass

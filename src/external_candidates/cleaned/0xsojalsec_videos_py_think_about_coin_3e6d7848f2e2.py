@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class RandyThinksAboutCoin(PiCreatureScene):
     def construct(self):
-
         randy = self.get_primary_pi_creature()
 
         randy.center()

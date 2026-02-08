@@ -76,19 +76,16 @@ class ScoreBasedContextCreator(BaseContextCreator):
     """
 
     def __init__(self, token_counter: BaseTokenCounter, token_limit: int) -> None:
-
         self._token_counter = token_counter
 
         self._token_limit = token_limit
 
     @property
     def token_counter(self) -> BaseTokenCounter:
-
         return self._token_counter
 
     @property
     def token_limit(self) -> int:
-
         return self._token_limit
 
     def create_context(

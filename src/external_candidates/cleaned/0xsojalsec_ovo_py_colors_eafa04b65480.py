@@ -13,7 +13,6 @@ from ovo.core.utils.formatting import get_hash_of_bytes
 
 
 def get_color_from_str(value: str, colormap_name: str) -> str:
-
     # Colormaps: https://cmap-docs.readthedocs.io/en/latest/catalog/
 
     cmap = Colormap(colormap_name)
@@ -48,10 +47,8 @@ def darken_lighten(hex_color, factor: float):
 
 
 def lighten(hex_color, factor=1.3):
-
     return darken_lighten(hex_color, factor=factor)
 
 
 def darken(hex_color, factor=1.3):
-
     return darken_lighten(hex_color, factor=1 / factor)

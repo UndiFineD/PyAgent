@@ -11,12 +11,10 @@ from lightning.fabric.plugins.collectives import SingleDeviceCollective
 
 
 def test_can_instantiate_without_args():
-
     SingleDeviceCollective()
 
 
 def test_create_group():
-
     collective = SingleDeviceCollective()
 
     assert collective.is_initialized()

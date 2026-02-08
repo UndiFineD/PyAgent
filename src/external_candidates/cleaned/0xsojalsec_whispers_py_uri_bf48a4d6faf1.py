@@ -8,7 +8,6 @@ from urllib.parse import parse_qsl, urlparse
 
 class Uri:
     def pairs(self, code: str):
-
         uri = urlparse(code)
 
         if uri.password:

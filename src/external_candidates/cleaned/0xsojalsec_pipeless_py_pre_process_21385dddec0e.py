@@ -9,7 +9,6 @@ import numpy as np
 
 
 def hook(frame_data, _):
-
     frame = frame_data["original"]
 
     ih, iw = (224, 224)

@@ -9,7 +9,6 @@ from datetime import datetime, timedelta
 
 from typing import Dict, Optional
 
-
 from rich.console import Console
 
 from rich.layout import Layout
@@ -70,7 +69,6 @@ class InstanceMetrics:
 
 class FactorioLogger:
     def __init__(self, num_instances: int):
-
         self.console = Console()
 
         self.layout = Layout()
@@ -113,7 +111,6 @@ class FactorioLogger:
             self.live.stop()
 
     def update_progress(self, advance: int = 1):
-
         if self.progress_task is not None:
             self.progress.update(self.progress_task, advance=advance)
 
@@ -218,7 +215,6 @@ class FactorioLogger:
         )
 
     def _generate_layout(self) -> Layout:
-
         layout = Layout()
 
         # Create instance metrics layout

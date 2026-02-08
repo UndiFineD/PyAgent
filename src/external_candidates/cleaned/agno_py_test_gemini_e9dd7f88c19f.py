@@ -5,8 +5,8 @@
 
 from agno.utils.gemini import convert_schema, format_function_definitions
 
-def test_convert_schema_simple_string():
 
+def test_convert_schema_simple_string():
     """Test converting a simple string schema"""
 
     schema_dict = {"type": "string", "description": "A string field"}
@@ -19,8 +19,8 @@ def test_convert_schema_simple_string():
 
     assert result.description == "A string field"
 
-def test_convert_schema_simple_integer():
 
+def test_convert_schema_simple_integer():
     """Test converting a simple integer schema"""
 
     schema_dict = {"type": "integer", "description": "An integer field", "default": 42}
@@ -35,26 +35,18 @@ def test_convert_schema_simple_integer():
 
     assert result.default == 42
 
-def test_convert_schema_object_with_properties():
 
+def test_convert_schema_object_with_properties():
     """Test converting an object schema with properties"""
 
     schema_dict = {
-
         "type": "object",
-
         "description": "A test object",
-
         "properties": {
-
             "name": {"type": "string", "description": "Name field"},
-
             "age": {"type": "integer", "description": "Age field"},
-
         },
-
         "required": ["name"],
-
     }
 
     result = convert_schema(schema_dict)
@@ -77,18 +69,14 @@ def test_convert_schema_object_with_properties():
 
     assert "age" not in result.required
 
-def test_convert_schema_array():
 
+def test_convert_schema_array():
     """Test converting an array schema"""
 
     schema_dict = {
-
         "type": "array",
-
         "description": "An array of strings",
-
         "items": {"type": "string"},
-
     }
 
     result = convert_schema(schema_dict)
@@ -103,22 +91,16 @@ def test_convert_schema_array():
 
     assert result.items.type == "STRING"
 
-def test_convert_schema_nullable_property():
 
+def test_convert_schema_nullable_property():
     """Test converting a schema with nullable property"""
 
     schema_dict = {
-
         "type": "object",
-
         "properties": {
-
             "name": {"type": "string"},
-
             "optional_field": {"type": ["string", "null"]},
-
         },
-
     }
 
     result = convert_schema(schema_dict)
@@ -127,16 +109,13 @@ def test_convert_schema_nullable_property():
 
     assert result.properties["optional_field"].nullable is True
 
-def test_convert_schema_anyof():
 
+def test_convert_schema_anyof():
     """Test converting a schema with anyOf"""
 
     schema_dict = {
-
         "anyOf": [{"type": "string"}, {"type": "integer"}],
-
         "description": "String or integer",
-
     }
 
     result = convert_schema(schema_dict)
@@ -153,16 +132,13 @@ def test_convert_schema_anyof():
 
     assert result.any_of[1].type == "INTEGER"
 
-def test_convert_schema_anyof_with_null():
 
+def test_convert_schema_anyof_with_null():
     """Test converting a schema with anyOf including null (nullable)"""
 
     schema_dict = {
-
         "anyOf": [{"type": "string"}, {"type": "null"}],
-
         "description": "Nullable string",
-
     }
 
     result = convert_schema(schema_dict)
@@ -173,8 +149,8 @@ def test_convert_schema_anyof_with_null():
 
     assert result.nullable is True
 
-def test_convert_schema_null_type():
 
+def test_convert_schema_null_type():
     """Test converting a schema with null type"""
 
     schema_dict = {"type": "null"}
@@ -183,8 +159,8 @@ def test_convert_schema_null_type():
 
     assert result is None
 
-def test_convert_schema_empty_object():
 
+def test_convert_schema_empty_object():
     """Test converting an empty object schema"""
 
     schema_dict = {"type": "object"}
@@ -197,46 +173,28 @@ def test_convert_schema_empty_object():
 
     assert not hasattr(result, "properties") or not result.properties
 
-def test_format_function_definitions_single_function():
 
+def test_format_function_definitions_single_function():
     """Test formatting a single function definition"""
 
     tools_list = [
-
         {
-
             "type": "function",
-
             "function": {
-
                 "name": "get_weather",
-
                 "description": "Get weather for a location",
-
                 "parameters": {
-
                     "type": "object",
-
                     "properties": {
-
                         "location": {
-
                             "type": "string",
-
                             "description": "The city and state",
-
                         }
-
                     },
-
                     "required": ["location"],
-
                 },
-
             },
-
         }
-
     ]
 
     result = format_function_definitions(tools_list)
@@ -255,60 +213,35 @@ def test_format_function_definitions_single_function():
 
     assert "location" in func.parameters.required
 
-def test_format_function_definitions_multiple_functions():
 
+def test_format_function_definitions_multiple_functions():
     """Test formatting multiple function definitions"""
 
     tools_list = [
-
         {
-
             "type": "function",
-
             "function": {
-
                 "name": "get_weather",
-
                 "description": "Get weather for a location",
-
                 "parameters": {
-
                     "type": "object",
-
                     "properties": {"location": {"type": "string"}},
-
                     "required": ["location"],
-
                 },
-
             },
-
         },
-
         {
-
             "type": "function",
-
             "function": {
-
                 "name": "get_time",
-
                 "description": "Get current time for a timezone",
-
                 "parameters": {
-
                     "type": "object",
-
                     "properties": {"timezone": {"type": "string"}},
-
                     "required": ["timezone"],
-
                 },
-
             },
-
         },
-
     ]
 
     result = format_function_definitions(tools_list)
@@ -321,8 +254,8 @@ def test_format_function_definitions_multiple_functions():
 
     assert result.function_declarations[1].name == "get_time"
 
-def test_format_function_definitions_no_functions():
 
+def test_format_function_definitions_no_functions():
     """Test formatting with no valid functions"""
 
     tools_list = [{"type": "not_a_function", "something": "else"}]
@@ -331,8 +264,8 @@ def test_format_function_definitions_no_functions():
 
     assert result is None
 
-def test_format_function_definitions_empty_list():
 
+def test_format_function_definitions_empty_list():
     """Test formatting with an empty tools list"""
 
     tools_list = []
@@ -341,50 +274,30 @@ def test_format_function_definitions_empty_list():
 
     assert result is None
 
-def test_format_function_definitions_complex_parameters():
 
+def test_format_function_definitions_complex_parameters():
     """Test formatting a function with complex nested parameters"""
 
     tools_list = [
-
         {
-
             "type": "function",
-
             "function": {
-
                 "name": "complex_function",
-
                 "description": "A function with complex parameters",
-
                 "parameters": {
-
                     "type": "object",
-
                     "properties": {
-
                         "simple_param": {"type": "string"},
-
                         "object_param": {
-
                             "type": "object",
-
                             "properties": {"nested_field": {"type": "integer"}},
-
                         },
-
                         "array_param": {"type": "array", "items": {"type": "string"}},
-
                     },
-
                     "required": ["simple_param"],
-
                 },
-
             },
-
         }
-
     ]
 
     result = format_function_definitions(tools_list)
@@ -421,24 +334,17 @@ def test_format_function_definitions_complex_parameters():
 
     assert array_param.items.type == "STRING"
 
-def test_convert_schema_union():
 
+def test_convert_schema_union():
     """Test converting a schema with union types using anyOf"""
 
     schema_dict = {
-
         "anyOf": [
-
             {"type": "string", "description": "A string value"},
-
             {"type": "integer", "description": "An integer value"},
-
             {"type": "boolean", "description": "A boolean value"},
-
         ],
-
         "description": "A union of string, integer, and boolean",
-
     }
 
     result = convert_schema(schema_dict)
@@ -462,4 +368,3 @@ def test_convert_schema_union():
     assert result.any_of[2].type == "BOOLEAN"
 
     assert result.any_of[2].description == "A boolean value"
-

@@ -15,15 +15,11 @@ def format_position(x: Union[int, float], y: Union[int, float]) -> str:
 
     Format a position as Position(x={x}, y={y}).
 
-
-
     Args:
 
         x: X coordinate
 
         y: Y coordinate
-
-
 
     Returns:
 
@@ -39,13 +35,9 @@ def format_position_from_dict(position: Dict[str, Union[int, float]]) -> str:
 
     Format a position dictionary as Position(x={x}, y={y}).
 
-
-
     Args:
 
         position: Dictionary with 'x' and 'y' keys
-
-
 
     Returns:
 
@@ -65,13 +57,9 @@ def convert_coordinate_format_in_text(text: str) -> str:
 
     Convert coordinate references in text from (x, y) format to Position(x={x}, y={y}) format.
 
-
-
     Args:
 
         text: Text containing coordinate references
-
-
 
     Returns:
 
@@ -84,7 +72,6 @@ def convert_coordinate_format_in_text(text: str) -> str:
     coordinate_pattern = r"\((-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)\)"
 
     def replace_coordinate(match):
-
         x = match.group(1)
 
         y = match.group(2)
@@ -99,13 +86,9 @@ def extract_position_from_text(text: str) -> Tuple[float, float]:
 
     Extract position coordinates from Position(x={x}, y={y}) format.
 
-
-
     Args:
 
         text: Text containing position reference
-
-
 
     Returns:
 
@@ -132,13 +115,9 @@ def normalize_position_references_in_qa(qa_data: Dict[str, Any]) -> Dict[str, An
 
     Normalize position references in a QA pair to use Position(x={x}, y={y}) format.
 
-
-
     Args:
 
         qa_data: QA pair dictionary containing 'question' and 'answer' keys
-
-
 
     Returns:
 

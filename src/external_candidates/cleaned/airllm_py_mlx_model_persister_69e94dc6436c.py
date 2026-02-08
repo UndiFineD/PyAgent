@@ -21,8 +21,8 @@ from mlx.utils import tree_unflatten
 
 from .model_persister import ModelPersister
 
-def map_torch_to_mlx(model):
 
+def map_torch_to_mlx(model):
     # things to change
 
     # 1. there's no "model." in the weight names
@@ -43,17 +43,9 @@ def map_torch_to_mlx(model):
 
     # 4. layernorms
 
-    model = {
+    model = {k.replace("input_layernorm", "attention_norm"): v for k, v in model.items()}
 
-        k.replace("input_layernorm", "attention_norm"): v for k, v in model.items()
-
-    }
-
-    model = {
-
-        k.replace("post_attention_layernorm", "ffn_norm"): v for k, v in model.items()
-
-    }
+    model = {k.replace("post_attention_layernorm", "ffn_norm"): v for k, v in model.items()}
 
     # 5. lm head
 
@@ -79,38 +71,28 @@ def map_torch_to_mlx(model):
 
     return model
 
+
 class MlxModelPersister(ModelPersister):
-
     def __init__(self, *args, **kwargs):
-
         super(MlxModelPersister, self).__init__(*args, **kwargs)
 
     def model_persist_exist(self, layer_name, saving_path):
-
         safetensor_exists = os.path.exists(str(saving_path / (layer_name + "mlx.npz")))
 
-        done_marker_exists = os.path.exists(
-
-            str(saving_path / (layer_name + "mlx.done"))
-
-        )
+        done_marker_exists = os.path.exists(str(saving_path / (layer_name + "mlx.done")))
 
         # print(f"checking {layer_name}, {saving_path} - {safetensor_exists},{done_marker_exists}")
 
         return safetensor_exists and done_marker_exists
 
     def persist_model(self, state_dict, layer_name, saving_path):
-
         # save_file(state_dict, saving_path / (layer_name + 'safetensors'))
 
         weights = {k: v.to(torch.float16).numpy() for k, v in state_dict.items()}
 
         np.savez(
-
             saving_path / (layer_name + "mlx"),
-
             **weights,  # map_torch_to_mlx(state_dict)
-
         )
 
         print(f"saved as: {saving_path / (layer_name + 'mlx')}")
@@ -120,9 +102,7 @@ class MlxModelPersister(ModelPersister):
         (saving_path / (layer_name + "mlx.done")).touch()
 
     def load_model(self, layer_name, path):
-
         try:
-
             to_load_path = Path(path) / (layer_name + ".mlx.npz")
 
             # available = psutil.virtual_memory().available / 1024 / 1024
@@ -152,8 +132,6 @@ class MlxModelPersister(ModelPersister):
             return weights
 
         except Exception as ex:
-
             print(f"error: {layer_name}, {path}")
 
             raise ex
-

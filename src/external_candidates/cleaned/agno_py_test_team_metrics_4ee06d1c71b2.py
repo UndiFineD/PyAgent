@@ -17,32 +17,22 @@ from agno.team.team import Team
 
 from agno.tools.yfinance import YFinanceTools
 
-def test_team_metrics_basic():
 
+def test_team_metrics_basic():
     """Test basic team metrics functionality."""
 
     stock_agent = Agent(
-
         name="Stock Agent",
-
         model=OpenAIChat("gpt-4o"),
-
         role="Get stock information",
-
         tools=[YFinanceTools(stock_price=True)],
-
     )
 
     team = Team(
-
         name="Stock Research Team",
-
         mode="route",
-
         model=OpenAIChat("gpt-4o"),
-
         members=[stock_agent],
-
     )
 
     response = team.run("What is the current stock price of AAPL?")
@@ -89,32 +79,22 @@ def test_team_metrics_basic():
 
     assert team.session_metrics.total_tokens is not None
 
-def test_team_metrics_streaming():
 
+def test_team_metrics_streaming():
     """Test team metrics with streaming."""
 
     stock_agent = Agent(
-
         name="Stock Agent",
-
         model=OpenAIChat("gpt-4o"),
-
         role="Get stock information",
-
         tools=[YFinanceTools(stock_price=True)],
-
     )
 
     team = Team(
-
         name="Stock Research Team",
-
         mode="route",
-
         model=OpenAIChat("gpt-4o"),
-
         members=[stock_agent],
-
     )
 
     # Run with streaming
@@ -143,32 +123,22 @@ def test_team_metrics_streaming():
 
     assert team.run_response.metrics["total_tokens"] is not None
 
-def test_team_metrics_multiple_runs():
 
+def test_team_metrics_multiple_runs():
     """Test team metrics across multiple runs."""
 
     stock_agent = Agent(
-
         name="Stock Agent",
-
         model=OpenAIChat("gpt-4o"),
-
         role="Get stock information",
-
         tools=[YFinanceTools(stock_price=True)],
-
     )
 
     team = Team(
-
         name="Stock Research Team",
-
         mode="route",
-
         model=OpenAIChat("gpt-4o"),
-
         members=[stock_agent],
-
     )
 
     # First run
@@ -188,4 +158,3 @@ def test_team_metrics_multiple_runs():
     # Verify metrics have been updated after second run
 
     assert team.session_metrics.total_tokens > metrics_run1.total_tokens
-

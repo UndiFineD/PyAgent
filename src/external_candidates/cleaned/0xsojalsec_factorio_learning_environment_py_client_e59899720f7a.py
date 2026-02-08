@@ -20,7 +20,6 @@ from fle.env.tools.agent.nearest.client import Nearest
 
 class HarvestResource(Tool):
     def __init__(self, connection, game_state):
-
         super().__init__(connection, game_state)
 
         self.move_to = MoveTo(connection, game_state)
@@ -129,7 +128,6 @@ class HarvestResource(Tool):
         return response
 
     def get_resource_type_at_position(self, position: Position):
-
         x, y = self.get_position(position)
 
         entity_at_position = self.connection.rcon_client.send_command(

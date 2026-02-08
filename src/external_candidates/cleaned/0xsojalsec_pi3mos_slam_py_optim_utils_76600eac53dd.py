@@ -19,7 +19,6 @@ from scipy.spatial.transform import Rotation as R
 
 
 def make_pypose_Sim3(rot, t, s):
-
     q = R.from_matrix(rot).as_quat()
 
     data = np.concatenate([t, q, np.array(s).reshape((1,))])
@@ -28,7 +27,6 @@ def make_pypose_Sim3(rot, t, s):
 
 
 def SE3_to_Sim3(x: pp.SE3):
-
     out = torch.cat((x.data, torch.ones_like(x.data[..., :1])), dim=-1)
 
     return pp.Sim3(out)
@@ -36,13 +34,11 @@ def SE3_to_Sim3(x: pp.SE3):
 
 @nb.njit(cache=True)
 def _format(es):
-
     return np.asarray(es, dtype=np.int64).reshape((-1, 2))[1:]
 
 
 @nb.njit(cache=True)
 def reduce_edges(flow_mag, ii, jj, max_num_edges, nms):
-
     es = [(-1, -1)]
 
     if ii.size == 0:
@@ -170,7 +166,6 @@ def umeyama_alignment(x: np.ndarray, y: np.ndarray):
 
 @nb.njit(cache=True)
 def ransac_umeyama(src_points, dst_points, iterations=1, threshold=0.1):
-
     best_inliers = 0
 
     best_R = None
@@ -221,9 +216,7 @@ def ransac_umeyama(src_points, dst_points, iterations=1, threshold=0.1):
 
 
 def batch_jacobian(func, x):
-
     def _func_sum(*x):
-
         return func(*x).sum(dim=0)
 
     _, b, c = torch.autograd.functional.jacobian(_func_sum, x, vectorize=True)
@@ -232,7 +225,6 @@ def batch_jacobian(func, x):
 
 
 def _residual(C, Gi, Gj):
-
     assert parse_shape(C, "N _") == parse_shape(Gi, "N _") == parse_shape(Gj, "N _")
 
     out = C @ pp.Exp(Gi) @ pp.Exp(Gj).Inv()
@@ -241,7 +233,6 @@ def _residual(C, Gi, Gj):
 
 
 def residual(Ginv, input_poses, dSloop, ii, jj, jacobian=False):
-
     # prep
 
     device = Ginv.device
@@ -301,7 +292,6 @@ def residual(Ginv, input_poses, dSloop, ii, jj, jacobian=False):
 
 
 def run_DPVO_PGO(pred_poses, loop_poses, loop_ii, loop_jj, queue):
-
     final_est = perform_updates(pred_poses, loop_poses, loop_ii, loop_jj, iters=30)
 
     safe_i = loop_ii.max().item() + 1

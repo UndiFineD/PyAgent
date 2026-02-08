@@ -19,7 +19,6 @@ from ovo.core.scheduler.base_scheduler import Scheduler
 
 
 def tool_supports_scheduler(tool: ProteinQCTool, scheduler: Scheduler) -> bool:
-
     if "profile" in scheduler.submission_args and "conda" in scheduler.submission_args["profile"]:
         return tool.supports_conda
 
@@ -194,7 +193,6 @@ def get_plddt_color(thresholds: List[float] = [90, 70, 50], lighter: bool = Fals
     assert len(colors) == len(thresholds) + 1, "Number of colors must be one more than number of thresholds"
 
     def color_func(value):
-
         for t, color in zip(thresholds, colors):
             if value >= t:
                 return color
@@ -225,13 +223,11 @@ def get_rmsd_colormap():
 
 
 def get_higher_is_better_colormap(min_val, max_val):
-
     colors = ["#ffffff", "#d7ee8e"]  # white → light green
 
     cmap = mcolors.LinearSegmentedColormap.from_list("neutral_accent", colors)
 
     def color_func(value):
-
         if pd.isna(value):
             return ""
 
@@ -245,13 +241,11 @@ def get_higher_is_better_colormap(min_val, max_val):
 
 
 def get_lower_is_better_colormap(min_val, max_val):
-
     colors = ["#d7ee8e", "#ffffff"]  # light green -> white
 
     cmap = mcolors.LinearSegmentedColormap.from_list("neutral_accent", colors)
 
     def color_func(value):
-
         if pd.isna(value):
             return ""
 
@@ -265,13 +259,11 @@ def get_lower_is_better_colormap(min_val, max_val):
 
 
 def get_neutral_colormap(min_val, max_val):
-
     colors = ["#ffffff", "#b0b0b0"]  # white -> light gray
 
     cmap = mcolors.LinearSegmentedColormap.from_list("neutral_accent", colors)
 
     def color_func(value):
-
         if pd.isna(value):
             return ""
 
@@ -335,7 +327,6 @@ def get_cmap(
     thresholds: list[float] = None,
     reverse_colors: bool = False,
 ):
-
     if pd.isna(min_val) or pd.isna(max_val):
         return lambda val: "#ffffff"
 
@@ -364,7 +355,6 @@ def get_cmap(
 
 
 def get_flag_color(value: float, descriptor: Descriptor) -> Literal["green", "yellow", "orange", "missing", None]:
-
     if not isinstance(descriptor, NumericDescriptor):
         return None
 
@@ -405,7 +395,6 @@ def get_flag_color(value: float, descriptor: Descriptor) -> Literal["green", "ye
 
 
 def get_descriptor_comment(descriptor: Descriptor) -> str:
-
     if not isinstance(descriptor, NumericDescriptor):
         return descriptor.description
 

@@ -18,7 +18,6 @@ class ShowHilbertCurve(Scene):
     }
 
     def construct(self):
-
         curves = VGroup(
             *[
                 self.FractalClass(
@@ -48,7 +47,6 @@ class ShowFlowSnake(ShowHilbertCurve):
 
 class FlippedSierpinski(Sierpinski):
     def __init__(self, *args, **kwargs):
-
         Sierpinski.__init__(self, *args, **kwargs)
 
         self.rotate(np.pi, RIGHT, about_point=ORIGIN)
@@ -67,7 +65,6 @@ class ShowSierpinski(ShowHilbertCurve):
 
 class SquareWave(Scene):
     def construct(self):
-
         L = FRAME_WIDTH / 4
 
         waves = VGroup(
@@ -108,13 +105,11 @@ class SquareWave(Scene):
         # self.add(tex_mob)
 
     def approx_square_wave(self, x, L, n_terms=3):
-
         return 1.0 * sum([(1.0 / n) * np.sin(n * PI * x / L) for n in range(1, 2 * n_terms + 1, 2)])
 
 
 class PendulumPhaseSpace(Scene):
     def construct(self):
-
         axes = Axes(
             x_min=-PI,
             x_max=PI,
@@ -132,7 +127,6 @@ class PendulumPhaseSpace(Scene):
         )
 
         def func(point, mu=0.1, k=0.5):
-
             theta, theta_dot = axes.p2c(point)
 
             return axes.c2p(

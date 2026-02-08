@@ -86,7 +86,6 @@ Who is likely to be in a close relationship with this persona? Describe the rela
 """)  # noqa: E501
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-
         super().__init__(*args, **kwargs)
 
         self.update(

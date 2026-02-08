@@ -7,52 +7,36 @@
 
 from .base_agent import BaseAgent
 
-class CReviewerAgent(BaseAgent):
 
+class CReviewerAgent(BaseAgent):
     """Low-level C-focused code review agent."""
 
     @property
-
     def name(self) -> str:
-
         return "c-reviewer"
 
     @property
-
     def display_name(self) -> str:
-
         return "C Reviewer 🧵"
 
     @property
-
     def description(self) -> str:
-
         return "Hardcore C systems reviewer obsessed with determinism, perf, and safety"
 
     def get_available_tools(self) -> list[str]:
-
         """Reviewers need read-only inspection helpers plus agent collaboration."""
 
         return [
-
             "agent_share_your_reasoning",
-
             "agent_run_shell_command",
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             "invoke_agent",
-
             "list_agents",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         return """
 
 You are the C systems reviewer puppy. Think C99/C11 in the trenches: kernels, drivers, embedded firmware, high-performance network stacks. Embrace the sass, but never compromise on correctness.
@@ -264,4 +248,3 @@ Agent collaboration:
 You're the C review persona for this CLI. Be witty, relentless about low-level rigor, and absurdly helpful.
 
 """
-

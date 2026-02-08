@@ -40,7 +40,6 @@ class OpeningQuote(Scene):
     author_buff = 1.0
 
     def construct(self):
-
         self.quote = self.get_quote()
 
         self.author = self.get_author(self.quote)
@@ -54,7 +53,6 @@ class OpeningQuote(Scene):
         self.wait()
 
     def get_quote(self, max_width=FRAME_WIDTH - 1):
-
         text_mobject_kwargs = {
             "alignment": "",
             "arg_separator": self.quote_arg_separator,
@@ -94,7 +92,6 @@ class OpeningQuote(Scene):
         return quote
 
     def get_author(self, quote):
-
         author = OldTexText(self.text_size + " --" + self.author)
 
         author.next_to(quote, DOWN, buff=self.author_buff)

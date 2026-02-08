@@ -5,7 +5,6 @@
 
 
 def get_css(soup):
-
     css = []
 
     for link in soup.find_all("style"):

@@ -34,7 +34,6 @@ class CaseSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def create(self, validated_data):
-
         linked_users_data = validated_data.pop("linked_users")
 
         case = Case.objects.create(**validated_data)
@@ -49,7 +48,6 @@ class CaseSerializer(serializers.ModelSerializer):
         return case
 
     def update(self, instance, validated_data):
-
         linked_users_data = validated_data.pop("linked_users", None)
 
         instance.case_name = validated_data.get("case_name", instance.case_name)
@@ -73,7 +71,6 @@ class CaseSerializer(serializers.ModelSerializer):
 
 @receiver(post_save, sender=Case)
 def send_case_created(sender, instance, created, **kwargs):
-
     channel_layer = get_channel_layer()
 
     serializer = CaseSerializer(instance)
@@ -89,7 +86,6 @@ def send_case_created(sender, instance, created, **kwargs):
     sender=Case,
 )
 def send_case_deleted(sender, instance, **kwargs):
-
     channel_layer = get_channel_layer()
 
     serializer = CaseSerializer(instance)

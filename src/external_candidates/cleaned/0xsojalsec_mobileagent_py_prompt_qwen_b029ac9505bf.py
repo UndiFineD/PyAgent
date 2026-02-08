@@ -7,7 +7,6 @@
 
 
 def get_subtask_prompt_cn(instruction):
-
     func_prompt = """多模态agent通过执行点击、输入等一系列操作来完成用户的指令。
 
 用户指令可能由跨越多个应用程序的数个子任务组成，我希望你能将这个复杂的指令，分解为一些子任务，子任务有4种类型：
@@ -78,7 +77,6 @@ User Instruction:
 
 
 def get_subtask_prompt(instruction):
-
     func_prompt = """A multi-modal agent completes a user's instruction by performing a series of actions such as clicking and typing. A user's instruction may consist of multiple subtasks across different applications. I want you to break down this complex instruction into several subtasks, which are of four types:
 
 1. Regular string: For example, "Open dark mode in system settings";
@@ -151,7 +149,6 @@ Please output the split subtasks in the following format:
 
 
 def get_select_prompt(content):
-
     prompt_template = """
 
 Analyze the specified text range {} and output the first line and last line of the specified range separately. 
@@ -176,7 +173,6 @@ You should respond in the following format:
 
 
 def get_select_prompt_simple(content):
-
     prompt_template = """
 
 Analyze the text range of this part of the current Word document: {}, and output the content of the first and last lines separately.
@@ -199,7 +195,6 @@ You should respond in the following format:
 
 
 def get_select_prompt_backup(content):
-
     prompt_template = """
 
 Directly output the first line and the last line of the content: {} in the current shown Microsoft Word document. If the content has only one line, output this line twice."""
@@ -236,7 +231,6 @@ def get_action_prompt(
     completed_content,
     memory,
 ):
-
     prompt = "### Background ###\n"
 
     prompt += f"This image is a computer screenshot where icons are marked with numbers. Its width is {width} pixels and its height is {height} pixels. The user's instruction is: {instruction}.\n\n"
@@ -416,7 +410,6 @@ def get_reflect_prompt(
     add_info,
     no_image=0,
 ):
-
     if no_image == 1:
         prompt = f"The computer screen's width is {width} pixels and the height is {height} pixels.\n\n"
 
@@ -504,7 +497,6 @@ def get_reflect_prompt(
 
 
 def get_memory_prompt(insight):
-
     if insight != "":
         prompt = "### Important content ###\n"
 
@@ -539,7 +531,6 @@ def get_process_prompt(
     add_info,
     reflection_history=[],
 ):
-
     prompt = "### Background ###\n"
 
     prompt += f"There is an user's instruction which is: {instruction}. You are a computer operating assistant and are operating the user's computer.\n\n"

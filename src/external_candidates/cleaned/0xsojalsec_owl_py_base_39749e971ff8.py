@@ -48,7 +48,6 @@ class BaseNode(ABC):
     """
 
     def __init__(self, description: str) -> None:
-
         self.node_id = str(id(self))
 
         self.description = description

@@ -392,7 +392,6 @@ class TestProcessingBenchmarks:
             # Add artificial delay to simulate network
 
             def delayed_response(*args, **kwargs):
-
                 time.sleep(0.1)  # 100ms simulated network delay
 
                 return mock_response

@@ -89,13 +89,11 @@ class BindCraftParams(WorkflowParams):
 
     @classmethod
     def from_dict(cls, data):
-
         data = copy(data)
 
         return cls(**data)
 
     def validate(self):
-
         super().validate()
 
         if not self.input_pdb_path:
@@ -155,29 +153,23 @@ class BindCraftBinderDesignWorkflow(DesignWorkflow):
     chains: dict | None = None
 
     def get_input_pdb_paths(self):
-
         return [self.get_input_pdb_path()]
 
     def get_input_pdb_path(self):
-
         return self.bindcraft_params.input_pdb_path
 
     def get_selected_segments(self):
-
         return self.selected_segments or []
 
     def set_selected_segments(self, segments: list[str]):
-
         self.selected_segments = segments
 
         self.bindcraft_params.hotspots = from_segments_to_hotspots(segments)
 
     def get_pipeline_name(self) -> str:
-
         return "ovo.bindcraft"
 
     def prepare_params(self, workdir: str) -> dict:
-
         from ovo.core.logic.design_logic_bindcraft import prepare_bindcraft_params
 
         return prepare_bindcraft_params(self, workdir=workdir)
@@ -203,7 +195,6 @@ class BindCraftBinderDesignWorkflow(DesignWorkflow):
 
     @classmethod
     def get_download_fields(cls):
-
         return {
             "BindCraft Input PDB": (
                 BindCraftBinderDesignWorkflow,
@@ -213,7 +204,6 @@ class BindCraftBinderDesignWorkflow(DesignWorkflow):
         }
 
     def get_settings_paths(self):
-
         ovo_resources_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "resources"))
 
         bindcraft_resources_path = os.path.join(ovo_resources_path, "bindcraft")

@@ -21,7 +21,6 @@ class Tool:
         schema: Optional[dict] = None,
         func: Optional[Callable] = None,
     ):
-
         self.name = name
 
         self.params = params
@@ -33,7 +32,6 @@ class Tool:
         self.schema = schema
 
     def __call__(self, func):
-
         if self.params:
             # Store the decorated function and its metadata
 
@@ -60,7 +58,6 @@ class Tool:
         return self  # Return the Tool Instance
 
     def invoke(self, **kwargs):
-
         # Validate inputs using the schema and invoke the wrapped function
 
         try:
@@ -76,7 +73,6 @@ class Tool:
             return f"Error: {str(e)}"
 
     async def async_invoke(self, **kwargs):
-
         # Validate inputs using the schema and invoke the wrapped function
 
         try:
@@ -92,7 +88,6 @@ class Tool:
             return f"Error: {str(e)}"
 
     def __repr__(self):
-
         if self.params is not None:
             params = list(self.params.model_json_schema().get("properties").keys())
 
@@ -102,5 +97,4 @@ class Tool:
         return f"Tool(name={self.name}, description={self.description}, params={params})"
 
     def get_prompt(self):
-
         return f"""Tool Name: {self.name}\nTool Description: {self.description}\nTool Input: {dumps(self.schema, indent=2)}"""

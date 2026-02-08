@@ -28,7 +28,6 @@ class GeminiEmbedding(BaseEmbedding):
         api_key: str = "",
         base_url: str = "",
     ):
-
         self.api_key = api_key
 
         self.model = model
@@ -42,7 +41,6 @@ class GeminiEmbedding(BaseEmbedding):
         self.headers = {"Content-Type": "application/json"}
 
     def embed(self, text: list[str] | str = "", title: str = ""):
-
         headers = self.headers
 
         if isinstance(text, list):

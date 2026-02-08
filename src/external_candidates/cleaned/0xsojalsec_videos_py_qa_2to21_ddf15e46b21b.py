@@ -12,7 +12,6 @@ from manim_imports_ext import *
 
 class Questions(Scene):
     def construct(self):
-
         kw = {"alignment": ""}
 
         TexText.CONFIG.update(kw)
@@ -67,7 +66,6 @@ class Questions(Scene):
 
 class MathematicianPlusX(Scene):
     def construct(self):
-
         text = OldTexText(
             "Side note:\\\\",
             "``The Mathematician + X''\\\\",
@@ -81,7 +79,6 @@ class MathematicianPlusX(Scene):
 
 class NoClearCutPath(Scene):
     def construct(self):
-
         path1 = VMobject()
 
         path1.start_new_path(3 * LEFT)
@@ -190,7 +187,6 @@ class NoClearCutPath(Scene):
         self.wait()
 
     def get_dot(self, color):
-
         dot = Dot()
 
         dot.scale(1.5)
@@ -204,7 +200,6 @@ class NoClearCutPath(Scene):
 
 class Cumulative(Scene):
     def construct(self):
-
         colors = list(Color(BLUE_B).range_to(BLUE_D, 20))
 
         rects = VGroup(
@@ -278,7 +273,6 @@ class Cumulative(Scene):
 
 class HolidayStorePromotionTime(HappyHolidays):
     def construct(self):
-
         title = OldTexText("Holiday store promotion time!")
 
         title.set_width(FRAME_WIDTH - 1)

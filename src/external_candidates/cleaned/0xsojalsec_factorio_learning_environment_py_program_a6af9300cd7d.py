@@ -7,7 +7,6 @@ from datetime import datetime
 
 from typing import Dict, List, Optional
 
-
 import numpy as np
 
 from fle.commons.models.achievements import ProductionFlows
@@ -73,15 +72,12 @@ class Program(BaseModel):
     timing_metrics: List[TimingMetrics] = Field(default_factory=list)
 
     def __repr__(self):
-
         return self.code
 
     def get_step(self):
-
         return int(((self.depth - 1) / 2) + 1)
 
     def get_uct(self, parent_visits: int, exploration_constant: float = 1.41) -> float:
-
         if self.visits == 0:
             return float("inf")
 
@@ -91,7 +87,6 @@ class Program(BaseModel):
 
     @classmethod
     def from_row(cls, row: Dict):
-
         return cls(
             id=row["id"],
             code=row["code"],

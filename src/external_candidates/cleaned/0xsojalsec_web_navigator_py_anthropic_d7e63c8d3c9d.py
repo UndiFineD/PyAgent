@@ -44,7 +44,6 @@ class ChatAnthropic(BaseInference):
     def invoke(
         self, messages: list[BaseMessage], json: bool = False, model: BaseModel = None
     ) -> AIMessage | ToolMessage | BaseModel:
-
         self.headers.update(
             {
                 "x-api-key": self.api_key,
@@ -176,7 +175,6 @@ class ChatAnthropic(BaseInference):
     async def async_invoke(
         self, messages: list[BaseMessage], json: bool = False, model: BaseModel = None
     ) -> AIMessage | ToolMessage | BaseModel:
-
         self.headers.update(
             {
                 "x-api-key": self.api_key,
@@ -304,11 +302,9 @@ class ChatAnthropic(BaseInference):
     @limits(calls=15, period=60)
     @retry(stop=stop_after_attempt(3), retry=retry_if_exception_type(RequestException))
     def stream(self, messages: list[BaseMessage], json=False) -> Generator[str, None, None]:
-
         pass
 
     def available_models(self):
-
         url = "https://api.groq.com/openai/v1/models"
 
         self.headers.update({"Authorization": f"Bearer {self.api_key}"})

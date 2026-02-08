@@ -12,7 +12,6 @@ from fle.env.tools import Tool
 
 class SaveBlueprint(Tool):
     def __init__(self, *args):
-
         super().__init__(*args)
 
     def __call__(self) -> Tuple[str, Position]:

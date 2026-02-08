@@ -181,7 +181,6 @@ class VideoRAG:
     imagebind_client: object = None
 
     def __post_init__(self):
-
         # Configure logger to write to file
 
         log_file = os.path.join(self.working_dir, "log.txt")
@@ -521,13 +520,11 @@ class VideoRAG:
             progress_callback("Completed", f"Video processing completed for all videos")
 
     def query(self, query: str, param: QueryParam = QueryParam()):
-
         loop = always_get_an_event_loop()
 
         return loop.run_until_complete(self.aquery(query, param))
 
     async def aquery(self, query: str, param: QueryParam = QueryParam()):
-
         if param.mode == "videorag":
             response = await videorag_query(
                 query,
@@ -566,7 +563,6 @@ class VideoRAG:
         return response
 
     async def ainsert(self, new_video_segment):
-
         await self._insert_start()
 
         try:
@@ -624,7 +620,6 @@ class VideoRAG:
             await self._insert_done()
 
     async def _insert_start(self):
-
         tasks = []
 
         for storage_inst in [
@@ -638,7 +633,6 @@ class VideoRAG:
         await asyncio.gather(*tasks)
 
     async def _save_video_segments(self):
-
         tasks = []
 
         for storage_inst in [
@@ -654,7 +648,6 @@ class VideoRAG:
         await asyncio.gather(*tasks)
 
     async def _insert_done(self):
-
         tasks = []
 
         for storage_inst in [
@@ -675,7 +668,6 @@ class VideoRAG:
         await asyncio.gather(*tasks)
 
     async def _query_done(self):
-
         tasks = []
 
         for storage_inst in [self.llm_response_cache]:

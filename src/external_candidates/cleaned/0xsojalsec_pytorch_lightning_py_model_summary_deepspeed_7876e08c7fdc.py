@@ -51,7 +51,6 @@ from typing_extensions import override
 
 
 def deepspeed_param_size(p: torch.nn.Parameter) -> int:
-
     assert hasattr(p, "ds_numel")
 
     return p.ds_numel
@@ -70,7 +69,6 @@ class DeepSpeedLayerSummary(LayerSummary):
         """Returns the number of parameters in this module."""
 
         def partitioned_size(p: Parameter) -> int:
-
             return p.partitioned_size() if RequirementCache("deepspeed<0.6.6") else p.partition_numel()
 
         return sum(partitioned_size(p) if not _tensor_has_shape(p) else 0 for p in self._module.parameters())
@@ -79,7 +77,6 @@ class DeepSpeedLayerSummary(LayerSummary):
 class DeepSpeedSummary(ModelSummary):
     @override
     def summarize(self) -> dict[str, DeepSpeedLayerSummary]:  # type: ignore[override]
-
         summary = OrderedDict((name, DeepSpeedLayerSummary(module)) for name, module in self.named_modules)
 
         if self._model.example_input_array is not None:
@@ -99,13 +96,11 @@ class DeepSpeedSummary(ModelSummary):
     @property
     @override
     def total_parameters(self) -> int:
-
         return sum(deepspeed_param_size(p) if not _tensor_has_shape(p) else 0 for p in self._model.parameters())
 
     @property
     @override
     def trainable_parameters(self) -> int:
-
         return sum(
             deepspeed_param_size(p) if not _tensor_has_shape(p) else 0
             for p in self._model.parameters()
@@ -114,7 +109,6 @@ class DeepSpeedSummary(ModelSummary):
 
     @property
     def parameters_per_layer(self) -> list[int]:
-
         return [layer.average_shard_parameters for layer in self._layer_summary.values()]
 
     @override

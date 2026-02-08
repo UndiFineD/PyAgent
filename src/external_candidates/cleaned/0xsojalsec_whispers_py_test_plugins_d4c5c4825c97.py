@@ -85,7 +85,6 @@ from tests.unit.conftest import fixture_path
     ],
 )
 def test_init(filename, expected_plugin):
-
     filename = fixture_path(filename)
 
     plugin = WhisperPlugins(filename, WhisperRules()).plugin

@@ -12,7 +12,6 @@ from mobject.svg.svg_mobject import *
 
 class DieFace(SVGMobject):
     def __init__(self, value, **kwargs):
-
         self.value = value
 
         self.file_name = "Dice-" + str(value)
@@ -29,7 +28,6 @@ class RowOfDice(VGroup):
     }
 
     def init_points(self):
-
         for value in self.values:
             new_die = DieFace(value)
 
@@ -48,7 +46,6 @@ class TwoDiceTable(VMobject):
     CONFIG = {"cell_size": 1, "label_scale": 0.7}
 
     def __init__(self, **kwargs):
-
         VMobject.__init__(self, **kwargs)
 
         colors = color_gradient([RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE], 13)

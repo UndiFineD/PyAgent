@@ -12,7 +12,6 @@ def _run_async_in_new_thread(coro):
     """Run an async coroutine in a new thread with its own event loop"""
 
     def run_in_thread():
-
         new_loop = asyncio.new_event_loop()
 
         asyncio.set_event_loop(new_loop)

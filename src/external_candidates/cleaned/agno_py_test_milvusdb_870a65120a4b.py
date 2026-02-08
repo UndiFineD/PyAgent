@@ -15,14 +15,12 @@ from agno.vectordb.distance import Distance
 
 from agno.vectordb.milvus import Milvus
 
+
 @pytest.fixture
-
 def mock_milvus_client():
-
     """Fixture to create a mock Milvus client"""
 
     with patch("pymilvus.MilvusClient") as mock_client_class:
-
         client = Mock()
 
         # Mock collection operations
@@ -53,14 +51,12 @@ def mock_milvus_client():
 
         yield client
 
+
 @pytest.fixture
-
 def mock_milvus_async_client():
-
     """Fixture to create a mock Milvus async client"""
 
     with patch("pymilvus.AsyncMilvusClient") as mock_async_client_class:
-
         client = Mock()
 
         # Mock search/retrieve operations
@@ -83,10 +79,9 @@ def mock_milvus_async_client():
 
         yield client
 
+
 @pytest.fixture
-
 def milvus_db(mock_milvus_client, mock_embedder):
-
     """Fixture to create a Milvus instance with mocked client"""
 
     db = Milvus(embedder=mock_embedder, collection="test_collection")
@@ -95,54 +90,36 @@ def milvus_db(mock_milvus_client, mock_embedder):
 
     yield db
 
+
 @pytest.fixture
-
 def sample_documents() -> List[Document]:
-
     """Fixture to create sample documents"""
 
     return [
-
         Document(
-
             content="Tom Kha Gai is a Thai coconut soup with chicken",
-
             meta_data={"cuisine": "Thai", "type": "soup"},
-
             name="tom_kha",
-
         ),
-
         Document(
-
             content="Pad Thai is a stir-fried rice noodle dish",
-
             meta_data={"cuisine": "Thai", "type": "noodles"},
-
             name="pad_thai",
-
         ),
-
         Document(
-
             content="Green curry is a spicy Thai curry with coconut milk",
-
             meta_data={"cuisine": "Thai", "type": "curry"},
-
             name="green_curry",
-
         ),
-
     ]
 
-def test_create_collection(milvus_db, mock_milvus_client):
 
+def test_create_collection(milvus_db, mock_milvus_client):
     """Test creating a collection"""
 
     # Mock exists to return False to ensure create is called
 
     with patch.object(milvus_db, "exists", return_value=False):
-
         milvus_db.create()
 
         mock_milvus_client.create_collection.assert_called_once()
@@ -155,8 +132,8 @@ def test_create_collection(milvus_db, mock_milvus_client):
 
         assert kwargs["dimension"] == milvus_db.dimensions
 
-def test_exists(milvus_db, mock_milvus_client):
 
+def test_exists(milvus_db, mock_milvus_client):
     """Test checking if collection exists"""
 
     # Test when collection exists
@@ -171,24 +148,22 @@ def test_exists(milvus_db, mock_milvus_client):
 
     assert milvus_db.exists() is False
 
-def test_drop(milvus_db, mock_milvus_client):
 
+def test_drop(milvus_db, mock_milvus_client):
     """Test dropping a collection"""
 
     # Mock exists to return True to ensure delete is called
 
     with patch.object(milvus_db, "exists", return_value=True):
-
         milvus_db.drop()
 
         mock_milvus_client.drop_collection.assert_called_once_with("test_collection")
 
-def test_insert_documents(milvus_db, sample_documents, mock_milvus_client):
 
+def test_insert_documents(milvus_db, sample_documents, mock_milvus_client):
     """Test inserting documents"""
 
     with patch.object(milvus_db.embedder, "get_embedding", return_value=[0.1] * 768):
-
         milvus_db.insert(sample_documents)
 
         # Should call insert once for each document
@@ -207,8 +182,8 @@ def test_insert_documents(milvus_db, sample_documents, mock_milvus_client):
 
         assert "content" in kwargs["data"]
 
-def test_doc_exists(milvus_db, sample_documents, mock_milvus_client):
 
+def test_doc_exists(milvus_db, sample_documents, mock_milvus_client):
     """Test document existence check"""
 
     # Test when document exists
@@ -223,8 +198,8 @@ def test_doc_exists(milvus_db, sample_documents, mock_milvus_client):
 
     assert milvus_db.doc_exists(sample_documents[0]) is False
 
-def test_name_exists(milvus_db, mock_milvus_client):
 
+def test_name_exists(milvus_db, mock_milvus_client):
     """Test name existence check"""
 
     # Test when name exists
@@ -239,8 +214,8 @@ def test_name_exists(milvus_db, mock_milvus_client):
 
     assert milvus_db.name_exists("nonexistent") is False
 
-def test_id_exists(milvus_db, mock_milvus_client):
 
+def test_id_exists(milvus_db, mock_milvus_client):
     """Test ID existence check"""
 
     # Test when ID exists
@@ -255,12 +230,11 @@ def test_id_exists(milvus_db, mock_milvus_client):
 
     assert milvus_db.id_exists("nonexistent_id") is False
 
-def test_upsert_documents(milvus_db, sample_documents, mock_milvus_client):
 
+def test_upsert_documents(milvus_db, sample_documents, mock_milvus_client):
     """Test upserting documents"""
 
     with patch.object(milvus_db.embedder, "get_embedding", return_value=[0.1] * 768):
-
         milvus_db.upsert(sample_documents)
 
         # Should call upsert once for each document
@@ -279,60 +253,41 @@ def test_upsert_documents(milvus_db, sample_documents, mock_milvus_client):
 
         assert "content" in kwargs["data"]
 
-def test_upsert_available(milvus_db):
 
+def test_upsert_available(milvus_db):
     """Test upsert_available method"""
 
     assert milvus_db.upsert_available() is True
 
-def test_search(milvus_db, mock_milvus_client):
 
+def test_search(milvus_db, mock_milvus_client):
     """Test search functionality"""
 
     # Set up mock embedding
 
     with patch.object(milvus_db.embedder, "get_embedding", return_value=[0.1] * 768):
-
         # Set up mock search results
 
         mock_result1 = {
-
             "id": "id1",
-
             "entity": {
-
                 "name": "tom_kha",
-
                 "meta_data": {"cuisine": "Thai", "type": "soup"},
-
                 "content": "Tom Kha Gai is a Thai coconut soup with chicken",
-
                 "vector": [0.1] * 768,
-
                 "usage": {"prompt_tokens": 10, "total_tokens": 10},
-
             },
-
         }
 
         mock_result2 = {
-
             "id": "id2",
-
             "entity": {
-
                 "name": "green_curry",
-
                 "meta_data": {"cuisine": "Thai", "type": "curry"},
-
                 "content": "Green curry is a spicy Thai curry with coconut milk",
-
                 "vector": [0.2] * 768,
-
                 "usage": {"prompt_tokens": 10, "total_tokens": 10},
-
             },
-
         }
 
         mock_milvus_client.search.return_value = [[mock_result1, mock_result2]]
@@ -359,28 +314,23 @@ def test_search(milvus_db, mock_milvus_client):
 
         assert kwargs["limit"] == 2
 
-def test_get_count(milvus_db, mock_milvus_client):
 
+def test_get_count(milvus_db, mock_milvus_client):
     """Test getting count of documents"""
 
     mock_milvus_client.get_collection_stats.return_value = {"row_count": 42}
 
     assert milvus_db.get_count() == 42
 
-    mock_milvus_client.get_collection_stats.assert_called_once_with(
+    mock_milvus_client.get_collection_stats.assert_called_once_with(collection_name="test_collection")
 
-        collection_name="test_collection"
-
-    )
 
 def test_distance_setting(mock_embedder, mock_milvus_client):
-
     """Test that distance settings are properly applied"""
 
     # Test with cosine distance (default)
 
     with patch("pymilvus.MilvusClient", return_value=mock_milvus_client):
-
         db1 = Milvus(embedder=mock_embedder, collection="test_collection")
 
         # Direct assignment to avoid real client creation
@@ -388,7 +338,6 @@ def test_distance_setting(mock_embedder, mock_milvus_client):
         db1._client = mock_milvus_client
 
         with patch.object(db1, "exists", return_value=False):
-
             db1.create()
 
             args, kwargs = mock_milvus_client.create_collection.call_args
@@ -398,19 +347,13 @@ def test_distance_setting(mock_embedder, mock_milvus_client):
     # Test with L2 distance
 
     with patch("pymilvus.MilvusClient", return_value=mock_milvus_client):
-
-        db2 = Milvus(
-
-            embedder=mock_embedder, collection="test_collection", distance=Distance.l2
-
-        )
+        db2 = Milvus(embedder=mock_embedder, collection="test_collection", distance=Distance.l2)
 
         # Direct assignment to avoid real client creation
 
         db2._client = mock_milvus_client
 
         with patch.object(db2, "exists", return_value=False):
-
             db2.create()
 
             args, kwargs = mock_milvus_client.create_collection.call_args
@@ -420,15 +363,10 @@ def test_distance_setting(mock_embedder, mock_milvus_client):
     # Test with inner product distance
 
     with patch("pymilvus.MilvusClient", return_value=mock_milvus_client):
-
         db3 = Milvus(
-
             embedder=mock_embedder,
-
             collection="test_collection",
-
             distance=Distance.max_inner_product,
-
         )
 
         # Direct assignment to avoid real client creation
@@ -436,15 +374,14 @@ def test_distance_setting(mock_embedder, mock_milvus_client):
         db3._client = mock_milvus_client
 
         with patch.object(db3, "exists", return_value=False):
-
             db3.create()
 
             args, kwargs = mock_milvus_client.create_collection.call_args
 
             assert kwargs["metric_type"] == "IP"
 
-def test_build_expr(milvus_db):
 
+def test_build_expr(milvus_db):
     """Test the _build_expr method for constructing query filters"""
 
     # Test with None filters
@@ -475,62 +412,51 @@ def test_build_expr(milvus_db):
 
     assert " and " in expr
 
+
 @pytest.mark.asyncio
-
 async def test_async_create(mock_embedder):
-
     """Test async collection creation"""
 
     db = Milvus(embedder=mock_embedder, collection="test_collection")
 
     with patch.object(db, "async_create", return_value=None):
-
         await db.async_create()
 
+
 @pytest.mark.asyncio
-
 async def test_async_exists(mock_embedder):
-
     """Test async exists check"""
 
     db = Milvus(embedder=mock_embedder, collection="test_collection")
 
     with patch.object(db, "async_exists", return_value=True):
-
         result = await db.async_exists()
 
         assert result is True
 
+
 @pytest.mark.asyncio
-
 async def test_async_search(mock_embedder):
-
     """Test async search"""
 
     db = Milvus(embedder=mock_embedder, collection="test_collection")
 
-    mock_results = [
-
-        Document(name="test_doc", content="Test content", meta_data={"key": "value"})
-
-    ]
+    mock_results = [Document(name="test_doc", content="Test content", meta_data={"key": "value"})]
 
     with patch.object(db, "async_search", return_value=mock_results):
-
         results = await db.async_search("test query", limit=1)
 
         assert len(results) == 1
 
         assert results[0].name == "test_doc"
 
-async def async_return(result):
 
+async def async_return(result):
     return result
 
+
 @pytest.mark.asyncio
-
 async def test_async_doc_exists(mock_embedder, mock_milvus_async_client):
-
     """Test async document existence check"""
 
     db = Milvus(embedder=mock_embedder, collection="test_collection")
@@ -542,33 +468,22 @@ async def test_async_doc_exists(mock_embedder, mock_milvus_async_client):
     db._async_client = mock_milvus_async_client
 
     with patch.object(
-
         mock_milvus_async_client,
-
         "get",
-
         side_effect=lambda **kwargs: async_return([Mock()]),
-
     ):
-
         result = await db.async_doc_exists(test_doc)
 
         assert result is True
 
-    with patch.object(
-
-        mock_milvus_async_client, "get", side_effect=lambda **kwargs: async_return([])
-
-    ):
-
+    with patch.object(mock_milvus_async_client, "get", side_effect=lambda **kwargs: async_return([])):
         result = await db.async_doc_exists(test_doc)
 
         assert result is False
 
+
 @pytest.mark.asyncio
-
 async def test_async_insert(mock_embedder, sample_documents):
-
     """Test async insert"""
 
     db = Milvus(embedder=mock_embedder, collection="test_collection")
@@ -576,13 +491,11 @@ async def test_async_insert(mock_embedder, sample_documents):
     # Mock async_insert directly
 
     with patch.object(db, "async_insert", return_value=None):
-
         await db.async_insert(sample_documents)
 
+
 @pytest.mark.asyncio
-
 async def test_async_upsert(mock_embedder, sample_documents):
-
     """Test async upsert"""
 
     db = Milvus(embedder=mock_embedder, collection="test_collection")
@@ -590,13 +503,11 @@ async def test_async_upsert(mock_embedder, sample_documents):
     # Mock async_upsert directly
 
     with patch.object(db, "async_upsert", return_value=None):
-
         await db.async_upsert(sample_documents)
 
+
 @pytest.mark.asyncio
-
 async def test_async_drop(mock_embedder):
-
     """Test async drop collection"""
 
     db = Milvus(embedder=mock_embedder, collection="test_collection")
@@ -604,6 +515,4 @@ async def test_async_drop(mock_embedder):
     # Mock async_drop directly
 
     with patch.object(db, "async_drop", return_value=None):
-
         await db.async_drop()
-

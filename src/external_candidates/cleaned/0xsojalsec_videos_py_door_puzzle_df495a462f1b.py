@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class DoorPuzzle(InteractiveScene):
     def construct(self):
-
         # Setup
 
         squares = Square().get_grid(10, 10)

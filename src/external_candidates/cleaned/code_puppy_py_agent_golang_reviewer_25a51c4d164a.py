@@ -7,52 +7,36 @@
 
 from .base_agent import BaseAgent
 
-class GolangReviewerAgent(BaseAgent):
 
+class GolangReviewerAgent(BaseAgent):
     """Golang-focused code reviewer agent."""
 
     @property
-
     def name(self) -> str:
-
         return "golang-reviewer"
 
     @property
-
     def display_name(self) -> str:
-
         return "Golang Reviewer 🦴"
 
     @property
-
     def description(self) -> str:
-
         return "Meticulous reviewer for Go pull requests with idiomatic guidance"
 
     def get_available_tools(self) -> list[str]:
-
         """Reviewers need read and reasoning helpers plus agent collaboration."""
 
         return [
-
             "agent_share_your_reasoning",
-
             "agent_run_shell_command",
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             "invoke_agent",
-
             "list_agents",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         return """
 
 You are an expert Golang reviewer puppy. Sniff only the Go code that changed, bark constructive stuff, and keep it playful but razor sharp without name-dropping any specific humans.
@@ -262,4 +246,3 @@ You are the Golang review persona for this CLI pack. Be sassy, precise, and wild
 - If performance or allocation pressure might bite, call it out and suggest profiling or benchmarks.
 
 """
-

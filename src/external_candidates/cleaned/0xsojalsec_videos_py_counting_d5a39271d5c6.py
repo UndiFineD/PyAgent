@@ -34,7 +34,6 @@ class CountingScene(Scene):
     }
 
     def setup(self):
-
         self.dots = VGroup()
 
         self.number = 0
@@ -58,7 +57,6 @@ class CountingScene(Scene):
         self.add(self.number_mob)
 
     def get_template_configuration(self, place):
-
         # This should probably be replaced for non-base-10 counting scenes
 
         down_right = (0.5) * RIGHT + (np.sqrt(3) / 2) * DOWN
@@ -72,7 +70,6 @@ class CountingScene(Scene):
         return reversed(result[: self.get_place_max(place)])
 
     def get_dot_template(self, place):
-
         # This should be replaced for non-base-10 counting scenes
 
         dots = VGroup(
@@ -93,7 +90,6 @@ class CountingScene(Scene):
         return dots
 
     def add_configuration(self):
-
         new_template = self.get_dot_template(len(self.dot_templates))
 
         new_template.move_to(self.ones_configuration_location)
@@ -109,12 +105,10 @@ class CountingScene(Scene):
         self.curr_configurations.append(VGroup())
 
     def count(self, max_val, run_time_per_anim=1):
-
         for x in range(max_val):
             self.increment(run_time_per_anim)
 
     def increment(self, run_time_per_anim=1):
-
         moving_dot = Dot(
             self.counting_dot_starting_position,
             radius=self.count_dot_starting_radius,
@@ -180,7 +174,6 @@ class CountingScene(Scene):
                 continue_rolling_over = False
 
     def get_digit_increment_animations(self):
-
         result = []
 
         self.number += 1
@@ -216,7 +209,6 @@ class CountingScene(Scene):
         return result
 
     def get_number_mob(self, num):
-
         result = VGroup()
 
         place = 0
@@ -242,21 +234,17 @@ class CountingScene(Scene):
         return result
 
     def is_next_digit(self):
-
         return False
 
     def get_place_num(self, num, place):
-
         return 0
 
     def get_place_max(self, place):
-
         return 0
 
 
 class PowerCounter(CountingScene):
     def is_next_digit(self):
-
         number = self.number
 
         while number > 1:
@@ -268,11 +256,9 @@ class PowerCounter(CountingScene):
         return True
 
     def get_place_max(self, place):
-
         return self.base
 
     def get_place_num(self, num, place):
-
         return (num / (self.base**place)) % self.base
 
 
@@ -282,7 +268,6 @@ class CountInDecimal(PowerCounter):
     }
 
     def construct(self):
-
         for x in range(11):
             self.increment()
 
@@ -301,7 +286,6 @@ class CountInTernary(PowerCounter):
     }
 
     def construct(self):
-
         self.count(27)
 
     # def get_template_configuration(self, place):
@@ -317,11 +301,9 @@ class CountInBinaryTo256(PowerCounter):
     }
 
     def construct(self):
-
         self.count(128, 0.3)
 
     def get_template_configuration(self, place):
-
         return [ORIGIN, UP]
 
 
@@ -332,23 +314,18 @@ class FactorialBase(CountingScene):
     }
 
     def construct(self):
-
         self.count(30, 0.4)
 
     def is_next_digit(self):
-
         return self.number == self.factorial(self.max_place + 1)
 
     def get_place_max(self, place):
-
         return place + 2
 
     def get_place_num(self, num, place):
-
         return (num / self.factorial(place + 1)) % self.get_place_max(place)
 
     def factorial(self, n):
-
         if n == 1:
             return 1
 

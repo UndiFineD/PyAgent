@@ -141,11 +141,9 @@ class MemCell:
             raise ValueError("original_data is required")
 
     def __repr__(self) -> str:
-
         return f"MemCell(event_id={self.event_id!r}, original_data={self.original_data!r}, timestamp={self.timestamp!r}, summary={self.summary!r})"
 
     def to_dict(self) -> Dict[str, Any]:
-
         return {
             "event_id": self.event_id if self.event_id else None,
             "user_id_list": self.user_id_list,
@@ -228,7 +226,6 @@ class BaseMemory:
             return str(self.timestamp) if self.timestamp else None
 
     def to_dict(self) -> Dict[str, Any]:
-
         return {
             "memory_type": self.memory_type.value if self.memory_type else None,
             "user_id": self.user_id,
@@ -258,7 +255,6 @@ class EpisodeMemory(BaseMemory):
     episode: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
-
         d = super().to_dict()
 
         d["id"] = self.id
@@ -285,7 +281,6 @@ class EventLog(BaseMemory):
     parent_episode_id: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
-
         d = super().to_dict()
 
         if self.time:
@@ -335,7 +330,6 @@ class Foresight(BaseMemory):
     parent_episode_id: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
-
         d = super().to_dict()
 
         d["foresight"] = self.foresight

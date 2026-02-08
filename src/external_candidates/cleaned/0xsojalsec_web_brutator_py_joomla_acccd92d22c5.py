@@ -18,7 +18,6 @@ from lib.core.Requester import AuthMode, Requester
 
 class Joomla:
     def __init__(self, url, verbose=False):
-
         self.url = url
 
         self.interface = None
@@ -34,7 +33,6 @@ class Joomla:
         self.option = None
 
     def check(self):
-
         r = Requester.get("{}/administrator/index.php".format(self.url))
 
         # print(r.headers)
@@ -91,7 +89,6 @@ class Joomla:
         return False
 
     def try_auth(self, username, password):
-
         if self.interface == "joomla-admin":
             r = Requester.get(self.interface_url)
 

@@ -18,7 +18,6 @@ class Car(SVGMobject):
     light_colors = [BLACK, BLACK]
 
     def __init__(self, **kwargs):
-
         SVGMobject.__init__(self, **kwargs)
 
         path = self.submobjects[0]
@@ -75,7 +74,6 @@ class Car(SVGMobject):
         self.add_treds_to_tires()
 
     def move_to(self, point_or_mobject):
-
         vect = rotate_vector(UP + LEFT, self.orientation_line.get_angle())
 
         self.next_to(point_or_mobject, vect, buff=0)
@@ -83,7 +81,6 @@ class Car(SVGMobject):
         return self
 
     def get_front_line(self):
-
         return DashedLine(
             self.get_corner(UP + RIGHT),
             self.get_corner(DOWN + RIGHT),
@@ -92,7 +89,6 @@ class Car(SVGMobject):
         )
 
     def add_treds_to_tires(self):
-
         for tire in self.get_tires():
             radius = tire.get_width() / 2
 
@@ -114,25 +110,20 @@ class Car(SVGMobject):
         return self
 
     def get_tires(self):
-
         return VGroup(self[1][0], self[1][1])
 
     def get_lights(self):
-
         return VGroup(self.get_front_light(), self.get_rear_light())
 
     def get_front_light(self):
-
         return self[1][3]
 
     def get_rear_light(self):
-
         return self[1][4]
 
 
 class MoveCar(ApplyMethod):
     def __init__(self, car, target_point, run_time=5, moving_forward=True, **kwargs):
-
         self.moving_forward = moving_forward
 
         self.check_if_input_is_car(car)
@@ -142,12 +133,10 @@ class MoveCar(ApplyMethod):
         super().__init__(car.move_to, target_point, run_time=run_time, **kwargs)
 
     def check_if_input_is_car(self, car):
-
         if not isinstance(car, Car):
             raise Exception("MoveCar must take in Car object")
 
     def begin(self):
-
         super().begin()
 
         car = self.mobject
@@ -167,7 +156,6 @@ class MoveCar(ApplyMethod):
         self.total_tire_radians = -distance / tire_radius
 
     def interpolate_mobject(self, alpha):
-
         ApplyMethod.interpolate_mobject(self, alpha)
 
         if alpha == 0:
@@ -201,7 +189,6 @@ class PartyHat(SVGMobject):
     NUM_DOTS = 6
 
     def __init__(self, **kwargs):
-
         SVGMobject.__init__(self, **kwargs)
 
         self.set_height(self.height)
@@ -228,7 +215,6 @@ class SunGlasses(SVGMobject):
     glasses_width_to_eyes_width = 1.1
 
     def __init__(self, pi_creature, **kwargs):
-
         super().__init__(**kwargs)
 
         self.set_stroke(WHITE, width=0)
@@ -250,7 +236,6 @@ class Headphones(SVGMobject):
     color = GREY
 
     def __init__(self, pi_creature=None, **kwargs):
-
         super().__init__(file_name=self.file_name, **kwargs)
 
         self.stretch(self.y_stretch_factor, 1)
@@ -282,7 +267,6 @@ class Guitar(SVGMobject):
         stroke_color=WHITE,
         stroke_width=0.5,
     ):
-
         super().__init__(
             height=height,
             fill_color=fill_color,
@@ -297,7 +281,6 @@ class Guitar(SVGMobject):
 
 class DeckOfCards(VGroup):
     def __init__(self, **kwargs):
-
         possible_values = list(map(str, list(range(1, 11)))) + ["J", "Q", "K"]
 
         possible_suits = ["hearts", "diamonds", "spades", "clubs"]
@@ -324,7 +307,6 @@ class PlayingCard(VGroup):
         possible_values=list(map(str, list(range(2, 11)))) + ["J", "Q", "K", "A"],
         **kwargs,
     ):
-
         self.key = key
 
         self.value = value
@@ -389,7 +371,6 @@ class PlayingCard(VGroup):
         self.add(contents)
 
     def get_value(self):
-
         value = self.value
 
         if value is None:
@@ -423,7 +404,6 @@ class PlayingCard(VGroup):
         return value
 
     def get_symbol(self):
-
         suit = self.suit
 
         if suit is None:
@@ -445,7 +425,6 @@ class PlayingCard(VGroup):
         return symbol
 
     def get_design(self, value, symbol):
-
         if value == "A":
             return self.get_ace_design(symbol)
 
@@ -456,7 +435,6 @@ class PlayingCard(VGroup):
             return self.get_face_card_design(value, symbol)
 
     def get_ace_design(self, symbol):
-
         design = symbol.copy().scale(1.5)
 
         design.move_to(self)
@@ -464,7 +442,6 @@ class PlayingCard(VGroup):
         return design
 
     def get_number_design(self, value, symbol):
-
         num = int(value)
 
         n_rows = {
@@ -515,7 +492,6 @@ class PlayingCard(VGroup):
         return design
 
     def get_face_card_design(self, value, symbol):
-
         from videos.characters.pi_creature import PiCreature
 
         sub_rect = Rectangle(
@@ -576,7 +552,6 @@ class PlayingCard(VGroup):
         return VGroup(sub_rect, pi_creature, pi_copy)
 
     def get_corner_numbers(self, value, symbol):
-
         value_mob = OldTexText(value)
 
         width = self.get_width() / self.card_width_to_corner_num_width
@@ -608,7 +583,6 @@ class PlayingCard(VGroup):
 
 class SuitSymbol(SVGMobject):
     def __init__(self, suit_name, **kwargs):
-
         suits = {"hearts", "diamonds", "spades", "clubs"}
 
         if suit_name not in suits:
@@ -626,7 +600,6 @@ class AoPSLogo(SVGMobject):
     height = 1.5
 
     def __init__(self, **kwargs):
-
         super().__init__(**kwargs)
 
         self.set_stroke(WHITE, width=0)

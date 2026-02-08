@@ -5,7 +5,6 @@
 
 from typing import Tuple, Union
 
-
 from fle.env.entities import Entity, Position
 
 from fle.env.namespace import FactorioNamespace
@@ -21,13 +20,11 @@ class Tool(Controller):
         *args,
         **kwargs,
     ):
-
         super().__init__(lua_script_manager, game_state)
 
         self.load()
 
     def get_position(self, position_or_entity: Union[Tuple, Position, Entity]):
-
         if isinstance(position_or_entity, tuple):
             x, y = position_or_entity
 
@@ -44,7 +41,6 @@ class Tool(Controller):
         return x, y
 
     def get_error_message(self, response):
-
         try:
             msg = response.split(":")[-1].replace('"', "").strip().replace("\\'", "").replace("'", "")
 
@@ -54,7 +50,6 @@ class Tool(Controller):
             return response
 
     def load(self):
-
         # self.lua_script_manager.load_action_into_game(self.name)
 
         self.lua_script_manager.load_tool_into_game(self.name)

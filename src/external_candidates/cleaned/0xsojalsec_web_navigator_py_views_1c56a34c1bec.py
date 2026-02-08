@@ -28,7 +28,6 @@ class Memory(BaseModel):
     what_to_avoid: str = Field(..., description="Describes the important pitfalls to avoid.")
 
     def to_dict(self):
-
         return self.model_dump()
 
     class Config:
@@ -39,15 +38,12 @@ class Memories(BaseModel):
     memories: list[Memory] = Field(description="The list of memories", default_factory=list)
 
     def model_dump(self, *args, **kwargs):
-
         return super().model_dump(*args, **kwargs)["memories"]
 
     def all(self):
-
         return [memory.to_dict() for memory in self.memories]
 
     def to_string(self):
-
         return "\n\n".join(
             [
                 f"**Tags:** {memory.tags}\n***Summary:** {memory.summary}\n**What Worked:** {memory.what_worked}\n**What to Avoid:** {memory.what_to_avoid}"

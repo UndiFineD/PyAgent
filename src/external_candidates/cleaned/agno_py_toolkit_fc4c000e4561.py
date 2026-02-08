@@ -11,34 +11,21 @@ from agno.tools.function import Function
 
 from agno.utils.log import log_debug, logger
 
+
 class Toolkit:
-
     def __init__(
-
         self,
-
         name: str = "toolkit",
-
         tools: List[Callable] = [],
-
         instructions: Optional[str] = None,
-
         add_instructions: bool = False,
-
         include_tools: Optional[list[str]] = None,
-
         exclude_tools: Optional[list[str]] = None,
-
         cache_results: bool = False,
-
         cache_ttl: int = 3600,
-
         cache_dir: Optional[str] = None,
-
         auto_register: bool = True,
-
     ):
-
         """Initialize a new Toolkit.
 
         Args:
@@ -76,13 +63,9 @@ class Toolkit:
         self.add_instructions: bool = add_instructions
 
         self._check_tools_filters(
-
             available_tools=[tool.__name__ for tool in tools],
-
             include_tools=include_tools,
-
             exclude_tools=exclude_tools,
-
         )
 
         self.include_tools = include_tools
@@ -98,69 +81,41 @@ class Toolkit:
         # Automatically register all methods if auto_register is True
 
         if auto_register and self.tools:
-
             self._register_tools()
 
     def _check_tools_filters(
-
         self,
-
         available_tools: List[str],
-
         include_tools: Optional[list[str]] = None,
-
         exclude_tools: Optional[list[str]] = None,
-
     ) -> None:
-
         """Check if `include_tools` and `exclude_tools` are valid"""
 
         if include_tools or exclude_tools:
-
             if include_tools:
-
                 missing_includes = set(include_tools) - set(available_tools)
 
                 if missing_includes:
-
-                    raise ValueError(
-
-                        f"Included tool(s) not present in the toolkit: {', '.join(missing_includes)}"
-
-                    )
+                    raise ValueError(f"Included tool(s) not present in the toolkit: {', '.join(missing_includes)}")
 
             if exclude_tools:
-
                 missing_excludes = set(exclude_tools) - set(available_tools)
 
                 if missing_excludes:
-
-                    raise ValueError(
-
-                        f"Excluded tool(s) not present in the toolkit: {', '.join(missing_excludes)}"
-
-                    )
+                    raise ValueError(f"Excluded tool(s) not present in the toolkit: {', '.join(missing_excludes)}")
 
     def _register_tools(self) -> None:
-
         """Register all tools."""
 
         for tool in self.tools:
-
             self.register(tool)
 
     def register(
-
         self,
-
         function: Callable[..., Any],
-
         sanitize_arguments: bool = True,
-
         name: Optional[str] = None,
-
     ):
-
         """Register a function with the toolkit.
 
         Args:
@@ -178,31 +133,21 @@ class Toolkit:
         """
 
         try:
-
             tool_name = name or function.__name__
 
             if self.include_tools is not None and tool_name not in self.include_tools:
-
                 return
 
             if self.exclude_tools is not None and tool_name in self.exclude_tools:
-
                 return
 
             f = Function(
-
                 name=tool_name,
-
                 entrypoint=function,
-
                 sanitize_arguments=sanitize_arguments,
-
                 cache_results=self.cache_results,
-
                 cache_dir=self.cache_dir,
-
                 cache_ttl=self.cache_ttl,
-
             )
 
             self.functions[f.name] = f
@@ -210,16 +155,12 @@ class Toolkit:
             log_debug(f"Function: {f.name} registered with {self.name}")
 
         except Exception as e:
-
             logger.warning(f"Failed to create Function for: {function.__name__}")
 
             raise e
 
     def __repr__(self):
-
         return f"<{self.__class__.__name__} name={self.name} functions={list(self.functions.keys())}>"
 
     def __str__(self):
-
         return self.__repr__()
-

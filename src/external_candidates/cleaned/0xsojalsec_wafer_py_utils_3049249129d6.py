@@ -9,26 +9,22 @@ import time
 
 
 def rndstr(length):
-
     return "".join(random.choice("0123456789abcdef") for i in range(length))
 
 
 def choice(arr):
-
     # randomize seed
 
     return random.choice(arr)
 
 
 def rndunicode():
-
     # randomize seed
 
     return chr(random.randint(0, 0x10FFFF))
 
 
 def choice_percent(elements):
-
     # elements is a dict of {percent: action}
 
     # like following:

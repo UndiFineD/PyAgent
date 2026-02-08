@@ -24,7 +24,6 @@ from ovo.core.logic.descriptor_logic import export_proteinqc_excel
 
 
 def create_test_data():
-
     # Create minimal test data for export, matching import/export test conventions
 
     project = Project(

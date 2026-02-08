@@ -15,7 +15,6 @@ def write_sheets(
     fd_or_path: BytesIO | str,
     header_format: dict | None = "default",
 ):
-
     writer = pd.ExcelWriter(fd_or_path, engine="xlsxwriter")
 
     sheet_names = shorten_sheet_names([sanitize_excel_sheet_name(n) for n in df_dict.keys()])
@@ -124,7 +123,6 @@ def write_sheet(
 
 
 def sanitize_excel_sheet_name(name: str) -> str:
-
     sanitized = name
 
     for char in "[]:*?/\\":
@@ -134,7 +132,6 @@ def sanitize_excel_sheet_name(name: str) -> str:
 
 
 def shorten_sheet_names(names_orig: list[str], max_length: int = 27, max_iter: int = 25) -> list[str]:
-
     suffixes = [0] * len(names_orig)
 
     names_final = [name[:max_length] for name in names_orig]

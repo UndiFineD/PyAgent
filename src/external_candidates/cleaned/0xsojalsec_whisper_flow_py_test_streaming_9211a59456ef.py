@@ -29,7 +29,6 @@ async def test_simple():
     queue.put(1)
 
     async def dummy_transcriber(items: list) -> dict:
-
         await asyncio.sleep(0.1)
 
         if queue.qsize() == 0:
@@ -38,7 +37,6 @@ async def test_simple():
         return {"text": str(len(items))}
 
     async def dummy_segment_closed(text: str) -> None:
-
         await asyncio.sleep(0.01)
 
         print(text)
@@ -61,7 +59,6 @@ async def test_transcribe_streaming(chunk_size=4096):
     chunks = [res["audio"][i : i + chunk_size] for i in range(0, len(res["audio"]), chunk_size)]
 
     async def dummy_transcriber(items: list) -> str:
-
         await asyncio.sleep(0.01)
 
         result = ts.transcribe_pcm_chunks(model, items)
@@ -71,7 +68,6 @@ async def test_transcribe_streaming(chunk_size=4096):
     result = []
 
     async def dummy_segment_closed(text: str) -> None:
-
         await asyncio.sleep(0.01)
 
         result.append(text)

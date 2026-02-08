@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class Birthday(Scene):
     def construct(self):
-
         sidelength = 6.0
 
         corner = np.array([-sidelength / 2, -sidelength / 2, 0])
@@ -18,7 +17,6 @@ class Birthday(Scene):
         toggle = False
 
         def probability():
-
             width = rect.get_width()
 
             height = rect.get_height()

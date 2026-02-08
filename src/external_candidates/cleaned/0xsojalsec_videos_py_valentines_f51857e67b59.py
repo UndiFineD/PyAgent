@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class PowersOfTwo(MovingCameraScene):
     def construct(self):
-
         R = 3
 
         circle = Circle(radius=R)
@@ -95,7 +94,6 @@ class PowersOfTwo(MovingCameraScene):
 
 class Cardiod(Scene):
     def construct(self):
-
         r = 1
 
         big_circle = Circle(color=BLUE, radius=r)
@@ -109,7 +107,6 @@ class Cardiod(Scene):
         get_time = time_tracker.get_value
 
         def get_lil_circle():
-
             lil_circle = big_circle.copy()
 
             lil_circle.set_color(YELLOW)

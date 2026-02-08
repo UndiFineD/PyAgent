@@ -25,7 +25,6 @@ class MultilayeredScene(Scene):
     }
 
     def get_layers(self, n_layers=None):
-
         if n_layers is None:
             n_layers = self.n_layers
 
@@ -55,7 +54,6 @@ class MultilayeredScene(Scene):
         return result
 
     def add_layers(self):
-
         self.layers = self.get_layers()
 
         self.add(*self.layers)
@@ -63,11 +61,9 @@ class MultilayeredScene(Scene):
         self.freeze_background()
 
     def get_bottom(self):
-
         return self.top + self.total_glass_height * DOWN
 
     def get_continuous_glass(self):
-
         result = self.RectClass(
             width=FRAME_WIDTH,
             height=self.total_glass_height,
@@ -86,7 +82,6 @@ class TwoToMany(MultilayeredScene):
     CONFIG = {"RectClass": FilledRectangle}
 
     def construct(self):
-
         glass = self.get_glass()
 
         layers = self.get_layers()
@@ -103,7 +98,6 @@ class TwoToMany(MultilayeredScene):
         self.wait()
 
     def get_glass(self):
-
         return self.RectClass(height=FRAME_Y_RADIUS, width=FRAME_WIDTH, color=BLUE_E).shift(FRAME_Y_RADIUS * DOWN / 2)
 
 
@@ -111,7 +105,6 @@ class RaceLightInLayers(MultilayeredScene, PhotonScene):
     CONFIG = {"RectClass": FilledRectangle}
 
     def construct(self):
-
         self.add_layers()
 
         line = Line(FRAME_X_RADIUS * LEFT, FRAME_X_RADIUS * RIGHT)
@@ -119,7 +112,6 @@ class RaceLightInLayers(MultilayeredScene, PhotonScene):
         lines = [line.copy().shift(layer.get_center()) for layer in self.layers]
 
         def rate_maker(x):
-
             return lambda t: min(x * x * t, 1)
 
         min_rate, max_rate = 1.0, 2.0
@@ -138,7 +130,6 @@ class ShowDiscretePath(MultilayeredScene, PhotonScene):
     CONFIG = {"RectClass": FilledRectangle}
 
     def construct(self):
-
         self.add_layers()
 
         self.cycloid = Cycloid(end_theta=np.pi)
@@ -154,7 +145,6 @@ class ShowDiscretePath(MultilayeredScene, PhotonScene):
         self.wait()
 
     def generate_discrete_path(self):
-
         points = self.cycloid.points
 
         tops = [mob.get_top()[1] for mob in self.layers]
@@ -183,7 +173,6 @@ class NLayers(MultilayeredScene):
     CONFIG = {"RectClass": FilledRectangle}
 
     def construct(self):
-
         self.add_layers()
 
         brace = Brace(Mobject(Point(self.top), Point(self.get_bottom())), RIGHT)
@@ -207,7 +196,6 @@ class ShowLayerVariables(MultilayeredScene, PhotonScene):
     CONFIG = {"RectClass": FilledRectangle}
 
     def construct(self):
-
         self.add_layers()
 
         v_equations = []
@@ -304,7 +292,6 @@ class LimitingProcess(MultilayeredScene):
     CONFIG = {"RectClass": FilledRectangle}
 
     def construct(self):
-
         num_iterations = 3
 
         layer_sets = [self.get_layers((2**x) * self.n_layers) for x in range(num_iterations)]
@@ -337,7 +324,6 @@ class ShowLightAndSlidingObject(MultilayeredScene, TryManyPaths, PhotonScene):
     CONFIG = {"show_time": False, "wait_and_add": False, "RectClass": FilledRectangle}
 
     def construct(self):
-
         glass = self.get_continuous_glass()
 
         self.play(ApplyMethod(glass.fade, 0.8))
@@ -392,7 +378,6 @@ class ContinuouslyObeyingSnellsLaw(MultilayeredScene):
     CONFIG = {"arc_radius": 0.5, "RectClass": FilledRectangle}
 
     def construct(self):
-
         glass = self.get_continuous_glass()
 
         self.add(glass)
@@ -418,7 +403,6 @@ class ContinuouslyObeyingSnellsLaw(MultilayeredScene):
         self.show_equation(chopped_cycloid, ref_mob)
 
     def snells_law_at_every_point(self, cycloid, chopped_cycloid):
-
         square = Square(side_length=0.2, color=WHITE)
 
         words = OldTexText(["Snell's law ", "everywhere"])
@@ -456,7 +440,6 @@ class ContinuouslyObeyingSnellsLaw(MultilayeredScene):
         return colon
 
     def get_marks(self, point1, point2):
-
         vert_line = Line(2 * DOWN, 2 * UP)
 
         tangent_line = vert_line.copy()
@@ -493,7 +476,6 @@ class ContinuouslyObeyingSnellsLaw(MultilayeredScene):
         return arc, theta, vert_line, tangent_line
 
     def show_equation(self, chopped_cycloid, ref_mob):
-
         point2, point1 = chopped_cycloid.get_points()[-2:]
 
         arc, theta, vert_line, tangent_line = self.get_marks(point1, point2)

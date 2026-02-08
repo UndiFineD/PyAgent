@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class ComplexAnalysisOverlay(Scene):
     def construct(self):
-
         words = OldTexText("Complex analysis")
 
         words.scale(1.25)
@@ -33,13 +32,11 @@ class AnalyzeZSquared(ComplexTransformationScene, ZoomedScene):
     }
 
     def setup(self):
-
         ComplexTransformationScene.setup(self)
 
         ZoomedScene.setup(self)
 
     def construct(self):
-
         self.edit_background_plane()
 
         self.add_title()
@@ -53,7 +50,6 @@ class AnalyzeZSquared(ComplexTransformationScene, ZoomedScene):
         self.write_derivative()
 
     def add_title(self):
-
         title = OldTex("z \\rightarrow z^2")
 
         title.add_background_rectangle()
@@ -65,7 +61,6 @@ class AnalyzeZSquared(ComplexTransformationScene, ZoomedScene):
         self.add_foreground_mobject(title)
 
     def edit_background_plane(self):
-
         self.backgrounds.set_stroke(GREY, 2)
 
         self.background.secondary_lines.set_stroke(GREY_D, 1)
@@ -73,13 +68,11 @@ class AnalyzeZSquared(ComplexTransformationScene, ZoomedScene):
         self.add_foreground_mobject(self.background.coordinate_labels)
 
     def add_transforming_planes(self):
-
         self.plane = self.get_plane()
 
         self.add_transformable_mobjects(self.plane)
 
     def preview_some_numbers(self):
-
         dots = VGroup(
             *[
                 Dot().move_to(self.background.number_to_point(z))
@@ -189,7 +182,6 @@ class AnalyzeZSquared(ComplexTransformationScene, ZoomedScene):
         self.transformable_mobjects.remove(self.plane)
 
     def zoom_in_to_one_plus_half_i(self):
-
         z = complex(1, 0.5)
 
         point = self.background.number_to_point(z)
@@ -240,13 +232,11 @@ class AnalyzeZSquared(ComplexTransformationScene, ZoomedScene):
         self.wait(2)
 
     def write_derivative(self):
-
         pass
 
     # Helpers
 
     def get_plane(self):
-
         top_plane = NumberPlane(
             y_radius=FRAME_HEIGHT / 2,
             x_line_frequency=0.1,

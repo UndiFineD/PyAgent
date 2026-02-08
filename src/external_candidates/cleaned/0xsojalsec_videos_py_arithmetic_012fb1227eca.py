@@ -30,7 +30,6 @@ class RearrangeEquation(Scene):
         leave_start_terms=False,
         transform_kwargs={},
     ):
-
         transform_kwargs["path_func"] = path_along_arc(path_arc)
 
         start_mobs, end_mobs = self.get_mobs_from_terms(start_terms, end_terms)
@@ -99,7 +98,6 @@ class RearrangeEquation(Scene):
 
 class FlipThroughSymbols(Animation):
     def __init__(self, tex_list, start_center=ORIGIN, end_center=ORIGIN, **kwargs):
-
         self.tex_list = tex_list
 
         self.start_center = start_center
@@ -111,7 +109,6 @@ class FlipThroughSymbols(Animation):
         Animation.__init__(self, mobject, **kwargs)
 
     def interpolate_mobject(self, alpha):
-
         new_tex = self.tex_list[np.ceil(alpha * len(self.tex_list)) - 1]
 
         if new_tex != self.curr_tex:

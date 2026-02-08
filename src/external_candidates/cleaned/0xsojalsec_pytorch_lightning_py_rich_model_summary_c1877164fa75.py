@@ -86,7 +86,6 @@ class RichModelSummary(ModelSummary):
     """
 
     def __init__(self, max_depth: int = 1, **summarize_kwargs: Any) -> None:
-
         if not _RICH_AVAILABLE:
             raise ModuleNotFoundError(
                 "`RichModelSummary` requires `rich` to be installed. Install it by running `pip install -U rich`."
@@ -105,7 +104,6 @@ class RichModelSummary(ModelSummary):
         total_flops: int,
         **summarize_kwargs: Any,
     ) -> None:
-
         from rich import get_console
 
         from rich.table import Table

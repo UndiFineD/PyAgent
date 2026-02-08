@@ -14,7 +14,6 @@ from manim_imports_ext import *
 
 class GradientDescentWrapper(Scene):
     def construct(self):
-
         title = OldTexText("Gradient descent")
 
         title.to_edge(UP)
@@ -32,7 +31,6 @@ class GradientDescentWrapper(Scene):
 
 class ShowSimpleMultivariableFunction(Scene):
     def construct(self):
-
         scale_val = 1.5
 
         func_tex = OldTex(
@@ -133,7 +131,6 @@ class ShowGraphWithVectors(ExternallyAnimatedScene):
 
 class ShowFunction(Scene):
     def construct(self):
-
         func = OldTex(
             "f(x, y) = e^{-x^2 + \\cos(2y)}",
             tex_to_color_map={
@@ -155,7 +152,6 @@ class ShowExampleFunctionGraph(ExternallyAnimatedScene):
 
 class ShowGradient(Scene):
     def construct(self):
-
         lhs = OldTex("\\nabla f(x, y)=", tex_to_color_map={"x": BLUE, "y": RED})
 
         vector = Matrix(
@@ -223,7 +219,6 @@ class ExampleGraphHoldYConstant(ExternallyAnimatedScene):
 
 class TakePartialDerivatives(Scene):
     def construct(self):
-
         tex_to_color_map = {
             "x": BLUE,
             "y": RED,
@@ -441,7 +436,6 @@ class TakePartialDerivatives(Scene):
 
 class ShowDerivativeAtExamplePoint(Scene):
     def construct(self):
-
         tex_to_color_map = {
             "x": BLUE,
             "y": RED,
@@ -537,7 +531,6 @@ class ShowDerivativeAtExamplePoint(Scene):
         self.wait()
 
     def get_result_vector(self, x, y):
-
         result_vector = Matrix(
             [
                 ["e^{-%s^2 + \\cos(2\\cdot %s)} (-2\\cdot %s)" % (x, y, x)],

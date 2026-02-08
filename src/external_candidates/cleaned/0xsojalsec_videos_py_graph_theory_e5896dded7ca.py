@@ -22,7 +22,6 @@ from manimlib.utils.space_ops import center_of_mass
 
 class Graph:
     def __init__(self):
-
         # List of points in R^3
 
         # vertices = []
@@ -42,11 +41,9 @@ class Graph:
         self.construct()
 
     def construct(self):
-
         pass
 
     def __str__(self):
-
         return self.__class__.__name__
 
 
@@ -64,7 +61,6 @@ class CubeGraph(Graph):
     """
 
     def construct(self):
-
         self.vertices = [(x, y, 0) for r in (1, 2) for x, y in it.product([-r, r], [-r, r])]
 
         self.edges = [
@@ -106,7 +102,6 @@ class SampleGraph(Graph):
     """
 
     def construct(self):
-
         self.vertices = [
             (0, 0, 0),
             (2, 0, 0),
@@ -163,7 +158,6 @@ class OctohedronGraph(Graph):
     """
 
     def construct(self):
-
         self.vertices = [
             (r * np.cos(angle), r * np.sin(angle) - 1, 0)
             for r, s in [(1, 0), (3, 3)]
@@ -199,7 +193,6 @@ class OctohedronGraph(Graph):
 
 class CompleteGraph(Graph):
     def __init__(self, num_vertices, radius=3):
-
         self.num_vertices = num_vertices
 
         self.radius = radius
@@ -207,7 +200,6 @@ class CompleteGraph(Graph):
         Graph.__init__(self)
 
     def construct(self):
-
         self.vertices = [
             (self.radius * np.cos(theta), self.radius * np.sin(theta), 0)
             for x in range(self.num_vertices)
@@ -217,7 +209,6 @@ class CompleteGraph(Graph):
         self.edges = it.combinations(list(range(self.num_vertices)), 2)
 
     def __str__(self):
-
         return Graph.__str__(self) + str(self.num_vertices)
 
 
@@ -230,11 +221,9 @@ class DiscreteGraphScene(Scene):
 
     @staticmethod
     def args_to_string(*args):
-
         return str(args[0])
 
     def __init__(self, graph, *args, **kwargs):
-
         # See CubeGraph() above for format of graph
 
         self.graph = graph
@@ -242,7 +231,6 @@ class DiscreteGraphScene(Scene):
         Scene.__init__(self, *args, **kwargs)
 
     def construct(self):
-
         self._points = list(map(np.array, self.graph.vertices))
 
         self.vertices = self.dots = [Dot(p) for p in self._points]
@@ -252,7 +240,6 @@ class DiscreteGraphScene(Scene):
         self.add(*self.dots + self.edges)
 
     def generate_regions(self):
-
         regions = [self.region_from_cycle(cycle) for cycle in self.graph.region_cycles]
 
         regions[-1].complement()  # Outer region painted outwardly...
@@ -260,23 +247,19 @@ class DiscreteGraphScene(Scene):
         self.regions = regions
 
     def region_from_cycle(self, cycle):
-
         point_pairs = [[self._points[cycle[i]], self._points[cycle[(i + 1) % len(cycle)]]] for i in range(len(cycle))]
 
         return region_from_line_boundary(*point_pairs, shape=self.shape)
 
     def draw_vertices(self, **kwargs):
-
         self.clear()
 
         self.play(ShowCreation(Mobject(*self.vertices), **kwargs))
 
     def draw_edges(self):
-
         self.play(*[ShowCreation(edge, run_time=1.0) for edge in self.edges])
 
     def accent_vertices(self, **kwargs):
-
         self.remove(*self.vertices)
 
         start = Mobject(*self.vertices)
@@ -290,7 +273,6 @@ class DiscreteGraphScene(Scene):
         self.add(*self.vertices)
 
     def replace_vertices_with(self, mobject):
-
         mobject.center()
 
         diameter = max(mobject.get_height(), mobject.get_width())
@@ -301,7 +283,6 @@ class DiscreteGraphScene(Scene):
         )
 
     def annotate_edges(self, mobject, fade_in=True, **kwargs):
-
         angles = list(map(np.arctan, list(map(Line.get_slope, self.edges))))
 
         self.edge_annotations = [
@@ -312,7 +293,6 @@ class DiscreteGraphScene(Scene):
             self.play(*[FadeIn(ann, **kwargs) for ann in self.edge_annotations])
 
     def trace_cycle(self, cycle=None, color="yellow", run_time=2.0):
-
         if cycle is None:
             cycle = self.graph.region_cycles[0]
 
@@ -327,7 +307,6 @@ class DiscreteGraphScene(Scene):
         self.play(ShowCreation(self.traced_cycle), run_time=run_time)
 
     def generate_spanning_tree(self, root=0, color="yellow"):
-
         self.spanning_tree_root = 0
 
         pairs = deepcopy(self.graph.edges)
@@ -361,7 +340,6 @@ class DiscreteGraphScene(Scene):
         )
 
     def generate_treeified_spanning_tree(self):
-
         bottom = -FRAME_Y_RADIUS + 1
 
         x_sep = 1
@@ -436,7 +414,6 @@ class DiscreteGraphScene(Scene):
         )
 
     def generate_dual_graph(self):
-
         point_at_infinity = np.array([np.inf] * 3)
 
         cycles = self.graph.region_cycles

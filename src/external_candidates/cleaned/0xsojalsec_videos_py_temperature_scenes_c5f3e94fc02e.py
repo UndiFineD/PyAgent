@@ -39,7 +39,6 @@ class StepFunctionExample(BringTwoRodsTogether, FourierSeriesIllustraiton):
     }
 
     def construct(self):
-
         self.setup_axes()
 
         self.setup_graph()
@@ -57,7 +56,6 @@ class StepFunctionExample(BringTwoRodsTogether, FourierSeriesIllustraiton):
         self.sum_of_sine_waves()
 
     def bring_rods_together(self):
-
         rods = VGroup(
             self.get_rod(0, 0.5),
             self.get_rod(0.5, 1),
@@ -120,7 +118,6 @@ class StepFunctionExample(BringTwoRodsTogether, FourierSeriesIllustraiton):
         self.rods = rods
 
     def let_evolve_for_a_bit(self):
-
         rods = self.rods
 
         # axes = self.axes
@@ -165,7 +162,6 @@ class StepFunctionExample(BringTwoRodsTogether, FourierSeriesIllustraiton):
         self.wait()
 
     def add_labels(self):
-
         axes = self.axes
 
         y_axis = axes.y_axis
@@ -194,7 +190,6 @@ class StepFunctionExample(BringTwoRodsTogether, FourierSeriesIllustraiton):
         self.wait()
 
     def compare_to_sine_wave(self):
-
         phi_tracker = ValueTracker(0)
 
         get_phi = phi_tracker.get_value
@@ -236,7 +231,6 @@ class StepFunctionExample(BringTwoRodsTogether, FourierSeriesIllustraiton):
         self.sine_wave = sine_wave
 
     def sum_of_sine_waves(self):
-
         curr_sine_wave = self.sine_wave
 
         axes = self.axes
@@ -283,7 +277,6 @@ class StepFunctionExample(BringTwoRodsTogether, FourierSeriesIllustraiton):
     #
 
     def setup_axes(self):
-
         super().setup_axes()
 
         self.axes.shift(self.axes.c2p(0, 0)[1] * DOWN)
@@ -307,7 +300,6 @@ class BreakDownStepFunction(StepFunctionExample):
     }
 
     def construct(self):
-
         self.setup_axes()
 
         self.setup_graph()
@@ -323,7 +315,6 @@ class BreakDownStepFunction(StepFunctionExample):
         self.play(self.get_clock_anim(self.wait_time))
 
     def setup_axes(self):
-
         super().setup_axes()
 
         axes = self.axes
@@ -389,7 +380,6 @@ class BreakDownStepFunction(StepFunctionExample):
         self.mini_axes = mini_axes
 
     def setup_graph(self):
-
         super().setup_graph()
 
         graph = self.graph
@@ -420,7 +410,6 @@ class BreakDownStepFunction(StepFunctionExample):
         self.add(mini_graphs)
 
     def setup_clock(self):
-
         super().setup_clock()
 
         clock = self.clock
@@ -438,13 +427,11 @@ class BreakDownStepFunction(StepFunctionExample):
         self.add(time_label)
 
     def add_rod(self):
-
         self.rod = self.get_rod(0, 1)
 
         self.add(self.rod)
 
     def init_updaters(self):
-
         self.graph.add_updater(self.update_graph)
 
         for mg in self.mini_graphs:

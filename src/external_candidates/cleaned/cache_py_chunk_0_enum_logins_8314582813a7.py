@@ -7,8 +7,8 @@
 
 # NOTE: extracted with static-only rules; review before use
 
-class NXCModule:
 
+class NXCModule:
     """
 
     Enumerate SQL Server logins
@@ -28,13 +28,11 @@ class NXCModule:
     multiple_hosts = True
 
     def __init__(self):
-
         self.mssql_conn = None
 
         self.context = None
 
     def on_login(self, context, connection):
-
         self.context = context
 
         self.mssql_conn = connection.conn
@@ -42,19 +40,15 @@ class NXCModule:
         logins = self.get_logins()
 
         if logins:
-
             self.context.log.success("Logins found:")
 
             for login in logins:
-
                 self.context.log.display(f"  - {login}")
 
         else:
-
             self.context.log.fail("No logins found.")
 
     def get_logins(self) -> list:
-
         """
 
         Fetches a list of SQL Server logins.
@@ -74,6 +68,4 @@ class NXCModule:
         return [login["name"] for login in res] if res else []
 
     def options(self, context, module_options):
-
         pass
-

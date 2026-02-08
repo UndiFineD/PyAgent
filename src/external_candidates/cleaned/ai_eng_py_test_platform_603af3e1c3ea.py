@@ -13,15 +13,14 @@ We may submit the test codes to databricks and synapse cluster to confirm the be
 
 from feathr.utils.platform import is_databricks, is_jupyter, is_synapse
 
-def test_is_jupyter():
 
+def test_is_jupyter():
     assert not is_jupyter()
 
-def test_is_databricks():
 
+def test_is_databricks():
     assert not is_databricks()
 
+
 def test_is_synapse():
-
     assert not is_synapse()
-

@@ -9,7 +9,6 @@ from stix2 import Indicator as StixIndicator
 
 
 def create_indicator(indicator):
-
     pattern_mapping = {
         "artifact-sha1": "[artifact:hashes.'SHA-1' = '{}']",
         "artifact-sha256": "[artifact:hashes.'SHA-256' = '{}']",
@@ -62,7 +61,6 @@ def create_indicator(indicator):
 
 
 def export_bundle(indicators):
-
     stix_indicators = []
 
     for indicator in indicators:

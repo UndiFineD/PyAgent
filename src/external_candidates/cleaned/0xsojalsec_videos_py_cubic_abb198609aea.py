@@ -79,7 +79,6 @@ class CubicFormula(RootCoefScene):
     cf_dot_color = YELLOW
 
     def add_planes(self):
-
         super().add_planes()
 
         self.root_plane_label.next_to(self.root_plane, -self.plane_arrangement)
@@ -89,7 +88,6 @@ class CubicFormula(RootCoefScene):
         self.add_lower_planes()
 
     def add_lower_planes(self):
-
         sqrt_plane = ComplexPlane(**self.sqrt_plane_config)
 
         crt_plane = ComplexPlane(**self.crt_plane_config)
@@ -171,7 +169,6 @@ class CubicFormula(RootCoefScene):
         self.cf_label = cf_label
 
     def get_coef_poly(self):
-
         return OldTex(
             "x^3 + {0}x^2 + {p}x + {q}",
             tex_to_color_map={
@@ -182,17 +179,14 @@ class CubicFormula(RootCoefScene):
         )
 
     def add_c_labels(self):
-
         self.c_dot_labels = self.add_dot_labels(VGroup(*map(Tex, ["q", "p", "0"])), self.coef_dots)
 
     def get_c_symbols(self, coef_poly):
-
         return VGroup(*(coef_poly.get_part_by_tex(tex) for tex in ["q", "p", "0"]))
 
     #
 
     def add_dots(self):
-
         super().add_dots()
 
         self.add_sqrt_dots()
@@ -202,13 +196,11 @@ class CubicFormula(RootCoefScene):
         self.add_cf_dots()
 
     def add_sqrt_dots(self):
-
         sqrt_dots = Dot(**self.dot_style).replicate(2)
 
         sqrt_dots.set_color(self.sqrt_dot_color)
 
         def update_sqrt_dots(dots):
-
             q, p, zero, one = self.get_coefs()
 
             disc = (q**2 / 4) + (p**3 / 27)
@@ -232,18 +224,15 @@ class CubicFormula(RootCoefScene):
         self.delta_labels = self.add_dot_labels(VGroup(OldTex("\\delta_1"), OldTex("\\delta_2")), sqrt_dots)
 
     def get_deltas(self):
-
         return list(map(self.sqrt_plane.p2n, (d.get_center() for d in self.sqrt_dots)))
 
     def add_crt_dots(self):
-
         crt_dots = Dot(**self.dot_style).replicate(3).replicate(2)
 
         for dots, color in zip(crt_dots, self.crt_dot_colors):
             dots.set_color(color)
 
         def update_crt_dots(dot_triples):
-
             q, p, zero, one = self.get_coefs()
 
             deltas = self.get_deltas()
@@ -264,15 +253,12 @@ class CubicFormula(RootCoefScene):
         self.crt_dots = crt_dots
 
     def get_cube_root_values(self):
-
         return [[self.crt_plane.p2n(d.get_center()) for d in triple] for triple in self.crt_dots]
 
     def add_crt_lines(self):
-
         crt_lines = VGroup(*(Line(stroke_color=color, stroke_width=1).replicate(3) for color in self.crt_dot_colors))
 
         def update_crt_lines(crt_lines):
-
             cube_root_values = self.get_cube_root_values()
 
             origin = self.crt_plane.n2p(0)
@@ -288,13 +274,11 @@ class CubicFormula(RootCoefScene):
         self.crt_lines = crt_lines
 
     def add_cf_dots(self):
-
         cf_dots = Dot(**self.dot_style).replicate(9)
 
         cf_dots.set_fill(self.root_color, opacity=0.5)
 
         def update_cf_dots(dots):
-
             cube_root_values = self.get_cube_root_values()
 
             for dot, (z1, z2) in zip(dots, it.product(*cube_root_values)):
@@ -319,7 +303,6 @@ class CubicFormula(RootCoefScene):
         self.add(alt_root_dots)
 
     def add_cf_lines(self):
-
         cf_lines = VGroup(
             Line(stroke_color=self.crt_dot_colors[0]).replicate(9),
             Line(stroke_color=self.crt_dot_colors[1]).replicate(3),
@@ -328,7 +311,6 @@ class CubicFormula(RootCoefScene):
         cf_lines.set_stroke(width=1)
 
         def update_cf_lines(cf_lines):
-
             cube_root_values = self.get_cube_root_values()
 
             for z1, line in zip(cube_root_values[1], cf_lines[1]):
@@ -352,7 +334,6 @@ class CubicFormula(RootCoefScene):
 
 class CubicFormulaTest(CubicFormula):
     def construct(self):
-
         pass
 
         # self.embed()

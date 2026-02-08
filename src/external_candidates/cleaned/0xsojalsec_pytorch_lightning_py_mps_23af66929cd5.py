@@ -70,7 +70,6 @@ class MPSAccelerator(Accelerator):
 
     @override
     def teardown(self) -> None:
-
         pass
 
     @staticmethod
@@ -113,13 +112,11 @@ class MPSAccelerator(Accelerator):
     @staticmethod
     @override
     def name() -> str:
-
         return "mps"
 
     @classmethod
     @override
     def register_accelerators(cls, accelerator_registry: _AcceleratorRegistry) -> None:
-
         accelerator_registry.register(
             cls.name(),
             cls,

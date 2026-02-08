@@ -17,7 +17,6 @@ def wait_with_statusbar(
     interval_seconds=1.0,
     timeout_seconds=60 * 60,
 ) -> bool:
-
     if scheduler.get_result(job_id):
         # Do not render the component at all if the job has already finished
 

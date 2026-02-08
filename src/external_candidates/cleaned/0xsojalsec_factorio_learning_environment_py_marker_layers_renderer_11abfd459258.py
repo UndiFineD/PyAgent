@@ -5,7 +5,6 @@
 
 from typing import Callable, Dict
 
-
 from fle.env.entities import Layer, Position
 
 from fle.env.tools.admin.render_simple.layers.layer_renderer import LayerRenderer
@@ -17,14 +16,12 @@ class MarkersLayerRenderer(LayerRenderer):
     """Renderer for markers (origin, player position)"""
 
     def __init__(self, config, shape_renderer):
-
         super().__init__(config)
 
         self.shape_renderer = shape_renderer
 
     @property
     def layer_name(self) -> str:
-
         return "markers"
 
     def render(

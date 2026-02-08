@@ -36,7 +36,6 @@ from .retrieval import ImageCache, RetrievalDBOW
 
 class LongTermLoopClosure:
     def __init__(self, cfg, patchgraph):
-
         self.cfg = cfg
 
         # Data structures to manage retrieval
@@ -100,7 +99,6 @@ class LongTermLoopClosure:
         ]
 
     def __call__(self, img, n):
-
         img_np = K.tensor_to_image(img)
 
         self.retrieval(img_np, n)
@@ -108,7 +106,6 @@ class LongTermLoopClosure:
         self.imcache(img_np, n)
 
     def keyframe(self, k):
-
         self.retrieval.keyframe(k)
 
         self.imcache.keyframe(k)
@@ -236,7 +233,6 @@ class LongTermLoopClosure:
         }
 
     def attempt_loop_closure(self, n):
-
         if self.lc_in_progress:
             return
 
@@ -267,7 +263,6 @@ class LongTermLoopClosure:
         self.imcache.save_up_to(n - self.cfg.REMOVAL_WINDOW - 1)
 
     def terminate(self, n):
-
         self.retrieval.save_up_to(n - 1)
 
         self.imcache.save_up_to(n - 1)

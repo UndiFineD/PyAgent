@@ -187,7 +187,6 @@ class ConditionalDecoder(nn.Module):
         self.initialize_weights()
 
     def initialize_weights(self):
-
         for m in self.modules():
             if isinstance(m, nn.Conv1d):
                 nn.init.kaiming_normal_(m.weight, nonlinearity="relu")
@@ -209,8 +208,6 @@ class ConditionalDecoder(nn.Module):
     def forward(self, x, mask, mu, t, spks=None, cond=None):
         """Forward pass of the UNet1DConditional model.
 
-
-
         Args:
 
             x (torch.Tensor): shape (batch_size, in_channels, time)
@@ -223,15 +220,11 @@ class ConditionalDecoder(nn.Module):
 
             cond (_type_, optional): placeholder for future use. Defaults to None.
 
-
-
         Raises:
 
             ValueError: _description_
 
             ValueError: _description_
-
-
 
         Returns:
 

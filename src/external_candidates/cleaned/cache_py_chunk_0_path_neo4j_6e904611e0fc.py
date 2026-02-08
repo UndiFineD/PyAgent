@@ -7,9 +7,7 @@
 
 # NOTE: extracted with static-only rules; review before use
 
+
 class Path:
-
     def __init__(self, nodes):
-
         self.nodes = nodes
-

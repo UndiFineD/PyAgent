@@ -206,7 +206,6 @@ class RMSNorm(nn.Module):
     """
 
     def __init__(self, dim: int, eps: float = 1e-6):
-
         super().__init__()
 
         self.eps = eps
@@ -214,17 +213,14 @@ class RMSNorm(nn.Module):
         self.weight = nn.Parameter(torch.ones(dim))
 
     def _norm(self, x: torch.Tensor):
-
         return x * torch.rsqrt(x.pow(2).mean(-1, keepdim=True) + self.eps)
 
     def forward(self, x: torch.Tensor):
-
         output = self._norm(x.float()).type_as(x)
 
         return output * self.weight
 
     def reset_parameters(self):
-
         torch.nn.init.ones_(self.weight)  # type: ignore
 
 
@@ -256,7 +252,6 @@ class Attention(nn.Module):
     """
 
     def __init__(self, model_args: ModelArgs):
-
         super().__init__()
 
         self.n_heads = model_args.n_heads
@@ -276,7 +271,6 @@ class Attention(nn.Module):
         self.wo = nn.Linear(model_args.n_heads * self.head_dim, model_args.dim, bias=False)
 
     def init_weights(self, init_std: float):
-
         for linear in (self.wq, self.wk, self.wv):
             nn.init.trunc_normal_(linear.weight, mean=0.0, std=0.02)
 
@@ -366,7 +360,6 @@ class FeedForward(nn.Module):
         multiple_of: int,
         ffn_dim_multiplier: Optional[float],
     ):
-
         super().__init__()
 
         hidden_dim = int(2 * hidden_dim / 3)
@@ -385,11 +378,9 @@ class FeedForward(nn.Module):
         self.w3 = nn.Linear(dim, hidden_dim, bias=False)
 
     def forward(self, x):
-
         return self.w2(F.silu(self.w1(x)) * self.w3(x))
 
     def init_weights(self, init_std: float):
-
         nn.init.trunc_normal_(self.w1.weight, mean=0.0, std=0.02)
 
         for linear in (self.w2, self.w3):
@@ -426,7 +417,6 @@ class TransformerBlock(nn.Module):
     """
 
     def __init__(self, layer_id: int, model_args: ModelArgs):
-
         super().__init__()
 
         self.n_heads = model_args.n_heads
@@ -480,7 +470,6 @@ class TransformerBlock(nn.Module):
         return h + self.feed_forward(self.ffn_norm(h))
 
     def init_weights(self):
-
         for norm in (self.attention_norm, self.ffn_norm):
             norm.reset_parameters()
 
@@ -517,7 +506,6 @@ class Transformer(nn.Module):
     """
 
     def __init__(self, model_args: ModelArgs):
-
         super().__init__()
 
         self.model_args = model_args
@@ -556,7 +544,6 @@ class Transformer(nn.Module):
         self.init_weights()
 
     def reset_parameters(self):
-
         with torch.device(self.freqs_cis.device):
             self.freqs_cis = self._precompute_freqs_cis()
 
@@ -606,7 +593,6 @@ class Transformer(nn.Module):
         )
 
     def _precompute_freqs_cis(self) -> torch.Tensor:
-
         return precompute_freqs_cis(
             self.model_args.dim // self.model_args.n_heads,
             # Need to compute until at least the max token limit for generation

@@ -43,13 +43,11 @@ from typing_extensions import override
 
 
 def _profile_nothing() -> None:
-
     pass
 
 
 class _DataFetcher(Iterator):
     def __init__(self) -> None:
-
         self._combined_loader: Optional[CombinedLoader] = None
 
         self.iterator: Optional[Iterator] = None
@@ -66,7 +64,6 @@ class _DataFetcher(Iterator):
 
     @property
     def combined_loader(self) -> CombinedLoader:
-
         if self._combined_loader is None:
             raise MisconfigurationException(
                 f"`{self.__class__.__name__}` should have been `setup` with a `CombinedLoader`."
@@ -75,12 +72,10 @@ class _DataFetcher(Iterator):
         return self._combined_loader
 
     def setup(self, combined_loader: CombinedLoader) -> None:
-
         self._combined_loader = combined_loader
 
     @override
     def __iter__(self) -> "_DataFetcher":
-
         self.iterator = iter(self.combined_loader)
 
         self.reset()
@@ -89,7 +84,6 @@ class _DataFetcher(Iterator):
 
     @override
     def __next__(self) -> _ITERATOR_RETURN:
-
         assert self.iterator is not None
 
         self._start_profiler()
@@ -113,7 +107,6 @@ class _DataFetcher(Iterator):
         return batch
 
     def reset(self) -> None:
-
         self.fetched = 0
 
         # teardown calls `reset()`, and if it happens early, `combined_loader` can still be None
@@ -124,7 +117,6 @@ class _DataFetcher(Iterator):
             self.done = self.length == 0
 
     def teardown(self) -> None:
-
         self.reset()
 
         if self._combined_loader is not None:
@@ -147,7 +139,6 @@ class _PrefetchDataFetcher(_DataFetcher):
     """
 
     def __init__(self, prefetch_batches: int = 1) -> None:
-
         super().__init__()
 
         if prefetch_batches < 0:
@@ -159,7 +150,6 @@ class _PrefetchDataFetcher(_DataFetcher):
 
     @override
     def __iter__(self) -> "_PrefetchDataFetcher":
-
         super().__iter__()
 
         if self.length is not None:
@@ -186,7 +176,6 @@ class _PrefetchDataFetcher(_DataFetcher):
 
     @override
     def __next__(self) -> _ITERATOR_RETURN:
-
         if self.batches:
             # there are pre-fetched batches already from a previous `prefetching` call.
 
@@ -218,7 +207,6 @@ class _PrefetchDataFetcher(_DataFetcher):
 
     @override
     def reset(self) -> None:
-
         super().reset()
 
         self.batches = []
@@ -246,7 +234,6 @@ class _DataLoaderIterDataFetcher(_DataFetcher):
     """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-
         super().__init__(*args, **kwargs)
 
         self._batch: Any = None
@@ -257,7 +244,6 @@ class _DataLoaderIterDataFetcher(_DataFetcher):
 
     @override
     def __iter__(self) -> "_DataLoaderIterDataFetcher":
-
         super().__iter__()
 
         self.iterator_wrapper = iter(_DataFetcherWrapper(self))
@@ -266,7 +252,6 @@ class _DataLoaderIterDataFetcher(_DataFetcher):
 
     @override
     def __next__(self) -> Iterator["_DataFetcherWrapper"]:  # type: ignore[override]
-
         if self.done:
             raise StopIteration
 
@@ -274,7 +259,6 @@ class _DataLoaderIterDataFetcher(_DataFetcher):
 
     @override
     def reset(self) -> None:
-
         super().reset()
 
         self._batch = None
@@ -286,27 +270,22 @@ class _DataLoaderIterDataFetcher(_DataFetcher):
 
 class _DataFetcherWrapper(Iterator):
     def __init__(self, data_fetcher: _DataLoaderIterDataFetcher) -> None:
-
         self.data_fetcher = data_fetcher
 
     @property
     def done(self) -> bool:
-
         return self.data_fetcher.done
 
     @property
     def fetched(self) -> int:
-
         return self.data_fetcher.fetched
 
     @property
     def length(self) -> Optional[int]:
-
         return self.data_fetcher.length
 
     @override
     def __next__(self) -> _ITERATOR_RETURN:
-
         fetcher = self.data_fetcher
 
         if fetcher.done:

@@ -11,8 +11,8 @@ from ... import callbacks
 
 from ..base_agent import BaseAgent
 
-class BloodhoundAgent(BaseAgent):
 
+class BloodhoundAgent(BaseAgent):
     """Bloodhound - Tracks issues like following a scent trail.
 
     Expert in `bd` (local issue tracker with dependencies).
@@ -22,45 +22,30 @@ class BloodhoundAgent(BaseAgent):
     """
 
     @property
-
     def name(self) -> str:
-
         return "bloodhound"
 
     @property
-
     def display_name(self) -> str:
-
         return "Bloodhound 🐕‍🦺"
 
     @property
-
     def description(self) -> str:
-
         return "Issue tracking specialist - follows the scent of dependencies with bd"
 
     def get_available_tools(self) -> list[str]:
-
         """Get the list of tools available to Bloodhound."""
 
         return [
-
             # Shell for bd commands
-
             "agent_run_shell_command",
-
             # Transparency - always share the sniff report!
-
             "agent_share_your_reasoning",
-
             # Read files to understand issue context
-
             "read_file",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         """Get Bloodhound's system prompt."""
 
         puppy_name = get_puppy_name()
@@ -460,8 +445,6 @@ Now go follow that scent! 🐕‍🦺✨
         prompt_additions = callbacks.on_load_prompt()
 
         if len(prompt_additions):
-
             result += "\n".join(prompt_additions)
 
         return result
-

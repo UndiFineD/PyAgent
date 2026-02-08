@@ -17,56 +17,37 @@ from agno.tools import Toolkit
 
 from agno.utils.log import log_debug, log_error
 
+
 class ReasoningTools(Toolkit):
-
     def __init__(
-
         self,
-
         think: bool = True,
-
         analyze: bool = True,
-
         instructions: Optional[str] = None,
-
         add_instructions: bool = False,
-
         add_few_shot: bool = False,
-
         few_shot_examples: Optional[str] = None,
-
         **kwargs,
-
     ):
-
         """A toolkit that provides step-by-step reasoning tools: Think and Analyze."""
 
         super().__init__(
-
             name="reasoning_tools",
-
             instructions=instructions,
-
             add_instructions=add_instructions,
-
             **kwargs,
-
         )
 
         # Add instructions for using this toolkit
 
         if instructions is None:
-
             self.instructions = "<reasoning_instructions>\n" + self.DEFAULT_INSTRUCTIONS
 
             if add_few_shot:
-
                 if few_shot_examples is not None:
-
                     self.instructions += "\n" + few_shot_examples
 
                 else:
-
                     self.instructions += "\n" + self.FEW_SHOT_EXAMPLES
 
             self.instructions += "\n</reasoning_instructions>\n"
@@ -74,29 +55,19 @@ class ReasoningTools(Toolkit):
         # Register each tool based on the init flags
 
         if think:
-
             self.register(self.think)
 
         if analyze:
-
             self.register(self.analyze)
 
     def think(
-
         self,
-
         agent: Union[Agent, Team],
-
         title: str,
-
         thought: str,
-
         action: Optional[str] = None,
-
         confidence: float = 0.8,
-
     ) -> str:
-
         """Use this tool as a scratchpad to reason about the question and work through it step-by-step.
 
         This tool will help you break down complex problems into logical steps and track the reasoning process.
@@ -120,63 +91,37 @@ class ReasoningTools(Toolkit):
         """
 
         try:
-
             log_debug(f"Thought about {title}")
 
             # Create a reasoning step
 
             reasoning_step = ReasoningStep(
-
                 title=title,
-
                 reasoning=thought,
-
                 action=action,
-
                 next_action=NextAction.CONTINUE,
-
                 confidence=confidence,
-
             )
 
             # Add this step to the Agent's session state
 
             if agent.session_state is None:
-
                 agent.session_state = {}
 
             if "reasoning_steps" not in agent.session_state:
-
                 agent.session_state["reasoning_steps"] = {}
 
             if agent.run_id not in agent.session_state["reasoning_steps"]:
-
                 agent.session_state["reasoning_steps"][agent.run_id] = []
 
-            agent.session_state["reasoning_steps"][agent.run_id].append(
-
-                reasoning_step.model_dump_json()
-
-            )
+            agent.session_state["reasoning_steps"][agent.run_id].append(reasoning_step.model_dump_json())
 
             # Return all previous reasoning_steps and the new reasoning_step
 
-            if (
-
-                "reasoning_steps" in agent.session_state
-
-                and agent.run_id in agent.session_state["reasoning_steps"]
-
-            ):
-
+            if "reasoning_steps" in agent.session_state and agent.run_id in agent.session_state["reasoning_steps"]:
                 formatted_reasoning_steps = ""
 
-                for i, step in enumerate(
-
-                    agent.session_state["reasoning_steps"][agent.run_id], 1
-
-                ):
-
+                for i, step in enumerate(agent.session_state["reasoning_steps"][agent.run_id], 1):
                     step_parsed = ReasoningStep.model_validate_json(step)
 
                     step_str = dedent(f"""\
@@ -200,29 +145,19 @@ Confidence: {step_parsed.confidence}
             return reasoning_step.model_dump_json()
 
         except Exception as e:
-
             log_error(f"Error recording thought: {e}")
 
             return f"Error recording thought: {e}"
 
     def analyze(
-
         self,
-
         agent: Union[Agent, Team],
-
         title: str,
-
         result: str,
-
         analysis: str,
-
         next_action: str = "continue",
-
         confidence: float = 0.8,
-
     ) -> str:
-
         """Use this tool to analyze results from a reasoning step and determine next actions.
 
         Args:
@@ -244,7 +179,6 @@ Confidence: {step_parsed.confidence}
         """
 
         try:
-
             log_debug(f"Analyzed {title}")
 
             # Map string next_action to enum
@@ -252,67 +186,40 @@ Confidence: {step_parsed.confidence}
             next_action_enum = NextAction.CONTINUE
 
             if next_action.lower() == "validate":
-
                 next_action_enum = NextAction.VALIDATE
 
             elif next_action.lower() in ["final", "final_answer", "finalize"]:
-
                 next_action_enum = NextAction.FINAL_ANSWER
 
             # Create a reasoning step for the analysis
 
             reasoning_step = ReasoningStep(
-
                 title=title,
-
                 result=result,
-
                 reasoning=analysis,
-
                 next_action=next_action_enum,
-
                 confidence=confidence,
-
             )
 
             # Add this step to the Agent's session state
 
             if agent.session_state is None:
-
                 agent.session_state = {}
 
             if "reasoning_steps" not in agent.session_state:
-
                 agent.session_state["reasoning_steps"] = {}
 
             if agent.run_id not in agent.session_state["reasoning_steps"]:
-
                 agent.session_state["reasoning_steps"][agent.run_id] = []
 
-            agent.session_state["reasoning_steps"][agent.run_id].append(
-
-                reasoning_step.model_dump_json()
-
-            )
+            agent.session_state["reasoning_steps"][agent.run_id].append(reasoning_step.model_dump_json())
 
             # Return all previous reasoning_steps and the new reasoning_step
 
-            if (
-
-                "reasoning_steps" in agent.session_state
-
-                and agent.run_id in agent.session_state["reasoning_steps"]
-
-            ):
-
+            if "reasoning_steps" in agent.session_state and agent.run_id in agent.session_state["reasoning_steps"]:
                 formatted_reasoning_steps = ""
 
-                for i, step in enumerate(
-
-                    agent.session_state["reasoning_steps"][agent.run_id], 1
-
-                ):
-
+                for i, step in enumerate(agent.session_state["reasoning_steps"][agent.run_id], 1):
                     step_parsed = ReasoningStep.model_validate_json(step)
 
                     step_str = dedent(f"""\
@@ -336,7 +243,6 @@ Confidence: {step_parsed.confidence}
             return reasoning_step.model_dump_json()
 
         except Exception as e:
-
             log_error(f"Error recording analysis: {e}")
 
             return f"Error recording analysis: {e}"
@@ -348,7 +254,6 @@ Confidence: {step_parsed.confidence}
     # --------------------------------------------------------------------------------
 
     DEFAULT_INSTRUCTIONS = dedent(
-
         """\
 
         You have access to the `think` and `analyze` tools to work through problems step-by-step and structure your thought process. You must ALWAYS `think` before making tool calls or generating a response.
@@ -378,11 +283,9 @@ Confidence: {step_parsed.confidence}
         - **Keep Thoughts Internal:** The reasoning steps (thoughts and analyses) are for your internal process only. Do not share them directly with the user.
 
         - **Conclude Clearly:** When your analysis determines the `next_action` is `final_answer`, provide a concise and accurate final answer to the user."""
-
     )
 
     FEW_SHOT_EXAMPLES = dedent(
-
         """
 
         Below are examples demonstrating how to use the `think` and `analyze` tools.
@@ -506,6 +409,4 @@ Confidence: {step_parsed.confidence}
         *Agent's Final Answer to User:*
 
         The capital of France is Paris. Its estimated population (city proper) is approximately 2.1 million as of early 2024."""
-
     )
-

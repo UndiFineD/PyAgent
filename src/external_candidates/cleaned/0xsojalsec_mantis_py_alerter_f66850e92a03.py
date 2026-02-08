@@ -25,7 +25,6 @@ from mantis.utils.notifications import Notifications, NotificationsUtils
 class Alerter:
     @staticmethod
     async def send_alerts(log_dict, args):
-
         try:
             notify_config = ConfigProvider.get_config().notify
 
@@ -69,7 +68,6 @@ class Alerter:
 
     @staticmethod
     async def get_inventory_slack_message(assets, findings, asset_tag_list, finding_tag_list):
-
         blocks = []
 
         section = {"type": "section", "text": {"type": "mrkdwn", "text": ""}}
@@ -198,7 +196,6 @@ class Alerter:
 
     @staticmethod
     async def fetch_results(asset_types, finding_types, args, app):
-
         assets = await Alerter.get_assets_by_type_discovered(asset_types=asset_types, args=args, app=app)
 
         findings = await Alerter.get_findings_by_type_discovered(finding_types=finding_types, args=args, app=app)
@@ -207,7 +204,6 @@ class Alerter:
 
     @staticmethod
     async def get_assets_by_type_discovered(asset_types, args, app):
-
         pipeline_type_discovered = []
 
         if len(app):
@@ -245,7 +241,6 @@ class Alerter:
 
     @staticmethod
     async def get_findings_by_type_discovered(finding_types, args, app):
-
         pipeline_type_discovered = []
 
         if len(app):
@@ -284,7 +279,6 @@ class Alerter:
 
     @staticmethod
     def get_stats_slack_message(logs):
-
         scan_stats = {}
 
         scan_stats["scan_start"] = logs.scan_start_time

@@ -45,7 +45,6 @@ class LLMJudge(BaseEvaluator):
     """LLM judge evaluator."""
 
     def __init__(self, config: dict):
-
         super().__init__(config)
 
         # Initialize OpenAI client
@@ -93,7 +92,6 @@ class LLMJudge(BaseEvaluator):
         pbar = tqdm(total=len(answer_results), desc="⚖️  Evaluate Progress", unit="qa")
 
         async def evaluate_single(answer_result: AnswerResult):
-
             async with semaphore:
                 result = await self._evaluate_single_answer(answer_result)
 

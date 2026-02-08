@@ -140,7 +140,6 @@ class TorchSyncBatchNorm(LayerSync):
 class _BatchNormXd(torch.nn.modules.batchnorm._BatchNorm):
     @override
     def _check_input_dim(self, input: Tensor) -> None:
-
         # The only difference between BatchNorm1d, BatchNorm2d, BatchNorm3d, etc
 
         # is this method that is overwritten by the subclass.

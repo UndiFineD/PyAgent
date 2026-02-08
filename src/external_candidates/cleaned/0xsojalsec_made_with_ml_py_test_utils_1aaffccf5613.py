@@ -19,7 +19,6 @@ from ray.train.torch import get_device
 
 
 def test_set_seed():
-
     utils.set_seeds()
 
     a = np.random.randn(2, 3)
@@ -38,7 +37,6 @@ def test_set_seed():
 
 
 def test_save_and_load_dict():
-
     with tempfile.TemporaryDirectory() as dp:
         d = {"hello": "world"}
 
@@ -52,7 +50,6 @@ def test_save_and_load_dict():
 
 
 def test_pad_array():
-
     arr = np.array([[1, 2], [1, 2, 3]], dtype="object")
 
     padded_arr = np.array([[1, 2, 0], [1, 2, 3]])
@@ -61,7 +58,6 @@ def test_pad_array():
 
 
 def test_collate_fn():
-
     batch = {
         "ids": np.array([[1, 2], [1, 2, 3]], dtype="object"),
         "masks": np.array([[1, 1], [1, 1, 1]], dtype="object"),
@@ -88,5 +84,4 @@ def test_collate_fn():
     ],
 )
 def test_dict_to_list(d, keys, list):
-
     assert utils.dict_to_list(d, keys=keys) == list

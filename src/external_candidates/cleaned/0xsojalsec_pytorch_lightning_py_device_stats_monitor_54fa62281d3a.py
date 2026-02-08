@@ -174,7 +174,6 @@ class DeviceStatsMonitor(Callback):
     """
 
     def __init__(self, cpu_stats: Optional[bool] = None) -> None:
-
         self._cpu_stats = cpu_stats
 
     @override
@@ -184,7 +183,6 @@ class DeviceStatsMonitor(Callback):
         pl_module: "pl.LightningModule",
         stage: str,
     ) -> None:
-
         if stage != "fit":
             return
 
@@ -201,7 +199,6 @@ class DeviceStatsMonitor(Callback):
             )
 
     def _get_and_log_device_stats(self, trainer: "pl.Trainer", key: str) -> None:
-
         if not trainer._logger_connector.should_update_logs:
             return
 
@@ -239,7 +236,6 @@ class DeviceStatsMonitor(Callback):
         batch: Any,
         batch_idx: int,
     ) -> None:
-
         self._get_and_log_device_stats(trainer, "on_train_batch_start")
 
     @override
@@ -251,7 +247,6 @@ class DeviceStatsMonitor(Callback):
         batch: Any,
         batch_idx: int,
     ) -> None:
-
         self._get_and_log_device_stats(trainer, "on_train_batch_end")
 
     @override
@@ -263,7 +258,6 @@ class DeviceStatsMonitor(Callback):
         batch_idx: int,
         dataloader_idx: int = 0,
     ) -> None:
-
         self._get_and_log_device_stats(trainer, "on_validation_batch_start")
 
     @override
@@ -276,7 +270,6 @@ class DeviceStatsMonitor(Callback):
         batch_idx: int,
         dataloader_idx: int = 0,
     ) -> None:
-
         self._get_and_log_device_stats(trainer, "on_validation_batch_end")
 
     @override
@@ -288,7 +281,6 @@ class DeviceStatsMonitor(Callback):
         batch_idx: int,
         dataloader_idx: int = 0,
     ) -> None:
-
         self._get_and_log_device_stats(trainer, "on_test_batch_start")
 
     @override
@@ -301,10 +293,8 @@ class DeviceStatsMonitor(Callback):
         batch_idx: int,
         dataloader_idx: int = 0,
     ) -> None:
-
         self._get_and_log_device_stats(trainer, "on_test_batch_end")
 
 
 def _prefix_metric_keys(metrics_dict: dict[str, float], prefix: str, separator: str) -> dict[str, float]:
-
     return {prefix + separator + k: v for k, v in metrics_dict.items()}

@@ -16,7 +16,6 @@ class ConnectionsLayerRenderer(LayerRenderer):
     """Renderer for underground connections (belts and pipes)"""
 
     def __init__(self, config, color_manager, connection_renderer):
-
         super().__init__(config)
 
         self.color_manager = color_manager
@@ -25,7 +24,6 @@ class ConnectionsLayerRenderer(LayerRenderer):
 
     @property
     def layer_name(self) -> str:
-
         return "connections"
 
     def render(

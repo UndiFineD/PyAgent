@@ -7,7 +7,6 @@ from colorama import Fore, Style
 
 
 def banner():
-
     banner = (
         Fore.BLUE
         + """

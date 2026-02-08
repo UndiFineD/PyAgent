@@ -11,7 +11,6 @@ from torch import Tensor
 
 
 def policy_loss(advantages: torch.Tensor, ratio: torch.Tensor, clip_coef: float) -> torch.Tensor:
-
     pg_loss1 = -advantages * ratio
 
     pg_loss2 = -advantages * torch.clamp(ratio, 1 - clip_coef, 1 + clip_coef)
@@ -27,7 +26,6 @@ def value_loss(
     clip_vloss: bool,
     vf_coef: float,
 ) -> Tensor:
-
     new_values = new_values.view(-1)
 
     if not clip_vloss:
@@ -40,5 +38,4 @@ def value_loss(
 
 
 def entropy_loss(entropy: Tensor, ent_coef: float) -> Tensor:
-
     return -entropy.mean() * ent_coef

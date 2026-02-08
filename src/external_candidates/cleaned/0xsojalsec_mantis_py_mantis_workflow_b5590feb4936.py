@@ -13,5 +13,4 @@ from mantis.modules.workflow import Workflow
 class MantisWorkflow:
     @staticmethod
     def select_workflow(args: ArgsModel) -> None:
-
         asyncio.run(Workflow.workflow_executor(args))

@@ -38,7 +38,6 @@ class DefaultErrorHandler(ErrorHandler):
     """Default error handler"""
 
     def __init__(self, logger: Optional[logging.Logger] = None):
-
         self.logger = logger or logging.getLogger(__name__)
 
     async def handle_error(self, error: Exception, context: Dict[str, Any]) -> bool:

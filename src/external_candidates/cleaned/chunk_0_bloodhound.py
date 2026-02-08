@@ -100,7 +100,6 @@ def add_user_bh(user, domain, logger, config):
 
 
 def _add_with_domain(user_info, domain, tx, logger):
-
     if user_info["username"][-1] == "$":
         user_owned = f"{user_info['username'][:-1]}.{domain}"
 
@@ -129,7 +128,6 @@ def _add_with_domain(user_info, domain, tx, logger):
 
 
 def _add_without_domain(user_info, tx, logger):
-
     if user_info["username"][-1] == "$":
         user_owned = user_info["username"][:-1]
 

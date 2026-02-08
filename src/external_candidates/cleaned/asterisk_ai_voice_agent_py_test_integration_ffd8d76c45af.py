@@ -25,14 +25,12 @@ import pytest
 
 from src.config import AppConfig, load_config
 
-class TestConfigLoading:
 
+class TestConfigLoading:
     """Integration tests for load_config with real YAML files."""
 
     @pytest.fixture(autouse=True)
-
     def setup_env(self, monkeypatch):
-
         """Set up required environment variables for tests."""
 
         # Set minimal required env vars
@@ -44,7 +42,6 @@ class TestConfigLoading:
         monkeypatch.setenv("OPENAI_API_KEY", "sk-test-key")
 
     def test_load_example_config(self):
-
         """Should successfully load ai-agent.example.yaml."""
 
         config = load_config("config/ai-agent.example.yaml")
@@ -58,7 +55,6 @@ class TestConfigLoading:
         assert config.llm.api_key == "sk-test-key"
 
     def test_load_golden_openai_config(self):
-
         """Should successfully load golden OpenAI config."""
 
         config = load_config("config/ai-agent.golden-openai.yaml")
@@ -70,7 +66,6 @@ class TestConfigLoading:
         assert hasattr(config, "pipelines")
 
     def test_load_golden_deepgram_config(self):
-
         """Should successfully load golden Deepgram config."""
 
         config = load_config("config/ai-agent.golden-deepgram.yaml")
@@ -80,7 +75,6 @@ class TestConfigLoading:
         assert config.default_provider == "deepgram"
 
     def test_load_golden_local_hybrid_config(self):
-
         """Should successfully load golden local hybrid config."""
 
         config = load_config("config/ai-agent.golden-local-hybrid.yaml")
@@ -92,7 +86,6 @@ class TestConfigLoading:
         assert hasattr(config, "pipelines")
 
     def test_config_has_required_sections(self):
-
         """Should have all required configuration sections."""
 
         config = load_config("config/ai-agent.example.yaml")
@@ -110,7 +103,6 @@ class TestConfigLoading:
         assert config.downstream_mode is not None
 
     def test_credentials_from_env_override_yaml(self, monkeypatch):
-
         """SECURITY: Environment variables should override YAML credentials."""
 
         monkeypatch.setenv("ASTERISK_ARI_USERNAME", "env_user")
@@ -130,7 +122,6 @@ class TestConfigLoading:
         assert config.llm.api_key == "sk-env-key"
 
     def test_default_profiles_injected(self):
-
         """Should inject default telephony profile if missing."""
 
         config = load_config("config/ai-agent.example.yaml")
@@ -140,7 +131,6 @@ class TestConfigLoading:
         assert config.profiles["telephony_ulaw_8k"]["internal_rate_hz"] == 8000
 
     def test_pipelines_normalized(self):
-
         """Should normalize pipeline definitions."""
 
         config = load_config("config/ai-agent.example.yaml")
@@ -152,7 +142,6 @@ class TestConfigLoading:
         # All pipelines should have stt, llm, tts keys
 
         for pipeline_name, pipeline in config.pipelines.items():
-
             assert hasattr(pipeline, "stt")
 
             assert hasattr(pipeline, "llm")
@@ -160,7 +149,6 @@ class TestConfigLoading:
             assert hasattr(pipeline, "tts")
 
     def test_diagnostic_settings_from_env(self, monkeypatch):
-
         """Should apply diagnostic settings from environment variables."""
 
         monkeypatch.setenv("STREAMING_LOG_LEVEL", "debug")
@@ -174,7 +162,6 @@ class TestConfigLoading:
         assert config.streaming.logging_level == "debug"
 
     def test_barge_in_env_overrides(self, monkeypatch):
-
         """Should apply barge-in env var overrides."""
 
         monkeypatch.setenv("BARGE_IN_ENABLED", "false")
@@ -188,31 +175,23 @@ class TestConfigLoading:
         assert config.barge_in.min_ms == 500
 
     def test_nonexistent_file_raises_error(self):
-
         """Should raise FileNotFoundError for missing config file."""
 
         with pytest.raises(FileNotFoundError) as exc_info:
-
             load_config("config/nonexistent.yaml")
 
         assert "not found" in str(exc_info.value).lower()
 
     def test_absolute_path_supported(self):
-
         """Should support absolute paths to config files."""
 
-        abs_path = (
-
-            Path(__file__).parent.parent.parent / "config" / "ai-agent.example.yaml"
-
-        ).resolve()
+        abs_path = (Path(__file__).parent.parent.parent / "config" / "ai-agent.example.yaml").resolve()
 
         config = load_config(str(abs_path))
 
         assert isinstance(config, AppConfig)
 
     def test_config_version_preserved(self):
-
         """Should preserve config_version if present."""
 
         config = load_config("config/ai-agent.example.yaml")
@@ -223,14 +202,12 @@ class TestConfigLoading:
 
         assert config is not None
 
-class TestConfigIntegrity:
 
+class TestConfigIntegrity:
     """Tests to ensure refactored config behaves identically to original."""
 
     @pytest.fixture(autouse=True)
-
     def setup_env(self, monkeypatch):
-
         """Set up required environment variables."""
 
         monkeypatch.setenv("ASTERISK_ARI_USERNAME", "test_user")
@@ -240,35 +217,25 @@ class TestConfigIntegrity:
         monkeypatch.setenv("OPENAI_API_KEY", "sk-test-key")
 
     def test_all_example_configs_load_successfully(self):
-
         """All example configs should load without errors."""
 
         example_configs = [
-
             "config/ai-agent.example.yaml",
-
             "config/ai-agent.golden-openai.yaml",
-
             "config/ai-agent.golden-deepgram.yaml",
-
             "config/ai-agent.golden-local-hybrid.yaml",
-
         ]
 
         for config_path in example_configs:
-
             try:
-
                 config = load_config(config_path)
 
                 assert isinstance(config, AppConfig)
 
             except Exception as e:
-
                 pytest.fail(f"Failed to load {config_path}: {str(e)}")
 
     def test_provider_configs_preserved(self):
-
         """Provider configurations should be preserved correctly."""
 
         config = load_config("config/ai-agent.example.yaml")
@@ -280,7 +247,6 @@ class TestConfigIntegrity:
         assert isinstance(config.providers, dict)
 
     def test_streaming_config_complete(self):
-
         """Streaming configuration should have all expected fields."""
 
         config = load_config("config/ai-agent.example.yaml")
@@ -294,7 +260,6 @@ class TestConfigIntegrity:
         assert hasattr(config.streaming, "logging_level")
 
     def test_contexts_block_initialized(self):
-
         """Contexts block should be initialized (even if empty)."""
 
         config = load_config("config/ai-agent.example.yaml")
@@ -302,4 +267,3 @@ class TestConfigIntegrity:
         assert hasattr(config, "contexts")
 
         assert isinstance(config.contexts, dict)
-

@@ -11,8 +11,8 @@ from click.testing import CliRunner
 
 from feathrcli.cli import init
 
-def test_workspace_creation():
 
+def test_workspace_creation():
     """
 
     Test CLI init() is working properly.
@@ -22,7 +22,6 @@ def test_workspace_creation():
     runner = CliRunner()
 
     with runner.isolated_filesystem():
-
         result = runner.invoke(init, [])
 
         assert result.exit_code == 0
@@ -43,11 +42,7 @@ def test_workspace_creation():
 
         assert result.exit_code == 0
 
-        total_yaml_files = glob.glob(
-
-            os.path.join(test_folder_name, "*.yaml"), recursive=True
-
-        )
+        total_yaml_files = glob.glob(os.path.join(test_folder_name, "*.yaml"), recursive=True)
 
         # we should have exact 1 yaml file
 
@@ -62,4 +57,3 @@ def test_workspace_creation():
         expected_out = f"Feathr workspace ({test_folder_name}) already exist. Please use a new folder name.\n"
 
         assert expected_out in result.output
-

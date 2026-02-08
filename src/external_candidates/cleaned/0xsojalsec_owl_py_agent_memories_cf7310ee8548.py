@@ -69,7 +69,6 @@ class ChatHistoryMemory(AgentMemory):
         storage: Optional[BaseKeyValueStorage] = None,
         window_size: Optional[int] = None,
     ) -> None:
-
         if window_size is not None and not isinstance(window_size, int):
             raise TypeError("`window_size` must be an integer or None.")
 
@@ -83,19 +82,15 @@ class ChatHistoryMemory(AgentMemory):
         self._chat_history_block = ChatHistoryBlock(storage=storage)
 
     def retrieve(self) -> List[ContextRecord]:
-
         return self._chat_history_block.retrieve(self._window_size)
 
     def write_records(self, records: List[MemoryRecord]) -> None:
-
         self._chat_history_block.write_records(records)
 
     def get_context_creator(self) -> BaseContextCreator:
-
         return self._context_creator
 
     def clear(self) -> None:
-
         self._chat_history_block.clear()
 
 
@@ -128,7 +123,6 @@ class VectorDBMemory(AgentMemory):
         storage: Optional[BaseVectorStorage] = None,
         retrieve_limit: int = 3,
     ) -> None:
-
         self._context_creator = context_creator
 
         self._retrieve_limit = retrieve_limit
@@ -138,14 +132,12 @@ class VectorDBMemory(AgentMemory):
         self._current_topic: str = ""
 
     def retrieve(self) -> List[ContextRecord]:
-
         return self._vectordb_block.retrieve(
             self._current_topic,
             limit=self._retrieve_limit,
         )
 
     def write_records(self, records: List[MemoryRecord]) -> None:
-
         # Assume the last user input is the current topic.
 
         for record in records:
@@ -155,7 +147,6 @@ class VectorDBMemory(AgentMemory):
         self._vectordb_block.write_records(records)
 
     def get_context_creator(self) -> BaseContextCreator:
-
         return self._context_creator
 
 
@@ -193,7 +184,6 @@ class LongtermAgentMemory(AgentMemory):
         vector_db_block: Optional[VectorDBBlock] = None,
         retrieve_limit: int = 3,
     ) -> None:
-
         self.chat_history_block = chat_history_block or ChatHistoryBlock()
 
         self.vector_db_block = vector_db_block or VectorDBBlock()

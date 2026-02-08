@@ -11,10 +11,9 @@ import pytest
 
 from agno.document.reader.arxiv_reader import ArxivReader
 
+
 @pytest.fixture
-
 def mock_arxiv_result():
-
     result = Mock()
 
     result.title = "Test Paper"
@@ -24,25 +23,20 @@ def mock_arxiv_result():
     result.pdf_url = "https://arxiv.org/pdf/1234.5678"
 
     result.links = [
-
         Mock(href="https://arxiv.org/abs/1234.5678"),
-
         Mock(href="https://arxiv.org/pdf/1234.5678"),
-
     ]
 
     return result
 
+
 @pytest.fixture
-
 def mock_search_results(mock_arxiv_result):
-
     return [mock_arxiv_result for _ in range(2)]
 
+
 def test_read_basic_query(mock_search_results):
-
     with patch("arxiv.Search") as mock_search:
-
         # Setup mock search
 
         mock_search.return_value.results.return_value = mock_search_results
@@ -57,26 +51,13 @@ def test_read_basic_query(mock_search_results):
 
         assert all(doc.content == "This is a test paper abstract" for doc in documents)
 
-        assert all(
+        assert all(doc.meta_data["pdf_url"] == "https://arxiv.org/pdf/1234.5678" for doc in documents)
 
-            doc.meta_data["pdf_url"] == "https://arxiv.org/pdf/1234.5678"
+        assert all("https://arxiv.org/abs/1234.5678" in doc.meta_data["article_links"] for doc in documents)
 
-            for doc in documents
-
-        )
-
-        assert all(
-
-            "https://arxiv.org/abs/1234.5678" in doc.meta_data["article_links"]
-
-            for doc in documents
-
-        )
 
 def test_read_empty_results():
-
     with patch("arxiv.Search") as mock_search:
-
         # Setup mock search with no results
 
         mock_search.return_value.results.return_value = []
@@ -87,10 +68,9 @@ def test_read_empty_results():
 
         assert len(documents) == 0
 
+
 def test_read_max_results():
-
     with patch("arxiv.Search") as mock_search:
-
         # Create mock results
 
         mock_result = Mock()
@@ -106,9 +86,7 @@ def test_read_max_results():
         # Create a list generator that respects max_results
 
         def mock_results():
-
             for i in range(3):  # Only yield 3 results
-
                 yield mock_result
 
         # Setup the mock to use our generator
@@ -124,19 +102,14 @@ def test_read_max_results():
         assert len(documents) == 3
 
         mock_search.assert_called_once_with(
-
             query="quantum computing",
-
             max_results=3,
-
             sort_by=arxiv.SortCriterion.Relevance,
-
         )
 
+
 def test_read_sort_criterion():
-
     with patch("arxiv.Search") as mock_search:
-
         reader = ArxivReader()
 
         reader.read("quantum computing")
@@ -151,10 +124,9 @@ def test_read_sort_criterion():
 
         assert kwargs["sort_by"] == reader.sort_by
 
+
 def test_read_with_special_characters():
-
     with patch("arxiv.Search") as mock_search:
-
         mock_result = Mock()
 
         mock_result.title = "Test Paper"
@@ -174,19 +146,14 @@ def test_read_with_special_characters():
         assert len(documents) == 1
 
         mock_search.assert_called_once_with(
-
             query="quantum & computing + AI",
-
             max_results=reader.max_results,
-
             sort_by=reader.sort_by,
-
         )
 
+
 def test_read_different_sort_criterions():
-
     with patch("arxiv.Search") as mock_search:
-
         # Test with different sort criterions
 
         reader = ArxivReader()
@@ -198,13 +165,9 @@ def test_read_different_sort_criterions():
         reader.read("quantum computing")
 
         mock_search.assert_called_with(
-
             query="quantum computing",
-
             max_results=reader.max_results,
-
             sort_by=arxiv.SortCriterion.LastUpdatedDate,
-
         )
 
         # Test with SubmittedDate
@@ -214,21 +177,15 @@ def test_read_different_sort_criterions():
         reader.read("quantum computing")
 
         mock_search.assert_called_with(
-
             query="quantum computing",
-
             max_results=reader.max_results,
-
             sort_by=arxiv.SortCriterion.SubmittedDate,
-
         )
 
+
 @pytest.mark.asyncio
-
 async def test_async_read_basic_query(mock_search_results):
-
     with patch("arxiv.Search") as mock_search:
-
         # Setup mock search
 
         mock_search.return_value.results.return_value = mock_search_results
@@ -243,28 +200,14 @@ async def test_async_read_basic_query(mock_search_results):
 
         assert all(doc.content == "This is a test paper abstract" for doc in documents)
 
-        assert all(
+        assert all(doc.meta_data["pdf_url"] == "https://arxiv.org/pdf/1234.5678" for doc in documents)
 
-            doc.meta_data["pdf_url"] == "https://arxiv.org/pdf/1234.5678"
+        assert all("https://arxiv.org/abs/1234.5678" in doc.meta_data["article_links"] for doc in documents)
 
-            for doc in documents
-
-        )
-
-        assert all(
-
-            "https://arxiv.org/abs/1234.5678" in doc.meta_data["article_links"]
-
-            for doc in documents
-
-        )
 
 @pytest.mark.asyncio
-
 async def test_async_read_empty_results():
-
     with patch("arxiv.Search") as mock_search:
-
         # Setup mock search with no results
 
         mock_search.return_value.results.return_value = []
@@ -275,12 +218,10 @@ async def test_async_read_empty_results():
 
         assert len(documents) == 0
 
+
 @pytest.mark.asyncio
-
 async def test_async_read_max_results():
-
     with patch("arxiv.Search") as mock_search:
-
         # Create mock results
 
         mock_result = Mock()
@@ -296,9 +237,7 @@ async def test_async_read_max_results():
         # Create a list generator that respects max_results
 
         def mock_results():
-
             for i in range(3):  # Only yield 3 results
-
                 yield mock_result
 
         # Setup the mock to use our generator
@@ -314,21 +253,15 @@ async def test_async_read_max_results():
         assert len(documents) == 3
 
         mock_search.assert_called_once_with(
-
             query="quantum computing",
-
             max_results=3,
-
             sort_by=arxiv.SortCriterion.Relevance,
-
         )
 
+
 @pytest.mark.asyncio
-
 async def test_async_read_sort_criterion():
-
     with patch("arxiv.Search") as mock_search:
-
         reader = ArxivReader()
 
         await reader.async_read("quantum computing")
@@ -343,12 +276,10 @@ async def test_async_read_sort_criterion():
 
         assert kwargs["sort_by"] == reader.sort_by
 
+
 @pytest.mark.asyncio
-
 async def test_async_read_with_special_characters():
-
     with patch("arxiv.Search") as mock_search:
-
         mock_result = Mock()
 
         mock_result.title = "Test Paper"
@@ -368,12 +299,7 @@ async def test_async_read_with_special_characters():
         assert len(documents) == 1
 
         mock_search.assert_called_once_with(
-
             query="quantum & computing + AI",
-
             max_results=reader.max_results,
-
             sort_by=reader.sort_by,
-
         )
-

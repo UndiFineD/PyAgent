@@ -15,7 +15,6 @@ class SeparatorSplitter:
         chunk_overlap: int = 200,
         length_function: callable = len,
     ):
-
         self._separators = separators or []
 
         self._keep_separator = keep_separator
@@ -27,13 +26,11 @@ class SeparatorSplitter:
         self._length_function = length_function
 
     def split_tokens(self, tokens: List[int]) -> List[List[int]]:
-
         splits = self._split_tokens_with_separators(tokens)
 
         return self._merge_splits(splits)
 
     def _split_tokens_with_separators(self, tokens: List[int]) -> List[List[int]]:
-
         splits = []
 
         current_split = []
@@ -73,7 +70,6 @@ class SeparatorSplitter:
         return [s for s in splits if s]
 
     def _merge_splits(self, splits: List[List[int]]) -> List[List[int]]:
-
         if not splits:
             return []
 
@@ -105,7 +101,6 @@ class SeparatorSplitter:
         return merged_splits
 
     def _split_chunk(self, chunk: List[int]) -> List[List[int]]:
-
         result = []
 
         for i in range(0, len(chunk), self._chunk_size - self._chunk_overlap):
@@ -117,7 +112,6 @@ class SeparatorSplitter:
         return result
 
     def _enforce_overlap(self, chunks: List[List[int]]) -> List[List[int]]:
-
         result = []
 
         for i, chunk in enumerate(chunks):

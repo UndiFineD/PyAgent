@@ -14,7 +14,6 @@ from mantis.utils.base_request import BaseRequestExecutor
 
 class APIScanner:
     def __init__(self) -> None:
-
         self.scannerName = None
 
         self.endpoint = None
@@ -32,23 +31,18 @@ class APIScanner:
         self.asset_api_list = []
 
     async def init(self, args: ArgsModel):
-
         return await self.get_api_calls(args)
 
     def get_api_calls(self, args: ArgsModel):
-
         raise NotImplementedError
 
     def parse_response(self, response):
-
         raise NotImplementedError
 
     async def db_operations(self, output_dict, asset=None):
-
         raise NotImplementedError
 
     async def execute(self, tool_tuple):
-
         results = {}
 
         results["success"] = 0

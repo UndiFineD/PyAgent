@@ -19,7 +19,6 @@ from tests.unit.conftest import CONFIG_PATH, FIXTURE_PATH, config_path, fixture_
 @pytest.mark.parametrize("configfile", ["exclude_keys.yml", "exclude_values.yml"])
 @pytest.mark.parametrize("src", ["excluded.yml", "excluded.json", "excluded.xml"])
 def test_exclude_by_keys_and_values(configfile, src):
-
     args = parse_args([fixture_path(src)])
 
     args.config = core.load_config(config_path(configfile), FIXTURE_PATH)
@@ -47,7 +46,6 @@ def test_exclude_by_keys_and_values(configfile, src):
     ],
 )
 def test_detection_by_key(src, expected):
-
     args = parse_args([fixture_path(src)])
 
     secrets = core.run(args)
@@ -113,7 +111,6 @@ def test_detection_by_key(src, expected):
     ],
 )
 def test_detection_by_value(src, count):
-
     args = parse_args([fixture_path(src)])
 
     args.config = core.load_config(CONFIG_PATH.joinpath("detection_by_value.yml"))
@@ -130,7 +127,6 @@ def test_detection_by_value(src, count):
 
 
 def test_detection_by_filename():
-
     expected = map(
         fixture_path,
         [
@@ -167,7 +163,6 @@ def test_detection_by_filename():
     ],
 )
 def test_detection_by_rule(src, count, rule_id):
-
     args = parse_args(["-r", rule_id, fixture_path(src)])
 
     args.config = core.load_config(CONFIG_PATH.joinpath("detection_by_value.yml"))
@@ -208,7 +203,6 @@ def test_detection_by_rule(src, count, rule_id):
     ],
 )
 def test_is_static(key, value, expectation):
-
     args = parse_args([fixture_path()])
 
     args.config = core.load_config(CONFIG_PATH.joinpath("example.yml"))

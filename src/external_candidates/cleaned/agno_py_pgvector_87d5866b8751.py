@@ -5,8 +5,8 @@
 
 from agno.docker.app.postgres.postgres import PostgresDb
 
-class PgVectorDb(PostgresDb):
 
+class PgVectorDb(PostgresDb):
     # -*- App Name
 
     name: str = "pgvector"
@@ -16,4 +16,3 @@ class PgVectorDb(PostgresDb):
     image_name: str = "agnohq/pgvector"
 
     image_tag: str = "16"
-

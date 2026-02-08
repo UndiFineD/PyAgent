@@ -70,7 +70,6 @@ class ParallelStrategy(Strategy, ABC):
         checkpoint_io: Optional[CheckpointIO] = None,
         precision_plugin: Optional[Precision] = None,
     ):
-
         super().__init__(
             accelerator=accelerator,
             checkpoint_io=checkpoint_io,
@@ -91,43 +90,35 @@ class ParallelStrategy(Strategy, ABC):
 
     @property
     def global_rank(self) -> int:
-
         return self.cluster_environment.global_rank() if self.cluster_environment is not None else 0
 
     @property
     def local_rank(self) -> int:
-
         return self.cluster_environment.local_rank() if self.cluster_environment is not None else 0
 
     @property
     def node_rank(self) -> int:
-
         return self.cluster_environment.node_rank() if self.cluster_environment is not None else 0
 
     @property
     def world_size(self) -> int:
-
         return self.cluster_environment.world_size() if self.cluster_environment is not None else 1
 
     @property
     @override
     def is_global_zero(self) -> bool:
-
         return self.global_rank == 0
 
     @property
     def parallel_devices(self) -> Optional[list[torch.device]]:
-
         return self._parallel_devices
 
     @parallel_devices.setter
     def parallel_devices(self, parallel_devices: Optional[list[torch.device]]) -> None:
-
         self._parallel_devices = parallel_devices
 
     @property
     def distributed_sampler_kwargs(self) -> dict[str, Any]:
-
         return {
             "num_replicas": (len(self.parallel_devices) if self.parallel_devices is not None else 0),
             "rank": self.global_rank,
@@ -189,7 +180,6 @@ class ParallelStrategy(Strategy, ABC):
 
     @override
     def teardown(self) -> None:
-
         assert self.cluster_environment is not None
 
         self.cluster_environment.teardown()

@@ -14,7 +14,6 @@ class MarkerOCRStrategy(OCRStrategy):
     """Marker OCR Strategy"""
 
     def extract_text_from_pdf(self, pdf_bytes):
-
         model_lst = load_all_models()
 
         full_text, images, out_meta = convert_single_pdf(pdf_bytes, model_lst)

@@ -7,7 +7,6 @@ from wappalyzer.core.matcher import parse_pattern
 
 
 def query(soup, selector):
-
     try:
         return soup.select(selector)
 
@@ -16,7 +15,6 @@ def query(soup, selector):
 
 
 def match_dom(selectors, soup):
-
     if type(selectors) == str:
         clean_selector, version_type, confidence = parse_pattern(selectors)
 

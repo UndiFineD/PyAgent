@@ -7,7 +7,6 @@ from dataclasses import dataclass
 
 from typing import List
 
-
 from fle.env.instance import FactorioInstance
 
 from fle.eval.algorithms.mcts.mcts import MCTS
@@ -31,5 +30,4 @@ class InstanceGroup:
 
     @property
     def total_instances(self) -> int:
-
         return len(self.active_instances) + 1  # Including holdout

@@ -7,13 +7,11 @@
 
 # -*- coding: utf-8 -*-
 
-
 from dbs.abstract_db import AbstractDatabase
 
 
 class Database(AbstractDatabase):
     def __init__(self, msgstore, wa):
-
         schema = {
             "chat_view": {
                 "name": "chat_view",
@@ -51,7 +49,6 @@ class Database(AbstractDatabase):
         super(Database, self).__init__(msgstore, wa, schema=schema)
 
     def fetch_contact_chats(self):
-
         chat_view_table = self.schema["chat_view"]["name"]  # I will continue later
 
         sql_query = """
@@ -68,21 +65,13 @@ class Database(AbstractDatabase):
 
         DATETIME(ROUND(chat_view.sort_timestamp / 1000), 'unixepoch') as timestamp
 
-
-
         from chat_view INNER JOIN jid ON chat_view.raw_string_jid=jid.raw_string 
 
         INNER JOIN message ON chat_view.last_message_row_id = message._id
 
-
-
         WHERE 
 
-
-
         chat_view.raw_string_jid not LIKE '%g.us'
-
-        
 
         order by timestamp desc
 
@@ -91,7 +80,6 @@ class Database(AbstractDatabase):
         return self.msgstore_cursor.execute(sql_query).fetchall()
 
     def fetch_group_chats(self):
-
         sql_query = """
 
                 select 
@@ -106,17 +94,11 @@ class Database(AbstractDatabase):
 
                 DATETIME(ROUND(chat_view.sort_timestamp / 1000), 'unixepoch') as timestamp
 
-
-
                 from chat_view INNER JOIN jid ON chat_view.raw_string_jid=jid.raw_string 
 
                 INNER JOIN message ON chat_view.last_message_row_id = message._id
 
-
-
                 WHERE 
-
-
 
                 chat_view.raw_string_jid LIKE '%g.us'
 
@@ -125,7 +107,6 @@ class Database(AbstractDatabase):
         return self.msgstore_cursor.execute(sql_query).fetchall()
 
     def fetch_calls(self, how_many=None):
-
         sql_query = """
 
                select 
@@ -142,8 +123,6 @@ class Database(AbstractDatabase):
 
                 jid.raw_string as raw_string_jid
 
-
-
                 from call_log LEFT JOIN jid
 
                 ON call_log.jid_row_id = jid._id
@@ -157,7 +136,6 @@ class Database(AbstractDatabase):
             return self.msgstore_cursor.execute(sql_query).fetchall()
 
     def fetch_chat(self, chat_id):
-
         sql_query = f"""
 
         select  message._id, message.key_id, message.from_me, DATETIME(ROUND(message.timestamp / 1000), 'unixepoch') as timestamp,  ifnull(message.text_data, '') as text_data,
@@ -170,8 +148,6 @@ class Database(AbstractDatabase):
 
         message_quoted.key_id as message_quoted_key_id
 
-        
-
         from  message LEFT JOIN message_media 
 
         ON message._id = message_media.message_row_id
@@ -179,8 +155,6 @@ class Database(AbstractDatabase):
         LEFT JOIN message_quoted 
 
         ON message._id = message_quoted.message_row_id
-
-        
 
         WHERE message.chat_row_id={chat_id}
 

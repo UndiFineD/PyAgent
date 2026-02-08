@@ -13,20 +13,20 @@ from feathr.definition.feathrconfig import HoconConvertible
 
 from jinja2 import Template
 
-class Transformation(HoconConvertible):
 
+class Transformation(HoconConvertible):
     """Base class for all transformations that produce feature values."""
 
     pass
 
-class RowTransformation(Transformation):
 
+class RowTransformation(Transformation):
     """Base class for all row-level transformations."""
 
     pass
 
-class ExpressionTransformation(RowTransformation):
 
+class ExpressionTransformation(RowTransformation):
     """A row-level transformations that is defined with the Feathr expression language.
 
     Attributes:
@@ -36,13 +36,11 @@ class ExpressionTransformation(RowTransformation):
     """
 
     def __init__(self, expr: str) -> None:
-
         super().__init__()
 
         self.expr = expr
 
     def to_feature_config(self, with_def_field_name: Optional[bool] = True) -> str:
-
         tm = Template("""
 
 {% if with_def_field_name %}
@@ -59,8 +57,8 @@ def.sqlExpr: "{{expr}}"
 
         return tm.render(expr=self.expr, with_def_field_name=with_def_field_name)
 
-class WindowAggTransformation(Transformation):
 
+class WindowAggTransformation(Transformation):
     """Aggregate the value of an expression over a fixed time window. E.g. sum(amount*10) over last 3 days.
 
     Attributes:
@@ -78,23 +76,14 @@ class WindowAggTransformation(Transformation):
     """
 
     def __init__(
-
         self,
-
         agg_expr: str,
-
         agg_func: str,
-
         window: str,
-
         group_by: Optional[str] = None,
-
         filter: Optional[str] = None,
-
         limit: Optional[int] = None,
-
     ) -> None:
-
         super().__init__()
 
         self.def_expr = agg_expr
@@ -110,7 +99,6 @@ class WindowAggTransformation(Transformation):
         self.limit = limit
 
     def to_feature_config(self, with_def_field_name: Optional[bool] = True) -> str:
-
         tm = Template("""
 
 def:"{{windowAgg.def_expr}}"
@@ -141,8 +129,8 @@ aggregation: {{windowAgg.agg_func}}
 
         return tm.render(windowAgg=self)
 
-class UdfTransform(Transformation):
 
+class UdfTransform(Transformation):
     """User defined transformation. To be supported.
 
     Attributes:
@@ -152,7 +140,6 @@ class UdfTransform(Transformation):
     """
 
     def __init__(self, name: str) -> None:
-
         """
 
         :param name:
@@ -164,6 +151,4 @@ class UdfTransform(Transformation):
         self.name = name
 
     def to_feature_config(self) -> str:
-
         pass
-

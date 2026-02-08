@@ -77,7 +77,6 @@ class File(ABC):
         docs: Optional[List[Dict[str, Any]]] = None,
         raw_bytes: bytes = b"",
     ):
-
         self.name = name
 
         self.file_id = file_id
@@ -185,11 +184,9 @@ class File(ABC):
         return File.create_file(file, filename)
 
     def __repr__(self) -> str:
-
         return f"File(name={self.name}, id={self.file_id}, metadata={self.metadata}, docs={self.docs})"
 
     def __str__(self) -> str:
-
         return f"File(name={self.name}, id={self.file_id}, metadata={self.metadata})"
 
     def copy(self) -> "File":

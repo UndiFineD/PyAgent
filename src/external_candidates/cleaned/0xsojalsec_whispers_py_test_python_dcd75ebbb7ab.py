@@ -26,7 +26,6 @@ from tests.unit.conftest import FIXTURE_PATH, does_not_raise
     ],
 )
 def test_pairs(code, exception):
-
     stamp = datetime.now().timestamp()
 
     testfile = FIXTURE_PATH.joinpath(f"test-{stamp}.py")
@@ -60,7 +59,6 @@ def test_pairs(code, exception):
     ],
 )
 def test_is_key(key, expectation):
-
     plugin = Python()
 
     assert plugin.is_key(key) == expectation
@@ -80,7 +78,6 @@ def test_is_key(key, expectation):
     ],
 )
 def test_is_value(value, expectation):
-
     plugin = Python()
 
     assert plugin.is_value(value) == expectation
@@ -103,7 +100,6 @@ def test_is_value(value, expectation):
     ],
 )
 def test_traverse_parse(code, key, value, exception):
-
     plugin = Python()
 
     ast = astroid.parse(code)
@@ -124,7 +120,6 @@ def test_traverse_parse(code, key, value, exception):
     ],
 )
 def test_traverse_extract(code, key, value, exception):
-
     plugin = Python()
 
     ast = astroid.extract_node(code)

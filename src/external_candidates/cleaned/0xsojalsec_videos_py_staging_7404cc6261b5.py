@@ -14,7 +14,6 @@ class PartTwoOfTour(TourOfDifferentialEquations):
     }
 
     def construct(self):
-
         self.add_title()
 
         self.show_thumbnails()
@@ -22,7 +21,6 @@ class PartTwoOfTour(TourOfDifferentialEquations):
         self.zoom_in_to_one_thumbnail()
 
     def zoom_in_to_one_thumbnail(self):
-
         frame = self.camera_frame
 
         thumbnails = self.thumbnails
@@ -79,7 +77,6 @@ class BrownianMotion(Scene):
     }
 
     def construct(self):
-
         self.add_title()
 
         self.add_particles()
@@ -87,7 +84,6 @@ class BrownianMotion(Scene):
         self.wait(self.wait_time)
 
     def add_title(self):
-
         square = Square(side_length=2 * self.L)
 
         title = OldTexText("Brownian motion")
@@ -101,7 +97,6 @@ class BrownianMotion(Scene):
         self.add(title)
 
     def add_particles(self):
-
         m1 = self.m1
 
         m2 = self.m2
@@ -143,7 +138,6 @@ class BrownianMotion(Scene):
         self.path = path
 
     def get_particle(self, m, r, L, max_v):
-
         dot = Dot(radius=r)
 
         dot.set_fill(WHITE, 0.7)
@@ -167,13 +161,11 @@ class BrownianMotion(Scene):
         return dot
 
     def are_colliding(self, p1, p2):
-
         d = get_norm(p1.get_center() - p2.get_center())
 
         return d < p1.radius + p2.radius
 
     def get_traced_path(self, particle):
-
         path = VMobject()
 
         path.set_stroke(BLUE, 3)
@@ -183,7 +175,6 @@ class BrownianMotion(Scene):
         buff = 0.02
 
         def update_path(path):
-
             new_point = particle.get_center()
 
             if get_norm(new_point - path.get_last_point()) > buff:
@@ -194,7 +185,6 @@ class BrownianMotion(Scene):
         return path
 
     def update_particles(self, particles, dt):
-
         for p1 in particles:
             p1.center += p1.velocity * dt
 
@@ -265,7 +255,6 @@ class AltBrownianMotion(BrownianMotion):
 
 class BlackScholes(AltBrownianMotion):
     def construct(self):
-
         # For some reason I'm amused by the thought
 
         # Of this graph perfectly matching the Brownian
@@ -285,7 +274,6 @@ class BlackScholes(AltBrownianMotion):
         self.wait(self.wait_time)
 
     def add_title(self):
-
         title = OldTexText("Black-Scholes equations")
 
         title.scale(1.5)
@@ -318,7 +306,6 @@ class BlackScholes(AltBrownianMotion):
         self.equation = equation
 
     def add_graph(self):
-
         axes = Axes(
             x_min=-1,
             x_max=20,
@@ -334,7 +321,6 @@ class BlackScholes(AltBrownianMotion):
         axes.move_to(DOWN)
 
         def get_graph_point():
-
             return axes.c2p(self.get_time(), 5 + 2 * self.big_particle.get_center()[1])
 
         graph = VMobject()
@@ -352,7 +338,6 @@ class BlackScholes(AltBrownianMotion):
 
 class ContrastChapters1And2(Scene):
     def construct(self):
-
         c1_frame, c2_frame = frames = VGroup(*[ScreenRectangle(height=3.5) for x in range(2)])
 
         frames.arrange(RIGHT, buff=LARGE_BUFF)
@@ -506,7 +491,6 @@ class ShowCubeFormation(ThreeDScene):
     }
 
     def construct(self):
-
         light_source = self.camera.light_source
 
         light_source.move_to(np.array([-6, -3, 6]))
@@ -569,7 +553,6 @@ class ShowRect(Scene):
     }
 
     def construct(self):
-
         rect = Rectangle(
             height=self.height,
             width=self.width,
@@ -589,7 +572,6 @@ class ShowSquare(ShowRect):
 
 class ShowHLine(Scene):
     def construct(self):
-
         line = Line(LEFT, RIGHT)
 
         line.set_color(BLUE)
@@ -599,7 +581,6 @@ class ShowHLine(Scene):
 
 class ShowCross(Scene):
     def construct(self):
-
         cross = Cross(Square())
 
         cross.set_width(3)
@@ -611,7 +592,6 @@ class ShowCross(Scene):
 
 class TwoBodyEquations(Scene):
     def construct(self):
-
         kw = {
             "tex_to_color_map": {
                 "x_1": GREY_B,
@@ -741,7 +721,6 @@ class LaplacianIntuition(SpecialThreeDScene):
     }
 
     def construct(self):
-
         axes = self.get_axes()
 
         axes.scale(0.5, about_point=ORIGIN)
@@ -751,7 +730,6 @@ class LaplacianIntuition(SpecialThreeDScene):
         self.begin_ambient_camera_rotation()
 
         def func(x, y):
-
             return np.array([x, y, 2.7 + 0.5 * (np.sin(x) + np.cos(y)) - 0.025 * (x**2 + y**2)])
 
         surface_config = {
@@ -856,7 +834,6 @@ class LaplacianIntuition(SpecialThreeDScene):
 
 class StrogatzMention(PiCreatureScene):
     def construct(self):
-
         self.show_book()
 
         self.show_motives()
@@ -864,7 +841,6 @@ class StrogatzMention(PiCreatureScene):
         self.show_pages()
 
     def show_book(self):
-
         morty = self.pi_creature
 
         book = ImageMobject("InfinitePowers")
@@ -910,7 +886,6 @@ class StrogatzMention(PiCreatureScene):
         self.book = book
 
     def show_motives(self):
-
         motives = VGroup(
             OldTexText("1) Scratch and itch"),
             OldTexText("2) Make people love math"),
@@ -936,7 +911,6 @@ class StrogatzMention(PiCreatureScene):
         self.play(FadeOut(motives))
 
     def show_pages(self):
-
         book = self.book
 
         pages = Group(*[ImageMobject("IP_Sample_Page{}".format(i)) for i in range(1, 4)])
@@ -958,13 +932,11 @@ class StrogatzMention(PiCreatureScene):
         self.play(FadeOut(last_page))
 
     def create_pi_creature(self):
-
         return Mortimer().to_corner(DR)
 
 
 class Thumbnail(Scene):
     def construct(self):
-
         image = ImageMobject("HeatSurfaceExampleFlipped")
 
         image.set_height(6.5)
@@ -1012,11 +984,9 @@ class Thumbnail(Scene):
 
 class ShowNewton(Scene):
     def construct(self):
-
         pass
 
 
 class ShowCupOfWater(Scene):
     def construct(self):
-
         pass

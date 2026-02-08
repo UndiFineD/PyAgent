@@ -15,44 +15,29 @@ from agno.tools.yfinance import YFinanceTools
 
 from pydantic import BaseModel
 
-def test_route_team_basic():
 
+def test_route_team_basic():
     """Test basic functionality of a route team."""
 
     web_agent = Agent(
-
         name="Web Agent",
-
         model=OpenAIChat("gpt-4o"),
-
         role="Search the web for information",
-
         tools=[DuckDuckGoTools(cache_results=True)],
-
     )
 
     finance_agent = Agent(
-
         name="Finance Agent",
-
         model=OpenAIChat("gpt-4o"),
-
         role="Get financial data",
-
         tools=[YFinanceTools(stock_price=True)],
-
     )
 
     team = Team(
-
         name="Router Team",
-
         mode="route",
-
         model=OpenAIChat("gpt-4o"),
-
         members=[web_agent, finance_agent],
-
     )
 
     # This should route to the finance agent
@@ -73,52 +58,35 @@ def test_route_team_basic():
 
     assert team.session_id == finance_agent.team_session_id
 
-def test_route_team_structured_output():
 
+def test_route_team_structured_output():
     """Test basic functionality of a route team."""
 
     class StockInfo(BaseModel):
-
         symbol: str
 
         price: str
 
     web_agent = Agent(
-
         name="Web Agent",
-
         model=OpenAIChat("gpt-4o"),
-
         role="Search the web for information",
-
         tools=[DuckDuckGoTools(cache_results=True)],
-
     )
 
     finance_agent = Agent(
-
         name="Finance Agent",
-
         model=OpenAIChat("gpt-4o"),
-
         role="Get financial data",
-
         response_model=StockInfo,
-
         tools=[YFinanceTools(stock_price=True)],
-
     )
 
     team = Team(
-
         name="Router Team",
-
         mode="route",
-
         model=OpenAIChat("gpt-4o"),
-
         members=[web_agent, finance_agent],
-
     )
 
     # This should route to the finance agent
@@ -139,63 +107,40 @@ def test_route_team_structured_output():
 
     assert response.member_responses[0].agent_id == finance_agent.agent_id
 
-def test_route_team_with_multiple_agents():
 
+def test_route_team_with_multiple_agents():
     """Test route team routing to multiple agents."""
 
     web_agent = Agent(
-
         name="Web Agent",
-
         model=OpenAIChat("gpt-4o"),
-
         role="Search the web for information",
-
         tools=[DuckDuckGoTools(cache_results=True)],
-
     )
 
     finance_agent = Agent(
-
         name="Finance Agent",
-
         model=OpenAIChat("gpt-4o"),
-
         role="Get financial data",
-
         tools=[YFinanceTools(stock_price=True)],
-
     )
 
     analysis_agent = Agent(
-
         name="Analysis Agent",
-
         model=OpenAIChat("gpt-4o"),
-
         role="Analyze data and provide insights",
-
     )
 
     team = Team(
-
         name="Multi-Router Team",
-
         mode="route",
-
         model=OpenAIChat("gpt-4o"),
-
         members=[web_agent, finance_agent, analysis_agent],
-
     )
 
     # This should route to both finance and web agents
 
-    response = team.run(
-
-        "Compare the stock performance of AAPL with recent tech industry news"
-
-    )
+    response = team.run("Compare the stock performance of AAPL with recent tech industry news")
 
     assert response.content is not None
 
@@ -207,40 +152,27 @@ def test_route_team_with_multiple_agents():
 
     assert len(response.member_responses) >= 2
 
-def test_route_team_with_expected_output():
 
+def test_route_team_with_expected_output():
     """Test route team with expected output specification."""
 
     qa_agent = Agent(
-
         name="QA Agent",
-
         model=OpenAIChat("gpt-4o"),
-
         role="Answer general knowledge questions",
-
     )
 
     math_agent = Agent(
-
         name="Math Agent",
-
         model=OpenAIChat("gpt-4o"),
-
         role="Solve mathematical problems",
-
     )
 
     team = Team(
-
         name="Specialized Router Team",
-
         mode="route",
-
         model=OpenAIChat("gpt-4o"),
-
         members=[qa_agent, math_agent],
-
     )
 
     # This should route to the math agent with specific expected output
@@ -256,4 +188,3 @@ def test_route_team_with_expected_output():
     assert len(response.member_responses) == 1
 
     assert response.member_responses[0].agent_id == math_agent.agent_id
-

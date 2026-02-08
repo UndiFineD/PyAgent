@@ -16,7 +16,6 @@ from whispers.plugins.traverse import StructuredDocument
 
 class Yml(StructuredDocument):
     def pairs(self, filepath: Path):
-
         def _constructor(loader, tag_suffix, node):
             """This is needed to parse IaC syntax"""
 

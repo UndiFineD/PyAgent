@@ -30,13 +30,11 @@ class ShowLinearity(WriteHeatEquationTemplate, TemperatureGraphScene):
     }
 
     def setup(self):
-
         TemperatureGraphScene.setup(self)
 
         WriteHeatEquationTemplate.setup(self)
 
     def construct(self):
-
         self.init_camera()
 
         self.add_three_graphs()
@@ -48,11 +46,9 @@ class ShowLinearity(WriteHeatEquationTemplate, TemperatureGraphScene):
         self.change_scalars()
 
     def init_camera(self):
-
         self.camera.set_distance(1000)
 
     def add_three_graphs(self):
-
         axes_group = self.get_axes_group()
 
         axes0, axes1, axes2 = axes_group
@@ -107,7 +103,6 @@ class ShowLinearity(WriteHeatEquationTemplate, TemperatureGraphScene):
         self.equals = equals
 
     def show_words(self):
-
         equation = self.get_d1_equation()
 
         name = OldTexText("Heat equation")
@@ -145,7 +140,6 @@ class ShowLinearity(WriteHeatEquationTemplate, TemperatureGraphScene):
         self.wait()
 
     def add_function_labels(self):
-
         axes_group = self.axes_group
 
         graphs = self.graphs
@@ -252,7 +246,6 @@ class ShowLinearity(WriteHeatEquationTemplate, TemperatureGraphScene):
         )
 
     def change_scalars(self):
-
         s1, s2 = self.scalar_trackers
 
         kw = {
@@ -277,7 +270,6 @@ class ShowLinearity(WriteHeatEquationTemplate, TemperatureGraphScene):
     #
 
     def get_axes_group(self):
-
         axes_group = VGroup(*[self.get_axes() for x in range(3)])
 
         axes_group.arrange(RIGHT, buff=2)
@@ -289,7 +281,6 @@ class ShowLinearity(WriteHeatEquationTemplate, TemperatureGraphScene):
         return axes_group
 
     def get_axes(self, **kwargs):
-
         axes = self.get_three_d_axes(**kwargs)
 
         # axes.input_plane.set_fill(opacity=0)
@@ -309,13 +300,11 @@ class ShowLinearity(WriteHeatEquationTemplate, TemperatureGraphScene):
         return axes
 
     def get_graph(self, axes, freqs, scalar_trackers):
-
         L = axes.x_max
 
         a = self.alpha
 
         def func(x, t):
-
             scalars = [st.get_value() for st in scalar_trackers]
 
             return np.sum(
@@ -327,7 +316,6 @@ class ShowLinearity(WriteHeatEquationTemplate, TemperatureGraphScene):
             )
 
         def get_surface_graph_group():
-
             return VGroup(
                 self.get_surface(axes, func),
                 self.get_time_slice_graph(axes, func, t=0),
@@ -357,7 +345,6 @@ class CombineSeveralSolutions(ShowLinearity):
     }
 
     def construct(self):
-
         self.init_camera()
 
         self.add_all_axes()
@@ -371,7 +358,6 @@ class CombineSeveralSolutions(ShowLinearity):
         self.show_time_passing()
 
     def add_all_axes(self):
-
         top_axes_group = VGroup(
             *[
                 self.get_axes(
@@ -415,7 +401,6 @@ class CombineSeveralSolutions(ShowLinearity):
         self.low_axes = low_axes
 
     def setup_all_graphs(self):
-
         scalar_trackers = Group(*[ValueTracker(1) for x in range(self.n_top_graphs)])
 
         freqs = np.arange(self.n_top_graphs)
@@ -438,7 +423,6 @@ class CombineSeveralSolutions(ShowLinearity):
         self.scalar_trackers = scalar_trackers
 
     def show_infinite_family(self):
-
         top_axes_group = self.top_axes_group
 
         top_graphs = self.top_graphs
@@ -482,7 +466,6 @@ class CombineSeveralSolutions(ShowLinearity):
         self.wait()
 
     def show_sum(self):
-
         top_graphs = self.top_graphs
 
         low_graph = self.low_graph
@@ -509,7 +492,6 @@ class CombineSeveralSolutions(ShowLinearity):
         self.wait()
 
     def show_time_passing(self):
-
         all_graphs = [*self.top_graphs, self.low_graph]
 
         all_axes = [*self.top_axes_group, self.low_axes]
@@ -555,7 +537,6 @@ class CombineSeveralSolutions(ShowLinearity):
     #
 
     def get_decimals(self, axes_group, scalar_trackers):
-
         result = VGroup()
 
         for axes, st in zip(axes_group, scalar_trackers):
@@ -594,7 +575,6 @@ class CycleThroughManyLinearCombinations(CombineSeveralSolutions):
     }
 
     def construct(self):
-
         self.init_camera()
 
         self.add_all_axes()
@@ -606,7 +586,6 @@ class CycleThroughManyLinearCombinations(CombineSeveralSolutions):
         self.cycle_through_superpositions()
 
     def cycle_through_superpositions(self):
-
         top_graphs = self.top_graphs
 
         low_graph = self.low_graph

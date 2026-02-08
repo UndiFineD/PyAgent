@@ -16,7 +16,6 @@ class FractionMobject(VGroup):
     }
 
     def __init__(self, fraction, **kwargs):
-
         VGroup.__init__(self, **kwargs)
 
         numerator = self.numerator = Integer(fraction.numerator)
@@ -39,7 +38,6 @@ class FractionMobject(VGroup):
         self.value = fraction
 
     def add_plus_if_needed(self):
-
         if self.value > 0:
             plus = OldTex("+")
 
@@ -74,7 +72,6 @@ class ShowRowReduction(Scene):
     }
 
     def construct(self):
-
         self.initialize_terms()
 
         self.apply_row_rescaling(0, Fraction(1, 2))
@@ -96,7 +93,6 @@ class ShowRowReduction(Scene):
         self.wait()
 
     def initialize_terms(self):
-
         full_matrix = reduce(lambda m, v: np.append(m, v, axis=1), self.matrices)
 
         mobject_matrix = np.vectorize(FractionMobject)(full_matrix)
@@ -137,13 +133,11 @@ class ShowRowReduction(Scene):
         self.add(group)
 
     def add_variables(self):
-
         # If it is meant to represent a system of equations
 
         pass
 
     def apply_row_rescaling(self, row_index, scale_factor):
-
         row = self.rows[row_index]
 
         new_row = VGroup()
@@ -204,7 +198,6 @@ class ShowRowReduction(Scene):
         self.rows.submobjects[row_index] = new_row
 
     def add_row_multiple_to_row(self, row1_index, row2_index, scale_factor):
-
         row1 = self.rows[row1_index]
 
         row2 = self.rows[row2_index]

@@ -27,7 +27,6 @@ from ovo.core.utils.tests import TEST_SCHEDULER_KEY
 
 
 def test_scaffold_end_to_end_logic(project_data):
-
     project, project_round, custom_pool = project_data
 
     workflow = RFdiffusionScaffoldDesignWorkflow(

@@ -34,7 +34,6 @@ from manimlib.utils.space_ops import (
 
 
 def rotate(points, angle=np.pi, axis=OUT):
-
     if axis is None:
         return points
 
@@ -46,7 +45,6 @@ def rotate(points, angle=np.pi, axis=OUT):
 
 
 def fractalify(vmobject, order=3, *args, **kwargs):
-
     for x in range(order):
         fractalification_iteration(vmobject)
 
@@ -54,7 +52,6 @@ def fractalify(vmobject, order=3, *args, **kwargs):
 
 
 def fractalification_iteration(vmobject, dimension=1.05, num_inserted_anchors_range=list(range(1, 4))):
-
     num_points = vmobject.get_num_points()
 
     if num_points > 0:
@@ -119,13 +116,11 @@ class SelfSimilarFractal(VMobject):
     fill_opacity = 1  # Not the right way to assign fill opacity
 
     def init_colors(self):
-
         VMobject.init_colors(self)
 
         self.set_color_by_gradient(*self.colors)
 
     def init_points(self):
-
         order_n_self = self.get_order_n_self(self.order)
 
         if self.order == 0:
@@ -137,7 +132,6 @@ class SelfSimilarFractal(VMobject):
         return self
 
     def get_order_n_self(self, order):
-
         if order == 0:
             result = self.get_seed_shape()
 
@@ -157,17 +151,14 @@ class SelfSimilarFractal(VMobject):
         return result
 
     def get_seed_shape(self):
-
         raise Exception("Not implemented")
 
     def arrange_subparts(self, *subparts):
-
         raise Exception("Not implemented")
 
 
 class Sierpinski(SelfSimilarFractal):
     def get_seed_shape(self):
-
         return Polygon(
             RIGHT,
             np.sqrt(3) * UP,
@@ -175,7 +166,6 @@ class Sierpinski(SelfSimilarFractal):
         )
 
     def arrange_subparts(self, *subparts):
-
         tri1, tri2, tri3 = subparts
 
         tri1.move_to(tri2.get_corner(DOWN + LEFT), UP)
@@ -191,11 +181,9 @@ class DiamondFractal(SelfSimilarFractal):
     colors = [GREEN_E, YELLOW]
 
     def get_seed_shape(self):
-
         return RegularPolygon(n=4)
 
     def arrange_subparts(self, *subparts):
-
         # VGroup(*subparts).rotate(np.pi/4)
 
         for part, vect in zip(subparts, compass_directions(start_vect=UP + RIGHT)):
@@ -212,11 +200,9 @@ class PentagonalFractal(SelfSimilarFractal):
     height = 6
 
     def get_seed_shape(self):
-
         return RegularPolygon(n=5, start_angle=np.pi / 2)
 
     def arrange_subparts(self, *subparts):
-
         for x, part in enumerate(subparts):
             part.shift(0.95 * part.get_height() * UP)
 
@@ -225,7 +211,6 @@ class PentagonalFractal(SelfSimilarFractal):
 
 class PentagonalPiCreatureFractal(PentagonalFractal):
     def init_colors(self):
-
         SelfSimilarFractal.init_colors(self)
 
         internal_pis = [pi for pi in self.get_family() if isinstance(pi, PiCreature)]
@@ -240,11 +225,9 @@ class PentagonalPiCreatureFractal(PentagonalFractal):
             pi.set_color(color)
 
     def get_seed_shape(self):
-
         return Randolph(mode="shruggie")
 
     def arrange_subparts(self, *subparts):
-
         for part in subparts:
             part.rotate(2 * np.pi / 5, about_point=ORIGIN)
 
@@ -278,7 +261,6 @@ class PiCreatureFractal(VMobject):
     stroke_width = 0
 
     def init_colors(self):
-
         VMobject.init_colors(self)
 
         internal_pis = [pi for pi in self.get_family() if isinstance(pi, PiCreature)]
@@ -293,7 +275,6 @@ class PiCreatureFractal(VMobject):
             pi.set_stroke(color, width=0)
 
     def init_points(self):
-
         random.seed(self.random_seed)
 
         modes = get_all_pi_creature_modes()
@@ -338,11 +319,9 @@ class WonkyHexagonFractal(SelfSimilarFractal):
     num_subparts = 7
 
     def get_seed_shape(self):
-
         return RegularPolygon(n=6)
 
     def arrange_subparts(self, *subparts):
-
         for i, piece in enumerate(subparts):
             piece.rotate(i * np.pi / 12, about_point=ORIGIN)
 
@@ -370,11 +349,9 @@ class CircularFractal(SelfSimilarFractal):
     colors = [GREEN, BLUE, GREY]
 
     def get_seed_shape(self):
-
         return Circle()
 
     def arrange_subparts(self, *subparts):
-
         if not hasattr(self, "been_here"):
             self.num_subparts = 3 + self.order
 
@@ -395,7 +372,6 @@ class CircularFractal(SelfSimilarFractal):
 
 class JaggedCurvePiece(VMobject):
     def insert_n_curves(self, n):
-
         if self.get_num_curves() == 0:
             self.set_points(np.zeros((1, 3)))
 
@@ -424,7 +400,6 @@ class FractalCurve(VMobject):
     }
 
     def init_points(self):
-
         points = self.get_anchor_points()
 
         self.set_points_as_corners(points)
@@ -442,7 +417,6 @@ class FractalCurve(VMobject):
             self.set_points(np.zeros((0, 3)))
 
     def init_colors(self):
-
         VMobject.init_colors(self)
 
         self.set_color_by_gradient(*self.colors)
@@ -452,7 +426,6 @@ class FractalCurve(VMobject):
                 self.set_stroke(width=self.order_to_stroke_width_map[order])
 
     def get_anchor_points(self):
-
         raise Exception("Not implemented")
 
 
@@ -470,7 +443,6 @@ class LindenmayerCurve(FractalCurve):
     angle = np.pi / 2
 
     def expand_command_string(self, command):
-
         result = ""
 
         for letter in command:
@@ -483,7 +455,6 @@ class LindenmayerCurve(FractalCurve):
         return result
 
     def get_command_string(self):
-
         result = self.axiom
 
         for x in range(self.order):
@@ -492,7 +463,6 @@ class LindenmayerCurve(FractalCurve):
         return result
 
     def get_anchor_points(self):
-
         step = float(self.radius) * self.start_step
 
         step /= self.scale_factor**self.order
@@ -548,13 +518,11 @@ class SelfSimilarSpaceFillingCurve(FractalCurve):
         return copy
 
     def refine_into_subparts(self, points):
-
         transformed_copies = [self.transform(points, offset) for offset in self.offsets]
 
         return reduce(lambda a, b: np.append(a, b, axis=0), transformed_copies)
 
     def get_anchor_points(self):
-
         points = np.zeros((1, 3))
 
         for count in range(self.order):
@@ -563,7 +531,6 @@ class SelfSimilarSpaceFillingCurve(FractalCurve):
         return points
 
     def generate_grid(self):
-
         raise Exception("Not implemented")
 
 
@@ -607,7 +574,6 @@ class HilbertCurve3D(SelfSimilarSpaceFillingCurve):
     # Rewrote transform method to include the rotation angle
 
     def transform(self, points, offset):
-
         copy = np.array(points)
 
         copy = rotate(
@@ -691,7 +657,6 @@ class HexagonFillingCurve(SelfSimilarSpaceFillingCurve):
     radius_scale_factor = 2 / (3 * np.sqrt(3))
 
     def refine_into_subparts(self, points):
-
         return SelfSimilarSpaceFillingCurve.refine_into_subparts(self, rotate(points, np.pi / 6, IN))
 
 
@@ -724,7 +689,6 @@ class FlowSnake(LindenmayerCurve):
     angle = -np.pi / 3
 
     def __init__(self, **kwargs):
-
         LindenmayerCurve.__init__(self, **kwargs)
 
         self.rotate(-self.order * np.pi / 9, about_point=ORIGIN)
@@ -771,7 +735,6 @@ class KochSnowFlake(LindenmayerCurve):
     }
 
     def __init__(self, **kwargs):
-
         digest_config(self, kwargs)
 
         self.scale_factor = 2 * (1 + np.cos(self.angle))
@@ -824,7 +787,6 @@ class SnakeCurve(FractalCurve):
     end_color = YELLOW
 
     def get_anchor_points(self):
-
         result = []
 
         resolution = 2**self.order

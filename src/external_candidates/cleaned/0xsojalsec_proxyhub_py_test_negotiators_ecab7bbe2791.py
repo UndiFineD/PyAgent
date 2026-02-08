@@ -18,7 +18,6 @@ from .utils import future_iter
 
 @pytest.fixture
 def proxy(mocker):
-
     proxy = Proxy("127.0.0.1", "80", timeout=0.1)
 
     mocker.patch.multiple(proxy, send=mocker.DEFAULT, recv=mocker.DEFAULT, connect=mocker.DEFAULT)
@@ -40,7 +39,6 @@ def proxy(mocker):
     ],
 )
 def test_base_attrs(proxy, ngtr, check_anon_lvl, use_full_path):
-
     proxy.ngtr = ngtr
 
     assert proxy.ngtr.name == ngtr
@@ -81,7 +79,6 @@ def test_base_attrs(proxy, ngtr, check_anon_lvl, use_full_path):
     ],
 )
 async def test_socks_negotiate(proxy, ngtr, port, recv, expected):
-
     proxy.ngtr = ngtr
 
     proxy.send.side_effect = future_iter(None, None)
@@ -122,7 +119,6 @@ async def test_socks_negotiate(proxy, ngtr, port, recv, expected):
     ],
 )
 async def test_socks_negotiate_error(proxy, ngtr, recv, expected):
-
     proxy.ngtr = ngtr
 
     proxy.send.side_effect = future_iter(None, None)
@@ -160,7 +156,6 @@ async def test_socks_negotiate_error(proxy, ngtr, recv, expected):
     ],
 )
 async def test_connect_negotiate(proxy, ngtr, port, recv):
-
     host = "test.com"
 
     proxy.ngtr = ngtr
@@ -201,7 +196,6 @@ async def test_connect_negotiate(proxy, ngtr, port, recv):
     ],
 )
 async def test_connect_negotiate_error(proxy, ngtr, recv):
-
     host = "test.com"
 
     proxy.ngtr = ngtr

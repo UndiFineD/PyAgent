@@ -19,7 +19,6 @@ class CoinFlipTree(VGroup):
     }
 
     def __init__(self, **kwargs):
-
         VGroup.__init__(self, **kwargs)
 
         self.rows = []
@@ -56,7 +55,6 @@ class CoinFlipTree(VGroup):
                 self.add(group)
 
     def create_row(self, level, sorted=True):
-
         if level == 0:
             new_row = [[ORIGIN, 0, ORIGIN]]  # is its own parent
 

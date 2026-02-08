@@ -14,13 +14,11 @@ from manim_imports_ext import *
 
 class Test(Scene):
     def construct(self):
-
         pass
 
 
 class Announcements(PiCreatureScene):
     def construct(self):
-
         title = OldTexText("Announcements!")
 
         title.scale(1.5)
@@ -71,7 +69,6 @@ class Announcements(PiCreatureScene):
 
 class PowersOfTwo(Scene):
     def construct(self):
-
         powers_of_2 = VGroup(*[OldTex("2^{%d}" % n, "=", "{:,}".format(2**n)) for n in range(20)])
 
         powers_of_2.to_edge(UP)
@@ -177,7 +174,6 @@ class PowersOfTwo(Scene):
 
 class PiHoldingScreen(PiCreatureScene):
     def construct(self):
-
         morty = self.pi_creature
 
         screen = ScreenRectangle()
@@ -210,7 +206,6 @@ class PiHoldingScreen(PiCreatureScene):
 
 class QuestionsLink(Scene):
     def construct(self):
-
         link = OldTexText("https://3b1b.co/questions")
 
         link.set_width(FRAME_WIDTH)
@@ -224,7 +219,6 @@ class QuestionsLink(Scene):
 
 class Thumbnail(Scene):
     def construct(self):
-
         equation = OldTex("2^{19} = " + "{:,}".format(2**19))
 
         equation.set_width(FRAME_X_RADIUS)

@@ -7,8 +7,8 @@ import xml.etree.ElementTree as ET
 
 from typing import Dict, List, Optional
 
-def get_interactive_elements(xml_content: str) -> List[Dict]:
 
+def get_interactive_elements(xml_content: str) -> List[Dict]:
     """
 
     Parses Android Accessibility XML and returns a lean list of interactive elements.
@@ -18,11 +18,9 @@ def get_interactive_elements(xml_content: str) -> List[Dict]:
     """
 
     try:
-
         root = ET.fromstring(xml_content)
 
     except ET.ParseError:
-
         print("⚠️ Error parsing XML. The screen might be loading.")
 
         return []
@@ -32,7 +30,6 @@ def get_interactive_elements(xml_content: str) -> List[Dict]:
     # Recursively find all nodes
 
     for node in root.iter():
-
         # Filter: We only care about elements that are interactive or have information
 
         is_clickable = node.attrib.get("clickable") == "true"
@@ -42,13 +39,9 @@ def get_interactive_elements(xml_content: str) -> List[Dict]:
         element_class = node.attrib.get("class", "")
 
         is_editable = (
-
             "EditText" in element_class
-
             or "AutoCompleteTextView" in element_class
-
             or node.attrib.get("editable") == "true"
-
         )
 
         text = node.attrib.get("text", "")
@@ -60,7 +53,6 @@ def get_interactive_elements(xml_content: str) -> List[Dict]:
         # Skip empty layout containers that do nothing
 
         if not is_clickable and not is_editable and not text and not desc:
-
             continue
 
         # Parse Bounds: "[140,200][400,350]" -> Center X, Y
@@ -68,22 +60,10 @@ def get_interactive_elements(xml_content: str) -> List[Dict]:
         bounds = node.attrib.get("bounds")
 
         if bounds:
-
             try:
-
                 # Extract coordinates
 
-                coords = (
-
-                    bounds.replace("][", ",")
-
-                    .replace("[", "")
-
-                    .replace("]", "")
-
-                    .split(",")
-
-                )
+                coords = bounds.replace("][", ",").replace("[", "").replace("]", "").split(",")
 
                 x1, y1, x2, y2 = map(int, coords)
 
@@ -94,42 +74,28 @@ def get_interactive_elements(xml_content: str) -> List[Dict]:
                 # Determine suggested action based on element type
 
                 if is_editable:
-
                     suggested_action = "type"
 
                 elif is_clickable:
-
                     suggested_action = "tap"
 
                 else:
-
                     suggested_action = "read"
 
                 element = {
-
                     "id": resource_id,
-
                     "text": text or desc,  # Fallback to content-desc if text is empty
-
                     "type": node.attrib.get("class", "").split(".")[-1],
-
                     "bounds": bounds,
-
                     "center": (center_x, center_y),
-
                     "clickable": is_clickable,
-
                     "editable": is_editable,
-
                     "action": suggested_action,
-
                 }
 
                 elements.append(element)
 
             except Exception:
-
                 continue
 
     return elements
-

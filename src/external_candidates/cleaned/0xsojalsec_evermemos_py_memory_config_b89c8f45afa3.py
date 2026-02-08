@@ -112,7 +112,6 @@ class ExtractModeConfig:
     enable_foresight_extraction: bool = False
 
     def __post_init__(self):
-
         # Automatically set output directory
 
         if self.output_dir is None:
@@ -164,5 +163,4 @@ class ChatModeConfig:
     memcell_output_dir: Path = field(default_factory=lambda: Path(__file__).parent.parent / "memcell_outputs")
 
     def __post_init__(self):
-
         self.chat_history_dir.mkdir(parents=True, exist_ok=True)

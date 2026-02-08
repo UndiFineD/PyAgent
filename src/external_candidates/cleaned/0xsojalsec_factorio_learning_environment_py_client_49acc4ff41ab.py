@@ -24,7 +24,6 @@ from fle.env.tools.agent.place_entity.client import PlaceObject as PlaceEntity
 
 class ShiftEntity(Tool):
     def __init__(self, connection, game_state):
-
         self.game_state = game_state
 
         super().__init__(connection, game_state)

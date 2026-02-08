@@ -10,7 +10,6 @@ from urllib.parse import urlparse
 
 class Pip:
     def pairs(self, filepath: Path):
-
         for line in filepath.open("r").readlines():
             if "http" not in line:
                 continue

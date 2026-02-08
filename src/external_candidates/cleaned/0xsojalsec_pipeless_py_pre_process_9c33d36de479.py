@@ -7,7 +7,6 @@ import cv2
 
 
 def hook(frame_data, _):
-
     rgb_frame_arr = frame_data["original"]
 
     # Create reduced frame for faster detection

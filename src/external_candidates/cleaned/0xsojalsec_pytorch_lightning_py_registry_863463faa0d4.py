@@ -108,7 +108,6 @@ class _AcceleratorRegistry(dict):
         data["init_params"] = init_params
 
         def do_register(accelerator: Callable) -> Callable:
-
             data["accelerator"] = accelerator
 
             data["accelerator_name"] = name
@@ -157,7 +156,6 @@ class _AcceleratorRegistry(dict):
         return set(self.keys())
 
     def __str__(self) -> str:
-
         return "Registered Accelerators: {}".format(", ".join(self.available_accelerators()))
 
 

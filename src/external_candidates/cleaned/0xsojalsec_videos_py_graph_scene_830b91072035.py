@@ -88,7 +88,6 @@ class GraphScene(Scene):
     num_rects = 50
 
     def setup(self):
-
         self.default_graph_colors_cycle = it.cycle(self.default_graph_colors)
 
         self.left_T_label = VGroup()
@@ -100,7 +99,6 @@ class GraphScene(Scene):
         self.right_v_line = VGroup()
 
     def setup_axes(self, animate=False):
-
         # TODO, once eoc is done, refactor this to be less redundant.
 
         x_num_range = float(self.x_max - self.x_min)
@@ -196,7 +194,6 @@ class GraphScene(Scene):
         self.default_graph_colors = it.cycle(self.default_graph_colors)
 
     def coords_to_point(self, x, y):
-
         assert hasattr(self, "x_axis") and hasattr(self, "y_axis")
 
         result = self.x_axis.number_to_point(x)[0] * RIGHT
@@ -206,11 +203,9 @@ class GraphScene(Scene):
         return result
 
     def point_to_coords(self, point):
-
         return (self.x_axis.point_to_number(point), self.y_axis.point_to_number(point))
 
     def get_graph(self, func, color=None, x_min=None, x_max=None, **kwargs):
-
         if color is None:
             color = next(self.default_graph_colors_cycle)
 
@@ -221,7 +216,6 @@ class GraphScene(Scene):
             x_max = self.x_max
 
         def parameterized_function(alpha):
-
             x = interpolate(x_min, x_max, alpha)
 
             y = func(x)
@@ -238,26 +232,21 @@ class GraphScene(Scene):
         return graph
 
     def input_to_graph_point(self, x, graph):
-
         return self.coords_to_point(x, graph.underlying_function(x))
 
     def angle_of_tangent(self, x, graph, dx=0.01):
-
         vect = self.input_to_graph_point(x + dx, graph) - self.input_to_graph_point(x, graph)
 
         return angle_of_vector(vect)
 
     def slope_of_tangent(self, *args, **kwargs):
-
         return np.tan(self.angle_of_tangent(*args, **kwargs))
 
     def get_derivative_graph(self, graph, dx=0.01, **kwargs):
-
         if "color" not in kwargs:
             kwargs["color"] = self.default_derivative_color
 
         def deriv(x):
-
             return self.slope_of_tangent(x, graph, dx) / self.space_unit_to_y
 
         return self.get_graph(deriv, **kwargs)
@@ -271,7 +260,6 @@ class GraphScene(Scene):
         buff=MED_SMALL_BUFF,
         color=None,
     ):
-
         label = OldTex(label)
 
         color = color or graph.get_color()
@@ -310,7 +298,6 @@ class GraphScene(Scene):
         show_signed_area=True,
         width_scale_factor=1.001,
     ):
-
         x_min = x_min if x_min is not None else self.x_min
 
         x_max = x_max if x_max is not None else self.x_max
@@ -374,7 +361,6 @@ class GraphScene(Scene):
         return rectangles
 
     def get_riemann_rectangles_list(self, graph, n_iterations, max_dx=0.5, power_base=2, stroke_width=1, **kwargs):
-
         return [
             self.get_riemann_rectangles(
                 graph=graph,
@@ -386,7 +372,6 @@ class GraphScene(Scene):
         ]
 
     def get_area(self, graph, t_min, t_max):
-
         numerator = max(t_max - t_min, 0.0001)
 
         dx = float(numerator) / self.num_rects
@@ -400,7 +385,6 @@ class GraphScene(Scene):
         ).set_fill(opacity=self.area_opacity)
 
     def transform_between_riemann_rects(self, curr_rects, new_rects, **kwargs):
-
         transform_kwargs = {"run_time": 2, "lag_ratio": 0.5}
 
         added_anims = kwargs.get("added_anims", [])
@@ -423,7 +407,6 @@ class GraphScene(Scene):
         self.play(Transform(curr_rects, new_rects, **transform_kwargs), *added_anims)
 
     def get_vertical_line_to_graph(self, x, graph, line_class=Line, **line_kwargs):
-
         if "color" not in line_kwargs:
             line_kwargs["color"] = graph.get_color()
 
@@ -434,7 +417,6 @@ class GraphScene(Scene):
         )
 
     def get_vertical_lines_to_graph(self, graph, x_min=None, x_max=None, num_lines=20, **kwargs):
-
         x_min = x_min or self.x_min
 
         x_max = x_max or self.x_max
@@ -551,7 +533,6 @@ class GraphScene(Scene):
         return group
 
     def add_T_label(self, x_val, side=RIGHT, label=None, color=WHITE, animated=False, **kwargs):
-
         triangle = RegularPolygon(n=3, start_angle=np.pi / 2)
 
         triangle.set_height(MED_SMALL_BUFF)
@@ -597,7 +578,6 @@ class GraphScene(Scene):
     def get_animation_integral_bounds_change(
         self, graph, new_t_min, new_t_max, fade_close_to_origin=True, run_time=1.0
     ):
-
         curr_t_min = self.x_axis.point_to_number(self.area.get_left())
 
         curr_t_max = self.x_axis.point_to_number(self.area.get_right())
@@ -619,7 +599,6 @@ class GraphScene(Scene):
         group.add(self.right_T_label_group)
 
         def update_group(group, alpha):
-
             area, left_v_line, left_T_label, right_v_line, right_T_label = group
 
             t_min = interpolate(curr_t_min, new_t_min, alpha)
@@ -668,7 +647,6 @@ class GraphScene(Scene):
         added_anims=None,
         **anim_kwargs,
     ):
-
         if target_dx is None and target_x is None:
             raise Exception("At least one of target_x and target_dx must not be None")
 
@@ -686,7 +664,6 @@ class GraphScene(Scene):
             target_x = start_x
 
         def update_func(group, alpha):
-
             dx = interpolate(start_dx, target_dx, alpha)
 
             x = interpolate(start_x, target_x, alpha)

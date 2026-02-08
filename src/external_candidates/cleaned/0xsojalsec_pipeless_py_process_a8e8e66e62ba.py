@@ -7,7 +7,6 @@ import numpy as np
 
 
 def hook(frame_data, context):
-
     model = context["model"]
 
     reduced_frame = frame_data["modified"]

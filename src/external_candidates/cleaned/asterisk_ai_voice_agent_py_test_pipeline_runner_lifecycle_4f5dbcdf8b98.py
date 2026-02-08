@@ -13,28 +13,24 @@ from src.engine import Engine
 
 from src.pipelines.base import LLMComponent, STTComponent, TTSComponent
 
+
 class _StubSTT(STTComponent):
-
     async def transcribe(self, call_id, audio_pcm16, sample_rate_hz, options):
-
         return "hi"
 
+
 class _StubLLM(LLMComponent):
-
     async def generate(self, call_id, transcript, context, options):
-
         return "hello"
 
+
 class _StubTTS(TTSComponent):
-
     async def synthesize(self, call_id, text, options):
-
         yield b"ulaw-bytes"
 
+
 class _StubResolution:
-
     def __init__(self):
-
         self.pipeline_name = "stub"
 
         self.stt_adapter = _StubSTT()
@@ -52,51 +48,31 @@ class _StubResolution:
         self.prepared = True
 
     def component_summary(self):
-
         return {"stt": "stub", "llm": "stub", "tts": "stub"}
 
+
 @pytest.mark.asyncio
-
 async def test_pipeline_runner_lifecycle(monkeypatch):
-
     # Minimal AppConfig, orchestrator presence is enough; we will stub its output
 
     config_data = {
-
         "default_provider": "local",
-
         "providers": {"local": {"enabled": True}},
-
         "asterisk": {
-
             "host": "127.0.0.1",
-
             "port": 8088,
-
             "username": "u",
-
             "password": "p",
-
             "app_name": "ai-voice-agent",
-
         },
-
         "llm": {
-
             "initial_greeting": "hi",
-
             "prompt": "You are helpful",
-
             "model": "gpt-4o",
-
         },
-
         "pipelines": {"local_only": {}},
-
         "active_pipeline": "local_only",
-
         "audio_transport": "externalmedia",
-
     }
 
     app_config = AppConfig(**config_data)
@@ -108,7 +84,6 @@ async def test_pipeline_runner_lifecycle(monkeypatch):
     # Stub orchestrator to return a fake resolution with in-memory adapters
 
     def fake_get_pipeline(call_id, pipeline_name=None):
-
         return _StubResolution()
 
     monkeypatch.setattr(engine.pipeline_orchestrator, "get_pipeline", fake_get_pipeline)
@@ -148,4 +123,3 @@ async def test_pipeline_runner_lifecycle(monkeypatch):
     assert call_id not in engine._pipeline_queues
 
     assert call_id not in engine._pipeline_forced
-

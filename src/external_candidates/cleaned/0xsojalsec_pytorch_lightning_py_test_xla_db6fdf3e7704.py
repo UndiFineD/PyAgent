@@ -38,7 +38,6 @@ from tests_fabric.helpers.runif import RunIf
 
 @RunIf(tpu=True)
 def test_auto_device_count():
-
     # this depends on the chip used, e.g. with v4-8 we expect 4
 
     # there's no easy way to test it without copying the `auto_device_count` so just check that its greater than 1
@@ -55,14 +54,12 @@ def test_tpu_device_absence():
 
 @pytest.mark.parametrize("devices", [1, 8])
 def test_get_parallel_devices(devices, tpu_available):
-
     expected = XLAAccelerator.get_parallel_devices(devices)
 
     assert len(expected) == devices
 
 
 def test_get_parallel_devices_raises(tpu_available):
-
     with pytest.raises(ValueError, match="devices` can only be"):
         XLAAccelerator.get_parallel_devices(0)
 
@@ -75,5 +72,4 @@ def test_get_parallel_devices_raises(tpu_available):
 
 @pytest.mark.skipif(not _XLA_AVAILABLE, reason="test requires torch_xla to be present")
 def test_instantiate_xla_accelerator():
-
     _ = XLAAccelerator()

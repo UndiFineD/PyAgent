@@ -10,7 +10,6 @@ from chromadb import Documents, EmbeddingFunction, Embeddings
 
 class BaseEmbedding(ABC, EmbeddingFunction):
     def __init__(self, model: str = "", api_key: str = "", base_url: str = ""):
-
         self.name = self.__class__.__name__.replace("Embedding", "")
 
         self.api_key = api_key
@@ -22,10 +21,8 @@ class BaseEmbedding(ABC, EmbeddingFunction):
         self.headers = {"Content-Type": "application/json"}
 
     def __call__(self, input: Documents) -> Embeddings:
-
         return self.embed(input)
 
     @abstractmethod
     def embed(self, text: list[str] | str) -> list:
-
         pass

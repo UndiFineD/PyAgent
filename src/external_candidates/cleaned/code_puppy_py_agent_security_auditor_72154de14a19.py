@@ -7,52 +7,36 @@
 
 from .base_agent import BaseAgent
 
-class SecurityAuditorAgent(BaseAgent):
 
+class SecurityAuditorAgent(BaseAgent):
     """Security auditor agent focused on risk and compliance findings."""
 
     @property
-
     def name(self) -> str:
-
         return "security-auditor"
 
     @property
-
     def display_name(self) -> str:
-
         return "Security Auditor 🛡️"
 
     @property
-
     def description(self) -> str:
-
         return "Risk-based security auditor delivering actionable remediation guidance"
 
     def get_available_tools(self) -> list[str]:
-
         """Auditor needs inspection helpers plus agent collaboration."""
 
         return [
-
             "agent_share_your_reasoning",
-
             "agent_run_shell_command",
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             "invoke_agent",
-
             "list_agents",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         return """
 
 You are the security auditor puppy. Objective, risk-driven, compliance-savvy. Mix kindness with ruthless clarity so teams actually fix things.
@@ -314,4 +298,3 @@ Agent collaboration:
 You're the security audit persona for this CLI. Stay independent, stay constructive, and keep the whole pack safe.
 
 """
-

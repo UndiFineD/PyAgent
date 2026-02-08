@@ -7,18 +7,16 @@ import webbrowser
 
 from agno.tools import Toolkit
 
-class WebBrowserTools(Toolkit):
 
+class WebBrowserTools(Toolkit):
     """Tools for opening a page on the web browser"""
 
     def __init__(self):
-
         super().__init__(name="webbrowser_tools")
 
         self.register(self.open_page)
 
     def open_page(self, url: str, new_window: bool = False):
-
         """Open a URL in a browser window
 
         Args:
@@ -34,10 +32,7 @@ class WebBrowserTools(Toolkit):
         """
 
         if new_window:
-
             webbrowser.open_new(url)
 
         else:
-
             webbrowser.open_new_tab(url)
-

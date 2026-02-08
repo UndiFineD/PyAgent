@@ -34,7 +34,6 @@
 
 class CustomInfDataloader:
     def __init__(self, dataloader):
-
         self.dataloader = dataloader
 
         self.iter = iter(dataloader)
@@ -44,13 +43,11 @@ class CustomInfDataloader:
         self.dataloader.num_workers = 0  # reduce chance for hanging pytest
 
     def __iter__(self):
-
         self.count = 0
 
         return self
 
     def __next__(self):
-
         if self.count >= 50:
             raise StopIteration
 
@@ -72,7 +69,6 @@ class CustomNotImplementedErrorDataloader(CustomInfDataloader):
         raise NotImplementedError
 
     def __next__(self):
-
         if self.count >= 2:
             raise StopIteration
 

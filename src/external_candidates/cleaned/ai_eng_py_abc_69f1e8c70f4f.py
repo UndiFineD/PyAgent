@@ -7,14 +7,12 @@ from abc import ABC, abstractmethod
 
 from typing import Dict, List, Optional, Tuple
 
-class SparkJobLauncher(ABC):
 
+class SparkJobLauncher(ABC):
     """This is the abstract class for all the spark launchers. All the Spark launcher should implement those interfaces"""
 
     @abstractmethod
-
     def upload_or_get_cloud_path(self, local_path_or_http_path: str):
-
         """upload a file from local path or an http path to the current work directory. Should support transferring file from an http path to cloud working storage, or upload directly from a local storage.
 
         Args:
@@ -26,29 +24,17 @@ class SparkJobLauncher(ABC):
         pass
 
     @abstractmethod
-
     def submit_feathr_job(
-
         self,
-
         job_name: str,
-
         main_jar_path: str,
-
         main_class_name: str,
-
         arguments: List[str],
-
         reference_files_path: List[str],
-
         job_tags: Dict[str, str] = None,
-
         configuration: Dict[str, str] = {},
-
         properties: Dict[str, str] = None,
-
     ):
-
         """
 
         Submits the feathr job
@@ -74,9 +60,7 @@ class SparkJobLauncher(ABC):
         pass
 
     @abstractmethod
-
     def wait_for_completion(self, timeout_seconds: Optional[float]) -> bool:
-
         """Returns true if the job completed successfully
 
         Args:
@@ -92,9 +76,7 @@ class SparkJobLauncher(ABC):
         pass
 
     @abstractmethod
-
     def get_status(self) -> str:
-
         """
 
         Get current job status
@@ -110,4 +92,3 @@ class SparkJobLauncher(ABC):
         """
 
         pass
-

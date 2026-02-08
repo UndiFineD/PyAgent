@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class WhyWouldYouCare(TeacherStudentsScene):
     def construct(self):
-
         self.student_says(
             "Who cares!",
             target_mode="sassy",
@@ -37,7 +36,6 @@ class WhyWouldYouCare(TeacherStudentsScene):
 
 class SolveForWavesNothingElse(TeacherStudentsScene):
     def construct(self):
-
         self.student_says(
             "Sure, we can\\\\solve it for\\\\sums of waves...",
             target_mode="sassy",
@@ -67,7 +65,6 @@ class SolveForWavesNothingElse(TeacherStudentsScene):
 
 class HangOnThere(TeacherStudentsScene):
     def construct(self):
-
         student = self.students[2]
 
         axes1 = Axes(
@@ -215,7 +212,6 @@ class HangOnThere(TeacherStudentsScene):
 
 class YouSaidThisWasEasier(TeacherStudentsScene):
     def construct(self):
-
         self.play_all_student_changes(
             "confused",
             look_at=self.screen,
@@ -239,7 +235,6 @@ class YouSaidThisWasEasier(TeacherStudentsScene):
 
 class LooseWithLanguage(TeacherStudentsScene):
     def construct(self):
-
         terms = VGroup(
             OldTexText("``Complex number''"),
             OldTexText("``Vector''"),
@@ -285,7 +280,6 @@ class LooseWithLanguage(TeacherStudentsScene):
 
 class FormulaOutOfContext(TeacherStudentsScene):
     def construct(self):
-
         formula = OldTex(
             "c_{n} = \\int_0^1 e^{-2\\pi i {n} {t}}f({t}){dt}",
             tex_to_color_map={

@@ -15,7 +15,6 @@ from pathlib import Path
 
 
 def configure_log(logpath: str = "") -> Path:
-
     try:
         logpath = Path(logpath, "whispers.log")
 
@@ -69,7 +68,6 @@ def cleanup_log(logpath: str = ""):
 
 
 def debug(message: str = "") -> str:
-
     trace = traceback.format_exc().strip()
 
     if trace == "NoneType: None":

@@ -81,7 +81,6 @@ class DPTHead(nn.Module):
         feature_only: bool = False,
         down_ratio: int = 1,
     ) -> None:
-
         super(DPTHead, self).__init__()
 
         self.patch_size = patch_size
@@ -473,7 +472,6 @@ class DPTHead(nn.Module):
 
 
 def _make_fusion_block(features: int, size: int = None, has_residual: bool = True, groups: int = 1) -> nn.Module:
-
     return FeatureFusionBlock(
         features,
         nn.ReLU(inplace=True),
@@ -488,7 +486,6 @@ def _make_fusion_block(features: int, size: int = None, has_residual: bool = Tru
 
 
 def _make_scratch(in_shape: List[int], out_shape: int, groups: int = 1, expand: bool = False) -> nn.Module:
-
     scratch = nn.Module()
 
     out_shape1 = out_shape

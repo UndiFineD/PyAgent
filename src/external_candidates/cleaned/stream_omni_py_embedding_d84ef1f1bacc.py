@@ -39,7 +39,6 @@ import math
 
 from typing import Tuple, Union
 
-
 import numpy as np
 
 import torch
@@ -50,15 +49,11 @@ import torch.nn.functional as F
 class PositionalEncoding(torch.nn.Module):
     """Positional encoding.
 
-
-
     :param int d_model: embedding dim
 
     :param float dropout_rate: dropout rate
 
     :param int max_len: maximum input length
-
-
 
     PE(pos, 2i)   = sin(pos/(10000^(2i/dmodel)))
 
@@ -102,15 +97,11 @@ class PositionalEncoding(torch.nn.Module):
     def forward(self, x: torch.Tensor, offset: Union[int, torch.Tensor] = 0) -> Tuple[torch.Tensor, torch.Tensor]:
         """Add positional encoding.
 
-
-
         Args:
 
             x (torch.Tensor): Input. Its shape is (batch, time, ...)
 
             offset (int, torch.tensor): position offset
-
-
 
         Returns:
 
@@ -133,8 +124,6 @@ class PositionalEncoding(torch.nn.Module):
     ) -> torch.Tensor:
         """For getting encoding in a streaming fashion
 
-
-
         Attention!!!!!
 
         we apply dropout only once at the whole utterance level in a none
@@ -145,15 +134,11 @@ class PositionalEncoding(torch.nn.Module):
 
         be applied several times.
 
-
-
         Args:
 
             offset (int or torch.tensor): start offset
 
             size (int): required size of position encoding
-
-
 
         Returns:
 
@@ -242,7 +227,6 @@ class WhisperPositionalEncoding(PositionalEncoding):
     """Sinusoids position encoding used in openai-whisper.encoder"""
 
     def __init__(self, d_model: int, dropout_rate: float, max_len: int = 1500):
-
         super().__init__(d_model, dropout_rate, max_len)
 
         self.xscale = 1.0
@@ -264,7 +248,6 @@ class LearnablePositionalEncoding(PositionalEncoding):
     """Learnable position encoding used in openai-whisper.decoder"""
 
     def __init__(self, d_model: int, dropout_rate: float, max_len: int = 448):
-
         super().__init__(d_model, dropout_rate, max_len)
 
         # NOTE(xcsong): overwrite self.pe & self.xscale
@@ -278,7 +261,6 @@ class NoPositionalEncoding(torch.nn.Module):
     """No position encoding"""
 
     def __init__(self, d_model: int, dropout_rate: float):
-
         super().__init__()
 
         self.d_model = d_model
@@ -293,22 +275,15 @@ class NoPositionalEncoding(torch.nn.Module):
         return self.dropout(x), pos_emb
 
     def position_encoding(self, offset: Union[int, torch.Tensor], size: int) -> torch.Tensor:
-
         return torch.zeros(1, size, self.d_model)
 
 
 class EspnetRelPositionalEncoding(torch.nn.Module):
     """Relative positional encoding module (new implementation).
 
-
-
     Details can be found in https://github.com/espnet/espnet/pull/2816.
 
-
-
     See : Appendix B in https://arxiv.org/abs/1901.02860
-
-
 
     Args:
 
@@ -317,8 +292,6 @@ class EspnetRelPositionalEncoding(torch.nn.Module):
         dropout_rate (float): Dropout rate.
 
         max_len (int): Maximum input length.
-
-
 
     """
 
@@ -392,19 +365,13 @@ class EspnetRelPositionalEncoding(torch.nn.Module):
     def forward(self, x: torch.Tensor, offset: Union[int, torch.Tensor] = 0) -> Tuple[torch.Tensor, torch.Tensor]:
         """Add positional encoding.
 
-
-
         Args:
 
             x (torch.Tensor): Input tensor (batch, time, `*`).
 
-
-
         Returns:
 
             torch.Tensor: Encoded tensor (batch, time, `*`).
-
-
 
         """
 
@@ -419,8 +386,6 @@ class EspnetRelPositionalEncoding(torch.nn.Module):
     def position_encoding(self, offset: Union[int, torch.Tensor], size: int) -> torch.Tensor:
         """For getting encoding in a streaming fashion
 
-
-
         Attention!!!!!
 
         we apply dropout only once at the whole utterance level in a none
@@ -431,15 +396,11 @@ class EspnetRelPositionalEncoding(torch.nn.Module):
 
         be applied several times.
 
-
-
         Args:
 
             offset (int or torch.tensor): start offset
 
             size (int): required size of position encoding
-
-
 
         Returns:
 

@@ -46,7 +46,6 @@ class _WrappingCheckpointIO(CheckpointIO):
     """
 
     def __init__(self, checkpoint_io: Optional["CheckpointIO"] = None) -> None:
-
         super().__init__()
 
         self._checkpoint_io = checkpoint_io
@@ -62,12 +61,10 @@ class _WrappingCheckpointIO(CheckpointIO):
 
     @property
     def checkpoint_io(self) -> Optional["CheckpointIO"]:
-
         return self._checkpoint_io
 
     @checkpoint_io.setter
     def checkpoint_io(self, checkpoint_io: "CheckpointIO") -> None:
-
         assert not isinstance(checkpoint_io, _WrappingCheckpointIO)
 
         if self._checkpoint_io is None:

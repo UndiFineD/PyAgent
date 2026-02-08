@@ -86,7 +86,6 @@ def _sanitize_callable_params(params: dict[str, Any]) -> dict[str, Any]:
     """
 
     def _sanitize_callable(val: Any) -> Any:
-
         if inspect.isclass(val):
             # If it's a class, don't try to instantiate it, just return the name
 

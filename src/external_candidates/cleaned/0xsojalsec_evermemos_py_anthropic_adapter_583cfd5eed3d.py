@@ -33,7 +33,6 @@ class AnthropicAdapter(LLMBackendAdapter):
     """Anthropic Claude API adapter"""
 
     def __init__(self, config: Dict[str, Any]):
-
         self.config = config
 
         self.base_url = config.get("base_url")

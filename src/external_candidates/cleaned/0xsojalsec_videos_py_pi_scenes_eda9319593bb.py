@@ -16,7 +16,6 @@ class SomeOfYouWatching(TeacherStudentsScene):
     }
 
     def construct(self):
-
         screen = self.screen
 
         screen.scale(1.25, about_edge=UL)
@@ -37,7 +36,6 @@ class SomeOfYouWatching(TeacherStudentsScene):
 
 class FormulasAreLies(PiCreatureScene):
     def construct(self):
-
         you = self.pi_creature
 
         t2c = {
@@ -133,7 +131,6 @@ class FormulasAreLies(PiCreatureScene):
         self.wait()
 
     def create_pi_creature(self):
-
         return You().flip().to_corner(DR)
 
 
@@ -146,7 +143,6 @@ class FormulasAreLies(PiCreatureScene):
 
 class SoWhatIsThetaThen(TeacherStudentsScene):
     def construct(self):
-
         ode = get_ode()
 
         ode.to_corner(UL)
@@ -171,7 +167,6 @@ class SoWhatIsThetaThen(TeacherStudentsScene):
 
 class ProveTeacherWrong(TeacherStudentsScene):
     def construct(self):
-
         tex_config = {
             "tex_to_color_map": {
                 "{\\theta}": BLUE,
@@ -297,7 +292,6 @@ class ProveTeacherWrong(TeacherStudentsScene):
 
 class PhysicistPhaseSpace(PiCreatureScene):
     def construct(self):
-
         physy = self.pi_creature
 
         name = OldTexText("Physicist")
@@ -363,13 +357,11 @@ class PhysicistPhaseSpace(PiCreatureScene):
         self.wait(3)
 
     def create_pi_creature(self):
-
         return PiCreature(color=GREY).to_corner(DL)
 
 
 class AskAboutActuallySolving(TeacherStudentsScene):
     def construct(self):
-
         ode = get_ode()
 
         ode.to_corner(UL)
@@ -407,7 +399,6 @@ class AskAboutActuallySolving(TeacherStudentsScene):
 
 class HungerForExactness(TeacherStudentsScene):
     def construct(self):
-
         students = self.students
 
         you = students[2]
@@ -673,7 +664,6 @@ class HungerForExactness(TeacherStudentsScene):
 
 class ItGetsWorse(TeacherStudentsScene):
     def construct(self):
-
         self.teacher_says("It gets\\\\worse")
 
         self.play_student_changes("hesitant", "pleading", "erm")

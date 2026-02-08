@@ -104,7 +104,6 @@ class _StrategyRegistry(dict):
         data["init_params"] = init_params
 
         def do_register(strategy: Callable) -> Callable:
-
             data["strategy"] = strategy
 
             data["strategy_name"] = name
@@ -153,5 +152,4 @@ class _StrategyRegistry(dict):
         return list(self.keys())
 
     def __str__(self) -> str:
-
         return "Registered Strategies: {}".format(", ".join(self.keys()))

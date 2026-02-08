@@ -20,7 +20,6 @@ from windows_engine.models import FileScan, Handles, Loot, PsTree
 
 @shared_task
 def compute_handles(evidence_id, pid):
-
     channel_layer = get_channel_layer()
 
     instance = Evidence.objects.get(dump_id=evidence_id)
@@ -58,7 +57,6 @@ def compute_handles(evidence_id, pid):
 
 @shared_task
 def dump_process_pslist(evidence_id, pid):
-
     channel_layer = get_channel_layer()
 
     instance = PsTree.objects.get(evidence_id=evidence_id)
@@ -116,7 +114,6 @@ def dump_process_pslist(evidence_id, pid):
 
 @shared_task
 def dump_process_memmap(evidence_id, pid):
-
     channel_layer = get_channel_layer()
 
     instance = PsTree.objects.get(evidence_id=evidence_id)
@@ -174,7 +171,6 @@ def dump_process_memmap(evidence_id, pid):
 
 @shared_task
 def dump_file(evidence_id, offset):
-
     channel_layer = get_channel_layer()
 
     instance = Evidence.objects.get(dump_id=evidence_id)

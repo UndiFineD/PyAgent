@@ -13,7 +13,6 @@ Base renderer functionality for entity rendering
 
 from typing import Callable, Dict, Optional, Tuple
 
-
 from PIL import Image
 
 

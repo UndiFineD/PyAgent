@@ -36,7 +36,6 @@ class _PathTrieNode:
     __slots__ = ["children", "metadata", "is_registered"]
 
     def __init__(self):
-
         # Child node mapping {path_segment: _PathTrieNode}
 
         self.children: Dict[str, "_PathTrieNode"] = {}

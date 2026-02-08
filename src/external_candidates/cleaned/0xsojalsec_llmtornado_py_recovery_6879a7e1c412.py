@@ -22,7 +22,6 @@ class RecoveryManager:
     """Manages quick recovery of indexing state after restarts."""
 
     def __init__(self, data_dir: Path):
-
         self.data_dir = Path(data_dir)
 
         self.state_file = self.data_dir / "indexing_state.json"

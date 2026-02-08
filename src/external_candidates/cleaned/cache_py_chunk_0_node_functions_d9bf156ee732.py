@@ -7,8 +7,8 @@
 
 # NOTE: extracted with static-only rules; review before use
 
-def error_msg_default(prompt, result, error):
 
+def error_msg_default(prompt, result, error):
     """Default function to append the error message to the prompt.
 
     Args:
@@ -30,4 +30,3 @@ def error_msg_default(prompt, result, error):
     prompt.append({"role": "user", "content": error})
 
     return prompt
-

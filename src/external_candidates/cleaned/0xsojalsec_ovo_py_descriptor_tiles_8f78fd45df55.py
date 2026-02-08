@@ -52,7 +52,6 @@ def descriptor_overview_tiles(
     design_id: str = None,
     histogram_source: str = "all",
 ):
-
     st.subheader(
         "Sequence-based descriptors",
         help="Overview of top sequence-based descriptors of the designs. The top histograms show distribution of the descriptor in PDB and the bottom histograms show distribution of the designs colored by preset warning and error thresholds.",
@@ -211,7 +210,6 @@ def descriptor_tiles(
     design_id: str = None,
     histogram_source: str = "all",
 ):
-
     columns = wrapped_columns(len(descriptors), wrap=3, gap="medium")
 
     for col, descriptor in zip(columns, descriptors):

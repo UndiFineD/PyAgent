@@ -26,7 +26,6 @@ from sqlalchemy.orm.attributes import flag_modified
 
 class SqlDBEngine(CacheClearingEngine):
     def __init__(self, db_url: str, verbose: bool = False, read_only: bool = False):
-
         if verbose:
             print("Connecting to", db_url, file=sys.stderr)
 
@@ -44,7 +43,6 @@ class SqlDBEngine(CacheClearingEngine):
             self._in_clause_items_limit = 200000
 
     def init(self):
-
         if self._db_url.startswith("sqlite:///"):
             db_path = self._db_url.removeprefix("sqlite:///")
 
@@ -58,7 +56,6 @@ class SqlDBEngine(CacheClearingEngine):
         self.automigrate()
 
     def automigrate(self):
-
         with self._create_session() as session:
             inspector = inspect(self._engine)
 
@@ -94,23 +91,19 @@ class SqlDBEngine(CacheClearingEngine):
                 session.commit()
 
     def _create_session(self) -> Session:
-
         return Session(bind=self._engine, expire_on_commit=False)
 
     def _check_updated(self, obj: Base):
-
         for field, value in obj.__dict__.items():
             if hasattr(value, "is_changed_hash"):
                 if value.is_changed_hash():
                     flag_modified(obj, field)
 
     def check_read_only(self):
-
         if self._read_only:
             raise RuntimeError("Ovo is running in read-only mode, write operations are not allowed.")
 
     def save(self, obj: Base):
-
         self.check_read_only()
 
         super().save(obj)
@@ -123,7 +116,6 @@ class SqlDBEngine(CacheClearingEngine):
             session.commit()
 
     def save_all(self, objs: Sequence[Base]):
-
         self.check_read_only()
 
         super().save_all(objs)
@@ -137,7 +129,6 @@ class SqlDBEngine(CacheClearingEngine):
             session.commit()
 
     def remove(self, model: Type[T], *id_args, **kwargs):
-
         self.check_read_only()
 
         super().remove(model, *id_args, **kwargs)
@@ -150,7 +141,6 @@ class SqlDBEngine(CacheClearingEngine):
             session.commit()
 
     def save_value(self, model: Type[T], column: str, value, **kwargs):
-
         self.check_read_only()
 
         super().save_value(model, column, value, **kwargs)
@@ -163,17 +153,14 @@ class SqlDBEngine(CacheClearingEngine):
             session.commit()
 
     def select(self, model: Type[T], limit: int = None, order_by=None, **kwargs) -> Sequence[T]:
-
         with self._create_session() as session:
             return self._create_query(session, model=model, order_by=order_by, limit=limit, **kwargs).all()
 
     def count(self, model: Type[T], **kwargs) -> int:
-
         with self._create_session() as session:
             return self._create_query(session, model=model, **kwargs).count()
 
     def count_distinct(self, model: Type[T], field="id", group_by=None, **kwargs) -> int | dict[Any, int]:
-
         with self._create_session() as session:
             if group_by:
                 if isinstance(group_by, str):
@@ -202,7 +189,6 @@ class SqlDBEngine(CacheClearingEngine):
         id_args=None,
         **kwargs,
     ):
-
         if id_args:
             assert len(id_args) == 1, "Only one positional argument is allowed"
 
@@ -224,7 +210,6 @@ class SqlDBEngine(CacheClearingEngine):
         )
 
     def _create_order_by(self, model: Type[T], order_by):
-
         if order_by is None:
             return []
 
@@ -234,11 +219,9 @@ class SqlDBEngine(CacheClearingEngine):
         return [self._create_order_by_single(model, k) for k in order_by]
 
     def _create_order_by_single(self, model: Type[T], order_by):
-
         return getattr(model, order_by) if not order_by.startswith("-") else getattr(model, order_by[1:]).desc()
 
     def _create_filters(self, model: Type[T], kwargs):
-
         filters = []
 
         for k, v in kwargs.items():
@@ -271,12 +254,10 @@ class SqlDBEngine(CacheClearingEngine):
         return filters
 
     def get(self, model: Type[T], *id_args, **kwargs) -> T:
-
         with self._create_session() as session:
             return self._create_query(session, model=model, id_args=id_args, **kwargs).one()
 
     def get_value(self, model: Type[T], column: str, *id_args, raw=False, **kwargs):
-
         with self._create_session() as session:
             query = self._create_query(session, model=model, columns=[column], id_args=id_args, **kwargs)
 
@@ -288,7 +269,6 @@ class SqlDBEngine(CacheClearingEngine):
             return query.one()[0]
 
     def select_values(self, model: Type[T], column: str, order_by=None, **kwargs) -> list:
-
         with self._create_session() as session:
             return [
                 row[0]
@@ -303,7 +283,6 @@ class SqlDBEngine(CacheClearingEngine):
         order_by=None,
         **kwargs,
     ) -> dict:
-
         with self._create_session() as session:
             return {
                 row[0]: row[1]
@@ -317,7 +296,6 @@ class SqlDBEngine(CacheClearingEngine):
             }
 
     def select_unique_values(self, model: Type[T], column: str, **kwargs) -> set:
-
         with self._create_session() as session:
             return set(
                 row[0]
@@ -337,7 +315,6 @@ class SqlDBEngine(CacheClearingEngine):
         limit="unset",
         **kwargs,
     ) -> pd.DataFrame:
-
         if limit == "unset":
             if not kwargs:
                 raise ValueError(
@@ -439,7 +416,6 @@ class SqlDBEngine(CacheClearingEngine):
             return series.reindex(descriptor_keys)
 
     def select_wide_descriptor_table(self, design_ids: list[str], descriptor_keys: list[str], **kwargs) -> pd.DataFrame:
-
         # TODO this does not handle the case when a descriptor was computed multiple times for the same design
 
         #  this can happen when we implement multiple descriptor jobs with different settings.
@@ -513,7 +489,6 @@ class SqlDBEngine(CacheClearingEngine):
             return df.reindex(design_ids)
 
     def get_design_accepted_values(self, design_ids: list[str]):
-
         with self._create_session() as session:
             query = self._create_query(session, model=Design, columns=["id", "accepted"], id__in=design_ids)
 

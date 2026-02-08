@@ -105,7 +105,6 @@ class AzureOpenAIModel(BaseModelBackend):
         api_version: Optional[str] = None,
         azure_deployment_name: Optional[str] = None,
     ) -> None:
-
         if model_config_dict is None:
             model_config_dict = ChatGPTConfig().as_dict()
 

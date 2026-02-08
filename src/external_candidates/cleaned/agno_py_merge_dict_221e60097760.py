@@ -5,8 +5,8 @@
 
 from typing import Any, Dict
 
-def merge_dictionaries(a: Dict[str, Any], b: Dict[str, Any]) -> None:
 
+def merge_dictionaries(a: Dict[str, Any], b: Dict[str, Any]) -> None:
     """
 
     Recursively merges two dictionaries.
@@ -26,12 +26,8 @@ def merge_dictionaries(a: Dict[str, Any], b: Dict[str, Any]) -> None:
     """
 
     for key in b:
-
         if key in a and isinstance(a[key], dict) and isinstance(b[key], dict):
-
             merge_dictionaries(a[key], b[key])
 
         else:
-
             a[key] = b[key]
-

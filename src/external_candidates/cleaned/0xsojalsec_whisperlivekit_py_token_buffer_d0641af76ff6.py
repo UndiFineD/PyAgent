@@ -10,7 +10,6 @@ import torch
 
 class TokenBuffer:
     def __init__(self, text="", tokenizer=None, device=None, prefix_token_ids=[]):
-
         self.text = text
 
         self.prefix_token_ids = prefix_token_ids
@@ -20,7 +19,6 @@ class TokenBuffer:
         self.device = device
 
     def as_token_ids(self, tokenizer=None):
-
         if tokenizer is None:
             tokenizer = self.tokenizer
 
@@ -30,7 +28,6 @@ class TokenBuffer:
         return self.prefix_token_ids + tokenizer.encode(self.text)
 
     def as_tensor(self, device=None):
-
         if device is None:
             device = self.device
 
@@ -42,27 +39,22 @@ class TokenBuffer:
         return torch.tensor(tok_ids, dtype=torch.long, device=device).unsqueeze(0)
 
     def as_tensor_beam(self, beam, device=None):
-
         t = self.as_tensor(device=device)
 
         return t.repeat_interleave(beam, dim=0)
 
     def as_text(self):
-
         return self.text
 
     @staticmethod
     def empty(*a, **kw):
-
         return TokenBuffer(*a, **kw)
 
     @staticmethod
     def from_text(text, *a, **kw):
-
         return TokenBuffer(*a, text=text, **kw)
 
     def is_empty(self):
-
         return self.text is None or self.text == ""
 
     def trim_words(self, num=1, after=0):
@@ -94,7 +86,6 @@ class TokenBuffer:
         return sum(len(wi) for wi in wids[:num])
 
     def append_token_ids(self, token_ids):
-
         tokenizer = self.tokenizer
 
         assert tokenizer is not None, "Tokenizer is not set."
@@ -102,7 +93,6 @@ class TokenBuffer:
         self.text += self.tokenizer.decode(token_ids)
 
     def as_split_word_tokens(self):
-
         tokenizer = self.tokenizer
 
         assert tokenizer is not None, "Tokenizer is not set."

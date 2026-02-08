@@ -17,7 +17,6 @@ from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 
 
 def speech_to_text(video_name, working_dir, segment_index2name, audio_output_format):
-
     model = WhisperModel("./faster-distil-whisper-large-v3")
 
     model.logger.setLevel(logging.WARNING)

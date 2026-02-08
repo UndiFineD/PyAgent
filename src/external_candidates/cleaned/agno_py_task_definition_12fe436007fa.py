@@ -25,8 +25,8 @@ from agno.utils.log import logger
 
 from typing_extensions import Literal
 
-class EcsTaskDefinition(AwsResource):
 
+class EcsTaskDefinition(AwsResource):
     """
 
     Reference:
@@ -168,11 +168,9 @@ class EcsTaskDefinition(AwsResource):
     add_secret_access_to_ecs: bool = False
 
     def get_task_family(self):
-
         return self.family or self.name
 
     def _create(self, aws_client: AwsApiClient) -> bool:
-
         """Create EcsTaskDefinition"""
 
         print_info(f"Creating {self.get_resource_type()}: {self.get_resource_name()}")
@@ -182,13 +180,11 @@ class EcsTaskDefinition(AwsResource):
         task_role_arn = self.task_role_arn
 
         if task_role_arn is None and self.create_task_role:
-
             # Create the IamRole and get task_role_arn
 
             task_role = self.get_task_role()
 
             try:
-
                 task_role.create(aws_client)
 
                 task_role_arn = task_role.read(aws_client).arn
@@ -196,7 +192,6 @@ class EcsTaskDefinition(AwsResource):
                 print_info(f"ARN for {task_role.name}: {task_role_arn}")
 
             except Exception as e:
-
                 logger.error("IamRole creation failed, please fix and try again")
 
                 logger.error(e)
@@ -208,13 +203,11 @@ class EcsTaskDefinition(AwsResource):
         execution_role_arn = self.execution_role_arn
 
         if execution_role_arn is None and self.create_execution_role:
-
             # Create the IamRole and get execution_role_arn
 
             execution_role = self.get_execution_role()
 
             try:
-
                 execution_role.create(aws_client)
 
                 execution_role_arn = execution_role.read(aws_client).arn
@@ -222,7 +215,6 @@ class EcsTaskDefinition(AwsResource):
                 print_info(f"ARN for {execution_role.name}: {execution_role_arn}")
 
             except Exception as e:
-
                 logger.error("IamRole creation failed, please fix and try again")
 
                 logger.error(e)
@@ -234,77 +226,55 @@ class EcsTaskDefinition(AwsResource):
         not_null_args: Dict[str, Any] = {}
 
         if task_role_arn is not None:
-
             not_null_args["taskRoleArn"] = task_role_arn
 
         if execution_role_arn is not None:
-
             not_null_args["executionRoleArn"] = execution_role_arn
 
         if self.network_mode is not None:
-
             not_null_args["networkMode"] = self.network_mode
 
         if self.containers is not None:
-
-            container_definitions = [
-
-                c.get_container_definition(aws_client=aws_client)
-
-                for c in self.containers
-
-            ]
+            container_definitions = [c.get_container_definition(aws_client=aws_client) for c in self.containers]
 
             not_null_args["containerDefinitions"] = container_definitions
 
         if self.volumes is not None:
-
             volume_definitions = [v.get_volume_definition() for v in self.volumes]
 
             not_null_args["volumes"] = volume_definitions
 
         if self.placement_constraints is not None:
-
             not_null_args["placementConstraints"] = self.placement_constraints
 
         if self.requires_compatibilities is not None:
-
             not_null_args["requiresCompatibilities"] = self.requires_compatibilities
 
         if self.cpu is not None:
-
             not_null_args["cpu"] = self.cpu
 
         if self.memory is not None:
-
             not_null_args["memory"] = self.memory
 
         if self.tags is not None:
-
             not_null_args["tags"] = self.tags
 
         if self.pid_mode is not None:
-
             not_null_args["pidMode"] = self.pid_mode
 
         if self.ipc_mode is not None:
-
             not_null_args["ipcMode"] = self.ipc_mode
 
         if self.proxy_configuration is not None:
-
             not_null_args["proxyConfiguration"] = self.proxy_configuration
 
         if self.inference_accelerators is not None:
-
             not_null_args["inferenceAccelerators"] = self.inference_accelerators
 
         if self.ephemeral_storage is not None:
-
             not_null_args["ephemeralStorage"] = self.ephemeral_storage
 
         if self.runtime_platform is not None:
-
             not_null_args["runtimePlatform"] = self.runtime_platform
 
         # Register EcsTaskDefinition
@@ -312,13 +282,9 @@ class EcsTaskDefinition(AwsResource):
         service_client = self.get_service_client(aws_client)
 
         try:
-
             create_response = service_client.register_task_definition(
-
                 family=self.get_task_family(),
-
                 **not_null_args,
-
             )
 
             logger.debug(f"EcsTaskDefinition: {create_response}")
@@ -328,13 +294,11 @@ class EcsTaskDefinition(AwsResource):
             # Validate resource creation
 
             if resource_dict is not None:
-
                 self.active_resource = create_response
 
                 return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be created.")
 
             logger.error(e)
@@ -342,7 +306,6 @@ class EcsTaskDefinition(AwsResource):
         return False
 
     def _read(self, aws_client: AwsApiClient) -> Optional[Any]:
-
         """Read EcsTaskDefinition"""
 
         from botocore.exceptions import ClientError
@@ -352,19 +315,13 @@ class EcsTaskDefinition(AwsResource):
         service_client = self.get_service_client(aws_client)
 
         try:
-
-            describe_response = service_client.describe_task_definition(
-
-                taskDefinition=self.get_task_family()
-
-            )
+            describe_response = service_client.describe_task_definition(taskDefinition=self.get_task_family())
 
             logger.debug(f"EcsTaskDefinition: {describe_response}")
 
             resource = describe_response.get("taskDefinition", None)
 
             if resource is not None:
-
                 # compare the task definition with the current state
 
                 # if there is a difference, create a new task definition
@@ -376,11 +333,9 @@ class EcsTaskDefinition(AwsResource):
                 self.active_resource = resource
 
         except ClientError as ce:
-
             logger.debug(f"ClientError: {ce}")
 
         except Exception as e:
-
             logger.error(f"Error reading {self.get_resource_type()}.")
 
             logger.error(e)
@@ -388,7 +343,6 @@ class EcsTaskDefinition(AwsResource):
         return self.active_resource
 
     def _delete(self, aws_client: AwsApiClient) -> bool:
-
         """Delete EcsTaskDefinition"""
 
         print_info(f"Deleting {self.get_resource_type()}: {self.get_resource_name()}")
@@ -396,40 +350,26 @@ class EcsTaskDefinition(AwsResource):
         # Step 1: Delete the task role
 
         if self.task_role_arn is None and self.create_task_role:
-
             task_role = self.get_task_role()
 
             try:
-
                 task_role.delete(aws_client)
 
             except Exception as e:
-
-                logger.error(
-
-                    "IamRole deletion failed, please try again or delete manually"
-
-                )
+                logger.error("IamRole deletion failed, please try again or delete manually")
 
                 logger.error(e)
 
         # Step 2: Delete the execution role
 
         if self.execution_role_arn is None and self.create_execution_role:
-
             execution_role = self.get_execution_role()
 
             try:
-
                 execution_role.delete(aws_client)
 
             except Exception as e:
-
-                logger.error(
-
-                    "IamRole deletion failed, please try again or delete manually"
-
-                )
+                logger.error("IamRole deletion failed, please try again or delete manually")
 
                 logger.error(e)
 
@@ -438,37 +378,25 @@ class EcsTaskDefinition(AwsResource):
         self.active_resource = None
 
         try:
-
             # Get the task definition revisions
 
-            list_response = service_client.list_task_definitions(
-
-                familyPrefix=self.get_task_family(), sort="DESC"
-
-            )
+            list_response = service_client.list_task_definitions(familyPrefix=self.get_task_family(), sort="DESC")
 
             logger.debug(f"EcsTaskDefinition: {list_response}")
 
             task_definition_arns = list_response.get("taskDefinitionArns", [])
 
             if task_definition_arns:
-
                 # Delete all revisions
 
                 for task_definition_arn in task_definition_arns:
-
-                    service_client.deregister_task_definition(
-
-                        taskDefinition=task_definition_arn
-
-                    )
+                    service_client.deregister_task_definition(taskDefinition=task_definition_arn)
 
                 print_info(f"EcsTaskDefinition deleted: {self.get_resource_name()}")
 
                 return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be deleted.")
 
             logger.error("Please try again or delete resources manually.")
@@ -478,7 +406,6 @@ class EcsTaskDefinition(AwsResource):
         return False
 
     def _update(self, aws_client: AwsApiClient) -> bool:
-
         """Update EcsTaskDefinition"""
 
         print_info(f"Updating {self.get_resource_type()}: {self.get_resource_name()}")
@@ -486,31 +413,19 @@ class EcsTaskDefinition(AwsResource):
         return self._create(aws_client)
 
     def get_task_role(self) -> IamRole:
-
         policy_arns = [
-
             "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
-
             "arn:aws:iam::aws:policy/CloudWatchFullAccess",
-
         ]
 
-        if self.add_policy_arns_to_task_role is not None and isinstance(
-
-            self.add_policy_arns_to_task_role, list
-
-        ):
-
+        if self.add_policy_arns_to_task_role is not None and isinstance(self.add_policy_arns_to_task_role, list):
             policy_arns.extend(self.add_policy_arns_to_task_role)
 
         policies = []
 
         if self.add_bedrock_access_to_task:
-
             bedrock_access_policy = IamPolicy(
-
                 name=f"{self.name}-bedrock-access-policy",
-
                 policy_document=dedent("""\
 
                 {
@@ -534,17 +449,13 @@ class EcsTaskDefinition(AwsResource):
                 }
 
                 """),
-
             )
 
             policies.append(bedrock_access_policy)
 
         if self.add_exec_access_to_task:
-
             ecs_exec_policy = IamPolicy(
-
                 name=f"{self.name}-task-exec-policy",
-
                 policy_document=dedent("""\
 
                 {
@@ -578,27 +489,21 @@ class EcsTaskDefinition(AwsResource):
                 }
 
                 """),
-
             )
 
             policies.append(ecs_exec_policy)
 
         if self.add_secret_access_to_task:
-
             policy_arns.append("arn:aws:iam::aws:policy/SecretsManagerReadWrite")
 
         if self.add_s3_access_to_task:
-
             policy_arns.append("arn:aws:iam::aws:policy/AmazonS3FullAccess")
 
         if self.add_policies_to_task_role:
-
             policies.extend(self.add_policies_to_task_role)
 
         return IamRole(
-
             name=self.task_role_name or f"{self.name}-task-role",
-
             assume_role_policy_document=dedent("""\
 
             {
@@ -626,39 +531,26 @@ class EcsTaskDefinition(AwsResource):
             }
 
             """),
-
             policies=policies,
-
             policy_arns=policy_arns,
-
         )
 
     def get_execution_role(self) -> IamRole:
-
         policy_arns = [
-
             "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
-
             "arn:aws:iam::aws:policy/CloudWatchFullAccess",
-
         ]
 
         if self.add_policy_arns_to_execution_role is not None and isinstance(
-
             self.add_policy_arns_to_execution_role, list
-
         ):
-
             policy_arns.extend(self.add_policy_arns_to_execution_role)
 
         policies = []
 
         if self.add_secret_access_to_ecs:
-
             ecs_secret_policy = IamPolicy(
-
                 name=f"{self.name}-ecs-secret-policy",
-
                 policy_document=dedent("""\
 
                 {
@@ -690,19 +582,15 @@ class EcsTaskDefinition(AwsResource):
                 }
 
                 """),
-
             )
 
             policies.append(ecs_secret_policy)
 
         if self.add_policies_to_execution_role:
-
             policies.extend(self.add_policies_to_execution_role)
 
         return IamRole(
-
             name=self.execution_role_name or f"{self.name}-execution-role",
-
             assume_role_policy_document=dedent("""\
 
             {
@@ -730,11 +618,8 @@ class EcsTaskDefinition(AwsResource):
             }
 
             """),
-
             policies=policies,
-
             policy_arns=policy_arns,
-
         )
 
     # def task_definition_up_to_date(self, task_definition: Dict[str, Any]) -> bool:
@@ -980,4 +865,3 @@ class EcsTaskDefinition(AwsResource):
     #
 
     #     return True
-

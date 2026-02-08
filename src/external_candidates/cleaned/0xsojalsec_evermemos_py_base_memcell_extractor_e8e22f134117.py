@@ -56,12 +56,10 @@ class StatusResult:
 
 class MemCellExtractor(ABC):
     def __init__(self, raw_data_type: RawDataType, llm_provider=LLMProvider):
-
         self.raw_data_type = raw_data_type
 
         self._llm_provider = llm_provider
 
     @abstractmethod
     async def extract_memcell(self, request: MemCellExtractRequest) -> tuple[Optional[MemCell], Optional[StatusResult]]:
-
         pass

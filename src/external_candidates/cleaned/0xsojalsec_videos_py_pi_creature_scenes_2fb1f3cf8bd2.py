@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class IveHeardOfThis(TeacherStudentsScene):
     def construct(self):
-
         point = VectorizedPoint()
 
         point.move_to(3 * RIGHT + 2 * UP)
@@ -64,7 +63,6 @@ class IveHeardOfThis(TeacherStudentsScene):
 
 class InFouriersShoes(PiCreatureScene, WriteHeatEquationTemplate):
     def construct(self):
-
         randy = self.pi_creature
 
         fourier = ImageMobject("Joseph Fourier")
@@ -132,7 +130,6 @@ class InFouriersShoes(PiCreatureScene, WriteHeatEquationTemplate):
 
 class SineCurveIsUnrealistic(TeacherStudentsScene):
     def construct(self):
-
         self.student_says(
             "But that would\\\\never happen!",
             index=1,
@@ -164,7 +161,6 @@ class SineCurveIsUnrealistic(TeacherStudentsScene):
 
 class IfOnly(TeacherStudentsScene):
     def construct(self):
-
         self.teacher_says("If only!", target_mode="angry")
 
         self.play_all_student_changes("confused", look_at=self.screen)
@@ -174,7 +170,6 @@ class IfOnly(TeacherStudentsScene):
 
 class SoWeGotNowhere(TeacherStudentsScene):
     def construct(self):
-
         self.student_says(
             "So we've gotten\\\\nowhere!",
             target_mode="angry",

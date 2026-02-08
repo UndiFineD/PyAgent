@@ -42,7 +42,6 @@ class WhisperRules:
         self.load_rules(rulespath)
 
     def load_rules(self, rulespath: str = ""):
-
         if not rulespath:
             rulespath = Path(__file__).parent
 
@@ -60,7 +59,6 @@ class WhisperRules:
             raise TypeError("Rules must be loaded from a file or directory")
 
     def load_rules_from_file(self, rulefile: Path):
-
         if not rulefile.exists():
             raise FileNotFoundError(f"Rule file {rulefile.as_posix()} not found")
 
@@ -70,7 +68,6 @@ class WhisperRules:
             self.load_rule(rule_id, rule)
 
     def load_rules_from_dict(self, custom_rules: dict):
-
         if not custom_rules:
             return
 
@@ -78,7 +75,6 @@ class WhisperRules:
             self.load_rule(rule_id, rule)
 
     def load_rule(self, rule_id: str, rule: dict):
-
         if rule_id in self.rules:
             raise IndexError(f"Duplicated rule {rule_id}, {self.rules[rule_id]}")
 
@@ -86,7 +82,6 @@ class WhisperRules:
 
     @staticmethod
     def parse_rule(rule_id: str, rule: dict) -> dict:
-
         required_severity = ["BLOCKER", "CRITICAL", "MAJOR", "MINOR", "INFO"]
 
         if rule["severity"] not in required_severity:
@@ -109,7 +104,6 @@ class WhisperRules:
         return rule
 
     def match(self, rule_id: str, text: str):
-
         for idx in ("key", "value"):
             if idx in self.rules[rule_id]:
                 regex = self.rules[rule_id][idx]["regex"]
@@ -120,7 +114,6 @@ class WhisperRules:
         return False
 
     def check(self, key: str, value: str, filepath: Path, foundlines: List[int]) -> Secret:
-
         matrix = {"key": key, "value": value}
 
         checks = {
@@ -179,24 +172,20 @@ class WhisperRules:
             )
 
     def check_isBase64(self, rule, mkey, mvalue):
-
         return rule[mkey]["isBase64"] == self.match("base64", mvalue)
 
     def check_isAscii(self, rule, mkey, mvalue):
-
         mvalue = self.decode_if_base64(rule, mkey, mvalue)
 
         return self.is_ascii(mvalue)
 
     def check_isUri(self, rule, mkey, mvalue):
-
         mvalue = self.decode_if_base64(rule, mkey, mvalue)
 
         return rule[mkey]["isUri"] == self.match("uri", mvalue)
 
     @staticmethod
     def check_minlen(rule, mkey, mvalue):
-
         if mkey not in rule:
             return True  # Not specified
 
@@ -215,7 +204,6 @@ class WhisperRules:
 
     @staticmethod
     def check_regex(rule, mkey, mvalue):
-
         if mkey not in rule:
             return True  # Not specified
 
@@ -256,7 +244,6 @@ class WhisperRules:
 
     @staticmethod
     def check_isLuhn(rule, key, value):
-
         if not value.isnumeric():
             return False
 
@@ -264,7 +251,6 @@ class WhisperRules:
 
     @staticmethod
     def decode_if_base64(rule, mkey, mvalue):
-
         if "isBase64" in rule[mkey]:
             if rule[mkey]["isBase64"]:
                 decoded = b64decode(mvalue)
@@ -279,7 +265,6 @@ class WhisperRules:
 
     @staticmethod
     def is_ascii(data):
-
         if isinstance(data, bytes):
             try:
                 data = data.decode("utf-8")

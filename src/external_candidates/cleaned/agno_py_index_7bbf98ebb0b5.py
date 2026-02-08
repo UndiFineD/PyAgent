@@ -7,8 +7,8 @@ from typing import Any, Dict, Optional
 
 from pydantic import BaseModel
 
-class Ivfflat(BaseModel):
 
+class Ivfflat(BaseModel):
     name: Optional[str] = None
 
     lists: int = 100
@@ -18,13 +18,11 @@ class Ivfflat(BaseModel):
     dynamic_lists: bool = True
 
     configuration: Dict[str, Any] = {
-
         "maintenance_work_mem": "2GB",
-
     }
 
-class HNSW(BaseModel):
 
+class HNSW(BaseModel):
     name: Optional[str] = None
 
     m: int = 16
@@ -34,8 +32,5 @@ class HNSW(BaseModel):
     ef_construction: int = 200
 
     configuration: Dict[str, Any] = {
-
         "maintenance_work_mem": "2GB",
-
     }
-

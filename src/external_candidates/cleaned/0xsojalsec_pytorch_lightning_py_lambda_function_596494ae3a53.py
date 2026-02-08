@@ -101,7 +101,6 @@ class LambdaCallback(Callback):
         on_predict_epoch_start: Optional[Callable] = None,
         on_predict_epoch_end: Optional[Callable] = None,
     ):
-
         for k, v in locals().items():
             if k == "self":
                 continue

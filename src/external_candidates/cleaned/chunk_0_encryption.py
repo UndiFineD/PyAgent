@@ -46,7 +46,6 @@ class CodeSysV3Encryption:
 
     @staticmethod
     def hash_password(challenge: int, password: str):
-
         password_len = len(password)
 
         full_password_len = password_len

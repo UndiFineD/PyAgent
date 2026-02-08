@@ -24,7 +24,6 @@ class ArgumentsParser:
     formatter_class = lambda prog: LineWrapRawTextHelpFormatter(prog, max_help_position=100)
 
     def __init__(self):
-
         self.parser = argparse.ArgumentParser(formatter_class=ArgumentsParser.formatter_class)
 
         self.parser.add_argument("--url", type=self.check_arg_url, dest="url", help="Target URL")
@@ -117,7 +116,6 @@ class ArgumentsParser:
         self.check_args()
 
     def check_arg_url(self, url):
-
         url = str(url)
 
         regex = re.compile(
@@ -148,7 +146,6 @@ class ArgumentsParser:
         return url
 
     def check_arg_type(self, type_):
-
         type_ = str(type_).lower()
 
         if type_ not in Utils.list_modules():
@@ -157,7 +154,6 @@ class ArgumentsParser:
         return type_
 
     def check_arg_file(self, file):
-
         file = str(file)
 
         if not os.path.isfile(file):
@@ -166,7 +162,6 @@ class ArgumentsParser:
         return os.path.abspath(file)
 
     def check_arg_threads(self, threads):
-
         try:
             threads = int(threads)
 
@@ -179,7 +174,6 @@ class ArgumentsParser:
         return threads
 
     def check_args(self):
-
         if self.args.list is False:
             if self.args.url is None:
                 self.parser.error("Target URL is required (--url)")

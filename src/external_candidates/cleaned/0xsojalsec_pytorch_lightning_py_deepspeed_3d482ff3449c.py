@@ -79,7 +79,6 @@ class DeepSpeedPrecision(Precision):
     """
 
     def __init__(self, precision: _PRECISION_INPUT) -> None:
-
         super().__init__()
 
         _raise_enterprise_not_available()
@@ -92,22 +91,18 @@ class DeepSpeedPrecision(Precision):
 
     @override
     def convert_module(self, module: Module) -> Module:
-
         return self.deepspeed_precision_impl.convert_module(module=module)
 
     @override
     def convert_input(self, data: Any) -> Any:
-
         return self.deepspeed_precision_impl.convert_input(data=data)
 
     @override
     def tensor_init_context(self) -> AbstractContextManager:
-
         return self.deepspeed_precision_impl.tensor_init_context()
 
     @override
     def module_init_context(self) -> AbstractContextManager:
-
         return self.deepspeed_precision_impl.module_init_context()
 
     @override
@@ -145,7 +140,6 @@ class DeepSpeedPrecision(Precision):
         closure: Callable[[], Any],
         **kwargs: Any,
     ) -> Any:
-
         return self.deepspeed_precision_impl.optimizer_step(optimizer=optimizer, model=model, closure=closure, **kwargs)
 
     @override
@@ -155,7 +149,6 @@ class DeepSpeedPrecision(Precision):
         clip_val: Union[int, float] = 0.0,
         gradient_clip_algorithm: GradClipAlgorithmType = GradClipAlgorithmType.NORM,
     ) -> None:
-
         return self.deepspeed_precision_impl.clip_gradients(
             optimizer=optimizer,
             clip_val=clip_val,
@@ -164,20 +157,16 @@ class DeepSpeedPrecision(Precision):
 
     @property
     def precision(self) -> _PRECISION_INPUT_STR:
-
         return self.deepspeed_precision_impl.precision
 
     @precision.setter
     def precision(self, value: _PRECISION_INPUT_STR) -> None:
-
         self.deepspeed_precision_impl.precision = value
 
     @property
     def _desired_dtype(self) -> torch.dtype:
-
         return self.deepspeed_precision_impl._desired_dtype
 
     @_desired_dtype.setter
     def _desired_dtype(self, value: torch.dtype) -> None:
-
         self.deepspeed_precision_impl._desired_dtype = value

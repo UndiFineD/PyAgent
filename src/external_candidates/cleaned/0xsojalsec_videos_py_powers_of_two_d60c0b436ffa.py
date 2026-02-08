@@ -8,13 +8,11 @@ from manim_imports_ext import *
 
 class PowersOfTwo(Scene):
     def construct(self):
-
         max_n = 22
 
         self.colors = [[BLUE_B, BLUE_D, BLUE_C, GREY_BROWN][n % 4] for n in range(max_n)]
 
         def update_group(group, alpha):
-
             n = int(interpolate(0, max_n, alpha))
 
             group.set_submobjects(
@@ -53,7 +51,6 @@ class PowersOfTwo(Scene):
         self.wait(2)
 
     def get_label(self, n):
-
         lhs = Tex("2^{", "10", "} =")
 
         exp = Integer(n)
@@ -79,7 +76,6 @@ class PowersOfTwo(Scene):
         return result
 
     def get_dots(self, n, height=6):
-
         if n == 0:
             result = self.get_marginal_dots(0)
 
@@ -120,7 +116,6 @@ class PowersOfTwo(Scene):
         return result
 
     def get_marginal_dots(self, n):
-
         dots = DotCloud()
 
         rows = 2 ** (int(np.floor(n / 2)))

@@ -7,8 +7,8 @@ from pathlib import Path
 
 from typing import Dict, Optional
 
-def get_python_objects_from_module(module_path: Path) -> Dict:
 
+def get_python_objects_from_module(module_path: Path) -> Dict:
     """Returns a dictionary of python objects from a module"""
 
     import importlib.util
@@ -19,16 +19,11 @@ def get_python_objects_from_module(module_path: Path) -> Dict:
 
     # Create a ModuleSpec
 
-    module_spec: Optional[ModuleSpec] = importlib.util.spec_from_file_location(
-
-        "module", module_path
-
-    )
+    module_spec: Optional[ModuleSpec] = importlib.util.spec_from_file_location("module", module_path)
 
     # Using the ModuleSpec create a module
 
     if module_spec:
-
         module = importlib.util.module_from_spec(module_spec)
 
         module_spec.loader.exec_module(module)  # type: ignore
@@ -36,6 +31,4 @@ def get_python_objects_from_module(module_path: Path) -> Dict:
         return module.__dict__
 
     else:
-
         return {}
-

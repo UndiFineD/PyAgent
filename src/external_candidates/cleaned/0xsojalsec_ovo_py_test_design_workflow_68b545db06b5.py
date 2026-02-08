@@ -20,7 +20,6 @@ from tests.unit_tests.utils.mocking import MockScheduler
 
 
 def test_rfdiffusion_scaffold_design_workflow_get_params():
-
     from ovo import local_scheduler
 
     workflow = RFdiffusionScaffoldDesignWorkflow(

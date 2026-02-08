@@ -24,11 +24,9 @@ from requests.exceptions import RetryError
 
 class PolyswarmExtractor:
     def __init__(self, POLYAPI):
-
         self.POLYAPI = POLYAPI
 
     def requestPOLYAPI(self):
-
         if self.POLYAPI == "":
             print(
                 mycolors.foreground.red
@@ -40,7 +38,6 @@ class PolyswarmExtractor:
             exit(1)
 
     def polymetasearch(self, poly, metainfo):
-
         self.requestPOLYAPI()
 
         polyswarm = PolyswarmAPI(key=self.POLYAPI)
@@ -312,7 +309,6 @@ class PolyswarmExtractor:
             exit(1)
 
     def polyfile(self, poly):
-
         if not (os.path.isfile(poly)):
             if cv.bkg == 0:
                 print(mycolors.foreground.red + "\nYou didn't provide a valid file.\n")
@@ -444,7 +440,6 @@ class PolyswarmExtractor:
             exit(1)
 
     def polyhashsearch(self, poly, download):
-
         if len(poly) not in [32, 40, 64]:
             return False
 

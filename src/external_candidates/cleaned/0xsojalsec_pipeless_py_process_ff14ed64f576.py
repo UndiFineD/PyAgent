@@ -7,7 +7,6 @@ import cv2
 
 
 def hook(frame_data, context):
-
     # Get RG frame
 
     frame = frame_data["original"]

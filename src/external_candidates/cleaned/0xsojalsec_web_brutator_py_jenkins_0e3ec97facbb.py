@@ -20,7 +20,6 @@ from lib.core.Requester import AuthMode, Requester
 
 class Jenkins:
     def __init__(self, url, verbose=False):
-
         self.url = url
 
         self.interface = None
@@ -70,7 +69,6 @@ class Jenkins:
         return False
 
     def try_auth(self, username, password):
-
         if self.interface == "jenkins-admin":
             data = {
                 "j_username": username,

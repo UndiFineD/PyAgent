@@ -19,7 +19,6 @@ from utils import fetch_web_info, process_profile_entity
 
 
 async def fetch_profile_by_phone(phone: str):
-
     async with app:
         contacts = await app.import_contacts([InputPhoneContact(phone, "Foo")])
 
@@ -40,7 +39,6 @@ async def fetch_profile_by_phone(phone: str):
 class PhoneToProfile(DiscoverableTransform):
     @classmethod
     def create_entities(cls, request: MaltegoMsg, response: MaltegoTransform):
-
         phone = request.getProperty("phonenumber")
 
         profile = loop.run_until_complete(fetch_profile_by_phone(phone))

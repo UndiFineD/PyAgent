@@ -97,7 +97,6 @@ class ZhipuAIModel(BaseModelBackend):
         url: Optional[str] = None,
         token_counter: Optional[BaseTokenCounter] = None,
     ) -> None:
-
         if model_config_dict is None:
             model_config_dict = ZhipuAIConfig().as_dict()
 

@@ -24,7 +24,6 @@ class AgentABC:
     conversation: Conversation
 
     def __init__(self, model, system_prompt, *args, **kwargs):
-
         self.model = model
 
         self.system_prompt = system_prompt

@@ -5,7 +5,6 @@
 
 import random
 
-
 from fle.env import Resource
 
 from inspect_ai.solver import Generate, Solver, TaskState, solver
@@ -13,9 +12,7 @@ from inspect_ai.solver import Generate, Solver, TaskState, solver
 
 @solver
 def nearest_questions(multiple_choice: bool = True) -> Solver:
-
     async def solve(state: TaskState, generate: Generate) -> TaskState:
-
         instance = state.metadata["instance"]
 
         state.metadata["renderer"]

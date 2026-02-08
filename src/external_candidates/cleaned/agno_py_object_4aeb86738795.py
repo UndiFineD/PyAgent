@@ -15,8 +15,8 @@ from agno.utils.log import logger
 
 from pydantic import Field
 
-class S3Object(AwsResource):
 
+class S3Object(AwsResource):
     """
 
     Reference:
@@ -38,9 +38,7 @@ class S3Object(AwsResource):
     name: str = Field(..., alias="key")
 
     @property
-
     def uri(self) -> str:
-
         """Returns the URI of the s3.Object
 
         Returns:
@@ -52,7 +50,6 @@ class S3Object(AwsResource):
         return f"s3://{self.bucket_name}/{self.name}"
 
     def get_resource(self, aws_client: Optional[AwsApiClient] = None) -> Any:
-
         """Returns the s3.Object
 
         Args:
@@ -70,15 +67,11 @@ class S3Object(AwsResource):
         service_resource = self.get_service_resource(client)
 
         return service_resource.Object(
-
             bucket_name=self.bucket_name,
-
             key=self.name,
-
         )
 
     def download(self, path: Path, aws_client: Optional[AwsApiClient] = None) -> None:
-
         """Downloads the s3.Object to the specified path
 
         Args:
@@ -96,6 +89,4 @@ class S3Object(AwsResource):
         path.parent.mkdir(parents=True, exist_ok=True)
 
         with path.open(mode="wb") as f:
-
             object_resource.download_fileobj(f)
-

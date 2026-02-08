@@ -46,7 +46,6 @@ class MaskDownSampler(nn.Module):
         total_stride=16,
         activation=nn.GELU,
     ):
-
         super().__init__()
 
         num_layers = int(math.log2(total_stride) // math.log2(stride))
@@ -79,7 +78,6 @@ class MaskDownSampler(nn.Module):
         self.encoder.append(nn.Conv2d(mask_out_chans, embed_dim, kernel_size=1))
 
     def forward(self, x):
-
         return self.encoder(x)
 
 
@@ -114,7 +112,6 @@ class CXBlock(nn.Module):
         layer_scale_init_value=1e-6,
         use_dwconv=True,
     ):
-
         super().__init__()
 
         self.dwconv = nn.Conv2d(
@@ -142,7 +139,6 @@ class CXBlock(nn.Module):
         self.drop_path = DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
 
     def forward(self, x):
-
         input = x
 
         x = self.dwconv(x)
@@ -169,7 +165,6 @@ class CXBlock(nn.Module):
 
 class Fuser(nn.Module):
     def __init__(self, layer, num_layers, dim=None, input_projection=False):
-
         super().__init__()
 
         self.proj = nn.Identity()
@@ -182,7 +177,6 @@ class Fuser(nn.Module):
             self.proj = nn.Conv2d(dim, dim, kernel_size=1)
 
     def forward(self, x):
-
         # normally x: (N, C, H, W)
 
         x = self.proj(x)
@@ -202,7 +196,6 @@ class MemoryEncoder(nn.Module):
         position_encoding,
         in_dim=256,  # in_dim of pix_feats
     ):
-
         super().__init__()
 
         self.mask_downsampler = mask_downsampler
@@ -224,7 +217,6 @@ class MemoryEncoder(nn.Module):
         masks: torch.Tensor,
         skip_mask_sigmoid: bool = False,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
-
         ## Process masks
 
         # sigmoid, so that less domain shift from gt masks which are bool

@@ -20,15 +20,12 @@ class RefoldingSupportedDesignWorkflow(ABC):
     """Abstract class that defines an interface for workflows supported by the RefoldingWorkflow workflow"""
 
     def get_refolding_native_pdb_path(self, contig_index: int) -> Optional[str]:
-
         raise NotImplementedError()
 
     def get_refolding_design_paths(self, design_ids: list[str]) -> dict[str, str]:
-
         raise NotImplementedError()
 
     def get_refolding_design_type(self) -> str:
-
         raise NotImplementedError()
 
 
@@ -44,17 +41,14 @@ class RefoldingWorkflow(DescriptorWorkflow):
     native_pdb_path: str = None
 
     def get_pipeline_name(self) -> str:
-
         return "ovo.refolding"
 
     def prepare_params(self, workdir: str) -> dict:
-
         from ovo.core.logic.descriptor_logic import prepare_refolding_params
 
         return prepare_refolding_params(self, workdir=workdir)
 
     def process_results(self, job: DescriptorJob, callback: Callable = None) -> list[Base]:
-
         from ovo.core.logic.descriptor_logic import read_descriptor_file_values
 
         descriptor_values = read_descriptor_file_values(
@@ -68,7 +62,6 @@ class RefoldingWorkflow(DescriptorWorkflow):
         return descriptor_values + [job]
 
     def validate(self):
-
         super().validate()
 
         if not self.design_type:

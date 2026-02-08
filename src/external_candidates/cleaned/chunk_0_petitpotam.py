@@ -35,5 +35,4 @@ class NXCModule:
             self.pipe = module_options["PIPE"]
 
     def on_login(self, context, connection):
-
         context.log.fail('[REMOVED] This module moved to the new module "coerce_plus"')

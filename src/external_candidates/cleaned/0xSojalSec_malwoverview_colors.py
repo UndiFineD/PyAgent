@@ -41,7 +41,6 @@ class mycolors:
 
         @staticmethod
         def error(bkg):
-
             if bkg == 1:
                 return mycolors.foreground.lightred
 
@@ -50,7 +49,6 @@ class mycolors:
 
         @staticmethod
         def info(bkg):
-
             if bkg == 1:
                 return mycolors.foreground.lightcyan
 
@@ -59,7 +57,6 @@ class mycolors:
 
         @staticmethod
         def success(bkg):
-
             if bkg == 1:
                 return mycolors.foreground.yellow
 
@@ -85,10 +82,8 @@ class mycolors:
 
 
 def printc(text, color, *args, **kwargs):
-
     print(f"{color}{text}{mycolors.reset}", *args, **kwargs)
 
 
 def printr():
-
     print(mycolors.reset)

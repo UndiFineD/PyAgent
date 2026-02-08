@@ -29,13 +29,11 @@
 
 #    limitations under the License.
 
-
 import os
 
 import shutil
 
 import warnings
-
 
 import torch
 
@@ -56,7 +54,6 @@ from transformers import (
     BitsAndBytesConfig,
 )
 
-
 # attn_implementation="flash_attention_2"
 
 
@@ -72,7 +69,6 @@ def load_pretrained_model(
     overwrite_config=None,
     **kwargs,
 ):
-
     kwargs["device_map"] = device_map
 
     if load_8bit:

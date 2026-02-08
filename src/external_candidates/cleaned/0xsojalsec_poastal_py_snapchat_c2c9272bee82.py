@@ -9,7 +9,6 @@ import requests
 
 
 def snapchat_email(email):
-
     headers = {
         "Content-Type": "text/plain",
     }

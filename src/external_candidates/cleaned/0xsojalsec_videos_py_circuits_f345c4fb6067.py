@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class Resistor(Line):
     def init_points(self):
-
         midpoints = [
             interpolate(self.start, self.end, alpha) for alpha in [0.25] + list(np.arange(0.3, 0.71, 0.1)) + [0.75]
         ]
@@ -25,7 +24,6 @@ class Resistor(Line):
 
 class LongResistor(Line):
     def init_points(self):
-
         mid1 = interpolate(self.start, self.end, 1.0 / 5)
 
         mid2 = interpolate(self.start, self.end, 4.0 / 5)
@@ -39,7 +37,6 @@ class LongResistor(Line):
 
 class Source(VMobject):
     def init_points(self):
-
         self.add(Circle(color=self.color))
 
         self.add(OldTex("+").scale(1.5).set_color(GREEN).shift(0.5 * UP))
@@ -55,7 +52,6 @@ class Source(VMobject):
 
 class CircuitReduction(Scene):
     def construct(self):
-
         pos = dict(
             [
                 (

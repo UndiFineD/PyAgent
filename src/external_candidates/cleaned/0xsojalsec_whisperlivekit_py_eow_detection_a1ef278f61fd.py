@@ -84,7 +84,6 @@ def resize(alphas, target_lengths, threshold=0.999):
 
 
 def fire_at_boundary(chunked_encoder_feature: torch.Tensor, cif_linear):
-
     content_mel_len = chunked_encoder_feature.shape[1]  # B, T, D
 
     alphas = cif_linear(chunked_encoder_feature).squeeze(dim=2)  # B, T

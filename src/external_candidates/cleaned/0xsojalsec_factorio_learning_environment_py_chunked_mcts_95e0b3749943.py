@@ -32,7 +32,6 @@ from .mcts import MCTS
 
 class ChunkedMCTS(MCTS):
     def __init__(self, *args, logit_bias: Optional[float] = None, **kwargs):
-
         super().__init__(*args, **kwargs)
 
         self.logit_bias = logit_bias
@@ -664,14 +663,12 @@ class ChunkedMCTS(MCTS):
             raise e
 
     async def search(self, n_iterations: int, samples_per_iteration: int, skip_failures: bool = False):
-
         for iteration in range(n_iterations):
             await self.run_iteration(samples_per_iteration, skip_failures, iteration)
 
             self.evaluator.logger.update_progress()
 
     async def run_iteration(self, samples_per_iteration, skip_failures, iteration, n_iterations):
-
         parent = await self.sampler.sample_parent(version=self.version)
 
         start_state = parent.state if parent else self.initial_state
@@ -866,7 +863,6 @@ class ChunkedMCTS(MCTS):
     async def _generate_programs_batch(
         self, conversation: Conversation, n_samples: int
     ) -> List[Tuple[Program, List[Program]]]:
-
         generation_parameters = GenerationParameters(
             n=n_samples,
             model=self.llm.model,

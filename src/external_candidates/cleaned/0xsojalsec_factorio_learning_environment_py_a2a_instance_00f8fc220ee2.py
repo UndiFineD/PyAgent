@@ -32,7 +32,6 @@ class A2AFactorioInstance(FactorioInstance):
     _init_lock = Lock()
 
     def __new__(cls, *args, **kwargs):
-
         if not cls._initialized:
             raise RuntimeError(
                 "Direct instantiation of A2AFactorioInstance is not allowed. "

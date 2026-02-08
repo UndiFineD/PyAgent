@@ -20,7 +20,6 @@ class GREquations(Scene):
     }
 
     def construct(self):
-
         eq1 = self.get_field_eq("\\mu", "\\nu")
 
         indices = list(filter(lambda t: t[0] <= t[1], it.product(range(4), range(4))))
@@ -124,7 +123,6 @@ class GREquations(Scene):
         self.wait()
 
     def get_field_eq(self, mu, nu, simple=True):
-
         mu = "{" + str(mu) + " }"  # Deliberate space
 
         nu = "{" + str(nu) + "}"
@@ -181,7 +179,6 @@ class GREquations(Scene):
         return result
 
     def get_rects(self, equation):
-
         return VGroup(
             *[
                 SurroundingRectangle(

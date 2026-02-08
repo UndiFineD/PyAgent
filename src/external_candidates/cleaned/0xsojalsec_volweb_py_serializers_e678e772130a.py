@@ -27,7 +27,6 @@ class EvidenceSerializer(serializers.ModelSerializer):
         extra_fields = ["dump_linked_case_name"]
 
     def get_dump_linked_case_name(self, obj):
-
         # Return the name of the linked case instead of the id
 
         return obj.dump_linked_case.case_name

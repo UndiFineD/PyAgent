@@ -28,7 +28,6 @@ def split_video(
     audio_output_format="mp3",
     audio_sample_rate=16000,  # Default 16kHz for speech recognition
 ):
-
     unique_timestamp = str(int(time.time() * 1000))
 
     video_name = os.path.basename(video_path).split(".")[0]
@@ -108,7 +107,6 @@ def saving_video_segments(
     segment_times_info,
     video_output_format="mp4",
 ):
-
     try:
         with VideoFileClip(video_path) as video:
             video_segment_cache_path = os.path.join(working_dir, "_cache", video_name)

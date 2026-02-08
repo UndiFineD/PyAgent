@@ -440,7 +440,6 @@ class SAM2ImagePredictor:
         normalize_coords,
         img_idx=-1,
     ):
-
         unnorm_coords, labels, unnorm_box, mask_input = None, None, None, None
 
         if point_coords is not None:
@@ -639,7 +638,6 @@ class SAM2ImagePredictor:
 
     @property
     def device(self) -> torch.device:
-
         return self.model.device
 
     def reset_predictor(self) -> None:

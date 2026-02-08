@@ -25,10 +25,9 @@ from agno.tools.cartesia import CartesiaTools
 
 # from agno.utils.log import logger as agno_logger_instance # Removed unused import
 
+
 @pytest.fixture
-
 def mock_cartesia_client():
-
     """Create a mock Cartesia client instance (not the class)."""
 
     mock_client = MagicMock()
@@ -77,22 +76,17 @@ def mock_cartesia_client():
 
     return mock_client
 
+
 @pytest.fixture
-
 def cartesia_tools(mock_cartesia_client):
-
     """Create CartesiaTools instance with mocked API client."""
 
     # Patch the Cartesia class during instantiation
 
     with (
-
         patch("agno.tools.cartesia.cartesia.Cartesia") as mock_cartesia_class,
-
         patch.dict("os.environ", {"CARTESIA_API_KEY": "test_key"}),
-
     ):
-
         # Make the patched class return our mock client instance
 
         mock_cartesia_class.return_value = mock_cartesia_client
@@ -101,24 +95,23 @@ def cartesia_tools(mock_cartesia_client):
 
         return tools
 
+
 # Mock agent fixture
 
+
 @pytest.fixture
-
 def mock_agent():
-
     agent = MagicMock(spec=Agent)
 
     agent.add_audio = MagicMock()
 
     return agent
 
-def test_init_with_api_key(mock_cartesia_client):
 
+def test_init_with_api_key(mock_cartesia_client):
     """Test initialization with API key."""
 
     with patch("agno.tools.cartesia.cartesia.Cartesia") as mock_cartesia_class:
-
         mock_cartesia_class.return_value = mock_cartesia_client
 
         tools = CartesiaTools(api_key="test_key")
@@ -133,20 +126,15 @@ def test_init_with_api_key(mock_cartesia_client):
 
         assert tools.default_voice_id == "78ab82d5-25be-4f7d-82b3-7ad64e5b85b2"
 
-def test_init_with_env_var(mock_cartesia_client):
 
+def test_init_with_env_var(mock_cartesia_client):
     """Test initialization with environment variable."""
 
     with (
-
         patch("agno.tools.cartesia.cartesia.Cartesia") as mock_cartesia_class,
-
         patch.dict("os.environ", {"CARTESIA_API_KEY": "env_key"}),
-
         patch("os.getenv", return_value="env_key"),
-
     ):
-
         mock_cartesia_class.return_value = mock_cartesia_client
 
         tools = CartesiaTools()
@@ -159,25 +147,17 @@ def test_init_with_env_var(mock_cartesia_client):
 
         assert tools.default_voice_id == "78ab82d5-25be-4f7d-82b3-7ad64e5b85b2"
 
-def test_init_override_defaults(mock_cartesia_client):
 
+def test_init_override_defaults(mock_cartesia_client):
     """Test initialization overriding default model/voice IDs."""
 
     with (
-
         patch("agno.tools.cartesia.cartesia.Cartesia") as mock_cartesia_class,
-
         patch.dict("os.environ", {"CARTESIA_API_KEY": "test_key"}),
-
     ):
-
         mock_cartesia_class.return_value = mock_cartesia_client
 
-        tools = CartesiaTools(
-
-            model_id="override-model", default_voice_id="override-voice"
-
-        )
+        tools = CartesiaTools(model_id="override-model", default_voice_id="override-voice")
 
         mock_cartesia_class.assert_called_once_with(api_key="test_key")
 
@@ -185,34 +165,26 @@ def test_init_override_defaults(mock_cartesia_client):
 
         assert tools.default_voice_id == "override-voice"
 
-def test_init_missing_api_key():
 
+def test_init_missing_api_key():
     """Test initialization with missing API key."""
 
     # Patch getenv where it's imported in the tools module
 
     with (
-
         patch("agno.tools.cartesia.getenv", return_value=None),
-
         pytest.raises(ValueError),
-
     ):
-
         CartesiaTools()
 
-def test_feature_registration(mock_cartesia_client):
 
+def test_feature_registration(mock_cartesia_client):
     """Test that features are correctly registered based on flags."""
 
     with (
-
         patch("agno.tools.cartesia.cartesia.Cartesia") as mock_cartesia_class,
-
         patch.dict("os.environ", {"CARTESIA_API_KEY": "dummy"}),
-
     ):
-
         mock_cartesia_class.return_value = mock_cartesia_client
 
         # Test with only TTS and List enabled (defaults)
@@ -240,19 +212,15 @@ def test_feature_registration(mock_cartesia_client):
         # Test with all disabled
 
         tools = CartesiaTools(
-
             text_to_speech_enabled=False,
-
             list_voices_enabled=False,
-
             voice_localize_enabled=False,
-
         )
 
         assert len(tools.functions) == 0
 
-def test_list_voices(cartesia_tools, mock_cartesia_client):
 
+def test_list_voices(cartesia_tools, mock_cartesia_client):
     """Test listing voices correctly handles the pager and extracts data."""
 
     # Mock client already set up in fixture to return pager
@@ -287,8 +255,8 @@ def test_list_voices(cartesia_tools, mock_cartesia_client):
 
     assert result_data[1]["language"] == "es"
 
-def test_list_voices_error(cartesia_tools, mock_cartesia_client):
 
+def test_list_voices_error(cartesia_tools, mock_cartesia_client):
     """Test error handling for list_voices."""
 
     mock_cartesia_client.voices.list.side_effect = Exception("List API Error")
@@ -303,20 +271,16 @@ def test_list_voices_error(cartesia_tools, mock_cartesia_client):
 
     assert "detail" in result_data
 
-def test_text_to_speech(cartesia_tools, mock_cartesia_client, mock_agent):
 
+def test_text_to_speech(cartesia_tools, mock_cartesia_client, mock_agent):
     """Test text-to-speech functionality creates artifact."""
 
     # Mock client returns iterator with b"audio data"
 
     result = cartesia_tools.text_to_speech(
-
         agent=mock_agent,
-
         transcript="Hello world",
-
         # language="en",  # Removed: Language is no longer a parameter
-
     )
 
     # Verify TTS call arguments
@@ -333,11 +297,7 @@ def test_text_to_speech(cartesia_tools, mock_cartesia_client, mock_agent):
 
     assert call_args["voice"]["mode"] == "id"
 
-    assert (
-
-        call_args["voice"]["id"] == cartesia_tools.default_voice_id
-
-    )  # Check defaults used
+    assert call_args["voice"]["id"] == cartesia_tools.default_voice_id  # Check defaults used
 
     # assert call_args["language"] == "en"  # Removed assertion for language
 
@@ -351,11 +311,7 @@ def test_text_to_speech(cartesia_tools, mock_cartesia_client, mock_agent):
 
     assert output_format["sample_rate"] == 44100
 
-    assert (
-
-        output_format["bit_rate"] == 128000
-
-    )  # Capped value used if default was > 192k
+    assert output_format["bit_rate"] == 128000  # Capped value used if default was > 192k
 
     assert output_format["encoding"] == "mp3"
 
@@ -379,8 +335,8 @@ def test_text_to_speech(cartesia_tools, mock_cartesia_client, mock_agent):
 
     assert result == "Audio generated and attached successfully."
 
-def test_text_to_speech_error(cartesia_tools, mock_cartesia_client, mock_agent):
 
+def test_text_to_speech_error(cartesia_tools, mock_cartesia_client, mock_agent):
     """Test error handling for text_to_speech."""
 
     mock_cartesia_client.tts.bytes.side_effect = Exception("TTS API Error")
@@ -391,22 +347,18 @@ def test_text_to_speech_error(cartesia_tools, mock_cartesia_client, mock_agent):
 
     assert result == "Error generating speech: TTS API Error"
 
+
 # Keep localize_voice test if the method is potentially enabled/used
 
-def test_localize_voice(cartesia_tools, mock_cartesia_client):
 
+def test_localize_voice(cartesia_tools, mock_cartesia_client):
     """Test localizing a voice (assuming enabled)."""
 
     localized_voice_data = {
-
         "id": "localized_voice_id",
-
         "name": "Localized Voice",
-
         "language": "es",
-
         "description": "Voice localized to Spanish",
-
     }
 
     # Use the client from the specific tools instance
@@ -414,36 +366,23 @@ def test_localize_voice(cartesia_tools, mock_cartesia_client):
     mock_cartesia_client.voices.localize.return_value = localized_voice_data
 
     result = cartesia_tools.localize_voice(
-
         voice_id="original_voice_id",
-
         language="es",
-
         name="Localized Voice",
-
         description="Test Localization",
-
         original_speaker_gender="female",
-
     )
 
     result_data = json.loads(result)
 
     mock_cartesia_client.voices.localize.assert_called_once_with(
-
         voice_id="original_voice_id",
-
         language="es",
-
         name="Localized Voice",
-
         description="Test Localization",
-
         original_speaker_gender="female",
-
     )
 
     assert result_data["id"] == "localized_voice_id"
 
     assert result_data["language"] == "es"
-

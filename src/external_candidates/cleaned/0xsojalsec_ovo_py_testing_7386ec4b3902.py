@@ -7,12 +7,10 @@ import streamlit as st
 
 
 def is_test_dialog_shown(dialog_key: str):
-
     return dialog_key in st.session_state.get("test_dialogs", [])
 
 
 def show_test_dialog(at, dialog_key: str):
-
     if "test_dialogs" not in at.session_state:
         at.session_state["test_dialogs"] = []
 
@@ -22,7 +20,6 @@ def show_test_dialog(at, dialog_key: str):
 
 
 def hide_test_dialog(at, dialog_key: str):
-
     if "test_dialogs" not in at.session_state:
         at.session_state["test_dialogs"] = []
 

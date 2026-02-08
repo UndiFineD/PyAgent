@@ -37,7 +37,6 @@
 
 from typing import Optional, Tuple
 
-
 import torch
 
 from torch import nn
@@ -45,8 +44,6 @@ from torch import nn
 
 class TransformerEncoderLayer(nn.Module):
     """Encoder layer module.
-
-
 
     Args:
 
@@ -109,8 +106,6 @@ class TransformerEncoderLayer(nn.Module):
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         """Compute encoded features.
 
-
-
         Args:
 
             x (torch.Tensor): (#batch, time, size)
@@ -148,8 +143,6 @@ class TransformerEncoderLayer(nn.Module):
                 (#batch=1, head, cache_t1 + time, d_k * 2).
 
             torch.Tensor: cnn_cahce tensor (#batch=1, size, cache_t2).
-
-
 
         """
 
@@ -272,8 +265,6 @@ class ConformerEncoderLayer(nn.Module):
         cnn_cache: torch.Tensor = torch.zeros((0, 0, 0, 0)),
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         """Compute encoded features.
-
-
 
         Args:
 

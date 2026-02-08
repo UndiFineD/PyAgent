@@ -18,7 +18,6 @@ class DecomposeRoar_SlowFPS(DecomposeAudioSegment):
     zoom_rect_dims = (0.2, 6.0)
 
     def construct(self):
-
         self.add_full_waveform(run_time=2.5)
 
         self.zoom_in_on_segment(
@@ -34,7 +33,6 @@ class DecomposeRoar_SlowFPS(DecomposeAudioSegment):
         self.show_all_waves()
 
     def show_all_waves(self):
-
         t_axes = self.axes
 
         graph = self.graph
@@ -153,7 +151,6 @@ class CombineWavesToImage_SlowFPS(FourierCirclesScene):
     }
 
     def construct(self):
-
         self.generate_coefs()
 
         self.show_sine_waves()
@@ -161,7 +158,6 @@ class CombineWavesToImage_SlowFPS(FourierCirclesScene):
         self.piece_together_circles()
 
     def generate_coefs(self):
-
         drawing = self.get_drawing()
 
         coefs = self.get_coefficients_of_path(drawing)
@@ -183,7 +179,6 @@ class CombineWavesToImage_SlowFPS(FourierCirclesScene):
         self.circles = circles
 
     def show_sine_waves(self):
-
         # Initialized copycat vectors and circles
 
         s = slice(1, 1 + self.n_shown_waves)
@@ -318,7 +313,6 @@ class CombineWavesToImage_SlowFPS(FourierCirclesScene):
         self.dots = dots
 
     def piece_together_circles(self):
-
         # Setup path and labels
 
         true_path = self.path
@@ -409,7 +403,6 @@ class CombineWavesToImage_SlowFPS(FourierCirclesScene):
         )
 
         def update_drawing_group(group, alpha):
-
             n, _ = integer_interpolate(self.n_shown_waves, self.n_vectors, alpha)
 
             if n not in drawn_paths:
@@ -487,7 +480,6 @@ class CombineWavesToImage_SlowFPS(FourierCirclesScene):
     ##
 
     def get_drawing(self):
-
         svg = SVGMobject(self.drawing_file)
 
         drawing = svg[1]
@@ -499,7 +491,6 @@ class CombineWavesToImage_SlowFPS(FourierCirclesScene):
         return drawing
 
     def get_peace_sign(self):
-
         theta = 40 * DEGREES
 
         arc1 = Arc(270 * DEGREES, -theta, n_components=1)
@@ -526,14 +517,12 @@ class CombineWavesToImage_SlowFPS(FourierCirclesScene):
         return path
 
     def style_vectors(self, vectors):
-
         for k, vector in enumerate(vectors):
             vector.set_stroke(width=2.5 / (1 + k / 10), opacity=1)
 
         return vectors
 
     def style_circles(self, circles):
-
         mcsw = self.max_circle_stroke_width
 
         circles.set_stroke(Color("green"))
@@ -544,7 +533,6 @@ class CombineWavesToImage_SlowFPS(FourierCirclesScene):
         return circles
 
     def get_fade_region(self, path):
-
         dot = GlowDot()
 
         dot.set_radius(1.0 * path.get_width())
@@ -556,7 +544,6 @@ class CombineWavesToImage_SlowFPS(FourierCirclesScene):
         return dot
 
     def get_drawn_path(self, vectors):
-
         nv = len(vectors)
 
         if nv == 0:
@@ -571,7 +558,6 @@ class CombineWavesToImage_SlowFPS(FourierCirclesScene):
         return path
 
     def get_terms(self, n_terms, max_terms=100, max_width=12):
-
         ks = list(range(-int(np.floor(n_terms / 2)), int(np.ceil(n_terms / 2))))
 
         ks.sort(key=abs)
@@ -613,7 +599,6 @@ class CombineWavesToImage_SlowFPS(FourierCirclesScene):
         return terms
 
     def add_draw_dot(self, vectors):
-
         dot = GlowDot()
 
         dot.add_updater(lambda d: d.move_to(vectors[-1].get_end() if len(vectors) > 0 else ORIGIN))

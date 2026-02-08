@@ -4,7 +4,6 @@
 
 
 def build_main(stager_ip, stager_port):
-
     MAIN_C = f"""
 
 #include <Windows.h>

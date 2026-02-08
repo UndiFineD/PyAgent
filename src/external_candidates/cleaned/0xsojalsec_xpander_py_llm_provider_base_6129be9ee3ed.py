@@ -20,7 +20,6 @@ class LLMProviderBase:
     """
 
     def __init__(self) -> None:
-
         self.ensure_required_secrets()
 
     @staticmethod
@@ -78,5 +77,4 @@ class LLMProviderBase:
         pass
 
     def ensure_required_secrets(self):
-
         pass

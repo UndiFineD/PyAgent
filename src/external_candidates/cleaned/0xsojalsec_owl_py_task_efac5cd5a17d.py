@@ -97,7 +97,6 @@ class TaskState(str, Enum):
 
     @classmethod
     def states(cls):
-
         return [s.value for s in cls]
 
 
@@ -431,7 +430,6 @@ class TaskManager:
     """
 
     def __init__(self, task: Task):
-
         self.root_task: Task = task
 
         self.current_task_id: str = task.id
@@ -477,7 +475,6 @@ class TaskManager:
         # recursive visit the vertices
 
         def visit(task: Task):
-
             if task.id in visited:
                 return
 

@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class ThreePis(Scene):
     def construct(self):
-
         pis = VGroup(*(PiCreature() for x in range(3)))
 
         for pi, color in zip(pis, (BLUE_E, BLUE_C, BLUE_D)):
@@ -44,7 +43,6 @@ class ThreePis(Scene):
 
 class PendulumAxes(Scene):
     def construct(self):
-
         plane = NumberPlane(
             (-2, 2),
             (-2, 2),
@@ -94,7 +92,6 @@ class InterpolatingOrientations(ThreeDScene):
     matrix = True
 
     def construct(self):
-
         # Frame
 
         frame = self.camera.frame
@@ -155,14 +152,12 @@ class InterpolatingOrientations(ThreeDScene):
         lines.apply_depth_test()
 
         def update_lines(lines):
-
             for line, point in zip(lines, bases.get_points()):
                 line.put_start_and_end_on(ORIGIN, point)
 
         lines.add_updater(update_lines)
 
         def get_matrix():
-
             return bases.get_points().T
 
         # Tie logo to matrix
@@ -183,7 +178,6 @@ class InterpolatingOrientations(ThreeDScene):
             mat_mob.to_corner(UL)
 
             def update_mat_mob(mat_mob):
-
                 for entry, value in zip(mat_mob.get_entries(), get_matrix().flatten()):
                     entry.set_value(value)
 
@@ -221,7 +215,6 @@ class InterpolatingOrientations(ThreeDScene):
             quat_label.shift(2 * RIGHT)
 
             def update_quat_label(quat_label):
-
                 colors = [WHITE, RED, GREEN, BLUE]
 
                 for mob, value, color in zip(quat_label, quat_tracker.get_value(), colors):
@@ -248,13 +241,11 @@ class InterpolatingOrientations(ThreeDScene):
         self.add(logo)
 
         def move_to_matrix(matrix, run_time=5):
-
             self.play(bases.animate.set_points(np.transpose(matrix)), run_time=run_time)
 
             self.wait()
 
         def move_to_quaternion(quaternion, run_time=5):
-
             self.play(
                 quat_tracker.animate.set_value(quaternion),
                 UpdateFromFunc(quat_tracker, lambda m: m.set_value(normalize(m.get_value()))),
@@ -294,7 +285,6 @@ class InterpolatingOrientationsWithQuaternions(InterpolatingOrientations):
 
 class FirstStepIsToCare(Scene):
     def construct(self):
-
         morty = Mortimer()
 
         morty.to_corner(DR)
@@ -304,7 +294,6 @@ class FirstStepIsToCare(Scene):
 
 class NeverNeeded(Scene):
     def construct(self):
-
         formula = OldTex("\\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}")
 
         formula.set_height(2)
@@ -322,7 +311,6 @@ class NeverNeeded(Scene):
 
 class Thanks(Scene):
     def construct(self):
-
         morty = Mortimer()
 
         morty.to_corner(DR)

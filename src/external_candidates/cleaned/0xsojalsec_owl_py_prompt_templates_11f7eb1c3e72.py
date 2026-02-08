@@ -57,7 +57,6 @@ class PromptTemplateGenerator:
         self,
         task_prompt_template_dict: Optional[TaskPromptTemplateDict] = None,
     ) -> None:
-
         self.task_prompt_template_dict = task_prompt_template_dict or TaskPromptTemplateDict()
 
     def get_prompt_from_key(self, task_type: TaskType, key: Any) -> TextPrompt:

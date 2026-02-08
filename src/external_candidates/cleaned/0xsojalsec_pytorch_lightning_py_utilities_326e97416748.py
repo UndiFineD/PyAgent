@@ -189,7 +189,6 @@ def _is_max_limit_reached(current: int, maximum: int = -1) -> bool:
 
 
 def _reset_progress(loop: _Loop) -> None:
-
     for v in vars(loop).values():
         if isinstance(v, _BaseProgress):
             v.reset()
@@ -199,7 +198,6 @@ def _reset_progress(loop: _Loop) -> None:
 
 
 def _select_data_fetcher(trainer: "pl.Trainer", stage: RunningStage) -> _DataFetcher:
-
     lightning_module = trainer.lightning_module
 
     if stage == RunningStage.TESTING:
@@ -231,9 +229,7 @@ def _select_data_fetcher(trainer: "pl.Trainer", stage: RunningStage) -> _DataFet
 
 
 def _no_grad_context(loop_run: Callable) -> Callable:
-
     def _decorator(self: _Loop, *args: Any, **kwargs: Any) -> Any:
-
         if not isinstance(self, _Loop):
             raise TypeError(f"`{type(self).__name__}` needs to be a Loop.")
 
@@ -277,7 +273,6 @@ def _verify_dataloader_idx_requirement(
     stage: RunningStage,
     pl_module: "pl.LightningModule",
 ) -> None:
-
     for hook in hooks:
         fx = getattr(pl_module, hook)
 

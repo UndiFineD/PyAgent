@@ -26,7 +26,6 @@ class ResourceManager:
     """Manages system resources to prevent overload."""
 
     def __init__(self, settings: Settings):
-
         self.settings = settings
 
         self.max_cpu_percent = settings.resource.max_cpu_percent

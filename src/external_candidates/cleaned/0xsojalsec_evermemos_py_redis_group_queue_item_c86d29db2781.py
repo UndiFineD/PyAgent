@@ -170,5 +170,4 @@ class SimpleQueueItem(RedisGroupQueueItem):
             raise ValueError(f"Invalid BSON data: {e}") from e
 
     def __repr__(self) -> str:
-
         return f"SimpleQueueItem(data={self.data}, item_type={self.item_type})"

@@ -15,8 +15,6 @@ Because this app is only a reverse engineering attempt of the Whatsapp database,
 
 in case there have been any updates to the database.
 
-
-
 The `schema` variable and the `AbstractDatabase` class are introduced to make it easy to add support to
 
 different versions of databases.
@@ -30,7 +28,6 @@ from abc import ABC, abstractmethod
 
 class AbstractDatabase(ABC):
     def __init__(self, msgstore, wa=None, schema=None):
-
         self.msgstore = msgstore
 
         self.wa = wa
@@ -247,7 +244,6 @@ class AbstractDatabase(ABC):
         pass
 
     def load_contacts(self, wa_cursor):
-
         sql_query = """
 
         SELECT 

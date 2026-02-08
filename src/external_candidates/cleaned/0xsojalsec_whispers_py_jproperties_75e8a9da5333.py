@@ -10,7 +10,6 @@ from jproperties import Properties
 
 class Jproperties:
     def pairs(self, filepath: Path):
-
         props = Properties()
 
         props.load(filepath.read_text(), "utf-8")

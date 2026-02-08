@@ -18,7 +18,6 @@ import torch
     ],
 )
 def test_graveyard_single_tpu(import_path, name, tpu_available):
-
     module = import_module(import_path)
 
     cls = getattr(module, name)
@@ -45,7 +44,6 @@ def test_graveyard_single_tpu(import_path, name, tpu_available):
     ],
 )
 def test_graveyard_no_device(import_path, name, tpu_available):
-
     module = import_module(import_path)
 
     cls = getattr(module, name)

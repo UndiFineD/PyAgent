@@ -7,7 +7,6 @@ import math
 
 from typing import List, Tuple, Union
 
-
 from fle.env.entities import (
     Accumulator,
     AssemblingMachine,
@@ -32,11 +31,9 @@ from fle.env.tools.agent.connect_entities.resolver import Resolver
 
 class TransportConnectionResolver(Resolver):
     def __init__(self, *args):
-
         super().__init__(*args)
 
     def _get_transport_belt_adjacent_positions(self, belt, target=False) -> List[Position]:
-
         source_positions = [belt.output_position] if not target else [belt.input_position]
 
         match belt.direction.value:
@@ -59,7 +56,6 @@ class TransportConnectionResolver(Resolver):
         source: Union[Position, Entity, EntityGroup],
         target: Union[Position, Entity, EntityGroup],
     ) -> List[Tuple[Position, Position]]:
-
         match source:
             case GunTurret() | AssemblingMachine() | Lab() | Chest() | Accumulator() | Furnace():
                 raise Exception(

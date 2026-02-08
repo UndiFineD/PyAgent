@@ -7,7 +7,6 @@ import mediapipe as mp
 
 
 def init():
-
     # Store the face_mesh on the context to avoid starting it on every frame
 
     face_mesh = mp.solutions.face_mesh.FaceMesh(

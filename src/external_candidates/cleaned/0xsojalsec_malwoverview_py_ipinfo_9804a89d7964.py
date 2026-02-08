@@ -12,7 +12,6 @@ from malwoverview.utils.colors import mycolors, printc
 
 class IPInfoExtractor:
     def __init__(self, IPINFOAPI):
-
         self.IPINFOAPI = IPINFOAPI
 
     """
@@ -30,7 +29,6 @@ class IPInfoExtractor:
     """
 
     def _raw_ip_info(self, ip_address):
-
         url = f"https://ipinfo.io/{ip_address}?token={self.IPINFOAPI}"
 
         try:
@@ -42,7 +40,6 @@ class IPInfoExtractor:
             return {"error": e}
 
     def get_ip_details(self, ip_address):
-
         #        self.requestIPINFOAPI()
 
         data = self._raw_ip_info(ip_address)

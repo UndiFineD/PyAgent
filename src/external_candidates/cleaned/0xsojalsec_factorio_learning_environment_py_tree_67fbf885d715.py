@@ -15,9 +15,7 @@ import re
 
 from typing import Callable, Dict, Optional, Set, Tuple
 
-
 from PIL import Image
-
 
 from ..constants import TREE_FILES_PER_VARIATION, TREE_VARIATIONS
 
@@ -139,8 +137,6 @@ def get_tree_variant(x: float, y: float, tree_type: str, available_trees: Dict[s
 
     Returns (variation_letter, foliage_state)
 
-
-
     Args:
 
         x, y: Position coordinates
@@ -259,8 +255,6 @@ def build_available_trees_index(sprites_dir) -> Dict[str, Set[str]]:
     """
 
     Build an index of available tree sprites.
-
-
 
     Returns a dict mapping tree type to available variation-state combinations.
 

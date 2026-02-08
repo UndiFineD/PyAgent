@@ -19,7 +19,6 @@ from evo.tools import file_interface  # , plot
 
 
 def run_eval_tum(traj_est, timestamps, gt_file, plot_file_name=None, save_dir=None, plot=False):
-
     traj_ref = file_interface.read_tum_trajectory_file(gt_file)
 
     traj_est = PoseTrajectory3D(

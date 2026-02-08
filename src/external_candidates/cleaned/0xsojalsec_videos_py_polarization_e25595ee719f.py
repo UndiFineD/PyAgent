@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class BeamSplitter(InteractiveScene):
     def construct(self):
-
         # Add laser device
 
         frame = self.frame
@@ -30,7 +29,6 @@ class BeamSplitter(InteractiveScene):
         pointer.curr_angle = 90 * DEG
 
         def set_theta(target_angle, run_time=2):
-
             curr_angle = theta_tracker.get_value()
 
             return AnimationGroup(
@@ -97,7 +95,6 @@ class BeamSplitter(InteractiveScene):
         corner_vector.fix_in_frame()
 
         def update_corner_vect(vect, vertical=False, horizontal=False):
-
             coords = vect.wave.axes.p2c(sample_point)
 
             output = vect.wave.func(np.array([coords]))[0]
@@ -356,7 +353,6 @@ class BeamSplitter(InteractiveScene):
         theta_label_height = theta_label.get_height()
 
         def update_theta_label(theta_label):
-
             point = arc.pfp(0.25)
 
             direction = rotate_vector(RIGHT, 0.5 * theta_tracker.get_value())
@@ -481,7 +477,6 @@ class BeamSplitter(InteractiveScene):
         # Turn down power
 
     def get_laser_pointer(self):
-
         box = Prism(0.75, 0.25, 0.25)
 
         box.set_color(GREY_D)
@@ -517,7 +512,6 @@ class BeamSplitter(InteractiveScene):
         opacity=1.0,
         anti_alias_width=25,
     ):
-
         beam = Line(start, end)
 
         beam.set_stroke(color, stroke_width, opacity)
@@ -542,7 +536,6 @@ class BeamSplitter(InteractiveScene):
         project_vertical=False,
         project_horizontal=False,
     ):
-
         axes = ThreeDAxes()
 
         axes.rotate(refraction_angle)
@@ -550,7 +543,6 @@ class BeamSplitter(InteractiveScene):
         axes.move_to(start_point)
 
         def field_func(points, time):
-
             theta = theta_tracker.get_value()
 
             magnitudes = amplitude * np.cos(wave_number * points[:, 0] - TAU * freq * time)

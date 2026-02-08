@@ -124,7 +124,6 @@ async def run_search_stage(
     )
 
     async def search_single_with_tracking(qa):
-
         async with semaphore:
             conv_id = qa.metadata.get("conversation_id", "0")
 

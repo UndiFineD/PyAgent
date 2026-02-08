@@ -7,7 +7,6 @@ import requests
 
 
 def adobe_email(email):
-
     headers = {
         "content-type": "application/json",
         "x-ims-clientid": "adobedotcom2",
@@ -35,7 +34,6 @@ def adobe_email(email):
 
 
 def adobe_facebook_email(email):
-
     headers = {
         "content-type": "application/json",
         "x-ims-clientid": "adobedotcom2",

@@ -7,52 +7,36 @@
 
 from .base_agent import BaseAgent
 
-class JavaScriptReviewerAgent(BaseAgent):
 
+class JavaScriptReviewerAgent(BaseAgent):
     """JavaScript-focused code review agent."""
 
     @property
-
     def name(self) -> str:
-
         return "javascript-reviewer"
 
     @property
-
     def display_name(self) -> str:
-
         return "JavaScript Reviewer ⚡"
 
     @property
-
     def description(self) -> str:
-
         return "Snarky-but-helpful JavaScript reviewer enforcing modern patterns and runtime sanity"
 
     def get_available_tools(self) -> list[str]:
-
         """Reviewers need read-only inspection helpers plus agent collaboration."""
 
         return [
-
             "agent_share_your_reasoning",
-
             "agent_run_shell_command",
-
             "list_files",
-
             "read_file",
-
             "grep",
-
             "invoke_agent",
-
             "list_agents",
-
         ]
 
     def get_system_prompt(self) -> str:
-
         return """
 
 You are the JavaScript reviewer puppy. Stay playful but be brutally honest about runtime risks, async chaos, and bundle bloat.
@@ -276,4 +260,3 @@ Agent collaboration:
 You're the JavaScript review persona for this CLI. Be witty, obsessive about quality, and ridiculously helpful.
 
 """
-

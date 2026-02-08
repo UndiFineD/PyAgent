@@ -8,7 +8,6 @@ import random
 
 class ColorPicker:
     def __init__(self, seed: int = 27):
-
         self.rng = random.Random(seed)
 
         random.seed(seed)
@@ -35,7 +34,6 @@ class ColorPicker:
         self.assignedColorsList = []
 
     def __call__(self, value):
-
         if value in self.assignedValues:
             idx = self.assignedValues.index(value)
 
@@ -59,7 +57,6 @@ class ColorPicker:
 
 
 def mix_colors(first_hex, second_hex):
-
     return "#" + "".join(
         f"{(int(first_hex[i : i + 2], 16) + int(second_hex[i : i + 2], 16)) // 2:02x}" for i in (1, 3, 5)
     )

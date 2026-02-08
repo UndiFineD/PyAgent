@@ -7,24 +7,20 @@ import re
 
 from IPython.core.getipython import get_ipython
 
-def create_new_cell(contents):
 
+def create_new_cell(contents):
     shell = get_ipython()
 
     payload = dict(
-
         source="set_next_input",
-
         text=contents,
-
         replace=False,
-
     )
 
     shell.payload_manager.write_payload(payload, single=False)
 
-def extract_code_from_string(input_str, lang="python"):
 
+def extract_code_from_string(input_str, lang="python"):
     """Extract the code block for a given language"""
 
     pattern = rf"```({lang}|\s*)\n(.*?)\n```"
@@ -36,10 +32,7 @@ def extract_code_from_string(input_str, lang="python"):
     # Check if any code block was found
 
     if match:
-
         return match.group(2)
 
     else:
-
         return ""
-

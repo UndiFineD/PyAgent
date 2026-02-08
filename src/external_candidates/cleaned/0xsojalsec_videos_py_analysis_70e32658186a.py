@@ -9,13 +9,11 @@ from manim_imports_ext import *
 
 
 def approx_exp(x, n):
-
     return sum([x**k / math.factorial(k) for k in range(n + 1)])
 
 
 class ExpPlay(Scene):
     def construct(self):
-
         for n in [2, 4, 6, 8, 10]:
             self.show_sum_up_to(n)
 
@@ -26,7 +24,6 @@ class ExpPlay(Scene):
         self.wait(2)
 
     def show_sum_up_to(self, n, shown_n=None, include_dots=False):
-
         plane = ComplexPlane()
 
         plane.add_coordinate_labels()
@@ -140,7 +137,6 @@ class ExpPlay(Scene):
         self.wait()
 
     def get_sum_vectors(self, t, n, center=ORIGIN):
-
         vectors = VGroup()
 
         template_vect = Vector(RIGHT)
@@ -169,12 +165,10 @@ class ExpPlay(Scene):
         return vectors
 
     def color_vectors(self, vectors, colors=[BLUE, YELLOW, RED, PINK]):
-
         for vect, color in zip(vectors, it.cycle(colors)):
             vect.set_color(color)
 
     def get_paths(self):
-
         paths = VGroup(
             *[
                 ParametricCurve(
@@ -199,7 +193,6 @@ class ExpPlay(Scene):
 
 class ZetaSum(Scene):
     def construct(self):
-
         plane = ComplexPlane()
 
         self.add(plane)
@@ -238,7 +231,6 @@ class ZetaSum(Scene):
 
 class ZetaSpiral(Scene):
     def construct(self):
-
         max_t = 50
 
         spiral = VGroup(
@@ -304,7 +296,6 @@ class SumRotVectors(Scene):
     }
 
     def construct(self):
-
         plane = ComplexPlane()
 
         circle = Circle(color=YELLOW)
@@ -329,7 +320,6 @@ class SumRotVectors(Scene):
         self.play(ShowIncreasingSubsets(vects, run_time=5))
 
     def get_vects(self, t):
-
         vects = VGroup()
 
         last_tip = ORIGIN
@@ -356,7 +346,6 @@ class Spirals(Scene):
     CONFIG = {"n_lines": 1200}
 
     def construct(self):
-
         s_tracker = ComplexValueTracker(complex(2, 1))
 
         get_s = s_tracker.get_value
@@ -407,7 +396,6 @@ class Spirals(Scene):
             self.wait()
 
     def get_spiral(self, s, colors=[RED, BLUE]):
-
         n_lines = self.n_lines
 
         lines = VGroup()
@@ -432,7 +420,6 @@ class Spirals(Scene):
         return lines
 
     def n_to_z(self, n, s, n_lines):
-
         # if is_prime(n):
 
         #     return -np.log(1 - n**(-s))

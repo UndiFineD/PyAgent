@@ -68,7 +68,6 @@ class CUDAAccelerator(Accelerator):
 
     @override
     def teardown(self) -> None:
-
         _clear_cuda_memory()
 
     @staticmethod
@@ -97,19 +96,16 @@ class CUDAAccelerator(Accelerator):
     @staticmethod
     @override
     def is_available() -> bool:
-
         return num_cuda_devices() > 0
 
     @staticmethod
     @override
     def name() -> str:
-
         return "cuda"
 
     @classmethod
     @override
     def register_accelerators(cls, accelerator_registry: _AcceleratorRegistry) -> None:
-
         accelerator_registry.register(
             cls.name(),
             cls,
@@ -215,7 +211,6 @@ def is_cuda_available() -> bool:
 
 
 def _is_ampere_or_later(device: Optional[torch.device] = None) -> bool:
-
     major, _ = torch.cuda.get_device_capability(device)
 
     return major >= 8  # Ampere and later leverage tensor cores, where this setting becomes useful
@@ -223,7 +218,6 @@ def _is_ampere_or_later(device: Optional[torch.device] = None) -> bool:
 
 @lru_cache(1)  # show the warning only ever once
 def _check_cuda_matmul_precision(device: torch.device) -> None:
-
     if not torch.cuda.is_available() or not _is_ampere_or_later(device):
         return
 
@@ -245,7 +239,6 @@ def _check_cuda_matmul_precision(device: torch.device) -> None:
 
 
 def _clear_cuda_memory() -> None:
-
     # strangely, the attribute function be undefined when torch.compile is used
 
     if hasattr(torch._C, "_cuda_clearCublasWorkspaces"):

@@ -58,32 +58,26 @@ class DoublePrecision(Precision):
 
     @override
     def convert_module(self, module: Module) -> Module:
-
         return module.double()
 
     @override
     def tensor_init_context(self) -> AbstractContextManager:
-
         return _DtypeContextManager(torch.double)
 
     @override
     def module_init_context(self) -> AbstractContextManager:
-
         return self.tensor_init_context()
 
     @override
     def forward_context(self) -> AbstractContextManager:
-
         return self.tensor_init_context()
 
     @override
     def convert_input(self, data: Any) -> Any:
-
         return apply_to_collection(data, function=_convert_fp_tensor, dtype=Tensor, dst_type=torch.double)
 
     @override
     def convert_output(self, data: Any) -> Any:
-
         return apply_to_collection(
             data,
             function=_convert_fp_tensor,

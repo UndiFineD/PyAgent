@@ -8,7 +8,6 @@ from fle.env.tools import Tool
 
 class Reward(Tool):
     def __init__(self, connection, game_state):
-
         super().__init__(connection, game_state)
 
         self.name = "score"
@@ -18,7 +17,6 @@ class Reward(Tool):
         self.load()
 
     def __call__(self, *args, **kwargs):
-
         response, execution_time = self.execute(*args)
 
         if self.game_state.instance.initial_score:

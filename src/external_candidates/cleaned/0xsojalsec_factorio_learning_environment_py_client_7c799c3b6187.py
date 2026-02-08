@@ -20,7 +20,6 @@ from fle.env.tools.agent.pickup_entity.client import PickupEntity
 
 class PlaceObject(Tool):
     def __init__(self, *args):
-
         super().__init__(*args)
 
         self.name = "place_entity"

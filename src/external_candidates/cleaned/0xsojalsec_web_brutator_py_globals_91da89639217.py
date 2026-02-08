@@ -9,7 +9,6 @@
 
 
 def initialize():
-
     global timeout
 
     timeout = 10

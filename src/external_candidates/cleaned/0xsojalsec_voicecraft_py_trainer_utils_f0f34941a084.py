@@ -33,7 +33,6 @@ class StatefulDistributedSampler(Sampler[int]):
         seed=0,
         drop_last=False,
     ):
-
         if num_replicas is None:
             if not dist.is_available():
                 raise RuntimeError("Requires distributed package to be available")
@@ -90,7 +89,6 @@ class StatefulDistributedSampler(Sampler[int]):
         self.continue_flag = False
 
     def __len__(self):
-
         return self.num_samples
 
     def set_epoch(self, epoch):
@@ -156,12 +154,10 @@ class StatefulDistributedSampler(Sampler[int]):
             self.continue_flag = False
 
     def __iter__(self):
-
         for idx in self.indices:
             yield idx
 
     def set_epoch_resume(self, epoch, cur_step):
-
         self.epoch = epoch
 
         self.cur_step = cur_step
@@ -171,7 +167,6 @@ class StatefulDistributedSampler(Sampler[int]):
 
 class StatefulSampler(Sampler):
     def __init__(self, data_source_length, batch_size, use_random=True, seed=1, epoch=0):
-
         self.use_random = use_random
 
         self.data_source_length = data_source_length
@@ -189,16 +184,13 @@ class StatefulSampler(Sampler):
         self.cur_step = 0
 
     def __len__(self):
-
         return self.num_samples
 
     def __iter__(self):
-
         for idx in self.indices:
             yield idx
 
     def set_epoch(self, epoch):
-
         self.epoch = epoch
 
         if self.use_random:
@@ -221,7 +213,6 @@ class StatefulSampler(Sampler):
         self.num_samples = len(self.indices)
 
     def set_epoch_resume(self, epoch, cur_step):
-
         self.epoch = epoch
 
         self.cur_step = cur_step
@@ -233,11 +224,9 @@ class AverageMeter:
     """Computes and stores the average and current value"""
 
     def __init__(self):
-
         self.reset()
 
     def reset(self):
-
         self.val = 0
 
         self.avg = 0
@@ -247,7 +236,6 @@ class AverageMeter:
         self.count = 0
 
     def update(self, val, n=1):
-
         self.val = val
 
         self.sum += val * n
@@ -258,7 +246,6 @@ class AverageMeter:
 
 
 def print_model_info(model, print_model=False, print_params=True):
-
     if print_model:
         logging.info(model)
 
@@ -492,7 +479,6 @@ class DistributedDynamicBatchSampler(Sampler):
         epoch: int = 0,
         verbose: bool = False,
     ):
-
         self.args = args
 
         if num_replicas is None:
@@ -657,7 +643,6 @@ class DistributedDynamicBatchSampler(Sampler):
         max_batch_length: int,
         num_quantiles: int,
     ) -> List[int]:
-
         # NOTE: the following lines do not cover that there is only one example in the dataset
 
         # warp frames (duration) distribution of train data
@@ -700,7 +685,6 @@ class DistributedDynamicBatchSampler(Sampler):
         return list(sorted(bucket_boundaries))
 
     def _permute_batches(self):
-
         if self._batch_ordering == "random":
             # deterministically shuffle based on epoch and seed
 
@@ -736,7 +720,6 @@ class DistributedDynamicBatchSampler(Sampler):
             raise NotImplementedError
 
     def _generate_batches(self):
-
         logging.info("DynamicBatchSampler: Generating dynamic batches")
 
         if self._shuffle_ex:
@@ -876,7 +859,6 @@ class DistributedDynamicBatchSampler(Sampler):
                     )
 
     def __iter__(self):
-
         for batch in self._replica_batches:
             yield batch
 
@@ -919,11 +901,9 @@ class DistributedDynamicBatchSampler(Sampler):
             self.num_samples = len(self._replica_batches)
 
     def __len__(self):
-
         return self.num_samples
 
     def set_epoch_resume(self, epoch, cur_step):
-
         self.continue_flag = True
 
         self._epoch = epoch

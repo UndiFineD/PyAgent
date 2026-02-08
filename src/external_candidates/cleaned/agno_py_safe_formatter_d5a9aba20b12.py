@@ -5,20 +5,17 @@
 
 import string
 
+
 class SafeFormatter(string.Formatter):
-
     def get_value(self, key, args, kwargs):
-
         """Handle missing keys by returning '{key}'."""
 
         if key not in kwargs:
-
             return f"{key}"
 
         return kwargs[key]
 
     def format_field(self, value, format_spec):
-
         """
 
         If Python sees something like 'somekey:"stuff"', it tries to parse
@@ -30,16 +27,12 @@ class SafeFormatter(string.Formatter):
         """
 
         if not format_spec:
-
             return super().format_field(value, format_spec)
 
         try:
-
             return super().format_field(value, format_spec)
 
         except ValueError:
-
             # On invalid format specifiers, keep them literal
 
             return f"{{{value}:{format_spec}}}"
-

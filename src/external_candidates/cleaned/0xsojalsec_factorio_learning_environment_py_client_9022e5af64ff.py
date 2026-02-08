@@ -14,7 +14,6 @@ from fle.env.tools.agent.inspect_inventory.client import InspectInventory
 
 class CraftItem(Tool):
     def __init__(self, connection, game_state):
-
         super().__init__(connection, game_state)
 
         self.inspect_inventory = InspectInventory(connection, game_state)

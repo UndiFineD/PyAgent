@@ -22,7 +22,6 @@ class PatchGraph:
     """Dataclass for storing variables"""
 
     def __init__(self, cfg, P, DIM, pmem, **kwargs):
-
         self.cfg = cfg
 
         self.P = P
@@ -184,20 +183,16 @@ class PatchGraph:
 
     @property
     def poses(self):
-
         return self.poses_.view(1, self.N, 7)
 
     @property
     def patches(self):
-
         return self.patches_.view(1, self.N * self.M, 3, 3, 3)
 
     @property
     def intrinsics(self):
-
         return self.intrinsics_.view(1, self.N, 4)
 
     @property
     def ix(self):
-
         return self.index_.view(-1)

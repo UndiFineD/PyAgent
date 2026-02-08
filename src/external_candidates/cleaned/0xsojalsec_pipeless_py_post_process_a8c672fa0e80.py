@@ -15,7 +15,6 @@ import simpleaudio as sa
 
 
 def hook(frame_data, _):
-
     results = frame_data["inference_output"]
 
     print(results)
@@ -79,7 +78,6 @@ def hook(frame_data, _):
 
 
 def play_sound(note, duration):
-
     sample_rate = 44100  # Hz
 
     samples = (32767 * 0.5 * np.sin(2.0 * np.pi * np.arange(sample_rate * duration) * note / sample_rate)).astype(
@@ -94,7 +92,6 @@ def play_sound(note, duration):
 
 
 def draw_piano(frame, center):
-
     num_radii = 8
 
     init_angle = np.pi / 8
@@ -143,7 +140,6 @@ def draw_piano(frame, center):
 
 
 def is_point_outside_circle(point, center, radius):
-
     distance = math.sqrt((point[0] - center[0]) ** 2 + (point[1] - center[1]) ** 2)
 
     return distance > radius

@@ -5,8 +5,8 @@
 
 import os
 
-def is_jupyter() -> bool:
 
+def is_jupyter() -> bool:
     """Check if the module is running on Jupyter notebook/console.
 
     Note - there might be better way to check if the code is running on a jupyter notebook or not,
@@ -26,11 +26,9 @@ def is_jupyter() -> bool:
     # Should check is_databricks() and is_synapse() first since they also use the same ZMQ interactive shell.
 
     if is_databricks() or is_synapse():
-
         return False
 
     try:
-
         # Pre-loaded module `get_ipython()` tells you whether you are running inside IPython or not.
 
         shell_name = get_ipython().__class__.__name__
@@ -38,19 +36,16 @@ def is_jupyter() -> bool:
         # `ZMQInteractiveShell` tells you if this is an interactive mode (notebook).
 
         if shell_name == "ZMQInteractiveShell":
-
             return True
 
         else:
-
             return False
 
     except NameError:
-
         return False
 
-def is_databricks() -> bool:
 
+def is_databricks() -> bool:
     """Check if the module is running on Databricks.
 
     Returns:
@@ -62,15 +57,13 @@ def is_databricks() -> bool:
     # Note, this is a hacky way to check if the code is running on Databricks.
 
     if "DATABRICKS_RUNTIME_VERSION" in os.environ:
-
         return True
 
     else:
-
         return False
 
-def is_synapse() -> bool:
 
+def is_synapse() -> bool:
     """Check if the module is running on Azure Synapse.
 
     Returns:
@@ -82,10 +75,7 @@ def is_synapse() -> bool:
     # Note, this is a hacky way to check if the code is running on Synapse.
 
     if "SYNAPSE_ENABLE_CONFIG_MERGE_RULE" in os.environ:
-
         return True
 
     else:
-
         return False
-

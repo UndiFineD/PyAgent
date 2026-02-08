@@ -43,13 +43,11 @@ from ovo.core.logic.proteinqc_logic import get_flag_color
 
 
 def on_dismiss_dialog():
-
     st.query_params.pop("dialog", None)
 
 
 @st.dialog("Detail", on_dismiss=on_dismiss_dialog)
 def detail_descriptor_dialog(descriptor, descriptor_values: pd.Series, design_id: str = None):
-
     st.markdown(
         """
 
@@ -86,7 +84,6 @@ def detail_descriptor_dialog(descriptor, descriptor_values: pd.Series, design_id
 
 
 def detail_button(descriptor, descriptor_values: pd.Series, design_id: str = None):
-
     if st.button("Show more", key=f"{descriptor.name}_btn"):
         st.query_params["dialog"] = descriptor.key
 
@@ -95,7 +92,6 @@ def detail_button(descriptor, descriptor_values: pd.Series, design_id: str = Non
 
 
 def detail_table(descriptor, descriptor_values: pd.Series):
-
     table_data = pd.DataFrame({"value": descriptor_values})
 
     table_data.index.name = "Design ID"
@@ -207,7 +203,6 @@ def detail_design(
     format_func: Callable,
     design_id: str = None,
 ):
-
     design_id = st.selectbox(
         "Select design:",
         options=table_data.index,

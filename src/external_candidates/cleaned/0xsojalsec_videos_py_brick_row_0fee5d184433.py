@@ -23,7 +23,6 @@ class BrickRow(VMobject):
     }
 
     def __init__(self, n, **kwargs):
-
         self.subdiv_level = n
 
         self.coloring_level = n
@@ -31,7 +30,6 @@ class BrickRow(VMobject):
         VMobject.__init__(self, **kwargs)
 
     def init_points(self):
-
         self.submobjects = []
 
         self.rects = self.get_rects_for_level(self.coloring_level)
@@ -47,7 +45,6 @@ class BrickRow(VMobject):
         self.add(self.border)
 
     def get_rects_for_level(self, r):
-
         rects = VGroup()
 
         for k in range(r + 1):
@@ -72,7 +69,6 @@ class BrickRow(VMobject):
         return rects
 
     def get_subdivs_for_level(self, r):
-
         subdivs = VGroup()
 
         x = -0.5 * self.width
@@ -94,7 +90,6 @@ class BrickRow(VMobject):
         return subdivs
 
     def get_sequence_subdivs_for_level(self, r):
-
         subdivs = VGroup()
 
         x = -0.5 * self.width
@@ -118,7 +113,6 @@ class BrickRow(VMobject):
         return subdivs
 
     def get_outcome_centers_for_level(self, r):
-
         dpos = float(self.width) / (2**r) * RIGHT
 
         pos = 0.5 * self.width * LEFT + 0.5 * dpos
@@ -131,7 +125,6 @@ class BrickRow(VMobject):
         return centers
 
     def get_outcome_rects_for_level(self, r, inset=False, with_labels=False):
-
         centers = self.get_outcome_centers_for_level(r)
 
         if inset == True:
@@ -187,7 +180,6 @@ class BrickRow(VMobject):
         return rects
 
     def get_coin_sequences_for_level(self, r):
-
         # array of arrays of characters
 
         if r < 0 or int(r) != r:
@@ -227,11 +219,9 @@ class BrickRow(VMobject):
         return seq_array
 
     def get_outcome_width_for_level(self, r):
-
         return self.width / (2**r)
 
     def get_rect_widths_for_level(self, r):
-
         ret_arr = []
 
         for k in range(0, r):
@@ -244,7 +234,6 @@ class BrickRow(VMobject):
 
 class SplitRectsInBrickWall(AnimationGroup):
     def __init__(self, mobject, **kwargs):
-
         # print mobject.height, mobject.get_height()
 
         r = self.subdiv_level = mobject.subdiv_level + 1

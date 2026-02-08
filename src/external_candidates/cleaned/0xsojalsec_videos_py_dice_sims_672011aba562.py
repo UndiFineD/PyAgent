@@ -33,7 +33,6 @@ class DiceSimulation(InteractiveScene):
     dice_width = 5
 
     def setup(self):
-
         super().setup()
 
         self.add_die_distribution()
@@ -47,7 +46,6 @@ class DiceSimulation(InteractiveScene):
         self.all_bricks = VGroup()
 
     def construct(self):
-
         # Slow samples
 
         for _ in range(3):
@@ -73,7 +71,6 @@ class DiceSimulation(InteractiveScene):
         self.play(self.all_bricks.animate.set_fill(color=self.full_dist_color))
 
     def add_die_distribution(self, animate=False):
-
         die_dist = get_die_distribution_chart(
             self.distribution,
             **self.die_distribution_config,
@@ -97,7 +94,6 @@ class DiceSimulation(InteractiveScene):
         self.die_dist = die_dist
 
     def add_sum_axes(self):
-
         # (Value, probability) pairs
 
         vps = list(zip(it.count(1), self.distribution))
@@ -152,7 +148,6 @@ class DiceSimulation(InteractiveScene):
         self.sum_axis = x_axis
 
     def add_sample_label(self):
-
         label = TexText(R"\# Sums = 0", font_size=36)
 
         label.set_fill(GREY_B)
@@ -168,7 +163,6 @@ class DiceSimulation(InteractiveScene):
         self.sample_label = label
 
     def run_one_sum(self, run_time=3.0, transition_time=1.0, still_frame=False):
-
         # Setup sample
 
         values = list(range(1, 7))
@@ -199,7 +193,6 @@ class DiceSimulation(InteractiveScene):
         tips = get_sample_markers(bars, samples)
 
         def get_sum():
-
             return sum(d.value for d in dice)
 
         # Sum label
@@ -280,7 +273,6 @@ class DiceSimulation(InteractiveScene):
         self.add(self.all_bricks)
 
     def scale_brick_height(self, scale_factor):
-
         self.brick_height *= scale_factor
 
         bricks = self.all_bricks
@@ -296,7 +288,6 @@ class DiceSimulation(InteractiveScene):
         self.wait()
 
     def get_brick(self):
-
         return Rectangle(
             stroke_width=self.brick_height * 5,
             stroke_color=BLACK,
@@ -335,7 +326,6 @@ class LargerDiceSimulation(DiceSimulation):
     random_seed = 1
 
     def construct(self):
-
         # Larger sample
 
         for _ in range(self.n_samples):
@@ -352,7 +342,6 @@ class SimulationWithUShapedDistribution(DiceSimulation):
     n_samples = 3000
 
     def construct(self):
-
         # Transition
 
         tmp_dist = self.distribution
@@ -396,14 +385,12 @@ class LargerUSimulation(SimulationWithUShapedDistribution):
     brick_height = 0.01
 
     def construct(self):
-
         # Thousands of samples
 
         for _ in range(self.n_samples):
             self.run_one_sum(transition_time=1 / 30, still_frame=True)
 
     def get_brick(self):
-
         return super().get_brick().set_stroke(width=0)
 
 
@@ -437,7 +424,6 @@ class SimulationWithExpDistribution2Dice(SimulationWithExpDistribution):
     dice_width = 2
 
     def get_brick(self):
-
         return super().get_brick().set_stroke(width=0)
 
 

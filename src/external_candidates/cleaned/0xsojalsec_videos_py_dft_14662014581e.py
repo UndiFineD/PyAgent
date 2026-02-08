@@ -8,7 +8,6 @@ from manim_imports_ext import *
 
 class IntroduceDFT(Scene):
     def construct(self):
-
         # Create signal
 
         N = 8
@@ -309,7 +308,6 @@ class IntroduceDFT(Scene):
         self.wait()
 
         def change_signal(new_signal, omega=1):
-
             side_vectors.generate_target()
 
             vectors.generate_target()

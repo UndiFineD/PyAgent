@@ -10,7 +10,6 @@ from manim_imports_ext import *
 
 class ConnectionToOptics(Scene):
     def construct(self):
-
         e_group, m_group = k_groups = self.get_kinematics_groups()
 
         c_group, a_group = o_groups = self.get_optics_groups()
@@ -97,7 +96,6 @@ class ConnectionToOptics(Scene):
         self.wait(4)
 
     def get_kinematics_groups(self):
-
         tex_to_color_map = {
             "m_1": BLUE,
             "m_2": BLUE,
@@ -136,7 +134,6 @@ class ConnectionToOptics(Scene):
         return groups
 
     def get_optics_groups(self):
-
         self.time_tracker = ValueTracker(0)
 
         self.time_tracker.add_updater(lambda m, dt: m.increment_value(dt))
@@ -146,7 +143,6 @@ class ConnectionToOptics(Scene):
         return VGroup(self.get_speed_group(), self.get_angle_group())
 
     def get_speed_group(self):
-
         speed_label = OldTexText("Constant speed of light")
 
         speed_label.set_color(YELLOW)
@@ -162,7 +158,6 @@ class ConnectionToOptics(Scene):
         speed_light = speed_light_template.deepcopy()
 
         def update_speed_light(light, period=2, time_width=0.05):
-
             time = self.time_tracker.get_value()
 
             alpha = (time / period) % 1
@@ -194,7 +189,6 @@ class ConnectionToOptics(Scene):
         return result
 
     def get_angle_group(self):
-
         title = VGroup(
             *map(
                 TexText,
@@ -255,7 +249,6 @@ class ConnectionToOptics(Scene):
         beam = VMobject()
 
         def update_beam(beam, period=2, time_width=0.05):
-
             time = self.time_tracker.get_value()
 
             alpha = (time / period) % 1
@@ -285,11 +278,9 @@ class ConnectionToOpticsTransparent(ConnectionToOptics):
 
 class RearrangeMomentumEquation(ShowMomentumConservation):
     def setup(self):
-
         pass  # Don't build all the things
 
     def construct(self):
-
         self.add(
             FullScreenFadeRectangle(
                 fill_color=BLACK,
@@ -302,7 +293,6 @@ class RearrangeMomentumEquation(ShowMomentumConservation):
         self.show_with_x_and_y()
 
     def show_initial_dot_product(self):
-
         equation = self.get_momentum_equation()
 
         dot_product = self.get_dot_product("m_1", "m_2", "v_1", "v_2")
@@ -349,7 +339,6 @@ class RearrangeMomentumEquation(ShowMomentumConservation):
         self.momentum_equation = equation
 
     def show_with_x_and_y(self):
-
         simple_dot_product = self.simple_dot_product
 
         momentum_equation = self.momentum_equation
@@ -448,5 +437,4 @@ class RearrangeMomentumEquation(ShowMomentumConservation):
 
 class NewSceneName(Scene):
     def construct(self):
-
         pass

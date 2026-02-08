@@ -23,7 +23,6 @@ class Bruteforcer:
         request_error_callback,
         threads=1,
     ):
-
         self.auth_module = auth_module
 
         self.wordlist = wordlist
@@ -45,7 +44,6 @@ class Bruteforcer:
         self.creds_found = []
 
     def wait(self, timeout=None):
-
         for thread in self.threads:
             thread.join(timeout)
 
@@ -55,7 +53,6 @@ class Bruteforcer:
         return True
 
     def setup_threads(self):
-
         if len(self.threads) != 0:
             self.threads = []
 
@@ -67,7 +64,6 @@ class Bruteforcer:
             self.threads.append(new_thread)
 
     def start(self):
-
         # Setting up testers
 
         # Setting up threads
@@ -92,11 +88,9 @@ class Bruteforcer:
         self.play()
 
     def play(self):
-
         self.play_event.set()
 
     def pause(self):
-
         self.play_event.clear()
 
         for thread in self.threads:
@@ -104,35 +98,28 @@ class Bruteforcer:
                 self.paused_semaphore.acquire()
 
     def stop(self):
-
         self.running = False
 
         self.play()
 
     def is_running(self):
-
         return self.running
 
     def finish_threads(self):
-
         self.running = False
 
         # self.finishedEvent.set()
 
     def is_finished(self):
-
         return self.nb_running_threads == 0
 
     def stop_thread(self):
-
         self.nb_running_threads -= 1
 
     def check_auth(self, username, password):
-
         return self.auth_module.try_auth(username, password)
 
     def thread_proc(self):
-
         self.play_event.wait()
 
         try:

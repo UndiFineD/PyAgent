@@ -39,7 +39,6 @@ class Target:
             self.params = parse_qs(urlparse(raw_url).query, True)
 
     def __eq__(self, other):
-
         if self.getFullUrl(clean=True).lower() == other.getFullUrl(clean=True).lower():
             return True
 
@@ -47,7 +46,6 @@ class Target:
             return False
 
     def __hash__(self):
-
         return hash(self.getFullUrl(clean=True).lower())
 
     def getAbsoluteUrl(self):
@@ -83,7 +81,6 @@ class Target:
         return url
 
     def getFullUrl(self, clean=False):
-
         if clean:
             temp_params = {}
 

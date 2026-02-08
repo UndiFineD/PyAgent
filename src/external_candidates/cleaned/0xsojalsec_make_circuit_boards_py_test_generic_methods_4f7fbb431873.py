@@ -10,7 +10,6 @@ from atopile.generic_methods import bfs, dfs_postorder
 
 class Node:
     def __init__(self, name, children):
-
         self.name = name
 
         self.children = children
@@ -68,14 +67,12 @@ def tree():
 
 
 def test_bfs(tree: tuple[Node]):
-
     a, b, c, d, e, f, g, h = tree
 
     assert list(bfs(lambda n: n.children, a)) == [a, b, c, d, e, f, g, h]
 
 
 def test_dfs_postorder(tree: tuple[Node]):
-
     a, b, c, d, e, f, g, h = tree
 
     assert list(dfs_postorder(lambda n: n.children, a)) == [e, f, b, g, h, c, d, a]

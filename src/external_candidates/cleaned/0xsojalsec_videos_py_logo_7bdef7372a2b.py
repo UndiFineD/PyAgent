@@ -68,7 +68,6 @@ class Logo(VMobject):
     spike_angle: float = TAU / 28
 
     def __init__(self, **kwargs):
-
         super().__init__(**kwargs)
 
         self.add_iris_back()
@@ -78,7 +77,6 @@ class Logo(VMobject):
         self.add_pupil()
 
     def add_iris_back(self):
-
         blue_iris_back = AnnularSector(
             inner_radius=self.pupil_radius,
             outer_radius=self.outer_radius,
@@ -107,7 +105,6 @@ class Logo(VMobject):
         self.add(self.iris_background)
 
     def add_spikes(self):
-
         layers = VGroup()
 
         radii = np.linspace(
@@ -207,7 +204,6 @@ class Logo(VMobject):
         self.add(layers)
 
     def add_pupil(self):
-
         self.pupil = Circle(
             radius=self.pupil_radius,
             fill_color=BLACK,
@@ -222,7 +218,6 @@ class Logo(VMobject):
         self.add(self.pupil)
 
     def cut_pupil(self):
-
         pupil = self.pupil
 
         center = pupil.get_center()
@@ -239,7 +234,6 @@ class Logo(VMobject):
         self.pupil = new_pupil
 
     def get_blue_part_and_brown_part(self):
-
         if len(self.pupil) == 1:
             self.cut_pupil()
 
@@ -260,7 +254,6 @@ class Logo(VMobject):
 
 class LogoGenerationTemplate(Scene):
     def setup(self):
-
         super().setup()
 
         frame = self.camera.frame
@@ -280,7 +273,6 @@ class LogoGenerationTemplate(Scene):
         self.channel_name = name
 
     def construct(self):
-
         logo = self.logo
 
         name = self.channel_name
@@ -290,13 +282,11 @@ class LogoGenerationTemplate(Scene):
         self.wait()
 
     def get_logo_animations(self, logo):
-
         return []  # For subclasses
 
 
 class LogoGeneration(LogoGenerationTemplate):
     def construct(self):
-
         logo = self.logo
 
         name = self.channel_name
@@ -341,7 +331,6 @@ class LogoGeneration(LogoGenerationTemplate):
         self.wrong_spike = wrong_spike
 
         def get_spike_animation(spike, **kwargs):
-
             return Restore(spike, **kwargs)
 
         logo.iris_background.save_state()
@@ -393,7 +382,6 @@ class LogoGeneration(LogoGenerationTemplate):
 
 class SortingLogoGeneration(LogoGenerationTemplate):
     def get_logo_animations(self, logo):
-
         layers = logo.spike_layers
 
         for j, layer in enumerate(layers):
@@ -420,7 +408,6 @@ class SortingLogoGeneration(LogoGenerationTemplate):
                 # )
 
         def get_spike_animation(spike, **kwargs):
-
             return Restore(spike, path_arc=-spike.angle, **kwargs)
 
         logo.iris_background.save_state()
@@ -453,7 +440,6 @@ class SortingLogoGeneration(LogoGenerationTemplate):
 
 class LogoTest(Scene):
     def construct(self):
-
         n_range = list(range(4, 40, 4))
 
         for n, denom in zip(n_range, np.linspace(14, 28, len(n_range))):
@@ -492,7 +478,6 @@ class LogoGenerationFlurry(LogoGenerationTemplate):
     random_seed: int = 2
 
     def get_logo_animations(self, logo):
-
         layers = logo.spike_layers
 
         for i, layer in enumerate(layers):
@@ -541,13 +526,11 @@ class LogoGenerationFlurry(LogoGenerationTemplate):
 
 class WrittenLogo(LogoGenerationTemplate):
     def get_logo_animations(self, logo):
-
         return [Write(logo, stroke_color=None, stroke_width=2, run_time=3, lag_ratio=5e-3)]
 
 
 class LogoGenerationFivefold(LogoGenerationTemplate):
     def construct(self):
-
         logo = self.logo
 
         iris, spike_layers, pupil = logo
@@ -585,7 +568,6 @@ class LogoGenerationFivefold(LogoGenerationTemplate):
         self.add(pupil)
 
         def update(alpha):
-
             spike_layers.set_opacity(alpha)
 
             mid_alpha = 4.0 * (1.0 - alpha) * alpha
@@ -615,7 +597,6 @@ class LogoGenerationFivefold(LogoGenerationTemplate):
 
 class Vertical3B1B(Scene):
     def construct(self):
-
         words = OldTexText(
             "3",
             "Blue",

@@ -11,7 +11,6 @@ from dataclasses import dataclass
 
 from typing import Any, Dict, List, Optional
 
-
 from fle.commons.constants import REWARD_OVERRIDE_KEY
 
 from fle.env.gym_env.observation import Observation
@@ -81,11 +80,7 @@ class FormattedObservation:
 
     ⏳ IN PROGRESS
 
-
-
     **Message:** Need more iron plates
-
-
 
     **Criteria:**
 
@@ -185,15 +180,11 @@ class FormattedObservation:
 
     - coal: 50
 
-
-
     ### Entities
 
     - burner-mining-drill: 2
 
     - transport-belt: 5
-
-
 
     ### Production Flows
 
@@ -205,8 +196,6 @@ class FormattedObservation:
 
     - iron-ore: 0.75/s
 
-
-
     ### Available Functions
 
     ```python
@@ -217,25 +206,17 @@ class FormattedObservation:
 
     ```
 
-
-
     ### Game Info
 
     - Elapsed Time: 1:00:00
 
     - Ticks: 3600
 
-
-
     ### Task Status
 
     ⏳ IN PROGRESS
 
-
-
     **Message:** Need more iron plates
-
-
 
     **Criteria:**
 
@@ -243,15 +224,11 @@ class FormattedObservation:
 
     - ❌ Produce 100 iron plates
 
-
-
     ### Messages
 
     - **[Agent 1]**: Need more iron plates
 
     - **[Agent 2]**: I'll help with that
-
-
 
     ### Raw Output
 

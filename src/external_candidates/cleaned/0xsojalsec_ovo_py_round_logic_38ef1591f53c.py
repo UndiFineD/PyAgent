@@ -9,7 +9,6 @@ from ovo.core.database.models import Round
 
 
 def get_or_create_project_rounds(project_id: str) -> dict[str, Round]:
-
     project_rounds = db.select(Round, project_id=project_id, order_by="created_date_utc")
 
     if not project_rounds:

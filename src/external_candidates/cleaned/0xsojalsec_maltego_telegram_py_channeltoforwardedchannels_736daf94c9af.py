@@ -15,7 +15,6 @@ from utils import fetch_web_info, message_is_forwarded_from_another_chat
 
 
 async def fetch_forwarded_channels(username: str):
-
     channels = []
 
     async with app:
@@ -37,7 +36,6 @@ async def fetch_forwarded_channels(username: str):
 class ChannelToForwardedChannels(DiscoverableTransform):
     @classmethod
     def create_entities(cls, request: MaltegoMsg, response: MaltegoTransform):
-
         username = request.getProperty("properties.channel")
 
         channels = loop.run_until_complete(fetch_forwarded_channels(username))

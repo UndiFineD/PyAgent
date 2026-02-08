@@ -19,104 +19,66 @@ from src.pipelines.google import GoogleLLMAdapter, GoogleSTTAdapter, GoogleTTSAd
 
 from src.pipelines.orchestrator import PipelineOrchestrator
 
+
 def _build_app_config() -> AppConfig:
-
     providers = {
-
         "google": {
-
             "api_key": "test-google-key",
-
             "project_id": "demo-project",
-
             "stt_base_url": "https://speech.googleapis.com/v1",
-
             "tts_base_url": "https://texttospeech.googleapis.com/v1",
-
             "llm_base_url": "https://generativelanguage.googleapis.com/v1",
-
             "stt_language_code": "en-US",
-
             "tts_voice_name": "en-US-Neural2-C",
-
             "tts_audio_encoding": "MULAW",
-
             "tts_sample_rate_hz": 8000,
-
             "llm_model": "models/gemini-1.5-pro-latest",
-
         }
-
     }
 
     pipelines = {
-
         "google_stack": {
-
             "stt": "google_stt",
-
             "llm": "google_llm",
-
             "tts": "google_tts",
-
             "options": {
-
                 "stt": {"language_code": "en-US"},
-
                 "llm": {"temperature": 0.3},
-
                 "tts": {"format": {"encoding": "mulaw", "sample_rate": 8000}},
-
             },
-
         }
-
     }
 
     return AppConfig(
-
         default_provider="google",
-
         providers=providers,
-
         asterisk={"host": "127.0.0.1", "username": "ari", "password": "secret"},
-
         llm={"initial_greeting": "hi", "prompt": "prompt", "model": "gpt-4o"},
-
         audio_transport="audiosocket",
-
         downstream_mode="stream",
-
         pipelines=pipelines,
-
         active_pipeline="google_stack",
-
     )
 
+
 class _FakeResponse:
-
     def __init__(self, body: str, status: int = 200):
-
         self._body = body
 
         self.status = status
 
     async def __aenter__(self):
-
         return self
 
     async def __aexit__(self, exc_type, exc, tb):
-
         return False
 
     async def text(self):
-
         return self._body
 
+
 class _FakeSession:
-
     def __init__(self, body: str, status: int = 200):
-
         self._body = body
 
         self._status = status
@@ -126,59 +88,38 @@ class _FakeSession:
         self.closed = False
 
     def post(self, url, json=None, params=None, headers=None, timeout=None):
-
         self.requests.append(
-
             {
-
                 "url": url,
-
                 "json": json,
-
                 "params": params,
-
                 "headers": headers,
-
                 "timeout": timeout,
-
             }
-
         )
 
         return _FakeResponse(self._body, status=self._status)
 
     async def close(self):
-
         self.closed = True
 
+
 @pytest.mark.asyncio
-
 async def test_google_stt_adapter_transcribes(monkeypatch):
-
     app_config = _build_app_config()
 
     provider_config = GoogleProviderConfig(**app_config.providers["google"])
 
-    payload = json.dumps(
-
-        {"results": [{"alternatives": [{"transcript": "hello google"}]}]}
-
-    )
+    payload = json.dumps({"results": [{"alternatives": [{"transcript": "hello google"}]}]})
 
     fake_session = _FakeSession(payload)
 
     adapter = GoogleSTTAdapter(
-
         "google_stt",
-
         app_config,
-
         provider_config,
-
         {"encoding": "LINEAR16"},
-
         session_factory=lambda: fake_session,
-
     )
 
     await adapter.start()
@@ -197,48 +138,32 @@ async def test_google_stt_adapter_transcribes(monkeypatch):
 
     assert request["json"]["config"]["languageCode"] == "en-US"
 
+
 @pytest.mark.asyncio
-
 async def test_google_llm_adapter_generate(monkeypatch):
-
     app_config = _build_app_config()
 
     provider_config = GoogleProviderConfig(**app_config.providers["google"])
 
-    payload = json.dumps(
-
-        {"candidates": [{"content": {"parts": [{"text": "response from gemini"}]}}]}
-
-    )
+    payload = json.dumps({"candidates": [{"content": {"parts": [{"text": "response from gemini"}]}}]})
 
     fake_session = _FakeSession(payload)
 
     adapter = GoogleLLMAdapter(
-
         "google_llm",
-
         app_config,
-
         provider_config,
-
         {"temperature": 0.1},
-
         session_factory=lambda: fake_session,
-
     )
 
     await adapter.start()
 
     reply = await adapter.generate(
-
         "call-1",
-
         "hello there",
-
         {"system_prompt": "You are friendly."},
-
         {"temperature": 0.2},
-
     )
 
     assert reply == "response from gemini"
@@ -249,10 +174,9 @@ async def test_google_llm_adapter_generate(monkeypatch):
 
     assert request["json"]["generationConfig"]["temperature"] == 0.2
 
+
 @pytest.mark.asyncio
-
 async def test_google_tts_adapter_synthesizes_chunks():
-
     app_config = _build_app_config()
 
     provider_config = GoogleProviderConfig(**app_config.providers["google"])
@@ -261,26 +185,16 @@ async def test_google_tts_adapter_synthesizes_chunks():
 
     mulaw_audio = convert_pcm16le_to_target_format(pcm_audio, "mulaw")
 
-    payload = json.dumps(
-
-        {"audioContent": base64.b64encode(mulaw_audio).decode("ascii")}
-
-    )
+    payload = json.dumps({"audioContent": base64.b64encode(mulaw_audio).decode("ascii")})
 
     fake_session = _FakeSession(payload)
 
     adapter = GoogleTTSAdapter(
-
         "google_tts",
-
         app_config,
-
         provider_config,
-
         {"format": {"encoding": "mulaw", "sample_rate": 8000}},
-
         session_factory=lambda: fake_session,
-
     )
 
     await adapter.start()
@@ -299,10 +213,9 @@ async def test_google_tts_adapter_synthesizes_chunks():
 
     assert request["json"]["voice"]["name"] == "en-US-Neural2-C"
 
+
 @pytest.mark.asyncio
-
 async def test_google_orchestrator_falls_back_without_credentials(monkeypatch):
-
     app_config = _build_app_config()
 
     app_config.providers["google"].pop("api_key", None)
@@ -325,10 +238,9 @@ async def test_google_orchestrator_falls_back_without_credentials(monkeypatch):
 
     assert resolution.tts_adapter.__class__.__name__ == "PlaceholderTTSAdapter"
 
+
 @pytest.mark.asyncio
-
 async def test_pipeline_orchestrator_registers_google_adapters():
-
     app_config = _build_app_config()
 
     orchestrator = PipelineOrchestrator(app_config)
@@ -344,4 +256,3 @@ async def test_pipeline_orchestrator_registers_google_adapters():
     assert isinstance(resolution.tts_adapter, GoogleTTSAdapter)
 
     assert resolution.stt_options["language_code"] == "en-US"
-

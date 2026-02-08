@@ -24,7 +24,6 @@ from yaralyzer.util.logging import log
 
 class PdfTreeVerifier:
     def __init__(self, pdfalyzer: "Pdfalyzer") -> None:
-
         self.pdfalyzer = pdfalyzer
 
     def verify_all_nodes_encountered_are_in_tree(self) -> None:

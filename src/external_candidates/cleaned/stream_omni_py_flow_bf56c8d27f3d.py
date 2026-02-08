@@ -35,7 +35,6 @@ import random
 
 from typing import Dict, Optional
 
-
 import torch
 
 import torch.nn as nn
@@ -95,7 +94,6 @@ class MaskedDiffWithXvec(torch.nn.Module):
             "fmax": 8000,
         },
     ):
-
         super().__init__()
 
         self.input_size = input_size
@@ -133,7 +131,6 @@ class MaskedDiffWithXvec(torch.nn.Module):
         batch: dict,
         device: torch.device,
     ) -> Dict[str, Optional[torch.Tensor]]:
-
         token = batch["speech_token"].to(device)
 
         token_len = batch["speech_token_len"].to(device)
@@ -204,7 +201,6 @@ class MaskedDiffWithXvec(torch.nn.Module):
         embedding,
         flow_cache,
     ):
-
         assert token.shape[0] == 1
 
         # xvec projection

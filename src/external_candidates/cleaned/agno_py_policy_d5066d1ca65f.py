@@ -13,8 +13,8 @@ from agno.cli.console import print_info
 
 from agno.utils.log import logger
 
-class IamPolicy(AwsResource):
 
+class IamPolicy(AwsResource):
     """
 
     Reference:
@@ -58,7 +58,6 @@ class IamPolicy(AwsResource):
     arn: Optional[str] = None
 
     def _create(self, aws_client: AwsApiClient) -> bool:
-
         """Creates the IamPolicy
 
         Args:
@@ -70,21 +69,17 @@ class IamPolicy(AwsResource):
         print_info(f"Creating {self.get_resource_type()}: {self.get_resource_name()}")
 
         try:
-
             # create a dict of args which are not null, otherwise aws type validation fails
 
             not_null_args: Dict[str, Any] = {}
 
             if self.path:
-
                 not_null_args["Path"] = self.path
 
             if self.description:
-
                 not_null_args["Description"] = self.description
 
             if self.tags:
-
                 not_null_args["Tags"] = self.tags
 
             # Create Policy
@@ -92,13 +87,9 @@ class IamPolicy(AwsResource):
             service_resource = self.get_service_resource(aws_client)
 
             policy = service_resource.create_policy(
-
                 PolicyName=self.name,
-
                 PolicyDocument=self.policy_document,
-
                 **not_null_args,
-
             )
 
             # logger.debug(f"Policy: {policy}")
@@ -114,7 +105,6 @@ class IamPolicy(AwsResource):
             logger.debug(f"arn: {self.arn}")
 
             if create_date is not None:
-
                 print_info(f"Policy created: {self.name}")
 
                 self.active_resource = policy
@@ -124,7 +114,6 @@ class IamPolicy(AwsResource):
             logger.error("Policy could not be created")
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be created.")
 
             logger.error(e)
@@ -132,43 +121,27 @@ class IamPolicy(AwsResource):
         return False
 
     def post_create(self, aws_client: AwsApiClient) -> bool:
-
         # Wait for Policy to be created
 
         if self.wait_for_create:
-
             try:
-
                 print_info(f"Waiting for {self.get_resource_type()} to be created.")
 
                 if self.arn is not None:
-
-                    waiter = self.get_service_client(aws_client).get_waiter(
-
-                        "policy_exists"
-
-                    )
+                    waiter = self.get_service_client(aws_client).get_waiter("policy_exists")
 
                     waiter.wait(
-
                         PolicyArn=self.arn,
-
                         WaiterConfig={
-
                             "Delay": self.waiter_delay,
-
                             "MaxAttempts": self.waiter_max_attempts,
-
                         },
-
                     )
 
                 else:
-
                     logger.warning("Skipping waiter, No Policy ARN found")
 
             except Exception as e:
-
                 logger.error("Waiter failed.")
 
                 logger.error(e)
@@ -176,7 +149,6 @@ class IamPolicy(AwsResource):
         return True
 
     def _read(self, aws_client: AwsApiClient) -> Optional[Any]:
-
         """Returns the IamPolicy
 
         Args:
@@ -190,21 +162,17 @@ class IamPolicy(AwsResource):
         logger.debug(f"Reading {self.get_resource_type()}: {self.get_resource_name()}")
 
         try:
-
             service_resource = self.get_service_resource(aws_client)
 
             policy = None
 
             for _policy in service_resource.policies.all():
-
                 if _policy.policy_name == self.name:
-
                     policy = _policy
 
                     break
 
             if policy is None:
-
                 logger.debug("No Policy found")
 
                 return None
@@ -220,17 +188,14 @@ class IamPolicy(AwsResource):
             logger.debug(f"arn: {self.arn}")
 
             if create_date is not None:
-
                 logger.debug(f"Policy found: {policy.policy_name}")
 
                 self.active_resource = policy
 
         except ClientError as ce:
-
             logger.debug(f"ClientError: {ce}")
 
         except Exception as e:
-
             logger.error(f"Error reading {self.get_resource_type()}.")
 
             logger.error(e)
@@ -238,7 +203,6 @@ class IamPolicy(AwsResource):
         return self.active_resource
 
     def _delete(self, aws_client: AwsApiClient) -> bool:
-
         """Deletes the IamPolicy
 
         Args:
@@ -250,7 +214,6 @@ class IamPolicy(AwsResource):
         print_info(f"Deleting {self.get_resource_type()}: {self.get_resource_name()}")
 
         try:
-
             policy = self._read(aws_client)
 
             # logger.debug(f"Policy: {policy}")
@@ -260,7 +223,6 @@ class IamPolicy(AwsResource):
             self.active_resource = None
 
             if policy is None:
-
                 logger.warning(f"No {self.get_resource_type()} to delete")
 
                 return True
@@ -278,7 +240,6 @@ class IamPolicy(AwsResource):
             roles = policy.attached_roles.all()
 
             for role in roles:
-
                 print_info(f"Detaching policy from role: {role}")
 
                 policy.detach_role(RoleName=role.name)
@@ -288,7 +249,6 @@ class IamPolicy(AwsResource):
             users = policy.attached_users.all()
 
             for user in users:
-
                 print_info(f"Detaching policy from user: {user}")
 
                 policy.detach_user(UserName=user.name)
@@ -298,7 +258,6 @@ class IamPolicy(AwsResource):
             groups = policy.attached_groups.all()
 
             for group in groups:
-
                 print_info(f"Detaching policy from group: {group}")
 
                 policy.detach_group(GroupName=group.name)
@@ -310,9 +269,7 @@ class IamPolicy(AwsResource):
             versions = policy.versions.all()
 
             for version in versions:
-
                 if version.version_id == default_version.version_id:
-
                     print_info(f"Skipping deleting default PolicyVersion: {version}")
 
                     continue
@@ -328,7 +285,6 @@ class IamPolicy(AwsResource):
             return True
 
         except Exception as e:
-
             logger.error(f"{self.get_resource_type()} could not be deleted.")
 
             logger.error("Please try again or delete resources manually.")
@@ -336,4 +292,3 @@ class IamPolicy(AwsResource):
             logger.error(e)
 
         return False
-

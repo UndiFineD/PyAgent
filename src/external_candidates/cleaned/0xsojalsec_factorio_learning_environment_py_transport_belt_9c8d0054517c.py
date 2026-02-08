@@ -15,9 +15,7 @@ import random
 
 from typing import Callable, Dict, Optional, Tuple
 
-
 from PIL import Image
-
 
 from ..constants import EAST, HORIZONTAL, NORTH, SOUTH, VERTICAL, WEST
 

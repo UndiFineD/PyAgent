@@ -17,10 +17,9 @@ from agno.vectordb.cassandra.index import AgnoMetadataVectorCassandraTable
 
 from cassandra.cluster import Session
 
+
 @pytest.fixture
-
 def mock_session():
-
     """Create a mocked Cassandra session."""
 
     session = MagicMock(spec=Session)
@@ -33,10 +32,9 @@ def mock_session():
 
     return session
 
+
 @pytest.fixture
-
 def mock_table():
-
     """Create a mock table with all necessary methods."""
 
     mock_table = MagicMock()
@@ -53,30 +51,19 @@ def mock_table():
 
     return mock_table
 
+
 @pytest.fixture
-
 def vector_db(mock_session, mock_embedder, mock_table):
-
     """Create a VectorDB instance with mocked session and table."""
 
     table_name = f"test_vectors_{uuid.uuid4().hex[:8]}"
 
-    with patch.object(
-
-        AgnoMetadataVectorCassandraTable, "__new__", return_value=mock_table
-
-    ):
-
+    with patch.object(AgnoMetadataVectorCassandraTable, "__new__", return_value=mock_table):
         db = Cassandra(
-
             table_name=table_name,
-
             keyspace="test_vectordb",
-
             embedder=mock_embedder,
-
             session=mock_session,
-
         )
 
         db.create()
@@ -89,39 +76,27 @@ def vector_db(mock_session, mock_embedder, mock_table):
 
         yield db
 
-def create_test_documents(num_docs: int = 3) -> list[Document]:
 
+def create_test_documents(num_docs: int = 3) -> list[Document]:
     """Helper function to create test documents."""
 
     return [
-
         Document(
-
             id=f"doc_{i}",
-
             content=f"This is test document {i}",
-
             meta_data={"type": "test", "index": str(i)},
-
             name=f"test_doc_{i}",
-
         )
-
         for i in range(num_docs)
-
     ]
 
-def test_initialization(mock_session):
 
+def test_initialization(mock_session):
     """Test VectorDB initialization."""
 
     # Test successful initialization
 
-    db = Cassandra(
-
-        table_name="test_vectors", keyspace="test_vectordb", session=mock_session
-
-    )
+    db = Cassandra(table_name="test_vectors", keyspace="test_vectordb", session=mock_session)
 
     assert db.table_name == "test_vectors"
 
@@ -130,19 +105,16 @@ def test_initialization(mock_session):
     # Test initialization failures
 
     with pytest.raises(ValueError):
-
         Cassandra(table_name="", keyspace="test_vectordb", session=mock_session)
 
     with pytest.raises(ValueError):
-
         Cassandra(table_name="test_vectors", keyspace="", session=mock_session)
 
     with pytest.raises(ValueError):
-
         Cassandra(table_name="test_vectors", keyspace="test_vectordb", session=None)
 
-def test_insert_and_search(vector_db, mock_table):
 
+def test_insert_and_search(vector_db, mock_table):
     """Test document insertion and search functionality."""
 
     docs = create_test_documents(1)
@@ -150,17 +122,11 @@ def test_insert_and_search(vector_db, mock_table):
     # Configure mock for search results
 
     mock_hit = {
-
         "row_id": "doc_0",
-
         "body_blob": "This is test document 0",
-
         "metadata": {"type": "test", "index": "0"},
-
         "vector": [0.1] * 1024,
-
         "document_name": "test_doc_0",
-
     }
 
     mock_table.metric_ann_search.return_value = [mock_hit]
@@ -189,8 +155,8 @@ def test_insert_and_search(vector_db, mock_table):
 
     assert len(results) == 1
 
-def test_document_existence(vector_db, mock_session):
 
+def test_document_existence(vector_db, mock_session):
     """Test document existence checking methods."""
 
     docs = create_test_documents(1)
@@ -225,8 +191,8 @@ def test_document_existence(vector_db, mock_session):
 
     assert vector_db.id_exists("nonexistent") is False
 
-def test_upsert(vector_db, mock_table):
 
+def test_upsert(vector_db, mock_table):
     """Test upsert functionality."""
 
     docs = create_test_documents(1)
@@ -234,17 +200,11 @@ def test_upsert(vector_db, mock_table):
     # Mock search result for verification
 
     mock_hit = {
-
         "row_id": "doc_0",
-
         "body_blob": "Modified content",
-
         "metadata": {"type": "modified"},
-
         "vector": [0.1] * 1024,
-
         "document_name": "test_doc_0",
-
     }
 
     mock_table.metric_ann_search.return_value = [mock_hit]
@@ -258,15 +218,10 @@ def test_upsert(vector_db, mock_table):
     # Modify document and upsert
 
     modified_doc = Document(
-
         id=docs[0].id,
-
         content="Modified content",
-
         meta_data={"type": "modified"},
-
         name=docs[0].name,
-
     )
 
     vector_db.upsert([modified_doc])
@@ -281,8 +236,8 @@ def test_upsert(vector_db, mock_table):
 
     assert results[0].meta_data["type"] == "modified"
 
-def test_delete_and_drop(vector_db, mock_table, mock_session):
 
+def test_delete_and_drop(vector_db, mock_table, mock_session):
     """Test delete and drop functionality."""
 
     # Test delete
@@ -296,15 +251,11 @@ def test_delete_and_drop(vector_db, mock_table, mock_session):
     vector_db.drop()
 
     mock_session.execute.assert_called_with(
-
-        "DROP TABLE IF EXISTS test_vectordb.test_vectors_"
-
-        + vector_db.table_name.split("_")[-1]
-
+        "DROP TABLE IF EXISTS test_vectordb.test_vectors_" + vector_db.table_name.split("_")[-1]
     )
 
-def test_exists(vector_db, mock_session):
 
+def test_exists(vector_db, mock_session):
     """Test table existence checking."""
 
     mock_session.execute.return_value.one.return_value = True
@@ -315,10 +266,9 @@ def test_exists(vector_db, mock_session):
 
     assert vector_db.exists() is False
 
+
 @pytest.mark.asyncio
-
 async def test_async_create(vector_db, mock_session):
-
     """Test async table creation."""
 
     # Set up mock session return values
@@ -328,17 +278,15 @@ async def test_async_create(vector_db, mock_session):
     # Mock the initialize_table method to track if it was called
 
     with patch.object(vector_db, "initialize_table") as mock_initialize:
-
         # Test async create
 
         await vector_db.async_create()
 
         assert mock_initialize.called
 
+
 @pytest.mark.asyncio
-
 async def test_async_doc_exists(vector_db, mock_session):
-
     """Test async document existence checking."""
 
     doc = create_test_documents(1)[0]
@@ -359,10 +307,9 @@ async def test_async_doc_exists(vector_db, mock_session):
 
     assert exists is False
 
+
 @pytest.mark.asyncio
-
 async def test_async_name_exists(vector_db, mock_session):
-
     """Test async name existence checking."""
 
     # Configure mock for existing name
@@ -381,10 +328,9 @@ async def test_async_name_exists(vector_db, mock_session):
 
     assert exists is False
 
+
 @pytest.mark.asyncio
-
 async def test_async_insert_and_search(vector_db, mock_table):
-
     """Test async document insertion and search."""
 
     docs = create_test_documents(2)
@@ -392,17 +338,11 @@ async def test_async_insert_and_search(vector_db, mock_table):
     # Configure mock for search results
 
     mock_hit = {
-
         "row_id": "doc_0",
-
         "body_blob": "This is test document 0",
-
         "metadata": {"type": "test", "index": "0"},
-
         "vector": [0.1] * 1024,
-
         "document_name": "test_doc_0",
-
     }
 
     mock_table.metric_ann_search.return_value = [mock_hit]
@@ -423,10 +363,9 @@ async def test_async_insert_and_search(vector_db, mock_table):
 
     assert mock_table.metric_ann_search.called
 
+
 @pytest.mark.asyncio
-
 async def test_async_upsert(vector_db, mock_table):
-
     """Test async upsert functionality."""
 
     docs = create_test_documents(1)
@@ -434,17 +373,11 @@ async def test_async_upsert(vector_db, mock_table):
     # Configure mock for search result
 
     mock_hit = {
-
         "row_id": "doc_0",
-
         "body_blob": "Updated content",
-
         "metadata": {"type": "updated"},
-
         "vector": [0.1] * 1024,
-
         "document_name": "test_doc_0",
-
     }
 
     mock_table.metric_ann_search.return_value = [mock_hit]
@@ -461,26 +394,20 @@ async def test_async_upsert(vector_db, mock_table):
 
     assert len(results) == 1
 
+
 @pytest.mark.asyncio
-
 async def test_async_drop(vector_db, mock_session):
-
     """Test async drop functionality."""
 
     await vector_db.async_drop()
 
     mock_session.execute.assert_called_with(
-
-        "DROP TABLE IF EXISTS test_vectordb.test_vectors_"
-
-        + vector_db.table_name.split("_")[-1]
-
+        "DROP TABLE IF EXISTS test_vectordb.test_vectors_" + vector_db.table_name.split("_")[-1]
     )
 
+
 @pytest.mark.asyncio
-
 async def test_async_exists(vector_db, mock_session):
-
     """Test async exists functionality."""
 
     # Configure mock for existing table
@@ -498,4 +425,3 @@ async def test_async_exists(vector_db, mock_session):
     exists = await vector_db.async_exists()
 
     assert exists is False
-

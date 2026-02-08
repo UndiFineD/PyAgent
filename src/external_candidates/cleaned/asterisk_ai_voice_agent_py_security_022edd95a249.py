@@ -31,8 +31,8 @@ import os
 
 from typing import Any, Dict
 
-def _is_nonempty_string(val: Any) -> bool:
 
+def _is_nonempty_string(val: Any) -> bool:
     """
 
     Check if value is a non-empty string.
@@ -51,8 +51,8 @@ def _is_nonempty_string(val: Any) -> bool:
 
     return isinstance(val, str) and val.strip() != ""
 
-def expand_string_tokens(value: str) -> str:
 
+def expand_string_tokens(value: str) -> str:
     """
 
     Expand environment variable tokens in a string.
@@ -74,15 +74,13 @@ def expand_string_tokens(value: str) -> str:
     """
 
     try:
-
         return os.path.expandvars(value or "")
 
     except Exception:
-
         return value or ""
 
-def inject_asterisk_credentials(config_data: Dict[str, Any]) -> None:
 
+def inject_asterisk_credentials(config_data: Dict[str, Any]) -> None:
     """
 
     Inject Asterisk credentials from environment variables ONLY.
@@ -107,30 +105,17 @@ def inject_asterisk_credentials(config_data: Dict[str, Any]) -> None:
 
     """
 
-    asterisk_yaml = (
-
-        (config_data.get("asterisk") or {})
-
-        if isinstance(config_data.get("asterisk"), dict)
-
-        else {}
-
-    )
+    asterisk_yaml = (config_data.get("asterisk") or {}) if isinstance(config_data.get("asterisk"), dict) else {}
 
     config_data["asterisk"] = {
-
         "host": os.getenv("ASTERISK_HOST", "127.0.0.1"),
-
         "username": os.getenv("ASTERISK_ARI_USERNAME") or os.getenv("ARI_USERNAME"),
-
         "password": os.getenv("ASTERISK_ARI_PASSWORD") or os.getenv("ARI_PASSWORD"),
-
         "app_name": asterisk_yaml.get("app_name", "asterisk-ai-voice-agent"),
-
     }
 
-def inject_llm_config(config_data: Dict[str, Any]) -> None:
 
+def inject_llm_config(config_data: Dict[str, Any]) -> None:
     """
 
     Merge LLM configuration from YAML and environment variables.
@@ -155,22 +140,13 @@ def inject_llm_config(config_data: Dict[str, Any]) -> None:
 
     """
 
-    llm_yaml = (
-
-        (config_data.get("llm") or {})
-
-        if isinstance(config_data.get("llm"), dict)
-
-        else {}
-
-    )
+    llm_yaml = (config_data.get("llm") or {}) if isinstance(config_data.get("llm"), dict) else {}
 
     # Resolve initial_greeting
 
     initial_greeting = llm_yaml.get("initial_greeting")
 
     if not _is_nonempty_string(initial_greeting):
-
         initial_greeting = os.getenv("GREETING", "Hello, how can I help you?")
 
     # Resolve prompt/persona
@@ -178,7 +154,6 @@ def inject_llm_config(config_data: Dict[str, Any]) -> None:
     prompt_val = llm_yaml.get("prompt")
 
     if not _is_nonempty_string(prompt_val):
-
         prompt_val = os.getenv("AI_ROLE", "You are a helpful assistant.")
 
     # Resolve model
@@ -196,19 +171,14 @@ def inject_llm_config(config_data: Dict[str, Any]) -> None:
     prompt_val = expand_string_tokens(prompt_val)
 
     config_data["llm"] = {
-
         "initial_greeting": initial_greeting,
-
         "prompt": prompt_val,
-
         "model": model_val,
-
         "api_key": api_key_val,
-
     }
 
-def inject_provider_api_keys(config_data: Dict[str, Any]) -> None:
 
+def inject_provider_api_keys(config_data: Dict[str, Any]) -> None:
     """
 
     Inject provider API keys from environment variables ONLY.
@@ -234,7 +204,6 @@ def inject_provider_api_keys(config_data: Dict[str, Any]) -> None:
     """
 
     try:
-
         providers_block = config_data.get("providers", {}) or {}
 
         # Inject OPENAI_API_KEY
@@ -242,7 +211,6 @@ def inject_provider_api_keys(config_data: Dict[str, Any]) -> None:
         openai_block = providers_block.get("openai", {}) or {}
 
         if isinstance(openai_block, dict):
-
             openai_block["api_key"] = os.getenv("OPENAI_API_KEY")
 
             providers_block["openai"] = openai_block
@@ -252,7 +220,6 @@ def inject_provider_api_keys(config_data: Dict[str, Any]) -> None:
         deepgram_block = providers_block.get("deepgram", {}) or {}
 
         if isinstance(deepgram_block, dict):
-
             deepgram_block["api_key"] = os.getenv("DEEPGRAM_API_KEY")
 
             providers_block["deepgram"] = deepgram_block
@@ -262,7 +229,6 @@ def inject_provider_api_keys(config_data: Dict[str, Any]) -> None:
         google_live_block = providers_block.get("google_live", {}) or {}
 
         if isinstance(google_live_block, dict):
-
             google_live_block["api_key"] = os.getenv("GOOGLE_API_KEY")
 
             providers_block["google_live"] = google_live_block
@@ -270,8 +236,6 @@ def inject_provider_api_keys(config_data: Dict[str, Any]) -> None:
         config_data["providers"] = providers_block
 
     except Exception:
-
         # Non-fatal; Pydantic may still raise if keys are missing
 
         pass
-

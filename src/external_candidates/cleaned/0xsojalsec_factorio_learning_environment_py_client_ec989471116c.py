@@ -24,7 +24,6 @@ from fle.env.tools.admin.request_path.client import RequestPath
 
 class MoveTo(Tool):
     def __init__(self, connection: LuaScriptManager, game_state):
-
         super().__init__(connection, game_state)
 
         # self.observe = ObserveAll(connection, game_state)

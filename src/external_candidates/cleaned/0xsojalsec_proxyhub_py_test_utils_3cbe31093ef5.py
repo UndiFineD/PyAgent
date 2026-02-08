@@ -16,14 +16,12 @@ from proxyhub.utils import (
 
 
 def test_get_all_ip():
-
     page = "abc127.0.0.1:80abc127.0.0.1xx127.0.0.2:8080h"
 
     assert get_all_ip(page) == {"127.0.0.1", "127.0.0.2"}
 
 
 def test_get_status_code():
-
     assert get_status_code("HTTP/1.1 200 OK\r\n") == 200
 
     assert get_status_code("<html>123</html>\r\n") == 400
@@ -34,7 +32,6 @@ def test_get_status_code():
 
 
 def test_parse_status_line():
-
     assert parse_status_line("HTTP/1.1 200 OK") == {
         "Version": "HTTP/1.1",
         "Status": 200,
@@ -58,7 +55,6 @@ def test_parse_status_line():
 
 
 def test_parse_headers():
-
     req = (
         b"GET /go HTTP/1.1\r\nContent-Length: 0\r\nAccept-Encoding: "
         b"gzip, deflate\r\nHost: host.com\r\nConnection: close\r\n\r\n"

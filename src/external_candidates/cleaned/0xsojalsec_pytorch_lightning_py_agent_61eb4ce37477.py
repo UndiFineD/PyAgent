@@ -31,7 +31,6 @@ class PPOAgent(torch.nn.Module):
         act_fun: str = "relu",
         ortho_init: bool = False,
     ) -> None:
-
         super().__init__()
 
         if act_fun.lower() == "relu":
@@ -70,7 +69,6 @@ class PPOAgent(torch.nn.Module):
         )
 
     def get_action(self, x: Tensor, action: Tensor = None) -> tuple[Tensor, Tensor, Tensor]:
-
         logits = self.actor(x)
 
         distribution = Categorical(logits=logits)
@@ -81,7 +79,6 @@ class PPOAgent(torch.nn.Module):
         return action, distribution.log_prob(action), distribution.entropy()
 
     def get_greedy_action(self, x: Tensor) -> Tensor:
-
         logits = self.actor(x)
 
         probs = F.softmax(logits, dim=-1)
@@ -89,11 +86,9 @@ class PPOAgent(torch.nn.Module):
         return torch.argmax(probs, dim=-1)
 
     def get_value(self, x: Tensor) -> Tensor:
-
         return self.critic(x)
 
     def get_action_and_value(self, x: Tensor, action: Tensor = None) -> tuple[Tensor, Tensor, Tensor, Tensor]:
-
         action, log_prob, entropy = self.get_action(x, action)
 
         value = self.get_value(x)
@@ -101,7 +96,6 @@ class PPOAgent(torch.nn.Module):
         return action, log_prob, entropy, value
 
     def forward(self, x: Tensor, action: Tensor = None) -> tuple[Tensor, Tensor, Tensor, Tensor]:
-
         return self.get_action_and_value(x, action)
 
     @torch.no_grad()
@@ -116,7 +110,6 @@ class PPOAgent(torch.nn.Module):
         gamma: float,
         gae_lambda: float,
     ) -> tuple[Tensor, Tensor]:
-
         next_value = self.get_value(next_obs).reshape(1, -1)
 
         advantages = torch.zeros_like(rewards)
@@ -156,7 +149,6 @@ class PPOLightningAgent(LightningModule):
         normalize_advantages: bool = False,
         **torchmetrics_kwargs,
     ):
-
         super().__init__()
 
         if act_fun.lower() == "relu":
@@ -211,7 +203,6 @@ class PPOLightningAgent(LightningModule):
         self.avg_ent_loss = MeanMetric(**torchmetrics_kwargs)
 
     def get_action(self, x: Tensor, action: Tensor = None) -> tuple[Tensor, Tensor, Tensor]:
-
         logits = self.actor(x)
 
         distribution = Categorical(logits=logits)
@@ -222,7 +213,6 @@ class PPOLightningAgent(LightningModule):
         return action, distribution.log_prob(action), distribution.entropy()
 
     def get_greedy_action(self, x: Tensor) -> Tensor:
-
         logits = self.actor(x)
 
         probs = F.softmax(logits, dim=-1)
@@ -230,11 +220,9 @@ class PPOLightningAgent(LightningModule):
         return torch.argmax(probs, dim=-1)
 
     def get_value(self, x: Tensor) -> Tensor:
-
         return self.critic(x)
 
     def get_action_and_value(self, x: Tensor, action: Tensor = None) -> tuple[Tensor, Tensor, Tensor, Tensor]:
-
         action, log_prob, entropy = self.get_action(x, action)
 
         value = self.get_value(x)
@@ -242,7 +230,6 @@ class PPOLightningAgent(LightningModule):
         return action, log_prob, entropy, value
 
     def forward(self, x: Tensor, action: Tensor = None) -> tuple[Tensor, Tensor, Tensor, Tensor]:
-
         return self.get_action_and_value(x, action)
 
     @torch.no_grad()
@@ -257,7 +244,6 @@ class PPOLightningAgent(LightningModule):
         gamma: float,
         gae_lambda: float,
     ) -> tuple[Tensor, Tensor]:
-
         next_value = self.get_value(next_obs).reshape(1, -1)
 
         advantages = torch.zeros_like(rewards)
@@ -284,7 +270,6 @@ class PPOLightningAgent(LightningModule):
         return returns, advantages
 
     def training_step(self, batch: dict[str, Tensor]):
-
         # Get actions and values given the current observations
 
         _, newlogprob, entropy, newvalue = self(batch["obs"], batch["actions"].long())
@@ -330,7 +315,6 @@ class PPOLightningAgent(LightningModule):
         return pg_loss + ent_loss + v_loss
 
     def on_train_epoch_end(self, global_step: int) -> None:
-
         # Log metrics and reset their internal state
 
         self.logger.log_metrics(
@@ -345,7 +329,6 @@ class PPOLightningAgent(LightningModule):
         self.reset_metrics()
 
     def reset_metrics(self):
-
         self.avg_pg_loss.reset()
 
         self.avg_value_loss.reset()
@@ -353,5 +336,4 @@ class PPOLightningAgent(LightningModule):
         self.avg_ent_loss.reset()
 
     def configure_optimizers(self, lr: float):
-
         return torch.optim.Adam(self.parameters(), lr=lr, eps=1e-4)

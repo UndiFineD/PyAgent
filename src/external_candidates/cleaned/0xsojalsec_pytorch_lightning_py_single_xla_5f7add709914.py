@@ -58,7 +58,6 @@ class SingleDeviceXLAStrategy(SingleDeviceStrategy):
         checkpoint_io: Optional[XLACheckpointIO] = None,
         precision: Optional[XLAPrecision] = None,
     ):
-
         _raise_enterprise_not_available()
 
         from pytorch_lightning_enterprise.strategies.xla.single import (
@@ -77,7 +76,6 @@ class SingleDeviceXLAStrategy(SingleDeviceStrategy):
     @property
     @override
     def checkpoint_io(self) -> XLACheckpointIO:
-
         plugin = self._checkpoint_io
 
         if plugin is not None:
@@ -90,7 +88,6 @@ class SingleDeviceXLAStrategy(SingleDeviceStrategy):
     @checkpoint_io.setter
     @override
     def checkpoint_io(self, io: Optional[CheckpointIO]) -> None:
-
         if io is not None and not isinstance(io, XLACheckpointIO):
             raise TypeError(f"The XLA strategy can only work with the `XLACheckpointIO` plugin, found {io}")
 
@@ -99,7 +96,6 @@ class SingleDeviceXLAStrategy(SingleDeviceStrategy):
     @property
     @override
     def precision(self) -> XLAPrecision:
-
         plugin = self._precision
 
         if plugin is not None:
@@ -112,7 +108,6 @@ class SingleDeviceXLAStrategy(SingleDeviceStrategy):
     @precision.setter
     @override
     def precision(self, precision: Optional[Precision]) -> None:
-
         if precision is not None and not isinstance(precision, XLAPrecision):
             raise TypeError(f"The XLA strategy can only work with the `XLAPrecision` plugin, found {precision}")
 
@@ -121,5 +116,4 @@ class SingleDeviceXLAStrategy(SingleDeviceStrategy):
     @classmethod
     @override
     def register_strategies(cls, strategy_registry: _StrategyRegistry) -> None:
-
         strategy_registry.register("single_xla", cls, description=cls.__name__)

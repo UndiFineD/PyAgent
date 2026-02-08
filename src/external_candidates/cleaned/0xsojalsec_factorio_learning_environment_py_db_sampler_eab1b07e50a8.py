@@ -16,14 +16,12 @@ from psycopg2.extras import DictCursor
 
 class DBSampler(ABC):
     def __init__(self, db_client: DBClient, maximum_lookback=10):
-
         self.db_client = db_client
 
         self.maximum_lookback = maximum_lookback
 
     @abstractmethod
     async def sample_parent(self, version=1, **kwargs) -> Optional[Program]:
-
         pass
 
     async def visit(self, id, children=1):

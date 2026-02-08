@@ -75,7 +75,6 @@ class OpenAIEmbedding(BaseEmbedding[str]):
         api_key: str | None = None,
         dimensions: int | NotGiven = NOT_GIVEN,
     ) -> None:
-
         if not model_type.is_openai:
             raise ValueError("Invalid OpenAI embedding model type.")
 

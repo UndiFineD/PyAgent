@@ -7,7 +7,6 @@ import requests
 
 
 def rumble_email(email):
-
     email = email
 
     headers = {

@@ -10,7 +10,6 @@ from memory_layer.llm.openai_provider import OpenAIProvider
 
 class LLMProvider:
     def __init__(self, provider_type: str, **kwargs):
-
         self.provider_type = provider_type
 
         if provider_type == "openai":
@@ -29,5 +28,4 @@ class LLMProvider:
         extra_body: dict | None = None,
         response_format: dict | None = None,
     ) -> str:
-
         return await self.provider.generate(prompt, temperature, max_tokens, extra_body, response_format)

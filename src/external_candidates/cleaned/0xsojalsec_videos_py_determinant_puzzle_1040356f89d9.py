@@ -13,7 +13,6 @@ class WorkOutNumerically(Scene):
     }
 
     def construct(self):
-
         self.add_question()
 
         self.add_example()
@@ -23,7 +22,6 @@ class WorkOutNumerically(Scene):
         self.compute_lhs()
 
     def add_question(self):
-
         equation = self.original_equation = OldTex(
             "\\det(",
             "M_1",
@@ -62,7 +60,6 @@ class WorkOutNumerically(Scene):
         self.wait()
 
     def add_example(self):
-
         M1 = self.M1 = Matrix([[2, -1], [1, 1]])
 
         M1.set_color(self.M1_COLOR)
@@ -118,7 +115,6 @@ class WorkOutNumerically(Scene):
         self.play(LaggedStartMap(FadeIn, equation))
 
     def compute_rhs(self):
-
         M1, M2 = self.M1_copy, self.M2_copy
 
         line1 = VGroup(
@@ -172,7 +168,6 @@ class WorkOutNumerically(Scene):
         self.play(LaggedStartMap(FadeIn, lines[1:], run_time=3))
 
     def compute_lhs(self):
-
         matrix = Matrix([[-3, 7], [0, 5]])
 
         matrix.set_color(BLUE)
@@ -216,7 +211,6 @@ class WorkOutNumerically(Scene):
 
 class LetsGoInOneSentence(TeacherStudentsScene):
     def construct(self):
-
         self.teacher_says("Here we go, \\\\", "one sentence!")
 
         self.play_all_student_changes("hooray")
@@ -235,7 +229,6 @@ class SuccessiveLinearTransformations(LinearTransformationScene):
     }
 
     def construct(self):
-
         self.create_product_and_inverse()
 
         self.scale_area_successively()
@@ -247,13 +240,11 @@ class SuccessiveLinearTransformations(LinearTransformationScene):
         # self.show_det_as_scaling_factor()
 
     def create_product_and_inverse(self):
-
         self.matrix_product = np.dot(self.matrix_1, self.matrix_2)
 
         self.matrix_product_inverse = np.linalg.inv(self.matrix_product)
 
     def scale_area_successively(self, tex2="3", tex1="5", tex_prod="15", reset=True):
-
         self.add_unit_square()
 
         t1 = "$%s \\, \\cdot $" % tex1
@@ -316,7 +307,6 @@ class SuccessiveLinearTransformations(LinearTransformationScene):
         self.wait()
 
     def apply_transformations_successively(self):
-
         M1, M2, all_space = expression = OldTex("M_1", "M_2", "\\text{(All 2d space)}")
 
         expression.set_color_by_tex_to_color_map(
@@ -386,13 +376,11 @@ class SuccessiveLinearTransformations(LinearTransformationScene):
         self.reset_plane()
 
     def show_det_as_scaling_factor(self):
-
         pass
 
     ###
 
     def reset_plane(self):
-
         plane_and_bases = VGroup(self.plane, self.basis_vectors)
 
         self.play(FadeOut(plane_and_bases))

@@ -13,7 +13,6 @@ def _detect_tail_repetition(
     max_tail: int = 300,  # search window from the end for speed
     prefer: str = "longest",  # "longest" coverage or "smallest" block
 ) -> Optional[Dict]:
-
     vals = [key(x) for x in seq][-max_tail:]
 
     n = len(vals)
