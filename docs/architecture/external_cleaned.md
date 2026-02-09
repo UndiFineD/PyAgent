@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 258
+Total Files: 221
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -27,43 +27,6 @@ Total Files: 258
 | 0xsojalsec_graphsearch_py_pathrag_af986adbebb5.py | -----Sources----- |
 | 0xsojalsec_graphsearch_py_pipeline_b537066e0214.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphsearch', providing core logic for its parent repository. |
 | 0xsojalsec_graphsearch_py_utils_e71d50b73dff.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_labelllm_py_base_6c001f9ae5a0.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_common_c84da800a51c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_config_c16eea0398ed.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_labelllm_py_crud_data_01f14204eaf6.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_crud_file_997fb9fd0e87.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_crud_label_task_c007e7c9ce00.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_crud_record_e2726fd2f8f5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_crud_team_2f497ed02f07.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_crud_team_invitation_a71cce924909.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_crud_user_b5b77a3a6d7f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_data_5f061bceeb30.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_data_baf105f81466.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_evaluation_c47ecfc16956.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_file_43b75a06f8fa.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_file_ad2482cf0ebf.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_init_24bc3488186d.py | ratio in [0, 100] |
-| 0xsojalsec_labelllm_py_label_task_5bd8532da610.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_label_task_8f9572dfe047.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_logger_b1cdef161126.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_message_c75758a78d1b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_middleware_8f69a69d4f15.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_minio_213e9f0c440c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_record_93be9afa3811.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_record_eec1eac12f5b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_security_a6246d3b3649.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_stats_281405fa67a5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_stats_842e1227e896.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_task_3c43b0efe2e8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_task_a93b3dba9605.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_task_f82f3d53198b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_team_8b52e4497677.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_team_c000cdb51aa5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_team_invitation_c2904d0a4e6c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_tool_c3d638ee9547.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_user_6f61aab3d6d3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_user_997efd4721ac.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_worker_74c0ed2d8952.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
 | 0xsojalsec_langextract_py_base_model_f7b04dd357a1.py | Base interfaces for language models. |
 | 0xsojalsec_langextract_py_builtin_registry_d4464b447b8a.py | Built-in provider registration configuration. |
 | 0xsojalsec_langextract_py_chunking_b006658f31fe.py | Library for breaking documents into chunks of sentences. |
