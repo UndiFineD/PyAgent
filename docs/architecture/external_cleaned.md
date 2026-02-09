@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 409
+Total Files: 340
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -21,76 +21,7 @@ Total Files: 409
 | 0xSojalSec_pdf_extract_api_ocr_strategy.py | Base OCR Strategy Interface |
 | 0xSojalSec_wappalyzer_next_css.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-wappalyzer-next\wappalyzer\parsers\css', providing core logic for its parent repository. |
 | 0xSojalSec_wappalyzer_next_meta.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-wappalyzer-next\wappalyzer\parsers\meta', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_base_76bacfa7ffeb.py | Please refer to the camel agent, which is used to align the prompt for MedicalRAG. |
-| 0xsojalsec_graphrag_py_baseblobstorage_65bba5606250.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_basecommunity_71a267d155b4.py | Base community class definition. |
-| 0xsojalsec_graphrag_py_baseemb_5a7f5f151ab8.py | @Time    : 2024/11/01 00:57 |
-| 0xsojalsec_graphrag_py_basegraph_d01b39768bdb.py | Builds or loads a graph based on the input chunks. |
-| 0xsojalsec_graphrag_py_basegraphstorage_7bb0e519f3e4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_baseindex_36f1eefa1c28.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_basekvstorage_2561388d211f.py | return un-exist keys |
-| 0xsojalsec_graphrag_py_basellm_e8a77aecefaa.py | @Time    : 2024/11/01 00:57 |
-| 0xsojalsec_graphrag_py_baseretriever_7100fbeb39d2.py | Find the relevant contexts for the given query. |
-| 0xsojalsec_graphrag_py_basestorage_97610212b0af.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_basicquery_ecd1e1f9c334.py | -----Entities----- |
-| 0xsojalsec_graphrag_py_chunkconfig_0815eaa4636f.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_graphrag_py_chunkfactory_a7b9635d6de2.py | Register a new chunking method |
-| 0xsojalsec_graphrag_py_chunkretriever_dc5c67eb67c2.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_chunkschema_1f04e76df401.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_clusterfactory_577b6dd4ba4d.py | register a community to registry |
-| 0xsojalsec_graphrag_py_colbertstore_3bc8e7f73374.py | Store for ColBERT v2 with PLAID indexing. |
-| 0xsojalsec_graphrag_py_communityretriever_1b33bb1c0315.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_communityschema_4a1726134212.py | Community reports result class definition. |
-| 0xsojalsec_graphrag_py_constants_c33d1021cc87.py | Get the project root directory. |
-| 0xsojalsec_graphrag_py_context_6107848f7a55.py | A dict-like object that allows access to keys as attributes, compatible with Pydantic. |
-| 0xsojalsec_graphrag_py_contextmixin_12f33f095471.py | Mixin class for context and config |
-| 0xsojalsec_graphrag_py_costmanager_358c233e40f9.py | @Time    : 2024/11/01 01:02 |
-| 0xsojalsec_graphrag_py_dalkquery_21b83c7bb068.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_docchunk_7009958df313.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_embconfig_4cbee1be00f1.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_graphrag_py_embeddingfactory_61d3e87264d7.py | RAG Embedding Factory. |
-| 0xsojalsec_graphrag_py_entityrelation_a02368c33d66.py | Initializes an Edge object with the given attributes. |
-| 0xsojalsec_graphrag_py_evaluation_0b5aea81a573.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_faissindex_3ddd54023249.py | FaissIndex is designed to be simple and straightforward. |
-| 0xsojalsec_graphrag_py_graphconfig_3b87badb09f5.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_graphrag_py_graphfactory_d49842a0a87b.py | Graph Factory. |
-| 0xsojalsec_graphrag_py_graphrag_42a18be31bcc.py | A class representing a Graph-based Retrieval-Augmented Generation system. |
-| 0xsojalsec_graphrag_py_graphschema_4624ae269577.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_grquery_f982e80290cd.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_indexconfigfactory_aa055b7da1c7.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_graphrag_py_indexfactory_4d5ac4c5fd47.py | Key is IndexType. |
-| 0xsojalsec_graphrag_py_jsonkvstorage_34dffbc2f815.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_kgpquery_a3ad748f9720.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_leidencommunity_4c32751047df.py | Please refer to the Nano-GraphRAG: https://github.com/gusye1234/nano-graphrag/blob/main/nano_graphrag/_op.py |
-| 0xsojalsec_graphrag_py_llm_27d70d91ba23.py | get the default llm provider if name is None |
-| 0xsojalsec_graphrag_py_llmconfig_3db28c4d8109.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_graphrag_py_llmproviderregister_ece9861b502a.py | @Time    : 2024/11/04 15:35 |
-| 0xsojalsec_graphrag_py_logger_5887ef8f460b.py | Adjust the log level to above level |
-| 0xsojalsec_graphrag_py_medquery_811e08905e16.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_memory_f746536790f3.py | @Time    : 2024/11/06 17:01 |
-| 0xsojalsec_graphrag_py_mergeer_b612f8a39cdc.py | Merge entity information for a specific entity name, including source IDs, entity types, and descriptions. |
-| 0xsojalsec_graphrag_py_mixretriever_b1485846f61a.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_namespace_89971c995304.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_queryconfig_ab5b459a386a.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_graphrag_py_querydataset_3ea74d3d9c80.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_queryfactory_b59873a57ed8.py | Query Factory. |
-| 0xsojalsec_graphrag_py_queryprompt_d882f58418af.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_retrieverconfig_fa71e23e0fd6.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_graphrag_py_retrievercontext_9a296daaa91b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_retrieverfactory_cdea835fd6a6.py | Register a new chunking method |
-| 0xsojalsec_graphrag_py_schema_14ab72833167.py | RAG schemas. |
-| 0xsojalsec_graphrag_py_separator_afe7db0a0efb.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_tfidfstore_4cedc847c1e1.py | Retrieval the Tf-Idf |
-| 0xsojalsec_graphrag_py_timestatistic_edbd31c21699.py | Stop last stage and return the time taken |
-| 0xsojalsec_graphrag_py_togquery_eef1e1d6aae5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_tokencounter_f12c471f5fc6.py | @Time    : 2024/11/01 01:14 |
-| 0xsojalsec_graphrag_py_treegraph_ab784e970410.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_treegraphbalanced_6d2e2c3b8461.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_treeschema_b0ffb8ccd074.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_vdbresult_5711bb3dcbc1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_wat_2bfad0b9d143.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
 | 0xsojalsec_graphsearch_py_base_ebcd7e868604.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphsearch', providing core logic for its parent repository. |
-| 0xsojalsec_graphsearch_py_hypergraphrag_82876f424256.py | -----Sources----- |
 | 0xsojalsec_graphsearch_py_lightrag_b7708170dbea.py | Document Chunks (Each entry has a reference_id refer to the `Reference Document List`): |
 | 0xsojalsec_graphsearch_py_minirag_85c966a96d97.py | -----Sources----- |
 | 0xsojalsec_graphsearch_py_pathrag_af986adbebb5.py | -----Sources----- |
