@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 340
+Total Files: 321
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -27,25 +27,6 @@ Total Files: 340
 | 0xsojalsec_graphsearch_py_pathrag_af986adbebb5.py | -----Sources----- |
 | 0xsojalsec_graphsearch_py_pipeline_b537066e0214.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphsearch', providing core logic for its parent repository. |
 | 0xsojalsec_graphsearch_py_utils_e71d50b73dff.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_guardian_cli_py_amass_91a7ec8061e0.py | Amass tool wrapper for advanced network mapping and asset discovery |
-| 0xsojalsec_guardian_cli_py_analyst_agent_4e65498f2f7f.py | Analyst Agent |
-| 0xsojalsec_guardian_cli_py_ffuf_a536e61cfe22.py | FFuf tool wrapper for fast web fuzzing |
-| 0xsojalsec_guardian_cli_py_gobuster_8004544ef289.py | Gobuster tool wrapper for directory and file brute forcing |
-| 0xsojalsec_guardian_cli_py_httpx_85b29d3c062a.py | httpx tool wrapper for HTTP probing |
-| 0xsojalsec_guardian_cli_py_logger_c4ac7745c2ac.py | Audit logging system for Guardian |
-| 0xsojalsec_guardian_cli_py_main_9d5cecb5c297.py | Guardian CLI - Main entry point |
-| 0xsojalsec_guardian_cli_py_masscan_974863f949c7.py | Masscan tool wrapper for ultra-fast TCP port scanning |
-| 0xsojalsec_guardian_cli_py_nmap_10ac8b908911.py | Nmap tool wrapper for port scanning and service detection |
-| 0xsojalsec_guardian_cli_py_planner_bd801f1c50c6.py | Strategic Planner Agent |
-| 0xsojalsec_guardian_cli_py_recon_9322e686b257.py | guardian recon - Reconnaissance command |
-| 0xsojalsec_guardian_cli_py_reporter_agent_af0304e94855.py | Reporter Agent |
-| 0xsojalsec_guardian_cli_py_scan_dee57379ed1c.py | guardian scan - Quick scan command |
-| 0xsojalsec_guardian_cli_py_sslyze_e96894f2da7e.py | SSLyze tool wrapper for advanced SSL/TLS security testing |
-| 0xsojalsec_guardian_cli_py_subfinder_8b71e36aa9d0.py | Subfinder tool wrapper for subdomain discovery |
-| 0xsojalsec_guardian_cli_py_tool_agent_f6b5cc451f05.py | Tool Selector Agent |
-| 0xsojalsec_guardian_cli_py_wafw00f_6fb171a2f40f.py | Wafw00f tool wrapper for WAF detection |
-| 0xsojalsec_guardian_cli_py_whatweb_715153f6cb83.py | WhatWeb tool wrapper for web technology fingerprinting |
-| 0xsojalsec_guardian_cli_py_workflow_1fcb8e529178.py | guardian workflow - Run predefined workflows |
 | 0xsojalsec_h2o_llmstudio_py_app_13115d54fad7.py | Serving function. |
 | 0xsojalsec_h2o_llmstudio_py_base_2f641d14c977.py | Template for any configuration file |
 | 0xsojalsec_h2o_llmstudio_py_cards_19bb271fdcca.py | Returns the header zone |
