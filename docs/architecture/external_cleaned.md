@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 1224
+Total Files: 1190
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -1139,40 +1139,6 @@ Total Files: 1224
 | 0xsojalsec_voicecraft_py_tokenizer_6c21cea429b5.py | Phonemize Text. |
 | 0xsojalsec_voicecraft_py_trainer_utils_f0f34941a084.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_voicecraft_py_utils_75f84a546542.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_volweb_py__0001_initial_112f1699f86f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py__0001_initial_8ce6c611756a.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py__0001_initial_c687543c588a.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py__0001_initial_e9eb142e9900.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py__0001_initial_fb0f6ac59521.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_apps_07e90373af19.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_apps_19bc8fb3e378.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_apps_38c195e94221.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_apps_7e0d3d00473d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_apps_b66547cc4e86.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_apps_ed7d237300af.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_consumers_d4d43c036671.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_forms_5ed67447dc25.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_forms_6f55430b0a71.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_forms_911820074fae.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_forms_98ea46da4e51.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_initadmin_74b7211687df.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_keyconfig_0740e4494149.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_volweb_py_models_f0cd9b0308fc.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_serializers_6c577f2b1592.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_serializers_b64a39fbc51c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_serializers_c9de706cb180.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_serializers_e678e772130a.py | Evidence Serializer |
-| 0xsojalsec_volweb_py_serializers_f6dc697deb6d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_serializers_ff365a49569d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_signals_037fbf2f0cf3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_stix_b02871c8d90e.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_tasks_be7b96ad8596.py | The main analysis routine for both Windows and Linux. |
-| 0xsojalsec_volweb_py_tasks_cdfc4cee7999.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_volweb', providing core logic for its parent repository. |
-| 0xsojalsec_volweb_py_views_27aba378f350.py | This view will return the evidence template with a form to add a new evidence. |
-| 0xsojalsec_volweb_py_views_30b4a54d394b.py | Load home page and display the current user with their token and all usernames. |
-| 0xsojalsec_volweb_py_views_b796d0ea16cd.py | Symbols main page |
-| 0xsojalsec_volweb_py_views_d78af2eb7d85.py | Return the requested PSTree data. |
-| 0xsojalsec_volweb_py_views_fea420b9bc8f.py | Give the requested PSTree. |
 | 0xsojalsec_wa_crypt_tools_py_key_2070987c3ef8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wa_crypt_tools', providing core logic for its parent repository. |
 | 0xsojalsec_wa_crypt_tools_py_logformat_02242594f62f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wa_crypt_tools', providing core logic for its parent repository. |
 | 0xsojalsec_wa_crypt_tools_py_props_e6b7dcfcc358.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wa_crypt_tools', providing core logic for its parent repository. |
