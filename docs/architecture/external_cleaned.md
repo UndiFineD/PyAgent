@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 191
+Total Files: 177
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -16,7 +16,6 @@ Total Files: 191
 | 0xSojalSec_homoglyph_char_manager.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-homoglyph\generator\char_manager', providing core logic for its parent repository. |
 | 0xSojalSec_ics_forensics_tools_encryption.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-ics-forensics-tools\src\forensic\plugins\CodeSysV3\codesysv3_protocol\encryption', providing core logic for its parent repository. |
 | 0xSojalSec_ldapper_logging.py | This class provides a wrapper for the standard Python logging |
-| 0xSojalSec_mahilo_mahilo_sales_agent.py | Analyze effectiveness of different lead sources |
 | 0xSojalSec_malwoverview_colors.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-malwoverview\malwoverview\utils\colors', providing core logic for its parent repository. |
 | 0xSojalSec_pdf_extract_api_ocr_strategy.py | Base OCR Strategy Interface |
 | 0xSojalSec_wappalyzer_next_css.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-wappalyzer-next\wappalyzer\parsers\css', providing core logic for its parent repository. |
@@ -35,18 +34,6 @@ Total Files: 191
 | 0xsojalsec_lumina_dimoo_py_image_utils_53d2ca36ffd5.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_lumina_dimoo_py_prompt_utils_686c20ce886a.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_lumina_dimoo_py_text_understanding_generator_cd6cfb9bae62.py | Text understanding generator |
-| 0xsojalsec_made_with_ml_py_data_2702cadb4f6a.py | Load data from source into a Ray Dataset. |
-| 0xsojalsec_made_with_ml_py_utils_a3f336d9dc9c.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_made_with_ml_py_utils_dcc2a0c7f73d.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_mahilo_py_agent_manager_e39620998b71.py | A class to manage agents of different types. |
-| 0xsojalsec_mahilo_py_message_store_e8a3b9b81851.py | Protocol defining message persistence operations |
-| 0xsojalsec_mahilo_py_monitoring_75744d6306ab.py | OpenTelemetry-based monitoring for Mahilo |
-| 0xsojalsec_mahilo_py_policy_cc188b925e24.py | Types of policies that can be defined. |
-| 0xsojalsec_mahilo_py_server_8f8c9abacca7.py | Get system metrics, optionally filtered by agent |
-| 0xsojalsec_mahilo_py_tools_21deba355616.py | Get the chat_with_agent tool that can be bound to LLMs. |
-| 0xsojalsec_mahilo_py_tools_49fe1527347a.py | Get a tool for chatting with another agent. |
-| 0xsojalsec_mahilo_py_tools_7d3c57954a55.py | Get the chat with agent tool for PydanticAI. |
-| 0xsojalsec_mahilo_py_tools_f5775f65de64.py | Dummy function to search for properties based on preferences |
 | 0xsojalsec_make_circuit_boards_py_address_8a7b1f75c7e9.py | Addresses are references to a specific node. |
 | 0xsojalsec_make_circuit_boards_py_atopilelexerbase_774d2e8f39da.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_make_circuit_boards', providing core logic for its parent repository. |
 | 0xsojalsec_make_circuit_boards_py_atopileparserbase_7d2b5de03fcf.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_make_circuit_boards', providing core logic for its parent repository. |
@@ -177,7 +164,6 @@ Total Files: 191
 | _0xsojalsec_idor_forge_banner.py | '####:'########:::'#######::'########:::::::::::'########::'#######::'########:::'######:::'########: |
 | _0xsojalsec_ldapper_logging.py | This class provides a wrapper for the standard Python logging |
 | _0xsojalsec_llava_next_convert_sqa_to_llava_base_prompt.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_LLaVA_NeXT_convert_sqa_to_llava_base_prompt', providing core logic for its parent repository. |
-| _0xsojalsec_mahilo_mahilo_sales_agent.py | Analyze effectiveness of different lead sources |
 | _0xsojalsec_malwoverview_colors.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_malwoverview_colors', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_colorpp.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_colorpp', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_run_gcp_module.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_run_gcp_module', providing core logic for its parent repository. |
