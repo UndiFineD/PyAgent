@@ -1,5 +1,0 @@
-# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-whispers\tests\fixtures\cors.py
-cors = aiohttp_cors.setup(
-    app,
-    defaults={"*": aiohttp_cors.ResourceOptions(allow_credentials=False, expose_headers="*", allow_headers="*")},
-)
