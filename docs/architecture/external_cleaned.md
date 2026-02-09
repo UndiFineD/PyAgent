@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 908
+Total Files: 816
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -706,98 +706,6 @@ Total Files: 908
 | 0xsojalsec_ovo_py_submission_components_28010275d6d8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
 | 0xsojalsec_ovo_py_trim_components_1e5f00359ff7.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
 | 0xsojalsec_ovo_py_user_settings_logic_7c2ca735e008.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_owl_py_agent_memories_cf7310ee8548.py | An agent memory wrapper of :obj:`ChatHistoryBlock`. |
-| 0xsojalsec_owl_py_agent_responses_84e7da7e4d43.py | Response of a ChatAgent. |
-| 0xsojalsec_owl_py_ai_society_f1defe79069a.py | A dictionary containing :obj:`TextPrompt` used in the `AI Society` |
-| 0xsojalsec_owl_py_alpaca_9520c04aa2dd.py | Represents an instruction-response item in the Alpaca format. |
-| 0xsojalsec_owl_py_anthropic_model_9832da70b1c5.py | Anthropic API in a unified BaseModelBackend interface. |
-| 0xsojalsec_owl_py_arxiv_toolkit_b6b2df3fae83.py | A toolkit for interacting with the arXiv API to search and download |
-| 0xsojalsec_owl_py_ask_news_toolkit_fc97fcbc3af1.py | Process the response based on the specified return type. |
-| 0xsojalsec_owl_py_async_func_97ce3ede6232.py | Convert a list of Python synchronous functions to Python |
-| 0xsojalsec_owl_py_azure_openai_model_fac14df99cb8.py | Azure OpenAI API in a unified BaseModelBackend interface. |
-| 0xsojalsec_owl_py_base_071acec9d5cc.py | Abstract base class for dataset managers. |
-| 0xsojalsec_owl_py_base_08fe6d69723f.py | An abstract base class for graph storage systems. |
-| 0xsojalsec_owl_py_base_39749e971ff8.py | Base class for all nodes in the workforce. |
-| 0xsojalsec_owl_py_base_5e598128e820.py | Check if the object exists in the storage. |
-| 0xsojalsec_owl_py_base_60fc549f0631.py | Base class for terminators. |
-| 0xsojalsec_owl_py_base_747b77a8fd5e.py | An abstract class serves as the fundamental component within the agent |
-| 0xsojalsec_owl_py_base_a7dd6d151fc3.py | Base class for toolkits. |
-| 0xsojalsec_owl_py_base_ad6bc9152eef.py | An abstract base class for key-value storage systems. Provides a |
-| 0xsojalsec_owl_py_base_b2217d6adef2.py | An abstract base class for all CAMEL agents. |
-| 0xsojalsec_owl_py_base_b453aaf9b98d.py | An abstract base class for code interpreters. |
-| 0xsojalsec_owl_py_base_config_3e0026e00a9a.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_owl_py_base_d0fc55b7c3a1.py | Base class for message objects used in CAMEL chat system. |
-| 0xsojalsec_owl_py_base_f1ff69a7650b.py | Creates a :obj:`BaseToolAgent` object with the specified name and |
-| 0xsojalsec_owl_py_base_f83723e35adf.py | A base class for schema outputs that includes functionality |
-| 0xsojalsec_owl_py_base_f89801942765.py | Encapsulates information about a vector's unique identifier and its |
-| 0xsojalsec_owl_py_base_fee3aa377d47.py | An abstract base class for all CAMEL runtimes. |
-| 0xsojalsec_owl_py_base_io_8da6a55254c4.py | Represents an uploaded file comprised of Documents. |
-| 0xsojalsec_owl_py_base_model_e8229db37a39.py | Base class for different model backends. |
-| 0xsojalsec_owl_py_chat_history_block_0eb9dc8cafbc.py | An implementation of the :obj:`MemoryBlock` abstract base class for |
-| 0xsojalsec_owl_py_code_2616e8e58038.py | A dictionary containing :obj:`TextPrompt` used in the `Code` task. |
-| 0xsojalsec_owl_py_configs_c1a214f73054.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_owl_py_constants_b98ec8719121.py | A class containing constants used in CAMEL. |
-| 0xsojalsec_owl_py_conversation_models_4478c10a6572.py | A single message in ShareGPT format with enhanced validation |
-| 0xsojalsec_owl_py_evaluation_5864e56c42fb.py | A dictionary containing :obj:`TextPrompt` used in the `Evaluation` |
-| 0xsojalsec_owl_py_func_message_fbde92cf8642.py | Class for message objects used specifically for |
-| 0xsojalsec_owl_py_function_risk_toolkit_8786cc52377f.py | A toolkit for assessing the risk associated with functions. |
-| 0xsojalsec_owl_py_gemini_model_abaf7df9dc3f.py | Gemini API in a unified BaseModelBackend interface. |
-| 0xsojalsec_owl_py_generate_text_embedding_data_7a1164e6a0d6.py | A :obj:`TextPrompt` dictionary containing text embedding tasks |
-| 0xsojalsec_owl_py_get_classes_a745d03c009c.py | Get classes from Outschool API. |
-| 0xsojalsec_owl_py_google_cloud_ee4fe0384561.py | A class to connect to Google Cloud Storage. It will connect to one |
-| 0xsojalsec_owl_py_google_scholar_toolkit_b1801b375012.py | A toolkit for retrieving information about authors and their |
-| 0xsojalsec_owl_py_groq_model_f81fddaedfc7.py | LLM API served by Groq in a unified BaseModelBackend interface. |
-| 0xsojalsec_owl_py_hugging_face_tool_agent_25a0552a4a44.py | Tool agent for calling HuggingFace models. This agent is a wrapper |
-| 0xsojalsec_owl_py_human_2938e8dc39e2.py | A class representing a human user. |
-| 0xsojalsec_owl_py_ignore_risk_toolkit_c7fa67568a69.py | A toolkit for ignoring risks associated with functions. |
-| 0xsojalsec_owl_py_image_craft_e867e4e7d764.py | A dictionary containing :obj:`TextPrompt` used in the `ImageCraft` |
-| 0xsojalsec_owl_py_in_memory_2b5be7db6812.py | A concrete implementation of the :obj:`BaseKeyValueStorage` using |
-| 0xsojalsec_owl_py_json_cb605ccfe4c0.py | A custom JSON encoder for serializing specifically enumerated types. |
-| 0xsojalsec_owl_py_litellm_model_4c7a76f7dba9.py | Constructor for LiteLLM backend with OpenAI compatibility. |
-| 0xsojalsec_owl_py_math_toolkit_91ffa7500b6b.py | A class representing a toolkit for mathematical operations. |
-| 0xsojalsec_owl_py_meshy_toolkit_9b657396ac7f.py | A class representing a toolkit for 3D model generation using Meshy. |
-| 0xsojalsec_owl_py_misalignment_b2a79755a8be.py | A dictionary containing :obj:`TextPrompt` used in the `Misalignment` |
-| 0xsojalsec_owl_py_mistral_embedding_7a52a19af68d.py | Provides text embedding functionalities using Mistral's models. |
-| 0xsojalsec_owl_py_model_factory_58808cb6c4cf.py | Factory of backend models. |
-| 0xsojalsec_owl_py_models_2c7fdaaa9dc8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_owl', providing core logic for its parent repository. |
-| 0xsojalsec_owl_py_models_b2033273c443.py | Represents the authorization profile within a Slack event. |
-| 0xsojalsec_owl_py_multi_condition_image_craft_b770037a740d.py | You are tasked with creating an image based on |
-| 0xsojalsec_owl_py_nemotron_model_62adba76a55a.py | Nemotron model API backend with OpenAI compatibility. |
-| 0xsojalsec_owl_py_notion_toolkit_575d227554c3.py | Extracts plain text from a list of rich text elements. |
-| 0xsojalsec_owl_py_nvidia_model_cfd0314d42d1.py | NVIDIA API in a unified BaseModelBackend interface. |
-| 0xsojalsec_owl_py_object_recognition_208b12e98a46.py | You have been assigned an object recognition task. |
-| 0xsojalsec_owl_py_openai_compatible_embedding_c6ac3c0e6142.py | Provides text embedding functionalities supporting OpenAI |
-| 0xsojalsec_owl_py_openai_compatible_model_71c349f7580b.py | Constructor for model backend supporting OpenAI compatibility. |
-| 0xsojalsec_owl_py_openai_embedding_c27eb4642c49.py | Provides text embedding functionalities using OpenAI's models. |
-| 0xsojalsec_owl_py_persona_aff10fa623fa.py | A persona is a character in the society. |
-| 0xsojalsec_owl_py_persona_hub_885daf0a8160.py | The PersonaHub adapted from `"Scaling Synthetic Data Creation with 1, |
-| 0xsojalsec_owl_py_persona_hub_d22a0edf8ac8.py | A dictionary containing :obj:`TextPrompt` used for generating and |
-| 0xsojalsec_owl_py_prompt_templates_11f7eb1c3e72.py | A class for generating prompt templates for tasks. |
-| 0xsojalsec_owl_py_qwen_model_b4135403a168.py | Qwen API in a unified BaseModelBackend interface. |
-| 0xsojalsec_owl_py_records_d8fabc07c6c2.py | The basic message storing unit in the CAMEL memory system. |
-| 0xsojalsec_owl_py_response_format_e1880104b4dc.py | A multi-purpose function that can be used as a normal function, |
-| 0xsojalsec_owl_py_response_terminator_4c340511fb62.py | Terminate agent when some words reached to occurrence |
-| 0xsojalsec_owl_py_retrieval_toolkit_85ab9f7bb6e6.py | A class representing a toolkit for information retrieval. |
-| 0xsojalsec_owl_py_role_description_prompt_template_1051a446900c.py | A dictionary containing :obj:`TextPrompt` used in the `role description` |
-| 0xsojalsec_owl_py_role_playing_worker_9a38bf04b5b6.py | A worker node that contains a role playing. |
-| 0xsojalsec_owl_py_score_based_4b24d6cea91c.py | A default implementation of context creation strategy, which inherits |
-| 0xsojalsec_owl_py_scraper_6725242dd060.py | Scrape data from a website using the Scraper API. |
-| 0xsojalsec_owl_py_search_teachers_21a38ae1d6d6.py | Search for teachers on Outschool. |
-| 0xsojalsec_owl_py_sentence_transformers_embeddings_15ed197f67a0.py | This class provides functionalities to generate text |
-| 0xsojalsec_owl_py_stub_model_56eeabde4785.py | Token counting for STUB models, directly returning a constant. |
-| 0xsojalsec_owl_py_task_channel_d36c9c21991d.py | The status of a packet. The packet can be in one of the following |
-| 0xsojalsec_owl_py_task_efac5cd5a17d.py | Parse Tasks from a response. |
-| 0xsojalsec_owl_py_task_prompt_template_c77b64f40ce3.py | A dictionary (:obj:`Dict[Any, TextPromptDict]`) of task prompt |
-| 0xsojalsec_owl_py_togetherai_model_babdb892b491.py | Constructor for Together AI backend with OpenAI compatibility. |
-| 0xsojalsec_owl_py_token_limit_terminator_6ec830831102.py | Terminate agent if number of tokens reached to token limit threshold. |
-| 0xsojalsec_owl_py_translation_2693306255d6.py | A dictionary containing :obj:`TextPrompt` used in the `Translation` |
-| 0xsojalsec_owl_py_utils_a2a23a1da187.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_owl_py_vectordb_block_b721a901eedf.py | An implementation of the :obj:`MemoryBlock` abstract base class for |
-| 0xsojalsec_owl_py_video_description_prompt_fcb839e09523.py | A dictionary containing :obj:`TextPrompt` used in the `VideoDescription` |
-| 0xsojalsec_owl_py_weather_toolkit_e2ece4f58688.py | A class representing a toolkit for interacting with weather data. |
-| 0xsojalsec_owl_py_whatsapp_toolkit_77c37964bc53.py | A class representing a toolkit for WhatsApp operations. |
-| 0xsojalsec_owl_py_yi_model_3e74a8e9247e.py | Yi API in a unified BaseModelBackend interface. |
-| 0xsojalsec_owl_py_zhipuai_model_d962d0372cee.py | ZhipuAI API in a unified BaseModelBackend interface. |
 | 0xsojalsec_pdf_extract_api_py_marker_34e7464ee71a.py | Marker OCR Strategy |
 | 0xsojalsec_pdf_extract_api_py_ocr_strategy_774e565f5af5.py | Base OCR Strategy Interface |
 | 0xsojalsec_pdf_extract_api_py_tesseract_4ae45dead928.py | Tesseract OCR Strategy |
