@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 816
+Total Files: 768
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -658,54 +658,6 @@ Total Files: 816
 | 0xsojalsec_moon_dev_ai_agents_py_angleconfirm_btfinal_c05b285997be.py | A trend-based trading strategy using William D. Gann's angular analysis combined with 5-period SMA for confirmation. |
 | 0xsojalsec_moon_dev_ai_agents_py_fractaldivergence_btfinal_a040441dde42.py | Implementation of the FractalDivergence strategy. |
 | 0xsojalsec_moon_dev_ai_agents_py_retracementcontra_pkg_6a38e88624d1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_moon_dev_ai_agents', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_acceptance_thresholds_components_83852fb8bdc6.py | Adjust thresholds using sliders and show histograms for each descriptor, return new thresholds. |
-| 0xsojalsec_ovo_py_asserts_59082bb24468.py | Assert that two parameters are equal. |
-| 0xsojalsec_ovo_py_auth_d960b5602f46.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_aws_27d89353e3e3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_cached_db_6fbee0a28162.py | Return dict of project id -> name |
-| 0xsojalsec_ovo_py_color_picker_23fe0d8e9d5d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_colors_eafa04b65480.py | Darken or lighten a hex color by multiplying its lightness component in HLS space. |
-| 0xsojalsec_ovo_py_contigs_parser_05dff49c5c20.py | Class for parsing the contigs definition. |
-| 0xsojalsec_ovo_py_create_new_pool_9272f65a68ab.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_custom_elements_4d6e3e75aa73.py | Heading with additional text in grey |
-| 0xsojalsec_ovo_py_dataclasses_5b8f9cf6515e.py | Class for storing data about individual contig regions. |
-| 0xsojalsec_ovo_py_db_proxy_f6ed3ac14a26.py | Proxy class for DBEngine to enable db.Design.select() instead of db.select(Design) |
-| 0xsojalsec_ovo_py_descriptor_dialog_4adb57f5ed56.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_descriptor_explorer_b39aff1a1307.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_descriptor_job_components_f7c3aeb586cd.py | Update and process all descriptor jobs results and display a Refresh button and log output if any errors occurred. |
-| 0xsojalsec_ovo_py_descriptor_logic_d2a950ea08d7.py | Return all descriptor keys found in DB for the given design ids. |
-| 0xsojalsec_ovo_py_descriptor_scatterplot_0ff85d69a081.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_descriptor_table_67d90c1e4d9a.py | Create a streamlit column_config for a more readable dataframe (labels, help, formatting,...) |
-| 0xsojalsec_ovo_py_descriptor_tiles_8f78fd45df55.py | Returns a DataFrame with each unique residue and the percentage of designs in which it is present. |
-| 0xsojalsec_ovo_py_design_job_detail_9f4a25fcef3d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_design_logic_bindcraft_a9efbe20211a.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_design_logic_e75ce345b282.py | Get pandas DataFrame with job and pool metadata and workflow parameter information. |
-| 0xsojalsec_ovo_py_design_logic_rfdiffusion_cfd41e7136ea.py | Run the RFdiffusion workflow with reduced number of diffuser timesteps. |
-| 0xsojalsec_ovo_py_download_component_62fc3805a2c8.py | Download design files for the specified workflow. |
-| 0xsojalsec_ovo_py_encoder_394445461646.py | Simple JSON encoder that encodes dataclasses and enums. |
-| 0xsojalsec_ovo_py_explorer_daa987531dc4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_export_10e78e8cb5a9.py | Write df as an excel file to ExcelWriter, roughly similar to `df.to_excel` except that it handles |
-| 0xsojalsec_ovo_py_filtering_logic_e905d1676b1c.py | Filter designs by thresholds (inclusive - <=, >=) |
-| 0xsojalsec_ovo_py_formatting_9572fa3f7afe.py | Returns: 1 day 2 hours and 5 minutes |
-| 0xsojalsec_ovo_py_healthomics_scheduler_a8d97bde831b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_history_components_02438869a061.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_input_components_31d254c3167d.py | Initialize a workflow in the session state based on dropdown with available workflow variants (subclasses). |
-| 0xsojalsec_ovo_py_job_logic_73d509110564.py | Update job status of JobMixin object (Pool, DescriptorJob, ...) and return the scheduler result. |
-| 0xsojalsec_ovo_py_models_bindcraft_8cef8d44c6fc.py | Dataclass for BindCraft binder design workflow. |
-| 0xsojalsec_ovo_py_models_refolding_14586ca67dde.py | Abstract class that defines an interface for workflows supported by the RefoldingWorkflow workflow |
-| 0xsojalsec_ovo_py_param_validation_2588e03a6fea.py | Validate input parameters against JSON schema. |
-| 0xsojalsec_ovo_py_proteinqc_123d7326bac4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_proteinqc_logic_9c42ec1635ae.py | Get available schedulers based on the tools selected by the user. |
-| 0xsojalsec_ovo_py_refolding_94ed6a93b5a3.py | Submit refolding evaluation for {num_designs:,} {"design" if num_designs == 1 else "designs"} |
-| 0xsojalsec_ovo_py_residue_selection_24c542fe9ce8.py | Convert a list of residues [3,4,5,6,9,10,...] into a list of segments [3-6,9-10,...]. |
-| 0xsojalsec_ovo_py_round_logic_38ef1591f53c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_scheduler_components_5fc5ce1e4bde.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_seq_151adace7d0d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_sidebar_fd5eda6489ba.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_sql_db_d05f0674dbe1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_submission_components_28010275d6d8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_trim_components_1e5f00359ff7.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_user_settings_logic_7c2ca735e008.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | 0xsojalsec_pdf_extract_api_py_marker_34e7464ee71a.py | Marker OCR Strategy |
 | 0xsojalsec_pdf_extract_api_py_ocr_strategy_774e565f5af5.py | Base OCR Strategy Interface |
 | 0xsojalsec_pdf_extract_api_py_tesseract_4ae45dead928.py | Tesseract OCR Strategy |
