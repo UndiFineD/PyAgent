@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 121
+Total Files: 96
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -9,7 +9,6 @@ Total Files: 121
 | 0xSojalSec_LLaVA_NeXT_convert_sqa_to_llava_base_prompt.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-LLaVA-NeXT\scripts\archived\convert_sqa_to_llava_base_prompt', providing core logic for its parent repository. |
 | 0xSojalSec_Nebula_colorpp.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-Nebula\teamserver\core\colorpp\colorpp', providing core logic for its parent repository. |
 | 0xSojalSec_Nebula_run_gcp_module.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-Nebula\teamserver\core\run_module\run_gcp_module', providing core logic for its parent repository. |
-| 0xSojalSec_PraisonAI_config.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | 0xSojalSec_VideoAgent_base_text_processor.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-VideoAgent\tools\DiffSinger\data_gen\tts\txt_processors\base_text_processor', providing core logic for its parent repository. |
 | 0xSojalSec_VideoAgent_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xSojalSec_VoiceCraft_edit_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
@@ -33,29 +32,6 @@ Total Files: 121
 | 0xsojalsec_lumina_dimoo_py_prompt_utils_686c20ce886a.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_lumina_dimoo_py_text_understanding_generator_cd6cfb9bae62.py | Text understanding generator |
 | 0xsojalsec_malpacks_py_cli_e7f6434e9c6c.py | #    #    ##    #       #####     ##     ####   #    #   #### |
-| 0xsojalsec_poastal_py_adobe_32af7187a86f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
-| 0xsojalsec_poastal_py_duolingo_b4949bfc0663.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
-| 0xsojalsec_poastal_py_hulu_14c99e2afad2.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
-| 0xsojalsec_poastal_py_imgur_f26f7f18e3ab.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
-| 0xsojalsec_poastal_py_mewe_0d63502bcc74.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
-| 0xsojalsec_poastal_py_parler_5fee2f409425.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
-| 0xsojalsec_poastal_py_rumble_5e41c94fe222.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
-| 0xsojalsec_poastal_py_snapchat_c2c9272bee82.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
-| 0xsojalsec_poastal_py_twitter_89f40f117613.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
-| 0xsojalsec_poastal_py_verify_d91a475ddeb1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
-| 0xsojalsec_poastal_py_wordpress_0d93802f5890.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
-| 0xsojalsec_praisonai_py_autoagents_e12c64ef8f9c.py | AutoAgents - A class for automatically creating and managing AI agents and tasks. |
-| 0xsojalsec_praisonai_py_chunking_dee813b46b12.py | A unified class for text chunking with various chunking strategies. |
-| 0xsojalsec_praisonai_py_config_c93747fddd4a.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_praisonai_py_database_config_1a14940215c0.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_praisonai_py_flow_display_3b3f3dc80ec6.py | Flow Display for PraisonAI Agents |
-| 0xsojalsec_praisonai_py_guardrail_result_067760f2d126.py | Guardrail result classes for PraisonAI Agents. |
-| 0xsojalsec_praisonai_py_internet_search_ab9311b5f75a.py | Search Internet for relevant information based on a query. |
-| 0xsojalsec_praisonai_py_session_bf352ac72587.py | Session Management for PraisonAI Agents |
-| 0xsojalsec_prettymapp_py_plotting_f79ea3790e9f.py | Main plotting class for prettymapp. |
-| 0xsojalsec_prettymapp_py_utils_d30325933b14.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_proxyhub_py_checker_76793d29e566.py | Proxy checker. |
-| 0xsojalsec_proxyhub_py_judge_c285ac7ab7e9.py | Proxy Judge. |
 | 0xsojalsec_videorag_py_asr_3e431c15bf03.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_videorag', providing core logic for its parent repository. |
 | 0xsojalsec_videorag_py_asr_9256e9a47b0f.py | Process a single audio segment with ASR |
 | 0xsojalsec_videorag_py_feature_6e819d57eef3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_videorag', providing core logic for its parent repository. |
@@ -112,7 +88,6 @@ Total Files: 121
 | _0xsojalsec_llava_next_convert_sqa_to_llava_base_prompt.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_LLaVA_NeXT_convert_sqa_to_llava_base_prompt', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_colorpp.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_colorpp', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_run_gcp_module.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_run_gcp_module', providing core logic for its parent repository. |
-| _0xsojalsec_praisonai_config.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | _0xsojalsec_videoagent_base_text_processor.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_VideoAgent_base_text_processor', providing core logic for its parent repository. |
 | _0xsojalsec_videoagent_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | _0xsojalsec_voicecraft_edit_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
