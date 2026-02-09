@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 321
+Total Files: 287
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -27,40 +27,6 @@ Total Files: 321
 | 0xsojalsec_graphsearch_py_pathrag_af986adbebb5.py | -----Sources----- |
 | 0xsojalsec_graphsearch_py_pipeline_b537066e0214.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphsearch', providing core logic for its parent repository. |
 | 0xsojalsec_graphsearch_py_utils_e71d50b73dff.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_h2o_llmstudio_py_app_13115d54fad7.py | Serving function. |
-| 0xsojalsec_h2o_llmstudio_py_base_2f641d14c977.py | Template for any configuration file |
-| 0xsojalsec_h2o_llmstudio_py_cards_19bb271fdcca.py | Returns the header zone |
-| 0xsojalsec_h2o_llmstudio_py_cfg_checks_afe8e660304c.py | Checks the configuration for consistency. |
-| 0xsojalsec_h2o_llmstudio_py_chat_c41fa36dc8c5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_h2o_llmstudio', providing core logic for its parent repository. |
-| 0xsojalsec_h2o_llmstudio_py_chat_update_2d42e4eae8f1.py | Update the chatbot with the new message. |
-| 0xsojalsec_h2o_llmstudio_py_common_85f6aa400075.py | .ms-MessageBar { |
-| 0xsojalsec_h2o_llmstudio_py_conversation_chain_handler_3cea0579ce0e.py | This class partitions the dataset into chains of conversations. |
-| 0xsojalsec_h2o_llmstudio_py_db_3a4d75eb623d.py | Dataset table |
-| 0xsojalsec_h2o_llmstudio_py_default_datasets_45916f74f97b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_h2o_llmstudio', providing core logic for its parent repository. |
-| 0xsojalsec_h2o_llmstudio_py_download_default_datasets_718250b2ab38.py | Downloads the default datasets to a local folder. |
-| 0xsojalsec_h2o_llmstudio_py_histogram_card_9ed326be404b.py | Compute the quantiles based on the input list x. |
-| 0xsojalsec_h2o_llmstudio_py_hugging_face_utils_153fc650c89a.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_h2o_llmstudio_py_initializers_24b1bd854fb1.py | Imports default data |
-| 0xsojalsec_h2o_llmstudio_py_loggers_1bcde0e15e8e.py | Returns simplified config elements |
-| 0xsojalsec_h2o_llmstudio_py_nesting_1d1870051c88.py | Represents a dependency with a key, value, and set condition. |
-| 0xsojalsec_h2o_llmstudio_py_nlp_aug_c63636b479d2.py | Base class for NLP augmentation |
-| 0xsojalsec_h2o_llmstudio_py_optimizers_111944c4fc12.py | Optimizers factory. |
-| 0xsojalsec_h2o_llmstudio_py_order_2893d6de09ef.py | A list-like structure to specify the order of items in a dictionary. |
-| 0xsojalsec_h2o_llmstudio_py_possible_values_2ed93ecdb9b1.py | Recursively scans a directory for subfolders. |
-| 0xsojalsec_h2o_llmstudio_py_prompt_e3e190c786ce.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_h2o_llmstudio', providing core logic for its parent repository. |
-| 0xsojalsec_h2o_llmstudio_py_schedulers_3fe187ea9a1c.py | Schedulers factory. |
-| 0xsojalsec_h2o_llmstudio_py_text_causal_classification_modeling_config_31951548f8df.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_h2o_llmstudio_py_text_causal_classification_modeling_losses_0feac129d1db.py | Losses factory. |
-| 0xsojalsec_h2o_llmstudio_py_text_causal_language_modeling_ds_fd84705ac7e1.py | Dataset for Causal Language modeling. |
-| 0xsojalsec_h2o_llmstudio_py_text_causal_language_modeling_losses_c889bb946030.py | Losses factory. |
-| 0xsojalsec_h2o_llmstudio_py_text_causal_regression_modeling_config_d50a3a61a4db.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_h2o_llmstudio_py_text_causal_regression_modeling_losses_cec814b5431f.py | Losses factory. |
-| 0xsojalsec_h2o_llmstudio_py_text_dpo_modeling_config_7dd76a3c12a6.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_h2o_llmstudio_py_text_dpo_modeling_ds_81d211779617.py | Dataset for DPO optimization. |
-| 0xsojalsec_h2o_llmstudio_py_text_dpo_modeling_losses_32aae38d58e1.py | Loss Implementation based upon |
-| 0xsojalsec_h2o_llmstudio_py_text_sequence_to_sequence_modeling_config_70b37056c211.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_h2o_llmstudio_py_text_utils_8ace302f2033.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_h2o_llmstudio_py_train_20e97349a53e.py | Runs the evaluation loop. |
 | 0xsojalsec_klavis_py_albums_5e189e6625af.py | Get detailed information about one or multiple albums. |
 | 0xsojalsec_klavis_py_artists_d650341bc8ab.py | Get catalog information for multiple artists by their Spotify IDs. |
 | 0xsojalsec_klavis_py_auth_d1cd3b16a810.py | Get the Tavily API key for the current request (ContextVar → env). |
