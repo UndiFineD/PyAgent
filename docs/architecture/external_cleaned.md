@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 221
+Total Files: 191
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -27,36 +27,6 @@ Total Files: 221
 | 0xsojalsec_graphsearch_py_pathrag_af986adbebb5.py | -----Sources----- |
 | 0xsojalsec_graphsearch_py_pipeline_b537066e0214.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphsearch', providing core logic for its parent repository. |
 | 0xsojalsec_graphsearch_py_utils_e71d50b73dff.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_langextract_py_base_model_f7b04dd357a1.py | Base interfaces for language models. |
-| 0xsojalsec_langextract_py_builtin_registry_d4464b447b8a.py | Built-in provider registration configuration. |
-| 0xsojalsec_langextract_py_chunking_b006658f31fe.py | Library for breaking documents into chunks of sentences. |
-| 0xsojalsec_langextract_py_data_28e8de6dfb51.py | Classes used to represent core data types of annotation pipeline. |
-| 0xsojalsec_langextract_py_data_lib_a92c1bcdc84b.py | Library for data conversion between AnnotatedDocument and JSON. |
-| 0xsojalsec_langextract_py_debug_utils_a2bc1b0e0d2d.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_langextract_py_factory_3b948cee869d.py | Factory for creating language model instances. |
-| 0xsojalsec_langextract_py_format_handler_46ff6e1ec993.py | Centralized format handler for prompts and parsing. |
-| 0xsojalsec_langextract_py_gemini_1413f95db98d.py | Gemini provider schema implementation. |
-| 0xsojalsec_langextract_py_gemini_668a4d3b640a.py | Gemini provider for LangExtract. |
-| 0xsojalsec_langextract_py_inference_2797c0c57971.py | Language model inference compatibility layer. |
-| 0xsojalsec_langextract_py_inference_c7609941379b.py | Compatibility shim for langextract.inference imports. |
-| 0xsojalsec_langextract_py_init_57a5696fc4d1.py | Provider package for LangExtract. |
-| 0xsojalsec_langextract_py_init_fbed8f454184.py | LangExtract: Extract structured information from text with LLMs. |
-| 0xsojalsec_langextract_py_openai_4b29d9079bd3.py | OpenAI provider for LangExtract. |
-| 0xsojalsec_langextract_py_plugins_bf057cb162d9.py | Provider discovery and registration system. |
-| 0xsojalsec_langextract_py_progress_7799b78a4179.py | Progress and visualization utilities for LangExtract. |
-| 0xsojalsec_langextract_py_prompt_validation_f95548e81861.py | Prompt validation for alignment checks on few-shot examples. |
-| 0xsojalsec_langextract_py_provider_49f312298022.py | Minimal example of a custom provider plugin for LangExtract. |
-| 0xsojalsec_langextract_py_registry_0ba4ddeec50a.py | Compatibility shim for langextract.registry imports. |
-| 0xsojalsec_langextract_py_registry_a657e43b7dda.py | Compatibility shim for langextract.registry imports. |
-| 0xsojalsec_langextract_py_router_0326822c8555.py | Runtime registry that maps model-ID patterns to provider classes. |
-| 0xsojalsec_langextract_py_schema_16055f206dfd.py | Example custom schema implementation for provider plugins. |
-| 0xsojalsec_langextract_py_schema_555f2b10f007.py | Core schema abstractions for LangExtract. |
-| 0xsojalsec_langextract_py_schema_9cc8c251bf70.py | Compatibility shim for langextract.schema imports. |
-| 0xsojalsec_langextract_py_schema_c0e16a7c312d.py | Schema compatibility layer. |
-| 0xsojalsec_langextract_py_tokenizer_d19dec9b655a.py | Tokenization utilities for text. |
-| 0xsojalsec_langextract_py_types_cd419813f7bd.py | Core data types for LangExtract. |
-| 0xsojalsec_langextract_py_validate_community_providers_f2151e6e6486.py | Validation for COMMUNITY_PROVIDERS.md plugin registry table. |
-| 0xsojalsec_langextract_py_visualization_aa960f0c734a.py | Utility functions for visualizing LangExtract extractions in notebooks. |
 | 0xsojalsec_lazycross_py_lazycross_6d7607a9b69f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_lazycross', providing core logic for its parent repository. |
 | 0xsojalsec_llms_from_scratch_py_ch03_0555a19ec4c3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_llms_from_scratch', providing core logic for its parent repository. |
 | 0xsojalsec_lumina_dimoo_py_generation_utils_536b87cd06b9.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
