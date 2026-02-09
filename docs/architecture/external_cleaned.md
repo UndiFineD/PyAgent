@@ -1,10 +1,9 @@
 # External Cleaned Candidates Report
 
-Total Files: 4711
+Total Files: 4499
 
 | File | Utility to Swarm |
 |------|------------------|
-| 0xSojalSec_GunnerC2_source_files.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-GunnerC2\core\payload_generator\windows\tls\exe\source_files', providing core logic for its parent repository. |
 | 0xSojalSec_HoloCine_base.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-HoloCine\diffsynth\processors\base', providing core logic for its parent repository. |
 | 0xSojalSec_IDOR_Forge_banner.py | '####:'########:::'#######::'########:::::::::::'########::'#######::'########:::'######:::'########: |
 | 0xSojalSec_LLaVA_NeXT_convert_sqa_to_llava_base_prompt.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-LLaVA-NeXT\scripts\archived\convert_sqa_to_llava_base_prompt', providing core logic for its parent repository. |
@@ -258,7 +257,6 @@ Total Files: 4711
 | 0xsojalsec_evermemos_py_session_e6992b8adb42.py | Conversation Session Management |
 | 0xsojalsec_evermemos_py_simple_memory_manager_2fc6f12876d6.py | Simple Memory Manager - Simplified Memory Manager (HTTP API Version) |
 | 0xsojalsec_evermemos_py_skill_helpers_5810e8516c77.py | Skill normalization helpers. |
-| 0xsojalsec_evermemos_py_sse_exception_middleware_7b4664d69388.py | SSE (Server-Sent Events) exception handling middleware |
 | 0xsojalsec_evermemos_py_strategies_e252f9eb457f.py | Default authorization strategy |
 | 0xsojalsec_evermemos_py_task_56117bf97190.py | Task Worker - Async task processor startup script |
 | 0xsojalsec_evermemos_py_task_manager_d9dd8b032c8a.py | Task status enumeration |
@@ -801,7 +799,6 @@ Total Files: 4711
 | 0xsojalsec_guardian_cli_py_agent_8a33aace06bb.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_guardian_cli_py_amass_91a7ec8061e0.py | Amass tool wrapper for advanced network mapping and asset discovery |
 | 0xsojalsec_guardian_cli_py_analyst_agent_4e65498f2f7f.py | Analyst Agent |
-| 0xsojalsec_guardian_cli_py_cmseek_eb671c0a7563.py | Wrapper for CMSeek - CMS Detection and Exploitation Tool |
 | 0xsojalsec_guardian_cli_py_ffuf_a536e61cfe22.py | FFuf tool wrapper for fast web fuzzing |
 | 0xsojalsec_guardian_cli_py_gemini_client_40a4e519f559.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_guardian_cli_py_gobuster_8004544ef289.py | Gobuster tool wrapper for directory and file brute forcing |
@@ -809,9 +806,7 @@ Total Files: 4711
 | 0xsojalsec_guardian_cli_py_logger_c4ac7745c2ac.py | Audit logging system for Guardian |
 | 0xsojalsec_guardian_cli_py_main_9d5cecb5c297.py | Guardian CLI - Main entry point |
 | 0xsojalsec_guardian_cli_py_masscan_974863f949c7.py | Masscan tool wrapper for ultra-fast TCP port scanning |
-| 0xsojalsec_guardian_cli_py_nikto_38e8de7db5f0.py | Nikto tool wrapper for web vulnerability scanning |
 | 0xsojalsec_guardian_cli_py_nmap_10ac8b908911.py | Nmap tool wrapper for port scanning and service detection |
-| 0xsojalsec_guardian_cli_py_nuclei_f17aece6842a.py | Nuclei tool wrapper for vulnerability scanning |
 | 0xsojalsec_guardian_cli_py_planner_bd801f1c50c6.py | Strategic Planner Agent |
 | 0xsojalsec_guardian_cli_py_recon_9322e686b257.py | guardian recon - Reconnaissance command |
 | 0xsojalsec_guardian_cli_py_reporter_agent_af0304e94855.py | Reporter Agent |
@@ -822,175 +817,6 @@ Total Files: 4711
 | 0xsojalsec_guardian_cli_py_wafw00f_6fb171a2f40f.py | Wafw00f tool wrapper for WAF detection |
 | 0xsojalsec_guardian_cli_py_whatweb_715153f6cb83.py | WhatWeb tool wrapper for web technology fingerprinting |
 | 0xsojalsec_guardian_cli_py_workflow_1fcb8e529178.py | guardian workflow - Run predefined workflows |
-| 0xsojalsec_guardian_cli_py_wpscan_17a0e8c0d9e6.py | WPScan tool wrapper for WordPress vulnerability scanning |
-| 0xsojalsec_guardian_cli_py_xsstrike_606ba37a6082.py | Wrapper for XSStrike - Advanced XSS Detection Suite |
-| 0xsojalsec_gunnerc2_py_adadmins_7fdf37058b4d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_adcomputers_b02b7f63c77a.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_adcs_enum_com2_89ff15031363.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_adcs_enum_com_6b5867a13e07.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_adcs_enum_f227d2337c6b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_addelegations_6b24885e4f68.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_addns_286fa6fba1f2.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_adduser_5f45d1011fda.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_adgpos_73083311e3f5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_adgroups_932fa83e4b2c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_adous_11d2ef9e105f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_adpasswords_7f0170d5d76d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_adspns_f7dd31e82cb9.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_adstaleusers_dd25804a9a58.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_adtrusts_71cd470504e8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_adusers_9dfc23184eca.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_alwaysinstallelevated_c6fabcdd5115.py | Checks for Always Install Elevated Registry Keys |
-| 0xsojalsec_gunnerc2_py_arp_3c489c2a282b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_arp_a1c76baf42a2.py | Display ARP cache: arp |
-| 0xsojalsec_gunnerc2_py_asktgt_183dfdd318f3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_asreproast_129e5987be3b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_auth_87d519f12206.py | Best-effort lookup for an operator row by username using whatever |
-| 0xsojalsec_gunnerc2_py_auth_manager_1f69193a3f1e.py | Get or open a thread‑local SQLite3 connection, tuned for speed. |
-| 0xsojalsec_gunnerc2_py_autologon_1c5f471e95ec.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_autologon_6749bef87b16.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_background_module_runner_a8933092a088.py | Internal helper to run a module in a background thread and capture its output. |
-| 0xsojalsec_gunnerc2_py_banner_da12d69518fe.py | Print a red ASCII-art banner saying 'GUNNER'. |
-| 0xsojalsec_gunnerc2_py_base_5601021f543e.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gunnerc2_py_base_8702ec7139b7.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gunnerc2_py_base_962d4a000571.py | Initalize Download |
-| 0xsojalsec_gunnerc2_py_base_e0436a17a78d.py | Normalized config the generator needs. |
-| 0xsojalsec_gunnerc2_py_base_e90a8f787ed3.py | Base class for all Gunnershell commands. |
-| 0xsojalsec_gunnerc2_py_bash_reverse_http_8f429a2bb0e8.py | gen_sid(){ local chars=abcdefghijklmnopqrstuvwxyz0123456789 part idx; for idx in 1 2 3; do part=""; for j in {1..5}; do part+=${chars:RANDOM%${#chars}:1}; done; sid[$((idx-1))]=$part; done; printf "%s-%s-%s" "${sid[0]}" "${sid[1]}" "${sid[2]}"; } |
-| 0xsojalsec_gunnerc2_py_bash_reverse_tcp_c7befcfff4c5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_bofcount_645ae36a3290.py | Show how many BOFs are currently loaded in the BOF library. |
-| 0xsojalsec_gunnerc2_py_bofexec_e3976932beed.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gunnerc2_py_bofhelp_44e9a0f536ad.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gunnerc2_py_cacls_09d6e8511ce4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_checkdebugger_64f6f7a3f836.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_credentialmanager_098052fee0ad.py | Enumerates Credentials From Credential Manager |
-| 0xsojalsec_gunnerc2_py_credman_e6b5ffeff01c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_dcsyncenum_479b3aaf4b96.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_deluser_59451b99f0d5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_dependencies_128f1d3118db.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_dir_e593054ccfd8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_domaininfo_6c9aae29f138.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_driversigs_7e750d6cae01.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_dumpclip_3cc18e3c4c29.py | Prints any text on the clipboard. |
-| 0xsojalsec_gunnerc2_py_dumpntlm_77c0b248045a.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_dumpsysmonconfig_ed97c36b1f33.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_gunnerc2_py_enablerdp_46fb7a9de431.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_enumacls_0c2e46d89ab3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_enumdotnet_3b0cae156b5c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_enumdrives_14189a336ade.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_enumgmsa_5b44086e47e2.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_enumlocalsessions_ddaddc4dd637.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_enumrbcd_153300a12213.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_env_0fa19627fa69.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_exe_csharp_http_profile_loader_30bcfe341b36.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_exe_csharp_https_profile_loader_88b6814f9ecb.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_files_0f9f65b07ef5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_get_password_policy_da5ce43f714a.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_get_session_info_5d45f66ee3e3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_getadmins_219f9b2f540c.py | List members of Domain Admins and Enterprise Admins. |
-| 0xsojalsec_gunnerc2_py_getcomputers_4da33a67bcc8.py | List all computers or dump properties for a single computer. |
-| 0xsojalsec_gunnerc2_py_getdelegation_3dc2339cc3f4.py | List unconstrained or constrained delegation settings. |
-| 0xsojalsec_gunnerc2_py_getdomain_436c53eab658.py | Dump current domain properties. |
-| 0xsojalsec_gunnerc2_py_getdomaincontrollers_0462b94f7e27.py | List all DCs in the current domain or across the forest. |
-| 0xsojalsec_gunnerc2_py_getdomainpolicy_ee81796d9431.py | Dump domain Password, Lockout and Kerberos policies. |
-| 0xsojalsec_gunnerc2_py_getexclusions_21b62f95f95f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_getforests_bb8f014b47f4.py | List trusted forests or dump properties for a single forest. |
-| 0xsojalsec_gunnerc2_py_getfsmo_35d4e3112ecf.py | Show forest‐ or domain‐level FSMO role holders. |
-| 0xsojalsec_gunnerc2_py_getgpos_e5f3ea872bf6.py | List all GPOs or dump properties for a single GPO. |
-| 0xsojalsec_gunnerc2_py_getgroups_e7beaab1a2c1.py | List all groups or dump properties/members for a single group. |
-| 0xsojalsec_gunnerc2_py_getintegrity_b88e288576de.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_getous_cf600c9082ab.py | List all OUs or dump properties for a single OU. |
-| 0xsojalsec_gunnerc2_py_getproxy_cc00aa52a936.py | Show proxy settings: getproxy |
-| 0xsojalsec_gunnerc2_py_getrecentfiles_f6862d0da1a1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_getsecurity_957039f55baf.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_getspns_3da43189e4d7.py | List or dump all accounts that have SPNs registered. |
-| 0xsojalsec_gunnerc2_py_getsysmon_5046628b59af.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_gettrusts_60bb47d816bf.py | List or dump AD trust relationships. |
-| 0xsojalsec_gunnerc2_py_getuac_262bdf77b48d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_getusers_1f51aa78c40e.py | List all users or dump properties for a single user. |
-| 0xsojalsec_gunnerc2_py_gunnershell_utils_d9cbc3381ffb.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_gunnerc2_py_hashdump_8648343e1de8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_hijackablepath_b60cd049cd3b.py | Checks For Hijackable Paths |
-| 0xsojalsec_gunnerc2_py_hostname_4fc34a01b5de.py | Show remote hostname: hostname |
-| 0xsojalsec_gunnerc2_py_http_command_execution_4d3ffc64c708.py | Execute `cmd` on HTTP/HTTPS beacon session `sid` for operator `op_id`. |
-| 0xsojalsec_gunnerc2_py_http_command_router_b3d9f03e421e.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gunnerc2_py_http_handler_4da76d97137a.py | Send back a minimal HTML page *with* typical Apache-style headers |
-| 0xsojalsec_gunnerc2_py_ipconfig_6027bf484f1d.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_gunnerc2_py_ipconfig_c1fde48d539b.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_gunnerc2_py_killsysmon_21fa2553eeef.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_klist_b614f2b0a97c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_ldapsearch_010133e42ee5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_list_firewall_rules_1a8b5233aaa9.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_listdns_222e34f59576.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_listmods_4bccedca475e.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_locale_4e10dfec2754.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_login_dialog_39892c65ef28.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_logutil_940c648573b9.py | Return the shared package logger or a child logger. |
-| 0xsojalsec_gunnerc2_py_main_084f19d18b6e.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_main_window_ef0511e4ab41.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_modifiableautorun_0e370f0b7019.py | Checks For Modifiable Autoruns |
-| 0xsojalsec_gunnerc2_py_module_base_ee4ace6a0a64.py | Base class for all C2 modules. Each module should subclass this and define: |
-| 0xsojalsec_gunnerc2_py_module_loader_5e07fbeb4466.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gunnerc2_py_nanodump_5cca23a34754.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_netlocalgroup_74b4d38a5b07.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_netloggedon_649a8009aad5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_netshares_66c97b640c04.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_netstat_f414aed5f9b6.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_netstat_f839fd5ef99a.py | Show network connections: netstat |
-| 0xsojalsec_gunnerc2_py_nettime_213c53096698.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_netuptime_d0856db013e2.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_netuser_017d19aed738.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_netuserenum_372d0f32d807.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_netview_fb770ab7db24.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_notepad_ecb43820d5eb.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_notruncate_field_d5c4e87e4c52.py | Ensures the given column never shows '…' and is fully readable. |
-| 0xsojalsec_gunnerc2_py_openports_7163a6dbaf38.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_operators_tab_f38f6b46e68a.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gunnerc2_py_payload_generator_3120178a1248.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_payloads_3cf8e7aad9ee.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gunnerc2_py_powershell_reverse_http_0dd86138dded.py | if ($task.DeviceTelemetry) { |
-| 0xsojalsec_gunnerc2_py_powershell_reverse_http_6a32b9cb59ca.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_powershell_reverse_https_e80719b85569.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_powershell_reverse_tcp_53d9959587bb.py | Returns the raw PowerShell one-liner (no encoding) for a Windows |
-| 0xsojalsec_gunnerc2_py_powershell_reverse_tcp_6a41b2cdeeea.py | Returns the raw PowerShell one-liner (no encoding) for a Windows |
-| 0xsojalsec_gunnerc2_py_powershell_reverse_tls_4041576d58e5.py | obs levels can then dispatch to your existing obfuscation helpers |
-| 0xsojalsec_gunnerc2_py_print_override_d2c6b14b8990.py | # single, global context object |
-| 0xsojalsec_gunnerc2_py_probe_c952313df4ff.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_profile_loader_8e120727ee84.py | Load & normalize a malleable‐C2 JSON profile (or fall back to a listener's one). |
-| 0xsojalsec_gunnerc2_py_prompt_manager_e33096cae35c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_rbac_manager_ee0376e09b4d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_regdump_a74dc2209af3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_regdump_e1da9bad7014.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_registry_151832f601e9.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_resolve_958c91982edd.py | Resolve DNS on target: resolve <hostname> |
-| 0xsojalsec_gunnerc2_py_resources_ae2069643568.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_route_a6e520c600b0.py | Show routing table: route |
-| 0xsojalsec_gunnerc2_py_routeprint_372feecad120.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_sc_enum_81ab6c4c9d9a.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_schemas_bd693d4fdf34.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_schtasksenum_94c639985cff.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_schtasksquery_a76fee2b7c85.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_session_manager_2fe3dbc57ee9.py | self.command_queue.put(base64.b64encode(b"hostname").decode()) |
-| 0xsojalsec_gunnerc2_py_session_manager_8bdf2e707ddf.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gunnerc2_py_sessions_49ab5f6b3707.py | Kill/close a session, matching the CLI semantics: |
-| 0xsojalsec_gunnerc2_py_sessions_tab_65fbaf1b53dd.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gunnerc2_py_stager_server_c2adaf53ed44.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_style_b32042c36ca5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_tasklist_16717b6bc7f0.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_tcp_command_execution_abc7e47b958b.py | Execute `cmd` over a TCP/TLS session identified by `sid`. |
-| 0xsojalsec_gunnerc2_py_theme_center_cf5fee3b4f0e.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_tokenprivileges_7c5e6775fefe.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_unquotedsvcpath_f52772b39631.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_useridletime_bf0a31ec9038.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_web_utils_44df62dd3539.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_gunnerc2_py_websocket_client_4e8e4e8407c6.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gunnerc2_py_websocket_gunnershell_b0c9e8086c18.py | Capture stdout/stderr AND anything routed via core.utils.echo. |
-| 0xsojalsec_gunnerc2_py_websocket_operators_977c7e727040.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_websocket_sessions_fbda3edca2bf.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_whoami_1d92bfd26829.py | BOF provider for x64 whoami. |
-| 0xsojalsec_gunnerc2_py_whoami_bb188f43ca90.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gunnerc2_py_whoami_bf07104a6ead.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gunnerc2_py_wifi_85c66d15ed12.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
 | 0xsojalsec_h2o_llmstudio_py_app_13115d54fad7.py | Serving function. |
 | 0xsojalsec_h2o_llmstudio_py_base_2f641d14c977.py | Template for any configuration file |
 | 0xsojalsec_h2o_llmstudio_py_cards_19bb271fdcca.py | Returns the header zone |
@@ -1546,7 +1372,6 @@ Total Files: 4711
 | 0xsojalsec_pytorch_lightning_py_model_summary_deepspeed_7876e08c7fdc.py | Utilities that can be used with Deepspeed. |
 | 0xsojalsec_pytorch_lightning_py_models_0873e8526271.py | Defines the interface for a model in a Fabric-PyTorch parity test. |
 | 0xsojalsec_pytorch_lightning_py_mps_23af66929cd5.py | Accelerator for Metal Apple Silicon GPU devices. |
-| 0xsojalsec_pytorch_lightning_py_on_exception_checkpoint_2d12cbb4a2b0.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_pytorch_lightning_py_optimizer_241a899bd4d2.py | Moves optimizer states for a sequence of optimizers to the device. |
 | 0xsojalsec_pytorch_lightning_py_optimizer_6049251ef8f4.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_pytorch_lightning_py_parallel_1d64e09246c8.py | Strategy for training with multiple processes in parallel. |
@@ -1801,7 +1626,6 @@ Total Files: 4711
 | 0xsojalsec_wa_crypt_tools_py_key_2070987c3ef8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wa_crypt_tools', providing core logic for its parent repository. |
 | 0xsojalsec_wa_crypt_tools_py_logformat_02242594f62f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wa_crypt_tools', providing core logic for its parent repository. |
 | 0xsojalsec_wa_crypt_tools_py_props_e6b7dcfcc358.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wa_crypt_tools', providing core logic for its parent repository. |
-| 0xsojalsec_waf_bypass_py_tables_c9a9021d43bb.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_waf_bypass', providing core logic for its parent repository. |
 | 0xsojalsec_wafer_py_language_utils_f080bbf20ecd.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_wafer_py_mutations_5d8fea6f8078.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wafer', providing core logic for its parent repository. |
 | 0xsojalsec_wafer_py_utils_3049249129d6.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
@@ -1905,30 +1729,6 @@ Total Files: 4711
 | 0xsojalsec_withoutbg_py_mock_responses_e81161b2bc2a.py | Mock API responses for testing. |
 | 0xsojalsec_withoutbg_py_models_a464b211f0f4.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_witnessme_py_models_e661c4aff829.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_witnessme', providing core logic for its parent repository. |
-| 0xsojalsec_wordpress_exploits2_py_wpall_99ceba899ead.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wordpress_exploits2', providing core logic for its parent repository. |
-| 0xsojalsec_wordpress_exploits2_py_wpchangelog_762790c364f0.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wpchangelog_e83a567c2882.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wpcolor_c76a4483027b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wordpress_exploits2', providing core logic for its parent repository. |
-| 0xsojalsec_wordpress_exploits2_py_wpconfig_bb226b2820fd.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wpcrossdomain_dec9e073c90e.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wpfpd_8128bb9176bc.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wpfpd_c5883dee5d03.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wpgeneric_4d6cb6d3936d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wordpress_exploits2', providing core logic for its parent repository. |
-| 0xsojalsec_wordpress_exploits2_py_wphtaccess_fa660ea9dbd9.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wphttp_3c9eb8b774f4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wordpress_exploits2', providing core logic for its parent repository. |
-| 0xsojalsec_wordpress_exploits2_py_wplicense_4ad68f997e1c.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wplicense_592f59f6bbaf.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wplicense_d33a0bff4ef9.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wplisting_73384701411c.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wplisting_757228d11b44.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wplisting_e83b359e1fd8.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wploginprotection_bdcb1e0f919b.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wpreadme_c6feeb4207de.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wpreadme_d598b6e7f743.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wpsitemap_6afc22fd5507.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wpstyle_bfc6b7ea1006.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wpwaf_fd9527c170aa.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_wordpress_exploits2_py_wpxmlrpc_ec1023cf5fe2.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_x_anylabeling_server_py_automatic_mask_generator_f59e4a752f0e.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_x_anylabeling_server', providing core logic for its parent repository. |
 | 0xsojalsec_x_anylabeling_server_py_glm_4_6v_6556644fcddb.py | GLM-4.6V model supporting grounding tasks via ZaiClient API. |
 | 0xsojalsec_x_anylabeling_server_py_hieradet_1f813788e44b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_x_anylabeling_server', providing core logic for its parent repository. |
@@ -1950,10 +1750,6 @@ Total Files: 4711
 | 0xsojalsec_x_anylabeling_server_py_yolo11_track_546835fa5fc2.py | YOLO11 object detection with tracking model. |
 | 0xsojalsec_xpander_py_async_function_caller_140060a3e28f.py | Generic utility for asynchronously executing functions. |
 | 0xsojalsec_xpander_py_llm_provider_base_6129be9ee3ed.py | Base class for LLM provider integration in xpander.ai platform. |
-| 0xsojalsec_xsssniper_py_ordereddict_62be14f9124c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_xsssniper', providing core logic for its parent repository. |
-| 0xsojalsec_xsssniper_py_payload_3337e10c5ddb.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_xsssniper', providing core logic for its parent repository. |
-| 0xsojalsec_xsssniper_py_target_6d3ba150263c.py | raw_url is target url in string form |
-| 0xsojalsec_xsssniper_py_winterm_9d7cecf05b6d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_xsssniper', providing core logic for its parent repository. |
 | 0xsojalsec_xtremenmapparser_py_logs_ff065fa16683.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_xtremenmapparser', providing core logic for its parent repository. |
 | 200_ok_modifier_py__200_ok_modifier_30009f487080.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_200_ok_modifier', providing core logic for its parent repository. |
 | AD_Miner_logger.py | Component originally named 'DEV\PyAgent\.external\AD_Miner\ad_miner\sources\modules\logger', providing core logic for its parent repository. |
@@ -1968,7 +1764,6 @@ Total Files: 4711
 | Stream_Omni_convert_sqa_to_llava_base_prompt.py | Component originally named 'DEV\PyAgent\.external\Stream-Omni\scripts\archived\convert_sqa_to_llava_base_prompt', providing core logic for its parent repository. |
 | _0xsojalsec_factorio_learning_environment_profits.py | Calculate the dynamic production flows between two states |
 | _0xsojalsec_factorio_learning_environment_system_prompt_formatter.py | Formats the system prompt for the agent, only including the task and instructions. |
-| _0xsojalsec_gunnerc2_source_files.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_GunnerC2_source_files', providing core logic for its parent repository. |
 | _0xsojalsec_holocine_base.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_HoloCine_base', providing core logic for its parent repository. |
 | _0xsojalsec_homoglyph_char_manager.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_homoglyph_char_manager', providing core logic for its parent repository. |
 | _0xsojalsec_ics_forensics_tools_encryption.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_ics_forensics_tools_encryption', providing core logic for its parent repository. |
@@ -2612,12 +2407,6 @@ Total Files: 4711
 | ai_eng_py_spark_job_params_b0dd6b72a551.py | Parameters related to feature join job. |
 | ai_eng_py_transformation_7c1e2d66373c.py | Base class for all transformations that produce feature values. |
 | ai_eng_py_udfs_1e633d4b6ea5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\ai_eng', providing core logic for its parent repository. |
-| ai_exploits_py_h2o_importfiles_lfi_21092172712c.py | H2O is vulnerable to an local file include in it's ImportFiles API endpoint |
-| ai_exploits_py_h2o_typehead_apl_82da14e12dfc.py | H2O allows for arbitrary path lookup via it's Typehead API endpoint |
-| ai_exploits_py_ray_job_rce_96092346a48b.py | RCE in Ray via the agent job submission endpoint. This is intended functionality as Ray's main purpose is executing arbitrary workloads. |
-| ai_exploits_py_ray_lfi_static_file_1986b689dd85.py | Ray before 2.6.1 is vulnerable to a local file inclusion. |
-| ai_exploits_py_triton_file_write_c32de8dbd61d.py | When the Triton Inference Server is started with `--model-control-mode explicit` argument, an attacker is able to overwrite arbitrary files on the server. |
-| ai_exploits_py_triton_model_rce_f588736ddf61.py | When the Triton Inference Server is started with `--model-control-mode explicit` argument, an attacker is able to overwrite arbitrary files on the server. |
 | ai_red_teaming_playground_labs_py_app_9409b0ba40ea.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\ai_red_teaming_playground_labs', providing core logic for its parent repository. |
 | ai_red_teaming_playground_labs_py_app_b92c7a98e242.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\ai_red_teaming_playground_labs', providing core logic for its parent repository. |
 | ai_red_teaming_playground_labs_py_app_bfd75652d236.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\ai_red_teaming_playground_labs', providing core logic for its parent repository. |
@@ -2656,7 +2445,6 @@ Total Files: 4711
 | android_action_kernel_py_config_9f98c324aa2a.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | android_action_kernel_py_llm_providers_52c27d558ecf.py | LLM Provider module for Android Action Kernel. |
 | android_action_kernel_py_sanitizer_599c9f636952.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| android_exploits_py__44554_8b8607e1ea4c.py | If the extension flag is equal to 0x1 then |
 | apt_attack_simulation_py_fnv1a_salted_63029447a300.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\apt_attack_simulation', providing core logic for its parent repository. |
 | apt_hunter_py_apt_hunter_old_1b4fa44477df.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\apt_hunter', providing core logic for its parent repository. |
 | apt_hunter_py_evtxhunt_59cedcb77df5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\apt_hunter', providing core logic for its parent repository. |
