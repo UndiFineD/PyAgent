@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 287
+Total Files: 258
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -27,35 +27,6 @@ Total Files: 287
 | 0xsojalsec_graphsearch_py_pathrag_af986adbebb5.py | -----Sources----- |
 | 0xsojalsec_graphsearch_py_pipeline_b537066e0214.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphsearch', providing core logic for its parent repository. |
 | 0xsojalsec_graphsearch_py_utils_e71d50b73dff.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_klavis_py_albums_5e189e6625af.py | Get detailed information about one or multiple albums. |
-| 0xsojalsec_klavis_py_artists_d650341bc8ab.py | Get catalog information for multiple artists by their Spotify IDs. |
-| 0xsojalsec_klavis_py_auth_d1cd3b16a810.py | Get the Tavily API key for the current request (ContextVar → env). |
-| 0xsojalsec_klavis_py_base_7f8533bb4942.py | Create a user-authenticated Spotipy client (Authorization Code flow). |
-| 0xsojalsec_klavis_py_base_ccc598361439.py | Get the authentication token from context. |
-| 0xsojalsec_klavis_py_bm25_search_8f21c5a24c72.py | BM25+ based search utility with field-level scoring |
-| 0xsojalsec_klavis_py_cli_d9fc7c4f946a.py | Command-line interface for Strata MCP Router using argparse. |
-| 0xsojalsec_klavis_py_client_43032fc02490.py | MCP Client for connecting to and interacting with MCP servers. |
-| 0xsojalsec_klavis_py_crawl_cec9b3b5fa56.py | Crawl Website — start from a root URL and follow links with depth/breadth controls. |
-| 0xsojalsec_klavis_py_dict_utils_2aa82321ba51.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_klavis_py_episodes_53684cdb9e84.py | Get catalog information for multiple episodes. |
-| 0xsojalsec_klavis_py_extract_81bebc07d6ed.py | Extract Web Content — fetch and parse content from one or more URLs. |
-| 0xsojalsec_klavis_py_field_search_f6335fb59566.py | Field-based weighted search engine |
-| 0xsojalsec_klavis_py_http_20db4e200cf6.py | HTTP and SSE transport implementations for MCP. |
-| 0xsojalsec_klavis_py_logging_config_33a5007a1e4e.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_klavis_py_map_267caadf26fb.py | Generate Website Map — discover reachable URLs from a root without heavy extraction. |
-| 0xsojalsec_klavis_py_playlists_cb870fc22652.py | Get a Spotify playlist's full metadata and contents by its Spotify ID. |
-| 0xsojalsec_klavis_py_search_20150e342636.py | Web Search (Tavily). |
-| 0xsojalsec_klavis_py_search_ff3434d35749.py | Search Spotify for items of the given type and return simplified metadata. |
-| 0xsojalsec_klavis_py_server_4c111098e21d.py | Converts seconds into HH:MM:SS or MM:SS format. |
-| 0xsojalsec_klavis_py_server_a8137ed99180.py | Main server module for Strata MCP Router. |
-| 0xsojalsec_klavis_py_server_a8cc219faf21.py | Get all tool definitions to avoid duplication between stdio and HTTP modes. |
-| 0xsojalsec_klavis_py_server_c82758042666.py | Extract API key from headers or environment. |
-| 0xsojalsec_klavis_py_shared_search_c38bf6c69eca.py | Shared search utility for both single_server and strata_server. |
-| 0xsojalsec_klavis_py_shows_6f19a8043b81.py | Get Spotify catalog information for several shows by their Spotify IDs. |
-| 0xsojalsec_klavis_py_stdio_23e5772f300f.py | Stdio transport implementation for MCP. |
-| 0xsojalsec_klavis_py_tools_63a41f5efd68.py | Shared tool implementations for Strata MCP Router. |
-| 0xsojalsec_klavis_py_tracks_f5df3f6083fd.py | Get detailed information about one or multiple tracks. |
-| 0xsojalsec_klavis_py_users_a1f12248e4be.py | Get the current Spotify user's profile details. |
 | 0xsojalsec_labelllm_py_base_6c001f9ae5a0.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
 | 0xsojalsec_labelllm_py_common_c84da800a51c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
 | 0xsojalsec_labelllm_py_config_c16eea0398ed.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
