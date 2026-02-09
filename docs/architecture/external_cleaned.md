@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 4772
+Total Files: 4763
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -31,8 +31,6 @@ Total Files: 4772
 | 0xSojalSec_factorio_learning_environment_system_prompt_formatter.py | Formats the system prompt for the agent, only including the task and instructions. |
 | 0xSojalSec_h2o_llmstudio_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xSojalSec_homoglyph_char_manager.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-homoglyph\generator\char_manager', providing core logic for its parent repository. |
-| 0xSojalSec_http_request_smuggler_CL_TE.py | GET /robots.txt HTTP/1.1 |
-| 0xSojalSec_http_request_smuggler_H2_TE.py | GET /robots.txt HTTP/1.1 |
 | 0xSojalSec_ics_forensics_tools_encryption.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-ics-forensics-tools\src\forensic\plugins\CodeSysV3\codesysv3_protocol\encryption', providing core logic for its parent repository. |
 | 0xSojalSec_ics_forensics_tools_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xSojalSec_klavis_errors.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -1835,7 +1833,6 @@ Total Files: 4772
 | 0xsojalsec_wappalyzer_next_py_js_25d39ae2637b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wappalyzer_next', providing core logic for its parent repository. |
 | 0xsojalsec_wappalyzer_next_py_matcher_aa6056cc8d37.py | Special strings: version, confidence |
 | 0xsojalsec_wappalyzer_next_py_meta_58b2cc96d867.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wappalyzer_next', providing core logic for its parent repository. |
-| 0xsojalsec_wappalyzer_next_py_robots_9e2c1b8fd78d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wappalyzer_next', providing core logic for its parent repository. |
 | 0xsojalsec_wayback_google_analytics_py_codes_1a5fdbfa186c.py | Returns UA codes (w/o duplicates) from given html, or None if not found. |
 | 0xsojalsec_web_brutator_py_argumentsparser_4db2b916a0c3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_web_brutator', providing core logic for its parent repository. |
 | 0xsojalsec_web_brutator_py_axis2_97dc13c0c8ad.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -1997,8 +1994,6 @@ Total Files: 4772
 | _0xsojalsec_h2o_llmstudio_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | _0xsojalsec_holocine_base.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_HoloCine_base', providing core logic for its parent repository. |
 | _0xsojalsec_homoglyph_char_manager.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_homoglyph_char_manager', providing core logic for its parent repository. |
-| _0xsojalsec_http_request_smuggler_cl_te.py | GET /robots.txt HTTP/1.1 |
-| _0xsojalsec_http_request_smuggler_h2_te.py | GET /robots.txt HTTP/1.1 |
 | _0xsojalsec_ics_forensics_tools_encryption.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_ics_forensics_tools_encryption', providing core logic for its parent repository. |
 | _0xsojalsec_ics_forensics_tools_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | _0xsojalsec_idor_forge_banner.py | '####:'########:::'#######::'########:::::::::::'########::'#######::'########:::'######:::'########: |
@@ -2799,7 +2794,6 @@ Total Files: 4772
 | cache_py_chunk_0_bitwise_operations_1ac7f19e4fe3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_bloodhound_178db9984ccc.py | Adds a user to the BloodHound graph database. |
 | cache_py_chunk_0_char_manager_0f75d409b9a0.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
-| cache_py_chunk_0_cl_te_4372ad4d97d3.py | GET /robots.txt HTTP/1.1 |
 | cache_py_chunk_0_colorpp_ff8c3602900b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_colors_723a3f82bcdf.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_config_93e4be6ecca9.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
@@ -2821,7 +2815,6 @@ Total Files: 4772
 | cache_py_chunk_0_exp_filter_c0d2596e7fdb.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_fnv1a_salted_19fcab29684a.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_generation_progress_bac7a23a1fce.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
-| cache_py_chunk_0_h2_te_350b4ff99230.py | GET /robots.txt HTTP/1.1 |
 | cache_py_chunk_0_iis_54d273e9f0d1.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | cache_py_chunk_0_init_70d3799725e1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_link_enable_xp_2d0b1fc7b002.py | Enable or disable xp_cmdshell on a linked SQL server |
@@ -2856,8 +2849,6 @@ Total Files: 4772
 | chain_of_recursive_thoughts_py_rec_tic_tac_61b79cda7896.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\chain_of_recursive_thoughts', providing core logic for its parent repository. |
 | chain_of_recursive_thoughts_py_recthink_web_f1883e96b81e.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | chain_of_recursive_thoughts_py_tic_tac_dbee5e4d2c83.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\chain_of_recursive_thoughts', providing core logic for its parent repository. |
-| chunk_0_CL_TE.py | GET /robots.txt HTTP/1.1 |
-| chunk_0_H2_TE.py | GET /robots.txt HTTP/1.1 |
 | chunk_0_accounts.py | Returns the current price of a share for the given symbol. |
 | chunk_0_banner.py | '####:'########:::'#######::'########:::::::::::'########::'#######::'########:::'######:::'########: |
 | chunk_0_base.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-HoloCine\diffsynth\processors\base', providing core logic for its parent repository. |
