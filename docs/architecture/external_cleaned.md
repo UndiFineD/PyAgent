@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 4757
+Total Files: 4711
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -29,20 +29,14 @@ Total Files: 4757
 | 0xSojalSec_WhisperLiveKit_generation_progress.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-WhisperLiveKit\whisperlivekit\simul_whisper\generation_progress', providing core logic for its parent repository. |
 | 0xSojalSec_factorio_learning_environment_profits.py | Calculate the dynamic production flows between two states |
 | 0xSojalSec_factorio_learning_environment_system_prompt_formatter.py | Formats the system prompt for the agent, only including the task and instructions. |
-| 0xSojalSec_h2o_llmstudio_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xSojalSec_homoglyph_char_manager.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-homoglyph\generator\char_manager', providing core logic for its parent repository. |
 | 0xSojalSec_ics_forensics_tools_encryption.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-ics-forensics-tools\src\forensic\plugins\CodeSysV3\codesysv3_protocol\encryption', providing core logic for its parent repository. |
-| 0xSojalSec_ics_forensics_tools_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xSojalSec_klavis_errors.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xSojalSec_ldapper_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xSojalSec_ldapper_logging.py | This class provides a wrapper for the standard Python logging |
 | 0xSojalSec_mahilo_mahilo_sales_agent.py | Analyze effectiveness of different lead sources |
 | 0xSojalSec_malwoverview_colors.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-malwoverview\malwoverview\utils\colors', providing core logic for its parent repository. |
 | 0xSojalSec_pdf_extract_api_ocr_strategy.py | Base OCR Strategy Interface |
-| 0xSojalSec_pdfalyzer_exceptions.py | For errors that arise while walking the document tree |
 | 0xSojalSec_pipeless_init.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-pipeless\examples\wattermark\init', providing core logic for its parent repository. |
 | 0xSojalSec_pipeless_process.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-pipeless\examples\custom-data\process', providing core logic for its parent repository. |
-| 0xSojalSec_roampal_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xSojalSec_wappalyzer_next_css.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-wappalyzer-next\wappalyzer\parsers\css', providing core logic for its parent repository. |
 | 0xSojalSec_wappalyzer_next_meta.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-wappalyzer-next\wappalyzer\parsers\meta', providing core logic for its parent repository. |
 | 0xsojalsec_evermemos_py_addon_bean_order_strategy_b33a6af0bacf.py | Addon Bean ordering strategy module |
@@ -156,8 +150,6 @@ Total Files: 4757
 | 0xsojalsec_evermemos_py_event_publisher_8e1d514c3b8f.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_evermemos_py_evidence_utils_55b656558538.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_evermemos_py_exact_match_7fe23e59597e.py | Exact Match evaluator - direct answer comparison, suitable for multiple-choice scenarios. |
-| 0xsojalsec_evermemos_py_exceptions_5456853705cc.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_evermemos_py_exceptions_786e2484fe4e.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_evermemos_py_foresight_943793a70f97.py | Foresight Elasticsearch document |
 | 0xsojalsec_evermemos_py_foresight_collection_d180b13deb16.py | Foresight Milvus Collection Definition |
 | 0xsojalsec_evermemos_py_foresight_converter_242a19f85f31.py | Foresight ES Converter |
@@ -199,7 +191,6 @@ Total Files: 4757
 | 0xsojalsec_evermemos_py_log_info_service_e9c699775835.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_evermemos_py_logger_ba1a47a7917e.py | Log level enumeration |
 | 0xsojalsec_evermemos_py_logger_fa610f5564a4.py | Logging utilities. |
-| 0xsojalsec_evermemos_py_longjob_error_2770c4cb7818.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_evermemos_py_longjob_lifespan_7dbe2e8d1fcd.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_evermemos_py_manage_2cba82adcacb.py | Memsys Backend Management Script |
 | 0xsojalsec_evermemos_py_manager_287ceca3486d.py | Long job manager implementation. |
@@ -429,7 +420,6 @@ Total Files: 4757
 | 0xsojalsec_factorio_learning_environment_py_handler_15cbef2b6551.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_factorio_learning_environment_py_heat_exchanger_4c9337f392f0.py | Heat exchanger renderer |
 | 0xsojalsec_factorio_learning_environment_py_heat_pipe_8cba73064b51.py | Heat pipe renderer with connection logic |
-| 0xsojalsec_factorio_learning_environment_py_hinting_name_error_75691269610d.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_factorio_learning_environment_py_image_calculator_02ed896de09d.py | Handles calculations related to the image size and coordinate transforms |
 | 0xsojalsec_factorio_learning_environment_py_image_calculator_359cefc9abff.py | Handles calculations related to the image size and coordinate transforms |
 | 0xsojalsec_factorio_learning_environment_py_image_resolver_1a3e8108f20e.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -754,7 +744,6 @@ Total Files: 4757
 | 0xsojalsec_graphrag_py_entityrelation_a02368c33d66.py | Initializes an Edge object with the given attributes. |
 | 0xsojalsec_graphrag_py_ergraph_069eb4c930ac.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_graphrag_py_evaluation_0b5aea81a573.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphrag', providing core logic for its parent repository. |
-| 0xsojalsec_graphrag_py_exceptions_50ea2d5b3c0c.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_graphrag_py_faissindex_3ddd54023249.py | FaissIndex is designed to be simple and straightforward. |
 | 0xsojalsec_graphrag_py_graphconfig_3b87badb09f5.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | 0xsojalsec_graphrag_py_graphfactory_d49842a0a87b.py | Graph Factory. |
@@ -1084,7 +1073,6 @@ Total Files: 4757
 | 0xsojalsec_labelllm_py_data_5f061bceeb30.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
 | 0xsojalsec_labelllm_py_data_baf105f81466.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
 | 0xsojalsec_labelllm_py_evaluation_c47ecfc16956.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
-| 0xsojalsec_labelllm_py_exceptions_1948604ad95f.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_labelllm_py_file_43b75a06f8fa.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
 | 0xsojalsec_labelllm_py_file_ad2482cf0ebf.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_labelllm', providing core logic for its parent repository. |
 | 0xsojalsec_labelllm_py_init_24bc3488186d.py | ratio in [0, 100] |
@@ -1116,8 +1104,6 @@ Total Files: 4757
 | 0xsojalsec_langextract_py_data_28e8de6dfb51.py | Classes used to represent core data types of annotation pipeline. |
 | 0xsojalsec_langextract_py_data_lib_a92c1bcdc84b.py | Library for data conversion between AnnotatedDocument and JSON. |
 | 0xsojalsec_langextract_py_debug_utils_a2bc1b0e0d2d.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_langextract_py_exceptions_7e863cc6aef3.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_langextract_py_exceptions_b208d3aadc67.py | Compatibility shim for langextract.exceptions imports. |
 | 0xsojalsec_langextract_py_extraction_f50f5d3dd73d.py | Main extraction API for LangExtract. |
 | 0xsojalsec_langextract_py_factory_3b948cee869d.py | Factory for creating language model instances. |
 | 0xsojalsec_langextract_py_format_handler_46ff6e1ec993.py | Centralized format handler for prompts and parsing. |
@@ -1359,7 +1345,6 @@ Total Files: 4757
 | 0xsojalsec_owl_py_ignore_risk_toolkit_c7fa67568a69.py | A toolkit for ignoring risks associated with functions. |
 | 0xsojalsec_owl_py_image_craft_e867e4e7d764.py | A dictionary containing :obj:`TextPrompt` used in the `ImageCraft` |
 | 0xsojalsec_owl_py_in_memory_2b5be7db6812.py | A concrete implementation of the :obj:`BaseKeyValueStorage` using |
-| 0xsojalsec_owl_py_interpreter_error_352b95a6652e.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_owl_py_json_cb605ccfe4c0.py | A custom JSON encoder for serializing specifically enumerated types. |
 | 0xsojalsec_owl_py_litellm_model_4c7a76f7dba9.py | Constructor for LiteLLM backend with OpenAI compatibility. |
 | 0xsojalsec_owl_py_math_toolkit_91ffa7500b6b.py | A class representing a toolkit for mathematical operations. |
@@ -1417,7 +1402,6 @@ Total Files: 4757
 | 0xsojalsec_pdf_extract_api_py_tesseract_4ae45dead928.py | Tesseract OCR Strategy |
 | 0xsojalsec_pdfalyzer_py_debugging_5f1c77b70765.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pdfalyzer', providing core logic for its parent repository. |
 | 0xsojalsec_pdfalyzer_py_dict_helper_bf50355b1ca4.py | Fun with dicts. |
-| 0xsojalsec_pdfalyzer_py_exceptions_f03bae682cc9.py | For errors that arise while walking the document tree |
 | 0xsojalsec_pdfalyzer_py_indeterminate_node_d2ecee6c8518.py | Some nodes cannot be placed until we have walked the rest of the tree. For instance |
 | 0xsojalsec_pdfalyzer_py_number_helper_87dbf698f638.py | Some simple math helpers. |
 | 0xsojalsec_pdfalyzer_py_pdf_object_helper_01152ce5678f.py | Some methods to help with the direct manipulation/processing of PyPDF's PdfObjects |
@@ -1505,7 +1489,6 @@ Total Files: 4757
 | 0xsojalsec_prettymapp_py_plotting_f79ea3790e9f.py | Main plotting class for prettymapp. |
 | 0xsojalsec_prettymapp_py_utils_d30325933b14.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_proxyhub_py_checker_76793d29e566.py | Proxy checker. |
-| 0xsojalsec_proxyhub_py_errors_167365f1132a.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_proxyhub_py_judge_c285ac7ab7e9.py | Proxy Judge. |
 | 0xsojalsec_pytorch_lightning_py_accelerator_05e0c8c39ade.py | The Accelerator base class for Lightning PyTorch. |
 | 0xsojalsec_pytorch_lightning_py_accelerator_cb16a59c206c.py | The Accelerator base class. |
@@ -1538,8 +1521,6 @@ Total Files: 4757
 | 0xsojalsec_pytorch_lightning_py_dp_0129bb78501c.py | Implements data-parallel training in a single process, i.e., the model gets replicated to each device and each |
 | 0xsojalsec_pytorch_lightning_py_enums_666ec467faf7.py | Enumerated utilities. |
 | 0xsojalsec_pytorch_lightning_py_evaluation_loop_e734cb2c9d5d.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_pytorch_lightning_py_exceptions_4c1e334e1ee5.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_pytorch_lightning_py_exceptions_f4308d80fc42.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_pytorch_lightning_py_fetchers_a298e6b96d54.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_pytorch_lightning_py_fx_validator_5f9c19de6461.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_pytorch_lightning_py_gradient_accumulation_scheduler_41ad614fc2c7.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -1837,7 +1818,6 @@ Total Files: 4757
 | 0xsojalsec_web_brutator_py_axis2_97dc13c0c8ad.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_web_brutator_py_bruteforcer_de07faf4d94a.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_web_brutator_py_coldfusion_831fd5258599.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_web_brutator_py_exceptions_db9c48992d62.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_web_brutator_py_glassfish_60f951ba62f9.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_web_brutator_py_globals_91da89639217.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_web_brutator', providing core logic for its parent repository. |
 | 0xsojalsec_web_brutator_py_htaccess_26795117d077.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -1922,7 +1902,6 @@ Total Files: 4757
 | 0xsojalsec_wifiphisher_py_firewall_79ee0389a51b.py | Serves as an abstraction layer in front of iptables. |
 | 0xsojalsec_wifiphisher_py_uimethods_a8279a01a008.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wifiphisher', providing core logic for its parent repository. |
 | 0xsojalsec_withoutbg_py_core_1feec2abbfcb.py | Core background removal functionality. |
-| 0xsojalsec_withoutbg_py_exceptions_033ffbd24ee1.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_withoutbg_py_mock_responses_e81161b2bc2a.py | Mock API responses for testing. |
 | 0xsojalsec_withoutbg_py_models_a464b211f0f4.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_witnessme_py_models_e661c4aff829.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_witnessme', providing core logic for its parent repository. |
@@ -1990,14 +1969,10 @@ Total Files: 4757
 | _0xsojalsec_factorio_learning_environment_profits.py | Calculate the dynamic production flows between two states |
 | _0xsojalsec_factorio_learning_environment_system_prompt_formatter.py | Formats the system prompt for the agent, only including the task and instructions. |
 | _0xsojalsec_gunnerc2_source_files.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_GunnerC2_source_files', providing core logic for its parent repository. |
-| _0xsojalsec_h2o_llmstudio_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | _0xsojalsec_holocine_base.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_HoloCine_base', providing core logic for its parent repository. |
 | _0xsojalsec_homoglyph_char_manager.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_homoglyph_char_manager', providing core logic for its parent repository. |
 | _0xsojalsec_ics_forensics_tools_encryption.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_ics_forensics_tools_encryption', providing core logic for its parent repository. |
-| _0xsojalsec_ics_forensics_tools_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | _0xsojalsec_idor_forge_banner.py | '####:'########:::'#######::'########:::::::::::'########::'#######::'########:::'######:::'########: |
-| _0xsojalsec_klavis_errors.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| _0xsojalsec_ldapper_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | _0xsojalsec_ldapper_logging.py | This class provides a wrapper for the standard Python logging |
 | _0xsojalsec_llava_next_convert_sqa_to_llava_base_prompt.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_LLaVA_NeXT_convert_sqa_to_llava_base_prompt', providing core logic for its parent repository. |
 | _0xsojalsec_mahilo_mahilo_sales_agent.py | Analyze effectiveness of different lead sources |
@@ -2017,11 +1992,9 @@ Total Files: 4757
 | _0xsojalsec_netexec_proto_args.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_NetExec_proto_args', providing core logic for its parent repository. |
 | _0xsojalsec_netexec_whoami.py | Basic enumeration of provided user information and privileges |
 | _0xsojalsec_pdf_extract_api_ocr_strategy.py | Base OCR Strategy Interface |
-| _0xsojalsec_pdfalyzer_exceptions.py | For errors that arise while walking the document tree |
 | _0xsojalsec_pipeless_init.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_pipeless_init', providing core logic for its parent repository. |
 | _0xsojalsec_pipeless_process.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_pipeless_process', providing core logic for its parent repository. |
 | _0xsojalsec_praisonai_config.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| _0xsojalsec_roampal_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | _0xsojalsec_videoagent_base_text_processor.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_VideoAgent_base_text_processor', providing core logic for its parent repository. |
 | _0xsojalsec_videoagent_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | _0xsojalsec_voicecraft_edit_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
@@ -2074,8 +2047,6 @@ Total Files: 4757
 | acontext_py_disk_9599259ca4df.py | Type definitions for disk and artifact resources. |
 | acontext_py_disks_2f492227fd7c.py | Disk and artifact endpoints. |
 | acontext_py_embedding_ad353af7565d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\acontext', providing core logic for its parent repository. |
-| acontext_py_error_code_a1044adf5743.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\acontext', providing core logic for its parent repository. |
-| acontext_py_errors_152fc4e44859.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | acontext_py_general_2ee7ac521833.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\acontext', providing core logic for its parent repository. |
 | acontext_py_generate_ids_275fb2574277.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\acontext', providing core logic for its parent repository. |
 | acontext_py_llm_f3e70fc82e9d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\acontext', providing core logic for its parent repository. |
@@ -2145,7 +2116,6 @@ Total Files: 4757
 | aenvironment_py_config_a2b77157f160.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | aenvironment_py_custom_env_0aa2e8fdd501.py | Tool description for your custom env. |
 | aenvironment_py_custom_env_169287412a28.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\aenvironment', providing core logic for its parent repository. |
-| aenvironment_py_exceptions_c9fa19ba6983.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | aenvironment_py_get_029b36db9a54.py | get command - Get specified environment details |
 | aenvironment_py_init_40e9850d3fb2.py | init command - Initialize aenv project using environmental scaffolding tools |
 | aenvironment_py_list_ba102988d63f.py | list command - List all environments with pagination |
@@ -2157,7 +2127,6 @@ Total Files: 4757
 | aenvironment_py_swe_model_78faa9e1c9ea.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\aenvironment', providing core logic for its parent repository. |
 | aenvironment_py_version_26338e41b1a1.py | version command - Display version information |
 | agentcloud_dict_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| agentcloud_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agentcloud_provider.py | Component originally named 'DEV\PyAgent\.external\agentcloud\agent-backend\src\storage\provider', providing core logic for its parent repository. |
 | agentcloud_py_anthropic_c130f3a1d374.py | Anthropic-specific customizations |
 | agentcloud_py_apify_google_search_8502d595ea05.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -2175,7 +2144,6 @@ Total Files: 4757
 | agentcloud_py_default_3d96369291f0.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentcloud', providing core logic for its parent repository. |
 | agentcloud_py_dict_utils_65b4ce464799.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | agentcloud_py_duckduckgo_5c5367f56794.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentcloud', providing core logic for its parent repository. |
-| agentcloud_py_exceptions_112544d016fb.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agentcloud_py_factory_3d68e0b24221.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentcloud', providing core logic for its parent repository. |
 | agentcloud_py_factory_e5b00e337413.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentcloud', providing core logic for its parent repository. |
 | agentcloud_py_factory_f0638ba25265.py | Return a (llm or embedding) langchain model based on model specs in mongo |
@@ -2183,7 +2151,6 @@ Total Files: 4757
 | agentcloud_py_firecrawl_loader_2e89b12d13a2.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentcloud', providing core logic for its parent repository. |
 | agentcloud_py_global_tools_1982ee4b032d.py | A class designed to facilitate communication between a server and a client |
 | agentcloud_py_human_input_tool_6e90e4a4ecc8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentcloud', providing core logic for its parent repository. |
-| agentcloud_py_log_exception_context_manager_1373386d092d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentcloud', providing core logic for its parent repository. |
 | agentcloud_py_model_helper_4092567afde4.py | Generates a map function to get attribute from models |
 | agentcloud_py_mongo_db_saver_3c18c1db1544.py | A checkpoint saver that stores checkpoints in a MongoDB database asynchronously. |
 | agentcloud_py_mongo_session_fee5fe3d78aa.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentcloud', providing core logic for its parent repository. |
@@ -2209,14 +2176,12 @@ Total Files: 4757
 | agentcloud_py_wikidata_345d92a2acf0.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agentcloud_py_wikipedia_d5830f67e0b4.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agentcloud_py_youtube_6e16ce602b00.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentcloud', providing core logic for its parent repository. |
-| agentkit_prompting_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agentkit_prompting_node_functions.py | Default function to append the error message to the prompt. |
 | agentkit_prompting_py_after_query_13b1f3382178.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agentkit_prompting_py_base_7dd580e13a63.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentkit_prompting', providing core logic for its parent repository. |
 | agentkit_prompting_py_compose_prompt_5f0b3bf9983f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentkit_prompting', providing core logic for its parent repository. |
 | agentkit_prompting_py_compose_prompt_6f9b7838fe6d.py | Base class for composing prompts. This class is used to compose prompts for the LLM. |
 | agentkit_prompting_py_engine_f38b1da8d2af.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentkit_prompting', providing core logic for its parent repository. |
-| agentkit_prompting_py_exceptions_a45caebc1430.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agentkit_prompting_py_node_00debe3eea73.py | Class for a node in the graph that queries a database. |
 | agentkit_prompting_py_node_functions_c01badb146c0.py | Default function to append the error message to the prompt. |
 | agentkit_prompting_py_objects_025669e07d1b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentkit_prompting', providing core logic for its parent repository. |
@@ -2231,7 +2196,6 @@ Total Files: 4757
 | agentkit_py_base_uuid_model_c2059e3a4966.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentkit', providing core logic for its parent repository. |
 | agentkit_py_celery_deps_bacf88af43ec.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentkit', providing core logic for its parent repository. |
 | agentkit_py_chat_model_9a51a46ddde5.py | Fake ChatModel for testing purposes. |
-| agentkit_py_common_exceptions_f0958a10b43b.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agentkit_py_common_schema_a9e7586870a3.py | Query base schema. |
 | agentkit_py_extendedbasetool_f2f13d412724.py | Base tool for all tools in the agent. |
 | agentkit_py_fastapi_42fe83828bb5.py | FastAPI subclass that adds internal models (which are not already exposed via API |
@@ -2251,7 +2215,6 @@ Total Files: 4757
 | agentkit_py_uuid6_4734405f9c65.py | UUID draft version objects (universally unique identifiers). This module provides the |
 | agentkit_py_uuid_975eddc56058.py | UUID draft version objects (universally unique identifiers). |
 | agentkit_py_vector_db_1b4d5407ea11.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentkit', providing core logic for its parent repository. |
-| agents_generic_errors.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agents_generic_exp_filter.py | Component originally named 'DEV\PyAgent\.external\agents_generic\livekit-agents\livekit\agents\utils\exp_filter', providing core logic for its parent repository. |
 | agents_generic_py_anthropic_83a0d8da8246.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agents_generic', providing core logic for its parent repository. |
 | agents_generic_py_aws_06525ab978a1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agents_generic', providing core logic for its parent repository. |
@@ -2262,8 +2225,6 @@ Total Files: 4757
 | agents_generic_py_debug_925a2d120915.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agents_generic', providing core logic for its parent repository. |
 | agents_generic_py_decoder_d43a27d253e4.py | Return the libav *container* short‑name for a given MIME‑type. |
 | agents_generic_py_embeddings_498da436040b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agents_generic', providing core logic for its parent repository. |
-| agents_generic_py_errors_e153185048e3.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| agents_generic_py_exceptions_65ce120ae1e8.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agents_generic_py_exp_filter_596ff6cb119a.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agents_generic', providing core logic for its parent repository. |
 | agents_generic_py_fake_io_1cfd4c0ec940.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agents_generic', providing core logic for its parent repository. |
 | agents_generic_py_fake_llm_d9dabfee2de1.py | Map from input text to output content, tool calls, ttft, and duration |
@@ -2805,9 +2766,7 @@ Total Files: 4757
 | cache_py_chunk_0_enum_impersonate_16925739e9e4.py | Enumerate SQL Server users with impersonation rights |
 | cache_py_chunk_0_enum_links_a0244c097474.py | Enumerate SQL Server linked servers |
 | cache_py_chunk_0_enum_logins_8314582813a7.py | Enumerate SQL Server logins |
-| cache_py_chunk_0_errors_6bdb86a8a394.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | cache_py_chunk_0_example_module_1f755c8b2781.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| cache_py_chunk_0_exceptions_31e107b6b8b6.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | cache_py_chunk_0_exec_on_link_c33f8c258ed8.py | Execute commands on linked servers |
 | cache_py_chunk_0_exp_filter_c0d2596e7fdb.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_fnv1a_salted_19fcab29684a.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
@@ -2867,9 +2826,7 @@ Total Files: 4757
 | chunk_0_enum_impersonate.py | Enumerate SQL Server users with impersonation rights |
 | chunk_0_enum_links.py | Enumerate SQL Server linked servers |
 | chunk_0_enum_logins.py | Enumerate SQL Server logins |
-| chunk_0_errors.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | chunk_0_example_module.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| chunk_0_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | chunk_0_exec_on_link.py | Execute commands on linked servers |
 | chunk_0_exp_filter.py | Component originally named 'DEV\PyAgent\.external\agents_generic\livekit-agents\livekit\agents\utils\exp_filter', providing core logic for its parent repository. |
 | chunk_0_fnv1a_salted.py | Component originally named 'DEV\PyAgent\.external\APT-Attack-Simulation\Chinese APT\Wicked Panda\fnv1a_salted', providing core logic for its parent repository. |
@@ -2958,7 +2915,6 @@ Total Files: 4757
 | code_puppy_py_dashboard_96e993faf787.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | code_puppy_py_display_732e9880517c.py | Common display utilities for rendering agent outputs. |
 | code_puppy_py_emitter_2e8b3a904690.py | Event emitter for frontend integration. |
-| code_puppy_py_error_isolation_4109f1efc031.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | code_puppy_py_event_stream_handler_56f29e0514f1.py | Event stream handler for processing streaming events from agent runs. |
 | code_puppy_py_file_path_completion_a8c5c5aa9c7d.py | A simple file path completer that works with a trigger symbol. |
 | code_puppy_py_gemini_code_assist_34dd481c1c0b.py | Gemini Code Assist Model for pydantic_ai. |
@@ -4072,7 +4028,6 @@ Total Files: 4757
 | skills_py_reachy_gst_snap_d4132d162b2a.py | Capture a single frame from Reachy Mini via GStreamer WebRTC (local). |
 | skills_py_read_ui_elements_5bd472009926.py | Read UI Elements - Extract buttons, links, and interactive elements from a window |
 | skills_py_read_webpage_ab3da77e0968.py | Read Webpage - Extract content from browser windows with enhanced element detection |
-| skills_py_reality_error_409434c22e67.py | R̷E̵A̸L̶I̷T̸Y̵.̶E̷X̸E̵ ̷H̶A̵S̸ ̷E̶N̸C̷O̸U̶N̷T̸E̷R̵E̷D̶ ̴A̵N̶ ̴E̷R̵R̸O̵R̷ |
 | skills_py_recall_7e8a37522d2b.py | Memory Recall - Search memory files for relevant context. |
 | skills_py_recharge_credits_a32716d7ed73.py | x402 Credit Recharge |
 | skills_py_recommender_8d1641c4f91c.py | Recommendation Engine - Extracted from EnhancedTradingAgent |
@@ -4152,7 +4107,6 @@ Total Files: 4757
 | skills_py_server_ee07b435a28b.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | skills_py_server_realtime_c28217ebf4fb.py | Phone Agent v2: OpenAI Realtime API |
 | skills_py_serverless_stack_4682bc8b19d6.py | Serverless stack generator for AWS. |
-| skills_py_session_exceptions_54fbe975d147.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | skills_py_session_manager_ff774ff99599.py | Browser Session Manager |
 | skills_py_settings_a6fe51d98da8.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | skills_py_settings_e5fff57cc28e.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
