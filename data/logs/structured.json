@@ -1046,3 +1046,5 @@
 {"timestamp":"2026-02-09T10:01:45.774605Z","agent_id":"src.infrastructure.swarm.fleet.mixins.fleet_update_mixin","trace_id":"trace_1770631290","level":"INFO","message":"FleetUpdateMixin: Auto-update service started with 900s interval."}
 {"timestamp":"2026-02-09T10:05:53.093187Z","agent_id":"src.infrastructure.swarm.fleet.mixins.fleet_discovery_mixin","trace_id":"trace_1770631540","level":"INFO","message":"FleetDiscovery: Initialized discovery for fleet-src"}
 {"timestamp":"2026-02-09T10:05:53.096051Z","agent_id":"src.infrastructure.swarm.fleet.mixins.fleet_update_mixin","trace_id":"trace_1770631540","level":"INFO","message":"FleetUpdateMixin: Auto-update service started with 900s interval."}
+{"timestamp":"2026-02-09T10:15:49.891742Z","agent_id":"src.infrastructure.swarm.fleet.mixins.fleet_discovery_mixin","trace_id":"trace_1770632137","level":"INFO","message":"FleetDiscovery: Initialized discovery for fleet-src"}
+{"timestamp":"2026-02-09T10:15:49.899387Z","agent_id":"src.infrastructure.swarm.fleet.mixins.fleet_update_mixin","trace_id":"trace_1770632137","level":"INFO","message":"FleetUpdateMixin: Auto-update service started with 900s interval."}

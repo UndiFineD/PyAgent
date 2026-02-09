@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 938
+Total Files: 908
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -816,36 +816,6 @@ Total Files: 938
 | 0xsojalsec_pi0_lerobot_py_video_decode_benchmark_f8cd63256595.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pi0_lerobot', providing core logic for its parent repository. |
 | 0xsojalsec_pi0_lerobot_py_video_io_9a5cab92a846.py | Video class with similar usage to a list object. |
 | 0xsojalsec_pi0_lerobot_py_visualize_dataset_rerun_7186167b6b45.py | Visualize data of **all** frames of any episode of a dataset of type LeRobotDataset. |
-| 0xsojalsec_pi3mos_slam_py_augmentation_47e336590be3.py | perform augmentation on RGB-D video |
-| 0xsojalsec_pi3mos_slam_py_ba_c07388ea0c44.py | block matrix multiply |
-| 0xsojalsec_pi3mos_slam_py_backbones_b9b3c877203b.py | DINOv2 ViT-S/14 model (optionally) pretrained on the LVD-142M dataset. |
-| 0xsojalsec_pi3mos_slam_py_basic_2d0f0c0ccafa.py | Loads images from a directory or video, resizes them to a uniform size, |
-| 0xsojalsec_pi3mos_slam_py_broadcasting_8176a6bef784.py | Automatic broadcasting of missing dimensions |
-| 0xsojalsec_pi3mos_slam_py_camera_head_66fce09a6ac2.py | 1x1 convolution residual block |
-| 0xsojalsec_pi3mos_slam_py_cluster_bdc7f2a12a83.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pi3mos_slam', providing core logic for its parent repository. |
-| 0xsojalsec_pi3mos_slam_py_correlation_c412a724da1e.py | forward correlation |
-| 0xsojalsec_pi3mos_slam_py_dino_head_2005e3973d07.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pi3mos_slam', providing core logic for its parent repository. |
-| 0xsojalsec_pi3mos_slam_py_dpt_head_180211f43e68.py | DPT  Head for dense prediction tasks. |
-| 0xsojalsec_pi3mos_slam_py_drop_path_6833685dbf71.py | Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks). |
-| 0xsojalsec_pi3mos_slam_py_eval_traj_8baa46cf4931.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pi3mos_slam', providing core logic for its parent repository. |
-| 0xsojalsec_pi3mos_slam_py_evaluate_rpe_264d0f36eac3.py | Computes relative pose error. |
-| 0xsojalsec_pi3mos_slam_py_factory_9be38b688393.py | create a combined dataset |
-| 0xsojalsec_pi3mos_slam_py_geometry_2b6c627869f1.py | Compute the inverse of each 4x4 (or 3x4) SE3 matrix in a batch. |
-| 0xsojalsec_pi3mos_slam_py_group_ops_ec07f911676c.py | group operation base class |
-| 0xsojalsec_pi3mos_slam_py_groups_bb67e1cbbe95.py | Wrapper class for LieGroup |
-| 0xsojalsec_pi3mos_slam_py_layer_scale_c788dd841973.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pi3mos_slam', providing core logic for its parent repository. |
-| 0xsojalsec_pi3mos_slam_py_long_term_3e5f2721293e.py | Pretty self explanitory! Alas, we can only use disk w/ lightglue. ORB is brittle |
-| 0xsojalsec_pi3mos_slam_py_mlp_e5dfab09fce4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pi3mos_slam', providing core logic for its parent repository. |
-| 0xsojalsec_pi3mos_slam_py_optim_utils_76600eac53dd.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_pi3mos_slam_py_patch_embed_80e21d74a598.py | 2D image to patch embedding: (B,C,H,W) -> (B,N,D) |
-| 0xsojalsec_pi3mos_slam_py_patchgraph_ebb556fabbd9.py | Dataclass for storing variables |
-| 0xsojalsec_pi3mos_slam_py_pi3_dc420bae6468.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pi3mos_slam', providing core logic for its parent repository. |
-| 0xsojalsec_pi3mos_slam_py_plot_utils_309816c534d8.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_pi3mos_slam_py_plot_utils_4cbf9ba7d453.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_pi3mos_slam_py_rgbd_utils_0c162997669e.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_pi3mos_slam_py_transformer_head_b49309ae80d9.py | Linear head for dust3r |
-| 0xsojalsec_pi3mos_slam_py_utils_67998aba7e20.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_pi3mos_slam_py_vision_transformer_157886bb1bdd.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pi3mos_slam', providing core logic for its parent repository. |
 | 0xsojalsec_poastal_py_adobe_32af7187a86f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
 | 0xsojalsec_poastal_py_duolingo_b4949bfc0663.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
 | 0xsojalsec_poastal_py_hulu_14c99e2afad2.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
