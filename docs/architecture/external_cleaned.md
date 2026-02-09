@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 4763
+Total Files: 4757
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -827,7 +827,6 @@ Total Files: 4763
 | 0xsojalsec_guardian_cli_py_recon_9322e686b257.py | guardian recon - Reconnaissance command |
 | 0xsojalsec_guardian_cli_py_reporter_agent_af0304e94855.py | Reporter Agent |
 | 0xsojalsec_guardian_cli_py_scan_dee57379ed1c.py | guardian scan - Quick scan command |
-| 0xsojalsec_guardian_cli_py_sqlmap_673ef4dc9c9d.py | SQLMap tool wrapper for automated SQL injection testing |
 | 0xsojalsec_guardian_cli_py_sslyze_e96894f2da7e.py | SSLyze tool wrapper for advanced SSL/TLS security testing |
 | 0xsojalsec_guardian_cli_py_subfinder_8b71e36aa9d0.py | Subfinder tool wrapper for subdomain discovery |
 | 0xsojalsec_guardian_cli_py_tool_agent_f6b5cc451f05.py | Tool Selector Agent |
@@ -2654,7 +2653,6 @@ Total Files: 4763
 | ai_eng_py_udfs_1e633d4b6ea5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\ai_eng', providing core logic for its parent repository. |
 | ai_exploits_py_h2o_importfiles_lfi_21092172712c.py | H2O is vulnerable to an local file include in it's ImportFiles API endpoint |
 | ai_exploits_py_h2o_typehead_apl_82da14e12dfc.py | H2O allows for arbitrary path lookup via it's Typehead API endpoint |
-| ai_exploits_py_ray_cpuprofile_cmd_injection_45fbe0a994f1.py | Ray RCE via cpu_profile command injection vulnerability. |
 | ai_exploits_py_ray_job_rce_96092346a48b.py | RCE in Ray via the agent job submission endpoint. This is intended functionality as Ray's main purpose is executing arbitrary workloads. |
 | ai_exploits_py_ray_lfi_static_file_1986b689dd85.py | Ray before 2.6.1 is vulnerable to a local file inclusion. |
 | ai_exploits_py_triton_file_write_c32de8dbd61d.py | When the Triton Inference Server is started with `--model-control-mode explicit` argument, an attacker is able to overwrite arbitrary files on the server. |
@@ -2763,7 +2761,6 @@ Total Files: 4763
 | asterisk_ai_voice_agent_py_registry_a802a590a0a6.py | Tool registry - central repository for all available tools. |
 | asterisk_ai_voice_agent_py_request_transcript_03e43b11018a.py | Request Transcript Tool |
 | asterisk_ai_voice_agent_py_resampler_22cd434785e4.py | Audio resampling and format conversion helpers. |
-| asterisk_ai_voice_agent_py_security_022edd95a249.py | Security-critical configuration injection. |
 | asterisk_ai_voice_agent_py_session_store_bd3e9d4a2c36.py | SessionStore - Centralized, atomic state management for call sessions. |
 | asterisk_ai_voice_agent_py_switch_provider_98992787a8da.py | Utility to switch the default provider in config/ai-agent.yaml. |
 | asterisk_ai_voice_agent_py_transfer_fe85693ca9b1.py | Call Transfer Tool - Transfer caller to internal extension or external number. |
@@ -3666,7 +3663,6 @@ Total Files: 4763
 | skills_py_camoufox_session_291f5d2bd2b4.py | Camoufox persistent session manager. |
 | skills_py_cancel_booking_7a9b5084a1c6.py | Cancel booking tool for SRT skill. |
 | skills_py_candlestick_patterns_0b3a4dca1d79.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| skills_py_canvas_inject_8a996262ccda.py | Canvas HTML Injection Helper |
 | skills_py_capture_4cc1493f2bb5.py | Memory Capture - Extract and store facts from conversations. |
 | skills_py_card_generator_905f2851d348.py | AH Bonuskaart generator + personal offers checker |
 | skills_py_carnalaestheticengine_fc86b34251bb.py | Generates a physiological impulse based on user intent. |
@@ -4054,7 +4050,6 @@ Total Files: 4763
 | skills_py_price_tape_66ccd41e283b.py | price_tape.py |
 | skills_py_process_watch_30ffbd4cf71a.py | Process Watch - Comprehensive system process monitoring. |
 | skills_py_profile_306790e2703d.py | LinkedIn profile and activity page scraping. |
-| skills_py_prompt_analyzer_8b8eee0ac879.py | SkillGuard Prompt Injection Analyzer |
 | skills_py_protonmail_0e220a7f21ca.py | ProtonMail CLI via IMAP bridge (Proton Bridge or hydroxide). |
 | skills_py_proxmox_91b488286cd7.py | Proxmox Skill for OpenClaw |
 | skills_py_proxy_server_f43138edd40b.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -4063,7 +4058,6 @@ Total Files: 4763
 | skills_py_pymupdf_parse_b1542f3b0752.py | Parse PDFs with PyMuPDF (fitz) into Markdown/JSON quickly (less robust). |
 | skills_py_quantum_clock_34a0492d00f4.py | QUANTUM CLOCK |
 | skills_py_quantum_magic_aef8da048e83.py | ✨ QUANTUM MAGIC ✨ |
-| skills_py_query_adbc822428cb.py | SQL Injection - EVALUATION SKILL |
 | skills_py_query_quiver_9096173322c9.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\skills', providing core logic for its parent repository. |
 | skills_py_quick_validate_3adf060a6055.py | Quick validation script for skills - minimal version |
 | skills_py_quick_validate_50c49fb99f27.py | quick_validate.py |
