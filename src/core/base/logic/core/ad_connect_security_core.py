@@ -131,12 +131,12 @@ class ADConnectSecurityCore(BaseCore):
             }
         }
 
-    async def analyze_service_account(self, context: CascadeContext) -> ADConnectServiceAccount:
+    async def analyze_service_account(self, _context: CascadeContext) -> ADConnectServiceAccount:
         """
         Analyze the Azure AD Connect service account.
 
         Args:
-            context: Cascade context for the analysis
+            _context: Cascade context for the analysis
 
         Returns:
             ADConnectServiceAccount: Service account analysis results
@@ -168,7 +168,7 @@ class ADConnectSecurityCore(BaseCore):
                 sid=account_info.get('sid')
             )
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Failed to analyze AD Connect service account: {e}")
             # Return minimal account info for error cases
             return ADConnectServiceAccount(
@@ -181,12 +181,12 @@ class ADConnectSecurityCore(BaseCore):
                 sid=None
             )
 
-    async def analyze_database_security(self, context: CascadeContext) -> ADConnectDatabase:
+    async def analyze_database_security(self, _context: CascadeContext) -> ADConnectDatabase:
         """
         Analyze Azure AD Connect database security.
 
         Args:
-            context: Cascade context for the analysis
+            _context: Cascade context for the analysis
 
         Returns:
             ADConnectDatabase: Database security analysis results
@@ -211,7 +211,7 @@ class ADConnectSecurityCore(BaseCore):
                 connection_string=db_info.get('connection_string', '')
             )
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Failed to analyze AD Connect database: {e}")
             return ADConnectDatabase(
                 instance_name="ADSync2019",
@@ -223,12 +223,12 @@ class ADConnectSecurityCore(BaseCore):
                 connection_string=""
             )
 
-    async def analyze_configuration(self, context: CascadeContext) -> ADConnectConfiguration:
+    async def analyze_configuration(self, _context: CascadeContext) -> ADConnectConfiguration:
         """
         Analyze Azure AD Connect configuration.
 
         Args:
-            context: Cascade context for the analysis
+            _context: Cascade context for the analysis
 
         Returns:
             ADConnectConfiguration: Configuration analysis results
@@ -253,7 +253,7 @@ class ADConnectSecurityCore(BaseCore):
                 source_domains=domains.get('source', [])
             )
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Failed to analyze AD Connect configuration: {e}")
             return ADConnectConfiguration(
                 sync_interval=30,
@@ -329,7 +329,7 @@ class ADConnectSecurityCore(BaseCore):
             logger.error(f"Failed to get ADSync service info: {e}")
             return {}
 
-    async def _analyze_service_account_details(self, service_info: Dict[str, Any]) -> Dict[str, Any]:
+    async def _analyze_service_account_details(self, _service_info: Dict[str, Any]) -> Dict[str, Any]:
         """Analyze service account details."""
         try:
             # Get service account from registry
@@ -394,7 +394,7 @@ class ADConnectSecurityCore(BaseCore):
 
         return privileges
 
-    async def _check_password_policy_compliance(self, account_info: Dict[str, Any]) -> bool:
+    async def _check_password_policy_compliance(self, _account_info: Dict[str, Any]) -> bool:
         """Check if service account complies with password policy."""
         try:
             # This is a simplified check - in practice, you'd need domain policy analysis
@@ -441,12 +441,12 @@ class ADConnectSecurityCore(BaseCore):
             logger.error(f"Failed to get LocalDB info: {e}")
             return {}
 
-    async def _check_database_encryption(self, db_info: Dict[str, Any]) -> str:
+    async def _check_database_encryption(self, _db_info: Dict[str, Any]) -> str:
         """Check database encryption status."""
         # Simplified check - in practice, would query database encryption status
         return "TDE_Enabled"  # Placeholder
 
-    async def _analyze_backup_status(self, db_info: Dict[str, Any]) -> Dict[str, Any]:
+    async def _analyze_backup_status(self, _db_info: Dict[str, Any]) -> Dict[str, Any]:
         """Analyze database backup status."""
         # Simplified check - in practice, would check backup history
         return {
@@ -484,7 +484,7 @@ class ADConnectSecurityCore(BaseCore):
 
         return config
 
-    async def _parse_sync_rules(self, config_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    async def _parse_sync_rules(self, _config_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Parse synchronization rules."""
         # Simplified - in practice, would parse actual sync rules
         return []

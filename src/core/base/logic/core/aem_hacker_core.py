@@ -18,7 +18,6 @@
 # limitations under the License.
 
 """
-TODO FIXME DELETE THIS
 AEM Hacker Core - Comprehensive Adobe Experience Manager Security Assessment
 
 This core implements advanced AEM vulnerability scanning patterns based on
@@ -36,7 +35,7 @@ import time
 from dataclasses import dataclass, field
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from threading import Thread
-from typing import List, Dict, Optional, Any, cast, Tuple
+from typing import List, Dict, Optional, Any, cast
 from urllib.parse import urljoin
 
 from src.core.base.common.base_core import BaseCore

@@ -5,13 +5,17 @@ import sys
 
 path = r'c:\Dev\PyAgent\lint_results.json'
 if len(sys.argv) < 2:
-    print("Usage: python remove_lint_entry.py <file_path>")
+    print("Usage: python remove_lint_entry.py <file_path1> <file_path2> ...")
     exit(1)
 
-target_file = sys.argv[1].replace('/', '\\')
-# If the path starts with c:\Dev\PyAgent\, strip it to match the json format
-if target_file.lower().startswith(r'c:\dev\pyagent\\'):
-    target_file = target_file[16:]
+target_files = [f.replace('/', '\\') for f in sys.argv[1:]]
+# Strip c:\Dev\PyAgent\ from each
+processed_targets = []
+for f in target_files:
+    if f.lower().startswith(r'c:\dev\pyagent\\'):
+        processed_targets.append(f[16:].lower())
+    else:
+        processed_targets.append(f.lower())
 
 if not os.path.exists(path):
     print(f"Error: {path} not found")
@@ -21,15 +25,15 @@ with open(path, 'r', encoding='utf-8') as f:
     data = json.load(f)
 
 original_count = len(data)
-filtered_data = [entry for entry in data if entry['file'].lower() != target_file.lower()]
+filtered_data = [entry for entry in data if entry['file'].lower() not in processed_targets]
 new_count = len(filtered_data)
 
 if original_count == new_count:
-    print(f"Entry for {target_file} not found or already removed.")
+    print(f"No entries for {processed_targets} found or already removed.")
 else:
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(filtered_data, f, indent=2)
-    print(f"Removed entry for {target_file}. {original_count} -> {new_count}")
+    print(f"Removed {original_count - new_count} entries. {original_count} -> {new_count}")
 
 total_issues = 0
 for entry in filtered_data:

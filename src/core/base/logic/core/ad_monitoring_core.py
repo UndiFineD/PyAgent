@@ -33,7 +33,7 @@ import logging
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Protocol, Set, Tuple
+from typing import Any, Dict, List, Optional, Protocol, Set, Tuple, cast
 from enum import Enum
 import time
 import threading

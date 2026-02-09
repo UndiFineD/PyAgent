@@ -22,7 +22,7 @@ Based on patterns from Active-Directory-Exploitation-Cheat-Sheet repository.
 """
 
 import logging
-from typing import Dict, List, Optional, Set, Any
+from typing import Dict, List, Optional, Set, Any, cast
 from dataclasses import dataclass
 from enum import Enum
 
@@ -324,11 +324,12 @@ class ActiveDirectoryAnalysisCore:
         ]
 
         for ace in dangerous_aces:
+            obj_dn = cast(str, ace["object"])
             acl_vuln = ADVulnerability(
                 vulnerability_type="dangerous_acl",
                 severity="critical",
                 description=f"Dangerous ACL: {ace['description']}",
-                affected_objects=[ace["object"]],
+                affected_objects=[obj_dn],
                 exploit_path=[
                     f"User {ace['principal']} exploits {', '.join(ace['rights'])} rights",
                     "Modifies group membership",
@@ -681,7 +682,7 @@ class ActiveDirectoryAnalysisCore:
                         vulnerability_type="LabyrinthChollima_Trojanized_App",
                         severity="critical",
                         description=f"Trojanized application patterns detected: {', '.join(suspicious_props)}",
-                        affected_objects=[obj.distinguished_name],
+                        affected_objects=[dn],
                         exploit_path=["Legitimate application download", "DLL injection", "Trojanized execution"],
                         mitigation=(
                             "Verify application integrity, use application allowlisting, "

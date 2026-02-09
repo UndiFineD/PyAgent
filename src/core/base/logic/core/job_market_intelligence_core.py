@@ -299,7 +299,7 @@ class JobMarketIntelligenceCore(BaseCore):
         job_type: Optional[str] = None,
         company_type: Optional[str] = None,
         is_usa: Optional[bool] = None,
-        format: str = "markdown"
+        output_format: str = "markdown"
     ) -> str:
         """
         Generate a market intelligence report
@@ -308,21 +308,21 @@ class JobMarketIntelligenceCore(BaseCore):
             job_type: Filter by job type
             company_type: Filter by company type
             is_usa: Filter by location
-            format: Output format (markdown, json, html)
+            output_format: Output format (markdown, json, html)
             
         Returns:
             Formatted report
         """
         stats = await self.analyze_market_data(job_type, company_type, is_usa)
         
-        if format == "json":
+        if output_format == "json":
             return json.dumps(asdict(stats), indent=2, default=str)
         
-        elif format == "markdown":
+        elif output_format == "markdown":
             return await self._generate_markdown_report(stats, job_type, company_type, is_usa)
         
         else:
-            raise ValueError(f"Unsupported format: {format}")
+            raise ValueError(f"Unsupported format: {output_format}")
 
     async def _generate_markdown_report(
         self,
@@ -396,7 +396,7 @@ class JobMarketIntelligenceCore(BaseCore):
         filepath: str,
         job_type: Optional[str] = None,
         company_type: Optional[str] = None,
-        format: str = "json"
+        output_format: str = "json"
     ) -> None:
         """
         Export job data to file
@@ -405,7 +405,7 @@ class JobMarketIntelligenceCore(BaseCore):
             filepath: Output file path
             job_type: Filter by job type
             company_type: Filter by company type
-            format: Export format (json, csv)
+            output_format: Export format (json, csv)
         """
         # Filter jobs
         filtered_jobs = self.job_database
@@ -415,12 +415,12 @@ class JobMarketIntelligenceCore(BaseCore):
         if company_type:
             filtered_jobs = [j for j in filtered_jobs if j.company_type == company_type]
 
-        if format == "json":
+        if output_format == "json":
             data = [asdict(job) for job in filtered_jobs]
             with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=2, default=str)
         
-        elif format == "csv":
+        elif output_format == "csv":
             import csv
             with open(filepath, 'w', newline='', encoding='utf-8') as f:
                 if filtered_jobs:

@@ -35,7 +35,7 @@ import logging
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Protocol, Union, Callable
+from typing import Any, Dict, List, Optional, Protocol, Union, Callable, cast
 from concurrent.futures import ThreadPoolExecutor
 import threading
 

@@ -33,8 +33,8 @@ class ImprovementExporter:
     def __init__(self) -> None:
         self.formats: list[str] = ["json", "csv"]
 
-    def export(self, improvements: list[Improvement], format: str = "json") -> str:
-        fmt = format.lower()
+    def export(self, improvements: list[Improvement], output_format: str = "json") -> str:
+        fmt = output_format.lower()
         if fmt == "json":
             rows: list[dict[str, Any]] = []
             for imp in improvements:

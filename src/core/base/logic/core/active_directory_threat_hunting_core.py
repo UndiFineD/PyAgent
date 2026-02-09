@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TODO FIXME DELETE THIS
 # Active Directory Threat Hunting Core - AD Security Analysis and Monitoring
 # Based on patterns from Active_Directory_Advanced_Threat_Hunting repository
 
@@ -111,8 +110,8 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
             await self.initialize_baselines()
             self.logger.info("Active Directory Threat Hunting Core initialized successfully")
             return True
-        except Exception as e:
-            self.logger.error(f"Failed to initialize Active Directory Threat Hunting Core: {e}")
+        except Exception:  # noqa: BLE001
+            self.logger.exception("Failed to initialize Active Directory Threat Hunting Core")
             return False
 
     async def load_threat_detection_rules(self) -> None:
@@ -164,8 +163,8 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
 
     async def enumerate_ad_objects(
         self,
-        domain_controller: Optional[str] = None,
-        search_base: Optional[str] = None,
+        _domain_controller: Optional[str] = None,
+        _search_base: Optional[str] = None,
         object_types: Optional[List[ADObjectType]] = None
     ) -> List[ADObject]:
         """
@@ -279,8 +278,8 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
     async def perform_threat_hunt(
         self,
         hunt_type: str,
-        target_objects: Optional[List[str]] = None,
-        custom_rules: Optional[Dict[str, Any]] = None
+        target_objects: Optional[List[str]] = None,  # noqa: ARG002
+        custom_rules: Optional[Dict[str, Any]] = None  # noqa: ARG002
     ) -> HuntingResult:
         """
         Perform a threat hunting operation
@@ -574,19 +573,19 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
     async def generate_security_report(
         self,
         include_findings: bool = True,
-        format: str = "markdown"
+        output_format: str = "markdown"
     ) -> str:
         """
         Generate a comprehensive security report
 
         Args:
             include_findings: Whether to include detailed findings
-            format: Output format (markdown, json)
+            output_format: Output format (markdown, json)
 
         Returns:
             Formatted security report
         """
-        if format == "json":
+        if output_format == "json":
             report_data: Dict[str, Any] = {
                 "generated_at": datetime.now().isoformat(),
                 "total_objects": len(self.ad_objects),
@@ -615,7 +614,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
 
             return json.dumps(report_data, indent=2, default=str)
 
-        elif format == "markdown":
+        elif output_format == "markdown":
             report = "# Active Directory Threat Hunting Report\n\n"
             report += f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
             report += f"**Total AD Objects Analyzed:** {len(self.ad_objects)}\n\n"
@@ -659,12 +658,12 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
             return report
 
         else:
-            raise ValueError(f"Unsupported format: {format}")
+            raise ValueError(f"Unsupported format: {output_format}")
 
     async def export_findings(
         self,
         filepath: str,
-        format: str = "json",
+        output_format: str = "json",
         include_history: bool = True
     ) -> None:
         """
@@ -672,10 +671,10 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
 
         Args:
             filepath: Output file path
-            format: Export format (json, csv)
+            output_format: Export format (json, csv)
             include_history: Whether to include hunting history
         """
-        if format == "json":
+        if output_format == "json":
             data = {
                 "export_timestamp": datetime.now().isoformat(),
                 "findings": [
@@ -708,7 +707,6 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
                     for h in self.hunting_history
                 ]
 
-            import json
             with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=2, default=str)
 

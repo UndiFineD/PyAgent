@@ -409,9 +409,9 @@ class ImprovementsAgent(BaseAgent):
         return self._analytics
 
     # ========== Export ==========
-    def export_improvements(self, format: str = "json") -> str:
+    def export_improvements(self, output_format: str = "json") -> str:
         """Export improvements to various formats."""
-        if format == "json":
+        if output_format == "json":
             data: list[dict[str, Any]] = [
                 {
                     "id": i.id,
@@ -430,7 +430,7 @@ class ImprovementsAgent(BaseAgent):
                 for i in self._improvements
             ]
             return json.dumps(data, indent=2)
-        elif format == "markdown":
+        elif output_format == "markdown":
             lines = ["# Improvements\n"]
             for priority in sorted(ImprovementPriority, key=lambda p: p.value, reverse=True):
                 imps = self.get_improvements_by_priority(priority)

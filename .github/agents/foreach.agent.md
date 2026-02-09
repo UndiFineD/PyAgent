@@ -28,23 +28,23 @@ inputs:
     unit_id: "a monotonically increasing integer per file for tracking"
     ci_timeout: "CI system timeout in seconds (e.g., GitHub Actions default 21600)"
 
-  file: path (required)            # Path to the user-provided file to process
-  mode: 'line' | 'paragraph'       # How to split the file (default: 'line')
-  task: string (required)          # Natural-language instruction for each unit
-  batch_size: int (optional)       # Number of units to process per commit (default: 50)
-  auto_push: bool (optional)       # Whether to push commits automatically (default: false)
-  branch_strategy: 'no_branch' | 'single_branch' | 'per_batch' (optional) # Default: 'no_branch'. 'no_branch' commits locally or to a temporary run branch and does not open PRs by default. 'single_branch' creates one branch per run. 'per_batch' creates a branch per batch (use sparingly and only with explicit user approval).
-  allow_test_modification: bool (optional) # Whether the agent is permitted to create or modify tests when necessary (default: false). If true, the agent may update or generate tests to match intentional code changes, but must run tests and report results before staging.
-  max_parallel: int (optional)     # Max concurrent workers (default: 4) 
-  distributed_mode: bool (optional)  # Run across multiple collaborating agents (default: false)
-  num_workers: int (optional)       # Number of worker agents to spawn for distributed_mode (default: 4)
-  coordinator_agent: string (optional) # Name/role of coordinator agent (default: auto-select)
-  communication_channel: 'recorder' | 'git' | 'issue' (optional) # Channel workers use to coordinate (default: 'recorder')
-  conflict_strategy: 'requeue' | 'merge' | 'abort' (optional)  # How to handle conflicting edits (default: 'requeue')
-  worker_timeout: int (optional)    # Seconds before a worker is considered stalled (default: 300)
-  shard_lock_prefix: string (optional) # Lock namespace prefix for distributed edits (default: 'foreach')
-  retry_strategy: 'auto' | 'manual' | 'skip' (optional) # How to handle failed units. 'auto' retries automatically (max 3 attempts), 'manual' pauses for user intervention, 'skip' continues and marks unit skipped. Default: 'manual'
-  test_strategy: 'strict' | 'relaxed' | 'skip' (optional) # Default: 'strict'. 'strict': fail batch on test failures (no test modification). 'relaxed': attempt repairs if `allow_test_modification` is true. 'skip': do not run tests.
+  file: "path (required)"            # Path to the user-provided file to process
+  mode: "'line' | 'paragraph'"       # How to split the file (default: 'line')
+  task: "string (required)"          # Natural-language instruction for each unit
+  batch_size: "int (optional)"       # Number of units to process per commit (default: 50)
+  auto_push: "bool (optional)"       # Whether to push commits automatically (default: false)
+  branch_strategy: "'no_branch' | 'single_branch' | 'per_batch' (optional)" # Default: 'no_branch'. 'no_branch' commits locally or to a temporary run branch and does not open PRs by default. 'single_branch' creates one branch per run. 'per_batch' creates a branch per batch (use sparingly and only with explicit user approval).
+  allow_test_modification: "bool (optional)" # Whether the agent is permitted to create or modify tests when necessary (default: false). If true, the agent may update or generate tests to match intentional code changes, but must run tests and report results before staging.
+  max_parallel: "int (optional)"     # Max concurrent workers (default: 4) 
+  distributed_mode: "bool (optional)"  # Run across multiple collaborating agents (default: false)
+  num_workers: "int (optional)"       # Number of worker agents to spawn for distributed_mode (default: 4)
+  coordinator_agent: "string (optional)" # Name/role of coordinator agent (default: auto-select)
+  communication_channel: "'recorder' | 'git' | 'issue' (optional)" # Channel workers use to coordinate (default: 'recorder')
+  conflict_strategy: "'requeue' | 'merge' | 'abort' (optional)"  # How to handle conflicting edits (default: 'requeue')
+  worker_timeout: "int (optional)"    # Seconds before a worker is considered stalled (default: 300)
+  shard_lock_prefix: "string (optional)" # Lock namespace prefix for distributed edits (default: 'foreach')
+  retry_strategy: "'auto' | 'manual' | 'skip' (optional)" # How to handle failed units. 'auto' retries automatically (max 3 attempts), 'manual' pauses for user intervention, 'skip' continues and marks unit skipped. Default: 'manual'
+  test_strategy: "'strict' | 'relaxed' | 'skip' (optional)" # Default: 'strict'. 'strict': fail batch on test failures (no test modification). 'relaxed': attempt repairs if `allow_test_modification` is true. 'skip': do not run tests.
 
 constraints:
   - Do not change files outside the user's explicit scope unless asked.

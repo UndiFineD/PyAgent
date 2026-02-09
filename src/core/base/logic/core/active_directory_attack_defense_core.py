@@ -17,7 +17,7 @@
 
 import json
 import logging
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, cast
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -148,8 +148,8 @@ class ActiveDirectoryAttackDefenseCore:
             await self.initialize_defense_assessments()
             self.logger.info("Active Directory Attack & Defense Core initialized successfully")
             return True
-        except Exception as e:
-            self.logger.error(f"Failed to initialize Active Directory Attack & Defense Core: {e}")
+        except Exception:  # noqa: BLE001
+            self.logger.exception("Failed to initialize Active Directory Attack & Defense Core")
             return False
 
     async def load_attack_vectors(self) -> None:
@@ -500,7 +500,7 @@ class ActiveDirectoryAttackDefenseCore:
 
         return assessments
 
-    async def analyze_kill_chains(self, attack_vectors: List[AttackVector]) -> List[KillChainAnalysis]:
+    async def analyze_kill_chains(self, _attack_vectors: List[AttackVector]) -> List[KillChainAnalysis]:
         """Analyze potential kill chain progressions"""
         analyses = []
 
@@ -541,7 +541,7 @@ class ActiveDirectoryAttackDefenseCore:
     async def calculate_overall_score(
         self,
         attack_vectors: List[AttackVector],
-        defense_assessments: Dict[DefenseControl, DefenseAssessment]
+        _defense_assessments: Dict[DefenseControl, DefenseAssessment]
     ) -> float:
         """Calculate overall security posture score"""
         # Base score
@@ -602,7 +602,7 @@ class ActiveDirectoryAttackDefenseCore:
     async def generate_priority_actions(
         self,
         critical_gaps: List[str],
-        defense_assessments: Dict[DefenseControl, DefenseAssessment]
+        defense_assessments: Dict[DefenseControl, DefenseAssessment]  # noqa: ARG002
     ) -> List[str]:
         """Generate priority actions for security improvement"""
         actions = []
@@ -628,8 +628,8 @@ class ActiveDirectoryAttackDefenseCore:
     async def simulate_attack_chain(
         self,
         start_technique: AttackTechnique,
-        available_techniques: List[AttackTechnique],
-        defense_posture: Dict[DefenseControl, bool]
+        _available_techniques: List[AttackTechnique],
+        _defense_posture: Dict[DefenseControl, bool]
     ) -> KillChainAnalysis:
         """
         Simulate an attack chain from a starting technique
@@ -670,19 +670,19 @@ class ActiveDirectoryAttackDefenseCore:
     async def generate_attack_report(
         self,
         posture: SecurityPosture,
-        format: str = "json"
+        output_format: str = "json"
     ) -> str:
         """
         Generate comprehensive attack & defense report
 
         Args:
             posture: Security posture assessment
-            format: Output format (json, html, markdown)
+            output_format: Output format (json, html, markdown)
 
         Returns:
             Formatted report
         """
-        if format == "json":
+        if output_format == "json":
             report_data = {
                 "assessment_id": posture.assessment_id,
                 "domain": posture.domain,
@@ -714,7 +714,7 @@ class ActiveDirectoryAttackDefenseCore:
 
             return json.dumps(report_data, indent=2, default=str)
 
-        elif format == "markdown":
+        elif output_format == "markdown":
             report = "# Active Directory Security Posture Report\n\n"
             report += f"**Domain:** {posture.domain}\n\n"
             report += f"**Assessment Date:** {posture.assessment_date.strftime('%Y-%m-%d %H:%M:%S')}\n\n"
@@ -764,13 +764,13 @@ class ActiveDirectoryAttackDefenseCore:
             return report
 
         else:
-            raise ValueError(f"Unsupported format: {format}")
+            raise ValueError(f"Unsupported format: {output_format}")
 
     async def export_report(
         self,
         posture: SecurityPosture,
         filepath: str,
-        format: str = "json"
+        output_format: str = "json"
     ) -> None:
         """
         Export security posture report to file
@@ -778,9 +778,9 @@ class ActiveDirectoryAttackDefenseCore:
         Args:
             posture: Security posture to export
             filepath: Output file path
-            format: Export format
+            output_format: Export format
         """
-        report_content = await self.generate_attack_report(posture, format)
+        report_content = await self.generate_attack_report(posture, output_format)
 
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(report_content)
@@ -808,7 +808,7 @@ class ActiveDirectoryAttackDefenseCore:
 
         stats["most_common_attacks"] = sorted(
             [{"technique": k, "count": v} for k, v in attack_counts.items()],
-            key=lambda x: x["count"],
+            key=lambda x: int(cast(Any, x)["count"]),
             reverse=True
         )[:10]
 
