@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 144
+Total Files: 121
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -16,7 +16,6 @@ Total Files: 144
 | 0xSojalSec_homoglyph_char_manager.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-homoglyph\generator\char_manager', providing core logic for its parent repository. |
 | 0xSojalSec_ics_forensics_tools_encryption.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-ics-forensics-tools\src\forensic\plugins\CodeSysV3\codesysv3_protocol\encryption', providing core logic for its parent repository. |
 | 0xSojalSec_ldapper_logging.py | This class provides a wrapper for the standard Python logging |
-| 0xSojalSec_pdf_extract_api_ocr_strategy.py | Base OCR Strategy Interface |
 | 0xSojalSec_wappalyzer_next_css.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-wappalyzer-next\wappalyzer\parsers\css', providing core logic for its parent repository. |
 | 0xSojalSec_wappalyzer_next_meta.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-wappalyzer-next\wappalyzer\parsers\meta', providing core logic for its parent repository. |
 | 0xsojalsec_graphsearch_py_base_ebcd7e868604.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphsearch', providing core logic for its parent repository. |
@@ -34,27 +33,6 @@ Total Files: 144
 | 0xsojalsec_lumina_dimoo_py_prompt_utils_686c20ce886a.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_lumina_dimoo_py_text_understanding_generator_cd6cfb9bae62.py | Text understanding generator |
 | 0xsojalsec_malpacks_py_cli_e7f6434e9c6c.py | #    #    ##    #       #####     ##     ####   #    #   #### |
-| 0xsojalsec_moon_dev_ai_agents_py_angleconfirm_btfinal_c05b285997be.py | A trend-based trading strategy using William D. Gann's angular analysis combined with 5-period SMA for confirmation. |
-| 0xsojalsec_moon_dev_ai_agents_py_fractaldivergence_btfinal_a040441dde42.py | Implementation of the FractalDivergence strategy. |
-| 0xsojalsec_moon_dev_ai_agents_py_retracementcontra_pkg_6a38e88624d1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_moon_dev_ai_agents', providing core logic for its parent repository. |
-| 0xsojalsec_pdf_extract_api_py_marker_34e7464ee71a.py | Marker OCR Strategy |
-| 0xsojalsec_pdf_extract_api_py_ocr_strategy_774e565f5af5.py | Base OCR Strategy Interface |
-| 0xsojalsec_pdf_extract_api_py_tesseract_4ae45dead928.py | Tesseract OCR Strategy |
-| 0xsojalsec_pdfalyzer_py_debugging_5f1c77b70765.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pdfalyzer', providing core logic for its parent repository. |
-| 0xsojalsec_pdfalyzer_py_dict_helper_bf50355b1ca4.py | Fun with dicts. |
-| 0xsojalsec_pdfalyzer_py_indeterminate_node_d2ecee6c8518.py | Some nodes cannot be placed until we have walked the rest of the tree. For instance |
-| 0xsojalsec_pdfalyzer_py_number_helper_87dbf698f638.py | Some simple math helpers. |
-| 0xsojalsec_pdfalyzer_py_pdf_object_helper_01152ce5678f.py | Some methods to help with the direct manipulation/processing of PyPDF's PdfObjects |
-| 0xsojalsec_pdfalyzer_py_pdf_object_properties_4765a51110ab.py | Decorator for PyPDF PdfObject that extracts a couple of properties (type, label, etc). |
-| 0xsojalsec_pdfalyzer_py_pdf_tree_verifier_263e6b61d389.py | Verify that the PDF tree is complete/contains all the nodes in the PDF file. |
-| 0xsojalsec_pdfalyzer_py_stream_objects_table_c79a870d1ce0.py | Build a rich table to show the sizes of embedded streams. |
-| 0xsojalsec_pi0_lerobot_py_mano_utils_e660c49ffb65.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_pi0_lerobot_py_multiview_pose_estimator_83359d322535.py | Projects 3D keypoints (with confidence) to 2D image coordinates for multiple views. |
-| 0xsojalsec_pi0_lerobot_py_rerun_log_utils_94841bd935b9.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_pi0_lerobot_py_vggt_load_utils_f3b77171988b.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_pi0_lerobot_py_video_decode_benchmark_f8cd63256595.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pi0_lerobot', providing core logic for its parent repository. |
-| 0xsojalsec_pi0_lerobot_py_video_io_9a5cab92a846.py | Video class with similar usage to a list object. |
-| 0xsojalsec_pi0_lerobot_py_visualize_dataset_rerun_7186167b6b45.py | Visualize data of **all** frames of any episode of a dataset of type LeRobotDataset. |
 | 0xsojalsec_poastal_py_adobe_32af7187a86f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
 | 0xsojalsec_poastal_py_duolingo_b4949bfc0663.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
 | 0xsojalsec_poastal_py_hulu_14c99e2afad2.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
@@ -134,7 +112,6 @@ Total Files: 144
 | _0xsojalsec_llava_next_convert_sqa_to_llava_base_prompt.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_LLaVA_NeXT_convert_sqa_to_llava_base_prompt', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_colorpp.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_colorpp', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_run_gcp_module.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_run_gcp_module', providing core logic for its parent repository. |
-| _0xsojalsec_pdf_extract_api_ocr_strategy.py | Base OCR Strategy Interface |
 | _0xsojalsec_praisonai_config.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | _0xsojalsec_videoagent_base_text_processor.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_VideoAgent_base_text_processor', providing core logic for its parent repository. |
 | _0xsojalsec_videoagent_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
