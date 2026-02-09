@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 5653
+Total Files: 4772
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -8,12 +8,10 @@ Total Files: 5653
 | 0xSojalSec_HoloCine_base.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-HoloCine\diffsynth\processors\base', providing core logic for its parent repository. |
 | 0xSojalSec_IDOR_Forge_banner.py | '####:'########:::'#######::'########:::::::::::'########::'#######::'########:::'######:::'########: |
 | 0xSojalSec_LLaVA_NeXT_convert_sqa_to_llava_base_prompt.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-LLaVA-NeXT\scripts\archived\convert_sqa_to_llava_base_prompt', providing core logic for its parent repository. |
-| 0xSojalSec_Made_With_ML_test_dataset.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xSojalSec_MobileAgent_prompt.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-MobileAgent\Mobile-Agent-v2\MobileAgent\prompt', providing core logic for its parent repository. |
 | 0xSojalSec_Nebula_colorpp.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-Nebula\teamserver\core\colorpp\colorpp', providing core logic for its parent repository. |
 | 0xSojalSec_Nebula_run_gcp_module.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-Nebula\teamserver\core\run_module\run_gcp_module', providing core logic for its parent repository. |
 | 0xSojalSec_NetExec_bloodhound.py | Adds a user to the BloodHound graph database. |
-| 0xSojalSec_NetExec_dfscoerce.py | LISTENER    Listener Address (defaults to 127.0.0.1) |
 | 0xSojalSec_NetExec_enum_impersonate.py | Enumerate SQL Server users with impersonation rights |
 | 0xSojalSec_NetExec_enum_links.py | Enumerate SQL Server linked servers |
 | 0xSojalSec_NetExec_enum_logins.py | Enumerate SQL Server logins |
@@ -22,10 +20,7 @@ Total Files: 5653
 | 0xSojalSec_NetExec_iis.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xSojalSec_NetExec_link_enable_xp.py | Enable or disable xp_cmdshell on a linked SQL server |
 | 0xSojalSec_NetExec_link_xpcmd.py | Run xp_cmdshell commands on a linked SQL server |
-| 0xSojalSec_NetExec_petitpotam.py | LISTENER            IP of your listener |
-| 0xSojalSec_NetExec_printerbug.py | LISTENER    Listener Address (defaults to 127.0.0.1) |
 | 0xSojalSec_NetExec_proto_args.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-NetExec\nxc\protocols\wmi\proto_args', providing core logic for its parent repository. |
-| 0xSojalSec_NetExec_shadowcoerce.py | IPSC             Use IsPathShadowCopied (default: False). ex. IPSC=true |
 | 0xSojalSec_NetExec_whoami.py | Basic enumeration of provided user information and privileges |
 | 0xSojalSec_PraisonAI_config.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | 0xSojalSec_VideoAgent_base_text_processor.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-VideoAgent\tools\DiffSinger\data_gen\tts\txt_processors\base_text_processor', providing core logic for its parent repository. |
@@ -34,8 +29,6 @@ Total Files: 5653
 | 0xSojalSec_WhisperLiveKit_generation_progress.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-WhisperLiveKit\whisperlivekit\simul_whisper\generation_progress', providing core logic for its parent repository. |
 | 0xSojalSec_factorio_learning_environment_profits.py | Calculate the dynamic production flows between two states |
 | 0xSojalSec_factorio_learning_environment_system_prompt_formatter.py | Formats the system prompt for the agent, only including the task and instructions. |
-| 0xSojalSec_factorio_learning_environment_test_print.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xSojalSec_factorio_learning_environment_test_score.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xSojalSec_h2o_llmstudio_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xSojalSec_homoglyph_char_manager.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-homoglyph\generator\char_manager', providing core logic for its parent repository. |
 | 0xSojalSec_http_request_smuggler_CL_TE.py | GET /robots.txt HTTP/1.1 |
@@ -49,12 +42,9 @@ Total Files: 5653
 | 0xSojalSec_malwoverview_colors.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-malwoverview\malwoverview\utils\colors', providing core logic for its parent repository. |
 | 0xSojalSec_pdf_extract_api_ocr_strategy.py | Base OCR Strategy Interface |
 | 0xSojalSec_pdfalyzer_exceptions.py | For errors that arise while walking the document tree |
-| 0xSojalSec_pdfalyzer_test_pdf_tree_node.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xSojalSec_pipeless_init.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-pipeless\examples\wattermark\init', providing core logic for its parent repository. |
 | 0xSojalSec_pipeless_process.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-pipeless\examples\custom-data\process', providing core logic for its parent repository. |
-| 0xSojalSec_pipeless_test.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-pipeless\pipeless\src\test', providing core logic for its parent repository. |
 | 0xSojalSec_roampal_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xSojalSec_wa_crypt_tools_test_db.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xSojalSec_wappalyzer_next_css.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-wappalyzer-next\wappalyzer\parsers\css', providing core logic for its parent repository. |
 | 0xSojalSec_wappalyzer_next_meta.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-wappalyzer-next\wappalyzer\parsers\meta', providing core logic for its parent repository. |
 | 0xsojalsec_evermemos_py_addon_bean_order_strategy_b33a6af0bacf.py | Addon Bean ordering strategy module |
@@ -139,7 +129,6 @@ Total Files: 5653
 | 0xsojalsec_evermemos_py_discriminator_08659fdb281e.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_evermemos_py_doc_base_971b79cb2c07.py | Elasticsearch document base class |
 | 0xsojalsec_evermemos_py_document_base_03ccfe523922.py | MongoDB Document Base Class |
-| 0xsojalsec_evermemos_py_elasticsearch_client_factory_a26090be092f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_evermemos_py_elasticsearch_lifespan_c2aaaa90ba16.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_evermemos_py_empty_evidence_completion_d9facfc5e5d7.py | Evidence completion utilities for profile memory extraction. |
 | 0xsojalsec_evermemos_py_entity_b58411cefdf0.py | Entity document model |
@@ -157,7 +146,6 @@ Total Files: 5653
 | 0xsojalsec_evermemos_py_es_rebuild_index_9c383db4b09f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_evermemos', providing core logic for its parent repository. |
 | 0xsojalsec_evermemos_py_es_sync_docs_0c37cbb89b7e.py | Synchronize MongoDB data to the specified Elasticsearch index. |
 | 0xsojalsec_evermemos_py_es_utils_934d236dca71.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_evermemos_py_event_listener_b8830de2ef5e.py | Event listener module |
 | 0xsojalsec_evermemos_py_event_log_a1fd270d4880.py | Event log Elasticsearch document |
 | 0xsojalsec_evermemos_py_event_log_collection_d5360208fd7d.py | Event Log Milvus Collection Definition |
 | 0xsojalsec_evermemos_py_event_log_converter_790960b55658.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -242,19 +230,16 @@ Total Files: 5653
 | 0xsojalsec_evermemos_py_milvus_sync_docs_b67d56454bcd.py | Sync MongoDB data to Milvus |
 | 0xsojalsec_evermemos_py_mongo_fix_episodic_memory_missing_vector_c7ec2da91d66.py | Fix missing vector fields in historical EpisodicMemory documents. |
 | 0xsojalsec_evermemos_py_mongo_utils_8876b7288c1d.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_evermemos_py_mongodb_client_factory_b2e33e3e052c.py | MongoDB Client Factory |
 | 0xsojalsec_evermemos_py_mongodb_lifespan_dfb6ecdf9c56.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_evermemos_py_msg_group_queue_manager_factory_4324d5ea6779.py | Message group queue manager factory |
 | 0xsojalsec_evermemos_py_openai_adapter_7a13751ff43b.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_evermemos_py_openai_compatible_client_b88085017700.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_evermemos_py_openai_provider_7ec2d8999d66.py | OpenAI LLM provider implementation using OpenRouter. |
 | 0xsojalsec_evermemos_py_orchestrator_d8a64fd49993.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_evermemos_py_profile_helpers_5d638d754417.py | Profile-level helpers: payload conversion, accumulation, and merging. |
 | 0xsojalsec_evermemos_py_profile_middleware_c2493023aebc.py | Performance Profiling Middleware |
 | 0xsojalsec_evermemos_py_project_helpers_86fc8827933f.py | Project-related normalization helpers. |
 | 0xsojalsec_evermemos_py_project_meta_9e79dc891b64.py | Get the project name from environment variables |
 | 0xsojalsec_evermemos_py_project_path_4ba6b98f7d05.py | Get the base scan path |
-| 0xsojalsec_evermemos_py_protocol_ee82e3cfdec9.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_evermemos_py_rate_limiter_7c288ae6d25c.py | Async rate limiting decorator module based on aiolimiter |
 | 0xsojalsec_evermemos_py_recycle_consumer_base_497e992d218f.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_evermemos_py_redis_data_processor_c2778350eb81.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -290,7 +275,6 @@ Total Files: 5653
 | 0xsojalsec_evermemos_py_task_manager_d9dd8b032c8a.py | Task status enumeration |
 | 0xsojalsec_evermemos_py_task_scan_registry_a0f537b29102.py | Scan directory registry |
 | 0xsojalsec_evermemos_py_tenant_aware_async_document_21def601f7cf.py | Tenant-aware Elasticsearch AsyncDocument |
-| 0xsojalsec_evermemos_py_tenant_aware_client_factory_3f4d1413ae3b.py | Tenant-aware MongoDB Client Factory |
 | 0xsojalsec_evermemos_py_tenant_aware_collection_28418e81e556.py | Tenant-aware Milvus Collection |
 | 0xsojalsec_evermemos_py_tenant_aware_collection_with_suffix_b761dbda2f5c.py | Tenant-aware Milvus Collection Management Class with Suffix and Alias Mechanism |
 | 0xsojalsec_evermemos_py_tenant_aware_mongo_client_7a0fb923d856.py | Tenant-aware MongoDB Client Proxy |
@@ -301,29 +285,6 @@ Total Files: 5653
 | 0xsojalsec_evermemos_py_tenant_key_utils_e8296b973124.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_evermemos_py_tenant_models_06457c9cffcf.py | Tenant information data model |
 | 0xsojalsec_evermemos_py_tenant_switch_15b27965f36b.py | Tenant configuration application ready listener |
-| 0xsojalsec_evermemos_py_test_addon_bean_order_strategy_d9ac6698c8e8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_bean_order_strategy_835597d45234.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_conv_memcell_extractor_79ce77130d57.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_conversation_status_raw_repository_b87543081469.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_datetime_utils_to_iso_format_45a2f4e5fd1c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_di_container_a6ec62d57f24.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_di_scanner_4ed26638008e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_embedding_reranker_providers_485baeff0b4f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_episodic_memory_es_repository_8bf1d12f644d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_episodic_memory_milvus_repository_1f320ca8efe8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_fetch_mem_service_87befe41e07a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_fixtures_1dbdbdc92a54.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_group_profile_simple_8c8cd2db456e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_keyword_vocabulary_milvus_repository_66200b728982.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_pickle_size_analysis_94cfd70e21ee.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_rate_limiter_quick_3c342aa66a21.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_rawdata_json_serialization_e7b369f24b7d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_redis_windows_cache_59a7d32abe7c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_smart_text_parser_fb97f4d2e6e8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_stability_database_ae79e6736571.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_evermemos_py_test_stability_integration_9ea416eaacd1.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_evermemos_py_test_tokenizer_factory_98532ce214f2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_evermemos_py_test_v1api_search_299133ac1f07.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_evermemos_py_text_utils_a180ff2cf270.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_evermemos_py_timeout_background_bd1535f7ad60.py | Timeout to background execution decorator |
 | 0xsojalsec_evermemos_py_tokenizer_factory_795814418fb0.py | Tokenizer Factory |
@@ -425,7 +386,6 @@ Total Files: 5653
 | 0xsojalsec_factorio_learning_environment_py_colour_manager_e0b8189884ae.py | Manages colors for Factorio entities based on their categories and status |
 | 0xsojalsec_factorio_learning_environment_py_common_solvers_9f2cab03025b.py | Common solvers used across multiple VQA tasks. |
 | 0xsojalsec_factorio_learning_environment_py_config_ef44bfc86c6c.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_factorio_learning_environment_py_conftest_38a77484e952.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_factorio_learning_environment_py_connection_layers_renderer_3074a8cc2773.py | Renderer for underground connections (belts and pipes) |
 | 0xsojalsec_factorio_learning_environment_py_connection_layers_renderer_4b0f8e3d9914.py | Renderer for underground connections (belts and pipes) |
 | 0xsojalsec_factorio_learning_environment_py_connection_renderer_28aa7dffa34a.py | Renders connections between related entities, like underground belts and pipes |
@@ -564,7 +524,6 @@ Total Files: 5653
 | 0xsojalsec_factorio_learning_environment_py_stone_wall_847374bd75a0.py | Stone wall renderer with connection logic |
 | 0xsojalsec_factorio_learning_environment_py_storage_tank_b25c936ff38e.py | Storage tank renderer |
 | 0xsojalsec_factorio_learning_environment_py_straight_rail_8b758dc6516e.py | Straight rail renderer |
-| 0xsojalsec_factorio_learning_environment_py_sweep_run_3834fad0500b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_factorio_learning_environment_py_system_prompt_formatter_3e2f8795e484.py | Formats the system prompt for the agent, only including the task and instructions. |
 | 0xsojalsec_factorio_learning_environment_py_system_prompt_generator_8dea75816e5a.py | Generates system prompts for the Factorio environment. |
 | 0xsojalsec_factorio_learning_environment_py_task_abc_5eb56bfd5fab.py | Verify if the task is completed based on the current state. |
@@ -573,99 +532,6 @@ Total Files: 5653
 | 0xsojalsec_factorio_learning_environment_py_technology_state_f8629a7e867e.py | Represents the state of a technology |
 | 0xsojalsec_factorio_learning_environment_py_templates_d244a6372402.py | Manages Jinja2 templates for VQA tasks. |
 | 0xsojalsec_factorio_learning_environment_py_terrain_7bdfd8740ada.py | Extended sprite extractor for Factorio resources and trees |
-| 0xsojalsec_factorio_learning_environment_py_test_achievements_c2a057451ecc.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_actions_multiagent_ae98ce0349ab.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_agent_instructions_04c4d3bad26e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_assemblers_c4c5f92d93c0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_ast_comprehensive_8ab129eb98d7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_auto_fueling_iron_smelting_factory_c0982c63508e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_auto_refilling_coal_4ee2f99bc246.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_blueprint_based_policies_8738bfe72b01.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_can_place_52008da8a3b4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_chemical_plants_90fb0c6bc377.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_cliffs_4ef931e1a44f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_connect_entities_dry_run_1142c0c116f0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_connect_pipes_2fce825b6fba.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_connect_poles_c805d936d3de.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_connect_underground_belts_4aa564be0003.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_connect_underground_pipes_08c4eda6ac9f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_connect_walls_2b0196fa33cb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_conversation_formatter_badf07cfebd7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_craft_8c817fc9cac4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_defence_bb6533c67100.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_drill_63067cfa4eca.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_edge_cases_801cbe1b8b9c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_elapsed_ticks_9b6a3c932b49.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_elapsed_ticks_da306ad5faf2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_electricity_unit_ac8ebdeb3700.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_eval_b0c7ed8175bf.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_extract_item_ac1f5c7c5357.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_factory_unit_4a88856fe7ed.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_fluid_handlers_0f314905365a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_fluid_processors_fd356e383bae.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_full_oil_chain_69112667444e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_functions_7c75a6f9b27b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_game_state_4c64f2e1fc76.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_get_entities_602b6af3b6ce.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_get_entity_c96c46d87a86.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_get_prototype_recipe_5a570cc7fe6d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_get_research_progress_52e52ed512bc.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_get_resource_patch_4d34b85e43aa.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_harvest_resource_7e0462df282c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_insert_item_b54a4a00edbf.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_inserters_03ef6d57d93a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_inspect_entities_185b5009db6d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_inspect_inventory_1cf4f8b51247.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_interface_2621dcc070d7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_kld_mean_sampler_22922b29d234.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_mcp_8def67bf2da3.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_factorio_learning_environment_py_test_mcts_chunker_9eac78c767f6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_messages_3818a2c8ca42.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_move_to_11da1dd37034.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_multi_drill_multi_furnace_183d1e69e57f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_multiple_drills_multiple_furnaces_0cefc36319cc.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_nearest_5a963c2aa682.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_nearest_buildable_9bc8d07dd1b8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_nuclear_reactor_91eb60a710e1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_objectives_7770d7aa9d69.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_observation_029947990403.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_observation_formatter_6f1106bfa58d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_pickup_entity_5ca08d9dd2ed.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_pipes_status_042e696314f5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_place_4d8ebb6bcec8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_place_next_to_and_rotate_989e61c88d39.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_poles_status_fbbafe6b05e9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_power_generators_6afa611ae597.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_print_113e44555cdd.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_production_divergence_1e60ca933690.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_production_stats_4907121ca95d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_profits_675b6e56d834.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_pump_status_577311af8a0f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_python_parser_63c24e46ab33.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_python_parser_d58f56e36160.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_rcon_utils_dc0dec6ed12a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_recursive_formatter_8ebd9381612e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_recursive_formatter_functional_6daa91b7d327.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_registry_2c1969d8847f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_render_d984455081a9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_request_path_f59ccaf71946.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_research_7328ce0c1658.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_rockets_34e6a94722b2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_rotate_544fb32f4b03.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_save_load_ce3b4a6f9de2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_save_load_python_namespace_cca95172e5cc.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_score_bde40799163d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_script_caching_c39076879fba.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_set_entity_recipe_7d1e76eca623.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_set_research_a830e729d464.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_shift_entity_339fbc9da5eb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_sleep_991cb4c8a197.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_slow_760677bc4149.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_small_iron_factory_c33442f9bdfc.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_variables_2031ad906ed4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_vision_8c9ba2ab183a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_warnings_af83476ce8e4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_factorio_learning_environment_py_test_weighted_reward_sampler_a9234507e0ab.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_factorio_learning_environment_py_throughput_task_51d50f43a6ee.py | You must create an AUTOMATIC factory that automatically creates a target entity by itself. You are given the entity for which you need to create a factory for. You are also given the target throughput that the factory must achieve |
 | 0xsojalsec_factorio_learning_environment_py_throughput_tasks_280a3c21ffad.py | Throughput task definitions for lab_play scenario. |
 | 0xsojalsec_factorio_learning_environment_py_tile_renderer_50af6e0e81b3.py | Handles rendering of map tiles (water, land) on the Factorio map |
@@ -945,7 +811,6 @@ Total Files: 5653
 | 0xsojalsec_graphsearch_py_pipeline_b537066e0214.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_graphsearch', providing core logic for its parent repository. |
 | 0xsojalsec_graphsearch_py_utils_e71d50b73dff.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_graphw00f_py_lib_efffb84d6177.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gtfonow_py_test_privesc_c1a113e79842.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_guardian_cli_py_agent_8a33aace06bb.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_guardian_cli_py_amass_91a7ec8061e0.py | Amass tool wrapper for advanced network mapping and asset discovery |
 | 0xsojalsec_guardian_cli_py_analyst_agent_4e65498f2f7f.py | Analyst Agent |
@@ -967,7 +832,6 @@ Total Files: 5653
 | 0xsojalsec_guardian_cli_py_sqlmap_673ef4dc9c9d.py | SQLMap tool wrapper for automated SQL injection testing |
 | 0xsojalsec_guardian_cli_py_sslyze_e96894f2da7e.py | SSLyze tool wrapper for advanced SSL/TLS security testing |
 | 0xsojalsec_guardian_cli_py_subfinder_8b71e36aa9d0.py | Subfinder tool wrapper for subdomain discovery |
-| 0xsojalsec_guardian_cli_py_testssl_d4dc64450f94.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_guardian_cli_py_tool_agent_f6b5cc451f05.py | Tool Selector Agent |
 | 0xsojalsec_guardian_cli_py_wafw00f_6fb171a2f40f.py | Wafw00f tool wrapper for WAF detection |
 | 0xsojalsec_guardian_cli_py_whatweb_715153f6cb83.py | WhatWeb tool wrapper for web technology fingerprinting |
@@ -1013,7 +877,6 @@ Total Files: 5653
 | 0xsojalsec_gunnerc2_py_bofhelp_44e9a0f536ad.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_gunnerc2_py_cacls_09d6e8511ce4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
 | 0xsojalsec_gunnerc2_py_checkdebugger_64f6f7a3f836.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_create_listener_dialog_21f2c31ab225.py | Single-column, sectioned dialog. |
 | 0xsojalsec_gunnerc2_py_credentialmanager_098052fee0ad.py | Enumerates Credentials From Credential Manager |
 | 0xsojalsec_gunnerc2_py_credman_e6b5ffeff01c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
 | 0xsojalsec_gunnerc2_py_dcsyncenum_479b3aaf4b96.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
@@ -1073,10 +936,6 @@ Total Files: 5653
 | 0xsojalsec_gunnerc2_py_ldapsearch_010133e42ee5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
 | 0xsojalsec_gunnerc2_py_list_firewall_rules_1a8b5233aaa9.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
 | 0xsojalsec_gunnerc2_py_listdns_222e34f59576.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_listener_manager_2e7dcae70928.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
-| 0xsojalsec_gunnerc2_py_listeners_7aa9693dcc2c.py | Call the best-effort stop method without blocking the request thread. |
-| 0xsojalsec_gunnerc2_py_listeners_tab_7607fcd67ced.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_gunnerc2_py_listeners_ws_client_2c6423143a46.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_gunnerc2_py_listmods_4bccedca475e.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
 | 0xsojalsec_gunnerc2_py_locale_4e10dfec2754.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
 | 0xsojalsec_gunnerc2_py_login_dialog_39892c65ef28.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
@@ -1140,7 +999,6 @@ Total Files: 5653
 | 0xsojalsec_gunnerc2_py_web_utils_44df62dd3539.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_gunnerc2_py_websocket_client_4e8e4e8407c6.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_gunnerc2_py_websocket_gunnershell_b0c9e8086c18.py | Capture stdout/stderr AND anything routed via core.utils.echo. |
-| 0xsojalsec_gunnerc2_py_websocket_listeners_b21881102476.py | Is there any listener with the same (case-insensitive) non-empty name? |
 | 0xsojalsec_gunnerc2_py_websocket_operators_977c7e727040.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
 | 0xsojalsec_gunnerc2_py_websocket_sessions_fbda3edca2bf.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_gunnerc2', providing core logic for its parent repository. |
 | 0xsojalsec_gunnerc2_py_whoami_1d92bfd26829.py | BOF provider for x64 whoami. |
@@ -1211,10 +1069,6 @@ Total Files: 5653
 | 0xsojalsec_klavis_py_shared_search_c38bf6c69eca.py | Shared search utility for both single_server and strata_server. |
 | 0xsojalsec_klavis_py_shows_6f19a8043b81.py | Get Spotify catalog information for several shows by their Spotify IDs. |
 | 0xsojalsec_klavis_py_stdio_23e5772f300f.py | Stdio transport implementation for MCP. |
-| 0xsojalsec_klavis_py_test_mcp_client_77f33d91c0e8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_klavis_py_test_mcp_client_manager_7de44096f7bf.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_klavis_py_test_mcp_client_manager_sync_694733b0b240.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_klavis_py_test_server_integration_b9b012603130.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_klavis_py_tools_63a41f5efd68.py | Shared tool implementations for Strata MCP Router. |
 | 0xsojalsec_klavis_py_tracks_f5df3f6083fd.py | Get detailed information about one or multiple tracks. |
 | 0xsojalsec_klavis_py_users_a1f12248e4be.py | Get the current Spotify user's profile details. |
@@ -1262,58 +1116,38 @@ Total Files: 5653
 | 0xsojalsec_langextract_py_base_model_f7b04dd357a1.py | Base interfaces for language models. |
 | 0xsojalsec_langextract_py_builtin_registry_d4464b447b8a.py | Built-in provider registration configuration. |
 | 0xsojalsec_langextract_py_chunking_b006658f31fe.py | Library for breaking documents into chunks of sentences. |
-| 0xsojalsec_langextract_py_chunking_test_e27f4837c712.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_langextract_py_data_28e8de6dfb51.py | Classes used to represent core data types of annotation pipeline. |
 | 0xsojalsec_langextract_py_data_lib_a92c1bcdc84b.py | Library for data conversion between AnnotatedDocument and JSON. |
-| 0xsojalsec_langextract_py_data_lib_test_7b370071083e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_langextract_py_debug_utils_a2bc1b0e0d2d.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_langextract_py_exceptions_7e863cc6aef3.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_langextract_py_exceptions_b208d3aadc67.py | Compatibility shim for langextract.exceptions imports. |
-| 0xsojalsec_langextract_py_extract_precedence_test_ce564da2beec.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_langextract_py_extract_schema_integration_test_80a6c836d438.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_langextract_py_extraction_f50f5d3dd73d.py | Main extraction API for LangExtract. |
 | 0xsojalsec_langextract_py_factory_3b948cee869d.py | Factory for creating language model instances. |
-| 0xsojalsec_langextract_py_factory_schema_test_262e7e285975.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_langextract_py_factory_test_75fbb9b0cb0a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_langextract_py_format_handler_46ff6e1ec993.py | Centralized format handler for prompts and parsing. |
-| 0xsojalsec_langextract_py_format_handler_test_eed38147a136.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_langextract_py_gemini_1413f95db98d.py | Gemini provider schema implementation. |
 | 0xsojalsec_langextract_py_gemini_668a4d3b640a.py | Gemini provider for LangExtract. |
 | 0xsojalsec_langextract_py_inference_2797c0c57971.py | Language model inference compatibility layer. |
 | 0xsojalsec_langextract_py_inference_c7609941379b.py | Compatibility shim for langextract.inference imports. |
-| 0xsojalsec_langextract_py_inference_test_8b111af9ef8c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_langextract_py_init_57a5696fc4d1.py | Provider package for LangExtract. |
 | 0xsojalsec_langextract_py_init_fbed8f454184.py | LangExtract: Extract structured information from text with LLMs. |
-| 0xsojalsec_langextract_py_init_test_3c07bdbe742d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_langextract_py_ollama_a0c3a05e10c1.py | Ollama provider for LangExtract. |
 | 0xsojalsec_langextract_py_openai_4b29d9079bd3.py | OpenAI provider for LangExtract. |
 | 0xsojalsec_langextract_py_plugins_bf057cb162d9.py | Provider discovery and registration system. |
 | 0xsojalsec_langextract_py_progress_7799b78a4179.py | Progress and visualization utilities for LangExtract. |
-| 0xsojalsec_langextract_py_progress_test_084da7820b66.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_langextract_py_prompt_validation_f95548e81861.py | Prompt validation for alignment checks on few-shot examples. |
-| 0xsojalsec_langextract_py_prompt_validation_test_a65a8637e46e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_langextract_py_prompting_ea117d36298b.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_langextract_py_prompting_test_aafd5546f80e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_langextract_py_provider_49f312298022.py | Minimal example of a custom provider plugin for LangExtract. |
-| 0xsojalsec_langextract_py_provider_schema_test_7c5a9ad10b1d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_langextract_py_registry_0ba4ddeec50a.py | Compatibility shim for langextract.registry imports. |
 | 0xsojalsec_langextract_py_registry_a657e43b7dda.py | Compatibility shim for langextract.registry imports. |
-| 0xsojalsec_langextract_py_registry_test_1226fa2e5f13.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_langextract_py_router_0326822c8555.py | Runtime registry that maps model-ID patterns to provider classes. |
 | 0xsojalsec_langextract_py_schema_16055f206dfd.py | Example custom schema implementation for provider plugins. |
 | 0xsojalsec_langextract_py_schema_555f2b10f007.py | Core schema abstractions for LangExtract. |
 | 0xsojalsec_langextract_py_schema_9cc8c251bf70.py | Compatibility shim for langextract.schema imports. |
 | 0xsojalsec_langextract_py_schema_c0e16a7c312d.py | Schema compatibility layer. |
-| 0xsojalsec_langextract_py_schema_test_d9b62529b10a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_langextract_py_test_example_provider_48ba68456ca2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_langextract_py_test_kwargs_passthrough_bab94ca99007.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_langextract_py_test_live_api_6d5af3b1ac47.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_langextract_py_tokenizer_d19dec9b655a.py | Tokenization utilities for text. |
-| 0xsojalsec_langextract_py_tokenizer_test_22b5a88cac71.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_langextract_py_types_cd419813f7bd.py | Core data types for LangExtract. |
 | 0xsojalsec_langextract_py_validate_community_providers_f2151e6e6486.py | Validation for COMMUNITY_PROVIDERS.md plugin registry table. |
 | 0xsojalsec_langextract_py_visualization_aa960f0c734a.py | Utility functions for visualizing LangExtract extractions in notebooks. |
-| 0xsojalsec_langextract_py_visualization_test_9a05d98c88eb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_lazycross_py_lazycross_6d7607a9b69f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_lazycross', providing core logic for its parent repository. |
 | 0xsojalsec_llms_from_scratch_py_ch03_0555a19ec4c3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_llms_from_scratch', providing core logic for its parent repository. |
 | 0xsojalsec_llms_from_scratch_py_previous_chapters_0ec516d2cc98.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_llms_from_scratch', providing core logic for its parent repository. |
@@ -1322,32 +1156,17 @@ Total Files: 5653
 | 0xsojalsec_llms_from_scratch_py_previous_chapters_68c7de9363b3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_llms_from_scratch', providing core logic for its parent repository. |
 | 0xsojalsec_llms_from_scratch_py_previous_chapters_78564b74c1c6.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_llms_from_scratch', providing core logic for its parent repository. |
 | 0xsojalsec_llms_from_scratch_py_previous_chapters_dbeefe9c788c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_llms_from_scratch', providing core logic for its parent repository. |
-| 0xsojalsec_llms_from_scratch_py_tests_6e19353ba59d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_llms_from_scratch_py_tests_b0571ecc2dcd.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_llmtornado_py_git_tracker_35255b86c824.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_llmtornado_py_merkle_tree_fe322f593987.py | Merkle tree for efficient directory-level change detection. |
 | 0xsojalsec_llmtornado_py_recovery_6879a7e1c412.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_llmtornado_py_resource_manager_771f6f3d1fac.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_llmtornado_py_test_chunker_a18a15a206eb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_llmtornado_py_test_ignore_patterns_ae96caba9a74.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_llmtornado_py_test_resource_manager_155cf7ea3d31.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_lumina_dimoo_py_generation_utils_536b87cd06b9.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_lumina_dimoo_py_image_generation_generator_72455d105191.py | Image generation generator |
 | 0xsojalsec_lumina_dimoo_py_image_to_image_generator_72a63e7038b3.py | Image-to-image generator (supports DDP) |
 | 0xsojalsec_lumina_dimoo_py_image_utils_53d2ca36ffd5.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_lumina_dimoo_py_prompt_utils_686c20ce886a.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_lumina_dimoo_py_text_understanding_generator_cd6cfb9bae62.py | Text understanding generator |
-| 0xsojalsec_made_with_ml_py_conftest_09c384eb05b4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_made_with_ml_py_conftest_4931d6c76836.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_made_with_ml_py_conftest_62b128fd0ab8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_made_with_ml_py_data_2702cadb4f6a.py | Load data from source into a Ray Dataset. |
-| 0xsojalsec_made_with_ml_py_test_behavioral_3ff088fc36c5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_made_with_ml_py_test_data_7bd81ebe3d90.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_made_with_ml_py_test_dataset_a3a70e9d3f74.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_made_with_ml_py_test_predict_137550985602.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_made_with_ml_py_test_train_67737a9340fa.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_made_with_ml_py_test_tune_3930c077ba8d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_made_with_ml_py_test_utils_1aaffccf5613.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_made_with_ml_py_utils_a3f336d9dc9c.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_made_with_ml_py_utils_dcc2a0c7f73d.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_mahilo_py_agent_manager_e39620998b71.py | A class to manage agents of different types. |
@@ -1365,17 +1184,6 @@ Total Files: 5653
 | 0xsojalsec_make_circuit_boards_py_kicad6_datamodel_99986f48449d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_make_circuit_boards', providing core logic for its parent repository. |
 | 0xsojalsec_make_circuit_boards_py_parse_utils_92c3819333a3.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_make_circuit_boards_py_shortcodes_c7dc61310c9b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_make_circuit_boards', providing core logic for its parent repository. |
-| 0xsojalsec_make_circuit_boards_py_test_address_24083678d636.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_make_circuit_boards_py_test_config_a2d12e0a1667.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_make_circuit_boards_py_test_datatypes_b286eb692e9d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_make_circuit_boards_py_test_errors_395a0f7816a5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_make_circuit_boards_py_test_expressions_75a0a636993b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_make_circuit_boards_py_test_generic_methods_4f7fbb431873.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_make_circuit_boards_py_test_loop_soup_e4321bbee28e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_make_circuit_boards_py_test_ranged_values_f125716419e2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_make_circuit_boards_py_test_telemetry_7ccfc897f823.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_make_circuit_boards_py_test_test_b888f5f2d288.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_make_circuit_boards_py_test_version_0f67e635b4f9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_malpacks_py_cli_e7f6434e9c6c.py | #    #    ##    #       #####     ##     ####   #    #   #### |
 | 0xsojalsec_maltego_telegram_py_channeltoauthors_9dbf9583d687.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_maltego_telegram', providing core logic for its parent repository. |
 | 0xsojalsec_maltego_telegram_py_channeltodeletedposts_a6ddb0e06e8d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_maltego_telegram', providing core logic for its parent repository. |
@@ -1463,7 +1271,6 @@ Total Files: 5653
 | 0xsojalsec_ovo_py_cached_db_6fbee0a28162.py | Return dict of project id -> name |
 | 0xsojalsec_ovo_py_color_picker_23fe0d8e9d5d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
 | 0xsojalsec_ovo_py_colors_eafa04b65480.py | Darken or lighten a hex color by multiplying its lightness component in HLS space. |
-| 0xsojalsec_ovo_py_conftest_34320a0f29cb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_ovo_py_contigs_parser_05dff49c5c20.py | Class for parsing the contigs definition. |
 | 0xsojalsec_ovo_py_create_new_pool_9272f65a68ab.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
 | 0xsojalsec_ovo_py_custom_elements_4d6e3e75aa73.py | Heading with additional text in grey |
@@ -1503,16 +1310,6 @@ Total Files: 5653
 | 0xsojalsec_ovo_py_sidebar_fd5eda6489ba.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
 | 0xsojalsec_ovo_py_sql_db_d05f0674dbe1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
 | 0xsojalsec_ovo_py_submission_components_28010275d6d8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
-| 0xsojalsec_ovo_py_test_config_object_8cd9f31244b1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_ovo_py_test_design_workflow_68b545db06b5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_ovo_py_test_excel_export_851a25e42afe.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_ovo_py_test_full_proteinqc_dssp_proteinsol_esmif_28cc418e2fed.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_ovo_py_test_full_rfdiffusion_fastrelax_binder_design_workflow_3c1589ed56b9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_ovo_py_test_full_rfdiffusion_ligandmpnn_binder_design_workflow_b9129614be29.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_ovo_py_test_full_rfdiffusion_scaffold_design_workflow_04808487173f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_ovo_py_test_python_api_1b4f47463ed2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_ovo_py_test_residue_selection_fc460220e029.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_ovo_py_testing_7386ec4b3902.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
 | 0xsojalsec_ovo_py_trim_components_1e5f00359ff7.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_ovo', providing core logic for its parent repository. |
 | 0xsojalsec_ovo_py_user_settings_logic_7c2ca735e008.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | 0xsojalsec_owl_py_agent_memories_cf7310ee8548.py | An agent memory wrapper of :obj:`ChatHistoryBlock`. |
@@ -1618,9 +1415,6 @@ Total Files: 5653
 | 0xsojalsec_owl_py_whatsapp_toolkit_77c37964bc53.py | A class representing a toolkit for WhatsApp operations. |
 | 0xsojalsec_owl_py_yi_model_3e74a8e9247e.py | Yi API in a unified BaseModelBackend interface. |
 | 0xsojalsec_owl_py_zhipuai_model_d962d0372cee.py | ZhipuAI API in a unified BaseModelBackend interface. |
-| 0xsojalsec_pdf_airgapped_offline_rag_py_test_document_processor_42ea4e26f427.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pdf_airgapped_offline_rag_py_test_model_handler_60a0c6f9686d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pdf_airgapped_offline_rag_py_test_rag_733343941f10.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_pdf_extract_api_py_marker_34e7464ee71a.py | Marker OCR Strategy |
 | 0xsojalsec_pdf_extract_api_py_ocr_strategy_774e565f5af5.py | Base OCR Strategy Interface |
 | 0xsojalsec_pdf_extract_api_py_tesseract_4ae45dead928.py | Tesseract OCR Strategy |
@@ -1633,16 +1427,6 @@ Total Files: 5653
 | 0xsojalsec_pdfalyzer_py_pdf_object_properties_4765a51110ab.py | Decorator for PyPDF PdfObject that extracts a couple of properties (type, label, etc). |
 | 0xsojalsec_pdfalyzer_py_pdf_tree_verifier_263e6b61d389.py | Verify that the PDF tree is complete/contains all the nodes in the PDF file. |
 | 0xsojalsec_pdfalyzer_py_stream_objects_table_c79a870d1ce0.py | Build a rich table to show the sizes of embedded streams. |
-| 0xsojalsec_pdfalyzer_py_test_dict_helper_99cb15131c85.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pdfalyzer_py_test_encoding_detector_1f57280eaa0c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pdfalyzer_py_test_indeterminate_node_a477344a721c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pdfalyzer_py_test_node_colors_538ca002929a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pdfalyzer_py_test_pdf_object_helper_993fc9686f84.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pdfalyzer_py_test_pdf_parser_manager_76c41dd6235e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pdfalyzer_py_test_pdf_tree_node_11473c31a9e2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pdfalyzer_py_test_pdf_walker_2f3e6dab38c8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pdfalyzer_py_test_pdfalyzer_7d46497cea8d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pdfalyzer_py_test_rich_text_helper_2d3b9ceea782.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_pi0_lerobot_py_mano_utils_e660c49ffb65.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_pi0_lerobot_py_multiview_pose_estimator_83359d322535.py | Projects 3D keypoints (with confidence) to 2D image coordinates for multiple views. |
 | 0xsojalsec_pi0_lerobot_py_rerun_log_utils_94841bd935b9.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
@@ -1699,7 +1483,6 @@ Total Files: 5653
 | 0xsojalsec_pipeless_py_process_a8e8e66e62ba.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
 | 0xsojalsec_pipeless_py_process_b3c5c63d9824.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
 | 0xsojalsec_pipeless_py_process_ff14ed64f576.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_test_fcee8943e5d4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_poastal_py_adobe_32af7187a86f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
 | 0xsojalsec_poastal_py_duolingo_b4949bfc0663.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
 | 0xsojalsec_poastal_py_hulu_14c99e2afad2.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
@@ -1720,22 +1503,13 @@ Total Files: 5653
 | 0xsojalsec_praisonai_py_internet_search_ab9311b5f75a.py | Search Internet for relevant information based on a query. |
 | 0xsojalsec_praisonai_py_llm_guardrail_2d04a665927e.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_praisonai_py_session_bf352ac72587.py | Session Management for PraisonAI Agents |
-| 0xsojalsec_praisonai_py_test_validation_feedback_28ab6d1ee3d5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_praisonai_py_test_validation_feedback_2bc6860d90b2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_praisonai_py_tools_778e1df74205.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_prettymapp_py_conftest_dbba959c2478.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_prettymapp_py_geo_abf69a08fc4b.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_prettymapp_py_plotting_f79ea3790e9f.py | Main plotting class for prettymapp. |
-| 0xsojalsec_prettymapp_py_test_geo_2c0b9d8e0f17.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_prettymapp_py_test_osm_7af58a591c6b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_prettymapp_py_test_plotting_482dd9aa3358.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_prettymapp_py_utils_d30325933b14.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_proxyhub_py_checker_76793d29e566.py | Proxy checker. |
 | 0xsojalsec_proxyhub_py_errors_167365f1132a.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_proxyhub_py_judge_c285ac7ab7e9.py | Proxy Judge. |
-| 0xsojalsec_proxyhub_py_test_negotiators_ecab7bbe2791.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_proxyhub_py_test_proxy_5c966de539a9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_proxyhub_py_test_utils_3cbe31093ef5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_pytorch_lightning_py_accelerator_05e0c8c39ade.py | The Accelerator base class for Lightning PyTorch. |
 | 0xsojalsec_pytorch_lightning_py_accelerator_cb16a59c206c.py | The Accelerator base class. |
 | 0xsojalsec_pytorch_lightning_py_agent_61eb4ce37477.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
@@ -1744,7 +1518,6 @@ Total Files: 5653
 | 0xsojalsec_pytorch_lightning_py_base_ca844ca9ab29.py | Profiler to check if there are any bottlenecks in your code. |
 | 0xsojalsec_pytorch_lightning_py_batch_size_finder_b9b5f239d4f4.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_pytorch_lightning_py_bitsandbytes_7408f84ceb25.py | Plugin for quantizing weights with `bitsandbytes <https://github.com/bitsandbytes-foundation/bitsandbytes>`__. |
-| 0xsojalsec_pytorch_lightning_py_boring_classes_eec81343e1ed.py | .. warning::  This is meant for testing/debugging and is experimental. |
 | 0xsojalsec_pytorch_lightning_py_callback_bae6c70aba52.py | Base class used to build new callbacks. |
 | 0xsojalsec_pytorch_lightning_py_checkpoint_e3e3f33e65a1.py | This is the base class for model checkpointing. |
 | 0xsojalsec_pytorch_lightning_py_checkpoint_io_f10e6de1aed5.py | Interface to save/load checkpoints as they are saved through the ``Strategy``. |
@@ -1752,22 +1525,18 @@ Total Files: 5653
 | 0xsojalsec_pytorch_lightning_py_collective_c4b980b98c0e.py | Interface for collective operations. |
 | 0xsojalsec_pytorch_lightning_py_compile_e9a82a4ad9e9.py | Returns an instance LightningModule from the output of ``torch.compile``. |
 | 0xsojalsec_pytorch_lightning_py_configuration_validator_cbe30623c120.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_pytorch_lightning_py_conftest_2adac7153b59.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pytorch_lightning_py_conftest_d89b51f0e944.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_pytorch_lightning_py_cpu_1c8104cdfe7f.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_pytorch_lightning_py_csv_logs_fcf8389f080e.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
 | 0xsojalsec_pytorch_lightning_py_cuda_e5b1029b1567.py | Accelerator for NVIDIA CUDA devices. |
 | 0xsojalsec_pytorch_lightning_py_data_62758ebe6e13.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
 | 0xsojalsec_pytorch_lightning_py_data_ca20122f6361.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_pytorch_lightning_py_dataloaders_d5f6c13e9c37.py | Custom dataloaders for testing. |
-| 0xsojalsec_pytorch_lightning_py_datamodule_ac3119f65255.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_pytorch_lightning_py_datasets_8ea03986bea4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
 | 0xsojalsec_pytorch_lightning_py_deepspeed_3d482ff3449c.py | Precision plugin for DeepSpeed integration. |
 | 0xsojalsec_pytorch_lightning_py_device_dtype_mixin_b211aef51329.py | See :meth:`torch.nn.Module.to`. |
 | 0xsojalsec_pytorch_lightning_py_device_parser_482695819641.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
 | 0xsojalsec_pytorch_lightning_py_device_stats_monitor_54fa62281d3a.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_pytorch_lightning_py_distributed_37f12f4a8ac5.py | Recursively find all tensors contained in the specified object. |
-| 0xsojalsec_pytorch_lightning_py_double_257d1bf37fc9.py | Plugin for training with double (``torch.float64``) precision. |
 | 0xsojalsec_pytorch_lightning_py_double_ff5cf5783a5b.py | Plugin for training with double (``torch.float64``) precision. |
 | 0xsojalsec_pytorch_lightning_py_dp_0129bb78501c.py | Implements data-parallel training in a single process, i.e., the model gets replicated to each device and each |
 | 0xsojalsec_pytorch_lightning_py_enums_666ec467faf7.py | Enumerated utilities. |
@@ -1780,9 +1549,7 @@ Total Files: 5653
 | 0xsojalsec_pytorch_lightning_py_grads_1e226516aa1a.py | Utilities to describe gradients. |
 | 0xsojalsec_pytorch_lightning_py_half_2955874dd656.py | Plugin for training with half precision. |
 | 0xsojalsec_pytorch_lightning_py_half_bae69404e8b7.py | Plugin for training with half precision. |
-| 0xsojalsec_pytorch_lightning_py_hooks_0cbfc682a2f6.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_pytorch_lightning_py_init_24b67022bc33.py | Initialize `nn.Module` with empty tensors, i.e., uninitialized memory. |
-| 0xsojalsec_pytorch_lightning_py_init_94f16f21ee4f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
 | 0xsojalsec_pytorch_lightning_py_lambda_function_596494ae3a53.py | Lambda Callback |
 | 0xsojalsec_pytorch_lightning_py_launcher_7d5782ba8abf.py | Kill existing alive processes. |
 | 0xsojalsec_pytorch_lightning_py_launcher_8e94abe952af.py | Abstract base class for all Launchers. |
@@ -1809,16 +1576,13 @@ Total Files: 5653
 | 0xsojalsec_pytorch_lightning_py_parallelism_62a0c4a83d30.py | Apply parallelisms and activation checkpointing to the model. |
 | 0xsojalsec_pytorch_lightning_py_parameter_tying_674ecd0199a4.py | Utilities for automatic parameters tying. |
 | 0xsojalsec_pytorch_lightning_py_parsing_c44ab98265e2.py | Utilities used for parameter parsing. |
-| 0xsojalsec_pytorch_lightning_py_precision_3d1f1f34ec2b.py | Base class for all plugins handling the precision-specific parts of the training. |
 | 0xsojalsec_pytorch_lightning_py_prediction_loop_23bd65cc210e.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_pytorch_lightning_py_prediction_writer_985f546c17e0.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_pytorch_lightning_py_progress_bar_f9cded3154c4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_pytorch_lightning_py_progress_e98c4e0cfa4e.py | Mixin that implements state-loading utilities for dataclasses. |
 | 0xsojalsec_pytorch_lightning_py_pytree_070873de7537.py | Customized :func:`torch.utils._pytree._is_leaf` to avoid flattening containers of primitives. |
 | 0xsojalsec_pytorch_lightning_py_registry_863463faa0d4.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_pytorch_lightning_py_registry_9286d45345a5.py | This class is a Registry that stores information about the Training Strategies. |
 | 0xsojalsec_pytorch_lightning_py_rich_model_summary_c1877164fa75.py | Generates a summary of all layers in a :class:`~lightning.pytorch.core.LightningModule` with `rich text |
-| 0xsojalsec_pytorch_lightning_py_runif_4b390baa8d81.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
 | 0xsojalsec_pytorch_lightning_py_runif_a463511a6f31.py | Construct reasons for pytest skipif. |
 | 0xsojalsec_pytorch_lightning_py_seed_bb0ee05ffaf4.py | Utilities to help with reproducibility of models. |
 | 0xsojalsec_pytorch_lightning_py_servable_module_a7e13e58e829.py | The ServableModule provides a simple API to make your model servable. |
@@ -1832,16 +1596,6 @@ Total Files: 5653
 | 0xsojalsec_pytorch_lightning_py_spike_16dc54de56a9.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
 | 0xsojalsec_pytorch_lightning_py_states_cd91252694eb.py | Enum for the status of the :class:`~lightning.pytorch.trainer.trainer.Trainer` |
 | 0xsojalsec_pytorch_lightning_py_tensorboard_8676a75d3532.py | TensorBoard Logger |
-| 0xsojalsec_pytorch_lightning_py_test_cpu_892b130299ae.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pytorch_lightning_py_test_cuda_1b3b1e1e2031.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pytorch_lightning_py_test_kubeflow_61e0a1e550eb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pytorch_lightning_py_test_parity_simple_2f642d09fb0e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pytorch_lightning_py_test_registry_9b3430db6656.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pytorch_lightning_py_test_single_device_e7073c48e393.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pytorch_lightning_py_test_sync_batchnorm_parity_d9935ab9881e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pytorch_lightning_py_test_tensorboard_1685a8c90e21.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pytorch_lightning_py_test_tpu_e3c7d3776cd2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_pytorch_lightning_py_test_xla_db6fdf3e7704.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_pytorch_lightning_py_transformer_engine_92688cd79700.py | Plugin for training with fp8 precision via nvidia's |
 | 0xsojalsec_pytorch_lightning_py_utilities_326e97416748.py | Checks for finite loss value. |
 | 0xsojalsec_pytorch_lightning_py_utilities_8daa729ad627.py | Utilities for loggers. |
@@ -2069,9 +1823,6 @@ Total Files: 5653
 | 0xsojalsec_wa_crypt_tools_py_key_2070987c3ef8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wa_crypt_tools', providing core logic for its parent repository. |
 | 0xsojalsec_wa_crypt_tools_py_logformat_02242594f62f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wa_crypt_tools', providing core logic for its parent repository. |
 | 0xsojalsec_wa_crypt_tools_py_props_e6b7dcfcc358.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wa_crypt_tools', providing core logic for its parent repository. |
-| 0xsojalsec_wa_crypt_tools_py_test_constants_c8f752aaae11.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_wa_crypt_tools_py_test_db_26f5ca596a42.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_wa_crypt_tools_py_test_utils_ac16b7e49302.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_waf_bypass_py_tables_c9a9021d43bb.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_waf_bypass', providing core logic for its parent repository. |
 | 0xsojalsec_wafer_py_language_utils_f080bbf20ecd.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_wafer_py_mutations_5d8fea6f8078.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wafer', providing core logic for its parent repository. |
@@ -2086,10 +1837,6 @@ Total Files: 5653
 | 0xsojalsec_wappalyzer_next_py_meta_58b2cc96d867.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wappalyzer_next', providing core logic for its parent repository. |
 | 0xsojalsec_wappalyzer_next_py_robots_9e2c1b8fd78d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wappalyzer_next', providing core logic for its parent repository. |
 | 0xsojalsec_wayback_google_analytics_py_codes_1a5fdbfa186c.py | Returns UA codes (w/o duplicates) from given html, or None if not found. |
-| 0xsojalsec_wayback_google_analytics_py_test_async_utils_31e8670e08ea.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_wayback_google_analytics_py_test_codes_f2c96032420d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_wayback_google_analytics_py_test_main_7757f0fd5ebe.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_wayback_google_analytics_py_test_utils_37418f49db2b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_web_brutator_py_argumentsparser_4db2b916a0c3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_web_brutator', providing core logic for its parent repository. |
 | 0xsojalsec_web_brutator_py_axis2_97dc13c0c8ad.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_web_brutator_py_bruteforcer_de07faf4d94a.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -2142,8 +1889,6 @@ Total Files: 5653
 | 0xsojalsec_whatsapp_osint_py_db_to_excel_ddf4c2dcf467.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_whatsapp_osint', providing core logic for its parent repository. |
 | 0xsojalsec_whisper_flow_py_microphone_051a197757e1.py | capture audio from microphone |
 | 0xsojalsec_whisper_flow_py_streaming_9bd3d1292835.py | test scenario module |
-| 0xsojalsec_whisper_flow_py_test_audio_08153cf4d986.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_whisper_flow_py_test_streaming_9211a59456ef.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_whisperlivekit_py_beam_7db676b67286.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_whisperlivekit', providing core logic for its parent repository. |
 | 0xsojalsec_whisperlivekit_py_config_5d6605966bd8.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | 0xsojalsec_whisperlivekit_py_eow_detection_a1ef278f61fd.py | cfg: AlignAttConfig, n_audio_state: int, device: torch.device |
@@ -2174,30 +1919,17 @@ Total Files: 5653
 | 0xsojalsec_whispers_py_python_8975f94ff885.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_whispers_py_secrets_2b67420ae250.py | Check if given value is static (hardcoded). |
 | 0xsojalsec_whispers_py_shell_9b5692051ef3.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_whispers_py_test_core_9976c5d22407.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_whispers_py_test_log_434aff004b8e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_whispers_py_test_plugins_d4c5c4825c97.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_whispers_py_test_python_dcd75ebbb7ab.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_whispers_py_test_secrets_357f309fb8e9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_whispers_py_test_utils_0a47367a3388.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_whispers_py_traverse_a74e41a672c3.py | Recursively traverse YAML/JSON document |
 | 0xsojalsec_whispers_py_uri_bf48a4d6faf1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_whispers', providing core logic for its parent repository. |
 | 0xsojalsec_whispers_py_xml_3c49f82a27d2.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_whispers_py_yml_10bd3295ad03.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_wifiphisher_py_firewall_79ee0389a51b.py | Serves as an abstraction layer in front of iptables. |
-| 0xsojalsec_wifiphisher_py_test_lure10_69a55dfe7892.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_wifiphisher_py_uimethods_a8279a01a008.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wifiphisher', providing core logic for its parent repository. |
-| 0xsojalsec_withoutbg_py_conftest_95ec179c0a60.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_withoutbg_py_core_1feec2abbfcb.py | Core background removal functionality. |
 | 0xsojalsec_withoutbg_py_exceptions_033ffbd24ee1.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_withoutbg_py_mock_responses_e81161b2bc2a.py | Mock API responses for testing. |
 | 0xsojalsec_withoutbg_py_models_a464b211f0f4.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_withoutbg_py_test_batch_performance_70b6fed0ae20.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_withoutbg_py_test_benchmarks_04bc731294a8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_withoutbg_py_test_memory_usage_75e7fa20c739.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_witnessme_py_models_e661c4aff829.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_witnessme', providing core logic for its parent repository. |
-| 0xsojalsec_witnessme_py_test_sig_scanning_6c8374bf33bb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| 0xsojalsec_witnessme_py_test_target_parsing_09fd2a363491.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | 0xsojalsec_wordpress_exploits2_py_wpall_99ceba899ead.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_wordpress_exploits2', providing core logic for its parent repository. |
 | 0xsojalsec_wordpress_exploits2_py_wpchangelog_762790c364f0.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_wordpress_exploits2_py_wpchangelog_e83a567c2882.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -2256,14 +1988,11 @@ Total Files: 5653
 | Acontext_constants.py | Component originally named 'DEV\PyAgent\.external\Acontext\src\server\core\acontext_core\service\constants', providing core logic for its parent repository. |
 | Acontext_terminal_color.py | Component originally named 'DEV\PyAgent\.external\Acontext\src\server\core\acontext_core\util\terminal_color', providing core logic for its parent repository. |
 | Agent_Wiz_tools.py | Component originally named 'DEV\PyAgent\.external\agent_wiz\examples\code\swarm\airline\configs\tools', providing core logic for its parent repository. |
-| Asterisk_AI_Voice_Agent_test_sanity.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | Chain_of_Recursive_Thoughts_tic_tac.py | Component originally named 'DEV\PyAgent\.external\Chain-of-Recursive-Thoughts\demos\tic-tac', providing core logic for its parent repository. |
 | EvoAgentX_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | Stream_Omni_convert_sqa_to_llava_base_prompt.py | Component originally named 'DEV\PyAgent\.external\Stream-Omni\scripts\archived\convert_sqa_to_llava_base_prompt', providing core logic for its parent repository. |
 | _0xsojalsec_factorio_learning_environment_profits.py | Calculate the dynamic production flows between two states |
 | _0xsojalsec_factorio_learning_environment_system_prompt_formatter.py | Formats the system prompt for the agent, only including the task and instructions. |
-| _0xsojalsec_factorio_learning_environment_test_print.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| _0xsojalsec_factorio_learning_environment_test_score.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | _0xsojalsec_gunnerc2_source_files.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_GunnerC2_source_files', providing core logic for its parent repository. |
 | _0xsojalsec_h2o_llmstudio_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | _0xsojalsec_holocine_base.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_HoloCine_base', providing core logic for its parent repository. |
@@ -2277,14 +2006,12 @@ Total Files: 5653
 | _0xsojalsec_ldapper_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | _0xsojalsec_ldapper_logging.py | This class provides a wrapper for the standard Python logging |
 | _0xsojalsec_llava_next_convert_sqa_to_llava_base_prompt.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_LLaVA_NeXT_convert_sqa_to_llava_base_prompt', providing core logic for its parent repository. |
-| _0xsojalsec_made_with_ml_test_dataset.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | _0xsojalsec_mahilo_mahilo_sales_agent.py | Analyze effectiveness of different lead sources |
 | _0xsojalsec_malwoverview_colors.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_malwoverview_colors', providing core logic for its parent repository. |
 | _0xsojalsec_mobileagent_prompt.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_MobileAgent_prompt', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_colorpp.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_colorpp', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_run_gcp_module.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_run_gcp_module', providing core logic for its parent repository. |
 | _0xsojalsec_netexec_bloodhound.py | Adds a user to the BloodHound graph database. |
-| _0xsojalsec_netexec_dfscoerce.py | LISTENER    Listener Address (defaults to 127.0.0.1) |
 | _0xsojalsec_netexec_enum_impersonate.py | Enumerate SQL Server users with impersonation rights |
 | _0xsojalsec_netexec_enum_links.py | Enumerate SQL Server linked servers |
 | _0xsojalsec_netexec_enum_logins.py | Enumerate SQL Server logins |
@@ -2293,23 +2020,17 @@ Total Files: 5653
 | _0xsojalsec_netexec_iis.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | _0xsojalsec_netexec_link_enable_xp.py | Enable or disable xp_cmdshell on a linked SQL server |
 | _0xsojalsec_netexec_link_xpcmd.py | Run xp_cmdshell commands on a linked SQL server |
-| _0xsojalsec_netexec_petitpotam.py | LISTENER            IP of your listener |
-| _0xsojalsec_netexec_printerbug.py | LISTENER    Listener Address (defaults to 127.0.0.1) |
 | _0xsojalsec_netexec_proto_args.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_NetExec_proto_args', providing core logic for its parent repository. |
-| _0xsojalsec_netexec_shadowcoerce.py | IPSC             Use IsPathShadowCopied (default: False). ex. IPSC=true |
 | _0xsojalsec_netexec_whoami.py | Basic enumeration of provided user information and privileges |
 | _0xsojalsec_pdf_extract_api_ocr_strategy.py | Base OCR Strategy Interface |
 | _0xsojalsec_pdfalyzer_exceptions.py | For errors that arise while walking the document tree |
-| _0xsojalsec_pdfalyzer_test_pdf_tree_node.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | _0xsojalsec_pipeless_init.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_pipeless_init', providing core logic for its parent repository. |
 | _0xsojalsec_pipeless_process.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_pipeless_process', providing core logic for its parent repository. |
-| _0xsojalsec_pipeless_test.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_pipeless_test', providing core logic for its parent repository. |
 | _0xsojalsec_praisonai_config.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | _0xsojalsec_roampal_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | _0xsojalsec_videoagent_base_text_processor.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_VideoAgent_base_text_processor', providing core logic for its parent repository. |
 | _0xsojalsec_videoagent_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | _0xsojalsec_voicecraft_edit_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| _0xsojalsec_wa_crypt_tools_test_db.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | _0xsojalsec_wappalyzer_next_css.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_wappalyzer_next_css', providing core logic for its parent repository. |
 | _0xsojalsec_wappalyzer_next_meta.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_wappalyzer_next_meta', providing core logic for its parent repository. |
 | _0xsojalsec_whisperlivekit_generation_progress.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_WhisperLiveKit_generation_progress', providing core logic for its parent repository. |
@@ -2321,7 +2042,6 @@ Total Files: 5653
 | abetlen_llama_cpp_python_py_llama_speculative_899c02f83e45.py | Based on https://github.com/apoorvumang/prompt-lookup-decoding |
 | abetlen_llama_cpp_python_py_llama_tokenizer_6482ce26f304.py | Tokenize the text into tokens. |
 | abetlen_llama_cpp_python_py_llm_2a69464c886c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\abetlen_llama_cpp_python', providing core logic for its parent repository. |
-| abetlen_llama_cpp_python_py_test_llama_speculative_4a6112b00bb6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | absadiki_whatsapp_msgstore_viewer_py_abstract_db_c78e2dc70599.py | This file describes how the database should look like and what it should return. |
 | absadiki_whatsapp_msgstore_viewer_py_base_model_7984129afcf3.py | Implements a base class for model modules. |
 | absadiki_whatsapp_msgstore_viewer_py_base_screen_4ef5a097cba6.py | A base class that implements a visual representation of the model data. |
@@ -2352,7 +2072,6 @@ Total Files: 5653
 | acontext_py_client_d6a1baff2cf9.py | High-level synchronous client for the Acontext API. |
 | acontext_py_client_types_9dfbd085f673.py | Common typing helpers used by resource modules to avoid circular imports. |
 | acontext_py_config_0822429adb61.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| acontext_py_conftest_bec319869d01.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | acontext_py_constants_1740649f795d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\acontext', providing core logic for its parent repository. |
 | acontext_py_ctx_a08e7737b3d4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\acontext', providing core logic for its parent repository. |
 | acontext_py_ctx_b1f9c69bd5c2.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\acontext', providing core logic for its parent repository. |
@@ -2385,13 +2104,6 @@ Total Files: 5653
 | acontext_py_task_efd772d36c8e.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\acontext', providing core logic for its parent repository. |
 | acontext_py_task_sop_0671f1db05cb.py | Generate system prompt for SOP agent. |
 | acontext_py_terminal_color_6d9ff18ee1b2.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\acontext', providing core logic for its parent repository. |
-| acontext_py_test_async_client_84e927afa8a5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| acontext_py_test_block_nav_40c87df5e03c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| acontext_py_test_block_render_816c22fe864f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| acontext_py_test_block_search_c34a57790886.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| acontext_py_test_result_976801bf0802.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| acontext_py_test_sop_custom_rules_3632276f8a50.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| acontext_py_test_sop_customization_a5387f50c276.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | acontext_py_text_block_097327a6a03b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\acontext', providing core logic for its parent repository. |
 | acontext_py_tool_fb86275e80e5.py | Type definitions for tool resources. |
 | acontext_py_tool_reference_7227c5fcfcb1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\acontext', providing core logic for its parent repository. |
@@ -2423,7 +2135,6 @@ Total Files: 5653
 | action_py_accounts_3e38bfec56e1.py | Test implementation that returns fixed prices for AAPL, TSLA, GOOGL |
 | action_py_accounts_74c2e11ff325.py | Initialize an account with a username and an initial deposit. |
 | action_py_accounts_7eff518187a4.py | Returns the current price of a share for the given symbol. |
-| action_py_crew_03721f11baef.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | action_py_custom_tool_8316a79134e1.py | Input schema for MyCustomTool. |
 | action_py_research_manager_4812c7681892.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | action_state_labs_android_action_kernel_py_sanitizer_599c9f636952.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -2450,10 +2161,6 @@ Total Files: 5653
 | aenvironment_py_pull_8340f1ca1e86.py | pull command - Pull an aenv project to local repository |
 | aenvironment_py_run_464acc4b8693.py | run command - Start local environment for testing the current aenv project |
 | aenvironment_py_swe_model_78faa9e1c9ea.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\aenvironment', providing core logic for its parent repository. |
-| aenvironment_py_test_cmds_2cdf3dc6e66a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| aenvironment_py_test_env_hub_ab488c21d2e6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| aenvironment_py_test_environment_fe711cbf0f17.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| aenvironment_py_test_tool_4d385ad5abe9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | aenvironment_py_version_26338e41b1a1.py | version command - Display version information |
 | agentcloud_dict_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | agentcloud_exceptions.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -2501,10 +2208,6 @@ Total Files: 5653
 | agentcloud_py_similarity_search_7e321053d1e1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentcloud', providing core logic for its parent repository. |
 | agentcloud_py_sockets_ae9a0ce44ca0.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentcloud', providing core logic for its parent repository. |
 | agentcloud_py_stackexchange_9ab7840436f3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentcloud', providing core logic for its parent repository. |
-| agentcloud_py_test_env_variables_de1a0a2cb408.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agentcloud_py_test_mongo_session_e2ebff02e639.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agentcloud_py_test_qdrant_connection_dd7dc0b36655.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agentcloud_py_test_send_message_to_socket_e97f2a501e29.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | agentcloud_py_time_weighted_d2c3c384d110.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentcloud', providing core logic for its parent repository. |
 | agentcloud_py_time_weighted_retriever_0f0c6bb8cc4d.py | Get the hours passed between two datetimes. |
 | agentcloud_py_vectordatabase_bbd54233ad3d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentcloud', providing core logic for its parent repository. |
@@ -2536,7 +2239,6 @@ Total Files: 5653
 | agentkit_py_chat_model_9a51a46ddde5.py | Fake ChatModel for testing purposes. |
 | agentkit_py_common_exceptions_f0958a10b43b.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agentkit_py_common_schema_a9e7586870a3.py | Query base schema. |
-| agentkit_py_conftest_97b60ff09e00.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | agentkit_py_extendedbasetool_f2f13d412724.py | Base tool for all tools in the agent. |
 | agentkit_py_fastapi_42fe83828bb5.py | FastAPI subclass that adds internal models (which are not already exposed via API |
 | agentkit_py_meta_agent_87488e60c9d9.py | Get a ConversationTokenBufferMemory from a list of chat messages. |
@@ -2550,12 +2252,6 @@ Total Files: 5653
 | agentkit_py_stream_1f9115c2da27.py | Callback handler that returns an async iterator. |
 | agentkit_py_streaming_schema_e668fa1bea2d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentkit', providing core logic for its parent repository. |
 | agentkit_py_streamingjsonlistresponse_a48478caeccd.py | Asynchronously enumerate an async iterator from a given start value. |
-| agentkit_py_test_basellm_tool_30ee59230a42.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agentkit_py_test_chat_d9c26f2c177e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agentkit_py_test_pdf_tool_8095d110e458.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agentkit_py_test_sql_tool_f8e67902ac84.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agentkit_py_test_summarizer_tool_ee4afd15e6c1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agentkit_py_test_visualizer_tool_b2da34ac5839.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | agentkit_py_tools_fdc665cec910.py | separated to avoid circular imports. |
 | agentkit_py_user_schema_07ed083f9eb9.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agentkit', providing core logic for its parent repository. |
 | agentkit_py_uuid6_4734405f9c65.py | UUID draft version objects (universally unique identifiers). This module provides the |
@@ -2615,15 +2311,6 @@ Total Files: 5653
 | agents_generic_py_stt_d8278b81b448.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agents_generic', providing core logic for its parent repository. |
 | agents_generic_py_stt_eb34af2cae91.py | Create a new instance of Clova STT. |
 | agents_generic_py_stt_fe96ef60b3df.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agents_generic', providing core logic for its parent repository. |
-| agents_generic_py_test_agent_d54ad3d366b9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agents_generic_py_test_chat_ctx_4ee1997688b6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agents_generic_py_test_config_006bc342d8e0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agents_generic_py_test_connection_pool_ba37e57063af.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agents_generic_py_test_evals_d48f4725bf68.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agents_generic_py_test_schema_gemini_5e165df5edee.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agents_generic_py_test_speaker_id_grouping_11ed18c9202a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agents_generic_py_test_stt_fallback_29928f86065f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agents_generic_py_test_tts_fallback_1563fc435979.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | agents_generic_py_turn_tracker_f0603f400974.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agents_generic', providing core logic for its parent repository. |
 | agents_generic_py_types_dd32b5c2f687.py | Notify the sender that playback has finished |
 | agents_generic_py_types_f8a10c068337.py | Configuration for Anam avatar persona |
@@ -2834,7 +2521,6 @@ Total Files: 5653
 | agno_py_cluster_2926caba96ee.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agno', providing core logic for its parent repository. |
 | agno_py_cluster_cdfb8e239789.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agno', providing core logic for its parent repository. |
 | agno_py_common_c8e2abd0fd49.py | Returns True if obj is an instance of the classes in class_list |
-| agno_py_conftest_8db7ed5eaca8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | agno_py_container_5dfcf8736ca5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agno', providing core logic for its parent repository. |
 | agno_py_container_c1af5094a2a1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agno', providing core logic for its parent repository. |
 | agno_py_context_a50ae5ed4576.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agno', providing core logic for its parent repository. |
@@ -2869,7 +2555,6 @@ Total Files: 5653
 | agno_py_json_schema_f4247bb5e6ad.py | Get the JSON schema type for a given type. |
 | agno_py_knowledge_42443c9e48a7.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agno_py_linear_dd02bb62529b.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| agno_py_listener_06325a81051b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agno', providing core logic for its parent repository. |
 | agno_py_llama_9b1cfa3442a6.py | Format a message into the format expected by Llama API. |
 | agno_py_load_balancer_781c689e2e76.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agno_py_load_env_a658c7502656.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agno', providing core logic for its parent repository. |
@@ -2914,162 +2599,6 @@ Total Files: 5653
 | agno_py_target_group_a65b4af91a55.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agno', providing core logic for its parent repository. |
 | agno_py_task_definition_12fe436007fa.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agno', providing core logic for its parent repository. |
 | agno_py_telegram_029990762fc8.py | This function sends a message to the chat ID. |
-| agno_py_test_agent_with_storage_and_memory_c1b29820da8e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_agentql_da295105670b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_agents_with_shared_model_dab3758747aa.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_arxiv_knowledge_base_0a877498d8e7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_arxiv_reader_4346d3137c74.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_02a007da906f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_0366d1a2b201.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_07a544d9b91b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_08691a9daeeb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_09e78578446b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_0cd751e13822.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_13a0f894c3ff.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_25f5d4b19cbc.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_26d8af10e988.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_2a721356b836.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_2fc6c4226bc6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_3b6633fa07a1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_45fdd86508b2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_4fe435659bd2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_550946bd57a2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_656816166483.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_6e01eebf426b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_76b2b6f1b3a1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_7ac4eee35307.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_913cefeda67a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_92445a821351.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_96bed0f823e3.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_b88432474743.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_c6079b55c7c3.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_c6729ff9f4be.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_c8c0d2018719.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_d496e9fdaad1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_ec9155dc155b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_f9b6549bf155.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_fb7c6ffcb451.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_basic_ff59887a8aad.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_calculator_3bbce311b3b5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_cartesia_748aced78dbf.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_cassandra_ef8db40e9d87.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_collaborate_33e55167b526.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_confluence_6024ba6fe9f9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_coordinate_1e4b04a22eff.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_csv_url_knowledge_base_ac72224bb3c9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_custom_api_041543992cd5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_custom_api_251d565e6666.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_decorator_b40146413ed5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_docx_knowledge_base_cc71710618e6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_docx_reader_e0809d8d34ea.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_dynamodb_storage_229ea7ce3df1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_exa_f5f8c421efa0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_financial_datasets_39958ccaf0c3.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_firecrawl_knowledge_base_a295bbe981de.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_firecrawl_reader_cbb93bd56692.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_gcs_json_storage_b4d99870a535.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_gemini_4b6480a5db74.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_gemini_e9dd7f88c19f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_gmail_tools_f86949b17040.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_googlesheets_tools_67d18bb777c0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_image_support_file_upload_56f9c95584c2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_json_knowledge_base_588980ba4f8c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_json_reader_56782659b714.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_json_storage_2363287c5f91.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_json_storage_agent_4731c95fecbb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_json_storage_workflow_6eeb72d0996e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_mcp_53405fdb1f67.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_memory_716f860e4b03.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_memory_redis_0ee413638a3d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_metrics_6351572e6aac.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_milvusdb_870a65120a4b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_mongodb_26add97beb99.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_mongodb_storage_d4f515976c95.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_multimodal_2671b7dc255f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_multimodal_2c7788159f7d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_multimodal_2e7e2c7d8b7e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_multimodal_39a1a4eb1ab9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_multimodal_3dcc004d36e1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_multimodal_3e0dae707b7e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_multimodal_416cd3acdc42.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_multimodal_64a2996667ac.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_multimodal_8b12a3a29790.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_multimodal_8c3db770fc7a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_multimodal_8e64bc557507.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_multimodal_c6f9a229613b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_multimodal_de9172fd55cd.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_multimodal_ed0de4c83600.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_openweather_507a8efa090f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_pdf_knowledge_base_7e44f0010750.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_pdf_reader_b3aff9847564.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_pdf_url_knowledge_base_1e79701c9e45.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_postgres_storage_45a7f035c3d9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_qdrantdb_311c137de32b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_rag_a97ad8880937.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_reasoning_content_default_cot_070369848858.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_reasoning_content_reasoning_tools_3812d877c445.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_reasoning_content_thinking_tools_5373d92277fa.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_redis_storage_accbc017c6e7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_route_616bbb97507b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_singlestore_storage_3872e2bfe4f5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_sqlite_storage_agent_c807423eff99.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_sqlite_storage_eca6e232a38a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_sqlite_storage_workflow_f4696753b899.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_string_72713bb0dfd0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_structured_output_8f6c32fb5aba.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_structured_output_parsing_487f6cfce5a7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_team_3c815ff84c0d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_team_metrics_4ee06d1c71b2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_team_with_shared_model_196173e750e5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_team_with_storage_and_memory_826e5a452e63.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_teams_v1_a491fb4b35ca.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_text_knowledge_base_d4e500a563f7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_thinking_fb31f565a627.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_todoist_tools_0a74354e81c9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_parsing_5686e369c3a6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_parsing_b88d2da48afd.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_0315e1514875.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_036819c77503.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_06b7fcc139d8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_0fc2faa481a0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_2d02791318b1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_3b90f42b2203.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_460fdb26faed.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_48d03510d4f2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_49cfbe0d7e7b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_4a89e6ae6502.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_578a2d084e14.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_5ed022111d37.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_65767330f39f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_68de3b5ed375.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_7adbb483291e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_7e1a7634f25a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_8fcbb6bdb5b2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_907dd3613e86.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_9cfccf6268c0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_9ef9ec4cc0a8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_aba49aa612c5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_b128b7e620c4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_ce4d95f73c2f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_e67288cb7eec.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_e6e577e711d0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_f6dd77a24492.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_f741c94a064a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_tool_use_f78582232860.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_toolkit_50667b1e7a38.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_url_knowledge_base_3f9ac08b1dca.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_url_reader_7122247b445f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_weaviatedb_384d71a29be2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_webbrowser_4c473b99b45a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_webex_b5b5077ef7c1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_website_knowledge_base_df2e98f66053.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_website_reader_863f8b7ffaf7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_yaml_storage_475508c5475c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_yaml_storage_agent_c3db8491dcc4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_yaml_storage_workflow_d7cc246b8ea1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_youtube_knowledge_base_a8c27b27e51e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_youtube_reader_3c3cfc4e921e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| agno_py_test_zoom_tools_da6d74a694c7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | agno_py_thinking_0023337b35d2.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agno_py_timer_c6c8902bcbdf.py | Timer class for timing code execution |
 | agno_py_toolkit_fc4c000e4561.py | Initialize a new Toolkit. |
@@ -3095,7 +2624,6 @@ Total Files: 5653
 | ai_eng_py_akv_client_2682282be421.py | Get Feathr Secrets from Azure Key Vault. Note that this function will replace '_' in `secret_name` with '-' since Azure Key Vault doesn't support it |
 | ai_eng_py_anchor_943519f54fe6.py | A feature anchor defines a set of features on top of a data source, a.k.a. a set of features anchored to a source. |
 | ai_eng_py_config_helper_b1af6f107089.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| ai_eng_py_conftest_ad702c076d57.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | ai_eng_py_constants_cc23ea27efc0.py | all constants used in test code |
 | ai_eng_py_databricks_submission_90aa86093b12.py | Class to interact with Databricks Spark cluster |
 | ai_eng_py_db_rbac_b6e56207b3ba.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -3127,31 +2655,6 @@ Total Files: 5653
 | ai_eng_py_settings_196008bb660d.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | ai_eng_py_sink_caf8f2abe4ef.py | A data sink. |
 | ai_eng_py_spark_job_params_b0dd6b72a551.py | Parameters related to feature join job. |
-| ai_eng_py_test_azure_feature_monitoring_e2e_57f331a5fc9a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_azure_kafka_e2e_1dae190886bd.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_azure_snowflake_e2e_6c9f489344b5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_azure_spark_maven_e2e_770244bb7e61.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_cli_722f526e5a1d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_config_loading_0eb301d89316.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_dataset_utils_37206091c8de.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_derived_features_9cbeb4788802.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_dtype_f05817b8d8f7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_feature_anchor_7589b662d22f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_feature_materialization_e99e846882d7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_feature_name_validation_2f2035f0272f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_feature_registry_cf8041cb4412.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_input_output_sources_375d3b7b9a76.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_job_utils_e0a8ae5c29bf.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_local_spark_e2e_d21e24f630e2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_localspark_submission_86dc793010f6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_lookup_feature_76edadb290ac.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_observation_setting_b2013bad9780.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_platform_603af3e1c3ea.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_preprocessing_pyudf_manager_86ecf8eb5770.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_pyduf_preprocessing_e2e_b836bce6fbee.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_spark_sql_source_5b15097c8e4f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_sql_registry_61cc416eb39a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| ai_eng_py_test_time_partition_pattern_e2e_9c71dd987e24.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | ai_eng_py_transformation_7c1e2d66373c.py | Base class for all transformations that produce feature values. |
 | ai_eng_py_udfs_1e633d4b6ea5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\ai_eng', providing core logic for its parent repository. |
 | ai_exploits_py_h2o_importfiles_lfi_21092172712c.py | H2O is vulnerable to an local file include in it's ImportFiles API endpoint |
@@ -3196,7 +2699,6 @@ Total Files: 5653
 | airllm_py_mlx_model_persister_69e94dc6436c.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | airllm_py_profiler_83c7ec06edf5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\airllm', providing core logic for its parent repository. |
 | airllm_py_safetensor_model_persister_5dedd943848e.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\airllm', providing core logic for its parent repository. |
-| airllm_py_test_automodel_449b2348fe00.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | android_action_kernel_py_config_9f98c324aa2a.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | android_action_kernel_py_llm_providers_52c27d558ecf.py | LLM Provider module for Android Action Kernel. |
 | android_action_kernel_py_sanitizer_599c9f636952.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -3244,7 +2746,6 @@ Total Files: 5653
 | asterisk_ai_voice_agent_py_cache_49322f8e8442.py | Thread-safe model cache to enable hot-loading and reuse of AI models |
 | asterisk_ai_voice_agent_py_call_context_analyzer_17453b80b1c8.py | Call Context Analyzer - stub used for future adaptive VAD features. |
 | asterisk_ai_voice_agent_py_cancel_transfer_85a56dd997b4.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| asterisk_ai_voice_agent_py_conftest_5f778fe884c2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | asterisk_ai_voice_agent_py_context_8ab5b9015b35.py | Tool execution context - provides access to system resources during tool execution. |
 | asterisk_ai_voice_agent_py_conversation_coordinator_edf7ca98f3db.py | Conversation coordination and observability utilities. |
 | asterisk_ai_voice_agent_py_deepgram_b8749d5c6a10.py | Deepgram Voice Agent adapter for tool calling. |
@@ -3270,33 +2771,6 @@ Total Files: 5653
 | asterisk_ai_voice_agent_py_security_022edd95a249.py | Security-critical configuration injection. |
 | asterisk_ai_voice_agent_py_session_store_bd3e9d4a2c36.py | SessionStore - Centralized, atomic state management for call sessions. |
 | asterisk_ai_voice_agent_py_switch_provider_98992787a8da.py | Utility to switch the default provider in config/ai-agent.yaml. |
-| asterisk_ai_voice_agent_py_test_audio_resampler_43ff235d75e6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_cancel_transfer_tool_488015196d0b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_continuous_stream_0906fbccd87b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_defaults_1f91e9478ec4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_email_summary_tool_30b77c2a308b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_engine_transport_alignment_fa94cc0a0584.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_enhanced_vad_0fa7b73a6418.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_externalmedia_call_9d864ea97df2.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| asterisk_ai_voice_agent_py_test_hangup_tool_32398e6e707a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_integration_ffd8d76c45af.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_loaders_87296e078b81.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_log_sanitization_c75447db1c8d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_normalization_b6b00c591057.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_normalizer_313e0f7f1332.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_openai_realtime_provider_7464e8e36c0a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_pipeline_deepgram_adapters_988002d4c8cc.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_pipeline_google_adapters_48f1f0a71152.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_pipeline_local_adapters_97a922a0c672.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_pipeline_openai_adapters_5b1ccd82778f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_pipeline_runner_lifecycle_4f5dbcdf8b98.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_playback_manager_67973eecadd4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_queue_transfer_tool_c7f27d22e967.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_request_transcript_tool_86a07918a0e4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_sanity_6eaf4430ce89.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_security_d24acf6ccdba.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_session_store_f9436036318d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| asterisk_ai_voice_agent_py_test_transfer_tool_74189e42c6f1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | asterisk_ai_voice_agent_py_transfer_fe85693ca9b1.py | Call Transfer Tool - Transfer caller to internal extension or external number. |
 | asterisk_ai_voice_agent_py_transport_orchestrator_142b2a00d32f.py | Transport Orchestrator - Multi-Provider Audio Format Negotiation |
 | asterisk_ai_voice_agent_py_unified_transfer_e6923d5f2253.py | Unified Transfer Tool - Transfer calls to extensions, queues, or ring groups. |
@@ -3333,7 +2807,6 @@ Total Files: 5653
 | cache_py_chunk_0_convert_sqa_to_llava_base_prompt_c40a63b40c22.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_css_70dfd4d332e2.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_debug_44c5ab91d79d.py | Enable debug mode for the agno library. |
-| cache_py_chunk_0_dfscoerce_ed4ee5c2f810.py | LISTENER    Listener Address (defaults to 127.0.0.1) |
 | cache_py_chunk_0_dict_utils_caeb1cfebe22.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | cache_py_chunk_0_edit_utils_675934112473.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | cache_py_chunk_0_encoding_fe23dd489015.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
@@ -3364,8 +2837,6 @@ Total Files: 5653
 | cache_py_chunk_0_node_neo4j_421750aa01cb.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_ocr_strategy_4e908d3f82b4.py | Base OCR Strategy Interface |
 | cache_py_chunk_0_path_neo4j_6e904611e0fc.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
-| cache_py_chunk_0_petitpotam_f49a6015aa0d.py | LISTENER            IP of your listener |
-| cache_py_chunk_0_printerbug_73fed1664b5b.py | LISTENER    Listener Address (defaults to 127.0.0.1) |
 | cache_py_chunk_0_process_28bacc589808.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_profits_dd98e318929e.py | Calculate the dynamic production flows between two states |
 | cache_py_chunk_0_prompt_708f439257ad.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
@@ -3373,18 +2844,10 @@ Total Files: 5653
 | cache_py_chunk_0_provider_ef51bf4030da.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_response_iterator_16d3ebdfb0e4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_run_gcp_module_78d7fc554c33.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
-| cache_py_chunk_0_shadowcoerce_64a7499b7c6b.py | IPSC             Use IsPathShadowCopied (default: False). ex. IPSC=true |
 | cache_py_chunk_0_singleton_e5f867371af8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_synthesis_17a043b5f2af.py | Apply griffin-lim to each sample iterating throught the first dimension. |
 | cache_py_chunk_0_system_prompt_formatter_44ed99e9db92.py | Formats the system prompt for the agent, only including the task and instructions. |
 | cache_py_chunk_0_terminal_color_ffabdb2334c4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
-| cache_py_chunk_0_test_5b797ba0acf1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| cache_py_chunk_0_test_dataset_fc55c9fe7b62.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| cache_py_chunk_0_test_db_206d8a85862b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| cache_py_chunk_0_test_pdf_tree_node_9504b4a00187.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| cache_py_chunk_0_test_print_f5a2b9ee9613.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| cache_py_chunk_0_test_sanity_b17f61614533.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| cache_py_chunk_0_test_score_d4aff59711d9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | cache_py_chunk_0_tic_tac_3173a44a82a7.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_tools_e13ab8a32eb7.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_utils_2261ce23e03c.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
@@ -3409,7 +2872,6 @@ Total Files: 5653
 | chunk_0_convert_sqa_to_llava_base_prompt.py | Component originally named 'DEV\PyAgent\.external\Stream-Omni\scripts\archived\convert_sqa_to_llava_base_prompt', providing core logic for its parent repository. |
 | chunk_0_css.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-wappalyzer-next\wappalyzer\parsers\css', providing core logic for its parent repository. |
 | chunk_0_debug.py | Enable debug mode for the agno library. |
-| chunk_0_dfscoerce.py | LISTENER    Listener Address (defaults to 127.0.0.1) |
 | chunk_0_dict_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | chunk_0_edit_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | chunk_0_encoding.py | Component originally named 'DEV\PyAgent\.external\skills\skills\chocomintx\xiaohongshutools\scripts\units\fuck_reverse_crypto\encoding', providing core logic for its parent repository. |
@@ -3439,8 +2901,6 @@ Total Files: 5653
 | chunk_0_node_neo4j.py | Component originally named 'DEV\PyAgent\.external\AD_Miner\ad_miner\sources\modules\node_neo4j', providing core logic for its parent repository. |
 | chunk_0_ocr_strategy.py | Base OCR Strategy Interface |
 | chunk_0_path_neo4j.py | Component originally named 'DEV\PyAgent\.external\AD_Miner\ad_miner\sources\modules\path_neo4j', providing core logic for its parent repository. |
-| chunk_0_petitpotam.py | LISTENER            IP of your listener |
-| chunk_0_printerbug.py | LISTENER    Listener Address (defaults to 127.0.0.1) |
 | chunk_0_process.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-pipeless\examples\custom-data\process', providing core logic for its parent repository. |
 | chunk_0_profits.py | Calculate the dynamic production flows between two states |
 | chunk_0_prompt.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-MobileAgent\Mobile-Agent-v2\MobileAgent\prompt', providing core logic for its parent repository. |
@@ -3448,18 +2908,10 @@ Total Files: 5653
 | chunk_0_provider.py | Component originally named 'DEV\PyAgent\.external\agentcloud\agent-backend\src\storage\provider', providing core logic for its parent repository. |
 | chunk_0_response_iterator.py | Component originally named 'DEV\PyAgent\.external\agno\libs\agno\agno\utils\response_iterator', providing core logic for its parent repository. |
 | chunk_0_run_gcp_module.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-Nebula\teamserver\core\run_module\run_gcp_module', providing core logic for its parent repository. |
-| chunk_0_shadowcoerce.py | IPSC             Use IsPathShadowCopied (default: False). ex. IPSC=true |
 | chunk_0_singleton.py | Component originally named 'DEV\PyAgent\.external\skills\skills\chocomintx\xiaohongshutools\scripts\units\singleton', providing core logic for its parent repository. |
 | chunk_0_synthesis.py | Apply griffin-lim to each sample iterating throught the first dimension. |
 | chunk_0_system_prompt_formatter.py | Formats the system prompt for the agent, only including the task and instructions. |
 | chunk_0_terminal_color.py | Component originally named 'DEV\PyAgent\.external\Acontext\src\server\core\acontext_core\util\terminal_color', providing core logic for its parent repository. |
-| chunk_0_test.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-pipeless\pipeless\src\test', providing core logic for its parent repository. |
-| chunk_0_test_dataset.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| chunk_0_test_db.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| chunk_0_test_pdf_tree_node.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| chunk_0_test_print.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| chunk_0_test_sanity.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| chunk_0_test_score.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | chunk_0_tic_tac.py | Component originally named 'DEV\PyAgent\.external\Chain-of-Recursive-Thoughts\demos\tic-tac', providing core logic for its parent repository. |
 | chunk_0_tools.py | Component originally named 'DEV\PyAgent\.external\skills\skills\krishna3554\echo-agent\tools', providing core logic for its parent repository. |
 | chunk_0_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
@@ -3515,9 +2967,6 @@ Total Files: 5653
 | code_puppy_py_config_5108f6af7df9.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | code_puppy_py_config_557e4f20b15e.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | code_puppy_py_config_c77ac050128a.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| code_puppy_py_conftest_26943963989e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_conftest_6518ac7cdc2a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_conftest_703d19e988a1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | code_puppy_py_dashboard_96e993faf787.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | code_puppy_py_display_732e9880517c.py | Common display utilities for rendering agent outputs. |
 | code_puppy_py_emitter_2e8b3a904690.py | Event emitter for frontend integration. |
@@ -3597,135 +3046,10 @@ Total Files: 5653
 | code_puppy_py_summarization_agent_69ea97ec1941.py | Get the system instructions for the summarization agent. |
 | code_puppy_py_terminal_command_tools_25d83dfebf39.py | Terminal command execution tools for browser-based terminal automation. |
 | code_puppy_py_terrier_830ed737db78.py | Terrier - The worktree digging specialist! 🐕 |
-| code_puppy_py_test_add_model_menu_0213ed9e6262.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| code_puppy_py_test_agent_creator_agent_bc9f7f35d7f2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_agent_manager_basics_3f419d098cf5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_agent_manager_errors_31fb7ecbf300.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_agent_pinned_models_a260b525e908.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_agent_terminal_qa_5694565c8f79.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_agent_tools_coverage_63ebd1422f40.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_antigravity_accounts_8e24f21b71c5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_antigravity_model_b3f2e407ea6f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_antigravity_model_helpers_ae86f69d5f61.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_antigravity_model_integration_e2532df935d5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_antigravity_model_mapping_819e08302f27.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_antigravity_model_request_55ef3012c7b4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_antigravity_model_streaming_d00900ac058f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_antigravity_oauth_dfb1fa9d2590.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_antigravity_oauth_utils_3ac5a03a8cf7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_antigravity_streaming_response_83f9553f10a7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_antigravity_transport_flows_2116ae89ba13.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_async_lifecycle_eced276e5bfe.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_auto_save_session_eb4ba4ff3b8d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_base_agent_accumulator_45b2feaec404.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_base_agent_complex_methods_9161f0375c45.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_base_agent_configuration_2d9d0782453f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_base_agent_edge_cases_8c92fda95d66.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_base_agent_key_listeners_17073a399c92.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_base_agent_message_history_2fc7142823e1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_base_agent_message_processing_c6b870aefff2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_base_agent_reload_190b69afb80f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_base_agent_run_mcp_5b28e6037f58.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_base_agent_token_estimation_a4fb17a8d24d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_blocking_startup_a5be04f9ef05.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_browser_control_b8bd87a7227c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_browser_locators_4852239b915f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_browser_manager_34b12264f357.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_browser_navigation_29df014e17cb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_browser_screenshot_88c596145e0a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_callbacks_extended_b9f4f74cc2d0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_chatgpt_oauth_integration_7a5cc3a4196e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_chatgpt_oauth_server_8df2302cb030.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_chromium_terminal_manager_84a2f31580b0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_claude_cache_client_fb3ec76b3ca0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_claude_code_oauth_callbacks_83743d013bfa.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_cli_harness_foundations_68c111c866da.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_cli_runner_a2078863fa7b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_colors_menu_de36ab67e411.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_command_9104d96d348c.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| code_puppy_py_test_command_cache_c2d7f0ab8230.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_command_line_attachments_0d626c8f5f80.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_command_line_utils_b59e823ebc09.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_command_registry_160e4d0b583d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_command_runner_core_393d95abdd9f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_common_bdb15ab56799.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_common_comprehensive_8222d928b515.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_common_coverage_d19125732a4f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_common_extended_d0210c98a175.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_config_extended_part2_21d06208ae43.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_customizable_commands_callbacks_bc6fdbb7148b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_dashboard_55b829b7dc5a.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| code_puppy_py_test_dbos_enabled_46444b75d081.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_display_36ee1cd6af66.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_error_isolation_3acd5aabdc46.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_file_modification_auxiliary_e42c5e93a7c4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_file_modifications_extended_31be6cc27443.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_file_permission_handler_e517ca2db1fc.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_health_monitor_2825efa662ac.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_http_utils_02ef9217bf68.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_json_agent_extended_204670a99254.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_keymap_coverage_95d2985b134d.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| code_puppy_py_test_load_context_completion_428c255d1e9f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_managed_server_bd3bb00fcc80.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_manager_extended_6d318fce90a2.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| code_puppy_py_test_mcp_init_5c34d6c70646.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_mcp_list_search_commands_a67297cbf9bf.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_mcp_logs_fb14b7a195b2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_mcp_start_stop_commands_b502cd45d094.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_mcp_status_command_bd2e831c3682.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| code_puppy_py_test_mcp_utils_c5824f2b8ea8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_message_queue_883530ab2b8c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_message_queue_coverage_2699e5b8def3.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_messaging_bus_ec1f1c626665.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_messaging_extended_7d3474c7a433.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_messaging_init_7e45569d9813.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_messaging_structured_eaf17ce40106.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_model_factory_376a1209789b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_model_factory_basics_f6d9fbd72c5f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_model_factory_errors_04e5712b24bb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_model_factory_providers_b6e0b6093531.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_model_settings_bcdacd3f9d07.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_model_settings_menu_b2e2463e7928.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_model_utils_b3b7a2c530a9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_model_utils_coverage_9848f777c093.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_motd_db0e832a1fda.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_plugin_15522a69ab5a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_plugin_30104d3d39f8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_plugin_5a1201112427.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_plugins_init_c996bc6af32d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_plugins_init_coverage_752c17f22f92.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_prompt_toolkit_completion_4b87b7f9208a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_ralph_test_plugin_136c6bbf4771.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_registry_comprehensive_f99b3cad6f84.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_renderers_fc5ff968caf6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_retry_manager_519243bc1b9a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_rich_renderer_977882dbf0ea.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_round_robin_model_1870bdee2706.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_round_robin_rotate_every_670965165bf3.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_session_storage_ba63b4765aec.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_session_storage_coverage_dc03739adc10.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_session_storage_extended_3ffef38ed7c1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_shell_safety_733189cd2414.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_shell_safety_callbacks_c3cd8df5b4a6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_spinner_init_a749b93da3c9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_status_display_aa924632911f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_subagent_context_3ed07633ac86.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_subagent_stream_handler_1cf78bd1c5de.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_terminal_screenshot_tools_72407d0ba9a3.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_terminal_tools_0d1fdb9a909c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_tools_content_cce9809ef439.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_tools_registration_85c3e3e610ca.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_tutorial_5d4fdfaed57b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_uc_menu_4028e78a77d0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_utils_coverage_023ef63bea70.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| code_puppy_py_test_uvx_detection_coverage_97e0500d1aa3.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| code_puppy_py_test_uvx_detection_fc41527c3e05.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| code_puppy_py_test_version_checker_f0ed53d065bb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | code_puppy_py_token_78789ddc2c5c.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | code_puppy_py_tools_8ec9d5a01272.py | Ralph plugin tools - registered via the register_tools callback. |
 | code_puppy_py_utils_585c73714d26.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | code_puppy_py_version_checker_90d03a797fc4.py | Version checking utilities for Code Puppy. |
-| code_puppy_py_watchdog_d74054c11630.py | Watchdog - The QA critic that guards code quality! 🐕‍🦺 |
 | code_puppy_py_websocket_c2b4d99ac4a6.py | WebSocket endpoints for Code Puppy API. |
 | coqui_ai_TTS_measures.py | Compute how diagonal alignment predictions are. It is useful |
 | coqui_ai_TTS_synthesis.py | Apply griffin-lim to each sample iterating throught the first dimension. |
@@ -3743,8 +3067,6 @@ Total Files: 5653
 | coqui_ai_tts_py_bark_config_3a5358f3b93b.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | coqui_ai_tts_py_base_7768dccc6784.py | Base phonemizer class |
 | coqui_ai_tts_py_base_encoder_config_3c6bc55df5f3.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| coqui_ai_tts_py_base_tts_2a25b2ded240.py | Base `tts` class. Every new `tts` model must inherit this. |
-| coqui_ai_tts_py_base_vc_3527827ba2ab.py | Base VC class. Every new voice conversion model must inherit this. |
 | coqui_ai_tts_py_base_vocoder_715270ab62f6.py | Base `vocoder` class. Every new `vocoder` model must inherit this. |
 | coqui_ai_tts_py_belarusian_phonemizer_fdce3c7c5bdb.py | 🐸TTS be phonemizer using functions in `TTS.tts.utils.text.belarusian.phonemizer` |
 | coqui_ai_tts_py_capacitron_layers_e1451633d09b.py | Effective Use of Variational Embedding Capacity for prosody transfer. |
@@ -3808,7 +3130,6 @@ Total Files: 5653
 | coqui_ai_tts_py_init_1a79759f97ad.py | for backward compat. |
 | coqui_ai_tts_py_init_2220888a8c91.py | Load models directly from configuration. |
 | coqui_ai_tts_py_init_82be4efe10b3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\coqui_ai_tts', providing core logic for its parent repository. |
-| coqui_ai_tts_py_init_c2a8c785266a.py | Returns the path to the test directory. |
 | coqui_ai_tts_py_init_cbfa947db5d9.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\coqui_ai_tts', providing core logic for its parent repository. |
 | coqui_ai_tts_py_init_ce44ea632925.py | Download the model and return the model object. |
 | coqui_ai_tts_py_init_ddc1ffb6022c.py | Initiate a phonemizer by name |
@@ -3894,62 +3215,6 @@ Total Files: 5653
 | coqui_ai_tts_py_tacotron_9261c2f0fa15.py | Tacotron as in https://arxiv.org/abs/1703.10135 |
 | coqui_ai_tts_py_tacotron_config_45e4b5b959e2.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | coqui_ai_tts_py_tacotron_d91aba821d2b.py | A wrapper for Conv1d with BatchNorm. It sets the activation |
-| coqui_ai_tts_py_test_audio_processor_d3c60c808d37.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_belarusian_phonemizer_55181e43fd61.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_big_models_8831bd965d57.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_characters_c0886606e031.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| coqui_ai_tts_py_test_cloning_5b7b1d93a788.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_compute_statistics_750f4d4cfc7f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_dataset_formatters_6b0f679dbd3a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_delightful_tts_layers_140209b2e017.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_embedding_manager_850716131ec8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_extract_tts_spectrograms_8f2bd1da0372.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_feed_forward_layers_3d4e47940e49.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_find_unique_phonemes_fb7c2ec132b5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_forward_tts_962257f1758c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_freevc_51b165c039b2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_generic_utils_0305dbf1a038.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_glow_tts_2fccc3024a43.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_helpers_a9c06204b026.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_japanese_phonemizer_40289749c062.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_korean_phonemizer_58ddefa2feeb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_losses_2dd93b297fd1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_models_cc7d24b80c0e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_numpy_transforms_cb88872d7457.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_openvoice_dffc131584f3.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_overflow_f40a255b4b35.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_phonemizer_68e809798a57.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_punctuation_141771a68843.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_samplers_33b43e270965.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_speaker_encoder_015eadab9856.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_speaker_encoder_train_fb8cc60d6936.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_speaker_manager_821368fb4de7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_synthesize_6862a41a5837.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_synthesizer_492141cf7925.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_tacotron2_model_b53ab8a7174d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_tacotron_layers_95f28410bf23.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_tacotron_model_6b8ea31548c6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_text_cleaners_f87d763cb9a9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_tokenizer_8b4f9d18ee99.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_torch_transforms_6a44d232d0c3.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_train_tts_efe1cd1d571b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_train_vocoder_f221ff47e381.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_vits_e225d9064a16.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_vits_multilingual_speaker_emb_train_79f2741f46fd.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_vits_multilingual_train_d_vectors_d1754294c086.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_vocoder_gan_datasets_8a887d1f8d4f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_vocoder_losses_9b174a1a1d9f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_vocoder_melgan_discriminator_a31df54c224e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_vocoder_melgan_generator_1e64dd0d7b9f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_vocoder_parallel_wavegan_discriminator_b1ab6a243557.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_vocoder_parallel_wavegan_generator_7d27a684fbe4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_vocoder_pqmf_ff697641e214.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_vocoder_rwd_7ad228124e0e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_vocoder_wavernn_datasets_b8f410fe8472.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_vocoder_wavernn_db294e1c50ff.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_wavegrad_6cf644b4f88a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_wavegrad_layers_f68cc41abb93.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| coqui_ai_tts_py_test_xtts_gpt_train_86a9f66c26e0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | coqui_ai_tts_py_time_depth_sep_conv_845ef0325438.py | Time depth separable convolution as in https://arxiv.org/pdf/1904.02619.pdf |
 | coqui_ai_tts_py_time_norm_0c771fe7d899.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\coqui_ai_tts', providing core logic for its parent repository. |
 | coqui_ai_tts_py_tokenizer_238d7783e6bf.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\coqui_ai_tts', providing core logic for its parent repository. |
@@ -4023,7 +3288,6 @@ Total Files: 5653
 | coqui_ai_tts_py_wavenet_1b3d447aba53.py | Wavenet layers with weight norm and no input conditioning. |
 | coqui_ai_tts_py_wavernn_config_3fe467358da3.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | coqui_ai_tts_py_wavernn_dataset_5e5082718da8.py | WaveRNN Dataset searchs for all the wav files under root path |
-| coqui_ai_tts_py_wavernn_e620aeca7d17.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\coqui_ai_tts', providing core logic for its parent repository. |
 | coqui_ai_tts_py_xtts_config_e2622eefed38.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | coqui_ai_tts_py_xtts_manager_a41db4fc40d8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\coqui_ai_tts', providing core logic for its parent repository. |
 | coqui_ai_tts_py_zh_cn_phonemizer_f4f1ab5f96c4.py | 🐸TTS Zh-Cn phonemizer using functions in `TTS.tts.utils.text.chinese_mandarin.phonemizer` |
@@ -4100,7 +3364,6 @@ Total Files: 5653
 | decodingai_magazine_second_brain_ai_assistant_course_py_summarizer_1f6967cdd405.py | Use this tool to summarize a piece of text. Especially useful when you need to summarize a document. |
 | decodingai_magazine_second_brain_ai_assistant_course_py_summary_density_heuristic_f0d51fafbb94.py | A metric that evaluates whether an LLM's output has appropriate length and density. |
 | decodingai_magazine_second_brain_ai_assistant_course_py_summary_density_judge_91b7f8137dd8.py | A metric that evaluates whether an LLM's output has appropriate length and density. |
-| decodingai_magazine_second_brain_ai_assistant_course_py_test_s3_becb6658e8c3.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | decodingai_magazine_second_brain_ai_assistant_course_py_upload_to_s3_69d6646162b9.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\decodingai_magazine_second_brain_ai_assistant_course', providing core logic for its parent repository. |
 | decodingai_magazine_second_brain_ai_assistant_course_py_use_s3_fb72538e064d.py | CLI tool for uploading and downloading folders to/from S3. |
 | decodingai_magazine_second_brain_ai_assistant_course_py_utils_85e348e0e96e.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
@@ -4149,8 +3412,6 @@ Total Files: 5653
 | evoagentx_py_controller_7bf29e6f6f4e.py | start executing the workflow. |
 | evoagentx_py_crypto_currencies_tool_542c57a01d41.py | Create a tool to get a list of cryptocurrency pair symbols |
 | evoagentx_py_customize_action_9b04367fe8ac.py | Prepare prompt for action execution. |
-| evoagentx_py_customize_agent_999f56cc08e7.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\evoagentx', providing core logic for its parent repository. |
-| evoagentx_py_database_base_aec8902f5484.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | evoagentx_py_db_4510126ecb4c.py | Database connection and models for EvoAgentX. |
 | evoagentx_py_decorators_1c1e4f0b1d73.py | Class-based decorator for registering tunable optimization parameters. |
 | evoagentx_py_decorators_254b651bd1ab.py | threading safe decorator, it can be used to decorate a function or receive a lock: |
@@ -4160,7 +3421,6 @@ Total Files: 5653
 | evoagentx_py_evoprompt_bestconfig_json_d975bc9b0b5a.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | evoagentx_py_evoprompt_workflow_651fe779d955.py | Multi-Agent EvoPrompt Workflow Example |
 | evoagentx_py_example_optimizer_616a264aa2a0.py | A simple random search optimizer example. |
-| evoagentx_py_example_short_term_memory_afebd10a3709.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | evoagentx_py_experience_utils_8f0852667c30.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | evoagentx_py_faiss_1b49944ebb34.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | evoagentx_py_generate_report_2fae5d463af1.py | Simple wrapper script to generate HTML stock analysis reports. |
@@ -4206,7 +3466,6 @@ Total Files: 5653
 | evoagentx_py_math_textgrad_cc09bc82884f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\evoagentx', providing core logic for its parent repository. |
 | evoagentx_py_mbpp_50b6327522a9.py | load MBPP data from the given path and convert to HumanEval format |
 | evoagentx_py_mbpp_textgrad_58ba0c234400.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\evoagentx', providing core logic for its parent repository. |
-| evoagentx_py_mcp_agent_5f480d668069.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | evoagentx_py_measures_f6cf708f8c8c.py | Base tokenizer class. |
 | evoagentx_py_memory_ac7a258d367e.py | Base class for memory implementations in the EvoAgentX framework. |
 | evoagentx_py_memory_manager_b1add105878a.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -4267,25 +3526,6 @@ Total Files: 5653
 | evoagentx_py_task_planning_dae063456c12.py | Input specification for the task planning action. |
 | evoagentx_py_telegram_example_cd63a8fa25c5.py | Example usage of Telegram tools in EvoAgentX |
 | evoagentx_py_template_f91824b9ccf4.py | Get the required fields of the format. |
-| evoagentx_py_test_action_graph_de3873772d50.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_agent_f622e40e5be6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_agent_manager_60c355265e0a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_base_config_147ecd42a95c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_customize_agent_d7d4dd625710.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_evaluator_5f2e65a0e094.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_gsm8k_d5f173f63842.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_humaneval_aa50a97be45f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_livecodebench_e73e4fcbeaf1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_math_22d86d4daf0c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_mbpp_04903db075c4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_message_42be02a54967.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_module_b6c4ce238ddc.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_openai_model_e127a4e71b62.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_output_prediction_0785d20dbc3d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_sew_workflow_scheme_57ede0edf78c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_storagehandler_25e1a22e93c7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_workflow_graph_42d9b2de3d4c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| evoagentx_py_test_workflow_manager_993234d24414.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | evoagentx_py_textgrad_optimizer_66bf178b7883.py | A custom agent call with textgrad.Variable inputs and output. |
 | evoagentx_py_tool_4f3301c87497.py | inputs: {"input_name": {"type": "string", "description": "input description"}, ...} |
 | evoagentx_py_toolkit_79a1fbb04e60.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -4309,7 +3549,6 @@ Total Files: 5653
 | evoagentx_py_workflow_manager_16c400c125d9.py | Base interface for workflow schedulers. |
 | evoagentx_py_workflow_reviewer_112e1387afae.py | Placeholder for the Agent that is responsible for reviewing workflow plans and agents. |
 | grisuno_agi_py_agi_1cf4795629b4.py | Agentic Grokked Integratted v0.1 - Unified Algorithmic Cassette Model |
-| grisuno_agi_py_app_cd40a08cd6ea.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | grisuno_agi_py_super_casette_b52bfd2dd03a.py | FusedAGI - HYBRIDO FINAL (Arquitectura Casette + Entrenamiento App) |
 | grisuno_agi_py_uni_e5f455569dcd.py | AGI v0.1 - Demo Multi-Dominio |
 | grisuno_agi_py_unificado_c1947990081f.py | Grokkit v0.1 - Unified Agent with Explicit Path Mapping |
@@ -4329,9 +3568,6 @@ Total Files: 5653
 | llama_cpp_python_py_reasonact_1c8b9c1add86.py | You run in a loop of Thought, Action, Observation. |
 | llama_cpp_python_py_server_d821cd2035fc.py | llama-cpp-python server from scratch in a single file. |
 | llama_cpp_python_py_server_de18a86dee07.py | function () { |
-| llama_cpp_python_py_test_llama_chat_format_451e83e10f73.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| llama_cpp_python_py_test_llama_grammar_4e412cbe46d8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| llama_cpp_python_py_test_llama_speculative_4a6112b00bb6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | llama_cpp_python_py_types_89b520e8be67.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\llama_cpp_python', providing core logic for its parent repository. |
 | llama_cpp_python_py_util_e858f303e1c8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\llama_cpp_python', providing core logic for its parent repository. |
 | llmtornado_py_chroma_store_f86ab6a364c3.py | ChromaDB-based vector storage with branch-aware indexing. |
@@ -4343,10 +3579,6 @@ Total Files: 5653
 | llmtornado_py_resource_manager_771f6f3d1fac.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | llmtornado_py_sample_project_06fa97d783d6.py | Sample Python project to demonstrate context extraction. |
 | llmtornado_py_server_84546653a121.py | MCP (Model Context Protocol) server implementation. |
-| llmtornado_py_test_chunker_a18a15a206eb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| llmtornado_py_test_extractor_0fd733c540b0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| llmtornado_py_test_ignore_patterns_ae96caba9a74.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| llmtornado_py_test_resource_manager_155cf7ea3d31.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | llmtornado_py_verify_installation_9c0ca5554884.py | Verify FSKB installation and dependencies. |
 | openclaw_py_gen_19c78051c882.py | Return (default_size, default_quality) for the given model. |
 | openclaw_py_generate_image_62e18771ced6.py | Generate images using Google's Nano Banana Pro (Gemini 3 Pro Image) API. |
@@ -4362,7 +3594,6 @@ Total Files: 5653
 | skills_memory.py | Component originally named 'DEV\PyAgent\.external\skills\skills\krishna3554\echo-agent\memory', providing core logic for its parent repository. |
 | skills_py__3d_visualization_6550839cad03.py | 3D Visualization Patterns for Manim Community |
 | skills_py_a1_and_webid_319e7459df01.py | 小红书 cookie -> a1 & webId 加密实现类 |
-| skills_py_ab_test_planner_b34915dc9d22.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | skills_py_actions_5dfc607f9dd9.py | High-level LinkedIn actions with error handling and retry logic. |
 | skills_py_activity_ops_a192cb6fd25f.py | Activity log operations for email-to-calendar skill. |
 | skills_py_adaptive_parameter_selector_9d786c3a878e.py | Adaptive Parameter Selector |
@@ -4385,7 +3616,6 @@ Total Files: 5653
 | skills_py_analyze_ddbad2f72449.py | Analyze text for AI writing patterns. |
 | skills_py_analyze_log_8c80e78fc770.py | Security Log Analyzer |
 | skills_py_analyze_performance_4539cbee5033.py | Performance analysis and recommendation module. |
-| skills_py_analyze_spread_6c3b7378530c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | skills_py_analyzer_379e0aef8db2.py | Static analysis engine for skill packages. |
 | skills_py_analyzer_df12cac757d9.py | Personal Analytics Analyzer |
 | skills_py_anchor_87524b95b52a.py | ═══════════════════════════════════════════════════════════════════════════════ |
@@ -4405,10 +3635,6 @@ Total Files: 5653
 | skills_py_auth_739d4fb61de4.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | skills_py_auto_reply_46c438c520c4.py | Auto-reply example |
 | skills_py_auto_setup_crons_4a581f59803b.py | Auto Setup Crons - Generate cron configurations for upcoming fixtures. |
-| skills_py_backtest_validator_6faed5d0a143.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_backtester_09699e54d8aa.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| skills_py_backtester_8c29b9e4b741.py | Backtesting Framework for Trading Strategy Validation |
-| skills_py_backtester_f5daf44ea1bf.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | skills_py_backup_28112daa54d7.py | Backup Clawdbot media to a local folder (synced by Dropbox/iCloud/etc). |
 | skills_py_balance_dcb3b44c4645.py | Clawd Casino - Balance & Approval Status |
 | skills_py_base_3c6a37bb4267.py | Base provider protocols. |
@@ -4454,7 +3680,6 @@ Total Files: 5653
 | skills_py_card_generator_905f2851d348.py | AH Bonuskaart generator + personal offers checker |
 | skills_py_carnalaestheticengine_fc86b34251bb.py | Generates a physiological impulse based on user intent. |
 | skills_py_categories_52049ecf70e8.py | Finance Tracker — Category Definitions |
-| skills_py_cf_bypass_03559650a946.py | Cloudflare Bypass Utilities |
 | skills_py_changelog_ops_7520195c5399.py | Changelog operations for email-to-calendar skill. |
 | skills_py_characterize_run_2b690f504125.py | Characterize a W&B training run. |
 | skills_py_chart_patterns_fc0978c745ff.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -4464,7 +3689,6 @@ Total Files: 5653
 | skills_py_charts_mermaid_be4f2608a071.py | Mermaid chart generation for markdown output. |
 | skills_py_chat_53754096ab95.py | Google Chat commands. |
 | skills_py_check_5ad40f0f36a1.py | Check campsite availability on recreation.gov for given campground(s) and dates. |
-| skills_py_check_bounding_boxes_test_a4fbd4eeee58.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | skills_py_check_credits_fc5c95b301d1.py | x402 Credit Balance Check |
 | skills_py_check_inbox_4655e43b6938.py | Check inbox for new messages and process them. |
 | skills_py_check_inbox_d75cae1c2f7f.py | Check AgentMail inbox for messages |
@@ -4499,9 +3723,6 @@ Total Files: 5653
 | skills_py_computer_use_agent_07b667f703ec.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\skills', providing core logic for its parent repository. |
 | skills_py_config_658a06fc0be1.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | skills_py_config_8d5bf2b24685.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| skills_py_conftest_3cb0294543fe.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_conftest_90adcd351a53.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_conftest_f425d1288fa8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | skills_py_consolidate_2aab05d9256e.py | Memory Consolidation - Periodic maintenance of memory files. |
 | skills_py_consume_credits_d975d74cb799.py | x402 Credit-Based Consumption |
 | skills_py_context7_4d772f70f8e2.py | Context7 API client for searching libraries and fetching documentation. |
@@ -4615,14 +3836,12 @@ Total Files: 5653
 | skills_py_final_memory_81f13555ffce.py | Final Working LanceDB Memory Integration for Clawdbot |
 | skills_py_finance_engine_9464ae1cb7f5.py | Summarize invoices and expenses from account.move. |
 | skills_py_find_cheap_ranges_827d460213a5.py | Encuentra rangos de horas con precios baratos |
-| skills_py_find_untested_code_4349dd54d1c9.py | Find source files that don't have corresponding test files. |
 | skills_py_fitbit_api_0ff7ec0f6599.py | Fitbit Web API Wrapper with Auto-Refresh and Token Persistence |
 | skills_py_fitbit_briefing_6891f6463908.py | Fitbit Morning Briefing CLI |
 | skills_py_fixture_generator_0bdfde6b4d19.py | Fixture and test data generation module. |
 | skills_py_flights_3f83e27ac537.py | Flight tracking CLI - check status, delays, and set alerts. |
 | skills_py_forecast_04d757c5a9ff.py | Get weather forecast for Swiss locations by postal code. |
 | skills_py_format_dataframe_e92fb7c87e6a.py | DataFrame formatting for Oura data. |
-| skills_py_format_detector_713825216371.py | Format detection module. |
 | skills_py_format_html_fe902e09bc21.py | HTML formatting for Oura data. |
 | skills_py_format_json_c28ff454a0fd.py | JSON formatting for Oura data. |
 | skills_py_format_markdown_2f366cc5c7ce.py | Markdown formatting for Oura data. |
@@ -4630,7 +3849,6 @@ Total Files: 5653
 | skills_py_format_utils_1e464ff1df01.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | skills_py_formatter_dd43cc946d08.py | Substack Article Formatter - Transform plain text using viral Substack patterns |
 | skills_py_formatters_504ebd12e6fc.py | Output formatters for Oura data. |
-| skills_py_framework_adapter_2d1d514977fe.py | Framework adapter module. |
 | skills_py_ga4_auth_c6793c43d178.py | GA4 OAuth Setup Script |
 | skills_py_ga4_query_f7623993a6ee.py | GA4 Data API Query Script |
 | skills_py_gamma_client_711c0bb143fe.py | Polymarket Gamma API client for market browsing. |
@@ -4727,7 +3945,6 @@ Total Files: 5653
 | skills_py_labs_aadfa6b4feed.py | DataForSEO Labs API - Keyword research, suggestions, difficulty, and competitive analysis. |
 | skills_py_lafeitu_client_00637816763e.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\skills', providing core logic for its parent repository. |
 | skills_py_lamp_cli_ba29ef8fd40a.py | Desk lamp control CLI for Mijia devices. |
-| skills_py_lancedb_memory_22f40b7657ac.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | skills_py_laposte_7e3c1a8aa8e6.py | La Poste — Suivi de colis via l'API Suivi v2. |
 | skills_py_lastfm_cli_108dbc6ca365.py | Last.fm CLI - query listening data and manage local history. |
 | skills_py_learn_7874133aa49c.py | CLI wrapper for AgentMemory lesson operations. |
@@ -4759,7 +3976,6 @@ Total Files: 5653
 | skills_py_make_call_b9eea2186b13.py | Make voice calls via Dialpad API with optional ElevenLabs TTS. |
 | skills_py_manage_endpoint_ae486c9ceff8.py | x402 Endpoint Management |
 | skills_py_manage_examples_ab9875d33a19.py | Utility script for managing the blog examples library. |
-| skills_py_manage_topics_ae6f2393aa71.py | Topic management CLI for proactive-research. |
 | skills_py_market_context_analyzer_25da8dddb0c8.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | skills_py_market_regime_4b65943de883.py | Market Regime Detector - Extracted from PatternRecognition |
 | skills_py_market_series_06cc68d020ec.py | market_series.py |
@@ -4774,7 +3990,6 @@ Total Files: 5653
 | skills_py_meta_analyzer_0fdd502809b4.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | skills_py_metadata_optimizer_bfb39fa8151f.py | Metadata optimization module for App Store Optimization. |
 | skills_py_meteo_d1232785c272.py | Météo France via Open-Meteo — pas de clé API nécessaire. |
-| skills_py_metrics_calculator_9e2c41b9c785.py | Metrics calculation module. |
 | skills_py_minimal_formatter_70dfc0236ed9.py | Minimal Substack Formatter - Pure formatting only |
 | skills_py_ml_monitoring_suite_77f3ae2fc4df.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | skills_py_model_deployment_pipeline_9ba3a08df45e.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -4849,15 +4064,12 @@ Total Files: 5653
 | skills_py_process_watch_30ffbd4cf71a.py | Process Watch - Comprehensive system process monitoring. |
 | skills_py_profile_306790e2703d.py | LinkedIn profile and activity page scraping. |
 | skills_py_prompt_analyzer_8b8eee0ac879.py | SkillGuard Prompt Injection Analyzer |
-| skills_py_prompt_performance_tester_eb197ee33740.py | Prompt Performance Tester Skill - Multi-Provider Edition |
 | skills_py_protonmail_0e220a7f21ca.py | ProtonMail CLI via IMAP bridge (Proton Bridge or hydroxide). |
 | skills_py_proxmox_91b488286cd7.py | Proxmox Skill for OpenClaw |
-| skills_py_proxy_rotate_12c9a78f44d0.py | Proxy Rotation Manager |
 | skills_py_proxy_server_f43138edd40b.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | skills_py_publish_c3ec39597b9e.py | Publish Event - CLI and library for publishing events to the event bus. |
 | skills_py_pvp_6e8a06725e7a.py | Clawd Casino PvP CLI - Command line interface for /pvp commands. |
 | skills_py_pymupdf_parse_b1542f3b0752.py | Parse PDFs with PyMuPDF (fitz) into Markdown/JSON quickly (less robust). |
-| skills_py_python_client_48ab4b16a08f.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | skills_py_quantum_clock_34a0492d00f4.py | QUANTUM CLOCK |
 | skills_py_quantum_magic_aef8da048e83.py | ✨ QUANTUM MAGIC ✨ |
 | skills_py_query_adbc822428cb.py | SQL Injection - EVALUATION SKILL |
@@ -5029,96 +4241,6 @@ Total Files: 5653
 | skills_py_tesla_6ccbac7bc5ca.py | Tesla vehicle control via unofficial API. |
 | skills_py_tesla_fleet_7cb7078d09ad.py | Legacy compatibility wrapper. |
 | skills_py_tessie_dd0ae61473ca.py | Tessie API interaction script for Tesla vehicle control |
-| skills_py_test_advanced_validation_82eb69aad010.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_agent_c706c953b75f.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| skills_py_test_alerts_7266d9b56584.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_alerts_extended_ddbf77177f79.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_alerts_f30bac344cde.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_alignment_analyzer_9b7d30537001.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_alpaca_connection_da2b7270b683.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_analyzer_c32b65cc3f81.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_ast_analyzer_5aeb9636036e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_auth_bdc76a76a3c0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_behavior_3e200f2a6dee.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_broker_adapter_999ba8b034d0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_charge_port_status_38603c746895.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_charge_status_json_28fe1f5585dd.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_charts_html_8cd256809234.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_charts_mermaid_fa3826ee97d8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_cli_ef1b4eab5174.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_client_510ab227faff.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_client_5d7280a71c8c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_cmd_climate_defrost_8eb5c041609b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_cmd_climate_status_bda242597293.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_cmd_mileage_record_140c321003c4.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_cmd_seats_999eb7be8df7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_cmd_status_summary_6e949a5d3acb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_cmd_windows_7924d6e45f7b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_common_0ab2c60cdddd.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_congress_tracker_b4f9d09afd3f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_connection_02a6d3cfd1e3.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_content_converter_ee4ad78195d9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_core_3dfc99d0ce29.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_core_modules_e3153d01e5ab.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_coverage_boost_f40a8d810b92.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| skills_py_test_date_parser_485efe6242fb.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_date_parser_cc8cd212ed35.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_defaults_permissions_41d59ad524cc.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_earnings_450171f03a02.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_embedding_cache_644009048796.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_error_handling_a92754aa9e78.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_fetch_news_bdc9b7fe0d64.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| skills_py_test_formatter_45f8b55239dd.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_formatters_3369a5b3c3b7.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_formatters_extended_2bcd1669bb80.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_formatting_1c8ded28a624.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_fuzz_c0e3779c2133.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_generator_54096fc56ad1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_hybrid_briefing_aa73ca49d126.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_integration_1e5a7029be61.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_llm_analyzer_4754d1d58909.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_location_rounding_9115fe62480d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_memory_0ada5ad123f0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_meta_analyzer_1ea173b33311.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_mileage_db_66e898211c54.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_mileage_export_filter_8cf522122546.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_mock_703365907aea.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_no_wake_39c632f0abfa.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_openclaw_integration_ca80d1ef365c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_openings_format_db3f6ac515d2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_optimization_5b8ab847387d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_patterns_49ff0c8373dd.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_pending_summaries_6d479b19daa3.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_portfolio_604f3446372e.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_prompt_analyzer_e082087db0f6.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_questionary_8e842868ddbc.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_ranking_7008af4a283f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_refactored_components_d15043c007b9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_relationships_36a52da82b9a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_report_charging_power_c66da350a4d0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_report_json_df6652cbeaef.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_report_openings_becbaf29e2be.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_report_privacy_f17b642d8d9b.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_report_seat_heaters_3c82b2c4a8f2.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_scanner_ca4c6c7d8de0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_scheduled_departure_status_efd18d9aeedd.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_selection_94cf08e6fd7f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_server_d6f84de5d9c3.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| skills_py_test_skills_79279ce24030.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_stock_analysis_a83064c0da62.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_stocks_382e4ce1703c.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_store_0316040f71b0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_summarize_1182c1eeb3e5.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_summary_json_cccf80b3a3bc.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_system_58847a97cc3f.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_tagging_256819bb2ee1.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_time_helpers_6dbb14f4de41.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| skills_py_test_trade_engine_650c77d33e04.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_trading_agent_bdade963e7c8.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_tts_01fcf528c31d.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_validation_comprehensive_47b92e41f3e4.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| skills_py_test_vehicle_select_9bf38ae215c0.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
-| skills_py_test_wp_publisher_e6539c8278a9.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | skills_py_text_to_image_4a069d4dc4b9.py | Create a Meshy Text-to-Image task and download the resulting image(s). |
 | skills_py_tfl_journey_disruptions_e8b63b311e64.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\skills', providing core logic for its parent repository. |
 | skills_py_the_bridge_d748c2fedc3c.py | ═══════════════════════════════════════════════════════════════════════════════ |
@@ -5389,7 +4511,6 @@ Total Files: 5653
 | stream_omni_llava_serve_model_worker_324e68cc7c22_64ffa6723fb3.py | A model worker executes the model. |
 | stream_omni_llava_serve_register_worker_93afe95d9919_52280d635216.py | Manually register workers. |
 | stream_omni_llava_serve_sglang_worker_ee32fadc3aa2_ec55e545f962.py | A model worker executes the model. |
-| stream_omni_llava_serve_test_message_ef95e42dd133_93beb5815192.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | stream_omni_llava_train_llama_flash_attn_monkey_patch_525399bd58b5_4aaeeb0c24db.py | Component originally named 'DEV\PyAgent\.external\Stream-Omni\llava\train\llama_flash_attn_monkey_patch', providing core logic for its parent repository. |
 | stream_omni_llava_train_llava_trainer_019fa2d37a95_16611c63ed7c.py | Split a list of indices into `chunks` chunks of roughly equal lengths. |
 | stream_omni_llava_train_train_76d9a2ef3065_6b035afa9428.py | Component originally named 'DEV\PyAgent\.external\Stream-Omni\llava\train\train', providing core logic for its parent repository. |
@@ -5506,7 +4627,6 @@ Total Files: 5653
 | stream_omni_py_siglip_encoder_842aa67b0927.py | # Adapted from https://huggingface.co/MILVLG/imp-v1-3b/blob/main/vision_encoder.py |
 | stream_omni_py_spatial_pool_fce98c3ea5cc.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\stream_omni', providing core logic for its parent repository. |
 | stream_omni_py_subsampling_06e11ffd5f1d.py | Subsampling layer definition. |
-| stream_omni_py_test_message_ef95e42dd133.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | stream_omni_py_text_encoder_59adf4d8a257.py | from https://github.com/jaywalnut310/glow-tts |
 | stream_omni_py_timm_model_fdc8f1406703.py | timm model adapter |
 | stream_omni_py_tokenizer_f8b6d3b52c9d.py | CLIP tokenizer |
@@ -5629,7 +4749,6 @@ Total Files: 5653
 | stream_omni_stream_omni_serve_model_worker_42ee3930bf7d_c08bd95891e6.py | A model worker executes the model. |
 | stream_omni_stream_omni_serve_register_worker_93afe95d9919_65a664df70c6.py | Manually register workers. |
 | stream_omni_stream_omni_serve_sglang_worker_ee32fadc3aa2_d792afb30d59.py | A model worker executes the model. |
-| stream_omni_stream_omni_serve_test_message_ef95e42dd133_cb6885c7429a.py | Unit test module providing verification logic and behavioral examples for the associated functionality. |
 | stream_omni_stream_omni_train_llama_flash_attn_monkey_patch_525399bd58b5_9535520b065d.py | Component originally named 'DEV\PyAgent\.external\Stream-Omni\stream_omni\train\llama_flash_attn_monkey_patch', providing core logic for its parent repository. |
 | stream_omni_stream_omni_train_llava_trainer_df3793a21bcb_86caba230855.py | Split a list of indices into `chunks` chunks of roughly equal lengths. |
 | stream_omni_stream_omni_train_train_8fa7453d629b_8b86064aef16.py | Component originally named 'DEV\PyAgent\.external\Stream-Omni\stream_omni\train\train', providing core logic for its parent repository. |
