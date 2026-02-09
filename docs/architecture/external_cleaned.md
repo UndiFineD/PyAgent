@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 961
+Total Files: 938
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -20,8 +20,6 @@ Total Files: 961
 | 0xSojalSec_mahilo_mahilo_sales_agent.py | Analyze effectiveness of different lead sources |
 | 0xSojalSec_malwoverview_colors.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-malwoverview\malwoverview\utils\colors', providing core logic for its parent repository. |
 | 0xSojalSec_pdf_extract_api_ocr_strategy.py | Base OCR Strategy Interface |
-| 0xSojalSec_pipeless_init.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-pipeless\examples\wattermark\init', providing core logic for its parent repository. |
-| 0xSojalSec_pipeless_process.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-pipeless\examples\custom-data\process', providing core logic for its parent repository. |
 | 0xSojalSec_wappalyzer_next_css.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-wappalyzer-next\wappalyzer\parsers\css', providing core logic for its parent repository. |
 | 0xSojalSec_wappalyzer_next_meta.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-wappalyzer-next\wappalyzer\parsers\meta', providing core logic for its parent repository. |
 | 0xsojalsec_evermemos_py_addon_bean_order_strategy_b33a6af0bacf.py | Addon Bean ordering strategy module |
@@ -848,25 +846,6 @@ Total Files: 961
 | 0xsojalsec_pi3mos_slam_py_transformer_head_b49309ae80d9.py | Linear head for dust3r |
 | 0xsojalsec_pi3mos_slam_py_utils_67998aba7e20.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_pi3mos_slam_py_vision_transformer_157886bb1bdd.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pi3mos_slam', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_init_1895c3ba445d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_init_4685190a2bf8.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_init_806f959b21c4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_init_942e306048f0.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_init_98e159b66b3d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_init_b6cc1fb2d6dc.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_post_process_093631f5b68f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_post_process_a8c672fa0e80.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_post_process_b13b77a6b9fd.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_pre_process_21385dddec0e.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_pre_process_9c33d36de479.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_pre_process_ae7942131bdd.py | Resize and pad image. Uses CUDA when available |
-| 0xsojalsec_pipeless_py_process_07ca09b994e4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_process_25632b13799b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_process_452f3749033d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_process_5dca2689f6b2.py | Ref: https://github.com/amitt1236/Gaze_estimation/blob/master/gaze.py |
-| 0xsojalsec_pipeless_py_process_a8e8e66e62ba.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_process_b3c5c63d9824.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
-| 0xsojalsec_pipeless_py_process_ff14ed64f576.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pipeless', providing core logic for its parent repository. |
 | 0xsojalsec_poastal_py_adobe_32af7187a86f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
 | 0xsojalsec_poastal_py_duolingo_b4949bfc0663.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
 | 0xsojalsec_poastal_py_hulu_14c99e2afad2.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_poastal', providing core logic for its parent repository. |
@@ -950,8 +929,6 @@ Total Files: 961
 | _0xsojalsec_nebula_colorpp.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_colorpp', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_run_gcp_module.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_run_gcp_module', providing core logic for its parent repository. |
 | _0xsojalsec_pdf_extract_api_ocr_strategy.py | Base OCR Strategy Interface |
-| _0xsojalsec_pipeless_init.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_pipeless_init', providing core logic for its parent repository. |
-| _0xsojalsec_pipeless_process.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_pipeless_process', providing core logic for its parent repository. |
 | _0xsojalsec_praisonai_config.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | _0xsojalsec_videoagent_base_text_processor.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_VideoAgent_base_text_processor', providing core logic for its parent repository. |
 | _0xsojalsec_videoagent_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
