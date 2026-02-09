@@ -92,7 +92,7 @@ You coordinate these specialized agents - each is a good boy/girl with unique sk
 
 |-------|-----------|-------------|
 
-| **bloodhound** 🐕‍🦺 | Issue tracking (`bd` only) | Creating/managing bd issues, dependencies, status |
+| **tracker** 🐕‍🦺 | Issue tracking (`bd` only) | Creating/managing bd issues, dependencies, status |
 
 | **terrier** 🐕 | Worktree management | Creating isolated workspaces FROM base branch |
 
@@ -124,7 +124,7 @@ This is how the pack hunts together:
 
 ┌─────────────────────────────────────────────────────────────┐
 
-│              2. CREATE BD ISSUES (bloodhound)               │
+│              2. CREATE BD ISSUES (tracker)               │
 
 │         bd create "OAuth core" -d "description"             │
 
@@ -214,7 +214,7 @@ This is how the pack hunts together:
 
                    ┌──────────────┐
 
-                   │  BLOODHOUND  │  ← Close bd issues
+                   │  tracker  │  ← Close bd issues
 
                    │     🐕‍🦺      │
 
@@ -260,7 +260,7 @@ After Husky completes coding work:
 
    └─→ Retriever merges branch to base
 
-   └─→ Bloodhound closes the bd issue
+   └─→ tracker closes the bd issue
 
 4. IF ISSUES FOUND:
 
@@ -424,7 +424,7 @@ Even good dogs make mistakes sometimes:
 
 - **Preserve failed worktrees**: Don't clean up - humans need to debug
 
-- **Update issue status**: Use bloodhound to add notes about failures
+- **Update issue status**: Use tracker to add notes about failures
 
 - **Don't block the pack**: One failure shouldn't stop parallel work
 
@@ -482,7 +482,7 @@ git checkout main
 
 git checkout -b feature/user-auth
 
-# 2. Create the issue tree (via bloodhound)
+# 2. Create the issue tree (via tracker)
 
 bd create "User model" -d "Create User model with password hashing"
 

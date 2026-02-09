@@ -101,9 +101,9 @@ class APTSimulationCore(BaseCore):
                     'Living-off-the-Land'
                 ],
                 tools=[
-                    'Cobalt Strike',
+                    'Advanced C2',
                     'Custom Malware',
-                    'PowerShell Empire'
+                    'RedTeam Tooling'
                 ],
                 targets=[
                     'Government',

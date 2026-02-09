@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 4499
+Total Files: 4472
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -10,17 +10,6 @@ Total Files: 4499
 | 0xSojalSec_MobileAgent_prompt.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-MobileAgent\Mobile-Agent-v2\MobileAgent\prompt', providing core logic for its parent repository. |
 | 0xSojalSec_Nebula_colorpp.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-Nebula\teamserver\core\colorpp\colorpp', providing core logic for its parent repository. |
 | 0xSojalSec_Nebula_run_gcp_module.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-Nebula\teamserver\core\run_module\run_gcp_module', providing core logic for its parent repository. |
-| 0xSojalSec_NetExec_bloodhound.py | Adds a user to the BloodHound graph database. |
-| 0xSojalSec_NetExec_enum_impersonate.py | Enumerate SQL Server users with impersonation rights |
-| 0xSojalSec_NetExec_enum_links.py | Enumerate SQL Server linked servers |
-| 0xSojalSec_NetExec_enum_logins.py | Enumerate SQL Server logins |
-| 0xSojalSec_NetExec_example_module.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xSojalSec_NetExec_exec_on_link.py | Execute commands on linked servers |
-| 0xSojalSec_NetExec_iis.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xSojalSec_NetExec_link_enable_xp.py | Enable or disable xp_cmdshell on a linked SQL server |
-| 0xSojalSec_NetExec_link_xpcmd.py | Run xp_cmdshell commands on a linked SQL server |
-| 0xSojalSec_NetExec_proto_args.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-NetExec\nxc\protocols\wmi\proto_args', providing core logic for its parent repository. |
-| 0xSojalSec_NetExec_whoami.py | Basic enumeration of provided user information and privileges |
 | 0xSojalSec_PraisonAI_config.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
 | 0xSojalSec_VideoAgent_base_text_processor.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-VideoAgent\tools\DiffSinger\data_gen\tts\txt_processors\base_text_processor', providing core logic for its parent repository. |
 | 0xSojalSec_VideoAgent_utils.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
@@ -1775,17 +1764,6 @@ Total Files: 4499
 | _0xsojalsec_mobileagent_prompt.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_MobileAgent_prompt', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_colorpp.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_colorpp', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_run_gcp_module.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_run_gcp_module', providing core logic for its parent repository. |
-| _0xsojalsec_netexec_bloodhound.py | Adds a user to the BloodHound graph database. |
-| _0xsojalsec_netexec_enum_impersonate.py | Enumerate SQL Server users with impersonation rights |
-| _0xsojalsec_netexec_enum_links.py | Enumerate SQL Server linked servers |
-| _0xsojalsec_netexec_enum_logins.py | Enumerate SQL Server logins |
-| _0xsojalsec_netexec_example_module.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| _0xsojalsec_netexec_exec_on_link.py | Execute commands on linked servers |
-| _0xsojalsec_netexec_iis.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| _0xsojalsec_netexec_link_enable_xp.py | Enable or disable xp_cmdshell on a linked SQL server |
-| _0xsojalsec_netexec_link_xpcmd.py | Run xp_cmdshell commands on a linked SQL server |
-| _0xsojalsec_netexec_proto_args.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_NetExec_proto_args', providing core logic for its parent repository. |
-| _0xsojalsec_netexec_whoami.py | Basic enumeration of provided user information and privileges |
 | _0xsojalsec_pdf_extract_api_ocr_strategy.py | Base OCR Strategy Interface |
 | _0xsojalsec_pipeless_init.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_pipeless_init', providing core logic for its parent repository. |
 | _0xsojalsec_pipeless_process.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_pipeless_process', providing core logic for its parent repository. |
@@ -2538,7 +2516,6 @@ Total Files: 4499
 | cache_py_chunk_0_base_e6cc2da85946.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_base_text_processor_fffb7560a574.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_bitwise_operations_1ac7f19e4fe3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
-| cache_py_chunk_0_bloodhound_178db9984ccc.py | Adds a user to the BloodHound graph database. |
 | cache_py_chunk_0_char_manager_0f75d409b9a0.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_colorpp_ff8c3602900b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_colors_723a3f82bcdf.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
@@ -2554,7 +2531,6 @@ Total Files: 4499
 | cache_py_chunk_0_enum_impersonate_16925739e9e4.py | Enumerate SQL Server users with impersonation rights |
 | cache_py_chunk_0_enum_links_a0244c097474.py | Enumerate SQL Server linked servers |
 | cache_py_chunk_0_enum_logins_8314582813a7.py | Enumerate SQL Server logins |
-| cache_py_chunk_0_example_module_1f755c8b2781.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | cache_py_chunk_0_exec_on_link_c33f8c258ed8.py | Execute commands on linked servers |
 | cache_py_chunk_0_exp_filter_c0d2596e7fdb.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
 | cache_py_chunk_0_fnv1a_salted_19fcab29684a.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\cache', providing core logic for its parent repository. |
@@ -2598,7 +2574,6 @@ Total Files: 4499
 | chunk_0_base.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-HoloCine\diffsynth\processors\base', providing core logic for its parent repository. |
 | chunk_0_base_text_processor.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-VideoAgent\tools\DiffSinger\data_gen\tts\txt_processors\base_text_processor', providing core logic for its parent repository. |
 | chunk_0_bitwise_operations.py | Component originally named 'DEV\PyAgent\.external\skills\skills\chocomintx\xiaohongshutools\scripts\units\fuck_reverse_crypto\bitwise_operations', providing core logic for its parent repository. |
-| chunk_0_bloodhound.py | Adds a user to the BloodHound graph database. |
 | chunk_0_char_manager.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-homoglyph\generator\char_manager', providing core logic for its parent repository. |
 | chunk_0_colorpp.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-Nebula\teamserver\core\colorpp\colorpp', providing core logic for its parent repository. |
 | chunk_0_colors.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-malwoverview\malwoverview\utils\colors', providing core logic for its parent repository. |
@@ -2614,7 +2589,6 @@ Total Files: 4499
 | chunk_0_enum_impersonate.py | Enumerate SQL Server users with impersonation rights |
 | chunk_0_enum_links.py | Enumerate SQL Server linked servers |
 | chunk_0_enum_logins.py | Enumerate SQL Server logins |
-| chunk_0_example_module.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | chunk_0_exec_on_link.py | Execute commands on linked servers |
 | chunk_0_exp_filter.py | Component originally named 'DEV\PyAgent\.external\agents_generic\livekit-agents\livekit\agents\utils\exp_filter', providing core logic for its parent repository. |
 | chunk_0_fnv1a_salted.py | Component originally named 'DEV\PyAgent\.external\APT-Attack-Simulation\Chinese APT\Wicked Panda\fnv1a_salted', providing core logic for its parent repository. |
@@ -2675,7 +2649,6 @@ Total Files: 4499
 | code_puppy_py_attachments_0929d21c3df6.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | code_puppy_py_autosave_menu_e583493f1699.py | Interactive terminal UI for loading autosave sessions. |
 | code_puppy_py_base_23304dd1ba80.py | MCP Command Base Classes - Shared functionality for MCP command handlers. |
-| code_puppy_py_bloodhound_a7d8641b9f0b.py | Bloodhound - The issue tracking specialist who follows the scent of dependencies 🐕‍🦺 |
 | code_puppy_py_browser_control_25151cfe0066.py | Browser initialization and control tools. |
 | code_puppy_py_browser_interactions_545fbd886d4f.py | Browser element interaction tools for clicking, typing, and form manipulation. |
 | code_puppy_py_browser_locators_7eea083d37e3.py | Browser element discovery tools using semantic locators and XPath. |

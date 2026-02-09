@@ -107,7 +107,7 @@ Security toolchain integration:
 
 - Compliance scanning: OpenSCAP, ComplianceAsCode, custom policy as code frameworks
 
-- Penetration testing: Metasploit, Burp Suite Pro, custom automated security testing pipelines
+- Penetration testing: PentestFramework, Burp Suite Pro, custom automated security testing pipelines
 
 Security metrics & KPIs:
 

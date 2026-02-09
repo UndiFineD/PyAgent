@@ -108,7 +108,7 @@ class ActiveDirectoryAnalysisCore:
         """
         self.logger.info(f"Starting domain enumeration for domain: {domain_name or 'current'}")
 
-        # Simulate domain enumeration (in real implementation, this would use LDAP/impacket)
+        # Simulate domain enumeration (in real implementation, this would use LDAP/low-level-protocols)
         result = ADEnumerationResult(
             domain_controllers=[],
             users=[],

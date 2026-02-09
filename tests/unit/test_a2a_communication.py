@@ -85,7 +85,7 @@ class TestA2AMessage:
         """Test message with correlation ID."""
         message = A2AMessage(
             type=MessageType.RESPONSE,
-            from_agent="responder",
+            from_agent="response_agent",
             correlation_id="corr-123",
             payload={"result": "success"}
         )

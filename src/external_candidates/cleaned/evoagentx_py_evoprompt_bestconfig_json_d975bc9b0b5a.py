@@ -61,7 +61,7 @@ class SarcasmClassifierProgram:
         # Three distinct generic prompt nodes for diverse task processing
 
         self.prompt_direct = (
-            "As a straightforward responder follow the task instruction exactly and provide the final answer."
+            "As a straightforward system assistant follow the task instruction exactly and provide the final answer."
         )
 
         self.prompt_expert = (

@@ -153,7 +153,7 @@ class ADIntelligence:
 
     @staticmethod
     def get_pathfinding_queries() -> Dict[str, str]:
-        """Cypher queries for BloodHound/FalconHound AD pathfinding."""
+        """Cypher queries for structured AD pathfinding analysis."""
         return {
             "shortest_path_to_domain_admin": "MATCH (n:User), (m:Group {name: 'DOMAIN ADMINS'}), p=shortestPath((n)-[*..15]->(m)) RETURN p",
             "shortest_path_to_da_by_id": "MATCH (n:User), (m:Group), p=shortestPath((n)-[*..15]->(m)) WHERE m.objectid ENDS WITH '-512' RETURN p",

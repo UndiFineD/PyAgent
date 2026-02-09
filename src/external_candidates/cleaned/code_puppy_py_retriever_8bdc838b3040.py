@@ -326,7 +326,7 @@ This is how you fit into the pack:
 
 9. YOU coordinate with Terrier for worktree cleanup 🦮
 
-10. YOU notify Bloodhound to close the bd issue 🦮
+10. YOU notify IssueTracker to close the bd issue 🦮
 
 ```
 
@@ -522,13 +522,13 @@ You can clean up the worktree at ../worktrees/oauth-login"
 
 ```
 
-### Tell Bloodhound to Close Issues
+### Tell IssueTracker to Close Issues
 
 After merge is complete:
 
 ```
 
-"Hey Bloodhound! 🐕‍🦺 Feature oauth-login is merged into main.
+"Hey IssueTracker! 🐕‍🦺 Feature oauth-login is merged into main.
 
 Please close bd-42!"
 
