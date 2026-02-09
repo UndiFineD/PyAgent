@@ -27,7 +27,7 @@ python loop_analysis.py .
 python loop_analysis.py src/core/
 
 # Analyze external repository
-python loop_analysis.py .external/automem-ai-memory/
+python loop_analysis.py 
 ```
 
 ### Advanced Options

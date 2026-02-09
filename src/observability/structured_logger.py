@@ -107,6 +107,8 @@ class StructuredLogger:
     def log(self, level: str, message: str, **kwargs: Any) -> None:
         """Log a structured entry."""
         timestamp: str = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        std_logger: logging.Logger = logging.getLogger(f"PyAgent.{self.agent_id}")
+        log_func: Any | Callable[..., None] = getattr(std_logger, level.lower(), std_logger.info)
 
         # Fast path: Use Rust for building the log entry (includes masking)
         if _RUST_ACCEL and rc is not None:
@@ -121,8 +123,6 @@ class StructuredLogger:
                     extra_json,
                 )
                 # Console logging (quick)
-                std_logger: logging.Logger = logging.getLogger(f"PyAgent.{self.agent_id}")
-                log_func: Any | Callable[..., None] = getattr(std_logger, level.lower(), std_logger.info)
                 log_func(f"[{self.agent_id}] {message[:200]}")
 
                 # File write
@@ -137,7 +137,9 @@ class StructuredLogger:
 
         # Python fallback path
         clean_message: str = self._mask_sensitive(message)
-        clean_kwargs: dict[str, str | Any] = {k: (self._mask_sensitive(str(v)) if isinstance(v, str) else v) for k, v in kwargs.items()}
+        clean_kwargs: dict[str, str | Any] = {
+            k: (self._mask_sensitive(str(v)) if isinstance(v, str) else v) for k, v in kwargs.items()
+        }
 
         entry = {
             "timestamp": timestamp,
@@ -149,9 +151,8 @@ class StructuredLogger:
         }
 
         # Also log to standard logging for console visibility
-        std_logger: logging.Logger = logging.getLogger(f"PyAgent.{self.agent_id}")
-        log_func: Any | Callable[..., None] = getattr(std_logger, level.lower(), std_logger.info)
-        log_func(f"[{self.agent_id}] {clean_message} {json.dumps(clean_kwargs) if clean_kwargs else ''}")
+        json_suffix = json.dumps(clean_kwargs) if clean_kwargs else ""
+        log_func(f"[{self.agent_id}] {clean_message} {json_suffix}")
 
         try:
             with open(self.log_file, "a", encoding="utf-8") as f:

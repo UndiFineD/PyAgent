@@ -14,7 +14,8 @@
 
 import aiohttp
 import re
-from typing import Dict, List, Optional
+from typing import Dict, Optional
+
 
 class CMSIntelligence:
     """Intelligence engine for CMS identification and version detection."""
@@ -60,15 +61,15 @@ class CMSIntelligence:
         """Identify CMS and version from a URL."""
         if not self.session:
             self.session = aiohttp.ClientSession()
-        
+
         results = {}
         async with self.session.get(url, timeout=10) as resp:
             text = await resp.text()
-            
+
             for cms, data in self.FINGERPRINTS.items():
                 if data["indicator"] in text:
                     results["name"] = cms
-                    
+
                     # Try version detection
                     try:
                         async with self.session.get(f"{url.rstrip('/')}{data['path']}", timeout=10) as vresp:
@@ -76,7 +77,7 @@ class CMSIntelligence:
                             match = re.search(data["regex"], vtext)
                             if match:
                                 results["version"] = match.group(1)
-                    except:
+                    except Exception:
                         pass
                     break
         return results

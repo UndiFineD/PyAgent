@@ -50,9 +50,9 @@ class MetricNamespaceManager:
 
     def get_full_path(self, namespace: str) -> str:
         hierarchy: list[Any] = []
-        current: str = namespace
+        current: str | None = namespace
         while current:
             hierarchy.insert(0, current)
             ns: MetricNamespace | None = self.namespaces.get(current)
-            current: str | None = ns.parent if ns else None
+            current = ns.parent if ns else None
         return " / ".join(hierarchy)

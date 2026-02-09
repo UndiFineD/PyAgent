@@ -17,6 +17,7 @@ import mmh3
 import aiohttp
 from typing import Optional, Dict
 
+
 class AssetIntelligence:
     """
     Intelligence module for asset discovery and fingerprinting.

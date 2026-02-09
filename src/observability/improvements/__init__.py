@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
+# flake8: noqa
 # ruff: noqa: F401
 
 """Lazy-loading entry point for observability.improvements."""

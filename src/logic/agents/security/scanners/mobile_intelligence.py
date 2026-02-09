@@ -13,7 +13,8 @@
 # limitations under the License.
 
 import re
-from typing import List, Dict, Any
+from typing import List, Dict, Union
+
 
 class MobileIntelligence:
     """
@@ -22,7 +23,7 @@ class MobileIntelligence:
     """
 
     # Android manifest and resource patterns
-    ANDROID_VULN_PATTERNS = {
+    ANDROID_VULN_PATTERNS: Dict[str, Union[str, Dict[str, str]]] = {
         "firebase_url": r"https://.*\.firebaseio\.com",
         "cleartext_traffic": r'android:usesCleartextTraffic=["\']true["\']',
         "debuggable": r'android:debuggable=["\']true["\']',
@@ -35,8 +36,11 @@ class MobileIntelligence:
     }
 
     # iOS Info.plist patterns
-    IOS_VULN_PATTERNS = {
-        "allow_arbitrary_loads": r"<key>NSAppTransportSecurity</key>\s*<dict>\s*<key>NSAllowsArbitraryLoads</key>\s*<true/>",
+    IOS_VULN_PATTERNS: Dict[str, str] = {
+        "allow_arbitrary_loads": (
+            r"<key>NSAppTransportSecurity</key>\s*<dict>\s*"
+            r"<key>NSAllowsArbitraryLoads</key>\s*<true/>"
+        ),
         "backup_excluded": r"NSURLIsExcludedFromBackupKey",
         "biometric_usage": r"NSFaceIDUsageDescription"
     }
@@ -62,7 +66,10 @@ class MobileIntelligence:
     def get_ios_protection_bypass_primitives(self) -> Dict[str, str]:
         """iOS specific security bypasses (Ported from grapefruit-iOS)."""
         return {
-            "touchid_faceid": "Hooking -[LAContext evaluatePolicy:localizedReason:reply:] and calling callback with success=1",
+            "touchid_faceid": (
+                "Hooking -[LAContext evaluatePolicy:localizedReason:reply:] "
+                "and calling callback with success=1"
+            ),
             "jailbreak_check": "Hooking -[NSFileManager fileExistsAtPath:] for jailbreak-specific paths",
             "debugger_detection": "Hooking ptrace and sysctl to hide debugger presence"
         }
@@ -96,19 +103,46 @@ class MobileIntelligence:
         """Specific Frida bypass gadgets for various security controls."""
         return {
             "ssl_pinning": {
-                "okhttp4": "var CertificatePinner = Java.use('okhttp3.CertificatePinner'); CertificatePinner.check.overload('java.lang.String', 'java.util.List').implementation = function() { return; };",
-                "trustkit": "var TrustKit = Java.use('com.datatheorem.android.trustkit.pinning.OkHttp3Helper'); TrustKit.getCertificatePinner.implementation = function() { return null; };",
-                "flutter": "Interceptor.attach(Module.findExportByName('libflutter.so', 'ssl_crypto_x509_session_verify_cert_chain'), { onLeave: function(retval) { retval.replace(0x1); } });"
+                "okhttp4": (
+                    "var CertificatePinner = Java.use('okhttp3.CertificatePinner'); "
+                    "CertificatePinner.check.overload('java.lang.String', 'java.util.List')"
+                    ".implementation = function() { return; };"
+                ),
+                "trustkit": (
+                    "var TrustKit = Java.use('com.datatheorem.android.trustkit.pinning.OkHttp3Helper'); "
+                    "TrustKit.getCertificatePinner.implementation = function() { return null; };"
+                ),
+                "flutter": (
+                    "Interceptor.attach(Module.findExportByName('libflutter.so', "
+                    "'ssl_crypto_x509_session_verify_cert_chain'), "
+                    "{ onLeave: function(retval) { retval.replace(0x1); } });"
+                )
             },
             "root_check": {
-                "rootbeer": "var RootBeer = Java.use('com.scottyab.rootbeer.RootBeer'); RootBeer.isRooted.implementation = function() { return false; };",
-                "generic_su": "var File = Java.use('java.io.File'); File.exists.implementation = function() { var name = this.getName(); if (name === 'su' || name === 'magisk') return false; return this.exists(); };"
+                "rootbeer": (
+                    "var RootBeer = Java.use('com.scottyab.rootbeer.RootBeer'); "
+                    "RootBeer.isRooted.implementation = function() { return false; };"
+                ),
+                "generic_su": (
+                    "var File = Java.use('java.io.File'); File.exists.implementation = function() { "
+                    "var name = this.getName(); if (name === 'su' || name === 'magisk') return false; "
+                    "return this.exists(); };"
+                )
             },
             "biometrics": {
-                "android_biometric": "var BiometricPrompt = Java.use('androidx.biometric.BiometricPrompt'); BiometricPrompt.authenticate.overload('androidx.biometric.BiometricPrompt$PromptInfo', 'androidx.biometric.BiometricPrompt$CryptoObject').implementation = function(info, crypto) { this.onAuthenticationSucceeded(null); };"
+                "android_biometric": (
+                    "var BiometricPrompt = Java.use('androidx.biometric.BiometricPrompt'); "
+                    "BiometricPrompt.authenticate.overload('androidx.biometric.BiometricPrompt$PromptInfo', "
+                    "'androidx.biometric.BiometricPrompt$CryptoObject').implementation = function(info, crypto) { "
+                    "this.onAuthenticationSucceeded(null); };"
+                )
             },
             "ios_protection": {
-                "security_suite": "var SecuritySuite = ObjC.classes.SecuritySuite; SecuritySuite['- amIProxyfied'].implementation = function() { return false; }; SecuritySuite['- amIJailbroken'].implementation = function() { return false; };"
+                "security_suite": (
+                    "var SecuritySuite = ObjC.classes.SecuritySuite; "
+                    "SecuritySuite['- amIProxyfied'].implementation = function() { return false; }; "
+                    "SecuritySuite['- amIJailbroken'].implementation = function() { return false; };"
+                )
             }
         }
 
@@ -117,14 +151,22 @@ class MobileIntelligence:
         return {
             "ssl_pinning_bypass_okhttp": "Hooking okhttp3.CertificatePinner.check to return void",
             "ssl_pinning_bypass_flutter": "Patching ssl_verify_result in libflutter.so to always return valid",
-            "root_detection_bypass_android": "Hooking java.io.File.exists to return false for common SU paths (/system/bin/su, etc.)",
+            "root_detection_bypass_android": (
+                "Hooking java.io.File.exists to return false for common SU paths "
+                "(/system/bin/su, etc.)"
+            ),
             "jailbreak_detection_bypass_ios": "Hooking -[NSFileManager fileExistsAtPath:] for /Applications/Cydia.app",
             "biometric_bypass": "Hooking BiometricPrompt.Authenticate to simulate successful user verification",
-            "method_tracing_all": "Iterating through all loaded classes and hooking implementation to log arguments and return values",
-            "libc_interception": "Hooking open/read/write in libc.so to monitor low-level file and socket operations"
+            "method_tracing_all": (
+                "Iterating through all loaded classes and hooking implementation "
+                "to log arguments and return values"
+            ),
+            "libc_interception": (
+                "Hooking open/read/write in libc.so to monitor low-level file and socket operations"
+            )
         }
 
-    def get_android_manifest_checks(self) -> Dict[str, str]:
+    def get_android_manifest_checks(self) -> Dict[str, Union[str, Dict[str, str]]]:
         """Returns regexes for AndroidManifest.xml auditing."""
         return self.ANDROID_VULN_PATTERNS
 
@@ -137,15 +179,24 @@ class MobileIntelligence:
         return [
             r'<data\s+android:scheme="([^"]+)"',
             r'<data\s+android:host="([^"]+)"',
-            r'<intent-filter>.*<action\s+android:name="android.intent.action.VIEW".*</intent-filter>'
+            (
+                r'<intent-filter>.*<action\s+android:name="android.intent.action.VIEW"'
+                r'.*</intent-filter>'
+            )
         ]
 
     def audit_strings(self, content: str) -> List[Dict[str, str]]:
         """Scans strings for common secrets and endpoints."""
         findings = []
         # Check for Firebase
-        firebase = re.findall(self.ANDROID_VULN_PATTERNS["firebase_url"], content)
-        for fb in firebase:
-            findings.append({"type": "firebase_vulnerability", "value": fb, "info": "Check if .json suffix is publicly accessible"})
-        
+        pattern = self.ANDROID_VULN_PATTERNS["firebase_url"]
+        if isinstance(pattern, str):
+            firebase = re.findall(pattern, content)
+            for fb in firebase:
+                findings.append({
+                    "type": "firebase_vulnerability",
+                    "value": fb,
+                    "info": "Check if .json suffix is publicly accessible"
+                })
+
         return findings

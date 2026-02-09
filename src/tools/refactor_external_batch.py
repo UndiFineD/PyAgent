@@ -40,8 +40,16 @@ def sanitize_filename(name: str) -> str:
         s = '_' + s
     return s + '.py'
 
-def is_ast_safe(src: str, filename: str = '<unknown>', allow_modules:set=None, allow_attrs:set=None, allow_names:set=None, allow_limited_shell:bool=False, allow_eval:bool=False) -> (bool, list):
-    issues = []
+def is_ast_safe(
+    src: str,
+    filename: str = '<unknown>',
+    allow_modules: set[str] | None = None,
+    allow_attrs: set[str] | None = None,
+    allow_names: set[str] | None = None,
+    allow_limited_shell: bool = False,
+    allow_eval: bool = False
+) -> tuple[bool, list[str]]:
+    issues: list[str] = []
     try:
         tree = ast.parse(src, filename=filename)
     except Exception as e:
@@ -104,7 +112,17 @@ def file_hash(p: Path) -> str:
     h.update(data)
     return h.hexdigest()[:12]
 
-def process(limit: int, start: int, dry_run: bool, verbose: bool, allow_modules:set=None, allow_attrs:set=None, allow_names:set=None, allow_limited_shell:bool=False, allow_eval:bool=False):
+def process(
+    limit: int,
+    start: int,
+    dry_run: bool,
+    verbose: bool,
+    allow_modules: set[str] | None = None,
+    allow_attrs: set[str] | None = None,
+    allow_names: set[str] | None = None,
+    allow_limited_shell: bool = False,
+    allow_eval: bool = False
+) -> None:
     if not EXTERNAL.exists():
         print(f'.external not found at {EXTERNAL}')
         return

@@ -9,7 +9,8 @@ Safety checks (static-only):
 - file suffix must be .py
 - file size and line count under configurable limits
 - module top-level must contain only imports, defs, and module docstring (no exec code)
-- disallow imports of dangerous modules and banned names (ctypes, subprocess, eval, exec, compile, importlib, socket, os.system)
+- disallow imports of dangerous modules and banned names
+  (ctypes, subprocess, eval, exec, compile, importlib, socket, os.system)
 
 Usage:
   python src/tools/extract_candidates.py --report .external/refactor_report.json --limit 10
@@ -72,11 +73,12 @@ def safe_module(ast_mod: ast.Module, allow_top_level: bool = False, allow_no_def
         continue
 
     # walk AST for banned names usage
-    for node in ast.walk(ast_mod):
-        if isinstance(node, ast.Name) and node.id in BANNED_NAMES:
+    for node_walk in ast.walk(ast_mod):
+        if isinstance(node_walk, ast.Name) and node_walk.id in BANNED_NAMES:
             return False, []
-        if not allow_banned_imports and isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name) and node.value.id in BANNED_IMPORTS:
-            return False, []
+        if not allow_banned_imports and isinstance(node_walk, ast.Attribute):
+            if isinstance(node_walk.value, ast.Name) and node_walk.value.id in BANNED_IMPORTS:
+                return False, []
 
     # if no defs and they are not allowed, mark unsafe
     if not defs and not allow_no_defs:
@@ -115,8 +117,16 @@ def make_test(module_path: Path, defs: list[str], test_path: Path):
     test_path.write_text(body, encoding='utf-8')
 
 
-def extract_candidates(report_file: Path, limit: int = 10, skip: int = 0, max_lines: int = MAX_LINES, max_bytes: int = MAX_BYTES,
-                       allow_top_level: bool = False, allow_no_defs: bool = False, allow_banned_imports: bool = False):
+def extract_candidates(
+    report_file: Path,
+    limit: int = 10,
+    skip: int = 0,
+    max_lines: int = MAX_LINES,
+    max_bytes: int = MAX_BYTES,
+    allow_top_level: bool = False,
+    allow_no_defs: bool = False,
+    allow_banned_imports: bool = False
+):
     if not report_file.exists():
         print('report missing at', report_file)
         return 1
@@ -129,11 +139,11 @@ def extract_candidates(report_file: Path, limit: int = 10, skip: int = 0, max_li
         for f in d.get('files', []):
             if found >= limit:
                 break
-            
+
             suffix = f.get('suffix')
             if suffix != '.py':
                 continue
-            
+
             if skipped < skip:
                 skipped += 1
                 continue
@@ -159,7 +169,12 @@ def extract_candidates(report_file: Path, limit: int = 10, skip: int = 0, max_li
             ok, defs = safe_module(mod)
             if (not ok) or (not defs and not allow_no_defs):
                 # try with relaxed flags if provided
-                ok2, defs2 = safe_module(mod, allow_top_level=allow_top_level, allow_no_defs=allow_no_defs, allow_banned_imports=allow_banned_imports)
+                ok2, defs2 = safe_module(
+                    mod,
+                    allow_top_level=allow_top_level,
+                    allow_no_defs=allow_no_defs,
+                    allow_banned_imports=allow_banned_imports
+                )
                 if ok2:
                     ok, defs = ok2, defs2
             if not ok or (not defs and not allow_no_defs):
@@ -194,9 +209,16 @@ def main():
     p.add_argument('--allow-no-defs', action='store_true', help='Allow modules with no defs (constants-only)')
     p.add_argument('--allow-banned-imports', action='store_true', help='Skip banned-imports checks (risky)')
     args = p.parse_args()
-    return extract_candidates(args.report, args.limit, skip=args.skip, max_lines=args.max_lines, max_bytes=args.max_bytes,
-                              allow_top_level=args.allow_top_level, allow_no_defs=args.allow_no_defs,
-                              allow_banned_imports=args.allow_banned_imports)
+    return extract_candidates(
+        args.report,
+        args.limit,
+        skip=args.skip,
+        max_lines=args.max_lines,
+        max_bytes=args.max_bytes,
+        allow_top_level=args.allow_top_level,
+        allow_no_defs=args.allow_no_defs,
+        allow_banned_imports=args.allow_banned_imports
+    )
 
 
 if __name__ == '__main__':

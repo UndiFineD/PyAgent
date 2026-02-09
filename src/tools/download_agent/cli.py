@@ -53,7 +53,7 @@ def print_results_summary(results: List[DownloadResult]):
             print(f"  - {result.url}: {result.error_message}")
 
     # Group by type
-    type_counts = {}
+    type_counts: dict[str, int] = {}
     for result in results:
         type_counts[result.file_type] = type_counts.get(result.file_type, 0) + 1
 

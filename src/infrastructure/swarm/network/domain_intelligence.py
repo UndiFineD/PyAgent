@@ -23,6 +23,7 @@ from dataclasses import dataclass
 # PyAgent Logger
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class BugBountyProgram:
     name: str
@@ -31,6 +32,7 @@ class BugBountyProgram:
     platform: str
     count: int
     last_updated: str
+
 
 class DomainIntelligence:
     """
@@ -83,26 +85,26 @@ class DomainIntelligence:
                 if response.status != 200:
                     logger.error(f"Failed to download zip: {response.status}")
                     return []
-                
+
                 content = await response.read()
-                
+
                 # In-memory unzip to avoid disk writes/cleanup
                 with zipfile.ZipFile(io.BytesIO(content)) as z:
                     for filename in z.namelist():
                         # Safety check: ensure no directory traversal
                         if ".." in filename or filename.startswith("/"):
                             continue
-                        
+
                         with z.open(filename) as f:
                             text = f.read().decode('utf-8', errors='ignore')
                             subdomains.extend(text.splitlines())
-                            
+
         except Exception as e:
             logger.error(f"Error downloading/extracting subdomains: {e}")
         finally:
             if not self._session:
                 await session.close()
-                
+
         return subdomains
 
     async def search_program(self, query: str) -> List[BugBountyProgram]:
@@ -110,35 +112,36 @@ class DomainIntelligence:
         index = await self.fetch_chaos_index()
         results = []
         query = query.lower()
-        
+
         for item in index:
             name = item.get("name", "").lower()
             if query in name:
                 results.append(BugBountyProgram(
-                    name=item.get("name"),
-                    url=item.get("URL"),
-                    bounty=item.get("bounty"),
-                    platform=item.get("platform"),
-                    count=item.get("count"),
-                    last_updated=item.get("last_updated")
+                    name=str(item.get("name", "")),
+                    url=str(item.get("URL", "")),
+                    bounty=bool(item.get("bounty", False)),
+                    platform=str(item.get("platform", "")),
+                    count=int(item.get("count", 0)),
+                    last_updated=str(item.get("last_updated", ""))
                 ))
         return results
 
+
 async def example_usage():
     logging.basicConfig(level=logging.INFO)
-    
+
     async with DomainIntelligence() as intel:
         print("Fetching Chaos Index...")
         programs = await intel.fetch_chaos_index()
         print(f"Found {len(programs)} programs.")
-        
+
         target = "uber"
         print(f"Searching for '{target}'...")
         matches = await intel.search_program(target)
-        
+
         for p in matches:
             print(f"Found: {p.name} ({p.count} subdomains) - {p.platform}")
-            if p.count < 1000: # limit for example
+            if p.count < 1000:  # limit for example
                 print(f"  Downloading subdomains for {p.name}...")
                 subs = await intel.get_program_subdomains(p.url)
                 print(f"  First 5 subdomains: {subs[:5]}")

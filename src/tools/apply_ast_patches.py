@@ -47,7 +47,13 @@ def parse_patch(patch_text: str):
             # stop at next hunk header
             hunk_lines.append(lines[idx])
             idx += 1
-        hunks.append({'old_start': old_start, 'old_len': old_len, 'new_start': new_start, 'new_len': new_len, 'lines': hunk_lines})
+        hunks.append({
+            'old_start': old_start,
+            'old_len': old_len,
+            'new_start': new_start,
+            'new_len': new_len,
+            'lines': hunk_lines
+        })
     return fromfile, tofile, hunks
 
 

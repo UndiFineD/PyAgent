@@ -14,6 +14,7 @@
 
 import audioop
 
+
 class AudioStreamCore:
     """
     Core logic for real-time audio processing and codec conversion.
@@ -22,7 +23,7 @@ class AudioStreamCore:
 
     def __init__(self, target_sample_rate: int = 16000, target_width: int = 2):
         self.target_sample_rate = target_sample_rate
-        self.target_width = target_width # 2 bytes for 16-bit
+        self.target_width = target_width  # 2 bytes for 16-bit
         self.resample_state = None
 
     def convert_ulaw_to_pcm(self, ulaw_data: bytes) -> bytes:
@@ -34,11 +35,11 @@ class AudioStreamCore:
         """Resamples PCM audio to the target sample rate."""
         if source_rate == self.target_sample_rate:
             return pcm_data
-            
+
         resampled_data, self.resample_state = audioop.ratecv(
             pcm_data,
             self.target_width,
-            1, # channels
+            1,  # channels
             source_rate,
             self.target_sample_rate,
             self.resample_state
@@ -50,7 +51,7 @@ class AudioStreamCore:
         rms = audioop.rms(pcm_data, self.target_width)
         if rms == 0:
             return pcm_data
-        
+
         factor = target_rms / rms
         return audioop.mul(pcm_data, self.target_width, factor)
 

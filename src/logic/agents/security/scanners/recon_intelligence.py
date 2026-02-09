@@ -14,15 +14,15 @@
 
 import asyncio
 import re
-import string
 import hashlib
 import io
 import json
 import base64
 import aiohttp
 import mmh3
-from typing import List, Dict, Optional, Set
+from typing import List, Dict, Optional, Set, Any
 from PIL import Image
+
 
 class ReconIntelligence:
     """
@@ -178,7 +178,7 @@ class ReconIntelligence:
     async def calculate_favicon_hash(self, url: str, mode: str = "mmh3") -> Optional[str]:
         """
         Calculates a hash of a favicon for technical fingerprinting.
-        Modes: 
+        Modes:
         - 'mmh3': Shodan-compatible MurmurHash3 (default)
         - 'md5': MD5 of normalized image bytes
         """
@@ -187,13 +187,13 @@ class ReconIntelligence:
             async with session.get(url, timeout=10, ssl=False) as response:
                 if response.status == 200:
                     content = await response.read()
-                    
+
                     if mode == "mmh3":
                         # Shodan-style: base64 with newlines, then mmh3
                         # fav-up uses base64.encodebytes which adds newlines every 76 chars
                         encoded = base64.encodebytes(content)
                         return str(mmh3.hash(encoded))
-                    
+
                     # Use PIL to normalize image before hashing for MD5
                     img = Image.open(io.BytesIO(content))
                     return hashlib.md5(img.tobytes()).hexdigest()
@@ -210,7 +210,7 @@ class ReconIntelligence:
         domains = set()
         # Normalize CSP
         directives = [d.strip() for d in csp_header.split(';') if d.strip()]
-        
+
         for directive in directives:
             parts = directive.split(' ')
             for part in parts:
@@ -224,7 +224,7 @@ class ReconIntelligence:
                     continue
                 # It's likely a domain or host
                 domains.add(part)
-        
+
         return domains
 
     async def check_redos_api(self, regex: str) -> Dict:
@@ -264,7 +264,7 @@ class ReconIntelligence:
         # Find potential identifiers
         found = re.findall(r'[a-zA-Z0-9_\-\.]+', js_content)
         words = set()
-        
+
         for word in found:
             # Handle dots (like object properties)
             if '.' in word:
@@ -275,7 +275,7 @@ class ReconIntelligence:
             else:
                 if word and word.lower() not in self.JS_RESERVED_WORDS and len(word) > 2:
                     words.add(word)
-        
+
         return sorted(list(words))
 
     async def check_domain_availability(self, domain: str) -> bool:
@@ -300,14 +300,14 @@ class ReconIntelligence:
         source_hash = await self.calculate_favicon_hash(source_favicon_url)
         if not source_hash:
             return []
-            
+
         matches = []
-        
+
         async def check_target(target):
             # Try /favicon.ico
             if not target.startswith('http'):
                 target = f"http://{target}"
-            
+
             favicon_url = target.rstrip('/') + '/favicon.ico'
             target_hash = await self.calculate_favicon_hash(favicon_url)
             if target_hash == source_hash:
@@ -321,7 +321,8 @@ class ReconIntelligence:
         subdomains = set()
         try:
             session = await self.get_session()
-            url = f'https://transparencyreport.google.com/transparencyreport/api/v3/httpsreport/ct/certsearch?include_subdomains=true&domain={domain}'
+            base_url = "https://transparencyreport.google.com/transparencyreport/api/v3/httpsreport/ct/certsearch"
+            url = f"{base_url}?include_subdomains=true&domain={domain}"
             async with session.get(url, timeout=15) as response:
                 if response.status == 200:
                     content = await response.text()
@@ -345,13 +346,13 @@ class ReconIntelligence:
             session = await self.get_session()
             async with session.get(url, timeout=10) as resp1:
                 content1 = await resp1.read()
-                
+
             # Wait a bit
             await asyncio.sleep(0.5)
-            
+
             async with session.get(url, timeout=10) as resp2:
                 content2 = await resp2.read()
-            
+
             return content1 != content2
         except Exception:
             return False
@@ -363,9 +364,9 @@ class ReconIntelligence:
         """
         base_url = url.rstrip('/')
         clean_path = path.strip('/')
-        
+
         payloads = []
-        
+
         # Path manipulation
         fuzz_suffixes = [
             "/%2f/", "/./", "//", "?", "#", "%3b/", "..;/", ";",
@@ -395,14 +396,14 @@ class ReconIntelligence:
             "X-Host": "127.0.0.1",
             "Host": "localhost"
         }
-        
+
         for name, value in bypass_headers.items():
             payloads.append({
                 "type": "header",
                 "url": f"{base_url}/",
                 "headers": {name: value}
             })
-            
+
         # Method manipulation
         methods = ["POST", "PUT", "PATCH", "TRACE", "CONNECT"]
         for method in methods:
@@ -412,5 +413,5 @@ class ReconIntelligence:
                 "method": method,
                 "headers": {}
             })
-            
+
         return payloads

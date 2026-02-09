@@ -12,10 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Dict, List
+from typing import Dict
+
 
 class GraphIntelligence:
-    """Intelligence module for Graph-based security analysis and AD relationships (Ported from FalconHound & FalkorDB)."""
+    """Intelligence module for Graph-based security analysis and AD relationships.
+    Ported from FalconHound & FalkorDB.
+    """
 
     @staticmethod
     def get_ad_graph_queries() -> Dict[str, str]:
@@ -49,7 +52,9 @@ class GraphIntelligence:
     def get_graph_performance_primitives() -> Dict[str, str]:
         """Techniques for high-performance graph querying (Ported from FalkorDB)."""
         return {
-            "sparse_matrix_adjacency": "Representing graph relationships as sparse matrices for linear algebra operations",
+            "sparse_matrix_adjacency": (
+                "Representing graph relationships as sparse matrices for linear algebra operations"
+            ),
             "linear_algebra_query_exec": "Using vector-matrix multiplication for BFS/DFS traversal",
             "multi_tenant_isolation": "Namespace-based graph separation in memory",
             "opencypher_extension_indices": "Using specialized indices for property-based filtering in Cypher"

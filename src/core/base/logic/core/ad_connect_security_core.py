@@ -336,7 +336,11 @@ class ADConnectSecurityCore(BaseCore):
             cmd = [
                 'powershell.exe',
                 '-Command',
-                'Get-ItemProperty -Path "HKLM:\\SYSTEM\\CurrentControlSet\\Services\\ADSync\\Parameters" -Name "ServiceAccount" | ConvertTo-Json'
+                (
+                    'Get-ItemProperty -Path '
+                    '"HKLM:\\SYSTEM\\CurrentControlSet\\Services\\ADSync\\Parameters" '
+                    '-Name "ServiceAccount" | ConvertTo-Json'
+                )
             ]
 
             result = await self._run_powershell_command(cmd)
@@ -346,7 +350,9 @@ class ADConnectSecurityCore(BaseCore):
 
                 # Parse account information
                 if '\\' in account_name:
-                    domain, username = account_name.split('\\', 1)
+                    parts = account_name.split('\\', 1)
+                    domain = parts[0]
+                    username = parts[1]
                 else:
                     domain = '.'
                     username = account_name
@@ -403,7 +409,11 @@ class ADConnectSecurityCore(BaseCore):
             cmd = [
                 'powershell.exe',
                 '-Command',
-                'Get-ChildItem -Path "HKCU:\\SOFTWARE\\Microsoft\\Microsoft SQL Server\\LocalDB\\Instances" | Select-Object -Property PSChildName | ConvertTo-Json'
+                (
+                    'Get-ChildItem -Path "HKCU:\\SOFTWARE\\Microsoft\\Microsoft '
+                    'SQL Server\\LocalDB\\Instances" | Select-Object -Property '
+                    'PSChildName | ConvertTo-Json'
+                )
             ]
 
             result = await self._run_powershell_command(cmd)
@@ -412,11 +422,12 @@ class ADConnectSecurityCore(BaseCore):
                 if isinstance(instances, list):
                     for instance in instances:
                         if 'ADSync' in instance.get('PSChildName', ''):
+                            ps_child_name = instance['PSChildName']
                             return {
-                                'instance_name': instance['PSChildName'],
+                                'instance_name': ps_child_name,
                                 'database_name': 'ADSync',
                                 'version': 'Unknown',
-                                'connection_string': f"(LocalDB)\\{instance['PSChildName']}"
+                                'connection_string': f"(LocalDB)\\{ps_child_name}"
                             }
 
             return {
@@ -457,7 +468,10 @@ class ADConnectSecurityCore(BaseCore):
             cmd = [
                 'powershell.exe',
                 '-Command',
-                'Get-ItemProperty -Path "HKLM:\\SOFTWARE\\Microsoft\\Azure AD Connect" | ConvertTo-Json'
+                (
+                    'Get-ItemProperty -Path "HKLM:\\SOFTWARE\\Microsoft\\'
+                    'Azure AD Connect" | ConvertTo-Json'
+                )
             ]
 
             result = await self._run_powershell_command(cmd)
@@ -482,8 +496,11 @@ class ADConnectSecurityCore(BaseCore):
             'target': ['contoso.onmicrosoft.com']
         }
 
-    async def _identify_vulnerabilities(self, database: ADConnectDatabase,
-                                      configuration: ADConnectConfiguration) -> List[Dict[str, Any]]:
+    async def _identify_vulnerabilities(
+        self,
+        database: ADConnectDatabase,
+        configuration: ADConnectConfiguration
+    ) -> List[Dict[str, Any]]:
         """Identify security vulnerabilities."""
         vulnerabilities = []
 
@@ -509,15 +526,23 @@ class ADConnectSecurityCore(BaseCore):
 
         return vulnerabilities
 
-    async def _calculate_compliance_score(self, service_account: ADConnectServiceAccount,
-                                        database: ADConnectDatabase,
-                                        configuration: ADConnectConfiguration,
-                                        vulnerabilities: List[Dict[str, Any]]) -> float:
+    async def _calculate_compliance_score(
+        self,
+        service_account: ADConnectServiceAccount,
+        database: ADConnectDatabase,
+        configuration: ADConnectConfiguration,
+        vulnerabilities: List[Dict[str, Any]]
+    ) -> float:
         """Calculate compliance score (0-10 scale)."""
         score = 10.0
 
         # Deduct points for vulnerabilities
-        severity_weights = {'Critical': 3.0, 'High': 2.0, 'Medium': 1.0, 'Low': 0.5}
+        severity_weights = {
+            'Critical': 3.0,
+            'High': 2.0,
+            'Medium': 1.0,
+            'Low': 0.5
+        }
         for vuln in vulnerabilities:
             severity = vuln.get('severity', 'Low')
             score -= severity_weights.get(severity, 0.5)
@@ -542,10 +567,13 @@ class ADConnectSecurityCore(BaseCore):
         else:
             return 'Low'
 
-    async def _generate_security_recommendations(self, service_account: ADConnectServiceAccount,
-                                               database: ADConnectDatabase,
-                                               configuration: ADConnectConfiguration,
-                                               vulnerabilities: List[Dict[str, Any]]) -> List[str]:
+    async def _generate_security_recommendations(
+        self,
+        service_account: ADConnectServiceAccount,
+        database: ADConnectDatabase,
+        configuration: ADConnectConfiguration,
+        vulnerabilities: List[Dict[str, Any]]
+    ) -> List[str]:
         """Generate security recommendations."""
         recommendations = []
 
@@ -584,7 +612,8 @@ class ADConnectSecurityCore(BaseCore):
             if result.returncode == 0:
                 return stdout.decode('utf-8').strip()
             else:
-                logger.error(f"PowerShell command failed: {stderr.decode('utf-8')}")
+                err_msg = stderr.decode('utf-8')
+                logger.error(f"PowerShell command failed: {err_msg}")
                 return None
 
         except Exception as e:
@@ -597,7 +626,11 @@ class ADConnectSecurityCore(BaseCore):
             cmd = [
                 'powershell.exe',
                 '-Command',
-                f'$objUser = New-Object System.Security.Principal.NTAccount("{account_name}"); $strSID = $objUser.Translate([System.Security.Principal.SecurityIdentifier]); $strSID.Value'
+                (
+                    f'$objUser = New-Object System.Security.Principal.NTAccount("{account_name}"); '
+                    f'$strSID = $objUser.Translate([System.Security.Principal.SecurityIdentifier]); '
+                    f'$strSID.Value'
+                )
             ]
 
             result = await self._run_powershell_command(cmd)
@@ -623,19 +656,21 @@ class ADConnectSecurityCore(BaseCore):
             Dict containing analysis results
         """
         try:
-            task_type = context.task.get('type', 'assessment')
+            # Type safe access to task from context
+            task_data = getattr(context, 'task', {}) if hasattr(context, 'task') else {}
+            task_type = task_data.get('type', 'assessment')
 
             if task_type == 'service_account_analysis':
-                result = await self.analyze_service_account(context)
-                return result.__dict__
+                sa_result = await self.analyze_service_account(context)
+                return sa_result.__dict__
 
             elif task_type == 'database_analysis':
-                result = await self.analyze_database_security(context)
-                return result.__dict__
+                db_result_obj = await self.analyze_database_security(context)
+                return db_result_obj.__dict__
 
             elif task_type == 'configuration_analysis':
-                result = await self.analyze_configuration(context)
-                return result.__dict__
+                config_result_obj = await self.analyze_configuration(context)
+                return config_result_obj.__dict__
 
             elif task_type == 'full_assessment':
                 assessment = await self.perform_security_assessment(context)
@@ -668,14 +703,16 @@ class ADConnectSecurityCore(BaseCore):
             bool: True if task is valid
         """
         required_fields = ['type']
-        task_data = context.task
+        task_data = getattr(context, 'task', {}) if hasattr(context, 'task') else {}
 
         for field in required_fields:
             if field not in task_data:
                 return False
 
-        valid_types = ['service_account_analysis', 'database_analysis',
-                      'configuration_analysis', 'full_assessment']
+        valid_types = [
+            'service_account_analysis', 'database_analysis',
+            'configuration_analysis', 'full_assessment'
+        ]
 
         return task_data['type'] in valid_types
 

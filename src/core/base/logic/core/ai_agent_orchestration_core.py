@@ -35,7 +35,7 @@ import logging
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Protocol, Union
+from typing import Any, Dict, List, Optional, Protocol, Union, Callable
 from concurrent.futures import ThreadPoolExecutor
 import threading
 
@@ -81,7 +81,7 @@ class ToolDefinition:
     name: str
     description: str
     input_schema: Dict[str, Any]
-    handler: callable
+    handler: Callable[..., Any]
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -112,11 +112,21 @@ class StreamingContext:
 class MemoryProvider(Protocol):
     """Protocol for memory storage providers"""
 
-    async def create_thread(self, thread_id: str, resource_id: str, metadata: Dict[str, Any] = None) -> None:
+    async def create_thread(
+        self,
+        thread_id: str,
+        resource_id: str,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> None:
         """Create a new conversation thread"""
         ...
 
-    async def save_messages(self, messages: List[UIMessage], thread_id: str = None, resource_id: str = None) -> None:
+    async def save_messages(
+        self,
+        messages: List[UIMessage],
+        thread_id: Optional[str] = None,
+        resource_id: Optional[str] = None
+    ) -> None:
         """Save messages to memory"""
         ...
 
@@ -124,7 +134,12 @@ class MemoryProvider(Protocol):
         """Query messages from memory"""
         ...
 
-    async def search_similar(self, query: str, thread_id: str = None, limit: int = 10) -> List[UIMessage]:
+    async def search_similar(
+        self,
+        query: str,
+        thread_id: Optional[str] = None,
+        limit: int = 10
+    ) -> List[UIMessage]:
         """Search for similar messages using vector similarity"""
         ...
 
@@ -168,7 +183,7 @@ class StreamingProvider(Protocol):
 class CodeExecutionProvider(Protocol):
     """Protocol for code execution environments"""
 
-    async def create_environment(self, template: str, config: Dict[str, Any] = None) -> str:
+    async def create_environment(self, template: str, config: Optional[Dict[str, Any]] = None) -> str:
         """Create a new code execution environment"""
         ...
 
@@ -197,7 +212,7 @@ class AIAgentOrchestrationCore(BaseCore):
     - Collaborative development workflows
     """
 
-    def __init__(self, config: Dict[str, Any] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
         super().__init__(config or {})
 
         # Core components
@@ -267,32 +282,48 @@ class AIAgentOrchestrationCore(BaseCore):
         """Get the system prompt for the code builder agent"""
         return """You are an AI app builder. Create and modify applications as the user requests.
 
-The first thing you should always do when creating a new app is change the home page to a placeholder so that the user can see that something is happening. Then you should explore the project structure and see what has already been provided to you to build the app. Check if there's a README_AI.md file for more instructions on how to use the template.
+The first thing you should always do when creating a new app is change the home page to a placeholder so that the user
+can see that something is happening. Then you should explore the project structure and see what has already been
+provided to you to build the app. Check if there's a README_AI.md file for more instructions on how to use the template.
 
 All of the code you will be editing is in the global /template directory.
 
-When building a feature, build the UI for that feature first and show the user that UI using placeholder data. Prefer building UI incrementally and in small pieces so that the user can see the results as quickly as possible. However, don't make so many small updates that it takes way longer to create the app. It's about balance. Build the application logic/backend logic after the UI is built. Then connect the UI to the logic.
+When building a feature, build the UI for that feature first and show the user that UI using placeholder data.
+Prefer building UI incrementally and in small pieces so that the user can see the results as quickly as possible.
+However, don't make so many small updates that it takes way longer to create the app. It's about balance.
+Build the application logic/backend logic after the UI is built. Then connect the UI to the logic.
 
-When you need to change a file, prefer editing it rather than writing a new file in it's place. Please make a commit after you finish a task, even if you have more to build.
+When you need to change a file, prefer editing it rather than writing a new file in it's place.
+Please make a commit after you finish a task, even if you have more to build.
 
 Don't try and generate raster images like pngs or jpegs. That's not possible.
 
-Try to be concise and clear in your responses. If you need to ask the user for more information, do so in a way that is easy to understand. If you need to ask the user to try something, explain why they should try it and what you expect to happen.
+Try to be concise and clear in your responses. If you need to ask the user for more information, do so in a way
+that is easy to understand. If you need to ask the user to try something, explain why they should try it and
+what you expect to happen.
 
-Frequently run the linting tools so you can fix issues as you go and the user doesn't have to the user doesn't have to just stare at an error screen for a long time.
+Frequently run the linting tools so you can fix issues as you go and the user doesn't have to the user doesn't
+have to just stare at an error screen for a long time.
 
-Before you ever ask the user to try something, try curling the page yourself to ensure it's not just an error page. You shouldn't have to rely on the user to tell you when something is obviously broken.
+Before you ever ask the user to try something, try curling the page yourself to ensure it's not just an error page.
+You shouldn't have to rely on the user to tell you when something is obviously broken.
 
-Sometimes if the user tells you something is broken, they might be wrong. Don't be afraid to ask them to reload the page and try again if you think the issue they're describing doesn't make sense.
+Sometimes if the user tells you something is broken, they might be wrong. Don't be afraid to ask them to reload
+the page and try again if you think the issue they're describing doesn't make sense.
 
-It's common that users won't bother to read everything you write, so if there's something important you want them to do, make sure to put it last and make it as big as possible.
+It's common that users won't bother to read everything you write, so if there's something important you want
+them to do, make sure to put it last and make it as big as possible.
 
 Tips for games:
-- for games that navigate via arrow keys, you likely want to set the body to overflow hidden so that the page doesn't scroll.
+- for games that navigate via arrow keys, you likely want to set the body to overflow hidden so that the page
+  doesn't scroll.
 - for games that are computationally intensive to render, you should probably use canvas rather than html.
-- it's good to have a way to start the game using the keyboard. it's even better if the keys that you use to control the game can be used to start the game. like if you use WASD to control the game, pressing W should start the game. this doesn't work in all scenarios, but it's a good rule of thumb.
+- it's good to have a way to start the game using the keyboard. it's even better if the keys that you use to
+  control the game can be used to start the game. like if you use WASD to control the game, pressing W should
+  start the game. this doesn't work in all scenarios, but it's a good rule of thumb.
 - if you use arrow keys to navigate, generally it's good to support WASD as well.
-- insure you understand the game mechanics before you start building the game. If you don't understand the game, ask the user to explain it to you in detail.
+- insure you understand the game mechanics before you start building the game. If you don't understand the game,
+  ask the user to explain it to you in detail.
 - make the games full screen. don't make them in a small box with a title about it or something.
 
 NextJS tips:
@@ -415,7 +446,7 @@ Be concise but thorough in your responses. Use examples when helpful."""
         # This would be configured externally in a real implementation
         pass
 
-    async def create_conversation_thread(self, resource_id: str, metadata: Dict[str, Any] = None) -> str:
+    async def create_conversation_thread(self, resource_id: str, metadata: Optional[Dict[str, Any]] = None) -> str:
         """Create a new conversation thread"""
         thread_id = str(uuid.uuid4())
 
@@ -429,9 +460,9 @@ Be concise but thorough in your responses. Use examples when helpful."""
         self,
         agent_name: str,
         message: UIMessage,
-        thread_id: str = None,
+        thread_id: Optional[str] = None,
         streaming: bool = True,
-        context: CascadeContext = None
+        context: Optional[CascadeContext] = None
     ) -> Union[str, StreamingContext]:
         """Send a message to an AI agent"""
         if agent_name not in self.agents:
@@ -440,17 +471,19 @@ Be concise but thorough in your responses. Use examples when helpful."""
         agent_config = self.agents[agent_name]
 
         # Create thread if not provided
-        if not thread_id:
-            thread_id = await self.create_conversation_thread(f"agent_{agent_name}")
+        actual_thread_id = thread_id
+        if not actual_thread_id:
+            actual_thread_id = await self.create_conversation_thread(f"agent_{agent_name}")
 
         # Save user message to memory
         if self.memory_provider and agent_config.memory_enabled:
-            await self.memory_provider.save_messages([message], thread_id, f"agent_{agent_name}")
+            await self.memory_provider.save_messages([message], actual_thread_id, f"agent_{agent_name}")
 
         # Get conversation history
         conversation_history = []
         if self.memory_provider and agent_config.memory_enabled:
-            conversation_history = await self.memory_provider.query_messages(thread_id, f"agent_{agent_name}")
+            conversation_history = await self.memory_provider.query_messages(
+                actual_thread_id, f"agent_{agent_name}")
 
         # Prepare messages for AI
         messages = self._prepare_messages_for_ai(conversation_history + [message], agent_config)
@@ -477,7 +510,8 @@ Be concise but thorough in your responses. Use examples when helpful."""
                     role="assistant",
                     parts=[MessagePart(type="text", content=response)]
                 )
-                await self.memory_provider.save_messages([ai_message], thread_id, f"agent_{agent_name}")
+                await self.memory_provider.save_messages(
+                    [ai_message], actual_thread_id, f"agent_{agent_name}")
 
             return streaming_context if streaming_context else response
 
@@ -491,8 +525,8 @@ Be concise but thorough in your responses. Use examples when helpful."""
         self,
         agent_config: AgentConfig,
         messages: List[Dict[str, Any]],
-        streaming_context: StreamingContext = None,
-        context: CascadeContext = None
+        streaming_context: Optional[StreamingContext] = None,
+        context: Optional[CascadeContext] = None
     ) -> str:
         """Generate AI response (placeholder - would integrate with actual AI provider)"""
         # This is a placeholder implementation
@@ -502,7 +536,10 @@ Be concise but thorough in your responses. Use examples when helpful."""
         await asyncio.sleep(0.1)  # Simulate processing time
 
         # For now, return a simple response
-        return "This is a placeholder AI response. The actual implementation would integrate with AI providers like OpenAI, Anthropic, or local models."
+        return (
+            "This is a placeholder AI response. The actual implementation would integrate with "
+            "AI providers like OpenAI, Anthropic, or local models."
+        )
 
     def _prepare_messages_for_ai(self, ui_messages: List[UIMessage], agent_config: AgentConfig) -> List[Dict[str, Any]]:
         """Convert UI messages to AI provider format"""
@@ -533,21 +570,31 @@ Be concise but thorough in your responses. Use examples when helpful."""
 
         return messages
 
-    async def execute_tool(self, tool_name: str, parameters: Dict[str, Any], context: CascadeContext = None) -> Any:
+    async def execute_tool(
+        self,
+        tool_name: str,
+        parameters: Dict[str, Any],
+        context: Optional[CascadeContext] = None
+    ) -> Any:
         """Execute a tool"""
         if not self.tool_provider:
             raise ValueError("No tool provider configured")
 
         return await self.tool_provider.execute_tool(tool_name, parameters)
 
-    async def create_development_environment(self, template: str, config: Dict[str, Any] = None) -> str:
+    async def create_development_environment(self, template: str, config: Optional[Dict[str, Any]] = None) -> str:
         """Create a development environment"""
         if not self.code_provider:
             raise ValueError("No code execution provider configured")
 
         return await self.code_provider.create_environment(template, config or {})
 
-    async def execute_code_in_environment(self, environment_id: str, code: str, language: str = "python") -> Dict[str, Any]:
+    async def execute_code_in_environment(
+        self,
+        environment_id: str,
+        code: str,
+        language: str = "python"
+    ) -> Dict[str, Any]:
         """Execute code in a development environment"""
         if not self.code_provider:
             raise ValueError("No code execution provider configured")
@@ -574,7 +621,12 @@ Be concise but thorough in your responses. Use examples when helpful."""
 
         return await self.memory_provider.query_messages(thread_id, resource_id, limit)
 
-    async def search_conversations(self, query: str, thread_id: str = None, limit: int = 10) -> List[UIMessage]:
+    async def search_conversations(
+        self,
+        query: str,
+        thread_id: Optional[str] = None,
+        limit: int = 10
+    ) -> List[UIMessage]:
         """Search conversations using semantic similarity"""
         if not self.memory_provider:
             return []
@@ -641,7 +693,7 @@ Be concise but thorough in your responses. Use examples when helpful."""
         logger.info("AI Agent Orchestration Core cleaned up")
 
     # BaseCore interface implementation
-    async def initialize(self, context: CascadeContext = None) -> bool:
+    async def initialize(self, context: Optional[CascadeContext] = None) -> bool:
         """Initialize the core"""
         try:
             self._initialize_core()
@@ -650,7 +702,7 @@ Be concise but thorough in your responses. Use examples when helpful."""
             logger.error(f"Failed to initialize AI Agent Orchestration Core: {e}")
             return False
 
-    async def shutdown(self, context: CascadeContext = None) -> bool:
+    async def shutdown(self, context: Optional[CascadeContext] = None) -> bool:
         """Shutdown the core"""
         try:
             await self.cleanup()
@@ -659,7 +711,7 @@ Be concise but thorough in your responses. Use examples when helpful."""
             logger.error(f"Failed to shutdown AI Agent Orchestration Core: {e}")
             return False
 
-    async def health_check(self, context: CascadeContext = None) -> Dict[str, Any]:
+    async def health_check(self, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
         """Health check for the core"""
         return {
             "status": "healthy" if len(self.agents) > 0 else "degraded",
@@ -673,7 +725,7 @@ Be concise but thorough in your responses. Use examples when helpful."""
             "active_streams": len(self.streaming_contexts)
         }
 
-    async def get_metrics(self, context: CascadeContext = None) -> Dict[str, Any]:
+    async def get_metrics(self, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
         """Get core metrics"""
         return {
             "agents": len(self.agents),
@@ -683,14 +735,18 @@ Be concise but thorough in your responses. Use examples when helpful."""
             "uptime": 0  # Would track uptime
         }
 
-    async def process_task(self, task_data: Dict[str, Any], context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    async def process_task(
+        self,
+        task_data: Dict[str, Any],
+        context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """Process a task through the orchestration core"""
         task_type = task_data.get("type", "unknown")
 
         if task_type == "send_message":
-            agent_name = task_data.get("agent", "code_builder")
-            message_content = task_data.get("message", "")
-            thread_id = task_data.get("thread_id")
+            agent_name = cast(str, task_data.get("agent", "code_builder"))
+            message_content = cast(str, task_data.get("message", ""))
+            thread_id = cast(Optional[str], task_data.get("thread_id"))
 
             message = UIMessage(
                 id=str(uuid.uuid4()),
@@ -699,18 +755,27 @@ Be concise but thorough in your responses. Use examples when helpful."""
             )
 
             response = await self.send_message(agent_name, message, thread_id, context=context)
-            return {"response": response, "thread_id": thread_id}
+
+            # Convert response to dict if it's a StreamingContext
+            resp_data: Any = response
+            if isinstance(response, StreamingContext):
+                resp_data = {
+                    "session_id": response.session_id,
+                    "is_active": response.is_active
+                }
+
+            return {"response": resp_data, "thread_id": thread_id}
 
         elif task_type == "create_environment":
-            template = task_data.get("template", "python")
-            config = task_data.get("config", {})
+            template = cast(str, task_data.get("template", "python"))
+            config = cast(Optional[Dict[str, Any]], task_data.get("config", {}))
             env_id = await self.create_development_environment(template, config)
             return {"environment_id": env_id}
 
         elif task_type == "execute_code":
-            env_id = task_data.get("environment_id")
-            code = task_data.get("code", "")
-            language = task_data.get("language", "python")
+            env_id = cast(str, task_data.get("environment_id", ""))
+            code = cast(str, task_data.get("code", ""))
+            language = cast(str, task_data.get("language", "python"))
             result = await self.execute_code_in_environment(env_id, code, language)
             return {"result": result}
 

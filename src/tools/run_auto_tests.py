@@ -31,6 +31,7 @@ def main():
         return 0
     # Many generated tests use top-level asserts; run each test file as a separate
     # Python process so top-level asserts execute and tests run in parallel.
+
     def os_cpu_count() -> int | None:
         try:
             return os.cpu_count()

@@ -12,10 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import re
-import asyncio
 import aiohttp
 from typing import List, Dict, Any, Optional
+
 
 class DevOpsIntelligence:
     """
@@ -110,14 +109,14 @@ class DevOpsIntelligence:
         """Lightweight check for SCCM DP exposure."""
         session = await self.get_session()
         base_url = f"http://{target}"
-        results = {"exposed_paths": []}
-        
+        results: Dict[str, Any] = {"exposed_paths": []}
+
         for entry in self.get_sccm_looting_paths(base_url):
             url = base_url + entry["path"]
             try:
                 async with session.get(url, timeout=5) as resp:
                     if resp.status == 200:
                         results["exposed_paths"].append(url)
-            except:
+            except Exception:
                 continue
         return results

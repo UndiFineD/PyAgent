@@ -16,8 +16,9 @@
 Data models for the Download Agent.
 """
 
+from __future__ import annotations
 from dataclasses import dataclass
-from typing import Dict
+from typing import Dict, Any
 
 
 @dataclass
@@ -29,7 +30,7 @@ class DownloadResult:
     file_type: str
     size_bytes: int = 0
     error_message: str = ""
-    metadata: Dict = None
+    metadata: dict[str, Any] | None = None
 
 
 @dataclass

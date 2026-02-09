@@ -190,8 +190,9 @@ class AISecurityValidationCore:
             }
         ]
 
-    async def scan_input_security(self, input_text: str,
-                                context: Optional[Dict[str, Any]] = None) -> SecurityScanResult:
+    async def scan_input_security(
+        self, input_text: str, context: Optional[Dict[str, Any]] = None
+    ) -> SecurityScanResult:
         """
         Perform comprehensive security scan on input text.
 
@@ -309,8 +310,9 @@ class AISecurityValidationCore:
 
         return issues
 
-    async def _scan_additional_risks(self, text: str,
-                                   context: Optional[Dict[str, Any]]) -> List[SecurityIssue]:
+    async def _scan_additional_risks(
+        self, text: str, context: Optional[Dict[str, Any]]
+    ) -> List[SecurityIssue]:
         """Scan for additional security risks"""
         issues = []
 
@@ -458,8 +460,9 @@ class AISecurityValidationCore:
 
         return recommendations
 
-    async def validate_output_safety(self, output_text: str,
-                                   input_context: Optional[Dict[str, Any]] = None) -> SecurityScanResult:
+    async def validate_output_safety(
+        self, output_text: str, input_context: Optional[Dict[str, Any]] = None
+    ) -> SecurityScanResult:
         """
         Validate safety of AI-generated output.
 

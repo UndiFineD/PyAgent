@@ -75,7 +75,7 @@ class ReportSearchEngine:
                     for fp, rt, ln in locations:
                         self.index[word].append((fp, ReportType[rt], ln))
                 return
-            except (AttributeError, TypeError, RuntimeError, OSError) as _e:
+            except (AttributeError, TypeError, RuntimeError, OSError):
                 pass  # Fall back to Python
 
         # Python fallback: Build index
@@ -99,7 +99,7 @@ class ReportSearchEngine:
         if _RUST_AVAILABLE:
             try:
                 words = tokenize_query_rust(query)
-            except (AttributeError, TypeError, RuntimeError, OSError) as _e:
+            except (AttributeError, TypeError, RuntimeError, OSError):
                 words = re.findall(r"\w+", query.lower())
         else:
             words = re.findall(r"\w+", query.lower())

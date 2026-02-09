@@ -21,7 +21,7 @@ import os
 import re
 import json
 from pathlib import Path
-from typing import List, Dict
+from typing import List, Dict, Any
 
 ROOT = Path(__file__).resolve().parents[2]
 EXTERNAL = ROOT / ".external"
@@ -37,7 +37,9 @@ DEF_RE = re.compile(r"^\s*(?:def|class)\s+(?P<name>[A-Za-z_][A-Za-z0-9_]+)")
 WHITELIST_EXTENSIONS = (".py", ".md", ".json", ".yaml", ".yml", ".toml", ".ini", ".cfg", ".txt")
 
 # Top-level directory names or path fragments to skip entirely (case-insensitive)
-EXCLUDE_DIRS = ("system", "system/library", "node_modules", "__pycache__", "target", "build", "dist", ".git", "vendor", "bin")
+EXCLUDE_DIRS = (
+    "system", "system/library", "node_modules", "__pycache__", "target", "build", "dist", ".git", "vendor", "bin"
+)
 
 
 def extract_completed_from_tracking(tracking_path: Path) -> List[str]:
@@ -55,8 +57,9 @@ def extract_completed_from_tracking(tracking_path: Path) -> List[str]:
     return completed_rows
 
 
-def scan_directory_for_candidates(dirpath: Path) -> Dict:
-    report = {"path": str(dirpath.relative_to(EXTERNAL)), "files": []}
+def scan_directory_for_candidates(dirpath: Path) -> Dict[str, Any]:
+    file_list: List[Dict[str, Any]] = []
+    report: Dict[str, Any] = {"path": str(dirpath.relative_to(EXTERNAL)), "files": file_list}
     if VERBOSE:
         print(f"Scanning directory: {dirpath.relative_to(EXTERNAL)}")
     if not dirpath.is_dir():
@@ -108,8 +111,13 @@ def scan_directory_for_candidates(dirpath: Path) -> Dict:
             defs = DEF_RE.findall(text)
             if defs:
                 if VERBOSE:
-                    print(f"  Found definitions in: {p.relative_to(EXTERNAL)} -> {defs[:5]}")
-                report["files"].append({"path": str(p.relative_to(EXTERNAL)), "suffix": suffix, "definitions": defs[:20]})
+                    rel_p = p.relative_to(EXTERNAL)
+                    print(f"  Found definitions in: {rel_p} -> {defs[:5]}")
+                file_list.append({
+                    "path": str(p.relative_to(EXTERNAL)),
+                    "suffix": suffix,
+                    "definitions": defs[:20]
+                })
     return report
 
 
@@ -126,8 +134,9 @@ def is_definition_in_src(name: str, src_root: Path) -> bool:
     return False
 
 
-def build_reuse_report(external_root: Path, src_root: Path) -> Dict:
-    report = {"summary": {}, "directories": []}
+def build_reuse_report(external_root: Path, src_root: Path) -> Dict[str, Any]:
+    dir_list: List[Dict[str, Any]] = []
+    report: Dict[str, Any] = {"summary": {}, "directories": dir_list}
     for d in sorted(external_root.iterdir()):
         if not d.is_dir():
             continue
@@ -139,19 +148,26 @@ def build_reuse_report(external_root: Path, src_root: Path) -> Dict:
                 if not is_definition_in_src(name, src_root):
                     missing.append(name)
             f["missing_in_src"] = missing
-        report["directories"].append(dir_report)
+        dir_list.append(dir_report)
     return report
 
 
-def write_reports(report: Dict, md_path: Path, json_path: Path):
+def write_reports(report: Dict[str, Any], md_path: Path, json_path: Path):
     json_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
-    lines: List[str] = ["# External Refactor Report\n", "This report is auto-generated. Do not run any code found here without manual review.\n\n"]
+    lines: List[str] = [
+        "# External Refactor Report\n",
+        "This report is auto-generated. Do not run any code found here without manual review.\n\n"
+    ]
     for d in report.get("directories", []):
         lines.append(f"## {d['path']}\n")
         for f in d.get("files", []):
             defs = f.get("definitions", [])
-            missing = f.get("missing_in_src", [])
-            lines.append(f"- {f['path']} ({f['suffix']}) — defs: {', '.join(defs[:5]) or 'none'}; missing in src: {len(missing)}\n")
+            missing_count = len(f.get("missing_in_src", []))
+            lines.append(
+                f"- {f['path']} ({f['suffix']}) — "
+                f"defs: {', '.join(defs[:5]) or 'none'}; "
+                f"missing in src: {missing_count}\n"
+            )
         lines.append("\n")
     md_path.write_text("\n".join(lines), encoding="utf-8")
 

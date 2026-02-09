@@ -12,16 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
 import aiohttp
 import re
-from typing import List, Dict, Optional
+from typing import List, Optional
+
 
 class ProxyIntelligence:
     """Intelligence engine for proxy discovery and validation."""
 
     SOURCES = [
-        "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=all&ssl=all&anonymity=all",
+        (
+            "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&"
+            "timeout=10000&country=all&ssl=all&anonymity=all"
+        ),
         "https://www.proxy-list.download/api/v1/get?type=https",
         "https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/https.txt",
         "https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/http.txt"
@@ -34,7 +37,7 @@ class ProxyIntelligence:
         """Scrape common free proxy lists."""
         if not self.session:
             self.session = aiohttp.ClientSession()
-        
+
         all_proxies = []
         for url in self.SOURCES:
             try:
@@ -43,7 +46,7 @@ class ProxyIntelligence:
                         text = await resp.text()
                         proxies = re.findall(r"\d+\.\d+\.\d+\.\d+:\d+", text)
                         all_proxies.extend(proxies)
-            except:
+            except Exception:
                 continue
         return list(set(all_proxies))
 
@@ -51,12 +54,12 @@ class ProxyIntelligence:
         """Validate if a proxy is working and anonymous."""
         if not self.session:
             self.session = aiohttp.ClientSession()
-        
+
         try:
             async with self.session.get(test_url, proxy=f"http://{proxy}", timeout=10) as resp:
                 if resp.status == 200:
                     return True
-        except:
+        except Exception:
             pass
         return False
 

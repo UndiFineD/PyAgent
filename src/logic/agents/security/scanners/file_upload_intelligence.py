@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
 from typing import List, Dict, Any
+
 
 class FileUploadIntelligence:
     """
@@ -22,14 +22,14 @@ class FileUploadIntelligence:
     """
 
     PHP_EXTENSIONS = [
-        ".php", ".php2", ".php3", ".php4", ".php5", ".php6", ".php7", ".phps", 
-        ".pht", ".phtm", ".phtml", ".pgif", ".shtml", ".htaccess", ".phar", 
+        ".php", ".php2", ".php3", ".php4", ".php5", ".php6", ".php7", ".phps",
+        ".pht", ".phtm", ".phtml", ".pgif", ".shtml", ".htaccess", ".phar",
         ".inc", ".hphp", ".ctp", ".module", ".pHp", ".PhP2", ".PhP3",
         ".PhP4", ".PhP5", ".PhP6", ".PhP7", ".PhPs", ".pHt", ".pHtm", ".pHtMl"
     ]
 
     ASP_EXTENSIONS = [
-        ".asp", ".aspx", ".config", ".ashx", ".asmx", ".aspq", ".axd", ".cshtm", 
+        ".asp", ".aspx", ".config", ".ashx", ".asmx", ".aspq", ".axd", ".cshtm",
         ".cshtml", ".rem", ".soap", ".vbhtm", ".vbhtml", ".asa", ".cer", ".shtml",
         ".aSp", ".aSpX", ".cOnFig", ".aShx", ".aSmX", ".aSpq", ".aXd", ".cShtMl"
     ]
@@ -43,7 +43,7 @@ class FileUploadIntelligence:
     PERL_EXTENSIONS = [".pl", ".cgi"]
 
     BYPASS_SUFFIXES = [
-        "%20", "%0a", "%00", "%0d%0a", "/", ".\\", ".", "....", 
+        "%20", "%0a", "%00", "%0d%0a", "/", ".\\", ".", "....",
         ".", ". ", " .", " "
     ]
 
@@ -62,10 +62,10 @@ class FileUploadIntelligence:
             variants.extend(FileUploadIntelligence.ASP_EXTENSIONS)
         elif "jsp" in base_extension.lower():
             variants.extend(FileUploadIntelligence.JSP_EXTENSIONS)
-        
+
         # Add double extensions
         variants.append(f"{base_extension}{base_extension}")
-        
+
         return list(set(variants))
 
     @staticmethod
@@ -79,7 +79,7 @@ class FileUploadIntelligence:
             # Null byte / suffix bypasses
             results.append(f"{name_part}{ext_part}{suffix}.{allowed_ext}")
             results.append(f"{name_part}.{allowed_ext}{suffix}{ext_part}")
-        
+
         return results
 
     @staticmethod

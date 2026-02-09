@@ -134,7 +134,7 @@ class MonitoringConfig:
 class ADConnectionProvider(Protocol):
     """Protocol for Active Directory connection providers"""
 
-    async def connect(self, domain_controller: str, credentials: Dict[str, Any] = None) -> Any:
+    async def connect(self, domain_controller: str, credentials: Optional[Dict[str, Any]] = None) -> Any:
         """Establish connection to domain controller"""
         ...
 
@@ -142,7 +142,12 @@ class ADConnectionProvider(Protocol):
         """Get current Update Sequence Number"""
         ...
 
-    async def get_changed_objects(self, connection: Any, start_usn: int, filters: Dict[str, Any] = None) -> List[Dict[str, Any]]:
+    async def get_changed_objects(
+        self,
+        connection: Any,
+        start_usn: int,
+        filters: Optional[Dict[str, Any]] = None
+    ) -> List[Dict[str, Any]]:
         """Get objects changed since specified USN"""
         ...
 
@@ -183,7 +188,7 @@ class ADMonitoringCore(BaseCore):
     - Integration with security incident response
     """
 
-    def __init__(self, config: Dict[str, Any] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
         super().__init__(config or {})
 
         # Core components
@@ -242,7 +247,11 @@ class ADMonitoringCore(BaseCore):
             "admin_access": self._check_admin_access
         }
 
-    async def start_monitoring(self, domain_controllers: List[str] = None, context: CascadeContext = None) -> str:
+    async def start_monitoring(
+        self,
+        domain_controllers: Optional[List[str]] = None,
+        context: Optional[CascadeContext] = None
+    ) -> str:
         """Start AD monitoring session"""
         if not self.ad_provider:
             raise ValueError("No AD connection provider configured")
@@ -277,7 +286,11 @@ class ADMonitoringCore(BaseCore):
         logger.info(f"Started AD monitoring session {session_id} for {len(dc_list)} domain controllers")
         return session_id
 
-    async def stop_monitoring(self, session_id: str = None, context: CascadeContext = None) -> None:
+    async def stop_monitoring(
+        self,
+        session_id: Optional[str] = None,
+        context: Optional[CascadeContext] = None
+    ) -> None:
         """Stop AD monitoring"""
         self.is_monitoring = False
         self.stop_event.set()
@@ -287,7 +300,10 @@ class ADMonitoringCore(BaseCore):
 
         if session_id:
             # Remove specific session
-            sessions_to_remove = [s for s in self.monitoring_sessions.keys() if s.startswith(session_id)]
+            sessions_to_remove = [
+                s for s in self.monitoring_sessions.keys()
+                if s.startswith(session_id)
+            ]
             for session_key in sessions_to_remove:
                 del self.monitoring_sessions[session_key]
         else:
@@ -355,7 +371,11 @@ class ADMonitoringCore(BaseCore):
         finally:
             await self.ad_provider.disconnect(connection)
 
-    async def _process_object_change(self, obj_data: Dict[str, Any], session: MonitoringSession) -> Optional[ADObjectChange]:
+    async def _process_object_change(
+        self,
+        obj_data: Dict[str, Any],
+        session: MonitoringSession
+    ) -> Optional[ADObjectChange]:
         """Process a detected object change"""
         object_guid = obj_data.get("objectGUID")
         if not object_guid:
@@ -372,17 +392,17 @@ class ADMonitoringCore(BaseCore):
             await self.ad_provider.disconnect(connection)
 
         # Filter for monitored attributes
-        relevant_changes = {}
+        relevant_changes: Dict[str, AttributeChange] = {}
         security_events = []
 
         for attr_name, attr_data in attributes.items():
             if attr_name in session.monitored_attributes:
-                change = self._analyze_attribute_change(attr_name, attr_data)
-                if change:
-                    relevant_changes[attr_name] = change
+                attr_change = self._analyze_attribute_change(attr_name, attr_data)
+                if attr_change:
+                    relevant_changes[attr_name] = attr_change
 
                     # Check for security events
-                    security_event = self._detect_security_event(attr_name, change)
+                    security_event = self._detect_security_event(attr_name, attr_change)
                     if security_event:
                         security_events.append(security_event)
 
@@ -398,7 +418,7 @@ class ADMonitoringCore(BaseCore):
             timestamp=datetime.now(),
             usn=obj_data.get("uSNChanged", 0),
             version=max(attr_data.get("version", 1) for attr_data in attributes.values()),
-            attributes=relevant_changes,
+            attributes=cast(Dict[str, Any], relevant_changes),
             security_events=security_events,
             explanation=self._generate_change_explanation(relevant_changes)
         )
@@ -415,8 +435,9 @@ class ADMonitoringCore(BaseCore):
         if len(self.change_history) > self.monitoring_config.max_history_size:
             self.change_history = self.change_history[-self.monitoring_config.max_history_size:]
 
-        if len(session.change_history) > self.monitoring_config.max_history_size // len(self.monitoring_sessions):
-            session.change_history = session.change_history[-(self.monitoring_config.max_history_size // len(self.monitoring_sessions)):]
+        max_session_history = self.monitoring_config.max_history_size // max(1, len(self.monitoring_sessions))
+        if len(session.change_history) > max_session_history:
+            session.change_history = session.change_history[-max_session_history:]
 
         # Record security events
         for event_type in change.security_events:
@@ -516,8 +537,8 @@ class ADMonitoringCore(BaseCore):
             0x800000: "TRUSTED_TO_AUTH_FOR_DELEGATION"
         }
 
-        new_flags = [flag for flag, value in uac_flags.items() if new_value & flag]
-        old_flags = [flag for flag, value in uac_flags.items() if old_value & flag]
+        new_flags = [value for flag, value in uac_flags.items() if new_value & flag]
+        old_flags = [value for flag, value in uac_flags.items() if old_value & flag]
 
         added = set(new_flags) - set(old_flags)
         removed = set(old_flags) - set(new_flags)
@@ -590,9 +611,9 @@ class ADMonitoringCore(BaseCore):
 
     async def get_change_history(
         self,
-        session_id: str = None,
+        session_id: Optional[str] = None,
         limit: int = 100,
-        filters: Dict[str, Any] = None
+        filters: Optional[Dict[str, Any]] = None
     ) -> List[ADObjectChange]:
         """Get change history with optional filtering"""
         history = self.change_history
@@ -613,7 +634,7 @@ class ADMonitoringCore(BaseCore):
 
     async def get_security_events(
         self,
-        event_types: List[SecurityEventType] = None,
+        event_types: Optional[List[SecurityEventType]] = None,
         limit: int = 100
     ) -> List[Tuple[SecurityEventType, ADObjectChange]]:
         """Get security events"""
@@ -728,29 +749,33 @@ class ADMonitoringCore(BaseCore):
             "domain_controllers": len(self.monitoring_config.domain_controllers)
         }
 
-    async def process_task(self, task_data: Dict[str, Any], context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    async def process_task(
+        self,
+        task_data: Dict[str, Any],
+        context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """Process a task through the monitoring core"""
         task_type = task_data.get("type", "unknown")
 
         if task_type == "start_monitoring":
-            dc_list = task_data.get("domain_controllers")
+            dc_list = cast(List[str], task_data.get("domain_controllers"))
             session_id = await self.start_monitoring(dc_list, context)
             return {"session_id": session_id, "status": "started"}
 
         elif task_type == "stop_monitoring":
-            session_id = task_data.get("session_id")
+            session_id = cast(str, task_data.get("session_id"))
             await self.stop_monitoring(session_id, context)
             return {"status": "stopped"}
 
         elif task_type == "get_changes":
-            session_id = task_data.get("session_id")
+            session_id = cast(str, task_data.get("session_id"))
             limit = task_data.get("limit", 100)
             filters = task_data.get("filters", {})
             changes = await self.get_change_history(session_id, limit, filters)
             return {"changes": [self._change_to_dict(c) for c in changes]}
 
         elif task_type == "get_security_events":
-            event_types = task_data.get("event_types")
+            event_types = cast(List[SecurityEventType], task_data.get("event_types"))
             limit = task_data.get("limit", 100)
             events = await self.get_security_events(event_types, limit)
             return {"events": [(e[0].value, self._change_to_dict(e[1])) for e in events]}

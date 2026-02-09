@@ -25,7 +25,9 @@ from pathlib import Path
 # Ensure src is on path
 sys.path.append(os.getcwd())
 
-from src.infrastructure.swarm.fleet.agent_registry import LazyAgentMap  # noqa: E402  # pylint: disable=wrong-import-position
+from src.infrastructure.swarm.fleet.agent_registry import (  # noqa: E402
+    LazyAgentMap,
+)  # pylint: disable=wrong-import-position
 from src.infrastructure.swarm.fleet.orchestrator_registry import \
     LazyOrchestratorMap  # noqa: E402  # pylint: disable=wrong-import-position
 
@@ -42,11 +44,12 @@ def run_diagnostic() -> None:
     try:
         # In reality, LazyAgentMap expects a fleet or workspace root
         agents = LazyAgentMap(root)
-        print(f"Discovered {len(agents._discovered_configs)} agent configurations.")  # pylint: disable=protected-access
+        num_configs = len(agents._discovered_configs)  # pylint: disable=protected-access
+        print(f"Discovered {num_configs} agent configurations.")
         for name in list(agents._discovered_configs.keys())[:10]:  # pylint: disable=protected-access
             print(f"  - {name}")
-        if len(agents._discovered_configs) > 10:  # pylint: disable=protected-access
-            print(f"  ... and {len(agents._discovered_configs) - 10} more.")  # pylint: disable=protected-access
+        if num_configs > 10:
+            print(f"  ... and {num_configs - 10} more.")
     except (ImportError, OSError, TypeError) as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"Error loading AgentRegistry: {e}")
         traceback.print_exc()
@@ -62,7 +65,8 @@ def run_diagnostic() -> None:
                 self.workspace_root: Path = root
 
         orchestrators = LazyOrchestratorMap(MockFleet())
-        print(f"Discovered {len(orchestrators._configs)} orchestrator configurations.")  # pylint: disable=protected-access
+        num_orchestrators = len(orchestrators._configs)  # pylint: disable=protected-access
+        print(f"Discovered {num_orchestrators} orchestrator configurations.")
         for name in list(orchestrators._configs.keys()):  # pylint: disable=protected-access
             print(f"  - {name}")
     except (ImportError, OSError, TypeError) as e:  # pylint: disable=broad-exception-caught, unused-variable

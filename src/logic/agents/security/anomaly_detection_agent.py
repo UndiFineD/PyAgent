@@ -50,10 +50,10 @@ class AnomalyDetector:
 
         # Simple anomaly detection based on interaction frequency and types
         interactions = list(self.agent_interactions[agent_id])
-        types = [i.get('type', 'unknown') for i in interactions]
-        frequencies = defaultdict(int)
+        types = [str(i.get('type', 'unknown')) for i in interactions]
+        frequencies: Dict[str, int] = {}
         for t in types:
-            frequencies[t] += 1
+            frequencies[t] = frequencies.get(t, 0) + 1
 
         current_type = current_interaction.get('type', 'unknown')
         if current_type not in frequencies:

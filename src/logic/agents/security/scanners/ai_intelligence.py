@@ -14,6 +14,7 @@
 
 from typing import Dict, List, Any
 
+
 class AIIntelligence:
     """Intelligence module for LLM operations, training, and semantic transformations (Ported from fenic & fluxgym)."""
 

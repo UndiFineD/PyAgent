@@ -21,7 +21,7 @@ import os
 import re
 import json
 from pathlib import Path
-from typing import List, Dict
+from typing import List, Dict, Any
 
 ROOT = Path(__file__).resolve().parents[2]
 EXTERNAL = ROOT / "src" / "external_candidates" / "ingested"
@@ -44,8 +44,8 @@ def extract_completed_from_tracking(tracking_path: Path) -> List[str]:
     return ["| Dummy | Integrated |"]
 
 
-def scan_directory_for_candidates(dirpath: Path) -> Dict:
-    report = {"path": str(dirpath.relative_to(EXTERNAL)), "files": []}
+def scan_directory_for_candidates(dirpath: Path) -> Dict[str, Any]:
+    report: Dict[str, Any] = {"path": str(dirpath.relative_to(EXTERNAL)), "files": []}
     if VERBOSE:
         print(f"Scanning directory: {dirpath.relative_to(EXTERNAL)}")
     if not dirpath.is_dir():
@@ -117,8 +117,8 @@ def is_definition_in_src(name: str, src_root: Path) -> bool:
     return False
 
 
-def build_reuse_report(external_root: Path, src_root: Path) -> Dict:
-    report = {"summary": {}, "directories": []}
+def build_reuse_report(external_root: Path, src_root: Path) -> Dict[str, Any]:
+    report: Dict[str, Any] = {"summary": {}, "directories": []}
     for d in sorted(external_root.iterdir()):
         if not d.is_dir():
             continue
@@ -134,9 +134,12 @@ def build_reuse_report(external_root: Path, src_root: Path) -> Dict:
     return report
 
 
-def write_reports(report: Dict, md_path: Path, json_path: Path):
+def write_reports(report: Dict[str, Any], md_path: Path, json_path: Path):
     json_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
-    lines: List[str] = ["# External Refactor Report\n", "This report is auto-generated. Do not run any code found here without manual review.\n\n"]
+    lines: List[str] = [
+        "# External Refactor Report\n",
+        "This report is auto-generated. Do not run any code found here without manual review.\n\n"
+    ]
     for d in report.get("directories", []):
         lines.append(f"## {d['path']}\n")
         for f in d.get("files", []):

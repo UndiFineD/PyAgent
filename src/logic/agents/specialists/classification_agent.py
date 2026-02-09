@@ -178,9 +178,9 @@ class ClassificationAgent(BaseAgent):
             results.append({"index": idx, "content_preview": content[:50], **result})
 
         # Compute distribution
-        category_counts = {}
+        category_counts: Dict[str, int] = {}
         for r in results:
-            cat = r.get("category", "unknown")
+            cat = str(r.get("category", "unknown"))
             category_counts[cat] = category_counts.get(cat, 0) + 1
 
         return {
@@ -249,12 +249,12 @@ class ClassificationAgent(BaseAgent):
         if not self._classification_history:
             return {"total_classifications": 0}
 
-        categories = {}
-        confidences = []
+        categories: Dict[str, int] = {}
+        confidences: List[float] = []
 
         for item in self._classification_history:
             result = item.get("result", {})
-            cat = result.get("category", "unknown")
+            cat = str(result.get("category", "unknown"))
             conf = result.get("confidence", 0.0)
 
             categories[cat] = categories.get(cat, 0) + 1

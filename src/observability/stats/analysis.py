@@ -157,7 +157,7 @@ class StabilityCore:
                 return variance < 0.0001
 
         avg: float = sum(score_history) / len(score_history)
-        variance: float = sum((x - avg) ** 2 for x in score_history) / len(score_history)
+        variance = sum((x - avg) ** 2 for x in score_history) / len(score_history)
         return variance < 0.0001
 
     def get_healing_threshold(self, stability_score: float) -> float:
@@ -276,7 +276,9 @@ class FormulaEngineCore:
         if rc and "AVG(" not in formula:
             with contextlib.suppress(Exception):
                 # Convert variables to dict[str, float] for Rust (excludes list/complex types)
-                float_vars: dict[str, float] = {k: float(v) for k, v in variables.items() if isinstance(v, (int, float))}
+                float_vars: dict[str, float] = {
+                    k: float(v) for k, v in variables.items() if isinstance(v, (int, float))
+                }
                 # pylint: disable=no-member
                 return rc.evaluate_formula(formula, float_vars)  # type: ignore[attr-defined]
 
@@ -303,7 +305,7 @@ class FormulaEngineCore:
             # Use FormulaCore evaluation style for validation or just parse
             test_f: str = formula
             for v in re.findall(r"\{(\w+)\}", formula):
-                test_f: str = test_f.replace(f"{{{v}}}", "1")
+                test_f = test_f.replace(f"{{{v}}}", "1")
             ast.parse(test_f, mode="eval")
 
             return {"is_valid": True, "error": None}

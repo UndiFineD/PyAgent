@@ -58,7 +58,9 @@ class URLClassifier:
                     }
 
         # Research paper PDFs
-        if url_lower.endswith('.pdf') and any(term in url_lower for term in ['paper', 'research', 'arxiv', 'ieee', 'acm']):
+        if url_lower.endswith('.pdf') and any(
+            term in url_lower for term in ['paper', 'research', 'arxiv', 'ieee', 'acm']
+        ):
             return 'research_paper', {
                 'destination': 'data/research',
                 'format': 'pdf'

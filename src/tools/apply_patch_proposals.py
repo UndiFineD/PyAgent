@@ -64,12 +64,16 @@ def main() -> int:
             # - replace subprocess/os.system/Popen usages with a RuntimeError
             applied_here = False
             if s.startswith('import ') or s.startswith('from '):
-                lines[ln - 1] = '# ' + orig + f"  # PATCH_APPLIED: commented risky import ({f.get('severity')})"
+                msg = f"  # PATCH_APPLIED: commented risky import ({f.get('severity')})"
+                lines[ln - 1] = '# ' + orig + msg
                 applied_here = True
             elif any(k in s for k in ('eval', 'exec', 'compile')):
                 # Found potential dynamic execution usage — conservatively replace.
                 # Use of eval() is highly insecure — intentional detection here
-                lines[ln - 1] = "raise RuntimeError('Refactor required: remove dynamic execution; see .external/patches')"
+                lines[ln - 1] = (
+                    "raise RuntimeError('Refactor required: remove dynamic execution; "
+                    "see .external/patches')"
+                )
                 applied_here = True
             elif 'subprocess' in s or 'os.system' in s or 'Popen' in s:
                 lines[ln - 1] = "raise RuntimeError('Refactor required: avoid running subprocesses directly')"

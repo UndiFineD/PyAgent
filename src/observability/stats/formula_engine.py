@@ -39,7 +39,9 @@ class FormulaEngineCore(FormulaCore):
         # Check Rust acceleration first
         if rc and "AVG(" not in formula:
             with contextlib.suppress(Exception):
-                float_vars: Dict[str, float] = {k: float(v) for k, v in variables.items() if isinstance(v, (int, float))}
+                float_vars: Dict[str, float] = {
+                    k: float(v) for k, v in variables.items() if isinstance(v, (int, float))
+                }
                 # Support both naming conventions
                 if hasattr(rc, "evaluate_formula"):
                     return rc.evaluate_formula(formula, float_vars)
@@ -80,7 +82,7 @@ class FormulaEngineCore(FormulaCore):
             test_formula: str = formula
             vars_found: list[str] = re.findall(r"\{(\w+)\}", formula)
             for var in vars_found:
-                test_formula: str = test_formula.replace(f"{{{var}}}", "1")
+                test_formula = test_formula.replace(f"{{{var}}}", "1")
 
             ast.parse(test_formula, mode="eval")
             return {"is_valid": True, "error": None}

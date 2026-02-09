@@ -42,7 +42,7 @@ class GraphMemoryAgent(
         self.beads_dir.mkdir(exist_ok=True)
         self.graph_store_path = Path(self._workspace_root) / "data/memory/agent_store/knowledge_graph.json"
         # MIRIX 6-component memory categories
-        self.memory_store = {
+        self.memory_store: Dict[str, Any] = {
             "core": {},  # Human/Persona identities
             "episodic": [],  # Action logs/events
             "semantic": {},  # Facts and concepts

@@ -12,15 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
-import aiohttp
-from typing import List, Dict, Optional
+from typing import List
+
 
 class SQLInjectionIntelligence:
     """
     Refactored logic from Atlas for SQLMap Tamper suggesting and WAF bypass logic.
     """
-    
+
     TAMPER_LIST = [
         "apostrophemask", "apostrophenullencode", "base64encode", "between",
         "bluecoat", "chardoubleencode", "charencode", "charunicodeencode",
@@ -37,15 +36,6 @@ class SQLInjectionIntelligence:
         """
         Suggests potential tampers by testing if a modified payload bypasses a 403/406 response.
         """
-        suggested = []
-        async with aiohttp.ClientSession() as session:
-            # First, check if the raw payload is blocked
-            try:
-                # This is a simplified version of Atlas's logic
-                # In a real scenario, we'd apply various tampers and check for 200 vs 403
-                pass 
-            except Exception:
-                pass
         # For now, return a default set of common bypass tampers if we suspect a WAF
         return ["space2comment", "randomcase", "charencode"]
 

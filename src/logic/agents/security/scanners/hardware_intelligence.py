@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Dict, List
+from typing import Dict, List, Any
+
 
 class HardwareIntelligence:
     """Intelligence module for RF, SDR, and Hardware exploitation (Ported from FISSURE)."""
@@ -26,11 +27,21 @@ class HardwareIntelligence:
     def get_rf_protocol_discovery_primitives() -> Dict[str, str]:
         """Techniques for identifying unknown RF protocols."""
         return {
-            "preamble_discovery": "Identifying repeating synchronization patterns at the start of burst transmissions",
-            "packet_length_analysis": "Statistical evaluation of transmission duration to determine payload boundaries",
-            "bit_rate_estimation": "Calculating the clock rate by analyzing the minimum duration of a single bit period",
-            "symbol_mapping_recovery": "Mapping physical signal states (frequency/phase shifts) to logical binary data",
-            "crc_brute_force": "Identifying cyclic redundancy check polynomials by testing common LFSR configurations"
+            "preamble_discovery": (
+                "Identifying repeating synchronization patterns at the start of burst transmissions"
+            ),
+            "packet_length_analysis": (
+                "Statistical evaluation of transmission duration to determine payload boundaries"
+            ),
+            "bit_rate_estimation": (
+                "Calculating the clock rate by analyzing the minimum duration of a single bit period"
+            ),
+            "symbol_mapping_recovery": (
+                "Mapping physical signal states (frequency/phase shifts) to logical binary data"
+            ),
+            "crc_brute_force": (
+                "Identifying cyclic redundancy check polynomials by testing common LFSR configurations"
+            )
         }
 
     @staticmethod

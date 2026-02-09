@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
 import aiohttp
 import re
-from typing import List, Dict, Optional, Set
+from typing import List, Optional
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
+
 
 class XssIntelligence:
     """
@@ -41,32 +41,33 @@ class XssIntelligence:
         """
         if not payloads:
             payloads = cls.DEFAULT_PAYLOADS
-            
+
         parsed = urlparse(url)
         params = parse_qs(parsed.query)
-        
+
         if not params:
             return []
 
         found = []
-        async with aiohttp.ClientSession() as session:
+        timeout = aiohttp.ClientTimeout(total=10)
+        async with aiohttp.ClientSession(timeout=timeout) as session:
             for param_name in params:
                 for payload in payloads:
                     # Replace only the current parameter value
                     new_params = params.copy()
                     new_params[param_name] = [payload]
-                    
+
                     test_query = urlencode(new_params, doseq=True)
                     test_url = urlunparse(parsed._replace(query=test_query))
-                    
+
                     try:
-                        async with session.get(test_url, timeout=10, allow_redirects=True) as resp:
+                        async with session.get(test_url, allow_redirects=True) as resp:
                             if resp.status == 200:
                                 text = await resp.text()
                                 if payload in text:
                                     found.append(test_url)
                                     # Optimization: if one payload works on this param, maybe move to next param
-                                    break 
+                                    break
                     except Exception:
                         continue
         return found
@@ -80,15 +81,16 @@ class XssIntelligence:
         # Patterns for dangerous sinks and sources
         SINKS = re.compile(r"(eval|setTimeout|setInterval|innerHTML|outerHTML|document\.write|docment\.writeln)\s*\(")
         SOURCES = re.compile(r"(location\.(search|hash|href|pathname)|document\.(URL|referrer|cookie)|window\.name)")
-        
+
         findings = []
-        async with aiohttp.ClientSession() as session:
+        timeout = aiohttp.ClientTimeout(total=10)
+        async with aiohttp.ClientSession(timeout=timeout) as session:
             try:
                 # 1. Fetch the main page
-                async with session.get(url, timeout=10) as resp:
+                async with session.get(url) as resp:
                     if resp.status == 200:
                         content = await resp.text()
-                        
+
                         # Check inline scripts
                         if SINKS.search(content) and SOURCES.search(content):
                             findings.append(f"Potential inline DOM XSS sink/source found in {url}")
@@ -96,13 +98,13 @@ class XssIntelligence:
                         # 2. Extract and fetch external JS files
                         js_files = re.findall(r'src=["\'](.*?\.js)["\']', content)
                         base_url = f"{parsed.scheme}://{parsed.netloc}" if (parsed := urlparse(url)) else ""
-                        
+
                         for js_path in js_files:
                             if not js_path.startswith("http"):
                                 js_url = f"{base_url.rstrip('/')}/{js_path.lstrip('/')}"
                             else:
                                 js_url = js_path
-                                
+
                             try:
                                 async with session.get(js_url, timeout=5) as js_resp:
                                     if js_resp.status == 200:

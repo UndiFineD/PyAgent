@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# TODO FIXME DELETE THIS
 # Active Directory Threat Hunting Core - AD Security Analysis and Monitoring
 # Based on patterns from Active_Directory_Advanced_Threat_Hunting repository
 
@@ -88,7 +89,7 @@ class HuntingResult:
 class ActiveDirectoryThreatHuntingCore(BaseCore):
     """
     Active Directory Threat Hunting Core for comprehensive AD security analysis.
-    
+
     Provides capabilities for Active Directory enumeration, threat detection,
     permission analysis, and security monitoring based on advanced threat hunting patterns.
     """
@@ -169,12 +170,12 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
     ) -> List[ADObject]:
         """
         Enumerate Active Directory objects
-        
+
         Args:
             domain_controller: Domain controller to query
             search_base: Search base DN
             object_types: Types of objects to enumerate
-            
+
         Returns:
             List of enumerated AD objects
         """
@@ -182,7 +183,8 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         enumerated_objects = []
 
         # Generate mock AD objects for demonstration
-        mock_objects = await self._generate_mock_ad_objects(object_types or [ADObjectType.USER, ADObjectType.COMPUTER, ADObjectType.GROUP])
+        default_types = [ADObjectType.USER, ADObjectType.COMPUTER, ADObjectType.GROUP]
+        mock_objects = await self._generate_mock_ad_objects(object_types or default_types)
 
         for obj_data in mock_objects:
             ad_object = ADObject(
@@ -282,12 +284,12 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
     ) -> HuntingResult:
         """
         Perform a threat hunting operation
-        
+
         Args:
             hunt_type: Type of hunt (privileged_accounts, stale_accounts, etc.)
             target_objects: Specific objects to hunt in
             custom_rules: Custom hunting rules
-            
+
         Returns:
             Hunting results
         """
@@ -353,7 +355,10 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
                     findings.append(ThreatFinding(
                         id=f"priv_acc_{obj.sam_account_name}",
                         title="Privileged Account Detected",
-                        description=f"User {obj.sam_account_name} has membership in privileged groups: {', '.join(privileged_memberships)}",
+                        description=(
+                            f"User {obj.sam_account_name} has membership in privileged "
+                            f"groups: {', '.join(privileged_memberships)}"
+                        ),
                         threat_level=threat_level,
                         affected_objects=[obj.distinguished_name],
                         mitre_technique="T1078.002",  # Valid Accounts: Domain Accounts
@@ -383,7 +388,10 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
                     findings.append(ThreatFinding(
                         id=f"stale_acc_{obj.sam_account_name}",
                         title="Stale Account Detected",
-                        description=f"Account {obj.sam_account_name} hasn't logged in for {days_since_logon} days",
+                        description=(
+                            f"Account {obj.sam_account_name} hasn't logged in for "
+                            f"{days_since_logon} days"
+                        ),
                         threat_level=ThreatLevel.MEDIUM,
                         affected_objects=[obj.distinguished_name],
                         mitre_technique="T1078.003",  # Valid Accounts: Local Accounts
@@ -429,21 +437,24 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
                             issues.append("Service account has no SPNs configured")
 
                     # Check delegation
-                    if obj.permissions.get("TrustedForDelegation"):
+                    if (obj.permissions or {}).get("TrustedForDelegation"):
                         issues.append("Account is trusted for delegation")
 
                     if issues:
                         findings.append(ThreatFinding(
                             id=f"svc_acc_{obj.sam_account_name}",
                             title="Service Account Security Issue",
-                            description=f"Service account {obj.sam_account_name} has security concerns: {', '.join(issues)}",
+                            description=(
+                                f"Service account {obj.sam_account_name} has security "
+                                f"concerns: {', '.join(issues)}"
+                            ),
                             threat_level=ThreatLevel.MEDIUM,
                             affected_objects=[obj.distinguished_name],
                             mitre_technique="T1078.003",  # Valid Accounts: Local Accounts
                             evidence={
                                 "issues": issues,
                                 "password_age_days": (datetime.now() - obj.password_last_set).days if obj.password_last_set else None,
-                                "has_spn": bool(obj.permissions.get("ServicePrincipalNames"))
+                                "has_spn": bool((obj.permissions or {}).get("ServicePrincipalNames"))
                             },
                             recommendations=[
                                 "Regularly rotate service account passwords",
@@ -463,19 +474,20 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
             # Check permissions
             found_suspicious = []
             for perm in suspicious_perms:
-                if obj.permissions.get(perm):
+                if (obj.permissions or {}).get(perm):
                     found_suspicious.append(perm)
 
             if found_suspicious:
                 threat_level = ThreatLevel.CRITICAL if "GenericAll" in found_suspicious else ThreatLevel.HIGH
 
+                obj_name = obj.sam_account_name or obj.distinguished_name.split(',')[0]
                 findings.append(ThreatFinding(
-                    id=f"susp_perm_{obj.sam_account_name or obj.distinguished_name.split(',')[0]}",
+                    id=f"susp_perm_{obj_name}",
                     title="Suspicious Permissions Detected",
                     description=f"Object has dangerous permissions: {', '.join(found_suspicious)}",
                     threat_level=threat_level,
                     affected_objects=[obj.distinguished_name],
-                    mitre_technique="T1222.001",  # File and Directory Permissions Modification
+                    mitre_technique="T1222.001",  # AD Permissions Modification
                     evidence={
                         "suspicious_permissions": found_suspicious,
                         "object_type": obj.object_class.value
@@ -499,7 +511,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
                 found_weaknesses = []
 
                 for config in weak_configs:
-                    if obj.permissions.get(config):
+                    if (obj.permissions or {}).get(config):
                         found_weaknesses.append(config)
 
                 if found_weaknesses:
@@ -566,16 +578,16 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
     ) -> str:
         """
         Generate a comprehensive security report
-        
+
         Args:
             include_findings: Whether to include detailed findings
             format: Output format (markdown, json)
-            
+
         Returns:
             Formatted security report
         """
         if format == "json":
-            report_data = {
+            report_data: Dict[str, Any] = {
                 "generated_at": datetime.now().isoformat(),
                 "total_objects": len(self.ad_objects),
                 "total_findings": len(self.threat_findings),
@@ -585,9 +597,11 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
             }
 
             # Count findings by severity
+            severity_counts_json: Dict[str, int] = {}
             for finding in self.threat_findings:
                 severity = finding.threat_level.value
-                report_data["findings_by_severity"][severity] = report_data["findings_by_severity"].get(severity, 0) + 1
+                severity_counts_json[severity] = severity_counts_json.get(severity, 0) + 1
+            report_data["findings_by_severity"] = severity_counts_json
 
             # Recent hunting sessions
             for hunt in self.hunting_history[-5:]:
@@ -608,7 +622,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
             report += f"**Total Security Findings:** {len(self.threat_findings)}\n\n"
 
             # Findings by severity
-            severity_counts = {}
+            severity_counts: Dict[str, int] = {}
             for finding in self.threat_findings:
                 severity = finding.threat_level.value
                 severity_counts[severity] = severity_counts.get(severity, 0) + 1
@@ -655,7 +669,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
     ) -> None:
         """
         Export threat findings and hunting history
-        
+
         Args:
             filepath: Output file path
             format: Export format (json, csv)
@@ -702,7 +716,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
 
     async def get_hunting_statistics(self) -> Dict[str, Any]:
         """Get comprehensive hunting statistics"""
-        stats = {
+        stats: Dict[str, Any] = {
             "total_objects": len(self.ad_objects),
             "total_findings": len(self.threat_findings),
             "total_hunts": len(self.hunting_history),
@@ -713,14 +727,18 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         }
 
         # Findings by severity
+        severity_counts_stats: Dict[str, int] = {}
         for finding in self.threat_findings:
             severity = finding.threat_level.value
-            stats["findings_by_severity"][severity] = stats["findings_by_severity"].get(severity, 0) + 1
+            severity_counts_stats[severity] = severity_counts_stats.get(severity, 0) + 1
+        stats["findings_by_severity"] = severity_counts_stats
 
         # Findings by type (from title patterns)
+        findings_by_type: Dict[str, int] = {}
         for finding in self.threat_findings:
             finding_type = finding.title.split()[0].lower()  # First word of title
-            stats["findings_by_type"][finding_type] = stats["findings_by_type"].get(finding_type, 0) + 1
+            findings_by_type[finding_type] = findings_by_type.get(finding_type, 0) + 1
+        stats["findings_by_type"] = findings_by_type
 
         # Hunt performance
         if self.hunting_history:

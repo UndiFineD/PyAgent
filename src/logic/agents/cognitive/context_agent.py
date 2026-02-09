@@ -81,15 +81,15 @@ class ContextAgent(
         self.source_path = self._derive_source_path()
 
         # New features initialized from defaults
-        self._templates = dict(DEFAULT_TEMPLATES)
-        self._tags = {}
-        self._versions = []
-        self._validation_rules = list(DEFAULT_VALIDATION_RULES)
-        self._annotations = []
+        self._templates: Dict[str, Any] = dict(DEFAULT_TEMPLATES)
+        self._tags: Dict[str, str] = {}
+        self._versions: List[str] = []
+        self._validation_rules: List[str] = list(DEFAULT_VALIDATION_RULES)
+        self._annotations: List[str] = []
         self._priority = ContextPriority.MEDIUM
         self._category = FileCategory.OTHER
-        self._compressed_content = None
-        self._metadata = {}
+        self._compressed_content: Optional[bytes] = None
+        self._metadata: Dict[str, Any] = {}
 
     def route_query(self, query: str) -> list[str]:
         """Selects the best vector shards based on file path and query sentiment."""

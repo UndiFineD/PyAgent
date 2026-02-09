@@ -7,6 +7,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SRC_DIR = ROOT / 'src' / 'external_candidates' / 'auto'
 DEST_DIR = ROOT / 'src' / 'external_candidates' / 'cleaned'
 
+
 def sanitize(name: str) -> str:
     base = Path(name).stem
     s = base.lower()
@@ -18,6 +19,7 @@ def sanitize(name: str) -> str:
     if s[0].isdigit():
         s = '_' + s
     return s + '.py'
+
 
 def main():
     if not SRC_DIR.exists():
@@ -41,6 +43,7 @@ def main():
     map_file = DEST_DIR / 'refactor_map.json'
     map_file.write_text(json.dumps(mapping, indent=2), encoding='utf-8')
     print(f"Wrote mapping to {map_file}")
+
 
 if __name__ == '__main__':
     main()

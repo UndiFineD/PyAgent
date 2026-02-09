@@ -13,7 +13,8 @@
 # limitations under the License.
 
 import itertools
-from typing import List, Set, Dict
+from typing import List, Set, Dict, Optional
+
 
 class WordlistIntelligence:
     """
@@ -37,29 +38,29 @@ class WordlistIntelligence:
     def case_transforms(word: str) -> Set[str]:
         """Generates common case permutations of a word."""
         results = {word, word.lower(), word.upper(), word.capitalize()}
-        
+
         # Alternating case
         alt1 = "".join(c.upper() if i % 2 == 0 else c.lower() for i, c in enumerate(word))
         alt2 = "".join(c.lower() if i % 2 == 0 else c.upper() for i, c in enumerate(word))
         results.add(alt1)
         results.add(alt2)
-        
+
         # Vowels upper / Consonants upper
         vowels = "aeiouAEIOU"
         results.add("".join(c.upper() if c in vowels else c.lower() for c in word))
         results.add("".join(c.lower() if c in vowels else c.upper() for c in word))
-        
+
         return results
 
     @classmethod
-    def leet_transforms(cls, word: str, charset: Dict[str, List[str]] = None) -> Set[str]:
+    def leet_transforms(cls, word: str, charset: Optional[Dict[str, List[str]]] = None) -> Set[str]:
         """Generates leet-speak permutations of a word."""
         if charset is None:
             charset = cls.DEFAULT_LEET_CHARSET
-            
+
         results = {word}
         word_chars = list(word.lower())
-        
+
         # Generate all possible replacements for each character
         possibilities = []
         for char in word_chars:
@@ -67,7 +68,7 @@ class WordlistIntelligence:
             if char in charset:
                 opts.extend(charset[char])
             possibilities.append(opts)
-            
+
         # Product of all possibilities (Warning: can be large)
         # Limit to 1000 permutations for stability
         count = 0
@@ -76,15 +77,15 @@ class WordlistIntelligence:
             count += 1
             if count > 1000:
                 break
-                
+
         return results
 
     @staticmethod
-    def generate_personalized_wordlist(basics: List[str], additions: List[str] = None) -> Set[str]:
+    def generate_personalized_wordlist(basics: List[str], additions: Optional[List[str]] = None) -> Set[str]:
         """Combines basic info with common padding to generate a targeted wordlist."""
         if additions is None:
             additions = ["123", "!", "2024", "2025", "2026", "123!", "321", "password"]
-            
+
         results = set()
         for base in basics:
             results.add(base)
@@ -93,5 +94,5 @@ class WordlistIntelligence:
                 results.add(f"{add}{base}")
                 results.add(f"{base}_{add}")
                 results.add(f"{add}_{base}")
-                
+
         return results

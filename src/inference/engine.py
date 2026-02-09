@@ -20,18 +20,17 @@ Handles communication with various LLM backends.
 import os
 import logging
 import asyncio
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional
 
 # Optional dependencies
 try:
-    import openai
     from openai import AsyncOpenAI
     HAS_OPENAI = True
 except ImportError:
     HAS_OPENAI = False
 
 try:
-    import anthropic
+    import anthropic  # noqa: F401
     HAS_ANTHROPIC = True
 except ImportError:
     HAS_ANTHROPIC = False
@@ -45,6 +44,7 @@ except ImportError:
 from src.inference.execution.async_model_runner import AsyncModelRunner, ModelInput
 
 logger = logging.getLogger("pyagent.inference.engine")
+
 
 class InferenceEngine:
     """
@@ -87,7 +87,7 @@ class InferenceEngine:
         if self.local_runner:
             try:
                 # This is a simplification, real AsyncModelRunner might need tokenization
-                model_input = ModelInput(request_id="req-" + str(os.getpid()), metadata={"prompt": prompt})
+                _ = ModelInput(request_id="req-" + str(os.getpid()), metadata={"prompt": prompt})
                 # In a real scenario, we'd wait for the runner to process
                 # For now, we fall back to external if it fails or if not fully implemented
                 logger.debug("Attempting local inference via AsyncModelRunner")

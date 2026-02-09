@@ -102,7 +102,7 @@ class AIFuzzingEngine:
 
         # Fuzzing payloads and patterns
         self.payloads = self._load_default_payloads()
-        self.learning_patterns = {}
+        self.learning_patterns: Dict[str, Any] = {}
         self.session_history: List[FuzzingSession] = []
 
     def _load_default_payloads(self) -> Dict[FuzzingTechnique, List[str]]:
@@ -501,7 +501,7 @@ Generate payloads that might bypass security filters. Return only the payloads, 
 
         vulnerabilities = [r for r in all_results if r.error_detected]
 
-        summary = {
+        summary: Dict[str, Any] = {
             'total_sessions': len(self.session_history),
             'total_results': len(all_results),
             'vulnerabilities_found': len(vulnerabilities),

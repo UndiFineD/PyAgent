@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any
+
 
 class ProtocolIntelligence:
     """Intelligence engine for decoding and analyzing binary protocols."""
@@ -23,7 +24,7 @@ class ProtocolIntelligence:
         Minimal pure-python protobuf decoder (best effort).
         Extracts field number and wire type.
         """
-        results = {}
+        results: Dict[int, Any] = {}
         index = 0
         while index < len(data):
             try:
@@ -34,30 +35,33 @@ class ProtocolIntelligence:
                     b = data[index]
                     tag |= (b & 0x7F) << shift
                     index += 1
-                    if not (b & 0x80): break
+                    if not (b & 0x80):
+                        break
                     shift += 7
-                
+
                 field_number = tag >> 3
                 wire_type = tag & 0x07
-                
-                if wire_type == 0: # Varint
+
+                if wire_type == 0:  # Varint
                     val = 0
                     shift = 0
                     while True:
                         b = data[index]
                         val |= (b & 0x7F) << shift
                         index += 1
-                        if not (b & 0x80): break
+                        if not (b & 0x80):
+                            break
                         shift += 7
                     results[field_number] = val
-                elif wire_type == 2: # Length-delimited
+                elif wire_type == 2:  # Length-delimited
                     length = 0
                     shift = 0
                     while True:
                         b = data[index]
                         length |= (b & 0x7F) << shift
                         index += 1
-                        if not (b & 0x80): break
+                        if not (b & 0x80):
+                            break
                         shift += 7
                     results[field_number] = data[index:index+length]
                     index += length
@@ -71,10 +75,14 @@ class ProtocolIntelligence:
     @staticmethod
     def identify_protocol(data: bytes) -> str:
         """Identify common binary protocols based on magic bytes."""
-        if data.startswith(b"\x00\x00\x00\x0c"): return "GRPC/H2"
-        if data.startswith(b"POST"): return "HTTP"
-        if data.startswith(b"SSH-2.0"): return "SSH"
-        if data.startswith(b"BEGIN RSA PRIVATE"): return "RSA KEY"
+        if data.startswith(b"\x00\x00\x00\x0c"):
+            return "GRPC/H2"
+        if data.startswith(b"POST"):
+            return "HTTP"
+        if data.startswith(b"SSH-2.0"):
+            return "SSH"
+        if data.startswith(b"BEGIN RSA PRIVATE"):
+            return "RSA KEY"
         return "Unknown"
 
     @staticmethod

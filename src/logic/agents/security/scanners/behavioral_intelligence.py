@@ -14,6 +14,7 @@
 
 from typing import Dict, List, Any
 
+
 class BehavioralIntelligence:
     """
     Intelligence engine for Windows behavioral indicators and TTPs.
@@ -65,8 +66,20 @@ class BehavioralIntelligence:
     def get_persistence_indicators() -> List[Dict[str, str]]:
         """Registry and file system indicators for advanced persistence."""
         return [
-            {"path": r"HKCU\Software\Classes\*\shell\open\command", "name": "Registry Shell Command Hijack"},
-            {"path": r"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options", "name": "IFEO Debugger Hijack"},
-            {"path": r"HKLM\SYSTEM\CurrentControlSet\Control\Lsa", "name": "Security Packages / Authentication Packages Persistence"},
-            {"path": r"C:\Windows\System32\drivers\etc\hosts", "name": "Hosts File Hijack"}
+            {
+                "path": r"HKCU\Software\Classes\*\shell\open\command",
+                "name": "Registry Shell Command Hijack"
+            },
+            {
+                "path": r"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options",
+                "name": "IFEO Debugger Hijack"
+            },
+            {
+                "path": r"HKLM\SYSTEM\CurrentControlSet\Control\Lsa",
+                "name": "Security Packages / Authentication Packages Persistence"
+            },
+            {
+                "path": r"C:\Windows\System32\drivers\etc\hosts",
+                "name": "Hosts File Hijack"
+            }
         ]

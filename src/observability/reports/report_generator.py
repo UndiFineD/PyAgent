@@ -59,12 +59,12 @@ class ReportGenerator:
         if agent_dir:
             self.agent_dir = Path(agent_dir)
         else:
-            self.agent_dir: Path = Path(__file__).resolve().parent.parent.parent
+            self.agent_dir = Path(__file__).resolve().parent.parent.parent
 
         if output_dir:
             self.output_dir = Path(output_dir)
         else:
-            self.output_dir: Path = self.agent_dir
+            self.output_dir = self.agent_dir
 
         os.makedirs(self.output_dir, exist_ok=True)
         self.logger = StructuredLogger(agent_id="ReportGenerator")
@@ -73,7 +73,6 @@ class ReportGenerator:
         """Record report generation activities."""
         if self.recorder:
             self.recorder.record_interaction("Reporting", "ReportGenerator", action, result)
-
 
     def process_all_files(self) -> dict[str, Any]:
         """Process all .py files in agent_dir and generate reports."""
@@ -120,6 +119,7 @@ class ReportGenerator:
             count=len(unique_items),
             path=str(output_path),
         )
+        return True
 
     def generate_full_report(self) -> str:
         """Generate a comprehensive project report including the dashboard grid."""
@@ -179,19 +179,19 @@ class ReportGenerator:
         tree, parse_err = self._try_parse_python(source, str(py_path))
         compile_result: CompileResult = self._compile_check(py_path)
         if tree is None:
-            description: str = (
+            description = (
                 f"# Description: `{py_path.name}`\n\n## Module purpose\n\n(Unable to parse file: {parse_err})\n"
             )
-            errors: str = self.render_errors(py_path, source, CompileResult(ok=False, error=str(parse_err)))
-            improvements: str = (
+            errors = self.render_errors(py_path, source, CompileResult(ok=False, error=str(parse_err)))
+            improvements = (
                 f"# Improvements: `{py_path.name}`\n\n"
                 "## Suggested improvements\n"
                 "- Fix the syntax errors first; then re-run report generation\n"
             )
         else:
-            description: str = self.render_description(py_path, source, tree)
-            errors: str = self.render_errors(py_path, source, compile_result)
-            improvements: str = self.render_improvements(py_path, source, tree)
+            description = self.render_description(py_path, source, tree)
+            errors = self.render_errors(py_path, source, compile_result)
+            improvements = self.render_improvements(py_path, source, tree)
         self._write_md(self.output_dir / f"{stem}.description.md", description)
         self._write_md(self.output_dir / f"{stem}.errors.md", errors)
         self._write_md(self.output_dir / f"{stem}.improvements.md", improvements)
@@ -275,9 +275,9 @@ class ReportGenerator:
         ]
         error_msg = None
         if isinstance(compile_result, str):
-            error_msg: str = compile_result
+            error_msg = compile_result
         elif isinstance(compile_result, CompileResult):
-            error_msg: str | None = compile_result.error
+            error_msg = compile_result.error
 
         if error_msg:
             lines.append("- `py_compile` equivalent: FAILED")
@@ -309,7 +309,7 @@ class ReportGenerator:
                     for default in node.args.defaults:
                         if isinstance(default, (ast.List, ast.Dict)):
                             known.append(f"Hazard: Mutable default in `{node.name}`.")
-        except (SyntaxError, ValueError) as _e:
+        except (SyntaxError, ValueError):
             pass
 
         if known:
@@ -367,7 +367,9 @@ class ReportGenerator:
     def _find_top_level_defs(self, tree: ast.AST) -> tuple[list[str], list[str]]:
         funcs = []
         classes = []
-        for node in tree.body:
+        # tree is typically ast.Module when coming from ast.parse
+        body = getattr(tree, "body", [])
+        for node in body:
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 funcs.append(node.name)
             elif isinstance(node, ast.ClassDef):
@@ -406,8 +408,9 @@ class ReportGenerator:
             issues.append("Avoid broad `except Exception:`; catch specific errors.")
         # 3. Bare excepts
         for node in ast.walk(tree):
-            if isinstance(node, ast.ExceptHandler) and (node.type is None or
-                    (isinstance(node.type, ast.Name) and node.type.id == "Exception")):
+            if isinstance(node, ast.ExceptHandler) and (
+                node.type is None or (isinstance(node.type, ast.Name) and node.type.id == "Exception")
+            ):
                 issues.append("Contains bare or broad `except` clause.")
             if isinstance(node, ast.FunctionDef):
                 missing_arg_type = any(arg.annotation is None for arg in node.args.args if arg.arg != "self")

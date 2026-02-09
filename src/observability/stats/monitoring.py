@@ -33,7 +33,7 @@ class ResourceMonitor:
         self.stats_file: Path = self.workspace_root / ".system_stats.json"
 
     def get_current_stats(self) -> dict[str, Any]:
-        stats = {
+        stats: dict[str, Any] = {
             "platform": platform.platform(),
             "cpu_usage_pct": 0,
             "memory_usage_pct": 0,

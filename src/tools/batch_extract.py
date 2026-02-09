@@ -15,6 +15,7 @@ import json
 from pathlib import Path
 import subprocess
 import shutil
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORT_DEFAULT = ROOT / '.external' / 'refactor_report.json'
@@ -34,20 +35,26 @@ def chunk_files(report: dict, chunk_size: int) -> list[list[dict]]:
     return chunks
 
 
-def make_chunk_report(chunk: list[dict], idx: int) -> Path:
+def make_chunk_report(chunk: list[dict[str, Any]], idx: int) -> Path:
     TMP_DIR.mkdir(parents=True, exist_ok=True)
     # Preserve the structure: directories -> list with a single synthetic dir
-    rep = {'directories': [{'path': f'chunk_{idx}', 'files': []}]}
+    files_list: list[dict[str, Any]] = []
+    rep = {'directories': [{'path': f'chunk_{idx}', 'files': files_list}]}
     # Each file must include 'path' and 'suffix' keys as in original report
     for f in chunk:
-        rep['directories'][0]['files'].append({'path': f.get('path'), 'suffix': f.get('suffix')})
+        files_list.append({'path': f.get('path'), 'suffix': f.get('suffix')})
     out = TMP_DIR / f'report_chunk_{idx}.json'
     out.write_text(json.dumps(rep), encoding='utf-8')
     return out
 
 
 def run_chunk(report_path: Path, args_extra: list[str]) -> int:
-    cmd = [shutil.which('python') or 'python', str(EXTRACTOR), '--report', str(report_path), '--limit', '1000000'] + args_extra
+    cmd = [
+        shutil.which('python') or 'python',
+        str(EXTRACTOR),
+        '--report', str(report_path),
+        '--limit', '1000000'
+    ] + args_extra
     print('RUN:', ' '.join(cmd))
     p = subprocess.run(cmd)
     return p.returncode

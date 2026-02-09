@@ -14,6 +14,7 @@
 
 from typing import List, Dict, Any
 
+
 class ADIntelligence:
     """Intelligence engine for Active Directory enumeration and exploitation."""
 
@@ -103,7 +104,10 @@ class ADIntelligence:
         return {
             "NAA_Credentials": {
                 "description": "Network Access Account credentials stored in WMI.",
-                "query": "Get-WmiObject -Namespace root\\ccm\\policy\\machine\\actualconfig -Class CCM_NetworkAccessAccount"
+                "query": (
+                    "Get-WmiObject -Namespace root\\ccm\\policy\\machine\\actualconfig "
+                    "-Class CCM_NetworkAccessAccount"
+                )
             },
             "PXE_Password": {
                 "description": "PXE boot passwords often found in SCCM configuration files or registry.",
@@ -155,8 +159,13 @@ class ADIntelligence:
     def get_pathfinding_queries() -> Dict[str, str]:
         """Cypher queries for structured AD pathfinding analysis."""
         return {
-            "shortest_path_to_domain_admin": "MATCH (n:User), (m:Group {name: 'DOMAIN ADMINS'}), p=shortestPath((n)-[*..15]->(m)) RETURN p",
-            "shortest_path_to_da_by_id": "MATCH (n:User), (m:Group), p=shortestPath((n)-[*..15]->(m)) WHERE m.objectid ENDS WITH '-512' RETURN p",
+            "shortest_path_to_domain_admin": (
+                "MATCH (n:User), (m:Group {name: 'DOMAIN ADMINS'}), p=shortestPath((n)-[*..15]->(m)) RETURN p"
+            ),
+            "shortest_path_to_da_by_id": (
+                "MATCH (n:User), (m:Group), p=shortestPath((n)-[*..15]->(m)) WHERE m.objectid ENDS WITH '-512' "
+                "RETURN p"
+            ),
             "high_value_targets_chokepoints": "MATCH (n:Group) WHERE n.highvalue = true RETURN n.name, n.objectid",
             "unconstrained_delegation": "MATCH (c:Computer {unconstraineddelegation: true}) RETURN c.name",
             "kerberoastable_users": "MATCH (u:User {hasspn: true}) RETURN u.name, u.serviceprincipalnames",
@@ -172,7 +181,7 @@ class ADIntelligence:
             "DRS_REPL_OBJ": 0x1,
             "hidden_objects_via_drs": "Using DRSGetNCChanges to retrieve objects bypassed by standard LDAP filters",
             "sid_history_hunting": "Identifying persistence via orphaned or high-privileged SIDHistory values",
-            "gpo_link_regex": r"://(.*?;\d)" # Used to extract GPOs from gPLink attribute
+            "gpo_link_regex": r"://(.*?;\d)"  # Used to extract GPOs from gPLink attribute
         }
 
     @staticmethod
@@ -183,8 +192,16 @@ class ADIntelligence:
         return {
             "minimal": minimal,
             "account_extended": account_min + ["userAccountControl", "UserPrincipalName", "ServicePrincipalName"],
-            "all": account_min + ["userCertificate", "mS-DS-CreatorSID", "primaryGroupID", "SIDHistory", "msDS-AllowedToDelegateTo"]
+            "all": account_min + [
+                "userCertificate",
+                "mS-DS-CreatorSID",
+                "primaryGroupID",
+                "SIDHistory",
+                "msDS-AllowedToDelegateTo"
+            ]
         }
+
+    @staticmethod
     def get_adws_enumeration_info() -> Dict[str, Any]:
         """Returns info on Active Directory Web Services (Port 9389)."""
         return {
@@ -201,9 +218,16 @@ class ADIntelligence:
             "all_groups": "(objectCategory=group)",
             "all_computers": "(objectClass=Computer)",
             "privileged_accounts": "(&(objectCategory=person)(objectClass=user)(adminCount=1))",
-            "kerberoastable_users": "(&(&(servicePrincipalName=*)(UserAccountControl:1.2.840.113556.1.4.803:=512))(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))",
-            "unconstrained_delegation_users": "(&(&(objectCategory=person)(objectClass=user))(userAccountControl:1.2.840.113556.1.4.803:=524288))",
-            "unconstrained_delegation_computers": "(&(objectCategory=computer)(objectClass=computer)(userAccountControl:1.2.840.113556.1.4.803:=524288))",
+            "kerberoastable_users": (
+                "(&(&(servicePrincipalName=*)(UserAccountControl:1.2.840.113556.1.4.803:=512))"
+                "(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))"
+            ),
+            "unconstrained_delegation_users": (
+                "(&(&(objectCategory=person)(objectClass=user))(userAccountControl:1.2.840.113556.1.4.803:=524288))"
+            ),
+            "unconstrained_delegation_computers": (
+                "(&(objectCategory=computer)(objectClass=computer)(userAccountControl:1.2.840.113556.1.4.803:=524288))"
+            ),
             "constrained_delegation": "(&(objectCategory=computer)(msDS-AllowedToDelegateTo=*))",
             "gpos": "(objectClass=groupPolicyContainer)",
             "laps_passwords": "(ms-Mcs-AdmPwd=*)",

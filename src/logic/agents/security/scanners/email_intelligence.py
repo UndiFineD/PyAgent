@@ -17,8 +17,11 @@ import aiohttp
 import random
 import string
 import re
+import logging
 from typing import List, Dict, Optional, Any
-from src.core.base.logic.logger import logger
+
+logger = logging.getLogger(__name__)
+
 
 class EmailIntelligence:
     """Intelligence engine for handling ephemeral/temporary emails and OTP extraction."""

@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import logging
 from typing import Any
-from pathlib import Path
 
 from src.core.base.lifecycle.version import VERSION
 from src.maintenance.workspace_maintenance import WorkspaceMaintenance

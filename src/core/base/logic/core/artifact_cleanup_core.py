@@ -20,6 +20,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 class ArtifactCleanupCore:
     """
     Background worker for disk maintenance of modality artifacts (images/test logs).
@@ -27,9 +28,9 @@ class ArtifactCleanupCore:
     """
 
     def __init__(
-        self, 
-        base_dir: str, 
-        interval: int = 300, 
+        self,
+        base_dir: str,
+        interval: int = 300,
         ttl: int = 3600,
         patterns: Optional[List[str]] = None
     ):
@@ -92,7 +93,7 @@ class ArtifactCleanupCore:
 
         if deleted_count > 0:
             logger.info(f"Cleanup complete. Removed {deleted_count} expired artifacts.")
-            
+
         return deleted_count
 
     def force_purge(self):

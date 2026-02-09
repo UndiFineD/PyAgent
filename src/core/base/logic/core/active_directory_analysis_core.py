@@ -152,8 +152,10 @@ class ActiveDirectoryAnalysisCore:
                 object_type=ADObjectType.USER,
                 name=user_name,
                 properties={"enabled": True, "last_logon": "2024-01-15"},
-                privileges={PrivilegeLevel.DOMAIN_USER} if user_name != "Administrator"
-                         else {PrivilegeLevel.DOMAIN_ADMIN, PrivilegeLevel.ENTERPRISE_ADMIN},
+                privileges=(
+                    {PrivilegeLevel.DOMAIN_USER} if user_name != "Administrator"
+                    else {PrivilegeLevel.DOMAIN_ADMIN, PrivilegeLevel.ENTERPRISE_ADMIN}
+                ),
                 relationships={}
             )
             result.users.append(user)
@@ -173,8 +175,10 @@ class ActiveDirectoryAnalysisCore:
                 object_type=ADObjectType.GROUP,
                 name=group_name,
                 properties={"member_count": 5},
-                privileges={PrivilegeLevel.DOMAIN_ADMIN} if "Admins" in group_name
-                         else {PrivilegeLevel.DOMAIN_USER},
+                privileges=(
+                    {PrivilegeLevel.DOMAIN_ADMIN} if "Admins" in group_name
+                    else {PrivilegeLevel.DOMAIN_USER}
+                ),
                 relationships={"members": [user_dn for user_dn in user_dns if "Administrator" in user_dn]}
             )
             result.groups.append(group)
@@ -198,15 +202,15 @@ class ActiveDirectoryAnalysisCore:
         # Find users with admin privileges
         admin_users = [
             obj for obj in self.ad_objects.values()
-            if PrivilegeLevel.DOMAIN_ADMIN in obj.privileges or
-               PrivilegeLevel.ENTERPRISE_ADMIN in obj.privileges
+            if (PrivilegeLevel.DOMAIN_ADMIN in obj.privileges or
+                PrivilegeLevel.ENTERPRISE_ADMIN in obj.privileges)
         ]
 
         # Find computers with local admin access
         admin_computers = [
             obj for obj in self.ad_objects.values()
-            if obj.object_type == ADObjectType.COMPUTER and
-               PrivilegeLevel.LOCAL_ADMIN in obj.privileges
+            if (obj.object_type == ADObjectType.COMPUTER and
+                PrivilegeLevel.LOCAL_ADMIN in obj.privileges)
         ]
 
         # Build escalation paths
@@ -243,8 +247,8 @@ class ActiveDirectoryAnalysisCore:
         # Check for weak passwords (simulated)
         weak_password_users = [
             obj for obj in self.ad_objects.values()
-            if obj.object_type == ADObjectType.USER and
-               not obj.properties.get("password_policy", {}).get("complexity", True)
+            if (obj.object_type == ADObjectType.USER and
+                not obj.properties.get("password_policy", {}).get("complexity", True))
         ]
 
         if weak_password_users:
@@ -261,8 +265,8 @@ class ActiveDirectoryAnalysisCore:
         # Check for Kerberoastable accounts
         kerberoastable_accounts = [
             obj for obj in self.ad_objects.values()
-            if obj.object_type == ADObjectType.USER and
-               obj.properties.get("service_principal_name", False)
+            if (obj.object_type == ADObjectType.USER and
+                obj.properties.get("service_principal_name", False))
         ]
 
         if kerberoastable_accounts:
@@ -289,9 +293,12 @@ class ActiveDirectoryAnalysisCore:
         if not self.enumeration_cache:
             await self.enumerate_domain()
 
-        group_memberships = {}
+        cache = self.enumeration_cache
+        if not cache:
+            return {}
 
-        for group in self.enumeration_cache.groups:
+        group_memberships = {}
+        for group in cache.groups:
             members = group.relationships.get("members", [])
             group_memberships[group.distinguished_name] = members
 
@@ -323,7 +330,7 @@ class ActiveDirectoryAnalysisCore:
                 description=f"Dangerous ACL: {ace['description']}",
                 affected_objects=[ace["object"]],
                 exploit_path=[
-                    f"User {ace['principal']} exploits {ace['rights']} rights",
+                    f"User {ace['principal']} exploits {', '.join(ace['rights'])} rights",
                     "Modifies group membership",
                     "Gains elevated privileges"
                 ],
@@ -348,12 +355,17 @@ class ActiveDirectoryAnalysisCore:
         acl_issues = await self.check_acl_abuses()
         group_analysis = await self.analyze_group_memberships()
 
+        cache = self.enumeration_cache
+        if not cache:
+            # Should not happen as enumerate_domain sets it
+            return {}
+
         report = {
             "enumeration_summary": {
-                "total_users": len(self.enumeration_cache.users),
-                "total_computers": len(self.enumeration_cache.computers),
-                "total_groups": len(self.enumeration_cache.groups),
-                "domain_controllers": len(self.enumeration_cache.domain_controllers)
+                "total_users": len(cache.users),
+                "total_computers": len(cache.computers),
+                "total_groups": len(cache.groups),
+                "domain_controllers": len(cache.domain_controllers)
             },
             "privilege_escalation_paths": len(escalation_paths),
             "vulnerabilities_found": len(vulnerabilities) + len(acl_issues),
@@ -386,8 +398,8 @@ class ActiveDirectoryAnalysisCore:
         # Find accounts with old last logon dates (simulated)
         dormant_accounts = [
             obj for obj in self.ad_objects.values()
-            if obj.object_type == ADObjectType.USER and
-               obj.properties.get("last_logon", "").startswith("2023")  # Older than 1 year
+            if (obj.object_type == ADObjectType.USER and
+                obj.properties.get("last_logon", "").startswith("2023"))  # Older than 1 year
         ]
 
         if dormant_accounts:
@@ -417,8 +429,8 @@ class ActiveDirectoryAnalysisCore:
         # Find accounts with Service Principal Names (vulnerable to Kerberoasting)
         kerberoastable = [
             obj for obj in self.ad_objects.values()
-            if obj.object_type == ADObjectType.USER and
-               obj.properties.get("service_principal_name", False)
+            if (obj.object_type == ADObjectType.USER and
+                obj.properties.get("service_principal_name", False))
         ]
 
         if kerberoastable:
@@ -440,7 +452,7 @@ class ActiveDirectoryAnalysisCore:
 
         Based on AD_Miner privilege analysis.
         """
-        privileged_analysis = {
+        privileged_analysis: Dict[str, List[str]] = {
             "domain_admins": [],
             "enterprise_admins": [],
             "tier_zero_sessions": [],
@@ -458,8 +470,10 @@ class ActiveDirectoryAnalysisCore:
 
         # Identify machine accounts with admin privileges
         for obj in self.ad_objects.values():
-            if (obj.object_type == ADObjectType.COMPUTER and
-                PrivilegeLevel.DOMAIN_ADMIN in obj.privileges):
+            if (
+                obj.object_type == ADObjectType.COMPUTER and
+                PrivilegeLevel.DOMAIN_ADMIN in obj.privileges
+            ):
                 privileged_analysis["machine_accounts_with_admin"].append(obj.distinguished_name)
 
         return privileged_analysis
@@ -554,10 +568,16 @@ class ActiveDirectoryAnalysisCore:
                     vulnerabilities.append(ADVulnerability(
                         vulnerability_type="APT28_OneDrive_C2",
                         severity="high",
-                        description=f"Potential APT28 Fancy Bear OneDrive C2 activity detected: {', '.join(suspicious_props)}",
+                        description=(
+                            f"Potential APT28 Fancy Bear OneDrive C2 activity detected: "
+                            f"{', '.join(suspicious_props)}"
+                        ),
                         affected_objects=[dn],
                         exploit_path=["User enumeration", "OneDrive API abuse", "Command execution"],
-                        mitigation="Monitor OneDrive API access, implement strict API rate limiting, audit unusual authentication patterns"
+                        mitigation=(
+                            "Monitor OneDrive API access, implement strict API rate limiting, "
+                            "audit unusual authentication patterns"
+                        )
                     ))
 
         return vulnerabilities
@@ -583,11 +603,18 @@ class ActiveDirectoryAnalysisCore:
                 if any("tunnel" in str(prop).lower() for prop in obj.properties.values()):
                     suspicious_props.append("Tunnel-related activity detected")
 
+                # Check for GitHub VS Code tunnel indicators
+                if any("vscode-server" in str(prop).lower() for prop in obj.properties.values()):
+                    suspicious_props.append("VS Code tunnel activity detected")
+
                 if suspicious_props:
                     vulnerabilities.append(ADVulnerability(
                         vulnerability_type="MustangPanda_VSCode_C2",
                         severity="high",
-                        description=f"Potential Mustang Panda VS Code tunnel abuse detected: {', '.join(suspicious_props)}",
+                        description=(
+                            f"Potential Mustang Panda VS Code tunnel abuse detected: "
+                            f"{', '.join(suspicious_props)}"
+                        ),
                         affected_objects=[dn],
                         exploit_path=["VS Code installation", "GitHub OAuth", "Tunnel establishment", "Reverse shell"],
                         mitigation="Monitor VS Code installations, restrict GitHub OAuth, audit tunnel connections"
@@ -654,9 +681,12 @@ class ActiveDirectoryAnalysisCore:
                         vulnerability_type="LabyrinthChollima_Trojanized_App",
                         severity="critical",
                         description=f"Trojanized application patterns detected: {', '.join(suspicious_props)}",
-                        affected_objects=[dn],
+                        affected_objects=[obj.distinguished_name],
                         exploit_path=["Legitimate application download", "DLL injection", "Trojanized execution"],
-                        mitigation="Verify application integrity, use application allowlisting, monitor file modifications"
+                        mitigation=(
+                            "Verify application integrity, use application allowlisting, "
+                            "monitor file modifications"
+                        )
                     ))
 
         return vulnerabilities
@@ -691,7 +721,10 @@ class ActiveDirectoryAnalysisCore:
                             description=f"Unusual service account activity: {', '.join(suspicious_props)}",
                             affected_objects=[dn],
                             exploit_path=["Service account compromise", "Privilege escalation", "Lateral movement"],
-                            mitigation="Monitor service account usage, implement strict access controls, regular credential rotation"
+                            mitigation=(
+                                "Monitor service account usage, implement strict access controls, "
+                                "regular credential rotation"
+                            )
                         ))
 
         return vulnerabilities
@@ -726,7 +759,7 @@ class ActiveDirectoryAnalysisCore:
         # Gather all analysis data
         dormant_accounts = await self.analyze_dormant_accounts()
         kerberoastable = await self.analyze_kerberoastable_accounts()
-        privileged_analysis = await self.analyze_privileged_accounts()
+        privileged_analysis: Dict[str, List[str]] = await self.analyze_privileged_accounts()
         control_paths = await self.analyze_control_paths()
         vulnerabilities = await self.detect_vulnerabilities()
         acl_issues = await self.check_acl_abuses()
@@ -766,20 +799,29 @@ class ActiveDirectoryAnalysisCore:
         else:
             overall_risk = "low"
 
+        cache = self.enumeration_cache
+        if not cache:
+            return {}
+
         report = {
             "ad_miner_analysis": {
                 "enumeration_summary": {
-                    "total_users": len(self.enumeration_cache.users),
-                    "total_computers": len(self.enumeration_cache.computers),
-                    "total_groups": len(self.enumeration_cache.groups),
-                    "domain_controllers": len(self.enumeration_cache.domain_controllers)
+                    "total_users": len(cache.users),
+                    "total_computers": len(cache.computers),
+                    "total_groups": len(cache.groups),
+                    "domain_controllers": len(cache.domain_controllers)
                 },
                 "privileged_accounts": privileged_analysis,
-                "vulnerability_findings": {
+                "vulnerability_summary": {
+                    "vulnerabilities": len(vulnerabilities),
+                    "acl_issues": len(acl_issues),
                     "dormant_accounts": len(dormant_accounts),
                     "kerberoastable_accounts": len(kerberoastable),
                     "apt_c2_vulnerabilities": len(apt_c2_vulnerabilities),
-                    "total_vulnerabilities": len(vulnerabilities) + len(acl_issues) + len(dormant_accounts) + len(kerberoastable) + len(apt_c2_vulnerabilities)
+                    "total_vulnerabilities": (
+                        len(vulnerabilities) + len(acl_issues) + len(dormant_accounts) +
+                        len(kerberoastable) + len(apt_c2_vulnerabilities)
+                    )
                 },
                 "control_paths": {
                     "total_paths": len(control_paths),

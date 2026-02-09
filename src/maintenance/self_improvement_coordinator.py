@@ -194,7 +194,7 @@ class SelfImprovementCoordinator:
         if not topics:
             self.logger.info("No explicit research topics found. Checking for general multimodal cues.")
             if any("multimodal" in p.lower() for p in self.directives["fixed_prompts"]):
-                topics: List[str] = ["multimodal ia3 scaling tensorrt"]
+                topics = ["multimodal ia3 scaling tensorrt"]
             else:
                 return
 
@@ -261,17 +261,17 @@ class SelfImprovementCoordinator:
         health_audit: Dict[str, Any] = orchestrator.run_health_audit()
 
         # 3. Check for failed agents in health registry
-        failed_agents = []
+        failed_agents: List[str] = []
         if orchestrator.core is not None:
-            failed_agents: List[str] = orchestrator.core.detect_failures()
+            failed_agents = orchestrator.core.detect_failures()
 
-        results = {
+        results: Dict[str, Any] = {
             "integrity": integrity_report,
             "health": health_audit,
             "failures": failed_agents,
             "actions_taken": [],
         }
-
+    
         if failed_agents:
             self.logger.warning(f"Self-Healing: {len(failed_agents)} failures detected. Reviewing roadmap items...")
             for agent in failed_agents:
@@ -390,11 +390,11 @@ class SelfImprovementCoordinator:
                 agent = DirectorAgent(str(self.improvements_file))
 
                 # Hand off task to director
-                prompt: str = (
+                hand_off_prompt = (
                     f"Improvement Task: {title}\nPlease decompose this and delegate to the appropriate specialists."
                 )
-                res: str = await agent.think(prompt)
-                print(f"  -> [DIRECTOR RESPONSE] {res[:200]}...")
+                director_res = await agent.think(hand_off_prompt)
+                print(f"  -> [DIRECTOR RESPONSE] {director_res[:200]}...")
 
             elif status == "RESEARCH":
                 from src.logic.agents.intelligence.research_agent import \
@@ -405,9 +405,9 @@ class SelfImprovementCoordinator:
 
                 # Find associated research links if any
                 links: List[str] = await self.scan_for_research()
-                prompt: str = f"Research Task: {title}\nRelated links found: {links}"
-                res: str = await agent.think(prompt)
-                print(f"  -> [RESEARCH RESPONSE] {res[:200]}...")
+                research_prompt = f"Research Task: {title}\nRelated links found: {links}"
+                research_res = await agent.think(research_prompt)
+                print(f"  -> [RESEARCH RESPONSE] {research_res[:200]}...")
 
         except ImportError as e:
             self.logger.warning(f"  -> [SKIP] Required agent not found: {e}")

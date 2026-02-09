@@ -63,6 +63,7 @@ class StatsAgent:
         self._retention_policies: dict[str, RetentionPolicy] = {}
         self._anomaly_scores: dict[str, list[float]] = {}
         self._metric_history: dict[str, list[tuple[str, float]]] = {}
+        self._alerts: list[Alert] = []
 
     def _validate_files(self) -> None:
         """Validate input files."""
@@ -539,8 +540,9 @@ class StatsAgent:
 
     def generate_comparison_report(self, baseline_stats: dict[str, int]) -> None:
         """Generate a comparison report between current and baseline stats."""
-        def compare_item(acc: dict[str, Any], item: tuple[str, int]) -> dict[str, Any]:
-            key, current_val = item
+        def compare_item(acc: dict[str, Any], item: tuple[str, Any]) -> dict[str, Any]:
+            key, current_val_raw = item
+            current_val = int(current_val_raw) if isinstance(current_val_raw, (int, float)) else 0
             baseline_val = baseline_stats.get(key, 0)
             acc[key] = {
                 "current": current_val,
@@ -549,7 +551,7 @@ class StatsAgent:
             }
             return acc
 
-        comparison = functools.reduce(compare_item, self.stats.items(), {})
+        comparison: Dict[str, Any] = functools.reduce(compare_item, self.stats.items(), {})
         report: str = json.dumps(comparison, indent=2)
         logger.info(report)
         print(report)
@@ -565,7 +567,7 @@ class StatsAgent:
             import io
 
             output = io.StringIO()
-            writer: csv.Writer = csv.writer(output)
+            writer = csv.writer(output)
             writer.writerow(stats.keys())
             writer.writerow(stats.values())
             logger.info(output.getvalue())

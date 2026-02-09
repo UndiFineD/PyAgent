@@ -15,11 +15,13 @@
 from typing import List, Dict, Any, Optional
 from pydantic import BaseModel, Field
 
+
 class AgentCapability(BaseModel):
     name: str
     description: str
     parameters: Dict[str, Any] = Field(default_factory=dict)
     returns: str = "Any"
+
 
 class AgentCard(BaseModel):
     """
@@ -32,8 +34,9 @@ class AgentCard(BaseModel):
     role: str
     description: str
     capabilities: List[AgentCapability] = Field(default_factory=list)
-    contact_info: Dict[str, str] = Field(default_factory=dict) # e.g., {"protocol": "voyager_p2p", "address": "peer_id"}
+    contact_info: Dict[str, str] = Field(default_factory=dict)  # e.g., {"protocol": "voyager_p2p", "address": "peer_id"}
     metadata: Dict[str, Any] = Field(default_factory=dict)
+
 
 class AgentCardCore:
     """

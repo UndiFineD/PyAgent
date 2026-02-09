@@ -19,7 +19,6 @@ import ast
 ROOT = Path(__file__).resolve().parents[2]
 TARGET_DIR = ROOT / 'src' / 'external_candidates' / 'auto'
 PATCH_DIR = ROOT / '.external' / 'patches'
-PATCH_DIR = ROOT / '.external' / 'patches'
 
 
 def find_py_files(target: Path):
@@ -51,7 +50,7 @@ def remove_top_level_asserts(text: str) -> str:
         if isinstance(node, ast.Assert):
             start = getattr(node, 'lineno', None)
             end = getattr(node, 'end_lineno', start)
-            if start:
+            if isinstance(start, int) and isinstance(end, int):
                 ranges.append((start, end))
     if not ranges:
         return text
@@ -128,7 +127,9 @@ def main(argv=None) -> int:
     parser.add_argument('--target', type=str, default=None, help='Target directory to scan (defaults to internal target)')
     parser.add_argument('--patch-dir', type=str, default=None, help='Directory to write patch files')
     args = parser.parse_args(argv)
-    apply_fixes(apply=args.apply, target_dir=Path(args.target) if args.target else None, patch_dir=Path(args.patch_dir) if args.patch_dir else None)
+    target_path = Path(args.target) if args.target else None
+    patch_path = Path(args.patch_dir) if args.patch_dir else None
+    apply_fixes(apply=args.apply, target_dir=target_path, patch_dir=patch_path)
     # run static checks and tests if we applied changes
     if args.apply:
         print('Re-running static checks...')

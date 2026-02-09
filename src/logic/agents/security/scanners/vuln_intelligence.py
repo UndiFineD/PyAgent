@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
 import aiohttp
 import re
-from typing import List, Dict, Optional
+from typing import List, Dict
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
+
 
 class VulnIntelligence:
     """
@@ -58,18 +58,42 @@ class VulnIntelligence:
             ]
         return [original_ct]
 
-    def get_vulnerable_params() -> Dict[str, List[str]]:
+    def get_vulnerable_params(self) -> Dict[str, List[str]]:
         """
         Returns a mapping of vulnerability types to common parameter names.
         Ported from 0xSojalSec-Bambdas (OWASP Top 25).
         """
         return {
-            "ssrf": ["dest", "redirect", "uri", "path", "continue", "url", "window", "next", "data", "reference", "site", "html", "val", "validate", "domain", "callback", "return", "page", "feed", "host", "port", "to", "out", "view", "dir"],
-            "sql": ["id", "page", "report", "dir", "search", "category", "file", "class", "url", "news", "item", "menu", "lang", "name", "ref", "title", "view", "topic", "thread", "type", "date", "form", "main", "nav", "region"],
-            "xss": ["q", "s", "search", "id", "lang", "keyword", "query", "page", "keywords", "year", "view", "email", "type", "name", "p", "month", "image", "list_type", "url", "terms", "categoryid", "key", "l", "begindate", "enddate"],
-            "lfi": ["cat", "dir", "action", "board", "date", "detail", "file", "download", "path", "folder", "prefix", "include", "page", "inc", "locate", "show", "doc", "site", "type", "view", "content", "document", "layout", "mod", "conf"],
-            "open_redirect": ["next", "url", "target", "rurl", "dest", "destination", "redir", "redirect_uri", "redirect_url", "redirect", "out", "view", "to", "image_url", "go", "return", "returnTo", "return_to", "checkout_url", "continue", "return_path"],
-            "rce": ["cmd", "exec", "command", "execute", "ping", "query", "jump", "code", "reg", "do", "func", "arg", "option", "load", "process", "step", "read", "feature", "exe", "module", "payload", "run", "print"]
+            "ssrf": [
+                "dest", "redirect", "uri", "path", "continue", "url", "window", "next", "data", "reference",
+                "site", "html", "val", "validate", "domain", "callback", "return", "page", "feed", "host",
+                "port", "to", "out", "view", "dir"
+            ],
+            "sql": [
+                "id", "page", "report", "dir", "search", "category", "file", "class", "url", "news",
+                "item", "menu", "lang", "name", "ref", "title", "view", "topic", "thread", "type",
+                "date", "form", "main", "nav", "region"
+            ],
+            "xss": [
+                "q", "s", "search", "id", "lang", "keyword", "query", "page", "keywords", "year",
+                "view", "email", "type", "name", "p", "month", "image", "list_type", "url", "terms",
+                "categoryid", "key", "l", "begindate", "enddate"
+            ],
+            "lfi": [
+                "cat", "dir", "action", "board", "date", "detail", "file", "download", "path", "folder",
+                "prefix", "include", "page", "inc", "locate", "show", "doc", "site", "type", "view",
+                "content", "document", "layout", "mod", "conf"
+            ],
+            "open_redirect": [
+                "next", "url", "target", "rurl", "dest", "destination", "redir", "redirect_uri",
+                "redirect_url", "redirect", "out", "view", "to", "image_url", "go", "return",
+                "returnTo", "return_to", "checkout_url", "continue", "return_path"
+            ],
+            "rce": [
+                "cmd", "exec", "command", "execute", "ping", "query", "jump", "code", "reg", "do",
+                "func", "arg", "option", "load", "process", "step", "read", "feature", "exe",
+                "module", "payload", "run", "print"
+            ]
         }
 
     GIT_MAGIC = re.compile(r"^(ref:.*|[0-9a-f]{40}$)")
@@ -85,12 +109,14 @@ class VulnIntelligence:
             ("svn", ".svn/wc.db", re.compile(r"^SQLite")),
             ("hg", ".hg/store/00manifest.i", re.compile(r"^\x00\x00\x00\x01"))
         ]
-        
+
         async with aiohttp.ClientSession() as session:
             for name, path, pattern in checks:
                 try:
                     target = f"{url.rstrip('/')}/{path}"
-                    async with session.get(target, timeout=5, allow_redirects=False) as resp:
+                    async with session.get(
+                        target, timeout=aiohttp.ClientTimeout(total=5), allow_redirects=False
+                    ) as resp:
                         if resp.status == 200:
                             text = await resp.text()
                             if pattern.search(text.strip()):
@@ -109,20 +135,20 @@ class VulnIntelligence:
         # Artemis logic: find candidate params like ?page=, ?file=
         # For simplicity, we assume the user provides the base URL.
         # Here we just implement the verification logic.
-        
+
         test_params = ["page", "file", "include", "view", "content", "path"]
         base_path = url.split("?")[0]
-        
+
         async with aiohttp.ClientSession() as session:
             for param in test_params:
                 # Try to include the current script (guessing index.php if not in url)
                 filename = "index"
                 if ".php" in url:
                     filename = url.split("/")[-1].split(".php")[0]
-                
+
                 test_url = f"{base_path}?{param}={cls.LFI_PAYLOAD}{filename}"
                 try:
-                    async with session.get(test_url, timeout=10) as resp:
+                    async with session.get(test_url, timeout=aiohttp.ClientTimeout(total=10)) as resp:
                         if resp.status == 200:
                             text = (await resp.text()).replace("\n", "")
                             if cls.B64_PHP_START.match(text):
@@ -134,11 +160,14 @@ class VulnIntelligence:
     @classmethod
     async def parse_robots(cls, url: str) -> Dict[str, List[str]]:
         """Parse robots.txt and identify high-value paths."""
-        results = {"disallowed": [], "sensitive": []}
+        results: Dict[str, List[str]] = {
+            "disallowed": [],
+            "sensitive": []
+        }
         async with aiohttp.ClientSession() as session:
             try:
                 target = f"{url.rstrip('/')}/robots.txt"
-                async with session.get(target, timeout=5) as resp:
+                async with session.get(target, timeout=aiohttp.ClientTimeout(total=5)) as resp:
                     if resp.status == 200:
                         content = await resp.text()
                         for line in content.splitlines():
@@ -147,11 +176,13 @@ class VulnIntelligence:
                                 if path and "*" not in path:
                                     results["disallowed"].append(path)
                                     # Flag sensitive looking paths
-                                    if any(kw in path.lower() for kw in ["admin", "config", "backup", "db", "sql", "git"]):
+                                    keywords = ["admin", "config", "backup", "db", "sql", "git"]
+                                    if any(kw in path.lower() for kw in keywords):
                                         results["sensitive"].append(path)
             except Exception:
                 pass
         return results
+
     @classmethod
     async def scan_ssti(cls, url: str) -> List[str]:
         """
@@ -161,7 +192,7 @@ class VulnIntelligence:
         # Math payloads for different engines (Jinja2, Mako, Twig, etc.)
         payloads = ["{{7*7}}", "{{7+7}}", "${7*7}", "<%= 7*7 %>", "#{7*7}"]
         confirmed = []
-        
+
         parsed = urlparse(url)
         params = parse_qs(parsed.query)
         if not params:
@@ -173,9 +204,9 @@ class VulnIntelligence:
                     new_params = params.copy()
                     new_params[param_name] = [payload]
                     test_url = urlunparse(parsed._replace(query=urlencode(new_params, doseq=True)))
-                    
+
                     try:
-                        async with session.get(test_url, timeout=10) as resp:
+                        async with session.get(test_url, timeout=aiohttp.ClientTimeout(total=10)) as resp:
                             if resp.status == 200:
                                 text = await resp.text()
                                 if "49" in text or "14" in text:
@@ -192,7 +223,7 @@ class VulnIntelligence:
         """
         payloads = [callback_host, f"http://{callback_host}", f"https://{callback_host}"]
         confirmed = []
-        
+
         parsed = urlparse(url)
         params = parse_qs(parsed.query)
         if not params:
@@ -204,11 +235,11 @@ class VulnIntelligence:
                     new_params = params.copy()
                     new_params[param_name] = [payload]
                     test_url = urlunparse(parsed._replace(query=urlencode(new_params, doseq=True)))
-                    
+
                     try:
-                        # For SSRF we usually need to check the callback listener logs, 
+                        # For SSRF we usually need to check the callback listener logs,
                         # but we can look for change in response.
-                        async with session.get(test_url, timeout=10) as resp:
+                        async with session.get(test_url, timeout=aiohttp.ClientTimeout(total=10)) as resp:
                             # A 200 OK when requesting an internal host might be an indicator
                             if resp.status == 200:
                                 confirmed.append(f"Potential SSRF indicator on {param_name}: {test_url}")

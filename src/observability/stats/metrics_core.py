@@ -95,7 +95,7 @@ class TokenCostCore:
                 traceback.print_exc()
 
         # check cache
-        cache_key: Tuple[int | str] = (input_tokens, output_tokens, model)
+        cache_key: Tuple[int, int, str] = (input_tokens, output_tokens, model)
         if cache_key in self.cache:
             return self.cache[cache_key]
 
@@ -212,6 +212,7 @@ class DerivedMetricCalculator:
 
     def __init__(self) -> None:
         """Initialize calculator."""
+        self.derived_metrics: dict[str, Any] = {}
 
     def calculate(self, metric_name: str, context: dict[str, float]) -> float:
         """Calculate derived metric value."""
@@ -219,7 +220,10 @@ class DerivedMetricCalculator:
             raise KeyError(f"Derived metric {metric_name} not found")
 
         metric_def = self.derived_metrics[metric_name]
-        formula: Any | str = getattr(metric_def, "formula", metric_def) if not isinstance(metric_def, str) else metric_def
+        if isinstance(metric_def, str):
+            formula: Any | str = metric_def
+        else:
+            formula = getattr(metric_def, "formula", metric_def)
 
         return self.evaluate_formula(formula, context)
 

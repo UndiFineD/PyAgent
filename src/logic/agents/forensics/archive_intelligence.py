@@ -16,7 +16,7 @@ import zipfile
 import tarfile
 import os
 import shutil
-from typing import List, Optional
+from typing import List, Optional, Any
 from pathlib import Path
 
 class ArchiveIntelligence:
@@ -27,7 +27,7 @@ class ArchiveIntelligence:
     
     @staticmethod
     async def analyze_zip(file_path: str) -> dict:
-        results = {"vulnerabilities": [], "files": []}
+        results: dict[str, Any] = {"vulnerabilities": [], "files": []}
         try:
             with zipfile.ZipFile(file_path, 'r') as zip_ref:
                 for info in zip_ref.infolist():
@@ -57,7 +57,7 @@ class ArchiveIntelligence:
 
     @staticmethod
     async def analyze_tar(file_path: str) -> dict:
-        results = {"vulnerabilities": [], "files": []}
+        results: dict[str, Any] = {"vulnerabilities": [], "files": []}
         try:
             with tarfile.open(file_path, 'r:*') as tar_ref:
                 for member in tar_ref.getmembers():

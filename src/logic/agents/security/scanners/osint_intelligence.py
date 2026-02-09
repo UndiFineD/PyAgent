@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Dict, Any
+from typing import List, Dict
+
 
 class OsintIntelligence:
     """
@@ -23,34 +24,34 @@ class OsintIntelligence:
     # High-value Google Dorks
     GOOGLE_DORKS = {
         "sensitive_files": [
-            'filetype:log \"PHP Parse error\"',
-            'filetype:sql \"MySQL dump\"',
+            'filetype:log "PHP Parse error"',
+            'filetype:sql "MySQL dump"',
             'filetype:env DB_PASSWORD',
-            '\"index of\" \"config.php\"',
-            'intitle:\"index of\" \"api.txt\"'
+            '"index of" "config.php"',
+            'intitle:"index of" "api.txt"'
         ],
         "bug_bounty": [
-            'site:github.com \"target.com\"',
-            'site:s3.amazonaws.com \"target.com\"',
-            'site:atlassian.net \"target.com\"'
+            'site:github.com "target.com"',
+            'site:s3.amazonaws.com "target.com"',
+            'site:atlassian.net "target.com"'
         ]
     }
 
     # High-value Shodan Dorks
     SHODAN_DORKS = [
-        \"product:\\\"Elastic\\\" port:9200\",
-        \"product:\\\"Redis\\\"\",
-        \"product:\\\"MongoDB\\\"\",
-        \"\\\"X-OWA-Version\\\"\",
-        \"\\\"X-Powered-By: PHP/\\\"\",
-        \"title:\\\"index of /\\\"\"
+        'product:"Elastic" port:9200',
+        'product:"Redis"',
+        'product:"MongoDB"',
+        '"X-OWA-Version"',
+        '"X-Powered-By: PHP/"',
+        'title:"index of /"'
     ]
 
     # High-value GitHub Dorks
     GITHUB_DORKS = [
-        '\"target.com\" password',
-        '\"target.com\" api_key',
-        '\"target.com\" token',
+        '"target.com" password',
+        '"target.com" api_key',
+        '"target.com" token',
         'filename:.env target.com'
     ]
 
@@ -58,8 +59,14 @@ class OsintIntelligence:
     def generate_dorks(domain: str) -> Dict[str, List[str]]:
         """Generates domain-specific dorks."""
         results = {
-            \"google\": [d.replace(\"target.com\", domain) for d in OsintIntelligence.GOOGLE_DORKS[\"bug_bounty\"]],
-            "github": [d.replace("target.com", domain) for d in OsintIntelligence.GITHUB_DORKS],
+            "google": [
+                d.replace("target.com", domain)
+                for d in OsintIntelligence.GOOGLE_DORKS["bug_bounty"]
+            ],
+            "github": [
+                d.replace("target.com", domain)
+                for d in OsintIntelligence.GITHUB_DORKS
+            ],
             "shodan": [
                 f"hostname:{domain}",
                 f"http.html:{domain}",
@@ -72,6 +79,3 @@ class OsintIntelligence:
     def get_cxsecurity_dork_url(page: int = 1) -> str:
         """Returns the URL for fetching dorks from CXSecurity."""
         return f"https://cxsecurity.com/dorks/{page}"
-
-if __name__ == \"__main__\":
-    pass

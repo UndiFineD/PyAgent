@@ -236,7 +236,7 @@ class MCPServerRegistry:
         """
         # Placeholder for server discovery
         # In production, this would fetch from GitHub, npm, etc.
-        discovered = []
+        discovered: List[MCPServerConfig] = []
 
         # Example: Fetch from awesome-mcp-servers
         try:

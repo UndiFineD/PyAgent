@@ -13,13 +13,14 @@
 # limitations under the License.
 
 import re
-from typing import Dict, List, Optional
+from typing import Dict, List
 from dataclasses import dataclass
 
 # Refactoring Note: Ported from .external/0xSojalSec-dnsresolver/src/waf/mod.rs
 # Logic ported:
 # - WAF Signatures (JSON to Python List)
 # - Header/Content matching logic
+
 
 @dataclass
 class WAFSignature:
@@ -37,22 +38,23 @@ class WAFSignature:
         for key, value in headers.items():
             if self.header_only:
                 if self.keyword in key or self.keyword in value:
-                     # Refine with regex if needed, but keyword is fast check
+                    # Refine with regex if needed, but keyword is fast check
                     if re.search(self.regex, f"{key}: {value}", re.IGNORECASE):
                         return True
-        
+
         # Check content if not header only (though most in list are header only)
         if not self.header_only and content:
             if re.search(self.regex, content, re.IGNORECASE):
                 return True
-                
+
         return False
+
 
 class WAFIntelligence:
     """
     WAF Detection Logic ported from external sources.
     """
-    
+
     # Partial list ported from 0xSojalSec-dnsresolver
     SIGNATURES_DATA = [
         {

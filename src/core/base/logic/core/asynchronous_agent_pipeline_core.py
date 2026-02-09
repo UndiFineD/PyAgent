@@ -91,7 +91,7 @@ class AsynchronousAgentPipelineCore:
         self.tool_registry: Dict[str, Callable[..., Awaitable[Any]]] = {}
 
         # Statistics
-        self.stats = {
+        self.stats: Dict[str, Any] = {
             "tool_calls_processed": 0,
             "trajectories_processed": 0,
             "average_execution_time": 0.0,
@@ -261,8 +261,10 @@ class AsynchronousAgentPipelineCore:
 
         self.logger.info(f"Reward modeler {worker_id} stopped")
 
-    def _compute_reward(self, state: Dict[str, Any], tool_call: ToolCall,
-                       tool_result: ToolResult, execution_time: float) -> float:
+    def _compute_reward(
+        self, state: Dict[str, Any], tool_call: ToolCall,
+        tool_result: ToolResult, execution_time: float
+    ) -> float:
         """
         Compute reward for a trajectory.
 
@@ -345,8 +347,9 @@ class AsynchronousAgentPipelineCore:
         }
         return self.stats.copy()
 
-    async def create_tool_call(self, tool_name: str, parameters: Dict[str, Any],
-                              priority: int = 1) -> ToolCall:
+    async def create_tool_call(
+        self, tool_name: str, parameters: Dict[str, Any], priority: int = 1
+    ) -> ToolCall:
         """Create a tool call for submission to the pipeline"""
         return ToolCall(
             id=str(uuid.uuid4()),

@@ -16,6 +16,7 @@
 
 import pytest
 from unittest.mock import AsyncMock, MagicMock
+from typing import Optional, Dict, Any
 
 from src.core.base.common.models.communication_models import CascadeContext
 from src.core.base.work_patterns import PeerWorkPattern, WorkPattern
@@ -24,7 +25,7 @@ from src.core.base.work_patterns import PeerWorkPattern, WorkPattern
 class MockAgent:
     """Mock agent for testing."""
 
-    def __init__(self, agent_id: str, response: dict = None):
+    def __init__(self, agent_id: str, response: Optional[Dict[Any, Any]] = None):
         self.agent_id = agent_id
         self.response = response or {"result": f"Mock response from {agent_id}"}
 

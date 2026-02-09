@@ -120,7 +120,7 @@ class SecurityPosture:
     assessment_date: datetime
     overall_score: float  # 0-100, higher is better
     attack_vectors: List[AttackVector] = field(default_factory=list)
-    defense_assessments: List[DefenseAssessment] = field(default_factory=dict)
+    defense_assessments: List[DefenseAssessment] = field(default_factory=list)
     kill_chain_analyses: List[KillChainAnalysis] = field(default_factory=list)
     critical_gaps: List[str] = field(default_factory=list)
     priority_actions: List[str] = field(default_factory=list)
@@ -139,7 +139,7 @@ class ActiveDirectoryAttackDefenseCore:
         self.attack_vectors: Dict[AttackTechnique, AttackVector] = {}
         self.defense_assessments: Dict[DefenseControl, DefenseAssessment] = {}
         self.kill_chain_analyses: List[KillChainAnalysis] = []
-        self.security_postures: List[SecurityPosture] = {}
+        self.security_postures: Dict[str, SecurityPosture] = {}
 
     async def initialize(self) -> bool:
         """Initialize the AD attack & defense core"""
@@ -789,7 +789,7 @@ class ActiveDirectoryAttackDefenseCore:
 
     async def get_attack_statistics(self) -> Dict[str, Any]:
         """Get comprehensive attack & defense statistics"""
-        stats = {
+        stats: Dict[str, Any] = {
             "total_assessments": len(self.security_postures),
             "attack_vectors_analyzed": len(self.attack_vectors),
             "defenses_assessed": len(self.defense_assessments),
@@ -800,7 +800,7 @@ class ActiveDirectoryAttackDefenseCore:
         }
 
         # Most common attack vectors
-        attack_counts = {}
+        attack_counts: Dict[str, int] = {}
         for posture in self.security_postures.values():
             for av in posture.attack_vectors:
                 technique = av.technique.value
@@ -813,16 +813,25 @@ class ActiveDirectoryAttackDefenseCore:
         )[:10]
 
         # Defense effectiveness
+        defense_eff_counts: Dict[str, int] = {}
         for posture in self.security_postures.values():
             for da in posture.defense_assessments:
                 if da.implemented:
                     effectiveness = da.effectiveness
-                    stats["defense_effectiveness"][effectiveness] = stats["defense_effectiveness"].get(effectiveness, 0) + 1
+                    defense_eff_counts[effectiveness] = defense_eff_counts.get(effectiveness, 0) + 1
+        stats["defense_effectiveness"] = defense_eff_counts
 
         # Risk distribution
+        risk_dist_counts: Dict[str, int] = {}
         for posture in self.security_postures.values():
-            risk_category = "low" if posture.overall_score >= 80 else "medium" if posture.overall_score >= 60 else "high"
-            stats["risk_distribution"][risk_category] = stats["risk_distribution"].get(risk_category, 0) + 1
+            if posture.overall_score >= 80:
+                risk_category = "low"
+            elif posture.overall_score >= 60:
+                risk_category = "medium"
+            else:
+                risk_category = "high"
+            risk_dist_counts[risk_category] = risk_dist_counts.get(risk_category, 0) + 1
+        stats["risk_distribution"] = risk_dist_counts
 
         return stats
 

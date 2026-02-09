@@ -14,6 +14,7 @@
 
 from typing import List, Dict
 
+
 class PasswordIntelligence:
     """Intelligence engine for password generation, cracking, and analysis."""
 
@@ -21,7 +22,7 @@ class PasswordIntelligence:
         "!", "!!", "!!!", "123", "@", "#", "$", "2023", "2024", "2025", "2026"
     ]
 
-    CHARACTER_SUBSTITUTIONS = {
+    CHARACTER_SUBSTITUTIONS: Dict[str, List[str]] = {
         'a': ['@', '4'],
         'e': ['3'],
         'i': ['1', '!'],
@@ -34,12 +35,12 @@ class PasswordIntelligence:
     def generate_mutations(base_word: str) -> List[str]:
         """Generate common password mutations based on a base word (psudohash style)."""
         mutations = [base_word, base_word.capitalize(), base_word.upper(), base_word.lower()]
-        
+
         # Add padding
         for pad in PasswordIntelligence.COMMON_PADDING:
             mutations.append(f"{base_word}{pad}")
             mutations.append(f"{base_word.capitalize()}{pad}")
-            
+
         return list(set(mutations))
 
     @staticmethod
@@ -53,10 +54,14 @@ class PasswordIntelligence:
     def identify_hash_type(hash_str: str) -> str:
         """Heuristic identification of hash type based on length/format."""
         length = len(hash_str)
-        if length == 32: return "MD5"
-        if length == 40: return "SHA-1"
-        if length == 64: return "SHA-256"
-        if hash_str.startswith("$2a$") or hash_str.startswith("$2b$"): return "Bcrypt"
+        if length == 32:
+            return "MD5"
+        if length == 40:
+            return "SHA-1"
+        if length == 64:
+            return "SHA-256"
+        if hash_str.startswith("$2a$") or hash_str.startswith("$2b$"):
+            return "Bcrypt"
         return "Unknown"
 
     @staticmethod
@@ -64,11 +69,13 @@ class PasswordIntelligence:
         """Generate social engineering wordlist based on targets information."""
         base = name.lower()
         words = [base, base.capitalize()]
-        
+
         suffixes = ["123", "!", "@", "2024", "2025", "1", "12"]
-        if dob: suffixes.append(dob)
-        if year: suffixes.append(year)
-        
+        if dob:
+            suffixes.append(dob)
+        if year:
+            suffixes.append(year)
+
         results = []
         for w in words:
             for s in suffixes:

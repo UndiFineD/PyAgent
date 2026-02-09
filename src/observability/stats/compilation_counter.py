@@ -163,7 +163,9 @@ class CompilationCounter:
             self._total_compiles += 1
             self._update_compile_stats(function_id, duration, shape)
 
-    def _create_compile_event(self, function_id: int, shape: Tuple[int, ...], duration: float, backend: str) -> CompileEvent:
+    def _create_compile_event(
+        self, function_id: int, shape: Tuple[int, ...], duration: float, backend: str
+    ) -> CompileEvent:
         return CompileEvent(
             event_type=CompileEventType.COMPILE,
             timestamp=time.time(),
@@ -190,7 +192,9 @@ class CompilationCounter:
             self._total_recompiles += 1
             self._update_recompile_stats(function_id, duration, shape)
 
-    def _create_recompile_event(self, function_id: int, shape: Tuple[int, ...], duration: float, backend: str) -> CompileEvent:
+    def _create_recompile_event(
+        self, function_id: int, shape: Tuple[int, ...], duration: float, backend: str
+    ) -> CompileEvent:
         return CompileEvent(
             event_type=CompileEventType.RECOMPILE,
             timestamp=time.time(),
@@ -304,7 +308,7 @@ class CompilationCounter:
     def emit_metrics(self) -> Dict[str, Any]:
         """Emit metrics and reset timer."""
         with self._lock:
-            self._last_emit: float = time.time()
+            self._last_emit = time.time()
             return self.get_summary()
 
     def reset(self) -> None:

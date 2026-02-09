@@ -68,7 +68,7 @@ class StatsAPIServer:
         return {"data": {}, "status": 200}
 
     def get_api_docs(self) -> str:
-        docs = {
+        docs: dict[str, Any] = {
             "openapi": "3.0.0",
             "info": {"title": "Stats API", "version": "1.0.0"},
             "paths": {},

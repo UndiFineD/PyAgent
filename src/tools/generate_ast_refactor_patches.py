@@ -35,7 +35,7 @@ def load_bandit_results():
 
 
 def top_files_from_bandit(results: dict, top_n: int = 30) -> list[str]:
-    files = {}
+    files: dict[str, int] = {}
     for r in results.get('results', []):
         fn = r.get('filename')
         sev = r.get('issue_severity', 'LOW').upper()

@@ -23,7 +23,6 @@ from _thread import LockType
 from argparse import Namespace
 import ast
 import functools
- 
 import json
 import re
 import threading
@@ -31,7 +30,7 @@ import time
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, cast
 
 
 @dataclass
@@ -200,6 +199,7 @@ class RustProfiler:
         return cls._instance
 
     _initialized: bool = False
+
     def __init__(self) -> None:
         if self._initialized:
             return
@@ -289,10 +289,18 @@ class RustProfiler:
         called_funcs: dict[str, FunctionStats] = {k: v for k, v in stats.items() if v.call_count > 0}
 
         # Sort by total time
-        by_time: list[tuple[str, FunctionStats]] = sorted(called_funcs.items(), key=lambda x: x[1].total_time_ns, reverse=True)
+        by_time: list[tuple[str, FunctionStats]] = sorted(
+            called_funcs.items(),
+            key=lambda x: x[1].total_time_ns,
+            reverse=True
+        )
 
         # Sort by call count
-        by_calls: list[tuple[str, FunctionStats]] = sorted(called_funcs.items(), key=lambda x: x[1].call_count, reverse=True)
+        by_calls: list[tuple[str, FunctionStats]] = sorted(
+            called_funcs.items(),
+            key=lambda x: x[1].call_count,
+            reverse=True
+        )
 
         total_calls: int = sum(s.call_count for s in called_funcs.values())
         total_time_ms: float | int = sum(s.total_time_ms for s in called_funcs.values())
@@ -467,7 +475,7 @@ class RustUsageScanner:
 
     def scan_directory(self, directory: Path, recursive: bool = True) -> dict[str, Any]:
         """Scan a directory for Rust function usage."""
-        results = {
+        results: dict[str, Any] = {
             "files_scanned": 0,
             "files_with_rust": 0,
             "function_usage": defaultdict(lambda: {"count": 0, "locations": []}),
@@ -485,9 +493,11 @@ class RustUsageScanner:
             if findings:
                 results["files_with_rust"] += 1
                 for func_name, lines in findings.items():
-                    results["function_usage"][func_name]["count"] += len(lines)
+                    # Explicitly cast to avoid mypy object indexing issues with defaultdict values
+                    usage_info = cast(dict[str, Any], results["function_usage"][func_name])
+                    usage_info["count"] += len(lines)
                     for line in lines:
-                        results["function_usage"][func_name]["locations"].append(
+                        usage_info["locations"].append(
                             f"{filepath.relative_to(directory)}:{line}"
                         )
 
@@ -523,14 +533,16 @@ class RustUsageScanner:
                 "src_files_with_rust": src_results["files_with_rust"],
                 "test_files_scanned": tests_results["files_scanned"],
                 "test_files_with_rust": tests_results["files_with_rust"],
-                "total_rust_functions": len(self.profiler.RUST_FUNCTIONS),
+                "total_rust_functions": len(self.profiler.RUST_FUNCTIONS_LIST),
                 "functions_in_use": len(used_funcs),
                 "functions_unused": len(unused_funcs),
             },
             "usage_by_function": dict(all_usage),
             "unused_functions": sorted(unused_funcs),
             "top_used": sorted(
-                [(str(k), int(v["src_count"] + v["test_count"])) for k, v in all_usage.items()], key=lambda x: x[1], reverse=True
+                [(str(k), int(v["src_count"] + v["test_count"])) for k, v in all_usage.items()],
+                key=lambda x: x[1],
+                reverse=True
             )[:20],
         }
 
@@ -541,7 +553,7 @@ def create_profiled_rust_core() -> Any:
     Returns a module-like object that tracks all calls.
     """
     try:
-        import rust_core as rc
+        import rust_core as rc  # type: ignore
     except ImportError:
         return None
 
@@ -557,15 +569,15 @@ def create_profiled_rust_core() -> Any:
 
                 @functools.wraps(original)
                 def profiled_func(*profiled_args, **profiled_kwargs) -> object:
-                    start: int = time.perf_counter_ns()
+                    start_ns: int = time.perf_counter_ns()
                     try:
                         result: object = original(*profiled_args, **profiled_kwargs)
-                        elapsed: int = time.perf_counter_ns() - start
-                        profiler.record_call(name, elapsed, used_rust=True)
+                        elapsed_ns: int = time.perf_counter_ns() - start_ns
+                        profiler.record_call(name, elapsed_ns, used_rust=True)
                         return result
                     except Exception:  # pylint: disable=broad-exception-caught, unused-variable
-                        elapsed: int = time.perf_counter_ns() - start
-                        profiler.record_call(name, elapsed, used_rust=False)
+                        elapsed_ns = time.perf_counter_ns() - start_ns
+                        profiler.record_call(name, elapsed_ns, used_rust=False)
                         raise
 
                 return profiled_func

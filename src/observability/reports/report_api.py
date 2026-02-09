@@ -98,5 +98,5 @@ class ReportAPI:
         try:
             path.write_text(content, encoding="utf-8")
             return True
-        except (IOError, OSError, UnicodeEncodeError) as _e:
+        except (IOError, OSError, UnicodeEncodeError):
             return False

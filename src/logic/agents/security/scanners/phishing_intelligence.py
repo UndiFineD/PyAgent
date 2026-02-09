@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
 import aiohttp
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
+
 
 class PhishingIntelligence:
     """Intelligence engine for phishing site detection and simulated phishing."""
@@ -27,12 +27,13 @@ class PhishingIntelligence:
         """Check if a domain is a known phishing site using Phisherman."""
         if not self.session:
             self.session = aiohttp.ClientSession()
-        
+
         try:
             async with self.session.get(f"{self.phisherman_api}{domain}", timeout=10) as resp:
                 if resp.status == 200:
-                    return await resp.json()
-        except:
+                    data: Dict[str, Any] = await resp.json()
+                    return data
+        except Exception:
             pass
         return {}
 

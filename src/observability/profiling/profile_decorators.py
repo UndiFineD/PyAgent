@@ -33,7 +33,7 @@ import time
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable, Iterator, ParamSpec, TypeVar
+from typing import Any, Callable, Iterator, ParamSpec, TypeVar, cast
 
 P = ParamSpec("P")
 R = TypeVar("R")
@@ -117,12 +117,14 @@ def cprofile_context(
         result.stats = stats
 
         # Count total calls
-        for (filename, line, name), (cc, nc, tt, ct, callers) in stats.stats.items():
+        # Access pstats internal dict which is often missing from mypy stubs
+        raw_stats = getattr(stats, "stats", {})
+        for (filename, line, name), (cc, nc, tt, ct, callers) in raw_stats.items():
             result.call_count += nc
 
         # Extract top functions by cumulative time
         stats.sort_stats("cumulative")
-        for (filename, line, name), (cc, nc, tt, ct, callers) in list(stats.stats.items())[:limit]:
+        for (filename, line, name), (cc, nc, tt, ct, callers) in list(raw_stats.items())[:limit]:
             func_name = f"{name} ({Path(filename).name}:{line})"
             result.top_functions.append((func_name, ct))
 
@@ -176,7 +178,7 @@ def cprofile(
 
 
 @contextmanager
-def timer_context(name: str = "operation") -> Iterator[dict]:
+def timer_context(name: str = "operation") -> Iterator[dict[str, Any]]:
     """
     Simple timing context manager.
 
@@ -191,7 +193,7 @@ def timer_context(name: str = "operation") -> Iterator[dict]:
         ...     data = load_data()
         >>> print(f"Took {timing['elapsed_ms']:.2f}ms")
     """
-    timing = {"name": name, "start": 0.0, "end": 0.0, "elapsed_seconds": 0.0, "elapsed_ms": 0.0}
+    timing: dict[str, Any] = {"name": name, "start": 0.0, "end": 0.0, "elapsed_seconds": 0.0, "elapsed_ms": 0.0}
     timing["start"] = time.perf_counter()
     try:
         yield timing

@@ -35,7 +35,6 @@ from types import TracebackType
 from typing import Iterator, Optional
 
 
-
 @dataclass
 class MemorySnapshot:
     """
@@ -271,7 +270,7 @@ class GCDebugger:
             if phase == "start":
                 self._gc_start_time = time.time()
             elif phase == "stop":
-                elapsed_ms: gc.Any | float = (time.time() - getattr(self, "_gc_start_time", time.time())) * 1000
+                elapsed_ms: float = (time.time() - getattr(self, "_gc_start_time", time.time())) * 1000
 
                 self.total_collections += 1
                 self.total_collected += info.get("collected", 0)
@@ -347,7 +346,7 @@ def freeze_gc_heap() -> int:
     """
     gc.collect()  # Full collection first
     gc.freeze()
-    return len(gc.get_freeze_count()) if hasattr(gc, "get_freeze_count") else -1
+    return gc.get_freeze_count() if hasattr(gc, "get_freeze_count") else -1
 
 
 def unfreeze_gc_heap() -> None:

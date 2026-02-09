@@ -227,8 +227,9 @@ class APTSimulationCore(BaseCore):
 
         return sorted(results, key=lambda x: x.confidence, reverse=True)
 
-    async def _analyze_group_techniques(self, apt_group: APTGroup,
-                                      indicators: Dict[str, Any]) -> APTSimulationResult:
+    async def _analyze_group_techniques(
+        self, apt_group: APTGroup, indicators: Dict[str, Any]
+    ) -> APTSimulationResult:
         """Analyze indicators against a specific APT group's techniques."""
         techniques_found = []
         c2_channels = []
@@ -283,8 +284,9 @@ class APTSimulationCore(BaseCore):
             confidence=confidence
         )
 
-    def _matches_file_indicators(self, file_info: Dict[str, Any],
-                               group_indicators: Dict[str, Any]) -> bool:
+    def _matches_file_indicators(
+        self, file_info: Dict[str, Any], group_indicators: Dict[str, Any]
+    ) -> bool:
         """Check if file matches APT group indicators."""
         if 'file_types' in group_indicators:
             file_extension = file_info.get('extension', '').lower()
@@ -292,8 +294,9 @@ class APTSimulationCore(BaseCore):
                 return True
         return False
 
-    def _analyze_c2_traffic(self, network_info: Dict[str, Any],
-                          group_indicators: Dict[str, Any]) -> List[str]:
+    def _analyze_c2_traffic(
+        self, network_info: Dict[str, Any], group_indicators: Dict[str, Any]
+    ) -> List[str]:
         """Analyze network traffic for C2 patterns."""
         c2_matches = []
 
@@ -313,8 +316,9 @@ class APTSimulationCore(BaseCore):
 
         return list(set(c2_matches))
 
-    def _matches_behavior_indicators(self, behavior: Dict[str, Any],
-                                   group_indicators: Dict[str, Any]) -> bool:
+    def _matches_behavior_indicators(
+        self, behavior: Dict[str, Any], group_indicators: Dict[str, Any]
+    ) -> bool:
         """Check if behavior matches APT group indicators."""
         if 'registry_keys' in group_indicators:
             registry_key = behavior.get('registry_key', '')
@@ -371,8 +375,9 @@ class APTSimulationCore(BaseCore):
 
         return simulation
 
-    def _generate_attack_chain(self, apt_group: APTGroup,
-                             target_profile: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def _generate_attack_chain(
+        self, apt_group: APTGroup, target_profile: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
         """Generate a simulated attack chain based on APT group techniques."""
         chain = []
 
@@ -483,7 +488,7 @@ class APTSimulationCore(BaseCore):
         Returns:
             Analysis results with identified C2 channels
         """
-        analysis_results = {
+        analysis_results: Dict[str, Any] = {
             'identified_c2': [],
             'suspicious_traffic': [],
             'confidence_scores': {},
@@ -513,8 +518,10 @@ class APTSimulationCore(BaseCore):
 
         return analysis_results
 
-    def _analyze_traffic_against_profile(self, sample: Dict[str, Any],
-                                       profile: C2Profile) -> float:
+
+    def _analyze_traffic_against_profile(
+        self, sample: Dict[str, Any], profile: C2Profile
+    ) -> float:
         """Analyze a traffic sample against a C2 profile."""
         confidence = 0.0
         url = sample.get('url', '')

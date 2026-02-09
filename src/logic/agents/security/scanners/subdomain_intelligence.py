@@ -14,17 +14,23 @@
 
 import asyncio
 import aiohttp
-import json
 import re
-from typing import List, Set, Dict, Optional
-from src.core.base.logic.logger import logger
+import logging
+from typing import List, Set, Optional
+
+
+logger = logging.getLogger(__name__)
+
 
 class SubdomainIntelligence:
     """Unified engine for passive subdomain discovery using multiple OSINT sources."""
 
     def __init__(self, session: Optional[aiohttp.ClientSession] = None):
         self.session = session
-        self.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        self.user_agent = (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        )
 
     async def _get_session(self) -> aiohttp.ClientSession:
         if self.session is None or self.session.closed:

@@ -95,4 +95,4 @@ class ReportLocalizer:
             locale: New locale.
         """
 
-        self.current_locale: LocaleCode = locale
+        self.current_locale = locale

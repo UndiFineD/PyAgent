@@ -16,11 +16,12 @@
 # Based on patterns from ACE_plus repository
 
 import asyncio
-from typing import Dict, List, Optional, Any, Union
+from typing import Dict, List, Optional, Any, Union, cast
 from dataclasses import dataclass, field
 from datetime import datetime
 
 from src.core.base.logic.core.base_core import BaseCore
+from src.core.base.models.communication_models import CascadeContext
 
 
 @dataclass
@@ -59,7 +60,7 @@ class ContentTemplate:
 class AIContentEditorCore(BaseCore):
     """
     AI Content Editor Core for instruction-based content generation and editing.
-    
+
     Provides capabilities for multi-modal content creation, editing, and refinement
     using instruction-based approaches similar to advanced AI content editors.
     """
@@ -164,10 +165,10 @@ class AIContentEditorCore(BaseCore):
     ) -> ContentEditResult:
         """
         Process a content editing request
-        
+
         Args:
             request: Content editing request
-            
+
         Returns:
             Content editing result
         """
@@ -260,10 +261,18 @@ class AIContentEditorCore(BaseCore):
         template: Optional[ContentTemplate]
     ) -> str:
         """Process text content editing"""
+        # Ensure input content is string
+        input_content = ""
+        if request.input_content:
+            if isinstance(request.input_content, bytes):
+                input_content = request.input_content.decode(errors="replace")
+            else:
+                input_content = request.input_content
+
         if template:
             # Use template instruction
             instruction = template.instruction_template.format(
-                content=request.input_content or "",
+                content=input_content,
                 instruction=request.instruction
             )
         else:
@@ -272,14 +281,13 @@ class AIContentEditorCore(BaseCore):
         # Mock text processing - in real implementation, this would call an AI model
         if "summarize" in instruction.lower():
             # Simple summarization logic
-            content = request.input_content or ""
-            sentences = content.split('.')
-            summary = '. '.join(sentences[:3]) + '.' if len(sentences) > 3 else content
+            sentences = input_content.split('.')
+            summary = '. '.join(sentences[:3]) + '.' if len(sentences) > 3 else input_content
             return f"Summary: {summary}"
         elif "enhance" in instruction.lower():
-            return f"Enhanced: {request.input_content or ''} [Quality improvements applied]"
+            return f"Enhanced: {input_content} [Quality improvements applied]"
         else:
-            return f"Processed: {request.input_content or ''} according to: {instruction}"
+            return f"Processed: {input_content} according to: {instruction}"
 
     async def _process_image_content(
         self,
@@ -290,7 +298,9 @@ class AIContentEditorCore(BaseCore):
         # Mock image processing - in real implementation, this would use diffusion models
         if request.input_content:
             # If input is provided, return modified version
-            return request.input_content + b"[IMAGE_ENHANCED]"
+            input_bytes = request.input_content if isinstance(request.input_content, bytes) \
+                else str(request.input_content).encode()
+            return input_bytes + b"[IMAGE_ENHANCED]"
         else:
             # Generate new image based on instruction
             return f"[GENERATED_IMAGE:{request.instruction}]".encode()
@@ -301,8 +311,13 @@ class AIContentEditorCore(BaseCore):
         template: Optional[ContentTemplate]
     ) -> str:
         """Process code content editing"""
-        code = request.input_content or ""
-        
+        code = ""
+        if request.input_content:
+            if isinstance(request.input_content, bytes):
+                code = request.input_content.decode(errors="replace")
+            else:
+                code = request.input_content
+
         if "optimize" in request.instruction.lower():
             # Simple code optimization patterns
             optimized = code.replace("    ", "  ")  # Reduce indentation
@@ -317,24 +332,30 @@ class AIContentEditorCore(BaseCore):
         template: Optional[ContentTemplate]
     ) -> str:
         """Process generic content types"""
-        return f"Processed {request.content_type} content: {request.input_content or ''}"
+        content = ""
+        if request.input_content:
+            if isinstance(request.input_content, bytes):
+                content = request.input_content.decode(errors="replace")
+            else:
+                content = str(request.input_content)
+        return f"Processed {request.content_type} content: {content}"
 
     async def _calculate_confidence(self, result_content: Any, request: ContentEditRequest) -> float:
         """Calculate confidence score for the result"""
         # Mock confidence calculation
         base_confidence = 0.8
-        
+
         # Adjust based on content length/complexity
         if isinstance(result_content, str):
             if len(result_content) > 100:
                 base_confidence += 0.1
             if len(result_content) < 20:
                 base_confidence -= 0.2
-        
+
         # Adjust based on request complexity
         if len(request.instruction) > 50:
             base_confidence -= 0.1
-        
+
         return max(0.0, min(1.0, base_confidence))
 
     async def add_template(self, template: ContentTemplate) -> None:
@@ -361,19 +382,19 @@ class AIContentEditorCore(BaseCore):
     ) -> List[ContentEditResult]:
         """
         Get content editing history
-        
+
         Args:
             limit: Maximum number of results
             content_type: Filter by content type
-            
+
         Returns:
             List of edit results
         """
         history = self.edit_history
-        
+
         if content_type:
             history = [h for h in history if h.content_type == content_type]
-        
+
         return history[-limit:] if limit > 0 else history
 
     async def generate_content_report(
@@ -382,18 +403,18 @@ class AIContentEditorCore(BaseCore):
     ) -> Dict[str, Any]:
         """
         Generate a report on content editing activities
-        
+
         Args:
             time_range_hours: Hours to look back
-            
+
         Returns:
             Activity report
         """
         cutoff_time = datetime.now().replace(hour=datetime.now().hour - time_range_hours)
-        
+
         recent_edits = [e for e in self.edit_history if e.timestamp > cutoff_time]
-        
-        report = {
+
+        report: Dict[str, Any] = {
             "total_edits": len(recent_edits),
             "content_types": {},
             "templates_used": {},
@@ -406,17 +427,19 @@ class AIContentEditorCore(BaseCore):
             # Calculate statistics
             total_confidence = sum(e.confidence_score for e in recent_edits)
             total_time = sum(e.processing_time for e in recent_edits)
-            
+
             report["average_confidence"] = total_confidence / len(recent_edits)
             report["average_processing_time"] = total_time / len(recent_edits)
-            
+
             # Count by content type
             for edit in recent_edits:
-                report["content_types"][edit.content_type] = report["content_types"].get(edit.content_type, 0) + 1
-                
-                template = edit.metadata.get("template_used")
-                if template:
-                    report["templates_used"][template] = report["templates_used"].get(template, 0) + 1
+                content_types = cast(Dict[str, int], report["content_types"])
+                content_types[edit.content_type] = content_types.get(edit.content_type, 0) + 1
+
+                template_name = edit.metadata.get("template_used")
+                if template_name:
+                    templates_used = cast(Dict[str, int], report["templates_used"])
+                    templates_used[str(template_name)] = templates_used.get(str(template_name), 0) + 1
 
         return report
 
@@ -439,7 +462,7 @@ class AIContentEditorCore(BaseCore):
     async def import_templates(self, templates_data: Dict[str, Any]) -> None:
         """Import templates from dictionary"""
         self.templates.clear()
-        
+
         for template_data in templates_data.get("templates", []):
             template = ContentTemplate(
                 name=template_data["name"],
@@ -450,7 +473,7 @@ class AIContentEditorCore(BaseCore):
                 examples=template_data.get("examples", [])
             )
             self.templates[template.name] = template
-        
+
         self.logger.info(f"Imported {len(self.templates)} templates")
 
     async def cleanup(self) -> None:

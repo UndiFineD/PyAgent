@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import re
-from typing import List, Dict, Any
+from typing import Dict, Any
+
 
 class MessengerIntelligence:
     """
@@ -28,7 +28,7 @@ class MessengerIntelligence:
         """Returns public Telegram endpoints for OSINT."""
         return {
             "profile": f"https://t.me/{username}",
-            "api_info": f"https://api.telegram.org/bot<token>/getMe",
+            "api_info": "https://api.telegram.org/bot<token>/getMe",
             "proxy_list": "https://t.me/s/ProxyMTProto"
         }
 
@@ -45,10 +45,12 @@ class MessengerIntelligence:
         return {
             "method": "messages.getNearbyUsers",
             "required_fields": ["lat", "long"],
-            "description": "Used to find users within a specific radius. Can be used for trilateration by spoofing 3 locations."
+            "description": (
+                "Used to find users within a specific radius. "
+                "Can be used for trilateration by spoofing 3 locations."
+            )
         }
 
     def audit_bot_token(self, token: str) -> str:
         """Generates a command to verify a Telegram bot token."""
-        return f"curl -s f'https://api.telegram.org/bot{token}/getMe'"
-
+        return f"curl -s https://api.telegram.org/bot{token}/getMe"

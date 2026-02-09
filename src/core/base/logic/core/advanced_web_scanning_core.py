@@ -70,40 +70,52 @@ class AdvancedWebScanningCore:
         import urllib3
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-    async def _make_request(self, url: str, method: str = "GET", headers: Optional[Dict[str, str]] = None, 
-                           timeout: int = 10) -> Optional[requests.Response]:
+    async def _make_request(
+        self,
+        url: str,
+        method: str = "GET",
+        headers: Optional[Dict[str, str]] = None,
+        timeout: int = 10
+    ) -> Any:
         """
         Make an async HTTP request.
-        
+
         Args:
             url: URL to request
             method: HTTP method
             headers: Request headers
             timeout: Request timeout
-            
+
         Returns:
             Response object or None if failed
         """
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.request(method, url, headers=headers, timeout=aiohttp.ClientTimeout(total=timeout)) as response:
+                async with session.request(
+                    method,
+                    url,
+                    headers=headers,
+                    timeout=aiohttp.ClientTimeout(total=timeout)
+                ) as response:
                     # Convert aiohttp response to requests-like response for compatibility
                     class MockResponse:
+                        """Mock response object for aiohttp results"""
                         def __init__(self, aio_response):
                             self.status_code = aio_response.status
                             self.headers = dict(aio_response.headers)
-                            self.text = None
+                            self.text = ""
                             self.url = str(aio_response.url)
-                            
+
                         async def read_text(self):
-                            if self.text is None:
+                            """Read response text"""
+                            if not self.text:
                                 self.text = await response.text()
                             return self.text
-                    
+
                     mock_response = MockResponse(response)
                     await mock_response.read_text()
                     return mock_response
-                    
+
         except Exception as e:
             self.logger.error(f"Request failed for {url}: {e}")
             return None
@@ -114,7 +126,7 @@ class AdvancedWebScanningCore:
 
         Based on active-scan-plus-plus host header checks.
         """
-        results = []
+        results: List[ScanResult] = []
 
         # Parse the base URL
         parsed = urlparse(base_url)
@@ -168,7 +180,10 @@ class AdvancedWebScanningCore:
                         vulnerability_type="host_header_attack",
                         severity="medium",
                         description=test.description,
-                        evidence=f"Host: {test.host_value} - Reflected: {host_reflected}, Content Changed: {content_changed}",
+                        evidence=(
+                            f"Host: {test.host_value} - Reflected: {host_reflected}, "
+                            f"Content Changed: {content_changed}"
+                        ),
                         request_details={"headers": headers},
                         response_details={
                             "status_code": response.status_code,
@@ -189,7 +204,7 @@ class AdvancedWebScanningCore:
 
         Based on active-scan-plus-plus code injection checks.
         """
-        results = []
+        results: List[ScanResult] = []
 
         # Code injection payloads
         payloads = [
@@ -244,7 +259,7 @@ class AdvancedWebScanningCore:
 
         Based on active-scan-plus-plus Shellshock detection.
         """
-        results = []
+        results: List[ScanResult] = []
 
         shellshock_payloads = [
             "() { :; }; echo 'Shellshock vulnerable'",
@@ -287,7 +302,7 @@ class AdvancedWebScanningCore:
 
         Based on active-scan-plus-plus transformation detection.
         """
-        results = []
+        results: List[ScanResult] = []
 
         transformation_tests = [
             {
@@ -330,7 +345,11 @@ class AdvancedWebScanningCore:
 
         return results
 
-    async def scan_http_redirects_ssrf(self, base_url: str, redirect_urls: Optional[List[str]] = None) -> List[ScanResult]:
+    async def scan_http_redirects_ssrf(
+        self,
+        base_url: str,
+        redirect_urls: Optional[List[str]] = None
+    ) -> List[ScanResult]:
         """
         Test for HTTP redirect-based SSRF vulnerabilities.
 
@@ -344,7 +363,7 @@ class AdvancedWebScanningCore:
         Returns:
             List of SSRF vulnerability findings
         """
-        results = []
+        results: List[ScanResult] = []
 
         if not redirect_urls:
             # Default test URLs that might be vulnerable to SSRF
@@ -402,7 +421,10 @@ class AdvancedWebScanningCore:
                                 url=test_url_params,
                                 vulnerability_type="HTTP_Redirect_SSRF_Query",
                                 severity="high",
-                                description=f"HTTP {redirect_code} redirect via query parameters to internal service",
+                                description=(
+                                    f"HTTP {redirect_code} redirect via query parameters "
+                                    "to internal service"
+                                ),
                                 evidence=f"Redirected to: {location_header}",
                                 request_details={
                                     "method": "GET",
@@ -461,7 +483,11 @@ class AdvancedWebScanningCore:
 
         return False
 
-    async def comprehensive_scan(self, base_url: str, scan_types: Optional[List[str]] = None) -> Dict[str, List[ScanResult]]:
+    async def comprehensive_scan(
+        self,
+        base_url: str,
+        scan_types: Optional[List[str]] = None
+    ) -> Dict[str, List[ScanResult]]:
         """
         Perform a comprehensive web application scan.
 
@@ -473,9 +499,15 @@ class AdvancedWebScanningCore:
             Dictionary of scan results by type
         """
         if scan_types is None:
-            scan_types = ["host_header", "code_injection", "shellshock", "input_transformation", "http_redirect_ssrf"]
+            scan_types = [
+                "host_header",
+                "code_injection",
+                "shellshock",
+                "input_transformation",
+                "http_redirect_ssrf"
+            ]
 
-        results = {}
+        results: Dict[str, List[ScanResult]] = {}
 
         # Discover URLs to scan (basic crawling)
         urls_to_scan = await self.discover_urls(base_url)
@@ -539,10 +571,10 @@ class AdvancedWebScanningCore:
         total_findings = sum(len(results) for results in scan_results.values())
 
         # Count by severity
-        severity_counts = {"critical": 0, "high": 0, "medium": 0, "low": 0, "info": 0}
-        vulnerability_types = {}
+        severity_counts: Dict[str, int] = {"critical": 0, "high": 0, "medium": 0, "low": 0, "info": 0}
+        vulnerability_types: Dict[str, int] = {}
 
-        for scan_type, results in scan_results.items():
+        for results in scan_results.values():
             for result in results:
                 severity_counts[result.severity] = severity_counts.get(result.severity, 0) + 1
                 vuln_type = result.vulnerability_type

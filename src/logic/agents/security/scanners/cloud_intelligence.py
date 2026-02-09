@@ -12,11 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import re
 import asyncio
 import aiohttp
 from typing import List, Dict, Any, Optional
-from urllib.parse import urljoin
+
 
 class CloudIntelligence:
     """
@@ -79,7 +78,7 @@ class CloudIntelligence:
         for pattern in self.BUCKET_PATTERNS:
             url = "https://" + pattern.format(target=target, region="us-east-1")
             tasks.append(self.check_bucket_accessibility(url))
-        
+
         results = await asyncio.gather(*tasks)
         return results
 

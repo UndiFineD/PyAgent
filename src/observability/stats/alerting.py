@@ -115,7 +115,7 @@ class RetentionEnforcer:
         actual_ts: float | None = timestamp if timestamp is not None else ts
         actual_val = value if value is not None else val
         if actual_ts is None:
-            actual_ts: float = datetime.now().timestamp()
+            actual_ts = datetime.now().timestamp()
 
         if name not in self.data:
             self.data[name] = []
@@ -144,7 +144,7 @@ class RetentionEnforcer:
                 for m in matching:
                     orig = len(self.data[m])
                     if pol.retention_days > 0:
-                        cutoff: float = now - (pol.retention_days * 86400)
+                        cutoff = now - (pol.retention_days * 86400)
                         self.data[m] = [d for d in self.data[m] if d["timestamp"] > cutoff]
                     removed += orig - len(self.data[m])
         return removed

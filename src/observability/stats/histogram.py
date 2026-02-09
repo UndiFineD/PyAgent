@@ -102,15 +102,15 @@ class Histogram:
             log_step: float = (log_max - log_min) / self._num_buckets
 
             for i in range(self._num_buckets):
-                lower: float = 10 ** (log_min + i * log_step)
-                upper: float = 10 ** (log_min + (i + 1) * log_step)
+                lower = 10 ** (log_min + i * log_step)
+                upper = 10 ** (log_min + (i + 1) * log_step)
                 buckets.append(HistogramBucket(lower_bound=lower, upper_bound=upper))
         else:
             step: float = (self._max_value - self._min_value) / self._num_buckets
 
             for i in range(self._num_buckets):
-                lower: float = self._min_value + i * step
-                upper: float = self._min_value + (i + 1) * step
+                lower = self._min_value + i * step
+                upper = self._min_value + (i + 1) * step
                 buckets.append(HistogramBucket(lower_bound=lower, upper_bound=upper))
 
         return buckets
@@ -342,10 +342,10 @@ class ExponentialHistogram:
             if value == 0:
                 self._zero_count += 1
             elif value > 0:
-                idx: int = self._value_to_bucket(value)
+                idx = self._value_to_bucket(value)
                 self._positive[idx] = self._positive.get(idx, 0) + 1
             else:
-                idx: int = self._value_to_bucket(-value)
+                idx = self._value_to_bucket(-value)
                 self._negative[idx] = self._negative.get(idx, 0) + 1
 
     def percentile(self, p: float) -> float:

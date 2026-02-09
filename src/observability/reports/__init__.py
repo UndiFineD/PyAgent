@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # ruff: noqa: F401
+# flake8: noqa: F401
 
 """Lazy-loading entry point for observability.reports."""
 
@@ -126,7 +127,9 @@ _LAZY_REGISTRY = {
 
 _loader = ModuleLazyLoader(_LAZY_REGISTRY)
 
+
 def __getattr__(name: str) -> Any:
     return _loader.load(name)
+
 
 __all__ = ["VERSION"] + list(_LAZY_REGISTRY.keys())

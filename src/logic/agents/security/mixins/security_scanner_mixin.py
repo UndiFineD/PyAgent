@@ -17,14 +17,18 @@
 from __future__ import annotations
 
 import re
+from typing import TYPE_CHECKING
 
 from src.core.base.common.types.security_issue_type import SecurityIssueType
 from src.core.base.common.types.security_vulnerability import \
     SecurityVulnerability
 
+if TYPE_CHECKING:
+    from src.logic.agents.security.security_core import SecurityCore
+
 # Rust acceleration imports
 try:
-    from rust_core import scan_lines_multi_pattern_rust
+    from rust_core import scan_lines_multi_pattern_rust  # type: ignore
 
     _RUST_AVAILABLE = True
 except ImportError:
@@ -34,7 +38,7 @@ except ImportError:
 class SecurityScannerMixin:
     """Mixin for content and injection scanning."""
 
-    def scan_content(self, content: str) -> list[SecurityVulnerability]:
+    def scan_content(self: SecurityCore, content: str) -> list[SecurityVulnerability]:
         """Performs a comprehensive scan of the provided content."""
         vulnerabilities = []
 

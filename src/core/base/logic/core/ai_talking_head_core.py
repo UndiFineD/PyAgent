@@ -16,11 +16,12 @@
 # Based on patterns from ACTalker repository
 
 import asyncio
+import logging
 from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from src.core.base.logic.core.base_core import BaseCore
+from src.core.base.common.base_core import BaseCore
 
 
 @dataclass
@@ -69,13 +70,14 @@ class AudioFeatures:
 class AITalkingHeadCore(BaseCore):
     """
     AI Talking Head Core for audio-visual controlled video generation.
-    
+
     Provides capabilities for generating natural talking head videos from audio,
     text, and reference images using advanced diffusion and state space models.
     """
 
     def __init__(self):
         super().__init__()
+        self.logger = logging.getLogger(f"pyagent.core.{self.name.lower()}")
         self.active_models: Dict[str, Any] = {}  # Mock model instances
         self.generation_history: List[TalkingHeadResult] = []
         self.face_alignment_cache: Dict[str, FaceAlignmentResult] = {}
@@ -144,10 +146,10 @@ class AITalkingHeadCore(BaseCore):
     ) -> TalkingHeadResult:
         """
         Generate a talking head video from the given inputs
-        
+
         Args:
             request: Talking head generation request
-            
+
         Returns:
             Generated talking head result
         """
@@ -157,23 +159,29 @@ class AITalkingHeadCore(BaseCore):
             # Step 1: Process inputs
             audio_features = await self._process_audio_input(request)
             reference_face = await self._process_reference_image(request)
-            
+
             # Step 2: Generate or synthesize audio if needed
+            audio_data: bytes = b""
             if not request.audio_data and request.text_input:
                 audio_data = await self._synthesize_audio(request.text_input, request.emotion, request.speaking_style)
                 audio_features = await self._extract_audio_features(audio_data)
-            else:
+            elif request.audio_data:
                 audio_data = request.audio_data
+            else:
+                raise ValueError("Neither audio_data nor text_input provided in request")
+
+            if audio_features is None:
+                audio_features = await self._extract_audio_features(audio_data)
 
             # Step 3: Generate lip sync animation
             lip_sync_data = await self._generate_lip_sync_animation(audio_features, reference_face)
-            
+
             # Step 4: Generate full video with head movements
             video_data = await self._generate_video_frames(lip_sync_data, reference_face, request)
-            
+
             # Step 5: Post-process and enhance video
             enhanced_video = await self._enhance_video_quality(video_data)
-            
+
             # Calculate quality metrics
             quality_score = await self._calculate_video_quality(enhanced_video, audio_data)
             processing_time = asyncio.get_event_loop().time() - start_time
@@ -198,8 +206,9 @@ class AITalkingHeadCore(BaseCore):
             # Store in history
             self.generation_history.append(result)
 
-            self.logger.info(f"Generated talking head video: {request.video_length_seconds}s, "
-                           ".2f")
+            self.logger.info(
+                f"Generated talking head video: {request.video_length_seconds}s, quality: {quality_score:.2f}"
+            )
             return result
 
         except Exception as e:
@@ -249,7 +258,7 @@ class AITalkingHeadCore(BaseCore):
 
         # Mock face alignment
         aligned_face = request.reference_image + b"[FACE_ALIGNED]"
-        
+
         # Cache the result
         alignment_result = FaceAlignmentResult(
             aligned_face=aligned_face,
@@ -258,7 +267,7 @@ class AITalkingHeadCore(BaseCore):
             confidence=0.95
         )
         self.face_alignment_cache[str(image_hash)] = alignment_result
-        
+
         return aligned_face
 
     async def _synthesize_audio(
@@ -270,8 +279,8 @@ class AITalkingHeadCore(BaseCore):
         """Synthesize audio from text with emotion and style"""
         # Mock audio synthesis
         audio_length = len(text) * 0.1  # Rough estimate
-        mock_audio = f"[SYNTHESIZED_AUDIO:{text}|emotion:{emotion}|style:{speaking_style}|length:{audio_length}s]".encode()
-        return mock_audio
+        msg = f"[SYNTHESIZED_AUDIO:{text}|emotion:{emotion}|style:{speaking_style}|length:{audio_length}s]"
+        return msg.encode()
 
     async def _extract_audio_features(self, audio_data: bytes) -> AudioFeatures:
         """Extract features from audio data"""
@@ -293,14 +302,15 @@ class AITalkingHeadCore(BaseCore):
         # Mock lip sync generation
         num_frames = int(len(audio_features.phonemes) * 5)  # 5 frames per phoneme
         frames = []
-        
+
         for i in range(num_frames):
             if reference_face:
-                frame = reference_face + f"[LIP_SYNC_FRAME_{i}|phoneme:{audio_features.phonemes[i % len(audio_features.phonemes)]}]".encode()
+                phoneme = audio_features.phonemes[i % len(audio_features.phonemes)]
+                frame = reference_face + f"[LIP_SYNC_FRAME_{i}|phoneme:{phoneme}]".encode()
             else:
                 frame = f"[GENERATED_FACE_FRAME_{i}]".encode()
             frames.append(frame)
-        
+
         return frames
 
     async def _generate_video_frames(
@@ -313,17 +323,17 @@ class AITalkingHeadCore(BaseCore):
         # Mock video generation using diffusion model
         total_frames = int(request.video_length_seconds * 25)  # 25 fps
         video_frames = []
-        
+
         for i in range(total_frames):
             if i < len(lip_sync_frames):
                 frame = lip_sync_frames[i]
             else:
                 frame = lip_sync_frames[-1] if lip_sync_frames else b"[DEFAULT_FRAME]"
-            
+
             # Add head movement and expression
             enhanced_frame = frame + f"[HEAD_POSE_{i}|emotion:{request.emotion}]".encode()
             video_frames.append(enhanced_frame)
-        
+
         # Combine frames into video
         video_data = b"[VIDEO_START]" + b"".join(video_frames) + b"[VIDEO_END]"
         return video_data
@@ -338,13 +348,13 @@ class AITalkingHeadCore(BaseCore):
         """Calculate video quality score"""
         # Mock quality calculation
         base_quality = 0.85
-        
+
         # Adjust based on data size (proxy for complexity)
         if len(video_data) > 10000:
             base_quality += 0.1
         if len(audio_data) > 1000:
             base_quality += 0.05
-        
+
         return min(1.0, base_quality)
 
     async def get_generation_history(
@@ -354,28 +364,28 @@ class AITalkingHeadCore(BaseCore):
     ) -> List[TalkingHeadResult]:
         """
         Get talking head generation history
-        
+
         Args:
             limit: Maximum number of results
             min_quality: Minimum quality score filter
-            
+
         Returns:
             List of generation results
         """
         history = self.generation_history
-        
+
         if min_quality is not None:
             history = [h for h in history if h.quality_score >= min_quality]
-        
+
         return history[-limit:] if limit > 0 else history
 
     async def analyze_face_image(self, image_data: bytes) -> FaceAlignmentResult:
         """
         Analyze a face image for alignment and pose estimation
-        
+
         Args:
             image_data: Input face image
-            
+
         Returns:
             Face analysis result
         """
@@ -399,10 +409,10 @@ class AITalkingHeadCore(BaseCore):
     async def extract_audio_emotion(self, audio_data: bytes) -> Dict[str, float]:
         """
         Extract emotion features from audio
-        
+
         Args:
             audio_data: Input audio data
-            
+
         Returns:
             Emotion probability distribution
         """
@@ -421,16 +431,16 @@ class AITalkingHeadCore(BaseCore):
     ) -> List[TalkingHeadResult]:
         """
         Generate talking head videos with different emotions
-        
+
         Args:
             base_request: Base request to modify
             emotions: List of emotions to generate
-            
+
         Returns:
             List of results for each emotion
         """
         results = []
-        
+
         for emotion in emotions:
             # Create modified request
             modified_request = TalkingHeadRequest(
@@ -442,17 +452,17 @@ class AITalkingHeadCore(BaseCore):
                 speaking_style=base_request.speaking_style,
                 parameters=base_request.parameters.copy()
             )
-            
+
             # Generate video
             result = await self.generate_talking_head(modified_request)
             results.append(result)
-        
+
         return results
 
     async def optimize_for_realtime(self, enable: bool = True) -> None:
         """
         Optimize models for real-time performance
-        
+
         Args:
             enable: Whether to enable real-time optimization
         """
@@ -465,13 +475,13 @@ class AITalkingHeadCore(BaseCore):
     async def get_performance_stats(self) -> Dict[str, Any]:
         """Get performance statistics for the talking head system"""
         total_generations = len(self.generation_history)
-        
+
         if not total_generations:
             return {"total_generations": 0, "average_quality": 0.0, "average_processing_time": 0.0}
-        
+
         avg_quality = sum(r.quality_score for r in self.generation_history) / total_generations
         avg_time = sum(r.processing_time for r in self.generation_history) / total_generations
-        
+
         return {
             "total_generations": total_generations,
             "average_quality": avg_quality,

@@ -94,14 +94,14 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         if agreement_score >= required_quorum:
             # Find the winning hash
-            from collections import defaultdict
-            hash_weights = defaultdict(float)
+            hash_weights: Dict[str, float] = {}
             for v in vote_payloads:
-                hash_weights[v["hash"]] += v["weight"]
-            
-            winning_hash = max(hash_weights, key=hash_weights.get)
+                v_hash = str(v["hash"])
+                hash_weights[v_hash] = hash_weights.get(v_hash, 0.0) + float(v["weight"])
+
+            winning_hash = max(hash_weights.keys(), key=lambda k: hash_weights[k])
             confidence = hash_weights[winning_hash] / sum(hash_weights.values())
-            
+
             return {
                 "decision": "ACCEPTED",
                 "reason": "Byzantine Quorum Reached",

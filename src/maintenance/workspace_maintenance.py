@@ -29,7 +29,9 @@ from src.maintenance.mixins.import_cleanup_mixin import ImportCleanupMixin
 from src.maintenance.mixins.header_fixer_mixin import HeaderFixerMixin
 from src.maintenance.mixins.syntax_fixer_mixin import SyntaxFixerMixin
 
+
 logger: logging.Logger = logging.getLogger(__name__)
+
 
 class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixin, SyntaxFixerMixin):
     """Consolidation of file system auditing, naming convention enforcement, and cleanup."""
@@ -60,7 +62,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
 
     def _is_excluded(self, path: str | Path) -> bool:
         p = Path(path)
-        parts: Tuple[str] = p.parts
+        parts: tuple[str, ...] = p.parts
         for part in parts:
             if part in self.DEFAULT_EXCLUSIONS:
                 return True
@@ -128,7 +130,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
                         content: str = path.read_text(encoding="utf-8")
                         if "Copyright 2026 PyAgent Authors" not in content:
                             missing.append(path)
-                    except (IOError, OSError, UnicodeDecodeError) as _e:
+                    except (IOError, OSError, UnicodeDecodeError):
                         continue
         return missing
 
@@ -164,15 +166,10 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
                         lines: List[str] = content.splitlines()
                         new_lines: List[str] = [line.rstrip() for line in lines]
                         new_content: str = "\n".join(new_lines)
-                        if not content.endswith("\n") and content != "":
-                            # Keep newline at end of file if it had one, or add one if it didn't but had content
-                            pass
-                        # To match test expectations exactly:
-                        new_content: str = "\n".join(new_lines)
                         if content.endswith("\n"):
                             new_content += "\n"
                         path.write_text(new_content, encoding="utf-8")
-                    except (IOError, OSError, UnicodeEncodeError) as _e:
+                    except (IOError, OSError, UnicodeEncodeError):
                         continue
 
     def apply_header_compliance(self) -> None:
@@ -195,7 +192,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
                 # Strip existing shebang if any
                 if content.startswith("#!"):
                     lines: List[str] = content.splitlines()
-                    content: str = "\n".join(lines[1:])
+                    content = "\n".join(lines[1:])
                 path.write_text(self.STANDARD_HEADER + "\n" + content, encoding="utf-8")
         except (IOError, OSError, UnicodeDecodeError, UnicodeEncodeError) as e:
             logger.error(f"Error applying header to {path}: {e}")
@@ -216,15 +213,15 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
             if '"""' not in content and "'''" not in content:
                 # Add a simple docstring after header
                 lines: List[str] = content.splitlines()
-                header_end = 0
+                header_end_idx = 0
                 for i, line in enumerate(lines):
                     if "limitations under the License." in line:
-                        header_end: int = i + 1
+                        header_end_idx = i + 1
                         break
 
                 module_name: str = path.stem.replace("_", " ").title()
                 docstring: str = f'\n"""\n{module_name} module.\n"""\n'
-                new_content: str = "\n".join(lines[:header_end]) + docstring + "\n".join(lines[header_end:])
+                new_content: str = "\n".join(lines[:header_end_idx]) + docstring + "\n".join(lines[header_end_idx:])
                 path.write_text(new_content, encoding="utf-8")
         except (IOError, OSError, UnicodeEncodeError) as e:
             logger.error(f"Error applying docstring to {path}: {e}")

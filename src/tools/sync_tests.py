@@ -1,10 +1,24 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import glob
-import os
 from pathlib import Path
+
 
 CLEANED_DIR = Path(r"C:\DEV\PyAgent\src\external_candidates\cleaned")
 TESTS_DIR = Path(r"C:\DEV\PyAgent\tests\unit")
+
 
 def main():
     modules = glob.glob(str(CLEANED_DIR / "*.py"))
@@ -13,7 +27,7 @@ def main():
     for mod_path in modules:
         mod_name = Path(mod_path).name
         test_path = TESTS_DIR / f"test_auto_{mod_name}"
-        
+
         # Simple test content pointing to 'cleaned'
         content = f'''
 import importlib.util
@@ -29,6 +43,7 @@ spec.loader.exec_module(mod)
             f.write(content)
 
     print("Regenerated all tests.")
+
 
 if __name__ == "__main__":
     main()

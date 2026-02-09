@@ -71,10 +71,13 @@ def run_checks_for_sha(args: tuple[str, str]) -> tuple[str, dict]:
         if exe:
             cmd = ['bandit', '-r', str(p), '-f', 'json', '-o', str(bandit_out)]
         else:
-            py = sys.executable or shutil.which('python')
-            cmd = [py, '-m', 'bandit', '-r', str(p), '-f', 'json', '-o', str(bandit_out)]
+            py_exe = sys.executable or shutil.which('python') or 'python'
+            cmd = [py_exe, '-m', 'bandit', '-r', str(p), '-f', 'json', '-o', str(bandit_out)]
         proc = subprocess.run(cmd, capture_output=True, text=True)
-        results['bandit'] = {'code': proc.returncode, 'out': str(bandit_out) if proc.returncode == 0 else (proc.stderr or proc.stdout)}
+        results['bandit'] = {
+            'code': proc.returncode,
+            'out': str(bandit_out) if proc.returncode == 0 else (proc.stderr or proc.stdout)
+        }
     except Exception as e:
         results['bandit'] = {'code': 1, 'out': str(e)}
     # semgrep
@@ -83,10 +86,13 @@ def run_checks_for_sha(args: tuple[str, str]) -> tuple[str, dict]:
         if exe:
             cmd = ['semgrep', '--config', 'auto', '--json', '--output', str(semgrep_out), str(p)]
         else:
-            py = sys.executable or shutil.which('python')
-            cmd = [py, '-m', 'semgrep.cli', '--config', 'auto', '--json', '--output', str(semgrep_out), str(p)]
+            py_exe = sys.executable or shutil.which('python') or 'python'
+            cmd = [py_exe, '-m', 'semgrep.cli', '--config', 'auto', '--json', '--output', str(semgrep_out), str(p)]
         proc = subprocess.run(cmd, capture_output=True, text=True)
-        results['semgrep'] = {'code': proc.returncode, 'out': str(semgrep_out) if proc.returncode == 0 else (proc.stderr or proc.stdout)}
+        results['semgrep'] = {
+            'code': proc.returncode,
+            'out': str(semgrep_out) if proc.returncode == 0 else (proc.stderr or proc.stdout)
+        }
     except Exception as e:
         results['semgrep'] = {'code': 1, 'out': str(e)}
     # python-only checks (AST)
@@ -212,6 +218,7 @@ def main():
     cache_dir = ROOT / '.external' / 'cache'
     cache_dir.mkdir(parents=True, exist_ok=True)
     # simple helper to hash small files
+
     def file_sha(p: Path) -> str:
         h = hashlib.sha256()
         with p.open('rb') as f:
@@ -236,7 +243,16 @@ def main():
         report_changed = True
     # 1) batch extract (permissive)
     if report_changed:
-        run([sys.executable, str(SCRIPTS / 'batch_extract.py'), '--report', str(REPORT), '--chunk-size', '500', '--workers', '4', '--allow-top-level', '--allow-no-defs', '--allow-banned-imports'])
+        extract_cmd = [
+            sys.executable, str(SCRIPTS / 'batch_extract.py'),
+            '--report', str(REPORT),
+            '--chunk-size', '500',
+            '--workers', '4',
+            '--allow-top-level',
+            '--allow-no-defs',
+            '--allow-banned-imports'
+        ]
+        run(extract_cmd)
         # update last_report.sha
         try:
             if REPORT.exists():
@@ -248,7 +264,8 @@ def main():
     # collect extracted files and update refactor report
     # Build extracted list: prefer filesystem scan only if report changed; otherwise use DB manifest
     if report_changed:
-        extracted = [p for p in (EXTRACT_TARGET.rglob('*.py') if EXTRACT_TARGET.exists() else []) if not _is_init(p)]
+        files_gen = EXTRACT_TARGET.rglob('*.py') if EXTRACT_TARGET.exists() else []
+        extracted = [p for p in files_gen if not _is_init(p)]
     else:
         # use DB manifest (paths) to avoid expensive rglob
         cur = None
@@ -268,7 +285,8 @@ def main():
             else:
                 extracted = []
         except Exception:
-            extracted = [p for p in (EXTRACT_TARGET.rglob('*.py') if EXTRACT_TARGET.exists() else []) if not _is_init(p)]
+            files_gen = EXTRACT_TARGET.rglob('*.py') if EXTRACT_TARGET.exists() else []
+            extracted = [p for p in files_gen if not _is_init(p)]
     try:
         update_refactor_report(REPORT, extracted)
     except Exception as e:
@@ -309,7 +327,6 @@ def main():
 
     changed_files: list[Path] = []
     hash_map: dict[str, list[Path]] = {}
-    _sha_cache: dict[str, str] = {}
 
     # Collect files that need hashing (changed/new)
     to_hash: list[tuple[Path, str, float, int]] = []  # (path, rel, mtime, size)
@@ -325,7 +342,11 @@ def main():
             # mark last_seen update in db_rows to avoid immediate write
             db_rows[rel] = (row[0], row[1], row[2])
             # queue update for last_seen
-            cur.execute('UPDATE files SET last_seen = ? WHERE path = ?', (int(datetime.utcnow().timestamp()), rel))
+            now_ts = int(datetime.utcnow().timestamp())
+            cur.execute(
+                'UPDATE files SET last_seen = ? WHERE path = ?',
+                (now_ts, rel)
+            )
             continue
         # changed/new -> enqueue for hashing later
         to_hash.append((p, rel, st.st_mtime, st.st_size))
@@ -352,11 +373,13 @@ def main():
                 hash_map.setdefault(s, []).append(p)
                 # commit in batches to reduce transaction overhead
                 if len(batch) >= 1000:
-                    cur.executemany('REPLACE INTO files (path, mtime, size, sha256, last_seen) VALUES (?, ?, ?, ?, ?)', batch)
+                    replace_sql = 'REPLACE INTO files (path, mtime, size, sha256, last_seen) VALUES (?, ?, ?, ?, ?)'
+                    cur.executemany(replace_sql, batch)
                     conn.commit()
                     batch = []
             if batch:
-                cur.executemany('REPLACE INTO files (path, mtime, size, sha256, last_seen) VALUES (?, ?, ?, ?, ?)', batch)
+                replace_sql = 'REPLACE INTO files (path, mtime, size, sha256, last_seen) VALUES (?, ?, ?, ?, ?)'
+                cur.executemany(replace_sql, batch)
                 conn.commit()
 
     print(f'Changed files: {len(changed_files)} (unique content groups: {len(hash_map)})')
@@ -404,14 +427,20 @@ def main():
             missing_shas = [s for s in hash_map.keys() if s not in checked_shas]
             if missing_shas:
                 # run apply_safe_fixes on tmpdir (so checks operate on patched files)
+                patch_dir = str(ROOT / '.external' / 'patches')
                 try:
                     from src.tools import apply_safe_fixes as _apply_safe_fixes
                     try:
-                        _apply_safe_fixes.main(['--apply', '--target', str(tmpdir), '--patch-dir', str(ROOT / '.external' / 'patches')])
+                        _apply_safe_fixes.main(['--apply', '--target', str(tmpdir), '--patch-dir', patch_dir])
                     except TypeError:
                         _apply_safe_fixes.main()
                 except Exception:
-                    run([sys.executable, str(SCRIPTS / 'apply_safe_fixes.py'), '--apply', '--target', str(tmpdir), '--patch-dir', str(ROOT / '.external' / 'patches')], fatal=False)
+                    apply_cmd = [
+                        sys.executable, str(SCRIPTS / 'apply_safe_fixes.py'),
+                        '--apply', '--target', str(tmpdir),
+                        '--patch-dir', patch_dir
+                    ]
+                    run(apply_cmd, fatal=False)
 
                 # Run grouped static checks (bandit/semgrep) once on tmpdir and map results to shas
                 try:
@@ -482,9 +511,11 @@ def main():
                             fn = node.func
                             if isinstance(fn, ast.Name) and fn.id in {'eval', 'exec', 'compile'}:
                                 file_findings.append(f'dangerous_call: {fn.id}')
-                            if isinstance(fn, ast.Attribute) and isinstance(fn.value, ast.Name) and fn.attr in dangerous_attrs:
-                                file_findings.append(f'dangerous_call: {fn.value.id}.{fn.attr}')
-                    return (path_str, {'files': {str(p): sorted(set(file_findings))} if file_findings else {}})
+                            if isinstance(fn, ast.Attribute) and isinstance(fn.value, ast.Name):
+                                if fn.attr in dangerous_attrs:
+                                    file_findings.append(f'dangerous_call: {fn.value.id}.{fn.attr}')
+                    res_dict = {str(p): sorted(set(file_findings))} if file_findings else {}
+                    return (path_str, {'files': res_dict})
 
                 sha_to_paths: dict[str, Path] = {}
                 for s in missing_shas:
@@ -498,7 +529,8 @@ def main():
                     sha_to_paths[s] = target_file
 
                 # parallel python-only checks
-                with concurrent.futures.ProcessPoolExecutor(max_workers=min(len(sha_to_paths), (os.cpu_count() or 2))) as pool:
+                workers = min(len(sha_to_paths), (os.cpu_count() or 2))
+                with concurrent.futures.ProcessPoolExecutor(max_workers=workers) as pool:
                     futures = {pool.submit(python_checks, str(p)): s for s, p in sha_to_paths.items()}
                     py_results = {}
                     for fut in concurrent.futures.as_completed(futures):
@@ -540,9 +572,18 @@ def main():
                             python_path = ''
                     rows.append((s, bandit_path, semgrep_path, python_path, ts))
                 if rows:
-                    cur.executemany('REPLACE INTO tool_results (sha, bandit_path, semgrep_path, python_path, last_checked) VALUES (?, ?, ?, ?, ?)', rows)
+                    replace_results_sql = (
+                        'REPLACE INTO tool_results '
+                        '(sha, bandit_path, semgrep_path, python_path, last_checked) '
+                        'VALUES (?, ?, ?, ?, ?)'
+                    )
+                    cur.executemany(replace_results_sql, rows)
                     # also mark as static_checked
-                    cur.executemany('REPLACE INTO static_checked (sha, last_checked) VALUES (?, ?)', [(r[0], ts) for r in rows])
+                    checked_rows = [(r[0], ts) for r in rows]
+                    cur.executemany(
+                        'REPLACE INTO static_checked (sha, last_checked) VALUES (?, ?)',
+                        checked_rows
+                    )
                     conn.commit()
             else:
                 print('All unique content groups already static-checked; skipping apply/static checks')
@@ -598,7 +639,8 @@ def main():
             new_text = '# Refactored by Copilot placeholder\n' + orig_text
             if new_text != orig_text:
                 # write patch file (simple full-file replacement)
-                patch_path = patches_ast_dir / f'{str(rel).replace("/","_")}.patch'
+                pname = str(rel).replace("/", "_")
+                patch_path = patches_ast_dir / f'{pname}.patch'
                 patch_path.write_text(new_text, encoding='utf-8')
                 # apply to real target (backup original)
                 target_path = EXTRACT_TARGET / rel
@@ -649,7 +691,8 @@ def main():
             unique_groups INTEGER
         )''')
         duration_ms = (time.time() - start_ts) * 1000.0
-        rc.execute('INSERT INTO runs (start_ts, duration_ms, changed_count, unique_groups) VALUES (?, ?, ?, ?)', (start_ts, duration_ms, len(changed_files), len(hash_map)))
+        insert_sql = 'INSERT INTO runs (start_ts, duration_ms, changed_count, unique_groups) VALUES (?, ?, ?, ?)'
+        rc.execute(insert_sql, (start_ts, duration_ms, len(changed_files), len(hash_map)))
         rconn.commit()
         rconn.close()
     except Exception:
