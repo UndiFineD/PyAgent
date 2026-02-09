@@ -29,6 +29,7 @@ PyAgent operates with a **Safety-First** philosophy:
 - **State Transactions**: Every file modification is atomic. Automatic rollbacks are triggered if a reasoning chain fails or a collision is detected.
 - **Cascading Context**: Prevents infinite recursion and ensures task lineage (Task Parentage -> Result Attribution).
 - **Environment Sandbox**: Strict allow-list protocols for external shell operations and PII redaction.
+- **End-to-End Encryption**: Signal Protocol implementation for zero-knowledge user data storage. OAuth authentication with cryptographic user isolation ensures server cannot decrypt user memories, chats, or queries.
 
 ### 🧠 Advanced LLM Engine (v0.14.0+)
 Fully integrated with **vLLM** and custom inference kernels:
@@ -50,6 +51,7 @@ Fully integrated with **vLLM** and custom inference kernels:
 | **Skills** | `src/external_candidates/` | Ingested external capabilities and auto-generated tool wrappers |
 | **Acceleration**| `rust_core/` | Native PyO3 modules (Performance Kernels) |
 | **Observability**| `src/observability/`| Prometheus metrics, stats, and health monitoring |
+| **Security**| `src/core/base/logic/security/`| E2EE core, OAuth integration, encrypted memory storage |
 
 ---
 
@@ -97,12 +99,35 @@ python -m pytest tests/unit/
 
 ---
 
+## 🔐 Security & Privacy
+
+PyAgent implements **Signal Protocol** for end-to-end encryption, providing WhatsApp/Signal-level security:
+
+### Zero-Knowledge Architecture
+- **OAuth Authentication**: Supports GitHub, Google, and other providers
+- **Client-Side Encryption**: User keys never leave the client device
+- **Encrypted Storage**: All user memories, chats, and queries encrypted at rest
+- **Perfect Forward Secrecy**: Each message uses a unique key via Double Ratchet
+- **User Isolation**: Cryptographic guarantee that users cannot access each other's data
+
+### Features
+- ✅ **X3DH Key Agreement**: Asynchronous message delivery without online coordination
+- ✅ **Double Ratchet Algorithm**: Self-healing encryption with forward secrecy
+- ✅ **Multi-Tenant Isolation**: Per-user encryption keys with zero-knowledge server
+- ✅ **Encrypted Memory Store**: Transparent E2EE wrapper for existing storage
+- ✅ **User-to-User E2EE**: Secure messaging between users and agents
+
+**Documentation**: See [`docs/E2E_ENCRYPTION.md`](docs/E2E_ENCRYPTION.md) for complete usage guide and security properties.
+
+---
+
 ## 🗺️ Roadmap "VOYAGER"
 - [x] **Decentralized Transport**: Zero-broker P2P swarms with mDNS discovery.
 - [x] **Synaptic Pruning**: Exponential knowledge decay for high-efficiency memory.
 - [x] **Holographic Memory**: Distributed vector weights across the fleet.
 - [x] **Multimodal AI Integration**: Async task queues for image generation and processing, with background artifact cleanup.
 - [x] **External Skill Ingestion**: Automated ingestion and wrapping of external Python tools (`external_candidates`).
+- [x] **End-to-End Encryption**: Signal Protocol implementation with zero-knowledge user data storage.
 - [ ] **MARKOV Decision Processes**: Implementation of RL environments for self-optimization.
 - [ ] **Multi-Model Speculation**: Federated speculative decoding across multiple nodes.
 
