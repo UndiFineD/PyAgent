@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 177
+Total Files: 144
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -16,7 +16,6 @@ Total Files: 177
 | 0xSojalSec_homoglyph_char_manager.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-homoglyph\generator\char_manager', providing core logic for its parent repository. |
 | 0xSojalSec_ics_forensics_tools_encryption.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-ics-forensics-tools\src\forensic\plugins\CodeSysV3\codesysv3_protocol\encryption', providing core logic for its parent repository. |
 | 0xSojalSec_ldapper_logging.py | This class provides a wrapper for the standard Python logging |
-| 0xSojalSec_malwoverview_colors.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-malwoverview\malwoverview\utils\colors', providing core logic for its parent repository. |
 | 0xSojalSec_pdf_extract_api_ocr_strategy.py | Base OCR Strategy Interface |
 | 0xSojalSec_wappalyzer_next_css.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-wappalyzer-next\wappalyzer\parsers\css', providing core logic for its parent repository. |
 | 0xSojalSec_wappalyzer_next_meta.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-wappalyzer-next\wappalyzer\parsers\meta', providing core logic for its parent repository. |
@@ -34,38 +33,7 @@ Total Files: 177
 | 0xsojalsec_lumina_dimoo_py_image_utils_53d2ca36ffd5.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_lumina_dimoo_py_prompt_utils_686c20ce886a.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_lumina_dimoo_py_text_understanding_generator_cd6cfb9bae62.py | Text understanding generator |
-| 0xsojalsec_make_circuit_boards_py_address_8a7b1f75c7e9.py | Addresses are references to a specific node. |
-| 0xsojalsec_make_circuit_boards_py_atopilelexerbase_774d2e8f39da.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_make_circuit_boards', providing core logic for its parent repository. |
-| 0xsojalsec_make_circuit_boards_py_atopileparserbase_7d2b5de03fcf.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_make_circuit_boards', providing core logic for its parent repository. |
-| 0xsojalsec_make_circuit_boards_py_kicad6_datamodel_99986f48449d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_make_circuit_boards', providing core logic for its parent repository. |
-| 0xsojalsec_make_circuit_boards_py_parse_utils_92c3819333a3.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_make_circuit_boards_py_shortcodes_c7dc61310c9b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_make_circuit_boards', providing core logic for its parent repository. |
 | 0xsojalsec_malpacks_py_cli_e7f6434e9c6c.py | #    #    ##    #       #####     ##     ####   #    #   #### |
-| 0xsojalsec_maltego_telegram_py_channeltoauthors_9dbf9583d687.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_maltego_telegram', providing core logic for its parent repository. |
-| 0xsojalsec_maltego_telegram_py_channeltodeletedposts_a6ddb0e06e8d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_maltego_telegram', providing core logic for its parent repository. |
-| 0xsojalsec_maltego_telegram_py_channeltoemojiset_8615296f8c08.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_maltego_telegram', providing core logic for its parent repository. |
-| 0xsojalsec_maltego_telegram_py_channeltoforwardedchannels_736daf94c9af.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_maltego_telegram', providing core logic for its parent repository. |
-| 0xsojalsec_maltego_telegram_py_channeltoforwardedusers_6ffdafb28a00.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_maltego_telegram', providing core logic for its parent repository. |
-| 0xsojalsec_maltego_telegram_py_channeltogroup_9b08cdad2c17.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_maltego_telegram', providing core logic for its parent repository. |
-| 0xsojalsec_maltego_telegram_py_channeltostickerset_bc2083188cc9.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_maltego_telegram', providing core logic for its parent repository. |
-| 0xsojalsec_maltego_telegram_py_grouptoadmins_de7ee69b0c27.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_maltego_telegram', providing core logic for its parent repository. |
-| 0xsojalsec_maltego_telegram_py_phonetoprofile_a3b08633933e.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_maltego_telegram', providing core logic for its parent repository. |
-| 0xsojalsec_malwoverview_py_colors_3eb7f63a98d0.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_malwoverview', providing core logic for its parent repository. |
-| 0xsojalsec_malwoverview_py_polyswarm_9f04115f47d1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_malwoverview', providing core logic for its parent repository. |
-| 0xsojalsec_mantis_py_args_model_b51ff2a4f89d.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mantis', providing core logic for its parent repository. |
-| 0xsojalsec_mantis_py_args_parse_3e46308f4747.py | \033[1;34mONBOARD: (First time scan, Run this !!)\033[0m |
-| 0xsojalsec_mantis_py_basescanner_41d7cd2545d3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mantis', providing core logic for its parent repository. |
-| 0xsojalsec_mantis_py_config_models_dda4e8416b24.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_mantis_py_config_utils_8c21dff94362.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_mantis_py_csper_c3213f59447c.py | Csper Module is used to get the CSP misconfigurations for the TLD and subdomains. |
-| 0xsojalsec_mantis_py_db_models_a9206deea904.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mantis', providing core logic for its parent repository. |
-| 0xsojalsec_mantis_py_logging_utils_2ae9720d637f.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_mantis_py_mantis_workflow_b5590feb4936.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mantis', providing core logic for its parent repository. |
-| 0xsojalsec_mantis_py_ray_scan_4268ac17fb60.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mantis', providing core logic for its parent repository. |
-| 0xsojalsec_mantis_py_sslmate_7d7762bebbe3.py | SSLMate module enumerates certifcates for the TLDs using certspotter API. |
-| 0xsojalsec_mantis_py_threadpool_scan_85b80efbe7bc.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mantis', providing core logic for its parent repository. |
-| 0xsojalsec_mantis_py_tool_logs_model_5d864de02f28.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mantis', providing core logic for its parent repository. |
-| 0xsojalsec_mantis_py_tool_utils_a9de790fb6b8.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_moon_dev_ai_agents_py_angleconfirm_btfinal_c05b285997be.py | A trend-based trading strategy using William D. Gann's angular analysis combined with 5-period SMA for confirmation. |
 | 0xsojalsec_moon_dev_ai_agents_py_fractaldivergence_btfinal_a040441dde42.py | Implementation of the FractalDivergence strategy. |
 | 0xsojalsec_moon_dev_ai_agents_py_retracementcontra_pkg_6a38e88624d1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_moon_dev_ai_agents', providing core logic for its parent repository. |
@@ -164,7 +132,6 @@ Total Files: 177
 | _0xsojalsec_idor_forge_banner.py | '####:'########:::'#######::'########:::::::::::'########::'#######::'########:::'######:::'########: |
 | _0xsojalsec_ldapper_logging.py | This class provides a wrapper for the standard Python logging |
 | _0xsojalsec_llava_next_convert_sqa_to_llava_base_prompt.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_LLaVA_NeXT_convert_sqa_to_llava_base_prompt', providing core logic for its parent repository. |
-| _0xsojalsec_malwoverview_colors.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_malwoverview_colors', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_colorpp.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_colorpp', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_run_gcp_module.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_run_gcp_module', providing core logic for its parent repository. |
 | _0xsojalsec_pdf_extract_api_ocr_strategy.py | Base OCR Strategy Interface |
