@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 1038
+Total Files: 961
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -890,83 +890,6 @@ Total Files: 1038
 | 0xsojalsec_prettymapp_py_utils_d30325933b14.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_proxyhub_py_checker_76793d29e566.py | Proxy checker. |
 | 0xsojalsec_proxyhub_py_judge_c285ac7ab7e9.py | Proxy Judge. |
-| 0xsojalsec_pytorch_lightning_py_accelerator_05e0c8c39ade.py | The Accelerator base class for Lightning PyTorch. |
-| 0xsojalsec_pytorch_lightning_py_accelerator_cb16a59c206c.py | The Accelerator base class. |
-| 0xsojalsec_pytorch_lightning_py_agent_61eb4ce37477.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
-| 0xsojalsec_pytorch_lightning_py_amp_230669ae051a.py | Plugin for Automatic Mixed Precision (AMP) training with ``torch.autocast``. |
-| 0xsojalsec_pytorch_lightning_py_base_ca844ca9ab29.py | Profiler to check if there are any bottlenecks in your code. |
-| 0xsojalsec_pytorch_lightning_py_bitsandbytes_7408f84ceb25.py | Plugin for quantizing weights with `bitsandbytes <https://github.com/bitsandbytes-foundation/bitsandbytes>`__. |
-| 0xsojalsec_pytorch_lightning_py_callback_bae6c70aba52.py | Base class used to build new callbacks. |
-| 0xsojalsec_pytorch_lightning_py_checkpoint_e3e3f33e65a1.py | This is the base class for model checkpointing. |
-| 0xsojalsec_pytorch_lightning_py_checkpoint_io_f10e6de1aed5.py | Interface to save/load checkpoints as they are saved through the ``Strategy``. |
-| 0xsojalsec_pytorch_lightning_py_cluster_environment_7938318b5a87.py | Specification of a cluster environment. |
-| 0xsojalsec_pytorch_lightning_py_collective_c4b980b98c0e.py | Interface for collective operations. |
-| 0xsojalsec_pytorch_lightning_py_compile_e9a82a4ad9e9.py | Returns an instance LightningModule from the output of ``torch.compile``. |
-| 0xsojalsec_pytorch_lightning_py_configuration_validator_cbe30623c120.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
-| 0xsojalsec_pytorch_lightning_py_csv_logs_fcf8389f080e.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
-| 0xsojalsec_pytorch_lightning_py_cuda_e5b1029b1567.py | Accelerator for NVIDIA CUDA devices. |
-| 0xsojalsec_pytorch_lightning_py_data_62758ebe6e13.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
-| 0xsojalsec_pytorch_lightning_py_dataloaders_d5f6c13e9c37.py | Custom dataloaders for testing. |
-| 0xsojalsec_pytorch_lightning_py_datasets_8ea03986bea4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
-| 0xsojalsec_pytorch_lightning_py_deepspeed_3d482ff3449c.py | Precision plugin for DeepSpeed integration. |
-| 0xsojalsec_pytorch_lightning_py_device_dtype_mixin_b211aef51329.py | See :meth:`torch.nn.Module.to`. |
-| 0xsojalsec_pytorch_lightning_py_device_parser_482695819641.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
-| 0xsojalsec_pytorch_lightning_py_distributed_37f12f4a8ac5.py | Recursively find all tensors contained in the specified object. |
-| 0xsojalsec_pytorch_lightning_py_double_ff5cf5783a5b.py | Plugin for training with double (``torch.float64``) precision. |
-| 0xsojalsec_pytorch_lightning_py_dp_0129bb78501c.py | Implements data-parallel training in a single process, i.e., the model gets replicated to each device and each |
-| 0xsojalsec_pytorch_lightning_py_enums_666ec467faf7.py | Enumerated utilities. |
-| 0xsojalsec_pytorch_lightning_py_grads_1e226516aa1a.py | Utilities to describe gradients. |
-| 0xsojalsec_pytorch_lightning_py_half_2955874dd656.py | Plugin for training with half precision. |
-| 0xsojalsec_pytorch_lightning_py_half_bae69404e8b7.py | Plugin for training with half precision. |
-| 0xsojalsec_pytorch_lightning_py_init_24b67022bc33.py | Initialize `nn.Module` with empty tensors, i.e., uninitialized memory. |
-| 0xsojalsec_pytorch_lightning_py_lambda_function_596494ae3a53.py | Lambda Callback |
-| 0xsojalsec_pytorch_lightning_py_launcher_7d5782ba8abf.py | Kill existing alive processes. |
-| 0xsojalsec_pytorch_lightning_py_launcher_8e94abe952af.py | Abstract base class for all Launchers. |
-| 0xsojalsec_pytorch_lightning_py_layer_sync_e10977a87cf3.py | Abstract base class for creating plugins that wrap layers of a model with synchronization logic for |
-| 0xsojalsec_pytorch_lightning_py_logger_4a11f1c381e6.py | Abstract base class used to build new loggers. |
-| 0xsojalsec_pytorch_lightning_py_logger_58b6e96f3068.py | Abstract base class used to build new loggers. |
-| 0xsojalsec_pytorch_lightning_py_logger_afb6c87a13f9.py | Ensure parameters are a dict or convert to dict if necessary. |
-| 0xsojalsec_pytorch_lightning_py_loop_91342d6360c5.py | Basic Loops interface. |
-| 0xsojalsec_pytorch_lightning_py_loss_b1360beba086.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
-| 0xsojalsec_pytorch_lightning_py_lstm_b55a3d23b182.py | Demo of a simple LSTM language model. |
-| 0xsojalsec_pytorch_lightning_py_measure_4d76447c7839.py | Returns an array with the last loss from each epoch for each run. |
-| 0xsojalsec_pytorch_lightning_py_memory_c55be019f618.py | Utilities related to memory. |
-| 0xsojalsec_pytorch_lightning_py_model_9929683c694c.py | Precompute the frequency tensor for complex exponentials (cis) with given dimensions. |
-| 0xsojalsec_pytorch_lightning_py_model_summary_deepspeed_7876e08c7fdc.py | Utilities that can be used with Deepspeed. |
-| 0xsojalsec_pytorch_lightning_py_models_0873e8526271.py | Defines the interface for a model in a Fabric-PyTorch parity test. |
-| 0xsojalsec_pytorch_lightning_py_mps_23af66929cd5.py | Accelerator for Metal Apple Silicon GPU devices. |
-| 0xsojalsec_pytorch_lightning_py_optimizer_241a899bd4d2.py | Moves optimizer states for a sequence of optimizers to the device. |
-| 0xsojalsec_pytorch_lightning_py_parallel_1d64e09246c8.py | Strategy for training with multiple processes in parallel. |
-| 0xsojalsec_pytorch_lightning_py_parallel_236d0e0023f0.py | Strategy for training with multiple processes in parallel. |
-| 0xsojalsec_pytorch_lightning_py_parallelism_62a0c4a83d30.py | Apply parallelisms and activation checkpointing to the model. |
-| 0xsojalsec_pytorch_lightning_py_parameter_tying_674ecd0199a4.py | Utilities for automatic parameters tying. |
-| 0xsojalsec_pytorch_lightning_py_parsing_c44ab98265e2.py | Utilities used for parameter parsing. |
-| 0xsojalsec_pytorch_lightning_py_progress_e98c4e0cfa4e.py | Mixin that implements state-loading utilities for dataclasses. |
-| 0xsojalsec_pytorch_lightning_py_pytree_070873de7537.py | Customized :func:`torch.utils._pytree._is_leaf` to avoid flattening containers of primitives. |
-| 0xsojalsec_pytorch_lightning_py_registry_9286d45345a5.py | This class is a Registry that stores information about the Training Strategies. |
-| 0xsojalsec_pytorch_lightning_py_rich_model_summary_c1877164fa75.py | Generates a summary of all layers in a :class:`~lightning.pytorch.core.LightningModule` with `rich text |
-| 0xsojalsec_pytorch_lightning_py_runif_a463511a6f31.py | Construct reasons for pytest skipif. |
-| 0xsojalsec_pytorch_lightning_py_seed_bb0ee05ffaf4.py | Utilities to help with reproducibility of models. |
-| 0xsojalsec_pytorch_lightning_py_servable_module_a7e13e58e829.py | The ServableModule provides a simple API to make your model servable. |
-| 0xsojalsec_pytorch_lightning_py_setup_188d6e6b6934.py | Houses the methods used to set up the Trainer. |
-| 0xsojalsec_pytorch_lightning_py_signature_utils_77b5b5fb052c.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_pytorch_lightning_py_single_device_5611d70f8905.py | Strategy that handles communication on a single device. |
-| 0xsojalsec_pytorch_lightning_py_single_device_efbef51519bc.py | Support for collective operations on a single device (no-op). |
-| 0xsojalsec_pytorch_lightning_py_single_device_f260360140fe.py | Strategy that handles communication on a single device. |
-| 0xsojalsec_pytorch_lightning_py_single_xla_5f7add709914.py | Strategy for training on a single XLA device. |
-| 0xsojalsec_pytorch_lightning_py_single_xla_63d88fe8747a.py | Strategy for training on a single XLA device. |
-| 0xsojalsec_pytorch_lightning_py_spike_16dc54de56a9.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_pytorch_lightning', providing core logic for its parent repository. |
-| 0xsojalsec_pytorch_lightning_py_states_cd91252694eb.py | Enum for the status of the :class:`~lightning.pytorch.trainer.trainer.Trainer` |
-| 0xsojalsec_pytorch_lightning_py_tensorboard_8676a75d3532.py | TensorBoard Logger |
-| 0xsojalsec_pytorch_lightning_py_transformer_engine_92688cd79700.py | Plugin for training with fp8 precision via nvidia's |
-| 0xsojalsec_pytorch_lightning_py_utilities_326e97416748.py | Checks for finite loss value. |
-| 0xsojalsec_pytorch_lightning_py_utilities_8daa729ad627.py | Utilities for loggers. |
-| 0xsojalsec_pytorch_lightning_py_utils_3b2686453a14.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_pytorch_lightning_py_utils_f052af5d3506.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_pytorch_lightning_py_weight_averaging_c079c0839d99.py | Weight Averaging Callback |
-| 0xsojalsec_pytorch_lightning_py_wrapper_bbbe7326f442.py | ``_WrappingCheckpointIO`` is a wrapper checkpoint_io that uses a base checkpoint_io to handle checkpointing. |
-| 0xsojalsec_pytorch_lightning_py_xla_40911aca99c9.py | Plugin for training with XLA. |
-| 0xsojalsec_pytorch_lightning_py_xla_41acbd592cf1.py | Accelerator for XLA devices, normally TPUs. |
 | 0xsojalsec_videorag_py_asr_3e431c15bf03.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_videorag', providing core logic for its parent repository. |
 | 0xsojalsec_videorag_py_asr_9256e9a47b0f.py | Process a single audio segment with ASR |
 | 0xsojalsec_videorag_py_feature_6e819d57eef3.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_videorag', providing core logic for its parent repository. |
