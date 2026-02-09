@@ -1,6 +1,6 @@
 # External Cleaned Candidates Report
 
-Total Files: 4472
+Total Files: 4468
 
 | File | Utility to Swarm |
 |------|------------------|
@@ -67,7 +67,6 @@ Total Files: 4472
 | 0xsojalsec_evermemos_py_behavior_history_raw_repository_40df3158910d.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_evermemos_py_bootstrap_523294ab6854.py | Memsys Bootstrap Script - Generic context loader and script runner |
 | 0xsojalsec_evermemos_py_business_lifespan_21ad7ecc1fbc.py | Business lifecycle provider implementation |
-| 0xsojalsec_evermemos_py_clear_all_data_6b1b99899ec0.py | Tool function to clear all memory data |
 | 0xsojalsec_evermemos_py_cli_0c7dac4cf07f.py | CLI entry point for the evaluation framework. |
 | 0xsojalsec_evermemos_py_cli_fa03ec3a3b91.py | MongoDB migration CLI tool. |
 | 0xsojalsec_evermemos_py_cli_ui_0b1419bbfdfb.py | CLI UI utilities for width-aware, emoji-aligned, optionally colored output. |
@@ -234,7 +233,6 @@ Total Files: 4472
 | 0xsojalsec_evermemos_py_request_converter_8c9d9293ba77.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | 0xsojalsec_evermemos_py_require_tenant_e857251b2880.py | Tenant context check decorator |
 | 0xsojalsec_evermemos_py_rerank_service_ddb657dd8d0e.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| 0xsojalsec_evermemos_py_reset_databases_2c00d938715e.py | ⚠️ DANGER: Completely reset all database structures ⚠️ |
 | 0xsojalsec_evermemos_py_retrieval_utils_c7f8230f218d.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
 | 0xsojalsec_evermemos_py_role_processor_482723711e2e.py | Role management utilities for group profile extraction. |
 | 0xsojalsec_evermemos_py_run_dd4525fc0d1b.py | Memsys Main Application - Main application startup script |
@@ -2267,7 +2265,6 @@ Total Files: 4472
 | agno_py_fastapi_7525cfac6ab4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agno', providing core logic for its parent repository. |
 | agno_py_fastapi_944cebfc87db.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\agno', providing core logic for its parent repository. |
 | agno_py_file_e51d96aa0102.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| agno_py_filesystem_f5e69173cdd9.py | Deletes dir_path recursively, including all files and dirs in that directory |
 | agno_py_financial_datasets_c6d1b6251be2.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | agno_py_format_str_800e44d5029a.py | Remove the indent from a string. |
 | agno_py_giphy_1bd872001f4f.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
@@ -3018,7 +3015,6 @@ Total Files: 4472
 | decodingai_magazine_second_brain_ai_assistant_course_py_crawl_d08d74554ecf.py | Crawl the child URLs of each document. |
 | decodingai_magazine_second_brain_ai_assistant_course_py_create_histograms_ce9c7f351c1e.py | Create histograms showing content length and quality score distributions. |
 | decodingai_magazine_second_brain_ai_assistant_course_py_database_414e14853477.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
-| decodingai_magazine_second_brain_ai_assistant_course_py_delete_rag_collection_6879c33febe4.py | Deletes the 'rag' collection from the specified MongoDB database. |
 | decodingai_magazine_second_brain_ai_assistant_course_py_document_cbd75112d1b0.py | Defines custom exception classes for domain-specific error handling and fault tolerance. |
 | decodingai_magazine_second_brain_ai_assistant_course_py_embeddings_54d181338896.py | Gets an instance of the configured embedding model. |
 | decodingai_magazine_second_brain_ai_assistant_course_py_embeddings_cad572639fe5.py | Gets an instance of the HuggingFace embedding model. |
