@@ -116,7 +116,7 @@ class AdvancedWebScanningCore:
                     await mock_response.read_text()
                     return mock_response
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             self.logger.error(f"Request failed for {url}: {e}")
             return None
 
@@ -158,7 +158,7 @@ class AdvancedWebScanningCore:
         try:
             baseline_response = self.session.get(base_url, timeout=self.timeout)
             baseline_hash = hashlib.md5(baseline_response.text.encode()).hexdigest()
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             self.logger.error(f"Failed to get baseline response: {e}")
             return results
 
@@ -193,7 +193,7 @@ class AdvancedWebScanningCore:
                     )
                     results.append(result)
 
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 self.logger.error(f"Host header test failed for {test.name}: {e}")
 
         return results
@@ -248,7 +248,7 @@ class AdvancedWebScanningCore:
                         )
                         results.append(result)
 
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     self.logger.error(f"Code injection test failed for {url}: {e}")
 
         return results
@@ -291,7 +291,7 @@ class AdvancedWebScanningCore:
                         )
                         results.append(result)
 
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     self.logger.error(f"Shellshock test failed for {url}: {e}")
 
         return results
@@ -340,7 +340,7 @@ class AdvancedWebScanningCore:
                         )
                         results.append(result)
 
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     self.logger.error(f"Input transformation test failed for {url}: {e}")
 
         return results
@@ -438,7 +438,7 @@ class AdvancedWebScanningCore:
                                 }
                             ))
 
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     self.logger.error(f"HTTP redirect SSRF test failed for {base_url}: {e}")
 
         return results
@@ -534,7 +534,7 @@ class AdvancedWebScanningCore:
 
         return results
 
-    async def discover_urls(self, base_url: str, max_depth: int = 2) -> List[str]:
+    async def discover_urls(self, base_url: str, _max_depth: int = 2) -> List[str]:
         """
         Basic URL discovery through HTML parsing.
 
@@ -553,7 +553,7 @@ class AdvancedWebScanningCore:
                 if full_url.startswith(base_url) and full_url not in urls:
                     urls.append(full_url)
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             self.logger.error(f"URL discovery failed: {e}")
 
         return urls[:20]  # Limit to 20 URLs

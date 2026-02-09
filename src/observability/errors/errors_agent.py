@@ -425,9 +425,9 @@ class ErrorsAgent(BaseAgent):
                 docs.append("")
         return "\n".join(docs)
 
-    def export_errors(self, format: str = "json") -> str:
+    def export_errors(self, output_format: str = "json") -> str:
         """Export errors to various formats."""
-        if format == "json":
+        if output_format == "json":
             data: list[dict[str, Any]] = [
                 {
                     "id": e.id,
@@ -441,7 +441,7 @@ class ErrorsAgent(BaseAgent):
                 for e in self._errors
             ]
             return json.dumps(data, indent=2)
-        elif format == "csv":
+        elif output_format == "csv":
             lines = ["id,message,file,line,severity,category,resolved"]
             for e in self._errors:
                 lines.append(

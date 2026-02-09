@@ -139,11 +139,11 @@ class GraphAnalysisCore:
             "total_paths": sum(len(p) for p in paths.values())
         }
 
-    def export_graph(self, graph_id: str, format: str = "json") -> Optional[str]:
+    def export_graph(self, graph_id: str, output_format: str = "json") -> Optional[str]:
         """Export graph in specified format."""
         if graph_id not in self.graphs:
             return None
         
-        if format == "json":
+        if output_format == "json":
             return json.dumps(self.graphs[graph_id], indent=2)
         return None

@@ -261,8 +261,9 @@ class TTSService:
             "type": engine_instance.__class__.__name__
         }
 
-    def save_audio(self, audio_data: bytes, filename: str, format: str = "wav"):
+    def save_audio(self, audio_data: bytes, filename: str, audio_format: str = "wav"):
         """Save audio data to file."""
+        self.logger.debug(f"Saving audio in {audio_format} format")
         with open(filename, "wb") as f:
             f.write(audio_data)
 

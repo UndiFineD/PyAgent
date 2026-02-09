@@ -588,7 +588,7 @@ class FederationServicesCore:
         self,
         token: SAMLToken,
         filepath: str,
-        format: str = "xml"
+        output_format: str = "xml"
     ) -> None:
         """
         Export SAML token to file
@@ -596,11 +596,11 @@ class FederationServicesCore:
         Args:
             token: Token to export
             filepath: Output file path
-            format: Export format (xml, json)
+            output_format: Export format (xml, json)
         """
-        if format == "xml":
+        if output_format == "xml":
             content = token.signed_xml or f"<!-- Unsigned SAML Token -->\n{token.token_id}"
-        elif format == "json":
+        elif output_format == "json":
             content = json.dumps({
                 "token_id": token.token_id,
                 "version": token.version.value,

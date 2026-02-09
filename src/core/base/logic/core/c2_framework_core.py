@@ -549,14 +549,14 @@ class C2FrameworkCore:
 
         return stats
 
-    async def generate_operation_report(self, format: str = "json") -> str:
+    async def generate_operation_report(self, output_format: str = "json") -> str:
         """Generate comprehensive operation report"""
         if not self.framework:
             raise ValueError("Framework not initialized")
 
         stats = await self.get_framework_statistics()
 
-        if format == "json":
+        if output_format == "json":
             report = {
                 "generated_at": datetime.now().isoformat(),
                 "framework_profile": self.framework.profile.name,
@@ -588,7 +588,7 @@ class C2FrameworkCore:
 
             return json.dumps(report, indent=2, default=str)
 
-        elif format == "markdown":
+        elif output_format == "markdown":
             report = "# C2 Framework Operation Report\n\n"
             report += f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
             report += f"**Profile:** {self.framework.profile.name}\n\n"
@@ -619,7 +619,7 @@ class C2FrameworkCore:
             return report
 
         else:
-            raise ValueError(f"Unsupported format: {format}")
+            raise ValueError(f"Unsupported format: {output_format}")
 
     async def _load_extenders(self) -> None:
         """Load configured extenders/plugins"""

@@ -21,7 +21,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 
 from src.core.base.logic.core.base_core import BaseCore
-from src.core.base.models.communication_models import CascadeContext
 
 
 @dataclass

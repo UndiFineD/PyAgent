@@ -52,6 +52,7 @@ except ImportError:
     torch = None  # type: ignore
 
 # Try to import Rust accelerations
+_BRIDGE: Any = None
 try:
     from src.core.rust_bridge import get_bridge
 
@@ -115,7 +116,7 @@ class PooledStream:
     stats: StreamStats = field(default_factory=StreamStats)
     affinity_key: Optional[str] = None
 
-    acquired_at: float = field(default=0.0, repr=False)
+    acquired_at: int = field(default=0, repr=False)
 
     def __post_init__(self) -> None:
         """Initialize stream if not provided."""

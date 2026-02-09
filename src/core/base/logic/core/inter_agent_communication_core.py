@@ -28,6 +28,7 @@ Key Features:
 """
 
 import json
+import logging
 import uuid
 from datetime import datetime, timezone
 from enum import Enum
@@ -37,6 +38,9 @@ import aiohttp
 from pydantic import BaseModel, Field, ConfigDict
 
 from src.core.base.common.base_core import BaseCore
+
+# Setup logger
+logger = logging.getLogger(__name__)
 
 
 class Role(str, Enum):
@@ -256,10 +260,10 @@ class InterAgentCommunicationCore(BaseCore):
             card = await self._fetch_agent_card(endpoint.url)
             endpoint.agent_card = card
         except Exception as e:
-            self.logger.warning(f"Failed to fetch agent card for {agent_id}: {e}")
+            logger.warning(f"Failed to fetch agent card for {agent_id}: {e}")
 
         self.registered_agents[agent_id] = endpoint
-        self.logger.info(f"Registered agent {agent_id} at {endpoint.url}")
+        logger.info(f"Registered agent {agent_id} at {endpoint.url}")
 
     async def unregister_agent(self, agent_id: str) -> None:
         """
@@ -270,7 +274,7 @@ class InterAgentCommunicationCore(BaseCore):
         """
         if agent_id in self.registered_agents:
             del self.registered_agents[agent_id]
-            self.logger.info(f"Unregistered agent {agent_id}")
+            logger.info(f"Unregistered agent {agent_id}")
 
     async def send_message(self, target_agent_id: str, message: Message) -> Task:
         """
@@ -357,7 +361,7 @@ class InterAgentCommunicationCore(BaseCore):
             task.status = TaskStatus(state=TaskState.CANCELLED)
             return True
         except Exception as e:
-            self.logger.error(f"Failed to cancel task {task_id}: {e}")
+            logger.error(f"Failed to cancel task {task_id}: {e}")
             return False
 
     async def stream_messages(self, target_agent_id: str, message: Message) -> AsyncGenerator[Message, None]:
@@ -433,6 +437,9 @@ class InterAgentCommunicationCore(BaseCore):
         """
         card_url = f"{url.rstrip('/')}/.well-known/agent.json"
 
+        if self.http_client is None:
+            self.http_client = aiohttp.ClientSession()
+
         async with self.http_client.get(card_url) as response:
             response.raise_for_status()
             data = await response.json()
@@ -462,6 +469,9 @@ class InterAgentCommunicationCore(BaseCore):
             method=method,
             params=params
         )
+
+        if self.http_client is None:
+            self.http_client = aiohttp.ClientSession()
 
         async with self.http_client.post(
             url,
@@ -496,6 +506,9 @@ class InterAgentCommunicationCore(BaseCore):
             params=params
         )
 
+        if self.http_client is None:
+            self.http_client = aiohttp.ClientSession()
+
         async with self.http_client.post(
             url,
             json=request.dict(),
@@ -504,8 +517,8 @@ class InterAgentCommunicationCore(BaseCore):
             response.raise_for_status()
 
             # Process streaming response
-            async for line in response.content:
-                line = line.decode().strip()
+            async for chunk in response.content:
+                line = chunk.decode().strip()
                 if line.startswith("data: "):
                     try:
                         data = json.loads(line[6:])  # Remove "data: " prefix

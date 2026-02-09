@@ -28,15 +28,15 @@ __version__ = VERSION
 class StatsExporter:
     """Exports stats in various formats."""
 
-    def __init__(self, format: str = "json") -> None:
-        self.format = format
+    def __init__(self, export_format: str = "json") -> None:
+        self.export_format = export_format
 
-    def export(self, metrics: dict[str, Any], format: str | None = None) -> str:
+    def export(self, metrics: dict[str, Any], export_format: str | None = None) -> str:
         """Export metrics in specified format."""
-        export_format = format or self.format
-        if export_format == "json":
+        effective_format = export_format or self.export_format
+        if effective_format == "json":
             return json.dumps(metrics)
-        elif export_format == "prometheus":
+        elif effective_format == "prometheus":
             lines: list[str] = []
             for name, value in metrics.items():
                 lines.append(f"{name} {value}")
