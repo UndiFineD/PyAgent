@@ -1,13 +1,12 @@
 # External Cleaned Candidates Report
 
-Total Files: 768
+Total Files: 739
 
 | File | Utility to Swarm |
 |------|------------------|
 | 0xSojalSec_HoloCine_base.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-HoloCine\diffsynth\processors\base', providing core logic for its parent repository. |
 | 0xSojalSec_IDOR_Forge_banner.py | '####:'########:::'#######::'########:::::::::::'########::'#######::'########:::'######:::'########: |
 | 0xSojalSec_LLaVA_NeXT_convert_sqa_to_llava_base_prompt.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-LLaVA-NeXT\scripts\archived\convert_sqa_to_llava_base_prompt', providing core logic for its parent repository. |
-| 0xSojalSec_MobileAgent_prompt.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-MobileAgent\Mobile-Agent-v2\MobileAgent\prompt', providing core logic for its parent repository. |
 | 0xSojalSec_Nebula_colorpp.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-Nebula\teamserver\core\colorpp\colorpp', providing core logic for its parent repository. |
 | 0xSojalSec_Nebula_run_gcp_module.py | Component originally named 'DEV\PyAgent\.external\0xSojalSec-Nebula\teamserver\core\run_module\run_gcp_module', providing core logic for its parent repository. |
 | 0xSojalSec_PraisonAI_config.py | Configuration handler for managing environment variables, API keys, and operational parameters. |
@@ -628,33 +627,6 @@ Total Files: 768
 | 0xsojalsec_mantis_py_threadpool_scan_85b80efbe7bc.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mantis', providing core logic for its parent repository. |
 | 0xsojalsec_mantis_py_tool_logs_model_5d864de02f28.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mantis', providing core logic for its parent repository. |
 | 0xsojalsec_mantis_py_tool_utils_a9de790fb6b8.py | Collection of utility functions and helper methods to support core logic and reduce code redundancy. |
-| 0xsojalsec_mobileagent_py_api_c697a913124a.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_chat_02531902fc57.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_chat_3f7a219ce3a4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_chat_4385df0bc163.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_chat_9342918b0ab5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_chat_aef90f0b1d3c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_chat_e5b0fcbb9103.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_crop_10aa61ea37cf.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_crop_5faa68beaac9.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_crop_9c483bdaddab.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_crop_c3dabf895832.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_crop_d4da1f60498b.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_icon_localization_51cff22749c4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_icon_localization_6d6e2ebb826f.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_icon_localization_b04facc7d7aa.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_icon_localization_f1a961cb3a0c.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_icon_localization_f49c92280d83.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_merge_strategy_03436cd0af23.py | Compute the Intersection over Union (IoU) of two bounding boxes. |
-| 0xsojalsec_mobileagent_py_merge_strategy_1df4d3bea2ff.py | Compute the Intersection over Union (IoU) of two bounding boxes. |
-| 0xsojalsec_mobileagent_py_prompt_796bc04d1224.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_prompt_eaeb9c2a45b4.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_text_localization_6db28216c1c5.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_text_localization_9e202411d1e0.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_text_localization_c9dd794d6eed.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_text_localization_e1553d3622ad.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_text_localization_f188b0fc7382.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
-| 0xsojalsec_mobileagent_py_text_localization_old_c9dd794d6eed.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_mobileagent', providing core logic for its parent repository. |
 | 0xsojalsec_moon_dev_ai_agents_py_angleconfirm_btfinal_c05b285997be.py | A trend-based trading strategy using William D. Gann's angular analysis combined with 5-period SMA for confirmation. |
 | 0xsojalsec_moon_dev_ai_agents_py_fractaldivergence_btfinal_a040441dde42.py | Implementation of the FractalDivergence strategy. |
 | 0xsojalsec_moon_dev_ai_agents_py_retracementcontra_pkg_6a38e88624d1.py | Component originally named 'DEV\PyAgent\src\external_candidates\ingested\_0xsojalsec_moon_dev_ai_agents', providing core logic for its parent repository. |
@@ -755,7 +727,6 @@ Total Files: 768
 | _0xsojalsec_llava_next_convert_sqa_to_llava_base_prompt.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_LLaVA_NeXT_convert_sqa_to_llava_base_prompt', providing core logic for its parent repository. |
 | _0xsojalsec_mahilo_mahilo_sales_agent.py | Analyze effectiveness of different lead sources |
 | _0xsojalsec_malwoverview_colors.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_malwoverview_colors', providing core logic for its parent repository. |
-| _0xsojalsec_mobileagent_prompt.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_MobileAgent_prompt', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_colorpp.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_colorpp', providing core logic for its parent repository. |
 | _0xsojalsec_nebula_run_gcp_module.py | Component originally named 'DEV\PyAgent\src\external_candidates\auto\0xSojalSec_Nebula_run_gcp_module', providing core logic for its parent repository. |
 | _0xsojalsec_pdf_extract_api_ocr_strategy.py | Base OCR Strategy Interface |
