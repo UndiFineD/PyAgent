@@ -1,7 +1,0 @@
-# Extracted from: C:\DEV\PyAgent\.external\skills\skills\zbruceli\unifai-trading-suite\src\agents\__init__.py
-"""UnifAI agent implementations."""
-
-from .basic_agent import TradingAgent as BasicAgent
-from .trading_agent import TradingAgent, run_trading_query
-
-__all__ = ["BasicAgent", "TradingAgent", "run_trading_query"]
