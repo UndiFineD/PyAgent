@@ -22,7 +22,7 @@ Based on patterns from Active-Directory-Exploitation-Cheat-Sheet repository.
 """
 
 import logging
-from typing import Dict, List, Optional, Set, Any, cast
+from typing import Dict, List, Optional, Set, Any
 from dataclasses import dataclass
 from enum import Enum
 
@@ -324,12 +324,12 @@ class ActiveDirectoryAnalysisCore:
         ]
 
         for ace in dangerous_aces:
-            obj_dn = cast(str, ace["object"])
+            obj_dn_str: str = str(ace["object"])
             acl_vuln = ADVulnerability(
                 vulnerability_type="dangerous_acl",
                 severity="critical",
                 description=f"Dangerous ACL: {ace['description']}",
-                affected_objects=[obj_dn],
+                affected_objects=[obj_dn_str],
                 exploit_path=[
                     f"User {ace['principal']} exploits {', '.join(ace['rights'])} rights",
                     "Modifies group membership",
@@ -697,7 +697,7 @@ class ActiveDirectoryAnalysisCore:
         vulnerabilities = []
 
         # Look for service accounts with suspicious activity
-        for dn, obj in self.ad_objects.items():
+        for _, obj in self.ad_objects.items():
             if obj.object_type == ADObjectType.USER:
                 # Check if it's a service account
                 if any("service" in str(prop).lower() for prop in obj.properties.values()):
@@ -720,7 +720,7 @@ class ActiveDirectoryAnalysisCore:
                             vulnerability_type="APT_Service_Account_Abuse",
                             severity="medium",
                             description=f"Unusual service account activity: {', '.join(suspicious_props)}",
-                            affected_objects=[dn],
+                            affected_objects=[obj.distinguished_name],
                             exploit_path=["Service account compromise", "Privilege escalation", "Lateral movement"],
                             mitigation=(
                                 "Monitor service account usage, implement strict access controls, "

@@ -541,7 +541,7 @@ class ActiveDirectoryAttackDefenseCore:
     async def calculate_overall_score(
         self,
         attack_vectors: List[AttackVector],
-        _defense_assessments: Dict[DefenseControl, DefenseAssessment]
+        defense_assessments: Dict[DefenseControl, DefenseAssessment]
     ) -> float:
         """Calculate overall security posture score"""
         # Base score

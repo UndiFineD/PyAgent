@@ -57,10 +57,10 @@ class InferenceEngine:
         self.config = kwargs
         self.api_key = kwargs.get("api_key") or os.environ.get("LLM_API_KEY")
         self.base_url = kwargs.get("base_url") or os.environ.get("LLM_BASE_URL")
-        
+
         # Local runner if specified
         self.local_runner: Optional[AsyncModelRunner] = kwargs.get("local_runner")
-        
+
         # Clients
         self._openai_client: Optional[Any] = None
         self._anthropic_client: Optional[Any] = None
@@ -97,7 +97,7 @@ class InferenceEngine:
         # 2. Route to appropriate provider
         if "claude" in model.lower() and HAS_ANTHROPIC:
             return await self._generate_anthropic(prompt, model, temperature, max_tokens)
-        
+
         if "ollama" in model.lower() or kwargs.get("use_ollama") or os.environ.get("USE_OLLAMA") == "true":
             if HAS_OLLAMA:
                 return await self._generate_ollama(prompt, model, temperature)
@@ -124,15 +124,15 @@ class InferenceEngine:
     async def _generate_anthropic(self, prompt: str, model: str, temperature: float, max_tokens: int) -> str:
         if not HAS_ANTHROPIC:
             return await self._generate_openai(prompt, model, temperature, max_tokens)
-        
+
         # Implementation for Anthropic...
         return "Anthropic implementation pending"
 
     async def _generate_ollama(self, prompt: str, model: str, temperature: float) -> str:
         try:
             response = await asyncio.to_thread(
-                ollama.chat, 
-                model=model, 
+                ollama.chat,
+                model=model,
                 messages=[{'role': 'user', 'content': prompt}],
                 options={'temperature': temperature}
             )

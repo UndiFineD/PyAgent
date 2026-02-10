@@ -8,36 +8,20 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 """
-LegalAuditAgent: Agent for auditing legal compliance, licensing, and intellectual property across the PyAgent swarm.
+LegalAuditAgent: Agent for auditing legal compliance, licensing, and intellectual property.
 Automates legal risk assessment and documentation.
 """
-
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Legal audit agent.py module.
-"""
-
 
 from __future__ import annotations
 
 import re
 import time
-from typing import Any, Optional, TypedDict
+from typing import Any, TypedDict
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
@@ -86,7 +70,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                     result=result,
                     meta={"timestamp": time.time(), "agent": "LegalAuditAgent"}
                 )
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
     def check_license_compliance(self, content: str, project_license: str = "MIT") -> LicenseReport:

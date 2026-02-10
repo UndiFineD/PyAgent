@@ -68,6 +68,7 @@ class EmergencyEventLog:
 
 EMERGENCY_LOG = EmergencyEventLog()
 
+
 class AgentCircuitBreaker:
     """
     Phase 336: Circuit breaker for autonomous agents to prevent cascading failures.
@@ -87,7 +88,7 @@ class AgentCircuitBreaker:
             try:
                 data = json.loads(self._state_file.read_text(encoding="utf-8"))
                 self.window.extend(data.get("history", []))
-            except Exception: # pylint: disable=broad-except
+            except Exception:  # pylint: disable=broad-except
                 pass
 
     def _save(self) -> None:
@@ -95,7 +96,7 @@ class AgentCircuitBreaker:
         try:
             self._state_file.parent.mkdir(parents=True, exist_ok=True)
             FileSystemCore().atomic_write(
-                self._state_file, 
+                self._state_file,
                 json.dumps({"history": list(self.window)})
             )
         except (OSError, TypeError):  # pylint: disable=broad-exception-caught, unused-variable
@@ -159,7 +160,7 @@ class AgentCheckpointManager:
                     backup_name: str = f"{file_path.name}.bak"
                     self._fs.safe_copy(file_path, cp_path / backup_name)
                     file_manifest[str(file_path)] = backup_name
-            
+
             self._fs.atomic_write(cp_path / "files.json", json.dumps(file_manifest))
 
         return checkpoint_id
@@ -187,8 +188,9 @@ class AgentCheckpointManager:
         state_path: Path = cp_path / "state.json"
         if state_path.exists():
             return json.loads(state_path.read_text(encoding="utf-8"))
-        
+
         return {}
+
 
 class StateDriftDetector:
     """
@@ -364,8 +366,10 @@ class StateTransaction:
                         orig_content: bytes = self.backups[file].read_bytes()
                         new_content: bytes = file.read_bytes()
                         if orig_content != new_content:
-                            msg: str = ("Security Violation: Attempted modification of "
-                                   f"immutable test infrastructure: {file}")
+                            msg: str = (
+                                "Security Violation: Attempted modification of "
+                                f"immutable test infrastructure: {file}"
+                            )
                             logging.critical(msg)
                             raise PermissionError(msg)
 

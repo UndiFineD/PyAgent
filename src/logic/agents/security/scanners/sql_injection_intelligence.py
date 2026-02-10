@@ -32,7 +32,7 @@ class SQLInjectionIntelligence:
     ]
 
     @classmethod
-    async def suggest_tampers(cls, url: str, payload: str, method: str = "GET") -> List[str]:
+    async def suggest_tampers(cls, _url: str, _payload: str, _method: str = "GET") -> List[str]:
         """
         Suggests potential tampers by testing if a modified payload bypasses a 403/406 response.
         """

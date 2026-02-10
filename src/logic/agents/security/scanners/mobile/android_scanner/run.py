@@ -51,15 +51,18 @@ def process_and_generate_reports(all_pathes, model_key, model_variant, input_dir
     files_to_process = []
     for path in all_pathes:
         if os.path.exists(path):
-            files_to_process.append((path, open(path, encoding="utf-8").read()))
-    
+            with open(path, encoding="utf-8") as f:
+                files_to_process.append((path, f.read()))
+
     with ThreadPoolExecutor(max_workers=num_threads) as executor:
         futures = []
         for file_path, code_content in files_to_process:
-            futures.append(executor.submit(process_file, file_path, code_content, model_key, model_variant, input_dir, output_dir))
+            futures.append(
+                executor.submit(process_file, file_path, code_content, model_key, model_variant, input_dir, output_dir)
+            )
 
         for future in as_completed(futures):
-            file_path, markdown_path, html_path = future.result()
+            future.result()
 
     generate_index_html(output_dir)
     print(colored(f"[✓] Index file created at {os.path.join(output_dir, 'index.html')}", "green"))

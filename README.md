@@ -6,6 +6,13 @@ PyAgent is a high-performance, multi-agent swarm system optimized for autonomous
 
 ## 🚀 The Core Pillars
 
+### 🐝 Swarm Singularity (v4.0.0)
+PyAgent v4.0 has evolved into a fully decentralized "Universal Agent" mesh.
+- **Universal Shards**: Agents are no longer specialists; they are shells that load **Logic Manifests** (JSON-defined brains) and **Skills** dynamically.
+- **Shard RAID-10**: Distributed state resilience via mirrored striping across the swarm. No single node failure can cause data loss.
+- **Zero-Trust Network**: RSA/HMAC authenticated transport layer with **Signal Double Ratchet** forward secrecy.
+- **Scam & Hallucination Defense**: Byzantine Consensus auditing for all agent outputs.
+
 ### ⚡ Rust-Native Acceleration
 Computationally intensive tasks are delegated to a high-throughput **Rust FFI bridge** (`rust_core`).
 - **41% Performance Gain**: Offloads metrics calculation, complexity analysis, and regex FSM decoding to native code.

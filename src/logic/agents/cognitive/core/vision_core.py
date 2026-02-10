@@ -21,7 +21,6 @@
 """
 VisionCore: Core logic for visual processing and perception in PyAgent.
 Supports image analysis, feature extraction, and multimodal reasoning for cognitive agents.
-"""
 
 Provides logic for image hashing, glitch detection, and visual signature extraction
 from GUI screenshots and other visual data sources.

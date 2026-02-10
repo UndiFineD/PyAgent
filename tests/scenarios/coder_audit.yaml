@@ -1,0 +1,19 @@
+name: "Coder Security Audit Workflow"
+description: "Scenario where a Coder Agent refactors a file and a Security Agent audits the change."
+steps:
+  - description: "Coder refactors the base agent core"
+    action: "delegate"
+    params:
+      role: "coder"
+      prompt: "Add type hints to all methods in src/core/base/lifecycle/base_agent_core.py"
+  
+  - description: "Security Auditor checks for vulnerabilities"
+    action: "delegate"
+    params:
+      role: "security_auditor"
+      prompt: "Scan src/core/base/lifecycle/base_agent_core.py for any introduced security risks."
+  
+  - description: "Verify state"
+    action: "verify_state"
+    params:
+      condition: "source_clean"

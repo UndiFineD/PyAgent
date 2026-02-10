@@ -518,7 +518,6 @@ class APTSimulationCore(BaseCore):
 
         return analysis_results
 
-
     def _analyze_traffic_against_profile(
         self, sample: Dict[str, Any], profile: C2Profile
     ) -> float:

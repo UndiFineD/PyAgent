@@ -30,6 +30,27 @@ class FleetInteractionRecorder:
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
+    def record_interaction(self, user_input: str, agent_id: str, role: str, content: str | None = None) -> None:
+        """Directly records an interaction for the Web UI reasoning stream."""
+        import json
+        log_file = self.fleet.workspace_root / "data" / "logs" / "reasoning_chains.jsonl"
+        entry = {
+            "timestamp": time.time(),
+            "role": role,
+            "agent": agent_id,
+            "content": content or user_input,
+            "action": "reply" if role == "assistant" else "input"
+        }
+        try:
+            log_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(log_file, "a", encoding="utf-8") as f:
+                f.write(json.dumps(entry) + "\n")
+        except Exception as e:
+            # Fallback to standard logging if FS fails
+            from src.observability.structured_logger import StructuredLogger
+            logger = StructuredLogger(__name__)
+            logger.error(f"Failed to record interaction: {e}")
+
     async def record_success(self, res_or_prompt: Any, *args: Any, **_kwargs: Any) -> None:
         """Records the success of a workflow step including Explainability and Telemetry."""
         # Detect calling convention (New: 8 parameters total, Legacy: 3)

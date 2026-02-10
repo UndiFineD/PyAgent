@@ -37,6 +37,9 @@ from falkordb import FalkorDB
 from qdrant_client import QdrantClient
 from qdrant_client import models as qdrant_models
 
+from src.core.memory.kv_cache import KVCacheManager
+from src.core.rust_bridge import get_bridge
+
 try:
     from qdrant_client.http.exceptions import UnexpectedResponse
 except ImportError:  # Allow tests to import without full qdrant client installed
@@ -146,6 +149,9 @@ class AutoMemCore:
         # Initialize backing stores
         self.graph_store = FalkorDB.from_url(config.falkordb_url)
         self.vector_store = QdrantClient(url=config.qdrant_url)
+
+        # Swarm Singularity (Pillar 2): Paged KV Cache
+        self.kv_cache = KVCacheManager()
 
         # Initialize vector collection if it doesn't exist
         self._ensure_vector_collection()

@@ -15,8 +15,9 @@
 import asyncio
 import aiohttp
 import xml.etree.ElementTree as ET
-from typing import List, Dict, Optional
+from typing import Dict, Optional
 from urllib.parse import quote
+
 
 class MFAIntelligence:
     """
@@ -51,12 +52,16 @@ class MFAIntelligence:
                 content = await response.text()
                 root = ET.fromstring(content)
                 name_space = {'ns': 'http://schemas.microsoft.com/identity/userrealm/1.0'}
-                
+
+                state_node = root.find('.//ns:State', name_space)
+                auth_url_node = root.find('.//ns:AuthURL', name_space)
+                fed_proto_node = root.find('.//ns:FederationProtocol', name_space)
+
                 realm = {
                     "username": username,
-                    "state": root.find('.//ns:State', name_space).text if root.find('.//ns:State', name_space) is not None else "Unknown",
-                    "auth_url": root.find('.//ns:AuthURL', name_space).text if root.find('.//ns:AuthURL', name_space) is not None else None,
-                    "federation_protocol": root.find('.//ns:FederationProtocol', name_space).text if root.find('.//ns:FederationProtocol', name_space) is not None else None
+                    "state": state_node.text if state_node is not None else "Unknown",
+                    "auth_url": auth_url_node.text if auth_url_node is not None else None,
+                    "federation_protocol": fed_proto_node.text if fed_proto_node is not None else None
                 }
                 return realm
         except Exception as e:
@@ -69,7 +74,7 @@ class MFAIntelligence:
         """
         results = {}
         session = await self.get_session()
-        
+
         async def check_endpoint(name, url):
             # This is a simplified check. Real MFASweep does more complex header handling.
             auth = aiohttp.BasicAuth(username, password)

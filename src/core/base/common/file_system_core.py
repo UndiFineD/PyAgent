@@ -64,7 +64,9 @@ class FileSystemCore:
     def _can_use_rust_discover(self) -> bool:
         return rc and hasattr(rc, "discover_files_rust")
 
-    def _try_rust_discover_files(self, root: Path, patterns: List[str], ignore: Optional[List[str]]) -> Optional[List[Path]]:
+    def _try_rust_discover_files(
+        self, root: Path, patterns: List[str], ignore: Optional[List[str]]
+    ) -> Optional[List[Path]]:
         """Attempt to use the Rust-backed directory walker.
 
         Returns None on any failure so callers fall back to the Python implementation.
@@ -221,11 +223,11 @@ class FileSystemCore:
         p = Path(path)
         if not p.exists():
             return None
-            
+
         # Try Rust for speed
         if rc and hasattr(rc, "generate_hash"):
             try:
-                return rc.generate_hash(p.read_text(encoding="utf-8")) # type: ignore
+                return rc.generate_hash(p.read_text(encoding="utf-8"))  # type: ignore
             except Exception:
                 pass
 
@@ -247,11 +249,10 @@ class FileSystemCore:
         if rc and hasattr(rc, "bulk_hash_files_rust"):
             try:
                 str_paths = [str(p) for p in paths if p.exists()]
-                results = rc.bulk_hash_files_rust(str_paths) # type: ignore
+                results = rc.bulk_hash_files_rust(str_paths)  # type: ignore
                 return {Path(k): v for k, v in results.items()}
             except Exception:
                 pass
-        
+
         # Fallback
         return {p: self.get_file_hash(p) or "" for p in paths if p.exists()}
-

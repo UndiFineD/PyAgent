@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import asyncio
 import aiohttp
 import re
 from typing import List, Optional
@@ -68,7 +69,7 @@ class XssIntelligence:
                                     found.append(test_url)
                                     # Optimization: if one payload works on this param, maybe move to next param
                                     break
-                    except Exception:
+                    except (asyncio.TimeoutError, aiohttp.ClientError):
                         continue
         return found
 
@@ -111,8 +112,8 @@ class XssIntelligence:
                                         js_content = await js_resp.text()
                                         if SINKS.search(js_content) and SOURCES.search(js_content):
                                             findings.append(f"Potential DOM XSS in external script: {js_url}")
-                            except Exception:
+                            except (asyncio.TimeoutError, aiohttp.ClientError):
                                 continue
-            except Exception:
+            except (asyncio.TimeoutError, aiohttp.ClientError):
                 pass
         return findings

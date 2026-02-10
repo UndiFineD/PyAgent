@@ -13,8 +13,8 @@
 # limitations under the License.
 
 import re
-import asyncio
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
+
 
 class OSINTIntelligence:
     """
@@ -24,7 +24,7 @@ class OSINTIntelligence:
 
     # Regex for international phone numbers
     PHONE_REGEX = re.compile(r'\+?[1-9]\d{1,14}')
-    
+
     # Regex for common social media profiles in text
     SOCIAL_PATTERNS = {
         "twitter": r'twitter\.com\/([a-zA-Z0-9_]+)',

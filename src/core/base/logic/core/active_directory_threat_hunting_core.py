@@ -326,7 +326,9 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
             risk_score=risk_score,
             summary={
                 "total_findings": len(findings),
-                "high_risk_findings": len([f for f in findings if f.threat_level in [ThreatLevel.HIGH, ThreatLevel.CRITICAL]]),
+                "high_risk_findings": len([
+                    f for f in findings if f.threat_level in [ThreatLevel.HIGH, ThreatLevel.CRITICAL]
+                ]),
                 "affected_objects": len(set(obj for f in findings for obj in f.affected_objects))
             }
         )
@@ -416,8 +418,11 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
                 # Check for service account indicators
                 is_service_account = (
                     obj.sam_account_name and
-                    any(indicator in obj.sam_account_name.lower() for indicator in self.baseline_data["service_account_indicators"])
-                ) or obj.user_principal_name and "svc-" in obj.user_principal_name.lower()
+                    any(
+                        indicator in obj.sam_account_name.lower()
+                        for indicator in self.baseline_data["service_account_indicators"]
+                    )
+                ) or (obj.user_principal_name and "svc-" in obj.user_principal_name.lower())
 
                 if is_service_account:
                     # Check for security issues
@@ -452,7 +457,10 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
                             mitre_technique="T1078.003",  # Valid Accounts: Local Accounts
                             evidence={
                                 "issues": issues,
-                                "password_age_days": (datetime.now() - obj.password_last_set).days if obj.password_last_set else None,
+                                "password_age_days": (
+                                    (datetime.now() - obj.password_last_set).days
+                                    if obj.password_last_set else None
+                                ),
                                 "has_spn": bool((obj.permissions or {}).get("ServicePrincipalNames"))
                             },
                             recommendations=[

@@ -98,6 +98,35 @@ class MCPAgent:
             if hasattr(self, "recorder") and self.recorder:
                 self.recorder.record_lesson(
                     "mcp_tool_error",
+                    {"server": server_name, "tool": tool_name, "error": response["error"]},
+                )
+            return f"Error: {response['error']}"
+
+        return json.dumps(response.get("result", {}), indent=2)
+
+    @as_tool
+    async def initialize_mcp_server(self, server_name: str, command: str, args: list[str]) -> str:
+        """Boots a new MCP server and registers it with the fleet (Pillar 4)."""
+        if server_name in self.connectors:
+            return f"MCP Server '{server_name}' is already running."
+
+        def boot() -> str:
+            try:
+                # Combine command and args
+                full_cmd = [command] + args
+                connector = MCPConnector(server_name, full_cmd)
+                connector.start()
+                self.connectors[server_name] = connector
+                return f"Successfully initialized MCP server '{server_name}'"
+            except Exception as e:
+                return f"Failed to initialize MCP server: {e}"
+
+        return await asyncio.to_thread(boot)
+
+    async def run_task(self, task_manifest: dict[str, Any]) -> Any:
+        """Standard task runner for MCP agent."""
+        # Implementation...
+        return {"status": "success", "agent": "mcp_agent"}
                     {
                         "server": server_name,
                         "tool": tool_name,

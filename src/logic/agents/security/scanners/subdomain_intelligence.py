@@ -64,7 +64,7 @@ class SubdomainIntelligence:
                         name_value = entry.get("name_value", "")
                         subdomains.extend(name_value.split())
                     return self._clean_subdomains(subdomains, domain)
-        except Exception as e:
+        except (asyncio.TimeoutError, aiohttp.ClientError, ValueError) as e:
             logger.error(f"Error fetching from crt.sh for {domain}: {e}")
         return set()
 
@@ -78,7 +78,7 @@ class SubdomainIntelligence:
                     text = await resp.text()
                     subdomains = [line.split(',')[0] for line in text.strip().split('\n') if line]
                     return self._clean_subdomains(subdomains, domain)
-        except Exception as e:
+        except (asyncio.TimeoutError, aiohttp.ClientError, ValueError) as e:
             logger.error(f"Error fetching from HackerTarget for {domain}: {e}")
         return set()
 
@@ -92,7 +92,7 @@ class SubdomainIntelligence:
                     data = await resp.json()
                     subdomains = data.get("subdomains", [])
                     return self._clean_subdomains(subdomains, domain)
-        except Exception as e:
+        except (asyncio.TimeoutError, aiohttp.ClientError, ValueError) as e:
             logger.error(f"Error fetching from ThreatCrowd for {domain}: {e}")
         return set()
 
@@ -107,7 +107,7 @@ class SubdomainIntelligence:
                     results = data.get("results", [])
                     subdomains = [r.get("page", {}).get("domain") for r in results if r.get("page")]
                     return self._clean_subdomains(subdomains, domain)
-        except Exception as e:
+        except (asyncio.TimeoutError, aiohttp.ClientError, ValueError) as e:
             logger.error(f"Error fetching from urlscan for {domain}: {e}")
         return set()
 
@@ -124,7 +124,7 @@ class SubdomainIntelligence:
                         dns_names = entry.get("dns_names", [])
                         subdomains.extend(dns_names)
                     return self._clean_subdomains(subdomains, domain)
-        except Exception as e:
+        except (asyncio.TimeoutError, aiohttp.ClientError, ValueError) as e:
             logger.error(f"Error fetching from CertSpotter for {domain}: {e}")
         return set()
 

@@ -1,0 +1,15 @@
+{
+    "version": "1.0.0",
+    "role": "coder",
+    "description": "Expert software engineer specialized in Python and Rust",
+    "required_skills": ["identity", "environment", "security", "git", "filesystem"],
+    "reasoning_mode": "cot",
+    "memory_strategy": "working_context",
+    "permissions": {
+        "fs_read": true,
+        "fs_write": true,
+        "network": true,
+        "execution": true
+    },
+    "tools": ["python_executor", "rust_compiler", "git_cli"]
+}

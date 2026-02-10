@@ -284,7 +284,8 @@ class AIAgentOrchestrationCore(BaseCore):
 
 The first thing you should always do when creating a new app is change the home page to a placeholder so that the user
 can see that something is happening. Then you should explore the project structure and see what has already been
-provided to you to build the app. Check if there's a README_AI.md file for more instructions on how to use the template.
+provided to you to build the app. Check if there's a README_AI.md file for more instructions on how to use
+the template.
 
 All of the code you will be editing is in the global /template directory.
 
@@ -332,7 +333,8 @@ NextJS tips:
 
     def _get_dev_assistant_prompt(self) -> str:
         """Get the system prompt for the development assistant agent"""
-        return """You are a development assistant. Help developers with coding tasks, debugging, code review, and technical guidance.
+        return """You are a development assistant. Help developers with coding tasks, debugging,
+code review, and technical guidance.
 
 Your capabilities include:
 - Code review and improvement suggestions
@@ -541,7 +543,9 @@ Be concise but thorough in your responses. Use examples when helpful."""
             "AI providers like OpenAI, Anthropic, or local models."
         )
 
-    def _prepare_messages_for_ai(self, ui_messages: List[UIMessage], agent_config: AgentConfig) -> List[Dict[str, Any]]:
+    def _prepare_messages_for_ai(
+        self, ui_messages: List[UIMessage], agent_config: AgentConfig
+    ) -> List[Dict[str, Any]]:
         """Convert UI messages to AI provider format"""
         messages = []
 

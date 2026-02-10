@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import itertools
 import concurrent.futures
 import sys
@@ -17,16 +31,16 @@ semaphore = None
 
 
 def error(message, **kwargs):
-    print('[{}] {}'.format(datetime.datetime.now().time(), message), sys.stderr)
+    print('[{}] {}'.format(datetime.datetime.now().time(), message), file=sys.stderr)
     for n, a in kwargs.items():
-        print('\t{}={}'.format(n, a), sys.stderr)
+        print('\t{}={}'.format(n, a), file=sys.stderr)
 
     exc_type, exc_value, exc_traceback = sys.exc_info()
-    print('Exception type:' + str(exc_type), sys.stderr)
-    print('Exception value:' + str(exc_value), sys.stderr)
-    print('TRACE:', sys.stderr)
+    print('Exception type:' + str(exc_type), file=sys.stderr)
+    print('Exception value:' + str(exc_value), file=sys.stderr)
+    print('TRACE:', file=sys.stderr)
     traceback.print_tb(exc_traceback, file=sys.stderr)
-    print('\n\n\n', sys.stderr)
+    print('\n\n\n', file=sys.stderr)
 
 
 def register(f):
@@ -52,7 +66,10 @@ def http_request(url, method='GET', data=None, additional_headers=None, proxy=No
     if not proxy:
         proxy = {}
 
-    resp = requests.request(method, url, data=data, headers=headers, proxies=proxy, verify=False, timeout=15, allow_redirects=False)
+    resp = requests.request(
+        method, url, data=data, headers=headers, proxies=proxy,
+        verify=False, timeout=15, allow_redirects=False
+    )
 
     return resp
 
@@ -60,7 +77,7 @@ def http_request(url, method='GET', data=None, additional_headers=None, proxy=No
 def preflight(url, proxy=None):
     try:
         http_request(url, proxy=proxy)
-    except:
+    except Exception:
         return False
     else:
         return True
@@ -80,7 +97,7 @@ def by_login_page(base_url, debug, proxy=None):
 
         if resp.status_code == 200 and 'Welcome to Adobe Experience Manager' in str(resp.content):
             return True
-    except:
+    except Exception:
         if debug:
             error('Exception', method='by_login_page', url=url)
 
@@ -96,7 +113,7 @@ def by_csrf_token(base_url, debug, proxy=None):
         ct = content_type(resp.headers.get('Content-Type', ''))
         if resp.status_code == 200 and ct == 'application/json' and '"token"' in str(resp.content):
             return True
-    except:
+    except Exception:
         if debug:
             error('Exception', method='by_csrf_token', url=url)
 
@@ -111,22 +128,26 @@ def by_geometrixx_page(base_url, debug, proxy=None):
 
         if resp.status_code == 200 and 'Geometrixx has been selling' in str(resp.content):
             return True
-    except:
+    except Exception:
         if debug:
             error('Exception', method='by_geometrixx_page', url=url)
 
 
 @register
 def by_get_servlet(base_url, debug, proxy=None):
-    GETSERVLET = itertools.product(('/', '/content', '/content/dam', '/bin', '/etc', '/var'),
-                                   ('.json', '.1.json', '.childrenlist.json', '.childrenlist.html', '.ext.json',
-                                    '.children.json', '...4.2.1...json', '.json/a.css', '.json/a.html', '.json/a.png',
-                                    '.json/a.ico', '.json;%0aa.css', '.json;%0aa.html', '.json;%0aa.png',
-                                    '.json;%0aa.ico', '.json?a.css', '.json?a.ico', '.json?a.html', '.ext.json/a.css',
-                                    '.ext.json/a.html', '.ext.json/a.ico', '.ext.json;%0aa.css', '.ext.json;%0aa.ico',
-                                    '.ext.json;%0aa.html', '.children.json/a.css', '.children.json/a.html',
-                                    '.children.json/a.ico', '.children.json;%0aa.css', '.children.json;%0aa.ico',
-                                    '.children.json;%0aa.html'))
+    GETSERVLET = itertools.product(
+        ('/', '/content', '/content/dam', '/bin', '/etc', '/var'),
+        (
+            '.json', '.1.json', '.childrenlist.json', '.childrenlist.html', '.ext.json',
+            '.children.json', '...4.2.1...json', '.json/a.css', '.json/a.html', '.json/a.png',
+            '.json/a.ico', '.json;%0aa.css', '.json;%0aa.html', '.json;%0aa.png',
+            '.json;%0aa.ico', '.json?a.css', '.json?a.ico', '.json?a.html', '.ext.json/a.css',
+            '.ext.json/a.html', '.ext.json/a.ico', '.ext.json;%0aa.css', '.ext.json;%0aa.ico',
+            '.ext.json;%0aa.html', '.children.json/a.css', '.children.json/a.html',
+            '.children.json/a.ico', '.children.json;%0aa.css', '.children.json;%0aa.ico',
+            '.children.json;%0aa.html'
+        )
+    )
     GETSERVLET = list('{0}{1}'.format(p1, p2) for p1, p2 in GETSERVLET)
 
     for path in GETSERVLET:
@@ -144,26 +165,26 @@ def by_get_servlet(base_url, debug, proxy=None):
 
                 try:
                     json.loads(resp.content.decode())['jcr:primaryType']
-                except:
+                except Exception:
                     pass
                 else:
                     return True
 
                 try:
                     json.loads(resp.content.decode())['parent']['resourceType']
-                except:
+                except Exception:
                     pass
                 else:
                     return True
 
                 try:
                     json.loads(resp.content.decode())[0]['type']
-                except:
+                except Exception:
                     pass
                 else:
                     return True
 
-        except:
+        except Exception:
             if debug:
                 error('Exception', method='by_get_servlet', url=url)
 
@@ -172,8 +193,10 @@ def by_get_servlet(base_url, debug, proxy=None):
 
 @register
 def by_bin_receive(base_url, debug, proxy=None):
-    BINRECEIVE = itertools.product(('/bin/receive{0}?sling:authRequestLogin=1', '/bin/receive.servlet{0}?sling:authRequestLogin=1'),
-                                   ('.css', '.html', '.js', '.ico', '.png', '.gif', '.1.json', '...4.2.1...json'))
+    BINRECEIVE = itertools.product(
+        ('/bin/receive{0}?sling:authRequestLogin=1', '/bin/receive.servlet{0}?sling:authRequestLogin=1'),
+        ('.css', '.html', '.js', '.ico', '.png', '.gif', '.1.json', '...4.2.1...json')
+    )
     BINRECEIVE = list(p1.format(p2) for p1, p2 in BINRECEIVE)
 
     for path in BINRECEIVE:
@@ -183,9 +206,12 @@ def by_bin_receive(base_url, debug, proxy=None):
             resp = http_request(url, proxy=proxy)
 
             header = resp.headers.get('WWW-Authenticate', '').lower()
-            if resp.status_code == 401 and ('day' in header or 'sling' in header or 'aem' in header or 'communique' in header or 'adobe' in header):
+            if resp.status_code == 401 and (
+                'day' in header or 'sling' in header or 'aem' in header or
+                'communique' in header or 'adobe' in header
+            ):
                 return True
-        except:
+        except Exception:
             if debug:
                 error('Exception', method='by_bin_receive', url=url)
 
@@ -194,9 +220,13 @@ def by_bin_receive(base_url, debug, proxy=None):
 
 @register
 def by_loginstatus_servlet(base_url, debug, proxy=None):
-    LOGINSTATUS = itertools.product(('/system/sling/loginstatus', '///system///sling///loginstatus'),
-                                    ('.json', '.css', '.png', '.gif', '.html', '.ico', '.json/a.1.json',
-                                     '.json;%0aa.css', '.json;%0aa.html', '.json;%0aa.ico'))
+    LOGINSTATUS = itertools.product(
+        ('/system/sling/loginstatus', '///system///sling///loginstatus'),
+        (
+            '.json', '.css', '.png', '.gif', '.html', '.ico', '.json/a.1.json',
+            '.json;%0aa.css', '.json;%0aa.html', '.json;%0aa.ico'
+        )
+    )
     LOGINSTATUS = list('{0}{1}'.format(p1, p2) for p1, p2 in LOGINSTATUS)
 
     for path in LOGINSTATUS:
@@ -207,7 +237,7 @@ def by_loginstatus_servlet(base_url, debug, proxy=None):
 
             if resp.status_code == 200 and 'authenticated=' in str(resp.content):
                 return True
-        except:
+        except Exception:
             if debug:
                 error('Exception', method='by_loginstatus_servlet', url=url)
 
@@ -216,9 +246,13 @@ def by_loginstatus_servlet(base_url, debug, proxy=None):
 
 @register
 def by_bgtest_servlet(base_url, debug, proxy=None):
-    TESTSERVLET = itertools.product(('/system/bgservlets/test', '///system///bgservlets///test'),
-                                    ('.json', '.css', '.png', 'ico', '.gif', '.html', '.json/a.1.json', '.json;%0aa.css',
-                                    '.json;%0aa.html', '.json;%0aa.ico'))
+    TESTSERVLET = itertools.product(
+        ('/system/bgservlets/test', '///system///bgservlets///test'),
+        (
+            '.json', '.css', '.png', 'ico', '.gif', '.html', '.json/a.1.json',
+            '.json;%0aa.css', '.json;%0aa.html', '.json;%0aa.ico'
+        )
+    )
     TESTSERVLET = list('{0}{1}'.format(p1, p2) for p1, p2 in TESTSERVLET)
 
     for path in TESTSERVLET:
@@ -229,7 +263,7 @@ def by_bgtest_servlet(base_url, debug, proxy=None):
 
             if resp.status_code == 200 and 'All done.' in str(resp.content) and 'Cycle' in str(resp.content):
                 return True
-        except:
+        except Exception:
             if debug:
                 error('Exception', method='by_bgtest_servlet', url=url)
 
@@ -238,9 +272,13 @@ def by_bgtest_servlet(base_url, debug, proxy=None):
 
 @register
 def by_crx(base_url, debug, proxy=None):
-    CRX = itertools.product(('/crx/de/index.jsp', '/crx/explorer/browser/index.jsp', '/crx/packmgr/index.jsp'),
-                            ('', ';%0aa.css', ';%0aa.html', ';%0aa.ico', ';%0aa.png', '?a.css', '?a.html',
-                             '?a.png', '?a.ico', '/a.html', '/a.css', '/a.js', '/a.ico', '/a.png'))
+    CRX = itertools.product(
+        ('/crx/de/index.jsp', '/crx/explorer/browser/index.jsp', '/crx/packmgr/index.jsp'),
+        (
+            '', ';%0aa.css', ';%0aa.html', ';%0aa.ico', ';%0aa.png', '?a.css', '?a.html',
+            '?a.png', '?a.ico', '/a.html', '/a.css', '/a.js', '/a.ico', '/a.png'
+        )
+    )
     CRX = list('{0}{1}'.format(p1, p2) for p1, p2 in CRX)
 
     for path in CRX:
@@ -249,10 +287,12 @@ def by_crx(base_url, debug, proxy=None):
         try:
             resp = http_request(url, proxy=proxy)
 
-            if resp.status_code == 200 and ('CRXDE Lite' in str(resp.content) or 'Content Explorer' in str(resp.content) or
-                                            'CRX Package Manager' in str(resp.content)):
+            if resp.status_code == 200 and (
+                'CRXDE Lite' in str(resp.content) or 'Content Explorer' in str(resp.content) or
+                'CRX Package Manager' in str(resp.content)
+            ):
                 return True
-        except:
+        except Exception:
             if debug:
                 error('Exception', method='by_crx', url=url)
 
@@ -301,11 +341,11 @@ def by_gql_servlet(base_url, debug, proxy=None):
             if resp.status_code == 200:
                 try:
                     json.loads(resp.content.decode())['hits']
-                except:
+                except Exception:
                     pass
                 else:
                     return True
-        except:
+        except Exception:
             if debug:
                 error('Exception', method='by_gql_servlet', url=url)
 
@@ -327,9 +367,11 @@ def by_css_js(base_url, debug, proxy=None):
         try:
             resp = http_request(url, proxy=proxy)
 
-            if resp.status_code == 200 and ('ADOBE CONFIDENTIAL' in str(resp.content) or 'JCR repository' in str(resp.content)):
+            if resp.status_code == 200 and (
+                'ADOBE CONFIDENTIAL' in str(resp.content) or 'JCR repository' in str(resp.content)
+            ):
                 return True
-        except:
+        except Exception:
             if debug:
                 error('Exception', method='by_css_js', url=url)
 
@@ -338,11 +380,15 @@ def by_css_js(base_url, debug, proxy=None):
 
 @register
 def by_siren_api(base_url, debug, proxy=None):
-    SIREN = itertools.product(('/api/content.json', ),
-                              ('', '.css', '.js', '.ico', '.png', '/test.css', '/test.html', '/test.ico', '/test.1.json',
-                               '/test...4.2.1...json', ';%0a.css', ';%0aa.html', ';%0aa.ico', '?a.css', '?a.html', '?a.ico'))
+    SIREN = itertools.product(
+        ('/api/content.json', ),
+        (
+            '', '.css', '.js', '.ico', '.png', '/test.css', '/test.html', '/test.ico', '/test.1.json',
+            '/test...4.2.1...json', ';%0a.css', ';%0aa.html', ';%0aa.ico', '?a.css', '?a.html', '?a.ico'
+        )
+    )
     SIREN = list('{0}{1}'.format(p1, p2) for p1, p2 in SIREN)
-    
+
     for path in SIREN:
         url = normalize_url(base_url, path)
 
@@ -351,7 +397,7 @@ def by_siren_api(base_url, debug, proxy=None):
 
             if resp.status_code == 200 and '"links":' in str(resp.content):
                 return True
-        except:
+        except Exception:
             if debug:
                 error('Exception', method='by_siren_api', url=url)
 
@@ -360,10 +406,14 @@ def by_siren_api(base_url, debug, proxy=None):
 
 @register
 def by_post_servlet(base_url, debug, proxy=None):
-    POSTSERVLET = itertools.product(('/', '/content', '/content/dam'),
-                                    ('.json', '.1.json', '.json/a.css', '.json/a.html', '.json/a.ico', '.json/a.png',
-                                     '.json/a.gif', '.json/a.1.json', '.json;%0aa.css', '.json;%0aa.html', '.json;%0aa.js',
-                                     '.json;%0aa.png', '.json;%0aa.ico', '...4.2.1...json', '?a.ico', '?a.html', '?a.css', '?a.png'))
+    POSTSERVLET = itertools.product(
+        ('/', '/content', '/content/dam'),
+        (
+            '.json', '.1.json', '.json/a.css', '.json/a.html', '.json/a.ico', '.json/a.png',
+            '.json/a.gif', '.json/a.1.json', '.json;%0aa.css', '.json;%0aa.html', '.json;%0aa.js',
+            '.json;%0aa.png', '.json;%0aa.ico', '...4.2.1...json', '?a.ico', '?a.html', '?a.css', '?a.png'
+        )
+    )
     POSTSERVLET = list('{0}{1}'.format(p1, p2) for p1, p2 in POSTSERVLET)
 
     for path in POSTSERVLET:
@@ -373,16 +423,18 @@ def by_post_servlet(base_url, debug, proxy=None):
             headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Referer': base_url}
             resp = http_request(url, 'POST', data=data, additional_headers=headers, proxy=proxy)
 
-            if resp.status_code == 200 and ('Null Operation Status:' in str(resp.content) or 'Parent Location' in str(resp.content)):
+            if resp.status_code == 200 and (
+                'Null Operation Status:' in str(resp.content) or 'Parent Location' in str(resp.content)
+            ):
                 return True
-        except:
+        except Exception:
             if debug:
                 error('Exception', check='by_post_servlet', url=url)
 
     return False
 
 
-#@register
+# @register
 def by_swf(base_url, debug, proxy=None):
     SWFS = (
         '/etc/clientlibs/foundation/video/swf/player_flv_maxi.swf',
@@ -412,7 +464,7 @@ def by_swf(base_url, debug, proxy=None):
             ct = content_type(resp.headers.get('Content-Type', ''))
             if resp.status_code == 200 and ct == 'application/x-shockwave-flash':
                 return True
-        except:
+        except Exception:
             if debug:
                 error('Exception', method='by_swf', url=url)
 
@@ -428,8 +480,6 @@ def check_url(base_url, debug, proxy=None):
 
 
 def handle_finding(future):
-    global semaphore, lock
-
     semaphore.release()
 
     if future.done():
@@ -442,7 +492,12 @@ def handle_finding(future):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='AEM discoverer by @0ang3el, see the slides - https://speakerdeck.com/0ang3el/hunting-for-security-bugs-in-aem-webapps')
+    parser = argparse.ArgumentParser(
+        description=(
+            'AEM discoverer by @0ang3el, see the slides - '
+            'https://speakerdeck.com/0ang3el/hunting-for-security-bugs-in-aem-webapps'
+        )
+    )
 
     parser.add_argument('--file', help='file with urls')
     parser.add_argument('--proxy', help='http and https proxy')
@@ -469,9 +524,9 @@ def main():
 
     semaphore = Semaphore(args.workers)
 
-    with concurrent.futures.ThreadPoolExecutor(args.workers) as tpe, open(args.file, 'r') as input:
+    with concurrent.futures.ThreadPoolExecutor(args.workers) as tpe, open(args.file, 'r') as input_file:
         while True:
-            line = input.readline()
+            line = input_file.readline()
             if not line:
                 break
 
@@ -481,7 +536,7 @@ def main():
             try:
                 future = tpe.submit(check_url, url, args.debug, proxy)
                 future.add_done_callback(handle_finding)
-            except:
+            except Exception:
                 semaphore.release()
 
         tpe.shutdown(wait=True)

@@ -14,9 +14,10 @@
 
 import asyncio
 import aiohttp
-from typing import Dict, Any, Optional, List
+from typing import Dict, Optional, List
 from urllib.parse import urlparse
 from dataclasses import dataclass
+
 
 @dataclass
 class CORSVulnerability:
@@ -28,6 +29,7 @@ class CORSVulnerability:
     acao_header: Optional[str]
     acac_header: Optional[str]
 
+
 class CORSScanner:
     """
     Ported logic from 0xSojalSec-Corsy.
@@ -35,58 +37,62 @@ class CORSScanner:
     """
 
     DETAILS = {
-        "wildcard value" : {
-            "class" : "wildcard value",
-            "description" : "This host allows requests made from any origin. However, browsers will block all requests to this host by default.",
-            "severity" : "low",
-            "exploitation" : "Not possible"
+        "wildcard value": {
+            "class": "wildcard value",
+            "description": "This host allows requests made from any origin. "
+                           "However, browsers will block all requests by default.",
+            "severity": "low",
+            "exploitation": "Not possible"
         },
-        "third party allowed" : {
-            "class" : "third party allowed",
-            "description" : "This host has whitelisted a third party host for cross origin requests.",
-            "severity" : "Medium",
-            "exploitation" : "If the whitelisted host is a code hosting platform such as codepen.io or has an XSS vulnerability, it can be used to exploit this misconfiguration."
-
+        "third party allowed": {
+            "class": "third party allowed",
+            "description": "This host has whitelisted a third party host for cross origin requests.",
+            "severity": "Medium",
+            "exploitation": "If the whitelisted host is a code hosting platform such as codepen.io "
+                            "or has an XSS vulnerability, it can be used to exploit this misconfiguration."
         },
         "origin reflected": {
-            "class" : "origin reflected",
-            "description" : "This host allows any origin to make requests to it.",
-            "severity" : "high",
-            "exploitation" : "Make requests from any domain you control."
+            "class": "origin reflected",
+            "description": "This host allows any origin to make requests to it.",
+            "severity": "high",
+            "exploitation": "Make requests from any domain you control."
         },
-        "invalid value" : {
-            "class" : "invalid value",
-            "description" : "Header's value is invalid, this CORS implementation doesn't work at all.",
-            "severity" : "low",
-            "exploitation" : "Not possible"
+        "invalid value": {
+            "class": "invalid value",
+            "description": "Header's value is invalid, this CORS implementation doesn't work at all.",
+            "severity": "low",
+            "exploitation": "Not possible"
         },
-        "post-domain wildcard" : {
-            "class" : "post-domain wildcard",
-            "description" : "The origin verification is flawed, it allows requests from a host that has this host as a prefix.",
-            "severity" : "high",
-            "exploitation" : "Make requests from target.com.attacker.com"
+        "post-domain wildcard": {
+            "class": "post-domain wildcard",
+            "description": "The origin verification is flawed, it allows requests from a host "
+                           "that has this host as a prefix.",
+            "severity": "high",
+            "exploitation": "Make requests from target.com.attacker.com"
         },
-        "pre-domain wildcard" : {
-            "class" : "pre-domain wildcard",
-            "description" : "The origin verification is flawed, it allows requests from a host that has this host as a suffix.",
-            "severity" : "high",
-            "exploitation" : "Make requests from attacker-target.com"
+        "pre-domain wildcard": {
+            "class": "pre-domain wildcard",
+            "description": "The origin verification is flawed, it allows requests from a host "
+                           "that has this host as a suffix.",
+            "severity": "high",
+            "exploitation": "Make requests from attacker-target.com"
         },
-        "null origin allowed" : {
-            "class" : "null origin allowed",
-            "description" : "This host allows requests from 'null' origin.",
-            "severity" : "high",
-            "exploitation" : "Make requests from a sandboxed iframe."
+        "null origin allowed": {
+            "class": "null origin allowed",
+            "description": "This host allows requests from 'null' origin.",
+            "severity": "high",
+            "exploitation": "Make requests from a sandboxed iframe."
         },
-        "http origin allowed" : {
-            "class" : "http origin allowed",
-            "description" : "This host allows sharing resources over an unencrypted (HTTP) connection.",
-            "severity" : "low",
-            "exploitation" : "Sniff requests made over the unencrypted channel."
+        "http origin allowed": {
+            "class": "http origin allowed",
+            "description": "This host allows sharing resources over an unencrypted (HTTP) connection.",
+            "severity": "low",
+            "exploitation": "Sniff requests made over the unencrypted channel."
         },
         "unrecognized underscore": {
             "class": "unrecognized underscore",
-            "description": "The origin verification allowed an origin with an underscore which might not be what was intended.",
+            "description": "The origin verification allowed an origin with an underscore "
+                           "which might not be what was intended.",
             "severity": "medium",
             "exploitation": "Depends on regex implementation."
         },
@@ -133,15 +139,15 @@ class CORSScanner:
         if not parsed.scheme:
             url = f"http://{url}"
             parsed = urlparse(url)
-        
+
         root = parsed.netloc
         scheme = parsed.scheme
         target_url = f"{scheme}://{root}{parsed.path}"
 
         # Logic ported from active_tests in core/tests.py
-        
+
         async with aiohttp.ClientSession() as session:
-            
+
             # 1. Origin Reflected
             origin = f"{scheme}://example.com"
             headers = await self._request(session, target_url, origin)
@@ -188,7 +194,7 @@ class CORSScanner:
             acao = headers.get('Access-Control-Allow-Origin')
             acac = headers.get('Access-Control-Allow-Credentials')
             if acao and '`.example.com' in acao:
-                 results.append(self._create_vuln(target_url, 'broken parser', acao, acac))
+                results.append(self._create_vuln(target_url, 'broken parser', acao, acac))
 
             # 7. Unescaped Regex
             if root.count('.') > 1:
@@ -214,11 +220,11 @@ class CORSScanner:
             headers = await self._request(session, target_url, origin)
             acao = headers.get('Access-Control-Allow-Origin')
             acac = headers.get('Access-Control-Allow-Credentials')
-            
+
             if acao == '*':
                 results.append(self._create_vuln(target_url, 'wildcard value', acao, acac))
             elif acao and self._get_host(acao) and root != self._get_host(acao):
-                 results.append(self._create_vuln(target_url, 'third party allowed', acao, acac))
+                results.append(self._create_vuln(target_url, 'third party allowed', acao, acac))
 
         return results
 
@@ -239,9 +245,10 @@ class CORSScanner:
             acac_header=acac
         )
 
+
 # Example usage
 async def main():
-    scanner = CORSScanner()
+    _ = CORSScanner()
     # Mocking for test purposes or CLI usage
     # vulns = await scanner.scan("http://example.com")
     # for v in vulns:

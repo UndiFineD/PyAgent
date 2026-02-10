@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import asyncio
 import aiohttp
 import re
 from typing import List, Dict
@@ -121,7 +122,7 @@ class VulnIntelligence:
                             text = await resp.text()
                             if pattern.search(text.strip()):
                                 found.append(name)
-                except Exception:
+                except (asyncio.TimeoutError, aiohttp.ClientError):
                     continue
         return found
 
@@ -153,7 +154,7 @@ class VulnIntelligence:
                             text = (await resp.text()).replace("\n", "")
                             if cls.B64_PHP_START.match(text):
                                 confirmed.append(test_url)
-                except Exception:
+                except (asyncio.TimeoutError, aiohttp.ClientError):
                     continue
         return confirmed
 
@@ -179,7 +180,7 @@ class VulnIntelligence:
                                     keywords = ["admin", "config", "backup", "db", "sql", "git"]
                                     if any(kw in path.lower() for kw in keywords):
                                         results["sensitive"].append(path)
-            except Exception:
+            except (asyncio.TimeoutError, aiohttp.ClientError):
                 pass
         return results
 
@@ -212,7 +213,7 @@ class VulnIntelligence:
                                 if "49" in text or "14" in text:
                                     confirmed.append(test_url)
                                     break
-                    except Exception:
+                    except (asyncio.TimeoutError, aiohttp.ClientError):
                         continue
         return confirmed
 
@@ -243,6 +244,6 @@ class VulnIntelligence:
                             # A 200 OK when requesting an internal host might be an indicator
                             if resp.status == 200:
                                 confirmed.append(f"Potential SSRF indicator on {param_name}: {test_url}")
-                    except Exception:
+                    except (asyncio.TimeoutError, aiohttp.ClientError):
                         continue
         return confirmed

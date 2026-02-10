@@ -89,7 +89,9 @@ class AIContentEditorCore(BaseCore):
             ContentTemplate(
                 name="text_summarizer",
                 description="Summarize text content with key points",
-                instruction_template="Summarize the following text, highlighting the key points and main ideas: {content}",
+                instruction_template=(
+                    "Summarize the following text, highlighting the key points and main ideas: {content}"
+                ),
                 content_type="text",
                 parameters={"max_length": 200, "style": "concise"}
             ),
@@ -209,8 +211,10 @@ class AIContentEditorCore(BaseCore):
             # Store in history
             self.edit_history.append(result)
 
-            self.logger.info(f"Processed content edit: {request.edit_mode} {request.content_type} "
-                           ".2f")
+            self.logger.info(
+                f"Processed content edit: {request.edit_mode} {request.content_type} "
+                f"in {processing_time:.2f}s"
+            )
             return result
 
         except Exception as e:

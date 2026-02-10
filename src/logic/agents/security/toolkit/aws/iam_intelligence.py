@@ -13,9 +13,10 @@
 # limitations under the License.
 
 import logging
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 
 logger = logging.getLogger(__name__)
+
 
 class IAMIntelligence:
     """
@@ -51,17 +52,22 @@ class IAMIntelligence:
         Identifies potential privilege escalation paths based on a list of current IAM permissions.
         """
         opportunities = []
-        
-        # Normalize permissions to lowercase for comparison if needed, 
+
+        # Normalize permissions to lowercase for comparison if needed,
         # but AWS is case-sensitive for action names usually.
         # We assume standard naming.
-        
+
         for name, req_perms in IAMIntelligence.ESCALATION_PATHS.items():
-            if all(perm in current_permissions or "*" in current_permissions or f"{perm.split(':')[0]}:*" in current_permissions for perm in req_perms):
+            if all(
+                perm in current_permissions or
+                "*" in current_permissions or
+                f"{perm.split(':')[0]}:*" in current_permissions
+                for perm in req_perms
+            ):
                 opportunities.append({
                     "path": name,
                     "required_permissions": req_perms,
                     "description": f"Potential escalation via {name}"
                 })
-                
+
         return opportunities

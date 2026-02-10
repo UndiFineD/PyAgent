@@ -21,7 +21,6 @@ Inspired by AD-Canaries event correlation using KQL queries.
 from __future__ import annotations
 
 import logging
-from collections import defaultdict
 from typing import Any, Dict, List
 
 from src.core.base.common.base_utilities import as_tool
@@ -74,8 +73,10 @@ class EventCorrelator:
                 })
         return matches
 
-    def _events_related(self, event1: Dict[str, Any], event2: Dict[str, Any],
-                       conditions: Dict[str, Any], time_window: int) -> bool:
+    def _events_related(
+        self, event1: Dict[str, Any], event2: Dict[str, Any],
+        conditions: Dict[str, Any], time_window: int
+    ) -> bool:
         """Check if two events are related based on conditions."""
         # Check time proximity
         time1 = event1.get('timestamp', 0)
@@ -112,8 +113,10 @@ class EventCorrelationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.correlator.add_event(event)
 
     @as_tool
-    def define_correlation_rule(self, name: str, event_type: str,
-                               conditions: Dict[str, Any], time_window: int = 300) -> None:
+    def define_correlation_rule(
+        self, name: str, event_type: str,
+        conditions: Dict[str, Any], time_window: int = 300
+    ) -> None:
         """Define a new correlation rule."""
         rule = {
             'name': name,

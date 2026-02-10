@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -145,8 +144,13 @@ class SelfImprovementCoordinator:
                     {
                         "id": name,
                         "type": "mcp_server",
-                        # Accessing protected member _sessions is discouraged; consider exposing via public API in MCPServerRegistry
-                        "status": "connected" if hasattr(registry, '_sessions') and name in registry._sessions else "registered",
+                        # Accessing protected member _sessions is discouraged;
+                        # consider exposing via public API in MCPServerRegistry
+                        "status": (
+                            "connected"
+                            if hasattr(registry, '_sessions') and name in registry._sessions
+                            else "registered"
+                        ),
                     }
                 )
         except ImportError as e:
@@ -162,18 +166,23 @@ class SelfImprovementCoordinator:
                 try:
                     data = json.loads(status_file.read_text(encoding="utf-8"))
                     for key, val in data.items():
-                        if isinstance(val, dict) and val.get("working") and not key.startswith("__"):
+                        is_valid = isinstance(val, dict) and val.get("working")
+                        if is_valid and not key.startswith("__"):
                             # Avoid duplicates from LAN/MCP
                             if not any(n["id"] == key for n in all_nodes):
-                                all_nodes.append({"id": key, "type": "remote_endpoint", "status": "available"})
+                                all_nodes.append({
+                                    "id": key,
+                                    "type": "remote_endpoint",
+                                    "status": "available"
+                                })
                 except json.JSONDecodeError as jde:
                     self.logger.warning(f"Failed to parse connectivity_status.json: {jde}")
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    self.logger.error(f"[Robustness] Error reading/processing connectivity_status.json: {e}", exc_info=True)
+                    self.logger.error(f"[Robustness] Error with connectivity_status.json: {e}", exc_info=True)
         except ImportError as e:
             self.logger.debug(f"ConnectivityManager not available for status check: {e}")
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            self.logger.error(f"[Robustness] Unexpected error in ConnectivityManager discovery block: {e}", exc_info=True)
+            self.logger.error(f"[Robustness] Unexpected error in discovery block: {e}", exc_info=True)
 
         self.logger.info(f"Discovery Cycle: Found {len(all_nodes)} total available/connected servers/nodes.")
         return all_nodes
@@ -271,7 +280,7 @@ class SelfImprovementCoordinator:
             "failures": failed_agents,
             "actions_taken": [],
         }
-    
+
         if failed_agents:
             self.logger.warning(f"Self-Healing: {len(failed_agents)} failures detected. Reviewing roadmap items...")
             for agent in failed_agents:
@@ -327,11 +336,13 @@ class SelfImprovementCoordinator:
         content: str = self.improvements_file.read_text(encoding="utf-8")
 
         # Simple extraction logic for "High Priority" items
-        high_priority_section: re.Match[str] | None = re.search(r"### High Priority\n(.*?)(?=\n###|\n==)", content, re.DOTALL)
+        hp_pattern = r"### High Priority\n(.*?)(?=\n###|\n==)"
+        high_priority_section: re.Match[str] | None = re.search(hp_pattern, content, re.DOTALL)
         if not high_priority_section:
             return []
 
-        items: List[Any] = re.findall(r"\d+\.\s+\*\*(.*?)\*\*\n\s+-\s+Status:\s+(.*?)\n", high_priority_section.group(1))
+        item_pattern = r"\d+\.\s+\*\*(.*?)\*\*\n\s+-\s+Status:\s+(.*?)\n"
+        items: List[Any] = re.findall(item_pattern, high_priority_section.group(1))
 
         active_ideas = []
         for title, status in items:

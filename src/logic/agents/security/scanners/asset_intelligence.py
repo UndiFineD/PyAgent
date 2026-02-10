@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import asyncio
 import base64
 import mmh3
 import aiohttp
@@ -44,7 +45,7 @@ class AssetIntelligence:
                     if response.status == 200:
                         content = await response.read()
                         return self.calculate_favicon_hash(content)
-        except Exception:
+        except (asyncio.TimeoutError, aiohttp.ClientError):
             pass
         return None
 

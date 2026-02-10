@@ -17,12 +17,16 @@
 
 from __future__ import annotations
 
+import asyncio
 import contextlib
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Dict
 
 from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.manifest_repository import ManifestRepository
+from src.infrastructure.swarm.resilience.distributed_backup import DistributedBackup
+from src.maintenance.evolution.code_improver import EvolutionLoop
 from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry
 from src.infrastructure.swarm.fleet.fleet_consensus_manager import \
     FleetConsensusManager
@@ -33,6 +37,9 @@ from src.infrastructure.swarm.fleet.fleet_interaction_recorder import \
 from src.infrastructure.swarm.fleet.fleet_lifecycle_manager import \
     FleetLifecycleManager
 from src.infrastructure.swarm.fleet.fleet_routing_core import FleetRoutingCore
+from src.infrastructure.swarm.fleet.resource_monitor import ResourceMonitor
+from src.infrastructure.swarm.voyager.transport_layer import VoyagerTransport
+from src.infrastructure.swarm.voyager.discovery_node import DiscoveryNode
 from src.infrastructure.swarm.fleet.mixins.fleet_delegation_mixin import \
     FleetDelegationMixin
 from src.infrastructure.swarm.fleet.mixins.fleet_discovery_mixin import \
@@ -51,6 +58,8 @@ from src.infrastructure.swarm.fleet.orchestrator_registry import \
     OrchestratorRegistry
 from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
 from src.observability.structured_logger import StructuredLogger
+from src.infrastructure.swarm.topology_reporter import SwarmTopologyReporter
+from src.infrastructure.security.firewall.zero_trust import ZeroTrustFirewall
 
 # Type Hinting Imports (Phase 106)
 if TYPE_CHECKING:
@@ -81,6 +90,15 @@ class FleetManager(
 
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
+        self.manifest_repo = ManifestRepository()
+        self.backup_node = DistributedBackup(node_id=f"node-{self.workspace_root.name}")
+        self.evolution_loop = EvolutionLoop(self)
+        self.topology_reporter = SwarmTopologyReporter(
+            output_path=str(self.workspace_root / "data" / "logs" / "topology.json")
+        )
+
+        # Phase 324: Zero-Trust Security (Pillar 7)
+        self.firewall = ZeroTrustFirewall(owner_key=f"node-key-{self.workspace_root.name}")
 
         # New: Lazy Orchestrators (replaces ~50 direct instantiations)
         self.orchestrators = OrchestratorRegistry.get_orchestrator_map(self)
@@ -91,6 +109,21 @@ class FleetManager(
 
         # Phase 320: LAN Discovery
         self.init_discovery(agent_id=f"fleet-{self.workspace_root.name}")
+
+        # Phase 319-320: Voyager P2P Transport & Discovery
+        self.voyager_transport = VoyagerTransport()
+        self.voyager_discovery = DiscoveryNode(node_name=f"Fleet-{self.workspace_root.name}")
+        
+        # Start voyager services (async)
+        asyncio.create_task(self.voyager_transport.start_server(self._handle_voyager_message))
+        asyncio.create_task(self.voyager_discovery.start_advertising())
+        asyncio.create_task(self.voyager_discovery.start_discovery())
+
+        # Phase 320: Resource Monitoring & Autonomous Balancing
+        self.resource_monitor = ResourceMonitor()
+        asyncio.create_task(self.resource_monitor.start())
+        asyncio.create_task(self.evolution_loop.start())
+        asyncio.create_task(self._topology_loop())
 
         # Phase 322: Autonomous Update Service (15-min cycle)
         self.init_update_service(interval_seconds=900)
@@ -173,6 +206,7 @@ class FleetManager(
             "sql_coder_agent": "SQLCoderAgent",
             "telemetry_agent": "TelemetryAgent",
             "workflow_agent": "WorkflowAgent",
+            "universal": "UniversalAgent",
         }
 
         self.remote_nodes: list[str] = []
@@ -194,7 +228,128 @@ class FleetManager(
         with contextlib.suppress(Exception):
             _ = self.orchestrators.discovery
 
+    async def handle_user_command(self, command: str) -> Dict[str, Any]:
+        """Entry point for the Universal Agent Shell (Pillar 3)."""
+        logger.info(f"FleetManager: Received user command: {command}")
+        
+        # 1. Record user input in reasoning chain
+        self.interaction_recorder.record_interaction(
+            user_input=command,
+            agent_id="User",
+            role="user"
+        )
+        
+        # 2. Utilize the Universal Agent for Pillar 3 execution
+        try:
+            # Check for UniversalAgent in registry
+            if "UniversalAgent" not in self.agents:
+                from src.logic.agents.system.universal_agent import UniversalAgent
+                self.register_agent(
+                    "UniversalAgent", 
+                    UniversalAgent, 
+                    str(self.workspace_root / "src" / "logic" / "agents" / "system" / "universal_agent.py")
+                )
+
+            agent = self.agents["UniversalAgent"]
+            logger.info("FleetManager: Dispatched to UniversalAgent (Pillar 3)")
+            
+            # Execute via the Universal Shell
+            result = await agent.execute_query(command)
+            
+            # 3. Record response
+            self.interaction_recorder.record_interaction(
+                user_input=command,
+                agent_id="UniversalAgent",
+                role="assistant",
+                content=str(result)
+            )
+            return {"status": "success", "agent": "UniversalAgent", "result": result}
+            
+        except Exception as e:
+            logger.error(f"FleetManager: UniversalAgent failed: {e}")
+            # Fallback to standard delegation for security/reasons
+            target_agent = "ReasoningAgent"
+            if "code" in command.lower() or "fix" in command.lower():
+                target_agent = "CoderAgent"
+            
+            try:
+                result = await self.delegate_to(target_agent, command)
+                return {"status": "success", "agent": target_agent, "result": result}
+            except Exception as e2:
+                return {"status": "error", "message": str(e2)}
+
     # Logic delegated to mixins
+
+    async def _handle_voyager_message(self, message: Dict[str, Any]) -> Dict[str, Any]:
+        """Handles incoming P2P messages from the Voyager transport layer."""
+        # Phase 324: Zero-Trust Validation (Pillar 7)
+        signature = message.get("signature", "unsigned")
+        sender_id = message.get("sender_id", "unknown")
+        
+        if not self.firewall.validate_message(message, signature, sender_id):
+            logger.warning(f"FleetManager: Blocked message from {sender_id} - Zero-Trust Violation")
+            return {"status": "error", "reason": "security_violation"}
+
+        msg_type = message.get("type")
+
+        if msg_type == "delegate_task":
+            agent_type = message.get("agent_type")
+            prompt = message.get("prompt")
+            try:
+                result = await self.delegate_to(agent_type, prompt)
+                return {"status": "success", "result": result}
+            except Exception as e:
+                return {"status": "error", "message": str(e)}
+
+        elif msg_type == "resource_status":
+            return {"status": "ok"}
+
+        elif msg_type == "store_shard":
+            shard = message.get("shard", {})
+            self.backup_node.store_shard_locally(shard)
+            return {"status": "shard_stored"}
+
+        elif msg_type == "request_shard":
+            shard_id = message.get("shard_id")
+            shard = self.backup_node.retrieve_shard(shard_id)
+            return {"status": "success", "shard": shard} if shard else {"status": "not_found"}
+
+        return {"status": "unknown_message_type"}
+
+    async def _topology_loop(self) -> None:
+        """Periodically refreshes the swarm topology visualization data (Pillar 9)."""
+        while True:
+            try:
+                # Reset snapshot lists
+                self.topology_reporter.nodes = []
+                self.topology_reporter.links = []
+
+                # 1. Self node with Resource metrics
+                stats = self.resource_monitor.get_latest_stats()
+                self.topology_reporter.update_traffic("localhost", stats.get("network_io", {}).get("bytes_sent", 0))
+                
+                self.topology_reporter.record_node(
+                    node_id="localhost",
+                    group="gateway",
+                    metadata={"cpu": stats.get("cpu_usage"), "mem": stats.get("memory_usage")}
+                )
+                
+                # 2. Swarm nodes and synaptic links
+                peers = self.voyager_discovery.get_active_peers()
+                for peer in peers:
+                    peer_id = peer.get("properties", {}).get("node_id", peer["name"])
+                    
+                    # Estimate Link Strength based on mDNS response time if available
+                    strength = 1.5 if peer.get("port") == 5555 else 0.8
+                    
+                    self.topology_reporter.record_node(peer_id, group="peer")
+                    self.topology_reporter.record_link("localhost", peer_id, strength=strength)
+
+                self.topology_reporter.export()
+                await asyncio.sleep(10) # 10s Topology Pulse
+            except Exception as e:
+                logger.error(f"FleetManager: Topology Loop Error: {e}")
+                await asyncio.sleep(5)
 
 
 if __name__ == "__main__":

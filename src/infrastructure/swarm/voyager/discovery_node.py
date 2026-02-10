@@ -5,6 +5,8 @@ Discovery node.py module.
 # Copyright 2026 PyAgent Authors
 # Phase 319: Multi-Cloud Teleportation (Discovery Node)
 
+from __future__ import annotations
+
 import asyncio
 import contextlib
 import socket
@@ -23,8 +25,8 @@ logger = StructuredLogger(__name__)
 class VoyagerPeerListener(ServiceListener):
     """Listens for other PyAgent Voyager peers on the local network."""
 
-    def __init__(self, callback: Any, loop: asyncio.AbstractEventLoop) -> None:
-        self.callback = callback
+    def __init__(self, node: DiscoveryNode, loop: asyncio.AbstractEventLoop) -> None:
+        self.node = node
         self.loop: asyncio.AbstractEventLoop = loop
 
     def add_service(self, zc: Any, type_: str, name: str) -> None:
@@ -32,18 +34,25 @@ class VoyagerPeerListener(ServiceListener):
         asyncio.run_coroutine_threadsafe(self._async_add_service(zc, type_, name), self.loop)
 
     async def _async_add_service(self, zc: Any, type_: str, name: str) -> None:
-        """Asynchronously retrieves service info and notifies the callback."""
+        """Asynchronously retrieves service info and notifies the node."""
         info = await zc.async_get_service_info(type_, name)
         if info:
             logger.info(f"Voyager: Discovered peer {name} at {info.parsed_addresses()}")
-            self.callback(info)
+            self.node._peer_added(info)
 
     def update_service(self, zc: Any, type_: str, name: str) -> None:
-        """Called by Zeroconf when a service is updated (not used)."""
+        """Called by Zeroconf when a service is updated."""
+        asyncio.run_coroutine_threadsafe(self._async_update_service(zc, type_, name), self.loop)
+
+    async def _async_update_service(self, zc: Any, type_: str, name: str) -> None:
+        info = await zc.async_get_service_info(type_, name)
+        if info:
+            self.node._peer_added(info)
 
     def remove_service(self, zc: Any, type_: str, name: str) -> None:
         """Called by Zeroconf when a service is removed from the network."""
         logger.info(f"Voyager: Peer {name} removed from network.")
+        self.node._peer_removed(name)
 
 
 class DiscoveryNode:
@@ -75,22 +84,22 @@ class DiscoveryNode:
         self.peer_metadata[peer_id].update(metadata)
         logger.debug(f"Voyager: Updated metadata for peer {peer_id}")
 
-    def get_peers(self) -> List[Dict[str, Any]]:
-        """Returns simplified peer list for Synapse broadcasting."""
-        peers = []
-        for name, info in self.peers.items():
-            addrs = info.parsed_addresses()
-            props = {
-                k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
-                for k, v in info.properties.items()
-            }
-            if addrs and "transport_port" in props:
-                peers.append({
-                    "id": props.get("node_id"),
-                    "ip": addrs[0],
-                    "port": int(props["transport_port"])
-                })
-        return peers
+    def get_nearest_peers(self, count: int = 5) -> List[Dict[str, Any]]:
+        """
+        Returns the N nearest peers based on network proximity.
+        Follows Pillar 5: Community Mesh.
+        """
+        all_peers = self.get_peers()
+        # Sort by IP subnet similarity (simplified proximity metric)
+        local_prefix = ".".join(self.local_ip.split(".")[:3])
+        
+        def proximity_score(peer):
+            peer_ip = peer.get("ip", "")
+            if peer_ip.startswith(local_prefix):
+                return 0 # On same subnet
+            return 1 # Different subnet
+            
+        return sorted(all_peers, key=proximity_score)[:count]
 
     def _get_local_ip(self) -> str:
         """Returns the local IPv4 address of the node."""
@@ -150,14 +159,19 @@ class DiscoveryNode:
         logger.info("Voyager: Starting peer discovery browser...")
         loop: asyncio.AbstractEventLoop = asyncio.get_running_loop()
         self.browser = ServiceBrowser(
-            self.aiozc.zeroconf, self.SERVICE_TYPE, VoyagerPeerListener(self._peer_discovered, loop)
+            self.aiozc.zeroconf, self.SERVICE_TYPE, VoyagerPeerListener(self, loop)
         )
 
-    def _peer_discovered(self, info: ServiceInfo) -> None:
-        """Internal callback for when a peer is discovered via Zeroconf."""
-        if info.name not in self.peers:
-            self.peers[info.name] = info
-            logger.info(f"Voyager: Peer Registry updated. Total peers: {len(self.peers)}")
+    def _peer_added(self, info: ServiceInfo) -> None:
+        """Internal callback for when a peer is discovered or updated."""
+        self.peers[info.name] = info
+        logger.info(f"Voyager: Peer Registry updated ({info.name}). Total: {len(self.peers)}")
+
+    def _peer_removed(self, name: str) -> None:
+        """Internal callback for when a peer leaves the network."""
+        if name in self.peers:
+            del self.peers[name]
+            logger.info(f"Voyager: Peer {name} removed. Total remaining: {len(self.peers)}")
 
     async def stop(self) -> None:
         """Stops advertising and discovery."""

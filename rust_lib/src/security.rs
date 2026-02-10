@@ -4,6 +4,7 @@ pub mod vulnerability;
 pub mod injection;
 pub mod patterns;
 pub mod auth_helpers;
+pub mod firewall;
 
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
@@ -24,5 +25,8 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
 
     m.add_function(wrap_pyfunction!(auth_helpers::generate_challenge, m)?)?;
     m.add_function(wrap_pyfunction!(auth_helpers::generate_auth_proof, m)?)?;
+    
+    m.add_function(wrap_pyfunction!(firewall::verify_message_signature_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(firewall::ratchet_step_rust, m)?)?;
     Ok(())
 }

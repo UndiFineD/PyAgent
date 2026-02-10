@@ -37,6 +37,14 @@ __version__ = VERSION
 
 def main() -> None:
     root = tk.Tk()
+    root.withdraw() # Hide main window while showing deprecation alert
+    from tkinter import messagebox
+    messagebox.showwarning(
+        "Deprecation Warning", 
+        "The Tkinter GUI is deprecated as of v4.0.0 and will be removed in a future release. "
+        "Please use the Web UI (launch_web_interface.py) for the full Swarm Singularity experience."
+    )
+    root.deiconify() # Show it for now if they really want it
     PyAgentGUI(root)
     root.mainloop()
 

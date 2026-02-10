@@ -89,6 +89,39 @@ class RustBridge:
         return RUST_AVAILABLE and hasattr(rc, attr)
 
     @staticmethod
+    def search_vector(query_vec: List[float], database: List[List[float]], top_k: int) -> List[int]:
+        """Rust-accelerated vector search for long-term memory."""
+        if not query_vec or not database:
+            return []
+        
+        return get_bridge()._try_rust_call(
+            "search_vector_rust",
+            query_vec,
+            database,
+            top_k,
+            fallback=lambda: []
+        )
+
+    @staticmethod
+    def manage_kv_blocks(num_blocks: int, block_size: int) -> List[int]:
+        """Paged Attention: Get available block offsets."""
+        return get_bridge()._try_rust_call(
+            "block_manager_rust",
+            num_blocks,
+            block_size,
+            fallback=lambda: [i * block_size for i in range(num_blocks)]
+        )
+
+    @staticmethod
+    def get_token_hash(tokens: List[int]) -> str:
+        """High-speed token sequence hashing for prefix caching."""
+        return get_bridge()._try_rust_call(
+            "kv_block_hash_rust",
+            tokens,
+            fallback=lambda: str(hash(tuple(tokens)))
+        )
+
+    @staticmethod
     def _try_rust_call(attr: str, *args: Any, fallback: Optional[Callable[[], Any]] = None, **kwargs: Any) -> Any:
         try:
             return getattr(rc, attr)(*args, **kwargs)  # type: ignore

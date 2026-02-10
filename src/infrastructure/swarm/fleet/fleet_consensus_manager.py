@@ -31,70 +31,63 @@ class FleetConsensusManager:
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
-    def execute_with_consensus(
+    async def execute_with_consensus(
         self,
         task: str,
         primary_agent: str | None = None,
         secondary_agents: list[str] | None = None,
     ) -> dict[str, Any]:
-        """Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner."""
+        """
+        [Pillar 1: Swarm Consensus]
+        Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner.
+        Fully asynchronous implementation for v4.0.0.
+        """
         logging.info(f"Fleet: Running consensus vote for task: {task[:50]}")
 
-        # Dynamic Committee Formation
+        # 1. Committee Formation
+        judge = self.fleet.agents.get("ByzantineConsensusAgent") or self.fleet.agents.get("byzantine_judge")
+        if not judge:
+            return {"decision": "REJECTED", "reason": "ByzantineConsensusAgent not found."}
+
         if not primary_agent or not secondary_agents:
-            available = list(set(list(self.fleet.agents.registry_configs.keys()) + list(self.fleet.agents.keys())))
-            available = [
-                a for a in available if a not in ["ByzantineConsensus", "ByzantineConsensusAgent", "FleetManager"]
-            ]
-
-            judge = getattr(self.fleet, "ByzantineConsensus", None)
-            if not judge:
-                for name in ["byzantine_judge", "ByzantineConsensusAgent"]:
-                    judge = getattr(self.fleet, name, None)
-                    if judge:
-                        break
-
-            if not judge:
-                return {
-                    "decision": "REJECTED",
-                    "reason": "ByzantineConsensus agent not available.",
-                }
-
+            available = [a for a in self.fleet.agents.keys() if a not in ["ByzantineConsensusAgent", "FleetManager"]]
             committee = judge.select_committee(task, available)
             if not committee:
-                return {
-                    "decision": "REJECTED",
-                    "reason": "No committee could be formed.",
-                }
+                return {"decision": "REJECTED", "reason": "Committee formation failed."}
             primary_agent = committee[0]
             secondary_agents = committee[1:]
-            logging.info(f"Fleet: Formed dynamic committee: {primary_agent}, {secondary_agents}")
 
-        proposals: dict[str, str] = {}
+        # 2. Parallel Proposal Generation
         all_agents = [primary_agent] + secondary_agents
-
-        loop = None
-        try:
-            loop = asyncio.get_event_loop()
-        except RuntimeError:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-
+        proposals: dict[str, str] = {}
+        
+        tasks = []
         for agent_name in all_agents:
-            if agent_name in self.fleet.agents:
-                try:
-                    res = self.fleet.agents[agent_name].improve_content(task)
-                    if asyncio.iscoroutine(res):
-                        res = loop.run_until_complete(res)
-                    proposals[agent_name] = res
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    logging.error(f"Fleet: Agent {agent_name} failed to provide consensus proposal: {e}")
+            agent = self.fleet.agents.get(agent_name)
+            if agent:
+                # We assume 'improve_content' or similar primary action exists
+                action = getattr(agent, "improve_content", None) or getattr(agent, "run_task", None)
+                if action:
+                    tasks.append((agent_name, action(task)))
+
+        # Wait for all proposals in parallel
+        for agent_name, coro in tasks:
+            try:
+                res = await coro
+                if isinstance(res, dict):
+                    content = res.get("result") or res.get("content") or str(res)
+                else:
+                    content = str(res)
+                proposals[agent_name] = content
+            except Exception as e:
+                logging.error(f"Fleet Consensus: Agent {agent_name} proposal error: {e}")
 
         if not proposals:
-            return {
-                "decision": "REJECTED",
-                "reason": "No agents could provide proposals.",
-            }
+            return {"decision": "REJECTED", "reason": "No valid proposals gathered."}
+
+        # 3. Byzantine Audit
+        vote_result = await judge.run_committee_vote(task, proposals)
+        return vote_result
 
         # Run the committee vote
         if "judge" not in locals():

@@ -1,11 +1,5649 @@
 {
   "nodes": [
-    { "id": "Local Node (This Machine)", "group": 1 },
-    { "id": "Cloud-Node-Alpha", "group": 2 },
-    { "id": "Raspberry-Pi-Edge-1", "group": 3 }
+    {
+      "id": "localhost",
+      "group": "orchestrator",
+      "meta": {
+        "version": "4.0.0",
+        "type": "gateway"
+      }
+    },
+    {
+      "id": "fleet-PyAgent",
+      "group": "orchestrator",
+      "meta": {
+        "version": "4.0.0"
+      }
+    },
+    {
+      "id": "subdomain_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "model_forge",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "temporal_predictor",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "predictive_scheduler_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "latent_reasoning",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "excel_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "LegalAudit",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "genetic_hardening_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "wordlist_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "audio_reasoning",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "hierarchical_memory_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "event_correlation_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "test_gap_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "go",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "asyncio_threading_coder_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "self_search",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "localization_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "empathy",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "process_synthesizer_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "sql_query",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "multi_modal_reasoning",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "c_plus_plus",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "research_synthesis_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "linting_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "linter_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "coder",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "modernization",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "symbol_helper",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "dependency",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "voice",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "asyncio_threading_coder",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "agentic_patterns",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "cve_2025_0133_globalprotect",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "semantic_search_mesh_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "localization_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "Logging",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "synthesis",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "yaml",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "proactive",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "self_search_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "payload_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "quality_gate",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "ui_architect",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "external_recon_orchestrator",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "web",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "resilience_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "byzantine_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "universal_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "swarm_distillation",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "tool_synthesis_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "iam_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "graph_memory_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "compression",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "resource_curation_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "pe_utils",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "world_model",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "git_branch_processor",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "arch_advisor_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "modernization_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "session_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "find_remaining_candidates",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "devops_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "code_quality_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "refinement_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "quantum_scaling_coder",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "tech_debt",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "test_gap",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "data_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "swarm_visualizer",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "c_plus_plus_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "reality_grafting_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "recon_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "eternal_audit",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "graph_relational_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "identity_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "topology_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "fleet_economy_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "inter_fleet_identity_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "type_safety",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "multi_modal_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "idl_parser",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "proactive_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "memory_replay_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "interpretable_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "reality_anchor_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "security_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "consensus_conflict",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "neural_anchor",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "quantum_memory_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "security_audit",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "documentation_indexer",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "byzantine_consensus_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "compliance",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "cognitive_super_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "orchestrator_features",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "code_quality",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "benchmark_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "performance_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "infrastructure_manager",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "synthetic_data_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "memory_consolidator_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "sql_coder",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "hardware_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "dynamic_decomposer",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "external_recon",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "ai_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "voice_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "reality_anchor",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "knowledge_fusion_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "attention_buffer",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "android_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "linter",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "cloud_provider_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "predictive_scheduler",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "code_reviewer",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "test_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "orchestrator",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "dependency_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "resource_forecasting",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "pull_request_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "cloud_provider",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "quantum_memory",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "migration_manager",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "neural_anchor_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "model_registry_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "code_translation_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "legal_audit",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "immune_orchestrator",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "research_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "password_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "security_scanner_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "windows_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "type_safety_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "parameter_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "final_sanitization",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "external_ai_recorder_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "graph_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "evasion_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "morphological_evolution_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "linguistic_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "rl_priority",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "file_upload_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "model_forge_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "dependency_graph",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "radare2",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "APKEnum",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "code_generator_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "cosy_voice_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "multi_modal_reasoning_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "benchmark_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "compliance_audit_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "orchestrator_delegates",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "speciation",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "compliance_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "theory_of_mind_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "memo_rag_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "mobile_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "external_ai_recorder",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "knowledge_indexing_assistant",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "reward_model",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "self_optimizer_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "swarm_arbitrator_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "consensus_conflict_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "financial_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "asset_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "pattern",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "weight_orchestrator",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "scan_android_manifest",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "kernel_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "knowledge",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "core_expansion",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "memory_consolidation_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "compliance_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "cors_scanner",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "aem_hacker",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "dashboard_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "coder_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "architect_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "evolution_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "governance_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "linter_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "image_generation",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "convergence_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "context",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "compliance_audit",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "security_audit_manager",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "dashboard",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "memory_replay",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "refinement",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "security_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "immune_response",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "sandbox",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "consistency_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "voice_interaction_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "local_rag_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "mcp_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "go_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "evolutionary_prompt_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "fleet_deployer_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "firewall",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "governance",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "flm_connector",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "agent_dao",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "genetic_hardening",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "universal",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "identity",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "fleet_economy",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "swarm_deployment",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "svg_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "strategic_planning",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "temporal_shard",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "context_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "personality_core_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "quantum_shard",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "apk_deep_lens",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "documentation_indexer_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "idiom_extractor",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "Telemetry",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "loop_analysis",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "protocol_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "security_guard",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "fleet_deployer",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "config_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "neuro_symbolic",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "ida_python",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "router_model_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "policy_enforcement",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "mac_os_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "markdown_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "performance",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "consistency",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "config",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "linguistic",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "excel",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "payload_formatter",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "security_audit_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "inter_fleet_identity",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "model_optimizer_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "holographic_context_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "FleetDeployer",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "swarm_visualizer_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "tool_drafting_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "flm_connector_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "immune_system_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "resource_forecasting_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "intention_prediction_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "yaml_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "security_scanner",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "arch_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "cms_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "graph_memory",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "ollama_connector",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "changes",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "data_science_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "resource_curation",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "compliance_checker",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "canary_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "long_term_memory",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "morphology_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "logging_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "stream_omni",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "tool_synthesis",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "anomaly_detection_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "immune_response_orchestrator",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "intention_prediction",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "vision_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "aem_discoverer",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "localization",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "metacognitive_monitor",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "scraper_exceptions",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "tech_debt_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "anomaly_detection",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "code_translation",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "rust_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "messaging_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "voice_interaction",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "metacognitive_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "pull_request",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "database_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "router_model",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "coder_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "osint_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "proxy_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "quantum_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "network_context_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "canary",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "knowledge_graph_assistant",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "quantum_scaling_coder_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "linting",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "benchmark",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "firewall_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "origin_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "search_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "curation_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "feature_store",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "quantum_reasoner",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "compression_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "memo_rag",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "behavioral_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "code_generator",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "entropy_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "search_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "rl_priority_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "speciation_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "logging",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "memory_pruning_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "web_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "config_hygiene_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "cognitive_super",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "powershell_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "visualizer",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "neuro_symbolic_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "data_intelligence_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "auction_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "network_arch_search_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "powershell",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "cooperative_communication",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "pe_rpc_if_analysis",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "red_queen_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "privacy_guard",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "spec_tool",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "sensitive_info_extractor",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "tool_evolution_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "stream_omni_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "visualizer_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "self_archiving",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "ui_architect_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "changes_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "architect",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "memory_consolidation",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "multi_modal_context",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "Sandbox",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "synthetic_data",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "doc_gen_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "csv_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "image_generation_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "feature_store_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "swarm_deployment_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "logic_prover_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "pentest_gpt_prompts",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "code_reviewer_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "knowledge_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "research_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "web_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "audio_reasoning_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "documentation",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "exploit_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "rpc_registration_scraper_factory",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "subdomain_takeover_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "legal_audit_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "shell_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "Audit",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "arch_advisor",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "dependency_graph_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "entropy_guard_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "profiling_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "self_archiving_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "android_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "vuln_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "APKDeepLens",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "research",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "rust",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "web_intelligence_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "bash",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "qa_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "ssti_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "privacy_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "sql_injection_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "test",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "model_optimizer",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "telemetry_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "byzantine_consensus",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "aem_server",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "mfa_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "orchestrator_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "telemetry",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "entropy_guard",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "ida_rpc_registration_scraper",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "search_provider",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "financial",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "swarm_distillation_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "dynamic_decomposer_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "documentation_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "reflection",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "sql_query_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "browsing",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "honeypot",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "markdown",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "apk_enum",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "strategic_planning_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "bash_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "Linguist",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "base_rpc_registration_scraper",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "kernel",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "infrastructure_manager_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "doc_inference",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "ntlm_leak_generator",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "mcp",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "theory_of_mind",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "ethics_guardrail_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "honeypot_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "performance_profiling",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "eternal_audit_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "dependency_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "attention_buffer_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "temporal_shard_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "profiling",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "tech_debt_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "web_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "privacy_guard_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "knowledge_fusion",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "sandbox_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "cosy_voice",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "self_healing_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "report_gen",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "reasoning_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "ad_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "latent_reasoning_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "immune_system",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "memory_consolidator",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "js_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "temporal_predictor_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "memory_pruning",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "tool_evolution",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "idiom_extractor_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "quantum_reasoner_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "swarm_arbitrator",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "core_evolution_guard",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "data_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "explainability_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "logic_prover",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "svg",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "morphological_evolution",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "xss_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "analyst",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "ethics_guardrail",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "network_context",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "infrastructure_repair",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "evolutionary_prompt",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "policy_enforcement_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "personality_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "aem_ssrf2rce",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "empathy_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "search",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "operational_cost_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "doc_inference_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "multi_modal_context_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "arxiv_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "idl_scraper",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "self_healing",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "performance_profiling_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "graph_relational",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "bayesian_reasoning_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "doc_gen_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "topological_navigator",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "data",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "infrastructure_repair_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "csv",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "pe_rpc_scraper",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "event_correlation",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "messaging",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "data_science",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "resilience",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "android",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "security",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "cooperative_communication_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "graph_orchestration",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "search_mesh_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "doc_gen",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "research_synthesis",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "reasoning",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "Orchestrator",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "core_expansion_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "synthesis_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "cloud_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "run",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "analyst_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "download_agent_cli",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "domain_generator",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "world_model_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "operational_cost",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "reflection_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "radare_rpc_registration_scraper",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "bash_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "network_arch_search",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "reward_model_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "quality_gate_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "bayesian_reasoning",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "spec_tool_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "process_synthesizer",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "security_guard_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "reality_grafting",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "vulnerability_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "phishing_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "utility_class",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "synthesis_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "semantic_search_mesh",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "exchange_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "explainability",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "pattern_orchestrator",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "compliance_checker_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "sql_coder_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "code_quality_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "ollama_connector_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "hierarchical_memory",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "browsing_agent",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "email_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "orchestrator_core",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "messenger_intelligence",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "self_optimizer",
+      "group": "agent",
+      "meta": {}
+    },
+    {
+      "id": "holographic_context",
+      "group": "agent",
+      "meta": {}
+    }
   ],
   "links": [
-    { "source": "Local Node (This Machine)", "target": "Cloud-Node-Alpha", "value": 1 },
-    { "source": "Local Node (This Machine)", "target": "Raspberry-Pi-Edge-1", "value": 1 }
-  ]
+    {
+      "source": "localhost",
+      "target": "fleet-PyAgent",
+      "value": 1.0,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "subdomain_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "model_forge",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "temporal_predictor",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "predictive_scheduler_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "latent_reasoning",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "excel_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "LegalAudit",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "genetic_hardening_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "wordlist_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "audio_reasoning",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "hierarchical_memory_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "event_correlation_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "test_gap_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "go",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "asyncio_threading_coder_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "self_search",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "localization_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "empathy",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "process_synthesizer_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "sql_query",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "multi_modal_reasoning",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "c_plus_plus",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "research_synthesis_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "linting_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "linter_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "coder",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "modernization",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "symbol_helper",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "dependency",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "voice",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "asyncio_threading_coder",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "agentic_patterns",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "cve_2025_0133_globalprotect",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "semantic_search_mesh_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "localization_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "Logging",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "synthesis",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "yaml",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "proactive",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "self_search_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "payload_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "quality_gate",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "ui_architect",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "external_recon_orchestrator",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "web",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "resilience_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "byzantine_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "universal_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "swarm_distillation",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "tool_synthesis_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "iam_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "graph_memory_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "compression",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "resource_curation_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "pe_utils",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "world_model",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "git_branch_processor",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "arch_advisor_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "modernization_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "session_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "find_remaining_candidates",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "devops_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "code_quality_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "refinement_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "quantum_scaling_coder",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "tech_debt",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "test_gap",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "data_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "swarm_visualizer",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "c_plus_plus_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "reality_grafting_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "recon_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "eternal_audit",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "graph_relational_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "identity_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "topology_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "fleet_economy_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "inter_fleet_identity_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "type_safety",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "multi_modal_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "idl_parser",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "proactive_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "memory_replay_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "interpretable_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "reality_anchor_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "security_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "consensus_conflict",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "neural_anchor",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "quantum_memory_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "security_audit",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "documentation_indexer",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "byzantine_consensus_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "compliance",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "cognitive_super_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "orchestrator_features",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "code_quality",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "benchmark_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "performance_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "infrastructure_manager",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "synthetic_data_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "memory_consolidator_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "sql_coder",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "hardware_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "dynamic_decomposer",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "external_recon",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "ai_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "voice_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "reality_anchor",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "knowledge_fusion_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "attention_buffer",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "android_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "linter",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "cloud_provider_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "predictive_scheduler",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "code_reviewer",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "test_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "orchestrator",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "dependency_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "resource_forecasting",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "pull_request_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "cloud_provider",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "quantum_memory",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "migration_manager",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "neural_anchor_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "model_registry_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "code_translation_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "legal_audit",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "immune_orchestrator",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "research_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "password_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "security_scanner_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "windows_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "type_safety_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "parameter_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "final_sanitization",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "external_ai_recorder_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "graph_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "evasion_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "morphological_evolution_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "linguistic_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "rl_priority",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "file_upload_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "model_forge_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "dependency_graph",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "radare2",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "APKEnum",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "code_generator_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "cosy_voice_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "multi_modal_reasoning_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "benchmark_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "compliance_audit_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "orchestrator_delegates",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "speciation",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "compliance_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "theory_of_mind_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "memo_rag_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "mobile_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "external_ai_recorder",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "knowledge_indexing_assistant",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "reward_model",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "self_optimizer_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "swarm_arbitrator_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "consensus_conflict_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "financial_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "asset_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "pattern",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "weight_orchestrator",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "scan_android_manifest",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "kernel_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "knowledge",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "core_expansion",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "memory_consolidation_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "compliance_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "cors_scanner",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "aem_hacker",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "dashboard_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "coder_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "architect_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "evolution_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "governance_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "linter_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "image_generation",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "convergence_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "context",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "compliance_audit",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "security_audit_manager",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "dashboard",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "memory_replay",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "refinement",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "security_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "immune_response",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "sandbox",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "consistency_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "voice_interaction_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "local_rag_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "mcp_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "go_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "evolutionary_prompt_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "fleet_deployer_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "firewall",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "governance",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "flm_connector",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "agent_dao",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "genetic_hardening",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "universal",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "identity",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "fleet_economy",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "swarm_deployment",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "svg_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "strategic_planning",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "temporal_shard",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "context_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "personality_core_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "quantum_shard",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "apk_deep_lens",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "documentation_indexer_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "idiom_extractor",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "Telemetry",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "loop_analysis",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "protocol_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "security_guard",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "fleet_deployer",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "config_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "neuro_symbolic",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "ida_python",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "router_model_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "policy_enforcement",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "mac_os_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "markdown_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "performance",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "consistency",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "config",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "linguistic",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "excel",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "payload_formatter",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "security_audit_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "inter_fleet_identity",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "model_optimizer_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "holographic_context_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "FleetDeployer",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "swarm_visualizer_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "tool_drafting_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "flm_connector_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "immune_system_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "resource_forecasting_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "intention_prediction_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "yaml_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "security_scanner",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "arch_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "cms_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "graph_memory",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "ollama_connector",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "changes",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "data_science_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "resource_curation",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "compliance_checker",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "canary_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "long_term_memory",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "morphology_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "logging_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "stream_omni",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "tool_synthesis",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "anomaly_detection_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "immune_response_orchestrator",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "intention_prediction",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "vision_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "aem_discoverer",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "localization",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "metacognitive_monitor",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "scraper_exceptions",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "tech_debt_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "anomaly_detection",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "code_translation",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "rust_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "messaging_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "voice_interaction",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "metacognitive_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "pull_request",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "database_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "router_model",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "coder_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "osint_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "proxy_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "quantum_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "network_context_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "canary",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "knowledge_graph_assistant",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "quantum_scaling_coder_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "linting",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "benchmark",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "firewall_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "origin_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "search_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "curation_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "feature_store",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "quantum_reasoner",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "compression_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "memo_rag",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "behavioral_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "code_generator",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "entropy_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "search_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "rl_priority_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "speciation_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "logging",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "memory_pruning_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "web_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "config_hygiene_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "cognitive_super",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "powershell_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "visualizer",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "neuro_symbolic_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "data_intelligence_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "auction_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "network_arch_search_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "powershell",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "cooperative_communication",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "pe_rpc_if_analysis",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "red_queen_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "privacy_guard",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "spec_tool",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "sensitive_info_extractor",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "tool_evolution_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "stream_omni_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "visualizer_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "self_archiving",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "ui_architect_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "changes_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "architect",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "memory_consolidation",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "multi_modal_context",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "Sandbox",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "synthetic_data",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "doc_gen_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "csv_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "image_generation_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "feature_store_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "swarm_deployment_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "logic_prover_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "pentest_gpt_prompts",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "code_reviewer_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "knowledge_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "research_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "web_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "audio_reasoning_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "documentation",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "exploit_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "rpc_registration_scraper_factory",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "subdomain_takeover_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "legal_audit_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "shell_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "Audit",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "arch_advisor",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "dependency_graph_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "entropy_guard_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "profiling_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "self_archiving_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "android_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "vuln_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "APKDeepLens",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "research",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "rust",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "web_intelligence_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "bash",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "qa_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "ssti_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "privacy_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "sql_injection_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "test",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "model_optimizer",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "telemetry_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "byzantine_consensus",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "aem_server",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "mfa_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "orchestrator_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "telemetry",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "entropy_guard",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "ida_rpc_registration_scraper",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "search_provider",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "financial",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "swarm_distillation_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "dynamic_decomposer_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "documentation_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "reflection",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "sql_query_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "browsing",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "honeypot",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "markdown",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "apk_enum",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "strategic_planning_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "bash_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "Linguist",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "base_rpc_registration_scraper",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "kernel",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "infrastructure_manager_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "doc_inference",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "ntlm_leak_generator",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "mcp",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "theory_of_mind",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "ethics_guardrail_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "honeypot_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "performance_profiling",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "eternal_audit_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "dependency_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "attention_buffer_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "temporal_shard_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "profiling",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "tech_debt_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "web_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "privacy_guard_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "knowledge_fusion",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "sandbox_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "cosy_voice",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "self_healing_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "report_gen",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "reasoning_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "ad_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "latent_reasoning_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "immune_system",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "memory_consolidator",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "js_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "temporal_predictor_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "memory_pruning",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "tool_evolution",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "idiom_extractor_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "quantum_reasoner_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "swarm_arbitrator",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "core_evolution_guard",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "data_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "explainability_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "logic_prover",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "svg",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "morphological_evolution",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "xss_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "analyst",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "ethics_guardrail",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "network_context",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "infrastructure_repair",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "evolutionary_prompt",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "policy_enforcement_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "personality_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "aem_ssrf2rce",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "empathy_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "search",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "operational_cost_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "doc_inference_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "multi_modal_context_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "arxiv_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "idl_scraper",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "self_healing",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "performance_profiling_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "graph_relational",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "bayesian_reasoning_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "doc_gen_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "topological_navigator",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "data",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "infrastructure_repair_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "csv",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "pe_rpc_scraper",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "event_correlation",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "messaging",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "data_science",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "resilience",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "android",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "security",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "cooperative_communication_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "graph_orchestration",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "search_mesh_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "doc_gen",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "research_synthesis",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "reasoning",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "Orchestrator",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "core_expansion_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "synthesis_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "cloud_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "run",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "analyst_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "download_agent_cli",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "domain_generator",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "world_model_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "operational_cost",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "reflection_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "radare_rpc_registration_scraper",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "bash_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "network_arch_search",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "reward_model_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "quality_gate_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "bayesian_reasoning",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "spec_tool_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "process_synthesizer",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "security_guard_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "reality_grafting",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "vulnerability_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "phishing_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "utility_class",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "synthesis_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "semantic_search_mesh",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "exchange_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "explainability",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "pattern_orchestrator",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "compliance_checker_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "sql_coder_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "code_quality_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "ollama_connector_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "hierarchical_memory",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "browsing_agent",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "email_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "orchestrator_core",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "messenger_intelligence",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "self_optimizer",
+      "value": 0.8,
+      "type": "coord"
+    },
+    {
+      "source": "fleet-PyAgent",
+      "target": "holographic_context",
+      "value": 0.8,
+      "type": "coord"
+    }
+  ],
+  "timestamp": "2026-02-10T02:19:42.551470"
 }

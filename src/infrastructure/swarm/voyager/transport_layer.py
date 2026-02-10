@@ -6,6 +6,15 @@ Transport layer.py module.
 # Phase 319: Multi-Cloud Teleportation (ZMQ Transport Layer)
 
 import asyncio
+import sys
+
+# VOYAGER STABILITY: Force SelectorEventLoop for ZeroMQ on Windows
+if sys.platform == "win32":
+    try:
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    except Exception:
+        pass
+
 import os
 from typing import Any, Awaitable, Callable, Dict, Optional
 
@@ -13,6 +22,8 @@ import zmq
 import zmq.asyncio
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
+from src.infrastructure.security.firewall.zero_trust import ZeroTrustFirewall
+from src.infrastructure.security.encryption.double_ratchet import DoubleRatchet
 from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
@@ -34,21 +45,37 @@ class VoyagerTransport:
         self.aesgcm: AESGCM | None = AESGCM(encryption_key) if encryption_key else None
         if not self.aesgcm:
             logger.warning("Voyager: Encryption disabled (no key provided).")
+        
+        # Swarm Singularity: Zero-Trust Firewall
+        self.firewall = ZeroTrustFirewall(owner_key="master-key-v4")
+        
+        # Swarm Singularity: Double Ratchet Sessions (node_id -> Ratchet)
+        self.sessions: Dict[str, DoubleRatchet] = {}
 
-    def _encrypt(self, data: bytes) -> bytes:
+    def _encrypt(self, data: bytes, session_id: Optional[str] = None) -> bytes:
+        # Check for Double Ratchet session
+        if session_id and session_id in self.sessions:
+            mk = self.sessions[session_id].get_sending_key()
+            # Use mk with AES-GCM
+            temp_aesgcm = AESGCM(mk)
+            nonce = os.urandom(12)
+            return nonce + temp_aesgcm.encrypt(nonce, data, None)
+
         if self.aesgcm:
             nonce: bytes = os.urandom(12)
-            # AESGCM.encrypt returns ciphertext + tag appended, effectively.
-            # But wait, AESGCM.encrypt returns ciphertext (which includes authentication tag).
-            # We need to prepend nonce to send it.
             return nonce + self.aesgcm.encrypt(nonce, data, None)
         return data
 
-    def _decrypt(self, data: bytes) -> bytes:
+    def _decrypt(self, data: bytes, session_id: Optional[str] = None) -> bytes:
+        if session_id and session_id in self.sessions:
+            mk = self.sessions[session_id].get_receiving_key()
+            temp_aesgcm = AESGCM(mk)
+            nonce = data[:12]
+            return temp_aesgcm.decrypt(nonce, data[12:], None)
+
         if self.aesgcm:
             nonce: bytes = data[:12]
-            ciphertext: bytes = data[12:]
-            return self.aesgcm.decrypt(nonce, ciphertext, None)
+            return self.aesgcm.decrypt(nonce, data[12:], None)
         return data
 
     async def start_server(self, handler: Callable[[Dict[str, Any]], Awaitable[Dict[str, Any]]]) -> None:
@@ -77,6 +104,13 @@ class VoyagerTransport:
                     message = decoder.decode(msg_bytes)
 
                     logger.debug(f"Voyager: Received message from {identity.hex()}")
+
+                    # Swarm Singularity: Firewall Validation
+                    sender_id = message.get("sender_id", identity.hex())
+                    signature = message.get("signature", "unsigned")
+                    if not self.firewall.validate_message(message, signature, sender_id):
+                        logger.warning(f"Firewall: Blocked unauthorized message from {sender_id}")
+                        continue
 
                     # Dispatch to handler
                     if self._handler:

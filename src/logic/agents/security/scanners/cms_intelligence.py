@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import asyncio
 import aiohttp
 import re
 from typing import Dict, Optional
@@ -77,7 +78,7 @@ class CMSIntelligence:
                             match = re.search(data["regex"], vtext)
                             if match:
                                 results["version"] = match.group(1)
-                    except Exception:
+                    except (asyncio.TimeoutError, aiohttp.ClientError):
                         pass
                     break
         return results

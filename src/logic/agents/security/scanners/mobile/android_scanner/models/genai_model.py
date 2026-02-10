@@ -1,7 +1,5 @@
 from google import genai
 from google.genai import types
-from config import *
-
 
 
 def scan_code(API, MODEL, instruction, code):

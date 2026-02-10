@@ -64,7 +64,7 @@ if TYPE_CHECKING:
     from .severity_level import SeverityLevel
     from .subscription_frequency import SubscriptionFrequency
     from .subscription_manager import SubscriptionManager
-    from .swarm_topology_reporter import SwarmTopologyReporter
+    from src.infrastructure.swarm.topology_reporter import SwarmTopologyReporter
     from .validation_result import ValidationResult
 
 _LAZY_REGISTRY = {
@@ -121,7 +121,7 @@ _LAZY_REGISTRY = {
     "SeverityLevel": ("src.observability.reports.severity_level", "SeverityLevel"),
     "SubscriptionFrequency": ("src.observability.reports.subscription_frequency", "SubscriptionFrequency"),
     "SubscriptionManager": ("src.observability.reports.subscription_manager", "SubscriptionManager"),
-    "SwarmTopologyReporter": ("src.observability.reports.swarm_topology_reporter", "SwarmTopologyReporter"),
+    "SwarmTopologyReporter": ("src.infrastructure.swarm.topology_reporter", "SwarmTopologyReporter"),
     "ValidationResult": ("src.observability.reports.validation_result", "ValidationResult"),
 }
 

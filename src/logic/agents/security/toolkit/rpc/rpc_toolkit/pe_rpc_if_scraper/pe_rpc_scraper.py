@@ -1,24 +1,26 @@
-# Akamai RPC Toolkit
-# Copyright 2022 Akamai Technologies, Inc.
-# 
-# Licensed under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in
-# compliance with the License.  You may obtain a copy
-# of the License at
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#   https://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in
-# writing, software distributed under the License is
-# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-# CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing
-# permissions and limitations under the License.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 from rpc_registration_lookup.base_rpc_registration_scraper import BaseRpcRegistrationExtractor
 from rpc_registration_lookup import disassemblers, rpc_registration_scraper_factory
 from pe_rpc_if_analysis import PeRpcInterfaceScraper
-from scraper_exceptions import *
+from scraper_exceptions import (
+    NoRpcImportException,
+    CantDetermineRpcSideException,
+    DotNetPeException,
+    CantFindRDataSectionException
+)
 
 from typing import Dict, Optional
 import argparse
@@ -38,12 +40,13 @@ def scrape_folder(folder_path: str, disassembler: Optional[BaseRpcRegistrationEx
         try:
             print(filename)
             output_dict[filename] = interface_scraper.scrape_executable(pe_path)
-        except (NoRpcImportException, CantDetermineRpcSideException, DotNetPeException, CantFindRDataSectionException) as e:
+        except (NoRpcImportException, CantDetermineRpcSideException,
+                DotNetPeException, CantFindRDataSectionException):
             pass
     return output_dict
 
 
-def scrape_file(file_path: str, disassembler: Optional[BaseRpcRegistrationExtractor]  = None) -> Dict[str, Dict]:
+def scrape_file(file_path: str, disassembler: Optional[BaseRpcRegistrationExtractor] = None) -> Dict[str, Dict]:
     interface_scraper = PeRpcInterfaceScraper(disassembler)
     return {os.path.split(file_path)[1]: interface_scraper.scrape_executable(file_path)}
 

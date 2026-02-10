@@ -13,9 +13,9 @@
 # limitations under the License.
 
 """
-Swarm topology reporter.py module.
+Swarm Topology Reporter (Phase 320 Integration).
+Represents the current state of the swarm for visualization and analysis.
 """
-
 
 from __future__ import annotations
 
@@ -39,6 +39,7 @@ class SwarmTopologyReporter:
         self.output_path = Path(output_path)
         self.nodes: list[Any] = []
         self.links: list[Any] = []
+        self.traffic_matrix: dict[str, float] = {}  # Pillar 6: Synaptic Weights
 
     def record_node(
         self,
@@ -46,21 +47,39 @@ class SwarmTopologyReporter:
         group: str = "general",
         metadata: dict[str, Any] | None = None,
     ) -> None:
-        self.nodes.append({"id": node_id, "group": group, "meta": metadata or {}})
+        # Prevent duplicates in the snapshot
+        if not any(n["id"] == node_id for n in self.nodes):
+            # Integrate synaptic weight into visual groups
+            weight = self.traffic_matrix.get(node_id, 1.0)
+            self.nodes.append({
+                "id": node_id, 
+                "group": group, 
+                "meta": metadata or {},
+                "val": weight # D3 size scaling
+            })
 
     def record_link(self, source: str, target: str, strength: float = 1.0, type: str = "coord") -> None:
-        self.links.append({"source": source, "target": target, "value": strength, "type": type})
+        # Prevent exact duplicate links
+        if not any(l["source"] == source and l["target"] == target for l in self.links):
+            # Pillar 9: High-fidelity visualization link strength
+            self.links.append({"source": source, "target": target, "value": strength, "type": type})
+
+    def update_traffic(self, node_id: str, bytes_count: float) -> None:
+        """Accumulates traffic for synaptic heatmap (Pillar 6)."""
+        current = self.traffic_matrix.get(node_id, 1.0)
+        self.traffic_matrix[node_id] = current + (bytes_count / 1024) # KB focus
 
     def export(self) -> None:
+        import datetime
         data = {
             "nodes": self.nodes,
             "links": self.links,
-            "timestamp": "2026-01-11T18:00:00",
+            "timestamp": datetime.datetime.now().isoformat(),
         }
         self.output_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(self.output_path, 'w', encoding='utf-8') as f:
-            json.dump(data, f, indent=2)
-        logging.info(f"Topology exported to {self.output_path}")
-
-
-# Integration hook in FleetManager would call this.
+        try:
+            with open(self.output_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=2)
+            logging.info(f"Topology exported to {self.output_path}")
+        except Exception as e:
+            logging.error(f"Failed to export topology: {e}")

@@ -21,7 +21,6 @@ Used for critical infrastructure or security logic changes.
 from __future__ import annotations
 
 import asyncio
-import asyncio
 import hashlib
 import logging
 from typing import Any, Dict
@@ -64,21 +63,21 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         logging.info(f"ByzantineConsensus: Evaluating {len(proposals)} proposals for task: {task[:30]}...")
 
         required_quorum = self.core.get_required_quorum(change_type)
-        
+
         # 1. Proposal Hashing & Grouping
         vote_payloads = []
-        proposal_map: Dict[str, str] = {} # hash -> content
+        proposal_map: Dict[str, str] = {}  # hash -> content
 
         for agent, content in proposals.items():
             # Calculate SHA-256 hash of the content to find exact matches
             content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
-            
+
             # Update reliability score if missing
             if agent not in self.reliability_scores:
                 self.reliability_scores[agent] = 0.9
-            
+
             weight = self.reliability_scores.get(agent, 0.5)
-            
+
             vote_payloads.append({
                 "agent": agent,
                 "weight": weight,
@@ -86,11 +85,13 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             })
             if content_hash not in proposal_map:
                 proposal_map[content_hash] = content
-        
+
         # 2. Check for Consensus (Agreement on Content)
         agreement_score = self.core.calculate_agreement_score(vote_payloads)
-        
-        logging.info(f"ByzantineConsensus: Current Agreement Score: {agreement_score:.2f} (Required: {required_quorum})")
+
+        logging.info(
+            f"ByzantineConsensus: Current Agreement Score: {agreement_score:.2f} (Required: {required_quorum})"
+        )
 
         if agreement_score >= required_quorum:
             # Find the winning hash
@@ -112,7 +113,7 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             }
 
         logging.warning("ByzantineConsensus: No consensus reached on content. Falling back to AI Quality Eval.")
-        
+
         scores: dict[str, float] = {}
 
         async def _evaluate_proposal(agent_name: str, content: str) -> tuple[str, float]:
@@ -125,7 +126,7 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             try:
                 # Use subagent logic to get a score
                 score_response = (await self.think(evaluation_prompt)).strip()
-                
+
                 # Phase 108: Record the evaluation context
                 if hasattr(self, "recorder") and self.recorder:
                     try:
@@ -156,19 +157,19 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
             if len(content) < 10:
                 score *= 0.2
-            
+
             return agent_name, score
 
         # Parallelize evaluation with timeout
         tasks = [_evaluate_proposal(name, content) for name, content in proposals.items()]
-        
+
         try:
             results = await asyncio.wait_for(asyncio.gather(*tasks), timeout=timeout)
             for name, score in results:
                 scores[name] = score
         except asyncio.TimeoutError:
             logging.warning(f"ByzantineConsensus: Voting timed out after {timeout}s! Using partial results.")
-            # In a real implementation, we would collect completed tasks here. 
+            # In a real implementation, we would collect completed tasks here.
             # For now, we fail fast to ensure liveness, or we could handle partials.
             return {
                 "decision": "TIMEOUT",

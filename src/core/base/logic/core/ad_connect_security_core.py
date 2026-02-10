@@ -308,7 +308,7 @@ class ADConnectSecurityCore(BaseCore):
                 assessment_timestamp=datetime.now()
             )
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Failed to perform security assessment: {e}")
             raise
 
@@ -325,7 +325,7 @@ class ADConnectSecurityCore(BaseCore):
             result = await self._run_powershell_command(cmd)
             return json.loads(result) if result else {}
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Failed to get ADSync service info: {e}")
             return {}
 
@@ -366,7 +366,7 @@ class ADConnectSecurityCore(BaseCore):
 
             return {}
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Failed to analyze service account: {e}")
             return {}
 
@@ -389,7 +389,7 @@ class ADConnectSecurityCore(BaseCore):
                 if await self._check_account_privilege(account_name, priv_name):
                     privileges.append(description)
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Failed to check privileges: {e}")
 
         return privileges
@@ -399,7 +399,7 @@ class ADConnectSecurityCore(BaseCore):
         try:
             # This is a simplified check - in practice, you'd need domain policy analysis
             return True  # Placeholder
-        except Exception:
+        except Exception:  # noqa: BLE001
             return False
 
     async def _get_localdb_instance_info(self) -> Dict[str, Any]:
@@ -437,7 +437,7 @@ class ADConnectSecurityCore(BaseCore):
                 'connection_string': '(LocalDB)\\ADSync2019'
             }
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Failed to get LocalDB info: {e}")
             return {}
 
@@ -479,7 +479,7 @@ class ADConnectSecurityCore(BaseCore):
                 reg_data = json.loads(result)
                 config.update(reg_data)
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Failed to read configuration: {e}")
 
         return config
@@ -616,7 +616,7 @@ class ADConnectSecurityCore(BaseCore):
                 logger.error(f"PowerShell command failed: {err_msg}")
                 return None
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Failed to run PowerShell command: {e}")
             return None
 
@@ -636,7 +636,7 @@ class ADConnectSecurityCore(BaseCore):
             result = await self._run_powershell_command(cmd)
             return result if result else None
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Failed to get account SID: {e}")
             return None
 
@@ -688,7 +688,7 @@ class ADConnectSecurityCore(BaseCore):
             else:
                 raise ValueError(f"Unknown task type: {task_type}")
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Task execution failed: {e}")
             raise
 

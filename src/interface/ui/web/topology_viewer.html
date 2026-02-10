@@ -19,7 +19,7 @@
 
     <script>
         // Load the topology data from the recorded JSON
-        fetch('../../../../data/logs/topology.json')
+        fetch('/api/topology')
             .then(res => res.json())
             .then(data => {
                 document.getElementById('node-count').textContent = data.nodes.length;

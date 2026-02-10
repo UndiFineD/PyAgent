@@ -1,0 +1,15 @@
+{
+    "version": "1.0.0",
+    "role": "researcher",
+    "description": "Information retrieval and synthesis specialist",
+    "required_skills": ["identity", "environment", "security", "web_search", "document_parsing"],
+    "reasoning_mode": "react",
+    "memory_strategy": "long_term",
+    "permissions": {
+        "fs_read": true,
+        "fs_write": false,
+        "network": true,
+        "execution": false
+    },
+    "tools": ["browser", "pdf_reader", "arxiv_api"]
+}

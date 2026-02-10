@@ -63,10 +63,12 @@ class CloudIntelligence:
                     return {"url": bucket_url, "status": "private"}
                 else:
                     return {"url": bucket_url, "status": "not_found", "code": resp.status}
-        except Exception as e:
+        except (asyncio.TimeoutError, aiohttp.ClientError) as e:
             return {"url": bucket_url, "status": "error", "message": str(e)}
+        except Exception as e:
+            return {"url": bucket_url, "status": "error", "message": f"Unexpected error: {str(e)}"}
 
-    async def list_public_files(self, bucket_url: str) -> List[str]:
+    async def list_public_files(self, _bucket_url: str) -> List[str]:
         """Attempts to list files in a public S3 bucket."""
         # Simple XML parsing would happen here
         return []
