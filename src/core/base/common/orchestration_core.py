@@ -89,26 +89,26 @@ class OrchestrationCore(BaseCore):
         Executes the registered agents in the calculated order.
         """
         self.results.clear()
-        
+
         def run_agent(carry: str, agent_type: str) -> str:
             agent_config = next(filter(lambda a: a.agent_type == agent_type, self.agents), None)
             if not agent_config:
                 return carry
-            
+
             agent = agent_factory(agent_type, file_path)
             enhanced_prompt = prompt
-            
+
             def add_context(dep: str) -> str:
                 if dep in self.results:
                     return f"\n\nPrevious {dep} result:\n{self.results[dep][:500]}"
                 return ""
-            
+
             # Aggregate dependency context functionally
             enhanced_prompt += "".join(map(add_context, agent_config.depends_on))
-            
+
             if carry and hasattr(agent, "previous_content"):
                 agent.previous_content = carry
-                
+
             result = agent.improve_content(enhanced_prompt)
             self.results[agent_type] = result
             return result
