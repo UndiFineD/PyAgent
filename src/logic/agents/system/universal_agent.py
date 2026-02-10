@@ -103,4 +103,16 @@ class UniversalAgent(BaseAgent):
             "intent_hint": intent_analysis
         })
         
+        # Pillar 8 Hardening: Distribute state to the swarm after task completion
+        if hasattr(self.core, "fleet_instance"):
+            fleet = self.core.fleet_instance
+            if hasattr(fleet, "harden_agent_state"):
+                state_data = {
+                    "agent_id": self.id,
+                    "last_query": query,
+                    "last_result": str(result)[:1000],  # Truncate for efficiency
+                    "memory_len": len(getattr(self.memory, "working_set", []))
+                }
+                asyncio.create_task(fleet.harden_agent_state(self.id, state_data))
+
         return result

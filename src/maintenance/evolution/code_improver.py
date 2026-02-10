@@ -44,46 +44,61 @@ class EvolutionLoop:
         logger.info("Autonomous Evolution Loop engaged.")
         
         while self.running:
-            # Only run if system load is low
+            # 1. Performance Evolution (Python -> Rust / Refactor)
             stats = self.fleet.resource_monitor.get_latest_stats()
             if stats.get("cpu_percent", 100) < 30: # Idle threshold
                 await self._identify_and_improve_bottleneck()
             
+            # 2. Resilience Evolution (RAID-10 Sharding Update)
+            if hasattr(self.fleet, "run_resilience_audit"):
+                await self.fleet.run_resilience_audit()
+            
             await asyncio.sleep(3600) # Once per hour
 
     async def _identify_and_improve_bottleneck(self):
-        """Heuristic-based logic bottleneck identification."""
-        logger.info("Evolution: Identifying code bottlenecks...")
+        """Heuristic-based logic bottleneck identification and Rust acceleration."""
+        logger.info("Evolution: Identifying code bottlenecks (Pillar 8)...")
         
-        # Pillar 8: Identify Python functions for Rust migration
+        # 1. Complexity-based Rust Candidate Identification
         python_files = list(self.fleet.workspace_root.rglob("*.py"))
-        candidate = None
+        rust_candidates = []
         
         for pfile in python_files:
-            if "__" in pfile.name: continue
-            # Look for large, complex files (proxy for migration need)
-            if pfile.stat().st_size > 20000: # >20KB
-                candidate = str(pfile.relative_to(self.fleet.workspace_root))
-                break
-
-        if candidate:
-            logger.info(f"Evolution: Suggesting Rust migration for {candidate}")
+            if "__" in pfile.name or "test" in pfile.name.lower(): continue
+            
+            # Heuristic: Large files with high loop density or many mathematical ops
             try:
+                content = pfile.read_text(encoding="utf-8")
+                if len(content) > 15000: # >15KB
+                    loop_count = content.count("for ") + content.count("while ")
+                    math_count = content.count("math.") + content.count("np.") + content.count(" + ") + content.count(" * ")
+                    
+                    if loop_count > 20 or math_count > 50:
+                        rust_candidates.append(str(pfile.relative_to(self.fleet.workspace_root)))
+            except Exception:
+                continue
+
+        if rust_candidates:
+            target = rust_candidates[0]
+            logger.info(f"Evolution: Target identified for Rust acceleration: {target}")
+            try:
+                # Dispatch a special 'rust_porter' shard if available, or use Coder
                 await self.fleet.delegate_to(
                     "coder", 
-                    prompt=f"Analyze {candidate} and suggest which logic parts should be migrated to Rust for performance."
+                    prompt=f"AUTONOMOUS_EVOLUTION: The function in {target} is a bottleneck. "
+                           f"Implement a high-performance Rust version in 'rust_lib/src/optimized/' "
+                           f"and provide a Python FFI bridge using PyO3."
                 )
             except Exception as e:
-                logger.error(f"Evolution: Analysis failed: {e}")
+                logger.error(f"Evolution: Rust porting request failed: {e}")
         
-        # standard refactor cleanup
-        target_file = "src/core/base/lifecycle/base_agent_core.py"
+        # 2. General logic refactor for the core
+        target_core = "src/core/base/lifecycle/base_agent.py"
         try:
             await self.fleet.delegate_to(
                 "coder", 
-                prompt=f"Identify and refactor any performance bottlenecks in {target_file}.",
-                target_file=target_file
+                prompt=f"EVOLUTION_LOOP: Review {target_core} for redundancy and apply architectural patterns like Mixins for better isolation.",
+                target_file=target_core
             )
-            logger.info("Evolution: Successfully refactored %s", target_file)
         except Exception as e:
             logger.error("Evolution: Refactor failed: %s", e)

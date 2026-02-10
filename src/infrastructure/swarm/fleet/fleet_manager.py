@@ -40,6 +40,8 @@ from src.infrastructure.swarm.fleet.fleet_routing_core import FleetRoutingCore
 from src.infrastructure.swarm.fleet.resource_monitor import ResourceMonitor
 from src.infrastructure.swarm.voyager.transport_layer import VoyagerTransport
 from src.infrastructure.swarm.voyager.discovery_node import DiscoveryNode
+from src.infrastructure.swarm.fleet.mixins.fleet_backup_mixin import \
+    FleetBackupMixin
 from src.infrastructure.swarm.fleet.mixins.fleet_delegation_mixin import \
     FleetDelegationMixin
 from src.infrastructure.swarm.fleet.mixins.fleet_discovery_mixin import \
@@ -81,6 +83,7 @@ class FleetManager(
     FleetDiscoveryMixin,
     FleetDelegationMixin,
     FleetUpdateMixin,
+    FleetBackupMixin,
 ):  # pylint: disable=too-many-ancestors
     """
     The central hub for the PyAgent ecosystem. Orchestrates a swarm of specialized
@@ -304,15 +307,15 @@ class FleetManager(
         elif msg_type == "resource_status":
             return {"status": "ok"}
 
-        elif msg_type == "store_shard":
+        elif msg_type == "shard_store" or msg_type == "store_shard":
             shard = message.get("shard", {})
-            self.backup_node.store_shard_locally(shard)
-            return {"status": "shard_stored"}
+            success = self.backup_node.store_shard_locally(shard)
+            return {"status": "success" if success else "error"}
 
-        elif msg_type == "request_shard":
-            shard_id = message.get("shard_id")
-            shard = self.backup_node.retrieve_shard(shard_id)
-            return {"status": "success", "shard": shard} if shard else {"status": "not_found"}
+        elif msg_type == "shard_request" or msg_type == "request_shard":
+            state_hash = message.get("hash")
+            shards = self.backup_node.get_local_shards_for_hash(state_hash)
+            return {"status": "success", "shards": shards}
 
         return {"status": "unknown_message_type"}
 

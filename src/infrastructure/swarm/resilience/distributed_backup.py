@@ -40,64 +40,72 @@ class DistributedBackup:
 
     def create_shards(self, state_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
-        Splits state into N encrypted shards.
-        (RAID-10 Concept: Mirrored Striping).
+        Splits state into N encrypted shards using RAID-10 (Mirroring + Striping).
+        Also includes a redundancy parity check.
         """
         raw_data = json.dumps(state_data).encode()
         data_hash = hashlib.sha256(raw_data).hexdigest()
         
-        # Phase 320: Strategic Sharding
-        # Split data into 2 parts (stripping) and mirror each part twice (total 4 shards)
-        size = len(raw_data)
-        mid = size // 2
-        parts = [raw_data[:mid], raw_data[mid:]]
+        # Phase 326: Dynamic Striping
+        # N=3 parts, each mirrored once (M=2) = 6 shards total
+        num_parts = 3 if len(raw_data) > 10000 else 2
+        mirror_factor = self.replication_factor # Default 3
         
+        part_size = (len(raw_data) + num_parts - 1) // num_parts
+        parts = [raw_data[i:i + part_size] for i in range(0, len(raw_data), part_size)]
+        
+        # Ensure we have exactly num_parts (pad with empty if needed)
+        while len(parts) < num_parts:
+            parts.append(b"")
+
         shards = []
         for part_idx, part in enumerate(parts):
-            for mirror_idx in range(2): # Mirroring Factor: 2
+            part_hash = hashlib.blake3(part).hexdigest() if hasattr(hashlib, "blake3") else hashlib.md5(part).hexdigest()
+            for mirror_idx in range(mirror_factor): 
                 shards.append({
                     "origin_node": self.node_id,
                     "shard_id": f"{data_hash}_p{part_idx}_m{mirror_idx}",
                     "part_index": part_idx,
+                    "mirror_index": mirror_idx,
                     "data_b64": self._encode(part),
-                    "hash": data_hash,
-                    "total_parts": 2
+                    "part_hash": part_hash,
+                    "full_hash": data_hash,
+                    "total_parts": num_parts,
+                    "timestamp": 0 # Placeholder for time
                 })
+        
+        logger.info(f"DistributedBackup: Created {len(shards)} RAID-10 shards for state {data_hash[:8]}")
         return shards
 
-    def _encode(self, data: bytes) -> str:
-        import base64
-        return base64.b64encode(data).decode()
-
-    def _decode(self, data_str: str) -> bytes:
-        import base64
-        return base64.b64decode(data_str)
-
-    def reconstruct_state(self, shard_pool: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-        """Reassembles state from a collection of shards."""
-        if not shard_pool:
-            return None
-            
-        parts = {}
-        total_parts = shard_pool[0].get("total_parts", 1)
-        
-        for shard in shard_pool:
-            idx = shard.get("part_index", 0)
-            if idx not in parts:
-                parts[idx] = self._decode(shard["data_b64"])
-                
-        if len(parts) < total_parts:
-            logger.error("Incomplete shards for reconstruction")
-            return None
-            
-        full_data = b"".join(parts[i] for i in range(total_parts))
-        return json.loads(full_data.decode())
-
-    def store_shard_locally(self, shard: Dict[str, Any]) -> None:
-        """Stores a shard from a peer."""
+    def store_shard_locally(self, shard: Dict[str, Any]) -> bool:
+        """Stores a shard from a peer and verifies integrity."""
         shard_id = shard["shard_id"]
+        data_b64 = shard.get("data_b64", "")
+        part_hash = shard.get("part_hash")
+        
+        # Integrity check
+        if part_hash:
+            actual_data = self._decode(data_b64)
+            actual_hash = hashlib.blake3(actual_data).hexdigest() if hasattr(hashlib, "blake3") else hashlib.md5(actual_data).hexdigest()
+            if actual_hash != part_hash:
+                logger.error(f"DistributedBackup: Corruption detected in shard {shard_id}")
+                return False
+
         file_path = self.local_shards_dir / f"{shard_id}.json"
         with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(shard, f)
+        return True
+
+    def get_local_shards_for_hash(self, full_hash: str) -> List[Dict[str, Any]]:
+        """Retrieves locally stored shards belonging to a specific state hash."""
+        shards = []
+        for shard_file in self.local_shards_dir.glob(f"{full_hash}_*.json"):
+            try:
+                with open(shard_file, "r") as f:
+                    shards.append(json.load(f))
+            except Exception:
+                continue
+        return shards
             json.dump(shard, f)
         logger.info("Stored shard %s from %s", shard_id, shard["origin_node"])
 

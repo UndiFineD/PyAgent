@@ -18,26 +18,31 @@
     <div id="3d-graph"></div>
 
     <script>
-        // Load the topology data from the recorded JSON
-        fetch('/api/topology')
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('node-count').textContent = data.nodes.length;
-                document.getElementById('link-count').textContent = data.links.length;
+        const elem = document.getElementById('3d-graph');
+        const Graph = ForceGraph3D()(elem)
+            .nodeLabel('id')
+            .nodeAutoColorBy('group')
+            .nodeVal('val')
+            .linkWidth('value')
+            .linkDirectionalParticles(2)
+            .linkDirectionalParticleSpeed(d => d.value * 0.01)
+            .linkDirectionalArrowLength(3.5)
+            .linkDirectionalArrowRelPos(1)
+            .backgroundColor('#050510');
 
-                const Graph = ForceGraph3D()
-                    (document.getElementById('3d-graph'))
-                    .graphData(data)
-                    .nodeLabel('id')
-                    .nodeAutoColorBy('group')
-                    .linkWidth('value')
-                    .linkDirectionalArrowLength(3.5)
-                    .linkDirectionalArrowRelPos(1);
-            })
-            .catch(err => {
-                console.error("Failed to load topology data:", err);
-                document.getElementById('info').innerHTML = "<h1>Error</h1><p>Could not find data/logs/topology.json. Please run the SwarmTopologyReporter first.</p>";
-            });
+        function updateData() {
+            fetch('/api/topology')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('node-count').textContent = data.nodes.length;
+                    document.getElementById('link-count').textContent = data.links.length;
+                    Graph.graphData(data);
+                })
+                .catch(err => console.error("Topology Sync Error:", err));
+        }
+
+        setInterval(updateData, 5000);
+        updateData();
     </script>
 </body>
 </html>

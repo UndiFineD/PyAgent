@@ -1,0 +1,55 @@
+{
+    "version": "1.0.0",
+    "role": "complex_workflow",
+    "description": "A branching industrial workflow example",
+    "required_skills": ["orchestration", "research", "security"],
+    "reasoning_mode": "cort",
+    "permissions": {
+        "fs_read": true,
+        "fs_write": false,
+        "network": true,
+        "execution": false
+    },
+    "flow_nodes": [
+        {
+            "id": "node_1",
+            "type": "task",
+            "name": "Initial Research",
+            "prompt": "Research the current state of cybersecurity in P2P networks."
+        },
+        {
+            "id": "node_2",
+            "type": "condition",
+            "name": "Risk Analysis",
+            "logic": "'critical' in str(results.get('node_1', '')).lower()"
+        },
+        {
+            "id": "node_3",
+            "type": "task",
+            "name": "Security Hardening",
+            "prompt": "The previous research identified critical risks: {{node_1}}. Propose a zero-trust hardening strategy."
+        },
+        {
+            "id": "node_4",
+            "type": "task",
+            "name": "Standard Report",
+            "prompt": "Generate a summary report based on: {{node_1}}"
+        }
+    ],
+    "connectors": [
+        {
+            "from": "node_1",
+            "to": "node_2"
+        },
+        {
+            "from": "node_2",
+            "to": "node_3",
+            "label": "if_true"
+        },
+        {
+            "from": "node_2",
+            "to": "node_4",
+            "label": "if_false"
+        }
+    ]
+}
