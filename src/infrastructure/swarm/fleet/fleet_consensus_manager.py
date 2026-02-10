@@ -101,7 +101,7 @@ class FleetConsensusManager:
 
         res = judge.run_committee_vote(task, proposals)
         if asyncio.iscoroutine(res):
-            result = loop.run_until_complete(res)
+            result = await res
         else:
             result = res
 

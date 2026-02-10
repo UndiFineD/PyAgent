@@ -133,8 +133,7 @@ class JSONSchemaGrammar(StructuredOutputGrammar):
                 return True
             # Also accept if we're building valid JSON
             return self._is_valid_json_prefix(text)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             return False
 
     def _is_valid_json_prefix(self, text: str) -> bool:

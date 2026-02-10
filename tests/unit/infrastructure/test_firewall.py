@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import pytest
-from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 from src.infrastructure.security.network.firewall import ReverseProxyFirewall
 
 @pytest.fixture

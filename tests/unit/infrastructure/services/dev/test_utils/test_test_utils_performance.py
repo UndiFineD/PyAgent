@@ -16,18 +16,10 @@
 """Test classes from test_agent_test_utils.py - performance module."""
 
 from __future__ import annotations
-from typing import Any, Dict, Self
+from typing import Any, Dict
 import time
-from pathlib import Path
-import sys
 
 # Try to import test utilities
-from tests.utils.agent_test_utils import (
-    AGENT_DIR,
-    agent_sys_path,
-    load_module_from_path,
-    agent_dir_on_path,
-)
 
 # Import from src if needed
 

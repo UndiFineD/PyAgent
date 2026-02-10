@@ -137,7 +137,7 @@ class ReverseProxyFirewall:
             parsed = urlparse(url)
             domain = parsed.hostname or ""
             
-            if self.local_only and not domain in ["localhost", "127.0.0.1"]:
+            if self.local_only and domain not in ["localhost", "127.0.0.1"]:
                 self.logger.warning("Firewall Blocked: Non-local request in local_only mode: %s", domain)
                 self._log_violation(url, "local_only_violation")
                 return False

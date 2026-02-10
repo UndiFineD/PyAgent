@@ -14,8 +14,6 @@
 
 import asyncio
 import pytest
-import json
-import os
 from unittest.mock import AsyncMock, MagicMock
 from src.infrastructure.swarm.resilience.distributed_backup import DistributedBackup
 from src.infrastructure.swarm.fleet.mixins.fleet_backup_mixin import FleetBackupMixin

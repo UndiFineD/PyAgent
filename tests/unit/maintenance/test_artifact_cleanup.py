@@ -23,9 +23,14 @@ import tempfile
 import time
 from pathlib import Path
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
-from src.maintenance.artifact_cleanup import ArtifactCleanupCore, get_artifact_cleanup_core, start_fleet_cleanup, stop_fleet_cleanup
+from src.maintenance.artifact_cleanup import (
+    ArtifactCleanupCore,
+    get_artifact_cleanup_core,
+    start_fleet_cleanup,
+    stop_fleet_cleanup
+)
 
 
 class TestArtifactCleanupCore:

@@ -88,7 +88,7 @@ class CrossBrowserRunner:
             while retries <= self.config.retries and not passed:
                 try:
                     passed = test_code()
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                     retries += 1
             result: dict[str, Any] = {
                 "test": test_name,

@@ -20,19 +20,12 @@ import unittest
 from typing import Any, List, Dict, Optional, Tuple, Set
 from unittest.mock import MagicMock, patch
 import time
-from pathlib import Path
 import sys
 import os
 import tempfile
 import shutil
 
 # Try to import test utilities
-from tests.utils.agent_test_utils import (
-    AGENT_DIR,
-    agent_sys_path,
-    load_module_from_path,
-    agent_dir_on_path,
-)
 
 # Import from src if needed
 
@@ -205,7 +198,7 @@ class TestContextManagers(unittest.TestCase):
         try:
             with patch.object(object, "__init__", side_effect=Exception("Error")):
                 pass
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             pass
         finally:
             cleanup_called = True
@@ -351,7 +344,7 @@ class TestExceptionHandling(unittest.TestCase):
         try:
             result: int = safe_operation()
             self.assertEqual(result, 42)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             self.fail("Should not raise")
 
     def test_multiple_exception_types(self) -> None:

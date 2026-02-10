@@ -23,8 +23,20 @@ import hashlib
 import logging
 import secrets
 import time
+import json
+import base64
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Dict, Optional, List, Any
+
+from fido2.server import Fido2Server
+from fido2.webauthn import (
+    PublicKeyCredentialRpEntity,
+    PublicKeyCredentialUserEntity,
+    AuthenticatorSelectionCriteria,
+    UserVerificationRequirement,
+    AuthenticatorAttachment
+)
+from fido2.utils import websafe_decode, websafe_encode
 
 from .e2e_encryption_core import E2EEncryptionCore
 
@@ -58,7 +70,99 @@ class SecureAuthManager:
         self.active_sessions: Dict[str, UserSession] = {}
         self.oauth_states: Dict[str, Dict] = {}  # CSRF protection
         
-        logger.info("SecureAuthManager initialized with E2EE support")
+        # WebAuthn Configuration
+        self.rp = PublicKeyCredentialRpEntity(name="PyAgent Swarm", id="localhost")
+        self.server = Fido2Server(self.rp)
+        self.challenges: Dict[str, Any] = {}
+        self.user_credentials: Dict[str, List[Any]] = {}  # Mock persistence
+        
+        logger.info("SecureAuthManager initialized with E2EE and WebAuthn (FIDO2) support")
+
+    # ==================== WebAuthn Flow ====================
+
+    def begin_webauthn_registration(self, user_id: str, display_name: str) -> Dict[str, Any]:
+        """Generate options for new passkey registration."""
+        user = PublicKeyCredentialUserEntity(
+            id=user_id.encode(),
+            name=user_id,
+            display_name=display_name
+        )
+        
+        # Authenticator selection criteria (Platform preferred)
+        selection = AuthenticatorSelectionCriteria(
+            authenticator_attachment=AuthenticatorAttachment.CROSS_PLATFORM,
+            user_verification=UserVerificationRequirement.PREFERRED
+        )
+
+        registration_data, state = self.server.register_begin(
+            user,
+            credentials=self.user_credentials.get(user_id, []),
+            authenticator_selection=selection
+        )
+        
+        # Store state for verification
+        self.challenges[user_id] = state
+        
+        # Convert to serializable format for JSON response
+        return dict(registration_data)
+
+    def complete_webauthn_registration(self, user_id: str, credential_data: Dict[str, Any]) -> bool:
+        """Verify and save new passkey credential."""
+        if user_id not in self.challenges:
+            logger.error("No WebAuthn registration challenge found for user %s", user_id)
+            return False
+            
+        try:
+            auth_data = self.server.register_complete(
+                self.challenges[user_id],
+                credential_data
+            )
+            
+            # Store credential
+            if user_id not in self.user_credentials:
+                self.user_credentials[user_id] = []
+            self.user_credentials[user_id].append(auth_data.credential_data)
+            
+            del self.challenges[user_id]
+            logger.info("WebAuthn registration complete for user: %s", user_id)
+            return True
+        except Exception as e:
+            logger.error("WebAuthn registration verification failed: %s", e)
+            return False
+
+    def begin_webauthn_authentication(self, user_id: str) -> Dict[str, Any]:
+        """Generate options for passkey login."""
+        if user_id not in self.user_credentials or not self.user_credentials[user_id]:
+            logger.warning("No credentials found for user %s", user_id)
+            # We return empty to indicate failure or fallback
+            return {}
+
+        auth_data, state = self.server.authenticate_begin(self.user_credentials[user_id])
+        self.challenges[user_id] = state
+        
+        return dict(auth_data)
+
+    def complete_webauthn_authentication(self, user_id: str, assertion_data: Dict[str, Any]) -> Optional[UserSession]:
+        """Verify passkey assertion and create secure session."""
+        if user_id not in self.challenges:
+            return None
+            
+        try:
+            self.server.authenticate_complete(
+                self.challenges[user_id],
+                self.user_credentials[user_id],
+                assertion_data
+            )
+            
+            del self.challenges[user_id]
+            
+            # Create session (same logic as OAuth logout)
+            oauth_token = secrets.token_urlsafe(32)
+            return self._create_session(user_id, oauth_token)
+            
+        except Exception as e:
+            logger.error("WebAuthn authentication failed: %s", e)
+            return None
 
     # ==================== OAuth Flow ====================
 

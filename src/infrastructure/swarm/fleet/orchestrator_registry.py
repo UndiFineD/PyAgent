@@ -163,7 +163,7 @@ class LazyOrchestratorMap:
                 from src.core.base.lifecycle.base_agent import BaseAgent
 
                 is_agent = issubclass(orchestrator_class, BaseAgent)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 is_agent = False
 
             if is_agent:

@@ -86,6 +86,7 @@ class JsonSchemaConstraint(OutputConstraint):
             # Check properties regarding functional validation
             # Phase 387: Functional property check
             properties = self.schema.get("properties", {})
+
             def check_prop(item: tuple[str, dict]) -> bool:
                 key, prop_schema = item
                 if key in data:

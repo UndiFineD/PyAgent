@@ -4,7 +4,6 @@
 
 import asyncio
 import psutil
-import logging
 from typing import Dict, Any
 from src.observability.structured_logger import StructuredLogger
 

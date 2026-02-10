@@ -19,20 +19,6 @@ Base.py module.
 from abc import ABC, abstractmethod
 from typing import Any, Optional, Tuple
 
-try:
-    import torch  # pylint: disable=unused-import
-    import torch.nn as torch_nn  # pylint: disable=unused-import
-
-    HAS_TORCH = True
-except ImportError:
-    HAS_TORCH = False
-
-try:
-    import numpy as np  # pylint: disable=unused-import
-
-    HAS_NUMPY = True
-except ImportError:
-    HAS_NUMPY = False
 
 from .config import RoPEConfig
 

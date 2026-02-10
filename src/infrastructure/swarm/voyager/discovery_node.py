@@ -208,7 +208,7 @@ class DiscoveryNode:
         This enables decentralized routing without hardcoded IPs.
         """
         for name, info in self.peers.items():
-            props: Dict[str | bytearray | memoryview[_I], str | bytearray | memoryview[_I] | None] = {
+            props: Dict[str, str] = {
                 k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
                 for k, v in info.properties.items()
             }
@@ -216,7 +216,7 @@ class DiscoveryNode:
             # Match by node_name, node_id, or mDNS service name
             if peer_name == props.get("node_id") or peer_name == name.split(".")[0] or peer_name in name:
                 addrs: List[str] = info.parsed_addresses()
-                t_port: str | bytearray | memoryview[_I] | None = props.get("transport_port")
+                t_port: str | None = props.get("transport_port")
                 if addrs and t_port:
                     return (addrs[0], int(t_port))
 

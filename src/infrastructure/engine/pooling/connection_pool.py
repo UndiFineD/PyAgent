@@ -204,10 +204,8 @@ class ConnectionPool(Generic[T]):
             try:
                 conn = self._create_connection()
                 if conn:
-                    self._idle.append(conn)
                     self._stats.current_idle += 1
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 self._stats.failed_creates += 1
 
     def _create_connection(self) -> Optional[PooledConnection[T]]:
@@ -223,8 +221,7 @@ class ConnectionPool(Generic[T]):
                 last_used_at=now,
                 state=ConnectionState.IDLE,
             )
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             self._stats.failed_creates += 1
             raise
 
@@ -245,8 +242,7 @@ class ConnectionPool(Generic[T]):
                 if not conn.ping():
                     self._stats.failed_health_checks += 1
                     return False
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 self._stats.failed_health_checks += 1
                 return False
 
@@ -260,8 +256,7 @@ class ConnectionPool(Generic[T]):
         if isinstance(conn, Closeable):
             try:
                 conn.close()
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         self._stats.closed += 1

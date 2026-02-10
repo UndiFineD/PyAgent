@@ -86,7 +86,7 @@ class FleetLookupMixin:
             try:
                 # LazyAgentMap implements __getitem__ with fallback logic
                 return agents[effective_name]
-            except (KeyError, TypeError, AttributeError) as e:
+            except (KeyError, TypeError, AttributeError):
                 if effective_name != name:
                     try:
                         return agents[name]

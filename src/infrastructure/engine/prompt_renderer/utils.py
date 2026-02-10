@@ -30,7 +30,7 @@ from .salt import CacheSaltGenerator
 from .truncation import TruncationManager
 
 if TYPE_CHECKING:
-    from .renderers import ChatRenderer, CompletionRenderer
+    pass
 
 
 class EmbeddingLoader:

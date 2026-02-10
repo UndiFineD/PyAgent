@@ -35,7 +35,7 @@ def fix() -> None:
                 try:
                     with open(path, encoding="utf-8") as f:
                         lines = f.readlines()
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                     continue
 
                 changed = False

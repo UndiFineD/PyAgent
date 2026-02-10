@@ -20,11 +20,8 @@ Tests for MediaIOEngine - unified media loading.
 """
 
 import pytest
-import asyncio
 import inspect
 import numpy as np
-from pathlib import Path
-from typing import List
 
 from src.infrastructure.services.mediaio import (
     MediaType,

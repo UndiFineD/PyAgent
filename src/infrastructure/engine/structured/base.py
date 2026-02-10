@@ -46,10 +46,12 @@ class GrammarEngine(ABC):
 
         def register_token(item: tuple[int, str]) -> None:
             tid, tstr = item
+
             def add_to_list() -> None:
                 if tstr not in self._string_to_tokens:
                     self._string_to_tokens[tstr] = []
                 self._string_to_tokens[tstr].append(tid)
+
             (add_to_list() if tstr is not None else None)
 
         list(map(register_token, self.token_strings.items()))

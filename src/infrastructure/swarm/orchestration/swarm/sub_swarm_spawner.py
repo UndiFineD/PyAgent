@@ -60,7 +60,7 @@ class SubSwarm:
                     return f"[PENDING] {agent_name} logic execution"
 
                 result = loop.run_until_complete(coro)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 # Fallback for complex loop states
                 result = f"Direct execution of {agent_name} failed"
 
@@ -102,7 +102,7 @@ class SubSwarmSpawner:
                     asyncio.create_task(coro)
                 else:
                     loop.run_until_complete(coro)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         return swarm_id

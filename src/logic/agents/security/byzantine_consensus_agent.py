@@ -23,6 +23,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import logging
+import re
 from typing import Any, Dict
 
 from src.core.base.common.base_utilities import as_tool
@@ -118,7 +119,8 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         async def _evaluate_proposal(agent_name: str, content: str) -> tuple[str, float]:
             evaluation_prompt = (
-                f"Identify the technical quality and correctness of the following proposal for the task: '{task}'\n\n"
+                f"Identify the technical quality and correctness of the proposal "
+                f"for the task: '{task}'\n\n"
                 f"Agent Proposal ({agent_name}):\n{content}\n\n"
                 "Output ONLY a single numeric score between 0.0 and 1.0 (e.g. 0.85). "
                 "Higher is better."
@@ -139,7 +141,6 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                     except (IOError, AttributeError):
                         pass
 
-                import re
                 match = re.search(r"(\d+\.\d+)", score_response)
                 score = float(match.group(1)) if match else 0.7
             except (ValueError, TypeError, RuntimeError) as e:
@@ -210,6 +211,18 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         """Acts as a high-level evaluator for a single piece of content."""
         _ = (prompt, target_file)
         return "Byzantine Evaluation: Content integrity verified at 94% confidence level. Ready for deployment."
+
+    async def _process_task(self, task_data: dict[str, Any]) -> Any:
+        """
+        Implementation of TaskQueueMixin abstract method.
+        Routes incoming tasks to appropriate internal logic.
+        """
+        task_name = task_data.get("task", "")
+        if "vote" in task_name.lower() or "consensus" in task_name.lower():
+            proposals = task_data.get("proposals", {})
+            return await self.run_committee_vote(task_name, proposals)
+
+        return {"status": "ignored", "reason": "Unknown task type for ByzantineConsensusAgent"}
 
 
 if __name__ == "__main__":

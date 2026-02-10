@@ -26,9 +26,11 @@ import os
 import time
 from pathlib import Path
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from src.infrastructure.security.auth.webauthn_manager import WebAuthnManager
+from src.infrastructure.swarm.resilience.checkpoint_manager import CheckpointManager
 
 # VOYAGER STABILITY: Fix for ZeroMQ on Windows Proactor Loop
 if sys.platform == "win32":
@@ -42,6 +44,8 @@ LOGS_DIR = WORKSPACE_ROOT / "data" / "logs"
 
 # Global Fleet Instance
 fleet_instance = None
+auth_manager = WebAuthnManager()
+checkpoint_manager = CheckpointManager(rank=0, world_size=1) # Default for web proxy
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -245,6 +249,64 @@ async def read_workspace_file(path: str):
             return {"content": f.read()}
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
+
+# --- WebAuthn / Biometric Auth (Phase 327) ---
+
+@app.get("/api/auth/register/options")
+async def get_registration_options(username: str):
+    """Generates options for WebAuthn registration."""
+    try:
+        options = auth_manager.get_registration_options(username)
+        return options
+    except Exception as e:
+        return JSONResponse(status_code=400, content={"error": str(e)})
+
+# --- RDMA Checkpointing (Phase 93) ---
+
+@app.post("/api/resilience/checkpoint")
+async def trigger_checkpoint(data: dict):
+    """Triggers an RDMA checkpoint of the current swarm state."""
+    state_payload = data.get("state", "{}").encode("utf-8")
+    checkpoint_id = await checkpoint_manager.create_checkpoint(state_payload)
+    if checkpoint_id:
+        return {"status": "success", "checkpoint_id": checkpoint_id}
+    return JSONResponse(status_code=500, content={"error": "RDMA Checkpoint failed"})
+
+@app.get("/api/resilience/checkpoints/latest")
+async def get_latest_checkpoint():
+    """Returns metadata for the latest RDMA checkpoint."""
+    latest = checkpoint_manager.get_latest_checkpoint()
+    if latest:
+        return {
+            "id": latest.id,
+            "timestamp": latest.timestamp,
+            "peer_rank": latest.peer_rank,
+            "data_size": latest.data_size
+        }
+    return {"status": "none"}
+
+@app.post("/api/auth/register/verify")
+async def verify_registration(username: str, data: dict):
+    """Verifies WebAuthn registration response."""
+    if auth_manager.verify_registration(username, data):
+        return {"status": "success", "message": "Biometric credential registered"}
+    return JSONResponse(status_code=400, content={"error": "Verification failed"})
+
+@app.get("/api/auth/login/options")
+async def get_login_options(username: str):
+    """Generates options for WebAuthn authentication."""
+    try:
+        options = auth_manager.get_authentication_options(username)
+        return options
+    except Exception as e:
+        return JSONResponse(status_code=400, content={"error": str(e)})
+
+@app.post("/api/auth/login/verify")
+async def verify_login(username: str, data: dict):
+    """Verifies WebAuthn authentication response."""
+    if auth_manager.verify_authentication(username, data):
+        return {"status": "success", "token": "mock-jwt-token-v4"}
+    return JSONResponse(status_code=401, content={"error": "Authentication failed"})
 
 # 2. ROOT ROUTE
 @app.get("/")

@@ -33,7 +33,7 @@ import threading
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Any, Optional, Sequence, Type
+from typing import Any, Optional, Sequence
 
 from numpy import dtype, floating, ndarray
 from numpy._typing._nbit_base import _32Bit
@@ -540,7 +540,7 @@ class CompositeLogitsProcessor(LogitsProcessor):
     def apply(self, logits: Any) -> Any:
         """Apply all processors in sequence."""
         from functools import reduce
-        return reduce(lambda l, p: p.apply(l), self.processors, logits)
+        return reduce(lambda res, p: p.apply(res), self.processors, logits)
 
     def has_state(self) -> bool:
         """Check regarding state maintenance."""

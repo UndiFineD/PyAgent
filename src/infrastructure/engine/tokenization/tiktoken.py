@@ -79,8 +79,7 @@ class TiktokenTokenizer(BaseTokenizer):
         """Get the end of sequence token ID."""
         try:
             return self._encoding.encode("<|endoftext|>", allowed_special={"<|endoftext|>"})[0]
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             return None
 
     @property

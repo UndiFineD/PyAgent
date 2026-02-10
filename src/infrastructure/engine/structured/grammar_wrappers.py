@@ -110,10 +110,10 @@ class CompositeGrammar:
 
         # Apply each grammar's constraints (intersection)
         temp_mask = np.ones_like(bitmask)
-        
+
         def apply_grammar(grammar):
             temp_mask.fill(1)
             grammar.fill_next_token_bitmask(temp_mask)
-            bitmask &= temp_mask
-            
+            bitmask[:] &= temp_mask
+
         list(map(apply_grammar, self.grammars))

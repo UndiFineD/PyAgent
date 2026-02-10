@@ -88,7 +88,7 @@ class DiscoveryOrchestrator:
             ip = s.getsockname()[0]
             s.close()
             return ip
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             return "127.0.0.1"
 
     def start_advertising(self, port: int = 8000) -> None:
@@ -171,7 +171,7 @@ class FleetServiceListener(ServiceListener):
 
         try:
             info = zc.get_service_info(type_, name)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             # Zeroconf instance loop might be stopping, already stopped, or other transient issue (Phase 123)
             return
 

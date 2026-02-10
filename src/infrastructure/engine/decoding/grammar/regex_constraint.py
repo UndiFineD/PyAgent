@@ -80,8 +80,7 @@ class RegexGrammar(StructuredOutputGrammar):
                     self._token_to_chars.append(list(s.encode("utf-8")))
 
                 self._has_fsm = True
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception: # pylint: disable=broad-exception-caught
                 self._has_fsm = False
 
     def accept_tokens(self, request_id: str, tokens: List[int]) -> bool:
@@ -134,8 +133,7 @@ class RegexGrammar(StructuredOutputGrammar):
                 if self._regex.match(text[:i]):
                     return True
             return not text
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             return False
 
     def validate_tokens(self, tokens: List[int]) -> List[int]:
@@ -196,8 +194,7 @@ class RegexGrammar(StructuredOutputGrammar):
                 # pylint: disable=no-member
                 mask = rc.fill_token_bitmask_rust(self._fsm_state, self._transitions, self._token_to_chars)
                 return {i for i, allowed in enumerate(mask) if allowed}
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         valid: Set[int] = set()

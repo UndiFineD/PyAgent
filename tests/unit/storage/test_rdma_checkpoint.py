@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import unittest
+from unittest.mock import MagicMock, patch
+from src.infrastructure.storage.kv_transfer.nixl_connector import NixlConnector
+from src.infrastructure.storage.kv_transfer.kv_transfer_connector import KVTransferConfig
+
+class TestRdmaCheckpoint(unittest.TestCase):
+    def setUp(self):
+        self.config = KVTransferConfig(
+            kv_rank=0,
+            kv_parallel_size=2,
+            is_producer=True,
+            is_consumer=True
+        )
+        # Mock RustBridge to avoid FFI errors in tests
+        with patch("src.infrastructure.storage.kv_transfer.nixl_connector.RustBridge") as mock_bridge:
+            self.connector = NixlConnector(self.config)
+            self.connector.rust_bridge = mock_bridge.return_value
+
+    def test_create_checkpoint(self):
+        """Test creating an RDMA-based checkpoint (Phase 93)."""
+        mock_tensor = MagicMock()
+        mock_tensor.data_ptr.return_value = 0x12345678
+        mock_tensor.numel.return_value = 1024
+        mock_tensor.element_size.return_value = 4
+        
+        self.connector.rust_bridge.execute.return_value = {"lkey": 1, "rkey": 2}
+        
+        success = self.connector.create_rdma_checkpoint("cp_test_01", mock_tensor)
+        
+        self.assertTrue(success)
+        # Verify RustBridge was called with the checkpoint function
+        self.connector.rust_bridge.execute.assert_any_call(
+            "nixl_rdma_checkpoint_rust",
+            {
+                "checkpoint_id": "cp_test_01",
+                "target_rank": 1,
+                "local_ptr": 0x12345678,
+                "length": 4096,
+                "lkey": 1,
+            }
+        )
+
+if __name__ == "__main__":
+    unittest.main()

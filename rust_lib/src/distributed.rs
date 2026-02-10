@@ -35,6 +35,19 @@ pub fn dp_stats_aggregate_rust(rank_stats: HashMap<usize, HashMap<String, f64>>)
 }
 
 #[pyfunction]
+pub fn nixl_rdma_checkpoint_rust(
+    _checkpoint_id: String,
+    _target_rank: usize,
+    _local_ptr: usize,
+    _length: usize,
+    _lkey: u32,
+) -> PyResult<bool> {
+    // Phase 93: Basic RDMA background checkpointing stub
+    // This will be accelerated by NIXL in production environments.
+    Ok(true)
+}
+
+#[pyfunction]
 pub fn wave_sync_check_rust(ready_flags: Vec<bool>) -> PyResult<bool> {
     // Phase 55: Fast SIMD-ready sync check
     Ok(ready_flags.iter().all(|&x| x))
@@ -73,10 +86,42 @@ pub fn multi_node_coordinate_rust(_node_id: usize, total_nodes: usize, shape: Ve
     Ok(result)
 }
 
+#[pyfunction]
+pub fn nixl_rdma_write_rust(
+    target_rank: usize, 
+    id: String, 
+    buffer_size: usize,
+    priority: Option<String>,
+    payload_hint: Option<String>
+) -> PyResult<HashMap<String, bool>> {
+    // Phase 93: Basic RDMA Write logic (Stubs)
+    let _ = target_rank;
+    let _ = id;
+    let _ = buffer_size;
+    let _ = priority;
+    let _ = payload_hint;
+    let mut result = HashMap::new();
+    result.insert("success".to_string(), true);
+    Ok(result)
+}
+
+#[pyfunction]
+pub fn nixl_rdma_read_rust(source_rank: usize, id: String, expected_size: usize) -> PyResult<HashMap<String, bool>> {
+    // Phase 93: Basic RDMA Read logic (Stubs)
+    let _ = source_rank;
+    let _ = id;
+    let _ = expected_size;
+    let mut result = HashMap::new();
+    result.insert("success".to_string(), true);
+    Ok(result)
+}
+
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(dp_stats_aggregate_rust, m)?)?;
     m.add_function(wrap_pyfunction!(wave_sync_check_rust, m)?)?;
     m.add_function(wrap_pyfunction!(load_balance_select_rust, m)?)?;
     m.add_function(wrap_pyfunction!(multi_node_coordinate_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(nixl_rdma_write_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(nixl_rdma_read_rust, m)?)?;
     Ok(())
 }

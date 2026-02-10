@@ -112,7 +112,7 @@ class AdvancedRequestScheduler:
                 self.running[req_id] = request
                 batch.append(request)
                 token_budget -= request.total_tokens
-        
+
         return token_budget
 
     def _schedule_waiting(self, batch: list[ScheduledRequest], token_budget: int) -> int:
@@ -143,7 +143,7 @@ class AdvancedRequestScheduler:
             token_budget -= request.total_tokens
             self._total_scheduled += 1
             self._running_tokens += request.total_tokens
-        
+
         return token_budget
 
     def _should_preempt(

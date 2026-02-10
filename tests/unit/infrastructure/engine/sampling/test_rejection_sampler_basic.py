@@ -18,7 +18,6 @@ from src.infrastructure.engine.sampling.rejection_sampler import (
     RejectionSampler,
     RejectionConfig,
     RejectionStrategy,
-    RecoveryMode,
 )
 
 def test_rejection_sampler_basic():

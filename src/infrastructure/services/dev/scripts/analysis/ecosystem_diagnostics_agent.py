@@ -68,7 +68,7 @@ class EcosystemDiagnosticsAgent:
 
             free_gb = usage.free / (1024**3)
             self.results["disk_space"] = f"Free: {free_gb:.1f} GB / {total_gb:.1f} GB"
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             self.results["disk_space"] = "Unknown (Error reading disk info)"
 
     def summarize(self) -> None:

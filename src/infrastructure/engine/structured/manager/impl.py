@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import contextlib
 import json
-from typing import Callable, Dict, List, Optional, Sequence
+from typing import Callable, Sequence
 
 import numpy as np
 
@@ -69,7 +69,7 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
                 self._tokens_accepted += 1
                 def set_terminated() -> None:
                     self._is_terminated = True
-                
+
                 (set_terminated() if self._pattern.fullmatch(self._generated_text) else None)
                 return True
 
@@ -185,10 +185,10 @@ class ChoiceGrammar(StructuredOutputGrammar):
             self._generated_text = new_text
             self._valid_choices = new_valid
             self._tokens_accepted += 1
-            
+
             def set_terminated() -> None:
                 self._is_terminated = True
-            
+
             (set_terminated() if new_text in self._choices else None)
             return True
 
@@ -234,9 +234,9 @@ class ChoiceGrammar(StructuredOutputGrammar):
         """
         allowed = self._compute_allowed_tokens()
         bitmask[batch_index, :] = False
-        
+
         # Phase 371: Functional bitmask filling
-        list(map(lambda tid: bitmask.__setitem__((batch_index, tid), True), 
+        list(map(lambda tid: bitmask.__setitem__((batch_index, tid), True),
                  filter(lambda tid: tid < bitmask.shape[1], allowed)))
 
     def get_allowed_tokens(self) -> list[int]:
@@ -259,9 +259,9 @@ class ChoiceGrammar(StructuredOutputGrammar):
             return choice[len(self._generated_text)] if len(choice) > len(self._generated_text) else None
 
         chars = set(filter(None, map(get_char_at_pos, self._valid_choices)))
-        
+
         allowed = set(map(lambda x: x[0], filter(
-            lambda item: item[1] and item[1][0] in chars, 
+            lambda item: item[1] and item[1][0] in chars,
             self._token_strings.items()
         )))
 

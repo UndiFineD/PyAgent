@@ -17,20 +17,13 @@
 
 from __future__ import annotations
 import unittest
-from typing import Any, List, Self
+from typing import Any, List
 from unittest.mock import MagicMock
 from pathlib import Path
-import sys
 import os
 import tempfile
 
 # Try to import test utilities
-from tests.utils.agent_test_utils import (
-    AGENT_DIR,
-    agent_sys_path,
-    load_module_from_path,
-    agent_dir_on_path,
-)
 
 # Import from src if needed
 

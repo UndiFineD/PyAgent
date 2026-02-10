@@ -25,12 +25,6 @@ import sys
 import os
 
 # Try to import test utilities
-from tests.utils.agent_test_utils import (
-    AGENT_DIR,
-    agent_sys_path,
-    load_module_from_path,
-    agent_dir_on_path,
-)
 
 # Import from src if needed
 

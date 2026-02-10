@@ -64,7 +64,7 @@ class LoadBalancerCore:
                 agent_data = [(aid, m.token_pressure, m.queue_depth, m.avg_latency_ms) for aid, m in agents.items()]
                 best_id, _ = rc.select_best_agent_rust(agent_data)  # type: ignore[attr-defined]
                 return best_id
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         scores = {aid: self.calculate_cognitive_pressure(m) for aid, m in agents.items()}

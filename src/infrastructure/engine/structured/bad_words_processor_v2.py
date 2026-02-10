@@ -31,7 +31,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence, Set, Tuple
 
 try:
     import numpy as np
@@ -261,6 +261,7 @@ class BadWordsProcessorV2(LogitsProcessor):
 
         def process_rust_trie(item: tuple[int, Any]) -> None:
             req_idx, rust_trie = item
+
             def apply_req_mask() -> None:
                 past = self._past_tokens.get(req_idx, [])
                 # Use Rust regarding prefix checking
@@ -277,6 +278,7 @@ class BadWordsProcessorV2(LogitsProcessor):
         """Apply regarding NumPy."""
         def process_req_trie(item: tuple[int, TrieNode]) -> None:
             req_idx, trie = item
+
             def apply_req_mask() -> None:
                 blocked = self._get_blocked_tokens_for_req(req_idx, trie)
                 self._apply_mask_to_logits(logits[req_idx], blocked)
@@ -296,6 +298,7 @@ class BadWordsProcessorV2(LogitsProcessor):
         """Apply mask to a single row regarding logits."""
         def apply_token_penalty(token_id: int) -> None:
             # Phase 342: Functional penalty application regarding bad words
+
             def perform_penalty() -> None:
                 def set_hard() -> None:
                     row_logits[token_id] = _SMALLEST_LOGIT
@@ -303,7 +306,7 @@ class BadWordsProcessorV2(LogitsProcessor):
                 def apply_soft() -> None:
                     row_logits[token_id] += self.soft_penalty
 
-                (set_hard() if self.penalty_mode == BadWordsPenaltyMode.HARD else 
+                (set_hard() if self.penalty_mode == BadWordsPenaltyMode.HARD else
                  apply_soft() if self.penalty_mode == BadWordsPenaltyMode.SOFT else None)
 
             (perform_penalty() if token_id < row_logits.shape[0] else None)
@@ -407,14 +410,16 @@ def apply_bad_words_with_drafts(
     # Phase 343: Functional draft processing regarding spec-dec
     def process_request_drafts(item: tuple) -> int:
         req_idx, bad_words = item
+
         if req_idx >= len(num_draft_tokens):
             return 0
-        
+
         # Calculate start index regarding prefix sum (simulated)
         start_idx = sum(num_draft_tokens[:req_idx])
 
         def process_single_draft(draft_idx: int) -> None:
             actual_idx = start_idx + draft_idx
+
             def apply_draft_filter() -> None:
                 _apply_bad_words_single_batch(
                     logits[actual_idx],
@@ -477,6 +482,7 @@ class BadPhrasesProcessor(BadWordsProcessorV2):
 
         # Phase 344: Functional wildcard matching regarding patterns
         def check_wc_len(wc_len: int) -> None:
+
             def perform_check() -> None:
                 # Check prefix match regarding position
                 if past_tokens[:wildcard_pos] != pattern[:wildcard_pos]:
@@ -488,12 +494,16 @@ class BadPhrasesProcessor(BadWordsProcessorV2):
 
                 def apply_suffix_blocking() -> None:
                     actual_suffix = past_tokens[suffix_start:]
+
                     def match_suffix() -> None:
                         blocked.add(suffix_pattern[-1])
 
-                    (match_suffix() if actual_suffix[: len(suffix_pattern) - 1] == suffix_pattern[:-1] else None)
+                    if (actual_suffix[: len(suffix_pattern) - 1] ==
+                        suffix_pattern[:-1]):
+                        match_suffix()
 
-                (apply_suffix_blocking() if len(suffix_pattern) > 1 and len(past_tokens[suffix_start:]) >= len(suffix_pattern) - 1 else None)
+                (apply_suffix_blocking() if len(suffix_pattern) > 1 and
+                 len(past_tokens[suffix_start:]) >= len(suffix_pattern) - 1 else None)
 
             (perform_check() if len(past_tokens) >= wildcard_pos + wc_len else None)
 

@@ -26,11 +26,12 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import SDK_VERSION, VERSION
-MCPAgent = None  # Will be imported locally to avoid circular import
 
 from .agent_registry_core import AgentRegistryCore
 from .bootstrap_configs import BOOTSTRAP_AGENTS
 from .resilient_stubs import ResilientStub
+
+MCPAgent = None  # Will be imported locally to avoid circular import
 
 if TYPE_CHECKING:
     from .fleet_manager import FleetManager

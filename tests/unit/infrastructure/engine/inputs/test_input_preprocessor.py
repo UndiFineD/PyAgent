@@ -20,15 +20,12 @@ Tests for InputPreprocessor - unified prompt processing.
 """
 
 import pytest
-from typing import List, Dict
 
 from src.infrastructure.engine.inputs import (
     PromptType,
     InputFormat,
     TextPrompt,
     TokensPrompt,
-    EmbedsPrompt,
-    EncoderDecoderPrompt,
     ChatMessage,
     ChatPrompt,
     ProcessedInput,

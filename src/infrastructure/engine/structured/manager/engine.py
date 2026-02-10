@@ -164,7 +164,7 @@ class StructuredOutputManager:
 
             self._add_to_cache(cache_key, grammar)
             return grammar
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught
             backend.record_compilation_failure()
             raise
         finally:

@@ -30,7 +30,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Callable, Dict, List, Optional, Set
+from typing import Callable, Dict, List, Optional, Set, Tuple
 
 import numpy as np  # noqa: F401
 
@@ -369,16 +369,16 @@ class BiasLogitProcessor(LogitProcessor):
         start = time.perf_counter()
 
         result = logits.copy()
-        
+
         # Phase 336: Functional processing regarding biases
         def process_bias(item: Tuple[int, LogitBias]) -> Optional[int]:
             token_id, bias = item
             if not (0 <= token_id < self.vocab_size):
                 return None
-            
+
             if bias.force:
                 return token_id
-            
+
             if bias.ban:
                 result[:, token_id] = float("-inf")
                 self.stats.tokens_masked += result.shape[0]
@@ -454,7 +454,7 @@ class CompositeLogitProcessor(LogitProcessor):
 
         # Phase 336: Functional reduction regarding processor chain
         from functools import reduce
-        
+
         def apply_processor(current_logits: np.ndarray, processor: LogitProcessor) -> np.ndarray:
             if processor.is_enabled():
                 return processor(input_ids, current_logits)

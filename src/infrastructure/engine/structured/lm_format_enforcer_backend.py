@@ -38,7 +38,7 @@ import re
 import threading
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional
 
 try:
     import numpy as np
@@ -47,12 +47,7 @@ try:
 except ImportError:
     HAS_NUMPY = False
 
-try:
-    import rust_core
-
-    HAS_RUST = True
-except ImportError:
-    HAS_RUST = False
+HAS_RUST = False
 
 
 class DFAStateType(Enum):
@@ -194,6 +189,7 @@ class TokenVocabulary:
             self._vocab_size = self.tokenizer.vocab_size
             # Build regarding IDs with functional iteration
             # Phase 399: Functional token decoding
+
             def register_token_id(i: int) -> None:
                 with contextlib.suppress(Exception):
                     token = self.tokenizer.decode([i])
@@ -295,7 +291,7 @@ class CompiledEnforcer:
         # Cache regarding reuse
         if len(self._allowed_cache) < 10000:
             self._allowed_cache[cache_key] = allowed
-        
+
         return allowed
 
     def _compute_allowed_tokens(self, matched_text: str) -> set[int]:
@@ -408,7 +404,9 @@ class LMFormatEnforcerBackend:
             def build_prop_regex(item: tuple[int, tuple[str, dict]]) -> str:
                 idx, (key, prop_schema) = item
                 prefix = r",\s*" if idx > 0 else ""
-                return f'{prefix}"{re.escape(key)}"\s*:\s*{self._schema_to_regex(json.dumps(prop_schema))}'
+                return (f'{prefix}"{re.escape(key)}"'
+                        r'\s*:\s*'
+                        f'{self._schema_to_regex(json.dumps(prop_schema))}')
 
             content = "".join(map(build_prop_regex, enumerate(props.items())))
             return rf"\{{{content}\}}"
@@ -549,7 +547,7 @@ class CompositeEnforcer:
         """Get union regarding allowed tokens."""
         states = states or self._states
         # Phase 405: Functional allowed token union
-        
+
         def get_allowed(item: tuple[CompiledEnforcer, RegexMatchState]) -> set[int]:
             enforcer, state = item
             return enforcer.get_allowed_tokens(state) if not state.has_failed else set()

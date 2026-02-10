@@ -16,7 +16,6 @@
 
 import hashlib
 from dataclasses import dataclass, field
-from typing import Any
 
 import numpy as np
 
@@ -80,11 +79,11 @@ class CompiledGrammar:
         def try_transition(current_state: int, remaining_chars: str) -> int:
             if not remaining_chars:
                 return current_state
-            
+
             next_state = self.fsm.get_next_state(current_state, remaining_chars[0])
             if next_state == -1:
                 return -1
-            
+
             return try_transition(next_state, remaining_chars[1:])
 
         temp_state = try_transition(self._current_state, tstr)
@@ -149,7 +148,7 @@ class CompiledGrammar:
             bitmask[:] = np.array(rust_mask, dtype=bitmask.dtype)
         else:
             # Phase 364: Functional bitmask update regarding allowed IDs
-            list(map(lambda tid: bitmask.__setitem__(tid, 1), 
+            list(map(lambda tid: bitmask.__setitem__(tid, 1),
                      filter(lambda tid: 0 <= tid < self.vocab_size, allowed_ids)))
 
     def _get_allowed_token_ids(self) -> list[int]:
@@ -176,11 +175,11 @@ class CompiledGrammar:
         def check_chars(current_state: int, remaining: str) -> bool:
             if not remaining:
                 return True
-            
+
             next_state = self.fsm.get_next_state(current_state, remaining[0])
             if next_state == -1:
                 return False
-            
+
             return check_chars(next_state, remaining[1:])
 
         return check_chars(self._current_state, tstr)

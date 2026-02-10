@@ -21,7 +21,7 @@ from __future__ import annotations
 import contextlib
 import math
 import threading
-from typing import Any, List, Optional, Union
+from typing import Any, Optional
 
 import numpy as np
 

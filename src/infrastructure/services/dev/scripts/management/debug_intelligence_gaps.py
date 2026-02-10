@@ -55,7 +55,7 @@ def main() -> None:
                                 ]
                             ):
                                 findings.append(path)
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                     pass
 
     for f in findings:

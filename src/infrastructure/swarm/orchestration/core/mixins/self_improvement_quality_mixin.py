@@ -87,7 +87,7 @@ class SelfImprovementQualityMixin:
                         "details": [n.name],
                     }
                 )
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             # Simple line-based fallback for broken syntax
             untyped_count = content.count("def ") - content.count("->")
             if untyped_count > 0:

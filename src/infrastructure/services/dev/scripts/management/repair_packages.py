@@ -45,7 +45,7 @@ def fix_imports(file_path: str) -> bool:
         try:
             with open(file_path, encoding="latin-1") as f:
                 content = f.read()
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             return False
 
     original = content

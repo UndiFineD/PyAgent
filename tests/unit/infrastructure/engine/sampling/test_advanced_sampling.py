@@ -315,11 +315,11 @@ class TestTokenWhitelistProcessor:
 
         mask = processor.build_mask(vocab_size=10)
 
-        assert mask[1] == True
-        assert mask[3] == True
-        assert mask[5] == True
-        assert mask[0] == False
-        assert mask[2] == False
+        assert mask[1]
+        assert mask[3]
+        assert mask[5]
+        assert not mask[0]
+        assert not mask[2]
 
 
 class TestMirostatSampler:

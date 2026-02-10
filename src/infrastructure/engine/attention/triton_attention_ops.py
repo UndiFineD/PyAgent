@@ -164,8 +164,6 @@ class AttentionKernel(ABC):
 PAGED_ATTENTION_KERNEL = None
 
 if HAS_TRITON and HAS_TORCH:
-    import triton
-    import triton.language as tl
 
     @triton.jit
     def _paged_attention_kernel_impl(

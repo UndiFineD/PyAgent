@@ -45,7 +45,6 @@ import socket
 import sys
 import warnings
 import subprocess
-import platform
 from collections.abc import Iterator, Sequence
 from typing import Any
 from urllib.parse import urlparse
@@ -244,26 +243,26 @@ def get_local_network_ip(debug: bool = False) -> str:
                         if any(keyword in name for keyword in ['vpn', 'tunnel', 'wireguard', 'proton', 'openvpn', 'pptp', 'l2tp']):
                             score = 0
                             if debug:
-                                print(f"DEBUG:   -> VPN Detected (score=0)", flush=True)
+                                print("DEBUG:   -> VPN Detected (score=0)", flush=True)
                         # Prefer /24 networks (255.255.255.0 subnet mask)
                         elif subnet == '255.255.255.0':
                             score = 100
                             if debug:
-                                print(f"DEBUG:   -> /24 Subnet Detected (score=100)", flush=True)
+                                print("DEBUG:   -> /24 Subnet Detected (score=100)", flush=True)
                         # Then /16 networks (255.255.0.0)
                         elif subnet == '255.255.0.0':
                             score = 80
                             if debug:
-                                print(f"DEBUG:   -> /16 Subnet Detected (score=80)", flush=True)
+                                print("DEBUG:   -> /16 Subnet Detected (score=80)", flush=True)
                         # Then other private networks
                         elif ip.startswith(('192.168.', '10.', '172.')):
                             score = 60
                             if debug:
-                                print(f"DEBUG:   -> Other Private IP Detected (score=60)", flush=True)
+                                print("DEBUG:   -> Other Private IP Detected (score=60)", flush=True)
                         else:
                             score = 40
                             if debug:
-                                print(f"DEBUG:   -> Public/Other IP Detected (score=40)", flush=True)
+                                print("DEBUG:   -> Public/Other IP Detected (score=40)", flush=True)
 
                         scored_interfaces.append((score, ip, name))
 
@@ -278,7 +277,7 @@ def get_local_network_ip(debug: bool = False) -> str:
                             return best_ip
                         else:
                             if debug:
-                                print(f"DEBUG: No suitable interface found (all scored 0)", flush=True)
+                                print("DEBUG: No suitable interface found (all scored 0)", flush=True)
 
             except subprocess.TimeoutExpired:
                 logger.warning("get_local_network_ip: ipconfig command timed out")

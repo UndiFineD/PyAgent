@@ -12,11 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
 import socket
 import struct
 from dataclasses import dataclass, field
-from typing import Dict, Optional, Callable, Any, Tuple
+from typing import Dict, Optional, Tuple
 
 @dataclass
 class RTPSession:

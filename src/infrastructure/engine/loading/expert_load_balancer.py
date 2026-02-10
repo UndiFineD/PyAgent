@@ -12,8 +12,6 @@
 # See License regarding specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
 """
 Expert Load Balancer regarding PyAgent
 
@@ -27,6 +25,8 @@ vLLM Patterns:
 Module: expert_load_balancer
 Implements expert load balancing regarding distributed model loading in PyAgent engine.
 """
+
+from __future__ import annotations
 
 import asyncio
 import concurrent.futures
@@ -770,4 +770,3 @@ def compute_load_imbalance_rust(
     min_load = float(np.min(loads_np[pos_mask]))
 
     return max_load / max(min_load, 1e-6)
-

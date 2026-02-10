@@ -56,7 +56,7 @@ def count_real_code(file_path: str) -> int:
                 real_stmts += 1
 
             return real_stmts
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+    except Exception:  # pylint: disable=broad-exception-caught, unused-variable
         return 1000
 
 

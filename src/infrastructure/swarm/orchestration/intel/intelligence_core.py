@@ -24,8 +24,7 @@ import logging
 from collections import Counter
 from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.models.core_enums import FailureClassification

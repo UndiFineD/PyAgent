@@ -74,8 +74,8 @@ class SwarmTopologyReporter:
         """Adds or updates a link in the current snapshot pulse."""
         # Pillar 9: High-fidelity visualization link strength
         # We also look at traffic between these two if we had a link-traffic matrix
-        existing = next((l for l in self.links if (l["source"] == source and l["target"] == target) or 
-                                                 (l["source"] == target and l["target"] == source)), None)
+        existing = next((link for link in self.links if (link["source"] == source and link["target"] == target) or 
+                                                 (link["source"] == target and link["target"] == source)), None)
         
         if not existing:
             self.links.append({"source": source, "target": target, "value": strength, "type": type})

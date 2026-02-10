@@ -167,7 +167,7 @@ class DirectorAgent(BaseAgent):
 
                     results.append(f"### Step {i + 1}: {agent_type} on {target_file}\n{res}\n")
                     self.status.update_step_status(i, "Completed", res[:100] + "...")
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception as step_error:  # pylint: disable=broad-exception-caught
                     logging.error(f"Step {i + 1} failed: {step_error}")
 
                     results.append(f"### Step {i + 1}: {agent_type} FAILED\n{str(step_error)}\n")

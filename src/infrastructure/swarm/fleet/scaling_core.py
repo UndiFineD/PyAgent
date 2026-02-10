@@ -82,7 +82,7 @@ class ScalingCore(StandardScalingCore):
                 cpu = metrics.get("cpu", [])
                 mem = metrics.get("mem", [])
                 return rc.calculate_weighted_load_rust(latency, cpu, mem)  # type: ignore[attr-defined]
-            except (AttributeError, TypeError, RuntimeError, OSError) as e:
+            except (AttributeError, TypeError, RuntimeError, OSError):
                 pass
 
         # Weights: Latency 60%, CPU 30%, MEM 10%

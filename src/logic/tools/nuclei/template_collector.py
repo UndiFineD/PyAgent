@@ -21,6 +21,7 @@ from concurrent.futures import ThreadPoolExecutor, wait
 
 logger = logging.getLogger(__name__)
 
+
 class NucleiTemplateCollector:
     """
     Collects Nuclei templates from various public repositories.
@@ -38,9 +39,9 @@ class NucleiTemplateCollector:
         env['GIT_TERMINAL_PROMPT'] = '0'
         try:
             result = subprocess.run(
-                ['git', 'clone', url, destination], 
-                stdout=subprocess.DEVNULL, 
-                stderr=subprocess.PIPE, 
+                ['git', 'clone', url, destination],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.PIPE,
                 env=env,
                 check=False
             )
@@ -72,7 +73,7 @@ class NucleiTemplateCollector:
         Main execution method to collect templates.
         """
         source_url = source_url or self.DEFAULT_SOURCE_LIST
-        
+
         try:
             response = requests.get(source_url, timeout=30)
             if response.status_code == 200:
@@ -107,8 +108,8 @@ class NucleiTemplateCollector:
                     
                     # Let's try to preserve some structure or just rename if exists
                     if os.path.exists(destination_path):
-                         base, ext = os.path.splitext(file)
-                         destination_path = os.path.join(self.output_dir, f"{base}_{yaml_count}{ext}")
+                        base, ext = os.path.splitext(file)
+                        destination_path = os.path.join(self.output_dir, f"{base}_{yaml_count}{ext}")
 
                     try:
                         shutil.copy2(source_path, destination_path)
@@ -124,6 +125,7 @@ class NucleiTemplateCollector:
                 shutil.rmtree(self.temp_dir)
             except Exception as e:
                 logger.warning(f"Failed to cleanup temp dir {self.temp_dir}: {e}")
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

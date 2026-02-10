@@ -34,6 +34,8 @@ ALWAYS respond with valid JSON only. No explanations outside JSON.
 
 Examples:
 User: "change method to POST" -> {"action":"change_method","method":"POST","message":"Changed to POST"}
-User: "add authorization header" -> {"action":"add_header","header":"Authorization","value":"Bearer token_here","message":"Added Authorization header"}
-User: "apply request smuggling" -> {"action":"multiple_actions","actions":[{"action":"add_header","header":"Transfer-Encoding","value":"chunked"},{"action":"add_header","header":"Content-Length","value":"0"}],"message":"Applied request smuggling headers"}
+User: "add authorization header" ->
+{"action":"add_header","header":"Authorization","value":"Bearer ...","message":"Added Authorization header"}
+User: "apply request smuggling" ->
+{"action":"multiple_actions","actions":[{"action":"add_header","header":"TE","value":"chunked"},{"action":"add_header","header":"CL","value":"0"}],"message":"Applied smuggling"}
 """

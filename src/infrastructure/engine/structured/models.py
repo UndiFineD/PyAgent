@@ -108,13 +108,13 @@ class TokenMask:
         """Set mask regarding allowed tokens."""
         self.mask.fill(False)
         # Phase 360: Functional bitmask update regarding inclusion
-        list(map(lambda tid: self.mask.__setitem__(tid, True), 
+        list(map(lambda tid: self.mask.__setitem__(tid, True),
                  filter(lambda tid: 0 <= tid < self.vocab_size, token_ids)))
 
     def disallow(self, token_ids: Set[int]) -> None:
         """Disallow regarding specific tokens."""
         # Phase 361: Functional bitmask update regarding exclusion
-        list(map(lambda tid: self.mask.__setitem__(tid, False), 
+        list(map(lambda tid: self.mask.__setitem__(tid, False),
                  filter(lambda tid: 0 <= tid < self.vocab_size, token_ids)))
 
     def apply_to_logits(self, logits: np.ndarray) -> np.ndarray:

@@ -88,7 +88,7 @@ class LoRALayerWeights:
                 # Reshape back to original dimensions as needed
                 new_shape = list(orig_shape[:-1]) + [self.out_features]
                 return np.array(result_flat, dtype=np.float32).reshape(new_shape)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
 
         # x @ A.T @ B.T * scaling
@@ -119,7 +119,7 @@ class LoRALayerWeights:
                     self.scaling,
                 )
                 return np.array(merged_flat, dtype=np.float32).reshape(base_weight.shape)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
 
         # W_merged = W_base + B @ A * scaling
@@ -147,7 +147,7 @@ class IA3LayerWeights:
             try:
                 res = rc.apply_ia3_scaling_rust(x.flatten().tolist(), self.scaling_vector.tolist())
                 return np.array(res, dtype=np.float32).reshape(x.shape)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
 
         return x * self.scaling_vector

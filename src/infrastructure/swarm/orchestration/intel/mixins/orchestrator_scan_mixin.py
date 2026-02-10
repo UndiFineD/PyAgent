@@ -73,7 +73,7 @@ class OrchestratorScanMixin:
         try:
             with open(file_path, encoding="utf-8", errors="ignore") as f:
                 content = f.read()
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             return []
 
         rel_path = os.path.relpath(file_path, self.workspace_root)

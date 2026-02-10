@@ -14,7 +14,7 @@
 
 import asyncio
 import math
-from typing import List, Dict, Optional
+from typing import Dict, Optional
 from dataclasses import dataclass
 
 @dataclass

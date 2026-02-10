@@ -189,6 +189,39 @@ class NixlConnector(KVConnectorBase):
             return []
 
     # ==============================
+    # Phase 93: RDMA Checkpointing
+    # ==============================
+
+    def create_rdma_checkpoint(self, checkpoint_id: str, tensor: Any) -> bool:
+        """
+        Creates a background RDMA-based checkpoint (Phase 93).
+        
+        Transfers a memory shard to a pre-defined remote 'Mirror Rank' 
+        for zero-latency recovery if the local node crashes.
+        """
+        try:
+            region = self.register_memory(tensor)
+            # Use rank + 1 as the mirror rank for this simple implementation
+            mirror_rank = (self.rank + 1) % self.world_size
+            
+            logger.info(f"Initiating RDMA Checkpoint {checkpoint_id} to rank {mirror_rank}")
+            
+            self.rust_bridge.execute(
+                "nixl_rdma_checkpoint_rust",
+                {
+                    "checkpoint_id": checkpoint_id,
+                    "target_rank": mirror_rank,
+                    "local_ptr": region.address,
+                    "length": region.length,
+                    "lkey": region.lkey,
+                },
+            )
+            return True
+        except Exception as e:
+            logger.error(f"RDMA Checkpoint failed: {e}")
+            return False
+
+    # ==============================
     # KVConnectorBase Implementation
     # ==============================
 

@@ -147,7 +147,7 @@ class ConsensusOrchestrator:
                         refined = loop.run_until_complete(coro)
 
                     new_proposals.append({"agent": p["agent"], "content": refined, "weight": p["weight"]})
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                     new_proposals.append(p)
             current_proposals = new_proposals
         return current_proposals

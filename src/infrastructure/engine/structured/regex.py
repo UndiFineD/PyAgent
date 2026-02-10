@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import contextlib
 import sys
-import warnings
 from typing import Any, Optional
 
 # Handle re._constants / sre_constants transition across Python versions
@@ -274,7 +273,7 @@ class RegexGrammar(GrammarEngine):
     def _build_simple_fsm(self, spec: str) -> FSMTransitionTable:
         """Build simple FSM regarding literal pattern matching."""
         fsm = FSMTransitionTable(num_states=len(spec) + 1, initial_state=0, accepting_states=frozenset({len(spec)}))
-        
+
         def add_char_trans(item: tuple[int, str]) -> None:
             i, char = item
             fsm.add_transition(i, char, i + 1)

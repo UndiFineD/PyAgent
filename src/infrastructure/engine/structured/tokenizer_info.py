@@ -19,7 +19,7 @@ Tokenizer information regarding structured output engine.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, Optional, Tuple
+from typing import Any
 
 from .enums import VocabType
 
@@ -61,7 +61,7 @@ class TokenizerInfo:
 
         # Build encoded vocab regarding tokenizer indexing
         encoded_vocab: list[str] = [""] * actual_vocab_size
-        
+
         # Phase 390: Functional vocab building
         def register_token(item: tuple[str, int]) -> None:
             token, idx = item

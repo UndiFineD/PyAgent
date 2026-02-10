@@ -91,7 +91,7 @@ class AsyncPriorityScheduler:
                     self._stats.timeouts += 1
                 raise
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception: # pylint: disable=broad-exception-caught
                 async with self._lock:
                     self._stats.failed += 1
                 raise

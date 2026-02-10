@@ -36,6 +36,7 @@ vLLM Patterns:
 
 from __future__ import annotations
 
+from _thread import LockType
 import concurrent.futures
 import hashlib
 import logging
@@ -49,7 +50,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum, auto
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, BinaryIO, Dict, Generator, Optional
+from typing import TYPE_CHECKING, Any, BinaryIO, Dict, Generator
 
 from torch._tensor import Tensor
 

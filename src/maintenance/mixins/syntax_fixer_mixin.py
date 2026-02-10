@@ -24,13 +24,14 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 class SyntaxFixerMixin:
     """Provides automated fixes for specific Python syntax patterns."""
 
     def fix_invalid_for_loop_type_hints(self, file_path: Path) -> bool:
         """
         Fixes 'for x: Type in' -> 'for x in' which is invalid Python syntax.
-        Regex pattern: for\s+(\w+):\s*[^i]*?\s+in\s+
+        Regex pattern: r'for\s+(\w+):\s*[^i]*?\s+in\s+'
         """
         try:
             content = file_path.read_text(encoding='utf-8')

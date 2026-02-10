@@ -20,7 +20,6 @@ from __future__ import annotations
 
 import asyncio
 import logging
-import time
 import threading
 from typing import TYPE_CHECKING, Any
 
@@ -40,7 +39,6 @@ class RetryHTTPMixin:
         timeout: float | None = None,
     ) -> Any:
         """GET JSON with automatic retry on failure."""
-        import requests
 
         last_error: Exception | None = None
         delay = self.retry_delay

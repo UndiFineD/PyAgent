@@ -37,7 +37,7 @@ import re
 import threading
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
+from typing import Any, Dict, List, Optional
 
 try:
     import numpy as np
@@ -46,12 +46,7 @@ try:
 except ImportError:
     HAS_NUMPY = False
 
-try:
-    import rust_core
-
-    HAS_RUST = True
-except ImportError:
-    HAS_RUST = False
+HAS_RUST = False
 
 
 class GuidanceTemplateType(Enum):
@@ -192,7 +187,7 @@ class GuidanceState:
 
         if var is None:
             return self._handle_text_segment(text)
-        
+
         return self._handle_variable_segment(var)
 
     def _handle_text_segment(self, text: str) -> bool:
@@ -425,7 +420,7 @@ class GuidanceBackend:
                 i, (key, _) = item
                 comma = "," if i > 0 else ""
                 return f'{comma}"{key}":{{{{value_{key}}}}}'
-            
+
             parts = ["{"] + list(map(process_prop, enumerate(props.items()))) + ["}"]
             return "".join(parts)
 

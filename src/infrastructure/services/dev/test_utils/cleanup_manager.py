@@ -45,5 +45,5 @@ class CleanupManager:
         for hook in reversed(self.hooks):
             try:
                 hook()
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.debug("Cleanup hook execution failed.")

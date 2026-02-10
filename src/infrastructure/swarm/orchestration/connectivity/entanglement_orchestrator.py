@@ -39,7 +39,7 @@ class EntanglementOrchestrator:
         # Subscribe to sync signals if possible
         try:
             self.fleet.signal_bus.subscribe("entanglement_sync", self._on_sync)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             pass
 
         logging.info("EntanglementOrchestrator initialized.")

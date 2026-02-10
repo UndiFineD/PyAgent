@@ -106,7 +106,7 @@ class ProbabilisticExecutionOrchestrator:
                     if score > highest_score:
                         highest_score = score
                         best_result = res
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                     continue
 
             if best_result is not None:

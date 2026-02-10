@@ -121,6 +121,11 @@ class RustBridge:
             fallback=lambda: str(hash(tuple(tokens)))
         )
 
+    def execute(self, method_name: str, params: Dict[str, Any]) -> Any:
+        """Generic execution router for Rust functions."""
+        attr = method_name if method_name.endswith("_rust") else f"{method_name}_rust"
+        return self._try_rust_call(attr, **params)
+
     @staticmethod
     def _try_rust_call(attr: str, *args: Any, fallback: Optional[Callable[[], Any]] = None, **kwargs: Any) -> Any:
         try:

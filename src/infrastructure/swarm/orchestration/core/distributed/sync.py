@@ -87,7 +87,7 @@ class NixlSyncProvider(DistributedSyncProvider):
                 },
             )
             return result.get("success", False)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             return False
 
     def broadcast_state(self, key: str, value: Any) -> None:

@@ -24,7 +24,7 @@ import os
 import time
 from typing import AsyncIterator, Dict, List, Optional
 
-from httpx import AsyncClient, Response
+from httpx import Response
 
 from ..base import (AuthenticationError, CloudProviderBase, CloudProviderError,
                     InferenceRequest, InferenceResponse, RateLimitError)

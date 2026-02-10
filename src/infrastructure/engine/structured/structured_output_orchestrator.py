@@ -37,7 +37,7 @@ import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Protocol, Sequence, Tuple, Union, runtime_checkable
+from typing import Any, Optional, Protocol, runtime_checkable
 
 try:
     import numpy as np
@@ -45,12 +45,7 @@ try:
 except ImportError:
     HAS_NUMPY = False
 
-try:
-    # Optional internal rust core bridge
-    import pyagent_rust_core # type: ignore
-    HAS_RUST = True
-except ImportError:
-    HAS_RUST = False
+HAS_RUST = False
 
 
 logger = logging.getLogger(__name__)
@@ -196,17 +191,17 @@ class BackendWrapper:
         """Internal dispatch regarding compilation."""
         if constraint.constraint_type == ConstraintType.JSON_SCHEMA:
             return self.backend.compile_json_schema(constraint.value), None
-        
+
         if constraint.constraint_type == ConstraintType.REGEX:
             if hasattr(self.backend, "compile_regex"):
                 return self.backend.compile_regex(constraint.value), None
             return None, "Backend doesn't support regex"
-        
+
         if constraint.constraint_type == ConstraintType.TEMPLATE:
             if hasattr(self.backend, "compile_template"):
                 return self.backend.compile_template(constraint.value), None
             return None, "Backend doesn't support templates"
-        
+
         return None, f"Unsupported constraint type: {constraint.constraint_type}"
 
     def _update_stats(self, elapsed_ms: float) -> None:
@@ -358,7 +353,7 @@ class StructuredOutputOrchestrator:
         def check_fallback(remaining: list[StructuredOutputBackendType]) -> tuple[BackendWrapper, Any] | None:
             if not remaining:
                 return None
-            
+
             backend_type = remaining[0]
             if backend_type in tried or backend_type not in self._backends:
                 return check_fallback(remaining[1:])

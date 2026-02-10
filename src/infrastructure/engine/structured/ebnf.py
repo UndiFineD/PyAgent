@@ -65,6 +65,7 @@ class EBNFGrammar(GrammarEngine):
 
         def process_line(line: str) -> None:
             clean_line = line.strip()
+
             def add_rule() -> None:
                 if ":" in clean_line:
                     name, expr = clean_line.split(":", 1)

@@ -48,15 +48,16 @@ class StructuredOutputValidator:
                 errors.append(f"Invalid JSON: {e}")
                 return ValidationResult(valid=False, errors=errors)
 
-        # Check all constraints regarding functional validation
         # Phase 384: Functional constraint validation
         def check_constraint(constraint: Any) -> None:
             if not constraint.validate(text):
+
                 def add_error() -> None:
                     errors.append(f"Constraint violation: {type(constraint).__name__}")
+
                 def add_warning() -> None:
                     warnings.append(f"Constraint warning: {type(constraint).__name__}")
-                
+
                 (add_error() if self.config.strict_mode else add_warning())
 
         list(map(check_constraint, self._constraints))
