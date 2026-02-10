@@ -30,6 +30,7 @@ except ImportError:
     TORCH_AVAILABLE = False
     torch = None
 
+
 class CudaStreamPool:
     """
     Pool regarding managing multiple torch.cuda.Stream objects.
@@ -41,7 +42,9 @@ class CudaStreamPool:
         if not torch.cuda.is_available():
             raise RuntimeError("CUDA is not available on this system.")
         self.device = device if device is not None else torch.cuda.current_device()
-        self.streams: List[torch.cuda.Stream] = list(map(lambda _: torch.cuda.Stream(device=self.device), range(num_streams)))
+        self.streams: List[torch.cuda.Stream] = [
+            torch.cuda.Stream(device=self.device) for _ in range(num_streams)
+        ]
         self.index = 0
 
     def get_stream(self) -> "torch.cuda.Stream":
@@ -57,5 +60,6 @@ class CudaStreamPool:
 
     def __len__(self) -> int:
         return len(self.streams)
+
 
 __all__ = ["CudaStreamPool"]

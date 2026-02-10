@@ -16,6 +16,7 @@ from typing import List, Dict, Optional, Any
 from dataclasses import dataclass, field
 import collections
 
+
 @dataclass
 class WorkflowNode:
     """Represents a single step in a DAG workflow."""
@@ -24,6 +25,7 @@ class WorkflowNode:
     dependencies: List[str] = field(default_factory=list)
     results: Any = None
     status: str = "pending"  # pending, running, completed, failed
+
 
 class DAGWorkflowCore:
     """
@@ -47,7 +49,7 @@ class DAGWorkflowCore:
         for node_id, node in self.nodes.items():
             if node.status != "pending":
                 continue
-            
+
             # Check if all dependencies are completed
             if all(self.nodes[dep].status == "completed" for dep in node.dependencies):
                 executable.append(node_id)
@@ -84,5 +86,5 @@ class DAGWorkflowCore:
 
         if len(order) != len(self.nodes):
             raise ValueError("Cycle detected in the workflow graph!")
-            
+
         return order

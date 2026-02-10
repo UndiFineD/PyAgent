@@ -21,6 +21,30 @@ class FleetDelegationMixin:
         """Synaptic Delegation: Hands off a sub-task to a specialized agent or Universal Shard."""
         logging.info(f"Fleet: Delegating {agent_type} (Target: {target_file})")
 
+        # Phase 320: Python MPI - Check for compute borrowing
+        if self.resource_monitor.is_stressed and self.borrowed_helpers:
+            # Pick a helper (clean up expired ones)
+            now = asyncio.get_event_loop().time()
+            valid_helpers = {k: v for k, v in self.borrowed_helpers.items() if v["expiry"] > now}
+            self.borrowed_helpers = valid_helpers
+            
+            if valid_helpers:
+                helper_id, info = next(iter(valid_helpers.items()))
+                logging.info(f"Fleet: OFFLOADING task '{agent_type}' to borrowed helper {helper_id}")
+                
+                offload_msg = {
+                    "type": "delegate_task",
+                    "sender_id": f"fleet-{self.workspace_root.name}",
+                    "agent_type": agent_type,
+                    "prompt": prompt
+                }
+                
+                resp = await self.voyager_transport.send_to_peer(info["addr"], info["port"], offload_msg)
+                if resp and resp.get("status") == "success":
+                    return resp.get("result", "Task completed via offload.")
+                else:
+                    logging.warning(f"Fleet: Offload to {helper_id} failed. Falling back to local.")
+
         # Step 1: Check existing specialized agents
         if agent_type in self.agents:
             sub_agent = self.agents[agent_type]
@@ -73,7 +97,11 @@ class FleetDelegationMixin:
 
             response = await self.voyager_transport.send_to_peer(addr, port, borrow_msg, timeout=2000)
             if response and response.get("status") == "can_help":
-                logging.info(f"Fleet: Successfully borrowed compute from node {addr}")
+                helper_id = response.get("node_id", f"{addr}:{port}")
+                logging.info(f"Fleet: Successfully borrowed compute from node {helper_id}")
+                
+                # Phase 320: Track the helper for the next delegation
+                self.borrowed_helpers[helper_id] = {"addr": addr, "port": port, "expiry": asyncio.get_event_loop().time() + 300}
                 return True
 
         return False

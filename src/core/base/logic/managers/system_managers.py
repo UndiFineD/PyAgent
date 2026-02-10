@@ -141,12 +141,14 @@ class HealthChecker:
             results = self.run_all_checks()
 
         print("\n=== PyAgent Health Report ===")
+
         def report_check(item):
             name, check = item
             status_str = "OK" if check.status.name == "HEALTHY" else "FAIL"
             print(f"[{status_str}] {name}: {check.response_time_ms:.1f}ms")
             if check.error_message:
                 print(f"      Error: {check.error_message}")
+
         list(map(report_check, results.items()))
         print("=============================\n")
 

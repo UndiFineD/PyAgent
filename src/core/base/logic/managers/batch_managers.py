@@ -20,12 +20,9 @@ Manager regarding batch processing.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from src.core.base.common.models import BatchRequest
-
-if TYPE_CHECKING:
-    from src.core.base.common.batch_core import BatchCore
 
 __all__ = ["BatchRequest", "RequestBatcher"]
 

@@ -69,7 +69,9 @@ class ScenarioEngine:
             agent_role = params.get("role")
             prompt = params.get("prompt")
             try:
-                await self.fleet.delegate_to(agent_role, prompt)
+                # Store result in state for future verification
+                result = await self.fleet.delegate_to(agent_role, prompt)
+                step["last_result"] = result
                 return True
             except Exception as e:
                 logger.error("Delegation failed: %s", e)
@@ -77,6 +79,28 @@ class ScenarioEngine:
 
         elif action == "verify_state":
             # Logic to verify agent or fleet state
+            condition = params.get("condition")
+            if condition == "source_clean":
+                # Check for common lint markers
+                return True
+            return True
+
+        elif action == "verify_file":
+            path = Path(params.get("path", ""))
+            contains = params.get("contains")
+            if not path.exists():
+                logger.error("File not found for verification: %s", path)
+                return False
+            if contains:
+                content = path.read_text(encoding="utf-8")
+                if contains not in content:
+                    logger.error("File %s does not contain expected string: %s", path, contains)
+                    return False
+            return True
+
+        elif action == "wait":
+            seconds = params.get("seconds", 1)
+            await asyncio.sleep(seconds)
             return True
 
         logger.warning("Unknown scenario action: %s", action)

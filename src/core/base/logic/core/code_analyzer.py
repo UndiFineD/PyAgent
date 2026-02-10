@@ -69,9 +69,11 @@ class CodeAnalyzerCore:
                 node.body = [ast.Pass()]
             elif isinstance(node, ast.ClassDef):
                 # Keep class docstring if it exists, otherwise pass
-                if (node.body and isinstance(node.body[0], ast.Expr) and 
-                    isinstance(node.body[0].value, ast.Constant) and 
-                    isinstance(node.body[0].value.value, str)):
+                if (
+                    node.body and isinstance(node.body[0], ast.Expr)
+                    and isinstance(node.body[0].value, ast.Constant)
+                    and isinstance(node.body[0].value.value, str)
+                ):
                     node.body = [node.body[0], ast.Pass()]
                 else:
                     node.body = [ast.Pass()]

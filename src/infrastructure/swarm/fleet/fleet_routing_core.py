@@ -102,11 +102,24 @@ class FleetRoutingCore:
                 except asyncio.TimeoutError:
                     error_msg = f"Non-essential tool '{best_tool}' (owner: {owner}) timed out after 5 seconds."
                     logging.warning(error_msg)
+                    # Record failure in RL
+                    if hasattr(self.fleet, "rl_selector"):
+                        self.fleet.rl_selector.record_feedback(goal, best_tool, success=False)
                     return error_msg
 
             # Phase 123: Security Audit Feedback Loop
             if not await self._perform_security_audit(best_tool, str(res)):
+                # Record security failure in RL
+                if hasattr(self.fleet, "rl_selector"):
+                    self.fleet.rl_selector.record_feedback(goal, best_tool, success=False)
                 return f"ERROR: Security audit failed for tool '{best_tool}'. Output blocked."
+
+            # Success! Record feedback in RL
+            latency = time.time() - start_time
+            if hasattr(self.fleet, "rl_selector"):
+                self.fleet.rl_selector.record_feedback(goal, best_tool, success=True, latency=latency)
+            
+            return res
 
             if self.fleet.rl_selector:
                 self.fleet.rl_selector.update_stats(best_tool, success=True)

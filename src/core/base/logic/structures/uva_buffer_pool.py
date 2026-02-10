@@ -57,7 +57,7 @@ try:
     BRIDGE = get_bridge()
     HAS_RUST = hasattr(BRIDGE, "uva_copy_rust")
 except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        # pylint: disable=broad-exception-caught
     HAS_RUST = False
     BRIDGE = None
 
@@ -371,7 +371,7 @@ class UvaBufferPool:
             )
             self._buffers.append(buffer)
             self._free_buffers.append(buffer)
-        
+
         list(map(_add_one, range(self.buffer_count)))
 
     def acquire(
@@ -471,7 +471,7 @@ class UvaBufferPool:
             buffer = self._buffers[idx]
             if buffer.state == BufferState.ACQUIRED and buffer.priority < priority:
                 # vLLM Preemption logic
-                return None # Placeholder
+                return None  # Placeholder
             return find_preempt(idx + 1)
 
         return find_preempt(0)
@@ -521,7 +521,7 @@ class UvaBufferPool:
             )
             self._buffers.append(buffer)
             self._free_buffers.append(buffer)
-        
+
         list(map(_add_one, range(current, new_count)))
 
         self._last_resize_time = time.time()
@@ -550,7 +550,7 @@ class UvaBufferPool:
                 buffer = self._free_buffers.pop()
                 self._buffers.remove(buffer)
                 _shrink()
-        
+
         _shrink()
 
         self._last_resize_time = time.time()

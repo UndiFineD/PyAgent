@@ -100,7 +100,7 @@ class TensorShape:
         def detect_dynamic(dim):
             if isinstance(dim, DynamicDim):
                 self.dynamic_dims.add(dim.name)
-        
+
         list(map(detect_dynamic, dims))
 
     def resolve(self, **bindings: int) -> tuple[int | str, ...]:
@@ -165,7 +165,7 @@ class TensorShape:
                     return f"{dim}*"
                 return dim
             return str(dim)
-        
+
         dim_strs = list(map(_fmt, self.dims))
         return f"TensorShape({', '.join(dim_strs)})"
 

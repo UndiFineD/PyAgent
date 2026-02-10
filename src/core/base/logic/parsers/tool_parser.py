@@ -254,7 +254,7 @@ class JSONToolParser(ToolParser):
                     json_partial + "]",
                     json_partial + "}}]",
                 ]
-                
+
                 def try_attempts(att_list):
                     if not att_list:
                         return None
@@ -262,7 +262,7 @@ class JSONToolParser(ToolParser):
                         return json.loads(att_list[0])
                     except json.JSONDecodeError:
                         return try_attempts(att_list[1:])
-                
+
                 parsed = try_attempts(attempts)
 
                 if parsed is None:

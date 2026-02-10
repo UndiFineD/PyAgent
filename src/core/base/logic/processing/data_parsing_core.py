@@ -37,19 +37,19 @@ class DataParsingCore:
             # Simple pattern-based extraction
             start_pattern = f"<{tag_pattern}>"
             end_pattern = f"</{tag_pattern}>"
-            
+
             start_pos = xml.find(start_pattern)
             if start_pos == -1:
                 return None
-                
+
             start_pos += len(start_pattern)
             end_pos = xml.find(end_pattern, start_pos)
             if end_pos == -1:
                 return None
-                
+
             value = xml[start_pos:end_pos]
             return self.html_unescape(value)
-            
+
         except Exception:
             return None
 

@@ -613,7 +613,12 @@ class C2FrameworkCore:
             if self.framework.listeners:
                 report += "## Listeners\n\n"
                 for listener in self.framework.listeners.values():
-                    report += f"- **{listener.name}:** {listener.protocol.value}://{listener.host}:{listener.port} ({listener.status}) - {listener.agents_connected} agents\n"
+                    listener_str = (
+                        f"- **{listener.name}:** {listener.protocol.value}://"
+                        f"{listener.host}:{listener.port} ({listener.status}) - "
+                        f"{listener.agents_connected} agents\n"
+                    )
+                    report += listener_str
                 report += "\n"
 
             return report

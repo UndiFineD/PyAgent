@@ -57,7 +57,7 @@ class UserSession:
 class SecureAuthManager:
     """
     Manages OAuth authentication with integrated E2EE.
-    
+
     Security Model:
     1. OAuth 2.0 for identity verification (like GitHub, Google)
     2. Client-side key generation (never sent to server)
@@ -69,13 +69,13 @@ class SecureAuthManager:
         self.e2e_core = e2e_core
         self.active_sessions: Dict[str, UserSession] = {}
         self.oauth_states: Dict[str, Dict] = {}  # CSRF protection
-        
+
         # WebAuthn Configuration
         self.rp = PublicKeyCredentialRpEntity(name="PyAgent Swarm", id="localhost")
         self.server = Fido2Server(self.rp)
         self.challenges: Dict[str, Any] = {}
         self.user_credentials: Dict[str, List[Any]] = {}  # Mock persistence
-        
+
         logger.info("SecureAuthManager initialized with E2EE and WebAuthn (FIDO2) support")
 
     # ==================== WebAuthn Flow ====================
@@ -87,7 +87,7 @@ class SecureAuthManager:
             name=user_id,
             display_name=display_name
         )
-        
+
         # Authenticator selection criteria (Platform preferred)
         selection = AuthenticatorSelectionCriteria(
             authenticator_attachment=AuthenticatorAttachment.CROSS_PLATFORM,
@@ -99,10 +99,10 @@ class SecureAuthManager:
             credentials=self.user_credentials.get(user_id, []),
             authenticator_selection=selection
         )
-        
+
         # Store state for verification
         self.challenges[user_id] = state
-        
+
         # Convert to serializable format for JSON response
         return dict(registration_data)
 
@@ -111,18 +111,18 @@ class SecureAuthManager:
         if user_id not in self.challenges:
             logger.error("No WebAuthn registration challenge found for user %s", user_id)
             return False
-            
+
         try:
             auth_data = self.server.register_complete(
                 self.challenges[user_id],
                 credential_data
             )
-            
+
             # Store credential
             if user_id not in self.user_credentials:
                 self.user_credentials[user_id] = []
             self.user_credentials[user_id].append(auth_data.credential_data)
-            
+
             del self.challenges[user_id]
             logger.info("WebAuthn registration complete for user: %s", user_id)
             return True
@@ -139,27 +139,27 @@ class SecureAuthManager:
 
         auth_data, state = self.server.authenticate_begin(self.user_credentials[user_id])
         self.challenges[user_id] = state
-        
+
         return dict(auth_data)
 
     def complete_webauthn_authentication(self, user_id: str, assertion_data: Dict[str, Any]) -> Optional[UserSession]:
         """Verify passkey assertion and create secure session."""
         if user_id not in self.challenges:
             return None
-            
+
         try:
             self.server.authenticate_complete(
                 self.challenges[user_id],
                 self.user_credentials[user_id],
                 assertion_data
             )
-            
+
             del self.challenges[user_id]
-            
+
             # Create session (same logic as OAuth logout)
             oauth_token = secrets.token_urlsafe(32)
             return self._create_session(user_id, oauth_token)
-            
+
         except Exception as e:
             logger.error("WebAuthn authentication failed: %s", e)
             return None
@@ -172,20 +172,26 @@ class SecureAuthManager:
         Returns authorization URL and state token for CSRF protection.
         """
         state = secrets.token_urlsafe(32)
-        
+
         # Store state for verification
         self.oauth_states[state] = {
             "provider": provider,
             "created_at": time.time(),
             "expires_at": time.time() + 600  # 10 minutes
         }
-        
+
         # OAuth URLs (configure these with your OAuth app credentials)
         oauth_urls = {
-            "github": f"https://github.com/login/oauth/authorize?client_id=YOUR_CLIENT_ID&state={state}&scope=user:email",
-            "google": f"https://accounts.google.com/o/oauth2/v2/auth?client_id=YOUR_CLIENT_ID&state={state}&scope=openid%20email",
+            "github": (
+                f"https://github.com/login/oauth/authorize?"
+                f"client_id=YOUR_CLIENT_ID&state={state}&scope=user:email"
+            ),
+            "google": (
+                f"https://accounts.google.com/o/oauth2/v2/auth?"
+                f"client_id=YOUR_CLIENT_ID&state={state}&scope=openid%20email"
+            ),
         }
-        
+
         return {
             "authorization_url": oauth_urls.get(provider, ""),
             "state": state,
@@ -195,7 +201,7 @@ class SecureAuthManager:
     def complete_oauth_flow(self, code: str, state: str) -> Optional[UserSession]:
         """
         Complete OAuth flow and establish secure session with E2EE.
-        
+
         Process:
         1. Verify OAuth state (CSRF protection)
         2. Exchange code for access token
@@ -207,29 +213,29 @@ class SecureAuthManager:
         if state not in self.oauth_states:
             logger.warning("Invalid OAuth state token")
             return None
-        
+
         state_data = self.oauth_states[state]
         if time.time() > state_data["expires_at"]:
             logger.warning("Expired OAuth state token")
             del self.oauth_states[state]
             return None
-        
+
         # In production: Exchange code for access token with OAuth provider
         # For now, simulate user authentication
         user_id = f"user_{hashlib.sha256(code.encode()).hexdigest()[:16]}"
         oauth_token = secrets.token_urlsafe(32)
-        
+
         # Generate E2EE keys for user if they don't exist
         if not self.e2e_core.load_user_keys(user_id):
             logger.info("Generating new E2EE keys for user: %s", user_id)
             self.e2e_core.generate_identity_keypair(user_id)
-        
+
         # Create secure session
         session = self._create_session(user_id, oauth_token)
-        
+
         # Clean up OAuth state
         del self.oauth_states[state]
-        
+
         logger.info("OAuth flow completed for user: %s", user_id)
         return session
 
@@ -238,7 +244,7 @@ class SecureAuthManager:
     def _create_session(self, user_id: str, oauth_token: str) -> UserSession:
         """Create a new authenticated session."""
         session_token = secrets.token_urlsafe(32)
-        
+
         session = UserSession(
             user_id=user_id,
             oauth_token=oauth_token,
@@ -247,22 +253,22 @@ class SecureAuthManager:
             expires_at=time.time() + 86400,  # 24 hours
             e2e_enabled=True
         )
-        
+
         self.active_sessions[session_token] = session
         return session
 
     def verify_session(self, session_token: str) -> Optional[UserSession]:
         """Verify and return active session."""
         session = self.active_sessions.get(session_token)
-        
+
         if not session:
             return None
-        
+
         if time.time() > session.expires_at:
             logger.info("Session expired for user: %s", session.user_id)
             del self.active_sessions[session_token]
             return None
-        
+
         return session
 
     def revoke_session(self, session_token: str) -> bool:
@@ -284,7 +290,7 @@ class SecureAuthManager:
         session = self.verify_session(session_token)
         if not session or not session.e2e_enabled:
             return None
-        
+
         return self.e2e_core.encrypt_user_data(
             session.user_id,
             data_type="memory",
@@ -296,7 +302,7 @@ class SecureAuthManager:
         session = self.verify_session(session_token)
         if not session or not session.e2e_enabled:
             return None
-        
+
         return self.e2e_core.decrypt_user_data(
             session.user_id,
             data_type="memory",
@@ -308,7 +314,7 @@ class SecureAuthManager:
         session = self.verify_session(session_token)
         if not session:
             return None
-        
+
         return self.e2e_core.encrypt_user_data(
             session.user_id,
             data_type="chat",
@@ -320,7 +326,7 @@ class SecureAuthManager:
         session = self.verify_session(session_token)
         if not session:
             return None
-        
+
         return self.e2e_core.decrypt_user_data(
             session.user_id,
             data_type="chat",
@@ -330,9 +336,9 @@ class SecureAuthManager:
     # ==================== User-to-User E2EE ====================
 
     def send_encrypted_message(
-        self, 
-        sender_session_token: str, 
-        recipient_user_id: str, 
+        self,
+        sender_session_token: str,
+        recipient_user_id: str,
         message: str
     ) -> Optional[Dict]:
         """
@@ -342,7 +348,7 @@ class SecureAuthManager:
         sender_session = self.verify_session(sender_session_token)
         if not sender_session:
             return None
-        
+
         # Initiate session if needed
         session_key = (sender_session.user_id, recipient_user_id)
         if session_key not in self.e2e_core.sessions:
@@ -351,21 +357,21 @@ class SecureAuthManager:
             if not recipient_bundle:
                 logger.warning("Recipient %s has no prekey bundle", recipient_user_id)
                 return None
-            
+
             self.e2e_core.initiate_session(sender_session.user_id, recipient_bundle)
-        
+
         # Encrypt message with Double Ratchet
         encrypted_bundle = self.e2e_core.encrypt_message(
             sender_session.user_id,
             recipient_user_id,
             message
         )
-        
+
         return encrypted_bundle
 
     def receive_encrypted_message(
-        self, 
-        recipient_session_token: str, 
+        self,
+        recipient_session_token: str,
         encrypted_bundle: Dict
     ) -> Optional[str]:
         """
@@ -375,14 +381,14 @@ class SecureAuthManager:
         recipient_session = self.verify_session(recipient_session_token)
         if not recipient_session:
             return None
-        
+
         sender_id = encrypted_bundle["sender"]
-        
+
         # Decrypt message with Double Ratchet
         plaintext = self.e2e_core.decrypt_message(
             sender_id,
             recipient_session.user_id,
             encrypted_bundle
         )
-        
+
         return plaintext

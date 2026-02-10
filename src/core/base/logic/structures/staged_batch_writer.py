@@ -66,7 +66,7 @@ try:
     BRIDGE = get_bridge()
     HAS_RUST = hasattr(BRIDGE, "batch_write_indices_rust")
 except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        # pylint: disable=broad-exception-caught
     HAS_RUST = False
     BRIDGE = None
 
@@ -260,7 +260,7 @@ class StagedBatchWriter:
                         priority=priority,
                     )
                 )
-            
+
             list(map(_stage, zip(indices, values)))
             self.stats.total_writes += len(indices)
 
@@ -285,11 +285,12 @@ class StagedBatchWriter:
 
         # Group by index
         index_to_writes: dict[int, list[StagedWrite]] = {}
+
         def _group(write):
             if write.index not in index_to_writes:
                 index_to_writes[write.index] = []
             index_to_writes[write.index].append(write)
-        
+
         list(map(_group, self._staged))
 
         # Resolve conflicts
@@ -596,7 +597,7 @@ def coalesce_write_indices(
         try:
             return BRIDGE.coalesce_writes_rust(indices, block_size)
         except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            # pylint: disable=broad-exception-caught
             pass
 
     # Python fallback

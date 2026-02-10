@@ -29,6 +29,7 @@ dnslib
 dnspython==2.8.0
 email-validator==2.3.0
 fastapi==0.128.0
+fido2==1.2.0
 filelock==3.20.3
 frozenlist==1.8.0
 h11==0.16.0

@@ -42,7 +42,7 @@ class CodeIntegrityVerifier:
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     tree = ast.parse(f.read())
-                
+
                 def extract_import_targets(node: ast.AST) -> list[str]:
                     if isinstance(node, ast.Import):
                         return list(map(lambda n: n.name, node.names))
@@ -60,7 +60,7 @@ class CodeIntegrityVerifier:
                     if target.startswith("src.") or target == "src":
                         parts = target.split(".")
                         target_path = Path(".").joinpath(*parts)
-                        if not (target_path.with_suffix(".py").exists() or 
+                        if not (target_path.with_suffix(".py").exists() or
                                 target_path.joinpath("__init__.py").exists()):
                             return f"{file_path}: Broken import '{target}'"
                     return None
@@ -91,7 +91,7 @@ class CodeIntegrityVerifier:
             try:
                 tree = ast.parse(py_file.read_text(encoding="utf-8"))
                 rel_path = str(py_file.relative_to(root_dir.parent)).replace("\\", "/")
-                
+
                 def is_class_node(node: ast.AST) -> bool:
                     return isinstance(node, ast.ClassDef)
 

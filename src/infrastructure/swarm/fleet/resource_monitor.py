@@ -23,6 +23,17 @@ class ResourceMonitor:
         self.running = False
         self.is_borrowing = False
         
+    @property
+    def is_stressed(self) -> bool:
+        """Returns True if any core metric exceeds the high threshold."""
+        stats = self.get_latest_stats()
+        core_metrics = [
+            stats.get("cpu_usage", 0.0),
+            stats.get("memory_usage", 0.0),
+            stats.get("gpu", {}).get("usage", 0.0)
+        ]
+        return any(val > self.high_threshold for val in core_metrics)
+
     async def start(self, interval: int = 10):
         """Starts the background monitoring loop."""
         self.running = True

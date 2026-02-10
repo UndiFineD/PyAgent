@@ -142,7 +142,7 @@ class ObjectPool(Generic[T]):
             self._stats.created += 1
             self._stats.current_size += 1
             self._stats.peak_size = max(self._stats.peak_size, self._stats.current_size)
-        
+
         list(map(_add_one, range(self._min_size)))
 
     def acquire(self) -> T:
@@ -158,7 +158,7 @@ class ObjectPool(Generic[T]):
             def _try_get_from_pool():
                 if not self._pool:
                     return None
-                
+
                 obj, timestamp = self._pool.popleft()
                 self._stats.current_size -= 1
 
@@ -254,7 +254,7 @@ class ObjectPool(Generic[T]):
             self._pool = deque(filter(lambda x: now - x[1] <= max_age, self._pool))
             new_count = len(self._pool)
             pruned = old_count - new_count
-            
+
             self._stats.current_size = new_count
             self._stats.discarded += pruned
 
@@ -395,7 +395,9 @@ class TieredBufferPool:
             max_buffers_per_tier: Max buffers per size tier
         """
         self._sizes = sorted(sizes or self.DEFAULT_SIZES)
-        self._pools: Dict[int, BufferPool] = dict(map(lambda size: (size, BufferPool(size, max_buffers_per_tier)), self._sizes))
+        self._pools: Dict[int, BufferPool] = {
+            size: BufferPool(size, max_buffers_per_tier) for size in self._sizes
+        }
         self._lock = threading.Lock()
         self._oversized_allocations = 0
 

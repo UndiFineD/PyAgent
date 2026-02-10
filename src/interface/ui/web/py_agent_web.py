@@ -47,6 +47,48 @@ fleet_instance = None
 auth_manager = WebAuthnManager()
 checkpoint_manager = CheckpointManager(rank=0, world_size=1)  # Default for web proxy
 
+# Authentication Endpoints (Phase 327: Biometric Hardware Keys)
+@app.post("/api/auth/register/options")
+async def registration_options(request: Request):
+    data = await request.json()
+    username = data.get("username", "admin")
+    options = auth_manager.generate_registration_options(username)
+    # Store for verification
+    auth_manager.last_challenge = options["challenge"]
+    return options
+
+@app.post("/api/auth/register/verify")
+async def verify_registration(request: Request):
+    data = await request.json()
+    result = auth_manager.verify_registration(data.get("username", "admin"), data)
+    return {"status": "success" if result else "error"}
+
+@app.post("/api/auth/login/options")
+async def authentication_options(request: Request):
+    data = await request.json()
+    username = data.get("username", "admin")
+    options = auth_manager.generate_authentication_options(username)
+    # Store for verification
+    auth_manager.last_challenge = options["challenge"]
+    return options
+
+@app.post("/api/auth/login/verify")
+async def verify_authentication(request: Request):
+    data = await request.json()
+    result = auth_manager.verify_authentication(data.get("username", "admin"), data)
+    return {"status": "authenticated" if result else "denied"}
+
+# Mobile App Bridge Placeholder (Phase 4.0.0 Singularity)
+@app.post("/api/notify")
+async def send_notification(data: dict):
+    """
+    Simulates a bridge to mobile native notifications.
+    Used for hardware key prompts or critical swarm alerts.
+    """
+    msg = data.get("message", "Swarm Notification")
+    print(f"MOBILE_BRIDGE_ALERT: {msg}")
+    # In Phase 4.1.0, this will trigger a real WebPush or Firebase alert
+    return {"status": "dispatched_to_bridge", "message": msg}
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

@@ -16,6 +16,7 @@ from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
 import time
 
+
 @dataclass
 class AgentMetadata:
     name: str
@@ -26,11 +27,13 @@ class AgentMetadata:
     parent_agents: List[str] = field(default_factory=list)
     sop_name: Optional[str] = None
 
+
 class EvolutionCore:
     """
     Manages the lifecycle and evolution of agents based on task performance.
     Harvested from self-evolving-subagent patterns.
     """
+
     def __init__(self, sop_core: Optional[Any] = None):
         self.agent_pool: Dict[str, AgentMetadata] = {}
         self.sop_core = sop_core
@@ -38,18 +41,18 @@ class EvolutionCore:
     def record_usage(self, agent_name: str, success: bool):
         if agent_name not in self.agent_pool:
             self.agent_pool[agent_name] = AgentMetadata(name=agent_name)
-        
+
         meta = self.agent_pool[agent_name]
         meta.usage_count += 1
         meta.last_used = time.time()
-        
+
         # Simple moving average for success rate
         alpha = 0.2
         meta.success_rate = (alpha * (1.0 if success else 0.0)) + ((1 - alpha) * meta.success_rate)
-        
+
         if self.sop_core and meta.sop_name:
             self.sop_core.update_sop_metrics(meta.sop_name, success)
-            
+
         self._check_promotion(meta)
 
     def _check_promotion(self, meta: AgentMetadata):
@@ -64,26 +67,26 @@ class EvolutionCore:
         """
         meta_a = self.agent_pool.get(agent_a_name)
         meta_b = self.agent_pool.get(agent_b_name)
-        
+
         if not meta_a or not meta_b:
             return None
-            
+
         if meta_a.usage_count > 3 and meta_b.usage_count > 3:
             new_name = f"integrated_{agent_a_name}_{agent_b_name}"
             new_sop_name = None
-            
+
             if self.sop_core and meta_a.sop_name and meta_b.sop_name:
                 new_sop_name = f"sop_{new_name}"
                 self.sop_core.merge_sops(meta_a.sop_name, meta_b.sop_name, new_sop_name)
 
             if new_name not in self.agent_pool:
                 self.agent_pool[new_name] = AgentMetadata(
-                    name=new_name, 
+                    name=new_name,
                     tier="integrated",
                     usage_count=max(meta_a.usage_count, meta_b.usage_count),
                     parent_agents=[agent_a_name, agent_b_name],
                     sop_name=new_sop_name
                 )
             return new_name
-                
+
         return None

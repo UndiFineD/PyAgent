@@ -77,7 +77,7 @@ class WorkspaceAuditorMixin:
         """Process findings regarding the Rust scan functionally."""
         def process_file_entry(item: tuple[str, list]) -> None:
             file_path, findings = item
-            
+
             def handle_finding(finding: tuple) -> None:
                 issue_type, msg, line = finding
                 if issue_type == "Robustness Issue":
@@ -107,7 +107,7 @@ class WorkspaceAuditorMixin:
     def _perform_python_scan(self, root_path: Path, results: Dict[str, List]) -> None:
         """Perform Python-side supplemental scanning regarding files functionally."""
         py_files = list(root_path.rglob("*.py"))
-        
+
         def scan_file(file_path: Path) -> None:
             """Evaluates regarding skip policies and invokes analysis."""
             if not self._should_skip_file(file_path):
@@ -184,18 +184,18 @@ class WorkspaceAuditorMixin:
             has_defs, is_definitely_not_stub = acc
             if is_definitely_not_stub:
                 return acc
-            
+
             # Check node regarding stub patterns
             if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)):
                 res = StubDetectorMixin._is_stub_node(node)
                 if res is False or res == "IS_ABC":
                     return True, True
-                return True, False # found def, still can be stub
-            
+                return True, False  # found def, still can be stub
+
             if not isinstance(node, (ast.Import, ast.ImportFrom, ast.Assign, ast.AnnAssign)):
                 if not (isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant)):
-                    return has_defs, True # non-stub node found
-            
+                    return has_defs, True  # non-stub node found
+
             return has_defs, False
 
         from functools import reduce

@@ -160,7 +160,9 @@ class PeerWorkPattern(WorkPattern):
             return result
         return {"plan": "Default planning - break down task into steps"}
 
-    async def _execute_executing(self, context: CascadeContext, planning_result: Dict, round_results: Dict) -> Dict[str, Any]:
+    async def _execute_executing(
+        self, context: CascadeContext, planning_result: Dict, round_results: Dict
+    ) -> Dict[str, Any]:
         """Execute the executing phase."""
         if self.executing_agent:
             executing_context = CascadeContext(
@@ -175,7 +177,9 @@ class PeerWorkPattern(WorkPattern):
             return result
         return {"execution": "Default execution - perform the planned tasks"}
 
-    async def _execute_expressing(self, context: CascadeContext, executing_result: Dict, round_results: Dict) -> Dict[str, Any]:
+    async def _execute_expressing(
+        self, context: CascadeContext, executing_result: Dict, round_results: Dict
+    ) -> Dict[str, Any]:
         """Execute the expressing phase."""
         if self.expressing_agent:
             expressing_context = CascadeContext(
@@ -190,7 +194,9 @@ class PeerWorkPattern(WorkPattern):
             return result
         return {"expression": "Default expression - format results"}
 
-    async def _execute_reviewing(self, context: CascadeContext, expressing_result: Dict, round_results: Dict) -> Dict[str, Any]:
+    async def _execute_reviewing(
+        self, context: CascadeContext, expressing_result: Dict, round_results: Dict
+    ) -> Dict[str, Any]:
         """Execute the reviewing phase."""
         if self.reviewing_agent:
             reviewing_context = CascadeContext(

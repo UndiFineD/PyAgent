@@ -100,7 +100,9 @@ class CryptoCore:
                 ctypes.byref(out_blob)
             ):
                 # Extract decrypted data
-                decrypted = bytes((ctypes.c_byte * out_blob.cbData).from_address(ctypes.addressof(out_blob.pbData.contents)))
+                data_size = out_blob.cbData
+                data_addr = ctypes.addressof(out_blob.pbData.contents)
+                decrypted = bytes((ctypes.c_byte * data_size).from_address(data_addr))
                 # Free the output blob
                 ctypes.windll.kernel32.LocalFree(out_blob.pbData)
                 return decrypted
@@ -148,9 +150,11 @@ class CryptoCore:
             # Decrypt
             data = bytearray(encrypted_data)
             data_len = ctypes.c_void_p(len(data))
-            if self.advapi32.CryptDecrypt(hKey, None, True, 0, 
-                                         (ctypes.c_byte * len(data))(*data), 
-                                         data_len):
+            if self.advapi32.CryptDecrypt(
+                hKey, None, True, 0,
+                (ctypes.c_byte * len(data))(*data),
+                data_len
+            ):
                 # Clean up
                 self.advapi32.CryptDestroyKey(hKey)
                 self.advapi32.CryptReleaseContext(hProv, 0)
@@ -175,7 +179,7 @@ class CryptoCore:
         try:
             cred = CREDENTIALW()
             cred_ptr = ctypes.POINTER(CREDENTIALW)()
-            
+
             if self.advapi32.CredReadW(
                 target_name.encode('utf-16le'), 1, 0, ctypes.byref(cred_ptr)
             ):

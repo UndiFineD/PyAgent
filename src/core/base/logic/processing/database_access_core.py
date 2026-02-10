@@ -60,24 +60,36 @@ class DatabaseAccessCore:
         try:
             # Allocate environment handle
             self.env_handle = ctypes.c_void_p()
-            if self.odbc32.SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, ctypes.byref(self.env_handle)) not in [SQL_SUCCESS, SQL_SUCCESS_WITH_INFO]:
+            result = self.odbc32.SQLAllocHandle(
+                SQL_HANDLE_ENV, SQL_NULL_HANDLE, ctypes.byref(self.env_handle)
+            )
+            if result not in [SQL_SUCCESS, SQL_SUCCESS_WITH_INFO]:
                 self.last_error = "Failed to allocate environment handle"
                 return False
 
             # Set ODBC version
-            if self.odbc32.SQLSetEnvAttr(self.env_handle, SQL_ATTR_ODBC_VERSION, SQL_OV_ODBC3, 0) not in [SQL_SUCCESS, SQL_SUCCESS_WITH_INFO]:
+            result = self.odbc32.SQLSetEnvAttr(
+                self.env_handle, SQL_ATTR_ODBC_VERSION, SQL_OV_ODBC3, 0
+            )
+            if result not in [SQL_SUCCESS, SQL_SUCCESS_WITH_INFO]:
                 self.last_error = "Failed to set ODBC version"
                 return False
 
             # Allocate connection handle
             self.conn_handle = ctypes.c_void_p()
-            if self.odbc32.SQLAllocHandle(SQL_HANDLE_DBC, self.env_handle, ctypes.byref(self.conn_handle)) not in [SQL_SUCCESS, SQL_SUCCESS_WITH_INFO]:
+            result = self.odbc32.SQLAllocHandle(
+                SQL_HANDLE_DBC, self.env_handle, ctypes.byref(self.conn_handle)
+            )
+            if result not in [SQL_SUCCESS, SQL_SUCCESS_WITH_INFO]:
                 self.last_error = "Failed to allocate connection handle"
                 return False
 
             # Set login timeout
             timeout = ctypes.c_void_p(5)  # 5 seconds
-            if self.odbc32.SQLSetConnectAttrW(self.conn_handle, SQL_LOGIN_TIMEOUT, timeout, 0) not in [SQL_SUCCESS, SQL_SUCCESS_WITH_INFO]:
+            result = self.odbc32.SQLSetConnectAttrW(
+                self.conn_handle, SQL_LOGIN_TIMEOUT, timeout, 0
+            )
+            if result not in [SQL_SUCCESS, SQL_SUCCESS_WITH_INFO]:
                 self.last_error = "Failed to set login timeout"
                 return False
 
@@ -107,13 +119,17 @@ class DatabaseAccessCore:
         try:
             # Allocate statement handle
             self.stmt_handle = ctypes.c_void_p()
-            if self.odbc32.SQLAllocHandle(SQL_HANDLE_STMT, self.conn_handle, ctypes.byref(self.stmt_handle)) not in [SQL_SUCCESS, SQL_SUCCESS_WITH_INFO]:
+            result = self.odbc32.SQLAllocHandle(
+                SQL_HANDLE_STMT, self.conn_handle, ctypes.byref(self.stmt_handle)
+            )
+            if result not in [SQL_SUCCESS, SQL_SUCCESS_WITH_INFO]:
                 self.last_error = "Failed to allocate statement handle"
                 return None
 
             # Execute query
             query_utf16 = query.encode('utf-16le')
-            if self.odbc32.SQLExecDirectW(self.stmt_handle, query_utf16, SQL_NTS) not in [SQL_SUCCESS, SQL_SUCCESS_WITH_INFO]:
+            result = self.odbc32.SQLExecDirectW(self.stmt_handle, query_utf16, SQL_NTS)
+            if result not in [SQL_SUCCESS, SQL_SUCCESS_WITH_INFO]:
                 self.last_error = self._get_error_message()
                 return None
 

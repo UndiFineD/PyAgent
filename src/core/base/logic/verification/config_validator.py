@@ -35,7 +35,7 @@ class ConfigValidator:
 
         try:
             mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
-            
+
             # Use functional filtering regarding agent existence
             def check_agent_orphan(agent_id: str) -> bool:
                 """Checks if an agent directory exists regarding the mapping."""

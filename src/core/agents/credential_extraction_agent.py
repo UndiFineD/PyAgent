@@ -31,14 +31,14 @@ from src.core.base.mixins.data_parsing_mixin import DataParsingMixin
 from src.core.base.mixins.privilege_escalation_mixin import PrivilegeEscalationMixin
 
 
-class CredentialExtractionAgent(BaseAgent, PrivilegeEscalationMixin, DatabaseAccessMixin, 
+class CredentialExtractionAgent(BaseAgent, PrivilegeEscalationMixin, DatabaseAccessMixin,
                               CryptoMixin, DataParsingMixin):
     """Agent for extracting credentials using Windows-specific techniques."""
 
     def __init__(self, **kwargs: Any) -> None:
         if platform.system() != "Windows":
             raise RuntimeError("CredentialExtractionAgent is only supported on Windows")
-        
+
         super().__init__(**kwargs)
         PrivilegeEscalationMixin.__init__(self, **kwargs)
         DatabaseAccessMixin.__init__(self, **kwargs)

@@ -291,7 +291,7 @@ class CountingBloomFilter:
         def increment(pos):
             if self._counters[pos] < self._max_count:
                 self._counters[pos] += 1
-        
+
         list(map(increment, self._get_hash_positions(item)))
         self._count += 1
 
@@ -312,7 +312,7 @@ class CountingBloomFilter:
         def decrement(pos):
             if self._counters[pos] > 0:
                 self._counters[pos] -= 1
-        
+
         list(map(decrement, positions))
         self._count = max(0, self._count - 1)
         return True

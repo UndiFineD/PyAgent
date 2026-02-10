@@ -140,10 +140,13 @@ class CloudAssetDiscoveryCore:
         if self.session:
             await self.session.close()
 
-    async def discover_assets(self, ip_ranges: List[str],
-                            keywords: List[str],
-                            ports: List[int] = None,
-                            store_certificates: bool = True) -> DiscoveryResult:
+    async def discover_assets(
+        self,
+        ip_ranges: List[str],
+        keywords: List[str],
+        ports: List[int] = None,
+        store_certificates: bool = True
+    ) -> DiscoveryResult:
         """
         Discover cloud assets by scanning IP ranges for SSL certificates.
 
@@ -210,9 +213,14 @@ class CloudAssetDiscoveryCore:
             errors=errors
         )
 
-    async def _scan_ip_certificate(self, ip: str, port: int, keywords: List[str],
-                                 semaphore: asyncio.Semaphore,
-                                 store_certificate: bool) -> Optional[AssetFinding]:
+    async def _scan_ip_certificate(
+        self,
+        ip: str,
+        port: int,
+        keywords: List[str],
+        semaphore: asyncio.Semaphore,
+        store_certificate: bool
+    ) -> Optional[AssetFinding]:
         """Scan a single IP:port for SSL certificate"""
         async with semaphore:
             try:
@@ -378,7 +386,7 @@ class CloudAssetDiscoveryCore:
             cursor = conn.cursor()
 
             cursor.execute('''
-                INSERT INTO certificates 
+                INSERT INTO certificates
                 (ip_address, port, domain, organizations, common_names, subject_alt_names,
                  valid_from, valid_until, serial_number, signature_algorithm, discovered_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -402,8 +410,11 @@ class CloudAssetDiscoveryCore:
         except Exception as e:
             self.logger.error(f"Failed to store certificate: {e}")
 
-    async def search_stored_certificates(self, keywords: List[str],
-                                       organizations: List[str] = None) -> List[CertificateInfo]:
+    async def search_stored_certificates(
+        self,
+        keywords: List[str],
+        organizations: List[str] = None
+    ) -> List[CertificateInfo]:
         """
         Search stored certificates for keywords and organizations.
 

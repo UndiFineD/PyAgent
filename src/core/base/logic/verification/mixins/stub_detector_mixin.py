@@ -16,8 +16,8 @@ class StubDetectorMixin:
         """Determines regarding the stub status of a node functionally (pass/NotImplementedError)."""
         def is_docstring(s: ast.AST) -> bool:
             """Checks if a node is a docstring constant."""
-            return (isinstance(s, ast.Expr) and 
-                    isinstance(s.value, ast.Constant) and 
+            return (isinstance(s, ast.Expr) and
+                    isinstance(s.value, ast.Constant) and
                     isinstance(s.value.value, str))
 
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -46,7 +46,7 @@ class StubDetectorMixin:
             # Check bases regarding ABC/Protocol functionally
             def is_abc_base(base: ast.AST) -> bool:
                 return isinstance(base, ast.Name) and base.id in ("ABC", "Protocol")
-            
+
             if any(map(is_abc_base, node.bases)):
                 return "IS_ABC"
 
@@ -54,7 +54,7 @@ class StubDetectorMixin:
             body = list(filter(lambda s: not is_docstring(s), node.body))
             if not body:
                 return True
-            
+
             def evaluate_item(item: ast.AST) -> bool | str:
                 """Evaluates an item regarding its stub status."""
                 if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -65,7 +65,7 @@ class StubDetectorMixin:
                 return False
 
             results = list(map(evaluate_item, body))
-            
+
             if any(map(lambda r: r is False, results)):
                 return False
             if any(map(lambda r: r == "IS_ABC", results)):

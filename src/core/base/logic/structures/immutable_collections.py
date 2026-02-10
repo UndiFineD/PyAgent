@@ -109,7 +109,7 @@ class ConstantList(Generic[T], Sequence[T]):
     def __delitem__(self, index: int | slice) -> None:
         raise TypeError("Cannot delete item from a constant list")
 
-    def __iadd__(self, other: Any) -> "ConstantList[T]":
+    def __iadd__(self, other: Any) -> "ConstantList[T]":  # type: ignore[misc]
         raise TypeError("Cannot modify a constant list")
 
     def __imul__(self, n: int) -> "ConstantList[T]":
@@ -251,7 +251,7 @@ class ConstantDict(Generic[K, V], Mapping[K, V]):
     def items(self):
         return self._data.items()
 
-    def get(self, key: K, default: V | None = None) -> V | None:
+    def get(self, key: K, default: V | None = None) -> V | None:  # type: ignore[override]
         return self._data.get(key, default)
 
     def copy(self) -> dict[K, V]:
@@ -343,7 +343,7 @@ class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):
     def items(self):
         return self._data.items()
 
-    def get(self, key: K, default: V | None = None) -> V | None:
+    def get(self, key: K, default: V | None = None) -> V | None:  # type: ignore[override]
         return self._data.get(key, default)
 
     def copy(self) -> dict[K, V]:

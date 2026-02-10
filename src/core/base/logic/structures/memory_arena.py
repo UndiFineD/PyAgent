@@ -497,7 +497,7 @@ class SlabAllocator(Generic[T]):
                     self._free_list.append((idx, offset))
                     return True
                 return find_slab(idx + 1)
-            
+
             find_slab(0)
 
     def reset(self) -> None:
@@ -506,12 +506,9 @@ class SlabAllocator(Generic[T]):
             self._free_list.clear()
 
             # Rebuild free list
-            list(map(lambda slab_idx: 
-                list(map(lambda i: 
-                    self._free_list.append((slab_idx, i * self._object_size)), 
-                    range(self._slab_size))), 
-                range(len(self._slabs))))
-
+            for slab_idx in range(len(self._slabs)):
+                for i in range(self._slab_size):
+                    self._free_list.append((slab_idx, i * self._object_size))
             self._stats.resets += 1
 
     @property

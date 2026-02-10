@@ -124,8 +124,10 @@ class HistoryManager:
         """Get the most recent previous value for an object/attribute."""
         matches = []
         for change in reversed(self.history):
-            if (change.get('object') == object_id and
-                change.get('attribute_name') == attribute):
+            if (
+                change.get('object') == object_id and
+                change.get('attribute_name') == attribute
+            ):
                 matches.append(change.get('attribute_value'))
                 if len(matches) >= 2:
                     return matches[1]

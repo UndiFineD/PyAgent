@@ -60,7 +60,7 @@ class RatchetState:
 class E2EEncryptionCore:
     """
     Core implementation of Signal Protocol for PyAgent.
-    
+
     Features:
     - X3DH (Extended Triple Diffie-Hellman) for initial key agreement
     - Double Ratchet for forward secrecy and self-healing
@@ -71,13 +71,13 @@ class E2EEncryptionCore:
     def __init__(self, storage_path: str = ".pyagent/e2e_keys"):
         self.storage_path = storage_path
         os.makedirs(storage_path, exist_ok=True)
-        
+
         # User key pairs (identity keys)
         self.user_keys: Dict[str, UserKeyPair] = {}
-        
+
         # Active ratchet sessions per conversation
         self.sessions: Dict[Tuple[str, str], RatchetState] = {}
-        
+
         logger.info("E2EEncryptionCore initialized with storage at %s", storage_path)
 
     # ==================== Key Generation ====================
@@ -89,21 +89,21 @@ class E2EEncryptionCore:
             encoding=serialization.Encoding.Raw,
             format=serialization.PublicFormat.Raw
         )
-        
+
         keypair = UserKeyPair(
             identity_key=identity_key,
             identity_public=identity_public,
             user_id=user_id
         )
-        
+
         # Generate initial one-time prekeys (for X3DH)
         for i in range(10):
             prekey = x25519.X25519PrivateKey.generate()
             keypair.prekeys[i] = prekey
-        
+
         self.user_keys[user_id] = keypair
         self._save_user_keys(user_id)
-        
+
         logger.info("Generated identity keypair for user: %s", user_id)
         return keypair
 
@@ -111,9 +111,9 @@ class E2EEncryptionCore:
         """Get public prekey bundle for initiating E2EE with a user (X3DH)."""
         if user_id not in self.user_keys:
             return None
-        
+
         keypair = self.user_keys[user_id]
-        
+
         # Return one prekey (consume it for forward secrecy)
         if keypair.prekeys:
             prekey_id = next(iter(keypair.prekeys.keys()))
@@ -122,14 +122,14 @@ class E2EEncryptionCore:
                 encoding=serialization.Encoding.Raw,
                 format=serialization.PublicFormat.Raw
             )
-            
+
             return {
                 "user_id": user_id,
                 "identity_key": keypair.identity_public.hex(),
                 "prekey_id": prekey_id,
                 "prekey": prekey_public.hex()
             }
-        
+
         return None
 
     # ==================== X3DH Key Agreement ====================
@@ -141,19 +141,19 @@ class E2EEncryptionCore:
         """
         if sender_id not in self.user_keys:
             raise ValueError(f"Sender {sender_id} has no identity keys")
-        
+
         sender_keypair = self.user_keys[sender_id]
         recipient_id = recipient_bundle["user_id"]
         recipient_identity_key = bytes.fromhex(recipient_bundle["identity_key"])
         recipient_prekey = bytes.fromhex(recipient_bundle["prekey"])
-        
+
         # Generate ephemeral key for this session
         ephemeral_key = x25519.X25519PrivateKey.generate()
         ephemeral_public = ephemeral_key.public_key().public_bytes(
             encoding=serialization.Encoding.Raw,
             format=serialization.PublicFormat.Raw
         )
-        
+
         # X3DH: Perform 4 Diffie-Hellman exchanges
         dh1 = sender_keypair.identity_key.exchange(
             x25519.X25519PublicKey.from_public_bytes(recipient_identity_key)
@@ -164,7 +164,7 @@ class E2EEncryptionCore:
         dh3 = ephemeral_key.exchange(
             x25519.X25519PublicKey.from_public_bytes(recipient_prekey)
         )
-        
+
         # Derive shared secret using HKDF
         shared_secret = dh1 + dh2 + dh3
         root_key = HKDF(
@@ -173,10 +173,10 @@ class E2EEncryptionCore:
             salt=None,
             info=b"PyAgent-Signal-E2EE"
         ).derive(shared_secret)
-        
+
         # Initialize Double Ratchet
         send_chain_key, recv_chain_key = self._kdf_ratchet(root_key, b"init")
-        
+
         session_key = (sender_id, recipient_id)
         self.sessions[session_key] = RatchetState(
             root_key=root_key,
@@ -185,7 +185,7 @@ class E2EEncryptionCore:
             dh_send=ephemeral_key,
             dh_recv_public=recipient_identity_key
         )
-        
+
         logger.info("Initiated E2EE session: %s -> %s", sender_id, recipient_id)
         return ephemeral_public
 
@@ -199,19 +199,19 @@ class E2EEncryptionCore:
         session_key = (sender_id, recipient_id)
         if session_key not in self.sessions:
             raise ValueError(f"No active session between {sender_id} and {recipient_id}")
-        
+
         session = self.sessions[session_key]
-        
+
         # Derive message key from chain key (forward secrecy)
         message_key, next_chain_key = self._kdf_message_key(session.send_chain_key)
         session.send_chain_key = next_chain_key
         session.send_counter += 1
-        
+
         # Encrypt with AES-GCM
         aesgcm = AESGCM(message_key)
         nonce = os.urandom(12)
         ciphertext = aesgcm.encrypt(nonce, plaintext.encode(), None)
-        
+
         return {
             "sender": sender_id,
             "recipient": recipient_id,
@@ -228,20 +228,20 @@ class E2EEncryptionCore:
         session_key = (sender_id, recipient_id)
         if session_key not in self.sessions:
             raise ValueError(f"No active session between {sender_id} and {recipient_id}")
-        
+
         session = self.sessions[session_key]
-        
+
         # Derive message key from chain key
         message_key, next_chain_key = self._kdf_message_key(session.recv_chain_key)
         session.recv_chain_key = next_chain_key
         session.recv_counter += 1
-        
+
         # Decrypt with AES-GCM
         aesgcm = AESGCM(message_key)
         nonce = bytes.fromhex(encrypted_bundle["nonce"])
         ciphertext = bytes.fromhex(encrypted_bundle["ciphertext"])
         plaintext = aesgcm.decrypt(nonce, ciphertext, None)
-        
+
         return plaintext.decode()
 
     # ==================== User Data Encryption ====================
@@ -254,7 +254,7 @@ class E2EEncryptionCore:
         """
         if user_id not in self.user_keys:
             raise ValueError(f"User {user_id} has no identity keys")
-        
+
         # Derive encryption key from user's identity key
         keypair = self.user_keys[user_id]
         data_key = HKDF(
@@ -263,20 +263,20 @@ class E2EEncryptionCore:
             salt=data_type.encode(),
             info=b"PyAgent-UserData"
         ).derive(keypair.identity_public)
-        
+
         # Encrypt with AES-GCM
         aesgcm = AESGCM(data_key)
         nonce = os.urandom(12)
         plaintext = json.dumps(data).encode()
         ciphertext = aesgcm.encrypt(nonce, plaintext, None)
-        
+
         return nonce + ciphertext
 
     def decrypt_user_data(self, user_id: str, data_type: str, encrypted_data: bytes) -> Dict:
         """Decrypt user private data using their identity key."""
         if user_id not in self.user_keys:
             raise ValueError(f"User {user_id} has no identity keys")
-        
+
         # Derive decryption key
         keypair = self.user_keys[user_id]
         data_key = HKDF(
@@ -285,13 +285,13 @@ class E2EEncryptionCore:
             salt=data_type.encode(),
             info=b"PyAgent-UserData"
         ).derive(keypair.identity_public)
-        
+
         # Decrypt with AES-GCM
         aesgcm = AESGCM(data_key)
         nonce = encrypted_data[:12]
         ciphertext = encrypted_data[12:]
         plaintext = aesgcm.decrypt(nonce, ciphertext, None)
-        
+
         return json.loads(plaintext.decode())
 
     # ==================== Cryptographic Primitives ====================
@@ -311,10 +311,10 @@ class E2EEncryptionCore:
         """KDF for deriving message keys from chain key (forward secrecy)."""
         # Message key
         message_key = hmac.new(chain_key, b"\x01", hashlib.sha256).digest()
-        
+
         # Next chain key
         next_chain_key = hmac.new(chain_key, b"\x02", hashlib.sha256).digest()
-        
+
         return message_key[:32], next_chain_key
 
     # ==================== Persistence ====================
@@ -323,9 +323,9 @@ class E2EEncryptionCore:
         """Save user keys to encrypted storage."""
         if user_id not in self.user_keys:
             return
-        
+
         keypair = self.user_keys[user_id]
-        
+
         # Serialize keys (in production, encrypt this with user password/PIN)
         key_data = {
             "user_id": user_id,
@@ -336,31 +336,31 @@ class E2EEncryptionCore:
             ).hex(),
             "identity_public": keypair.identity_public.hex()
         }
-        
+
         key_path = os.path.join(self.storage_path, f"{user_id}_keys.json")
         with open(key_path, "w", encoding="utf-8") as f:
             json.dump(key_data, f)
-        
+
         logger.info("Saved keys for user: %s", user_id)
 
     def load_user_keys(self, user_id: str) -> bool:
         """Load user keys from storage."""
         key_path = os.path.join(self.storage_path, f"{user_id}_keys.json")
-        
+
         if not os.path.exists(key_path):
             return False
-        
+
         with open(key_path, "r", encoding="utf-8") as f:
             key_data = json.load(f)
-        
+
         identity_key_bytes = bytes.fromhex(key_data["identity_key"])
         identity_key = x25519.X25519PrivateKey.from_private_bytes(identity_key_bytes)
-        
+
         self.user_keys[user_id] = UserKeyPair(
             identity_key=identity_key,
             identity_public=bytes.fromhex(key_data["identity_public"]),
             user_id=user_id
         )
-        
+
         logger.info("Loaded keys for user: %s", user_id)
         return True

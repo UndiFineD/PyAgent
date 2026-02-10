@@ -60,6 +60,7 @@ from src.infrastructure.swarm.fleet.mixins.fleet_update_mixin import \
 from src.infrastructure.swarm.fleet.orchestrator_registry import \
     OrchestratorRegistry
 from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
+from src.infrastructure.swarm.fleet.rl_selector import RLSelector
 from src.observability.structured_logger import StructuredLogger
 from src.infrastructure.swarm.topology_reporter import SwarmTopologyReporter
 from src.infrastructure.security.firewall.zero_trust import ZeroTrustFirewall
@@ -140,6 +141,8 @@ class FleetManager(
 
         # Phase 320: Resource Monitoring & Autonomous Balancing
         self.resource_monitor = ResourceMonitor(fleet=self)
+        self.borrowed_helpers: Dict[str, Any] = {} # Phase 320: Cluster Balancing Helpers
+        self.rl_selector = RLSelector() # Phase 321: RL-based Routing
         asyncio.create_task(self.resource_monitor.start())
         asyncio.create_task(self.evolution_loop.start())
         asyncio.create_task(self._topology_loop())

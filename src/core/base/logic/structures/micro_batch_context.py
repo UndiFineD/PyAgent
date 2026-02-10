@@ -24,6 +24,7 @@ batch state, and nested batch scopes. Useful for distributed and pipelined GPU w
 import threading
 from typing import Any, Dict, Optional
 
+
 class MicroBatchContext:
     """
     Context manager for micro-batch execution state.
@@ -54,5 +55,6 @@ class MicroBatchContext:
 
     def set(self, key: str, value: Any) -> None:
         self.variables[key] = value
+
 
 __all__ = ["MicroBatchContext"]

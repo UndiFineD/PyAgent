@@ -198,11 +198,11 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
 
         raise TypeError(f"Invalid index type: {type(index)}")
 
-    def __setitem__(self, index: int, value: Any) -> None:
+    def __setitem__(self, index: int, value: Any) -> None:  # type: ignore[override]
         """Setting items is not supported."""
         raise TypeError("Cannot set logprobs in FlatLogprobs")
 
-    def __delitem__(self, index: int) -> None:
+    def __delitem__(self, index: int) -> None:  # type: ignore[override]
         """Deleting items is not supported."""
         raise TypeError("Cannot delete logprobs from FlatLogprobs")
 
@@ -263,13 +263,13 @@ def create_prompt_logprobs(flat_logprobs: bool = True) -> FlatLogprobs | list[Lo
         Empty container with None appended for first token
     """
     if flat_logprobs:
-        logprobs = FlatLogprobs()
+        lp_container: FlatLogprobs | list[LogprobsOnePosition | None] = FlatLogprobs()
     else:
-        logprobs: list[LogprobsOnePosition | None] = []
+        lp_container = []
 
     # Logprob of first prompt token is always None
-    logprobs.append(None)
-    return logprobs
+    lp_container.append(None)
+    return lp_container
 
 
 def create_sample_logprobs(flat_logprobs: bool = True) -> FlatLogprobs | list[LogprobsOnePosition]:

@@ -31,7 +31,7 @@ logger = logging.getLogger("pyagent.encrypted_memory")
 class EncryptedMemoryStore:
     """
     Encrypted wrapper for MemoryStore.
-    
+
     Provides transparent E2EE for user memories:
     - All memory content encrypted at rest
     - Per-user encryption keys
@@ -59,13 +59,13 @@ class EncryptedMemoryStore:
             "created_at": node.created_at,
             "updated_at": node.updated_at
         }
-        
+
         encrypted_blob = self.e2e_core.encrypt_user_data(
             user_id,
             data_type="memory",
             data=memory_data
         )
-        
+
         # Store encrypted blob in backend
         # Replace content with encrypted version
         encrypted_node = MemoryNode(
@@ -78,7 +78,7 @@ class EncryptedMemoryStore:
             created_at=node.created_at,
             updated_at=node.updated_at
         )
-        
+
         return await self.backend.store_memory(encrypted_node)
 
     async def get_memory(self, user_id: str, memory_id: str) -> Optional[MemoryNode]:
@@ -87,25 +87,25 @@ class EncryptedMemoryStore:
         Returns decrypted MemoryNode.
         """
         encrypted_node = await self.backend.get_memory(memory_id)
-        
+
         if not encrypted_node:
             return None
-        
+
         # Check if encrypted
         if not encrypted_node.content.startswith("encrypted:"):
             return encrypted_node  # Not encrypted, return as-is
-        
+
         # Decrypt content
         encrypted_hex = encrypted_node.content[10:]  # Remove "encrypted:" prefix
         encrypted_blob = bytes.fromhex(encrypted_hex)
-        
+
         try:
             decrypted_data = self.e2e_core.decrypt_user_data(
                 user_id,
                 data_type="memory",
                 data=encrypted_blob
             )
-            
+
             # Reconstruct MemoryNode
             return MemoryNode(
                 id=decrypted_data["id"],
@@ -134,18 +134,18 @@ class EncryptedMemoryStore:
         """
         # Search using backend (embeddings are unencrypted)
         results = await self.backend.search_similar(query_embedding, limit, threshold)
-        
+
         # Decrypt results
         decrypted_results = []
         for node, score in results:
             # Only return memories belonging to this user
             if node.metadata.get("user_id") != user_id:
                 continue
-            
+
             decrypted_node = await self.get_memory(user_id, node.id)
             if decrypted_node:
                 decrypted_results.append((decrypted_node, score))
-        
+
         return decrypted_results
 
     async def update_memory(self, user_id: str, memory_id: str, updates: Dict[str, Any]) -> bool:
@@ -154,7 +154,7 @@ class EncryptedMemoryStore:
         current_node = await self.get_memory(user_id, memory_id)
         if not current_node:
             return False
-        
+
         # Apply updates
         if "content" in updates:
             current_node.content = updates["content"]
@@ -164,7 +164,7 @@ class EncryptedMemoryStore:
             current_node.tags = updates["tags"]
         if "metadata" in updates:
             current_node.metadata.update(updates["metadata"])
-        
+
         # Re-encrypt and store
         await self.store_memory(user_id, current_node)
         return True
@@ -175,5 +175,5 @@ class EncryptedMemoryStore:
         node = await self.get_memory(user_id, memory_id)
         if not node:
             return False
-        
+
         return await self.backend.delete_memory(memory_id)

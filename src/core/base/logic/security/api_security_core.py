@@ -30,7 +30,6 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Set
 
 
-
 @dataclass
 class AgentCredentials:
     """Credentials for agent authentication."""
@@ -193,7 +192,13 @@ class APISecurityCore:
         self.error_handler = ErrorHandler()
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    async def secure_communication(self, sender_id: str, receiver_id: str, message: Dict[str, Any], token: str) -> Dict[str, Any]:
+    async def secure_communication(
+        self,
+        sender_id: str,
+        receiver_id: str,
+        message: Dict[str, Any],
+        token: str
+    ) -> Dict[str, Any]:
         """Secure agent-to-agent communication."""
         try:
             # Authenticate sender

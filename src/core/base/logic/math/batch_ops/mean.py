@@ -24,6 +24,7 @@ except ImportError:
     HAS_TORCH = False
 import numpy as np
 
+
 def mean_batch_invariant(
     tensor: Any,
     dim: int | tuple[int, ...] | None = None,

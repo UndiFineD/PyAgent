@@ -58,8 +58,7 @@ try:
 
     _BRIDGE = get_bridge()
     HAS_RUST = hasattr(_BRIDGE, "event_query_rust")
-except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+except Exception:  # pylint: disable=broad-exception-caught
     HAS_RUST = False
     _BRIDGE = None
 
@@ -348,11 +347,14 @@ class CudaStreamPool:
             return stream
 
         # Compute streams
-        list(map(lambda _: _create_and_add(StreamPriority.NORMAL, self._compute_streams, self._free_compute), range(self.compute_streams_count)))
+        for _ in range(self.compute_streams_count):
+            _create_and_add(StreamPriority.NORMAL, self._compute_streams, self._free_compute)
         # Communication streams
-        list(map(lambda _: _create_and_add(StreamPriority.NORMAL, self._comm_streams, self._free_comm), range(self.comm_streams_count)))
+        for _ in range(self.comm_streams_count):
+            _create_and_add(StreamPriority.NORMAL, self._comm_streams, self._free_comm)
         # High priority streams
-        list(map(lambda _: _create_and_add(StreamPriority.HIGH, self._high_priority_streams, self._free_high), range(self.high_priority_count)))
+        for _ in range(self.high_priority_count):
+            _create_and_add(StreamPriority.HIGH, self._high_priority_streams, self._free_high)
 
     def acquire_compute(
         self,
@@ -557,10 +559,13 @@ class CudaStreamPool:
         """Clear all stream affinities."""
         with self._lock:
             self._affinity_map.clear()
+
             def _clear_stream_affinity(s):
                 s.affinity_key = None
                 return s
-            list(map(_clear_stream_affinity, self._compute_streams + self._comm_streams))
+
+            all_managed = self._compute_streams + self._comm_streams
+            list(map(_clear_stream_affinity, all_managed))
 
     @property
     def stats(self) -> dict[str, Any]:

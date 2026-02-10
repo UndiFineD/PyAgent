@@ -48,6 +48,7 @@ from src.core.base.mixins.governance_mixin import GovernanceMixin
 # Import Mixins for Synaptic Modularization (Phase 317)
 from src.core.base.mixins.environment_mixin import EnvironmentMixin
 from src.core.base.mixins.identity_mixin import IdentityMixin
+from src.core.base.mixins.rl_optimization_mixin import RLOptimizationMixin
 from src.core.base.mixins.knowledge_mixin import KnowledgeMixin
 from src.core.base.mixins.multimodal_mixin import MultimodalMixin
 from src.core.base.mixins.orchestration_mixin import OrchestrationMixin
@@ -84,6 +85,7 @@ __version__ = VERSION
 # pylint: disable=too-many-ancestors, too-many-instance-attributes
 class BaseAgent(
     IdentityMixin,
+    RLOptimizationMixin, # Phase 321
     PersistenceMixin,
     KnowledgeMixin,
     OrchestrationMixin,
@@ -138,6 +140,7 @@ class BaseAgent(
 
     def __init__(self, file_path: str = ".", **kwargs: Any) -> None:
         """Initialize the BaseAgent with decentralized initialization."""
+        super().__init__(**kwargs) # Phase 317: Ensure all mixins are initialized
         self.file_path = Path(file_path)
         self._workspace_root = kwargs.get("repo_root") or BaseCore.detect_workspace_root(self.file_path)
         self.agent_logic_core = BaseAgentCore()
@@ -173,6 +176,7 @@ class BaseAgent(
         Executes a task based on a Logic Manifest.
         This is the entry point for the Universal Agent's cognitive loop.
         """
+        start_time = time.time()
         # Load any task-specific skills dynamically
         required_skills = task_manifest.get("required_skills", [])
         for skill in required_skills:
@@ -180,6 +184,13 @@ class BaseAgent(
 
         # Execute reasoning phase
         context = task_manifest.get("context", "")
+        
+        # Phase 321: RL-Guided Cognitive Loop
+        best_action = self.get_best_action(context)
+        if best_action:
+            logger.info("RLOptimization: Using learned policy for state: %s", context[:50])
+            # Implementation can expand to use best_action to guide ReasoningCore
+        
         plan = await self.reasoning_core.reason(context)
         
         # Dispatch to appropriate skills
@@ -190,9 +201,15 @@ class BaseAgent(
             safe = await self.scam_detector.audit_response(context, str(plan), [])
             if not safe:
                 logger.danger("Audit failed: Hallucination or Scam detected!")
+                # Record negative reward
+                self.record_step(action="reason", reward=-1.0, next_state="blocked", done=True)
                 return {"status": "blocked", "reason": "audit_failed"}
 
-        # Logic for executing plan steps...
+        # Success! Record positive reward indexed by latency
+        latency = time.time() - start_time
+        reward = max(0.0, 1.0 - (latency / 10.0)) # Reward based on speed, min 0
+        self.record_step(action="reason", reward=reward, next_state="success", done=True)
+
         return {"status": "success", "agent_mode": self.manifest.role, "result": plan}
 
         self.previous_content = ""
