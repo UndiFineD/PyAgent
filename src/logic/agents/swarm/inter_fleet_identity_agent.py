@@ -8,30 +8,15 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 """
-InterFleetIdentityAgent: Swarm agent for managing identity, authentication, and trust relationships between multiple PyAgent fleets.
-Supports secure federation, cross-fleet authorization, and distributed identity management.
+InterFleetIdentityAgent: Swarm agent for managing identity, authentication, and trust relationships
+between PyAgent fleets. Supports secure federation, cross-fleet authorization, and distributed
+identity management.
 """
-
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Inter fleet identity agent.py module.
-"""
-
 
 from __future__ import annotations
 
@@ -71,12 +56,12 @@ class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         signature = self.core.sign_payload(payload, secret)
         return {"fleet_id": self.fleet_id, "payload": payload, "signature": signature}
 
-    def register_remote_fleet(self, fleet_id: str, metadata: dict[str, Any]) -> bool:
+    def register_remote_fleet(self, fleet_id: str, metadata: dict[str, Any]) -> dict[str, Any]:
         """Registers a remote fleet to enable inter-fleet communication."""
         self.known_fleets[fleet_id] = metadata
         return {"status": "registered", "fleet_id": fleet_id}
 
-    def authorize_remote_agent(self, agent_id: str, remote_fleet_id: str, permissions: list[str]) -> bool:
+    def authorize_remote_agent(self, agent_id: str, remote_fleet_id: str, permissions: list[str]) -> dict[str, Any]:
         """Authorizes an agent from a remote fleet with specific permissions."""
         if remote_fleet_id not in self.known_fleets:
             return {"status": "error", "message": "Unknown fleet ID"}

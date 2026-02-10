@@ -24,7 +24,7 @@ class ArchiveIntelligence:
     Refactored logic from Archive Alchemist for safe archive analysis.
     Focuses on detecting malicious patterns like ZipSlip or massive compression ratios.
     """
-    
+
     @staticmethod
     async def analyze_zip(file_path: str) -> dict:
         results: dict[str, Any] = {"vulnerabilities": [], "files": []}
@@ -38,7 +38,7 @@ class ArchiveIntelligence:
                             "file": info.filename,
                             "severity": "High"
                         })
-                    
+
                     # Detect massive expansion ratio (ZipBomb)
                     if info.file_size > 0:
                         ratio = info.compress_size / info.file_size
@@ -49,7 +49,7 @@ class ArchiveIntelligence:
                                 "ratio": ratio,
                                 "severity": "Medium"
                             })
-                    
+
                     results["files"].append(info.filename)
         except Exception as e:
             results["error"] = str(e)

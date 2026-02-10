@@ -6,6 +6,9 @@ from __future__ import annotations
 import logging
 import asyncio
 import json
+import time
+import base64
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.resilience.distributed_backup import DistributedBackup
@@ -24,13 +27,14 @@ class HolographicStateOrchestrator:
     def __init__(self, fleet=None) -> None:
         self.fleet = fleet
         self.version = VERSION
-        self.backup_node = None
-        if fleet:
-            # Use the fleet's existing backup node if available
-            self.backup_node = getattr(fleet, "backup_node", DistributedBackup(node_id=f"hologram-{id(self)}"))
+        self.agent_id = "hologram_orchestrator"
+
+        # RAID-10 Sharding engine (Phase 330)
+        if self.fleet and hasattr(self.fleet, "backup_node"):
+            self.backup_node = self.fleet.backup_node
         else:
-            self.backup_node = DistributedBackup(node_id=f"hologram-standalone-{id(self)}")
-        
+            self.backup_node = DistributedBackup(node_id=self.agent_id)
+
         self.local_holograms: Dict[str, Dict[str, Any]] = {}
         logger.info("HolographicStateOrchestrator: Initialized (Phase 330).")
 
@@ -49,16 +53,22 @@ class HolographicStateOrchestrator:
         shards_created = 0
         for angle, data in perspectives.items():
             # Create shards for this specific perspective using RAID-10 logic
+            # Use a combined hash to allow global search by hologram_id while keeping angles distinct
             perspective_shards = self.backup_node.create_shards({
                 "hologram_id": hologram_id,
                 "perspective": angle,
                 "data": data,
                 "timestamp": hologram_data.get("timestamp", 0)
-            })
+            }, custom_hash=f"{hologram_id}_{angle}")
             
             # Record locally
             self.local_holograms[f"{hologram_id}_{angle}"] = data
-            
+
+            # Phase 330: Store at least one set of shards locally for others to query
+            for shard in perspective_shards:
+                if shard["mirror_index"] == 0:
+                    self.backup_node.store_shard_locally(shard)
+
             # Mirror shards to neighbors
             if self.fleet and hasattr(self.fleet, "voyager_transport"):
                 await self._mirror_to_neighbors(perspective_shards)
@@ -84,9 +94,33 @@ class HolographicStateOrchestrator:
             return self.local_holograms[local_key]
 
         logger.info(f"Holographic: Reconstructing perspective '{angle}' for '{hologram_id}' from swarm...")
-        
-        # In a real swarm, we'm query neighbors for shards with 'hologram_id' and 'perspective'
-        return None  # Placeholder for actual swarm fetching logic
+
+        if not self.fleet or not hasattr(self.fleet, "voyager_discovery"):
+            logger.warning("Holographic: Swarm transport unavailable for reconstruction.")
+            return None
+
+        # Phase 330: Try to find local RAID shards first
+        matching_shards = self.backup_node.get_local_shards_for_hash(hologram_id)
+        if matching_shards:
+            reconstructed = self.backup_node.reassemble_state({s["shard_id"]: s for s in matching_shards})
+            if reconstructed and angle in reconstructed:
+                logger.info(f"Holographic: Reconstructed '{angle}' from local shards.")
+                return reconstructed[angle]
+
+        # Future: P2P query to neighbors for missing shards
+        return None
+
+    async def handle_projection(self, projection_msg: Dict[str, Any]):
+        """Handles incoming metadata 'projections' from peers."""
+        hologram_id = projection_msg.get("hologram_id")
+        angles = projection_msg.get("angles", [])
+        source = projection_msg.get("sender_id")
+
+        logger.info(f"Holographic: Peer {source} projected hologram {hologram_id[:8]} (Angles: {angles})")
+
+    async def find_local_hologram_shards(self, hologram_id: str) -> List[Dict[str, Any]]:
+        """Returns shards stored locally for a given hologram ID."""
+        return self.backup_node.get_local_shards_for_hash(hologram_id)
 
     async def _mirror_to_neighbors(self, shards: List[Dict[str, Any]]):
         """Sends shards to different neighbor nodes for redundancy."""
@@ -103,9 +137,10 @@ class HolographicStateOrchestrator:
             addr = peer.get("addr")
             port = peer.get("port", 5555)
             
+            sender_id = f"fleet-{self.fleet.workspace_root.name}" if self.fleet and hasattr(self.fleet, "workspace_root") else self.agent_id
             msg = {
                 "type": "shard_store",
-                "sender_id": f"fleet-{self.fleet.workspace_root.name}",
+                "sender_id": sender_id,
                 "shard": shard
             }
             # Fire and forget mirroring
@@ -113,11 +148,12 @@ class HolographicStateOrchestrator:
 
     async def _broadcast_projection(self, hologram_id: str, angles: List[str]):
         """Broadcasts a compact 'projection' of the hologram metadata (Pillar 8)."""
+        sender_id = f"fleet-{self.fleet.workspace_root.name}" if self.fleet and hasattr(self.fleet, "workspace_root") else self.agent_id
         projection = {
             "type": "hologram_projection",
             "hologram_id": hologram_id,
             "angles": angles,
-            "sender_id": f"fleet-{self.fleet.workspace_root.name}"
+            "sender_id": sender_id
         }
         
         if self.fleet and hasattr(self.fleet, "voyager_transport"):

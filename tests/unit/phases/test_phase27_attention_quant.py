@@ -35,7 +35,7 @@ class TestPagedAttentionEngine:
     def test_attention_config_creation(self):
         """Test AttentionConfig dataclass."""
         from src.infrastructure.engine.attention.paged_attention_engine import (
-            AttentionConfig, AttentionType, KVCacheDtype
+            AttentionConfig
         )
 
         config = AttentionConfig(
@@ -72,10 +72,10 @@ class TestPagedAttentionEngine:
         table = BlockTable(num_blocks=100, block_size=16)
 
         # Allocate blocks for a sequence
-        block1 = table.allocate_block(seq_id=1)
-        block2 = table.allocate_block(seq_id=1)
-        block3 = table.allocate_block(seq_id=1)
-        block4 = table.allocate_block(seq_id=1)
+        table.allocate_block(seq_id=1)
+        table.allocate_block(seq_id=1)
+        table.allocate_block(seq_id=1)
+        table.allocate_block(seq_id=1)
 
         # Should have allocated 4 blocks
         assert table.num_allocated_blocks(seq_id=1) == 4
@@ -579,7 +579,7 @@ class TestLoRAManager:
     def test_lora_manager_request_binding(self):
         """Test LoRAManager per-request adapter binding."""
         from src.infrastructure.engine.adapters.lo_ra_manager import (
-            LoRAManager, LoRAConfig
+            LoRAManager
         )
 
         manager = LoRAManager()

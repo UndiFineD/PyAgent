@@ -7,7 +7,6 @@ Test Phase62 Fusion module.
 # Tests for Phase 62: Weighted Expert Fusion
 
 import pytest
-import asyncio
 from unittest.mock import MagicMock, AsyncMock
 from src.infrastructure.swarm.orchestration.swarm.expert_fusion import WeightedExpertFusion
 from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatekeeper

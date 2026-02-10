@@ -16,7 +16,6 @@ Test Phase81 Load Balancer module.
 """
 
 import pytest
-import asyncio
 from unittest.mock import MagicMock, AsyncMock
 from src.infrastructure.swarm.orchestration.swarm.load_balancer import SwarmLoadBalancer
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager, ContextShard

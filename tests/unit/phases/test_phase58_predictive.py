@@ -7,8 +7,6 @@ Test Phase58 Predictive module.
 # Tests for Phase 58: Predictive Workspace & Pre-allocation
 
 import pytest
-import asyncio
-import time
 from src.infrastructure.engine.workspace.workspace_manager import WorkspaceManager
 from src.infrastructure.engine.workspace.predictive_workspace import PredictiveWorkspace
 

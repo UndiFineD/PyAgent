@@ -18,8 +18,6 @@ Phase 42: Prompt Renderer System Tests
 Tests for the prompt rendering infrastructure.
 """
 
-import pytest
-from unittest.mock import Mock, MagicMock, patch
 
 # Import from the package
 from src.infrastructure.engine.prompt_renderer import (

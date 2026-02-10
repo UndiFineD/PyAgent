@@ -3,8 +3,6 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import pytest
-import asyncio
-import numpy as np
 from src.infrastructure.swarm.orchestration.swarm.swarm_training import SwarmTrainingCoordinator
 
 @pytest.mark.asyncio

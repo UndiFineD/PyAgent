@@ -18,10 +18,6 @@ Tests structured task tracking and management inspired by Adorable's todo tool.
 """
 
 import pytest
-import json
-import tempfile
-from pathlib import Path
-from unittest.mock import patch
 
 from src.core.base.mixins.task_manager_mixin import TaskManagerMixin, TaskItem
 from src.core.base.common.models.communication_models import CascadeContext
@@ -55,7 +51,7 @@ class TestTaskManager:
     def test_initialization(self, task_manager):
         """Test initialization of task manager."""
         assert task_manager.tasks == []
-        assert task_manager.auto_save == True
+        assert task_manager.auto_save
         assert task_manager.max_tasks == 50
 
     def test_task_item_creation(self):
@@ -63,18 +59,18 @@ class TestTaskManager:
         task = TaskItem(description="Test task", priority=2)
 
         assert task.description == "Test task"
-        assert task.completed == False
+        assert not task.completed
         assert task.priority == 2
         assert task.completed_at is None
 
         # Test completion
         task.complete()
-        assert task.completed == True
+        assert task.completed
         assert task.completed_at is not None
 
         # Test reset
         task.reset()
-        assert task.completed == False
+        assert not task.completed
         assert task.completed_at is None
 
     def test_task_item_serialization(self):
@@ -89,7 +85,7 @@ class TestTaskManager:
 
         data = task.to_dict()
         assert data["description"] == "Test task"
-        assert data["completed"] == True
+        assert data["completed"]
         assert data["priority"] == 3
         assert data["created_at"] == 1234567890.0
         assert data["completed_at"] == 1234567900.0
@@ -105,7 +101,7 @@ class TestTaskManager:
         """Test updating task list with empty list."""
         result = await task_manager.update_task_list([], cascade_context)
 
-        assert result["success"] == True
+        assert result["success"]
         assert "Updated 0 tasks" in result["message"]
         assert result["task_count"] == 0
         assert result["completed_count"] == 0
@@ -120,16 +116,16 @@ class TestTaskManager:
 
         result = await task_manager.update_task_list(task_data, cascade_context)
 
-        assert result["success"] == True
+        assert result["success"]
         assert result["task_count"] == 2
         assert result["completed_count"] == 1
 
         # Verify tasks were created
         assert len(task_manager.tasks) == 2
         assert task_manager.tasks[0].description == "Task 2"  # Higher priority first
-        assert task_manager.tasks[0].completed == True
+        assert task_manager.tasks[0].completed
         assert task_manager.tasks[1].description == "Task 1"
-        assert task_manager.tasks[1].completed == False
+        assert not task_manager.tasks[1].completed
 
     @pytest.mark.asyncio
     async def test_update_task_list_update_existing(self, task_manager, cascade_context):
@@ -144,14 +140,14 @@ class TestTaskManager:
 
         result = await task_manager.update_task_list(task_data, cascade_context)
 
-        assert result["success"] == True
+        assert result["success"]
         assert result["task_count"] == 1
         assert result["completed_count"] == 1
 
         # Verify task was updated
         task = task_manager.tasks[0]
         assert task.description == "Existing task"
-        assert task.completed == True
+        assert task.completed
         assert task.priority == 3
 
     @pytest.mark.asyncio
@@ -175,7 +171,7 @@ class TestTaskManager:
         """Test adding a new task."""
         result = await task_manager.add_task("New task", priority=2, cascade_context=cascade_context)
 
-        assert result["success"] == True
+        assert result["success"]
         assert result["task"]["description"] == "New task"
         assert result["task"]["priority"] == 2
         assert len(task_manager.tasks) == 1
@@ -187,7 +183,7 @@ class TestTaskManager:
 
         result = await task_manager.add_task("Duplicate task", cascade_context=cascade_context)
 
-        assert result["success"] == False
+        assert not result["success"]
         assert "already exists" in result["error"]
 
     @pytest.mark.asyncio
@@ -195,7 +191,7 @@ class TestTaskManager:
         """Test adding an empty task."""
         result = await task_manager.add_task("", cascade_context=cascade_context)
 
-        assert result["success"] == False
+        assert not result["success"]
         assert "cannot be empty" in result["error"]
 
     @pytest.mark.asyncio
@@ -205,8 +201,8 @@ class TestTaskManager:
 
         result = await task_manager.complete_task("Test task", cascade_context)
 
-        assert result["success"] == True
-        assert task_manager.tasks[0].completed == True
+        assert result["success"]
+        assert task_manager.tasks[0].completed
         assert task_manager.tasks[0].completed_at is not None
 
     @pytest.mark.asyncio
@@ -214,7 +210,7 @@ class TestTaskManager:
         """Test completing a nonexistent task."""
         result = await task_manager.complete_task("Nonexistent", cascade_context)
 
-        assert result["success"] == False
+        assert not result["success"]
         assert "not found" in result["error"]
 
     @pytest.mark.asyncio
@@ -226,7 +222,7 @@ class TestTaskManager:
 
         result = await task_manager.clear_completed_tasks(cascade_context)
 
-        assert result["success"] == True
+        assert result["success"]
         assert result["removed_count"] == 1
         assert result["remaining_tasks"] == 1
         assert len(task_manager.tasks) == 1
@@ -234,7 +230,7 @@ class TestTaskManager:
 
     def test_task_persistence(self, tmp_path):
         """Test task persistence to file."""
-        task_file = tmp_path / ".pyagent_tasks.json"
+        tmp_path / ".pyagent_tasks.json"
 
         # Create manager with persistence
         manager1 = TaskManagerMixinImpl(_workspace_root=str(tmp_path))
@@ -249,9 +245,9 @@ class TestTaskManager:
 
         assert len(manager2.tasks) == 2
         assert manager2.tasks[0].description == "Task 1"
-        assert manager2.tasks[0].completed == True
+        assert manager2.tasks[0].completed
         assert manager2.tasks[1].description == "Task 2"
-        assert manager2.tasks[1].completed == False
+        assert not manager2.tasks[1].completed
 
     @pytest.mark.asyncio
     async def test_task_limit(self, task_manager):

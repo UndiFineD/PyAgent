@@ -2,7 +2,6 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-import pytest
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
 
 def test_tenant_isolation_gate():

@@ -19,7 +19,9 @@ import logging
 from typing import Any
 
 from src.core.base.logic.managers.resource_quota_manager import (
-    QuotaConfig, ResourceQuotaManager)
+    QuotaConfig,
+    ResourceQuotaManager
+)
 
 
 class GovernanceMixin:

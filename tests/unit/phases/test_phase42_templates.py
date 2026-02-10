@@ -18,8 +18,6 @@ Phase 42: Chat Template Registry Tests
 Tests for the chat template infrastructure.
 """
 
-import pytest
-from unittest.mock import Mock, MagicMock, patch
 
 # Import from the package
 from src.infrastructure.engine.chat_templates import (
@@ -30,7 +28,6 @@ from src.infrastructure.engine.chat_templates import (
     JinjaTemplate,
     TemplateResolver,
     TemplateConfig,
-    TemplateInfo,
     RenderOptions,
     detect_template_type,
     get_template,

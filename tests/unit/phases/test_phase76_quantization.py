@@ -3,7 +3,6 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import pytest
-import asyncio
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
 from src.infrastructure.engine.kv_cache.compression import AdaptiveSwarmCompressor
 

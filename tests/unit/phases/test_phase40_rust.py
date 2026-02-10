@@ -20,8 +20,6 @@ Tests for Phase 40 Rust functions.
 """
 
 import pytest
-import numpy as np
-from typing import List, Tuple
 
 # Import Rust functions
 try:

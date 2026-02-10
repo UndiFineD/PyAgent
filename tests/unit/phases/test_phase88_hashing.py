@@ -16,7 +16,6 @@ Test Phase88 Hashing module.
 """
 
 import numpy as np
-import pytest
 from src.infrastructure.swarm.orchestration.swarm.semantic_hashing import SemanticHasher
 
 def test_semantic_hashing_collision():

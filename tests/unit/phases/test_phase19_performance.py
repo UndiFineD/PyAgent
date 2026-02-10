@@ -26,9 +26,7 @@ Tests for:
 Phase 19: Beyond vLLM - Performance
 """
 import pytest
-import time
 import threading
-from concurrent.futures import Future
 from queue import Empty
 
 
@@ -397,7 +395,7 @@ class TestPriorityScheduler:
     def test_basic_scheduling(self):
         """Test basic task scheduling."""
         from src.infrastructure.engine.scheduling.priority_scheduler import (
-            PriorityScheduler, TaskPriority
+            PriorityScheduler
         )
 
         scheduler = PriorityScheduler(workers=2)
@@ -543,7 +541,7 @@ class TestConnectionPool:
             pool.release(conn2)
 
             # Reacquire (should reuse)
-            conn3 = pool.acquire()
+            pool.acquire()
             assert pool.stats.reused >= 1
         finally:
             pool.close()
@@ -563,7 +561,7 @@ class TestConnectionPool:
         )
 
         try:
-            conn = pool.acquire()
+            pool.acquire()
 
             # Second acquire should timeout
             with pytest.raises(TimeoutError):

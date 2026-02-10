@@ -22,13 +22,6 @@ Tests cover:
 - Rust accelerations (image resize, audio resample, grammar compile)
 """
 
-import asyncio
-import json
-import re
-import time
-from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Set
-from unittest.mock import MagicMock, patch
 
 import numpy as np
 import pytest
@@ -240,7 +233,6 @@ class TestMultiModalRegistry:
     def test_process_inputs(self):
         """Test processing multiple inputs."""
         from src.infrastructure.engine.multimodal import (
-            ModalityType,
             MultiModalConfig,
             MultiModalData,
             MultiModalRegistry,
@@ -620,7 +612,6 @@ class TestDPCoordinator:
         from src.infrastructure.swarm.orchestration.core.distributed_coordinator import (
             DPCoordinator,
             EngineIdentity,
-            EngineState,
             ParallelConfig,
         )
 
@@ -732,7 +723,6 @@ class TestMPClient:
             BaseWorker,
             MPClient,
             ParallelConfig,
-            WorkerIdentity,
         )
 
         class MockWorker(BaseWorker):
@@ -761,7 +751,6 @@ class TestDistributedExecutor:
             BaseWorker,
             ParallelConfig,
             create_distributed_executor,
-            WorkerIdentity,
         )
 
         class MockWorker(BaseWorker):
@@ -943,7 +932,6 @@ class TestMultiModalIntegration:
     def test_full_image_pipeline(self):
         """Test full image processing pipeline."""
         from src.infrastructure.engine.multimodal import (
-            ModalityType,
             MultiModalConfig,
             MultiModalData,
             MultiModalRegistry,

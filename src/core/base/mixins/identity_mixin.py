@@ -53,8 +53,9 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
             # pylint: disable=import-outside-toplevel
             import asyncio
 
-            from src.infrastructure.swarm.orchestration.signals.signal_registry import \
+            from src.infrastructure.swarm.orchestration.signals.signal_registry import (
                 SignalRegistry
+            )
 
             signals = SignalRegistry()
             # Note: We expect the class using this mixin to have agent_logic_core

@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import unittest
-import os
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from src.logic.agents.security.privacy_guard_agent import PrivacyGuardAgent
 from src.logic.agents.system.messaging_agent import MessagingAgent
@@ -108,7 +107,7 @@ class TestPhase123FinalRealization(unittest.TestCase):
 
             self.fleet.memory = MockMemory()
 
-        pruned = pruner.prune_underutilized(threshold=0.0)
+        pruner.prune_underutilized(threshold=0.0)
 
         if hasattr(self.fleet.memory, "deleted"):
             self.assertEqual(len(self.fleet.memory.deleted), 110)  # 10% of 1100

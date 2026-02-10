@@ -20,7 +20,6 @@ Tests for the actual KVCacheCoordinator implementation API.
 
 import pytest
 import time
-from typing import Optional
 
 # Python implementations
 from src.infrastructure.engine.kv_cache_coordinator import (
@@ -375,7 +374,7 @@ class TestKVCacheCoordinator:
             config=basic_config,
             max_model_len=2048,
         )
-        blocks = coord.allocate(request_id="req_001", num_tokens=80)
+        coord.allocate(request_id="req_001", num_tokens=80)
         coord.free(request_id="req_001")
 
     def test_get_stats(self, basic_config):

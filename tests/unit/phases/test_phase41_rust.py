@@ -42,9 +42,7 @@ Rust Function Signatures (from inference.rs):
 """
 
 import pytest
-import json
 import math
-from typing import Optional
 
 # Try to import rust_core module
 try:

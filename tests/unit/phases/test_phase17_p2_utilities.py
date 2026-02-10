@@ -23,7 +23,6 @@ Tests for:
 Phase 17: vLLM Pattern Integration (P2)
 """
 import pytest
-import sys
 import time
 import hashlib
 

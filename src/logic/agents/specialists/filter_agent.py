@@ -47,10 +47,10 @@ class FilterAgent(BaseAgent):
     async def apply_vision_filter(self, frame_data: Any, filter_type: str = "detect_objects") -> Dict[str, Any]:
         """Applies a vision-based filter to the stream (e.g., OCR, Object Detection, Depth)."""
         logging.info(f"Applying vision filter: {filter_type}")
-        
+
         # In a real scenario, this would call the VideoProcessor with specific weights
         res, meta = self.video_processor.process((frame_data, {"type": "raw"}))
-        
+
         return {
             "status": "filtered",
             "type": filter_type,
@@ -62,9 +62,9 @@ class FilterAgent(BaseAgent):
     async def apply_audio_filter(self, audio_data: Any, filter_type: str = "pitch_shift") -> Dict[str, Any]:
         """Applies an audio-based filter (e.g., Echo cancellation, Voice cloning, EQ)."""
         logging.info(f"Applying audio filter: {filter_type}")
-        
+
         features, meta = self.audio_processor.process((audio_data, 16000))
-        
+
         return {
             "status": "filtered",
             "type": filter_type,
@@ -77,7 +77,7 @@ class FilterAgent(BaseAgent):
         """Applies a text-based filter (e.g., PII removal, Sentiment neutralization, Summarization)."""
         if filter_type == "PII":
             return "[REDACTED]"
-        
+
         prompt = f"Apply a '{filter_type}' filter to this text output:\n\n{text}"
         return await self.improve_content(prompt)
 

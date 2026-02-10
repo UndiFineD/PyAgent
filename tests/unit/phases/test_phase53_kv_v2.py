@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
 import torch
 from src.infrastructure.engine.kv_cache.v2.block_table import BlockTableV2
 from src.infrastructure.engine.kv_cache.v2.kv_cache_interface import KVCacheInterfaceV2

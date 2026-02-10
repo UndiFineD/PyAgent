@@ -7,7 +7,6 @@ Test Phase65 Compression module.
 # Tests for Phase 65: Adaptive Swarm Compression
 
 import pytest
-import asyncio
 import time
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
 from src.infrastructure.engine.kv_cache.compression import AdaptiveSwarmCompressor

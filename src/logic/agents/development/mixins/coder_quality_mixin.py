@@ -40,7 +40,7 @@ class CoderQualityMixin:
     ) -> QualityScore:
         """Aggregate all analysis into a single QualityScore."""
         from src.core.rust_bridge import RustBridge
-        
+
         score = QualityScore()
         score.maintainability = min(100, metrics.maintainability_index)
 

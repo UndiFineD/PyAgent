@@ -355,7 +355,7 @@ def displayResults():
 
 print(
     bcolors.OKBLUE
-    + """ 
+    + """
 
 :::'###::::'########::'##:::'##:'########:'##::: ##:'##::::'##:'##::::'##:
 ::'## ##::: ##.... ##: ##::'##:: ##.....:: ###:: ##: ##:::: ##: ###::'###:
@@ -368,7 +368,7 @@ print(
 	"""
     + bcolors.OKRED
     + bcolors.BOLD
-    + """         				
+    + """
                   # Developed By Shiv Sahni - @shiv__sahni
 """
     + bcolors.ENDC

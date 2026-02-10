@@ -21,8 +21,10 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
-from src.core.base.common.multimodal_core import (MultimodalCore,
-                                                  MultimodalStreamSession)
+from src.core.base.common.multimodal_core import (
+    MultimodalCore,
+    MultimodalStreamSession
+)
 
 
 class MultimodalMixin:

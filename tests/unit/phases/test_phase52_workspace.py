@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import pytest
-import time
 from src.infrastructure.engine.workspace.workspace_manager import WorkspaceManager
 from src.infrastructure.engine.workspace.ubatching_utils import UBatchingUtils
 from src.infrastructure.engine.workspace.memory_profiler import MemoryProfiler

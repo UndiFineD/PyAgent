@@ -102,7 +102,7 @@ class OllamaConnectorAgent(BaseAgent):
     ) -> Dict[str, Any]:
         """
         Runs a local inference request using OpenAI-compatible endpoints.
-        
+
         Args:
             prompt: User query or code prefix (if suffix is present).
             model: Model name.
@@ -110,7 +110,7 @@ class OllamaConnectorAgent(BaseAgent):
             suffix: Code suffix for FIM (Fill-In-The-Middle) tasks.
             reasoning: If True, parses deepseek-r1 <think> tags.
             json_schema: If provided, enforcing JSON output (Ollama output format).
-            
+
         Returns:
             Dict containing 'content', 'reasoning_trace', and 'cost'.
         """
@@ -142,7 +142,7 @@ class OllamaConnectorAgent(BaseAgent):
                 if json_schema:
                     # Ollama simple JSON mode or structured output if supported
                     extra_args["response_format"] = {"type": "json_object"}
-                
+
                 response = await self.client.chat.completions.create(
                     model=model,
                     messages=messages,
@@ -159,7 +159,7 @@ class OllamaConnectorAgent(BaseAgent):
                         response_content = re.sub(r"<think>.*?</think>", "", response_content, flags=re.DOTALL).strip()
 
             result_payload = {
-                "content": response_content, 
+                "content": response_content,
                 "reasoning_trace": reasoning_content,
                 "model": model,
                 "provider": "ollama"

@@ -19,18 +19,14 @@
 Tests for ToolParserFramework module.
 """
 
-import pytest
 import json
-from unittest.mock import Mock, patch
 
 from src.infrastructure.services.tools.tool_parser_framework import (
     ToolParserType,
     ToolCallStatus,
-    ToolParameter,
     ToolCall,
     ToolParseResult,
     StreamingToolState,
-    ToolParser,
     JsonToolParser,
     HermesToolParser,
     Llama3ToolParser,
@@ -433,7 +429,7 @@ class TestStreamingToolParser:
         parser.feed('{"name": "test')
         parser.feed('", "arguments": {}}')
 
-        result = parser.finalize()
+        parser.finalize()
         # Result should contain parsed tools or buffer
 
     def test_reset(self):

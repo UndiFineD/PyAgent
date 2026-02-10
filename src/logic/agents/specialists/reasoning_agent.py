@@ -73,7 +73,7 @@ class ReasoningAgent(BaseAgent):
         self.config_manager = ConfigCore()
         shard_config = self.config_manager.load_config("sharding")
         self.sharding_engine = ShardingCore(cluster_size=shard_config.get("shard_count", 1))
-        
+
         self._system_prompt = (
             "You are the Reasoning Agent. Your goal is to provide deep, recursive thoughts "
             "on complex problems. Use <thought> blocks to explore multiple hypotheses "

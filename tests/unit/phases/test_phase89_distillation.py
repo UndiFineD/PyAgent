@@ -16,7 +16,6 @@ Test Phase89 Distillation module.
 """
 
 import numpy as np
-import pytest
 from src.infrastructure.swarm.orchestration.swarm.context_distillation import ContextDistiller
 
 def test_context_distillation():
@@ -39,7 +38,7 @@ def test_context_distillation():
     idx = metadata["indices"][0]
     assert np.allclose(reconstructed[idx], kv_data[idx])
 
-    print(f"\n[Phase 89] Context distillation reduced 128 tokens to 32 tokens successfully.")
+    print("\n[Phase 89] Context distillation reduced 128 tokens to 32 tokens successfully.")
 
 def test_attention_aware_distillation():
     distiller = ContextDistiller(target_reduction=0.5)

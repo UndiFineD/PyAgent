@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class ExpertMinerAgent(BaseAgent):
     """
     The Expert Miner analyzes 'Trace Artifacts' from failed or sub-optimal tasks
-    to identify missing expertise 'shards'. It then 'mines' a new specialized 
+    to identify missing expertise 'shards'. It then 'mines' a new specialized
     agent definition (Class/Prompt/Tools).
     """
 
@@ -29,10 +29,10 @@ class ExpertMinerAgent(BaseAgent):
         Synthesizes a new specialist definition from a collection of failed reasoning traces.
         """
         logger.info(f"ExpertMiner: Analyzing {len(failed_traces)} failed traces for expertise gaps.")
-        
+
         # 1. Pattern Extraction (Simplified for now)
         common_missing_skills = self._extract_skills(failed_traces)
-        
+
         if not common_missing_skills:
             return {"status": "no_gap_found"}
 
@@ -50,7 +50,7 @@ class ExpertMinerAgent(BaseAgent):
 
         # 3. Code Generation (Phase 99 Placeholder)
         # In a full v4.0.0, this would generate the .py file and manifest entry
-        
+
         return {
             "status": "success",
             "specialist": specialist_def,
@@ -68,7 +68,7 @@ class ExpertMinerAgent(BaseAgent):
                 skills.append("NetworkOptimizer")
             elif "unauthorized" in error or "permission" in error:
                 skills.append("SecurityAuditor")
-        
+
         return sorted(list(set(skills)), key=lambda x: skills.count(x), reverse=True)
 
     def _recommend_tools(self, gap: str) -> List[str]:

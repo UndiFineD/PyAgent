@@ -20,6 +20,7 @@ class StreamingMixin:
     """
     Provides asynchronous streaming capabilities to agents for real-time output processing.
     """
+
     async def stream_response(
         self,
         generator: AsyncGenerator[Any, None],

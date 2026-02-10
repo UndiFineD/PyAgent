@@ -252,7 +252,7 @@ class TestLMStudioBackend:
         connectivity = MagicMock()
         connectivity.is_endpoint_available.return_value = False
 
-        backend = LMStudioBackend(
+        LMStudioBackend(
             session=MagicMock(),
             connectivity_manager=connectivity,
         )
@@ -389,7 +389,7 @@ class TestLMStudioConvenienceFunctions:
             mock_lmstudio.AsyncClient = MagicMock(return_value=mock_client)
             with patch.dict('sys.modules', {'lmstudio': mock_lmstudio}):
                 # _get_client should attempt to instantiate lmstudio.Client with the full base URL (including /v1)
-                client = backend._get_client()
+                backend._get_client()
                 mock_lmstudio.Client.assert_called_once_with("http://192.168.88.251:1234/v1")
         finally:
             del os.environ["DV_LMSTUDIO_BASE_URL"]

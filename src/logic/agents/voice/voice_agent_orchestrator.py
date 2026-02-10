@@ -27,27 +27,17 @@ Key Features:
 - Real-time audio processing
 """
 
-import os
-import json
 import base64
 import logging
-import threading
-import asyncio
-import time
-from datetime import datetime, timezone
-from pathlib import Path
-from typing import Dict, Any, Optional, List
-
-import websocket
+import os
 import pyaudio
-import numpy as np
+from typing import Dict, Any, List
+
 from rich.console import Console
 from rich.panel import Panel
-from rich.table import Table
 
 from src.core.base.base_agent import BaseAgent
 from src.core.base.common.models.communication_models import CascadeContext
-from src.logic.agents.swarm.graph_orchestration import Orchestrator, OrchestrationState
 
 
 class VoiceAgentOrchestrator(BaseAgent):

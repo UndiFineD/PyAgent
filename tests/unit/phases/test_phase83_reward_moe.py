@@ -55,4 +55,4 @@ async def test_routing_with_reward_bias():
     # 4. Expert B should win due to the reward boost even if similarities were equal
     # (Similarity calculation uses hash(domains) for random vec if none provided, but we set them equal)
     assert decision.selected_experts[0] == "expert_b"
-    print(f"\n[Phase 83] Reward predictor correctly prioritized 'expert_b' based on historical merit.")
+    print("\n[Phase 83] Reward predictor correctly prioritized 'expert_b' based on historical merit.")

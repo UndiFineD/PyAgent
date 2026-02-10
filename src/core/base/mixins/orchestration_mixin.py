@@ -32,8 +32,9 @@ class OrchestrationMixin:
 
         try:
             # pylint: disable=import-outside-toplevel
-            from src.infrastructure.swarm.orchestration.signals.signal_registry import \
+            from src.infrastructure.swarm.orchestration.signals.signal_registry import (
                 SignalRegistry
+            )
 
             self.registry = SignalRegistry()
         except (ImportError, ValueError):
@@ -41,8 +42,9 @@ class OrchestrationMixin:
 
         try:
             # pylint: disable=import-outside-toplevel
-            from src.infrastructure.swarm.orchestration.system.tool_registry import \
+            from src.infrastructure.swarm.orchestration.system.tool_registry import (
                 ToolRegistry
+            )
 
             self.tool_registry = ToolRegistry()
         except (ImportError, ValueError):
@@ -131,13 +133,13 @@ class OrchestrationMixin:
         """
         logging.info(f"Orchestration: Executing Logic Manifest with {len(manifest)} steps.")
         results = []
-        
+
         for step in manifest:
             action = step.get("action")
             params = step.get("params", {})
-            
+
             logging.info(f"Orchestration: Executing sequence step: {action}")
-            
+
             # Internal execution without full hand-over
             if action == "code":
                 res = await self.run_subagent("LogicManifest: Coding", f"Generate code for: {params.get('task')}")
@@ -147,9 +149,9 @@ class OrchestrationMixin:
                 res = await self.run_subagent("LogicManifest: Security Audit", f"Audit following code: {params.get('content')}")
             else:
                 res = f"Unknown action: {action}"
-            
+
             results.append({"action": action, "output": res})
-            
+
         return {"status": "completed", "results": results}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

@@ -30,7 +30,7 @@ import logging
 from typing import Any, List, Dict, Optional
 
 class TieredMemoryEngine:
-    """Manages the 6 memory tiers: Core, Episodic, Semantic, 
+    """Manages the 6 memory tiers: Core, Episodic, Semantic,
     Procedural, Resource, and Knowledge."""
 
     def __init__(self, db_path: str) -> None:
@@ -42,7 +42,7 @@ class TieredMemoryEngine:
         self.db_path = db_path
         # Initialization logic for ChromaDB would be here
         """
-        
+
     def record_memory(self, tier: str, content: str, metadata: Optional[Dict[str, Any]] = None) -> None:
         """Persists a memory fragment into the specified tier.
 

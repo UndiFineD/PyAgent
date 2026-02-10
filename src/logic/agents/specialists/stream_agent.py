@@ -130,9 +130,9 @@ class StreamAgent(BaseAgent):
         config = self._webhooks.get(webhook_name) if webhook_name else None
         if config:
             webhook_url = config.url
-        
+
         firewall = ReverseProxyFirewall()
-        
+
         # Schema validation
         if validate_schema and config and config.schema:
             validation = self._validate_schema(data, config.schema)
@@ -150,7 +150,7 @@ class StreamAgent(BaseAgent):
                 response = firewall.post(webhook_url, json=data, headers=headers, timeout=timeout)
 
                 status = WebhookStatus.SUCCESS if response.status_code in (200, 201, 202) else WebhookStatus.FAILED
-                
+
                 result = {
                     "success": status == WebhookStatus.SUCCESS,
                     "status_code": response.status_code,

@@ -24,9 +24,7 @@ Tests for:
 """
 
 import pytest
-import time
-import math
-from typing import Dict, List, Set
+from typing import List
 
 # Import Phase 28 modules
 from src.infrastructure.engine.request_lifecycle import (
@@ -49,9 +47,7 @@ from src.infrastructure.engine.sampling.sampling_engine import (
     TopKTopPSampler,
     TemperatureSampler,
     GumbelSampler,
-    RepetitionPenaltySampler,
     BeamSearchSampler,
-    BeamHypothesis,
     SamplingPipeline,
     sample_logits,
 )
@@ -61,7 +57,6 @@ from src.infrastructure.engine.tokenization.incremental_detokenizer import (
     FastIncrementalDetokenizer,
     SlowIncrementalDetokenizer,
     create_detokenizer,
-    detokenize_incrementally,
 )
 
 # Try to import Rust accelerations
@@ -904,7 +899,7 @@ class TestPhase28Integration:
     def test_detokenization_with_stop(self):
         """Test streaming detokenization with stop conditions."""
         tokenizer = MockTokenizer()
-        stop_checker = StopChecker(
+        StopChecker(
             stop_token_ids={7},  # EOS
             stop_strings=["?"],  # Also stop on question mark
         )

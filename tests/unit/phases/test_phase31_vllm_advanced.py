@@ -19,12 +19,6 @@ Tests for AsyncVllmEngine, StreamingEngine, LoraManager, and GuidedDecoder.
 """
 
 import pytest
-import asyncio
-import time
-import json
-from dataclasses import dataclass
-from typing import Dict, List, Optional, Any
-from unittest.mock import Mock, MagicMock, patch, AsyncMock
 
 
 # ============================================================================
@@ -137,7 +131,7 @@ class TestAsyncVllmEngine:
 
     def test_engine_singleton(self):
         from src.infrastructure.compute.backend.vllm_advanced.async_vllm_engine import (
-            AsyncVllmEngine, AsyncEngineConfig
+            AsyncVllmEngine
         )
 
         # Reset singleton
@@ -805,7 +799,6 @@ class TestModuleImports:
         from src.infrastructure.compute.backend.vllm_advanced import (
             AsyncVllmEngine,
             AsyncEngineConfig,
-            AsyncRequestHandle,
         )
 
         assert AsyncVllmEngine is not None
@@ -814,8 +807,6 @@ class TestModuleImports:
     def test_import_streaming(self):
         from src.infrastructure.compute.backend.vllm_advanced import (
             StreamingVllmEngine,
-            StreamingConfig,
-            StreamCallback,
             TokenStreamIterator,
         )
 
@@ -825,8 +816,6 @@ class TestModuleImports:
     def test_import_lora(self):
         from src.infrastructure.compute.backend.vllm_advanced import (
             LoraManager,
-            LoraAdapter,
-            LoraConfig,
             LoraRegistry,
         )
 
@@ -836,10 +825,7 @@ class TestModuleImports:
     def test_import_guided(self):
         from src.infrastructure.compute.backend.vllm_advanced import (
             GuidedDecoder,
-            GuidedConfig,
             JsonSchema,
-            RegexPattern,
-            ChoiceConstraint,
         )
 
         assert GuidedDecoder is not None

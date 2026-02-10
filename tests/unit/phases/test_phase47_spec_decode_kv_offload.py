@@ -26,9 +26,6 @@ Tests for:
 """
 
 import pytest
-import time
-import threading
-from unittest.mock import MagicMock, patch
 
 
 # =============================================================================
@@ -60,7 +57,7 @@ class TestEagleProposer:
 
         root = TreeNode(token_id=1, depth=0)
         child1 = root.add_child(2, 0.5)
-        child2 = root.add_child(3, 0.4)
+        root.add_child(3, 0.4)
         grandchild = child1.add_child(4, 0.3)
 
         assert len(root.children) == 2
@@ -506,7 +503,7 @@ class TestARCOffloadManager:
     def test_simple_backend(self):
         """Test SimpleBackend operations."""
         from src.infrastructure.storage.kv_transfer.arc_offload_manager import (
-            SimpleBackend, OffloadMedium
+            SimpleBackend
         )
 
         backend = SimpleBackend(num_blocks=100, block_size=16)
@@ -673,7 +670,7 @@ class TestLRUOffloadManager:
     def test_weighted_lru_manager(self):
         """Test WeightedLRUManager."""
         from src.infrastructure.storage.kv_transfer.lru_offload_manager import (
-            WeightedLRUManager, LRUManagerFactory
+            LRUManagerFactory
         )
 
         manager = LRUManagerFactory.create_weighted(
@@ -692,7 +689,7 @@ class TestLRUOffloadManager:
     def test_prefetching_lru_manager(self):
         """Test PrefetchingLRUManager."""
         from src.infrastructure.storage.kv_transfer.lru_offload_manager import (
-            PrefetchingLRUManager, LRUManagerFactory
+            LRUManagerFactory
         )
 
         manager = LRUManagerFactory.create_prefetching(
@@ -837,7 +834,7 @@ class TestRustPhase47:
     def rust_available(self):
         """Check if Rust module is available."""
         try:
-            import rust_core
+            import rust_core  # noqa: F401
             return True
         except ImportError:
             pytest.skip("rust_core not available")

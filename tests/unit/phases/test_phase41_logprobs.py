@@ -22,7 +22,6 @@ Tests for LogprobsProcessor module.
 import pytest
 import numpy as np
 import math
-from unittest.mock import Mock, MagicMock
 
 from src.infrastructure.engine.logprobs.logprobs_processor import (
     LogprobFormat,
@@ -31,7 +30,6 @@ from src.infrastructure.engine.logprobs.logprobs_processor import (
     PromptLogprobs,
     SampleLogprobs,
     FlatLogprobs,
-    LogprobsResult,
     LogprobsProcessor,
     StreamingLogprobs,
     LogprobsAnalyzer,
@@ -549,6 +547,5 @@ class TestUtilityFunctions:
         normalized = normalize_logprobs(logprobs)
 
         # Should sum to 0 in log space (probabilities sum to 1)
-        from scipy.special import logsumexp
         log_sum = np.log(np.sum(np.exp(normalized), axis=-1))
         assert np.allclose(log_sum, 0.0, atol=1e-5)

@@ -96,8 +96,8 @@ class ScalingAgent(BaseAgent):
             ProviderType.GITHUB: ProviderMetrics(ProviderType.GITHUB, capacity=50, cost_per_token=0.0),
             ProviderType.AZURE: ProviderMetrics(ProviderType.AZURE, capacity=100, cost_per_token=0.002),
             ProviderType.OLLAMA: ProviderMetrics(
-                ProviderType.OLLAMA, 
-                capacity=self._detect_ollama_capacity(), 
+                ProviderType.OLLAMA,
+                capacity=self._detect_ollama_capacity(),
                 cost_per_token=0.0
             ),
             ProviderType.FASTFLOWLM: ProviderMetrics(ProviderType.FASTFLOWLM, capacity=10, cost_per_token=0.0),
@@ -115,7 +115,7 @@ class ScalingAgent(BaseAgent):
             # Simplified heuristic using system RAM if GPU info unavailable
             # Assuming 4GB per concurrent 7B quant stream
             total_ram_gb = psutil.virtual_memory().total / (1024**3)
-            estimated_slots = int(total_ram_gb // 8) 
+            estimated_slots = int(total_ram_gb // 8)
             return max(1, estimated_slots)
         except ImportError:
             return 3  # Safe default

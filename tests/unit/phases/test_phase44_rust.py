@@ -19,7 +19,6 @@ Tests for Rust-accelerated sampling and speculative decoding functions.
 
 import pytest
 import random
-import math
 
 # Try to import rust_core
 try:

@@ -15,7 +15,6 @@
 Test Phase90 Meta Opt module.
 """
 
-import pytest
 from unittest.mock import MagicMock
 from src.infrastructure.swarm.orchestration.swarm.meta_optimizer import FederatedMetaOptimizer
 

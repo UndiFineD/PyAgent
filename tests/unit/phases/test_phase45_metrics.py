@@ -20,8 +20,6 @@ Tests vLLM-inspired infrastructure with Rust acceleration verification.
 import pytest
 import time
 import numpy as np
-from typing import List, Dict, Any
-import threading
 
 
 class TestPrometheusRegistry:
@@ -362,7 +360,7 @@ class TestCachingMetrics:
     def test_caching_metrics_observe(self):
         """Test CachingMetrics observation."""
         from src.infrastructure.services.metrics.caching_metrics import (
-            CachingMetrics, CacheType, EvictionReason
+            CachingMetrics, CacheType
         )
 
         metrics = CachingMetrics(CacheType.PREFIX)

@@ -25,7 +25,6 @@ vLLM Patterns Tested:
 
 from __future__ import annotations
 
-import math
 import sys
 from pathlib import Path
 
@@ -930,7 +929,7 @@ class TestPhase38Integration:
             hidden_size=moe_config["hidden_size"],
         )
 
-        layer = FusedMoELayer(config)
+        FusedMoELayer(config)
         router = TopKRouter(router_config)
 
         # Forward
@@ -1003,7 +1002,6 @@ class TestPhase38Integration:
     @pytest.mark.skipif(not HAS_RUST, reason="Rust core not available")
     def test_rust_python_equivalence_topk_routing(self, moe_config):
         """Test that Rust and Python top-k routing give similar results."""
-        from src.infrastructure.compute.moe import TopKRouter, RouterConfig
 
         num_tokens = 16
         num_experts = moe_config["num_experts"]

@@ -3,9 +3,7 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import pytest
-import asyncio
 import os
-import json
 import numpy as np
 from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
 from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatekeeper

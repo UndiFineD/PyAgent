@@ -21,10 +21,6 @@ Tests for LoRAManager module.
 
 import pytest
 import numpy as np
-from unittest.mock import Mock, patch, MagicMock
-from pathlib import Path
-import tempfile
-import json
 
 from src.infrastructure.compute.lora.lo_ra_manager import (
     LoRAMethod,
@@ -39,9 +35,7 @@ from src.infrastructure.compute.lora.lo_ra_manager import (
     LoRARegistry,
     LoRASlotManager,
     LoRAManager,
-    load_lora_adapter,
     merge_adapters,
-    get_lora_info,
 )
 
 

@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import pytest
-import asyncio
 from dataclasses import dataclass
 from src.infrastructure.engine.scheduling.v2.async_scheduler import AsyncSchedulerV2
 from src.infrastructure.engine.engine_coordinator_v2 import EngineCoordinator, EngineState

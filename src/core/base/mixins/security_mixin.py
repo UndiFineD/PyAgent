@@ -42,8 +42,13 @@ class SecurityMixin:
         """Configure rate limiting."""
         self.api_security.rate_limiter = self.api_security.rate_limiter.__class__(config)
 
-    async def secure_agent_communication(self, sender_id: str, receiver_id: str,
-                                         message: Dict[str, Any], token: str) -> Dict[str, Any]:
+    async def secure_agent_communication(
+        self,
+        sender_id: str,
+        receiver_id: str,
+        message: Dict[str, Any],
+        token: str
+    ) -> Dict[str, Any]:
         """Secure communication between agents."""
         return await self.api_security.secure_communication(sender_id, receiver_id, message, token)
 

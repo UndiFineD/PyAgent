@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 class UniversalAgent(BaseAgent):
     """
     IMPLEMENTATION OF PILLAR 3: The Universal Agent Shell.
-    This agent does not have a fixed role; it dynamically adjusts its 
+    This agent does not have a fixed role; it dynamically adjusts its
     cognitive cores based on the Logic Manifest provided in the task.
     """
 
@@ -51,7 +51,7 @@ class UniversalAgent(BaseAgent):
             role_match = query.lower().split("role")[-1].strip().split(" ")[0].strip(" .")
             if not role_match:
                 role_match = query.lower().split("shard")[-1].strip().split(" ")[0].strip(" .")
-            
+
             from src.core.base.lifecycle.manifest_repository import ManifestRepository
             repo = ManifestRepository()
             new_manifest = repo.get_manifest(role_match)
@@ -63,15 +63,15 @@ class UniversalAgent(BaseAgent):
                 return {"status": "error", "message": f"Shard '{role_match}' not found in manifest repository."}
 
         logger.info("UniversalAgent: Analyzing intent for query: %s", query)
-        
+
         # Phase 1: Reasoning / Intent Extraction via CoRT
         intent_analysis = await self.reasoning_core.reason(
             f"Analyze user intent and determine if this task is 'CRITICAL' (security/FS). Query: {query}"
         )
-        
+
         # Phase 2: Consensus Check (Pillar 1)
         is_critical = "critical" in intent_analysis.lower() or "security" in intent_analysis.lower()
-        
+
         if is_critical and hasattr(self.core, "fleet_instance"):
             fleet = self.core.fleet_instance
             if hasattr(fleet, "consensus_manager"):
@@ -95,14 +95,14 @@ class UniversalAgent(BaseAgent):
         elif any(kw in intent_analysis.lower() for kw in ["security", "vulnerability", "leak"]):
             await self.skill_manager.load_skill("security_audit")
             self.manifest.role = "specialist_security"
-            
+
         # Phase 4: Execution via the standard task loop
         result = await self.run_task({
             "context": query,
             "metadata": context or {},
             "intent_hint": intent_analysis
         })
-        
+
         # Pillar 8 Hardening: Distribute state to the swarm after task completion
         if hasattr(self.core, "fleet_instance"):
             fleet = self.core.fleet_instance

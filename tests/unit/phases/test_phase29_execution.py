@@ -27,7 +27,6 @@ Tests for:
 import pytest
 import numpy as np
 import time
-import threading
 
 from src.infrastructure.services.execution import (
     # ForwardContext
@@ -47,24 +46,19 @@ from src.infrastructure.services.execution import (
     UvaBufferPool,
     PinnedMemoryManager,
     copy_with_indices,
-    scatter_with_indices,
     pad_to_multiple,
     compute_cumsum_offsets,
     flatten_with_offsets,
-    split_by_offsets,
-    # AsyncOutputHandler
     AsyncState,
     CudaEvent,
     CudaStream,
     AsyncOutput,
     async_copy_to_np,
-    async_barrier,
     AsyncOutputHandler,
     DoubleBuffer,
     # CUDAGraphConfig
     CUDAGraphMode,
     CUDAGraphConfig,
-    CUDAGraphEntry,
     CUDAGraphRegistry,
     CUDAGraphManager,
 )
@@ -330,7 +324,7 @@ class TestUvaBufferPool:
         pool = UvaBufferPool("test_pool")
 
         buf1 = pool.allocate("buf1", (100, 64), np.float32)
-        buf2 = pool.allocate("buf2", (200, 128), np.float32)
+        pool.allocate("buf2", (200, 128), np.float32)
 
         assert pool.num_buffers == 2
         assert buf1.name == "buf1"

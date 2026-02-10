@@ -17,8 +17,7 @@ Phase 42: OpenAI Responses API Tests
 """
 
 import pytest
-import json
-from unittest.mock import Mock, MagicMock, AsyncMock
+from unittest.mock import MagicMock
 
 
 class TestResponseEnums:
@@ -317,7 +316,6 @@ class TestConversationBuilder:
         """Test building a conversation from input."""
         from src.infrastructure.services.openai_api.responses_api import (
             ConversationBuilder,
-            Message,
             RoleType,
         )
 

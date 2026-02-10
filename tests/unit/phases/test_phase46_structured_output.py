@@ -22,12 +22,7 @@ Target: ~50 tests covering structured output functionality
 """
 
 import pytest
-import threading
-import time
-import asyncio
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass
-from unittest.mock import MagicMock
+from typing import Dict, List
 
 # Import structured output modules
 import sys
@@ -51,7 +46,6 @@ from src.infrastructure.engine.structured.logits_processor_v2 import (
     SamplingParams,
     BatchUpdate,
     BatchUpdateBuilder,
-    LogitsProcessor,
     MinPLogitsProcessor,
     LogitBiasLogitsProcessor,
     CompositeLogitsProcessor,
@@ -74,21 +68,17 @@ from src.infrastructure.engine.structured.guidance_backend import (
     CompiledGuidanceProgram,
     GuidanceBackend,
     AsyncGuidanceBackend,
-    GuidanceGrammar,
 )
 
 # LMFormatEnforcerBackend imports
 from src.infrastructure.engine.structured.lm_format_enforcer_backend import (
     DFAStateType,
     DFAState,
-    DFATransition,
     CompiledDFA,
     TokenVocabulary,
     RegexMatchState,
-    CompiledEnforcer,
     LMFormatEnforcerBackend,
     AsyncLMFormatEnforcerBackend,
-    FormatEnforcerGrammar,
     CompositeEnforcer,
 )
 
@@ -96,15 +86,10 @@ from src.infrastructure.engine.structured.lm_format_enforcer_backend import (
 from src.infrastructure.engine.structured.structured_output_orchestrator import (
     StructuredOutputBackendType,
     ConstraintType,
-    GrammarProtocol,
-    BackendProtocol,
     ConstraintSpec,
     OrchestratorConfig,
-    BackendWrapper,
-    CompiledGrammarHandle,
     StructuredOutputOrchestrator,
     AsyncStructuredOutputOrchestrator,
-    BatchProcessor,
 )
 
 # Try to import rust_core
@@ -229,8 +214,8 @@ class TestXGrammarBackend:
         compiler = GrammarCompiler(info)
 
         schema = '{"type": "object"}'
-        grammar1 = compiler.compile_json_schema(schema)
-        grammar2 = compiler.compile_json_schema(schema)
+        compiler.compile_json_schema(schema)
+        compiler.compile_json_schema(schema)
 
         # Should be cached
         stats = compiler.get_stats()
@@ -670,7 +655,7 @@ class TestStructuredOutputOrchestrator:
             set_as_default=True,
         )
 
-        handle = orchestrator.compile_json_schema('{"type": "string"}')
+        orchestrator.compile_json_schema('{"type": "string"}')
         # May be None if no grammar implementation
         # Just verify no exception
 
@@ -829,7 +814,7 @@ class TestRustStructuredOutput:
             [0, 2],  # Allow only tokens 0, 2 for first batch
             [1, 3],  # Allow only tokens 1, 3 for second batch
         ]
-        mask_value = float('-inf')
+        float('-inf')
 
         result = rust_core.batch_grammar_mask_rust(batch_logits, batch_allowed, -1e9)
 

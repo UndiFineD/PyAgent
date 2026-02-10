@@ -41,9 +41,9 @@ class TestExplainability(IsolatedAsyncioTestCase):
         # Run workflow
         res = self.fleet.execute_workflow("Explainability Test", workflow)
         if asyncio.iscoroutine(res):
-            report = await res
+            await res
         else:
-            report = res
+            pass
 
         # Get workflow ID from the report or internal state
         workflow_id = self.fleet.state.task_id

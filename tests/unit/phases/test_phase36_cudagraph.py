@@ -28,14 +28,12 @@ Tests for:
 import pytest
 import time
 import threading
-from typing import Any, Dict, List, Tuple
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 # Import Phase 36 Python modules
 from src.infrastructure.compute.cuda.cuda_graph_manager import (
     CUDAGraphMode,
     BatchDescriptor,
-    CUDAGraphEntry,
     CUDAGraphOptions,
     CUDAGraphStats,
     CUDAGraphWrapper,
@@ -49,7 +47,6 @@ from src.infrastructure.compute.cuda.u_batch_processor import (
     UBatchState,
     UBatchSlice,
     UBatchContext,
-    UbatchMetadata,
     UBatchConfig,
     UBatchBarrier,
     UBatchWrapper,
@@ -73,9 +70,7 @@ from src.infrastructure.compute.cuda.cudagraph_dispatcher import (
 from src.infrastructure.compute.cuda.input_buffer_manager import (
     BufferState,
     BufferSpec,
-    BufferEntry,
     SimpleBufferPool,
-    InputBufferManager,
     HierarchicalBufferPool,
     PredictiveBufferManager,
     create_input_buffer_manager,
@@ -91,8 +86,6 @@ from src.infrastructure.compute.compilation.torch_compile_integration import (
     IncrementalCompiler,
     ProfileGuidedCompiler,
     compile_fn,
-    set_compile_enabled,
-    get_compile_config,
 )
 
 from src.observability.stats.compilation_counter import (
@@ -542,11 +535,11 @@ class TestTorchCompileIntegration:
 
         # First calls should return original
         for _ in range(2):
-            compiled = compiler.compile(simple_fn)
+            compiler.compile(simple_fn)
             assert not compiler.is_compiled(simple_fn)
 
         # After threshold, should compile
-        compiled = compiler.compile(simple_fn)
+        compiler.compile(simple_fn)
         # May or may not be compiled depending on torch availability
 
     def test_profile_guided_compiler(self):
@@ -775,7 +768,7 @@ class TestCompilationCounter:
         for i in range(10):
             tracker.record_recompile(1, (32 + i, 4), 0.1)
 
-        suggestions = tracker.get_optimization_suggestions()
+        tracker.get_optimization_suggestions()
         # May or may not have suggestions depending on thresholds
 
     def test_trend_analyzer(self):
@@ -1026,7 +1019,7 @@ class TestPhase36Integration:
             return x + 1
 
         start = time.perf_counter()
-        compiled = compiler.compile(fn)
+        compiler.compile(fn)
         elapsed = time.perf_counter() - start
 
         counter.record_compile(id(fn), (1,), elapsed)
@@ -1056,7 +1049,7 @@ class TestPhase36Integration:
     def test_full_dispatch_pipeline(self):
         """Test full dispatch pipeline with all components."""
         # Setup
-        counter = CompilationCounter()
+        CompilationCounter()
 
         def model_fn(**kwargs):
             return {"tokens": kwargs.get("num_tokens", 0)}
@@ -1066,7 +1059,7 @@ class TestPhase36Integration:
         # Simulate several dispatches
         for num_tokens in [32, 64, 32, 128, 32]:
             key = create_dispatch_key(num_tokens, num_tokens // 8)
-            rust_key = rust_core.batch_descriptor_key_rust(
+            rust_core.batch_descriptor_key_rust(
                 num_tokens, num_tokens // 8, 512, False, 8
             )
 

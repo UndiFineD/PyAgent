@@ -20,7 +20,6 @@ Tests for TokenizerRegistry module.
 """
 
 import pytest
-from unittest.mock import Mock, patch
 
 from src.infrastructure.engine.tokenization.tokenizer_registry import (
     TokenizerBackend,

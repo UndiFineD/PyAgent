@@ -16,7 +16,6 @@ Test Phase86 Deduplication module.
 """
 
 import pytest
-import asyncio
 from unittest.mock import MagicMock, AsyncMock
 from src.infrastructure.swarm.orchestration.swarm.query_deduplicator import SwarmQueryDeduplicator
 

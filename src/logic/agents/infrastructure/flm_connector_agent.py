@@ -66,7 +66,7 @@ class FlmConnectorAgent(BaseAgent):
                 if "choices" in response_json and len(response_json["choices"]) > 0:
                     return response_json["choices"][0].get("text", "")
                 return ""
-            
+
             return f"Error: FastFlowLM returned status {response.status_code}"
 
         except (requests.RequestException, json.JSONDecodeError, KeyError, ValueError) as e:

@@ -15,7 +15,7 @@
 Test Phase85 Speculative module.
 """
 
-import pytest
+from unittest.mock import MagicMock
 from src.infrastructure.swarm.orchestration.swarm.heterogeneous_speculator import HeterogeneousSpeculator
 from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatekeeper
 from src.core.base.common.models.communication_models import ExpertProfile

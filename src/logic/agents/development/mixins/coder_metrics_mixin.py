@@ -32,7 +32,7 @@ class CoderMetricsMixin:
     def _analyze_python_ast(self, tree: ast.AST, metrics: CodeMetrics) -> CodeMetrics:
         """Deep AST analysis for Python."""
         from src.core.rust_bridge import RustBridge
-        
+
         # Optimize import counting if rust is available
         if RustBridge.is_rust_active():
             # If we already have the source, we could pass it here.

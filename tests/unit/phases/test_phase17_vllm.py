@@ -16,7 +16,6 @@
 Quick verification test for Phase 17: vLLM-inspired improvements.
 """
 import pytest
-import asyncio
 
 
 class TestMathUtils:
@@ -171,7 +170,7 @@ class TestMemorySnapshot:
 
 # Check if rust_core is available
 try:
-    import rust_core as rc
+    import rust_core as rc  # noqa: F401
     RUST_AVAILABLE = True
 except ImportError:
     RUST_AVAILABLE = False

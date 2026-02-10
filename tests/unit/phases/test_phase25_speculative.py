@@ -25,7 +25,6 @@ Tests for:
 from __future__ import annotations
 
 import time
-from typing import Any
 
 import numpy as np
 import pytest
@@ -596,11 +595,11 @@ class TestPhase25Integration:
             VerificationResult,
         )
 
-        config = SpeculativeConfig(num_speculative_tokens=5)
+        SpeculativeConfig(num_speculative_tokens=5)
         metrics = SpecDecodingMetrics.new(5)
 
         # Simulate a draft and verification
-        proposal = DraftProposal(
+        DraftProposal(
             request_id="req-1",
             token_ids=[1, 2, 3, 4, 5],
         )
@@ -630,12 +629,12 @@ class TestPhase25Integration:
             compute_block_hash,
         )
 
-        config = PrefixCacheConfig(max_blocks=100, block_size=16)
+        PrefixCacheConfig(max_blocks=100, block_size=16)
         stats = PrefixCacheStats()
 
         # Simulate cache accesses
         tokens1 = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
-        hash1 = compute_block_hash(tokens1)
+        compute_block_hash(tokens1)
 
         # First access - miss
         stats.record(num_tokens=16, num_hits=0)
@@ -682,7 +681,6 @@ class TestPhase25Integration:
             SpecDecodingStats,
             PerfStats,
         )
-        from src.infrastructure.storage.cache.prefix_cache import PrefixCacheStats
 
         # Create comprehensive stats
         stats = SchedulerStats()

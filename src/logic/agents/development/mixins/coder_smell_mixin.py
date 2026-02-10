@@ -62,9 +62,9 @@ class CoderSmellMixin:
     def detect_code_smells(self, content: str) -> List[CodeSmell]:
         """Detect common architectural code smells."""
         from src.core.rust_bridge import RustBridge
-        
+
         smells: List[CodeSmell] = []
-        
+
         # Performance/Optimization smells via Rust
         opt_matches = RustBridge.scan_optimization_patterns(content)
         for match in opt_matches:

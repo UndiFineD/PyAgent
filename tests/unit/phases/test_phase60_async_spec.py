@@ -7,7 +7,6 @@ Test Phase60 Async Spec module.
 # Tests for Phase 60: Speculative Async Output Pipeline
 
 import pytest
-import asyncio
 from unittest.mock import MagicMock, AsyncMock
 from src.infrastructure.engine.speculative.async_pipeline import SpeculativeAsyncPipeline
 from src.core.base.common.models.communication_models import (

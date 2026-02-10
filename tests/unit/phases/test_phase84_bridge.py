@@ -15,7 +15,6 @@
 Test Phase84 Bridge module.
 """
 
-import pytest
 from unittest.mock import MagicMock
 from src.infrastructure.swarm.orchestration.swarm.tenant_bridge import TenantKnowledgeBridge
 from src.infrastructure.swarm.orchestration.swarm.trace_synthesis import SwarmTraceSynthesizer

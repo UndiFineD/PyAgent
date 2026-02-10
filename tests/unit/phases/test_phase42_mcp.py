@@ -18,8 +18,6 @@ Phase 42: MCP Tool Server Tests
 Tests for the MCP tool server infrastructure.
 """
 
-import pytest
-from unittest.mock import Mock, MagicMock, patch
 
 # Import from the package
 from src.infrastructure.services.mcp import (

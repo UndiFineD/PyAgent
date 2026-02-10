@@ -26,7 +26,6 @@ Tests for:
 import pytest
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
@@ -568,7 +567,7 @@ class TestZeroCopySerializer:
     )
     def test_encode_simple_dict(self):
         """Test encoding simple dictionary."""
-        msgspec = pytest.importorskip("msgspec")
+        pytest.importorskip("msgspec")
         from src.infrastructure.storage.serialization.zero_copy_serializer import ZeroCopyEncoder
 
         encoder = ZeroCopyEncoder()
@@ -584,7 +583,7 @@ class TestZeroCopySerializer:
     )
     def test_encode_decode_roundtrip(self):
         """Test encode/decode roundtrip."""
-        msgspec = pytest.importorskip("msgspec")
+        pytest.importorskip("msgspec")
         from src.infrastructure.storage.serialization.zero_copy_serializer import (
             ZeroCopyEncoder, ZeroCopyDecoder
         )

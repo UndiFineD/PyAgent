@@ -26,42 +26,34 @@ Tests for:
 Plus Rust acceleration tests.
 """
 
-import asyncio
 import pytest
 import time
-import threading
-from typing import Optional
 
 # Python module imports
 from src.infrastructure.engine.async_engine_client import (
-    ClientMode, WorkerState, EngineClientConfig, SchedulerOutput,
-    EngineOutput, WorkerInfo, EngineCoreClientBase, InprocClient,
-    SyncMPClient, AsyncMPClient, P2CLoadBalancer, DPAsyncMPClient,
+    ClientMode, EngineClientConfig, SchedulerOutput,
+    WorkerInfo, InprocClient,
+    P2CLoadBalancer, DPAsyncMPClient,
     auto_select_client_mode, create_engine_client
 )
 from src.infrastructure.storage.cache.block_pool_manager import (
-    BlockState, Block, BlockPoolConfig, EvictionEvent, CacheMetrics,
-    KVCacheMetricsCollector, ARCPolicy, BlockPool, compute_block_hash
+    BlockState, Block, BlockPoolConfig, ARCPolicy, BlockPool, compute_block_hash
 )
 from src.infrastructure.storage.memory.gpu_memory_allocator import (
-    MemoryState, AllocationStrategy, MemoryRegion, MemorySnapshot,
-    MemoryPoolConfig, MemoryPressureEvent, CuMemAllocator,
+    MemoryState, MemoryPoolConfig, CuMemAllocator,
     MultiGPUMemoryBalancer
 )
 from src.infrastructure.storage.cache.prefix_cache_optimizer import (
-    CacheTier, PrefixCacheConfig, PrefixEntry, CacheHitResult,
-    RadixTreeNode, PrefixTree, PrefixCacheOptimizer
+    CacheTier, PrefixEntry, PrefixTree, PrefixCacheOptimizer
 )
 from src.inference.execution.async_model_runner import (
     RunnerState, ModelInput, ModelOutput, AsyncGPUPoolingModelRunnerOutput,
-    ExecutionPipeline, AsyncModelRunner, BatchedAsyncRunner,
-    SchedulerOutput as RunnerSchedulerOutput
+    AsyncModelRunner, SchedulerOutput as RunnerSchedulerOutput
 )
 from src.infrastructure.swarm.parallel.data_parallel_coordinator import (
-    DPRole, WorkerHealth, LoadBalanceStrategy, DPConfig,
-    WorkerState as DPWorkerState, StepState, WaveState,
-    P2CLoadBalancer as DPLoadBalancer, DPEngineCoreProc,
-    HierarchicalDPCoordinator, dp_collective_all_reduce
+    DPRole, DPConfig,
+    StepState, DPEngineCoreProc,
+    HierarchicalDPCoordinator
 )
 
 
@@ -1196,7 +1188,7 @@ class TestPhase35Integration:
         runner = AsyncModelRunner()
 
         # Begin step
-        step = coordinator.begin_step(num_requests=3)
+        coordinator.begin_step(num_requests=3)
 
         # Assign and execute requests
         for i in range(3):
@@ -1213,7 +1205,7 @@ class TestPhase35Integration:
                 total_tokens=3
             )
 
-            outputs = runner.execute_model_sync(scheduler_output)
+            runner.execute_model_sync(scheduler_output)
 
             coordinator.complete_request(worker_id, latency_ms=1.0)
 

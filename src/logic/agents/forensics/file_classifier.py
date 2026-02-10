@@ -42,7 +42,7 @@ class FileClassifier:
     Analyzes files to determine type, calculate hashes, and identify suspicious content.
     Ported concepts from 0xSojalSec-Catalyzer and 0xSojalSec-CanaryTokenScanner.
     """
-    
+
     MAGIC_DB_PATH = Path("data/signatures/file_magics.json")
     SUSPICIOUS_KEYWORDS = ["cmd", "powershell", "wmi", "http", "shell", "hta", "mshta", "dos", "program", "invoke", "base64"]
     IGNORED_DOMAINS = ['schemas.openxmlformats.org', 'schemas.microsoft.com', 'purl.org', 'w3.org']
@@ -68,10 +68,10 @@ class FileClassifier:
             raise FileNotFoundError(f"File {file_path} not found")
 
         size = path.stat().st_size
-        
+
         # Calculate hashes
         md5, sha1, sha256 = await self._calculate_hashes(path)
-        
+
         # Check magic bytes
         detected_type, detected_ext = await self._detect_type(path)
 
@@ -105,42 +105,42 @@ class FileClassifier:
         """
         if not self.magic_signatures:
             return []
-            
+
         embedded = []
         try:
             async with aiofiles.open(path, mode='rb') as f:
                 data = await f.read()
-                
+
             for sig in self.magic_signatures:
                 # sig format: [hex_string, offset, extension, mime, description]
                 magic_hex = sig[0]
                 magic_bytes = bytes.fromhex(magic_hex)
-                
+
                 # Find all occurrences
                 start = 0
                 while True:
                     idx = data.find(magic_bytes, start)
                     if idx == -1:
                         break
-                    
+
                     # If idx is not the expected offset, it's embedded
                     if idx != sig[1]:
                         # Skip small matches that might be noise (if magic is < 3 bytes)
                         if len(magic_bytes) < 3:
                             start = idx + 1
                             continue
-                            
+
                         embedded.append({
                             "offset": idx,
                             "type": sig[3],
                             "extension": sig[2],
                             "description": sig[4]
                         })
-                    
+
                     start = idx + 1
         except Exception:
             pass
-            
+
         return embedded
 
     async def _scan_archive_urls(self, path: Path) -> List[str]:
@@ -165,7 +165,7 @@ class FileClassifier:
                         # Actually CanaryTokenScanner extracted all. Let's be safer and just read without extraction if possible, or extract carefully.
                         # For now, replicate extraction but with limit
                         zip_ref.extractall(temp_dir)
-                    
+
                     for root, _, files in os.walk(temp_dir):
                         for file_name in files:
                             full_path = Path(root) / file_name
@@ -188,7 +188,7 @@ class FileClassifier:
         md5 = hashlib.md5()
         sha1 = hashlib.sha1()
         sha256 = hashlib.sha256()
-        
+
         async with aiofiles.open(path, 'rb') as f:
             while True:
                 chunk = await f.read(65536)
@@ -197,7 +197,7 @@ class FileClassifier:
                 md5.update(chunk)
                 sha1.update(chunk)
                 sha256.update(chunk)
-        
+
         return md5.hexdigest(), sha1.hexdigest(), sha256.hexdigest()
 
     async def _detect_type(self, path: Path) -> Tuple[Optional[str], Optional[str]]:
@@ -212,23 +212,23 @@ class FileClassifier:
             pattern = sig[0].upper()
             if header_hex.startswith(pattern):
                 return sig[4], sig[2] # Description, Extension
-        
+
         return None, None
 
     async def _scan_content(self, path: Path) -> Tuple[List[str], bool]:
         found_keywords = set()
         has_mz = False
-        
+
         # We'll read the file in chunks and check for ascii representations
         # This is a simplified version of Catalyzer's Interesting()
         # Note: This is not efficient for huge files, but safe for analysis of small malware samples.
-        
+
         async with aiofiles.open(path, 'rb') as f:
             while True:
                 chunk = await f.read(65536)
                 if not chunk:
                     break
-                
+
                 # Check for PE header trace anywhere (MZ..)
                 if b'MZ' in chunk:
                     # Very naive check, but matches Catalyzer's intent
@@ -237,11 +237,11 @@ class FileClassifier:
                 # Convert to lower ascii for string search
                 # Replace non-printable to '.'
                 text = "".join([chr(b) if 32 <= b <= 127 else "." for b in chunk]).lower()
-                
+
                 for kw in self.SUSPICIOUS_KEYWORDS:
                     if kw in text:
                         found_keywords.add(kw)
-        
+
         return list(found_keywords), has_mz
 
 # Usage Example
@@ -251,5 +251,5 @@ if __name__ == "__main__":
         # Rescan self as test
         res = await fc.analyze_file(__file__)
         print(res)
-    
+
     asyncio.run(run())

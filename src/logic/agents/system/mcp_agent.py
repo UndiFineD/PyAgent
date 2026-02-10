@@ -30,7 +30,7 @@ from pathlib import Path
 from typing import Any
 
 from src.core.base.common.base_utilities import as_tool
-BaseAgent = None  # Will be imported locally to avoid circular import
+from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.mcp_connector import MCPConnector
 
@@ -41,15 +41,9 @@ class MCPAgent:
     """Enables the fleet to discover and utilize external tools via the MCP protocol."""
 
     def __init__(self, file_path: str) -> None:
-        global BaseAgent
-        if BaseAgent is None:
-            from src.core.base.lifecycle.base_agent import BaseAgent as _BaseAgent
-            BaseAgent = _BaseAgent
         self._base = BaseAgent(file_path)
-
-    def __getattr__(self, name: str) -> object:
-        return getattr(self._base, name)
-        self.workspace_root = Path(self.file_path).parent.parent.parent
+        self.file_path = file_path
+        self.workspace_root = Path(self.file_path).parent.parent.parent.parent.parent
         self.connectors: dict[str, MCPConnector] = {}
         self._system_prompt = (
             "You are the MCP Integration Agent. "
@@ -57,6 +51,9 @@ class MCPAgent:
             "You can list available MCP tools, call them, and register them with the fleet. "
             "Prioritize the 'tools' part of the MCP spec to expand fleet capabilities."
         )
+
+    def __getattr__(self, name: str) -> object:
+        return getattr(self._base, name)
 
     @as_tool
     async def list_mcp_servers(self) -> str:
@@ -105,56 +102,36 @@ class MCPAgent:
         return json.dumps(response.get("result", {}), indent=2)
 
     @as_tool
-    async def initialize_mcp_server(self, server_name: str, command: str, args: list[str]) -> str:
-        """Boots a new MCP server and registers it with the fleet (Pillar 4)."""
-        if server_name in self.connectors:
-            return f"MCP Server '{server_name}' is already running."
+    async def initialize_mcp_server(self, name: str, command: list[str]) -> str:
+        """Initializes and connects to a specific MCP server."""
+        if name in self.connectors:
+            return f"MCP Server '{name}' is already running."
 
-        def boot() -> str:
-            try:
-                # Combine command and args
-                full_cmd = [command] + args
-                connector = MCPConnector(server_name, full_cmd)
-                connector.start()
-                self.connectors[server_name] = connector
-                return f"Successfully initialized MCP server '{server_name}'"
-            except Exception as e:
-                return f"Failed to initialize MCP server: {e}"
-
-        return await asyncio.to_thread(boot)
+        try:
+            connector = MCPConnector(name, command)
+            await asyncio.to_thread(connector.start)
+            if connector.is_running:
+                self.connectors[name] = connector
+                if hasattr(self, "recorder") and self.recorder:
+                    self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "success"})
+                return f"Successfully started MCP server '{name}'"
+            else:
+                if hasattr(self, "recorder") and self.recorder:
+                    self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "failed"})
+                return f"Failed to start MCP server '{name}'"
+        except Exception as e:
+            return f"Error initializing MCP server: {e}"
 
     async def run_task(self, task_manifest: dict[str, Any]) -> Any:
         """Standard task runner for MCP agent."""
         # Implementation...
         return {"status": "success", "agent": "mcp_agent"}
-                    {
-                        "server": server_name,
-                        "tool": tool_name,
-                        "error": response["error"],
-                    },
-                )
-            return f"MCP Error: {response['error']}"
-
-        return json.dumps(response.get("result", {}), indent=2)
-
-    @as_tool
-    async def initialize_mcp_server(self, name: str, command: list[str]) -> str:
-        """Initializes and connects to a specific MCP server."""
-        connector = MCPConnector(name, command)
-        await asyncio.to_thread(connector.start)
-        if connector.is_running:
-            self.connectors[name] = connector
-            if hasattr(self, "recorder") and self.recorder:
-                self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "success"})
-            return f"Successfully started MCP server '{name}'"
-        else:
-            if hasattr(self, "recorder") and self.recorder:
-                self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "failed"})
-            return f"Failed to start MCP server '{name}'"
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Handle MCP-related requests."""
         if "list" in prompt.lower():
             return await self.list_mcp_servers()
-        # Fallback to base logic if needed
-        return await super().improve_content(prompt, target_file=target_file)
+        # Fallback to base agent logic
+        if hasattr(self._base, "improve_content"):
+            return await self._base.improve_content(prompt, target_file=target_file)
+        return f"MCP Agent processed: {prompt}"

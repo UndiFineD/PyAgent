@@ -7,8 +7,6 @@ Test Phase67 Prefetch module.
 # Tests for Phase 67: Predictive Context Prefetching
 
 import pytest
-import asyncio
-import time
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
 from src.infrastructure.engine.kv_cache.compression import AdaptiveSwarmCompressor
 from src.infrastructure.engine.kv_cache.prefetcher import ContextPrefetcher
@@ -43,5 +41,5 @@ async def test_predictive_prefetching_success():
 
     # Let's move deeper to trigger shard 2 prefetch
     prefetcher.record_access("doc1", 110)
-    assert shards[2].is_cached == True, "Shard 2 (200-299) should have been prefetched/reloaded"
+    assert shards[2].is_cached, "Shard 2 (200-299) should have been prefetched/reloaded"
     assert shards[2].precision == "float16"

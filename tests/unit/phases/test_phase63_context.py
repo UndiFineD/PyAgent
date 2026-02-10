@@ -7,7 +7,6 @@ Test Phase63 Context module.
 # Tests for Phase 63: Context Sharding and Locality-Aware MoE
 
 import pytest
-import asyncio
 from unittest.mock import MagicMock, AsyncMock
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
 from src.infrastructure.swarm.orchestration.swarm.context_aware_moe import ContextAwareMoEOrchestrator

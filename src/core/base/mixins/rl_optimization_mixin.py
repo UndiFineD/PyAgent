@@ -27,6 +27,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+
 class RLOptimizationMixin:
     """
     Mixin for Reinforcement Learning based agent optimization.
@@ -45,7 +46,7 @@ class RLOptimizationMixin:
         """Records a transition in the agent's internal MDP."""
         if self.current_state is None:
             self.current_state = "initial"
-            
+
         self.mdp.add_transition(
             state=self.current_state,
             action=action,
@@ -69,13 +70,13 @@ class RLOptimizationMixin:
         for state in self.mdp.states:
             best_action = None
             max_reward = -float('inf')
-            
+
             # Simple greedy policy update
             for action in self.mdp.actions:
                 reward = self.mdp.get_expected_reward(state, action)
                 if reward > max_reward:
                     max_reward = reward
                     best_action = action
-            
+
             if best_action:
                 self.mdp.policy[state] = best_action

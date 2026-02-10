@@ -405,6 +405,20 @@ class FleetManager(
             shards = self.backup_node.get_local_shards_for_hash(state_hash)
             return {"status": "success", "shards": shards}
 
+        elif msg_type == "hologram_projection":
+            # Phase 330: Holographic Metadata Projection
+            if hasattr(self.orchestrators, "holographic_state"):
+                await self.orchestrators.holographic_state.handle_projection(message)
+            return {"status": "ok"}
+
+        elif msg_type == "hologram_shard_request":
+            # Phase 330: Perspective-specific shard retrieval
+            h_id = message.get("hologram_id")
+            if hasattr(self.orchestrators, "holographic_state"):
+                shards = await self.orchestrators.holographic_state.find_local_hologram_shards(h_id)
+                return {"status": "success", "shards": shards}
+            return {"status": "error", "reason": "no_holographic_orchestrator"}
+
         return {"status": "unknown_message_type"}
 
     async def _topology_loop(self) -> None:

@@ -19,7 +19,6 @@
 Tests for StructuredOutputParams module.
 """
 
-import pytest
 
 from src.infrastructure.engine.structured.structured_output_params import (
     StructuredOutputType,
@@ -27,7 +26,6 @@ from src.infrastructure.engine.structured.structured_output_params import (
     SchemaFormat,
     GuidedDecodingBackend,
     WhitespacePattern,
-    OutputConstraint,
     JsonSchemaConstraint,
     RegexConstraint,
     ChoiceConstraint,

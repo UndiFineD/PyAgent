@@ -7,7 +7,6 @@ Test Phase59 Locality module.
 # Tests for Phase 59: Locality-aware DP
 
 import pytest
-import asyncio
 from src.infrastructure.swarm.distributed.v2.dp_coordinator import DPCoordinatorV2
 from src.infrastructure.swarm.distributed.v2.locality_manager import LocalityManager
 

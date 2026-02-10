@@ -153,7 +153,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 )
 
             logging.error(f"TestAgent execution failed: {e}\n{tb}")
-            
+
             # Phase 336: Trigger Static Analysis Fallback
             logging.info("TestAgent: Falling back to static code analysis.")
             return self.static_analysis_fallback(path)
@@ -165,10 +165,10 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         """
         import ast
         import os
-        
+
         report = ["## 🔍 Static Test Fallback Analysis\n"]
         report.append("⚠️ **Note**: Execution was blocked. Performing recursive static analysis.\n")
-        
+
         target_files = []
         if os.path.isfile(path):
             target_files.append(path)
@@ -177,15 +177,15 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 for f in files:
                     if f.endswith(".py"):
                         target_files.append(os.path.join(root, f))
-        
+
         total_issues = 0
         for f in target_files:
             try:
                 with open(f, "r", encoding="utf-8") as file:
                     content = file.read()
-                
+
                 ast.parse(content) # Check syntax
-                
+
                 # Check for risky imports or patterns often causing failures
                 tree = ast.parse(content)
                 for node in ast.walk(tree):
@@ -204,7 +204,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             report.append("✅ Static scan found no obvious syntax or structural issues.")
         else:
             report.append(f"\nFound {total_issues} potential issues.")
-            
+
         return "\n".join(report)
 
     @as_tool

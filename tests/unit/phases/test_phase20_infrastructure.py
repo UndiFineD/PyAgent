@@ -28,13 +28,8 @@ Tests for Phase 20 production infrastructure modules:
 """
 
 import os
-import sys
 import time
-import socket
-import threading
 import warnings
-from typing import Any
-from unittest.mock import patch, MagicMock
 
 import pytest
 
@@ -90,10 +85,12 @@ class TestExtensionManager:
         registry = ExtensionManager("test")
 
         @registry.register("a")
-        class A: pass
+        class A:
+            pass
 
         @registry.register("b")
-        class B: pass
+        class B:
+            pass
 
         assert set(registry.list_registered()) == {"a", "b"}
         assert len(registry) == 2
@@ -125,7 +122,8 @@ class TestTypedExtensionManager:
         """Test that non-subclass registration fails."""
         from src.core.base.registry.extension_registry import TypedExtensionManager
 
-        class Base: pass
+        class Base:
+            pass
 
         registry = TypedExtensionManager[Base]("test", Base)
 
@@ -511,7 +509,7 @@ class TestEnvVar:
             DEBUG = EnvVar("TEST_DEBUG_PHASE20", default=False)
 
         config = Config()
-        assert config.DEBUG == False
+        assert not config.DEBUG
 
     def test_envvar_from_environment(self):
         """Test EnvVar reading from environment."""
@@ -535,7 +533,7 @@ class TestEnvFunctions:
 
         os.environ["TEST_BOOL_PHASE20"] = "true"
         try:
-            assert get_env_bool("TEST_BOOL_PHASE20") == True
+            assert get_env_bool("TEST_BOOL_PHASE20")
         finally:
             del os.environ["TEST_BOOL_PHASE20"]
 
@@ -586,7 +584,7 @@ class TestNamespacedConfig:
         os.environ["MYAPP_PORT"] = "9000"
         try:
             config = NamespacedConfig("MYAPP")
-            assert config.get_bool("DEBUG") == True
+            assert config.get_bool("DEBUG")
             assert config.get_int("PORT") == 9000
         finally:
             del os.environ["MYAPP_DEBUG"]
@@ -719,7 +717,7 @@ class TestPhase20Integration:
             SpanTiming,
         )
 
-        tracer = get_null_tracer()
+        get_null_tracer()
 
         @memoize
         def compute(x):

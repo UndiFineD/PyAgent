@@ -171,10 +171,6 @@ BOOTSTRAP_ORCHESTRATORS = {
         "src.infrastructure.swarm.orchestration.intel.emotional_regulation_orchestrator",
         "EmotionalRegulationOrchestrator",
     ),
-    "holographic_state": (
-        "src.infrastructure.swarm.orchestration.state.holographic_state_orchestrator",
-        "HolographicStateOrchestrator",
-    ),
     "resource_predictor": (
         "src.infrastructure.swarm.orchestration.swarm.resource_predictor_orchestrator",
         "ResourcePredictorOrchestrator",

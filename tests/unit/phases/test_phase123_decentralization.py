@@ -142,7 +142,7 @@ class TestPhase123Decentralization(unittest.TestCase):
         test_agent.log_distributed("WARNING", "Alert message")
 
         logs = logging_agent.get_aggregated_logs()
-        self.assertTrue(any(l["message"] == "Alert message" for l in logs))
+        self.assertTrue(any(log_entry["message"] == "Alert message" for log_entry in logs))
 
     def test_did_sovereign_identity(self) -> None:
         id_file = os.path.join(self.test_dir, "identity_agent.py")

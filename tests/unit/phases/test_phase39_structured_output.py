@@ -142,9 +142,9 @@ class TestGrammarEngine:
         mask.allow_only({10, 20, 30})
 
         # Check mask state
-        assert mask.mask[10] == True
-        assert mask.mask[20] == True
-        assert mask.mask[50] == False
+        assert mask.mask[10]
+        assert mask.mask[20]
+        assert not mask.mask[50]
 
         # Apply to logits
         logits = np.zeros(100)
@@ -455,7 +455,7 @@ class TestTensorizer:
     def test_write_and_read_tensor(self):
         """Test writing and reading tensors."""
         from src.infrastructure.compute.tensorizer import (
-            TensorizerWriter, TensorizerReader, TensorizerConfig
+            TensorizerWriter, TensorizerReader
         )
 
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -733,7 +733,7 @@ class TestPhase39Integration:
             StructuredOutputManager, GrammarSpec, GrammarType
         )
         from src.infrastructure.engine.speculative import (
-            SpeculativeDecoder, NgramProposer, SpeculativeVerifier
+            SpeculativeDecoder, NgramProposer
         )
 
         vocab_size = 100
@@ -742,7 +742,7 @@ class TestPhase39Integration:
         manager = StructuredOutputManager(vocab_size=vocab_size)
 
         # Create a grammar spec
-        spec = GrammarSpec(
+        GrammarSpec(
             grammar_type=GrammarType.REGEX,
             spec=r"\d+",
         )

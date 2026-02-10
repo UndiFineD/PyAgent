@@ -30,8 +30,6 @@ Target: 60+ tests covering all Phase 33 functionality.
 """
 
 import pytest
-import numpy as np
-from unittest.mock import MagicMock, patch
 
 # Try to import torch
 try:
@@ -804,12 +802,9 @@ class TestPhase33Integration:
         """Test flow from input batch to attention."""
         from src.infrastructure.services.execution.input_batch_orchestrator import (
             CachedRequestState,
-            BatchUpdateBuilder,
         )
         from src.infrastructure.engine.attention.attention_backend_registry import (
             get_attention_registry,
-            AttentionMetadata,
-            AttentionType,
         )
 
         # Create cached request state

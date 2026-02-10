@@ -3,7 +3,6 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import pytest
-import asyncio
 from src.infrastructure.swarm.orchestration.swarm.consensus import SwarmConsensus
 
 @pytest.mark.asyncio

@@ -22,12 +22,10 @@ Tests for:
 4. ReasoningParser - Extensible reasoning extraction framework
 """
 
-import asyncio
 import json
 import pytest
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock, patch, AsyncMock
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
@@ -643,7 +641,7 @@ class TestPhase22Integration:
 
     def test_jsontree_with_reasoning_output(self):
         """Test JSONTree with parsed reasoning output."""
-        from src.core.base.common.utils.json_tree_utils import json_flatten, json_iter_leaves
+        from src.core.base.common.utils.json_tree_utils import json_flatten
         from src.core.base.logic.parsers.reasoning_parser import extract_reasoning
 
         # Simulate model output in JSON format

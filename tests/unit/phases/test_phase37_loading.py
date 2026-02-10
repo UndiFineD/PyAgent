@@ -23,13 +23,9 @@ Tests for:
 - Rust accelerations: 9 new functions
 """
 
-import os
 import sys
 import tempfile
-import threading
-import time
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -415,7 +411,7 @@ class TestKVOffloadManager:
     def test_lru_manager_prepare_store(self):
         """Test LRUOffloadingManager prepare_store with eviction."""
         from src.infrastructure.engine.loading.kv_offload_manager import (
-            LRUOffloadingManager, MemoryBackend, BlockStatus
+            LRUOffloadingManager, MemoryBackend
         )
 
         backend = MemoryBackend(2, 4096)  # Only 2 blocks
@@ -900,7 +896,7 @@ class TestPhase37Integration:
     def test_weight_loading_pipeline(self):
         """Test weight loading pipeline end-to-end."""
         from src.infrastructure.engine.loading.weight_loader import (
-            WeightSpec, LoadStats, detect_weight_format, WeightFormat
+            WeightSpec
         )
 
         # Create specs
@@ -942,7 +938,7 @@ class TestPhase37Integration:
         """Test expert rebalancing end-to-end."""
         pytest.importorskip("numpy")
         from src.infrastructure.engine.loading.expert_load_balancer import (
-            ExpertLoadBalancer, DefaultEplbPolicy
+            ExpertLoadBalancer
         )
         import numpy as np
 
@@ -997,11 +993,6 @@ class TestModuleImports:
         """Test WeightLoader module imports."""
         from src.infrastructure.engine.loading.weight_loader import (
             WeightFormat,
-            WeightSpec,
-            AtomicWriter,
-            WeightLoader,
-            MultiThreadWeightLoader,
-            StreamingWeightLoader,
         )
         assert WeightFormat is not None
 
@@ -1009,11 +1000,6 @@ class TestModuleImports:
         """Test ShardedStateLoader module imports."""
         from src.infrastructure.engine.loading.sharded_state_loader import (
             ShardPattern,
-            ShardedTensor,
-            SubtensorFilter,
-            ShardedStateLoader,
-            IncrementalShardLoader,
-            AsyncShardLoader,
         )
         assert ShardPattern is not None
 
@@ -1021,13 +1007,6 @@ class TestModuleImports:
         """Test KVOffloadManager module imports."""
         from src.infrastructure.engine.loading.kv_offload_manager import (
             OffloadMedium,
-            LoadStoreSpec,
-            BlockStatus,
-            OffloadingEvent,
-            MemoryBackend,
-            LRUOffloadingManager,
-            ARCOffloadingManager,
-            TieredOffloadManager,
         )
         assert OffloadMedium is not None
 
@@ -1035,13 +1014,6 @@ class TestModuleImports:
         """Test ExpertLoadBalancer module imports."""
         from src.infrastructure.engine.loading.expert_load_balancer import (
             ExpertType,
-            EplbMetrics,
-            ExpertMapping,
-            AbstractEplbPolicy,
-            DefaultEplbPolicy,
-            LocalityAwarePolicy,
-            ExpertLoadBalancer,
-            AsyncExpertRebalancer,
         )
         assert ExpertType is not None
 

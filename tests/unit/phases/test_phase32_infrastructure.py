@@ -27,7 +27,6 @@ This module tests:
 import pytest
 import time
 import threading
-from unittest.mock import Mock, patch, MagicMock
 
 # =============================================================================
 # UvaBufferPool Tests
@@ -126,7 +125,7 @@ class TestUvaBufferPool:
         pool = UvaBufferPool(buffer_count=2, buffer_size=1024, max_buffers=2)
 
         buffer1 = pool.acquire()
-        buffer2 = pool.acquire()
+        pool.acquire()
 
         # Non-blocking acquire should return None
         buffer3 = pool.acquire(blocking=False)
@@ -912,7 +911,7 @@ class TestPhase32RustAccelerations:
         try:
             from src.core.rust_bridge import get_bridge
             return get_bridge()
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             pytest.skip("Rust bridge not available")
 
     def test_uva_copy_rust(self, rust_bridge):

@@ -24,9 +24,7 @@ Tests for:
 - TypedPrompts: Type-safe prompt schemas
 """
 
-import json
 import logging
-from dataclasses import dataclass
 
 import pytest
 
@@ -660,7 +658,6 @@ class TestPhase24Integration:
     def test_logger_with_telemetry(self):
         """Test enhanced logger with usage telemetry."""
         from src.observability.logging.enhanced_logger import EnhancedLoggerAdapter
-        from src.observability.telemetry.usage_message import UsageContext
 
         logger = EnhancedLoggerAdapter(logging.getLogger("integration"))
 

@@ -100,7 +100,7 @@ class HolographicContextAgent(BaseAgent):
             perspective = h["perspectives"].get(angle)
             if perspective:
                 return perspective
-        
+
         # Phase 330: Try to reconstruct from swarm
         if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "orchestrators"):
             try:

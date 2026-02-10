@@ -39,13 +39,13 @@ class DistributedBackup:
         self.local_shards_dir = Path("data/shards")
         self.local_shards_dir.mkdir(parents=True, exist_ok=True)
 
-    def create_shards(self, state_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def create_shards(self, state_data: Dict[str, Any], custom_hash: Optional[str] = None) -> List[Dict[str, Any]]:
         """
         Splits state into N encrypted shards using RAID-10 (Mirroring + Striping).
         Also includes a redundancy parity check.
         """
         raw_data = json.dumps(state_data).encode()
-        data_hash = hashlib.sha256(raw_data).hexdigest()
+        data_hash = custom_hash if custom_hash else hashlib.sha256(raw_data).hexdigest()
         
         # Phase 326: Dynamic Striping
         # N=3 parts, each mirrored once (M=2) = 6 shards total

@@ -8,10 +8,9 @@ Test Phase56 Swarm Quant module.
 
 import pytest
 import asyncio
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import MagicMock
 from src.infrastructure.engine.quantization.manager import QuantizationManager, QuantizationMode
 from src.infrastructure.swarm.orchestration.swarm.speculative_swarm_orchestrator import SpeculativeSwarmOrchestrator
-from src.core.base.common.models.communication_models import CascadeContext
 
 @pytest.mark.asyncio
 async def test_quantization_manager_modes():
