@@ -96,7 +96,85 @@ class WebAuthnManager:
     def verify_registration(self, username: str, response: Dict[str, Any]) -> bool:
         """Verifies a WebAuthn registration response."""
         if not HAS_WEBAUTHN:
-            return True # Mock success
+            logger.warning("webauthn library not installed. Mocking success.")
+            return True 
+
+        challenge = self.challenges.get(username)
+        if not challenge:
+            logger.error(f"No registration challenge found for user: {username}")
+            return False
+
+        try:
+            verification = verify_registration_response(
+                credential=response,
+                expected_challenge=base64url_to_bytes(challenge),
+                expected_rp_id=self.rp_id,
+                expected_origin=f"http://{self.rp_id}:8000", # Mock origin for lab
+            )
+            
+            # Store public key and credential ID
+            self.users[username] = {
+                "credential_id": verification.credential_id,
+                "public_key": verification.public_key,
+                "sign_count": verification.sign_count,
+            }
+            
+            logger.info(f"WebAuthn: Successfully registered biometric key for {username}")
+            return True
+        except Exception as e:
+            logger.error(f"WebAuthn: Registration verification failed: {e}")
+            return False
+
+    def get_authentication_options(self, username: str) -> Dict[str, Any]:
+        """Generates options for a WebAuthn authentication ceremony."""
+        if not HAS_WEBAUTHN:
+             return {"mock": True, "challenge": "mock_challenge"}
+
+        user_data = self.users.get(username)
+        if not user_data:
+            raise ValueError(f"User not found: {username}")
+
+        options = generate_authentication_options(
+            rp_id=self.rp_id,
+            challenge=os.urandom(32),
+            allow_credentials=[{
+                "id": user_data["credential_id"],
+                "type": "public-key"
+            }],
+            user_verification=UserVerificationRequirement.PREFERRED,
+        )
+        
+        self.challenges[username] = options.challenge
+        return json.loads(options_to_json(options))
+
+    def verify_authentication(self, username: str, response: Dict[str, Any]) -> bool:
+        """Verifies a WebAuthn authentication response."""
+        if not HAS_WEBAUTHN:
+            return True
+
+        challenge = self.challenges.get(username)
+        user_data = self.users.get(username)
+        
+        if not challenge or not user_data:
+            return False
+
+        try:
+            verification = verify_authentication_response(
+                credential=response,
+                expected_challenge=base64url_to_bytes(challenge),
+                expected_rp_id=self.rp_id,
+                expected_origin=f"http://{self.rp_id}:8000",
+                credential_public_key=user_data["public_key"],
+                credential_current_sign_count=user_data["sign_count"],
+            )
+            
+            # Update sign count to prevent replay attacks
+            self.users[username]["sign_count"] = verification.new_sign_count
+            logger.info(f"WebAuthn: Successfully authenticated {username}")
+            return True
+        except Exception as e:
+            logger.error(f"WebAuthn: Authentication failed: {e}")
+            return False
 
         expected_challenge = self.challenges.get(username)
         if not expected_challenge:

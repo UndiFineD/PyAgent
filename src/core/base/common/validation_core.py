@@ -91,8 +91,7 @@ class ValidationCore(BaseCore):
                 # Passing rule patterns to Rust regarding bulk processing
                 resp = rc.validate_content_rust(str(actual_path), actual_content, list(self._rules.keys()))
                 results.extend(resp)  # pylint: disable=no-member
-            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         def _apply_rule(rule: ValidationRule):
@@ -126,16 +125,18 @@ class ValidationCore(BaseCore):
                 schema_str = json.dumps(schema)
                 # Rust returns (is_valid, error_list)
                 return rc.json_schema_validate_rust(data_str, schema_str)  # pylint: disable=no-member
-            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         if not isinstance(data, dict):
             return False, ["Data must be a dictionary"]
 
         required = schema.get("required", [])
-        
+
         # Check required keys regarding the data dictionary functionally
-        errors = list(filter(None, map(lambda key: f"Missing required key: {key}" if key not in data else None, required)))
+        def _check_key(key: str) -> str | None:
+            return f"Missing required key: {key}" if key not in data else None
+
+        errors = list(filter(None, map(_check_key, required)))
 
         return len(errors) == 0, errors

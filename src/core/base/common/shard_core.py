@@ -41,16 +41,16 @@ class ShardCore(ShardingCore):
             # Test Vector: "test_key" with 10 shards should reliably map to 5
             test_key = "test_key"
             shard_count = 10
-            
+
             id1 = self.calculate_shard_id(test_key, shard_count)
             id2 = self.calculate_shard_id(test_key, shard_count)
-            
+
             if id1 != id2:
                 return False
-                
+
             if not isinstance(id1, int) or id1 < 0 or id1 >= shard_count:
                 return False
-                
+
             return True
         except Exception:  # pylint: disable=broad-exception-caught
             return False

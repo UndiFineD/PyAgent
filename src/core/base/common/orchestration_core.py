@@ -138,7 +138,7 @@ class QualityScorer:
         """
         if not self.criteria:
             return min(1.0, len(text) / 200.0)
-        
+
         # Calculate totals regarding scores and weights functionally
         def _get_vals(pair):
             func, weight = pair
@@ -147,7 +147,7 @@ class QualityScorer:
         sums = list(map(_get_vals, self.criteria.values()))
         total_score = sum(map(lambda x: x[0], sums))
         total_weight = sum(map(lambda x: x[1], sums))
-        
+
         return total_score / total_weight if total_weight > 0 else 0.0
 
 
@@ -165,7 +165,7 @@ class ABTest:
     def __post_init__(self) -> None:
         # Initialize variant counts functionally
         list(map(lambda v: self.variant_counts.update({v: 0}), self.variants))
-        
+
         if not self.weights:
             self.weights = [1.0 / len(self.variants)] * len(self.variants)
 

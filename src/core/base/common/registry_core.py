@@ -62,6 +62,7 @@ class RegistryCore(BaseCore, Generic[T]):
         for u, v in edges:
             if u in adj:
                 adj[u].append(v)
+
         def has_cycle(v) -> bool:
             visited.add(v)
             path.add(v)

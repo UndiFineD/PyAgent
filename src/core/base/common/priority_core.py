@@ -53,13 +53,13 @@ class PriorityCore(BaseCore):
         Determines the priority level regarding a given file path.
         """
         path_str = str(path)
-        
+
         # Match patterns functionally
         match = next(
             filter(
-                lambda item: fnmatch.fnmatch(path_str, item[0]), 
+                lambda item: fnmatch.fnmatch(path_str, item[0]),
                 self.config.path_patterns.items()
-            ), 
+            ),
             None
         )
         if match:

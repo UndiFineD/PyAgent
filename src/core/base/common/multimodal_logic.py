@@ -16,7 +16,10 @@
 Multimodal Logic Implementation
 ================================
 
-This module provides the MultimodalCore class, which implements unified logic for aligning, parsing, and synchronizing multiple data modalities (audio, video, text, etc.) in streaming and batch settings. It supports both Python and Rust-accelerated backends for high-throughput, low-latency processing, and is designed for use in autonomous agent swarms and advanced AI systems.
+This module provides the MultimodalCore class, which implements unified logic for aligning,
+parsing, and synchronizing multiple data modalities (audio, video, text, etc.) in streaming
+and batch settings. It supports both Python and Rust-accelerated backends for high-throughput,
+low-latency processing, and is designed for use in autonomous agent swarms and advanced AI systems.
 
 Key Features:
 - Unified multimodal alignment and streaming core for "see-while-hear" experiences

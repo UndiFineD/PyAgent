@@ -98,7 +98,7 @@ class ResilienceCore(BaseCore):
                             except Exception:
                                 # If even that fails, there's nothing reasonable to do
                                 logger.debug("ResilienceCore: fallback wait also failed")
-                        
+
                         return run_attempt(attempt + 1, current_delay * backoff)
 
                 return run_attempt(0, delay)

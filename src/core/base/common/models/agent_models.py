@@ -146,7 +146,7 @@ class AgentRouter:
         match = next(filter(lambda r: r[0](data), self.routes), None)
         if match:
             return match[1](data)
-        
+
         if self.default_handler:
             return self.default_handler(data)
         return data

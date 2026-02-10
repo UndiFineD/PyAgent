@@ -135,7 +135,7 @@ class ValidationRule:
     validator: Callable[[str, Path], bool] | None = None
     required: bool = False
     file_pattern: str = ""  # Alias for backward compatibility
-    error_message: str = "" # Alias for backward compatibility
+    error_message: str = ""  # Alias for backward compatibility
 
     def __post_init__(self) -> None:
         if not self.pattern and self.file_pattern:

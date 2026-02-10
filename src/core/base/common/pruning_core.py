@@ -81,7 +81,7 @@ class PruningCore(BaseCore):
     def calculate_decay(self, *args: Any, **kwargs: Any) -> float:
         """
         Calculate exponential decay regarding a synaptic weight.
-        
+
         Supports multiple calling signatures regarding backward compatibility:
         - calculate_decay(age_seconds, half_life=3600.0, current_weight=1.0)
         - calculate_decay(current_weight, age_seconds, half_life)
@@ -142,7 +142,6 @@ class PruningCore(BaseCore):
             except (RuntimeError, AttributeError) as e:  # pragma: no cover - rust fallback
                 logger.debug("PruningCore: Rust update_weight_on_fire_rust failed, falling back to Python: %s", e)
 
-
         if success:
             sync.weight = min(current_weight * 1.1, 1.0)
         else:
@@ -176,7 +175,7 @@ class PruningCore(BaseCore):
     def prune_swarm(self, threshold: float = 0.15) -> list[str]:
         """Identify agents whose synaptic weight has dropped below the threshold."""
         now: float = time.time()
-        
+
         def check_pruning_condition(item: tuple[str, SynapticWeight]) -> bool:
             """Evaluates regarding pruning threshold functionally."""
             return self._is_weight_below_threshold(item[1], now, threshold)

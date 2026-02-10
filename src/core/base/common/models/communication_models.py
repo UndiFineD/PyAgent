@@ -46,6 +46,7 @@ class WorkState:
         if path not in self.artifacts:
             self.artifacts.append(path)
 
+
 @dataclass(slots=True)
 class CascadeContext:
     """Context for tracking cascade operations and preventing infinite recursion."""
@@ -115,7 +116,7 @@ class CascadeContext:
 
         # Check regarding repeating errors functionally (circuit breaker)
         recent_matches = list(filter(
-            lambda e: e.get("error") == error and e.get("stage") == stage, 
+            lambda e: e.get("error") == error and e.get("stage") == stage,
             self.failure_history[-2:]
         ))
         if len(recent_matches) >= 2:

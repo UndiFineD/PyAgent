@@ -255,7 +255,9 @@ class ShellCore:
         working_dir = cwd or self.repo_root
 
         # Intelligence Gap: Record shell execution context for auditability
-        self.logger.info("Executing shell command: %s | cwd=%s | env_keys=%s", cmd, working_dir, list((env or {}).keys()))
+        self.logger.info(
+            "Executing shell command: %s | cwd=%s | env_keys=%s", cmd, working_dir, list((env or {}).keys())
+        )
         try:
             result = subprocess.run(
                 cmd,

@@ -25,20 +25,21 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any, Callable, Tuple
 from enum import Enum
 import statistics
+from src.core.base.common.models.core_enums import FailureClassification, OptimizationMetric
 
 logger = logging.getLogger(__name__)
 
 
-class OptimizationMetric(Enum):
-    """Metrics for evaluating strategy performance"""
-    ACCURACY = "accuracy"
-    PRECISION = "precision"
-    RECALL = "recall"
-    F1_SCORE = "f1_score"
-    LATENCY = "latency"
-    THROUGHPUT = "throughput"
-    COST = "cost"
-    ROBUSTNESS = "robustness"
+# class OptimizationMetric(Enum):  # Removed duplicate definition
+#     """Metrics for evaluating strategy performance"""
+#     ACCURACY = "accuracy"
+#     PRECISION = "precision"
+#     RECALL = "recall"
+#     F1_SCORE = "f1_score"
+#     LATENCY = "latency"
+#     THROUGHPUT = "throughput"
+#     COST = "cost"
+#     ROBUSTNESS = "robustness"
 
 
 @dataclass
@@ -61,6 +62,7 @@ class PerformanceResult:
     metrics: Dict[str, float] = field(default_factory=dict)
     execution_time: float = 0.0
     error: Optional[str] = None
+    failure_type: Optional[FailureClassification] = None  # Phase 336
     metadata: Dict[str, Any] = field(default_factory=dict)
     timestamp: float = None
 
@@ -204,10 +206,26 @@ class PerformanceMeasurer:
 
         except Exception as e:
             execution_time = time.time() - start_time
+            
+            # Phase 336: Failure Taxonomy Classification
+            failure_type = FailureClassification.UNKNOWN
+            error_str = str(e).lower()
+            if "timeout" in error_str:
+                failure_type = FailureClassification.NETWORK_FAILURE
+            elif "memory" in error_str or "oom" in error_str:
+                failure_type = FailureClassification.RESOURCE_EXHAUSTION
+            elif "recursion" in error_str:
+                failure_type = FailureClassification.RECURSION_LIMIT
+            elif "shard" in error_str:
+                failure_type = FailureClassification.SHARD_CORRUPTION
+            elif "ai" in error_str or "llm" in error_str:
+                failure_type = FailureClassification.AI_ERROR
+
             return PerformanceResult(
                 strategy_name=strategy.name,
                 execution_time=execution_time,
-                error=str(e)
+                error=str(e),
+                failure_type=failure_type
             )
 
     def _default_metric_calculation(

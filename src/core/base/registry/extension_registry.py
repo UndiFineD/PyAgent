@@ -242,6 +242,7 @@ class LazyExtensionManager(ExtensionManager):
         cls = self.get_class(name)
         return cls(*args, **kwargs)
 
+
 # ============================================================================
 # FACTORY FUNCTIONS & GLOBAL REGISTRY
 # ============================================================================

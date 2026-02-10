@@ -19,19 +19,21 @@ Ports the extensive provider list from .code_puppy's models.dev integration.
 
 from typing import Dict, List, TypedDict
 
+
 class ModelSpec(TypedDict):
     id: str
     context_window: int
     input_price: float  # Per 1M tokens
-    output_price: float # Per 1M tokens
+    output_price: float  # Per 1M tokens
     provider: str
-    literals: List[str] # Trigger keywords
+    literals: List[str]  # Trigger keywords
+
 
 class ProviderRegistry:
     """
     Central repository for 65+ LLM/multimodal providers and their pricing.
     """
-    
+
     # --------------------------------------------------------------------------
     # TIER 1: FOUNDATION MODELS
     # --------------------------------------------------------------------------
@@ -40,7 +42,7 @@ class ProviderRegistry:
     GOOGLE = "google"
     META = "meta"
     MISTRAL = "mistral"
-    
+
     # --------------------------------------------------------------------------
     # TIER 2: SPECIALIZED & OPEN SOURCE
     # --------------------------------------------------------------------------
@@ -51,14 +53,14 @@ class ProviderRegistry:
     DEEPSEEK = "deepseek"
     QWEN = "qwen"
     YI = "01-ai"
-    
+
     # --------------------------------------------------------------------------
     # TIER 3: EDGE & LOCAL
     # --------------------------------------------------------------------------
     OLLAMA = "ollama"
     LMSTUDIO = "lmstudio"
     VLLM = "vllm"
-    FASTFLOWLM = "fastflowlm" # NPU Optimized
+    FASTFLOWLM = "fastflowlm"  # NPU Optimized
 
     @staticmethod
     def get_all_models() -> Dict[str, ModelSpec]:

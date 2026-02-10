@@ -186,12 +186,12 @@ class MetricsCore(BaseCore):
         if rc:
             try:
                 grouped: Dict[str, List[float]] = {}
-                
+
                 def group_record(r):
                     if r.name not in grouped:
                         grouped[r.name] = []
                     grouped[r.name].append(r.value)
-                
+
                 list(map(group_record, self.records))
 
                 # pylint: disable=no-member
@@ -202,12 +202,12 @@ class MetricsCore(BaseCore):
 
     def _python_aggregate(self) -> Dict[str, float]:
         grouped_py: Dict[str, List[float]] = {}
-        
+
         def group_record(rec):
             if rec.name not in grouped_py:
                 grouped_py[rec.name] = []
             grouped_py[rec.name].append(rec.value)
-        
+
         list(map(group_record, self.records))
 
         def calc_avg(item):
@@ -236,10 +236,10 @@ class MetricsCore(BaseCore):
     def _python_rolling_avg(self, values: List[float], window: int) -> List[float]:
         if not values:
             return []
-        
+
         def calc_step_avg(i):
             start = max(0, i - window + 1)
             slice_vals = values[start : i + 1]
             return sum(slice_vals) / len(slice_vals)
-        
+
         return list(map(calc_step_avg, range(len(values))))

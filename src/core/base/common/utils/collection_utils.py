@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +17,8 @@ collection_utils.py
 
 Collection utilities for advanced data structure operations and transformations.
 
-This module provides helper functions for manipulating and analyzing collections, supporting advanced workflows in the PyAgent system.
+This module provides helper functions for manipulating and analyzing collections,
+supporting advanced workflows in the PyAgent system.
 """
 
 from __future__ import annotations

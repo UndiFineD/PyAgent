@@ -109,7 +109,6 @@ def import_from_path(
     logger.debug(f"Imported module '{module_name}' from {file_path}")
     return module
 
-
 # ============================================================================
 # Qualified Name Resolution
 # ============================================================================
@@ -181,7 +180,6 @@ def resolve_obj_by_qualname_parts(
     """
     module: ModuleType = importlib.import_module(module_path)
     obj: ModuleType = module
-
 
     for attr_name in attr_path.split("."):
         obj = getattr(obj, attr_name)
@@ -605,7 +603,6 @@ def _compare_versions(v1: str, v2: str) -> int:
     Returns:
         -1 if v1 < v2, 0 if v1 == v2, 1 if v1 > v2.
     """
-
 
     def normalize(v: str) -> tuple[int, ...]:
         return tuple(int(x) for x in v.split(".")[:3])

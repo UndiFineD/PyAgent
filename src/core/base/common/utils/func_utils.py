@@ -51,7 +51,6 @@ F = TypeVar("F")
 logger = logging.getLogger(__name__)
 
 
-
 def identity(value: T, **_kwargs: Any) -> T:
     """Return the first provided value unchanged."""
     return value
@@ -478,7 +477,6 @@ def debounce(wait: float) -> Callable[[F], F]:
 # ============================================================================
 # Retry Decorator
 # ============================================================================
-
 
 
 def retry_on_exception(

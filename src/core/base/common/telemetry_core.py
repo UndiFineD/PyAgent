@@ -118,7 +118,7 @@ class TelemetryCore(BaseCore):
         """Calculates a unified health score (0.0 - 1.0) for the local machine or cluster."""
         cpu_avg = self.get_rollups("swarm.node.cpu_percent", window_seconds=60).get("avg", 0.0)
         mem_avg = self.get_rollups("swarm.node.memory_percent", window_seconds=60).get("avg", 0.0)
-        
+
         # Invert the load to get a 'health' score
         # (e.g. 20% CPU + 30% MEM -> 0.75 health)
         load = (cpu_avg + mem_avg) / 2.0

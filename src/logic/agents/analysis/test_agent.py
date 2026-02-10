@@ -153,7 +153,59 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 )
 
             logging.error(f"TestAgent execution failed: {e}\n{tb}")
-            return f"Error running tests: {e}\nTraceback:\n{tb}"
+            
+            # Phase 336: Trigger Static Analysis Fallback
+            logging.info("TestAgent: Falling back to static code analysis.")
+            return self.static_analysis_fallback(path)
+
+    def static_analysis_fallback(self, path: str) -> str:
+        """
+        Phase 336: Static Analysis Fallback.
+        Performs AST-based sanity checks when execution is blocked.
+        """
+        import ast
+        import os
+        
+        report = ["## 🔍 Static Test Fallback Analysis\n"]
+        report.append("⚠️ **Note**: Execution was blocked. Performing recursive static analysis.\n")
+        
+        target_files = []
+        if os.path.isfile(path):
+            target_files.append(path)
+        elif os.path.isdir(path):
+            for root, _, files in os.walk(path):
+                for f in files:
+                    if f.endswith(".py"):
+                        target_files.append(os.path.join(root, f))
+        
+        total_issues = 0
+        for f in target_files:
+            try:
+                with open(f, "r", encoding="utf-8") as file:
+                    content = file.read()
+                
+                ast.parse(content) # Check syntax
+                
+                # Check for risky imports or patterns often causing failures
+                tree = ast.parse(content)
+                for node in ast.walk(tree):
+                    if isinstance(node, ast.Import):
+                        for alias in node.names:
+                            if alias.name in ["sys", "os"] and "recursion" in content:
+                                report.append(f"- 🚩 `{f}`: Potential recursion limit issue detected.")
+                                total_issues += 1
+            except SyntaxError as e:
+                report.append(f"- ❌ `{f}`: Syntax error detected: {e}")
+                total_issues += 1
+            except Exception as e:
+                report.append(f"- ⚠️ `{f}`: Error reading file: {e}")
+
+        if total_issues == 0:
+            report.append("✅ Static scan found no obvious syntax or structural issues.")
+        else:
+            report.append(f"\nFound {total_issues} potential issues.")
+            
+        return "\n".join(report)
 
     @as_tool
     def run_file_tests(self, file_path: str) -> str:

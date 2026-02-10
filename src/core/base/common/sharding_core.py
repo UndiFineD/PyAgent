@@ -51,7 +51,7 @@ class ShardingCore(BaseCore):
         """Returns a list of primary and replica shard IDs for high availability."""
         primary = self.calculate_shard_id(key, shard_count)
         count = shard_count or self.cluster_size
-        
+
         replicas = [primary]
         for i in range(1, self.replication_factor):
             replicas.append((primary + i) % count)
@@ -67,19 +67,19 @@ class ShardingCore(BaseCore):
             res = RustBridge._try_rust_call("multi_node_coordinate_rust", 0, num_nodes, tensor_shape)
             if res:
                 return res
-        
+
         # Python fallback: Split along the last dimension
         splits = {}
         last_dim = tensor_shape[-1]
         chunk = last_dim // num_nodes
-        
+
         for i in range(num_nodes):
             new_shape = list(tensor_shape)
             start = i * chunk
             end = last_dim if i == num_nodes - 1 else (i + 1) * chunk
             new_shape[-1] = end - start
             splits[i] = new_shape
-            
+
         return splits
 
     def assign_workload(self, node_loads: List[float]) -> int:
@@ -94,7 +94,7 @@ class ShardingCore(BaseCore):
             res = RustBridge._try_rust_call("load_balance_select_rust", ranks, node_loads)
             if res is not None:
                 return int(res)
-        
+
         # Python fallback: pick minimum load
         return int(np.argmin(node_loads))
 
@@ -105,7 +105,7 @@ class ShardingCore(BaseCore):
         """
         if RustBridge.is_rust_active():
             return RustBridge._try_rust_call("wave_sync_check_rust", ready_node_flags)
-        
+
         return all(ready_node_flags)
 
     def aggregate_swarm_metrics(self, node_stats: Dict[int, Dict[str, float]]) -> Dict[str, float]:
@@ -114,12 +114,12 @@ class ShardingCore(BaseCore):
         """
         if RustBridge.is_rust_active():
             return RustBridge._try_rust_call("dp_stats_aggregate_rust", node_stats)
-        
+
         # Python fallback
         if not node_stats:
             return {}
-            
+
         avg_lat = sum(s.get("latency", 0.0) for s in node_stats.values()) / len(node_stats)
         total_thr = sum(s.get("throughput", 0.0) for s in node_stats.values())
-        
+
         return {"avg_latency": avg_lat, "total_throughput": total_thr}

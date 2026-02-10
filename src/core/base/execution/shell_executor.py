@@ -30,6 +30,7 @@ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class ShellExecutor:
     """
     Safely executes shell commands and records outcomes.
@@ -61,7 +62,9 @@ class ShellExecutor:
         if models_config:
             env["AGENT_MODELS_CONFIG"] = json.dumps(models_config)
 
-        result: subprocess.CompletedProcess = await core.execute_async(cmd=cmd, timeout=timeout, env=env, cwd=workspace_root, sanitize=True)
+        result: subprocess.CompletedProcess = await core.execute_async(
+            cmd=cmd, timeout=timeout, env=env, cwd=workspace_root, sanitize=True
+        )
 
         if recorder:
             output = result.stdout + result.stderr
