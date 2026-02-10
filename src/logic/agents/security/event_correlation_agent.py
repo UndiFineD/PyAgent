@@ -54,33 +54,29 @@ class EventCorrelator:
     def _apply_rule(self, rule: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Apply a single correlation rule."""
         matches = []
-        event_type = rule.get('event_type')
-        conditions = rule.get('conditions', {})
-        time_window = rule.get('time_window', 300)  # 5 minutes default
+        event_type = rule.get("event_type")
+        conditions = rule.get("conditions", {})
+        time_window = rule.get("time_window", 300)  # 5 minutes default
 
         # Simple correlation: find events matching conditions within time window
-        relevant_events = [e for e in self.events if e.get('type') == event_type]
+        relevant_events = [e for e in self.events if e.get("type") == event_type]
 
         for i, event in enumerate(relevant_events):
             correlated = [event]
-            for other in relevant_events[i+1:]:
+            for other in relevant_events[i + 1 :]:
                 if self._events_related(event, other, conditions, time_window):
                     correlated.append(other)
             if len(correlated) > 1:
-                matches.append({
-                    'rule': rule.get('name', 'unknown'),
-                    'events': correlated
-                })
+                matches.append({"rule": rule.get("name", "unknown"), "events": correlated})
         return matches
 
     def _events_related(
-        self, event1: Dict[str, Any], event2: Dict[str, Any],
-        conditions: Dict[str, Any], time_window: int
+        self, event1: Dict[str, Any], event2: Dict[str, Any], conditions: Dict[str, Any], time_window: int
     ) -> bool:
         """Check if two events are related based on conditions."""
         # Check time proximity
-        time1 = event1.get('timestamp', 0)
-        time2 = event2.get('timestamp', 0)
+        time1 = event1.get("timestamp", 0)
+        time2 = event2.get("timestamp", 0)
         if abs(time1 - time2) > time_window:
             return False
 
@@ -114,16 +110,10 @@ class EventCorrelationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def define_correlation_rule(
-        self, name: str, event_type: str,
-        conditions: Dict[str, Any], time_window: int = 300
+        self, name: str, event_type: str, conditions: Dict[str, Any], time_window: int = 300
     ) -> None:
         """Define a new correlation rule."""
-        rule = {
-            'name': name,
-            'event_type': event_type,
-            'conditions': conditions,
-            'time_window': time_window
-        }
+        rule = {"name": name, "event_type": event_type, "conditions": conditions, "time_window": time_window}
         self.correlation_rules.append(rule)
         logging.info(f"Defined correlation rule: {name}")
 

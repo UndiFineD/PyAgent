@@ -31,6 +31,7 @@ __version__ = VERSION
 
 class LicenseReport(TypedDict, total=False):
     """Structured report for license auditing."""
+
     detected_licenses: list[str]
     risk_level: str
     summary: str
@@ -68,7 +69,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                     model=model,
                     prompt=prompt,
                     result=result,
-                    meta={"timestamp": time.time(), "agent": "LegalAuditAgent"}
+                    meta={"timestamp": time.time(), "agent": "LegalAuditAgent"},
                 )
             except Exception:  # pylint: disable=broad-exception-caught
                 pass

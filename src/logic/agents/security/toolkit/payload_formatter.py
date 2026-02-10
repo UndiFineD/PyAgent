@@ -2,10 +2,11 @@
 # Copyright 2026 PyAgent Authors
 
 import json
-from typing import List, Dict
+from typing import List
+
 
 class PayloadFormatter:
-    """ Formats parameter lists into various HTTP request body formats. """
+    """Formats parameter lists into various HTTP request body formats."""
 
     @staticmethod
     def to_json(params: List[str], value: str = "null") -> str:

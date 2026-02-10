@@ -37,7 +37,7 @@ class VulnIntelligence:
             "%0D%0AInjected-Header:CRLFInject",
             "%E5%98%8A%E5%98%8DInjected-Header:CRLFInject",
             "%3F%0AInjected-Header:CRLFInject",
-            "\r\nInjected-Header:CRLFInject"
+            "\r\nInjected-Header:CRLFInject",
         ]
 
     @staticmethod
@@ -55,7 +55,7 @@ class VulnIntelligence:
                 "application/json+xml",
                 "application/json XXX",
                 "application/json;inject",
-                "application/vnd.api+json"
+                "application/vnd.api+json",
             ]
         return [original_ct]
 
@@ -66,35 +66,161 @@ class VulnIntelligence:
         """
         return {
             "ssrf": [
-                "dest", "redirect", "uri", "path", "continue", "url", "window", "next", "data", "reference",
-                "site", "html", "val", "validate", "domain", "callback", "return", "page", "feed", "host",
-                "port", "to", "out", "view", "dir"
+                "dest",
+                "redirect",
+                "uri",
+                "path",
+                "continue",
+                "url",
+                "window",
+                "next",
+                "data",
+                "reference",
+                "site",
+                "html",
+                "val",
+                "validate",
+                "domain",
+                "callback",
+                "return",
+                "page",
+                "feed",
+                "host",
+                "port",
+                "to",
+                "out",
+                "view",
+                "dir",
             ],
             "sql": [
-                "id", "page", "report", "dir", "search", "category", "file", "class", "url", "news",
-                "item", "menu", "lang", "name", "ref", "title", "view", "topic", "thread", "type",
-                "date", "form", "main", "nav", "region"
+                "id",
+                "page",
+                "report",
+                "dir",
+                "search",
+                "category",
+                "file",
+                "class",
+                "url",
+                "news",
+                "item",
+                "menu",
+                "lang",
+                "name",
+                "ref",
+                "title",
+                "view",
+                "topic",
+                "thread",
+                "type",
+                "date",
+                "form",
+                "main",
+                "nav",
+                "region",
             ],
             "xss": [
-                "q", "s", "search", "id", "lang", "keyword", "query", "page", "keywords", "year",
-                "view", "email", "type", "name", "p", "month", "image", "list_type", "url", "terms",
-                "categoryid", "key", "l", "begindate", "enddate"
+                "q",
+                "s",
+                "search",
+                "id",
+                "lang",
+                "keyword",
+                "query",
+                "page",
+                "keywords",
+                "year",
+                "view",
+                "email",
+                "type",
+                "name",
+                "p",
+                "month",
+                "image",
+                "list_type",
+                "url",
+                "terms",
+                "categoryid",
+                "key",
+                "l",
+                "begindate",
+                "enddate",
             ],
             "lfi": [
-                "cat", "dir", "action", "board", "date", "detail", "file", "download", "path", "folder",
-                "prefix", "include", "page", "inc", "locate", "show", "doc", "site", "type", "view",
-                "content", "document", "layout", "mod", "conf"
+                "cat",
+                "dir",
+                "action",
+                "board",
+                "date",
+                "detail",
+                "file",
+                "download",
+                "path",
+                "folder",
+                "prefix",
+                "include",
+                "page",
+                "inc",
+                "locate",
+                "show",
+                "doc",
+                "site",
+                "type",
+                "view",
+                "content",
+                "document",
+                "layout",
+                "mod",
+                "conf",
             ],
             "open_redirect": [
-                "next", "url", "target", "rurl", "dest", "destination", "redir", "redirect_uri",
-                "redirect_url", "redirect", "out", "view", "to", "image_url", "go", "return",
-                "returnTo", "return_to", "checkout_url", "continue", "return_path"
+                "next",
+                "url",
+                "target",
+                "rurl",
+                "dest",
+                "destination",
+                "redir",
+                "redirect_uri",
+                "redirect_url",
+                "redirect",
+                "out",
+                "view",
+                "to",
+                "image_url",
+                "go",
+                "return",
+                "returnTo",
+                "return_to",
+                "checkout_url",
+                "continue",
+                "return_path",
             ],
             "rce": [
-                "cmd", "exec", "command", "execute", "ping", "query", "jump", "code", "reg", "do",
-                "func", "arg", "option", "load", "process", "step", "read", "feature", "exe",
-                "module", "payload", "run", "print"
-            ]
+                "cmd",
+                "exec",
+                "command",
+                "execute",
+                "ping",
+                "query",
+                "jump",
+                "code",
+                "reg",
+                "do",
+                "func",
+                "arg",
+                "option",
+                "load",
+                "process",
+                "step",
+                "read",
+                "feature",
+                "exe",
+                "module",
+                "payload",
+                "run",
+                "print",
+            ],
         }
 
     GIT_MAGIC = re.compile(r"^(ref:.*|[0-9a-f]{40}$)")
@@ -108,7 +234,7 @@ class VulnIntelligence:
         checks = [
             ("git", ".git/HEAD", cls.GIT_MAGIC),
             ("svn", ".svn/wc.db", re.compile(r"^SQLite")),
-            ("hg", ".hg/store/00manifest.i", re.compile(r"^\x00\x00\x00\x01"))
+            ("hg", ".hg/store/00manifest.i", re.compile(r"^\x00\x00\x00\x01")),
         ]
 
         async with aiohttp.ClientSession() as session:
@@ -161,10 +287,7 @@ class VulnIntelligence:
     @classmethod
     async def parse_robots(cls, url: str) -> Dict[str, List[str]]:
         """Parse robots.txt and identify high-value paths."""
-        results: Dict[str, List[str]] = {
-            "disallowed": [],
-            "sensitive": []
-        }
+        results: Dict[str, List[str]] = {"disallowed": [], "sensitive": []}
         async with aiohttp.ClientSession() as session:
             try:
                 target = f"{url.rstrip('/')}/robots.txt"

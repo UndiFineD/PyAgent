@@ -19,6 +19,7 @@
 
 from typing import Dict, Any, Optional
 
+
 class ResearchCore:
     """Core domain logic for research, search, and technical synthesis tasks."""
     def __init__(self, config: Optional[Dict[str, Any]] = None):

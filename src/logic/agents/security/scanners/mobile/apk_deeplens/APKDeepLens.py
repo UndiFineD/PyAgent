@@ -40,7 +40,7 @@ class util(util):
         """
         Logo for APKDeepLens
         """
-        logo = f"""                 
+        logo = f"""
 {util.OKGREEN} ████  █████  ██  ██    ( )                  (_ )                           {util.ENDC}
 {util.OKGREEN}██  ██ ██  ██ ██ ██    _| |  __     __  _ _   | |     __    ___    ___      {util.ENDC}
 {util.OKGREEN}██████ █████  ████   /'_` | /'_`\\ /'_`\\( '_`\\ | |    /'_`\\/' _ `\\/',__)     {util.ENDC}
@@ -60,16 +60,10 @@ def parse_args():
     util.print_logo()
 
     parser = argparse.ArgumentParser(
-        description=(
-            "{BOLD}{GREEN}APKDeepLens:{ENDC}"
-            " Android security insights in full spectrum. "
-        ).format(
+        description=("{BOLD}{GREEN}APKDeepLens:{ENDC} Android security insights in full spectrum. ").format(
             BOLD=util.BOLD, GREEN=util.OKCYAN, ENDC=util.ENDC
         ),
-        epilog=(
-            "For more information, visit our GitHub repository"
-            " - https://github.com/d78ui98/APKDeepLens"
-        ),
+        epilog=("For more information, visit our GitHub repository - https://github.com/d78ui98/APKDeepLens"),
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
@@ -100,10 +94,7 @@ def parse_args():
         help="Format of the report to be generated. Default is JSON.",
     )
     parser.add_argument(
-        "-o",
-        metavar="output path or file",
-        type=str,
-        help="Output report path (can be filename or dir)"
+        "-o", metavar="output path or file", type=str, help="Output report path (can be filename or dir)"
     )
     parser.add_argument(
         "--ignore_virtualenv",
@@ -115,7 +106,6 @@ def parse_args():
 
 
 class AutoApkScanner(object):
-
     def __init__(self):
         pass
 
@@ -123,9 +113,7 @@ class AutoApkScanner(object):
         """
         Creating a folder to extract apk source code
         """
-        extracted_source_path = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "app_source", apk_file
-        )
+        extracted_source_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "app_source", apk_file)
 
         resources_path = os.path.join(extracted_source_path, "resources")
         sources_path = os.path.join(extracted_source_path, "sources")
@@ -139,17 +127,14 @@ class AutoApkScanner(object):
             and os.path.isdir(sources_path)
         ):
             util.mod_log(
-                "[+] Source code for apk - {} Already extracted. Skipping this step.".format(
-                    apk_file
-                ),
+                "[+] Source code for apk - {} Already extracted. Skipping this step.".format(apk_file),
                 util.OKCYAN,
             )
             return {"result": 0, "path": extracted_source_path}
         else:
             os.makedirs(extracted_source_path, exist_ok=True)
             util.mod_log(
-                "[+] Creating new directory for extracting apk : "
-                + extracted_source_path,
+                "[+] Creating new directory for extracting apk : " + extracted_source_path,
                 util.OKCYAN,
             )
             return {"result": 1, "path": extracted_source_path}
@@ -190,7 +175,7 @@ if __name__ == "__main__":
         args = parse_args()
 
         ignore_virtualenv = args.ignore_virtualenv
-        # Check if virtual environment is activated 
+        # Check if virtual environment is activated
         if not os.path.exists("/.dockerenv") and not ignore_virtualenv:
             try:
                 os.environ["VIRTUAL_ENV"]
@@ -202,9 +187,7 @@ if __name__ == "__main__":
                 exit(1)
 
             if not args.apk:
-                util.mod_log(
-                    "[-] ERROR: Please provide the apk file using the -apk flag.", util.FAIL
-                )
+                util.mod_log("[-] ERROR: Please provide the apk file using the -apk flag.", util.FAIL)
                 exit(1)
 
         apk = args.apk
@@ -261,14 +244,8 @@ if __name__ == "__main__":
 
         # Extraction useful infomration from android menifest file
         # obj_self.extract_manifest_info(apk_name)
-        extracted_source_path = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "app_source", apk_name
-        )
-        manifest_results = (
-            scan_android_manifest.ScanAndroidManifest().extract_manifest_info(
-                extracted_source_path
-            )
-        )
+        extracted_source_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "app_source", apk_name)
+        manifest_results = scan_android_manifest.ScanAndroidManifest().extract_manifest_info(extracted_source_path)
         results_dict["package_name"] = manifest_results["package_name"]
         results_dict["permission"] = manifest_results["permissions"]
         results_dict["dangerous_permission"] = manifest_results["dangerous_permission"]
@@ -297,9 +274,7 @@ if __name__ == "__main__":
         file_paths = obj.get_all_file_paths(extracted_apk_path)
         relative_to = extracted_apk_path
         util.mod_log("[+] Extracting all hardcoded secrets ", util.OKCYAN)
-        hardcoded_secrets_result = obj.extract_all_sensitive_info(
-            file_paths, relative_to
-        )
+        hardcoded_secrets_result = obj.extract_all_sensitive_info(file_paths, relative_to)
         if isinstance(hardcoded_secrets_result, list):
             results_dict["hardcoded_secrets"] = hardcoded_secrets_result
         else:
@@ -318,11 +293,8 @@ if __name__ == "__main__":
         ############## REPORT GENERATION ############
 
         if args.report:
-
             # Extracting all the required paths
-            extracted_source_path = os.path.join(
-                os.path.dirname(os.path.abspath(__file__)), "app_source", apk_name
-            )
+            extracted_source_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "app_source", apk_name)
             res_path = os.path.join(extracted_source_path, "resources")
             source_path = os.path.join(extracted_source_path, "sources")
             script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -335,9 +307,7 @@ if __name__ == "__main__":
             # Update the attributes by stripping out the namespace
             for elem in manifest.iter():
                 elem.attrib = {
-                    k.replace(
-                        "{http://schemas.android.com/apk/res/android}", "android:"
-                    ): v
+                    k.replace("{http://schemas.android.com/apk/res/android}", "android:"): v
                     for k, v in elem.attrib.items()
                 }
             out_path = args.o

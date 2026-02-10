@@ -56,7 +56,9 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             # Rust acceleration for secret scanning
             try:
                 from rust_core import (  # type: ignore[attr-defined]
-                    scan_hardcoded_secrets_rust, scan_insecure_patterns_rust)
+                    scan_hardcoded_secrets_rust,
+                    scan_insecure_patterns_rust,
+                )
 
                 # Scan for hardcoded secrets
                 secret_findings = scan_hardcoded_secrets_rust(content)

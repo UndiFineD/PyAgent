@@ -50,12 +50,12 @@ class AnomalyDetector:
 
         # Simple anomaly detection based on interaction frequency and types
         interactions = list(self.agent_interactions[agent_id])
-        types = [str(i.get('type', 'unknown')) for i in interactions]
+        types = [str(i.get("type", "unknown")) for i in interactions]
         frequencies: Dict[str, int] = {}
         for t in types:
             frequencies[t] = frequencies.get(t, 0) + 1
 
-        current_type = current_interaction.get('type', 'unknown')
+        current_type = current_interaction.get("type", "unknown")
         if current_type not in frequencies:
             return True  # New type
 
@@ -71,10 +71,10 @@ class AnomalyDetector:
         """Update baseline statistics."""
         if len(self.agent_interactions[agent_id]) >= 10:
             interactions = list(self.agent_interactions[agent_id])
-            types = [i.get('type', 'unknown') for i in interactions]
+            types = [i.get("type", "unknown") for i in interactions]
             self.baseline_stats[agent_id] = {
-                'mean_interactions': statistics.mean([len(types)]),
-                'common_types': max(set(types), key=types.count)
+                "mean_interactions": statistics.mean([len(types)]),
+                "common_types": max(set(types), key=types.count),
             }
 
 
@@ -104,7 +104,7 @@ class AnomalyDetectionAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def check_agent_anomalies(self, agent_id: str) -> List[Dict[str, Any]]:
         """Check anomalies for a specific agent."""
-        return [a for a in self.anomalies if a['agent_id'] == agent_id]
+        return [a for a in self.anomalies if a["agent_id"] == agent_id]
 
     @as_tool
     def get_all_anomalies(self) -> List[Dict[str, Any]]:
@@ -120,10 +120,6 @@ class AnomalyDetectionAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def _log_anomaly(self, agent_id: str, interaction: Dict[str, Any]) -> None:
         """Log a detected anomaly."""
-        anomaly = {
-            'agent_id': agent_id,
-            'interaction': interaction,
-            'timestamp': interaction.get('timestamp', None)
-        }
+        anomaly = {"agent_id": agent_id, "interaction": interaction, "timestamp": interaction.get("timestamp", None)}
         self.anomalies.append(anomaly)
         logging.warning(f"ANOMALY DETECTED: Agent {agent_id} - {interaction}")

@@ -48,8 +48,7 @@ class ArchCore:
                 graph_list = list(graph.items())
                 out_deg, in_deg = calculate_coupling_rust(graph_list)
                 return {"out_degree": dict(out_deg), "in_degree": dict(in_deg)}
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
         # Python fallback
         out_degree = {k: len(v) for k, v in graph.items()}

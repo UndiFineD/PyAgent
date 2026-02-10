@@ -53,7 +53,7 @@ class ShellIntelligence:
 
     async def check_shell_environment(self) -> str:
         """Uses PowerShell to check the current environment details safely."""
-        ps_command = "powershell -NoProfile -Command \"$PSVersionTable | Out-String\""
+        ps_command = 'powershell -NoProfile -Command "$PSVersionTable | Out-String"'
         stdout, stderr, _ = await self.execute_command(ps_command)
         return stdout.strip() if stdout else stderr.strip()
 
@@ -63,13 +63,11 @@ class ShellIntelligence:
         self.sanitize_command(command)
 
         process = await asyncio.create_subprocess_shell(
-            command,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
+            command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
         )
         stdout_bytes, stderr_bytes = await process.communicate()
 
-        encoding = sys.stdout.encoding or 'utf-8'
-        stdout = stdout_bytes.decode(encoding, errors='replace')
-        stderr = stderr_bytes.decode(encoding, errors='replace')
+        encoding = sys.stdout.encoding or "utf-8"
+        stdout = stdout_bytes.decode(encoding, errors="replace")
+        stderr = stderr_bytes.decode(encoding, errors="replace")
         return stdout, stderr, process.returncode or 0

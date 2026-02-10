@@ -12,11 +12,13 @@
 # limitations under the License.
 
 import asyncio
-from typing import List, Optional, Protocol, Any
+from typing import List, Protocol
 from dataclasses import dataclass
+
 
 class LLMInterface(Protocol):
     async def chat(self, messages: List[dict]) -> str: ...
+
 
 @dataclass
 class RoundResult:
@@ -25,9 +27,10 @@ class RoundResult:
     best_response: str
     rationale: str
 
+
 class RecursiveThinker:
     """
-    Implements a recursive thinking pattern (CoRT) to improve agent responses by 
+    Implements a recursive thinking pattern (CoRT) to improve agent responses by
     generating alternatives and self-evaluating.
     Ported logic from 0xSojalSec-Chain-of-Recursive-Thoughts.
     """
@@ -40,14 +43,14 @@ class RecursiveThinker:
         Iteratively improves the response through self-critique and alternative generation.
         """
         current_best = initial_response
-        
+
         for i in range(rounds):
             # 1. Generate Alternatives
             alternatives = await self._generate_alternatives(prompt, current_best)
-            
+
             # 2. Evaluate and Pick Best
             current_best = await self._evaluate_and_select(prompt, current_best, alternatives)
-            
+
         return current_best
 
     async def _generate_alternatives(self, prompt: str, current_response: str) -> List[str]:
@@ -75,9 +78,9 @@ ALTERNATIVE 2: [content]
         options = {"Current": current}
         for idx, alt in enumerate(alternatives):
             options[f"Alt_{idx}"] = alt
-        
+
         options_text = "\n".join([f"{k}: {v[:200]}..." for k, v in options.items()])
-        
+
         eval_prompt = [
              {"role": "user", "content": f"""User Prompt: {prompt}
 
@@ -86,13 +89,14 @@ Candidates:
 
 Which candidate is objectively the best? Respond with the key name only (e.g. Current, Alt_0)."""}
         ]
-        
+
         choice = await self.llm.chat(eval_prompt)
         choice = choice.strip()
-        
+
         if choice in options:
             return options[choice] if choice == "Current" else alternatives[int(choice.split("_")[1])]
         return current
+
 
 # Mock
 class MockThinkerLLM:
@@ -103,6 +107,7 @@ class MockThinkerLLM:
         if "Which candidate" in content:
             return "Alt_0"
         return "Unknown"
+
 
 if __name__ == "__main__":
     async def run():

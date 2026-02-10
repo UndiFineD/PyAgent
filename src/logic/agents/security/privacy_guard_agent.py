@@ -97,8 +97,7 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         Offloads the heavy filesystem traversal and regex matching to Rust.
         """
         try:
-            from rust_core import \
-                scan_secrets_rust  # type: ignore[attr-defined]
+            from rust_core import scan_secrets_rust  # type: ignore[attr-defined]
 
             return scan_secrets_rust(self.workspace_path)
         except (ImportError, AttributeError):

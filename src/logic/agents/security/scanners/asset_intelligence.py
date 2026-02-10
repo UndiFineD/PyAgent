@@ -550,16 +550,16 @@ class AssetIntelligence:
             492290497: "? (Possible IP Camera)",
             400100893: "? (DVR)",
             -1252041730: "Vue.js",
-            180732787: "Apache Flink"
+            180732787: "Apache Flink",
         }
 
     @staticmethod
     def get_common_asset_dorks() -> Dict[str, str]:
         """Common Shodan/Censys dorks for infrastructure discovery."""
         return {
-            "Fortinet VPN": "http.title:\"FortiToken Clock Drift\"",
-            "Pulse Secure": "http.title:\"Pulse Secure\" http.favicon.hash:-1562939331",
-            "Cisco VPN": "http.title:\"Cisco AnyConnect\"",
-            "Citrix ADC": "http.title:\"Citrix Gateway\"",
-            "Spring Boot Actuator": "http.title:\"Actuator\" \"/health\""
+            "Fortinet VPN": 'http.title:"FortiToken Clock Drift"',
+            "Pulse Secure": 'http.title:"Pulse Secure" http.favicon.hash:-1562939331',
+            "Cisco VPN": 'http.title:"Cisco AnyConnect"',
+            "Citrix ADC": 'http.title:"Citrix Gateway"',
+            "Spring Boot Actuator": 'http.title:"Actuator" "/health"',
         }

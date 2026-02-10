@@ -24,28 +24,20 @@ class GraphIntelligence:
     def get_ad_graph_queries() -> Dict[str, str]:
         """Cypher queries for Active Directory graph analysis."""
         return {
-            "unroll_group_members": (
-                "MATCH (g:Group)-[:MemberOf*0..]->(u:User) "
-                "RETURN g.name, u.name"
-            ),
+            "unroll_group_members": ("MATCH (g:Group)-[:MemberOf*0..]->(u:User) RETURN g.name, u.name"),
             "shortest_path_to_da": (
                 "MATCH (u:User {name: '{username}'}), (da:Group {name: 'DOMAIN ADMINS'}), "
                 "p = shortestPath((u)-[*..]->(da)) "
                 "RETURN p"
             ),
             "kerberoastable_admins": (
-                "MATCH (u:User {hasspn: true})-[:MemberOf*0..]->(g:Group) "
-                "WHERE g.name CONTAINS 'ADMIN' "
-                "RETURN u.name"
+                "MATCH (u:User {hasspn: true})-[:MemberOf*0..]->(g:Group) WHERE g.name CONTAINS 'ADMIN' RETURN u.name"
             ),
-            "constrained_delegation_path": (
-                "MATCH (u:User)-[:AllowedToDelegate]->(c:Computer) "
-                "RETURN u.name, c.name"
-            ),
+            "constrained_delegation_path": ("MATCH (u:User)-[:AllowedToDelegate]->(c:Computer) RETURN u.name, c.name"),
             "dangerous_acl_rights": (
                 "MATCH (u:User)-[r:WriteDacl|WriteOwner|AllExtendedRights]->(target) "
                 "RETURN u.name, type(r), target.name"
-            )
+            ),
         }
 
     @staticmethod
@@ -57,5 +49,5 @@ class GraphIntelligence:
             ),
             "linear_algebra_query_exec": "Using vector-matrix multiplication for BFS/DFS traversal",
             "multi_tenant_isolation": "Namespace-based graph separation in memory",
-            "opencypher_extension_indices": "Using specialized indices for property-based filtering in Cypher"
+            "opencypher_extension_indices": "Using specialized indices for property-based filtering in Cypher",
         }

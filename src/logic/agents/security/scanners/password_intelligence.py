@@ -18,17 +18,15 @@ from typing import List, Dict
 class PasswordIntelligence:
     """Intelligence engine for password generation, cracking, and analysis."""
 
-    COMMON_PADDING = [
-        "!", "!!", "!!!", "123", "@", "#", "$", "2023", "2024", "2025", "2026"
-    ]
+    COMMON_PADDING = ["!", "!!", "!!!", "123", "@", "#", "$", "2023", "2024", "2025", "2026"]
 
     CHARACTER_SUBSTITUTIONS: Dict[str, List[str]] = {
-        'a': ['@', '4'],
-        'e': ['3'],
-        'i': ['1', '!'],
-        'o': ['0'],
-        's': ['$', '5'],
-        't': ['7']
+        "a": ["@", "4"],
+        "e": ["3"],
+        "i": ["1", "!"],
+        "o": ["0"],
+        "s": ["$", "5"],
+        "t": ["7"],
     }
 
     @staticmethod
@@ -46,9 +44,7 @@ class PasswordIntelligence:
     @staticmethod
     def get_common_hash_algorithms() -> List[str]:
         """Registry of common hash algorithms for cracking."""
-        return [
-            "md5", "sha1", "sha256", "sha512", "bcrypt", "ntlm", "netntlmv2"
-        ]
+        return ["md5", "sha1", "sha256", "sha512", "bcrypt", "ntlm", "netntlmv2"]
 
     @staticmethod
     def identify_hash_type(hash_str: str) -> str:

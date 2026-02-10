@@ -66,8 +66,12 @@ class CoRTReasoningCore:
         self.inference_engine = inference_engine
         self.logger = logging.getLogger("pyagent.reasoning.cort.core")
 
-    async def think_and_respond(self, user_input: str, context: Optional[CascadeContext] = None,
-                               verbose: bool = True) -> CoRTResult:
+    async def think_and_respond(
+        self,
+        user_input: str,
+        context: Optional[CascadeContext] = None,
+        verbose: bool = True
+    ) -> CoRTResult:
         """
         Process user input with recursive thinking.
 
@@ -117,7 +121,7 @@ class CoRTReasoningCore:
                     round_number=round_num,
                     response=current_best,
                     selected=True,
-                    alternative_number=0, # 0 indicates a correction
+                    alternative_number=0,  # 0 indicates a correction
                     evaluation_score=0.9
                 ))
 
@@ -153,7 +157,9 @@ class CoRTReasoningCore:
                 current_best = new_best
 
             if verbose:
-                self.logger.info(f"🤔 Round {round_num} complete. Selection: {explanation}")
+                self.logger.info(
+                    f"🤔 Round {round_num} complete. Selection: {explanation}"
+                )
 
         # Calculate confidence and reasoning chain
         confidence_score = await self._calculate_confidence(current_best, thinking_history)
@@ -171,7 +177,10 @@ class CoRTReasoningCore:
         )
 
         if verbose:
-            self.logger.info(f"🤔 CoRT process complete in {processing_time:.2f}s with {confidence_score:.2f} confidence")
+            self.logger.info(
+                f"🤔 CoRT process complete in {processing_time:.2f}s "
+                f"with {confidence_score:.2f} confidence"
+            )
 
         return result
 
@@ -333,7 +342,7 @@ Analyze the draft for:
 3. Tone or style violations.
 4. Failure to fully address the original task.
 
-If you find errors, provide the FULL corrected response. 
+If you find errors, provide the FULL corrected response.
 If the response is already perfect, respond with ONLY the word "PERFECT".
 
 Corrected Response:"""
@@ -347,7 +356,7 @@ Corrected Response:"""
 
             if "PERFECT" in correction[:20].upper() and len(correction) < 50:
                 return response
-            
+
             return correction.strip()
         except Exception as e:
             self.logger.warning(f"Phase 321: Self-correction failed: {e}")

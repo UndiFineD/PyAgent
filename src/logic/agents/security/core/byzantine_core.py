@@ -111,10 +111,10 @@ class ByzantineCore:
                 health -= 0.2
             if len(content) < 10:
                 health -= 0.5
-            
+
             # Weighted by surgeon reliability (ideally)
             audit_results[p_hash] = health
-            
+
         return audit_results
 
     def detect_deviating_hashes(self, votes: list[dict[str, Any]], consensus_hash: str) -> list[str]:

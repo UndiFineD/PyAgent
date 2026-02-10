@@ -43,12 +43,12 @@ class EmailIntelligence:
                 emails = await resp.json()
                 return emails[0]
         # Fallback
-        user = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
+        user = "".join(random.choices(string.ascii_lowercase + string.digits, k=10))
         return f"{user}@1secmail.com"
 
     async def check_inbox(self, email: str) -> List[Dict[str, Any]]:
         """Checks the inbox for the given email address."""
-        user, domain = email.split('@')
+        user, domain = email.split("@")
         url = f"{self.api_url}?action=getMessages&login={user}&domain={domain}"
         session = await self._get_session()
         try:
@@ -61,7 +61,7 @@ class EmailIntelligence:
 
     async def get_message_content(self, email: str, msg_id: int) -> Dict[str, Any]:
         """Fetches the content of a specific message."""
-        user, domain = email.split('@')
+        user, domain = email.split("@")
         url = f"{self.api_url}?action=readMessage&login={user}&domain={domain}&id={msg_id}"
         session = await self._get_session()
         try:
@@ -74,12 +74,12 @@ class EmailIntelligence:
 
     def extract_otp(self, text: str) -> Optional[str]:
         """Extracts OTPS (4-8 digits) from text."""
-        match = re.search(r'\b\d{4,8}\b', text)
+        match = re.search(r"\b\d{4,8}\b", text)
         return match.group(0) if match else None
 
     def extract_links(self, text: str) -> List[str]:
         """Extracts confirmation/activation links from text."""
-        return re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
+        return re.findall(r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+", text)
 
     async def wait_for_otp(self, email: str, timeout: int = 120, interval: int = 5) -> Optional[str]:
         """Polls the inbox until an OTP is found or timeout is reached."""
@@ -87,8 +87,8 @@ class EmailIntelligence:
         while asyncio.get_event_loop().time() - start_time < timeout:
             messages = await self.check_inbox(email)
             for msg in messages:
-                content = await self.get_message_content(email, msg['id'])
-                body = content.get('textBody', '') + content.get('body', '')
+                content = await self.get_message_content(email, msg["id"])
+                body = content.get("textBody", "") + content.get("body", "")
                 otp = self.extract_otp(body)
                 if otp:
                     return otp

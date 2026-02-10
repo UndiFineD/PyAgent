@@ -23,15 +23,15 @@ class OSINTIntelligence:
     """
 
     # Regex for international phone numbers
-    PHONE_REGEX = re.compile(r'\+?[1-9]\d{1,14}')
+    PHONE_REGEX = re.compile(r"\+?[1-9]\d{1,14}")
 
     # Regex for common social media profiles in text
     SOCIAL_PATTERNS = {
-        "twitter": r'twitter\.com\/([a-zA-Z0-9_]+)',
-        "linkedin": r'linkedin\.com\/in\/([a-zA-Z0-9_-]+)',
-        "github": r'github\.com\/([a-zA-Z0-9_-]+)',
-        "facebook": r'facebook\.com\/([a-zA-Z0-9.]+)',
-        "instagram": r'instagram\.com\/([a-zA-Z0-9._]+)'
+        "twitter": r"twitter\.com\/([a-zA-Z0-9_]+)",
+        "linkedin": r"linkedin\.com\/in\/([a-zA-Z0-9_-]+)",
+        "github": r"github\.com\/([a-zA-Z0-9_-]+)",
+        "facebook": r"facebook\.com\/([a-zA-Z0-9.]+)",
+        "instagram": r"instagram\.com\/([a-zA-Z0-9._]+)",
     }
 
     def __init__(self):
@@ -66,8 +66,8 @@ class OSINTIntelligence:
         return {
             "number": formatted,
             "queries": [
-                f"https://www.google.com/search?q=\"{formatted}\"",
+                f'https://www.google.com/search?q="{formatted}"',
                 f"https://www.truecaller.com/search/global/{formatted}",
-                f"https://www.sync.me/search/{formatted}"
-            ]
+                f"https://www.sync.me/search/{formatted}",
+            ],
         }

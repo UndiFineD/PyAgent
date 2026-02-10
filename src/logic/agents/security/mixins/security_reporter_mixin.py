@@ -19,8 +19,7 @@ from __future__ import annotations
 import logging
 import time
 
-from src.core.base.common.types.security_vulnerability import \
-    SecurityVulnerability
+from src.core.base.common.types.security_vulnerability import SecurityVulnerability
 
 
 class SecurityReporterMixin:

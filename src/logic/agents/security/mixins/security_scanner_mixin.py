@@ -20,8 +20,7 @@ import re
 from typing import TYPE_CHECKING
 
 from src.core.base.common.types.security_issue_type import SecurityIssueType
-from src.core.base.common.types.security_vulnerability import \
-    SecurityVulnerability
+from src.core.base.common.types.security_vulnerability import SecurityVulnerability
 
 if TYPE_CHECKING:
     from src.logic.agents.security.security_core import SecurityCore

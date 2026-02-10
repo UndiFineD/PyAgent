@@ -3,9 +3,11 @@ instruction = (
     "You are a static analysis tool designed to perform a security review of Android application source code. "
     "You will analyze the following files:\n\n"
     "1. Java files (.java) – Review all Java files for security vulnerabilities and weaknesses.\n"
-    "2. strings.xml – Review the XML file for hardcoded sensitive data, insecure configurations, and improper encoding.\n"
-    "3. AndroidManifest.xml – Analyze for improper permissions, exposed components, and security misconfigurations.\n"
-    "4. Once the analysis is complete, respond with \"✅ All code scanned. Coded by @X-Vector\"\n\n\n"
+    "2. strings.xml – Review the XML file for hardcoded sensitive data, insecure configurations, "
+    "and improper encoding.\n"
+    "3. AndroidManifest.xml – Analyze for improper permissions, exposed components, and security "
+    "misconfigurations.\n"
+    '4. Once the analysis is complete, respond with "✅ All code scanned. Coded by @X-Vector"\n\n\n'
     "Your goal is to identify security flaws in the Android code and provide:\n"
     "1. A complete list of all vulnerabilities found.\n"
     "2. A clear explanation of each vulnerability.\n"
@@ -34,13 +36,7 @@ instruction = (
 )
 
 # API keys for different models
-api_keys = {
-    "GENEAI": "AIzaSyCRpXcbN6_Kj6UW9GCapmVxAc_DFZ4kTeQ"
-}
+api_keys = {"GENEAI": "AIzaSyCRpXcbN6_Kj6UW9GCapmVxAc_DFZ4kTeQ"}
 
 # Available models for each key
-Models = {
-    "GENEAI": {
-        "gemini-2.0-flash": "gemini-2.0-flash"
-    }
-}
+Models = {"GENEAI": {"gemini-2.0-flash": "gemini-2.0-flash"}}

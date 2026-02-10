@@ -50,7 +50,7 @@ class JSIntelligence:
         "execution": ["eval", "Function", "setTimeout", "setInterval"],
         "dom_injection": ["set(Element.innerHTML)", "set(Element.outerHTML)", "document.write", "document.writeln"],
         "data_storage": ["localStorage.setItem", "sessionStorage.setItem"],
-        "navigation": ["window.location", "window.open"]
+        "navigation": ["window.location", "window.open"],
     }
 
     # Sources of Interest
@@ -89,7 +89,7 @@ class JSIntelligence:
                 xhr.setRequestHeader("Content-type", "application/json");
                 xhr.send(JSON.stringify(data));
             }
-        """
+        """,
     }
 
     # Link Extraction Regex (Ported from LinkFinder)
@@ -179,10 +179,7 @@ class JSIntelligence:
                         "status": "success",
                         "secrets_found": len(secrets),
                         "links_found": len(links),
-                        "details": {
-                            "secrets": secrets,
-                            "links": list(links)
-                        }
+                        "details": {"secrets": secrets, "links": list(links)},
                     }
         except Exception as e:
             return {"url": url, "status": "error", "message": str(e)}

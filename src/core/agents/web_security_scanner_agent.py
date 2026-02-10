@@ -43,8 +43,11 @@ class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, Tas
             rate_limit=kwargs.get('rate_limit', 100)
         )
 
-    async def scan_for_vulnerabilities(self, hosts: List[str], 
-                                     custom_patterns: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
+    async def scan_for_vulnerabilities(
+        self,
+        hosts: List[str],
+        custom_patterns: Optional[Dict[str, str]] = None
+    ) -> Dict[str, Any]:
         """
         Scan hosts for security vulnerabilities using pattern matching.
 
@@ -85,7 +88,7 @@ class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, Tas
 
         for i in range(0, len(hosts), batch_size):
             batch = hosts[i:i + batch_size]
-            
+
             # Create scanning task
             task_id = await self.create_task({
                 'type': 'scan_batch',

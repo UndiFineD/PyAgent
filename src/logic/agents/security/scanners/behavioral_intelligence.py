@@ -29,57 +29,46 @@ class BehavioralIntelligence:
                 "description": "Modification of RID (Relative ID) in SAM for low-privilege accounts.",
                 "indicators": {
                     "registry_path": r"HKEY_LOCAL_MACHINE\SAM\SAM\Domains\Account\Users\*\F",
-                    "suspicious_processes": ["!lsass.exe"]
-                }
+                    "suspicious_processes": ["!lsass.exe"],
+                },
             },
             "LSASS Memory Dumping": {
                 "description": "Attempting to read LSASS memory or write minidumps.",
                 "indicators": {
                     "target_process": r"C:\Windows\System32\lsass.exe",
                     "access_mask": ["ALL_ACCESS", "VM_READ"],
-                    "dump_actions": ["write_minidump_file", "comsvcs.dll, MiniDump"]
-                }
+                    "dump_actions": ["write_minidump_file", "comsvcs.dll, MiniDump"],
+                },
             },
             "AppDomainManager Injection": {
                 "description": "Hijacking .NET CLR search order via AppDomainManager.",
-                "indicators": {
-                    "env_vars": ["COMPlus_AppDomainManagerType", "COMPlus_AppDomainManagerAsm"]
-                }
+                "indicators": {"env_vars": ["COMPlus_AppDomainManagerType", "COMPlus_AppDomainManagerAsm"]},
             },
             "Phantom DLL Hijacking": {
                 "description": "Hijacking a DLL that is loaded but missing from disk (e.g., version.dll in some apps).",
                 "indicators": {
                     "dll_name": "version.dll",
-                    "action": "Creation of known missing DLL in writable application directories"
-                }
+                    "action": "Creation of known missing DLL in writable application directories",
+                },
             },
             "Symbolic Link Creation": {
                 "description": "Creation of symbolic links in Object Manager (Defense Evasion).",
-                "indicators": {
-                    "action": "create_symbolic_link_object",
-                    "untrusted": True
-                }
-            }
+                "indicators": {"action": "create_symbolic_link_object", "untrusted": True},
+            },
         }
 
     @staticmethod
     def get_persistence_indicators() -> List[Dict[str, str]]:
         """Registry and file system indicators for advanced persistence."""
         return [
-            {
-                "path": r"HKCU\Software\Classes\*\shell\open\command",
-                "name": "Registry Shell Command Hijack"
-            },
+            {"path": r"HKCU\Software\Classes\*\shell\open\command", "name": "Registry Shell Command Hijack"},
             {
                 "path": r"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options",
-                "name": "IFEO Debugger Hijack"
+                "name": "IFEO Debugger Hijack",
             },
             {
                 "path": r"HKLM\SYSTEM\CurrentControlSet\Control\Lsa",
-                "name": "Security Packages / Authentication Packages Persistence"
+                "name": "Security Packages / Authentication Packages Persistence",
             },
-            {
-                "path": r"C:\Windows\System32\drivers\etc\hosts",
-                "name": "Hosts File Hijack"
-            }
+            {"path": r"C:\Windows\System32\drivers\etc\hosts", "name": "Hosts File Hijack"},
         ]

@@ -26,14 +26,10 @@ from pathlib import Path
 
 from src.core.base.common.types.security_issue_type import SecurityIssueType
 from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import \
-    LocalContextRecorder
-from src.logic.agents.security.mixins.security_auditor_mixin import \
-    SecurityAuditorMixin
-from src.logic.agents.security.mixins.security_reporter_mixin import \
-    SecurityReporterMixin
-from src.logic.agents.security.mixins.security_scanner_mixin import \
-    SecurityScannerMixin
+from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+from src.logic.agents.security.mixins.security_auditor_mixin import SecurityAuditorMixin
+from src.logic.agents.security.mixins.security_reporter_mixin import SecurityReporterMixin
+from src.logic.agents.security.mixins.security_scanner_mixin import SecurityScannerMixin
 
 _RUST_AVAILABLE = importlib.util.find_spec("rust_core") is not None
 __version__ = VERSION

@@ -67,7 +67,7 @@ class CosyVoiceAgent(BaseAgent):
         logger.info(f"Loading CosyVoice model from {self.config.model_path} on {self.config.device}...")
         # Simulation of model loading
         import asyncio
-        await asyncio.sleep(1) # Simulate I/O
+        await asyncio.sleep(1)  # Simulate I/O
         self._model = "CosyVoice-300M-Loaded-Mock"
         self._last_used = time.time()
         return f"CosyVoice model loaded successfully on {self.config.device}."
@@ -77,11 +77,11 @@ class CosyVoiceAgent(BaseAgent):
         """Offloads the model to free up VRAM."""
         if not self._model:
             return "CosyVoice model is not loaded."
-        
+
         self._model = None
         if torch and torch.cuda.is_available():
             torch.cuda.empty_cache()
-        
+
         logger.info("CosyVoice model unloaded.")
         return "CosyVoice model unloaded successfully."
 
@@ -94,12 +94,12 @@ class CosyVoiceAgent(BaseAgent):
         if not self._model:
             # Auto-load on demand
             self.load_model()
-            
+
         self._last_used = time.time()
-        
+
         mode = "Zero-Shot" if speaker_embedding_path else "Standard"
         logger.info(f"Generating speech ({mode}): '{text}'")
-        
+
         # Simulate inference
         return f"Generated audio for '{text}' using {mode} mode (Simulated)"
 
@@ -108,7 +108,8 @@ class CosyVoiceAgent(BaseAgent):
         if self._model and (time.time() - self._last_used) > timeout_seconds:
             logger.info(f"CosyVoice model idle for >{timeout_seconds}s. Unloading...")
             self.unload_model()
-        
+
+
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
     main = create_main_function(CosyVoiceAgent, "CosyVoice Orchestrator", "Speech generation logs")

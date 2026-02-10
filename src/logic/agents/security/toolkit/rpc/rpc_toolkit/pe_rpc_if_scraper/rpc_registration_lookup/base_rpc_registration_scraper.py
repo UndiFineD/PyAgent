@@ -1,6 +1,6 @@
 # Akamai RPC Toolkit
 # Copyright 2022 Akamai Technologies, Inc.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the
 # "License"); you may not use this file except in
 # compliance with the License.  You may obtain a copy
@@ -54,7 +54,7 @@ class BaseRpcRegistrationExtractor(metaclass=ABCMeta):
                     INTERFACE_ADDRESS: parsed_params[0],
                     INTERFACE_FLAGS: parsed_params[1],
                     INTERFACE_SECURITY_CALLBACK: parsed_params[2],
-                    INTERFACE_HAS_DESCRIPTOR: parsed_params[3]
+                    INTERFACE_HAS_DESCRIPTOR: parsed_params[3],
                 }
         return reg_info
 
@@ -93,9 +93,9 @@ class BaseRpcRegistrationExtractor(metaclass=ABCMeta):
 
     @staticmethod
     def _formalize_params(
-            rpc_if_addr: str = UNKNOWN_ADDRESS,
-            flags: Union[int, str] = 0,
-            security_callback: Optional[str] = None,
-            explicit_security_descriptor: bool = False
+        rpc_if_addr: str = UNKNOWN_ADDRESS,
+        flags: Union[int, str] = 0,
+        security_callback: Optional[str] = None,
+        explicit_security_descriptor: bool = False,
     ) -> Tuple[str, Union[int, str], Optional[str], bool]:
         return rpc_if_addr, flags, security_callback, explicit_security_descriptor

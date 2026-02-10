@@ -49,8 +49,7 @@ class ImmuneResponseOrchestrator:
         }
         # Phase 108: Intelligence Recording
         try:
-            from src.infrastructure.compute.backend.local_context_recorder import \
-                LocalContextRecorder
+            from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 
             recorder = LocalContextRecorder(user_context="ImmuneResponse")
             recorder.record_interaction(

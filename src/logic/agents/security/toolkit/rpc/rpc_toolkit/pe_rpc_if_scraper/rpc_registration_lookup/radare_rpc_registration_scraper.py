@@ -1,6 +1,6 @@
 # Akamai RPC Toolkit
 # Copyright 2022 Akamai Technologies, Inc.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the
 # "License"); you may not use this file except in
 # compliance with the License.  You may obtain a copy
@@ -30,10 +30,7 @@ class Radare2RpcRegistrationExtractor(BaseRpcRegistrationExtractor):
     _default_dism_path: str = "r2"
 
     def _get_rpc_registration_info(self, pe_path: str) -> Dict[str, Dict[str, List]]:
-        p = subprocess.run(
-            [self._dism_path, "-q", "-i", SCRIPT_PATH, pe_path],
-            stdout=subprocess.PIPE
-        )
+        p = subprocess.run([self._dism_path, "-q", "-i", SCRIPT_PATH, pe_path], stdout=subprocess.PIPE)
         if p.returncode != 0:
             raise DismExtractorFailue(p.returncode)
 

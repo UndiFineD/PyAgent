@@ -27,128 +27,111 @@ class SubdomainTakeoverIntelligence:
 
     # Combined fingerprints from subjack and other sources
     TAKEOVER_SIGNATURES: List[Dict[str, Any]] = [
-        {
-            "service": "fastly",
-            "cname": ["fastly"],
-            "fingerprint": ["Fastly error: unknown domain"],
-            "nxdomain": False
-        },
+        {"service": "fastly", "cname": ["fastly"], "fingerprint": ["Fastly error: unknown domain"], "nxdomain": False},
         {
             "service": "github",
             "cname": ["github.io"],
             "fingerprint": ["There isn't a GitHub Pages site here."],
-            "nxdomain": False
+            "nxdomain": False,
         },
         {
             "service": "heroku",
             "cname": ["herokuapp"],
             "fingerprint": ["herokucdn.com/error-pages/no-such-app.html"],
-            "nxdomain": False
+            "nxdomain": False,
         },
         {
             "service": "pantheon",
             "cname": ["pantheonsite.io"],
             "fingerprint": ["The gods are wise, but do not know of the site which you seek."],
-            "nxdomain": False
+            "nxdomain": False,
         },
         {
             "service": "tumblr",
             "cname": ["domains.tumblr.com"],
             "fingerprint": ["Whatever you were looking for doesn't currently exist at this address."],
-            "nxdomain": False
+            "nxdomain": False,
         },
         {
             "service": "wordpress",
             "cname": ["wordpress.com"],
             "fingerprint": ["Do you want to register"],
-            "nxdomain": False
+            "nxdomain": False,
         },
         {
             "service": "teamwork",
             "cname": ["teamwork.com"],
             "fingerprint": ["Oops - We didn't find your site."],
-            "nxdomain": False
+            "nxdomain": False,
         },
         {
             "service": "helpjuice",
             "cname": ["helpjuice.com"],
             "fingerprint": ["We could not find what you're looking for."],
-            "nxdomain": False
+            "nxdomain": False,
         },
         {
             "service": "helpscout",
             "cname": ["helpscoutdocs.com"],
             "fingerprint": ["No settings were found for this company:"],
-            "nxdomain": False
+            "nxdomain": False,
         },
         {
             "service": "s3 bucket",
             "cname": ["amazonaws"],
             "fingerprint": ["The specified bucket does not exist"],
-            "nxdomain": False
+            "nxdomain": False,
         },
         {
             "service": "ghost",
             "cname": ["ghost.io"],
             "fingerprint": ["The thing you were looking for is no longer here, or never was"],
-            "nxdomain": False
+            "nxdomain": False,
         },
         {
             "service": "shopify",
             "cname": ["myshopify.com"],
             "fingerprint": ["Sorry, this shop is currently unavailable."],
-            "nxdomain": False
+            "nxdomain": False,
         },
         {
             "service": "uservoice",
             "cname": ["uservoice.com"],
             "fingerprint": ["This UserVoice subdomain is currently available!"],
-            "nxdomain": False
+            "nxdomain": False,
         },
-        {
-            "service": "surge",
-            "cname": ["surge.sh"],
-            "fingerprint": ["project not found"],
-            "nxdomain": False
-        },
-        {
-            "service": "bitbucket",
-            "cname": ["bitbucket.io"],
-            "fingerprint": ["Repository not found"],
-            "nxdomain": False
-        },
+        {"service": "surge", "cname": ["surge.sh"], "fingerprint": ["project not found"], "nxdomain": False},
+        {"service": "bitbucket", "cname": ["bitbucket.io"], "fingerprint": ["Repository not found"], "nxdomain": False},
         {
             "service": "intercom",
             "cname": ["custom.intercom.help"],
             "fingerprint": ["This page is reserved for artistic dogs.", "Uh oh. That page doesn't exist."],
-            "nxdomain": False
+            "nxdomain": False,
         },
         {
             "service": "webflow",
             "cname": ["proxy.webflow.com", "proxy-ssl.webflow.com"],
             "fingerprint": ["The page you are looking for doesn't exist or has been moved."],
-            "nxdomain": False
+            "nxdomain": False,
         },
         {
             "service": "azure",
             "cname": [
-                ".azurewebsites.net", ".cloudapp.net", ".cloudapp.azure.com", ".trafficmanager.net",
-                ".blob.core.windows.net"
+                ".azurewebsites.net",
+                ".cloudapp.net",
+                ".cloudapp.azure.com",
+                ".trafficmanager.net",
+                ".blob.core.windows.net",
             ],
             "fingerprint": ["404 Not Found"],
-            "nxdomain": True
+            "nxdomain": True,
         },
-        {
-            "service": "zendesk",
-            "cname": ["zendesk.com"],
-            "fingerprint": ["Help Center Closed"],
-            "nxdomain": False
-        },
+        {"service": "zendesk", "cname": ["zendesk.com"], "fingerprint": ["Help Center Closed"], "nxdomain": False},
         {
             "service": "readme",
             "cname": ["readme.io"],
             "fingerprint": ["Project doesnt exist... yet!"],
-            "nxdomain": False
+            "nxdomain": False,
         },
     ]
 
@@ -161,8 +144,8 @@ class SubdomainTakeoverIntelligence:
         """Resolves CNAME records for a domain."""
         try:
             loop = asyncio.get_event_loop()
-            answers = await loop.run_in_executor(None, lambda: self.resolver.resolve(domain, 'CNAME'))
-            return [str(rdata.target).rstrip('.') for rdata in answers]
+            answers = await loop.run_in_executor(None, lambda: self.resolver.resolve(domain, "CNAME"))
+            return [str(rdata.target).rstrip(".") for rdata in answers]
         except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN, dns.exception.Timeout):
             return []
         except Exception:
@@ -191,7 +174,7 @@ class SubdomainTakeoverIntelligence:
                                 "cname": cname,
                                 "service": sig["service"],
                                 "vulnerable": True,
-                                "fingerprint_match": fp
+                                "fingerprint_match": fp,
                             }
                     if sig["nxdomain"]:
                         # Some azure/apigee services are vulnerable if they return NXDOMAIN or 404
@@ -201,7 +184,7 @@ class SubdomainTakeoverIntelligence:
                                 "cname": cname,
                                 "service": sig["service"],
                                 "vulnerable": True,
-                                "status": 404
+                                "status": 404,
                             }
         return None
 

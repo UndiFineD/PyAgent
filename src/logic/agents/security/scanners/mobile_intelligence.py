@@ -31,8 +31,8 @@ class MobileIntelligence:
         "network_security_config": {
             "user_certs": r'<certificates.*src=["\']user["\'].*>',
             "raw_certs": r'<certificates.*src=["\']@raw/.*["\'].*>',
-            "cleartext_permitted": r'<domain-config.*cleartextTrafficPermitted=["\']true["\'].*>'
-        }
+            "cleartext_permitted": r'<domain-config.*cleartextTrafficPermitted=["\']true["\'].*>',
+        },
     }
 
     # iOS Info.plist patterns
@@ -42,14 +42,24 @@ class MobileIntelligence:
             r"<key>NSAllowsArbitraryLoads</key>\s*<true/>"
         ),
         "backup_excluded": r"NSURLIsExcludedFromBackupKey",
-        "biometric_usage": r"NSFaceIDUsageDescription"
+        "biometric_usage": r"NSFaceIDUsageDescription",
     }
 
     def get_mobile_pentest_toolkit(self) -> List[str]:
         """Essential Android/iOS pentesting tools (Ported from Garuda)."""
         return [
-            "frida", "objection", "drozer", "busybox", "apktool", "apkleaks", "apkingo",
-            "quark-engine", "inspeckage", "SSLunpin", "rms-runtime-mobile-security", "dexcalibur"
+            "frida",
+            "objection",
+            "drozer",
+            "busybox",
+            "apktool",
+            "apkleaks",
+            "apkingo",
+            "quark-engine",
+            "inspeckage",
+            "SSLunpin",
+            "rms-runtime-mobile-security",
+            "dexcalibur",
         ]
 
     def get_fuzzing_mutations(self) -> Dict[str, str]:
@@ -60,18 +70,17 @@ class MobileIntelligence:
             "substitute": "Replace byte with random ASCII/Unicode",
             "bitflip": "XOR byte with 0x01, 0x02, 0xFF",
             "byte_op": "Arithmetic ops (+, -, *, /) on target byte",
-            "duplicate": "Repeat a range of bytes to test buffer overflows"
+            "duplicate": "Repeat a range of bytes to test buffer overflows",
         }
 
     def get_ios_protection_bypass_primitives(self) -> Dict[str, str]:
         """iOS specific security bypasses (Ported from grapefruit-iOS)."""
         return {
             "touchid_faceid": (
-                "Hooking -[LAContext evaluatePolicy:localizedReason:reply:] "
-                "and calling callback with success=1"
+                "Hooking -[LAContext evaluatePolicy:localizedReason:reply:] and calling callback with success=1"
             ),
             "jailbreak_check": "Hooking -[NSFileManager fileExistsAtPath:] for jailbreak-specific paths",
-            "debugger_detection": "Hooking ptrace and sysctl to hide debugger presence"
+            "debugger_detection": "Hooking ptrace and sysctl to hide debugger presence",
         }
 
     def get_mobile_surveillance_hooks(self) -> Dict[str, List[str]]:
@@ -81,22 +90,15 @@ class MobileIntelligence:
                 "android.telephony.TelephonyManager.getDeviceId",
                 "android.telephony.TelephonyManager.getImei",
                 "android.telephony.TelephonyManager.getSimSerialNumber",
-                "android.net.wifi.WifiInfo.getMacAddress"
+                "android.net.wifi.WifiInfo.getMacAddress",
             ],
             "location_tracking": [
                 "android.location.LocationManager.requestLocationUpdates",
                 "android.location.LocationManager.getLastKnownLocation",
-                "com.google.android.gms.location.FusedLocationProviderClient.getLastLocation"
+                "com.google.android.gms.location.FusedLocationProviderClient.getLastLocation",
             ],
-            "cryptography_interception": [
-                "javax.crypto.Cipher.doFinal",
-                "javax.crypto.Cipher.init"
-            ],
-            "native_calls": [
-                "libc.so!open",
-                "libc.so!gethostbyname",
-                "libc.so!connect"
-            ]
+            "cryptography_interception": ["javax.crypto.Cipher.doFinal", "javax.crypto.Cipher.init"],
+            "native_calls": ["libc.so!open", "libc.so!gethostbyname", "libc.so!connect"],
         }
 
     def get_frida_bypass_gadgets(self) -> Dict[str, Dict[str, str]]:
@@ -116,7 +118,7 @@ class MobileIntelligence:
                     "Interceptor.attach(Module.findExportByName('libflutter.so', "
                     "'ssl_crypto_x509_session_verify_cert_chain'), "
                     "{ onLeave: function(retval) { retval.replace(0x1); } });"
-                )
+                ),
             },
             "root_check": {
                 "rootbeer": (
@@ -127,7 +129,7 @@ class MobileIntelligence:
                     "var File = Java.use('java.io.File'); File.exists.implementation = function() { "
                     "var name = this.getName(); if (name === 'su' || name === 'magisk') return false; "
                     "return this.exists(); };"
-                )
+                ),
             },
             "biometrics": {
                 "android_biometric": (
@@ -143,7 +145,7 @@ class MobileIntelligence:
                     "SecuritySuite['- amIProxyfied'].implementation = function() { return false; }; "
                     "SecuritySuite['- amIJailbroken'].implementation = function() { return false; };"
                 )
-            }
+            },
         }
 
     def get_frida_hooking_strategies(self) -> Dict[str, str]:
@@ -152,18 +154,14 @@ class MobileIntelligence:
             "ssl_pinning_bypass_okhttp": "Hooking okhttp3.CertificatePinner.check to return void",
             "ssl_pinning_bypass_flutter": "Patching ssl_verify_result in libflutter.so to always return valid",
             "root_detection_bypass_android": (
-                "Hooking java.io.File.exists to return false for common SU paths "
-                "(/system/bin/su, etc.)"
+                "Hooking java.io.File.exists to return false for common SU paths (/system/bin/su, etc.)"
             ),
             "jailbreak_detection_bypass_ios": "Hooking -[NSFileManager fileExistsAtPath:] for /Applications/Cydia.app",
             "biometric_bypass": "Hooking BiometricPrompt.Authenticate to simulate successful user verification",
             "method_tracing_all": (
-                "Iterating through all loaded classes and hooking implementation "
-                "to log arguments and return values"
+                "Iterating through all loaded classes and hooking implementation to log arguments and return values"
             ),
-            "libc_interception": (
-                "Hooking open/read/write in libc.so to monitor low-level file and socket operations"
-            )
+            "libc_interception": ("Hooking open/read/write in libc.so to monitor low-level file and socket operations"),
         }
 
     def get_android_manifest_checks(self) -> Dict[str, Union[str, Dict[str, str]]]:
@@ -181,8 +179,8 @@ class MobileIntelligence:
             r'<data\s+android:host="([^"]+)"',
             (
                 r'<intent-filter>.*<action\s+android:name="android.intent.action.VIEW"'
-                r'.*</intent-filter>'
-            )
+                r".*</intent-filter>"
+            ),
         ]
 
     def audit_strings(self, content: str) -> List[Dict[str, str]]:
@@ -193,10 +191,12 @@ class MobileIntelligence:
         if isinstance(pattern, str):
             firebase = re.findall(pattern, content)
             for fb in firebase:
-                findings.append({
-                    "type": "firebase_vulnerability",
-                    "value": fb,
-                    "info": "Check if .json suffix is publicly accessible"
-                })
+                findings.append(
+                    {
+                        "type": "firebase_vulnerability",
+                        "value": fb,
+                        "info": "Check if .json suffix is publicly accessible",
+                    }
+                )
 
         return findings

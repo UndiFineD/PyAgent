@@ -27,9 +27,7 @@ class DevOpsIntelligence:
 
     async def get_session(self):
         if self.session is None or self.session.closed:
-            self.session = aiohttp.ClientSession(headers={
-                "User-Agent": "PyAgent DevOpsAudit/1.0"
-            })
+            self.session = aiohttp.ClientSession(headers={"User-Agent": "PyAgent DevOpsAudit/1.0"})
         return self.session
 
     def get_scm_recon_endpoints(self, base_url: str, provider: str = "github") -> List[str]:
@@ -39,14 +37,10 @@ class DevOpsIntelligence:
                 f"{base_url}/api/v3/users",
                 f"{base_url}/api/v3/repositories",
                 f"{base_url}/api/v3/search/code?q=filename:.env",
-                f"{base_url}/api/v3/search/code?q=filename:id_rsa"
+                f"{base_url}/api/v3/search/code?q=filename:id_rsa",
             ]
         elif provider == "gitlab":
-            return [
-                f"{base_url}/api/v4/projects",
-                f"{base_url}/api/v4/users",
-                f"{base_url}/api/v4/groups"
-            ]
+            return [f"{base_url}/api/v4/projects", f"{base_url}/api/v4/users", f"{base_url}/api/v4/groups"]
         return []
 
     def get_sccm_looting_paths(self, base_url: str) -> List[Dict[str, str]]:
@@ -54,14 +48,30 @@ class DevOpsIntelligence:
         return [
             {"path": "/SMS_DP_SMSPKG$/", "desc": "Package storage (often allows directory listing)"},
             {"path": "/SMS_DP_DATALIB/", "desc": "Data library metadata"},
-            {"path": "/SMS_DP_SMSSIG$/", "desc": "Signature files for package verification"}
+            {"path": "/SMS_DP_SMSSIG$/", "desc": "Signature files for package verification"},
         ]
 
     def get_sccm_sensitive_extensions(self) -> List[str]:
         """Returns extensions frequently containing secrets in SCCM packages."""
         return [
-            "ps1", "vbs", "txt", "cmd", "bat", "pfx", "pem", "cer", "sql",
-            "xml", "config", "ini", "sh", "py", "keystore", "reg", "yml", "yaml"
+            "ps1",
+            "vbs",
+            "txt",
+            "cmd",
+            "bat",
+            "pfx",
+            "pem",
+            "cer",
+            "sql",
+            "xml",
+            "config",
+            "ini",
+            "sh",
+            "py",
+            "keystore",
+            "reg",
+            "yml",
+            "yaml",
         ]
 
     def get_ci_cd_attack_patterns(self) -> Dict[str, Any]:
@@ -69,15 +79,13 @@ class DevOpsIntelligence:
         return {
             "jenkins": {
                 "paths": ["/script", "/asynchPeople/", "/manage"],
-                "secrets": ["credentials.xml", "config.xml"]
+                "secrets": ["credentials.xml", "config.xml"],
             },
             "teamcity": {
                 "paths": ["/httpAuth/app/rest/users", "/httpAuth/app/rest/projects"],
-                "secrets": ["database.properties"]
+                "secrets": ["database.properties"],
             },
-            "gh_actions": {
-                "keywords": ["ACTIONS_RUNTIME_TOKEN", "GITHUB_TOKEN"]
-            }
+            "gh_actions": {"keywords": ["ACTIONS_RUNTIME_TOKEN", "GITHUB_TOKEN"]},
         }
 
     def get_github_runner_attack_vectors(self) -> List[Dict[str, Any]]:
@@ -86,23 +94,23 @@ class DevOpsIntelligence:
             {
                 "name": "Runner Registration Token Leak",
                 "description": "Leakage of runner registration tokens in logs or code.",
-                "severity": "CRITICAL"
+                "severity": "CRITICAL",
             },
             {
                 "name": "Workflow Command Injection",
                 "description": "Injection into github.event.issue.title or search results used in run: steps.",
-                "severity": "HIGH"
+                "severity": "HIGH",
             },
             {
                 "name": "Non-Ephemeral Runner Persistence",
                 "description": "Exploiting long-lived runners for lateral movement in the internal network.",
-                "severity": "MEDIUM"
+                "severity": "MEDIUM",
             },
             {
                 "name": "Actions PATH Hijacking",
                 "description": "Modifying GITHUB_PATH to achieve persistence or privilege escalation on the runner.",
-                "severity": "HIGH"
-            }
+                "severity": "HIGH",
+            },
         ]
 
     async def scan_sccm_dp(self, target: str) -> Dict[str, Any]:

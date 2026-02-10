@@ -19,6 +19,7 @@
 
 from typing import Dict, Any
 
+
 class FixerCore:
     """Core domain logic for automated bug fixing and code refactoring."""
     def __init__(self, config: Dict[str, Any] = None):

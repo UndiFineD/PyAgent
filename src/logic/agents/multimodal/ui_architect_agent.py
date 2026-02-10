@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +16,7 @@
 # limitations under the License.
 
 """
-UIArchitectAgent: Multimodal agent for designing, generating, and optimizing user interfaces across the PyAgent platform.
+UIArchitectAgent: Multimodal agent for designing, generating, and optimizing user interfaces.
 Supports adaptive UI synthesis, accessibility, and cross-modal interaction design.
 """
 
@@ -32,8 +34,6 @@ Supports adaptive UI synthesis, accessibility, and cross-modal interaction desig
 Ui architect agent.py module.
 """
 
-
-from __future__ import annotations
 
 from typing import Any
 

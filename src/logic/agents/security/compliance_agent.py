@@ -23,8 +23,7 @@ from pathlib import Path
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import \
-    LocalContextRecorder
+from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 
 from .mixins.privacy_assessment_mixin import PrivacyAssessmentMixin
 from .mixins.privacy_scanner_mixin import PrivacyScannerMixin

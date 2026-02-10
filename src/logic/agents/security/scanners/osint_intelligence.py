@@ -26,15 +26,15 @@ class OsintIntelligence:
         "sensitive_files": [
             'filetype:log "PHP Parse error"',
             'filetype:sql "MySQL dump"',
-            'filetype:env DB_PASSWORD',
+            "filetype:env DB_PASSWORD",
             '"index of" "config.php"',
-            'intitle:"index of" "api.txt"'
+            'intitle:"index of" "api.txt"',
         ],
         "bug_bounty": [
             'site:github.com "target.com"',
             'site:s3.amazonaws.com "target.com"',
-            'site:atlassian.net "target.com"'
-        ]
+            'site:atlassian.net "target.com"',
+        ],
     }
 
     # High-value Shodan Dorks
@@ -44,34 +44,19 @@ class OsintIntelligence:
         'product:"MongoDB"',
         '"X-OWA-Version"',
         '"X-Powered-By: PHP/"',
-        'title:"index of /"'
+        'title:"index of /"',
     ]
 
     # High-value GitHub Dorks
-    GITHUB_DORKS = [
-        '"target.com" password',
-        '"target.com" api_key',
-        '"target.com" token',
-        'filename:.env target.com'
-    ]
+    GITHUB_DORKS = ['"target.com" password', '"target.com" api_key', '"target.com" token', "filename:.env target.com"]
 
     @staticmethod
     def generate_dorks(domain: str) -> Dict[str, List[str]]:
         """Generates domain-specific dorks."""
         results = {
-            "google": [
-                d.replace("target.com", domain)
-                for d in OsintIntelligence.GOOGLE_DORKS["bug_bounty"]
-            ],
-            "github": [
-                d.replace("target.com", domain)
-                for d in OsintIntelligence.GITHUB_DORKS
-            ],
-            "shodan": [
-                f"hostname:{domain}",
-                f"http.html:{domain}",
-                f"ssl:{domain}"
-            ]
+            "google": [d.replace("target.com", domain) for d in OsintIntelligence.GOOGLE_DORKS["bug_bounty"]],
+            "github": [d.replace("target.com", domain) for d in OsintIntelligence.GITHUB_DORKS],
+            "shodan": [f"hostname:{domain}", f"http.html:{domain}", f"ssl:{domain}"],
         }
         return results
 

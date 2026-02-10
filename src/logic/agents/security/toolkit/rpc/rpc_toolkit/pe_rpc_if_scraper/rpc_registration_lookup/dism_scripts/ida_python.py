@@ -1,6 +1,6 @@
 # Akamai RPC Toolkit
 # Copyright 2022 Akamai Technologies, Inc.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the
 # "License"); you may not use this file except in
 # compliance with the License.  You may obtain a copy
@@ -52,7 +52,7 @@ def find_all_func_xrefs(func_ea: int) -> List[int]:
     return xref_eas
 
 
-def get_reg_value(arg_ea: int): # -> Union[str, int]
+def get_reg_value(arg_ea: int):  # -> Union[str, int]
     reg = idc.get_operand_value(arg_ea, 1)
     reg_name = idaapi.get_reg_name(reg, 8)
     func_start_ea = idaapi.get_func(arg_ea).start_ea
@@ -66,10 +66,10 @@ def get_reg_value(arg_ea: int): # -> Union[str, int]
     return reg_name
 
 
-def parse_argument(arg_ea: int): # -> Union[str, int]
+def parse_argument(arg_ea: int):  # -> Union[str, int]
     if arg_ea != idaapi.BADADDR:
         mnemonic = idaapi.ua_mnem(arg_ea)
-        if mnemonic == 'xor':
+        if mnemonic == "xor":
             if idc.get_operand_value(arg_ea, 0) == idc.get_operand_value(arg_ea, 1):
                 return 0
             else:
@@ -89,8 +89,8 @@ def get_func_call_args(func_ea: int, arg_count: int):  # -> Union[str, int]
             args_addrs = get_call_args_manually(xref_ea, max_args=arg_count)
             args_addrs += [idaapi.BADADDR] * (arg_count - len(args_addrs))
         xref_args[hex(xref_ea)] = [parse_argument(arg_ea) for arg_ea in args_addrs] if args_addrs else []
-        
-    return xref_args 
+
+    return xref_args
 
 
 def get_call_args_manually(call_ea: int, max_look_behind: int = 20, max_args: int = 8) -> List[int]:
@@ -109,7 +109,7 @@ def get_call_args_manually(call_ea: int, max_look_behind: int = 20, max_args: in
         if op_type == idc.o_displ:
             insn = idaapi.insn_t()
             idaapi.decode_insn(insn, ins_ea)
-            if insn.Op1.reg == 0x4: # rsp
+            if insn.Op1.reg == 0x4:  # rsp
                 stack_params[idc.get_operand_value(ins_ea, 0)] = ins_ea
         elif op_type == idc.o_reg:
             reg_name = idaapi.get_reg_name(idc.get_operand_value(ins_ea, 0), 8)
@@ -130,12 +130,8 @@ def get_call_args_manually(call_ea: int, max_look_behind: int = 20, max_args: in
 
 def get_rpc_server_registration_info() -> Dict[str, List[Dict[int, Tuple]]]:
     return {
-        func_name: get_func_call_args(
-            func_ea,
-            get_arg_count_for_function_name(func_name)
-        )
-        for func_name, func_ea
-        in find_rpc_server_registration_funcs()
+        func_name: get_func_call_args(func_ea, get_arg_count_for_function_name(func_name))
+        for func_name, func_ea in find_rpc_server_registration_funcs()
     }
 
 

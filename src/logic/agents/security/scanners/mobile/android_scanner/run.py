@@ -11,18 +11,13 @@ from utils.extract_apk_helpers import extract_apk_with_jadx
 
 
 def get_available_models():
-    return ', '.join(api_keys.keys())
+    return ", ".join(api_keys.keys())
 
 
 def process_file(file_path, code_content, model_key, model_variant, input_dir, output_dir):
     print(colored(f"[+] Scanning {file_path} with model {model_key}...", "cyan"))
 
-    result = scan_code(
-        api_keys[model_key],
-        model_variant,
-        instruction,
-        code_content
-    )
+    result = scan_code(api_keys[model_key], model_variant, instruction, code_content)
 
     html_result = markdown.markdown(result)
 
@@ -72,10 +67,18 @@ def main():
     parser = argparse.ArgumentParser(description="AI Code Scanner")
     parser.add_argument("--apk-path", required=True, help="Path to the APK file")
     parser.add_argument("--out-dir", required=True, help="Directory to save the decompiled files")
-    parser.add_argument("--target-package", required=True, help="Target package name to find classes (e.g., 'jakhar.aseem.diva')")
+    parser.add_argument(
+        "--target-package", required=True, help="Target package name to find classes (e.g., 'jakhar.aseem.diva')"
+    )
     parser.add_argument("--model-name", required=True, help="Model key (e.g., GENEAI, OPENAI).")
     parser.add_argument("--report", required=True, help="Directory to save the reports.")
-    parser.add_argument("--threads", type=int, default=1, choices=range(1, 11), help="Number of threads to use for scanning files (default: 1, max: 10).")
+    parser.add_argument(
+        "--threads",
+        type=int,
+        default=1,
+        choices=range(1, 11),
+        help="Number of threads to use for scanning files (default: 1, max: 10).",
+    )
 
     args = parser.parse_args()
 
@@ -93,7 +96,9 @@ def main():
 
     model_variant = list(Models[model_key].values())[0]
 
-    manifest_path, strings_path, target_classes = extract_apk_with_jadx(args.apk_path, args.out_dir, args.target_package)
+    manifest_path, strings_path, target_classes = extract_apk_with_jadx(
+        args.apk_path, args.out_dir, args.target_package
+    )
     all_pathes = []
     all_pathes.append(manifest_path)
     all_pathes.append(strings_path)

@@ -43,16 +43,7 @@ class util:
 
 
 class ReportGen(object):
-
-    def __init__(
-        self,
-        apk_name,
-        manifest,
-        res_path,
-        source_path,
-        template_path,
-        out_path: str = None
-    ):
+    def __init__(self, apk_name, manifest, res_path, source_path, template_path, out_path: str = None):
         """
         Defining few important variables which are used throughout the class.
         """
@@ -73,22 +64,20 @@ class ReportGen(object):
         try:
             t_templates_str = {
                 "report_template.html": self.load_template(self.template_path),
-                "grep_lines.html": ('<div><span class="grep_filepath">{{ filepath }}</span>:'
-                                '<span class="grep_line">{{ line }}</span>:{{ content }}</div>'),
+                "grep_lines.html": (
+                    '<div><span class="grep_filepath">{{ filepath }}</span>:'
+                    '<span class="grep_line">{{ line }}</span>:{{ content }}</div>'
+                ),
             }
             render = t_templates_str.get(template_name, "")
             if not render:
-                util.mod_log(
-                    f"[-] ERROR: Template {template_name} not found.", util.FAIL
-                )
+                util.mod_log(f"[-] ERROR: Template {template_name} not found.", util.FAIL)
                 return ""
 
             for k, v in datas.items():
                 if isinstance(v, list):
                     v = self.list_to_html(v)
-                render = re.sub(
-                    "{{\\s*" + re.escape(k) + "\\s*}}", v.replace("\\", "\\\\"), render
-                )
+                render = re.sub("{{\\s*" + re.escape(k) + "\\s*}}", v.replace("\\", "\\\\"), render)
             return render
 
         except Exception as e:
@@ -152,35 +141,24 @@ class ReportGen(object):
                 r"MKCOL|COPY|MOVE|LOCK|UNLOCK|VERSION-CONTROL|REPORT|CHECKOUT|CHECKIN|UNCHECKOUT|"
                 r"MKWORKSPACE|UPDATE|LABEL|MERGE|BASELINE-CONTROL|MKACTIVITY|ORDERPATCH|ACL|PATCH|"
                 r"SEARCH|ARBITRARY)[^a-zA-Z0-9])",
-
                 r"(@(OPTIONS|GET|HEAD|POST|PUT|DELETE|TRACE|CONNECT|PROPFIND|PROPPATCH|MKCOL|COPY|"
                 r"MOVE|LOCK|UNLOCK|VERSION-CONTROL|REPORT|CHECKOUT|CHECKIN|UNCHECKOUT|MKWORKSPACE|"
                 r"UPDATE|LABEL|MERGE|BASELINE-CONTROL|MKACTIVITY|ORDERPATCH|ACL|PATCH|SEARCH|"
-                r"ARBITRARY)\()"
+                r"ARBITRARY)\()",
             ],
             "intent": [
                 r"(new Intent|new android\.content\.Intent|PendingIntent|sendBroadcast|"
                 r"sendOrderedBroadcast|startActivity|resolveActivity|createChooser|startService|"
                 r"bindService|registerReceiver)"
             ],
-            "internal_storage": [
-                r"(createTempFile|SQLiteDatabase|openOrCreateDatabase|execSQL|rawQuery)"
-            ],
+            "internal_storage": [r"(createTempFile|SQLiteDatabase|openOrCreateDatabase|execSQL|rawQuery)"],
             "external_storage": [r"(EXTERNAL_STORAGE|EXTERNAL_CONTENT|getExternal)"],
         }
-        if not keyword in keyword_search_dict:
+        if keyword not in keyword_search_dict:
             return ""
 
         for regexp in keyword_search_dict[keyword]:
-            cmd = (
-                'cd "'
-                + self.res_path
-                + '" ; grep -ErIn "'
-                + regexp
-                + '" "'
-                + self.source_path
-                + '" 2>/dev/null'
-            )
+            cmd = 'cd "' + self.res_path + '" ; grep -ErIn "' + regexp + '" "' + self.source_path + '" 2>/dev/null'
             # Eren yeager
             try:
                 o = subprocess.check_output(cmd, shell=True).decode("utf-8")
@@ -202,22 +180,16 @@ class ReportGen(object):
             output = ""
             for grep in grep_result.split("\n"):
                 tmp = grep.split(":")
-                if (
-                    len(tmp) < 3
-                ):  # Ensure there are enough components in the split result
+                if len(tmp) < 3:  # Ensure there are enough components in the split result
                     continue
                 filepath, line, content = tmp[0], tmp[1], ":".join(tmp[2:])
-                filepath = (
-                    "source" + filepath[len(self.source_path) :]
-                )  # Dont include full path
+                filepath = "source" + filepath[len(self.source_path) :]  # Dont include full path
                 content = content.strip()
                 _match = re.search(regexp, content)
                 start_pos = _match.start()
                 end_pos = _match.end()
                 content_f = content + "\n"
-                content_f += " " * (
-                    start_pos + len(filepath) + len(line) + 2
-                )  # +2 for two ":"
+                content_f += " " * (start_pos + len(filepath) + len(line) + 2)  # +2 for two ":"
                 content_f += "^" * (end_pos - start_pos)
                 content_f += "\n"
                 output += f"{filepath}:{line}:{content_f}"
@@ -235,9 +207,7 @@ class ReportGen(object):
             output = ""
             for grep in grep_result.split("\n"):
                 tmp = grep.split(":")
-                if (
-                    len(tmp) < 3
-                ):  # Ensure there are enough components in the split result
+                if len(tmp) < 3:  # Ensure there are enough components in the split result
                     continue
                 filepath, line, content = tmp[0], tmp[1], ":".join(tmp[2:])
                 content = re.sub(regexp, "ABRACADABRA1\\1ABRACADABRA2", content)
@@ -246,9 +216,9 @@ class ReportGen(object):
                     {"filepath": filepath, "line": line, "content": content},
                     True,
                 )
-                output = output.replace(
-                    "ABRACADABRA1", '<span class="grep_keyword">'
-                ).replace("ABRACADABRA2", "</span>")
+                output = output.replace("ABRACADABRA1", '<span class="grep_keyword">').replace(
+                    "ABRACADABRA2", "</span>"
+                )
             return output
 
         except Exception as e:
@@ -339,9 +309,7 @@ class ReportGen(object):
                         permissions.append(permission_name)
             return permissions
         except Exception as e:
-            util.mod_log(
-                f"[-] ERROR in extract_dangerous_permissions: {str(e)}", util.FAIL
-            )
+            util.mod_log(f"[-] ERROR in extract_dangerous_permissions: {str(e)}", util.FAIL)
             return []
 
     def convert_html_to_pdf(self, html_file, pdf_name):
@@ -368,21 +336,15 @@ class ReportGen(object):
         This function generates the json report based on the json output
         """
         clean_apk_name = self.clean_apk_name(self.apk_name)
-        reports_dir = os.path.join(self.out_path, 'reports')
+        reports_dir = os.path.join(self.out_path, "reports")
         json_report_path = os.path.join(reports_dir, f"report_{clean_apk_name}.json")
         if not os.path.exists(reports_dir):
-            os.makedirs(
-                os.path.dirname(json_report_path), exist_ok=True
-            )
+            os.makedirs(os.path.dirname(json_report_path), exist_ok=True)
         with open(json_report_path, "w") as json_file:
             json.dump(json_response, json_file, indent=4)
-        util.mod_print(
-            f"[+] Generated JSON report - {json_report_path}", util.OKCYAN
-        )
+        util.mod_print(f"[+] Generated JSON report - {json_report_path}", util.OKCYAN)
 
-    def create_obj_for_report(
-        self, txt_output: bool = False
-    ):
+    def create_obj_for_report(self, txt_output: bool = False):
         manifest = self.manifest
         res_path = self.res_path
         source_path = self.source_path
@@ -401,12 +363,8 @@ class ReportGen(object):
         html_dict["permissions"] = permissions
         html_dict["dangerous_permission"] = dangerous_permission
         html_dict["intent_grep"] = obj.grep_keyword("intent", txt_output)
-        html_dict["internal_storage_grep"] = obj.grep_keyword(
-            "internal_storage", txt_output
-        )
-        html_dict["external_storage_grep"] = obj.grep_keyword(
-            "external_storage", txt_output
-        )
+        html_dict["internal_storage_grep"] = obj.grep_keyword("internal_storage", txt_output)
+        html_dict["external_storage_grep"] = obj.grep_keyword("external_storage", txt_output)
         # print(html_dict)
         return obj, html_dict
 
@@ -447,10 +405,7 @@ class ReportGen(object):
                 return _res
 
             result += "".join(
-                [
-                    _manif_analysis_parser(index)
-                    for index in ["activities", "services", "receivers", "providers"]
-                ]
+                [_manif_analysis_parser(index) for index in ["activities", "services", "receivers", "providers"]]
             )
 
             result += "\nInsecure connections:\n"
@@ -474,9 +429,7 @@ class ReportGen(object):
             else:
                 txt_report_path = self.out_path
             if not os.path.exists(txt_report_path):
-                os.makedirs(
-                    os.path.dirname(txt_report_path), exist_ok=True
-                )
+                os.makedirs(os.path.dirname(txt_report_path), exist_ok=True)
             with open(txt_report_path, "w", encoding="utf-8") as f:
                 f.write(result)
             util.mod_print(f"[+] Generated TXT report - {txt_report_path}", util.OKCYAN)
@@ -499,13 +452,11 @@ class ReportGen(object):
             else:
                 html_report_path = self.out_path
             if not os.path.exists(html_report_path):
-                os.makedirs(
-                    os.path.dirname(html_report_path), exist_ok=True
-                )
+                os.makedirs(os.path.dirname(html_report_path), exist_ok=True)
 
             # Generating the html report
             report_content = obj.render_template("report_template.html", html_dict)
-            
+
             obj.grenerate_html_report(report_content, html_report_path)
             if report_type == "html":
                 util.mod_print(f"[+] Generated HTML report - {html_report_path}", util.OKCYAN)

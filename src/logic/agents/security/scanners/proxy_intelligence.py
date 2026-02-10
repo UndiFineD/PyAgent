@@ -27,7 +27,7 @@ class ProxyIntelligence:
         ),
         "https://www.proxy-list.download/api/v1/get?type=https",
         "https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/https.txt",
-        "https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/http.txt"
+        "https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/http.txt",
     ]
 
     def __init__(self, session: Optional[aiohttp.ClientSession] = None):
@@ -71,5 +71,5 @@ class ProxyIntelligence:
             "Rotate proxies every 10-50 requests",
             "Match the proxy location with the target domain's CDN edge if possible",
             "Check headers for leaking 'X-Forwarded-For' or 'Via'",
-            "Use residential proxies to bypass datacenter IP blocks"
+            "Use residential proxies to bypass datacenter IP blocks",
         ]

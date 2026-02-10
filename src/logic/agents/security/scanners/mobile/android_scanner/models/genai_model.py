@@ -5,7 +5,9 @@ from google.genai import types
 def scan_code(API, MODEL, instruction, code):
     result = ""
     count = 1
-    client = genai.Client(api_key=API,)
+    client = genai.Client(
+        api_key=API,
+    )
 
     model = MODEL
     contents = [
@@ -16,9 +18,7 @@ def scan_code(API, MODEL, instruction, code):
             ],
         ),
     ]
-    tools = [
-        types.Tool(google_search=types.GoogleSearch())
-    ]
+    tools = [types.Tool(google_search=types.GoogleSearch())]
     generate_content_config = types.GenerateContentConfig(
         tools=tools,
         response_mime_type="text/plain",

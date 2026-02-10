@@ -29,11 +29,16 @@ from src.core.base.mixins.ssrf_detector_mixin import SSRFDetectorMixin
 from src.core.base.mixins.vulnerability_scanner_mixin import VulnerabilityScannerMixin
 
 
-class SecurityScannerAgent(BaseAgent, VulnerabilityScannerMixin, PayloadGeneratorMixin, 
-                          SSRFDetectorMixin, ReconnaissanceMixin):
+class SecurityScannerAgent(
+    BaseAgent,
+    VulnerabilityScannerMixin,
+    PayloadGeneratorMixin,
+    SSRFDetectorMixin,
+    ReconnaissanceMixin
+):
     """
     Comprehensive security scanner agent inspired by aem-hacker patterns.
-    
+
     Features:
     - Modular vulnerability scanning with extensible checks
     - Payload generation for various exploit types
@@ -48,18 +53,22 @@ class SecurityScannerAgent(BaseAgent, VulnerabilityScannerMixin, PayloadGenerato
         SSRFDetectorMixin.__init__(self, **kwargs)
         ReconnaissanceMixin.__init__(self, **kwargs)
 
-    async def comprehensive_security_scan(self, targets: List[str], 
-                                        my_host: str, detector_port: int = 8080,
-                                        workers: int = 4) -> Dict[str, Any]:
+    async def comprehensive_security_scan(
+        self,
+        targets: List[str],
+        my_host: str,
+        detector_port: int = 8080,
+        workers: int = 4
+    ) -> Dict[str, Any]:
         """
         Perform comprehensive security scan on targets.
-        
+
         Args:
             targets: List of target URLs
             my_host: Host for SSRF callbacks
             detector_port: Port for SSRF detector
             workers: Number of parallel workers
-            
+
         Returns:
             Scan results dictionary
         """
@@ -69,25 +78,25 @@ class SecurityScannerAgent(BaseAgent, VulnerabilityScannerMixin, PayloadGenerato
             'ssrf_findings': [],
             'summary': {}
         }
-        
+
         # Start SSRF detector
         if not self.start_ssrf_detector(port=detector_port):
             self.logger.error("Failed to start SSRF detector")
             return results
-            
+
         try:
             # Reconnaissance phase
             self.logger.info(f"Starting reconnaissance on {len(targets)} targets")
             recon_results = await self.discover_targets(targets, workers=workers)
             results['reconnaissance'] = recon_results
-            
+
             # Fingerprint discovered services
             fingerprints = {}
             for url in recon_results.keys():
                 fingerprint = await self.fingerprint_service(url)
                 fingerprints[url] = fingerprint
             results['fingerprints'] = fingerprints
-            
+
             # Vulnerability scanning phase
             self.logger.info("Starting vulnerability scanning")
             vuln_results = {}
@@ -97,21 +106,21 @@ class SecurityScannerAgent(BaseAgent, VulnerabilityScannerMixin, PayloadGenerato
                 )
                 if findings:
                     vuln_results[target] = findings
-                    
+
             results['vulnerabilities'] = vuln_results
-            
+
             # Check for SSRF triggers
             ssrf_data = self._ssrf_data.copy()
             results['ssrf_findings'] = ssrf_data
-            
+
             # Generate summary
             results['summary'] = self._generate_scan_summary(results)
-            
+
         finally:
             self.stop_ssrf_detector()
-            
+
         return results
-        
+
     def _generate_scan_summary(self, results: Dict[str, Any]) -> Dict[str, Any]:
         """Generate summary of scan results."""
         summary = {
@@ -121,22 +130,22 @@ class SecurityScannerAgent(BaseAgent, VulnerabilityScannerMixin, PayloadGenerato
             'ssrf_triggers': len(results.get('ssrf_findings', {})),
             'service_types': {}
         }
-        
+
         # Count service types
         for fingerprint in results.get('fingerprints', {}).values():
             svc_type = fingerprint.get('service_type', 'unknown')
             summary['service_types'][svc_type] = summary['service_types'].get(svc_type, 0) + 1
-            
+
         return summary
-        
+
     async def generate_exploit_payload(self, exploit_type: str, **kwargs) -> str:
         """
         Generate exploit payload for specific vulnerability type.
-        
+
         Args:
             exploit_type: Type of exploit ('ssrf_rce', 'xss', 'deserialization', 'groovy_rce')
             **kwargs: Additional parameters for payload generation
-            
+
         Returns:
             Generated payload
         """
@@ -155,11 +164,11 @@ class SecurityScannerAgent(BaseAgent, VulnerabilityScannerMixin, PayloadGenerato
             return self.generate_groovy_rce_payload(command)
         else:
             raise ValueError(f"Unknown exploit type: {exploit_type}")
-            
+
     async def add_custom_vulnerability_check(self, name: str, check_func) -> None:
         """
         Add custom vulnerability check.
-        
+
         Args:
             name: Check name
             check_func: Check function

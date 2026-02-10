@@ -85,8 +85,7 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         findings = []
 
         try:
-            from rust_core import \
-                scan_injections_rust  # type: ignore[attr-defined]
+            from rust_core import scan_injections_rust  # type: ignore[attr-defined]
 
             rust_findings = scan_injections_rust(input_text)
             for idx, _ in rust_findings:

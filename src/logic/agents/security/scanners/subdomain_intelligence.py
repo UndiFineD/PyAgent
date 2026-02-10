@@ -46,7 +46,7 @@ class SubdomainIntelligence:
                 continue
             s = s.strip().lower().rstrip(".")
             # Remove wildcard prefixes
-            s = re.sub(r'^[\.\*]\.?', '', s)
+            s = re.sub(r"^[\.\*]\.?", "", s)
             if s.endswith(target_domain) and s != target_domain:
                 cleaned.add(s)
         return cleaned
@@ -76,7 +76,7 @@ class SubdomainIntelligence:
             async with session.get(url, timeout=15) as resp:
                 if resp.status == 200:
                     text = await resp.text()
-                    subdomains = [line.split(',')[0] for line in text.strip().split('\n') if line]
+                    subdomains = [line.split(",")[0] for line in text.strip().split("\n") if line]
                     return self._clean_subdomains(subdomains, domain)
         except (asyncio.TimeoutError, aiohttp.ClientError, ValueError) as e:
             logger.error(f"Error fetching from HackerTarget for {domain}: {e}")
@@ -135,7 +135,7 @@ class SubdomainIntelligence:
             self.from_hackertarget(domain),
             self.from_threatcrowd(domain),
             self.from_urlscan(domain),
-            self.from_certspotter(domain)
+            self.from_certspotter(domain),
         ]
         results = await asyncio.gather(*tasks)
         all_subdomains = set()

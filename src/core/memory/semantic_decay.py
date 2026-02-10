@@ -24,6 +24,7 @@ from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
+
 class SynapticDecay:
     """
     Manages the lifecycle of agent knowledge and KV-cache blocks.
@@ -49,20 +50,20 @@ class SynapticDecay:
         """
         now = time.time()
         to_prune = []
-        
+
         for key in keys:
             last_time = self.last_access.get(key, now)
-            elapsed = (now - last_time) / 3600 # hours
-            
+            elapsed = (now - last_time) / 3600  # hours
+
             # Exponential weight decay
             current_score = self.knowledge_scores.get(key, 1.0)
             decayed_score = current_score * (2.71828 ** (-self.decay_rate * elapsed))
-            
+
             self.knowledge_scores[key] = decayed_score
-            
+
             if decayed_score < self.relevance_threshold:
                 to_prune.append(key)
-                
+
         return to_prune
 
     def prune_low_utility(self, cache_manager: Any):

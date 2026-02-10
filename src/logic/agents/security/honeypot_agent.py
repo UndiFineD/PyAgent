@@ -16,7 +16,6 @@
 Honeypot agent.py module.
 """
 
-
 from __future__ import annotations
 
 import logging
@@ -26,8 +25,7 @@ from typing import Any
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.security.core.red_queen_core import (AttackVector,
-                                                           RedQueenCore)
+from src.logic.agents.security.core.red_queen_core import AttackVector, RedQueenCore
 
 __version__ = VERSION
 

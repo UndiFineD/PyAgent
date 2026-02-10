@@ -19,6 +19,7 @@
 
 from typing import Dict, Any, List
 
+
 class SecurityCore:
     """Core domain logic for security auditing, secret detection, and vulnerability scanning."""
     def __init__(self, config: Dict[str, Any] = None):

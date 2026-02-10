@@ -464,8 +464,12 @@ class PromptVersioningSystem:
         self.prompts_dir.mkdir(exist_ok=True)
         self.logger = logging.getLogger("pyagent.testing.prompts")
 
-    def save_prompt_version(self, prompt_name: str, prompt_content: str,
-                           metadata: Optional[Dict[str, Any]] = None) -> str:
+    def save_prompt_version(
+        self,
+        prompt_name: str,
+        prompt_content: str,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> str:
         """Save a new version of a prompt."""
         version_id = f"{int(time.time())}_{hash(prompt_content) % 10000:04d}"
 
@@ -507,8 +511,14 @@ class PromptVersioningSystem:
         versions.sort(key=lambda x: x['timestamp'], reverse=True)
         return versions
 
-    async def run_ab_test(self, prompt_name: str, version_a: str, version_b: str,
-                         test_input: str, num_runs: int = 10) -> Dict[str, Any]:
+    async def run_ab_test(
+        self,
+        prompt_name: str,
+        version_a: str,
+        version_b: str,
+        test_input: str,
+        num_runs: int = 10
+    ) -> Dict[str, Any]:
         """
         Run A/B test between two prompt versions.
 
@@ -555,8 +565,11 @@ class EvaluationNotebookSystem:
         self.notebooks_dir.mkdir(exist_ok=True)
         self.logger = logging.getLogger("pyagent.testing.notebooks")
 
-    def create_evaluation_notebook(self, test_results: List[TestResult],
-                                  notebook_name: str) -> str:
+    def create_evaluation_notebook(
+        self,
+        test_results: List[TestResult],
+        notebook_name: str
+    ) -> str:
         """Create a Jupyter notebook for test result analysis."""
         notebook_content = {
             "cells": [
@@ -578,7 +591,9 @@ class EvaluationNotebookSystem:
                         "import json\n",
                         "\n",
                         "# Load test results\n",
-                        f"results_data = {json.dumps([{'test_id': r.test_id, 'test_type': r.test_type.value, 'status': r.status.value, 'duration': r.duration, 'timestamp': r.timestamp} for r in test_results], indent=2)}\n",
+                        f"results_data = {json.dumps([{'test_id': r.test_id, 'test_type': r.test_type.value, "
+                        f"'status': r.status.value, 'duration': r.duration, "
+                        f"'timestamp': r.timestamp} for r in test_results], indent=2)}\n",
                         "\n",
                         "df = pd.DataFrame(results_data)\n",
                         "df.head()"

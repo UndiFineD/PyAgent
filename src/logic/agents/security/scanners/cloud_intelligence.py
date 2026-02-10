@@ -32,14 +32,24 @@ class CloudIntelligence:
         r"{target}.storage.googleapis.com",
         r"{target}.blob.core.windows.net",
         r"{target}.azureedge.net",
-        r"{target}.digitaloceanspaces.com"
+        r"{target}.digitaloceanspaces.com",
     ]
 
     S3_SEARCH_PATTERNS = [
-        r".*\.bak$", r".*\.sql$", r".*\.env$", r".*\.config$",
-        r"credentials", r"secret", r"password", r"key",
-        r".*\.p12$", r".*\.pfx$", r".*\.pem$",
-        r"database", r"backup", r"dump"
+        r".*\.bak$",
+        r".*\.sql$",
+        r".*\.env$",
+        r".*\.config$",
+        r"credentials",
+        r"secret",
+        r"password",
+        r"key",
+        r".*\.p12$",
+        r".*\.pfx$",
+        r".*\.pem$",
+        r"database",
+        r"backup",
+        r"dump",
     ]
 
     def __init__(self):
@@ -47,9 +57,7 @@ class CloudIntelligence:
 
     async def get_session(self):
         if self.session is None or self.session.closed:
-            self.session = aiohttp.ClientSession(headers={
-                "User-Agent": "PyAgent CloudAudit/1.0"
-            })
+            self.session = aiohttp.ClientSession(headers={"User-Agent": "PyAgent CloudAudit/1.0"})
         return self.session
 
     async def check_bucket_accessibility(self, bucket_url: str) -> Dict[str, Any]:
@@ -88,9 +96,19 @@ class CloudIntelligence:
     def get_gcp_audit_targets() -> List[str]:
         """GCP services to audit for security misconfigurations (Ported from gcp_scanner)."""
         return [
-            "bigquery", "bigtable", "cloud_functions", "compute_disks", "compute_firewalls",
-            "compute_instances", "dns_managed_zones", "iam_policies", "kms_keys",
-            "service_accounts", "sql_instances", "storage_buckets", "pubsub_subscriptions"
+            "bigquery",
+            "bigtable",
+            "cloud_functions",
+            "compute_disks",
+            "compute_firewalls",
+            "compute_instances",
+            "dns_managed_zones",
+            "iam_policies",
+            "kms_keys",
+            "service_accounts",
+            "sql_instances",
+            "storage_buckets",
+            "pubsub_subscriptions",
         ]
 
     @staticmethod
@@ -99,7 +117,7 @@ class CloudIntelligence:
         return {
             "danging_elastic_ip": "DNS records pointing to Elastic IPs not associated with any instance",
             "orphaned_dns_record": "Route53/CloudDNS entries pointing to deleted load balancers or S3 buckets",
-            "unused_network_interface": "ENIs with 'available' status potentially incurring costs or security risks"
+            "unused_network_interface": "ENIs with 'available' status potentially incurring costs or security risks",
         }
 
     @staticmethod
@@ -108,24 +126,24 @@ class CloudIntelligence:
         return {
             "unencrypted_storage": {
                 "desc": "Storage volumes (EBS, Managed Disks) not encrypted at rest",
-                "severity": "HIGH"
+                "severity": "HIGH",
             },
             "public_buckets": {
                 "desc": "S3 buckets or Azure Blobs with public read/write access",
-                "severity": "CRITICAL"
+                "severity": "CRITICAL",
             },
             "exposed_management_ports": {
                 "desc": "Security groups allowing 22 (SSH) or 3389 (RDP) from 0.0.0.0/0",
-                "severity": "HIGH"
+                "severity": "HIGH",
             },
             "mfa_disabled_admins": {
                 "desc": "Privileged IAM users without Multi-Factor Authentication",
-                "severity": "CRITICAL"
+                "severity": "CRITICAL",
             },
             "root_account_usage": {
                 "desc": "Recent activity detected using the cloud root account credentials",
-                "severity": "MEDIUM"
-            }
+                "severity": "MEDIUM",
+            },
         }
 
     @staticmethod
@@ -135,7 +153,7 @@ class CloudIntelligence:
             "role_assumption_chain": "Tracing 'AssumeRole' permissions to find escalation paths to AdministratorAccess",
             "cross_account_trust": "Identifying external accounts with trust relationships to internal roles",
             "overprivileged_service_accounts": "Finding compute instances with attached roles exceeding required scope",
-            "identity_bridging_vulnerabilities": "Exploiting misconfigured SAML/OIDC providers for identity takeover"
+            "identity_bridging_vulnerabilities": "Exploiting misconfigured SAML/OIDC providers for identity takeover",
         }
 
     @staticmethod
@@ -145,5 +163,5 @@ class CloudIntelligence:
             "exposed_llm_endpoints": "Identifying public-facing SageMaker, Vertex AI, or OpenAI-proxy endpoints",
             "unprotected_vector_stores": "Public unauthenticated access to Pinecone, Qdrant, or Milvus instances",
             "sensitive_data_in_training": "Identification of PII within datasets used for fine-tuning or RAG",
-            "model_inversion_potential": "API configurations allowing prompts that could leak training set data"
+            "model_inversion_potential": "API configurations allowing prompts that could leak training set data",
         }

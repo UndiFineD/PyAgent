@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from typing import Any, AsyncGenerator, Dict, Optional
+from typing import Any, AsyncGenerator, Dict
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 class StreamOmniAgent(BaseAgent):
     """
     Real-time multimodal pipeline agent.
-    
+
     Orchestrates the 'Stream-Omni' flow:
     Audio Input -> STT -> Token Streaming -> LLM -> Token Streaming -> TTS -> Audio Output.
     """
@@ -50,11 +50,11 @@ class StreamOmniAgent(BaseAgent):
         Execute a multimodal pipeline task.
         """
         request_type = task.get("type", "unknown")
-        
+
         if request_type == "audio_pipeline":
             # Simulate pipeline for now
             return {"status": "simulated", "latency_ms": 150}
-            
+
         return await super().execute_task(task)
 
     async def process_stream(self, audio_generator: AsyncGenerator[bytes, None]) -> AsyncGenerator[bytes, None]:
@@ -64,19 +64,19 @@ class StreamOmniAgent(BaseAgent):
         async for chunk in audio_generator:
             # 1. Speech to Text (STT)
             text_tokens = await self._stt_decode(chunk)
-            
+
             # 2. LLM Inference
             response_tokens = await self._llm_infer(text_tokens)
-            
+
             # 3. Text to Speech (TTS)
             audio_out = await self._tts_encode(response_tokens)
-            
+
             yield audio_out
 
     async def _stt_decode(self, audio_chunk: bytes) -> str:
         """Stub for Speech-to-Text decoding."""
         # Using CosyVoice or Whisper-Streaming
-        await asyncio.sleep(0.01) # Simulate latency
+        await asyncio.sleep(0.01)  # Simulate latency
         return " Hello "
 
     async def _llm_infer(self, text: str) -> str:
@@ -88,7 +88,8 @@ class StreamOmniAgent(BaseAgent):
         """Stub for Text-to-Speech encoding."""
         # Using CosyVoice
         return b"\x00\x00" * 10
-        
+
+
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
     main = create_main_function(StreamOmniAgent, "Stream-Omni Pipeline", "Multimodal logs")

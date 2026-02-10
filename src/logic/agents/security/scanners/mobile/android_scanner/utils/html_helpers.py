@@ -4,6 +4,7 @@ from colorama import init, Fore, Style
 # Initialize colorama
 init(autoreset=True)
 
+
 def generate_index_html(output_dir):
     """
     Generates an index.html file that links to all the HTML reports in the output directory

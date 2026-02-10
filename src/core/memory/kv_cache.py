@@ -51,10 +51,10 @@ class NeuralContextPruner:
             # Simplified entropy calculation for the block range
             block_weights = attention_weights[i] if i < len(attention_weights) else 0.01
             entropy = -np.sum(block_weights * np.log2(block_weights + 1e-9))
-            
+
             if entropy > self.entropy_threshold:
                 prunable.append(block_idx)
-        
+
         return prunable
 
 
@@ -68,35 +68,35 @@ class KVCacheManager:
         self.num_blocks = num_blocks
         self.block_size = block_size
         self.head_dim = head_dim
-        
+
         # Rust-accelerated block management
         self.free_blocks = get_bridge().manage_kv_blocks(num_blocks, block_size)
         self.active_blocks: Dict[str, List[int]] = {}  # prefix_hash -> block_indices
-        self.block_timestamps: Dict[int, float] = {} # block_idx -> last_access
-        
+        self.block_timestamps: Dict[int, float] = {}  # block_idx -> last_access
+
         # Phase 92: Pruning engine
         self.pruner = NeuralContextPruner()
-        
+
         # Physical Cache
         self.k_cache = np.zeros((num_blocks * block_size, head_dim), dtype=np.float32)
         self.v_cache = np.zeros((num_blocks * block_size, head_dim), dtype=np.float32)
-        
+
         logger.info(f"KVCacheManager initialized with {num_blocks} blocks (Pillar 2)")
 
     def get_or_allocate(self, tokens: List[int]) -> List[int]:
         """Gets existing blocks for a token prefix or allocates new ones."""
         token_hash = get_bridge().get_token_hash(tokens)
-        
+
         if token_hash in self.active_blocks:
             blocks = self.active_blocks[token_hash]
             for b_idx in blocks:
                 self.block_timestamps[b_idx] = time.time()
             return blocks
-        
+
         # Allocation logic (Phase 53)
         num_needed = (len(tokens) + self.block_size - 1) // self.block_size
         allocated = []
-        
+
         for _ in range(num_needed):
             if self.free_blocks:
                 new_block = self.free_blocks.pop(0)
@@ -106,17 +106,17 @@ class KVCacheManager:
                 # Eviction policy: Phase 91 Semantic Invalidation (LRU-based fallback)
                 evicted_block_idx = min(self.block_timestamps, key=self.block_timestamps.get)
                 logger.warning(f"KVCache: Cache full, evicting block {evicted_block_idx}")
-                
+
                 # Cleanup reverse mapping
                 for key, indices in list(self.active_blocks.items()):
                     if evicted_block_idx in indices:
                         self.active_blocks.pop(key)
                         break
-                
+
                 del self.block_timestamps[evicted_block_idx]
                 allocated.append(evicted_block_idx)
                 self.block_timestamps[evicted_block_idx] = time.time()
-                
+
         self.active_blocks[token_hash] = allocated
         return allocated
 
@@ -130,12 +130,12 @@ class KVCacheManager:
 
         blocks = self.active_blocks[prefix_hash]
         to_prune = self.pruner.identify_prunable_blocks(attention_weights, blocks)
-        
+
         if to_prune:
             logger.info(f"KVCache: Pruning {len(to_prune)} blocks from context {prefix_hash}")
             remaining = [b for b in blocks if b not in to_prune]
             self.active_blocks[prefix_hash] = remaining
-            
+
             for b_idx in to_prune:
                 self.free_blocks.append(b_idx)
                 if b_idx in self.block_timestamps:

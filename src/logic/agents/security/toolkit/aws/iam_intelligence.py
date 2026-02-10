@@ -43,7 +43,7 @@ class IAMIntelligence:
         "LambdaPassRoleInvoke": ["iam:PassRole", "lambda:CreateFunction", "lambda:InvokeFunction"],
         "GlueUpdateDevEndpoint": ["iam:PassRole", "glue:UpdateDevEndpoint"],
         "CloudFormationStackCreation": ["iam:PassRole", "cloudformation:CreateStack"],
-        "DataPipelineActivation": ["iam:PassRole", "datapipeline:CreatePipeline", "datapipeline:PutPipelineDefinition"]
+        "DataPipelineActivation": ["iam:PassRole", "datapipeline:CreatePipeline", "datapipeline:PutPipelineDefinition"],
     }
 
     @staticmethod
@@ -59,15 +59,13 @@ class IAMIntelligence:
 
         for name, req_perms in IAMIntelligence.ESCALATION_PATHS.items():
             if all(
-                perm in current_permissions or
-                "*" in current_permissions or
-                f"{perm.split(':')[0]}:*" in current_permissions
+                perm in current_permissions
+                or "*" in current_permissions
+                or f"{perm.split(':')[0]}:*" in current_permissions
                 for perm in req_perms
             ):
-                opportunities.append({
-                    "path": name,
-                    "required_permissions": req_perms,
-                    "description": f"Potential escalation via {name}"
-                })
+                opportunities.append(
+                    {"path": name, "required_permissions": req_perms, "description": f"Potential escalation via {name}"}
+                )
 
         return opportunities

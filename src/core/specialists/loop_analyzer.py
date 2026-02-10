@@ -173,7 +173,14 @@ class LoopAnalyzer:
         except Exception:
             return False
 
-    def calculate_complexity_score(self, loc: int, loops: int, has_nested: bool, has_deep: bool, has_large: bool) -> float:
+    def calculate_complexity_score(
+        self,
+        loc: int,
+        loops: int,
+        has_nested: bool,
+        has_deep: bool,
+        has_large: bool
+    ) -> float:
         """Calculate a complexity score for prioritization."""
         score = (loops * 2) + (loc / 100)
 
@@ -194,7 +201,9 @@ class LoopAnalyzer:
         has_large = self.analyze_loop_sizes(file_path)
 
         density = (loops / max(loc, 1)) * 100
-        complexity = self.calculate_complexity_score(loc, loops, has_nested, has_deep, has_large)
+        complexity = self.calculate_complexity_score(
+            loc, loops, has_nested, has_deep, has_large
+        )
 
         return LoopAnalysisResult(
             file_path=file_path,
@@ -216,7 +225,10 @@ class LoopAnalyzer:
 
         # Check file extensions
         file_name = os.path.basename(file_path)
-        if not any(file_name.endswith(ext.lstrip('*')) for ext in self.config.include_patterns):
+        if not any(
+            file_name.endswith(ext.lstrip('*'))
+            for ext in self.config.include_patterns
+        ):
             return False
 
         # Check exclude patterns
@@ -243,8 +255,10 @@ class LoopAnalyzer:
                 result = self.analyze_file(file_path)
 
                 # Apply thresholds
-                if (result.lines_of_code >= self.config.min_loc_threshold and
-                    result.loop_count >= self.config.min_loop_threshold):
+                if (
+                        result.lines_of_code >= self.config.min_loc_threshold
+                        and result.loop_count >= self.config.min_loop_threshold
+                ):
                     candidates.append(result)
 
         # Sort by complexity score (highest first)
@@ -267,8 +281,10 @@ class LoopAnalyzer:
                 result = self.analyze_file(file_path)
                 all_files.append(result)
 
-                if (result.lines_of_code >= self.config.min_loc_threshold and
-                    result.loop_count >= self.config.min_loop_threshold):
+                if (
+                        result.lines_of_code >= self.config.min_loc_threshold and
+                        result.loop_count >= self.config.min_loop_threshold
+                ):
                     candidates.append(result)
 
         return {
@@ -314,10 +330,14 @@ if __name__ == "__main__":
     parser.add_argument("directory", help="Directory to analyze")
     parser.add_argument("--min-loc", type=int, default=200, help="Minimum lines of code threshold")
     parser.add_argument("--min-loops", type=int, default=3, help="Minimum loop count threshold")
-    parser.add_argument("--exclude", nargs='*', default=['.venv', '__pycache__', 'node_modules'],
-                       help="Directories to exclude")
-    parser.add_argument("--format", choices=['summary', 'detailed'], default='summary',
-                       help="Output format")
+    parser.add_argument(
+        "--exclude", nargs='*', default=['.venv', '__pycache__', 'node_modules'],
+        help="Directories to exclude"
+    )
+    parser.add_argument(
+        "--format", choices=['summary', 'detailed'], default='summary',
+        help="Output format"
+    )
 
     args = parser.parse_args()
 
@@ -336,3 +356,4 @@ if __name__ == "__main__":
         print_analysis_report(analysis['all_files'][:10], "Top 10 Files by Complexity")
     else:
         print_analysis_report(results, "Loop Analysis Summary")
+

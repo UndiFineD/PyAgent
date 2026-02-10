@@ -26,7 +26,7 @@ class ExchangeScanner:
 
     @staticmethod
     async def check_proxynotshell(target: str, session: aiohttp.ClientSession) -> Dict[str, Any]:
-        random_domain = ''.join(random.choices(string.ascii_lowercase, k=10)) + ".com"
+        random_domain = "".join(random.choices(string.ascii_lowercase, k=10)) + ".com"
         path = f"/autodiscover/autodiscover.json@Powershell.{random_domain}/owa/"
         url = f"https://{target}{path}"
 
@@ -34,14 +34,14 @@ class ExchangeScanner:
             async with session.get(url, timeout=10, allow_redirects=False, ssl=False) as resp:
                 if resp.status == 401:
                     headers = resp.headers
-                    is_vulnerable = 'X-OWA-Version' in headers or 'X-BEServer' in headers
+                    is_vulnerable = "X-OWA-Version" in headers or "X-BEServer" in headers
                     return {
                         "vulnerable": True if is_vulnerable else "likely",
                         "cve": "CVE-2022-41082",
                         "details": (
                             f"Detected 401 response at autodiscover path. "
                             f"X-OWA-Version: {headers.get('X-OWA-Version', 'N/A')}"
-                        )
+                        ),
                     }
         except Exception as e:
             return {"vulnerable": False, "error": str(e)}

@@ -13,7 +13,9 @@
 
 from typing import Dict, Any
 
+
 class CoderCore:
     """Deterministic logic for code generation and refactoring."""
     async def analyze_complexity(self, code: str) -> Dict[str, Any]:
         return {"status": "analyzed", "complexity": "low"}
+

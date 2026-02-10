@@ -19,7 +19,7 @@ from scraper_exceptions import (
     NoRpcImportException,
     CantDetermineRpcSideException,
     DotNetPeException,
-    CantFindRDataSectionException
+    CantFindRDataSectionException,
 )
 
 from typing import Dict, Optional
@@ -34,14 +34,13 @@ def scrape_folder(folder_path: str, disassembler: Optional[BaseRpcRegistrationEx
     output_dict = {}
     interface_scraper = PeRpcInterfaceScraper(disassembler)
     for filename in os.listdir(folder_path):
-        if not (filename.lower().endswith('dll') or filename.lower().endswith('exe')):
+        if not (filename.lower().endswith("dll") or filename.lower().endswith("exe")):
             continue
         pe_path = os.path.join(folder_path, filename)
         try:
             print(filename)
             output_dict[filename] = interface_scraper.scrape_executable(pe_path)
-        except (NoRpcImportException, CantDetermineRpcSideException,
-                DotNetPeException, CantFindRDataSectionException):
+        except (NoRpcImportException, CantDetermineRpcSideException, DotNetPeException, CantFindRDataSectionException):
             pass
     return output_dict
 
@@ -58,21 +57,18 @@ if __name__ == "__main__":
     parser.add_argument(
         "-r",
         help="parse recursively, will only work on folder paths (obviously)",
-        dest="should_recurse", action='store_true', default=False
+        dest="should_recurse",
+        action="store_true",
+        default=False,
     )
     parser.add_argument(
         "-d",
         help="Disassembler to use for rpc registration info extraction",
         dest="disassembler",
         choices=disassemblers,
-        default=None
+        default=None,
     )
-    parser.add_argument(
-        "-P",
-        help="Disassembler executable path",
-        dest="disassembler_path",
-        default=None
-    )
+    parser.add_argument("-P", help="Disassembler executable path", dest="disassembler_path", default=None)
     args = parser.parse_args()
     dism = rpc_registration_scraper_factory(args.disassembler)(args.disassembler_path) if args.disassembler else None
     if args.should_recurse:
@@ -85,5 +81,5 @@ if __name__ == "__main__":
         else:
             output = scrape_file(args.scrape_path, dism)
 
-    with open(args.output_path, 'wt', newline='\n') as out:
+    with open(args.output_path, "wt", newline="\n") as out:
         json.dump(output, out)

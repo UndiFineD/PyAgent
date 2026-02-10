@@ -46,7 +46,7 @@ class HolographicContextAgent(BaseAgent):
         )
 
     @as_tool
-    def create_hologram(
+    async def create_hologram(
         self,
         name: str,
         state_data: dict[str, Any],
@@ -65,30 +65,59 @@ class HolographicContextAgent(BaseAgent):
         }
 
         for angle in angles:
-            # In a real system, this would call specialized agents or use specific prompts to 're-view' the data
+            # Phase 330: Multi-Perspective Neural Generation (Simulated)
             hologram["perspectives"][angle] = {
                 "summary": f"Perspective on {angle} for {name}",
                 "metrics": {
-                    angle: random.uniform(0.1, 1.0) if "random" in globals() else 0.5
+                    angle: random.uniform(0.1, 1.0)
                 },
                 "recommendations": [f"Improve {angle} by doing X."],
+                "vector": [random.random() for _ in range(8)] # Compact state representation
             }
+
+        # Phase 330: Offload to Holographic Orchestrator for Swarm Mirroring
+        if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "orchestrators"):
+            try:
+                # Lazy load the orchestrator
+                # Assuming the orchestrator name derived from filename is 'holographic_state'
+                h_orch = self.fleet.orchestrators.holographic_state
+                await h_orch.shard_hologram(name, hologram)
+                logging.info(f"Hologram '{name}' mirrored to swarm via orchestrator.")
+            except Exception as e:
+                logging.warning(f"Failed to mirror hologram to swarm: {e}")
 
         self.holograms[name] = hologram
         logging.info(f"Hologram created: {name} with {len(angles)} perspectives.")
-        return f"Successfully created hologram '{name}'."
+        return f"Successfully created hologram '{name}' and initiated swarm mirroring."
 
     @as_tool
-    def view_perspective(self, name: str, angle: str) -> dict[str, Any]:
+    async def view_perspective(self, name: str, angle: str) -> dict[str, Any]:
         """
         Returns a specific perspective from a named hologram.
         """
         if name in self.holograms:
             h = self.holograms[name]
-            return h["perspectives"].get(
-                angle, {"error": f"Angle '{angle}' not found in hologram '{name}'."}
-            )
-        return {"error": f"Hologram '{name}' not found."}
+            perspective = h["perspectives"].get(angle)
+            if perspective:
+                return perspective
+        
+        # Phase 330: Try to reconstruct from swarm
+        if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "orchestrators"):
+            try:
+                h_orch = self.fleet.orchestrators.holographic_state
+                remote_p = await h_orch.reconstruct_perspective(name, angle)
+                if remote_p:
+                    # Update local cache
+                    if name not in self.holograms:
+                        self.holograms[name] = {"perspectives": {}}
+                    if "perspectives" not in self.holograms[name]:
+                         self.holograms[name]["perspectives"] = {}
+                    self.holograms[name]["perspectives"][angle] = remote_p
+                    return remote_p
+            except Exception as e:
+                logging.debug(f"Swarm reconstruction failed for {name}:{angle}: {e}")
+
+        return {"error": f"Perspective '{angle}' for hologram '{name}' not found locally or in swarm."}
 
     @as_tool
     def list_holograms(self) -> list[str]:

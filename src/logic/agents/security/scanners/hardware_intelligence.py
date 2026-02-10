@@ -41,7 +41,7 @@ class HardwareIntelligence:
             ),
             "crc_brute_force": (
                 "Identifying cyclic redundancy check polynomials by testing common LFSR configurations"
-            )
+            ),
         }
 
     @staticmethod
@@ -51,12 +51,9 @@ class HardwareIntelligence:
             "cc1101": {
                 "frequencies": [300.0, 315.0, 433.92, 868.0, 915.0],
                 "modulations": ["2-FSK", "GFSK", "ASK", "OOK", "MSK"],
-                "packet_handling": "Hardware-based preamble and sync word insertion"
+                "packet_handling": "Hardware-based preamble and sync word insertion",
             },
-            "nrf24": {
-                "frequency_range": "2.4GHz - 2.525GHz",
-                "attack_modes": ["Mousejacking", "KeySniffing"]
-            }
+            "nrf24": {"frequency_range": "2.4GHz - 2.525GHz", "attack_modes": ["Mousejacking", "KeySniffing"]},
         }
 
     @staticmethod
@@ -70,7 +67,7 @@ class HardwareIntelligence:
             "signal_injection": "Injecting packets into an established mesh network (e.g., Zigbee, Z-Wave)",
             "beacon_flood": "Flooding the vicinity with fake AP beacon frames to disrupt client scanning",
             "evil_twin_ap": "Hosting a rogue AP with identical SSID and BSSID to intercept client traffic",
-            "packet_fuzzing_rf": "Sending malformed 802.11 frames to test driver robustness"
+            "packet_fuzzing_rf": "Sending malformed 802.11 frames to test driver robustness",
         }
 
     @staticmethod
@@ -81,5 +78,5 @@ class HardwareIntelligence:
             "i2c_eeprom_dump": "Extracting firmware or secrets from serial memory chips",
             "spi_flash_cloning": "Physical extraction of flash memory for offline reverse engineering",
             "jtag_debugging": "Using Boundary Scan to halt CPU execution and read registers/memory",
-            "swd_glitching": "Voltage or clock glitching to bypass read-out protection (RDP) on microcontrollers"
+            "swd_glitching": "Voltage or clock glitching to bypass read-out protection (RDP) on microcontrollers",
         }

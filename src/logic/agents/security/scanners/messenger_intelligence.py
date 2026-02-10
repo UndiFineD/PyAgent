@@ -29,7 +29,7 @@ class MessengerIntelligence:
         return {
             "profile": f"https://t.me/{username}",
             "api_info": "https://api.telegram.org/bot<token>/getMe",
-            "proxy_list": "https://t.me/s/ProxyMTProto"
+            "proxy_list": "https://t.me/s/ProxyMTProto",
         }
 
     def get_discord_patterns(self) -> Dict[str, str]:
@@ -37,7 +37,7 @@ class MessengerIntelligence:
         return {
             "invite": r"https?://discord\.gg/[a-zA-Z0-9]+",
             "webhook": r"https://discord\.com/api/webhooks/\d+/[a-zA-Z0-9_-]+",
-            "token": r"[a-zA-Z0-9_-]{24}\.[a-zA-Z0-9_-]{6}\.[a-zA-Z0-9_-]{27}"
+            "token": r"[a-zA-Z0-9_-]{24}\.[a-zA-Z0-9_-]{6}\.[a-zA-Z0-9_-]{27}",
         }
 
     def get_telegram_nearby_params(self) -> Dict[str, Any]:
@@ -46,9 +46,8 @@ class MessengerIntelligence:
             "method": "messages.getNearbyUsers",
             "required_fields": ["lat", "long"],
             "description": (
-                "Used to find users within a specific radius. "
-                "Can be used for trilateration by spoofing 3 locations."
-            )
+                "Used to find users within a specific radius. Can be used for trilateration by spoofing 3 locations."
+            ),
         }
 
     def audit_bot_token(self, token: str) -> str:

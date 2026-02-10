@@ -48,9 +48,13 @@ class SecurityFuzzingMixin:
         self.multi_cycle_fuzzer = MultiCycleFuzzing(self.fuzzing_engine)
         self.fuzzing_logger = logging.getLogger(f"{self.__class__.__name__}.fuzzing")
 
-    async def fuzz_target(self, target: str, target_type: FuzzingTarget,
-                         techniques: Optional[List[FuzzingTechnique]] = None,
-                         context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    async def fuzz_target(
+        self,
+        target: str,
+        target_type: FuzzingTarget,
+        techniques: Optional[List[FuzzingTechnique]] = None,
+        context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """
         Fuzz a target for security vulnerabilities.
 
@@ -111,9 +115,14 @@ class SecurityFuzzingMixin:
                 context.add_error("fuzzing_error", str(e))
             raise
 
-    async def multi_cycle_security_audit(self, target: str, target_type: FuzzingTarget,
-                                       cycles: int = 3, techniques: Optional[List[FuzzingTechnique]] = None,
-                                       context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    async def multi_cycle_security_audit(
+        self,
+        target: str,
+        target_type: FuzzingTarget,
+        cycles: int = 3,
+        techniques: Optional[List[FuzzingTechnique]] = None,
+        context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """
         Perform multi-cycle security audit with iterative improvement.
 
@@ -154,8 +163,11 @@ class SecurityFuzzingMixin:
                 context.add_error("audit_error", str(e))
             raise
 
-    async def generate_security_report(self, session_ids: List[str],
-                                     context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    async def generate_security_report(
+        self,
+        session_ids: List[str],
+        context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """
         Generate comprehensive security report from fuzzing sessions.
 
@@ -320,7 +332,11 @@ class SecurityFuzzingAgent(BaseAgent, SecurityFuzzingMixin):
         else:
             raise ValueError(f"Unknown task type: {task_type}")
 
-    async def _handle_fuzz_target_task(self, task: Dict[str, Any], context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    async def _handle_fuzz_target_task(
+        self,
+        task: Dict[str, Any],
+        context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """Handle fuzz target task."""
         target = task['target']
         target_type_str = task['target_type']
@@ -333,7 +349,11 @@ class SecurityFuzzingAgent(BaseAgent, SecurityFuzzingMixin):
         result = await self.fuzz_target(target, target_type, techniques, context)
         return result
 
-    async def _handle_multi_cycle_audit_task(self, task: Dict[str, Any], context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    async def _handle_multi_cycle_audit_task(
+        self,
+        task: Dict[str, Any],
+        context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """Handle multi-cycle audit task."""
         target = task['target']
         target_type_str = task['target_type']
@@ -347,7 +367,11 @@ class SecurityFuzzingAgent(BaseAgent, SecurityFuzzingMixin):
         result = await self.multi_cycle_security_audit(target, target_type, cycles, techniques, context)
         return result
 
-    async def _handle_generate_report_task(self, task: Dict[str, Any], context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    async def _handle_generate_report_task(
+        self,
+        task: Dict[str, Any],
+        context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """Handle generate report task."""
         session_ids = task['session_ids']
         result = await self.generate_security_report(session_ids, context)

@@ -32,7 +32,7 @@ class FleetLoadBalancer:
     def get_optimal_node(self) -> str:
         if not self.nodes:
             raise RuntimeError("No nodes available in the fleet.")
-        
+
         available_nodes = sorted(self.nodes, key=lambda x: x["load"])
         selected_node = available_nodes[0]
         selected_node["load"] += 1

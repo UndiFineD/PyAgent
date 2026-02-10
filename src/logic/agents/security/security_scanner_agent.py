@@ -20,8 +20,7 @@ from __future__ import annotations
 import re
 
 from src.core.base.common.types.security_issue_type import SecurityIssueType
-from src.core.base.common.types.security_vulnerability import \
-    SecurityVulnerability
+from src.core.base.common.types.security_vulnerability import SecurityVulnerability
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
@@ -97,8 +96,7 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.vulnerabilities = []
 
         try:
-            from rust_core import \
-                scan_code_vulnerabilities_rust  # type: ignore[attr-defined]
+            from rust_core import scan_code_vulnerabilities_rust  # type: ignore[attr-defined]
 
             # Rust returns (line_number, pattern_index, matched_text)
             rust_results = scan_code_vulnerabilities_rust(content)
@@ -132,8 +130,7 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         # Phase 108: Intelligence Recording
         try:
-            from src.infrastructure.compute.backend.local_context_recorder import \
-                LocalContextRecorder
+            from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 
             recorder = LocalContextRecorder(user_context="SecurityScanner")
             recorder.record_interaction(

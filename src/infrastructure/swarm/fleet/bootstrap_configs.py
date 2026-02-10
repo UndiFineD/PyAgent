@@ -80,6 +80,11 @@ def get_bootstrap_agents() -> dict[str, tuple[str, str, str | None]]:
             "ExpertMinerAgent",
             None,
         ),
+        "HolographicContext": (
+            "src.logic.agents.cognitive.holographic_context_agent",
+            "HolographicContextAgent",
+            None,
+        ),
     }
 
     return {k: _overlay.get_agent_config(k, v) for k, v in defaults.items()}
@@ -96,6 +101,10 @@ BOOTSTRAP_ORCHESTRATORS = {
     "self_improvement": (
         "src.infrastructure.swarm.orchestration.intel.self_improvement_orchestrator",
         "SelfImprovementOrchestrator",
+    ),
+    "holographic_state": (
+        "src.infrastructure.swarm.orchestration.state.holographic_state_orchestrator",
+        "HolographicStateOrchestrator",
     ),
     "structured_orchestrator": (
         "src.infrastructure.swarm.orchestration.intel.phase_orchestrator",

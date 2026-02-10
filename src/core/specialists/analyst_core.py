@@ -57,7 +57,7 @@ class AnalystCore:
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 tree = ast.parse(f.read())
-            
+
             for node in ast.walk(tree):
                 if isinstance(node, ast.Import):
                     for alias in node.names:
@@ -72,7 +72,7 @@ class AnalystCore:
     def _classify_dependency(self, module_name: str, report: Dict[str, Any]):
         if not module_name:
             return
-        
+
         base_module = module_name.split('.')[0]
         if base_module not in self.internal_modules:
             report["external_dependencies"].add(base_module)

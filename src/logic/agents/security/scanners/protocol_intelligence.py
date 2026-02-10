@@ -63,7 +63,7 @@ class ProtocolIntelligence:
                         if not (b & 0x80):
                             break
                         shift += 7
-                    results[field_number] = data[index:index+length]
+                    results[field_number] = data[index : index + length]
                     index += length
                 else:
                     # Skip other types for now (fixme: add wire type 1, 5)
@@ -92,5 +92,5 @@ class ProtocolIntelligence:
             "concept": "Using TLS Session Resumption or Session IDs to smuggle data through security boundaries.",
             "target_protocols": ["SMTP", "IMAP", "Memcached"],
             "vulnerability_type": "SSRF / Protocol Smuggling",
-            "mitigation": "Disable TLS Session Resumption or strictly validate SNI."
+            "mitigation": "Disable TLS Session Resumption or strictly validate SNI.",
         }

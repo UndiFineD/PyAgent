@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import ast
 
-from typing import Optional
+from typing import List, Optional
 
 from src.core.base.common.base_interfaces import ContextRecorderInterface
 from src.core.base.common.types.code_language import CodeLanguage

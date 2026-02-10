@@ -43,11 +43,7 @@ class CanaryObject:
 
     def attempt_access(self, agent_id: str, context: Dict[str, Any]) -> bool:
         """Log access attempt and deny access."""
-        self.access_log.append({
-            'agent_id': agent_id,
-            'timestamp': context.get('timestamp', None),
-            'context': context
-        })
+        self.access_log.append({"agent_id": agent_id, "timestamp": context.get("timestamp", None), "context": context})
         logging.warning(f"Canary object {self.name} accessed by {agent_id}")
         return False  # Deny access
 
@@ -81,11 +77,11 @@ class CanaryAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         """List all deployed canaries."""
         return [
             {
-                'id': c.id,
-                'name': c.name,
-                'type': c.type,
-                'description': c.description,
-                'access_count': len(c.access_log)
+                "id": c.id,
+                "name": c.name,
+                "type": c.type,
+                "description": c.description,
+                "access_count": len(c.access_log),
             }
             for c in self.canaries.values()
         ]
@@ -112,10 +108,10 @@ class CanaryAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def _trigger_alert(self, canary_id: str, agent_id: str, context: Dict[str, Any]) -> None:
         """Trigger an alert for canary access."""
         alert = {
-            'canary_id': canary_id,
-            'agent_id': agent_id,
-            'context': context,
-            'timestamp': context.get('timestamp', None)
+            "canary_id": canary_id,
+            "agent_id": agent_id,
+            "context": context,
+            "timestamp": context.get("timestamp", None),
         }
         self.alerts.append(alert)
         logging.warning(f"ALERT: Canary {canary_id} accessed by {agent_id}")

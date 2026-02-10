@@ -25,34 +25,18 @@ class CMSIntelligence:
         "wordpress": {
             "path": "/wp-links-opml.php",
             "regex": r"generator=\"WordPress/([\d.]+)\"",
-            "indicator": "/wp-content/"
+            "indicator": "/wp-content/",
         },
         "joomla": {
             "path": "/administrator/manifests/files/joomla.xml",
             "regex": r"<version>([\d.]+)</version>",
-            "indicator": "/templates/system/css/system.css"
+            "indicator": "/templates/system/css/system.css",
         },
-        "drupal": {
-            "path": "/core/install.php",
-            "regex": r"Drupal ([\d.]+)",
-            "indicator": "/sites/default/"
-        },
-        "magento": {
-            "path": "/js/mage/cookies.js",
-            "indicator": "Mage.Cookies"
-        },
-        "opencart": {
-            "path": "/index.php?route=common/home",
-            "indicator": "catalog/view/"
-        },
-        "oscommerce": {
-            "path": "/admin/images/cal_date_over.gif",
-            "indicator": "osCommerce"
-        },
-        "prestashop": {
-            "path": "/js/jquery/plugins/fancybox/jquery.fancybox.js",
-            "indicator": "prestashop"
-        }
+        "drupal": {"path": "/core/install.php", "regex": r"Drupal ([\d.]+)", "indicator": "/sites/default/"},
+        "magento": {"path": "/js/mage/cookies.js", "indicator": "Mage.Cookies"},
+        "opencart": {"path": "/index.php?route=common/home", "indicator": "catalog/view/"},
+        "oscommerce": {"path": "/admin/images/cal_date_over.gif", "indicator": "osCommerce"},
+        "prestashop": {"path": "/js/jquery/plugins/fancybox/jquery.fancybox.js", "indicator": "prestashop"},
     }
 
     def __init__(self, session: Optional[aiohttp.ClientSession] = None):

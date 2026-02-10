@@ -55,12 +55,12 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     async def run_committee_vote(
-        self, 
-        task: str, 
-        proposals: dict[str, str], 
-        change_type: str = "default", 
+        self,
+        task: str,
+        proposals: dict[str, str],
+        change_type: str = "default",
         timeout: float = 30.0,
-        audit_results: dict[str, float] | None = None
+        audit_results: dict[str, float] | None = None,
     ) -> dict[str, Any]:
         """
         Evaluates a set of proposals and determines the winner via BFT Consensus.
@@ -83,16 +83,12 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 self.reliability_scores[agent] = 0.9
 
             weight = self.reliability_scores.get(agent, 0.5)
-            
+
             # Apply Audit Multiplier if available
             if audit_results and content_hash in audit_results:
                 weight *= audit_results[content_hash]
 
-            vote_payloads.append({
-                "agent": agent,
-                "weight": weight,
-                "hash": content_hash
-            })
+            vote_payloads.append({"agent": agent, "weight": weight, "hash": content_hash})
             if content_hash not in proposal_map:
                 proposal_map[content_hash] = content
 
@@ -119,7 +115,7 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 "agreement_score": agreement_score,
                 "confidence": confidence,
                 "content": proposal_map[winning_hash],
-                "winning_hash": winning_hash
+                "winning_hash": winning_hash,
             }
 
         logging.warning("ByzantineConsensus: No consensus reached on content. Falling back to AI Quality Eval.")
@@ -199,8 +195,7 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             }
 
         logging.warning(
-            "ByzantineConsensus: Decision reached. "
-            "Primary output selected from '%s' (Score: %.2f).",
+            "ByzantineConsensus: Decision reached. Primary output selected from '%s' (Score: %.2f).",
             best_agent,
             confidence,
         )

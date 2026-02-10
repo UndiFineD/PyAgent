@@ -90,7 +90,7 @@ class NucleiTemplateCollector:
         os.makedirs(self.output_dir, exist_ok=True)
 
         logger.info(f"Starting clone of {total_repos} repositories...")
-        
+
         with ThreadPoolExecutor(max_workers=6) as executor:
             futures = [executor.submit(self._clone_repository, repo) for repo in repositories]
             wait(futures)
@@ -105,7 +105,7 @@ class NucleiTemplateCollector:
                     destination_path = os.path.join(self.output_dir, file)
                     # Handle filename collisions? Currently overwrites or just dumps all in root
                     # The original script dumped all in one folder.
-                    
+
                     # Let's try to preserve some structure or just rename if exists
                     if os.path.exists(destination_path):
                         base, ext = os.path.splitext(file)

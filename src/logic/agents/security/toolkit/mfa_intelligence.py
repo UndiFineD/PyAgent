@@ -30,7 +30,7 @@ class MFAIntelligence:
         "AzureManagement": "https://management.core.windows.net",
         "ExchangeServices": "https://outlook.office365.com/EWS/Exchange.asmx",
         "ActiveSync": "https://outlook.office365.com/Microsoft-Server-ActiveSync",
-        "WebPortal": "https://portal.office.com"
+        "WebPortal": "https://portal.office.com",
     }
 
     def __init__(self, session: Optional[aiohttp.ClientSession] = None):
@@ -51,17 +51,17 @@ class MFAIntelligence:
             async with session.get(url) as response:
                 content = await response.text()
                 root = ET.fromstring(content)
-                name_space = {'ns': 'http://schemas.microsoft.com/identity/userrealm/1.0'}
+                name_space = {"ns": "http://schemas.microsoft.com/identity/userrealm/1.0"}
 
-                state_node = root.find('.//ns:State', name_space)
-                auth_url_node = root.find('.//ns:AuthURL', name_space)
-                fed_proto_node = root.find('.//ns:FederationProtocol', name_space)
+                state_node = root.find(".//ns:State", name_space)
+                auth_url_node = root.find(".//ns:AuthURL", name_space)
+                fed_proto_node = root.find(".//ns:FederationProtocol", name_space)
 
                 realm = {
                     "username": username,
                     "state": state_node.text if state_node is not None else "Unknown",
                     "auth_url": auth_url_node.text if auth_url_node is not None else None,
-                    "federation_protocol": fed_proto_node.text if fed_proto_node is not None else None
+                    "federation_protocol": fed_proto_node.text if fed_proto_node is not None else None,
                 }
                 return realm
         except Exception as e:
@@ -84,7 +84,7 @@ class MFAIntelligence:
                     # whereas 200/302 might mean successful login (MFA bypassed or not enabled)
                     results[name] = {
                         "status_code": response.status,
-                        "mfa_indicator": "WAuth=wsignin1.0" in response.headers.get("WWW-Authenticate", "")
+                        "mfa_indicator": "WAuth=wsignin1.0" in response.headers.get("WWW-Authenticate", ""),
                     }
             except Exception as e:
                 results[name] = {"error": str(e)}

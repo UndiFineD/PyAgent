@@ -27,11 +27,11 @@ class XssIntelligence:
 
     DEFAULT_PAYLOADS = [
         "<script>alert(1)</script>",
-        "\"><script>alert(1)</script>",
+        '"><script>alert(1)</script>',
         "';alert(1)//",
-        "\";alert(1)//",
+        '";alert(1)//',
         "<img src=x onerror=alert(1)>",
-        "javascript:alert(1)"
+        "javascript:alert(1)",
     ]
 
     @classmethod

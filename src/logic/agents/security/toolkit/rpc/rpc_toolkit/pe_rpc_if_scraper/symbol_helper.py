@@ -54,8 +54,9 @@ class SYMBOL_INFO(ctypes.Structure):
         ("Tag", wintypes.ULONG),
         ("NameLen", wintypes.ULONG),
         ("MaxNameLen", wintypes.ULONG),
-        ("Name", wintypes.CHAR * MAX_SYM_NAME)
+        ("Name", wintypes.CHAR * MAX_SYM_NAME),
     ]
+
 
 class MODULE_INFO(ctypes.Structure):
     _fields_ = [
@@ -66,9 +67,9 @@ class MODULE_INFO(ctypes.Structure):
         ("CheckSum", wintypes.DWORD),
         ("NumSyms", wintypes.DWORD),
         ("SymType", wintypes.DWORD),
-        ("ModuleName", wintypes.CHAR*32),
-        ("ImageName", wintypes.CHAR*256),
-        ("LoadedImageName", wintypes.CHAR*256),
+        ("ModuleName", wintypes.CHAR * 32),
+        ("ImageName", wintypes.CHAR * 256),
+        ("LoadedImageName", wintypes.CHAR * 256),
     ]
 
 
@@ -79,11 +80,13 @@ class PESymbolMatcher(object):
         self._define_dbghelp_funcs()
 
         # self._hproc = ctypes.windll.kernel32.GetCurrentProcess()
-        self._hproc = ctypes.windll.kernel32.OpenProcess(0x000F0000, False, ctypes.windll.kernel32.GetCurrentProcessId())
+        self._hproc = ctypes.windll.kernel32.OpenProcess(
+            0x000F0000, False, ctypes.windll.kernel32.GetCurrentProcessId()
+        )
         self.loaded_pe = None
         self._loaded_pe_base_addr = 0
 
-        ctypes.windll.kernel32.LoadLibraryW(r'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\symsrv.dll')
+        ctypes.windll.kernel32.LoadLibraryW(r"C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\symsrv.dll")
 
         if not self._dbghelp.SymInitializeW(self._hproc, SYMBOL_FOLDER, False):
             raise CantLoadDebugSymbolsException()
@@ -115,24 +118,20 @@ class PESymbolMatcher(object):
             DWORD64,
             wintypes.DWORD,
             wintypes.LPVOID,
-            wintypes.DWORD
+            wintypes.DWORD,
         ]
         self._dbghelp.SymLoadModuleExW.restype = DWORD64
         self._dbghelp.SymFromAddr.argtypes = [
             wintypes.HANDLE,
             DWORD64,
             ctypes.POINTER(DWORD64),
-            ctypes.POINTER(SYMBOL_INFO)
+            ctypes.POINTER(SYMBOL_INFO),
         ]
         self._dbghelp.SymFromAddr.restype = wintypes.BOOL
         self._dbghelp.SymUnloadModule64.argtypes = [wintypes.HANDLE, DWORD64]
         self._dbghelp.SymUnloadModule64.restype = wintypes.BOOL
         self._dbghelp.SymCleanup.argtypes = [wintypes.HANDLE]
-        self._dbghelp.SymGetModuleInfo.argtypes = [
-            wintypes.HANDLE,
-            DWORD64,
-            ctypes.POINTER(MODULE_INFO)
-        ]
+        self._dbghelp.SymGetModuleInfo.argtypes = [wintypes.HANDLE, DWORD64, ctypes.POINTER(MODULE_INFO)]
 
         ctypes.windll.kernel32.GetCurrentProcess.restype = wintypes.HANDLE
 
@@ -140,14 +139,7 @@ class PESymbolMatcher(object):
         if self.loaded_pe:
             raise PeAlreadyLoadedException()
         self._loaded_pe_base_addr = self._dbghelp.SymLoadModuleExW(
-            self._hproc,
-            0,
-            pe_path,
-            ctypes.cast(NULL_PTR, wintypes.LPWSTR),
-            0,
-            0,
-            0,
-            0
+            self._hproc, 0, pe_path, ctypes.cast(NULL_PTR, wintypes.LPWSTR), 0, 0, 0, 0
         )
         if self._loaded_pe_base_addr:
             self.loaded_pe = pe_path
@@ -172,9 +164,9 @@ class PESymbolMatcher(object):
         sym_info = SYMBOL_INFO()
         sym_info.SizeOfStruct = ctypes.sizeof(SYMBOL_INFO) - MAX_SYM_NAME
         sym_info.MaxNameLen = MAX_SYM_NAME
-        if not(self._dbghelp.SymFromAddr(self._hproc, DWORD64(addr), NULL_PTR, ctypes.byref(sym_info))):
+        if not (self._dbghelp.SymFromAddr(self._hproc, DWORD64(addr), NULL_PTR, ctypes.byref(sym_info))):
             print(f"failed getting symbol for addr {hex(addr)}: {ctypes.windll.kernel32.GetLastError()}")
-        return sym_info.Name.decode('ascii')
+        return sym_info.Name.decode("ascii")
 
     def assert_loaded_pe(self):
         if not self.loaded_pe:

@@ -25,7 +25,7 @@ class OriginRecon:
 
     def __init__(self):
         self.resolver = dns.asyncresolver.Resolver()
-        self.resolver.nameservers = ['1.1.1.1', '8.8.8.8']
+        self.resolver.nameservers = ["1.1.1.1", "8.8.8.8"]
 
     async def get_subdomains_from_crt(self, domain: str, session: aiohttp.ClientSession) -> List[str]:
         url = f"https://crt.sh/?q=%.{domain}&output=json"
@@ -33,7 +33,7 @@ class OriginRecon:
             async with session.get(url, timeout=20) as resp:
                 if resp.status == 200:
                     data = await resp.json()
-                    return list({entry['name_value'].lower().strip() for entry in data})
+                    return list({entry["name_value"].lower().strip() for entry in data})
         except Exception:
             pass
         return []
@@ -46,28 +46,24 @@ class OriginRecon:
 
         try:
             # Check for high TTL on the domain itself (CDN check)
-            answers = await self.resolver.resolve(domain, 'A')
+            answers = await self.resolver.resolve(domain, "A")
             if answers.rrset and answers.rrset.ttl > 300:
                 results["reasons"].append(f"High TTL ({answers.rrset.ttl}s)")
 
             # Direct IP request
             headers = {"Host": domain}
             async with session.get(
-                f"http://{ip}",
-                headers=headers,
-                timeout=5,
-                ssl=False,
-                allow_redirects=False
+                f"http://{ip}", headers=headers, timeout=5, ssl=False, allow_redirects=False
             ) as resp:
-                server_header = resp.headers.get('Server', '').lower()
+                server_header = resp.headers.get("Server", "").lower()
 
                 # If the domain is behind Cloudflare but the IP shows Nginx/Apache/IIS directly
-                if 'cloudflare' not in server_header and server_header:
+                if "cloudflare" not in server_header and server_header:
                     results["reasons"].append(f"Direct Server Banner: {server_header}")
                     results["is_origin"] = True
 
                 # Check for sensitive headers usually stripped by CDNs
-                if any(h in resp.headers for h in ['X-Powered-By', 'X-AspNet-Version', 'X-Runtime']):
+                if any(h in resp.headers for h in ["X-Powered-By", "X-AspNet-Version", "X-Runtime"]):
                     results["reasons"].append("Leaked Backend Technology Headers")
                     results["is_origin"] = True
 

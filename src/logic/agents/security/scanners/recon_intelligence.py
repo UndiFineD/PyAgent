@@ -37,28 +37,28 @@ class ReconIntelligence:
             {
                 "service": "ActiveMQ",
                 "pattern": r"\0\0\0.\x01ActiveMQ\0\0\0",
-                "relevance": "Messaging middleware often exposed without auth."
+                "relevance": "Messaging middleware often exposed without auth.",
             },
             {
                 "service": "Amanda Index Server",
                 "pattern": r"220 ([-.\w]+) AMANDA index server \((\d[-.\w ]+)\) ready\.\r\n",
-                "relevance": "Backup server metadata leak."
+                "relevance": "Backup server metadata leak.",
             },
             {
                 "service": "Symantec AntiVirus Scan Engine",
                 "pattern": r"220 Symantec AntiVirus Scan Engine ready\.\r\n",
-                "relevance": "Security appliance identification."
+                "relevance": "Security appliance identification.",
             },
             {
                 "service": "Kubernetes API (Unauthorized)",
                 "pattern": r'{"kind":"Status","apiVersion":"v1","metadata":{},"status":"Failure","message":"forbidden"',
-                "relevance": "Critical Cloud misconfiguration."
+                "relevance": "Critical Cloud misconfiguration.",
             },
             {
                 "service": "Etcd API",
                 "pattern": r'{"action":"get","node":{"key":"/"',
-                "relevance": "Cluster secret storage exposure."
-            }
+                "relevance": "Cluster secret storage exposure.",
+            },
         ]
 
     @staticmethod
@@ -71,33 +71,182 @@ class ReconIntelligence:
             "Slack_Webhook": r"https://hooks.slack.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}",
             "Google_API_Key": r"AIza[0-9A-Za-z\\-_]{35}",
             "Firebase_URL": r"[a-z0-9.-]+\.firebaseio\.com",
-            "Heroku_API_Key": r"[Hh][Ee][Rr][Oo][Kk][Uu].*[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}"
+            "Heroku_API_Key": r"[Hh][Ee][Rr][Oo][Kk][Uu].*[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}",
         }
 
     JS_RESERVED_WORDS = {
-        "await", "break", "case", "catch", "class", "const", "continue", "debugger", "default",
-        "delete", "do", "else", "enum", "export", "extends", "false", "finally", "for",
-        "function", "if", "implements", "import", "in", "instanceof", "interface", "let",
-        "new", "null", "package", "private", "protected", "public", "return", "super",
-        "switch", "static", "this", "throw", "try", "true", "typeof", "var", "void",
-        "while", "with", "abstract", "boolean", "int", "synchronized", "byte", "long",
-        "native", "throws", "char", "final", "transient", "float", "goto", "volatile",
-        "double", "short", "alert", "frames", "outerheight", "all", "framerate", "outerwidth",
-        "anchor", "packages", "anchors", "getclass", "pagexoffset", "area", "hasownproperty",
-        "pageyoffset", "array", "hidden", "parent", "assign", "history", "parsefloat", "blur",
-        "image", "parseint", "button", "images", "password", "checkbox", "infinity", "pkcs11",
-        "clearinterval", "isfinite", "plugin", "cleartimeout", "isnan", "prompt",
-        "clientinformation", "isprototypeof", "propertyisenum", "close", "java", "prototype",
-        "closed", "javaarray", "radio", "confirm", "javaclass", "reset", "constructor",
-        "javaobject", "screenx", "crypto", "javapackage", "screeny", "date", "innerheight",
-        "scroll", "decodeuri", "innerwidth", "secure", "decodeuricomponent", "layer",
-        "select", "defaultstatus", "layers", "self", "document", "length", "setinterval",
-        "element", "link", "settimeout", "elements", "location", "status", "embed", "math",
-        "string", "embeds", "mimetypes", "submit", "encodeuri", "name", "taint",
-        "encodeuricomponent", "nan", "text", "escape", "navigate", "textarea", "eval",
-        "navigator", "top", "event", "number", "tostring", "fileupload", "object",
-        "undefined", "focus", "offscreenbuffering", "unescape", "form", "open", "untaint",
-        "forms", "opener", "valueof", "frame", "option", "window", "yield"
+        "await",
+        "break",
+        "case",
+        "catch",
+        "class",
+        "const",
+        "continue",
+        "debugger",
+        "default",
+        "delete",
+        "do",
+        "else",
+        "enum",
+        "export",
+        "extends",
+        "false",
+        "finally",
+        "for",
+        "function",
+        "if",
+        "implements",
+        "import",
+        "in",
+        "instanceof",
+        "interface",
+        "let",
+        "new",
+        "null",
+        "package",
+        "private",
+        "protected",
+        "public",
+        "return",
+        "super",
+        "switch",
+        "static",
+        "this",
+        "throw",
+        "try",
+        "true",
+        "typeof",
+        "var",
+        "void",
+        "while",
+        "with",
+        "abstract",
+        "boolean",
+        "int",
+        "synchronized",
+        "byte",
+        "long",
+        "native",
+        "throws",
+        "char",
+        "final",
+        "transient",
+        "float",
+        "goto",
+        "volatile",
+        "double",
+        "short",
+        "alert",
+        "frames",
+        "outerheight",
+        "all",
+        "framerate",
+        "outerwidth",
+        "anchor",
+        "packages",
+        "anchors",
+        "getclass",
+        "pagexoffset",
+        "area",
+        "hasownproperty",
+        "pageyoffset",
+        "array",
+        "hidden",
+        "parent",
+        "assign",
+        "history",
+        "parsefloat",
+        "blur",
+        "image",
+        "parseint",
+        "button",
+        "images",
+        "password",
+        "checkbox",
+        "infinity",
+        "pkcs11",
+        "clearinterval",
+        "isfinite",
+        "plugin",
+        "cleartimeout",
+        "isnan",
+        "prompt",
+        "clientinformation",
+        "isprototypeof",
+        "propertyisenum",
+        "close",
+        "java",
+        "prototype",
+        "closed",
+        "javaarray",
+        "radio",
+        "confirm",
+        "javaclass",
+        "reset",
+        "constructor",
+        "javaobject",
+        "screenx",
+        "crypto",
+        "javapackage",
+        "screeny",
+        "date",
+        "innerheight",
+        "scroll",
+        "decodeuri",
+        "innerwidth",
+        "secure",
+        "decodeuricomponent",
+        "layer",
+        "select",
+        "defaultstatus",
+        "layers",
+        "self",
+        "document",
+        "length",
+        "setinterval",
+        "element",
+        "link",
+        "settimeout",
+        "elements",
+        "location",
+        "status",
+        "embed",
+        "math",
+        "string",
+        "embeds",
+        "mimetypes",
+        "submit",
+        "encodeuri",
+        "name",
+        "taint",
+        "encodeuricomponent",
+        "nan",
+        "text",
+        "escape",
+        "navigate",
+        "textarea",
+        "eval",
+        "navigator",
+        "top",
+        "event",
+        "number",
+        "tostring",
+        "fileupload",
+        "object",
+        "undefined",
+        "focus",
+        "offscreenbuffering",
+        "unescape",
+        "form",
+        "open",
+        "untaint",
+        "forms",
+        "opener",
+        "valueof",
+        "frame",
+        "option",
+        "window",
+        "yield",
     }
 
     @staticmethod
@@ -109,7 +258,7 @@ class ReconIntelligence:
             "index": "/.git/index",
             "objects": "/.git/objects/",
             "refs": "/.git/refs/heads/",
-            "head": "/.git/HEAD"
+            "head": "/.git/HEAD",
         }
 
     @staticmethod
@@ -119,7 +268,7 @@ class ReconIntelligence:
             "passwords_regex": r".{0,3}passw.{0,3}[=]{1}.{0,18}",
             "sensitive_keywords": "passw,db_,admin,account,user,token,secret,key,credential,login",
             "aws_keys": r"AKIA[0-9A-Z]{16}",
-            "google_api": r"AIza[0-9A-Za-z-_]{35}"
+            "google_api": r"AIza[0-9A-Za-z-_]{35}",
         }
 
     @staticmethod
@@ -128,31 +277,129 @@ class ReconIntelligence:
         scales = {
             "small": [80, 443],
             "medium": [80, 443, 8000, 8080, 8443],
-            "large": [
-                80, 443, 81, 591, 2082, 2087, 2095, 2096, 3000, 8000, 8001, 8008, 8080, 8083, 8443, 8834, 8888
-            ],
+            "large": [80, 443, 81, 591, 2082, 2087, 2095, 2096, 3000, 8000, 8001, 8008, 8080, 8083, 8443, 8834, 8888],
             "xlarge": [
-                80, 443, 81, 300, 591, 593, 832, 981, 1010, 1311, 2082, 2087, 2095, 2096, 2480, 3000, 3128, 3333,
-                4243, 4567, 4711, 4712, 4993, 5000, 5104, 5108, 5800, 6543, 7000, 7396, 7474, 8000, 8001, 8008,
-                8014, 8042, 8069, 8080, 8081, 8088, 8090, 8091, 8118, 8123, 8172, 8222, 8243, 8280, 8281, 8333,
-                8443, 8500, 8834, 8880, 8888, 8983, 9000, 9043, 9060, 9080, 9090, 9091, 9200, 9443, 9800, 9981,
-                12443, 16080, 18091, 18092, 20720, 28017
-            ]
+                80,
+                443,
+                81,
+                300,
+                591,
+                593,
+                832,
+                981,
+                1010,
+                1311,
+                2082,
+                2087,
+                2095,
+                2096,
+                2480,
+                3000,
+                3128,
+                3333,
+                4243,
+                4567,
+                4711,
+                4712,
+                4993,
+                5000,
+                5104,
+                5108,
+                5800,
+                6543,
+                7000,
+                7396,
+                7474,
+                8000,
+                8001,
+                8008,
+                8014,
+                8042,
+                8069,
+                8080,
+                8081,
+                8088,
+                8090,
+                8091,
+                8118,
+                8123,
+                8172,
+                8222,
+                8243,
+                8280,
+                8281,
+                8333,
+                8443,
+                8500,
+                8834,
+                8880,
+                8888,
+                8983,
+                9000,
+                9043,
+                9060,
+                9080,
+                9090,
+                9091,
+                9200,
+                9443,
+                9800,
+                9981,
+                12443,
+                16080,
+                18091,
+                18092,
+                20720,
+                28017,
+            ],
         }
         return scales.get(scale, scales["medium"])
 
     CSP_DIRECTIVES = [
-        "base-uri", "block-all-mixed-content", "child-src", "connect-src", "default-src",
-        "font-src", "form-action", "frame-ancestors", "frame-src", "img-src", "manifest-src",
-        "media-src", "navigate-to", "object-src", "plugin-types", "prefetch-src", "referrer",
-        "report-sample", "report-to", "report-uri", "require-sri-for", "sandbox", "script-src",
-        "script-src-attr", "script-src-elem", "strict-dynamic", "style-src", "style-src-attr",
-        "style-src-elem", "trusted-types", "unsafe-hashes", "upgrade-insecure-requests", "worker-src"
+        "base-uri",
+        "block-all-mixed-content",
+        "child-src",
+        "connect-src",
+        "default-src",
+        "font-src",
+        "form-action",
+        "frame-ancestors",
+        "frame-src",
+        "img-src",
+        "manifest-src",
+        "media-src",
+        "navigate-to",
+        "object-src",
+        "plugin-types",
+        "prefetch-src",
+        "referrer",
+        "report-sample",
+        "report-to",
+        "report-uri",
+        "require-sri-for",
+        "sandbox",
+        "script-src",
+        "script-src-attr",
+        "script-src-elem",
+        "strict-dynamic",
+        "style-src",
+        "style-src-attr",
+        "style-src-elem",
+        "trusted-types",
+        "unsafe-hashes",
+        "upgrade-insecure-requests",
+        "worker-src",
     ]
 
     CSP_SOURCES = [
-        "'none'", "'self'", "'unsafe-inline'", "'unsafe-eval'", "'sha", "'nonce",
-        "'strict-dynamic'", "'unsafe-hashes'"
+        "'none'",
+        "'self'",
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+        "'sha",
+        "'nonce",
+        "'strict-dynamic'",
+        "'unsafe-hashes'",
     ]
 
     def __init__(self, session: Optional[aiohttp.ClientSession] = None):
@@ -209,10 +456,10 @@ class ReconIntelligence:
         """Extracts unique domains and hosts from a Content-Security-Policy header."""
         domains = set()
         # Normalize CSP
-        directives = [d.strip() for d in csp_header.split(';') if d.strip()]
+        directives = [d.strip() for d in csp_header.split(";") if d.strip()]
 
         for directive in directives:
-            parts = directive.split(' ')
+            parts = directive.split(" ")
             for part in parts:
                 part = part.strip()
                 if not part:
@@ -231,11 +478,7 @@ class ReconIntelligence:
         """Checks if a regex is vulnerable to ReDoS using regex.rip API."""
         try:
             session = await self.get_session()
-            async with session.post(
-                'https://go.regex.rip/check',
-                json={'regexes': [regex]},
-                timeout=10
-            ) as response:
+            async with session.post("https://go.regex.rip/check", json={"regexes": [regex]}, timeout=10) as response:
                 if response.status == 200:
                     return await response.json()
         except Exception:
@@ -249,10 +492,10 @@ class ReconIntelligence:
         """
         # Heuristic: Nested quantifiers like (a+)+ or (a|b|ab)*
         patterns = [
-            r'\(.*\+.*\)\+',           # (...+)+
-            r'\(.*\*.*\)\*',           # (...*)*
-            r'\(.*\{.*\}.*\)\{.*\}',   # ({...}){...}
-            r'\(.*\|.*\)\*',           # (...|...)* if parts overlap
+            r"\(.*\+.*\)\+",  # (...+)+
+            r"\(.*\*.*\)\*",  # (...*)*
+            r"\(.*\{.*\}.*\)\{.*\}",  # ({...}){...}
+            r"\(.*\|.*\)\*",  # (...|...)* if parts overlap
         ]
         for p in patterns:
             if re.search(p, regex):
@@ -262,13 +505,13 @@ class ReconIntelligence:
     def extract_js_words(self, js_content: str) -> List[str]:
         """Extracts potential functional words from JS for wordlist generation."""
         # Find potential identifiers
-        found = re.findall(r'[a-zA-Z0-9_\-\.]+', js_content)
+        found = re.findall(r"[a-zA-Z0-9_\-\.]+", js_content)
         words = set()
 
         for word in found:
             # Handle dots (like object properties)
-            if '.' in word:
-                sub_words = word.split('.')
+            if "." in word:
+                sub_words = word.split(".")
                 for sw in sub_words:
                     if sw and sw.lower() not in self.JS_RESERVED_WORDS and len(sw) > 2:
                         words.add(sw)
@@ -286,9 +529,7 @@ class ReconIntelligence:
         try:
             # Simple check if resolves
             proc = await asyncio.create_subprocess_exec(
-                'nslookup', domain,
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE
+                "nslookup", domain, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
             )
             stdout, _ = await proc.communicate()
             return b"Non-existent domain" in stdout or b"can't find" in stdout
@@ -305,10 +546,10 @@ class ReconIntelligence:
 
         async def check_target(target):
             # Try /favicon.ico
-            if not target.startswith('http'):
+            if not target.startswith("http"):
                 target = f"http://{target}"
 
-            favicon_url = target.rstrip('/') + '/favicon.ico'
+            favicon_url = target.rstrip("/") + "/favicon.ico"
             target_hash = await self.calculate_favicon_hash(favicon_url)
             if target_hash == source_hash:
                 matches.append(target)
@@ -362,27 +603,30 @@ class ReconIntelligence:
         Generates common 403 bypass payloads (Path and Header manipulation).
         Ported from 0xSojalSec-Bypass-Four03 and 0xSojalSec-BurpSuite_403Bypasser.
         """
-        base_url = url.rstrip('/')
-        clean_path = path.strip('/')
+        base_url = url.rstrip("/")
+        clean_path = path.strip("/")
 
         payloads = []
 
         # Path manipulation
         fuzz_suffixes = [
-            "/%2f/", "/./", "//", "?", "#", "%3b/", "..;/", ";",
-            "/%00/", "/%0d/", "/%23/", "/*/", "/%252e**/"
+            "/%2f/",
+            "/./",
+            "//",
+            "?",
+            "#",
+            "%3b/",
+            "..;/",
+            ";",
+            "/%00/",
+            "/%0d/",
+            "/%23/",
+            "/*/",
+            "/%252e**/",
         ]
         for suffix in fuzz_suffixes:
-            payloads.append({
-                "type": "path",
-                "url": f"{base_url}/{clean_path}{suffix}",
-                "headers": {}
-            })
-            payloads.append({
-                "type": "path",
-                "url": f"{base_url}/{suffix}{clean_path}",
-                "headers": {}
-            })
+            payloads.append({"type": "path", "url": f"{base_url}/{clean_path}{suffix}", "headers": {}})
+            payloads.append({"type": "path", "url": f"{base_url}/{suffix}{clean_path}", "headers": {}})
 
         # Header manipulation
         bypass_headers = {
@@ -394,24 +638,15 @@ class ReconIntelligence:
             "X-Remote-IP": "127.0.0.1",
             "X-Remote-Addr": "127.0.0.1",
             "X-Host": "127.0.0.1",
-            "Host": "localhost"
+            "Host": "localhost",
         }
 
         for name, value in bypass_headers.items():
-            payloads.append({
-                "type": "header",
-                "url": f"{base_url}/",
-                "headers": {name: value}
-            })
+            payloads.append({"type": "header", "url": f"{base_url}/", "headers": {name: value}})
 
         # Method manipulation
         methods = ["POST", "PUT", "PATCH", "TRACE", "CONNECT"]
         for method in methods:
-            payloads.append({
-                "type": "method",
-                "url": f"{base_url}/{clean_path}",
-                "method": method,
-                "headers": {}
-            })
+            payloads.append({"type": "method", "url": f"{base_url}/{clean_path}", "method": method, "headers": {}})
 
         return payloads

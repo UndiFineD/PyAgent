@@ -19,8 +19,6 @@ Provides image generation capabilities using diffusion models, inspired by 4o-gh
 
 from __future__ import annotations
 
-import os
-import time
 from typing import Any, Dict, Optional
 from pathlib import Path
 

@@ -69,7 +69,6 @@ if PointStruct is None:  # pragma: no cover - test shim
             self.payload = payload
 
 
-
 # Make OpenAI import optional to allow running without it
 try:
     from openai import OpenAI  # type: ignore
@@ -177,8 +176,13 @@ class AutoMemCore:
                 )
             )
 
-    def store_memory(self, content: str, tags: Optional[List[str]] = None,
-                    importance: float = 1.0, metadata: Optional[Dict[str, Any]] = None) -> str:
+    def store_memory(
+        self,
+        content: str,
+        tags: Optional[List[str]] = None,
+        importance: float = 1.0,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> str:
         """
         Store a new memory in the hybrid system.
 
@@ -286,8 +290,13 @@ class AutoMemCore:
         # In production, this would call OpenAI, local model, etc.
         return [random.random() for _ in range(self.config.vector_dim)]
 
-    def recall_memories(self, query: str, tags: Optional[List[str]] = None,
-                       limit: int = 10, min_score: float = 0.0) -> List[Dict[str, Any]]:
+    def recall_memories(
+        self,
+        query: str,
+        tags: Optional[List[str]] = None,
+        limit: int = 10,
+        min_score: float = 0.0
+    ) -> List[Dict[str, Any]]:
         """
         Recall memories using 9-component hybrid scoring.
 
@@ -335,8 +344,12 @@ class AutoMemCore:
         # Simple implementation - check if any filter tag is in memory tags
         return any(tag in memory_tags for tag in filter_tags)
 
-    def _hybrid_score(self, query: str, query_vector: List[float],
-                     vector_results: List) -> List[Dict[str, Any]]:
+    def _hybrid_score(
+        self,
+        query: str,
+        query_vector: List[float],
+        vector_results: List
+    ) -> List[Dict[str, Any]]:
         """
         Apply 9-component hybrid scoring system.
 
@@ -443,8 +456,13 @@ class AutoMemCore:
         union = query_set.union(content_set)
         return len(intersection) / len(union) if union else 0.0
 
-    def associate_memories(self, memory_id1: str, memory_id2: str,
-                          relationship: str = "related", strength: float = 1.0):
+    def associate_memories(
+        self,
+        memory_id1: str,
+        memory_id2: str,
+        relationship: str = "related",
+        strength: float = 1.0
+    ):
         """
         Create association between two memories in the graph.
 

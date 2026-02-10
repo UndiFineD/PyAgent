@@ -44,7 +44,7 @@ class PhishingIntelligence:
             "microsoft_365": "https://login.microsoftonline.com.common-auth.io/login",
             "google_workspace": "https://accounts.google.com.security-check.net/ServiceLogin",
             "outlook_web": "https://outlook.office365.com.mail-verify.com/",
-            "linkedin_session": "https://www.linkedin.com.session-expire.biz/checkpoint/lg/login"
+            "linkedin_session": "https://www.linkedin.com.session-expire.biz/checkpoint/lg/login",
         }
 
     @staticmethod
@@ -56,5 +56,5 @@ class PhishingIntelligence:
             "Browser fingerprinting (allow only real browsers)",
             "CAPTCHA before landing page",
             "URL shortening and multiple redirects",
-            "Zero-width characters in domain names"
+            "Zero-width characters in domain names",
         ]

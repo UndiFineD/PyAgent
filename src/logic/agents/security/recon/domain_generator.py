@@ -19,11 +19,12 @@ import re
 from dataclasses import dataclass
 from typing import Protocol, Set
 
-DOMAIN_REGEX = r'(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}'
+DOMAIN_REGEX = r"(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}"
 
 
 class LLMInterface(Protocol):
     """Protocol for LLM interactions."""
+
     async def chat(self, prompt: str) -> str:
         """Sends a chat prompt to the LLM."""
         ...
@@ -32,6 +33,7 @@ class LLMInterface(Protocol):
 @dataclass
 class DomainGenerationResult:
     """Stores results of domain generation."""
+
     seed_domain: str
     generated_domains: Set[str]
     model_used: str
@@ -74,7 +76,7 @@ class DomainGenerator:
             return DomainGenerationResult(
                 seed_domain=seed_domain,
                 generated_domains=found_domains,
-                model_used=getattr(self.llm, "model_name", "unknown")
+                model_used=getattr(self.llm, "model_name", "unknown"),
             )
 
         except Exception as e:
@@ -85,6 +87,7 @@ class DomainGenerator:
 
 class MockLLM:
     """Mock LLM for testing."""
+
     def __init__(self):
         self.model_name = "mock"
 
@@ -94,9 +97,11 @@ class MockLLM:
 
 
 if __name__ == "__main__":
+
     async def run():
         """Entry point for testing."""
         gen = DomainGenerator(MockLLM())
         res = await gen.generate_permutations("example.com")
         print(res)
+
     asyncio.run(run())

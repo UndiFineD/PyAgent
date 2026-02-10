@@ -32,6 +32,7 @@ class ExternalReconOrchestrator:
     """
     Orchestrates external security tools similar to AutoRecon.
     """
+
     def __init__(self, config: ReconConfig):
         self.config = config
         self.domain_dir = os.path.join(self.config.results_path, self.config.domain)
@@ -43,15 +44,13 @@ class ExternalReconOrchestrator:
         """
         print(f"[*] Running: {cmd}")
         process = await asyncio.create_subprocess_shell(
-            cmd,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
+            cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
         )
 
         stdout, stderr = await process.communicate()
 
         if stdout and output_file:
-            with open(output_file, 'wb') as f:
+            with open(output_file, "wb") as f:
                 f.write(stdout)
 
         if process.returncode != 0:
@@ -87,7 +86,7 @@ class ExternalReconOrchestrator:
             return
 
         # cat domains | httprobe
-        if os.name == 'nt':
+        if os.name == "nt":
             cmd = f"type {input_file} | httprobe -p http:81 -p https:81"
         else:
             cmd = f"cat {input_file} | httprobe"
@@ -124,6 +123,7 @@ class ExternalReconOrchestrator:
 
         if self.config.use_nuclei:
             await self.run_nuclei()
+
 
 # Example usage
 # if __name__ == "__main__":
