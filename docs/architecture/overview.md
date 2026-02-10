@@ -4,74 +4,52 @@
 PyAgent has evolved from a single-agent orchestrator into a multi-agent swarm capable of autonomous, secure, and transactionally safe self-improvement. Following the **Phase 319 (Voyager Stability)** milestone, the system now features a decentralized peer-to-peer transport layer and enhanced Rust-native metrics.
 we are building a multi-node, multi-user, multi-agent, multi-model, Multi-modal, LLM with streaming sound and video and multiple text channels
 
-## Core Architectural Pillars
+## The Nine Pillars of Swarm Singularity (v4.0.0)
 
-### 1. Rust Bridge & Acceleration (`rust_core/`)
-The primary performance layer is now a Rust-based FFI bridge (`rust_core.pyd`).
-- **41% Acceleration**: CPU-bound tasks like cyclomatic complexity calculation, pattern matching, and JSON logging are delegated to Rust.
-- **CodeHealth Guard**: Phase 319 introduces Rust-native metrics (C901, MI) in `CodeHealthAuditor`, enabling latency-free workspace audits (< 5ms per file).
-- **Other Options**: 
-    - **Current (Default)**: `rust_core` (FFI Bridge).
-    - **Alternative**: **Distributed Metrics Node** offloading heavy calculations to remote nodes via ZMQ for multi-machine swarm scaling.
+### 1. Swarm Singularity (BFT Consensus)
+PyAgent v4.0.0 evolved into a fully decentralized constellation.
+- **BFT Raft Consensus**: Ensures global state integrity across peer nodes.
+- **Collective Intelligence**: Tasks are negotiated across the mesh based on real-time node capability and load.
 
-### 2. Synaptic Modularization & Logic Delegation
-PyAgent avoids monolithic agent design in favor of high-cohesion modularity.
-- **Mixin-Based Architecture**: Using `IdentityMixin`, `KnowledgeMixin`, `PersistenceMixin`, etc. to build specialized agents without deep inheritance trees.
-- **Logic Delegation**: Domain logic resides in `*Core` classes (e.g., `CoderCore`). The **Agent** class handles only high-level orchestration, AI prompting, and state management, while the **Core** class handles the pure computation or heavy processing.
+### 2. Memory & Context (Paged KV_v2)
+Near-metal cognitive scaling using Rust-accelerated block management.
+- **Paged Attention**: Block-based KV management for massive context handling.
+- **AutoMem Hybrid Search**: 9-component search (Vector, Graph, Temporal, Lexical, etc.).
 
-### 3. Voyager Decentralized Transport (`src/infrastructure/voyager/`)
-The "Voyager" layer provides a zero-broker, decentralized message bus for multi-node swarms.
-- **mDNS Discovery**: Uses `DiscoveryNode` (zeroconf) to advertise node capabilities and transport ports automatically on the local network.
-- **ZMQ Neural Synapse**: Implements the DEALER/ROUTER pattern for high-speed, asynchronous task teleportation between fleets.
-- **Graceful Stability**: Specialized asyncio handling for Ctrl+C and socket termination ensures 100% clean shutdowns even on Windows (`SelectorEventLoop`).
+### 3. Universal Shell (UniversalAgent)
+Decoupling implementation from identity via dynamic Skill/Core loading.
+- **CoRT Reasoning**: Chain-of-Recursive-Thoughts for deep internal simulation.
+- **Logic Shards**: Agents load JSON-defined "Brains" dynamically based on task intent.
 
-### 3. Cascade Context and Lineage (`src/core/base/`)
-Introduced `CascadeContext` to solve the challenge of thread-safe recursion in complex task delegations. Every task maintains a lineage of its parentage, preventing infinite loops and providing deep observability into the "reasoning chain."
+### 4. Industrial Factory (n8n & DAG)
+The automation orchestration layer for the swarm.
+- **Workflow DAG**: Logic manifests support complex branching and conditional nodes.
+- **n8n Bridge**: Agents act as intelligent nodes in high-volume automation pipelines.
 
-### 2. Fleet Priority & Preemption (`src/infrastructure/fleet/`)
-The `FleetManager` and `FleetExecutionCore` now support `AgentPriority` (Low, Standard, High, Critical). 
-- **Active Task Registry**: Tracks all running agents and their priorities.
-- **Preemption**: When a high-priority task arrives, the Fleet can invoke `suspend()` on lower-priority agents, freeing up LLM bandwidth and compute resources.
+### 5. Swarm OS (Web & Designer)
+Modern, distributed interface for swarm interaction.
+- **Logic Designer**: Visual drag-and-drop tool to arrange agent cognitive shards.
+- **File Explorer**: Integrated workspace management with source preview.
 
-### 3. Neural Pruning & Synaptic Decay (`src/core/base/NeuralPruningEngine.py`)
-To maintain high-performance sharding, the system implements exponential decay for knowledge paths.
-- **50-Cycle Penalty**: Agents or paths that remain idle for more than 50 execution cycles suffer a 50% synaptic weight reduction.
-- **Pruning Core**: Automatically removes "forgotten" facts that fall below the efficiency threshold.
+### 6. Synaptic Weights (Efficiency)
+Self-optimizing traffic patterns across the P2P mesh.
+- **Efficiency Heatmaps**: Synaptic traffic intensity visualization.
+- **Neural Pruning**: Systematic decay of unused knowledge paths.
 
-### 4. Binary Shard Snapshots (`src/infrastructure/storage/`)
-Moving beyond JSON, the system uses `msgpack` and `blake3` for high-speed indexing and binary snapshots.
-- **O(1) Lookups**: Localized B-Tree indexing.
-- **Snapshots**: Periodic binary dumps of the global knowledge state allow for near-instantaneous restoration of the swarm's memory.
+### 7. Swarm Firewall (Zero-Trust)
+Security-first architecture for decentralized communication.
+- **Neural Scam Detection**: Real-time analysis of P2P messages for social engineering.
+- **Signal Double Ratchet**: Forward secrecy for all intra-swarm communications.
 
-### 5. Secure Asynchronous Execution (`src/core/base/shell.py`)
-Shell operations are now fully asynchronous and sandboxed.
-- **Environment Sanitizer**: Prevents the leakage of environment variables (keys, secrets) to subprocesses via an allow-list protocol.
-- **Real-time Streaming**: Non-blocking `stdout/stderr` capture for live logging.
+### 8. Self-Evolution Loop (Pillar 8)
+Autonomic codebase improvement and self-cleaning logic.
+- **Rust Migration**: Heuristic identification of Python bottlenecks for native porting.
+- **State Transactions**: FS-wide transaction management with guaranteed rollbacks.
 
-### 6. Transactional State Integrity (`src/core/base/state.py`)
-All file-system modifications are wrapped in `StateTransaction`.
-- **Atomic Operations**: Changes are buffered.
-- **Rollback**: If an agent fails midway through a multi-file refactor, the `StateTransaction` restores previous states from a secure vault.
-
-### 7. Mixin-Based Agent Modularization (`src/core/base/mixins/`)
-Following the Phase 317 complexity sweep, the monolithic `BaseAgent` (Complexity: 135) was refactored into a decentralized Mixin architecture.
-- **IdentityMixin**: Handles agent naming, versioning, and core metadata.
-- **ReflectionMixin**: Implements autonomous self-critique. After every reasoning pass, the agent performs a one-time self-reflection to verify correctness and logic integrity.
-
-### 8. Self-Learning & Lesson Aggregation (`src/logic/agents/swarm/core/`)
-The system now proactively learns from its own reasoning failures via the `LessonCore`.
-- **Mistake Harvesting**: If a reflection pass identifies a logic error or factual mistake, it records a `Lesson` (Error Pattern -> Cause -> Solution).
-- **Shared Memory**: Lessons are persisted and shared across the swarm, allowing one agent's failure to become a lesson for the entire fleet.
-
-### 8. Phase 48: Advanced Memory & API Partitioning (v3.16.x)
-To manage extreme complexity and performance in inference sub-systems, major monolithic components were modularized into high-cohesion sub-packages.
-- **Paged Attention Engine**: Split into `src/infrastructure/attention/paged_attention/`, implementing partitioned online softmax and block-based KV management.
-- **OpenAI Responses API Server**: Modularized into `src/infrastructure/openai_api/responses/`, featuring dedicated models, storage, and SSE streaming handlers.
-- **NIXL RDMA Connector**: High-performance KV transfer logic using Rust-accelerated RDMA memory registration and block-wise zero-copy transfers between prefill and decode instances.
-- **PersistenceMixin**: Manages state serialization, checkpointing, and history.
-- **KnowledgeMixin**: Orchestrates access to the "Knowledge Trinity" (Structured, Semantic, Relational).
-- **OrchestrationMixin**: Manages task delegation, tool calling, and recursive reasoning.
-- **GovernanceMixin**: Enforces security protocols, privacy boundaries, and ethical guardrails.
+### 9. Observability (3D Topology)
+Deep transparency into the machine mind.
+- **3D Topology Viewer**: Real-time map of node relationships and synaptic links.
+- **Resource HUD**: millisecond-level telemetry for CPU, GPU, Temperature, and Network.
 
 ## Roadmap: Project "VOYAGER"
 - **P2P Swarms (DONE)**: Decentralized fleet synchronization with mDNS discovery.

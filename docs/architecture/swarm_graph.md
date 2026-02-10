@@ -1,41 +1,39 @@
-# Swarm Social Topology (v3.6.0)
+# Swarm Singularity Topology (v4.0.0)
 
 ```mermaid
 graph TD
     subgraph InterfaceTier
         CLI[PyAgent CLI]
-        GUI[Desktop Dashboard]
+        HUD[3D Topology HUD]
+        DEP[Designer / Explorer]
         API[FastAPI Web]
     end
 
     subgraph InfrastructureTier
         Fleet[FleetManager]
-        Orch[SelfImprovementOrchestrator]
-        Economy[AgentEconomy]
+        Firewall[Zero-Trust Firewall]
+        Consensus[BFT Consensus Manager]
     end
 
     subgraph LogicTier
-        Agents[Specialized Agents]
-        Reasoning[CoT/Strategy]
+        Shell[Universal Agent Shell]
+        Skills[Dynamic Skill Manager]
+        Workflows[Workflow DAG Executor]
     end
 
     subgraph CoreTier
-        Trinity[Knowledge Trinity]
+        Memory[Paged KV_v2 Cache]
+        AutoMem[AutoMem Hybrid Search]
         Rust[rust_core Acceleration]
     end
 
-    subgraph ObservabilityTier
-        Stats[Metrics/Stats]
-        Logs[Structured JSON Logs]
-    end
-
-    CLI --> Fleet
-    GUI --> Fleet
-    Fleet --> Orch
-    Orch --> Agents
-    Agents --> Trinity
-    Agents --> Reasoning
-    Trinity --> Rust
-    Fleet --> Stats
-    Stats --> Logs
+    InterfaceTier --> Fleet
+    Fleet --> Firewall
+    Firewall --> Consensus
+    Consensus --> Shell
+    Shell --> Skills
+    Shell --> Workflows
+    Workflows --> Memory
+    Memory --> Rust
+    HUD --> Fleet
 ```

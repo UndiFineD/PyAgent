@@ -10,6 +10,7 @@ This document lists all specialized agents available in the PyAgent fleet. It is
 
 | Category | Agent | Version | Description | Source |
 | :--- | :--- | :--- | :--- | :--- |
+| System | `UniversalAgent` | 4.0.0 | **The Universal Shell**: centerpiece of the Swarm Singularity. Dynamically loads Logic Manifests and Skills via CoRT reasoning. | [universal_agent.py](../src/logic/agents/system/universal_agent.py) |
 | Cognitive | `AttentionBufferAgent` | CORE-LINKED | Agent that maintains a shared attention buffer between humans and agents. | [AttentionBufferAgent.py](../src/logic/agents/cognitive/AttentionBufferAgent.py) |
 | Cognitive | `AudioReasoningAgent` | CORE-LINKED | Phase 58: Advanced Multimedia Grounding. | [AudioReasoningAgent.py](../src/logic/agents/cognitive/AudioReasoningAgent.py) |
 | Cognitive | `BayesianReasoningAgent` | CORE-LINKED | Integrates Bayesian methods for robust fleet decision-making. | [BayesianReasoningAgent.py](../src/logic/agents/cognitive/BayesianReasoningAgent.py) |

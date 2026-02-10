@@ -67,7 +67,9 @@ def remove_top_level_asserts(text: str) -> str:
     return '\n'.join(lines) + ("\n" if text.endswith('\n') else "")
 
 
-def write_patch(orig_path: Path, orig_text: str, new_text: str, patch_dir: Path, base_dir: Path | None = None) -> Path | None:
+def write_patch(
+    orig_path: Path, orig_text: str, new_text: str, patch_dir: Path, base_dir: Path | None = None
+) -> Path | None:
     if orig_text == new_text:
         return None
     patch_dir.mkdir(parents=True, exist_ok=True)
@@ -135,7 +137,11 @@ def main(argv=None) -> int:
         print('Re-running static checks...')
         rc = 0
         import subprocess
-        rc |= subprocess.call([sys.executable, str(ROOT / 'src' / 'tools' / 'run_static_checks.py'), str(TARGET_DIR)])
+        rc |= subprocess.call([
+            sys.executable,
+            str(ROOT / 'src' / 'tools' / 'run_static_checks.py'),
+            str(TARGET_DIR)
+        ])
         print('Re-running generated tests...')
         rc |= subprocess.call([sys.executable, str(ROOT / 'src' / 'tools' / 'run_auto_tests.py')])
         return rc

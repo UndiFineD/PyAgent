@@ -56,7 +56,11 @@ def main() -> int:
             orig = lines[ln - 1]
             s = orig.strip()
             # Skip risky/easily-broken contexts
-            if s.startswith(('def ', 'class ', 'assert', '@', 'return', 'yield', 'if ', 'for ', 'while ', 'with ', 'try:', 'except')):
+            risky_starts = (
+                'def ', 'class ', 'assert', '@', 'return', 'yield',
+                'if ', 'for ', 'while ', 'with ', 'try:', 'except'
+            )
+            if s.startswith(risky_starts):
                 continue
             # Conservative application rules:
             # - comment out imports

@@ -2,16 +2,16 @@
 
 The Observability layer (`src/observability/`) acts as the "Nervous System" of the PyAgent swarm, providing real-time telemetry, audit logs, and performance metrics.
 
-## 📡 Live Telemetry
-- **Prometheus/Grafana Integration**: Exporting fine-grained metrics including:
-  - Tokens-per-second (TPS) per agent/node.
-  - P2P message latency (mDNS vs. Static).
-  - Memory pressure and cache hit rates.
-- **Node Health**: Heartbeat monitoring across the Voyager P2P network.
+## 📡 Swarm Observability (Pillar 9)
+- **3D Topology HUD**: Real-time force-graph visualization of the peer constellation and synaptic links.
+- **Resource HUD**: High-fidelity telemetry broadcast via WebSockets, including:
+  - **CPU/GPU/RAM**: Real-time usage percentages.
+  - **Heat/Temp**: Thermal monitoring for heavy inference/rust nodes.
+  - **Network**: Synaptic weight intensity (traffic heatmaps).
 
 ## 🪵 Audit & Traceability
-- **CascadeContext Tracking**: Every task carries a unique ID and parent ID, allowing for full recursion depth visualization and "attribution analysis" in multi-agent loops.
-- **Log Sharding**: Active logs are sharded by Agent Session to ensure high-speed writing without I/O contention.
+- **CascadeContext Tracking**: Every task carries a unique ID and parent ID, enabling full recursion depth visualization and "attribution analysis".
+- **Swarm Consensus History**: Immutable record of all BFT-approved security/FS operations.
 
 ## 🧪 Simulation & Benchmarking
 - **Shadow Mode**: Agents can run in "Shadow Mode," performing actions alongside production agents without executing side effects, providing a safe playground for testing new logic cores.

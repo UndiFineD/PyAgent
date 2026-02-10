@@ -37,8 +37,8 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
     """Consolidation of file system auditing, naming convention enforcement, and cleanup."""
 
     DEFAULT_EXCLUSIONS: set[str] = {
-        ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache", 
-        ".ruff_cache", ".agent_cache", "target", "node_modules", 
+        ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache",
+        ".ruff_cache", ".agent_cache", "target", "node_modules",
         ".hypothesis", "__pycache__", "reports", "archive"
     }
 
@@ -149,7 +149,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
                     for i, line in enumerate(lines, 1):
                         if len(line) > max_len:
                             violations.append(f"{path.name}:{i}:{len(line)}")
-                except (IOError, OSError, UnicodeDecodeError) as _e:
+                except (IOError, OSError, UnicodeDecodeError):
                     continue
         return violations
 
@@ -237,6 +237,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
                     self.fix_unspecified_encoding(path)
                     self.fix_no_else_return(path)
                     self.fix_broad_exception(path)
+
 
 if __name__ == "__main__":
     maint = WorkspaceMaintenance()

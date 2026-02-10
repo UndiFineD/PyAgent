@@ -24,10 +24,14 @@ PyAgent follows a **Domain Logic Separation** pattern. Instead of bloating Agent
 - **`CodeAnalyzer.py`**: Uses AST surgery to compress source code into compact API summaries for context-injection.
 - **`ContextPruningCore.py`**: Dynamic pruning of KV shards based on attention-entropy maps.
 
-### 🏗️ Task Orchestration
-- **`JobManagerCore.py`**: Manages the lifecycle of persistent, multi-modal "Jobs" (Starting -> Running -> Completed/Failed).
-- **`DAGWorkflowCore.py`**: Decomposes complex user requests into a Directed Acyclic Graph of nodes using Kahn's algorithm.
-- **`SessionControlCore.py`**: Provides "Stop/Pause" primitives for interruptible agent loops via Redis or filesystem flags.
+### 🏗️ Task Orchestration & Workflows
+- **`UniversalAgent.py`**: The cognitive entry point (Pillar 3). Routes intents to specialized cores.
+- **`WorkflowExecutor.py`**: executes branching DAGs defined in Logic Manifests (Pillar 4).
+- **`FleetConsensusManager.py`**: Handles BFT Raft consensus for high-stakes swarm decisions (Pillar 1).
+
+### 🧠 Memory & Context Scaling (Pillar 2)
+- **`KVCacheManager.py`**: Paged Attention KV-cache management with Rust-accelerated block handling.
+- **`MemoryConsolidationCore.py`**: Synaptic decay and cluster-based retrieval.
 
 ### 📡 Multimodal Processing
 - **`AudioStreamCore.py`**: Real-time RTP audio normalization (u-law to PCM) and resampling.
