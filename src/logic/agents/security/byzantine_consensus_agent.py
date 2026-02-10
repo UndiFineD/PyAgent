@@ -55,7 +55,12 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     async def run_committee_vote(
-        self, task: str, proposals: dict[str, str], change_type: str = "default", timeout: float = 30.0
+        self, 
+        task: str, 
+        proposals: dict[str, str], 
+        change_type: str = "default", 
+        timeout: float = 30.0,
+        audit_results: dict[str, float] | None = None
     ) -> dict[str, Any]:
         """
         Evaluates a set of proposals and determines the winner via BFT Consensus.
@@ -78,6 +83,10 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 self.reliability_scores[agent] = 0.9
 
             weight = self.reliability_scores.get(agent, 0.5)
+            
+            # Apply Audit Multiplier if available
+            if audit_results and content_hash in audit_results:
+                weight *= audit_results[content_hash]
 
             vote_payloads.append({
                 "agent": agent,

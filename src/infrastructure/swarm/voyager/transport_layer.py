@@ -116,7 +116,9 @@ class VoyagerTransport:
                     if self._handler:
                         response_data: Dict[str, Any] = await self._handler(message)
                         response_bytes = msgspec.msgpack.encode(response_data)
-                        encrypted_response: bytes = self._encrypt(response_bytes)
+                        
+                        # Use E2EE session if established
+                        encrypted_response: bytes = self._encrypt(response_bytes, session_id=sender_id)
                         await self.router.send_multipart([identity, b"", encrypted_response])
 
                 except (zmq.ContextTerminated, zmq.ZMQError, asyncio.CancelledError):
@@ -130,7 +132,12 @@ class VoyagerTransport:
             self.stop()
 
     async def send_to_peer(
-        self, peer_address: str, peer_port: int, message: Dict[str, Any], timeout: int = 5000
+        self, 
+        peer_address: str, 
+        peer_port: int, 
+        message: Dict[str, Any], 
+        timeout: int = 5000,
+        peer_id: Optional[str] = None
     ) -> Optional[Dict[str, Any]]:
         """Sends a message to a specific peer using a DEALER socket."""
         import msgspec
@@ -142,7 +149,9 @@ class VoyagerTransport:
         try:
             dealer.connect(target)
             msg_bytes = msgspec.msgpack.encode(message)
-            encrypted_msg: bytes = self._encrypt(msg_bytes)
+            
+            # Use E2EE session if established
+            encrypted_msg: bytes = self._encrypt(msg_bytes, session_id=peer_id)
 
             # Send [empty, message]
             await dealer.send_multipart([b"", encrypted_msg])
@@ -150,7 +159,7 @@ class VoyagerTransport:
             # Wait for response with timeout
             if await dealer.poll(timeout):
                 _, resp_raw = await dealer.recv_multipart()
-                resp_bytes: bytes = self._decrypt(resp_raw)
+                resp_bytes: bytes = self._decrypt(resp_raw, session_id=peer_id)
                 return msgspec.msgpack.decode(resp_bytes)
 
             logger.warning(f"Voyager: Timeout waiting for response from {target}")

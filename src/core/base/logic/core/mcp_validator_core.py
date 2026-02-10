@@ -15,10 +15,11 @@
 import re
 from typing import List, Dict, Any
 
+
 class McpValidatorCore:
     """
     Validates MCP (Model Context Protocol) servers and tools for security.
-    
+
     Harvested from .external/mcp-security:
     - Checks for prompt injection in descriptions.
     - Identifies high-risk tools.

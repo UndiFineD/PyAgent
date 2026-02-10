@@ -26,6 +26,7 @@ from rich.live import Live
 from rich.table import Table
 from datetime import datetime
 
+
 class PyAgentTUI:
     def __init__(self) -> None:
         self.console = Console()
@@ -53,12 +54,12 @@ class PyAgentTUI:
         table.add_column("Node", style="cyan")
         table.add_column("Status", style="green")
         table.add_column("Load", style="magenta")
-        
+
         table.add_row("Main-01", "Active", "45%")
         table.add_row("Worker-01", "Idle", "10%")
         table.add_row("Worker-02", "Busy", "88%")
         table.add_row("NPU-Edge", "Active", "32%")
-        
+
         return Panel(table, title="Swarm Typology")
 
     def generate_logs(self) -> Panel:
@@ -90,6 +91,7 @@ class PyAgentTUI:
                     await asyncio.sleep(0.25)
             except KeyboardInterrupt:
                 pass
+
 
 if __name__ == "__main__":
     tui = PyAgentTUI()

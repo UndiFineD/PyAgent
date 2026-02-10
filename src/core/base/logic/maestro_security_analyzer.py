@@ -76,9 +76,11 @@ class MAESTROSecurityAnalyzer:
 MAESTRO (Multi-Agent Environment, Security, Threat Risk, and Outcome), a framework built for Agentic AI.
 
 1. Principles
-Extended Security Categories: Expanding traditional categories like STRIDE, PASTA, and LINDDUN with AI-specific considerations.
+Extended Security Categories: Expanding traditional categories like STRIDE, PASTA,
+and LINDDUN with AI-specific considerations.
 Multi-Agent and Environment Focus: Explicitly considering the interactions between agents and their environment.
-Layered Security: Security isn't a single layer, but a property that must be built into each layer of the agentic architecture.
+Layered Security: Security isn't a single layer, but a property that must be built into each
+layer of the agentic architecture.
 AI-Specific Threats: Addressing threats arising from AI, especially adversarial ML and autonomy-related risks.
 Risk-Based Approach: Prioritizing threats based on likelihood and impact within the agent's context.
 Continuous Monitoring and Adaptation: Ongoing monitoring, threat intelligence, and model updates.
@@ -105,7 +107,9 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
             "agent_ecosystem": [
                 {
                     "threat": "Agent Impersonation",
-                    "description": "Malicious actors deceiving users or other agents by impersonating legitimate AI agents",
+                    "description": (
+                        "Malicious actors deceiving users or other agents by impersonating legitimate AI agents"
+                    ),
                     "impact": "High",
                     "likelihood": "Medium",
                     "mitigations": [
@@ -357,7 +361,10 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
                 layer_assessment["risk_assessment"] = "Critical"
             elif threat_assessment["risk_level"] == "High" and layer_assessment["risk_assessment"] != "Critical":
                 layer_assessment["risk_assessment"] = "High"
-            elif threat_assessment["risk_level"] == "Medium" and layer_assessment["risk_assessment"] not in ["Critical", "High"]:
+            elif (
+                threat_assessment["risk_level"] == "Medium"
+                and layer_assessment["risk_assessment"] not in ["Critical", "High"]
+            ):
                 layer_assessment["risk_assessment"] = "Medium"
 
         return layer_assessment
@@ -491,7 +498,8 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
         for layer_name, assessment in layer_assessments.items():
             if assessment["risk_assessment"] in ["Critical", "High"]:
                 recommendations.append(
-                    f"Prioritize security improvements for {layer_name} layer (currently {assessment['risk_assessment']} risk)"
+                    f"Prioritize security improvements for {layer_name} layer "
+                    f"(currently {assessment['risk_assessment']} risk)"
                 )
 
         # General recommendations
@@ -525,7 +533,8 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
         md_content.append(f"- **Unique Capabilities**: {overview['capability_coverage']['total_unique_capabilities']}")
 
         if overview['capability_coverage']['single_points_of_failure']:
-            md_content.append(f"- **⚠️ Single Points of Failure**: {', '.join(overview['capability_coverage']['single_points_of_failure'])}")
+            failures = ", ".join(overview['capability_coverage']['single_points_of_failure'])
+            md_content.append(f"- **⚠️ Single Points of Failure**: {failures}")
 
         # Layer Assessments
         md_content.append("\n## Layer Assessments\n")
@@ -539,7 +548,10 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
                 md_content.append("**Key Threats**:\n")
                 for threat in assessment["relevant_threats"]:
                     if threat["risk_level"] in ["Critical", "High"]:
-                        md_content.append(f"- **{threat['threat']}** ({threat['risk_level']} risk): {threat['description'][:100]}...\n")
+                        threat_desc = threat["description"][:100]
+                        md_content.append(
+                            f"- **{threat['threat']}** ({threat['risk_level']} risk): {threat_desc}...\n"
+                        )
 
         # Overall Risk
         risk = report["overall_risk_assessment"]

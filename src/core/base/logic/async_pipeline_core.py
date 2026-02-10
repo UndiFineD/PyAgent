@@ -176,7 +176,8 @@ class AsyncPipelineCore:
 
     def get_completed_tasks(self) -> List[PipelineTask]:
         """Get all completed tasks"""
-        return [task for task in self.tasks.values() if task.status in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]]
+        statuses = [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]
+        return [task for task in self.tasks.values() if task.status in statuses]
 
     async def wait_for_task(self, task_id: str, timeout: Optional[float] = None) -> PipelineTask:
         """Wait for a task to complete"""
@@ -313,8 +314,14 @@ class AsyncPipelineCore:
                 del self.running_tasks[task.task_id]
 
     # Convenience methods for common coding tasks
-    async def submit_code_task(self, name: str, code: str, task_type: str = "execute_code",
-                              dependencies: List[str] = None, priority: TaskPriority = TaskPriority.NORMAL) -> str:
+    async def submit_code_task(
+        self,
+        name: str,
+        code: str,
+        task_type: str = "execute_code",
+        dependencies: List[str] = None,
+        priority: TaskPriority = TaskPriority.NORMAL
+    ) -> str:
         """Submit a coding task"""
         task = PipelineTask(
             task_id=f"{task_type}_{int(time.time() * 1000)}",

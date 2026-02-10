@@ -65,10 +65,9 @@ class LessonCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.generate_failure_hash(error_msg)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
-        
+
         # Filter non-digits functionally
         normalized = "".join(filter(lambda c: not c.isdigit(), error_msg.lower()))
         return hashlib.sha256(normalized.encode()).hexdigest()
@@ -89,7 +88,7 @@ class LessonCore(BaseCore):
     def save_lessons(self) -> None:
         """Persists lessons to disk."""
         data = {
-            "known_failures": list(self.known_failures), 
+            "known_failures": list(self.known_failures),
             "lessons": list(map(asdict, self.lessons))
         }
         self._storage.save_json(self.persistence_path, data)

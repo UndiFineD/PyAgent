@@ -223,7 +223,7 @@ class RAGCore(BaseCore):
             # Fallback to Mock for unknown types
             self.logger.warning(f"Store type {store_type} not fully supported, using Mock.")
             store = MockVectorStore(config)
-            
+
         self.vector_stores[store_id] = store
         self.logger.info(f"Registered vector store {store_id} of type {store_type}")
         return store_id
@@ -729,7 +729,7 @@ class QdrantVectorStore(BaseVectorStore):
             for doc in documents:
                 self.documents[doc.doc_id] = doc
             return [doc.doc_id for doc in documents]
-        
+
         # Real Qdrant implementation would go here
         # For now, we simulate success if client is present
         return [doc.doc_id for doc in documents]

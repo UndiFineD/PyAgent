@@ -20,7 +20,7 @@ import re
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass
 
-from src.core.base.logic.core.base_core import BaseCore
+from src.core.base.common.base_core import BaseCore
 
 
 @dataclass
@@ -47,7 +47,7 @@ class ModifiedResponse:
 class ResponseModifierCore(BaseCore):
     """
     HTTP Response Modifier Core for security testing and analysis.
-    
+
     Provides capabilities to modify HTTP response codes and content
     for testing purposes, similar to Burp Suite extensions.
     Useful for bypassing client-side validations and testing error handling.
@@ -135,13 +135,13 @@ class ResponseModifierCore(BaseCore):
     ) -> Tuple[int, List[str], bytes]:
         """
         Modify an HTTP response based on active rules
-        
+
         Args:
             url: Request URL
             status_code: Original status code
             headers: Response headers
             body: Response body
-            
+
         Returns:
             Tuple of (modified_status, modified_headers, modified_body)
         """
@@ -192,11 +192,11 @@ class ResponseModifierCore(BaseCore):
     ) -> List[ModifiedResponse]:
         """
         Get modification history
-        
+
         Args:
             limit: Maximum number of entries to return
             rule_filter: Filter by rule name (optional)
-            
+
         Returns:
             List of modified responses
         """
@@ -235,7 +235,7 @@ class ResponseModifierCore(BaseCore):
     async def import_rules(self, rules_data: Dict[str, Any]) -> None:
         """Import modification rules from dictionary"""
         self.modification_rules.clear()
-        
+
         for rule_data in rules_data.get("rules", []):
             rule = ResponseModificationRule(
                 name=rule_data["name"],
@@ -245,7 +245,7 @@ class ResponseModifierCore(BaseCore):
                 enabled=rule_data.get("enabled", True)
             )
             self.modification_rules.append(rule)
-        
+
         self.enabled = rules_data.get("enabled", False)
         self.logger.info(f"Imported {len(self.modification_rules)} modification rules")
 
@@ -255,10 +255,10 @@ class ResponseModifierCore(BaseCore):
     ) -> Dict[str, Any]:
         """
         Analyze response patterns for testing insights
-        
+
         Args:
             responses: List of response data dictionaries
-            
+
         Returns:
             Analysis results
         """

@@ -17,6 +17,7 @@ import struct
 from dataclasses import dataclass, field
 from typing import Dict, Optional, Tuple
 
+
 @dataclass
 class RTPSession:
     """Represents an active RTP session for a call."""
@@ -34,6 +35,7 @@ class RTPSession:
     frames_received: int = 0
     frames_processed: int = 0
 
+
 class RTPServerCore:
     """
     Core logic for handling bidirectional RTP audio streams.
@@ -42,7 +44,7 @@ class RTPServerCore:
     RTP_VERSION = 2
     RTP_HEADER_SIZE = 12
     SAMPLE_RATE = 8000  # Default G.711 rate
-    
+
     def __init__(
         self,
         host: str = "0.0.0.0",

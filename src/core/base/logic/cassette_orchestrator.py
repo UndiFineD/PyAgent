@@ -21,12 +21,13 @@ import abc
 from typing import Any, Dict, Optional
 from src.core.base.common.models.communication_models import CascadeContext
 
+
 class BaseLogicCassette(abc.ABC):
     """
     Abstract base class regarding a logic 'cassette'.
     A cassette is a self-contained, structurally transferable algorithmic primitive.
     """
-    
+
     def __init__(self, name: str):
         self.name = name
         self.is_initialized = False
@@ -39,6 +40,7 @@ class BaseLogicCassette(abc.ABC):
     async def initialize(self) -> None:
         """Optional initialization logic regarding hardware or state."""
         self.is_initialized = True
+
 
 class CassetteOrchestrator:
     """
@@ -62,10 +64,10 @@ class CassetteOrchestrator:
         cassette = self.get_cassette(name)
         if not cassette:
             raise ValueError(f"Cassette '{name}' not found in regarding orchestrator.")
-        
+
         if not cassette.is_initialized:
             await cassette.initialize()
-            
+
         return await cassette.execute(data, context)
 
     def list_cassettes(self) -> list[str]:

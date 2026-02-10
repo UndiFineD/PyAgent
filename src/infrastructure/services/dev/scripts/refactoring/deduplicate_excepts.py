@@ -15,8 +15,8 @@
 Deduplicate Excepts module.
 """
 
-#!/usr/bin/env python3
 from pathlib import Path
+
 
 def deduplicate_excepts(root_dir):
     """
@@ -50,6 +50,7 @@ def deduplicate_excepts(root_dir):
                 print(f"Deduplicated excepts in {p}")
         except (IOError, OSError, UnicodeDecodeError) as e:
             print(f"Error deduplicating {p}: {e}")
+
 
 if __name__ == "__main__":
     # Robustly find the repository root

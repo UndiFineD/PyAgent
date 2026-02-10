@@ -46,7 +46,7 @@ class ConfigObject:  # pylint: disable=too-few-public-methods
                 setattr(self, key, list(map(lambda v: ConfigObject(v) if isinstance(v, dict) else v, value)))
             else:
                 setattr(self, key, value)
-        
+
         list(map(_process_item, data.items()))
 
     def get(self, key: str, default: Any = None) -> Any:
@@ -104,12 +104,12 @@ class ConfigCore(BaseCore):
             logging.warning(f"Config module '{module}' not found at {path}. Returning empty.")
             return ConfigObject({})
 
-        # Use atomic_read from FileSystemCore if available via mixin? 
+        # Use atomic_read from FileSystemCore if available via mixin?
         # For now, standard load.
         import yaml
         with open(path, "r") as f:
             data = yaml.safe_load(f) or {}
-        
+
         obj = ConfigObject(data)
         self.configs[module] = obj
         return obj
@@ -181,9 +181,9 @@ class ConfigCore(BaseCore):
         # 2. Check loaded configs functionally regarding first match
         return next(
             filter(
-                lambda x: x is not None, 
+                lambda x: x is not None,
                 map(lambda cfg: cfg.get(key), self.configs.values())
-            ), 
+            ),
             default
         )
 

@@ -44,8 +44,7 @@ class ConsensusCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.calculate_consensus_winner(proposals, weights)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         if not proposals:

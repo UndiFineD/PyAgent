@@ -46,3 +46,34 @@ class FleetDelegationMixin:
             return str(task_result)
 
         raise KeyError(f"Agent or Manifest '{agent_type}' not found in Fleet.")
+
+    async def request_compute_borrow(self: FleetManager, stats: dict) -> bool:
+        """
+        Broadcasts a 'compute_borrow_request' to neighbors (Pillar 8).
+        Nodes with <50% load will respond to take over the next task.
+        """
+        peers = self.voyager_discovery.get_active_peers()
+        if not peers:
+            logging.warning("Fleet: No peers available for compute borrowing.")
+            return False
+
+        borrow_msg = {
+            "type": "compute_borrow_request",
+            "sender_id": f"fleet-{self.workspace_root.name}",
+            "stats": stats
+        }
+
+        # Python MPI: For v4.0.0, we use a simple 'First Responder' logic
+        for peer in peers:
+            # Expected format: {"addr": "192.168.1.5", "port": 5555}
+            addr = peer.get("addr")
+            port = peer.get("port", 5555)
+            if not addr:
+                continue
+
+            response = await self.voyager_transport.send_to_peer(addr, port, borrow_msg, timeout=2000)
+            if response and response.get("status") == "can_help":
+                logging.info(f"Fleet: Successfully borrowed compute from node {addr}")
+                return True
+
+        return False

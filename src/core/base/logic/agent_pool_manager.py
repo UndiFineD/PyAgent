@@ -198,7 +198,7 @@ class AgentPoolManager:
             capability_count = len(manifest.capabilities)
 
             if (coverage > best_coverage or
-                (coverage == best_coverage and capability_count > best_capability_count)):
+                    (coverage == best_coverage and capability_count > best_capability_count)):
                 best_coverage = coverage
                 best_agent = agent_name
                 best_capability_count = capability_count
@@ -212,7 +212,7 @@ class AgentPoolManager:
             capability_count = len(manifest.capabilities)
 
             if (coverage > best_coverage or
-                (coverage == best_coverage and capability_count > best_capability_count)):
+                    (coverage == best_coverage and capability_count > best_capability_count)):
                 best_coverage = coverage
                 best_agent = agent_name
                 best_capability_count = capability_count
@@ -323,7 +323,10 @@ class AgentPoolManager:
                     if agent_name in self.agent_pool:
                         combined_capabilities.update(self.agent_pool[agent_name].capabilities)
 
-                combo_coverage = len(requirements.required_capabilities.intersection(combined_capabilities)) / len(requirements.required_capabilities)
+                combo_coverage = (
+                    len(requirements.required_capabilities.intersection(combined_capabilities)) /
+                    len(requirements.required_capabilities)
+                )
 
                 if combo_coverage >= 0.8:  # Good combined coverage
                     return combo
@@ -333,8 +336,8 @@ class AgentPoolManager:
     def _check_elite_promotion(self, manifest: AgentManifest):
         """Check if an agent should be promoted to elite status"""
         if (manifest.usage_count >= 10 and
-            manifest.success_rate >= 0.8 and
-            manifest.status == AgentStatus.ACTIVE):
+                manifest.success_rate >= 0.8 and
+                manifest.status == AgentStatus.ACTIVE):
 
             manifest.status = AgentStatus.ELITE
             self.elite_agents[manifest.agent_name] = manifest
@@ -376,10 +379,11 @@ class AgentPoolManager:
 
     def get_pool_stats(self) -> Dict[str, Any]:
         """Get statistics about the agent pool"""
+        success_rates = [m.success_rate for m in self.agent_pool.values()]
         return {
             "total_agents": len(self.agent_pool),
             "elite_agents": len(self.elite_agents),
             "integrated_agents": len(self.integrated_agents),
-            "avg_success_rate": statistics.mean([m.success_rate for m in self.agent_pool.values()]) if self.agent_pool else 0.0,
+            "avg_success_rate": statistics.mean(success_rates) if success_rates else 0.0,
             "total_usage": sum(m.usage_count for m in self.agent_pool.values())
         }

@@ -85,14 +85,16 @@ class MemoryStore(ABC):
         pass
 
     @abstractmethod
-    async def search_similar(self, query_embedding: List[float], limit: int = 10,
-                           threshold: float = 0.7) -> List[Tuple[MemoryNode, float]]:
+    async def search_similar(
+        self, query_embedding: List[float], limit: int = 10, threshold: float = 0.7
+    ) -> List[Tuple[MemoryNode, float]]:
         """Search for similar memories using vector similarity"""
         pass
 
     @abstractmethod
-    async def search_by_tags(self, tags: List[str], mode: str = "any",
-                           match: str = "exact") -> List[MemoryNode]:
+    async def search_by_tags(
+        self, tags: List[str], mode: str = "any", match: str = "exact"
+    ) -> List[MemoryNode]:
         """Search memories by tags"""
         pass
 
@@ -149,8 +151,9 @@ class GraphMemoryStore(MemoryStore):
         del self.relations[memory_id]
         return True
 
-    async def search_similar(self, query_embedding: List[float], limit: int = 10,
-                           threshold: float = 0.7) -> List[Tuple[MemoryNode, float]]:
+    async def search_similar(
+        self, query_embedding: List[float], limit: int = 10, threshold: float = 0.7
+    ) -> List[Tuple[MemoryNode, float]]:
         """Graph-based similarity search (simplified)"""
         # In a real implementation, this would use graph algorithms
         # For now, return all nodes with dummy similarity scores
@@ -164,8 +167,9 @@ class GraphMemoryStore(MemoryStore):
 
         return sorted(results, key=lambda x: x[1], reverse=True)[:limit]
 
-    async def search_by_tags(self, tags: List[str], mode: str = "any",
-                           match: str = "exact") -> List[MemoryNode]:
+    async def search_by_tags(
+        self, tags: List[str], mode: str = "any", match: str = "exact"
+    ) -> List[MemoryNode]:
         """Search memories by tags"""
         results = []
 
@@ -204,8 +208,9 @@ class GraphMemoryStore(MemoryStore):
             relations = [r for r in relations if r.relation_type == relation_type]
         return relations
 
-    async def find_related_memories(self, memory_id: str, max_depth: int = 2,
-                                  relation_types: Optional[List[str]] = None) -> List[Tuple[MemoryNode, float]]:
+    async def find_related_memories(
+        self, memory_id: str, max_depth: int = 2, relation_types: Optional[List[str]] = None
+    ) -> List[Tuple[MemoryNode, float]]:
         """Find related memories through graph traversal (multi-hop)"""
         visited = set()
         results = []
@@ -288,8 +293,9 @@ class VectorMemoryStore(MemoryStore):
         norm_b = math.sqrt(sum(y * y for y in b))
         return dot_product / (norm_a * norm_b) if norm_a and norm_b else 0.0
 
-    async def search_similar(self, query_embedding: List[float], limit: int = 10,
-                           threshold: float = 0.7) -> List[Tuple[MemoryNode, float]]:
+    async def search_similar(
+        self, query_embedding: List[float], limit: int = 10, threshold: float = 0.7
+    ) -> List[Tuple[MemoryNode, float]]:
         """Search for similar memories using vector similarity"""
         results = []
 
@@ -303,8 +309,9 @@ class VectorMemoryStore(MemoryStore):
         results.sort(key=lambda x: x[1], reverse=True)
         return results[:limit]
 
-    async def search_by_tags(self, tags: List[str], mode: str = "any",
-                           match: str = "exact") -> List[MemoryNode]:
+    async def search_by_tags(
+        self, tags: List[str], mode: str = "any", match: str = "exact"
+    ) -> List[MemoryNode]:
         """Search memories by tags (simplified - delegates to graph store in hybrid system)"""
         # In a real hybrid system, this would coordinate with graph store
         results = []
@@ -390,9 +397,10 @@ class HybridMemoryCore:
         vector_success = await self.vector_store.delete_memory(memory_id)
         return graph_success and vector_success
 
-    async def search_memories(self, query: str, query_embedding: Optional[List[float]] = None,
-                            tags: Optional[List[str]] = None, limit: int = 10,
-                            expand_paths: bool = True) -> List[Tuple[MemoryNode, float]]:
+    async def search_memories(
+        self, query: str, query_embedding: Optional[List[float]] = None,
+        tags: Optional[List[str]] = None, limit: int = 10, expand_paths: bool = True
+    ) -> List[Tuple[MemoryNode, float]]:
         """
         Hybrid search combining vector similarity, graph relations, and metadata
         Based on AutoMem's 9-component hybrid scoring
@@ -451,9 +459,9 @@ class HybridMemoryCore:
 
         return scored_results[:limit]
 
-    async def _calculate_hybrid_score(self, node: MemoryNode, query: str,
-                                    query_embedding: Optional[List[float]],
-                                    tags: Optional[List[str]]) -> float:
+    async def _calculate_hybrid_score(
+        self, node: MemoryNode, query: str, query_embedding: Optional[List[float]], tags: Optional[List[str]]
+    ) -> float:
         """Calculate hybrid score using multiple signals"""
         scores = {}
 
@@ -511,9 +519,10 @@ class HybridMemoryCore:
         norm_b = math.sqrt(sum(y * y for y in b))
         return dot_product / (norm_a * norm_b) if norm_a and norm_b else 0.0
 
-    async def associate_memories(self, source_id: str, target_id: str,
-                               relation_type: str, strength: float = 1.0,
-                               metadata: Optional[Dict[str, Any]] = None):
+    async def associate_memories(
+        self, source_id: str, target_id: str, relation_type: str,
+        strength: float = 1.0, metadata: Optional[Dict[str, Any]] = None
+    ):
         """Create a relationship between two memories"""
         relation = MemoryRelation(
             source_id=source_id,
@@ -544,7 +553,10 @@ class HybridMemoryCore:
             'related_nodes': [
                 {
                     'id': related_node.id,
-                    'content': related_node.content[:50] + '...' if len(related_node.content) > 50 else related_node.content,
+                    'content': (
+                        related_node.content[:50] + '...'
+                        if len(related_node.content) > 50 else related_node.content
+                    ),
                     'tags': related_node.tags,
                     'relation_strength': strength
                 }

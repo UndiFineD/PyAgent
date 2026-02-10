@@ -85,25 +85,19 @@ class FleetConsensusManager:
         if not proposals:
             return {"decision": "REJECTED", "reason": "No valid proposals gathered."}
 
-        # 3. Byzantine Audit
-        vote_result = await judge.run_committee_vote(task, proposals)
-        return vote_result
+        # 3. [Phase 3.0] Multi-surgeon BFT Audit
+        # Selection of 'surgeons' (agents with security/audit skills)
+        surgeons = [a for a in all_agents if "security" in a.lower() or "audit" in a.lower()]
+        if not surgeons and judge:
+            # Fallback to general practitioners if no specialists available
+            surgeons = secondary_agents[:2]
 
-        # Run the committee vote
-        if "judge" not in locals():
-            judge = getattr(self.fleet, "ByzantineConsensus", None)
+        audit_report = self.fleet.agents.get("ByzantineConsensusAgent").core.run_multi_surgeon_audit(
+            proposals, surgeons
+        )
 
-        if not judge:
-            return {
-                "decision": "REJECTED",
-                "reason": "ByzantineConsensus not found for voting.",
-            }
-
-        res = judge.run_committee_vote(task, proposals)
-        if asyncio.iscoroutine(res):
-            result = await res
-        else:
-            result = res
+        # 4. Byzantine Vote with Audit Weights
+        result = await judge.run_committee_vote(task, proposals, audit_results=audit_report)
 
         # Broadcast lesson via Federated Knowledge
         if result["decision"] == "ACCEPTED" and getattr(self.fleet, "federated_knowledge", None):
@@ -120,7 +114,7 @@ class FleetConsensusManager:
                         },
                     )
                 )
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.warning(f"FleetConsensus: Failed to trigger federated broadcast: {e}")
+            except Exception:  # pylint: disable=broad-exception-caught
+                logging.warning("FleetConsensus: Failed to trigger federated broadcast")
 
         return result

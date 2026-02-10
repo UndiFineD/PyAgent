@@ -15,11 +15,13 @@
 # VOYAGER STABILITY: Unified Dashboard Server (Final V1.5.0)
 
 from __future__ import annotations
-import asyncio, json, logging, psutil
+import asyncio
+import json
+import psutil
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Body
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -48,15 +50,22 @@ app.add_middleware(
 class ConnectionManager:
     def __init__(self):
         self.active_connections: list[WebSocket] = []
+
     async def connect(self, ws: WebSocket):
         await ws.accept()
         self.active_connections.append(ws)
+
     def disconnect(self, ws: WebSocket):
-        if ws in self.active_connections: self.active_connections.remove(ws)
+        if ws in self.active_connections:
+            self.active_connections.remove(ws)
+
     async def broadcast(self, message: dict):
         for connection in self.active_connections:
-            try: await connection.send_json(message)
-            except: pass
+            try:
+                await connection.send_json(message)
+            except Exception:
+                pass
+
 
 manager = ConnectionManager()
 
@@ -78,7 +87,8 @@ async def telemetry_loop():
                     "timestamp": datetime.now().timestamp()
                 }
             })
-        except: pass
+        except Exception:
+            pass
         await asyncio.sleep(1.0)
 
 @app.on_event("startup")
@@ -105,10 +115,14 @@ async def serve_stream():
         return FileResponse(str(path), media_type="text/html")
     return JSONResponse(status_code=404, content={"error": f"Console not found at {path}"})
 
+
 @app.get("/topology")
 async def serve_topology():
     path = WEB_UI_DIR / "topology_viewer.html"
-    return FileResponse(str(path), media_type="text/html") if path.exists() else {"error": "404"}
+    if path.exists():
+        return FileResponse(str(path), media_type="text/html")
+    return {"error": "404"}
+
 
 @app.get("/")
 async def serve_index():
@@ -117,7 +131,9 @@ async def serve_index():
         return FileResponse(str(path), media_type="text/html")
     return {"status": "Dashboard Active (No index.html found)"}
 
+
 # --- SWARM API ---
+
 
 @app.get("/swarm/status")
 async def get_swarm_status():
@@ -127,6 +143,7 @@ async def get_swarm_status():
         "nodes": discovery_service.peers if hasattr(discovery_service, 'peers') else [],
         "load": fleet_balancer.get_optimal_node() if hasattr(fleet_balancer, 'nodes') and fleet_balancer.nodes else "No nodes"
     }
+
 
 @app.post("/jobs/create")
 async def create_job(payload: Dict[str, Any] = Body(...)):
@@ -138,11 +155,15 @@ async def create_job(payload: Dict[str, Any] = Body(...)):
 
 @app.get("/api/thoughts")
 async def get_thoughts():
-    if not EPISODIC_LOG_FILE.exists(): return []
+    if not EPISODIC_LOG_FILE.exists():
+        return []
+
     try:
         with open(EPISODIC_LOG_FILE, "r", encoding="utf-8") as f:
             return [json.loads(line) for line in f.readlines()[-50:][::-1]]
-    except: return []
+    except Exception:
+        return []
+
 
 @app.websocket("/ws/telemetry")
 async def websocket_telemetry(websocket: WebSocket):

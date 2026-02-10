@@ -20,18 +20,15 @@ Inspired by big-3-super-agent's GeminiBrowserAgent.
 Provides web browsing capabilities with screenshot capture and interaction.
 """
 
-import os
 import time
 import uuid
-import asyncio
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 
-from playwright.sync_api import sync_playwright, Page
+from playwright.sync_api import sync_playwright
 from rich.console import Console
-from rich.panel import Panel
 
 from src.core.base.base_agent import BaseAgent
 from src.core.base.common.models.communication_models import CascadeContext
@@ -150,33 +147,33 @@ class BrowserAgent(BaseAgent):
         """Search for text on the current page."""
         try:
             # Highlight search results
-            result = self.page.evaluate(f"""
-                (query) => {{
+            result = self.page.evaluate("""
+                (query) => {
                     const elements = document.querySelectorAll('*');
                     let matches = [];
                     const regex = new RegExp(query, 'gi');
 
-                    for (let el of elements) {{
-                        if (el.offsetParent !== null && el.textContent) {{
+                    for (let el of elements) {
+                        if (el.offsetParent !== null && el.textContent) {
                             const text = el.textContent;
-                            if (regex.test(text)) {{
-                                matches.push({{
+                            if (regex.test(text)) {
+                                matches.push({
                                     text: text.trim(),
                                     tagName: el.tagName,
                                     className: el.className
-                                }});
+                                });
                                 // Highlight the element
                                 el.style.backgroundColor = 'yellow';
-                            }}
-                        }}
-                    }}
+                            }
+                        }
+                    }
 
-                    return {{
+                    return {
                         found: matches.length > 0,
                         count: matches.length,
                         matches: matches.slice(0, 10) // Limit results
-                    }};
-                }}
+                    };
+                }
             """, query)
 
             if result["found"]:
@@ -237,7 +234,7 @@ class BrowserAgent(BaseAgent):
             extract_text: Whether to extract text content
         """
         url = kwargs.get("url")
-        task = kwargs.get("task", "")
+        # task = kwargs.get("task", "")  # Reserved for future reasoning integration
         search_query = kwargs.get("search_query")
         extract_text = kwargs.get("extract_text", False)
 

@@ -238,8 +238,7 @@ class MemoryCore:
                 collection = client.get_or_create_collection(name=f"{agent_id}_knowledge")
                 collection.delete(ids=[key])
                 return True
-            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 return False
 
         agent_dir = self._get_agent_path(agent_id, mode)

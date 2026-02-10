@@ -96,7 +96,7 @@ class ModuleLoader:
 
         try:
             return self.load_module_from_path(module_name, path)
-        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught
             # Clean up if execution fails
             sys.modules.pop(module_name, None)
             raise

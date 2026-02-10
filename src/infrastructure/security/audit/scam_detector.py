@@ -19,31 +19,65 @@ Implements swarm-wide scam and hallucination detection via Byzantine Consensus.
 
 from __future__ import annotations
 import logging
-from typing import Any, List
+import re
+from typing import Any, List, Dict
 
 logger = logging.getLogger(__name__)
 
 class ScamDetector:
     """
-    Detects malicious intent or hallucinations by cross-referencing agent outputs.
+    Detects malicious intent, phishing, and hallucinations by cross-referencing agent outputs.
     Follows Pillar 6: Scam & Hallucination Defense.
     """
 
     def __init__(self, confidence_threshold: float = 0.85):
         self.confidence_threshold = confidence_threshold
+        # Neural Integrity Filter Patterns (Phase 325)
+        self.scam_patterns = [
+            r"(?i)private\s*key",
+            r"(?i)mnemonic\s*phrase",
+            r"(?i)password\s*reset.*click\s*here",
+            r"(?i)transfer.*funds.*wallet",
+            r"(?i)urgent\s*action\s*required.*authorize",
+        ]
 
-    async def audit_response(self, original_prompt: str, response: str, peers: List[Any]) -> bool:
+    async def audit_message(self, message: Dict[str, Any], context: str = "") -> Dict[str, Any]:
         """
-        Asks independent peers to vote on the quality and safety of a response.
+        Pillar 7 (Neural Scam & Phishing Detection):
+        Analyzes incoming peer messages and Global Wisdom for social engineering patterns.
         """
+        content = message.get("content", "")
+        sender = message.get("sender", "unknown")
+        
+        # 1. Pattern-based Integrity Filter
+        for pattern in self.scam_patterns:
+            if re.search(pattern, content):
+                logger.warning(f"ScamDetector: BLOCKED potential social engineering from {sender}")
+                return {"safe": False, "reason": "Social Engineering Pattern matched"}
+
+        # 2. Heuristic Semantic Anomaly (Draft)
+        # If the context is 'Testing' but the message is 'Urgent Action', flag it.
+        if "test" in context.lower() and re.search(r"(?i)emergency|urgent|critical", content):
+            return {"safe": False, "reason": "Contextual Semantic Anomaly"}
+
+        return {"safe": True, "score": 1.0}
+
+    async def audit_response(self, original_prompt: str, response: str, peers: List[Any] = None) -> bool:
+        """
+        Hallucination Defense: Asks independent peers to vote on quality.
+        """
+        # Integrity filter check first
+        audit_res = await self.audit_message({"content": response})
+        if not audit_res["safe"]:
+            return False
+
+        if not peers:
+            return True # Assume safe in isolation
+
         votes = []
         for peer in peers:
-            # Concept: delegate_to(agent_type="byzantine_judge", prompt=...)
             vote = await self._get_peer_opinion(peer, original_prompt, response)
             votes.append(vote)
-
-        if not votes:
-            return True # Assume safe in isolation (or block based on policy)
 
         safety_score = sum(votes) / len(votes)
         logger.info("Scam Audit: Safety score %f", safety_score)

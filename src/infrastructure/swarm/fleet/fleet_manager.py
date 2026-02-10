@@ -39,6 +39,7 @@ from src.infrastructure.swarm.fleet.fleet_lifecycle_manager import \
 from src.infrastructure.swarm.fleet.fleet_routing_core import FleetRoutingCore
 from src.infrastructure.swarm.fleet.resource_monitor import ResourceMonitor
 from src.infrastructure.swarm.voyager.transport_layer import VoyagerTransport
+from src.infrastructure.swarm.orchestration.swarm.consensus import SwarmConsensus
 from src.infrastructure.swarm.voyager.discovery_node import DiscoveryNode
 from src.infrastructure.swarm.fleet.mixins.fleet_backup_mixin import \
     FleetBackupMixin
@@ -62,6 +63,7 @@ from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
 from src.observability.structured_logger import StructuredLogger
 from src.infrastructure.swarm.topology_reporter import SwarmTopologyReporter
 from src.infrastructure.security.firewall.zero_trust import ZeroTrustFirewall
+from src.infrastructure.security.firewall.infection_guard import InfectionGuard
 from src.infrastructure.swarm.orchestration.swarm.swarm_pruning_orchestrator import SwarmPruningOrchestrator
 
 # Type Hinting Imports (Phase 106)
@@ -103,6 +105,13 @@ class FleetManager(
 
         # Phase 324: Zero-Trust Security (Pillar 7)
         self.firewall = ZeroTrustFirewall(owner_key=f"node-key-{self.workspace_root.name}")
+        self.infection_guard = InfectionGuard(workspace_root=str(self.workspace_root))
+
+        # Phase 3.0: Swarm Consensus (Decentralized State)
+        self.swarm_consensus = SwarmConsensus(
+            node_id=f"node-{self.workspace_root.name}",
+            transport=self.voyager_transport
+        )
 
         # Phase 326: Neural Pruning & Synaptic Decay (Pillar 6)
         self.pruning_orchestrator = SwarmPruningOrchestrator(self)
@@ -125,9 +134,12 @@ class FleetManager(
         asyncio.create_task(self.voyager_transport.start_server(self._handle_voyager_message))
         asyncio.create_task(self.voyager_discovery.start_advertising())
         asyncio.create_task(self.voyager_discovery.start_discovery())
+        
+        # Swarm Singularity: Register peer discovery handler
+        self.voyager_discovery.register_on_peer_added(self._on_voyager_peer_added)
 
         # Phase 320: Resource Monitoring & Autonomous Balancing
-        self.resource_monitor = ResourceMonitor()
+        self.resource_monitor = ResourceMonitor(fleet=self)
         asyncio.create_task(self.resource_monitor.start())
         asyncio.create_task(self.evolution_loop.start())
         asyncio.create_task(self._topology_loop())
@@ -287,6 +299,42 @@ class FleetManager(
 
     # Logic delegated to mixins
 
+    async def _on_voyager_peer_added(self, peer_data: Dict[str, Any]) -> None:
+        """P2P Handshake & Consensus setup for newly discovered Voyager peers."""
+        peer_id = peer_data["properties"].get("node_id", peer_data["name"])
+        addrs = peer_data["addresses"]
+        if not addrs:
+            return
+        addr = addrs[0]
+        port = int(peer_data["properties"].get("transport_port", 5555))
+
+        # 1. E2EE Handshake (Double Ratchet Phase 2.0)
+        if peer_id not in self.voyager_transport.sessions:
+            logger.info(f"Voyager: Initiating Double Ratchet session with {peer_id}...")
+            response = await self.voyager_transport.send_to_peer(
+                addr, port, 
+                {
+                    "type": "HANDSHAKE_INIT",
+                    "sender_id": f"node-{self.workspace_root.name}",
+                    "public_key": b"node-v4-init-pub"
+                },
+                peer_id=peer_id
+            )
+            
+            if response and response.get("type") == "HANDSHAKE_RESPONSE":
+                from src.infrastructure.security.encryption.double_ratchet import \
+                    DoubleRatchet
+                remote_pub = response.get("public_key")
+                # Phase 2.0: Shared secret established (simulated DH)
+                root_key = b"swarm-shared-secret-v4"
+                self.voyager_transport.sessions[peer_id] = DoubleRatchet(root_key, remote_pub)
+                logger.info(f"Voyager: E2EE Session active with {peer_id}")
+
+        # 2. Update Consensus Registry
+        current_peers = [p["properties"].get("node_id", p["name"]) 
+                         for p in self.voyager_discovery.get_active_peers()]
+        self.swarm_consensus.set_peers(current_peers)
+
     async def _handle_voyager_message(self, message: Dict[str, Any]) -> Dict[str, Any]:
         """Handles incoming P2P messages from the Voyager transport layer."""
         # Phase 324: Zero-Trust Validation (Pillar 7)
@@ -296,6 +344,11 @@ class FleetManager(
         if not self.firewall.validate_message(message, signature, sender_id):
             logger.warning(f"FleetManager: Blocked message from {sender_id} - Zero-Trust Violation")
             return {"status": "error", "reason": "security_violation"}
+
+        # Phase 324: Infection Guard (Instruction Validation)
+        if not self.infection_guard.validate_instruction(sender_id, message):
+            logger.warning(f"FleetManager: Blocked malicious instruction from {sender_id}")
+            return {"status": "error", "reason": "infection_guard_blocked"}
 
         msg_type = message.get("type")
 
@@ -307,6 +360,34 @@ class FleetManager(
                 return {"status": "success", "result": result}
             except Exception as e:
                 return {"status": "error", "message": str(e)}
+
+        elif msg_type.startswith("CONSENSUS_"):
+            # Update peer list for consensus engine
+            peers = [p["name"] for p in self.voyager_discovery.get_active_peers()]
+            self.swarm_consensus.set_peers(peers)
+            return self.swarm_consensus.handle_message(message)
+
+        elif msg_type == "HANDSHAKE_INIT":
+            # Start Double Ratchet Session (Phase 2.0 Security)
+            remote_pub = message.get("public_key")
+            # In a real implementation, we'd do X3DH or similar
+            # For Phase 3.0, we simulate with a dummy root key
+            from src.infrastructure.security.encryption.double_ratchet import DoubleRatchet
+            root_key = b"swarm-shared-secret-v4" 
+            self.voyager_transport.sessions[sender_id] = DoubleRatchet(root_key, remote_pub)
+            return {"type": "HANDSHAKE_RESPONSE", "public_key": b"local-ephemeral-pub"}
+
+        elif msg_type == "compute_borrow_request":
+            # Python MPI: Evaluate if we have idle capacity (<50%) to help a neighbor
+            stats = self.resource_monitor.get_latest_stats()
+            cpu = stats.get("cpu_usage", 0.0)
+            mem = stats.get("memory_usage", 0.0)
+            
+            if cpu < 50.0 and mem < 60.0:
+                logger.info(f"FleetManager: Accepting compute-borrow from {sender_id}. Current Load: {cpu}%")
+                return {"status": "can_help", "node_id": f"node-{self.workspace_root.name}"}
+            else:
+                return {"status": "too_busy"}
 
         elif msg_type == "resource_status":
             return {"status": "ok"}

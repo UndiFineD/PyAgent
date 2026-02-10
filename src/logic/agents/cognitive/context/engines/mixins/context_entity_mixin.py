@@ -18,6 +18,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
+
 class ContextEntityMixin:
     """Mixin for tracking entities and project lessons."""
 

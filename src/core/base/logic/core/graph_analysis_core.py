@@ -19,7 +19,7 @@ import os
 
 class GraphAnalysisCore:
     """Core for graph-based security and relationship analysis."""
-    
+
     def __init__(self, storage_path: str = "data/graphs"):
         self.storage_path = storage_path
         os.makedirs(storage_path, exist_ok=True)
@@ -52,50 +52,50 @@ class GraphAnalysisCore:
         """Find all shortest paths between two nodes using BFS."""
         if graph_id not in self.graphs:
             return []
-        
+
         graph = self.graphs[graph_id]
         adj = graph["adjacency"]
-        
+
         if start not in adj or end not in adj:
             return []
-        
+
         # BFS to find shortest paths
         queue = [(start, [start])]
         visited = set()
         paths = []
-        
+
         while queue:
             current, path = queue.pop(0)
             if current in visited:
                 continue
             visited.add(current)
-            
+
             if current == end:
                 paths.append(path)
                 continue
-            
+
             for neighbor in adj.get(current, []):
                 if neighbor not in visited:
                     queue.append((neighbor, path + [neighbor]))
-        
+
         return paths
 
     def detect_cycles(self, graph_id: str) -> List[List[str]]:
         """Detect cycles in the graph."""
         if graph_id not in self.graphs:
             return []
-        
+
         graph = self.graphs[graph_id]
         adj = graph["adjacency"]
         cycles = []
         visited = set()
         rec_stack = set()
-        
+
         def dfs(node: str, path: List[str]):
             visited.add(node)
             rec_stack.add(node)
             path.append(node)
-            
+
             for neighbor in adj.get(node, []):
                 if neighbor not in visited:
                     if dfs(neighbor, path.copy()):
@@ -105,34 +105,34 @@ class GraphAnalysisCore:
                     cycle_start = path.index(neighbor)
                     cycles.append(path[cycle_start:] + [neighbor])
                     return True
-            
+
             rec_stack.remove(node)
             return False
-        
+
         for node in adj:
             if node not in visited:
                 dfs(node, [])
-        
+
         return cycles
 
     def analyze_privilege_escalation_paths(self, graph_id: str, user_node: str) -> Dict:
         """Analyze potential privilege escalation paths in security graphs."""
         if graph_id not in self.graphs:
             return {}
-        
+
         graph = self.graphs[graph_id]
         nodes = graph["nodes"]
-        
+
         # Find high-privilege nodes (admin, domain admin, etc.)
         high_priv_nodes = [
-            node_id for node_id, node in nodes.items() 
+            node_id for node_id, node in nodes.items()
             if node.get("type") in ["admin", "domain_admin", "root"]
         ]
-        
+
         paths = {}
         for target in high_priv_nodes:
             paths[target] = self.find_shortest_paths(graph_id, user_node, target)
-        
+
         return {
             "user": user_node,
             "escalation_paths": paths,
@@ -143,7 +143,7 @@ class GraphAnalysisCore:
         """Export graph in specified format."""
         if graph_id not in self.graphs:
             return None
-        
+
         if output_format == "json":
             return json.dumps(self.graphs[graph_id], indent=2)
         return None

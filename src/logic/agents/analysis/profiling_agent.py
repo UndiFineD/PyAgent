@@ -50,10 +50,10 @@ class ProfilingAgent(BaseAgent):
 
     def profile_file(self, file_path: str) -> list[ProfileStats]:
         """Profiles a specific Python file by executing it and analyzing bottlenecks.
-        
+
         Args:
             file_path: Path to the Python file to profile.
-            
+
         Returns:
             List of ProfileStats for the file.
         """
@@ -61,7 +61,7 @@ class ProfilingAgent(BaseAgent):
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 code = f.read()
-            
+
             # Phase 336: Support for static analysis if execution is too risky
             if "os.remove" in code or "subprocess" in code:
                 logging.info(f"ProfilingAgent: Skipping execution profile for {file_path} due to risky calls. Using static fallback.")
@@ -71,17 +71,19 @@ class ProfilingAgent(BaseAgent):
             profiler.enable()
             exec(code, {"__name__": "__main__"})
             profiler.disable()
-            
+
             stats = pstats.Stats(profiler)
             # Use a large limit to catch all functions in the file
             results = self.core.analyze_stats(stats, limit=1000)
-            
+
             # Identify bottlenecks > 1 second
             slow_functions = [s for s in results if s.total_time > 1.0]
             if slow_functions:
-                logging.warning(f"ProfilingAgent: Detected {len(slow_functions)} functions > 1s in {file_path}")
+                logging.warning(
+                    f"ProfilingAgent: Detected {len(slow_functions)} functions > 1s in {file_path}"
+                )
                 self._handover_to_coder(file_path, slow_functions)
-            
+
             return results
         except Exception as e:
             logging.error(f"ProfilingAgent: Failed to profile {file_path}: {e}")
@@ -95,13 +97,13 @@ class ProfilingAgent(BaseAgent):
             if not os.path.exists(file_path):
                 logging.error(f"ProfilingAgent: [Static] File does not exist: {file_path}")
                 return []
-            
+
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
-            
+
             tree = ast.parse(content)
             findings: list[ProfileStats] = []
-            
+
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef):
                     # Heuristic: count loops and complex operations
@@ -116,7 +118,7 @@ class ProfilingAgent(BaseAgent):
                             file_name=file_path,
                             line_number=node.lineno
                         ))
-            
+
             if findings:
                 self._handover_to_coder(file_path, findings)
             return findings
@@ -126,7 +128,7 @@ class ProfilingAgent(BaseAgent):
 
     def _handover_to_coder(self, file_path: str, slow_functions: List[ProfileStats]) -> None:
         """Hands over slow functions to CoderAgent for Rust conversion.
-        
+
         Args:
             file_path: Original source file.
             slow_functions: List of detected slow functions.
@@ -137,7 +139,7 @@ class ProfilingAgent(BaseAgent):
                 f"Bottleneck Optimization: Convert slow Python function '{func.function_name}' "
                 f"in {file_path} (Total Time: {func.total_time:.2f}s) to Rust."
             )
-            
+
             # 1. Contribute to Hive Mind Intelligence
             if hasattr(self, "fleet") and self.fleet:
                 # Format insight in the NEW structured format we just implemented
@@ -147,7 +149,7 @@ class ProfilingAgent(BaseAgent):
                     insight=insight_str,
                     confidence=0.98
                 )
-                
+
                 # 2. Directly inject into Self-Improvement Orchestrator if available
                 try:
                     orchestrator = self.fleet.orchestrators.self_improvement
@@ -167,10 +169,10 @@ class ProfilingAgent(BaseAgent):
                     if not hasattr(orchestrator, "active_tasks"):
                         orchestrator.active_tasks = []
                     orchestrator.active_tasks.append(task)
-                    logging.info(f"ProfilingAgent: Successly handed over task to SelfImprovementOrchestrator.")
+                    logging.info("ProfilingAgent: Successly handed over task to SelfImprovementOrchestrator.")
                 except (AttributeError, KeyError) as e:
                     logging.debug(f"ProfilingAgent: Could not directy inject task to orchestrator: {e}")
-            
+
             logging.info(f"ProfilingAgent: Proposed Rust conversion for {func.function_name} ({func.total_time:.2f}s)")
 
     def analyze_pstats(self, pstats_filepath: str) -> list[ProfileStats]:

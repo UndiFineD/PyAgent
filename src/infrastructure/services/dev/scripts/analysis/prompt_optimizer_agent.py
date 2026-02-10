@@ -20,6 +20,7 @@ Injects context, recent issues, and best-practice reminders before dispatching t
 from typing import Optional, Any, Callable
 import logging
 
+
 class PromptOptimizerAgent:
     """
     Wraps and enhances prompts for all agents before LLM dispatch.
@@ -38,7 +39,11 @@ class PromptOptimizerAgent:
         if self.issues:
             issues_str = '\n'.join(f"- {i}" for i in self.issues)
             enhancements.append(f"Recent Issues:\n{issues_str}\n")
-        enhancements.append("Please provide actionable, concise, and code-focused recommendations. If code is required, include a complete, minimal example. Reference best practices and standards where possible.")
+        enhancements.append(
+            "Please provide actionable, concise, and code-focused recommendations. "
+            "If code is required, include a complete, minimal example. "
+            "Reference best practices and standards where possible."
+        )
         if agent_name:
             enhancements.append(f"[Prompt optimized for agent: {agent_name}]")
         return '\n\n'.join(enhancements + [base_prompt])

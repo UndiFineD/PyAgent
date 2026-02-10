@@ -23,6 +23,7 @@ from typing import List, Dict, Any
 from .base_core import BaseCore
 from src.core.base.configuration.config_manager import config
 
+
 class DiscoveryCore(BaseCore):
     """
     Core logic for peer discovery and swarm topology management.
@@ -32,7 +33,7 @@ class DiscoveryCore(BaseCore):
         super().__init__()
         self.peers: Dict[str, Any] = {}
         self.is_active = False
-        
+
         # Load settings from config
         self.auto_discovery = config.get("voyager.auto_discovery", True)
         self.discovery_interval = config.get("voyager.discovery_interval", 5.0)

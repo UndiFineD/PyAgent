@@ -16,12 +16,14 @@ import time
 from typing import Dict, Any, Optional
 from pydantic import BaseModel, Field
 
+
 class TenantContext(BaseModel):
     tenant_id: str
     user_id: Optional[str] = None
     role: str = "viewer"
     scopes: list[str] = Field(default_factory=list)
     exp: int = 0
+
 
 class TenantIsolationCore:
     """
@@ -49,7 +51,7 @@ class TenantIsolationCore:
             scopes=token_payload.get("scopes", []),
             exp=token_payload.get("exp", int(time.time() + 3600))
         )
-        
+
         self.active_sessions[tenant_id] = context
         return context
 
@@ -58,10 +60,10 @@ class TenantIsolationCore:
         context = self.active_sessions.get(tenant_id)
         if not context:
             return False
-            
+
         if "admin" in context.scopes:
             return True
-            
+
         return required_scope in context.scopes
 
     def isolate_path(self, base_path: str, tenant_id: str) -> str:
@@ -75,6 +77,6 @@ class TenantIsolationCore:
         # Remove any keys that don't belong to this tenant_id if present
         if "_internal_tenant" in scrubbed and scrubbed["_internal_tenant"] != tenant_id:
             return {"error": "Tenant mismatch detected during scrub"}
-            
+
         scrubbed["_internal_tenant"] = tenant_id
         return scrubbed

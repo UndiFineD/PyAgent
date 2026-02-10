@@ -232,19 +232,24 @@ class MCPServerRegistry:
         """
         Discover available MCP servers from external sources.
 
-        This would integrate with awesome-mcp-servers and other registries.
+        This integrates with awesome-mcp-servers via the ecosystem populator.
         """
-        # Placeholder for server discovery
-        # In production, this would fetch from GitHub, npm, etc.
-        discovered: List[MCPServerConfig] = []
-
-        # Example: Fetch from awesome-mcp-servers
-        try:
-            # This would parse the README and extract server information
-            pass
-        except Exception as e:
-            self.logger.warning(f"Failed to discover servers: {e}")
-
+        from .ecosystem_populator import get_expanded_ecosystem
+        
+        discovered = get_expanded_ecosystem()
+        
+        for config in discovered:
+            if config.name not in self.servers:
+                # Ensure category and server_type are Enums if they were stored as strings
+                if isinstance(config.category, str):
+                    config.category = MCPCategory(config.category)
+                if isinstance(config.server_type, str):
+                    config.server_type = MCPServerType(config.server_type)
+                
+                self.servers[config.name] = config
+        
+        self._save_registry()
+        self.logger.info(f"Ecosystem expanded to {len(self.servers)} MCP servers")
         return discovered
 
 

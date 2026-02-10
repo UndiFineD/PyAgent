@@ -155,8 +155,8 @@ class EfficientChangeDetector:
                 # Check for modifications
                 cached_meta = self.metadata_cache[path_str]
                 if (current_meta.mtime > cached_meta.mtime or
-                    current_meta.size != cached_meta.size or
-                    (self.enable_hashing and current_meta.hash != cached_meta.hash)):
+                        current_meta.size != cached_meta.size or
+                        (self.enable_hashing and current_meta.hash != cached_meta.hash)):
                     changes.append(ChangeRecord(
                         path=path_str,
                         change_type='modified',
@@ -193,8 +193,12 @@ class EfficientChangeDetector:
 
         return changes
 
-    async def monitor_changes(self, callback: Callable[[List[ChangeRecord]], None],
-                            interval: float = 30.0, max_iterations: Optional[int] = None):
+    async def monitor_changes(
+        self,
+        callback: Callable[[List[ChangeRecord]], None],
+        interval: float = 30.0,
+        max_iterations: Optional[int] = None
+    ):
         """
         Monitor for changes asynchronously
         Calls callback with list of changes when detected
@@ -215,6 +219,7 @@ class EfficientChangeDetector:
 
             iteration += 1
             await asyncio.sleep(interval)
+
 
     def get_change_statistics(self) -> Dict[str, Any]:
         """Get statistics about detected changes"""

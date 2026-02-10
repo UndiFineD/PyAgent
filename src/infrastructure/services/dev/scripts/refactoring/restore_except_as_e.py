@@ -17,6 +17,7 @@ Restore Except As E module.
 
 from pathlib import Path
 
+
 def restore_except_as_e(root_dir):
     """
     Restore 'except Exception as e' pattern in codebase.
@@ -36,6 +37,7 @@ def restore_except_as_e(root_dir):
                 print(f"Restored except as e in {p}")
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             print(f"Error restoring {p}: {e}")
+
 
 if __name__ == "__main__":
     # Robustly find the repository root

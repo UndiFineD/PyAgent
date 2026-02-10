@@ -20,7 +20,7 @@ from typing import Dict, List, Optional, Any, Union, cast
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from src.core.base.logic.core.base_core import BaseCore
+from src.core.base.common.base_core import BaseCore
 
 
 @dataclass

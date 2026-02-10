@@ -19,6 +19,7 @@ Memory search mixin for retrieving historical agent experiences.
 import logging
 from typing import Any
 
+
 class MemorySearchMixin:
     """Methods for searching memories."""
 

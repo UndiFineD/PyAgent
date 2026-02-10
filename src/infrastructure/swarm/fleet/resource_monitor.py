@@ -15,11 +15,13 @@ class ResourceMonitor:
     Triggers 'compute borrow' requests when thresholds are exceeded.
     """
     
-    def __init__(self, high_threshold: float = 70.0, critical_threshold: float = 90.0):
+    def __init__(self, fleet=None, high_threshold: float = 70.0, critical_threshold: float = 90.0):
+        self.fleet = fleet
         self.high_threshold = high_threshold
         self.critical_threshold = critical_threshold
         self.last_stats: Dict[str, float] = {}
         self.running = False
+        self.is_borrowing = False
         
     async def start(self, interval: int = 10):
         """Starts the background monitoring loop."""
@@ -98,6 +100,19 @@ class ResourceMonitor:
         
         if is_critical:
             logger.warning(f"ResourceMonitor: CRITICAL LOAD DETECTED. Stats: {stats}")
+        
+        if is_stressed and self.fleet and not self.is_borrowing:
+            logger.info("ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...")
+            self.is_borrowing = True
+            success = await self.fleet.request_compute_borrow(stats)
+            if success:
+                logger.info("ResourceMonitor: Successfully delegated extra load to neighbors.")
+            else:
+                logger.warning("ResourceMonitor: No neighbor available to take load.")
+            
+            # Reset borrowing flag after a cooldown (e.g., 60s) to avoid spamming
+            await asyncio.sleep(60)
+            self.is_borrowing = False
             # Potentially trigger emergency measures
         elif is_stressed:
             logger.info(f"ResourceMonitor: High load detected. Suggesting task delegation. Stats: {stats}")

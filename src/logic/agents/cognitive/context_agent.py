@@ -19,6 +19,7 @@ Auto-extracted class from agent_context.py
 
 import logging
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent

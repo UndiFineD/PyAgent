@@ -27,11 +27,11 @@ logger = logging.getLogger(__name__)
 
 class OptimizationStrategy(Enum):
     """Strategy selection algorithms"""
-    MEAN = "mean"                    # Simple average across metrics
-    RECIPROCAL_RANK = "rank"         # Reciprocal Rank fusion
-    NORMALIZE_MEAN = "normalize_mean" # Normalized mean combination
-    WEIGHTED_SUM = "weighted_sum"    # Weighted combination
-    PARETO_DOMINANCE = "pareto"      # Multi-objective optimization
+    MEAN = "mean"  # Simple average across metrics
+    RECIPROCAL_RANK = "rank"  # Reciprocal Rank fusion
+    NORMALIZE_MEAN = "normalize_mean"  # Normalized mean combination
+    WEIGHTED_SUM = "weighted_sum"  # Weighted combination
+    PARETO_DOMINANCE = "pareto"  # Multi-objective optimization
 
 
 @dataclass
@@ -65,9 +65,11 @@ class EnhancedStrategyOptimizer:
         """Add a strategy trial result"""
         self.trial_history.append(trial)
 
-    def optimize_strategies(self,
-                          strategy: OptimizationStrategy = OptimizationStrategy.RECIPROCAL_RANK,
-                          weights: Optional[Dict[str, float]] = None) -> OptimizationResult:
+    def optimize_strategies(
+        self,
+        strategy: OptimizationStrategy = OptimizationStrategy.RECIPROCAL_RANK,
+        weights: Optional[Dict[str, float]] = None
+    ) -> OptimizationResult:
         """
         Optimize strategies using specified algorithm
 
@@ -136,7 +138,11 @@ class EnhancedStrategyOptimizer:
             strategy_name='mean'
         )
 
-    def _optimize_reciprocal_rank(self, strategy_ids: List[str], metrics_data: List[Dict[str, float]]) -> OptimizationResult:
+    def _optimize_reciprocal_rank(
+        self,
+        strategy_ids: List[str],
+        metrics_data: List[Dict[str, float]]
+    ) -> OptimizationResult:
         """Reciprocal Rank fusion optimization"""
         metric_cols = self._get_metric_columns(metrics_data)
 
@@ -164,12 +170,18 @@ class EnhancedStrategyOptimizer:
             scores=rr_scores,
             metadata={
                 'rankings': rankings,
-                'reciprocal_ranks': [[1.0 / rank for rank in col_ranks] for col_ranks in rankings]
+                'reciprocal_ranks': [
+                    [1.0 / rank for rank in col_ranks] for col_ranks in rankings
+                ]
             },
             strategy_name='reciprocal_rank'
         )
 
-    def _optimize_normalize_mean(self, strategy_ids: List[str], metrics_data: List[Dict[str, float]]) -> OptimizationResult:
+    def _optimize_normalize_mean(
+        self,
+        strategy_ids: List[str],
+        metrics_data: List[Dict[str, float]]
+    ) -> OptimizationResult:
         """Normalized mean optimization"""
         metric_cols = self._get_metric_columns(metrics_data)
 
@@ -204,12 +216,19 @@ class EnhancedStrategyOptimizer:
             scores=normalized_scores,
             metadata={
                 'normalized_metrics': normalized_scores,
-                'original_ranges': {col: {'min': mins[col], 'max': maxs[col]} for col in metric_cols}
+                'original_ranges': {
+                    col: {'min': mins[col], 'max': maxs[col]} for col in metric_cols
+                }
             },
             strategy_name='normalize_mean'
         )
 
-    def _optimize_weighted_sum(self, strategy_ids: List[str], metrics_data: List[Dict[str, float]], weights: Dict[str, float]) -> OptimizationResult:
+    def _optimize_weighted_sum(
+        self,
+        strategy_ids: List[str],
+        metrics_data: List[Dict[str, float]],
+        weights: Dict[str, float]
+    ) -> OptimizationResult:
         """Weighted sum optimization"""
         metric_cols = self._get_metric_columns(metrics_data)
 
@@ -249,7 +268,12 @@ class EnhancedStrategyOptimizer:
             strategy_name='weighted_sum'
         )
 
-    def _optimize_pareto_dominance(self, strategy_ids: List[str], metrics_data: List[Dict[str, float]]) -> OptimizationResult:
+
+    def _optimize_pareto_dominance(
+        self,
+        strategy_ids: List[str],
+        metrics_data: List[Dict[str, float]]
+    ) -> OptimizationResult:
         """Pareto dominance-based multi-objective optimization"""
         metric_cols = self._get_metric_columns(metrics_data)
 
@@ -345,8 +369,11 @@ class EnhancedStrategyOptimizer:
         """Clear trial history"""
         self.trial_history.clear()
 
-    def get_best_strategies(self, top_k: int = 5,
-                          strategy: OptimizationStrategy = OptimizationStrategy.RECIPROCAL_RANK) -> List[Dict[str, Any]]:
+    def get_best_strategies(
+        self,
+        top_k: int = 5,
+        strategy: OptimizationStrategy = OptimizationStrategy.RECIPROCAL_RANK
+    ) -> List[Dict[str, Any]]:
         """Get top-k best strategies"""
         if not self.trial_history:
             return []

@@ -76,6 +76,11 @@ class DiscoveryNode:
         # Local IP detection
         self.local_ip: str = self._get_local_ip()
         self.peer_metadata: Dict[str, Dict[str, Any]] = {}
+        self._on_peer_added_callbacks: List[Callable[[Dict[str, Any]], Awaitable[None]]] = []
+
+    def register_on_peer_added(self, callback: Callable[[Dict[str, Any]], Awaitable[None]]) -> None:
+        """Registers a callback to be executed when a new peer is discovered."""
+        self._on_peer_added_callbacks.append(callback)
 
     def update_peer_metadata(self, peer_id: str, metadata: Dict[str, Any]) -> None:
         """Updates extended metadata received via side-channels (e.g. Heartbeats)."""
@@ -164,8 +169,25 @@ class DiscoveryNode:
 
     def _peer_added(self, info: ServiceInfo) -> None:
         """Internal callback for when a peer is discovered or updated."""
-        self.peers[info.name] = info
-        logger.info(f"Voyager: Peer Registry updated ({info.name}). Total: {len(self.peers)}")
+        name = info.name
+        is_new = name not in self.peers
+        self.peers[name] = info
+        logger.info(f"Voyager: Peer Registry updated ({name}). Total: {len(self.peers)}")
+        
+        if is_new and self._on_peer_added_callbacks:
+            # Prepare peer data for callbacks
+            props = {
+                k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
+                for k, v in info.properties.items()
+            }
+            peer_data = {
+                "name": name,
+                "addresses": info.parsed_addresses(),
+                "port": info.port,
+                "properties": props
+            }
+            for cb in self._on_peer_added_callbacks:
+                asyncio.create_task(cb(peer_data))
 
     def _peer_removed(self, name: str) -> None:
         """Internal callback for when a peer leaves the network."""

@@ -18,6 +18,7 @@ from __future__ import annotations
 import json
 import logging
 
+
 class ContextShardMixin:
     """Mixin for managing memory shards and persistence."""
 

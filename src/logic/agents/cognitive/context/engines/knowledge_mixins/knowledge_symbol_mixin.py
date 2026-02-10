@@ -25,6 +25,7 @@ try:
 except ImportError:
     HAS_RUST = False
 
+
 class KnowledgeSymbolMixin:
     """Methods for symbol extraction from various formats."""
 

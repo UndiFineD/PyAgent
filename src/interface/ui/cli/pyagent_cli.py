@@ -70,7 +70,7 @@ def check_server() -> bool:
         available = response.status_code == 200
         conn_manager.update_status("AgentAPIServer", available)
         return available
-    except (RuntimeError, ValueError) as e:
+    except (RuntimeError, ValueError):
         pass
     except BaseException as e:
         pass

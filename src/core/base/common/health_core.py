@@ -70,7 +70,6 @@ class HealthCore(BaseCore):
         """
         # Placeholder for telemetry hook
 
-
     def check_python(self) -> AgentHealthCheck:
         """Return details about the current Python environment."""
         return AgentHealthCheck(

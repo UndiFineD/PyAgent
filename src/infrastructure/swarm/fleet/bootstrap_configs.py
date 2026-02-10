@@ -75,6 +75,11 @@ def get_bootstrap_agents() -> dict[str, tuple[str, str, str | None]]:
             "QuantumShardOrchestrator",
             None,
         ),
+        "ExpertMiner": (
+            "src.logic.agents.specialized.expert_miner_agent",
+            "ExpertMinerAgent",
+            None,
+        ),
     }
 
     return {k: _overlay.get_agent_config(k, v) for k, v in defaults.items()}

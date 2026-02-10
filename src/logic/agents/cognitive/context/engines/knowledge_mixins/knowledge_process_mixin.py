@@ -18,6 +18,7 @@ Knowledge process mixin for content analysis.
 
 import re
 
+
 class KnowledgeProcessMixin:
     """Methods for processing file content and computing similarity."""
 

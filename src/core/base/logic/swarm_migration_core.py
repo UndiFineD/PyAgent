@@ -102,11 +102,10 @@ class SwarmMigrationCore:
         self.migration_strategies[task_type] = strategy
         logger.info(f"Registered migration strategy for {task_type.value}")
 
-    async def execute_swarm_migration(self,
-                                    targets: List[MigrationTarget],
-                                    task_type: MigrationTask,
-                                    context: CascadeContext,
-                                    progress_callback: Optional[Callable] = None) -> OptimizationTrial:
+    async def execute_swarm_migration(
+        self, targets: List[MigrationTarget], task_type: MigrationTask,
+        context: CascadeContext, progress_callback: Optional[Callable] = None
+    ) -> OptimizationTrial:
         """
         Execute a swarm migration across multiple targets
         Based on the Swarm Migration Pattern from agentic-patterns
@@ -195,11 +194,16 @@ class SwarmMigrationCore:
         trial.best_strategy = {"total_changes": total_changes, "successful_batches": len(successful_results)}
         trial.optimization_score = len(successful_results) / len(batches) if batches else 0
 
-        logger.info(f"Swarm migration completed: {len(successful_results)}/{len(batches)} successful batches, {total_changes} total changes")
+        logger.info(
+            f"Swarm migration completed: {len(successful_results)}/{len(batches)} "
+            f"successful batches, {total_changes} total changes"
+        )
 
         return trial
 
-    def _create_migration_batches(self, targets: List[MigrationTarget], strategy: MigrationStrategy) -> List[MigrationBatch]:
+    def _create_migration_batches(
+        self, targets: List[MigrationTarget], strategy: MigrationStrategy
+    ) -> List[MigrationBatch]:
         """Create migration batches from targets"""
         batches = []
         batch_id_counter = 0
@@ -242,6 +246,7 @@ class SwarmMigrationCore:
         if execution_times:
             stats["avg_execution_time"] = sum(execution_times) / len(execution_times)
 
-        stats["success_rate"] = stats["successful_batches"] / stats["total_batches"] if stats["total_batches"] > 0 else 0
+        total_batches = stats["total_batches"]
+        stats["success_rate"] = stats["successful_batches"] / total_batches if total_batches > 0 else 0
 
         return stats

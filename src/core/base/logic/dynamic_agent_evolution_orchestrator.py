@@ -248,7 +248,11 @@ class DynamicAgentEvolutionOrchestrator:
         candidates.sort(key=lambda x: x[1], reverse=True)
         return candidates
 
-    def select_or_create_agent(self, task_analysis: TaskAnalysis, context: Optional[CascadeContext] = None) -> AgentSkillSheet:
+    def select_or_create_agent(
+        self,
+        task_analysis: TaskAnalysis,
+        context: Optional[CascadeContext] = None
+    ) -> AgentSkillSheet:
         """
         Select existing agent or create new one based on coverage analysis.
 
@@ -301,7 +305,11 @@ class DynamicAgentEvolutionOrchestrator:
 
         return sheet
 
-    def _create_integrated_agent(self, task_analysis: TaskAnalysis, parent_sheets: List[AgentSkillSheet]) -> AgentSkillSheet:
+    def _create_integrated_agent(
+        self,
+        task_analysis: TaskAnalysis,
+        parent_sheets: List[AgentSkillSheet]
+    ) -> AgentSkillSheet:
         """Create an integrated agent by merging multiple parent agents."""
         parent_names = [s.name for s in parent_sheets]
         agent_name = f"integrated_{'_'.join(parent_names[:2])}_{uuid.uuid4().hex[:8]}"
@@ -353,8 +361,12 @@ class DynamicAgentEvolutionOrchestrator:
 
         return constraints
 
-    def _create_agent_definition_file(self, sheet: AgentSkillSheet, task_analysis: TaskAnalysis,
-                                    parent_sheets: Optional[List[AgentSkillSheet]] = None):
+    def _create_agent_definition_file(
+        self,
+        sheet: AgentSkillSheet,
+        task_analysis: TaskAnalysis,
+        parent_sheets: Optional[List[AgentSkillSheet]] = None
+    ):
         """Create the agent definition markdown file."""
         if sheet.tier == AgentTier.SPECIALIZED:
             dir_path = self.specialized_dir
@@ -410,20 +422,27 @@ This agent works well with:
     def _generate_description(self, sheet: AgentSkillSheet, task_analysis: TaskAnalysis) -> str:
         """Generate a one-line description for the agent."""
         if sheet.tier == AgentTier.SPECIALIZED:
-            return f"Specialized agent for {task_analysis.domain} tasks with {', '.join(sheet.capabilities)} capabilities"
+            caps = ", ".join(sheet.capabilities)
+            return f"Specialized agent for {task_analysis.domain} tasks with {caps} capabilities"
         else:
-            return f"Integrated agent combining expertise from {', '.join(sheet.parent_agents)} for {task_analysis.domain} tasks"
+            parents = ", ".join(sheet.parent_agents)
+            return f"Integrated agent combining expertise from {parents} for {task_analysis.domain} tasks"
 
     def _generate_detailed_description(self, sheet: AgentSkillSheet, task_analysis: TaskAnalysis,
                                      parent_sheets: Optional[List[AgentSkillSheet]] = None) -> str:
         """Generate detailed description for the agent."""
         if sheet.tier == AgentTier.SPECIALIZED:
-            return f"""This specialized agent was created to handle {task_analysis.domain} tasks requiring {', '.join(sheet.capabilities)} capabilities.
+            caps = ", ".join(sheet.capabilities)
+            domain = task_analysis.domain
+            return f"""This specialized agent was created to handle {domain} tasks requiring {caps} capabilities.
 
-It was born from the need to address {task_analysis.complexity} complexity tasks in the {task_analysis.domain} domain."""
+It was born from the need to address {task_analysis.complexity} complexity tasks in the {domain} domain."""
         else:
             parent_names = [s.name for s in parent_sheets] if parent_sheets else []
-            return f"""This integrated agent combines the expertise of {', '.join(parent_names)} to provide comprehensive coverage for {task_analysis.domain} tasks.
+            parents = ", ".join(parent_names)
+            domain = task_analysis.domain
+            return f"""This integrated agent combines the expertise of {parents} to provide \
+comprehensive coverage for {domain} tasks.
 
 Created through agent integration to achieve synergy between specialized capabilities."""
 
@@ -459,7 +478,7 @@ Created through agent integration to achieve synergy between specialized capabil
 
         # Check for promotion
         if (sheet.usage_count >= 5 and sheet.success_rate >= 0.8 and
-            sheet.tier != AgentTier.ELITE):
+                sheet.tier != AgentTier.ELITE):
             sheet.promotion_candidate = True
 
         # Save updated sheet

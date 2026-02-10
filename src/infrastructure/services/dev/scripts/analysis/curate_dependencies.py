@@ -1,8 +1,3 @@
-
-"""
-Autonomous Dependency Curation: Scans the workspace for imports and cross-references with requirements.txt.
-Phase 311 utility for the PyAgent fleet.
-"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +11,12 @@ Phase 311 utility for the PyAgent fleet.
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
+"""
+Autonomous Dependency Curation: Scans the workspace for imports and cross-references with requirements.txt.
+Phase 311 utility for the PyAgent fleet.
+"""
 
 from __future__ import annotations
 

@@ -19,6 +19,7 @@ Core resolution mixin for conflict management.
 from typing import Any
 from datetime import datetime
 
+
 class CoreResolutionMixin:
     """Methods for conflict resolution and fact preparation."""
 

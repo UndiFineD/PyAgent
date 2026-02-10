@@ -15,12 +15,13 @@
 import os
 from typing import List, Dict, Optional
 
+
 class VideoFragmentCore:
     """
     Handles fragmentation of long-form video files into overlapping clips for multimodal reasoning.
     Harvested from .external/AskVideos-VideoCLIP
     """
-    
+
     def __init__(self, clip_len: int = 10, overlap: int = 2):
         self.clip_len = clip_len
         self.overlap = overlap
@@ -32,11 +33,11 @@ class VideoFragmentCore:
         """
         if not os.path.exists(video_path):
             raise FileNotFoundError(f"Video file not found: {video_path}")
-            
+
         fragments = []
         # Logic to calculate segment start/end times based on clip_len and overlap
         # Example: [0-10], [8-18], [16-26], etc.
-        
+
         # Simulated fragment generation
         duration = 30 # Placeholder for actual duration check
         start = 0
@@ -51,7 +52,7 @@ class VideoFragmentCore:
             if end == duration:
                 break
             start += (self.clip_len - self.overlap)
-            
+
         return fragments
 
     def aggregate_fragments(self, fragment_results: List[str]) -> str:

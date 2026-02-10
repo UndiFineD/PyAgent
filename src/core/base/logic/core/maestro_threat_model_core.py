@@ -16,6 +16,7 @@ from typing import Dict, Any, List
 from enum import Enum
 from pydantic import BaseModel
 
+
 class MaestroLayer(str, Enum):
     FOUNDATION_MODELS = "L1_Foundation_Models"
     DATA_OPERATIONS = "L2_Data_Operations"
@@ -25,11 +26,13 @@ class MaestroLayer(str, Enum):
     SECURITY_COMPLIANCE = "L6_Security_Compliance"
     AGENT_ECOSYSTEM = "L7_Agent_Ecosystem"
 
+
 class ThreatSeverity(str, Enum):
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
     CRITICAL = "critical"
+
 
 class AgentThreat(BaseModel):
     layer: MaestroLayer
@@ -38,16 +41,17 @@ class AgentThreat(BaseModel):
     severity: ThreatSeverity
     mitigated: bool = False
 
+
 class MaestroThreatModelCore:
     """
     Evaluates agentic systems against the MAESTRO security framework.
     (Multi-Agent Environment, Security, Threat Risk, and Outcome).
     Pattern harvested from Agent-Wiz.
     """
-    
+
     THREAT_CATALOG = {
         MaestroLayer.AGENT_ECOSYSTEM: [
-            "Compromised Agents", "Agent Impersonation", "Agent Tool Misuse", 
+            "Compromised Agents", "Agent Impersonation", "Agent Tool Misuse",
             "Agent Goal Manipulation", "Marketplace Manipulation"
         ],
         MaestroLayer.SECURITY_COMPLIANCE: [
@@ -67,11 +71,11 @@ class MaestroThreatModelCore:
             "Input Validation Attacks", "Supply Chain Attacks"
         ],
         MaestroLayer.DATA_OPERATIONS: [
-            "Data Poisoning", "Data Exfiltration", 
+            "Data Poisoning", "Data Exfiltration",
             "Model Inversion/Extraction", "Compromised RAG Pipelines"
         ],
         MaestroLayer.FOUNDATION_MODELS: [
-            "Adversarial Examples", "Model Stealing", 
+            "Adversarial Examples", "Model Stealing",
             "Membership Inference Attacks", "Reprogramming Attacks"
         ]
     }
@@ -85,7 +89,7 @@ class MaestroThreatModelCore:
         In a production system, this would interface with Garak, PyRIT, or Vigil.
         """
         threatsFound = []
-        
+
         # Example Logic: Check for tool availability without sandboxing
         if system_config.get("tools_sandboxed") is False:
             threatsFound.append(AgentThreat(
@@ -94,7 +98,7 @@ class MaestroThreatModelCore:
                 description="Agents have direct access to host shell without sandboxing.",
                 severity=ThreatSeverity.CRITICAL
             ))
-            
+
         # Example Logic: Check for PII in observability
         if system_config.get("observability_redaction") is False:
             threatsFound.append(AgentThreat(
@@ -120,10 +124,10 @@ class MaestroThreatModelCore:
         """Generates a Markdown report of the threat landscape."""
         if not self.active_threats:
             return "# MAESTRO Security Report\n\n[✓] No critical threats detected in current architecture."
-            
+
         report = "# MAESTRO Security Report\n\n"
         report += f"Total Threats Detected: {len(self.active_threats)}\n\n"
-        
+
         for layer in MaestroLayer:
             layer_threats = [t for t in self.active_threats if t.layer == layer]
             if layer_threats:
@@ -132,5 +136,5 @@ class MaestroThreatModelCore:
                     status = " [x] Mitigated" if t.mitigated else " [ ] ACTIVE"
                     report += f"- **{t.threat_type}** ({t.severity.value}): {t.description}{status}\n"
                 report += "\n"
-                
+
         return report

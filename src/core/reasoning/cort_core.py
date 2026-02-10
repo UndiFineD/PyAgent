@@ -106,6 +106,21 @@ class CoRTReasoningCore:
             if verbose:
                 self.logger.info(f"🤔 Round {round_num}/{thinking_rounds}")
 
+            # [Phase 321] Self-Correction Step
+            # Before generating alternatives, we perform a deep audit of the current best
+            corrected_best = await self._self_correct(current_best, user_input)
+            if corrected_best != current_best:
+                if verbose:
+                    self.logger.info("🛠️ Phase 321: Self-correction triggered and improved the response")
+                current_best = corrected_best
+                thinking_history.append(ThinkingRound(
+                    round_number=round_num,
+                    response=current_best,
+                    selected=True,
+                    alternative_number=0, # 0 indicates a correction
+                    evaluation_score=0.9
+                ))
+
             # Generate alternative responses
             alternatives = await self._generate_alternatives(current_best, user_input)
 
@@ -302,6 +317,41 @@ Then on a new line, explain your choice in one sentence."""
 
         # Default to current best
         return current_best, "Evaluation failed, keeping current response"
+
+    async def _self_correct(self, response: str, original_prompt: str) -> str:
+        """
+        [Phase 321: Self-Correction Module]
+        Analyzes the response for common failures and attempts to fix them.
+        """
+        correction_prompt = f"""[PHASE 321: SELF-CORRECTION AUDIT]
+Original Task: {original_prompt}
+Current Draft: {response}
+
+Analyze the draft for:
+1. Hallucinations or factual errors.
+2. Inconsistencies or logical gaps.
+3. Tone or style violations.
+4. Failure to fully address the original task.
+
+If you find errors, provide the FULL corrected response. 
+If the response is already perfect, respond with ONLY the word "PERFECT".
+
+Corrected Response:"""
+
+        try:
+            correction = await self.inference_engine.generate(
+                prompt=correction_prompt,
+                temperature=0.3,
+                max_tokens=2000
+            )
+
+            if "PERFECT" in correction[:20].upper() and len(correction) < 50:
+                return response
+            
+            return correction.strip()
+        except Exception as e:
+            self.logger.warning(f"Phase 321: Self-correction failed: {e}")
+            return response
 
     async def _calculate_confidence(self, final_response: str, thinking_history: List[ThinkingRound]) -> float:
         """Calculate confidence score based on thinking consistency and rounds."""

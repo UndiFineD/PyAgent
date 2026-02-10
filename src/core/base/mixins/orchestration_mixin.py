@@ -123,6 +123,35 @@ class OrchestrationMixin:
             return original_content
         return result
 
+    async def execute_logic_manifest(self, manifest: list[dict[str, Any]]) -> dict[str, Any]:
+        """
+        Logic-Sequenced Task Handling (Phase 325).
+        Executes a sequence of multi-disciplinary steps without agent hand-overs.
+        Steps: [{'action': 'code', 'params': {...}}, {'action': 'test', 'params': {...}}]
+        """
+        logging.info(f"Orchestration: Executing Logic Manifest with {len(manifest)} steps.")
+        results = []
+        
+        for step in manifest:
+            action = step.get("action")
+            params = step.get("params", {})
+            
+            logging.info(f"Orchestration: Executing sequence step: {action}")
+            
+            # Internal execution without full hand-over
+            if action == "code":
+                res = await self.run_subagent("LogicManifest: Coding", f"Generate code for: {params.get('task')}")
+            elif action == "test":
+                res = await self.run_subagent("LogicManifest: Testing", f"Run tests for: {params.get('code')}")
+            elif action == "security_audit":
+                res = await self.run_subagent("LogicManifest: Security Audit", f"Audit following code: {params.get('content')}")
+            else:
+                res = f"Unknown action: {action}"
+            
+            results.append({"action": action, "output": res})
+            
+        return {"status": "completed", "results": results}
+
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Improve content using a subagent (respected strategy if set)."""
         actual_path = None

@@ -15,6 +15,7 @@
 from typing import List, Any
 import math
 
+
 class VideoAnalyzerCore:
     """
     Core logic for fragmenting and preparing video data for multi-modal inference.
@@ -29,7 +30,7 @@ class VideoAnalyzerCore:
         """Calculates start/end timestamps for sliding window video analysis."""
         segments = []
         num_segments = math.ceil(total_duration / segment_length)
-        
+
         for i in range(num_segments):
             start = i * segment_length
             end = min(start + segment_length, total_duration)
@@ -38,7 +39,7 @@ class VideoAnalyzerCore:
                 "start_time": start,
                 "end_time": end
             })
-            
+
         return segments
 
     def sample_frames(self, frames: List[Any], n_samples: int = 16) -> List[Any]:
@@ -46,7 +47,7 @@ class VideoAnalyzerCore:
         total = len(frames)
         if total <= n_samples:
             return frames
-            
+
         indices = [int(i * total / n_samples) for i in range(n_samples)]
         return [frames[i] for i in indices]
 

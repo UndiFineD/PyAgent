@@ -16,17 +16,19 @@ import asyncio
 from typing import Optional, Callable
 from pydantic import BaseModel
 
+
 class ScalingStrategy(BaseModel):
     max_candidates: int = 5
     self_critique_rounds: int = 1
     difficulty_threshold: float = 0.7
+
 
 class InferenceScalingCore:
     """
     Implements inference-time scaling patterns (multi-candidate, self-critique).
     Harvested from .external/agentic-patterns
     """
-    
+
     def __init__(self, strategy: Optional[ScalingStrategy] = None):
         self.strategy = strategy or ScalingStrategy()
 
@@ -35,7 +37,10 @@ class InferenceScalingCore:
         Determines the optimal number of thinking rounds for a prompt.
         Pattern harvested from 'Chain-of-Recursive-Thoughts'.
         """
-        meta_prompt = f"How many rounds of iterative thinking (1-5) are optimal for: {prompt}? Respond with JUST the number."
+        meta_prompt = (
+            f"How many rounds of iterative thinking (1-5) are optimal for: {prompt}? "
+            "Respond with JUST the number."
+        )
         try:
             response = await estimator(meta_prompt)
             # Find the first digit in the response
@@ -48,8 +53,8 @@ class InferenceScalingCore:
         return 3
 
     async def scale_inference(
-        self, 
-        prompt: str, 
+        self,
+        prompt: str,
         generator: Callable[[str], asyncio.Future],
         evaluator: Callable[[str], asyncio.Future],
         rounds: Optional[int] = None
@@ -58,24 +63,24 @@ class InferenceScalingCore:
         Executes an inference-time scaling loop.
         """
         num_rounds = rounds or self.strategy.self_critique_rounds
-        
+
         # Step 1: Generate candidates
         tasks = [generator(prompt) for _ in range(self.strategy.max_candidates)]
         candidates = await asyncio.gather(*tasks)
-        
+
         # Step 2: Evaluate candidates
         eval_tasks = [evaluator(c) for c in candidates]
         scores = await asyncio.gather(*eval_tasks)
-        
+
         # Step 3: Select winner
         best_idx = scores.index(max(scores))
         winner = candidates[best_idx]
-        
+
         # Step 4: Iterative improvement (Thinking Rounds)
         for _ in range(num_rounds):
             critique_prompt = f"Critique the following and provide an improved version:\n{winner}"
             winner = await generator(critique_prompt)
-            
+
         return winner
 
     def estimate_difficulty(self, task_description: str) -> float:

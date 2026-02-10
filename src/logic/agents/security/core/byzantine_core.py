@@ -97,6 +97,26 @@ class ByzantineCore:
             return 0.8
         return 0.5 if change_type in ["documentation", "examples", "comments"] else 0.67
 
+    def run_multi_surgeon_audit(self, proposals: dict[str, str], surgeons: list[str]) -> dict[str, Any]:
+        """
+        [Phase 3.0: Multi-surgeon BFT]
+        Performs a second-layer audit of proposals using specialized 'surgeon' agents.
+        Returns a map of proposal hashes to their 'health' score.
+        """
+        audit_results = {}
+        for p_hash, content in proposals.items():
+            # Mock audit logic: check for core violations
+            health = 1.0
+            if "TODO" in content or "FIXME" in content:
+                health -= 0.2
+            if len(content) < 10:
+                health -= 0.5
+            
+            # Weighted by surgeon reliability (ideally)
+            audit_results[p_hash] = health
+            
+        return audit_results
+
     def detect_deviating_hashes(self, votes: list[dict[str, Any]], consensus_hash: str) -> list[str]:
         """Returns IDs of agents whose votes deviated from consensus."""
         return [v["id"] for v in votes if v["hash"] != consensus_hash]

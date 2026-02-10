@@ -169,9 +169,10 @@ class PerformanceMeasurer:
         """Register a custom metric measurement function"""
         self.measurement_functions[metric] = func
 
-    async def measure_performance(self, strategy: Strategy, input_data: Any,
-                                ground_truth: Optional[Any] = None,
-                                **kwargs) -> PerformanceResult:
+    async def measure_performance(
+        self, strategy: Strategy, input_data: Any,
+        ground_truth: Optional[Any] = None, **kwargs
+    ) -> PerformanceResult:
         """Measure performance of a strategy"""
         start_time = time.time()
 
@@ -209,8 +210,9 @@ class PerformanceMeasurer:
                 error=str(e)
             )
 
-    def _default_metric_calculation(self, metric: OptimizationMetric, result: Any,
-                                  ground_truth: Any, execution_time: float) -> float:
+    def _default_metric_calculation(
+        self, metric: OptimizationMetric, result: Any, ground_truth: Any, execution_time: float
+    ) -> float:
         """Default metric calculations"""
         if metric == OptimizationMetric.LATENCY:
             return execution_time
@@ -238,8 +240,9 @@ class BestSelectionAlgorithm(ABC):
     """Abstract base class for best strategy selection algorithms"""
 
     @abstractmethod
-    def select_best(self, performance_results: List[PerformanceResult],
-                   weights: Optional[Dict[str, float]] = None) -> PerformanceResult:
+    def select_best(
+        self, performance_results: List[PerformanceResult], weights: Optional[Dict[str, float]] = None
+    ) -> PerformanceResult:
         """Select the best performing strategy"""
         pass
 
@@ -256,8 +259,9 @@ class WeightedAverageSelector(BestSelectionAlgorithm):
             "latency", "cost"
         }
 
-    def select_best(self, performance_results: List[PerformanceResult],
-                   weights: Optional[Dict[str, float]] = None) -> PerformanceResult:
+    def select_best(
+        self, performance_results: List[PerformanceResult], weights: Optional[Dict[str, float]] = None
+    ) -> PerformanceResult:
         """Select strategy with highest weighted average score"""
         if not performance_results:
             raise ValueError("No performance results provided")
@@ -308,8 +312,9 @@ class WeightedAverageSelector(BestSelectionAlgorithm):
 class ParetoFrontierSelector(BestSelectionAlgorithm):
     """Select best strategy using Pareto frontier (multi-objective optimization)"""
 
-    def select_best(self, performance_results: List[PerformanceResult],
-                   weights: Optional[Dict[str, float]] = None) -> PerformanceResult:
+    def select_best(
+        self, performance_results: List[PerformanceResult], weights: Optional[Dict[str, float]] = None
+    ) -> PerformanceResult:
         """Select strategy on Pareto frontier with best compromise"""
         if not performance_results:
             raise ValueError("No performance results provided")
@@ -383,8 +388,9 @@ class ParetoFrontierSelector(BestSelectionAlgorithm):
 
         return at_least_one_better
 
-    def _select_from_frontier(self, frontier: List[PerformanceResult],
-                            weights: Dict[str, float]) -> PerformanceResult:
+    def _select_from_frontier(
+        self, frontier: List[PerformanceResult], weights: Dict[str, float]
+    ) -> PerformanceResult:
         """Select best result from Pareto frontier using weighted scoring"""
         best_result = None
         best_score = float('-inf')
@@ -432,10 +438,11 @@ class StrategyOptimizer:
             del self.strategy_registry[strategy_name]
             logger.info(f"Unregistered strategy: {strategy_name}")
 
-    async def optimize(self, strategies: List[Strategy], input_data: Any,
-                      ground_truth: Optional[Any] = None,
-                      metric_weights: Optional[Dict[str, float]] = None,
-                      **kwargs) -> OptimizationTrial:
+    async def optimize(
+        self, strategies: List[Strategy], input_data: Any,
+        ground_truth: Optional[Any] = None, metric_weights: Optional[Dict[str, float]] = None,
+        **kwargs
+    ) -> OptimizationTrial:
         """
         Run optimization trial across multiple strategies
         Based on AutoRAG's optimization workflow
@@ -484,8 +491,9 @@ class StrategyOptimizer:
 
         return trial
 
-    def _calculate_optimization_score(self, result: PerformanceResult,
-                                    weights: Optional[Dict[str, float]]) -> float:
+    def _calculate_optimization_score(
+        self, result: PerformanceResult, weights: Optional[Dict[str, float]]
+    ) -> float:
         """Calculate overall optimization score"""
         if weights is None:
             # Equal weights for all metrics
@@ -501,9 +509,9 @@ class StrategyOptimizer:
 
         return score / total_weight if total_weight > 0 else 0.0
 
-    async def optimize_pipeline(self, pipeline_configs: List[Dict[str, Any]],
-                              evaluation_data: List[Tuple[Any, Any]],
-                              **kwargs) -> OptimizationTrial:
+    async def optimize_pipeline(
+        self, pipeline_configs: List[Dict[str, Any]], evaluation_data: List[Tuple[Any, Any]], **kwargs
+    ) -> OptimizationTrial:
         """
         Optimize a complete pipeline configuration
         Based on AutoRAG's pipeline optimization

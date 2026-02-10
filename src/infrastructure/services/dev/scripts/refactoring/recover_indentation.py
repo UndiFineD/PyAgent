@@ -15,9 +15,9 @@
 Recover Indentation module.
 """
 
-#!/usr/bin/env python3
 import re
 from pathlib import Path
+
 
 def fix_broken_indentation(root_dir):
     """
@@ -74,6 +74,7 @@ def fix_broken_indentation(root_dir):
                 print(f"Fixed indentation in {p}")
         except (IOError, OSError, UnicodeDecodeError) as e:
             print(f"Error fixing {p}: {e}")
+
 
 if __name__ == "__main__":
     # Robustly find the repository root

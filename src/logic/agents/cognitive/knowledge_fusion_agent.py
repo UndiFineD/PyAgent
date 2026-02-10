@@ -60,12 +60,11 @@ class KnowledgeFusionAgent(BaseAgent):
             with open(temp_path, "w", encoding="utf-8") as f:
                 json.dump(graph, f, indent=2)
             temp_path.replace(self.global_graph_path)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:  # pylint: disable=broad-exception-caught
             if temp_path.exists():
                 try:
                     temp_path.unlink()
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+                except Exception:  # pylint: disable=broad-exception-caught
                     pass
             logging.error(f"KnowledgeFusion: Atomic save failed: {e}")
             raise

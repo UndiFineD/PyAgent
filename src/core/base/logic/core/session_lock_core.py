@@ -17,9 +17,10 @@ import secrets
 from typing import Dict, Any, Optional
 from datetime import datetime
 
+
 class SessionLockCore:
     """Core for managing multi-tenant session locking and space isolation."""
-    
+
     def __init__(self, storage_path: str = "data/sessions"):
         self.storage_path = storage_path
         os.makedirs(storage_path, exist_ok=True)
@@ -31,7 +32,7 @@ class SessionLockCore:
         if lock_key in self.locks:
             if datetime.now().timestamp() < self.locks[lock_key]["expires"]:
                 return None # Already locked
-        
+
         token = secrets.token_hex(16)
         self.locks[lock_key] = {
             "token": token,

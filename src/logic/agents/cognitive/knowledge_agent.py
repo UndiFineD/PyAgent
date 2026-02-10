@@ -88,7 +88,7 @@ class KnowledgeAgent(BaseAgent):
         for m in hits:
             doc = m["content"][:1000]
             snippets.append(f"> [!ABSTRACT] File: {m['metadata']['path']}\n> ```\n" +
-                           "\n".join([f"> {sl}" for sl in doc.splitlines()[:20]]) + "\n> ```\n")
+                            "\n".join([f"> {sl}" for sl in doc.splitlines()[:20]]) + "\n> ```\n")
         return "\n".join(snippets)
 
     def scan_workspace(self, query: str) -> str:
@@ -156,6 +156,7 @@ class KnowledgeAgent(BaseAgent):
         """User-facing tool."""
         hits = self.tiered_memory.search_workspace(query, n_results=5)
         return "\n".join([f"- {m['metadata']['path']}" for m in hits])
+
 
 if __name__ == "__main__":
     main = create_main_function(KnowledgeAgent, "Knowledge Agent", "Query")

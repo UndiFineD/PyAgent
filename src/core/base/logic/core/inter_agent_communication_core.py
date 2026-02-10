@@ -102,9 +102,14 @@ class DataPart(BaseModel):
 
 class Message(BaseModel):
     """Agent message with multi-part content."""
-    content: List[Union[TextPart, FilePart, DataPart]] = Field(default_factory=list, description="Message content parts")
+    content: List[Union[TextPart, FilePart, DataPart]] = Field(
+        default_factory=list, description="Message content parts"
+    )
     role: Role = Field(..., description="Message sender role")
-    timestamp: Optional[datetime] = Field(default_factory=lambda: datetime.now(timezone.utc), description="Message timestamp")
+    timestamp: Optional[datetime] = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        description="Message timestamp"
+    )
     metadata: Optional[Dict[str, Any]] = Field(default=None, description="Additional metadata")
 
     def to_dict(self) -> Dict[str, Any]:

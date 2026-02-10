@@ -17,12 +17,14 @@ from enum import Enum
 from typing import Dict, Any, Optional
 from dataclasses import dataclass, field
 
+
 class JobStatus(Enum):
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
     FAILED = "failed"
     CANCELLED = "cancelled"
+
 
 @dataclass
 class AgentJob:
@@ -31,6 +33,7 @@ class AgentJob:
     payload: Dict[str, Any] = field(default_factory=dict)
     result: Optional[Any] = None
     error: Optional[str] = None
+
 
 class JobManagerCore:
     """

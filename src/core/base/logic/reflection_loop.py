@@ -50,11 +50,20 @@ class ReflectionLoopConfig(BaseModel):
     """Configuration for reflection loop execution."""
     max_iterations: int = Field(default=3, description="Maximum number of reflection iterations")
     critique_prompt: str = Field(
-        default="You are a senior software engineer and expert code reviewer. Critically evaluate the provided content based on the original requirements. Look for bugs, style issues, missing edge cases, and areas for improvement. If the content is perfect and meets all requirements, respond with the single phrase 'CONTENT_IS_PERFECT'. Otherwise, provide specific, actionable critiques.",
+        default=(
+            "You are a senior software engineer and expert code reviewer. "
+            "Critically evaluate the provided content based on the original requirements. "
+            "Look for bugs, style issues, missing edge cases, and areas for improvement. "
+            "If the content is perfect and meets all requirements, respond with the single phrase "
+            "'CONTENT_IS_PERFECT'. Otherwise, provide specific, actionable critiques."
+        ),
         description="Prompt template for the critic agent"
     )
     refinement_prompt: str = Field(
-        default="Please refine the content using the critiques provided. Address each critique systematically and improve the overall quality.",
+        default=(
+            "Please refine the content using the critiques provided. "
+            "Address each critique systematically and improve the overall quality."
+        ),
         description="Prompt template for refinement instructions"
     )
     early_stopping: bool = Field(default=True, description="Stop early if content is deemed perfect")
@@ -100,7 +109,11 @@ class LLMReflectionAgent(ReflectionAgent):
         else:
             # Refinement
             last_critique = context.history[-1].critique if context.history else ""
-            prompt = f"Original Task: {context.task_description}\n\nCurrent Content:\n{context.current_content}\n\nCritique: {last_critique}\n\n{context.config.refinement_prompt}"
+            prompt = (
+                f"Original Task: {context.task_description}\n\n"
+                f"Current Content:\n{context.current_content}\n\n"
+                f"Critique: {last_critique}\n\n{context.config.refinement_prompt}"
+            )
 
         # Run LLM call in thread pool to avoid blocking
         loop = asyncio.get_event_loop()
@@ -109,7 +122,11 @@ class LLMReflectionAgent(ReflectionAgent):
 
     async def critique(self, context: ReflectionContext, content: Any) -> str:
         """Critique content using LLM."""
-        prompt = f"{context.config.critique_prompt}\n\nOriginal Task:\n{context.task_description}\n\nContent to Review:\n{content}"
+        prompt = (
+            f"{context.config.critique_prompt}\n\n"
+            f"Original Task:\n{context.task_description}\n\n"
+            f"Content to Review:\n{content}"
+        )
 
         loop = asyncio.get_event_loop()
         critique = await loop.run_in_executor(None, self.llm_callable, prompt)
@@ -126,10 +143,18 @@ class CodeReflectionAgent(LLMReflectionAgent):
     async def generate(self, context: ReflectionContext) -> str:
         """Generate or refine code with language-specific considerations."""
         if context.current_content is None:
-            prompt = f"Write {self.language} code for the following task:\n{context.task_description}\n\nProvide only the code without explanation:"
+            prompt = (
+                f"Write {self.language} code for the following task:\n"
+                f"{context.task_description}\n\nProvide only the code without explanation:"
+            )
         else:
             last_critique = context.history[-1].critique if context.history else ""
-            prompt = f"Original Task: {context.task_description}\n\nCurrent {self.language} code:\n```python\n{context.current_content}\n```\n\nCritique: {last_critique}\n\n{context.config.refinement_prompt}\n\nProvide only the improved code:"
+            prompt = (
+                f"Original Task: {context.task_description}\n\n"
+                f"Current {self.language} code:\n```python\n{context.current_content}\n```\n\n"
+                f"Critique: {last_critique}\n\n{context.config.refinement_prompt}\n\n"
+                f"Provide only the improved code:"
+            )
 
         loop = asyncio.get_event_loop()
         code = await loop.run_in_executor(None, self.llm_callable, prompt)

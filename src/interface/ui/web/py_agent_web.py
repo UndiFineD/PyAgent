@@ -45,7 +45,8 @@ LOGS_DIR = WORKSPACE_ROOT / "data" / "logs"
 # Global Fleet Instance
 fleet_instance = None
 auth_manager = WebAuthnManager()
-checkpoint_manager = CheckpointManager(rank=0, world_size=1) # Default for web proxy
+checkpoint_manager = CheckpointManager(rank=0, world_size=1)  # Default for web proxy
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -58,7 +59,9 @@ async def lifespan(app: FastAPI):
         print(f"Failed to initialize FleetManager: {e}")
     yield
 
+
 app = FastAPI(title="PyAgent Fleet API", lifespan=lifespan)
+
 
 # Helper for system metrics
 def get_system_metrics():
@@ -70,20 +73,20 @@ def get_system_metrics():
             "cpu": round(stats.get("cpu_usage", 0), 1),
             "mem": round(stats.get("memory_usage", 0), 1),
             "storage": round(stats.get("disk_usage", 0), 1),
-            "network": abs(round(stats.get("network_io", {}).get("bytes_sent", 0) / 1024 / 1024, 2)) % 100, # Mock activity for bar
+            "network": round(abs(stats.get("network_io", {}).get("bytes_sent", 0) / 1024 / 1024) % 100, 1),
             "temp": round(stats.get("temp", 0), 1),
             "gpu": round(stats.get("gpu", {}).get("usage", 0), 1)
         }
-    
+
     try:
         import psutil
         return {
-            "cpu": psutil.cpu_percent(),
-            "mem": psutil.virtual_memory().percent,
-            "storage": psutil.disk_usage("/").percent,
-            "network": 0,
-            "temp": 0,
-            "gpu": 0
+            "cpu": round(psutil.cpu_percent(), 1),
+            "mem": round(psutil.virtual_memory().percent, 1),
+            "storage": round(psutil.disk_usage("/").percent, 1),
+            "network": 0.0,
+            "temp": 0.0,
+            "gpu": 0.0
         }
     except ImportError:
         return {"cpu": 0, "mem": 0, "storage": 0, "network": 0, "temp": 0, "gpu": 0}
@@ -102,6 +105,8 @@ async def get_thoughts():
                     data = json.loads(line)
                     # Map reasoning chain keys to UI expectations
                     mapped = {
+                        "id": data.get("task_id") or str(uuid.uuid4())[:8],
+                        "parent_id": data.get("parent_id") or data.get("context", {}).get("task_id"),
                         "role": data.get("role", "assistant" if data.get("agent") else "user"),
                         "action": data.get("agent") or data.get("action"),
                         "content": data.get("content") or data.get("justification") or str(data.get("context_summary")),
@@ -119,7 +124,7 @@ async def handle_command(data: dict):
     command = data.get("command")
     if not command:
         return JSONResponse(status_code=400, content={"error": "No command provided"})
-    
+
     if fleet_instance:
         # For Pillar 3, we route this to the FleetManager's command handler
         # which will use the UniversalAgent/Coores architecture
@@ -156,7 +161,7 @@ async def websocket_telemetry(websocket: WebSocket):
     try:
         while True:
             metrics = get_system_metrics()
-            
+
             # Phase 326: Consensus Activity Reporting
             consensus_active = False
             if fleet_instance and hasattr(fleet_instance, "consensus_manager"):
@@ -166,11 +171,11 @@ async def websocket_telemetry(websocket: WebSocket):
 
             # Send system metrics for the bars
             await websocket.send_json({
-                "event": "telemetry", 
+                "event": "telemetry",
                 "data": metrics,
                 "consensus": consensus_active
             })
-            await asyncio.sleep(2) 
+            await asyncio.sleep(2)
     except WebSocketDisconnect:
         pass
 
@@ -187,6 +192,14 @@ async def serve_topology():
     target = (WEB_UI_DIR / "topology_viewer.html").resolve()
     return FileResponse(str(target)) if target.exists() else {"error": "404"}
 
+@app.get("/api/infection-guard")
+async def get_infection_guard_events():
+    """Returns the latest blocked events from Infection Guard."""
+    global fleet_instance
+    if fleet_instance and hasattr(fleet_instance, "infection_guard"):
+        return fleet_instance.infection_guard.get_blocked_events()
+    return []
+
 @app.get("/designer")
 async def serve_designer():
     """Serves the Universal Shard (n8nstyle) Manifest Designer."""
@@ -200,7 +213,7 @@ async def create_manifest(data: dict):
     """API for the designer to save new cognitive shards."""
     from src.core.base.lifecycle.manifest_repository import ManifestRepository
     from src.core.base.lifecycle.logic_manifest import LogicManifest
-    
+
     repo = ManifestRepository()
     role = data.get("role", "custom_shard")
     manifest = LogicManifest.from_dict(data)
@@ -216,10 +229,10 @@ async def list_files(path: str = "."):
     # Security: Ensure path is within workspace
     if not str(target_path).startswith(str(WORKSPACE_ROOT)):
         return JSONResponse(status_code=403, content={"error": "Access denied"})
-    
+
     if not target_path.exists():
         return JSONResponse(status_code=404, content={"error": "Path not found"})
-    
+
     items = []
     try:
         for entry in os.scandir(target_path):
@@ -231,7 +244,7 @@ async def list_files(path: str = "."):
             })
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
-        
+
     return sorted(items, key=lambda x: (not x["is_dir"], x["name"].lower()))
 
 @app.get("/api/files/read")
@@ -240,10 +253,10 @@ async def read_workspace_file(path: str):
     target_path = (WORKSPACE_ROOT / path).resolve()
     if not str(target_path).startswith(str(WORKSPACE_ROOT)):
         return JSONResponse(status_code=403, content={"error": "Access denied"})
-    
+
     if not target_path.is_file():
         return JSONResponse(status_code=404, content={"error": "File not found"})
-    
+
     try:
         with open(target_path, "r", encoding="utf-8") as f:
             return {"content": f.read()}
@@ -307,6 +320,82 @@ async def verify_login(username: str, data: dict):
     if auth_manager.verify_authentication(username, data):
         return {"status": "success", "token": "mock-jwt-token-v4"}
     return JSONResponse(status_code=401, content={"error": "Authentication failed"})
+
+# --- External Automation (n8n) Integration ---
+
+@app.post("/api/n8n/execute")
+async def n8n_execute(data: dict):
+    """
+    Bi-directional n8n Orchestration (Phase 322).
+    Acts as an intelligent decision node for external workflows.
+    """
+    global fleet_instance
+    if not fleet_instance:
+        return JSONResponse(status_code=503, content={"error": "Fleet not initialized"})
+
+    prompt = data.get("prompt", "")
+    payload = data.get("data", {}) # Data for the agent to process
+
+    # Combine data into prompt if present
+    full_command = prompt
+    if payload:
+        full_command += f"\n\nData Context:\n{json.dumps(payload, indent=2)}"
+
+    try:
+        logger.info(f"n8n: Received automation request: {prompt[:50]}")
+        result = await fleet_instance.handle_user_command(full_command)
+        
+        return {
+            "status": "success",
+            "output": result.get("result", ""),
+            "metadata": {
+                "agent": result.get("agent"),
+                "timestamp": time.time()
+            }
+        }
+    except Exception as e:
+        logger.error(f"n8n: Execution error: {e}")
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+# --- Swarm Observability (Pillar 9) ---
+
+@app.get("/api/observability/traces")
+async def get_swarm_traces():
+    """
+    Returns the Global Trace Synthesis for the swarm (Pillar 9).
+    Shows task lineage across the entire constellation.
+    """
+    trace_path = WORKSPACE_ROOT / "data" / "logs" / "reasoning_chains.jsonl"
+    if not trace_path.exists():
+        return {"traces": []}
+    
+    traces = []
+    try:
+        with open(trace_path, "r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    traces.append(json.loads(line))
+        
+        # Limit to last 50 traces for visualization performance
+        return {"traces": traces[-50:]}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+@app.get("/api/observability/topology")
+async def get_topology():
+    """
+    Pillar 8: Real-Time Topology Mapper.
+    Returns 3D (2D projected) node locations and data 'teleportation' routes.
+    """
+    topo_path = WORKSPACE_ROOT / "data" / "logs" / "topology.json"
+    if not topo_path.exists():
+        return {"nodes": [], "edges": []}
+    
+    with open(topo_path, "r") as f:
+        return json.load(f)
+
 
 # 2. ROOT ROUTE
 @app.get("/")

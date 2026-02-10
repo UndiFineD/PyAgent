@@ -53,8 +53,11 @@ class DiffCore(BaseCore):
         actual_new = new_text
         actual_path = file_path
 
-        if (isinstance(old_text, (Path, str)) and isinstance(new_text, str) and
-            (file_path is None or isinstance(file_path, str))):
+        if (
+            isinstance(old_text, (Path, str))
+            and isinstance(new_text, str)
+            and (file_path is None or isinstance(file_path, str))
+        ):
             # Check if old_text looks like a path and new_text looks like content
             if isinstance(old_text, Path) or (isinstance(old_text, str) and ("/" in old_text or "\\" in old_text)):
                 # If we have 3 args and first is path, 2nd is old, 3rd is new

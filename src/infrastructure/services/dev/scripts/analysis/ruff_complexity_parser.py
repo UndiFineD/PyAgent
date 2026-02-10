@@ -1,8 +1,3 @@
-
-"""
-Ruff Complexity Parser: Parses Ruff JSON output to extract and rank cyclomatic complexity violations.
-Ported from temp/check_complexity.py for re-use in the PyAgent analysis suite.
-"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +11,12 @@ Ported from temp/check_complexity.py for re-use in the PyAgent analysis suite.
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+"""
+Ruff Complexity Parser: 
+Parses Ruff JSON output to extract and rank cyclomatic complexity violations.
+Ported from temp/check_complexity.py for re-use in the PyAgent analysis suite.
+"""
 
 import argparse
 import json

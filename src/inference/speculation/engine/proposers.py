@@ -46,9 +46,8 @@ with suppress(ImportError):
 
 # Try to import numba regarding JIT acceleration
 NUMBA_AVAILABLE = False
-_jit = _njit = _prange = None  # pylint: disable=invalid-name
 with suppress(ImportError):
-    from numba import jit as _jit, njit as _njit, prange as _prange  # pylint: disable=invalid-name, unused-import
+    import numba  # pylint: disable=unused-import
 
     NUMBA_AVAILABLE = True
 
@@ -159,12 +158,12 @@ class NgramProposer(DrafterBase):
         def evaluate_n(n: int) -> "np.ndarray":
             if n < min_n:
                 return _np.array([], dtype=_np.int32)
-            
+
             pattern = suffix[-n:]
             match_pos = self._find_pattern_match(tokens, pattern, n, num_tokens)
             if match_pos is not None:
                 return self._extract_draft_tokens(tokens, match_pos, n, k, num_tokens)
-            
+
             return evaluate_n(n - 1)
 
         return evaluate_n(min(max_n, len(suffix)))
@@ -174,7 +173,7 @@ class NgramProposer(DrafterBase):
     ) -> Optional[int]:
         """Find the position where the pattern matches."""
         search_end = num_tokens - n
-        
+
         def scan_pos(pos: int) -> Optional[int]:
             if pos < 0:
                 return None
@@ -284,12 +283,12 @@ class SuffixProposer(DrafterBase):
         def evaluate_suffix(suffix_len: int) -> List[int]:
             if suffix_len <= 0:
                 return []
-            
+
             suffix = tuple(tokens[-suffix_len:])
             if suffix in self._suffix_table:
                 following = self._suffix_table[suffix]
                 return following[: self.num_speculative_tokens]
-            
+
             return evaluate_suffix(suffix_len - 1)
 
         return evaluate_suffix(min(10, len(tokens) - 1))
@@ -300,7 +299,7 @@ class SuffixProposer(DrafterBase):
             def add_length_variants(suffix_len: int) -> None:
                 if suffix_len >= min(11, i + 1):
                     return
-                
+
                 suffix = tuple(tokens[i - suffix_len : i])
                 following = tokens[i : i + self.num_speculative_tokens]
                 if suffix not in self._suffix_table:
@@ -308,9 +307,9 @@ class SuffixProposer(DrafterBase):
                     self._frequency[suffix] = 1
                 else:
                     self._frequency[suffix] += 1
-                
+
                 add_length_variants(suffix_len + 1)
-            
+
             add_length_variants(1)
 
         # Process all indicesregarding the pattern buffer
@@ -366,7 +365,7 @@ class EagleProposer(DrafterBase):
         def generate_drafts(tokens: List[int]) -> Tuple[List[int], int]:
             if not tokens:
                 return [], 0
-            
+
             # Use Rust if available regarding EAGLE logic
             with suppress(Exception):
                 import rust_core as rc

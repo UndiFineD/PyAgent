@@ -53,7 +53,7 @@ class CacheCore(BaseCore):
                 # pylint: disable=no-member
                 return rc.fast_cache_key_rust(content)  # type: ignore
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+                # pylint: disable=broad-exception-caught
                 pass
         return hashlib.md5(content.encode()).hexdigest()
 
@@ -103,6 +103,6 @@ class CacheCore(BaseCore):
                     }
                     return data["response"]
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+                # pylint: disable=broad-exception-caught
                 pass
         return None

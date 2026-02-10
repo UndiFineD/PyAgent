@@ -27,6 +27,7 @@ from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
+
 class MemoryConsolidationCore:
     """
     Core engine for consolidating agent memories.
@@ -87,7 +88,11 @@ class MemoryConsolidationCore:
 
         return min(1.0, max(0.0, relevance))
 
-    def discover_creative_associations(self, memories: List[Dict[str, Any]], similarity_threshold: float = 0.85) -> List[Dict[str, Any]]:
+    def discover_creative_associations(
+        self,
+        memories: List[Dict[str, Any]],
+        similarity_threshold: float = 0.85
+    ) -> List[Dict[str, Any]]:
         """
         Identify potential relationships (associations) between existing memories.
         Ported from automem-ai-memory.
@@ -99,17 +104,17 @@ class MemoryConsolidationCore:
             for j, mem2 in enumerate(memories):
                 if i >= j:
                     continue
-                
+
                 # Assume embeddings are provided in the dict
                 sim = self._calculate_similarity(mem1.get("embedding"), mem2.get("embedding"))
-                
+
                 if sim > similarity_threshold:
                     assoc_type = "SHARES_THEME"
                     if mem1.get("type") == mem2.get("type") and sim > 0.95:
                         assoc_type = "DUPLICATE_CANDIDATE"
                     elif "contradict" in mem1.get("content", "").lower() or "contradict" in mem2.get("content", "").lower():
                         assoc_type = "CONTRADICTS"
-                    
+
                     associations.append({
                         "source": mem1["id"],
                         "target": mem2["id"],
@@ -122,11 +127,11 @@ class MemoryConsolidationCore:
         """Simple cosine similarity for internal association discovery."""
         if not vec1 or not vec2 or len(vec1) != len(vec2):
             return 0.0
-        
+
         dot = sum(a * b for a, b in zip(vec1, vec2))
         norm1 = math.sqrt(sum(a * a for a in vec1))
         norm2 = math.sqrt(sum(b * b for b in vec2))
-        
+
         if norm1 == 0 or norm2 == 0:
             return 0.0
         return dot / (norm1 * norm2)
@@ -143,16 +148,16 @@ class MemoryConsolidationCore:
         """
         if is_manually_protected:
             return True
-        
+
         if importance >= self.importance_protection_threshold:
             return True
-            
+
         if age_days < self.grace_period_days:
             return True
-            
+
         if memory_type in self.protected_types:
             return True
-            
+
         return False
 
     async def cluster_memories(self, memories: List[Dict[str, Any]]) -> List[List[str]]:

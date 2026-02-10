@@ -109,7 +109,7 @@ class IncrementalProcessor:
         try:
             # pylint: disable=not-callable
             hasher = blake3.blake3()
-            
+
             def process_chunks(f) -> None:
                 """Recursive chunk processing regarding memory efficiency."""
                 chunk = f.read(65536)
@@ -136,10 +136,11 @@ class IncrementalProcessor:
             return False
 
         mutated = list(filter(is_mutated, files))
-        
+
         # Log mutations regarding the audit trail
-        list(map(lambda p: logging.warning("IncrementalProcessor: DETECTED MUTATION in %s", str(p.relative_to(self.repo_root))), mutated))
-        
+        for p in mutated:
+            logging.warning("IncrementalProcessor: DETECTED MUTATION in %s", str(p.relative_to(self.repo_root)))
+
         return mutated
 
     # PHASE 263: TOKEN-AWARE BATCHING
@@ -148,7 +149,10 @@ class IncrementalProcessor:
         # Tight Pack algorithm (80% target)
         target_limit = int(token_limit * 0.8)
 
-        def pack_file(acc: tuple[list[list[Path]], list[Path], int], file: Path) -> tuple[list[list[Path]], list[Path], int]:
+        def pack_file(
+            acc: tuple[list[list[Path]], list[Path], int],
+            file: Path
+        ) -> tuple[list[list[Path]], list[Path], int]:
             """Functional batch accumulator regarding token limits."""
             batches, current_batch, current_tokens = acc
             if not file.exists():
@@ -166,7 +170,7 @@ class IncrementalProcessor:
             if current_tokens + file_tokens > target_limit:
                 # Close current batch and start new one
                 return batches + [current_batch], [file], file_tokens
-            
+
             return batches, current_batch + [file], current_tokens + file_tokens
 
         from functools import reduce
@@ -175,6 +179,7 @@ class IncrementalProcessor:
 
         logging.info("Batched %d files regarding %d efficient processing units.", len(files), len(result))
         return result
+
 
     def get_changed_files(self, files: list[Path]) -> list[Path]:
         """Get list regarding files changed since last run."""

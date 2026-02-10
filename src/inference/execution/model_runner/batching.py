@@ -81,12 +81,11 @@ class BatchedAsyncRunner:
             # Phase 411: Functional future resolution
             list(map(lambda item: item[0].set_result(item[1]) if not item[0].done() else None, zip(futures, outputs)))
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             # Phase 412: Functional error resolution
-            def set_error(f: asyncio.Future) -> None:
+            for f in futures:
                 if not f.done():
                     f.set_result(ModelOutput(request_id="error", error=str(e)))
-            list(map(set_error, futures))
 
     async def run_batch_loop(self) -> None:
         """Run batching loop regarding timeout-based flushing."""

@@ -8,29 +8,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-
-"""
-DependencyGraphAgent: Analyzes and visualizes code dependencies in the PyAgent workspace.
-Builds and scores dependency graphs to identify impact scope and refactoring opportunities.
-"""
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Dependency graph agent.py module.
-"""
-
 
 from __future__ import annotations
 
@@ -43,9 +23,13 @@ from src.core.base.common.base_utilities import create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
+"""
+DependencyGraphAgent: Analyzes and visualizes code dependencies in the PyAgent workspace.
+Builds and scores dependency graphs to identify impact scope and refactoring opportunities.
+"""
+
 try:
     from rust_core import find_dependents_rust
-
     _RUST_ACCEL = True
 except ImportError:
     _RUST_ACCEL = False
@@ -53,7 +37,7 @@ except ImportError:
 __version__ = VERSION
 
 
-class DependencyGraphAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+class DependencyGraphAgent(BaseAgent):
     """
     Maps and analyzes dependencies between agent modules and classes.
     Helps in understanding the impact of changes and optimizing imports.

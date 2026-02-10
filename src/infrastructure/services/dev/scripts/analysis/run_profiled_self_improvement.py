@@ -100,9 +100,7 @@ try:
             original = getattr(_original_rc, name)
 
             if callable(original):
-
                 @functools.wraps(original)
-
                 def profiled_func(*args, **kwargs):
                     start_time_ns = time.perf_counter_ns()
                     try:

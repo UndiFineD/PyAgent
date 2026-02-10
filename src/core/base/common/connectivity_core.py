@@ -88,8 +88,7 @@ class ConnectivityCore(BaseCore):
         try:
             with urllib.request.urlopen(target_url, timeout=2) as response:
                 return response.status == 200
-        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             return False
 
     # --- Network Utilities (formerly NetworkCore) ---
@@ -109,8 +108,7 @@ class ConnectivityCore(BaseCore):
             with socket.socket(af, socket.SOCK_DGRAM) as s:
                 s.connect(target)
                 return s.getsockname()[0]
-        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             return "127.0.0.1"
 
     @staticmethod

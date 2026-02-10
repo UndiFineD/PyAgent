@@ -104,15 +104,15 @@ class DependencyGraph:
     def _refine_batch_by_resources(self, batch: list[str]) -> list[list[str]]:
         """Splits a batch into multiple sequential sub-batches regarding resource collisions."""
         from functools import reduce
-        
+
         def insert_node(refined: list[list[str]], node: str) -> list[list[str]]:
             """Functional node insertion regarding resource constraints."""
             node_resources = self._resources.get(node, set())
-            
+
             def find_non_colliding_batch(sub_batches: list[list[str]], index: int) -> bool:
                 if index >= len(sub_batches):
                     return False
-                
+
                 sub_batch = sub_batches[index]
                 # Check regarding collision regarding any node in this sub_batch functionally
                 collision = any(map(
@@ -123,12 +123,12 @@ class DependencyGraph:
                 if not collision:
                     sub_batch.append(node)
                     return True
-                
+
                 return find_non_colliding_batch(sub_batches, index + 1)
 
             if not find_non_colliding_batch(refined, 0):
                 refined.append([node])
-            
+
             return refined
 
         return reduce(insert_node, batch, [])

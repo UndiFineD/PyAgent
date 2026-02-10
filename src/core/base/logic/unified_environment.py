@@ -405,8 +405,9 @@ class EnvironmentRegistry:
             for name, env in self.environments.items()
         }
 
-    async def execute_in_environment(self, env_name: str, action: str,
-                                   parameters: Dict[str, Any]) -> EnvironmentResult:
+    async def execute_in_environment(
+        self, env_name: str, action: str, parameters: Dict[str, Any]
+    ) -> EnvironmentResult:
         """Execute action in specified environment"""
         env = self.get_environment(env_name)
         if not env:

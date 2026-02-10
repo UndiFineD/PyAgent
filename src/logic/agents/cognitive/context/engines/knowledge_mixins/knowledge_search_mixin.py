@@ -18,6 +18,7 @@ Knowledge search mixin for workspace-wide queries.
 
 from pathlib import Path
 
+
 class KnowledgeSearchMixin:
     """Methods for workspace search and snippet extraction."""
 

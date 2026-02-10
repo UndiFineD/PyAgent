@@ -392,7 +392,7 @@ class Guardrail:
             # Extract parameters - try kwargs first, then positional args
             input_content = kwargs.get(input_param)
             user_id = kwargs.get(user_id_param) if user_id_param else None
-            
+
             # If input_content not in kwargs, check positional args
             if input_content is None and input_param in func.__code__.co_varnames:
                 param_index = func.__code__.co_varnames.index(input_param)

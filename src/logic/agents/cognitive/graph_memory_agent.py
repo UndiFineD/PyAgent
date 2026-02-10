@@ -18,7 +18,7 @@ Supports FalkorDB-style triple storage (Subject-Predicate-Object).
 """
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent

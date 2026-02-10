@@ -242,9 +242,12 @@ class SubdomainPermutationCore(BaseCore):
 
         return payloads
 
-    def _generate_domain_permutations(self, input_data: Dict[str, Any],
-                                    patterns: List[str],
-                                    payloads: Dict[str, List[str]]) -> Set[str]:
+    def _generate_domain_permutations(
+        self,
+        input_data: Dict[str, Any],
+        patterns: List[str],
+        payloads: Dict[str, List[str]]
+    ) -> Set[str]:
         """Generate permutations for a single domain input."""
         permutations = set()
 

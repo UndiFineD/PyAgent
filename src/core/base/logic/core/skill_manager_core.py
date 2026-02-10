@@ -17,6 +17,7 @@ import os
 import asyncio
 from typing import Dict, Any, List, Optional
 
+
 class SkillManagerCore:
     """
     Manages the dynamic discovery and registration of agent skills (MCP tools).
@@ -31,7 +32,7 @@ class SkillManagerCore:
         discovered = []
         if not os.path.exists(self.skills_dir):
             return discovered
-            
+
         for root, _, files in os.walk(self.skills_dir):
             if "mcp.json" in files:
                 manifest_path = os.path.join(root, "mcp.json")
@@ -68,7 +69,7 @@ class SkillManagerCore:
                 stderr=asyncio.subprocess.PIPE
             )
             stdout, stderr = await process.communicate()
-            
+
             if process.returncode == 0:
                 print(f"Successfully installed {tool_name}")
                 return True
@@ -84,15 +85,15 @@ class SkillManagerCore:
         manifest = self.get_skill_manifest(skill_name)
         if not manifest:
             return False
-            
+
         install_info = manifest.get("install")
         if not install_info:
             return True # Nothing to install
-            
+
         cmd = install_info.get("command")
         check_binary = install_info.get("check_binary", skill_name)
-        
+
         if not cmd:
             return True
-            
+
         return await self.ensure_tool_installed(check_binary, cmd)

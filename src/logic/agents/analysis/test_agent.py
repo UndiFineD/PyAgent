@@ -52,7 +52,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         """
         if ShardCore().verify_integrity():
             return True
-            
+
         msg = "Shard integrity check failed."
         if not bypass:
             logging.critical(f"{msg} Aborting operation. Use bypass=True to ignore.")
@@ -78,15 +78,15 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def run_tests(self, path: str = "tests", force: bool = False, bypass_shard_validation: bool = False) -> str:
         """Executes pytest on the specified directory."""
-        
+
         # Merge force and bypass flags
         should_bypass = force or bypass_shard_validation
 
         # Phase 336: Pattern 3 - TestAgent-Shard Coupling Mitigation
         # Verify shard integrity before running tests to prevent deadlocks
         if not self.shard_integrity_check(bypass=should_bypass):
-             msg = "Shard integrity check failed."
-             return f"❌ **system_error**: {msg} (Use force=True or bypass_shard_validation=True to bypass)"
+            msg = "Shard integrity check failed."
+            return f"❌ **system_error**: {msg} (Use force=True or bypass_shard_validation=True to bypass)"
 
         logging.info(f"TestAgent running tests in: {path}")
         try:
@@ -103,10 +103,10 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 provider="Shell",
                 model="pytest",
             )
-            
+
             # Phase 336: Validation failure capture
             if result.returncode != 0 and hasattr(self, "context") and self.context:
-                 self.context.log_failure(
+                self.context.log_failure(
                     stage="test_execution_fail",
                     error=f"Tests failed in {path}",
                     details={
@@ -115,7 +115,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                         "stderr_tail": result.stderr[-500:] if result.stderr else "",
                     },
                     failure_type=FailureClassification.TEST_INFRASTRUCTURE.value
-                 )
+                )
 
             report = ["## 🧪 Test Execution Report\n"]
             if result.returncode == 0:
@@ -133,7 +133,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
             # Phase 275: Log failure to context lineage if available
             if hasattr(self, "context") and self.context:
-                
+
                 # Heuristic classification of OS errors
                 f_type = FailureClassification.TEST_INFRASTRUCTURE.value
                 str_e = str(e).lower()

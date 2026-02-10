@@ -15,17 +15,19 @@
 from typing import List, Dict, Any
 from pydantic import BaseModel
 
+
 class MemoryItem(BaseModel):
     id: str
     content: str
     metadata: Dict[str, Any] = {}
+
 
 class MetacognitiveMemoryCore:
     """
     Core logic for agents to manage their own session memory using tool calls.
     Harvested from .external/agno
     """
-    
+
     def __init__(self, agent_id: str):
         self.agent_id = agent_id
         self.memories: Dict[str, MemoryItem] = {}
@@ -36,8 +38,8 @@ class MetacognitiveMemoryCore:
         self.counter += 1
         m_id = f"mem_{self.counter}_{self.agent_id}"
         self.memories[m_id] = MemoryItem(
-            id=m_id, 
-            content=content, 
+            id=m_id,
+            content=content,
             metadata={"importance": importance, "created_at": "now"}
         )
         return f"Memory stored as {m_id}"

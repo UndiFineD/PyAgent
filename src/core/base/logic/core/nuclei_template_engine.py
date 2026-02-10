@@ -20,6 +20,7 @@ Implements YAML-based vulnerability detection templates with DSL matchers.
 """
 
 import logging
+import asyncio
 import yaml
 import re
 from typing import Dict, List, Optional, Any
@@ -278,21 +279,28 @@ class NucleiTemplateEngine:
         else:
             return f"{base_url}/{path}"
 
-    async def _make_http_request(self, url: str, method: str = 'GET',
-                                headers: Optional[Dict[str, str]] = None,
-                                body: Optional[str] = None,
-                                timeout: int = 10) -> Optional[requests.Response]:
+    async def _make_http_request(
+        self,
+        url: str,
+        method: str = 'GET',
+        headers: Optional[Dict[str, str]] = None,
+        body: Optional[str] = None,
+        timeout: int = 10
+    ) -> Optional[requests.Response]:
         """Make HTTP request with timeout."""
         try:
-            # In a real implementation, this would use aiohttp for async HTTP
-            # For now, using requests (synchronous) - would need to be replaced with aiohttp
-            response = requests.request(
-                method=method,
-                url=url,
-                headers=headers,
-                data=body,
-                timeout=timeout,
-                allow_redirects=False  # Don't follow redirects for security testing
+            loop = asyncio.get_event_loop()
+            # Wrap synchronous requests.request in run_in_executor
+            response = await loop.run_in_executor(
+                None,
+                lambda: requests.request(
+                    method=method,
+                    url=url,
+                    headers=headers,
+                    data=body,
+                    timeout=timeout,
+                    allow_redirects=False
+                )
             )
             return response
         except Exception as e:

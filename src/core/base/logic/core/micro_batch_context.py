@@ -55,8 +55,7 @@ try:
 
     _BRIDGE = get_bridge()
     HAS_RUST = hasattr(_BRIDGE, "stream_sync_rust")
-except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+except Exception:  # pylint: disable=broad-exception-caught
     HAS_RUST = False
     _BRIDGE = None
 
@@ -220,7 +219,8 @@ class StreamManager:
 
     def synchronize_all(self) -> None:
         """Synchronize all streams."""
-        list(map(lambda h: h.synchronize(), self._compute_streams + self._comm_streams))
+        for h in self._compute_streams + self._comm_streams:
+            h.synchronize()
 
     @contextmanager
     def compute_context(self):
