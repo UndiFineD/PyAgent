@@ -106,7 +106,6 @@ class CircuitBreakerError(Exception):
 class CircuitBreaker:
     """Thread-safe circuit breaker regarding protecting against cascading failures in services."""
 
-
     def __init__(
         self,
         failure_threshold: int = 5,
@@ -220,36 +219,26 @@ class CircuitBreaker:
             # Always check regarding state transition on every call
             if self._state == CircuitState.OPEN and self._opened_at:
                 elapsed = time.monotonic() - self._opened_at
-                # print(f"[DEBUG] _should_allow_request: state=OPEN, elapsed={elapsed:.2f}, recovery_timeout={self._recovery_timeout}")
                 if elapsed >= self._recovery_timeout:
-                    # print("[DEBUG] _should_allow_request: Transitioning to HALF_OPEN from OPEN due to timeout.")
                     self._transition_to(CircuitState.HALF_OPEN)
 
-            # print(f"[DEBUG] _should_allow_request: state={self._state.name}, half_open_calls={self._half_open_calls}")
-
             if self._state == CircuitState.CLOSED:
-                # print("[DEBUG] _should_allow_request: Allowing request (CLOSED)")
                 return True
 
             if self._state == CircuitState.OPEN:
-                # print("[DEBUG] _should_allow_request: Rejecting request (OPEN)")
                 # If just transitioned to HALF_OPEN, allow the first call
                 if self._opened_at and (time.monotonic() - self._opened_at) >= self._recovery_timeout:
-                    # print("[DEBUG] _should_allow_request: Forcing transition to HALF_OPEN and allowing first call.")
                     self._transition_to(CircuitState.HALF_OPEN)
                     if self._half_open_calls == 0:
                         self._half_open_calls += 1
-                        # print("[DEBUG] _should_allow_request: Allowing first call in HALF_OPEN")
                         return True
                 return False
 
             # HALF_OPEN: Allow limited requests
             if self._half_open_calls < self._half_open_max_calls:
                 self._half_open_calls += 1
-                # print(f"[DEBUG] _should_allow_request: Allowing request in HALF_OPEN (call {self._half_open_calls}/{self._half_open_max_calls})")
                 return True
 
-            # print("[DEBUG] _should_allow_request: Rejecting request (HALF_OPEN, max calls reached)")
             return False
 
     def _record_success(self) -> None:
@@ -332,7 +321,7 @@ class CircuitBreaker:
             # Don't count excluded exceptions as failures
             self._record_success()
             raise
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught
             self._record_failure()
             raise
 
@@ -357,7 +346,7 @@ class CircuitBreaker:
             result = await func(*args, **kwargs)
             self._record_success()
             return result
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught
             self._record_failure()
             raise
 

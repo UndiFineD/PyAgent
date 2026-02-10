@@ -56,7 +56,10 @@ class OllamaBackend(LLMBackend):
                 messages=messages,
             )
             print(f"[OllamaBackend] Ollama raw response: {response}")
-            content = response.message.content if hasattr(response, "message") and hasattr(response.message, "content") else str(response)
+            if hasattr(response, "message") and hasattr(response.message, "content"):
+                content = response.message.content
+            else:
+                content = str(response)
             latency = time.time() - start_t
             print(f"[OllamaBackend] Ollama content: {content}")
             self._record("ollama", model, prompt, content, system_prompt=system_prompt, latency_s=latency)

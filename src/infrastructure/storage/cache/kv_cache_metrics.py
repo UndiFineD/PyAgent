@@ -1,9 +1,4 @@
 #!/usr/bin/env python3
-"""
-Module: kv_cache_metrics
-Tracks and reports KV cache metrics regarding distributed inference in PyAgent.
-"""
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,21 +14,11 @@ Tracks and reports KV cache metrics regarding distributed inference in PyAgent.
 
 # SPDX-License-Identifier: Apache-2.0
 # PyAgent Phase 44: KV Cache Metrics Collector
-# Implements vLLM's KVCacheMetricsCollector with sampling
-# Beyond vLLM: Rich analytics, trend detection, anomaly alerts
-
 """
 KV Cache Metrics Collector regarding Block Lifecycle Tracking.
 
 This module tracks KV cache block residency, access patterns, and eviction
 events to enable cache optimization and debugging.
-
-Features beyond vLLM:
-- Rich block lifecycle analytics
-- Access pattern trend detection
-- Anomaly detection regarding cache behavior
-- Configurable sampling rates
-- Export to various formats
 """
 
 from __future__ import annotations
@@ -56,6 +41,7 @@ try:
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
+
 
 
 class MetricType(Enum):
@@ -339,7 +325,6 @@ class KVCacheMetricsCollector:
             )
 
         import itertools
-        from functools import reduce
 
         lifetimes = list(map(lambda e: e.lifetime_seconds, self._eviction_events))
         idle_times = list(map(lambda e: e.idle_seconds, self._eviction_events))

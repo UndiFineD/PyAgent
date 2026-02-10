@@ -1,7 +1,3 @@
-"""
-Tools service package for PyAgent.
-Contains modules for tool management, parsing, and registry.
-"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +12,10 @@ Contains modules for tool management, parsing, and registry.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Copyright (c) 2026 PyAgent Authors. All rights reserved.
-# Phase 41: Tool Parser Framework Package
-
 """
+Tools service package for PyAgent.
+Contains modules for tool management, parsing, and registry.
+
 Tool/function call parsing framework with model-specific parsers.
 
 Exports:
@@ -35,6 +31,8 @@ Structure:
     - validator/  - Schema validation logic
     - registry/   - Parser registry and streaming parser
 """
+
+# Phase 41: Tool Parser Framework Package
 
 # Import from split modules (preferred)
 from .parser import (  # Enums; Data Classes; Protocols/Base; Parsers; Utilities  # noqa: F401

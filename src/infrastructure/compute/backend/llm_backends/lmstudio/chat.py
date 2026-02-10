@@ -19,8 +19,8 @@ LM Studio chat completion handler.
 """
 
 import logging
-import time
-from typing import TYPE_CHECKING, Any, Callable, Optional
+
+from typing import TYPE_CHECKING, Any, Optional
 
 from .api import LMStudioAPIClient
 
@@ -35,7 +35,7 @@ class ChatHandler:
 
     def __init__(self, api_client: LMStudioAPIClient):
         """Initialize chat handler.
-        
+
         Args:
             api_client: LMStudioAPIClient instance for HTTP fallback.
         """
@@ -43,19 +43,19 @@ class ChatHandler:
 
     def _build_prediction_config(self, sdk_available: bool, **kwargs) -> Optional[Any]:
         """Build prediction config from kwargs.
-        
+
         Args:
             sdk_available: Whether LM Studio SDK is available.
             **kwargs: Configuration parameters.
-        
+
         Returns:
             LmPredictionConfig if SDK available, None otherwise.
         """
         if not sdk_available:
             return None
-        
+
         import lmstudio
-        
+
         return lmstudio.LlmPredictionConfig(
             temperature=kwargs.get("temperature", 0.7),
             max_tokens=kwargs.get("max_tokens", 2048),
@@ -65,10 +65,10 @@ class ChatHandler:
 
     def _extract_chat_from_lmstudio(self, system_prompt: str) -> "lmstudio.Chat":
         """Create an LM Studio Chat object.
-        
+
         Args:
             system_prompt: System prompt/context.
-        
+
         Returns:
             lmstudio.Chat instance.
         """
@@ -83,18 +83,16 @@ class ChatHandler:
         **kwargs,
     ) -> str:
         """Execute chat via LM Studio SDK.
-        
+
         Args:
             llm: LM Studio LLM model handle.
             prompt: User prompt/message.
             system_prompt: System prompt/context.
             **kwargs: Additional configuration parameters.
-        
+
         Returns:
             Chat response text.
         """
-        import lmstudio
-        
         chat = self._extract_chat_from_lmstudio(system_prompt)
         chat.add_user_message(prompt)
         config = self._build_prediction_config(sdk_available=True, **kwargs)
@@ -109,18 +107,16 @@ class ChatHandler:
         **kwargs,
     ) -> str:
         """Execute chat via HTTP REST API fallback.
-        
+
         Args:
             prompt: User prompt/message.
             model: Model identifier.
             system_prompt: System prompt/context.
             **kwargs: Additional configuration parameters.
-        
+
         Returns:
             Chat response text.
         """
-        import httpx
-        
         try:
             url = self.api_client._normalize_url("chat")
             payload = {
@@ -137,18 +133,18 @@ class ChatHandler:
                 payload["max_tokens"] = kwargs["max_output_tokens"]
             elif "max_tokens" in kwargs:
                 payload["max_tokens"] = kwargs["max_tokens"]
-                
+
             for k in ("temperature", "top_p"):
                 if k in kwargs:
                     payload[k] = kwargs[k]
-            
+
             logger.info(f"[LMStudio] HTTP fallback chat: POST {url} | model={payload['model']}")
             resp = self.api_client._http_request_with_retry(
                 "POST", url, max_retries=2, json=payload, timeout=600.0
             )
             logger.info(f"[LMStudio] HTTP fallback chat response: {resp.status_code}")
             resp.raise_for_status()
-            
+
             data = resp.json()
             # Extract standard OpenAI choices[0].message.content
             choices = data.get("choices")
@@ -166,15 +162,15 @@ class ChatHandler:
                     text = "\n".join(messages)
                 else:
                     text = str(output) if output else ""
-            
+
             if text:
                 logger.info(f"[LMStudio] HTTP fallback chat succeeded: {len(text)} chars")
                 return text
-            
-            logger.warning(f"[LMStudio] HTTP fallback chat: no message content found in response choices or output")
+
+            logger.warning("[LMStudio] HTTP fallback chat: no message content found in response choices or output")
         except Exception as e:
             logger.error(f"[LMStudio] HTTP fallback chat failed: {e}")
-        
+
         return ""
 
     def chat(
@@ -187,7 +183,7 @@ class ChatHandler:
         **kwargs,
     ) -> str:
         """Execute chat completion with SDK-first and HTTP fallback.
-        
+
         Args:
             llm: LM Studio LLM model handle (from SDK).
             prompt: User prompt/message.
@@ -195,7 +191,7 @@ class ChatHandler:
             system_prompt: System prompt/context.
             sdk_available: Whether LM Studio SDK is available.
             **kwargs: Additional configuration parameters.
-        
+
         Returns:
             Chat response text.
         """
@@ -205,6 +201,6 @@ class ChatHandler:
                 return self._sdk_chat(llm, prompt, system_prompt, **kwargs)
             except Exception as e:
                 logger.warning(f"LM Studio SDK chat failed: {e}; will try HTTP fallback.")
-        
+
         # HTTP fallback
         return self._http_fallback_chat(prompt, model, system_prompt, **kwargs)

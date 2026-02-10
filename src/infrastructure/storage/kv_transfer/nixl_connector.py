@@ -1,8 +1,3 @@
-"""
-Module: nixl_connector
-Connector for Nixl distributed KV storage in PyAgent.
-"""
-
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,16 +13,12 @@ Connector for Nixl distributed KV storage in PyAgent.
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-
 """
 NIXL High-Performance KV Transfer Connector.
 
 NIXL (Network Interconnect for X-Large models) provides a low-latency, high-bandwidth
 transport layer for KV cache blocks between disaggregated prefill and decode instances.
 It utilizes RDMA techniques and peer-to-peer memory copies to minimize CPU overhead.
-
-Inspired by vLLM's NixlConnector and advanced distributed communication patterns.
 """
 
 from __future__ import annotations
@@ -53,6 +44,7 @@ from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
 if TYPE_CHECKING:
     from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
         ForwardContext
+
 
 logger = logging.getLogger(__name__)
 
@@ -193,7 +185,7 @@ class NixlConnector(KVConnectorBase):
                         self.active_transfers.remove(tx_id)
                         finished_ids.append(tx_id)
             return finished_ids
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught
             return []
 
     # ==============================

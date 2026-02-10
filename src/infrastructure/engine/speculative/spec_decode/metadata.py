@@ -147,16 +147,25 @@ class TreeVerificationMetadata:
 
     @classmethod
     def from_tree(
-        cls: type[TreeVerificationMetadata], tree_tokens: list[list[int]], tree_parents: list[list[int]]
+        cls: type[TreeVerificationMetadata],
+        tree_tokens: list[list[int]],
+        tree_parents: list[list[int]],
     ) -> TreeVerificationMetadata:
         """Construct verification metadata from tree paths and parent pointers."""
-        def flatten_next(acc: tuple[list[int], list[int], list[int], list[int], list[int], int], item: tuple[list[int], list[int]]) -> tuple[list[int], list[int], list[int], list[int], list[int], int]:
+
+        def flatten_next(
+            acc: tuple[list[int], list[int], list[int], list[int], list[int], int],
+            item: tuple[list[int], list[int]],
+        ) -> tuple[list[int], list[int], list[int], list[int], list[int], int]:
             ft, fp, fd, pl, ps, cp = acc
             pt, pp = item
             new_ps = ps + [cp]
             new_pl = pl + [len(pt)]
 
-            def add_token(inner_acc: tuple[list[int], list[int], list[int]], inner_item: tuple[int, int, int]) -> tuple[list[int], list[int], list[int]]:
+            def add_token(
+                inner_acc: tuple[list[int], list[int], list[int]],
+                inner_item: tuple[int, int, int],
+            ) -> tuple[list[int], list[int], list[int]]:
                 t, p, d = inner_acc
                 tn, pn, dn = inner_item
                 return (t + [tn], p + [pn], d + [dn])

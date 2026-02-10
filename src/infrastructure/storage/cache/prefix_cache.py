@@ -294,14 +294,23 @@ class PrefixCacheManager:
         candidate_id: int | None = None
 
         if policy == EvictionPolicy.LRU:
-            candidate_id = next(filter(lambda bid: self._blocks.get(bid) and self._blocks[bid].is_freeable, self._access_order), None)
+            def is_freeable(bid: int) -> bool:
+                b = self._blocks.get(bid)
+                return b is not None and b.is_freeable
+            candidate_id = next(filter(is_freeable, self._access_order), None)
 
         elif policy == EvictionPolicy.LFU:
-            freeable_items = list(filter(lambda item: self._blocks.get(item[0]) and self._blocks[item[0]].is_freeable, self._frequency.items()))
+            def is_item_freeable(item: tuple[int, int]) -> bool:
+                b = self._blocks.get(item[0])
+                return b is not None and b.is_freeable
+            freeable_items = list(filter(is_item_freeable, self._frequency.items()))
             candidate_id = min(freeable_items, key=lambda x: x[1])[0] if freeable_items else None
 
         elif policy == EvictionPolicy.FIFO:
-            candidate_id = next(filter(lambda bid: self._blocks.get(bid) and self._blocks[bid].is_freeable, self._access_order.keys()), None)
+            def is_fifo_freeable(bid: int) -> bool:
+                b = self._blocks.get(bid)
+                return b is not None and b.is_freeable
+            candidate_id = next(filter(is_fifo_freeable, self._access_order.keys()), None)
 
         else:  # ARC or default
             candidate_id = self._arc_evict()

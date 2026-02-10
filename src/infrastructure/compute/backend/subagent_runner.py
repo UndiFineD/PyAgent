@@ -286,7 +286,6 @@ class SubagentRunner:
         """Proxy to LLMClient."""
         return self.llm_client.llm_chat_via_copilot_cli(*args, **kwargs)
 
-
     def get_backend_status(self) -> dict[str, Any]:
         """Return diagnostic snapshot of backend availability."""
         return self._status_manager.get_backend_status()

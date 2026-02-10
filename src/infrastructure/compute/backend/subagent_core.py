@@ -44,7 +44,10 @@ class SubagentCore:
         use_cache = os.environ.get("DV_AGENT_CACHE", "true").lower() == "true"
 
         cache_model = backend_env if backend_env != "auto" else "subagent_auto"
-        cache_key = self.runner._get_cache_key(f"{description}:{prompt}:{original_content}", cache_model)  # pylint: disable=protected-access
+        # pylint: disable=protected-access
+        cache_key = self.runner._get_cache_key(
+            f"{description}:{prompt}:{original_content}", cache_model
+        )
 
         if use_cache:
             if cache_key in self.runner._response_cache:  # pylint: disable=protected-access
@@ -88,7 +91,8 @@ class SubagentCore:
         def _try_gh_copilot(allow_non_command: bool) -> str | None:
             if not self.runner._command_available("gh"):  # pylint: disable=protected-access
                 return None
-            if not allow_non_command and not self.runner._looks_like_command(original_prompt):  # pylint: disable=protected-access
+            # pylint: disable=protected-access
+            if not allow_non_command and not self.runner._looks_like_command(original_prompt):
                 return None
             return BackendHandlers.try_gh_copilot(full_prompt, repo_root, allow_non_command)
 
@@ -126,7 +130,9 @@ class SubagentCore:
             "ollama": _try_ollama,
             "lmstudio": _try_lmstudio,
             "neural": _try_neural,
-            "copilot": lambda: _try_codex_cli() or _try_vllm() or _try_ollama() or _try_lmstudio() or _try_copilot_cli(),
+            "copilot": lambda: (
+                _try_codex_cli() or _try_vllm() or _try_ollama() or _try_lmstudio() or _try_copilot_cli()
+            ),
             "gh": lambda: _try_gh_copilot(allow_non_command=True),
             "github_models": _try_github_models,
             "openai": _try_openai_api,

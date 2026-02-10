@@ -52,7 +52,9 @@ class AWQQuantizer(Quantizer):
         activations = activations if activations is not None else self.calibration_data
 
         if activations is not None:
-            importance: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = self._compute_importance(activations, weight)
+            importance: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = (
+                self._compute_importance(activations, weight)
+            )
             scaled_weight = weight * importance
         else:
             scaled_weight = weight

@@ -27,17 +27,10 @@ import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Callable, Optional
+from typing import Callable
 from itertools import product, chain
 
 import numpy as np
-
-try:
-    import rust_core
-
-    HAS_RUST = True
-except ImportError:
-    HAS_RUST = False
 
 
 class DeviceType(str, Enum):
@@ -527,29 +520,6 @@ class KVCacheManager:
     def _trigger_memory_pressure(self) -> None:
         """Trigger memory pressure callbacks."""
         list(map(lambda cb: cb(), self._memory_pressure_callbacks))
-
-
-# =============================================================================
-# Convenience Functions
-# =============================================================================
-
-
-def create_kv_cache_manager(
-    num_layers: int,
-    num_heads: int,
-    head_dim: int,
-    num_blocks: int = 1000,
-    block_size: int = 16,
-) -> KVCacheManager:
-    """Create a KV cache manager."""
-    config = KVCacheConfig(
-        num_layers=num_layers,
-        num_heads=num_heads,
-        head_dim=head_dim,
-        num_gpu_blocks=num_blocks,
-        block_size=block_size,
-    )
-    return KVCacheManager(config)
 
 
 # =============================================================================

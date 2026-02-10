@@ -233,7 +233,9 @@ class IntelligentRouter:
             candidates: List[str] = self._model_mapping[model].copy()
         else:
             # Try all providers if model not in mapping
-            candidates: List[str] = [name for name, provider in self._providers.items() if provider.supports_model(model)]
+            candidates: List[str] = [
+                name for name, provider in self._providers.items() if provider.supports_model(model)
+            ]
 
         # Apply exclusions
         candidates: List[str] = [name for name in candidates if name not in constraints.excluded_providers]

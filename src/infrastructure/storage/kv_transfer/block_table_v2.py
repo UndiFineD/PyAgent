@@ -31,7 +31,6 @@ Based on vLLM v1 patterns regarding PyAgent innovations.
 from __future__ import annotations
 
 import contextlib
-import functools
 import threading
 from dataclasses import dataclass
 from enum import Enum, auto
@@ -209,9 +208,15 @@ class BlockTable:
 
             def _append_block(item):
                 i, block_id = item
-                if current_num + i >= self.max_num_blocks_per_req: return
+                if current_num + i >= self.max_num_blocks_per_req:
+                    return
+
                 if self.use_hybrid_blocks:
-                    list(map(lambda j: self.block_table.set(row_idx, current_num + i, block_id * self.blocks_per_kv_block + j), range(self.blocks_per_kv_block)))
+                    def set_inner(j: int) -> None:
+                        val = block_id * self.blocks_per_kv_block + j
+                        self.block_table.set(row_idx, current_num + i, val)
+
+                    list(map(set_inner, range(self.blocks_per_kv_block)))
                 else:
                     self.block_table.set(row_idx, current_num + i, block_id)
 
@@ -402,10 +407,12 @@ class PredictiveBlockAllocator:
     def free(self, block_ids: list[int]) -> None:
         """Free blocks."""
         with self._lock:
+
             def _do_free(bid):
                 if bid in self._allocated:
-                    del self._allocated[bid]; self._free_blocks.append(bid)
-            
+                    del self._allocated[bid]
+                    self._free_blocks.append(bid)
+
             list(map(_do_free, block_ids))
 
     def _predict_future_need(self, request_id: str) -> int:
@@ -495,7 +502,12 @@ class BlockTableV2:
         if isinstance(self._impl, BlockTable):
             self._impl.append_row(row_idx, block_ids, num_tokens)
         elif isinstance(self._impl, SparseBlockTable):
-            list(map(lambda item: self._impl.set_block(row_idx, item[0] * self.config.block_size, item[1]), enumerate(block_ids)))
+            def set_sparse(item: tuple[int, int]) -> None:
+                idx, bid = item
+                self._impl.set_block(row_idx, idx * self.config.block_size, bid)
+
+            list(map(set_sparse, enumerate(block_ids)))
+
         self._allocations += len(block_ids)
 
     def get_row(self, row_idx: int) -> list[int]:

@@ -72,5 +72,5 @@ class LLMBackend(ABC):
                     "timestamp_unix": time.time(),
                 }
                 self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass

@@ -18,7 +18,6 @@ Maintenance utility to fix missing type hints in engine components.
 
 import ast
 import os
-import sys
 
 def fix_file(filepath: str) -> bool:
     """
@@ -51,7 +50,7 @@ def fix_file(filepath: str) -> bool:
 
     for node in nodes:
         start_line_idx = node.lineno - 1
-        
+
         # Scan forward to find the colon
         local_line_idx = start_line_idx
         char_idx = node.col_offset
@@ -63,10 +62,10 @@ def fix_file(filepath: str) -> bool:
 
         while local_line_idx < len(lines):
             line = lines[local_line_idx]
-            
+
             while char_idx < len(line):
                 char = line[char_idx]
-                
+
                 if in_string:
                     if char == string_char:
                         # minimal escape check
@@ -81,7 +80,7 @@ def fix_file(filepath: str) -> bool:
                             # Triple quote logic is too complex for this simple parser
                             # Proceed assuming it's a string, hoping we find the end
                             in_string = True
-                            string_char = char 
+                            string_char = char
                         else:
                             in_string = True
                             string_char = char
@@ -95,34 +94,33 @@ def fix_file(filepath: str) -> bool:
                     elif char == ':':
                         if started_args and paren_depth == 0:
                             # Found the colon
-                            target_line = new_lines[local_line_idx]
-                            # Recalculate prefix based on possibly modified line? 
+                            # Recalculate prefix based on possibly modified line?
                             # If multiple inits are on same line? (Impossible in python)
                             # But multiple changes in file? Yes.
-                            
+
                             # We use original char indices which are valid if we haven't shifted THIS line.
                             # Since we only insert, indices shift right.
                             # But char_idx corresponds to original 'lines'.
                             # So we need to act carefully if we modify.
-                            
+
                             # Actually, using 'new_lines' which copies 'lines', checking if it was already modified?
                             # If we modify new_lines[local_line_idx], we change its length.
                             # But our char_idx is based on 'lines'[local_line_idx] (original).
                             # So if we simply append ' -> None' before the colon matched in original line,
                             # We can construct the new line from the original line parts.
-                            
+
                             # BUT, what if we have multiple edits on same line? No, multiple __init__ on same line impossible.
-                            
+
                             prefix = line[:char_idx]
                             suffix = line[char_idx:]
-                            
+
                             new_lines[local_line_idx] = prefix + " -> None" + suffix
                             changed = True
                             found_end = True
                             break
-                
+
                 char_idx += 1
-            
+
             if found_end:
                 break
             local_line_idx += 1
@@ -131,7 +129,7 @@ def fix_file(filepath: str) -> bool:
     if changed:
         with open(filepath, "w", encoding="utf-8") as f:
             f.writelines(new_lines)
-            
+
     return changed
 
 def main():

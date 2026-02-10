@@ -5,19 +5,18 @@ Debug Engine Hints v2: Utility for checking missing type hints in __init__ metho
 #!/usr/bin/env python3
 import ast
 import os
-import sys
 from typing import List, Tuple
 
 def check_file_for_missing_hints(filepath: str) -> List[Tuple[str, int]]:
     """
-    Parses a python file and returns a list of (function_name, lineno) 
+    Parses a python file and returns a list of (function_name, lineno)
     for __init__ methods missing return type hints.
     """
     missing = []
     try:
         with open(filepath, "r", encoding="utf-8") as f:
             tree = ast.parse(f.read(), filename=filepath)
-        
+
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef):
                 if node.name == "__init__":
@@ -28,7 +27,7 @@ def check_file_for_missing_hints(filepath: str) -> List[Tuple[str, int]]:
         pass
     except Exception as e:
         print(f"Error parsing {filepath}: {e}")
-        
+
     return missing
 
 def scan_directory(root_path: str):
@@ -44,7 +43,7 @@ def scan_directory(root_path: str):
                     for func, line in missing_list:
                         print(f"  Line {line}: {func} is missing -> None")
                         count += 1
-    
+
     print(f"\nTotal missing hints found: {count}")
 
 if __name__ == "__main__":

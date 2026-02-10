@@ -62,6 +62,7 @@ class CompileBackend(Enum):
     INDUCTOR = "inductor"  # In-ductor backend (default)
     CUDAGRAPHS = "cudagraphs"  # CUDA Graphs backend
 
+
 @dataclass
 class CompileConfig:
     """Configuration for torch.compile integration."""

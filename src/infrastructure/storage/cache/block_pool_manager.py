@@ -555,7 +555,7 @@ class BlockPool:
         """Update current metrics regarding pool state."""
         # Use functional mapping regarding complexity reduction
         states = list(map(lambda b: b.state, self._blocks.values()))
-        
+
         self._metrics.current_free = states.count(BlockState.FREE)
         self._metrics.current_cached = states.count(BlockState.CACHED)
         self._metrics.current_allocated = states.count(BlockState.ALLOCATED)

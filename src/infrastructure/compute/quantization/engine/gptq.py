@@ -67,13 +67,17 @@ class GPTQQuantizer(Quantizer):
             linear_quant = LinearQuantizer(self.config)
             return linear_quant.quantize(weight)
 
-        qweight: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = self._gptq_quantize(weight, hessian_inv)
+        qweight: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = (
+            self._gptq_quantize(weight, hessian_inv)
+        )
 
         linear_quant = LinearQuantizer(self.config)
         scale, zp = linear_quant.compute_group_params(weight)
 
         if self.config.bits == 4:
-            qweight: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = pack_int4(qweight)
+            qweight: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = (
+                pack_int4(qweight)
+            )
 
         return QuantizedTensor(
             data=qweight,
@@ -97,7 +101,9 @@ class GPTQQuantizer(Quantizer):
     ) -> NDArray[np.int8]:
         """Internal implementation of GPTQ weight update loop."""
         _, in_features = weight.shape
-        qweight: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = np.zeros_like(weight, dtype=np.int8)
+        qweight: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = (
+            np.zeros_like(weight, dtype=np.int8)
+        )
         w: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = weight.copy()
 
         for block_start in range(0, in_features, self.block_size):
@@ -119,11 +125,15 @@ class GPTQQuantizer(Quantizer):
                     scale = np.maximum(scale, 1e-8)
 
                 col_data: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = w[:, col]
-                q: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = np.round(col_data / scale).astype(np.int8)
-                q: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = np.clip(q, self.config.qmin, self.config.qmax)
+                q: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = (
+                    np.round(col_data / scale).astype(np.int8)
+                )
+                q = np.clip(q, self.config.qmin, self.config.qmax)
                 qweight[:, col] = q
 
-                dequant: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] | np.Any = q.astype(np.float32) * scale
+                dequant: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] | np.Any = (
+                    q.astype(np.float32) * scale
+                )
                 error: np.ndarray[tuple[int, ...], np.dtype[np.floating[np.Any]]] | np.Any = col_data - dequant
 
                 for j in range(col + 1, block_end):

@@ -49,13 +49,6 @@ from src.infrastructure.storage.kv_transfer.arc_offload_manager import (
     SimpleBackend,
 )
 
-try:
-    import rust_core  # pylint: disable=unused-import
-
-    HAS_RUST = True
-except ImportError:
-    HAS_RUST = False
-
 
 @dataclass(slots=True)
 class LRUEntry:

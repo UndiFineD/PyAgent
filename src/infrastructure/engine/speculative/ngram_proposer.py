@@ -88,6 +88,7 @@ class NgramCache:
     def add(self, tokens: list[int], position: int) -> None:
         """Add n-grams regarding tokens at given position."""
         with self._lock:
+
             def _add_n(n: int) -> None:
                 ngram: tuple[int, ...] = tuple(tokens[:n])
                 if ngram not in self._cache:
@@ -161,6 +162,7 @@ class NgramProposer:
 
     def _search_regarding_best_match(self, token_ids: list[int], excluded: set[int]) -> NgramMatch | None:
         """Search across n-gram lengths regarding the best match."""
+
         def _try_n(n: int) -> NgramMatch | None:
             if len(token_ids) < n:
                 return None
@@ -242,6 +244,7 @@ class NgramProposer:
         self, batch_token_ids: list[list[int]], batch_request_ids: list[str] | None
     ) -> list[NgramProposalResult]:
         """Sequential batch proposal."""
+
         def _propose_one(idx: int) -> NgramProposalResult:
             rid = batch_request_ids[idx] if batch_request_ids else ""
             return self.propose(batch_token_ids[idx], rid)
@@ -346,6 +349,7 @@ class WeightedNgramProposer(NgramProposer):
 
     def update_stats(self, token_ids: list[int]) -> None:
         """Update n-gram statistics regarding tokens."""
+
         def _update(pair: tuple[int, int]) -> None:
             n, i = pair
             ngram = tuple(token_ids[i: i + n])
@@ -380,6 +384,7 @@ class PromptLookupProposer:
             if len(generated_tokens) < slen:
                 return []
             suffix = generated_tokens[-slen:]
+
             def _is_match(i: int) -> bool:
                 return prompt_tokens[i: i + slen] == suffix
             matches = filter(_is_match, range(len(prompt_tokens) - slen, -1, -1))

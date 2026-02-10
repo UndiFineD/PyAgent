@@ -29,10 +29,6 @@ Beyond vLLM:
 
 from __future__ import annotations
 
-import functools
-import hashlib
-import time
-from _thread import LockType
 from _thread import LockType
 import logging
 import threading
@@ -300,10 +296,14 @@ class UBatchWrapper:
         """
         def _slice_val(item):
             key, value = item
-            if value is None: return (key, None)
-            if not hasattr(value, "__getitem__"): return (key, value)
-            if key in ("input_ids", "positions"): return (key, value[slice_info.token_slice])
-            if key in ("attention_mask",): return (key, value[slice_info.req_slice])
+            if value is None:
+                return (key, None)
+            if not hasattr(value, "__getitem__"):
+                return (key, value)
+            if key in ("input_ids", "positions"):
+                return (key, value[slice_info.token_slice])
+            if key in ("attention_mask",):
+                return (key, value[slice_info.req_slice])
             return (key, value)
 
         return dict(map(_slice_val, inputs.items()))

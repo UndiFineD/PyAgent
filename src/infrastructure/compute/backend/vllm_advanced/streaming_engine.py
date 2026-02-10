@@ -239,7 +239,9 @@ class StreamingVllmEngine:
         }
 
     @classmethod
-    def get_instance(cls: type["StreamingVllmEngine"], config: Optional[StreamingConfig] = None) -> "StreamingVllmEngine":
+    def get_instance(
+        cls: type["StreamingVllmEngine"], config: Optional[StreamingConfig] = None
+    ) -> "StreamingVllmEngine":
         """Get singleton instance."""
         if cls._instance is None:
             cls._instance = StreamingVllmEngine(config)

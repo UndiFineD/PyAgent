@@ -103,7 +103,7 @@ class LocalContextRecorder(ContextRecorderInterface):
                 if isinstance(obj, (int, float, str, bool, type(None))):
                     return obj
                 return str(obj)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 return f"<unserializable {type(obj).__name__}>"
 
         try:

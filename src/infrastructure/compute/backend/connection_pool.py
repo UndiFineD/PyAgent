@@ -68,7 +68,7 @@ class ConnectionPool:
             try:
                 self.cache_file.parent.mkdir(parents=True, exist_ok=True)
                 self.cache_file.write_text(json.dumps(self.status_cache))
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
     def is_backend_working(self, backend: str) -> bool:

@@ -63,7 +63,7 @@ class LLMClient:
                 self.session = requests_lib.Session()
                 # Security Patch 115.1: Harden session against decompression bombs and redirect chains
                 self.session.max_redirects = 5
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 self.session = requests_lib
 
         # Auto-init recorder if workspace provided, else None
@@ -91,7 +91,7 @@ class LLMClient:
         disabled_backends = os.environ.get("DV_DISABLED_BACKENDS", "").strip()
         if not disabled_backends:
             return False
-        
+
         # Split by comma and strip whitespace
         disabled_list = [b.strip().lower() for b in disabled_backends.split(",")]
         return backend_name.lower() in disabled_list

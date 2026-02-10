@@ -212,7 +212,9 @@ class RetryStrategy:
         self._stats.total_attempts += 1
 
         # Functional attempt reduction regarding early exit identification
-        def _attempt_step(state: tuple[R | None, Exception | None, bool], attempt: int) -> tuple[R | None, Exception | None, bool]:
+        def _attempt_step(
+            state: tuple[R | None, Exception | None, bool], attempt: int
+        ) -> tuple[R | None, Exception | None, bool]:
             res, last_exc, done = state
             if done:
                 return state
@@ -226,7 +228,7 @@ class RetryStrategy:
                 if not self._is_retryable(e):
                     self._stats.failed_attempts += 1
                     return None, e, True
-                
+
                 if attempt + 1 >= self._max_attempts:
                     self._stats.failed_attempts += 1
                     return None, e, True

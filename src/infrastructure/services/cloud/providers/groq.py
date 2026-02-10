@@ -21,11 +21,14 @@ optimized for low-latency LLM inference.
 
 from __future__ import annotations
 
+import logging
 import os
 import time
 from typing import Any, AsyncIterator, Dict, List, Optional
 
 from ..base import CloudProviderBase, InferenceRequest, InferenceResponse
+
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class GroqConnector(CloudProviderBase):

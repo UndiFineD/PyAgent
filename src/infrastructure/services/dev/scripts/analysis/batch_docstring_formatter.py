@@ -21,11 +21,10 @@ from __future__ import annotations
 
 import argparse
 import ast
-import os
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 
 class DocstringStandards:
@@ -67,7 +66,6 @@ class DocstringStandards:
             - sections: List[str]
         """
         issues = []
-        sections = []
 
         # Check for basic structure
         if not content.strip():

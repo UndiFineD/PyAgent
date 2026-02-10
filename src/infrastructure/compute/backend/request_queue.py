@@ -108,7 +108,7 @@ class RequestQueue:
             with self._lock:
                 self._pending.pop(request.request_id, None)
             return request
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             return None
 
     def size(self) -> int:

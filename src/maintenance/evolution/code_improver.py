@@ -53,6 +53,11 @@ class EvolutionLoop:
             if hasattr(self.fleet, "run_resilience_audit"):
                 await self.fleet.run_resilience_audit()
             
+            # 3. Cognitive Evolution (Synaptic Pruning - Pillar 6)
+            if hasattr(self.fleet, "pruning_orchestrator"):
+                logger.info("Evolution: Triggering synaptic pruning cycle...")
+                self.fleet.pruning_orchestrator.run_pruning_cycle(threshold=0.15)
+            
             await asyncio.sleep(3600) # Once per hour
 
     async def _identify_and_improve_bottleneck(self):

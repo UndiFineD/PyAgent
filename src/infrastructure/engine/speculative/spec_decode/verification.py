@@ -110,7 +110,10 @@ class SpecDecodeVerifier:
                 draft_logprobs=draft_logprobs,
             )
 
-        def step(acc: tuple[list[int], list[bool], bool], item: tuple[int, float, float]) -> tuple[list[int], list[bool], bool]:
+        def step(
+            acc: tuple[list[int], list[bool], bool],
+            item: tuple[int, float, float],
+        ) -> tuple[list[int], list[bool], bool]:
             accepted, mask, done = acc
             if done:
                 return (accepted, mask + [False], True)
@@ -136,7 +139,11 @@ class SpecDecodeVerifier:
         self, draft_tokens: list[int], draft_logprobs: list[float], target_logprobs: list[float]
     ) -> VerificationResult:
         """Verify tokens using entropy-weighted typical acceptance."""
-        def step(acc: tuple[list[int], list[bool], bool], item: tuple[int, float, float]) -> tuple[list[int], list[bool], bool]:
+
+        def step(
+            acc: tuple[list[int], list[bool], bool],
+            item: tuple[int, float, float],
+        ) -> tuple[list[int], list[bool], bool]:
             accepted, mask, done = acc
             if done:
                 return (accepted, mask + [False], True)
@@ -176,7 +183,10 @@ class SpecDecodeVerifier:
 
         evaluated = filter(None, map(evaluate_path, range(tree_metadata.num_paths)))
 
-        def compare(best: tuple[int, VerificationResult], curr: tuple[int, VerificationResult]) -> tuple[int, VerificationResult]:
+        def compare(
+            best: tuple[int, VerificationResult],
+            curr: tuple[int, VerificationResult],
+        ) -> tuple[int, VerificationResult]:
             if curr[1].num_accepted > best[1].num_accepted:
                 return curr
             return best

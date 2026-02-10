@@ -205,7 +205,7 @@ class BackendHandlers:
                     token: str = path.read_text(encoding="utf-8").strip()
                     if token:
                         return token
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                     continue
 
         return None

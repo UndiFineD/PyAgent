@@ -147,6 +147,7 @@ class AsyncRequestHandle:
             return self.generated_tokens / (latency / 1000)
         return None
 
+
 class AsyncVllmEngine:
     """
     AsyncVllmEngine provides high-throughput async inference for PyAgent using vLLM.
@@ -173,6 +174,7 @@ class AsyncVllmEngine:
         if cls._instance is None:
             cls._instance = AsyncVllmEngine(config or AsyncEngineConfig())
         return cls._instance
+
     @property
     def _requests(self):
         """Alias for test compatibility (legacy)."""

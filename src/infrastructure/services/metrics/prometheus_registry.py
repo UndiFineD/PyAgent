@@ -243,6 +243,7 @@ class Histogram(MetricCollector):
             data["sum"] += value
             data["count"] += 1
             # Phase 336: Functional bucket update regarding loops
+
             def _update_bucket(bound: float) -> None:
                 if value <= bound:
                     data["buckets"][bound] = data["buckets"].get(bound, 0) + 1

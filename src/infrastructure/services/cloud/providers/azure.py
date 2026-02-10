@@ -25,8 +25,6 @@ import os
 import time
 from typing import List, Optional
 
-from httpx import AsyncClient
-
 from httpx import Response
 
 from ..base import (AuthenticationError, CloudProviderBase, CloudProviderError,

@@ -29,10 +29,14 @@ from src.infrastructure.compute.backend.circuit_state import CircuitState  # noq
 from src.infrastructure.compute.backend.config_hot_reloader import ConfigHotReloader  # noqa: F401
 from src.infrastructure.compute.backend.connection_pool import ConnectionPool  # noqa: F401
 from src.infrastructure.compute.backend.disk_cache import DiskCache  # noqa: F401
-from src.infrastructure.compute.backend.execution_engine import (describe_backends, get_backend_status,  # noqa: F401
-                               llm_chat_via_copilot_cli,
-                               llm_chat_via_github_models, llm_chat_via_ollama,
-                               run_subagent)
+from src.infrastructure.compute.backend.execution_engine import (
+    describe_backends,
+    get_backend_status,  # noqa: F401
+    llm_chat_via_copilot_cli,
+    llm_chat_via_github_models,
+    llm_chat_via_ollama,
+    run_subagent,
+)
 from src.infrastructure.compute.backend.extract_code_transformer import ExtractCodeTransformer  # noqa: F401
 from src.infrastructure.compute.backend.extract_json_transformer import ExtractJsonTransformer  # noqa: F401
 from src.infrastructure.compute.backend.load_balance_strategy import LoadBalanceStrategy  # noqa: F401

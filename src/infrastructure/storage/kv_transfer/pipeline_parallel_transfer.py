@@ -23,23 +23,12 @@ is enabled. In PP scenarios, different layers of the model reside on different p
 stages (processes/nodes). KV transfer must be coordinated such that each stage's
 respective KV blocks are transferred to the correct corresponding stages in the
 destination (prefill -> decode) group.
-
-Key Patterns:
-- Stage-to-stage mapping for disaggregated PP
-- Synchronized collective transfers for KV metadata
-- Latency hiding by overlapping PP stage transfers
-- Rust-accelerated PP stage mapping logic
 """
 
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, Dict, List
-
-"""
-Module: pipeline_parallel_transfer
-Implements pipeline parallel transfer for distributed KV storage in PyAgent.
-"""
+from typing import TYPE_CHECKING, Any, Dict
 
 from src.core.lazy_loader import LazyLoader
 
@@ -67,7 +56,6 @@ class PipelineParallelTransfer:
         self.pp_rank = pp_rank
         self.pp_size = pp_size
         self.local_connector = local_connector
-
 
     def _calculate_pp_stage_mapping_rust(self, num_layers: int, pp_size: int) -> Dict[int, int]:
         """Rust-accelerated calculation of layer-to-stage distribution."""

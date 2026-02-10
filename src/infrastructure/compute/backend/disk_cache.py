@@ -89,7 +89,7 @@ class DiskCache(StandardCacheCore):
                     logging.debug(f"Cache entry {key} expired")
                     try:
                         file_path.unlink()
-                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                         logging.debug(f"Failed to unlink expired cache file {file_path}")
                     return None
 
@@ -104,5 +104,5 @@ class DiskCache(StandardCacheCore):
             for file_path in self.cache_dir.glob("*.json"):
                 file_path.unlink()
             logging.debug(f"Cleared disk cache at {self.cache_dir}")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"Failed to clear disk cache: {e}")
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+            logging.error("Failed to clear disk cache")

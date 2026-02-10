@@ -95,8 +95,6 @@ class StreamingChatHandler:
         Yields:
             Chat response text fragments.
         """
-        import lmstudio
-
         chat = self._extract_chat_from_lmstudio(system_prompt)
         chat.add_user_message(prompt)
         config = self._build_prediction_config(sdk_available=True, **kwargs)
@@ -167,7 +165,7 @@ class StreamingChatHandler:
                     # Handle OpenAI style [DONE] or empty data
                     if event.data == "[DONE]":
                         break
-                    
+
                     try:
                         data = json.loads(event.data)
                         # Extract from OpenAI choices[0].delta.content
@@ -177,7 +175,7 @@ class StreamingChatHandler:
                         else:
                             # Fallback to older format (message.delta event)
                             content = data.get("content", "")
-                            
+
                         if content:
                             if on_fragment:
                                 on_fragment(content)

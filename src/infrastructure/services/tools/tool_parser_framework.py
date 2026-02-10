@@ -59,10 +59,6 @@ __all__ = [
     "HermesToolParser",
     "Llama3ToolParser",
     "ToolParserRegistry",
-                        """
-                        Module: tool_parser_framework
-                        Framework for parsing and managing tool definitions in PyAgent.
-                        """
     # Streaming
     "StreamingToolParser",
     # Utilities

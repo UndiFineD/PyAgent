@@ -44,7 +44,7 @@ class APICore:
         if rc:
             try:
                 return rc.generate_openapi_spec(tool_definitions, self.version)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         paths = {}

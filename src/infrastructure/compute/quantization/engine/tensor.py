@@ -40,9 +40,14 @@ class QuantizedTensor:
         config: QuantConfig,
     ) -> None:
         """Initializes a quantized tensor with data and calibration parameters."""
-        self.data: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] | np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._32Bit]]] = data
+        self.data: (
+            np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]]
+            | np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._32Bit]]]
+        ) = data
         self.scale = scale
-        self.zero_point: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._32Bit]]] | None = zero_point
+        self.zero_point: (
+            np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._32Bit]]] | None
+        ) = zero_point
         self.shape: tuple[int, ...] = shape
         self.config: QuantConfig = config
 
@@ -51,11 +56,18 @@ class QuantizedTensor:
         from .utils import unpack_int4
 
         if self.config.bits == 4:
-            unpacked: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = unpack_int4(self.data)
+            unpacked: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = (
+                unpack_int4(self.data)
+            )
         else:
-            unpacked: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = self.data.astype(np.float32)
+            unpacked: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = (
+                self.data.astype(np.float32)
+            )
 
-        unpacked_reshaped: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] | np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = unpacked.reshape(self.shape)
+        unpacked_reshaped: (
+            np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]]
+            | np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]]
+        ) = unpacked.reshape(self.shape)
 
         if self.scale.size == 1:
             if self.zero_point is not None:
@@ -73,8 +85,13 @@ class QuantizedTensor:
             num_groups: int = self.scale.shape[1]
             group_size: int = (in_features + num_groups - 1) // num_groups
 
-            result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = np.zeros(self.shape, dtype=np.float32)
-            flat: np.ndarray[tuple[int, int], np.dtype[np.signedinteger[np._8Bit]]] | np.ndarray[tuple[int, int], np.dtype[np.floating[np._32Bit]]] = unpacked_reshaped.reshape(out_features, -1)
+            result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = (
+                np.zeros(self.shape, dtype=np.float32)
+            )
+            flat: (
+                np.ndarray[tuple[int, int], np.dtype[np.signedinteger[np._8Bit]]]
+                | np.ndarray[tuple[int, int], np.dtype[np.floating[np._32Bit]]]
+            ) = unpacked_reshaped.reshape(out_features, -1)
 
             for g in range(num_groups):
                 start: int = g * group_size

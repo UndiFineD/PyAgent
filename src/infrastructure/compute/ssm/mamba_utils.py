@@ -119,11 +119,13 @@ def discretize_ssm(
     # Expand dimensions for broadcasting
     if dt.ndim == 2:
         # Single step: [batch, d_inner]
-        dA: np.ndarray[tuple[int, ...], np.dtype[math.Any]] = np.exp(dt[:, :, None] * A)  # [batch, d_inner, ssm_state_size]
+        # [batch, d_inner, ssm_state_size]
+        dA: np.ndarray[tuple[int, ...], np.dtype[math.Any]] = np.exp(dt[:, :, None] * A)
         dB = dt[:, :, None] * B[:, None, :]  # [batch, d_inner, ssm_state_size]
     else:
         # Sequence: [batch, seq_len, d_inner]
-        dA: np.ndarray[tuple[int, ...], np.dtype[math.Any]] = np.exp(dt[:, :, :, None] * A)  # [batch, seq_len, d_inner, ssm_state_size]
+        # [batch, seq_len, d_inner, ssm_state_size]
+        dA: np.ndarray[tuple[int, ...], np.dtype[math.Any]] = np.exp(dt[:, :, :, None] * A)
         dB = dt[:, :, :, None] * B[:, :, None, :]  # [batch, seq_len, d_inner, ssm_state_size]
 
     return dA, dB
@@ -387,7 +389,9 @@ def init_dt_proj(
     Returns (weight, bias) tuple.
     """
     # Weight initialization
-    weight: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = np.random.randn(d_inner, dt_rank).astype(np.float32)
+    weight: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = (
+        np.random.randn(d_inner, dt_rank).astype(np.float32)
+    )
     weight = weight * (1.0 / math.sqrt(dt_rank))
 
     # Bias initialization
@@ -398,6 +402,8 @@ def init_dt_proj(
             size=d_inner,
         ).astype(np.float32)
     else:
-        bias: np.ndarray[tuple[int], np.dtype[np.floating[np._32Bit]]] = np.full(d_inner, math.log(0.01), dtype=np.float32)
+        bias: np.ndarray[tuple[int], np.dtype[np.floating[np._32Bit]]] = (
+            np.full(d_inner, math.log(0.01), dtype=np.float32)
+        )
 
     return weight, bias

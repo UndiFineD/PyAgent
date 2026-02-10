@@ -62,6 +62,7 @@ from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
 from src.observability.structured_logger import StructuredLogger
 from src.infrastructure.swarm.topology_reporter import SwarmTopologyReporter
 from src.infrastructure.security.firewall.zero_trust import ZeroTrustFirewall
+from src.infrastructure.swarm.orchestration.swarm.swarm_pruning_orchestrator import SwarmPruningOrchestrator
 
 # Type Hinting Imports (Phase 106)
 if TYPE_CHECKING:
@@ -102,6 +103,9 @@ class FleetManager(
 
         # Phase 324: Zero-Trust Security (Pillar 7)
         self.firewall = ZeroTrustFirewall(owner_key=f"node-key-{self.workspace_root.name}")
+
+        # Phase 326: Neural Pruning & Synaptic Decay (Pillar 6)
+        self.pruning_orchestrator = SwarmPruningOrchestrator(self)
 
         # New: Lazy Orchestrators (replaces ~50 direct instantiations)
         self.orchestrators = OrchestratorRegistry.get_orchestrator_map(self)
@@ -323,13 +327,13 @@ class FleetManager(
         """Periodically refreshes the swarm topology visualization data (Pillar 9)."""
         while True:
             try:
-                # Reset snapshot lists
-                self.topology_reporter.nodes = []
-                self.topology_reporter.links = []
+                # 1. Fresh start for the current pulse (Pillar 6 Synaptic Modularization)
+                self.topology_reporter.clear_snapshot()
 
-                # 1. Self node with Resource metrics
+                # 2. Self node with Resource metrics
                 stats = self.resource_monitor.get_latest_stats()
-                self.topology_reporter.update_traffic("localhost", stats.get("network_io", {}).get("bytes_sent", 0))
+                traffic = stats.get("network_io", {}).get("bytes_sent", 0)
+                self.topology_reporter.update_traffic("localhost", traffic)
                 
                 self.topology_reporter.record_node(
                     node_id="localhost",
@@ -337,16 +341,21 @@ class FleetManager(
                     metadata={"cpu": stats.get("cpu_usage"), "mem": stats.get("memory_usage")}
                 )
                 
-                # 2. Swarm nodes and synaptic links
+                # 3. Active Local Agents (Synaptic Connections)
+                for agent_id in self.agents:
+                    self.topology_reporter.record_node(agent_id, group="agent")
+                    self.topology_reporter.record_link("localhost", agent_id, strength=1.2, type="memory_bus")
+
+                # 4. Swarm nodes and synaptic links
                 peers = self.voyager_discovery.get_active_peers()
                 for peer in peers:
                     peer_id = peer.get("properties", {}).get("node_id", peer["name"])
                     
-                    # Estimate Link Strength based on mDNS response time if available
+                    # Estimate Link Strength based on connection status
                     strength = 1.5 if peer.get("port") == 5555 else 0.8
                     
                     self.topology_reporter.record_node(peer_id, group="peer")
-                    self.topology_reporter.record_link("localhost", peer_id, strength=strength)
+                    self.topology_reporter.record_link("localhost", peer_id, strength=strength, type="voyager_p2p")
 
                 self.topology_reporter.export()
                 await asyncio.sleep(10) # 10s Topology Pulse

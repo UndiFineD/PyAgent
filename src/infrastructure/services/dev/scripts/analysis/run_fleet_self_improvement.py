@@ -338,7 +338,7 @@ def run_cycle(
     lessons = harvester.harvest()
 
     # Normalize messages for inter-cycle comparison
-    messages = [f"{l.get('provider')}:{l.get('text')}" for l in lessons if isinstance(l, dict) and l.get('text')]
+    messages = [f"{lesson.get('provider')}:{lesson.get('text')}" for lesson in lessons if isinstance(lesson, dict) and lesson.get('text')]
 
     # Return per-cycle information for orchestration decisions
     return {"messages": messages, "stats": combined_stats}
@@ -443,7 +443,7 @@ def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
                     desc = str(pattern)
                     file_path = None
                     doc = None
-                
+
                 if file_path and file_path != "unknown":
                     file_link = f" [View]({file_path})"
                 if doc:

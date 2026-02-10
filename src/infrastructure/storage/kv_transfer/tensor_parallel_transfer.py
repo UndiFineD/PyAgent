@@ -1,7 +1,3 @@
-"""
-Module: tensor_parallel_transfer
-Implements tensor parallel transfer for distributed KV storage in PyAgent.
-"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,22 +13,12 @@ Implements tensor parallel transfer for distributed KV storage in PyAgent.
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-
 """
 Tensor-Parallel Aware KV Transfer.
 
 In Tensor Parallelism (TP), KV heads (and thus KV cache blocks) are partitioned
 across multiple GPUs within a single node or across nodes. This module ensures
-that KV transfer logic correctly handles partitioned blocks, either by
-re-aggregating them for transfer or by performing parallel transfers of
-each shard.
-
-Key Patterns:
-- Sharded KV block transfer coordination
-- All-to-all or All-gather patterns for KV metadata reconciliation
-- Support for TP-aware PagedAttention block mapping
-- Rust-accelerated bitmask aggregation for TP shards
+that KV transfer logic correctly handles partitioned blocks.
 """
 
 from __future__ import annotations

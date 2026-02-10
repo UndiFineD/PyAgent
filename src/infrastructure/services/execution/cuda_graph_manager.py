@@ -27,7 +27,6 @@ Beyond vLLM: LRU eviction regarding memory pressure management.
 
 from __future__ import annotations
 
-import functools
 import hashlib
 import logging
 import math
@@ -123,7 +122,8 @@ class CUDAGraphRegistry:
         # Evict if at capacity
         def _evict_count_recursive():
             if len(self._graphs) >= self.max_graphs:
-                self._evict_lru(); _evict_count_recursive()
+                self._evict_lru()
+                _evict_count_recursive()
 
         _evict_count_recursive()
 
@@ -131,7 +131,8 @@ class CUDAGraphRegistry:
         if self.max_memory_bytes > 0:
             def _evict_mem_recursive():
                 if self._total_memory + entry.memory_bytes > self.max_memory_bytes:
-                    if self._evict_lru(): _evict_mem_recursive()
+                    if self._evict_lru():
+                        _evict_mem_recursive()
 
             _evict_mem_recursive()
 
@@ -160,7 +161,7 @@ class CUDAGraphRegistry:
         def _del_graph(entry):
             if HAS_TORCH and entry.graph is not None:
                 del entry.graph
-        
+
         list(map(_del_graph, self._graphs.values()))
         self._graphs.clear()
         self._total_memory = 0
@@ -349,7 +350,8 @@ class CUDAGraphManager:
 
         try:
             generate_fn(**input_buffers)
-            if HAS_TORCH: torch.cuda.synchronize()
+            if HAS_TORCH:
+                torch.cuda.synchronize()
 
             if HAS_TORCH:
                 graph = torch.cuda.CUDAGraph()
@@ -383,9 +385,12 @@ class CUDAGraphManager:
 
     def _estimate_graph_memory(self, input_buffers: dict[str, Any], output_buffers: Any) -> int:
         """Estimate memory usage regarding a graph."""
-        if not HAS_TORCH: return 0
-        def _tsize(t): return t.numel() * t.element_size() if isinstance(t, torch.Tensor) else 0
-        
+        if not HAS_TORCH:
+            return 0
+
+        def _tsize(t):
+            return t.numel() * t.element_size() if isinstance(t, torch.Tensor) else 0
+
         in_mem = sum(map(_tsize, input_buffers.values()))
         out_mem = sum(map(_tsize, output_buffers.values() if isinstance(output_buffers, dict) else [output_buffers]))
         return in_mem + out_mem
@@ -510,8 +515,9 @@ class CUDAGraphManager:
         Returns (num_tokens, num_reqs) or None if no suitable graph.
         """
         matches = list(filter(lambda e: e.num_tokens >= num_tokens and e.num_reqs >= num_reqs, self.registry._graphs.values()))
-        if not matches: return None
-        
+        if not matches:
+            return None
+
         best = min(matches, key=lambda e: (e.num_tokens - num_tokens) + (e.num_reqs - num_reqs))
         return (best.num_tokens, best.num_reqs)
 

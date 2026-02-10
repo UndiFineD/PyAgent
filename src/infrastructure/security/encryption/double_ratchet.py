@@ -50,16 +50,21 @@ class DoubleRatchet:
         """KDF step, using Rust acceleration if available."""
         if RUST_AVAILABLE and hasattr(rc, "ratchet_step_rust"):
             try:
-                # Assuming rust returns a tuple of (new_key, output_key)
+                # Returns (new_chain_key, message_key)
                 return rc.ratchet_step_rust(key, data)
             except Exception as e:
                 logger.debug("Rust ratchet failed: %s", e)
         
-        # Simple fallback (HMAC-based placeholder)
+        # Consistent fallback (Signal-style KDF with constants 0x01 and 0x02)
         import hmac
         import hashlib
-        h = hmac.new(key, data, hashlib.sha256).digest()
-        return h[:32], h[32:]
+        
+        # New Chain Key
+        ck_mac = hmac.new(key, data + b"\x01", hashlib.sha256).digest()
+        # Message Key
+        mk_mac = hmac.new(key, data + b"\x02", hashlib.sha256).digest()
+        
+        return ck_mac, mk_mac
 
     def get_sending_key(self) -> bytes:
         """Derive the next symmetric key for sending."""

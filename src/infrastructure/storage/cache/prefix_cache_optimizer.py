@@ -148,9 +148,11 @@ class PrefixTree:
 
                 # Find common prefix length
                 def _common_len_recursive(cl: int) -> int:
-                    if (cl < len(child.prefix)
+                    if (
+                        cl < len(child.prefix)
                         and pos + cl < len(tokens)
-                        and child.prefix[cl] == tokens[pos + cl]):
+                        and child.prefix[cl] == tokens[pos + cl]
+                    ):
                         return _common_len_recursive(cl + 1)
                     return cl
 
@@ -190,7 +192,11 @@ class PrefixTree:
         Returns (matched_length, entry) or None.
         """
         with self._lock:
-            def _find_recursive(node: RadixTreeNode, pos: int, last_match: Optional[tuple[int, PrefixEntry]]) -> Optional[tuple[int, PrefixEntry]]:
+            def _find_recursive(
+            node: RadixTreeNode,
+            pos: int,
+            last_match: Optional[tuple[int, PrefixEntry]],
+        ) -> Optional[tuple[int, PrefixEntry]]:
                 if pos >= len(tokens):
                     return last_match
 
@@ -225,7 +231,11 @@ class PrefixTree:
     def remove(self, tokens: tuple[int, ...]) -> bool:
         """Remove prefix from tree."""
         with self._lock:
-            def _find_path(node: RadixTreeNode, pos: int, path: list[tuple[RadixTreeNode, int]]) -> Optional[RadixTreeNode]:
+            def _find_path(
+            node: RadixTreeNode,
+            pos: int,
+            path: list[tuple[RadixTreeNode, int]],
+        ) -> Optional[RadixTreeNode]:
                 if pos >= len(tokens):
                     return node
 
@@ -476,7 +486,12 @@ class PrefixCacheOptimizer:
         now = time.time()
 
         # Move stale warm entries to cold
-        stale_hashes = list(filter(lambda h: now - self._warm_cache[h].last_access > self.config.cold_timeout_s, self._warm_cache))
+        stale_hashes = list(
+            filter(
+                lambda h: now - self._warm_cache[h].last_access > self.config.cold_timeout_s,
+                self._warm_cache,
+            )
+        )
 
         def _move_to_cold(h: int) -> None:
             entry = self._warm_cache.pop(h)
@@ -486,7 +501,10 @@ class PrefixCacheOptimizer:
         list(map(_move_to_cold, stale_hashes))
 
         # Evict from cold
-        cold_entries = sorted(self._cold_cache.keys(), key=lambda h: (self._cold_cache[h].hit_count, self._cold_cache[h].last_access))
+        cold_entries = sorted(
+            self._cold_cache.keys(),
+            key=lambda h: (self._cold_cache[h].hit_count, self._cold_cache[h].last_access),
+        )
         evict_hashes = cold_entries[: self.config.eviction_batch_size]
 
         list(map(self._remove_entry, evict_hashes))
@@ -523,9 +541,18 @@ class PrefixCacheOptimizer:
         Beyond vLLM: Speculative prefix pre-warming.
         """
         with self._lock:
-            sorted_hashes = list(map(lambda x: x[0], sorted(self._prewarm_candidates.items(), key=lambda x: x[1], reverse=True)[:limit]))
+            sorted_hashes = list(
+                map(
+                    lambda x: x[0],
+                    sorted(self._prewarm_candidates.items(), key=lambda x: x[1], reverse=True)[:limit]
+                )
+            )
 
-            return list(map(lambda h: self._hash_to_entry[h].token_ids, filter(lambda h: h in self._hash_to_entry, sorted_hashes)))
+            def get_tokens(h: int) -> list[int]:
+                return self._hash_to_entry[h].token_ids
+
+            valid_hashes = filter(lambda h: h in self._hash_to_entry, sorted_hashes)
+            return list(map(get_tokens, valid_hashes))
 
     def get_metrics(self) -> dict[str, Any]:
         """Get cache metrics."""

@@ -450,7 +450,7 @@ class AdaptiveRateLimiter:
                     result = await func(*args, **kwargs)
                     self.record_success()
                     return result
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception:  # pylint: disable=broad-exception-caught
                     self.record_error()
                     raise
 
@@ -466,7 +466,7 @@ class AdaptiveRateLimiter:
                     result = func(*args, **kwargs)
                     self.record_success()
                     return result
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception:  # pylint: disable=broad-exception-caught
                     self.record_error()
                     raise
 

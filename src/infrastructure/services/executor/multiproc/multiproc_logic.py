@@ -195,7 +195,7 @@ class MultiprocExecutor(Executor):
                         )
                     )
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught
                 with contextlib.suppress(Exception):
                     # Worker loop error - try to continue
                     pass
@@ -229,7 +229,7 @@ class MultiprocExecutor(Executor):
 
             except queue.Empty:
                 continue
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
     def _monitor_workers(self) -> None:

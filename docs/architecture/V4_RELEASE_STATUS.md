@@ -34,10 +34,13 @@
 - [x] **Shard RAID-10 Distributed Backup**: Logic implemented for mirroring agent state across nodes.
 - [x] **Universal Agent Shell**: Composition-based agent shell with lazy-loaded logic cores.
 - [x] **Paged KV_v2 Cache**: Rust-accelerated block management for long-context stability.
+- [x] **Synaptic Topology HUD**: High-fidelity 3D swarm visualization with traffic heatmap integration.
+- [x] **Neural Pruning Engine**: Autonomous synaptic decay loop integrated into the Evolution cycle.
+- [x] **Signal Double Ratchet**: Hardened KDF chain with 64-byte key splitting and perfect forward secrecy.
 
 ## 🛠 Next Steps (v4.1.0)
 - [ ] Migrate `msgspec` serialization fully to `rust_core` for sub-millisecond overhead.
 - [ ] Finalize the "Fleet Load Balancer" for public community mesh nodes.
-- [ ] Implement "Synaptic Pruning" triggers based on resource pressure.
+- [ ] Integrate real-time P2P Byzantine voting into `ScamDetector`.
 
 **Ready for Swarm Deployment.**

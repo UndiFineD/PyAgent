@@ -53,7 +53,7 @@ except ImportError:
 # =============================================================================
 
 T = TypeVar("T")
-StructT = TypeVar("StructT", bound="msgspec.Struct" if MSGSPEC_AVAILABLE else object)
+StructT = TypeVar("StructT", bound="Struct" if MSGSPEC_AVAILABLE else object)
 
 
 # =============================================================================

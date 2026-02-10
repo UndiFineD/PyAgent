@@ -194,7 +194,7 @@ class SqlMetadataHandler:
         """Extract shard number from filename."""
         try:
             return int(shard_file.split("_")[-1].split(".")[0])
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             return 0
 
     def _process_shard_file(self, cursor: sqlite3.Cursor, shard_file: str, shard_num: int) -> int:
@@ -212,7 +212,9 @@ class SqlMetadataHandler:
 
         return indexed_count
 
-    def _index_single_interaction(self, cursor: sqlite3.Cursor, data: dict[str, Any], shard_num: int, indexed_count: int) -> int:
+    def _index_single_interaction(
+        self, cursor: sqlite3.Cursor, data: dict[str, Any], shard_num: int, indexed_count: int
+    ) -> int:
         """Index a single interaction from shard data."""
         meta = data.get("meta", {})
         i_id = meta.get("id", f"{shard_num}_{indexed_count}")

@@ -43,6 +43,8 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set
 
+logger = logging.getLogger(__name__)
+
 try:
     import numpy as np
 except ImportError:
@@ -56,6 +58,9 @@ from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
 if TYPE_CHECKING:
     from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
         ForwardContext
+
+
+class MooncakeTransferStatus(Enum):
     """Status of a Mooncake KV transfer operation."""
 
     PENDING = auto()
@@ -63,6 +68,7 @@ if TYPE_CHECKING:
     COMPLETED = auto()
     FAILED = auto()
     EVICTED = auto()
+
 
 
 @dataclass

@@ -49,7 +49,7 @@ except ImportError as e:
     print(f"DEBUG: Initial import error: {e}")
 
 # pylint: disable=wrong-import-position
-from src.infrastructure.services.benchmarks.benchmark_suite import BenchmarkSuite
+from src.infrastructure.services.benchmarks.benchmark_suite import BenchmarkSuite  # noqa: E402
 
 async def main():
     """Main execution point for the profiling suite."""

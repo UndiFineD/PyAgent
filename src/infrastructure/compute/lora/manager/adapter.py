@@ -18,7 +18,6 @@ Adapter.py module.
 
 from __future__ import annotations
 
-from io import TextIOWrapper
 import time
 from pathlib import Path
 from typing import Dict, Optional
@@ -74,7 +73,7 @@ class LoRAAdapter:
                 self._load_time_ms,
             )
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             self._status: AdapterStatus = AdapterStatus.ERROR
             return False
 

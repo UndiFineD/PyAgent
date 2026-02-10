@@ -17,7 +17,7 @@ if project_root.name == 'src':
 # Ensure the project root is in PYTHONPATH
 sys.path.insert(0, str(project_root))
 
-from src.infrastructure.compute.backend.llm_backends.copilot_cli_backend import CopilotCliBackend  # pylint: disable=wrong-import-position
+from src.infrastructure.compute.backend.llm_backends.copilot_cli_backend import CopilotCliBackend  # noqa: E402 # pylint: disable=wrong-import-position
 
 def test_copilot():
     """

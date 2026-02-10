@@ -41,16 +41,27 @@ pub fn verify_message_signature_rust(message: String, signature: String, public_
 }
 
 /// Double Ratchet - Key Derivation Function (KDF) chain step.
+/// Generates a new chain key and a message key from the current chain key.
 #[pyfunction]
 pub fn ratchet_step_rust(chain_key: Vec<u8>, input_data: Vec<u8>) -> PyResult<(Vec<u8>, Vec<u8>)> {
-    let mut mac = HmacSha256::new_from_slice(&chain_key).map_err(|e| {
-        PyErr::new::<pyo3::exceptions::PyValueError, _>(format!("HMAC init failed: {}", e))
+    // We need 64 bytes of output to split into (Next Chain Key, Message Key)
+    // We'll perform two HMAC passes with different constants (Signal-style KDF)
+    
+    // 1. Next Chain Key Pass
+    let mut mac_ck = HmacSha256::new_from_slice(&chain_key).map_err(|e| {
+        PyErr::new::<pyo3::exceptions::PyValueError, _>(format!("HMAC CK init failed: {}", e))
     })?;
+    mac_ck.update(&input_data);
+    mac_ck.update(&[0x01]); // Constant for Chain Key
+    let new_chain = mac_ck.finalize().into_bytes().to_vec();
     
-    mac.update(&input_data);
-    let result = mac.finalize().into_bytes();
+    // 2. Message Key Pass
+    let mut mac_mk = HmacSha256::new_from_slice(&chain_key).map_err(|e| {
+        PyErr::new::<pyo3::exceptions::PyValueError, _>(format!("HMAC MK init failed: {}", e))
+    })?;
+    mac_mk.update(&input_data);
+    mac_mk.update(&[0x02]); // Constant for Message Key
+    let message_key = mac_mk.finalize().into_bytes().to_vec();
     
-    // Split into new chain key and output key
-    let (new_chain, output) = result.split_at(32);
-    Ok((new_chain.to_vec(), output.to_vec()))
+    Ok((new_chain, message_key))
 }

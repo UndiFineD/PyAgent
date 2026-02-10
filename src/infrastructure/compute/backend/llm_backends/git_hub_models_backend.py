@@ -58,7 +58,7 @@ class GitHubModelsBackend(LLMBackend):
                         if token:
                             logging.debug(f"DEBUG: token found in file: {path}")
                             break
-                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                         continue
 
         # Phase 120: Fallback to GitHub CLI token if possible
@@ -71,7 +71,7 @@ class GitHubModelsBackend(LLMBackend):
                     token = res.stdout.strip()
                     if token:
                         logging.debug("GitHub Models: Using token from 'gh auth token'.")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         if not token:
@@ -161,7 +161,8 @@ class GitHubModelsBackend(LLMBackend):
                             )
                         elif res.returncode != 0:
                             logging.error(
-                                "GitHub Models: 'gh auth token' failed. Run 'gh auth login' in your local terminal to refresh credentials."
+                                "GitHub Models: 'gh auth token' failed. Run 'gh auth login' "
+                                "in your local terminal to refresh credentials."
                             )
                         else:
                             logging.warning(

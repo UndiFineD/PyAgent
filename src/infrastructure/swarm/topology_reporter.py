@@ -41,16 +41,28 @@ class SwarmTopologyReporter:
         self.links: list[Any] = []
         self.traffic_matrix: dict[str, float] = {}  # Pillar 6: Synaptic Weights
 
+    def clear_snapshot(self) -> None:
+        """Clears the current node/link lists for a fresh snapshot pulse."""
+        self.nodes = []
+        self.links = []
+
     def record_node(
         self,
         node_id: str,
         group: str = "general",
         metadata: dict[str, Any] | None = None,
     ) -> None:
-        # Prevent duplicates in the snapshot
-        if not any(n["id"] == node_id for n in self.nodes):
-            # Integrate synaptic weight into visual groups
-            weight = self.traffic_matrix.get(node_id, 1.0)
+        """Adds or updates a node in the current snapshot."""
+        # Check if already exists in this snapshot
+        existing = next((n for n in self.nodes if n["id"] == node_id), None)
+        
+        weight = self.traffic_matrix.get(node_id, 1.0)
+        
+        if existing:
+            existing["group"] = group
+            existing["meta"].update(metadata or {})
+            existing["val"] = weight
+        else:
             self.nodes.append({
                 "id": node_id, 
                 "group": group, 
@@ -59,10 +71,17 @@ class SwarmTopologyReporter:
             })
 
     def record_link(self, source: str, target: str, strength: float = 1.0, type: str = "coord") -> None:
-        # Prevent exact duplicate links
-        if not any(l["source"] == source and l["target"] == target for l in self.links):
-            # Pillar 9: High-fidelity visualization link strength
+        """Adds or updates a link in the current snapshot pulse."""
+        # Pillar 9: High-fidelity visualization link strength
+        # We also look at traffic between these two if we had a link-traffic matrix
+        existing = next((l for l in self.links if (l["source"] == source and l["target"] == target) or 
+                                                 (l["source"] == target and l["target"] == source)), None)
+        
+        if not existing:
             self.links.append({"source": source, "target": target, "value": strength, "type": type})
+        else:
+            # Update strength if the new one is higher
+            existing["value"] = max(existing["value"], strength)
 
     def update_traffic(self, node_id: str, bytes_count: float) -> None:
         """Accumulates traffic for synaptic heatmap (Pillar 6)."""

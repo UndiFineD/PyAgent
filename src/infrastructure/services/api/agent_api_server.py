@@ -69,7 +69,7 @@ class TelemetryManager:
         for connection in self.active_connections:
             try:
                 await connection.send_text(message)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
 
