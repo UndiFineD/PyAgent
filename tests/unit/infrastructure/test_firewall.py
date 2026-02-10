@@ -21,7 +21,7 @@ def test_firewall_blocks_blocked_domain(mock_config):
     # Reset singleton for clean test
     ReverseProxyFirewall._instance = None
     ReverseProxyFirewall._initialized = False
-    
+
     fw = ReverseProxyFirewall()
     assert fw.validate_request("http://malicious.com/api", "GET") is False
     assert fw.validate_request("http://google.com", "GET") is True
@@ -29,7 +29,7 @@ def test_firewall_blocks_blocked_domain(mock_config):
 def test_firewall_blocks_invalid_ip(mock_config):
     ReverseProxyFirewall._instance = None
     ReverseProxyFirewall._initialized = False
-    
+
     fw = ReverseProxyFirewall()
     # 10.0.0.5 is not in allowed networks
     assert fw.validate_request("http://10.0.0.5", "GET") is False
@@ -42,10 +42,10 @@ def test_firewall_local_only_mode(tmp_path):
         m.get.side_effect = lambda key, default: {
             "firewall.local_only": True
         }.get(key, default)
-        
+
         ReverseProxyFirewall._instance = None
         ReverseProxyFirewall._initialized = False
-        
+
         fw = ReverseProxyFirewall()
         assert fw.validate_request("http://localhost/status", "GET") is True
         # google.com should fail in local_only
@@ -54,7 +54,7 @@ def test_firewall_local_only_mode(tmp_path):
 def test_firewall_invalid_scheme(mock_config):
     ReverseProxyFirewall._instance = None
     ReverseProxyFirewall._initialized = False
-    
+
     fw = ReverseProxyFirewall()
     assert fw.validate_request("ftp://fileserver.local", "GET") is False
     assert fw.validate_request("gopher://old.internet", "GET") is False

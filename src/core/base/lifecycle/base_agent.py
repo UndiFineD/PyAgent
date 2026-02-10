@@ -163,11 +163,11 @@ class BaseAgent(
     async def setup(self) -> None:
         """Asynchronous setup for the Universal Agent shell."""
         logger.info("Initializing Universal Agent [%s]", self.manifest.role)
-        
+
         # Load skills defined in logic manifest
         for skill_name in self.manifest.required_skills:
             await self.skill_manager.load_skill(skill_name)
-            
+
         # Register capabilities from loaded skills
         self._register_capabilities()
 
@@ -184,18 +184,18 @@ class BaseAgent(
 
         # Execute reasoning phase
         context = task_manifest.get("context", "")
-        
+
         # Phase 321: RL-Guided Cognitive Loop
         best_action = self.get_best_action(context)
         if best_action:
             logger.info("RLOptimization: Using learned policy for state: %s", context[:50])
             # Implementation can expand to use best_action to guide ReasoningCore
-        
+
         plan = await self.reasoning_core.reason(context)
-        
+
         # Dispatch to appropriate skills
         logger.info("Universal Agent executing plan: %s", plan)
-        
+
         # Swarm Singularity: Peer Audit (if requested)
         if task_manifest.get("audit", False):
             safe = await self.scam_detector.audit_response(context, str(plan), [])

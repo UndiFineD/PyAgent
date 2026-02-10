@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Module: mcp_agent
-Implements Model Context Protocol (MCP) agent logic for PyAgent core base.
-"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,8 +12,8 @@ Implements Model Context Protocol (MCP) agent logic for PyAgent core base.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""Agent specializing in Model Context Protocol (MCP) integration.
+"""
+Agent specializing in Model Context Protocol (MCP) integration.
 Acts as a bridge between the PyAgent fleet and external MCP servers.
 Inspired by mcp-server-spec-driven-development and awesome-mcp-servers.
 """

@@ -16,7 +16,7 @@ import pytest
 from unittest.mock import Mock, patch, AsyncMock
 from datetime import datetime, timedelta, timezone
 from src.core.base.logic.core.federation_services_core import (
-    FederationServicesCore, 
+    FederationServicesCore,
     TokenGenerationRequest,
     FederationProvider,
     FederationUser,
@@ -45,12 +45,12 @@ class TestFederationServicesCore:
         # Create mock request
         mock_user = Mock()
         mock_user.upn = "test@example.com"
-        
+
         mock_service = Mock()
         mock_service.server_fqdn = "sts.example.com"
         mock_service.signing_certificate = None
         mock_service.private_key = None
-        
+
         request = TokenGenerationRequest(
             provider=FederationProvider.OFFICE_365,
             user=mock_user,
@@ -58,7 +58,7 @@ class TestFederationServicesCore:
             service=mock_service,
             validity_minutes=60
         )
-        
+
         result = await self.core._generate_office365_token(
             request=request,
             token_id="test-token-id",
@@ -78,15 +78,15 @@ class TestFederationServicesCore:
         mock_user.upn = "test@example.com"
         mock_user.email = "test@example.com"
         mock_user.sam_account_name = "testuser"
-        
+
         mock_relying_party = Mock()
         mock_relying_party.identifier = "https://www.dropbox.com"
-        
+
         mock_service = Mock()
         mock_service.server_fqdn = "sts.example.com"
         mock_service.signing_certificate = None
         mock_service.private_key = None
-        
+
         request = TokenGenerationRequest(
             provider=FederationProvider.DROPBOX,
             user=mock_user,
@@ -94,7 +94,7 @@ class TestFederationServicesCore:
             service=mock_service,
             validity_minutes=60
         )
-        
+
         result = await self.core._generate_dropbox_token(
             request=request,
             token_id="test-token-id",
@@ -112,12 +112,12 @@ class TestFederationServicesCore:
         # Create mock request
         mock_user = Mock()
         mock_user.upn = "test@example.com"
-        
+
         mock_service = Mock()
         mock_service.server_fqdn = "sts.example.com"
         mock_service.signing_certificate = None
         mock_service.private_key = None
-        
+
         request = TokenGenerationRequest(
             provider=FederationProvider.OFFICE_365,
             user=mock_user,
@@ -125,7 +125,7 @@ class TestFederationServicesCore:
             service=mock_service,
             validity_minutes=60
         )
-        
+
         result = await self.core.generate_saml_token(request)
 
         assert result is not None
@@ -137,7 +137,7 @@ class TestFederationServicesCore:
         """Test PFX decryption."""
         # Mock the PFX data
         mock_pfx_data = b'fake_pfx_data'
-        
+
         # This would normally require actual PFX data, so we'll just test the method exists
         # and handles the async nature
         try:

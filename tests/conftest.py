@@ -151,7 +151,7 @@ def transactional_test_env(agent_sandbox):
     """
     # Track core files in the sandbox
     target_files = list(agent_sandbox.glob("**/*.py"))
-    
+
     with StateTransaction(target_files) as txn:
         yield txn
 

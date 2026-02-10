@@ -80,17 +80,17 @@ class AuthService:
                 expected_origin=f"http://{self.rp_id}:8000" if self.rp_id == "localhost" else f"https://{self.rp_id}",
                 expected_rp_id=self.rp_id,
             )
-            
+
             # Store credential for future logins
             if username not in self.user_credentials:
                 self.user_credentials[username] = []
-            
+
             self.user_credentials[username].append({
                 "id": verification.credential_id,
                 "public_key": verification.credential_public_key,
                 "sign_count": verification.sign_count,
             })
-            
+
             return True
         except Exception as e:
             logger.error(f"WebAuthn registration verification failed: {e}")
@@ -112,7 +112,7 @@ class AuthService:
             allow_credentials=allowed_credentials,
             user_verification=UserVerificationRequirement.PREFERRED,
         )
-        
+
         self.challenges[username] = options.challenge
         return json.loads(options_to_json(options))
 
@@ -126,7 +126,7 @@ class AuthService:
         credential_id = auth_data.get("id")
         user_creds = self.user_credentials.get(username, [])
         matching_cred = next((c for c in user_creds if c["id"] == credential_id), None)
-        
+
         if not matching_cred:
             return False
 
@@ -139,7 +139,7 @@ class AuthService:
                 credential_public_key=matching_cred["public_key"],
                 credential_current_sign_count=matching_cred["sign_count"],
             )
-            
+
             # Update sign count
             matching_cred["sign_count"] = verification.new_sign_count
             return True

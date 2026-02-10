@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 
 class SkillCore(abc.ABC):
     """
-    Abstract base for all agent skills. 
+    Abstract base for all agent skills.
     Replaces the mixin architecture with a composition-based approach.
     """
 
@@ -45,7 +45,7 @@ class SkillCore(abc.ABC):
 
 class SkillManifest:
     """Defines the metadata and requirements for a SkillCore."""
-    
+
     def __init__(self, name: str, version: str, description: str, dependencies: list[str] = None):
         self.name = name
         self.version = version

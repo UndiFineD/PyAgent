@@ -38,7 +38,7 @@ class TestBaseAgentExceptions:
     @patch("src.core.base.lifecycle.base_agent.BaseAgent.__init__", return_value=None)
     def test_run_exception_handling(self, mock_init, mock_notify, mock_run_async):
         mock_run_async.side_effect = RecursionError("Loop detected")
-        
+
         agent = BaseAgent()
         agent.run_async = mock_run_async
         agent._notify_webhooks = mock_notify
@@ -48,14 +48,14 @@ class TestBaseAgentExceptions:
 
         # Call sync run
         result = agent.run("test prompt")
-        
+
         assert "Error:" in result
         assert FailureClassification.RECURSION_LIMIT.value in result
-        
+
         mock_notify.assert_called_with(
-            "agent_error", 
+            "agent_error",
             {
-                "error": "Loop detected", 
+                "error": "Loop detected",
                 "failure_type": FailureClassification.RECURSION_LIMIT.value
             }
         )

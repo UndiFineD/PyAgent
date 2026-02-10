@@ -36,11 +36,11 @@ class TestRdmaCheckpoint(unittest.TestCase):
         mock_tensor.data_ptr.return_value = 0x12345678
         mock_tensor.numel.return_value = 1024
         mock_tensor.element_size.return_value = 4
-        
+
         self.connector.rust_bridge.execute.return_value = {"lkey": 1, "rkey": 2}
-        
+
         success = self.connector.create_rdma_checkpoint("cp_test_01", mock_tensor)
-        
+
         self.assertTrue(success)
         # Verify RustBridge was called with the checkpoint function
         self.connector.rust_bridge.execute.assert_any_call(

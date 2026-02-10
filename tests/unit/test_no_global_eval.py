@@ -29,7 +29,7 @@ def test_no_global_eval_use():
             # Allow intentional references (e.g., analyzer rules or documented warnings)
             if "Use of eval() is highly insecure" in snippet or "# nosec" in snippet:
                 continue
-            
+
             # Allow known safe usages in core logic and exploits
             if 'src\\core\\base\\logic\\core\\exploit_crafting_core.py' in str(p):
                 continue

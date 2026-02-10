@@ -30,14 +30,14 @@ class LogicManifest:
     version: str = "1.0.0"
     role: str = "generalist"
     description: str = "A universal autonomous agent"
-    
+
     # Required skill cores to load
     required_skills: list[str] = field(default_factory=lambda: ["identity", "environment", "security"])
-    
+
     # Cognitive configuration
     reasoning_mode: str = "cot"  # Chain of Thought
     memory_strategy: str = "autovault"
-    
+
     # Permissions and Boundaries
     permissions: dict[str, Any] = field(default_factory=lambda: {
         "fs_read": True,
@@ -45,7 +45,7 @@ class LogicManifest:
         "network": True,
         "execution": False
     })
-    
+
     # Toolsets available
     tools: list[str] = field(default_factory=list)
 

@@ -53,7 +53,7 @@ class TestImageGenerationAgent:
         mock_torch.cuda.is_available.return_value = False
         mock_torch.bfloat16 = Mock()
         mock_torch.float32 = Mock()
-        
+
         mock_pipe = Mock()
         mock_pipeline.from_pretrained.return_value = mock_pipe
 
@@ -75,7 +75,7 @@ class TestImageGenerationAgent:
         mock_torch.cuda.is_available.return_value = False
         mock_torch.bfloat16 = Mock()
         mock_torch.float32 = Mock()
-        
+
         mock_pipe = Mock()
         mock_result = Mock()
         mock_image = Mock()

@@ -34,10 +34,10 @@ class TestCascadeContext:
         # Pass invalid types in failure history
         bad_history = ["not-a-dict", 123, {"valid": "mostly"}]
         ctx = CascadeContext(
-            task_id="test", 
+            task_id="test",
             failure_history=bad_history
         )
-        
+
         # Should be filtered to just the dict, and keys added
         assert len(ctx.failure_history) == 1
         entry = ctx.failure_history[0]
@@ -46,13 +46,13 @@ class TestCascadeContext:
 
     def test_recursive_improvement_blocking(self):
         ctx = CascadeContext(task_id="root")
-        
+
         # Simulate failure history with recursive improvement loops
         ctx.failure_history = [
             {"error": "e1", "failure_type": FailureClassification.RECURSIVE_IMPROVEMENT.value},
             {"error": "e2", "failure_type": FailureClassification.RECURSIVE_IMPROVEMENT.value}
         ]
-        
+
         # Should raise RecursionError on next_level
         with pytest.raises(RecursionError) as exc:
             ctx.next_level("agent-child")
@@ -62,10 +62,10 @@ class TestCascadeContext:
         ctx = CascadeContext(task_id="root")
         ctx.log_failure(stage="test", error="Same Error")
         ctx.log_failure(stage="test", error="Same Error")
-        
+
         # Third time should trigger breaker
         ctx.log_failure(stage="test", error="Same Error")
-        
+
         assert len(ctx.failure_history) == 3 # 2 errors + 1 breaker (replacing 3rd)
         last = ctx.failure_history[-1]
         assert last["stage"] == "circuit_breaker_repeating"

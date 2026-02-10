@@ -46,15 +46,15 @@ class SecuritySkill(SkillCore):
         Check if an action is permitted by the agent's manifest.
         """
         permissions = self.agent.manifest.permissions
-        
+
         if action.startswith("fs_write") and not permissions.get("fs_write", False):
             logger.warning("Security: Permisson denied for fs_write")
             return False
-            
+
         if action.startswith("network") and not permissions.get("network", False):
             logger.warning("Security: Permisson denied for network access")
             return False
-            
+
         return True
 
     async def scan_content(self, content: str) -> bool:

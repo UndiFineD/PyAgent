@@ -118,7 +118,7 @@ class TestPhase123FinalRealization(unittest.TestCase):
 
         overlay_path = Path("data/memory/agent_store/test_overlay.json")
         overlay_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         overlay = RegistryOverlay(overlay_path)
         overlay.save_override("TestAgent", "test.module", "TestClass")
 

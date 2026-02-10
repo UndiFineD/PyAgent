@@ -21,7 +21,7 @@ from src.infrastructure.swarm.resilience.checkpoint_manager import CheckpointMan
 async def test_webauthn_options_generation():
     manager = WebAuthnManager(rp_id="localhost", rp_name="PyAgentTest")
     username = "testuser"
-    
+
     options = manager.get_registration_options(username)
     assert "challenge" in options
     assert "rp" in options
@@ -39,10 +39,10 @@ async def test_rdma_checkpoint_basic():
     # We use rank 0/2 to test buddy logic
     manager = CheckpointManager(rank=0, world_size=2)
     assert manager.peer_rank == 1
-    
+
     state = b'{"agents": ["coder"], "version": "4.0.0"}'
     checkpoint_id = await manager.create_checkpoint(state)
-    
+
     assert checkpoint_id.startswith("ckpt-")
     latest = manager.get_latest_checkpoint()
     assert latest is not None

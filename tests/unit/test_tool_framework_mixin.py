@@ -19,12 +19,9 @@ Tests schema-based tool creation and management inspired by Adorable's tool syst
 
 import pytest
 import asyncio
-from unittest.mock import AsyncMock
 
 from src.core.base.mixins.tool_framework_mixin import (
     ToolFrameworkMixin,
-    ToolDefinition,
-    ToolParameter,
     ToolExecutionError,
     ToolValidationError
 )
@@ -59,7 +56,7 @@ class TestToolFramework:
         """Test initialization of tool framework."""
         assert tool_framework.registered_tools == {}
         assert tool_framework.tool_usage_stats == {}
-        assert tool_framework.enable_tool_validation == True
+        assert tool_framework.enable_tool_validation
         assert tool_framework.max_tool_execution_time == 300
 
     def test_create_tool_decorator(self, tool_framework):
@@ -85,11 +82,11 @@ class TestToolFramework:
         # Check parameters
         param1 = next(p for p in tool_def.parameters if p.name == "param1")
         assert param1.type == "string"
-        assert param1.required == True
+        assert param1.required
 
         param2 = next(p for p in tool_def.parameters if p.name == "param2")
         assert param2.type == "integer"
-        assert param2.required == False
+        assert not param2.required
         assert param2.default == 42
 
     @pytest.mark.asyncio
@@ -108,7 +105,7 @@ class TestToolFramework:
             cascade_context
         )
 
-        assert result["success"] == True
+        assert result["success"]
         assert result["result"] == "Processed: test_input"
         assert result["tool_id"] == "success_tool"
 
@@ -225,12 +222,12 @@ class TestToolFramework:
         assert "removable_tool" in tool_framework.registered_tools
 
         result = tool_framework.unregister_tool("removable_tool")
-        assert result == True
+        assert result
         assert "removable_tool" not in tool_framework.registered_tools
 
         # Test unregistering non-existent tool
         result = tool_framework.unregister_tool("nonexistent")
-        assert result == False
+        assert not result
 
     def test_get_tool_stats(self, tool_framework):
         """Test getting tool usage statistics."""
@@ -269,11 +266,11 @@ class TestToolFramework:
             }
         )
 
-        assert result["success"] == True
+        assert result["success"]
         data = result["result"]
         assert data["int_param"] == 42
         assert data["float_param"] == 3.14
-        assert data["bool_param"] == True
+        assert data["bool_param"]
 
     @pytest.mark.asyncio
     async def test_validation_disabled(self, tool_framework):
@@ -289,11 +286,11 @@ class TestToolFramework:
 
         # Should not raise validation error (ToolValidationError) even with missing required param
         # The tool execution itself will fail due to missing argument (TypeError), resulting in ToolExecutionError
-        from src.core.base.mixins.tool_framework_mixin import ToolExecutionError, ToolValidationError
-        
+        from src.core.base.mixins.tool_framework_mixin import ToolExecutionError
+
         with pytest.raises(ToolExecutionError) as excinfo:
             await tool_framework.execute_tool("no_validation_tool", {})
-        
+
         # Verify it wasn't a validation error (which would be raised if validation was enabled)
         assert "execution failed" in str(excinfo.value)
         assert "missing 1 required positional argument" in str(excinfo.value) or "missing argument" in str(excinfo.value)

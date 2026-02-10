@@ -46,7 +46,7 @@ class EnvironmentSkill(SkillCore):
         full_path = Path(self.workspace_root) / relative_path
         if not full_path.exists():
             return ""
-        
+
         # Security check (should delegate to SecuritySkill if cross-skill sync is needed)
         # For now, simple boundary check
         if not str(full_path.resolve()).startswith(str(Path(self.workspace_root).resolve())):

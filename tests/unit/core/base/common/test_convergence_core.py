@@ -30,10 +30,10 @@ class TestConvergenceCore:
         st.dictionaries(st.text(min_size=1, max_size=10), st.booleans(), max_size=20)
     )
     def test_verify_fleet_health_hypothesis(self, convergence_core, agent_reports):
-        # We can reuse the fixture or create a new one inside. 
-        # The test logic uses the passed fixture but re-instantiates inside the original test. 
+        # We can reuse the fixture or create a new one inside.
+        # The test logic uses the passed fixture but re-instantiates inside the original test.
         # I will use the fixture `convergence_core` passed as argument.
-        
+
         result = convergence_core.verify_fleet_health(agent_reports)
 
         expected_healthy = sum(1 for status in agent_reports.values() if status)

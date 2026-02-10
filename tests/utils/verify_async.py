@@ -34,7 +34,7 @@ except ImportError:
         def __init__(self, repo_root: str):
             self.repo_root = Path(repo_root)
             self.enable_async = False
-        
+
         async def async_process_files(self, files: list[Any]):
             # Emulate logic
             if self.enable_async:

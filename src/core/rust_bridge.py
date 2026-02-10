@@ -93,7 +93,7 @@ class RustBridge:
         """Rust-accelerated vector search for long-term memory."""
         if not query_vec or not database:
             return []
-        
+
         return get_bridge()._try_rust_call(
             "search_vector_rust",
             query_vec,

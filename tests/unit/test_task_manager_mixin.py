@@ -261,7 +261,7 @@ class TestTaskManager:
         # Should only keep the last 3 tasks (Sorted by priority (high), completed (false), created_at (old))
         # Since all equal priority/completed, keeps oldest (0, 1, 2)
         assert len(task_manager.tasks) == 3
-        
+
         # Implementation keeps TOP 3. Top is Oldest.
         # So we expect Task 0, 1, 2
         assert task_manager.tasks[0].description == "Task 0"

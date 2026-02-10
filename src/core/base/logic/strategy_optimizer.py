@@ -206,7 +206,7 @@ class PerformanceMeasurer:
 
         except Exception as e:
             execution_time = time.time() - start_time
-            
+
             # Phase 336: Failure Taxonomy Classification
             failure_type = FailureClassification.UNKNOWN
             error_str = str(e).lower()

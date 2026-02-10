@@ -44,18 +44,18 @@ class SkillManager:
             # convention: skill 'identity' -> src.core.base.skills.identity_skill.IdentitySkill
             module_path = f"src.core.base.skills.{skill_name}_skill"
             module = importlib.import_module(module_path)
-            
+
             # Find the class (should be CamelCase version of name + Skill)
             class_name = "".join(word.capitalize() for word in skill_name.split("_")) + "Skill"
             skill_class: Type[SkillCore] = getattr(module, class_name)
-            
+
             skill_instance = skill_class(self.agent)
             await skill_instance.initialize()
-            
+
             self.skills[skill_name] = skill_instance
             logger.info("Loaded skill: %s", skill_name)
             return True
-            
+
         except (ImportError, AttributeError, Exception) as e:
             logger.error("Failed to load skill %s: %s", skill_name, e)
             return False

@@ -123,11 +123,11 @@ class ConfigCore(BaseCore):
         if not all(field in config_data for field in required_fields):
             logging.error("Sharding configuration missing required fields.")
             return False
-        
+
         if config_data.get("replication_factor", 0) < 1:
             logging.error("Replication factor must be at least 1.")
             return False
-            
+
         return True
 
     def load(self, path: Path | None = None) -> ConfigObject:
@@ -142,7 +142,7 @@ class ConfigCore(BaseCore):
         from itertools import product
         extensions = [".json", ".yaml", ".yml", ".toml"]
         names = ["config", "settings", "pyagent", "agent"]
-        
+
         # Determine candidate paths regarding existing files
         candidates = map(lambda x: directory / f"{x[1]}{x[0]}", product(extensions, names))
         return next(filter(lambda p: p.exists(), candidates), None)

@@ -37,7 +37,7 @@ class WorkflowExecutor:
     async def execute(self, flow_nodes: List[Dict[str, Any]], connectors: List[Dict[str, Any]]) -> Any:
         """Executes the workflow graph (DAG traversal)."""
         logger.info("WorkflowExecutor: Executing Graph with %d nodes", len(flow_nodes))
-        
+
         node_map = {n["id"]: n for n in flow_nodes}
         if not flow_nodes:
             return "Empty workflow"
@@ -45,7 +45,7 @@ class WorkflowExecutor:
         # Find starting nodes (no incoming connectors)
         dest_nodes = {c["to"] for c in connectors}
         current_node_ids = [n["id"] for n in flow_nodes if n["id"] not in dest_nodes]
-        
+
         # If all nodes have incoming links, just start at the first one
         if not current_node_ids and flow_nodes:
             current_node_ids = [flow_nodes[0]["id"]]
@@ -60,12 +60,12 @@ class WorkflowExecutor:
 
                 node_type = node.get("type", "task")
                 prompt_template = node.get("prompt", "")
-                
+
                 # Resolve dependencies (Variables from previous nodes)
                 prompt = self._resolve_variables(prompt_template)
-                
+
                 logger.info("WorkflowExecutor: Executing node [%s] type [%s]", node_id, node_type)
-                
+
                 node_result = None
                 if node_type == "task":
                     node_result = await self.agent.run_task({"context": prompt})
@@ -79,7 +79,7 @@ class WorkflowExecutor:
                         logger.error("Condition error in %s: %s", node_id, e)
                         node_result = False
                     self.results[node_id] = node_result
-                
+
                 last_result = node_result
 
                 # Find next nodes based on connectors
@@ -106,6 +106,6 @@ class WorkflowExecutor:
         def replace_match(match):
             key = match.group(1)
             return str(self.results.get(key, f"{{MISSING:{key}}}"))
-        
+
         return re.sub(r"\{\{(.*?)\}\}", replace_match, template)
 

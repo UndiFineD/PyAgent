@@ -46,8 +46,8 @@ class MockNode(FleetBackupMixin):
         shard_id = data.get("shard_id")
         if shard_id in self._shard_store:
             await self.voyager_transport.send_to_peer(
-                sender, 
-                "shard_response", 
+                sender,
+                "shard_response",
                 {"shard_id": shard_id, "content": self._shard_store[shard_id]}
             )
 
@@ -63,7 +63,7 @@ async def test_raid10_sharding_and_recovery():
 
     # Connect them conceptually
     node_a.fleet_manager.connected_peers = {"node-b": {}, "node-c": {}}
-    
+
     # Mock send_to_peer to route messages between mock nodes
     async def route_message(target_host, target_port, message, timeout=5000):
         print(f"Routing message to {target_host}:{target_port} - Type: {message.get('type')}")
@@ -74,7 +74,7 @@ async def test_raid10_sharding_and_recovery():
             target_node = node_c
         elif target_port == 5555:
             target_node = node_a
-            
+
         if target_node:
             msg_type = message.get("type")
             if msg_type == "shard_store":
@@ -93,11 +93,11 @@ async def test_raid10_sharding_and_recovery():
 
     # 2. Hardening (Sharding)
     test_state = {"agent_id": "test_agent", "data": "Singularity v4.0.0", "memory": [1, 2, 3]}
-    
+
     # Perform hardening on Node-A
     # This will use DistributedBackup to shard and then call send_to_peer
     success = await node_a.harden_agent_state("test_agent", test_state)
-    
+
     assert success is True
     assert len(node_b._shard_store) > 0
     assert len(node_c._shard_store) > 0
@@ -106,18 +106,18 @@ async def test_raid10_sharding_and_recovery():
 
     # 3. Simulate Node-A Data Loss
     # We'll try to recover from Node-B and Node-C
-    
+
     # We need to mock the response collection for recover_agent_state
     # In reality, this would happen via listener callbacks.
     # For the test, we'll manually simulate the arrival of responses.
-    
+
     backup_tool = DistributedBackup("recovery-manager")
-    
+
     # Verify we can reconstruct manually first to ensure logic is sound
     all_shards = {}
     all_shards.update(node_b._shard_store)
     all_shards.update(node_c._shard_store)
-    
+
     reconstructed = backup_tool.reassemble_state(all_shards)
     assert reconstructed == test_state
     print("Manual reconstruction successful!")
@@ -126,7 +126,7 @@ async def test_raid10_sharding_and_recovery():
     # N=3 parts, 2 mirror = 6 shards total (for small state)
     # Distributed across Node-B and Node-C.
     assert len(all_shards) == 6
-    
+
     print("Multi-node RAID-10 Resilience Test PASSED")
 
 if __name__ == "__main__":

@@ -32,12 +32,12 @@ try:
                         interfaces.append(current_iface)
                     else:
                         print(f"DEBUG: Discarding interface {current_iface['name']} (No IPv4)")
-                
+
                 # Start new interface
                 name = line.split(':', 1)[0].replace(' adapter', '').strip()
                 current_iface = {'name': name}
                 print(f"DEBUG: Found new interface header: {name}")
-                
+
             elif current_iface is not None:
                 if line.startswith('IPv4 Address'):
                     # Extract IP address - handle the dotted format
@@ -68,7 +68,7 @@ try:
             name = iface.get('name', '').lower()
 
             print(f"Interface: {iface['name']}")
-            print(f"  IP: {ip}") 
+            print(f"  IP: {ip}")
             print(f"  Subnet: {subnet}")
 
             # Skip VPN/tunnel interfaces

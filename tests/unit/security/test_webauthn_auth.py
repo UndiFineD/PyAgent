@@ -24,7 +24,7 @@ class TestWebAuthnAuth(unittest.TestCase):
         username = "testuser"
         options = self.auth_manager.get_registration_options(username)
         self.assertIn("challenge", options)
-        
+
         # Simulate registration response
         response = {"id": "cred123", "rawId": "cred123", "type": "public-key"}
         success = self.auth_manager.verify_registration(username, response)
@@ -36,11 +36,11 @@ class TestWebAuthnAuth(unittest.TestCase):
         # Register first
         self.auth_manager.get_registration_options(username)
         self.auth_manager.verify_registration(username, {"id": "cred123"})
-        
+
         # Now authenticate
         options = self.auth_manager.get_authentication_options(username)
         self.assertIn("challenge", options)
-        
+
         success = self.auth_manager.verify_authentication(username, {"id": "cred123"})
         self.assertTrue(success)
 

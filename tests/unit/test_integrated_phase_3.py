@@ -11,7 +11,7 @@ async def test_safe_executor():
     res = await interpreter.execute("x = 5 + 5; x")
     assert res.result == 10
     assert res.success is True
-    
+
     # Test forbidden builtin (should fail or result in name error depending on implementation)
     res = await interpreter.execute("import os; os.system('echo dangerous')")
     # If os is blocked, this imports nothing or fails

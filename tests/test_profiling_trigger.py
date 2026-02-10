@@ -16,11 +16,11 @@ class MockAnalysis(SelfImprovementAnalysis, ProfilingAnalysisMixin):
 def check_file(path):
     with open(path, 'r', encoding='utf-8') as f:
         content = f.read()
-    
+
     findings = []
     # Mixin will add findings if it triggers
     MockAnalysis().add_profiling_findings(findings, path, os.path.relpath(path), content)
-    
+
     if findings:
         loop_count = content.count("for ") + content.count("while ")
         print(f"File: {path}")

@@ -20,7 +20,7 @@ def test_imports():
 def test_instantiation():
     from src.infrastructure.services.resilience.adaptive_rate_limiter import AdaptiveRateLimiter
     from src.infrastructure.services.resilience.circuit_breaker import CircuitBreaker
-    
+
     # Test AdaptiveRateLimiter has name param
     limiter = AdaptiveRateLimiter(name="test_limiter")
     print("AdaptiveRateLimiter instantiated with name.")

@@ -36,10 +36,10 @@ class IdentitySkill(SkillCore):
         name = self.agent.__class__.__name__
         if name.endswith("Agent"):
             name = name[:-5]
-        
+
         s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
         agent_type = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
-        
+
         self.identity_core = IdentityCore(agent_type=agent_type or "base")
         self.agent_name: str = self.identity_core.agent_type
         self.capabilities: list[str] = ["base"]
