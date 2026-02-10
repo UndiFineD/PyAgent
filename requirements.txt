@@ -79,8 +79,8 @@ uvicorn==0.40.0
 watchfiles==1.1.1
 webauthn==2.5.0
 fido2
-authlib==1.5.0
-python-multipart==0.0.21
+authlib==1.6.6
+python-multipart==0.0.22
 websocket-client==1.9.0
 websockets==15.0.1
 yarl==1.22.0
