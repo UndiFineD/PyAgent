@@ -106,7 +106,7 @@ class NgramProposer:
             n_tokens,
             (-1.0, [], 0, -1)  # (best_score, best_proposal, best_ngram_size, best_position)
         )
-        
+
         best_score, best_proposal, best_ngram_size, best_position = result
 
         # Update stats
@@ -185,14 +185,14 @@ class NgramProposer:
 
         match_pos = matches[0]
         proposal = self._get_continuation(tokens_list, match_pos + n - 1, num_proposals)
-        
+
         if not proposal:
             return self._find_best_match_recursive(
                 tokens_list, matches[1:], n, num_proposals, n_tokens, best
             )
 
         score = self._score_match(proposal, match_pos, n_tokens, n)
-        
+
         new_best = (score, proposal, n, match_pos) if score > best[0] else best
 
         return self._find_best_match_recursive(

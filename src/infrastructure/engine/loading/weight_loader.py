@@ -36,9 +36,9 @@ vLLM Patterns:
 
 from __future__ import annotations
 
-from _thread import LockType
 import concurrent.futures
 import hashlib
+import logging
 import os
 import tempfile
 import threading
@@ -49,7 +49,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum, auto
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, BinaryIO, Dict, Generator
+from typing import TYPE_CHECKING, Any, BinaryIO, Dict, Generator, Optional
 
 from torch._tensor import Tensor
 
@@ -135,9 +135,9 @@ class AtomicWriter:
         self.filepath = Path(filepath)
         self.mode: str = mode
         self.encoding: str | None = encoding
-        self.temp_fd: Optional[int] = None
-        self.temp_path: Optional[str] = None
-        self.temp_file: Optional[BinaryIO] = None
+        self.temp_fd: int | None = None
+        self.temp_path: str | None = None
+        self.temp_file: BinaryIO | None = None
 
     def __enter__(self) -> BinaryIO:
         # Create temp file in same directory regarding atomic replace
@@ -206,6 +206,8 @@ def detect_weight_format(file_path: str | Path) -> WeightFormat:
         except (OSError, IOError):
             pass
         return WeightFormat.UNKNOWN
+
+
 def get_file_lock_path(model_name_or_path: str, cache_dir: str | None = None) -> str:
     """Generate a lock file path regarding model downloads."""
     lock_dir: str = cache_dir or tempfile.gettempdir()
@@ -475,7 +477,7 @@ class StreamingWeightLoader(WeightLoader):
         self.memory_budget_bytes = int(memory_budget_mb * 1024 * 1024)
         self.prefetch_count: int = prefetch_count
         self.priority_weights: set[str] = set(priority_weights or [])
-        self._prefetch_executor: Optional[concurrent.futures.ThreadPoolExecutor] = None
+        self._prefetch_executor: concurrent.futures.ThreadPoolExecutor | None = None
         self._prefetch_queue: dict[str, concurrent.futures.Future] = {}
 
     def _get_tensor_size(self, tensor: Any) -> int:
@@ -496,7 +498,7 @@ class StreamingWeightLoader(WeightLoader):
     ) -> Generator[tuple[str, Any], None, None]:
         """Stream weights regarding memory management."""
         try:
-            from safetensors.torch import safe_open
+            import safetensors.torch  # noqa: F401
         except ImportError:
             # Fallback
             yield from SafetensorsLoader(strategy="lazy").iterate_weights(file_paths, device)
@@ -604,12 +606,13 @@ def validate_weight_shapes_rust(
 
     # Python fallback identifying errors
     spec_map = dict(map(lambda s: (s["name"], s), specs))
-    
+
     def _check_exp(exp: dict) -> list[str]:
         if exp["name"] not in spec_map:
             return [f"Missing weight: {exp['name']}"]
         if spec_map[exp["name"]]["shape"] != exp["shape"]:
-            return [f"Shape mismatch regarding {exp['name']}: got {spec_map[exp['name']]['shape']}, expected {exp['shape']}"]
+            got = spec_map[exp["name"]]["shape"]
+            return [f"Shape mismatch regarding {exp['name']}: got {got}, expected {exp['shape']}"]
         return []
 
     from itertools import chain
@@ -624,12 +627,12 @@ def filter_shared_tensors(tensors: dict[str, Any]) -> dict[str, Any]:
     Keeps only one tensor per shared storage identifying shared storage.
     """
     storage_to_keys: dict[int, list[str]] = defaultdict(list)
-    
+
     def _map_ptr(pair: tuple[str, Any]):
         k, t = pair
         if hasattr(t, "data_ptr"):
             storage_to_keys[t.data_ptr()].append(k)
-    
+
     list(map(_map_ptr, tensors.items()))
 
     def _should_keep(pair: tuple[str, Any]):

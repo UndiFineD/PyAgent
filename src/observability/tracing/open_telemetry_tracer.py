@@ -68,14 +68,14 @@ else:
 
 try:
     from opentelemetry import trace  # noqa: F401
-    from opentelemetry.context.context import Context
+    from opentelemetry.context.context import Context  # noqa: F811
     from opentelemetry.sdk.environment_variables import \
         OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
-    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace import TracerProvider  # noqa: F811
     from opentelemetry.sdk.trace.export import (BatchSpanProcessor,
                                                 SimpleSpanProcessor,
-                                                SpanExporter)
-    from opentelemetry.trace import (Span, SpanKind, Status, StatusCode,
+                                                SpanExporter)  # noqa: F811
+    from opentelemetry.trace import (Span, SpanKind, Status, StatusCode,  # noqa: F811
                                      Tracer, get_current_span,
                                      get_tracer_provider, set_tracer_provider)
     from opentelemetry.trace.propagation.tracecontext import \
@@ -88,10 +88,10 @@ except ImportError:
     otel_import_error_traceback = traceback.format_exc()
 
 try:
-    import rust_core as rc # type: ignore
+    import rust_core as rc  # type: ignore
     HAS_RUST = True
 except ImportError:
-    rc = None # type: ignore
+    rc = None  # type: ignore
 
 
 P = ParamSpec("P")
@@ -324,12 +324,12 @@ def contains_trace_headers(headers: Mapping[str, str]) -> bool:
 # ============================================================================
 
 
-
 def _select_tracer(tracer: Tracer | None) -> Tracer | None:
     """Select the tracer to use, falling back to global if not provided."""
     if tracer is not None:
         return tracer
     return get_tracer()
+
 
 def _start_span_context(
     tracer: Tracer,
@@ -543,6 +543,7 @@ class SpanTiming:
     def to_attributes(self, prefix: str = "") -> dict[str, float]:
         """Convert checkpoints to span attributes."""
         result: dict[str, float] = {f"{prefix}total": self.elapsed()}
+
         def add_cp(acc: dict[str, float], item: tuple[str, float]) -> dict[str, float]:
             name, elapsed = item
             acc[f"{prefix}{name}"] = elapsed
@@ -554,7 +555,7 @@ class SpanTiming:
         """Apply timing attributes to a span."""
         if span is None:
             return
-        
+
         def set_attr(item: tuple[str, float]) -> None:
             span.set_attribute(item[0], item[1])
 

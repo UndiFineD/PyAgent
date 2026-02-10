@@ -69,7 +69,7 @@ class StructuredCounter:
                 setattr(self, f.name, f.default_factory())
             else:
                 setattr(self, f.name, 0)
-        
+
         list(map(reset_field, fields(self)))
 
     def diff(self: T, other: T) -> dict[str, int]:
@@ -114,7 +114,7 @@ class StructuredCounter:
         """
         old = self.clone()
         yield
-        
+
         def check_expected(item: tuple[str, int]) -> None:
             name, expected_diff = item
             actual_diff = getattr(self, name) - getattr(old, name)
@@ -123,7 +123,7 @@ class StructuredCounter:
                 f"after={getattr(self, name)}, expected_diff={expected_diff}, "
                 f"actual_diff={actual_diff}"
             )
-            
+
         list(map(check_expected, kwargs.items()))
 
     def increment(self, field_name: str, amount: int = 1) -> None:

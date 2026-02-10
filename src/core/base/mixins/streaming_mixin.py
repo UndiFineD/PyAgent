@@ -15,13 +15,14 @@
 import asyncio
 from typing import AsyncGenerator, Any, Callable, Optional
 
+
 class StreamingMixin:
     """
     Provides asynchronous streaming capabilities to agents for real-time output processing.
     """
     async def stream_response(
-        self, 
-        generator: AsyncGenerator[Any, None], 
+        self,
+        generator: AsyncGenerator[Any, None],
         callback: Optional[Callable[[Any], None]] = None
     ) -> AsyncGenerator[Any, None]:
         """

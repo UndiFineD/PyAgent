@@ -447,7 +447,9 @@ class MirostatSampler:
 
             # Sample
             choice = np.random.choice(k, p=selected_probs)
-            token_id: np.ndarray[Tuple[int], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]] = sorted_indices[choice]
+            token_id: np.ndarray[
+                Tuple[int], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]
+            ] = sorted_indices[choice]
 
             # Update mu
             surprise = -np.log2(probs[token_id])
@@ -542,7 +544,9 @@ class SamplingEngine:
             top_k: int = self.params.get_adaptive_top_k(entropy)
 
         if top_k > 0:
-            indices: np.ndarray[Tuple[int], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]] = np.argsort(logits)[-top_k:]
+            indices: np.ndarray[
+                Tuple[int], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]
+            ] = np.argsort(logits)[-top_k:]
             mask: np.ndarray[Tuple[int], np.dtype[Any]] = np.ones_like(logits, dtype=bool)
             mask[indices] = False
             logits[mask] = -float("inf")
@@ -551,7 +555,9 @@ class SamplingEngine:
         if self.params.top_p < 1.0:
             probs = np.exp(logits - logits.max())
             probs = probs / probs.sum()
-            sorted_indices: np.ndarray[Tuple[int], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]] = np.argsort(-probs)
+            sorted_indices: np.ndarray[
+                Tuple[int], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]
+            ] = np.argsort(-probs)
             cumsum: np.ndarray[Tuple[int], np.dtype[Any]] = np.cumsum(probs[sorted_indices])
             cutoff: np.signedinteger[np._32Bit | np._64Bit] = np.searchsorted(cumsum, self.params.top_p) + 1
             kept: np.ndarray[Tuple[int], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]] = sorted_indices[:cutoff]

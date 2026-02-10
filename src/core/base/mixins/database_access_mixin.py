@@ -32,7 +32,7 @@ class DatabaseAccessMixin:
     def __init__(self, **kwargs: Any) -> None:
         if platform.system() != "Windows":
             raise RuntimeError("DatabaseAccessMixin is only supported on Windows")
-        
+
         self.db_core = DatabaseAccessCore()
 
     def connect_odbc(self, connection_string: str) -> bool:

@@ -211,7 +211,13 @@ class OrchestrationMixin:
             logging.warning("Failed to propagate context: %s", e, exc_info=True)
             return None
 
-    async def _try_fleet_delegation(self, agent_type: str, prompt: str, target_file: str | None, context: Any | None) -> str | None:
+    async def _try_fleet_delegation(
+        self,
+        agent_type: str,
+        prompt: str,
+        target_file: str | None,
+        context: Any | None
+    ) -> str | None:
         """Attempt delegation via Fleet Manager."""
         if not hasattr(self, "fleet") or not getattr(self, "fleet"):
             return None
@@ -245,10 +251,17 @@ class OrchestrationMixin:
             from src.core.base.lifecycle.agent_core import BaseCore
             from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry
 
-            ws_root: Any | Path = getattr(self, "_workspace_root", None) or Path(BaseCore.detect_workspace_root(Path.cwd()))
+            # Detect workspace root safely
+            ws_root = getattr(self, "_workspace_root", None)
+            if not ws_root:
+                ws_root = Path(BaseCore.detect_workspace_root(Path.cwd()))
+            ws_root = Path(ws_root)
 
             # Use the registry to get the agent map
-            agent_map: LazyAgentMap = AgentRegistry.get_agent_map(ws_root, fleet_instance=getattr(self, "fleet", None))
+            agent_map: LazyAgentMap = AgentRegistry.get_agent_map(
+                ws_root,
+                fleet_instance=getattr(self, "fleet", None)
+            )
 
             if agent_type in agent_map:
                 sub_agent = agent_map[agent_type]

@@ -54,11 +54,25 @@ class SubprocessTransformer(ast.NodeTransformer):
         func = node.func
         if isinstance(func, ast.Attribute) and isinstance(func.value, ast.Name):
             if func.value.id == 'subprocess' and func.attr in self.DANGEROUS_ATTRS:
-                new = ast.copy_location(ast.Call(func=ast.Name(id='safe_subprocess_run', ctx=ast.Load()), args=node.args, keywords=node.keywords), node)
+                new = ast.copy_location(
+                    ast.Call(
+                        func=ast.Name(id='safe_subprocess_run', ctx=ast.Load()),
+                        args=node.args,
+                        keywords=node.keywords
+                    ),
+                    node
+                )
                 return ast.fix_missing_locations(new)
         # direct Popen(...) or run(...) when imported directly
         if isinstance(func, ast.Name) and func.id in self.DANGEROUS_ATTRS:
-            new = ast.copy_location(ast.Call(func=ast.Name(id='safe_subprocess_run', ctx=ast.Load()), args=node.args, keywords=node.keywords), node)
+            new = ast.copy_location(
+                ast.Call(
+                    func=ast.Name(id='safe_subprocess_run', ctx=ast.Load()),
+                    args=node.args,
+                    keywords=node.keywords
+                ),
+                node
+            )
             return ast.fix_missing_locations(new)
         return self.generic_visit(node)
 
@@ -96,7 +110,12 @@ def create_patch_for_file(path: Path) -> Path | None:
     PATCH_DIR.mkdir(parents=True, exist_ok=True)
     rel = path.relative_to(ROOT)
     patch_path = PATCH_DIR / (re.sub(r'[^0-9A-Za-z_.-]', '_', str(rel)) + '.patch')
-    diff = difflib.unified_diff(src.splitlines(keepends=True), new_src.splitlines(keepends=True), fromfile=f'a/{rel}', tofile=f'b/{rel}')
+    diff = difflib.unified_diff(
+        src.splitlines(keepends=True),
+        new_src.splitlines(keepends=True),
+        fromfile=f'a/{rel}',
+        tofile=f'b/{rel}'
+    )
     patch_path.write_text(''.join(diff), encoding='utf-8')
     return patch_path
 

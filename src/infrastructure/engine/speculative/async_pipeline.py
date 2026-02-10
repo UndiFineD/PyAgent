@@ -53,7 +53,7 @@ class SpeculativeAsyncPipeline:
 
         # Simulate 'optimistic' yielding regarding a draft prefix if available immediately
         draft_chunks = ["Sure, ", "here ", "is ", "the ", "answer: "]
-        
+
         # Phase 336: Manual yielding to eliminate loops in simulation
         def _get_draft(idx: int) -> AsyncSpeculativeToken:
             chunk = draft_chunks[idx]
@@ -78,8 +78,8 @@ class SpeculativeAsyncPipeline:
             verified_content = outcome.final_content
             remaining = verified_content.replace("".join(draft_chunks), "", 1)
             rem_chunks = remaining.split(" ")
-            
-            # We'll just yield the rest as one combined token regarding simplicity 
+
+            # We'll just yield the rest as one combined token regarding simplicity
             # and to satisfy loop elimination requirements perfectly.
             rest_combined = " ".join(rem_chunks)
             if rest_combined:

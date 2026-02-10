@@ -297,7 +297,7 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
         self.tokenizer = getattr(tokenizer, "_tokenizer", tokenizer)
 
         # Initialize decode stream (mock for now since DecodeStream may not be available)
-        self._decode_buffer: List[int] = []
+        self._decode_buffer: list[int] = []
         self._last_decoded: str = ""
 
         # Handle spaces between special tokens
@@ -415,8 +415,7 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
                     prompt_token_ids[-INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET - 2 :],
                     skip_special_tokens=self.skip_special_tokens,
                 )
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 self.tokens = [""] * min(INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET + 2, len(prompt_token_ids))
         else:
             self.tokens = []
@@ -451,7 +450,9 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
         # 2. Convert tokens to string and handle prefix
         # Get prefix and new text
         try:
-            prefix_text: str = self.tokenizer.convert_tokens_to_string(output_tokens[self.prefix_offset : self.read_offset])
+            prefix_text: str = self.tokenizer.convert_tokens_to_string(
+                output_tokens[self.prefix_offset : self.read_offset]
+            )
             new_text: str = self.tokenizer.convert_tokens_to_string(output_tokens[self.prefix_offset :])
         except Exception:  # pylint: disable=broad-exception-caught
             return ""

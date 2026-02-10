@@ -20,6 +20,7 @@ from typing import Any, Optional
 from src.core.base.logic.cassette_orchestrator import CassetteOrchestrator, BaseLogicCassette
 from src.core.base.common.models.communication_models import CascadeContext
 
+
 class CassetteMixin:
     """
     Mixin regarding providing Cassette Orchestration capabilities to an Agent.

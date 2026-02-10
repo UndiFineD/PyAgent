@@ -33,7 +33,7 @@ class PrivilegeEscalationMixin:
     def __init__(self, **kwargs: Any) -> None:
         if platform.system() != "Windows":
             raise RuntimeError("PrivilegeEscalationMixin is only supported on Windows")
-        
+
         self.privilege_core = PrivilegeEscalationCore()
         self.impersonated_tokens: list = []
 

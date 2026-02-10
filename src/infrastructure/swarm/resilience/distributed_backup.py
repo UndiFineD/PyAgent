@@ -21,6 +21,7 @@ from __future__ import annotations
 import json
 import logging
 import hashlib
+import base64
 from typing import Any, Dict, List, Optional
 from pathlib import Path
 
@@ -106,8 +107,6 @@ class DistributedBackup:
             except Exception:
                 continue
         return shards
-            json.dump(shard, f)
-        logger.info("Stored shard %s from %s", shard_id, shard["origin_node"])
 
     def retrieve_shard(self, shard_id: str) -> Optional[Dict[str, Any]]:
         """Retrieve a shard from local storage."""
@@ -116,3 +115,40 @@ class DistributedBackup:
             with open(file_path, "r", encoding="utf-8") as f:
                 return json.load(f)
         return None
+
+    def reassemble_state(self, shards: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Reconstructs state from a set of RAID-10 shards.
+        Requires at least one mirror of each part.
+        """
+        if not shards:
+            return None
+        
+        # Group by part index
+        parts_found = {}
+        total_parts = 0
+        
+        for shard in shards.values():
+            p_idx = shard["part_index"]
+            total_parts = shard["total_parts"]
+            if p_idx not in parts_found:
+                # Inside the data_b64 is our bin data
+                parts_found[p_idx] = self._decode(shard["data_b64"])
+        
+        if len(parts_found) < total_parts:
+            logger.error(f"DistributedBackup: Cannot reassemble state. Missing {total_parts - len(parts_found)} parts.")
+            return None
+            
+        # Join parts in order
+        reconstructed_raw = b"".join([parts_found[i] for i in range(total_parts)])
+        try:
+            return json.loads(reconstructed_raw.decode())
+        except Exception as e:
+            logger.error(f"DistributedBackup: Reconstruction failed: {e}")
+            return None
+
+    def _encode(self, data: bytes) -> str:
+        return base64.b64encode(data).decode()
+
+    def _decode(self, b64_str: str) -> bytes:
+        return base64.b64decode(b64_str)

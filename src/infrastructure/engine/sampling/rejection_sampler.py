@@ -306,7 +306,9 @@ class RejectionSampler:
         """Process draft tokens and return (accepted, mask, first_reject_idx)."""
         num_drafts = len(draft_tokens)
 
-        def check_token(acc: tuple[list[int], list[bool], int, bool], i: int) -> tuple[list[int], list[bool], int, bool]:
+        def check_token(
+            acc: tuple[list[int], list[bool], int, bool], i: int
+        ) -> tuple[list[int], list[bool], int, bool]:
             tokens, mask, reject_idx, done = acc
             if done:
                 return acc
@@ -417,9 +419,9 @@ class RejectionSampler:
 
             accepted_tokens = draft_tokens[:num_accepted]
             acceptance_mask = [True] * num_accepted + [False] * (len(draft_tokens) - num_accepted)
-            
+
             recovered_tokens = [recovered_token] if recovered_token is not None else []
-            
+
             # Bonus token if all accepted
             bonus_token = None
             if num_accepted == len(draft_tokens) and bonus_probs is not None:
@@ -440,7 +442,7 @@ class RejectionSampler:
                 num_recovered=len(recovered_tokens),
                 acceptance_mask=acceptance_mask,
             )
-        except Exception: # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             # Fall back to Python on error
             return self._verify_python(draft_tokens, draft_probs, target_probs, bonus_probs, random_numbers)
 
@@ -458,7 +460,9 @@ class RejectionSampler:
         """
         bonus_probs = batch_bonus_probs if batch_bonus_probs is not None else [None] * len(batch_draft_tokens)
 
-        def verify(item: tuple[list[int], NDArray[np.float32], NDArray[np.float32], NDArray[np.float32] | None]) -> RejectionOutput:
+        def verify(
+            item: tuple[list[int], NDArray[np.float32], NDArray[np.float32], NDArray[np.float32] | None]
+        ) -> RejectionOutput:
             drafts, d_probs, t_probs, b_probs = item
             return self.verify_and_sample(
                 draft_tokens=drafts,

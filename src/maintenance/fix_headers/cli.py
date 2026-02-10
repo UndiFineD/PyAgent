@@ -16,7 +16,6 @@
 CLI interface for the Fix Headers Tool.
 """
 
-import sys
 import argparse
 
 from .fix_headers_agent import FixHeadersAgent

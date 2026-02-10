@@ -470,7 +470,7 @@ class MCPBridge:
         return tools
 
     async def call_tool(self, tool_name: str, arguments: Dict[str, Any],
-                       context: Optional[CascadeContext] = None) -> Any:
+                        context: Optional[CascadeContext] = None) -> Any:
         """
         Call an MCP tool.
 
@@ -565,8 +565,10 @@ Select at most {max_tools} tools."""
                 max_tokens=100
             )
 
-            selected_names = [line.strip() for line in response.split('\n')
-                            if line.strip()][:max_tools]
+            selected_names = [
+                line.strip() for line in response.split('\n')
+                if line.strip()
+            ][:max_tools]
 
             selected_tools = []
             for name in selected_names:
@@ -582,7 +584,7 @@ Select at most {max_tools} tools."""
             return available_tools[:max_tools]
 
     async def orchestrate_tools(self, task_description: str,
-                               context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+                                context: Optional[CascadeContext] = None) -> Dict[str, Any]:
         """
         Orchestrate tool execution for a complex task.
 

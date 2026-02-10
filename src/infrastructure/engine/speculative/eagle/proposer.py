@@ -91,7 +91,13 @@ class EagleProposer:
         self, input_ids: list[int], positions: list[int], hidden_states: list[list[float]] | None, num_proposals: int
     ) -> list[DraftOutput]:
         """Sequential draft proposal."""
-        def step(current_ids: list[int], current_positions: list[int], current_hidden: list[list[float]] | None, count: int, acc: list[DraftOutput]) -> list[DraftOutput]:
+        def step(
+            current_ids: list[int],
+            current_positions: list[int],
+            current_hidden: list[list[float]] | None,
+            count: int,
+            acc: list[DraftOutput],
+        ) -> list[DraftOutput]:
             if count <= 0:
                 return acc
             output = self.draft_model.forward(current_ids[-1:], current_positions[-1:], current_hidden)
@@ -105,7 +111,7 @@ class EagleProposer:
                 count - 1,
                 new_acc
             )
-        
+
         return step(list(input_ids), list(positions), hidden_states, num_proposals, [])
 
     def _propose_tree(
@@ -143,7 +149,7 @@ class EagleProposer:
 
         # Zip nodes with logits up to available length
         list(map(process_output, zip(range(len(output.logits)), nodes_to_expand, output.logits)))
-        
+
         return output
 
     def _get_top_k_candidates(self, logits: list[float], k: int = 4) -> list[tuple[int, float]]:
@@ -206,12 +212,12 @@ class EagleProposer:
     ) -> int:
         """Fill metadata regarding a single path in the tree."""
         path_len = len(path)
-        
+
         def fill_step(i: int) -> None:
             curr_idx = start_token_idx + i
             tree_positions.append(base_seq_len + i)
             parent_indices.append(curr_idx - 1 if i > 0 else -1)
-            
+
             # Inner causal mask regarding path tokens
             list(map(lambda j: tree_mask[curr_idx].__setitem__(start_token_idx + j, True), range(i + 1)))
 
@@ -277,7 +283,7 @@ class EagleProposer:
             return getattr(rust_core, "eagle_prepare_inputs_padded_rust")(token_ids, positions, hidden_states)
 
         max_len = max(map(len, token_ids))
-        
+
         def pad_list(lst: list, length: int, pad_val: any) -> list:
             return lst + [pad_val] * (length - len(lst))
 
@@ -298,7 +304,7 @@ class EagleProposer:
                 lambda acc, states: acc + pad_list(states, max_len, [0.0] * hidden_size),
                 hidden_states, []
             ))
-            
+
         return padded_ids, padded_positions, padded_hidden
 
 

@@ -95,7 +95,7 @@ class TopPSampler(Sampler):
 
         batch_size, _ = logits.shape
         result = logits.copy()
-        
+
         # Phase 336: Functional top-p application regarding batch processing
         def _apply_one(i: int) -> None:
             sorted_indices = np.argsort(logits[i])[::-1]
@@ -211,15 +211,15 @@ class RepetitionPenaltySampler(Sampler):
         if not all_tokens:
             return result
         unique_tokens = np.array(list(set(all_tokens)))
-        
+
         # Phase 336: Vectorized penalty application regarding total loop elimination
         valid_mask = unique_tokens < result.shape[-1]
         valid_tokens = unique_tokens[valid_mask]
-        
+
         pos_mask = result[0, valid_tokens] > 0
         result[0, valid_tokens[pos_mask]] /= params.repetition_penalty
         result[0, valid_tokens[~pos_mask]] *= params.repetition_penalty
-        
+
         return result
 
 
@@ -246,12 +246,12 @@ class PenaltySampler(Sampler):
         # Phase 336: Vectorized penalty application regarding total loop elimination
         token_ids = np.array(list(state.token_counts.keys()))
         counts = np.array(list(state.token_counts.values()))
-        
+
         valid_mask = token_ids < result.shape[-1]
         valid_tokens = token_ids[valid_mask]
         valid_counts = counts[valid_mask]
-        
+
         result[0, valid_tokens] -= params.presence_penalty
         result[0, valid_tokens] -= params.frequency_penalty * valid_counts
-        
+
         return result

@@ -468,7 +468,7 @@ class BeamSearchManager:
         self,
         request_id: str,
         n: int = 1,
-    ) -> List[BeamState]:
+    ) -> list[BeamState]:
         """Get best n sequences."""
         all_beams = self.beams.get(request_id, []) + self.finished_beams.get(request_id, [])
 

@@ -175,7 +175,7 @@ class SpecDecodeVerifier:
             return (path_idx, result)
 
         evaluated = filter(None, map(evaluate_path, range(tree_metadata.num_paths)))
-        
+
         def compare(best: tuple[int, VerificationResult], curr: tuple[int, VerificationResult]) -> tuple[int, VerificationResult]:
             if curr[1].num_accepted > best[1].num_accepted:
                 return curr
@@ -184,7 +184,7 @@ class SpecDecodeVerifier:
         initial = (-1, VerificationResult(accepted_tokens=[], num_accepted=0))
         best_path_tuple = functools.reduce(compare, evaluated, initial)
         best_path_idx, best_result = best_path_tuple
-        
+
         tree_metadata.best_path_index = best_path_idx
         return best_result
 

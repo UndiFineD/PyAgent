@@ -93,7 +93,8 @@ class DataProcessingMixin:
             filetime = int(filetime_value)
             # FILETIME is in 100-nanosecond intervals since 1601-01-01
             # Return UTC datetime to ensure compatibility with comparisons
-            return datetime.datetime(1601, 1, 1, tzinfo=datetime.timezone.utc) + datetime.timedelta(microseconds=filetime // 10)
+            base = datetime.datetime(1601, 1, 1, tzinfo=datetime.timezone.utc)
+            return base + datetime.timedelta(microseconds=filetime // 10)
         except (ValueError, TypeError):
             return datetime.datetime.min.replace(tzinfo=datetime.timezone.utc)
 
@@ -110,7 +111,7 @@ class DataProcessingMixin:
         try:
             expires = int(expires_value)
             # Use a large threshold for "Never Expires" instead of datetime.max which can fail on Windows
-            if expires == 0 or expires > 2650467743999999999: # Approx AD "Never"
+            if expires == 0 or expires > 2650467743999999999:  # Approx AD "Never"
                 return "Never Expires"
             # Assuming it's in FILETIME format
             dt = self.convert_filetime_to_datetime(expires)

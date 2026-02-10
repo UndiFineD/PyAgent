@@ -25,7 +25,6 @@ import uuid
 from typing import Any, Dict, Optional
 
 
-
 class TaskQueueMixin:
     """
     Mixin to provide asynchronous task queue capabilities to agents.

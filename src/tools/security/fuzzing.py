@@ -145,9 +145,13 @@ class AIFuzzingEngine:
             ]
         }
 
-    async def start_fuzzing_session(self, target: str, target_type: FuzzingTarget,
-                                   techniques: Optional[List[FuzzingTechnique]] = None,
-                                   max_iterations: int = 1000) -> str:
+    async def start_fuzzing_session(
+        self,
+        target: str,
+        target_type: FuzzingTarget,
+        techniques: Optional[List[FuzzingTechnique]] = None,
+        max_iterations: int = 1000
+    ) -> str:
         """
         Start a new fuzzing session.
 
@@ -291,8 +295,12 @@ class AIFuzzingEngine:
 
         return results
 
-    async def _generate_ai_payloads(self, session: FuzzingSession, technique: FuzzingTechnique,
-                                   base_payloads: List[str]) -> List[str]:
+    async def _generate_ai_payloads(
+        self,
+        session: FuzzingSession,
+        technique: FuzzingTechnique,
+        base_payloads: List[str]
+    ) -> List[str]:
         """Generate new payloads using AI."""
         try:
             # Create prompt for AI payload generation
@@ -333,8 +341,12 @@ Generate payloads that might bypass security filters. Return only the payloads, 
             self.logger.error(f"Ollama API call failed: {e}")
             return ""
 
-    async def _execute_payload(self, session: FuzzingSession, technique: FuzzingTechnique,
-                              payload: str) -> FuzzingResult:
+    async def _execute_payload(
+        self,
+        session: FuzzingSession,
+        technique: FuzzingTechnique,
+        payload: str
+    ) -> FuzzingResult:
         """Execute a fuzzing payload against the target."""
         result = FuzzingResult(
             target=session.target,
@@ -364,8 +376,12 @@ Generate payloads that might bypass security filters. Return only the payloads, 
 
         return result
 
-    async def _execute_web_payload(self, target: str, technique: FuzzingTechnique,
-                                  payload: str) -> FuzzingResult:
+    async def _execute_web_payload(
+        self,
+        target: str,
+        technique: FuzzingTechnique,
+        payload: str
+    ) -> FuzzingResult:
         """Execute payload against web target."""
         result = FuzzingResult(target=target, technique=technique, payload=payload)
 
@@ -391,8 +407,12 @@ Generate payloads that might bypass security filters. Return only the payloads, 
 
         return result
 
-    async def _execute_api_payload(self, target: str, technique: FuzzingTechnique,
-                                  payload: str) -> FuzzingResult:
+    async def _execute_api_payload(
+        self,
+        target: str,
+        technique: FuzzingTechnique,
+        payload: str
+    ) -> FuzzingResult:
         """Execute payload against API endpoint."""
         result = FuzzingResult(target=target, technique=technique, payload=payload)
 
@@ -413,8 +433,12 @@ Generate payloads that might bypass security filters. Return only the payloads, 
 
         return result
 
-    async def _execute_file_payload(self, target: str, technique: FuzzingTechnique,
-                                   payload: str) -> FuzzingResult:
+    async def _execute_file_payload(
+        self,
+        target: str,
+        technique: FuzzingTechnique,
+        payload: str
+    ) -> FuzzingResult:
         """Execute payload against file system."""
         result = FuzzingResult(target=target, technique=technique, payload=payload)
 
@@ -528,8 +552,13 @@ class MultiCycleFuzzing:
         self.engine = fuzzing_engine
         self.logger = logging.getLogger("pyagent.security.fuzzing.multicycle")
 
-    async def run_multi_cycle_fuzzing(self, target: str, target_type: FuzzingTarget,
-                                     cycles: int = 3, techniques: Optional[List[FuzzingTechnique]] = None) -> Dict[str, Any]:
+    async def run_multi_cycle_fuzzing(
+        self,
+        target: str,
+        target_type: FuzzingTarget,
+        cycles: int = 3,
+        techniques: Optional[List[FuzzingTechnique]] = None
+    ) -> Dict[str, Any]:
         """
         Run multi-cycle fuzzing with iterative improvement.
 
@@ -578,7 +607,7 @@ class MultiCycleFuzzing:
             await asyncio.sleep(1)  # Brief pause for learning
 
         # Generate final summary
-        summary = {
+        summary: Dict[str, Any] = {
             'target': target,
             'cycles_completed': len(all_sessions),
             'total_findings': len(cumulative_findings),
@@ -588,9 +617,12 @@ class MultiCycleFuzzing:
         }
 
         # Breakdown by vulnerability type
+        vuln_breakdown: Dict[str, int] = {}
         for finding in cumulative_findings:
             vuln_type = finding.vulnerability_type or 'unknown'
-            summary['vulnerability_breakdown'][vuln_type] = summary['vulnerability_breakdown'].get(vuln_type, 0) + 1
+            vuln_breakdown[vuln_type] = vuln_breakdown.get(vuln_type, 0) + 1
+
+        summary['vulnerability_breakdown'] = vuln_breakdown
 
         self.logger.info(f"Multi-cycle fuzzing complete: {summary['total_findings']} total findings")
         return summary

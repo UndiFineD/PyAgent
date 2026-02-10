@@ -76,7 +76,7 @@ class SpeculativeTree:
             if not (0 <= curr_idx < len(self.tokens)):
                 return path
             return build_path(self.tokens[curr_idx].parent_idx, [self.tokens[curr_idx].token_id] + path)
-        
+
         return build_path(idx, [])
 
     def get_children(self, idx: int) -> List[int]:

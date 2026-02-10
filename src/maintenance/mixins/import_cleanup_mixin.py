@@ -23,6 +23,7 @@ from typing import Dict, List, Tuple
 
 logger: logging.Logger = logging.getLogger(__name__)
 
+
 class ImportCleanupMixin:
     """Provides utilities for resolving and fixing Python imports after refactors."""
 
@@ -109,7 +110,13 @@ class ImportCleanupMixin:
                     break
             return ".".join(res)
 
-    def fix_imports_in_file(self, file_path: Path, name_map: dict[tuple[str, str], str], root_dir: Path, search_dirs: list[str]) -> bool:
+    def fix_imports_in_file(
+        self,
+        file_path: Path,
+        name_map: dict[tuple[str, str], str],
+        root_dir: Path,
+        search_dirs: list[str]
+    ) -> bool:
         """Updates imports in a file to match the actual filesystem casing/naming."""
         try:
             content: str = file_path.read_text(encoding="utf-8")
@@ -120,8 +127,18 @@ class ImportCleanupMixin:
                 return f"{match.group(1)}{resolved}"
 
             # Regex for 'import ...' and 'from ... import ...'
-            new_content: str = re.sub(r"^(import\s+)([a-zA-Z0-9_\.]+)", replacer, content, flags=re.MULTILINE)
-            new_content: str = re.sub(r"^(from\s+)([a-zA-Z0-9_\.]+)(?=\s+import)", replacer, new_content, flags=re.MULTILINE)
+            new_content: str = re.sub(
+                r"^(import\s+)([a-zA-Z0-9_\.]+)",
+                replacer,
+                content,
+                flags=re.MULTILINE
+            )
+            new_content: str = re.sub(
+                r"^(from\s+)([a-zA-Z0-9_\.]+)(?=\s+import)",
+                replacer,
+                new_content,
+                flags=re.MULTILINE
+            )
 
             if new_content != content:
                 file_path.write_text(new_content, encoding="utf-8")

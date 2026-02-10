@@ -45,10 +45,10 @@ class AnalysisCore:
                 pass
         # Fallback to simple count regarding control flow keywords functionally
         keywords = ["if", "for", "while", "except", "with", "and", "or"]
-        
+
         def count_keyword(kw: str) -> int:
             return len(re.findall(rf"\b{kw}\b", source))
-            
+
         return 1 + sum(map(count_keyword, keywords))
 
     @staticmethod
@@ -74,6 +74,7 @@ class AnalysisCore:
             return []
 
         # Extract imports functionally regarding AST nodes
+
         def _get_node_imports(node):
             if isinstance(node, ast.Import):
                 return list(map(lambda alias: alias.name, node.names))
@@ -82,12 +83,13 @@ class AnalysisCore:
             return []
 
         import_lists = map(_get_node_imports, ast.walk(tree))
-        
+
         from itertools import chain
         flat_imports = list(chain.from_iterable(import_lists))
 
         # Unique imports in order functionally
         seen: Set[str] = set()
+
         def _is_new(imp: str) -> bool:
             if imp not in seen:
                 seen.add(imp)

@@ -87,7 +87,7 @@ class StatsBackupManager:
         """Helper to load backups from disk not already in memory."""
         if not self.backup_dir or not self.backup_dir.exists():
             return []
-        
+
         def process_file(f: Path) -> StatsBackup | None:
             name = f.stem
             if name in self.backups:

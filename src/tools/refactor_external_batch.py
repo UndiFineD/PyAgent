@@ -28,6 +28,7 @@ def parse_allowlist(s: str):
         return set()
     return {x.strip() for x in s.split(',') if x.strip()}
 
+
 def sanitize_filename(name: str) -> str:
     base = Path(name).stem
     s = base.lower()
@@ -39,6 +40,7 @@ def sanitize_filename(name: str) -> str:
     if s[0].isdigit():
         s = '_' + s
     return s + '.py'
+
 
 def is_ast_safe(
     src: str,
@@ -72,7 +74,12 @@ def is_ast_safe(
                 # attribute calls (e.g., os.system, subprocess.run)
                 if func.attr in FORBIDDEN_ATTRS and func.attr not in (allow_attrs or set()):
                     # special-case limited subprocess.run acceptance
-                    if func.attr == 'run' and isinstance(func.value, ast.Name) and func.value.id == 'subprocess' and allow_limited_shell:
+                    is_subproc_run = (
+                        func.attr == 'run' and
+                        isinstance(func.value, ast.Name) and
+                        func.value.id == 'subprocess'
+                    )
+                    if is_subproc_run and allow_limited_shell:
                         # inspect for shell=True; if shell is explicitly True, forbid
                         shell_true = False
                         for kw in node.keywords:
@@ -106,11 +113,13 @@ def is_ast_safe(
                     issues.append(f'forbidden_importfrom:{node.module}')
     return (len(issues) == 0), issues
 
+
 def file_hash(p: Path) -> str:
     h = hashlib.sha1()
     data = p.read_bytes()
     h.update(data)
     return h.hexdigest()[:12]
+
 
 def process(
     limit: int,
@@ -145,7 +154,15 @@ def process(
             skipped += 1
             count += 1
             continue
-        safe, issues = is_ast_safe(src, filename=str(p), allow_modules=allow_modules, allow_attrs=allow_attrs, allow_names=allow_names, allow_limited_shell=allow_limited_shell, allow_eval=allow_eval)
+        safe, issues = is_ast_safe(
+            src,
+            filename=str(p),
+            allow_modules=allow_modules,
+            allow_attrs=allow_attrs,
+            allow_names=allow_names,
+            allow_limited_shell=allow_limited_shell,
+            allow_eval=allow_eval
+        )
         if not safe:
             if verbose:
                 print(f'SKIP UNSAFE {p} -> issues={issues}')
@@ -176,14 +193,21 @@ def process(
     out.write_text(json.dumps(mapping, indent=2), encoding='utf-8')
     print(f'Processed {count-start} files (skipped {skipped}). Mapping at {out}')
 
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--limit', type=int, default=200, help='Max files to process')
     ap.add_argument('--start', type=int, default=0, help='Skip first N files')
     ap.add_argument('--dry-run', action='store_true')
     ap.add_argument('--verbose', action='store_true')
-    ap.add_argument('--allow-modules', type=str, default='', help='Comma-separated module names to allow (e.g. requests,httpx)')
-    ap.add_argument('--allow-attrs', type=str, default='', help='Comma-separated attribute names to allow (e.g. run,call)')
+    ap.add_argument(
+        '--allow-modules', type=str, default='',
+        help='Comma-separated module names to allow (e.g. requests,httpx)'
+    )
+    ap.add_argument(
+        '--allow-attrs', type=str, default='',
+        help='Comma-separated attribute names to allow (e.g. run,call)'
+    )
     ap.add_argument('--allow-names', type=str, default='', help='Comma-separated function names to allow (e.g. eval)')
     ap.add_argument('--allow-limited-shell', action='store_true', help='Allow subprocess.run when shell is not True')
     ap.add_argument('--allow-eval', action='store_true', help='Allow eval/exec calls (dangerous)')
@@ -191,7 +215,13 @@ def main():
     allow_modules = parse_allowlist(args.allow_modules)
     allow_attrs = parse_allowlist(args.allow_attrs)
     allow_names = parse_allowlist(args.allow_names)
-    process(args.limit, args.start, args.dry_run, args.verbose, allow_modules=allow_modules, allow_attrs=allow_attrs, allow_names=allow_names, allow_limited_shell=args.allow_limited_shell, allow_eval=args.allow_eval)
+    process(
+        args.limit, args.start, args.dry_run, args.verbose,
+        allow_modules=allow_modules, allow_attrs=allow_attrs,
+        allow_names=allow_names, allow_limited_shell=args.allow_limited_shell,
+        allow_eval=args.allow_eval
+    )
+
 
 if __name__ == '__main__':
     main()

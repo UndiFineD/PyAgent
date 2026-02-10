@@ -22,6 +22,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 class PylintFixerMixin:
     """Provides automated fixes for common Pylint warnings."""
 
@@ -39,7 +40,7 @@ class PylintFixerMixin:
                 r"open(\1, encoding='utf-8')",
                 new_content
             )
-            
+
             if new_content != content:
                 file_path.write_text(new_content, encoding="utf-8")
                 return True
@@ -73,7 +74,7 @@ class PylintFixerMixin:
                                 continue
                 new_lines.append(line)
                 i += 1
-            
+
             if modified:
                 file_path.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
                 return True
@@ -91,19 +92,20 @@ class PylintFixerMixin:
             modified = False
             for line in lines:
                 sline = line.strip()
-                if sline.startswith("except") and sline.endswith(":") or (":" in sline and sline.startswith("except") and "#" in sline):
+                if (sline.startswith("except") and sline.endswith(":")) or \
+                   (":" in sline and sline.startswith("except") and "#" in sline):
                     if "Exception" in sline or "BaseException" in sline or sline.startswith("except:"):
                         if "pylint: disable=" in line:
-                             updated_line = line
-                             if "broad-exception-caught" not in line and "broad-except" not in line:
-                                 updated_line = updated_line.replace("pylint: disable=", "pylint: disable=broad-exception-caught, ")
-                                 modified = True
-                             if "unused-variable" not in line:
-                                 updated_line = updated_line.replace("pylint: disable=", "pylint: disable=unused-variable, ")
-                                 modified = True
-                             new_lines.append(updated_line)
-                             continue
-                            
+                            updated_line = line
+                            if "broad-exception-caught" not in line and "broad-except" not in line:
+                                updated_line = updated_line.replace("pylint: disable=", "pylint: disable=broad-exception-caught, ")
+                                modified = True
+                            if "unused-variable" not in line:
+                                updated_line = updated_line.replace("pylint: disable=", "pylint: disable=unused-variable, ")
+                                modified = True
+                            new_lines.append(updated_line)
+                            continue
+
                         # If no disable, inject it
                         indent_match = re.match(r"^(\s*)", line)
                         indent = indent_match.group(1) if indent_match else ""

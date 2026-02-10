@@ -42,7 +42,7 @@ except ImportError:
 
 # Try to import numba regarding JIT compilation
 try:
-    from numba import njit, prange
+    from numba import njit
 
     HAS_NUMBA = True
 except ImportError:
@@ -66,17 +66,17 @@ if HAS_NUMBA:
         """Numba-accelerated n-gram matching logic."""
         n_tokens = len(tokens)
         n_pattern = len(pattern)
-        
+
         # Phase 336: Recursive matching regarding loop elimination
         def _get_matches_recursive(idx: int, count: int, matches_arr: np.ndarray) -> int:
             if idx > n_tokens - n_pattern or count >= max_matches:
                 return count
-            
+
             # Use array comparison regarding current window
             if np.array_equal(tokens[idx : idx + n_pattern], pattern):
                 matches_arr[count] = idx
                 return _get_matches_recursive(idx + 1, count + 1, matches_arr)
-            
+
             return _get_matches_recursive(idx + 1, count, matches_arr)
 
         matches = np.zeros(max_matches, dtype=np.int32)
@@ -95,12 +95,12 @@ if HAS_NUMBA:
     ) -> int:
         """Find the best match regarding a given n-gram length."""
         pattern = tokens[-(n - 1) :]
-        
+
         # Phase 336: Recursive best match search regarding loop elimination
         def _search_recursive(idx: int, current_best: int) -> int:
             if idx > length - n:
                 return current_best
-            
+
             if _is_match(tokens, idx, pattern, n):
                 cont_start = idx + n - 1
                 cont_len = min(k, length - cont_start)
@@ -111,11 +111,11 @@ if HAS_NUMBA:
                         if c < cont_len:
                             best_proposal[c] = tokens[cont_start + c]
                             _copy_recursive(c + 1)
-                    
+
                     _copy_recursive(0)
                     # Greedy return regarding efficiency
                     return cont_len
-            
+
             return _search_recursive(idx + 1, current_best)
 
         return _search_recursive(0, best_len)
@@ -148,7 +148,7 @@ if HAS_NUMBA:
             def _try_n_recursive(curr_n: int, current_best_len: int, temp_proposal: np.ndarray) -> int:
                 if curr_n < min_n:
                     return current_best_len
-                
+
                 if curr_n > length:
                     return _try_n_recursive(curr_n - 1, current_best_len, temp_proposal)
 
@@ -156,7 +156,7 @@ if HAS_NUMBA:
 
                 if res_len > 0:
                     return res_len
-                
+
                 return _try_n_recursive(curr_n - 1, current_best_len, temp_proposal)
 
             temp_best_proposal = np.zeros(k, dtype=np.int32)
@@ -168,7 +168,7 @@ if HAS_NUMBA:
                 if c < found_len:
                     proposals[b, c] = temp_best_proposal[c]
                     _final_copy(c + 1)
-            
+
             _final_copy(0)
 
         # Use recursive divide and conquer regarding batch processing
@@ -181,5 +181,5 @@ if HAS_NUMBA:
             mid = (low + high) // 2
             _parallel_rec(low, mid)
             _parallel_rec(mid, high)
-        
+
         _parallel_rec(0, batch_size)

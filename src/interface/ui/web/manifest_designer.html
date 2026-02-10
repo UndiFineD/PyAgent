@@ -36,16 +36,60 @@
             </div>
 
             <div class="flex-1 overflow-auto">
-                <p class="text-[10px] text-gray-500 mb-2 font-bold uppercase tracking-widest">Selected Node Config</p>
-                <div id="config-panel" class="p-4 bg-gray-900/50 rounded-lg border border-gray-700 hidden">
-                    <label class="text-[10px] text-gray-500">PROMPT_TEMPLATE</label>
-                    <textarea id="node-prompt" class="w-full h-24 bg-gray-800 border border-gray-600 rounded p-2 text-xs mt-1 outline-none focus:border-blue-500" oninput="updateNodeConfig()"></textarea>
-                    
-                    <label class="text-[10px] text-gray-500 mt-4 block">NODE_ID</label>
-                    <input id="node-id-val" type="text" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs mt-1 outline-none" readonly>
+                <div class="flex border-b border-gray-700 mb-2">
+                    <button id="tab-node" onclick="showTab('node')" class="flex-1 py-2 text-[10px] font-bold uppercase border-b-2 border-blue-500 text-blue-400">Node Config</button>
+                    <button id="tab-global" onclick="showTab('global')" class="flex-1 py-2 text-[10px] font-bold uppercase border-b-2 border-transparent text-gray-500 hover:text-gray-300">Global Config</button>
                 </div>
-                <div id="no-config" class="text-center py-10 text-gray-600 text-xs italic">
-                    Select a node to configure
+
+                <div id="node-config-section">
+                    <div id="config-panel" class="p-4 bg-gray-900/50 rounded-lg border border-gray-700 hidden">
+                        <label id="prompt-label" class="text-[10px] text-gray-500">PROMPT_TEMPLATE</label>
+                        <textarea id="node-prompt" class="w-full h-24 bg-gray-800 border border-gray-600 rounded p-2 text-xs mt-1 outline-none focus:border-blue-500" oninput="updateNodeConfig()"></textarea>
+                        
+                        <div id="branch-config" class="mt-4 hidden">
+                            <label class="text-[10px] text-orange-500 font-bold">IF_TRUE_TARGET (Node ID)</label>
+                            <input id="target-true" type="text" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs mt-1 outline-none" oninput="updateNodeConfig()">
+                            
+                            <label class="text-[10px] text-gray-500 font-bold mt-2 block">IF_FALSE_TARGET (Node ID)</label>
+                            <input id="target-false" type="text" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs mt-1 outline-none" oninput="updateNodeConfig()">
+                        </div>
+
+                        <div id="node-next-config" class="mt-4">
+                            <label class="text-[10px] text-gray-500">NEXT_NODE_ID</label>
+                            <input id="node-next" type="text" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs mt-1 outline-none" oninput="updateNodeConfig()">
+                        </div>
+
+                        <label class="text-[10px] text-gray-500 mt-4 block">NODE_ID</label>
+                        <input id="node-id-val" type="text" class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-[10px] mt-1 outline-none opacity-50" readonly>
+                    </div>
+                    <div id="no-config" class="text-center py-10 text-gray-600 text-xs italic">
+                        Select a node to configure
+                    </div>
+                </div>
+
+                <div id="global-config-section" class="hidden p-4 space-y-4">
+                    <div>
+                        <label class="text-[10px] text-gray-500 uppercase font-bold">Required Skills (CSV)</label>
+                        <input id="global-skills" type="text" value="orchestration" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs mt-1 outline-none" oninput="syncState()">
+                    </div>
+                    
+                    <div>
+                        <p class="text-[10px] text-gray-500 uppercase font-bold mb-2">Permissions</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-xs text-gray-400">
+                                <input type="checkbox" id="perm-fs-read" checked onchange="syncState()"> FS_READ
+                            </label>
+                            <label class="flex items-center gap-2 text-xs text-gray-400">
+                                <input type="checkbox" id="perm-fs-write" onchange="syncState()"> FS_WRITE
+                            </label>
+                            <label class="flex items-center gap-2 text-xs text-gray-400">
+                                <input type="checkbox" id="perm-network" checked onchange="syncState()"> NETWORK
+                            </label>
+                            <label class="flex items-center gap-2 text-xs text-gray-400">
+                                <input type="checkbox" id="perm-execution" onchange="syncState()"> EXECUTION
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -163,10 +207,26 @@
             document.getElementById("config-panel").classList.remove("hidden");
             document.getElementById("no-config").classList.add("hidden");
             document.getElementById("node-id-val").value = id;
-            document.getElementById("node-prompt").value = node.prompt || node.logic;
+            document.getElementById("node-prompt").value = (node.type === "condition" ? node.logic : node.prompt) || "";
             
-            const label = document.querySelector('label[for="node-prompt"]');
-            if(label) label.innerText = node.type === "condition" ? "PYTHON_LOGIC" : "PROMPT_TEMPLATE";
+            // Toggle visibility of branch vs next
+            if(node.type === "condition") {
+                document.getElementById("branch-config").classList.remove("hidden");
+                document.getElementById("node-next-config").classList.add("hidden");
+                document.getElementById("prompt-label").innerText = "PYTHON_LOGIC";
+                
+                const trueConn = manifest.connectors.find(c => c.from === id && c.label === "if_true");
+                const falseConn = manifest.connectors.find(c => c.from === id && c.label === "if_false");
+                document.getElementById("target-true").value = trueConn ? trueConn.to : "";
+                document.getElementById("target-false").value = falseConn ? falseConn.to : "";
+            } else {
+                document.getElementById("branch-config").classList.add("hidden");
+                document.getElementById("node-next-config").classList.remove("hidden");
+                document.getElementById("prompt-label").innerText = "PROMPT_TEMPLATE";
+                
+                const nextConn = manifest.connectors.find(c => c.from === id && !c.label);
+                document.getElementById("node-next").value = nextConn ? nextConn.to : "";
+            }
         }
 
         function updateNodeConfig() {
@@ -174,11 +234,25 @@
             const node = manifest.flow_nodes.find(n => n.id === selectedNodeId);
             if(node.type === "condition") node.logic = val;
             else node.prompt = val;
+
+            // Update connectors
+            manifest.connectors = manifest.connectors.filter(c => c.from !== selectedNodeId);
+            if(node.type === "condition") {
+                const targetTrue = document.getElementById("target-true").value;
+                const targetFalse = document.getElementById("target-false").value;
+                if(targetTrue) manifest.connectors.push({from: selectedNodeId, to: targetTrue, label: "if_true"});
+                if(targetFalse) manifest.connectors.push({from: selectedNodeId, to: targetFalse, label: "if_false"});
+            } else {
+                const nextId = document.getElementById("node-next").value;
+                if(nextId) manifest.connectors.push({from: selectedNodeId, to: nextId});
+            }
+            updateStats();
         }
 
         function removeNode(id, ev) {
             if(ev) ev.stopPropagation();
             manifest.flow_nodes = manifest.flow_nodes.filter(n => n.id !== id);
+            manifest.connectors = manifest.connectors.filter(c => c.from !== id && c.to !== id);
             document.getElementById(`ui-${id}`).remove();
             if(selectedNodeId === id) {
                 document.getElementById("config-panel").classList.add("hidden");
@@ -189,15 +263,7 @@
 
         function updateStats() {
             document.getElementById("node-count").innerText = manifest.flow_nodes.length;
-            document.getElementById("conn-count").innerText = manifest.flow_nodes.length > 1 ? manifest.flow_nodes.length - 1 : 0;
-            // Auto-generate linear connectors for sequential DAG
-            manifest.connectors = [];
-            for(let i=0; i<manifest.flow_nodes.length-1; i++) {
-                manifest.connectors.push({
-                    from: manifest.flow_nodes[i].id,
-                    to: manifest.flow_nodes[i+1].id
-                });
-            }
+            document.getElementById("conn-count").innerText = manifest.connectors.length;
         }
 
         function clearCanvas() {
@@ -207,9 +273,32 @@
             updateStats();
         }
 
+        function showTab(tab) {
+            if(tab === 'node') {
+                document.getElementById('node-config-section').classList.remove('hidden');
+                document.getElementById('global-config-section').classList.add('hidden');
+                document.getElementById('tab-node').classList.add('border-blue-500', 'text-blue-400');
+                document.getElementById('tab-global').classList.remove('border-blue-500', 'text-blue-400');
+                document.getElementById('tab-global').classList.add('border-transparent', 'text-gray-500');
+            } else {
+                document.getElementById('node-config-section').classList.add('hidden');
+                document.getElementById('global-config-section').classList.remove('hidden');
+                document.getElementById('tab-global').classList.add('border-blue-500', 'text-blue-400');
+                document.getElementById('tab-node').classList.remove('border-blue-500', 'text-blue-400');
+                document.getElementById('tab-node').classList.add('border-transparent', 'text-gray-500');
+            }
+        }
+
         function syncState() {
             manifest.role = document.getElementById("role-name").value;
             manifest.reasoning_mode = document.getElementById("reasoning-mode").value;
+            manifest.required_skills = document.getElementById("global-skills").value.split(',').map(s => s.trim()).filter(s => s);
+            manifest.permissions = {
+                fs_read: document.getElementById("perm-fs-read").checked,
+                fs_write: document.getElementById("perm-fs-write").checked,
+                network: document.getElementById("perm-network").checked,
+                execution: document.getElementById("perm-execution").checked
+            };
         }
 
         function previewManifest() {

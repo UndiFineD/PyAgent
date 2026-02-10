@@ -354,7 +354,7 @@ class TopKTopPSampler:
 
         def _exec_typical(idx: int) -> NDArray[np.float32]:
             p = probs[idx]
-            l = logits[idx]
+            logits_row = logits[idx]
             # Compute entropy regarding distribution
             ent = -np.sum(p * np.log(p + 1e-10))
             log_p = np.log(p + 1e-10)
@@ -368,7 +368,7 @@ class TopKTopPSampler:
             # Find cutoff during accumulation
             idx_cut = min(int(np.searchsorted(vals_sum, mass)) + 1, len(idx_sorted))
             ids_to_rem = idx_sorted[idx_cut:]
-            res = l.copy()
+            res = logits_row.copy()
             res[ids_to_rem] = -np.inf
             return res
 
@@ -386,10 +386,10 @@ class TopKTopPSampler:
 
         def _exec_eta(idx: int) -> NDArray[np.float32]:
             p = probs[idx]
-            l = logits[idx]
+            logits_row = logits[idx]
             ent = -np.sum(p * np.log(p + 1e-10))
             thresh: float = min(eta, np.sqrt(eta) * np.exp(-ent))
-            res = l.copy()
+            res = logits_row.copy()
             res[p < thresh] = -np.inf
             return res
 
@@ -547,7 +547,9 @@ class GumbelSoftmaxSampler:
             gumbel = rust_core.gumbel_sample_rust(logits.shape)
         else:
             # Sample from Gumbel(0, 1)
-            u: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = np.random.random(logits.shape).astype(np.float32)
+            u: np.ndarray[
+                tuple[int, ...], np.dtype[np.floating[np._32Bit]]
+            ] = np.random.random(logits.shape).astype(np.float32)
             gumbel = -np.log(-np.log(u + 1e-10) + 1e-10)
 
         # Add Gumbel noise

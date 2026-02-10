@@ -261,9 +261,11 @@ class NgramProposer:
         def _run_chunk(t: int) -> None:
             start: int = t * chunk_size
             end: int = min(start + chunk_size, num_requests)
+
             def _proc(i: int) -> None:
                 rid = batch_request_ids[i] if batch_request_ids else ""
                 results[i] = self.propose(batch_token_ids[i], rid)
+
             list(map(_proc, range(start, end)))
 
         threads = list(map(lambda t: threading.Thread(target=_run_chunk, args=(t,)), range(num_threads)))
@@ -373,6 +375,7 @@ class PromptLookupProposer:
 
     def _propose_python(self, prompt_tokens: list[int], generated_tokens: list[int]) -> list[int]:
         """Python implementation regarding prompt lookup."""
+
         def _try_suffix(slen: int) -> list[int]:
             if len(generated_tokens) < slen:
                 return []

@@ -173,7 +173,10 @@ def detect_cloud_provider() -> str:
             if os.path.isfile(vendor_file):
                 with open(vendor_file, 'r', encoding='utf-8') as f:
                     content: str = f.read().lower()
-                    return next((provider for identifier, provider in cloud_identifiers.items() if identifier in content), None)
+                    return next(
+                        (provider for identifier, provider in cloud_identifiers.items() if identifier in content),
+                        None
+                    )
         except (IOError, PermissionError):
             pass
         return None
@@ -334,7 +337,9 @@ class UsageMessage:
         # Environment variables
         import json
 
-        env_data: dict[str, str | None] = {var: os.environ.get(var) for var in _ENV_VARS_TO_COLLECT if os.environ.get(var)}
+        env_data: dict[str, str | None] = {
+            var: os.environ.get(var) for var in _ENV_VARS_TO_COLLECT if os.environ.get(var)
+        }
         if env_data:
             self.env_var_json = json.dumps(env_data)
 

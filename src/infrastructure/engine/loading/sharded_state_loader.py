@@ -45,8 +45,6 @@ from typing import (TYPE_CHECKING, Any, Callable, Dict, Generator, List,
 
 from torch._tensor import Tensor
 
-from torch._tensor import Tensor
-
 if TYPE_CHECKING:
     pass
 
@@ -150,7 +148,7 @@ class SubtensorFilter:
             def _check_strict(item: Tuple[str, Any]) -> bool:
                 k, t = item
                 a, b = t.data_ptr(), get_end_ptr(t)
-                
+
                 def is_strictly_contained_in(other: Tuple[str, Any]) -> bool:
                     k2, t2 = other
                     if k == k2 or not t2.is_contiguous():
@@ -438,7 +436,7 @@ class AsyncShardLoader:
             return itertools.chain.from_iterable(map(_gen_shard_items, range(len(shard_files))))
 
         finally:
-            pass # Cleanup handled outside if needed or by executor shutdown
+            pass  # Cleanup handled outside if needed or by executor shutdown
 
     async def load_weights_async_native(
         self,

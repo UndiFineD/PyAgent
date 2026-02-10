@@ -36,7 +36,6 @@ except ImportError:
     HAS_REDIS = False
 
 
-
 @dataclass
 class StreamState:
     """Represents the current state of a stream."""

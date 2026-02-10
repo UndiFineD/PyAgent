@@ -228,7 +228,6 @@ class PrefetchMultiModalCache(MemoryMultiModalCache):
                         data = loader()
                         self.put(key, data)
                         executed += 1
-                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+                    except Exception:  # pylint: disable=broad-exception-caught
                         pass
         return executed

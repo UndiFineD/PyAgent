@@ -580,8 +580,7 @@ class MultiTierEncoderCache:
         if os.path.exists(filepath):
             try:
                 return np.load(filepath, allow_pickle=True)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 return None
         return None
 
@@ -601,8 +600,7 @@ class MultiTierEncoderCache:
             np.save(filepath, data, allow_pickle=True)
             self._disk_index[key] = filename
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             return False
 
 

@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Module: engine
-PyAgent engine package initialization.
-"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +14,11 @@ PyAgent engine package initialization.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+
 """
+Module: engine
+PyAgent engine package initialization.
+
 Engine infrastructure module.
 
 Provides request lifecycle management, engine state control,
@@ -32,6 +32,7 @@ Phase 30 additions:
 - PrefixCacheManager: Block-level caching
 - EngineCoreClient: Engine communication clients
 """
+
 
 # Phase 30: Engine Core
 from .engine_core import (EngineCore, EngineCoreOutput, EngineCoreOutputs,  # noqa: F401

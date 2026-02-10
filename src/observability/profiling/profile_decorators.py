@@ -33,7 +33,7 @@ import time
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Iterator, ParamSpec, TypeVar, cast
+from typing import Any, Callable, Iterator, ParamSpec, TypeVar
 
 P = ParamSpec("P")
 R = TypeVar("R")

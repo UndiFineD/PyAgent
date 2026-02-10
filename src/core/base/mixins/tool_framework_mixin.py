@@ -179,7 +179,12 @@ class ToolFrameworkMixin:
 
         return decorator
 
-    async def execute_tool(self, tool_id: str, parameters: Dict[str, Any], cascade_context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    async def execute_tool(
+        self,
+        tool_id: str,
+        parameters: Dict[str, Any],
+        cascade_context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """
         Execute a registered tool with given parameters.
         """
@@ -198,15 +203,15 @@ class ToolFrameworkMixin:
                     try:
                         value = int(value)
                     except ValueError:
-                        pass # Let validation fail
+                        pass  # Let validation fail
                 elif param.type == "number" and isinstance(value, str):
                     try:
                         value = float(value)
                     except ValueError:
                         pass
                 elif param.type == "boolean" and isinstance(value, str):
-                   value = value.lower() in ('true', '1', 'yes')
-                
+                    value = value.lower() in ('true', '1', 'yes')
+
                 prepared_args[param.name] = value
 
         # Validate parameters (using converted values)

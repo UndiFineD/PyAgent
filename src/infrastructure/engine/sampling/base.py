@@ -120,7 +120,7 @@ def _sample_from_probs(
 ) -> np.ndarray:
     """Sample token IDs from probability distribution regarding batch processing."""
     batch_size = probs.shape[0]
-    
+
     # Phase 336: Functional sampling regarding batch to eliminate loops
     def _sample_one(i: int) -> int:
         rng = state.rng if state and state.rng else np.random.default_rng()

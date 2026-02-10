@@ -58,7 +58,10 @@ class SpeculativeVerifier:
 
     def verify_greedy(self, proposed_tokens: List[int], target_logits: np.ndarray) -> VerificationResult:
         """Greedy verification: accept if regarding matches argmax."""
-        def step(acc: tuple[list[int], int, bool, int | None], item: tuple[int, int]) -> tuple[list[int], int, bool, int | None]:
+
+        def step(
+            acc: tuple[list[int], int, bool, int | None], item: tuple[int, int]
+        ) -> tuple[list[int], int, bool, int | None]:
             accepted, rollback_pos, done, _ = acc
             if done:
                 return acc
@@ -73,7 +76,7 @@ class SpeculativeVerifier:
         final_accepted, final_rollback, final_done, final_bonus = functools.reduce(
             step, enumerate(proposed_tokens), ([], 0, False, None)
         )
-        
+
         # Handle trailing bonus token if all accepted
         effective_bonus = final_bonus
         if not final_done and len(target_logits) > len(proposed_tokens):
@@ -100,7 +103,9 @@ class SpeculativeVerifier:
         exp_logits = np.exp(logits - np.max(logits, axis=-1, keepdims=True))
         target_probs = exp_logits / np.sum(exp_logits, axis=-1, keepdims=True)
 
-        def step(acc: tuple[list[int], int, bool, int | None], item: tuple[int, int]) -> tuple[list[int], int, bool, int | None]:
+        def step(
+            acc: tuple[list[int], int, bool, int | None], item: tuple[int, int]
+        ) -> tuple[list[int], int, bool, int | None]:
             accepted, rollback_pos, done, _ = acc
             if done:
                 return acc

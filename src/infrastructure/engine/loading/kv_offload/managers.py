@@ -23,7 +23,7 @@ from __future__ import annotations
 import logging
 from collections import OrderedDict
 from typing import Any, Dict, Iterable, List, Optional
-from itertools import takewhile, chain, islice
+from itertools import takewhile, islice
 
 try:
     from ...core import rust_core

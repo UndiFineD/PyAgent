@@ -42,7 +42,7 @@ class AutonomyCore(BaseCore):
                 # pylint: disable=no-member
                 return rc.evaluate_autonomy_score(agent_id, stats)  # type: ignore
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+                # pylint: disable=broad-exception-caught
                 pass
         return 0.5  # Default fallback
 

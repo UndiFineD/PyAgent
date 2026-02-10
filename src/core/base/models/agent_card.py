@@ -16,6 +16,7 @@ from typing import List, Optional, Dict, Any
 from dataclasses import field
 from pydantic import BaseModel
 
+
 class AgentCard(BaseModel):
     """
     Standardized metadata for an agent in the fleet.

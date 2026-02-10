@@ -26,7 +26,10 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.file_system_core import FileSystemCore
 _fs = FileSystemCore()
 
-def _bulk_replace_python_fallback(file_paths: list[Union[str, Path]], old_pattern: str, new_string: str, use_regex: bool) -> dict[str, bool]:
+
+def _bulk_replace_python_fallback(
+    file_paths: list[Union[str, Path]], old_pattern: str, new_string: str, use_regex: bool
+) -> dict[str, bool]:
     results = {}
     for path_in in file_paths:
         path = Path(path_in)
@@ -47,6 +50,7 @@ def _bulk_replace_python_fallback(file_paths: list[Union[str, Path]], old_patter
             results[str(path)] = False
     return results
 
+
 def bulk_replace_files(
     file_paths: list[Union[str, Path]],
     old_pattern: str,
@@ -65,13 +69,13 @@ def bulk_replace_files(
         # pylint: disable=import-outside-toplevel
         from src.core.rust_bridge import RustBridge
 
-
     if RustBridge.is_rust_active():
         str_paths = [str(p) for p in file_paths]
         replacements = {old_pattern: new_string}
         return RustBridge.bulk_replace_files(str_paths, replacements)
 
     return _bulk_replace_python_fallback(file_paths, old_pattern, new_string, use_regex)
+
 
 def bulk_replace(
     file_paths: list[str | Path],

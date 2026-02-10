@@ -198,15 +198,21 @@ class PenaltyEngine:
 
         # Apply repetition penalty (multiplicative)
         if rep_penalty != 1.0:
-            result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = self.apply_repetition_penalty(result, penalty_tokens, rep_penalty)
+            result: np.ndarray[
+                tuple[int, ...], np.dtype[np.floating[np._32Bit]]
+            ] = self.apply_repetition_penalty(result, penalty_tokens, rep_penalty)
 
         # Apply frequency penalty (additive, proportional to count)
         if freq_penalty != 0.0:
-            result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = self.apply_frequency_penalty(result, output_tokens or [], freq_penalty)
+            result: np.ndarray[
+                tuple[int, ...], np.dtype[np.floating[np._32Bit]]
+            ] = self.apply_frequency_penalty(result, output_tokens or [], freq_penalty)
 
         # Apply presence penalty (additive, binary)
         if pres_penalty != 0.0:
-            result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = self.apply_presence_penalty(result, penalty_tokens, pres_penalty)
+            result: np.ndarray[
+                tuple[int, ...], np.dtype[np.floating[np._32Bit]]
+            ] = self.apply_presence_penalty(result, penalty_tokens, pres_penalty)
 
         # Apply n-gram penalty
         if self.config.ngram_penalty != 0.0 and output_tokens is not None:
@@ -216,11 +222,15 @@ class PenaltyEngine:
 
         # Apply positional decay penalty
         if self.config.positional_decay != 0.0 and output_tokens is not None:
-            result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = self.apply_positional_penalty(result, list(output_tokens), self.config.positional_decay)
+            result: np.ndarray[
+                tuple[int, ...], np.dtype[np.floating[np._32Bit]]
+            ] = self.apply_positional_penalty(result, list(output_tokens), self.config.positional_decay)
 
         # Apply bad words blocking
         if self._bad_words or self._bad_word_sequences:
-            result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = self.apply_bad_words(result, output_tokens or [])
+            result: np.ndarray[
+                tuple[int, ...], np.dtype[np.floating[np._32Bit]]
+            ] = self.apply_bad_words(result, output_tokens or [])
 
         # Update state
         self.state.step += 1

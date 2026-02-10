@@ -26,7 +26,7 @@ import zlib
 from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict
 import functools
 
 try:
@@ -240,7 +240,7 @@ class StatsAgent:
         def check_single(threshold: Threshold) -> None:
             if threshold.metric_name != metric.name:
                 return
-            
+
             # Map of operators to lambda functions
             ops = {
                 ">": lambda v, t: v > t,
@@ -395,20 +395,20 @@ class StatsAgent:
     def get_missing_items(self) -> dict[str, list[str]]:
         """Identify files missing specific auxiliary components."""
         suffixes = [".description.md", ".changes.md", ".errors.md", ".improvements.md"]
-        
+
         if HAS_RUST and hasattr(rust_core, "batch_exists_rust"):
             all_paths = []
             for f in self.files:
                 base = f.parent / f.stem
                 all_paths.extend([str(base.with_suffix(s)) for s in suffixes])
                 all_paths.append(str(f.parent / f"test_{f.stem}.py"))
-            
+
             exists = rust_core.batch_exists_rust(all_paths)
-            
+
             missing: dict[str, list[str]] = {
                 "context": [], "changes": [], "errors": [], "improvements": [], "tests": []
             }
-            
+
             keys = ["context", "changes", "errors", "improvements", "tests"]
             for i, file_path in enumerate(self.files):
                 start = i * 5
@@ -439,20 +439,20 @@ class StatsAgent:
     def calculate_stats(self) -> dict[str, int]:
         """Calculate statistics for each file regarding update progress."""
         suffixes = [".description.md", ".changes.md", ".errors.md", ".improvements.md"]
-        
+
         if HAS_RUST and hasattr(rust_core, "batch_exists_rust"):
             all_paths = []
             for f in self.files:
                 base = f.parent / f.stem
                 all_paths.extend([str(base.with_suffix(s)) for s in suffixes])
                 all_paths.append(str(f.parent / f"test_{f.stem}.py"))
-            
+
             exists = rust_core.batch_exists_rust(all_paths)
-            
+
             def count_matches(acc: list[int], i: int) -> list[int]:
                 start = i * 5
                 return [acc[j] + (1 if exists[start + j] else 0) for j in range(5)]
-            
+
             counts = functools.reduce(count_matches, range(len(self.files)), [0, 0, 0, 0, 0])
             self.stats = {
                 "total_files": len(self.files),

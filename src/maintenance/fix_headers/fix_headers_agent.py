@@ -25,7 +25,6 @@ from __future__ import annotations
 import os
 import re
 from pathlib import Path
-from typing import List, Set
 
 
 class FixHeadersAgent:
@@ -169,7 +168,7 @@ class FixHeadersAgent:
             print(f"❌ Error processing {filepath}: {e}")
             return False
 
-    def process_directory(self, directory: Path, exclude_patterns: Set[str] = None) -> None:
+    def process_directory(self, directory: Path, exclude_patterns: set[str] = None) -> None:
         """
         Process all Python files in a directory tree.
 
@@ -206,7 +205,7 @@ Files skipped:    {self.files_skipped}
 Mode:             {'DRY RUN' if self.dry_run else 'LIVE'}
 """
 
-    def run(self, target: str | Path, exclude_patterns: Set[str] = None) -> None:
+    def run(self, target: str | Path, exclude_patterns: set[str] = None) -> None:
         """
         Run the header fixing process on a target.
 

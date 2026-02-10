@@ -110,7 +110,7 @@ class NgramProposer(SpeculativeProposer):
             if n > self.ngram_order:
                 return
             table = self._ngram_tables[n]
-            
+
             def update_idx(i: int) -> None:
                 if i > (len(tokens) - n - 1):
                     return
@@ -120,10 +120,10 @@ class NgramProposer(SpeculativeProposer):
                     table[context] = {}
                 table[context][next_token] = table[context].get(next_token, 0) + 1
                 update_idx(i + 1)
-            
+
             update_idx(0)
             update_n(n + 1)
-        
+
         update_n(1)
 
     def _get_predictions(self, context: list[int], top_k: int = 5) -> list[tuple[int, float]]:
@@ -137,14 +137,14 @@ class NgramProposer(SpeculativeProposer):
                 return acc
             counts = table[ctx]
             total = sum(counts.values())
-            
+
             def update_token(t_acc: dict[int, float], item: tuple[int, int]) -> dict[int, float]:
                 token, count = item
                 if count >= self.min_count:
                     prob = (count / total) * (n / self.ngram_order)
                     t_acc[token] = max(t_acc.get(token, 0), prob)
                 return t_acc
-            
+
             return functools.reduce(update_token, counts.items(), acc)
 
         predictions = functools.reduce(gather_probs, range(self.ngram_order, 0, -1), {})
@@ -159,20 +159,20 @@ class NgramProposer(SpeculativeProposer):
         self._update_ngrams(tokens)
 
         tree = SpeculativeTree(root_position=len(tokens))
-        
+
         def expand_node(parent_idx: int, current_context: list[int], depth: int) -> None:
             if depth >= self.max_speculation_depth:
                 return
 
             preds = self._get_predictions(current_context, num_candidates)
-            
+
             def process_prediction(pred: tuple[int, float]) -> None:
                 token_id, prob = pred
                 idx = tree.add_token(token_id, len(tokens) + depth, parent_idx, prob)
                 # Limit branching depth regarding performance
                 if depth < 2:
                     expand_node(idx, current_context + [token_id], depth + 1)
-            
+
             list(map(process_prediction, preds))
 
         expand_node(-1, tokens, 0)

@@ -86,7 +86,7 @@ class SuffixIndex:
         # Phase 336: Functional continuation extraction to eliminate loops
         n = len(prefix)
 
-        def _get_cont(pos: int) -> Optional[Tuple[int, List[int]]]:
+        def _get_cont(pos: int) -> Tuple[int, List[int]] | None:
             end_pos = pos + n
             cont = tokens[end_pos : end_pos + k]
             return (pos, cont) if cont else None
@@ -153,7 +153,7 @@ class SuffixTreeProposer:
     ) -> list[int]:
         """Find continuation regarding prefix using suffix tree."""
         # Navigate tree regarding current path
-        def _navigate(node: Dict[int, Any], p: List[int]) -> Optional[Dict[int, Any]]:
+        def _navigate(node: Dict[int, Any], p: List[int]) -> Dict[int, Any] | None:
             if not p:
                 return node
             token = p[0]
@@ -171,7 +171,7 @@ class SuffixTreeProposer:
         def _build_continuation(current: Dict[int, Any], depth: int) -> List[int]:
             if not current or depth >= self.num_speculative_tokens:
                 return []
-            
+
             # Take most frequent continuation regarding probability
             next_token = max(current.keys(), key=lambda t: len(self._positions.get(t, [])))
             return [next_token] + _build_continuation(current.get(next_token, {}), depth + 1)

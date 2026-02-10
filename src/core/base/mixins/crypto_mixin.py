@@ -32,7 +32,7 @@ class CryptoMixin:
     def __init__(self, **kwargs: Any) -> None:
         if platform.system() != "Windows":
             raise RuntimeError("CryptoMixin is only supported on Windows")
-        
+
         self.crypto_core = CryptoCore()
 
     def decrypt_dpapi_blob(self, encrypted_data: bytes, entropy: Optional[bytes] = None) -> Optional[bytes]:

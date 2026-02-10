@@ -37,7 +37,10 @@ DEF_RE = re.compile(r"^\s*(?:def|class)\s+(?P<name>[A-Za-z_][A-Za-z0-9_]+)", re.
 WHITELIST_EXTENSIONS = (".py", ".md", ".json", ".yaml", ".yml", ".toml", ".ini", ".cfg", ".txt")
 
 # Top-level directory names or path fragments to skip entirely (case-insensitive)
-EXCLUDE_DIRS = ("system", "system/library", "node_modules", "__pycache__", "target", "build", "dist", ".git", "vendor", "bin")
+EXCLUDE_DIRS = (
+    "system", "system/library", "node_modules", "__pycache__",
+    "target", "build", "dist", ".git", "vendor", "bin"
+)
 
 
 def extract_completed_from_tracking(tracking_path: Path) -> List[str]:
@@ -100,7 +103,11 @@ def scan_directory_for_candidates(dirpath: Path) -> Dict[str, Any]:
             if defs:
                 if VERBOSE:
                     print(f"  Found definitions in: {p.relative_to(EXTERNAL)} -> {defs[:5]}")
-                report["files"].append({"path": str(p.relative_to(EXTERNAL)), "suffix": suffix, "definitions": defs[:20]})
+                report["files"].append({
+                    "path": str(p.relative_to(EXTERNAL)),
+                    "suffix": suffix,
+                    "definitions": defs[:20]
+                })
     return report
 
 
@@ -145,7 +152,11 @@ def write_reports(report: Dict[str, Any], md_path: Path, json_path: Path):
         for f in d.get("files", []):
             defs = f.get("definitions", [])
             missing = f.get("missing_in_src", [])
-            lines.append(f"- {f['path']} ({f['suffix']}) — defs: {', '.join(defs[:5]) or 'none'}; missing in src: {len(missing)}\n")
+            f_path = f['path']
+            f_suffix = f['suffix']
+            f_defs = ', '.join(defs[:5]) or 'none'
+            f_missing = len(missing)
+            lines.append(f"- {f_path} ({f_suffix}) — defs: {f_defs}; missing in src: {f_missing}\n")
         lines.append("\n")
     md_path.write_text("\n".join(lines), encoding="utf-8")
 
@@ -171,12 +182,12 @@ if __name__ == "__main__":
     dirs = [d for d in EXTERNAL.iterdir() if d.is_dir()]
     for d in dirs:
         results.append(scan_directory_for_candidates(d))
-    
+
     report = {
         "summary": {"total_dirs": len(results)},
         "directories": results
     }
-    
+
     out_json = ROOT / ".external" / "refactor_report.json"
     out_json.write_text(json.dumps(report, indent=2), encoding='utf-8')
     print(f"Wrote report to {out_json}")

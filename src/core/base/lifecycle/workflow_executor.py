@@ -35,36 +35,70 @@ class WorkflowExecutor:
         self.results: Dict[str, Any] = {}
 
     async def execute(self, flow_nodes: List[Dict[str, Any]], connectors: List[Dict[str, Any]]) -> Any:
-        """Executes the workflow graph (Synchronous top-sort for now)."""
-        logger.info("WorkflowExecutor: Executing DAG with %d nodes", len(flow_nodes))
+        """Executes the workflow graph (DAG traversal)."""
+        logger.info("WorkflowExecutor: Executing Graph with %d nodes", len(flow_nodes))
         
-        # Simple execution loop
-        for node in flow_nodes:
-            node_id = node.get("id")
-            if not node_id:
-                logger.warning("WorkflowExecutor: Skipping node without ID")
-                continue
-            
-            node_type = node.get("type", "task")
-            prompt_template = node.get("prompt", "")
-            
-            # Resolve dependencies (Variables from previous nodes)
-            prompt = self._resolve_variables(prompt_template)
-            
-            logger.info("WorkflowExecutor: Executing node [%s] type [%s]", node_id, node_type)
-            
-            if node_type == "task":
-                result = await self.agent.run_task({"context": prompt})
-                self.results[node_id] = result
-            elif node_type == "condition":
-                # Basic branch logic
-                condition = str(node.get("logic", "True"))
-                self.results[node_id] = eval(condition, {"results": self.results})
+        node_map = {n["id"]: n for n in flow_nodes}
+        if not flow_nodes:
+            return "Empty workflow"
+
+        # Find starting nodes (no incoming connectors)
+        dest_nodes = {c["to"] for c in connectors}
+        current_node_ids = [n["id"] for n in flow_nodes if n["id"] not in dest_nodes]
+        
+        # If all nodes have incoming links, just start at the first one
+        if not current_node_ids and flow_nodes:
+            current_node_ids = [flow_nodes[0]["id"]]
+
+        last_result = None
+
+        while current_node_ids:
+            next_node_ids = []
+            for node_id in current_node_ids:
+                node = node_map.get(node_id)
+                if not node: continue
+
+                node_type = node.get("type", "task")
+                prompt_template = node.get("prompt", "")
                 
-        # Final node result
-        if flow_nodes:
-            return self.results.get(flow_nodes[-1]["id"], "Workflow complete")
-        return "Empty workflow"
+                # Resolve dependencies (Variables from previous nodes)
+                prompt = self._resolve_variables(prompt_template)
+                
+                logger.info("WorkflowExecutor: Executing node [%s] type [%s]", node_id, node_type)
+                
+                node_result = None
+                if node_type == "task":
+                    node_result = await self.agent.run_task({"context": prompt})
+                    self.results[node_id] = node_result
+                elif node_type == "condition":
+                    # Basic branch logic
+                    condition = str(node.get("logic", "True"))
+                    try:
+                        node_result = eval(condition, {"results": self.results, "node": node})
+                    except Exception as e:
+                        logger.error("Condition error in %s: %s", node_id, e)
+                        node_result = False
+                    self.results[node_id] = node_result
+                
+                last_result = node_result
+
+                # Find next nodes based on connectors
+                if node_type == "condition":
+                    # For conditions, we look for targeted next nodes
+                    branch = "if_true" if node_result else "if_false"
+                    next_ids = [c["to"] for c in connectors if c["from"] == node_id and c.get("label") == branch]
+                    # Fallback to any unlabeled connector if specific one not found
+                    if not next_ids:
+                        next_ids = [c["to"] for c in connectors if c["from"] == node_id and not c.get("label")]
+                    next_node_ids.extend(next_ids)
+                else:
+                    # Generic task: follow all outgoing connectors
+                    next_ids = [c["to"] for c in connectors if c["from"] == node_id]
+                    next_node_ids.extend(next_ids)
+
+            current_node_ids = list(set(next_node_ids)) # De-duplicate and continue
+
+        return last_result if last_result is not None else "Workflow complete"
 
     def _resolve_variables(self, template: str) -> str:
         """Hydrates {{node_id}} placeholders with results."""

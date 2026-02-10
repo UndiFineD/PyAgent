@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # ruff: noqa: F401
+# flake8: noqa
 
 """Lazy-loading entry point for observability.tracing."""
 

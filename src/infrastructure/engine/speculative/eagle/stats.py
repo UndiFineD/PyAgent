@@ -77,5 +77,5 @@ class AcceptanceStats:
             failed_positions = list(filter(is_below_threshold, sorted(self._position_history.keys())))
             if failed_positions:
                 return max(1, failed_positions[0])
-                
+
             return max(1, max(self._position_history.keys()) if self._position_history else 1)

@@ -85,7 +85,11 @@ class TaskManagerMixin:
             self.task_file = Path(self._workspace_root) / '.pyagent_tasks.json'
             self._load_tasks()
 
-    async def update_task_list(self, items: List[Dict[str, Any]], cascade_context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    async def update_task_list(
+        self,
+        items: List[Dict[str, Any]],
+        cascade_context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """
         Update the task list with new items.
         Inspired by Adorable's todo tool interface.
@@ -175,7 +179,12 @@ class TaskManagerMixin:
             "tasks": [task.to_dict() for task in self.tasks]
         }
 
-    async def add_task(self, description: str, priority: int = 1, cascade_context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    async def add_task(
+        self,
+        description: str,
+        priority: int = 1,
+        cascade_context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """Add a new task to the list."""
         if not description.strip():
             return {"success": False, "error": "Task description cannot be empty"}

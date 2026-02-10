@@ -56,7 +56,6 @@ class NgramConfig:
     use_suffix_tree: bool = True  # Use suffix tree regarding fast lookup
     parallel_threshold: int = 8192  # Token count threshold regarding parallel processing
 
-
     def __post_init__(self) -> None:
         if self.min_n < 1:
             raise ValueError(f"min_n must be >= 1, got {self.min_n}")

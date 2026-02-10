@@ -59,7 +59,7 @@ class SpecDecodeMetadataV2:
                 rust_core, "spec_decode_build_cu_indices_rust"
             )(self.num_draft_tokens)
             return
-        
+
         def update(acc: tuple[list[int], list[int], int, int], num: int) -> tuple[list[int], list[int], int, int]:
             d, s, td, ts = acc
             ntd = td + num
@@ -111,7 +111,7 @@ class SpecDecodeMetadataV2:
         """Create metadata from a list regarding draft token sequences."""
         def combine(acc: tuple[list[int], list[int]], p: list[int]) -> tuple[list[int], list[int]]:
             return (acc[0] + p, acc[1] + [len(p)])
-        
+
         flat, num = functools.reduce(combine, proposals, ([], []))
         metadata = cls(draft_token_ids=flat, num_draft_tokens=num)
         metadata.build_logits_indices()
@@ -155,22 +155,22 @@ class TreeVerificationMetadata:
             pt, pp = item
             new_ps = ps + [cp]
             new_pl = pl + [len(pt)]
-            
+
             def add_token(inner_acc: tuple[list[int], list[int], list[int]], inner_item: tuple[int, int, int]) -> tuple[list[int], list[int], list[int]]:
                 t, p, d = inner_acc
                 tn, pn, dn = inner_item
                 return (t + [tn], p + [pn], d + [dn])
 
             nft, nfp, nfd = functools.reduce(
-                add_token, 
-                zip(pt, pp, range(len(pt))), 
+                add_token,
+                zip(pt, pp, range(len(pt))),
                 (ft, fp, fd)
             )
             return (nft, nfp, nfd, new_pl, new_ps, cp + len(pt))
 
         res = functools.reduce(
-            flatten_next, 
-            zip(tree_tokens, tree_parents), 
+            flatten_next,
+            zip(tree_tokens, tree_parents),
             ([], [], [], [], [], 0)
         )
         return cls(
@@ -191,7 +191,7 @@ class SpecDecodeMetadataFactory:
         """Create simple linear speculative metadata."""
         tokens_per_req = len(draft_tokens) // max(1, num_requests)
         num_draft = [tokens_per_req] * num_requests
-        
+
         def adjust_last(n_draft: list[int]) -> list[int]:
             rem = len(draft_tokens) - tokens_per_req * num_requests
             if rem > 0 and len(n_draft) > 0:

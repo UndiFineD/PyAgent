@@ -264,7 +264,9 @@ class BatchDCPPrefillWrapper(BatchExecutor):
             from functools import reduce
             initial: Tuple[int, Dict[str, Tuple[int, int]]] = (0, {})
 
-            def acc_pos(state: Tuple[int, Dict[str, Tuple[int, int]]], req: BatchRequest) -> Tuple[int, Dict[str, Tuple[int, int]]]:
+            def acc_pos(
+                state: Tuple[int, Dict[str, Tuple[int, int]]], req: BatchRequest
+            ) -> Tuple[int, Dict[str, Tuple[int, int]]]:
                 curr, d = state
                 end = curr + req.seq_len
                 d[req.request_id] = (curr, end)
@@ -281,7 +283,9 @@ class BatchDCPPrefillWrapper(BatchExecutor):
             from functools import reduce
             initial: Tuple[int, Dict[str, List[int]]] = (0, {})
 
-            def acc_alloc(state: Tuple[int, Dict[str, List[int]]], req: BatchRequest) -> Tuple[int, Dict[str, List[int]]]:
+            def acc_alloc(
+                state: Tuple[int, Dict[str, List[int]]], req: BatchRequest
+            ) -> Tuple[int, Dict[str, List[int]]]:
                 used, d = state
                 num_blocks = (req.seq_len + block_size - 1) // block_size
                 block_ids = list(range(used, used + num_blocks))
