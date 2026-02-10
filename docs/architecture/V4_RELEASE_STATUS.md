@@ -29,9 +29,15 @@
 - **Distributed RAID-10 Backup**: State is now sharded and mirrored across peer nodes using part-based striping.
 - **Synaptic Decay**: Knowledge pruning logic for keeping the swarm's memory lean and efficient.
 
-## 🛠 Next Steps (v4.0.1)
-- [ ] Migrate `ZeroTrustFirewall` (ECDSA) and `msgspec` serialization fully to `rust_core`.
-- [ ] Implement "Shard RAID-10" distributed backup protocol.
+## 🏁 Completed v4.0.0 Milestones
+- [x] **Zero-Trust Firewall (ECDSA)**: Fully integrated into `FleetManager` with identity verification.
+- [x] **Shard RAID-10 Distributed Backup**: Logic implemented for mirroring agent state across nodes.
+- [x] **Universal Agent Shell**: Composition-based agent shell with lazy-loaded logic cores.
+- [x] **Paged KV_v2 Cache**: Rust-accelerated block management for long-context stability.
+
+## 🛠 Next Steps (v4.1.0)
+- [ ] Migrate `msgspec` serialization fully to `rust_core` for sub-millisecond overhead.
 - [ ] Finalize the "Fleet Load Balancer" for public community mesh nodes.
+- [ ] Implement "Synaptic Pruning" triggers based on resource pressure.
 
 **Ready for Swarm Deployment.**

@@ -22,6 +22,11 @@ PyAgent now implements **Signal Protocol** for end-to-end encryption, providing 
 - Deniable authentication
 - No online coordination required for initial key exchange
 
+### ✅ **Zero-Trust Firewall Integration (v4.0.0)**
+- Encryption is now coupled with **Identity Verification**.
+- Every P2P message is signed by the sender's private key and verified by the `ZeroTrustFirewall`.
+- Prevents impersonation attacks in the decentralized Voyager mesh.
+
 ### ✅ **Multi-Tenant Isolation**
 - Per-user encryption keys
 - User A cannot access User B's data, even if server is compromised
