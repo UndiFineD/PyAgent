@@ -41,6 +41,12 @@ try:
 except ImportError:
     HAS_OLLAMA = False
 
+try:
+    from llama_cpp import Llama
+    HAS_LLAMA_CPP = True
+except ImportError:
+    HAS_LLAMA_CPP = False
+
 from src.inference.execution.async_model_runner import AsyncModelRunner, ModelInput
 
 logger = logging.getLogger("pyagent.inference.engine")
@@ -102,8 +108,40 @@ class InferenceEngine:
             if HAS_OLLAMA:
                 return await self._generate_ollama(prompt, model, temperature)
 
+        if "gguf" in model.lower() or model.endswith(".gguf") or kwargs.get("use_llama_cpp"):
+            if HAS_LLAMA_CPP:
+                return await self._generate_llama_cpp(prompt, model, temperature, max_tokens)
+
         # Default to OpenAI compatible (covers GPT, Gemini via proxy, etc)
         return await self._generate_openai(prompt, model, temperature, max_tokens)
+
+    async def _generate_llama_cpp(self, prompt: str, model: str, temperature: float, max_tokens: int) -> str:
+        """Generate using local llama.cpp GGUF model."""
+        try:
+            # Check if model is a path, if not try to find it in data/models
+            model_path = model
+            if not os.path.exists(model_path):
+                potential_path = os.path.join("data", "models", model)
+                if os.path.exists(potential_path):
+                    model_path = potential_path
+                else:
+                    logger.error(f"GGUF model not found at {model_path} or {potential_path}")
+                    return f"Error: GGUF model not found: {model}"
+
+            # Initialize Llama (lazily in a real scenario, but here for demo)
+            # In a production system, we'd use a singleton or pool
+            llm = Llama(model_path=model_path, verbose=False)
+            
+            response = await asyncio.to_thread(
+                llm,
+                prompt,
+                max_tokens=max_tokens,
+                temperature=temperature
+            )
+            return response['choices'][0]['text']
+        except Exception as e:
+            logger.error(f"llama-cpp generation failed: {e}")
+            return f"Error: {str(e)}"
 
     async def _generate_openai(self, prompt: str, model: str, temperature: float, max_tokens: int) -> str:
         client = self._get_openai_client()

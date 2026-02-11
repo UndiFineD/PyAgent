@@ -31,6 +31,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from src.tools.download_agent.core import DownloadAgent
+from src.tools.download_agent.models import DownloadConfig
 from src.infrastructure.security.auth.webauthn_manager import WebAuthnManager
 from src.infrastructure.swarm.resilience.checkpoint_manager import CheckpointManager
 
@@ -412,6 +414,33 @@ async def get_observability_topology():
     
     with open(topo_path, "r") as f:
         return json.load(f)
+
+
+@app.post("/api/tools/download")
+async def trigger_download(request: Request):
+    """
+    Triggers a download via the DownloadAgent.
+    """
+    data = await request.json()
+    url = data.get("url")
+    if not url:
+        return JSONResponse(status_code=400, content={"error": "URL required"})
+    
+    config = DownloadConfig(
+        urls_file="",
+        dry_run=data.get("dry_run", False),
+        verbose=True,
+        base_dir=str(WORKSPACE_ROOT)
+    )
+    agent = DownloadAgent(config)
+    result = await asyncio.to_thread(agent.process_url, url)
+    
+    # Save to history
+    history_path = WORKSPACE_ROOT / "temp" / "downloads.json"
+    history_path.parent.mkdir(parents=True, exist_ok=True)
+    await asyncio.to_thread(agent.save_results, [result], str(history_path))
+    
+    return {"status": "success" if result.success else "failed", "result": result.__dict__}
 
 
 # 2. ROOT ROUTE

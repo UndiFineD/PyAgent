@@ -250,6 +250,102 @@ class DownloadAgent:
 
         return self.download_file(pdf_url, metadata, filename)
 
+    def download_hf_model(self, url: str, metadata: Dict) -> DownloadResult:
+        """Download a full Hugging Face model repository."""
+        repo_id = metadata['repo_id']
+        dest_dir = self.ensure_directory(metadata['destination'])
+        repo_path = dest_dir / repo_id.replace("/", "--")
+
+        if self.config.skip_existing and repo_path.exists():
+            return DownloadResult(
+                url=url,
+                success=True,
+                destination=str(repo_path),
+                file_type='hf_model',
+                metadata={'skipped': True}
+            )
+
+        if self.config.dry_run:
+            return DownloadResult(
+                url=url,
+                success=True,
+                destination=str(repo_path),
+                file_type='hf_model',
+                metadata={'dry_run': True}
+            )
+
+        try:
+            from huggingface_hub import snapshot_download
+            p = snapshot_download(
+                repo_id=repo_id,
+                local_dir=str(repo_path),
+                token=os.environ.get("HF_TOKEN")
+            )
+            return DownloadResult(
+                url=url,
+                success=True,
+                destination=str(p),
+                file_type='hf_model',
+                metadata={'repo_id': repo_id}
+            )
+        except Exception as e:
+            return DownloadResult(
+                url=url,
+                success=False,
+                destination=str(repo_path),
+                file_type='hf_model',
+                error_message=str(e)
+            )
+
+    def download_hf_file(self, url: str, metadata: Dict) -> DownloadResult:
+        """Download a single file from Hugging Face."""
+        repo_id = metadata['repo_id']
+        filename = metadata['filename']
+        dest_dir = self.ensure_directory(metadata['destination'])
+        dest_path = dest_dir / filename
+
+        if self.config.skip_existing and dest_path.exists():
+            return DownloadResult(
+                url=url,
+                success=True,
+                destination=str(dest_path),
+                file_type='hf_file',
+                metadata={'skipped': True}
+            )
+
+        if self.config.dry_run:
+            return DownloadResult(
+                url=url,
+                success=True,
+                destination=str(dest_path),
+                file_type='hf_file',
+                metadata={'dry_run': True}
+            )
+
+        try:
+            from huggingface_hub import hf_hub_download
+            p = hf_hub_download(
+                repo_id=repo_id,
+                filename=filename,
+                local_dir=str(dest_dir),
+                token=os.environ.get("HF_TOKEN")
+            )
+            return DownloadResult(
+                url=url,
+                success=True,
+                destination=str(p),
+                file_type='hf_file',
+                metadata={'repo_id': repo_id, 'filename': filename}
+            )
+        except Exception as e:
+            return DownloadResult(
+                url=url,
+                success=False,
+                destination=str(dest_path),
+                file_type='hf_file',
+                error_message=str(e)
+            )
+
     def open_webpage(self, url: str, metadata: Dict) -> DownloadResult:
         """Open webpage in browser or download HTML."""
         # For now, just download the HTML content
@@ -270,6 +366,10 @@ class DownloadAgent:
             return self.download_github_repo(url, metadata)
         elif url_type == 'github_gist':
             return self.download_github_gist(url, metadata)
+        elif url_type == 'hf_model':
+            return self.download_hf_model(url, metadata)
+        elif url_type == 'hf_file':
+            return self.download_hf_file(url, metadata)
         elif url_type == 'arxiv_paper':
             return self.download_arxiv_paper(url, metadata)
         elif url_type in ['research_paper', 'dataset', 'documentation']:

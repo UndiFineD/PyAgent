@@ -47,6 +47,7 @@ class SelfImprovementCoordinator:
         self.context_file: Path = self.prompt_dir / "context.txt"
         self.prompt_file: Path = self.prompt_dir / "prompt.txt"
         self.cloud_policy_file: Path = self.prompt_dir / "cloud_integration.md"
+        self.steering_file: Path = self.prompt_dir / "steering.txt"
         self.logger: logging.Logger = logging.getLogger(__name__)
         self.directives: Dict[str, Any] = {}
 
@@ -89,7 +90,7 @@ class SelfImprovementCoordinator:
             "target_peers": [],
         }
 
-        files_to_check: List[Path] = [self.context_file, self.prompt_file]
+        files_to_check: List[Path] = [self.context_file, self.prompt_file, self.steering_file]
         for f in files_to_check:
             if f.exists():
                 content: str = f.read_text(encoding="utf-8")

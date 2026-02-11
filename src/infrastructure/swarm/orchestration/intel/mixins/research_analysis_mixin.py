@@ -40,19 +40,25 @@ class ResearchAnalysisMixin:
             os.makedirs(os.path.dirname(self.research_doc), exist_ok=True)
 
         # Generate a summary section
-        summary = f"\\n### Latest Autonomous Scan ({time.strftime('%Y-%m-%d')})\\n"
-        summary += f"- **Files Scanned**: {results['files_scanned']}\\n"
-        summary += f"- **Issues Identified**: {results['issues_found']}\\n"
-        summary += f"- **Fixes Applied**: {results['fixes_applied']}\\n"
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        summary = f"\n### Latest Autonomous Scan ({timestamp})\n"
+        summary += f"- **Files Scanned**: {results['files_scanned']}\n"
+        summary += f"- **Issues Identified**: {results['issues_found']}\n"
+        summary += f"- **Fixes Applied**: {results['fixes_applied']}\n"
 
         if lessons:
-            summary += "\\n**Lessons Learned from Interaction Shards:**\\n"
+            summary += "\n**Lessons Learned from Interaction Shards:**\n"
             for lesson in lessons:
-                summary += f"- {lesson}\\n"
+                summary += f"- {lesson}\n"
 
         with contextlib.suppress(Exception):
-            with open(self.research_doc, "a", encoding="utf-8") as f:
-                f.write(summary)
+            content = ""
+            if os.path.exists(self.research_doc):
+                with open(self.research_doc, "r", encoding="utf-8") as f:
+                    content = f.read()
+            
+            with open(self.research_doc, "w", encoding="utf-8") as f:
+                f.write(summary + "\n" + content)
 
     def review_ai_lessons(self: SelfImprovementAnalysis, fleet: Any, ai: Any) -> list[str]:
         """Reviews local interaction shards for patterns of success/failure."""

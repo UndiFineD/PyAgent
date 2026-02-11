@@ -78,6 +78,8 @@ Examples:
 Supported URL types:
   • GitHub repos: git clone to .external/
   • GitHub gists: git clone to .external/gists/
+  • HF Models: snapshot_download from huggingface.co to data/models/
+  • HF Files: hf_hub_download from huggingface.co to data/models/
   • ArXiv papers: download PDF to data/research/
   • Research PDFs: download to data/research/
   • Datasets: download to data/datasets/

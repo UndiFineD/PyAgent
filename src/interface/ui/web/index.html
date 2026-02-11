@@ -176,6 +176,8 @@
                         <div className="flex-1 space-y-2">
                             <NavBtn icon="brain" label="Thoughts" active={view === 'thoughts'} onClick={() => setView('thoughts')} />
                             <NavBtn icon="project-diagram" label="Topology" active={view === 'topology'} onClick={() => setView('topology')} />
+                            <NavBtn icon="cloud-download-alt" label="Downloads" active={view === 'downloads'} onClick={() => setView('downloads')} />
+                            <NavBtn icon="chart-line" label="Improvement" active={view === 'improvement'} onClick={() => setView('improvement')} />
                             <NavBtn icon="shield-virus" label="Safety Hub" active={view === 'safety'} onClick={() => setView('safety')} />
                             <NavBtn icon="tower-broadcast" label="Multimedia" active={view === 'stream'} onClick={() => setView('stream')} />
                             <NavBtn icon="folder-tree" label="Explorer" active={view === 'files'} onClick={() => setView('files')} />
@@ -238,6 +240,8 @@
                         <div className="flex-1 overflow-hidden p-6">
                             {view === 'thoughts' && <ThoughtStream />}
                             {view === 'topology' && <iframe src="/topology" title="Swarm Topology"></iframe>}
+                            {view === 'downloads' && <iframe src="http://localhost:8501" title="Download Manager"></iframe>}
+                            {view === 'improvement' && <iframe src="http://localhost:8502" title="Improvement Manager"></iframe>}
                             {view === 'stream' && <iframe src="/stream" title="Multimedia Stream"></iframe>}
                             {view === 'files' && <FileExplorer />}
                             {view === 'safety' && <SafetyHub />}

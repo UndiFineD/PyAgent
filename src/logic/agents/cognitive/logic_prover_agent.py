@@ -81,8 +81,9 @@ class LogicProverAgent:
         """
         Exports a log of verified steps for auditing.
         """
+        import datetime
         return {
             "chain_id": "logic_v1_001",
             "steps_verified": len(reasoning_chain),
-            "timestamp": "2026-01-08T12:00:00Z",
+            "timestamp": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
         }

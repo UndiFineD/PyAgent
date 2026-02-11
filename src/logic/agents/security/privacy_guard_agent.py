@@ -68,9 +68,10 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                         redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")
 
         if findings:
+            import datetime
             self.redaction_logs.append(
                 {
-                    "timestamp": "2026-01-08",  # Simulated
+                    "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "findings_count": len(findings),
                     "pii_types": list(set(f["type"] for f in findings)),
                 }

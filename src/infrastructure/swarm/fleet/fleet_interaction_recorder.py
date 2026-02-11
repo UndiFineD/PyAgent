@@ -33,9 +33,10 @@ class FleetInteractionRecorder:
     def record_interaction(self, user_input: str, agent_id: str, role: str, content: str | None = None) -> None:
         """Directly records an interaction for the Web UI reasoning stream."""
         import json
+        import datetime
         log_file = self.fleet.workspace_root / "data" / "logs" / "reasoning_chains.jsonl"
         entry = {
-            "timestamp": time.time(),
+            "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "role": role,
             "agent": agent_id,
             "content": content or user_input,

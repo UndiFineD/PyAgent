@@ -83,8 +83,9 @@ class ExplainabilityAgent(BaseAgent):
         if self.errors_only and not is_failure:
             return
 
+        import datetime
         entry = {
-            "timestamp": "2026-01-08",  # Simulated
+            "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "workflow_id": workflow_id,
             "agent": agent_name,
             "action": action,

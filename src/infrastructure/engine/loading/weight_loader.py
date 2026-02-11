@@ -570,23 +570,52 @@ class GGUFLoader(WeightLoader):
         device: str = "cpu",
     ) -> Generator[tuple[str, Any], None, None]:
         """Iterate weights regarding GGUF files."""
-        # Note: In a production scenario, we'd use gguf or llama-cpp-python
-        # For this implementation, we provide the architecture for the stream.
         try:
             import torch
-            # Mocking GGUF tensor extraction for the pipeline
+            import gguf
+            import numpy as np
+
             for path in file_paths:
-                logging.info(f"GGUFLoader: Streaming weights from {path}")
-                # Real implementation would parse GGUF KV pairs and tensors
-                yield "model.embed_tokens.weight", torch.randn(10, 10, device=device)
+                logging.info(f"GGUFLoader: Loading weights from {path}")
+                reader = gguf.GGUFReader(path)
+                
+                for tensor in reader.tensors:
+                    name = tensor.name
+                    # Convert to torch tensor
+                    # Note: GGUF tensors might need dequantization depending on the engine
+                    # but here we yield the raw or semi-processed data for the pipeline.
+                    data = tensor.data
+                    if isinstance(data, np.ndarray):
+                        t = torch.from_numpy(data).to(device)
+                    else:
+                        # Handle potential buffer issues
+                        t = torch.tensor(data).to(device)
+                    
+                    yield name, t
+
         except ImportError:
-            logging.error("Torch not available for GGUFLoader")
+            logging.error("Required libraries (torch, gguf) not available for GGUFLoader")
+        except Exception as e:
+            logging.error(f"Error loading GGUF weights: {e}")
 
     def get_weight_specs(self, file_paths: list[str]) -> list[WeightSpec]:
         """Provides metadata about GGUF tensors."""
-        return [
-            WeightSpec(name="model.embed_tokens.weight", shape=[32000, 4096], dtype="q4_k")
-        ]
+        specs = []
+        try:
+            import gguf
+            for path in file_paths:
+                reader = gguf.GGUFReader(path)
+                for tensor in reader.tensors:
+                    specs.append(
+                        WeightSpec(
+                            name=tensor.name,
+                            shape=list(tensor.shape),
+                            dtype=str(tensor.tensor_type)
+                        )
+                    )
+        except ImportError:
+            logging.error("GGUF library not available for metadata extraction")
+        return specs
 
 
 # Rust-accelerated functions

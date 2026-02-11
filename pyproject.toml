@@ -47,6 +47,10 @@ dependencies = [
     "websockets>=14.0.0",
     "censys>=2.2.0",
     "werkzeug>=3.1.5",
+    "vllm>=0.14.1",
+    "huggingface-hub>=0.36.0",
+    "llama-cpp-python>=0.3.7",
+    "gguf>=0.17.1",
 ]
 
 [project.optional-dependencies]

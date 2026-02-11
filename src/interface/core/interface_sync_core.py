@@ -51,11 +51,12 @@ class InterfaceSyncCore:
         """
         Formats an action for broadcast to all interface targets.
         """
+        import datetime
         return {
             "event": "INTERFACE_SYNC",
             "type": action_type,
             "payload": payload,
-            "timestamp": "2026-01-08",  # Simulated
+            "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         }
 
     def resolve_topology_state(self, agents: list[dict[str, Any]], connections: list[tuple]) -> dict[str, Any]:

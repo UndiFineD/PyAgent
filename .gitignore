@@ -86,3 +86,13 @@ tests\__pycache__
 
 #files
 .env
+
+# Data and Models
+data/models/
+data/logs/
+data/cache/
+data/agent_cache/
+data/memory/
+data/shards/
+*.jsonl
+

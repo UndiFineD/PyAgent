@@ -66,6 +66,28 @@ class URLClassifier:
                 'format': 'pdf'
             }
 
+        # Hugging Face Models
+        if 'huggingface.co' in url_lower and '/datasets' not in url_lower:
+            parts = url.split('/')
+            # Examples:
+            # https://huggingface.co/meta-llama/Llama-3-8B-Instruct
+            # https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/resolve/main/llama-2-7b-chat.Q4_K_M.gguf
+            if 'resolve' in parts:
+                idx = parts.index('resolve')
+                repo_id = "/".join(parts[parts.index('huggingface.co') + 1 : idx])
+                filename = parts[-1]
+                return 'hf_file', {
+                    'repo_id': repo_id,
+                    'filename': filename,
+                    'destination': 'data/models'
+                }
+            else:
+                repo_id = "/".join(parts[parts.index('huggingface.co') + 1 :])
+                return 'hf_model', {
+                    'repo_id': repo_id,
+                    'destination': 'data/models'
+                }
+
         # Dataset URLs
         if any(term in url_lower for term in ['dataset', 'data', 'kaggle', 'huggingface.co/datasets']):
             return 'dataset', {

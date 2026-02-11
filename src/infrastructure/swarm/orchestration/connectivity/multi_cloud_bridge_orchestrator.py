@@ -63,11 +63,12 @@ class MultiCloudBridgeOrchestrator:
                 success_count += 1
                 logger.info(f"Bridge: Synced state to {target} (Across {len(self.cloud_nodes[target])} nodes)")
 
+        import datetime
         sync_event = {
             "source": source_provider,
             "targets": targets,
             "nodes_synced": success_count,
-            "timestamp": "2026-01-08",  # Simulated
+            "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         }
         self.sync_logs.append(sync_event)
 
