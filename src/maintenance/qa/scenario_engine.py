@@ -49,7 +49,7 @@ class ScenarioEngine:
             scenario = yaml.safe_load(f)
 
         logger.info("Running scenario: %s", scenario.get("name", "Unnamed"))
-        
+
         steps = scenario.get("steps", [])
         for i, step in enumerate(steps):
             logger.info("Step %d: %s", i + 1, step.get("description", "No description"))
