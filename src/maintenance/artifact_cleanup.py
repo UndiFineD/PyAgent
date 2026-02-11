@@ -17,6 +17,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
+"""src.maintenance.artifact_cleanup
+
+Provides the ArtifactCleanupCore which runs background cleanup cycles to
+remove temporary/generated artifacts from disk based on configurable TTLs.
+
+This module exposes a global core instance and convenience functions to
+start/stop fleet-wide cleanup workers.
+"""
+
 import asyncio
 import os
 import time
@@ -106,42 +115,46 @@ class ArtifactCleanupCore:
     async def _run_cleanup_cycle(self) -> None:
         """Run one cycle of cleanup."""
         current_time = time.time()
-        total_removed = 0
-
-        for dir_path in self.cleanup_dirs:
-            if not os.path.exists(dir_path):
-                continue
-
-            try:
-                removed = await self._cleanup_directory(dir_path, current_time)
-                total_removed += removed
-            except Exception as e:
-                logger.error(f"Error cleaning directory {dir_path}: {e}")
-
-        if total_removed > 0:
-            self._cleanup_count += total_removed
-            logger.info(f"Cleanup cycle completed: removed {total_removed} artifacts (total: {self._cleanup_count})")
+        removed = await self._cleanup_all_dirs_once(current_time)
+        if removed > 0:
+            self._cleanup_count += removed
+            logger.info(
+                f"Cleanup cycle completed: removed {removed} artifacts (total: {self._cleanup_count})"
+            )
 
     async def _cleanup_directory(self, dir_path: str, current_time: float) -> int:
         """Clean up artifacts in a specific directory."""
-        removed = 0
-        path = Path(dir_path)
+        # Keep for backward compatibility; delegate to consolidated cleanup
+        return await self._cleanup_all_dirs_once(current_time, target_dir=dir_path)
 
-        for file_path in path.rglob("*"):
-            if not file_path.is_file():
+    async def _cleanup_all_dirs_once(self, current_time: float, target_dir: Optional[str] = None) -> int:
+        """Run a single pass over configured cleanup directories (or a single target dir).
+
+        This consolidates file iteration into a single loop to reduce duplicated
+        traversal logic and lower measured loop complexity.
+        """
+        removed = 0
+        dirs = [target_dir] if target_dir else self.cleanup_dirs
+
+        for dir_path in dirs:
+            if not os.path.exists(dir_path):
                 continue
 
-            # Check if file should be cleaned up
-            if self._should_cleanup_file(file_path, current_time):
-                if self.dry_run:
-                    logger.info(f"Would remove: {file_path}")
-                else:
-                    try:
-                        file_path.unlink()
-                        removed += 1
-                        logger.debug(f"Removed artifact: {file_path}")
-                    except Exception as e:
-                        logger.error(f"Failed to remove {file_path}: {e}")
+            path = Path(dir_path)
+            for file_path in path.rglob("*"):
+                if not file_path.is_file():
+                    continue
+
+                if self._should_cleanup_file(file_path, current_time):
+                    if self.dry_run:
+                        logger.info(f"Would remove: {file_path}")
+                    else:
+                        try:
+                            file_path.unlink()
+                            removed += 1
+                            logger.debug(f"Removed artifact: {file_path}")
+                        except Exception as e:
+                            logger.error(f"Failed to remove {file_path}: {e}")
 
         return removed
 
@@ -169,23 +182,12 @@ class ArtifactCleanupCore:
         """Force an immediate cleanup cycle and return number of files removed."""
         logger.info("Forcing immediate cleanup cycle")
         current_time = time.time()
-        total_removed = 0
+        removed = await self._cleanup_all_dirs_once(current_time)
+        if removed > 0:
+            self._cleanup_count += removed
+            logger.info(f"Force cleanup completed: removed {removed} artifacts")
 
-        for dir_path in self.cleanup_dirs:
-            if not os.path.exists(dir_path):
-                continue
-
-            try:
-                removed = await self._cleanup_directory(dir_path, current_time)
-                total_removed += removed
-            except Exception as e:
-                logger.error(f"Error in force cleanup for {dir_path}: {e}")
-
-        if total_removed > 0:
-            self._cleanup_count += total_removed
-            logger.info(f"Force cleanup completed: removed {total_removed} artifacts")
-
-        return total_removed
+        return removed
 
     def get_stats(self) -> Dict:
         """Get cleanup statistics."""
