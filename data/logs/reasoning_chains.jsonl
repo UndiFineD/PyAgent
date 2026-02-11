@@ -20,3 +20,6 @@
 {"timestamp": "2026-01-08", "workflow_id": "wf_1770549577147", "agent": "PrivacyGuard", "action": "scan_and_redact", "justification": "PII scrubbing is required before cross-fleet data sharing to maintain GDPR compliance.", "context_summary": {"args": "['My email is test@example.com']"}}
 {"timestamp": "2026-01-08", "workflow_id": "wf_1770549955636", "agent": "PrivacyGuard", "action": "scan_and_redact", "justification": "PII scrubbing is required before cross-fleet data sharing to maintain GDPR compliance.", "context_summary": {"args": "['My email is test@example.com']"}}
 {"timestamp": "2026-01-08", "workflow_id": "wf_1770549955636", "agent": "PrivacyGuard", "action": "scan_and_redact", "justification": "PII scrubbing is required before cross-fleet data sharing to maintain GDPR compliance.", "context_summary": {"args": "['My email is test@example.com']"}}
+{"timestamp": "2026-02-11 23:52:44", "role": "user", "agent": "User", "content": "hi", "action": "input"}
+{"timestamp": "2026-02-11 23:52:49", "role": "user", "agent": "User", "content": "hi", "action": "input"}
+{"timestamp": "2026-02-11 23:52:57", "role": "user", "agent": "User", "content": "/clear", "action": "input"}

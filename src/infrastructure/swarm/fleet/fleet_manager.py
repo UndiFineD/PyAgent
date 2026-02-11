@@ -95,6 +95,13 @@ class FleetManager(
     system-wide stability through various orchestrators.
     """
 
+    def _safe_start_task(self, coro) -> None:
+        """Starts a task if an event loop is running, otherwise logs a warning."""
+        try:
+            asyncio.create_task(coro)
+        except RuntimeError:
+            logging.debug(f"Fleet: Could not start task {coro.__name__ if hasattr(coro, '__name__') else 'unknown'} - no event loop.")
+
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
         self.manifest_repo = ManifestRepository()
@@ -107,6 +114,10 @@ class FleetManager(
         # Phase 324: Zero-Trust Security (Pillar 7)
         self.firewall = ZeroTrustFirewall(owner_key=f"node-key-{self.workspace_root.name}")
         self.infection_guard = InfectionGuard(workspace_root=str(self.workspace_root))
+
+        # Phase 319-320: Voyager P2P Transport & Discovery
+        self.voyager_transport = VoyagerTransport()
+        self.voyager_discovery = DiscoveryNode(node_name=f"Fleet-{self.workspace_root.name}")
 
         # Phase 3.0: Swarm Consensus (Decentralized State)
         self.swarm_consensus = SwarmConsensus(
@@ -127,14 +138,10 @@ class FleetManager(
         # Phase 320: LAN Discovery
         self.init_discovery(agent_id=f"fleet-{self.workspace_root.name}")
 
-        # Phase 319-320: Voyager P2P Transport & Discovery
-        self.voyager_transport = VoyagerTransport()
-        self.voyager_discovery = DiscoveryNode(node_name=f"Fleet-{self.workspace_root.name}")
-
         # Start voyager services (async)
-        asyncio.create_task(self.voyager_transport.start_server(self._handle_voyager_message))
-        asyncio.create_task(self.voyager_discovery.start_advertising())
-        asyncio.create_task(self.voyager_discovery.start_discovery())
+        self._safe_start_task(self.voyager_transport.start_server(self._handle_voyager_message))
+        self._safe_start_task(self.voyager_discovery.start_advertising())
+        self._safe_start_task(self.voyager_discovery.start_discovery())
 
         # Swarm Singularity: Register peer discovery handler
         self.voyager_discovery.register_on_peer_added(self._on_voyager_peer_added)
@@ -143,9 +150,9 @@ class FleetManager(
         self.resource_monitor = ResourceMonitor(fleet=self)
         self.borrowed_helpers: Dict[str, Any] = {} # Phase 320: Cluster Balancing Helpers
         self.rl_selector = RLSelector() # Phase 321: RL-based Routing
-        asyncio.create_task(self.resource_monitor.start())
-        asyncio.create_task(self.evolution_loop.start())
-        asyncio.create_task(self._topology_loop())
+        self._safe_start_task(self.resource_monitor.start())
+        self._safe_start_task(self.evolution_loop.start())
+        self._safe_start_task(self._topology_loop())
 
         # Phase 322: Autonomous Update Service (15-min cycle)
         self.init_update_service(interval_seconds=900)

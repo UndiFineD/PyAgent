@@ -36,7 +36,9 @@ __version__ = VERSION
 app = FastAPI(title="PyAgent Unified API")
 
 # Global instances
-workspace_root = str(Path(__file__).resolve().parents[3]) + ""
+# Prefer the repository root (4 levels up from this file) so all web
+# components use the same `data/` location instead of `src/data/`.
+workspace_root = str(Path(__file__).resolve().parents[4]) + ""
 fleet = FleetManager(workspace_root)
 load_balancer = FleetLoadBalancer(fleet)
 
@@ -88,7 +90,8 @@ async def root() -> dict[str, Any]:
 
 @app.get("/agents")
 async def list_agents() -> dict[str, Any]:
-    return {"agents": [{"id": k, "type": type(v).__name__} for k, v in fleet.agents.items()]}
+    metadata = fleet.agents.get_all_metadata()
+    return {"agents": [{"id": k, "type": v["type"]} for k, v in metadata.items()]}
 
 
 @app.get("/discovery/peers")

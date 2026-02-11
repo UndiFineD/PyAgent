@@ -159,5 +159,18 @@ class FleetLookupMixin:
 
     @property
     def rl_selector(self: FleetManager) -> Any:
-        """Returns the reinforcement learning selector."""
+        """Returns the reinforcement learning selector.
+
+        Allows an instance override (set during FleetManager initialization)
+        while falling back to the orchestrators' provided selector.
+        """
+        # Instance override takes precedence
+        if "rl_selector" in self.__dict__:
+            return self.__dict__["rl_selector"]
+
         return getattr(self.orchestrators, "r_l_selector", None) or getattr(self.orchestrators, "rl_selector", None)
+
+    @rl_selector.setter
+    def rl_selector(self: FleetManager, value: Any) -> None:
+        """Allow FleetManager to set a local `rl_selector` instance."""
+        self.__dict__["rl_selector"] = value

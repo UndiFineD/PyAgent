@@ -39,13 +39,14 @@ class CollaborationMarketplace:
         logging.info(f"MARKETPLACE: Auctioning task '{task}' requiring {required_capability}")
         bids = []
 
-        for name, agent in self.fleet.agents.items():
+        metadata = self.fleet.agents.get_all_metadata()
+        for name, meta in metadata.items():
             # In a real system, we'd ask the agent if they can handle it.
-            # Here we check RL weight or class type.
+            # Here we check RL weight or class type from metadata.
             weight = self.fleet.rl_selector.tool_stats.get(f"{name}.improve_content", {}).get("weight", 0.5)
 
-            # Simulated bid criteria
-            if required_capability.lower() in agent.__class__.__name__.lower():
+            # Simulated bid criteria - use metadata type to avoid instantiation
+            if required_capability.lower() in meta["type"].lower():
                 bid = {
                     "agent": name,
                     "confidence": weight,

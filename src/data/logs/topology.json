@@ -1,0 +1,208 @@
+{
+  "nodes": [
+    {
+      "id": "localhost",
+      "group": "gateway",
+      "meta": {
+        "cpu": 98.0,
+        "mem": 87.6
+      },
+      "val": 86321906.66796875
+    },
+    {
+      "id": "Telemetry",
+      "group": "agent",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "quantum_shard",
+      "group": "agent",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "Linguist",
+      "group": "agent",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "Logging",
+      "group": "agent",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "Sandbox",
+      "group": "agent",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "Orchestrator",
+      "group": "agent",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "Audit",
+      "group": "agent",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "LegalAudit",
+      "group": "agent",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "weight_orchestrator",
+      "group": "agent",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "immune_orchestrator",
+      "group": "agent",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "ExpertMiner",
+      "group": "agent",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "HolographicContext",
+      "group": "agent",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "FleetDeployer",
+      "group": "agent",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "agent_dao",
+      "group": "agent",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "a26e8397",
+      "group": "peer",
+      "meta": {},
+      "val": 1.0
+    },
+    {
+      "id": "b8411a2c",
+      "group": "peer",
+      "meta": {},
+      "val": 1.0
+    }
+  ],
+  "links": [
+    {
+      "source": "localhost",
+      "target": "Telemetry",
+      "value": 1.2,
+      "type": "memory_bus"
+    },
+    {
+      "source": "localhost",
+      "target": "quantum_shard",
+      "value": 1.2,
+      "type": "memory_bus"
+    },
+    {
+      "source": "localhost",
+      "target": "Linguist",
+      "value": 1.2,
+      "type": "memory_bus"
+    },
+    {
+      "source": "localhost",
+      "target": "Logging",
+      "value": 1.2,
+      "type": "memory_bus"
+    },
+    {
+      "source": "localhost",
+      "target": "Sandbox",
+      "value": 1.2,
+      "type": "memory_bus"
+    },
+    {
+      "source": "localhost",
+      "target": "Orchestrator",
+      "value": 1.2,
+      "type": "memory_bus"
+    },
+    {
+      "source": "localhost",
+      "target": "Audit",
+      "value": 1.2,
+      "type": "memory_bus"
+    },
+    {
+      "source": "localhost",
+      "target": "LegalAudit",
+      "value": 1.2,
+      "type": "memory_bus"
+    },
+    {
+      "source": "localhost",
+      "target": "weight_orchestrator",
+      "value": 1.2,
+      "type": "memory_bus"
+    },
+    {
+      "source": "localhost",
+      "target": "immune_orchestrator",
+      "value": 1.2,
+      "type": "memory_bus"
+    },
+    {
+      "source": "localhost",
+      "target": "ExpertMiner",
+      "value": 1.2,
+      "type": "memory_bus"
+    },
+    {
+      "source": "localhost",
+      "target": "HolographicContext",
+      "value": 1.2,
+      "type": "memory_bus"
+    },
+    {
+      "source": "localhost",
+      "target": "FleetDeployer",
+      "value": 1.2,
+      "type": "memory_bus"
+    },
+    {
+      "source": "localhost",
+      "target": "agent_dao",
+      "value": 1.2,
+      "type": "memory_bus"
+    },
+    {
+      "source": "localhost",
+      "target": "a26e8397",
+      "value": 0.8,
+      "type": "voyager_p2p"
+    },
+    {
+      "source": "localhost",
+      "target": "b8411a2c",
+      "value": 0.8,
+      "type": "voyager_p2p"
+    }
+  ],
+  "timestamp": "2026-02-11T23:46:25.686359"
+}

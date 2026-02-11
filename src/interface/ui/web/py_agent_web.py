@@ -29,7 +29,10 @@ import logging
 from pathlib import Path
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse, HTMLResponse
+import httpx
+import websockets
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from src.tools.download_agent.core import DownloadAgent
 from src.tools.download_agent.models import DownloadConfig
@@ -53,6 +56,26 @@ fleet_instance = None
 auth_manager = WebAuthnManager()
 checkpoint_manager = CheckpointManager(rank=0, world_size=1)  # Default for web proxy
 
+# If the Load Balancer API server is present in this Python process, mount
+# it under `/lb` so a single Uvicorn instance can serve both the web UI and
+# the API/load-balancer. Also, reuse its `fleet` instance when available.
+try:
+    import importlib
+    lb_mod = importlib.import_module("src.infrastructure.services.api.agent_api_server")
+    # Mount the load-balancer API under /lb to avoid route collisions.
+    # This gives endpoints like `/lb/task` for the load balancer while keeping
+    # the web UI at `/` and `/api/*` routes intact.
+    _LB_APP = getattr(lb_mod, "app", None)
+    if _LB_APP is not None:
+        # Note: `app` is defined later; we will mount after app creation below
+        _EXTERNAL_LB_APP = _LB_APP
+        # If the LB provided a FleetManager instance, reuse it
+        fleet_instance = getattr(lb_mod, "fleet", None)
+    else:
+        _EXTERNAL_LB_APP = None
+except Exception:
+    _EXTERNAL_LB_APP = None
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global fleet_instance
@@ -66,6 +89,112 @@ async def lifespan(app: FastAPI):
     # Cleanup logic here if needed
 
 app = FastAPI(title="PyAgent Fleet API", lifespan=lifespan)
+
+# Streamlit proxy mapping: app name -> local port
+STREAMLIT_MAP = {
+    "downloads": 8501,
+    "improvement": 8502,
+}
+
+
+def _filter_response_headers(headers: dict) -> dict:
+    # Remove hop-by-hop headers
+    hop_by_hop = {
+        "connection",
+        "keep-alive",
+        "proxy-authenticate",
+        "proxy-authorization",
+        "te",
+        "trailers",
+        "transfer-encoding",
+        "upgrade",
+    }
+    return {k: v for k, v in headers.items() if k.lower() not in hop_by_hop}
+
+
+@app.api_route("/streamlit/{app_name}/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"])
+async def streamlit_http_proxy(request: Request, app_name: str, path: str):
+    """Reverse-proxy HTTP requests to a local Streamlit instance.
+
+    Example: /streamlit/downloads/index.html -> http://127.0.0.1:8501/index.html
+    """
+    port = STREAMLIT_MAP.get(app_name)
+    if not port:
+        return JSONResponse(status_code=404, content={"error": "Unknown streamlit app"})
+
+    qs = request.url.query
+    target = f"http://127.0.0.1:{port}/{path}"
+    if qs:
+        target = f"{target}?{qs}"
+
+    body = await request.body()
+    headers = dict(request.headers)
+    headers.pop("host", None)
+
+    async with httpx.AsyncClient(timeout=None, follow_redirects=True) as client:
+        resp = await client.request(request.method, target, headers=headers, content=body)
+
+    filtered = _filter_response_headers(dict(resp.headers))
+    return Response(content=resp.content, status_code=resp.status_code, headers=filtered)
+
+
+@app.websocket("/streamlit_ws/{app_name}/{path:path}")
+async def streamlit_ws_proxy(websocket: WebSocket, app_name: str, path: str):
+    """Proxy WebSocket connections to the Streamlit server.
+
+    This forwards messages bidirectionally between the client and the
+    local Streamlit websocket endpoint.
+    """
+    port = STREAMLIT_MAP.get(app_name)
+    if not port:
+        await websocket.close(code=1008)
+        return
+
+    # Accept client websocket
+    await websocket.accept()
+
+    # Build target ws URL (include query string if present)
+    qs = websocket.scope.get("query_string", b"").decode()
+    target = f"ws://127.0.0.1:{port}/{path}"
+    if qs:
+        target = f"{target}?{qs}"
+
+    try:
+        async with websockets.connect(target) as remote:
+
+            async def client_to_remote():
+                try:
+                    while True:
+                        msg = await websocket.receive_text()
+                        await remote.send(msg)
+                except Exception:
+                    try:
+                        await remote.close()
+                    except Exception:
+                        pass
+
+            async def remote_to_client():
+                try:
+                    async for msg in remote:
+                        try:
+                            await websocket.send_text(msg)
+                        except Exception:
+                            break
+                except Exception:
+                    pass
+
+            await asyncio.gather(client_to_remote(), remote_to_client())
+
+    except Exception:
+        await websocket.close()
+
+# Mount external Load Balancer app (if found) under `/lb` to serve LB API
+if _EXTERNAL_LB_APP is not None:
+    try:
+        app.mount("/lb", _EXTERNAL_LB_APP)
+        logger.info("Mounted external Load Balancer app under /lb")
+    except Exception as exc:
+        logger.error(f"Failed to mount external LB app: {exc}")
 
 
 # Authentication Endpoints (Phase 327: Biometric Hardware Keys)
@@ -226,6 +355,30 @@ async def serve_stream():
     if target.exists():
         return FileResponse(str(target), media_type="text/html")
     return JSONResponse(status_code=404, content={"detail": f"File not found at {target}"})
+
+
+@app.get("/improvement")
+async def embed_improvement():
+        """Embed the Streamlit Self-Improvement UI running on port 8501.
+
+        Note: Streamlit runs as a separate process (not ASGI). This route
+        returns a simple page with an iframe pointed at the Streamlit server.
+        """
+        html = """
+        <!doctype html>
+        <html>
+            <head>
+                <meta charset="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <title>Self-Improvement UI</title>
+                <style>html,body,iframe{height:100%;margin:0;padding:0;border:0}iframe{width:100%}</style>
+            </head>
+            <body>
+                <iframe src="http://127.0.0.1:8501" title="Self-Improvement UI" frameborder="0"></iframe>
+            </body>
+        </html>
+        """
+        return HTMLResponse(content=html, status_code=200)
 
 @app.get("/topology")
 async def serve_topology():
@@ -451,6 +604,17 @@ async def root():
 
 # 3. STATIC MOUNTS LAST
 app.mount("/static", StaticFiles(directory=str(WEB_UI_DIR)), name="static")
+# Expose workspace `data/` so the UI can fetch logs/topology directly at /data/...
+data_dir = WORKSPACE_ROOT / "data"
+if data_dir.exists():
+    app.mount("/data", StaticFiles(directory=str(data_dir)), name="data")
+else:
+    # Ensure directory exists for future writes and mounting
+    try:
+        data_dir.mkdir(parents=True, exist_ok=True)
+        app.mount("/data", StaticFiles(directory=str(data_dir)), name="data")
+    except Exception:
+        logger.warning("Failed to create or mount data directory: %s", data_dir)
 
 if __name__ == "__main__":
     uvicorn.run("src.interface.ui.web.py_agent_web:app", host="0.0.0.0", port=8000, reload=True)

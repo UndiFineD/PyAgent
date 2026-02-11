@@ -37,14 +37,83 @@ def find_copilot_cli(override=None):
     return None
 
 def run_cli(cli_path, spec_path, extra_args=None):
+    """Try common CLI invocation patterns and return the subprocess returncode.
+
+    Captures and prints stdout/stderr for diagnostics. Tries options in this order:
+    Modern Agentic prompt, --input, --file, --path, positional.
+    """
     extra_args = extra_args or []
-    cmd = [cli_path, "implement", "--input", spec_path] + extra_args
-    print("Executing:", " ".join(cmd))
+    
+    # Modern Agentic CLI Detection (Phase 317)
+    is_modern = False
     try:
-        return subprocess.call(cmd)
-    except OSError as e:
-        print("Failed to execute CLI:", e, file=sys.stderr)
-        return 3
+        # Use shell=True on Windows for .BAT files to ensure correct execution and output capture
+        # Try both -v and --version
+        ver_proc = subprocess.run([cli_path, "--version"], capture_output=True, text=True, timeout=5, shell=(os.name == 'nt'))
+        stdout = ver_proc.stdout or ""
+        stderr = ver_proc.stderr or ""
+        combined = stdout + stderr
+        
+        if "GitHub Copilot CLI" in combined or "0.0.4" in combined or "0.0.3" in combined:
+            is_modern = True
+        else:
+            # Fallback check for common path patterns
+            if "copilot" in cli_path.lower():
+                is_modern = True
+    except Exception as e:
+        print(f"Warning: Failed to detect Copilot version, defaulting to modern mode. Error: {e}")
+        is_modern = True
+
+    if is_modern:
+        print("Detected modern agentic Copilot CLI. Using prompt-based implementation.")
+        
+        # We use --yolo for the modern CLI to avoid infinite prompts and allow tool use.
+        # We pass the path to the spec file in the prompt so Copilot can read it directly,
+        # which avoids shell command length limits for large JSON specs.
+        abs_spec_path = os.path.abspath(spec_path)
+        
+        variants = [
+            [cli_path, "-p", f"Implement the task described in the specification file at: {abs_spec_path}", "--yolo"],
+            [cli_path, "-p", f"Implement the task described in this specification: {abs_spec_path}", "--allow-all"],
+            [cli_path, "-i", f"Implement the task in {abs_spec_path}", "--yolo"],
+        ]
+    else:
+        # Legacy fallback (Phase 12)
+        variants = [
+            [cli_path, "implement", "--input", spec_path],
+            [cli_path, "implement", "--file", spec_path],
+            [cli_path, "implement", spec_path],
+        ]
+
+    last_rc = 1
+    for v in variants:
+        cmd = v + extra_args
+        # Hide the potentially massive prompt from the console if it's the modern version
+        if is_modern:
+             display_cmd = [cmd[0], cmd[1], "<json_spec_content>", *cmd[3:]]
+             print("Executing:", " ".join(display_cmd))
+        else:
+             print("Executing:", " ".join(cmd))
+             
+        try:
+            # We don't capture_output for the modern CLI because it's interactive/long-running
+            # unless we use -p. But -p still outputs to stdout.
+            # Using capture_output=False to allow real-time feedback.
+            proc = subprocess.run(cmd)
+            last_rc = proc.returncode
+        except OSError as e:
+            print("Failed to execute CLI:", e, file=sys.stderr)
+            last_rc = 3
+            continue
+
+        if last_rc == 0:
+            return 0
+        
+        # For modern CLI, if it failed, it might be because of an unknown option 
+        # (like --yolo vs --allow-all). Continue to next variant.
+        print(f"Variant failed with code {last_rc}. Trying next pattern...")
+
+    return last_rc
 
 def summarize_spec(spec):
     print("Specification summary:")
@@ -93,9 +162,8 @@ def main():
     print("CLI exited with code", rc)
     sys.exit(rc if isinstance(rc, int) else 0)
 
-if __name__ == "__main__":
-    main()
 
+# --- CoderAgent Delegation Logic ---
 
 """
 Delegate the implementation of 3 architectural security patterns to CoderAgent.
@@ -108,7 +176,7 @@ import sys
 from pathlib import Path
 
 # Add src to path for imports
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.core.base.common.models.communication_models import CascadeContext
 from src.core.base.common.models.core_enums import AgentPriority
@@ -193,7 +261,7 @@ async def main_delegate() -> None:
         print(f"{'='*60}\n")
         
         # Use the delegation mixin if available
-        if hasattr(agent, 'delegator'):
+        if hasattr(agent, 'delegator') and agent.delegator:
             result = await agent.delegator.delegate(
                 agent_type="CoderAgent",
                 prompt=task_prompt,
@@ -202,8 +270,8 @@ async def main_delegate() -> None:
                 priority=AgentPriority.HIGH
             )
         else:
-            # Direct execution fallback (BaseAgent.run is synchronous)
-            result = agent.run(task_prompt)
+            # Direct async execution (Better for main_delegate async scope)
+            result = await agent.run_async(task_prompt)
         
         print(f"\n{'='*60}\n")
         print("✅ Delegation Result:")

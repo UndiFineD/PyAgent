@@ -32,5 +32,19 @@ The "Voyager" layer implements a zero-broker, P2P message bus.
 - **Credential Vault**: Encrypted storage for API keys and tokens, never exposed to the reasoning logs.
 - **System Sanitizer**: Automated scanning of tool inputs/outputs to prevent prompt injection or exfiltration attempts.
 
+## 🎛️ Resource Quota & Rate Limiting
+- **Distributed Token Bucket**: Fleet-wide rate limiting with Redis backend for per-agent quota enforcement
+  - **Redis Backend**: Uses Redis for distributed state with atomic Lua scripts to prevent race conditions
+  - **Local Fallback**: Gracefully degrades to in-memory token bucket when Redis unavailable
+  - **Circuit Breaker**: Integrated protection prevents Redis exhaustion during cascading failures
+  - **Configuration**:
+    - `REDIS_URL`: Redis connection URL (e.g., `redis://localhost:6379`)
+    - `TOKEN_BUCKET_SIZE`: Maximum tokens per bucket (default: 1000)
+    - `TOKEN_REFILL_RATE`: Tokens added per second (default: 10.0)
+- **ResourceQuotaManager**: Facade for resource enforcement with optional distributed rate limiting
+  - Token, time, and cycle quotas for individual agent sessions
+  - Fleet-wide quota enforcement when Redis configured
+  - Backward compatible - works without Redis configuration
+
 ---
 *Distributed Intelligence. Secure by Default.*

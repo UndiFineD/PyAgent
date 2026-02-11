@@ -216,6 +216,31 @@ class LazyAgentMap(dict):
         # pylint: disable=consider-using-dict-items
         return list(map(lambda k: (k, self[k]), self.keys()))
 
+    def get_all_metadata(self) -> dict[str, dict[str, str]]:
+        """Returns metadata regarding all agents without triggering full instantiation."""
+        metadata = {}
+        all_configs = {
+            **self.registry_configs,
+            **self._manifest_configs,
+            **self._discovered_configs,
+        }
+        for key, cfg in all_configs.items():
+            # cfg is (module_path, class_name, arg_path_suffix)
+            metadata[key] = {
+                "type": cfg[1],
+                "module": cfg[0],
+                "instantiated": key in self._instances
+            }
+        # Include already instantiated agents not in configs (manual overrides)
+        for key, instance in self._instances.items():
+            if key not in metadata:
+                metadata[key] = {
+                    "type": type(instance).__name__,
+                    "module": getattr(instance, "__module__", "unknown"),
+                    "instantiated": True
+                }
+        return metadata
+
     def values(self) -> list[Any]:
         # pylint: disable=consider-using-dict-items
         return list(map(lambda k: self[k], self.keys()))
