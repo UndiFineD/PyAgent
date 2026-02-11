@@ -53,7 +53,7 @@ class HolographicStateOrchestrator:
         Each perspective is treated as an independent shard set.
         """
         logger.info(f"Holographic: Sharding hologram '{hologram_id}' across fleet.")
-        
+
         perspectives = hologram_data.get("perspectives", {})
         if not perspectives:
             # Fallback to source data if no perspectives provided
@@ -69,7 +69,7 @@ class HolographicStateOrchestrator:
                 "data": data,
                 "timestamp": hologram_data.get("timestamp", 0)
             }, custom_hash=f"{hologram_id}_{angle}")
-            
+
             # Record locally
             self.local_holograms[f"{hologram_id}_{angle}"] = data
 
@@ -81,7 +81,7 @@ class HolographicStateOrchestrator:
             # Mirror shards to neighbors
             if self.fleet and hasattr(self.fleet, "voyager_transport"):
                 await self._mirror_to_neighbors(perspective_shards)
-            
+
             shards_created += len(perspective_shards)
 
         # Broadcast "projection" (metadata) to neighborhood
@@ -145,7 +145,7 @@ class HolographicStateOrchestrator:
             peer = peers[i % len(peers)]
             addr = peer.get("addr")
             port = peer.get("port", 5555)
-            
+
             sender_id = f"fleet-{self.fleet.workspace_root.name}" if self.fleet and hasattr(self.fleet, "workspace_root") else self.agent_id
             msg = {
                 "type": "shard_store",
@@ -164,7 +164,7 @@ class HolographicStateOrchestrator:
             "angles": angles,
             "sender_id": sender_id
         }
-        
+
         if self.fleet and hasattr(self.fleet, "voyager_transport"):
             peers = self.fleet.voyager_discovery.get_active_peers()
             for peer in peers:

@@ -44,7 +44,7 @@ class CheckpointManager:
         self.world_size = world_size
         self.rust_bridge = RustBridge()
         self.checkpoints: List[CheckpointMetadata] = []
-        
+
         # Determine peer for mirroring (circular buddies)
         self.peer_rank = (self.rank + 1) % self.world_size if self.world_size > 1 else self.rank
         logger.info(f"CheckpointManager initialized. Rank {rank} buddies with {self.peer_rank}")
@@ -56,11 +56,11 @@ class CheckpointManager:
         """
         checkpoint_id = f"ckpt-{uuid.uuid4().hex[:8]}"
         start_time = time.perf_counter()
-        
+
         # Phase 93: Basic RDMA Write logic
         # In a real RDMA env, we would have pre-registered memory regions.
         # Here we simulate the command dispatch to the Rust NIXL backend.
-        
+
         try:
             # We wrap the state into a teleportation request
             # nixl_rdma_write_rust handle the high-speed transfer
@@ -74,7 +74,7 @@ class CheckpointManager:
                     "payload_hint": "AGENT_STATE"
                 }
             )
-            
+
             if result.get("success"):
                 metadata = CheckpointMetadata(
                     id=checkpoint_id,
@@ -85,14 +85,14 @@ class CheckpointManager:
                     peer_rank=self.peer_rank
                 )
                 self.checkpoints.append(metadata)
-                
+
                 latency = (time.perf_counter() - start_time) * 1000
                 logger.info(f"Checkpoint {checkpoint_id} teleported to rank {self.peer_rank} in {latency:.2f}ms")
                 return checkpoint_id
             else:
                 logger.error(f"RDMA Checkpoint failed: {result.get('error', 'Unknown error')}")
                 return ""
-                
+
         except Exception as e:
             logger.error(f"Failed to execute RDMA checkpoint: {e}")
             return ""
@@ -106,7 +106,7 @@ class CheckpointManager:
         Recovers state from a peer node using RDMA Read.
         """
         logger.info(f"Initiating RDMA Recovery for {checkpoint_id} from rank {self.peer_rank}")
-        
+
         try:
             # nixl_rdma_read_rust pulls the data back
             result = self.rust_bridge.execute(
@@ -117,7 +117,7 @@ class CheckpointManager:
                     "expected_size": 1024 # Mock
                 }
             )
-            
+
             if result.get("success"):
                 return b"RECOVERED_STATE_STUB" # In real imp, Rust would return the buffer
             return None

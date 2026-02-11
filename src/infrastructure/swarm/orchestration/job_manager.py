@@ -45,7 +45,7 @@ class JobManager:
             "updated_at": datetime.utcnow().isoformat()
         }
         self.jobs[job_id] = job_info
-        
+
         await self._emit_telemetry("job_created", job_info)
         return job_id
 
@@ -59,12 +59,12 @@ class JobManager:
         old_status = job["status"]
         job["status"] = status
         job["updated_at"] = datetime.utcnow().isoformat()
-        
+
         if result is not None:
             job["result"] = result
 
         logger.info(f"Job {job_id} transitioned from {old_status} to {status}")
-        
+
         await self._emit_telemetry("job_status_change", {
             "job_id": job_id,
             "old_status": old_status.value,
@@ -84,4 +84,4 @@ class JobManager:
             "service": "JobManager"
         }
         logger.debug(f"Telemetry Event: {payload}")
-        await asyncio.sleep(0) 
+        await asyncio.sleep(0)

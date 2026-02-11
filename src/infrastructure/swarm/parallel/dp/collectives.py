@@ -51,7 +51,7 @@ async def dp_collective_all_reduce(
     try:
         # Move to torch tensor for distributed operation
         tensor = torch.tensor(values, dtype=torch.float32)
-        
+
         # Map operation
         reduce_op = dist.ReduceOp.SUM
         if operation.lower() == "min":
@@ -61,10 +61,10 @@ async def dp_collective_all_reduce(
         elif operation.lower() == "product":
             reduce_op = dist.ReduceOp.PRODUCT
 
-        # Run all-reduce in a thread to keep async loop responsive if needed, 
+        # Run all-reduce in a thread to keep async loop responsive if needed,
         # but torch.distributed usually has async_op=True support
         dist.all_reduce(tensor, op=reduce_op)
-        
+
         return tensor.tolist()
     except Exception as e:
         logger.error(f"DP all-reduce failed: {e}")

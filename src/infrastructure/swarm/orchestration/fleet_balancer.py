@@ -55,7 +55,7 @@ class FleetBalancer:
 
         weights = [node.capacity for node in self.nodes.values()]
         self._max_weight = max(weights)
-        
+
         gcd = weights[0]
         for w in weights[1:]:
             gcd = math.gcd(gcd, w)
@@ -77,7 +77,7 @@ class FleetBalancer:
                         self._current_weight = self._max_weight
                         if self._current_weight == 0:
                             return None
-                
+
                 if node_list[self._current_index].capacity >= self._current_weight:
                     return node_list[self._current_index].node_id
 

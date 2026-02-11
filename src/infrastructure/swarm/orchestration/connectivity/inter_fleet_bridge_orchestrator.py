@@ -162,7 +162,7 @@ class InterFleetBridgeOrchestrator:
                             best_peer = (addrs[0], port)
             except (ValueError, TypeError):
                 continue
-        
+
         return best_peer
 
     async def offload_task(self, task_description: str, required_cpu: int = 1, required_ram: float = 2.0) -> Optional[Dict[str, Any]]:
@@ -217,7 +217,7 @@ class InterFleetBridgeOrchestrator:
         # Gather results with timeout
         results = await asyncio.gather(*tasks, return_exceptions=True)
         aggregated = []
-        
+
         for res in results:
             if isinstance(res, dict) and res.get("status") == "success":
                 items = res.get("results", [])

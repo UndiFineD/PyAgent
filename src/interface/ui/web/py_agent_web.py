@@ -363,7 +363,7 @@ async def n8n_execute(data: dict):
     try:
         logger.info(f"n8n: Received automation request: {prompt[:50]}")
         result = await fleet_instance.handle_user_command(full_command)
-        
+
         return {
             "status": "success",
             "output": result.get("result", ""),
@@ -388,14 +388,14 @@ async def get_swarm_traces():
     trace_path = WORKSPACE_ROOT / "data" / "logs" / "reasoning_chains.jsonl"
     if not trace_path.exists():
         return {"traces": []}
-    
+
     traces = []
     try:
         with open(trace_path, "r", encoding="utf-8") as f:
             for line in f:
                 if line.strip():
                     traces.append(json.loads(line))
-        
+
         # Limit to last 50 traces for visualization performance
         return {"traces": traces[-50:]}
     except Exception as e:
@@ -411,7 +411,7 @@ async def get_observability_topology():
     topo_path = WORKSPACE_ROOT / "data" / "logs" / "topology.json"
     if not topo_path.exists():
         return {"nodes": [], "edges": []}
-    
+
     with open(topo_path, "r") as f:
         return json.load(f)
 
@@ -425,7 +425,7 @@ async def trigger_download(request: Request):
     url = data.get("url")
     if not url:
         return JSONResponse(status_code=400, content={"error": "URL required"})
-    
+
     config = DownloadConfig(
         urls_file="",
         dry_run=data.get("dry_run", False),
@@ -434,12 +434,12 @@ async def trigger_download(request: Request):
     )
     agent = DownloadAgent(config)
     result = await asyncio.to_thread(agent.process_url, url)
-    
+
     # Save to history
     history_path = WORKSPACE_ROOT / "temp" / "downloads.json"
     history_path.parent.mkdir(parents=True, exist_ok=True)
     await asyncio.to_thread(agent.save_results, [result], str(history_path))
-    
+
     return {"status": "success" if result.success else "failed", "result": result.__dict__}
 
 

@@ -55,17 +55,17 @@ class SwarmTopologyReporter:
         """Adds or updates a node in the current snapshot."""
         # Check if already exists in this snapshot
         existing = next((n for n in self.nodes if n["id"] == node_id), None)
-        
+
         weight = self.traffic_matrix.get(node_id, 1.0)
-        
+
         if existing:
             existing["group"] = group
             existing["meta"].update(metadata or {})
             existing["val"] = weight
         else:
             self.nodes.append({
-                "id": node_id, 
-                "group": group, 
+                "id": node_id,
+                "group": group,
                 "meta": metadata or {},
                 "val": weight # D3 size scaling
             })
@@ -74,9 +74,9 @@ class SwarmTopologyReporter:
         """Adds or updates a link in the current snapshot pulse."""
         # Pillar 9: High-fidelity visualization link strength
         # We also look at traffic between these two if we had a link-traffic matrix
-        existing = next((link for link in self.links if (link["source"] == source and link["target"] == target) or 
+        existing = next((link for link in self.links if (link["source"] == source and link["target"] == target) or
                                                  (link["source"] == target and link["target"] == source)), None)
-        
+
         if not existing:
             self.links.append({"source": source, "target": target, "value": strength, "type": type})
         else:

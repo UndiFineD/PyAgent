@@ -130,12 +130,12 @@ class FleetManager(
         # Phase 319-320: Voyager P2P Transport & Discovery
         self.voyager_transport = VoyagerTransport()
         self.voyager_discovery = DiscoveryNode(node_name=f"Fleet-{self.workspace_root.name}")
-        
+
         # Start voyager services (async)
         asyncio.create_task(self.voyager_transport.start_server(self._handle_voyager_message))
         asyncio.create_task(self.voyager_discovery.start_advertising())
         asyncio.create_task(self.voyager_discovery.start_discovery())
-        
+
         # Swarm Singularity: Register peer discovery handler
         self.voyager_discovery.register_on_peer_added(self._on_voyager_peer_added)
 
@@ -253,31 +253,31 @@ class FleetManager(
     async def handle_user_command(self, command: str) -> Dict[str, Any]:
         """Entry point for the Universal Agent Shell (Pillar 3)."""
         logger.info(f"FleetManager: Received user command: {command}")
-        
+
         # 1. Record user input in reasoning chain
         self.interaction_recorder.record_interaction(
             user_input=command,
             agent_id="User",
             role="user"
         )
-        
+
         # 2. Utilize the Universal Agent for Pillar 3 execution
         try:
             # Check for UniversalAgent in registry
             if "UniversalAgent" not in self.agents:
                 from src.logic.agents.system.universal_agent import UniversalAgent
                 self.register_agent(
-                    "UniversalAgent", 
-                    UniversalAgent, 
+                    "UniversalAgent",
+                    UniversalAgent,
                     str(self.workspace_root / "src" / "logic" / "agents" / "system" / "universal_agent.py")
                 )
 
             agent = self.agents["UniversalAgent"]
             logger.info("FleetManager: Dispatched to UniversalAgent (Pillar 3)")
-            
+
             # Execute via the Universal Shell
             result = await agent.execute_query(command)
-            
+
             # 3. Record response
             self.interaction_recorder.record_interaction(
                 user_input=command,
@@ -286,14 +286,14 @@ class FleetManager(
                 content=str(result)
             )
             return {"status": "success", "agent": "UniversalAgent", "result": result}
-            
+
         except Exception as e:
             logger.error(f"FleetManager: UniversalAgent failed: {e}")
             # Fallback to standard delegation for security/reasons
             target_agent = "ReasoningAgent"
             if "code" in command.lower() or "fix" in command.lower():
                 target_agent = "CoderAgent"
-            
+
             try:
                 result = await self.delegate_to(target_agent, command)
                 return {"status": "success", "agent": target_agent, "result": result}
@@ -315,7 +315,7 @@ class FleetManager(
         if peer_id not in self.voyager_transport.sessions:
             logger.info(f"Voyager: Initiating Double Ratchet session with {peer_id}...")
             response = await self.voyager_transport.send_to_peer(
-                addr, port, 
+                addr, port,
                 {
                     "type": "HANDSHAKE_INIT",
                     "sender_id": f"node-{self.workspace_root.name}",
@@ -323,7 +323,7 @@ class FleetManager(
                 },
                 peer_id=peer_id
             )
-            
+
             if response and response.get("type") == "HANDSHAKE_RESPONSE":
                 from src.infrastructure.security.encryption.double_ratchet import \
                     DoubleRatchet
@@ -334,7 +334,7 @@ class FleetManager(
                 logger.info(f"Voyager: E2EE Session active with {peer_id}")
 
         # 2. Update Consensus Registry
-        current_peers = [p["properties"].get("node_id", p["name"]) 
+        current_peers = [p["properties"].get("node_id", p["name"])
                          for p in self.voyager_discovery.get_active_peers()]
         self.swarm_consensus.set_peers(current_peers)
 
@@ -343,7 +343,7 @@ class FleetManager(
         # Phase 324: Zero-Trust Validation (Pillar 7)
         signature = message.get("signature", "unsigned")
         sender_id = message.get("sender_id", "unknown")
-        
+
         if not self.firewall.validate_message(message, signature, sender_id):
             logger.warning(f"FleetManager: Blocked message from {sender_id} - Zero-Trust Violation")
             return {"status": "error", "reason": "security_violation"}
@@ -376,7 +376,7 @@ class FleetManager(
             # In a real implementation, we'd do X3DH or similar
             # For Phase 3.0, we simulate with a dummy root key
             from src.infrastructure.security.encryption.double_ratchet import DoubleRatchet
-            root_key = b"swarm-shared-secret-v4" 
+            root_key = b"swarm-shared-secret-v4"
             self.voyager_transport.sessions[sender_id] = DoubleRatchet(root_key, remote_pub)
             return {"type": "HANDSHAKE_RESPONSE", "public_key": b"local-ephemeral-pub"}
 
@@ -385,7 +385,7 @@ class FleetManager(
             stats = self.resource_monitor.get_latest_stats()
             cpu = stats.get("cpu_usage", 0.0)
             mem = stats.get("memory_usage", 0.0)
-            
+
             if cpu < 50.0 and mem < 60.0:
                 logger.info(f"FleetManager: Accepting compute-borrow from {sender_id}. Current Load: {cpu}%")
                 return {"status": "can_help", "node_id": f"node-{self.workspace_root.name}"}
@@ -432,13 +432,13 @@ class FleetManager(
                 stats = self.resource_monitor.get_latest_stats()
                 traffic = stats.get("network_io", {}).get("bytes_sent", 0)
                 self.topology_reporter.update_traffic("localhost", traffic)
-                
+
                 self.topology_reporter.record_node(
                     node_id="localhost",
                     group="gateway",
                     metadata={"cpu": stats.get("cpu_usage"), "mem": stats.get("memory_usage")}
                 )
-                
+
                 # 3. Active Local Agents (Synaptic Connections)
                 for agent_id in self.agents:
                     self.topology_reporter.record_node(agent_id, group="agent")
@@ -448,10 +448,10 @@ class FleetManager(
                 peers = self.voyager_discovery.get_active_peers()
                 for peer in peers:
                     peer_id = peer.get("properties", {}).get("node_id", peer["name"])
-                    
+
                     # Estimate Link Strength based on connection status
                     strength = 1.5 if peer.get("port") == 5555 else 0.8
-                    
+
                     self.topology_reporter.record_node(peer_id, group="peer")
                     self.topology_reporter.record_link("localhost", peer_id, strength=strength, type="voyager_p2p")
 

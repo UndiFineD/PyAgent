@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 class PyAgentServiceListener(ServiceListener):
     """Listener to handle PyAgent node discovery events."""
-    
+
     def __init__(self, discovery_callback):
         self.discovery_callback = discovery_callback
 
@@ -62,7 +62,7 @@ class MDNSService:
     async def start(self):
         """Initializes Zeroconf and registers the local node."""
         self.zc = Zeroconf(ip_version=IPVersion.V4Only)
-        
+
         # Determine local IP
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
@@ -73,7 +73,7 @@ class MDNSService:
             IP = '127.0.0.1'
         finally:
             s.close()
-            
+
         # Register local service
         info = ServiceInfo(
             self.SERVICE_TYPE,
@@ -83,7 +83,7 @@ class MDNSService:
             properties=self.properties,
             server=f"{self.node_id}.local."
         )
-        
+
         loop = asyncio.get_running_loop()
         await loop.run_in_executor(None, self.zc.register_service, info)
         logger.info(f"Registered mDNS service for node {self.node_id}")

@@ -46,15 +46,15 @@ class DistributedBackup:
         """
         raw_data = json.dumps(state_data).encode()
         data_hash = custom_hash if custom_hash else hashlib.sha256(raw_data).hexdigest()
-        
+
         # Phase 326: Dynamic Striping
         # N=3 parts, each mirrored once (M=2) = 6 shards total
         num_parts = 3 if len(raw_data) > 10000 else 2
         mirror_factor = self.replication_factor # Default 3
-        
+
         part_size = (len(raw_data) + num_parts - 1) // num_parts
         parts = [raw_data[i:i + part_size] for i in range(0, len(raw_data), part_size)]
-        
+
         # Ensure we have exactly num_parts (pad with empty if needed)
         while len(parts) < num_parts:
             parts.append(b"")
@@ -62,7 +62,7 @@ class DistributedBackup:
         shards = []
         for part_idx, part in enumerate(parts):
             part_hash = hashlib.blake3(part).hexdigest() if hasattr(hashlib, "blake3") else hashlib.md5(part).hexdigest()
-            for mirror_idx in range(mirror_factor): 
+            for mirror_idx in range(mirror_factor):
                 shards.append({
                     "origin_node": self.node_id,
                     "shard_id": f"{data_hash}_p{part_idx}_m{mirror_idx}",
@@ -74,7 +74,7 @@ class DistributedBackup:
                     "total_parts": num_parts,
                     "timestamp": 0 # Placeholder for time
                 })
-        
+
         logger.info(f"DistributedBackup: Created {len(shards)} RAID-10 shards for state {data_hash[:8]}")
         return shards
 
@@ -83,7 +83,7 @@ class DistributedBackup:
         shard_id = shard["shard_id"]
         data_b64 = shard.get("data_b64", "")
         part_hash = shard.get("part_hash")
-        
+
         # Integrity check
         if part_hash:
             actual_data = self._decode(data_b64)
@@ -123,22 +123,22 @@ class DistributedBackup:
         """
         if not shards:
             return None
-        
+
         # Group by part index
         parts_found = {}
         total_parts = 0
-        
+
         for shard in shards.values():
             p_idx = shard["part_index"]
             total_parts = shard["total_parts"]
             if p_idx not in parts_found:
                 # Inside the data_b64 is our bin data
                 parts_found[p_idx] = self._decode(shard["data_b64"])
-        
+
         if len(parts_found) < total_parts:
             logger.error(f"DistributedBackup: Cannot reassemble state. Missing {total_parts - len(parts_found)} parts.")
             return None
-            
+
         # Join parts in order
         reconstructed_raw = b"".join([parts_found[i] for i in range(total_parts)])
         try:

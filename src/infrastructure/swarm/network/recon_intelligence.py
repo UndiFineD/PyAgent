@@ -20,7 +20,7 @@ class ReconIntelligence:
     Refactored Reconnaissance logic from Argus.
     Focuses on OSINT and infrastructure detection.
     """
-    
+
     FIREWALL_SIGNATURES = {
         'cloudflare': 'Cloudflare Firewall',
         'akamai': 'Akamai Firewall',
@@ -39,11 +39,11 @@ class ReconIntelligence:
                 async with session.get(url, timeout=10) as response:
                     headers = response.headers
                     server = headers.get('Server', '').lower()
-                    
+
                     for sig, name in cls.FIREWALL_SIGNATURES.items():
                         if sig in server:
                             results.add(name)
-                    
+
                     if 'X-Akamai' in headers:
                         results.add('Akamai Firewall')
                     if 'x-sucuri-id' in headers:

@@ -60,7 +60,7 @@ class FleetConsensusManager:
         # 2. Parallel Proposal Generation
         all_agents = [primary_agent] + secondary_agents
         proposals: dict[str, str] = {}
-        
+
         tasks = []
         for agent_name in all_agents:
             agent = self.fleet.agents.get(agent_name)

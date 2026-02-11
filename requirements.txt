@@ -29,7 +29,6 @@ dnslib
 dnspython==2.8.0
 email-validator==2.3.0
 fastapi==0.128.0
-fido2==1.2.0
 filelock==3.20.3
 frozenlist==1.8.0
 h11==0.16.0
@@ -79,7 +78,6 @@ urllib3>=2.6.3
 uvicorn==0.40.0
 watchfiles==1.1.1
 webauthn==2.5.0
-fido2
 authlib==1.6.6
 python-multipart==0.0.22
 websocket-client==1.9.0
@@ -97,7 +95,7 @@ qdrant-client==1.16.2
 arxiv==2.4.0
 chromadb==1.4.1
 cloudpickle==3.1.2
-compressed-tensors==0.12.2
+compressed-tensors==0.13.0
 contourpy==1.3.3
 cycler==0.12.1
 dill==0.4.0

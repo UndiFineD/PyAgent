@@ -118,7 +118,7 @@ class FleetRoutingCore:
             latency = time.time() - start_time
             if hasattr(self.fleet, "rl_selector"):
                 self.fleet.rl_selector.record_feedback(goal, best_tool, success=True, latency=latency)
-            
+
             return res
 
             if self.fleet.rl_selector:

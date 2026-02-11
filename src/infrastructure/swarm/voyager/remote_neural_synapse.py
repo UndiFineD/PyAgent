@@ -68,7 +68,7 @@ class RemoteNeuralSynapse:
         tasks = []
         for peer in peers:
             tasks.append(self.send_to_peer(peer["ip"], peer["port"], message))
-        
+
         if tasks:
             await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -106,7 +106,7 @@ class RemoteNeuralSynapse:
             peer_id = message.get("sender_id", "unknown")
             metrics = message.get("metrics", {})
             logger.debug(f"Synapse: Received heartbeat from {peer_id}: {metrics}")
-            
+
             # Update discovery node with peer metadata
             if self.discovery_node and hasattr(self.discovery_node, "update_peer_metadata"):
                 self.discovery_node.update_peer_metadata(peer_id, {
@@ -120,7 +120,7 @@ class RemoteNeuralSynapse:
             task_desc = message.get("task", "")
             sender = message.get("sender_id", "unknown")
             logger.info(f"Synapse: Received offloaded task from {sender}: {task_desc[:50]}...")
-            
+
             if hasattr(self.fleet_manager, "execute_reliable_task"):
                 try:
                     # Execute locally (Task Preemption / Synergy)
@@ -138,7 +138,7 @@ class RemoteNeuralSynapse:
             agent_id = message.get("target_agent", "swarm_shared")
             sender = message.get("sender_id", "unknown")
             logger.info(f"Synapse: Processing federated memory query from {sender}: '{query}'")
-            
+
             from src.core.base.common.memory_core import MemoryCore
             try:
                 results: List[Dict[str, Any]] = MemoryCore().retrieve_knowledge(agent_id, query, mode="semantic", limit=3)

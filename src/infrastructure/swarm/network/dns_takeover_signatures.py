@@ -23,7 +23,7 @@ DNS_TAKEOVER_SIGNATURES = {
     },
     "AWS Route 53": {
         "status": "Not Vulnerable",
-        "fingerprints": ["awsdns-"] 
+        "fingerprints": ["awsdns-"]
     },
     "Azure (Microsoft)": {
         "status": "Edge Case",

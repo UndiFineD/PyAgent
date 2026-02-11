@@ -59,7 +59,7 @@ class RssCollector:
                 "author": entry.get("author", "Unknown"),
                 "source_feed": feed_url
             })
-            
+
         return entries
 
     @classmethod

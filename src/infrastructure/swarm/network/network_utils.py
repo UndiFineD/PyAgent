@@ -138,16 +138,16 @@ def get_local_network_ip(debug: bool = False) -> str:
     """
     # Simply delegate IP detection to the exact same logic as test_interface_scan.py
     # We re-implement it here carefully to avoid any weird import issues or blocks.
-    
+
     if debug:
         print("DEBUG: Entered get_local_network_ip", flush=True)
-    
+
     try:
         # Check for Windows explicitly using sys.platform to avoid platform module if it's acting up
         is_windows = sys.platform == 'win32'
         if debug:
             print(f"DEBUG: sys.platform is {sys.platform}", flush=True)
-        
+
         if is_windows:
             if debug:
                 print("DEBUG: Windows detected, proceeding with ipconfig...", flush=True)
@@ -155,7 +155,7 @@ def get_local_network_ip(debug: bool = False) -> str:
             try:
                 if debug:
                     print("DEBUG: get_local_network_ip - Running ipconfig /all...", flush=True)
-                
+
                 # Use absolute path for ipconfig if possible, but PATH usually works
                 # subprocess.run can hang if stdout/stderr buffers fill up, but capture_output handles that.
                 # However, let's use a very safe invocation.
@@ -188,7 +188,7 @@ def get_local_network_ip(debug: bool = False) -> str:
                                 else:
                                     if debug:
                                         print(f"DEBUG: Discarding interface {current_iface['name']} (No IPv4)", flush=True)
-                            
+
                             # Start new interface
                             name = line.split(':', 1)[0].replace(' adapter', '').strip()
                             current_iface = {'name': name}

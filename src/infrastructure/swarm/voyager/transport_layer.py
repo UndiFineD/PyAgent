@@ -57,10 +57,10 @@ class VoyagerTransport:
         self.aesgcm: AESGCM | None = AESGCM(encryption_key) if encryption_key else None
         if not self.aesgcm:
             logger.warning("Voyager: Encryption disabled (no key provided).")
-        
+
         # Swarm Singularity: Zero-Trust Firewall
         self.firewall = ZeroTrustFirewall(owner_key="master-key-v4")
-        
+
         # Swarm Singularity: Double Ratchet Sessions (node_id -> Ratchet)
         self.sessions: Dict[str, DoubleRatchet] = {}
 
@@ -128,7 +128,7 @@ class VoyagerTransport:
                     if self._handler:
                         response_data: Dict[str, Any] = await self._handler(message)
                         response_bytes = msgspec.msgpack.encode(response_data)
-                        
+
                         # Use E2EE session if established
                         encrypted_response: bytes = self._encrypt(response_bytes, session_id=sender_id)
                         await self.router.send_multipart([identity, b"", encrypted_response])
@@ -144,10 +144,10 @@ class VoyagerTransport:
             self.stop()
 
     async def send_to_peer(
-        self, 
-        peer_address: str, 
-        peer_port: int, 
-        message: Dict[str, Any], 
+        self,
+        peer_address: str,
+        peer_port: int,
+        message: Dict[str, Any],
         timeout: int = 5000,
         peer_id: Optional[str] = None
     ) -> Optional[Dict[str, Any]]:
@@ -161,7 +161,7 @@ class VoyagerTransport:
         try:
             dealer.connect(target)
             msg_bytes = msgspec.msgpack.encode(message)
-            
+
             # Use E2EE session if established
             encrypted_msg: bytes = self._encrypt(msg_bytes, session_id=peer_id)
 

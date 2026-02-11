@@ -63,7 +63,7 @@ class SwarmHeartbeatService:
             try:
                 # 1. Collect Local Metrics
                 stats = self._get_local_stats()
-                
+
                 # 2. Record to local telemetry
                 for name, value in stats.items():
                     self.telemetry.record_metric(f"swarm.node.{name}", value, MetricType.GAUGE)
@@ -80,10 +80,10 @@ class SwarmHeartbeatService:
                 # 4. Broadcast to known peers via Synapse
                 if hasattr(self.synapse, "broadcast"):
                     await self.synapse.broadcast(payload)
-                
+
             except Exception as e:
                 logger.error(f"HeartbeatService: Loop error: {e}")
-            
+
             await asyncio.sleep(self.interval)
 
     def _get_local_stats(self) -> Dict[str, float]:

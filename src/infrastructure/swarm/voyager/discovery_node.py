@@ -109,13 +109,13 @@ class DiscoveryNode:
         all_peers = self.get_peers()
         # Sort by IP subnet similarity (simplified proximity metric)
         local_prefix = ".".join(self.local_ip.split(".")[:3])
-        
+
         def proximity_score(peer):
             peer_ip = peer.get("ip", "")
             if peer_ip.startswith(local_prefix):
                 return 0 # On same subnet
             return 1 # Different subnet
-            
+
         return sorted(all_peers, key=proximity_score)[:count]
 
     def _get_local_ip(self) -> str:
@@ -185,7 +185,7 @@ class DiscoveryNode:
         is_new = name not in self.peers
         self.peers[name] = info
         logger.info(f"Voyager: Peer Registry updated ({name}). Total: {len(self.peers)}")
-        
+
         if is_new and self._on_peer_added_callbacks:
             # Prepare peer data for callbacks
             props = {
@@ -225,7 +225,7 @@ class DiscoveryNode:
                 for k, v in info.properties.items()
             }
             node_id = props.get("node_id", "unknown")
-            
+
             peer_data = {
                 "name": name,
                 "addresses": info.parsed_addresses(),

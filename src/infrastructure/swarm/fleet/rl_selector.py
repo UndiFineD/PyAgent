@@ -59,7 +59,7 @@ class RLSelector:
                 max_reward = reward
                 best_candidate = candidate
 
-        logger.info("RLSelector: Selected best candidate '%s' (Reward: %.2f) for goal '%s'", 
+        logger.info("RLSelector: Selected best candidate '%s' (Reward: %.2f) for goal '%s'",
                     best_candidate, max_reward if max_reward != -float('inf') else 0.0, goal)
         return best_candidate
 
@@ -69,7 +69,7 @@ class RLSelector:
         reward = 1.0 if success else -1.0
         if success and latency > 0:
             reward -= min(0.5, latency / 10.0) # Penalty for slow success
-            
+
         self.mdp.add_transition(
             state=goal,
             action=candidate,

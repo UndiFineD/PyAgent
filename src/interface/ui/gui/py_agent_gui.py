@@ -40,7 +40,7 @@ def main() -> None:
     root.withdraw() # Hide main window while showing deprecation alert
     from tkinter import messagebox
     messagebox.showwarning(
-        "Deprecation Warning", 
+        "Deprecation Warning",
         "The Tkinter GUI is deprecated as of v4.0.0 and will be removed in a future release. "
         "Please use the Web UI (launch_web_interface.py) for the full Swarm Singularity experience."
     )

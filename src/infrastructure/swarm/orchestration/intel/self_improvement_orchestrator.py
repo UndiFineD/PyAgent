@@ -74,14 +74,14 @@ class SelfImprovementOrchestrator(BaseAgent, OrchestratorCycleMixin, Orchestrato
         self.ai: LLMClient = LLMClient(requests, workspace_root=self.workspace_root)
         self.core: SelfImprovementCore = SelfImprovementCore(workspace_root=self.workspace_root)
         self.analysis: SelfImprovementAnalysis = SelfImprovementAnalysis(workspace_root=self.workspace_root)
-        
+
         # Inject Profiling Agent into Analysis
         if self.fleet:
             try:
                 self.analysis.profiling_agent = self.fleet.agents.ProfilingAgent
             except (AttributeError, KeyError):
                 pass
-        
+
         self.fixer: SelfImprovementFixer = SelfImprovementFixer(
             ai=self.ai, core=self.core, workspace_root=self.workspace_root
         )

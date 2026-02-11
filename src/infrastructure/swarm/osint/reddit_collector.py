@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 class RedditCollector:
     """
-    Reddit OSINT collector. 
+    Reddit OSINT collector.
     Async implementation refactored from auto-news RedditAgent.
     """
 
@@ -49,7 +49,7 @@ class RedditCollector:
             auth = aiohttp.BasicAuth(self.client_id, self.client_secret)
             data = {'grant_type': 'client_credentials'}
             headers = {'User-Agent': self.user_agent}
-            
+
             try:
                 async with session.post(self.AUTH_URL, data=data, headers=headers, auth=auth) as resp:
                     if resp.status == 200:

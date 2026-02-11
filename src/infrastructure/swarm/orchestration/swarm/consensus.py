@@ -63,7 +63,7 @@ class SwarmConsensus:
         self.is_leader = False
         self.peers: List[str] = []
         self.votes_received: Dict[int, set] = {} # term -> set of voter IDs
-        
+
         # BFT Weights: Higher trust for nodes with more 'Expertize'
         self.node_weights: Dict[str, float] = {node_id: 1.0}
 
@@ -81,8 +81,8 @@ class SwarmConsensus:
                 return False
 
         new_entry = LogEntry(
-            index=len(self.log), 
-            term=self.term, 
+            index=len(self.log),
+            term=self.term,
             command={"action": action, "data": data}
         )
         self.log.append(new_entry)
@@ -90,7 +90,7 @@ class SwarmConsensus:
         # Replicate to peers via Transport
         successful_replications = 1
         total_weight = self.node_weights.get(self.node_id, 1.0)
-        required_weight = sum(self.node_weights.values()) * 0.51 
+        required_weight = sum(self.node_weights.values()) * 0.51
 
         if self.transport:
             for peer in self.peers:
@@ -115,14 +115,14 @@ class SwarmConsensus:
             self._apply_entry(new_entry)
             logger.info(f"Swarm state changed: {action} committed.")
             return True
-        
+
         return False
 
     async def _start_election(self):
         """Phase 3.0: Leader election with BFT weights."""
         self.term += 1
         self.votes_received[self.term] = {self.node_id}
-        
+
         if not self.transport:
             self.is_leader = True
             return
@@ -135,9 +135,9 @@ class SwarmConsensus:
                 "candidate_id": self.node_id,
                 "last_log_index": len(self.log) - 1
             }))
-        
+
         results = await asyncio.gather(*election_tasks, return_exceptions=True)
-        
+
         total_vote_weight = self.node_weights.get(self.node_id, 1.0)
         for res in results:
             if isinstance(res, dict) and res.get("vote_granted"):
@@ -152,7 +152,7 @@ class SwarmConsensus:
         """Applies a committed log entry to the state machine."""
         action = entry.command["action"]
         data = entry.command["data"]
-        
+
         if action == "UPDATE_ROUTING":
             self.state.routing_table.update(data)
         elif action == "ADD_MCP_SERVER":
@@ -160,14 +160,14 @@ class SwarmConsensus:
         elif action == "ASSIGN_SHARD":
             if data not in self.state.active_shards:
                 self.state.active_shards.append(data)
-        
+
         self.commit_index = entry.index
         # Propagate to local services if needed
 
     def handle_message(self, message: Dict[str, Any]) -> Dict[str, Any]:
         """Handles incoming consensus messages from peers."""
         msg_type = message.get("type")
-        
+
         if msg_type == "CONSENSUS_VOTE_REQUEST":
             term = message.get("term", 0)
             if term >= self.term:
@@ -175,7 +175,7 @@ class SwarmConsensus:
                 self.is_leader = False
                 return {"vote_granted": True, "voter_id": self.node_id}
             return {"vote_granted": False, "voter_id": self.node_id}
-            
+
         elif msg_type == "CONSENSUS_REPLICATE":
             term = message.get("term", 0)
             if term >= self.term:
@@ -186,5 +186,5 @@ class SwarmConsensus:
                 self._apply_entry(entry)
                 return {"status": "ACK", "index": entry.index}
             return {"status": "REJECT", "reason": "Lower term"}
-            
+
         return {"status": "UNKNOWN_CONSENSUS_MSG"}
