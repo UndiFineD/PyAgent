@@ -38,7 +38,7 @@ class TemporalPredictorAgent(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.history_file = Path("data/logs/temporal_history.json")
+        self.history_file = self._workspace_root / "data" / "logs" / "temporal_history.json"
         self.history_file.parent.mkdir(parents=True, exist_ok=True)
         self.prediction_log: list[Any] = []
 

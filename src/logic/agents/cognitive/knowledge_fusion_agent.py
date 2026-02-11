@@ -36,7 +36,7 @@ class KnowledgeFusionAgent(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.fusion_dir = Path("data/logs/knowledge_fusion")
+        self.fusion_dir = self._workspace_root / "data" / "logs" / "knowledge_fusion"
         self.fusion_dir.mkdir(parents=True, exist_ok=True)
         self.global_graph_path = self.fusion_dir / "global_knowledge_graph.json"
 

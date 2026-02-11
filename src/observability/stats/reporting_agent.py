@@ -42,7 +42,7 @@ class ReportingAgent(BaseAgent):
     def __init__(self, fleet: FleetManager) -> None:
         super().__init__(agent_name="Reporting")
         self.fleet = fleet
-        self.workspace_root = Path(os.getcwd())
+        self.workspace_root = self._workspace_root
 
     async def generate_dashboard(self) -> str:
         """Runs a workflow to gather data and build a markdown dashboard."""

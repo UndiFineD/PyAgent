@@ -37,8 +37,6 @@ try:
         AttestationConveyancePreference,
         AuthenticatorAttachment,
         AuthenticatorSelectionCriteria,
-        PublicKeyCredentialRpEntity,
-        PublicKeyCredentialUserEntity,
         UserVerificationRequirement,
     )
     HAS_WEBAUTHN = True

@@ -19,7 +19,7 @@ Provides 500+ (simulated/metadata) MCP server configurations for PyAgent.
 
 from typing import List
 try:
-    from .bridge import MCPServerConfig, MCPCategory, MCPServerType
+    from .bridge import MCPServerConfig
 except ImportError:
     # Generic definitions if imported standalone
     from dataclasses import dataclass

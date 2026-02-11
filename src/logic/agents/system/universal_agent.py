@@ -20,6 +20,7 @@ Implementation of Pillar 3: The Universal Agent Shell.
 from __future__ import annotations
 import logging
 from typing import Any, Dict
+import asyncio
 from src.core.base.lifecycle.base_agent import BaseAgent
 
 logger = logging.getLogger(__name__)

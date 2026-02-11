@@ -36,7 +36,13 @@ __version__: str = VERSION
 class EmergencyEventLog:
     """Phase 278: Ring buffer recording the last 10 filesystem actions for recovery."""
 
-    def __init__(self, log_path: Path = Path("data/logs/emergency_recovery.log")) -> None:
+    def __init__(self, log_path: Path | None = None) -> None:
+        if log_path is None:
+            # Detect workspace root safely
+            from src.core.base.lifecycle.agent_core import BaseCore
+            root = Path(BaseCore.detect_workspace_root(Path.cwd()))
+            log_path = root / "data" / "logs" / "emergency_recovery.log"
+        
         self.log_path: Path = log_path
         self.buffer = collections.deque(maxlen=10)
         self._fs = FileSystemCore()

@@ -37,7 +37,7 @@ class RefinementAgent(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.refinement_logs = Path("data/logs/self_refinement")
+        self.refinement_logs = self._workspace_root / "data" / "logs" / "self_refinement"
         self.refinement_logs.mkdir(parents=True, exist_ok=True)
 
         self._system_prompt = (

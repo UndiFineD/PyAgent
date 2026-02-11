@@ -35,7 +35,7 @@ class HierarchicalMemoryAgent(BaseAgent, MemoryStorageMixin, MemoryQueryMixin):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.memory_root = Path("data/logs/memory_hierarchical")
+        self.memory_root = self._workspace_root / "data" / "logs" / "memory_hierarchical"
         # Phase 290: Standardized 3-layer tiers + Archival
         self.tiers = ["ShortTerm", "Working", "LongTerm", "Archival"]
         for tier in self.tiers:

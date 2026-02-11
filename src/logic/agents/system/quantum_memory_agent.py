@@ -43,7 +43,7 @@ class QuantumMemoryAgent(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.context_cache_dir = Path("data/logs/quantum_context")
+        self.context_cache_dir = self._workspace_root / "data" / "logs" / "quantum_context"
         self.context_cache_dir.mkdir(parents=True, exist_ok=True)
         self.active_context_blocks: list[Any] = []
 

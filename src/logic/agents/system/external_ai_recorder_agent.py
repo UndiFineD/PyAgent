@@ -35,7 +35,7 @@ class ExternalAIRecorderAgent(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.logs_dir = Path("data/logs/external_ai_learning")
+        self.logs_dir = self._workspace_root / "data" / "logs" / "external_ai_learning"
         self.logs_dir.mkdir(parents=True, exist_ok=True)
         self.archive_path = self.logs_dir / "external_knowledge.jsonl"
 

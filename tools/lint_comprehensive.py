@@ -22,7 +22,7 @@ from typing import Dict, List, Any
 ROOT_DIR = Path(__file__).parent.parent.resolve()
 SRC_DIR = ROOT_DIR / "src"
 TESTS_DIR = ROOT_DIR / "tests"
-OUTPUT_FILE = ROOT_DIR / "lint_results.json"
+OUTPUT_FILE = ROOT_DIR / "temp" / "lint_results.json"
 
 
 async def run_tool(cmd: List[str], file_path: str, timeout: int = 60) -> Dict[str, Any]:
@@ -58,11 +58,10 @@ async def run_tool(cmd: List[str], file_path: str, timeout: int = 60) -> Dict[st
         }
 
 
-async def lint_file(file_path: Path, semaphore: asyncio.Semaphore) -> Dict[str, Any]:
+async def lint_file(file_path: Path, semaphore: asyncio.Semaphore) -> Dict[str, Any] | None:
     """Runs flake8, ruff, and mypy on a single file."""
     async with semaphore:
         rel_path = str(file_path.relative_to(ROOT_DIR))
-        # print(f"Checking: {rel_path}...") # Reduced noise
 
         # Run tools
         results = await asyncio.gather(
@@ -71,12 +70,18 @@ async def lint_file(file_path: Path, semaphore: asyncio.Semaphore) -> Dict[str, 
             run_tool([sys.executable, "-m", "mypy", "--ignore-missing-imports", "--follow-imports=skip"], str(file_path))
         )
 
-        return {
-            "file": rel_path,
-            "flake8": results[0],
-            "ruff": results[1],
-            "mypy": results[2]
-        }
+        # Only record tools with errors (non-zero exit code)
+        file_record = {"file": rel_path}
+        tools = ["flake8", "ruff", "mypy"]
+        has_errors = False
+
+        for i, tool_name in enumerate(tools):
+            if results[i]["exit_code"] != 0:
+                file_record[tool_name] = results[i]
+                has_errors = True
+
+        # If no tool found errors, don't record the file at all
+        return file_record if has_errors else None
 
 
 async def main():
@@ -104,9 +109,11 @@ async def main():
     for i in range(0, len(tasks), chunk_size):
         chunk = tasks[i : i + chunk_size]
         results = await asyncio.gather(*chunk)
-        all_results.extend(results)
+        # Only record files that have at least one tool error
+        all_results.extend([r for r in results if r is not None])
 
         # Save progress
+        OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
         with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
             json.dump(all_results, f, indent=2)
 
