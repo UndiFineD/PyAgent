@@ -21,7 +21,6 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.logic_manifest import LogicManifest
 
 logger = logging.getLogger(__name__)
 

@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """
 Core logic for Python Linting analysis.
 Integrates ruff, flake8, and pylint for comprehensive code quality checks.
@@ -88,7 +93,7 @@ class LinterCore:
                             "code": item.get("code", "UNKNOWN"),
                             "message": item.get("message", ""),
                             "linter": "ruff",
-                            "type": "warning" # ruff doesn't explicitly categorize in simple json
+                            "type": "warning"  # ruff doesn't explicitly categorize in simple json
                         })
                 except json.JSONDecodeError:
                     self.logger.warning("Failed to parse ruff output")

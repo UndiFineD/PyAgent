@@ -1,5 +1,4 @@
 
-import pytest
 from src.logic.agents.development.coder_core import CoderCore
 from src.core.base.common.types.code_language import CodeLanguage
 

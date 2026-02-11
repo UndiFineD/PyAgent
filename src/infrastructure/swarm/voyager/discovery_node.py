@@ -11,7 +11,7 @@ import asyncio
 import contextlib
 import socket
 import uuid
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Callable, Awaitable
 
 from zeroconf import IPVersion, ServiceBrowser, ServiceInfo, ServiceListener
 from zeroconf.asyncio import AsyncZeroconf

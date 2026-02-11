@@ -21,16 +21,12 @@ Tests for PoolingEngine - embedding pooling strategies.
 
 import pytest
 import numpy as np
-from typing import List
 
 from src.infrastructure.engine.pooling.pooling_engine import (
     PoolingTask,
     PoolingStrategy,
     PoolingConfig,
-    PoolingResult,
     EmbeddingOutput,
-    ClassificationOutput,
-    BasePooler,
     MeanPooler,
     CLSPooler,
     LastTokenPooler,
@@ -43,6 +39,7 @@ from src.infrastructure.engine.pooling.pooling_engine import (
     PoolingEngine,
     create_pooling_engine,
 )
+
 
 # Helper to create a default PoolingConfig
 def default_config(strategy=PoolingStrategy.MEAN, normalize=True, truncate_dim=None):

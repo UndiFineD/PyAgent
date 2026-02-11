@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """File iteration logic for OrchestratorAgent."""
 
 from __future__ import annotations
@@ -72,7 +77,7 @@ class ExecIterationMixin:
 
                 try:
                     changes_made = self._perform_iteration(code_file)
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception as e:  # pylint: disable=broad-exception-caught
                     logging.error(f"Error in _perform_iteration for {code_file}: {e}")
                     try:
                         sql = getattr(
@@ -87,7 +92,7 @@ class ExecIterationMixin:
                                 f"Iteration failed: {str(e)}",
                                 False,
                             )
-                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    except Exception:  # pylint: disable=broad-exception-caught
                         pass
                     changes_made = False
 
@@ -109,8 +114,8 @@ class ExecIterationMixin:
             if hasattr(self, "shutdown_handler"):
                 self.shutdown_handler.mark_completed(code_file)
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.critical(f"Global failure processing {code_file}: {global_e}", exc_info=True)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.critical(f"Global failure processing {code_file}: {e}", exc_info=True)
         finally:
             if hasattr(self, "lock_manager"):
                 self.lock_manager.release_lock(code_file)

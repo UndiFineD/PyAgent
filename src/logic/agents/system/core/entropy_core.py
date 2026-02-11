@@ -12,9 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """
-Core logic for Entropy Measurement (Phase 172).
-Calculates structural complexity metrics.
+EntropyCore: Core logic for structural complexity metrics (Phase 172).
 """
 
 import ast
@@ -102,7 +106,7 @@ class EntropyCore:
                     "max_complexity": max_complexity,
                     "file_count": count,
                 }
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         count = len(all_metrics)

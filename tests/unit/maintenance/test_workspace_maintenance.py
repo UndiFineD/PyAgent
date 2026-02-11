@@ -18,7 +18,6 @@ Test Workspace Maintenance module.
 
 import unittest
 import tempfile
-import os
 from pathlib import Path
 from src.maintenance.workspace_maintenance import WorkspaceMaintenance
 

@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import pytest
-import asyncio
 from src.infrastructure.security.auth.webauthn_manager import WebAuthnManager
 from src.infrastructure.swarm.resilience.checkpoint_manager import CheckpointManager
 

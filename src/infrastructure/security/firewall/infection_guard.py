@@ -6,7 +6,7 @@ import json
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)

@@ -1,3 +1,23 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""Test profiling trigger logic."""
 
 import os
 import sys
@@ -8,10 +28,12 @@ sys.path.insert(0, os.getcwd())
 from src.infrastructure.swarm.orchestration.intel.mixins.profiling_analysis_mixin import ProfilingAnalysisMixin
 from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import SelfImprovementAnalysis
 
+
 class MockAnalysis(SelfImprovementAnalysis, ProfilingAnalysisMixin):
     def __init__(self):
         # We don't call super().__init__ because it might trigger other things
         self.profiling_agent = None
+
 
 def check_file(path):
     with open(path, 'r', encoding='utf-8') as f:
@@ -29,6 +51,7 @@ def check_file(path):
             print(f"  - {f['message']}")
     else:
         print(f"File: {path} - OK")
+
 
 files_to_check = [
     r'src/infrastructure/engine/loading/expert_load_balancer.py',

@@ -21,7 +21,7 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Dict
 
 from src.core.base.lifecycle.logic_manifest import LogicManifest
 

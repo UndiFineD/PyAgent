@@ -3,10 +3,8 @@
 
 import asyncio
 import logging
-import json
 from unittest.mock import MagicMock
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-from src.core.base.logic.security.e2e_encryption_core import E2EEncryptionCore
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("HandshakeVerify")

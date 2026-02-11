@@ -206,7 +206,8 @@ class TestConvenienceFunctions:
 
     def test_reflect_on_code(self):
         """Test reflect_on_code convenience function."""
-        mock_llm = Mock(return_value="def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n-1)")
+        mock_val = "def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n-1)"
+        mock_llm = Mock(return_value=mock_val)
 
         # Mock the internal critique to be perfect
         original_llm = mock_llm

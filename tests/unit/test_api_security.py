@@ -17,7 +17,6 @@ Module: test_api_security
 Comprehensive tests for API security patterns implemented from 31-days-of-API-Security-Tips.
 """
 
-import asyncio
 import hmac
 import hashlib
 import pytest

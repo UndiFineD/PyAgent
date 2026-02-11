@@ -21,9 +21,6 @@ Tests for MultiModalCache - content-aware caching with IPC support.
 
 import pytest
 import sys
-import asyncio
-import numpy as np
-from typing import List
 
 from src.infrastructure.engine.multimodal.multi_modal_cache import (
     MediaType,
@@ -34,7 +31,6 @@ from src.infrastructure.engine.multimodal.multi_modal_cache import (
     CacheStats,
     PlaceholderRange,
     MultiModalHasher,
-    MultiModalCache,
     MemoryMultiModalCache,
     IPCMultiModalCache,
     PerceptualCache,

@@ -126,8 +126,8 @@ class TestStatsRollupCore:
     def test_percentiles(self, values):
         core = StatsRollupCore()
         p50 = core.rollup_p50(values)
-        p95 = core.rollup_p95(values)
-        p99 = core.rollup_p99(values)
+        core.rollup_p95(values)
+        core.rollup_p99(values)
 
         assert core.rollup_min(values) <= p50 <= core.rollup_max(values)
         if len(values) >= 20:

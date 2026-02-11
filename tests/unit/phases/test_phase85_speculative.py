@@ -46,4 +46,3 @@ def test_heterogeneous_pairing():
     assert pairs[0] == ("ex_fast", "ex_slow")
     print("\n[Phase 85] Heterogeneous speculator correctly paired FP8 drafter with standard verifier.")
 
-from unittest.mock import MagicMock

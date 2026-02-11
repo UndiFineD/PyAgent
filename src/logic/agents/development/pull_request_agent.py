@@ -58,8 +58,7 @@ class PullRequestAgent(BaseAgent):
             try:
                 meta = {"phase": 108, "type": "git_pr", "timestamp": time.time()}
                 self.recorder.record_interaction("pra", "git", action, result, meta=meta)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
     @as_tool

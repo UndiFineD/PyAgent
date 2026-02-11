@@ -2,7 +2,7 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
-# you may obtain a copy of the License at
+# You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import pytest
 from src.core.base.mixins.orchestration_mixin import OrchestrationMixin
 
 
@@ -26,9 +27,6 @@ def test_prepare_delegation_context_handles_exceptions(monkeypatch):
     # Should return None and not raise
     res = OrchestrationMixin._prepare_delegation_context(mixin)
     assert res is None
-
-
-import pytest
 
 
 @pytest.mark.asyncio

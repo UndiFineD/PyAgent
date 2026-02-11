@@ -16,8 +16,6 @@
 Tests for chat decorator commands.
 """
 
-import pytest
-
 
 class TestChatDecoratorCommands:
     """Tests for chat formatting commands."""

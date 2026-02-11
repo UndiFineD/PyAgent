@@ -14,7 +14,7 @@
 
 import torch
 import torch.nn as nn
-from typing import Optional, Tuple
+from typing import Tuple
 
 class KVzapSurrogate(nn.Module):
     """
@@ -58,7 +58,6 @@ def kvzap_prune(
             scores[:, -window_size:, :] = float('inf')
 
         # Create mask: True means KEEP
-        mask = scores >= threshold # [B, T, H]
 
         # Note: In practice, implementing this efficiently requires handling
         # non-uniform lengths across heads/layers or block-level pruning.

@@ -22,7 +22,7 @@ from pathlib import Path
 
 import pytest
 
-from src.core.base.common.models.base_models import EnvironmentConfig, EnvironmentInstance
+from src.core.base.common.models.base_models import EnvironmentConfig
 from src.core.base.common.models.core_enums import EnvironmentIsolation, EnvironmentStatus
 from src.core.base.environment.environment_manager import EnvironmentManager
 

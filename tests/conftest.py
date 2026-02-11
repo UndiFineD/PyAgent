@@ -12,18 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """Pytest configuration for PyAgent tests."""
 
 import types
 import tempfile
-from pathlib import Path
 import pytest
 import importlib.util
 import re
-from pathlib import Path as _Path
+from pathlib import Path
+
 # Normalize Windows-style absolute paths embedded in generated tests when running on non-Windows CI
 _orig_spec_from_file_location = importlib.util.spec_from_file_location
-_repo_root = _Path(__file__).resolve().parents[1]
+_repo_root = Path(__file__).resolve().parents[1]
 
 def _spec_from_file_location(name, location, *args, **kwargs):
     try:
@@ -69,11 +74,13 @@ def pytest_ignore_collect(collection_path, config):
     except Exception:
         pass
     return False
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.logic.circuit_breaker import CircuitBreaker
-from src.core.base.logic.agent_plugin_base import AgentPluginBase
-from src.core.base.common.models.core_enums import HealthStatus
-from src.core.base.state.agent_state_manager import StateTransaction
+
+
+from src.core.base.lifecycle.base_agent import BaseAgent  # noqa: E402
+from src.core.base.logic.circuit_breaker import CircuitBreaker  # noqa: E402
+from src.core.base.logic.agent_plugin_base import AgentPluginBase  # noqa: E402
+from src.core.base.common.models.core_enums import HealthStatus  # noqa: E402
+from src.core.base.state.agent_state_manager import StateTransaction  # noqa: E402
 
 
 @pytest.fixture

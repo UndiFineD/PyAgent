@@ -18,7 +18,6 @@ Tests for SlashCommands - Chat prompt slash command parser and executor.
 
 import os
 import re
-import time
 from unittest.mock import patch
 
 import pytest

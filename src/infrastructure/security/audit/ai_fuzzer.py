@@ -10,8 +10,7 @@ Simulates prompt injection and logic bypassing to harden agent guardrails.
 
 import logging
 import random
-from typing import List, Dict, Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

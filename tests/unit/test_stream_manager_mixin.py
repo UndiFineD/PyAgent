@@ -12,14 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """
 Tests for Stream Manager Mixin.
 Tests Redis-backed streaming capabilities adapted from Adorable patterns.
 """
 
-import asyncio
 import pytest
-from unittest.mock import Mock, patch, AsyncMock
+from unittest.mock import patch, AsyncMock
 import time
 
 from src.core.base.mixins.stream_manager_mixin import StreamManagerMixin, StreamState, StreamInfo
@@ -89,13 +93,13 @@ class TestStreamManager:
         manager, mock_client = stream_manager_with_redis
 
         mock_client.get.return_value = '{"state": "running"}'
-        assert await manager.is_stream_running("test_agent") == True
+        assert await manager.is_stream_running("test_agent")
 
         mock_client.get.return_value = '{"state": "stopped"}'
-        assert await manager.is_stream_running("test_agent") == False
+        assert not await manager.is_stream_running("test_agent")
 
         mock_client.get.return_value = None
-        assert await manager.is_stream_running("test_agent") == False
+        assert not await manager.is_stream_running("test_agent")
 
     @pytest.mark.asyncio
     async def test_stop_stream(self, stream_manager_with_redis):
@@ -134,7 +138,7 @@ class TestStreamManager:
         manager.is_stream_running = mock_is_running
 
         result = await manager.wait_for_stream_to_stop("test_agent", max_attempts=5)
-        assert result == True
+        assert result
         assert call_count == 3  # Should check 3 times: True, True, False
 
     @pytest.mark.asyncio

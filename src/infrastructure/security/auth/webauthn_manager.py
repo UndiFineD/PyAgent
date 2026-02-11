@@ -21,7 +21,7 @@ import logging
 import base64
 import os
 import json
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from authlib.integrations.starlette_client import OAuth
 
 try:
@@ -174,76 +174,4 @@ class WebAuthnManager:
             return True
         except Exception as e:
             logger.error(f"WebAuthn: Authentication failed: {e}")
-            return False
-
-        expected_challenge = self.challenges.get(username)
-        if not expected_challenge:
-            return False
-
-        try:
-            verification = verify_registration_response(
-                credential=response,
-                expected_challenge=expected_challenge,
-                expected_origin=f"http://{self.rp_id}:8000", # Example origin
-                expected_rp_id=self.rp_id,
-            )
-            
-            # Save the successful credential for future authentication
-            self.users[username] = {
-                "credential_id": verification.credential_id,
-                "public_key": verification.public_key,
-                "sign_count": verification.sign_count,
-            }
-            return True
-        except Exception as e:
-            logger.error(f"WebAuthn registration verification failed: {e}")
-            return False
-
-    def get_authentication_options(self, username: str) -> Dict[str, Any]:
-        """Generates options for WebAuthn authentication."""
-        if not HAS_WEBAUTHN:
-            return {"mock": True, "challenge": base64.b64encode(os.urandom(32)).decode()}
-
-        user_data = self.users.get(username)
-        if not user_data:
-            raise ValueError("User not registered")
-
-        options = generate_authentication_options(
-            rp_id=self.rp_id,
-            allow_credentials=[{
-                "id": user_data["credential_id"],
-                "type": "public-key",
-            }],
-            user_verification=UserVerificationRequirement.PREFERRED,
-        )
-        
-        self.challenges[username] = options.challenge
-        return json.loads(options_to_json(options))
-
-    def verify_authentication(self, username: str, response: Dict[str, Any]) -> bool:
-        """Verifies a WebAuthn authentication response."""
-        if not HAS_WEBAUTHN:
-            return True # Mock success
-
-        user_data = self.users.get(username)
-        expected_challenge = self.challenges.get(username)
-        
-        if not user_data or not expected_challenge:
-            return False
-
-        try:
-            verification = verify_authentication_response(
-                credential=response,
-                expected_challenge=expected_challenge,
-                expected_origin=f"http://{self.rp_id}:8000",
-                expected_rp_id=self.rp_id,
-                credential_public_key=user_data["public_key"],
-                credential_current_sign_count=user_data["sign_count"],
-            )
-            
-            # Update sign count
-            self.users[username]["sign_count"] = verification.new_sign_count
-            return True
-        except Exception as e:
-            logger.error(f"WebAuthn authentication verification failed: {e}")
             return False

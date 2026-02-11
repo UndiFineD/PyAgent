@@ -571,6 +571,18 @@ class EvaluationNotebookSystem:
         notebook_name: str
     ) -> str:
         """Create a Jupyter notebook for test result analysis."""
+        # Convert results to a serializable format for the notebook
+        results_list = []
+        for r in test_results:
+            results_list.append({
+                'test_id': r.test_id,
+                'test_type': r.test_type.value,
+                'status': r.status.value,
+                'duration': r.duration,
+                'timestamp': r.timestamp
+            })
+        results_json = json.dumps(results_list, indent=2)
+
         notebook_content = {
             "cells": [
                 {
@@ -591,9 +603,7 @@ class EvaluationNotebookSystem:
                         "import json\n",
                         "\n",
                         "# Load test results\n",
-                        f"results_data = {json.dumps([{'test_id': r.test_id, 'test_type': r.test_type.value, "
-                        f"'status': r.status.value, 'duration': r.duration, "
-                        f"'timestamp': r.timestamp} for r in test_results], indent=2)}\n",
+                        f"results_data = {results_json}\n",
                         "\n",
                         "df = pd.DataFrame(results_data)\n",
                         "df.head()"

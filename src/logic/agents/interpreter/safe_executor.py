@@ -15,7 +15,7 @@ import ast
 import builtins
 import logging
 import asyncio
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, Optional
 from dataclasses import dataclass
 
 logger = logging.getLogger(__name__)
@@ -108,7 +108,7 @@ class SafeLocalInterpreter:
             else:
                 exec(code, self.safe_globals)
 
-        except Exception as e:
+        except Exception:
             success = False
             import traceback
             traceback.print_exc(file=capture_err)

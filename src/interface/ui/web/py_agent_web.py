@@ -24,6 +24,8 @@ import asyncio
 import sys
 import os
 import time
+import uuid
+import logging
 from pathlib import Path
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
@@ -36,6 +38,8 @@ from src.infrastructure.swarm.resilience.checkpoint_manager import CheckpointMan
 if sys.platform == "win32":
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
+logger = logging.getLogger(__name__)
+
 # Absolute resolution is critical on Windows
 WEB_UI_DIR = Path(__file__).resolve().parent
 # Workspace Root is 4 levels up: web -> ui -> interface -> src -> root
@@ -47,6 +51,21 @@ fleet_instance = None
 auth_manager = WebAuthnManager()
 checkpoint_manager = CheckpointManager(rank=0, world_size=1)  # Default for web proxy
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global fleet_instance
+    try:
+        from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+        fleet_instance = FleetManager(str(WORKSPACE_ROOT))
+        logger.info(f"FleetManager initialized at {WORKSPACE_ROOT}")
+    except Exception as e:
+        logger.error(f"Failed to initialize FleetManager: {e}")
+    yield
+    # Cleanup logic here if needed
+
+app = FastAPI(title="PyAgent Fleet API", lifespan=lifespan)
+
+
 # Authentication Endpoints (Phase 327: Biometric Hardware Keys)
 @app.post("/api/auth/register/options")
 async def registration_options(request: Request):
@@ -57,11 +76,13 @@ async def registration_options(request: Request):
     auth_manager.last_challenge = options["challenge"]
     return options
 
+
 @app.post("/api/auth/register/verify")
 async def verify_registration(request: Request):
     data = await request.json()
     result = auth_manager.verify_registration(data.get("username", "admin"), data)
     return {"status": "success" if result else "error"}
+
 
 @app.post("/api/auth/login/options")
 async def authentication_options(request: Request):
@@ -72,37 +93,12 @@ async def authentication_options(request: Request):
     auth_manager.last_challenge = options["challenge"]
     return options
 
+
 @app.post("/api/auth/login/verify")
 async def verify_authentication(request: Request):
     data = await request.json()
     result = auth_manager.verify_authentication(data.get("username", "admin"), data)
     return {"status": "authenticated" if result else "denied"}
-
-# Mobile App Bridge Placeholder (Phase 4.0.0 Singularity)
-@app.post("/api/notify")
-async def send_notification(data: dict):
-    """
-    Simulates a bridge to mobile native notifications.
-    Used for hardware key prompts or critical swarm alerts.
-    """
-    msg = data.get("message", "Swarm Notification")
-    print(f"MOBILE_BRIDGE_ALERT: {msg}")
-    # In Phase 4.1.0, this will trigger a real WebPush or Firebase alert
-    return {"status": "dispatched_to_bridge", "message": msg}
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    global fleet_instance
-    try:
-        from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-        fleet_instance = FleetManager(str(WORKSPACE_ROOT))
-        print(f"FleetManager initialized at {WORKSPACE_ROOT}")
-    except Exception as e:
-        print(f"Failed to initialize FleetManager: {e}")
-    yield
-
-
-app = FastAPI(title="PyAgent Fleet API", lifespan=lifespan)
 
 
 # Helper for system metrics
@@ -278,7 +274,8 @@ async def list_files(path: str = "."):
     items = []
     try:
         for entry in os.scandir(target_path):
-            if entry.name.startswith((".", "__")): continue
+            if entry.name.startswith((".", "__")):
+                continue
             items.append({
                 "name": entry.name,
                 "is_dir": entry.is_dir(),
@@ -340,28 +337,6 @@ async def get_latest_checkpoint():
         }
     return {"status": "none"}
 
-@app.post("/api/auth/register/verify")
-async def verify_registration(username: str, data: dict):
-    """Verifies WebAuthn registration response."""
-    if auth_manager.verify_registration(username, data):
-        return {"status": "success", "message": "Biometric credential registered"}
-    return JSONResponse(status_code=400, content={"error": "Verification failed"})
-
-@app.get("/api/auth/login/options")
-async def get_login_options(username: str):
-    """Generates options for WebAuthn authentication."""
-    try:
-        options = auth_manager.get_authentication_options(username)
-        return options
-    except Exception as e:
-        return JSONResponse(status_code=400, content={"error": str(e)})
-
-@app.post("/api/auth/login/verify")
-async def verify_login(username: str, data: dict):
-    """Verifies WebAuthn authentication response."""
-    if auth_manager.verify_authentication(username, data):
-        return {"status": "success", "token": "mock-jwt-token-v4"}
-    return JSONResponse(status_code=401, content={"error": "Authentication failed"})
 
 # --- External Automation (n8n) Integration ---
 
@@ -426,7 +401,7 @@ async def get_swarm_traces():
 
 
 @app.get("/api/observability/topology")
-async def get_topology():
+async def get_observability_topology():
     """
     Pillar 8: Real-Time Topology Mapper.
     Returns 3D (2D projected) node locations and data 'teleportation' routes.
@@ -449,4 +424,4 @@ async def root():
 app.mount("/static", StaticFiles(directory=str(WEB_UI_DIR)), name="static")
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run("src.interface.ui.web.py_agent_web:app", host="0.0.0.0", port=8000, reload=True)

@@ -1,5 +1,4 @@
 import os
-import re
 
 def sanitize_file(path):
     with open(path, 'r', encoding='utf-8') as f:

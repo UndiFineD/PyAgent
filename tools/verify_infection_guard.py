@@ -3,8 +3,6 @@
 # Verification script for Infection Guard security patterns.
 
 import asyncio
-import json
-import os
 import sys
 from pathlib import Path
 

@@ -9,11 +9,8 @@ Analyzes reasoning failures across the swarm and synthesizes new agent definitio
 """
 
 import logging
-import json
-import os
 from typing import List, Dict, Any
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.models.communication_models import CascadeContext
 
 logger = logging.getLogger(__name__)
 

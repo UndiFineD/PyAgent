@@ -12,16 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """Self-evolution mixin for PyAgent orchestrators."""
 
-import asyncio
-import json
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
 
 from src.core.base.common.models.communication_models import CascadeContext, WorkState
-from src.core.base.work_patterns import WorkPattern
 
 
 @dataclass
@@ -281,13 +283,17 @@ class SelfEvolutionMixin:
     def _is_improved(self, old_metrics: EvolutionMetrics, new_metrics: EvolutionMetrics) -> bool:
         """Check if new metrics represent an improvement."""
         # Calculate composite improvement score
-        old_score = (old_metrics.success_rate * 0.4 +
-                    old_metrics.quality_score * 0.4 +
-                    (1.0 - min(old_metrics.execution_time / 300.0, 1.0)) * 0.2)
+        old_score = (
+            old_metrics.success_rate * 0.4 +
+            old_metrics.quality_score * 0.4 +
+            (1.0 - min(old_metrics.execution_time / 300.0, 1.0)) * 0.2
+        )
 
-        new_score = (new_metrics.success_rate * 0.4 +
-                    new_metrics.quality_score * 0.4 +
-                    (1.0 - min(new_metrics.execution_time / 300.0, 1.0)) * 0.2)
+        new_score = (
+            new_metrics.success_rate * 0.4 +
+            new_metrics.quality_score * 0.4 +
+            (1.0 - min(new_metrics.execution_time / 300.0, 1.0)) * 0.2
+        )
 
         improvement = (new_score - old_score) / old_score if old_score > 0 else 0
         return improvement >= self._improvement_threshold
@@ -342,8 +348,10 @@ class SelfEvolutionMixin:
 
         insights = {
             "total_evolutions": len(history.evolved_workflows),
-            "best_performance": max(history.performance_history,
-                                  key=lambda m: m.quality_score) if history.performance_history else None,
+            "best_performance": max(
+                history.performance_history,
+                key=lambda m: m.quality_score
+            ) if history.performance_history else None,
             "lessons_learned": history.lessons_learned,
             "improvement_trend": self._calculate_improvement_trend(history.performance_history)
         }

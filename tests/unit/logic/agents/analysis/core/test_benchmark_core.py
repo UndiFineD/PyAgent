@@ -17,7 +17,7 @@
 Tests performance calculation logic before Rust conversion.
 """
 
-from hypothesis import given, strategies as st, settings, HealthCheck
+from hypothesis import given, strategies as st, settings
 from src.logic.agents.analysis.core.benchmark_core import (
     BenchmarkCore,
     BenchmarkResult,

@@ -12,9 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """Tests for security analysis mixin."""
 
-import pytest
 from src.logic.agents.swarm.security_analysis_mixin import (
     WorkflowSecurityAnalyzer,
     SecurityAnalysisMixin,
@@ -62,8 +66,10 @@ def vulnerable_agent():
 '''
         analysis = self.analyzer.analyze_workflow_code(code, "vulnerable_workflow")
 
-        vulnerabilities = [v for v in analysis.vulnerabilities
-                          if v.vulnerability_id == "AGENT-001"]
+        vulnerabilities = [
+            v for v in analysis.vulnerabilities
+            if v.vulnerability_id == "AGENT-001"
+        ]
         assert len(vulnerabilities) == 1
         assert vulnerabilities[0].severity == "critical"
 
@@ -78,15 +84,16 @@ def data_handler_agent():
 '''
         analysis = self.analyzer.analyze_workflow_code(code, "data_exposure_workflow")
 
-        vulnerabilities = [v for v in analysis.vulnerabilities
-                          if v.vulnerability_id == "AGENT-003"]
+        vulnerabilities = [
+            v for v in analysis.vulnerabilities
+            if v.vulnerability_id == "AGENT-003"
+        ]
         assert len(vulnerabilities) == 1
         assert vulnerabilities[0].severity == "high"
 
     def test_calculate_security_score(self):
         """Test security score calculation."""
         # Empty analysis should get perfect score
-        analysis = WorkflowAnalysis("test")
         score = self.analyzer._calculate_security_score([])
         assert score == 100.0
 
@@ -128,8 +135,10 @@ def broken_function(
         analysis = self.analyzer.analyze_workflow_code(invalid_code, "broken_workflow")
 
         assert len(analysis.vulnerabilities) > 0
-        parse_errors = [v for v in analysis.vulnerabilities
-                       if v.vulnerability_id == "PARSE-001"]
+        parse_errors = [
+            v for v in analysis.vulnerabilities
+            if v.vulnerability_id == "PARSE-001"
+        ]
         assert len(parse_errors) == 1
 
 

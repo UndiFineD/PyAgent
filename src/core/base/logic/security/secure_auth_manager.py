@@ -23,8 +23,6 @@ import hashlib
 import logging
 import secrets
 import time
-import json
-import base64
 from dataclasses import dataclass
 from typing import Dict, Optional, List, Any
 
@@ -36,7 +34,6 @@ from fido2.webauthn import (
     UserVerificationRequirement,
     AuthenticatorAttachment
 )
-from fido2.utils import websafe_decode, websafe_encode
 
 from .e2e_encryption_core import E2EEncryptionCore
 

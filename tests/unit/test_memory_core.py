@@ -17,9 +17,7 @@ Tests for HybridMemoryCore - Hybrid graph-vector memory system
 Based on AutoMem patterns
 """
 
-import asyncio
 import pytest
-from typing import List
 
 from src.core.base.logic.memory_core import (
     HybridMemoryCore, MemoryNode, MemoryRelation,

@@ -12,9 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-import time
-import requests
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 from src.core.base.mixins.ssrf_detector_mixin import SSRFDetectorMixin
 
 
@@ -56,7 +58,7 @@ class TestSSRFDetectorMixin:
 
         try:
             # Simulate callback
-            token = self.mixin.get_ssrf_token()
+            self.mixin.get_ssrf_token()
             self.mixin._ssrf_data['test'] = ['value1']
 
             # Check data

@@ -1,4 +1,22 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 import subprocess
 import socket
 
@@ -75,29 +93,29 @@ try:
             is_vpn = any(keyword in name for keyword in ['vpn', 'tunnel', 'wireguard', 'proton', 'openvpn', 'pptp', 'l2tp'])
             if is_vpn:
                 score = 0
-                print(f"  -> VPN Detected (score=0)")
+                print("  -> VPN Detected (score=0)")
             else:
                 # Prefer /24 networks (255.255.255.0 subnet mask)
                 if subnet == '255.255.255.0':
                     score = 100
-                    print(f"  -> /24 Subnet Detected (score=100)")
+                    print("  -> /24 Subnet Detected (score=100)")
                 # Then /16 networks (255.255.0.0)
                 elif subnet == '255.255.0.0':
                     score = 80
-                    print(f"  -> /16 Subnet Detected (score=80)")
+                    print("  -> /16 Subnet Detected (score=80)")
                 # Then other private networks
                 elif ip.startswith(('192.168.', '10.', '172.')):
                     score = 60
-                    print(f"  -> Other Private IP Detected (score=60)")
+                    print("  -> Other Private IP Detected (score=60)")
                 else:
                     score = 40
-                    print(f"  -> Public/Other IP Detected (score=40)")
+                    print("  -> Public/Other IP Detected (score=40)")
 
             scored_interfaces.append((score, ip, iface['name']))
 
         # Sort by score and show results
         scored_interfaces.sort(reverse=True)
-        print(f"\nScored interfaces (highest first):")
+        print("\nScored interfaces (highest first):")
         for score, ip, name in scored_interfaces:
             status = "SELECTED" if score > 0 else "SKIPPED"
             print(f"  {status}: {name} - {ip} (score: {score})")

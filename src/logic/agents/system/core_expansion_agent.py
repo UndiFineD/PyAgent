@@ -12,8 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """
-Core expansion agent.py module.
+CoreExpansionAgent: System agent for autonomous environment expansion.
 """
 
 
@@ -99,7 +104,7 @@ class CoreExpansionAgent(BaseAgent):
                     else:
                         name = getattr(dist, "name", "Unknown")
                     results.append(f"{name}=={dist.version}")
-                except (AttributeError, KeyError, TypeError) as _e:
+                except (AttributeError, KeyError, TypeError):
                     continue
             if results:
                 return results

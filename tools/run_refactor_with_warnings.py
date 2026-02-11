@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-import runpy, warnings, sys, inspect
+import runpy
+import warnings
+import sys
+import inspect
 
 
 def showwarning(message, category, filename, lineno, file=None, line=None):

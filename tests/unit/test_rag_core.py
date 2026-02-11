@@ -19,14 +19,11 @@ Tests advanced RAG functionality based on AgentCloud patterns.
 """
 
 import pytest
-import asyncio
-from datetime import datetime
 
 from src.core.base.logic.core.rag_core import (
     RAGCore,
     VectorStoreType,
     RetrievalStrategy,
-    DocumentType,
     Document,
     RetrievalConfig,
     RAGToolConfig,

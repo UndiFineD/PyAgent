@@ -20,8 +20,7 @@ Autonomous Codebase Evolution Loop for self-optimizing system logic.
 from __future__ import annotations
 import asyncio
 import logging
-from pathlib import Path
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
@@ -69,8 +68,9 @@ class EvolutionLoop:
         rust_candidates = []
         
         for pfile in python_files:
-            if "__" in pfile.name or "test" in pfile.name.lower(): continue
-            
+            if "__" in pfile.name or "test" in pfile.name.lower():
+                continue
+
             # Heuristic: Large files with high loop density or many mathematical ops
             try:
                 content = pfile.read_text(encoding="utf-8")

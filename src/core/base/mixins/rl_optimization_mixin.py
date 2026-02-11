@@ -19,11 +19,11 @@ Allows agents to record and learn from decision-making using Markov Decision Pro
 
 from __future__ import annotations
 import logging
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from typing import Any, Optional, TYPE_CHECKING
 from src.core.rl.mdp import MDP
 
 if TYPE_CHECKING:
-    from src.core.base.lifecycle.base_agent import BaseAgent
+    pass
 
 logger = logging.getLogger(__name__)
 

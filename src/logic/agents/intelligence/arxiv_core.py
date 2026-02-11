@@ -26,6 +26,7 @@ import fitz  # PyMuPDF
 
 from src.infrastructure.security.network.firewall import ReverseProxyFirewall
 
+
 class ArxivCore:
     """Core logic for interacting with Arxiv research papers."""
 

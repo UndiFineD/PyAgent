@@ -21,7 +21,6 @@ import time
 import pytest
 from pathlib import Path
 from unittest.mock import MagicMock
-import sys
 from typing import Any
 
 # Add src to path
@@ -30,7 +29,7 @@ from typing import Any
 try:
     from src.core.base.base_agent import BaseAgent as Agent
 except ImportError:
-    class Agent: # type: ignore
+    class Agent:  # type: ignore
         def __init__(self, repo_root: str):
             self.repo_root = Path(repo_root)
             self.enable_async = False
@@ -39,10 +38,10 @@ except ImportError:
             # Emulate logic
             if self.enable_async:
                 # Mock parallel
-                await asyncio.sleep(1) # Total expected if parallel
+                await asyncio.sleep(1)  # Total expected if parallel
             else:
-                 for _ in files:
-                     await asyncio.sleep(1)
+                for _ in files:
+                    await asyncio.sleep(1)
 
 
 @pytest.mark.anyio

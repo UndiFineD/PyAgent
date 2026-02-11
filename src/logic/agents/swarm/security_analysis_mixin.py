@@ -12,16 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """Security analysis and threat modeling for PyAgent workflows."""
 
 import ast
-import json
 import logging
-from typing import Dict, List, Any, Optional, Set
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from src.logic.agents.swarm.orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +77,10 @@ class WorkflowSecurityAnalyzer:
             "prompt_injection": SecurityVulnerability(
                 vulnerability_id="AGENT-001",
                 title="Prompt Injection Vulnerability",
-                description="Agent susceptible to prompt injection attacks where malicious input can override system instructions",
+                description=(
+                    "Agent susceptible to prompt injection attacks where malicious "
+                    "input can override system instructions"
+                ),
                 severity="critical",
                 category="input_validation",
                 affected_components=["agent_instruction_parsing"],
@@ -232,9 +238,11 @@ class WorkflowSecurityAnalyzer:
     def _has_tool_execution_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:
         """Check if workflow has tool execution authorization issues."""
         # Check if external function calls are made
-        external_calls = [flow for flow in analyzer.data_flows
-                         if flow.get("type") == "function_call" and
-                         flow.get("callee") not in [agent["name"] for agent in analyzer.agents]]
+        external_calls = [
+            flow for flow in analyzer.data_flows
+            if flow.get("type") == "function_call"
+            and flow.get("callee") not in [agent["name"] for agent in analyzer.agents]
+        ]
         return len(external_calls) > 0
 
     def _has_data_exposure_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:
@@ -290,8 +298,11 @@ class WorkflowSecurityAnalyzer:
         else:
             return "critical"
 
-    def _generate_recommendations(self, vulnerabilities: List[SecurityVulnerability],
-                                analyzer: 'WorkflowASTAnalyzer') -> List[str]:
+    def _generate_recommendations(
+        self,
+        vulnerabilities: List[SecurityVulnerability],
+        analyzer: 'WorkflowASTAnalyzer'
+    ) -> List[str]:
         """Generate security recommendations."""
         recommendations = []
 
@@ -450,7 +461,8 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
             })
 
             # Check if this looks like an LLM call (potential prompt injection)
-            if any(llm_keyword in func_name.lower() for llm_keyword in ["llm", "gpt", "claude", "openai", "anthropic"]):
+            llm_keywords = ["llm", "gpt", "claude", "openai", "anthropic"]
+            if any(llm_keyword in func_name.lower() for llm_keyword in llm_keywords):
                 self.data_flows[-1]["type"] = "llm_call"
 
         self.generic_visit(node)

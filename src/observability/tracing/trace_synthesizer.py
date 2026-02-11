@@ -10,7 +10,7 @@ Supports cross-node lineage tracking.
 
 import json
 import logging
-from typing import List, Dict, Any
+from typing import Dict, Any
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -38,7 +38,8 @@ class TraceSynthesizer:
         try:
             with open(self.trace_file, "r", encoding="utf-8") as f:
                 for line in f:
-                    if not line.strip(): continue
+                    if not line.strip():
+                        continue
                     entry = json.loads(line)
                     
                     context = entry.get("context", {})
@@ -72,7 +73,7 @@ class TraceSynthesizer:
 
     def record_trace(self, agent_name: str, status: str, context: Any, metadata: Dict[str, Any] = None):
         """Records a reasoning step into the synthesis log."""
-        entry = {
+        {
             "agent_name": agent_name,
             "status": status,
             "context": context.to_dict() if hasattr(context, "to_dict") else context,

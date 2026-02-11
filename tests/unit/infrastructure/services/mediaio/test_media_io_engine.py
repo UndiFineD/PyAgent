@@ -276,11 +276,11 @@ class TestImageLoader:
     async def test_load_bytes(self):
         """Test loading from bytes."""
         loader = ImageLoader()
-        config = MediaLoadConfig()
+        MediaLoadConfig()
 
         # Create minimal PNG bytes (1x1 red pixel)
         # This is a valid 1x1 PNG
-        png_data = bytes([
+        bytes([
             0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,  # PNG signature
             # ... minimal valid PNG would be needed here
         ])

@@ -18,7 +18,7 @@ Ref: arXiv:2312.07104 (SGLang)
 Implementation Stub for PyAgent (Radix Tree Prefix Caching)
 """
 
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional
 
 class RadixNode:
     def __init__(self, tokens: List[int], physical_blocks: List[int]):

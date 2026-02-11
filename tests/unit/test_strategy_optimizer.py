@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """
 Tests for StrategyOptimizer - AutoML framework for pipeline optimization
 """
@@ -23,7 +28,7 @@ from typing import Any, Dict
 from src.core.base.logic.strategy_optimizer import (
     StrategyOptimizer, Strategy, StrategyConfig, PerformanceResult,
     ThresholdFilter, PerformanceMeasurer, WeightedAverageSelector,
-    ParetoFrontierSelector, OptimizationMetric, PipelineStrategy
+    ParetoFrontierSelector, OptimizationMetric
 )
 
 

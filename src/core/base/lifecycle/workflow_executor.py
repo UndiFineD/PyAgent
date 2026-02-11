@@ -18,7 +18,6 @@ Implements Pillar 4: Industrial Factory Integration (DAG-based Workflows).
 """
 
 from __future__ import annotations
-import asyncio
 import logging
 from typing import Any, Dict, List
 
@@ -56,7 +55,8 @@ class WorkflowExecutor:
             next_node_ids = []
             for node_id in current_node_ids:
                 node = node_map.get(node_id)
-                if not node: continue
+                if not node:
+                    continue
 
                 node_type = node.get("type", "task")
                 prompt_template = node.get("prompt", "")

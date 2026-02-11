@@ -34,7 +34,6 @@ except ImportError:
 class TestRustCoreParity:
     def test_memory_logic(self):
         # Python Logic
-        base = 0.5
         success = 0.5 + 0.2
         failure = 0.5 - 0.3
 

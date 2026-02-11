@@ -20,18 +20,13 @@ Tests for ReasoningEngine - thinking extraction and tool parsing.
 """
 
 import pytest
-import asyncio
-from typing import List
 
 from src.infrastructure.engine.reasoning import (
     ReasoningFormat,
     ToolCallFormat,
     ParseState,
-    ReasoningToken,
     ThinkingBlock,
     ToolCall,
-    ReasoningParser,
-    ToolParser,
     DeepSeekReasoningParser,
     QwenReasoningParser,
     GenericReasoningParser,

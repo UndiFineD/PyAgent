@@ -24,7 +24,7 @@ from pathlib import Path
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
-from core.specialists.loop_analyzer import LoopAnalyzer, LoopAnalysisConfig, print_analysis_report
+from core.specialists.loop_analyzer import LoopAnalyzer, LoopAnalysisConfig
 
 
 def find_candidates_legacy(root_dir):

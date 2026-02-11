@@ -12,8 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """
-Morphology core.py module.
+MorphologyCore: Core logic for agent splitting, merging, and DNA encoding.
 """
 
 from __future__ import annotations
@@ -43,7 +48,7 @@ class MorphologyCore:
         if HAS_RUST:
             try:
                 return rc.calculate_jaccard_set_rust(path_a, path_b)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
         set_a, set_b = set(path_a), set(path_b)
         if not set_a or not set_b:

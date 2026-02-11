@@ -22,6 +22,7 @@ from typing import Any, Optional
 from pathlib import Path
 import logging
 
+
 class LegacyAgentMixin:
     """Mixin to provide legacy test methods for the newer BaseAgent."""
 
@@ -209,11 +210,11 @@ class LegacyAgentMixin:
         patterns = []
         ignore_file = target_path / ".codeignore"
         if ignore_file.exists():
-            patterns.extend([l.strip() for l in ignore_file.read_text().splitlines() if l.strip()])
+            patterns.extend([line.strip() for line in ignore_file.read_text().splitlines() if line.strip()])
         if path and path != self.repo_root:
             root_ignore = self.repo_root / ".codeignore"
             if root_ignore.exists():
-                patterns.extend([l.strip() for l in root_ignore.read_text().splitlines() if l.strip()])
+                patterns.extend([line.strip() for line in root_ignore.read_text().splitlines() if line.strip()])
         return patterns
 
     def generate_improvement_report(self):
@@ -235,8 +236,11 @@ class LegacyAgentMixin:
         """Analyze cost of operations."""
         agents_runs = sum(self.metrics.get("agents_applied", {}).values())
         return {
-            "total_cost": 0.0, "currency": "USD", "backend": backend,
-            "cost_per_request": cost_per_request, "total_tokens": 0,
+            "total_cost": 0.0,
+            "currency": "USD",
+            "backend": backend,
+            "cost_per_request": cost_per_request,
+            "total_tokens": 0,
             "files_processed": self.metrics.get("files_processed", 0),
             "total_agent_runs": agents_runs,
         }
@@ -254,20 +258,40 @@ class LegacyAgentMixin:
                     count += 1
         return count
 
+
 def create_legacy_agent_wrapper(base_agent_cls):
     """Factory to create LegacyAgentWrapper class inheriting from the provided base_agent_cls."""
 
     class LegacyAgentWrapper(LegacyAgentMixin, base_agent_cls):
         """Wrapper to adapt new BaseAgent to legacy test expectations."""
 
-        def __init__(self, repo_root=None, dry_run=False, loop=None, enable_async=False, # pylint: disable=keyword-arg-before-vararg
-                     enable_multiprocessing=False, selective_agents=None, timeout_per_agent=None, *args, **kwargs):
+        def __init__(
+            self,
+            repo_root=None,
+            dry_run=False,
+            loop=None,
+            enable_async=False,
+            enable_multiprocessing=False,
+            selective_agents=None,
+            timeout_per_agent=None,
+            *args,
+            **kwargs,
+        ):
+            # pylint: disable=keyword-arg-before-vararg
             file_path = repo_root or (args[0] if args else None) or kwargs.get("file_path", ".")
             logging.warning(f"DEBUG WRAPPER: repo_root={repo_root}, args={args}, file_path={file_path}")
 
             super().__init__(file_path=str(file_path))
-            self._init_legacy_attrs(repo_root, dry_run, loop, enable_async, enable_multiprocessing,
-                                   selective_agents, timeout_per_agent, str(file_path))
+            self._init_legacy_attrs(
+                repo_root,
+                dry_run,
+                loop,
+                enable_async,
+                enable_multiprocessing,
+                selective_agents,
+                timeout_per_agent,
+                str(file_path),
+            )
 
         @property
         def plugins(self) -> dict:
@@ -317,7 +341,7 @@ def create_legacy_agent_wrapper(base_agent_cls):
             """Auto configure the agent instance."""
             instance = LegacyAgentWrapper(repo_root=path)
             if (Path(path) / "agent.json").exists():
-                instance.loop = 5 # pylint: disable=attribute-defined-outside-init
+                instance.loop = 5  # pylint: disable=attribute-defined-outside-init
             return instance
 
     return LegacyAgentWrapper

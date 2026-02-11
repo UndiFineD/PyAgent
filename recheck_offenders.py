@@ -1,7 +1,6 @@
 import json
 import os
 import subprocess
-from pathlib import Path
 
 LINT_RESULTS_PATH = r"c:\Dev\PyAgent\lint_results.json"
 PYTHON_PATH = r"c:\Dev\PyAgent\.venv\Scripts\python.exe"

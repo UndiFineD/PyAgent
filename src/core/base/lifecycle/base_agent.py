@@ -27,14 +27,6 @@ import traceback
 from pathlib import Path
 from typing import Any
 
-try:
-    import requests
-
-    HAS_REQUESTS = True
-except ImportError:
-    requests = None
-    HAS_REQUESTS = False
-
 from src.core.base.common.models.communication_models import CascadeContext
 from src.core.base.common.models import CacheEntry, EventType, PromptTemplate, FailureClassification
 from src.core.base.execution.shell_executor import ShellExecutor
@@ -65,6 +57,15 @@ from src.core.base.mixins.streaming_mixin import StreamingMixin
 # Cognitive Cores
 from src.core.memory.automem_core import AutoMemCore
 from src.core.reasoning.cort_core import CoRTReasoningCore as CoRTCore
+
+logger = logging.getLogger(__name__)
+
+try:
+    import requests
+    HAS_REQUESTS = True
+except ImportError:
+    requests = None
+    HAS_REQUESTS = False
 
 # Advanced components (Lazy loaded or optional)
 try:
@@ -160,6 +161,49 @@ class BaseAgent(
         inference_engine = kwargs.get("inference_engine", "gemini-3-flash")
         self.reasoning_core = CoRTCore(inference_engine=inference_engine)
 
+        self.previous_content = ""
+        self.current_content = ""
+
+        # Decentralized Mixin Initialization
+        IdentityMixin.__init__(self, **kwargs)
+        PersistenceMixin.__init__(self, **kwargs)
+        KnowledgeMixin.__init__(
+            self,
+            agent_name=self.manifest.role,
+            workspace_root=Path(self._workspace_root),
+            **kwargs,
+        )
+        OrchestrationMixin.__init__(self, **kwargs)
+        ReflectionMixin.__init__(self, **kwargs)
+        MultimodalMixin.__init__(self, **kwargs)
+        SecurityMixin.__init__(self, **kwargs)
+        TaskQueueMixin.__init__(self, **kwargs)
+        StreamManagerMixin.__init__(self, **kwargs)
+        TaskManagerMixin.__init__(self, **kwargs)
+        ToolFrameworkMixin.__init__(self, **kwargs)
+        PromptLoaderMixin.__init__(self, **kwargs)
+        StreamingMixin.__init__(self, **kwargs)
+
+        self._config = self.agent_logic_core.load_config_from_env()
+        GovernanceMixin.__init__(self, config=self._config, **kwargs)
+
+        # Post-init setup
+        self._register_capabilities()
+        self._token_usage = 0
+        self._state_data: dict[str, Any] = {}
+        self._post_processors: list[collections.abc.Callable[[str], str]] = []
+        self._model: str | None = kwargs.get("model")
+        self.recorder = kwargs.get("recorder")
+        self.logger = logging.getLogger(self.__class__.__name__)
+
+        # Load system prompt from file if available, otherwise use default
+        self._system_prompt: str = self._load_system_prompt()
+
+        self.status_cache: dict[str, float] = {}
+
+        # Context for task lineage
+        self.context: CascadeContext | None = kwargs.get("context", None)
+
     async def setup(self) -> None:
         """Asynchronous setup for the Universal Agent shell."""
         logger.info("Initializing Universal Agent [%s]", self.manifest.role)
@@ -211,49 +255,6 @@ class BaseAgent(
         self.record_step(action="reason", reward=reward, next_state="success", done=True)
 
         return {"status": "success", "agent_mode": self.manifest.role, "result": plan}
-
-        self.previous_content = ""
-        self.current_content = ""
-
-        # Decentralized Mixin Initialization
-        IdentityMixin.__init__(self, **kwargs)
-        PersistenceMixin.__init__(self, **kwargs)
-        KnowledgeMixin.__init__(
-            self,
-            agent_name=self.agent_name,
-            workspace_root=Path(self._workspace_root),
-            **kwargs,
-        )
-        OrchestrationMixin.__init__(self, **kwargs)
-        ReflectionMixin.__init__(self, **kwargs)
-        MultimodalMixin.__init__(self, **kwargs)
-        SecurityMixin.__init__(self, **kwargs)
-        TaskQueueMixin.__init__(self, **kwargs)
-        StreamManagerMixin.__init__(self, **kwargs)
-        TaskManagerMixin.__init__(self, **kwargs)
-        ToolFrameworkMixin.__init__(self, **kwargs)
-        PromptLoaderMixin.__init__(self, **kwargs)
-        StreamingMixin.__init__(self, **kwargs)
-
-        self._config = self.agent_logic_core.load_config_from_env()
-        GovernanceMixin.__init__(self, config=self._config, **kwargs)
-
-        # Post-init setup
-        self._register_capabilities()
-        self._token_usage = 0
-        self._state_data: dict[str, Any] = {}
-        self._post_processors: list[collections.abc.Callable[[str], str]] = []
-        self._model: str | None = kwargs.get("model")
-        self.recorder = kwargs.get("recorder")
-        self.logger = logging.getLogger(self.__class__.__name__)
-
-        # Load system prompt from file if available, otherwise use default
-        self._system_prompt: str = self._load_system_prompt()
-
-        self.status_cache: dict[str, float] = {}
-
-        # Context for task lineage
-        self.context: CascadeContext | None = kwargs.get("context", None)
 
     async def initialize_persona(self) -> None:
         """Asynchronously load the system prompt and initialize cognitive context."""

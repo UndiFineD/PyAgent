@@ -137,7 +137,7 @@ class ChangesAgent(
 
         try:
             full_prompt = self._build_prompt_with_history(enhanced_prompt)
-            except (RuntimeError, ValueError, TypeError, AttributeError):
+        except (RuntimeError, ValueError, TypeError, AttributeError):
             full_prompt = enhanced_prompt
 
         from src.infrastructure.compute import backend as _backend

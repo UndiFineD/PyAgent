@@ -16,7 +16,6 @@
 Tests for CanaryAgent.
 """
 
-import pytest
 from src.logic.agents.security.canary_agent import CanaryAgent
 
 

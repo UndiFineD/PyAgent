@@ -6,10 +6,16 @@
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in WITHOUT WARRANTIES OR
-# CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing
-# permissions and limitations under the License.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 import argparse
 import json
@@ -21,7 +27,7 @@ from tqdm import tqdm
 from bs4 import BeautifulSoup
 from posixpath import join as path_urljoin
 
-##################### GLOBALS #####################
+# GLOBALS
 
 WINDOWS_PROTOCOLS_URL = "https://docs.microsoft.com/en-us/openspecs/windows_protocols"
 TECHNICAL_DOCS_URL = (
@@ -85,7 +91,7 @@ def get_idl_page_uuids_from_toc_items(items):
         elif toc_title.endswith(".idl"):
             # This is the case where multiple IDL files are present for the protocol.
             try:
-                idl_name = re.search("(\w+).idl", toc_title).group(1)
+                idl_name = re.search(r"(\w+).idl", toc_title).group(1)
                 idl_page_uuids[idl_name] = item.get("href", "")
             except AttributeError:
                 logging.error(f"could not fetch IDL name from TOC. toc_title = {toc_title}")

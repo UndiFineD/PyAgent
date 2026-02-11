@@ -15,8 +15,7 @@
 """Tests for self-evolution mixin."""
 
 import pytest
-import asyncio
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock
 from datetime import datetime
 
 from src.logic.agents.swarm.self_evolution_mixin import (
@@ -24,7 +23,7 @@ from src.logic.agents.swarm.self_evolution_mixin import (
     EvolutionMetrics,
     EvolutionHistory
 )
-from src.core.base.common.models.communication_models import CascadeContext, WorkState
+from src.core.base.common.models.communication_models import CascadeContext
 
 
 class MockOrchestrator(SelfEvolutionMixin):

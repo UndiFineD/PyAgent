@@ -21,8 +21,7 @@ import tempfile
 from pathlib import Path
 from src.core.base.logic.maestro_security_analyzer import (
     MAESTROSecurityAnalyzer,
-    AgentNode,
-    ThreatAssessment
+    AgentNode
 )
 from src.core.base.logic.dynamic_agent_evolution_orchestrator import AgentTier
 

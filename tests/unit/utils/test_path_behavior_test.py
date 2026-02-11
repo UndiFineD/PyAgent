@@ -14,7 +14,6 @@
 
 """Test script to verify Path behavior with mock objects."""
 
-import pytest
 from pathlib import Path
 
 

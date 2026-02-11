@@ -10,7 +10,7 @@ Implements Pillar 6: Synaptic Decay & Knowledge Pruning for context lifecycle ma
 from __future__ import annotations
 import logging
 import asyncio
-from typing import Any, Dict, List, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from src.core.memory.semantic_decay import SynapticDecay
 
 if TYPE_CHECKING:

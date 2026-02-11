@@ -18,7 +18,6 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock
 
 from src.core.base.common.models.communication_models import CascadeContext
-from src.core.base.work_patterns import PeerWorkPattern
 from src.logic.agents.swarm.orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
 
 

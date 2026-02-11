@@ -18,9 +18,8 @@
 # limitations under the License.
 
 """
-Reasoning agent.py module.
+ReasoningAgent: Specialist agent for recursive and deep thinking - Phase 319 Enhanced.
 """
-# ReasoningAgent: Recursive and Deep Thinking Agent - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -87,7 +86,7 @@ class ReasoningAgent(BaseAgent):
         """
         Splits a reasoning task across the cluster based on shard load.
         """
-        node_id = self.sharding_engine.assign_workload([0.1, 0.5, 0.2]) # Mock loads
+        node_id = self.sharding_engine.assign_workload([0.1, 0.5, 0.2])  # Mock loads
         logging.info(f"ReasoningAgent: Assigning shard task to Node {node_id}")
         return {"assigned_node": node_id, "status": "SHARD_ACTIVE"}
 

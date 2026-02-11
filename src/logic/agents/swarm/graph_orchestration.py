@@ -27,10 +27,10 @@ import asyncio
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Callable, TypeVar, Generic, Union
+from typing import Dict, List, Any, Optional, Callable, TypeVar, Generic
 from datetime import datetime
 from enum import Enum
-from dataclasses import dataclass, field
+
 
 # Simple execution context for orchestration
 @dataclass
@@ -53,7 +53,9 @@ class ExecutionContext:
             metadata=self.metadata.copy()
         )
 
+
 logger = logging.getLogger(__name__)
+
 
 TState = TypeVar('TState', bound='OrchestrationState')
 
@@ -226,7 +228,11 @@ class OrchestrationGraphBuilder(Generic[TState]):
         self._entry_runnable = runnable
         return self
 
-    def set_exit_runnable(self, runnable: OrchestrationRunnable, allow_dead_end: bool = False) -> 'OrchestrationGraphBuilder[TState]':
+    def set_exit_runnable(
+        self,
+        runnable: OrchestrationRunnable,
+        allow_dead_end: bool = False
+    ) -> 'OrchestrationGraphBuilder[TState]':
         """Set an exit point runnable."""
         if self._is_built:
             raise ValueError("Cannot modify graph after build() has been called.")
@@ -374,8 +380,10 @@ class Orchestrator(Generic[TState]):
                 current_runners = list(set(next_runners))
 
                 # Check if we've reached exit runnables - execute them but don't continue
-                has_exit_runnables = any(self.graph.is_exit_runnable(self.graph.get_runnable(name))
-                                        for name in current_runners if self.graph.get_runnable(name))
+                has_exit_runnables = any(
+                    self.graph.is_exit_runnable(self.graph.get_runnable(name))
+                    for name in current_runners if self.graph.get_runnable(name)
+                )
                 if has_exit_runnables:
                     # Execute exit runnables but don't get their successors
                     exit_tasks = []

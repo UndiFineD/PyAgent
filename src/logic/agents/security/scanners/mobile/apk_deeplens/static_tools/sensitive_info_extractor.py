@@ -1,3 +1,22 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 import os
 import re
 
@@ -77,7 +96,7 @@ class SensitiveInfoExtractor(object):
             try:
                 read = open(file, "r", encoding="utf-8", errors="ignore").read()
                 regex_for_insecure_conn = (
-                    "((?:http://|s?ftp://|smtp://|:javascript:|www\d{0,3}[.])[\w().=/;,#:@?&~*+!$%\{}-]+)"
+                    r"((?:http://|s?ftp://|smtp://|:javascript:|www\d{0,3}[.])[\w().=/;,#:@?&~*+!$%{}-]+)"
                 )
                 a = re.findall(regex_for_insecure_conn, read)
                 for i in a:
@@ -94,46 +113,45 @@ class SensitiveInfoExtractor(object):
         Detected potential security issues in "{pattern_name}: {match}" format.
         """
         patterns = {
-            "slack_token": "(xox[p|b|o|a]-[0-9]{12}-[0-9]{12}-[0-9]{12}-[a-z0-9]{32})",
-            "slack_webhook": "https://hooks.slack.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}",
-            "facebook_oauth": "[f|F][a|A][c|C][e|E][b|B][o|O][o|O][k|K].{0,30}['\"\\s][0-9a-f]{32}['\"\\s]",
-            "twitter_oauth": "[t|T][w|W][i|I][t|T][t|T][e|E][r|R].{0,30}['\"\\s][0-9a-zA-Z]{35,44}['\"\\s]",
-            "twitter_access_token": "[t|T][w|W][i|I][t|T][t|T][e|E][r|R].*[1-9][0-9]+-[0-9a-zA-Z]{40}",
+            "slack_token": r"(xox[p|b|o|a]-[0-9]{12}-[0-9]{12}-[0-9]{12}-[a-z0-9]{32})",
+            "slack_webhook": r"https://hooks.slack.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}",
+            "facebook_oauth": r"[f|F][a|A][c|C][e|E][b|B][o|O][o|O][k|K].{0,30}['\"\s][0-9a-f]{32}['\"\s]",
+            "twitter_oauth": r"[t|T][w|W][i|I][t|T][t|T][e|E][r|R].{0,30}['\"\s][0-9a-zA-Z]{35,44}['\"\s]",
+            "twitter_access_token": r"[t|T][w|W][i|I][t|T][t|T][e|E][r|R].*[1-9][0-9]+-[0-9a-zA-Z]{40}",
             "heroku_api": (
-                "[h|H][e|E][r|R][o|O][k|K][u|U].{0,30}[0-9A-F]{8}-[0-9A-F]{4}-"
-                "[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}"
+                r"[h|H][e|E][r|R][o|O][k|K][u|U].{0,30}[0-9A-F]{8}-[0-9A-F]{4}-"
+                r"[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}"
             ),
-            "mailgun_api": "key-[0-9a-zA-Z]{32}",
-            "mailchamp_api": "[0-9a-f]{32}-us[0-9]{1,2}",
-            "picatic_api": "sk_live_[0-9a-z]{32}",
-            "google_oauth_id": "[0-9(+-[0-9A-Za-z_]{32}.apps.googleusercontent.com",
-            "google_api": "AIza[0-9A-Za-z-_]{35}",
-            "google_captcha": "^6[0-9a-zA-Z_-]{39}$",
-            "google_oauth": "ya29\\.[0-9A-Za-z\\-_]+",
-            "amazon_aws_access_key_id": "AKIA[0-9A-Z]{16}",
-            "amazon_mws_auth_token": "amzn\\.mws\\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
-            "amazonaws_url": "s3\\.amazonaws.com[/]+|[a-zA-Z0-9_-]*\\.s3\\.amazonaws.com",
-            "facebook_access_token": "EAACEdEose0cBA[0-9A-Za-z]+",
-            "twilio_api_key": "\bSK[0-9a-fA-F]{32}\b",
-            "twilio_account_sid": "\bAC[a-zA-Z0-9_\\-]{32}\b",
-            "twilio_app_sid": "\bAP[a-zA-Z0-9_\\-]{32}\b",
-            "paypal_braintree_access_token": "access_token\\$production\\$[0-9a-z]{16}\\$[0-9a-f]{32}",
-            "square_oauth_secret": "sq0csp-[ 0-9A-Za-z\\-_]{43}",
-            "square_access_token": "sq0[a-z]{3}-[0-9A-Za-z\-_]{22,43}",
-            "stripe_standard_api": "sk_live_[0-9a-zA-Z]{24}",
-            "stripe_restricted_api": "rk_live_[0-9a-zA-Z]{24}",
-            "github_access_token": "[a-zA-Z0-9_-]*:[a-zA-Z0-9_\\-]+@github\\.com*",
-            "private_ssh_key": "-----BEGIN PRIVATE KEY-----[a-zA-Z0-9\\S]{100,}-----END PRIVATE KEY-----",
-            "private_rsa_key": "-----BEGIN RSA PRIVATE KEY-----[a-zA-Z0-9\\S]{100,}-----END RSA PRIVATE KEY-----",
-            "gpg_private_key_block": "-----BEGIN PGP PRIVATE KEY BLOCK-----",
-            "generic_api_key": "[a|A][p|P][i|I][_]?[k|K][e|E][y|Y].*['|\"][0-9a-zA-Z]{32,45}['|\"]",
-            "generic_secret": "[s|S][e|E][c|C][r|R][e|E][t|T].*['|\"][0-9a-zA-Z]{32,45}['|\"]",
+            "mailgun_api": r"key-[0-9a-zA-Z]{32}",
+            "mailchamp_api": r"[0-9a-f]{32}-us[0-9]{1,2}",
+            "picatic_api": r"sk_live_[0-9a-z]{32}",
+            "google_oauth_id": r"[0-9(+-[0-9A-Za-z_]{32}.apps.googleusercontent.com",
+            "google_api": r"AIza[0-9A-Za-z-_]{35}",
+            "google_captcha": r"^6[0-9a-zA-Z_-]{39}$",
+            "google_oauth": r"ya29\.[0-9A-Za-z\-_]+",
+            "amazon_aws_access_key_id": r"AKIA[0-9A-Z]{16}",
+            "amazon_mws_auth_token": r"amzn\.mws\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+            "amazonaws_url": r"s3\.amazonaws.com[/]+|[a-zA-Z0-9_-]*\.s3\.amazonaws.com",
+            "facebook_access_token": r"EAACEdEose0cBA[0-9A-Za-z]+",
+            "twilio_api_key": r"\bSK[0-9a-fA-F]{32}\b",
+            "twilio_account_sid": r"\bAC[a-zA-Z0-9_\\-]{32}\b",
+            "twilio_app_sid": r"\bAP[a-zA-Z0-9_\\-]{32}\b",
+            "paypal_braintree_access_token": r"access_token\$production\$[0-9a-z]{16}\$[0-9a-f]{32}",
+            "square_oauth_secret": r"sq0csp-[ 0-9A-Za-z\-_]{43}",
+            "square_access_token": r"sq0[a-z]{3}-[0-9A-Za-z\-_]{22,43}",
+            "stripe_standard_api": r"sk_live_[0-9a-zA-Z]{24}",
+            "stripe_restricted_api": r"rk_live_[0-9a-zA-Z]{24}",
+            "github_access_token": r"[a-zA-Z0-9_-]*:[a-zA-Z0-9_\-]+@github\.com*",
+            "private_ssh_key": r"-----BEGIN PRIVATE KEY-----[a-zA-Z0-9\S]{100,}-----END PRIVATE KEY-----",
+            "private_rsa_key": r"-----BEGIN RSA PRIVATE KEY-----[a-zA-Z0-9\S]{100,}-----END RSA PRIVATE KEY-----",
+            "gpg_private_key_block": r"-----BEGIN PGP PRIVATE KEY BLOCK-----",
+            "generic_api_key": r"[a|A][p|P][i|I][_]?[k|K][e|E][y|Y].*['\"][0-9a-zA-Z]{32,45}['\"]",
+            "generic_secret": r"[s|S][e|E][c|C][r|R][e|E][t|T].*['\"][0-9a-zA-Z]{32,45}['\"]",
             "ip_address": (
                 r"(?:(?:1\d\d|2[0-5][0-5]|2[0-4]\d|0?[1-9]\d|0?0?\d)\.){3}"
                 r"(?:1\d\d|2[0-5][0-5]|2[0-4]\d|0?[1-9]\d|0?0?\d)"
             ),
-            # "link_finder": "((?:https?://|www\d{0,3}[.])[a-zA-Z0-9_-]+(?:\.[a-zA-Z0-9_-]+)+[\w().=/;,#:@?&~*+!$%{}-]*)",
-            "password_in_url": "[a-zA-Z]{3,10}://[^/\\s:@]{3,20}:[^/\\s:@]{3,20}@.{1,100}[\"'\\s]",
+            "password_in_url": r"[a-zA-Z]{3,10}://[^/\s:@]{3,20}:[^/\s:@]{3,20}@.{1,100}[\"'~\s]",
         }
         compiled_patterns = [(key, re.compile(pattern)) for key, pattern in patterns.items()]
 

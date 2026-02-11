@@ -13,9 +13,9 @@
 # limitations under the License.
 
 import pytest
-import logging
 from pathlib import Path
 from src.infrastructure.swarm.orchestration.swarm.director_agent import DirectorAgent
+
 
 @pytest.mark.asyncio
 async def test_status_update():

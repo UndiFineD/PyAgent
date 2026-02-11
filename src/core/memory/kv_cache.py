@@ -21,7 +21,7 @@ from __future__ import annotations
 import logging
 import numpy as np
 import time
-from typing import Dict, List, Optional, Any, Set
+from typing import Dict, List, Set
 from src.core.rust_bridge import get_bridge
 
 logger = logging.getLogger(__name__)

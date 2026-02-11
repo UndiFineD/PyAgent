@@ -16,7 +16,6 @@
 Tests for EventCorrelationAgent.
 """
 
-import pytest
 from src.logic.agents.security.event_correlation_agent import EventCorrelationAgent
 
 

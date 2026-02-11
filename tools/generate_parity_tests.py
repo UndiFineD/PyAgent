@@ -19,7 +19,6 @@ def generate_tests():
         
         # Determine import path
         # src/external_candidates/cleaned/name.py -> src.external_candidates.cleaned.name
-        import_path = f"src.external_candidates.cleaned.{mod.stem}"
         
         content = f"""#!/usr/bin/env python3
 from pathlib import Path

@@ -19,11 +19,8 @@ Handles OAuth2 (External) and WebAuthn (Biometric/Hardware Keys).
 
 import json
 import logging
-import os
-from typing import Dict, Any, Optional
-from datetime import datetime, timedelta
+from typing import Dict, Any
 
-from authlib.integrations.starlette_client import OAuth
 from webauthn import (
     generate_registration_options,
     verify_registration_response,
@@ -31,12 +28,11 @@ from webauthn import (
     verify_authentication_response,
 )
 from webauthn.helpers.structs import (
-    RegistrationCredential,
     AuthenticatorSelectionCriteria,
     UserVerificationRequirement,
     AuthenticatorAttachment,
 )
-from webauthn.helpers import options_to_json, verify_registration_response
+from webauthn.helpers import options_to_json
 
 logger = logging.getLogger(__name__)
 

@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
 import unittest
 import logging
 from src.infrastructure.swarm.resilience.checkpoint_manager import CheckpointManager

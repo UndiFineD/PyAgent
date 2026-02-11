@@ -17,7 +17,7 @@ Population utility for the MCP Ecosystem.
 Provides 500+ (simulated/metadata) MCP server configurations for PyAgent.
 """
 
-from typing import List, Dict
+from typing import List
 try:
     from .bridge import MCPServerConfig, MCPCategory, MCPServerType
 except ImportError:

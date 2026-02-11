@@ -176,7 +176,7 @@ class OllamaConnectorAgent(BaseAgent):
                 )
             return result_payload
 
-        except (Exception, ConnectionError, TimeoutError, ValueError, KeyError) as e:  # pylint: disable=broad-exception-caught
+        except (Exception, ConnectionError, TimeoutError, ValueError, KeyError) as e:
             error_msg = f"Exception during local inference: {e}"
             logger.error(error_msg)
             return {"error": error_msg}

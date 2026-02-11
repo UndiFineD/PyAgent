@@ -14,11 +14,10 @@
 
 """Tests for Multi-Channel Gateway Core."""
 
-import asyncio
 import json
 import pytest
 from typing import Optional
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock
 
 from src.core.base.logic.multi_channel_gateway import (
     ChannelType,

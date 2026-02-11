@@ -16,7 +16,6 @@
 Tests for AnomalyDetectionAgent.
 """
 
-import pytest
 from src.logic.agents.security.anomaly_detection_agent import AnomalyDetectionAgent
 
 

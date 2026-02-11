@@ -25,7 +25,7 @@ def get_interfaces(idl_content):
     # Returns an iterator of regex matches where:
     # First group is the interface name;
     # Second group is the interface block content
-    return re.finditer("(?:interface|coclass)\s([\w\s:]+){(.*?)};?\s*$", idl_content, flags=re.DOTALL | re.MULTILINE)
+    return re.finditer(r"(?:interface|coclass)\s([\w\s:]+){(.*?)};?\s*$", idl_content, flags=re.DOTALL | re.MULTILINE)
 
 
 def get_interface_name(interface_name_raw):
@@ -34,16 +34,16 @@ def get_interface_name(interface_name_raw):
 
 def get_interface_uuid(content_block: str) -> str:
     return next(
-        re.finditer("([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})", content_block)
+        re.finditer(r"([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})", content_block)
     ).group(0)
 
 
 def get_functions(idl_content):
-    return re.finditer("(\w+)\s+(\w+)(?:\n\s+)?\((.*?)\);", idl_content, flags=re.DOTALL)
+    return re.finditer(r"(\w+)\s+(\w+)(?:\n\s+)?\((.*?)\);", idl_content, flags=re.DOTALL)
 
 
 def drop_compilation_attributes(declaration_str: str) -> str:
-    return re.sub("\[.+?\] ", "", declaration_str)
+    return re.sub(r"\[.+?\] ", "", declaration_str)
 
 
 def get_typedefs(idl_name: str, idl_content: str) -> None:
@@ -51,7 +51,7 @@ def get_typedefs(idl_name: str, idl_content: str) -> None:
         return
     else:
         _typedefs[idl_name] = {}
-    for typedef in re.findall("typedef (.+);", idl_content):
+    for typedef in re.findall(r"typedef (.+);", idl_content):
         typedef = drop_compilation_attributes(typedef)
         name_ind = typedef.rfind(" ")
         _typedefs[idl_name][typedef[name_ind + 1 :]] = typedef[:name_ind]

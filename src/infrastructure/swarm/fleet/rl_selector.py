@@ -19,7 +19,7 @@ Uses MDP history to select the most reliable candidate for a given goal.
 
 import logging
 import random
-from typing import Any, List, Optional
+from typing import List
 from src.core.rl.mdp import MDP
 
 logger = logging.getLogger(__name__)

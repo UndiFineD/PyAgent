@@ -13,12 +13,10 @@
 # limitations under the License.
 
 import pytest
-import asyncio
 from unittest.mock import AsyncMock, patch
 from src.core.base.logic.reconnaissance_core import (
     ReconnaissanceCore,
     ReconConfig,
-    SubdomainResult,
     DNSSource,
     CertificateTransparencySource,
     ThreatCrowdSource
@@ -75,7 +73,7 @@ class TestReconnaissanceCore:
         with patch('dns.resolver.Resolver.resolve') as mock_resolve:
             mock_resolve.return_value = [MockARecord('93.184.216.34')]
 
-            results = await dns_source.enumerate_subdomains("example.com", config)
+            await dns_source.enumerate_subdomains("example.com", config)
 
             # Should attempt to resolve subdomains
             assert mock_resolve.call_count >= 2  # www and mail

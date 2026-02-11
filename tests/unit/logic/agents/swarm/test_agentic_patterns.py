@@ -15,9 +15,7 @@
 """Tests for agentic patterns (sequential and parallel execution)."""
 
 import pytest
-import asyncio
-from unittest.mock import AsyncMock, MagicMock
-from typing import Dict, Any
+from unittest.mock import AsyncMock
 
 from src.logic.agents.swarm.agentic_patterns import (
     SequentialAgentPattern,
@@ -83,7 +81,9 @@ class TestSequentialAgentPattern:
         )
 
     @pytest.mark.asyncio
-    async def test_sequential_execution_success(self, sequential_pattern, sample_context, sample_config, mock_orchestrator):
+    async def test_sequential_execution_success(
+        self, sequential_pattern, sample_context, sample_config, mock_orchestrator
+    ):
         """Test successful sequential execution."""
         # Mock successful execution results
         mock_orchestrator.execute_with_pattern.side_effect = [
@@ -108,7 +108,9 @@ class TestSequentialAgentPattern:
         assert mock_orchestrator.execute_with_pattern.call_count == 2
 
     @pytest.mark.asyncio
-    async def test_sequential_execution_with_failure_continue(self, sequential_pattern, sample_context, mock_orchestrator):
+    async def test_sequential_execution_with_failure_continue(
+        self, sequential_pattern, sample_context, mock_orchestrator
+    ):
         """Test sequential execution with failure but continue_on_failure=True."""
         config = SequentialAgentConfig(
             name="test_continue",
@@ -225,7 +227,9 @@ class TestParallelAgentPattern:
         ]
 
     @pytest.mark.asyncio
-    async def test_parallel_execution_success(self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator):
+    async def test_parallel_execution_success(
+        self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator
+    ):
         """Test successful parallel execution."""
         # Mock successful execution results
         mock_orchestrator.execute_with_pattern.side_effect = [
@@ -251,6 +255,8 @@ class TestParallelAgentPattern:
         assert "news_agent" in combined
         assert combined["_summary"]["successful_agents"] == 2
 
+        self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator
+    
     @pytest.mark.asyncio
     async def test_parallel_execution_with_partial_failure(self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator):
         """Test parallel execution with one agent failing."""
@@ -277,6 +283,8 @@ class TestParallelAgentPattern:
 
         assert len(successful_results) == 1
         assert len(failed_results) == 1
+        self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator
+    
         assert failed_results[0]["error"] == "News API unavailable"
 
     @pytest.mark.asyncio

@@ -293,7 +293,8 @@ class TestToolFramework:
 
         # Verify it wasn't a validation error (which would be raised if validation was enabled)
         assert "execution failed" in str(excinfo.value)
-        assert "missing 1 required positional argument" in str(excinfo.value) or "missing argument" in str(excinfo.value)
+        error_msg = str(excinfo.value)
+        assert "missing 1 required positional argument" in error_msg or "missing argument" in error_msg
 
     def test_tool_definition_serialization(self, tool_framework):
         """Test tool definition serialization."""

@@ -23,7 +23,6 @@ import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any, Callable, Tuple
-from enum import Enum
 import statistics
 from src.core.base.common.models.core_enums import FailureClassification, OptimizationMetric
 

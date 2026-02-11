@@ -23,7 +23,7 @@ from typing import Any, TYPE_CHECKING
 from src.core.base.lifecycle.skill_core import SkillCore
 
 if TYPE_CHECKING:
-    from src.core.base.lifecycle.base_agent import BaseAgent
+    pass
 
 logger = logging.getLogger(__name__)
 

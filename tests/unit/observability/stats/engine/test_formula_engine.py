@@ -16,7 +16,6 @@ Test Formula Engine Core module.
 """
 
 import math
-import pytest
 from hypothesis import given, strategies as st, settings
 
 # Try importing the official location

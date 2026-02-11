@@ -20,7 +20,7 @@ Handles dynamic loading and orchestration of SkillCore components.
 from __future__ import annotations
 import importlib
 import logging
-from typing import Any, TYPE_CHECKING, Dict, Type
+from typing import TYPE_CHECKING, Dict, Type
 
 if TYPE_CHECKING:
     from src.core.base.lifecycle.base_agent import BaseAgent

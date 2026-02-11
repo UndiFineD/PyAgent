@@ -16,15 +16,12 @@
 Tests for AgentPoolManager - Self-evolving agent pool implementation
 """
 
-import pytest
 import tempfile
-import os
 from unittest.mock import Mock
 
 from src.core.base.logic.agent_pool_manager import (
     AgentPoolManager,
     TaskRequirements,
-    AgentManifest,
     AgentStatus
 )
 

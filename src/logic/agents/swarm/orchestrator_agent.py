@@ -19,27 +19,17 @@ Manages task decomposition, agent delegation, and collaborative workflow executi
 
 from __future__ import annotations
 
-"""
-Orchestrator agent.py module.
-"""
-"""
-Module: orchestrator_agent
-Implements orchestration logic for PyAgent system agents.
-"""
-# Standardized OrchestratorAgent for Swarm Intelligence
-
 import logging
 import time
 from pathlib import Path
 from typing import Any
 
 from src.core.base.execution.agent_command_handler import AgentCommandHandler
-BaseAgent = None  # Will be imported locally to avoid circular import
 from src.core.base.lifecycle.version import VERSION
-
 from .orchestrator_features import OrchestratorFeatures
 
 __version__ = VERSION
+BaseAgent = None  # Will be imported locally to avoid circular import
 
 
 class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ancestors
@@ -99,7 +89,11 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         """Sets agent metrics."""
         self._metrics = value
 
-    def register_plugin(self, name_or_plugin: Any, plugin: Any | None = None) -> None:  # pylint: disable=arguments-renamed
+    def register_plugin(
+        self,
+        name_or_plugin: Any,
+        plugin: Any | None = None
+    ) -> None:  # pylint: disable=arguments-renamed
         """
         Registers a plugin. Overrides BaseAgent classmethod
         to use OrchestratorPluginMixin instance method.

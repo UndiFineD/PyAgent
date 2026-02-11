@@ -13,15 +13,12 @@
 # limitations under the License.
 
 import pytest
-from unittest.mock import Mock, patch, AsyncMock
+from unittest.mock import Mock
 from datetime import datetime, timedelta, timezone
 from src.core.base.logic.core.federation_services_core import (
     FederationServicesCore,
     TokenGenerationRequest,
-    FederationProvider,
-    FederationUser,
-    RelyingParty,
-    FederationService
+    FederationProvider
 )
 
 
@@ -141,7 +138,7 @@ class TestFederationServicesCore:
         # This would normally require actual PFX data, so we'll just test the method exists
         # and handles the async nature
         try:
-            result = await self.core.decrypt_encrypted_pfx(mock_pfx_data, "password")
+            await self.core.decrypt_encrypted_pfx(mock_pfx_data, "password")
             # If it doesn't raise an exception, the method exists
             assert True
         except Exception:

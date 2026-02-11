@@ -15,7 +15,7 @@
 """Tests for debate work pattern."""
 
 import pytest
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import MagicMock
 
 from src.core.base.common.models.communication_models import CascadeContext
 from src.core.base.work_patterns import DebateWorkPattern

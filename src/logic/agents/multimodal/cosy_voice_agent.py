@@ -67,7 +67,7 @@ class CosyVoiceAgent(BaseAgent):
         logger.info(f"Loading CosyVoice model from {self.config.model_path} on {self.config.device}...")
         # Simulation of model loading
         import asyncio
-        await asyncio.sleep(1)  # Simulate I/O
+        await asyncio.sleep(1)    # Simulate I/O
         self._model = "CosyVoice-300M-Loaded-Mock"
         self._last_used = time.time()
         return f"CosyVoice model loaded successfully on {self.config.device}."

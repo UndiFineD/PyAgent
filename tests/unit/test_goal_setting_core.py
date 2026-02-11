@@ -18,14 +18,11 @@ Tests for Goal Setting and Iterative Refinement Core
 
 import pytest
 import asyncio
-from datetime import datetime
 
 from src.core.base.logic.core.goal_setting_core import (
     GoalSettingCore,
-    Goal,
     GoalStatus,
     GoalPriority,
-    IterationResult,
 )
 
 
@@ -95,7 +92,7 @@ class TestGoalSettingCore:
         goal_core = GoalSettingCore()
         try:
             # Create goal
-            goal = await goal_core.create_goal(
+            await goal_core.create_goal(
                 goal_id="iterative_goal",
                 description="Achieve iterative refinement",
                 criteria=["contains success"],
@@ -139,7 +136,7 @@ class TestGoalSettingCore:
         goal_core = GoalSettingCore()
         try:
             # Create goal that will never succeed
-            goal = await goal_core.create_goal(
+            await goal_core.create_goal(
                 goal_id="max_iter_goal",
                 description="Test max iterations",
                 criteria=["xyz_unlikely_word"],

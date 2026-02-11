@@ -18,7 +18,7 @@ from tests.utils.agent_test_utils import agent_dir_on_path, AGENT_DIR
 
 def test_agent_dir_on_path_modifies_sys_path() -> None:
     """Test that agent_dir_on_path adds AGENT_DIR to sys.path."""
-    original_path = list(sys.path)
+    list(sys.path)
     with agent_dir_on_path():
         assert str(AGENT_DIR) in sys.path
 

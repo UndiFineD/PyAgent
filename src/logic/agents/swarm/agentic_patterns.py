@@ -12,11 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """Sequential agent orchestration pattern."""
 
 import asyncio
 import logging
-from typing import List, Dict, Any, Optional, Union
+from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
 
 from src.core.base.common.models.communication_models import CascadeContext, WorkState
@@ -155,8 +160,12 @@ class SequentialAgentPattern:
         if config.output_key:
             final_result[config.output_key] = current_input
 
-        logger.info(f"Completed sequential execution for {config.name}: "
-                   f"{final_result['execution']['successful']}/{final_result['execution']['total_executed']} successful")
+        logger.info(
+            "Completed sequential execution for %s: %d/%d successful",
+            config.name,
+            final_result['execution']['successful'],
+            final_result['execution']['total_executed']
+        )
 
         return final_result
 

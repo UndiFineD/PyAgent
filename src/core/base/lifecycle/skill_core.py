@@ -19,7 +19,7 @@ Base classes for the Universal Shard (Skill Core) architecture.
 
 from __future__ import annotations
 import abc
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from src.core.base.lifecycle.base_agent import BaseAgent

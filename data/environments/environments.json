@@ -256,5 +256,21 @@
     "build_config": {},
     "test_config": {},
     "deploy_config": {}
+  },
+  {
+    "name": "test-env-2237109392464",
+    "version": "1.0.0",
+    "description": "",
+    "tags": [],
+    "isolation": "none",
+    "cpu_limit": 1.0,
+    "memory_limit": 1024,
+    "disk_limit": 10240,
+    "ttl_seconds": 1800,
+    "environment_variables": {},
+    "dependencies": [],
+    "build_config": {},
+    "test_config": {},
+    "deploy_config": {}
   }
 ]

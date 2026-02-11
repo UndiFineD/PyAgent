@@ -3,7 +3,6 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import asyncio
-import os
 import json
 from pathlib import Path
 from src.logic.agents.analysis.analyst_agent import AnalystAgent

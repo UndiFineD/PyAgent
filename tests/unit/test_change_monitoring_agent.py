@@ -1,16 +1,4 @@
-# Force add project root to sys.path
-import os
-import sys
-from pathlib import Path
-
-# Identify the root of the repository (where 'src' and 'tests' are)
-# File is in tests/unit/test_change_monitoring_agent.py, so two levels up is repo root
-_script_dir = os.path.dirname(os.path.abspath(__file__))
-_repo_root = os.path.abspath(os.path.join(_script_dir, "..", ".."))
-
-if _repo_root not in sys.path:
-    sys.path.insert(0, _repo_root)
-
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,15 +12,7 @@ if _repo_root not in sys.path:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
-"""Tests for ChangeMonitoringAgent."""
-
 import asyncio
-import json
 import os
 import sys
 import tempfile
@@ -40,11 +20,20 @@ import unittest
 from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from src.core.agents.change_monitoring_agent import (
+# Force add project root to sys.path
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+_repo_root = os.path.abspath(os.path.join(_script_dir, "..", ".."))
+
+if _repo_root not in sys.path:
+    sys.path.insert(0, _repo_root)
+
+from src.core.agents.change_monitoring_agent import (  # noqa: E402
     ChangeMonitoringAgent,
     FileSystemDataSource,
     HistoryManager
 )
+
+"""Tests for ChangeMonitoringAgent."""
 
 
 class TestHistoryManager(unittest.TestCase):

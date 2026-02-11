@@ -1,8 +1,6 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-import pytest
-from unittest.mock import MagicMock
 from src.logic.agents.analysis.benchmark_agent import BenchmarkAgent
 from src.infrastructure.services.benchmarks.models import BenchmarkResult
 

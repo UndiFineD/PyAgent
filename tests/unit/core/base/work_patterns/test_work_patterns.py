@@ -15,11 +15,11 @@
 """Tests for work patterns."""
 
 import pytest
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import MagicMock
 from typing import Optional, Dict, Any
 
 from src.core.base.common.models.communication_models import CascadeContext
-from src.core.base.work_patterns import PeerWorkPattern, WorkPattern
+from src.core.base.work_patterns import PeerWorkPattern
 
 
 class MockAgent:

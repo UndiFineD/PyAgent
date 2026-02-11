@@ -47,7 +47,6 @@ with suppress(ImportError):
 # Try to import numba regarding JIT acceleration
 NUMBA_AVAILABLE = False
 with suppress(ImportError):
-    import numba  # pylint: disable=unused-import
 
     NUMBA_AVAILABLE = True
 

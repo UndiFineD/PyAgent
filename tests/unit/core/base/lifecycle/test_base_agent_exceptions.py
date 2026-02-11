@@ -14,8 +14,7 @@
 
 """Unit tests for BaseAgent exception handling (Phase 336)."""
 
-import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.models import FailureClassification
 

@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 """
 Tests for End-to-End Encryption Core.
@@ -9,11 +19,9 @@ Validates Signal Protocol implementation, forward secrecy, and zero-knowledge pr
 
 import pytest
 import tempfile
-import os
 from src.core.base.logic.security.e2e_encryption_core import (
     E2EEncryptionCore,
-    UserKeyPair,
-    RatchetState
+    UserKeyPair
 )
 
 
@@ -209,7 +217,7 @@ def test_zero_knowledge_property(e2e_core):
     Server (e2e_core) cannot decrypt data without user's private key.
     """
     user_id = "alice"
-    keypair = e2e_core.generate_identity_keypair(user_id)
+    e2e_core.generate_identity_keypair(user_id)
 
     secret_data = {"password": "super_secret_123"}
     encrypted = e2e_core.encrypt_user_data(user_id, "memory", secret_data)

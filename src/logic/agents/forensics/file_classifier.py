@@ -17,7 +17,7 @@ import asyncio
 import aiofiles
 import zipfile
 import re
-import shutil
+import os
 import tempfile
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -179,7 +179,7 @@ class FileClassifier:
                                             found_urls.append(url)
                             except Exception:
                                 pass
-            except Exception as e:
+            except Exception:
                 # Corrupt zip or other error
                 pass
         return found_urls

@@ -38,7 +38,6 @@ from qdrant_client import QdrantClient
 from qdrant_client import models as qdrant_models
 
 from src.core.memory.kv_cache import KVCacheManager
-from src.core.rust_bridge import get_bridge
 
 try:
     from qdrant_client.http.exceptions import UnexpectedResponse

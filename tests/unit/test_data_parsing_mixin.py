@@ -16,7 +16,6 @@
 Test module for data_parsing_mixin
 """
 
-import pytest
 
 from src.core.base.mixins.data_parsing_mixin import DataParsingMixin
 

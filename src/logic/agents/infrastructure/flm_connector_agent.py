@@ -45,7 +45,7 @@ class FlmConnectorAgent(BaseAgent):
             # Firewall handles caching, retries, and recording status
             response = self._firewall.get(health_url, timeout=2)
             return response.status_code == 200
-        except (requests.RequestException, ConnectionError, TimeoutError) as e:
+        except (requests.RequestException, ConnectionError, TimeoutError):
             return False
 
     def generate_local(self, prompt: str, model: str = "flm-npu-optimized") -> str:

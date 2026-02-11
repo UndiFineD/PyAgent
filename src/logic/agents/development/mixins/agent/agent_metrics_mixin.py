@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """Code metrics and quality logic for CoderAgent."""
 
 # pylint: disable=too-many-ancestors
@@ -100,7 +105,9 @@ class AgentMetricsMixin:
         code_smells = self.detect_code_smells(content)
         coverage = self._get_test_coverage()
 
-        self._quality_score = self.core.calculate_quality_score(metrics, style_violations, code_smells, coverage, content=content)
+        self._quality_score = self.core.calculate_quality_score(
+            metrics, style_violations, code_smells, coverage, content=content
+        )
         return self._quality_score
 
     def detect_code_smells(self, content: str | None = None) -> list[CodeSmell]:

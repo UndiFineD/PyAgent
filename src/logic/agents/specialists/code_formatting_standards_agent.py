@@ -475,7 +475,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 results["passed"] = False
                 self.common_mistakes["time_sleep_usage"] += len(sleep_issues)
 
-        except (Exception,): # pylint: disable=broad-exception-caught
+        except (Exception,):  # pylint: disable=broad-exception-caught
             results["critical_issues"].append("Error during validation process")
             results["passed"] = False
 
@@ -496,7 +496,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
             ast.parse(content)
         except SyntaxError as e:
             issues.append(f"Syntax Error: {e.msg} at line {e.lineno}")
-        except (Exception,): # pylint: disable=broad-exception-caught
+        except (Exception,):  # pylint: disable=broad-exception-caught
             issues.append("Parse Error")
         return issues
 
@@ -572,7 +572,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                     if not re.match(r'^[A-Z][a-zA-Z0-9]*$', node.name):
                         issues["critical"].append(f"Class '{node.name}' should be PascalCase")
 
-        except (Exception,): # pylint: disable=broad-exception-caught
+        except (Exception,):  # pylint: disable=broad-exception-caught
             pass  # Skip if syntax errors prevent parsing
 
         return issues
@@ -763,14 +763,13 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 # Check colon spacing in dict literals and slices
                 elif char == ':' and j > 0 and j + 1 < len(line):
                     prev_char = line[j - 1]
-                    _next_char = line[j + 1]
 
                     # In dict literals and function parameters, no space before colon
                     if prev_char.isspace():
                         # Check if this is likely a dict/key-value context
                         before_colon = line[:j].strip()
                         if ('{' in before_colon or '=' in before_colon or
-                            re.search(r'\b\w+\s*$', before_colon)):
+                                re.search(r'\b\w+\s*$', before_colon)):
                             issues.append(f"Line {i}: No space allowed before colon in dict literals")
 
                 j += 1
@@ -796,7 +795,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 else:
                     issues["warnings"].append(f"Docstring: {issue['message']}")
 
-        except (Exception,): # pylint: disable=broad-exception-caught
+        except (Exception,):  # pylint: disable=broad-exception-caught
             issues["critical"].append("Docstring validation error")
 
         return issues
@@ -862,7 +861,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 return "Strict formatting applied successfully (auto-fixed warnings, applied black formatting)."
             return f"Formatting partially successful, but black reported: {result.stderr}"
 
-        except (Exception,): # pylint: disable=broad-exception-caught
+        except (Exception,):  # pylint: disable=broad-exception-caught
             return "Error during strict formatting"
 
     def _validate_strong_typing(self, content: str) -> List[str]:

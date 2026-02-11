@@ -495,5 +495,3 @@ class TestMockSystemResponseGeneration:
 
     def test_mock_response_with_custom_content(self, utils_module: Any) -> None:
         """Test mock response with custom content."""
-        MockAIBackend = utils_module.MockAIBackend
-        MockResponse = utils_module.MockResponse

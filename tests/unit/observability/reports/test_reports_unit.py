@@ -20,8 +20,6 @@ import unittest
 from typing import List, Dict
 import json
 from datetime import datetime
-from pathlib import Path
-import pytest
 
 
 class TestReportGeneration(unittest.TestCase):

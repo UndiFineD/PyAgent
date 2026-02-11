@@ -19,7 +19,7 @@ Implements identity management as a SkillCore.
 
 from __future__ import annotations
 import re
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from src.core.base.lifecycle.skill_core import SkillCore
 from src.core.base.logic.core.identity_core import IdentityCore
 from src.core.base.common.models import AgentPriority

@@ -57,7 +57,8 @@ class TestDynamicAgentEvolutionOrchestrator:
         analysis = orchestrator.analyze_task(task)
 
         assert isinstance(analysis.capabilities, set)
-        assert analysis.domain in ["general", "web_development", "data_engineering", "security", "ai_ml"]
+        expected_domains = ["general", "web_development", "data_engineering", "security", "ai_ml"]
+        assert analysis.domain in expected_domains
         assert analysis.complexity in ["simple", "moderate", "complex"]
         assert 1 <= analysis.estimated_effort <= 10
 
@@ -311,7 +312,6 @@ if __name__ == "__main__":
     test_instance = TestDynamicAgentEvolutionOrchestrator()
 
     # Test initialization
-    import tempfile
     with tempfile.TemporaryDirectory() as tmpdir:
         temp_path = Path(tmpdir)
         test_instance.test_orchestrator_initialization(temp_path)

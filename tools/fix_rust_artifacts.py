@@ -1,6 +1,5 @@
 import sys
 import os
-import re
 
 if len(sys.argv) < 2:
     print("Usage: python fix_rust_artifacts.py <file_path>")

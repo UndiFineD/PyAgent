@@ -14,7 +14,7 @@
 
 import hashlib
 import time
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Optional
 
 class LiveVectorLake:
     """

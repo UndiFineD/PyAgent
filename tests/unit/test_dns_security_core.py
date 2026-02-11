@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import pytest
-from unittest.mock import Mock, patch, AsyncMock
 from datetime import datetime, timedelta, timezone
 from src.core.base.logic.core.dns_security_core import (
     DnsSecurityCore,

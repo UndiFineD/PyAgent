@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 from rpc_registration_lookup.base_rpc_registration_scraper import (
     BaseRpcRegistrationExtractor,
     INTERFACE_SECURITY_CALLBACK,
@@ -139,7 +144,7 @@ class PeRpcInterfaceScraper:
 
     @staticmethod
     def _check_flags_for_global_cache(flags: Union[int, str]) -> Union[bool, str]:
-        if type(flags) == str:
+        if isinstance(flags, str):
             if flags.startswith("0x"):
                 flags = int(flags, 16)
             elif flags.isdecimal():

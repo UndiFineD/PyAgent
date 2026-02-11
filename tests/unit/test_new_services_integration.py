@@ -12,12 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """
 Integration test for new core services: JobQueue, MultimodalAIService, and TTSService.
 """
 
 import time
-import pytest
 from src.core.base.logic.job_queue import JobQueue
 from src.core.base.logic.multimodal_ai_service import MultimodalAIService, CloudflareProvider, AIServiceConfig
 from src.core.base.logic.tts_service import TTSService

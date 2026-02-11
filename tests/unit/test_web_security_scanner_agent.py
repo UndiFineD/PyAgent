@@ -119,7 +119,9 @@ class TestWebSecurityScannerAgent:
         """Test CMS detection."""
         hosts = ["http://example.com"]
 
-        scanner_agent.scanner_core.detect_cms_fingerprints = AsyncMock(return_value={"http://example.com": ["wordpress"]})
+        scanner_agent.scanner_core.detect_cms_fingerprints = AsyncMock(
+            return_value={"http://example.com": ["wordpress"]}
+        )
         scanner_agent._analyze_scan_results = AsyncMock(return_value={"total_matches": 1})
 
         results = await scanner_agent.detect_cms_instances(hosts)
