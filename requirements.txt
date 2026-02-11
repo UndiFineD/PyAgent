@@ -136,7 +136,7 @@ opentelemetry-sdk==1.39.1
 opentelemetry-semantic-conventions==0.60b1
 outlines_core==0.2.11
 pandas==3.0.0
-pillow==12.1.0
+pillow==12.1.1
 posthog==5.4.0
 prometheus-fastapi-instrumentator==7.1.0
 prometheus_client==0.23.1
