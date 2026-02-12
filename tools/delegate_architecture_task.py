@@ -20,17 +20,22 @@ def load_spec(path: str) -> dict:
 
 def find_copilot_cli() -> str | None:
     """Find GitHub Copilot CLI executable."""
-    # Common installation paths
-    candidates = [
-        os.path.expandvars(r"%APPDATA%\Code\User\globalStorage\github.copilot-chat\copilotCli\copilot.BAT"),
-        shutil.which("copilot"),
-        shutil.which("github-copilot-cli"),
-    ]
-    
-    for candidate in candidates:
-        if candidate and os.path.exists(candidate):
-            return candidate
-    
+    # Always prefer invoking via command name, not explicit .BAT path.
+    # This keeps logs and behavior consistent with `copilot` usage.
+    for command_name in ("copilot", "github-copilot-cli"):
+        if shutil.which(command_name):
+            return command_name
+
+    # Fallback: if VS Code Copilot CLI is installed but not on PATH, add its folder
+    # and still return command name `copilot` (not the .BAT path).
+    bundled_bat = os.path.expandvars(
+        r"%APPDATA%\Code\User\globalStorage\github.copilot-chat\copilotCli\copilot.BAT"
+    )
+    if os.path.exists(bundled_bat):
+        copilot_dir = os.path.dirname(bundled_bat)
+        os.environ["PATH"] = copilot_dir + os.pathsep + os.environ.get("PATH", "")
+        return "copilot"
+
     return None
 
 
@@ -62,14 +67,14 @@ def run_copilot_cli(cli_path: str, spec_path: str) -> int:
         return proc.returncode
         
     except subprocess.TimeoutExpired:
-        print("\n❌ Command timed out after 60 seconds. This may indicate:")
+        print("\nERROR: Command timed out after 60 seconds. This may indicate:")
         print("   1. Copilot CLI is hanging waiting for input")
         print("   2. The task is taking longer than expected")
         print("   3. There's a configuration issue with the CLI")
         return 124  # Standard timeout exit code
         
     except OSError as e:
-        print(f"❌ Failed to execute CLI: {e}", file=sys.stderr)
+        print(f"ERROR: Failed to execute CLI: {e}", file=sys.stderr)
         return 1
 
 
@@ -124,7 +129,7 @@ Examples:
     
     # Validate spec file exists
     if not os.path.exists(args.spec):
-        print(f"❌ Specification file not found: {args.spec}", file=sys.stderr)
+        print(f"ERROR: Specification file not found: {args.spec}", file=sys.stderr)
         sys.exit(2)
     
     # Load and display specification
@@ -132,23 +137,23 @@ Examples:
         spec = load_spec(args.spec)
         summarize_spec(spec)
     except json.JSONDecodeError as e:
-        print(f"❌ Invalid JSON in specification file: {e}", file=sys.stderr)
+        print(f"ERROR: Invalid JSON in specification file: {e}", file=sys.stderr)
         sys.exit(2)
     except Exception as e:
-        print(f"❌ Failed to load specification: {e}", file=sys.stderr)
+        print(f"ERROR: Failed to load specification: {e}", file=sys.stderr)
         sys.exit(2)
     
     # Find Copilot CLI
     cli_path = find_copilot_cli()
     if not cli_path:
-        print("❌ GitHub Copilot CLI not found!", file=sys.stderr)
+        print("ERROR: GitHub Copilot CLI not found!", file=sys.stderr)
         print("\nSearched in:", file=sys.stderr)
         print("  - %APPDATA%\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli\\copilot.BAT")
         print("  - PATH environment variable (copilot, github-copilot-cli)")
         print("\nPlease install GitHub Copilot CLI or check your PATH.")
         sys.exit(4)
     
-    print(f"✓ Found Copilot CLI: {cli_path}\n")
+    print(f"OK: Found Copilot CLI: {cli_path}\n")
     
     # Dry run mode
     if args.dry_run:
@@ -156,18 +161,18 @@ Examples:
         print(f"  CLI: {cli_path}")
         print(f"  Spec: {os.path.abspath(args.spec)}")
         print(f"  Prompt: Implement the task described in the specification file...")
-        print("\n✓ Dry run complete.")
+        print("\nOK: Dry run complete.")
         sys.exit(0)
     
     # Execute Copilot CLI
     rc = run_copilot_cli(cli_path, args.spec)
     
     if rc == 0:
-        print("\n✅ Task delegation completed successfully!")
+        print("\nSUCCESS: Task delegation completed successfully!")
     elif rc == 124:
-        print("\n⏱️  Task delegation timed out.")
+        print("\nTIMEOUT: Task delegation timed out.")
     else:
-        print(f"\n❌ Task delegation failed with exit code {rc}")
+        print(f"\nERROR: Task delegation failed with exit code {rc}")
     
     sys.exit(rc)
 

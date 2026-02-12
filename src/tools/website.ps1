@@ -1,6 +1,6 @@
 Param(
     [Parameter(Position=0)]
-    [ValidateSet("start","stop","restart","status","logs","help")]
+    [ValidateSet("start","stop","restart","status","logs","clear-logs","help")]
     [string]$action = "status",
     [Parameter(Position=1, ValueFromRemainingArguments=$true)]
     [string[]]$services = @("all")
@@ -16,7 +16,7 @@ if ($null -eq $services -or $services.Count -eq 0 -or ($services.Count -eq 1 -an
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 # Project root is the parent directory of the tools folder
-$ProjectRoot = Resolve-Path (Join-Path $ScriptDir "..") | Select-Object -ExpandProperty Path
+$ProjectRoot = Resolve-Path (Join-Path $ScriptDir "..\..") | Select-Object -ExpandProperty Path
 $RunDir = Join-Path $ProjectRoot ".run"
 if (-not (Test-Path $RunDir)) { New-Item -ItemType Directory -Path $RunDir | Out-Null }
 
@@ -34,6 +34,7 @@ $ServicesMap = @{
 }
 
 $ServiceOrder = @("uvicorn", "api", "downloads", "improvement")
+$LogOnlyServices = @("delegate_task", "self_improvement")
 
 function Get-PidFilePath($name){ Join-Path $RunDir $($ServicesMap[$name].pid) }
 
@@ -77,7 +78,7 @@ function Start-ServiceTask($name){
     $exeEsc = $svc.exe.Replace("'", "''")
     $argsEsc = $svc.args.Replace("'", "''")
     $logEsc = $dailyLog.Replace("'", "''")
-    $psCmd = "& '$exeEsc' $argsEsc *>> '$logEsc'"
+    $psCmd = "& '$exeEsc' $argsEsc *>&1 | ForEach-Object { `$line = [string]`$_; if (-not [string]::IsNullOrWhiteSpace(`$line)) { Add-Content -Path '$logEsc' -Value `$line } }"
     Add-Content -Path $dailyLog -Value ("[{0}] Starting {1} with command: {2} {3}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $name, $svc.exe, $svc.args)
     try {
         $proc = Start-Process -FilePath powershell.exe -ArgumentList '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', $psCmd -WorkingDirectory $ProjectRoot -WindowStyle Hidden -PassThru
@@ -172,8 +173,7 @@ function Status-ServiceTask($name){
 }
 
 function Logs-ServiceTask($name){
-    $svc = $ServicesMap[$name]
-    if (-not $svc){ Write-Host "Unknown service: $name" -ForegroundColor Yellow; return }
+    if ((-not $ServicesMap.ContainsKey($name)) -and (-not ($LogOnlyServices -contains $name))) { Write-Host "Unknown service: $name" -ForegroundColor Yellow; return }
 
     $serviceLogDir = Join-Path $ProjectRoot "data\logs\webservices\$name"
     $dailyLog = Join-Path $serviceLogDir ("access-{0}.log" -f (Get-Date -Format "yyyyMMdd"))
@@ -186,22 +186,48 @@ function Logs-ServiceTask($name){
     }
 }
 
+function Clear-LogsServiceTask($name){
+    if ((-not $ServicesMap.ContainsKey($name)) -and (-not ($LogOnlyServices -contains $name))) { Write-Host "Unknown service: $name" -ForegroundColor Yellow; return }
+
+    $serviceLogDir = Join-Path $ProjectRoot "data\logs\webservices\$name"
+    if (-not (Test-Path $serviceLogDir)) { New-Item -ItemType Directory -Path $serviceLogDir -Force | Out-Null }
+    $dailyLog = Join-Path $serviceLogDir ("access-{0}.log" -f (Get-Date -Format "yyyyMMdd"))
+
+    if (Test-Path $dailyLog) {
+        Clear-Content -Path $dailyLog -ErrorAction SilentlyContinue
+        Write-Host "Cleared log file for ${name}: ${dailyLog}" -ForegroundColor Green
+    } else {
+        New-Item -ItemType File -Path $dailyLog -Force | Out-Null
+        Write-Host "Created empty log file for ${name}: ${dailyLog}" -ForegroundColor Green
+    }
+}
+
 if ($action -eq 'help') {
-    Write-Host "Usage: .\tools\website.ps1 <start|stop|restart|status|logs|help> [all|uvicorn|api|downloads|improvement]"
+    Write-Host "Usage: .\src\tools\website.ps1 <start|stop|restart|status|logs|clear-logs|help> [all|uvicorn|api|downloads|improvement|delegate_task|self_improvement]"
     return
 }
 
 if ($services -contains 'all') { $targets = $ServiceOrder } else { $targets = $services }
 
 foreach($t in $targets){
-    if (-not $ServicesMap.ContainsKey($t)) { Write-Host "Skipping unknown service: $t"; continue }
+    $isPrimary = $ServicesMap.ContainsKey($t)
+    $isLogOnly = $LogOnlyServices -contains $t
+
+    if (-not ($isPrimary -or $isLogOnly)) { Write-Host "Skipping unknown service: $t"; continue }
+
+    if ($isLogOnly -and @('start','stop','restart','status') -contains $action) {
+        Write-Host "Skipping unsupported action '$action' for log-only service: $t" -ForegroundColor Yellow
+        continue
+    }
+
     switch ($action){
         'start' { Start-ServiceTask $t }
         'stop' { Stop-ServiceTask $t }
         'restart' { Stop-ServiceTask $t; Start-Sleep -Seconds 1; Start-ServiceTask $t }
         'status' { Status-ServiceTask $t }
         'logs' { Logs-ServiceTask $t }
+        'clear-logs' { Clear-LogsServiceTask $t }
     }
 }
 
-Write-Host "Done. Use: .\tools\website.ps1 <start|stop|restart|status|logs|help> [all|uvicorn|api|downloads|improvement]"
+Write-Host "Done. Use: .\src\tools\website.ps1 <start|stop|restart|status|logs|clear-logs|help> [all|uvicorn|api|downloads|improvement|delegate_task|self_improvement]"
