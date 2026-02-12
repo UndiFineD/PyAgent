@@ -32,7 +32,7 @@ def main():
             issues += len(entry["flake8"]["stdout"].splitlines())
         if "ruff" in entry and entry["ruff"]["stdout"]:
             # Ruff output is more complex, but we can count lines starting with it
-            issues += len([l for l in entry["ruff"]["stdout"].splitlines() if l.strip()])
+            issues += len([line for line in entry["ruff"]["stdout"].splitlines() if line.strip()])
         
         file_issues.append((entry["file"], issues))
 

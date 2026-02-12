@@ -18,7 +18,6 @@ Provides a modern UI for managing model and dataset downloads.
 """
 
 import streamlit as st
-import os
 import json
 from pathlib import Path
 from src.tools.download_agent.core import DownloadAgent
@@ -81,7 +80,7 @@ def main():
     with col2:
         st.subheader("Current Config & Stats")
         st.info(f"**Workspace:** `{WORKSPACE_ROOT}`")
-        st.info(f"**Default Download Path:** `data/models` | `data/datasets`")
+        st.info("**Default Download Path:** `data/models` | `data/datasets`")
         
         history = load_history()
         if history:

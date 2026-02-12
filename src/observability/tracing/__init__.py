@@ -22,7 +22,8 @@ from typing import Any, TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader
 
-if TYPE_CHECKING:  # ruff: noqa: F401
+if TYPE_CHECKING:
+    # ruff: noqa: F401
     from .open_telemetry_tracer import (
         NullSpan, NullTracer, SpanAttributes, SpanTiming, TRACE_HEADERS,
         add_span_attributes, add_span_event, contains_trace_headers,

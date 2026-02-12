@@ -9,7 +9,6 @@ import os
 import shutil
 import subprocess
 import sys
-from pathlib import Path
 
 
 def load_spec(path: str) -> dict:
@@ -51,10 +50,10 @@ def run_copilot_cli(cli_path: str, spec_path: str) -> int:
     
     cmd = [cli_path, "-p", prompt]
     
-    print(f"Executing Copilot CLI...")
+    print("Executing Copilot CLI...")
     print(f"Spec file: {abs_spec_path}")
     print(f"Command: {cli_path} -p \"<prompt>\"")
-    print(f"Timeout: 60 seconds for initial response\n")
+    print("Timeout: 60 seconds for initial response\n")
     
     try:
         # Run with 60-second timeout to detect hangs
@@ -160,7 +159,7 @@ Examples:
         print("DRY RUN MODE - Would execute:")
         print(f"  CLI: {cli_path}")
         print(f"  Spec: {os.path.abspath(args.spec)}")
-        print(f"  Prompt: Implement the task described in the specification file...")
+        print("  Prompt: Implement the task described in the specification file...")
         print("\nOK: Dry run complete.")
         sys.exit(0)
     

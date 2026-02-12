@@ -18,6 +18,8 @@ FastAPI-based API gateway for the PyAgent fleet.
 
 from __future__ import annotations
 
+import sys
+import asyncio
 import json
 import time
 from pathlib import Path
@@ -41,8 +43,6 @@ app = FastAPI(title="PyAgent Unified API")
 workspace_root = str(Path(__file__).resolve().parents[4]) + ""
 
 # On Windows prefer the selector event loop for compatibility with pyzmq
-import sys
-import asyncio
 if sys.platform == "win32":
     try:
         from asyncio import WindowsSelectorEventLoopPolicy

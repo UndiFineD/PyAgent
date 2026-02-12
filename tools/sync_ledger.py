@@ -23,14 +23,14 @@ def run_ruff(file_path):
     try:
         res = subprocess.run([PYTHON_PATH, "-m", "ruff", "check", file_path], capture_output=True, text=True)
         return res.stdout, res.returncode
-    except:
+    except Exception:
         return "", 0
 
 def run_flake8(file_path):
     try:
         res = subprocess.run([PYTHON_PATH, "-m", "flake8", file_path, "--max-line-length=120"], capture_output=True, text=True)
         return res.stdout, res.returncode
-    except:
+    except Exception:
         return "", 0
 
 def main():
@@ -60,8 +60,8 @@ def main():
         entry["flake8"]["exit_code"] = flake_rc
         
         # Count issues
-        ruff_issues = len([l for l in ruff_out.splitlines() if l.strip() and "All checks passed!" not in l])
-        flake_issues = len([l for l in flake_out.splitlines() if l.strip()])
+        ruff_issues = len([line for line in ruff_out.splitlines() if line.strip() and "All checks passed!" not in line])
+        flake_issues = len([line for line in flake_out.splitlines() if line.strip()])
         
         if ruff_issues == 0 and flake_issues == 0:
             # File is clean! Skip adding it back to the list

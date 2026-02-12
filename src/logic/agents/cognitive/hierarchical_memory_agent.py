@@ -17,8 +17,6 @@
 Manages Short-term (Episodic), Mid-term (Working), Long-term (Semantic), and Archival storage tiers.
 """
 
-from pathlib import Path
-
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from .mixins.memory_storage_mixin import MemoryStorageMixin

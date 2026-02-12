@@ -22,7 +22,6 @@ import logging
 import os
 import time
 from datetime import datetime
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 from src.core.base.lifecycle.base_agent import BaseAgent

@@ -22,7 +22,8 @@ from typing import Any, TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader
 
-if TYPE_CHECKING:  # ruff: noqa: F401
+if TYPE_CHECKING:
+    # ruff: noqa: F401
     from .ab_engine import (
         ABComparator, ABComparison, ABComparisonEngine,
         ABComparisonResult, ABSignificanceResult

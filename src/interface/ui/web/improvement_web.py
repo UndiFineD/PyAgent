@@ -18,7 +18,6 @@ Monitor CoRT thoughts and steer the fleet's autonomous evolution.
 """
 
 import streamlit as st
-import os
 import json
 import time
 from pathlib import Path

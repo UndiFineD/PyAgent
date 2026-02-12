@@ -23,14 +23,14 @@ def run_ruff(file_path):
     try:
         res = subprocess.run([PYTHON_PATH, "-m", "ruff", "check", file_path], capture_output=True, text=True)
         return res.stdout
-    except:
+    except Exception:
         return ""
 
 def run_flake8(file_path):
     try:
         res = subprocess.run([PYTHON_PATH, "-m", "flake8", file_path, "--max-line-length=120"], capture_output=True, text=True)
         return res.stdout
-    except:
+    except Exception:
         return ""
 
 def main():
@@ -53,8 +53,8 @@ def main():
         ruff_out = run_ruff(file_path)
         flake_out = run_flake8(file_path)
         
-        issues = len([l for l in ruff_out.splitlines() if l.strip()])
-        issues += len([l for l in flake_out.splitlines() if l.strip()])
+        issues = len([line for line in ruff_out.splitlines() if line.strip()])
+        issues += len([line for line in flake_out.splitlines() if line.strip()])
         
         file_issues.append((file_path, issues))
 

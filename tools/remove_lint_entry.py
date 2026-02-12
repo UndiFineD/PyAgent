@@ -63,7 +63,7 @@ def main():
         ruff = entry.get("ruff", {}).get("stdout", "").strip()
         if ruff and "All checks passed!" not in ruff:
             # Filter out summary lines if any
-            lines = [l for l in ruff.splitlines() if not l.startswith("Found ") and not l.startswith("Checked ")]
+            lines = [line for line in ruff.splitlines() if not line.startswith("Found ") and not line.startswith("Checked ")]
             total_issues += len(lines)
 
         # Count mypy issues

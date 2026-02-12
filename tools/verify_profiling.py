@@ -25,8 +25,8 @@ project_root = str(Path(__file__).parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-from src.infrastructure.swarm.orchestration.intel.self_improvement_orchestrator import SelfImprovementOrchestrator
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager  # noqa: E402
+from src.infrastructure.swarm.orchestration.intel.self_improvement_orchestrator import SelfImprovementOrchestrator  # noqa: E402
 
 def test_static_profiling():
     print("[Test] Initializing Fleet and Orchestrator...")

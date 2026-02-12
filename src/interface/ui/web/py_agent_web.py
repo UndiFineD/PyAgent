@@ -29,10 +29,9 @@ import logging
 from pathlib import Path
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
-from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse, HTMLResponse
+from fastapi.responses import FileResponse, JSONResponse, Response, HTMLResponse
 import httpx
 import websockets
-from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from src.tools.download_agent.core import DownloadAgent
 from src.tools.download_agent.models import DownloadConfig
