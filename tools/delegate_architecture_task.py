@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Minimal task runner that reads implement_architecture.json and delegates
-the implementation to a local Copilot CLI if available.
+Simplified task runner that delegates architecture implementation to GitHub Copilot CLI.
+Usage: python tools/delegate_architecture_task.py --spec temp/implement_architecture.json
 """
 import argparse
 import json
@@ -9,285 +9,168 @@ import os
 import shutil
 import subprocess
 import sys
+from pathlib import Path
 
-def find_spec():
-    candidates = [
-        "implement_architecture.json",
-        os.path.join("temp", "implement_architecture.json"),
-        os.path.join("data", "implement_architecture.json"),
-    ]
-    for p in candidates:
-        if os.path.exists(p):
-            return p
-    raise FileNotFoundError("implement_architecture.json not found; looked in: " + ", ".join(candidates))
 
-def load_spec(path):
+def load_spec(path: str) -> dict:
+    """Load JSON specification file."""
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
-def find_copilot_cli(override=None):
-    if override:
-        if shutil.which(override):
-            return shutil.which(override)
-        return None
-    for name in ("copilot", "copilot-cli", "github-copilot-cli"):
-        p = shutil.which(name)
-        if p:
-            return p
-    return None
 
-def run_cli(cli_path, spec_path, extra_args=None):
-    """Try common CLI invocation patterns and return the subprocess returncode.
-
-    Captures and prints stdout/stderr for diagnostics. Tries options in this order:
-    Modern Agentic prompt, --input, --file, --path, positional.
-    """
-    extra_args = extra_args or []
-    
-    # Modern Agentic CLI Detection (Phase 317)
-    is_modern = False
-    try:
-        # Use shell=True on Windows for .BAT files to ensure correct execution and output capture
-        # Try both -v and --version
-        ver_proc = subprocess.run([cli_path, "--version"], capture_output=True, text=True, timeout=5, shell=(os.name == 'nt'))
-        stdout = ver_proc.stdout or ""
-        stderr = ver_proc.stderr or ""
-        combined = stdout + stderr
-        
-        if "GitHub Copilot CLI" in combined or "0.0.4" in combined or "0.0.3" in combined:
-            is_modern = True
-        else:
-            # Fallback check for common path patterns
-            if "copilot" in cli_path.lower():
-                is_modern = True
-    except Exception as e:
-        print(f"Warning: Failed to detect Copilot version, defaulting to modern mode. Error: {e}")
-        is_modern = True
-
-    if is_modern:
-        print("Detected modern agentic Copilot CLI. Using prompt-based implementation.")
-        
-        # We use --yolo for the modern CLI to avoid infinite prompts and allow tool use.
-        # We pass the path to the spec file in the prompt so Copilot can read it directly,
-        # which avoids shell command length limits for large JSON specs.
-        abs_spec_path = os.path.abspath(spec_path)
-        
-        variants = [
-            [cli_path, "-p", f"Implement the task described in the specification file at: {abs_spec_path}", "--yolo"],
-            [cli_path, "-p", f"Implement the task described in this specification: {abs_spec_path}", "--allow-all"],
-            [cli_path, "-i", f"Implement the task in {abs_spec_path}", "--yolo"],
-        ]
-    else:
-        # Legacy fallback (Phase 12)
-        variants = [
-            [cli_path, "implement", "--input", spec_path],
-            [cli_path, "implement", "--file", spec_path],
-            [cli_path, "implement", spec_path],
-        ]
-
-    last_rc = 1
-    for v in variants:
-        cmd = v + extra_args
-        # Hide the potentially massive prompt from the console if it's the modern version
-        if is_modern:
-             display_cmd = [cmd[0], cmd[1], "<json_spec_content>", *cmd[3:]]
-             print("Executing:", " ".join(display_cmd))
-        else:
-             print("Executing:", " ".join(cmd))
-             
-        try:
-            # We don't capture_output for the modern CLI because it's interactive/long-running
-            # unless we use -p. But -p still outputs to stdout.
-            # Using capture_output=False to allow real-time feedback.
-            proc = subprocess.run(cmd)
-            last_rc = proc.returncode
-        except OSError as e:
-            print("Failed to execute CLI:", e, file=sys.stderr)
-            last_rc = 3
-            continue
-
-        if last_rc == 0:
-            return 0
-        
-        # For modern CLI, if it failed, it might be because of an unknown option 
-        # (like --yolo vs --allow-all). Continue to next variant.
-        print(f"Variant failed with code {last_rc}. Trying next pattern...")
-
-    return last_rc
-
-def summarize_spec(spec):
-    print("Specification summary:")
-    if isinstance(spec, dict):
-        for k, v in list(spec.items())[:10]:
-            print(f"- {k}: {type(v).__name__}")
-    else:
-        print(f"- top-level type: {type(spec).__name__}")
-
-def main():
-    parser = argparse.ArgumentParser(description="Delegate architecture implementation via local Copilot CLI")
-    parser.add_argument("--spec", help="Path to implement_architecture.json")
-    parser.add_argument("--cli", help="Path or name of Copilot CLI to use (overrides auto-detection)")
-    parser.add_argument("--dry-run", action="store_true", help="Only print actions without executing CLI")
-    parser.add_argument("--extra-arg", action="append", help="Extra argument(s) passed to the CLI", default=[])
-    args = parser.parse_args()
-
-    try:
-        spec_path = args.spec or find_spec()
-    except FileNotFoundError as e:
-        print(e, file=sys.stderr)
-        sys.exit(2)
-
-    try:
-        spec = load_spec(spec_path)
-    except Exception as e:
-        print("Failed to read spec:", e, file=sys.stderr)
-        sys.exit(2)
-
-    summarize_spec(spec)
-
-    cli = find_copilot_cli(args.cli)
-    if not cli:
-        print("No local Copilot CLI found. Install one of: copilot, copilot-cli, github-copilot-cli")
-        print("Or provide a path with --cli. Dry-run mode:", args.dry_run)
-        if args.dry_run:
-            print("Dry-run complete.")
-            sys.exit(0)
-        sys.exit(4)
-
-    if args.dry_run:
-        print("Would run CLI:", cli, "with spec", spec_path, "and extra args", args.extra_arg)
-        sys.exit(0)
-
-    rc = run_cli(cli, spec_path, args.extra_arg)
-    print("CLI exited with code", rc)
-    sys.exit(rc if isinstance(rc, int) else 0)
-
-
-# --- CoderAgent Delegation Logic ---
-
-"""
-Delegate the implementation of 3 architectural security patterns to CoderAgent.
-Run with: python tools/delegate_architecture_task.py
-"""
-
-import asyncio
-import json
-import sys
-from pathlib import Path
-
-# Add src to path for imports
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-
-from src.core.base.common.models.communication_models import CascadeContext
-from src.core.base.common.models.core_enums import AgentPriority
-from src.logic.agents.development.coder_agent import CoderAgent
-
-
-def load_task_spec() -> dict:
-    """Load task specification from JSON file."""
-    task_file = Path(__file__).resolve().parents[1] / "temp" / "implement_architecture.json"
-    if not task_file.exists():
-        raise FileNotFoundError(f"Task file not found: {task_file}")
-    
-    with open(task_file, encoding='utf-8') as f:
-        return json.load(f)
-
-
-def build_task_prompt(spec: dict) -> str:
-    """Convert JSON task spec to detailed prompt."""
-    lines = [
-        "Implement 3 architectural patterns for the PyAgent fleet:\n",
+def find_copilot_cli() -> str | None:
+    """Find GitHub Copilot CLI executable."""
+    # Common installation paths
+    candidates = [
+        os.path.expandvars(r"%APPDATA%\Code\User\globalStorage\github.copilot-chat\copilotCli\copilot.BAT"),
+        shutil.which("copilot"),
+        shutil.which("github-copilot-cli"),
     ]
     
-    for idx, pattern in enumerate(spec["requirements"]["patterns"], 1):
-        lines.append(f"## {idx}. {pattern['name']}")
-        lines.append(f"File: {pattern.get('file', pattern.get('target', 'TBD'))}")
-        lines.append(f"{pattern['description']}\n")
-        
-        impl = pattern.get("implementation", {})
-        if "class_name" in impl:
-            lines.append(f"Class: {impl['class_name']}")
-        if "methods" in impl:
-            lines.append(f"Methods: {', '.join(impl['methods'])}")
-        if "features" in impl:
-            lines.append("Features:")
-            for feature in impl["features"]:
-                lines.append(f"  - {feature}")
-        if "methods_to_extract" in impl:
-            lines.append(f"Extract methods: {', '.join(impl['methods_to_extract'])}")
-        lines.append("")
+    for candidate in candidates:
+        if candidate and os.path.exists(candidate):
+            return candidate
     
-    lines.append("\nConstraints:")
-    for constraint in spec.get("constraints", []):
-        lines.append(f"- {constraint}")
-    
-    return "\n".join(lines)
+    return None
 
 
-async def main_delegate() -> None:
-    """Execute the delegation."""
-    print("🚀 Delegating architecture implementation to CoderAgent...")
+def run_copilot_cli(cli_path: str, spec_path: str) -> int:
+    """Execute Copilot CLI with the specification file.
     
-    # Load task specification
+    Uses a 60-second timeout to detect hangs early.
+    """
+    abs_spec_path = os.path.abspath(spec_path)
+    
+    # Modern Copilot CLI command (agentic mode)
+    prompt = f"Implement the task described in the specification file at: {abs_spec_path}"
+    
+    cmd = [cli_path, "-p", prompt]
+    
+    print(f"Executing Copilot CLI...")
+    print(f"Spec file: {abs_spec_path}")
+    print(f"Command: {cli_path} -p \"<prompt>\"")
+    print(f"Timeout: 60 seconds for initial response\n")
+    
     try:
-        task_spec = load_task_spec()
-        task_prompt = build_task_prompt(task_spec)
-        print(f"📄 Loaded task: {task_spec.get('task_type', 'unknown')}")
-    except Exception as e:
-        print(f"❌ Failed to load task spec: {e}")
-        sys.exit(1)
+        # Run with 60-second timeout to detect hangs
+        proc = subprocess.run(
+            cmd,
+            timeout=60,
+            capture_output=False,  # Allow real-time output
+            shell=(os.name == 'nt'),  # Use shell on Windows for .BAT files
+        )
+        return proc.returncode
+        
+    except subprocess.TimeoutExpired:
+        print("\n❌ Command timed out after 60 seconds. This may indicate:")
+        print("   1. Copilot CLI is hanging waiting for input")
+        print("   2. The task is taking longer than expected")
+        print("   3. There's a configuration issue with the CLI")
+        return 124  # Standard timeout exit code
+        
+    except OSError as e:
+        print(f"❌ Failed to execute CLI: {e}", file=sys.stderr)
+        return 1
+
+
+def summarize_spec(spec: dict) -> None:
+    """Print a summary of the specification."""
+    print("=" * 70)
+    print("SPECIFICATION SUMMARY")
+    print("=" * 70)
     
-    # Create cascade context to track this task
-    context = CascadeContext(
-        task_id="arch_patterns_implementation_001",
-        agent_id="copilot_cli_delegator",
-        cascade_depth=0
+    if isinstance(spec, dict):
+        print(f"Task ID:     {spec.get('task_id', 'N/A')}")
+        print(f"Title:       {spec.get('title', 'N/A')}")
+        print(f"Priority:    {spec.get('priority', 'N/A')}")
+        print(f"Status:      {spec.get('status', 'N/A')}")
+        
+        if 'requirements' in spec and 'patterns' in spec['requirements']:
+            patterns = spec['requirements']['patterns']
+            print(f"\nPatterns to implement: {len(patterns)}")
+            for i, pattern in enumerate(patterns, 1):
+                print(f"  {i}. {pattern.get('name', 'Unnamed')}")
+        
+        if 'constraints' in spec:
+            print(f"\nConstraints: {len(spec['constraints'])}")
+    
+    print("=" * 70 + "\n")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Delegate architecture task to GitHub Copilot CLI",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python tools/delegate_architecture_task.py --spec temp/implement_architecture.json
+  python tools/delegate_architecture_task.py --spec temp/my_task.json --dry-run
+        """
     )
     
-    # Target file for the agent to work on (first pattern file)
-    first_pattern = task_spec["requirements"]["patterns"][0]
-    target_file = str(Path(__file__).resolve().parents[1] / first_pattern.get("file", first_pattern.get("target")))
+    parser.add_argument(
+        "--spec",
+        required=True,
+        help="Path to JSON specification file"
+    )
     
-    # Initialize CoderAgent
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be executed without running"
+    )
+    
+    args = parser.parse_args()
+    
+    # Validate spec file exists
+    if not os.path.exists(args.spec):
+        print(f"❌ Specification file not found: {args.spec}", file=sys.stderr)
+        sys.exit(2)
+    
+    # Load and display specification
     try:
-        agent = CoderAgent(target_file)
-        
-        print(f"📋 Task ID: {context.task_id}")
-        print(f"🎯 Starting file: {target_file}")
-        print(f"🔢 Priority: {task_spec.get('priority', 'high').upper()}")
-        print(f"\n{'='*60}")
-        print("TASK PROMPT:")
-        print(task_prompt)
-        print(f"{'='*60}\n")
-        
-        # Use the delegation mixin if available
-        if hasattr(agent, 'delegator') and agent.delegator:
-            result = await agent.delegator.delegate(
-                agent_type="CoderAgent",
-                prompt=task_prompt,
-                target_file=target_file,
-                context=context,
-                priority=AgentPriority.HIGH
-            )
-        else:
-            # Direct async execution (Better for main_delegate async scope)
-            result = await agent.run_async(task_prompt)
-        
-        print(f"\n{'='*60}\n")
-        print("✅ Delegation Result:")
-        print(result)
-        
+        spec = load_spec(args.spec)
+        summarize_spec(spec)
+    except json.JSONDecodeError as e:
+        print(f"❌ Invalid JSON in specification file: {e}", file=sys.stderr)
+        sys.exit(2)
     except Exception as e:
-        print(f"❌ Delegation failed: {e}")
-        import traceback
-        traceback.print_exc()
-        sys.exit(1)
-
+        print(f"❌ Failed to load specification: {e}", file=sys.stderr)
+        sys.exit(2)
+    
+    # Find Copilot CLI
+    cli_path = find_copilot_cli()
+    if not cli_path:
+        print("❌ GitHub Copilot CLI not found!", file=sys.stderr)
+        print("\nSearched in:", file=sys.stderr)
+        print("  - %APPDATA%\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli\\copilot.BAT")
+        print("  - PATH environment variable (copilot, github-copilot-cli)")
+        print("\nPlease install GitHub Copilot CLI or check your PATH.")
+        sys.exit(4)
+    
+    print(f"✓ Found Copilot CLI: {cli_path}\n")
+    
+    # Dry run mode
+    if args.dry_run:
+        print("DRY RUN MODE - Would execute:")
+        print(f"  CLI: {cli_path}")
+        print(f"  Spec: {os.path.abspath(args.spec)}")
+        print(f"  Prompt: Implement the task described in the specification file...")
+        print("\n✓ Dry run complete.")
+        sys.exit(0)
+    
+    # Execute Copilot CLI
+    rc = run_copilot_cli(cli_path, args.spec)
+    
+    if rc == 0:
+        print("\n✅ Task delegation completed successfully!")
+    elif rc == 124:
+        print("\n⏱️  Task delegation timed out.")
+    else:
+        print(f"\n❌ Task delegation failed with exit code {rc}")
+    
+    sys.exit(rc)
 
 if __name__ == "__main__":
-    # Provide two modes: the CLI-driven implementer or the CoderAgent delegator
-    if len(sys.argv) > 1:
-        # pass-through to the original CLI runner behavior
-        main()
-    else:
-        asyncio.run(main_delegate())
+    main()
+
