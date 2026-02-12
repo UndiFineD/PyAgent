@@ -39,6 +39,19 @@ app = FastAPI(title="PyAgent Unified API")
 # Prefer the repository root (4 levels up from this file) so all web
 # components use the same `data/` location instead of `src/data/`.
 workspace_root = str(Path(__file__).resolve().parents[4]) + ""
+
+# On Windows prefer the selector event loop for compatibility with pyzmq
+import sys
+import asyncio
+if sys.platform == "win32":
+    try:
+        from asyncio import WindowsSelectorEventLoopPolicy
+
+        asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())
+    except Exception:
+        # Best-effort; if unavailable continue with default
+        pass
+
 fleet = FleetManager(workspace_root)
 load_balancer = FleetLoadBalancer(fleet)
 

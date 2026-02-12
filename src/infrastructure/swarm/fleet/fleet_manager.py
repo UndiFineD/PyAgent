@@ -13,7 +13,28 @@
 # limitations under the License.
 
 
-"""Coordinator for deploying and aggregating results from multiple agents."""
+"""
+Fleet Manager - Primary Swarm Coordinator
+
+Coordinator for deploying and aggregating results from multiple agents.
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+Typically initialized within the system lifecycle or via management scripts to orchestrate agent tasks.
+
+WHAT IT DOES:
+The FleetManager serves as the central nervous system of the PyAgent swarm. It handles:
+1. Agent Registration & Lifecycle: Tracks active agents and their capabilities.
+2. Task Distribution: Dispatches work chunks to specialized agents (e.g., CoderAgent, ResearchAgent).
+3. Result Aggregation: Collects and synthesizes findings from across the fleet.
+4. Resilience & Backup: Manages distributed state backups to prevent data loss.
+5. Self-Improvement: Provides hooks for the EvolutionLoop to maintain system health.
+
+WHAT IT SHOULD DO BETTER:
+- Implement more advanced load balancing for agent task queues.
+- Enhance real-time performance metrics tracking for individual agents.
+- Support dynamic scaling of agent clusters based on workload complexity.
+"""
 
 from __future__ import annotations
 

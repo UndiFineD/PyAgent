@@ -13,7 +13,26 @@
 # limitations under the License.
 
 """
-Copilot cli backend.py module.
+Copilot CLI LLM Backend - Local AI Execution
+
+Native interface for the GitHub Copilot CLI to provide local-first AI capabilities.
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+Invoked through the LLMBackend factory to provide chat and architectural insights using the local 'copilot' command.
+
+WHAT IT DOES:
+The CopilotCLIBackend enables the fleet to run without cloud-agent dependencies by:
+1. Process Orchestration: Spawns and manages 'copilot' CLI processes safely.
+2. Model Selection: Supports dynamic model routing (e.g., gpt-5-mini) via the --model flag.
+3. Prompt Handling: Sanitizes and optimizes prompts for the CLI's conversational interface.
+4. Response Parsing: Extracts clean text and code blocks from CLI stdout.
+5. Fallback Protection: Integrates with the system's local-only environment variables.
+
+WHAT IT SHOULD DO BETTER:
+- Improve output streaming for faster response processing in real-time interfaces.
+- Standardize multi-turn conversation context handling within the CLI wrapper.
+- Enhance error detection for specific CLI authentication or rate-limit states.
 """
 
 
