@@ -121,7 +121,10 @@ class FleetManager(
         try:
             asyncio.create_task(coro)
         except RuntimeError:
-            logging.debug(f"Fleet: Could not start task {coro.__name__ if hasattr(coro, '__name__') else 'unknown'} - no event loop.")
+            with contextlib.suppress(Exception):
+                coro.close()
+            task_name = getattr(getattr(coro, "cr_code", None), "co_name", "unknown")
+            logging.debug(f"Fleet: Could not start task {task_name} - no event loop.")
 
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)

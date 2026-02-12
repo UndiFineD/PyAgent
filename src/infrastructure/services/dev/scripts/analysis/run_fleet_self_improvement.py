@@ -51,7 +51,18 @@ from pathlib import Path
 from typing import Any
 
 # Ensure the project root is in PYTHONPATH before importing from src
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
+_here = Path(__file__).resolve()
+project_root_path: Path | None = None
+for parent in _here.parents:
+    if (parent / "src").is_dir() and (parent / "pyproject.toml").exists():
+        project_root_path = parent
+        break
+
+if project_root_path is None:
+    # Fallback to a conservative upward traversal from current file location
+    project_root_path = _here.parents[min(7, len(_here.parents) - 1)]
+
+project_root = str(project_root_path)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
@@ -600,7 +611,7 @@ def _apply_docstring_upgrades(root: str, target_dirs: list[str], model_name: str
 
     python_files = []
     for t_dir in target_dirs:
-        abs_dir = os.path.join(root, t_dir) if not os.path.is_absolute(t_dir) else t_dir
+        abs_dir = os.path.join(root, t_dir) if not os.path.isabs(t_dir) else t_dir
         if os.path.isdir(abs_dir):
             for p in Path(abs_dir).rglob("*.py"):
                 if "__init__.py" not in p.name:
@@ -783,10 +794,11 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true")
     args: argparse.Namespace = parser.parse_args()
 
-    fleet: FleetManager = FleetManager(os.getcwd())
     if args.dry_run:
-        logging.info("Dry-run mode: Initialization successful.")
+        logging.info("Dry-run mode: Argument parsing and environment bootstrap successful.")
         sys.exit(0)
+
+    fleet: FleetManager = FleetManager(os.getcwd())
 
     try:
         orchestrator: CycleOrchestrator = CycleOrchestrator(fleet, args)

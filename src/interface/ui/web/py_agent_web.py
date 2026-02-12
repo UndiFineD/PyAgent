@@ -361,7 +361,7 @@ async def serve_stream():
 async def embed_improvement():
         """Embed the Streamlit Self-Improvement UI running on port 8501.
 
-        Note: Streamlit runs as a separate process (not ASGI). This route
+                <iframe src="http://127.0.0.1:8502" title="Self-Improvement UI" frameborder="0"></iframe>
         returns a simple page with an iframe pointed at the Streamlit server.
         """
         html = """

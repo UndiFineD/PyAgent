@@ -72,6 +72,26 @@ def save_steering_directive(directive: str):
         f.write(f"\n# Directive Added on {timestamp}\n")
         f.write(f"research: {directive}\n")
 
+
+def load_self_improvement_log_tail(max_lines: int = 120) -> str:
+    log_dir = WORKSPACE_ROOT / "data" / "logs" / "webservices" / "self_improvement"
+    if not log_dir.exists():
+        return ""
+
+    log_files = sorted(log_dir.glob("access-*.log"), key=lambda p: p.stat().st_mtime, reverse=True)
+    if not log_files:
+        return ""
+
+    latest = log_files[0]
+    try:
+        with open(latest, "r", encoding="utf-8", errors="ignore") as f:
+            lines = f.readlines()
+    except OSError:
+        return ""
+
+    tail = lines[-max_lines:]
+    return "".join(tail).rstrip()
+
 def format_timestamp(ts):
     if isinstance(ts, (int, float)):
         import datetime
@@ -123,6 +143,20 @@ def main():
                 st.write(f"- **{ts}** [{status}]: {msg}")
         else:
             st.write("Clean audit log.")
+
+    st.markdown("---")
+    st.subheader("⚙️ Self-Improvement Runtime Progress")
+    runtime_tail = load_self_improvement_log_tail(max_lines=120)
+    if runtime_tail:
+        st.text_area(
+            "Latest self-improvement log output",
+            value=runtime_tail,
+            height=320,
+            disabled=True,
+            key="self_improvement_runtime_tail",
+        )
+    else:
+        st.info("No self-improvement runtime logs found yet. Start it via src/tools/self_improvement.ps1.")
 
     st.markdown("---")
     st.subheader("📖 Improvement Research Status")
