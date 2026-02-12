@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Module: base_agent
-Principal agent interface for PyAgent, supporting mixin-based architecture.
-"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,6 +11,29 @@ Principal agent interface for PyAgent, supporting mixin-based architecture.
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+"""
+Base Agent Interface - Principal PyAgent Abstract Base
+
+Principal agent interface for PyAgent, supporting mixin-based architecture.
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+Subclassed by specialized agents (e.g., CoderAgent, ResearchAgent) to provide core orchestration, state management, and tool-use capabilities.
+
+WHAT IT DOES:
+The BaseAgent class provides the foundational logic for all agents in the swarm, including:
+1. Mixin Integration: Seamlessly blends capabilities from identity, status, and messaging mixins.
+2. Async Execution: Core loop supporting concurrent I/O, network requests, and tool execution.
+3. State Orchestration: Manages agent health, focus, and memory transitions.
+4. Tool Utilization: Interfaces with internal and external tools via a standardized dispatch mechanism.
+5. Error Resilience: Implements robust exception handling and state recovery patterns.
+
+WHAT IT SHOULD DO BETTER:
+- Further decoupling of specialized logic into standalone mixins to prevent class bloat.
+- Implementation of more granular tracing for complex multi-agent execution spans.
+- Optimization of state serialization for high-frequency environment updates.
+"""
 
 from __future__ import annotations
 

@@ -12,7 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Autonomous Fleet Self-Improvement Loop - scans workspace for issues and applies fixes."""
+"""
+Autonomous Fleet Self-Improvement Loop
+
+scans workspace for issues and applies fixes.
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+python src/infrastructure/services/dev/scripts/analysis/run_fleet_self_improvement.py --cycles 3 --delay 60 --model gpt-5-mini
+
+WHAT IT DOES:
+The script orchestrates an autonomous loop that:
+1. Parses strategic directives (@focus, @cmd) from prompt and context files.
+2. Scans the workspace using the FleetManager's SelfImprovementOrchestrator to identify and fix code health issues (mypy, flake8, pylint).
+3. Harvests high-level architectural and security lessons from local Copilot CLI (GPT-5 mini).
+4. Generates archival implementation specifications (JSON) for remaining technical debt.
+5. Updates auto-documentation (FLEET_AUTO_DOC.md) and explainability logs.
+
+WHAT IT SHOULD DO BETTER:
+- Improve validation of autonomous reasoning steps to prevent regressions.
+- Implement more granular rollback for failed architectural changes.
+- Enhance the synthesis of collective intelligence into multi-step refactoring plans.
+"""
+
 
 from __future__ import annotations
 
@@ -308,6 +330,9 @@ def run_cycle(
         f"Fixed: {combined_stats['fixes_applied']}"
     )
 
+    # 3.5 Upgrade Module Docstrings (Phase 432: Keimpe's Full-Page Description)
+    _apply_docstring_upgrades(root, target_dirs, model_name)
+
     _report_remaining_debt(
         combined_stats,
         logger,
@@ -567,6 +592,86 @@ def _prune_verified_directives(
     if new_content != content:
         p_path.write_text(new_content.strip() + "\n", encoding="utf-8")
         print(f" - Updated {p_path.name}: Verified directives REMOVED.")
+
+
+def _apply_docstring_upgrades(root: str, target_dirs: list[str], model_name: str) -> None:
+    """Scans target directories for Python files with minimal docstrings and upgrades them."""
+    print("\n[Docstring Upgrader] Scanning for minimal module docstrings...")
+
+    python_files = []
+    for t_dir in target_dirs:
+        abs_dir = os.path.join(root, t_dir) if not os.path.is_absolute(t_dir) else t_dir
+        if os.path.isdir(abs_dir):
+            for p in Path(abs_dir).rglob("*.py"):
+                if "__init__.py" not in p.name:
+                    python_files.append(p)
+
+    upgraded_count = 0
+    for p_file in python_files:
+        try:
+            content = p_file.read_text(encoding="utf-8")
+            # Skip if already upgraded or containing the signature
+            if "AUTHOR: Keimpe de Jong" in content:
+                continue
+
+            # Look for the first docstring after potential shebang/copyright
+            match = re.search(r'"""(.*?)"""', content, re.DOTALL)
+            if match:
+                docstring = match.group(1).strip()
+                # Check if it's "tiny" or doesn't follow the full format
+                lines = docstring.split("\n")
+                if len(lines) < 6:
+                    print(f" - Upgrading docstring for {p_file.name}...")
+                    new_doc = _generate_enhanced_docstring(p_file, content, model_name)
+                    if new_doc and "AUTHOR:" in new_doc:
+                        # Replace the old docstring with the newer one
+                        # We use escaped markers to avoid matching wrong blocks if multiple exist
+                        target_text = f'"""{match.group(1)}"""'
+                        replacement_text = f'"""\n{new_doc.strip()}\n"""'
+                        new_content = content.replace(target_text, replacement_text, 1)
+                        p_file.write_text(new_content, encoding="utf-8")
+                        upgraded_count += 1
+                    else:
+                        logging.debug(f"Skipping empty or malformed docstring generation for {p_file.name}")
+        except Exception as e:
+            logging.debug(f"Failed to process docstring for {p_file.name}: {e}")
+
+    if upgraded_count > 0:
+        print(f"[Docstring Upgrader] Success: Upgraded {upgraded_count} files with full-page descriptions.")
+
+
+def _generate_enhanced_docstring(file_path: Path, content: str, model_name: str) -> str | None:
+    """Uses Copilot CLI to generate a full-page description for a module."""
+    from src.infrastructure.compute.backend import execution_engine as ai
+
+    prompt = (
+        f"Generate a full-page module description for the Python file: {file_path.name}\n"
+        "Follow the Keimpe de Jong format strictly:\n\n"
+        "[Module Title] - [Core Function]\n\n"
+        "[Brief Summary]\n"
+        f"DATE: {datetime.datetime.now().strftime('%Y-%m-%d')}\n"
+        "AUTHOR: Keimpe de Jong\n"
+        "USAGE:\n"
+        "[usage]\n\n"
+        "WHAT IT DOES:\n"
+        "[what it does]\n\n"
+        "WHAT IT SHOULD DO BETTER:\n"
+        "[what it should do better]\n\n"
+        "FILE CONTENT SUMMARY:\n"
+        f"{content[:5000]}"
+    )
+
+    try:
+        # Force use of copilot_cli for docstring generation
+        solution = ai.llm_chat_via_copilot_cli(prompt, model=model_name)
+        if solution:
+            # Strip any markdown triple backticks if the model wraps the output
+            solution = re.sub(r'^```python\n|```$', '', solution.strip(), flags=re.MULTILINE)
+            solution = re.sub(r'^```\n|```$', '', solution.strip(), flags=re.MULTILINE)
+            return solution
+    except Exception as e:
+        logging.debug(f"Docstring generation failed via CLI: {e}")
+    return None
 
 
 def _report_remaining_debt(

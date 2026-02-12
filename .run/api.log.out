@@ -1,0 +1,184 @@
+2026-02-12 10:11:14,509 | WARNING | PyAgent.src.infrastructure.swarm.voyager.transport_layer | [src.infrastructure.swarm.voyager.transport_layer] Voyager: Encryption disabled (no key provided).
+2026-02-12 10:11:14,534 | INFO | root | Registry: Discovered 162 orchestrators.
+2026-02-12 10:11:14,585 | INFO | root | Registry: Discovered 501 agents dynamically.
+2026-02-12 10:11:14,734 | INFO | src.infrastructure.swarm.network.network_utils | get_local_network_ip: Selected 192.168.88.253 from ethernet ethernet 2 for LAN discovery
+2026-02-12 10:11:14,743 | INFO | src.infrastructure.swarm.network.lan_discovery | LANDiscovery: Listening on port 31415
+2026-02-12 10:11:14,744 | INFO | src.infrastructure.swarm.network.lan_discovery | LANDiscovery: Started on port 31415 (broadcast: True)
+2026-02-12 10:11:14,745 | INFO | PyAgent.src.infrastructure.swarm.fleet.mixins.fleet_discovery_mixin | [src.infrastructure.swarm.fleet.mixins.fleet_discovery_mixin] FleetDiscovery: Initialized discovery for fleet-PyAgent
+2026-02-12 10:11:14,748 | INFO | PyAgent.src.infrastructure.swarm.fleet.mixins.fleet_update_mixin | [src.infrastructure.swarm.fleet.mixins.fleet_update_mixin] FleetUpdateMixin: Auto-update service started with 900s interval.
+2026-02-12 10:11:14,777 | INFO | root | Discovery: Advertising local fleet node 'pyagent-AX18' at 10.2.0.2:8000
+2026-02-12 10:11:14,861 | INFO | PyAgent.src.infrastructure.swarm.voyager.transport_layer | [src.infrastructure.swarm.voyager.transport_layer] Voyager: Transport Layer stopped.
+2026-02-12 10:11:14,862 | ERROR | asyncio | Task exception was never retrieved
+future: <Task finished name='Task-2' coro=<VoyagerTransport.start_server() done, defined at C:\DEV\PyAgent\src\infrastructure\swarm\voyager\transport_layer.py:93> exception=ZMQError('Address in use (addr='tcp://0.0.0.0:5555')')>
+Traceback (most recent call last):
+  File "C:\DEV\PyAgent\src\infrastructure\swarm\voyager\transport_layer.py", line 98, in start_server
+    self.router.bind(f"tcp://{self.host}:{self.port}")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\DEV\PyAgent\.venv\Lib\site-packages\zmq\sugar\socket.py", line 320, in bind
+    super().bind(addr)
+    ~~~~~~~~~~~~^^^^^^
+  File "zmq/backend/cython/_zmq.py", line 1009, in zmq.backend.cython._zmq.Socket.bind
+    _check_rc(rc)
+    
+  File "zmq/backend/cython/_zmq.py", line 190, in zmq.backend.cython._zmq._check_rc
+    raise ZMQError(errno)
+    
+zmq.error.ZMQError: Address in use (addr='tcp://0.0.0.0:5555')
+2026-02-12 10:11:14,875 | INFO | PyAgent.src.infrastructure.swarm.voyager.discovery_node | [src.infrastructure.swarm.voyager.discovery_node] Voyager: Advertising node Fleet-PyAgent at 10.2.0.2:8000
+2026-02-12 10:11:14,877 | INFO | PyAgent.src.infrastructure.swarm.voyager.discovery_node | [src.infrastructure.swarm.voyager.discovery_node] Voyager: Starting peer discovery browser...
+2026-02-12 10:11:14,879 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Starting with thresholds H:70.0% C:90.0%
+2026-02-12 10:11:15,050 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: CRITICAL LOAD DETECTED. Stats: {'cpu_percent': 92.6, 'memory_percent': 79.2, 'disk_percent': 61.5, 'network_io': {'bytes_sent': 170362034, 'bytes_recv': 1433761378, 'packets_sent': 77
+2026-02-12 10:11:15,053 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...
+2026-02-12 10:11:15,055 | WARNING | root | Fleet: No peers available for compute borrowing.
+2026-02-12 10:11:15,055 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: No neighbor available to take load.
+2026-02-12 10:11:15,057 | INFO | src.maintenance.evolution.code_improver | Autonomous Evolution Loop engaged.
+2026-02-12 10:11:15,058 | INFO | src.infrastructure.swarm.fleet.mixins.fleet_backup_mixin | FleetResilience: Starting Shard RAID-10 Audit...
+2026-02-12 10:11:15,095 | INFO | src.infrastructure.swarm.fleet.mixins.fleet_backup_mixin | FleetResilience: Audit complete.
+2026-02-12 10:11:15,096 | INFO | src.maintenance.evolution.code_improver | Evolution: Triggering synaptic pruning cycle...
+2026-02-12 10:11:15,097 | INFO | root | SwarmPruningOrchestrator: Initiating swarm-wide neural pruning cycle.
+2026-02-12 10:11:15,223 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:11:16,532 | INFO | PyAgent.src.infrastructure.swarm.voyager.discovery_node | [src.infrastructure.swarm.voyager.discovery_node] Voyager: Discovered peer Fleet-PyAgent._pyagentv._tcp.local. at ['10.2.0.2']
+2026-02-12 10:11:16,534 | INFO | PyAgent.src.infrastructure.swarm.voyager.discovery_node | [src.infrastructure.swarm.voyager.discovery_node] Voyager: Peer Registry updated (Fleet-PyAgent._pyagentv._tcp.local.). Total: 1
+2026-02-12 10:11:16,536 | INFO | PyAgent.src.infrastructure.swarm.fleet.fleet_manager | [src.infrastructure.swarm.fleet.fleet_manager] Voyager: Initiating Double Ratchet session with 85614cf4...
+2026-02-12 10:11:16,551 | ERROR | asyncio | Task exception was never retrieved
+future: <Task finished name='Task-19' coro=<FleetManager._on_voyager_peer_added() done, defined at C:\DEV\PyAgent\src\infrastructure\swarm\fleet\fleet_manager.py:333> exception=ZMQError('Not supported')>
+Traceback (most recent call last):
+  File "C:\DEV\PyAgent\src\infrastructure\swarm\fleet\fleet_manager.py", line 345, in _on_voyager_peer_added
+    response = await self.voyager_transport.send_to_peer(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "C:\DEV\PyAgent\src\infrastructure\swarm\voyager\transport_layer.py", line 157, in send_to_peer
+    dealer: zmq.asyncio.Socket = self.ctx.socket(zmq.DEALER)
+                                 ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\DEV\PyAgent\.venv\Lib\site-packages\zmq\sugar\context.py", line 348, in socket
+    raise ZMQError(Errno.ENOTSUP)
+zmq.error.ZMQError: Not supported
+2026-02-12 10:11:16,557 | INFO | PyAgent.src.infrastructure.swarm.voyager.discovery_node | [src.infrastructure.swarm.voyager.discovery_node] Voyager: Peer Registry updated (Fleet-PyAgent._pyagentv._tcp.local.). Total: 1
+2026-02-12 10:11:25,419 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:11:35,481 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:11:44,760 | INFO | PyAgent.src.infrastructure.swarm.fleet.mixins.fleet_update_mixin | [src.infrastructure.swarm.fleet.mixins.fleet_update_mixin] FleetUpdateMixin: Checking for updates from https://github.com/UndiFineD/PyAgent...
+2026-02-12 10:11:45,842 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:11:48,436 | INFO | PyAgent.src.infrastructure.swarm.fleet.mixins.fleet_update_mixin | [src.infrastructure.swarm.fleet.mixins.fleet_update_mixin] FleetUpdateMixin: System is already up to date.
+2026-02-12 10:11:56,028 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:12:06,086 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:12:16,144 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:12:25,079 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...
+2026-02-12 10:12:25,081 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: No neighbor available to take load.
+2026-02-12 10:12:26,204 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:12:36,325 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:12:46,369 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:12:56,426 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:13:06,476 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:13:16,562 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:13:26,607 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:13:35,109 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...
+2026-02-12 10:13:35,111 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: No neighbor available to take load.
+2026-02-12 10:13:36,650 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:13:46,709 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:13:56,783 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:14:06,852 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:14:16,905 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:14:26,980 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:14:37,025 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:14:45,140 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...
+2026-02-12 10:14:45,142 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: No neighbor available to take load.
+2026-02-12 10:14:47,079 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:14:57,134 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:15:07,188 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:15:17,240 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:15:27,303 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:15:37,352 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:15:47,401 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:15:55,174 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...
+2026-02-12 10:15:55,176 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: No neighbor available to take load.
+2026-02-12 10:15:57,453 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:16:07,500 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:16:17,558 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:16:27,607 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:16:37,663 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:16:47,706 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:16:57,766 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:17:05,223 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...
+2026-02-12 10:17:05,225 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: No neighbor available to take load.
+2026-02-12 10:17:07,807 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:17:17,861 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:17:27,914 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:17:37,970 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:17:48,042 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:17:58,083 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:18:08,159 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:18:15,266 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...
+2026-02-12 10:18:15,268 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: No neighbor available to take load.
+2026-02-12 10:18:18,220 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:18:28,312 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:18:38,379 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:18:48,434 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:18:58,484 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:19:08,532 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:19:18,584 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:19:25,305 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...
+2026-02-12 10:19:25,307 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: No neighbor available to take load.
+2026-02-12 10:19:28,636 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:19:38,681 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:19:48,738 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:19:58,788 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:20:08,835 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:20:18,888 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:20:28,962 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:20:35,330 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...
+2026-02-12 10:20:35,332 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: No neighbor available to take load.
+2026-02-12 10:20:39,004 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:20:49,048 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:20:59,101 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:21:09,144 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:21:19,187 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:21:29,239 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:21:39,310 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:21:45,378 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...
+2026-02-12 10:21:45,380 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: No neighbor available to take load.
+2026-02-12 10:21:49,358 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:21:59,402 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:22:09,473 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:22:19,521 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:22:29,572 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:22:39,615 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:22:49,675 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:22:55,418 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...
+2026-02-12 10:22:55,420 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: No neighbor available to take load.
+2026-02-12 10:22:59,723 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:23:09,769 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:23:19,817 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:23:29,874 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:23:39,932 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:23:50,011 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:24:00,129 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:24:05,451 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...
+2026-02-12 10:24:05,453 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: No neighbor available to take load.
+2026-02-12 10:24:10,270 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:24:20,355 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:24:30,414 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:24:40,478 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:24:50,531 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:25:00,592 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:25:10,630 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:25:15,494 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...
+2026-02-12 10:25:15,496 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: No neighbor available to take load.
+2026-02-12 10:25:20,681 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:25:30,786 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:25:40,857 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:25:50,922 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:26:01,046 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:26:11,096 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:26:21,150 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:26:25,528 | INFO | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: Threshold exceeded (>70%). Requesting compute borrow from swarm...
+2026-02-12 10:26:25,530 | WARNING | PyAgent.src.infrastructure.swarm.fleet.resource_monitor | [src.infrastructure.swarm.fleet.resource_monitor] ResourceMonitor: No neighbor available to take load.
+2026-02-12 10:26:31,204 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:26:41,279 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:26:50,263 | INFO | PyAgent.src.infrastructure.swarm.fleet.mixins.fleet_update_mixin | [src.infrastructure.swarm.fleet.mixins.fleet_update_mixin] FleetUpdateMixin: Checking for updates from https://github.com/UndiFineD/PyAgent...
+2026-02-12 10:26:51,101 | INFO | PyAgent.src.infrastructure.swarm.fleet.mixins.fleet_update_mixin | [src.infrastructure.swarm.fleet.mixins.fleet_update_mixin] FleetUpdateMixin: System is already up to date.
+2026-02-12 10:26:51,334 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:27:01,392 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:27:11,458 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json
+2026-02-12 10:27:21,507 | INFO | root | Topology exported to C:\DEV\PyAgent\data\logs\topology.json

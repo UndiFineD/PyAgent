@@ -1,0 +1,8 @@
+INFO:     Started server process [19528]
+INFO:     Waiting for application startup.
+C:\DEV\PyAgent\.venv\Lib\site-packages\zmq\_future.py:718: RuntimeWarning: Proactor event loop does not implement add_reader family of methods required for zmq. Registering an additional selector thread for add_reader support via tornado. Use `asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())` to avoid this warning.
+  self._get_loop()
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:58889 - "WebSocket /ws/telemetry" [accepted]
+INFO:     connection open
