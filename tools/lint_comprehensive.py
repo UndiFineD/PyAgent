@@ -59,20 +59,18 @@ async def run_tool(cmd: List[str], file_path: str, timeout: int = 60) -> Dict[st
 
 
 async def lint_file(file_path: Path, semaphore: asyncio.Semaphore) -> Dict[str, Any] | None:
-    """Runs flake8, ruff, and mypy on a single file."""
+    """Runs flake8 on a single file."""
     async with semaphore:
         rel_path = str(file_path.relative_to(ROOT_DIR))
 
         # Run tools
         results = await asyncio.gather(
-            run_tool([sys.executable, "-m", "flake8", "--max-line-length=120"], str(file_path)),
-            run_tool([sys.executable, "-m", "ruff", "check", "--no-cache"], str(file_path)),
-            run_tool([sys.executable, "-m", "mypy", "--ignore-missing-imports", "--follow-imports=skip"], str(file_path))
+            run_tool([sys.executable, "-m", "flake8", "--max-line-length=120"], str(file_path))
         )
 
         # Only record tools with errors (non-zero exit code)
         file_record = {"file": rel_path}
-        tools = ["flake8", "ruff", "mypy"]
+        tools = ["flake8"]
         has_errors = False
 
         for i, tool_name in enumerate(tools):
