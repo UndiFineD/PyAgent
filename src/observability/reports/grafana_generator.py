@@ -13,7 +13,107 @@
 # limitations under the License.
 
 """
+Grafana generator.py - Generate Grafana JSON dashboards for PyAgent swarm observability
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+from src.tools.grafana_generator import GrafanaDashboardGenerator
+gen = GrafanaDashboardGenerator(output_dir="deploy/grafana/dashboards")
+gen.generate_fleet_summary()        # writes deploy/grafana/dashboards/fleet_summary.json
+gen.generate_shard_obs("shard-01")  # writes deploy/grafana/dashboards/shard_shard-01.json
+
+WHAT IT DOES:
+Creates simple, opinionated Grafana dashboard JSON files for PyAgent: a fleet summary dashboard and per-shard observability dashboards. Outputs to a configurable directory, ensures the directory exists, and writes prettified JSON files with fixed Prometheus expressions and panel types.
+
+WHAT IT SHOULD DO BETTER:
+- Parameterize metrics and panel configuration (templating, not hard-coded Prometheus expressions).
+- Validate and sanitize shard names to avoid invalid uids/file names and injection in expressions.
+- Add schema validation (Grafana/JSON schema), richer panel types, configurable UID generation, and unit tests for file I/O and generated content. Consider using Jinja2 templates, Prometheus query builder helpers, and runtime checks to avoid overwriting existing dashboards unintentionally.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
 Grafana generator.py module.
+"""
+
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class GrafanaDashboardGenerator:
+    """
+    Generates Grafana JSON dashboard configurations for PyAgent swarm observability.
+    Supports monitoring fleet metrics, agent health, and shard performance.
+    """
+
+    def __init__(self, output_dir: str = "deploy/grafana/dashboards") -> None:
+        self.output_dir = Path(output_dir)
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+
+    def generate_fleet_summary(self) -> str:
+        """Generates a summary dashboard for the entire fleet."""
+        dashboard = {
+            "title": "PyAgent Fleet Summary",
+            "panels": [
+                {
+                    "title": "Agent Count",
+                    "type": "stat",
+                    "targets": [{"expr": "count(agent_up)"}],
+                },
+                {
+                    "title": "Fleet Latency",
+                    "type": "timeseries",
+                    "targets": [{"expr": "rate(fleet_request_duration_seconds_sum[5m])"}],
+                },
+            ],
+            "schemaVersion": 36,
+            "uid": "pyagent-fleet-summary",
+        }
+
+        output_path = self.output_dir / "fleet_summary.json"
+        output_path.write_text(json.dumps(dashboard, indent=2))
+        return str(output_path)
+
+    def generate_shard_obs(self, shard_name: str) -> str:
+        """Generates a dashboard for a specific swarm shard."""
+        dashboard = {
+            "title": f"PyAgent Shard: {shard_name}",
+            "panels": [
+                {
+                    "title": "Shard Load",
+                    "type": "gauge",
+                    "targets": [{"expr": f"shard_load{{shard='{shard_name}'}} "}],
+                }
+            ],
+            "schemaVersion": 36,
+            "uid": f"shard-{shard_name}",
+        }
+
+        output_path = self.output_dir / f"shard_{shard_name}.json"
+        output_path.write_text(json.dumps(dashboard, indent=2))
+        return str(output_path)
 """
 
 

@@ -13,7 +13,167 @@
 # limitations under the License.
 
 
+"""
+Report Generator - Generate quality reports for agent source files
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate: rg = ReportGenerator(agent_dir="path/to/agents", output_dir="path/to/output", recorder=recorder)
+- Quick run: rg.process_all_files() → returns dict with counts
+- Full project report: html = rg.generate_full_report() (returns dashboard string)
+- Export deduplicated items: rg.export_jsonl_report(items, filename="audit_log.jsonl")
+
+WHAT IT DOES:
+- Scans a directory for agent .py files, parses and processes each file to produce quality reports, audit items and a project dashboard.
+- Deduplicates and exports findings to JSONL via DeduplicationCore and logs actions with StructuredLogger.
+- Records activity to an optional recorder and provides summary counts (processed, skipped, errors).
+
+WHAT IT SHOULD DO BETTER:
+- Improve robustness: add explicit AST-based validations, clearer exception granularity, and retry/backoff for transient IO errors.
+- Performance: support parallel file processing, incremental updates, and content-hash caching to avoid unnecessary reprocessing.
+- Reporting: include richer metadata (file version, author, module-level docstring extraction), machine-readable outputs (JSON schema), and configurable export options.
+- Observability: unify logging levels, surface metrics (time per file), and add unit/integration tests for edge cases.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 """Report generation logic for agent source files."""
+
+from __future__ import annotations
+
+from argparse import Namespace
+import ast
+import hashlib
+import logging
+import os
+import re
+
+import sys
+import time
+from collections.abc import Iterable
+from pathlib import Path
+from typing import Any, cast
+
+from src.core.base.lifecycle.version import VERSION
+from src.observability.structured_logger import StructuredLogger
+
+from .compile_result import CompileResult
+from .core.deduplication_core import DeduplicationCore
+
+__version__: str = VERSION
+
+
+class ReportGenerator:
+    """Generates quality reports (description, errors, improvements) for agent files."""
+
+    def __init__(
+        self,
+        agent_dir: Path | str | None = None,
+        output_dir: Path | str | None = None,
+        recorder: Any = None,
+    ) -> None:
+        """Initialize with directory containing agent scripts.
+
+        Args:
+            agent_dir: Directory containing agent scripts.
+            output_dir: Directory where reports should be written.
+            recorder: Optional LocalContextRecorder.
+        """
+        self.recorder = recorder
+        if agent_dir:
+            self.agent_dir = Path(agent_dir)
+        else:
+            self.agent_dir = Path(__file__).resolve().parent.parent.parent
+
+        if output_dir:
+            self.output_dir = Path(output_dir)
+        else:
+            self.output_dir = self.agent_dir
+
+        os.makedirs(self.output_dir, exist_ok=True)
+        self.logger = StructuredLogger(agent_id="ReportGenerator")
+
+    def _record(self, action: str, result: str) -> None:
+        """Record report generation activities."""
+        if self.recorder:
+            self.recorder.record_interaction("Reporting", "ReportGenerator", action, result)
+
+    def process_all_files(self) -> dict[str, Any]:
+        """Process all .py files in agent_dir and generate reports."""
+        py_files: list[Path] = list(self.iter_agent_py_files())
+        if not py_files:
+            logging.error(f"No .py files found under {self.agent_dir}")
+            return {"count": 0, "skipped": 0, "errors": 0}
+        return self._process_files_and_count(py_files)
+
+    def _process_files_and_count(self, py_files: list[Path]) -> dict[str, Any]:
+        count = 0
+        skipped = 0
+        errors_count = 0
+        for py_path in py_files:
+            result = self._process_single_file(py_path)
+            if result == "processed":
+                count += 1
+            elif result == "skipped":
+                skipped += 1
+            elif result == "error":
+                errors_count += 1
+        logging.info(f"Processed {count} files, skipped {skipped} unchanged, {errors_count} errors.")
+        return {"count": count, "skipped": skipped, "errors": errors_count}
+
+    def _process_single_file(self, py_path: Path) -> str:
+        """Helper to process a single file with error handling. Returns 'processed', 'skipped', or 'error'."""
+        try:
+            if self.process_file(py_path):
+                return "processed"
+            else:
+                return "skipped"
+        except (IOError, OSError, RuntimeError) as e:
+            logging.error(f"Error processing {py_path.name}: {e}")
+            return "error"
+
+    def export_jsonl_report(self, items: list[dict[str, Any]], filename: str = "audit_log.jsonl") -> bool:
+        """Exports report items to JSONL format (Phase 183)."""
+        output_path: Path = self.output_dir / filename
+        # Deduplicate before export
+        unique_items: list[dict[str, Any]] = DeduplicationCore.deduplicate_items(items)
+        DeduplicationCore.export_to_jsonl(unique_items, str(output_path))
+        self.logger.info(
+            "Exported deduplicated items",
+            count=len(unique_items),
+            path=str(output_path),
+        )
+        return True
+
+    def generate_full_report(self) -> str:
+        """Generate a comprehensive project report including the dashboard grid."""
+        processed: dict[str, Any] = self.process_all_files()
+
+        lines: list[str] = [
+            "# 🚀 PyAgent Active Progress Dashboard",
+            f"*Last Updated: {time.strftime('%Y-%m-%d %H:%M:%S')}*",
+            "",
+            self.render_3x3_grid(),
+            "",
+            "## 📈 Processing Summary",
+            f"- Files Processed: {processed.get('count', 0)}",
+            f"- Files Skipped: {processed.get('skipped', 0)
+"""
 
 from __future__ import annotations
 

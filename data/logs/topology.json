@@ -4,10 +4,10 @@
       "id": "localhost",
       "group": "gateway",
       "meta": {
-        "cpu": 78.0,
-        "mem": 88.0
+        "cpu": 100.0,
+        "mem": 73.3
       },
-      "val": 31035346257.706055
+      "val": 32181085325.135742
     },
     {
       "id": "memo_rag_agent",
@@ -6204,5 +6204,5 @@
       "type": "voyager_p2p"
     }
   ],
-  "timestamp": "2026-02-12T22:34:35.945458"
+  "timestamp": "2026-02-12T22:48:44.183480"
 }
