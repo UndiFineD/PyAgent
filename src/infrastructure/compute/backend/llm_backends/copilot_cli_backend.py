@@ -57,7 +57,11 @@ class CopilotCliBackend(LLMBackend):
 
             # Phase 336: Use stand-alone 'copilot' CLI instead of deprecated 'gh extension'
             # We use -s (silent) and -p (prompt) for non-interactive mode.
+            # Phase 431: Pass the model argument to the CLI if specified.
             cmd = ["copilot", "-s", "-p", safe_prompt]
+            if model and model != "gh-extension" and model != "copilot":
+                cmd.extend(["--model", model])
+
             process = subprocess.run(
                 cmd,
                 capture_output=True,

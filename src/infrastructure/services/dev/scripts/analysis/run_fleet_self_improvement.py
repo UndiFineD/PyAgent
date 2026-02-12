@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
 import logging
 import os
@@ -33,10 +34,15 @@ if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
 # Phase 335: Support for custom Copilot CLI paths
-COPILOT_PATH = r"C:\DEV\copilot-cli"
+COPILOT_PATH = r"copilot"
 if os.path.exists(COPILOT_PATH) and COPILOT_PATH not in os.environ["PATH"]:
     os.environ["PATH"] = COPILOT_PATH + os.pathsep + os.environ["PATH"]
     logging.info(f"Augmented PATH with {COPILOT_PATH}")
+
+# Force local Copilot CLI only (Phase 430)
+os.environ["DV_DISABLED_BACKENDS"] = "lmstudio,vllm_native,vllm,ollama,github_models"
+os.environ["DV_AGENT_LOCAL_ONLY"] = "true"
+os.environ["DV_PREFERRED_BACKEND"] = "copilot_cli"
 
 
 # Import the Rust extension for fleet self-improvement (registers PyO3 functions)
@@ -126,7 +132,7 @@ class IntelligenceHarvester:
 
 
     def harvest(self) -> list[dict[str, Any]]:
-        """Harvests insights from multiple external backends, with prompt optimization."""
+        """Harvests insights from local Copilot CLI ONLY (Phase 430)."""
         from src.infrastructure.compute.backend import execution_engine as ai
 
         prompt = "Provide 3 high-level architectural or security recommendations for a Python-based AI Agent fleet."
@@ -134,40 +140,19 @@ class IntelligenceHarvester:
 
         # --- Prompt Optimizer Integration ---
         optimizer = PromptOptimizerAgent()
-        # Prefer LMStudio as the primary local backend (configured via .env DV_LMSTUDIO_MODEL)
-        ai.llm_chat_via_lmstudio = optimizer.wrap_agent_prompt(
-            ai.llm_chat_via_lmstudio, agent_name="LMStudio"
-        )
-        ai.llm_chat_via_github_models = optimizer.wrap_agent_prompt(
-            ai.llm_chat_via_github_models, agent_name="GitHubModels"
-        )
+        
+        # Only use Copilot CLI for intelligence harvesting per user request
         ai.llm_chat_via_copilot_cli = optimizer.wrap_agent_prompt(
             ai.llm_chat_via_copilot_cli, agent_name="CopilotCLI"
         )
 
-        # 1. LMStudio (Local External)
+        # 1. Copilot CLI (Local Intel)
         try:
-            lmstudio_res = ai.llm_chat_via_lmstudio(prompt, model=os.environ.get("DV_LMSTUDIO_MODEL", ""))
-            if lmstudio_res:
-                lessons.append({"provider": "LMStudio", "text": lmstudio_res})
-        except Exception:
-            logging.debug("LMStudio harvesting failed.")
-
-        # 2. GitHub Models (Global External)
-        try:
-            gemini_res = ai.llm_chat_via_github_models(prompt, model=self.model_name)
-            if gemini_res:
-                lessons.append({"provider": "GitHubModels", "text": gemini_res})
-        except Exception:
-            logging.debug("GitHubModels harvesting failed.")
-
-        # 3. Copilot CLI (System Intel)
-        try:
-            copilot_res = ai.llm_chat_via_copilot_cli(prompt)
+            copilot_res = ai.llm_chat_via_copilot_cli(prompt, model=self.model_name)
             if copilot_res:
                 lessons.append({"provider": "CopilotCLI", "text": copilot_res})
-        except Exception:
-            logging.debug("CopilotCLI harvesting failed.")
+        except Exception as e:
+            logging.debug(f"CopilotCLI harvesting failed: {e}")
 
         # Feed to fleet
         if lessons:
@@ -290,7 +275,7 @@ def run_cycle(
     prompt_path: str | None = None,
     context_path: str | None = None,
     current_cycle: int = 1,
-    model_name: str = "gemini-3-flash",
+    model_name: str = "gpt-5-mini",
     allow_triton_check: bool = True,
 ) -> dict[str, Any]:
     """Run a single improvement cycle and return a dict with per-cycle messages and stats.
@@ -464,6 +449,42 @@ def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[s
 
     print("\n[Autonomous Solver] Attempting to resolve remaining technical debt...")
 
+    # Create a separate implementation JSON for this cycle (Phase 431)
+    timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    temp_dir = os.path.join(os.getcwd(), "temp")
+    os.makedirs(temp_dir, exist_ok=True)
+    impl_filename = os.path.join(temp_dir, f"implement_{timestamp}.json")
+
+    spec = {
+        "task_id": f"debt_resolution_{timestamp}",
+        "title": "Autonomous Technical Debt Resolution",
+        "priority": "medium",
+        "delegator": "SelfImprovementOrchestrator",
+        "target_agent": "CoderAgent",
+        "timestamp": timestamp,
+        "status": "pending",
+        "requirements": {
+            "patterns": [
+                {
+                    "file": item["file"],
+                    "description": f"Resolve the following issues: {', '.join([str(i.get('message')) for i in item['remaining_issues']])}"
+                } for item in broken_items
+            ]
+        },
+        "constraints": [
+            "Follow PyAgent coding standards",
+            "Minimal changes",
+            "Use Copilot CLI for implementation"
+        ]
+    }
+
+    try:
+        with open(impl_filename, "w", encoding="utf-8") as f:
+            json.dump(spec, f, indent=4)
+        print(f" - Created implementation specification: {impl_filename}")
+    except Exception as e:
+        print(f" - Failed to save implementation spec: {e}")
+
     # Construct the context prompt
     context_prompt = "The following technical debt issues remain after the initial improvement cycle:\n\n"
     for item in broken_items:
@@ -478,16 +499,13 @@ def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[s
         "Focus on the root cause (e.g., missing type hints, unsafe IO pattern, recursion depth)."
     )
 
-    # Attempt to solve via Fleet Intelligence (Support LM Studio/GitHub fallback)
+    # Attempt to solve via Fleet Intelligence (Phase 430: Local Copilot CLI Only)
     try:
         from src.infrastructure.compute.backend import execution_engine as ai
 
-        print(" - Querying external intelligence for solution patterns...")
-        # Phase 317: Use smart fallback logic to ensure choice of local heavy models
-        if os.environ.get("DV_LMSTUDIO_BASE_URL") or os.environ.get("DV_OLLAMA_MODEL"):
-            solution = ai.llm_chat_via_lmstudio(context_prompt, model=model_name)
-        else:
-            solution = ai.llm_chat_via_github_models(context_prompt, model=model_name)
+        print(f" - Querying local Copilot CLI ({model_name}) for solution patterns...")
+        # Force use of copilot_cli for architectural analysis
+        solution = ai.llm_chat_via_copilot_cli(context_prompt, model=model_name)
 
         if solution:
             print("\n[Autonomous Solver] Proposed Solution:")
@@ -656,7 +674,7 @@ def main() -> None:
     parser.add_argument("--watch", "-w", action="store_true")
     parser.add_argument("--prompt", "-p", type=str)
     parser.add_argument("--context", "-t", type=str)
-    parser.add_argument("--model", "-m", type=str, default="gemini-3-flash")
+    parser.add_argument("--model", "-m", type=str, default="gpt-5-mini")
     parser.add_argument("--dry-run", action="store_true")
     args: argparse.Namespace = parser.parse_args()
 

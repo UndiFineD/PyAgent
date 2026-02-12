@@ -4,10 +4,10 @@
       "id": "localhost",
       "group": "gateway",
       "meta": {
-        "cpu": 99.9,
-        "mem": 84.0
+        "cpu": 99.1,
+        "mem": 86.0
       },
-      "val": 1759066245.671875
+      "val": 2291327023.3115234
     },
     {
       "id": "localization_core",
@@ -6204,5 +6204,5 @@
       "type": "voyager_p2p"
     }
   ],
-  "timestamp": "2026-02-12T01:10:43.655289"
+  "timestamp": "2026-02-12T01:35:24.328108"
 }
