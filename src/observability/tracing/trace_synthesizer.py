@@ -27,6 +27,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 class TraceSynthesizer:
     """
     Consolidates local and remote reasoning traces into a synthesis report.
@@ -53,11 +54,11 @@ class TraceSynthesizer:
                     if not line.strip():
                         continue
                     entry = json.loads(line)
-                    
+
                     context = entry.get("context", {})
                     task_id = context.get("task_id", "unknown")
                     parent_id = context.get("parent_id")
-                    
+
                     # Create node
                     if task_id not in nodes:
                         nodes[task_id] = {
@@ -66,7 +67,7 @@ class TraceSynthesizer:
                             "status": entry.get("status"),
                             "timestamp": entry.get("timestamp")
                         }
-                    
+
                     # Create link to parent
                     if parent_id and parent_id != "root":
                         links.append({
@@ -74,7 +75,7 @@ class TraceSynthesizer:
                             "target": task_id,
                             "type": "delegation"
                         })
-            
+
             return {
                 "nodes": list(nodes.values()),
                 "links": links
@@ -90,8 +91,9 @@ class TraceSynthesizer:
             "status": status,
             "context": context.to_dict() if hasattr(context, "to_dict") else context,
             "metadata": metadata or {},
-            "timestamp": logger.timestamp if hasattr(logger, "timestamp") else None # Usually handled by structured logger
+            "timestamp": logger.timestamp if hasattr(logger, "timestamp") else None
+            # Usually handled by structured logger
         }
-        
+
         # In practice, this delegatesto the FleetInteractionRecorder or StructuredLogger
         pass

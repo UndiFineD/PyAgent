@@ -356,4 +356,3 @@ if __name__ == "__main__":
         print_analysis_report(analysis['all_files'][:10], "Top 10 Files by Complexity")
     else:
         print_analysis_report(results, "Loop Analysis Summary")
-

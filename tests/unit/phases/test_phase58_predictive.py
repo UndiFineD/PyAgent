@@ -21,6 +21,7 @@ import pytest
 from src.infrastructure.engine.workspace.workspace_manager import WorkspaceManager
 from src.infrastructure.engine.workspace.predictive_workspace import PredictiveWorkspace
 
+
 def test_predictive_pattern_analysis():
     # Initialize workspace
     wm = WorkspaceManager(size_mb=100)
@@ -38,6 +39,7 @@ def test_predictive_pattern_analysis():
     patterns = pw.analyze_patterns()
     # Top pattern should be 1024 (frequency 3)
     assert patterns["top_patterns"][0][0] == 1024
+
 
 @pytest.mark.asyncio
 async def test_pre_warm_and_reuse():
@@ -58,6 +60,7 @@ async def test_pre_warm_and_reuse():
     assert buf is not None
     assert wm.predictive.cache_hits == 1
     assert len(wm.predictive.pre_allocated_buffers[size]) == 0
+
 
 @pytest.mark.asyncio
 async def test_moving_average_prediction():

@@ -19,14 +19,13 @@
 
 """Test profiling trigger logic."""
 
+from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import SelfImprovementAnalysis
+from src.infrastructure.swarm.orchestration.intel.mixins.profiling_analysis_mixin import ProfilingAnalysisMixin
 import os
 import sys
 
 # Add src to path
 sys.path.insert(0, os.getcwd())
-
-from src.infrastructure.swarm.orchestration.intel.mixins.profiling_analysis_mixin import ProfilingAnalysisMixin
-from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import SelfImprovementAnalysis
 
 
 class MockAnalysis(SelfImprovementAnalysis, ProfilingAnalysisMixin):

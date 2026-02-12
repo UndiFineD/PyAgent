@@ -145,6 +145,7 @@ class TestWeightLoader:
         class MockTensor:
             def __init__(self, ptr):
                 self._ptr = ptr
+
             def data_ptr(self):
                 return self._ptr
 

@@ -25,17 +25,19 @@ from src.infrastructure.swarm.orchestration.swarm.cross_model_moe_orchestrator i
 from src.infrastructure.engine.models.similarity import EmbeddingSimilarityService
 from src.core.base.common.models.communication_models import ExpertProfile
 
+
 @pytest.mark.asyncio
 async def test_weighted_plurality_fusion():
     fusion = WeightedExpertFusion()
 
     outputs = ["Answer A", "Answer B", "Answer A"]
-    weights = [0.4, 0.5, 0.3] # Answer A total = 0.7, Answer B total = 0.5
+    weights = [0.4, 0.5, 0.3]  # Answer A total = 0.7, Answer B total = 0.5
     expert_ids = ["e1", "e2", "e3"]
 
     result = await fusion.fuse_outputs(outputs, weights, expert_ids, mode="weighted_plurality")
     assert result.merged_content == "Answer A"
     assert result.consensus_score > 0.5
+
 
 @pytest.mark.asyncio
 async def test_moe_orchestrator_mixture_mode():

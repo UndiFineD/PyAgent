@@ -41,6 +41,8 @@ from src.infrastructure.engine.pooling.pooling_engine import (
 )
 
 # Helper to create a default PoolingConfig
+
+
 def default_config(strategy=PoolingStrategy.MEAN, normalize=True, truncate_dim=None):
     return PoolingConfig(strategy=strategy, normalize=normalize, truncate_dim=truncate_dim)
 

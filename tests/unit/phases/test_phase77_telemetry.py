@@ -21,6 +21,7 @@ from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManag
 from src.infrastructure.swarm.orchestration.swarm.topology_manager import TopologyManager
 from src.core.base.common.models.communication_models import ExpertProfile
 
+
 @pytest.mark.asyncio
 async def test_telemetry_aggregation():
     """Verifies that the telemetry service correctly aggregates data from all layers."""

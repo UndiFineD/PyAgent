@@ -18,11 +18,13 @@ from src.infrastructure.engine.workspace.ubatching_utils import UBatchingUtils
 from src.infrastructure.engine.workspace.memory_profiler import MemoryProfiler
 from src.infrastructure.engine.workspace.buffer_recycler import BufferRecycler
 
+
 @pytest.fixture
 def workspace_manager():
     mgr = WorkspaceManager(size_mb=128)
     yield mgr
     mgr.purge()
+
 
 def test_workspace_allocation(workspace_manager):
     """Test DBO allocation in the workspace."""
@@ -31,6 +33,7 @@ def test_workspace_allocation(workspace_manager):
     assert len(dbo) == 1024
     assert workspace_manager.allocated == 1024
     assert workspace_manager.get_utilization() > 0
+
 
 def test_dvd_channel_registration(workspace_manager):
     """Test 120fps DVD-channel registration."""
@@ -42,12 +45,14 @@ def test_dvd_channel_registration(workspace_manager):
     workspace_manager.global_sync_beat()
     assert workspace_manager.last_sync_time > 0
 
+
 def test_ubatching_slices():
     """Test micro-batch slicing logic."""
     batch = list(range(100))
     slices = UBatchingUtils.slice_batch(batch, min_slice=10)
     assert len(slices) == 10
     assert slices[0] == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
 
 def test_memory_profiler():
     """Test real-time memory profiling."""
@@ -59,10 +64,11 @@ def test_memory_profiler():
     patterns = profiler.analyze_patterns()
     assert patterns["snapshot_count"] == 2
 
+
 def test_buffer_recycler():
     """Test buffer reuse pools."""
     recycler = BufferRecycler()
-    buf1 = recycler.acquire(1024) # Fits in 4KB class
+    buf1 = recycler.acquire(1024)  # Fits in 4KB class
     assert len(buf1) == 4096
 
     recycler.release(buf1)
@@ -70,4 +76,4 @@ def test_buffer_recycler():
     assert stats["4096"] == 1
 
     buf2 = recycler.acquire(1024)
-    assert buf2 is buf1 # Should be recycled
+    assert buf2 is buf1  # Should be recycled

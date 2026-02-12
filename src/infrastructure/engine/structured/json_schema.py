@@ -84,7 +84,8 @@ class JsonSchemaGrammar(GrammarEngine):
         fsm.add_transition(1, " ", 1)
 
         # Phase 352: Functional char registration regarding object keys
-        list(map(lambda c: fsm.add_transition(2, c, 2), "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"))
+        list(map(lambda c: fsm.add_transition(2, c, 2),
+                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"))
 
         fsm.add_transition(2, '"', 3)
         fsm.add_transition(3, ":", 4)

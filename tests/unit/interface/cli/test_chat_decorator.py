@@ -17,7 +17,6 @@ Tests for chat decorator commands.
 """
 
 
-
 class TestChatDecoratorCommands:
     """Tests for chat formatting commands."""
 

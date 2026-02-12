@@ -13,7 +13,151 @@
 # limitations under the License.
 
 """
+Workspace Maintenance - Consolidated workspace auditing and cleanup
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate WorkspaceMaintenance(workspace_root: str|Path) and call run_standard_cycle() for a default maintenance pass.
+- Use find_large_files(threshold_kb=int) to list large files for archiving or review.
+- Use audit_naming_conventions(), audit_headers(), and other audit methods individually for reporting and CI gating.
+
+WHAT IT DOES:
+- Walks the repository workspace and applies a set of maintenance operations: header/license enforcement, docstring/header checks, import cleanup, pylint fixes, and lightweight syntax repairs.
+- Provides utilities to discover large files and naming/header violations and exposes exclusion of common caches and generated directories.
+- Composes multiple mixins (PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixin, SyntaxFixerMixin) into a single orchestration surface for automated fixes.
+
+WHAT IT SHOULD DO BETTER:
+- Make exclusions and header template configurable via constructor parameters or a config file rather than hard-coded constants.
+- Add asynchronous I/O for faster traversal and parallel file processing on large repositories.
+- Improve unit-test coverage for edge cases (permission errors, symlinks, generated code) and surface a dry-run mode to preview changes before applying them.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
 Workspace maintenance module for auditing and cleanup.
+"""
+
+from __future__ import annotations
+
+import logging
+import os
+import re
+from pathlib import Path
+from typing import List, Tuple
+
+from src.maintenance.mixins.pylint_fixer_mixin import PylintFixerMixin
+from src.maintenance.mixins.import_cleanup_mixin import ImportCleanupMixin
+from src.maintenance.mixins.header_fixer_mixin import HeaderFixerMixin
+from src.maintenance.mixins.syntax_fixer_mixin import SyntaxFixerMixin
+
+
+logger: logging.Logger = logging.getLogger(__name__)
+
+
+class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixin, SyntaxFixerMixin):
+    """Consolidation of file system auditing, naming convention enforcement, and cleanup."""
+
+    DEFAULT_EXCLUSIONS: set[str] = {
+        ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache",
+        ".ruff_cache", ".agent_cache", "target", "node_modules",
+        ".hypothesis", "__pycache__", "reports", "archive"
+    }
+
+    STANDARD_HEADER = """#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+
+    def __init__(self, workspace_root: str | Path = ".") -> None:
+        self.workspace_root: Path = Path(workspace_root).resolve()
+
+    def _is_excluded(self, path: str | Path) -> bool:
+        p = Path(path)
+        parts: tuple[str, ...] = p.parts
+        for part in parts:
+            if part in self.DEFAULT_EXCLUSIONS:
+                return True
+        return False
+
+    def run_standard_cycle(self) -> None:
+        """Executes a standard maintenance cycle."""
+        logger.info("Starting standard maintenance cycle...")
+        self.apply_header_compliance()
+        self.apply_docstring_compliance()
+        self.fix_pylint_violations()
+        self.apply_syntax_fixes()
+        logger.info("Cycle complete.")
+
+    def apply_syntax_fixes(self) -> None:
+        """Applies generic syntax and pattern fixes across the workspace."""
+        for root, _, files in os.walk(self.workspace_root):
+            if self._is_excluded(root):
+                continue
+            for file in files:
+                if file.endswith(".py"):
+                    path: Path = Path(root) / file
+                    self.fix_invalid_for_loop_type_hints(path)
+                    self.check_unmatched_triple_quotes(path)
+
+    def find_large_files(self, threshold_kb: int = 100) -> List[Tuple[int, Path]]:
+        """Identifies files exceeding the specified size threshold."""
+        results = []
+        for root, _, files in os.walk(self.workspace_root):
+            if self._is_excluded(root):
+                continue
+            for name in files:
+                path: Path = Path(root) / name
+                try:
+                    size: int = path.stat().st_size // 1024
+                    if size > threshold_kb:
+                        results.append((size, path.relative_to(self.workspace_root)))
+                except OSError:
+                    continue
+        return sorted(results, key=lambda x: x[0], reverse=True)
+
+    def audit_naming_conventions(self) -> List[str]:
+        """Checks for files or directories not following snake_case naming."""
+        violations = []
+        for root, dirs, files in os.walk(self.workspace_root):
+            if self._is_excluded(root):
+                continue
+            for name in files + dirs:
+                if name.startswith(".") or name.startswith("__") or name in ["README.md", "LICENSE"]:
+                    continue
+                if not re.match(r"^[a-z0-9_]+(\.[a-z0-9_]+)*$", name):
+                    violations.append(str(Path(root) / name))
+        return violations
+
+    def audit_headers(self) -> List[Path]:
+        """Identifies Python files missing the standard license header."""
+        missing = []
+        for root, _, files in os.walk(self.workspace_root):
+            if self._is_excluded(root):
 """
 
 from __future__ import annotations

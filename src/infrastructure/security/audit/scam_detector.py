@@ -24,6 +24,7 @@ from typing import Any, List, Dict
 
 logger = logging.getLogger(__name__)
 
+
 class ScamDetector:
     """
     Detects malicious intent, phishing, and hallucinations by cross-referencing agent outputs.
@@ -48,7 +49,7 @@ class ScamDetector:
         """
         content = message.get("content", "")
         sender = message.get("sender", "unknown")
-        
+
         # 1. Pattern-based Integrity Filter
         for pattern in self.scam_patterns:
             if re.search(pattern, content):
@@ -72,7 +73,7 @@ class ScamDetector:
             return False
 
         if not peers:
-            return True # Assume safe in isolation
+            return True  # Assume safe in isolation
 
         votes = []
         for peer in peers:
@@ -81,10 +82,10 @@ class ScamDetector:
 
         safety_score = sum(votes) / len(votes)
         logger.info("Scam Audit: Safety score %f", safety_score)
-        
+
         return safety_score >= self.confidence_threshold
 
     async def _get_peer_opinion(self, peer: Any, prompt: str, resp: str) -> float:
         """Internal helper to simulate peer validation."""
         # In a real swarm, this would be a P2P request
-        return 0.9 # Hardcoded placeholder for now
+        return 0.9  # Hardcoded placeholder for now

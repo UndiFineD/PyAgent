@@ -19,6 +19,7 @@
 
 from src.core.base.common.sharding_core import ShardingCore
 
+
 def test_sharding_core_calculate_splits():
     core = ShardingCore(cluster_size=4)
     shape = [1024, 1024]
@@ -31,6 +32,7 @@ def test_sharding_core_calculate_splits():
     assert splits[0][-1] == 512
     assert splits[1][-1] == 512
 
+
 def test_sharding_core_assign_workload():
     core = ShardingCore()
     loads = [0.1, 0.9, 0.2, 0.5]
@@ -38,6 +40,7 @@ def test_sharding_core_assign_workload():
 
     # P2C or Min should pick 0 or 2 (0.1 or 0.2)
     assert best_node in [0, 2]
+
 
 def test_sharding_core_calculate_shard_id():
     core = ShardingCore(cluster_size=10)
@@ -47,6 +50,7 @@ def test_sharding_core_calculate_shard_id():
     assert 0 <= shard_id < 10
     # Determinism
     assert shard_id == core.calculate_shard_id(key)
+
 
 def test_sharding_core_verify_sync():
     core = ShardingCore()

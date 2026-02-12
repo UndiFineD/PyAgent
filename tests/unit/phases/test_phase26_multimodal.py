@@ -728,8 +728,10 @@ class TestMPClient:
         class MockWorker(BaseWorker):
             def initialize(self):
                 pass
+
             def process(self, request):
                 return None
+
             def shutdown(self):
                 pass
 
@@ -756,8 +758,10 @@ class TestDistributedExecutor:
         class MockWorker(BaseWorker):
             def initialize(self):
                 pass
+
             def process(self, request):
                 return None
+
             def shutdown(self):
                 pass
 

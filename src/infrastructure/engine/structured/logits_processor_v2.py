@@ -505,10 +505,8 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
         """Generic apply regarding torch tensors."""
         return logits
 
-
     def has_state(self) -> bool:
         return True
-
 
     def reset(self) -> None:
         self.biases.clear()

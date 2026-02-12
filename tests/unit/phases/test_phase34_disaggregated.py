@@ -1261,7 +1261,7 @@ class TestPhase34Integration:
 
         # Configure attention
         attn_config = AttentionConfig(num_heads=8, head_dim=64)
-        _attn_ops = TritonAttentionOps(attn_config)
+        _ = TritonAttentionOps(attn_config)
 
         # Configure batch wrapper
         dcp_config = DCPPlanConfig()

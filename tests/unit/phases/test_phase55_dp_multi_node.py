@@ -22,6 +22,7 @@ from src.infrastructure.swarm.distributed.v2.dp_engine_sync import DPEngineSync
 from src.infrastructure.swarm.distributed.v2.multi_node_executor import MultiNodeExecutor
 from src.infrastructure.swarm.distributed.v2.load_balancer_client import LoadBalancerClient
 
+
 @pytest.mark.asyncio
 async def test_dp_coordinator_zmq():
     """Test ZMQ-based DP coordination stubs."""
@@ -40,6 +41,7 @@ async def test_dp_coordinator_zmq():
     await master.close()
     await worker.close()
 
+
 def test_dp_engine_sync():
     """Test wave synchronization logic."""
     sync = DPEngineSync(rank=0, world_size=4)
@@ -53,6 +55,7 @@ def test_dp_engine_sync():
     sync.reset_ready()
     assert sync.all_ready() is False
 
+
 def test_multi_node_executor_split():
     """Test cross-node tensor split calculation."""
     executor = MultiNodeExecutor(node_id=0, total_nodes=2)
@@ -63,6 +66,7 @@ def test_multi_node_executor_split():
     # Rust implementation returns lists in the dict values, verify value content regardless of container type
     assert list(splits[0]) == [1, 12, 2048]
     assert list(splits[1]) == [1, 12, 2048]
+
 
 def test_load_balancer_p2c():
     """Test Power of Two Choices load balancing selection."""

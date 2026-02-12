@@ -24,6 +24,7 @@ from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
 
+
 class FleetBackupMixin:
     """
     Handles distribution and retrieval of state shards across the swarm.
@@ -35,7 +36,7 @@ class FleetBackupMixin:
         """
         # 1. Create RAID-10 Shards
         shards = self.backup_node.create_shards(state_data)
-        
+
         # 2. Identify available peer nodes
         peers = self.voyager_discovery.get_active_peers()
         if not peers:
@@ -57,10 +58,10 @@ class FleetBackupMixin:
                     "shard": shard
                 }
             ))
-        
+
         results = await asyncio.gather(*tasks, return_exceptions=True)
         success_count = sum(1 for r in results if isinstance(r, dict) and r.get("status") == "success")
-        
+
         logger.info(f"FleetBackup: Distributed {success_count}/{len(shards)} shards across {len(peers)} peers.")
         return success_count > 0
 
@@ -70,7 +71,7 @@ class FleetBackupMixin:
         """
         peers = self.voyager_discovery.get_active_peers()
         shard_pool = self.backup_node.get_local_shards_for_hash(state_hash)
-        
+
         if peers:
             tasks = [
                 self.voyager_transport.send_to_peer(
@@ -95,7 +96,7 @@ class FleetBackupMixin:
         logger.info("FleetResilience: Starting Shard RAID-10 Audit...")
         # 1. Gather all unique local agent IDs
         agent_ids = [a for a in getattr(self, "agents", {}).keys()]
-        
+
         for agent_id in agent_ids:
             # For demo/mock: check current 'state.json' for the agent
             checkpoint_dir = self.workspace_root / "data" / "checkpoints" / agent_id

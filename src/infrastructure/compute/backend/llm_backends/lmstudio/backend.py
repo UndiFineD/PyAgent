@@ -215,6 +215,7 @@ class LMStudioBackend(LLMBackend):
 
                 class _HTTPFallbackLLM:
                     """Internal shim for HTTP-based LLM access when SDK is unavailable."""
+
                     def __init__(self, backend: "LMStudioBackend", model_id: str):
                         self._backend = backend
                         self._model_id = model_id
@@ -222,7 +223,8 @@ class LMStudioBackend(LLMBackend):
                     def respond(self, chat, _config=None):
                         """Respond using HTTP fallback."""
                         # Use the backend's _http_chat_request method
-                        return self._backend._http_chat_request(chat, self._model_id)  # pylint: disable=protected-access
+                        return self._backend._http_chat_request(
+                            chat, self._model_id)  # pylint: disable=protected-access
 
                 fallback_llm = _HTTPFallbackLLM(self, model or self.config.default_model)
                 if self.config.cache_models:

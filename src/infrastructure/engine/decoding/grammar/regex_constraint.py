@@ -80,7 +80,7 @@ class RegexGrammar(StructuredOutputGrammar):
                     self._token_to_chars.append(list(s.encode("utf-8")))
 
                 self._has_fsm = True
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 self._has_fsm = False
 
     def accept_tokens(self, request_id: str, tokens: List[int]) -> bool:

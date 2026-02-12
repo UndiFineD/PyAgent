@@ -18,6 +18,7 @@ import pytest
 from src.core.base.common.models.communication_models import CascadeContext
 from src.core.base.common.models import FailureClassification
 
+
 class TestCascadeContext:
     def test_initialization_defaults(self):
         ctx = CascadeContext(task_id="test-task")
@@ -65,7 +66,7 @@ class TestCascadeContext:
         # Third time should trigger breaker
         ctx.log_failure(stage="test", error="Same Error")
 
-        assert len(ctx.failure_history) == 3 # 2 errors + 1 breaker (replacing 3rd)
+        assert len(ctx.failure_history) == 3  # 2 errors + 1 breaker (replacing 3rd)
         last = ctx.failure_history[-1]
         assert last["stage"] == "circuit_breaker_repeating"
         assert "Exact Repeating Error" in last["error"]

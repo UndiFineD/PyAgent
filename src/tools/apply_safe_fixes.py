@@ -139,7 +139,8 @@ def apply_fixes(apply: bool = False, target_dir: Path | None = None, patch_dir: 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument('--apply', action='store_true', help='Apply fixes to files')
-    parser.add_argument('--target', type=str, default=None, help='Target directory to scan (defaults to internal target)')
+    parser.add_argument('--target', type=str, default=None,
+                        help='Target directory to scan (defaults to internal target)')
     parser.add_argument('--patch-dir', type=str, default=None, help='Directory to write patch files')
     args = parser.parse_args(argv)
     target_path = Path(args.target) if args.target else None

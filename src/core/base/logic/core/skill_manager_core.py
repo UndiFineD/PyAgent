@@ -23,6 +23,7 @@ class SkillManagerCore:
     Manages the dynamic discovery and registration of agent skills (MCP tools).
     Harvested from awesome-mcp patterns.
     """
+
     def __init__(self, skills_dir: str = "src/tools/skills"):
         self.skills_dir = skills_dir
         self.active_skills: Dict[str, Any] = {}
@@ -88,7 +89,7 @@ class SkillManagerCore:
 
         install_info = manifest.get("install")
         if not install_info:
-            return True # Nothing to install
+            return True  # Nothing to install
 
         cmd = install_info.get("command")
         check_binary = install_info.get("check_binary", skill_name)

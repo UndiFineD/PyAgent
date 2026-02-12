@@ -18,6 +18,7 @@ from src.infrastructure.swarm.resilience.checkpoint_manager import CheckpointMan
 
 logging.basicConfig(level=logging.INFO)
 
+
 class TestCheckpointRDMA(unittest.IsolatedAsyncioTestCase):
     async def test_checkpoint_lifecycle(self):
         """Verify the RDMA checkpoint and recovery lifecycle (Phase 330)."""
@@ -50,6 +51,7 @@ class TestCheckpointRDMA(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(mgr3.peer_rank, 0)
 
         logging.info("RDMA Peer Buddy ranks verified.")
+
 
 if __name__ == "__main__":
     unittest.main()

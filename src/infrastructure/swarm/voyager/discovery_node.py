@@ -113,8 +113,8 @@ class DiscoveryNode:
         def proximity_score(peer):
             peer_ip = peer.get("ip", "")
             if peer_ip.startswith(local_prefix):
-                return 0 # On same subnet
-            return 1 # Different subnet
+                return 0  # On same subnet
+            return 1  # Different subnet
 
         return sorted(all_peers, key=proximity_score)[:count]
 
@@ -139,12 +139,12 @@ class DiscoveryNode:
 
         # Basic resource detection for Voyager Synergy (Phase 4.0)
         cpu_cores = str(os.cpu_count() or 1)
-        ram_gb = "8.0" # Default
+        ram_gb = "8.0"  # Default
         try:
-             import psutil
-             ram_gb: str = f"{psutil.virtual_memory().total / (1024**3):.1f}"
+            import psutil
+            ram_gb: str = f"{psutil.virtual_memory().total / (1024**3):.1f}"
         except ImportError:
-             pass
+            pass
 
         desc: Dict[str, str] = {
             "version": VERSION,

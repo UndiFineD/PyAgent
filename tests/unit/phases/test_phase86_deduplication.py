@@ -19,6 +19,7 @@ import pytest
 from unittest.mock import MagicMock, AsyncMock
 from src.infrastructure.swarm.orchestration.swarm.query_deduplicator import SwarmQueryDeduplicator
 
+
 @pytest.mark.asyncio
 async def test_semantic_deduplication_join():
     # 1. Setup Mock Similarity
@@ -30,11 +31,11 @@ async def test_semantic_deduplication_join():
 
     # 2. Register first query
     fut1 = await deduper.register_query("Explain quantum computing roughly", "task_001")
-    assert fut1 is None # Should be new
+    assert fut1 is None  # Should be new
 
     # 3. Register second similar query
     fut2 = await deduper.register_query("Explain quantum computing please", "task_002")
-    assert fut2 is not None # Should find task_001's future
+    assert fut2 is not None  # Should find task_001's future
 
     # 4. Complete first and check second
     deduper.complete_query("task_001", "Quantum is cool.")
@@ -42,6 +43,7 @@ async def test_semantic_deduplication_join():
     result = await fut2
     assert result == "Quantum is cool."
     print("\n[Phase 86] Deduplicator successfully joined two similar inflight queries.")
+
 
 @pytest.mark.asyncio
 async def test_exact_hash_cache():

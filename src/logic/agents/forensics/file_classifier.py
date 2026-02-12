@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
 
+
 @dataclass
 class FileAnalysisResult:
     path: str
@@ -37,6 +38,7 @@ class FileAnalysisResult:
     extracted_urls: List[str] = field(default_factory=list)
     embedded_files: List[Dict] = field(default_factory=list)
 
+
 class FileClassifier:
     """
     Analyzes files to determine type, calculate hashes, and identify suspicious content.
@@ -44,7 +46,9 @@ class FileClassifier:
     """
 
     MAGIC_DB_PATH = Path("data/signatures/file_magics.json")
-    SUSPICIOUS_KEYWORDS = ["cmd", "powershell", "wmi", "http", "shell", "hta", "mshta", "dos", "program", "invoke", "base64"]
+    SUSPICIOUS_KEYWORDS = [
+        "cmd", "powershell", "wmi", "http", "shell", "hta", "mshta", "dos", "program", "invoke", "base64"
+    ]
     IGNORED_DOMAINS = ['schemas.openxmlformats.org', 'schemas.microsoft.com', 'purl.org', 'w3.org']
 
     def __init__(self):
@@ -162,7 +166,8 @@ class FileClassifier:
                 if zipfile.is_zipfile(path):
                     with zipfile.ZipFile(path, 'r') as zip_ref:
                         # Only extract xml/text files/html to avoid zip bombs or executables
-                        # Actually CanaryTokenScanner extracted all. Let's be safer and just read without extraction if possible, or extract carefully.
+                        # Actually CanaryTokenScanner extracted all. Let's be safer and just read
+                        # without extraction if possible, or extract carefully.
                         # For now, replicate extraction but with limit
                         zip_ref.extractall(temp_dir)
 
@@ -211,7 +216,7 @@ class FileClassifier:
             # Pattern is hex string
             pattern = sig[0].upper()
             if header_hex.startswith(pattern):
-                return sig[4], sig[2] # Description, Extension
+                return sig[4], sig[2]  # Description, Extension
 
         return None, None
 
@@ -245,6 +250,8 @@ class FileClassifier:
         return list(found_keywords), has_mz
 
 # Usage Example
+
+
 if __name__ == "__main__":
     async def run():
         fc = FileClassifier()

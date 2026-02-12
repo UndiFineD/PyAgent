@@ -191,6 +191,7 @@ class AbstractEplbPolicy(ABC):
 
         def _assign_one_layer(layer_idx: int) -> None:
             layer_data = phy_to_log[layer_idx]
+
             def _assign_one_phys(ph_i: int) -> None:
                 l_i = layer_data[ph_i]
                 if 0 <= l_i < num_logical:

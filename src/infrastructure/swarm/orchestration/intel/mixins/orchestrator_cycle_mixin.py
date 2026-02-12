@@ -41,7 +41,8 @@ class OrchestratorCycleMixin:
             "details": [],
         }
 
-        debt_records: list[tuple[str, str, str, int, float]] = self._scan_and_repair_files(target_dir, results, allow_triton_check=allow_triton_check)
+        debt_records: list[tuple[str, str, str, int, float]] = self._scan_and_repair_files(
+            target_dir, results, allow_triton_check=allow_triton_check)
         self._record_debt_to_sql(debt_records)
         self._log_results(results)
 

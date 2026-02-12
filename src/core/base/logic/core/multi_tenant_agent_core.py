@@ -396,7 +396,7 @@ class MultiTenantAgentCore(BaseCore):
         # Check tenant RPM
         tenant_counts = self.tenant_request_counts.get(tenant_id, {})
         tenant_rpm = sum(count for time_key, count in tenant_counts.items()
-                        if (current_time - time_key).total_seconds() < 60)
+                         if (current_time - time_key).total_seconds() < 60)
 
         if tenant_rpm >= self.tenants[tenant_id].max_rpm:
             return False
@@ -405,7 +405,7 @@ class MultiTenantAgentCore(BaseCore):
         if agent_id:
             agent_counts = self.agent_request_counts.get(agent_id, {})
             agent_rpm = sum(count for time_key, count in agent_counts.items()
-                           if (current_time - time_key).total_seconds() < 60)
+                            if (current_time - time_key).total_seconds() < 60)
 
             if agent_rpm >= self.agents[agent_id].max_rpm:
                 return False

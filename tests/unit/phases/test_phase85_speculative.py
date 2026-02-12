@@ -20,9 +20,10 @@ from src.infrastructure.swarm.orchestration.swarm.heterogeneous_speculator impor
 from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatekeeper
 from src.core.base.common.models.communication_models import ExpertProfile
 
+
 def test_heterogeneous_pairing():
     # 1. Setup Gatekeeper with different hardware experts
-    mock_sim = MagicMock() # Not used for pairing logic
+    mock_sim = MagicMock()  # Not used for pairing logic
     gatekeeper = MoEGatekeeper(mock_sim)
 
     # Fast Drafter (FP8)
@@ -45,4 +46,3 @@ def test_heterogeneous_pairing():
     assert len(pairs) == 1
     assert pairs[0] == ("ex_fast", "ex_slow")
     print("\n[Phase 85] Heterogeneous speculator correctly paired FP8 drafter with standard verifier.")
-

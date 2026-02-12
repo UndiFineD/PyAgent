@@ -29,6 +29,7 @@ short, mid, long, and archival tiers.
 import logging
 from typing import Any, List, Dict, Optional
 
+
 class TieredMemoryEngine:
     """Manages the 6 memory tiers: Core, Episodic, Semantic,
     Procedural, Resource, and Knowledge."""

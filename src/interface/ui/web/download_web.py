@@ -33,12 +33,14 @@ st.set_page_config(
 # Workspace Detection
 WORKSPACE_ROOT = Path(__file__).resolve().parent.parent.parent.parent.parent
 
+
 def load_history():
     history_file = WORKSPACE_ROOT / "temp" / "downloads.json"
     if history_file.exists():
         with open(history_file, "r", encoding="utf-8") as f:
             return json.load(f)
     return None
+
 
 def main():
     st.title("📥 PyAgent Download Manager")
@@ -49,7 +51,7 @@ def main():
     with col1:
         st.subheader("Add New Download")
         url = st.text_input("URL (GitHub, Hugging Face, ArXiv, etc.)", placeholder="https://huggingface.co/...")
-        
+
         c1, c2 = st.columns(2)
         dry_run = c1.checkbox("Dry Run", help="Simulate the download process")
         verbose = c2.checkbox("Verbose Log", value=True)
@@ -65,7 +67,7 @@ def main():
                     )
                     agent = DownloadAgent(config)
                     result = agent.process_url(url)
-                    
+
                     if result.success:
                         st.success(f"Successfully processed: {result.destination}")
                         # Update global history
@@ -81,7 +83,7 @@ def main():
         st.subheader("Current Config & Stats")
         st.info(f"**Workspace:** `{WORKSPACE_ROOT}`")
         st.info("**Default Download Path:** `data/models` | `data/datasets`")
-        
+
         history = load_history()
         if history:
             summary = history.get("summary", {})
@@ -90,13 +92,14 @@ def main():
 
     st.markdown("---")
     st.subheader("📦 Download History")
-    
+
     if history:
         for res in reversed(history.get("results", [])):
             with st.expander(f"{'✅' if res['success'] else '❌'} {res['url']}", expanded=False):
                 st.code(json.dumps(res, indent=2), language="json")
     else:
         st.write("No download history found in `temp/downloads.json`.")
+
 
 if __name__ == "__main__":
     main()

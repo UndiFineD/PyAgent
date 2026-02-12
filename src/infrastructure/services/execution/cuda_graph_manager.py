@@ -208,7 +208,8 @@ def generate_warmup_sizes(max_tokens: int, max_reqs: int, granularity: int = 8) 
 
     # Add multi-request batches
     req_counts = [2, 4, 8, 16, 32]
-    multi_req_sizes = list(map(lambda nr: ((max(1, max_tokens // nr) * nr), nr), filter(lambda nr: nr <= max_reqs, req_counts)))
+    multi_req_sizes = list(map(lambda nr: ((max(1, max_tokens // nr) * nr), nr),
+                           filter(lambda nr: nr <= max_reqs, req_counts)))
 
     return sorted(set(p2_sizes + max_tokens_size + multi_req_sizes))
 
@@ -376,7 +377,9 @@ class CUDAGraphManager:
 
             self.registry.put(entry)
             self._capture_count += 1
-            logger.debug(f"Captured CUDA graph: tokens={num_tokens}, reqs={num_reqs}, memory={memory_bytes / 1024:.1f}KB")
+            logger.debug(
+                f"Captured CUDA graph: tokens={num_tokens}, reqs={num_reqs}, memory={
+                    memory_bytes / 1024:.1f}KB")
             return entry
 
         except Exception as e:
@@ -514,7 +517,10 @@ class CUDAGraphManager:
 
         Returns (num_tokens, num_reqs) or None if no suitable graph.
         """
-        matches = list(filter(lambda e: e.num_tokens >= num_tokens and e.num_reqs >= num_reqs, self.registry._graphs.values()))
+        matches = list(
+            filter(
+                lambda e: e.num_tokens >= num_tokens and e.num_reqs >= num_reqs,
+                self.registry._graphs.values()))
         if not matches:
             return None
 

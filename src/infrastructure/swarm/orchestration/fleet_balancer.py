@@ -17,12 +17,14 @@ import math
 from typing import Dict, Optional
 from dataclasses import dataclass
 
+
 @dataclass
 class SwarmNode:
     node_id: str
     capacity: int  # Max weight
     current_load: int = 0
     effective_weight: int = 0
+
 
 class FleetBalancer:
     """Implements a Weighted Round-Robin (WRR) balancer for agent node orchestration."""

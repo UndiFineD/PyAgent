@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from src.core.base.lifecycle.base_agent import BaseAgent
 
+
 class SkillCore(abc.ABC):
     """
     Abstract base for all agent skills.
@@ -42,6 +43,7 @@ class SkillCore(abc.ABC):
     async def shutdown(self) -> None:
         """Cleanup resources used by the skill."""
         pass
+
 
 class SkillManifest:
     """Defines the metadata and requirements for a SkillCore."""

@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import VERSION
 
-from .intelligence_core import IntelligenceCore
+from src.infrastructure.swarm.orchestration.intel.intelligence_core import IntelligenceCore
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
@@ -68,7 +68,7 @@ class IntelligenceOrchestrator:
         """Analyzes the pool and recent SQL lessons using local AI to find shared patterns."""
         # Delegate filtering to Core
         sql_lessons = []
-        if hasattr(self.fleet_manager, "sql_metadata"):
+        if self.fleet_manager is not None and hasattr(self.fleet_manager, "sql_metadata"):
             try:
                 sql_lessons = self.fleet_manager.sql_metadata.get_intelligence_summary()[:5]
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
@@ -96,7 +96,10 @@ class IntelligenceOrchestrator:
         try:
             summary = self.ai.smart_chat(
                 prompt,
-                system_prompt="You are a Swarm Intelligence Synthesizer. Be concise and technical. Format: File: [path] | Line: [number] | Description: [desc]",
+                system_prompt=(
+                    "You are a Swarm Intelligence Synthesizer. Be concise and technical. "
+                    "Format: File: [path] | Line: [number] | Description: [desc]"
+                ),
             )
             if summary:
                 raw_patterns = [s.strip() for s in summary.split("\n") if s.strip() and len(s) > 10]
@@ -104,7 +107,7 @@ class IntelligenceOrchestrator:
                 self.patterns = self.core.extract_actionable_patterns(raw_patterns)
 
                 # Record the synthesis to SQL Metadata (Phase 108)
-                if hasattr(self.fleet_manager, "sql_metadata"):
+                if self.fleet_manager is not None and hasattr(self.fleet_manager, "sql_metadata"):
                     self.fleet_manager.sql_metadata.record_lesson(
                         interaction_id=f"swarm_{int(time.time())}",
                         text=summary,

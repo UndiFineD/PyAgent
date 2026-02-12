@@ -39,18 +39,18 @@ class FleetDelegationMixin:
             now = asyncio.get_event_loop().time()
             valid_helpers = {k: v for k, v in self.borrowed_helpers.items() if v["expiry"] > now}
             self.borrowed_helpers = valid_helpers
-            
+
             if valid_helpers:
                 helper_id, info = next(iter(valid_helpers.items()))
                 logging.info(f"Fleet: OFFLOADING task '{agent_type}' to borrowed helper {helper_id}")
-                
+
                 offload_msg = {
                     "type": "delegate_task",
                     "sender_id": f"fleet-{self.workspace_root.name}",
                     "agent_type": agent_type,
                     "prompt": prompt
                 }
-                
+
                 resp = await self.voyager_transport.send_to_peer(info["addr"], info["port"], offload_msg)
                 if resp and resp.get("status") == "success":
                     return resp.get("result", "Task completed via offload.")
@@ -72,7 +72,7 @@ class FleetDelegationMixin:
             # Instantiate a Universal Agent shell with the manifest
             universal_agent = BaseAgent(manifest=manifest.__dict__)
             await universal_agent.setup()
-            
+
             # Execute task using the new cognitive loop
             task_result = await universal_agent.run_task({
                 "context": prompt,
@@ -110,9 +110,10 @@ class FleetDelegationMixin:
             if response and response.get("status") == "can_help":
                 helper_id = response.get("node_id", f"{addr}:{port}")
                 logging.info(f"Fleet: Successfully borrowed compute from node {helper_id}")
-                
+
                 # Phase 320: Track the helper for the next delegation
-                self.borrowed_helpers[helper_id] = {"addr": addr, "port": port, "expiry": asyncio.get_event_loop().time() + 300}
+                self.borrowed_helpers[helper_id] = {
+                    "addr": addr, "port": port, "expiry": asyncio.get_event_loop().time() + 300}
                 return True
 
         return False

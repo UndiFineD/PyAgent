@@ -13,7 +13,86 @@
 # limitations under the License.
 
 
+"""
+VotingSystem - Manage voting on improvements and prioritization
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+from voting_system import VotingSystem
+vs = VotingSystem()
+vs.cast_vote("improvement-123", voter="alice", vote_value=1)
+vs.cast_vote("improvement-123", voter_id="uuid-456", vote_value=-1)
+count = vs.get_vote_count("improvement-123")
+priority = vs.get_prioritized_list(["improvement-123", "improvement-456"])
+
+WHAT IT DOES:
+Provides an in-memory, simple voting registry for improvement identifiers. Supports casting a vote (by voter name or voter_id), counting positive votes for an improvement, and producing a prioritized list of improvement IDs sorted by positive vote count (highest first). Uses a dict-of-dicts structure keyed by improvement_id then voter_key to store integer vote values.
+
+WHAT IT SHOULD DO BETTER:
+- Persistence: add durable storage (file, DB, or state manager) so votes survive process restarts.  
+- Concurrency & atomicity: protect the votes structure for multi-thread/process use and consider using StateTransaction for transactional updates.  
+- Richer vote semantics: support vote weights, negative/abstain semantics, vote removal, timestamps, and tie-breaking strategies.  
+- Validation & errors: validate inputs (vote_value range, id formats) and raise informative errors rather than silently coercing.  
+- API & observability: add methods to list voters, get raw vote maps, export/import (JSON), and emit events for changes; include unit tests and docstrings for public methods.  
+- Integration: expose adapter interface to plug in different backends and add optional dependency injection for better testability.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 """Auto-extracted class from agent_improvements.py"""
+
+from __future__ import annotations
+
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class VotingSystem:
+    """Manages voting on improvements."""
+
+    def __init__(self) -> None:
+        self.votes: dict[str, dict[str, int]] = {}
+
+    def cast_vote(
+        self,
+        improvement_id: str,
+        voter: str | None = None,
+        vote_value: int = 1,
+        voter_id: str | None = None,
+        **_: Any,
+    ) -> None:
+        voter_key = voter_id or voter or "anonymous"
+        self.votes.setdefault(improvement_id, {})[voter_key] = int(vote_value)
+
+    def get_vote_count(self, improvement_id: str) -> int:
+        votes = self.votes.get(improvement_id, {})
+        return sum(1 for v in votes.values() if v > 0)
+
+    def get_prioritized_list(self, improvement_ids: list[str]) -> list[str]:
+        return sorted(
+            list(improvement_ids),
+            key=lambda imp_id: self.get_vote_count(imp_id),
+            reverse=True,
+        )
+"""
 
 from __future__ import annotations
 

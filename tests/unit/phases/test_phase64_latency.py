@@ -24,6 +24,7 @@ from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatek
 from src.infrastructure.engine.models.similarity import EmbeddingSimilarityService
 from src.core.base.common.models.communication_models import ExpertProfile
 
+
 @pytest.mark.asyncio
 async def test_gatekeeper_caching():
     sim_service = EmbeddingSimilarityService()
@@ -31,6 +32,7 @@ async def test_gatekeeper_caching():
     original_get = sim_service.get_embedding
 
     call_count = 0
+
     async def slow_get(text):
         nonlocal call_count
         call_count += 1
@@ -54,8 +56,9 @@ async def test_gatekeeper_caching():
     start = time.time()
     await gatekeeper.route_task(task)
     duration2 = time.time() - start
-    assert call_count == 1 # Still 1!
+    assert call_count == 1  # Still 1!
     assert duration2 < duration1
+
 
 @pytest.mark.asyncio
 async def test_gatekeeper_batch_routing():

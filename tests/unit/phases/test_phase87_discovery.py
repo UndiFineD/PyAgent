@@ -20,6 +20,7 @@ import numpy as np
 from unittest.mock import AsyncMock, MagicMock
 from src.infrastructure.swarm.orchestration.swarm.tool_discovery import AutonomousToolDiscovery
 
+
 @pytest.mark.asyncio
 async def test_autonomous_tool_discovery():
     # 1. Setup Mock MCP Agent
@@ -33,7 +34,7 @@ async def test_autonomous_tool_discovery():
 
     # Simulate high similarity for "search" related tasks
     async def side_effect(emb1, emb2):
-        return 0.95 # Highly similar
+        return 0.95  # Highly similar
     mock_sim.compute_similarity = AsyncMock(side_effect=side_effect)
 
     discovery = AutonomousToolDiscovery(mock_mcp, mock_sim)
@@ -46,6 +47,7 @@ async def test_autonomous_tool_discovery():
     assert "github_search" in tool["tool_id"]
     print(f"\n[Phase 87] Autonomous discovery successfully found external MCP tool: {tool['tool_id']}")
 
+
 @pytest.mark.asyncio
 async def test_tool_discovery_no_match():
     mock_mcp = MagicMock()
@@ -53,7 +55,7 @@ async def test_tool_discovery_no_match():
 
     mock_sim = MagicMock()
     mock_sim.get_embedding = AsyncMock(return_value=np.random.randn(384))
-    mock_sim.compute_similarity = AsyncMock(return_value=0.1) # low score
+    mock_sim.compute_similarity = AsyncMock(return_value=0.1)  # low score
 
     discovery = AutonomousToolDiscovery(mock_mcp, mock_sim)
     tool = await discovery.find_external_tool("order a pizza", threshold=0.5)

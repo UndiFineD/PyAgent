@@ -26,7 +26,8 @@ class TestByzantineCore:
     def core(self):
         return ByzantineCore()
 
-    @settings(suppress_health_check=[HealthCheck.too_slow, HealthCheck.function_scoped_fixture], max_examples=50, deadline=None)
+    @settings(suppress_health_check=[HealthCheck.too_slow,
+              HealthCheck.function_scoped_fixture], max_examples=50, deadline=None)
     @given(
         st.lists(
             st.fixed_dictionaries(

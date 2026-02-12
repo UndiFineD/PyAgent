@@ -75,6 +75,7 @@ try:
 except Exception:
     _EXTERNAL_LB_APP = None
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global fleet_instance
@@ -111,7 +112,10 @@ def _filter_response_headers(headers: dict) -> dict:
     return {k: v for k, v in headers.items() if k.lower() not in hop_by_hop}
 
 
-@app.api_route("/streamlit/{app_name}/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"])
+@app.api_route(
+    "/streamlit/{app_name}/{path:path}",
+    methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]
+)
 async def streamlit_http_proxy(request: Request, app_name: str, path: str):
     """Reverse-proxy HTTP requests to a local Streamlit instance.
 
@@ -233,7 +237,6 @@ async def verify_authentication(request: Request):
 
 # Helper for system metrics
 def get_system_metrics():
-    global fleet_instance
     if fleet_instance and hasattr(fleet_instance, "resource_monitor"):
         stats = fleet_instance.resource_monitor.get_latest_stats()
         # Map to UI keys
@@ -257,9 +260,12 @@ def get_system_metrics():
             "gpu": 0.0
         }
     except ImportError:
+
         return {"cpu": 0, "mem": 0, "storage": 0, "network": 0, "temp": 0, "gpu": 0}
 
 # 1. SPECIFIC ROUTES FIRST
+
+
 @app.get("/api/thoughts")
 async def get_thoughts():
     """Returns the last 50 thoughts from the reasoning chain."""
@@ -282,13 +288,14 @@ async def get_thoughts():
                     }
                     thoughts.append(mapped)
                 except json.JSONDecodeError:
+
                     continue
     return thoughts
+
 
 @app.post("/api/command")
 async def handle_command(data: dict):
     """Dispatches a command to the swarm (Pillar 3)."""
-    global fleet_instance
     command = data.get("command")
     if not command:
         return JSONResponse(status_code=400, content={"error": "No command provided"})
@@ -314,14 +321,17 @@ async def handle_command(data: dict):
 
     return JSONResponse(status_code=503, content={"error": "Fleet not ready"})
 
+
 @app.get("/api/topology")
 async def get_topology():
     """Returns the current swarm topology."""
     topology_file = LOGS_DIR / "topology.json"
     if topology_file.exists():
         with open(topology_file, "r", encoding="utf-8") as f:
+
             return json.load(f)
     return {"nodes": [], "links": []}
+
 
 @app.websocket("/ws/telemetry")
 async def websocket_telemetry(websocket: WebSocket):
@@ -344,8 +354,10 @@ async def websocket_telemetry(websocket: WebSocket):
                 "consensus": consensus_active
             })
             await asyncio.sleep(2)
+
     except WebSocketDisconnect:
         pass
+
 
 @app.get("/stream")
 async def serve_stream():
@@ -358,12 +370,12 @@ async def serve_stream():
 
 @app.get("/improvement")
 async def embed_improvement():
-        """Embed the Streamlit Self-Improvement UI running on port 8501.
+    """Embed the Streamlit Self-Improvement UI running on port 8501.
 
-                <iframe src="http://127.0.0.1:8502" title="Self-Improvement UI" frameborder="0"></iframe>
-        returns a simple page with an iframe pointed at the Streamlit server.
-        """
-        html = """
+            <iframe src="http://127.0.0.1:8502" title="Self-Improvement UI" frameborder="0"></iframe>
+    returns a simple page with an iframe pointed at the Streamlit server.
+    """
+    html = """
         <!doctype html>
         <html>
             <head>
@@ -376,29 +388,36 @@ async def embed_improvement():
                 <iframe src="http://127.0.0.1:8501" title="Self-Improvement UI" frameborder="0"></iframe>
             </body>
         </html>
+
         """
-        return HTMLResponse(content=html, status_code=200)
+    return HTMLResponse(content=html, status_code=200)
+
 
 @app.get("/topology")
 async def serve_topology():
+
     target = (WEB_UI_DIR / "topology_viewer.html").resolve()
     return FileResponse(str(target)) if target.exists() else {"error": "404"}
+
 
 @app.get("/api/infection-guard")
 async def get_infection_guard_events():
     """Returns the latest blocked events from Infection Guard."""
-    global fleet_instance
     if fleet_instance and hasattr(fleet_instance, "infection_guard"):
+
         return fleet_instance.infection_guard.get_blocked_events()
     return []
+
 
 @app.get("/designer")
 async def serve_designer():
     """Serves the Universal Shard (n8nstyle) Manifest Designer."""
     target = (WEB_UI_DIR / "manifest_designer.html").resolve()
     if target.exists():
+
         return FileResponse(str(target), media_type="text/html")
     return JSONResponse(status_code=404, content={"detail": "Designer HTML not found"})
+
 
 @app.post("/manifest/create")
 async def create_manifest(data: dict):
@@ -411,6 +430,7 @@ async def create_manifest(data: dict):
     manifest = LogicManifest.from_dict(data)
     repo.save_manifest(role, manifest)
     return {"status": "success", "role": role}
+
 
 # --- File Explorer API (Phase 325) ---
 
@@ -440,6 +460,7 @@ async def list_files(path: str = "."):
 
     return sorted(items, key=lambda x: (not x["is_dir"], x["name"].lower()))
 
+
 @app.get("/api/files/read")
 async def read_workspace_file(path: str):
     """Reads the content of a file in the workspace."""
@@ -456,6 +477,7 @@ async def read_workspace_file(path: str):
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
 
+
 # --- WebAuthn / Biometric Auth (Phase 327) ---
 
 @app.get("/api/auth/register/options")
@@ -467,6 +489,7 @@ async def get_registration_options(username: str):
     except Exception as e:
         return JSONResponse(status_code=400, content={"error": str(e)})
 
+
 # --- RDMA Checkpointing (Phase 93) ---
 
 @app.post("/api/resilience/checkpoint")
@@ -475,8 +498,10 @@ async def trigger_checkpoint(data: dict):
     state_payload = data.get("state", "{}").encode("utf-8")
     checkpoint_id = await checkpoint_manager.create_checkpoint(state_payload)
     if checkpoint_id:
+
         return {"status": "success", "checkpoint_id": checkpoint_id}
     return JSONResponse(status_code=500, content={"error": "RDMA Checkpoint failed"})
+
 
 @app.get("/api/resilience/checkpoints/latest")
 async def get_latest_checkpoint():
@@ -500,12 +525,11 @@ async def n8n_execute(data: dict):
     Bi-directional n8n Orchestration (Phase 322).
     Acts as an intelligent decision node for external workflows.
     """
-    global fleet_instance
     if not fleet_instance:
         return JSONResponse(status_code=503, content={"error": "Fleet not initialized"})
 
     prompt = data.get("prompt", "")
-    payload = data.get("data", {}) # Data for the agent to process
+    payload = data.get("data", {})  # Data for the agent to process
 
     # Combine data into prompt if present
     full_command = prompt

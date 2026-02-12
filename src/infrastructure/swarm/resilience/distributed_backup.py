@@ -27,6 +27,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 class DistributedBackup:
     """
     Manages distributed redundancy for agent state and memory.
@@ -50,7 +51,7 @@ class DistributedBackup:
         # Phase 326: Dynamic Striping
         # N=3 parts, each mirrored once (M=2) = 6 shards total
         num_parts = 3 if len(raw_data) > 10000 else 2
-        mirror_factor = self.replication_factor # Default 3
+        mirror_factor = self.replication_factor  # Default 3
 
         part_size = (len(raw_data) + num_parts - 1) // num_parts
         parts = [raw_data[i:i + part_size] for i in range(0, len(raw_data), part_size)]
@@ -61,7 +62,11 @@ class DistributedBackup:
 
         shards = []
         for part_idx, part in enumerate(parts):
-            part_hash = hashlib.blake3(part).hexdigest() if hasattr(hashlib, "blake3") else hashlib.md5(part).hexdigest()
+            if hasattr(hashlib, "blake3"):
+                part_hash = hashlib.blake3(part).hexdigest()
+            else:
+                part_hash = hashlib.md5(part).hexdigest()
+
             for mirror_idx in range(mirror_factor):
                 shards.append({
                     "origin_node": self.node_id,
@@ -72,7 +77,7 @@ class DistributedBackup:
                     "part_hash": part_hash,
                     "full_hash": data_hash,
                     "total_parts": num_parts,
-                    "timestamp": 0 # Placeholder for time
+                    "timestamp": 0  # Placeholder for time
                 })
 
         logger.info(f"DistributedBackup: Created {len(shards)} RAID-10 shards for state {data_hash[:8]}")
@@ -87,7 +92,11 @@ class DistributedBackup:
         # Integrity check
         if part_hash:
             actual_data = self._decode(data_b64)
-            actual_hash = hashlib.blake3(actual_data).hexdigest() if hasattr(hashlib, "blake3") else hashlib.md5(actual_data).hexdigest()
+            if hasattr(hashlib, "blake3"):
+                actual_hash = hashlib.blake3(actual_data).hexdigest()
+            else:
+                actual_hash = hashlib.md5(actual_data).hexdigest()
+
             if actual_hash != part_hash:
                 logger.error(f"DistributedBackup: Corruption detected in shard {shard_id}")
                 return False

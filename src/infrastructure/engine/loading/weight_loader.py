@@ -578,7 +578,7 @@ class GGUFLoader(WeightLoader):
             for path in file_paths:
                 logging.info(f"GGUFLoader: Loading weights from {path}")
                 reader = gguf.GGUFReader(path)
-                
+
                 for tensor in reader.tensors:
                     name = tensor.name
                     # Convert to torch tensor
@@ -590,7 +590,7 @@ class GGUFLoader(WeightLoader):
                     else:
                         # Handle potential buffer issues
                         t = torch.tensor(data).to(device)
-                    
+
                     yield name, t
 
         except ImportError:

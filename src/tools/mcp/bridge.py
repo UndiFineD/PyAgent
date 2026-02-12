@@ -13,10 +13,178 @@
 # limitations under the License.
 
 """
+bridge.py - MCP Server Bridge (registry, discovery, and orchestration)
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate MCPServerRegistry(registry_path=Path("path\\to\\registry.json")) and inspect registry.servers or call registry._create_default_registry() to seed defaults.
+- Use MCPServerConfig and MCPTool dataclasses to define new servers/tools and register them in registry.json.
+- Query registry.active_servers to manage running MCPServerInstance entries and integrate with CascadeContext when invoking tools.
+
+WHAT IT DOES:
+- Provides dataclasses for MCP server configuration and tools, enumerations for server types and categories, and a registry class to load, create, and manage a local registry of MCP servers for the PyAgent ecosystem.
+- Loads registry from registry.json, deserializes entries into MCPServerConfig objects, logs outcomes, and can create a sensible default registry with essential servers (filesystem, git, browser, etc.).
+- Serves as the integration bridge that standardizes discovery, configuration, and lifecycle management of heterogeneous MCP servers (local, remote, docker, native) for downstream agent orchestration.
+
+WHAT IT SHOULD DO BETTER:
+- Expose a stable public API (discover, register, start, stop, health_check) rather than relying on internal methods like _load_registry/_create_default_registry and direct dict access.
+- Add robust validation, schema migration/versioning for registry.json, and clearer error handling with typed exceptions for missing/invalid config entries.
+- Implement async lifecycle management (start/stop) with asyncio subprocess handling, timeouts, and secure environment handling for high-security servers; persist state transactionally via StateTransaction.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
 PyAgent MCP Server Ecosystem Integration.
 
 Based on awesome-mcp-servers repository with 500+ MCP servers.
 Implements standardized protocol abstraction for 10x tool expansion.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import json
+import logging
+import os
+import subprocess
+from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import aiohttp
+
+from src.core.base.common.models.communication_models import CascadeContext
+
+logger = logging.getLogger("pyagent.tools.mcp")
+
+
+class MCPServerType(Enum):
+    """Types of MCP servers."""
+    LOCAL = "local"
+    REMOTE = "remote"
+    DOCKER = "docker"
+    NATIVE = "native"
+
+
+class MCPCategory(Enum):
+    """MCP server categories."""
+    DATABASE = "database"
+    API = "api"
+    FILESYSTEM = "filesystem"
+    BROWSER = "browser"
+    COMMUNICATION = "communication"
+    DEVELOPMENT = "development"
+    SECURITY = "security"
+    PRODUCTIVITY = "productivity"
+    MULTIMEDIA = "multimedia"
+    OTHER = "other"
+
+
+@dataclass
+class MCPServerConfig:
+    """Configuration for an MCP server."""
+    name: str
+    description: str
+    category: MCPCategory
+    server_type: MCPServerType
+    command: Optional[str] = None
+    args: List[str] = field(default_factory=list)
+    env: Dict[str, str] = field(default_factory=dict)
+    url: Optional[str] = None
+    docker_image: Optional[str] = None
+    capabilities: List[str] = field(default_factory=list)
+    requirements: List[str] = field(default_factory=list)
+    version: str = "latest"
+    enabled: bool = True
+    security_level: str = "medium"  # low, medium, high
+    timeout: int = 30  # seconds
+
+
+@dataclass
+class MCPTool:
+    """Represents an MCP tool."""
+    name: str
+    description: str
+    input_schema: Dict[str, Any]
+    server_name: str
+    category: str
+    tags: List[str] = field(default_factory=list)
+
+
+class MCPServerRegistry:
+    """
+    Registry of available MCP servers.
+
+    Manages discovery, configuration, and lifecycle of MCP servers.
+    """
+
+    def __init__(self, registry_path: Optional[Path] = None):
+        self.registry_path = registry_path or Path(__file__).parent / "registry.json"
+        self.servers: Dict[str, MCPServerConfig] = {}
+        self.active_servers: Dict[str, 'MCPServerInstance'] = {}
+        self.logger = logging.getLogger("pyagent.tools.mcp.registry")
+
+        # Load registry
+        self._load_registry()
+
+    def _load_registry(self):
+        """Load server registry from file."""
+        if self.registry_path.exists():
+            try:
+                with open(self.registry_path, 'r') as f:
+                    data = json.load(f)
+                    for name, config_data in data.items():
+                        config_data['category'] = MCPCategory(config_data['category'])
+                        config_data['server_type'] = MCPServerType(config_data['server_type'])
+                        self.servers[name] = MCPServerConfig(**config_data)
+                self.logger.info(f"Loaded {len(self.servers)} MCP servers from registry")
+            except Exception as e:
+                self.logger.error(f"Failed to load registry: {e}")
+        else:
+            self._create_default_registry()
+
+    def _create_default_registry(self):
+        """Create default registry with essential MCP servers."""
+        default_servers = {
+            "filesystem": MCPServerConfig(
+                name="filesystem",
+                description="Local filesystem operations",
+                category=MCPCategory.FILESYSTEM,
+                server_type=MCPServerType.NATIVE,
+                capabilities=["read", "write", "list", "search"],
+                security_level="high"
+            ),
+            "git": MCPServerConfig(
+                name="git",
+                description="Git repository operations",
+                category=MCPCategory.DEVELOPMENT,
+                server_type=MCPServerType.NATIVE,
+                capabilities=["status", "commit", "push", "pull", "diff"],
+                security_level="medium"
+            ),
+            "browser": MCPServerConfig(
+                name="browser",
+                description="Web browser automation",
+                category=MCPCategory.BROWSER,
+                server_type=MCPServerType.DOCKER,
+                docker_image="mcp/browser:latest",
+                capabilities=["navigate",
 """
 
 from __future__ import annotations
@@ -235,9 +403,9 @@ class MCPServerRegistry:
         This integrates with awesome-mcp-servers via the ecosystem populator.
         """
         from .ecosystem_populator import get_expanded_ecosystem
-        
+
         discovered = get_expanded_ecosystem()
-        
+
         for config in discovered:
             if config.name not in self.servers:
                 # Ensure category and server_type are Enums if they were stored as strings
@@ -245,9 +413,9 @@ class MCPServerRegistry:
                     config.category = MCPCategory(config.category)
                 if isinstance(config.server_type, str):
                     config.server_type = MCPServerType(config.server_type)
-                
+
                 self.servers[config.name] = config
-        
+
         self._save_registry()
         self.logger.info(f"Ecosystem expanded to {len(self.servers)} MCP servers")
         return discovered

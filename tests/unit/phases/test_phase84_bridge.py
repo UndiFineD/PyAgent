@@ -21,6 +21,7 @@ from src.infrastructure.swarm.orchestration.swarm.trace_synthesis import SwarmTr
 from src.infrastructure.swarm.orchestration.swarm.reward_predictor import ExpertRewardPredictor
 from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
 
+
 def test_cross_tenant_bridge_transfer():
     # 1. Setup Tenant A (The Source)
     logger_a = SwarmAuditLogger(log_to_file=False)
@@ -44,6 +45,7 @@ def test_cross_tenant_bridge_transfer():
     val = predictor_b.get_synergy_boost("ex_x", "ex_y")
     assert val == 1.0
     print("\n[Phase 84] Cross-tenant bridge successfully transferred agent synergy from A to B.")
+
 
 def test_scrubbing_anonymity():
     mock_synth = MagicMock()

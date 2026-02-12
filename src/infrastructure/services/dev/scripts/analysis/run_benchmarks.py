@@ -34,7 +34,8 @@ if project_root.name == 'src':
 
 sys.path.insert(0, str(project_root))
 
-from src.infrastructure.services.benchmarks.benchmark_suite import BenchmarkSuite  # noqa: E402 # pylint: disable=wrong-import-position
+from src.infrastructure.services.benchmarks.benchmark_suite import \
+    BenchmarkSuite  # noqa: E402 # pylint: disable=wrong-import-position
 
 
 async def main():

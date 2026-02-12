@@ -44,7 +44,10 @@ class P2CLoadBalancer:
         """Select best worker using P2C algorithm."""
         with self._lock:
             # Filter healthy workers
-            healthy: list[WorkerState] = [w for w in self._workers if w.health in (WorkerHealth.HEALTHY, WorkerHealth.DEGRADED)]
+            healthy: list[WorkerState] = [
+                w for w in self._workers
+                if w.health in (WorkerHealth.HEALTHY, WorkerHealth.DEGRADED)
+            ]
 
             if not healthy:
                 # Fallback to any worker

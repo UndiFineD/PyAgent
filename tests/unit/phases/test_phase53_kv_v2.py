@@ -17,6 +17,7 @@ from src.infrastructure.engine.kv_cache.v2.block_table import BlockTableV2
 from src.infrastructure.engine.kv_cache.v2.kv_cache_interface import KVCacheInterfaceV2
 from src.infrastructure.engine.kv_cache.v2.block_hash_manager import BlockHashManager
 
+
 def test_block_table_allocation_v2():
     """Test v2 block table allocation and hybrid support."""
     bt = BlockTableV2(num_blocks=100, block_size=16)
@@ -28,6 +29,7 @@ def test_block_table_allocation_v2():
     bt.update_hybrid_mapping(blocks[0], new_size=32)
     assert bt.block_size_map[blocks[0]] == 32
 
+
 def test_kv_cache_interface_storage():
     """Test v2 interface storage allocation."""
     interface = KVCacheInterfaceV2(num_layers=2, num_heads=8, head_size=64, num_blocks=10)
@@ -38,6 +40,7 @@ def test_kv_cache_interface_storage():
     assert interface.k_cache is not None
     assert interface.k_cache.shape == (10, 2, 8, 16, 64)
     assert interface.k_cache.device.type in ["cuda", "cpu"]
+
 
 def test_block_hash_manager():
     """Test prefix caching via block hashing."""
@@ -53,6 +56,7 @@ def test_block_hash_manager():
 
     # Miss lookup
     assert manager.find_block_by_tokens([1, 2, 3]) is None
+
 
 def test_context_parallel_mask():
     """Test CP mask generation in block table."""

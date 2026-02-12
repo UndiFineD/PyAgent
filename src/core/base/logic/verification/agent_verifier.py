@@ -25,6 +25,7 @@ try:
 except ImportError:
     rc = None
 
+
 class AgentVerifier:
     """Handles quality and anchoring verification of agent responses."""
 
@@ -123,7 +124,7 @@ class AgentVerifier:
         if rc:
             try:
                 return rc.check_latent_reasoning(content, 0.1)
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         # Filter characters regarding non-ASCII status functionally

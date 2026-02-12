@@ -27,6 +27,7 @@ from src.core.base.lifecycle.logic_manifest import LogicManifest
 
 logger = logging.getLogger(__name__)
 
+
 class ManifestRepository:
     """Repository for managing cognitive shards (Logic Manifests)."""
 

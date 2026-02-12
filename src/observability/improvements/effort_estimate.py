@@ -13,7 +13,60 @@
 # limitations under the License.
 
 
+"""
+EffortEstimate - Enum of effort estimation levels
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Import the enum and use values to annotate or compute effort estimates in planners or task scoring:
+  from src.core.base import effort_estimate
+  from src.core.base.effort_estimate import EffortEstimate
+  estimate = EffortEstimate.MEDIUM
+
+WHAT IT DOES:
+- Defines a small, Fibonacci-like set of named effort levels (TRIVIAL, SMALL, MEDIUM, LARGE, EPIC) for consistent effort tagging across agents and tooling
+
+WHAT IT SHOULD DO BETTER:
+- Add docstrings per-member or metadata (time range, relative weight), provide integer-to-duration mapping helpers, input validation and utility methods for arithmetic/comparison, and unit tests and type hints for stronger integration
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 """Auto-extracted class from agent_improvements.py"""
+
+from __future__ import annotations
+
+from enum import Enum
+
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class EffortEstimate(Enum):
+    """Effort estimation levels."""
+
+    TRIVIAL = 1
+    SMALL = 3
+    MEDIUM = 5
+    LARGE = 8
+    EPIC = 13
+"""
 
 from __future__ import annotations
 

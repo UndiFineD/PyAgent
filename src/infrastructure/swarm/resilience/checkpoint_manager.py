@@ -27,6 +27,7 @@ from src.core.rust_bridge import RustBridge
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class CheckpointMetadata:
     id: str
@@ -35,6 +36,7 @@ class CheckpointMetadata:
     data_size: int
     checksum: str
     peer_rank: int
+
 
 class CheckpointManager:
     """Manages high-speed state checkpoints using RDMA teleportation."""
@@ -81,7 +83,7 @@ class CheckpointManager:
                     timestamp=time.time(),
                     rank=self.rank,
                     data_size=len(state_buffer),
-                    checksum=hash(state_buffer), # Simple checksum for stub
+                    checksum=hash(state_buffer),  # Simple checksum for stub
                     peer_rank=self.peer_rank
                 )
                 self.checkpoints.append(metadata)
@@ -114,12 +116,12 @@ class CheckpointManager:
                 {
                     "source_rank": self.peer_rank,
                     "id": checkpoint_id,
-                    "expected_size": 1024 # Mock
+                    "expected_size": 1024  # Mock
                 }
             )
 
             if result.get("success"):
-                return b"RECOVERED_STATE_STUB" # In real imp, Rust would return the buffer
+                return b"RECOVERED_STATE_STUB"  # In real imp, Rust would return the buffer
             return None
         except Exception as e:
             logger.error(f"RDMA Recovery failed: {e}")

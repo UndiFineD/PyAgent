@@ -26,6 +26,7 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 
 logger = logging.getLogger(__name__)
 
+
 class ExpertMinerAgent(BaseAgent):
     """
     The Expert Miner analyzes 'Trace Artifacts' from failed or sub-optimal tasks

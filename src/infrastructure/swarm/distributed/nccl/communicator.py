@@ -481,30 +481,30 @@ class CustomAllReduce:
         """
         # Ensure we are on the communicator's stream
         stream = getattr(self.comm, "_stream", None)
-        
+
         with torch.cuda.stream(stream):
             # For a single process managing multiple GPUs (DataParallel style),
             # torch.cuda.comm.all_reduce is highly efficient.
             # In a multi-process distributed setting, we use this as an
             # optimized entry point that could be extended with custom kernels.
             from torch.cuda.comm import all_reduce as cuda_all_reduce
-            
+
             # Map reduce op to Torch op
             reduce_op = self.comm._map_reduce_op(op)
-            
+
             # Check if we can use the specialized cuda_comm path
             # (requires tensors on all participating GPUs in this process)
             # For now, we perform an optimized distributed all_reduce
             # that ensures it stays within the custom stream and uses
             # the world's most performant path for the given tensor size.
-            
+
             if dist.is_initialized():
                 dist.all_reduce(tensor, op=reduce_op, group=self.comm.group)
             else:
                 # Local only reduction if distributed is not init
                 # (Demonstrating use of the requested primitive)
                 cuda_all_reduce([tensor])
-            
+
             if op in (ReduceOp.AVG, "avg"):
                 tensor.div_(self.comm.world_size)
 

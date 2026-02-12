@@ -220,7 +220,6 @@ class EfficientChangeDetector:
             iteration += 1
             await asyncio.sleep(interval)
 
-
     def get_change_statistics(self) -> Dict[str, Any]:
         """Get statistics about detected changes"""
         if not self.change_history:

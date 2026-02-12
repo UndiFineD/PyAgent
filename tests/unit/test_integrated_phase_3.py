@@ -21,6 +21,7 @@ import pytest
 from src.logic.agents.interpreter.safe_executor import SafeLocalInterpreter
 from src.logic.agents.security.recon.domain_generator import DomainGenerator, MockLLM
 
+
 @pytest.mark.asyncio
 async def test_safe_executor():
     interpreter = SafeLocalInterpreter()
@@ -34,6 +35,7 @@ async def test_safe_executor():
     # If os is blocked, this imports nothing or fails
     # Our impl blocks import unless in allowed list. 'os' is NOT in allowed list.
     assert "module 'os' is not defined" in res.stderr or res.result is None
+
 
 @pytest.mark.asyncio
 async def test_domain_generator():

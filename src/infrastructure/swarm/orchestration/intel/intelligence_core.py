@@ -82,7 +82,7 @@ class IntelligenceCore:
             "corrupt": FailureClassification.SHARD_CORRUPTION,
             "distributed": FailureClassification.DISTRIBUTED_STATE_ERROR,
             "synchronization": FailureClassification.DISTRIBUTED_STATE_ERROR,
-            "recursive": FailureClassification.RECURSION_LIMIT, # Map rough matches
+            "recursive": FailureClassification.RECURSION_LIMIT,  # Map rough matches
             "self_improvement": FailureClassification.RECURSIVE_IMPROVEMENT,
             "self_healing": FailureClassification.RECURSIVE_IMPROVEMENT,
             "swarm_desynchronization": FailureClassification.DISTRIBUTED_STATE_ERROR,

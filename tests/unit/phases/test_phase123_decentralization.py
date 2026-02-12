@@ -15,7 +15,6 @@
 Test Phase123 Decentralization module.
 """
 
-#!/usr/bin/env python3
 
 import unittest
 import json

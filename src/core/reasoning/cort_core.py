@@ -242,13 +242,12 @@ Respond with just a number between 1 and 5."""
         temperatures = [0.7, 0.8, 0.9][:num_alternatives]
 
         for i, temp in enumerate(temperatures):
-            alt_prompt = f"""Original message: {prompt}
-
-Current response: {base_response}
-
-Generate an alternative response that might be better. Be creative and consider different approaches, perspectives, or emphases.
-
-Alternative response:"""
+            alt_prompt = (
+                f"Original message: {prompt}\n"
+                f"Current response: {base_response}\n"
+                f"Generate an alternative response that might be better. Be creative and consider different approaches, perspectives, or emphases.\n"
+                f"Alternative response:"
+            )
 
             try:
                 alternative = await self.inference_engine.generate(
@@ -258,7 +257,7 @@ Alternative response:"""
                 )
                 alternatives.append(alternative.strip())
             except Exception as e:
-                self.logger.warning(f"Failed to generate alternative {i+1}: {e}")
+                self.logger.warning(f"Failed to generate alternative {i + 1}: {e}")
                 alternatives.append(base_response)  # Fallback
 
         return alternatives
@@ -276,7 +275,7 @@ Evaluate these responses and choose the best one:
 Current best: {current_best}
 
 Alternatives:
-{chr(10).join([f"{i+1}. {alt}" for i, alt in enumerate(alternatives)])}
+{chr(10).join([f"{i + 1}. {alt}" for i, alt in enumerate(alternatives)])}
 
 Which response best addresses the original message? Consider accuracy, clarity, completeness, and helpfulness.
 

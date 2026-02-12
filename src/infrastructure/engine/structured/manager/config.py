@@ -107,7 +107,6 @@ class ValidationResult:
     suggestion: Optional[str] = None
 
 
-
 @dataclass
 class BackendStats:
     """Statistics for a structured output backend."""

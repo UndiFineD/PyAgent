@@ -20,7 +20,7 @@ from dataclasses import dataclass, field
 class DelegationMode(str, Enum):
     ROUTE = "route"            # Single best agent chosen to handle task
     COORDINATE = "coordinate"  # Lead agent breaks task into sub-tasks for others
-    COLLABORATE = "collaborate" # Agents work concurrently on shared state
+    COLLABORATE = "collaborate"  # Agents work concurrently on shared state
 
 
 @dataclass

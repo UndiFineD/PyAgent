@@ -16,6 +16,7 @@
 
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
 
+
 def test_tenant_isolation_gate():
     """Verifies that context shards are inaccessible to wrong tenants."""
     manager = ContextShardManager(block_size=512)
@@ -37,6 +38,7 @@ def test_tenant_isolation_gate():
     assert rank_beta is None
 
     print("\nPhase 71: Tenant context isolation verified.")
+
 
 def test_cascade_context_tenant_propagation():
     """Verifies that tenant_id is preserved across agent delegation."""

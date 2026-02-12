@@ -174,7 +174,8 @@ class CircuitBreaker:
         """Check if state should transition based on timeout."""
         if self._state == CircuitState.OPEN and self._opened_at:
             elapsed = time.monotonic() - self._opened_at
-            # print(f"[DEBUG] _check_state_transition: state=OPEN, elapsed={elapsed:.2f}, recovery_timeout={self._recovery_timeout}")
+            # print(f"[DEBUG] _check_state_transition: state=OPEN, elapsed={elapsed:.2f}, "
+            #       f"recovery_timeout={self._recovery_timeout}")
             if elapsed >= self._recovery_timeout:
                 # print("[DEBUG] Transitioning to HALF_OPEN from OPEN due to timeout.")
                 self._transition_to(CircuitState.HALF_OPEN)

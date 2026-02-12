@@ -17,6 +17,7 @@ from collections import defaultdict
 import json
 import os
 
+
 class GraphAnalysisCore:
     """Core for graph-based security and relationship analysis."""
 

@@ -28,6 +28,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+
 class GitSkill(SkillCore):
     """Git management for Universal Agents."""
 

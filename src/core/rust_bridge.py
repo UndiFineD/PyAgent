@@ -13,9 +13,31 @@
 # limitations under the License.
 
 """
+Rust Bridge - Safe Rust FFI Bridge.
 Safe FFI Bridge for Rust Acceleration (rust_core.pyd).
 Provides centralized hub for all Rust FFI calls with graceful fallbacks.
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- From Python: from rust_bridge import get_bridge; metrics = get_bridge().calculate_metrics(text)
+- Shard id: sid = get_bridge().calculate_shard_id(key, shard_count)
+- Vector search: idxs = get_bridge().search_vector(query_vec, database, top_k)
+- Generic execute: result = get_bridge().execute("method_name", {"param": value})
+
+WHAT IT DOES:
+- Provides a centralized, memory-safe bridge to an optional rust_core extension with graceful Python fallbacks.
+- Wraps Rust FFI calls with boundary checks, logging, and simple fallback implementations for metrics, sharding, vector search, block management, token hashing, and bulk text replace.
+- Exposes a singleton-like accessor (get_bridge) and a generic execute router for dynamic calls.
+
+WHAT IT SHOULD DO BETTER:
+- Add structured feature-detection and an initialization handshake to surface availability and version of rust_core at startup.
+- Improve error handling: return typed exceptions or result objects instead of None/empty values to aid upstream handling and testing.
+- Add extensive unit tests for fallbacks, and optimize fallback implementations (e.g., use thread-safe caches, deterministic hashing) and better typing for returned structures.
 """
+
+
 
 from __future__ import annotations
 

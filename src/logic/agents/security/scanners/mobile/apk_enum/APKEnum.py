@@ -61,28 +61,36 @@ vulnerableGmapKeys = []
 unrestrictedGmapKeys = []
 gmapURLs = [
     "https://maps.googleapis.com/maps/api/staticmap?center=45%2C10&zoom=7&size=400x400&key=",
-    "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=40.720032,-73.988354&fov=90&heading=235&pitch=10&key=",
+    ("https://maps.googleapis.com/maps/api/streetview?size=400x400&location=40.720032,-73.988354&fov=90&heading="
+     "235&pitch=10&key="),
     "https://www.google.com/maps/embed/v1/place?q=Seattle&key=",
     "https://www.google.com/maps/embed/v1/search?q=record+stores+in+Seattle&key=",
-    "https://maps.googleapis.com/maps/api/directions/json?origin=Disneyland&destination=Universal+Studios+Hollywood4&key=",
+    ("https://maps.googleapis.com/maps/api/directions/json?origin=Disneyland&destination=Universal+Studios+"
+     "Hollywood4&key="),
     "https://maps.googleapis.com/maps/api/geocode/json?latlng=40,30&key=",
-    "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=",
-    "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Museum%20of%20Contemporary%20Art%20Australia&inputtype=textquery&fields=photos,formatted_address,name,rating,opening_hours,geometry&key=",
+    ("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998"
+     "&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C"
+     "-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C"
+     "-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C"
+     "-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key="),
+    ("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Museum%20of%20Contemporary%20Art"
+     "%20Australia&inputtype=textquery&fields=photos,formatted_address,name,rating,opening_hours,geometry&key="),
     "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=Bingh&types=%28cities%29&key=",
     "https://maps.googleapis.com/maps/api/elevation/json?locations=39.7391536,-104.9847034&key=",
     "https://maps.googleapis.com/maps/api/timezone/json?location=39.6034810,-119.6822510&timestamp=1331161200&key=",
-    "https://roads.googleapis.com/v1/nearestRoads?points=60.170880,24.942795|60.170879,24.942796|60.170877,24.942796&key=",
+    ("https://roads.googleapis.com/v1/nearestRoads?points=60.170880,24.942795|"
+     "60.170879,24.942796|60.170877,24.942796&key="),
 ]
 
 apktoolPath = "./Dependencies/apktool.jar"
 urlRegex = (
-    "(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+):?\d*)([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?"
+    r"(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+):?\d*)([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?"
 )  # regex to extract domain
-s3Regex1 = "https*://(.+?)\.s3\..+?\.amazonaws\.com\/.+?"
-s3Regex2 = "https*://s3\..+?\.amazonaws\.com\/(.+?)\/.+?"
-s3Regex3 = "S3://(.+?)/"
-s3Website1 = "https*://(.+?)\.s3-website\..+?\.amazonaws\.com"
-s3Website2 = "https*://(.+?)\.s3-website-.+?\.amazonaws\.com"
+s3Regex1 = r"https*://(.+?)\.s3\..+?\.amazonaws\.com\/.+?"
+s3Regex2 = r"https*://s3\..+?\.amazonaws\.com\/(.+?)\/.+?"
+s3Regex3 = r"S3://(.+?)/"
+s3Website1 = r"https*://(.+?)\.s3-website\..+?\.amazonaws\.com"
+s3Website2 = r"https*://(.+?)\.s3-website-.+?\.amazonaws\.com"
 publicIp = (
     r"https*://(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(?<!172\.(16|17|18|19|20|21|22|23|24"
     r"|25|26|27|28|29|30|31))(?<!127)(?<!^10)(?<!^0)\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25"
@@ -90,7 +98,7 @@ publicIp = (
     r"[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])"
     r"(?<!\.255$))"
 )
-gMapsAPI = "(AIzaSy[\w-]{33})"
+gMapsAPI = r"(AIzaSy[\w-]{33})"
 
 
 def myPrint(text, type):
@@ -266,7 +274,7 @@ def findPublicIPs(line):
 
 
 def performRecon():
-    global domainList, authorityList, inScopeDomainList, inScopeAuthorityList
+    global authorityList, inScopeAuthorityList
     filecontent = ""
     for dir_path, dirs, file_names in os.walk(rootDir + apkFileName + "_" + hashlib.md5().hexdigest()):
         for file_name in file_names:
@@ -378,7 +386,7 @@ print(
  ##.... ##: ##:::::::: ##:. ##:: ##::::::: ##:. ###: ##:::: ##: ##:.:: ##:
  ##:::: ##: ##:::::::: ##::. ##: ########: ##::. ##:. #######:: ##:::: ##:
 ..:::::..::..:::::::::..::::..::........::..::::..:::.......:::..:::::..::
-	"""
+    """
     + bcolors.OKRED
     + bcolors.BOLD
     + """

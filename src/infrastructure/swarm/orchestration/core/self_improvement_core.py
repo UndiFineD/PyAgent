@@ -67,7 +67,8 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
             r"subprocess\.(run|call|Popen|check_call|check_output)\(|adb shell)"
         )
 
-    def analyze_content(self, content: str, file_path_rel: str, allow_triton_check: bool = True) -> List[Dict[str, Any]]:
+    def analyze_content(self, content: str, file_path_rel: str,
+                        allow_triton_check: bool = True) -> List[Dict[str, Any]]:
         """
         Performs multi-dimensional analysis on file content using Rust if available.
         Returns a list of findings.
@@ -76,7 +77,9 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
         if _RUST_ACCEL and rc is not None:
             try:
                 # Use the Rust PyO3 function directly
-                result = rc.analyze_content(content, file_path_rel, allow_triton_check)
+                result = rc.analyze_content(
+                    content, file_path_rel, allow_triton_check
+                )
                 return json.loads(result)
             except (ValueError, TypeError, AttributeError):
                 pass  # Fallback to Python path if Rust fails
@@ -87,7 +90,9 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
         findings.extend(self._analyze_complexity(content, file_path_rel))
         findings.extend(self._analyze_documentation(content, file_path_rel))
         findings.extend(self._analyze_typing(content, file_path_rel))
-        findings.extend(self._analyze_robustness_and_perf(content, file_path_rel, allow_triton_check=allow_triton_check))
+        findings.extend(self._analyze_robustness_and_perf(
+            content, file_path_rel, allow_triton_check=allow_triton_check
+        ))
         return findings
 
     def _analyze_via_rust(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:

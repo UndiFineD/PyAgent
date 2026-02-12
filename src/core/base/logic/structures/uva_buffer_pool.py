@@ -57,7 +57,7 @@ try:
     BRIDGE = get_bridge()
     HAS_RUST = hasattr(BRIDGE, "uva_copy_rust")
 except Exception:  # pylint: disable=broad-exception-caught, unused-variable
-        # pylint: disable=broad-exception-caught
+    # pylint: disable=broad-exception-caught
     HAS_RUST = False
     BRIDGE = None
 

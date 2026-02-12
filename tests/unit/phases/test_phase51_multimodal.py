@@ -23,6 +23,7 @@ from src.core.base.common.multimodal_core import MultimodalCore
 from src.infrastructure.engine.multimodal.muxer import Muxer
 from src.infrastructure.engine.multimodal.quantized_engine import QuantizedMultimediaEngine
 
+
 def test_muxer_binary_sync():
     """Test muxer binary synchronization."""
     muxer = Muxer()
@@ -35,7 +36,8 @@ def test_muxer_binary_sync():
     # Check Magic Header (0xDEADBEEF in Little Endian is EF BE AD DE)
     # assert packet.startswith(b"\xef\xbe\xad\xde")
     assert packet.startswith(b"\xde\xad\xbe\xef")
-    assert len(packet) > 12 # Header + lengths + some data
+    assert len(packet) > 12  # Header + lengths + some data
+
 
 def test_ia3_scaling_fallback():
     """Test IA3 scaling fallback."""
@@ -47,12 +49,14 @@ def test_ia3_scaling_fallback():
     result = engine.apply_stream_ia3(activations, scaling)
     assert np.allclose(result, 2.0)
 
+
 def test_multimodal_core_initialization():
     """Test multimodal core initialization."""
     core = MultimodalCore()
     assert core.muxer is not None
     assert core.q_engine is not None
     assert "Audio" in core.active_channels
+
 
 def test_cross_modal_alignment_logic():
     """Test cross modal alignment logic."""
@@ -64,6 +68,7 @@ def test_cross_modal_alignment_logic():
     # Should work (returns range if Rust not compiled, or aligned indices if it is)
     alignment = engine.align_streams(video_feat, audio_feat)
     assert len(alignment) == 5
+
 
 @pytest.mark.asyncio
 async def test_tensorrt_loader_stub():

@@ -98,10 +98,16 @@ class PylintFixerMixin:
                         if "pylint: disable=" in line:
                             updated_line = line
                             if "broad-exception-caught" not in line and "broad-except" not in line:
-                                updated_line = updated_line.replace("pylint: disable=", "pylint: disable=broad-exception-caught, ")
+                                updated_line = updated_line.replace(
+                                    "pylint: disable=",
+                                    "pylint: disable=broad-exception-caught, "
+                                )
                                 modified = True
                             if "unused-variable" not in line:
-                                updated_line = updated_line.replace("pylint: disable=", "pylint: disable=unused-variable, ")
+                                updated_line = updated_line.replace(
+                                    "pylint: disable=",
+                                    "pylint: disable=unused-variable, "
+                                )
                                 modified = True
                             new_lines.append(updated_line)
                             continue
@@ -109,7 +115,9 @@ class PylintFixerMixin:
                         # If no disable, inject it
                         indent_match = re.match(r"^(\s*)", line)
                         indent = indent_match.group(1) if indent_match else ""
-                        new_lines.append(f"{indent}except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable")
+                        new_lines.append(
+                            f"{indent}except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable"
+                        )
                         modified = True
                     else:
                         new_lines.append(line)

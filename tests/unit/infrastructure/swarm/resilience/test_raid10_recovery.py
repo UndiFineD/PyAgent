@@ -18,6 +18,7 @@ from unittest.mock import AsyncMock, MagicMock
 from src.infrastructure.swarm.resilience.distributed_backup import DistributedBackup
 from src.infrastructure.swarm.fleet.mixins.fleet_backup_mixin import FleetBackupMixin
 
+
 class MockNode(FleetBackupMixin):
     """Mock node for testing distributed RAID-10 recovery."""
     def __init__(self, node_id):
@@ -50,6 +51,7 @@ class MockNode(FleetBackupMixin):
                 "shard_response",
                 {"shard_id": shard_id, "content": self._shard_store[shard_id]}
             )
+
 
 @pytest.mark.asyncio
 async def test_raid10_sharding_and_recovery():

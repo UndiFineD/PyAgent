@@ -36,6 +36,8 @@ FORBIDDEN_ATTRS = {'system', 'popen', 'call', 'Popen', 'run'}
 FORBIDDEN_MODULES = {'subprocess', 'sh', 'pexpect'}
 
 # CLI-configurable allowlists (comma-separated strings parsed in `main`)
+
+
 def parse_allowlist(s: str):
     if not s:
         return set()

@@ -270,6 +270,7 @@ class TestLMStudioBackend:
         # Helper fixtures
         class MockLLM:
             """Mock LLM for async client testing."""
+
             def __init__(self, response: str):
                 self._response = response
 
@@ -302,6 +303,7 @@ class TestLMStudioBackend:
 
         # Case B: client.llm is callable and returns model (sync)
         mock_llm_b = MockLLM("resp-b")
+
         def callable_llm(model=None):
             return mock_llm_b
 
@@ -414,6 +416,7 @@ class TestLMStudioConvenienceFunctions:
         # The fallback LLM's respond should call into _http_chat_request
         resp = llm.respond("hello world")
         assert resp == "http-response"
+
     def test_lmstudio_stream_import(self):
         """Test streaming function can be imported."""
         from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import lmstudio_stream

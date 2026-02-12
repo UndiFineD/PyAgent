@@ -172,8 +172,8 @@ class FleetManager(
 
         # Phase 320: Resource Monitoring & Autonomous Balancing
         self.resource_monitor = ResourceMonitor(fleet=self)
-        self.borrowed_helpers: Dict[str, Any] = {} # Phase 320: Cluster Balancing Helpers
-        self.rl_selector = RLSelector() # Phase 321: RL-based Routing
+        self.borrowed_helpers: Dict[str, Any] = {}  # Phase 320: Cluster Balancing Helpers
+        self.rl_selector = RLSelector()  # Phase 321: RL-based Routing
         self._safe_start_task(self.resource_monitor.start())
         self._safe_start_task(self.evolution_loop.start())
         self._safe_start_task(self._topology_loop())
@@ -361,6 +361,8 @@ class FleetManager(
                 remote_pub = response.get("public_key")
                 # Phase 2.0: Shared secret established (simulated DH)
                 root_key = b"swarm-shared-secret-v4"
+                if remote_pub is None:
+                    remote_pub = b"peer-ephemeral-pub-default"
                 self.voyager_transport.sessions[peer_id] = DoubleRatchet(root_key, remote_pub)
                 logger.info(f"Voyager: E2EE Session active with {peer_id}")
 
@@ -389,13 +391,17 @@ class FleetManager(
         if msg_type == "delegate_task":
             agent_type = message.get("agent_type")
             prompt = message.get("prompt")
+            if not isinstance(agent_type, str):
+                return {"status": "error", "message": "agent_type must be a string"}
+            if not isinstance(prompt, str):
+                return {"status": "error", "message": "prompt must be a string"}
             try:
                 result = await self.delegate_to(agent_type, prompt)
                 return {"status": "success", "result": result}
             except Exception as e:
                 return {"status": "error", "message": str(e)}
 
-        elif msg_type.startswith("CONSENSUS_"):
+        elif msg_type and msg_type.startswith("CONSENSUS_"):
             # Update peer list for consensus engine
             peers = [p["name"] for p in self.voyager_discovery.get_active_peers()]
             self.swarm_consensus.set_peers(peers)
@@ -408,6 +414,8 @@ class FleetManager(
             # For Phase 3.0, we simulate with a dummy root key
             from src.infrastructure.security.encryption.double_ratchet import DoubleRatchet
             root_key = b"swarm-shared-secret-v4"
+            if remote_pub is None:
+                remote_pub = b"peer-ephemeral-pub-default"
             self.voyager_transport.sessions[sender_id] = DoubleRatchet(root_key, remote_pub)
             return {"type": "HANDSHAKE_RESPONSE", "public_key": b"local-ephemeral-pub"}
 
@@ -433,6 +441,8 @@ class FleetManager(
 
         elif msg_type == "shard_request" or msg_type == "request_shard":
             state_hash = message.get("hash")
+            if not isinstance(state_hash, str):
+                return {"status": "error", "message": "hash must be a string"}
             shards = self.backup_node.get_local_shards_for_hash(state_hash)
             return {"status": "success", "shards": shards}
 
@@ -471,7 +481,7 @@ class FleetManager(
                 )
 
                 # 3. Active Local Agents (Synaptic Connections)
-                for agent_id in self.agents:
+                for agent_id in self.agents.keys():
                     self.topology_reporter.record_node(agent_id, group="agent")
                     self.topology_reporter.record_link("localhost", agent_id, strength=1.2, type="memory_bus")
 
@@ -487,7 +497,7 @@ class FleetManager(
                     self.topology_reporter.record_link("localhost", peer_id, strength=strength, type="voyager_p2p")
 
                 self.topology_reporter.export()
-                await asyncio.sleep(10) # 10s Topology Pulse
+                await asyncio.sleep(300)  # 5m Topology Pulse
             except Exception as e:
                 logger.error(f"FleetManager: Topology Loop Error: {e}")
                 await asyncio.sleep(5)

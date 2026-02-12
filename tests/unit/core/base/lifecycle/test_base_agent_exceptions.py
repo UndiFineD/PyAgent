@@ -18,6 +18,7 @@ from unittest.mock import patch
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.models import FailureClassification
 
+
 class TestBaseAgentExceptions:
     def test_classify_exception(self):
         # Mocking init to bypass side effects
@@ -28,8 +29,10 @@ class TestBaseAgentExceptions:
 
             assert agent._classify_exception(RecursionError("Max depth")) == FailureClassification.RECURSION_LIMIT.value
             assert agent._classify_exception(MemoryError("OOM")) == FailureClassification.RESOURCE_EXHAUSTION.value
-            assert agent._classify_exception(Exception("Connection refused")) == FailureClassification.NETWORK_FAILURE.value
-            assert agent._classify_exception(Exception("Shard checksum failed")) == FailureClassification.SHARD_CORRUPTION.value
+            assert agent._classify_exception(Exception("Connection refused")
+                                             ) == FailureClassification.NETWORK_FAILURE.value
+            assert agent._classify_exception(Exception("Shard checksum failed")
+                                             ) == FailureClassification.SHARD_CORRUPTION.value
             assert agent._classify_exception(ValueError("Bad val")) == FailureClassification.UNKNOWN.value
 
     @patch("src.core.base.lifecycle.base_agent.BaseAgent.run_async")

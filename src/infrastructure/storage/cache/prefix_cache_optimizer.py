@@ -171,7 +171,7 @@ class PrefixTree:
 
                     # New node regarding remaining tokens
                     if pos + common_len < len(tokens):
-                        remaining = tokens[pos + common_len :]
+                        remaining = tokens[pos + common_len:]
                         new_node = RadixTreeNode(prefix=remaining)
                         new_node.entry = entry
                         new_node.is_leaf = True
@@ -193,10 +193,10 @@ class PrefixTree:
         """
         with self._lock:
             def _find_recursive(
-            node: RadixTreeNode,
-            pos: int,
-            last_match: Optional[tuple[int, PrefixEntry]],
-        ) -> Optional[tuple[int, PrefixEntry]]:
+                node: RadixTreeNode,
+                pos: int,
+                last_match: Optional[tuple[int, PrefixEntry]],
+            ) -> Optional[tuple[int, PrefixEntry]]:
                 if pos >= len(tokens):
                     return last_match
 
@@ -232,10 +232,10 @@ class PrefixTree:
         """Remove prefix from tree."""
         with self._lock:
             def _find_path(
-            node: RadixTreeNode,
-            pos: int,
-            path: list[tuple[RadixTreeNode, int]],
-        ) -> Optional[RadixTreeNode]:
+                node: RadixTreeNode,
+                pos: int,
+                path: list[tuple[RadixTreeNode, int]],
+            ) -> Optional[RadixTreeNode]:
                 if pos >= len(tokens):
                     return node
 

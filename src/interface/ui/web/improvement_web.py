@@ -32,11 +32,12 @@ st.set_page_config(
 # Workspace Root Detection
 WORKSPACE_ROOT = Path(__file__).resolve().parent.parent.parent.parent.parent
 
+
 def load_reasoning_chains():
     log_path = WORKSPACE_ROOT / "data" / "logs" / "reasoning_chains.jsonl"
     if not log_path.exists():
         return []
-    
+
     chains = []
     with open(log_path, "r", encoding="utf-8") as f:
         for line in f:
@@ -47,11 +48,12 @@ def load_reasoning_chains():
                     continue
     return chains
 
+
 def load_audit_log():
     log_path = WORKSPACE_ROOT / "data" / "logs" / "self_improvement_audit.jsonl"
     if not log_path.exists():
         return []
-    
+
     audit = []
     with open(log_path, "r", encoding="utf-8") as f:
         for line in f:
@@ -62,10 +64,11 @@ def load_audit_log():
                     continue
     return audit
 
+
 def save_steering_directive(directive: str):
     steering_file = WORKSPACE_ROOT / "docs" / "prompt" / "steering.txt"
     steering_file.parent.mkdir(parents=True, exist_ok=True)
-    
+
     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
     with open(steering_file, "a", encoding="utf-8") as f:
         f.write(f"\n# Directive Added on {timestamp}\n")
@@ -91,11 +94,13 @@ def load_self_improvement_log_tail(max_lines: int = 120) -> str:
     tail = lines[-max_lines:]
     return "".join(tail).rstrip()
 
+
 def format_timestamp(ts):
     if isinstance(ts, (int, float)):
         import datetime
         return datetime.datetime.fromtimestamp(ts).strftime("%Y-%m-%d %H:%M:%S")
     return ts
+
 
 def main():
     st.title("🧠 Self-Improvement Manager")
@@ -113,7 +118,7 @@ def main():
                 role = chain.get("role", "unknown")
                 content = chain.get("content", "")
                 timestamp = format_timestamp(chain.get("timestamp", ""))
-                
+
                 with st.chat_message(role if role != "thought" else "assistant"):
                     st.write(f"**[{timestamp}]**")
                     st.write(content)
@@ -123,10 +128,10 @@ def main():
     with col2:
         st.subheader("🎯 Steer the Swarm")
         with st.form("steering_form"):
-            directive = st.text_area("New Improvement Directive (ArXiv topic, specific fix, etc.)", 
+            directive = st.text_area("New Improvement Directive (ArXiv topic, specific fix, etc.)",
                                      placeholder="e.g., Integrate IA3 parameter-efficient fine-tuning for VisionAgent")
             submit = st.form_submit_button("🚀 Inject Directive")
-            
+
             if submit and directive:
                 save_steering_directive(directive)
                 st.success("Directive injected into the strategic context!")
@@ -164,6 +169,7 @@ def main():
         st.markdown(research_doc.read_text(encoding="utf-8")[:2000] + "...")
     else:
         st.write("No research document found.")
+
 
 if __name__ == "__main__":
     main()

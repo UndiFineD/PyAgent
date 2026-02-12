@@ -117,7 +117,8 @@ class GPTQQuantizer(Quantizer):
                 group: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = w[:, group_start:group_end]
                 if self.config.symmetric:
                     max_val = np.max(np.abs(group), axis=1)
-                    scale: np.ndarray[tuple[int, ...], np.dtype[np.Any]] = np.where(max_val > 0, max_val / self.config.qmax, 1.0)
+                    scale: np.ndarray[tuple[int, ...], np.dtype[np.Any]] = np.where(
+                        max_val > 0, max_val / self.config.qmax, 1.0)
                 else:
                     min_val = np.min(group, axis=1)
                     max_val = np.max(group, axis=1)

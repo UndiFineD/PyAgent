@@ -359,8 +359,8 @@ class HybridMemoryCore:
         }
 
     async def store_memory(self, content: str, embedding: Optional[List[float]] = None,
-                          tags: Optional[List[str]] = None, importance: float = 1.0,
-                          metadata: Optional[Dict[str, Any]] = None) -> str:
+                           tags: Optional[List[str]] = None, importance: float = 1.0,
+                           metadata: Optional[Dict[str, Any]] = None) -> str:
         """Store a new memory in both graph and vector stores"""
         memory_id = str(uuid.uuid4())
 
@@ -507,7 +507,7 @@ class HybridMemoryCore:
 
         # Weighted sum
         final_score = sum(scores[component] * weight
-                         for component, weight in self.scoring_weights.items())
+                          for component, weight in self.scoring_weights.items())
 
         return final_score
 

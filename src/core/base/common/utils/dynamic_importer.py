@@ -98,7 +98,6 @@ def import_from_path(
     if add_to_sys_modules:
         sys.modules[module_name] = module
 
-
     try:
         spec.loader.exec_module(module)
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable

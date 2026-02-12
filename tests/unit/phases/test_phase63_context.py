@@ -25,6 +25,7 @@ from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatek
 from src.infrastructure.engine.models.similarity import EmbeddingSimilarityService
 from src.core.base.common.models.communication_models import ExpertProfile
 
+
 @pytest.mark.asyncio
 async def test_context_sharding_logic():
     manager = ContextShardManager(block_size=100)
@@ -36,6 +37,7 @@ async def test_context_sharding_logic():
     assert manager.get_rank_for_token("doc1", 250) == 2
     # Token 550 should be rank 2 (550 // 100 = 5, 5 % 3 = 2)
     assert manager.get_rank_for_token("doc1", 550) == 2
+
 
 @pytest.mark.asyncio
 async def test_locality_aware_routing():

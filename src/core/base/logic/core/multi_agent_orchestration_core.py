@@ -56,7 +56,8 @@ class OrchestrationPlan(BaseModel):
     """Plan for multi-agent task execution."""
     tasks: List[AgentTask] = Field(..., description="List of tasks to execute")
     execution_order: List[str] = Field(..., description="Order of task execution by task ID")
-    parallel_groups: List[List[str]] = Field(default_factory=list, description="Groups of tasks that can run in parallel")
+    parallel_groups: List[List[str]] = Field(default_factory=list,
+                                             description="Groups of tasks that can run in parallel")
 
 
 class AgentCoordinator(ABC):

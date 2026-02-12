@@ -23,6 +23,7 @@ from unittest.mock import MagicMock
 from src.infrastructure.engine.quantization.manager import QuantizationManager, QuantizationMode
 from src.infrastructure.swarm.orchestration.swarm.speculative_swarm_orchestrator import SpeculativeSwarmOrchestrator
 
+
 @pytest.mark.asyncio
 async def test_quantization_manager_modes():
     manager = QuantizationManager()
@@ -37,6 +38,7 @@ async def test_quantization_manager_modes():
     config = manager.get_kernel_config()
     assert config["bits"] == 4
 
+
 @pytest.mark.asyncio
 async def test_speculative_swarm_execution():
     # Mock Fleet Manager
@@ -50,7 +52,7 @@ async def test_speculative_swarm_execution():
     verify_future = asyncio.Future()
 
     mock_fleet.delegate_task = MagicMock(side_effect=[
-        draft_future, # draft
+        draft_future,  # draft
         verify_future  # verify
     ])
 
@@ -70,6 +72,7 @@ async def test_speculative_swarm_execution():
     assert outcome.accepted is True
     assert "Paris" in outcome.final_content
     assert orchestrator.stats["accepted_proposals"] == 1
+
 
 @pytest.mark.asyncio
 async def test_speculative_swarm_rejection():

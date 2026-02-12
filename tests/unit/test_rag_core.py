@@ -416,8 +416,8 @@ class TestRAGCore:
 
         document = Document(
             doc_id="test_doc",
-            content="This is a long document that should be split into multiple chunks for better retrieval performance."
-        )
+            content=("This is a long document that should be split into multiple "
+                     "chunks for better retrieval performance."))
 
         chunks = await core._chunk_document(document, tool_config)
 
@@ -427,7 +427,7 @@ class TestRAGCore:
 
         # Check overlap
         for i in range(1, len(chunks)):
-            prev_content = chunks[i-1].content
+            prev_content = chunks[i - 1].content
             curr_content = chunks[i].content
             # Should have some overlap
             assert len(set(prev_content.split()) & set(curr_content.split())) > 0

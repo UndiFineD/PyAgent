@@ -55,14 +55,14 @@ class SwarmConsensus:
 
     def __init__(self, node_id: str, transport: Any = None) -> None:
         self.node_id = node_id
-        self.transport = transport # VoyagerTransport instance
+        self.transport = transport  # VoyagerTransport instance
         self.term = 0
         self.log: List[LogEntry] = []
         self.commit_index = 0
         self.state = SwarmState()
         self.is_leader = False
         self.peers: List[str] = []
-        self.votes_received: Dict[int, set] = {} # term -> set of voter IDs
+        self.votes_received: Dict[int, set] = {}  # term -> set of voter IDs
 
         # BFT Weights: Higher trust for nodes with more 'Expertize'
         self.node_weights: Dict[str, float] = {node_id: 1.0}

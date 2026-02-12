@@ -16,6 +16,7 @@ import pytest
 from src.infrastructure.security.auth.webauthn_manager import WebAuthnManager
 from src.infrastructure.swarm.resilience.checkpoint_manager import CheckpointManager
 
+
 @pytest.mark.asyncio
 async def test_webauthn_options_generation():
     manager = WebAuthnManager(rp_id="localhost", rp_name="PyAgentTest")
@@ -27,11 +28,13 @@ async def test_webauthn_options_generation():
     assert options["rp"]["name"] == "PyAgentTest"
     assert username in manager.challenges
 
+
 @pytest.mark.asyncio
 async def test_oauth_initialization():
     manager = WebAuthnManager()
     assert manager.oauth is not None
     assert 'github' in manager.oauth._clients
+
 
 @pytest.mark.asyncio
 async def test_rdma_checkpoint_basic():
@@ -47,6 +50,7 @@ async def test_rdma_checkpoint_basic():
     assert latest is not None
     assert latest.id == checkpoint_id
     assert latest.data_size == len(state)
+
 
 @pytest.mark.asyncio
 async def test_rdma_recovery_stub():

@@ -62,7 +62,7 @@ async def test_moe_routing_accuracy():
     # Mock the similarity service to return vectors that match our experts
     # For coding task, return something close to vec_coder
     with patch.object(sim_service, "get_embedding", side_effect=[
-        np.array(vec_coder, dtype=np.float32), # For coding prompt
+        np.array(vec_coder, dtype=np.float32),  # For coding prompt
         np.array(vec_poet, dtype=np.float32)   # For poetry prompt
     ]):
         # Test routing for a code task
@@ -72,6 +72,7 @@ async def test_moe_routing_accuracy():
         # Test routing for a creative task
         decision_poet = await gatekeeper.route_task("Write a sonnet about the digital void")
         assert decision_poet.selected_experts[0] == "agent_poet"
+
 
 @pytest.mark.asyncio
 async def test_moe_orchestrator_execution():

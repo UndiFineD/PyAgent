@@ -16,6 +16,7 @@
 
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
 
+
 def test_distributed_overlap_buffers():
     """Verifies that shards have correct overlap for sliding window attention."""
     # Block size 100, overlap 20
@@ -39,7 +40,7 @@ def test_distributed_overlap_buffers():
     assert shards[1].overlap_size == 20
 
     # Shard 2: 180 to 250
-    assert shards[2].start_token == 180 # 200 - 20
+    assert shards[2].start_token == 180  # 200 - 20
     assert shards[2].end_token == 250
 
     print("\nPhase 78: Distributed token-shifting (Overlap Buffers) verified.")

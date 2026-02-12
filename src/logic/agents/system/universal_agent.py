@@ -25,6 +25,7 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 
 logger = logging.getLogger(__name__)
 
+
 class UniversalAgent(BaseAgent):
     """
     IMPLEMENTATION OF PILLAR 3: The Universal Agent Shell.
@@ -58,7 +59,10 @@ class UniversalAgent(BaseAgent):
             if new_manifest:
                 self.manifest = new_manifest
                 logger.info(f"UniversalAgent: Successfully assumed role '{role_match}'")
-                return {"status": "success", "message": f"Core reconfiguration complete. Now operating as '{role_match}'."}
+                return {
+                    "status": "success",
+                    "message": f"Core reconfiguration complete. Now operating as '{role_match}'."
+                }
             else:
                 return {"status": "error", "message": f"Shard '{role_match}' not found in manifest repository."}
 

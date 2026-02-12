@@ -18,6 +18,7 @@ import pytest
 import asyncio
 from src.infrastructure.swarm.orchestration.state.holographic_state_orchestrator import HolographicStateOrchestrator
 
+
 @pytest.mark.asyncio
 async def test_holographic_sharding_and_reconstruction():
     """Verifies that the Holographic Orchestrator can shard multi-perspective state and reconstruct it."""
@@ -57,6 +58,7 @@ async def test_holographic_sharding_and_reconstruction():
     # Every angle should have at least 2 shards (default redundancy in shard_hologram)
     # Total perspectives = 3, redundancy = 2 -> at least 6 shards expected
     assert len(shards) >= 6
+
 
 @pytest.mark.asyncio
 async def test_holographic_projection_handling():

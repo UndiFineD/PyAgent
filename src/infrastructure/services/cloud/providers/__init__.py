@@ -36,7 +36,8 @@ __all__: list[str] = [
 ]
 
 
-def __getattr__(name: str) -> type[GeminiConnector] | type[AWSBedrockConnector] | type[GroqConnector] | type[AzureAIConnector]:
+def __getattr__(
+        name: str) -> type[GeminiConnector] | type[AWSBedrockConnector] | type[GroqConnector] | type[AzureAIConnector]:
     """Lazy load provider implementations."""
     if name == "GeminiConnector":
         from .gemini import GeminiConnector
@@ -57,7 +58,4 @@ def __getattr__(name: str) -> type[GeminiConnector] | type[AWSBedrockConnector] 
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
-if TYPE_CHECKING:
-    from .bedrock import AWSBedrockConnector
-    from .gemini import GeminiConnector
-    from .groq import GroqConnector
+

@@ -16,6 +16,7 @@
 
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
 
+
 def test_shard_mirroring_failover():
     """Verifies that shards can be recovered from mirrors if primary rank fails."""
     # Redundancy factor 2: one primary, one mirror

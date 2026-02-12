@@ -25,12 +25,13 @@ from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatek
 from src.infrastructure.engine.models.similarity import EmbeddingSimilarityService
 from src.core.base.common.models.communication_models import ExpertProfile
 
+
 @pytest.mark.asyncio
 async def test_self_healing_rerouting():
     sim_service = EmbeddingSimilarityService()
     gatekeeper = MoEGatekeeper(sim_service)
     orchestrator = CrossModelMoEOrchestrator(gatekeeper)
-    orchestrator.timeout_sec = 0.1 # Short timeout for test
+    orchestrator.timeout_sec = 0.1  # Short timeout for test
 
     # Setup two experts
     gatekeeper.register_expert(ExpertProfile(agent_id="e1", domains=["fail"], performance_score=1.0))
@@ -53,6 +54,7 @@ async def test_self_healing_rerouting():
     assert result == "Success after failover"
     assert orchestrator.expert_health["e1"] is False
     assert orchestrator.expert_health["e2"] is True
+
 
 @pytest.mark.asyncio
 async def test_self_healing_mixture_partial_failure():

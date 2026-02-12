@@ -17,6 +17,7 @@
 import pytest
 from src.infrastructure.swarm.orchestration.swarm.consensus import SwarmConsensus
 
+
 @pytest.mark.asyncio
 async def test_swarm_state_consensus():
     """Verifies that changes are committed only after quorum agreement."""

@@ -646,11 +646,11 @@ class TestJsonSchema:
         from src.infrastructure.compute.backend.vllm_advanced.guided_decoder import JsonSchema
 
         schema = (JsonSchema()
-            .add_string("name", required=True)
-            .add_integer("age", minimum=0)
-            .add_array("tags")
-            .add_boolean("active")
-            .build())
+                  .add_string("name", required=True)
+                  .add_integer("age", minimum=0)
+                  .add_array("tags")
+                  .add_boolean("active")
+                  .build())
 
         assert len(schema["properties"]) == 4
         assert "name" in schema["required"]
@@ -883,17 +883,17 @@ class TestEndToEndSchemaBuilding:
 
         # Build a complex person schema
         address_schema = (JsonSchema()
-            .add_string("street", required=True)
-            .add_string("city", required=True)
-            .add_string("zip", pattern=r"^\d{5}$"))
+                          .add_string("street", required=True)
+                          .add_string("city", required=True)
+                          .add_string("zip", pattern=r"^\d{5}$"))
 
         person_schema = (JsonSchema(title="Person")
-            .add_string("name", required=True, min_length=1, max_length=100)
-            .add_integer("age", minimum=0, maximum=150)
-            .add_string("email", pattern=r"^[\w.-]+@[\w.-]+\.\w+$")
-            .add_array("tags", items_type="string", max_items=10)
-            .add_enum("status", ["active", "inactive"])
-            .add_object("address", address_schema))
+                         .add_string("name", required=True, min_length=1, max_length=100)
+                         .add_integer("age", minimum=0, maximum=150)
+                         .add_string("email", pattern=r"^[\w.-]+@[\w.-]+\.\w+$")
+                         .add_array("tags", items_type="string", max_items=10)
+                         .add_enum("status", ["active", "inactive"])
+                         .add_object("address", address_schema))
 
         result = person_schema.build()
 

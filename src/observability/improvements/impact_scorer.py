@@ -13,7 +13,18 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_improvements.py"""
+"""
+Impact Scorer - Scores improvements by weighted impact factors
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE: Instantiate ImpactScorer(), optionally call set_weights({'complexity':..., 'reach':..., 'urgency':...}), then call calculate_score(improvement) to get a 0..100 impact score or calculate_weighted_score(factors) for manual factors.
+
+WHAT IT DOES: Implements a small heuristic scorer that computes a weighted combination of complexity, reach and urgency derived from improvement.title/description text (keyword nudges for "urgent"/"critical", "api"/"endpoint", "refactor"/"architecture") and nudges urgency from improvement.priority when present; WHAT IT SHOULD DO BETTER: replace keyword heuristics with structured/quantitative signals, validate and normalize inputs, expose configurable normalization and extensibility for new factors, and add robust unit tests and error handling.
+
+FILE CONTENT SUMMARY: Python module with Apache-2.0 header and brief docstring that imports VERSION and Improvement, defines ImpactScorer with default weights {'complexity':0.34,'reach':0.33,'urgency':0.33}, methods set_weights, calculate_weighted_score (applies weights to provided factor dict), and calculate_score (derives factors from text, adjusts urgency from priority if available, computes weighted base and clamps result to [0.0,100.0]).
+"""
 
 from __future__ import annotations
 

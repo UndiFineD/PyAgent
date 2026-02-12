@@ -69,6 +69,7 @@ def test_firewall_local_only_mode(tmp_path):
         # google.com should fail in local_only
         assert fw.validate_request("http://google.com", "GET") is False
 
+
 def test_firewall_invalid_scheme(mock_config):
     ReverseProxyFirewall._instance = None
     ReverseProxyFirewall._initialized = False

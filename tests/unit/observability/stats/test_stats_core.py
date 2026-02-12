@@ -40,6 +40,7 @@ from src.observability.stats import (
     StatsNamespace
 )
 
+
 class TestMetricType:
     """Tests for MetricType enum."""
 
@@ -197,6 +198,7 @@ class TestNamespaceCreation:
         """Test namespace creation."""
         ns = StatsNamespace("production")
         assert ns.name == "production"
+
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

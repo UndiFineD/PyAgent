@@ -21,6 +21,7 @@ from src.infrastructure.swarm.orchestration.swarm.load_balancer import SwarmLoad
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager, ContextShard
 from src.infrastructure.engine.kv_cache.p2p_migration import P2PMigrationEngine
 
+
 @pytest.mark.asyncio
 async def test_swarm_load_balancing():
     # 1. Setup Mock Telemetry
@@ -57,6 +58,7 @@ async def test_swarm_load_balancing():
     # 6. Verify migration was triggered from Rank 0 to Rank 1
     migration_engine.migrate_shard.assert_called_once_with("ctx_test", 0, 1)
     print("\n[Phase 81] Load balancer successfully triggered migration from hot Rank 0 to cool Rank 1.")
+
 
 @pytest.mark.asyncio
 async def test_no_balancing_when_stable():

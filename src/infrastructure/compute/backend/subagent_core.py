@@ -86,7 +86,9 @@ class SubagentCore:
         def _try_copilot_cli() -> str | None:
             if not self.runner._command_available("copilot"):  # pylint: disable=protected-access
                 return None
-            return BackendHandlers.try_copilot_cli(full_prompt, repo_root)
+            # Use shared backend logic to support model selection and consistent flags
+            model_env = os.environ.get("DV_AGENT_MODEL", "gh-extension")
+            return self.runner.llm_client.llm_chat_via_copilot_cli(full_prompt, model=model_env)
 
         def _try_gh_copilot(allow_non_command: bool) -> str | None:
             if not self.runner._command_available("gh"):  # pylint: disable=protected-access
@@ -133,6 +135,7 @@ class SubagentCore:
             "copilot": lambda: (
                 _try_codex_cli() or _try_vllm() or _try_ollama() or _try_lmstudio() or _try_copilot_cli()
             ),
+            "copilot_cli_only": _try_copilot_cli,
             "gh": lambda: _try_gh_copilot(allow_non_command=True),
             "github_models": _try_github_models,
             "openai": _try_openai_api,
@@ -163,7 +166,8 @@ class SubagentCore:
             "local-neural": "neural",
             "copilot": "copilot",
             "local": "copilot",
-            "copilot-cli": "copilot",
+            "copilot-cli": "copilot_cli_only",
+            "copilot_cli": "copilot_cli_only",
             "gh": "gh",
             "gh-copilot": "gh",
             "github-models": "github_models",

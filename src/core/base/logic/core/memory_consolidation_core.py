@@ -112,7 +112,8 @@ class MemoryConsolidationCore:
                     assoc_type = "SHARES_THEME"
                     if mem1.get("type") == mem2.get("type") and sim > 0.95:
                         assoc_type = "DUPLICATE_CANDIDATE"
-                    elif "contradict" in mem1.get("content", "").lower() or "contradict" in mem2.get("content", "").lower():
+                    elif ("contradict" in mem1.get("content", "").lower() or
+                          "contradict" in mem2.get("content", "").lower()):
                         assoc_type = "CONTRADICTS"
 
                     associations.append({

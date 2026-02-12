@@ -26,6 +26,7 @@ from src.core.base.common.models.communication_models import ExpertProfile
 from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatekeeper
 from src.infrastructure.swarm.orchestration.swarm.topology_manager import TopologyManager
 
+
 class MockSimilarity:
     """Mock similarity service for testing."""
     async def get_embedding(self, text: str):
@@ -33,6 +34,7 @@ class MockSimilarity:
         _ = text
         # Return deterministic vector for testing
         return np.ones(384, dtype=np.float32) / np.sqrt(384)
+
 
 @pytest.mark.asyncio
 async def test_expert_cloning():
@@ -70,6 +72,7 @@ async def test_expert_cloning():
     assert gatekeeper.experts["busy_expert_replica_1"].parent_id == "busy_expert"
 
     print(f"\nPhase 70: Expert cloning verified. Stats: {stats}")
+
 
 @pytest.mark.asyncio
 async def test_replica_routing():

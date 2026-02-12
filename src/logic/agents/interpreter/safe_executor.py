@@ -20,12 +20,14 @@ from dataclasses import dataclass
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class ExecutionResult:
     stdout: str
     stderr: str
     result: Any
     success: bool
+
 
 class SafeLocalInterpreter:
     """
@@ -124,6 +126,8 @@ class SafeLocalInterpreter:
         )
 
 # Example usage
+
+
 if __name__ == "__main__":
     async def main():
         interpreter = SafeLocalInterpreter()

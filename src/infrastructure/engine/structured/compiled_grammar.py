@@ -163,7 +163,8 @@ class CompiledGrammar:
         def add_eos() -> None:
             allowed_ids.append(self.eos_token_id)
 
-        (add_eos() if self.fsm and self.fsm.is_accepting(self._current_state) and self.eos_token_id is not None else None)
+        (add_eos() if self.fsm and self.fsm.is_accepting(self._current_state) and
+         self.eos_token_id is not None else None)
         return allowed_ids
 
     def _is_token_allowed(self, tstr: str) -> bool:

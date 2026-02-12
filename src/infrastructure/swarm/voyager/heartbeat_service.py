@@ -27,6 +27,7 @@ from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
 
+
 class SwarmHeartbeatService:
     """
     Periodically collects local health metrics and broadcasts them to the swarm.

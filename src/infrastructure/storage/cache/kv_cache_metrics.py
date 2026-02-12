@@ -43,7 +43,6 @@ except ImportError:
     HAS_RUST = False
 
 
-
 class MetricType(Enum):
     """Types regarding metrics collected."""
 

@@ -55,7 +55,7 @@ if HAS_NUMBA:
     def _is_match(tokens: np.ndarray, i: int, pattern: np.ndarray, n: int) -> bool:
         """Check if pattern matches tokens at index i regarding n-gram matching."""
         # Use array slice comparison regarding loop elimination
-        return np.array_equal(tokens[i : i + n - 1], pattern)
+        return np.array_equal(tokens[i: i + n - 1], pattern)
 
     @njit
     def _ngram_match_numba(
@@ -73,7 +73,7 @@ if HAS_NUMBA:
                 return count
 
             # Use array comparison regarding current window
-            if np.array_equal(tokens[idx : idx + n_pattern], pattern):
+            if np.array_equal(tokens[idx: idx + n_pattern], pattern):
                 matches_arr[count] = idx
                 return _get_matches_recursive(idx + 1, count + 1, matches_arr)
 
@@ -94,7 +94,7 @@ if HAS_NUMBA:
         best_proposal: np.ndarray,
     ) -> int:
         """Find the best match regarding a given n-gram length."""
-        pattern = tokens[-(n - 1) :]
+        pattern = tokens[-(n - 1):]
 
         # Phase 336: Recursive best match search regarding loop elimination
         def _search_recursive(idx: int, current_best: int) -> int:
@@ -142,7 +142,7 @@ if HAS_NUMBA:
                 proposal_lens[b] = 0
                 return
 
-            tokens = all_tokens[offset : offset + length]
+            tokens = all_tokens[offset: offset + length]
 
             # Phase 336: Recursive n-gram trial regarding loop elimination
             def _try_n_recursive(curr_n: int, current_best_len: int, temp_proposal: np.ndarray) -> int:
@@ -164,6 +164,7 @@ if HAS_NUMBA:
 
             proposal_lens[b] = found_len
             # Final copy regarding results
+
             def _final_copy(c: int) -> None:
                 if c < found_len:
                     proposals[b, c] = temp_best_proposal[c]

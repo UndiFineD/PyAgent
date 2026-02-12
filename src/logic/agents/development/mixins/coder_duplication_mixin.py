@@ -56,7 +56,7 @@ class CoderDuplicationMixin:
                     )
             return duplicates
         except Exception:
- # pylint: disable=broad-exception-caught
+            # pylint: disable=broad-exception-caught
             pass
 
         return self._find_duplicate_code_fallback(content, min_lines)

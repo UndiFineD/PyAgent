@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,12 +27,17 @@ from .mixins.research_analysis_mixin import ResearchAnalysisMixin
 from .mixins.structural_analysis_mixin import StructuralAnalysisMixin
 
 
-class SelfImprovementAnalysis(StructuralAnalysisMixin, ResearchAnalysisMixin, ComplexityAnalysisMixin, ProfilingAnalysisMixin):
+class SelfImprovementAnalysis(
+    StructuralAnalysisMixin,
+    ResearchAnalysisMixin,
+    ComplexityAnalysisMixin,
+    ProfilingAnalysisMixin
+):
     """Specialized assistant for scanning and analyzing tech debt and fleet metrics."""
 
     def __init__(self, workspace_root: str):
         self.workspace_root = workspace_root
         self.research_doc = os.path.join(workspace_root, "docs", "IMPROVEMENT_RESEARCH.md")
-        self.profiling_agent: Any = None # Set by orchestrator
+        self.profiling_agent: Any = None  # Set by orchestrator
 
     # Logic delegated to mixins

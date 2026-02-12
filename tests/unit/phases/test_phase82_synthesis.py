@@ -19,6 +19,7 @@ import pytest
 from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
 from src.infrastructure.swarm.orchestration.swarm.trace_synthesis import SwarmTraceSynthesizer
 
+
 def test_trace_synthesis_synergy():
     # 1. Setup Audit Logger with simulated history
     logger = SwarmAuditLogger(log_to_file=False)
@@ -45,9 +46,10 @@ def test_trace_synthesis_synergy():
     # Expert A should have higher synergy with B (0.9) than with C (0.4)
     a_synergies = wisdom["expert_synergies"]["expert_a"]
     assert a_synergies["expert_b"] > a_synergies["expert_c"]
-    assert wisdom["domain_baselines"]["coding"] == pytest.approx(0.65) # (0.9 + 0.4) / 2
+    assert wisdom["domain_baselines"]["coding"] == pytest.approx(0.65)  # (0.9 + 0.4) / 2
 
     print("\n[Phase 82] Trace synthesis correctly identified expert synergies from historical logs.")
+
 
 def test_empty_trace_synthesis():
     logger = SwarmAuditLogger(log_to_file=False)

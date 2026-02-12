@@ -342,7 +342,7 @@ class TestValidation(unittest.TestCase):
         """Test detecting anomalies."""
         values: List[int] = [100, 105, 103, 102, 200]  # Last value is anomaly
         mean: float = sum(values) / len(values)
-        _variance: float = sum((x - mean) ** 2 for x in values) / len(values)
+        _ = sum((x - mean) ** 2 for x in values) / len(values)
 
         # The last value (200) is significantly higher than mean
         assert values[-1] > mean * 1.5  # Obvious anomaly

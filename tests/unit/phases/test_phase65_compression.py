@@ -22,6 +22,7 @@ import time
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
 from src.infrastructure.engine.kv_cache.compression import AdaptiveSwarmCompressor
 
+
 @pytest.mark.asyncio
 async def test_adaptive_compression_cycle():
     manager = ContextShardManager(block_size=100)
@@ -29,7 +30,7 @@ async def test_adaptive_compression_cycle():
     compressor = AdaptiveSwarmCompressor(manager, idle_threshold_sec=60.0)
 
     # 1. Create shards
-    manager.shard_context("doc", 200, [0]) # 2 shards
+    manager.shard_context("doc", 200, [0])  # 2 shards
 
     # Check initial state
     shards = manager.context_registry["doc"]
@@ -46,8 +47,8 @@ async def test_adaptive_compression_cycle():
     assert shards[1].precision == "float16"
 
     # 3. Trigger eviction (simulated)
-    compressor.idle_threshold_sec = 0.5 # Lower threshold now
-    shards[0].last_access = time.time() - 15.0 # Now 15.0 > 0.5
+    compressor.idle_threshold_sec = 0.5  # Lower threshold now
+    shards[0].last_access = time.time() - 15.0  # Now 15.0 > 0.5
     stats = await compressor.run_optimization_cycle()
     assert stats["evicted"] >= 1
     assert shards[0].is_cached is False

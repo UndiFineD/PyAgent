@@ -50,6 +50,7 @@ def test_instantiation():
     _ = CircuitBreaker(name="test_breaker")
     print("CircuitBreaker instantiated.")
 
+
 if __name__ == "__main__":
     test_imports()
     test_instantiation()

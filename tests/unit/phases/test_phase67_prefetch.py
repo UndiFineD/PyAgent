@@ -22,6 +22,7 @@ from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManag
 from src.infrastructure.engine.kv_cache.compression import AdaptiveSwarmCompressor
 from src.infrastructure.engine.kv_cache.prefetcher import ContextPrefetcher
 
+
 @pytest.mark.asyncio
 async def test_predictive_prefetching_success():
     # 1. Setup Stack
@@ -37,7 +38,7 @@ async def test_predictive_prefetching_success():
     # 2. Simulate Cold/Compress State for future shards
     shards[1].precision = "fp8"
     shards[2].precision = "fp8"
-    shards[2].is_cached = False # Evicted
+    shards[2].is_cached = False  # Evicted
 
     # 3. Access sequence
     # Access shard 0 (token 0)

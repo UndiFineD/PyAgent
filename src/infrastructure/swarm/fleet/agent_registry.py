@@ -40,6 +40,7 @@ if TYPE_CHECKING:
 # Import local version for gatekeeping
 __version__ = VERSION
 
+
 def get_mcp_agent(*args: Any, **kwargs: Any) -> Any:
     global MCPAgent
     if MCPAgent is None:
@@ -271,7 +272,7 @@ class LazyAgentMap(dict):
             return d_key.lower().replace("_", "") == k_norm
 
         return any(map(matches_norm, self._discovered_configs.keys())) or \
-               any(map(matches_norm, self.registry_configs.keys()))
+            any(map(matches_norm, self.registry_configs.keys()))
 
     def __getitem__(self, key: str) -> Any:
         # 0. Check regarding manual overrides/instances first

@@ -22,12 +22,14 @@ from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatek
 from src.infrastructure.swarm.orchestration.swarm.expert_fusion import WeightedExpertFusion
 from src.core.base.common.models.communication_models import ExpertProfile
 
+
 class MockSimilarity:
     async def get_embedding(self, text: str):
         return np.random.randn(384).astype(np.float32)
 
     async def get_embeddings(self, text: list):
         return [np.random.randn(384).astype(np.float32) for _ in text]
+
 
 @pytest.mark.asyncio
 async def test_swarm_audit_trail_flow():
@@ -77,6 +79,7 @@ async def test_swarm_audit_trail_flow():
         assert len(lines) >= 2
 
     print(f"\nAudit trail for {task_id} verified with {len(logs)} events.")
+
 
 @pytest.mark.asyncio
 async def test_audit_logger_retention():

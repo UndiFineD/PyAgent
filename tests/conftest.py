@@ -30,6 +30,7 @@ from pathlib import Path
 _orig_spec_from_file_location = importlib.util.spec_from_file_location
 _repo_root = Path(__file__).resolve().parents[1]
 
+
 def _spec_from_file_location(name, location, *args, **kwargs):
     try:
         loc = str(location)
@@ -46,6 +47,7 @@ def _spec_from_file_location(name, location, *args, **kwargs):
     except Exception:
         pass
     return _orig_spec_from_file_location(name, location, *args, **kwargs)
+
 
 importlib.util.spec_from_file_location = _spec_from_file_location
 
@@ -161,4 +163,3 @@ def transactional_test_env(agent_sandbox):
 
     with StateTransaction(target_files) as txn:
         yield txn
-

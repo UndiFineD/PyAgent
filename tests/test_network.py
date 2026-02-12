@@ -19,6 +19,7 @@
 
 """Test network utility functionality."""
 
+from src.infrastructure.swarm.network.network_utils import get_local_network_ip
 import os
 import platform
 import shutil
@@ -28,7 +29,6 @@ import sys
 # Add project root to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.infrastructure.swarm.network.network_utils import get_local_network_ip
 
 print('Testing get_local_network_ip()...')
 
@@ -55,7 +55,8 @@ if result is not None and getattr(result, 'returncode', 1) == 0:
 
     for line in lines:
         line = line.strip()
-        if line.startswith('Ethernet adapter') or line.startswith('Wireless LAN adapter') or line.startswith('Unknown adapter'):
+        if line.startswith('Ethernet adapter') or line.startswith(
+                'Wireless LAN adapter') or line.startswith('Unknown adapter'):
             if current_iface and 'IPv4' in current_iface:
                 interfaces.append(current_iface)
             current_iface = {'name': line.split(':', 1)[0].replace(' adapter', '')}

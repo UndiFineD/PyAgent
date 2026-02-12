@@ -31,6 +31,7 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 class DoubleRatchet:
     """
     Implements the Double Ratchet protocol for perfect forward secrecy.
@@ -41,9 +42,9 @@ class DoubleRatchet:
         self.remote_pub = initial_remote_pub
         self.ck_send: Optional[bytes] = None
         self.ck_recv: Optional[bytes] = None
-        self.ns = 0 # Send counter
-        self.nr = 0 # Recv counter
-        self.pn = 0 # Previous chain length
+        self.ns = 0  # Send counter
+        self.nr = 0  # Recv counter
+        self.pn = 0  # Previous chain length
 
     def _ratchet_step(self, key: bytes, data: bytes) -> Tuple[bytes, bytes]:
         """KDF step, using Rust acceleration if available."""
@@ -53,16 +54,16 @@ class DoubleRatchet:
                 return rc.ratchet_step_rust(key, data)
             except Exception as e:
                 logger.debug("Rust ratchet failed: %s", e)
-        
+
         # Consistent fallback (Signal-style KDF with constants 0x01 and 0x02)
         import hmac
         import hashlib
-        
+
         # New Chain Key
         ck_mac = hmac.new(key, data + b"\x01", hashlib.sha256).digest()
         # Message Key
         mk_mac = hmac.new(key, data + b"\x02", hashlib.sha256).digest()
-        
+
         return ck_mac, mk_mac
 
     def get_sending_key(self) -> bytes:
@@ -70,7 +71,7 @@ class DoubleRatchet:
         if not self.ck_send:
             # First time initialization
             self.rk, self.ck_send = self._ratchet_step(self.rk, b"send_init")
-        
+
         self.ck_send, mk = self._ratchet_step(self.ck_send, b"msg_key")
         self.ns += 1
         return mk
@@ -79,7 +80,7 @@ class DoubleRatchet:
         """Derive the next symmetric key for receiving."""
         if not self.ck_recv:
             self.rk, self.ck_recv = self._ratchet_step(self.rk, b"recv_init")
-            
+
         self.ck_recv, mk = self._ratchet_step(self.ck_recv, b"msg_key")
         self.nr += 1
         return mk

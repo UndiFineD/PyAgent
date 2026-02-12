@@ -725,4 +725,3 @@ class TestPhase25Integration:
         assert d["prefix_cache"]["hit_rate"] > 0
         assert d["spec_decoding"]["acceptance_rate"] == 0.6
         assert d["performance"]["num_steps"] == 10
-

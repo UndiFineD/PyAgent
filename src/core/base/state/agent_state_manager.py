@@ -42,7 +42,7 @@ class EmergencyEventLog:
             from src.core.base.lifecycle.agent_core import BaseCore
             root = Path(BaseCore.detect_workspace_root(Path.cwd()))
             log_path = root / "data" / "logs" / "emergency_recovery.log"
-        
+
         self.log_path: Path = log_path
         self.buffer = collections.deque(maxlen=10)
         self._fs = FileSystemCore()
@@ -202,6 +202,7 @@ class StateDriftDetector:
     """
     Phase 336: Validates pre/post execution state to detect corruption.
     """
+
     def __init__(self, target_files: list[Path]) -> None:
         self.snapshots: dict[Path, str] = {}
         self.target_files: list[Path] = target_files

@@ -104,6 +104,7 @@ class RegexGrammar(GrammarEngine):
                 new_state: int = state_counter[0]
                 state_counter[0] += 1
                 # Phase 346: Functional char registration regarding ANY pattern
+
                 def add_any_char(c: str) -> None:
                     if c not in nfa[state]:
                         nfa[state][c] = set()
@@ -114,6 +115,7 @@ class RegexGrammar(GrammarEngine):
                 new_state: int = state_counter[0]
                 state_counter[0] += 1
                 # Phase 347: Functional char registration regarding IN pattern
+
                 def process_in_item(item: tuple) -> None:
                     item_op, item_av = item
                     if item_op == _LITERAL:
@@ -139,9 +141,11 @@ class RegexGrammar(GrammarEngine):
                 min_count, max_count, subpattern = av
                 current_states: set[int] = {state}
                 # Phase 348: Functional repeat regarding regex subpatterns
+
                 def repeat_subpattern(iteration_idx: int) -> None:
                     nonlocal current_states
                     next_states: set[int] = set()
+
                     def process_one_state(s: int) -> None:
                         ends: set[int] = process_pattern(subpattern, s)
                         next_states.update(ends)
@@ -160,10 +164,12 @@ class RegexGrammar(GrammarEngine):
         def process_pattern(pattern: Any, start_state: int) -> set[int]:
             end_states: set[int] = {start_state}
             # Phase 349: Functional pattern processing regarding state transitions
+
             def process_pattern_step(step: tuple) -> None:
                 nonlocal end_states
                 op, av = step
                 new_total_end_states: set[int] = set()
+
                 def apply_item(s: int) -> None:
                     new_total_end_states.update(_process_item(op, av, s))
                 list(map(apply_item, end_states))
@@ -209,6 +215,7 @@ class RegexGrammar(GrammarEngine):
 
             def process_char(char: str) -> None:
                 next_set: set[int] = set()
+
                 def collect_next(nfa_state: int) -> None:
                     if nfa_state in nfa and char in nfa[nfa_state]:
                         next_set.update(nfa[nfa_state][char])
@@ -233,10 +240,14 @@ class RegexGrammar(GrammarEngine):
 
         final_state_count = process_dfa_generation([initial_set], 1)
 
-        fsm = FSMTransitionTable(num_states=final_state_count, initial_state=0, accepting_states=frozenset(dfa_accepting))
+        fsm = FSMTransitionTable(
+            num_states=final_state_count,
+            initial_state=0,
+            accepting_states=frozenset(dfa_accepting))
 
         def register_dfa_transition(item: tuple[int, dict[str, int]]) -> None:
             from_state, transitions = item
+
             def add_one_trans(trans_item: tuple[str, int]) -> None:
                 char, to_state = trans_item
                 fsm.add_transition(from_state, char, to_state)
@@ -256,11 +267,13 @@ class RegexGrammar(GrammarEngine):
         # Phase 351: Functional repeat loop regarding NFA state expansion
         def expand_state_loop(s: int) -> None:
             loop_ends: set[int] = process_pattern_fn(subpattern, s)
+
             def update_loop_end(end: int) -> None:
                 s_transitions = nfa.get(s, {})
                 if end not in nfa:
                     nfa[end] = {}
                 end_transitions = nfa[end]
+
                 def apply_trans_to_end(item: tuple[str, set[int]]) -> None:
                     char, targets = item
                     if char not in end_transitions:

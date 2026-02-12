@@ -66,7 +66,7 @@ def execute_action(action: Dict[str, Any]):
         run_adb_command(["shell", "input", "tap", str(x), str(y)])
 
     elif act_type == "type":
-        text = action.get("text").replace(" ", "%s") # ADB requires %s for spaces
+        text = action.get("text").replace(" ", "%s")  # ADB requires %s for spaces
         print(f"⌨️ Typing: {action.get('text')}")
         run_adb_command(["shell", "input", "text", text])
 

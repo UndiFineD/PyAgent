@@ -18,6 +18,7 @@ import pytest
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
 from src.infrastructure.engine.kv_cache.compression import AdaptiveSwarmCompressor
 
+
 @pytest.mark.asyncio
 async def test_dynamic_bit_scaling():
     """Verifies that shards downscale precision when VRAM pressure is high."""

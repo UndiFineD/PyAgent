@@ -288,7 +288,7 @@ class SatelliteReconnaissanceCore(BaseCore):
             'spectrum_licensing': {
                 'fcc_licensed': True,
                 'itu_region': 2,
-                'license_expiry': (datetime.now() + timedelta(days=365*5)).isoformat()
+                'license_expiry': (datetime.now() + timedelta(days=365 * 5)).isoformat()
             }
         }
 
@@ -373,7 +373,7 @@ class SatelliteReconnaissanceCore(BaseCore):
         }
 
     def predict_satellite_passes(self, satellite_id: str, location: Tuple[float, float],
-                               days_ahead: int = 7) -> List[Dict[str, Any]]:
+                                 days_ahead: int = 7) -> List[Dict[str, Any]]:
         """
         Predict satellite passes over a location.
 

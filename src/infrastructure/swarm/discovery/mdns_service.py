@@ -20,6 +20,7 @@ from zeroconf import IPVersion, ServiceBrowser, ServiceInfo, Zeroconf, ServiceLi
 
 logger = logging.getLogger(__name__)
 
+
 class PyAgentServiceListener(ServiceListener):
     """Listener to handle PyAgent node discovery events."""
 
@@ -40,11 +41,16 @@ class PyAgentServiceListener(ServiceListener):
                 "name": name,
                 "addresses": addresses,
                 "port": info.port,
-                "properties": {k.decode(): v.decode() if isinstance(v, bytes) else v for k, v in info.properties.items()}
+                "properties": {
+                    k.decode(): v.decode() if isinstance(v, bytes) else v
+                    for k, v in info.properties.items()
+                }
             }
             logger.info(f"Discovered PyAgent node: {node_data}")
+
             if self.discovery_callback:
                 self.discovery_callback(node_data)
+
 
 class MDNSService:
     """Handles mDNS registration and discovery for PyAgent nodes."""

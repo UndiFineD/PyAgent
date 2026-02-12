@@ -237,8 +237,12 @@ class TestMAESTROSecurityAnalyzer:
 
         agents = [
             AgentNode("web_agent", AgentTier.SPECIALIZED, ["web_scraping"], ["requests"], [], 0.85, 15),
-            AgentNode("data_agent", AgentTier.INTEGRATED, ["data_processing", "web_scraping"], ["pandas"], ["web_agent"], 0.92, 8),
-            AgentNode("security_agent", AgentTier.ELITE, ["security_analysis", "data_processing"], ["scanner"], ["data_agent"], 0.96, 25)
+            AgentNode(
+                "data_agent", AgentTier.INTEGRATED, [
+                    "data_processing", "web_scraping"], ["pandas"], ["web_agent"], 0.92, 8),
+            AgentNode(
+                "security_agent", AgentTier.ELITE, [
+                    "security_analysis", "data_processing"], ["scanner"], ["data_agent"], 0.96, 25)
         ]
 
         report = analyzer.analyze_multi_agent_system(agents)

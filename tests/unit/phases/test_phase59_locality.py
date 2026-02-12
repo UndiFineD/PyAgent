@@ -21,6 +21,7 @@ import pytest
 from src.infrastructure.swarm.distributed.v2.dp_coordinator import DPCoordinatorV2
 from src.infrastructure.swarm.distributed.v2.locality_manager import LocalityManager
 
+
 def test_locality_manager_clustering():
     mgr = LocalityManager()
 
@@ -38,6 +39,7 @@ def test_locality_manager_clustering():
     assert len(meta_shards["rack-A"]) == 2
     assert len(meta_shards["rack-B"]) == 2
 
+
 @pytest.mark.asyncio
 async def test_coordinator_locality_publish():
     # Master
@@ -49,6 +51,7 @@ async def test_coordinator_locality_publish():
 
     assert master.current_wave == 1
     await master.close()
+
 
 def test_suggested_aggregators():
     mgr = LocalityManager()

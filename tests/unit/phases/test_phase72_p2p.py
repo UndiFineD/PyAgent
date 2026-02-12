@@ -18,6 +18,7 @@ import pytest
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
 from src.infrastructure.engine.kv_cache.p2p_migration import P2PMigrationEngine
 
+
 @pytest.mark.asyncio
 async def test_shard_migration_flow():
     """Verifies that shards can be moved between ranks successfully."""

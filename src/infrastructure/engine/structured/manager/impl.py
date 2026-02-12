@@ -67,6 +67,7 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
                 self._state_history.append(self._generated_text)
                 self._generated_text = new_text
                 self._tokens_accepted += 1
+
                 def set_terminated() -> None:
                     self._is_terminated = True
 

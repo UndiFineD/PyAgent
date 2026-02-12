@@ -15,5 +15,6 @@ class DiscoveryService:
     """P2P mDNS Discovery and Peer Registration."""
     def __init__(self):
         self.peers = {}
+
     async def register(self, node_id, addr):
         self.peers[node_id] = addr

@@ -30,13 +30,15 @@ if project_root.name == 'src':
 # Ensure the project root is in PYTHONPATH
 sys.path.insert(0, str(project_root))
 
-from src.infrastructure.compute.backend.llm_backends.copilot_cli_backend import CopilotCliBackend  # noqa: E402 # pylint: disable=wrong-import-position
+from src.infrastructure.compute.backend.llm_backends.copilot_cli_backend import \
+    CopilotCliBackend  # noqa: E402 # pylint: disable=wrong-import-position
+
 
 def test_copilot():
     """
     Test the Copilot CLI backend integration.
     """
-    backend = CopilotCliBackend(None, None) # Mock session/manager
+    backend = CopilotCliBackend(None, None)  # Mock session/manager
     # Mock _is_working to return True as we don't have a connectivity manager
     # pylint: disable=protected-access
     backend._is_working = lambda x: True
@@ -46,6 +48,7 @@ def test_copilot():
     print("Testing Copilot CLI integration...")
     response = backend.chat("What is 2+2?", timeout_s=10)
     print(f"Response: {response}")
+
 
 if __name__ == "__main__":
     test_copilot()

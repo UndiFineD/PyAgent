@@ -470,7 +470,10 @@ class JobMarketIntelligenceCore(BaseCore):
         elif focus_area == "companies":
             if stats.top_companies:
                 top_company = stats.top_companies[0]
-                insights["opportunities"].append(f"High hiring activity at {top_company[0]} ({top_company[1]} positions)")
+                insights["opportunities"].append(
+                    f"High hiring activity at {
+                        top_company[0]} ({
+                        top_company[1]} positions)")
 
             if stats.company_types:
                 dominant_type = max(stats.company_types.items(), key=lambda x: x[1])

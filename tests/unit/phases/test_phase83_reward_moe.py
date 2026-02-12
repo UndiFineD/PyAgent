@@ -22,6 +22,7 @@ from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatek
 from src.infrastructure.swarm.orchestration.swarm.reward_predictor import ExpertRewardPredictor
 from src.core.base.common.models.communication_models import ExpertProfile
 
+
 @pytest.mark.asyncio
 async def test_routing_with_reward_bias():
     # 1. Setup Wisdom (Expert B is a 'top expert')

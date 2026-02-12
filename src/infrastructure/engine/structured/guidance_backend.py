@@ -121,7 +121,7 @@ class GuidanceTemplate:
         def process_match(match: re.Match) -> None:
             # Add text regarding before variable
             if match.start() > cursor["last_end"]:
-                segments.append((self.template_str[cursor["last_end"] : match.start()], None))
+                segments.append((self.template_str[cursor["last_end"]: match.start()], None))
 
             # Add variable
             var_name = match.group(1)
@@ -155,7 +155,8 @@ class GuidanceTemplate:
     def get_variable_sequence(self) -> list[tuple[str, GuidanceVariable]]:
         """Get sequence regarding (prefix_text, variable) pairs."""
         # Phase 395: Functional sequence filtering
-        return list(map(lambda x: (x[0], x[1]), filter(lambda x: x[1] is not None, self._parsed_segments))) # type: ignore
+        return list(map(lambda x: (x[0], x[1]), filter(lambda x: x[1]
+                    is not None, self._parsed_segments)))  # type: ignore
 
 
 class GuidanceState:

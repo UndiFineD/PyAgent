@@ -130,6 +130,7 @@ class TestStreamManager:
 
         # Mock stream running then stopped
         call_count = 0
+
         async def mock_is_running(agent_id):
             nonlocal call_count
             call_count += 1

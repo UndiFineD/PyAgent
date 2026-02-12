@@ -19,6 +19,7 @@ Maintenance utility to fix missing type hints in engine components.
 import ast
 import os
 
+
 def fix_file(filepath: str) -> bool:
     """
     Scans a file for __init__ methods missing return type hints and fixes them.
@@ -69,14 +70,15 @@ def fix_file(filepath: str) -> bool:
                 if in_string:
                     if char == string_char:
                         # minimal escape check
-                        if char_idx > 0 and line[char_idx-1] == '\\' and not (char_idx > 1 and line[char_idx-2] == '\\'):
+                        if char_idx > 0 and line[char_idx -
+                                                 1] == '\\' and not (char_idx > 1 and line[char_idx - 2] == '\\'):
                             pass
                         else:
                             in_string = False
                 else:
                     if char in ["'", '"']:
                         # Check for triple quotes
-                        if char_idx + 2 < len(line) and line[char_idx:char_idx+3] == char * 3:
+                        if char_idx + 2 < len(line) and line[char_idx:char_idx + 3] == char * 3:
                             # Triple quote logic is too complex for this simple parser
                             # Proceed assuming it's a string, hoping we find the end
                             in_string = True
@@ -85,7 +87,7 @@ def fix_file(filepath: str) -> bool:
                             in_string = True
                             string_char = char
                     elif char == '#':
-                        break # Skip comment
+                        break  # Skip comment
                     elif char == '(':
                         paren_depth += 1
                         started_args = True
@@ -109,7 +111,8 @@ def fix_file(filepath: str) -> bool:
                             # So if we simply append ' -> None' before the colon matched in original line,
                             # We can construct the new line from the original line parts.
 
-                            # BUT, what if we have multiple edits on same line? No, multiple __init__ on same line impossible.
+                            # BUT, what if we have multiple edits on same line? No, multiple __init__
+                            # on same line impossible.
 
                             prefix = line[:char_idx]
                             suffix = line[char_idx:]
@@ -132,6 +135,7 @@ def fix_file(filepath: str) -> bool:
 
     return changed
 
+
 def main():
     root_dir = r"c:\DEV\PyAgent\src\infrastructure\engine"
     count = 0
@@ -147,6 +151,7 @@ def main():
                 except Exception as e:
                     print(f"Failed to fix {path}: {e}")
     print(f"Total files fixed: {count}")
+
 
 if __name__ == "__main__":
     main()

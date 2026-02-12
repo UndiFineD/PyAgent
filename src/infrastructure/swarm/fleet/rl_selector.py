@@ -24,6 +24,7 @@ from src.core.rl.mdp import MDP
 
 logger = logging.getLogger(__name__)
 
+
 class RLSelector:
     """
     Selects the best agent or tool using Reinforcement Learning.
@@ -68,7 +69,7 @@ class RLSelector:
         # Calculate reward: 1.0 for success, -1.0 for failure, with latency penalty
         reward = 1.0 if success else -1.0
         if success and latency > 0:
-            reward -= min(0.5, latency / 10.0) # Penalty for slow success
+            reward -= min(0.5, latency / 10.0)  # Penalty for slow success
 
         self.mdp.add_transition(
             state=goal,

@@ -42,11 +42,15 @@ try:
             line = line.strip()
             # print(f"DEBUG: Line: {line}")  # Very verbose
 
-            if line.startswith('Ethernet adapter') or line.startswith('Wireless LAN adapter') or line.startswith('Unknown adapter'):
+            if line.startswith('Ethernet adapter') or line.startswith(
+                    'Wireless LAN adapter') or line.startswith('Unknown adapter'):
                 # Save previous interface if it had an IP
                 if current_iface:
                     if 'IPv4' in current_iface:
-                        print(f"DEBUG: Completed interface: {current_iface['name']} with IP {current_iface.get('IPv4')}")
+                        print(
+                            f"DEBUG: Completed interface: {
+                                current_iface['name']} with IP {
+                                current_iface.get('IPv4')}")
                         interfaces.append(current_iface)
                     else:
                         print(f"DEBUG: Discarding interface {current_iface['name']} (No IPv4)")
@@ -90,7 +94,15 @@ try:
             print(f"  Subnet: {subnet}")
 
             # Skip VPN/tunnel interfaces
-            is_vpn = any(keyword in name for keyword in ['vpn', 'tunnel', 'wireguard', 'proton', 'openvpn', 'pptp', 'l2tp'])
+            is_vpn = any(
+                keyword in name for keyword in [
+                    'vpn',
+                    'tunnel',
+                    'wireguard',
+                    'proton',
+                    'openvpn',
+                    'pptp',
+                    'l2tp'])
             if is_vpn:
                 score = 0
                 print("  -> VPN Detected (score=0)")
@@ -138,7 +150,7 @@ except Exception as e:
     import traceback
     traceback.print_exc()
 
-print("\n" + "="*50)
+print("\n" + "=" * 50)
 print("Testing socket approach...")
 
 try:
@@ -151,7 +163,7 @@ try:
         print(f'Found IP: {ip}')
         if (not ip.startswith('127.') and
             not ip.startswith('169.254.') and
-            ip != '0.0.0.0'):
+                ip != '0.0.0.0'):
             local_ips.append(ip)
             print(f'  -> Valid IP: {ip}')
 

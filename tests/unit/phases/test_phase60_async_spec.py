@@ -24,6 +24,7 @@ from src.core.base.common.models.communication_models import (
     AsyncSpeculativeToken, PipelineCorrection, VerificationOutcome
 )
 
+
 @pytest.mark.asyncio
 async def test_async_pipeline_success_flow():
     # Mock orchestrator
@@ -52,6 +53,7 @@ async def test_async_pipeline_success_flow():
     assert any(t.is_draft for t in tokens)
     assert any(not t.is_draft for t in tokens)
     assert "42." in "".join([t.token for t in tokens])
+
 
 @pytest.mark.asyncio
 async def test_async_pipeline_rollback_flow():

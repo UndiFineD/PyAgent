@@ -30,6 +30,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+
 class PruningOrchestrator:
     """
     Coordinates the pruning of idle knowledge paths and KV-cache blocks.
@@ -39,7 +40,7 @@ class PruningOrchestrator:
     def __init__(self, fleet: FleetManager, decay_rate: float = 0.08):
         self.fleet = fleet
         self.decay_engine = SynapticDecay(decay_rate=decay_rate)
-        self.pruning_interval = 1800 # 30 mins
+        self.pruning_interval = 1800  # 30 mins
 
     async def run_pruning_cycle(self, threshold: float = 0.2):
         """
@@ -47,11 +48,11 @@ class PruningOrchestrator:
         Identifies stale LSH buckets and low-utility landmarks.
         """
         logger.info("PruningOrchestrator: Starting Synaptic Decay cycle (Phase 92)...")
-        
+
         # 1. Prune Global Knowledge Cache
         knowledge_keys = list(self.fleet.memory_core.get_active_indices()) if hasattr(self.fleet, "memory_core") else []
         dead_keys = self.decay_engine.process_decay(knowledge_keys)
-        
+
         if dead_keys:
             logger.info(f"Pruning: Evicting {len(dead_keys)} stale knowledge keys.")
             for key in dead_keys:
@@ -74,7 +75,7 @@ class PruningOrchestrator:
             "threshold": self.decay_engine.relevance_threshold,
             "sender": "orchestrator"
         }
-        
+
         # Broadcast to peers via mDNS/Discovery
         if hasattr(self.fleet, "remote_nodes"):
             for node_id in self.fleet.remote_nodes:
@@ -85,6 +86,7 @@ class PruningOrchestrator:
         while True:
             await self.run_pruning_cycle()
             await asyncio.sleep(self.pruning_interval)
+
 
 if __name__ == "__main__":
     # Mock for testing

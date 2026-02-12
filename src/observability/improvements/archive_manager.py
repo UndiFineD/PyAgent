@@ -13,7 +13,71 @@
 # limitations under the License.
 
 
+"""
+ArchiveManager - Archives completed improvements
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate ArchiveManager(), call .archive(improvement) to add an Improvement to the archive, and call .restore(improvement_id) to remove and return a previously archived Improvement by its id. 
+- Expect KeyError if restore is called with a missing id.
+
+WHAT IT DOES:
+- Maintains an in-memory list of archived Improvement objects.
+- Provides simple append-based archival and linear-search restoration by improvement.id.
+- Keeps behavior intentionally minimal and synchronous for straightforward use within agent workflows.
+
+WHAT IT SHOULD DO BETTER:
+- Persist archives to durable storage (file, database, or StateTransaction) to survive process restarts.
+- Use an index (dict) or ordered mapping to avoid O(n) restore performance and to support faster lookups and removals.
+- Add thread-safety or async-safe primitives (locks or asyncio primitives) for concurrent use in multi-agent contexts.
+- Provide metadata (timestamps, actor, reason) and soft-delete / purge policies, plus search/listing and size limits.
+- Validate inputs and return clearer exceptions or typed results rather than raw KeyError for better error handling.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 """Auto-extracted class from agent_improvements.py"""
+
+from __future__ import annotations
+
+from src.core.base.lifecycle.version import VERSION
+
+from .improvement import Improvement
+
+__version__ = VERSION
+
+
+class ArchiveManager:
+    """Archives completed improvements."""
+
+    def __init__(self) -> None:
+        self.archived: list[Improvement] = []
+
+    def archive(self, improvement: Improvement) -> None:
+        self.archived.append(improvement)
+
+    def restore(self, improvement_id: str) -> Improvement:
+        for i, imp in enumerate(list(self.archived)):
+            if imp.id == improvement_id:
+                self.archived.pop(i)
+                return imp
+        raise KeyError(improvement_id)
+"""
 
 from __future__ import annotations
 

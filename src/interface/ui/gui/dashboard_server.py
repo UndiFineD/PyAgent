@@ -47,6 +47,8 @@ app.add_middleware(
 )
 
 # --- TELEMETRY ENGINE ---
+
+
 class ConnectionManager:
     def __init__(self):
         self.active_connections: list[WebSocket] = []
@@ -74,6 +76,7 @@ fleet_balancer = FleetLoadBalancer()
 job_manager = JobManagerCore()
 discovery_service = DiscoveryService()
 
+
 async def telemetry_loop():
     """Background task to broadcast system vitals."""
     while True:
@@ -91,6 +94,7 @@ async def telemetry_loop():
             pass
         await asyncio.sleep(1.0)
 
+
 @app.on_event("startup")
 async def startup_event():
     asyncio.create_task(telemetry_loop())
@@ -106,6 +110,7 @@ async def startup_event():
         print(f"Discovery Registration Failed: {e}")
 
 # --- PRIMARY NAVIGATION (Prioritized Routes) ---
+
 
 @app.get("/stream")
 async def serve_stream():
@@ -141,7 +146,9 @@ async def get_swarm_status():
     return {
         "status": "online",
         "nodes": discovery_service.peers if hasattr(discovery_service, 'peers') else [],
-        "load": fleet_balancer.get_optimal_node() if hasattr(fleet_balancer, 'nodes') and fleet_balancer.nodes else "No nodes"
+        "load": (fleet_balancer.get_optimal_node()
+                 if hasattr(fleet_balancer, 'nodes') and fleet_balancer.nodes
+                 else "No nodes")
     }
 
 
@@ -152,6 +159,7 @@ async def create_job(payload: Dict[str, Any] = Body(...)):
     return {"status": "queued", "job_id": job_id}
 
 # --- TERMINAL / SHELL BRIDGE ---
+
 
 @app.get("/api/thoughts")
 async def get_thoughts():

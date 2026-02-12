@@ -31,7 +31,7 @@ class SessionLockCore:
         lock_key = f"{tenant_id}:{session_id}"
         if lock_key in self.locks:
             if datetime.now().timestamp() < self.locks[lock_key]["expires"]:
-                return None # Already locked
+                return None  # Already locked
 
         token = secrets.token_hex(16)
         self.locks[lock_key] = {

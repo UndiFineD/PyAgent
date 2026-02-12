@@ -21,6 +21,7 @@ from time import mktime
 
 logger = logging.getLogger(__name__)
 
+
 class RssCollector:
     """
     RSS feed collector for OSINT agents.

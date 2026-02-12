@@ -27,6 +27,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+
 class SecuritySkill(SkillCore):
     """
     Security capability for Universal Agents.

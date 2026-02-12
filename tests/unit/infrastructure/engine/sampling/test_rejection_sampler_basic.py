@@ -20,6 +20,7 @@ from src.infrastructure.engine.sampling.rejection_sampler import (
     RejectionStrategy,
 )
 
+
 def test_rejection_sampler_basic():
     config = RejectionConfig(strategy=RejectionStrategy.STANDARD)
     sampler = RejectionSampler(config)
@@ -53,6 +54,7 @@ def test_rejection_sampler_basic():
     assert output.bonus_token == 5
     assert output.num_accepted == 3
 
+
 def test_rejection_sampler_reject():
     sampler = RejectionSampler()
 
@@ -83,6 +85,7 @@ def test_rejection_sampler_reject():
     assert len(output.recovered_tokens) == 1
     assert output.recovered_tokens[0] == 5
     assert output.bonus_token is None
+
 
 if __name__ == "__main__":
     pytest.main([__file__])

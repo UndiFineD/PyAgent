@@ -130,7 +130,7 @@ class RemoteNeuralSynapse:
                     logger.error(f"Synapse: Execution failed: {e}")
                     return {"status": "error", "message": str(e)}
             else:
-                 return {"status": "error", "message": "FleetManager capability missing."}
+                return {"status": "error", "message": "FleetManager capability missing."}
 
         elif msg_type == "memory_query":
             # Phase 4.0: Federated Memory Query
@@ -141,7 +141,9 @@ class RemoteNeuralSynapse:
 
             from src.core.base.common.memory_core import MemoryCore
             try:
-                results: List[Dict[str, Any]] = MemoryCore().retrieve_knowledge(agent_id, query, mode="semantic", limit=3)
+                results: List[Dict[str, Any]] = MemoryCore().retrieve_knowledge(
+                    agent_id, query, mode="semantic", limit=3
+                )
                 return {"status": "success", "results": results}
             except Exception as e:
                 logger.error(f"Synapse: Memory query failed: {e}")

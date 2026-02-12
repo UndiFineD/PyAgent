@@ -19,11 +19,13 @@ import numpy as np
 from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatekeeper
 from src.core.base.common.models.communication_models import ExpertProfile
 
+
 class MockSimilarity:
     async def get_embedding(self, text: str):
         # Return a neutral vector
         vec = np.ones(384).astype(np.float32)
         return vec / np.linalg.norm(vec)
+
 
 @pytest.mark.asyncio
 async def test_heterogeneous_routing_boost():

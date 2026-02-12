@@ -268,7 +268,6 @@ class EnhancedStrategyOptimizer:
             strategy_name='weighted_sum'
         )
 
-
     def _optimize_pareto_dominance(
         self,
         strategy_ids: List[str],

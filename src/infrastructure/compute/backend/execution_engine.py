@@ -147,30 +147,24 @@ def llm_chat_via_lmstudio(
 ) -> str | None:
     """Call LM Studio local inference server.
 
-    This is a compatibility wrapper that dispatches to the underlying runner if
-    available, or falls back to the higher-level LLMClient implementation. This
-    prevents AttributeError when modules expect a module-level function named
+    This is a compatibility wrapper that uses the LLMClient implementation.
+    This prevents AttributeError when modules expect a module-level function named
     `llm_chat_via_lmstudio` on the execution engine.
     """
+    from src.infrastructure.compute.backend.llm_client import LLMClient
+
+    client = LLMClient(requests, workspace_root=str(root))
     try:
-        # Preferred path: SubagentRunner provides a direct implementation
-        return _runner.llm_chat_via_lmstudio(prompt=prompt, model=model, system_prompt=system_prompt, **kwargs)
-    except AttributeError:
-        # Fallback: use the LLMClient if the runner does not expose LM Studio
-        from src.infrastructure.compute.backend.llm_client import LLMClient
-
-        client = LLMClient(requests, workspace_root=str(root))
-        try:
-            return client.llm_chat_via_lmstudio(prompt=prompt, model=model, system_prompt=system_prompt, **kwargs)
-        except Exception as e:  # pylint: disable=broad-exception-caught
-            # Keep behavior tolerant: don't raise to caller, just return None on failure
-            logging.debug("LM Studio wrapper failed: %s", e)
-            return None
+        return client.llm_chat_via_lmstudio(prompt=prompt, model=model, system_prompt=system_prompt, **kwargs)
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        # Keep behavior tolerant: don't raise to caller, just return None on failure
+        logging.debug("LM Studio wrapper failed: %s", e)
+        return None
 
 
-def llm_chat_via_copilot_cli(prompt: str) -> str | None:
+def llm_chat_via_copilot_cli(prompt: str, **kwargs) -> str | None:
     """Call Copilot CLI endpoint."""
-    return _runner.llm_chat_via_copilot_cli(prompt=prompt)
+    return _runner.llm_chat_via_copilot_cli(prompt=prompt, **kwargs)
 
 
 def run_subagent(description: str, prompt: str, original_content: str = "") -> str | None:

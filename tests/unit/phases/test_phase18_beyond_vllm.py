@@ -34,7 +34,8 @@ import pytest
 class TestCircuitBreaker:
     """Tests for CircuitBreaker."""
 
-    @patch('src.infrastructure.services.resilience.circuit_breaker.ConnectivityManager.is_endpoint_available', return_value=True)
+    @patch('src.infrastructure.services.resilience.circuit_breaker.ConnectivityManager.is_endpoint_available',
+           return_value=True)
     def test_circuit_starts_closed(self, _):
         """Test circuit starts in closed state."""
         from src.infrastructure.services.resilience.circuit_breaker import (
@@ -45,7 +46,8 @@ class TestCircuitBreaker:
         assert cb.state == CircuitState.CLOSED
         assert cb.is_closed
 
-    @patch('src.infrastructure.services.resilience.circuit_breaker.ConnectivityManager.is_endpoint_available', return_value=True)
+    @patch('src.infrastructure.services.resilience.circuit_breaker.ConnectivityManager.is_endpoint_available',
+           return_value=True)
     def test_circuit_opens_after_failures(self, _):
         """Test circuit opens after threshold failures."""
         from src.infrastructure.services.resilience.circuit_breaker import (
@@ -70,7 +72,8 @@ class TestCircuitBreaker:
         with pytest.raises(CircuitBreakerError):
             cb.call(failing_func)
 
-    @patch('src.infrastructure.services.resilience.circuit_breaker.ConnectivityManager.is_endpoint_available', return_value=True)
+    @patch('src.infrastructure.services.resilience.circuit_breaker.ConnectivityManager.is_endpoint_available',
+           return_value=True)
     def test_circuit_half_open_after_timeout(self, _):
         """Test circuit transitions to half-open after timeout."""
         from src.infrastructure.services.resilience.circuit_breaker import (
@@ -95,7 +98,8 @@ class TestCircuitBreaker:
         _ = cb.state
         assert cb.state == CircuitState.HALF_OPEN
 
-    @patch('src.infrastructure.services.resilience.circuit_breaker.ConnectivityManager.is_endpoint_available', return_value=True)
+    @patch('src.infrastructure.services.resilience.circuit_breaker.ConnectivityManager.is_endpoint_available',
+           return_value=True)
     def test_circuit_closes_after_success(self, _):
         """Test circuit closes after successful calls in half-open."""
         from src.infrastructure.services.resilience.circuit_breaker import (
@@ -132,7 +136,8 @@ class TestCircuitBreaker:
         assert cb.call(sometimes_fails) == "success"
         assert cb.state == CircuitState.CLOSED
 
-    @patch('src.infrastructure.services.resilience.circuit_breaker.ConnectivityManager.is_endpoint_available', return_value=True)
+    @patch('src.infrastructure.services.resilience.circuit_breaker.ConnectivityManager.is_endpoint_available',
+           return_value=True)
     def test_circuit_stats(self, _):
         """Test circuit breaker statistics."""
         from src.infrastructure.services.resilience.circuit_breaker import CircuitBreaker
@@ -151,7 +156,8 @@ class TestCircuitBreaker:
         assert stats['failed_calls'] == 0
         assert stats['success_rate'] == 1.0
 
-    @patch('src.infrastructure.services.resilience.circuit_breaker.ConnectivityManager.is_endpoint_available', return_value=True)
+    @patch('src.infrastructure.services.resilience.circuit_breaker.ConnectivityManager.is_endpoint_available',
+           return_value=True)
     def test_circuit_decorator(self, _):
         """Test circuit breaker as decorator."""
         from src.infrastructure.services.resilience.circuit_breaker import CircuitBreaker
@@ -642,7 +648,7 @@ class TestIntegration:
         # Open the circuit by failing enough times
         for _ in range(5):
             try:
-                    cb_wrapped()
+                cb_wrapped()
             except (RuntimeError, ValueError):
                 pass
             except BaseException:
@@ -653,7 +659,8 @@ class TestIntegration:
         time.sleep(0.12)
 
         # Patch ConnectivityManager to always allow endpoint during retry
-        with patch('src.infrastructure.services.resilience.circuit_breaker.ConnectivityManager.is_endpoint_available', return_value=True):
+        with patch('src.infrastructure.services.resilience.circuit_breaker.ConnectivityManager.is_endpoint_available',
+                   return_value=True):
             result = retry.execute(cb_wrapped)
         assert result == "success"
         # 5 failures to open, at least 1 retry, so call_count should be >= 6

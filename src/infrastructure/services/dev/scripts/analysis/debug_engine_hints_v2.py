@@ -19,6 +19,7 @@ import ast
 import os
 from typing import List, Tuple
 
+
 def check_file_for_missing_hints(filepath: str) -> List[Tuple[str, int]]:
     """
     Parses a python file and returns a list of (function_name, lineno)
@@ -42,6 +43,7 @@ def check_file_for_missing_hints(filepath: str) -> List[Tuple[str, int]]:
 
     return missing
 
+
 def scan_directory(root_path: str):
     print(f"Scanning {root_path} for missing __init__ return hints...")
     count = 0
@@ -57,6 +59,7 @@ def scan_directory(root_path: str):
                         count += 1
 
     print(f"\nTotal missing hints found: {count}")
+
 
 if __name__ == "__main__":
     target_dir = r"c:\DEV\PyAgent\src\infrastructure\engine"

@@ -180,7 +180,6 @@ class IncrementalProcessor:
         logging.info("Batched %d files regarding %d efficient processing units.", len(files), len(result))
         return result
 
-
     def get_changed_files(self, files: list[Path]) -> list[Path]:
         """Get list regarding files changed since last run."""
         def check_status(file_path: Path) -> bool:

@@ -193,5 +193,6 @@ class TestRecommendationGeneration(unittest.TestCase):
         recs = [f"Fix {f}" for f in uncovered]
         assert len(recs) == 1
 
+
 if __name__ == "__main__":
     unittest.main()

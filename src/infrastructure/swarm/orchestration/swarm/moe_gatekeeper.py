@@ -122,7 +122,8 @@ class MoEGatekeeper:
                 import zlib
                 seed: int = zlib.adler32(" ".join(profile.domains).encode()) & 0xFFFFFFFF
                 np.random.seed(seed)
-                expert_vec: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = np.random.randn(384).astype(np.float32)
+                expert_vec: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]
+                                       ] = np.random.randn(384).astype(np.float32)
                 expert_vec /= np.linalg.norm(expert_vec)
                 profile.specialization_vector = expert_vec.tolist()
 
@@ -146,7 +147,8 @@ class MoEGatekeeper:
 
         # Convert to numpy for sorting
         scores_arr = np.array(scores)
-        top_indices: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]] = np.argsort(scores_arr)[-top_k:][::-1]
+        top_indices: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]
+                                ] = np.argsort(scores_arr)[-top_k:][::-1]
 
         selected_experts = [agent_ids[i] for i in top_indices]
         weights: List[float] = [float(scores_arr[i]) for i in top_indices]

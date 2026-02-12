@@ -50,7 +50,7 @@ class ProfilingAnalysisMixin:
             return
 
         logging.info(f"Self-Improvement: Triggering profiling for potential bottleneck: {rel_path}")
-        
+
         # Access fleet through the orchestrator
         if not hasattr(self, "profiling_agent") or self.profiling_agent is None:
             # Add a placeholder finding so IntelligenceOrchestrator can suggest profiling
@@ -71,14 +71,17 @@ class ProfilingAnalysisMixin:
                 performance_stats = self.profiling_agent.static_profile(file_path)
             else:
                 logging.info(f"Self-Improvement: profiling_agent missing static_profile: {type(self.profiling_agent)}")
-            
+
             if performance_stats:
                 for stat in performance_stats:
                     findings.append({
                         "file": rel_path,
                         "line": str(stat.line_number),
                         "type": "Profiling",
-                        "message": f"Static analysis suggests bottleneck in '{stat.function_name}'. High loop density detected. Recommend Rust port.",
+                        "message": (
+                            f"Static analysis suggests bottleneck in '{stat.function_name}'. "
+                            f"High loop density detected. Recommend Rust port."
+                        ),
                         "fixed": False
                     })
             else:
@@ -86,7 +89,10 @@ class ProfilingAnalysisMixin:
                     "file": rel_path,
                     "line": "0",
                     "type": "Profiling",
-                    "message": f"Detected compute-intensive patterns in {rel_path} ({loop_count} loops). Recommend Rust port.",
+                    "message": (
+                        f"Detected compute-intensive patterns in {rel_path} ({loop_count} loops). "
+                        f"Recommend Rust port."
+                    ),
                     "fixed": False
                 })
         except Exception as e:

@@ -70,7 +70,6 @@ class MooncakeTransferStatus(Enum):
     EVICTED = auto()
 
 
-
 @dataclass
 class MooncakeRemoteTarget:
     """Represents a remote Mooncake node for KV storage or retrieval."""

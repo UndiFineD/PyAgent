@@ -19,7 +19,8 @@ Principal agent interface for PyAgent, supporting mixin-based architecture.
 DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
-Subclassed by specialized agents (e.g., CoderAgent, ResearchAgent) to provide core orchestration, state management, and tool-use capabilities.
+Subclassed by specialized agents (e.g., CoderAgent, ResearchAgent) to provide core orchestration,
+state management, and tool-use capabilities.
 
 WHAT IT DOES:
 The BaseAgent class provides the foundational logic for all agents in the swarm, including:
@@ -105,7 +106,7 @@ __version__ = VERSION
 # pylint: disable=too-many-ancestors, too-many-instance-attributes
 class BaseAgent(
     IdentityMixin,
-    RLOptimizationMixin, # Phase 321
+    RLOptimizationMixin,  # Phase 321
     PersistenceMixin,
     KnowledgeMixin,
     OrchestrationMixin,
@@ -160,43 +161,64 @@ class BaseAgent(
 
     def __init__(self, file_path: str = ".", **kwargs: Any) -> None:
         """Initialize the BaseAgent with decentralized initialization."""
-        super().__init__(**kwargs) # Phase 317: Ensure all mixins are initialized
+        # Extract arguments consumed by BaseAgent to prevent leaking them to object.__init__
+        inference_engine = kwargs.pop("inference_engine", "gemini-3-flash")
+        manifest_data = kwargs.pop("manifest", {})
+        repo_root = kwargs.pop("repo_root", None)
+        memory_config = kwargs.pop("memory_config", {})
+
+        super().__init__(**kwargs)  # Phase 317: Ensure all mixins are initialized
+        
         self.file_path = Path(file_path)
-        self._workspace_root = kwargs.get("repo_root") or BaseCore.detect_workspace_root(self.file_path)
+        self._workspace_root = repo_root or BaseCore.detect_workspace_root(self.file_path)
         self.agent_logic_core = BaseAgentCore()
         self.core = BaseCore(workspace_root=self._workspace_root)
 
         # Swarm Singularity: Initialize Logic Shard and Skill Manager
-        manifest_data = kwargs.get("manifest", {})
         self.manifest = LogicManifest.from_dict(manifest_data)
         self.skill_manager = SkillManager(self)
         self.scam_detector = ScamDetector()
 
         # Initialize Cognitive Core Components
-        memory_config = kwargs.get("memory_config", {})
         if isinstance(memory_config, dict) and "workspace_root" not in memory_config:
             memory_config["workspace_root"] = str(self._workspace_root)
         self.memory_core = AutoMemCore(config=memory_config)
-        inference_engine = kwargs.get("inference_engine", "gemini-3-flash")
-        self.reasoning_core = CoRTCore(inference_engine=inference_engine)
+        
+        # Determine inference engine (handle string vs object)
+        from src.inference.engine import InferenceEngine
+        if isinstance(inference_engine, str):
+            self.inference_engine = InferenceEngine(model_name=inference_engine)
+        else:
+            self.inference_engine = inference_engine
+            
+        self.reasoning_core = CoRTCore(inference_engine=self.inference_engine)
 
         self.previous_content = ""
         self.current_content = ""
 
         # Decentralized Mixin Initialization
-        IdentityMixin.__init__(self, **kwargs)
-        PersistenceMixin.__init__(self, **kwargs)
+        # Restore popped kwargs for manual mixin initialization if needed
+        full_kwargs = kwargs.copy()
+        full_kwargs.update({
+            "inference_engine": inference_engine, 
+            "manifest": manifest_data,
+            "repo_root": repo_root,
+            "memory_config": memory_config
+        })
+
+        IdentityMixin.__init__(self, **full_kwargs)
+        PersistenceMixin.__init__(self, **full_kwargs)
         KnowledgeMixin.__init__(
             self,
             agent_name=self.manifest.role,
             workspace_root=Path(self._workspace_root),
-            **kwargs,
+            **full_kwargs,
         )
-        OrchestrationMixin.__init__(self, **kwargs)
-        ReflectionMixin.__init__(self, **kwargs)
-        MultimodalMixin.__init__(self, **kwargs)
-        SecurityMixin.__init__(self, **kwargs)
-        TaskQueueMixin.__init__(self, **kwargs)
+        OrchestrationMixin.__init__(self, **full_kwargs)
+        ReflectionMixin.__init__(self, **full_kwargs)
+        MultimodalMixin.__init__(self, **full_kwargs)
+        SecurityMixin.__init__(self, **full_kwargs)
+        TaskQueueMixin.__init__(self, **full_kwargs)
         StreamManagerMixin.__init__(self, **kwargs)
         TaskManagerMixin.__init__(self, **kwargs)
         ToolFrameworkMixin.__init__(self, **kwargs)
@@ -270,7 +292,7 @@ class BaseAgent(
 
         # Success! Record positive reward indexed by latency
         latency = time.time() - start_time
-        reward = max(0.0, 1.0 - (latency / 10.0)) # Reward based on speed, min 0
+        reward = max(0.0, 1.0 - (latency / 10.0))  # Reward based on speed, min 0
         self.record_step(action="reason", reward=reward, next_state="success", done=True)
 
         return {"status": "success", "agent_mode": self.manifest.role, "result": plan}

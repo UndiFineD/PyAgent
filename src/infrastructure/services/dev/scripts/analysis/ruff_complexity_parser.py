@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-Ruff Complexity Parser: 
+Ruff Complexity Parser:
 Parses Ruff JSON output to extract and rank cyclomatic complexity violations.
 Ported from temp/check_complexity.py for re-use in the PyAgent analysis suite.
 """

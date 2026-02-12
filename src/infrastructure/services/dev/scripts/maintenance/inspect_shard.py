@@ -20,6 +20,7 @@ import gzip
 import json
 import sys
 
+
 def inspect_shard(file_path):
     print(f"Inspecting {file_path}...")
     try:
@@ -32,6 +33,7 @@ def inspect_shard(file_path):
                     print(f"Skipping malformed line: {line[:50]}...")
     except Exception as e:
         print(f"Error reading {file_path}: {e}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

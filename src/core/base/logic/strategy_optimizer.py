@@ -237,7 +237,7 @@ class PerformanceMeasurer:
             # Assume result size indicates throughput
             return len(str(result)) / execution_time if execution_time > 0 else 0
         elif metric in [OptimizationMetric.ACCURACY, OptimizationMetric.PRECISION,
-                       OptimizationMetric.RECALL, OptimizationMetric.F1_SCORE]:
+                        OptimizationMetric.RECALL, OptimizationMetric.F1_SCORE]:
             # Placeholder for classification metrics
             if ground_truth is not None and result is not None:
                 # Simple exact match for demonstration
@@ -414,7 +414,7 @@ class ParetoFrontierSelector(BestSelectionAlgorithm):
 
         for result in frontier:
             score = sum(result.metrics.get(metric, 0) * weight
-                       for metric, weight in weights.items())
+                        for metric, weight in weights.items())
 
             if score > best_score:
                 best_score = score

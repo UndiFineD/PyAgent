@@ -67,7 +67,7 @@ class SwarmTopologyReporter:
                 "id": node_id,
                 "group": group,
                 "meta": metadata or {},
-                "val": weight # D3 size scaling
+                "val": weight  # D3 size scaling
             })
 
     def record_link(self, source: str, target: str, strength: float = 1.0, type: str = "coord") -> None:
@@ -75,7 +75,7 @@ class SwarmTopologyReporter:
         # Pillar 9: High-fidelity visualization link strength
         # We also look at traffic between these two if we had a link-traffic matrix
         existing = next((link for link in self.links if (link["source"] == source and link["target"] == target) or
-                                                 (link["source"] == target and link["target"] == source)), None)
+                         (link["source"] == target and link["target"] == source)), None)
 
         if not existing:
             self.links.append({"source": source, "target": target, "value": strength, "type": type})
@@ -86,7 +86,7 @@ class SwarmTopologyReporter:
     def update_traffic(self, node_id: str, bytes_count: float) -> None:
         """Accumulates traffic for synaptic heatmap (Pillar 6)."""
         current = self.traffic_matrix.get(node_id, 1.0)
-        self.traffic_matrix[node_id] = current + (bytes_count / 1024) # KB focus
+        self.traffic_matrix[node_id] = current + (bytes_count / 1024)  # KB focus
 
     def export(self) -> None:
         import datetime

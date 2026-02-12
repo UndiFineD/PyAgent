@@ -18,6 +18,7 @@ Test Phase88 Hashing module.
 import numpy as np
 from src.infrastructure.swarm.orchestration.swarm.semantic_hashing import SemanticHasher
 
+
 def test_semantic_hashing_collision():
     hasher = SemanticHasher(dimension=384, num_bits=8)
 
@@ -38,6 +39,7 @@ def test_semantic_hashing_collision():
     assert h1 != h3
 
     print(f"\n[Phase 88] LSH successful: h1={h1}, h2={h2}, h3={h3}")
+
 
 def test_hashing_index():
     hasher = SemanticHasher(dimension=384, num_bits=4)

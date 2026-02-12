@@ -13,10 +13,11 @@
 # limitations under the License.
 
 """
-PyAgent AI Fuzzing Engine.
+Fuzzing Engine - AI-powered fuzzing and intelligent payload generation.
 
-Based on the brainstorm repository for AI-powered security testing.
-Implements learning-based discovery and intelligent fuzzing capabilities.
+Brief Summary DATE: 2026-02-12 AUTHOR: Keimpe de Jong USAGE: instantiate AIFuzzingEngine (optionally pointing at a local Ollama LLM), configure a FuzzingSession or call start_fuzzing_session with target and FuzzingTechnique list, then collect and analyze FuzzingResult entries; WHAT IT DOES: implements enums for target/technique types, dataclasses for session/result tracking, a default payload library and the AIFuzzingEngine with learning-enabled session management and intelligent path/payload generation; WHAT IT SHOULD DO BETTER: add robust HTTP/error handling and retry/backoff, make payloads and learning components pluggable and configurable, enforce safe sandboxing of destructive payloads, and improve observability and test coverage.
+
+FILE CONTENT SUMMARY: the file begins with the Apache-licensed header and module docstring ("PyAgent AI Fuzzing Engine"), imports asyncio, logging, requests and BeautifulSoup, defines FuzzingTarget and FuzzingTechnique enums, FuzzingResult and FuzzingSession dataclasses, and the AIFuzzingEngine class which initializes with an ollama_url, loads default payloads (_load_default_payloads) containing path traversal, SQLi, XSS, command and directory traversal samples, and includes the async start_fuzzing_session method (excerpted) that orchestrates fuzzing iterations and records results as shown in the provided excerpt.
 """
 
 from __future__ import annotations

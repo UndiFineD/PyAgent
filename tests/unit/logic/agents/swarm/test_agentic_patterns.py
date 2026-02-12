@@ -256,9 +256,10 @@ class TestParallelAgentPattern:
         assert combined["_summary"]["successful_agents"] == 2
 
         self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator
-    
+
     @pytest.mark.asyncio
-    async def test_parallel_execution_with_partial_failure(self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator):
+    async def test_parallel_execution_with_partial_failure(
+            self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator):
         """Test parallel execution with one agent failing."""
         # Mock one success, one failure
         mock_orchestrator.execute_with_pattern.side_effect = [
@@ -284,11 +285,12 @@ class TestParallelAgentPattern:
         assert len(successful_results) == 1
         assert len(failed_results) == 1
         self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator
-    
+
         assert failed_results[0]["error"] == "News API unavailable"
 
     @pytest.mark.asyncio
-    async def test_parallel_execution_all_failure(self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator):
+    async def test_parallel_execution_all_failure(
+            self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator):
         """Test parallel execution with all agents failing."""
         # Mock all failures
         mock_orchestrator.execute_with_pattern.side_effect = [

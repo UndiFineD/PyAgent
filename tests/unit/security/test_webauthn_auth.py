@@ -15,6 +15,7 @@
 import unittest
 from src.infrastructure.security.auth.webauthn_manager import WebAuthnManager
 
+
 class TestWebAuthnAuth(unittest.TestCase):
     def setUp(self):
         self.auth_manager = WebAuthnManager(rp_id="localhost")
@@ -43,6 +44,7 @@ class TestWebAuthnAuth(unittest.TestCase):
 
         success = self.auth_manager.verify_authentication(username, {"id": "cred123"})
         self.assertTrue(success)
+
 
 if __name__ == "__main__":
     unittest.main()

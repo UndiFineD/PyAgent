@@ -685,4 +685,3 @@ class TestPhase24Integration:
             })
 
         assert len(logprobs) == 3
-

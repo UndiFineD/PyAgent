@@ -181,24 +181,20 @@ class TestRustFunctions:
     """Test Rust Phase 17 functions."""
 
     def test_rust_cdiv(self):
-        import rust_core as rc
         assert rc.cdiv_rust(7, 3) == 3
         assert rc.cdiv_rust(6, 3) == 2
         assert rc.cdiv_rust(1, 3) == 1
 
     def test_rust_next_power_of_2(self):
-        import rust_core as rc
         assert rc.next_power_of_2_rust(7) == 8
         assert rc.next_power_of_2_rust(8) == 8
         assert rc.next_power_of_2_rust(1) == 1
 
     def test_rust_round_up(self):
-        import rust_core as rc
         assert rc.round_up_rust(7, 4) == 8
         assert rc.round_up_rust(8, 4) == 8
 
     def test_rust_xxhash(self):
-        import rust_core as rc
         h1 = rc.xxhash_rust("test")
         h2 = rc.xxhash_rust("test")
         h3 = rc.xxhash_rust("different")
@@ -207,7 +203,6 @@ class TestRustFunctions:
         assert len(h1) == 16  # 64-bit hex
 
     def test_rust_cache_hit_ratio(self):
-        import rust_core as rc
         assert rc.cache_hit_ratio_rust(50, 100) == 0.5
         assert rc.cache_hit_ratio_rust(0, 100) == 0.0
         assert rc.cache_hit_ratio_rust(0, 0) == 0.0
@@ -215,4 +210,3 @@ class TestRustFunctions:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
-

@@ -13,7 +13,163 @@
 # limitations under the License.
 
 
+"""
+Branch Comparer - Compare improvements between Git branches
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate BranchComparer with an optional repo_path and optional recorder. Call compare(source_branch, target_branch, file_path) to obtain a BranchComparison with diffs and counts. Example: comparer = BranchComparer(repo_path="C:\repo"); result = comparer.compare("main", "feature/improvements", "improvements.yaml")
+
+WHAT IT DOES:
+Provides tooling to fetch a file from two git branches, parse improvement entries, and compute added/removed/modified ImprovementDiffs; records comparison history and optional recorder interactions; returns a BranchComparison with status and counts.
+
+WHAT IT SHOULD DO BETTER:
+- Improve error handling to surface useful exception details and partial results instead of swallowing broad exceptions.  
+- Add unit tests and validation for parsing logic and git access to avoid silent empty-file fallbacks.  
+- Support configurable git command timeouts, authentication contexts, binary/large-file handling, and richer diff heuristics (e.g., semantic diffing, rename detection).
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 """Auto-extracted class from agent_improvements.py"""
+
+from __future__ import annotations
+
+import hashlib
+import logging
+import re
+import subprocess
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .branch_comparison import BranchComparison
+from .branch_comparison_status import BranchComparisonStatus
+from .improvement import Improvement
+from .improvement_diff import ImprovementDiff
+from .improvement_diff_type import ImprovementDiffType
+
+__version__ = VERSION
+
+
+class BranchComparer:
+    """Comparer for improvements across git branches.
+
+    Enables comparison of improvement files between branches
+    to identify additions, removals, and modifications.
+
+    Attributes:
+        repo_path: Path to git repository.
+        comparisons: History of comparisons.
+
+    Example:
+        comparer=BranchComparer("/path / to / repo")
+        result=comparer.compare("main", "feature / improvements")
+        for diff in result.diffs:
+            print(f"{diff.diff_type.value}: {diff.improvement_id}")
+    """
+
+    def __init__(self, repo_path: str | None = None, recorder: Any = None) -> None:
+        """Initialize branch comparer.
+
+        Args:
+            repo_path: Path to git repository. Defaults to current directory.
+            recorder: Optional LocalContextRecorder.
+        """
+        self.repo_path = Path(repo_path) if repo_path else Path.cwd()
+        self.recorder = recorder
+        self.comparisons: list[BranchComparison] = []
+
+    def _record(self, action: str, result: str) -> None:
+        """Record branch comparison activities."""
+        if self.recorder:
+            self.recorder.record_interaction("Git", "BranchComparer", action, result)
+        logging.debug(f"BranchComparer initialized for {self.repo_path}")
+
+    def compare(self, source_branch: str, target_branch: str, file_path: str) -> BranchComparison:
+        """Compare improvements between branches.
+
+        Args:
+            source_branch: Source branch name.
+            target_branch: Target branch name.
+            file_path: Path to improvements file.
+
+        Returns:
+            Comparison result with diffs.
+        """
+        comparison = BranchComparison(
+            source_branch=source_branch,
+            target_branch=target_branch,
+            file_path=file_path,
+            status=BranchComparisonStatus.IN_PROGRESS,
+        )
+
+        try:
+            # Get file content from each branch
+            source_content = self._get_file_from_branch(source_branch, file_path)
+            target_content = self._get_file_from_branch(target_branch, file_path)
+
+            # Parse improvements from each branch
+            source_improvements = self._parse_improvements(source_content)
+            target_improvements = self._parse_improvements(target_content)
+
+            # Calculate differences
+            comparison.diffs = self._calculate_diffs(source_improvements, target_improvements)
+
+            # Count by type
+            comparison.added_count = sum(1 for d in comparison.diffs if d.diff_type == ImprovementDiffType.ADDED)
+            comparison.removed_count = sum(1 for d in comparison.diffs if d.diff_type == ImprovementDiffType.REMOVED)
+            comparison.modified_count = sum(1 for d in comparison.diffs if d.diff_type == ImprovementDiffType.MODIFIED)
+
+            comparison.status = BranchComparisonStatus.COMPLETED
+
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logging.error(f"Branch comparison failed: {e}")
+            comparison.status = BranchComparisonStatus.FAILED
+
+        self.comparisons.append(comparison)
+        return comparison
+
+    def _get_file_from_branch(self, branch: str, file_path: str) -> str:
+        """Get file content from a specific branch.
+
+        Args:
+            branch: Branch name.
+            file_path: Path to file.
+
+        Returns:
+            File content string.
+        """
+        try:
+            result = subprocess.run(
+                ["git", "show", f"{branch}:{file_path}"],
+                cwd=self.repo_path,
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            return result.stdout
+        except subprocess.CalledProcessError:
+            return ""
+
+    def _parse_improvements(self, content: str) -> dict[str, Improvement]:
+"""
 
 from __future__ import annotations
 

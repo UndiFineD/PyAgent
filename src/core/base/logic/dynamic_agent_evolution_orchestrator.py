@@ -429,7 +429,7 @@ This agent works well with:
             return f"Integrated agent combining expertise from {parents} for {task_analysis.domain} tasks"
 
     def _generate_detailed_description(self, sheet: AgentSkillSheet, task_analysis: TaskAnalysis,
-                                     parent_sheets: Optional[List[AgentSkillSheet]] = None) -> str:
+                                       parent_sheets: Optional[List[AgentSkillSheet]] = None) -> str:
         """Generate detailed description for the agent."""
         if sheet.tier == AgentTier.SPECIALIZED:
             caps = ", ".join(sheet.capabilities)

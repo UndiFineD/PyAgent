@@ -16,6 +16,7 @@ import shutil
 from pathlib import Path
 from src.infrastructure.swarm.resilience.distributed_backup import DistributedBackup
 
+
 def test_raid10_sharding_and_reconstruction():
     backup = DistributedBackup(node_id="test_node_1")
 
@@ -45,6 +46,7 @@ def test_raid10_sharding_and_reconstruction():
     # Clean up
     if Path("data/shards").exists():
         shutil.rmtree("data/shards")
+
 
 if __name__ == "__main__":
     test_raid10_sharding_and_reconstruction()

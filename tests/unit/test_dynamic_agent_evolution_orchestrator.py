@@ -66,7 +66,8 @@ class TestDynamicAgentEvolutionOrchestrator:
         """Test task analysis for complex tasks."""
         orchestrator = DynamicAgentEvolutionOrchestrator(temp_dir)
 
-        task = "Implement a full-stack web application with user authentication, database integration, and real-time features"
+        task = ("Implement a full-stack web application with user authentication, "
+                "database integration, and real-time features")
         analysis = orchestrator.analyze_task(task)
 
         assert len(analysis.capabilities) > 1

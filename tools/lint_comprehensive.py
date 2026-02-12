@@ -15,8 +15,23 @@
 import asyncio
 import json
 import sys
+import warnings
 from pathlib import Path
 from typing import Dict, List, Any
+
+# Windows-specific noise suppression for asyncio subprocesses
+if sys.platform == "win32":
+    import asyncio.proactor_events
+
+    _original_del = asyncio.proactor_events._ProactorBasePipeTransport.__del__
+
+    def _silence_event_loop_closed(self):
+        try:
+            _original_del(self)
+        except (RuntimeError, ValueError, ImportError):
+            pass
+
+    asyncio.proactor_events._ProactorBasePipeTransport.__del__ = _silence_event_loop_closed
 
 # Configure search paths
 ROOT_DIR = Path(__file__).parent.parent.resolve()
@@ -121,4 +136,8 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("\nLinting interrupted by user. Partial results saved.")
+        sys.exit(130)

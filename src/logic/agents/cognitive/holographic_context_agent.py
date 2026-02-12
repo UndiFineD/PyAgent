@@ -72,7 +72,7 @@ class HolographicContextAgent(BaseAgent):
                     angle: random.uniform(0.1, 1.0)
                 },
                 "recommendations": [f"Improve {angle} by doing X."],
-                "vector": [random.random() for _ in range(8)] # Compact state representation
+                "vector": [random.random() for _ in range(8)]  # Compact state representation
             }
 
         # Phase 330: Offload to Holographic Orchestrator for Swarm Mirroring
@@ -111,7 +111,7 @@ class HolographicContextAgent(BaseAgent):
                     if name not in self.holograms:
                         self.holograms[name] = {"perspectives": {}}
                     if "perspectives" not in self.holograms[name]:
-                         self.holograms[name]["perspectives"] = {}
+                        self.holograms[name]["perspectives"] = {}
                     self.holograms[name]["perspectives"][angle] = remote_p
                     return remote_p
             except Exception as e:

@@ -19,12 +19,14 @@ scans workspace for issues and applies fixes.
 DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
-python src/infrastructure/services/dev/scripts/analysis/run_fleet_self_improvement.py --cycles 3 --delay 60 --model gpt-5-mini
+python src/infrastructure/services/dev/scripts/analysis/run_fleet_self_improvement.py \
+    --cycles 3 --delay 60 --model gpt-5-mini
 
 WHAT IT DOES:
 The script orchestrates an autonomous loop that:
 1. Parses strategic directives (@focus, @cmd) from prompt and context files.
-2. Scans the workspace using the FleetManager's SelfImprovementOrchestrator to identify and fix code health issues (mypy, flake8, pylint).
+2. Scans the workspace using the FleetManager's SelfImprovementOrchestrator to identify and fix code health issues
+   (mypy, flake8, pylint).
 3. Harvests high-level architectural and security lessons from local Copilot CLI (GPT-5 mini).
 4. Generates archival implementation specifications (JSON) for remaining technical debt.
 5. Updates auto-documentation (FLEET_AUTO_DOC.md) and explainability logs.
@@ -75,7 +77,8 @@ if os.path.exists(COPILOT_PATH) and COPILOT_PATH not in os.environ["PATH"]:
 # Force local Copilot CLI only (Phase 430)
 os.environ["DV_DISABLED_BACKENDS"] = "lmstudio,vllm_native,vllm,ollama,github_models"
 os.environ["DV_AGENT_LOCAL_ONLY"] = "true"
-os.environ["DV_PREFERRED_BACKEND"] = "copilot_cli"
+os.environ["DV_PREFERRED_BACKEND"] = "copilot_cli"  # Kept for compatibility
+os.environ["DV_AGENT_BACKEND"] = "copilot_cli"      # Force SubagentCore specific backend
 
 
 # Import the Rust extension for fleet self-improvement (registers PyO3 functions)
@@ -163,7 +166,6 @@ class IntelligenceHarvester:
         self.fleet = fleet
         self.model_name = model_name
 
-
     def harvest(self) -> list[dict[str, Any]]:
         """Harvests insights from local Copilot CLI ONLY (Phase 430)."""
         from src.infrastructure.compute.backend import execution_engine as ai
@@ -173,7 +175,7 @@ class IntelligenceHarvester:
 
         # --- Prompt Optimizer Integration ---
         optimizer = PromptOptimizerAgent()
-        
+
         # Only use Copilot CLI for intelligence harvesting per user request
         ai.llm_chat_via_copilot_cli = optimizer.wrap_agent_prompt(
             ai.llm_chat_via_copilot_cli, agent_name="CopilotCLI"
@@ -203,8 +205,8 @@ class IntelligenceHarvester:
         return lessons
 
 
-
 # Global flag to ensure Triton compatibility is only checked/logged on the first cycle
+
 
 class CycleOrchestrator:
     """Manages the execution of multiple improvement cycles."""
@@ -219,9 +221,12 @@ class CycleOrchestrator:
         # Stores normalized messages from the last completed cycle for stagnation detection
         self._last_cycle_messages: list[str] | None = None
 
-
     def run(self) -> None:
         """Executes the loop based on arguments, always printing per-cycle timing."""
+        # Set strict backend preference from args if provided
+        if hasattr(self.args, "model") and self.args.model:
+            os.environ["DV_AGENT_MODEL"] = self.args.model
+
         current_cycle = 0
         while True:
             current_cycle += 1
@@ -231,7 +236,11 @@ class CycleOrchestrator:
                 # Proactively set GITHUB_TOKEN from gh CLI if not already set
                 if not os.environ.get("GITHUB_TOKEN"):
                     try:
-                        res = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True, check=False)
+                        res = subprocess.run(
+                            ["gh", "auth", "token"],
+                            capture_output=True,
+                            text=True,
+                            check=False)
                         if res.returncode == 0:
                             token = res.stdout.strip()
                             if token:
@@ -277,7 +286,11 @@ class CycleOrchestrator:
                 break
 
             self.logger.info("Waiting before next cycle... (Press Ctrl+C to stop)")
-            _cycle_throttle(self.args.delay, self.root, self._get_last_focus(), use_watcher=self.args.watch)
+            _cycle_throttle(
+                self.args.delay,
+                self.root,
+                self._get_last_focus(),
+                use_watcher=self.args.watch)
 
     def _get_last_focus(self) -> list[str]:
         """Peeks at the prompt for the watcher's benefit."""
@@ -298,7 +311,6 @@ except ImportError:
     pass
 
 __version__ = VERSION
-
 
 
 def run_cycle(
@@ -329,7 +341,9 @@ def run_cycle(
     combined_stats = {"files_scanned": 0, "issues_found": 0, "fixes_applied": 0, "details": []}
     for t_dir in target_dirs:
         # Patch: Only allow Triton compatibility check on first cycle
-        stats = fleet.self_improvement.run_improvement_cycle(target_dir=t_dir, allow_triton_check=allow_triton_check)
+        stats = fleet.self_improvement.run_improvement_cycle(
+            target_dir=t_dir,
+            allow_triton_check=allow_triton_check)
         combined_stats["files_scanned"] += stats.get("files_scanned", 0)
         combined_stats["issues_found"] += stats.get("issues_found", 0)
         combined_stats["fixes_applied"] += stats.get("fixes_applied", 0)
@@ -359,7 +373,8 @@ def run_cycle(
     lessons = harvester.harvest()
 
     # Normalize messages for inter-cycle comparison
-    messages = [f"{lesson.get('provider')}:{lesson.get('text')}" for lesson in lessons if isinstance(lesson, dict) and lesson.get('text')]
+    messages = [f"{lesson.get('provider')}:{lesson.get('text')}" for lesson in lessons if isinstance(
+        lesson, dict) and lesson.get('text')]
 
     # Return per-cycle information for orchestration decisions
     return {"messages": messages, "stats": combined_stats}
@@ -475,7 +490,10 @@ def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
         logger.warning(f"[Intelligence] Synthesis skipped: {e}")
 
 
-def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[str, Any]], model_name: str) -> None:
+def _attempt_autonomous_solutions(
+    fleet: FleetManager,
+    broken_items: list[dict[str, Any]],
+    model_name: str) -> None:
     """
     Constructs a prompt with cycle findings and attempts to solve remaining issues
     via autonomous reasoning or external LLM consultation.
@@ -541,7 +559,7 @@ def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[s
 
         print(f" - Querying local Copilot CLI ({model_name}) for solution patterns...")
         # Force use of copilot_cli for architectural analysis
-        solution = ai.llm_chat_via_copilot_cli(context_prompt, model=model_name)
+        solution = ai.llm_chat_via_copilot_cli(context_prompt, model=model_name)  # type: ignore
 
         if solution:
             print("\n[Autonomous Solver] Proposed Solution:")
@@ -590,9 +608,15 @@ def _prune_verified_directives(
         flags=re.MULTILINE | re.IGNORECASE | re.DOTALL,
     )
     if new_content == content:
-        new_content = re.sub(r"^@focus:.*$\n?", "", content, count=1, flags=re.MULTILINE | re.IGNORECASE)
+        new_content = re.sub(
+            r"^@focus:.*$\n?", "",
+            content, count=1,
+            flags=re.MULTILINE | re.IGNORECASE)
 
-    new_content = re.sub(r"^@cmd:.*$\n?", "", new_content, count=1, flags=re.MULTILINE | re.IGNORECASE)
+    new_content = re.sub(
+        r"^@cmd:.*$\n?", "",
+        new_content, count=1,
+        flags=re.MULTILINE | re.IGNORECASE)
     new_content = re.sub(
         r"^@python:\s*\"\"\"(.*?)\"\"\"\n?", "", new_content, count=1,
         flags=re.DOTALL | re.IGNORECASE
@@ -674,7 +698,7 @@ def _generate_enhanced_docstring(file_path: Path, content: str, model_name: str)
 
     try:
         # Force use of copilot_cli for docstring generation
-        solution = ai.llm_chat_via_copilot_cli(prompt, model=model_name)
+        solution = ai.llm_chat_via_copilot_cli(prompt, model=model_name)  # type: ignore
         if solution:
             # Strip any markdown triple backticks if the model wraps the output
             solution = re.sub(r'^```python\n|```$', '', solution.strip(), flags=re.MULTILINE)
@@ -721,7 +745,7 @@ def _report_remaining_debt(
     consult_external_models(fleet, broken_items, prompt_path=prompt_path, model_name=model_name)
 
     # 5. Autonomous Problem Solving
-    _attempt_autonomous_solutions(fleet, broken_items, model_name)
+    _attempt_autonomous_solutions(fleet, broken_items, model_name)  # type: ignore
 
     _synthesize_collective_knowledge(fleet)
 
@@ -776,7 +800,6 @@ def _cycle_throttle(
     print(f" - [Throttle] Waiting {delay}s for next cycle...")
     # Use threading.Event to avoid synchronous wait performance warnings
     threading.Event().wait(timeout=float(delay))
-
 
 
 def main() -> None:

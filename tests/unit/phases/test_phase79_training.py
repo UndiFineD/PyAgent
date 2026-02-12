@@ -17,6 +17,7 @@
 import pytest
 from src.infrastructure.swarm.orchestration.swarm.swarm_training import SwarmTrainingCoordinator
 
+
 @pytest.mark.asyncio
 async def test_swarm_lora_merging():
     """Verifies that adapters from multiple experts can be merged into a global adapter."""

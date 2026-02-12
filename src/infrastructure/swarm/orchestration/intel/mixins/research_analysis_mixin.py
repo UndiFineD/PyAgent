@@ -56,7 +56,7 @@ class ResearchAnalysisMixin:
             if os.path.exists(self.research_doc):
                 with open(self.research_doc, "r", encoding="utf-8") as f:
                     content = f.read()
-            
+
             with open(self.research_doc, "w", encoding="utf-8") as f:
                 f.write(summary + "\n" + content)
 

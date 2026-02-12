@@ -146,7 +146,8 @@ class OrchestrationMixin:
             elif action == "test":
                 res = await self.run_subagent("LogicManifest: Testing", f"Run tests for: {params.get('code')}")
             elif action == "security_audit":
-                res = await self.run_subagent("LogicManifest: Security Audit", f"Audit following code: {params.get('content')}")
+                res = await self.run_subagent("LogicManifest: Security Audit",
+                                              f"Audit following code: {params.get('content')}")
             else:
                 res = f"Unknown action: {action}"
 
@@ -275,7 +276,8 @@ class OrchestrationMixin:
 
         return None
 
-    async def _try_registry_delegation(self, agent_type: str, prompt: str, target_file: str | None, context: Any | None) -> str | None:
+    async def _try_registry_delegation(self, agent_type: str, prompt: str,
+                                       target_file: str | None, context: Any | None) -> str | None:
         """Attempt delegation via AgentRegistry fallback."""
         try:
             # pylint: disable=import-outside-toplevel

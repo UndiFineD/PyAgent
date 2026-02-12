@@ -36,6 +36,7 @@ from webauthn.helpers import options_to_json
 
 logger = logging.getLogger(__name__)
 
+
 class AuthService:
     """Orchestrates multi-modal authentication for the swarm."""
 
@@ -55,12 +56,13 @@ class AuthService:
             user_id=user_id,
             user_name=username,
             authenticator_selection=AuthenticatorSelectionCriteria(
-                authenticator_attachment=AuthenticatorAttachment.PLATFORM, # Prefer FaceID/TouchID/Windows Hello
+                authenticator_attachment=AuthenticatorAttachment.PLATFORM,  # Prefer FaceID/TouchID/Windows Hello
                 user_verification=UserVerificationRequirement.PREFERRED,
             ),
         )
         # Store challenge for verification
-        self.challenges[username] = options.challenge.decode("utf-8") if isinstance(options.challenge, bytes) else options.challenge
+        self.challenges[username] = options.challenge.decode(
+            "utf-8") if isinstance(options.challenge, bytes) else options.challenge
         return json.loads(options_to_json(options))
 
     def verify_registration(self, username: str, credential_data: Dict[str, Any]):

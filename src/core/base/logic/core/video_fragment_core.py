@@ -39,7 +39,7 @@ class VideoFragmentCore:
         # Example: [0-10], [8-18], [16-26], etc.
 
         # Simulated fragment generation
-        duration = 30 # Placeholder for actual duration check
+        duration = 30  # Placeholder for actual duration check
         start = 0
         while start < duration:
             end = min(start + self.clip_len, duration)

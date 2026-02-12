@@ -147,7 +147,8 @@ class TestSelfEvolutionMixin:
         assert result == successful_result
 
     @pytest.mark.asyncio
-    async def test_execute_with_evolution_no_improvement_needed(self, mock_orchestrator, sample_context, successful_result):
+    async def test_execute_with_evolution_no_improvement_needed(
+            self, mock_orchestrator, sample_context, successful_result):
         """Test execution when evolution is enabled but no improvement needed."""
         mock_orchestrator.execute_with_pattern.return_value = successful_result
 

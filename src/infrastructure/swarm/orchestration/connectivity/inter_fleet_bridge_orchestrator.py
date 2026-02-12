@@ -165,13 +165,17 @@ class InterFleetBridgeOrchestrator:
 
         return best_peer
 
-    async def offload_task(self, task_description: str, required_cpu: int = 1, required_ram: float = 2.0) -> Optional[Dict[str, Any]]:
+    async def offload_task(self, task_description: str, required_cpu: int = 1,
+                           required_ram: float = 2.0) -> Optional[Dict[str, Any]]:
         """
         Attempts to offload a task to a capable peer in the constellation.
         """
         target = self.find_best_offload_target(required_cpu, required_ram)
         if not target:
-            logger.warning(f"Voyager: No suitable peer found for task offload (CPU:{required_cpu}, RAM:{required_ram})")
+            logger.warning(
+                f"Voyager: No suitable peer found for task offload (CPU:{required_cpu}, "
+                f"RAM:{required_ram})"
+            )
             return None
 
         peer_ip, peer_port = target
@@ -199,7 +203,7 @@ class InterFleetBridgeOrchestrator:
             "type": "memory_query",
             "query": query,
             "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown"),
-             "limit": limit_per_peer
+            "limit": limit_per_peer
         }
 
         tasks = []

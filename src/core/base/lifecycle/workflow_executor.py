@@ -23,6 +23,7 @@ from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
+
 class WorkflowExecutor:
     """
     Executes complex multi-agent workflows defined in LogicManifest snippets.
@@ -96,16 +97,16 @@ class WorkflowExecutor:
                     next_ids = [c["to"] for c in connectors if c["from"] == node_id]
                     next_node_ids.extend(next_ids)
 
-            current_node_ids = list(set(next_node_ids)) # De-duplicate and continue
+            current_node_ids = list(set(next_node_ids))  # De-duplicate and continue
 
         return last_result if last_result is not None else "Workflow complete"
 
     def _resolve_variables(self, template: str) -> str:
         """Hydrates {{node_id}} placeholders with results."""
         import re
+
         def replace_match(match):
             key = match.group(1)
             return str(self.results.get(key, f"{{MISSING:{key}}}"))
 
         return re.sub(r"\{\{(.*?)\}\}", replace_match, template)
-

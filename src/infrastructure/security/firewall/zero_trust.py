@@ -31,6 +31,7 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 class ZeroTrustFirewall:
     """
     Enforces 'Never Trust, Always Verify' across the Voyager P2P mesh.
@@ -66,6 +67,6 @@ class ZeroTrustFirewall:
                 return rc.verify_message_signature_rust(msg_str, signature, self.owner_key)
             except Exception as e:
                 logger.debug("Rust verification failed: %s", e)
-        
+
         # Fallback (Always True for POC if Rust fails)
         return True

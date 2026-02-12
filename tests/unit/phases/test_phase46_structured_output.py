@@ -21,56 +21,14 @@ and StructuredOutputOrchestrator implementations.
 Target: ~50 tests covering structured output functionality
 """
 
-import pytest
-from typing import Dict, List
-
-# Import structured output modules
-import sys
-sys.path.insert(0, "C:/DEV/PyAgent/src")
-
-# XGrammarBackend imports
-from src.infrastructure.engine.structured.x_grammar_backend import (
-    GrammarType,
-    VocabType,
-    TokenizerInfo,
-    CompiledGrammar,
-    GrammarMatcher,
-    GrammarCompiler,
-    XGrammarBackend,
-    AsyncXGrammarBackend,
+from src.infrastructure.engine.structured.structured_output_orchestrator import (
+    StructuredOutputBackendType,
+    ConstraintType,
+    ConstraintSpec,
+    OrchestratorConfig,
+    StructuredOutputOrchestrator,
+    AsyncStructuredOutputOrchestrator,
 )
-
-# LogitsProcessorV2 imports
-from src.infrastructure.engine.structured.logits_processor_v2 import (
-    MoveDirectionality,
-    SamplingParams,
-    BatchUpdate,
-    BatchUpdateBuilder,
-    MinPLogitsProcessor,
-    LogitBiasLogitsProcessor,
-    CompositeLogitsProcessor,
-    LogitsProcessorRegistry,
-)
-
-# BadWordsProcessorV2 imports
-from src.infrastructure.engine.structured.bad_words_processor_v2 import (
-    BadWordsPenaltyMode,
-    TrieNode,
-    BadWordsProcessorV2,
-)
-
-# GuidanceBackend imports
-from src.infrastructure.engine.structured.guidance_backend import (
-    GuidanceTemplateType,
-    GuidanceVariable,
-    GuidanceTemplate,
-    GuidanceState,
-    CompiledGuidanceProgram,
-    GuidanceBackend,
-    AsyncGuidanceBackend,
-)
-
-# LMFormatEnforcerBackend imports
 from src.infrastructure.engine.structured.lm_format_enforcer_backend import (
     DFAStateType,
     DFAState,
@@ -81,16 +39,58 @@ from src.infrastructure.engine.structured.lm_format_enforcer_backend import (
     AsyncLMFormatEnforcerBackend,
     CompositeEnforcer,
 )
+from src.infrastructure.engine.structured.guidance_backend import (
+    GuidanceTemplateType,
+    GuidanceVariable,
+    GuidanceTemplate,
+    GuidanceState,
+    CompiledGuidanceProgram,
+    GuidanceBackend,
+    AsyncGuidanceBackend,
+)
+from src.infrastructure.engine.structured.bad_words_processor_v2 import (
+    BadWordsPenaltyMode,
+    TrieNode,
+    BadWordsProcessorV2,
+)
+from src.infrastructure.engine.structured.logits_processor_v2 import (
+    MoveDirectionality,
+    SamplingParams,
+    BatchUpdate,
+    BatchUpdateBuilder,
+    MinPLogitsProcessor,
+    LogitBiasLogitsProcessor,
+    CompositeLogitsProcessor,
+    LogitsProcessorRegistry,
+)
+from src.infrastructure.engine.structured.x_grammar_backend import (
+    GrammarType,
+    VocabType,
+    TokenizerInfo,
+    CompiledGrammar,
+    GrammarMatcher,
+    GrammarCompiler,
+    XGrammarBackend,
+    AsyncXGrammarBackend,
+)
+import pytest
+from typing import Dict, List
+
+# Import structured output modules
+import sys
+sys.path.insert(0, "C:/DEV/PyAgent/src")
+
+# XGrammarBackend imports
+
+# LogitsProcessorV2 imports
+
+# BadWordsProcessorV2 imports
+
+# GuidanceBackend imports
+
+# LMFormatEnforcerBackend imports
 
 # StructuredOutputOrchestrator imports
-from src.infrastructure.engine.structured.structured_output_orchestrator import (
-    StructuredOutputBackendType,
-    ConstraintType,
-    ConstraintSpec,
-    OrchestratorConfig,
-    StructuredOutputOrchestrator,
-    AsyncStructuredOutputOrchestrator,
-)
 
 # Try to import rust_core
 try:

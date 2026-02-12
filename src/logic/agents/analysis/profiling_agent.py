@@ -64,7 +64,10 @@ class ProfilingAgent(BaseAgent):
 
             # Phase 336: Support for static analysis if execution is too risky
             if "os.remove" in code or "subprocess" in code:
-                logging.info(f"ProfilingAgent: Skipping execution profile for {file_path} due to risky calls. Using static fallback.")
+                logging.info(
+                    f"ProfilingAgent: Skipping execution profile for {file_path} "
+                    f"due to risky calls. Using static fallback."
+                )
                 return self.static_profile(file_path)
 
             # Execute in a controlled environment
@@ -113,7 +116,7 @@ class ProfilingAgent(BaseAgent):
                         findings.append(ProfileStats(
                             function_name=node.name,
                             call_count=1,
-                            total_time=1.5, # Estimated
+                            total_time=1.5,  # Estimated
                             per_call=1.5,
                             file_name=file_path,
                             line_number=node.lineno

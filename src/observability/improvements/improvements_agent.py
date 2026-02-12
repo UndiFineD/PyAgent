@@ -13,7 +13,183 @@
 # limitations under the License.
 
 
+"""
+ImprovementsAgent - Updates code-file improvement suggestions using AI assistance
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+from improvements_agent import ImprovementsAgent
+agent = ImprovementsAgent(r"C:\path\to\module.improvements.md")
+agent.load()
+# inspect agent.manager or agent._improvements for parsed suggestions
+# call manager methods to generate, update, or persist improvements
+
+WHAT IT DOES:
+Parses .improvements.md files, validates and locates the associated source file, delegates improvement storage and operations to an ImprovementManager, and exposes accessors for improvements and templates. Provides basic validation, directory heuristics to find related code, and loading/parsing entry points intended to feed AI-driven suggestion workflows.
+
+WHAT IT SHOULD DO BETTER:
+- Improve robustness of associated-file discovery (configurable search roots, respect workspace/project root, and handle symlinks and virtual filesystem edge-cases).
+- Surface clearer error reporting and recoverable fallback behavior instead of only logging warnings when files are missing or unreadable.
+- Add explicit unit-tested parsing rules, richer markdown schema validation, and better analytics/telemetry for suggestion quality and change history.
+- Make AI integration points pluggable (async-friendly, retryable, and rate-limit aware) and ensure all I/O is asyncio-compatible per project conventions.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 """Auto-extracted class from agent_improvements.py"""
+
+from __future__ import annotations
+
+import json
+import logging
+from datetime import datetime
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    pass
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+from .effort_estimate import EffortEstimate
+from .improvement import Improvement
+from .improvement_category import ImprovementCategory
+from .improvement_priority import ImprovementPriority
+from .improvement_status import ImprovementStatus
+from .improvement_template import ImprovementTemplate
+
+__version__ = VERSION
+
+
+class ImprovementsAgent(BaseAgent):
+    """Updates code file improvement suggestions using AI assistance.
+
+    This agent reads .improvements.md files and uses AI to suggest better,
+    more actionable improvements for the associated code file.
+    """
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._validate_file_extension()
+        self._check_associated_file()
+
+        # Improvement management delegated to ImprovementManager
+        from .improvement_manager import ImprovementManager
+        self.manager = ImprovementManager(base_file_path=str(self.file_path))
+        self._analytics: dict[str, Any] = {}
+
+    @property
+    def _improvements(self) -> list[Improvement]:
+        return self.manager._improvements
+
+    @property
+    def _templates(self) -> dict[str, ImprovementTemplate]:
+        return self.manager._templates
+
+    def _validate_file_extension(self) -> None:
+        """Validate that the file has the correct extension."""
+        if not self.file_path.name.endswith(".improvements.md"):
+            logging.warning(f"File {self.file_path.name} does not end with .improvements.md")
+
+    def _check_associated_file(self) -> None:
+        """Check if the associated code file exists.
+
+        Searches:
+        1. Same directory with various extensions.
+        2. Parent directory (e.g. if doc is in a subfolder).
+        3. Common code directories (src, lib, app).
+        """
+        name = self.file_path.name
+        if not name.endswith(".improvements.md"):
+            return
+
+        base_name = name[:-16]
+
+        # Extensions to try
+        extensions = [
+            "",
+            ".py",
+            ".sh",
+            ".js",
+            ".ts",
+            ".md",
+            ".txt",
+            ".yaml",
+            ".yml",
+            ".json",
+            ".html",
+            ".css",
+            ".go",
+            ".rs",
+        ]
+
+        # Directories to search
+        search_dirs = []
+        if self.file_path.parent:
+            search_dirs.append(self.file_path.parent)
+            if self.file_path.parent.parent:
+                search_dirs.append(self.file_path.parent.parent)
+
+        # Look for src/lib adjacent to current or parent
+        for d in list(search_dirs):
+            for sub in ["src", "lib", "app", "classes"]:
+                cand_dir = d / sub
+                if cand_dir.exists() and cand_dir.is_dir():
+                    search_dirs.append(cand_dir)
+
+        # Unique search directories
+        unique_dirs = []
+        seen = set()
+        for d in search_dirs:
+            resolved = str(d.resolve())
+            if resolved not in seen:
+                unique_dirs.append(d)
+                seen.add(resolved)
+
+        for directory in unique_dirs:
+            for ext in extensions:
+                candidate = directory / (base_name + ext)
+                try:
+                    if candidate.exists() and candidate.is_file() and candidate.resolve() != self.file_path.resolve():
+                        logging.debug(f"Found associated file: {candidate}")
+                        return
+                except (OSError, PermissionError):
+                    continue
+
+        logging.warning(f"Could not find associated code file for {self.file_path.name}")
+
+    # ========== Improvement Management ==========
+
+    def load(self) -> None:
+        """Load improvements from file."""
+        if not self.file_path.exists():
+            return
+
+        content = self.file_path.read_text(encoding="utf-8")
+        self.parse_markdown(content)
+
+    def parse_markdown(self, content: str) -> None:
+        """Parse improvements from markdown content.
+
+        Supports format:
+        - [ ] **Title** (Cat
+"""
 
 from __future__ import annotations
 

@@ -33,6 +33,9 @@
 Simple validation script for StrategyOptimizer
 """
 
+from src.core.base.logic.strategy_optimizer import (
+    StrategyOptimizer, Strategy, StrategyConfig, ThresholdFilter
+)
 import asyncio
 import os
 import sys
@@ -40,10 +43,6 @@ from typing import Any
 
 # Add project root to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from src.core.base.logic.strategy_optimizer import (
-    StrategyOptimizer, Strategy, StrategyConfig, ThresholdFilter
-)
 
 
 class SimpleStrategy(Strategy):
@@ -124,7 +123,7 @@ async def test_threshold_filtering():
     strategies = [
         SimpleStrategy("excellent", 0.95, 0.2),  # Should pass
         SimpleStrategy("too_slow", 0.9, 0.5),     # Should pass
-        SimpleStrategy("inaccurate", 0.05, 0.1), # Should fail accuracy threshold
+        SimpleStrategy("inaccurate", 0.05, 0.1),  # Should fail accuracy threshold
     ]
 
     trial = await optimizer.optimize(strategies, "test input", "expected output")
@@ -162,7 +161,9 @@ async def test_threshold_filtering():
 
     # Should select one of the passing strategies
     assert trial.best_strategy is not None, "No best strategy selected"
-    assert trial.best_strategy.name in ["excellent", "too_slow"], f"Unexpected best strategy: {trial.best_strategy.name}"
+    assert trial.best_strategy.name in [
+        "excellent", "too_slow"], f"Unexpected best strategy: {
+        trial.best_strategy.name}"
     print("✓ Threshold filtering test passed")
 
 

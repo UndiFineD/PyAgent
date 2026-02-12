@@ -15,6 +15,7 @@
 from src.logic.agents.development.coder_core import CoderCore
 from src.core.base.common.types.code_language import CodeLanguage
 
+
 def test_coder_core_rust_metrics():
     core = CoderCore(CodeLanguage.PYTHON)
     content = """def hello():
@@ -29,12 +30,14 @@ def test_coder_core_rust_metrics():
     assert metrics.import_count >= 1
     assert metrics.cyclomatic_complexity >= 2
 
+
 def test_coder_core_rust_dependencies():
     core = CoderCore(CodeLanguage.PYTHON)
     content = "import os\nfrom pathlib import Path\n"
     deps = core.get_dependencies(content)
     assert "os" in deps
     assert "pathlib" in deps
+
 
 def test_coder_core_rust_smells():
     core = CoderCore(CodeLanguage.PYTHON)
@@ -45,6 +48,7 @@ def test_coder_core_rust_smells():
     perf_smells = [s for s in smells if s.category == "performance"]
     assert len(perf_smells) > 0
     assert "time.sleep" in perf_smells[0].description.lower() or "blocking" in perf_smells[0].description.lower()
+
 
 def test_coder_core_quality_score():
     core = CoderCore(CodeLanguage.PYTHON)

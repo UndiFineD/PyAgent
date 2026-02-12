@@ -45,6 +45,7 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 class WebAuthnManager:
     """Manages WebAuthn registration and authentication logic."""
 
@@ -53,7 +54,7 @@ class WebAuthnManager:
         self.rp_name = rp_name
         self.users: Dict[str, Dict[str, Any]] = {}  # Mock DB: username -> credential data
         self.challenges: Dict[str, str] = {}         # username -> challenge
-        
+
         # Phase 327: OAuth Integration
         self.oauth = OAuth()
         self.oauth.register(
@@ -86,7 +87,7 @@ class WebAuthnManager:
                 user_verification=UserVerificationRequirement.PREFERRED,
             ),
         )
-        
+
         # Store challenge for verification
         self.challenges[username] = options.challenge
         return json.loads(options_to_json(options))
@@ -95,7 +96,7 @@ class WebAuthnManager:
         """Verifies a WebAuthn registration response."""
         if not HAS_WEBAUTHN:
             logger.warning("webauthn library not installed. Mocking success.")
-            return True 
+            return True
 
         challenge = self.challenges.get(username)
         if not challenge:
@@ -107,16 +108,16 @@ class WebAuthnManager:
                 credential=response,
                 expected_challenge=base64url_to_bytes(challenge),
                 expected_rp_id=self.rp_id,
-                expected_origin=f"http://{self.rp_id}:8000", # Mock origin for lab
+                expected_origin=f"http://{self.rp_id}:8000",  # Mock origin for lab
             )
-            
+
             # Store public key and credential ID
             self.users[username] = {
                 "credential_id": verification.credential_id,
                 "public_key": verification.public_key,
                 "sign_count": verification.sign_count,
             }
-            
+
             logger.info(f"WebAuthn: Successfully registered biometric key for {username}")
             return True
         except Exception as e:
@@ -126,7 +127,7 @@ class WebAuthnManager:
     def get_authentication_options(self, username: str) -> Dict[str, Any]:
         """Generates options for a WebAuthn authentication ceremony."""
         if not HAS_WEBAUTHN:
-             return {"mock": True, "challenge": "mock_challenge"}
+            return {"mock": True, "challenge": "mock_challenge"}
 
         user_data = self.users.get(username)
         if not user_data:
@@ -141,7 +142,7 @@ class WebAuthnManager:
             }],
             user_verification=UserVerificationRequirement.PREFERRED,
         )
-        
+
         self.challenges[username] = options.challenge
         return json.loads(options_to_json(options))
 
@@ -152,7 +153,7 @@ class WebAuthnManager:
 
         challenge = self.challenges.get(username)
         user_data = self.users.get(username)
-        
+
         if not challenge or not user_data:
             return False
 
@@ -165,7 +166,7 @@ class WebAuthnManager:
                 credential_public_key=user_data["public_key"],
                 credential_current_sign_count=user_data["sign_count"],
             )
-            
+
             # Update sign count to prevent replay attacks
             self.users[username]["sign_count"] = verification.new_sign_count
             logger.info(f"WebAuthn: Successfully authenticated {username}")

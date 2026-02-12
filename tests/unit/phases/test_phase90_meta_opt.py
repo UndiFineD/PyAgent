@@ -18,12 +18,13 @@ Test Phase90 Meta Opt module.
 from unittest.mock import MagicMock
 from src.infrastructure.swarm.orchestration.swarm.meta_optimizer import FederatedMetaOptimizer
 
+
 def test_meta_optimization_loop():
     # 1. Setup Mock Telemetry with 'Bad' Metrics
     mock_telemetry = MagicMock()
     mock_telemetry.get_grid_metrics.return_value = {
         "avg_vram_util": 0.95,        # Too high
-        "speculative_acceptance_rate": 0.40 # Too low
+        "speculative_acceptance_rate": 0.40  # Too low
     }
 
     initial_config = {

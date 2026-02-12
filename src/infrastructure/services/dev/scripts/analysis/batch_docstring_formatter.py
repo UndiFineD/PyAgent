@@ -314,7 +314,10 @@ class DocstringFixer:
                     modified_content = fix_result["content"]
                     fixes_applied.append(f"Added module docstring to {file_path}")
                 else:
-                    fixes_failed.append(f"Failed to add module docstring: {fix_result['error']}")
+                    fixes_failed.append(
+                        f"Failed to add module docstring: "
+                        f"{fix_result['error']}"
+                    )
             elif issue["type"] in ["Malformed Module Docstring", "Malformed Function Docstring", "Malformed Class Docstring"]:
                 fix_result = self._fix_malformed_docstring(modified_content, issue)
                 if fix_result["success"]:
@@ -450,7 +453,7 @@ def main():
     parser.add_argument("--recursive", "-r", action="store_true", help="Process directories recursively")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     parser.add_argument("--style", choices=["google", "numpy", "sphinx"], default="google",
-                       help="Docstring style to enforce (default: google)")
+                        help="Docstring style to enforce (default: google)")
 
     args = parser.parse_args()
 

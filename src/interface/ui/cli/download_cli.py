@@ -29,7 +29,7 @@ def main():
         description="PyAgent Download Manager CLI",
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    
+
     parser.add_argument('url', nargs='?', help='URL to download (direct mode)')
     parser.add_argument('--file', '-f', help='File containing URLs to process')
     parser.add_argument('--output', '-o', default='temp/downloads.json', help='Path to save results')
@@ -58,6 +58,7 @@ def main():
     else:
         parser.print_help()
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

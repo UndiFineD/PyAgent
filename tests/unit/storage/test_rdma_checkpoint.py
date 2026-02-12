@@ -17,6 +17,7 @@ from unittest.mock import MagicMock, patch
 from src.infrastructure.storage.kv_transfer.nixl_connector import NixlConnector
 from src.infrastructure.storage.kv_transfer.kv_transfer_connector import KVTransferConfig
 
+
 class TestRdmaCheckpoint(unittest.TestCase):
     def setUp(self):
         self.config = KVTransferConfig(
@@ -53,6 +54,7 @@ class TestRdmaCheckpoint(unittest.TestCase):
                 "lkey": 1,
             }
         )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -23,6 +23,7 @@ from src.infrastructure.swarm.orchestration.swarm.expert_evolution import Expert
 from src.infrastructure.engine.models.similarity import EmbeddingSimilarityService
 from src.core.base.common.models.communication_models import ExpertProfile, ExpertEvaluation
 
+
 @pytest.mark.asyncio
 async def test_expert_evolution_score_adjustment():
     sim_service = EmbeddingSimilarityService()
@@ -64,6 +65,7 @@ async def test_expert_evolution_score_adjustment():
 
     assert gatekeeper.experts[expert_id].performance_score == pytest.approx(0.725)
 
+
 @pytest.mark.asyncio
 async def test_evolution_impacts_routing():
     sim_service = EmbeddingSimilarityService()
@@ -77,7 +79,7 @@ async def test_evolution_impacts_routing():
     gatekeeper.register_expert(ExpertProfile(agent_id="e2", domains=["tech"], performance_score=1.0))
 
     # Tank e1's health
-    for _ in range(5): # Multiple evals to really hammer it down
+    for _ in range(5):  # Multiple evals to really hammer it down
         evolution_service.process_evaluation(ExpertEvaluation(
             expert_id="e1", task_id="t1", is_correct=False, quality_score=0.0
         ))

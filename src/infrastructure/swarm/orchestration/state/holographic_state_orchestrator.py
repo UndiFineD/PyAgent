@@ -26,6 +26,7 @@ __version__ = VERSION
 
 logger = logging.getLogger(__name__)
 
+
 class HolographicStateOrchestrator:
     """
     Manages multi-perspective state distribution across the fleet.
@@ -146,7 +147,11 @@ class HolographicStateOrchestrator:
             addr = peer.get("addr")
             port = peer.get("port", 5555)
 
-            sender_id = f"fleet-{self.fleet.workspace_root.name}" if self.fleet and hasattr(self.fleet, "workspace_root") else self.agent_id
+            if self.fleet and hasattr(self.fleet, "workspace_root"):
+                sender_id = f"fleet-{self.fleet.workspace_root.name}"
+            else:
+                sender_id = self.agent_id
+
             msg = {
                 "type": "shard_store",
                 "sender_id": sender_id,
@@ -157,7 +162,11 @@ class HolographicStateOrchestrator:
 
     async def _broadcast_projection(self, hologram_id: str, angles: List[str]):
         """Broadcasts a compact 'projection' of the hologram metadata (Pillar 8)."""
-        sender_id = f"fleet-{self.fleet.workspace_root.name}" if self.fleet and hasattr(self.fleet, "workspace_root") else self.agent_id
+        if self.fleet and hasattr(self.fleet, "workspace_root"):
+            sender_id = f"fleet-{self.fleet.workspace_root.name}"
+        else:
+            sender_id = self.agent_id
+
         projection = {
             "type": "hologram_projection",
             "hologram_id": hologram_id,

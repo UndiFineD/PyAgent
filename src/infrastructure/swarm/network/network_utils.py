@@ -45,7 +45,7 @@ import socket
 import sys
 import warnings
 import subprocess
-from collections.abc import Iterator, Sequence
+from collections.abc import Callable, Iterator, Sequence
 from typing import Any
 from urllib.parse import urlparse
 from uuid import uuid4
@@ -75,8 +75,6 @@ except ImportError:
 # ============================================================================
 # IP Address Detection
 # ============================================================================
-
-
 def get_ip(prefer_ipv4: bool = True, host_env_var: str | None = None) -> str:
     """
     Get the machine's IP address.
@@ -123,6 +121,138 @@ def get_ip(prefer_ipv4: bool = True, host_env_var: str | None = None) -> str:
     return "0.0.0.0"
 
 
+def _is_windows() -> bool:
+    return sys.platform == 'win32'
+
+
+def _get_interfaces_from_ipconfig(debug: bool) -> list[dict]:
+    try:
+        result = subprocess.run(
+            "ipconfig /all",
+            capture_output=True,
+            text=True,
+            timeout=5,
+            shell=False,
+            check=False
+        )
+        if debug:
+            print(f"DEBUG: ipconfig finished with code {result.returncode}", flush=True)
+
+        if result.returncode == 0:
+            lines = result.stdout.split('\n')
+            if debug:
+                print(f"DEBUG: Processing {len(lines)} lines of output", flush=True)
+            interfaces = []
+            current_iface = None
+
+            for line in lines:
+                line = line.strip()
+                if line.startswith('Ethernet adapter') or line.startswith(
+                        'Wireless LAN adapter') or line.startswith('Unknown adapter'):
+                    if current_iface and 'IPv4' in current_iface:
+                        interfaces.append(current_iface)
+                    name = line.split(':', 1)[0].replace(' adapter', '').strip()
+                    current_iface = {'name': name}
+                    if debug:
+                        print(f"DEBUG: Found new interface header: {name}", flush=True)
+                elif current_iface is not None:
+                    if line.startswith('IPv4 Address'):
+                        try:
+                            ip_part = line.split(':', 1)[1].strip()
+                            ip = ip_part.split('(')[0].strip()
+                            current_iface['IPv4'] = ip
+                            if debug:
+                                print(f"DEBUG:   Found IPv4: {ip}", flush=True)
+                        except Exception as e:
+                            if debug:
+                                print(f"DEBUG:   Error parsing IPv4: {e}", flush=True)
+                    elif line.startswith('Subnet Mask'):
+                        try:
+                            subnet = line.split(':', 1)[1].strip()
+                            current_iface['Subnet'] = subnet
+                            if debug:
+                                print(f"DEBUG:   Found Subnet: {subnet}", flush=True)
+                        except Exception as e:
+                            if debug:
+                                print(f"DEBUG:   Error parsing Subnet: {e}", flush=True)
+
+            if current_iface and 'IPv4' in current_iface:
+                interfaces.append(current_iface)
+
+            if debug:
+                print(f"DEBUG: Found {len(interfaces)} interfaces with IPv4 addresses", flush=True)
+            return interfaces
+    except subprocess.TimeoutExpired:
+        logger.warning("get_local_network_ip: ipconfig command timed out")
+        if debug:
+            print("DEBUG: ipconfig command timed out", flush=True)
+    return []
+
+
+def _score_interfaces(interfaces: list[dict], debug: bool) -> list[tuple[int, str, str]]:
+    scored_interfaces = []
+    for iface in interfaces:
+        ip = iface.get('IPv4', '')
+        subnet = iface.get('Subnet', '')
+        name = iface.get('name', '').lower()
+
+        if debug:
+            print(f"DEBUG: Scoring Interface: {name}, IP: {ip}, Subnet: {subnet}", flush=True)
+
+        vpn_keywords = ['vpn', 'tunnel', 'wireguard', 'proton', 'openvpn', 'pptp', 'l2tp']
+        if any(keyword in name for keyword in vpn_keywords):
+            score = 0
+            if debug:
+                print("DEBUG:   -> VPN Detected (score=0)", flush=True)
+        elif subnet == '255.255.255.0':
+            score = 100
+            if debug:
+                print("DEBUG:   -> /24 Subnet Detected (score=100)", flush=True)
+        elif subnet == '255.255.0.0':
+            score = 80
+            if debug:
+                print("DEBUG:   -> /16 Subnet Detected (score=80)", flush=True)
+        elif ip.startswith(('192.168.', '10.', '172.')):
+            score = 60
+            if debug:
+                print("DEBUG:   -> Other Private IP Detected (score=60)", flush=True)
+        else:
+            score = 40
+            if debug:
+                print("DEBUG:   -> Public/Other IP Detected (score=40)", flush=True)
+        scored_interfaces.append((score, ip, name))
+    return scored_interfaces
+
+
+def _get_ip_from_socket_fallback(debug: bool) -> str | None:
+    candidate_ips = []
+    try:
+        hostname = socket.gethostname()
+        all_addrs = socket.getaddrinfo(hostname, None, socket.AF_INET, socket.SOCK_STREAM)
+
+        for addr in all_addrs:
+            ip = addr[4][0]
+            if (not ip.startswith('127.') and
+                not ip.startswith('169.254.') and
+                ip != '0.0.0.0'):
+                candidate_ips.append(ip)
+
+    except Exception as e:
+        logger.warning(f"get_local_network_ip: Socket approach failed: {e}")
+
+    candidate_ips = list(set(candidate_ips))
+    private_ips = [ip for ip in candidate_ips if ip.startswith(('192.168.', '172.', '10.'))]
+    private_ips.sort(key=lambda ip: (ip.startswith('10.'), ip))
+
+    if private_ips:
+        selected_ip = private_ips[0]
+        logger.info(f"get_local_network_ip: Selected private IP {selected_ip} for LAN discovery")
+        return selected_ip
+    elif candidate_ips:
+        return candidate_ips[0]
+    return None
+
+
 def get_local_network_ip(debug: bool = False) -> str:
     """
     Get the IP address of the local network interface for LAN discovery.
@@ -144,7 +274,7 @@ def get_local_network_ip(debug: bool = False) -> str:
 
     try:
         # Check for Windows explicitly using sys.platform to avoid platform module if it's acting up
-        is_windows = sys.platform == 'win32'
+        is_windows = _is_windows()
         if debug:
             print(f"DEBUG: sys.platform is {sys.platform}", flush=True)
 
@@ -152,171 +282,25 @@ def get_local_network_ip(debug: bool = False) -> str:
             if debug:
                 print("DEBUG: Windows detected, proceeding with ipconfig...", flush=True)
             # Use a simpler approach: get all IPv4 addresses and filter
-            try:
-                if debug:
-                    print("DEBUG: get_local_network_ip - Running ipconfig /all...", flush=True)
+            interfaces = _get_interfaces_from_ipconfig(debug)
+            scored_interfaces = _score_interfaces(interfaces, debug)
 
-                # Use absolute path for ipconfig if possible, but PATH usually works
-                # subprocess.run can hang if stdout/stderr buffers fill up, but capture_output handles that.
-                # However, let's use a very safe invocation.
-                result = subprocess.run(
-                    "ipconfig /all",
-                    capture_output=True,
-                    text=True,
-                    timeout=5,
-                    shell=False # Try false first, then true if needed. ipconfig is an exe.
-                )
-                if debug:
-                    print(f"DEBUG: ipconfig finished with code {result.returncode}", flush=True)
-
-                if result.returncode == 0:
-                    lines = result.stdout.split('\n')
+            if scored_interfaces:
+                scored_interfaces.sort(reverse=True)
+                best_score, best_ip, best_name = scored_interfaces[0]
+                if best_score > 0:
+                    logger.info(f"get_local_network_ip: Selected {best_ip} from {best_name} for LAN discovery")
                     if debug:
-                        print(f"DEBUG: Processing {len(lines)} lines of output", flush=True)
-                    interfaces = []
-                    current_iface = None
-
-                    for line in lines:
-                        line = line.strip()
-                        if line.startswith('Ethernet adapter') or line.startswith('Wireless LAN adapter') or line.startswith('Unknown adapter'):
-                            # Save previous interface if it had an IP
-                            if current_iface:
-                                if 'IPv4' in current_iface:
-                                    if debug:
-                                        print(f"DEBUG: Completed interface: {current_iface['name']} with IP {current_iface.get('IPv4')}", flush=True)
-                                    interfaces.append(current_iface)
-                                else:
-                                    if debug:
-                                        print(f"DEBUG: Discarding interface {current_iface['name']} (No IPv4)", flush=True)
-
-                            # Start new interface
-                            name = line.split(':', 1)[0].replace(' adapter', '').strip()
-                            current_iface = {'name': name}
-                            if debug:
-                                print(f"DEBUG: Found new interface header: {name}", flush=True)
-                        elif current_iface is not None:
-                            if line.startswith('IPv4 Address'):
-                                # Extract IP address - handle the dotted format
-                                try:
-                                    ip_part = line.split(':', 1)[1].strip()
-                                    ip = ip_part.split('(')[0].strip()
-                                    current_iface['IPv4'] = ip
-                                    if debug:
-                                        print(f"DEBUG:   Found IPv4: {ip}", flush=True)
-                                except Exception as e:
-                                    if debug:
-                                        print(f"DEBUG:   Error parsing IPv4: {e}", flush=True)
-                            elif line.startswith('Subnet Mask'):
-                                try:
-                                    subnet = line.split(':', 1)[1].strip()
-                                    current_iface['Subnet'] = subnet
-                                    if debug:
-                                        print(f"DEBUG:   Found Subnet: {subnet}", flush=True)
-                                except Exception as e:
-                                    if debug:
-                                        print(f"DEBUG:   Error parsing Subnet: {e}", flush=True)
-
-                    # Add the last interface
-                    if current_iface:
-                        if 'IPv4' in current_iface:
-                            if debug:
-                                print(f"DEBUG: Completed last interface: {current_iface['name']} with IP {current_iface.get('IPv4')}", flush=True)
-                            interfaces.append(current_iface)
-                        else:
-                            if debug:
-                                print(f"DEBUG: Discarding last interface {current_iface['name']} (No IPv4)", flush=True)
-
+                        print(f"DEBUG: Selected {best_ip} from {best_name}", flush=True)
+                    return best_ip
+                else:
                     if debug:
-                        print(f"DEBUG: Found {len(interfaces)} interfaces with IPv4 addresses", flush=True)
+                        print("DEBUG: No suitable interface found (all scored 0)", flush=True)
 
-                    # Score interfaces: prefer non-VPN interfaces with proper subnets
-                    scored_interfaces = []
-                    for iface in interfaces:
-                        ip = iface.get('IPv4', '')
-                        subnet = iface.get('Subnet', '')
-                        name = iface.get('name', '').lower()
-
-                        if debug:
-                            print(f"DEBUG: Scoring Interface: {name}, IP: {ip}, Subnet: {subnet}", flush=True)
-
-                        # Skip VPN/tunnel interfaces
-                        if any(keyword in name for keyword in ['vpn', 'tunnel', 'wireguard', 'proton', 'openvpn', 'pptp', 'l2tp']):
-                            score = 0
-                            if debug:
-                                print("DEBUG:   -> VPN Detected (score=0)", flush=True)
-                        # Prefer /24 networks (255.255.255.0 subnet mask)
-                        elif subnet == '255.255.255.0':
-                            score = 100
-                            if debug:
-                                print("DEBUG:   -> /24 Subnet Detected (score=100)", flush=True)
-                        # Then /16 networks (255.255.0.0)
-                        elif subnet == '255.255.0.0':
-                            score = 80
-                            if debug:
-                                print("DEBUG:   -> /16 Subnet Detected (score=80)", flush=True)
-                        # Then other private networks
-                        elif ip.startswith(('192.168.', '10.', '172.')):
-                            score = 60
-                            if debug:
-                                print("DEBUG:   -> Other Private IP Detected (score=60)", flush=True)
-                        else:
-                            score = 40
-                            if debug:
-                                print("DEBUG:   -> Public/Other IP Detected (score=40)", flush=True)
-
-                        scored_interfaces.append((score, ip, name))
-
-                    # Return the highest scoring interface
-                    if scored_interfaces:
-                        scored_interfaces.sort(reverse=True)
-                        best_score, best_ip, best_name = scored_interfaces[0]
-                        if best_score > 0:
-                            logger.info(f"get_local_network_ip: Selected {best_ip} from {best_name} for LAN discovery")
-                            if debug:
-                                print(f"DEBUG: Selected {best_ip} from {best_name}", flush=True)
-                            return best_ip
-                        else:
-                            if debug:
-                                print("DEBUG: No suitable interface found (all scored 0)", flush=True)
-
-            except subprocess.TimeoutExpired:
-                logger.warning("get_local_network_ip: ipconfig command timed out")
-                if debug:
-                    print("DEBUG: ipconfig command timed out", flush=True)
-
-        # Fallback: use Python's socket approach but filter more carefully
-        candidate_ips = []
-
-        try:
-            # Get all addresses for the hostname
-            hostname = socket.gethostname()
-            all_addrs = socket.getaddrinfo(hostname, None, socket.AF_INET, socket.SOCK_STREAM)
-
-            for addr in all_addrs:
-                ip = addr[4][0]
-                if (not ip.startswith('127.') and
-                    not ip.startswith('169.254.') and  # APIPA
-                    ip != '0.0.0.0'):
-                    # Don't filter by IP range - VPN IPs are in valid private ranges
-                    # We rely on the ipconfig approach above to filter by interface name
-                    candidate_ips.append(ip)
-
-        except Exception as e:
-            logger.warning(f"get_local_network_ip: Socket approach failed: {e}")
-
-        # Remove duplicates and prefer private network IPs
-        candidate_ips = list(set(candidate_ips))
-        private_ips = [ip for ip in candidate_ips if ip.startswith(('192.168.', '172.', '10.'))]
-
-        # Sort private IPs to prefer 192.168.x.x over 10.x.x.x (common VPN range)
-        private_ips.sort(key=lambda ip: (ip.startswith('10.'), ip))
-
-        if private_ips:
-            selected_ip = private_ips[0]
-            logger.info(f"get_local_network_ip: Selected private IP {selected_ip} for LAN discovery")
-            return selected_ip
-        elif candidate_ips:
-            return candidate_ips[0]
+        # Fallback
+        ip = _get_ip_from_socket_fallback(debug)
+        if ip:
+            return ip
 
     except Exception as e:
         logger.warning(f"get_local_network_ip: Failed to detect local network IP: {e}")
@@ -355,20 +339,6 @@ def get_loopback_ip(loopback_env_var: str | None = None) -> str:
         return "::1"
 
     raise RuntimeError("No loopback interface available")
-    if loopback_env_var:
-        env_ip = os.environ.get(loopback_env_var)
-        if env_ip:
-            return env_ip
-
-    # Test IPv4 loopback
-    if test_bind("127.0.0.1", socket.AF_INET):
-        return "127.0.0.1"
-
-    # Test IPv6 loopback
-    if test_bind("::1", socket.AF_INET6):
-        return "::1"
-
-    raise RuntimeError("Neither 127.0.0.1 nor ::1 are bound to a local interface.")
 
 
 def test_bind(address: str, family: int) -> bool:
@@ -400,7 +370,7 @@ def resolve_hostname(hostname: str) -> list[str]:
     """
     try:
         results = socket.getaddrinfo(hostname, None)
-        return list(set(r[4][0] for r in results))
+        return list(set(str(r[4][0]) for r in results))
     except socket.gaierror:
         return []
 
@@ -580,7 +550,12 @@ def is_port_open(host: str, port: int, timeout: float = 1.0) -> bool:
         return False
 
 
-def wait_for_port(host: str, port: int, timeout: float = 30.0, poll_interval: float = 0.5, sleep_fn: callable | None = None) -> bool:
+def wait_for_port(
+        host: str,
+        port: int,
+        timeout: float = 30.0,
+        poll_interval: float | Callable[[], float] = 0.5,
+        sleep_fn: Callable[[float], None] | None = None) -> bool:
     """
     Wait for a port to become available.
 
@@ -588,7 +563,7 @@ def wait_for_port(host: str, port: int, timeout: float = 30.0, poll_interval: fl
         host: Host to check.
         port: Port to check.
         timeout: Total timeout in seconds.
-        poll_interval: Interval between checks.
+        poll_interval: Interval between checks (seconds) or a callable returning seconds.
         sleep_fn: Optional sleep function to allow injection and testability.
 
     Returns:
@@ -602,9 +577,21 @@ def wait_for_port(host: str, port: int, timeout: float = 30.0, poll_interval: fl
         sleep_fn = _wait
 
     while time.monotonic() < deadline:
-        if is_port_open(host, port, timeout=min(poll_interval, 0.5)):
+        # Determine actual interval
+        if callable(poll_interval):
+            current_interval = poll_interval()
+        else:
+            current_interval = poll_interval
+
+        if current_interval is None:
+            current_interval = 0.5
+
+        # Check port
+        if is_port_open(host, port, timeout=min(current_interval, 0.5)):
             return True
-        sleep_fn(poll_interval)
+
+        # Wait safely
+        sleep_fn(current_interval)
 
     return False
 
@@ -618,12 +605,22 @@ def find_process_using_port(port: int) -> Any | None:
     Returns:
         psutil.Process if found, None otherwise.
     """
-    if not HAS_PSUTIL:
+    if not HAS_PSUTIL or psutil is None:
         logger.warning("psutil not installed, cannot find process")
         return None
 
     for conn in psutil.net_connections():
-        if conn.laddr.port == port and conn.status == psutil.CONN_LISTEN:
+        # conn.laddr can be a tuple (host, port) or named tuple depending on psutil version
+        try:
+            if isinstance(conn.laddr, tuple) and len(conn.laddr) > 1:
+                laddr_port = conn.laddr[1]
+            elif hasattr(conn.laddr, 'port'):
+                laddr_port = conn.laddr.port  # type: ignore
+            else:
+                continue
+        except (IndexError, AttributeError):
+            continue
+        if laddr_port == port and conn.status == psutil.CONN_LISTEN:
             try:
                 return psutil.Process(conn.pid)
             except (psutil.NoSuchProcess, psutil.AccessDenied):
@@ -634,8 +631,6 @@ def find_process_using_port(port: int) -> Any | None:
 # ============================================================================
 # URI Builders
 # ============================================================================
-
-
 def get_tcp_uri(ip: str, port: int) -> str:
     """
     Build a TCP URI string.
@@ -683,8 +678,6 @@ def parse_uri(uri: str) -> dict[str, Any]:
 # ============================================================================
 # ZeroMQ Utilities
 # ============================================================================
-
-
 def get_zmq_ipc_path(base_path: str | None = None) -> str:
     """
     Generate a unique ZeroMQ IPC path.
@@ -752,7 +745,7 @@ def create_zmq_context(io_threads: int = 1) -> Any:
     Returns:
         zmq.Context instance.
     """
-    if not HAS_ZMQ:
+    if not HAS_ZMQ or zmq is None:
         raise RuntimeError("ZeroMQ is not installed")
     return zmq.Context(io_threads)
 
@@ -767,7 +760,7 @@ def create_async_zmq_context(io_threads: int = 1) -> Any:
     Returns:
         zmq.asyncio.Context instance.
     """
-    if not HAS_ZMQ:
+    if not HAS_ZMQ or zmq is None:
         raise RuntimeError("ZeroMQ is not installed")
     return zmq.asyncio.Context(io_threads)
 
@@ -786,7 +779,7 @@ def get_network_interfaces() -> dict[str, list[str]]:
     Returns:
         Dictionary mapping interface names to list of IP addresses.
     """
-    if not HAS_PSUTIL:
+    if not HAS_PSUTIL or psutil is None:
         logger.warning("psutil not installed, limited interface info")
         return {"default": [get_ip()]}
 
@@ -810,13 +803,8 @@ def get_primary_interface() -> str | None:
     Returns:
         Interface name or None if not determinable.
     """
-    if not HAS_PSUTIL:
-        return None
-
     # Get the interface used for default route
     with contextlib.suppress(Exception):
-        import subprocess
-
         if sys.platform != "win32":
             result = subprocess.run(
                 ["ip", "route", "get", "8.8.8.8"],

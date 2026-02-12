@@ -184,7 +184,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 with open(f, "r", encoding="utf-8") as file:
                     content = file.read()
 
-                ast.parse(content) # Check syntax
+                ast.parse(content)  # Check syntax
 
                 # Check for risky imports or patterns often causing failures
                 tree = ast.parse(content)

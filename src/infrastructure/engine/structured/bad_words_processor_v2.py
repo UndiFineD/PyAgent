@@ -344,6 +344,7 @@ def apply_bad_words(
     """
     def process_req(item: tuple) -> None:
         req_idx, bad_words = item
+
         def apply_single() -> None:
             past = past_tokens_ids[req_idx]
             _apply_bad_words_single_batch(logits[req_idx], bad_words, past)
@@ -499,7 +500,7 @@ class BadPhrasesProcessor(BadWordsProcessorV2):
                         blocked.add(suffix_pattern[-1])
 
                     if (actual_suffix[: len(suffix_pattern) - 1] ==
-                        suffix_pattern[:-1]):
+                            suffix_pattern[:-1]):
                         match_suffix()
 
                 (apply_suffix_blocking() if len(suffix_pattern) > 1 and

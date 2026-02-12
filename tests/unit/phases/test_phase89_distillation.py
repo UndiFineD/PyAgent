@@ -18,8 +18,9 @@ Test Phase89 Distillation module.
 import numpy as np
 from src.infrastructure.swarm.orchestration.swarm.context_distillation import ContextDistiller
 
+
 def test_context_distillation():
-    distiller = ContextDistiller(target_reduction=0.75) # 4x compression
+    distiller = ContextDistiller(target_reduction=0.75)  # 4x compression
 
     # Mock KV data: 128 tokens, 16 features
     kv_data = np.random.randn(128, 16)
@@ -40,12 +41,13 @@ def test_context_distillation():
 
     print("\n[Phase 89] Context distillation reduced 128 tokens to 32 tokens successfully.")
 
+
 def test_attention_aware_distillation():
     distiller = ContextDistiller(target_reduction=0.5)
 
-    kv_data = np.arange(10).reshape(10, 1) # tokens 0..9
+    kv_data = np.arange(10).reshape(10, 1)  # tokens 0..9
     # Favor the last two tokens
-    scores = np.array([0,0,0,0,0,0,0,0,10,10])
+    scores = np.array([0, 0, 0, 0, 0, 0, 0, 0, 10, 10])
 
     distilled, metadata = distiller.distill_shard(kv_data, attention_scores=scores)
 

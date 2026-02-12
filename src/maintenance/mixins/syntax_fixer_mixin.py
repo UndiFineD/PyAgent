@@ -29,7 +29,7 @@ class SyntaxFixerMixin:
     """Provides automated fixes for specific Python syntax patterns."""
 
     def fix_invalid_for_loop_type_hints(self, file_path: Path) -> bool:
-        """
+        r"""
         Fixes 'for x: Type in' -> 'for x in' which is invalid Python syntax.
         Regex pattern: r'for\s+(\w+):\s*[^i]*?\s+in\s+'
         """
@@ -63,7 +63,7 @@ class SyntaxFixerMixin:
                     break
                 indices.append(idx)
                 i = idx + 3
-            
+
             if len(indices) % 2 != 0:
                 line_numbers = [content.count('\n', 0, idx) + 1 for idx in indices]
                 logger.warning(f"Unmatched triple quotes found in {file_path} at lines: {line_numbers}")

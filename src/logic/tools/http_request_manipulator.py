@@ -37,5 +37,6 @@ User: "change method to POST" -> {"action":"change_method","method":"POST","mess
 User: "add authorization header" ->
 {"action":"add_header","header":"Authorization","value":"Bearer ...","message":"Added Authorization header"}
 User: "apply request smuggling" ->
-{"action":"multiple_actions","actions":[{"action":"add_header","header":"TE","value":"chunked"},{"action":"add_header","header":"CL","value":"0"}],"message":"Applied smuggling"}
+{"action":"multiple_actions","actions":[{"action":"add_header","header":"TE","value":"chunked"},
+{"action":"add_header","header":"CL","value":"0"}],"message":"Applied smuggling"}
 """
