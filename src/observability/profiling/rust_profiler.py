@@ -18,33 +18,33 @@ RustProfiler - Profiles Rust-accelerated function usage
 [Brief Summary]
 DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
+
 USAGE:
-Import the RustProfiler and use the singleton to record or wrap calls to Rust-accelerated functions. Typical use: obtain the singleton (RustProfiler.get_instance()), annotate or wrap Rust-call sites so the profiler increments call counts and measures durations, then generate/export reports for optimization work.
+Import the RustProfiler and use the singleton to record or wrap calls to
+Rust-accelerated functions. Typical use: obtain the singleton via
+RustProfiler.get_instance(), then annotate or wrap Rust-call sites so the
+profiler increments call counts and measures durations. Finally, generate
+and export reports for optimization work.
 
 WHAT IT DOES:
-Tracks per-function statistics for Rust-accelerated functions used by PyAgent: call counts, total/min/max/average durations, and counts of Python fallbacks; provides a thread-safe singleton profiler, data structures (FunctionStats), and reporting/export capabilities to help find hotspots and fallback occurrences.
+Tracks per-function statistics for Rust-accelerated functions used by
+PyAgent: call counts, total/min/max/average durations, and counts of
+Python fallbacks. Provides a thread-safe singleton profiler, data
+structures (FunctionStats), and reporting/export capabilities to help find
+hotspots and fallback occurrences.
 
 WHAT IT SHOULD DO BETTER:
-- Expose a documented, stable public API (decorator, context manager, and simple record() call) with examples so instrumenting call sites is trivial.
-- Persist and rotate historical profiles (timestamped snapshots) and integrate with telemetry backends (Prometheus, Grafana, or remote logging) for long-term trend analysis.
-- Add sampling, configurable aggregation windows, and low-overhead modes for high-frequency hot paths; enable async-friendly instrumentation and typed interfaces for runtime validation.
+- Expose a documented, stable public API (decorator, context manager, and
+  simple record() call) with examples so instrumenting call sites is
+  trivial.
+- Persist and rotate historical profiles (timestamped snapshots) and
+  integrate with telemetry backends (Prometheus, Grafana, or remote
+  logging) for long-term trend analysis.
+- Add sampling, configurable aggregation windows, and low-overhead modes
+  for high-frequency hot paths; enable async-friendly instrumentation and
+  typed interfaces for runtime validation.
 
 FILE CONTENT SUMMARY:
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
 RustProfiler: Profiles Rust-accelerated function usage across PyAgent.
 Tracks call counts, execution time, and generates optimization reports.
 """
@@ -65,145 +65,21 @@ from pathlib import Path
 from typing import Any, Callable, cast
 
 
-@dataclass
-class FunctionStats:
-    """Statistics for a single Rust function."""
+try:
+    from src.core.base.mixins.singleton_mixin import SingletonMixin
+except ImportError:
+    # Fallback for tests or alternate import paths
+    class SingletonMixin:
+        """Fallback singleton mixin if not available."""
+        _instance = None
+        _lock = threading.Lock()
 
-    name: str
-    call_count: int = 0
-    total_time_ns: int = 0
-    min_time_ns: int = 0
-    max_time_ns: int = 0
-    python_fallback_count: int = 0
-
-    @property
-    def avg_time_ns(self) -> float:
-        return self.total_time_ns / self.call_count if self.call_count > 0 else 0.0
-
-    @property
-    def avg_time_us(self) -> float:
-        return self.avg_time_ns / 1000.0
-
-    @property
-    def total_time_ms(self) -> float:
-        return self.total_time_ns / 1_000_000.0
-
-
-class RustProfiler:
-    """
-    Singleton profiler for tracking Rust function usage.
-    Thread-safe and designed for production use.
-    """
-
-    _instance: "RustProfiler | None" = None
-    _lock: LockType = threading.Lock()
-
-    # All known Rust functions (72 total as of Phase 13)
-    RUST_FUNCTIONS_LIST: list[str] = [
-        # Security (8)
-        "scan_code_vulnerabilities_rust",
-        "scan_injections_rust",
-        "scan_pii_rust",
-        "analyze_thought_rust",
-        "scan_hardcoded_secrets_rust",
-        "scan_insecure_patterns_rust",
-        "scan_optimization_patterns_rust",
-        "scan_secrets_rust",
-        # Statistics (4)
-        "calculate_pearson_correlation",
-        "predict_linear",
-        "predict_with_confidence_rust",
-        "aggregate_score_rust",
-        # Neural (1)
-        "cluster_interactions_rust",
-        # Base (1)
-        "is_response_valid_rust",
-        # Text Processing (58)
-        "tokenize_and_index_rust",
-        "tokenize_query_rust",
-        "calculate_text_similarity_rust",
-        "find_similar_pairs_rust",
-        "bulk_tokenize_rust",
-        "word_frequencies_rust",
-        "deduplicate_strings_rust",
-        "match_patterns_rust",
-        "bulk_match_patterns_rust",
-        "check_suppression_rust",
-        "scan_lines_multi_pattern_rust",
-        "search_content_scored_rust",
-        "extract_versions_rust",
-        "batch_scan_files_rust",
-        "cosine_similarity_rust",
-        "batch_cosine_similarity_rust",
-        "find_strong_correlations_rust",
-        "search_with_tags_rust",
-        "filter_memory_by_query_rust",
-        "find_dependents_rust",
-        "match_policies_rust",
-        "search_blocks_rust",
-        "apply_patterns_rust",
-        "analyze_security_patterns_rust",
-        "calculate_coupling_rust",
-        "topological_sort_rust",
-        "partition_to_shards_rust",
-        "count_untyped_functions_rust",
-        "build_graph_edges_rust",
-        "find_duplicate_code_rust",
-        "linear_forecast_rust",
-        "check_style_patterns_rust",
-        "scan_compliance_patterns_rust",
-        "normalize_and_hash_rust",
-        "generate_unified_diff_rust",
-        "calculate_jaccard_set_rust",
-        "fast_cache_key_rust",
-        "fast_prefix_key_rust",
-        "select_best_agent_rust",
-        "aggregate_file_metrics_rust",
-        "calculate_weighted_load_rust",
-        "detect_failed_agents_rust",
-        "calculate_variance_rust",
-        "validate_semver_rust",
-        "analyze_failure_strategy_rust",
-        "analyze_tech_debt_rust",
-        "calculate_sum_rust",
-        "calculate_avg_rust",
-        "calculate_min_rust",
-        "calculate_max_rust",
-        "calculate_median_rust",
-        "calculate_p95_rust",
-        "calculate_p99_rust",
-        "calculate_stddev_rust",
-        "calculate_pearson_correlation_rust",
-        "calculate_shard_id_rust",
-        "merge_knowledge_rust",
-        "filter_stable_knowledge_rust",
-        # Phase 14: Cognitive & Buffer (8)
-        "count_hedge_words_rust",
-        "predict_intent_rust",
-        "top_k_indices_rust",
-        "decompose_activations_rust",
-        "sort_buffer_by_priority_rust",
-        "filter_stale_entries_rust",
-        "calculate_statistical_significance",
-        "calculate_sample_size",
-        # Phase 15: Core & Infrastructure (8)
-        "analyze_structure_rust",
-"""
-
-from __future__ import annotations
-
-from _thread import LockType
-from argparse import Namespace
-import ast
-import functools
-import json
-import re
-import threading
-import time
-from collections import defaultdict
-from dataclasses import dataclass
-from pathlib import Path
-from typing import Any, Callable, cast
+        def __new__(cls):
+            if cls._instance is None:
+                with cls._lock:
+                    if cls._instance is None:
+                        cls._instance = super().__new__(cls)
+            return cls._instance
 
 
 @dataclass
@@ -230,14 +106,11 @@ class FunctionStats:
         return self.total_time_ns / 1_000_000.0
 
 
-class RustProfiler:
+class RustProfiler(SingletonMixin):
     """
     Singleton profiler for tracking Rust function usage.
     Thread-safe and designed for production use.
     """
-
-    _instance: "RustProfiler | None" = None
-    _lock: LockType = threading.Lock()
 
     # All known Rust functions (72 total as of Phase 13)
     RUST_FUNCTIONS_LIST: list[str] = [
@@ -362,14 +235,6 @@ class RustProfiler:
         "batch_cdiv_rust",
         "batch_next_power_of_2_rust",
     ]
-
-    def __new__(cls) -> "RustProfiler":
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-                    cls._instance._initialized = False
-        return cls._instance
 
     _initialized: bool = False
 

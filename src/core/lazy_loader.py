@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 """
 Lazy loading utilities for PyAgent.
 
@@ -42,7 +43,8 @@ Example usage:
 from __future__ import annotations
 
 import importlib
-from functools import lru_cache
+import threading
+from functools import lru_cache, wraps
 from typing import Any, Callable, Dict, Optional, Tuple, TypeVar
 
 __all__ = [
@@ -98,17 +100,21 @@ class LazyLoader:
         self.attr_name = attr_name
         self._cached: Optional[Any] = None
         self._loaded = False
+        self._lock = threading.Lock()
         self.__doc__ = doc or f"Lazy loader for {module_path}.{attr_name or ''}"
 
     def _load(self) -> Any:
-        """Load and cache the module/attribute."""
-        if not self._loaded:
-            module = importlib.import_module(self.module_path)
-            if self.attr_name:
-                self._cached = getattr(module, self.attr_name)
-            else:
-                self._cached = module
-            self._loaded = True
+        """Load and cache the module/attribute in a thread-safe manner."""
+        if self._loaded:
+            return self._cached
+        with self._lock:
+            if not self._loaded:
+                module = importlib.import_module(self.module_path)
+                if self.attr_name:
+                    self._cached = getattr(module, self.attr_name)
+                else:
+                    self._cached = module
+                self._loaded = True
         return self._cached
 
     def __get__(self, obj: Optional[object], objtype: Optional[type] = None) -> Any:
@@ -159,11 +165,10 @@ def lazy_import(func: Callable[[], T]) -> Callable[[], T]:
     """
     cached_func = lru_cache(maxsize=1)(func)
 
+    @wraps(func)
     def wrapper() -> T:
         return cached_func()
 
-    wrapper.__doc__ = func.__doc__
-    wrapper.__name__ = func.__name__
     wrapper.__wrapped__ = func  # type: ignore[attr-defined]
     return wrapper
 
@@ -210,14 +215,16 @@ class ModuleLazyLoader:
                       (module_path, attribute_name) for lazy loading.
             parent_module: Optional parent module name for relative imports.
         """
-        self._registry = registry
+        # Validate registry entries to be tuples of two strings for safety
+        for k, v in registry.items():
+            if not (isinstance(k, str) and isinstance(v, tuple) and len(v) == 2 and all(isinstance(x, str) for x in v)):
+                raise TypeError("registry must be mapping of str -> (module_path: str, attr_name: str)")
+        self._registry = dict(registry)
         self._cache: Dict[str, Any] = {}
         self._parent_module = parent_module
 
     def _resolve_module_path(self, module_path: str) -> str:
-        """Resolve relative module paths using the parent module if provided."""
-        if self._parent_module and module_path.startswith("."):
-            return self._parent_module + module_path
+        """Return the module path unchanged; importlib.import_module will handle relative imports using the package parameter."""
         return module_path
 
     def _get_registry_entry(self, name: str) -> Tuple[str, str]:
@@ -242,7 +249,10 @@ class ModuleLazyLoader:
 
     def _load_with_error_handling(self, name: str, module_path: str, attr_name: str) -> Any:
         try:
-            module = importlib.import_module(module_path)
+            if module_path.startswith(".") and self._parent_module:
+                module = importlib.import_module(module_path, package=self._parent_module)
+            else:
+                module = importlib.import_module(module_path)
             attr = getattr(module, attr_name)
             self._cache[name] = attr
             return attr
