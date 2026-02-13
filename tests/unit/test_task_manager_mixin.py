@@ -23,8 +23,13 @@ from src.core.base.mixins.task_manager_mixin import TaskManagerMixin, TaskItem
 from src.core.base.common.models.communication_models import CascadeContext
 
 
+<<<<<<< HEAD
 class TaskManagerMixinImpl(TaskManagerMixin):
     """Non-test implementation of TaskManagerMixin for fixtures."""
+=======
+class MockTaskManagerMixin(TaskManagerMixin):
+    """Test implementation of TaskManagerMixin."""
+>>>>>>> copilot/sub-pr-29
 
     def __init__(self, **kwargs):
         self._workspace_root = kwargs.get('_workspace_root')
@@ -37,7 +42,11 @@ class TestTaskManager:
     @pytest.fixture
     def task_manager(self, tmp_path):
         """Create a test task manager instance."""
+<<<<<<< HEAD
         return TaskManagerMixinImpl(_workspace_root=str(tmp_path))
+=======
+        return MockTaskManagerMixin(_workspace_root=str(tmp_path))
+>>>>>>> copilot/sub-pr-29
 
     @pytest.fixture
     def cascade_context(self):
@@ -233,7 +242,11 @@ class TestTaskManager:
         tmp_path / ".pyagent_tasks.json"
 
         # Create manager with persistence
+<<<<<<< HEAD
         manager1 = TaskManagerMixinImpl(_workspace_root=str(tmp_path))
+=======
+        manager1 = MockTaskManagerMixin(_workspace_root=str(tmp_path))
+>>>>>>> copilot/sub-pr-29
         manager1.tasks = [
             TaskItem("Task 1", completed=True, priority=2),
             TaskItem("Task 2", completed=False, priority=1)
@@ -241,7 +254,11 @@ class TestTaskManager:
         manager1._save_tasks()
 
         # Create new manager and load
+<<<<<<< HEAD
         manager2 = TaskManagerMixinImpl(_workspace_root=str(tmp_path))
+=======
+        manager2 = MockTaskManagerMixin(_workspace_root=str(tmp_path))
+>>>>>>> copilot/sub-pr-29
 
         assert len(manager2.tasks) == 2
         assert manager2.tasks[0].description == "Task 1"

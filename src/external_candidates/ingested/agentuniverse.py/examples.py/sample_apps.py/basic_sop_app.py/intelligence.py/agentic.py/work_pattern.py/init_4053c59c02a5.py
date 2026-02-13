@@ -1,0 +1,8 @@
+# Extracted from: C:\DEV\PyAgent\.external\agentUniverse\examples\sample_apps\basic_sop_app\intelligence\agentic\work_pattern\__init__.py
+# !/usr/bin/env python3
+# -*- coding:utf-8 -*-
+
+# @Time    : 2024/10/29 10:44
+# @Author  : wangchongshi
+# @Email   : wangchongshi.wcs@antgroup.com
+# @FileName: __init__.py

@@ -158,8 +158,11 @@ class IdentityAgent(BaseAgent):
         # New: Shared Secret Manager Access
         from src.infrastructure.swarm.fleet.secret_manager import SecretManager
 
+        # Ensure workspace root fallback when BaseAgent did not set it
+        workspace_root = self._workspace_root or os.getcwd()
+
         self.secret_manager = SecretManager(
-            vault_path=os.path.join(self._workspace_root, "data/memory/agent_store/vault.json")
+            vault_path=os.path.join(workspace_root, "data/memory/agent_store/vault.json")
         )
 
     def create_agent_did(self, agent_name: str, fleet_id: str = "fleet-01") -> str:

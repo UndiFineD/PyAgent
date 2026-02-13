@@ -28,8 +28,13 @@ from src.core.base.mixins.tool_framework_mixin import (
 from src.core.base.common.models.communication_models import CascadeContext
 
 
+<<<<<<< HEAD
 class ToolFrameworkMixinImpl(ToolFrameworkMixin):
     """Non-test implementation of ToolFrameworkMixin for fixtures."""
+=======
+class MockToolFrameworkMixin(ToolFrameworkMixin):
+    """Test implementation of ToolFrameworkMixin."""
+>>>>>>> copilot/sub-pr-29
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -41,7 +46,11 @@ class TestToolFramework:
     @pytest.fixture
     def tool_framework(self):
         """Create a test tool framework instance."""
+<<<<<<< HEAD
         return ToolFrameworkMixinImpl()
+=======
+        return MockToolFrameworkMixin()
+>>>>>>> copilot/sub-pr-29
 
     @pytest.fixture
     def cascade_context(self):
@@ -257,14 +266,14 @@ class TestToolFramework:
             }
 
         # Test with string inputs that should be converted
-        result = await tool_framework.execute_tool(
+        result = asyncio.run(tool_framework.execute_tool(
             "type_conversion_tool",
             {
                 "int_param": "42",
                 "float_param": "3.14",
                 "bool_param": "true"
             }
-        )
+        ))
 
         assert result["success"]
         data = result["result"]
@@ -284,6 +293,7 @@ class TestToolFramework:
         async def no_validation_tool(required_param: str, cascade_context=None):
             return f"Got: {required_param}"
 
+<<<<<<< HEAD
         # Should not raise validation error (ToolValidationError) even with missing required param
         # The tool execution itself will fail due to missing argument (TypeError), resulting in ToolExecutionError
         from src.core.base.mixins.tool_framework_mixin import ToolExecutionError
@@ -295,6 +305,11 @@ class TestToolFramework:
         assert "execution failed" in str(excinfo.value)
         error_msg = str(excinfo.value)
         assert "missing 1 required positional argument" in error_msg or "missing argument" in error_msg
+=======
+        # Should not raise validation error even with missing required param
+        result = asyncio.run(tool_framework.execute_tool("no_validation_tool", {}))
+        assert result["success"] == False  # Will fail during execution due to missing param
+>>>>>>> copilot/sub-pr-29
 
     def test_tool_definition_serialization(self, tool_framework):
         """Test tool definition serialization."""

@@ -1,0 +1,25 @@
+# Extracted from: C:\DEV\PyAgent\.external\agentUniverse\examples\startup_app\demo_startup_app_with_single_agent\intelligence\test\insurance_agent_test.py
+# !/usr/bin/env python3
+# -*- coding:utf-8 -*-
+
+from agentuniverse.agent.agent import Agent
+from agentuniverse.agent.agent_manager import AgentManager
+
+# @Time    : 2024/12/26 17:18
+# @Author  : wangchongshi
+# @Email   : wangchongshi.wcs@antgroup.com
+# @FileName: insurance_agent_test.py
+from agentuniverse.agent.output_object import OutputObject
+from agentuniverse.base.agentuniverse import AgentUniverse
+
+AgentUniverse().start(config_path="../../config/config.toml", core_mode=True)
+
+
+def chat(question: str):
+    instance: Agent = AgentManager().get_instance_obj("insurance_agent")
+    output_object: OutputObject = instance.run(input=question)
+    print(output_object.get_data("output"))
+
+
+if __name__ == "__main__":
+    chat("保险产品A怎么升级")

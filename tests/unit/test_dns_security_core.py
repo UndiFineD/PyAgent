@@ -13,6 +13,10 @@
 # limitations under the License.
 
 import pytest
+<<<<<<< HEAD
+=======
+from unittest.mock import Mock, patch, AsyncMock
+>>>>>>> copilot/sub-pr-29
 from datetime import datetime, timedelta, timezone
 from src.core.base.logic.core.dns_security_core import (
     DnsSecurityCore,

@@ -1,0 +1,60 @@
+# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-Nebula\teamserver\core\module\enum\__not_done\aws_enum_services_using_cost_explorer.py
+import json
+import sys
+
+import boto3
+
+author = {
+    "name": "gl4ssesbo1",
+    "twitter": "https://twitter.com/gl4ssesbo1",
+    "github": "https://github.com/gl4ssesbo1",
+    "blog": "https://www.pepperclipp.com/",
+}
+
+needs_creds = True
+
+variables = {
+    "SERVICE": {
+        "value": "cur",
+        "required": "true",
+        "description": "The service that will be used to run the module. It cannot be changed.",
+    },
+    "OTHERVARIABLE": {
+        "value": "",
+        "required": "true/false",
+        "description": "Another variable to set",
+    },
+}
+description = "The module will run "
+
+COSTFILTER = {
+    "AND": [
+        {"Dimensions": {"Key": "REGION", "Values": ["us-east-1, eu-west-3"]}},
+        {"Dimensions": {"Key": "SERVICE", "Values": ["iam"]}},
+    ]
+}
+
+# The aws command is the command used for describe-launch-templates. You can change to yours. Please set region and profile as {}
+aws_command = "aws ec2 describe-launch-templates --region {} --profile {}"
+
+# The exploit function is like the main() of the module. This is called
+# from the module
+
+colors = ["not-used", "red", "blue", "yellow", "green", "magenta", "cyan", "white"]
+
+output = ""
+
+
+def exploit(profile):
+    try:
+        response = profile.describe_report_definitions()
+
+        if response["NextToken"]:
+            response.extend(
+                profile.describe_report_definitions(NextToken=response["NextToken"])
+            )
+
+        return {"ReportName": response["ReportDefinitions"]}
+
+    except Exception as e:
+        return {"error": str(e)}

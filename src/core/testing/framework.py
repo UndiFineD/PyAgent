@@ -12,6 +12,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Minimal testing framework helpers for agent scenarios.
+
+This module provides small utilities used by higher-level scenario
+testing engines. It is intentionally lightweight and dependency-free.
+"""
+from __future__ import annotations
+from dataclasses import dataclass
+from typing import Any, Dict
+
+
+@dataclass
+class ScenarioResult:
+    name: str
+    success: bool
+    details: Dict[str, Any]
+
+
+def assert_equal(a, b, message: str = ""):
+    if a != b:
+        raise AssertionError(message or f"Expected {a} == {b}")
+
+
+def run_scenario(name: str, func) -> ScenarioResult:
+    try:
+        func()
+        return ScenarioResult(name=name, success=True, details={})
+    except Exception as e:
+        return ScenarioResult(name=name, success=False, details={"error": str(e)})
+
+
+__all__ = ["ScenarioResult", "assert_equal", "run_scenario"]
 """
 PyAgent Better-Agents Testing Framework.
 

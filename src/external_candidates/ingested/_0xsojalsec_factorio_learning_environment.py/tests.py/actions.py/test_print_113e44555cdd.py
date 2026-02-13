@@ -1,0 +1,8 @@
+# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\tests\actions\test_print.py
+def test_print_tuple(game):
+    """
+    Print a tuple
+    """
+    r = game.print("Hello", "World", (1, 2, 3))
+
+    assert r == "Hello\tWorld\t(1, 2, 3)"

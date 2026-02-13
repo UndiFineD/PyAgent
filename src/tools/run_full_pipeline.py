@@ -43,8 +43,10 @@ import shutil
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = ROOT / 'src' / 'tools'
 REPORT = ROOT / '.external' / 'refactor_report.json'
+# Operate over all python files under `.external` (single-pass, no batching)
+EXTERNAL_ROOT = ROOT / '.external'
 EXTRACT_TARGET = ROOT / 'src' / 'external_candidates' / 'auto'
-STATIC_DIR = ROOT / '.external' / 'static_checks'
+STATIC_DIR = EXTERNAL_ROOT / 'static_checks'
 DOC = ROOT / 'docs' / 'architecture' / 'external_integration.md'
 
 
@@ -153,7 +155,12 @@ def run_checks_for_sha(args: tuple[str, str]) -> tuple[str, dict]:
 
 def summarize_and_write_doc():
     # Build a concise summary using available artifacts
-    files = list(EXTRACT_TARGET.glob('*.py')) if EXTRACT_TARGET.exists() else []
+    # Count all .py files under EXTRACT_TARGET, excluding internal cache/static/patch dirs
+    def _is_under_skipped(p: Path) -> bool:
+        skip = {'cache', 'static_checks', 'patches', 'patches_ast'}
+        return any(part in skip for part in p.parts)
+
+    files = [p for p in EXTRACT_TARGET.rglob('*.py') if EXTRACT_TARGET.exists() and not _is_init(p) and not _is_under_skipped(p)] if EXTRACT_TARGET.exists() else []
     count = len(files)
     # load static summary if present
     summary = {}
@@ -229,6 +236,8 @@ def _is_init(p: Path) -> bool:
 
 def main():
     start_ts = time.time()
+    # default parallelism
+    workers = os.cpu_count() or 2
     # Cache dir (ensure exists early so we can store report hash)
     cache_dir = ROOT / '.external' / 'cache'
     cache_dir.mkdir(parents=True, exist_ok=True)
@@ -241,6 +250,7 @@ def main():
                 h.update(chunk)
         return h.hexdigest()
 
+<<<<<<< HEAD
     # check whether report changed since last run; if unchanged, skip batch_extract
     report_sha_file = cache_dir / 'last_report.sha'
     report_changed = True
@@ -302,6 +312,14 @@ def main():
         except Exception:
             files_gen = EXTRACT_TARGET.rglob('*.py') if EXTRACT_TARGET.exists() else []
             extracted = [p for p in files_gen if not _is_init(p)]
+=======
+    # Single-pass: collect all .py files under .external (excluding internal dirs)
+    def _is_under_skipped(p: Path) -> bool:
+        skip = {'cache', 'static_checks', 'patches', 'patches_ast'}
+        return any(part in skip for part in p.parts)
+
+    extracted = [p for p in (EXTRACT_TARGET.rglob('*.py') if EXTRACT_TARGET.exists() else []) if not _is_init(p) and not _is_under_skipped(p)]
+>>>>>>> copilot/sub-pr-29
     try:
         update_refactor_report(REPORT, extracted)
     except Exception as e:
@@ -623,9 +641,58 @@ def main():
     except Exception:
         run([sys.executable, str(SCRIPTS / 'prepare_refactor_patches.py')], fatal=False)
 
-    # 6) generate AST-based conservative refactor patches for top-priority files
-    # Run generator on full extract target but skip if nothing changed
+    # 6) optional Copilot-based refactors + conservative refactor proposals
+    # If PYAGENT_USE_COPILOT=1 is set, attempt to generate per-file refactors
+    # using the Copilot CLI backend. Always write patch files to
+    # .external/patches_copilot/; only apply when PYAGENT_APPLY_COPILOT=1.
+    copilot_enabled = os.environ.get('PYAGENT_USE_COPILOT') == '1'
+    copilot_apply = os.environ.get('PYAGENT_APPLY_COPILOT') == '1'
+    patches_copilot_dir = ROOT / '.external' / 'patches_copilot'
+    patches_copilot_dir.mkdir(parents=True, exist_ok=True)
+
+    if changed_files and copilot_enabled:
+        try:
+            from src.infrastructure.compute.backend.llm_backends.copilot_cli_backend import CopilotCliBackend
+            backend = CopilotCliBackend()
+            for sha, paths in hash_map.items():
+                rep = paths[0]
+                if _is_init(rep):
+                    continue
+                rel = rep.relative_to(EXTRACT_TARGET)
+                try:
+                    text = rep.read_text(encoding='utf-8', errors='ignore')
+                except Exception:
+                    continue
+                prompt = (
+                    f"Refactor the following Python file for safety and clarity while preserving behavior. "
+                    f"Only return the full refactored file contents.\n---\n" + text
+                )
+                # limit prompt size
+                max_chars = 30000
+                prompt = prompt if len(prompt) <= max_chars else prompt[-max_chars:]
+                out = backend.chat(prompt, timeout_s=180)
+                if out and '\n' in out:
+                    patch_path = patches_copilot_dir / f"{str(rel).replace('/','_')}.copilot.patch"
+                    try:
+                        patch_path.write_text(out, encoding='utf-8')
+                    except Exception:
+                        continue
+                    print('Wrote Copilot patch to', patch_path)
+                    if copilot_apply:
+                        target = EXTRACT_TARGET / rel
+                        if target.exists():
+                            bak = target.with_suffix(target.suffix + '.bak')
+                            if not bak.exists():
+                                shutil.copy2(target, bak)
+                        target.parent.mkdir(parents=True, exist_ok=True)
+                        target.write_text(out, encoding='utf-8')
+                        print('Applied Copilot refactor to', target)
+        except Exception as e:
+            print('Copilot backend unavailable or failed:', e)
+
+    # Use an in-repo applier to make deterministic, safe replacements (backups created).
     if changed_files:
+<<<<<<< HEAD
         # Instead of the previous AST pipeline, ask "Copilot" to refactor files.
         # We implement a small, safe placeholder refactor step here: prepend a marker
         # and write an AST-style patch file under .external/patches_ast/. This will
@@ -659,8 +726,19 @@ def main():
                 target_path.parent.mkdir(parents=True, exist_ok=True)
                 target_path.write_text(new_text, encoding='utf-8')
                 print('Applied copilot-placeholder refactor to', target_path)
+=======
+        try:
+            from src.tools import apply_patch_proposals as _apply
+            try:
+                _apply.main()
+            except TypeError:
+                _apply.main()
+        except Exception:
+            # fallback to subprocess if import fails
+            run([sys.executable, str(SCRIPTS / 'apply_patch_proposals.py')], fatal=False)
+>>>>>>> copilot/sub-pr-29
     else:
-        print('No changed files; skipping AST patch generation/application')
+        print('No changed files; skipping patch proposal application')
 
     # 8) after applying AST patches, re-run static checks and tests on full target (non-fatal)
     try:

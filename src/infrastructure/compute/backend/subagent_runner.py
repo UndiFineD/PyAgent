@@ -103,7 +103,7 @@ class SubagentRunner:
 
         # Disk cache initialization
         repo_root = self._resolve_repo_root()
-        self.disk_cache = DiskCache(repo_root / ".agent_cache", ttl_seconds=60 * 60 * 24 * 7)  # 7 days default
+        self.disk_cache = DiskCache(repo_root / "data/agent_cache", ttl_seconds=60 * 60 * 24 * 7)  # 7 days default
 
         # Phase 108: Recording Intelligence
         self.recorder = LocalContextRecorder(workspace_root=repo_root)

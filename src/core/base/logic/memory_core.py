@@ -419,10 +419,15 @@ class HybridMemoryCore:
             for node in tag_results:
                 candidates.add(node.id)
 
-        # Keyword search (simplified)
+        # Keyword search (simplified). Skip if empty query to avoid matching all nodes.
         keyword_results = []
+<<<<<<< HEAD
         if query:
             query_lower = query.lower()
+=======
+        query_lower = query.lower().strip() if query else ""
+        if query_lower:
+>>>>>>> copilot/sub-pr-29
             for node in self.graph_store.nodes.values():
                 if query_lower in node.content.lower():
                     keyword_results.append(node)

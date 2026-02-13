@@ -61,8 +61,13 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
     """Consolidation of file system auditing, naming convention enforcement, and cleanup."""
 
     DEFAULT_EXCLUSIONS: set[str] = {
+<<<<<<< HEAD
         ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache",
         ".ruff_cache", ".agent_cache", "target", "node_modules",
+=======
+        ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache", 
+        ".ruff_cache", "data/agent_cache", "target", "node_modules",
+>>>>>>> copilot/sub-pr-29
         ".hypothesis", "__pycache__", "reports", "archive"
     }
 
