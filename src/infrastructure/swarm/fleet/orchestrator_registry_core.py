@@ -1,3 +1,5 @@
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,6 +14,8 @@
 # limitations under the License.
 
 """
+OrchestratorRegistryCore
+- Core logic for orchestrator registry management.
 Orchestrator registry core.py module.
 """
 

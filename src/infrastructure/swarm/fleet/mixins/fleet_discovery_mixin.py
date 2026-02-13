@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +14,7 @@
 # limitations under the License.
 
 """
+FleetDiscoveryMixin
 Fleet discovery mixin.py module.
 """
 # Phase 320: Fleet Discovery Mixin
@@ -22,8 +24,7 @@ from __future__ import annotations
 import os
 from typing import List
 
-from src.infrastructure.swarm.network.lan_discovery import (LANDiscovery,
-                                                            PeerInfo)
+from src.infrastructure.swarm.network.lan_discovery import (LANDiscovery, PeerInfo)
 from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
@@ -85,7 +86,7 @@ class FleetDiscoveryMixin:
             for peer in peers:
                 try:
                     url = f"http://{peer.ip}:{peer.port}/discovery/peers"
-                    async with session.get(url, timeout=5) as response:
+                    async with session.get(url, timeout=aiohttp.ClientTimeout(total=5)) as response:
                         if response.status == 200:
                             data = await response.json()
                             remote_peers = data.get("peers", [])

@@ -1,0 +1,140 @@
+--- C:\DEV\PyAgent\src\infrastructure\swarm\fleet\fleet_manager.py.bak
++++ C:\DEV\PyAgent\src\infrastructure\swarm\fleet\fleet_manager.py
+@@ -1,4 +1,5 @@
+ #!/usr/bin/env python3
++# Refactored by copilot-placeholder
+ # Copyright 2026 PyAgent Authors
+ # Licensed under the Apache License, Version 2.0 (the "License");
+ # you may not use this file except in compliance with the License.
+@@ -42,7 +43,7 @@
+ import contextlib
+ import logging
+ from pathlib import Path
+-from typing import TYPE_CHECKING, Any, Dict
++from typing import TYPE_CHECKING, Any, Dict, cast
+ 
+ from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.manifest_repository import ManifestRepository
+@@ -130,7 +131,7 @@
+         self.workspace_root = Path(workspace_root)
+         self.manifest_repo = ManifestRepository()
+         self.backup_node = DistributedBackup(node_id=f"node-{self.workspace_root.name}")
+-        self.evolution_loop = EvolutionLoop(self)
++        self.evolution_loop: EvolutionLoop | None = None
+         self.topology_reporter = SwarmTopologyReporter(
+             output_path=str(self.workspace_root / "data" / "logs" / "topology.json")
+         )
+@@ -153,11 +154,11 @@
+         self.pruning_orchestrator = SwarmPruningOrchestrator(self)
+ 
+         # New: Lazy Orchestrators (replaces ~50 direct instantiations)
+-        self.orchestrators = OrchestratorRegistry.get_orchestrator_map(self)
++        self.orchestrators = OrchestratorRegistry.get_orchestrator_map(cast(FleetManager, self))
+ 
+         # Load agents from registry (also lazy)
+         # Pass self so agents can register utils/tools upon lazy instantiation
+-        self.agents = AgentRegistry.get_agent_map(self.workspace_root, fleet_instance=self)
++        self.agents = AgentRegistry.get_agent_map(self.workspace_root, fleet_instance=cast(FleetManager, self))
+ 
+         # Phase 320: LAN Discovery
+         self.init_discovery(agent_id=f"fleet-{self.workspace_root.name}")
+@@ -173,7 +174,7 @@
+         # Phase 320: Resource Monitoring & Autonomous Balancing
+         self.resource_monitor = ResourceMonitor(fleet=self)
+         self.borrowed_helpers: Dict[str, Any] = {}  # Phase 320: Cluster Balancing Helpers
+-        self.rl_selector = RLSelector()  # Phase 321: RL-based Routing
++        self._rl_selector = RLSelector()  # Phase 321: RL-based Routing
+         self._safe_start_task(self.resource_monitor.start())
+         self._safe_start_task(self.evolution_loop.start())
+         self._safe_start_task(self._topology_loop())
+@@ -271,15 +272,18 @@
+         self.active_tasks: dict[str, Any] = {}  # task_id -> {priority, agent_instances}
+ 
+         # Delegated Managers (Phase 120 Extraction)
+-        self.execution_core = FleetExecutionCore(self)
+-        self.lifecycle_manager = FleetLifecycleManager(self)
+-        self.interaction_recorder = FleetInteractionRecorder(self)
+-        self.routing_core = FleetRoutingCore(self)
+-        self.consensus_manager = FleetConsensusManager(self)
++        self.execution_core = FleetExecutionCore(cast(FleetManager, self))
++        self.lifecycle_manager = FleetLifecycleManager(cast(FleetManager, self))
++        self.interaction_recorder = FleetInteractionRecorder(cast(FleetManager, self))
++        self.routing_core = FleetRoutingCore(cast(FleetManager, self))
++        self.consensus_manager = FleetConsensusManager(cast(FleetManager, self))
+ 
+         # Phase 123: Start Peer Discovery
+         with contextlib.suppress(Exception):
+             _ = self.orchestrators.discovery
++
++        # Defer EvolutionLoop initialization until FleetManager is fully constructed
++        self.evolution_loop = EvolutionLoop(cast(FleetManager, self))
+ 
+     async def handle_user_command(self, command: str) -> Dict[str, Any]:
+         """Entry point for the Universal Agent Shell (Pillar 3)."""
+@@ -294,41 +298,37 @@
+ 
+         # 2. Utilize the Universal Agent for Pillar 3 execution
+         try:
+-            # Check for UniversalAgent in registry
+-            if "UniversalAgent" not in self.agents:
+-                from src.logic.agents.system.universal_agent import UniversalAgent
+-                self.register_agent(
+-                    "UniversalAgent",
+-                    UniversalAgent,
+-                    str(self.workspace_root / "src" / "logic" / "agents" / "system" / "universal_agent.py")
++            # Check for UniversalAgent in capability hints
++            if "universal" in self.capability_hints:
++                target_agent = self.capability_hints["universal"]
++                logger.info(f"FleetManager: Dispatched to {target_agent} (Pillar 3)")
++
++                result = await cast(FleetDelegationMixin, self).delegate_to(target_agent, command)
++
++                # Record response
++                self.interaction_recorder.record_interaction(
++                    user_input=command,
++                    agent_id=target_agent,
++                    role="assistant",
++                    content=str(result)
+                 )
+-
+-            agent = self.agents["UniversalAgent"]
+-            logger.info("FleetManager: Dispatched to UniversalAgent (Pillar 3)")
+-
+-            # Execute via the Universal Shell
+-            result = await agent.execute_query(command)
+-
+-            # 3. Record response
+-            self.interaction_recorder.record_interaction(
+-                user_input=command,
+-                agent_id="UniversalAgent",
+-                role="assistant",
+-                content=str(result)
+-            )
+-            return {"status": "success", "agent": "UniversalAgent", "result": result}
+-
+-        except Exception as e:
+-            logger.error(f"FleetManager: UniversalAgent failed: {e}")
+-            # Fallback to standard delegation for security/reasons
++                return {"status": "success", "agent": target_agent, "result": result}
++
++            # Fallback to standard delegation
+             target_agent = "ReasoningAgent"
+             if "code" in command.lower() or "fix" in command.lower():
+                 target_agent = "CoderAgent"
+ 
++            result = await cast(FleetDelegationMixin, self).delegate_to(target_agent, command)
++            return {"status": "success", "agent": target_agent, "result": result}
++
++        except (ValueError, TypeError, RuntimeError, asyncio.TimeoutError) as e:
++            logger.error(f"FleetManager: Agent delegation failed: {e}")
++            # Final fallback to ReasoningAgent
+             try:
+-                result = await self.delegate_to(target_agent, command)
+-                return {"status": "success", "agent": target_agent, "result": result}
+-            except Exception as e2:
++                result = await cast(FleetDelegationMixin, self).delegate_to("ReasoningAgent", command)
++                return {"status": "success", "agent": "ReasoningAgent", "result": result}
++            except (ValueError, TypeError, RuntimeError, asyncio.TimeoutError) as e2:
+                 return {"status": "error", "message": str(e2)}
+ 
+     # Logic delegated to mixins

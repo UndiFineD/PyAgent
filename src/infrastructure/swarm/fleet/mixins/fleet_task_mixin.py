@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +14,8 @@
 # limitations under the License.
 
 """
+FleetTaskMixin 
+- Mixin for task execution, preemption, and consensus management in FleetManager.
 Fleet task mixin.py module.
 """
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -73,7 +76,7 @@ class FleetTaskMixin:
         """Runs a sequence of agent actions with shared state and signals."""
         return await self.execution_core.execute_workflow(task, workflow_steps, priority=priority)
 
-    def execute_with_consensus(
+    async def execute_with_consensus(
         self: FleetManager,
         task: str,
         primary_agent: str | None = None,
@@ -82,4 +85,4 @@ class FleetTaskMixin:
         """
         Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner.
         """
-        return self.consensus_manager.execute_with_consensus(task, primary_agent, secondary_agents)
+        return await self.consensus_manager.execute_with_consensus(task, primary_agent, secondary_agents)

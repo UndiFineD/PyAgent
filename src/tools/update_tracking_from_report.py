@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,6 +21,7 @@ This script is read-only for scanned files and only appends/edits
 the tracking/completed/candidates files in-place. It does not
 execute any code found in .external.
 """
+
 import json
 from pathlib import Path
 
@@ -33,11 +33,13 @@ CANDIDATES = ROOT / '.external' / 'candidates.md'
 
 
 def load_report() -> dict:
+    """Load the refactor report from the JSON file."""
     with REPORT.open('r', encoding='utf-8', errors='ignore') as f:
         return json.load(f)
 
 
 def append_tracking(rows: list[str]) -> int:
+    """Append the given rows to the tracking file."""
     if not rows:
         return 0
     text = '\n'.join(rows) + '\n'
@@ -48,6 +50,7 @@ def append_tracking(rows: list[str]) -> int:
 
 
 def move_completed_rows() -> int:
+    """Move completed rows from tracking.md to completed.md."""
     if not TRACKING.exists():
         return 0
     lines = TRACKING.read_text(encoding='utf-8', errors='ignore').splitlines()
@@ -68,6 +71,7 @@ def move_completed_rows() -> int:
 
 
 def build_candidates(report: dict, limit: int = 50) -> list[dict]:
+    """Build a list of prioritized candidates from the refactor report."""
     cand = []
     for d in report.get('directories', []):
         path = d.get('path')
@@ -88,6 +92,7 @@ def build_candidates(report: dict, limit: int = 50) -> list[dict]:
 
 
 def write_candidates(cands: list[dict]) -> int:
+    """Write the prioritized candidates to the candidates.md file."""
     lines = []
     lines.append('# Prioritized candidates from .external/refactor_report.json')
     lines.append('')
@@ -98,6 +103,7 @@ def write_candidates(cands: list[dict]) -> int:
 
 
 def main() -> int:
+    """Main entry point: load report, update tracking and completed files, generate candidates."""
     if not REPORT.exists():
         print('No report found at', REPORT)
         return 1

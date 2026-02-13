@@ -1,4 +1,52 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""
+ReasoningAgent - Deep recursive reasoning and self-verification
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate the agent via ReasoningAgent(file_path).
+- Use think_deeply(prompt, depth=int, strategy=str) for multi-strategy recursive reasoning (strategy: "cot", "tot", "sc", "reflection", "debate").
+- Use distribute_reasoning_shard(payload) to split tasks across sharded workers (decorated with @as_tool for framework integration).
+
+WHAT IT DOES:
+- Implements a specialist agent (ReasoningAgent) that orchestrates long-context, multi-step reasoning using multiple strategies (chain-of-thought, tree-of-thought, self-consistency, reflection, debate).
+- Provides a ThoughtNode dataclass to represent nodes in a reasoning tree including content, depth, score, children, parent and metadata.
+- Integrates with ConfigCore and ShardingCore to load sharding configuration and distribute workload across a cluster.
+- Records lightweight reasoning history for telemetry and basic profiling and exposes reasoning entrypoints as tools via as_tool decorator.
+- Uses BaseAgent primitives (e.g., improve_content) to produce and refine intermediate thought steps asynchronously.
+
+WHAT IT SHOULD DO BETTER:
+- Add robust input validation, error handling, and timeouts for each reasoning strategy to avoid runaway computation and to surface failures clearly.
+- Make strategy implementations configurable and pluggable (strategy registry) so new techniques can be added without modifying core agent logic.
+- Improve observability: richer telemetry (per-step metrics, memory/CPU usage), structured logs, and tracing for distributed reasoning.
+- Ensure deterministic reproducibility and seed control for stochastic strategies (self-consistency, debate) and persistable checkpoints for long runs.
+- Decouple LLM/content-improvement dependencies (e.g., improve_content) behind explicit interfaces and add unit/integration tests for each strategy and sharding behavior.
+- Respect StateTransaction transactional filesystem edits per project conventions when the agent writes artifacts; add explicit cancellation and resource quotas for shard tasks.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +67,117 @@
 
 """
 ReasoningAgent: Specialist agent for recursive and deep thinking - Phase 319 Enhanced.
+"""
+
+from __future__ import annotations
+
+import contextlib
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.sharding_core import ShardingCore
+from src.core.base.common.config_core import ConfigCore
+
+__version__ = VERSION
+
+
+class ReasoningStrategy(Enum):
+    """Strategies for deep reasoning and logical deduction."""
+    CHAIN_OF_THOUGHT = "cot"
+    TREE_OF_THOUGHT = "tot"
+    SELF_CONSISTENCY = "sc"
+    REFLECTION = "reflection"
+    DEBATE = "debate"
+
+
+@dataclass
+class ThoughtNode:
+    """Represents a single thought in the reasoning tree."""
+
+    content: str
+    depth: int
+    score: float = 0.0
+    children: List["ThoughtNode"] = field(default_factory=list)
+    parent: Optional["ThoughtNode"] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+# pylint: disable=too-many-ancestors
+class ReasoningAgent(BaseAgent):
+    """
+    Agent specializing in long-context reasoning, recursive chain-of-thought,
+    and multi-step logical deduction with self-verification.
+    """
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self.config_manager = ConfigCore()
+        shard_config = self.config_manager.load_config("sharding")
+        self.sharding_engine = ShardingCore(cluster_size=shard_config.get("shard_count", 1))
+
+        self._system_prompt = (
+            "You are the Reasoning Agent. Your goal is to provide deep, recursive thoughts "
+            "on complex problems. Use <thought> blocks to explore multiple hypotheses "
+            "before arriving at a conclusion. Never settle for the first answer. "
+            "Challenge your own assumptions and verify your logic."
+        )
+        self._reasoning_history: List[Dict[str, Any]] = []
+
+    @as_tool
+    async def distribute_reasoning_shard(self, task_payload: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Splits a reasoning task across the cluster based on shard load.
+        """
+        node_id = self.sharding_engine.assign_workload([0.1, 0.5, 0.2])  # Mock loads
+        logging.info(f"ReasoningAgent: Assigning shard task to Node {node_id}")
+        return {"assigned_node": node_id, "status": "SHARD_ACTIVE"}
+
+    @as_tool
+    async def think_deeply(self, prompt: str, depth: int = 3, strategy: str = "cot") -> Dict[str, Any]:
+        """Performs recursive reasoning on a given prompt with multiple strategies."""
+        start_time = time.time()
+
+        if strategy == "tot":
+            result = await self._tree_of_thought(prompt, depth)
+        elif strategy == "sc":
+            result = await self._self_consistency(prompt, num_samples=depth)
+        elif strategy == "reflection":
+            result = await self._reflective_reasoning(prompt, depth)
+        elif strategy == "debate":
+            result = await self._internal_debate(prompt, rounds=depth)
+        else:
+            result = await self._chain_of_thought(prompt, depth)
+
+        elapsed = time.time() - start_time
+        self._reasoning_history.append(
+            {"prompt": prompt[:100], "strategy": strategy, "depth": depth, "elapsed_s": elapsed}
+        )
+
+        return result
+
+    async def _chain_of_thought(self, prompt: str, depth: int) -> Dict[str, Any]:
+        """Standard recursive chain-of-thought reasoning."""
+        current_context = prompt
+        thought_chain = []
+
+        for i in range(depth):
+            logging.info(f"ReasoningAgent: Chain depth {i + 1}/{depth}...")
+
+            if i == 0:
+                step_prompt = f"Problem: {current_context}\n\nLet me think through this step-by-step:"
+            else:
+                step_prompt = (
+                    f"Building on my previous analysis:\n{current_context}\n\nLet me refine and extend this reasoning:"
+                )
+
+            response = await self.improve_content(step_prompt)
+            tho
 """
 
 from __future__ import annotations

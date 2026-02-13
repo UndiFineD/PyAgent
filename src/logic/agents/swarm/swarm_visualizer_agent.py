@@ -18,9 +18,127 @@
 # limitations under the License.
 
 """
+Swarm Visualizer Agent - Real-time swarm topology and interaction visualization
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate with a workspace path: agent = SwarmVisualizerAgent(r"C:\path\to\workspace")
+- Log interactions: agent.log_interaction("agent_a", "agent_b", "task_request")
+- Update positions for layout: agent.update_agent_position("agent_a", 12.3, -4.5)
+- Retrieve dashboard data: data = agent.get_visualization_data() and feed to a web socket or dashboard renderer
+
+WHAT IT DOES:
+- Collects lightweight interaction logs (from, to, type, timestamp) and maintains agent visual positions.
+- Produces a topology graph (nodes, edges) with a simple complexity score and timestamps.
+- Aggregates visualization payload containing topology, positions, and basic metrics suitable for real-time dashboards.
+
+WHAT IT SHOULD DO BETTER:
+- Persist logs and snapshots to durable storage and support configurable retention beyond the fixed in-memory cap.
+- Add time-windowed aggregation, sampling, and streaming endpoints (WebSocket / SSE) for scalable real-time dashboards.
+- Enrich topology with metadata (agent types, health, load), rate-limited sampling, and pluggable layout algorithms (force-directed, layered).
+- Provide thread-safe or async-safe operation, and optional integration with observability backends (Prometheus, OpenTelemetry, Grafana).
+- Offer configurable complexity heuristics, entity grouping, and export formats (GraphML, JSON-LD).
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""
 SwarmVisualizerAgent: Swarm agent for visualizing agent activity and system state.
 
 Provides dashboards and real-time observability for distributed workflows in the PyAgent swarm.
+"""
+
+from __future__ import annotations
+
+import time
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class SwarmVisualizerAgent:
+    """
+    Generates topological maps and visualizations of agent interactions.
+    Tracks message flows, agent dependencies, and swarm health metrics.
+    """
+
+    def __init__(self, workspace_path: str) -> None:
+        self.workspace_path = workspace_path
+        self.interaction_log: list[Any] = []  # List of (from_agent, to_agent, message_type, timestamp)
+        self.agent_positions: dict[Any, Any] = {}  # agent_id -> (x, y)
+
+    def log_interaction(self, from_agent: str, to_agent: str, message_type: str) -> None:
+        """Logs an interaction between two agents."""
+        self.interaction_log.append(
+            {
+                "from": from_agent,
+                "to": to_agent,
+                "type": message_type,
+                "timestamp": time.time(),
+            }
+        )
+        # Keep log size manageable
+        if len(self.interaction_log) > 1000:
+            self.interaction_log.pop(0)
+
+    def generate_topology_map(self) -> dict[str, Any]:
+        """Generates a graph-based representation of the swarm topology."""
+        nodes = set()
+        edges = []
+
+        for interaction in self.interaction_log:
+            nodes.add(interaction["from"])
+            nodes.add(interaction["to"])
+            edges.append(
+                {
+                    "source": interaction["from"],
+                    "target": interaction["to"],
+                    "type": interaction["type"],
+                }
+            )
+
+        return {
+            "nodes": list(nodes),
+            "edges": edges,
+            "timestamp": time.time(),
+            "complexity_score": len(edges) / max(1, len(nodes)),
+        }
+
+    def update_agent_position(self, agent_id: str, x: float, y: float) -> None:
+        """Updates the visual position of an agent in the topology."""
+        self.agent_positions[agent_id] = {"x": x, "y": y}
+
+    def get_visualization_data(self) -> dict[str, Any]:
+        """Returns all data needed for a real-time visualization dashboard."""
+        return {
+            "topology": self.generate_topology_map(),
+            "positions": self.agent_positions,
+            "metrics": {
+                "total_interactions": len(self.interaction_log),
+                "active_agents": len(self.agent_positions),
+            },
+        }
 """
 
 from __future__ import annotations

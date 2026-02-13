@@ -17,7 +17,161 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
+"""
+Self Evolution Mixin - Automatic workflow optimization for PyAgent orchestrators
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Used as a mixin for orchestrator/agent classes that implement execute_with_pattern(context, pattern_name, **kwargs). Instantiate or mix into an agent class, optionally call enable_evolution(False) to disable, and use execute_with_evolution(context, pattern_name, **kwargs) in place of direct execution to get automatic iterative workflow improvements.
+
+WHAT IT DOES:
+Implements tracking and lightweight evolutionary optimization around workflow execution: records initial run metrics, decides whether evolution is warranted, attempts a bounded number of evolution iterations, records history and metrics, and returns the best-observed result. Provides configuration hooks (enable_evolution, set_evolution_params) and dataclasses (EvolutionMetrics, EvolutionHistory) to store performance, improvements, and lessons learned.
+
+WHAT IT SHOULD DO BETTER:
+- Provide typed return and error contracts for execute_with_evolution to make integration safer (e.g., a Result dataclass and explicit error handling instead of raw Dicts).
+- Persist evolution history to durable storage (StateTransaction or rust_core) and expose retrieval/query APIs to analyze long-term trends.
+- Use pluggable evolution strategies and validators (strategy pattern) rather than a single internal _evolve_workflow implementation, and add async concurrency controls, timeouts, and resource safeguards for evolved executions.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """Self-evolution mixin for PyAgent orchestrators."""
+
+from typing import Dict, List, Any, Optional
+from dataclasses import dataclass, field
+from datetime import datetime
+
+from src.core.base.common.models.communication_models import CascadeContext, WorkState
+
+
+@dataclass
+class EvolutionMetrics:
+    """Metrics for tracking workflow performance."""
+
+    execution_time: float = 0.0
+    success_rate: float = 0.0
+    quality_score: float = 0.0
+    error_count: int = 0
+    improvement_iterations: int = 0
+    last_updated: datetime = field(default_factory=datetime.now)
+
+
+@dataclass
+class EvolutionHistory:
+    """History of workflow evolution attempts."""
+
+    original_workflow: Dict[str, Any]
+    evolved_workflows: List[Dict[str, Any]] = field(default_factory=list)
+    performance_history: List[EvolutionMetrics] = field(default_factory=list)
+    lessons_learned: List[str] = field(default_factory=list)
+
+
+class SelfEvolutionMixin:
+    """
+    Mixin that enables self-evolving capabilities for PyAgent orchestrators.
+
+    This mixin implements automatic workflow optimization based on execution
+    feedback, inspired by EvoAgentX's self-evolution algorithms.
+    """
+
+    def __init__(self, **kwargs: Any) -> None:
+        """Initialize self-evolution capabilities."""
+        super().__init__(**kwargs)
+        self._evolution_history: Dict[str, EvolutionHistory] = {}
+        self._evolution_enabled: bool = True
+        self._max_evolution_iterations: int = 3
+        self._improvement_threshold: float = 0.1  # 10% improvement required
+
+    def enable_evolution(self, enabled: bool = True) -> None:
+        """Enable or disable self-evolution."""
+        self._evolution_enabled = enabled
+
+    def set_evolution_params(self, max_iterations: int = 3, improvement_threshold: float = 0.1) -> None:
+        """Set evolution parameters."""
+        self._max_evolution_iterations = max_iterations
+        self._improvement_threshold = improvement_threshold
+
+    async def execute_with_evolution(
+        self,
+        context: CascadeContext,
+        pattern_name: Optional[str] = None,
+        **kwargs: Any
+    ) -> Dict[str, Any]:
+        """
+        Execute a workflow with self-evolution capabilities.
+
+        This method executes a workflow and automatically improves it based on
+        performance feedback if evolution is enabled.
+        """
+        if not self._evolution_enabled:
+            # Fall back to regular execution
+            return await self.execute_with_pattern(context, pattern_name, **kwargs)
+
+        workflow_id = context.task_id
+
+        # Execute initial workflow
+        initial_result = await self.execute_with_pattern(context, pattern_name, **kwargs)
+
+        # Track initial performance
+        initial_metrics = self._calculate_metrics(initial_result)
+        self._record_evolution_step(workflow_id, initial_result, initial_metrics)
+
+        # Check if evolution is needed
+        if not self._should_evolve(initial_metrics):
+            return initial_result
+
+        # Perform evolution iterations
+        best_result = initial_result
+        best_metrics = initial_metrics
+
+        for iteration in range(self._max_evolution_iterations):
+            # Generate improved workflow
+            evolved_workflow = await self._evolve_workflow(
+                workflow_id, best_result, best_metrics, iteration
+            )
+
+            if evolved_workflow:
+                # Execute evolved workflow
+                evolved_result = await self._execute_evolved_workflow(
+                    evolved_workflow, context, pattern_name, **kwargs
+                )
+
+                evolved_metrics = self._calculate_metrics(evolved_result)
+
+                # Record evolution step
+                self._record_evolution_step(workflow_id, evolved_result, evolved_metrics)
+
+                # Check if this is better
+                if self._is_improved(best_metrics, evolved_metrics):
+                    best_result = evolved_result
+                    best_metrics = evolved_metrics
+                else:
+                    # No improvement, stop evolving
+                    break
+
+        return best_result
+
+    def _calculate_metrics(self, r
+"""
 
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field

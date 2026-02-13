@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,9 +34,9 @@ logging.basicConfig(level=logging.DEBUG, format="%(message)s")
 """
 
 
-class Util:
+class util:
     """
-    A static class containing useful variables and methods
+    A static class for which contain some useful variables and methods
     """
 
     HEADER = "\033[95m"
@@ -50,11 +51,11 @@ class Util:
 
     @staticmethod
     def mod_print(text_output, color):
-        print(color + "{}".format(text_output) + Util.ENDC)
+        print(color + "{}".format(text_output) + util.ENDC)
 
     @staticmethod
     def mod_log(text, color):
-        logging.info(color + "{}".format(text) + Util.ENDC)
+        logging.info(color + "{}".format(text) + util.ENDC)
 
 
 class ReportGen(object):
@@ -86,7 +87,7 @@ class ReportGen(object):
             }
             render = t_templates_str.get(template_name, "")
             if not render:
-                Util.mod_log(f"[-] ERROR: Template {template_name} not found.", Util.FAIL)
+                util.mod_log(f"[-] ERROR: Template {template_name} not found.", util.FAIL)
                 return ""
 
             for k, v in datas.items():
@@ -96,7 +97,7 @@ class ReportGen(object):
             return render
 
         except Exception as e:
-            Util.mod_log(f"[-] ERROR in render_template: {str(e)}", Util.FAIL)
+            util.mod_log(f"[-] ERROR in render_template: {str(e)}", util.FAIL)
             return ""
 
     def list_to_html(self, list_items):
@@ -105,13 +106,13 @@ class ReportGen(object):
         """
         try:
             if not isinstance(list_items, list):
-                Util.mod_log("[-] ERROR: The provided input is not a list.", Util.FAIL)
+                util.mod_log("[-] ERROR: The provided input is not a list.", util.FAIL)
                 return ""
             items = [f"<li>{perm}</li>" for perm in list_items]
             return "<ul>" + "\n".join(items) + "</ul>"
 
         except Exception as e:
-            Util.mod_log(f"[-] ERROR in list_to_html: {str(e)}", Util.FAIL)
+            util.mod_log(f"[-] ERROR in list_to_html: {str(e)}", util.FAIL)
             return ""
 
     def grenerate_html_report(self, report, html_report_path):
@@ -124,7 +125,7 @@ class ReportGen(object):
             print("report generated")
 
         except Exception as e:
-            Util.mod_log(f"[-] ERROR in generate_html_report: {str(e)}", Util.FAIL)
+            util.mod_log(f"[-] ERROR in generate_html_report: {str(e)}", util.FAIL)
 
     def load_template(self, template_path):
         """
@@ -134,7 +135,7 @@ class ReportGen(object):
             with open(self.template_path) as f:
                 return f.read()
         except Exception as e:
-            Util.mod_log(f"[-] ERROR in load_template: {str(e)}", Util.FAIL)
+            util.mod_log(f"[-] ERROR in load_template: {str(e)}", util.FAIL)
             return ""
 
     def grep_keyword(self, keyword, txt_ouput: bool = False):
@@ -211,7 +212,7 @@ class ReportGen(object):
             return output
 
         except Exception as e:
-            Util.mod_log(f"[-] ERROR in add_sundarta_for_grep: {str(e)}", Util.FAIL)
+            util.mod_log(f"[-] ERROR in add_sundarta_for_grep: {str(e)}", util.FAIL)
             return ""
 
     def add_html_tag(self, grep_result, regexp):
@@ -237,7 +238,7 @@ class ReportGen(object):
             return output
 
         except Exception as e:
-            Util.mod_log(f"[-] ERROR in add_html_tag: {str(e)}", Util.FAIL)
+            util.mod_log(f"[-] ERROR in add_html_tag: {str(e)}", util.FAIL)
             return ""
 
     def get_build_information(self):
@@ -252,7 +253,7 @@ class ReportGen(object):
             return version
 
         except Exception as e:
-            Util.mod_log(f"[-] ERROR in get_build_information: {str(e)}", Util.FAIL)
+            util.mod_log(f"[-] ERROR in get_build_information: {str(e)}", util.FAIL)
             return "?"
 
     def extract_permissions(self, manifest):
@@ -268,7 +269,7 @@ class ReportGen(object):
             return permissions
 
         except Exception as e:
-            Util.mod_log(f"[-] ERROR in extract_permissions: {str(e)}", Util.FAIL)
+            util.mod_log(f"[-] ERROR in extract_permissions: {str(e)}", util.FAIL)
             return []
 
     def extract_dangerous_permissions(self, manifest):
@@ -324,7 +325,7 @@ class ReportGen(object):
                         permissions.append(permission_name)
             return permissions
         except Exception as e:
-            Util.mod_log(f"[-] ERROR in extract_dangerous_permissions: {str(e)}", Util.FAIL)
+            util.mod_log(f"[-] ERROR in extract_dangerous_permissions: {str(e)}", util.FAIL)
             return []
 
     def convert_html_to_pdf(self, html_file, pdf_name):
@@ -357,7 +358,7 @@ class ReportGen(object):
             os.makedirs(os.path.dirname(json_report_path), exist_ok=True)
         with open(json_report_path, "w") as json_file:
             json.dump(json_response, json_file, indent=4)
-        Util.mod_print(f"[+] Generated JSON report - {json_report_path}", Util.OKCYAN)
+        util.mod_print(f"[+] Generated JSON report - {json_report_path}", util.OKCYAN)
 
     def create_obj_for_report(self, txt_output: bool = False):
         manifest = self.manifest
@@ -447,9 +448,9 @@ class ReportGen(object):
                 os.makedirs(os.path.dirname(txt_report_path), exist_ok=True)
             with open(txt_report_path, "w", encoding="utf-8") as f:
                 f.write(result)
-            Util.mod_print(f"[+] Generated TXT report - {txt_report_path}", Util.OKCYAN)
+            util.mod_print(f"[+] Generated TXT report - {txt_report_path}", util.OKCYAN)
         except Exception as e:
-            Util.mod_print(f"[-] {str(e)}", Util.FAIL)
+            util.mod_print(f"[-] {str(e)}", util.FAIL)
 
     def generate_html_pdf_report(self, report_type):
         """
@@ -474,14 +475,14 @@ class ReportGen(object):
 
             obj.grenerate_html_report(report_content, html_report_path)
             if report_type == "html":
-                Util.mod_print(f"[+] Generated HTML report - {html_report_path}", Util.OKCYAN)
+                util.mod_print(f"[+] Generated HTML report - {html_report_path}", util.OKCYAN)
 
             # Converting html report to pdf.
             if report_type == "pdf":
                 pdf_name = f"report_{cleaned_apk_name}.pdf"
                 pdf_path = os.path.join(os.path.dirname(html_report_path), pdf_name)
                 obj.convert_html_to_pdf(html_report_path, pdf_path)
-                Util.mod_print(f"[+] Generated PDF report - {pdf_path}", Util.OKCYAN)
+                util.mod_print(f"[+] Generated PDF report - {pdf_path}", util.OKCYAN)
 
         except Exception as e:
-            Util.mod_print(f"[-] {str(e)}", Util.FAIL)
+            util.mod_print(f"[-] {str(e)}", util.FAIL)

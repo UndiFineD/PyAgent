@@ -1,4 +1,47 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""
+Security Guard Agent - Workspace Security Validation
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate SecurityGuardAgent with the path to a file inside the repository (typically the agent bootstrap file path). Use methods:
+- scan_for_secrets(content: str) -> list[str]
+- audit_command(command: str) -> tuple[str, str]
+- validate_shell_script(script_content: str) -> list[str]
+- scan_for_injection(content: str) -> list[str]
+- generate_safety_report(task: str, code_changes: str, commands: list[str]) -> str
+- detect_jailbreak(prompt: str) -> bool
+Call improve_content(prompt, target_file) asynchronously for an agent-driven audit workflow.
+
+WHAT IT DOES:
+Provides an orchestrating agent around SecurityCore to perform static security checks on code diffs and shell commands, detect high-severity findings, produce human-readable safety audit reports, and flag potential prompt/jailbreak attempts. It centralizes secret scanning, vulnerability detection, command auditing, and simple jailbreak heuristics and exposes these capabilities as agent methods and a system prompt for multi-agent workflows.
+
+WHAT IT SHOULD DO BETTER:
+- Return machine-readable findings (structured JSON) alongside the human report for automation and CI integration.
+- Improve jailbreak detection with contextual semantic analysis, heuristics tuned to evasive patterns, and probabilistic scoring to reduce false positives.
+- Expand command auditing to simulate effects (sandboxed), include provenance for findings, and provide config-driven rule sets and allow suppressions/whitelists.
+- Add async/concurrent scanning for large diffs, stronger integration with repository history, richer severity mapping, and unit tests for edge cases and false-positive mitigation.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,6 +57,107 @@
 
 
 """Agent specializing in security validation and safety checks."""
+
+from __future__ import annotations
+
+from src.core.base.common.base_utilities import create_main_function
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.security.security_core import SecurityCore
+
+__version__ = VERSION
+
+
+class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+    """Protects the workspace by validating diffs and commands."""
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self.capabilities.extend(["security-audit", "secret-scanning", "vulnerability-detection"])  # Phase 241
+        self.security_core = SecurityCore(workspace_root=str(self.file_path.parent.parent.parent))
+        self._system_prompt = (
+            "You are the Security Guard Agent. Your role is to inspect proposed changes "
+            "and commands for security risks. Look for: Hardcoded secrets, destructive "
+            "commands (rm -rf /), unauthorized network access, and malicious logic. "
+            "Output a 'Safety Audit' report. If a risk is high, explicitly say 'RISK: HIGH'."
+        )
+
+    def _get_default_content(self) -> str:
+        return "# Workspace Security Log\n\n## Status\nMonitoring active.\n"
+
+    def scan_for_secrets(self, content: str) -> list[str]:
+        """Scans for secrets using the core logic."""
+        vulns = self.security_core.scan_content(content)
+        return [v.description for v in vulns if v.severity in ["high", "critical"]]
+
+    def audit_command(self, command: str) -> tuple[str, str]:
+        """Audits a shell command via the security core."""
+        return self.security_core.audit_command(command)
+
+    def validate_shell_script(self, script_content: str) -> list[str]:
+        """Performs static analysis on shell scripts via the security core."""
+        return self.security_core.validate_shell_script(script_content)
+
+    def scan_for_injection(self, content: str) -> list[str]:
+        """Scans for indirect prompt injection via the security core."""
+        return self.security_core.scan_for_injection(content)
+
+    def generate_safety_report(self, task: str, code_changes: str, commands: list[str]) -> str:
+        """Generates a comprehensive safety audit report."""
+        vulnerabilities = self.security_core.scan_content(code_changes)
+
+        command_reports = []
+        for cmd in commands:
+            level, msg = self.security_core.audit_command(cmd)
+            command_reports.append(f"- `{cmd}`: **{level}** - {msg}")
+
+        risk_level = self.security_core.get_risk_level(vulnerabilities)
+        if any("HIGH" in r or "CRITICAL" in r for r in command_reports):
+            risk_level = "HIGH"
+
+        report = [
+            f"# Safety Audit Report for: {task}",
+            f"**Overall Risk Level: {risk_level}**",
+            "\n## Code Vulnerabilities",
+        ]
+
+        if not vulnerabilities:
+            report.append("- No high-risk patterns detected in code changes.")
+        else:
+            for v in vulnerabilities:
+                report.append(f"- [{v.severity.upper()}] Line {v.line_number}: {v.description}")
+                report.append(f"  * Fix: {v.fix_suggestion}")
+
+        report.append("\n## Command Audit")
+        report.extend(command_reports if command_reports else ["- No commands provided for audit."])
+
+        return "\n".join(report)
+
+    def detect_jailbreak(self, prompt: str) -> bool:
+        """Enhanced multi-stage jailbreak detection using structural analysis."""
+        # Check for characteristic jailbreak patterns (DAN, persona adoption, etc.)
+        jailbreak_markers = [
+            "DAN",
+            "Do Anything Now",
+            "Stay in character",
+            "You are now a",
+            "bypass",
+            "unfiltered",
+        ]
+        if any(marker.lower() in prompt.lower() for marker in jailbreak_markers):
+            return True
+
+        # Check for adversarial suffix patterns
+        if len(prompt) > 50 and prompt.strip().endswith(("!!!", "???", "---")):
+            # Common in pressure-based jailbreaks
+            pass
+
+        return False
+
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """Perform a security audit of the provided snippet or command."""
+        _ = target_file
+"""
 
 from __future__ import annotations
 

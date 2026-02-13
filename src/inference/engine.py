@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -55,18 +58,21 @@ from typing import Any, Optional
 # Optional dependencies
 try:
     from openai import AsyncOpenAI
+
     HAS_OPENAI = True
 except ImportError:
     HAS_OPENAI = False
 
 try:
     import anthropic  # noqa: F401
+
     HAS_ANTHROPIC = True
 except ImportError:
     HAS_ANTHROPIC = False
 
 try:
     import ollama
+
     HAS_OLLAMA = True
 except ImportError:
     ollama = None
@@ -74,6 +80,7 @@ except ImportError:
 
 try:
     from llama_cpp import Llama
+
     HAS_LLAMA_CPP = True
 except ImportError:
     HAS_LLAMA_CPP = False
@@ -107,9 +114,9 @@ class InferenceEngine:
             raise ImportError("openai package not installed. run 'pip install openai'")
         if self._openai_client is None:
             from openai import AsyncOpenAI
+
             self._openai_client = AsyncOpenAI(
-                api_key=self.api_key or os.environ.get("OPENAI_API_KEY", "mock-key"),
-                base_url=self.base_url
+                api_key=self.api_key or os.environ.get("OPENAI_API_KEY", "mock-key"), base_url=self.base_url
             )
         return self._openai_client
 
@@ -166,16 +173,12 @@ class InferenceEngine:
             # Initialize Llama (lazily in a real scenario, but here for demo)
             # In a production system, we'd use a singleton or pool
             from llama_cpp import Llama
+
             llm = Llama(model_path=model_path, verbose=False)
 
-            response = await asyncio.to_thread(
-                llm,
-                prompt,
-                max_tokens=max_tokens,
-                temperature=temperature
-            )
-            if isinstance(response, dict) and 'choices' in response:
-                return response['choices'][0]['text']
+            response = await asyncio.to_thread(llm, prompt, max_tokens=max_tokens, temperature=temperature)
+            if isinstance(response, dict) and "choices" in response:
+                return response["choices"][0]["text"]
             return str(response)
         except Exception as e:
             logger.error(f"llama-cpp generation failed: {e}")
@@ -188,7 +191,7 @@ class InferenceEngine:
                 model=model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=temperature,
-                max_tokens=max_tokens
+                max_tokens=max_tokens,
             )
             return response.choices[0].message.content or ""
         except Exception as e:
@@ -211,10 +214,10 @@ class InferenceEngine:
             response = await asyncio.to_thread(
                 ollama.chat,
                 model=model,
-                messages=[{'role': 'user', 'content': prompt}],
-                options={'temperature': temperature}
+                messages=[{"role": "user", "content": prompt}],
+                options={"temperature": temperature},
             )
-            return response['message']['content']
+            return response["message"]["content"]
         except (KeyError, ValueError, RuntimeError) as e:
             logger.error(f"Ollama generation failed: {e}")
             return f"Error: {str(e)}"

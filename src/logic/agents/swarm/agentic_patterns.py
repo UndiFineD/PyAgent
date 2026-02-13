@@ -17,7 +17,175 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
+"""
+Agentic Patterns - Sequential Agent Orchestration
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate SequentialAgentPattern with an OrchestratorWorkPatternMixin implementation and call execute_sequential with a CascadeContext, a SequentialAgentConfig, and an initial input dict.
+- Example:
+  config = SequentialAgentConfig(name="example", sub_agents=[{"name":"step1"},{"name":"step2"}])
+  pattern = SequentialAgentPattern(orchestrator)
+  result = await pattern.execute_sequential(context, config, {"prompt":"start"})
+
+WHAT IT DOES:
+- Orchestrates a list of sub-agents in sequence, passing outputs from one agent as inputs to the next, tracking results in a WorkState and optionally continuing on failure.
+- Creates per-agent child CascadeContext entries, executes agents via an internal _execute_single_agent coroutine, records outputs to execution_state, and assembles a final result structure describing successes and failures.
+
+WHAT IT SHOULD DO BETTER:
+- Provide explicit type hints and return schemas for agent results and execution_state to improve static analysis and downstream consumption.
+- Surface retry/backoff behavior and configurable timeouts per sub-agent (max_retries exists but lacks per-agent control and backoff).
+- Improve error reporting by including exception types, stack traces (when permitted), and structured error codes; add observability hooks (metrics, tracing) and better unit-test coverage for failure paths and input transformation logic.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """Sequential agent orchestration pattern."""
+
+import asyncio
+import logging
+from typing import List, Dict, Any, Optional
+from dataclasses import dataclass, field
+
+from src.core.base.common.models.communication_models import CascadeContext, WorkState
+from src.logic.agents.swarm.orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass
+class SequentialAgentConfig:
+    """Configuration for sequential agent execution."""
+
+    name: str
+    description: str = ""
+    sub_agents: List[Dict[str, Any]] = field(default_factory=list)
+    max_retries: int = 3
+    continue_on_failure: bool = False
+    output_key: Optional[str] = None
+
+
+class SequentialAgentPattern:
+    """
+    Sequential agent execution pattern.
+
+    This pattern executes agents in sequence, where each agent's output
+    can be used as input for subsequent agents. Inspired by agentic design
+    patterns from ADK (Agentic Design Patterns).
+    """
+
+    def __init__(self, orchestrator: OrchestratorWorkPatternMixin):
+        """Initialize the sequential agent pattern."""
+        self.orchestrator = orchestrator
+
+    async def execute_sequential(
+        self,
+        context: CascadeContext,
+        config: SequentialAgentConfig,
+        initial_input: Dict[str, Any],
+        **kwargs
+    ) -> Dict[str, Any]:
+        """
+        Execute agents in sequence.
+
+        Args:
+            context: Cascade context for execution
+            config: Sequential agent configuration
+            initial_input: Initial input for the first agent
+            **kwargs: Additional execution parameters
+
+        Returns:
+            Dict containing execution results
+        """
+        logger.info(f"Starting sequential execution for {config.name}")
+
+        # Initialize execution state
+        execution_state = WorkState()
+        execution_state.update("input", initial_input)
+        execution_state.update("results", {})
+
+        results = []
+        current_input = initial_input
+
+        for i, agent_config in enumerate(config.sub_agents):
+            agent_name = agent_config.get("name", f"agent_{i}")
+            logger.info(f"Executing agent {i+1}/{len(config.sub_agents)}: {agent_name}")
+
+            try:
+                # Create child context for this agent
+                agent_context = context.next_level(
+                    child_task_id=f"{context.task_id}_seq_{i}",
+                    agent_id=agent_name
+                )
+
+                # Execute the agent
+                agent_result = await self._execute_single_agent(
+                    agent_context,
+                    agent_config,
+                    current_input,
+                    execution_state,
+                    **kwargs
+                )
+
+                results.append({
+                    "agent": agent_name,
+                    "success": True,
+                    "result": agent_result,
+                    "sequence_index": i
+                })
+
+                # Update execution state with this agent's output
+                output_key = agent_config.get("output_key", f"agent_{i}_output")
+                execution_state.update(output_key, agent_result)
+                execution_state.results[output_key] = agent_result
+
+                # Prepare input for next agent
+                current_input = self._prepare_next_input(
+                    current_input, agent_result, agent_config
+                )
+
+            except Exception as e:
+                logger.error(f"Agent {agent_name} failed: {e}")
+
+                results.append({
+                    "agent": agent_name,
+                    "success": False,
+                    "error": str(e),
+                    "sequence_index": i
+                })
+
+                if not config.continue_on_failure:
+                    logger.error(f"Stopping sequential execution due to failure in {agent_name}")
+                    break
+
+                # Continue with previous input for next agent
+                continue
+
+        # Prepare final result
+        final_result = {
+            "pattern": "sequential",
+            "config": {
+                "name": config.name,
+"""
 
 import asyncio
 import logging

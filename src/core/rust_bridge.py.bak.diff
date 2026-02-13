@@ -1,0 +1,107 @@
+--- C:\DEV\PyAgent\src\core\rust_bridge.py.bak
++++ C:\DEV\PyAgent\src\core\rust_bridge.py
+@@ -1,4 +1,7 @@
+ #!/usr/bin/env python3
++# Refactored by copilot-placeholder
++# Refactored by copilot-placeholder
++# Refactored by copilot-placeholder
+ # Copyright 2026 PyAgent Authors
+ # Licensed under the Apache License, Version 2.0 (the "License");
+ # you may not use this file except in compliance with the License.
+@@ -37,8 +40,6 @@
+ - Add extensive unit tests for fallbacks, and optimize fallback implementations (e.g., use thread-safe caches, deterministic hashing) and better typing for returned structures.
+ """
+ 
+-
+-
+ from __future__ import annotations
+ 
+ import logging
+@@ -46,6 +47,7 @@
+ 
+ try:
+     import rust_core as rc
++
+     RUST_AVAILABLE = True
+ except ImportError:
+     rc = None
+@@ -102,6 +104,7 @@
+     @staticmethod
+     def _calculate_shard_id_fallback(key: str, shard_count: int) -> int:
+         import hashlib
++
+         h = hashlib.md5(key.encode()).digest()
+         seed = int.from_bytes(h[:8], "big")
+         return seed % shard_count
+@@ -116,32 +119,19 @@
+         if not query_vec or not database:
+             return []
+ 
+-        return get_bridge()._try_rust_call(
+-            "search_vector_rust",
+-            query_vec,
+-            database,
+-            top_k,
+-            fallback=lambda: []
+-        )
++        return get_bridge()._try_rust_call("search_vector_rust", query_vec, database, top_k, fallback=lambda: [])
+ 
+     @staticmethod
+     def manage_kv_blocks(num_blocks: int, block_size: int) -> List[int]:
+         """Paged Attention: Get available block offsets."""
+         return get_bridge()._try_rust_call(
+-            "block_manager_rust",
+-            num_blocks,
+-            block_size,
+-            fallback=lambda: [i * block_size for i in range(num_blocks)]
++            "block_manager_rust", num_blocks, block_size, fallback=lambda: [i * block_size for i in range(num_blocks)]
+         )
+ 
+     @staticmethod
+     def get_token_hash(tokens: List[int]) -> str:
+         """High-speed token sequence hashing for prefix caching."""
+-        return get_bridge()._try_rust_call(
+-            "kv_block_hash_rust",
+-            tokens,
+-            fallback=lambda: str(hash(tuple(tokens)))
+-        )
++        return get_bridge()._try_rust_call("kv_block_hash_rust", tokens, fallback=lambda: str(hash(tuple(tokens))))
+ 
+     def execute(self, method_name: str, params: Dict[str, Any]) -> Any:
+         """Generic execution router for Rust functions."""
+@@ -274,6 +264,7 @@
+     @staticmethod
+     def _get_imports_fallback(source: str) -> List[str]:
+         import ast
++
+         try:
+             tree = ast.parse(source)
+             imports = []
+@@ -309,11 +300,9 @@
+ 
+         results = []
+         for line, idx, groups in raw:
+-            results.append({
+-                "line": line,
+-                "pattern": patterns[idx] if idx < len(patterns) else "Unknown",
+-                "groups": groups
+-            })
++            results.append(
++                {"line": line, "pattern": patterns[idx] if idx < len(patterns) else "Unknown", "groups": groups}
++            )
+         return results
+ 
+     @staticmethod
+@@ -335,11 +324,7 @@
+ 
+         results = []
+         for name, line, matched_text in raw:
+-            results.append({
+-                "risk_type": name,
+-                "line": line,
+-                "text": matched_text
+-            })
++            results.append({"risk_type": name, "line": line, "text": matched_text})
+         return results
+ 
+     @staticmethod

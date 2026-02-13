@@ -1,4 +1,41 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""
+Obsidian Code Describer Agent - Obsidian Vault Documentation Specialist
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate ObsidianCodeDescriberAgent with a target file path and call describe_file_to_vault(target_file, vault_path, include_classes=True, include_functions=True, generate_moc=False) to produce Obsidian-formatted Markdown notes into the specified vault directory.
+
+WHAT IT DOES:
+Analyzes a Python source file, parses code entities (classes, functions, modules), generates an Obsidian-compatible main file note plus per-entity notes with YAML frontmatter and [[wikilinks]], optionally creating a Map of Content (MOC), and saves notes to the provided vault path.
+
+WHAT IT SHOULD DO BETTER:
+Improve parsing accuracy (AST-based instead of regex), add robust handling for nested and private entities, perform async file I/O and transactional filesystem changes using StateTransaction, emit richer Dataview metadata, better dependency resolution for wikilinks, include comprehensive logging and error reporting, and add unit tests and incremental update semantics to avoid overwriting user edits.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +56,132 @@
 
 """
 Obsidian code describer agent.py module.
+"""
+# ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
+
+from __future__ import annotations
+
+import contextlib
+import logging
+import re
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class NoteType(Enum):
+    """Types of notes in the Obsidian vault."""
+    FILE = "file"
+    CLASS = "class"
+    FUNCTION = "function"
+    MODULE = "module"
+    CONCEPT = "concept"
+    INDEX = "index"
+
+
+@dataclass
+class CodeEntity:
+    """Represents a code entity to document."""
+
+    name: str
+    entity_type: str  # class, function, variable, etc.
+    file_path: str
+    line_number: int = 0
+    docstring: Optional[str] = None
+    dependencies: List[str] = field(default_factory=list)
+
+
+@dataclass
+class VaultNote:
+    """Represents an Obsidian note."""
+
+    title: str
+    note_type: NoteType
+    content: str
+    frontmatter: Dict[str, Any] = field(default_factory=dict)
+    wikilinks: Set[str] = field(default_factory=set)
+
+
+# pylint: disable=too-many-ancestors
+class ObsidianCodeDescriberAgent(BaseAgent):
+    """
+    Agent specializing in describing code and generating markdown files
+    formatted for an Obsidian knowledge vault (with [[wikilinks]]).
+    """
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._note_cache: Dict[str, VaultNote] = {}
+        self._entity_registry: Dict[str, CodeEntity] = {}
+        self._vault_path: Optional[Path] = None
+        self._system_prompt = (
+            "You are the Obsidian Vault Code Describing Agent. You analyze codebases "
+            "and create interconnected Markdown notes. Use [[wikilinks]] for cross-references. "
+            "Include YAML frontmatter for Obsidian plugins (e.g., Dataview). "
+            "Create comprehensive, navigable documentation."
+        )
+
+    @as_tool
+    # pylint: disable=too-many-positional-arguments
+    async def describe_file_to_vault(
+        self,
+        target_file: str,
+        vault_path: str,
+        include_classes: bool = True,
+        include_functions: bool = True,
+        generate_moc: bool = False,
+    ) -> Dict[str, Any]:
+        """Analyzes a file and creates corresponding Obsidian notes."""
+        target = Path(target_file)
+        if not target.exists():
+            return {"success": False, "error": f"File not found: {target_file}"}
+
+        self._vault_path = Path(vault_path)
+        self._vault_path.mkdir(parents=True, exist_ok=True)
+
+        code_content = target.read_text(encoding="utf-8")
+
+        # Parse code structure
+        entities = self._parse_code_entities(code_content, str(target))
+
+        # Generate main file note
+        main_note = await self._generate_file_note(target, code_content, entities)
+        notes_created = [self._save_note(main_note)]
+
+        # Generate notes for classes and functions if requested
+        if include_classes:
+            for entity in entities:
+                if entity.entity_type == "class":
+                    class_note = await self._generate_entity_note(entity, code_content)
+                    notes_created.append(self._save_note(class_note))
+
+        if include_functions:
+            for entity in entities:
+                if entity.entity_type == "function" and not entity.name.startswith("_"):
+                    func_note = await self._generate_entity_note(entity, code_content)
+                    notes_created.append(self._save_note(func_note))
+
+        # Generate MOC (Map of Content) if requested
+        if generate_moc:
+            moc_note = self._generate_moc(target.stem, notes_created)
+            notes_created.append(self._save_note(moc_note))
+
+        return {
+            "success": True,
+            "notes_created": notes_created,
+            "entities_documented": len(entities),
+            "vault_path": str(self._vault_path),
+        }
+
+    @as_tool
 """
 # ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
 

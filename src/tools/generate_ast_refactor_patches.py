@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Generate conservative AST-based refactor patch proposals for top-priority files.
+"""
+Generate conservative AST-based refactor patch proposals for top-priority files.
 
 This script:
 - Loads the bandit report (.external/static_checks/bandit.json) or uses the prepared
@@ -25,6 +26,7 @@ This script:
 Notes:
 - This only writes patch proposals and does not modify source files.
 """
+
 from __future__ import annotations
 import json
 from pathlib import Path
@@ -39,6 +41,10 @@ TARGET_PREFIX = ROOT / 'src' / 'external_candidates' / 'auto'
 
 
 def load_bandit_results():
+    """
+    Loads the bandit results from the JSON file, 
+    returning an empty dict if not found or on error.
+    """
     if not BANDIT_JSON.exists():
         return {}
     try:
@@ -48,6 +54,7 @@ def load_bandit_results():
 
 
 def top_files_from_bandit(results: dict, top_n: int = 30) -> list[str]:
+    """Extracts the top N files with the highest weighted issue severity from bandit results."""
     files: dict[str, int] = {}
     for r in results.get('results', []):
         fn = r.get('filename')
@@ -60,9 +67,14 @@ def top_files_from_bandit(results: dict, top_n: int = 30) -> list[str]:
 
 
 class SubprocessTransformer(ast.NodeTransformer):
+    """AST transformer that replaces subprocess calls with a safe wrapper."""
     DANGEROUS_ATTRS = {'Popen', 'call', 'run', 'check_output'}
 
     def visit_Call(self, node):
+        """
+        Transforms calls to subprocess.<attr>(...) or direct Popen(...) 
+        into safe_subprocess_run(...).
+        """
         # transform subprocess.<attr>(...) -> safe_subprocess_run(...)
         func = node.func
         if isinstance(func, ast.Attribute) and isinstance(func.value, ast.Name):
@@ -100,6 +112,7 @@ SAFE_WRAPPER_SRC = '''def safe_subprocess_run(*args, **kwargs):
 
 
 def create_patch_for_file(path: Path) -> Path | None:
+    """Creates a unified diff patch for the given file if transformations are applied."""
     try:
         src = path.read_text(encoding='utf-8', errors='ignore')
         tree = ast.parse(src)
@@ -134,6 +147,9 @@ def create_patch_for_file(path: Path) -> Path | None:
 
 
 def main() -> int:
+    """
+    Main entry point for AST-based refactor patch generation.
+    """
     results = load_bandit_results()
     top_files = top_files_from_bandit(results, top_n=40)
     created = 0

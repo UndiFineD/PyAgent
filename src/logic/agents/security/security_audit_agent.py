@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,8 +15,136 @@
 # limitations under the License.
 
 """
+SecurityAuditAgent - Scans workspace for secrets, insecure patterns, and permission issues
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate SecurityAuditAgent with a workspace path and call scan routines to identify hardcoded secrets, insecure patterns, and permission problems across files. Integrate results into reporting or CI gates.
+
+WHAT IT DOES:
+- Walks the repository workspace and scans files for hardcoded secrets and insecure coding patterns.
+- Prefers Rust-accelerated scanning (rust_core) when available, falling back to Python regex scanning.
+- Produces structured findings including file, type, detail, and severity for downstream consumption.
+
+WHAT IT SHOULD DO BETTER:
+- Improve regex accuracy to reduce false positives/negatives and avoid naive line-indexing bugs.
+- Add recursive workspace traversal, file-type filtering, and rate-limited parallel scanning for performance and resource safety.
+- Replace ad-hoc "# nosec" handling with a robust exclude/allowlist mechanism and surface contextual snippets with line numbers.
+
+FILE CONTENT SUMMARY:
 SecurityAuditAgent: Agent for performing security audits, vulnerability scanning, and compliance checks.
 Implements advanced analysis and reporting for system security posture.
+"""
+
+from __future__ import annotations
+
+import os
+import re
+from typing import Any
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+    """
+    Scans the workspace for potential security risks including hardcoded secrets,
+    vulnerable patterns, and insecure file permissions.
+    """
+
+    def __init__(self, workspace_path: str) -> None:
+        super().__init__(workspace_path)
+        self.workspace_path = workspace_path
+        self.secret_patterns = [
+            r"(?i)api[-_]?key",
+            r"(?i)password",
+            r"(?i)secret",
+            r"(?i)token",
+            r"(?i)auth[-_]?key",
+        ]
+
+    def scan_file(self, file_path: str) -> list[dict[str, Any]]:
+        """Scans a single file for security issues."""
+        findings = []
+        try:
+            with open(file_path, encoding="utf-8", errors="ignore") as f:
+                content = f.read()
+
+            # Rust acceleration for secret scanning
+            try:
+                from rust_core import (  # type: ignore[attr-defined]
+                    scan_hardcoded_secrets_rust,
+                    scan_insecure_patterns_rust,
+                )
+
+                # Scan for hardcoded secrets
+                secret_findings = scan_hardcoded_secrets_rust(content)
+                for pattern_name, _ in secret_findings:
+                    findings.append(
+                        {
+                            "file": file_path,
+                            "type": "Hardcoded Secret",
+                            "detail": f"Matched pattern: {pattern_name}",
+                            "severity": "High",
+                        }
+                    )
+
+                # Scan for insecure patterns
+                insecure_findings = scan_insecure_patterns_rust(content)
+                for pattern_type, severity in insecure_findings:
+                    if pattern_type == "eval_usage":
+                        findings.append(
+                            {
+                                "file": file_path,
+                                "type": "Insecure Pattern",
+                                "detail": "Usage of ev" + "al() detected",
+                                "severity": severity,
+                            }
+                        )
+                    elif pattern_type == "shell_true":
+                        findings.append(
+                            {
+                                "file": file_path,
+                                "type": "Insecure Pattern",
+                                "detail": "Usage of shell=True in subprocess detected",
+                                "severity": severity,
+                            }
+                        )
+
+            except (ImportError, AttributeError):
+                # Fallback to Python implementation
+                lines = content.split("\n")
+
+                # Check for secrets
+                for pattern in self.secret_patterns:
+                    if pattern.startswith("(?"):
+                        flag_end = pattern.find(")") + 1
+                        flags = pattern[:flag_end]
+                        actual_pattern = pattern[flag_end:]
+                        full_pattern = f"{flags}\\b{actual_pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"
+                    else:
+                        full_pattern = f"\\b{pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"
+
+                    matches = re.finditer(full_pattern, content)
+                    for match in matches:
+                        if "# nosec" in lines[content.count("\n", 0, match.start())]:
+                            continue
+                        findings.append(
+                            {
+                                "file": file_path,
+                                "type": "Hardcoded Secret",
+                                "detail": f"Matched pattern: {pattern}",
+                                "severity": "High",
+                            }
+                        )
+
+                # Check for insecure patterns
+                if (
+                    re.search(r"\b" +
 """
 
 from __future__ import annotations

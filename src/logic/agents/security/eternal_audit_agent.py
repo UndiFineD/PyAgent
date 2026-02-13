@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +15,29 @@
 # limitations under the License.
 
 """
-Eternal audit agent.py module.
+EternalAuditAgent - Append only verifiable audit trail
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate EternalAuditAgent with a file path then call log_event to record critical events and verify_audit_trail to validate the chain
+WHAT IT DOES:
+- Selectively records critical errors and high severity events to an append only JSONL audit shard
+- Chains entries using sha256 over sorted JSON payloads to provide temporal integrity and simulates a simple blockchain via previous_hash links
+- Calls internal _record for intelligence recording and emits logging info with a short hash prefix
+WHAT IT SHOULD DO BETTER:
+- Implement atomic writes and file locking to avoid corruption during concurrent writes and shard rotation for size management
+- Add cryptographic signing and external anchoring for stronger non repudiation and tamper evidence
+- Move blocking file IO to asyncio friendly patterns and add retention, indexing, and compact verification modes for large trails
+FILE CONTENT SUMMARY:
+- Module header with Apache License 2.0 and module docstring
+- Imports include hashlib, json, logging, os, time, typing Any and framework helpers as_tool BaseAgent VERSION
+- Defines EternalAuditAgent class extending BaseAgent with CRITICAL_ACTIONS list for selective logging
+- __init__ creates data/logs/audit_trail, sets current_shard path and initializes last_hash then calls _initialize_last_hash
+- _initialize_last_hash seeks near end of current shard, reads last JSON line and retrieves stored hash with safe fallbacks
+- log_event decorated as_tool builds payload with timestamp agent action details previous_hash, computes current sha256 over sorted JSON, appends hash to payload, writes JSON line to shard, updates last_hash, calls _record and logs info, returns short hash acknowledgment or skips routine events when selective_logging is enabled
+- verify_audit_trail decorated as_tool reads the JSONL shard, iterates entries, recomputes hashes, validates previous_hash chain, accumulates errors and returns status dict with findings
 """
 
 from __future__ import annotations

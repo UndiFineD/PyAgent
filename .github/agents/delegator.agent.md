@@ -2,7 +2,8 @@
 name: delegator
 description: High-level swarm orchestrator that decomposes complex tasks and delegates to specialist agents in parallel.
 argument-hint: A complex engineering requirement (e.g., "build a full-stack feature" or "refactor the networking layer").
-tools: ['runSubagent', 'read_file', 'run_in_terminal', 'file_search', 'runTests', 'manage_todo_list', 'semantic_search']
+tools: ['runSubagent', 'read_file', 'run_in_terminal', 'file_search', 'runTests', 'manage_todo_list', 'semantic_search', 'rg']
+models:  only use github free models: 'GPT-5 mini' , 'Grok Code Fast 1' , 'Raptor mini (preview)' 
 ---
 # PyAgent Delegator (Swarm Orchestrator)
 

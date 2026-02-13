@@ -1,4 +1,45 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""
+WebSearchEssayAgent - Research-driven Essay Composition
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate WebSearchEssayAgent(context) and call the as_tool-decorated async method write_essay(subject, length="medium", style="academic", include_citations=True, target_audience="general") from the agent runtime or tool registry to perform multi-query web research and produce a structured essay with citations.
+
+WHAT IT DOES:
+- Conducts multi-query web research and caches Source objects per topic
+- Synthesizes findings into an EssayOutline and composes a full essay following a generated outline and configurable style/length
+- Returns structured metadata and essay content suitable for downstream formatting, publishing, or human review
+
+WHAT IT SHOULD DO BETTER:
+- Improve error handling and fallback when web queries return partial or contradictory data
+- Add configurable citation formatting options and verify source credibility (dates, authorship) automatically
+- Support incremental composition with checkpoints to allow partial work saving and human-in-the-loop edits
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +60,134 @@
 
 """
 Web search essay agent.py module.
+"""
+# WebSearchEssayAgent: Research-driven Essay Writing Specialist - Phase 319 Enhanced
+
+from __future__ import annotations
+
+import contextlib
+import json
+import logging
+import re
+import time
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.intelligence.search_agent import SearchAgent
+
+__version__ = VERSION
+
+
+class EssayStyle(Enum):
+    """Essay style options."""
+    ACADEMIC = "academic"
+    PROFESSIONAL = "professional"
+    TECHNICAL = "technical"
+    JOURNALISTIC = "journalistic"
+    PERSUASIVE = "persuasive"
+    EXPOSITORY = "expository"
+
+
+class EssayLength(Enum):
+    """Essay length options."""
+    SHORT = "short"  # ~500 words
+    MEDIUM = "medium"  # ~1000 words
+    LONG = "long"  # ~2000 words
+    COMPREHENSIVE = "comprehensive"  # ~3000+ words
+
+
+@dataclass
+class Source:
+    """Represents a research source."""
+
+    title: str
+    url: str
+    snippet: str
+    relevance: float = 0.0
+    date: Optional[str] = None
+
+
+@dataclass
+class EssayOutline:
+    """Represents an essay outline."""
+
+    title: str
+    thesis: str
+    sections: List[Dict[str, Any]]
+    sources: List[Source]
+
+
+# pylint: disable=too-many-ancestors
+class WebSearchEssayAgent(SearchAgent):
+    """
+    Agent that researches complex subjects via web search and
+    composes structured essays based on findings.
+    """
+
+    def __init__(self, context: str) -> None:
+        super().__init__(context)
+        self._research_cache: Dict[str, List[Source]] = {}
+        self._essay_history: List[Dict[str, Any]] = []
+        self._system_prompt = (
+            "You are the Subject WebSearch Essay Writing Agent. Your task is to: "
+            "1. Research the provided subject using web search tools. "
+            "2. Synthesize information from multiple sources. "
+            "3. Write a high-quality, academic or professional essay with proper citations. "
+            "4. Ensure logical flow, clear argumentation, and proper structure."
+        )
+
+    @as_tool
+    # pylint: disable=too-many-positional-arguments
+    async def write_essay(
+        self,
+        subject: str,
+        length: str = "medium",
+        style: str = "academic",
+        include_citations: bool = True,
+        target_audience: str = "general",
+    ) -> Dict[str, Any]:
+        """Researches a subject and writes an essay."""
+        logging.info(f"WebSearchEssayAgent: Researching subject: {subject}")
+
+        essay_style = EssayStyle(style) if style in [s.value for s in EssayStyle] else EssayStyle.ACADEMIC
+        essay_length = EssayLength(length) if length in [ell.value for ell in EssayLength] else EssayLength.MEDIUM
+
+        word_targets = {
+            EssayLength.SHORT: 500,
+            EssayLength.MEDIUM: 1000,
+            EssayLength.LONG: 2000,
+            EssayLength.COMPREHENSIVE: 3000,
+        }
+        target_words = word_targets.get(essay_length, 1000)
+
+        # Step 1: Multi-query research
+        sources = await self._research_topic(subject)
+
+        # Step 2: Generate outline
+        outline = await self._generate_outline(subject, sources, essay_style)
+
+        # Step 3: Compose essay
+        essay_prompt = (
+            f"Subject: {subject}\n"
+            f"Style: {essay_style.value}\n"
+            f"Target Audience: {target_audience}\n"
+            f"Target Length: ~{target_words} words\n\n"
+            f"Outline:\n{json.dumps(outline, indent=2)}\n\n"
+            f"Research Sources:\n{self._format_sources(sources)}\n\n"
+            "Write a well-structured essay following the outline. "
+            f"{'Include inline citations in [Author, Year] format.' if include_citations else ''}\n"
+            "Ensure:\n"
+            "1. Strong introduction with clear thesis\n"
+            "2. Well-developed body paragraphs with evidence\n"
+            "3. Smooth transitions between sections\n"
+            "4. Compelling conclusion that synthesizes the argument\n"
+            "5. Professional tone appropriate for the style"
+        )
+
+        essay = a
 """
 # WebSearchEssayAgent: Research-driven Essay Writing Specialist - Phase 319 Enhanced
 

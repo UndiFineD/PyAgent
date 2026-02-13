@@ -12,12 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Reduces consecutive newlines in Python files within a directory.
+"""
+
 import re
 import sys
 from pathlib import Path
 
 
 def reduce_newlines(directory: Path):
+    """Reduces consecutive newlines in Python files within the specified directory."""
     for p in directory.rglob("*.py"):
         if not p.is_file():
             continue

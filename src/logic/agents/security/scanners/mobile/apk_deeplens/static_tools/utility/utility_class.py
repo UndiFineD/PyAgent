@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,9 +20,9 @@ import traceback
 logging.basicConfig(level=logging.DEBUG, format="%(message)s")
 
 
-class util:
+class Util:
     """
-    A static class for which contain some useful variables and methods
+    A static class containing useful variables and methods
     """
 
     HEADER = "\033[95m"
@@ -41,7 +43,7 @@ class util:
         stack = traceback.extract_stack()
         filename, line_no, func_name, text = stack[-2]
         formatted_message = f"{filename}:{line_no}: {text_output}"
-        print(color + formatted_message + util.ENDC)
+        print(color + formatted_message + Util.ENDC)
 
     def mod_log(text, color):
-        logging.info(color + "{}".format(text) + util.ENDC)
+        logging.info(color + "{}".format(text) + Util.ENDC)

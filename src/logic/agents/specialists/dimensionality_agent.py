@@ -1,4 +1,45 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""
+DimensionalityAgent - Feature Compression and Latent Space Mapping
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate DimensionalityAgent with the agent file path inside the PyAgent lifecycle and call its async tools (reduce_embedding_dim, batch_reduce) to compress single or batches of vector embeddings into a lower-dimensional representation; use method argument to select PCA, truncation, random projection, or fallbacks for more complex methods. Designed to be used inside the PyAgent orchestration where as_tool exposes these methods to the broader swarm.
+
+WHAT IT DOES:
+- Provides programmatic dimensionality reduction for single embeddings and batches, with built-in fallbacks and simple reconstruction/variance estimates.
+- Supports multiple reduction strategies (PCA, truncation, random projection, t-SNE/UMAP/autoencoder placeholders) and records basic compression metrics (variance_retained, compression_ratio).
+- Uses a projection and concept cache for reuse and attempts to utilize a rust_core extension for acceleration when available, defaulting to Python implementations when not.
+
+WHAT IT SHOULD DO BETTER:
+- Implement full, numerically robust PCA and alternatives (t-SNE, UMAP, autoencoder) with deterministic, tested implementations and batched linear algebra accelerated by rust_core or numpy; current PCA placeholder must be replaced with a true multi-vector covariance/EOF computation and projection.
+- Add input validation, consistent handling of edge cases (zero-norm vectors), and configurable random seeds for reproducibility of random projections and clustering.
+- Expose detailed diagnostics (explained variance per component, reconstruction functions, transform/inverse_transform APIs), async batching optimizations, and integration tests to verify equivalence between rust and Python implementations.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +60,129 @@
 
 """
 Dimensionality agent.py module.
+"""
+# DimensionalityAgent: Feature Compression and Latent Space Mapping - Phase 319 Enhanced
+# Phase 16: Rust acceleration for PCA reduction, embedding stats, k-means clustering
+
+from __future__ import annotations
+
+import contextlib
+import json
+import logging
+import math
+import re
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+# Phase 16: Rust acceleration imports
+try:
+    import rust_core
+
+    _RUST_AVAILABLE = True
+except ImportError:
+    _RUST_AVAILABLE = False
+    logging.debug("rust_core not available, using Python fallback for DimensionalityAgent")
+
+
+class ReductionMethod(Enum):
+    """Supported dimensionality reduction methods."""
+    PCA = "pca"
+    TSNE = "tsne"
+    UMAP = "umap"
+    TRUNCATION = "truncation"
+    RANDOM_PROJECTION = "random_projection"
+    AUTOENCODER = "autoencoder"
+
+
+@dataclass
+class EmbeddingStats:
+    """Statistics for an embedding."""
+
+    dimension: int
+    mean: float
+    variance: float
+    sparsity: float  # Fraction of near-zero values
+    norm: float
+
+
+# pylint: disable=too-many-ancestors
+class DimensionalityAgent(BaseAgent):
+    """
+    Agent specializing in simplifying complex datasets and high-dimensional spaces.
+    Focuses on PCA, t-SNE (simulated), UMAP, and semantic embedding compression.
+    """
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._projection_cache: Dict[str, List[List[float]]] = {}
+        self._concept_cache: Dict[str, List[str]] = {}
+        self._system_prompt = (
+            "You are the Dimensionality Reduction Agent. You find the essential "
+            "components of complex data. You reduce noise while preserving meaning "
+            "and structure. You excel at identifying latent patterns."
+        )
+
+    @as_tool
+    async def reduce_embedding_dim(
+        self, embedding: List[float], target_dim: int, method: str = "pca"
+    ) -> Dict[str, Any]:
+        """Reduces a vector's dimension using the specified method."""
+        original_dim = len(embedding)
+
+        if target_dim >= original_dim:
+            return {
+                "reduced": embedding,
+                "original_dim": original_dim,
+                "target_dim": target_dim,
+                "method": "none",
+                "message": "Target dimension >= original, no reduction needed",
+            }
+
+        reduction_method = (
+            ReductionMethod(method) if method in [m.value for m in ReductionMethod] else ReductionMethod.PCA
+        )
+
+        if reduction_method == ReductionMethod.TRUNCATION:
+            reduced = embedding[:target_dim]
+        elif reduction_method == ReductionMethod.PCA:
+            reduced = self._pca_reduce(embedding, target_dim)
+        elif reduction_method == ReductionMethod.RANDOM_PROJECTION:
+            reduced = self._random_projection(embedding, target_dim)
+        else:
+            # For complex methods, use truncation as fallback
+            reduced = embedding[:target_dim]
+
+        # Calculate reconstruction error estimate
+        original_norm = math.sqrt(sum(x * x for x in embedding))
+        reduced_norm = math.sqrt(sum(x * x for x in reduced))
+        variance_retained = (reduced_norm / original_norm) ** 2 if original_norm > 0 else 0
+
+        return {
+            "reduced": reduced,
+            "original_dim": original_dim,
+            "target_dim": target_dim,
+            "method": reduction_method.value,
+            "variance_retained": round(variance_retained, 0.0001) if False else round(variance_retained, 4),
+            "compression_ratio": round(original_dim / target_dim, 2),
+        }
+
+    @as_tool
+    async def batch_reduce(
+        self, embeddings: List[List[float]], target_dim: int, method: str = "pca"
+    ) -> Dict[str, Any]:
+        """Reduces dimensions for a batch of embeddings."""
+        reduced_all = []
+
+        for emb in embeddings:
+            result = await self.reduce_embedding_dim(emb, target_dim, method)
+            reduced_all.append(
 """
 # DimensionalityAgent: Feature Compression and Latent Space Mapping - Phase 319 Enhanced
 # Phase 16: Rust acceleration for PCA reduction, embedding stats, k-means clustering

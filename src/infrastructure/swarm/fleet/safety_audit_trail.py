@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,8 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+SafetyAuditTrail
 
-"""Persistent audit log for safety violations and adversarial attempts."""
+Persistent audit log for safety violations and adversarial attempts.
+"""
 
 from __future__ import annotations
 
@@ -36,7 +41,7 @@ class SafetyAuditTrail:
         self.violations: list[Any] = []
         self._load_log()
 
-    def _load_log(self) -> str:
+    def _load_log(self) -> None:
         if self.log_path.exists():
             try:
                 with open(self.log_path, encoding='utf-8') as f:
@@ -57,7 +62,7 @@ class SafetyAuditTrail:
         self._save_log()
         logging.warning(f"SafetyAuditTrail: Logged {level} violation for {agent_name}.")
 
-    def _save_log(self) -> str:
+    def _save_log(self) -> None:
         try:
             with open(self.log_path, 'w', encoding='utf-8') as f:
                 json.dump(self.violations, f, indent=2)

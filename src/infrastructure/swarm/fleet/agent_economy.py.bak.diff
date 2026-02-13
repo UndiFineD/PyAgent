@@ -1,0 +1,15 @@
+--- C:\DEV\PyAgent\src\infrastructure\swarm\fleet\agent_economy.py.bak
++++ C:\DEV\PyAgent\src\infrastructure\swarm\fleet\agent_economy.py
+@@ -12,8 +12,10 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-
+-"""Agent economy and accounting engine.
++"""
++MarketPricingEngine and AgentEconomy 
++- Dynamic pricing and internal credit system for PyAgent Swarm.
++Agent economy and accounting engine.
+ Manages credits, bidding, and automated payments between agents.
+ """
+ 

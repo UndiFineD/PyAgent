@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,8 +15,89 @@
 # limitations under the License.
 
 """
+PolicyEnforcementAgent - Enforces security, privacy, and operational policies
+
+Brief Summary
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate with the workspace path and call evaluate_action(agent_id, action_type, metadata) before or during agent actions; use quarantine_agent/is_agent_quarantined to isolate misbehaving agents and inspect violation_log for audit.
+
+WHAT IT DOES:
+- Provides a lightweight policy evaluation engine with a small set of built-in policies (data leak prevention, token spend limits, required scans).
+- Logs detected violations with timestamps and supports quarantining agents to stop further activity.
+- Exposes simple programmatic APIs for enforcement and status queries suitable for runtime integration with an agent fleet.
+
+WHAT IT SHOULD DO BETTER:
+- Support configurable policy rules (YAML/JSON) and dynamic policy reload without restart.
+- Implement rate-limiting, token spend tracking, and aggregated metrics rather than a static max_token_spend_per_hour value.
+- Add richer metadata parsing, contextual risk scoring, alerting/integration hooks (SIEM, incident response), and secure persistence for violation logs and quarantine state.
+- Harden concurrency and atomicity (use StateTransaction) and add comprehensive unit tests and type hints for metadata schemas.
+
+FILE CONTENT SUMMARY:
 PolicyEnforcementAgent: Enforces security, privacy, and operational policies.
 Implements real-time policy checks and automated enforcement actions.
+"""
+
+from __future__ import annotations
+
+import time
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class PolicyEnforcementAgent:
+    """
+    Monitors agent activity against a set of governance-defined policies
+    and enforces restrictions (quarantining) if violations occur.
+    """
+
+    def __init__(self, workspace_path: str) -> None:
+        self.workspace_path = workspace_path
+        self.active_policies: dict[str, Any] = {
+            "no_external_data_leak": True,
+            "max_token_spend_per_hour": 100000,
+            "required_security_scan": True,
+        }
+        self.violation_log: list[dict[str, Any]] = []
+        self.quarantine_list: set[str] = set()
+
+    def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> dict[str, Any]:
+        """
+        Evaluates if an agent action complies with active policies.
+        """
+        _ = (agent_id, action_type, metadata)
+        violations = []
+
+        if action_type == "external_push" and self.active_policies["no_external_data_leak"]:
+            if "credentials" in str(metadata).lower():
+                violations.append("DATA_LEAK_PREVENTION")
+
+        if violations:
+            self.violation_log.append(
+                {
+                    "agent_id": agent_id,
+                    "violations": violations,
+                    "timestamp": time.time(),
+                }
+            )
+            return {"status": "violation", "details": violations}
+
+        return {"status": "authorized"}
+
+    def quarantine_agent(self, agent_id: str, reason: str) -> dict[str, Any]:
+        """
+        Isolates an agent from the fleet.
+        """
+        self.quarantine_list.add(agent_id)
+        return {"agent_id": agent_id, "status": "quarantined", "reason": reason}
+
+    def is_agent_quarantined(self, agent_id: str) -> bool:
+        """Checks if an agent is in the quarantine list."""
+        return agent_id in self.quarantine_list
 """
 
 from __future__ import annotations

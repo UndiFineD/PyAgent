@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,9 +14,9 @@
 # limitations under the License.
 
 """
+FleetLifecycleMixin
 Fleet lifecycle mixin.py module.
 """
-# Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
 
@@ -29,20 +30,22 @@ if TYPE_CHECKING:
 class FleetLifecycleMixin:
     """Mixin for agent lifecycle and biological swarm patterns in FleetManager."""
 
+    lifecycle_manager: FleetManager
+
     def register_agent(
-        self: FleetManager, name: str, agent_class: type[BaseAgent], file_path: str | None = None
+        self, name: str, agent_class: type[BaseAgent], file_path: str | None = None
     ) -> str:
         """Adds an agent to the fleet."""
         return self.lifecycle_manager.register_agent(name, agent_class, file_path)
 
-    def cell_divide(self: FleetManager, agent_name: str) -> str:
+    def cell_divide(self, agent_name: str) -> str:
         """Simulates biological mitosis."""
         return self.lifecycle_manager.cell_divide(agent_name)
 
-    def cell_differentiate(self: FleetManager, agent_name: str, specialization: str) -> str:
+    def cell_differentiate(self, agent_name: str, specialization: str) -> str:
         """Changes an agent's characteristics."""
         return self.lifecycle_manager.cell_differentiate(agent_name, specialization)
 
-    def cell_apoptosis(self: FleetManager, agent_name: str) -> str:
+    def cell_apoptosis(self, agent_name: str) -> str:
         """Cleanly shuts down and removes an agent."""
         return self.lifecycle_manager.cell_apoptosis(agent_name)

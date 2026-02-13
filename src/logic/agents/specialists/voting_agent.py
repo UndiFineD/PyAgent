@@ -1,4 +1,48 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""
+VotingAgent - Consensus and Multi-Agent Voting Specialist
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate and use inside the PyAgent swarm: from src.core.agents.voting_agent import VotingAgent
+- Create sessions and collect votes via the tool-wrapped async methods:
+  agent = VotingAgent(__file__); await agent.create_session("Which plan?", ["A","B"], method="ranked_choice")
+  await agent.cast_vote(session_id, voter_id, choice, weight=1.0, rankings=None, reasoning=None)
+
+WHAT IT DOES:
+- Provides an agent (VotingAgent) that manages VotingSession objects, collects Vote dataclasses, and computes consensus using multiple voting methods (majority, weighted, ranked-choice, Borda, approval, quadratic, consensus).
+- Exposes as_tool-decorated async methods (create_session, cast_vote, etc.) for integration into the PyAgent lifecycle; maintains in-memory sessions, enforces active-state and duplicate-voter checks, stores timestamps and optional reasoning for auditability.
+- Ships enumerations (VotingMethod, VoteStatus) and simple data models (Vote, VotingSession) to standardize vote representation and session lifecycle handling.
+
+WHAT IT SHOULD DO BETTER:
+- Persist sessions and votes to durable storage (StateTransaction-backed) to survive process restarts and to support audit and reconciliation.
+- Implement full, tested tally algorithms for each VotingMethod (ranked-choice instant-runoff, Borda scoring, quadratic cost math, tie-break strategies) and surface detailed result metadata.
+- Add authentication/authorization for voters, replay-protection, conflict resolution for concurrent vote submissions, telemetry for voting anomalies, and pluggable tie/consensus policies; extract heavy computation into a Core class for Rust acceleration as per repository conventions.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +63,139 @@
 
 """
 Voting agent.py module.
+"""
+# VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
+
+from __future__ import annotations
+
+import contextlib
+import json
+import logging
+import re
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class VotingMethod(Enum):
+    """Supported consensus and voting methodologies."""
+    MAJORITY = "majority"
+    WEIGHTED = "weighted"
+    RANKED_CHOICE = "ranked_choice"
+    BORDA_COUNT = "borda_count"
+    APPROVAL = "approval"
+    QUADRATIC = "quadratic"
+    CONSENSUS = "consensus"
+
+
+class VoteStatus(Enum):
+    """Current state of a voting session."""
+    PENDING = "pending"
+    ACTIVE = "active"
+    COMPLETED = "completed"
+    TIED = "tied"
+    INCONCLUSIVE = "inconclusive"
+
+
+@dataclass
+class Vote:
+    """Represents a single vote."""
+
+    voter_id: str
+    choice: str
+    weight: float = 1.0
+    rankings: Optional[List[str]] = None  # For ranked choice
+    timestamp: float = field(default_factory=time.time)
+    reasoning: Optional[str] = None
+
+
+@dataclass
+class VotingSession:
+    """Represents a voting session."""
+
+    session_id: str
+    question: str
+    options: List[str]
+    method: VotingMethod
+    votes: List[Vote] = field(default_factory=list)
+    status: VoteStatus = VoteStatus.PENDING
+    winner: Optional[str] = None
+    results: Dict[str, Any] = field(default_factory=dict)
+    created_at: float = field(default_factory=time.time)
+
+
+# pylint: disable=too-many-ancestors
+class VotingAgent(BaseAgent):
+    """
+    Agent specializing in evaluation and consensus.
+    Gathers votes from multiple agents to decide on a 'truth' or 'best path'.
+    Supports multiple voting methods including ranked choice and quadratic voting.
+    """
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._sessions: Dict[str, VotingSession] = {}
+        self._session_counter = 0
+        self._system_prompt = (
+            "You are the Voting Agent. You act as an impartial judge for agentic consensus. "
+            "You aggregate multiple perspectives and determine the winner based on "
+            "majority, ranked choice, or weighted quality metrics. You ensure fair voting."
+        )
+
+    @as_tool
+    async def create_session(self, question: str, options: List[str], method: str = "majority") -> Dict[str, Any]:
+        """Creates a new voting session."""
+        self._session_counter += 1
+        session_id = f"vote_{self._session_counter}"
+
+        voting_method = VotingMethod(method) if method in [m.value for m in VotingMethod] else VotingMethod.MAJORITY
+
+        session = VotingSession(
+            session_id=session_id, question=question, options=options, method=voting_method, status=VoteStatus.ACTIVE
+        )
+        self._sessions[session_id] = session
+
+        return {
+            "session_id": session_id,
+            "question": question,
+            "options": options,
+            "method": voting_method.value,
+            "status": VoteStatus.ACTIVE.value,
+        }
+
+    @as_tool
+    # pylint: disable=too-many-positional-arguments
+    async def cast_vote(
+        self,
+        session_id: str,
+        voter_id: str,
+        choice: str,
+        weight: float = 1.0,
+        rankings: Optional[List[str]] = None,
+        reasoning: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Casts a vote in an active session."""
+        if session_id not in self._sessions:
+            return {"success": False, "error": f"Session {session_id} not found"}
+
+        session = self._sessions[session_id]
+
+        if session.status != VoteStatus.ACTIVE:
+            return {"success": False, "error": f"Session is {session.status.value}"}
+
+        # Check if already voted
+        if any(v.voter_id == voter_id for v in session.votes):
+            return {"success": False, "error": f"Voter {voter_id} has already voted"}
+
+        # Validate choice
+        if session.method != Votin
 """
 # VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
 

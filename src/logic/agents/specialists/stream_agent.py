@@ -1,4 +1,43 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""
+[StreamAgent] - [Webhook bridge for external automation and reliable delivery]
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate StreamAgent with a file path, register external automation webhooks via register_external_webhook, push events to automation platforms (n8n, Zapier, Make) with push_to_n8n, and manage event transformers and delivery logs for observability and retries.
+
+WHAT IT DOES:
+Implements a streaming bridge that models events (StreamEvent), stores webhook configurations (WebhookConfig), validates payloads against optional schemas, applies transformers, and performs reliable webhook delivery with retry semantics, basic rate/timeout handling, and a delivery audit trail.
+
+WHAT IT SHOULD DO BETTER:
+- Use a robust async HTTP client with configurable exponential backoff and jitter, circuit breaker, and proper rate-limit handling.  
+- Replace simple/inline schema checks with jsonschema (or pydantic) validation and clearer error reporting.  
+- Improve observability (structured logging, metrics counters, tracing), add authentication/credential management for webhooks, and increase test coverage (unit and integration tests for retry, timeout, and firewall interactions).  
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +58,135 @@
 
 """
 Stream agent.py module.
+"""
+# StreamAgent: n8n and External Workflow Integration - Phase 319 Enhanced
+
+from __future__ import annotations
+
+import asyncio
+import contextlib
+import json
+import re
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class WebhookStatus(Enum):
+    """Possible statuses for a webhook delivery."""
+    SUCCESS = "success"
+    FAILED = "failed"
+    TIMEOUT = "timeout"
+    RETRY = "retry"
+    RATE_LIMITED = "rate_limited"
+
+
+@dataclass
+class WebhookConfig:
+    """Configuration for a webhook endpoint."""
+
+    url: str
+    name: str
+    method: str = "POST"
+    headers: Dict[str, str] = field(default_factory=dict)
+    timeout: float = 10.0
+    max_retries: int = 3
+    retry_delay: float = 1.0
+    schema: Optional[Dict[str, Any]] = None
+
+
+@dataclass
+class StreamEvent:
+    """Represents an event in the data stream."""
+
+    event_type: str
+    payload: Dict[str, Any]
+    timestamp: float = field(default_factory=time.time)
+    source: str = "unknown"
+    correlation_id: Optional[str] = None
+
+
+# pylint: disable=too-many-ancestors
+class StreamAgent(BaseAgent):
+    """
+    Agent specializing in streaming data injection and extraction.
+    Interfaces with n8n, Zapier, Make, and other webhook-based automation platforms.
+    """
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._webhooks: Dict[str, WebhookConfig] = {}
+        self._event_buffer: List[StreamEvent] = []
+        self._transformers: Dict[str, Callable] = {}
+        self._delivery_log: List[Dict[str, Any]] = []
+        self._system_prompt = (
+            "You are the Stream Agent. You act as a bridge between PyAgent "
+            "and external automation tools like n8n. You handle data transformation, "
+            "schema validation, and reliable webhook delivery with retries."
+        )
+
+    @as_tool
+    # pylint: disable=too-many-positional-arguments
+    async def register_external_webhook(
+        self,
+        name: str,
+        url: str,
+        method: str = "POST",
+        headers: Optional[Dict[str, str]] = None,
+        timeout: float = 10.0,
+        max_retries: int = 3,
+        schema: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """Registers an external automation webhook (n8n, etc.)."""
+        config = WebhookConfig(
+            url=url,
+            name=name,
+            method=method,
+            headers=headers or {"Content-Type": "application/json"},
+            timeout=timeout,
+            max_retries=max_retries,
+            schema=schema,
+        )
+        self._webhooks[name] = config
+
+        return {"success": True, "webhook_name": name, "url": url, "registered_webhooks": list(self._webhooks.keys())}
+
+    @as_tool
+    async def push_to_n8n(
+        self, webhook_url: str, data: Dict, webhook_name: Optional[str] = None, validate_schema: bool = True
+    ) -> Dict[str, Any]:
+        """Sends data to an n8n webhook with retry logic and validation."""
+        from src.infrastructure.security.network.firewall import ReverseProxyFirewall
+
+        # Get config if named webhook
+        config = self._webhooks.get(webhook_name) if webhook_name else None
+        if config:
+            webhook_url = config.url
+
+        firewall = ReverseProxyFirewall()
+
+        # Schema validation
+        if validate_schema and config and config.schema:
+            validation = self._validate_schema(data, config.schema)
+            if not validation["valid"]:
+                return {"success": False, "error": "schema_validation_failed", "details": validation["errors"]}
+
+        # Retry logic
+        max_retries = config.max_retries if config else 3
+        timeout = config.timeout if config else 10.0
+        headers = config.headers if config else {"Content-Type": "application/json"}
+
+        last_error = None
+        for attempt in range(max_retries):
+            try:
+                response = firew
 """
 # StreamAgent: n8n and External Workflow Integration - Phase 319 Enhanced
 

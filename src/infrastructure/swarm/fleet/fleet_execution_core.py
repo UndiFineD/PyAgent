@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +15,8 @@
 # limitations under the License.
 
 """
+FleetExecutionCore
+Core logic for Fleet workflow execution and reliability.
 Fleet execution core.py module.
 """
 
@@ -33,7 +37,7 @@ from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from .fleet_manager import FleetManager
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class FleetExecutionCore:
@@ -153,7 +157,8 @@ class FleetExecutionCore:
 
         # Process variables (e.g., $last_result)
         processed_args = [
-            self.fleet.state.get(arg[1:], arg) if isinstance(arg, str) and arg.startswith("$") else arg for arg in args
+            self.fleet.state.get(arg[1:], arg) if self.fleet.state and isinstance(arg, str) and arg.startswith("$") else arg
+            for arg in args
         ]
 
         variant_name = agent_name  # Placeholder for Phase 105
@@ -209,7 +214,8 @@ class FleetExecutionCore:
         if success:
             return f"### Results from {agent_name} ({action_name})\n{res}\n"
 
-        self.fleet.state.errors.append(f"{agent_name}.{action_name}: {error_msg}")
+        if self.fleet.state is not None:
+            self.fleet.state.errors.append(f"{agent_name}.{action_name}: {error_msg}")
         return f"### Error from {agent_name}\n{error_msg}\n"
 
     async def _execute_with_retry(

@@ -1,0 +1,75 @@
+--- C:\DEV\PyAgent\src\infrastructure\swarm\fleet\fleet_consensus_manager.py.bak
++++ C:\DEV\PyAgent\src\infrastructure\swarm\fleet\fleet_consensus_manager.py
+@@ -1,4 +1,5 @@
+ #!/usr/bin/env python3
++# Refactored by copilot-placeholder
+ # Copyright 2026 PyAgent Authors
+ # Licensed under the Apache License, Version 2.0 (the "License");
+ # you may not use this file except in compliance with the License.
+@@ -12,7 +13,10 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-"""Consensus management for the FleetManager."""
++"""
++FleetConsensusManager
++Consensus management for the FleetManager.
++"""
+ 
+ from __future__ import annotations
+ 
+@@ -22,7 +26,7 @@
+ from typing import TYPE_CHECKING, Any
+ 
+ if TYPE_CHECKING:
+-    from .fleet_manager import FleetManager
++    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+ 
+ 
+ class FleetConsensusManager:
+@@ -58,11 +62,13 @@
+             secondary_agents = committee[1:]
+ 
+         # 2. Parallel Proposal Generation
+-        all_agents = [primary_agent] + secondary_agents
++        all_agents = [primary_agent] + (secondary_agents or [])
+         proposals: dict[str, str] = {}
+ 
+         tasks = []
+         for agent_name in all_agents:
++            if not agent_name:
++                continue
+             agent = self.fleet.agents.get(agent_name)
+             if agent:
+                 # We assume 'improve_content' or similar primary action exists
+@@ -72,6 +78,8 @@
+ 
+         # Wait for all proposals in parallel
+         for agent_name, coro in tasks:
++            if not agent_name:
++                continue
+             try:
+                 res = await coro
+                 if isinstance(res, dict):
+@@ -79,7 +87,7 @@
+                 else:
+                     content = str(res)
+                 proposals[agent_name] = content
+-            except Exception as e:
++            except (asyncio.TimeoutError, asyncio.CancelledError, RuntimeError) as e:
+                 logging.error(f"Fleet Consensus: Agent {agent_name} proposal error: {e}")
+ 
+         if not proposals:
+@@ -87,10 +95,10 @@
+ 
+         # 3. [Phase 3.0] Multi-surgeon BFT Audit
+         # Selection of 'surgeons' (agents with security/audit skills)
+-        surgeons = [a for a in all_agents if "security" in a.lower() or "audit" in a.lower()]
++        surgeons = [a for a in all_agents if a and ("security" in a.lower() or "audit" in a.lower())]
+         if not surgeons and judge:
+             # Fallback to general practitioners if no specialists available
+-            surgeons = secondary_agents[:2]
++            surgeons = (secondary_agents or [])[:2]
+ 
+         audit_report = self.fleet.agents.get("ByzantineConsensusAgent").core.run_multi_surgeon_audit(
+             proposals, surgeons

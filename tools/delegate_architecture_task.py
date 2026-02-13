@@ -18,15 +18,16 @@ def load_spec(path: str) -> dict:
 
 
 def find_copilot_cli() -> str | None:
-    """Find GitHub Copilot CLI executable."""
-    # Always prefer invoking via command name, not explicit .BAT path.
-    # This keeps logs and behavior consistent with `copilot` usage.
+    """Find GitHub Copilot CLI executable.
+
+    Prefer invoking via command name `copilot`. If a bundled VS Code copilot.BAT
+    exists but `copilot` is not on PATH, add its directory to PATH and still
+    return the command name `copilot` so callers always invoke the command.
+    """
     for command_name in ("copilot", "github-copilot-cli"):
         if shutil.which(command_name):
             return command_name
 
-    # Fallback: if VS Code Copilot CLI is installed but not on PATH, add its folder
-    # and still return command name `copilot` (not the .BAT path).
     bundled_bat = os.path.expandvars(
         r"%APPDATA%\Code\User\globalStorage\github.copilot-chat\copilotCli\copilot.BAT"
     )
@@ -146,9 +147,11 @@ Examples:
     cli_path = find_copilot_cli()
     if not cli_path:
         print("ERROR: GitHub Copilot CLI not found!", file=sys.stderr)
-        print("\nSearched in:", file=sys.stderr)
-        print("  - %APPDATA%\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli\\copilot.BAT")
-        print("  - PATH environment variable (copilot, github-copilot-cli)")
+        print("\nSearched for command name on PATH (preferred):", file=sys.stderr)
+        print("  - copilot", file=sys.stderr)
+        print("  - github-copilot-cli", file=sys.stderr)
+        print("\nAlso checked common VS Code bundled location (fallback):", file=sys.stderr)
+        print("  - %APPDATA%\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli\\copilot.BAT", file=sys.stderr)
         print("\nPlease install GitHub Copilot CLI or check your PATH.")
         sys.exit(4)
     

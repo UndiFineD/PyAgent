@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +15,9 @@
 # limitations under the License.
 
 
-"""Human-in-the-loop (HITL) connector for fleet approvals.
+"""
+HITLConnector
+Human-in-the-loop (HITL) connector for fleet approvals.
 Supports Slack and Discord notification patterns for critical agent decisions.
 """
 

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +20,156 @@
 # limitations under the License.
 
 """
+VisionAgent - Image analysis, OCR, and code-screenshot analysis
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate as part of the PyAgent lifecycle with the agent file path and invoke tools: analyze_image(image_source, query), extract_text_ocr(image_source), analyze_code_screenshot(image_source)
+- image_source may be a base64 string, local file path, or URL; methods return structured dicts with status and results
+- Designed to be used where multi-modal model backends are available via the agent's improve_content method
+
+WHAT IT DOES:
+- Loads images from base64, path, or URL and normalizes to inline base64 for model prompts
+- Provides three primary tools: free-form image analysis, OCR text extraction preserving layout, and code extraction plus analysis from screenshots
+- Caches recent analysis results to avoid repeated model calls and uses the agent's improve_content multi-modal interface for backend model interaction
+
+WHAT IT SHOULD DO BETTER:
+- Add robust image loading and validation with clear error messages and support for streaming large images to avoid memory spikes
+- Provide configurable OCR/layout-preservation options and language/encoding hints to improve extraction fidelity
+- Improve cache key strategy (use stable hashing and include image metadata) and add configurable cache eviction and size limits; add unit tests and fallback local OCR (e.g., Tesseract) when model backends are unavailable
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+"""
 Vision agent.py module.
+"""
+# VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
+
+from __future__ import annotations
+
+import base64
+import logging
+import re
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+# pylint: disable=too-many-ancestors
+class VisionAgent(BaseAgent):
+    """
+    Agent specializing in image description, OCR, diagram analysis,
+    and visual pattern recognition using multi-modal model backends.
+    """
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._system_prompt = (
+            "You are the Vision Agent. You excel at analyzing visual data, "
+            "describing images, extracting text from screenshots or diagrams, "
+            "and understanding visual patterns. Be objective, detailed, and structured "
+            "in your descriptions. When analyzing code screenshots, extract the actual code."
+        )
+        self._analysis_cache: Dict[str, Dict] = {}
+
+    @as_tool
+    async def analyze_image(self, image_source: str, query: str = "Describe this image in detail.") -> Dict[str, Any]:
+        """
+        Analyzes an image and answers a query about it.
+        image_source: Either a base64 string, file path, or URL.
+        """
+        b64_data = await self._resolve_image_source(image_source)
+        if not b64_data:
+            return {"error": "Could not load image", "status": "failed"}
+
+        # Check cache
+        cache_key = f"{hash(b64_data[:100])}:{query[:50]}"
+        if cache_key in self._analysis_cache:
+            return self._analysis_cache[cache_key]
+
+        prompt = f"[IMAGE_DATA:{b64_data}]\n{query}"
+        logging.info("VisionAgent: Requesting multi-modal analysis...")
+
+        result = await self.improve_content(prompt)
+
+        response = {"query": query, "description": result, "status": "success"}
+        self._analysis_cache[cache_key] = response
+        return response
+
+    @as_tool
+    async def extract_text_ocr(self, image_source: str) -> Dict[str, Any]:
+        """Extracts all visible text from an image (OCR)."""
+        b64_data = await self._resolve_image_source(image_source)
+        if not b64_data:
+            return {"error": "Could not load image", "status": "failed"}
+
+        prompt = (
+            f"[IMAGE_DATA:{b64_data}]\n"
+            "Extract ALL visible text from this image. "
+            "Preserve the layout and formatting as much as possible. "
+            "Output only the extracted text, nothing else."
+        )
+
+        result = await self.improve_content(prompt)
+
+        return {"extracted_text": result, "word_count": len(result.split()), "status": "success"}
+
+    @as_tool
+    async def analyze_code_screenshot(self, image_source: str) -> Dict[str, Any]:
+        """Extracts and analyzes code from a screenshot."""
+        b64_data = await self._resolve_image_source(image_source)
+        if not b64_data:
+            return {"error": "Could not load image", "status": "failed"}
+
+        extract_prompt = (
+            f"[IMAGE_DATA:{b64_data}]\n"
+            "This is a screenshot of code. Extract the exact code shown. "
+            "Output ONLY the code with proper indentation, no explanations."
+        )
+        extracted_code = await self.improve_content(extract_prompt)
+
+        analyze_prompt = (
+            "Analyze this code and identify:\n"
+            "1. Programming language\n"
+            "2. Purpose/functionality\n"
+            "3. Any visible issues\n\n"
+            f"Code:\n{extracted_code}"
+        )
+        analysis = await self.improve_content(analyze_prompt)
+
+        # Detect language
+        language = "unknown"
+        lang_patterns = {
+            "python": r"\b(def |import |class |print\()",
+            "javascript": r"\b(function |const |let |var |=>)",
+            "rust": r"\b(fn |let |mut |impl |struct )",
+            "java": r"\b(public |private |class |void |static )",
+        }
+        for lang, pattern in lang_patterns.items
 """
 # VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
 

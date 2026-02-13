@@ -1,0 +1,129 @@
+--- C:\DEV\PyAgent\src\logic\agents\system\mixins\map_builder_mixin.py.bak
++++ C:\DEV\PyAgent\src\logic\agents\system\mixins\map_builder_mixin.py
+@@ -1,4 +1,36 @@
+ #!/usr/bin/env python3
++# Refactored by copilot-placeholder
++# Copyright 2026 PyAgent Authors
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#     http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++
++"""
++Map Builder Mixin - Build and index module/class/function dependency graph
++
++[Brief Summary]
++DATE: 2026-02-13
++AUTHOR: Keimpe de Jong
++USAGE:
++Import MapBuilderMixin into TopologicalNavigator, ensure self.root_dir and self.graph exist, then call build_dependency_map("src") to scan and index Python modules, classes, and functions.
++
++WHAT IT DOES:
++Scans a target directory for .py files, parses AST to extract module-level imports, class and function definitions, and builds a dependency graph mapping module -> imports and module -> contained entities, exposing _get_entity_id, _parse_file, and build_dependency_map decorated as a tool.
++
++WHAT IT SHOULD DO BETTER:
++Handle package-relative imports and alias resolution more robustly, resolve dotted import targets to workspace module IDs, record intra-file function/class references (calls, attribute usage), add unit tests and better error reporting (avoid broad except), and optionally persist or visualize the graph.
++
++FILE CONTENT SUMMARY:
++#!/usr/bin/env python3
++# Refactored by copilot-placeholder
+ # Copyright 2026 PyAgent Authors
+ # Licensed under the Apache License, Version 2.0 (the "License");
+ # you may not use this file except in compliance with the License.
+@@ -100,3 +132,89 @@
+ 
+         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+             logging.error(f"Failed to parse {file_path}: {e}")
++"""
++# Copyright 2026 PyAgent Authors
++# Licensed under the Apache License, Version 2.0 (the "License");
++
++from __future__ import annotations
++
++import ast
++import logging
++import os
++from pathlib import Path
++from typing import TYPE_CHECKING
++
++from src.core.base.common.base_utilities import as_tool
++
++if TYPE_CHECKING:
++    from src.logic.agents.system.topological_navigator import \
++        TopologicalNavigator
++
++
++class MapBuilderMixin:
++    """Mixin for mapping and parsing code entities in TopologicalNavigator."""
++
++    def _get_entity_id(self: TopologicalNavigator, file_path: Path, entity_name: str = "") -> str:
++        """Generates a unique ID for a code entity."""
++        rel_path = file_path.relative_to(self.root_dir)
++        module_path = str(rel_path).replace(os.path.sep, ".").replace(".py", "")
++        if entity_name:
++            return f"{module_path}.{entity_name}"
++        return module_path
++
++    @as_tool
++    def build_dependency_map(self: TopologicalNavigator, target_dir: str = "src") -> str:
++        """Scans the specified directory to build a full dependency graph."""
++        target_path = self.root_dir / target_dir
++        if not target_path.exists():
++            return f"Error: Path {target_dir} does not exist."
++
++        count = 0
++        for py_file in target_path.rglob("*.py"):
++            if "__pycache__" in str(py_file):
++                continue
++            self._parse_file(py_file)
++            count += 1
++
++        return f"Dependency map built successfully. Indexed {count} files. Total nodes: {len(self.graph)}"
++
++    def _parse_file(self: TopologicalNavigator, file_path: Path) -> None:
++        """Extracts imports and class/function definitions from a file."""
++        try:
++            with open(file_path, encoding="utf-8") as f:
++                tree = ast.parse(f.read())
++
++            module_id = self._get_entity_id(file_path)
++            if module_id not in self.graph:
++                self.graph[module_id] = set()
++
++            for node in ast.walk(tree):
++                if isinstance(node, (ast.Import, ast.ImportFrom)):
++                    # Extract imports to find module-level dependencies
++                    if isinstance(node, ast.Import):
++                        for alias in node.names:
++                            self.graph[module_id].add(alias.name)
++                    else:
++                        if node.module:
++                            self.graph[module_id].add(node.module)
++
++                elif isinstance(node, ast.ClassDef):
++                    class_id = self._get_entity_id(file_path, node.name)
++                    if class_id not in self.graph:
++                        self.graph[class_id] = set()
++                    # Add class as dependee of module
++                    self.graph[module_id].add(class_id)
++
++                    # Track base classes
++                    for base in node.bases:
++                        if isinstance(base, ast.Name):
++                            self.graph[class_id].add(base.id)
++
++                elif isinstance(node, ast.FunctionDef):
++                    func_id = self._get_entity_id(file_path, node.name)
++                    if func_id not in self.graph:
++                        self.graph[func_id] = set()
++                    self.graph[module_id].add(func_id)
++
++        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
++            logging.error(f"Failed to parse {file_path}: {e}")

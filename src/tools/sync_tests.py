@@ -12,6 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+sync_tests.py - Synchronize test files with cleaned modules
+
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Execute as standalone script: python sync_tests.py
+- Synchronizes test files in the tests/unit directory with modules in the cleaned directory
+"""
+
 import glob
 from pathlib import Path
 
@@ -21,6 +31,7 @@ TESTS_DIR = Path(r"C:\DEV\PyAgent\tests\unit")
 
 
 def main():
+    """Synchronize test files with cleaned modules."""
     modules = glob.glob(str(CLEANED_DIR / "*.py"))
     print(f"Found {len(modules)} modules in cleaned.")
 

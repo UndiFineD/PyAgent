@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +15,8 @@
 # limitations under the License.
 
 """
+ShardManager
+
 Sharding and partitioning logic.
 (Facade for src.core.base.common.shard_core)
 """
@@ -32,7 +36,7 @@ class ShardManager(StandardShardCore):
     def __init__(self, workspace_root: str):
         super().__init__()
         self.workspace_root = Path(workspace_root)
-        self.shards: dict[str, set[str]] = {}  # Shard name to agent names
+        self.shard_assignments: dict[str, set[str]] = {}  # Shard name to agent names
         self.agent_to_shard: dict[str, str] = {}
         self.communication_log: dict[frozenset[str], int] = {}  # Pairs of agents to frequency
 
@@ -43,13 +47,13 @@ class ShardManager(StandardShardCore):
 
     def create_shard(self, shard_name: str, capacity: int = 100) -> None:
         """Initializes a new shard."""
-        if shard_name not in self.shards:
-            self.shards[shard_name] = set()
+        if shard_name not in self.shard_assignments:
+            self.shard_assignments[shard_name] = set()
             logger.info(f"ShardManager: Created shard '{shard_name}' with capacity {capacity}")
 
     def assign_agent(self, agent_name: str, shard_name: str) -> bool:
         """Assigns an agent to a specific shard."""
-        if shard_name not in self.shards:
+        if shard_name not in self.shard_assignments:
             self.create_shard(shard_name)
 
         # Phase 95: Zero-Downtime Migration logic
@@ -57,9 +61,9 @@ class ShardManager(StandardShardCore):
             old_shard = self.agent_to_shard[agent_name]
             if old_shard != shard_name:
                 logger.info(f"ShardManager: Migrating '{agent_name}' from {old_shard} to {shard_name}")
-                self.shards[old_shard].discard(agent_name)
+                self.shard_assignments[old_shard].discard(agent_name)
 
-        self.shards[shard_name].add(agent_name)
+        self.shard_assignments[shard_name].add(agent_name)
         self.agent_to_shard[agent_name] = shard_name
         return True
 
@@ -99,7 +103,7 @@ class ShardManager(StandardShardCore):
 
     def get_shard_members(self, shard_name: str) -> list[str]:
         """Returns all agents in a shard."""
-        return list(self.shards.get(shard_name, set()))
+        return list(self.shard_assignments.get(shard_name, set()))
 
     def get_agent_shard(self, agent_name: str) -> str | None:
         """Gets the shard containing the specified agent."""

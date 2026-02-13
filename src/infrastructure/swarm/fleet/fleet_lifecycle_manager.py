@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +15,7 @@
 # limitations under the License.
 
 """
+FleetLifecycleManager
 Fleet lifecycle manager.py module.
 """
 
@@ -29,7 +32,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from .fleet_manager import FleetManager
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class FleetLifecycleManager:
@@ -38,7 +41,7 @@ class FleetLifecycleManager:
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
-    def cell_divide(self, agent_name: str) -> str:
+    async def cell_divide(self, agent_name: str) -> str:
         """Simulates biological mitosis by creating a clone of an existing agent."""
         if agent_name not in self.fleet.agents:
             return f"Error: Agent {agent_name} not found for division."
@@ -48,34 +51,37 @@ class FleetLifecycleManager:
         self.fleet.agents[clone_name] = base_agent
 
         logging.info(f"Mitosis: {agent_name} divided into {clone_name}")
-        self.fleet.signals.emit(
-            "CELL_DIVIDED",
-            {"parent": agent_name, "child": clone_name},
-            sender="FleetManager",
-        )
+        if hasattr(self.fleet, "signals") and hasattr(self.fleet.signals, "emit"):
+            await self.fleet.signals.emit(
+                "CELL_DIVIDED",
+                {"parent": agent_name, "child": clone_name},
+                sender="FleetManager",
+            )
         return f"Agent {agent_name} successfully divided into {clone_name}."
 
-    def cell_differentiate(self, agent_name: str, specialization: str) -> str:
+    async def cell_differentiate(self, agent_name: str, specialization: str) -> str:
         """Changes an agent's characteristics or 'role' based on environmental signals."""
         if agent_name not in self.fleet.agents:
             return f"Error: Agent {agent_name} not found for differentiation."
 
         logging.info(f"Differentiation: {agent_name} specialized into {specialization}")
-        self.fleet.signals.emit(
-            "CELL_DIFFERENTIATED",
-            {"agent": agent_name, "specialization": specialization},
-            sender="FleetManager",
-        )
+        if hasattr(self.fleet, "signals") and hasattr(self.fleet.signals, "emit"):
+            await self.fleet.signals.emit(
+                "CELL_DIFFERENTIATED",
+                {"agent": agent_name, "specialization": specialization},
+                sender="FleetManager",
+            )
         return f"Agent {agent_name} successfully differentiated into {specialization}."
 
-    def cell_apoptosis(self, agent_name: str) -> str:
+    async def cell_apoptosis(self, agent_name: str) -> str:
         """Cleanly shuts down and removes an agent from the fleet (programmed cell death)."""
         if agent_name not in self.fleet.agents:
             return f"Error: Agent {agent_name} not found for apoptosis."
 
         del self.fleet.agents[agent_name]
         logging.info(f"Apoptosis: {agent_name} has been recycled.")
-        self.fleet.signals.emit("CELL_APOPTOSIS", {"agent": agent_name}, sender="FleetManager")
+        if hasattr(self.fleet, "signals") and hasattr(self.fleet.signals, "emit"):
+            await self.fleet.signals.emit("CELL_APOPTOSIS", {"agent": agent_name}, sender="FleetManager")
         return f"Agent {agent_name} successfully removed from the fleet."
 
     def register_agent(self, name: str, agent_class: type[BaseAgent], file_path: str | None = None) -> str:

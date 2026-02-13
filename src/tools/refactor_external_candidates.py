@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Docstring for src.tools.refactor_external_candidates
+"""
+
 from pathlib import Path
 import re
 import json
@@ -22,6 +26,9 @@ DEST_DIR = ROOT / 'src' / 'external_candidates' / 'cleaned'
 
 
 def sanitize(name: str) -> str:
+    """
+    Sanitize a filename to be a valid Python module name.
+    """
     base = Path(name).stem
     s = base.lower()
     s = re.sub(r'[^0-9a-z_]', '_', s)
@@ -35,6 +42,10 @@ def sanitize(name: str) -> str:
 
 
 def main():
+    """
+    Main function to sanitize and copy Python files from the source directory
+    to the destination directory, creating a mapping of original to new filenames.
+    """
     if not SRC_DIR.exists():
         print(f"Source dir not found: {SRC_DIR}")
         return

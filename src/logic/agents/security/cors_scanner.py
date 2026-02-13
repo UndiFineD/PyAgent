@@ -1,4 +1,59 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+import asyncio
+import aiohttp
+from typing import Dict, Optional, List
+from urllib.parse import urlparse
+from dataclasses import dataclass
+
+
+@dataclass
+class CORSVulnerability:
+    url: str
+    vulnerability_type: str
+    description: str
+    severity: str
+    exploitation: str
+    acao_header: Optional[str]
+    acac_header: Optional[str]
+
+
+class CORSScanner:
+    """
+CORS Scanner - Scan for CORS misconfigurations
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate CORSScanner(timeout=<seconds>, concurrency=<n>) and call its async scanning methods from an asyncio event loop, providing target URLs and crafted Origin headers to detect and classify CORS misconfigurations; the class uses aiohttp and concurrency control via asyncio.Semaphore.
+
+WHAT IT DOES:
+Scans target URLs for a variety of CORS header misconfigurations (wildcards, reflected origins, null origins, domain-wildcards, broken parsers, unescaped regex, etc.), maps findings to severity and exploitation guidance, and returns structured CORSVulnerability dataclass instances describing each issue.
+
+WHAT IT SHOULD DO BETTER:
+- Improve handling of redirects, authentication-required endpoints and various HTTP methods; add robust retry/backoff, connection error handling, and configurable TLS options.
+- Provide richer reporting (JSON/CSV output, per-host aggregation), integrate logging and observability, and include automated tests and type hints for all public methods.
+- Harden origin-testing strategies (additional crafted origins, timing and rate-limiting protections), reuse aiohttp sessions across scans, and add optional active exploitation probes with safety controls.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,6 +92,97 @@ class CORSScanner:
     Ported logic from 0xSojalSec-Corsy.
     Scans a target URL for CORS misconfigurations.
     """
+
+    DETAILS = {
+        "wildcard value": {
+            "class": "wildcard value",
+            "description": (
+                "This host allows requests made from any origin. However, browsers will block all requests by default."
+            ),
+            "severity": "low",
+            "exploitation": "Not possible",
+        },
+        "third party allowed": {
+            "class": "third party allowed",
+            "description": "This host has whitelisted a third party host for cross origin requests.",
+            "severity": "Medium",
+            "exploitation": (
+                "If the whitelisted host is a code hosting platform such as codepen.io "
+                "or has an XSS vulnerability, it can be used to exploit this misconfiguration."
+            ),
+        },
+        "origin reflected": {
+            "class": "origin reflected",
+            "description": "This host allows any origin to make requests to it.",
+            "severity": "high",
+            "exploitation": "Make requests from any domain you control.",
+        },
+        "invalid value": {
+            "class": "invalid value",
+            "description": "Header's value is invalid, this CORS implementation doesn't work at all.",
+            "severity": "low",
+            "exploitation": "Not possible",
+        },
+        "post-domain wildcard": {
+            "class": "post-domain wildcard",
+            "description": (
+                "The origin verification is flawed, it allows requests from a host that has this host as a prefix."
+            ),
+            "severity": "high",
+            "exploitation": "Make requests from target.com.attacker.com",
+        },
+        "pre-domain wildcard": {
+            "class": "pre-domain wildcard",
+            "description": (
+                "The origin verification is flawed, it allows requests from a host that has this host as a suffix."
+            ),
+            "severity": "high",
+            "exploitation": "Make requests from attacker-target.com",
+        },
+        "null origin allowed": {
+            "class": "null origin allowed",
+            "description": "This host allows requests from 'null' origin.",
+            "severity": "high",
+            "exploitation": "Make requests from a sandboxed iframe.",
+        },
+        "http origin allowed": {
+            "class": "http origin allowed",
+            "description": "This host allows sharing resources over an unencrypted (HTTP) connection.",
+            "severity": "low",
+            "exploitation": "Sniff requests made over the unencrypted channel.",
+        },
+        "unrecognized underscore": {
+            "class": "unrecognized underscore",
+            "description": (
+                "The origin verification allowed an origin with an underscore which might not be what was intended."
+            ),
+            "severity": "medium",
+            "exploitation": "Depends on regex implementation.",
+        },
+        "broken parser": {
+            "class": "broken parser",
+            "description": "The origin verification allowed a malformed origin which indicates a broken parser.",
+            "severity": "medium",
+            "exploitation": "Depends on the parser implementation.",
+        },
+        "unescaped regex": {
+            "class": "unescaped regex",
+            "description": "The origin verification allowed a dot variation, suggesting unescaped regex.",
+            "severity": "high",
+            "exploitation": "Register a domain that matches the regex (e.g. siteXcom).",
+        },
+    }
+
+    def __init__(self, timeout: int = 10, concurrency: int = 10):
+        self.timeout = timeout
+        self.semaphore = asyncio.Semaphore(concurrency)
+
+    def _get_host(self, url: str) -> str:
+        parsed = urlparse(url)
+        return parsed.netloc
+
+    async def _request(self, session: aiohttp.ClientSession, url: str, origin: str) ->
+"""
 
     DETAILS = {
         "wildcard value": {

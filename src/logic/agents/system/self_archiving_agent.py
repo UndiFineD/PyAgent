@@ -13,7 +13,94 @@
 # limitations under the License.
 
 """
+Self Archiving Agent - Identify and archive low-utility files and memories
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Import the agent and invoke its tools from an orchestration context. Example:
+from src.core.base.lifecycle.self_archiving_agent import SelfArchivingAgent
+agent = SelfArchivingAgent(__file__)
+targets = agent.identify_archivable_targets(threshold_days=90)
+report = agent.archive_targets(targets)
+
+WHAT IT DOES:
+- Provides a SelfArchivingAgent subclass of BaseAgent with a system prompt describing its role.
+- Exposes two as_tool methods: identify_archivable_targets (returns mock stale file paths) and archive_targets (simulates archiving and returns a markdown report).
+- Implements an async improve_content wrapper that calls identify_archivable_targets and archive_targets to produce an archive report.
+
+WHAT IT SHOULD DO BETTER:
+- Replace mocked discovery with real file-system checks (access/modify times) and integrate StateTransaction for atomic archival operations.
+- Actually create compressed archives, move files, and garbage-collect originals; support configurable archive locations and retention policies.
+- Improve error handling, logging, unit tests, and make archive operations async/await-friendly and cancellable; integrate CascadeContext and rust_core for high-throughput compression tasks and correctness under concurrent agents.
+
+FILE CONTENT SUMMARY:
 Self archiving agent.py module.
+"""
+
+
+from __future__ import annotations
+
+import logging
+import os
+from datetime import datetime
+from pathlib import Path
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class SelfArchivingAgent(BaseAgent):
+    """
+    Phase 35: Recursive Self-Archiving.
+    Identifies abandoned code paths or low-utility memories and compresses them into archives.
+    """
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._system_prompt = (
+            "You are the Self-Archiving Agent. "
+            "Your objective is to maintain fleet efficiency by identifying and archiving "
+            "low-utility data, obsolete logs, or abandoned code paths."
+        )
+
+    @as_tool
+    def identify_archivable_targets(self, threshold_days: int = 30) -> list[str]:
+        """
+        Scans for files or memory entries that haven't been accessed in the given threshold.
+        """
+        logging.info(f"SelfArchiving: Scanning for targets older than {threshold_days} days.")
+        # Mock logic to 'find' some obsolete paths
+        targets = [
+            str(Path(__file__).resolve().parents[4]) + "/logs/session_old_001.log",
+            str(Path(__file__).resolve().parents[4]) + "/memory/abandoned_plan_v1.json",
+        ]
+        return targets
+
+    @as_tool
+    def archive_targets(self, targets: list[str]) -> str:
+        """
+        'Compresses' the provided targets into the archive directory.
+        """
+        if not targets:
+            return "No targets provided for archiving."
+
+        logging.info(f"SelfArchiving: Archiving {len(targets)} targets.")
+        # Simplified simulation: just pretend we archived them
+        os.path.join(os.path.dirname(self.file_path), "archives")
+
+        report = f"### Archiving Report\n- **Timestamp**: {datetime.now().isoformat()}\n"
+        for t in targets:
+            report += f"- [ARCHIVED] {t}\n"
+
+        return report
+
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        return self.archive_targets(self.identify_archivable_targets())
 """
 
 

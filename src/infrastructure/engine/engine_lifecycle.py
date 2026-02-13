@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,8 +41,6 @@ logger = logging.getLogger(__name__)
 # ==============================================================================
 # Engine State Enum
 # ==============================================================================
-
-
 class EngineState(enum.Enum):
     """Enumeration of possible engine lifecycle states."""
 

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +15,8 @@
 # limitations under the License.
 
 """
+LazyOrchestratorMap
+- A lazy-loading registry that maps orchestrator names to their instances.
 Orchestrator registry.py module.
 """
 
@@ -28,9 +32,9 @@ from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import SDK_VERSION, VERSION
 
-from .bootstrap_configs import BOOTSTRAP_ORCHESTRATORS
-from .orchestrator_registry_core import OrchestratorRegistryCore
-from .resilient_stubs import ResilientStub
+from src.infrastructure.swarm.fleet.bootstrap_configs import BOOTSTRAP_ORCHESTRATORS
+from src.infrastructure.swarm.fleet.orchestrator_registry_core import OrchestratorRegistryCore
+from src.infrastructure.swarm.fleet.resilient_stubs import ResilientStub
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager

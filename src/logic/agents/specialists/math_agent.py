@@ -1,4 +1,47 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""
+MathAgent - Specialized mathematical reasoning and safe expression evaluation
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate: agent = MathAgent("path/to/agent_file")
+- Call tools asynchronously: await agent.solve_expression("sin(pi/4) + 2") or await agent.solve_equation("2*x+3=7", "x")
+- Integrate into pipelines by decorating and exposing as a tool via @as_tool (already applied to public methods)
+
+WHAT IT DOES:
+- Provides an async BaseAgent-derived MathAgent focused on numeric and symbolic problem solving.
+- Safely evaluates arithmetic and math expressions using a whitelist SAFE_MATH_NAMESPACE and an eval fallback, with an attempt to use rust_core.evaluate_formula when available.
+- Records calculation history, falls back to LLM reasoning for complex or failing evaluations, and offers an equation-solving wrapper that prompts the agent's language model for stepwise reasoning.
+
+WHAT IT SHOULD DO BETTER:
+- Replace eval fallback with a stronger sandbox (or parser-based evaluator) to eliminate residual injection risk and to support symbolic algebra robustly (e.g., integrate sympy or expand Rust evaluator).
+- Improve equation extraction/parsing (support systems, symbolic solutions, intervals, complex roots) and return structured solutions (lists, symbolic objects) rather than fragile regex-extracted floats.
+- Add richer typing, unit tests for edge cases (singularities, domain errors), clearer error codes, and deterministic fallbacks when rust_core is partially available or misbehaves.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,6 +63,127 @@
 """
 MathAgent: Specialized Mathematical Reasoning Agent.
 Provides support for symbolic math, numerical computation, and logical proofs.
+"""
+# MathAgent: Specialized Mathematical Reasoning Agent - Phase 319 Enhanced
+
+from __future__ import annotations
+
+import logging
+import math
+import re
+from typing import Any, Dict, List, Optional
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+# Safe math namespace for expression evaluation
+SAFE_MATH_NAMESPACE = {
+    "__builtins__": {},
+    "abs": abs,
+    "round": round,
+    "min": min,
+    "max": max,
+    "sum": sum,
+    "len": len,
+    "pow": pow,
+    "int": int,
+    "float": float,
+    "sin": math.sin,
+    "cos": math.cos,
+    "tan": math.tan,
+    "asin": math.asin,
+    "acos": math.acos,
+    "atan": math.atan,
+    "atan2": math.atan2,
+    "sinh": math.sinh,
+    "cosh": math.cosh,
+    "tanh": math.tanh,
+    "log": math.log,
+    "log10": math.log10,
+    "log2": math.log2,
+    "exp": math.exp,
+    "sqrt": math.sqrt,
+    "ceil": math.ceil,
+    "floor": math.floor,
+    "factorial": math.factorial,
+    "gcd": math.gcd,
+    "pi": math.pi,
+    "e": math.e,
+    "tau": math.tau,
+    "inf": math.inf,
+    "degrees": math.degrees,
+    "radians": math.radians,
+}
+
+
+# pylint: disable=too-many-ancestors
+class MathAgent(BaseAgent):
+    """
+    Agent specializing in symbolic math, numerical computation, and logical proofs.
+    Utilizes Rust-accelerated evaluation where available.
+    """
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._system_prompt = (
+            "You are the Math Agent. You solve complex mathematical problems, "
+            "perform symbolic manipulations, and verify logical proofs. "
+            "Always prefer precise numerical outputs and structured reasoning. "
+            "Show your work step-by-step."
+        )
+        self._calculation_history: List[Dict[str, Any]] = []
+
+    @as_tool
+    async def solve_expression(self, expression: str) -> Dict[str, Any]:
+        """Evaluates a mathematical expression safely."""
+        # Sanitize input
+        sanitized = self._sanitize_expression(expression)
+
+        try:
+            # Try Rust-accelerated evaluation first
+            try:
+                import rust_core
+
+                if hasattr(rust_core, "evaluate_formula"):
+                    result = rust_core.evaluate_formula(sanitized)
+                    self._record_calculation(expression, result, "rust")
+                    return {"expression": expression, "result": result, "status": "success", "engine": "rust"}
+            except (ImportError, AttributeError):
+                pass
+
+            # Python safe eval fallback: use empty builtins and whitelist of math functions
+            result = eval(sanitized, {"__builtins__": {}}, SAFE_MATH_NAMESPACE)  # nosec
+            self._record_calculation(expression, result, "python")
+            return {"expression": expression, "result": result, "status": "success", "engine": "python"}
+
+        except (ArithmeticError, ValueError, SyntaxError, TypeError, RuntimeError) as e:
+            logging.debug(f"MathAgent: Direct evaluation failed: {e}")
+            # Fallback to LLM reasoning for complex/symbolic math
+            return await self._llm_solve(expression)
+
+    @as_tool
+    async def solve_equation(self, equation: str, variable: str = "x") -> Dict[str, Any]:
+        """Solves algebraic equations for a variable."""
+        prompt = (
+            f"Solve the equation: {equation}\n"
+            f"Solve for: {variable}\n"
+            "Show step-by-step solution and provide the final answer in the format: {variable} = value"
+        )
+        result = await self.improve_content(prompt)
+
+        # Try to extract numerical answer
+        match = re.search(rf"{variable}\s*=\s*([-\d.]+)", result)
+        extracted = float(match.group(1)) if match else None
+
+        return {
+            "equation": equation,
+            "variable": variable,
+            "solution": extracted,
+            "reasoning": result,
+            "status":
 """
 # MathAgent: Specialized Mathematical Reasoning Agent - Phase 319 Enhanced
 

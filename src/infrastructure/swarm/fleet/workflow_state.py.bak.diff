@@ -1,0 +1,21 @@
+--- C:\DEV\PyAgent\src\infrastructure\swarm\fleet\workflow_state.py.bak
++++ C:\DEV\PyAgent\src\infrastructure\swarm\fleet\workflow_state.py
+@@ -1,4 +1,5 @@
+ #!/usr/bin/env python3
++# Refactored by copilot-placeholder
+ # Copyright 2026 PyAgent Authors
+ # Licensed under the Apache License, Version 2.0 (the "License");
+ # you may not use this file except in compliance with the License.
+@@ -13,7 +14,11 @@
+ # limitations under the License.
+ 
+ 
+-"""Container for shared state and context between agents in a workflow."""
++"""
++WorkflowState
++
++Container for shared state and context between agents in a workflow.
++"""
+ 
+ from __future__ import annotations
+ 

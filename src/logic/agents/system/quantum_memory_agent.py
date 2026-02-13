@@ -13,8 +13,28 @@
 # limitations under the License.
 
 
-"""Agent specializing in Quantum Context Compression and million-token reasoning.
-Uses hierarchical summarization and selective hydration to handle massive local context.
+"""
+Quantum Memory Agent - Massive Context Compression & Retrieval
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Used as a specialized BaseAgent to compress large text/code contexts into dense semantic blocks, run relevance queries across those compressed blocks (optionally using rust acceleration), export a JSON knowledge graph, and provide an async hook for memory optimization; intended to be invoked programmatically (as an as_tool-enabled agent) or via an agent CLI integration.
+
+WHAT IT DOES:
+Manages and caches hierarchical compressed context blocks to enable million-token reasoning by (1) compressing raw text into dense summaries and tracking them in an in-memory pool, (2) searching and selectively hydrating only relevant compressed blocks for downstream reasoning, (3) exporting the compressed pool as a JSON knowledge graph, and (4) offering a placeholder async optimization method for further memory quantization and retrieval tuning.
+
+WHAT IT SHOULD DO BETTER:
+Replace the simulated compression with an actual quantized summarization pipeline (small local model or vector encoder), store and index vector embeddings for fast nearest-neighbor retrieval (and persist an index on disk), add robust serialization/versioning for blocks, improve relevance scoring (TF‑IDF / semantic similarity) and pagination for very large pools, add unit tests for rust fallback and rust-accelerated search, and complete the CLI main guard and graceful shutdown/eviction policies.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3 and Apache-2.0 license header; module docstring describing "Quantum Context Compression and million-token reasoning". Imports include json, logging, typing.Anys, as_tool, BaseAgent, VERSION and optional rust_core.search_blocks_rust guarded by ImportError with _RUST_ACCEL flag; __version__ set from VERSION. Defines class QuantumMemoryAgent(BaseAgent) which initializes a context_cache_dir under workspace/data/logs/quantum_context, an active_context_blocks list, and a long _system_prompt describing its role. Methods:
+- compress_context(context_text: str, target_ratio: float = 0.1) -> str: as_tool-wrapped, logs and simulates compression by creating a summary string, appends a block dict with id/original_len/summary to active_context_blocks, returns a SUCCESS message with block id and pool size.
+- hyper_context_query(query: str) -> str: as_tool-wrapped, searches summaries for query tokens; if rust acceleration is available uses search_blocks_rust on (block_id, summary) tuples, otherwise performs a simple keyword match, falls back to last 3 blocks if none match, and returns a human-readable hydrated-results string.
+- export_context_knowledge_graph() -> str: as_tool-wrapped, writes active_context_blocks to data/logs/quantum_context/knowledge_graph.json and returns the export path.
+- async improve_content(prompt: str, target_file: str | None = None) -> str: stub that returns an optimization-status string.
+Module ends with an incomplete __main__ guard that imports create_main_function and begins to construct a main for QuantumMemoryAgent (truncated in file).
 """
 
 from __future__ import annotations

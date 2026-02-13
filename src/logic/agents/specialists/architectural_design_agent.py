@@ -1,4 +1,48 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""
+Architectural Design Agent - Multi-stage Architectural Design Orchestration
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate the agent with a project file path and optional expertise level, then call its as_tool methods to drive the pipeline:
+- agent = ArchitecturalDesignAgent(r"C:\path\to\project.json", DesignExpertise.EXPERT)
+- await agent.process_requirements(brief_text)
+- await agent.simulate_environmental_impact()
+- continue with concept generation, refinement, development and production tools exposed by the agent
+
+WHAT IT DOES:
+Implements a hierarchical, multi-stage architectural design workflow informed by 2026 empirical studies; extracts requirements, runs environmental simulation, generates concepts, iterates visual refinement, and advances designs toward production while tracking lightweight metrics and maintaining an internal design_state.
+
+WHAT IT SHOULD DO BETTER:
+- Enforce transactional filesystem writes via StateTransaction for all stateful changes and ensure persistent checkpoints for rollback.
+- Harden async lifecycle handling and event-loop usage (avoid direct get_event_loop time calls in constructors), add robust cancellation and timeout semantics.
+- Expand metrics collection, validation, and telemetry; integrate rust_core for heavy computations (simulations, complexity analysis) and add comprehensive unit/integration tests for each phase.
+- Improve typing and docstrings, surface clear error types, and use CascadeContext for lineage and provenance across subagents.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +63,107 @@
 
 """
 Architectural design agent.py module.
+"""
+# ArchitecturalDesignAgent: Implementation of Multi-Stage Architectural GenAI Framework
+# Based on research: arXiv:2601.10696 and ScienceDirect S2090447925006203 (Jiang et al., 2026)
+
+from __future__ import annotations
+
+import asyncio
+import contextlib
+import json
+import logging
+from enum import Enum
+from typing import Any, Dict, Optional
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class DesignPhase(Enum):
+    """Phases of the architectural design process."""
+    PRE_DESIGN_ANALYSIS = "Pre-design Analysis"
+    ENVIRONMENTAL_SIMULATION = "Environmental Simulation"
+    CONCEPT_GENERATION = "Concept Generation"
+    VISUAL_REFINEMENT = "Visual Refinement Loop"
+    DESIGN_DEVELOPMENT = "Design Development"
+    DESIGN_PRODUCTION = "Design Production"
+    POST_PRODUCTION = "Post-production/Presentation"
+
+
+class DesignExpertise(Enum):
+    """Levels of expertise for the architectural agent."""
+    NOVICE = "novice"
+    EXPERT = "expert"
+
+
+# pylint: disable=too-many-ancestors
+class ArchitecturalDesignAgent(BaseAgent):
+    """
+    Agent specializing in hierarchical architectural design workflows.
+    Implements the 5-stage framework identified in 2026 empirical studies
+    (arXiv:2601.10696, ScienceDirect S2090447925006203) regarding cognitive load
+    reduction and performance enhancement in AI-aided design.
+    """
+
+    def __init__(self, file_path: str, expertise: DesignExpertise = DesignExpertise.EXPERT) -> None:
+        super().__init__(file_path)
+        self.expertise = expertise
+        self.current_phase = DesignPhase.PRE_DESIGN_ANALYSIS
+        self.design_state: Dict[str, Any] = {
+            "requirements": {},
+            "concepts": [],
+            "layouts": [],
+            "visualizations": [],
+            "feedback_history": [],
+            "critique_passed": False,
+        }
+        self.metrics = {
+            "jct_start": asyncio.get_event_loop().time(),
+            "cognitive_load_index": 0.0,
+            "aesthetic_delta": 0.14,
+            "constructability_score": 0.0,
+        }
+        self._system_prompt = (
+            "You are the Architectural Design Agent, specializing in the multi-stage "
+            "transformation of project requirements into structured architectural designs. "
+            "You follow a hierarchical reasoning approach: from pre-design analysis to "
+            "automated post-production presentation."
+        )
+
+    @as_tool
+    async def process_requirements(self, brief: str) -> Dict[str, Any]:
+        """
+        Phase 1: Pre-design Analysis. Extracts site conditions and functional requirements.
+        Reduces initial cognitive load by automating constraints identification.
+        """
+        prompt = (
+            f"Expertise Level: {self.expertise.value}. "
+            f"Extract architectural requirements and constraints from this brief: {brief}"
+        )
+        requirements = await self.run_subagent("extracting requirements", prompt)
+        self.design_state["requirements"] = requirements
+        self.current_phase = DesignPhase.PRE_DESIGN_ANALYSIS
+        self.metrics["cognitive_load_index"] += 0.1  # Simulated tracking
+        return {"phase": self.current_phase.value, "requirements": requirements}
+
+    @as_tool
+    async def simulate_environmental_impact(self) -> Dict[str, Any]:
+        """
+        Phase 1.5: Environmental Simulation. Analyze sun, wind, and terrain factors.
+        Based on ScienceDirect S2090447925006203 recommendations for real-time analysis.
+        """
+        if not self.design_state["requirements"]:
+            return {"error": "Requirements must be processed first."}
+
+        prompt = f"Perform environmental simulation (sun/wind/terrain) for: {self.design_state['requirements']}"
+        analysis = await self.run_subagent("environmental simulation", prompt)
+        self.design_state["environmental_analysis"] = analysis
+        self.current_phase = DesignPhase.ENVIRONMENTAL_SIMULATION
+        return {"phase": self.current_phase.value, "analys
 """
 # ArchitecturalDesignAgent: Implementation of Multi-Stage Architectural GenAI Framework
 # Based on research: arXiv:2601.10696 and ScienceDirect S2090447925006203 (Jiang et al., 2026)

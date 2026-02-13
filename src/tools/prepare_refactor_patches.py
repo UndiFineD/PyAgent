@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Generate prioritized bandit report and prepare AST-based refactor patch proposals.
+"""
+Generate prioritized bandit report and prepare AST-based refactor patch proposals.
 
 Produces:
 - .external/static_checks/bandit_report.md  (summary, prioritized)
@@ -20,6 +21,7 @@ Produces:
 
 This script does NOT apply patches; it only writes suggestions for reviewers.
 """
+
 from __future__ import annotations
 import json
 from pathlib import Path
@@ -30,23 +32,25 @@ BANDIT_JSON = ROOT / '.external' / 'static_checks' / 'bandit.json'
 OUT_DIR = ROOT / '.external' / 'static_checks'
 PATCH_DIR = ROOT / '.external' / 'patches'
 
-
 SEVERITY_WEIGHT = {'LOW': 1, 'MEDIUM': 5, 'HIGH': 10}
 
 
 def sanitize_name(p: Path) -> str:
+    """Sanitize a path to be a valid filename."""
     s = str(p).replace(':', '').replace('\\', '_').replace('/', '_')
     s = re.sub(r'[^0-9A-Za-z_.-]', '_', s)
     return s
 
 
 def load_bandit() -> dict:
+    """Load the Bandit JSON report."""
     if not BANDIT_JSON.exists():
         raise FileNotFoundError(f"{BANDIT_JSON} not found")
     return json.loads(BANDIT_JSON.read_text(encoding='utf-8'))
 
 
 def aggregate(results: dict) -> dict:
+    """Aggregate Bandit results by file."""
     files: dict[str, dict] = {}
     for r in results.get('results', []):
         fn = r.get('filename')
@@ -62,6 +66,7 @@ def aggregate(results: dict) -> dict:
 
 
 def make_report(agg: dict, top_n: int = 50) -> None:
+    """Generate a Markdown report from aggregated Bandit results."""
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     PATCH_DIR.mkdir(parents=True, exist_ok=True)
     entries = sorted(agg.items(), key=lambda kv: kv[1]['score'], reverse=True)
@@ -79,12 +84,12 @@ def make_report(agg: dict, top_n: int = 50) -> None:
             report.append(f"- Patch proposal: .external/patches/{sanitize_name(Path(fn))}.patch\n")
         except Exception as e:
             report.append(f"- Patch creation failed: {e}\n")
-
     out = OUT_DIR / 'bandit_report.md'
     out.write_text('\n'.join(report), encoding='utf-8')
 
 
 def create_patch_proposal(filename: str, findings: list[dict]) -> None:
+    """Create a patch proposal for the given file based on Bandit findings."""
     p = Path(filename)
     if not p.exists():
         # skip if file not present in workspace (bandit referenced external path)
@@ -118,6 +123,7 @@ def create_patch_proposal(filename: str, findings: list[dict]) -> None:
 
 
 def suggest_replacement(line: str) -> str:
+    """Suggest a conservative replacement for a potentially unsafe line of code."""
     # naive heuristics: detect eval/exec/compile or import of banned modules
     s = line.strip()
     if re.search(r"\beval\s*\(", s) or re.search(r"\bexec\s*\(", s):
@@ -132,6 +138,7 @@ def suggest_replacement(line: str) -> str:
 
 
 def main() -> int:
+    """Main entry point for preparing refactor patches."""
     data = load_bandit()
     agg = aggregate(data)
     make_report(agg)

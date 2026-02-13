@@ -1,0 +1,7 @@
+--- C:\DEV\PyAgent\src\infrastructure\lazy.py
++++ C:\DEV\PyAgent\src\infrastructure\lazy.suggested.py
+@@ -1,3 +1,4 @@
++# Refactored by copilot-placeholder
+ # Refactored by copilot-placeholder
+ # Refactored by copilot-placeholder
+ # Copyright 2026 PyAgent Authors

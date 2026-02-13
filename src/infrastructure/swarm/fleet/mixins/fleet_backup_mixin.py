@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +14,7 @@
 # limitations under the License.
 
 """
+FleetBackupMixin
 Mixin: fleet_backup_mixin
 Implements Pillar 8/9 hardening: Shard RAID-10 Distributed Backup.
 """
@@ -29,6 +31,10 @@ class FleetBackupMixin:
     """
     Handles distribution and retrieval of state shards across the swarm.
     """
+
+    backup_node: Any = None
+    voyager_discovery: Any = None
+    voyager_transport: Any = None
 
     async def harden_agent_state(self, agent_id: str, state_data: Dict[str, Any]) -> bool:
         """
@@ -96,10 +102,14 @@ class FleetBackupMixin:
         logger.info("FleetResilience: Starting Shard RAID-10 Audit...")
         # 1. Gather all unique local agent IDs
         agent_ids = [a for a in getattr(self, "agents", {}).keys()]
+        workspace_root = getattr(self, "workspace_root", None)
+        if not workspace_root:
+            logger.warning("FleetResilience: workspace_root not available, skipping audit.")
+            return
 
         for agent_id in agent_ids:
             # For demo/mock: check current 'state.json' for the agent
-            checkpoint_dir = self.workspace_root / "data" / "checkpoints" / agent_id
+            checkpoint_dir = workspace_root / "data" / "checkpoints" / agent_id
             if checkpoint_dir.exists():
                 latest_cp = sorted(list(checkpoint_dir.glob("cp_*")))[-1:]
                 if latest_cp:

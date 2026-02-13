@@ -13,7 +13,39 @@
 # limitations under the License.
 
 """
+Changelog Template - Template configuration dataclass
+
+[Brief Summary]
+A small, focused dataclass that models configuration for generating human-readable changelogs; intended as a lightweight, serializable template used by changelog generation code.
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate ChangelogTemplate(name="MyProject", project_type="library", sections=["Added","Changed","Fixed"], header_format="## [{version}] - {date}", include_links=True)
+- Pass the instance to a changelog renderer/generator which iterates sections and fills header_format with version/date and optionally appends links and contributors.
+WHAT IT DOES:
+- Encapsulates name, project_type, ordered sections, header format and toggles for links and contributor lists.
+- Provides a single source of truth for formatting options consumed by changelog-generation logic.
+WHAT IT SHOULD DO BETTER:
+- Validate inputs (e.g., non-empty sections, recognized project_type values) and provide helpful error messages.
+- Offer serialization helpers (to/from dict or TOML/YAML) and a default set of sensible sections per project_type.
+- Include templating hooks or callable formatters for more flexible header/body rendering and i18n support.
+FILE CONTENT SUMMARY:
 Changelog template.py module.
+"""
+
+from dataclasses import dataclass
+from typing import List
+
+
+@dataclass
+class ChangelogTemplate:
+    """Template configuration for generating human-readable changelogs."""
+    name: str
+    project_type: str
+    sections: List[str]
+    header_format: str = "## [{version}] - {date}"
+    include_links: bool = True
+    include_contributors: bool = False
 """
 
 from dataclasses import dataclass

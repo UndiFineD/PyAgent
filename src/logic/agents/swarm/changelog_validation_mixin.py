@@ -18,7 +18,33 @@
 # limitations under the License.
 
 """
-Changelog validation mixin.py module.
+Changelog Validation Mixin - Validate changelog entries and content
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Inherit ChangelogValidationMixin into a class that supplies a _validation_rules sequence and optionally a _template object then call validate_entry(entry) to validate a ChangelogEntry or validate_changelog(content) to validate whole changelog content
+
+WHAT IT DOES:
+Validates entry.version, entry.date and entry.description against named regex rules from _validation_rules and returns issue dicts; detects unresolved merge conflict markers in content and reports missing recommended sections based on _template.sections; issue records include rule or type and severity
+
+WHAT IT SHOULD DO BETTER:
+Cache compiled regex objects for performance; provide configurable heading matching and smarter section detection including different heading levels; return structured Issue dataclass objects instead of raw dicts; improve merge conflict detection to handle edge cases; add more explicit type hints and unit tests; allow customizable severity mapping and localization of messages
+
+FILE CONTENT SUMMARY:
+Shebang and Apache 2 license header followed by module docstring declaring "Changelog validation mixin.py module"
+Imports: __future__ annotations, re, typing.TYPE_CHECKING and Any, conditional TYPE_CHECKING import of ChangelogEntry
+Class ChangelogValidationMixin with methods:
+- validate_entry(self, entry: ChangelogEntry) -> list[dict[str, str]] which
+  - returns empty issues if no _validation_rules present
+  - finds rules named version_format, date_format, entry_not_empty and uses re.match against entry.version, entry.date, entry.description
+  - appends dicts with keys rule, message, severity when patterns do not match
+- validate_changelog(self, content: str) -> list[dict[str, Any]] which
+  - collects merge_conflict issues via detect_merge_conflicts(content) and appends an error-type issue with count and message when conflicts found
+  - if self has _template and it is truthy then iterates template.sections and appends warning-type missing_section issues when "### {section}" and "## {section}" are not present in content
+
+END OF MODULE DESCRIPTION
 """
 
 from __future__ import annotations

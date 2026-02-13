@@ -55,6 +55,10 @@ EXCLUDE_DIRS = (
 
 
 def extract_completed_from_tracking(tracking_path: Path) -> List[str]:
+    """
+    Extract rows from tracking.md that indicate completed/integrated status, 
+    to avoid re-processing.
+    """
     if not tracking_path.exists():
         return []
     completed_rows = []
@@ -70,6 +74,7 @@ def extract_completed_from_tracking(tracking_path: Path) -> List[str]:
 
 
 def scan_directory_for_candidates(dirpath: Path) -> Dict[str, Any]:
+    """Scan a directory for candidate files and their definitions, applying exclusion rules."""
     file_list: List[Dict[str, Any]] = []
     report: Dict[str, Any] = {"path": str(dirpath.relative_to(EXTERNAL)), "files": file_list}
     if VERBOSE:
@@ -134,6 +139,7 @@ def scan_directory_for_candidates(dirpath: Path) -> Dict[str, Any]:
 
 
 def is_definition_in_src(name: str, src_root: Path) -> bool:
+    """Check if a definition with the given name exists anywhere in src_root."""
     # Fast grep-like search without importing; searches for 'def name(' or 'class name'
     pattern = re.compile(rf"\b(def|class)\s+{re.escape(name)}\b")
     for p in src_root.rglob("*.py"):
@@ -147,6 +153,10 @@ def is_definition_in_src(name: str, src_root: Path) -> bool:
 
 
 def build_reuse_report(external_root: Path, src_root: Path) -> Dict[str, Any]:
+    """
+    Build a report of candidate files and definitions from external_root, 
+    marking which defs are missing in src_root.
+    """
     dir_list: List[Dict[str, Any]] = []
     report: Dict[str, Any] = {"summary": {}, "directories": dir_list}
     for d in sorted(external_root.iterdir()):
@@ -165,6 +175,7 @@ def build_reuse_report(external_root: Path, src_root: Path) -> Dict[str, Any]:
 
 
 def write_reports(report: Dict[str, Any], md_path: Path, json_path: Path):
+    """Write the report to both markdown and JSON files."""
     json_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
     lines: List[str] = [
         "# External Refactor Report\n",
@@ -185,6 +196,7 @@ def write_reports(report: Dict[str, Any], md_path: Path, json_path: Path):
 
 
 def main() -> int:
+    """Main entry point for the external refactor scan."""
     tracking = EXTERNAL / "tracking.md"
     completed = EXTERNAL / "completed.md"
     completed_rows = extract_completed_from_tracking(tracking)

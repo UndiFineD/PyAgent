@@ -1,0 +1,46 @@
+--- C:\DEV\PyAgent\src\infrastructure\swarm\fleet\fleet_interaction_recorder.py.bak
++++ C:\DEV\PyAgent\src\infrastructure\swarm\fleet\fleet_interaction_recorder.py
+@@ -1,4 +1,5 @@
+ #!/usr/bin/env python3
++# Refactored by copilot-placeholder
+ # Copyright 2026 PyAgent Authors
+ # Licensed under the Apache License, Version 2.0 (the "License");
+ # you may not use this file except in compliance with the License.
+@@ -12,7 +13,10 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-"""Logic for recording fleet interactions and justifying actions."""
++"""
++FleetInteractionRecorder
++Logic for recording fleet interactions and justifying actions.
++"""
+ 
+ from __future__ import annotations
+ 
+@@ -21,7 +25,7 @@
+ from typing import TYPE_CHECKING, Any
+ 
+ if TYPE_CHECKING:
+-    from .fleet_manager import FleetManager
++    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+ 
+ 
+ class FleetInteractionRecorder:
+@@ -46,7 +50,7 @@
+             log_file.parent.mkdir(parents=True, exist_ok=True)
+             with open(log_file, "a", encoding="utf-8") as f:
+                 f.write(json.dumps(entry) + "\n")
+-        except Exception as e:
++        except (OSError, IOError, ValueError) as e:
+             # Fallback to standard logging if FS fails
+             from src.observability.structured_logger import StructuredLogger
+             logger = StructuredLogger(__name__)
+@@ -79,6 +83,7 @@
+             duration = 0
+             trace_id = "none"
+             token_info = {"model": model}
++            p_args = {}
+ 
+         # 1. Standard Interaction Logging
+         with contextlib.suppress(AttributeError, ValueError, TypeError):

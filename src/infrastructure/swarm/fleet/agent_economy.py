@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,8 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""Agent economy and accounting engine.
+"""
+MarketPricingEngine and AgentEconomy 
+- Dynamic pricing and internal credit system for PyAgent Swarm.
+Agent economy and accounting engine.
 Manages credits, bidding, and automated payments between agents.
 """
 

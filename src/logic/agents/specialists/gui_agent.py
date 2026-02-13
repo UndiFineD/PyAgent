@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +20,73 @@
 # limitations under the License.
 
 """
+GUIAgent - Graphical User Interface Automation Specialist
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Use inside the PyAgent swarm to generate production-ready UI code, interpret UI hierarchy dumps, cache/track UI elements and actions, and expose design and interpretation tools for other agents or operators
+
+WHAT IT DOES:
+Provides enums for supported frameworks and element types, dataclasses for UIElement and UIAction, and a GUIAgent subclass of BaseAgent that (1) generates UI layout code via design_layout, (2) parses and interprets UI hierarchy dumps via interpret_ui_structure, (3) maintains an element cache and action history, and (4) exposes those capabilities as as_tool methods for integration
+
+WHAT IT SHOULD DO BETTER:
+Stronger input validation and error handling for malformed UI dumps, clearer schema definitions for outputs (strict JSON schemas), richer unit tests for cross-framework code generation, explicit async cancellation/timeouts and rate-limiting for improve_content calls, and improved typing for action parameters and element attributes
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""
 Gui agent.py module.
+"""
+# GUIAgent: Graphical User Interface Automation Specialist - Phase 319 Enhanced
+
+from __future__ import annotations
+
+import contextlib
+import json
+import logging
+import re
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+Key declarations and responsibilities:
+- Framework Enum: REACT, VUE, SVELTE, TKINTER, QT, FLUTTER, ANDROID_XML, SWIFTUI, HTML_CSS
+- ElementType Enum: BUTTON, INPUT, TEXT, IMAGE, LIST, CONTAINER, NAVIGATION, MODAL, FORM
+- UIElement dataclass: element_type, id, bounds, text, clickable, children, attributes
+- UIAction dataclass: action_type, target_id, parameters
+- GUIAgent(BaseAgent): maintains _element_cache and _action_history, system prompt string, and two primary as_tool async methods
+  - design_layout(framework, description, responsive=True, accessibility=True, dark_mode=False): builds prompt and calls improve_content to produce full source code and returns dict with framework, code, features
+  - interpret_ui_structure(ui_dump, _format="auto"): analyzes UI hierarchy dump and is intended to output JSON describing interactive elements (method body continues beyond provided snippet)
+
+Minimal behavioral notes:
+- Methods are async and decorated with as_tool for automation integration
+- The agent relies on BaseAgent.improve_content for large-language-model driven generation, so robustness depends on that core method and its timeouts/validation
 """
 # GUIAgent: Graphical User Interface Automation Specialist - Phase 319 Enhanced
 

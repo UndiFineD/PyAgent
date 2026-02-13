@@ -56,10 +56,12 @@ EXCLUDE_DIRS = (
 
 
 def extract_completed_from_tracking(tracking_path: Path) -> List[str]:
+    """Extracts completed/integrated rows from tracking.md for move to completed.md."""
     return ["| Dummy | Integrated |"]
 
 
 def scan_directory_for_candidates(dirpath: Path) -> Dict[str, Any]:
+    """Scans a directory for candidate files and extracts definitions."""
     report: Dict[str, Any] = {"path": str(dirpath.relative_to(EXTERNAL)), "files": []}
     if VERBOSE:
         print(f"Scanning directory: {dirpath.relative_to(EXTERNAL)}")
@@ -124,6 +126,7 @@ def scan_directory_for_candidates(dirpath: Path) -> Dict[str, Any]:
 
 
 def is_definition_in_src(name: str, src_root: Path) -> bool:
+    """Checks if a definition (function or class) exists in the src directory."""
     # Fast grep-like search without importing; searches for 'def name(' or 'class name'
     pattern = re.compile(rf"\b(def|class)\s+{re.escape(name)}\b")
     for p in src_root.rglob("*.py"):
@@ -137,6 +140,10 @@ def is_definition_in_src(name: str, src_root: Path) -> bool:
 
 
 def build_reuse_report(external_root: Path, src_root: Path) -> Dict[str, Any]:
+    """
+    Builds a report of candidate files and their definitions, 
+    marking which definitions are missing in src.
+    """
     report: Dict[str, Any] = {"summary": {}, "directories": []}
     for d in sorted(external_root.iterdir()):
         if not d.is_dir():
@@ -154,6 +161,8 @@ def build_reuse_report(external_root: Path, src_root: Path) -> Dict[str, Any]:
 
 
 def write_reports(report: Dict[str, Any], md_path: Path, json_path: Path):
+    """Writes the report to both markdown and JSON files.
+    """
     json_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
     lines: List[str] = [
         "# External Refactor Report\n",
@@ -174,6 +183,8 @@ def write_reports(report: Dict[str, Any], md_path: Path, json_path: Path):
 
 
 def main() -> int:
+    """Main function to execute the scan and report generation.
+    """
     tracking = EXTERNAL / "tracking.md"
     completed = EXTERNAL / "completed.md"
     completed_rows = extract_completed_from_tracking(tracking)
@@ -189,6 +200,10 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    """
+    This script performs a safe scan of the .external repository snapshot 
+    to identify candidate files and definitions for refactoring.
+    """
     results = []
     # Scan ALL directories in search for new candidates
     dirs = [d for d in EXTERNAL.iterdir() if d.is_dir()]

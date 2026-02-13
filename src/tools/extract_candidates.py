@@ -28,9 +28,11 @@ Safety checks (static-only):
 Usage:
   python src/tools/extract_candidates.py --report .external/refactor_report.json --limit 10
 
-This script makes small, reversible changes: writes new files under src/external_candidates/auto
+This script makes small, reversible changes: 
+writes new files under src/external_candidates/auto
 and tests under tests/unit/. It does not modify `.external`.
 """
+
 from __future__ import annotations
 import argparse
 import json
@@ -101,16 +103,22 @@ def safe_module(ast_mod: ast.Module, allow_top_level: bool = False, allow_no_def
 
 
 def sanitize_filename(s: str) -> str:
+    """
+    Sanitize a string to be a safe filename: 
+    replace non-alphanumeric chars with underscores
+    """
     return re.sub(r'[^0-9A-Za-z_]+', '_', s).strip('_')[:120]
 
 
 def write_extracted(source_path: Path, dest_path: Path, provenance: str, content: str):
+    """Write the extracted content to dest_path with a provenance header."""
     header = f"""# Extracted from: {provenance}\n# NOTE: extracted with static-only rules; review before use\n\n"""
     dest_path.parent.mkdir(parents=True, exist_ok=True)
     dest_path.write_text(header + content, encoding='utf-8')
 
 
 def make_test(module_path: Path, defs: list[str], test_path: Path):
+    """Generate a test that imports the module at module_path and asserts presence of defs."""
     # test will load module by path and assert defs exist
     mod_load = textwrap.dedent(f"""
     import importlib.util
@@ -140,6 +148,7 @@ def extract_candidates(
     allow_no_defs: bool = False,
     allow_banned_imports: bool = False
 ):
+    """Extract candidate Python files from the refactor report, applying safety checks."""
     if not report_file.exists():
         print('report missing at', report_file)
         return 1
@@ -212,6 +221,7 @@ def extract_candidates(
 
 
 def main():
+    """Main entry point for candidate extraction."""
     p = argparse.ArgumentParser()
     p.add_argument('--report', type=Path, default=REPORT_PATH)
     p.add_argument('--limit', type=int, default=10)

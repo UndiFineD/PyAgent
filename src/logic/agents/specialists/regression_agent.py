@@ -1,4 +1,54 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""
+RegressionAgent - Predictive Trend and Relationship Specialist
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+from src.core.base.lifecycle.version import VERSION
+from src.core.agents.regression_agent import RegressionAgent, RegressionType
+agent = RegressionAgent(__file__)
+# async context required to call tools:
+# await agent.predict_future_state([1.0, 2.0, 3.0], steps=2, method="linear")
+# await agent.analyze_correlation([1,2,3], [2,4,6])
+
+WHAT IT DOES:
+- Provides an async tool-oriented agent (RegressionAgent) to predict future sequence values and analyze relationships between paired variables.
+- Supports multiple regression model types enumerated in RegressionType (linear, polynomial, exponential, logarithmic, moving average).
+- Exposes as_tool-wrapped methods: predict_future_state(history, steps, method) and analyze_correlation(var_a, var_b).
+- Implements lightweight, pure-Python statistical computations (means, variance/covariance, Pearson and Spearman correlations) and has simple model implementations for linear, polynomial, exponential, and moving-average forecasts.
+- Records prediction history and caches results via internal structures (._model_cache and ._prediction_history) and provides a system prompt for agent behavior.
+
+WHAT IT SHOULD DO BETTER:
+- Replace hand-rolled math with robust numeric libraries (numpy, scipy, statsmodels) to improve numerical stability, performance, and richer diagnostics (confidence intervals, p-values).
+- Add input validation and handling for NaNs, unequal lengths, or non-numeric values and surface clearer error types rather than generic dict errors.
+- Add configurable hyperparameters, model selection/validation (cross-validation, AIC/BIC), and persistence for fitted models; expose evaluation metrics and plotting helpers.
+- Improve async/tool integration tests, type annotations for all public interfaces, and extend logging/observability for model training and inference steps.
+- Move heavy computations into a Core class (e.g., RegressionCore) to follow project separation of concerns and enable optional Rust acceleration for large datasets.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +69,281 @@
 
 """
 Regression agent.py module.
+"""
+# RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
+
+from __future__ import annotations
+
+import math
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class RegressionType(Enum):
+    """Supported regression model types."""
+    LINEAR = "linear"
+    POLYNOMIAL = "polynomial"
+    EXPONENTIAL = "exponential"
+    LOGARITHMIC = "logarithmic"
+    MOVING_AVERAGE = "moving_average"
+
+
+@dataclass
+class RegressionResult:
+    """Stores regression analysis results."""
+
+    regression_type: RegressionType
+    coefficients: List[float]
+    r_squared: float
+    predictions: List[float]
+    residuals: List[float]
+
+
+# pylint: disable=too-many-ancestors
+class RegressionAgent(BaseAgent):
+    """
+    Agent specializing in predicting continuous values and analyzing relationships
+    between variables (e.g., predicting code complexity growth, performance trends).
+    """
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._model_cache: Dict[str, RegressionResult] = {}
+        self._prediction_history: List[Dict[str, Any]] = []
+        self._system_prompt = (
+            "You are the Regression Agent. You predict trends and quantify relationships. "
+            "You look for linear and non-linear patterns in time-series and cross-sectional data. "
+            "You provide confidence intervals and model diagnostics."
+        )
+
+    @as_tool
+    async def predict_future_state(
+        self, history: List[float], steps: int = 1, method: str = "linear"
+    ) -> Dict[str, Any]:
+        """Predicts the next values in a sequence using the specified method."""
+        if len(history) < 2:
+            return {"predictions": history, "error": "Need at least 2 data points"}
+
+        regression_type = (
+            RegressionType(method) if method in [m.value for m in RegressionType] else RegressionType.LINEAR
+        )
+
+        if regression_type == RegressionType.LINEAR:
+            result = self._linear_regression(history, steps)
+        elif regression_type == RegressionType.POLYNOMIAL:
+            result = self._polynomial_regression(history, steps, degree=2)
+        elif regression_type == RegressionType.EXPONENTIAL:
+            result = self._exponential_regression(history, steps)
+        elif regression_type == RegressionType.MOVING_AVERAGE:
+            result = self._moving_average(history, steps, window=3)
+        else:
+            result = self._linear_regression(history, steps)
+
+        # Record prediction
+        self._prediction_history.append(
+            {
+                "history_length": len(history),
+                "steps": steps,
+                "method": regression_type.value,
+                "predictions": result["predictions"],
+            }
+        )
+
+        return result
+
+    @as_tool
+    async def analyze_correlation(self, var_a: List[float], var_b: List[float]) -> Dict[str, Any]:
+        """Calculates correlation and relationship metrics between two variables."""
+        if len(var_a) != len(var_b):
+            return {"error": "Variables must have same length"}
+
+        n = len(var_a)
+        if n < 2:
+            return {"error": "Need at least 2 data points"}
+
+        # Means
+        mean_a = sum(var_a) / n
+        mean_b = sum(var_b) / n
+
+        # Variances and covariance
+        var_a_sq = sum((x - mean_a) ** 2 for x in var_a)
+        var_b_sq = sum((x - mean_b) ** 2 for x in var_b)
+        covar = sum((a - mean_a) * (b - mean_b) for a, b in zip(var_a, var_b))
+
+        # Pearson correlation
+        denom =RegressionAgent - Predictive Trend and Relationship Specialist
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+from src.core.base.lifecycle.version import VERSION
+from src.core.agents.regression_agent import RegressionAgent, RegressionType
+# instantiate (example)
+agent = RegressionAgent(__file__)
+# predict next 3 steps with linear regression
+await agent.predict_future_state([1.0, 2.1, 2.9, 4.2], steps=3, method="linear")
+# analyze correlation between two series
+await agent.analyze_correlation([1,2,3,4], [2,4,6,8])
+
+WHAT IT DOES:
+- Provides simple time-series regression predictions (linear, polynomial, exponential, logarithmic, moving average).
+- Computes basic relationship metrics between two variables (Pearson and Spearman correlations, covariance, variances).
+- Caches model results and records prediction history for later inspection.
+
+WHAT IT SHOULD DO BETTER:
+- Use robust numeric libraries (numpy, scipy, pandas) for stability, performance, and more accurate regressions and statistics.
+- Produce and return confidence intervals, residual diagnostics, and model selection metrics (AIC/BIC), and expose hyperparameter tuning.
+- Improve input validation, error reporting, and support multivariate regression, missing-value handling, and persistence via StateTransaction.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""
+Regression agent.py module.
+"""
+# RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
+
+from __future__ import annotations
+
+import math
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class RegressionType(Enum):
+    """Supported regression model types."""
+    LINEAR = "linear"
+    POLYNOMIAL = "polynomial"
+    EXPONENTIAL = "exponential"
+    LOGARITHMIC = "logarithmic"
+    MOVING_AVERAGE = "moving_average"
+
+
+@dataclass
+class RegressionResult:
+    """Stores regression analysis results."""
+
+    regression_type: RegressionType
+    coefficients: List[float]
+    r_squared: float
+    predictions: List[float]
+    residuals: List[float]
+
+
+# pylint: disable=too-many-ancestors
+class RegressionAgent(BaseAgent):
+    """
+    Agent specializing in predicting continuous values and analyzing relationships
+    between variables (e.g., predicting code complexity growth, performance trends).
+    """
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._model_cache: Dict[str, RegressionResult] = {}
+        self._prediction_history: List[Dict[str, Any]] = []
+        self._system_prompt = (
+            "You are the Regression Agent. You predict trends and quantify relationships. "
+            "You look for linear and non-linear patterns in time-series and cross-sectional data. "
+            "You provide confidence intervals and model diagnostics."
+        )
+
+    @as_tool
+    async def predict_future_state(
+        self, history: List[float], steps: int = 1, method: str = "linear"
+    ) -> Dict[str, Any]:
+        """Predicts the next values in a sequence using the specified method."""
+        if len(history) < 2:
+            return {"predictions": history, "error": "Need at least 2 data points"}
+
+        regression_type = (
+            RegressionType(method) if method in [m.value for m in RegressionType] else RegressionType.LINEAR
+        )
+
+        if regression_type == RegressionType.LINEAR:
+            result = self._linear_regression(history, steps)
+        elif regression_type == RegressionType.POLYNOMIAL:
+            result = self._polynomial_regression(history, steps, degree=2)
+        elif regression_type == RegressionType.EXPONENTIAL:
+            result = self._exponential_regression(history, steps)
+        elif regression_type == RegressionType.MOVING_AVERAGE:
+            result = self._moving_average(history, steps, window=3)
+        else:
+            result = self._linear_regression(history, steps)
+
+        # Record prediction
+        self._prediction_history.append(
+            {
+                "history_length": len(history),
+                "steps": steps,
+                "method": regression_type.value,
+                "predictions": result["predictions"],
+            }
+        )
+
+        return result
+
+    @as_tool
+    async def analyze_correlation(self, var_a: List[float], var_b: List[float]) -> Dict[str, Any]:
+        """Calculates correlation and relationship metrics between two variables."""
+        if len(var_a) != len(var_b):
+            return {"error": "Variables must have same length"}
+
+        n = len(var_a)
+        if n < 2:
+            return {"error": "Need at least 2 data points"}
+
+        # Means
+        mean_a = sum(var_a) / n
+        mean_b = sum(var_b) / n
+
+        # Variances and covariance
+        var_a_sq = sum((x - mean_a) ** 2 for x in var_a)
+        var_b_sq = sum((x - mean_b) ** 2 for x in var_b)
+        covar = sum((a - mean_a) * (b - mean_b) for a, b in zip(var_a, var_b))
+
+        # Pearson correlation
+        denom = math.sqrt(var_a_sq * var_b_sq)
+        correlation = covar / denom if denom > 0 else 0
+
+        # Spearman rank correlation
+        ranks_a = self._rank(var_a)
+        ranks_b = self._rank(var_b)
+        d_sq_sum = sum((ra - rb) ** 2 for ra, rb in zip(ranks_a, ranks_b))
+        spearman = 1 - (6 * d_sq_sum) / (n * (n**2 - 1)) if n > 1 else 0
+
+        # Interpreta
 """
 # RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
 

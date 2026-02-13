@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Apply safe, automated fixes over extracted candidate files.
+"""
+Apply safe, automated fixes over extracted candidate files.
 
 Currently implements:
 - Replace `yaml.load(` -> `yaml.safe_load(`
@@ -21,6 +22,7 @@ Currently implements:
 Writes unified diff patches to `.external/patches/` and optionally applies changes when
 `--apply` is passed. Re-runs static checks and generated tests after applying fixes.
 """
+
 from __future__ import annotations
 import argparse
 from pathlib import Path
@@ -35,12 +37,25 @@ PATCH_DIR = ROOT / '.external' / 'patches'
 
 
 def find_py_files(target: Path):
+    """
+    Find all Python files in the given target directory.
+
+    Args:
+        target: The directory path to search for .py files.
+
+    Returns:
+        A list of Path objects for all .py files found.
+    """
     if not target.exists():
         return []
     return list(target.rglob('*.py'))
 
 
 def transform_text(text: str) -> str:
+    """
+    Transform the given text by applying safe fixes such as replacing yaml.load with yaml.safe_load,
+    updating yaml imports, and removing top-level assert statements to avoid execution side-effects.
+    """
     out = text
     # simple replacement for yaml.load(...) -> yaml.safe_load(...)
     out = out.replace('yaml.load(', 'yaml.safe_load(')
@@ -52,6 +67,18 @@ def transform_text(text: str) -> str:
 
 
 def remove_top_level_asserts(text: str) -> str:
+    """
+    Remove top-level assert statements from the given Python code by commenting them out.
+
+    This function parses the code using the AST, identifies top-level assert statements,
+    and replaces them with commented versions to avoid execution side-effects.
+
+    Args:
+        text: The Python code as a string.
+
+    Returns:
+        The modified code with top-level asserts commented out.
+    """
     try:
         mod = ast.parse(text)
     except Exception:
@@ -83,6 +110,19 @@ def remove_top_level_asserts(text: str) -> str:
 def write_patch(
     orig_path: Path, orig_text: str, new_text: str, patch_dir: Path, base_dir: Path | None = None
 ) -> Path | None:
+    """
+    Write a unified diff patch if there are changes between the original and new text, and return the patch file path.
+
+    Args:
+        orig_path: The path to the original file.
+        orig_text: The original text content of the file.
+        new_text: The transformed text content of the file.
+        patch_dir: The directory where the patch file should be written.
+        base_dir: Optional base directory for computing relative paths; defaults to ROOT if None.
+
+    Returns:
+        The path to the created patch file if changes were detected, otherwise None.
+    """
     if orig_text == new_text:
         return None
     patch_dir.mkdir(parents=True, exist_ok=True)
@@ -107,6 +147,17 @@ def write_patch(
 
 
 def apply_fixes(apply: bool = False, target_dir: Path | None = None, patch_dir: Path | None = None) -> int:
+    """
+    Apply safe fixes to Python files in the target directory.
+
+    Args:
+        apply: Whether to apply the fixes to the files.
+        target_dir: Directory to scan for Python files.
+        patch_dir: Directory to write patch files.
+
+    Returns:
+        The number of files changed.
+    """
     target = Path(target_dir) if target_dir is not None else TARGET_DIR
     patch_dir = Path(patch_dir) if patch_dir is not None else PATCH_DIR
     files = find_py_files(target)
@@ -137,6 +188,7 @@ def apply_fixes(apply: bool = False, target_dir: Path | None = None, patch_dir: 
 
 
 def main(argv=None) -> int:
+    """main entry point for apply_safe_fixes.py"""
     parser = argparse.ArgumentParser()
     parser.add_argument('--apply', action='store_true', help='Apply fixes to files')
     parser.add_argument('--target', type=str, default=None,

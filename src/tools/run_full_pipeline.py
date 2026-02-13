@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Orchestrate the full external->src pipeline end-to-end with no prompts.
+"""
+Orchestrate the full external->src pipeline end-to-end with no prompts.
 
 Steps (non-interactive):
   1. Run `batch_extract.py` to extract candidates into `src/external_candidates/auto/`
@@ -23,6 +24,7 @@ Steps (non-interactive):
 
 This script returns a non-zero exit code if critical steps fail.
 """
+
 from __future__ import annotations
 import subprocess
 import sys
@@ -606,23 +608,16 @@ def main():
         print('No changed files detected; skipping apply-safe-fixes and per-file static checks')
 
     # 5) run generated tests (parallel) - only when changes were detected
+    workers = os.cpu_count() or 2
     if changed_files:
-        workers = os.cpu_count() or 2
-        try:
-            from src.tools import run_auto_tests as _run_tests
-            try:
-                _run_tests.main(['--workers', str(workers)])
-            except TypeError:
-                _run_tests.main()
-        except Exception:
-            run([sys.executable, str(SCRIPTS / 'run_auto_tests.py'), '--workers', str(workers)])
+        run([sys.executable, str(SCRIPTS / 'run_auto_tests.py'), '--workers', str(workers)])
     else:
         print('No changed files; skipping generated tests')
     # 4) prepare patch proposals and bandit report (regenerate)
     try:
         from src.tools import prepare_refactor_patches as _prep
         try:
-            _prep.main([])
+            _prep.main()
         except TypeError:
             _prep.main()
     except Exception:
@@ -677,14 +672,7 @@ def main():
     except Exception:
         run([sys.executable, str(SCRIPTS / 'run_static_checks.py'), str(EXTRACT_TARGET)], fatal=False)
 
-    try:
-        from src.tools import run_auto_tests as _run_tests2
-        try:
-            _run_tests2.main(['--workers', str(workers)])
-        except TypeError:
-            _run_tests2.main()
-    except Exception:
-        run([sys.executable, str(SCRIPTS / 'run_auto_tests.py'), '--workers', str(workers)], fatal=False)
+    run([sys.executable, str(SCRIPTS / 'run_auto_tests.py'), '--workers', str(workers)], fatal=False)
 
     # 8) move completed rows
     run([sys.executable, str(SCRIPTS / 'move_completed.py')], fatal=False)

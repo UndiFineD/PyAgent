@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +15,10 @@
 # limitations under the License.
 
 
-"""GPU scaling manager for specialized agents.
+"""
+GPUScalingManager 
+- Monitors GPU memory pressure and triggers scaling actions for agent pools.
+GPU scaling manager for specialized agents.
 Scales agent pools based on GPU memory pressure and latency.
 """
 

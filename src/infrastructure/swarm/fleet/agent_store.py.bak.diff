@@ -1,0 +1,19 @@
+--- C:\DEV\PyAgent\src\infrastructure\swarm\fleet\agent_store.py.bak
++++ C:\DEV\PyAgent\src\infrastructure\swarm\fleet\agent_store.py
+@@ -1,4 +1,5 @@
+ #!/usr/bin/env python3
++# Refactored by copilot-placeholder
+ # Copyright 2026 PyAgent Authors
+ # Licensed under the Apache License, Version 2.0 (the "License");
+ # you may not use this file except in compliance with the License.
+@@ -13,7 +14,9 @@
+ # limitations under the License.
+ 
+ 
+-"""Agent Store for sharing specialized agent configurations and templates.
++"""
++AgentStore for sharing specialized agent configurations and templates.
++
+ Allows agents to 'buy' or download new capabilities.
+ """
+ 

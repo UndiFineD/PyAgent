@@ -1,4 +1,41 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""
+Trust Agent - Multi-dimensional Socio-Emotional Trust Scoring
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate TrustAgent with the agent file path and use its async tools (e.g., analyze_sentiment) from the agent runtime; read properties trust_score, trust_level and mood to integrate trust-aware behavior into higher-level orchestration. Designed to be used inside the PyAgent lifecycle where BaseAgent methods (improve_content, tool wrappers) are available.
+
+WHAT IT DOES:
+Provides a focused agent for monitoring human-agent interactions, performing LLM-driven sentiment and emotional analysis, and maintaining multi-dimensional trust metrics (trust, honesty, reliability, consistency) plus an interaction history. Exposes an as_tool analyze_sentiment method that formats a JSON analysis prompt, parses LLM responses, and updates EmotionalState and TrustMetrics. Maps numeric trust_score to an ordinal TrustLevel and offers simple properties for external components to query current mood and trust.
+
+WHAT IT SHOULD DO BETTER:
+Robustly validate and sanitize LLM output to avoid partial/invalid JSON parsing and to handle edge cases without raising exceptions. Persist trust metrics and history to durable storage and expose configurable thresholds and decay strategies for trust scoring. Separate analysis core from agent orchestration (move heavy computation to a dedicated Core or rust_core), add comprehensive unit tests for parsing and scoring logic, and add privacy safeguards and explainable rationale for trust adjustments.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +56,136 @@
 
 """
 Trust agent.py module.
+"""
+# TrustAgent: Multi-dimensional Socio-Emotional Analysis Agent - Phase 319 Enhanced
+
+from __future__ import annotations
+
+import contextlib
+import json
+import logging
+import re
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class Mood(Enum):
+    """Possible emotional moods for the interaction."""
+    JOYFUL = "joyful"
+    CONTENT = "content"
+    NEUTRAL = "neutral"
+    CONCERNED = "concerned"
+    FRUSTRATED = "frustrated"
+    ANXIOUS = "anxious"
+
+
+class TrustLevel(Enum):
+    """Ordinal levels of trust based on scores."""
+    HIGH = "high"  # 0.8-1.0
+    MEDIUM = "medium"  # 0.5-0.8
+    LOW = "low"  # 0.2-0.5
+    CRITICAL = "critical"  # 0.0-0.2
+
+
+@dataclass
+class EmotionalState:
+    """Represents the current emotional state of an interaction."""
+
+    mood: Mood = Mood.NEUTRAL
+    valence: float = 0.0  # -1.0 (negative) to 1.0 (positive)
+    arousal: float = 0.0  # 0.0 (calm) to 1.0 (excited)
+    dominance: float = 0.5  # 0.0 (submissive) to 1.0 (dominant)
+
+
+@dataclass
+class TrustMetrics:
+    """Tracks trust-related metrics over time."""
+
+    trust_score: float = 1.0
+    honesty_score: float = 1.0
+    reliability_score: float = 1.0
+    consistency_score: float = 1.0
+    history: List[Dict[str, Any]] = field(default_factory=list)
+
+
+# pylint: disable=too-many-ancestors
+class TrustAgent(BaseAgent):
+    """
+    Agent specializing in human-agent alignment, mood detection,
+    emotional intelligence, and maintaining trust scores for interaction safety.
+    """
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self.trust_metrics = TrustMetrics()
+        self.emotional_state = EmotionalState()
+        self._interaction_history: List[Dict[str, Any]] = []
+        self._system_prompt = (
+            "You are the Trust Agent. You monitor interactions for emotional tone, "
+            "intent, honesty, and alignment. You provide nuanced analysis of human "
+            "communication and adjust trust scores based on evidence. Be empathetic "
+            "but objective in your assessments."
+        )
+
+    @property
+    def trust_score(self) -> float:
+        """Current overall trust score (0.0 to 1.0)."""
+        return self.trust_metrics.trust_score
+
+    @property
+    def mood(self) -> str:
+        """String representation of current mood."""
+        return self.emotional_state.mood.value
+
+    @property
+    def trust_level(self) -> TrustLevel:
+        """Calculated trust level based on score."""
+        score = self.trust_score
+        if score >= 0.8:
+            return TrustLevel.HIGH
+        if score >= 0.5:
+            return TrustLevel.MEDIUM
+        if score >= 0.2:
+            return TrustLevel.LOW
+        return TrustLevel.CRITICAL
+
+    @as_tool
+    async def analyze_sentiment(self, text: str) -> Dict[str, Any]:
+        """Performs comprehensive sentiment and emotional analysis."""
+        prompt = (
+            f'Analyze this text for emotional content:\n\n"{text}"\n\n'
+            "Provide analysis in JSON format:\n"
+            "{\n"
+            '  "primary_emotion": "emotion name",\n'
+            '  "secondary_emotions": ["list", "of", "emotions"],\n'
+            '  "valence": -1.0 to 1.0,\n'
+            '  "arousal": 0.0 to 1.0,\n'
+            '  "sentiment": "positive/neutral/negative",\n'
+            '  "intent": "friendly/neutral/hostile/uncertain",\n'
+            '  "honesty_indicators": "honest/deceptive/uncertain",\n'
+            '  "trust_adjustment": -0.1 to 0.1,\n'
+            '  "explanation": "brief explanation"\n'
+            "}"
+        )
+
+        res = await self.improve_content(prompt)
+
+        try:
+            match = re.search(r"(\{[\s\S]*\})", res)
+            if match:
+                data = json.loads(match.group(1))
+
+                # Update emotional state
+                self.emotional_state.valence = data.get("valence", 0.0)
+                self.emotional_state.
 """
 # TrustAgent: Multi-dimensional Socio-Emotional Analysis Agent - Phase 319 Enhanced
 

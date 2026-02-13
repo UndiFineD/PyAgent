@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +20,171 @@
 # limitations under the License.
 
 """
+Scaling Agent - Fleet Expansion and Resource Orchestration
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate ScalingAgent with the path to the agent file and register it with the PyAgent fleet manager.
+- Monitor provider metrics and call the agent's async orchestration methods to perform scaling decisions (e.g., within an asyncio event loop).
+- Example:
+    from src.agents.scaling_agent import ScalingAgent
+    agent = ScalingAgent(__file__)
+    asyncio.run(agent.run())  # or integrate with the platform's lifecycle
+
+WHAT IT DOES:
+- Maintains ProviderMetrics for multiple providers (LOCAL, GITHUB, AZURE, OLLAMA, FASTFLOWLM) and exposes aggregated properties: total_capacity, total_active, utilization.
+- Implements provider capacity detection (heuristic for Ollama), records scaling decisions (ScalingDecision), and supports multiple scaling strategies (ROUND_ROBIN, LEAST_LOADED, LATENCY_WEIGHTED, COST_OPTIMIZED, PRIORITY_BASED).
+- Designed as a specialized BaseAgent for coordinating high-concurrency async scaling, rebalancing, migration, and cost/latency-aware orchestration across heterogeneous compute backends.
+
+WHAT IT SHOULD DO BETTER:
+- Add robust health checks, telemetry emission, and backoff/retry policies for transient provider failures; current is_healthy flag is simplistic.
+- Replace heuristics with deterministic resource discovery for GPU/VRAM (e.g., NVML) and make capacity detection testable via dependency injection/mocks.
+- Implement concrete async methods for scaling actions, throttling, and provider-specific APIs (provisioning/removal), plus unit tests for decision logic and strategy pluggability.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+"""
 Scaling agent.py module.
+"""
+# ScalingAgent: Fleet Expansion and Resource Orchestration - Phase 319 Enhanced
+
+from __future__ import annotations
+
+import asyncio
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class ProviderType(Enum):
+    """Types of compute providers available."""
+    LOCAL = "local"
+    GITHUB = "github"
+    AZURE = "azure"
+    OLLAMA = "ollama"
+    VLLM = "vllm"
+    FASTFLOWLM = "fastflowlm"
+
+
+class ScalingStrategy(Enum):
+    """Strategies for dynamic fleet scaling."""
+    ROUND_ROBIN = "round_robin"
+    LEAST_LOADED = "least_loaded"
+    LATENCY_WEIGHTED = "latency_weighted"
+    COST_OPTIMIZED = "cost_optimized"
+    PRIORITY_BASED = "priority_based"
+
+
+@dataclass
+class ProviderMetrics:
+    """Tracks metrics for a compute provider."""
+
+    provider_type: ProviderType
+    active_agents: int = 0
+    capacity: int = 10
+    avg_latency_ms: float = 100.0
+    error_rate: float = 0.0
+    cost_per_token: float = 0.0
+    last_health_check: float = field(default_factory=time.time)
+    is_healthy: bool = True
+
+
+@dataclass
+class ScalingDecision:
+    """Represents a scaling action."""
+
+    action: str  # "scale_up", "scale_down", "rebalance", "migrate"
+    provider: ProviderType
+    target_count: int
+    reason: str
+    urgency: float = 0.5  # 0.0 to 1.0
+
+
+# pylint: disable=too-many-ancestors
+class ScalingAgent(BaseAgent):
+    """
+    Agent specializing in dynamic fleet scaling, multi-provider deployment,
+    load balancing, and high-concurrency async operations coordination.
+    """
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._providers: Dict[ProviderType, ProviderMetrics] = {
+            ProviderType.LOCAL: ProviderMetrics(ProviderType.LOCAL, capacity=5, cost_per_token=0.0),
+            ProviderType.GITHUB: ProviderMetrics(ProviderType.GITHUB, capacity=50, cost_per_token=0.0),
+            ProviderType.AZURE: ProviderMetrics(ProviderType.AZURE, capacity=100, cost_per_token=0.002),
+            ProviderType.OLLAMA: ProviderMetrics(
+                ProviderType.OLLAMA,
+                capacity=self._detect_ollama_capacity(),
+                cost_per_token=0.0
+            ),
+            ProviderType.FASTFLOWLM: ProviderMetrics(ProviderType.FASTFLOWLM, capacity=10, cost_per_token=0.0),
+        }
+        self._scaling_history: List[ScalingDecision] = []
+        self._current_strategy = ScalingStrategy.LATENCY_WEIGHTED
+
+    def _detect_ollama_capacity(self) -> int:
+        """
+        Dynamically estimates Ollama concurrency capacity based on system VRAM.
+        Heuristic: 1 slot per 8GB VRAM for 7B models, or default to 3.
+        """
+        try:
+            import psutil
+            # Simplified heuristic using system RAM if GPU info unavailable
+            # Assuming 4GB per concurrent 7B quant stream
+            total_ram_gb = psutil.virtual_memory().total / (1024**3)
+            estimated_slots = int(total_ram_gb // 8)
+            return max(1, estimated_slots)
+        except ImportError:
+            return 3  # Safe default
+        self._system_prompt = (
+            "You are the Scaling Agent. You optimize swarm density and manage "
+            "compute resources across multiple providers (GitHub, Azure, Local, Ollama). "
+            "You ensure high availability, low latency, and cost efficiency."
+        )
+
+    @property
+    def total_capacity(self) -> int:
+        """Calculates total healthy capacity."""
+        return sum(p.capacity for p in self._providers.values() if p.is_healthy)
+
+    @property
+    def total_active(self) -> int:
+        """Calculates total active agents across all providers."""
+        return sum(p.active_agents for p in self._providers.values())
+
+    @property
+    def utilization(self) -> float:
+        """Calculates current fleet utilization."""
+        cap = self.total_capacity
+        return self.total_active / cap if cap > 0 else 0.0
 """
 # ScalingAgent: Fleet Expansion and Resource Orchestration - Phase 319 Enhanced
 

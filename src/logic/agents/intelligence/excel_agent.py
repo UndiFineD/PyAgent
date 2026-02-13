@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +15,41 @@
 # limitations under the License.
 
 """
+ExcelAgent - Excel spreadsheet processing and data extraction
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate with a path to an Excel file and call the DataIntelligenceAgent interface to extract tables, metadata, or run analysis pipelines.
+- Example (conceptual): from src.agents.excel_agent import ExcelAgent
+  agent = ExcelAgent(r"C:\data\report.xlsx")
+  results = agent.extract_structured_data()  # or agent.run_pipeline(...)
+- Intended to be used inside the PyAgent swarm where a DataIntelligenceAgent core provides common parsing, prompting, and persistence behavior.
+
+WHAT IT DOES:
+- Defines ExcelAgent, a thin subclass of DataIntelligenceAgent specialized for spreadsheet processing and data extraction.
+- Sets a dedicated system prompt for Excel-specific behavior and delegates heavy lifting (I/O, parsing, extraction, AI prompting) to the DataIntelligenceAgent core.
+- Serves as the integration point for Excel-format handling (sheet iteration, table detection, header inference) inside higher-level agent workflows.
+
+WHAT IT SHOULD DO BETTER:
+- Expose and document concrete API methods for common tasks (extract_structured_data, infer_schema, preview_sheet) rather than relying on implicit core behavior.
+- Add robust large-file streaming, memory-safe parsing, password-protected workbook support, and explicit error/edge-case handling (merged cells, non-rectangular ranges, mixed types).
+- Provide unit tests, typed return models for extracted tables, async I/O entrypoints, and configurable parsers (pandas/openpyxl/pyxlsb) with automatic fallback.
+
+FILE CONTENT SUMMARY:
 Excel agent.py module.
+"""
+
+from .data_intelligence_agent import DataIntelligenceAgent
+
+
+class ExcelAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
+    """Agent specialized in Excel spreadsheet processing and data extraction."""
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._system_prompt = "You are the ExcelAgent (via DataIntelligence core)."
 """
 
 from .data_intelligence_agent import DataIntelligenceAgent

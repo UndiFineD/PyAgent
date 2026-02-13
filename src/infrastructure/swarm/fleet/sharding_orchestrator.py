@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +15,10 @@
 # limitations under the License.
 
 
-"""Dynamic Communication Sharding Orchestrator (Phase 128).
+"""
+ShardingOrchestrator
+
+Dynamic Communication Sharding Orchestrator (Phase 128).
 Optimizes swarm latency by clustering frequently interacting agents.
 """
 
@@ -26,8 +31,8 @@ from pathlib import Path
 
 try:
     import numpy as np
-    from sklearn.cluster import DBSCAN
-    from sklearn.preprocessing import StandardScaler
+    from sklearn.cluster import DBSCAN  # type: ignore[import-untyped]
+    from sklearn.preprocessing import StandardScaler  # type: ignore[import-untyped]
 except ImportError:
     np = None
     DBSCAN = None

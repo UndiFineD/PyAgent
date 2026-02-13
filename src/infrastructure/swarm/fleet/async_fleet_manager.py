@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +15,10 @@
 # limitations under the License.
 
 
-"""An enhanced FleetManager that supports parallel execution of agent workflows."""
+"""
+AsyncFleetManager
+An enhanced FleetManager that supports parallel execution of agent workflows.
+"""
 
 from __future__ import annotations
 
@@ -25,9 +30,8 @@ from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.dependency_graph import DependencyGraph
-
-from .fleet_manager import FleetManager
-from .workflow_state import WorkflowState
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
 
 __version__ = VERSION
 
@@ -167,10 +171,12 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
         args = step.get("args", [])
         resources = step.get("resources", [])
 
-        if agent_name not in self.agents:
+        if not agent_name or agent_name not in self.agents:
             return f"Error: Agent '{agent_name}' not found."
 
         agent = self.agents[agent_name]
+        if not action_name:
+            return "Error: Action name is required."
         action_fn = getattr(agent, action_name, None)
         if not action_fn:
             return f"Error: Action '{action_name}' not supported."
@@ -262,7 +268,7 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
 if __name__ == "__main__":
     # Test script
     from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
-    from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
+    from src.logic.agents.security import SecurityGuardAgent
 
     ROOT_PATH = "."
     afleet = AsyncFleetManager(ROOT_PATH)

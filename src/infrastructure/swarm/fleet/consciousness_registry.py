@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +15,7 @@
 # limitations under the License.
 
 """
+ConsciousnessRegistry
 Consciousness registry.py module.
 """
 
@@ -33,12 +36,14 @@ class ConsciousnessRegistry:
     """
 
     _instance = None
+    thought_index: dict[str, list[dict[str, Any]]]
+    global_summary: str
 
     def __new__(cls, *args, **kwargs) -> ConsciousnessRegistry:
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            cls._instance.thought_index: dict[str, list[dict[str, Any]]] = {}  # Agent -> Thoughts
-            cls._instance.global_summary: str = "Fleet consciousness active. No thoughts yet."
+            cls._instance.thought_index = {}  # Agent -> Thoughts
+            cls._instance.global_summary = "Fleet consciousness active. No thoughts yet."
 
             # Subscribe to signals
             try:

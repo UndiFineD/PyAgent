@@ -22,23 +22,19 @@ risky imports, replace eval/exec with a RuntimeError), writes a backup
 This is intentionally conservative and deterministic so it can run
 automatically in CI or overnight runs.
 """
+
 from __future__ import annotations
 import shutil
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-PATCH_DIR = ROOT / '.external' / 'patches'
-STATIC_DIR = ROOT / '.external' / 'static_checks'
-
+PATCH_DIR = ROOT / ".external" / "patches"
+STATIC_DIR = ROOT / ".external" / "static_checks"
 
 def main() -> int:
-    try:
-        from src.tools import prepare_refactor_patches as prep
-    except Exception:
-        # fallback: try to import by path
-        sys.path.insert(0, str(ROOT / 'src'))
-        from tools import prepare_refactor_patches as prep
+    """Main function to apply conservative patch proposals from bandit findings."""
+    from . import prepare_refactor_patches as prep
 
     try:
         data = prep.load_bandit()

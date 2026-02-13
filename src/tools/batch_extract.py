@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Batch extractor: split a large refactor report into chunks and run
+"""
+Batch extractor: split a large refactor report into chunks and run
 `extract_candidates.py` in parallel subprocesses.
 
 This script creates temporary chunked reports under `.external/tmp_reports/`
@@ -22,8 +23,10 @@ extract broadly. Use `--allow-top-level` and `--allow-no-defs` to be permissive.
 WARNING: this automates extraction at scale and may produce many files. Do not
 run on untrusted machines unless you understand the risks.
 """
+
 from __future__ import annotations
 import argparse
+import asyncio
 import json
 from pathlib import Path
 import subprocess
@@ -37,6 +40,15 @@ EXTRACTOR = ROOT / 'src' / 'tools' / 'extract_candidates.py'
 
 
 def chunk_files(report: dict, chunk_size: int) -> list[list[dict]]:
+    """Split report files into chunks of specified size.
+    
+    Args:
+        report: The refactor report dictionary containing directories and files.
+        chunk_size: Maximum number of files per chunk.
+    
+    Returns:
+        A list of file chunks, each containing up to chunk_size entries.
+    """
     files = []
     for d in report.get('directories', []):
         repo = d.get('path')
@@ -49,6 +61,15 @@ def chunk_files(report: dict, chunk_size: int) -> list[list[dict]]:
 
 
 def make_chunk_report(chunk: list[dict[str, Any]], idx: int) -> Path:
+    """Create a chunk report JSON file from a subset of files.
+    
+    Args:
+        chunk: A list of file entries to include in the chunk report.
+        idx: The chunk index used to name the output file.
+    
+    Returns:
+        Path to the generated chunk report JSON file.
+    """
     TMP_DIR.mkdir(parents=True, exist_ok=True)
     # Preserve the structure: directories -> list with a single synthetic dir
     files_list: list[dict[str, Any]] = []
@@ -61,7 +82,16 @@ def make_chunk_report(chunk: list[dict[str, Any]], idx: int) -> Path:
     return out
 
 
-def run_chunk(report_path: Path, args_extra: list[str]) -> int:
+async def run_chunk(report_path: Path, args_extra: list[str]) -> int:
+    """Execute the extractor on a single chunk report.
+    
+    Args:
+        report_path: Path to the chunk report JSON file.
+        args_extra: Additional command-line arguments to pass to the extractor.
+    
+    Returns:
+        The exit code of the subprocess.
+    """
     cmd = [
         shutil.which('python') or 'python',
         str(EXTRACTOR),
@@ -69,11 +99,25 @@ def run_chunk(report_path: Path, args_extra: list[str]) -> int:
         '--limit', '1000000'
     ] + args_extra
     print('RUN:', ' '.join(cmd))
-    p = subprocess.run(cmd)
+    p = await asyncio.create_subprocess_exec(
+        *cmd,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE
+    )
+    await p.wait()
+    assert p.returncode is not None
     return p.returncode
 
 
-def main():
+def main() -> int:
+    """Execute batch extraction of candidates from a chunked refactor report.
+    
+    Parses command-line arguments, splits the refactor report into chunks,
+    creates temporary chunk reports, and runs the extractor in parallel.
+    
+    Returns:
+        Exit code: 0 on success, 1 if any chunks failed, 2 if report not found.
+    """
     p = argparse.ArgumentParser()
     p.add_argument('--report', type=Path, default=REPORT_DEFAULT)
     p.add_argument('--chunk-size', type=int, default=500)
@@ -106,19 +150,20 @@ def main():
         report_paths.append(rp)
 
     # run in parallel pools of size workers
-    from concurrent.futures import ThreadPoolExecutor, as_completed
+    async def run_all_chunks():
+        tasks = [run_chunk(rp, extra) for rp in report_paths]
+        return await asyncio.gather(*tasks, return_exceptions=True)
+    
     results = []
-    with ThreadPoolExecutor(max_workers=args.workers) as ex:
-        futs = {ex.submit(run_chunk, rp, extra): rp for rp in report_paths}
-        for fut in as_completed(futs):
-            rp = futs[fut]
-            try:
-                code = fut.result()
-            except Exception as e:
-                code = 1
-                print('chunk failed', rp, e)
-            print('chunk', rp.name, 'exit', code)
-            results.append((rp, code))
+    outcomes = asyncio.run(run_all_chunks())
+    for rp, outcome in zip(report_paths, outcomes):
+        if isinstance(outcome, Exception):
+            code = 1
+            print('chunk failed', rp, outcome)
+        else:
+            code = outcome
+        print('chunk', rp.name, 'exit', code)
+        results.append((rp, code))
 
     failed = [r for r in results if r[1] != 0]
     print('Done. chunks:', len(results), 'failed:', len(failed))

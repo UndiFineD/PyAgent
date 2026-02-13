@@ -12,14 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Batch-safe refactor/copy of .external Python files into src/external_candidates.
+"""
+Batch-safe refactor/copy of .external Python files into src/external_candidates.
 
 Features:
 - Recursively scans ROOT/.external for .py files
-- Performs lightweight AST safety checks to detect `eval`, `exec`, `os.system`, `subprocess` usages
-- Sanitizes filenames to snake_case and writes to a mirrored directory under `src/external_candidates/ingested`
+- Performs lightweight AST safety checks to detect 
+  `eval`, `exec`, `os.system`, `subprocess` usages
+- Sanitizes filenames to snake_case and writes to a mirrored directory 
+  under `src/external_candidates/ingested`
 - Produces a JSON mapping and log file, supports `--limit` and `--dry-run`
 """
+
 from pathlib import Path
 import argparse
 import ast
@@ -39,12 +43,14 @@ FORBIDDEN_MODULES = {'subprocess', 'sh', 'pexpect'}
 
 
 def parse_allowlist(s: str):
+    """Parses a comma-separated allowlist string into a set of stripped values."""
     if not s:
         return set()
     return {x.strip() for x in s.split(',') if x.strip()}
 
 
 def sanitize_filename(name: str) -> str:
+    """Sanitize a filename to be a valid Python module name."""
     base = Path(name).stem
     s = base.lower()
     s = re.sub(r'[^0-9a-z_]', '_', s)
@@ -66,10 +72,11 @@ def is_ast_safe(
     allow_limited_shell: bool = False,
     allow_eval: bool = False
 ) -> tuple[bool, list[str]]:
+    """Performs AST-based safety checks on the provided source code string."""
     issues: list[str] = []
     try:
         tree = ast.parse(src, filename=filename)
-    except Exception as e:
+    except SyntaxError as e:
         issues.append(f'parse_error:{e}')
         return False, issues
     for node in ast.walk(tree):
@@ -130,6 +137,7 @@ def is_ast_safe(
 
 
 def file_hash(p: Path) -> str:
+    """Computes a short hash of the file contents for collision avoidance in naming."""
     h = hashlib.sha1()
     data = p.read_bytes()
     h.update(data)
@@ -147,6 +155,10 @@ def process(
     allow_limited_shell: bool = False,
     allow_eval: bool = False
 ) -> None:
+    """
+    Processes .py files in EXTERNAL, checks AST safety, 
+    and copies/sanitizes them to DEST_BASE with a mapping log.
+    """
     if not EXTERNAL.exists():
         print(f'.external not found at {EXTERNAL}')
         return
@@ -163,7 +175,7 @@ def process(
         rel = p.relative_to(EXTERNAL)
         try:
             src = p.read_text(encoding='utf-8')
-        except Exception as e:
+        except (UnicodeDecodeError, OSError) as e:
             if verbose:
                 print(f'failed read {p}: {e}')
             skipped += 1
@@ -187,9 +199,15 @@ def process(
             continue
         # sanitize and mirror path
         parts = rel.parts
+        if not parts:
+            if verbose:
+                print(f'SKIP empty path {p}')
+            skipped += 1
+            count += 1
+            continue
         dest_dir = DEST_BASE.joinpath(*[sanitize_filename(p) for p in parts[:-1]]) if len(parts) > 1 else DEST_BASE
         dest_dir.mkdir(parents=True, exist_ok=True)
-        new_name = sanitize_filename(parts[-1])
+        new_name = sanitize_filename(parts[-1]) if parts else 'module.py'
         # include short hash to avoid collisions
         h = file_hash(p)
         dest_name = f"{Path(new_name).stem}_{h}.py"
@@ -210,6 +228,7 @@ def process(
 
 
 def main():
+    """Entry point for the batch refactor script, parsing CLI arguments."""
     ap = argparse.ArgumentParser()
     ap.add_argument('--limit', type=int, default=200, help='Max files to process')
     ap.add_argument('--start', type=int, default=0, help='Skip first N files')

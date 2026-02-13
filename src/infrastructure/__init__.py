@@ -1,3 +1,6 @@
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,11 +38,13 @@ from typing import Any, List
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader
-from src.infrastructure.lazy import (get_arc_offload_manager,
-                                     get_eagle_proposer,
-                                     get_paged_attention_engine,
-                                     get_reasoning_engine,
-                                     get_tool_parser_registry)
+from src.infrastructure.lazy import (
+    get_arc_offload_manager,
+    get_eagle_proposer,
+    get_paged_attention_engine,
+    get_reasoning_engine,
+    get_tool_parser_registry,
+)
 
 __version__ = VERSION
 

@@ -1,4 +1,40 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""
+SvgAgent - 2D SVG generation and optimization
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- As script: python svg_agent.py "path\to\file.svg"
+- As library: from svg_agent import SvgAgent; agent = SvgAgent("path\to\file.svg"); use via CoderAgent workflow (generate/optimize and save).
+
+WHAT IT DOES:
+Provides an agent class (SvgAgent) specialized for producing and optimizing 2D SVG markup; it sets XML language context, supplies an SVG-focused system prompt for the underlying CoderAgent, and returns a small default SVG template.
+
+WHAT IT SHOULD DO BETTER:
+- Expose CLI options for viewport, precision, and optimization level.
+- Implement concrete SVG optimization routines (path simplification, precision trimming, ID deduplication) rather than relying solely on LLM guidance.
+- Add input validation, unit tests for generated SVG correctness, and streaming/async IO for large assets.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,6 +50,43 @@
 
 
 """Agent specializing in 2D SVG image generation and optimization."""
+
+from __future__ import annotations
+
+from src.core.base.common.base_utilities import create_main_function
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.development.coder_agent import CoderAgent
+
+__version__ = VERSION
+
+
+# pylint: disable=too-many-ancestors
+class SvgAgent(CoderAgent):
+    """Agent for generating and optimizing 2D SVG vector graphics."""
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._language = "xml"  # SVG is XML-based
+
+        self._system_prompt = (
+            "You are an SVG Graphic Designer and Vector Optimization Expert. "
+            "You generate high-quality, clean, and optimized 2D SVG code. "
+            "Focus on semantic tags, proper viewports, path optimization, and CSS styling within the SVG. "
+            "Avoid bloated markup and use minimal precision for coordinates."
+        )
+
+    def _get_default_content(self) -> str:
+        return (
+            '<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">\n'
+            '  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />\n'
+            '</svg>\n'
+        )
+
+
+if __name__ == "__main__":
+    main = create_main_function(SvgAgent, "SVG Agent", "Path to SVG file (.svg)")
+    main()
+"""
 
 from __future__ import annotations
 

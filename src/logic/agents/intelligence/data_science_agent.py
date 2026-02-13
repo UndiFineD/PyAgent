@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +15,37 @@
 # limitations under the License.
 
 """
+DataScienceAgent - Advanced statistical analysis and data science workflows
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+from src.agents.data_science_agent import DataScienceAgent
+agent = DataScienceAgent(file_path="path/to/dataset.csv")
+call agent methods via the DataIntelligenceAgent interface for ingestion, preprocessing, modeling, and evaluation.
+
+WHAT IT DOES:
+Provides a specialized agent subclassing DataIntelligenceAgent that sets a system prompt tailored for data science tasks and inherits core data intelligence capabilities (ingest, transform, analyze, report) from its parent.
+
+WHAT IT SHOULD DO BETTER:
+- Expose explicit methods for common data-science workflows (train_model, evaluate, explain) rather than relying solely on inherited behavior.
+- Accept configurable system prompts and pipeline configuration (presets for EDA, modeling, hyperparameter search).
+- Add type-hinted public APIs, documentation strings for methods, and unit tests covering typical analysis flows.
+
+FILE CONTENT SUMMARY:
 Data science agent.py module.
+"""
+
+from .data_intelligence_agent import DataIntelligenceAgent
+
+
+class DataScienceAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
+    """Agent specialized in advanced statistical analysis and data science workflows."""
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._system_prompt = "You are the DataScienceAgent (via DataIntelligence core)."
 """
 
 from .data_intelligence_agent import DataIntelligenceAgent

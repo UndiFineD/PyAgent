@@ -13,8 +13,148 @@
 # limitations under the License.
 
 """
+OrchestratorAgent - Central coordination unit for swarm agentic workflows
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate with OrchestratorAgent(file_path="path/to/repo", enable_async=True, dry_run=False) then register plugins, call from_config_file for config-driven init, and use the command_handler to dispatch agent commands
+
+WHAT IT DOES:
+Coordinates BaseAgent and OrchestratorFeatures to decompose tasks, delegate work to specialist agents, provide legacy compatibility shims such as repo_root aliasing and legacy metrics, initialize AgentCommandHandler and plugin container, and support config-file construction
+
+WHAT IT SHOULD DO BETTER:
+Remove the runtime circular import for BaseAgent by refactoring initialization to a factory or injection pattern, migrate legacy synchronous helpers to full asyncio usage for enable_async, extract metrics management to a dedicated MetricsManager, add stricter typing for plugin interfaces, and expand unit tests for lifecycle and plugin registration
+
+FILE CONTENT SUMMARY:
 OrchestratorAgent: The central coordination unit of the PyAgent swarm.
 Manages task decomposition, agent delegation, and collaborative workflow execution.
+"""
+
+from __future__ import annotations
+
+import logging
+import time
+from pathlib import Path
+from typing import Any
+
+from src.core.base.execution.agent_command_handler import AgentCommandHandler
+from src.core.base.lifecycle.version import VERSION
+from .orchestrator_features import OrchestratorFeatures
+
+__version__ = VERSION
+BaseAgent = None  # Will be imported locally to avoid circular import
+
+
+class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ancestors
+    """
+    Primary orchestrator for swarm agentic workflows.
+    Combines core BaseAgent capabilities with specialized orchestrator features.
+
+    This class satisfies both modern Mixin-based architecture and legacy
+    integration requirements (Phase 317 consolidation).
+    """
+
+    def __init__(self, file_path: str = ".", **kwargs: Any) -> None:
+        global BaseAgent
+        if BaseAgent is None:
+            from src.core.base.lifecycle.base_agent import BaseAgent as _BaseAgent
+            BaseAgent = _BaseAgent
+        # Handle cases where repo_root is passed instead of file_path
+        repo_root = kwargs.get("repo_root")
+        if repo_root and (file_path == "." or not file_path):
+            file_path = repo_root
+        self._base = BaseAgent(str(file_path), **kwargs)
+        super().__init__()
+
+        # Initialize legacy components expected by some integration tests
+        self.command_handler = AgentCommandHandler(str(self._workspace_root))
+
+        # Initialize plugins container
+        self.plugins: dict[str, Any] = {}
+
+        # Legacy attribute support
+        self.enable_async = kwargs.get("enable_async", False)
+        self.dry_run = kwargs.get("dry_run", False)
+        self.strategy = kwargs.get("strategy", "direct")
+
+        # Handle rate limiting from config/kwargs
+        if "rate_limit" in kwargs or "rate_limiter" in kwargs:
+            rl_config = kwargs.get("rate_limit", {})
+            self.enable_rate_limiting(config=rl_config)
+
+        # Performance/Cost metrics (Legacy support)
+        self.metrics_manager = self
+        self._metrics: dict[str, Any] = {
+            "files_processed": 0,
+            "files_modified": 0,
+            "agents_applied": {},
+            "start_time": time.time(),
+            "end_time": 0.0,
+        }
+
+    @property
+    def metrics(self) -> dict[str, Any]:
+        """Provides access to agent metrics."""
+        return self._metrics
+
+    @metrics.setter
+    def metrics(self, value: dict[str, Any]) -> None:
+        """Sets agent metrics."""
+        self._metrics = value
+
+    def register_plugin(
+        self,
+        name_or_plugin: Any,
+        plugin: Any | None = None
+    ) -> None:  # pylint: disable=arguments-renamed
+        """
+        Registers a plugin. Overrides BaseAgent classmethod
+        to use OrchestratorPluginMixin instance method.
+        """
+        # Ensure plugins dict exists on instance
+        if not hasattr(self, "plugins"):
+            self.plugins = {}
+
+        # Use the mixin implementation
+        from src.logic.agents.swarm.orchestrator_plugin_mixin import \
+            OrchestratorPluginMixin
+
+        if plugin:
+            OrchestratorPluginMixin.register_plugin(self, plugin)
+        else:
+            OrchestratorPluginMixin.register_plugin(self, name_or_plugin)
+
+    @property
+    def repo_root(self) -> str:
+        """Alias for _workspace_root for legacy compatibility."""
+        return str(self._workspace_root)
+
+    @repo_root.setter
+    def repo_root(self, value: Any) -> None:
+        """Allow setting repo_root for legacy compatibility."""
+        self._workspace_root = str(value)
+
+    @classmethod
+    def from_config_file(cls, config_path: Path | str) -> OrchestratorAgent:
+        """
+        Creates an OrchestratorAgent from a configuration file.
+        Legacy support for config-driven initialization.
+        """
+        import json
+
+        config_path = Path(config_path)
+        if not config_path.exists():
+            raise FileNotFoundError(f"Config file not found: {config_path}")
+
+        with open(config_path, "r", encoding="utf-8") as f:
+            config = json.load(f)
+
+        repo_root = config.get("repo_root", ".")
+        return cls(file_path=repo_root, **config)
+
+    def generate_
 """
 
 from __future__ import annotations

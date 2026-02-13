@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +15,8 @@
 # limitations under the License.
 
 
-"""Attribution Engine for PyAgent.
+"""
+Attribution Engine for PyAgent.
 Tracks the lineage and provenance of every generated piece of content or code.
 """
 

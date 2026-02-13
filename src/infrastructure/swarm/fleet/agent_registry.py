@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +15,11 @@
 # limitations under the License.
 
 
-"""Registry for mapping agent names to their implementations and initialization logic."""
+"""
+Registry for mapping agent names to their implementations and initialization logic.
+
+LazyAgentMap is a dictionary that instantiates agents only when they are first accessed.
+"""
 
 from __future__ import annotations
 
@@ -21,32 +27,36 @@ import importlib
 import json
 import logging
 import os
-from collections.abc import Iterable
+from collections.abc import Iterable, KeysView
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Mapping
 
 from src.core.base.lifecycle.version import SDK_VERSION, VERSION
-
-from .agent_registry_core import AgentRegistryCore
-from .bootstrap_configs import BOOTSTRAP_AGENTS
-from .resilient_stubs import ResilientStub
+from src.infrastructure.swarm.fleet.agent_registry_core import AgentRegistryCore
+from src.infrastructure.swarm.fleet.bootstrap_configs import BOOTSTRAP_AGENTS
+from src.infrastructure.swarm.fleet.resilient_stubs import ResilientStub
 
 MCPAgent = None  # Will be imported locally to avoid circular import
 
 if TYPE_CHECKING:
-    from .fleet_manager import FleetManager
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 # Import local version for gatekeeping
 __version__ = VERSION
 
 
-def get_mcp_agent(*args: Any, **kwargs: Any) -> Any:
+def get_mcp_agent_class() -> type | None:
+    """Returns the MCPAgent class without instantiating it."""
     global MCPAgent
     if MCPAgent is None:
-        from src.logic.agents.system.mcp_agent import MCPAgent as _MCPAgent
-        MCPAgent = _MCPAgent
-    return MCPAgent(*args, **kwargs)
+        try:
+            from src.logic.agents.system.mcp_agent import MCPAgent as _MCPAgent
+            MCPAgent = _MCPAgent
+        except (ImportError, ModuleNotFoundError):
+            logging.warning("MCPAgent not available; MCP integration may be disabled.")
+            return None
+    return MCPAgent
 
 
 class LazyAgentMap(dict):
@@ -199,21 +209,21 @@ class LazyAgentMap(dict):
             list(map(report_cycle, cycles))
             raise RecursionError(f"Circular dependencies detected in Agent Registry: {cycles[0]}")
 
-    def keys(self) -> list[str]:
+    def keys(self):  # type: ignore
         # Combine all potential keys
         all_ks = set(super().keys())
         all_ks.update(self.registry_configs.keys())
         all_ks.update(self._manifest_configs.keys())
         all_ks.update(self._discovered_configs.keys())
-        return list(all_ks)
+        return {k: None for k in all_ks}.keys()
 
-    def __iter__(self) -> Iterable[str]:
+    def __iter__(self):
         return iter(self.keys())
 
     def __len__(self) -> int:
         return len(self.keys())
 
-    def items(self) -> list[tuple[str, Any]]:
+    def items(self):  # type: ignore
         # pylint: disable=consider-using-dict-items
         return list(map(lambda k: (k, self[k]), self.keys()))
 
@@ -242,7 +252,7 @@ class LazyAgentMap(dict):
                 }
         return metadata
 
-    def values(self) -> list[Any]:
+    def values(self):  # type: ignore
         # pylint: disable=consider-using-dict-items
         return list(map(lambda k: self[k], self.keys()))
 
@@ -318,7 +328,7 @@ class LazyAgentMap(dict):
 
         try:
             return self[name]
-        except KeyError:
+        except KeyError as exc:
             # Fallback to normalized names regarding attributes as well
             n_low = name.lower().replace("_", "")
 
@@ -329,7 +339,7 @@ class LazyAgentMap(dict):
             match_k = get_matching_key()
             if match_k:
                 return self[match_k]
-            raise AttributeError(f"Agent '{name}' not found in registry.")
+            raise AttributeError(f"Agent '{name}' not found in registry.") from exc
 
     def _instantiate(self, key: str, config: tuple[str, str, str | None]) -> Any:
         """Standard instantiation logic regarding dependency injection and version checks."""
@@ -369,7 +379,10 @@ class LazyAgentMap(dict):
     def _handle_mcp_agent(self, key: str, class_name: str) -> Any:
         """Handles initialization regarding MCP agents."""
         try:
-            instance = MCPAgent(class_name)
+            mcp_agent_class = get_mcp_agent_class()
+            if mcp_agent_class is None:
+                raise ImportError("MCPAgent class not available")
+            instance = mcp_agent_class(class_name)
             self._instances[key] = instance
             return instance
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
@@ -421,9 +434,12 @@ class LazyAgentMap(dict):
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning(f"Failed to register tools regarding {key}: {e}")
 
-    def update(self, other: dict[str, Any]) -> None:
+    def update(self, other: Mapping[str, Any] | None = None, **kwargs: Any) -> None:
         # Allow manual overrides or additions (like SignalBus)
-        self._instances.update(other)
+        if other is not None:
+            self._instances.update(other)
+        if kwargs:
+            self._instances.update(kwargs)
 
 
 class AgentRegistry:

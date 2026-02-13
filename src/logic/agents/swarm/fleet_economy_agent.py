@@ -13,7 +13,136 @@
 # limitations under the License.
 
 """
+Fleet Economy Agent - Manage Agent Wallets and Resource Bidding
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate: agent = FleetEconomyAgent(workspace_path=".")
+- Fund an agent: agent.deposit_credits("agent_a", 100.0)
+- Place a bid: agent.place_bid("agent_a", "task_123", 10.0, priority=1)
+- Resolve auction: agent.resolve_auction("task_123")
+
+WHAT IT DOES:
+- Provides a Tier 4 "Economy" agent that manages per-agent wallets, bids, and an on-disk SQLite ledger for persistent fleet economy state.
+- Supports depositing credits, placing bids (with funds locking), and resolving auctions using a second-price (Vickrey-like) mechanism, plus a simple hardware savings table for telemetry.
+- Implements basic DB initialization and error logging to make the ledger resilient to missing directories or DB errors.
+
+WHAT IT SHOULD DO BETTER:
+- Move DB access to a transactional, thread-safe layer and use a connection pool or async DB to avoid race conditions under concurrency.
+- Add robust validation of inputs, clearer error codes, and explicit rollback paths for multi-statement operations (use SAVEPOINT/ROLLBACK or a StateTransaction abstraction).
+- Extend auction logic: handle tie-breaking, time windows, bid retractions, expired/closed auctions, and offload complex logic to a FleetEconomyCore to separate orchestration from domain rules; add unit and integration tests and DB migrations/versioning.
+
+FILE CONTENT SUMMARY:
 Fleet economy agent.py module.
+"""
+
+
+from __future__ import annotations
+
+import logging
+import sqlite3
+from pathlib import Path
+from typing import Any, Dict
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+    """
+    Tier 4 (Economy) - Fleet Economy Agent: Manages internal agent "wallets",
+    credits, and resource bidding mechanisms using a persistent SQLite backend.
+    """
+
+    def __init__(self, workspace_path: str | Path = ".") -> None:
+        super().__init__(str(workspace_path))
+        self.workspace_path = Path(workspace_path)
+        self.db_path = self.workspace_path / "data/db/swarm_economy.db"
+        self._init_db()
+
+    def _init_db(self) -> None:
+        """Initializes the persistent fleet ledger (Phase 284)."""
+        try:
+            self.db_path.parent.mkdir(parents=True, exist_ok=True)
+            with sqlite3.connect(self.db_path) as conn:
+                conn.execute(
+                    "CREATE TABLE IF NOT EXISTS wallets (agent_id TEXT PRIMARY KEY, balance REAL)"
+                )
+                conn.execute(
+                    "CREATE TABLE IF NOT EXISTS bids (task_id TEXT, agent_id TEXT, bid REAL, "
+                    "priority INTEGER, status TEXT)"
+                )
+                conn.execute(
+                    "CREATE TABLE IF NOT EXISTS hardware_savings (timestamp DATETIME DEFAULT "
+                    "CURRENT_TIMESTAMP, agent_id TEXT, tokens INTEGER, tps REAL, savings_usd REAL)"
+                )
+                conn.commit()
+            logging.info(f"FleetEconomyAgent: Persistent ledger initialized at {self.db_path}")
+        except (sqlite3.Error, OSError) as e:
+            logging.error(f"FleetEconomyAgent: DB initialization failed: {e}")
+
+    def deposit_credits(self, agent_id: str, amount: float) -> dict[str, Any]:
+        """Funds an agent's wallet or deducts if negative (Phase 284)."""
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(
+                "INSERT INTO wallets (agent_id, balance) VALUES (?, ?) "
+                "ON CONFLICT(agent_id) DO UPDATE SET balance = balance + ?",
+                (agent_id, amount, amount),
+            )
+            cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))
+            balance = cursor.fetchone()[0]
+            conn.commit()
+        return {"agent": agent_id, "balance": balance}
+
+    def place_bid(self, agent_id: str, task_id: str, bid_amount: float, priority: int = 1) -> dict[str, Any]:
+        """Places a bid for compute resources (Phase 284)."""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))
+            row = cursor.fetchone()
+            balance = row[0] if row else 0.0
+
+            if balance < bid_amount:
+                return {"status": "failed", "reason": "Insufficient credits"}
+
+            conn.execute(
+                "INSERT INTO bids (task_id, agent_id, bid, priority, status) VALUES (?, ?, ?, ?, 'active')",
+                (task_id, agent_id, bid_amount, priority),
+            )
+            # Lock funds
+            conn.execute(
+                "UPDATE wallets SET balance = balance - ? WHERE agent_id = ?",
+                (bid_amount, agent_id),
+            )
+            conn.commit()
+
+        return {
+            "status": "bid_placed",
+            "task_id": task_id,
+            "remaining_balance": balance - bid_amount,
+        }
+
+    def resolve_auction(self, task_id: str) -> dict[str, Any]:
+        """Implement Second-Price (Vickrey) auction for task allocation (Phase 284)."""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.execute(
+                "SELECT agent_id, bid FROM bids WHERE task_id = ? ORDER BY bid DESC",
+                (task_id,),
+            )
+            bids = cursor.fetchall()
+
+            if not bids:
+                return {"status": "failed", "reason": "No bids for task"}
+
+            winner_id, highest_bid = bids[0]
+            # Second bid or half of highest if only one bidder
+            second_bid = bids[1][1] if len(bids) > 1 else (highest_bid * 0.5)
+
+            # Refund the difference (Winner pays second price)
+            refun
 """
 
 

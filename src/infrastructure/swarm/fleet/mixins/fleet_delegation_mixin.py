@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +14,7 @@
 # limitations under the License.
 
 """
+FleetDelegationMixin
 Fleet delegation mixin.py module.
 """
 
@@ -24,12 +26,24 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+    from src.core.base.monitoring.resource_monitor import ResourceMonitor
+    from src.core.manifest.manifest_repository import ManifestRepository
+    from src.infrastructure.swarm.voyager.voyager_transport import VoyagerTransport
+    from src.infrastructure.swarm.voyager.voyager_discovery import VoyagerDiscovery
 
 
 class FleetDelegationMixin:
     """Mixin for agent delegation logic in FleetManager."""
 
-    async def delegate_to(self: FleetManager, agent_type: str, prompt: str, target_file: str | None = None) -> str:
+    resource_monitor: ResourceMonitor
+    borrowed_helpers: dict
+    workspace_root: object  # Should be properly typed; accessing .name attribute
+    voyager_transport: VoyagerTransport
+    agents: dict
+    manifest_repo: ManifestRepository
+    voyager_discovery: VoyagerDiscovery
+
+    async def delegate_to(self, agent_type: str, prompt: str, target_file: str | None = None) -> str:
         """Synaptic Delegation: Hands off a sub-task to a specialized agent or Universal Shard."""
         logging.info(f"Fleet: Delegating {agent_type} (Target: {target_file})")
 
@@ -46,7 +60,7 @@ class FleetDelegationMixin:
 
                 offload_msg = {
                     "type": "delegate_task",
-                    "sender_id": f"fleet-{self.workspace_root.name}",
+                    "sender_id": f"fleet-{getattr(self.workspace_root, 'name', 'unknown')}",
                     "agent_type": agent_type,
                     "prompt": prompt
                 }
@@ -82,7 +96,7 @@ class FleetDelegationMixin:
 
         raise KeyError(f"Agent or Manifest '{agent_type}' not found in Fleet.")
 
-    async def request_compute_borrow(self: FleetManager, stats: dict) -> bool:
+    async def request_compute_borrow(self, stats: dict) -> bool:
         """
         Broadcasts a 'compute_borrow_request' to neighbors (Pillar 8).
         Nodes with <50% load will respond to take over the next task.
@@ -94,7 +108,7 @@ class FleetDelegationMixin:
 
         borrow_msg = {
             "type": "compute_borrow_request",
-            "sender_id": f"fleet-{self.workspace_root.name}",
+            "sender_id": f"fleet-{getattr(self.workspace_root, 'name', 'unknown')}",
             "stats": stats
         }
 
