@@ -69,17 +69,17 @@ try:
     from src.core.base.mixins.singleton_mixin import SingletonMixin
 except ImportError:
     # Fallback for tests or alternate import paths
-    class SingletonMixin:
+    class SingletonMixin:  # type: ignore
         """Fallback singleton mixin if not available."""
-        _instance = None
-        _lock = threading.Lock()
+        _instance: "SingletonMixin | None" = None
+        _lock: LockType = threading.Lock()
 
-        def __new__(cls):
+        def __new__(cls: type["SingletonMixin"]) -> "SingletonMixin":
             if cls._instance is None:
                 with cls._lock:
                     if cls._instance is None:
-                        cls._instance = super().__new__(cls)
-            return cls._instance
+                        cls._instance = super().__new__(cls)  # type: ignore
+            return cls._instance  # type: ignore
 
 
 @dataclass

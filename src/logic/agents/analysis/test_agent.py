@@ -13,8 +13,151 @@
 # limitations under the License.
 
 
+"""
+Test Agent - Executes pytest suites and analyzes failures
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate with the path of the agent file (agent = TestAgent(file_path)) then call agent.run_tests(path="tests", force=False, bypass_shard_validation=False). Use force=True or bypass_shard_validation=True to skip shard integrity blocking when necessary. The method is decorated as a tool (@as_tool) so it is intended to be invoked by the system orchestration layer.
+
+WHAT IT DOES:
+- Verifies shard integrity via ShardCore before running tests (with optional bypass).
+- Executes pytest using a safe, list-based subprocess invocation and captures stdout/stderr and return codes.
+- Records execution metadata via the agent _record method and logs failures to the agent context using FailureClassification enums.
+- Produces a concise test execution report and limits tracebacks and failures (maxfail=5) to keep outputs manageable.
+
+WHAT IT SHOULD DO BETTER:
+- More robust parsing and structured extraction of pytest failures (e.g., JSON output via pytest --json-report) to provide actionable diagnostics rather than string tails.
+- Add configurable timeouts, parallel test execution options, and explicit coverage collection/integration rather than relying on external invocation flags.
+- Migrate blocking subprocess calls to asyncio subprocess APIs for non-blocking integration with the agent event loop and better resource control.
+- Improve isolation for test runs (virtual environments, reproducible dependencies) and richer failure classification mapping (per-test causes, flaky detection, rerun strategies).
+- Increase testability of the agent itself (unit tests for shard bypass logic, mocked subprocess behavior, and context logging) and adopt StateTransaction for any filesystem changes per project conventions.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 """Agent specializing in automated testing and coverage analysis.
 Inspired by SGI-Bench and py.test.
+"""
+
+from __future__ import annotations
+
+import logging
+import subprocess
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.common.shard_core import ShardCore
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+# Phase 336: Failure Taxonomy
+from src.core.base.common.models.core_enums import FailureClassification
+
+__version__ = VERSION
+
+
+class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+    """Executes unit and integration tests and analyzes failures."""
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self.workspace_root = self.file_path.parent.parent.parent
+        self._system_prompt = (
+            "You are the Test Agent. "
+            "Your role is to ensure the functional correctness of the codebase. "
+            "Execute pytest suites, capture failures, and explain them to the developers. "
+            "Always suggest a potential cause for every test failure."
+        )
+
+    def shard_integrity_check(self, bypass: bool = False) -> bool:
+        """
+        Verify validation of shards, with optional bypass.
+        Refactored to decouple testing from shard state (Phase 336).
+        """
+        if ShardCore().verify_integrity():
+            return True
+
+        msg = "Shard integrity check failed."
+        if not bypass:
+            logging.critical(f"{msg} Aborting operation. Use bypass=True to ignore.")
+            if hasattr(self, "context") and self.context:
+                self.context.log_failure(
+                    stage="shard_integrity_check_abort",
+                    error=msg,
+                    details={},
+                    failure_type=FailureClassification.SHARD_CORRUPTION.value
+                )
+            return False
+        else:
+            logging.warning(f"{msg} Proceeding due to bypass=True.")
+            if hasattr(self, "context") and self.context:
+                self.context.log_failure(
+                    stage="shard_integrity_check_bypass",
+                    error=msg,
+                    details={},
+                    failure_type=FailureClassification.SHARD_CORRUPTION.value
+                )
+            return True
+
+    @as_tool
+    def run_tests(self, path: str = "tests", force: bool = False, bypass_shard_validation: bool = False) -> str:
+        """Executes pytest on the specified directory."""
+
+        # Merge force and bypass flags
+        should_bypass = force or bypass_shard_validation
+
+        # Phase 336: Pattern 3 - TestAgent-Shard Coupling Mitigation
+        # Verify shard integrity before running tests to prevent deadlocks
+        if not self.shard_integrity_check(bypass=should_bypass):
+            msg = "Shard integrity check failed."
+            return f"❌ **system_error**: {msg} (Use force=True or bypass_shard_validation=True to bypass)"
+
+        logging.info(f"TestAgent running tests in: {path}")
+        try:
+            import sys
+
+            # Converted to list-based execution to prevent shell injection
+            cmd = [sys.executable, "-m", "pytest", path, "--tb=short", "--maxfail=5"]
+            result = subprocess.run(cmd, shell=False, capture_output=True, text=True, check=False)
+
+            # Phase 108: Record test execution patterns
+            self._record(
+                f"pytest {path}",
+                f"RC={result.returncode}\n{result.stdout[-1000:]}",
+                provider="Shell",
+                model="pytest",
+            )
+
+            # Phase 336: Validation failure capture
+            if result.returncode != 0 and hasattr(self, "context") and self.context:
+                self.context.log_failure(
+                    stage="test_execution_fail",
+                    error=f"Tests failed in {path}",
+                    details={
+                        "return_code": result.returncode,
+                        "stdout_tail": result.stdout[-500:],
+                        "stderr_tail": result.stderr[-500:] if result.stderr else "",
+                    },
+                    failure_type=FailureClassification.TEST_INFRASTRUCTURE.value
+                )
+
+            report = ["## 🧪 Test Execution Report\n"]
+            if result.returncode == 0:
+                report.append("✅ **Status**: All t
 """
 
 from __future__ import annotations

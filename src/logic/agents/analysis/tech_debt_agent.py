@@ -22,8 +22,159 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 """
+TechDebtAgent - Detects, tracks, and prioritizes technical debt in the PyAgent codebase
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- As a library: instantiate TechDebtAgent(workspace_path) and call analyze_file(path), analyze_workspace(), or await improve_content(prompt, target_file).
+- From CLI: python tech_debt_agent.py <workspace_path> (uses create_main_function to build a simple CLI).
+- Integrate in CI: run analyze_workspace and fail or annotate PRs when high-severity hotspots are detected.
+
+WHAT IT DOES:
+- Walks the workspace directory tree and analyzes Python files for simple technical-debt signals.
+- Detects missing module/class/function docstrings and reports them as "Missing Docstring" issues.
+- Computes a crude complexity heuristic by counting AST nodes and flags files with over 1000 nodes as "High Complexity".
+- Returns per-file reports (issues and issue counts), aggregates total issues, and lists top hotspots.
+- Offers an async improve_content method that returns JSON for a single file or a Markdown-like workspace summary.
+
+WHAT IT SHOULD DO BETTER:
+- Use more robust complexity metrics (cyclomatic complexity per function, nesting depth, cognitive complexity) rather than raw AST node counts to reduce false positives.
+- Make thresholds configurable and support per-project configuration (pyproject, .tdebt config), plus allow inclusion/exclusion globs and test/file-type filters.
+- Replace synchronous file I/O with asyncio-based file reads for high-concurrency analysis and large workspaces.
+- Integrate transactional filesystem updates via StateTransaction when proposing automated fixes and use rust_core for heavy analysis tasks to improve performance.
+- Improve issue classification and severity (e.g., severity based on file churn, ownership, test coverage) and add automatic suggestions or patch generation for trivial fixes.
+- Add unit tests for edge cases (syntax errors, encoding, large generated files) and CI integration to surface regressions early.
+- Preserve context lineage using CascadeContext for any automated or suggested changes and ensure Agent delegates core logic to a separate Core class to follow architecture patterns.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+import ast
+import os
+from typing import Any
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+"""
 TechDebtAgent: Detects, tracks, and prioritizes technical debt in the PyAgent codebase.
 Provides actionable insights and automated suggestions for debt reduction and codebase health.
+"""
+
+__version__ = VERSION
+
+
+class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+    """
+    Analyzes the codebase for technical debt including high cyclomatic complexity,
+    missing docstrings, and large files.
+    """
+
+    def __init__(self, workspace_path: str) -> None:
+        super().__init__(workspace_path)
+        self.workspace_path = workspace_path
+
+    def analyze_file(self, file_path: str) -> dict[str, Any]:
+        """Analyzes a single Python file for technical debt."""
+        if not file_path.endswith(".py"):
+            return {"file": file_path, "issues": []}
+
+        issues = []
+        try:
+            with open(file_path, encoding="utf-8") as f:
+                content = f.read()
+
+            tree = ast.parse(content, filename=file_path)
+
+            # Check for missing docstrings
+            for node in ast.walk(tree):
+                if isinstance(node, (ast.FunctionDef, ast.ClassDef, ast.Module)):
+                    if not ast.get_docstring(node):
+                        issues.append(
+                            {
+                                "type": "Missing Docstring",
+                                "name": getattr(node, "name", "Module"),
+                                "severity": "Low",
+                            }
+                        )
+
+            # Check for high complexity (simple heuristic: depth of nesting/number of nodes)
+            node_count = sum(1 for _ in ast.walk(tree))
+            if node_count > 1000:
+                issues.append(
+                    {
+                        "type": "High Complexity",
+                        "detail": f"File contains {node_count} AST nodes.",
+                        "severity": "Medium",
+                    }
+                )
+
+        except (SyntaxError, EnvironmentError) as e:
+            issues.append({"type": "Error", "detail": str(e), "severity": "Medium"})
+
+        return {"file": file_path, "issues": issues, "issue_count": len(issues)}
+
+    def analyze_workspace(self) -> dict[str, Any]:
+        """Runs technical debt analysis on the entire workspace."""
+        total_issues = 0
+        file_reports = []
+
+        for root, dirs, files in os.walk(self.workspace_path):
+            dirs[:] = [
+                d for d in dirs if not d.startswith(".") and d not in ["node_modules", "__pycache__", ".venv", "venv"]
+            ]
+            for file in files:
+                if file.endswith(".py"):
+                    path = os.path.join(root, file)
+                    report = self.analyze_file(path)
+                    if report["issue_count"] > 0:
+                        file_reports.append(report)
+                        total_issues += report["issue_count"]
+
+        return {
+            "total_issues": total_issues,
+            "hotspots": sorted(file_reports, key=lambda x: x["issue_count"], reverse=True)[:5],
+        }
+
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """Perform a tech debt analysis."""
+        if target_file:
+            report = self.analyze_file(target_file)
+            import json
+
+            return json.dumps(report, indent=2)
+
+        workspace_report = self.analyze_workspace()
+        report_lines = ["## Tech Debt Analysis Report"]
+        report_lines.append(f"**Total Issues**: {workspace_report['total_issues']}")
+        report_lines.append("\n### Hotspots")
+        for hotspot in workspace_report["hotspots"]:
+            report_lines.append(f"- `{hotspot['file']}`: {hotspot['issue_count']} issues")
+
+        return "\n".join(report_lines)
+
+
+if __name__ == "__main__":
+    from src.core.base.common.base_utilities import create_main_function
+
+    main = create_main_function(TechDebtAgent, "TechDebt Agent", "Workspace path")
+    main()
 """
 
 __version__ = VERSION
