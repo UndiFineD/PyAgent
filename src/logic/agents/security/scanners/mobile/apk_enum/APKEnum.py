@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +27,7 @@ urlparse = urllib.parse
 urllib2 = urllib.request
 
 
-class bcolors:
+class BColors:
     TITLE = "\033[95m"
     OKBLUE = "\033[94m"
     OKGREEN = "\033[92m"
@@ -101,46 +102,47 @@ publicIp = (
 gMapsAPI = r"(AIzaSy[\w-]{33})"
 
 
-def myPrint(text, type):
-    if type == "INFO":
+def myPrint(text: str, print_type: str) -> None:
+    """Print text with color based on the print type."""
+    if print_type == "INFO":
         print()
         return
-    if type == "INFO_WS":
+    if print_type == "INFO_WS":
         print()
         return
-    if type == "PLAIN_OUTPUT_WS":
+    if print_type == "PLAIN_OUTPUT_WS":
         print()
         return
-    if type == "ERROR":
+    if print_type == "ERROR":
         print()
         return
-    if type == "MESSAGE_WS":
+    if print_type == "MESSAGE_WS":
         print()
         return
-    if type == "MESSAGE":
+    if print_type == "MESSAGE":
         print()
         return
-    if type == "INSECURE":
+    if print_type == "INSECURE":
         print()
         return
-    if type == "INSECURE_WS":
+    if print_type == "INSECURE_WS":
         print()
         return
-    if type == "OUTPUT":
+    if print_type == "OUTPUT":
         print()
         return
-    if type == "OUTPUT_WS":
+    if print_type == "OUTPUT_WS":
         print()
         return
-    if type == "SECURE_WS":
+    if print_type == "SECURE_WS":
         print()
         return
-    if type == "SECURE":
+    if print_type == "SECURE":
         print()
         return
 
 
-def isNewInstallation():
+def isNewInstallation() -> bool:
     if not os.path.exists(rootDir):
         myPrint("Thank you for installing APKEnum", "OUTPUT_WS")
         os.mkdir(rootDir)
@@ -375,7 +377,7 @@ def displayResults():
 ####################################################################################################
 
 print(
-    bcolors.OKBLUE
+    BColors.OKBLUE
     + """
 
 :::'###::::'########::'##:::'##:'########:'##::: ##:'##::::'##:'##::::'##:
@@ -387,12 +389,12 @@ print(
  ##:::: ##: ##:::::::: ##::. ##: ########: ##::. ##:. #######:: ##:::: ##:
 ..:::::..::..:::::::::..::::..::........::..::::..:::.......:::..:::::..::
     """
-    + bcolors.OKRED
-    + bcolors.BOLD
+    + BColors.OKRED
+    + BColors.BOLD
     + """
                   # Developed By Shiv Sahni - @shiv__sahni
 """
-    + bcolors.ENDC
+    + BColors.ENDC
 )
 
 if (len(sys.argv) == 2) and (sys.argv[1] == "-h" or sys.argv[1] == "--help"):

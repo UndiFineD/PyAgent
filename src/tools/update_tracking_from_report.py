@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,12 +32,12 @@ COMPLETED = ROOT / '.external' / 'completed.md'
 CANDIDATES = ROOT / '.external' / 'candidates.md'
 
 
-def load_report():
+def load_report() -> dict:
     with REPORT.open('r', encoding='utf-8', errors='ignore') as f:
         return json.load(f)
 
 
-def append_tracking(rows):
+def append_tracking(rows: list[str]) -> int:
     if not rows:
         return 0
     text = '\n'.join(rows) + '\n'
@@ -46,7 +47,7 @@ def append_tracking(rows):
     return len(rows)
 
 
-def move_completed_rows():
+def move_completed_rows() -> int:
     if not TRACKING.exists():
         return 0
     lines = TRACKING.read_text(encoding='utf-8', errors='ignore').splitlines()
@@ -66,7 +67,7 @@ def move_completed_rows():
     return len(moved)
 
 
-def build_candidates(report, limit=50):
+def build_candidates(report: dict, limit: int = 50) -> list[dict]:
     cand = []
     for d in report.get('directories', []):
         path = d.get('path')
@@ -86,7 +87,7 @@ def build_candidates(report, limit=50):
     return cand[:limit]
 
 
-def write_candidates(cands):
+def write_candidates(cands: list[dict]) -> int:
     lines = []
     lines.append('# Prioritized candidates from .external/refactor_report.json')
     lines.append('')
@@ -96,7 +97,7 @@ def write_candidates(cands):
     return len(cands)
 
 
-def main():
+def main() -> int:
     if not REPORT.exists():
         print('No report found at', REPORT)
         return 1
