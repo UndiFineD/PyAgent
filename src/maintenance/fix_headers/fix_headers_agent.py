@@ -1,31 +1,10 @@
-"""
-FixHeadersAgent - Fix and standardize Python file headers
-
-[Brief Summary]
-DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
-USAGE:
-- As a library: from fix_headers_agent import FixHeadersAgent; FixHeadersAgent(dry_run=True, verbose=True).process_directory(Path("src"))
-- From maintenance scripts: instantiate the agent and call process_directory() or process_file() for single-file fixes
-- CI/automation: run in a maintenance job with dry_run=False and capture stdout for audit
-
-WHAT IT DOES:
-- Detects whether a Python file already contains the canonical 2026 PyAgent Apache-2.0 header and skips if present.
-- Safely removes existing top-of-file shebang/license comment blocks while preserving PEP-263 encoding comments and optional UTF-8 BOM, then prepends the canonical HEADER_TEMPLATE.
-- Supports dry-run and verbose modes; tracks files_processed, files_updated and files_skipped; process_file returns success/failure booleans for integration with callers.
-
-WHAT IT SHOULD DO BETTER:
-- Add an explicit, well-documented CLI entrypoint and richer logging (use logging module instead of prints) to integrate with CI and monitoring.
-- Perform atomic writes and preserve original file permissions and line-ending style (CRLF vs LF), and optionally create backups prior to overwriting.
-- Expand process_directory to accept richer globs/filters, use transactional FS (StateTransaction) for bulk operations, and include comprehensive unit tests and a safety opt-out for generated files.
-
-FILE CONTENT SUMMARY:
 """Maintenance: Fix and normalize Python file headers.
 
 Small, well-tested implementation of FixHeadersAgent used by maintenance
 scripts to ensure all Python files carry the canonical PyAgent Apache-2.0
 header. This file contains a single, correct implementation (no duplicates).
 """
+
 
 from __future__ import annotations
 
@@ -153,6 +132,7 @@ class FixHeadersAgent:
             return False
 
     def process_directory(self, directory: Path, exclude_patterns: set[str] | None = None) -> None:
+<<<<<<< HEAD
         if exclude_patterns is None:
 """
 
@@ -282,6 +262,8 @@ class FixHeadersAgent:
             return False
 
     def process_directory(self, directory: Path, exclude_patterns: set[str] | None = None) -> None:
+=======
+>>>>>>> origin/main
         if exclude_patterns is None:
             exclude_patterns = {'__pycache__', '.git', '.venv', 'node_modules', '.pytest_cache'}
         for root, dirs, files in os.walk(directory):
