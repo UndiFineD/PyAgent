@@ -13,7 +13,148 @@
 # limitations under the License.
 
 
+"""
+Profiling Agent - Code profiling and bottleneck detection
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate ProfilingAgent and call profile_file(file_path) to execute an instrumented run (executes the target file in a controlled namespace) or static_profile(file_path) to perform AST-based heuristics when execution is risky or unavailable.
+
+WHAT IT DOES:
+Provides runtime profiling via cProfile, parses pstats through ProfilingCore to produce ProfileStats, detects slow functions (heuristic threshold >1.0s), logs and hands off heavy hotspots for further action (e.g., Rust conversion), and offers a static AST-based fallback estimating costly functions by counting loops and comprehensions.
+
+WHAT IT SHOULD DO BETTER:
+Improve sandboxing of exec to avoid side effects (use subprocessed interpreter or tracing), refine static heuristics with complexity metrics and cost models, parameterize thresholds and limits, persist and correlate profiles across runs, and surface structured suggestions (ProfilingSuggestion) with reproducible reproduction steps.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 """Agent specializing in profiling and performance analysis."""
+
+from __future__ import annotations
+
+import ast
+import cProfile
+import logging
+import os
+import pstats
+from typing import Any, List
+
+from src.core.base.common.types.profiling_category import ProfilingCategory
+from src.core.base.common.types.profiling_suggestion import ProfilingSuggestion
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.observability.stats.core.profiling_core import (ProfileStats,
+                                                         ProfilingCore)
+
+__version__ = VERSION
+
+
+class ProfilingAgent(BaseAgent):
+    """Provides code profiling suggestions.
+    Integrated with ProfilingCore for cProfile analysis and bottleneck detection.
+    Can identify slow functions (>1s) and hand them over for Rust conversion.
+    """
+
+    def __init__(self, agent_id: str = "ProfilingAgent") -> None:
+        """Initialize the profiling advisor."""
+        # BaseAgent expects file_path as first arg
+        super().__init__(agent_id)
+        self.suggestions: list[ProfilingSuggestion] = []
+        self.core = ProfilingCore()
+        self.capabilities.append("profiling")
+
+    def profile_file(self, file_path: str) -> list[ProfileStats]:
+        """Profiles a specific Python file by executing it and analyzing bottlenecks.
+
+        Args:
+            file_path: Path to the Python file to profile.
+
+        Returns:
+            List of ProfileStats for the file.
+        """
+        profiler = cProfile.Profile()
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                code = f.read()
+
+            # Phase 336: Support for static analysis if execution is too risky
+            if "os.remove" in code or "subprocess" in code:
+                logging.info(
+                    f"ProfilingAgent: Skipping execution profile for {file_path} "
+                    f"due to risky calls. Using static fallback."
+                )
+                return self.static_profile(file_path)
+
+            # Execute in a controlled environment
+            profiler.enable()
+            exec(code, {"__name__": "__main__"})
+            profiler.disable()
+
+            stats = pstats.Stats(profiler)
+            # Use a large limit to catch all functions in the file
+            results = self.core.analyze_stats(stats, limit=1000)
+
+            # Identify bottlenecks > 1 second
+            slow_functions = [s for s in results if s.total_time > 1.0]
+            if slow_functions:
+                logging.warning(
+                    f"ProfilingAgent: Detected {len(slow_functions)} functions > 1s in {file_path}"
+                )
+                self._handover_to_coder(file_path, slow_functions)
+
+            return results
+        except Exception as e:
+            logging.error(f"ProfilingAgent: Failed to profile {file_path}: {e}")
+            # Fallback to static
+            return self.static_profile(file_path)
+
+    def static_profile(self, file_path: str) -> list[ProfileStats]:
+        """Performs static analysis to estimate performance bottlenecks without execution."""
+        try:
+            logging.info(f"ProfilingAgent: [Static] Attempting to read: {file_path}")
+            if not os.path.exists(file_path):
+                logging.error(f"ProfilingAgent: [Static] File does not exist: {file_path}")
+                return []
+
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+
+            tree = ast.parse(content)
+            findings: list[ProfileStats] = []
+
+            for node in ast.walk(tree):
+                if isinstance(node, ast.FunctionDef):
+                    # Heuristic: count loops and complex operations
+                    loops = sum(1 for n in ast.walk(node) if isinstance(n, (ast.For, ast.While, ast.ListComp)))
+                    logging.info(f"ProfilingAgent: Static scan of {node.name} found {loops} loops.")
+                    if loops > 5:
+                        findings.append(ProfileStats(
+                            function_name=node.name,
+                            call_count=1,
+                            total_time=1.5,  # Estimated
+                            per_call=1.5,
+                            file_name=file_path,
+                            line_number=node.lineno
+                        ))
+
+            if find.
+"""
 
 from __future__ import annotations
 
