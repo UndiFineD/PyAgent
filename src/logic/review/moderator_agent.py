@@ -12,8 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Moderator Agent - Content moderation and policy compliance
 
-"""Agent specializing in moderation, review, and policy compliance."""
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+Run as a script to review a single file for moderation issues:
+    python moderator_agent.py <path-to-file-to-review>
+Or import ModeratorAgent in automation and instantiate with a file path to perform programmatic reviews.
+
+WHAT IT DOES:
+- Subclasses BaseAgent to provide a focused moderation reviewer agent.
+- Establishes a system prompt tuned for content moderation, toxicity/bias detection,
+  safety violations, and professional tone feedback.
+- Supplies a sensible default content template when no input is provided and wires a
+  CLI entrypoint via create_main_function for single-file reviews.
+
+FILE CONTENT SUMMARY:
+Agent specializing in moderation, review, and policy compliance.
+"""
 
 from __future__ import annotations
 
@@ -39,6 +58,11 @@ class ModeratorAgent(BaseAgent):
 
     def _get_default_content(self) -> str:
         return "# Moderation Review\n\n- No content provided for review yet.\n"
+
+    async def _process_task(self, task_data: dict) -> dict:
+        """Process a moderation review task asynchronously."""
+        review_result = self.run(task_data.get("content", self._get_default_content()))
+        return {"review": review_result}
 
 
 if __name__ == "__main__":

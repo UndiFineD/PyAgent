@@ -12,10 +12,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
+"""Reflexion Strategy - Draft -> Critique -> Revise.
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+
+USAGE:
+- Create an async-compatible backend function matching BackendFunction
+  signature: Callable[[str, Optional[str], Optional[list[dict[str,str]]]],
+  str].
+- Instantiate ReflexionStrategy and call its execute(...) coroutine:
+  result = await ReflexionStrategy().execute(
+      prompt, context, backend_call, system_prompt=None, history=None)
+
+WHAT IT DOES:
+- Coordinates a three-step reflexion workflow:
+  (1) Draft — produce initial implementation using backend_call
+  (2) Critique — senior-review-style critique of the draft
+  (3) Revise — produce final implementation addressing critique
+- Logs the critique for traceability and returns revised content
+  from the backend.
+
+WHAT IT SHOULD DO BETTER:
+- Pass meaningful history/context into Critique step instead of
+  empty list to preserve conversation state and reproducibility.
+- Add robust error handling and retries around backend_call;
+  gracefully handle unexpected outputs or timeouts.
+- Make system prompts, critique severity, and orchestration
+  configurable (policy for harshness, multiple passes, acceptance
+  criteria).
+- Surface richer telemetry (timings, token usage); include unit
+  tests and type-checked stubs for BackendFunction.
+
+FILE CONTENT SUMMARY:
 Reflexion strategy.py module.
 """
-# Apache 2.0 License
 
 from __future__ import annotations
 

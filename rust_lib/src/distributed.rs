@@ -118,6 +118,7 @@ pub fn nixl_rdma_read_rust(source_rank: usize, id: String, expected_size: usize)
 
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(dp_stats_aggregate_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(nixl_rdma_checkpoint_rust, m)?)?;
     m.add_function(wrap_pyfunction!(wave_sync_check_rust, m)?)?;
     m.add_function(wrap_pyfunction!(load_balance_select_rust, m)?)?;
     m.add_function(wrap_pyfunction!(multi_node_coordinate_rust, m)?)?;

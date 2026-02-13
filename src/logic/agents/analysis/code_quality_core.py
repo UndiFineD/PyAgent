@@ -12,17 +12,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+CodeQualityCore - Core logic for code quality analysis and scoring
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+Import CodeQualityCore from src.core.quality.code_quality_core (or the module path in this repo) and call its analysis methods directly with source strings; use calculate_score(issues_count) to convert issue counts into a quality score. Example:
+from src.core.quality.code_quality_core import CodeQualityCore
+core = CodeQualityCore()
+issues = core.check_python_source_quality(python_source)
+score = core.calculate_score(len(issues))
+
+WHAT IT DOES:
+Provides language-agnostic core analysis and scoring routines for Python, Rust and JavaScript source fragments; prefers a Rust-accelerated backend (rust_core) when available and falls back to pure-Python heuristics (line-length checks, pattern matches such as unwrap() and var/== detection). It is intentionally I/O-free and designed to be small, deterministic, and ready for a future Rust port.
+
+WHAT IT SHOULD DO BETTER:
+- Expand rule coverage and make heuristics configurable (thresholds, rule toggles, language profiles).  
+- Return richer, typed issue objects (severity, rule_id, fixer_hint) and support batching and file-path context.  
+- Add unit-tested, pluggable integration with real linters (flake8/ruff, clippy, ESLint) and asynchronous execution for large repositories.
+
+FILE CONTENT SUMMARY:
+CodeQualityCore: Core logic for code quality analysis and scoring in PyAgent.
+Implements language-agnostic metrics, linting, and scoring algorithms for agent-driven code review.
+"""
+
 from __future__ import annotations
 
 import re
 from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
-
-"""
-CodeQualityCore: Core logic for code quality analysis and scoring in PyAgent.
-Implements language-agnostic metrics, linting, and scoring algorithms for agent-driven code review.
-"""
 
 __version__ = VERSION
 

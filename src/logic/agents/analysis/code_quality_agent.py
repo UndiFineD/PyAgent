@@ -12,6 +12,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+CodeQualityAgent - Automated Code Quality Guard
+
+Brief Summary
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate CodeQualityAgent with the repository workspace path
+- Call analyze_file_quality(file_path) to get a per-file report
+- Integrate into CI to produce aggregated quality_reports for the workspace
+
+WHAT IT DOES:
+- Runs manual and tool-based linting and style checks for Python, Rust, and JavaScript/TypeScript
+- Aggregates issues, timestamps, and a heuristic score into quality_reports
+- Records shell interactions when a recorder is available and falls back to internal checks if external tools are absent
+
+WHAT IT SHOULD DO BETTER:
+- Provide structured JSON output compatible with common reporting tools and CI systems
+- Use subprocess-safe invocation with configurable tool paths and timeouts and avoid blocking calls
+- Expand language support, add configurable rule sets, and surface severity-based scoring and fix suggestions
+
+FILE CONTENT SUMMARY:
+CodeQualityAgent: Analyzes and improves code quality across Python, Rust, and JavaScript files in PyAgent.
+Provides linting, scoring, and automated code improvement for maintainability and standards compliance.
+"""
+
 from __future__ import annotations
 
 import json
@@ -22,11 +48,6 @@ from typing import Any
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
-
-"""
-CodeQualityAgent: Analyzes and improves code quality across Python, Rust, and JavaScript files in PyAgent.
-Provides linting, scoring, and automated code improvement for maintainability and standards compliance.
-"""
 
 __version__ = VERSION
 
@@ -195,6 +216,12 @@ class CodeQualityAgent(BaseAgent):
         if not self.quality_reports:
             return 100.0
         return sum(r["score"] for r in self.quality_reports) / len(self.quality_reports)
+
+    async def _process_task(self, task_data: Any) -> Any:
+        """Process a task from the queue."""
+        if isinstance(task_data, dict) and "file_path" in task_data:
+            return self.analyze_file_quality(task_data["file_path"])
+        return {"error": "Invalid task format"}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Analyze code quality for a given prompt."""

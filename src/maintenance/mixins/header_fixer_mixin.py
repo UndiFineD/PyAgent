@@ -13,6 +13,38 @@
 # limitations under the License.
 
 """
+HeaderFixerMixin - Fix file license headers and __future__ import placement
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Mix into an agent or utility class to provide header-cleaning capability.
+- Call HeaderFixerMixin.clean_file_headers(Path('path', 'to', 'file.py'))
+  which returns True if the file was modified, False otherwise.
+- Intended to be used as a file-level post-processor in CI, pre-commit hooks,
+  or automated refactoring scripts.
+
+WHAT IT DOES:
+- Reads a Python source file, removes duplicated license header blocks and
+  extra top-of-file docstrings while preserving the first docstring.
+- Moves any from __future__ imports so they appear after the module docstring.
+- Preserves shebang and copyright lines and attempts to keep helpful comment
+  annotations (pylint, noqa, type:).
+
+WHAT IT SHOULD DO BETTER:
+- Use the AST or tokenize module to reliably detect module docstrings,
+  comments, and import positions instead of line-based heuristics.
+- Preserve exact license block structure and surrounding spacing; current
+  heuristic risks dropping or altering legitimate comment lines.
+- Handle edge cases: multi-line/triple-quoted docstrings that start and end
+  on different lines, files with different encodings, and mixed CRLF/LF
+  line endings.
+- Add unit tests covering varied header patterns, and provide a dry-run mode
+  and backups before overwriting files.
+- Improve logging and surface a detailed diff of changes for auditability.
+
+FILE CONTENT SUMMARY:
 Mixin for fixing license headers and docstring placement.
 """
 
@@ -116,6 +148,6 @@ class HeaderFixerMixin:
                 file_path.write_text(new_content, encoding='utf-8')
                 return True
             return False
-        except Exception as e:
+        except (OSError, UnicodeDecodeError, ValueError) as e:
             logger.error(f"Failed to fix headers in {file_path}: {e}")
             return False

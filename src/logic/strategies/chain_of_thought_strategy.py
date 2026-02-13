@@ -13,23 +13,54 @@
 # limitations under the License.
 
 """
+Chain of Thought Strategy - ChainOfThoughtStrategy.execute
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate or reference ChainOfThoughtStrategy inside an agent orchestration
+  flow and call execute(prompt, context, backend_call, system_prompt=None,
+  history=None).
+- Provide a backend_call callable matching BackendFunction signature:
+  (prompt: str, system_prompt: Optional[str],
+  history: Optional[list[dict[str,str]]]) -> str (awaitable).
+- Use for tasks where explicit step-by-step reasoning is desired before
+  producing final code or content.
+
+WHAT IT DOES:
+- Orchestrates a two-step LLM interaction: first asks the model to "think
+  step-by-step" and produce reasoning, logs that reasoning, then asks the
+  model to implement changes producing ONLY the final output.
+- Preserves conversation continuity by appending the reasoning as an
+  assistant message to the history for the second call.
+- Returns the final implementation/content produced by the backend model.
+
+WHAT IT SHOULD DO BETTER:
+- Validate and sanitize backend_call results (e.g., ensure reasoning is
+  well-formed and not excessively long) and handle backend failures or
+  timeouts with retries and clear error messages.
+- Allow configurable prompting templates, temperature/parameters, and stop
+  sequences rather than fixed strings to increase robustness and reuse.
+- Support partial execution (apply suggestions incrementally), structured
+  intermediate artifacts (e.g., JSON-plan), and stronger typing for history
+  items (role/content enums) to reduce runtime errors.
+
+FILE CONTENT SUMMARY:
 Chain of thought strategy.py module.
 """
-# Apache 2.0 License
 
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Awaitable, Callable
 
 from src.core.base.lifecycle.version import VERSION
 
-from .agent_strategy import AgentStrategy
+from .agent_strategy import AgentStrategy, BackendFunction
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-
-    BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
+    pass
 
 __version__ = VERSION
 

@@ -13,7 +13,41 @@
 # limitations under the License.
 
 
-"""Exporter for high-level fleet metrics.
+"""
+Metrics Exporter - Consolidate and expose fleet telemetry
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate: exporter = MetricsExporter()
+- Record agent call: exporter.record_agent_call("AgentName", duration_ms, success_bool)
+- Record resource usage: exporter.record_resource_usage(cpu_percent, mem_mb)
+- Get scrape payload: payload = exporter.get_prometheus_payload()
+- Push simulation: exporter.export_to_grafana()
+
+WHAT IT DOES:
+- Centralizes fleet telemetry and forwards metrics to a Prometheus-compatible
+  exporter implementation (PrometheusExporter).
+- Provides simple helpers for recording agent execution timing/counts and
+  process resource usage, and for producing a Prometheus scrape payload or
+  simulating a push to Grafana Cloud.
+- Tracks last export timestamp for basic batching/observability.
+
+WHAT IT SHOULD DO BETTER:
+- Add explicit return types and error handling; current record_* methods
+  return None though annotated as str in signatures and should return
+  consistent status or be typed None.
+- Make exporters pluggable via configuration (backend selection, auth,
+  endpoints) and support async/non-blocking exports with retries, backoff,
+  and rate limiting.
+- Improve label normalization, histogram buckets for durations,
+  sampling/aggregation strategy, thread-safety for concurrent metric updates,
+  and unit/integration tests for backend behavior; add telemetry tests and
+  metrics naming constants.
+
+FILE CONTENT SUMMARY:
+Exporter for high-level fleet metrics.
 Sends telemetry to specialized backends like Prometheus, InfluxDB, or Grafana Cloud.
 """
 

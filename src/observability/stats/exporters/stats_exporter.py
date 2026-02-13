@@ -13,7 +13,41 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_stats.py"""
+"""
+Stats Exporter - Export metrics in JSON and Prometheus text
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate and call:
+  from stats_exporter import StatsExporter
+  exporter = StatsExporter(export_format="json")  # or "prometheus"
+  text = exporter.export({"requests_total": 42, "latency_seconds": 0.123})
+- Or override per-call: exporter.export(metrics, export_format="prometheus")
+
+WHAT IT DOES:
+- Provides a small utility class StatsExporter that serializes
+  a metrics dict to either JSON (json.dumps) or a simple
+  Prometheus-style plaintext (one "name value" per line).
+- Defaults to JSON; returns an empty string for unsupported
+  formats.
+
+WHAT IT SHOULD DO BETTER:
+- Validate metric names and values and handle non-primitive
+  values (lists, dicts) robustly instead of dumping or
+  producing invalid Prometheus lines.
+- Implement proper Prometheus exposition formatting: support
+  HELP and TYPE lines, label support, sanitization of metric
+  names, and float formatting; optionally expose timestamps.
+- Add error handling/logging, unit tests for edge cases,
+  deterministic ordering for stable outputs, streaming/
+  large-payload support, and an extensible plugin-based
+  exporter registry for additional formats.
+
+FILE CONTENT SUMMARY:
+Auto-extracted class from agent_stats.py
+"""
 
 from __future__ import annotations
 

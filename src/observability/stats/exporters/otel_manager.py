@@ -13,8 +13,35 @@
 # limitations under the License.
 
 
-"""Distributed tracing for the PyAgent fleet using OpenTelemetry standards.
+"""OTel Manager - Distributed tracing and span lifecycle.
+
+Distributed tracing for the PyAgent fleet using OpenTelemetry standards.
 Allows visualization of agent chains and request propagation across nodes.
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+
+USAGE:
+  Instantiate OTelManager in agents or services to start and end spans.
+  Call get_trace_context(span_id) to propagate trace headers across RPC/HTTP.
+  Call export_spans() to retrieve completed mock spans when the OpenTelemetry
+  SDK is not installed.
+
+WHAT IT DOES:
+  Provides a thin manager that creates and tracks spans either as real
+  OpenTelemetry spans (when SDK available) or as lightweight mock Span
+  dataclasses. Integrates with TracingCore for latency analysis, supports
+  starting/ending spans, exporting completed mock spans, and generating
+  traceparent headers for propagation.
+
+WHAT IT SHOULD DO BETTER:
+  1) Unify real OTel context propagation (use proper Context/SpanContext
+     when creating child spans) instead of manually mapping UUIDs.
+  2) Add robust export pipeline (OTLP/Zipkin exporters) and graceful
+     handling/validation of SDK vs mock spans.
+  3) Record and expose latency breakdowns via TracingCore and include tests
+     for end-to-end propagation and exporter behavior.
 """
 
 from __future__ import annotations
@@ -29,12 +56,14 @@ from src.core.base.lifecycle.version import VERSION
 from src.observability.stats.core.tracing_core import TracingCore
 
 # Phase 307: Official OpenTelemetry SDK integration
+trace = None
 try:
-    from opentelemetry import trace
+    from opentelemetry import trace as otel_trace
     from opentelemetry.sdk.resources import Resource
     from opentelemetry.sdk.trace import TracerProvider
 
     # Initialize Global Tracer
+    trace = otel_trace
     resource = Resource(attributes={"service.name": "pyagent-fleet"})
     provider = TracerProvider(resource=resource)
     trace.set_tracer_provider(provider)
@@ -67,7 +96,7 @@ class OTelManager:
         self.active_spans: dict[str, Any] = {}  # Now stores real OTel spans if available
         self.completed_spans: list[Span] = []
         self.core = TracingCore()
-        if HAS_OTEL:
+        if HAS_OTEL and trace:
             self.tracer = trace.get_tracer(__name__)
         else:
             self.tracer = None
@@ -147,7 +176,6 @@ class OTelManager:
             span = self.active_spans[span_id]
             return {"traceparent": f"00-{span.trace_id}-{span.span_id}-01"}
         return {}
-
 
 if __name__ == "__main__":
     otel = OTelManager()

@@ -13,7 +13,25 @@
 # limitations under the License.
 
 
-"""Agent specializing in automated benchmarking of other agents.
+"""
+Benchmark Agent - Automated benchmarking of agent fleet
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate BenchmarkAgent(file_path) and invoke tools exposed as methods (decorated with @as_tool): run_sgi_benchmark(agent_name, scientific_task), validate_scientific_hypothesis(hypothesis, dataset_path), evaluate_model_on_benchmark(model_name, benchmark_suite), run_benchmark(agent_name, task, expected_output=None). Intended to be called by orchestration code or a FleetManager to run automated regressions and baseline comparisons.
+
+WHAT IT DOES:
+Implements a BenchmarkAgent subclass of BaseAgent that wraps a BenchmarkCore and provides tool methods to simulate SGI-Bench evaluations, hypothesis validation reports, model-suite evaluation summaries, and single-task runtime measurements; stores lightweight in-memory results and returns structured dictionaries/reports. Uses as_tool to expose methods as callable tools and embeds a system prompt describing SGI-Bench scoring dimensions; many results are current mocks/skeletons.
+
+WHAT IT SHOULD DO BETTER:
+- Replace mocked metrics with real instrumentation: call FleetManager, execute agents, capture stdout/stderr, measure wall-clock and CPU, and record memory and I/O. 
+- Integrate real statistical/data-analysis (pandas/scipy), persistent storage for BenchmarkResult records, and baseline/versioned comparisons via BenchmarkCore. 
+- Add robust error handling, retries, async execution (asyncio) for parallel benchmarks, configurable scoring/thresholds, parameterized benchmark suites, and unit/integration tests with fixtures; improve typing (avoid Any), and surface costs (API/token) and reproducibility metadata.
+
+FILE CONTENT SUMMARY:
+Agent specializing in automated benchmarking of other agents.
 Measures latency, accuracy, and cost.
 """
 
@@ -52,7 +70,7 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "4. Perception accuracy (validation loop rigour)"
         )
 
-    @as_tool
+    @as_tool(priority=1)
     def run_sgi_benchmark(self, agent_name: str, scientific_task: str) -> dict[str, Any]:
         """Runs an SGI-Bench scientific inquiry evaluation on an agent."""
         logging.info(f"BENCHMARK: Running SGI inquiry for {agent_name}")
@@ -75,7 +93,7 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.results.append(result)
         return result
 
-    @as_tool
+    @as_tool(priority=2)
     def validate_scientific_hypothesis(self, hypothesis: str, dataset_path: str) -> str:
         """Scientific Benchmarking: Validates a hypothesis against a dataset using statistical analysis.
         Args:
@@ -93,7 +111,7 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             f"- **Verdict**: Hypothesis supported by evidence."
         )
 
-    @as_tool
+    @as_tool(priority=3)
     def evaluate_model_on_benchmark(self, model_name: str, benchmark_suite: str) -> dict[str, Any]:
         """Runs a standard benchmark suite (MMLU, GSM8K, SGI-Bench) against a specific model."""
         logging.info(f"BENCHMARK: Evaluating {model_name} on {benchmark_suite}")
@@ -106,7 +124,7 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "fail_cases": ["Multi-turn logic decay", "Mathematical precision at scale"],
         }
 
-    @as_tool
+    @as_tool(priority=4)
     def run_benchmark(self, agent_name: str, task: str, expected_output: str | None = None) -> str:
         """Runs a task against an agent and measures performance."""
         # Note: In a real system, this would call the FleetManager
@@ -133,7 +151,21 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         bench_res = BenchmarkResult(name=f"Task: {task[:20]}", duration=duration, agent_id=agent_name, success=True)
         self.benchmark_results.append(bench_res)
 
-        return f"Benchmark completed for {agent_name}. Latency: {duration:.2f}s"
+        result_message = f"Benchmark completed for {agent_name}. Latency: {duration:.2f}s"
+        logging.info(result_message)
+        return result_message
+
+    async def _process_task(self, task_data: dict[str, Any]) -> dict[str, Any]:
+        """Process a task from the task queue."""
+        agent_name = task_data.get("agent_name", "unknown_agent")
+        task_description = task_data.get("task", "")
+        expected_output = task_data.get("expected_output")
+        result_message = self.run_benchmark(agent_name, task_description, expected_output)
+        return {
+            "status": "completed",
+            "result": result_message,
+            "task_id": task_data.get("task_id"),
+        }
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Perform a benchmarking run."""
@@ -143,7 +175,7 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         task = parts[1].strip() if len(parts) > 1 else prompt
         return self.run_benchmark(agent_name, task)
 
-    @as_tool
+    @as_tool(priority=5)
     def check_for_performance_regression(self, agent_id: str, current_duration: float) -> str:
         """Checks if an agent's current performance has regressed vs the fleet baseline."""
         baseline = self.core.calculate_baseline(self.benchmark_results)
@@ -156,7 +188,7 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         return f"SUCCESS: {agent_id} is within performance limits."
 
-    @as_tool
+    @as_tool(priority=6)
     def generate_report(self) -> str:
         """Generates a summary report of all benchmark runs."""
         if not self.results:

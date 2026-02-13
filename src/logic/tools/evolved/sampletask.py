@@ -11,8 +11,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Sample Task Module - Automated GUI Click/Type Task
 
-"""A sample automated GUI task."""
+Brief Summary
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Import the module and call sample_automated_task() directly, or let
+  the PyAgent tool registry invoke it (decorated with @as_tool).
+- Requires an active graphical session where pyautogui can control the
+  mouse and keyboard; run only on the local desktop with expected
+  screen resolution and layout.
+- Ensure pyautogui is installed and permits synthetic input (no
+  headless servers, remote sessions without input forwarding).
+
+WHAT IT DOES:
+- Performs a minimal recorded GUI sequence: moves/clicks to two screen
+  coordinates and sends keyboard input ("a" then Enter) between clicks.
+- Intended as a simplistic example or starting point for automated UI
+  interactions and tool wrapping via src.core.base.common.
+  base_utilities.as_tool.
+
+WHAT IT SHOULD DO BETTER:
+- Replace hard-coded coordinates and keystrokes with configurable
+  parameters or declarative action sequence to avoid brittle behavior
+  across different screens and resolutions.
+- Add safety checks, delays, and exception handling (e.g., confirm
+  active window, verify screen bounds, catch pyautogui.FailSafeException)
+  to prevent unintended input or locking the user out.
+- Integrate logging, test hooks, and dry-run mode; consider using
+  transactional state management (StateTransaction) and asynchronous APIs
+  to fit PyAgent architecture and enable retries/rollbacks.
+
+FILE CONTENT SUMMARY:
+A sample automated GUI task.
+"""
 
 from __future__ import annotations
 
@@ -24,7 +58,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
-@as_tool
+@as_tool(priority=5)
 def sample_automated_task() -> None:
     """Automated task from sample recording."""
     pyautogui.click(100, 200)

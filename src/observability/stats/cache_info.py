@@ -13,11 +13,208 @@
 # limitations under the License.
 
 """
+CacheInfo - LRU Cache with hit/miss statistics and pinned items
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Construct an LRUCache with optional ttl: cache = LRUCache[str, int](max_size=1000, ttl_seconds=60, name="responses")
+- Put and get values: cache.put("k", value); value = cache.get("k", default=None)
+- Inspect and reset stats: stats = cache.stats.to_dict(); delta = cache.pop_delta_stats()
+- Pin items to prevent eviction: cache.put("k2", v, pinned=True); cache.unpin("k2")
+WHAT IT DOES:
+- Implements a thread-safe LRU cache (OrderedDict) with explicit pinning for items that must not be evicted.
+- Tracks comprehensive CacheStats (hits, misses, evictions, pins) with derived metrics (hit_ratio, miss_ratio, total) and supports resetting and delta extraction.
+- Supports optional TTL for entries, manual touch for LRU promotion, capacity/usage reporting, and separate pinned storage to exclude from eviction accounting.
+- Designed with simple, production-minded patterns inspired by vLLM's cache.py for monitoring and observability.
+
+WHAT IT SHOULD DO BETTER:
+- Enforce TTL expiration proactively (background sweeper) rather than only on access to avoid stale memory usage.
+- Provide clearer semantics and limits for pinned items (e.g., configurable pinned quota or eviction of oldest pinned when explicit override is allowed).
+- Export metrics via a pluggable backend (Prometheus/OpenTelemetry) and add async-friendly APIs for asyncio environments.
+- Harden concurrency by minimizing lock scope and adding more granular locking or lock-free structures for high-concurrency workloads.
+- Add comprehensive unit tests for edge cases (concurrent put/get/pin/unpin), and document memory/cost characteristics of cached values.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
 CacheInfo - LRU Cache with hit/miss statistics and pinned items.
 
 Inspired by vLLM's cache.py patterns for production cache monitoring.
 
 Phase 17: vLLM Pattern Integration
+"""
+
+from __future__ import annotations
+
+from _thread import RLock
+import threading
+import time
+from collections import OrderedDict
+from dataclasses import dataclass, field
+from typing import Generic, Optional, TypeVar
+from collections.abc import Hashable
+
+K = TypeVar("K", bound=Hashable)
+V = TypeVar("V")
+
+
+@dataclass
+class CacheStats:
+    """Statistics for cache performance monitoring."""
+
+    hits: int = 0
+    misses: int = 0
+    evictions: int = 0
+    pins: int = 0
+
+    @property
+    def total(self) -> int:
+        """Total access attempts."""
+        return self.hits + self.misses
+
+    @property
+    def hit_ratio(self) -> float:
+        """Cache hit ratio (0.0 to 1.0)."""
+        if self.total == 0:
+            return 0.0
+        return self.hits / self.total
+
+    @property
+    def miss_ratio(self) -> float:
+        """Cache miss ratio (0.0 to 1.0)."""
+        return 1.0 - self.hit_ratio
+
+    def reset(self) -> "CacheStats":
+        """Reset stats and return a copy of the old stats."""
+        old = CacheStats(
+            hits=self.hits,
+            misses=self.misses,
+            evictions=self.evictions,
+            pins=self.pins,
+        )
+        self.hits = 0
+        self.misses = 0
+        self.evictions = 0
+        self.pins = 0
+        return old
+
+    def to_dict(self) -> dict:
+        return {
+            "hits": self.hits,
+            "misses": self.misses,
+            "total": self.total,
+            "hit_ratio": round(self.hit_ratio, 4),
+            "evictions": self.evictions,
+            "pins": self.pins,
+        }
+
+
+@dataclass
+class CacheEntry(Generic[V]):
+    """A cache entry with value, timestamp, and pin status."""
+
+    value: V
+    created_at: float = field(default_factory=time.time)
+    last_access: float = field(default_factory=time.time)
+    access_count: int = 0
+    pinned: bool = False
+
+    def touch(self) -> None:
+        """Update access time and count."""
+        self.last_access = time.time()
+        self.access_count += 1
+
+
+class LRUCache(Generic[K, V]):
+    """
+    Thread-safe LRU cache with hit statistics and pinned items.
+
+    Features:
+    - Hit/miss tracking with statistics
+    - Pinned items that won't be evicted
+    - Delta statistics (changes since last check)
+    - Touch operation for manual LRU updates
+    - Capacity tracking
+
+    Example:
+        >>> cache = LRUCache[str, int](max_size=100)
+        >>> cache.put("key1", 42)
+        >>> value = cache.get("key1")  # Returns 42, records hit
+        >>> value = cache.get("key2")  # Returns None, records miss
+        >>> print(cache.stats.hit_ratio)  # 0.5
+    """
+
+    def __init__(
+        self,
+        max_size: int = 1000,
+        ttl_seconds: Optional[float] = None,
+        name: str = "cache",
+    ) -> None:
+        """
+        Initialize LRU cache.
+
+        Args:
+            max_size: Maximum number of items (excluding pinned)
+            ttl_seconds: Optional TTL for entries (None = no expiration)
+            name: Name for logging/debugging
+        """
+        self._max_size: int = max_size
+        self._ttl_seconds: float | None = ttl_seconds
+        self._name: str = name
+
+        self._cache: OrderedDict[K, CacheEntry[V]] = OrderedDict()
+        self._pinned: dict[K, CacheEntry[V]] = {}
+        self._stats = CacheStats()
+        self._delta_stats = CacheStats()
+        self._lock: RLock = threading.RLock()
+
+    @property
+    def stats(self) -> CacheStats:
+        """Get cache statistics."""
+        return self._stats
+
+    @property
+    def size(self) -> int:
+        """Current number of items (including pinned)."""
+        with self._lock:
+            return len(self._cache) + len(self._pinned)
+
+    @property
+    def capacity(self) -> int:
+        """Maximum capacity."""
+        return self._max_size
+
+    @property
+    def usage(self) -> float:
+        """Current usage ratio (0.0 to 1.0)."""
+        if self._max_size == 0:
+            return 1.0
+        return min(1.0, len(self._cache) / self._max_size)
+
+    def get(self, key: K, default: Optional[V] = None) -> Optional[V]:
+        """
+        Get a value from the cache.
+
+        Updates LRU order and records hit/miss.
+
+        Args:
+            key: Cache key
+            default: Default valu
 """
 
 from __future__ import annotations

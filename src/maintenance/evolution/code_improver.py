@@ -13,6 +13,51 @@
 # limitations under the License.
 
 """
+code_improver - Autonomous Evolution Loop
+
+[Brief Summary]
+A background evolution loop that monitors fleet metrics and autonomously
+proposes performance, resilience, and cognitive improvements (including
+Rust acceleration and refactors) by delegating tasks to the fleet's
+coder/orchestrators.
+
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+
+USAGE:
+- Instantiate EvolutionLoop with a FleetManager implementation:
+  loop = EvolutionLoop(fleet)
+- Run in an asyncio context: await loop.start()
+- Stop by setting loop.running = False or cancelling the task
+
+WHAT IT DOES:
+- Continuously runs an hourly evolution cycle when started.
+- Detects low CPU usage and heuristically scans Python files for
+  performance-heavy candidates (large files, loop/math density) to propose
+  Rust porting via fleet.delegate_to("coder").
+- Triggers resilience audits if available and runs synaptic pruning via
+  the fleet's pruning_orchestrator.
+- Proposes general architectural refactors (e.g., applying Mixins to
+  base_agent) by delegating to the coder.
+
+WHAT IT SHOULD DO BETTER:
+- Make delegation safe and auditable: add authentication, change approval
+  workflows, dry-run mode, and explicit commit/PR generation rather than
+  blind delegation.
+- Use transactional filesystem updates (StateTransaction) and
+  unit/integration test runs before applying refactors or FFI bridges.
+- Replace naive content heuristics with static analysis or complexity
+  metrics; avoid scanning test/dunder files only by name and add size/IO
+  rate limits.
+- Improve error handling, cancellation support, and configurable thresholds
+  (idle CPU, loop/math counts, sleep interval) via injected config rather
+  than hard-coded values.
+- Ensure Rust porting integrates build, CI configuration, and FFI boundary
+  tests; provide rollback and staging channels for risky changes.
+- Add structured logging, tracing/context propagation (CascadeContext),
+  and metrics emission for auditability and observability.
+
+FILE CONTENT SUMMARY:
 Module: code_improver
 Autonomous Codebase Evolution Loop for self-optimizing system logic.
 """
@@ -110,3 +155,8 @@ class EvolutionLoop:
             )
         except Exception as e:
             logger.error("Evolution: Refactor failed: %s", e)
+
+if TYPE_CHECKING:
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+logger = logging.getLogger(__name__)

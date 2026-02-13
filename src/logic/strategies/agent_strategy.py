@@ -12,8 +12,43 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Agent Strategy - Abstract execution strategy for agents
 
-"""Auto-extracted class from agent_strategies.py"""
+Brief Summary
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Implement a concrete subclass of AgentStrategy and provide an async
+  execute(...) method.
+- Call the subclass's execute(prompt, context, backend_call,
+  system_prompt=None, history=None) from agent orchestration code to obtain
+  generated content.
+- Provide a BackendFunction callable matching the signature:
+  (prompt: str, system_prompt: str|None, history: list[dict[str,str]]|None)
+  -> str; run execute inside an asyncio event loop.
+
+WHAT IT DOES:
+- Declares a minimal, testable abstraction for pluggable agent execution
+  strategies used to drive LLM calls.
+- Standardizes the execution contract (async execute) so different strategies
+  (streaming, batching, caching, safe-guards) can be swapped without changing
+  callers.
+- Keeps dependencies light and clearly typed (TYPE_CHECKING alias for
+  BackendFunction).
+
+WHAT IT SHOULD DO BETTER:
+- Export a concrete typed alias for history entry objects and document expected
+  keys to reduce caller confusion and enable static checks.
+- Provide a small default/base implementation (e.g., simple passthrough strategy)
+  and helper utilities for common concerns (retry, timeout, logging, metrics).
+- Validate and normalize inputs (None-to-empty-history, enforce non-empty
+  prompt/context) and add explicit error handling and unit tests to codify
+  expected behavior.
+
+FILE CONTENT SUMMARY:
+Auto-extracted class from agent_strategies.py
+"""
 
 from __future__ import annotations
 
@@ -54,4 +89,3 @@ class AgentStrategy(ABC):
         Returns:
             The final generated content.
         """
-        ...

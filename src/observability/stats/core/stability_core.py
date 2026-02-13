@@ -13,6 +13,49 @@
 # limitations under the License.
 
 """
+stability_core.py - Fleet stability scoring and healing thresholds
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+
+USAGE:
+- Import StabilityCore and FleetMetrics from stability_core
+  and call calculate_stability_score(metrics, sae_anomalies)
+  to derive a 0.0-1.0 stability score.
+- Use is_in_stasis(score_history) to detect low-variance
+  "digital stasis" and get_healing_threshold(score)
+  to decide self-healing aggressiveness.
+- Example:
+  from stability_core import StabilityCore, FleetMetrics
+  sc = StabilityCore()
+  score = sc.calculate_stability_score(
+      FleetMetrics(0.01, 100000, 12, 250.0), sae_anomalies=2)
+
+WHAT IT DOES:
+- Provides pure-Python logic for fleet-level stability scoring,
+  stasis detection, and healing-threshold computation.
+- Integrates optional Rust backend (rust_core) when available
+  for performance-sensitive calculations; falls back to
+  deterministic Python implementations.
+- Encapsulates metrics as immutable dataclass (FleetMetrics)
+  and exposes three core behaviours: calculate_stability_score,
+  is_in_stasis, and get_healing_threshold.
+
+WHAT IT SHOULD DO BETTER:
+- Make penalties and thresholds configurable via
+  dependency-injected config objects rather than hard-coded
+  constants so operators can tune for different deployments.
+- Add comprehensive unit tests and property-based tests around
+  numeric stability, boundary conditions, and rust_core
+  fallbacks to ensure parity between implementations.
+- Improve observability: emit structured diagnostic events
+  (reason-coded deltas, contributing metric breakdowns) and
+  surface input validation; consider probabilistic models or
+  exponential smoothing rather than simple variance for
+  stasis detection.
+
+FILE CONTENT SUMMARY:
 Stability core.py module.
 """
 

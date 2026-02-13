@@ -13,6 +13,52 @@
 # limitations under the License.
 
 """
+Deduplication Core - Similarity-based report deduplication and JSONL export
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Use DeduplicationCore.jaccard_similarity(s1, s2) to compute word-level
+  Jaccard similarity between two strings.
+- Use DeduplicationCore.deduplicate_items(items, key='message',
+  threshold=0.8) to remove near-duplicate dict entries (keeps first-seen).
+- Use DeduplicationCore.export_to_jsonl(items, output_path) to write a
+  list of dicts as JSONL to disk.
+- The module will attempt to use an optional rust_core extension for
+  faster similarity and deduplication when available, falling back to
+  pure-Python implementations otherwise.
+
+WHAT IT DOES:
+- Provides a compact core for report deduplication (Phase 183) centered
+  on word-level Jaccard similarity.
+- Offers a safe optional acceleration path via a rust_core extension
+  (calculate_jaccard_similarity, deduplicate_by_similarity) and gracefully
+  falls back on Python logic if that extension is missing or raises errors.
+- Implements a simple deduplication strategy that iterates items in order,
+  treating an item as duplicate if its similarity to any previously
+  accepted message exceeds the threshold.
+- Exports deduplicated items to JSONL for downstream consumption.
+
+WHAT IT SHOULD DO BETTER:
+- Use a configurable tokenizer (respect punctuation, stemming, stopwords,
+  and n-grams) instead of a simple .split() to improve similarity accuracy
+  across real-world text.
+- Provide alternative similarity metrics (e.g., cosine over TF-IDF,
+  MinHash/LSH for large corpora) and allow selecting the metric per-run.
+- Improve scalability: current O(N^2) pairwise comparisons are fine for
+  small lists but need blocking/LSH/minhashing or shard-based approaches
+  for large datasets.
+- Preserve determinism options (e.g., stable sorting or explicit
+  tie-breaking) and optionally return metadata (similarity scores, cluster
+  ids, indices removed) rather than only filtered items.
+- Add robust error handling, logging, typing annotations (use TypedDict
+  for item schema), async-friendly APIs, and unit tests for edge cases
+  (empty strings, non-string keys, large inputs).
+- Allow streaming processing and incremental deduplication to limit
+  memory use for very large JSONL inputs/outputs.
+
+FILE CONTENT SUMMARY:
 Core logic for Report Deduplication (Phase 183).
 Handles similarity calculations and JSONL export.
 """
@@ -34,7 +80,7 @@ class DeduplicationCore:
         """
         Calculates Jaccard similarity between two strings based on words.
         """
-        if rc:
+        if rc is not None:
             try:
                 return rc.calculate_jaccard_similarity(s1, s2)  # type: ignore[attr-defined]
             except (AttributeError, TypeError, RuntimeError, OSError):
@@ -55,7 +101,7 @@ class DeduplicationCore:
         """
         Removes items that are too similar to already seen items.
         """
-        if rc:
+        if rc is not None:
             try:
                 messages = [item.get(key, "") for item in items]
                 unique_indices = rc.deduplicate_by_similarity(messages, threshold)  # type: ignore[attr-defined]
