@@ -13,8 +13,152 @@
 # limitations under the License.
 
 
+"""
+Pull Request Agent - Git PR analysis and review summarization
+
+[Brief Summary]
+DATE: 2026-02-13
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate PullRequestAgent with the repository workspace file path (e.g., PullRequestAgent("path/to/repo")).
+- Call as_tool methods to generate PR diffs, summarize recent commits, or create a patch branch (subject to config).
+- Intended to be used interactively by other agents or via CLI wrappers that orchestrate git operations and generate review reports.
+
+WHAT IT DOES:
+- Analyzes git diffs vs a target branch and builds a concise Markdown PR summary including impacted files and stats.
+- Summarizes recent commit history into a readable block and exposes tools for branch creation while respecting agent config.
+- Records PR-related interactions to a LocalContextRecorder for fleet intelligence and post-hoc analysis.
+
+WHAT IT SHOULD DO BETTER:
+- Validate repository state and surface clearer, structured error objects instead of plain text to enable programmatic handling.
+- Expand diff analysis to include semantic change detection (AST-aware) and richer risk scoring for breaking changes.
+- Make recorder usage optional with explicit lifecycle management and add configurable limits (file count, time window) to avoid large recordings.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 """Agent specializing in Git operations, pull request analysis, and code review.
 Inspired by PR-Agent and GitHub CLI.
+"""
+
+# pylint: disable=too-many-ancestors
+
+from __future__ import annotations
+
+import subprocess
+import time
+from pathlib import Path
+from typing import Any
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.compute.backend.local_context_recorder import \
+    LocalContextRecorder
+
+__version__ = VERSION
+
+
+class PullRequestAgent(BaseAgent):
+    """Analyzes differences in the codebase and generates summaries or review comments."""
+
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._system_prompt = (
+            "You are the PR Agent. "
+            "Your role is to analyze git changes and provide high-quality summaries. "
+            "Identify impacted modules, potential breaking changes, and suggest improvements. "
+            "Output clear Markdown reports for code reviews."
+        )
+
+        # Phase 108: Intelligence Harvesting
+        work_root = getattr(self, "_workspace_root", None)
+        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
+
+    def _record_pr_event(self, action: str, details: Any, result: str) -> None:
+        """Archiving git/PR interactions for fleet intelligence."""
+        _ = details
+        if self.recorder:
+            try:
+                meta = {"phase": 108, "type": "git_pr", "timestamp": time.time()}
+                self.recorder.record_interaction("pra", "git", action, result, meta=meta)
+            except Exception:  # pylint: disable=broad-exception-caught
+                pass
+
+    @as_tool
+    def get_diff_summary(self, branch: str = "main") -> str:
+        """Generates a summary of changes between the current state and a branch."""
+        try:
+            # Get the diff
+            summary = subprocess.check_output(["git", "diff", branch, "--stat"], text=True, encoding="utf-8")
+
+            # Get actual file changes for content analysis (limited)
+            files = subprocess.check_output(
+                ["git", "diff", branch, "--name-only"], text=True, encoding="utf-8"
+            ).splitlines()
+
+            report = [
+                "## 📝 PR Change Summary",
+                f"Comparing current state against `{branch}`\n",
+            ]
+            report.append(f"```text\n{summary}\n```")
+
+            if files:
+                report.append("\n### Impacted Files")
+                for f in files[:10]:  # Limit to top 10
+                    report.append(f"- `{f}`")
+
+            res = "\n".join(report)
+            self._record_pr_event("diff_summary", {"branch": branch}, res)
+            return res
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            err = f"Error analyzing git diff: {e}"
+            self._record_pr_event("diff_error", {"branch": branch}, err)
+            return err
+
+    @as_tool
+    def analyze_commit_history(self, limit: int = 5) -> str:
+        """Summarizes recent activity in the repository."""
+        try:
+            # Use argument list for git log to avoid shell injection
+            cmd = ["git", "log", "-n", str(limit), "--pretty=format:%h - %an: %s (%cr)"]
+            result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+            if result.returncode != 0:
+                return f"Git history unavailable: {result.stderr}"
+            return f"## 📜 Recent Git History\n\n```text\n{result.stdout}\n```"
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            return f"Error reading git history: {e}"
+
+    @as_tool
+    def create_patch_branch(self, branch_name: str) -> str:
+        """Creates a new git branch for staging changes.
+
+        Respects the policy setting `allow_branch_creation` in the agent config
+        (defaults to False, requiring explicit user permission).
+        """
+        # Respect configuration to avoid creating many branches/PRs by default
+        allow = False
+        try:
+            allow = bool(getattr(self, "_config", {}).get("allow_branch_creation", False))
+        except Exception:
+            allow = False
+
+        if not allow:
+            return (
+                "Branch creation is d
 """
 
 # pylint: disable=too-many-ancestors

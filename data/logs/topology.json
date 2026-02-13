@@ -4,10 +4,10 @@
       "id": "localhost",
       "group": "gateway",
       "meta": {
-        "cpu": 64.5,
-        "mem": 78.8
+        "cpu": 61.9,
+        "mem": 80.9
       },
-      "val": 98627269.71972656
+      "val": 269503715.8701172
     },
     {
       "id": "synthesis_agent",
@@ -6204,5 +6204,5 @@
       "type": "voyager_p2p"
     }
   ],
-  "timestamp": "2026-02-13T02:10:39.263019"
+  "timestamp": "2026-02-13T03:10:40.101672"
 }
