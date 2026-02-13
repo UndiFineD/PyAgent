@@ -13,6 +13,41 @@
 # limitations under the License.
 
 """
+[Tracing Core] - [Distributed tracing and latency breakdown]
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate TracingCore and call create_span_context(trace_id, span_id)
+  to obtain a standardized span context for downstream exporters.
+- Use calculate_latency_breakdown(total_time, network_time) to separate
+  agent thinking time from network latency (returns values in milliseconds
+  and a think ratio).
+- Use format_otel_log(name, attributes) to produce a single OTel-compatible
+  telemetry event dict ready for ingestion.
+
+WHAT IT DOES:
+- Provides a small, focused API for creating span contexts, computing
+  latency breakdowns, and formatting OpenTelemetry-style log events.
+- Delegates heavy lifting to a rust_core extension when available for
+  performance and falls back to pure-Python implementations on ImportError
+  or runtime errors.
+- Ensures outputs are normalized (trace/span ids, time in ms, ratio) and
+  includes a simple INTERNAL-kind log envelope with a high-resolution
+  timestamp.
+
+WHAT IT SHOULD DO BETTER:
+- Add explicit logging and error reporting when rust_core calls fail to
+  make fallbacks observable and debuggable.
+- Validate inputs (trace/span id formats, non-negative times) and document
+  units clearly to avoid misuse.
+- Expand OTel compatibility by adopting official semantic conventions,
+  support trace/span parent relationships, and add unit tests and
+  type-checked signatures; consider async-friendly interfaces and richer
+  metadata support.
+
+FILE CONTENT SUMMARY:
 Tracing core.py module.
 """
 

@@ -13,7 +13,181 @@
 # limitations under the License.
 
 """
+Rollup Engine - Rollup, query, and correlation analyzer
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate StatsRollup or StatsRollupCalculator to collect raw metric points, configure rollups, add metric values, and call compute_rollup or rollup to get aggregated results.
+- Prefer StatsRollup for config-driven multi-metric aggregation; use StatsRollupCalculator for lightweight, per-metric bucketing and aggregation logic.
+- If rust_core is available it will be used for accelerated aggregation; otherwise the Python fallback (StatsRollupCore) is used.
+
+WHAT IT DOES:
+- Provides classes to collect raw metric points, bucket them by interval, and compute rollup aggregates (sum, avg, min, max, count).
+- Supports configuration-driven named rollups (StatsRollup.configure_rollup) that pull from multiple source metrics and produce aggregated views.
+- Attempts to use a Rust acceleration layer (rust_core) when available, falling back to pure-Python core implementations.
+- Exposes a simple API: add_point/add_value to ingest, rollup/compute_rollup to produce results, and calculate_rollup to apply aggregation types.
+
+WHAT IT SHOULD DO BETTER:
+- Complete and robust integration with rust_core: clearly defined interfaces, fallbacks, and unit tests covering both paths.
+- Handle time-zone aware datetimes and missing/late-arriving points more robustly (e.g., retention windows, out-of-order insertion).
+- Add more aggregation types (percentiles, median), windowed sliding aggregations, and configurable bucketing alignment (start-of-hour/day).
+- Improve error handling and observability (metrics and structured logs) around aggregation failures and data shape mismatches.
+- Provide documented examples and type-hints for external callers; add tests for edge cases (empty inputs, single-point buckets).
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
 Rollup engine.py module.
+"""
+# Rollup, query, and correlation analyzer engine.
+# Phase 16: Rust acceleration for aggregation and percentile calculations
+
+from __future__ import annotations
+
+import contextlib
+import logging
+import math
+from datetime import datetime
+from typing import Any
+
+from .metrics import AggregationType, Metric
+from .metrics_core import CorrelationCore, StatsRollupCore
+from .observability_core import RollupConfig
+
+logger: logging.Logger = logging.getLogger(__name__)
+
+# Phase 16: Rust acceleration imports
+try:
+    import rust_core
+
+    _RUST_AVAILABLE = True
+except ImportError:
+    _RUST_AVAILABLE = False
+    logging.debug("rust_core not available, using Python fallback for RollupEngine")
+
+
+class StatsRollupCalculator:
+    """Calculates metric rollups using pure logic core."""
+
+    def __init__(self) -> None:
+        self.rollups: dict[str, list[float]] = {}
+        self._points: dict[str, list[tuple[float, float]]] = {}
+        self.core = StatsRollupCore()
+
+    def add_point(self, metric: str, timestamp: float, value: float) -> None:
+        if metric not in self._points:
+            self._points[metric] = []
+        self._points[metric].append((float(timestamp), float(value)))
+
+    def rollup(self, metric: str, interval: str = "1h") -> list[float]:
+        points: list[tuple[float, float]] = self._points.get(metric, [])
+        if not points:
+            return []
+
+        unit: str = interval[-1]
+        amount = 1
+        with contextlib.suppress(Exception):
+            amount = int(interval[:-1])
+
+        if unit == "m":
+            bucket: int = 60 * amount
+        elif unit == "h":
+            bucket: int = 3600 * amount
+        elif unit == "d":
+            bucket: int = 86400 * amount
+        else:
+            bucket: int = 3600 * amount
+
+        buckets: dict[int, list[float]] = {}
+        for ts, val in points:
+            key = int(ts) // int(bucket)
+            buckets.setdefault(key, []).append(float(val))
+
+        results: list[float] = []
+        for key in sorted(buckets.keys()):
+            vals = buckets[key]
+            results.append(sum(vals) / len(vals))
+
+        self.rollups[metric] = results
+        return results
+
+    def calculate_rollup(self, metrics: list[float], aggregation_type: AggregationType) -> float:
+        if not metrics:
+            return 0.0
+        if aggregation_type == AggregationType.SUM:
+            return sum(metrics)
+
+        elif aggregation_type == AggregationType.AVG:
+            return sum(metrics) / len(metrics)
+        elif aggregation_type == AggregationType.MIN:
+            return min(metrics)
+        elif aggregation_type == AggregationType.MAX:
+            return max(metrics)
+        elif aggregation_type == AggregationType.COUNT:
+            return float(len(metrics))
+        return 0.0
+
+
+class StatsRollup:
+    """Aggregate metrics into rollup views."""
+
+    def __init__(self) -> None:
+        self.configs: dict[str, RollupConfig] = {}
+        self.rollups: dict[str, list[dict[str, Any]]] = {}
+        self._raw_data: dict[str, list[tuple[datetime, float]]] = {}
+
+    def configure_rollup(
+        self,
+        name: str,
+        source_metrics: list[str],
+        aggregation: AggregationType,
+        interval_minutes: int = 60,
+        keep_raw: bool = True,
+    ) -> RollupConfig:
+        config = RollupConfig(
+            name=name,
+            source_metrics=source_metrics,
+            aggregation=aggregation,
+            interval_minutes=interval_minutes,
+            keep_raw=keep_raw,
+        )
+        self.configs[name] = config
+        self.rollups[name] = []
+        return config
+
+    def add_value(self, metric_name: str, value: float, timestamp: datetime | None = None) -> None:
+        ts: datetime = timestamp or datetime.now()
+        if metric_name not in self._raw_data:
+            self._raw_data[metric_name] = []
+        self._raw_data[metric_name].append((ts, value))
+
+    def compute_rollup(self, name: str) -> list[dict[str, Any]]:
+        config: RollupConfig | None = self.configs.get(name)
+        if not config:
+            return []
+        all_values: list[float] = []
+        for metric in config.source_metrics:
+            values = self._raw_data.get(metric, [])
+            all_values.extend(v for _, v in values)
+        if not all_values:
+            return []
+
+        result = self._try_rust_aggregation(config, all_v
 """
 # Rollup, query, and correlation analyzer engine.
 # Phase 16: Rust acceleration for aggregation and percentile calculations

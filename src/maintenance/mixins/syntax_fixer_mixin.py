@@ -13,6 +13,42 @@
 # limitations under the License.
 
 """
+Syntax Fixer Mixin - Fix Python syntax patterns and common type-hint errors
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+
+USAGE:
+- Import SyntaxFixerMixin into agent classes or utilities that
+  operate on Path-referenced Python source files.
+- Call fix_invalid_for_loop_type_hints(Path('path/to/file.py')) to
+  automatically correct invalid "for var: Type in" constructs.
+- Call check_unmatched_triple_quotes(Path('path/to/file.py')) to
+  detect unmatched triple-quote occurrences and return line numbers
+  for inspection.
+
+WHAT IT DOES:
+- Detects and fixes invalid for-loop type-hint syntax of the form
+  "for x: Type in ..." by rewriting to "for x in ...".
+- Scans files for unmatched triple-quote occurrences and returns
+  the line numbers where triple quotes appear if an odd count is
+  found.
+- Logs actions and failures for operational visibility.
+
+WHAT IT SHOULD DO BETTER:
+- Broaden regex accuracy to avoid false positives and handle
+  complex whitespace/comments, generics, and nested constructs
+  more robustly.
+- Preserve original file formatting (e.g., spacing, inline comments)
+  and create backups or use a transactional write for safer changes.
+- Add unit tests, configurable patterns, and an option to preview
+  changes before writing; consider AST-based parsing for correctness
+  instead of regex alone.
+- Provide clearer handling/reporting for edge cases like f-strings
+  with triple quotes or mixed single/double triple quotes.
+
+FILE CONTENT SUMMARY:
 Mixin for fixing Python syntax patterns and common type hint errors.
 """
 

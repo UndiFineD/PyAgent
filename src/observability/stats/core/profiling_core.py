@@ -13,6 +13,52 @@
 # limitations under the License.
 
 """
+Profiling Core - cProfile aggregation and bottleneck analysis
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Import ProfilingCore and ProfileStats from profiling_core.
+- Use ProfilingCore.analyze_stats(pstats_obj, limit=10) to convert a
+  cProfile pstats.Stats into a list of ProfileStats.
+- Call ProfilingCore.identify_bottlenecks(stats, threshold_ms=100.0) to
+  get function names exceeding the threshold.
+- Use ProfilingCore.calculate_optimization_priority(profile_stat) to
+  rank optimization impact.
+
+WHAT IT DOES:
+- Parses pstats.Stats produced by cProfile and extracts top N functions
+  sorted by cumulative time.
+- Represents results as immutable ProfileStats dataclasses with function
+  name, call count, total time, per-call time and optional source info.
+- Identifies bottlenecks either via optional Rust acceleration
+  (rust_core.identify_bottlenecks) or a fallback Python filter using a
+  millisecond threshold.
+- Provides a simple heuristic (time * frequency) to compute an
+  optimization priority score.
+
+WHAT IT SHOULD DO BETTER:
+- Preserve and surface file_name and line_number values parsed from
+  pstats keys (currently left as None), so callers can map hotspots to
+  source locations.
+- Improve parsing of pstats.Stats entries (the func tuple) to extract
+  readable function names and module paths rather than str(func).
+- Make threshold units and defaults explicit (threshold_ms is
+  milliseconds but fallback compares seconds), and unify units across
+  code and Rust FFI.
+- Add robust error handling and logging around rust_core integration and
+  pstats structure differences, and provide comprehensive unit tests.
+- Consider richer aggregation (per-module summaries, percentiles,
+  exclusive vs inclusive time) and better sorting options (by per-call,
+  total, or call count).
+- Return richer typed results from identify_bottlenecks
+  (e.g., list[ProfileStats] or list[dict]) instead of only names for
+  downstream tooling.
+- Document and test interaction with optional Rust extension and ensure
+  deterministic behavior when rc is unavailable.
+
+FILE CONTENT SUMMARY:
 Profiling core.py module.
 """
 
@@ -50,7 +96,8 @@ class ProfilingCore:
 
         # pstats stores data in a complex tuple structure
         # (cc, nc, tt, ct, callers)
-        for func, (cc, nc, tt, ct, callers) in pstats_obj.stats.items():
+        stats_dict: dict[Any, Any] = pstats_obj.stats  # type: ignore[attr-defined]
+        for func, (cc, nc, tt, ct, callers) in stats_dict.items():
             if len(results) >= limit:
                 break
             results.append(

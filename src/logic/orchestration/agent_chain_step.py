@@ -12,8 +12,48 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+AgentChainStep - Represents a single step in an agent execution chain.
 
-"""Auto-extracted class from agent.py"""
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+from src.logic.orchestration.agent_chain_step import AgentChainStep
+
+# Simple step that wraps and unwraps data for a downstream agent
+step = AgentChainStep(
+    agent_name="ExampleAgent",
+    input_transform=lambda data: {"payload": data},
+    output_transform=lambda out: out.get("result"),
+    enabled=True,
+    condition=lambda ctx: ctx is not None and ctx.get("run_step", True),
+)
+
+# Execution pattern: check step.enabled and step.condition(context) before calling
+# transformed_input = step.input_transform(raw_input) if step.input_transform else raw_input
+# agent_result = run_agent(step.agent_name, transformed_input)
+# final = step.output_transform(agent_result) if step.output_transform else agent_result
+
+WHAT IT DOES:
+- Encapsulates metadata and optional transformation/guard functions for a single link in a chain of agents.
+- Holds agent identity (agent_name), optional input/output transformers, an enabled flag,
+  and an optional condition predicate.
+- Designed as a lightweight dataclass for easy construction, serialization, and immutability-friendly behavior.
+
+WHAT IT SHOULD DO BETTER:
+- Validate callable signatures and provide clearer runtime errors when transforms/conditions
+  have unexpected parameters.
+- Offer built-in async support and standard execution helper methods (e.g.,
+  execute(context, runner)) so chains have a canonical runtime behavior.
+- Add thorough unit tests, richer docstrings, and optional logging/hooks for observability
+  and debugging.
+- Support optional metadata, priority, retry policy, and deterministic ordering for complex
+  orchestration needs.
+
+FILE CONTENT SUMMARY:
+Auto-extracted class from agent.py
+"""
 
 from __future__ import annotations
 

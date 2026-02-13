@@ -13,7 +13,29 @@
 # limitations under the License.
 
 """
-Mixin providing automated import cleanup and optimization for the Maintenance Agent.
+ImportCleanupMixin - Automated import resolution and normalization
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+Used by maintenance/refactor agents to scan a project tree, build a filesystem
+name map and update Python files' import statements to match actual module/file
+names and casing, handling relative and absolute imports.
+
+WHAT IT DOES:
+Builds fuzzy name maps from filesystem layout, resolves relative and absolute
+module strings to real names using that map, and rewrites import/from lines in
+files to match the filesystem.
+
+WHAT IT SHOULD DO BETTER:
+Handle package __init__ exports, support aliased imports and multi-target
+from-imports, preserve formatting and comments around complex import lines, and
+add dry-run/backup and logging levels for safe mass edits.
+
+FILE CONTENT SUMMARY:
+Mixin providing automated import cleanup and optimization for the Maintenance
+Agent.
 """
 
 import re
@@ -60,6 +82,8 @@ class ImportCleanupMixin:
         if mod_str.startswith("."):
             # Relative import
             m: re.Match[str] | None = re.match(r"^(\.+)", mod_str)
+            if not m:
+                return mod_str
             dots: int = len(m.group(1))
             rel_parts: List[str] = parts[dots-1:]
             if rel_parts and rel_parts[0].startswith("."):
@@ -81,41 +105,41 @@ class ImportCleanupMixin:
                 else:
                     return mod_str  # Cannot resolve
             return "." * dots + ".".join(res)
-        else:
-            # Absolute import
-            curr_path = None
-            res = []
-            for i, p in enumerate(parts):
-                if curr_path is None:
-                    # Look for root/part
-                    low: str = p.lower()
-                    for d in search_dirs:
-                        if d.lower() == low:
-                            curr_path = root_dir / d
-                            res.append(d)
-                            break
-                    if curr_path:
-                        continue
-                    else:
-                        return mod_str  # External module
 
-                low: str = p.replace("_", "").replace("-", "").lower()
-                key: Tuple[str] = (str(curr_path).lower(), low)
-                if key in name_map:
-                    real: str = name_map[key]
-                    res.append(real)
-                    curr_path: Path = curr_path / real
+        # Absolute import
+        curr_path: Path | None = None
+        res = []
+        for i, p in enumerate(parts):
+            if curr_path is None:
+                # Look for root/part
+                low: str = p.lower()
+                for d in search_dirs:
+                    if d.lower() == low:
+                        curr_path = root_dir / d
+                        res.append(d)
+                        break
+                if curr_path:
+                    continue
                 else:
-                    res.extend(parts[i:])
-                    break
-            return ".".join(res)
+                    return mod_str  # External module
+
+            low: str = p.replace("_", "").replace("-", "").lower()
+            key: Tuple[str, str] = (str(curr_path).lower(), low)
+            if key in name_map:
+                real: str = name_map[key]
+                res.append(real)
+                curr_path = curr_path / real
+            else:
+                res.extend(parts[i:])
+                break
+        return ".".join(res)
 
     def fix_imports_in_file(
         self,
         file_path: Path,
-        name_map: dict[tuple[str, str], str],
+        name_map: Dict[Tuple[str, str], str],
         root_dir: Path,
-        search_dirs: list[str]
+        search_dirs: List[str]
     ) -> bool:
         """Updates imports in a file to match the actual filesystem casing/naming."""
         try:
@@ -128,22 +152,13 @@ class ImportCleanupMixin:
 
             # Regex for 'import ...' and 'from ... import ...'
             new_content: str = re.sub(
-                r"^(import\s+)([a-zA-Z0-9_\.]+)",
+                r"^((?:import|from)\s+)([a-zA-Z0-9_\.]+)",
                 replacer,
                 content,
                 flags=re.MULTILINE
             )
-            new_content: str = re.sub(
-                r"^(from\s+)([a-zA-Z0-9_\.]+)(?=\s+import)",
-                replacer,
-                new_content,
-                flags=re.MULTILINE
-            )
-
-            if new_content != content:
-                file_path.write_text(new_content, encoding="utf-8")
-                return True
-            return False
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            file_path.write_text(new_content, encoding="utf-8")
+            return True
+        except (OSError, UnicodeDecodeError, UnicodeEncodeError) as e:
             logger.error(f"Failed to fix imports in {file_path}: {e}")
             return False

@@ -12,8 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Consistency Agent - Check code consistency across the codebase
 
-"""Auto-extracted class from agent_coder.py"""
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate ConsistencyAgent and call check(file_contents) where file_contents is a dict mapping file paths to their text content. Example:
+>>> checker = ConsistencyAgent()
+>>> issues = checker.check({"src/foo.py": open("src/foo.py").read(), "src/bar.py": open("src/bar.py").read()})
+
+WHAT IT DOES:
+Detects mixed naming conventions for functions (simple snake_case vs camelCase detection) and mixed import styles (absolute vs relative) using regular-expression scans over provided file contents, and emits ConsistencyIssue objects summarizing sample occurrences and a recommended style.
+
+WHAT IT SHOULD DO BETTER:
+- Use AST-based parsing instead of regex for robust detection (handle nested defs, decorators, class methods, and aliases).
+- Extend checks to class naming, constants, module/file naming, and import grouping (stdlib/third-party/local) with configurable rules and thresholds.
+- Provide severity levels, aggregation metrics, automatic fix suggestions or codemods, and better performance for large repositories (incremental or parallel analysis).
+
+FILE CONTENT SUMMARY:
+Auto-extracted class from agent_coder.py
+"""
 
 from __future__ import annotations
 

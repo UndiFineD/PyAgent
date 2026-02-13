@@ -18,25 +18,22 @@ Transport layer.py module.
 # Phase 319: Multi-Cloud Teleportation (ZMQ Transport Layer)
 
 import asyncio
+import os
 import sys
+from typing import Any, Awaitable, Callable, Dict, Optional
+import zmq
+import zmq.asyncio
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from src.infrastructure.security.firewall.zero_trust import ZeroTrustFirewall
+from src.infrastructure.security.encryption.double_ratchet import DoubleRatchet
+from src.observability.structured_logger import StructuredLogger
 
 # VOYAGER STABILITY: Force SelectorEventLoop for ZeroMQ on Windows
 if sys.platform == "win32":
     try:
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    except Exception:
+    except RuntimeError:
         pass
-
-import os
-from typing import Any, Awaitable, Callable, Dict, Optional
-
-import zmq
-import zmq.asyncio
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-
-from src.infrastructure.security.firewall.zero_trust import ZeroTrustFirewall
-from src.infrastructure.security.encryption.double_ratchet import DoubleRatchet
-from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
 

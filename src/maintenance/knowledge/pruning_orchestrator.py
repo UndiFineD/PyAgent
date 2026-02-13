@@ -15,8 +15,47 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 """
+Pruning Orchestrator - Synaptic Decay & Knowledge Pruning
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate PruningOrchestrator with a FleetManager (fleet) and optionally
+a decay_rate, then run run_pruning_cycle(threshold) for ad-hoc pruning or
+start_background_loop() in an asyncio task for continuous maintenance.
+Example:
+  orchestrator = PruningOrchestrator(fleet, decay_rate=0.08)
+  asyncio.create_task(orchestrator.start_background_loop())
+
+WHAT IT DOES:
+Coordinates swarm-wide garbage collection of semantic memory and local
+KV caches using a SynapticDecay engine. It queries fleet.memory_core for
+active indices, computes decayed (dead) keys, evicts them, and broadcasts
+PRUNING_SIGNAL messages to remote nodes via fleet.voyager_transport to
+trigger distributed local pruning. Provides a continuous background loop
+for periodic pruning cycles.
+
+WHAT IT SHOULD DO BETTER:
+- Add robust error handling and logging around fleet attribute access and
+  transport failures to avoid silent failures during network issues.
+- Batch evictions and make eviction operations transactional (use
+  StateTransaction) to ensure atomicity and support rollback on partial
+  failures.
+- Make pruning_interval, decay parameters, and messaging behavior
+  configurable from FleetManager config or environment; add jitter/backoff
+  to avoid synchronized spikes across nodes.
+- Add metrics and observability (counts evicted, cycle durations,
+  failures), unit/integration tests and graceful shutdown/cancellation
+  handling for start_background_loop.
+- Respect TYPE_CHECKING hints and dependency injection patterns (pass a
+  decay engine factory) to make the class more testable and decoupled from
+  concrete SynapticDecay implementation.
+
+FILE CONTENT SUMMARY:
 Module: pruning_orchestrator
-Implements Pillar 6: Synaptic Decay & Knowledge Pruning for context lifecycle management.
+Implements Pillar 6: Synaptic Decay & Knowledge Pruning for context
+lifecycle management.
 """
 
 from __future__ import annotations

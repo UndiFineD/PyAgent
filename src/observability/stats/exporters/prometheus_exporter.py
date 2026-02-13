@@ -13,7 +13,32 @@
 # limitations under the License.
 
 
-"""Exporter for fleet metrics in Prometheus/OpenMetrics format.
+"""
+Prometheus Exporter - Formats fleet telemetry into Prometheus/OpenMetrics metrics
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate PrometheusExporter and call record_metric(name, value, labels) as telemetry is produced.
+- Expose generate_scrape_response() on an HTTP GET /metrics endpoint for Prometheus to scrape.
+- Use get_grafana_info() to seed Grafana provisioning or documentation.
+
+WHAT IT DOES:
+- Provides a minimal in-process registry (dict) mapping metric_name{labels} -> float.
+- Serializes metrics into a simple text/plain Prometheus scrape response prefixed with "pyagent_".
+- Supplies static Grafana integration metadata to help dashboard provisioning.
+
+WHAT IT SHOULD DO BETTER:
+- Sanitize and validate metric names and label keys/values to follow Prometheus naming and
+  escaping rules.
+- Support metric types (counter/gauge/histogram/summary), HELP/TYPE lines, and richer metric
+  families (histograms, exemplars).
+- Be concurrency-safe (locks/async primitives), optionally integrate with the official
+  prometheus_client package, and add unit tests and metrics TTL/expiration.
+
+FILE CONTENT SUMMARY:
+Exporter for fleet metrics in Prometheus/OpenMetrics format.
 Enables real-time dashboards in Grafana and ELK stack.
 """
 

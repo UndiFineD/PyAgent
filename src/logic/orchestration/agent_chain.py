@@ -12,8 +12,53 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+AgentChain - Chain multiple agents for sequential execution
 
-"""Auto-extracted class from agent.py"""
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Create an AgentChain, add steps with optional input/output
+  transforms and conditions, and execute with an
+  agent_executor callable.
+- Example:
+    chain = AgentChain("pipeline")
+    chain.add_step("coder", output_transform=extract_code)
+    chain.add_step("tests", input_transform=prepare_for_tests)
+    results = chain.execute(initial_input, agent_executor=my_executor)
+- agent_executor signature:
+  Callable[[agent_name: str, input: Any], Any] — it must
+  execute the named agent and return its output.
+
+WHAT IT DOES:
+- Provides a small orchestration primitive to run a sequence of
+  named agents where each step can:
+  - be enabled/disabled,
+  - conditionally run based on the previous step's output,
+  - transform the input before execution and transform the
+    output after execution.
+- Collects structured per-step result dictionaries with keys
+  such as agent, success, output, error, or skipped/reason.
+
+WHAT IT SHOULD DO BETTER:
+- Add explicit async support so agent executors that are
+  coroutines can be awaited.
+- Provide richer error handling and retry semantics instead of
+  breaking the chain on the first exception.
+- Add logging/tracing integration, timeouts for long-running
+  steps, and better typing (use Protocols for agent_executor
+  and typed Result models).
+- Preserve immutable original inputs (avoid in-place mutation
+  when transforms run), and provide hooks for transactional
+  rollback (StateTransaction) when running file-modifying agents.
+- Add unit tests covering transform/condition interactions and
+  edge-cases (None outputs, exceptions, non-serializable
+  outputs).
+
+FILE CONTENT SUMMARY:
+Auto-extracted class from agent.py
+"""
 
 from __future__ import annotations
 

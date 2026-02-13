@@ -308,36 +308,36 @@ pub fn eagle_prepare_inputs_padded_rust(
 }
 
 /// Prompt lookup propose from prompt tokens
-#[pyfunction]
-pub fn prompt_lookup_propose_spec_rust(
-    prompt_tokens: Vec<i64>,
-    generated_tokens: Vec<i64>,
-    min_len: usize,
-    max_len: usize,
-    k: usize,
-) -> Vec<i64> {
-    if generated_tokens.is_empty() {
-        return Vec::new();
-    }
-    
-    for suffix_len in (min_len..=max_len).rev() {
-        if generated_tokens.len() < suffix_len {
-            continue;
-        }
-        
-        let suffix = &generated_tokens[generated_tokens.len() - suffix_len..];
-        
-        for i in 0..prompt_tokens.len().saturating_sub(suffix_len) {
-            if &prompt_tokens[i..i + suffix_len] == suffix {
-                let start = i + suffix_len;
-                let end = (start + k).min(prompt_tokens.len());
-                return prompt_tokens[start..end].to_vec();
-            }
-        }
-    }
-    
-    Vec::new()
-}
+// #[pyfunction]
+// pub fn prompt_lookup_propose_spec_rust(
+//     prompt_tokens: Vec<i64>,
+//     generated_tokens: Vec<i64>,
+//     min_len: usize,
+//     max_len: usize,
+//     k: usize,
+// ) -> Vec<i64> {
+//     if generated_tokens.is_empty() {
+//         return Vec::new();
+//     }
+//     
+//     for suffix_len in (min_len..=max_len).rev() {
+//         if generated_tokens.len() < suffix_len {
+//             continue;
+//         }
+//         
+//         let suffix = &generated_tokens[generated_tokens.len() - suffix_len..];
+//         
+//         for i in 0..prompt_tokens.len().saturating_sub(suffix_len) {
+//             if &prompt_tokens[i..i + suffix_len] == suffix {
+//                 let start = i + suffix_len;
+//                 let end = (start + k).min(prompt_tokens.len());
+//                 return prompt_tokens[start..end].to_vec();
+//             }
+//         }
+//     }
+//     
+//     Vec::new()
+// }
 
 /// Build cumulative indices for speculative decode metadata
 #[pyfunction]

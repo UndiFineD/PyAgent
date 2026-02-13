@@ -13,7 +13,163 @@
 # limitations under the License.
 
 """
+Metrics Engine - High-performance observability & token cost aggregation
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate ObservabilityEngine(workspace_root=<path>, fleet=<fleet>) in the agent runtime.
+- Use start_trace/stop_trace/log_event/get_metrics/generate_dashboard/export_to_elk to record, export and view telemetry.
+- Integrate PrometheusExporter, OTelManager and MetricsExporter for scraping, tracing and external dashboards.
+
+WHAT IT DOES:
+- Centralizes fleet-wide telemetry, event logging and metric aggregation for PyAgent.
+- Records structured events with noise reduction, exports buffered logs to an ELK-style sink, and exposes Prometheus payloads.
+- Provides token-cost calculation via TokenCostEngine, Grafana dashboard generation hooks, and optional Rust acceleration via rust_core.
+
+WHAT IT SHOULD DO BETTER:
+- Persist telemetry atomically (use StateTransaction) and provide configurable retention/rotation for the .agent_telemetry.json file.
+- Add robust error handling and backpressure when exporters (Prometheus/OTel/Grafana) are unavailable, and surface async APIs for non-blocking operation.
+- Improve type-safety and unit coverage for boundary cases (missing rust_core, exporter failures, and malformed events), and document stable public API surface.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
 High-performance metrics engine for real-time observability and aggregation.
+"""
+
+from __future__ import annotations
+
+
+import json
+import logging
+import time
+from dataclasses import asdict
+from pathlib import Path
+from typing import Any, Optional
+
+from src.observability.reports.grafana_generator import GrafanaDashboardGenerator
+
+from src.observability.stats.metrics_core import TokenCostResult
+
+# Import pure calculation cores
+from .metrics_core import ModelFallbackCore, TokenCostCore
+from .observability_core import AgentMetric, ObservabilityCore
+
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None
+
+from .exporters import MetricsExporter, OTelManager, PrometheusExporter
+from src.core.base.lifecycle.version import VERSION
+
+
+__version__: str = VERSION
+
+logger: logging.Logger = logging.getLogger(__name__)
+
+
+class ObservabilityEngine:
+    """Provides telemetry and performance tracking for the agent fleet."""
+
+    def __init__(self, workspace_root: str | None = None, fleet: Any = None) -> None:
+        if fleet and hasattr(fleet, "workspace_root"):
+            self.workspace_root = Path(fleet.workspace_root)
+        elif workspace_root:
+            self.workspace_root = Path(workspace_root)
+        else:
+            self.workspace_root = Path(".")
+
+        self.telemetry_file: Path = self.workspace_root / ".agent_telemetry.json"
+        self.core = ObservabilityCore()
+        self.metrics: list[AgentMetric] = []
+        self._start_times: dict[str, float] = {}
+        self._otel_spans: dict[str, str] = {}  # Map trace_id -> tel_span_id
+        self.cost_engine = TokenCostEngine()
+        self.prometheus = PrometheusExporter()
+        self.otel = OTelManager()
+        self.metrics_exporter = MetricsExporter()
+        self.log_buffer: list[dict[str, Any]] = []
+        self.load()
+
+    def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:
+        """Logs a system event in a structured format for ELK.
+
+        Args:
+            agent_id: The ID of the agent generating the event.
+            event_type: The category of event (e.g., 'task_complete', 'error').
+            data: Payload of the event.
+            level: Severity level (INFO, WARNING, ERROR, CRITICAL).
+        """
+        # Noise Reduction: Only store significant events in the persistent log buffer.
+        # Metrics are still recorded for everything.
+        important_types: list[str] = [
+            "agent_failure",
+            "security_alert",
+            "workflow_error",
+            "system_crash",
+        ]
+        important_levels: list[str] = ["ERROR", "WARNING", "CRITICAL"]
+
+        should_log: bool = level in important_levels or event_type in important_types
+
+        if should_log:
+            event = {
+                "timestamp": time.time(),
+                "agent_id": agent_id,
+                "event_type": event_type,
+                "level": level,
+                "data": data,
+            }
+            self.log_buffer.append(event)
+
+        # Always record metrics regardless of log storage
+        self.prometheus.record_metric("agent_events_total", 1.0, {"agent": agent_id, "type": event_type})
+        self.metrics_exporter.record_agent_call(agent_id, 0.0, True)
+
+    def export_to_elk(self) -> str:
+        """Simulates exporting log buffer to ELK stack."""
+        count: int = len(self.log_buffer)
+        # In real scenario: push to Elasticsearch/Logstash
+        json.dumps(self.log_buffer)
+        self.log_buffer = []
+        self.metrics_exporter.export_to_grafana()
+        return f"Exported {count} events to ELK/Logstash."
+
+    def get_metrics(self) -> str:
+        """Returns Prometheus scrape response."""
+        return self.metrics_exporter.get_prometheus_payload()
+
+    def generate_dashboard(self, shard_name: str | None = None) -> str:
+        """
+        Triggers Grafana JSON dashboard generation (Phase 126).
+        """
+        try:
+            generator = GrafanaDashboardGenerator(self.workspace_root / "deploy" / "grafana")
+            if shard_name:
+                return generator.generate_shard_obs(shard_name)
+            return generator.generate_fleet_summary()
+        except RuntimeError as e:
+            return f"Error: GrafanaDashboardGenerator not available: {e}"
+
+    def start_trace(self, trace_id: str) -> None:
+        """Start timing an operation."""
+        self._start_time
 """
 
 from __future__ import annotations

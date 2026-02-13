@@ -13,7 +13,175 @@
 # limitations under the License.
 
 """
+subs_engine.py - Subscription and Annotation Management Engine
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Import classes from subs_engine: AnnotationManager, StatsAnnotationManager, SubscriptionManager.
+- Use AnnotationManager.add_annotation / get_annotations / delete_annotation to manage metric annotations.
+- Use SubscriptionManager.subscribe / unsubscribe / get_stats to manage metric subscriptions and basic notification rate limiting.
+
+WHAT IT DOES:
+- Provides in-memory management of metric annotations and a backward-compatible StatsAnnotationManager wrapper.
+- Provides a simple subscription registry that creates lightweight MetricSubscription objects keyed by a short md5-derived id, and tracks last-notification timestamps and basic statistics.
+- Exposes export and retrieval helpers useful for APIs or ad-hoc inspection.
+
+WHAT IT SHOULD DO BETTER:
+- Persistence: annotations and subscriptions are in-memory only — add durable storage (SQLite, Redis, or file) to survive restarts.
+- Concurrency and safety: make thread-safe / process-safe (locks or use asyncio primitives) and validate inputs.
+- Notifications: implement actual delivery (HTTP callbacks, retries, backoff) and enforce min_interval_seconds when sending notifications.
+- Configuration and observability: improve logging detail, add metrics for notifications sent/failed, and allow pluggable subscription filters and pattern matching (regex/glob).
+- Tests and type completeness: add unit tests, stricter type hints, and handle edge cases (duplicate subscriptions, invalid timestamps).
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
 Subs engine.py module.
+"""
+# Subscription and annotation management engine.
+
+from __future__ import annotations
+
+import contextlib
+import hashlib
+import logging
+from datetime import datetime
+from typing import Any, Callable
+
+from .metrics import MetricAnnotation
+from .observability_core import MetricSubscription, StatsSubscription
+
+logger = logging.getLogger(__name__)
+
+
+class AnnotationManager:
+    """Manage metric annotations and comments."""
+
+    def __init__(self) -> None:
+        self.annotations: dict[str, list[MetricAnnotation]] = {}
+
+    def add_annotation(
+        self,
+        metric_name: str,
+        text: str,
+        author: str = "",
+        annotation_type: str = "info",
+    ) -> MetricAnnotation:
+        annotation = MetricAnnotation(
+            metric_name=metric_name,
+            timestamp=datetime.now().isoformat(),
+            text=text,
+            author=author,
+            annotation_type=annotation_type,
+        )
+        self.annotations.setdefault(metric_name, []).append(annotation)
+        return annotation
+
+    def get_annotations(self, metric_name: str, annotation_type: str | None = None) -> list[MetricAnnotation]:
+        anns = self.annotations.get(metric_name, [])
+        return [a for a in anns if a.annotation_type == annotation_type] if annotation_type else anns
+
+    def delete_annotation(self, metric_name: str, timestamp: str) -> bool:
+        if metric_name in self.annotations:
+            original = self.annotations[metric_name]
+            self.annotations[metric_name] = [a for a in original if a.timestamp != timestamp]
+            return len(original) != len(self.annotations[metric_name])
+        return False
+
+    def export_annotations(self) -> dict[str, list[dict[str, Any]]]:
+        result = {}
+        for k, v in self.annotations.items():
+            result[k] = [
+                {
+                    "timestamp": a.timestamp,
+                    "text": a.text,
+                    "author": a.author,
+                    "type": a.annotation_type,
+                }
+                for a in v
+            ]
+        return result
+
+
+class StatsAnnotationManager:
+    """Manages annotations on metrics (backward compat)."""
+
+    def __init__(self) -> None:
+        self.annotations: dict[str, list[MetricAnnotation]] = {}
+
+    def add_annotation(
+        self, metric: str, annotation: MetricAnnotation | None = None, **kwargs: Any
+    ) -> MetricAnnotation:
+        if annotation is None:
+            ts = kwargs.get("timestamp") or datetime.now().isoformat()
+            annotation = MetricAnnotation(
+                metric_name=metric,
+                timestamp=str(ts),
+                text=str(kwargs.get("text", "")),
+                author=str(kwargs.get("author", "")),
+                annotation_type=str(kwargs.get("annotation_type", kwargs.get("type", "info"))),
+            )
+        self.annotations.setdefault(metric, []).append(annotation)
+        return annotation
+
+    def get_annotations(self, metric: str) -> list[MetricAnnotation]:
+        return self.annotations.get(metric, [])
+
+
+class SubscriptionManager:
+    """Manage metric subscriptions and change notifications."""
+
+    def __init__(self) -> None:
+        self.subscriptions: dict[str, MetricSubscription] = {}
+        self.last_notification: dict[str, datetime] = {}
+
+    def subscribe(
+        self,
+        metric_pattern: str,
+        callback_url: str = "",
+        notify_on: list[str] | None = None,
+        min_interval_seconds: int = 60,
+    ) -> MetricSubscription:
+        sub_id = hashlib.md5(f"{metric_pattern}:{callback_url}".encode()).hexdigest()[:8]
+        sub = MetricSubscription(
+            id=sub_id,
+            metric_pattern=metric_pattern,
+            callback_url=callback_url,
+            notify_on=notify_on or ["threshold", "anomaly"],
+            min_interval_seconds=min_interval_seconds,
+        )
+        self.subscriptions[sub_id] = sub
+        return sub
+
+    def unsubscribe(self, sub_id: str) -> bool:
+        if sub_id in self.subscriptions:
+            del self.subscriptions[sub_id]
+            return True
+        return False
+
+    def get_stats(self) -> dict[str, Any]:
+        return {
+            "total_subscriptions": len(self.subscriptions),
+            "active_subscriptions": len(self.subscriptions),
+            "notifications_sent": sum(1 for _ in self.last_notification),
+        }
+
+    d
 """
 # Subscription and annotation management engine.
 

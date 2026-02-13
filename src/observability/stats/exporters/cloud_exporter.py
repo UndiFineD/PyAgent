@@ -13,7 +13,60 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_stats.py"""
+"""
+cloud_exporter.py - Export metrics to cloud monitoring services
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+
+USAGE:
+Instantiate CloudExporter with the target ExportDestination
+(e.g., ExportDestination.DATADOG, PROMETHEUS, GRAFANA), optionally
+provide api_key and endpoint, call queue_metric() one or more times
+with Metric objects, then call export() to push queued metrics to the
+configured destination. Example:
+  exporter = CloudExporter(ExportDestination.DATADOG, api_key="XXX")
+  exporter.queue_metric(metric)
+  exporter.export()
+
+WHAT IT DOES:
+- Collects Metric instances in an in-memory queue and exports them
+  to several cloud monitoring backends (Datadog, Prometheus, Grafana,
+  CloudWatch, Stackdriver) via specialized formatter methods.
+- Destination-specific exporters: _export_datadog (builds Datadog
+  payload), _export_prometheus (appends OpenMetrics-like lines to a
+  local file), and fallback generic export path.
+- Tracks exporter state (export queue, cumulative export count,
+  last export timestamp) and logs diagnostic information.
+
+WHAT IT SHOULD DO BETTER:
+- Validate default endpoint strings (remove stray spaces and malformed
+  paths) and allow configurable, validated endpoints; use canonical
+  URLs without embedded spaces.
+- Replace file-append Prometheus export with proper OpenMetrics
+  exposition endpoint or pushgateway integration; avoid filesystem
+  coupling for production exporters.
+- Use real HTTP client with configurable timeouts, retries, and
+  backoff (requests or httpx/async) for remote destinations instead
+  of only logging payloads; perform authentication (API keys, IAM)
+  securely and not in plain attributes.
+- Improve error handling: avoid broad exception catches, surface
+  errors to callers, add retries/metrics on failures; make export
+  operations async-compatible to avoid blocking.
+- Stronger typing and data validation for Metric/TAG shapes;
+  consider dataclasses or pydantic models for serialization; include
+  unit tests validating payload shapes and endpoint interactions.
+- Add batching, rate-limiting, and size limits for payloads; support
+  metric timestamp precision (ms vs s), metric type mapping, and
+  histogram summary serialization.
+- Emit internal exporter metrics (export failures, latency, queued
+  size) and expose configuration-driven log levels and structured
+  logs.
+
+FILE CONTENT SUMMARY:
+Auto-extracted class from agent_stats.py
+"""
 
 from __future__ import annotations
 

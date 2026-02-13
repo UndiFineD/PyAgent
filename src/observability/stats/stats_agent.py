@@ -13,7 +13,175 @@
 # limitations under the License.
 
 
+"""
+StatsAgent - Reports statistics on file update progress
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate with a list of file paths to monitor: StatsAgent(["a.txt", "b.txt"]).
+- Register custom metrics: stats.register_custom_metric("files_processed").
+- Emit metric samples: stats.add_metric("files_processed", 42).
+- Read current metric: stats.get_metric("files_processed") and gather all via stats.collect_custom_metrics().
+- Integrates with observability primitives (Metric, Alert, Threshold, RetentionPolicy) and uses StructuredLogger; optionally uses rust_core if available.
+
+WHAT IT DOES:
+- Validates and normalizes input file paths and filters out missing files.
+- Provides an API to register, add, retrieve and collect custom metrics and maintains in-memory metric history, snapshots, thresholds, retention rules and alerts.
+- Integrates with the project's observability core types (Metric, MetricSnapshot, Alert, Threshold, RetentionPolicy) and emits structured logs using StructuredLogger.
+- Optionally leverages rust_core for performance-sensitive operations when available.
+
+WHAT IT SHOULD DO BETTER:
+- Persist metrics and snapshots to durable storage and expose an API for loading/storing state (use StateTransaction for transactional FS changes).
+- Complete and document anomaly detection, threshold evaluation and retention enforcement code paths; add async support for non-blocking collection.
+- Harden error handling and validation (clearer exceptions, retry/backoff for IO), add unit tests for edge cases, and centralize namespace handling instead of embedding in tags.
+- Provide richer typing, docstrings on all public methods, and examples for alerting configuration and retention policies.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 """Auto-extracted class from agent_stats.py"""
+
+from __future__ import annotations
+
+import csv
+import hashlib
+import json
+import logging
+import time
+import zlib
+from collections.abc import Callable
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict
+import functools
+
+try:
+    import rust_core
+    HAS_RUST = True
+except ImportError:
+    HAS_RUST = False
+
+from src.core.base.lifecycle.version import VERSION
+from src.observability.stats.observability_core import (Alert, AlertSeverity,
+                                                        Metric, MetricSnapshot,
+                                                        MetricType,
+                                                        RetentionPolicy,
+                                                        StatsCore, Threshold)
+from src.observability.structured_logger import StructuredLogger
+
+__version__: str = VERSION
+
+logger = StructuredLogger(__name__)
+
+
+class StatsAgent:
+    """Reports statistics on file update progress."""
+
+    def __init__(self, files: list[str]) -> None:
+        self.files: list[Path] = [Path(f) for f in files]
+        self.stats: dict[str, Any] = {}
+        self._validate_files()
+        # New features
+        self._metrics: dict[str, list[Metric]] = {}
+        self._custom_metrics: dict[str, Callable[[], float]] = {}
+        self._snapshots: list[MetricSnapshot] = []
+        self._thresholds: list[Threshold] = []
+        self._retention_policies: dict[str, RetentionPolicy] = {}
+        self._anomaly_scores: dict[str, list[float]] = {}
+        self._metric_history: dict[str, list[tuple[str, float]]] = {}
+        self._alerts: list[Alert] = []
+
+    def _validate_files(self) -> None:
+        """Validate input files."""
+        if not self.files:
+            raise ValueError("No files provided")
+        invalid: list[Path] = [f for f in self.files if not f.exists()]
+        if invalid:
+            logging.warning(f"Files not found: {', '.join(map(str, invalid))}")
+            # Filter out invalid files
+            self.files = [f for f in self.files if f.exists()]
+        if not self.files:
+            raise ValueError("No valid files found after filtering")
+
+    # ========== Custom Metrics ==========
+    def register_custom_metric(
+        self,
+        name: str,
+        metric_type: MetricType = MetricType.GAUGE,
+        description: str = "",  # noqa: ARG002
+    ) -> Metric:
+        """Register a custom metric type."""
+        if name not in self._custom_metrics:
+            self._custom_metrics[name] = lambda: 0.0
+        # Return a Metric object for the custom metric
+        return Metric(
+            name=name,
+            value=0.0,
+            metric_type=metric_type,
+            timestamp=datetime.now().isoformat(),
+        )
+
+    def get_metric(self, name: str) -> Metric | None:
+        """Get a registered metric by name."""
+        if name in self._custom_metrics:
+            if name in self._metrics and self._metrics[name]:
+                value: float = self._metrics[name][-1].value
+            else:
+                value = 0.0
+            return Metric(
+                name=name,
+                value=value,
+                metric_type=MetricType.GAUGE,
+                timestamp=datetime.now().isoformat(),
+            )
+        return None
+
+    def collect_custom_metrics(self) -> dict[str, float]:
+        """Collect all custom metrics."""
+        results: dict[str, float] = {}
+        for name in self._custom_metrics:
+            if name in self._metrics and self._metrics[name]:
+                # Get the latest value for this metric
+                latest_metric: Metric = self._metrics[name][-1]
+                results[name] = latest_metric.value
+        return results
+
+    def add_metric(
+        self,
+        name: str,
+        value: float,
+        metric_type: MetricType = MetricType.GAUGE,
+        namespace: str = "default",
+        tags: dict[str, str] | None = None,
+    ) -> Metric:
+        """Add a metric value."""
+        # Note: Core Metric doesn't support namespace natively.
+        # We store it in tags for compatibility.
+        actual_tags: dict[str, str] = tags or {}
+        if namespace != "default":
+            actual_tags["namespace"] = namespace
+
+        metric = Metric(
+            name=name,
+            value=value,
+            metric_type=metric_type,
+            timestamp=time.tim
+"""
 
 from __future__ import annotations
 

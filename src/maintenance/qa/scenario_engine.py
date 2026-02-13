@@ -13,6 +13,38 @@
 # limitations under the License.
 
 """
+Scenario Engine - YAML-driven scenario execution for multi-agent testing
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate with a FleetManager and await run_scenario with a path to a YAML file:
+  from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+  engine = ScenarioEngine(fleet)
+  await engine.run_scenario("tests/scenarios/example.yaml")
+
+WHAT IT DOES:
+- Loads a declarative YAML scenario file, logs its name and steps, and executes
+  each step in sequence.
+- Supports basic actions: "delegate" (delegates a prompt to an agent role via
+  FleetManager), "verify_state" (placeholder checks), "verify_file" (checks
+  file existence and contents), and "wait" (async sleep).
+- Stores step results in the step dict under "last_result" for simple
+  in-scenario propagation and returns overall success/failure.
+
+WHAT IT SHOULD DO BETTER:
+- Validate scenario schema (e.g., with jsonschema or pydantic) before execution
+  to provide earlier, user-friendly errors.
+- Improve error handling and retries (configurable timeouts, backoff) and
+  surface structured failure reasons for CI integration.
+- Add richer state management (scoped variables, parameter interpolation,
+  templating), parallel step execution and orchestration primitives, and
+  pluggable verification hooks for extensibility and test assertions.
+- Provide clearer logging context per-scenario/step and better test coverage
+  (unit tests and integration tests with mocked FleetManager).
+
+FILE CONTENT SUMMARY:
 Module: scenario_engine
 YAML-driven scenario engine for complex multi-agent interaction testing.
 """

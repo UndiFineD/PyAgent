@@ -13,6 +13,22 @@
 # limitations under the License.
 
 """
+Direct Strategy - Standard Zero-Shot: Prompt -> Response
+
+Brief Summary
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate DirectStrategy and call execute(prompt, context, backend_call, system_prompt=None, history=None)
+- backend_call must be an async callable with signature BackendFunction returning the model response
+
+WHAT IT DOES:
+- Concatenates prompt and context into a single full_prompt and forwards it to the provided backend_call, returning the backend response
+
+WHAT IT SHOULD DO BETTER:
+- Validate and sanitize context and history inputs, support configurable prompt templates, and add optional post-processing, retry, or timeouts for backend calls
+
+FILE CONTENT SUMMARY:
 Direct strategy.py module.
 """
 # Apache 2.0 License
@@ -26,9 +42,7 @@ from src.core.base.lifecycle.version import VERSION
 from .agent_strategy import AgentStrategy
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-
-    BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
+    from .agent_strategy import BackendFunction
 
 __version__ = VERSION
 

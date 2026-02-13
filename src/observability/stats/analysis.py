@@ -12,7 +12,169 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Analysis - Fleet observability analysis and profiling core
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+Import and use ProfilingCore to aggregate cProfile results and identify bottlenecks; use StabilityCore with FleetMetrics to compute fleet stability (it will use rust_core if available). Example: 
+from src.analysis import ProfilingCore, StabilityCore, FleetMetrics
+stability = StabilityCore().calculate_stability_score(FleetMetrics(...), sae_anomalies=2)
+
+WHAT IT DOES:
+Provides pure-Python cores for profiling aggregation (ProfilingCore), fleet metrics data modeling (FleetMetrics), and stability scoring (StabilityCore) with optional Rust acceleration when rust_core is present. Declares model cost constants for a TokenCostEngine, tests for optional dependencies (rust_core, psutil), and integrates with observability and AB testing helpers (ab_engine, observability_core). Focuses on metric analysis, profiling, stasis detection and (phase-noted) forecasting primitives.
+
+WHAT IT SHOULD DO BETTER:
+Complete and harden the Rust integration boundary (clear fallbacks and unit tests), add thorough input validation and richer typing for external inputs, expand docstrings and public API documentation, and include tests for psutil-absent environments. Consider exposing small CLI or instrumentation hooks, improve error handling and logging for rust_core fallbacks, and add end-to-end examples for forecasting and correlation utilities.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Analysis and metrics processing logic for fleet observability."""
+# Logic for metric analysis, profiling, stability, and forecasting.
+# Phase 14: Rust acceleration for variance, stasis detection, and forecasting
+
+from __future__ import annotations
+
+import ast
+import contextlib
+import logging
+import math
+import re
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+from src.core.base.common.formula_core import FormulaCore
+
+from .ab_engine import ABComparisonResult, ABSignificanceResult
+from .observability_core import DerivedMetric, MetricCorrelation
+
+try:
+    import rust_core as rc
+
+    RUST_AVAILABLE = True
+except ImportError:
+    rc = None
+    RUST_AVAILABLE = False
+
+try:
+    import psutil
+
+    HAS_PSUTIL = True
+except ImportError:
+    HAS_PSUTIL = False
+
+logger: logging.Logger = logging.getLogger(__name__)
+
+# Model costs for TokenCostEngine
+MODEL_COSTS: dict[str, dict[str, float]] = {
+    "gpt-4o": {"input": 0.005, "output": 0.015, "total": 0.01},
+    "gpt-4o-mini": {"input": 0.00015, "output": 0.0006, "total": 0.0004},
+    "claude-3-5-sonnet": {"input": 0.003, "output": 0.015, "total": 0.009},
+    "claude-3-haiku": {"input": 0.00025, "output": 0.00125, "total": 0.00075},
+    "gemini-1.5-pro": {"input": 0.0035, "output": 0.0105, "total": 0.007},
+    "gemini-1.5-flash": {"input": 0.00035, "output": 0.00105, "total": 0.0007},
+    "default": {"input": 0.002, "output": 0.006, "total": 0.004},
+}
+
+
+@dataclass(frozen=True)
+class ProfileStats:
+    """Statistics for a single function call profile."""
+
+    function_name: str
+    call_count: int
+    total_time: float
+    per_call: float
+
+
+class ProfilingCore:
+    """Pure logic for cProfile aggregation and bottleneck analysis."""
+
+    def analyze_stats(self, pstats_obj: Any, limit: int = 10) -> list[ProfileStats]:
+        """Convert pstats objects into a flat list of ProfileStats."""
+        pstats_obj.sort_stats("cumulative")
+        return self._extract_profile_stats(pstats_obj, limit)
+
+    def _extract_profile_stats(self, pstats_obj: Any, limit: int) -> list[ProfileStats]:
+        results: list[ProfileStats] = []
+        for func, (cc, _, _, ct, _) in pstats_obj.stats.items():
+            if len(results) >= limit:
+                break
+            results.append(
+                ProfileStats(
+                    function_name=str(func),
+                    call_count=cc,
+                    total_time=ct,
+                    per_call=ct / cc if cc > 0 else 0,
+                )
+            )
+        return results
+
+    def identify_bottlenecks(self, stats: list[ProfileStats], threshold_ms: float = 100.0) -> list[str]:
+        """Identify functions exceeding a latency threshold."""
+        return [s.function_name for s in stats if s.total_time > (threshold_ms / 1000.0)]
+
+    def calculate_optimization_priority(self, stats: ProfileStats) -> float:
+        """Calculate optimization priority based on total time and call count."""
+        return stats.total_time * stats.call_count
+
+
+@dataclass(frozen=True)
+class FleetMetrics:
+    """Consolidated metrics for a fleet of agents."""
+
+    avg_error_rate: float
+    total_token_out: int
+    active_agent_count: int
+    latency_p95: float
+
+
+class StabilityCore:
+    """Pure logic for calculating fleet stability and reasoning coherence.
+
+    Phase 14 Rust Optimizations:
+    - calculate_variance_rust: Fast variance calculation for stasis detection
+    """
+
+    def calculate_stability_score(self, metrics: FleetMetrics, sae_anomalies: int) -> float:
+        """Calculate stability score.
+
+        Uses Rust-accelerated logic if available.
+        """
+        if self._can_use_rust_stability():
+            result = self._try_rust_stability(metrics, sae_anomalies)
+            if result is not None:
+                return result
+
+        return self._calculate_stability_score_python(metrics, sae_anomalies)
+
+    def _can_use_rust_stability(self) -> bool:
+        return RUST_AVAILABLE and hasattr(rc, "calculate_stability_score")
+
+    def _try_rust_stability(self, metrics: FleetMetrics, sae_anomalies: int) -> float | None:
+        with contextlib.suppress(Exception):
+            metrics_dict = {
+                "avg_error_rate": float(metrics.avg_error_rate),
+                "total_token_out": int(metrics.total_token_out),
+                "active_agent_count": int(metrics.active_agent_count),
+                "latency_p9
+"""
 # Logic for metric analysis, profiling, stability, and forecasting.
 # Phase 14: Rust acceleration for variance, stasis detection, and forecasting
 

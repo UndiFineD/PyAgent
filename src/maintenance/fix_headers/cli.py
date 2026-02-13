@@ -13,6 +13,34 @@
 # limitations under the License.
 
 """
+Fix Headers CLI - Command-line entry point for fixing Apache 2.0 license headers
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+python -m src.maintenance.fix_headers.cli <file_or_directory>
+python -m src.maintenance.fix_headers.cli --dry-run --verbose <dir>
+python -m src.maintenance.fix_headers.cli --exclude tests --exclude vendor single_file.py
+
+WHAT IT DOES:
+Provides a small argparse-based CLI that constructs and runs a FixHeadersAgent to
+ensure Python files contain the correct Apache 2.0 license header and PyAgent
+copyright notice; supports dry-run, verbose output, and simple exclude patterns.
+
+WHAT IT SHOULD DO BETTER:
+- Validate and normalize the target path(s) and support multiple targets or glob
+  patterns.
+- Provide better error handling and exit codes for common failures (permission
+  errors, invalid target).
+- Allow configurable exclude patterns via a config file or environment variable,
+  and support more advanced pattern matching (glob/regex).
+- Add unit tests for CLI parsing and integration tests for dry-run vs. write
+  modes.
+- Improve logging (structured logs, levels) instead of relying solely on verbose
+  boolean.
+
+FILE CONTENT SUMMARY:
 CLI interface for the Fix Headers Tool.
 """
 

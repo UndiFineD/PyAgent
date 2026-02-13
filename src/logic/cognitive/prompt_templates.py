@@ -12,7 +12,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Vibe-Coding 2025 persona and track definitions."""
+"""
+prompt_templates.py - Define persona and workflow tracks for Vibe-Coding 2026
+
+[Brief Summary]
+A small module that centralizes the Vibe-Coding 2026 persona, workflow and
+phase-range definitions used by agents to select behavior profiles and
+phase-aware workflows.
+
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong0
+USAGE:
+Import VIBE_CODING_2025_TRACKS and read the dictionary keys (RESEARCH, DEFINE, DESIGN,
+BUILD, VALIDATE) to obtain persona, workflow and phase_range for routing agent behavior
+and selecting prompts/templates.
+
+WHAT IT DOES:
+Provides a single constant mapping (VIBE_CODING_2025_TRACKS) that encodes
+human-readable persona descriptions, short workflow summaries, and numeric
+phase ranges to partition the agent lifecycle for research, definition,
+design, build, and validation phases.
+
+WHAT IT SHOULD DO BETTER:
+- Add explicit typing (TypedDict or dataclasses) for stronger static checking
+  and IDE discoverability.
+- Include machine-readable metadata (IDs, priorities, localized strings) and
+  programmatic helpers to query which track matches a given phase.
+- Add unit tests, richer documentation for each persona, and a small validation
+  routine to detect overlapping or invalid phase ranges.
+
+FILE CONTENT SUMMARY:
+Vibe-Coding 2026persona and track definitions.
+"""
 
 from __future__ import annotations
 

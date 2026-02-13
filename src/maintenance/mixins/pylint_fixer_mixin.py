@@ -13,6 +13,34 @@
 # limitations under the License.
 
 """
+PylintFixerMixin - Automated Pylint issue remediation
+
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Mix into a Maintenance Agent or similar tool to programmatically apply
+  simple, conservative fixes for common Pylint warnings across a codebase.
+- Call individual fix_* methods with Path objects pointing to Python source
+  files and act on returned bool to record changes.
+
+WHAT IT DOES:
+- Detects and updates open() calls to include explicit UTF-8 encoding
+  (W1514).
+- Simplifies unnecessary 'else' blocks following returns by removing them
+  where safe (R1705).
+- Annotates or injects inline pylint disables for overly broad exception
+  handlers to reduce W0718 noise, logging failures.
+
+WHAT IT SHOULD DO BETTER:
+- Improve AST-based analysis rather than relying on regex/line heuristics to
+  avoid false positives and broken syntax (use ast module or lib2to3/parso).
+- Preserve code formatting and comments more reliably (use a parser/formatter
+  rather than raw string replacements).
+- Make exception-fix choices configurable (which exceptions to catch,
+  preferred disable tokens) and add unit tests for edge cases.
+
+FILE CONTENT SUMMARY:
 Mixin providing automated pylint issue remediation for the Maintenance Agent.
 """
 
@@ -49,6 +77,19 @@ class PylintFixerMixin:
             logger.error(f"Failed to fix encoding in {file_path}: {e}")
             return False
 
+    def _should_skip_else_block(self, lines: list, i: int, indent: str) -> bool:
+        """Check if an else/elif block follows a return and should be skipped."""
+        if i + 1 >= len(lines):
+            return False
+        next_line = lines[i + 1]
+        if not re.search(r'^\s*(else|elif):', next_line):
+            return False
+        indent_match = re.match(r'^\s*', next_line)
+        if not indent_match:
+            return False
+        actual_indent = indent_match.group(0)
+        return actual_indent == indent
+
     def fix_no_else_return(self, file_path: Path) -> bool:
         """Fixes R1705: Unnecessary 'else' after 'return'."""
         try:
@@ -60,18 +101,11 @@ class PylintFixerMixin:
             while i < len(lines):
                 line = lines[i]
                 return_match = re.match(r'^(\s*)return(\s+|$)', line)
-                if return_match:
-                    indent = return_match.group(1)
-                    if i + 1 < len(lines):
-                        next_line = lines[i+1]
-                        else_match = re.search(r'^\s*(else|elif):', next_line)
-                        if else_match:
-                            actual_indent = re.match(r'^\s*', next_line).group(0)
-                            if actual_indent == indent:
-                                new_lines.append(line)
-                                modified = True
-                                i += 1
-                                continue
+                if return_match and self._should_skip_else_block(lines, i, return_match.group(1)):
+                    new_lines.append(line)
+                    modified = True
+                    i += 1
+                    continue
                 new_lines.append(line)
                 i += 1
 
