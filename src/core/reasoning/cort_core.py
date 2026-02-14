@@ -460,44 +460,121 @@ Corrected Response:"""
         """
         Perform recursive thinking with adaptive rounds.
 
+        Uses multi-path reasoning and evaluation to determine optimal thinking depth.
+
         Args:
             query: The query to think about
-            **kwargs: Additional parameters like complexity
+            **kwargs: Additional parameters like complexity, max_rounds
 
         Returns:
-            Dict with rounds and final_answer
+            Dict with rounds, final_answer, confidence, and reasoning paths
         """
         if not query or not query.strip():
             raise ValueError("Query cannot be empty")
 
         complexity = kwargs.get("complexity", "medium")
+        max_rounds = kwargs.get("max_rounds", 5)
+
+        # Determine optimal rounds based on complexity
         if complexity == "low":
             rounds = 1
         elif complexity == "high":
-            rounds = 5
+            rounds = min(max_rounds, 5)
+        else:  # medium
+            rounds = min(max_rounds, 3)
+
+        # Generate multiple reasoning paths
+        temperatures = [0.6, 0.8, 1.0][:rounds]  # Different temperatures for diversity
+        reasoning_paths = self.reason_multi_path(query, temperatures)
+
+        # Select best path based on confidence
+        if reasoning_paths:
+            best_path = max(reasoning_paths, key=lambda x: x["confidence"])
+            final_answer = best_path["reasoning"]
+            confidence = best_path["confidence"]
         else:
-            rounds = 3
+            final_answer = f"Recursive analysis of: {query}"
+            confidence = 0.5
 
-        # Placeholder reasoning
-        final_answer = f"Thought through {rounds} rounds: {query}"
-
-        if kwargs.get("recovery"):
-            final_answer += " (recovered)"
+        # Add recovery logic if confidence is low
+        if confidence < 0.6 and kwargs.get("recovery", False):
+            recovery_prompt = f"Re-analyze with more care: {query}"
+            recovery_paths = self.reason_multi_path(recovery_prompt, [0.5, 0.7])
+            if recovery_paths:
+                recovery_best = max(recovery_paths, key=lambda x: x["confidence"])
+                if recovery_best["confidence"] > confidence:
+                    final_answer = f"Recovery analysis: {recovery_best['reasoning']}"
+                    confidence = recovery_best["confidence"]
 
         return {
             "rounds": rounds,
-            "final_answer": final_answer
+            "final_answer": final_answer,
+            "confidence": confidence,
+            "reasoning_paths": reasoning_paths,
+            "complexity": complexity,
+            "recovery_used": kwargs.get("recovery", False) and confidence < 0.6
         }
 
     def measure_reasoning_performance(self) -> float:
         """
-        Measure current reasoning performance.
+        Measure current reasoning performance using benchmark queries.
+
+        Tests reasoning accuracy, speed, and consistency across multiple queries.
 
         Returns:
             Performance score (0.0-1.0)
         """
-        # Placeholder - would measure against benchmarks
-        return 0.95
+        try:
+            import time
+
+            # Benchmark queries of varying complexity
+            benchmark_queries = [
+                "What is 2+2?",  # Simple (low complexity)
+                "Explain how photosynthesis works",  # Medium complexity
+                "Analyze the economic impact of artificial intelligence",  # High complexity
+                "Design a solution for traffic congestion in a major city"  # Very high complexity
+            ]
+
+            total_score = 0.0
+            total_time = 0.0
+
+            for i, query in enumerate(benchmark_queries):
+                start_time = time.time()
+
+                # Test recursive thinking
+                result = self.think_recursively(query, complexity=["low", "medium", "high", "high"][i])
+
+                processing_time = time.time() - start_time
+                total_time += processing_time
+
+                # Score based on response quality and speed
+                quality_score = result.get("confidence", 0.5)
+
+                # Speed penalty (faster is better, but quality matters more)
+                time_penalty = min(processing_time / 30.0, 0.3)  # 30 second cap for penalty
+
+                query_score = quality_score * (1.0 - time_penalty)
+                total_score += query_score
+
+            # Average across queries
+            avg_score = total_score / len(benchmark_queries)
+
+            # Time bonus (if average time is reasonable)
+            avg_time = total_time / len(benchmark_queries)
+            time_bonus = max(0, 0.1 - (avg_time / 60.0))  # Bonus for under 10 seconds avg
+
+            final_score = min(avg_score + time_bonus, 1.0)
+
+            self.logger.info(
+                f"🧠 Reasoning performance: {final_score:.3f} "
+                f"(Quality: {avg_score:.3f}, Avg Time: {avg_time:.2f}s)"
+            )
+
+            return final_score
+
+        except Exception as e:
+            self.logger.warning(f"Reasoning performance measurement failed: {e}")
+            return 0.5  # Neutral score on failure
 
     def adapt_reasoning(self, query: str, context: Optional[str] = None) -> Dict[str, Any]:
         """
@@ -520,24 +597,99 @@ Corrected Response:"""
         """
         Perform multi-path reasoning with different temperatures.
 
+        Uses temperature variance to generate diverse reasoning paths,
+        then evaluates and ranks them for optimal response selection.
+
         Args:
-            query: The query
-            temperatures: List of temperatures to use
+            query: The query to reason about
+            temperatures: List of temperatures to use (default: [0.7, 0.8, 0.9])
 
         Returns:
-            List of reasoning paths
+            List of reasoning paths with scores and metadata
         """
         if temperatures is None:
             temperatures = [0.7, 0.8, 0.9]
 
         paths = []
         for temp in temperatures:
-            paths.append({
-                "temperature": temp,
-                "reasoning": f"Path with temperature {temp}: {query}"
-            })
+            try:
+                # Generate reasoning path with specific temperature
+                prompt = f"""Analyze this query using creative reasoning: {query}
+
+Provide a thoughtful analysis considering multiple perspectives and approaches.
+Be comprehensive but concise in your reasoning."""
+
+                response = self.inference_engine.generate(
+                    prompt=prompt,
+                    temperature=temp,
+                    max_tokens=800
+                )
+
+                # Calculate confidence score based on response quality
+                confidence = self._calculate_response_quality(response, query)
+
+                paths.append({
+                    "temperature": temp,
+                    "reasoning": response,
+                    "confidence": confidence,
+                    "length": len(response),
+                    "timestamp": time.time()
+                })
+
+            except Exception as e:
+                self.logger.warning(f"Failed to generate reasoning path with temp {temp}: {e}")
+                paths.append({
+                    "temperature": temp,
+                    "reasoning": f"Temperature {temp} reasoning failed: {query}",
+                    "confidence": 0.0,
+                    "length": 0,
+                    "timestamp": time.time(),
+                    "error": str(e)
+                })
+
+        # Sort by confidence (highest first)
+        paths.sort(key=lambda x: x["confidence"], reverse=True)
 
         return paths
+
+    def _calculate_response_quality(self, response: str, query: str) -> float:
+        """
+        Calculate quality score for a reasoning response.
+
+        Considers relevance, coherence, depth, and creativity.
+        """
+        if not response or not response.strip():
+            return 0.0
+
+        score = 0.0
+        response_lower = response.lower()
+        query_lower = query.lower()
+
+        # Relevance (30%): Contains query keywords
+        query_words = set(query_lower.split())
+        response_words = set(response_lower.split())
+        relevance = len(query_words.intersection(response_words)) / max(len(query_words), 1)
+        score += relevance * 0.3
+
+        # Coherence (25%): Has logical structure
+        coherence_indicators = ['because', 'therefore', 'however', 'additionally', 'furthermore',
+                              'consequently', 'moreover', 'specifically', 'generally']
+        coherence_score = sum(1 for indicator in coherence_indicators if indicator in response_lower)
+        coherence_score = min(coherence_score / 3.0, 1.0)  # Cap at 3 indicators
+        score += coherence_score * 0.25
+
+        # Depth (25%): Response length indicates thoroughness
+        length_score = min(len(response) / 1000.0, 1.0)  # Optimal around 1000 chars
+        score += length_score * 0.25
+
+        # Creativity (20%): Uses diverse vocabulary and perspectives
+        creative_indicators = ['perspective', 'approach', 'alternative', 'consider', 'explore',
+                             'different', 'various', 'multiple', 'diverse', 'innovative']
+        creativity_score = sum(1 for indicator in creative_indicators if indicator in response_lower)
+        creativity_score = min(creativity_score / 4.0, 1.0)  # Cap at 4 indicators
+        score += creativity_score * 0.20
+
+        return min(score, 1.0)
 
     async def think_async(self, query: str) -> Dict[str, Any]:
         """
