@@ -35,11 +35,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
 from uuid import uuid4
 
-<<<<<<< HEAD
-from pydantic import BaseModel, Field, field_validator, ValidationInfo
-=======
-from pydantic import BaseModel, Field, field_validator
->>>>>>> copilot/sub-pr-29
+from pydantic import BaseModel, Field, model_validator
 
 logger = logging.getLogger(__name__)
 
@@ -98,19 +94,11 @@ class Task(BaseModel):
     dependencies: List[str] = Field(default_factory=list, description="IDs of prerequisite tasks")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional task metadata")
 
-    @field_validator('deadline')
-<<<<<<< HEAD
-    @classmethod
-    def validate_deadline(cls, v: Optional[datetime], info: ValidationInfo) -> Optional[datetime]:
-        if v and v < info.data.get('created_at', datetime.now()):
-=======
-    def validate_deadline(cls, v, info):
-        # info.data contains other field values (Pydantic v2)
-        created_at = info.data.get('created_at', datetime.now())
-        if v and v < created_at:
->>>>>>> copilot/sub-pr-29
+    @model_validator(mode='after')
+    def validate_deadline(self):
+        if self.deadline and self.deadline < self.created_at:
             raise ValueError('Deadline cannot be in the past')
-        return v
+        return self
 
     def is_overdue(self) -> bool:
         """Check if task is overdue."""
@@ -133,8 +121,9 @@ class Task(BaseModel):
             base_score -= 2  # Higher priority for overdue
 
         # Boost score for tasks with approaching deadlines
-        if self.time_remaining():
-            hours_remaining = self.time_remaining().total_seconds() / 3600
+        time_rem = self.time_remaining()
+        if time_rem is not None:
+            hours_remaining = time_rem.total_seconds() / 3600
             if hours_remaining < 24:  # Less than 24 hours
                 base_score -= 1
             elif hours_remaining < 168:  # Less than 1 week
@@ -145,7 +134,6 @@ class Task(BaseModel):
             base_score -= 0.2
 
         return base_score
-
 
 @dataclass(order=True)
 class PrioritizedTask:

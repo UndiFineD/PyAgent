@@ -349,16 +349,6 @@ class RAGCore(BaseCore):
         # Apply pre-processors (support sync or async processors)
         processed_query = query
         for processor in tool_config.pre_processors:
-<<<<<<< HEAD
-            if asyncio.iscoroutinefunction(processor):
-                processed_query = await processor(processed_query)
-            else:
-                res = processor(processed_query)
-                if asyncio.iscoroutine(res):
-                    processed_query = await res
-                else:
-                    processed_query = res
-=======
             try:
                 result = processor(processed_query)
                 if asyncio.iscoroutine(result):
@@ -368,7 +358,6 @@ class RAGCore(BaseCore):
             except TypeError:
                 # Fallback: if processor is async function requiring awaitable call
                 processed_query = await processor(processed_query)
->>>>>>> copilot/sub-pr-29
 
         # Perform retrieval based on strategy
         vector_store = self.vector_stores.get(tool_config.collection_name)

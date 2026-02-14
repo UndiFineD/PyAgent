@@ -26,6 +26,7 @@ start_fuzzing_session with target
 and FuzzingTechnique list,
 then collect and analyze
 FuzzingResult entries;
+
 WHAT IT DOES:
 implements enums for target/technique types,
 dataclasses for session/result tracking,
@@ -33,6 +34,7 @@ a default payload library and the
 AIFuzzingEngine with learning-enabled
 session management and intelligent
 path/payload generation;
+
 WHAT IT SHOULD DO BETTER:
 add robust HTTP/error handling and retry/backoff,
 make payloads and learning components pluggable

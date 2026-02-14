@@ -29,13 +29,8 @@ import time
 from src.core.base.mixins.stream_manager_mixin import StreamManagerMixin, StreamState, StreamInfo
 
 
-<<<<<<< HEAD
-class StreamManagerMixinImpl(StreamManagerMixin):
-    """Non-test implementation of StreamManagerMixin for fixtures."""
-=======
 class MockStreamManagerMixin(StreamManagerMixin):
     """Test implementation of StreamManagerMixin."""
->>>>>>> copilot/sub-pr-29
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

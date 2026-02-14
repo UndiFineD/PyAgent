@@ -24,20 +24,45 @@ Agentic Patterns - Sequential Agent Orchestration
 DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
-- Instantiate SequentialAgentPattern with an OrchestratorWorkPatternMixin implementation and call execute_sequential with a CascadeContext, a SequentialAgentConfig, and an initial input dict.
+- Instantiate SequentialAgentPattern with an
+  OrchestratorWorkPatternMixin implementation and
+  call execute_sequential with a CascadeContext,
+  a SequentialAgentConfig, and an initial input
+  dict.
 - Example:
-  config = SequentialAgentConfig(name="example", sub_agents=[{"name":"step1"},{"name":"step2"}])
+  config = SequentialAgentConfig(
+      name="example",
+      sub_agents=[{"name":"step1"}, {"name":"step2"}]
+  )
   pattern = SequentialAgentPattern(orchestrator)
-  result = await pattern.execute_sequential(context, config, {"prompt":"start"})
+  result = await pattern.execute_sequential(
+      context, config, {"prompt": "start"}
+  )
 
 WHAT IT DOES:
-- Orchestrates a list of sub-agents in sequence, passing outputs from one agent as inputs to the next, tracking results in a WorkState and optionally continuing on failure.
-- Creates per-agent child CascadeContext entries, executes agents via an internal _execute_single_agent coroutine, records outputs to execution_state, and assembles a final result structure describing successes and failures.
+- Orchestrates a list of sub-agents in sequence.
+- Passes outputs from one agent as inputs to the next.
+- Tracks results in a WorkState and optionally
+  continues on failure.
+- Creates per-agent child CascadeContext entries.
+- Executes agents via an internal
+  _execute_single_agent coroutine.
+- Records outputs to execution_state.
+- Assembles a final result structure describing
+  successes and failures.
 
 WHAT IT SHOULD DO BETTER:
-- Provide explicit type hints and return schemas for agent results and execution_state to improve static analysis and downstream consumption.
-- Surface retry/backoff behavior and configurable timeouts per sub-agent (max_retries exists but lacks per-agent control and backoff).
-- Improve error reporting by including exception types, stack traces (when permitted), and structured error codes; add observability hooks (metrics, tracing) and better unit-test coverage for failure paths and input transformation logic.
+- Provide explicit type hints and return schemas for
+  agent results and execution_state to improve
+  static analysis and downstream consumption.
+- Surface retry/backoff behavior and configurable
+  timeouts per sub-agent (max_retries exists but
+  lacks per-agent control and backoff).
+- Improve error reporting by including exception
+  types, stack traces (when permitted), and
+  structured error codes; add observability hooks
+  (metrics, tracing) and better unit-test coverage
+  for failure paths and input transformation logic.
 
 FILE CONTENT SUMMARY:
 Sequential agent orchestration pattern.
@@ -54,18 +79,26 @@ if TYPE_CHECKING:
 else:
     # Runtime fallback stubs to avoid import errors when the package or stubs are not available.
     class CascadeContext:
-        def __init__(self, *args, task_id: str = "task", **kwargs):
+        """Fallback stub for CascadeContext.
+
+        Lightweight stub used at runtime when real CascadeContext is unavailable;
+        preserves a task_id and can create child contexts.
+        """
+        def __init__(self, *_args, task_id: str = "task", **_kwargs):
             self.task_id = task_id
 
-        def next_level(self, child_task_id: str = "", agent_id: str = "") -> "CascadeContext":
+        def next_level(self, child_task_id: str = "", _agent_id: str = "") -> "CascadeContext":
+            """Return a child CascadeContext preserving or overriding task_id."""
             # Simple passthrough stub that preserves a task_id for downstream code that uses it.
             return CascadeContext(task_id=child_task_id or self.task_id)
 
     class WorkState:
+        """Fallback stub for WorkState which stores results in a dict."""
         def __init__(self):
             self.results = {}
 
         def update(self, key, value):
+            """Update the internal results mapping."""
             self.results[key] = value
 
 from src.logic.agents.swarm.orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
@@ -233,6 +266,21 @@ class SequentialAgentPattern:
         This method intentionally attempts common orchestrator entrypoints and
         falls back to sensible defaults to avoid runtime AttributeError.
         """
+        # Try execute_with_pattern first (preferred for work patterns)
+        if hasattr(self.orchestrator, 'execute_with_pattern') and callable(getattr(self.orchestrator, 'execute_with_pattern')):
+            try:
+                pattern_name = agent_config.get("pattern")
+                if pattern_name:
+                    result = self.orchestrator.execute_with_pattern(
+                        agent_context, pattern_name, input_data=current_input, **kwargs
+                    )
+                    if asyncio.iscoroutine(result):
+                        return await result
+                    return result
+            except Exception:
+                logger.exception("Orchestrator execute_with_pattern raised an exception")
+                raise
+
         # Preferred orchestrator method names (try common candidates)
         candidate_methods = ("execute_agent", "run_agent", "execute", "run")
         for method in candidate_methods:

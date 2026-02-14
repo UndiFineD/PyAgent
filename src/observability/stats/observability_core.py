@@ -21,13 +21,34 @@ Observability Core - Telemetry facade and metric models
 DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
-Import observability_core and use its dataclasses and enums (Alert, Threshold, MetricSnapshot, AggregationType, RetentionPolicy, MetricNamespace, etc.) as the canonical in-process telemetry model; use the Metric alias that proxies to src.core.base.common.telemetry_core.Metric for integration with the core telemetry plumbing. The module optionally uses rust_core for accelerated processing when available and exposes structures for alerting, retention, federation, rollups, streaming, and subscriptions.
+Import observability_core and use its dataclasses and enums as the canonical
+in-process telemetry model. Examples include Alert, Threshold, MetricSnapshot,
+AggregationType, RetentionPolicy, MetricNamespace, and other domain types.
+Use the Metric alias that proxies to
+src.core.base.common.telemetry_core.Metric for integration with the core
+telemetry plumbing. The module may use rust_core for accelerated processing
+when available and exposes structures for alerting, retention, federation,
+rollups, streaming, and subscriptions.
 
 WHAT IT DOES:
-Provides typed dataclasses and enums representing alerts, thresholds, snapshots, retention policies, namespaces, annotations, correlations, subscriptions, export destinations, federation configuration, rollup and streaming configs, and agent-captured metrics. Acts as a thin facade tying these models to the existing telemetry core (Metric) and conditionally enabling rust_core acceleration. Centralizes observability domain types so other components can share a single schema.
+Provides typed dataclasses and enums representing:
+- alerts, thresholds, snapshots, and retention policies
+- namespaces, annotations, correlations, and subscriptions
+- export destinations and federation configuration
+- rollup and streaming configs and agent-captured metrics
+Acts as a thin facade tying these models to the existing telemetry core (Metric)
+and conditionally enabling rust_core acceleration. It centralizes observability
+domain types so other components can share a single schema.
 
 WHAT IT SHOULD DO BETTER:
-Add robust validation for timestamps, numeric bounds, and operator semantics; prefer stricter typing (from typing import TypedDict/Protocol where appropriate) and more explicit Optional usage. Expose async-friendly helpers for federation polling and streaming, unit tests for serialization/deserialization, and a stable adapter layer for switching between Python and rust implementations with feature-flagged fallbacks. Provide clear conversion helpers to/from telemetry_core.Metric and documented examples for exporters (Prometheus, CloudWatch, Datadog).
+Add robust validation for timestamps, numeric bounds, and operator semantics.
+Prefer stricter typing (for example, use TypedDict/Protocol where appropriate)
+and more explicit Optional usage. Expose async-friendly helpers for federation
+polling and streaming, add unit tests for serialization/deserialization, and
+provide a stable adapter layer for switching between Python and rust
+implementations with feature-flagged fallbacks. Provide clear conversion helpers
+to/from telemetry_core.Metric and documented examples for exporters such as
+Prometheus, CloudWatch, and Datadog.
 
 FILE CONTENT SUMMARY:
 Observability core logic.
@@ -42,7 +63,7 @@ import zlib
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any
+from typing import Any, List
 
 from src.core.base.common.telemetry_core import Metric  # pylint: disable=unused-import
 
@@ -58,217 +79,12 @@ except ImportError:
 # Additional types specific to Observability tier
 
 
-class AlertSeverity(Enum):
-    """Severity levels for observability alerts."""
-    CRITICAL = 5
-    HIGH = 4
-    MEDIUM = 3
-    LOW = 2
-    INFO = 1
-
-
-@dataclass
-class Alert:
-    """Represents an observability alert."""
-    id: str
-    metric_name: str
-    current_value: float
-    threshold_value: float
-    severity: AlertSeverity
-    message: str
-    timestamp: str
-
-
-@dataclass
-class Threshold:
-    """Defines a threshold for a metric."""
-    metric_name: str
-    min_value: float | None = None
-    max_value: float | None = None
-    severity: AlertSeverity | None = None
-    message: str = ""
-    operator: str | None = None
-    value: float | None = None
-
-
-@dataclass
-class RetentionPolicy:
-    """Policy for data retention."""
-
-    name: str = ""  # Changed from metric_name to name for constructor
-    retention_days: int = 0
-    resolution: str = "1m"
-    metric_name: str | None = None
-    namespace: str = ""
-    max_age_days: int = 0
-
-    max_points: int = 0
-    compression_after_days: int = 7
-
-
-@dataclass
-class MetricSnapshot:
-    """A snapshot of metrics at a point in time."""
-
-    name: str
-    id: str
-    timestamp: str
-    metrics: dict[str, float]
-    tags: dict[str, str] = field(default_factory=lambda: {})
-
-
-class AggregationType(Enum):
-    """Types of metric aggregation for rollups."""
-
-    SUM = "sum"
-    AVG = "average"
-    MIN = "minimum"
-    MAX = "maximum"
-    COUNT = "count"
-
-    P50 = "percentile_50"
-    P95 = "percentile_95"
-    P99 = "percentile_99"
-
-
-@dataclass
-class MetricNamespace:
-    """Namespace for organizing metrics."""
-
-    name: str
-    description: str = ""
-    parent: str | None = None
-    tags: dict[str, str] = field(default_factory=lambda: {})
-    retention_days: int = 30
-
-
-@dataclass
-class MetricAnnotation:
-    """Annotation or comment on a metric."""
-
-    metric_name: str
-    timestamp: str
-    text: str
-    author: str = ""
-    annotation_type: str = "info"  # info, warning, milestone
-
-
-@dataclass
-class MetricCorrelation:
-    """Correlation between two metrics."""
-
-    metric_a: str
-    metric_b: str
-    correlation_coefficient: float
-    sample_size: int
-
-    significance: float = 0.0
-
-
-@dataclass
-class MetricSubscription:
-    """Subscription for metric change notifications."""
-
-    id: str
-    metric_pattern: str  # glob pattern like "cpu.*"
-
-    callback_url: str = ""
-    notify_on: list[str] = field(default_factory=lambda: ["threshold", "anomaly"])
-    min_interval_seconds: int = 60
-
-
-class ExportDestination(Enum):
-    """Cloud monitoring export destinations."""
-
-    DATADOG = "datadog"
-    PROMETHEUS = "prometheus"
-    GRAFANA = "grafana"
-    CLOUDWATCH = "cloudwatch"
-    STACKDRIVER = "stackdriver"
-
-
-@dataclass
-class FederatedSource:
-    """A source repository for stats federation."""
-
-    repo_url: str
-    api_endpoint: str
-    auth_token: str = ""
-
-    poll_interval_seconds: int = 300
-    enabled: bool = True
-    metrics: dict[str, float] = field(default_factory=dict)
-
-
-class FederationMode(Enum):
-    """Federation modes for multi-repo aggregation."""
-
-    PULL = "pull"
-
-    PUSH = "push"
-    HYBRID = "hybrid"
-
-
-@dataclass
-class RollupConfig:
-    """Configuration for metric rollups."""
-
-    name: str
-    source_metrics: list[str]
-    aggregation: AggregationType
-    interval_minutes: int = 60
-    keep_raw: bool = True
-
-
-class StreamingProtocol(Enum):
-    """Protocols for real-time stats streaming."""
-
-    WEBSOCKET = "websocket"
-    SSE = "server_sent_events"
-    GRPC = "grpc"
-    MQTT = "mqtt"
-
-
-@dataclass
-class StreamingConfig:
-    """Configuration for real-time stats streaming."""
-
-    protocol: StreamingProtocol
-    endpoint: str
-    port: int = 8080
-    buffer_size: int = 1000
-
-
-@dataclass
-class AgentMetric:
-    """Represents a metric captured from an agent operation."""
-    agent_name: str
-    operation: str
-    duration_ms: f
-"""
-
-import contextlib
-import json
-import logging
-import math
-import zlib
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any
-
-from src.core.base.common.telemetry_core import Metric  # pylint: disable=unused-import
-
-# Try to import rust_core
-try:
-    import rust_core as rc
-
-    HAS_RUST = True
-except ImportError:
-    rc = None
-    HAS_RUST = False
-
-# Additional types specific to Observability tier
+class MetricType(Enum):
+    """Types of metrics for observability."""
+    COUNTER = "counter"
+    GAUGE = "gauge"
+    HISTOGRAM = "histogram"
+    SUMMARY = "summary"
 
 
 class AlertSeverity(Enum):
@@ -645,7 +461,17 @@ class StatsCore:
             if policy.max_age_days > 0:
                 cutoff: datetime = now - timedelta(days=policy.max_age_days)
                 orig: int = len(metrics)
-                metrics_dict[key] = [m for m in metrics if datetime.fromisoformat(m.timestamp) > cutoff]
+
+                def _parse_ts(ts: Any) -> datetime:
+                    # Accept numeric Unix timestamps (int/float) or ISO strings; coerce otherwise.
+                    if isinstance(ts, (int, float)):
+                        return datetime.fromtimestamp(ts)
+                    try:
+                        return datetime.fromisoformat(str(ts))
+                    except Exception:
+                        return datetime.fromtimestamp(float(ts))
+
+                metrics_dict[key] = [m for m in metrics if _parse_ts(m.timestamp) > cutoff]
                 removed += orig - len(metrics_dict[key])
 
             if policy.max_points > 0 and len(metrics_dict[key]) > policy.max_points:
@@ -736,6 +562,6 @@ class ThresholdAlert:
 class DerivedMetric:
     """A metric derived from other metrics via a formula."""
     name: str
-    dependencies: list[str]
+    dependencies: List[str]
     formula: str
     description: str = ""

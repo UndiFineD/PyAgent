@@ -177,7 +177,6 @@ class FleetManager(
         self.borrowed_helpers: Dict[str, Any] = {}  # Phase 320: Cluster Balancing Helpers
         self._rl_selector = RLSelector()  # Phase 321: RL-based Routing
         self._safe_start_task(self.resource_monitor.start())
-        self._safe_start_task(self.evolution_loop.start())
         self._safe_start_task(self._topology_loop())
 
         # Phase 322: Autonomous Update Service (15-min cycle)
@@ -285,6 +284,9 @@ class FleetManager(
 
         # Defer EvolutionLoop initialization until FleetManager is fully constructed
         self.evolution_loop = EvolutionLoop(cast(FleetManager, self))
+
+        # Start evolution loop now that it's initialized
+        self._safe_start_task(self.evolution_loop.start())
 
     async def handle_user_command(self, command: str) -> Dict[str, Any]:
         """Entry point for the Universal Agent Shell (Pillar 3)."""

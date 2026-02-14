@@ -23,6 +23,7 @@ from src.infrastructure.swarm.distributed.v2.locality_manager import LocalityMan
 
 
 def test_locality_manager_clustering():
+    """Test locality-based clustering logic."""
     mgr = LocalityManager()
 
     # Register ranks in different localities
@@ -42,6 +43,7 @@ def test_locality_manager_clustering():
 
 @pytest.mark.asyncio
 async def test_coordinator_locality_publish():
+    """Test coordinator's ability to publish waves to specific localities."""
     # Master
     master = DPCoordinatorV2(port=5560, is_master=True)
     await master.connect()
@@ -54,6 +56,9 @@ async def test_coordinator_locality_publish():
 
 
 def test_suggested_aggregators():
+    """
+    Docstring for test_suggested_aggregators
+    """
     mgr = LocalityManager()
     mgr.register_rank(5, "DC1")
     mgr.register_rank(3, "DC1")

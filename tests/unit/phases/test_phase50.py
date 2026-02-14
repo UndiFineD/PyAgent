@@ -21,10 +21,12 @@ from src.infrastructure.services.api.agent_api_server import app
 
 
 class TestPhase50(unittest.TestCase):
+    """Test cases for Phase 50: API Endpoints (TestClient)."""
     def setUp(self):
         self.client = TestClient(app)
 
     def test_api_endpoints(self) -> None:
+        """Test API endpoints using TestClient."""
         print("\nTesting Phase 50: API Endpoints (TestClient)...")
         # Test Root
         res = self.client.get("/")

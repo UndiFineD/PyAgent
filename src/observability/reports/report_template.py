@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,15 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
-report_template.py - ReportTemplate dataclass
+ReportTemplate - Data model for report templates
 
 [Brief Summary]
 DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
-Import ReportTemplate from report_template.py and instantiate with a name and optional sections list; pass instances into the report generation pipeline (e.g., generate_agent_reports.py) to control which report sections are produced and whether metadata/summary are included.
+Import ReportTemplate from report_template.py and instantiate with a name and optional sections list; pass instances into the report generation pipeline to control which report sections are produced and whether metadata/summary are included.
 
 WHAT IT DOES:
 Defines a minimal dataclass, ReportTemplate, that captures a report template's name, default sections, and boolean flags for including metadata and summary; exposes module version via __version__ imported from src.core.base.lifecycle.version.
@@ -32,48 +29,6 @@ WHAT IT SHOULD DO BETTER:
 - Add validation for section names and a factory/helper to produce canonical templates (e.g., from_dict, validate).
 - Provide serialization (to_dict/from_dict), equality/merge helpers, and richer docstrings/examples for downstream authors.
 - Consider integrating templating backends (Jinja2) or schema enforcement to prevent silent incorrect templates.
-
-FILE CONTENT SUMMARY:
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-
-"""Auto-extracted class from generate_agent_reports.py"""
-
-from __future__ import annotations
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ReportTemplate:
-    """Template for report generation.
-    Attributes:
-        name: Template name.
-        sections: List of section names to include.
-        include_metadata: Whether to include metadata section.
-        include_summary: Whether to include summary section.
-    """
-
-    name: str
-    sections: list[str] = field(default_factory=lambda: ["purpose", "location", "surface"])  # type: ignore[assignment]
-    include_metadata: bool = True
-    include_summary: bool = True
 """
 
 from __future__ import annotations
@@ -87,15 +42,16 @@ __version__ = VERSION
 
 @dataclass
 class ReportTemplate:
-    """Template for report generation.
+    """Template for generating reports.
+
     Attributes:
-        name: Template name.
+        name: Name of the template.
         sections: List of section names to include.
-        include_metadata: Whether to include metadata section.
-        include_summary: Whether to include summary section.
+        include_metadata: Whether to include metadata.
+        include_summary: Whether to include summary.
     """
 
     name: str
-    sections: list[str] = field(default_factory=lambda: ["purpose", "location", "surface"])  # type: ignore[assignment]
+    sections: list[str] = field(default_factory=list)
     include_metadata: bool = True
     include_summary: bool = True

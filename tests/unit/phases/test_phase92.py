@@ -25,10 +25,13 @@ from src.logic.agents.swarm.resource_forecasting_agent import ResourceForecastin
 
 
 class TestResourceForecasting(unittest.TestCase):
+    """Test cases for the ResourceForecastingAgent."""
     def setUp(self):
+        """Set up the ResourceForecastingAgent for testing."""
         self.agent = ResourceForecastingAgent(os.getcwd())
 
     def test_log_and_predict(self) -> None:
+        """Test logging usage snapshots and predicting future needs."""
         # Log some data points
         self.agent.log_usage_snapshot(10.0, 100.0, 50.0)
         time.sleep(0.1)
@@ -40,6 +43,7 @@ class TestResourceForecasting(unittest.TestCase):
         self.assertTrue(forecast["prediction"]["storage"] > 105.0)
 
     def test_scaling_recommendation(self) -> None:
+        """Test getting scaling recommendations based on usage."""
         # Trigger SCALE_UP
         self.agent.log_usage_snapshot(80.0, 400.0, 200.0)
         time.sleep(0.1)

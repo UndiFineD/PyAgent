@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 """
 Report Format - Enumerating supported report output formats
@@ -51,25 +48,6 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
-"""Auto-extracted class from generate_agent_reports.py"""
-
-from __future__ import annotations
-
-from enum import Enum
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-class ReportFormat(Enum):
-    """Output format for reports."""
-
-    MARKDOWN = "markdown"
-    JSON = "json"
-    HTML = "html"
 """
 
 from __future__ import annotations
