@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - name: Install system dependencies
+      run: sudo apt-get update && sudo apt-get install -y pkg-config libssl-dev
     - name: Set up Rust
       uses: actions-rust-lang/setup-rust-toolchain@v1
     - name: Set up Python
@@ -37,6 +39,8 @@ jobs:
         python-version: ['3.12']
     steps:
     - uses: actions/checkout@v4
+    - name: Install system dependencies
+      run: sudo apt-get update && sudo apt-get install -y pkg-config libssl-dev
     - name: Set up Rust
       uses: actions-rust-lang/setup-rust-toolchain@v1
     - name: Set up Python ${{ matrix.python-version }}

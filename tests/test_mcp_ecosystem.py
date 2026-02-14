@@ -70,14 +70,23 @@ class TestMCPEcosystem:
             result = adapter.execute_code("print('hello')", lang)
             assert "hello" in result
 
-    def test_security_validation_framework(self, mcp_core):
+    def test_security_validation_framework(self):
         """Test security validation and sandboxing framework."""
+        from src.tools.mcp.core import MCPCore
+        mcp_core = MCPCore()
+        
         # Test tool validation
         is_valid = mcp_core.validate_tool("safe_tool")
         assert is_valid is True
 
         is_valid = mcp_core.validate_tool("malicious_tool")
         assert is_valid is False
+
+        # Test security manager directly
+        if mcp_core._security_manager:
+            # Test suspicious pattern detection
+            assert mcp_core._security_manager._contains_suspicious_patterns("malicious_tool") is True
+            assert mcp_core._security_manager._contains_suspicious_patterns("safe_tool") is False
 
         # Test sandboxing
         sandbox = mcp_core.create_sandbox()

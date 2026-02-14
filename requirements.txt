@@ -194,3 +194,4 @@ rich>=13.0
 fido2>=2.0.0
 pyopenssl>=25.3.0
 streamlit
+virtualenv
