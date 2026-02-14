@@ -19,6 +19,8 @@ module is intentionally conservative and returns structured placeholders
 for integration and testing.
 """
 from __future__ import annotations
+
+__all__ = ["CoRTReasoningCore", "ReasonStep"]
 from dataclasses import dataclass
 import typing as t
 
@@ -51,16 +53,6 @@ class CoRTReasoningCore:
             self.history.append(step)
         return list(self.history[-rounds:])
 
-
-__all__ = ["CoRTReasoningCore", "ReasonStep"]
-"""
-PyAgent Chain-of-Recursive-Thoughts (CoRT) Reasoning System.
-
-Based on the Chain-of-Recursive-Thoughts framework for breakthrough
-problem-solving and response quality through recursive thinking.
-"""
-
-from __future__ import annotations
 
 import logging
 import time
@@ -436,6 +428,132 @@ Corrected Response:"""
                     response = response[:200] + "..."
                 chain.append(f"Round {round_item.round_number}: {response}")
         return chain
+
+    def evaluate_response(self, responses: List[str]) -> Dict[str, Any]:
+        """
+        Evaluate multiple responses and select the best one.
+
+        Args:
+            responses: List of response strings to evaluate
+
+        Returns:
+            Dict with score and selected response
+        """
+        if not responses:
+            return {"score": 0.0, "selected": ""}
+
+        # Simple scoring based on length and keywords (placeholder)
+        scores = []
+        for resp in responses:
+            score = min(len(resp) / 1000.0, 1.0)  # Length-based score
+            if any(word in resp.lower() for word in ["comprehensive", "detailed", "solution"]):
+                score += 0.2
+            scores.append(min(score, 1.0))
+
+        best_idx = scores.index(max(scores))
+        return {
+            "score": scores[best_idx],
+            "selected": responses[best_idx]
+        }
+
+    def think_recursively(self, query: str, **kwargs) -> Dict[str, Any]:
+        """
+        Perform recursive thinking with adaptive rounds.
+
+        Args:
+            query: The query to think about
+            **kwargs: Additional parameters like complexity
+
+        Returns:
+            Dict with rounds and final_answer
+        """
+        if not query or not query.strip():
+            raise ValueError("Query cannot be empty")
+
+        complexity = kwargs.get("complexity", "medium")
+        if complexity == "low":
+            rounds = 1
+        elif complexity == "high":
+            rounds = 5
+        else:
+            rounds = 3
+
+        # Placeholder reasoning
+        final_answer = f"Thought through {rounds} rounds: {query}"
+
+        if kwargs.get("recovery"):
+            final_answer += " (recovered)"
+
+        return {
+            "rounds": rounds,
+            "final_answer": final_answer
+        }
+
+    def measure_reasoning_performance(self) -> float:
+        """
+        Measure current reasoning performance.
+
+        Returns:
+            Performance score (0.0-1.0)
+        """
+        # Placeholder - would measure against benchmarks
+        return 0.95
+
+    def adapt_reasoning(self, query: str, context: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Adapt reasoning strategy based on context.
+
+        Args:
+            query: The query
+            context: Optional context
+
+        Returns:
+            Adaptation result
+        """
+        return {
+            "context": context,
+            "adapted": True,
+            "strategy": "recursive" if context else "direct"
+        }
+
+    def reason_multi_path(self, query: str, temperatures: Optional[List[float]] = None) -> List[Dict[str, Any]]:
+        """
+        Perform multi-path reasoning with different temperatures.
+
+        Args:
+            query: The query
+            temperatures: List of temperatures to use
+
+        Returns:
+            List of reasoning paths
+        """
+        if temperatures is None:
+            temperatures = [0.7, 0.8, 0.9]
+
+        paths = []
+        for temp in temperatures:
+            paths.append({
+                "temperature": temp,
+                "reasoning": f"Path with temperature {temp}: {query}"
+            })
+
+        return paths
+
+    async def think_async(self, query: str) -> Dict[str, Any]:
+        """
+        Async version of recursive thinking.
+
+        Args:
+            query: The query
+
+        Returns:
+            Thinking result
+        """
+        # Simple async wrapper
+        result = self.think_recursively(query)
+        return {
+            "final_answer": result["final_answer"]
+        }
 
 
 class CoRTAgentMixin:

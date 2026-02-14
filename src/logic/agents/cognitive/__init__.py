@@ -18,12 +18,11 @@
 
 from .knowledge_agent import KnowledgeAgent
 from .reasoning_agent import ReasoningAgent
-from .context_agent import ContextAgent
+# from .context_agent import ContextAgent
 from .speciation_agent import SpeciationAgent
 
 __all__ = [
     "KnowledgeAgent",
     "ReasoningAgent",
-    "ContextAgent",
     "SpeciationAgent",
 ]

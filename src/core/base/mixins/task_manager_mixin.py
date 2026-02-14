@@ -272,13 +272,8 @@ class TaskManagerMixin:
         return {
             "success": True,
             "message": f"Cleared {removed_count} completed tasks",
-<<<<<<< HEAD
-            "remaining_tasks": len(self.tasks),
-            "removed_count": removed_count
-=======
             "removed_count": removed_count,
             "remaining_tasks": len(self.tasks)
->>>>>>> copilot/sub-pr-29
         }
 
     def _load_tasks(self) -> None:

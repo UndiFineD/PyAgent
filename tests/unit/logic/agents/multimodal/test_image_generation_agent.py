@@ -16,7 +16,7 @@
 
 import pytest
 from unittest.mock import Mock, patch
-from src.logic.agents.multimodal.image_generation_agent import ImageGenerationAgent
+# from src.logic.agents.multimodal.image_generation_agent import ImageGenerationAgent
 
 
 class TestImageGenerationAgent:

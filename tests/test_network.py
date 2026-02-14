@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-<<<<<<< HEAD
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,27 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
 """Test network utility functionality."""
 
-from src.infrastructure.swarm.network.network_utils import get_local_network_ip
+import sys
 import os
 import platform
 import shutil
 import subprocess
-import sys
-
-# Add project root to path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-=======
-import sys
-import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
->>>>>>> copilot/sub-pr-29
+
+from src.infrastructure.swarm.network.network_utils import get_local_network_ip
 
 
 print('Testing get_local_network_ip()...')

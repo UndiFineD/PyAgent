@@ -146,7 +146,6 @@
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770068633.6219394}
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770150031.9451356}
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770150271.832693}
-<<<<<<< HEAD
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770400024.561051}
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770402530.7650652}
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770403352.3392186}
@@ -174,20 +173,3 @@
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770549025.6445189}
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770549518.4550085}
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770549892.2446012}
-=======
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770276526.6862032}
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770277242.461661}
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770277531.9657276}
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770279026.862258}
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770279376.802204}
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770280190.0269732}
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770283600.1262155}
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770284125.2972417}
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770287204.0972762}
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770289773.1353486}
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770290578.1495173}
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770293623.8169582}
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770296325.037336}
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770321048.9132109}
-{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1770321382.236111}
->>>>>>> copilot/sub-pr-29

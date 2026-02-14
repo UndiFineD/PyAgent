@@ -20,15 +20,10 @@ Provides schema-based tool creation and management, inspired by Adorable's tool 
 from __future__ import annotations
 
 import inspect
-<<<<<<< HEAD
-import asyncio
-import time
-=======
 import json
 import logging
 import time
 import asyncio
->>>>>>> copilot/sub-pr-29
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Callable, get_type_hints
 
@@ -236,17 +231,6 @@ class ToolFrameworkMixin:
         # Execute the tool
         try:
             # Build final kwargs
-            kwargs = {}
-<<<<<<< HEAD
-            for param in tool_def.parameters:
-                if param.name in prepared_args:
-                    kwargs[param.name] = prepared_args[param.name]
-                elif param.name in ['cascade_context', 'context']:
-                    kwargs[param.name] = cascade_context
-                # required check handled by validation
-
-            # Execute with timeout
-=======
 
             # Inspect the original function signature to detect if it accepts cascade/context
             func_sig = inspect.signature(tool_def.execute_function)
@@ -275,7 +259,6 @@ class ToolFrameworkMixin:
                         raise ToolValidationError(f"Required parameter '{param.name}' not provided")
 
             # Execute with timeout using module-level asyncio
->>>>>>> copilot/sub-pr-29
             result = await asyncio.wait_for(
                 tool_def.execute_function(**kwargs),
                 timeout=self.max_tool_execution_time

@@ -50,8 +50,6 @@ Based on the better-agents repository for enterprise-grade development practices
 Implements comprehensive testing pyramid with unit, integration, and E2E testing.
 """
 
-from __future__ import annotations
-
 import json
 import logging
 import time

@@ -20,10 +20,6 @@ external code and tests.
 """
 from __future__ import annotations
 
-<<<<<<< HEAD
-from src.core.base.lifecycle.base_agent import BaseAgent
-=======
 from src.core.base.lifecycle.base_agent import BaseAgent  # noqa: F401
->>>>>>> copilot/sub-pr-29
 
 __all__ = ["BaseAgent"]

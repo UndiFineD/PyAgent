@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 # Refactored by copilot-placeholder
 # Refactored by copilot-placeholder
 # Refactored by copilot-placeholder
@@ -51,13 +53,6 @@ FILE CONTENT SUMMARY:
 # Licensed under the Apache License, Version 2.0
 
 """Docstring auditor utilities.
-
-Parses the analyzer output (e.g., docs/prompt/prompt4.txt) and extracts a list
-of Python modules flagged with missing module-level docstrings. Provides a
-helper to generate a small next-batch file listing modules to address.
-"""
-
-from __future__ import annotations
 
 import re
 from pathlib import Path

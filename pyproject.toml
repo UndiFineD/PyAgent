@@ -79,11 +79,23 @@ target-version = "py312"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra -q --asyncio-mode=strict"
+addopts = "-ra -q --asyncio-mode=strict -p no:anyio"
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
+asyncio_mode = "strict"
+timeout = 10
+norecursedirs = [".external", ".hypothesis"]
+filterwarnings = [
+    "ignore:.*SwigPyPacked.*:DeprecationWarning",
+    "ignore:.*SwigPyObject.*:DeprecationWarning",
+    "ignore:.*swigvarlink.*:DeprecationWarning",
+    "ignore:The module 'cgi' is deprecated:DeprecationWarning",
+    "ignore:the load_module\\(\\) method is deprecated:DeprecationWarning",
+    "ignore:.*builtin type .* has no __module__ attribute:DeprecationWarning",
+    "ignore::pytest.PytestRemovedIn9Warning",
+]
 
 [tool.maturin]
 manifest-path = "rust_lib/Cargo.toml"

@@ -52,13 +52,9 @@ class CascadeContext:
     """Context for tracking cascade operations and preventing infinite recursion."""
 
     task_id: str = ""
-<<<<<<< HEAD
-    agent_id: str = ""
-=======
     # Backwards-compatible alias: some callers pass `agent_id` as the task identifier
     agent_id: str = ""
     # Optional workflow identifier for tracking across systems
->>>>>>> copilot/sub-pr-29
     workflow_id: str = ""
     cascade_depth: int = 0
     depth_limit: int = 10
