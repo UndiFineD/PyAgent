@@ -13,138 +13,54 @@
 # limitations under the License.
 
 """
-Orchestrator Plugin Mixin - Plugin management for OrchestratorAgent
+Orchestrator Plugin Mixin - Plugin management for
+OrchestratorAgent
 
 Brief Summary
 DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
-- Mix into an OrchestratorAgent to gain plugin lifecycle and execution helpers.
-- Use load_plugins_from_config([...]) to dynamically load plugin modules from AgentPluginConfig entries.
-- Use register_plugin(plugin), unregister_plugin(name) to manage plugins at runtime, and run_plugins(Path(...)) to execute them against a file with built-in timeout, rate-limiting and simple metrics updates.
+- Mix into an OrchestratorAgent to gain plugin
+  lifecycle and execution helpers.
+- Use load_plugins_from_config([...]) to dynamically
+  load plugin modules from AgentPluginConfig entries.
+- Use register_plugin(plugin),
+  unregister_plugin(name) to manage plugins at runtime.
+- Use run_plugins(Path(...)) to execute plugins
+  against a file with built-in timeout,
+  rate-limiting and simple metrics updates.
 
 WHAT IT DOES:
-- Provides registration, unregistration and lookup for AgentPluginBase instances.
-- Executes registered plugins in priority order using a ThreadPoolExecutor with a hard timeout and optional rate_limiter integration.
-- Updates a simple metrics counter ("agents_applied") when a plugin returns truthy, and logs plugin lifecycle events and load errors.
-- Dynamically imports plugin modules from filesystem paths and instantiates plugin classes declared in AgentPluginConfig.
+- Provides registration, unregistration and lookup
+  for AgentPluginBase instances.
+- Executes registered plugins in priority order.
+- Uses ThreadPoolExecutor with a hard timeout and
+  optional rate_limiter integration.
+- Updates a simple metrics counter
+  ("agents_applied") when a plugin returns truthy.
+- Logs plugin lifecycle events and load errors.
+- Dynamically imports plugin modules from filesystem
+  paths and instantiates plugin classes declared in
+  AgentPluginConfig.
 
 WHAT IT SHOULD DO BETTER:
-- Make timeouts, threadpool size, and rate-limiter timeout configurable rather than hard-coded.
-- Add stronger validation and sandboxing for dynamically loaded modules (path existence, integrity, and security checks).
-- Broaden and standardize exception handling (catch unexpected exceptions), surface errors to callers when appropriate, and add unit tests for edge cases (timeouts, loader failures).
-- Support asyncio/async plugin execution and backpressure instead of spawning threads per plugin for improved scalability.
-- Improve metrics structure and thread-safety and emit richer telemetry for failures and durations.
+- Make timeouts, threadpool size, and rate-limiter
+  timeout configurable rather than hard-coded.
+- Add stronger validation and sandboxing for
+  dynamically loaded modules.
+  (Check path existence, integrity, and security.)
+- Broaden and standardize exception handling.
+  Catch unexpected exceptions and surface errors to
+  callers when appropriate.
+- Add unit tests for edge cases (timeouts,
+  loader failures).
+- Support asyncio/async plugin execution and
+  backpressure instead of spawning threads per plugin.
+- Improve metrics structure and thread-safety and
+  emit richer telemetry for failures and durations.
 
 FILE CONTENT SUMMARY:
 Orchestrator plugin mixin module.
-"""
-
-from __future__ import annotations
-
-import importlib.util
-import logging
-from concurrent.futures import ThreadPoolExecutor
-from concurrent.futures import TimeoutError as FuturesTimeoutError
-from pathlib import Path
-from typing import Any
-
-from src.core.base.common.models import AgentPluginConfig
-from src.core.base.logic.agent_plugin_base import AgentPluginBase
-
-
-class OrchestratorPluginMixin:
-    """Plugin system methods for OrchestratorAgent."""
-
-    def register_plugin(self, plugin: AgentPluginBase) -> None:
-        """Register a custom agent plugin."""
-        if not hasattr(self, "plugins"):
-            self.plugins: dict[str, AgentPluginBase] = {}
-
-        plugin.setup()
-        self.plugins[plugin.name] = plugin
-        logging.info(f"Registered plugin: {plugin.name} (priority: {plugin.priority.name})")
-
-    def unregister_plugin(self, plugin_name: str) -> bool:
-        """Unregister a plugin by name."""
-        if not hasattr(self, "plugins") or plugin_name not in self.plugins:
-            return False
-
-        plugin = self.plugins[plugin_name]
-        plugin.teardown()
-        del self.plugins[plugin_name]
-        logging.info(f"Unregistered plugin: {plugin_name}")
-        return True
-
-    def get_plugin(self, plugin_name: str) -> AgentPluginBase | None:
-        """Get a registered plugin by name."""
-        if not hasattr(self, "plugins"):
-            return None
-        return self.plugins.get(plugin_name)
-
-    def run_plugins(self, file_path: Path) -> dict[str, bool]:
-        """Run all registered plugins on a file."""
-        if not hasattr(self, "plugins") or not self.plugins:
-            return {}
-
-        results: dict[str, bool] = {}
-        context: dict[str, Any] = {
-            "agent": self,
-            "repo_root": getattr(self, "repo_root", Path(".")),
-            "dry_run": getattr(self, "dry_run", False),
-            "metrics": getattr(self, "metrics", {}),
-        }
-
-        # Sort plugins by priority
-        sorted_plugins = sorted(self.plugins.values(), key=lambda p: p.priority.value)
-
-        for plugin in sorted_plugins:
-            if not plugin.config.get("enabled", True):
-                continue
-
-            try:
-                if hasattr(self, "rate_limiter"):
-                    getattr(self, "rate_limiter").acquire(timeout=30.0)
-
-                with ThreadPoolExecutor(max_workers=1) as executor:
-                    future = executor.submit(plugin.run, file_path, context)
-                    try:
-                        result = future.result(timeout=5.0)
-                    except FuturesTimeoutError:
-                        logging.warning(f"Plugin {plugin.name} timed out. Skipping.")
-                        result = False
-
-                results[plugin.name] = result
-                if result and hasattr(self, "metrics"):
-                    metrics = getattr(self, "metrics")
-                    if "agents_applied" not in metrics:
-                        metrics["agents_applied"] = {}
-                    applied = metrics["agents_applied"]
-                    applied[plugin.name] = applied.get(plugin.name, 0) + 1
-
-            except (IOError, RuntimeError) as e:
-                logging.error(f"Plugin {plugin.name} failed: {e}")
-                results[plugin.name] = False
-
-        return results
-
-    def load_plugins_from_config(self, plugin_configs: list[AgentPluginConfig]) -> None:
-        """Load plugins from configuration."""
-        for config in plugin_configs:
-            if not config.enabled:
-                continue
-
-            try:
-                spec = importlib.util.spec_from_file_location(config.name, config.module_path)
-                if spec and spec.loader:
-                    module = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(module)
-                    plugin_class = getattr(module, config.entry_point, None)
-                    if plugin_class and issubclass(plugin_class, AgentPluginBase):
-                        plugin = plugin_class(config.name, config.priority, config.config)
-                        self.register_plugin(plugin)
-            except (ImportError, AttributeError, SyntaxError) as e:
-                logging.error(f"Failed to load plugin {config.name}: {e}")
 """
 
 from __future__ import annotations

@@ -48,13 +48,7 @@ BaseAgent = None  # Will be imported locally to avoid circular import
 
 
 class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ancestors
-    """
-    Primary orchestrator for swarm agentic workflows.
-    Combines core BaseAgent capabilities with specialized orchestrator features.
-
-    This class satisfies both modern Mixin-based architecture and legacy
-    integration requirements (Phase 317 consolidation).
-    """
+    # Primary orchestrator for swarm agentic workflows
 
     def __init__(self, file_path: str = ".", **kwargs: Any) -> None:
         global BaseAgent
@@ -138,10 +132,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
 
     @classmethod
     def from_config_file(cls, config_path: Path | str) -> OrchestratorAgent:
-        """
-        Creates an OrchestratorAgent from a configuration file.
-        Legacy support for config-driven initialization.
-        """
+        # Creates an OrchestratorAgent from a configuration file
         import json
 
         config_path = Path(config_path)
@@ -154,68 +145,9 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         repo_root = config.get("repo_root", ".")
         return cls(file_path=repo_root, **config)
 
-    def generate_
-"""
-
-from __future__ import annotations
-
-import logging
-import time
-from pathlib import Path
-from typing import Any
-
-from src.core.base.execution.agent_command_handler import AgentCommandHandler
-from src.core.base.lifecycle.version import VERSION
-from .orchestrator_features import OrchestratorFeatures
-
-__version__ = VERSION
-BaseAgent = None  # Will be imported locally to avoid circular import
-
-
-class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ancestors
-    """
-    Primary orchestrator for swarm agentic workflows.
-    Combines core BaseAgent capabilities with specialized orchestrator features.
-
-    This class satisfies both modern Mixin-based architecture and legacy
-    integration requirements (Phase 317 consolidation).
-    """
-
-    def __init__(self, file_path: str = ".", **kwargs: Any) -> None:
-
-    @property
-    def repo_root(self) -> str:
-        """Alias for _workspace_root for legacy compatibility."""
-        return str(self._workspace_root)
-
-    @repo_root.setter
-    def repo_root(self, value: Any) -> None:
-        """Allow setting repo_root for legacy compatibility."""
-        self._workspace_root = str(value)
-
-    @classmethod
-    def from_config_file(cls, config_path: Path | str) -> OrchestratorAgent:
-        """
-        Creates an OrchestratorAgent from a configuration file.
-        Legacy support for config-driven initialization.
-        """
-        import json
-
-        config_path = Path(config_path)
-        if not config_path.exists():
-            raise FileNotFoundError(f"Config file not found: {config_path}")
-
-        with open(config_path, "r", encoding="utf-8") as f:
-            config = json.load(f)
-
-        repo_root = config.get("repo_root", ".")
-        return cls(file_path=repo_root, **config)
 
     def generate_improvement_report(self) -> dict[str, Any]:
-        """
-        Generates a summary of changes and improvements made.
-        Legacy support for Phase 5 reporting tools.
-        """
+        # Generates a summary of changes and improvements made
         processed = self._metrics.get("files_processed", 0)
         modified = self._metrics.get("files_modified", 0)
         rate = (modified / processed * 100.0) if processed > 0 else 0.0
@@ -229,20 +161,14 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         }
 
     def benchmark_execution(self, files: list[Path]) -> dict[str, Any]:
-        """
-        Benchmarks the execution time per file.
-        Legacy support for Phase 5 benchmarking.
-        """
+        # Benchmarks the execution time per file
         total_files = len(files)
         elapsed = time.time() - float(self._metrics.get("start_time", time.time()))
         avg = (elapsed / total_files) if total_files > 0 else 0.0
         return {"average_per_file": avg, "total_time": elapsed, "file_count": total_files}
 
     def cost_analysis(self, cost_per_request: float = 0.0) -> dict[str, Any]:
-        """
-        Analyzes the estimated cost of operations.
-        Legacy support for Phase 5 cost tracking.
-        """
+        # Analyzes the estimated cost of operations
         agent_runs = sum(self._metrics.get("agents_applied", {}).values())
         return {
             "total_estimated_cost": agent_runs * cost_per_request,
@@ -252,10 +178,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         }
 
     def update_code(self, target: Path) -> str:
-        """
-        Stub for update_code which was used in older integration tests.
-        Redirects to modern sub-agent execution via command_handler.
-        """
+        # Stub for update_code which was used in older integration tests
         logging.info(f"Orchestrator: Updating code for {target}")
 
         # Build command that includes strategy if set
@@ -271,10 +194,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         return f"Error: {result.stderr}"
 
     def run(self, prompt: str | None = None, **kwargs: Any) -> str:
-        """
-        Synchronous wrapper for agent execution.
-        If no prompt is provided, runs the main processing loop.
-        """
+        # Synchronous wrapper for agent execution
         _ = kwargs
         if prompt is None:
             # Legacy loop-based mode (Phase 5/6)

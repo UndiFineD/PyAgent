@@ -19,7 +19,7 @@ from unittest.mock import AsyncMock
 
 from src.logic.agents.swarm.agentic_patterns import (
     SequentialAgentPattern,
-    ParallelAgentPattern,
+    # ParallelAgentPattern,  # TODO: Restore when ParallelAgentPattern is implemented
     SequentialAgentConfig
 )
 from src.core.base.common.models.communication_models import CascadeContext
@@ -227,9 +227,7 @@ class TestParallelAgentPattern:
         ]
 
     @pytest.mark.asyncio
-    async def test_parallel_execution_success(
-        self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator
-    ):
+    async def test_parallel_execution_success(self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator):
         """Test successful parallel execution."""
         # Mock successful execution results
         mock_orchestrator.execute_with_pattern.side_effect = [
@@ -254,8 +252,6 @@ class TestParallelAgentPattern:
         assert "weather_agent" in combined
         assert "news_agent" in combined
         assert combined["_summary"]["successful_agents"] == 2
-
-        self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator
 
     @pytest.mark.asyncio
     async def test_parallel_execution_with_partial_failure(
@@ -284,7 +280,6 @@ class TestParallelAgentPattern:
 
         assert len(successful_results) == 1
         assert len(failed_results) == 1
-        self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator
 
         assert failed_results[0]["error"] == "News API unavailable"
 

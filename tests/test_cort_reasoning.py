@@ -146,20 +146,18 @@ class TestCoRTReasoning:
             ui = None
             if inspect.isclass(ReasoningUI):
                 ui = ReasoningUI()
+            elif hasattr(ReasoningUI, "instance"):
+                ui = ReasoningUI.instance
+            elif hasattr(ReasoningUI, "get_instance") and callable(getattr(ReasoningUI, "get_instance")):
+                ui = ReasoningUI.get_instance()
+            elif hasattr(ReasoningUI, "display_reasoning"):
+                ui = ReasoningUI
             elif callable(ReasoningUI) and not inspect.ismodule(ReasoningUI):
                 # function/factory that returns an instance
                 try:
                     ui = ReasoningUI()
                 except TypeError:
                     ui = None
-            else:
-                # If it's already an instance or a module-like object, try common access patterns.
-                if hasattr(ReasoningUI, "instance"):
-                    ui = ReasoningUI.instance
-                elif hasattr(ReasoningUI, "get_instance") and callable(getattr(ReasoningUI, "get_instance")):
-                    ui = ReasoningUI.get_instance()
-                elif hasattr(ReasoningUI, "display_reasoning"):
-                    ui = ReasoningUI
             if ui is None:
                 pytest.skip("ReasoningUI not instantiable or usable")
                 return

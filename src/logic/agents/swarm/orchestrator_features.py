@@ -56,16 +56,6 @@ class OrchestratorFeatures(
     Mixin class that provides additional features to OrchestratorAgent.
     This helps keep the main OrchestratorAgent file small (<30KB).
     """
-"""
-
-from __future__ import annotations
-
-from .orchestrator_diff_mixin import OrchestratorDiffMixin
-from .orchestrator_execution_mixin import OrchestratorExecutionMixin
-from .orchestrator_lifecycle_mixin import OrchestratorLifecycleMixin
-from .orchestrator_plugin_mixin import OrchestratorPluginMixin
-from .orchestrator_resource_mixin import OrchestratorResourceMixin
-from .orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
 
 
 class OrchestratorFeatures(

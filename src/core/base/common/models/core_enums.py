@@ -63,6 +63,18 @@ class FailureClassification(Enum):
     UNKNOWN = "unknown"
 
 
+class OptimizationMetric(Enum):
+    """Metrics for strategy optimization."""
+    LATENCY = "latency"
+    THROUGHPUT = "throughput"
+    ACCURACY = "accuracy"
+    PRECISION = "precision"
+    RECALL = "recall"
+    F1_SCORE = "f1_score"
+    COST = "cost"
+    ROBUSTNESS = "robustness"
+
+
 class EventType(Enum):
     """Agent event types for hooks."""
 
