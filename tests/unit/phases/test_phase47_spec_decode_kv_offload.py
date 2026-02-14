@@ -27,6 +27,14 @@ Tests for:
 
 import pytest
 
+# Handle rust_core import
+try:
+    import rust_core
+    RUST_AVAILABLE = True
+except ImportError:
+    rust_core = None  # type: ignore[assignment]
+    RUST_AVAILABLE = False
+
 
 # =============================================================================
 # Test EagleProposer
@@ -833,17 +841,12 @@ class TestRustPhase47:
     @pytest.fixture
     def rust_available(self):
         """Check if Rust module is available."""
-        try:
-            import rust_core  # noqa: F401
-            return True
-        except ImportError:
+        if not RUST_AVAILABLE:
             pytest.skip("rust_core not available")
-            return False
+        return True
 
     def test_eagle_top_k_candidates(self, rust_available):
         """Test eagle_top_k_candidates_rust."""
-        import rust_core
-
         logits = [0.1, 0.5, 0.3, 0.9, 0.2]
         result = rust_core.eagle_top_k_candidates_rust(logits, 3)
 
@@ -853,8 +856,6 @@ class TestRustPhase47:
 
     def test_eagle_extrapolate_hidden(self, rust_available):
         """Test eagle_extrapolate_hidden_rust."""
-        import rust_core
-
         hidden = [[1.0, 2.0], [2.0, 3.0]]
         result = rust_core.eagle_extrapolate_hidden_rust(hidden, 2)
 
@@ -864,8 +865,6 @@ class TestRustPhase47:
 
     def test_ngram_find_match(self, rust_available):
         """Test ngram_find_match_rust."""
-        import rust_core
-
         context = [1, 2, 3, 4, 5]
         prefix = [2, 3]
         excluded = []
@@ -879,8 +878,6 @@ class TestRustPhase47:
 
     def test_ngram_fuzzy_match(self, rust_available):
         """Test ngram_fuzzy_match_rust."""
-        import rust_core
-
         context = [1, 2, 3, 4, 5]
         prefix = [2, 99]  # 99 differs from 3
 
@@ -891,8 +888,6 @@ class TestRustPhase47:
 
     def test_prompt_lookup_propose(self, rust_available):
         """Test prompt_lookup_propose_rust."""
-        import rust_core
-
         prompt = [1, 2, 3, 4, 5, 6]
         generated = [3, 4]
 
@@ -903,8 +898,6 @@ class TestRustPhase47:
 
     def test_spec_decode_build_cu_indices(self, rust_available):
         """Test spec_decode_build_cu_indices_rust."""
-        import rust_core
-
         num_draft = [3, 2, 4]
         cu_draft, cu_sampled = rust_core.spec_decode_build_cu_indices_rust(num_draft)
 
@@ -913,8 +906,6 @@ class TestRustPhase47:
 
     def test_spec_decode_build_logits_indices(self, rust_available):
         """Test spec_decode_build_logits_indices_rust."""
-        import rust_core
-
         num_draft = [3, 2]
         cu_draft = [3, 5]
 
@@ -927,8 +918,6 @@ class TestRustPhase47:
 
     def test_block_table_slot_mapping(self, rust_available):
         """Test block_table_slot_mapping_rust."""
-        import rust_core
-
         blocks = [10, 20, 30]
         slots = rust_core.block_table_slot_mapping_rust(blocks, 5, 0, 16)
 
@@ -938,8 +927,6 @@ class TestRustPhase47:
 
     def test_arc_adaptation_delta(self, rust_available):
         """Test arc_adaptation_delta_rust."""
-        import rust_core
-
         # B1 hit should be positive (favor recency)
         delta = rust_core.arc_adaptation_delta_rust(10, 5, True, 1.0)
         assert delta > 0
@@ -950,8 +937,6 @@ class TestRustPhase47:
 
     def test_lru_eviction_priority(self, rust_available):
         """Test lru_eviction_priority_rust."""
-        import rust_core
-
         positions = [0, 1, 2]  # LRU order
         access_counts = [1, 5, 2]  # Different frequencies
 
@@ -965,8 +950,6 @@ class TestRustPhase47:
 
     def test_tree_verification_paths(self, rust_available):
         """Test tree_verification_paths_rust."""
-        import rust_core
-
         tree_tokens = [1, 2, 3, 4, 5]  # Two paths: [1,2,3] and [4,5]
         parents = [-1, 0, 1, -1, 3]
         depths = [0, 1, 2, 0, 1]

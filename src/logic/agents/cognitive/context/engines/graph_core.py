@@ -27,10 +27,8 @@ from src.core.base.lifecycle.version import VERSION
 
 try:
     import rust_core
-
     _RUST_ACCEL = True
 except ImportError:
-    import rust_core  # type: ignore[no-redef]
     _RUST_ACCEL = False
 
 __version__ = VERSION

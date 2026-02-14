@@ -739,17 +739,24 @@ class TestMultiprocExecutor:
         assert uni_class == UniprocExecutor
 
 
+# Handle rust_core import
+try:
+    import rust_core
+    RUST_AVAILABLE = True
+except ImportError:
+    rust_core = None  # type: ignore[assignment]
+    RUST_AVAILABLE = False
+
+
 class TestRustAcceleration:
     """Tests for Rust acceleration functions."""
 
     @pytest.fixture
     def rust_core(self):
         """Get rust_core module."""
-        try:
-            import rust_core
-            return rust_core
-        except ImportError:
+        if not RUST_AVAILABLE:
             pytest.skip("rust_core not available")
+        return rust_core
 
     def test_cache_observe_rust(self, rust_core):
         """Test cache observation Rust function."""
