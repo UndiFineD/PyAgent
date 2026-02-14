@@ -141,14 +141,23 @@ class AutoMemCore:
         self.logger = logging.getLogger("pyagent.memory.automem.core")
 
         # Initialize backing stores
-        self.graph_store = FalkorDB.from_url(config.falkordb_url)
-        self.vector_store = QdrantClient(url=config.qdrant_url)
+        try:
+            self.graph_store = FalkorDB.from_url(config.falkordb_url)
+        except Exception as e:
+            self.logger.warning(f"Failed to connect to FalkorDB at {config.falkordb_url}: {e}. Memory graph features will be disabled.")
+            self.graph_store = None
+        try:
+            self.vector_store = QdrantClient(url=config.qdrant_url)
+        except Exception as e:
+            self.logger.warning(f"Failed to connect to Qdrant at {config.qdrant_url}: {e}. Vector memory features will be disabled.")
+            self.vector_store = None
 
         # Swarm Singularity (Pillar 2): Paged KV Cache
         self.kv_cache = KVCacheManager()
 
         # Initialize vector collection if it doesn't exist
-        self._ensure_vector_collection()
+        if self.vector_store is not None:
+            self._ensure_vector_collection()
 
         # Initialize consolidation system
         if config.consolidation_enabled:

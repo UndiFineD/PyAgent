@@ -2,7 +2,19 @@
 
 ## Recent Git Operations
 
-### Commit: 2082c629b - Add security core and tool agent modules, update workflows and tests
+### Commit: adf5e7dd6 - Enhance semantic decay functionality and add advanced tests
+- **Date**: February 14, 2026
+- **Files Changed**: 5 files, 603 insertions(+), 38 deletions(-)
+- **Key Changes**:
+  - Updated semantic_decay.py in core memory with advanced decay algorithms
+  - Added comprehensive unit tests for semantic decay in test_semantic_decay_advanced.py
+  - Modified agent memory files with latest swarm activities
+  - Updated structured logs for v4.0.0 memory management improvements
+- **Push Status**: Successfully pushed to origin/main
+- **Branch**: main
+- **Remote**: https://github.com/UndiFineD/PyAgent
+
+### Previous Commit: 2082c629b - Add security core and tool agent modules, update workflows and tests
 - **Date**: February 14, 2026
 - **Files Changed**: 11 files, 1303 insertions(+), 173 deletions(-)
 - **Key Changes**:
@@ -13,18 +25,6 @@
   - Enhanced MCP core and AutoMem/CoRT test suites
   - Updated agent memory files with latest swarm activities
   - Improved structured logging for v4.0.0 compliance
-- **Push Status**: Successfully pushed to origin/main
-- **Branch**: main
-- **Remote**: https://github.com/UndiFineD/PyAgent
-
-### Previous Commit: 2e9f3f4c0 - Update agent memories and logs post-swarm cycle
-- **Date**: February 14, 2026
-- **Files Changed**: 6 files, 115 insertions(+), 219 deletions(-)
-- **Key Changes**:
-  - Updated all agent memory files (executing, gitdance, planner, tester) with latest activities
-  - Modified structured logs with swarm operation details
-  - Removed temporary anomaly detection agent file
-  - Swarm cycle completion for v4.0.0 workflow integration
 - **Push Status**: Successfully pushed to origin/main
 
 ## Repository State

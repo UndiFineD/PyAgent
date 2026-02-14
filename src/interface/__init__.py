@@ -15,7 +15,10 @@
 # limitations under the License.
 
 """
-Interface package.
+Interface package - User Space Components
+
+This package provides backward compatibility imports for user space components
+that have been moved to src/userspace/ for better architectural separation.
 """
 
 from __future__ import annotations
@@ -24,10 +27,8 @@ from src.core.base.lifecycle.version import VERSION as VERSION
 
 __version__ = VERSION
 
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+# Import user space components for backward compatibility
+from src.userspace import interface, agents, dashboard, mobile
 
-"""Interface namespace containing CLI, API, and Web UI components."""
+# Re-export for backward compatibility
+__all__ = ["interface", "agents", "dashboard", "mobile"]

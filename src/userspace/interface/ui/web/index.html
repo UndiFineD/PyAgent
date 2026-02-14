@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyAgent | Voyager Swarm Dashboard</title>
+    <script src="/static/assets/react.production.min.js"></script>
+    <script src="/static/assets/react-dom.production.min.js"></script>
+    <script src="/static/assets/babel.min.js"></script>
+    <script src="/static/assets/tailwind.js"></script>
+    <link href="/static/assets/fontawesome.min.css" rel="stylesheet">
+    <style>
+        :root { --primary: #3b82f6; --bg: #020617; --card: #0f172a; }
+        body { background-color: var(--bg); color: #f8fafc; font-family: 'Inter', system-ui, sans-serif; overflow: hidden; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(51, 65, 85, 0.5); }
+        .nav-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav-btn:hover { background: rgba(59, 130, 246, 0.1); border-color: var(--primary); }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+        .status-online { background-color: #10b981; box-shadow: 0 0 8px #10b981; }
+        iframe { border: none; width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Base64url Helpers (Phase 327)
+        const bufferToBase64url = (buffer) => {
+            const bytes = new Uint8Array(buffer);
+            let binary = '';
+            for (let i = 0; i < bytes.byteLength; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary)
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=/g, '');
+        };
+
+        const base64urlToBuffer = (base64url) => {
+            const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            return bytes.buffer;
+        };
+
+        async function enrollWebAuthn() {
+            try {
+                const username = "admin";
+                const resp = await fetch('/api/auth/register/options', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username})
+                });
+                const options = await resp.json();
+                
+                options.challenge = base64urlToBuffer(options.challenge);
+                options.user.id = base64urlToBuffer(options.user.id);
+                if (options.excludeCredentials) {
+                    options.excludeCredentials.forEach(c => c.id = base64urlToBuffer(c.id));
+                }
+                
+                const credential = await navigator.credentials.create({ publicKey: options });
+                
+                const verifyResp = await fetch('/api/auth/register/verify', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        username,
+                        id: credential.id,
+                        rawId: bufferToBase64url(credential.rawId),
+                        type: credential.type,
+                        response: {
+                            attestationObject: bufferToBase64url(credential.response.attestationObject),
+                            clientDataJSON: bufferToBase64url(credential.response.clientDataJSON)
+                        }
+                    })
+                });
+                const result = await verifyResp.json();
+                alert(result.status === 'success' ? "Enrollment Successful" : "Enrollment Failed");
+            } catch (err) {
+                console.error(err);
+                alert("Enrollment Error: " + err.message);
+            }
+        }
+
+        async function verifyWebAuthn() {
+            try {
+                const username = "admin";
+                const resp = await fetch('/api/auth/login/options', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username})
+                });
+                const options = await resp.json();
+                
+                options.challenge = base64urlToBuffer(options.challenge);
+                if (options.allowCredentials) {
+                    options.allowCredentials.forEach(c => c.id = base64urlToBuffer(c.id));
+                }
+                
+                const assertion = await navigator.credentials.get({ publicKey: options });
+                
+                const verifyResp = await fetch('/api/auth/login/verify', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        username,
+                        id: assertion.id,
+                        rawId: bufferToBase64url(assertion.rawId),
+                        type: assertion.type,
+                        response: {
+                            authenticatorData: bufferToBase64url(assertion.response.authenticatorData),
+                            clientDataJSON: bufferToBase64url(assertion.response.clientDataJSON),
+                            signature: bufferToBase64url(assertion.response.signature),
+                            userHandle: assertion.response.userHandle ? bufferToBase64url(assertion.response.userHandle) : null
+                        }
+                    })
+                });
+                const result = await verifyResp.json();
+                alert(result.status === 'authenticated' ? "Authentication Successful" : "Authentication Denied");
+            } catch (err) {
+                console.error(err);
+                alert("Authentication Error: " + err.message);
+            }
+        }
+
+        function App() {
+            const [view, setView] = useState('thoughts');
+            const [status, setStatus] = useState('connecting');
+            const [consensus, setConsensus] = useState(false);
+            const [metrics, setMetrics] = useState({ cpu: 0, mem: 0, storage: 0, network: 0, temp: 0, gpu: 0 });
+            const ws = useRef(null);
+
+            useEffect(() => {
+                connectWS();
+                // Phase 4.0.0: Request Notification Permission for Mobile Bridge
+                if ("Notification" in window && Notification.permission !== "granted") {
+                    Notification.requestPermission();
+                }
+                return () => ws.current?.close();
+            }, []);
+
+            const connectWS = () => {
+                ws.current = new WebSocket(`ws://${window.location.host}/ws/telemetry`);
+                ws.current.onopen = () => setStatus('online');
+                ws.current.onmessage = (e) => {
+                    const data = JSON.parse(e.data);
+                    if (data.event === 'telemetry') {
+                        setMetrics(data.data);
+                        setConsensus(data.consensus || false);
+                    }
+                };
+                ws.current.onclose = () => {
+                    setStatus('offline');
+                    setTimeout(connectWS, 3000);
+                };
+            };
+
+            return (
+                <div className="flex h-screen w-screen overflow-hidden">
+                    {/* Sidebar Navigation */}
+                    <nav className="w-20 lg:w-64 bg-slate-900 border-r border-slate-800 flex flex-col p-4 z-50">
+                        <div className="flex items-center gap-3 px-2 mb-10">
+                            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                                <i className="fas fa-microchip text-xl"></i>
+                            </div>
+                            <span className="hidden lg:block font-bold text-xl tracking-tight">PyAgent <span className="text-slate-500 font-light">VOYAGER</span></span>
+                        </div>
+
+                        <div className="flex-1 space-y-2">
+                            <NavBtn icon="brain" label="Thoughts" active={view === 'thoughts'} onClick={() => setView('thoughts')} />
+                            <NavBtn icon="project-diagram" label="Topology" active={view === 'topology'} onClick={() => setView('topology')} />
+                            <NavBtn icon="cloud-download-alt" label="Downloads" active={view === 'downloads'} onClick={() => setView('downloads')} />
+                            <NavBtn icon="chart-line" label="Improvement" active={view === 'improvement'} onClick={() => setView('improvement')} />
+                            <NavBtn icon="shield-virus" label="Safety Hub" active={view === 'safety'} onClick={() => setView('safety')} />
+                            <NavBtn icon="tower-broadcast" label="Multimedia" active={view === 'stream'} onClick={() => setView('stream')} />
+                            <NavBtn icon="folder-tree" label="Explorer" active={view === 'files'} onClick={() => setView('files')} />
+                        </div>
+
+                        <div className="mt-auto pt-6 border-t border-slate-800">
+                            <div className="flex items-center justify-between px-2 mb-4">
+                                <span className="hidden lg:block text-xs text-slate-500 uppercase font-bold">Health</span>
+                                <div className={`status-dot ${status === 'online' ? 'status-online' : 'bg-red-500 shadow-red-500/50'}`}></div>
+                            </div>
+                            <MetricBar label="CPU" value={metrics.cpu} color="bg-blue-500" />
+                            <MetricBar label="MEM" value={metrics.mem} color="bg-emerald-500" />
+                            <MetricBar label="DISK" value={metrics.storage} color="bg-amber-500" />
+                            {metrics.gpu > 0 && <MetricBar label="GPU" value={metrics.gpu} color="bg-purple-500" />}
+                            <div className="hidden lg:flex justify-between px-2 text-[10px] text-slate-500 font-mono mt-4">
+                                <span>TEMP: <span className={metrics.temp > 75 ? 'text-red-500' : 'text-slate-300'}>{parseFloat(metrics.temp).toFixed(1)}°C</span></span>
+                                <span>NET: <span className="text-slate-300">{parseFloat(metrics.network).toFixed(1)} MB/s</span></span>
+                            </div>
+                        </div>
+                    </nav>
+
+                    {/* Main Content Area */}
+                    <main className="flex-1 flex flex-col bg-slate-950 relative">
+                        {/* Global Progress Bar (Cassetta Sync) */}
+                        <div className="h-1 w-full bg-slate-900 overflow-hidden">
+                            <div className="h-full bg-blue-600 w-1/3 animate-[shimmer_2s_infinite]"></div>
+                        </div>
+
+                        {/* Top Bar */}
+                        <header className="h-16 glass border-b border-slate-800 flex items-center justify-between px-8 z-40">
+                            <div className="flex items-center gap-6">
+                                <h2 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em]">Current Node: <span className="text-blue-500">Master-01</span></h2>
+                                {consensus && (
+                                    <div className="flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full animate-pulse">
+                                        <i className="fas fa-gavel text-amber-500 text-xs"></i>
+                                        <span className="text-[10px] font-bold text-amber-500 uppercase">Swarm Consensus Active</span>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <span className="text-xs font-mono text-slate-500">Uptime: 14h 22m 04s</span>
+                                <button 
+                                    onClick={() => setView('profile')}
+                                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${view === 'profile' ? 'bg-blue-600 text-white' : 'bg-slate-800 hover:bg-slate-700 text-slate-400'}`}
+                                    title="Profile Settings"
+                                >
+                                    <i className="fas fa-user-circle text-sm"></i>
+                                </button>
+                                <button 
+                                    onClick={() => setView('settings')}
+                                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${view === 'settings' ? 'bg-blue-600 text-white' : 'bg-slate-800 hover:bg-slate-700 text-slate-400'}`}
+                                    title="System Configuration"
+                                >
+                                    <i className="fas fa-cog text-xs"></i>
+                                </button>
+                            </div>
+                        </header>
+
+                        {/* Viewport Container */}
+                        <div className="flex-1 overflow-hidden p-6">
+                            {view === 'thoughts' && <ThoughtStream />}
+                            {view === 'topology' && <iframe src="/topology" title="Swarm Topology"></iframe>}
+                            {view === 'downloads' && <iframe src="http://localhost:8501" title="Download Manager"></iframe>}
+                            {view === 'improvement' && <iframe src="http://localhost:8502" title="Improvement Manager"></iframe>}
+                            {view === 'stream' && <iframe src="/stream" title="Multimedia Stream"></iframe>}
+                            {view === 'files' && <FileExplorer />}
+                            {view === 'safety' && <SafetyHub />}
+                            {view === 'profile' && <ProfileView />}
+                            {view === 'settings' && <SettingsView />}
+                        </div>
+                    </main>
+                </div>
+            );
+        }
+
+        function NavBtn({ icon, label, active, onClick }) {
+            return (
+                <button 
+                    onClick={onClick}
+                    className={`nav-btn w-full flex items-center gap-4 p-3 rounded-xl border border-transparent ${active ? 'bg-blue-600/10 border-blue-500/30 text-blue-400' : 'text-slate-400'}`}
+                >
+                    <div className="w-6 flex justify-center">
+                        <i className={`fas fa-${icon} text-lg`}></i>
+                    </div>
+                    <span className="hidden lg:block text-sm font-medium tracking-wide">{label}</span>
+                </button>
+            );
+        }
+
+        function MetricBar({ label, value, color }) {
+            return (
+                <div className="hidden lg:block px-2 mb-2">
+                    <div className="flex justify-between text-[10px] text-slate-500 mb-1 font-mono uppercase font-bold">
+                        <span>{label}</span>
+                        <span>{parseFloat(value).toFixed(1)}%</span>
+                    </div>
+                    <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
+                        <div className={`h-full ${color} transition-all duration-500`} style={{ width: `${value}%` }}></div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ThoughtStream() {
+            const [thoughts, setThoughts] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+            const [command, setCommand] = useState('');
+            
+            useEffect(() => {
+                const fetchThoughts = () => {
+                    fetch('/api/thoughts')
+                        .then(r => r.json())
+                        .then(data => {
+                            setThoughts(Array.isArray(data) ? data : []);
+                            setLoading(false);
+                            setError(null);
+                        })
+                        .catch(err => {
+                            console.error("Failed to fetch thoughts:", err);
+                            setError(err.message);
+                            setLoading(false);
+                        });
+                };
+                fetchThoughts();
+                const interval = setInterval(fetchThoughts, 2000);
+                return () => clearInterval(interval);
+            }, []);
+
+            const sendCommand = () => {
+                if (!command.trim()) return;
+                fetch('/api/command', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ command })
+                });
+                setCommand('');
+            };
+
+            const formatTime = (ts) => {
+                if (!ts) return "--:--:--";
+                try {
+                    const d = new Date(isNaN(ts) ? ts : ts * 1000);
+                    return d.toLocaleTimeString();
+                } catch (e) {
+                    return String(ts);
+                }
+            };
+
+            if (error) return <div className="text-red-500 p-10 bg-red-500/10 rounded-xl border border-red-500/20">Error: {error}</div>;
+
+            // Simple lineage calculator
+            const getDepth = (thought, all) => {
+                let depth = 0;
+                let current = thought;
+                const visited = new Set();
+                while (current.parent_id && !visited.has(current.id)) {
+                    visited.add(current.id);
+                    const parent = all.find(t => t.id === current.parent_id);
+                    if (!parent) break;
+                    depth++;
+                    current = parent;
+                }
+                return depth;
+            };
+
+            return (
+                <div className="h-full flex flex-col max-w-5xl mx-auto pb-20">
+                    <div className="flex-1 overflow-y-auto space-y-4 pr-4 custom-scrollbar">
+                        {loading && thoughts.length === 0 && <div className="text-center py-20 animate-pulse text-slate-600">Loading collective consciousness...</div>}
+                        {!loading && thoughts.length === 0 && (
+                            <div className="text-center py-20 text-slate-600">
+                                <i className="fas fa-ghost text-4xl mb-4"></i>
+                                <p>No thoughts found in reasoning chains...</p>
+                            </div>
+                        )}
+                        {thoughts.map((t, i) => {
+                            const depth = getDepth(t, thoughts);
+                            return (
+                                <div 
+                                    key={i} 
+                                    className={`p-5 rounded-2xl glass border transition-all hover:scale-[1.005] ${t.role === 'user' ? 'ml-auto border-blue-500/20 bg-blue-500/5 max-w-[80%]' : 'border-slate-800'}`}
+                                    style={{ marginLeft: t.role !== 'user' ? `${depth * 2}rem` : 'auto' }}
+                                >
+                                    <div className="flex items-center justify-between mb-3 border-b border-slate-800/50 pb-2">
+                                        <div className="flex items-center gap-2">
+                                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs ${t.role === 'user' ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                                                <i className={`fas fa-${t.role === 'user' ? 'user' : 'robot'}`}></i>
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-xs font-bold uppercase tracking-widest text-slate-500">{t.role === 'user' ? 'User' : (t.action || 'Thinking')}</span>
+                                                {t.id && <span className="text-[8px] font-mono text-slate-600 uppercase">ID: {t.id}</span>}
+                                            </div>
+                                        </div>
+                                        <span className="text-[10px] font-mono text-slate-600">{formatTime(t.timestamp)}</span>
+                                    </div>
+                                    <p className="text-slate-300 font-sans leading-relaxed text-sm whitespace-pre-wrap">{t.content || "Empty thought."}</p>
+                                    {t.parent_id && (
+                                        <div className="mt-3 pt-2 border-t border-slate-800/30 flex items-center gap-2">
+                                            <i className="fas fa-level-up-alt text-[10px] text-slate-600 rotate-90"></i>
+                                            <span className="text-[10px] text-slate-600 font-mono italic">Derived from {t.parent_id}</span>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-4xl px-8">
+                        <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800 p-1.5 rounded-2xl shadow-2xl flex items-center gap-3">
+                            <input 
+                                type="text" 
+                                value={command}
+                                onChange={(e) => setCommand(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && sendCommand()}
+                                placeholder="Command swarm node..." 
+                                className="flex-1 bg-transparent border-none focus:ring-0 text-slate-200 px-4 py-3 placeholder-slate-600 font-sans"
+                            />
+                            <button 
+                                onClick={sendCommand}
+                                className="bg-blue-600 hover:bg-blue-500 text-white w-12 h-12 rounded-xl flex items-center justify-center transition-all active:scale-95 shadow-lg shadow-blue-500/20"
+                            >
+                                <i className="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function FileExplorer() {
+            const [path, setPath] = useState('.');
+            const [items, setItems] = useState([]);
+            const [content, setContent] = useState(null);
+            const [loading, setLoading] = useState(false);
+
+            useEffect(() => {
+                fetchFiles(path);
+            }, [path]);
+
+            const fetchFiles = (p) => {
+                setLoading(true);
+                fetch(`/api/files/list?path=${encodeURIComponent(p)}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        setItems(data);
+                        setLoading(false);
+                    });
+            };
+
+            const openFile = (item) => {
+                if (item.is_dir) {
+                    setPath(item.path);
+                    setContent(null);
+                } else {
+                    fetch(`/api/files/read?path=${encodeURIComponent(item.path)}`)
+                        .then(r => r.json())
+                        .then(data => setContent(data.content));
+                }
+            };
+
+            const goBack = () => {
+                const parts = path.split('/');
+                if (parts.length > 1) {
+                    parts.pop();
+                    setPath(parts.join('/'));
+                } else if (path !== '.') {
+                    setPath('.');
+                }
+                setContent(null);
+            };
+
+            return (
+                <div className="h-full flex gap-6">
+                    {/* File List */}
+                    <div className="w-80 glass border border-slate-800 rounded-2xl flex flex-col overflow-hidden">
+                        <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+                            <span className="text-xs font-bold text-slate-500 uppercase flex items-center gap-2">
+                                <i className="fas fa-folder-open text-blue-500"></i> {path === '.' ? 'ROOT' : path}
+                            </span>
+                            {path !== '.' && (
+                                <button onClick={goBack} className="text-slate-500 hover:text-white transition-colors">
+                                    <i className="fas fa-arrow-left text-xs"></i>
+                                </button>
+                            )}
+                        </div>
+                        <div className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar">
+                            {loading ? (
+                                <div className="text-center py-10 animate-pulse text-slate-700">Scanning VFS...</div>
+                            ) : (
+                                items.map((item, i) => (
+                                    <button 
+                                        key={i} 
+                                        onClick={() => openFile(item)}
+                                        className="w-full text-left p-2.5 rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-3 group"
+                                    >
+                                        <i className={`fas fa-${item.is_dir ? 'folder text-blue-400' : 'file-code text-slate-500'} text-sm`}></i>
+                                        <span className="text-sm text-slate-400 group-hover:text-slate-200 truncate">{item.name}</span>
+                                    </button>
+                                ))
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Viewer */}
+                    <div className="flex-1 glass border border-slate-800 rounded-2xl overflow-hidden flex flex-col relative">
+                        {content ? (
+                            <pre className="flex-1 p-6 text-xs text-slate-400 font-mono overflow-auto custom-scrollbar whitespace-pre-wrap leading-relaxed selection:bg-blue-500/30">
+                                {content}
+                            </pre>
+                        ) : (
+                            <div className="flex-1 flex items-center justify-center text-slate-700 flex-col gap-4">
+                                <i className="fas fa-eye text-5xl opacity-20"></i>
+                                <p className="text-sm font-medium">Select a file to preview source</p>
+                            </div>
+                        )}
+                        <div className="absolute top-4 right-4 flex gap-2">
+                            {content && (
+                                <button onClick={() => setContent(null)} className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-all">
+                                    <i className="fas fa-times text-xs text-slate-400"></i>
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ProfileView() {
+            return (
+                <div className="h-full max-w-2xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="flex items-center gap-6">
+                        <div className="w-24 h-24 bg-blue-600 rounded-3xl flex items-center justify-center text-3xl shadow-2xl shadow-blue-500/20">
+                            <i className="fas fa-user-shield"></i>
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold">Adminstrator <span className="text-blue-500 text-sm font-light ml-2">Root Node</span></h2>
+                            <p className="text-slate-500 text-sm mt-1 uppercase tracking-tighter">Security Level: Omega-7 (Encrypted)</p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="glass p-6 rounded-2xl border border-slate-800 space-y-4">
+                            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Identity Settings</h3>
+                            <div className="space-y-3">
+                                <div>
+                                    <label className="text-[10px] text-slate-600 uppercase font-mono mb-1 block">Display Name</label>
+                                    <input type="text" defaultValue="Fleet Overseer" className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-300 focus:border-blue-500 outline-none transition-all" />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] text-slate-600 uppercase font-mono mb-1 block">Neural Signature (UID)</label>
+                                    <input type="text" readOnly value="PYA-8859-X-2026" className="w-full bg-slate-900/50 border border-slate-800 rounded-lg p-2 text-xs text-slate-500 font-mono" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="glass p-6 rounded-2xl border border-slate-800 space-y-4">
+                            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Authentication</h3>
+                            <div className="space-y-3">
+                                <button 
+                                    onClick={enrollWebAuthn}
+                                    className="w-full bg-slate-800 hover:bg-blue-600/20 border border-slate-700 hover:border-blue-500/50 p-3 rounded-xl flex items-center justify-between transition-all group"
+                                >
+                                    <span className="text-sm">Enroll Biometric Key</span>
+                                    <i className="fas fa-fingerprint text-slate-500 group-hover:text-blue-500"></i>
+                                </button>
+                                <button 
+                                    onClick={verifyWebAuthn}
+                                    className="w-full bg-slate-800 hover:bg-emerald-600/20 border border-slate-700 hover:border-emerald-500/50 p-3 rounded-xl flex items-center justify-between transition-all group"
+                                >
+                                    <span className="text-sm">Test Secure Login</span>
+                                    <i className="fas fa-key text-slate-500 group-hover:text-emerald-500"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="glass p-8 rounded-2xl border border-slate-800 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+                        <h3 className="text-sm font-bold text-slate-300 mb-6 flex items-center gap-3">
+                            <i className="fas fa-shield-halved text-blue-500"></i>
+                            E2EE Encryption Key
+                        </h3>
+                        <div className="bg-slate-950/80 p-4 rounded-xl border border-slate-800 font-mono text-[10px] text-slate-500 break-all leading-relaxed whitespace-pre-wrap">
+                            7a2d-4f1b-8e9c-3d5f-2a1c-6b7d-0e9f-4a3b-2c1d-0e9f-8a7b-6c5d-4e3f-2a1b-0c9d
+                        </div>
+                        <p className="text-[10px] text-slate-600 mt-4 uppercase italic">Note: This represents your core Double Ratchet root key. Never share it.</p>
+                    </div>
+                </div>
+            );
+        }
+
+        function SettingsView() {
+            return (
+                <div className="h-full max-w-4xl mx-auto p-4 animate-in fade-in zoom-in-95 duration-300">
+                    <div className="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 className="text-2xl font-bold">System Configuration</h2>
+                            <p className="text-slate-500 text-sm">Fine-tune the Voyager Swarm parameters and hardware abstraction.</p>
+                        </div>
+                        <button className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all">
+                            <i className="fas fa-save"></i> Commit Changes
+                        </button>
+                    </div>
+
+                    <div className="space-y-6 overflow-y-auto max-h-[calc(100vh-250px)] pr-2 custom-scrollbar">
+                        <section className="glass p-6 rounded-2xl border border-slate-800">
+                            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-6">Inference Engine</h3>
+                            <div className="grid grid-cols-2 gap-8">
+                                <div className="space-y-4">
+                                    <label className="flex items-center justify-between">
+                                        <span className="text-sm text-slate-300">Model Temperature</span>
+                                        <span className="text-blue-500 font-mono text-xs">0.7</span>
+                                    </label>
+                                    <input type="range" className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+                                </div>
+                                <div className="space-y-4">
+                                    <label className="flex items-center justify-between">
+                                        <span className="text-sm text-slate-300">Top-P Sampling</span>
+                                        <span className="text-blue-500 font-mono text-xs">0.95</span>
+                                    </label>
+                                    <input type="range" className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+                                </div>
+                            </div>
+                        </section>
+
+                        <section className="glass p-6 rounded-2xl border border-slate-800">
+                            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-6">Phase 93 Resilience</h3>
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between p-4 bg-slate-950/40 rounded-xl border border-slate-800/50">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                                            <i className="fas fa-bolt"></i>
+                                        </div>
+                                        <div>
+                                            <h4 className="text-sm font-medium">RDMA Checkpointing</h4>
+                                            <p className="text-[10px] text-slate-500">Enable zero-latency memory snapshots over NIXL.</p>
+                                        </div>
+                                    </div>
+                                    <div className="w-12 h-6 bg-blue-600 rounded-full relative">
+                                        <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-between p-4 bg-slate-950/40 rounded-xl border border-slate-800/50">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-500">
+                                            <i className="fas fa-database"></i>
+                                        </div>
+                                        <div>
+                                            <h4 className="text-sm font-medium">RAID-10 Sharding</h4>
+                                            <p className="text-[10px] text-slate-500">Distribute state across M=2 mirrors.</p>
+                                        </div>
+                                    </div>
+                                    <div className="w-12 h-6 bg-slate-800 rounded-full relative">
+                                        <div className="absolute left-1 top-1 w-4 h-4 bg-white/20 rounded-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            );
+        }
+
+        function SafetyHub() {
+            const [events, setEvents] = useState([]);
+            const [loading, setLoading] = useState(true);
+
+            useEffect(() => {
+                const fetchEvents = () => {
+                    fetch('/api/infection-guard')
+                        .then(r => r.json())
+                        .then(data => {
+                            setEvents(Array.isArray(data) ? data : []);
+                            setLoading(false);
+                        })
+                        .catch(() => setLoading(false));
+                };
+                fetchEvents();
+                const interval = setInterval(fetchEvents, 3000);
+                return () => clearInterval(interval);
+            }, []);
+
+            return (
+                <div className="h-full flex flex-col gap-6 animate-in fade-in duration-500">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h2 className="text-2xl font-bold">Infection Guard Dashboard</h2>
+                            <p className="text-slate-500 text-sm">Real-time visualization of blocked/hallucinated command propagation.</p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                                <span className="text-xs font-bold text-red-500 uppercase">Active Defense</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-2">
+                        {loading && <div className="text-center py-20 text-slate-500 animate-pulse">Scanning security logs...</div>}
+                        {!loading && events.length === 0 && (
+                            <div className="flex flex-col items-center justify-center py-20 text-slate-700">
+                                <i className="fas fa-shield-alt text-6xl opacity-10 mb-4"></i>
+                                <p>No security events detected. Swarm is clean.</p>
+                            </div>
+                        )}
+                        {events.map((ev, i) => (
+                            <div key={i} className="glass border border-red-500/20 rounded-2xl p-5 hover:bg-red-500/5 transition-all">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-500">
+                                            <i className="fas fa-biohazard"></i>
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-red-500">Infection Attempt Blocked</h4>
+                                            <p className="text-[10px] text-slate-500 uppercase font-mono">{ev.timestamp}</p>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <span className="text-[10px] font-bold px-2 py-0.5 bg-red-500 text-white rounded text-uppercase tracking-tighter">CRITICAL</span>
+                                    </div>
+                                </div>
+                                <div className="bg-slate-950/50 rounded-xl p-4 border border-slate-800 mb-3">
+                                    <p className="text-xs font-mono text-slate-400 break-all leading-relaxed">
+                                        {ev.command}
+                                    </p>
+                                </div>
+                                <div className="flex items-center justify-between text-[11px]">
+                                    <div className="flex items-center gap-4">
+                                        <span className="text-slate-500">Source: <span className="text-slate-300 font-mono">{ev.sender_id}</span></span>
+                                        <span className="text-slate-500">Policy: <span className="text-amber-500 font-bold">ANTI_HALLUCINATION_GUARD</span></span>
+                                    </div>
+                                    <span className="text-red-500/80 italic">{ev.reason}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
