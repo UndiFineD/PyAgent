@@ -15,25 +15,54 @@
 # limitations under the License.
 
 
-"""
-TimelineEvent - Simple dataclass for error timeline entries
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
+# TimelineEvent - Simple dataclass for error timeline entries
+
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
 from src.core.base.lifecycle.timeline_event import TimelineEvent
-event = TimelineEvent(timestamp="2026-02-12T21:00:00Z", event_type="created", error_id="err-1234", details="Initial occurrence")
+# event = TimelineEvent(timestamp="2026-02-12T21:00:00Z", event_type="created", error_id="err-1234", details="Initial occurrence")
 
-WHAT IT DOES:
+# WHAT IT DOES:
 Defines a minimal dataclass representing a point in an error timeline with fields timestamp, event_type, error_id, and optional details and exposes module __version__ from the package VERSION
 
-WHAT IT SHOULD DO BETTER:
+# WHAT IT SHOULD DO BETTER:
 Use timezone-aware datetime objects instead of plain strings, validate and normalize timestamps, replace event_type strings with an Enum, add serialization/deserialization helpers, add unit tests and richer docstrings
 
-FILE CONTENT SUMMARY:
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+@dataclass
+# class TimelineEvent:
+    Event in error timeline.
+
+    Attributes:
+        timestamp: When the event occurred.
+        event_type: Type of event (created, resolved, recurred).
+        error_id: Associated error ID.
+        details: Additional event details.
+    
+
+    timestamp: str
+    event_type: str
+    error_id: str
+# #     details: str =
+
 
 from __future__ import annotations
 
@@ -46,42 +75,16 @@ __version__ = VERSION
 
 @dataclass
 class TimelineEvent:
-    """Event in error timeline.
+    Event in error timeline.
 
     Attributes:
         timestamp: When the event occurred.
         event_type: Type of event (created, resolved, recurred).
         error_id: Associated error ID.
         details: Additional event details.
-    """
+    
 
     timestamp: str
     event_type: str
     error_id: str
-    details: str = ""
-"""
-
-from __future__ import annotations
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class TimelineEvent:
-    """Event in error timeline.
-
-    Attributes:
-        timestamp: When the event occurred.
-        event_type: Type of event (created, resolved, recurred).
-        error_id: Associated error ID.
-        details: Additional event details.
-    """
-
-    timestamp: str
-    event_type: str
-    error_id: str
-    details: str = ""
+# #     details: str =

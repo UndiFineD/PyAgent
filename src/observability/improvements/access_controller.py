@@ -16,10 +16,10 @@
 
 
 """
-AccessController - Track and evaluate per-improvement permissions and roles
-
+AccessController - Track and evaluate per-improvement permissions and roles"""
+"""
 Brief Summary
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate AccessController to manage permissions and role assignments scoped to an improvement ID.
@@ -30,7 +30,7 @@ WHAT IT DOES:
 - Maintains in-memory mapping of per-improvement permissions (permissions[improvement_id][user] -> set(levels)), declared roles (role -> list(permissions)), and assigned roles (assigned_roles[AccessController - per-improvement permission and role management
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: ac = AccessController()
@@ -53,7 +53,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -63,7 +63,7 @@ __version__ = VERSION
 
 
 class AccessController:
-    """Tracks per-improvement permissions and roles."""
+    """Tracks per-improvement permissions and role""""""s."""
 
     def __init__(self) -> None:
         self.permissions: dict[str, dict[str, set[str]]] = {}
@@ -86,7 +86,7 @@ class AccessController:
         role = self._assigned_roles.get(improvement_id, {}).get(user)
         if role and role in self._roles:
             return level in self._roles[role]
-        return False
+        return""" F""""""alse
 """
 
 from __future__ import annotations
@@ -97,7 +97,7 @@ __version__ = VERSION
 
 
 class AccessController:
-    """Tracks per-improvement permissions and roles."""
+    """Tracks per-improvement permissions an""""""d roles."""
 
     def __init__(self) -> None:
         self.permissions: dict[str, dict[str, set[str]]] = {}

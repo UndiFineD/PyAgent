@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from enum import Enum
@@ -26,12 +26,12 @@ __version__ = VERSION
 
 
 class FileCategory(Enum):
-    """Categories for context files."""
+""""Categories for context files."""
 
-    CODE = "code"
-    DOCUMENTATION = "documentation"
-    CONFIGURATION = "configuration"
-    TEST = "test"
-    BUILD = "build"
-    DATA = "data"
-    OTHER = "other"
+#     CODE = "code
+#     DOCUMENTATION = "documentation
+#     CONFIGURATION = "configuration
+#     TEST = "test
+#     BUILD = "build
+#     DATA = "data
+#     OTHER = "other

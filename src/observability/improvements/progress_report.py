@@ -13,10 +13,10 @@
 # limitations under the License.
 
 """
-Progress Report - ProgressReport dataclass for improvements dashboard
-
+Progress Report - ProgressReport dataclass for improvements dashboard"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import the dataclass and instantiate with report_date and counts:
@@ -34,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 

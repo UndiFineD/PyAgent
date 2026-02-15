@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from enum import Enum
@@ -26,10 +26,10 @@ __version__ = VERSION
 
 
 class ExportFormat(Enum):
-    """Formats for context export."""
+""""Formats for context export."""
 
-    MARKDOWN = "markdown"
-    HTML = "html"
-    PDF = "pdf"
-    DOCX = "docx"
-    RST = "rst"
+#     MARKDOWN = "markdown
+#     HTML = "html
+#     PDF = "pdf
+#     DOCX = "docx
+#     RST = "rst

@@ -15,11 +15,11 @@
 # limitations under the License.
 
 """
-namespaces.py - Metric Namespace Management
-
+namespaces.py - Metric Namespace Management"""
+"""
 [Brief Summary]
 A small manager class to create, delete, and organize MetricNamespace objects and to assign metrics to namespaces for hierarchical metric organization.
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.metrics.namespaces import MetricNamespaceManager
@@ -43,7 +43,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Namespaces.py module.
 """
-# Metric namespace management engine.
+# Metric namespace management engi""""""ne.
 
 from __future__ import annotations
 
@@ -53,7 +53,7 @@ from .metrics import MetricNamespace
 
 
 class MetricNamespaceManager:
-    """Manage metric namespaces for organizing large metric sets."""
+    """Manage metric namespaces for organizing large metric set""""""s."""
 
     def __init__(self) -> None:
         self.namespaces: dict[str, MetricNamespace] = {}
@@ -96,7 +96,7 @@ class MetricNamespaceManager:
             current = ns.parent if ns else None
         return " / ".join(hierarchy)
 """
-# Metric namespace management engine.
+# Metric namespace managemen""""""t engine.
 
 from __future__ import annotations
 
@@ -106,7 +106,7 @@ from .metrics import MetricNamespace
 
 
 class MetricNamespaceManager:
-    """Manage metric namespaces for organizing large metric sets."""
+    """Manage metric namespaces for organizing large metr""""""ic sets."""
 
     def __init__(self) -> None:
         self.namespaces: dict[str, MetricNamespace] = {}

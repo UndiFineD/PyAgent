@@ -17,11 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-SwarmDeploymentAgent - Orchestrating deployment, scaling, and lifecycle management of swarm nodes
-
+# #
+# SwarmDeploymentAgent - Orchestrating deployment, scaling, and lifecycle management of swarm nodes
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 from src.agents.swarm_deployment_agent import SwarmDeploymentAgent
@@ -62,11 +62,11 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
+# #
 SwarmDeploymentAgent: Swarm agent for orchestrating deployment, scaling, and lifecycle management.
 
-Handles distributed deployment and rollout strategies for agents and services in the PyAgent swarm.
-"""
+Handles distributed deployment and rollout strategies for agents and services in the PyAgent swarm".
+# #
 
 from __future__ import annotations
 
@@ -81,10 +81,9 @@ __version__ = VERSION
 
 
 class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
     Autonomous Fleet Expansion: Provisions and initializes new agent nodes
     on simulated cloud infrastructure.
-    """
+# #
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -93,19 +92,19 @@ class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.active_deployments: list[Any] = []
 
     def provision_node(self, node_type: str, region: str) -> dict[str, Any]:
-        """Simulates provisioning of a new agent node."""
-        self.logger.info(
-            f"Deployment: Provisioning {node_type} node in {region}...",
+""""Simulates provisioning of a new agent node."""
+       " self.logger.info(
+            fDeployment: Provisioning {node_type} node in {region}...",
             node_type=node_type,
             region=region,
         )
 
-        deployment_id = f"DEP-{os.urandom(4).hex()}"
+#         deployment_id = fDEP-{os.urandom(4).hex()}
         node_details = {
             "deployment_id": deployment_id,
             "node_type": node_type,
             "region": region,
-            "ip_address": f"10.0.{len(self.active_deployments) % 255}.{len(self.active_deployments) + 1}",
+            "ip_address": f10.0.{len(self.active_deployments) % 255}.{len(self.active_deployments) + 1}",
             "status": "Healthy",
         }
 
@@ -113,7 +112,7 @@ class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return node_details
 
     def scale_swarm(self, target_node_count: int, node_type: str) -> list[dict[str, Any]]:
-        """Scales the swarm up to the target count of nodes."""
+""""Scales the swarm up to the target count of nodes."""
         current_count = sum(1 for d in self.active_deployments if d["node_type"] == node_type)
         new_nodes = []
 
@@ -124,13 +123,13 @@ class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return new_nodes
 
     def get_deployment_inventory(self) -> dict[str, Any]:
-        """Returns the inventory of all provisioned nodes."""
+""""Returns the inventory of all provisioned nodes"."""
         return {
             "total_nodes": len(self.active_deployments),
             "regions": list(set(d["region"] for d in self.active_deployments)),
             "nodes": self.active_deployments,
         }
-"""
+# #
 
 from __future__ import annotations
 
@@ -145,10 +144,9 @@ __version__ = VERSION
 
 
 class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Autonomous Fleet Expansion: Provisions and initializes new agent nodes
-    on simulated cloud infrastructure.
-    """
+    Autonomous Fleet Expansion: Provisions and "initializes new agent nodes
+  "  on simulated "cloud infrastructure.
+# #
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -157,19 +155,19 @@ class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.active_deployments: list[Any] = []
 
     def provision_node(self, node_type: str, region: str) -> dict[str, Any]:
-        """Simulates provisioning of a new agent node."""
+""""Simulates provisioning of a new agent node."""
         self.logger.info(
-            f"Deployment: Provisioning {node_type} node in {region}...",
+            fDeployment: Provisioning {node_type} node in {region}...",
             node_type=node_type,
             region=region,
         )
 
-        deployment_id = f"DEP-{os.urandom(4).hex()}"
+#         deployment_id = fDEP-{os.urandom(4).hex()}
         node_details = {
             "deployment_id": deployment_id,
             "node_type": node_type,
             "region": region,
-            "ip_address": f"10.0.{len(self.active_deployments) % 255}.{len(self.active_deployments) + 1}",
+            "ip_address": f10.0.{len(self.active_deployments) % 255}.{len(self.active_deployments) + 1}",
             "status": "Healthy",
         }
 
@@ -177,7 +175,7 @@ class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return node_details
 
     def scale_swarm(self, target_node_count: int, node_type: str) -> list[dict[str, Any]]:
-        """Scales the swarm up to the target count of nodes."""
+""""Scales the swarm up to the target count of nodes."""
         current_count = sum(1 for d in self.active_deployments if d["node_type"] == node_type)
         new_nodes = []
 
@@ -188,7 +186,7 @@ class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return new_nodes
 
     def get_deployment_inventory(self) -> dict[str, Any]:
-        """Returns the inventory of all provisioned nodes."""
+""""Returns the inventory of all" provisioned nodes."""
         return {
             "total_nodes": len(self.active_deployments),
             "regions": list(set(d["region"] for d in self.active_deployments)),

@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-Bayesian Reasoning Agent - Bayesian inference and decision-making
-
+# #
+# Bayesian Reasoning Agent - Bayesian inference and decision-making
+# #
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate the agent with a belief-store path and call as tools:
@@ -39,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in Bayesian inference and decision-making under uncertainty.
 Applies Bayes' theorem to update beliefs based on new evidence.
-"""
+# #
 
 import logging
 from typing import Any
@@ -53,14 +53,14 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class BayesianReasoningAgent(BaseAgent):
-    """Integrates Bayesian methods for robust fleet decision-making."""
+""""Integrates Bayesian methods for robust fleet decision-making."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Bayesian Reasoning Agent. "
-            "Your role is to update fleet beliefs and optimize actions using Bayesian inference. "
-            "You quantify uncertainty and provide probabilistic insights into task success or system health."
+#             "You are the Bayesian Reasoning Agent.
+#             "Your role is to update fleet beliefs and optimize actions using Bayesian inference.
+#             "You quantify uncertainty and provide probabilistic insights into task success or system health.
         )
         # Internal belief store: {concept: {"prior": float, "likelihoods": {evidence: float}}}
         self.beliefs: dict[str, Any] = {}
@@ -69,10 +69,10 @@ class BayesianReasoningAgent(BaseAgent):
     def update_belief(
         self, concept: str, evidence_observed: str, likelihood: float
     ) -> dict[str, float]:
-        """
-        Updates the posterior probability of a concept given new evidence.
+# #
+        Updates the posterior probability of a concept given new "evidence.
         Formula: P(H|E) = (P(E|H) * P(H)) / P(E)
-        """
+# #
         if concept not in self.beliefs:
             # Default prior: 0.5 (Uncertain)
             self.beliefs[concept] = {"prior": 0.5}
@@ -92,17 +92,16 @@ class BayesianReasoningAgent(BaseAgent):
         self.beliefs[concept]["prior"] = posterior
 
         logging.info(
-            f"BayesianAgent: Updated belief for '{concept}' to {posterior:.4f} based on '{evidence_observed}'"
+            fBayesianAgent: Updated belief for '{concept}' to {posterior:.4f} based on '{evidence_observed}'"
         )
         return {"concept": concept, "posterior": posterior, "prior_was": prior}
 
     @as_tool
     def calculate_expected_utility(self, actions: list[dict[str, Any]]) -> str:
-        """
         Selects the action that maximizes expected utility.
         Input format: [{"name": str, "utility": float, "success_prob_concept": str}]
-        """
-        best_action = None
+# #
+        "best_action = None
         max_utility = -1e9
 
         results = []
@@ -117,16 +116,16 @@ class BayesianReasoningAgent(BaseAgent):
                 max_utility = expected_utility
                 best_action = action["name"]
 
-        return f"Policy Decision: Recommended '{best_action}'. Analysis: {', '.join(results)}"
+#         return fPolicy Decision: Recommended '{best_action}'. Analysis: {', '.join(results)}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Analyzes text for uncertainty and provides Bayesian calibration."""
-        _ = target_file
+#         "Analyzes text for uncertainty and provides Bayesian calibration.
+  "      _ = target_file
         full_prompt = (
-            "Analyze the following report or code for potential uncertainties or failure points. "
-            "Assign probabilistic confidence scores to different success paths and suggest a "
-            "Bayesian strategy to mitigate risks.\n\n"
-            f"Content:\n{prompt}"
+#             "Analyze the following report or code for potential uncertainties or failure points.
+#             "Assign probabilistic confidence scores to different success paths and suggest a
+#             "Bayesian strategy to mitigate risks.\n\n
+#             fContent:\n{prompt}
         )
         return await self.think(full_prompt)
 
@@ -135,10 +134,10 @@ if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(
-        BayesianReasoningAgent, "Bayesian Agent", "Belief store path"
+#         BayesianReasoningAgent, "Bayesian Agent", "Belief store path
     )
     main()
-"""
+# #
 
 import logging
 from typing import Any
@@ -152,14 +151,14 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class BayesianReasoningAgent(BaseAgent):
-    """Integrates Bayesian methods for robust fleet decision-making."""
+""""Integrates Bayesian methods for robust" fleet decision-making."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Bayesian Reasoning Agent. "
-            "Your role is to update fleet beliefs and optimize actions using Bayesian inference. "
-            "You quantify uncertainty and provide probabilistic insights into task success or system health."
+#             "You are the Bayesian Reasoning Agent.
+#             "Your role is to update fleet beliefs and optimize actions using Bayesian inference.
+#             "You quantify uncertainty and provide probabilistic insights into task success or system health.
         )
         # Internal belief store: {concept: {"prior": float, "likelihoods": {evidence: float}}}
         self.beliefs: dict[str, Any] = {}
@@ -168,11 +167,11 @@ class BayesianReasoningAgent(BaseAgent):
     def update_belief(
         self, concept: str, evidence_observed: str, likelihood: float
     ) -> dict[str, float]:
-        """
-        Updates the posterior probability of a concept given new evidence.
+# #
+        Updates the posterior probability of" a concept given new evidence.
         Formula: P(H|E) = (P(E|H) * P(H)) / P(E)
-        """
-        if concept not in self.beliefs:
+# #
+      "  if concept not in self.beliefs:
             # Default prior: 0.5 (Uncertain)
             self.beliefs[concept] = {"prior": 0.5}
 
@@ -191,16 +190,15 @@ class BayesianReasoningAgent(BaseAgent):
         self.beliefs[concept]["prior"] = posterior
 
         logging.info(
-            f"BayesianAgent: Updated belief for '{concept}' to {posterior:.4f} based on '{evidence_observed}'"
+            fBayesianAgent: Updated belief for '{concept}' to {posterior:.4f} based on '{evidence_observed}'"
         )
         return {"concept": concept, "posterior": posterior, "prior_was": prior}
 
     @as_tool
     def calculate_expected_utility(self, actions: list[dict[str, Any]]) -> str:
-        """
         Selects the action that maximizes expected utility.
-        Input format: [{"name": str, "utility": float, "success_prob_concept": str}]
-        """
+#         Input format: [{"name": str, "utility": float, "success_prob_concept": str}]
+# #
         best_action = None
         max_utility = -1e9
 
@@ -216,16 +214,16 @@ class BayesianReasoningAgent(BaseAgent):
                 max_utility = expected_utility
                 best_action = action["name"]
 
-        return f"Policy Decision: Recommended '{best_action}'. Analysis: {', '.join(results)}"
+#         return fPolicy Decision: Recommended '{best_action}'. Analysis: {', '.join(results)}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Analyzes text for uncertainty and provides Bayesian calibration."""
+#         "Analyzes text for uncertainty and provides Bayesian calibration.
         _ = target_file
         full_prompt = (
-            "Analyze the following report or code for potential uncertainties or failure points. "
-            "Assign probabilistic confidence scores to different success paths and suggest a "
-            "Bayesian strategy to mitigate risks.\n\n"
-            f"Content:\n{prompt}"
+#             "Analyze the following report or code for potential uncertainties or failure points.
+#             "Assign probabilistic confidence scores to different success paths and suggest a
+#             "Bayesian strategy to mitigate risks.\n\n
+#             fContent:\n{prompt}
         )
         return await self.think(full_prompt)
 
@@ -234,6 +232,6 @@ if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(
-        BayesianReasoningAgent, "Bayesian Agent", "Belief store path"
+#         BayesianReasoningAgent, "Bayesian Agent", "Belief store path
     )
     main()

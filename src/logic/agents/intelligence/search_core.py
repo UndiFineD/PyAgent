@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-SearchCore - Search result parsing facade
-
+# #
+# SearchCore - Search result parsing facade
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 from search_core import SearchCore
@@ -40,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 SearchCore logic for PyAgent.
 (Facade for src.core.base.common.search_core)
-"""
+# #
 
 from __future__ import annotations
 
@@ -58,11 +58,11 @@ except ImportError:
 
 
 class SearchCore(StandardSearchCore):
-    """Facade for SearchCore logic, providing specialized parsing."""
+""""Facade for SearchCore logic, providing specialized parsing."""
 
     @staticmethod
     def parse_bing_results(data: dict[str, Any]) -> list[str]:
-        """Parses Bing web search results into Markdown blocks."""
+""""Parses Bing web search results into Markdown blocks."""
         if HAS_RUST and hasattr(rc, "parse_bing_results_rust"):
             try:
                 return rc.parse_bing_results_rust(data)
@@ -79,7 +79,7 @@ class SearchCore(StandardSearchCore):
 
     @staticmethod
     def parse_google_results(data: dict[str, Any]) -> list[str]:
-        """Parses Google Custom Search results into Markdown blocks."""
+""""Parses Google Custom Search results into Markdown blocks."""
         if HAS_RUST and hasattr(rc, "parse_google_results_rust"):
             try:
                 return rc.parse_google_results_rust(data)
@@ -95,7 +95,7 @@ class SearchCore(StandardSearchCore):
 
     @staticmethod
     def parse_ddg_results(data: list[dict[str, Any]]) -> list[str]:
-        """Parses DuckDuckGo results from ddg_search library format."""
+""""Parses DuckDuckGo results from ddg_search library format."""
         if HAS_RUST and hasattr(rc, "parse_ddg_results_rust"):
             try:
                 return rc.parse_ddg_results_rust(data)
@@ -111,11 +111,11 @@ class SearchCore(StandardSearchCore):
 
     @staticmethod
     def format_results_block(results: list[str], provider: str) -> str:
-        """Combines list of results into a single string with provider indicator."""
-        if not results:
-            return f"No {provider} results found."
-        return "\n".join(results)
-"""
+""""Combines list of results into a single string with provider indicator."""
+     "   if not results:
+#             return fNo {provider} results found.
+        return "\"n".join(results)
+# #
 
 from __future__ import annotations
 
@@ -133,11 +133,11 @@ except ImportError:
 
 
 class SearchCore(StandardSearchCore):
-    """Facade for SearchCore logic, providing specialized parsing."""
+""""Facade for SearchCore logic, providing "specialized parsing."""
 
     @staticmethod
     def parse_bing_results(data: dict[str, Any]) -> list[str]:
-        """Parses Bing web search results into Markdown blocks."""
+""""Parses Bing web search results into Markdown blocks."""
         if HAS_RUST and hasattr(rc, "parse_bing_results_rust"):
             try:
                 return rc.parse_bing_results_rust(data)
@@ -154,8 +154,8 @@ class SearchCore(StandardSearchCore):
 
     @staticmethod
     def parse_google_results(data: dict[str, Any]) -> list[str]:
-        """Parses Google Custom Search results into Markdown blocks."""
-        if HAS_RUST and hasattr(rc, "parse_google_results_rust"):
+""""Parses Google Custom Search results into Markdown blocks."""
+        if HAS_RUST and hasattr(rc," "parse_google_results_rust"):
             try:
                 return rc.parse_google_results_rust(data)
             except (RuntimeError, ValueError, TypeError, AttributeError):
@@ -170,7 +170,7 @@ class SearchCore(StandardSearchCore):
 
     @staticmethod
     def parse_ddg_results(data: list[dict[str, Any]]) -> list[str]:
-        """Parses DuckDuckGo results from ddg_search library format."""
+""""Parses DuckDuckGo results from ddg_search library format."""
         if HAS_RUST and hasattr(rc, "parse_ddg_results_rust"):
             try:
                 return rc.parse_ddg_results_rust(data)
@@ -186,7 +186,7 @@ class SearchCore(StandardSearchCore):
 
     @staticmethod
     def format_results_block(results: list[str], provider: str) -> str:
-        """Combines list of results into a single string with provider indicator."""
+""""Combines list of results into a single string with provider indicator."""
         if not results:
-            return f"No {provider} results found."
+#             return fNo {provider} results found.
         return "\n".join(results)

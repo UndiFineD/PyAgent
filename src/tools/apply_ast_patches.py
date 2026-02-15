@@ -16,7 +16,7 @@
 apply_ast_patches.py - Apply unified-diff patches conservatively to workspace files
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Place unified-diff patch files under .external\patches_ast relative to the repository root.

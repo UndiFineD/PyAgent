@@ -16,10 +16,10 @@
 
 
 """
-schedule_status.py - ScheduleStatus enum for scheduled improvements
-
+schedule_status.py - ScheduleStatus enum for scheduled improvements"""
+"""
 Brief Summary
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import the enum and use it to represent or check the scheduling state of an improvement or task:
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -50,7 +50,7 @@ __version__ = VERSION
 
 
 class ScheduleStatus(Enum):
-    """Status of scheduled improvements."""
+    """Status of scheduled improvement""""""s."""
 
     UNSCHEDULED = "unscheduled"
     SCHEDULED = "scheduled"

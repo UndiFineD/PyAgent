@@ -18,7 +18,7 @@
 ImportCleanupMixin - Automated import resolution and normalization
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 Used by maintenance/refactor agents to scan a project tree, build a filesystem

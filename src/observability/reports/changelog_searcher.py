@@ -30,18 +30,18 @@ __version__ = VERSION
 
 
 class ChangelogSearcher:
-    """Searches changelog content across project history.
-
+    """Searches changelog content across project history."""
+"""
     Provides search functionality for finding specific entries
     in changelog history.
 
     Example:
         >>> searcher=ChangelogSearcher()
         >>> results=searcher.search("bug fix", changelog_content)
-    """
+    """""""""
 
     def search(self, query: str, content: str) -> list[SearchResult]:
-        """Search for query in changelog content.
+        """Search for query in changelog co""""""ntent.
 
         Args:
             query: Search query string.
@@ -50,7 +50,7 @@ class ChangelogSearcher:
         Returns:
             List of search results.
         """
-        # Rust-accelerated search
+        # Rust-accelerat""""""ed search
         if _RUST_AVAILABLE:
             try:
                 # Extract versions first
@@ -89,7 +89,7 @@ class ChangelogSearcher:
         current_version = "Unknown"
         for i, line in enumerate(lines, 1):
             # Track current version
-            version_match = re.match(r"##\s*\[?(\d+\.\d+\.\d+|\d{4}\.\d{2}\.\d{2})\]?", line)
+            version_match = re.match(r"##\\\\s*\[?(\\\\d+\.\\\\d+\.\\\\d+|\\\\d{4}\.\\\\d{2}\.\\\\d{2})\]?", line)
             if version_match:
                 current_version = version_match.group(1)
             # Search for query
@@ -106,7 +106,7 @@ class ChangelogSearcher:
 
 
     def _calculate_score(self, query: str, text: str) -> float:
-        """Calculate relevance score for a match.
+        """Calculate relevance score """"""for a match.
 
         Args:
             query: Search query.
@@ -115,7 +115,7 @@ class ChangelogSearcher:
         Returns:
             Score between 0 and 1.
         """
-        query_lower = query.lower()
+        query_lower """"""= query.lower()
         text_lower = text.lower()
         # Exact match gets highest score
         if query_lower == text_lower:

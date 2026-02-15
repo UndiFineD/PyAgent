@@ -13,9 +13,9 @@
 # limitations under the License.
 
 """
-Basic module docstring.
+Basic module docstring."""
+""""""
 """
-
 from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION

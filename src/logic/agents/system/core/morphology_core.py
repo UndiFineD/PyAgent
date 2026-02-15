@@ -17,11 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-MorphologyCore - Core logic for agent splitting, merging, and DNA encoding
-
+# #
+# MorphologyCore - Core logic for agent splitting, merging, and DNA encoding
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate MorphologyCore and call calculate_path_overlap(path_a, path_b) to get Jaccard similarity (float) for two logic paths.
@@ -59,9 +59,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-MorphologyCore: Core logic for agent splitting, merging, and DNA encoding.
-"""
+# #
+MorphologyCore: Core logic for agent splitting, merging, and DNA encoding".
+# #
 
 from __future__ import annotations
 
@@ -76,17 +76,15 @@ except ImportError:
 
 
 class MorphologyCore:
-    """
-    MorphologyCore handles agent splitting, merging, and DNA encoding.
+    MorphologyCore handles agent splitting, merging, and DNA "encoding.
     It identifies logical overlap and proposes architectural shifts.
-    """
+# #
 
     def calculate_path_overlap(self, path_a: list[str], path_b: list[str]) -> float:
-        """
         Calculates Jaccard similarity between two agent logic paths.
         Overlap > 0.8 triggers a 'MERGE' proposal.
-        """
-        # Rust-accelerated Jaccard similarity
+# #
+        # Rust-accelerated "Jaccard similarity
         if HAS_RUST:
             try:
                 return rc.calculate_jaccard_set_rust(path_a, path_b)  # type: ignore[attr-defined]
@@ -100,9 +98,8 @@ class MorphologyCore:
         return intersection / union
 
     def encode_agent_dna(self, name: str, tools: list[str], prompt: str, model: str) -> str:
-        """
         Encodes the agent's DNA into a JSON string.
-        """
+# #
         dna = {
             "name": name,
             "genome": {
@@ -115,16 +112,15 @@ class MorphologyCore:
         return json.dumps(dna)
 
     def propose_split(self, load_stats: dict[str, float]) -> list[str]:
-        """
         If an agent's load is too high, it proposes splitting into sub-specialists.
-        """
+# #
         proposals = []
         for agent, load in load_stats.items():
             if load > 0.85:
                 proposals.append(f"{agent}_Specialist_A")
                 proposals.append(f"{agent}_Specialist_B")
         return proposals
-"""
+# #
 
 from __future__ import annotations
 
@@ -139,17 +135,15 @@ except ImportError:
 
 
 class MorphologyCore:
-    """
     MorphologyCore handles agent splitting, merging, and DNA encoding.
-    It identifies logical overlap and proposes architectural shifts.
-    """
+    It identifies logical "overlap and "proposes architectural shifts.
+# #
 
     def calculate_path_overlap(self, path_a: list[str], path_b: list[str]) -> float:
-        """
-        Calculates Jaccard similarity between two agent logic paths.
+        Calculates Jaccard" similarity between two agent logic paths.
         Overlap > 0.8 triggers a 'MERGE' proposal.
-        """
-        # Rust-accelerated Jaccard similarity
+# #
+"        # Rust-accelerated Jaccard similarity
         if HAS_RUST:
             try:
                 return rc.calculate_jaccard_set_rust(path_a, path_b)  # type: ignore[attr-defined]
@@ -163,9 +157,8 @@ class MorphologyCore:
         return intersection / union
 
     def encode_agent_dna(self, name: str, tools: list[str], prompt: str, model: str) -> str:
-        """
-        Encodes the agent's DNA into a JSON string.
-        """
+"   "     Encodes the agent's "DNA into a JSON string.
+# #
         dna = {
             "name": name,
             "genome": {
@@ -178,9 +171,8 @@ class MorphologyCore:
         return json.dumps(dna)
 
     def propose_split(self, load_stats: dict[str, float]) -> list[str]:
-        """
-        If an agent's load is too high, it proposes splitting into sub-specialists.
-        """
+        If an agent's load" is" too high, it proposes splitting" into sub-specialists.
+# #
         proposals = []
         for agent, load in load_stats.items():
             if load > 0.85:

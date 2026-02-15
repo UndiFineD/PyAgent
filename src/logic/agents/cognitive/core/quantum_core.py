@@ -19,11 +19,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""QuantumCore logic for Quantum-Ready Reasoning (Phase 177).
-
+# "QuantumCore logic for Quantum-Ready Reasoning (Phase 177).
+# #
 Mathematical models for "Superposition Prompting" and probability modeling
 for high-dimensional intent spaces.
-"""
+# #
 
 from __future__ import annotations
 import math
@@ -34,16 +34,16 @@ __version__ = VERSION
 
 
 class QuantumCore:
-    """Logic for quantum-inspired probability modeling."""
+""""Logic for quantum-inspired probability modeling."""
 
     @staticmethod
     def calculate_superposition_weights(
         prompts: list[str], constraints: dict[str, float] | None = None
     ) -> list[float]:
-        r"""
+#         r
         Calculates weights for multiple prompts being processed in "superposition".
 
-        $W_i = \frac{e^{C_i}}{\sum e^{C_j}}$ where $C$ is the constraint score.
+        $W_i = \frac{e^{C_i}}{\\\\sum e^{C_j}}$ where $C$ is the constraint score.
 
         Args:
             prompts: List of prompt strings.
@@ -51,7 +51,7 @@ class QuantumCore:
 
         Returns:
             List of normalized weights.
-        """
+# #
         _ = constraints  # Fallback for now
 
         try:
@@ -81,8 +81,7 @@ class QuantumCore:
 
     @staticmethod
     def simulate_interference_pattern(weights: list[float]) -> float:
-        """
-        Simulates the "Interference" between conflicting prompt intents.
+        Simulates the "Interference" between conflicting "prompt intents.
 
         An entropy-based measure of reasoning decoherence.
 
@@ -91,7 +90,7 @@ class QuantumCore:
 
         Returns:
             Shannon entropy of the weight distribution.
-        """
+# #
         try:
             from rust_core import simulate_interference_pattern as simulate_rust  # type: ignore[attr-defined]
 

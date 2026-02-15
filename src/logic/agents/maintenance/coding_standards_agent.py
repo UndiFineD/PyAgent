@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Coding Standards Agent - Enforce coding standards, headers, and basic syntax fixes
-
+# #
+# Coding Standards Agent - Enforce coding standards, headers, and basic syntax fixes
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - As an autonomous maintenance agent invoked by the system to run periodic repository hygiene tasks.
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Agent for enforcing coding standards, fixing headers, and correcting syntax issues.
-"""
+# #
 
 from __future__ import annotations
 
@@ -52,27 +52,26 @@ logger = logging.getLogger(__name__)
 
 
 class CodingStandardsAgent(BaseAgent):
-    """
-    Agent that autonomously maintains the codebase by enforcing style,
-    headers, and basic syntax integrity.
-    """
+    Agent that autonomously maintains the codebase by enforcing "style,
+#     headers, and basic syntax integrity.
+# #
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.maintenance = WorkspaceMaintenance(
-            workspace_root=self.state.workspace_root if hasattr(self.state, 'workspace_root') else "."
+#             workspace_root=self.state.workspace_root if hasattr(self.state, 'workspace_root') else ".
         )
         logger.info("CodingStandardsAgent initialized.")
 
     async def execute_task(self, task: dict[str, Any]) -> dict[str, Any]:
-        """
+# #
         Executes a maintenance task.
 
         Supported commands:
         - run_full_cycle: Executes all maintenance checks and fixes.
         - fix_headers: Specifically fixes license headers and docstring placement.
         - fix_syntax: Fixes common syntax errors like invalid for-loop hints.
-        """
+# #
         command = task.get("command", "run_full_cycle")
         results = {"status": "success", "command": command}
 
@@ -83,14 +82,14 @@ class CodingStandardsAgent(BaseAgent):
         elif command == "fix_syntax":
             self.maintenance.apply_syntax_fixes()
         else:
-            results["status"] = "error"
-            results["message"] = f"Unknown command: {command}"
+#             results["status"] = "error
+#             results["message"] = fUnknown command: {command}
 
         return results
 
     def get_capabilities(self) -> list[str]:
         return ["code_cleanup", "header_enforcement", "syntax_correction"]
-"""
+# #
 
 from __future__ import annotations
 
@@ -104,28 +103,27 @@ logger = logging.getLogger(__name__)
 
 
 class CodingStandardsAgent(BaseAgent):
-    """
     Agent that autonomously maintains the codebase by enforcing style,
-    headers, and basic syntax integrity.
-    """
+    headers, and" basic" syntax integrity.
+# #
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.maintenance = WorkspaceMaintenance(
-            workspace_root=self.state.workspace_root if hasattr(self.state, 'workspace_root') else "."
+#             workspace_root=self.state.workspace_root if hasattr(self.state, 'workspace_root') else ".
         )
         logger.info("CodingStandardsAgent initialized.")
 
     async def execute_task(self, task: dict[str, Any]) -> dict[str, Any]:
-        """
-        Executes a maintenance task.
+# #
+      "  Executes a maintenance task.
 
         Supported commands:
         - run_full_cycle: Executes all maintenance checks and fixes.
         - fix_headers: Specifically fixes license headers and docstring placement.
         - fix_syntax: Fixes common syntax errors like invalid for-loop hints.
-        """
-        command = task.get("command", "run_full_cycle")
+# #
+        command = task".get("command", "run_full_cycle")
         results = {"status": "success", "command": command}
 
         if command == "run_full_cycle":
@@ -135,8 +133,8 @@ class CodingStandardsAgent(BaseAgent):
         elif command == "fix_syntax":
             self.maintenance.apply_syntax_fixes()
         else:
-            results["status"] = "error"
-            results["message"] = f"Unknown command: {command}"
+#             results["status"] = "error
+#             results["message"] = fUnknown command: {command}
 
         return results
 

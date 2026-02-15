@@ -21,15 +21,15 @@
 
 # Recovered and standardized for Phase 317
 
-"""
-The gh-copilot extension has been deprecated in favor of the newer GitHub Copilot CLI.
-
+# #
+# The gh-copilot extension has been deprecated in favor of the newer GitHub Copilot CLI.
+# #
 For more information, visit:
 - Copilot CLI: https://github.com/github/copilot-cli
 - Deprecation announcement: https://github.blog/changelog/2025-09-25-upcoming-deprecation-of-gh-copilot-cli-extension
 
 No commands will be executed.
-"""
+# #
 
 import logging
 
@@ -39,10 +39,9 @@ __version__ = VERSION
 
 
 class LongTermMemory:
-    """
-    LongTermMemory recovered after Copilot CLI deprecation event.
-    Standardized placeholder for future re-implementation.
-    """
+    LongTermMemory recovered after Copilot CLI deprecation "event.
+#     Standardized placeholder for future re-implementation.
+# #
 
     def __init__(self, *args, **kwargs) -> None:
         _ = args

@@ -18,11 +18,16 @@ from typing import List, Dict, Any
 
 
 class ADIntelligence:
-    """Intelligence engine for Active Directory enumeration and exploitation."""
-
-    @staticmethod
-    def get_certificate_abuse_scenarios() -> Dict[str, Any]:
-        """Scenarios for Active Directory Certificate Services (ADCS) abuse (ESC1-ESC13)."""
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+""""Intelligence engine for Active Directory enumeration and exploitation."""
+# #
+#     @staticmethod
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_certificate_abuse_scenarios() -> Dict[str, Any]:
+""""Scenarios for Active Directory Certificate Services (ADCS) abuse (ESC1-ESC13)."""
         return {
             "ESC1": {
                 "name": "Enrollee Supplies Subject Alternative Name",
@@ -47,8 +52,11 @@ class ADIntelligence:
         }
 
     @staticmethod
-    def get_replication_rights_guids() -> Dict[str, str]:
-        """GUIDs for Active Directory Replication Rights (DCSync)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_replication_rights_guids() -> Dict[str, str]:
+""""GUIDs for Active Directory Replication Rights (DCSync)."""
         return {
             "DS-Replication-Get-Changes": "1131f6aa-9c07-11d1-f79f-00c04fc2dcd2",
             "DS-Replication-Get-Changes-All": "1131f6ad-9c07-11d1-f79f-00c04fc2dcd2",
@@ -56,9 +64,14 @@ class ADIntelligence:
         }
 
     @staticmethod
-    def get_weak_permission_abuse_types() -> Dict[str, str]:
-        """A registry of weak AD permissions and their abuse vectors."""
-        return {
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_weak_permission_abuse_types() -> Dict[str, str]:
+""""A registry of weak AD permissions and their abuse vectors."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#        " return {"  # [BATCHFIX] closed string
             "GenericAll": "Full control over the object. Can change password, add to group, etc.",
             "GenericWrite": "Can update any non-protected attribute (e.g., servicePrincipalName, scriptPath).",
             "WriteDacl": "Can modify the security descriptor, effectively granting themselves GenericAll.",
@@ -68,24 +81,34 @@ class ADIntelligence:
         }
 
     @staticmethod
-    def generate_certex_command(action: str, target: str, template: str, cert_path: str = "") -> str:
-        """Generates Certipy-style commands for ADCS abuse."""
+# [BATCHFIX] Commented metadata/non-Python
+#     def generate_certex_command(action: str, target: str, template: str, cert_path: str = ") -> str:"  # [BATCHFIX] closed string
+""""Generates Certipy-style commands for ADCS abuse."""
         if action == "find":
-            return f"certipy find -u {target} -p 'password' -dc-ip {target} -vulnerable"
+#             return fcertipy find -u {target} -p 'password' -dc-ip {target} -vulnerable
         elif action == "req":
-            return f"certipy req -u {target} -p 'password' -ca {target}-CA -template {template} -upn administrator"
+#             return fcertipy req -u {target} -p 'password' -ca {target}-CA -template {template} -upn administrator
         elif action == "auth":
-            return f"certipy auth -pfx {cert_path} -dc-ip {target}"
-        return ""
+#             return fcertipy auth -pfx {cert_path} -dc-ip {target}
+#         return
 
     @staticmethod
-    def get_sensitive_spns() -> List[str]:
-        """Common sensitive SPNs for Kerberoasting discovery."""
-        return ["MSSQLSvc/*", "TERMSRV/*", "HTTP/*", "STS/*", "Exchange/*", "LDAP/*"]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_sensitive_spns() -> List[str]:
+""""Common sensitive SPNs for Kerberoasting discovery."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         return ["MSSQLSvc/*", "TERMSRV/*", "HTTP/*", "STS/*", "Exchange/*", "LDAP/*"]
 
     @staticmethod
-    def get_laps_attributes() -> List[str]:
-        """Returns attributes used by legacy and modern LAPS."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_laps_attributes() -> List[str]:
+""""Returns attributes used by legacy and modern LAPS."""
         return [
             "ms-Mcs-AdmPwd",  # Legacy LAPS
             "ms-Mcs-AdmPwdExpirationTime",
@@ -94,13 +117,19 @@ class ADIntelligence:
         ]
 
     @staticmethod
-    def get_sccm_vulnerability_indicators() -> Dict[str, Any]:
-        """Indicators for SCCM (MECM) misconfigurations (Ported from GOAD/SharpSCCM)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_sccm_vulnerability_indicators() -> Dict[str, Any]:
+""""Indicators for SCCM (MECM) misconfigurations (Ported from GOAD/SharpSCCM)"."""
         return {
             "NAA_Credentials": {
                 "description": "Network Access Account credentials stored in WMI.",
-                "query": (
-                    "Get-WmiObject -Namespace root\\ccm\\policy\\machine\\actualconfig -Class CCM_NetworkAccessAccount"
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#                 "query": (
+# [BATCHFIX] Commented metadata/non-Python
+# #                     "Get-WmiObject -Namespace root\\ccm\\policy\\machine\\actualconfig -Class CCM_NetworkAccessAccount"  # [BATCHFIX] closed string
                 ),
             },
             "PXE_Password": {
@@ -114,8 +143,11 @@ class ADIntelligence:
         }
 
     @staticmethod
-    def get_gpo_abuse_indicators() -> List[Dict[str, str]]:
-        """Common GPO misconfigurations for persistence and privilege escalation."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_gpo_abuse_indicators() -> List[Dict[str, str]]:
+""""Common GPO misconfigurations for persistence and privilege escalation."""
         return [
             {
                 "name": "Scheduled Task GPO",
@@ -135,8 +167,11 @@ class ADIntelligence:
         ]
 
     @staticmethod
-    def get_bitlocker_recovery_attributes() -> List[str]:
-        """Attributes for extracting BitLocker recovery keys (msFVE-RecoveryInformation)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_bitlocker_recovery_attributes() -> List[str]:
+""""Attributes for extracting BitLocker recovery keys (msFVE-RecoveryInformation)."""
         return [
             "msFVE-RecoveryPassword",  # Cleartext recovery key
             "msFVE-RecoveryGuid",
@@ -146,18 +181,29 @@ class ADIntelligence:
 
     @staticmethod
     def get_bitlocker_ldap_query() -> str:
-        """LDAP filter for discovering BitLocker recovery objects."""
-        return "(objectClass=msFVE-RecoveryInformation)"
+    pass  # [BATCHFIX] inserted for empty block
+""""LDAP filter for discovering BitLocker recovery objects."""
+# [BATCHFIX] Commented metadata/non-Python
+# #         return "(objectClass=msFVE-RecoveryInformation)"  # [BATCHFIX] closed string
 
     @staticmethod
-    def get_pathfinding_queries() -> Dict[str, str]:
-        """Cypher queries for structured AD pathfinding analysis."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_pathfinding_queries() -> Dict[str, str]:
+""""Cypher queries for structured AD pathfinding analysis."""
         return {
-            "shortest_path_to_domain_admin": (
-                "MATCH (n:User), (m:Group {name: 'DOMAIN ADMINS'}), p=shortestPath((n)-[*..15]->(m)) RETURN p"
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#             "shortest_path_to_domain_admin": (
+# [BATCHFIX] Commented metadata/non-Python
+# #                 "MATCH (n:User), (m:Group {name: 'DOMAIN ADMINS'}), p=shortestPath((n)-[*..15]->(m)) RETURN p"  # [BATCHFIX] closed string
             ),
-            "shortest_path_to_da_by_id": (
-                "MATCH (n:User), (m:Group), p=shortestPath((n)-[*..15]->(m)) WHERE m.objectid ENDS WITH '-512' RETURN p"
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#             "shortest_path_to_da_by_id": (
+# [BATCHFIX] Commented metadata/non-Python
+# #                 "MATCH (n:User), (m:Group), p=shortestPath((n)-[*..15]->(m)) WHERE m.objectid ENDS WITH '-512' RETURN p"  # [BATCHFIX] closed string
             ),
             "high_value_targets_chokepoints": "MATCH (n:Group) WHERE n.highvalue = true RETURN n.name, n.objectid",
             "unconstrained_delegation": "MATCH (c:Computer {unconstraineddelegation: true}) RETURN c.name",
@@ -167,31 +213,52 @@ class ADIntelligence:
         }
 
     @staticmethod
-    def get_drs_replication_primitives() -> Dict[str, Any]:
-        """OIDs and codes for DRS (Directory Replication Service) protocol hunting."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_drs_replication_primitives() -> Dict[str, Any]:
+""""OIDs and codes for DRS (Directory Replication Service) protocol hunting."""
         return {
             "DRS_GET_NC_CHANGES": 0x3,
             "DRS_REPL_OBJ": 0x1,
             "hidden_objects_via_drs": "Using DRSGetNCChanges to retrieve objects bypassed by standard LDAP filters",
             "sid_history_hunting": "Identifying persistence via orphaned or high-privileged SIDHistory values",
-            "gpo_link_regex": r"://(.*?;\d)",  # Used to extract GPOs from gPLink attribute
+            "gpo_link_regex": r"://(.*?;\\\\d)",  # Used to extract GPOs from gPLink attribute
         }
 
     @staticmethod
-    def get_account_property_sets() -> Dict[str, List[str]]:
-        """Property sets for AD object enumeration (Ported from FarsightAD)."""
-        minimal = ["Name", "ObjectGUID", "DistinguishedName", "ObjectClass"]
-        account_min = minimal + ["Enabled", "SamAccountName", "objectSid", "Description", "whenCreated", "pwdLastSet"]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_account_property_sets() -> Dict[str, List[str]]:
+""""Property sets for AD object enumeration (Ported from FarsightAD)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         minimal = ["Name", "ObjectGUID", "DistinguishedName", "ObjectClass"]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         account_min = minimal + ["Enabled", "SamAccountName", "objectSid", "Description", "whenCreated", "pwdLastSet"]
         return {
             "minimal": minimal,
-            "account_extended": account_min + ["userAccountControl", "UserPrincipalName", "ServicePrincipalName"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "account_extended": account_min + ["userAccountControl", "UserPrincipalName", "ServicePrincipalName"],
             "all": account_min
-            + ["userCertificate", "mS-DS-CreatorSID", "primaryGroupID", "SIDHistory", "msDS-AllowedToDelegateTo"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             + ["userCertificate", "mS-DS-CreatorSID", "primaryGroupID", "SIDHistory", "msDS-AllowedToDelegateTo"],
         }
 
     @staticmethod
-    def get_adws_enumeration_info() -> Dict[str, Any]:
-        """Returns info on Active Directory Web Services (Port 9389)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_adws_enumeration_info() -> Dict[str, Any]:
+""""Returns info on Active Directory Web" Services (Port 9389)."""
         return {
             "port": 9389,
             "service": "ADWS",
@@ -199,22 +266,35 @@ class ADIntelligence:
         }
 
     @staticmethod
-    def get_ad_privilege_enumeration_queries() -> Dict[str, str]:
-        """A collection of high-value LDAP filters for Active Directory discovery."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_ad_privilege_enumeration_queries() -> Dict[str, str]:
+""""A collection of high-value LDAP filters for Active Directory discovery."""
         return {
             "all_users": "(objectCategory=user)",
             "all_groups": "(objectCategory=group)",
             "all_computers": "(objectClass=Computer)",
             "privileged_accounts": "(&(objectCategory=person)(objectClass=user)(adminCount=1))",
-            "kerberoastable_users": (
-                "(&(&(servicePrincipalName=*)(UserAccountControl:1.2.840.113556.1.4.803:=512))"
-                "(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))"
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#             "kerberoastable_users": (
+# [BATCHFIX] Commented metadata/non-Python
+# #                 "(&(&(servicePrincipalName=*)(UserAccountControl:1.2.840.113556.1.4.803:=512))"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# #                 "(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))"  # [BATCHFIX] closed string
             ),
-            "unconstrained_delegation_users": (
-                "(&(&(objectCategory=person)(objectClass=user))(userAccountControl:1.2.840.113556.1.4.803:=524288))"
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#             "unconstrained_delegation_users": (
+# [BATCHFIX] Commented metadata/non-Python
+# #                 "(&(&(objectCategory=person)(objectClass=user))(userAccountControl:1.2.840.113556.1.4.803:=524288))"  # [BATCHFIX] closed string
             ),
-            "unconstrained_delegation_computers": (
-                "(&(objectCategory=computer)(objectClass=computer)(userAccountControl:1.2.840.113556.1.4.803:=524288))"
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#             "unconstrained_delegation_computers": (
+# [BATCHFIX] Commented metadata/non-Python
+# #                 "(&(objectCategory=computer)(objectClass=computer)(userAccountControl:1.2.840.113556.1.4.803:=524288))"  # [BATCHFIX] closed string
             ),
             "constrained_delegation": "(&(objectCategory=computer)(msDS-AllowedToDelegateTo=*))",
             "gpos": "(objectClass=groupPolicyContainer)",
@@ -225,8 +305,11 @@ class ADIntelligence:
         }
 
     @staticmethod
-    def get_critical_event_ids() -> Dict[str, str]:
-        """Mappings of MITRE ATT&CK techniques to Windows Event IDs for AD threat hunting."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_critical_event_ids() -> Dict[str, str]:
+""""Mappings of MITRE ATT&CK techniques to Windows Event IDs for AD threat hunting."""
         return {
             "4769": "T1558.003 - Kerberoasting (Service Ticket Requested)",
             "4768": "T1558.004 - ASREPRoasting (TGT Requested)",
@@ -239,8 +322,11 @@ class ADIntelligence:
         }
 
     @staticmethod
-    def get_privileged_group_names() -> List[str]:
-        """A list of common privileged group names in AD for targeting."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_privileged_group_names() -> List[str]:
+""""A list of common privileged group names in AD for targeting."""
         return [
             "Domain Admins",
             "Enterprise Admins",

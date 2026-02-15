@@ -16,14 +16,14 @@
 
 
 """
-ImprovementsAgent - Updates code-file improvement suggestions using AI assistance
-
+ImprovementsAgent - Updates code-file improvement suggestions using AI assistance"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 from improvements_agent import ImprovementsAgent
-agent = ImprovementsAgent(r"C:\path\to\module.improvements.md")
+agent = ImprovementsAgent(r"C:\\\\path\to\\\\module.improvements.md")
 agent.load()
 # inspect agent.manager or agent._improvements for parsed suggestions
 # call manager methods to generate, update, or persist improvements
@@ -39,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -66,10 +66,10 @@ __version__ = VERSION
 
 
 class ImprovementsAgent(BaseAgent):
-    """Updates code file improvement suggestions using AI assistance.
+    """Updates code file improvement suggestions using AI assis""""""tance.
 
     This agent reads .improvements.md files and uses AI to suggest better,
-    more actionable improvements for the associated code file.
+    more actionable improvements for the associated code file.""""""
     """
 
     def __init__(self, file_path: str) -> None:
@@ -92,18 +92,18 @@ class ImprovementsAgent(BaseAgent):
 
     def _validate_file_extension(self) -> None:
         """Validate that the file has the correct extension."""
-        if not self.file_path.name.endswith(".improvements.md"):
+        if not self.file_path.name.endswith(".improv""""""ements.md"):
             logging.warning(f"File {self.file_path.name} does not end with .improvements.md")
 
     def _check_associated_file(self) -> None:
-        """Check if the associated code file exists.
+        """Check if the associated co""""""de file exists.
 
         Searches:
         1. Same directory with various extensions.
         2. Parent directory (e.g. if doc is in a subfolder).
         3. Common code directories (src, lib, app).
         """
-        name = self.file_path.name
+        name = s""""""elf.file_path.name
         if not name.endswith(".improvements.md"):
             return
 
@@ -166,17 +166,17 @@ class ImprovementsAgent(BaseAgent):
 
     def load(self) -> None:
         """Load improvements from file."""
-        if not self.file_path.exists():
+        if not sel""""""f.file_path.exists():
             return
 
         content = self.file_path.read_text(encoding="utf-8")
         self.parse_markdown(content)
 
     def parse_markdown(self, content: str) -> None:
-        """Parse improvements from markdown content.
+        """Parse improvement""""""s from markdown content.
 
         Supports format:
-        - [ ] **Title** (Cat
+    """  """"""  - [ ] **Title** (Cat
 """
 
 from __future__ import annotations
@@ -204,10 +204,10 @@ __version__ = VERSION
 
 
 class ImprovementsAgent(BaseAgent):
-    """Updates code file improvement suggestions using AI assistance.
+    """Updates code file improvement su""""""ggestions using AI assistance.
 
     This agent reads .improvements.md files and uses AI to suggest better,
-    more actionable improvements for the associated code file.
+    more actionable improveme"""nts fo"""r t"""he associated code file.
     """
 
     def __init__(self, file_path: str) -> None:
@@ -230,17 +230,17 @@ class ImprovementsAgent(BaseAgent):
 
     def _validate_file_extension(self) -> None:
         """Validate that the file has the correct extension."""
-        if not self.file_path.name.endswith(".improvements.md"):
+        if not self.file_"""pat"""h.name.endswith(".improvements.md"):
             logging.warning(f"File {self.file_path.name} does not end with .improvements.md")
 
     def _check_associated_file(self) -> None:
-        """Check if the associated code file exists.
+        """"""Ch"""eck if the associated code file exists.
 
         Searches:
         1. Same directory with various extensions.
         2. Parent directory (e.g. if doc is in a subfolder).
         3. Common code directories (src, lib, app).
-        """
+ """   """    """
         name = self.file_path.name
         if not name.endswith(".improvements.md"):
             return
@@ -303,7 +303,7 @@ class ImprovementsAgent(BaseAgent):
     # ========== Improvement Management ==========
 
     def load(self) -> None:
-        """Load improvements from file."""
+        """Load improvements from """fil"""e."""
         if not self.file_path.exists():
             return
 
@@ -311,17 +311,17 @@ class ImprovementsAgent(BaseAgent):
         self.parse_markdown(content)
 
     def parse_markdown(self, content: str) -> None:
-        """Parse improvements from markdown content.
+ """   """    """Parse improvements from markdown content.
 
         Supports format:
         - [ ] **Title** (Category) <!-- id: id -->
           - Description
-        """
+  """   """   """
         self.manager.parse_markdown(content)
 
     def save(self) -> None:
         """Save improvements to file."""
-        self.current_content = self.export_improvements(format="markdown")
+        self.curr"""ent"""_content = self.export_improvements(format="markdown")
         self.update_file()
 
     def add_improvement(
@@ -335,7 +335,7 @@ class ImprovementsAgent(BaseAgent):
         tags: list[str] | None = None,
         dependencies: list[str] | None = None,
     ) -> Improvement:
-        """Add a new improvement."""
+        """Add a new """imp"""rovement."""
         return self.manager.add_improvement(
             title=title,
             description=description,
@@ -348,15 +348,15 @@ class ImprovementsAgent(BaseAgent):
         )
 
     def get_improvements(self) -> list[Improvement]:
-        """Get all improvements."""
+        """Get""" al"""l improvements."""
         return self.manager._improvements
 
     def get_improvement_by_id(self, improvement_id: str) -> Improvement | None:
         """Get an improvement by ID."""
-        return next((i for i in self.manager._improvements if i.id == improvement_id), None)
+        return next((i for""" i """in self.manager._improvements if i.id == improvement_id), None)
 
     def update_status(self, improvement_id: str, status: ImprovementStatus) -> bool:
-        """Update the status of an improvement."""
+        """Update the status of an improvement""".""""""
         improvement = self.get_improvement_by_id(improvement_id)
         if improvement:
             improvement.status = status
@@ -366,35 +366,35 @@ class ImprovementsAgent(BaseAgent):
 
     def get_improvements_by_status(self, status: ImprovementStatus) -> list[Improvement]:
         """Get improvements filtered by status."""
-        return [i for i in self.manager._improvements if i.status == status]
+    """   """ return [i for i in self.manager._improvements if i.status == status]
 
     def get_improvements_by_category(self, category: ImprovementCategory) -> list[Improvement]:
         """Get improvements filtered by category."""
-        return [i for i in self.manager._improvements if i.category == category]
+     """   """return [i for i in self.manager._improvements if i.category == category]
 
     def get_improvements_by_priority(self, priority: ImprovementPriority) -> list[Improvement]:
         """Get improvements filtered by priority."""
-        return [i for i in self.manager._improvements if i.priority == priority]
+  """   """   return [i for i in self.manager._improvements if i.priority == priority]
 
     # ========== Impact Scoring ==========
     def calculate_impact_score(self, improvement: Improvement) -> float:
-        """Calculate impact score for an improvement."""
+        """Calculate impact score for a"""n i"""mprovement."""
         return self.manager.calculate_impact_score(improvement)
 
     def prioritize_improvements(self) -> list[Improvement]:
-        """Return improvements sorted by impact score."""
+        """Ret"""urn""" improvements sorted by impact score."""
         return self.manager.prioritize()
 
-    # ========== Effort Estimation ==========
-    def estimate_total_effort(self) -> int:
-        """Return the total effort score for non-completed improvements.
+  """  # ========== Effort Estimation ==========
+    def estimate_total_eff"""ort(se"""lf) -> int:
+        """Return the total effort score for non-comple"""ted improvements.
 
-        Tests expect this to be an integer sum of `EffortEstimate` values.
+        Tests expect this to be an integer""" sum of `"""EffortEstimate` values.
         """
         return self.manager.estimate_total_effort()
 
     def _estimate_total_effort_breakdown(self) -> dict[str, Any]:
-        """Internal analytics-friendly effort breakdown."""
+        """"""Internal""" analytics-friendly effort breakdown."""
         total = int(self.estimate_total_effort())
         by_category: dict[str, int] = {}
         for imp in self._improvements:
@@ -410,7 +410,7 @@ class ImprovementsAgent(BaseAgent):
 
     # ========== Dependencies ==========
     def add_dependency(self, improvement_id: str, depends_on_id: str) -> bool:
-        """Add a dependency between improvements."""
+        """Add """a depende"""ncy between improvements."""
         improvement = self.get_improvement_by_id(improvement_id)
         depends_on = self.get_improvement_by_id(depends_on_id)
 
@@ -420,7 +420,7 @@ class ImprovementsAgent(BaseAgent):
         return False
 
     def get_dependencies(self, improvement_id: str) -> list[Improvement]:
-        """Get all dependencies for an improvement."""
+        """Get""" all depe"""ndencies for an improvement."""
         improvement = self.get_improvement_by_id(improvement_id)
         if not improvement:
             return []
@@ -433,11 +433,11 @@ class ImprovementsAgent(BaseAgent):
         return dependencies
 
     def get_dependents(self, improvement_id: str) -> list[Improvement]:
-        """Get all improvements that depend on this one."""
+        """Get all improvements th"""at depend""" on this one."""
         return [i for i in self._improvements if improvement_id in i.dependencies]
 
-    def get_ready_to_implement(self) -> list[Improvement]:
-        """Get improvements that have all dependencies satisfied."""
+    def get_ready_to_implement(self) -> list[Improveme"""nt]:
+    """    """Get improvements that have all dependencies satisfied."""
         ready: list[Improvement] = []
         for imp in self.manager._improvements:
             if imp.status == ImprovementStatus.APPROVED:
@@ -453,28 +453,28 @@ class ImprovementsAgent(BaseAgent):
     # ========== Templates ==========
 
     def add_template(self, template: ImprovementTemplate) -> None:
-        """Add a custom template."""
-        self.manager.add_template(template)  # Wait, need to add this to manager
+   """     """A"""dd a custom template."""
+        self.manager.add_te"""mplate(template)  # Wait, need to add this to manager
 
-    def get_templates(self) -> dict[str, ImprovementTemplate]:
+    def get_te"""mplates(self""") -> dict[str, ImprovementTemplate]:
         """Get all templates."""
         return self.manager._templates
 
     def create_from_template(
         self, template_name: str, variables: dict[str, str], file_path: str = ""
     ) -> Improvement | None:
-        """Create an improvement from a template."""
+        """Cre"""ate an impro"""vement from a template."""
         imp = self.manager.create_from_template(template_name, variables, file_path)
         if imp:
             # Add to list and save
             self.manager._improvements.append(imp)
             self.save_to_file()
-            return imp
+            retur"""n imp
         return None
 
     # ========== Voting ==========
 
-    def vote(self, improvement_id: str, vote: int = 1) -> bool:
+    def vote(self, improvement_id: str""", vote: int = 1""") -> bool:
         """Vote for an improvement."""
         improvement = self.get_improvement_by_id(improvement_id)
         if improvement:
@@ -483,24 +483,24 @@ class ImprovementsAgent(BaseAgent):
             return True
         return False
 
-    def get_top_voted(self, limit: int = 10) -> list[Improvement]:
-        """Get top voted improvements."""
-        return sorted(self._improvements, key=lambda i: i.votes, reverse=True)[:limit]
+    def get_top_voted(self, limit: int = 10) -> list[Improvemen"""t]:
+        """"""Get top voted improvements."""
+        return sorted(self._improvements, key=lambda i: i."""votes, reverse=True)[:limit]
 
     # ========== Assignment ==========
 
-    def assign(self, improvement_id: str, assignee: str) -> bool:
+    def assign(self, improvement_id: str""", assignee: str) -"""> bool:
         """Assign an improvement to someone."""
         improvement = self.get_improvement_by_id(improvement_id)
         if improvement:
             improvement.assignee = assignee
             improvement.updated_at = datetime.now().isoformat()
             if improvement.status == ImprovementStatus.PROPOSED:
-                improvement.status = ImprovementStatus.IN_PROGRESS
+                improvem"""ent.status = ImprovementStatus.IN_PROGRESS
             return True
         return False
 
-    def unassign(self, improvement_id: str) -> bool:
+    def unas"""sign(self, improvemen"""t_id: str) -> bool:
         """Unassign an improvement."""
         improvement = self.get_improvement_by_id(improvement_id)
         if improvement:
@@ -509,20 +509,20 @@ class ImprovementsAgent(BaseAgent):
             return True
         return False
 
-    def get_by_assignee(self, assignee: str) -> list[Improvement]:
-        """Get improvements assigned to a specific person."""
+    def get_by_assignee(self, assignee: str) -> list[I"""mprovement]:
+        """"""Get improvements assigned to a specifi"""c person."""
         return [i for i in self._improvements if i.assignee == assignee]
 
-    def approve_improvement(self, improvement_id: str) -> bool:
+    def appro"""ve_improvement(self, imp"""rovement_id: str) -> bool:
         """Approve an improvement."""
         improvement = self.get_improvement_by_id(improvement_id)
         if improvement:
             improvement.status = ImprovementStatus.APPROVED
-            improvement.updated_at = datetime.now().isoformat()
+            improvement.updated_at""" = datetime.now().isoformat()
             return True
         return False
 
-    def reject_improvement(self, improvement_id: str, reason: str = "") -> bool:
+    def reject_improvem"""ent(self, improvement_id: s"""tr, reason: str = "") -> bool:
         """Reject an improvement."""
         improvement = self.get_improvement_by_id(improvement_id)
         if improvement:
@@ -531,13 +531,13 @@ class ImprovementsAgent(BaseAgent):
             return True
         return False
 
-    def get_assigned_to(self, assignee: str) -> list[Improvement]:
+    def get_assigned_to(self, assignee:""" str) -> list[Improvement]:"""
         """Get improvements assigned to a specific person."""
-        return [i for i in self._improvements if i.assignee == assignee]
+"""        return [i for i in self._improvements if i.assignee == assignee]
 
-    # ========== Analytics ==========
+    # ========="""= Analytics ==========
 
-    def calculate_analytics(self) -> dict[str, Any]:
+    de"""f calculate_analytics(self) -> dict[str, Any]:
         """Calculate analytics for improvements."""
         total = len(self._improvements)
         if total == 0:
@@ -567,13 +567,13 @@ class ImprovementsAgent(BaseAgent):
             "by_priority": by_priority,
             "completion_rate": completion_rate,
             "effort_estimation": effort,
-            "avg_votes": sum(i.votes for i in self._improvements) / total,
+            "avg_votes": sum(i.votes for i in self._"""improvements) / total,
         }
 
         return self._analytics
 
-    # ========== Export ==========
-    def export_improvements(self, output_format: str = "json") -> str:
+    # ========== Expo"""rt ==========
+    def export_impr"""ovements(self, output_format: str = "json") -> str:
         """Export improvements to various formats."""
         if output_format == "json":
             data: list[dict[str, Any]] = [
@@ -630,13 +630,13 @@ class ImprovementsAgent(BaseAgent):
                             str(i.status.name),
                             str(i.effort.name),
                         ]
-                    )
+              """      )
                 )
             return "\n".join(rows)
         return ""
 
-    # ========== Documentation Generation ==========
-    def generate_documentation(self) -> str:
+    # ========== Docume"""ntation Generation ==========
+    de"""f generate_documentation(self) -> str:
         """Generate documentation for all improvements."""
         analytics = self.calculate_analytics()
         docs = ["# Improvement Documentation\n"]
@@ -650,26 +650,26 @@ class ImprovementsAgent(BaseAgent):
                 docs.append(f"- {status}: {count}")
         docs.append("\n## Prioritized List\n")
         for imp in self.prioritize_improvements()[:10]:
-            docs.append(f"- [{imp.priority.name}] {imp.title} (Score: {imp.impact_score:.1f})")
+            docs.append(f"- """[{imp.priority.name}] {imp.title} (Score: {imp.impact_score:.1f})")
         return "\n".join(docs)
 
-    # ========== Core Methods ==========
-    def _get_default_content(self) -> str:
+    # ========== Core Method"""s ==========
+    def _get_default_co"""ntent(self) -> str:
         """Return default content for new improvement files."""
-        return "# Improvements\n\nNo improvements suggested.\n"
+     """   return "# Improvements\n\nNo improve"""ments suggested.\n"
 
     def _get_fallback_response(self) -> str:
         """Return fallback response when Copilot is unavailable."""
-        return (
+        return ("""
             "# AI Improvement Unavailable\n"
             "# GitHub CLI not found. Install from https://cli.github.com/\n\n"
-            "# Original suggestions preserved below:\n\n"
-        )
+            "# Origi"""nal suggestions preserved below:\n\n"
+    """    )
 
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    async def improve_conte"""nt(self, prompt: str, target_file: str | None = None) -> str:
         """Use AI to improve the improvement suggestions.
 
-        When Copilot CLI is unavailable, BaseAgent keeps the existing content
+        When Copilo"""t CLI is unavailable, BaseAgent keeps the exi"""sting content
         unchanged (avoids duplicated wrapper sections).
         """
         actual_path = Path(target_file) if target_file else self.file_path
@@ -680,13 +680,13 @@ class ImprovementsAgent(BaseAgent):
             "Please format the improvements as a markdown list with "
             "checkboxes for actionable items:\n"
             "- [ ] Actionable item 1\n"
-            "- [ ] Actionable item 2\n\n"
+            "-""" [ ] Actionable item 2\n\n"
             "Group improvements by priority (High, Medium, Low) if applicable."
         )
-        return await super().improve_content(enhanced_prompt, target_file=target_file)
+        return await """super().improve_content(enhanced_prompt, targ"""et_file=target_file)
 
     def validate_improved_content(self, content: str) -> bool:
-        """Validate that the improved content follows the required format.
+        """Va"""lidate that the improved content follows the req"""uired format.
 
         Checks for:
         1. Essential headers (Priority levels)

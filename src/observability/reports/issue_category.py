@@ -13,12 +13,11 @@
 # limitations under the License.
 
 """
-IssueCategory - Enum for classifying code issues
-
+IssueCategory - Enum for classifying code issues"""
+"""
 [Brief Summary]
 A small, focused enum that centralizes canonical issue categories used across reporting and analysis subsystems. Keeps category strings consistent and versioned via the project's VERSION constant.
-
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 from issue_category import IssueCategory
@@ -37,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -49,7 +48,7 @@ __version__ = VERSION
 
 
 class IssueCategory(Enum):
-    """Category of code issue."""
+    """Category of code issu""""""e."""
 
     SYNTAX = "syntax"
     TYPE_ANNOTATION = "type_annotation"

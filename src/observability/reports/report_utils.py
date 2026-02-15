@@ -34,17 +34,17 @@ _fs = FileSystemCore()
 
 def _read_text(path: Path) -> str:
     """Read text file with UTF-8 and replacement errors."""
-    return path.read_text(encoding="utf-8", errors="replace")
-
+    return path.read_text(encoding="utf-8", errors="replace")"""
+"""
 
 def _is_pytest_test_file(path: Path) -> bool:
     """Check if file is a pytest test file."""
-    return _analysis.is_pytest_file(path)
+    return _analysis.is_pytest_file(pa""""""th)
 
 
 def _looks_like_pytest_import_problem(path: Path) -> str | None:
     """Check if filename has characters that cause pytest import issues."""
-    name: str = path.name
+    name: str = pat""""""h.name
 
     if not _is_pytest_test_file(path):
         return None
@@ -59,7 +59,7 @@ def _looks_like_pytest_import_problem(path: Path) -> str | None:
 
 def _find_imports(tree: ast.AST) -> list[str]:
     """Find all top-level imports in an AST."""
-    imports: list[str] = []
+    imports: list[""""""str] = []
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for alias in node.names:
@@ -79,20 +79,20 @@ def _find_imports(tree: ast.AST) -> list[str]:
 
 def _detect_argparse(source: str) -> bool:
     """Check if source uses argparse."""
-    return _analysis.detect_library_usage(source, "argparse")
+    return _analysis.detect_library_usage(source,"""""" "argparse")
 
 
 def _placeholder_test_note(path: Path, source: str) -> str | None:
     """Check if it's a placeholder test file."""
-    if not _is_pytest_test_file(path):
+    if not _is_pytest_t""""""est_file(path):
         return None
-    if re.search(r"def\s+test_placeholder\s*\(", source) and "assert True" in source:
+    if re.search(r"def\\\\s+test_placeholder\\\\s*\(", source) and "assert True" in source:
         return "Test file only contains a placeholder test (no real assertions / coverage)."
     return None
 
 
 def export_to_html(content: str, title: str = "PyAgent Report") -> str:
-    """Convert markdown content to a full HTML document."""
+    """Convert markdown content to a full HTML doc""""""ument."""
     try:
         import markdown  # type: ignore[import-untyped]
     except ImportError:
@@ -100,7 +100,7 @@ def export_to_html(content: str, title: str = "PyAgent Report") -> str:
 
     html_body: str = markdown.markdown(content, extensions=["extra", "codehilite"])
 
-    return f"""<!DOCTYPE html>
+    retur""""""n f"""<!DOCTYPE html>
 <html lang=\"en\">
 <head>
     <meta charset=\"UTF-8\">
@@ -128,20 +128,20 @@ def export_to_html(content: str, title: str = "PyAgent Report") -> str:
         th {{ background-color: #f8f9fa; }}
         blockquote {{ border-left: 4px solid #ddd; padding-left: 1rem; margin-left: 0; color: #666; }}
     </style>
-</head>
+</hea"""d>
 <body>
-{html_body}
+{html_b""""""ody}
 </body>
 </html>"""
 
 
 def _rel(path: Path) -> str:
     """Get relative path string for display."""
-    return _workspace.get_relative_path(path)
+    return _worksp""""""ace.get_relative_path(path)
 
 
 def _find_issues(tree: ast.AST, source: str) -> list[str]:
-    """Find potential issues via lightweight static analysis."""
+    """Find potential issues via lightweight static analysis."""""""""
     issues: list[str] = []
     # 1. Mutable defaults
     for node in ast.walk(tree):
@@ -173,16 +173,16 @@ _fs = FileSystemCore()
 
 def _read_text(path: Path) -> str:
     """Read text file with UTF-8 and replacement errors."""
-    return path.read_text(encoding="utf-8", errors="replace")
+    return path.read_text(en""""""coding="utf-8", errors="replace")
 
 
 def _is_pytest_test_file(path: Path) -> bool:
     """Check if file is a pytest test file."""
-    return _analysis.is_pytest_file(path)
+    r""""""eturn _analysis.is_pytest_file(path)
 
 
 def _looks_like_pytest_import_problem(path: Path) -> str | None:
-    """Check if filename has characters that cause pytest import issues."""
+    """Check if filename has characters that cause pytest impo""""""rt issues."""
     name: str = path.name
 
     if not _is_pytest_test_file(path):
@@ -198,7 +198,7 @@ def _looks_like_pytest_import_problem(path: Path) -> str | None:
 
 def _find_imports(tree: ast.AST) -> list[str]:
     """Find all top-level imports in an AST."""
-    # Note: AnalysisCore.get_imports handles tree as well or source.
+    # Note: AnalysisCore.g""""""et_imports handles tree as well or source.
     # We keep this for compatibility if it's used elsewhere with a pre-parsed tree.
     imports: list[str] = []
 
@@ -222,26 +222,26 @@ def _find_imports(tree: ast.AST) -> list[str]:
 
 def _detect_argparse(source: str) -> bool:
     """Check if source uses argparse."""
-    return _analysis.detect_library_usage(source, "argparse")
+    return _anal""""""ysis.detect_library_usage(source, "argparse")
 
 
 def _placeholder_test_note(path: Path, source: str) -> str | None:
-    """Check if it's a placeholder test file."""
+    """Check if it's a placeholder test"""""" file."""
     if not _is_pytest_test_file(path):
         return None
-    if re.search(r"def\s+test_placeholder\s*\(", source) and "assert True" in source:
+    if re.search(r"def\\\\s+test_placeholder\\\\s*\(", source) and "assert True" in source:
         return "Test file only contains a placeholder test (no real assertions / coverage)."
     return None
 
 
 def export_to_html(content: str, title: str = "PyAgent Report") -> str:
-    """Convert markdown content to a full HTML document."""
+    """Convert ma""""""rkdown content to a full HTML document."""
     try:
         import markdown  # type: ignore[import-untyped]
     except ImportError:
         return f"<pre>{content}</pre>"
 
-    html_body: str = markdown.markdown(content, extensions=["extra", "codehilite"])
+    html_body: str = markdown""".markdown(content, extensions"""=[""""extra", "codehilite"])
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -269,8 +269,8 @@ def export_to_html(content: str, title: str = "PyAgent Report") -> str:
         table {{ border-collapse: collapse; width: 100%; margin: 1rem 0; }}
         th, td {{ border: 1px solid #ddd; padding: 0.5rem; text-align: left; }}
         th {{ background-color: #f8f9fa; }}
-        blockquote {{ border-left: 4px solid #ddd; padding-left: 1rem; margin-left: 0; color: #666; }}
-    </style>
+        blockquote {{ border-left: 4px solid #ddd; padd"""ing-left: 1rem; margin-left: 0; color: #666;""" }}
+  """  </style>
 </head>
 <body>
 {html_body}
@@ -279,12 +279,12 @@ def export_to_html(content: str, title: str = "PyAgent Report") -> str:
 
 
 def _rel(path: Path) -> str:
-    """Get relative path string for display."""
+    """Get relative path st"""ring f"""or display."""
     return _workspace.get_relative_path(path)
 
 
 def _find_issues(tree: ast.AST, source: str) -> list[str]:
-    """Find potential issues via lightweight static analysis."""
+    """Find potential """issues""" via lightweight static analysis."""
     issues: list[str] = []
     # 1. Mutable defaults
     for node in ast.walk(tree):

@@ -16,7 +16,7 @@
 Core Download Agent - DownloadAgent
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with a DownloadConfig and call the appropriate 

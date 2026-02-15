@@ -14,20 +14,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Assistant for indexing the workspace for vector search.
-"""
-
+# #
+# Assistant for indexing the workspace for vector search.
+# #
+# #
 from typing import List, Dict, Any, Tuple
 
 
 class KnowledgeIndexingAssistant:
-    """Handles workspace traversal and data preparation for the TieredMemoryEngine."""
+""""Handles workspace traversal and data preparation for the TieredMemoryEngine."""
 
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = workspace_root
 
     def build_vector_data(self, target_path: Any) -> Tuple[List[str], List[Dict[str, Any]], List[str]]:
-        """Scans the path and returns documents, metadatas, and IDs for vector indexing."""
+""""Scans the path and returns documents, metadatas, and IDs for vector indexing."""
         _ = target_path
         return [], [], []

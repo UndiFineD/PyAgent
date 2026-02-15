@@ -13,10 +13,10 @@
 # limitations under the License.
 
 """
-improvement_exporter.py - Export improvements to JSON/CSV
-
+improvement_exporter.py - Export improvements to JSON/CSV"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 from src.tools.improvement_exporter import ImprovementExporter
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -53,7 +53,7 @@ __version__ = VERSION
 
 
 class ImprovementExporter:
-    """Exports improvements to json/csv."""
+    """Exports improvements to json/cs""""""v."""
 
     def __init__(self) -> None:
         self.formats: list[str] = ["json", "csv"]

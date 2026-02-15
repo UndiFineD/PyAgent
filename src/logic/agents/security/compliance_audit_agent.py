@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Compliance audit agent for performing detailed compliance audits and reporting.
+"""
+Compliance audit agent for performing detailed compliance audits and reporting.
 
-Brief Summary
 DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:

@@ -30,8 +30,8 @@ __version__ = VERSION
 
 def main() -> None:
     """CLI entry point for the Stats Agent."""
-    parser = argparse.ArgumentParser(
-        description="Stats Agent: Reports file update statistics",
+    parser = argparse.ArgumentParser("""
+        description="Stats Agent: Reports file update statistics","""
         epilog="Example: python src/agent_stats.py --files src/*.py",
     )
     parser.add_argument("--files", nargs="+", required=True, help="List of files to analyze")

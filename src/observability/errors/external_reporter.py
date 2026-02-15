@@ -15,28 +15,31 @@
 # limitations under the License.
 
 
-"""
-ExternalReporter - Enumeration of external error reporting systems
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
+# ExternalReporter - Enumeration of external error reporting systems
+
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
 from src.core.base.external_reporter import ExternalReporter
 reporter = ExternalReporter.SENTRY
 if reporter == ExternalReporter.SENTRY:
     # use Sentry-specific client mapping or configuration
-    pass
+#     pass
 
-WHAT IT DOES:
+# WHAT IT DOES:
 Defines a simple Enum listing supported external error reporting providers (sentry, rollbar, bugsnag, datadog, newrelic) and exposes module version from src.core.base.lifecycle.version
 
-WHAT IT SHOULD DO BETTER:
+# WHAT IT SHOULD DO BETTER:
 Should include explanatory module-level docstring, mapping utilities to provider SDK clients and configuration keys, validation helpers, and unit tests; consider adding serialization helpers and a provider discovery function for pluggable integrations
 
-FILE CONTENT SUMMARY:
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
 
 from __future__ import annotations
 
@@ -48,14 +51,19 @@ __version__ = VERSION
 
 
 class ExternalReporter(Enum):
-    """External error reporting systems."""
+    External error reporting systems.
 
-    SENTRY = "sentry"
-    ROLLBAR = "rollbar"
-    BUGSNAG = "bugsnag"
-    DATADOG = "datadog"
-    NEWRELIC = "newrelic"
-"""
+# [BATCHFIX] Commented metadata/non-Python
+# # #     SENTRY = "sentry"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     ROLLBAR = "rollbar"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     BUGSNAG = "bugsnag"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     DATADOG = "datadog"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     NEWRELIC = "newrelic"  # [BATCHFIX] closed string
+
 
 from __future__ import annotations
 
@@ -67,10 +75,15 @@ __version__ = VERSION
 
 
 class ExternalReporter(Enum):
-    """External error reporting systems."""
+    External error reporting systems.
 
-    SENTRY = "sentry"
-    ROLLBAR = "rollbar"
-    BUGSNAG = "bugsnag"
-    DATADOG = "datadog"
-    NEWRELIC = "newrelic"
+# [BATCHFIX] Commented metadata/non-Python
+# # #     SENTRY = "sentry"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     ROLLBAR = "rollbar"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     BUGSNAG = "bugsnag"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     DATADOG = "datadog"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     NEWRELIC = "newrelic"  # [BATCHFIX] closed string

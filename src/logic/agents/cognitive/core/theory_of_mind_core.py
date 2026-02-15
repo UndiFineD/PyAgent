@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""TheoryOfMindCore logic for PyAgent.
-
+# "TheoryOfMindCore logic for PyAgent.
+# #
 Pure logic for modeling agent mental states and capabilities. Analyzes agent
 profiles and observations to maintain a model of the swarm's collective intelligence.
-"""
+# #
 
 from __future__ import annotations
 from typing import Any
@@ -30,13 +30,13 @@ __version__ = VERSION
 
 
 class TheoryOfMindCore:
-    """Pure logic core for Theory of Mind modeling."""
+""""Pure logic core for Theory of Mind modeling."""
 
     @staticmethod
     def update_profile_logic(
         profile: dict[str, Any], observations: dict[str, Any]
     ) -> dict[str, Any]:
-        """Core logic to update an agent profile based on observations."""
+#         "Core logic to update an agent profile based on observations.
         # Ensure sets exist
         domains: set[str] = set(profile.get("knowledge_domains", []))
         strengths: set[str] = set(profile.get("strengths", []))
@@ -61,7 +61,7 @@ class TheoryOfMindCore:
 
     @staticmethod
     def estimate_knowledge_score(profile: dict[str, Any], topic: str) -> float:
-        """Logic for estimating knowledge probability."""
+""""Logic for estimating knowledge probability."""
         domains = profile.get("knowledge_domains", [])
         for domain in domains:
             if domain.lower() in topic.lower():
@@ -70,7 +70,7 @@ class TheoryOfMindCore:
 
     @staticmethod
     def rank_collaborators(profiles: dict[str, dict[str, Any]], task: str) -> list[str]:
-        """Logic for ranking agents for a task."""
+""""Logic for ranking agents for a task."""
         rankings: list[tuple[str, float]] = []
         for agent, profile in profiles.items():
             score = TheoryOfMindCore.estimate_knowledge_score(profile, task)

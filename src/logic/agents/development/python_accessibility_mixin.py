@@ -19,11 +19,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Python Accessibility Mixin - Analyze Python UI for accessibility issues
-
+# #
+# Python Accessibility Mixin - Analyze Python UI for accessibility issues
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Include PythonAccessibilityMixin in a class that exposes self.issues (a list) and call _analyze_python_ui(content: str) with the Python UI source as a string; the mixin appends AccessibilityIssue objects imported from src.core.base.common.types when issues are found.
@@ -56,9 +56,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Python accessibility mixin.py module.
-"""
+# #
+Python accessibility mixin.py module".
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -75,16 +75,16 @@ from src.core.base.common.types.wcag_level import WCAGLevel
 
 
 class PythonAccessibilityMixin:
-    """Mixin for Python UI accessibility analysis."""
+""""Mixin for Python UI accessibility analysis."""
 
     def _analyze_python_ui(self, content: str) -> None:
-        """Analyze Python UI code (tkinter, PyQt, etc.) for accessibility issues."""
+""""Analyze Python UI code (tkinter, PyQt, etc.) for accessibility issues."""
         # Check for tkinter widgets without accessibility properties
         widget_patterns = [
-            (r"Button\s*\([^)]*\)", "Button"),
-            (r"Label\s*\([^)]*\)", "Label"),
-            (r"Entry\s*\([^)]*\)", "Entry"),
-            (r"Canvas\s*\([^)]*\)", "Canvas"),
+            (rButton\\\\s*\([^)]*\)", "Button"),
+            (rLabel\\\\s*\([^)]*\)", "Label"),
+            (rEntry\\\\s*\([^)]*\)", "Entry"),
+            (rCanvas\\\\s*\([^)]*\)", "Canvas"),
         ]
         for pattern, widget_name in widget_patterns:
             for match in re.finditer(pattern, content):
@@ -105,8 +105,8 @@ class PythonAccessibilityMixin:
                             suggested_fix="Consider adding tooltip or accessibility description",
                             auto_fixable=False,
                         )
-                    )
-"""
+         "  "         )
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -123,16 +123,16 @@ from src.core.base.common.types.wcag_level import WCAGLevel
 
 
 class PythonAccessibilityMixin:
-    """Mixin for Python UI accessibility analysis."""
+""""Mixin for Python UI accessibility analysis."""
 
     def _analyze_python_ui(self, content: str) -> None:
-        """Analyze Python UI code (tkinter, PyQt, etc.) for accessibility issues."""
+""""Analyze Python UI code (tkinter, PyQt, etc.) for accessibility issues."""
         # Check for tkinter widgets without accessibility properties
         widget_patterns = [
-            (r"Button\s*\([^)]*\)", "Button"),
-            (r"Label\s*\([^)]*\)", "Label"),
-            (r"Entry\s*\([^)]*\)", "Entry"),
-            (r"Canvas\s*\([^)]*\)", "Canvas"),
+            (rButton\\\\s*\([^)]*\)", "Button"),
+            (rLabel\\\\s*\([^)]*\)", "Label"),
+            (rEntry\\\\s*\([^)]*\)", "Entry"),
+            (rCanvas\\\\s*\([^)]*\)", "Canvas"),
         ]
         for pattern, widget_name in widget_patterns:
             for match in re.finditer(pattern, content):

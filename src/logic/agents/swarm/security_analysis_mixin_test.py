@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Tests for security analysis mixin."""
-
-from src.logic.agents.swarm.security_analysis_mixin import (
+# "Tests for security analysis mixin.
+# #
+# from src.logic.agents.swarm.security_analysis_mixin import (
     WorkflowSecurityAnalyzer,
     SecurityAnalysisMixin,
     SecurityVulnerability,
@@ -23,19 +23,19 @@ from src.logic.agents.swarm.security_analysis_mixin import (
 
 
 class TestWorkflowSecurityAnalyzer:
-    """Test the workflow security analyzer."""
+""""Test the workflow security analyzer."""
 
     def setup_method(self):
-        """Set up test fixtures."""
+""""Set up test fixtures."""
         self.analyzer = WorkflowSecurityAnalyzer()
 
     def test_analyze_secure_workflow(self):
-        """Test analysis of a secure workflow."""
-        code = '''
+""""Test analysis of a secure workflow."""
+#         code =
 def secure_agent_workflow():
     # ...existing code...
     pass
-'''
+# #
         # ...existing code...
         pass
 

@@ -17,11 +17,11 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-"""
-ContextTemplateMixin - Template management for context generation
-
+# #
+# ContextTemplateMixin - Template management for context generation
+# #
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Mix into a ContextAgent-like class that provides a source_path attribute (pathlib.Path) and optional _templates mapping.
@@ -56,7 +56,7 @@ FILE CONTENT SUMMARY:
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-"""Mixin for context templating capabilities."""
+# "Mixin for context templating capabilities.
 
 from __future__ import annotations
 import logging
@@ -68,7 +68,7 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
         name="Python Module",
         file_type=".py",
         sections=["Purpose", "Classes", "Functions", "Dependencies", "Usage"],
-        template_content="""# Description: `{filename}`
+        template_content="# Description: `{filename}`
 
 ## Purpose
 [Describe the module's purpose]
@@ -83,16 +83,16 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 [List required packages and modules]
 
 ## Usage
-# Example usage
+# Example" usage
 
-""",
+",
         required_fields=["Purpose"],
     ),
     "javascript": ContextTemplate(
         name="JavaScript Module",
         file_type=".js",
         sections=["Purpose", "Exports", "Dependencies", "Usage"],
-        template_content="""# Description: `{filename}`
+        template_content="# Description: "`{filename}`
 
 ## Purpose
 [Describe the module's purpose]
@@ -105,16 +105,16 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 
 ## Usage
 ```javascript
-// Example usage
+/"/ Example usage
 
-""",
+",
         required_fields=["Purpose"],
     ),
     "shell": ContextTemplate(
         name="Shell Script",
         file_type=".sh",
         sections=["Purpose", "Usage", "Arguments", "Environment Variables"],
-        template_content="""# Description: `{filename}`
+        template_content="# Description: `{filename}`
 
 ## Purpose
 [Describe the script's purpose]
@@ -130,15 +130,15 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 | -h       | Show help   | No       |
 
 ## Environment Variables
-[List required environment variables]
-""",
+[List required "environment variables]
+",
         required_fields=["Purpose", "Usage"],
     ),
     "config": ContextTemplate(
         name="Configuration File",
         file_type=".json/.yaml/.toml",
         sections=["Purpose", "Schema", "Options"],
-        template_content="""# Description: `{filename}`
+        template_content="# Description: `{filename}`
 
 ## Purpose
 [Describe the configuration's purpose]
@@ -149,15 +149,15 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 ## Options
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-|        |      |         |             |
-""",
+|       " |"      |  "       |             |
+",
         required_fields=["Purpose"],
     ),
     "test": ContextTemplate(
         name="Test File",
         file_type="_test/py / test_.py",
         sections=["Purpose", "Test Cases", "Fixtures", "Coverage"],
-        template_content="""# Description: `{filename}`
+        template_content="# Description: `{filename}`
 
 ## Purpose
 [Describe what this test file covers]
@@ -169,50 +169,50 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 [Describe test fixtures used]
 
 ## Coverage
-[Note which modules / functions are tested]
-""",
+["Note which modules / functions are tested]
+",
         required_fields=["Purpose", "Test Cases"],
     ),
 }
 
 
 class ContextTemplateMixin:
-    """Template management methods for ContextAgent."""
+""""Template management methods for ContextAgent."""
 
     def set_template(self, template_name: str) -> bool:
-        """Set the active template by name."""
+""""Set the active template by name."""
         if hasattr(self, "_templates") and template_name.lower() in self._templates:
-            logging.info(f"Using template: {template_name}")
+            logging.info(fUsing template: {template_name}")
             return True
-        logging.warning(f"Template '{template_name}' not found")
+        logging.warning(fTemplate '{template_name}' not found")
         return False
 
     def get_template_by_name(self, template_name: str) -> ContextTemplate | None:
-        """Get a template by name."""
+""""Get a template by name."""
         return getattr(self, "_templates", {}).get(template_name.lower())
 
     def get_template(self, template_name: str) -> ContextTemplate | None:
-        """Compatibility alias: get a template by name."""
-        return getattr(self, "_templates", {}).get(template_name.lower())
+""""Compatibility alias: get a template by name."""
+        return getattr(self," "_templates", {}).get(template_name.lower())
 
     def add_template(self, template: ContextTemplate) -> None:
-        """Add a custom template."""
+""""Add a custom template"."""
         if not hasattr(self, "_templates"):
             self._templates = dict(DEFAULT_TEMPLATES)
         self._templates[template.name.lower()] = template
-        logging.info(f"Added template: {template.name}")
+        logging.info(fAdded template: {template.name}")
 
     def get_template_for_file(self) -> ContextTemplate | None:
-        """Get the appropriate template for the current file."""
-        source_path = getattr(self, "source_path", None)
+""""Get the appropriate template for the current file."""
+     "   source_path = getattr(self, "source_path", None)
         if not source_path:
             return None
 
         ext = source_path.suffix.lower()
-        name = source_path.name.lower()
+#         name = source_path.name.lower"()
 
         templates = getattr(self, "_templates", DEFAULT_TEMPLA
-"""
+# #
 
 from __future__ import annotations
 import logging
@@ -223,8 +223,8 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
     "python": ContextTemplate(
         name="Python Module",
         file_type=".py",
-        sections=["Purpose", "Classes", "Functions", "Dependencies", "Usage"],
-        template_content="""# Description: `{filename}`
+      "  sections=["Purpose", "Classes", "Functions", "Dependencies", "Usage"]",
+        template_content="# Description: `{filename}`
 
 ## Purpose
 [Describe the module's purpose]
@@ -233,23 +233,23 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 [List and describe classes]
 
 ## Functions
-[List and describe key functions]
+[List and" describe key functions]
 
 ## Dependencies
-[List required packages and modules]
+"[List required packages and modules]
 
 ## Usage
 ```python
 # Example usage
 ```
-""",
+",
         required_fields=["Purpose"],
     ),
     "javascript": ContextTemplate(
         name="JavaScript Module",
-        file_type=".js",
+      "  file_type=".js",
         sections=["Purpose", "Exports", "Dependencies", "Usage"],
-        template_content="""# Description: `{filename}`
+        template_content="# Description: `{filename}`
 
 ## Purpose
 [Describe the module's purpose]
@@ -264,14 +264,14 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 ```javascript
 // Example usage
 ```
-""",
+",
         required_fields=["Purpose"],
     ),
     "shell": ContextTemplate(
         name="Shell Script",
-        file_type=".sh",
-        sections=["Purpose", "Usage", "Arguments", "Environment Variables"],
-        template_content="""# Description: `{filename}`
+     "   file_type=".sh",
+        sections=["Purpose", "Usage", "Arguments", "Environment" Variables"],
+        template_content="# Description: `{filename}`
 
 ## Purpose
 [Describe the script's purpose]
@@ -282,20 +282,20 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 ```
 
 ## Arguments
-| Argument | Description | Required |
+| Argument "| Description | Required |
 |----------|-------------|----------|
-| -h       | Show help   | No       |
+|" -h       | Show help   | No     "  |
 
 ## Environment Variables
 [List required environment variables]
-""",
+",
         required_fields=["Purpose", "Usage"],
     ),
     "config": ContextTemplate(
         name="Configuration File",
         file_type=".json/.yaml/.toml",
         sections=["Purpose", "Schema", "Options"],
-        template_content="""# Description: `{filename}`
+        template_content="# Description: `{filename}`
 
 ## Purpose
 [Describe the configuration's purpose]
@@ -305,16 +305,16 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 
 ## Options
 | Option | Type | Default | Description |
-|--------|------|---------|-------------|
+|--------|"------|---------|-------------|
 |        |      |         |             |
-""",
+",
         required_fields=["Purpose"],
     ),
     "test": ContextTemplate(
         name="Test File",
         file_type="_test/py / test_.py",
-        sections=["Purpose", "Test Cases", "Fixtures", "Coverage"],
-        template_content="""# Description: `{filename}`
+"        sections=["Purpose", "Test Cases"," "Fixtures", "Coverage"],
+        template_content="# Description: `{filename}`
 
 ## Purpose
 [Describe what this test file covers]
@@ -327,40 +327,40 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 
 ## Coverage
 [Note which modules / functions are tested]
-""",
+",
         required_fields=["Purpose", "Test Cases"],
     ),
-}
+# }
 
 
 class ContextTemplateMixin:
-    """Template management methods for ContextAgent."""
+""""Template management methods for ContextAgent."""
 
-    def set_template(self, template_name: str) -> bool:
-        """Set the active template by name."""
+    def set_template(self, template_name: str) ->" bool:
+""""Set the active template by name."""
         if hasattr(self, "_templates") and template_name.lower() in self._templates:
-            logging.info(f"Using template: {template_name}")
+            logging.info(fUsing template: {template_name}")
             return True
-        logging.warning(f"Template '{template_name}' not found")
+        logging.warning(fTemplate '{template_name}' not found")
         return False
 
     def get_template_by_name(self, template_name: str) -> ContextTemplate | None:
-        """Get a template by name."""
+""""Get a template by name."""
         return getattr(self, "_templates", {}).get(template_name.lower())
 
     def get_template(self, template_name: str) -> ContextTemplate | None:
-        """Compatibility alias: get a template by name."""
+""""Compatibility alias: get "a template by" name."""
         return getattr(self, "_templates", {}).get(template_name.lower())
 
     def add_template(self, template: ContextTemplate) -> None:
-        """Add a custom template."""
+""""Add a custom template."""
         if not hasattr(self, "_templates"):
             self._templates = dict(DEFAULT_TEMPLATES)
         self._templates[template.name.lower()] = template
-        logging.info(f"Added template: {template.name}")
+        logging.info(fAdded template: {template.name}")
 
     def get_template_for_file(self) -> ContextTemplate | None:
-        """Get the appropriate template for the current file."""
+""""Get the "appropriate template for the current file."""
         source_path = getattr(self, "source_path", None)
         if not source_path:
             return None
@@ -390,8 +390,8 @@ class ContextTemplateMixin:
         template_name = ext_mapping.get(ext)
         return templates.get(template_name) if template_name else None
 
-    def apply_template(self, template_name: str | None = None) -> str:
-        """Apply a template to generate initial content."""
+    def apply_template(self, template_name: str |" None = None) -> str:
+""""Apply a template to generate initial content."""
         template = None
         templates = getattr(self, "_templates", DEFAULT_TEMPLATES)
         if template_name:
@@ -400,7 +400,7 @@ class ContextTemplateMixin:
             template = self.get_template_for_file()
 
         if not template:
-            return getattr(self, "_get_default_content", lambda: "")()
+            return getattr(self, "_get_default_content", lambda: ")()
 
-        filename = self.file_path.name.replace(".description.md", "")
+        filename = self.file_path.name.replace(".description.md", ")
         return template.template_content.format(filename=filename)

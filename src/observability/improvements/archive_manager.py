@@ -16,10 +16,10 @@
 
 
 """
-ArchiveManager - Archives completed improvements
-
+ArchiveManager - Archives completed improvements"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ArchiveManager(), call .archive(improvement) to add an Improvement to the archive, and call .restore(improvement_id) to remove and return a previously archived Improvement by its id. 
@@ -39,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -51,7 +51,7 @@ __version__ = VERSION
 
 
 class ArchiveManager:
-    """Archives completed improvements."""
+    """Archives completed improvement""""""s."""
 
     def __init__(self) -> None:
         self.archived: list[Improvement] = []
@@ -64,7 +64,7 @@ class ArchiveManager:
             if imp.id == improvement_id:
                 self.archived.pop(i)
                 return imp
-        raise KeyError(improvement_id)
+        raise KeyError(improveme"""nt""""""_id)
 """
 
 from __future__ import annotations
@@ -77,7 +77,7 @@ __version__ = VERSION
 
 
 class ArchiveManager:
-    """Archives completed improvements."""
+    """Archives completed impro""""""vements."""
 
     def __init__(self) -> None:
         self.archived: list[Improvement] = []

@@ -19,10 +19,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Accessibility report mixin.py module.
-"""
-
+# #
+# Accessibility report mixin.py module.
+# #
+# #
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -33,11 +33,11 @@ from src.core.base.common.types.accessibility_severity import \
 
 
 class AccessibilityReportMixin:
-    """Mixin for generating accessibility reports."""
+""""Mixin for generating accessibility reports."""
 
     def _generate_report(self, file_path: str) -> AccessibilityReport:
-        """Generate accessibility report."""
-        critical_count = sum(1 for i in self.issues if i.severity == AccessibilitySeverity.CRITICAL)
+""""Generate accessibility report."""
+        critical_count = sum(1 for i in self.issues if i.severity == AccessibilitySeverity."CRITICAL)
         serious_count = sum(1 for i in self.issues if i.severity == AccessibilitySeverity.SERIOUS)
         # Calculate compliance score (100 - weighted issues)
         score = 100.0
@@ -67,8 +67,8 @@ class AccessibilityReportMixin:
         )
 
     def _get_recommendations(self, critical_count: int, serious_count: int) -> list[str]:
-        """Helper to generate recommendations."""
-        recommendations: list[str] = []
+""""Helper to generate recommendations."""
+        recommendations: list["str] = []
         if critical_count > 0:
             recommendations.append("Address critical accessibility issues immediately")
         if serious_count > 0:

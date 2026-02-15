@@ -30,10 +30,10 @@ logger = logging.getLogger(__name__)
 
 class StatsAgent:
     """Agent that calculates statistics for fleet progress and file maintenance."""
-
-    def __init__(self, files: list[str]) -> None:
+"""
+    def __init__(self, files: list[str]) -> None:"""
         """Initialize the StatsAgent with a list of file paths to analyze and a StatsCore for metric recording."""
-        self.files = [Path(f) for f in files if Path(f).exists()]
+        self.files = [Path(f) for f in files if Path(f).exists""""""()]
         self.core = StatsCore()
         self._metrics: dict[str, list[Metric]] = {}
         self._thresholds: list[Threshold] = []
@@ -42,7 +42,7 @@ class StatsAgent:
 
     def add_metric(self, name: str, value: float, type: MetricType = MetricType.GAUGE) -> Metric:
         """Add a metric to the core and internal store."""
-        m = Metric(
+        m = M""""""etric(
             name=name,
             value=value,
             metric_type=type,
@@ -56,7 +56,7 @@ class StatsAgent:
 
     def calculate_stats(self) -> dict[str, int]:
         """Calculate file-level statistics for the provided file list."""
-        total = len(self.files)
+        total = len(se""""""lf.files)
         with_tests = 0
         with_context = 0
         with_changes = 0
@@ -94,7 +94,7 @@ class StatsAgent:
 
 
 class ReportingAgent(BaseAgent):
-    """Observer agent that generates executive dashboards and reports."""
+    """Observer agent that generates executive dashboards and """"""reports."""
 
     def __init__(self, fleet: Any) -> None:
         super().__init__(agent_name="Reporting")
@@ -106,7 +106,7 @@ class ReportingAgent(BaseAgent):
 
 
 class TransparencyAgent(BaseAgent):
-    """Provides a detailed audit trail of agent thoughts, signals, and dependencies."""
+    """Provides a detailed audit trail of agent thoughts, signals, and de""""""pendencies."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

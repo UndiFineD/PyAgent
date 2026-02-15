@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-GoAgent - Go code improvement and auditing
-
+# #
+# GoAgent - Go code improvement and auditing
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 python go_agent.py <path\to\file.go>
@@ -35,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 - Provide configurable severity thresholds, optional automatic fixes, and richer output formats (JSON, SARIF) for CI integration.
 
 FILE CONTENT SUMMARY:
-Agent specializing in Go (Golang) programming."""
+# Agent specializing in Go (Golang) programming.
 
 # pylint: disable=too-many-ancestors
 
@@ -49,17 +49,17 @@ __version__ = VERSION
 
 
 class GoAgent(CoderAgent):
-    """Agent for Go code improvement and auditing."""
+""""Agent for Go code improvement and auditing."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._language = "go"
+#         self._language = "go
 
         self._system_prompt = (
-            "You are a Go Expert. "
-            "Focus on concurrency patterns (goroutines, channels), "
-            "effective error handling, interface design, and idiomatic Go project structure. "
-            "Follow 'Effective Go' principles."
+#             "You are a Go Expert.
+#             "Focus on concurrency patterns (goroutines, channels),
+#             "effective error handling, interface design, and idiomatic Go project structure.
+#             "Follow 'Effective Go' principles.
         )
 
     def _get_default_content(self) -> str:
@@ -68,8 +68,8 @@ class GoAgent(CoderAgent):
 
 if __name__ == "__main__":
     main = create_main_function(GoAgent, "Go Agent", "Path to Go file (.go)")
-    main()
-"""
+    "main()
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -83,17 +83,17 @@ __version__ = VERSION
 
 
 class GoAgent(CoderAgent):
-    """Agent for Go code improvement and auditing."""
+""""Agent for Go code improvement and auditing."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._language = "go"
+#         self._language = "go
 
         self._system_prompt = (
-            "You are a Go Expert. "
-            "Focus on concurrency patterns (goroutines, channels), "
-            "effective error handling, interface design, and idiomatic Go project structure. "
-            "Follow 'Effective Go' principles."
+#             "You are a Go Expert.
+#             "Focus on concurrency patterns (goroutines, channels),
+#             "effective error handling, interface design, and idiomatic Go project structure.
+#             "Follow 'Effective Go' principles.
         )
 
     def _get_default_content(self) -> str:

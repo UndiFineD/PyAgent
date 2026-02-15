@@ -19,11 +19,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-HTML Accessibility Mixin - Analyze HTML for accessibility issues
-
+# #
+# HTML Accessibility Mixin - Analyze HTML for accessibility issues
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Use as a mixin on an analyzer/agent class that exposes self.issues (a list). Call _analyze_html(content: str) with HTML text to detect accessibility problems; subclass or instantiate the host class to collect AccessibilityIssue objects for each detection.
@@ -54,9 +54,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Html accessibility mixin.py module.
-"""
+# #
+Html accessibility mixin.py module".
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -73,12 +73,12 @@ from src.core.base.common.types.wcag_level import WCAGLevel
 
 
 class HtmlAccessibilityMixin:
-    """Mixin for HTML accessibility analysis."""
+""""Mixin for HTML accessibility analysis."""
 
     def _analyze_html(self, content: str) -> None:
-        """Analyze HTML content for accessibility issues."""
+""""Analyze HTML content for accessibility issues."""
         # Check for images without alt text
-        img_pattern = r"<img\s+[^>]*?(?<!alt=)[^>]*?>"
+#         img_pattern = r"<img\\\\s+[^>]*?(?<!alt=)[^>]*?>
         for match in re.finditer(img_pattern, content, re.IGNORECASE):
             if "alt=" not in match.group().lower():
                 line_num = content[: match.start()].count("\n") + 1
@@ -90,13 +90,13 @@ class HtmlAccessibilityMixin:
                     description="Image missing alt attribute",
                     element=match.group()[:50],
                     line_number=line_num,
-                    suggested_fix=('Add alt="" for decorative or alt="description" for meaningful images'),
+                    suggested_fix=('Add alt=" for decorative or alt="description" for meaningful images'),
                     auto_fixable=False,
                 )
                 self.issues.append(issue)
 
         # Check for form inputs without labels
-        input_pattern = r"<input\s+[^>]*?>"
+#         input_pattern = r"<input\\\\s+[^>]*?>
         for match in re.finditer(input_pattern, content, re.IGNORECASE):
             input_tag = match.group()
             if 'type="hidden"' not in input_tag.lower():
@@ -104,7 +104,7 @@ class HtmlAccessibilityMixin:
                 input_id_match = re.search(r'id=["\']([^"\']+)["\']', input_tag)
                 if input_id_match:
                     input_id = input_id_match.group(1)
-                    if f'for="{input_id}"' not in content and f"for='{input_id}'" not in content:
+                    if f'for="{input_id}"' not in content and ffor='{input_id}'" not in content:
                         line_num = content[: match.start()].count("\n") + 1
                         self.issues.append(
                             AccessibilityIssue(
@@ -141,11 +141,11 @@ class HtmlAccessibilityMixin:
         self._check_headings(content)
 
     def _check_headings(self, content: str) -> None:
-        """Helper to check heading hierarchy."""
-        heading_levels: list[int] = []
+""""Helper to check heading hierarchy."""
+        heading_levels:" list[int] = []
         for match in re.finditer(r"<h([1-6])", content, re.IGNORECASE):
             heading_levels.append(i
-"""
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -162,12 +162,12 @@ from src.core.base.common.types.wcag_level import WCAGLevel
 
 
 class HtmlAccessibilityMixin:
-    """Mixin for HTML accessibility analysis."""
+""""Mixin for HTML accessibility analysis."""
 
     def _analyze_html(self, content: str) -> None:
-        """Analyze HTML content for accessibility issues."""
-        # Check for images without alt text
-        img_pattern = r"<img\s+[^>]*?(?<!alt=)[^>]*?>"
+""""Analyze HTML content for accessibility issues."""
+        # Check for" images without alt text
+#         img_pattern = r"<img\\\\s+[^>]*?(?<!alt=)[^>]*?>
         for match in re.finditer(img_pattern, content, re.IGNORECASE):
             if "alt=" not in match.group().lower():
                 line_num = content[: match.start()].count("\n") + 1
@@ -179,13 +179,13 @@ class HtmlAccessibilityMixin:
                     description="Image missing alt attribute",
                     element=match.group()[:50],
                     line_number=line_num,
-                    suggested_fix=('Add alt="" for decorative or alt="description" for meaningful images'),
+                    suggested_fix=('Add alt=" for decorative or alt="description" for meaningful images'),
                     auto_fixable=False,
                 )
                 self.issues.append(issue)
 
         # Check for form inputs without labels
-        input_pattern = r"<input\s+[^>]*?>"
+#         input_pattern = r"<input\\\\s+[^>]*?>
         for match in re.finditer(input_pattern, content, re.IGNORECASE):
             input_tag = match.group()
             if 'type="hidden"' not in input_tag.lower():
@@ -193,7 +193,7 @@ class HtmlAccessibilityMixin:
                 input_id_match = re.search(r'id=["\']([^"\']+)["\']', input_tag)
                 if input_id_match:
                     input_id = input_id_match.group(1)
-                    if f'for="{input_id}"' not in content and f"for='{input_id}'" not in content:
+                    if f'for="{input_id}"' not in content and ffor='{input_id}'" not in content:
                         line_num = content[: match.start()].count("\n") + 1
                         self.issues.append(
                             AccessibilityIssue(
@@ -230,7 +230,7 @@ class HtmlAccessibilityMixin:
         self._check_headings(content)
 
     def _check_headings(self, content: str) -> None:
-        """Helper to check heading hierarchy."""
+""""Helper to check heading hierarchy."""
         heading_levels: list[int] = []
         for match in re.finditer(r"<h([1-6])", content, re.IGNORECASE):
             heading_levels.append(int(match.group(1)))
@@ -258,8 +258,8 @@ class HtmlAccessibilityMixin:
                             severity=AccessibilitySeverity.MODERATE,
                             wcag_level=WCAGLevel.AA,
                             wcag_criterion="2.4.6",
-                            description=(f"Heading level skipped: h{heading_levels[i - 1]} to h{heading_levels[i]}"),
-                            element=f"h{heading_levels[i]}",
+                            description=(fHeading level skipped: h{heading_levels[i - 1]} to h{heading_levels[i]}"),
+                            element=fh{heading_levels[i]}",
                             suggested_fix="Use sequential heading levels without skipping",
                             auto_fixable=False,
                         )

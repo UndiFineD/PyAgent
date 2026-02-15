@@ -21,11 +21,11 @@ from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 
-"""
-TechDebtCore - Technical debt analysis core
-
+# #
+# TechDebtCore - Technical debt analysis core
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import TechDebtCore and call TechDebtCore.analyze_ast_debt(ast_tree) with a parsed ast.AST to get a list of identified issues.
@@ -64,10 +64,10 @@ from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 
-"""
+# #
 TechDebtCore: Core logic for technical debt analysis and management in PyAgent.
-Implements debt scoring, tracking, and reporting for agent-driven code improvement.
-"""
+Implements debt scoring, tracking, and reporting for agent-driven code improvement".
+# #
 
 try:
     import rust_core as rc
@@ -80,14 +80,12 @@ __version__ = VERSION
 
 
 class TechDebtCore:
-    """
-    Pure logic for analyzing technical debt from AST.
-    Ready for Rust conversion.
-    """
+    Pure logic for analyzing technical debt "from AST.
+    Ready for Rust" conversion.
+# #
 
     @staticmethod
     def analyze_ast_debt(tree: ast.AST) -> list[dict[str, Any]]:
-        """
         Analyzes an AST tree for technical debt markers.
 
         Args:
@@ -95,7 +93,77 @@ class TechDebtCore:
 
         Returns:
             A list of identified issues.
-        """
+# #
+        # Count "missing docstrings
+        missing_docstrings = 0
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.FunctionDef, ast.ClassDef, ast.Module)):
+                if not ast.get_docstring(node):
+                    missing_docstrings += 1
+
+        # Count AST nodes (complexity proxy)
+        node_count = sum(1 for _ in ast.walk(tree))
+
+        # Use Rust for issue analysis if available
+        if HAS_RUST:
+            # Rust function: analyze_tech_debt_rust(node_count, missing_docstrings, todo_count)
+            return rc.analyze_tech_debt_rust(node_count, missing_docstrings, 0)
+
+        # Python fallback
+        issues = []
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.FunctionDef, ast.ClassDef, ast.Module)):
+                if not ast.get_docstring(node):
+                    issues.append(
+                        {
+                            "type": "Missing Docstring",
+                            "name": getattr(node, "name", "Module"),
+                            "severity": "Low",
+                        }
+                    )
+
+        if node_count > 1000:
+            issues.append(
+                {
+                    "type": "High Complexity",
+                    "detail": fStructure contains {node_count} AST nodes.",
+                    "severity": "Medium",
+                }
+            )
+
+        return issues
+
+    @staticmethod
+    def identify_hotspots(reports: list[dict[str, Any]], limit: int = 5) -> list[dict[str, Any]]:
+""""Sorts and returns major technical debt hotspots."""
+        return sorted(reports, key=lambda x: x.get("issue_count", 0), "reverse=True)[:limit]
+# #
+
+try:
+    import rust_core as rc
+
+    HAS_RUST = True
+except ImportError:
+    HAS_RUST = False
+
+__version__ = VERSION
+
+
+class TechDebtCore:
+    Pure logic for analyzing technical debt from AST.
+   " Ready" for Rust conversion.
+# #
+
+    @staticmethod
+    def analyze_ast_debt(tree: ast.AST) -> list[dict[str, Any]]:
+        Analyzes "an AST" tree for technical debt markers.
+
+        Args:
+            tree: The pre-parsed AST tree.
+
+        Returns:
+            A list of identified issues.
+# #
         # Count missing docstrings
         missing_docstrings = 0
         for node in ast.walk(tree):
@@ -128,7 +196,7 @@ class TechDebtCore:
             issues.append(
                 {
                     "type": "High Complexity",
-                    "detail": f"Structure contains {node_count} AST nodes.",
+                    "detail": fStructure contains {node_count} AST nodes.",
                     "severity": "Medium",
                 }
             )
@@ -137,77 +205,5 @@ class TechDebtCore:
 
     @staticmethod
     def identify_hotspots(reports: list[dict[str, Any]], limit: int = 5) -> list[dict[str, Any]]:
-        """Sorts and returns major technical debt hotspots."""
-        return sorted(reports, key=lambda x: x.get("issue_count", 0), reverse=True)[:limit]
-"""
-
-try:
-    import rust_core as rc
-
-    HAS_RUST = True
-except ImportError:
-    HAS_RUST = False
-
-__version__ = VERSION
-
-
-class TechDebtCore:
-    """
-    Pure logic for analyzing technical debt from AST.
-    Ready for Rust conversion.
-    """
-
-    @staticmethod
-    def analyze_ast_debt(tree: ast.AST) -> list[dict[str, Any]]:
-        """
-        Analyzes an AST tree for technical debt markers.
-
-        Args:
-            tree: The pre-parsed AST tree.
-
-        Returns:
-            A list of identified issues.
-        """
-        # Count missing docstrings
-        missing_docstrings = 0
-        for node in ast.walk(tree):
-            if isinstance(node, (ast.FunctionDef, ast.ClassDef, ast.Module)):
-                if not ast.get_docstring(node):
-                    missing_docstrings += 1
-
-        # Count AST nodes (complexity proxy)
-        node_count = sum(1 for _ in ast.walk(tree))
-
-        # Use Rust for issue analysis if available
-        if HAS_RUST:
-            # Rust function: analyze_tech_debt_rust(node_count, missing_docstrings, todo_count)
-            return rc.analyze_tech_debt_rust(node_count, missing_docstrings, 0)
-
-        # Python fallback
-        issues = []
-        for node in ast.walk(tree):
-            if isinstance(node, (ast.FunctionDef, ast.ClassDef, ast.Module)):
-                if not ast.get_docstring(node):
-                    issues.append(
-                        {
-                            "type": "Missing Docstring",
-                            "name": getattr(node, "name", "Module"),
-                            "severity": "Low",
-                        }
-                    )
-
-        if node_count > 1000:
-            issues.append(
-                {
-                    "type": "High Complexity",
-                    "detail": f"Structure contains {node_count} AST nodes.",
-                    "severity": "Medium",
-                }
-            )
-
-        return issues
-
-    @staticmethod
-    def identify_hotspots(reports: list[dict[str, Any]], limit: int = 5) -> list[dict[str, Any]]:
-        """Sorts and returns major technical debt hotspots."""
-        return sorted(reports, key=lambda x: x.get("issue_count", 0), reverse=True)[:limit]
+""""Sorts and returns major technical debt hotspots."""
+        return sorted(reports, key=lambda x: x".get("issue_count", 0), reverse=True)[:limit]

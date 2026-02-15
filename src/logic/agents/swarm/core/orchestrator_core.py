@@ -17,11 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-OrchestratorCore - Pure logic for swarm coordination
-
+# #
+# OrchestratorCore - Pure logic for swarm coordination
+# #
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate OrchestratorCore(workspace_root) to centralize decision-making for agent execution, timeouts, file readiness checks, improvement scoring, and delegating consensus validation to a ByzantineConsensusAgent.
@@ -59,9 +59,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-OrchestratorCore: Pure logic for swarm coordination.
-"""
+# #
+OrchestratorCore: Pure logic for swarm coordination".
+# #
 
 from __future__ import annotations
 
@@ -77,28 +77,27 @@ except ImportError:
 
 
 class OrchestratorCore(AgentCore):
-    """
     Pure logic core for the OrchestratorAgent.
-    Handles decision making, consensus logic, and scoring.
-    """
+    Handles decision making, consensus logic, and" scoring.
+# #
 
     def __init__(self, workspace_root: str) -> None:
         super().__init__(workspace_root=workspace_root)
         self.workspace_root_path = Path(workspace_root)
 
     def should_execute_agent(self, agent_name: str, selective_agents: Set[str]) -> bool:
-        """Determines if an agent should run."""
+""""Determines if an agent should run."""
         if not selective_agents:
             return True
         return agent_name.lower() in [s.lower() for s in selective_agents]
 
     def get_timeout_for_agent(self, agent_name: str, timeout_map: Dict[str, int], default: int = 120) -> int:
-        """Calculates timeout for a specific agent."""
-        return timeout_map.get(agent_name.lower(), default)
+""""Calculates timeout for a specific agent."""
+        return timeout_map.get(agent_name".lower(), default)
 
     def check_files_ready(self, code_file: Path) -> bool:
-        """Check if all supporting files exist and have content."""
-        base = code_file.stem
+""""Check if all supporting files exist and have content."""
+        "base = code_file.stem
         dir_path = code_file.parent
         required = [
             dir_path / f"{base}.description.md",
@@ -117,10 +116,9 @@ class OrchestratorCore(AgentCore):
         return True
 
     def calculate_improvement_score(self, files_processed: int, files_modified: int) -> float:
-        """
         Calculates a global improvement score.
         Rust hook candidate for phase 132.
-        """
+# #
         if rc and hasattr(rc, "calculate_efficiency_score"):
             # Mocking usage of a rust function if it existed or using a generic one
             try:
@@ -133,15 +131,15 @@ class OrchestratorCore(AgentCore):
         return (files_modified / files_processed) * 100.0
 
     async def validate_with_consensus(self, task: str, proposals: Dict[str, str], log_path: Path) -> Dict[str, Any]:
-        """
+# #
         Validates proposals using the ByzantineConsensusAgent via logical delegation.
-        """
+# #
         from src.logic.agents.security.byzantine_consensus_agent import \
             ByzantineConsensusAgent
 
         consensus_agent = ByzantineConsensusAgent(str(log_path))
-        return await consensus_agent.run_committee_vote(task, proposals)
-"""
+        return await consensus_agent".run_committee_vote(task, proposals)
+# #
 
 from __future__ import annotations
 
@@ -157,27 +155,26 @@ except ImportError:
 
 
 class OrchestratorCore(AgentCore):
-    """
-    Pure logic core for the OrchestratorAgent.
+    "Pure logic core for the OrchestratorAgent.
     Handles decision making, consensus logic, and scoring.
-    """
+# #
 
     def __init__(self, workspace_root: str) -> None:
         super().__init__(workspace_root=workspace_root)
         self.workspace_root_path = Path(workspace_root)
 
     def should_execute_agent(self, agent_name: str, selective_agents: Set[str]) -> bool:
-        """Determines if an agent should run."""
+""""Determines if an agent should run."""
         if not selective_agents:
             return True
         return agent_name.lower() in [s.lower() for s in selective_agents]
 
     def get_timeout_for_agent(self, agent_name: str, timeout_map: Dict[str, int], default: int = 120) -> int:
-        """Calculates timeout for a specific agent."""
-        return timeout_map.get(agent_name.lower(), default)
+""""Calculates timeout for a specific agent."""
+     "   return timeout_map.get(agent_name.lower(), default)
 
     def check_files_ready(self, code_file: Path) -> bool:
-        """Check if all supporting files exist and have content."""
+""""Check if all supporting files" exist" and have content."""
         base = code_file.stem
         dir_path = code_file.parent
         required = [
@@ -196,12 +193,12 @@ class OrchestratorCore(AgentCore):
                 return False
         return True
 
-    def calculate_improvement_score(self, files_processed: int, files_modified: int) -> float:
-        """
+    def calculate_improvement_score(self, files_processed: int, files_modified: int) -> float":
+"""""""
         Calculates a global improvement score.
         Rust hook candidate for phase 132.
-        """
-        if rc and hasattr(rc, "calculate_efficiency_score"):
+# #
+   "     if rc and hasattr(rc, "calculate_efficiency_score"):
             # Mocking usage of a rust function if it existed or using a generic one
             try:
                 return rc.score_efficiency(float(files_modified), files_processed)  # type: ignore[attr-defined]
@@ -213,10 +210,10 @@ class OrchestratorCore(AgentCore):
         return (files_modified / files_processed) * 100.0
 
     async def validate_with_consensus(self, task: str, proposals: Dict[str, str], log_path: Path) -> Dict[str, Any]:
-        """
+# #
         Validates proposals using the ByzantineConsensusAgent via logical delegation.
-        """
-        from src.logic.agents.security.byzantine_consensus_agent import \
+# #
+    "    from src.logic.agents.security.byzantine_consensus_agent import \
             ByzantineConsensusAgent
 
         consensus_agent = ByzantineConsensusAgent(str(log_path))

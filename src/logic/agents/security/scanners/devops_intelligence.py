@@ -19,21 +19,29 @@ from typing import List, Dict, Any, Optional
 
 
 class DevOpsIntelligence:
-    """
-    Handles discovery and exploitation of DevOps & Management infrastructure.
-    Integrates logic from SCMKit, sccm-http-looter, and CI/CD attack tools.
-    """
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+"""Handles discovery and exploitation of DevOps & Management infrastructure."""
+#     Integrates logic from SCMKit, sccm-http-looter, and CI/CD attack tools.
+# #
 
     def __init__(self):
-        self.session: Optional[aiohttp.ClientSession] = None
+    pass  # [BATCHFIX] inserted for empty block
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self.session: Optional[aiohttp.ClientSession] = None
 
     async def get_session(self):
         if self.session is None or self.session.closed:
             self.session = aiohttp.ClientSession(headers={"User-Agent": "PyAgent DevOpsAudit/1.0"})
         return self.session
 
-    def get_scm_recon_endpoints(self, base_url: str, provider: str = "github") -> List[str]:
-        """Returns API endpoints for repository and user recon."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_scm_recon_endpoints(self, base_url: str, provider: str = "github") -> List[str]:
+""""Returns API endpoints for repository and user recon."""
         if provider == "github":
             return [
                 f"{base_url}/api/v3/users",
@@ -42,20 +50,36 @@ class DevOpsIntelligence:
                 f"{base_url}/api/v3/search/code?q=filename:id_rsa",
             ]
         elif provider == "gitlab":
-            return [f"{base_url}/api/v4/projects", f"{base_url}/api/v4/users", f"{base_url}/api/v4/groups"]
-        return []
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             return [f"{base_url}/api/v4/projects", f"{base_url}/api/v4/users", f"{base_url}/api/v4/groups"]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         return []
 
-    def get_sccm_looting_paths(self, base_url: str) -> List[Dict[str, str]]:
-        """Returns interesting SCCM/MECM distribution point paths."""
-        return [
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_sccm_looting_paths(self, base_url: str) -> List[Dict[str, str]]:
+""""Returns interesting SCCM/MECM distribution point paths."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#        " return ["  # [BATCHFIX] closed string
             {"path": "/SMS_DP_SMSPKG$/", "desc": "Package storage (often allows directory listing)"},
             {"path": "/SMS_DP_DATALIB/", "desc": "Data library metadata"},
             {"path": "/SMS_DP_SMSSIG$/", "desc": "Signature files for package verification"},
         ]
 
-    def get_sccm_sensitive_extensions(self) -> List[str]:
-        """Returns extensions frequently containing secrets in SCCM packages."""
-        return [
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_sccm_sensitive_extensions(self) -> List[str]:
+""""Returns extensions frequently containing secrets in SCCM packages."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#     "    return ["  # [BATCHFIX] closed string
             "ps1",
             "vbs",
             "txt",
@@ -76,22 +100,45 @@ class DevOpsIntelligence:
             "yaml",
         ]
 
-    def get_ci_cd_attack_patterns(self) -> Dict[str, Any]:
-        """Returns common entry points and misconfigurations for CI/CD systems."""
-        return {
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_ci_cd_attack_patterns(self) -> Dict[str, Any]:
+""""Returns common entry points and misconfigurations for CI/CD systems."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#  "       return {"  # [BATCHFIX] closed string
             "jenkins": {
-                "paths": ["/script", "/asynchPeople/", "/manage"],
-                "secrets": ["credentials.xml", "config.xml"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                 "paths": ["/script", "/asynchPeople/", "/manage"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                 "secrets": ["credentials.xml", "config.xml"],
             },
             "teamcity": {
-                "paths": ["/httpAuth/app/rest/users", "/httpAuth/app/rest/projects"],
-                "secrets": ["database.properties"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                 "paths": ["/httpAuth/app/rest/users", "/httpAuth/app/rest/projects"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                 "secrets": ["database.properties"],
             },
-            "gh_actions": {"keywords": ["ACTIONS_RUNTIME_TOKEN", "GITHUB_TOKEN"]},
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "gh_actions": {"keywords": ["ACTIONS_RUNTIME_TOKEN", "GITHUB_TOKEN"]},
         }
 
-    def get_github_runner_attack_vectors(self) -> List[Dict[str, Any]]:
-        """Attack vectors for GitHub Action Self-Hosted Runners (Ported from Gato-X)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_github_runner_attack_vectors(self) -> List[Dict[str, Any]]:
+""""Attack vectors for GitHub Action Self-Hosted Runners (Ported from Gato-X)."""
         return [
             {
                 "name": "Runner Registration Token Leak",
@@ -115,18 +162,31 @@ class DevOpsIntelligence:
             },
         ]
 
-    async def scan_sccm_dp(self, target: str) -> Dict[str, Any]:
-        """Lightweight check for SCCM DP exposure."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     async def scan_sccm_dp(self, target: str) -> Dict[str, Any]:
+# [BATCHFIX] Commented metadata/non-Python
+# #         "Lightweight check for SCCM DP exposure."  # [BATCHFIX] closed string
         session = await self.get_session()
-        base_url = f"http://{target}"
-        results: Dict[str, Any] = {"exposed_paths": []}
+#         base_url = fhttp://{target}
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         results: Dict[str, Any] = {"exposed_paths": []}
 
         for entry in self.get_sccm_looting_paths(base_url):
-            url = base_url + entry["path"]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             url = base_url + entry["path"]
             try:
                 async with session.get(url, timeout=5) as resp:
                     if resp.status == 200:
-                        results["exposed_paths"].append(url)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                         results["exposed_paths"].append(url)
             except Exception:
                 continue
         return results

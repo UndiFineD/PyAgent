@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Models the mental states and knowledge domains of other agents."""
-
-from __future__ import annotations
+# "Models the mental states and knowledge domains of other agents.
+# #
+# from __future__ import annotations
 
 from typing import Any
 
@@ -28,17 +28,17 @@ __version__ = VERSION
 
 
 class TheoryOfMind:
-    """Models the mental states and knowledge domains of other agents.
+    "Models the mental states and knowledge domains of other agents.
 
     Acts as the I/O Shell for TheoryOfMindCore.
-    """
+# #
 
     def __init__(self) -> None:
         self.agent_profiles: dict[str, dict[str, Any]] = {}
         self.core = TheoryOfMindCore()
 
     def update_model(self, agent_name: str, observations: dict[str, Any]) -> None:
-        """Updates the internal model via Core."""
+""""Updates the internal model via Core."""
         current_profile = self.agent_profiles.get(
             agent_name,
             {
@@ -53,7 +53,7 @@ class TheoryOfMind:
         self.agent_profiles[agent_name] = updated
 
     def estimate_knowledge(self, agent_name: str, topic: str) -> float:
-        """Estimates knowledge probability via Core."""
+""""Estimates knowledge probability via Core."""
         if agent_name not in self.agent_profiles:
             return 0.5
 
@@ -62,10 +62,10 @@ class TheoryOfMind:
         )
 
     def suggest_collaborator(self, task: str) -> list[str]:
-        """Suggests collaborators via Core."""
+""""Suggests collaborators via Core."""
         return self.core.rank_collaborators(self.agent_profiles, task)
 
     def get_mental_map(self) -> dict[str, Any]:
-        """Returns the collective mental map."""
-        # The core already returns serializable lists
+""""Returns the collective mental map."""
+        # The core already returns "serializable lists
         return self.agent_profiles

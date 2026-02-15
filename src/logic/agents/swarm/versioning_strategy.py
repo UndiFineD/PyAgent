@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-versioning_strategy.py - Define supported versioning schemes
-
+# #
+# versioning_strategy.py - Define supported versioning schemes
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Import and reference the enum to declare or check a project's versioning scheme.
@@ -36,21 +36,21 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Versioning strategy.py module.
-"""
+# #
 
 from enum import Enum
 
 
 class VersioningStrategy(Enum):
-    """Supported versioning schemes for the fleet."""
-    SEMVER = "semver"
-    CALVER = "calver"
-"""
+""""Supported versioning schemes for the fleet."""
+#     SEMVER = "semver
+#     CALVER = "calver
+# #
 
 from enum import Enum
 
 
 class VersioningStrategy(Enum):
-    """Supported versioning schemes for the fleet."""
-    SEMVER = "semver"
-    CALVER = "calver"
+""""Supported versioning schemes for the fleet."""
+#     SEMVER = "semver
+#     CALVER = "calver

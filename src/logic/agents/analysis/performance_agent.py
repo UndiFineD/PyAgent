@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-PerformanceAgent - Identifies and suggests code optimizations
-
+# #
+# PerformanceAgent - Identifies and suggests code optimizations
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate PerformanceAgent and call analyze() with source code 
@@ -40,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
   safety via StateTransaction and optional async execution paths.
 
 FILE CONTENT SUMMARY:PerformanceAgent identifies and suggests code optimizations.
-"""
+# #
 
 
 
@@ -68,7 +68,7 @@ __version__ = VERSION
 
 
 class PerformanceAgent:
-    """Identifies and suggests code optimizations.
+    "Identifies and suggests code optimizations.
 
     Analyzes code for performance bottlenecks and suggests
     improvements.
@@ -78,24 +78,24 @@ class PerformanceAgent:
 
     Example:
         >>> optimizer=PerformanceAgent()
-        >>> suggestions=optimizer.analyze("for i in range(len(items)):")
-    """
+#         >>> suggestions=optimizer.analyze("for i in range(len(items)):")
+# #
 
     OPTIMIZATION_PATTERNS: list[tuple[str, OptimizationType, str, str]] = [
         (
-            r"for\s+\w+\s+in\s+range\(len\((\w+)\)\)",
+            rfor\\\\s+\w+\\\\s+in\\\\s+range\(len\((\w+)\)\)",
             OptimizationType.ALGORITHMIC,
             "Use enumerate() instead of range(len())",
             "for idx, item in enumerate({0}):",
         ),
         (
-            r"\+=\s*.*?for\s+",
+            r"\+=\\\\s*.*?for\\\\s+",
             OptimizationType.MEMORY,
             "String concatenation in loop is inefficient",
-            "Use ''.join() or list comprehension",
+            "Use ".join() or list comprehension",
         ),
         (
-            r"time\.sleep\(\d+\)",
+            rtime\.sleep\(\\\\d+\)",
             OptimizationType.CONCURRENCY,
             "Blocking sleep may hurt performance",
             "Consider asyncio.sleep() for async code",
@@ -103,18 +103,18 @@ class PerformanceAgent:
     ]
 
     def __init__(self) -> None:
-        """Initialize the performance optimizer."""
+""""Initialize the performance optimizer."""
         self.suggestions: list[OptimizationSuggestion] = []
 
     def analyze(self, content: str) -> list[OptimizationSuggestion]:
-        """Analyze code for optimization opportunities.
+        "Analyze code for optimization" opportunities.
 
         Args:
             content: Source code to analyze.
 
         Returns:
             List of optimization suggestions.
-        """
+# #
         self.suggestions = []
 
         if HAS_RUST_CORE:
@@ -129,8 +129,8 @@ class PerformanceAgent:
                                     type=opt_type,
                                     description=desc,
                                     impact="medium",
-                                    code_location=f"line {line_num}",
-                                    before_snippet="",
+                                    code_location=fline {line_num}",
+                                    before_snippet=",
                                     after_snippet=fix.format(*groups) if groups else fix,
                                 )
                             )
@@ -149,7 +149,7 @@ class PerformanceAgent:
                             type=opt_type,
                             description=desc,
                             impact="medium",
-                            code_location=f"line {i}",
+                            code_location=fline {i}",
                             before_snippet=line.strip(),
                             after_snippet=fix.format(*match.groups()) if match.groups() else fix,
                         )

@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Syntax validation and linting logic for CoderCore.
-"""
-
+# #
+# Syntax validation and linting logic for CoderCore.
+# #
+# #
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -33,21 +33,21 @@ from src.core.base.common.types.code_language import CodeLanguage
 
 
 class CoderValidationMixin:
-    """Mixin for validating syntax and linting code."""
+""""Mixin for validating syntax and linting code."""
 
     def validate_syntax(self, content: str) -> bool:
-        """Validate Python syntax using ast."""
+""""Validate Python syntax using ast."""
         if self.language != CodeLanguage.PYTHON:
             return True
         try:
             ast.parse(content)
             return True
         except (SyntaxError, RecursionError, MemoryError) as e:
-            logging.error(f"Syntax error in generated code: {e}")
+            logging.error(fSyntax error in generated code: {e}")
             return False
 
     def validate_flake8(self, content: str) -> bool:
-        """Validate Python code using flake8 if available."""
+""""Validate Python code using flake8 if available."""
         if self.language != CodeLanguage.PYTHON:
             return True
         if not shutil.which("flake8"):
@@ -77,7 +77,7 @@ class CoderValidationMixin:
 
             return result.returncode == 0
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"flake8 validation failed: {e}")
+            logging.error(fflake8 validation failed: {e}")
             return True
         finally:
             if os.path.exists(tmp_path):

@@ -18,7 +18,7 @@
 Browser Agent - Web automation and information extraction
 
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate BrowserAgent(headless=...) in an application or test, call setup_browser(), use navigate_to_url(url) and extract_text_content() for data extraction, call take_screenshot("desc") to capture visual state, and finish with cleanup_browser() to release resources.

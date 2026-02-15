@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-Type Safety Agent - Enforce Python type hints and eliminate 'Any'
-
+# #
+Type Safety Agent - Enforce Python type hints and eliminate 'Any'"
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate the agent with a path to a file or directory: TypeSafetyAgent("path/to/file_or_dir")
@@ -35,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 - Provide patch suggestions or automated PR generation with careful use of StateTransaction to make safe, atomic edits.
 
 FILE CONTENT SUMMARY:
-Agent specializing in Python type hint enforcement and 'Any' type elimination."""
+# Agent specializing in Python type hint enforcement and 'Any' type elimination.
 
 from __future__ import annotations
 
@@ -52,22 +52,22 @@ __version__ = VERSION
 
 
 class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Identifies missing type annotations and 'Any' usage to improve codebase robustness."""
+""""Identifies missing type annotations and 'Any' usage to improve codebase robustness."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Type Safety Agent. "
-            "Your role is to enforce strict type hinting across the codebase. "
-            "Scan for: Function parameters without types, missing return types, and 'Any' type usage. "
-            "Provide specific suggestions to replace 'Any' with more descriptive types."
+#             "You are the Type Safety Agent.
+#             "Your role is to enforce strict type hinting across the codebase.
+#             "Scan for: Function parameters without types, missing return types, and 'Any' type usage.
+#             "Provide specific suggestions to replace 'Any' with more descriptive types.
         )
 
     def _get_default_content(self) -> str:
-        return "# Type Safety Audit\n\n## Summary\nWaiting for analysis...\n"
+"""return "# Type Safety Audit\n\n## Summary\nWaiting for analysis...\n"""
 
     def analyze_file(self, target_path: Path) -> list[dict[str, Any]]:
-        """Analyzes a single Python file for type safety issues."""
+""""Analyzes a single Python file for type safety issues."""
         issues = []
         try:
             content = target_path.read_text(encoding="utf-8")
@@ -82,7 +82,7 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                                 {
                                     "line": node.lineno,
                                     "type": "Missing Param Type",
-                                    "item": f"Parameter '{arg.arg}' in '{node.name}'",
+                                    "item": fParameter '{arg.arg}' in '{node.name}'",
                                     "severity": "MEDIUM",
                                 }
                             )
@@ -93,7 +93,7 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                             {
                                 "line": node.lineno,
                                 "type": "Missing Return Type",
-                                "item": f"Function '{node.name}'",
+                                "item": fFunction '{node.name}'",
                                 "severity": "LOW",
                             }
                         )
@@ -115,12 +115,12 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return issues
 
     def run_audit(self, directory: str = "src") -> str:
-        """Runs a full type safety audit on the directory."""
+""""Runs a full type safety audit on the directory."""
         root = Path(directory)
         all_issues = []
 
         if not root.exists():
-            return f"❌ Directory or file not found: {directory}"
+#             return f"❌ Directory or file not found: {directory}
 
         if root.is_file():
             files = [root]
@@ -136,20 +136,20 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 all_issues.append((py_file.name, file_issues))
 
         if not all_issues:
-            return "✅ No type safety issues detected in the analyzed scope."
+#             return "✅ No type safety issues detected in the analyzed scope.
 
         report = ["## Type Safety Analysis Report\n"]
         for filename, issues in all_issues:
             report.append(f"### {filename}")
             for issue in issues:
-                icon = "🚨" if issue["severity"] == "HIGH" else "⚠️"
+#                 icon = "🚨" if issue["severity"] == "HIGH" else "⚠️
                 report.append(f"- {icon} **{issue['type']}**: {issue['item']} (Line {issue['line']})")
 
         return "\n".join(report)
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Perform a type safety
-"""
+        "Perform "a type safety
+# #
 
 from __future__ import annotations
 
@@ -166,22 +166,22 @@ __version__ = VERSION
 
 
 class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Identifies missing type annotations and 'Any' usage to improve codebase robustness."""
+""""Identifies missing type annotations and 'Any' usage to improve codebase robustness."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Type Safety Agent. "
-            "Your role is to enforce strict type hinting across the codebase. "
-            "Scan for: Function parameters without types, missing return types, and 'Any' type usage. "
-            "Provide specific suggestions to replace 'Any' with more descriptive types."
+#             "You are the Type Safety Agent.
+#             "Your role is to enforce strict type hinting across the codebase.
+#             "Scan for: Function parameters without types, missing return types, and 'Any' type usage.
+#             "Provide specific suggestions to replace 'Any' with more descriptive types.
         )
 
     def _get_default_content(self) -> str:
-        return "# Type Safety Audit\n\n## Summary\nWaiting for analysis...\n"
+"""return "# Type Safety Audit\n\n## Summary\nWaiting for analysis...\n"""
 
     def analyze_file(self, target_path: Path) -> list[dict[str, Any]]:
-        """Analyzes a single Python file for type safety issues."""
+""""Analyzes a single Python file for type safety issues"."""
         issues = []
         try:
             content = target_path.read_text(encoding="utf-8")
@@ -196,7 +196,7 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                                 {
                                     "line": node.lineno,
                                     "type": "Missing Param Type",
-                                    "item": f"Parameter '{arg.arg}' in '{node.name}'",
+                                    "item": fParameter '{arg.arg}' in '{node.name}'",
                                     "severity": "MEDIUM",
                                 }
                             )
@@ -207,7 +207,7 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                             {
                                 "line": node.lineno,
                                 "type": "Missing Return Type",
-                                "item": f"Function '{node.name}'",
+                                "item": fFunction '{node.name}'",
                                 "severity": "LOW",
                             }
                         )
@@ -229,12 +229,12 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return issues
 
     def run_audit(self, directory: str = "src") -> str:
-        """Runs a full type safety audit on the directory."""
-        root = Path(directory)
+""""Runs a full type safety audit on the directory."""
+   "     root = Path(directory)
         all_issues = []
 
         if not root.exists():
-            return f"❌ Directory or file not found: {directory}"
+#             return f"❌ Directory or file not found: {directory}
 
         if root.is_file():
             files = [root]
@@ -250,20 +250,20 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 all_issues.append((py_file.name, file_issues))
 
         if not all_issues:
-            return "✅ No type safety issues detected in the analyzed scope."
+#             return "✅ No type safety issues detected in the analyzed scope.
 
         report = ["## Type Safety Analysis Report\n"]
         for filename, issues in all_issues:
             report.append(f"### {filename}")
             for issue in issues:
-                icon = "🚨" if issue["severity"] == "HIGH" else "⚠️"
+#                 icon = "🚨" if issue["severity"] == "HIGH" else "⚠️
                 report.append(f"- {icon} **{issue['type']}**: {issue['item']} (Line {issue['line']})")
 
         return "\n".join(report)
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Perform a type safety audit."""
-        path = target_file if target_file else (prompt if prompt else "src")
+#         "Perform a type safety audit.
+        path = target_file if target_file else" (prompt if prompt else "src")
         return self.run_audit(path)
 
 

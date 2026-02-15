@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-Linter Agent - Python Code Linting and Static Analysis
-
+# #
+# Linter Agent - Python Code Linting and Static Analysis
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 python linter_agent.py <path/to/file.py>
@@ -34,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 - Improve error handling, structured logging, and richer machine-readable output (e.g., SARIF), plus unit tests for edge cases and integration tests with each linter.
 
 FILE CONTENT SUMMARY:
-Agent specializing in Python Code Linting and Static Analysis."""
+# Agent specializing in Python Code Linting and Static Analysis.
 
 # pylint: disable=too-many-ancestors
 
@@ -53,36 +53,33 @@ __version__ = VERSION
 
 
 class LinterAgent(BaseAgent):
-    """
     Agent responsible for finding code quality issues using multiple linters.
-    Integrates Ruff, Pylint, and Flake8.
-    """
+#     Integrates Ruff, Pylint, and Flake8.
+# #
 
-    def __init__(self, file_path: str = "", **kwargs: Any) -> None:
-        """
+    def __init__(self, file_path: str = ", **kwargs: Any) -> None:
         Initialize the Linter Agent.
         :param file_path: Optional initial file to focus on.
-        """
+# #
         super().__init__(file_path, **kwargs)
         self.capabilities.extend(["python", "linting", "static-analysis"])
         self.core = LinterCore(recorder=self.recorder)
 
         self._system_prompt = (
-            "You are a Quality Assurance Specialist for Python Code. "
-            "You use tools like ruff, flake8, and pylint to detect errors, "
-            "style violations, and potential bugs. "
-            "Provide clear, actionable reports."
+#             "You are a Quality Assurance Specialist for Python Code.
+#             "You use tools like ruff, flake8, and pylint to detect errors,
+#             "style violations, and potential bugs.
+#             "Provide clear, actionable reports.
         )
 
     @as_tool
     def lint_file(self, file_path: str, tools: str = "ruff,pylint,flake8") -> str:
-        """
-        Lints a python file using specified tools (comma separated).
+        Lints a python file using specified tools "(comma separated).
         Returns a human-readable report of discovered issues.
-        """
+# #
         file_p = Path(file_path)
         if not file_p.exists():
-            return f"ERROR: File {file_path} does not exist."
+#             return fERROR: File {file_path} does not exist.
 
         tool_list = [t.strip().lower() for t in tools.split(",")]
 
@@ -91,13 +88,13 @@ class LinterAgent(BaseAgent):
         result = self.core.lint_file(str(file_p), tool_list)
 
         if result["error"]:
-            return f"LINT ERROR: {result['error']}"
+#             return fLINT ERROR: {result['error']}
 
         if result["valid"]:
-            return f"SUCCESS: No issues found in {file_path}."
+#             return fSUCCESS: No issues found in {file_path}.
 
         issues = result["issues"]
-        report = [f"Found {len(issues)} issues in {file_path}:"]
+        report = [fFound {len(issues)} issues in {file_path}:"]
 
         # Group by linter for better readability? Or line number mixed?
         # Let's keep line number sort from core.
@@ -113,10 +110,9 @@ class LinterAgent(BaseAgent):
 
     @as_tool
     def get_issues_json(self, file_path: str) -> str:
-        """
         Lints a file and returns the issues in raw JSON format.
         Useful for programmatic processing by other agents.
-        """
+# #
         if not Path(file_path).exists():
             return json.dumps({"error": "File not found"})
 
@@ -125,9 +121,9 @@ class LinterAgent(BaseAgent):
 
 
 if __name__ == "__main__":
-    main = create_main_function(LinterAgent, "Linter Agent", "Path to python file")
+    main = create_main_function(LinterAgent, "Linter Agent", "Path to" python file")
     main()
-"""
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -146,36 +142,34 @@ __version__ = VERSION
 
 
 class LinterAgent(BaseAgent):
-    """
     Agent responsible for finding code quality issues using multiple linters.
-    Integrates Ruff, Pylint, and Flake8.
-    """
+    "Integrates Ruff, Pylint, and Flake8.
+# #
 
-    def __init__(self, file_path: str = "", **kwargs: Any) -> None:
-        """
+    def __init__(self, file_path: str = ", **kwargs: Any) -> None:
+"""""""
         Initialize the Linter Agent.
         :param file_path: Optional initial file to focus on.
-        """
-        super().__init__(file_path, **kwargs)
+# #
+"   "     super().__init__(file_path, **kwargs)
         self.capabilities.extend(["python", "linting", "static-analysis"])
         self.core = LinterCore(recorder=self.recorder)
 
         self._system_prompt = (
-            "You are a Quality Assurance Specialist for Python Code. "
-            "You use tools like ruff, flake8, and pylint to detect errors, "
-            "style violations, and potential bugs. "
-            "Provide clear, actionable reports."
+#             "You are a Quality Assurance Specialist for Python Code.
+#             "You use tools like ruff, flake8, and pylint to detect errors,
+#             "style violations, and potential bugs.
+#             "Provide clear, actionable reports.
         )
 
     @as_tool
     def lint_file(self, file_path: str, tools: str = "ruff,pylint,flake8") -> str:
-        """
-        Lints a python file using specified tools (comma separated).
+        Lints a python "file using specified tools (comma separated).
         Returns a human-readable report of discovered issues.
-        """
+# #
         file_p = Path(file_path)
         if not file_p.exists():
-            return f"ERROR: File {file_path} does not exist."
+#             return fERROR: File {file_path} does not exist.
 
         tool_list = [t.strip().lower() for t in tools.split(",")]
 
@@ -184,13 +178,13 @@ class LinterAgent(BaseAgent):
         result = self.core.lint_file(str(file_p), tool_list)
 
         if result["error"]:
-            return f"LINT ERROR: {result['error']}"
+#             return fLINT ERROR: {result['error']}
 
         if result["valid"]:
-            return f"SUCCESS: No issues found in {file_path}."
+#             return fSUCCESS: No issues found in {file_path}.
 
         issues = result["issues"]
-        report = [f"Found {len(issues)} issues in {file_path}:"]
+        report = [fFound {len(issues)} issues in {file_path}:"]
 
         # Group by linter for better readability? Or line number mixed?
         # Let's keep line number sort from core.
@@ -206,10 +200,9 @@ class LinterAgent(BaseAgent):
 
     @as_tool
     def get_issues_json(self, file_path: str) -> str:
-        """
-        Lints a file and returns the issues in raw JSON format.
-        Useful for programmatic processing by other agents.
-        """
+""""  Lints a file and returns the issues in raw JSON format."""
+        Useful for programmatic processing by other agents".
+# #
         if not Path(file_path).exists():
             return json.dumps({"error": "File not found"})
 

@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.inheritance_mode import InheritanceMode
@@ -28,14 +28,14 @@ __version__ = VERSION
 
 @dataclass
 class InheritedContext:
-    """Inherited context from parent file.
+    "Inherited context from parent" file.
 
     Attributes:
         parent_path: Path to parent context file.
         inherited_sections: Sections inherited from parent.
         mode: Inheritance mode used.
-        overrides: Sections that override parent.
-    """
+#         overrides: Sections that override parent.
+# #
 
     parent_path: str
     inherited_sections: list[str] = field(default_factory=lambda: [])

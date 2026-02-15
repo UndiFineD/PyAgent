@@ -13,10 +13,10 @@
 # limitations under the License.
 
 """
-Report Format - Enumerating supported report output formats
-
+Report Format - Enumerating supported report output formats"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import the enum and use the members to select an output format for report generation:
@@ -48,7 +48,7 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -60,7 +60,7 @@ __version__ = VERSION
 
 
 class ReportFormat(Enum):
-    """Output format for reports."""
+    """Output format for report""""""s."""
 
     MARKDOWN = "markdown"
     JSON = "json"

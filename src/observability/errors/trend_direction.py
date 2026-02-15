@@ -15,29 +15,32 @@
 # limitations under the License.
 
 
-"""
+
 trend_direction.py - TrendDirection Enum
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Minimal import: from trend_direction import TrendDirection
-- When used inside package: from src.core.base.agent_errors.trend_direction import TrendDirection
-- Example: if direction == TrendDirection.INCREASING: handle_uptrend()
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
+# - Minimal import: from trend_direction import TrendDirection
+# - When used inside package: from src.core.base.agent_errors.trend_direction import TrendDirection
+# - Example: if direction == TrendDirection.INCREASING: handle_uptrend()
 
-WHAT IT DOES:
-Defines a simple Enum, TrendDirection, with four named members (INCREASING, DECREASING, STABLE, VOLATILE) and exposes module version via __version__ imported from lifecycle.VERSION. Intended as a canonical set of labels for representing observed trend directions in higher-level agent logic or telemetry.
+# WHAT IT DOES:
+# Defines a simple Enum, TrendDirection, with four named members (INCREASING, DECREASING, STABLE, VOLATILE) and exposes module version via __version__ imported from lifecycle.VERSION. Intended as a canonical set of labels for representing observed trend directions in higher-level agent logic or telemetry.
 
-WHAT IT SHOULD DO BETTER:
-- Add a module-level docstring describing intent, provenance and recommended usage site (why it was extracted from agent_errors.py).
-- Provide helper constructors/parsers (e.g., from_delta, from_string, and a normalization function) to map numeric changes or free-form text into these enum values.
-- Add explicit __all__ export, unit tests covering string round-trips and parsing, and richer member docstrings or comments explaining when to use VOLATILE vs STABLE.
-- Consider making it pluggable/configurable (thresholds for STABLE vs VOLATILE) rather than fixed labels, and include typing stubs or pydantic models when used in public APIs.
+# WHAT IT SHOULD DO BETTER:
+# - Add a module-level docstring describing intent, provenance and recommended usage site (why it was extracted from agent_errors.py).
+# - Provide helper constructors/parsers (e.g., from_delta, from_string, and a normalization function) to map numeric changes or free-form text into these enum values.
+# - Add explicit __all__ export, unit tests covering string round-trips and parsing, and richer member docstrings or comments explaining when to use VOLATILE vs STABLE.
+# - Consider making it pluggable/configurable (thresholds for STABLE vs VOLATILE) rather than fixed labels, and include typing stubs or pydantic models when used in public APIs.
 
-FILE CONTENT SUMMARY:
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
 
 from __future__ import annotations
 
@@ -49,13 +52,17 @@ __version__ = VERSION
 
 
 class TrendDirection(Enum):
-    """Trend direction indicators."""
+    Trend direction indicators.
 
-    INCREASING = "increasing"
-    DECREASING = "decreasing"
-    STABLE = "stable"
-    VOLATILE = "volatile"
-"""
+# [BATCHFIX] Commented metadata/non-Python
+# # #     INCREASING = "increasing"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     DECREASING = "decreasing"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     STABLE = "stable"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     VOLATILE = "volatile"  # [BATCHFIX] closed string
+
 
 from __future__ import annotations
 
@@ -67,9 +74,13 @@ __version__ = VERSION
 
 
 class TrendDirection(Enum):
-    """Trend direction indicators."""
+    Trend direction indicators.
 
-    INCREASING = "increasing"
-    DECREASING = "decreasing"
-    STABLE = "stable"
-    VOLATILE = "volatile"
+# [BATCHFIX] Commented metadata/non-Python
+# # #     INCREASING = "increasing"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     DECREASING = "decreasing"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     STABLE = "stable"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     VOLATILE = "volatile"  # [BATCHFIX] closed string

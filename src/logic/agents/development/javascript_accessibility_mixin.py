@@ -19,11 +19,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Javascript Accessibility Mixin - Analyze JavaScript/React UI for accessibility issues
-
+# #
+# Javascript Accessibility Mixin - Analyze JavaScript/React UI for accessibility issues
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Use as a mixin in analysis agents; call _analyze_javascript_ui(content) with JavaScript/JSX source to append AccessibilityIssue instances to self.issues.
@@ -54,9 +54,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Javascript accessibility mixin.py module.
-"""
+# #
+Javascript accessibility mixin.py module".
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -73,12 +73,12 @@ from src.core.base.common.types.wcag_level import WCAGLevel
 
 
 class JavascriptAccessibilityMixin:
-    """Mixin for Javascript UI accessibility analysis."""
+""""Mixin for Javascript UI accessibility analysis."""
 
     def _analyze_javascript_ui(self, content: str) -> None:
-        """Analyze JavaScript / React UI code for accessibility issues."""
+""""Analyze JavaScript / React UI code for accessibility issues."""
         # Check for click handlers without keyboard support
-        click_pattern = r"onClick\s*=\s*\{[^}]+\}"
+#         click_pattern = ronClick\\\\s*=\\\\s*\{[^}]+\}
         for match in re.finditer(click_pattern, content):
             line_num = content[: match.start()].count("\n") + 1
             # Check if there's also onKeyPress / onKeyDown nearby
@@ -99,7 +99,7 @@ class JavascriptAccessibilityMixin:
                 )
 
         # Check for div / span used as interactive elements
-        interactive_div = r"<div\b[^>]*\bonClick\s*=\s*\{[^}]+\}[^>]*>"
+#         interactive_div = r"<div\b[^>]*\bonClick\\\\s*=\\\\s*\{[^}]+\}[^>]*>
         for match in re.finditer(interactive_div, content, re.IGNORECASE):
             line_num = content[: match.start()].count("\n") + 1
             context = match.group()
@@ -117,8 +117,8 @@ class JavascriptAccessibilityMixin:
                         suggested_fix='Use <button> or add role="button" tabIndex="0"',
                         auto_fixable=False,
                     )
-                )
-"""
+     "  "         )
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -135,12 +135,12 @@ from src.core.base.common.types.wcag_level import WCAGLevel
 
 
 class JavascriptAccessibilityMixin:
-    """Mixin for Javascript UI accessibility analysis."""
+""""Mixin for Javascript UI accessibility analysis."""
 
     def _analyze_javascript_ui(self, content: str) -> None:
-        """Analyze JavaScript / React UI code for accessibility issues."""
+""""Analyze JavaScript / React UI code for accessibility issues."""
         # Check for click handlers without keyboard support
-        click_pattern = r"onClick\s*=\s*\{[^}]+\}"
+#         click_pattern = ronClick\\\\s*=\\\\s*\{[^}]+\}
         for match in re.finditer(click_pattern, content):
             line_num = content[: match.start()].count("\n") + 1
             # Check if there's also onKeyPress / onKeyDown nearby
@@ -161,7 +161,7 @@ class JavascriptAccessibilityMixin:
                 )
 
         # Check for div / span used as interactive elements
-        interactive_div = r"<div\b[^>]*\bonClick\s*=\s*\{[^}]+\}[^>]*>"
+#         interactive_div = r"<div\b[^>]*\bonClick\\\\s*=\\\\s*\{[^}]+\}[^>]*>
         for match in re.finditer(interactive_div, content, re.IGNORECASE):
             line_num = content[: match.start()].count("\n") + 1
             context = match.group()

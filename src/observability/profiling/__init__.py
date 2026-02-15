@@ -15,9 +15,9 @@
 # limitations under the License.
 
 """
-Profiling utilities for PyAgent.
-Includes Rust acceleration profiling and performance tracking.
-"""
+Profiling utilities for PyAgent."""
+Includes Rust acceleration profiling and performance tracking."""
+"""""""""
 
 from src.observability.profiling.profile_decorators import (ProfileAccumulator,
                                                             ProfileResult,

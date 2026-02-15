@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from dataclasses import dataclass, field
@@ -27,16 +27,16 @@ __version__ = VERSION
 
 @dataclass
 class ContextRecommendation:
-    """Recommendation for context improvement.
+    "Recommendation for context improvement.
 
     Attributes:
         source_file: File used as reference.
         suggested_sections: Sections to add.
         reason: Why this recommendation was made.
-        confidence: Recommendation confidence.
-    """
+#         confidence: Recommendation confidence.
+# #
 
     source_file: str
     suggested_sections: list[str] = field(default_factory=lambda: [])
-    reason: str = ""
+#     reason: str =
     confidence: float = 0.0

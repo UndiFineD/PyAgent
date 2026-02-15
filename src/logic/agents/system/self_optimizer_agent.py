@@ -13,11 +13,11 @@
 # limitations under the License.
 
 
-"""
-SelfOptimizerAgent - Self-optimization and roadmap refinement
-
+# #
+# SelfOptimizerAgent - Self-optimization and roadmap refinement
+# #
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Programmatic: from src.agents.self_optimizer_agent import SelfOptimizerAgent; agent = SelfOptimizerAgent(__file__); await agent.improve_content("Optimize test coverage")
@@ -36,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 - Add input validation for improvements file name and make the agent respect repository-level config (e.g., pyproject.toml or .pyagentrc) for thresholds and categories.
 
 FILE CONTENT SUMMARY:
-Agent specializing in self-optimization and roadmap refinement."""
+# Agent specializing in self-optimization and roadmap refinement.
 
 from __future__ import annotations
 
@@ -50,7 +50,7 @@ __version__ = VERSION
 
 
 class SelfOptimizerAgent(BaseAgent):
-    """Analyses the workspace status and suggests strategic improvements."""
+""""Analyses the workspace status and suggests strategic improvements."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -58,23 +58,23 @@ class SelfOptimizerAgent(BaseAgent):
         self.resource_monitor = ResourceMonitor(str(workspace_root))
         self.telemetry = ObservabilityEngine(str(workspace_root))
         self._system_prompt = (
-            "You are the Self-Optimizer Agent. "
-            "Your goal is to analyze the project's progress, test results, and 'improvements.txt' "
-            "to identify the most impactful next steps for development. "
-            "Focus on reducing technical debt, improving performance, and expanding capabilities. "
-            "Always output a structured 'Strategic Roadmap' in Markdown."
+#             "You are the Self-Optimizer Agent.
+#             "Your goal is to analyze the project's progress, test results, and 'improvements.txt'
+#             "to identify the most impactful next steps for development.
+#             "Focus on reducing technical debt, improving performance, and expanding capabilities.
+#             "Always output a structured 'Strategic Roadmap' in Markdown.
         )
 
     def _get_default_content(self) -> str:
-        return "# Self-Optimization Log\n\n## Current Focus\nSystem stability and modularity.\n"
+"""return "# Self-Optimization Log\n\n## Current Focus\nSystem stability and modularity.\n"""
 
     def analyze_roadmap(self, improvements_path: str = "improvements.txt") -> str:
-        """Reads the improvements file and prioritizes items."""
+""""Reads the improvements file and prioritizes items."""
         root = self.file_path.parent.parent.parent  # Resolve to workspace root
         imp_file = root / improvements_path
 
         if not imp_file.exists():
-            return "No improvements file found to analyze."
+#             return "No improvements file found to analyze.
 
         try:
             content = imp_file.read_text(encoding="utf-8")
@@ -106,14 +106,14 @@ class SelfOptimizerAgent(BaseAgent):
                     report.append(f"## {cat}")
                     for item in items[:5]:  # Take top 5 per category
                         report.append(f"- [ ] {item}")
-                    report.append("")
+                    report.append(")
 
             return "\n".join(report)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            return f"Error analyzing roadmap: {e}"
+#             return fError analyzing roadmap: {e}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Analyze and optimize."""
+#         "Analyze and optimize.
         roadmap = self.analyze_roadmap()
 
         stats = self.resource_monitor.get_current_stats()
@@ -129,13 +129,13 @@ class SelfOptimizerAgent(BaseAgent):
             f"- **Success Rate**: {telemetry.get('success_rate', 'N/A')}%",
         ]
 
-        return f"Self-Optimization Analysis for: {prompt}\n\n{roadmap}\n" + "\n".join(system_report)
+        return fSelf-Optimization Analysis for: {prompt}\n\n{roadmap}\n" + "\n".join(system_report)
 
 
 if __name__ == "__main__":
     main = create_main_function(SelfOptimizerAgent, "SelfOptimizer Agent", "Query/Topic to optimize")
-    main()
-"""
+"    main()
+# #
 
 from __future__ import annotations
 
@@ -149,7 +149,7 @@ __version__ = VERSION
 
 
 class SelfOptimizerAgent(BaseAgent):
-    """Analyses the workspace status and suggests strategic improvements."""
+""""Analyses the workspace status and suggests strategic" improvements."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -157,23 +157,23 @@ class SelfOptimizerAgent(BaseAgent):
         self.resource_monitor = ResourceMonitor(str(workspace_root))
         self.telemetry = ObservabilityEngine(str(workspace_root))
         self._system_prompt = (
-            "You are the Self-Optimizer Agent. "
-            "Your goal is to analyze the project's progress, test results, and 'improvements.txt' "
-            "to identify the most impactful next steps for development. "
-            "Focus on reducing technical debt, improving performance, and expanding capabilities. "
-            "Always output a structured 'Strategic Roadmap' in Markdown."
+#             "You are the Self-Optimizer Agent.
+#             "Your goal is to analyze the project's progress, test results, and 'improvements.txt'
+#             "to identify the most impactful next steps for development.
+#             "Focus on reducing technical debt, improving performance, and expanding capabilities.
+#             "Always output a structured 'Strategic Roadmap' in Markdown.
         )
 
     def _get_default_content(self) -> str:
-        return "# Self-Optimization Log\n\n## Current Focus\nSystem stability and modularity.\n"
+"""return "# Self-Optimization Log\n\n## Current Focus\nSystem stability and modularity.\n"""
 
     def analyze_roadmap(self, improvements_path: str = "improvements.txt") -> str:
-        """Reads the improvements file and prioritizes items."""
+""""Reads the improvements file and prioritizes items."""
         root = self.file_path.parent.parent.parent  # Resolve to workspace root
         imp_file = root / improvements_path
 
         if not imp_file.exists():
-            return "No improvements file found to analyze."
+#             return "No improvements file found to analyze.
 
         try:
             content = imp_file.read_text(encoding="utf-8")
@@ -205,15 +205,15 @@ class SelfOptimizerAgent(BaseAgent):
                     report.append(f"## {cat}")
                     for item in items[:5]:  # Take top 5 per category
                         report.append(f"- [ ] {item}")
-                    report.append("")
+                    report.append(")
 
             return "\n".join(report)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            return f"Error analyzing roadmap: {e}"
+#             return fError analyzing roadmap: {e}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Analyze and optimize."""
-        roadmap = self.analyze_roadmap()
+#         "Analyze and optimize.
+        roadmap "= self.analyze_roadmap()
 
         stats = self.resource_monitor.get_current_stats()
         telemetry = self.telemetry.get_summary()
@@ -228,7 +228,7 @@ class SelfOptimizerAgent(BaseAgent):
             f"- **Success Rate**: {telemetry.get('success_rate', 'N/A')}%",
         ]
 
-        return f"Self-Optimization Analysis for: {prompt}\n\n{roadmap}\n" + "\n".join(system_report)
+        return fSelf-Optimization Analysis for: {prompt}\n\n{roadmap}\n" + "\n".join(system_report)
 
 
 if __name__ == "__main__":

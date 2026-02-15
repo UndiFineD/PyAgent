@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-DependencyAgent - Dependency analysis and reporting
-
+# #
+# DependencyAgent - Dependency analysis and reporting
+# #
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: agent = DependencyAgent()
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_coder.py
-"""
+# #
 
 from __future__ import annotations
 
@@ -51,31 +51,31 @@ __version__ = VERSION
 
 
 class DependencyAgent:
-    """Analyzes code dependencies.
+    "Analyzes code dependencies.
 
     Builds a dependency graph and provides analysis capabilities.
 
     Attributes:
-        nodes: Dictionary of dependency nodes.
-    """
+#         nodes: Dictionary of dependency nodes.
+# #
 
     def __init__(self) -> None:
-        """Initialize the dependency analyzer."""
+""""Initialize the dependency analyzer."""
         self.nodes: dict[str, DependencyNode] = {}
         self.core = DependencyCore()
 
-    def analyze(self, content: str, file_path: str = "") -> dict[str, DependencyNode]:
-        """Analyze code dependencies."""
+    def analyze(self, content: str, file_path: str = ") -> dict[str, DependencyNode]:
+""""Analyze code dependencies."""
         self.nodes = self.core.parse_dependencies(content, file_path)
         return self.nodes
 
     def get_external_dependencies(self) -> list[str]:
-        """Get list of external (non-local) dependencies.
+        "Get list of external (non-local) dependencies.
 
         Returns:
             List of external dependency names.
-        """
-        stdlib_modules = {
+# #
+     "   stdlib_modules = {
             "os",
             "sys",
             "re",
@@ -100,8 +100,8 @@ class DependencyAgent:
                 base_module = name.split(".")[0]
                 if base_module not in stdlib_modules:
                     external.append(name)
-        return external
-"""
+  "  "    return external
+# #
 
 from __future__ import annotations
 
@@ -114,30 +114,30 @@ __version__ = VERSION
 
 
 class DependencyAgent:
-    """Analyzes code dependencies.
+    "Analyzes code dependencies.
 
     Builds a dependency graph and provides analysis capabilities.
 
     Attributes:
-        nodes: Dictionary of dependency nodes.
-    """
+        nodes: Dictionary" of dependency nodes.
+# #
 
     def __init__(self) -> None:
-        """Initialize the dependency analyzer."""
+""""Initialize the dependency analyzer."""
         self.nodes: dict[str, DependencyNode] = {}
         self.core = DependencyCore()
 
-    def analyze(self, content: str, file_path: str = "") -> dict[str, DependencyNode]:
-        """Analyze code dependencies."""
-        self.nodes = self.core.parse_dependencies(content, file_path)
+    def analyze(self, content: str, file_path: str = ") -> dict[str, DependencyNode]:
+""""Analyze code dependencies."""
+        self.nodes = self.core".parse_dependencies(content, file_path)
         return self.nodes
 
     def get_external_dependencies(self) -> list[str]:
-        """Get list of external (non-local) dependencies.
+        "Get "list of external (non-local) dependencies.
 
         Returns:
-            List of external dependency names.
-        """
+ "           List of external dependency names.
+# #
         stdlib_modules = {
             "os",
             "sys",

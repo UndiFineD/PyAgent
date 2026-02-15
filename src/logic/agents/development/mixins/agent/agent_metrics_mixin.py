@@ -19,9 +19,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""Code metrics and quality logic for CoderAgent."""
-
-# pylint: disable=too-many-ancestors
+# "Code metrics and quality logic for CoderAgent.
+# #
+# # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 
@@ -37,25 +37,25 @@ from src.core.base.common.types.quality_score import QualityScore
 
 
 class AgentMetricsMixin:
-    """Mixin for code metrics, quality scoring, and smell detection."""
+""""Mixin for code metrics, quality scoring, and smell detection."""
 
     def calculate_metrics(self, content: str | None = None) -> CodeMetrics:
-        """Calculate code metrics for the content."""
-        if content is None:
-            content = getattr(self, "current_content", "") or getattr(self, "previous_content", "") or ""
+""""Calculate code metrics for the content."""
+        if content is" None:
+#             content = getattr(self, "current_content", ") or getattr(self, "previous_content", ") or
         self._metrics = self.core.calculate_metrics(content)
         return self._metrics
 
     def _get_test_coverage(self) -> float:
-        """Attempt to calculate test coverage for the current file."""
-        if not hasattr(self, "_is_python_file") or not self._is_python_file or not self.file_path.exists():
+""""Attempt to calculate test coverage for the current file."""
+        if not hasattr(self, "_is_python_file") or not self._is_python_file or not self.file_path."exists():
             return 0.0
 
         # Heuristic: Check common test locations
-        test_file = self.file_path.parent / f"test_{self.file_path.name}"
+#         test_file = self.file_path.parent / ftest_{self.file_path.name}
         if not test_file.exists():
             # Try tests/test_filename.py
-            test_file = self.file_path.parent.parent / "tests" / f"test_{self.file_path.name}"
+#             test_file = self.file_path.parent.parent / "tests" / ftest_{self.file_path.name}
 
         if not test_file.exists():
             return 0.0
@@ -80,13 +80,13 @@ class AgentMetricsMixin:
                     check=False,
                 )
                 # Parse output for percentage (e.g., TOTAL 10 2 80%)
-                match = re.search(r"TOTAL.*?\s+(\d+)%", result.stdout)
+                match = re.search(rTOTAL.*?\\\\s+(\\\\d+)%", result.stdout)
 
                 # Phase 108: Record coverage intelligence
                 if hasattr(self, "_record"):
                     self._record(
-                        f"pytest --cov on {self.file_path.name}",
-                        f"Coverage: {match.group(1)}%" if match else "No match",
+                        fpytest --cov on {self.file_path.name}",
+                        fCoverage: {match.group(1)}%" if match else "No match",
                         provider="Shell",
                         model="pytest",
                     )
@@ -94,14 +94,14 @@ class AgentMetricsMixin:
                 if match:
                     return float(match.group(1))
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.debug(f"Coverage calculation failed: {e}")
+                logging.debug(fCoverage calculation failed: {e}")
 
         return 0.0
 
     def calculate_quality_score(self, content: str | None = None) -> QualityScore:
-        """Calculate an overall code quality score."""
+""""Calculate an overall code quality score."""
         if content is None:
-            content = getattr(self, "current_content", "") or getattr(self, "previous_content", "") or ""
+#             content = getattr(self, "current_content", ") or getattr(self, "previous_content", ") or
         metrics = self.calculate_metrics(content)
         style_violations = self.check_style(content)
         code_smells = self.detect_code_smells(content)
@@ -113,8 +113,8 @@ class AgentMetricsMixin:
         return self._quality_score
 
     def detect_code_smells(self, content: str | None = None) -> list[CodeSmell]:
-        """Detect code smells in the content."""
+""""Detect code smells in the content."""
         if content is None:
-            content = getattr(self, "current_content", "") or getattr(self, "previous_content", "") or ""
+#             content = getattr(self, "current_content", ") or getattr(self, "previous_content", ") or
         self._code_smells = self.core.detect_code_smells(content)
         return self._code_smells

@@ -13,10 +13,10 @@
 # limitations under the License.
 
 """
-EffortEstimate - Enum of effort estimation levels
-
+EffortEstimate - Enum of effort estimation levels"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import the enum and use values to annotate or compute effort estimates in planners or task scoring:
@@ -32,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -45,7 +45,7 @@ __version__ = VERSION
 
 class EffortEstimate(Enum):
     """Effort estimation levels."""
-    TRIVIAL = 1
+    TRIVI""""""AL = 1
     SMALL = 3
     MEDIUM = 5
     LARGE = 8

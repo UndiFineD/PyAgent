@@ -14,9 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Cognitive Agents for PyAgent Swarm."""
-
-from .knowledge_agent import KnowledgeAgent
+# "Cognitive Agents for PyAgent Swarm.
+# #
+# from .knowledge_agent import KnowledgeAgent
 from .reasoning_agent import ReasoningAgent
 # from .context_agent import ContextAgent
 from .speciation_agent import SpeciationAgent

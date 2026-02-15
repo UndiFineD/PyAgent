@@ -16,7 +16,7 @@
 run_auto_tests - Run generated unit test files
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 python run_auto_tests.py [--workers N]

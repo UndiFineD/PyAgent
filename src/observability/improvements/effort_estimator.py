@@ -29,8 +29,8 @@ __version__ = VERSION
 
 class EffortEstimator:
     """Estimates effort for improvements."""
-
-    def __init__(self) -> None:
+"""
+    def __init__(self) -> None:"""
         self.base_rates: dict[str, float] = {
             "low": 2.0,
             "medium": 6.0,

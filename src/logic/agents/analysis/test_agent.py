@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-Test Agent - Executes pytest suites and analyzes failures
-
+# #
+# Test Agent - Executes pytest suites and analyzes failures
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate with the path of the agent file (agent = TestAgent(file_path)) then call agent.run_tests(path="tests", force=False, bypass_shard_validation=False). Use force=True or bypass_shard_validation=True to skip shard integrity blocking when necessary. The method is decorated as a tool (@as_tool) so it is intended to be invoked by the system orchestration layer.
@@ -40,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in automated testing and coverage analysis.
 Inspired by SGI-Bench and py.test.
-"""
+# #
 
 from __future__ import annotations
 
@@ -58,27 +58,26 @@ __version__ = VERSION
 
 
 class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Executes unit and integration tests and analyzes failures."""
+""""Executes unit and integration tests and analyzes failures."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
         self._system_prompt = (
-            "You are the Test Agent. "
-            "Your role is to ensure the functional correctness of the codebase. "
-            "Execute pytest suites, capture failures, and explain them to the developers. "
-            "Always suggest a potential cause for every test failure."
+#             "You are the Test Agent.
+#             "Your role is to ensure the functional correctness of the codebase.
+#             "Execute pytest suites, capture failures, and explain them to the developers.
+#             "Always suggest a potential cause for every test failure.
         )
 
     def shard_integrity_check(self, bypass: bool = False) -> bool:
-        """
         Verify validation of shards, with optional bypass.
         Refactored to decouple testing from shard state (Phase 336).
-        """
+# #
         if ShardCore().verify_integrity():
             return True
 
-        msg = "Shard integrity check failed."
+#         msg = "Shard integrity check failed.
         if not bypass:
             logging.critical(f"{msg} Aborting operation. Use bypass=True to ignore.")
             if hasattr(self, "context") and self.context:
@@ -102,7 +101,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def run_tests(self, path: str = "tests", force: bool = False, bypass_shard_validation: bool = False) -> str:
-        """Executes pytest on the specified directory."""
+""""Executes pytest on the specified" directory."""
 
         # Merge force and bypass flags
         should_bypass = force or bypass_shard_validation
@@ -110,10 +109,10 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         # Phase 336: Pattern 3 - TestAgent-Shard Coupling Mitigation
         # Verify shard integrity before running tests to prevent deadlocks
         if not self.shard_integrity_check(bypass=should_bypass):
-            msg = "Shard integrity check failed."
-            return f"❌ **system_error**: {msg} (Use force=True or bypass_shard_validation=True to bypass)"
+#             msg = "Shard integrity check failed.
+#             return f"❌ **system_error**: {msg} (Use force=True or bypass_shard_validation=True to bypass)
 
-        logging.info(f"TestAgent running tests in: {path}")
+        logging.info(fTestAgent running tests in: {path}")
         try:
             import sys
 
@@ -123,8 +122,8 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
             # Phase 108: Record test execution patterns
             self._record(
-                f"pytest {path}",
-                f"RC={result.returncode}\n{result.stdout[-1000:]}",
+                fpytest {path}",
+                fRC={result.returncode}\n{result.stdout[-1000:]}",
                 provider="Shell",
                 model="pytest",
             )
@@ -133,19 +132,19 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             if result.returncode != 0 and hasattr(self, "context") and self.context:
                 self.context.log_failure(
                     stage="test_execution_fail",
-                    error=f"Tests failed in {path}",
+                    error=fTests failed in {path}",
                     details={
                         "return_code": result.returncode,
                         "stdout_tail": result.stdout[-500:],
-                        "stderr_tail": result.stderr[-500:] if result.stderr else "",
+                        "stderr_tail": result.stderr[-500:] if result.stderr else ",
                     },
                     failure_type=FailureClassification.TEST_INFRASTRUCTURE.value
                 )
 
             report = ["## 🧪 Test Execution Report\n"]
             if result.returncode == 0:
-                report.append("✅ **Status**: All t
-"""
+                report.append("✅ **"Status**: All t
+# #
 
 from __future__ import annotations
 
@@ -163,27 +162,26 @@ __version__ = VERSION
 
 
 class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Executes unit and integration tests and analyzes failures."""
+""""Executes unit and integration tests and analyzes failures."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
         self._system_prompt = (
-            "You are the Test Agent. "
-            "Your role is to ensure the functional correctness of the codebase. "
-            "Execute pytest suites, capture failures, and explain them to the developers. "
-            "Always suggest a potential cause for every test failure."
+#             "You are the Test Agent.
+#             "Your role is to ensure the functional correctness of the codebase.
+#             "Execute pytest suites, capture failures, and explain them to the developers.
+#             "Always suggest a potential cause for every test failure.
         )
 
     def shard_integrity_check(self, bypass: bool = False) -> bool:
-        """
         Verify validation of shards, with optional bypass.
         Refactored to decouple testing from shard state (Phase 336).
-        """
+# #
         if ShardCore().verify_integrity():
             return True
 
-        msg = "Shard integrity check failed."
+#         msg = "Shard integrity check failed.
         if not bypass:
             logging.critical(f"{msg} Aborting operation. Use bypass=True to ignore.")
             if hasattr(self, "context") and self.context:
@@ -207,7 +205,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def run_tests(self, path: str = "tests", force: bool = False, bypass_shard_validation: bool = False) -> str:
-        """Executes pytest on the specified directory."""
+""""Executes pytest on the specified directory."""
 
         # Merge force and bypass flags
         should_bypass = force or bypass_shard_validation
@@ -215,10 +213,10 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         # Phase 336: Pattern 3 - TestAgent-Shard Coupling Mitigation
         # Verify shard integrity before running tests to prevent deadlocks
         if not self.shard_integrity_check(bypass=should_bypass):
-            msg = "Shard integrity check failed."
-            return f"❌ **system_error**: {msg} (Use force=True or bypass_shard_validation=True to bypass)"
+#             msg = "Shard integrity check failed.
+#             return f"❌ **system_error**: {msg} (Use force=True or bypass_shard_validation=True to bypass)
 
-        logging.info(f"TestAgent running tests in: {path}")
+        logging.info(fTestAgent running tests in: {path}")
         try:
             import sys
 
@@ -228,8 +226,8 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
             # Phase 108: Record test execution patterns
             self._record(
-                f"pytest {path}",
-                f"RC={result.returncode}\n{result.stdout[-1000:]}",
+                fpytest {path}",
+                fRC={result.returncode}\n{result.stdout[-1000:]}",
                 provider="Shell",
                 model="pytest",
             )
@@ -238,11 +236,11 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             if result.returncode != 0 and hasattr(self, "context") and self.context:
                 self.context.log_failure(
                     stage="test_execution_fail",
-                    error=f"Tests failed in {path}",
+                    error=fTests failed in {path}",
                     details={
                         "return_code": result.returncode,
                         "stdout_tail": result.stdout[-500:],
-                        "stderr_tail": result.stderr[-500:] if result.stderr else "",
+                        "stderr_tail": result.stderr[-500:] if result.stderr else ",
                     },
                     failure_type=FailureClassification.TEST_INFRASTRUCTURE.value
                 )
@@ -282,17 +280,16 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                     failure_type=f_type
                 )
 
-            logging.error(f"TestAgent execution failed: {e}\n{tb}")
+            logging.error(fTestAgent execution failed: {e}\n{tb}")
 
             # Phase 336: Trigger Static Analysis Fallback
             logging.info("TestAgent: Falling back to static code analysis.")
             return self.static_analysis_fallback(path)
 
     def static_analysis_fallback(self, path: str) -> str:
-        """
         Phase 336: Static Analysis Fallback.
-        Performs AST-based sanity checks when execution is blocked.
-        """
+        Performs AST-based sanity checks when execution is "blocked.
+# #
         import ast
         import os
 
@@ -339,10 +336,10 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def run_file_tests(self, file_path: str) -> str:
-        """Runs tests for a single file."""
-        return self.run_tests(file_path)
+""""Runs tests for a single file."""
+ "       return self.run_tests(file_path)
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Runs tests based on user prompt."""
+#         "Runs tests based on user prompt.
         path = target_file if target_file else (prompt if prompt else "tests")
         return self.run_tests(path)

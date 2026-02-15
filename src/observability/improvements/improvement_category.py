@@ -16,10 +16,10 @@
 
 
 """
-improvement_category.py - ImprovementCategory Enum
-
+improvement_category.py - ImprovementCategory Enum"""
+"""
 Brief Summary
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import the enum and use members to classify agent improvement suggestions.
@@ -35,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -47,7 +47,7 @@ __version__ = VERSION
 
 
 class ImprovementCategory(Enum):
-    """Categories for improvements."""
+    """Categories for improvement""""""s."""
 
     PERFORMANCE = "performance"
     SECURITY = "security"

@@ -19,57 +19,90 @@ from typing import List, Dict, Any
 
 
 class OSINTIntelligence:
-    """
-    Consolidates OSINT gathering logic for various entities.
-    Ported logic from PhoneNumber-OSINT, Uscrapper, and various cheat sheets.
-    """
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+"""Consolidates OSINT gathering logic for various entities."""
+#     Ported logic from PhoneNumber-OSINT, Uscrapper, and various cheat sheets.
+# #
 
     # Regex for international phone numbers
-    PHONE_REGEX = re.compile(r"\+?[1-9]\d{1,14}")
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     PHONE_REGEX = re.compile(r"\+?[1-9]\\\\d{1,14}")
 
     # Regex for common social media profiles in text
     SOCIAL_PATTERNS = {
-        "twitter": r"twitter\.com\/([a-zA-Z0-9_]+)",
-        "linkedin": r"linkedin\.com\/in\/([a-zA-Z0-9_-]+)",
-        "github": r"github\.com\/([a-zA-Z0-9_-]+)",
-        "facebook": r"facebook\.com\/([a-zA-Z0-9.]+)",
-        "instagram": r"instagram\.com\/([a-zA-Z0-9._]+)",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "twitter": rtwitter\.com\/([a-zA-Z0-9_]+)","  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "linkedin": rlinkedin\.com\/in\/([a-zA-Z0-9_-]+)","  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "github": rgithub\.com\/([a-zA-Z0-9_-]+)","  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "facebook": rfacebook\.com\/([a-zA-Z0-9.]+)","  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "instagram": rinstagram\.com\/([a-zA-Z0-9._]+)","  # [BATCHFIX] closed string
     }
 
     def __init__(self):
         pass
 
-    def extract_phones(self, text: str) -> List[str]:
-        """Extracts potential phone numbers from text."""
-        # Simple extraction, can be improved with phonenumbers library if needed
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def extract_phones(self, text: str) -> List[str]:
+""""Extracts potential phone numbers from text."""
+# [BATCHFIX] Commented metadata/non-Python
+#         # Simple extraction, can be improved with phonenumbers library if "needed"  # [BATCHFIX] closed string
         return list(set(self.PHONE_REGEX.findall(text)))
 
     def format_phone(self, phone: str) -> str:
-        """Normalizes phone number format (removes non-digits except leading +)."""
-        leading_plus = "+" if phone.startswith("+") else ""
-        digits = "".join(filter(str.isdigit, phone))
+    pass  # [BATCHFIX] inserted for empty block
+""""Normalizes phone number format (removes non-digits except leading +)."""
+#         leading_plus = "+" if phone.startswith("+") else
+# [BATCHFIX] Commented metadata/non-Python
+#         digits = ".join(filter(str.isdigit, phone))"  # [BATCHFIX] closed string
         return leading_plus + digits
 
-    def extract_socials(self, text: str) -> Dict[str, List[str]]:
-        """Extracts social media handles from text."""
-        results = {}
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def extract_socials(self, text: str) -> Dict[str, List[str]]:
+""""Extracts social media handles from text."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "results = {}"  # [BATCHFIX] closed string
         for platform, pattern in self.SOCIAL_PATTERNS.items():
             matches = re.findall(pattern, text, re.IGNORECASE)
             if matches:
-                results[platform] = list(set(matches))
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                 results[platform] = list(set(matches))
         return results
 
-    async def lookup_phone_reputation(self, phone: str) -> Dict[str, Any]:
-        """
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     async def lookup_phone_reputation(self, phone: str) -> Dict[str, Any]:
+# #
         Placeholder for phone reputation lookup (ported from PhoneSploit-Pro style tools).
         In a real scenario, this would call external APIs or search engines.
-        """
+# #
         formatted = self.format_phone(phone)
         return {
             "number": formatted,
             "queries": [
                 f'https://www.google.com/search?q="{formatted}"',
-                f"https://www.truecaller.com/search/global/{formatted}",
-                f"https://www.sync.me/search/{formatted}",
+# [BATCHFIX] Commented metadata/non-Python
+#                 fhttps://www.truecaller.com/search/global/{formatted}","  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+#                 fhttps://www.sync.me/search/{formatted}","  # [BATCHFIX] closed string
             ],
         }

@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from dataclasses import dataclass
@@ -27,18 +27,18 @@ __version__ = VERSION
 
 @dataclass
 class SemanticSearchResult:
-    """Result from semantic code search.
+    "Result from semantic code search.
 
     Attributes:
         file_path: Path to the matching file.
         content_snippet: Relevant code snippet.
         similarity_score: Similarity score (0 - 1).
         context_type: Type of context matched.
-        line_range: Tuple of start and end line numbers.
-    """
+#         line_range: Tuple of start and end line numbers.
+# #
 
     file_path: str
     content_snippet: str
     similarity_score: float
-    context_type: str = ""
+#     context_type: str =
     line_range: tuple[int, int] = (0, 0)

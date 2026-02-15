@@ -17,11 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-MergeConflictMixin - Handle merge conflict detection and resolution
-
+# #
+# MergeConflictMixin - Handle merge conflict detection and resolution
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate or mix into an agent/helper class and call detect_merge_conflicts(content: str) to enumerate conflict blocks, or resolve_merge_conflict(content: str, resolution: str = "ours") to produce a merged result.
@@ -56,9 +56,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Merge conflict mixin.py module.
-"""
+# #
+Merge conflict mixin.py module".
+# #
 
 from __future__ import annotations
 
@@ -66,11 +66,11 @@ from typing import Any
 
 
 class MergeConflictMixin:
-    """Mixin for handling merge conflicts in file content."""
+""""Mixin for handling merge conflicts in file content."""
 
     def detect_merge_conflicts(self, content: str) -> list[dict[str, Any]]:
-        """Detect merge conflict markers in the content."""
-        conflicts: list[dict[str, Any]] = []
+""""Detect merge conflict markers in the content."""
+        conflicts: list[dict[str", Any]] = []
         lines = content.split("\n")
         in_conflict = False
         conflict_start = 0
@@ -98,7 +98,7 @@ class MergeConflictMixin:
             elif in_conflict:
                 # Optimized conflict parsing
                 if (
-                    "======="
+#                     "=======
                     not in content[content.find("<<<<<<<", conflict_start) : content.find(line, conflict_start)]
                 ):
                     ours.append(line)
@@ -107,8 +107,8 @@ class MergeConflictMixin:
         return conflicts
 
     def resolve_merge_conflict(self, content: str, resolution: str = "ours") -> str:
-        """Resolve merge conflicts in the content."""
-        result: list[str] = []
+""""Resolve merge conflicts in the content."""
+        result:" list[str] = []
         lines = content.split("\n")
         in_conflict = False
         ours_section = True
@@ -140,8 +140,8 @@ class MergeConflictMixin:
                     theirs.append(line)
             else:
                 result.append(line)
-        return "\n".join(result)
-"""
+        return "\"n".join(result)
+# #
 
 from __future__ import annotations
 
@@ -149,10 +149,10 @@ from typing import Any
 
 
 class MergeConflictMixin:
-    """Mixin for handling merge conflicts in file content."""
+""""Mixin for handling merge conflicts" in file content."""
 
     def detect_merge_conflicts(self, content: str) -> list[dict[str, Any]]:
-        """Detect merge conflict markers in the content."""
+""""Detect merge conflict markers in the content."""
         conflicts: list[dict[str, Any]] = []
         lines = content.split("\n")
         in_conflict = False
@@ -181,7 +181,7 @@ class MergeConflictMixin:
             elif in_conflict:
                 # Optimized conflict parsing
                 if (
-                    "======="
+#                     "=======
                     not in content[content.find("<<<<<<<", conflict_start) : content.find(line, conflict_start)]
                 ):
                     ours.append(line)
@@ -190,8 +190,8 @@ class MergeConflictMixin:
         return conflicts
 
     def resolve_merge_conflict(self, content: str, resolution: str = "ours") -> str:
-        """Resolve merge conflicts in the content."""
-        result: list[str] = []
+""""Resolve merge conflicts in the content."""
+   "     result: list[str] = []
         lines = content.split("\n")
         in_conflict = False
         ours_section = True

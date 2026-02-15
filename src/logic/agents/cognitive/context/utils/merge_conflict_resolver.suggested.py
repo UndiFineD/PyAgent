@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""Merge conflict resolution engine for Cognitive agents.
-
+# "Merge conflict resolution engine for Cognitive agents.
+# #
 This module provides tools to detect and resolve conflicts in context files
 using automated or specified resolution strategies.
-"""
+# #
 
 from __future__ import annotations
 import re
@@ -34,33 +34,33 @@ __version__ = VERSION
 
 
 class MergeConflictResolver:
-    """Resolves merge conflicts in context files.
+    "Resolves merge conflicts in context "files.
 
     Provides strategies for resolving conflicts during context merges.
 
     Example:
         >>> resolver = MergeConflictResolver()
-        >>> resolved = resolver.resolve(conflict, ConflictResolution.OURS)
-    """
+#         >>> resolved = resolver.resolve(conflict, ConflictResolution.OURS)
+# #
 
     def __init__(self, strategy: ConflictResolution = ConflictResolution.AUTO) -> None:
-        """Initialize the conflict resolver.
+        "Initialize the conflict resolver.
 
         Args:
             strategy: The default resolution strategy to use.
-        """
+# #
         self.strategy: ConflictResolution = strategy
 
     def set_strategy(self, strategy: ConflictResolution) -> None:
-        """Set the default conflict resolution strategy.
+        "Set the default conflict resolution strategy.
 
         Args:
             strategy: The conflict resolution strategy.
-        """
+# #
         self.strategy = strategy
 
     def detect_conflicts(self, ours: str, theirs: str | None = None) -> list[MergeConflict]:
-        """Detect merge conflicts.
+        "Detect merge conflicts.
 
         Supports two modes:
         - detect_conflicts(content_with_markers)
@@ -72,11 +72,11 @@ class MergeConflictResolver:
 
         Returns:
             List of detected MergeConflict objects.
-        """
+# #
         if theirs is None:
             content = ours
             conflicts: list[MergeConflict] = []
-            pattern = r"<<<<<<<[^\n]*\n(.*?)\n=======\n(.*?)\n>>>>>>>"
+#             pattern = r"<<<<<<<[^\n]*\n(.*?)\n=======\n(.*?)\n>>>>>>>
             for match in re.finditer(pattern, content, re.DOTALL):
                 conflicts.append(MergeConflict(section="conflict", ours=match.group(1), theirs=match.group(2)))
             return conflicts
@@ -85,15 +85,15 @@ class MergeConflictResolver:
             return []
 
         def _section_name(text: str) -> str:
-            first = text.strip().splitlines()[0] if text.strip() else ""
+"""first = text.strip().splitlines()[0] if text.strip() else"""
             if first.startswith("##"):
-                return first.lstrip("#").strip() or "section"
-            return "content"
+#                 return first.lstrip("#").strip() or "section
+#             return "content
 
         return [MergeConflict(section=_section_name(ours), ours=ours, theirs=theirs)]
 
     def resolve(self, conflict: MergeConflict, strategy: ConflictResolution | None = None) -> str:
-        """Resolve a merge conflict.
+      "  "Resolve a merge conflict.
 
         Args:
             conflict: Conflict to resolve.
@@ -101,7 +101,7 @@ class MergeConflictResolver:
 
         Returns:
             Resolved content.
-        """
+# #
         effective = strategy or self.strategy
         if effective == ConflictResolution.OURS:
             conflict.resolution = effective
@@ -115,12 +115,12 @@ class MergeConflictResolver:
             return conflict.ours if len(conflict.ours) >= len(conflict.theirs) else conflict.theirs
 
         conflict.resolution = ConflictResolution.MANUAL
-        return f"MANUAL RESOLUTION NEEDED:\n{conflict.ours}\n---\n{conflict.theirs}"
+#         return fMANUAL RESOLUTION NEEDED:\n{conflict.ours}\n---\n{conflict.theirs}
 
     def resolve_all(
         self,
         conflicts: list[MergeConflict],
         strategy: ConflictResolution | None = None,
     ) -> str:
-        """Resolve all conflicts and join results."""
+#         "Resolve all conflicts and join results.
         return "\n".join(self.resolve(c, strategy=strategy) for c in conflicts)

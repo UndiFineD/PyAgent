@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Benchmark core.py module.
-"""
-
+# #
+# Benchmark core.py module.
+# #
+# #
 from __future__ import annotations
 
 from typing import Any
@@ -31,13 +31,13 @@ except ImportError:
 
 
 class BenchmarkCore:
-    """Pure logic for agent performance benchmarking and regression gating.
-    Calculates baselines and validates performance constraints.
-    """
+    "Pure logic for agent performance benchmarking and regression gating.
+#     Calculates baselines and validates performance constraints.
+# #
 
     def calculate_baseline(self, results: list[BenchmarkResult]) -> float:
-        """Calculates the mean duration from a set of benchmark results."""
-        if rc:
+""""Calculates the mean duration from a set of benchmark results."""
+  "   "   if rc:
             try:
                 # Convert results to list of dicts for Rust
                 results_list = [
@@ -57,8 +57,8 @@ class BenchmarkCore:
         return sum(r.duration for r in results) / len(results)
 
     def check_regression(self, current_duration: float, baseline: float, threshold: float = 0.1) -> dict[str, Any]:
-        """Checks if current duration exceeds the baseline by the given threshold."""
-        if rc:
+""""Checks if current duration exceeds the baseline by the given threshold."""
+  "      if rc:
             try:
                 return rc.check_regression(current_duration, baseline, threshold)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):
@@ -74,7 +74,7 @@ class BenchmarkCore:
         }
 
     def score_efficiency(self, result: BenchmarkResult) -> float:
-        """Scores efficiency based on duration per token."""
+""""Scores efficiency based on duration per token."""
         if rc:
             try:
                 r_dict = {

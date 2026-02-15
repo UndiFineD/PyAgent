@@ -16,10 +16,10 @@
 
 
 """
-ImprovementTemplate - Template for creating improvements
-
+ImprovementTemplate - Template for creating improvements"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Construct: tpl = ImprovementTemplate(id="id", name="Name", title_pattern="Fix {area}", description_template="Change {detail}")
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -55,12 +55,12 @@ __version__ = VERSION
 
 @dataclass(init=False)
 class ImprovementTemplate:
-    """Template for creating improvements.
+    """Template for creating improve""""""ments.
 
     Compatibility notes:
     - Tests construct templates without `id`/`category`.
     - Tests sometimes pass `description_pattern` instead of `description_template`.
-    - `instantiate()` returns a dict with `title` and `description`.
+    - `instantiate()` returns a dict with `title` and `description`.""""""
     """
 
     id: str
@@ -99,9 +99,9 @@ class ImprovementTemplate:
 
     def instantiate(self, variables: dict[str, str]) -> dict[str, str]:
         """Instantiate the template with variables."""
-        return {
+    """"""    return {
             "title": self.title_pattern.format(**variables),
-            "description": self.description_template.format(**variables),
+            "description": self.description_template.format(**variables"""),""""""
         }
 """
 
@@ -121,12 +121,12 @@ __version__ = VERSION
 
 @dataclass(init=False)
 class ImprovementTemplate:
-    """Template for creating improvements.
+    """Template for crea""""""ting improvements.
 
     Compatibility notes:
     - Tests construct templates without `id`/`category`.
     - Tests sometimes pass `description_pattern` instead of `description_template`.
-    - `instantiate()` returns a dict with `title` and `description`.
+    - `instantiate()` returns a dict with `titl"""e` and""" `d"""escription`.
     """
 
     id: str
@@ -164,7 +164,7 @@ class ImprovementTemplate:
         self.default_effort = default_effort
 
     def instantiate(self, variables: dict[str, str]) -> dict[str, str]:
-        """Instantiate the template with variables."""
+        """Instantiate the template with var"""iab"""les."""
         return {
             "title": self.title_pattern.format(**variables),
             "description": self.description_template.format(**variables),

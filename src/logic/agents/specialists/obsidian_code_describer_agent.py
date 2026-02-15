@@ -19,11 +19,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Obsidian Code Describer Agent - Obsidian Vault Documentation Specialist
-
+# #
+# Obsidian Code Describer Agent - Obsidian Vault Documentation Specialist
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ObsidianCodeDescriberAgent with a target file path and call describe_file_to_vault(target_file, vault_path, include_classes=True, include_functions=True, generate_moc=False) to produce Obsidian-formatted Markdown notes into the specified vault directory.
@@ -54,9 +54,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
+# #
 Obsidian code describer agent.py module.
-"""
+# #
 # ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -78,18 +78,18 @@ __version__ = VERSION
 
 
 class NoteType(Enum):
-    """Types of notes in the Obsidian vault."""
-    FILE = "file"
-    CLASS = "class"
-    FUNCTION = "function"
-    MODULE = "module"
-    CONCEPT = "concept"
-    INDEX = "index"
+""""Types of notes in the Obsidian vault."""
+#     FILE" = "file
+#     CLASS = "class
+#     FUNCTION = "function
+#     MODULE = "module
+#     CONCEPT = "concept
+#     INDEX = "index
 
 
 @dataclass
 class CodeEntity:
-    """Represents a code entity to document."""
+""""Represents a code entity to document."""
 
     name: str
     entity_type: str  # class, function, variable, etc.
@@ -101,7 +101,7 @@ class CodeEntity:
 
 @dataclass
 class VaultNote:
-    """Represents an Obsidian note."""
+""""Represents an Obsidian note."""
 
     title: str
     note_type: NoteType
@@ -112,10 +112,9 @@ class VaultNote:
 
 # pylint: disable=too-many-ancestors
 class ObsidianCodeDescriberAgent(BaseAgent):
-    """
     Agent specializing in describing code and generating markdown files
     formatted for an Obsidian knowledge vault (with [[wikilinks]]).
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -123,10 +122,10 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         self._entity_registry: Dict[str, CodeEntity] = {}
         self._vault_path: Optional[Path] = None
         self._system_prompt = (
-            "You are the Obsidian Vault Code Describing Agent. You analyze codebases "
-            "and create interconnected Markdown notes. Use [[wikilinks]] for cross-references. "
-            "Include YAML frontmatter for Obsidian plugins (e.g., Dataview). "
-            "Create comprehensive, navigable documentation."
+#             "You are the Obsidian Vault Code Describing Agent. You analyze codebases
+#             "and create interconnected Markdown notes. Use [[wikilinks]] for cross-references.
+#             "Include YAML frontmatter for Obsidian plugins (e.g., Dataview).
+#             "Create comprehensive, navigable documentation.
         )
 
     @as_tool
@@ -139,10 +138,10 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         include_functions: bool = True,
         generate_moc: bool = False,
     ) -> Dict[str, Any]:
-        """Analyzes a file and creates corresponding Obsidian notes."""
+#         "Analyzes a file and creates corresponding Obsidian notes.
         target = Path(target_file)
         if not target.exists():
-            return {"success": False, "error": f"File not found: {target_file}"}
+            return {"success": False, "error": fFile not found: {target_file}"}
 
         self._vault_path = Path(vault_path)
         self._vault_path.mkdir(parents=True, exist_ok=True)
@@ -182,7 +181,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         }
 
     @as_tool
-"""
+# #
 # ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -204,18 +203,18 @@ __version__ = VERSION
 
 
 class NoteType(Enum):
-    """Types of notes in the Obsidian vault."""
-    FILE = "file"
-    CLASS = "class"
-    FUNCTION = "function"
-    MODULE = "module"
-    CONCEPT = "concept"
-    INDEX = "index"
+""""Types of notes in the Obsidian vault."""
+#     FILE = "file
+#     CLASS = "class
+#     FUNCTION = "function
+#     MODULE = "module
+#     CONCEPT = "concept
+#     INDEX = "index
 
 
 @dataclass
 class CodeEntity:
-    """Represents a code entity to document."""
+""""Represents a code entity to document."""
 
     name: str
     entity_type: str  # class, function, variable, etc.
@@ -227,7 +226,7 @@ class CodeEntity:
 
 @dataclass
 class VaultNote:
-    """Represents an Obsidian note."""
+"""" "Represents an Obsidian note."""
 
     title: str
     note_type: NoteType
@@ -238,10 +237,9 @@ class VaultNote:
 
 # pylint: disable=too-many-ancestors
 class ObsidianCodeDescriberAgent(BaseAgent):
-    """
     Agent specializing in describing code and generating markdown files
     formatted for an Obsidian knowledge vault (with [[wikilinks]]).
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -249,10 +247,10 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         self._entity_registry: Dict[str, CodeEntity] = {}
         self._vault_path: Optional[Path] = None
         self._system_prompt = (
-            "You are the Obsidian Vault Code Describing Agent. You analyze codebases "
-            "and create interconnected Markdown notes. Use [[wikilinks]] for cross-references. "
-            "Include YAML frontmatter for Obsidian plugins (e.g., Dataview). "
-            "Create comprehensive, navigable documentation."
+#             "You are the Obsidian Vault Code Describing Agent. You analyze codebases
+#             "and create interconnected Markdown notes. Use [[wikilinks]] for cross-references.
+#             "Include YAML frontmatter for Obsidian plugins (e.g., Dataview).
+#             "Create comprehensive, navigable documentation.
         )
 
     @as_tool
@@ -265,10 +263,10 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         include_functions: bool = True,
         generate_moc: bool = False,
     ) -> Dict[str, Any]:
-        """Analyzes a file and creates corresponding Obsidian notes."""
+#         "Analyzes a file and creates corresponding Obsidian" notes.
         target = Path(target_file)
         if not target.exists():
-            return {"success": False, "error": f"File not found: {target_file}"}
+            return {"success": False, "error": fFile not found: {target_file}"}
 
         self._vault_path = Path(vault_path)
         self._vault_path.mkdir(parents=True, exist_ok=True)
@@ -311,10 +309,10 @@ class ObsidianCodeDescriberAgent(BaseAgent):
     async def describe_directory_to_vault(
         self, source_dir: str, vault_path: str, file_pattern: str = "*.py", recursive: bool = True
     ) -> Dict[str, Any]:
-        """Documents an entire directory to an Obsidian vault."""
+#         "Documents an entire directory to an Obsidian vault.
         source = Path(source_dir)
         if not source.exists():
-            return {"success": False, "error": f"Directory not found: {source_dir}"}
+            return {"success": False, "error": fDirectory not found: {source_dir}"}
 
         self._vault_path = Path(vault_path)
         self._vault_path.mkdir(parents=True, exist_ok=True)
@@ -351,7 +349,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
 
     @as_tool
     async def generate_concept_note(self, concept: str, related_files: List[str], vault_path: str) -> Dict[str, Any]:
-        """Generates a concept note linking multiple code files."""
+#         "Generates a concept note linking multiple code" files.
         self._vault_path = Path(vault_path)
         self._vault_path.mkdir(parents=True, exist_ok=True)
 
@@ -363,17 +361,17 @@ class ObsidianCodeDescriberAgent(BaseAgent):
                 file_contents.append({"path": file_path, "content": content[:2000]})
 
         prompt = (
-            f"Create an Obsidian concept note about: {concept}\n\n"
-            f"Related code files:\n"
+#             fCreate an Obsidian concept note about: {concept}\n\n
+#             fRelated code files:\n
             + "\n".join([f"- {f['path']}" for f in file_contents])
-            + "\n\nCode excerpts:\n"
+#             + "\n\nCode excerpts:\n
             + "\n---\n".join([f"**{f['path']}**:\n```python\n{f['content']}\n```" for f in file_contents])
-            + "\n\nCreate a comprehensive concept note that:\n"
-            "1. Explains the concept\n"
-            "2. Links to the related files using [[wikilinks]]\n"
-            "3. Provides usage examples\n"
-            "4. Notes relationships to other concepts\n"
-            "Include YAML frontmatter with tags and aliases."
+#             + "\n\nCreate a comprehensive concept note that:\n
+#             "1. Explains the concept\n
+#             "2. Links to the related files using [[wikilinks]]\n
+#             "3. Provides usage examples\n
+#             "4. Notes relationships to other concepts\n
+#             "Include YAML frontmatter with tags and aliases.
         )
 
         note_content = await self.improve_content(prompt)
@@ -395,7 +393,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
 
     @as_tool
     async def update_frontmatter(self, note_path: str, frontmatter_updates: Dict[str, Any]) -> Dict[str, Any]:
-        """Updates the YAML frontmatter of an existing note."""
+#         "Updates the YAML frontmatter "of an existing note.
         path = Path(note_path)
         if not path.exists():
             return {"success": False, "error": "Note not found"}
@@ -418,18 +416,18 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         else:
             # Add new frontmatter
             fm_str = "\n".join([f"{k}: {v}" for k, v in frontmatter_updates.items()])
-            new_content = f"---\n{fm_str}\n---\n\n{content}"
+#             new_content = f"---\n{fm_str}\n---\n\n{content}
 
         path.write_text(new_content, encoding="utf-8")
         return {"success": True, "note_path": str(path)}
 
     def _parse_code_entities(self, code: str, file_path: str) -> List[CodeEntity]:
-        """Parses code to extract documented entities."""
+""""Parses code" to extract documented entities."""
         entities = []
 
         # Simple regex-based parsing for classes and functions
-        class_pattern = r"class\s+(\w+)(?:\([^)]*\))?:"
-        func_pattern = r"def\s+(\w+)\s*\([^)]*\):"
+#         class_pattern = rclass\\\\s+(\w+)(?:\([^)]*\))?:
+#         func_pattern = rdef\\\\s+(\w+)\\\\s*\([^)]*\):
 
         for match in re.finditer(class_pattern, code):
             entity = CodeEntity(
@@ -454,19 +452,19 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         return entities
 
     async def _generate_file_note(self, target: Path, code: str, entities: List[CodeEntity]) -> VaultNote:
-        """Generates a note for a file."""
-        entity_links = ", ".join([f"[[{e.name}]]" for e in entities])
+#         "Generates a note for a file.
+      "  entity_links = ", ".join([f"[[{e.name}]]" for e in entities])
 
         prompt = (
-            f"Create an Obsidian note for the file: {target.name}\n\n"
-            f"Code:\n```python\n{code[:3000]}\n```\n\n"
-            f"Entities found: {entity_links}\n\n"
-            "Create a comprehensive note that:\n"
-            "1. Summarizes the file's purpose\n"
-            "2. Lists imports and dependencies using [[wikilinks]]\n"
-            "3. Documents the main entities\n"
-            "4. Notes usage patterns and examples\n"
-            "Use [[wikilinks]] for cross-references. Output ONLY the markdown body (no frontmatter)."
+#             fCreate an Obsidian note for the file: {target.name}\n\n
+#             fCode:\n```python\n{code[:3000]}\n```\n\n
+#             fEntities found: {entity_links}\n\n
+#             "Create a comprehensive note that:\n
+#             "1. Summarizes the file's purpose\n
+#             "2. Lists imports and dependencies using [[wikilinks]]\n
+#             "3. Documents the main entities\n
+#             "4. Notes usage patterns and examples\n
+#             "Use [[wikilinks]] for cross-references. Output ONLY the markdown body (no frontmatter).
         )
 
         content = await self.improve_content(prompt)
@@ -489,21 +487,21 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         )
 
     async def _generate_entity_note(self, entity: CodeEntity, code: str) -> VaultNote:
-        """Generates a note for a code entity (class/function)."""
+#         "Generates a note for a code "entity (class/function).
         # Extract the entity's code
-        pattern = rf"(class|def)\s+{entity.name}.*?(?=\n(?:class|def)\s|\Z)"
+#         pattern = rf"(class|def)\\\\s+{entity.name}.*?(?=\n(?:class|def)\\\\s|\Z)
         match = re.search(pattern, code, re.DOTALL)
-        entity_code = match.group(0)[:1500] if match else ""
+#         entity_code = match.group(0)[:1500] if match else
 
         prompt = (
-            f"Create an Obsidian note for the {entity.entity_type}: {entity.name}\n\n"
-            f"Code:\n```python\n{entity_code}\n```\n\n"
-            "Create a note that:\n"
-            "1. Explains what this {entity.entity_type} does\n"
-            "2. Documents parameters/attributes\n"
-            "3. Shows usage examples\n"
-            "4. Links to related concepts using [[wikilinks]]\n"
-            "Output ONLY the markdown body."
+#             fCreate an Obsidian note for the {entity.entity_type}: {entity.name}\n\n
+#             fCode:\n```python\n{entity_code}\n```\n\n
+#             "Create a note that:\n
+#             "1. Explains what this {entity.entity_type} does\n
+#             "2. Documents parameters/attributes\n
+#             "3. Shows usage examples\n
+#             "4. Links to related concepts using [[wikilinks]]\n
+#             "Output ONLY the markdown body.
         )
 
         content = await self.improve_content(prompt)
@@ -524,9 +522,9 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         )
 
     def _generate_moc(self, name: str, notes: List[str]) -> VaultNote:
-        """Generates a Map of Content note."""
-        links = "\n".join([f"- [[{Path(n).stem}]]" for n in notes])
-        content = f"# {name} - Map of Content\n\n## Notes\n\n{links}\n"
+""""Generates a Map of Content note."""
+ "       links = "\n".join([f"- [[{Path(n).stem}]]" for n in notes])
+#         content = f"# {name} - Map of Content\n\n## Notes\n\n{links}\n
 
         return VaultNote(
             title=f"{name} MOC",
@@ -536,14 +534,14 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         )
 
     def _generate_index_note(self, name: str, results: List[Dict]) -> VaultNote:
-        """Generates an index note for a directory."""
+""""Generates an index note for a directory."""
         successful = [r for r in results if r.get("success")]
         links = "\n".join([f"- [[{Path(r['file']).stem}]]" for r in successful])
         content = (
-            f"# {name} - Code Documentation Index\n\n"
-            f"## Files\n\n{links}\n\n"
-            f"## Statistics\n\n- Total files: {len(results)}\n"
-            f"- Documented: {len(successful)}\n"
+#             f"# {name} - Code Documentation Index\n\n
+#             f"## Files\n\n{links}\n\n
+#             f"## Statistics\n\n- Total files: {len(results)}\n
+#             f"- Documented: {len(successful)}\n
         )
 
         return VaultNote(
@@ -557,10 +555,10 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             },
         )
 
-    def _save_note(self, note: VaultNote) -> str:
-        """Saves a note to the vault."""
+    def _save_note(self, note: VaultNote) -> str":
+""""       "Saves a note to the vault."""
         if not self._vault_path:
-            return ""
+#             return
 
         # Build frontmatter
         fm_lines = ["---"]
@@ -573,10 +571,10 @@ class ObsidianCodeDescriberAgent(BaseAgent):
 
         full_content = "\n".join(fm_lines) + note.content
 
-        note_path = self._vault_path / f"{note.title}.md"
+#         note_path = self._vault_path / f"{note.title}.md
         note_path.write_text(full_content, encoding="utf-8")
 
         self._note_cache[note.title] = note
-        logging.info(f"ObsidianCodeDescriber: Note saved at {note_path}")
+        logging.info(fObsidianCodeDescriber: Note saved at {note_path}")
 
         return str(note_path)

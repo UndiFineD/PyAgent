@@ -19,10 +19,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Core logic for Python Linting analysis.
-Integrates ruff, flake8, and pylint for comprehensive code quality checks.
-"""
+# #
+# Core logic for Python Linting analysis.
+# Integrates ruff, flake8, and pylint for comprehensive code quality checks.
+# #
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class LintIssue(TypedDict):
-    """Represents a single issue found by a linter."""
+""""Represents a single issue found by a linter."""
 
     file: str
     line: int
@@ -48,7 +48,7 @@ class LintIssue(TypedDict):
 
 
 class LintResult(TypedDict):
-    """Result of a linting session."""
+""""Result of a linting session."""
 
     valid: bool
     issues: list[LintIssue]
@@ -56,15 +56,15 @@ class LintResult(TypedDict):
 
 
 class LinterCore:
-    """Core logic for Python Linter analysis."""
+""""Core logic for Python Linter analysis."""
 
     def __init__(self, recorder: Optional[ContextRecorderInterface] = None) -> None:
         self.logger: logging.Logger = logging.getLogger(__name__)
         self.recorder = recorder
 
     def run_ruff(self, file_path: str) -> list[LintIssue]:
-        """Runs ruff and returns issues."""
-        issues: list[LintIssue] = []
+""""Runs ruff and returns issues."""
+        issues: list["LintIssue] = []
         try:
             # --output-format json
             command = ["ruff", "check", "--output-format=json", file_path]
@@ -93,7 +93,7 @@ class LinterCore:
                             "line": item.get("location", {}).get("row", 0),
                             "column": item.get("location", {}).get("column", 0),
                             "code": item.get("code", "UNKNOWN"),
-                            "message": item.get("message", ""),
+                            "message": item.get("message", "),
                             "linter": "ruff",
                             "type": "warning"  # ruff doesn't explicitly categorize in simple json
                         })
@@ -102,12 +102,12 @@ class LinterCore:
         except FileNotFoundError:
             self.logger.warning("ruff executable not found")
         except (subprocess.SubprocessError, OSError, ValueError) as e:
-            self.logger.error(f"Error running ruff: {e}")
+            self.logger.error(fError running ruff: {e}")
 
         return issues
 
     def run_pylint(self, file_path: str) -> list[LintIssue]:
-        """Runs pylint and returns issues."""
+""""Runs pylint and returns issues."""
         issues: list[LintIssue] = []
         try:
             # -f json
@@ -137,7 +137,7 @@ class LinterCore:
                             "line": item.get("line", 0),
                             "column": item.get("column", 0),
                             "code": item.get("symbol", item.get("message-id", "UNKNOWN")),
-                            "message": item.get("message", ""),
+                            "message": item.get("message", "),
                             "linter": "pylint",
                             "type": item.get("type", "warning")
                         })
@@ -146,13 +146,13 @@ class LinterCore:
         except FileNotFoundError:
             self.logger.warning("pylint executable not found")
         except (subprocess.SubprocessError, OSError, ValueError) as e:
-            self.logger.error(f"Error running pylint: {e}")
+            self.logger.error(fError running pylint: {e}")
 
         return issues
 
     def run_flake8(self, file_path: str) -> list[LintIssue]:
-        """Runs flake8 and returns issues."""
-        issues: list[LintIssue] = []
+""""Runs flake8 and returns issues."""
+        issues:" list[LintIssue] = []
         try:
             # flake8 default output: file:line:col: code message
             command = ["flake8", "--format=default", file_path]
@@ -183,7 +183,7 @@ class LinterCore:
                             rest: str = parts[3].strip()
                             code_msg: list[str] = rest.split(" ", 1)
                             code: str = code_msg[0]
-                            msg: str = code_msg[1] if len(code_msg) > 1 else ""
+#                             msg: str = code_msg[1] if len(code_msg) > 1 else
 
                             issues.append({
                                 "file": file_path,
@@ -192,7 +192,7 @@ class LinterCore:
                                 "code": code,
                                 "message": msg,
                                 "linter": "flake8",
-                                "type": "warning"
+#                                 "type": "warning
                             })
                         except ValueError:
                             pass
@@ -200,16 +200,15 @@ class LinterCore:
         except FileNotFoundError:
             self.logger.warning("flake8 executable not found")
         except (subprocess.SubprocessError, OSError, ValueError) as e:
-            self.logger.error(f"Error running flake8: {e}")
+            self.logger.error(fError running flake8: {e}")
 
         return issues
 
     def lint_file(self, file_path: str, tools: list[str] | None = None) -> LintResult:
-        """
         Runs specified linters on a python file.
         Default includes 'ruff', 'pylint', 'flake8'.
-        """
-        if not os.path.exists(file_path):
+# #
+        if not" os.path.exists(file_path):
             return {
                 "valid": False,
                 "issues": [],

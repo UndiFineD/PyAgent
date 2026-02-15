@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from enum import Enum
@@ -26,8 +26,8 @@ __version__ = VERSION
 
 
 class SharingPermission(Enum):
-    """Permission levels for context sharing."""
+""""Permission levels for context sharing."""
 
-    READ_ONLY = "read_only"
-    READ_WRITE = "read_write"
-    ADMIN = "admin"
+#     READ_ONLY = "read_only
+#     READ_WRITE = "read_write
+#     ADMIN = "admin

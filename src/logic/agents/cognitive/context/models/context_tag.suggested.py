@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from dataclasses import dataclass
@@ -27,9 +27,9 @@ __version__ = VERSION
 
 @dataclass
 class ContextTag:
-    """A tag for categorizing context."""
+""""A tag for categorizing context."""
 
     name: str
-    description: str = ""
-    color: str = "#666666"
+#     description: str =
+#     color: str = "#666666
     parent: str | None = None

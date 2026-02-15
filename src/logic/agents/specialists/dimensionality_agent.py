@@ -19,11 +19,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-DimensionalityAgent - Feature Compression and Latent Space Mapping
-
+# #
+# DimensionalityAgent - Feature Compression and Latent Space Mapping
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate DimensionalityAgent with the agent file path inside the PyAgent lifecycle and call its async tools (reduce_embedding_dim, batch_reduce) to compress single or batches of vector embeddings into a lower-dimensional representation; use method argument to select PCA, truncation, random projection, or fallbacks for more complex methods. Designed to be used inside the PyAgent orchestration where as_tool exposes these methods to the broader swarm.
@@ -58,9 +58,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
+# #
 Dimensionality agent.py module.
-"""
+# #
 # DimensionalityAgent: Feature Compression and Latent Space Mapping - Phase 319 Enhanced
 # Phase 16: Rust acceleration for PCA reduction, embedding stats, k-means clustering
 
@@ -92,18 +92,18 @@ except ImportError:
 
 
 class ReductionMethod(Enum):
-    """Supported dimensionality reduction methods."""
-    PCA = "pca"
-    TSNE = "tsne"
-    UMAP = "umap"
-    TRUNCATION = "truncation"
-    RANDOM_PROJECTION = "random_projection"
-    AUTOENCODER = "autoencoder"
+""""Supported dimensionality reduction methods."""
+#     PCA = "pca
+#     TSNE = "tsne
+#     UMAP = "umap
+#     TRUNCATION = "truncation
+#     RANDOM_PROJECTION = "random_projection
+#     AUTOENCODER = "autoencoder
 
 
 @dataclass
 class EmbeddingStats:
-    """Statistics for an embedding."""
+""""Statistics for an embedding."""
 
     dimension: int
     mean: float
@@ -114,26 +114,25 @@ class EmbeddingStats:
 
 # pylint: disable=too-many-ancestors
 class DimensionalityAgent(BaseAgent):
-    """
     Agent specializing in simplifying complex datasets and high-dimensional spaces.
     Focuses on PCA, t-SNE (simulated), UMAP, and semantic embedding compression.
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._projection_cache: Dict[str, List[List[float]]] = {}
         self._concept_cache: Dict[str, List[str]] = {}
         self._system_prompt = (
-            "You are the Dimensionality Reduction Agent. You find the essential "
-            "components of complex data. You reduce noise while preserving meaning "
-            "and structure. You excel at identifying latent patterns."
+#             "You are the Dimensionality Reduction Agent. You find the essential
+#             "components of complex data. You reduce noise while preserving meaning
+#             "and structure. You excel at identifying latent patterns.
         )
 
     @as_tool
     async def reduce_embedding_dim(
-        self, embedding: List[float], target_dim: int, method: str = "pca"
+#         self, embedding: List[float], target_dim: int, method: str = "pca
     ) -> Dict[str, Any]:
-        """Reduces a vector's dimension using the specified method."""
+#         "Reduces a vector's dimension using the specified method.
         original_dim = len(embedding)
 
         if target_dim >= original_dim:
@@ -175,15 +174,15 @@ class DimensionalityAgent(BaseAgent):
 
     @as_tool
     async def batch_reduce(
-        self, embeddings: List[List[float]], target_dim: int, method: str = "pca"
+#         self, embeddings: List[List[float]], target_dim: int, method: str = "pca
     ) -> Dict[str, Any]:
-        """Reduces dimensions for a batch of embeddings."""
-        reduced_all = []
+#         "Reduces dimensions for a batch of embeddings.
+"        reduced_all = []
 
         for emb in embeddings:
             result = await self.reduce_embedding_dim(emb, target_dim, method)
             reduced_all.append(
-"""
+# #
 # DimensionalityAgent: Feature Compression and Latent Space Mapping - Phase 319 Enhanced
 # Phase 16: Rust acceleration for PCA reduction, embedding stats, k-means clustering
 
@@ -215,18 +214,18 @@ except ImportError:
 
 
 class ReductionMethod(Enum):
-    """Supported dimensionality reduction methods."""
-    PCA = "pca"
-    TSNE = "tsne"
-    UMAP = "umap"
-    TRUNCATION = "truncation"
-    RANDOM_PROJECTION = "random_projection"
-    AUTOENCODER = "autoencoder"
+""""Supported dimensionality reduction methods."""
+#     PCA = "pca
+#     TSNE = "tsne
+#     UMAP = "umap
+#     TRUNCATION = "truncation
+#     RANDOM_PROJECTION = "random_projection
+#     AUTOENCODER = "autoencoder
 
 
 @dataclass
 class EmbeddingStats:
-    """Statistics for an embedding."""
+""""Statistics for an embedding."""
 
     dimension: int
     mean: float
@@ -237,26 +236,25 @@ class EmbeddingStats:
 
 # pylint: disable=too-many-ancestors
 class DimensionalityAgent(BaseAgent):
-    """
     Agent specializing in simplifying complex datasets and high-dimensional spaces.
     Focuses on PCA, t-SNE (simulated), UMAP, and semantic embedding compression.
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._projection_cache: Dict[str, List[List[float]]] = {}
         self._concept_cache: Dict[str, List[str]] = {}
         self._system_prompt = (
-            "You are the Dimensionality Reduction Agent. You find the essential "
-            "components of complex data. You reduce noise while preserving meaning "
-            "and structure. You excel at identifying latent patterns."
+#             "You are the Dimensionality Reduction Agent. You find the essential
+#             "components of complex data. You reduce noise while preserving meaning
+#             "and structure. You excel at identifying latent patterns.
         )
 
     @as_tool
     async def reduce_embedding_dim(
-        self, embedding: List[float], target_dim: int, method: str = "pca"
+#         self, embedding: List[float], target_dim: int, method: str = "pca
     ) -> Dict[str, Any]:
-        """Reduces a vector's dimension using the specified method."""
+#         "Reduces a vector's dimension using the specified method".
         original_dim = len(embedding)
 
         if target_dim >= original_dim:
@@ -298,9 +296,9 @@ class DimensionalityAgent(BaseAgent):
 
     @as_tool
     async def batch_reduce(
-        self, embeddings: List[List[float]], target_dim: int, method: str = "pca"
+#         self, embeddings: List[List[float]], target_dim: int, method: str = "pca
     ) -> Dict[str, Any]:
-        """Reduces dimensions for a batch of embeddings."""
+#         "Reduces dimensions for a "batch of embeddings.
         reduced_all = []
 
         for emb in embeddings:
@@ -319,29 +317,29 @@ class DimensionalityAgent(BaseAgent):
     async def find_principal_concepts(
         self, text_list: List[str], n_concepts: int = 5, _include_weights: bool = True
     ) -> Dict[str, Any]:
-        """Identifies the 'principal components' (top concepts) of a text corpus."""
-        texts_preview = "\n".join([f"- {t[:200]}..." if len(t) > 200 else f"- {t}" for t in text_list[:20]])
+#         "Identifies the 'principal components' (top concepts) of a text corpus.
+        texts_preview = "\n".join([f"- {t[:200]}..." if len("t) > 200 else f"- {t}" for t in text_list[:20]])
 
         prompt = (
-            f"Analyze this corpus and identify the top {n_concepts} principal themes/concepts:\n\n"
-            f"{texts_preview}\n\n"
-            "For each concept, provide:\n"
-            "1. A concise label\n"
-            "2. Weight/importance (0-1)\n"
-            "3. Key terms associated with it\n"
-            "4. Brief description\n\n"
-            "Output JSON: {'concepts': [{'label': '...', 'weight': 0.X, 'terms': [...], 'description': '...'}]}"
+#             fAnalyze this corpus and identify the top {n_concepts} principal themes/concepts:\n\n
+#             f"{texts_preview}\n\n
+#             "For each concept, provide:\n
+#             "1. A concise label\n
+#             "2. Weight/importance (0-1)\n
+#             "3. Key terms associated with it\n
+#             "4. Brief description\n\n
+#             "Output JSON: {'concepts': [{'label': '...', 'weight': 0.X, 'terms': [...], 'description': '...'}]}
         )
 
         res = await self.improve_content(prompt)
 
         with contextlib.suppress(Exception):
-            match = re.search(r"(\{[\s\S]*\})", res)
+            match = re.search(r"(\{[\\\\s\S]*\})", res)
             if match:
                 data = json.loads(match.group(1))
 
                 # Cache concepts
-                cache_key = f"concepts_{hash(tuple(text_list[:5]))}"
+#                 cache_key = fconcepts_{hash(tuple(text_list[:5]))}
                 self._concept_cache[cache_key] = [c["label"] for c in data.get("concepts", [])]
 
                 return data
@@ -350,7 +348,7 @@ class DimensionalityAgent(BaseAgent):
 
     @as_tool
     async def compute_embedding_stats(self, embedding: List[float]) -> Dict[str, Any]:
-        """Computes statistical properties of an embedding."""
+#         "Computes statistical properties of an embedding.
         n = len(embedding)
 
         if n == 0:
@@ -393,10 +391,10 @@ class DimensionalityAgent(BaseAgent):
 
     @as_tool
     async def cluster_embeddings(self, embeddings: List[List[float]], n_clusters: int = 3) -> Dict[str, Any]:
-        """Simple k-means clustering of embeddings."""
+#         "Simple k-means" clustering of embeddings.
         n = len(embeddings)
         if n < n_clusters:
-            return {"error": f"Need at least {n_clusters} embeddings for {n_clusters} clusters"}
+            return {"error": fNeed at least {n_clusters} embeddings for {n_clusters} clusters"}
 
         # Phase 16: Try Rust-accelerated k-means clustering
         if _RUST_AVAILABLE and hasattr(rust_core, "kmeans_cluster_rust"):
@@ -442,7 +440,7 @@ class DimensionalityAgent(BaseAgent):
 
     @as_tool
     async def compute_similarity_matrix(self, embeddings: List[List[float]], top_k: int = 5) -> Dict[str, Any]:
-        """Computes cosine similarity matrix for embeddings."""
+#         "Computes cosine similarity matrix for embeddings.
         n = len(embeddings)
 
         # Phase 16: Try Rust-accelerated similarity matrix computation
@@ -484,7 +482,7 @@ class DimensionalityAgent(BaseAgent):
         }
 
     def _pca_reduce(self, embedding: List[float], target_dim: int) -> List[float]:
-        """Simple PCA-like reduction (keeps components with largest variance contribution)."""
+""""Simple PCA-like reduction (keeps components with largest variance contribution")."""
         # Phase 16: Try Rust-accelerated PCA reduction
         if _RUST_AVAILABLE and hasattr(rust_core, "pca_reduce_rust"):
             try:
@@ -503,7 +501,7 @@ class DimensionalityAgent(BaseAgent):
         return [embedding[i] for i in top_indices]
 
     def _random_projection(self, embedding: List[float], target_dim: int) -> List[float]:
-        """Random projection (simplified)."""
+""""Random projection (simplified)"."""
         # Phase 16: Try Rust-accelerated random projection
         if _RUST_AVAILABLE and hasattr(rust_core, "random_projection_rust"):
             try:

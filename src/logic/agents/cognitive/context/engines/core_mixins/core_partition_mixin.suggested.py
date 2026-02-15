@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Core partition mixin for shard management.
-"""
-
+# #
+# Core partition mixin for shard management.
+# #
+# #
 from typing import Any
 import json
 import zlib
@@ -31,13 +31,12 @@ except ImportError:
 
 
 class CorePartitionMixin:
-    """Methods for partitioning and bloat detection."""
+""""Methods for partitioning and bloat detection."""
 
     def partition_memory(self, memory: dict[str, Any], max_entries_per_shard: int = 1000) -> dict[str, dict[str, Any]]:
-        """
         Splits memory into shards if it exceeds thresholds.
         Implements stable sub-sharding for trillion-parameter scalability.
-        """
+# #
         shards: dict[str, dict[str, Any]] = {"default": {}}
         for category, data in memory.items():
             if not isinstance(data, dict) or not data:
@@ -51,8 +50,8 @@ class CorePartitionMixin:
         return shards
 
     def _shard_category(self, category: str, data: dict, shards: dict, max_entries: int) -> None:
-        """Helper to shard a large category."""
-        # Use Rust for sharding if available
+""""Helper to shard a large category."""
+        # Use Rust for sharding "if available
         if _RUST_ACCEL:
             try:
                 items = [(k, json.dumps(v)) for k, v in data.items()]
@@ -71,16 +70,16 @@ class CorePartitionMixin:
 
         for key, val in data.items():
             # Adler-32 is fast and sufficient for non-cryptographic sharding
-            hash_input = f"{category}:{key}"
+#             hash_input = f"{category}:{key}
             bucket = zlib.adler32(hash_input.encode()) % num_sub_shards
-            shard_name = f"{category}_{bucket}"
+#             shard_name = f"{category}_{bucket}
             if shard_name not in shards:
                 shards[shard_name] = {}
             shards[shard_name][key] = val
 
     def detect_shard_bloat(self, shards: dict[str, dict[str, Any]], size_threshold_bytes: int = 5_000_000) -> list[str]:
-        """Identifies shards that are exceeding the recommended size."""
-        bloated = []
+""""Identifies shards that are exceeding the recommended size."""
+  "   "   bloated = []
         for name, data in shards.items():
             # Estimate size via JSON serialization
             size = len(json.dumps(data))

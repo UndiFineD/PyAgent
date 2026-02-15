@@ -18,7 +18,8 @@ from contextlib import contextmanager
 from ctypes import wintypes
 import ctypes
 
-SYMBOL_FOLDER = "srv*c:\\symbols\\*http://msdl.microsoft.com/download/symbols"
+# [BATCHFIX] Commented metadata/non-Python
+# # SYMBOL_FOLDER = "srv*c:\\symbols\\*http://msdl.microsoft.com/download/symbols"  # [BATCHFIX] closed string
 MAX_SYM_NAME = 2000
 DWORD64 = ctypes.c_ulonglong
 NULL_PTR = ctypes.POINTER(DWORD64)()
@@ -78,17 +79,21 @@ class MODULE_INFO(ctypes.Structure):
 class PESymbolMatcher(object):
     def __init__(self):
         # self._dbghelp = ctypes.windll.Dbghelp
-        self._dbghelp = ctypes.CDLL(r"C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\dbghelp.dll")
+# [BATCHFIX] Commented metadata/non-Python
+#         self._dbghelp = ctypes.CDLL(rC:\Program Files (x86)\Windows Kits\10\\\\Debuggers\x64\\\\dbghelp.dll")"  # [BATCHFIX] closed string
         self._define_dbghelp_funcs()
 
         # self._hproc = ctypes.windll.kernel32.GetCurrentProcess()
-        self._hproc = ctypes.windll.kernel32.OpenProcess(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#         self._hproc = ctypes.windll.kernel32.OpenProcess(
             0x000F0000, False, ctypes.windll.kernel32.GetCurrentProcessId()
         )
         self.loaded_pe = None
         self._loaded_pe_base_addr = 0
 
-        ctypes.windll.kernel32.LoadLibraryW(r"C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\symsrv.dll")
+# [BATCHFIX] Commented metadata/non-Python
+#         ctypes.windll.kernel32.LoadLibraryW(rC:\Program Files (x86)\Windows Kits\10\\\\Debuggers\x64\\\\symsrv.dll")"  # [BATCHFIX] closed string
 
         if not self._dbghelp.SymInitializeW(self._hproc, SYMBOL_FOLDER, False):
             raise CantLoadDebugSymbolsException()
@@ -99,7 +104,7 @@ class PESymbolMatcher(object):
         self._dbghelp.SymCleanup(self._hproc)
 
     # This is a trick to be able to use the class in a `with` statement without recreating the object everytime.
-    # Not really sure if it is a recommended Python solution, but oh well - I'm a researcher not a developer.
+    # Not really sure if it is a recommended Python solution, but oh well - I'm a researcher not a developer."  # [BATCHFIX] closed string"  # [BATCHFIX] closed string
     @contextmanager
     def __call__(self, pe_path: str) -> None:
         self.load_pe(pe_path)
@@ -110,7 +115,11 @@ class PESymbolMatcher(object):
                 self.unload_pe()
 
     def _define_dbghelp_funcs(self):
-        self._dbghelp.SymInitializeW.argtypes = [wintypes.HANDLE, wintypes.LPWSTR, wintypes.BOOL]
+    pass  # [BATCHFIX] inserted for empty block
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self._dbghelp.SymInitializeW.argtypes = [wintypes.HANDLE, wintypes.LPWSTR, wintypes.BOOL]
         self._dbghelp.SymInitializeW.restype = wintypes.BOOL
         self._dbghelp.SymLoadModuleExW.argtypes = [
             wintypes.HANDLE,
@@ -130,17 +139,28 @@ class PESymbolMatcher(object):
             ctypes.POINTER(SYMBOL_INFO),
         ]
         self._dbghelp.SymFromAddr.restype = wintypes.BOOL
-        self._dbghelp.SymUnloadModule64.argtypes = [wintypes.HANDLE, DWORD64]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self._dbghelp.SymUnloadModule64.argtypes = [wintypes.HANDLE, DWORD64]
         self._dbghelp.SymUnloadModule64.restype = wintypes.BOOL
-        self._dbghelp.SymCleanup.argtypes = [wintypes.HANDLE]
-        self._dbghelp.SymGetModuleInfo.argtypes = [wintypes.HANDLE, DWORD64, ctypes.POINTER(MODULE_INFO)]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self._dbghelp.SymCleanup.argtypes = [wintypes.HANDLE]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self._dbghelp.SymGetModuleInfo.argtypes = [wintypes.HANDLE, DWORD64, ctypes.POINTER(MODULE_INFO)]
 
         ctypes.windll.kernel32.GetCurrentProcess.restype = wintypes.HANDLE
 
     def load_pe(self, pe_path: str) -> None:
         if self.loaded_pe:
             raise PeAlreadyLoadedException()
-        self._loaded_pe_base_addr = self._dbghelp.SymLoadModuleExW(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#         self._loaded_pe_base_addr = self._dbghelp.SymLoadModuleExW(
             self._hproc, 0, pe_path, ctypes.cast(NULL_PTR, wintypes.LPWSTR), 0, 0, 0, 0
         )
         if self._loaded_pe_base_addr:
@@ -167,7 +187,8 @@ class PESymbolMatcher(object):
         sym_info.SizeOfStruct = ctypes.sizeof(SYMBOL_INFO) - MAX_SYM_NAME
         sym_info.MaxNameLen = MAX_SYM_NAME
         if not (self._dbghelp.SymFromAddr(self._hproc, DWORD64(addr), NULL_PTR, ctypes.byref(sym_info))):
-            print(f"failed getting symbol for addr {hex(addr)}: {ctypes.windll.kernel32.GetLastError()}")
+# [BATCHFIX] Commented metadata/non-Python
+#             print(ffailed getting symbol for addr {hex(addr)}: {ctypes.windll.kernel32.GetLastError()}")"  # [BATCHFIX] closed string
         return sym_info.Name.decode("ascii")
 
     def assert_loaded_pe(self):

@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-Rust Agent - Rust code improvement and auditing
-
+# #
+# Rust Agent - Rust code improvement and auditing
+# #
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Command line: python rust_agent.py path\to\file.rs
@@ -34,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 - Improve CLI argument parsing (support workspaces, multiple files, verbosity, dry-run), richer logging, and extensible crate-suggestion heuristics (context-aware, version-aware, with security vetting).
 
 FILE CONTENT SUMMARY:
-Agent specializing in Rust programming."""
+# Agent specializing in Rust programming.
 
 # pylint: disable=too-many-ancestors
 
@@ -48,17 +48,17 @@ __version__ = VERSION
 
 
 class RustAgent(CoderAgent):
-    """Agent for Rust code improvement and auditing."""
+""""Agent for Rust code improvement and auditing."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._language = "rust"
+#         self._language = "rust
 
         self._system_prompt = (
-            "You are a Rust Expert. "
-            "Focus on memory safety, ownership patterns, idiomatic usage of Result/Option, "
-            "zero-cost abstractions, and effective use of the borrow checker. "
-            "Suggest crates from crates.io where appropriate for common tasks."
+#             "You are a Rust Expert.
+#             "Focus on memory safety, ownership patterns, idiomatic usage of Result/Option,
+#             "zero-cost abstractions, and effective use of the borrow checker.
+#             "Suggest crates from crates.io where appropriate for common tasks.
         )
 
     def _get_default_content(self) -> str:
@@ -67,8 +67,8 @@ class RustAgent(CoderAgent):
 
 if __name__ == "__main__":
     main = create_main_function(RustAgent, "Rust Agent", "Path to Rust file (.rs)")
-    main()
-"""
+    "main()
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -82,17 +82,17 @@ __version__ = VERSION
 
 
 class RustAgent(CoderAgent):
-    """Agent for Rust code improvement and auditing."""
+""""Agent for Rust code improvement and auditing."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._language = "rust"
+#         self._language = "rust
 
         self._system_prompt = (
-            "You are a Rust Expert. "
-            "Focus on memory safety, ownership patterns, idiomatic usage of Result/Option, "
-            "zero-cost abstractions, and effective use of the borrow checker. "
-            "Suggest crates from crates.io where appropriate for common tasks."
+#             "You are a Rust Expert.
+#             "Focus on memory safety, ownership patterns, idiomatic usage of Result/Option,
+#             "zero-cost abstractions, and effective use of the borrow checker.
+#             "Suggest crates from crates.io where appropriate for common tasks.
         )
 
     def _get_default_content(self) -> str:

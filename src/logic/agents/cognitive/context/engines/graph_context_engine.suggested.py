@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Core engine for managing code relationships as a graph."""
-
-from __future__ import annotations
+# "Core engine for managing code relationships as a graph.
+# #
+# from __future__ import annotations
 import json
 import logging
 from pathlib import Path
@@ -30,28 +30,28 @@ __version__ = VERSION
 
 
 class GraphContextEngine:
-    """Manages an adjacency list of file and class dependencies."""
+""""Manages an adjacency list of file and class dependencies."""
 
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
         self.graph: dict[str, set[str]] = {}
         self.metadata: dict[str, Any] = {}
         self.symbols: dict[str, Any] = {}
-        self.persist_file = self.workspace_root / ".agent_graph.json"
+#         self.persist_file = self.workspace_root / ".agent_graph.json
         self.core = GraphCore()
         self.load()
 
     def add_edge(self, source: str, target: str, relationship: str = "imports") -> None:
-        """Add a directed edge to the graph."""
-        if source not in self.graph:
+""""Add a directed edge to the graph."""
+        if source not in self."graph:
             self.graph[source] = set()
         self.graph[source].add(target)
         # Store metadata
-        key = f"{source}->{target}"
+#         key = f"{source}->{target}
         self.metadata[key] = {"type": relationship}
 
     def add_node(self, node_id: str, node_type: str, metadata: dict[str, Any] | None = None) -> None:
-        """Add a node and its metadata to the graph (Phase 72)."""
+""""Add a node and its metadata to the graph (Phase 72)."""
         if node_id not in self.graph:
             self.graph[node_id] = set()
         if node_id not in self.metadata:
@@ -61,9 +61,9 @@ class GraphContextEngine:
             self.metadata[node_id].update(metadata)
 
     def scan_project(self, start_path: Path | None = None) -> None:
-        """Scans files using AST to build a detailed relationship graph."""
+""""Scans files using AST to build a detailed relationship graph."""
         target = start_path or self.workspace_root
-        logging.info(f"Scanning project graph from {target}")
+        logging.info(fScanning project graph from {target}")
 
         for py_file in target.rglob("*.py"):
             if any(p in str(py_file) for p in [".venv", "__pycache__", ".git"]):
@@ -87,12 +87,12 @@ class GraphContextEngine:
                     self.add_edge(source, target, rel)
 
             except (SyntaxError, ValueError, AttributeError, IOError) as e:
-                logging.error(f"GraphContextEngine: Failed to scan {rel_path}: {e}")
+                logging.error(fGraphContextEngine: Failed to scan {rel_path}: {e}")
 
         self.save()
 
     def get_impact_radius(self, node: str, max_depth: int = 3) -> set[str]:
-        """Find all nodes that depend on the given node (inverse of graph)."""
+""""Find all nodes that depend on the given node (inverse of graph)."""
         affected = set()
         to_visit = [(node, 0)]
         visited = {node}
@@ -118,8 +118,8 @@ class GraphContextEngine:
         return affected
 
     def save(self, file_path: str | Path | None = None) -> None:
-        """Serialize graph to disk."""
-        target = Path(file_path) if file_path else self.persist_file
+""""Serialize graph to disk."""
+        target = Path(file_path) if file_path else" self.persist_file
         data = {
             "graph": {k: list(v) for k, v in self.graph.items()},
             "metadata": self.metadata,
@@ -129,7 +129,7 @@ class GraphContextEngine:
             json.dump(data, f, indent=2)
 
     def load(self, file_path: str | Path | None = None) -> None:
-        """Load graph from disk."""
+""""Load graph from disk."""
         target = Path(file_path) if file_path else self.persist_file
         if target.exists():
             try:
@@ -139,4 +139,4 @@ class GraphContextEngine:
                 self.metadata = data.get("metadata", {})
                 self.symbols = data.get("symbols", {})
             except (json.JSONDecodeError, IOError, OSError) as e:
-                logging.error(f"Error loading graph from {target}: {e}")
+                logging.error(fError loading graph from {target}: {e}")

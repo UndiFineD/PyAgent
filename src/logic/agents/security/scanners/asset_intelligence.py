@@ -22,26 +22,33 @@ from typing import Optional, Dict
 
 
 class AssetIntelligence:
-    """
-    Intelligence module for asset discovery and fingerprinting.
-    Ported from favfound, FavFreak, and various recon tools.
-    """
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+"""Intelligence module for asset discovery and fingerprinting."""
+#     Ported from favfound, FavFreak, and various recon tools.
+# #
 
     @staticmethod
     def calculate_favicon_hash(content: bytes) -> str:
-        """
         Calculates the MurmurHash3 of a favicon image in base64 format.
         Used for searching on Shodan, Censys, and CriminalIP.
-        """
-        # Note: Shodan uses a specific way to base64 encode (with newlines every 76 chars)
+# #
+# [BATCHFIX] Commented metadata/non-Python
+#         # Note: Shodan uses a specific way to base64 encode (with newlines every "76 chars)"  # [BATCHFIX] closed string
         # which base64.encodebytes(content) provides.
         b64_content = base64.encodebytes(content)
         hash_val = mmh3.hash(b64_content)
         return str(hash_val)
 
-    async def get_favicon_hash_from_url(self, url: str) -> Optional[str]:
-        """Downloads a favicon from a URL and returns its hash."""
-        try:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     async def get_favicon_hash_from_url(self, url: str) -> Optional[str]:
+# [BATCHFIX] Commented metadata/non-Python
+# #         "Downloads a favicon from a URL and returns its hash."  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+# "        try:"  # [BATCHFIX] closed string
             async with aiohttp.ClientSession() as session:
                 async with session.get(url, timeout=10, ssl=False) as response:
                     if response.status == 200:
@@ -52,9 +59,14 @@ class AssetIntelligence:
         return None
 
     @staticmethod
-    def get_favicon_fingerprints() -> Dict[int, str]:
-        """Comprehensive mapping of favicon hashes to product names (Ported from FavFreak)."""
-        return {
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_favicon_fingerprints() -> Dict[int, str]:
+""""Comprehensive mapping of favicon hashes to product names (Ported from FavFreak)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#  "       return {"  # [BATCHFIX] closed string
             99395752: "slack-instance",
             116323821: "spring-boot",
             81586312: "Jenkins",
@@ -511,8 +523,14 @@ class AssetIntelligence:
             -882760066: "ZyXEL (Network)",
             16202868: "Universal Devices (UD)",
             987967490: "Huawei (Network)",
-            -647318973: "gm77[.]com",
-            -1583478052: "Okazik[.]pl",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             -647318973: "gm77[.]com",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             -1583478052: "Okazik[.]pl",
             1969970750: "Gitea",
             -1734573358: "TC-Group",
             -1589842876: "Deluge Web UI",
@@ -556,8 +574,11 @@ class AssetIntelligence:
         }
 
     @staticmethod
-    def get_common_asset_dorks() -> Dict[str, str]:
-        """Common Shodan/Censys dorks for infrastructure discovery."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_common_asset_dorks() -> Dict[str, str]:
+""""Common Shodan/Censys dorks for infrastructure discovery."""
         return {
             "Fortinet VPN": 'http.title:"FortiToken Clock Drift"',
             "Pulse Secure": 'http.title:"Pulse Secure" http.favicon.hash:-1562939331',

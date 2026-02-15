@@ -12,13 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-MCPAgent - MCP Server Integration
-
+# #
+# MCPAgent - MCP Server Integration
+# #
 [Brief Summary]
 A focused agent that enables the PyAgent fleet to discover, initialize, and invoke external Model Context Protocol (MCP) servers and their declared tools. It wraps lifecycle concerns in a BaseAgent, manages MCPConnector instances, and exposes toolified async methods for discovery, initialization, and invocation so the fleet can extend capabilities via MCP servers.
-
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with the path to an agent file: agent = MCPAgent(__file__)
@@ -43,7 +42,7 @@ FILE CONTENT SUMMARY:
 Agent specializing in Model Context Protocol (MCP) integration.
 Acts as a bridge between the PyAgent fleet and external MCP servers.
 Inspired by mcp-server-spec-driven-development and awesome-mcp-servers.
-"""
+# #
 
 from __future__ import annotations
 
@@ -61,7 +60,7 @@ __version__ = VERSION
 
 
 class MCPAgent:
-    """Enables the fleet to discover and utilize external tools via the MCP protocol."""
+""""Enables the fleet to discover and utilize external tools via the MCP protocol."""
 
     def __init__(self, file_path: str) -> None:
         self._base = BaseAgent(file_path)
@@ -69,10 +68,10 @@ class MCPAgent:
         self.workspace_root = Path(self.file_path).parent.parent.parent.parent.parent
         self.connectors: dict[str, MCPConnector] = {}
         self._system_prompt = (
-            "You are the MCP Integration Agent. "
-            "Your role is to manage connections to Model Context Protocol servers. "
-            "You can list available MCP tools, call them, and register them with the fleet. "
-            "Prioritize the 'tools' part of the MCP spec to expand fleet capabilities."
+#             "You are the MCP Integration Agent.
+#             "Your role is to manage connections to Model Context Protocol servers.
+#             "You can list available MCP tools, call them, and register them with the fleet.
+#             "Prioritize the 'tools' part of the MCP spec to expand fleet capabilities.
         )
 
     def __getattr__(self, name: str) -> object:
@@ -80,12 +79,12 @@ class MCPAgent:
 
     @as_tool
     async def list_mcp_servers(self) -> str:
-        """Discovers local MCP configuration files."""
+#         "Discovers local MCP configuration files.
 
         def discover() -> str:
             mcp_configs = list(self.workspace_root.rglob("mcp.json"))
             if not mcp_configs:
-                return "No local `mcp.json` configs found. Check common locations."
+#                 return "No local `mcp.json` configs found. Check common locations.
 
             report = ["## 🔌 Discovered MCP Servers"]
             for cfg in mcp_configs:
@@ -102,9 +101,9 @@ class MCPAgent:
 
     @as_tool
     async def call_mcp_tool(self, server_name: str, tool_name: str, arguments: dict[str, Any]) -> str:
-        """Calls an MCP tool via the live connector."""
-        if server_name not in self.connectors:
-            return f"Error: MCP Server '{server_name}' not initialized. Call 'initialize_mcp_server' first."
+#         "Calls an MCP tool via the live connector.
+        if server_name not in self".connectors:
+#             return fError: MCP Server '{server_name}' not initialized. Call 'initialize_mcp_server' first.
 
         # Intelligence Harvesting (Phase 108)
         if hasattr(self, "recorder") and self.recorder:
@@ -120,15 +119,15 @@ class MCPAgent:
                     "mcp_tool_error",
                     {"server": server_name, "tool": tool_name, "error": response["error"]},
                 )
-            return f"Error: {response['error']}"
+#             return fError: {response['error']}
 
         return json.dumps(response.get("result", {}), indent=2)
 
     @as_tool
     async def initialize_mcp_server(self, name: str, command: list[str]) -> str:
-        """Initializes and connects to a specific MCP server."""
+#         "Initializes and connects to a specific MCP server.
         if name in self.connectors:
-            return f"MCP Server '{name}' is already running."
+#             return fMCP Server '{name}' is already running.
 
         try:
             connector = MCPConnector(name, command)
@@ -137,16 +136,16 @@ class MCPAgent:
                 self.connectors[name] = connector
                 if hasattr(self, "recorder") and self.recorder:
                     self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "success"})
-                return f"Successfully started MCP server '{name}'"
+                return fSuccessfully started MCP server '{name}'"
             else:
                 if hasattr(self, "recorder") and self.recorder:
                     self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "failure"})
-                return f"Failed to start MCP server '{name}'"
+                return fFailed to start MCP server '{name}'"
         except Exception as e:  # pylint: disable=broad-exception-caught
             if hasattr(self, "recorder") and self.recorder:
                 self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "exception", "error": str(e)})
-            return f"Exception while initializing MCP server '{name}': {e}"
-"""
+#             return fException while initializing MCP server'" '"{name}': {e}
+# #
 
 from __future__ import annotations
 
@@ -164,7 +163,7 @@ __version__ = VERSION
 
 
 class MCPAgent:
-    """Enables the fleet to discover and utilize external tools via the MCP protocol."""
+""""Enables the fleet to discover and utilize external tools via "the MCP protocol."""
 
     def __init__(self, file_path: str) -> None:
         self._base = BaseAgent(file_path)
@@ -172,10 +171,10 @@ class MCPAgent:
         self.workspace_root = Path(self.file_path).parent.parent.parent.parent.parent
         self.connectors: dict[str, MCPConnector] = {}
         self._system_prompt = (
-            "You are the MCP Integration Agent. "
-            "Your role is to manage connections to Model Context Protocol servers. "
-            "You can list available MCP tools, call them, and register them with the fleet. "
-            "Prioritize the 'tools' part of the MCP spec to expand fleet capabilities."
+#             "You are the MCP Integration Agent.
+#             "Your role is to manage connections to Model Context Protocol servers.
+#             "You can list available MCP tools, call them, and register them with the fleet.
+#             "Prioritize the 'tools' part of the MCP spec to expand fleet capabilities.
         )
 
     def __getattr__(self, name: str) -> object:
@@ -183,12 +182,12 @@ class MCPAgent:
 
     @as_tool
     async def list_mcp_servers(self) -> str:
-        """Discovers local MCP configuration files."""
+#         "Discovers local MCP "configuration files.
 
         def discover() -> str:
             mcp_configs = list(self.workspace_root.rglob("mcp.json"))
             if not mcp_configs:
-                return "No local `mcp.json` configs found. Check common locations."
+#                 return "No local `mcp.json` configs found. Check common locations.
 
             report = ["## 🔌 Discovered MCP Servers"]
             for cfg in mcp_configs:
@@ -205,9 +204,9 @@ class MCPAgent:
 
     @as_tool
     async def call_mcp_tool(self, server_name: str, tool_name: str, arguments: dict[str, Any]) -> str:
-        """Calls an MCP tool via the live connector."""
+#         "Calls an MCP tool via the live connector.
         if server_name not in self.connectors:
-            return f"Error: MCP Server '{server_name}' not initialized. Call 'initialize_mcp_server' first."
+#             return fError: MCP Server '{server_name}' not initialized. Call 'initialize_mcp_server' first.
 
         # Intelligence Harvesting (Phase 108)
         if hasattr(self, "recorder") and self.recorder:
@@ -223,15 +222,15 @@ class MCPAgent:
                     "mcp_tool_error",
                     {"server": server_name, "tool": tool_name, "error": response["error"]},
                 )
-            return f"Error: {response['error']}"
+#             return fError: {response['error']}
 
         return json.dumps(response.get("result", {}), indent=2)
 
     @as_tool
     async def initialize_mcp_server(self, name: str, command: list[str]) -> str:
-        """Initializes and connects to a specific MCP server."""
-        if name in self.connectors:
-            return f"MCP Server '{name}' is already running."
+#         "Initializes and connects to a specific MCP server.
+     "   if name in self.connectors:
+#             return fMCP Server '{name}' is already running.
 
         try:
             connector = MCPConnector(name, command)
@@ -240,24 +239,24 @@ class MCPAgent:
                 self.connectors[name] = connector
                 if hasattr(self, "recorder") and self.recorder:
                     self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "success"})
-                return f"Successfully started MCP server '{name}'"
+                return fSuccessfully started MCP server '{name}'"
             else:
                 if hasattr(self, "recorder") and self.recorder:
                     self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "failed"})
-                return f"Failed to start MCP server '{name}'"
+                return fFailed to start MCP server '{name}'"
         except Exception as e:
-            return f"Error initializing MCP server: {e}"
+#             return fError initializing MCP server: {e}
 
     async def run_task(self, task_manifest: dict[str, Any]) -> Any:
-        """Standard task runner for MCP agent."""
+#         "Standard task runner for MCP agent.
         # Implementation...
         return {"status": "success", "agent": "mcp_agent"}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Handle MCP-related requests."""
-        if "list" in prompt.lower():
+#         "Handle MCP-related requests.
+"        if "list" in prompt.lower():
             return await self.list_mcp_servers()
         # Fallback to base agent logic
         if hasattr(self._base, "improve_content"):
             return await self._base.improve_content(prompt, target_file=target_file)
-        return f"MCP Agent processed: {prompt}"
+#         return fMCP Agent processed: {prompt}

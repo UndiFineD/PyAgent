@@ -16,10 +16,10 @@
 
 
 """
-MergeCandidate - Dataclass for representing a merge candidate between two improvements
-
+MergeCandidate - Dataclass for representing a merge candidate between two improvements"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.improvements.merge_candidate import MergeCandidate
@@ -35,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -48,13 +48,13 @@ __version__ = VERSION
 
 @dataclass
 class MergeCandidate:
-    """Candidate for merging with another improvement.
+    """Candidate for merging with another improv""""""ement.
 
     Attributes:
         source_id: ID of the source improvement.
         target_id: ID of the target improvement.
         similarity_score: How similar the improvements are.
-        merge_reason: Why these should be merged.
+        merge_reason: Why these should be merged.""""""
     """
 
     source_id: str

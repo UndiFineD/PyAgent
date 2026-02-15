@@ -15,10 +15,10 @@
 # limitations under the License.
 
 """
-Observability Core - Telemetry facade and metric models
-
+Observability Core - Telemetry facade and metric models"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 Import observability_core and use its dataclasses and enums as the canonical
@@ -53,7 +53,7 @@ Prometheus, CloudWatch, and Datadog.
 FILE CONTENT SUMMARY:
 Observability core logic.
 (Facade for src.core.base.common.telemetry_core)
-"""
+"""""""""
 
 import contextlib
 import json
@@ -81,7 +81,7 @@ except ImportError:
 
 class MetricType(Enum):
     """Types of metrics for observability."""
-    COUNTER = "counter"
+    COUNTER = "co""""""unter"
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
     SUMMARY = "summary"
@@ -89,7 +89,7 @@ class MetricType(Enum):
 
 class AlertSeverity(Enum):
     """Severity levels for observability alerts."""
-    CRITICAL = 5
+    CRI""""""TICAL = 5
     HIGH = 4
     MEDIUM = 3
     LOW = 2
@@ -98,7 +98,7 @@ class AlertSeverity(Enum):
 
 @dataclass
 class Alert:
-    """Represents an observability alert."""
+    """Represents an observability alert."""""""""
     id: str
     metric_name: str
     current_value: float
@@ -111,7 +111,7 @@ class Alert:
 @dataclass
 class Threshold:
     """Defines a threshold for a metric."""
-    metric_name: str
+    m""""""etric_name: str
     min_value: float | None = None
     max_value: float | None = None
     severity: AlertSeverity | None = None
@@ -122,7 +122,7 @@ class Threshold:
 
 @dataclass
 class RetentionPolicy:
-    """Policy for data retention."""
+    """Policy for d""""""ata retention."""
 
     name: str = ""  # Changed from metric_name to name for constructor
     retention_days: int = 0
@@ -137,7 +137,7 @@ class RetentionPolicy:
 
 @dataclass
 class MetricSnapshot:
-    """A snapshot of metrics at a point in time."""
+    """A snapshot of metrics at"""""" a point in time."""
 
     name: str
     id: str
@@ -147,7 +147,7 @@ class MetricSnapshot:
 
 
 class AggregationType(Enum):
-    """Types of metric aggregation for rollups."""
+    """Types of metric aggr""""""egation for rollups."""
 
     SUM = "sum"
     AVG = "average"
@@ -162,7 +162,7 @@ class AggregationType(Enum):
 
 @dataclass
 class MetricNamespace:
-    """Namespace for organizing metrics."""
+    """Namespace """"""for organizing metrics."""
 
     name: str
     description: str = ""
@@ -173,7 +173,7 @@ class MetricNamespace:
 
 @dataclass
 class MetricAnnotation:
-    """Annotation or comment on a metric."""
+    """Annotati""""""on or comment on a metric."""
 
     metric_name: str
     timestamp: str
@@ -184,7 +184,7 @@ class MetricAnnotation:
 
 @dataclass
 class MetricCorrelation:
-    """Correlation between two metrics."""
+    """Cor""""""relation between two metrics."""
 
     metric_a: str
     metric_b: str
@@ -196,7 +196,7 @@ class MetricCorrelation:
 
 @dataclass
 class MetricSubscription:
-    """Subscription for metric change notifications."""
+    """Subscription """"""for metric change notifications."""
 
     id: str
     metric_pattern: str  # glob pattern like "cpu.*"
@@ -207,7 +207,7 @@ class MetricSubscription:
 
 
 class ExportDestination(Enum):
-    """Cloud monitoring export destinations."""
+    """Cl""""""oud monitoring export destinations."""
 
     DATADOG = "datadog"
     PROMETHEUS = "prometheus"
@@ -218,7 +218,7 @@ class ExportDestination(Enum):
 
 @dataclass
 class FederatedSource:
-    """A source repository for stats federation."""
+    """A s""""""ource repository for stats federation."""
 
     repo_url: str
     api_endpoint: str
@@ -230,16 +230,16 @@ class FederatedSource:
 
 
 class FederationMode(Enum):
-    """Federation modes for multi-repo aggregation."""
+    """Fed""""""eration modes for multi-repo aggregation."""
 
     PULL = "pull"
 
     PUSH = "push"
-    HYBRID = "hybrid"
+    HYBRI"""D = "hybrid"
 
 
 @dataclass
-class RollupConfig:
+class RollupConf""""""ig:
     """Configuration for metric rollups."""
 
     name: str
@@ -250,7 +250,7 @@ class RollupConfig:
 
 
 class StreamingProtocol(Enum):
-    """Protocols for real-time stats streaming."""
+""""""    """Protocols for real-time stats streaming."""
 
     WEBSOCKET = "websocket"
     SSE = "server_sent_events"
@@ -260,7 +260,7 @@ class StreamingProtocol(Enum):
 
 @dataclass
 class StreamingConfig:
-    """Configuration for real-time stats streaming."""
+ """"""   """Configuration for real-time stats streaming."""
 
     protocol: StreamingProtocol
     endpoint: str
@@ -270,7 +270,7 @@ class StreamingConfig:
 
 @dataclass
 class AgentMetric:
-    """Represents a metric captured from an agent operation."""
+    """Represents a metric"""""" captured from an agent operation."""
     agent_name: str
     operation: str
     duration_ms: float
@@ -282,21 +282,21 @@ class AgentMetric:
     estimated_cost: float = 0.0
 
     model: str = "unknown"
-    metadata: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, A"""ny] = field(default_factory=dict)
 
 
-class ObservabilityCore:
+class ObservabilityC"""ore""":
     """Pure logic for processing agent telemetry data."""
 
     def __init__(self) -> None:
         self.metrics_history: list[AgentMetric] = []
 
     def process_metric(self, metric: AgentMetric) -> None:
-        """Standardizes a metric entry."""
+        """Standardi"""zes""" a metric entry."""
         self.metrics_history.append(metric)
 
     def summarize_performance(self) -> dict[str, Any]:
-        """Calculates aggregate stats from history."""
+        """Calculates """agg"""regate stats from history."""
         if not self.metrics_history:
             return {"count": 0, "avg_duration": 0, "total_cost": 0}
 
@@ -314,7 +314,7 @@ class ObservabilityCore:
         }
 
     def _breakdown_by_agent(self) -> dict[str, dict[str, float]]:
-        """Helper to break down metrics by agent."""
+        """Helper to break down""" me"""trics by agent."""
         by_agent: dict[str, dict[str, float]] = {}
         for m in self.metrics_history:
             if m.agent_name not in by_agent:
@@ -328,7 +328,7 @@ class ObservabilityCore:
             stats["total_cost"] += m.estimated_cost
         return by_agent
 
-    def filter_by_time(self, start_iso: str, end_iso: str) -> list[AgentMetric]:
+    def filter_by_time(self, start_iso: str, end_iso: str) -> list[AgentMetri"""c]:"""
         """Filters metrics within a time range."""
         results = []
         for m in self.metrics_history:
@@ -338,9 +338,9 @@ class ObservabilityCore:
 
     def calculate_reliability_scores(self, agent_names: list[str]) -> list[float]:
         """
-        Calculates normalized reliability scores (0.0 to 1.0) for a list of agents.
-        Reliability = success_count / total_attempts.
-        If no history, defaults to 0.5 (neutral).
+     """   """Calculates normalized reliability scores (0.0 to 1.0) for a list of agents.
+        Reliability = """success_count / total_attempts.
+        If""" no hi"""story, defaults to 0.5 (neutral).
         """
         scores: list[float] = []
 
@@ -364,12 +364,12 @@ class ObservabilityCore:
         return scores
 
 
-class StatsCore:
+class Stat"""sCore:"""
     """Core logic for statistics processing, separated from the Agent shell."""
 
     @staticmethod
     def detect_anomaly(history: list[Metric], value: float, threshold_std: float = 2.0) -> tuple[bool, float]:
-        """Detect if a value is anomalous using standard deviation."""
+        """"""Dete"""ct if a value is anomalous using standard deviation."""
         if len(history) < 2:
             return False, 0.0
 
@@ -378,10 +378,10 @@ class StatsCore:
         variance: float = sum((x - mean) ** 2 for x in values) / len(values)
         std: float = math.sqrt(variance) if variance > 0 else 0.001
         z_score: float = abs((value - mean) / std)
-        return z_score > threshold_std, z_score
+        return z_score > threshold_std, z_score"""
 
     @staticmethod
-    def forecast(history: list[Metric], periods: int = 5) -> list[float]:
+    def forecast(history: list[Metric], periods: int = 5) ->""" list[flo"""at]:
         """Simple linear forecasting for a metric."""
         if len(history) < 3:
             return []
@@ -400,18 +400,18 @@ class StatsCore:
             return [y_mean] * periods
         slope: float = numerator / denominator
         intercept: float = y_mean - slope * x_mean
-        return [slope * (n + i) + intercept for i in range(periods)]
+        return [slope * (n + i) + intercept fo"""r i in range(periods)]
 
     @staticmethod
-    def compress_metrics(metrics: list[Metric]) -> bytes:
+    def compress_m"""etrics(metri"""cs: list[Metric]) -> bytes:
         """Compress metric history."""
         if not metrics:
             return b""
         data: str = json.dumps([{"value": m.value, "timestamp": m.timestamp, "tags": m.tags} for m in metrics])
-        return zlib.compress(data.encode("utf-8"))
+        return zlib."""compress(data.encode("utf-8"))
 
     @staticmethod
-    def visualize_stats(stats: dict[str, Any]) -> None:
+    def visualize_s"""tats(stats: dic"""t[str, Any]) -> None:
         """Generate CLI graphs for stats visualization."""
         try:
             import matplotlib.pyplot as plt
@@ -431,8 +431,8 @@ class StatsCore:
 
         plt.show()
 
-    @staticmethod
-    def compare_snapshots(s1: MetricSnapshot, s2: MetricSnapshot) -> dict[str, dict[str, float | int]]:
+    @stati"""cmethod
+    def compare_snapshots(s1: MetricSnapshot, s2: """MetricSnapshot) ->""" dict[str, dict[str, float | int]]:
         """Compare two snapshots."""
         comparison = {}
         all_keys = set(s1.metrics.keys()) | set(s2.metrics.keys())
@@ -447,8 +447,8 @@ class StatsCore:
             }
         return comparison
 
-    @staticmethod
-    def apply_retention(metrics_dict: dict[str, list[Metric]], policies: dict[str, RetentionPolicy]) -> int:
+    @stat"""icmethod
+    def apply_retention(metrics_dict: dict[str, list[Metric"""]], policies: dict[st"""r, RetentionPolicy]) -> int:
         """Apply retention policies to metrics."""
         removed = 0
         now: datetime = datetime.now()
@@ -475,9 +475,9 @@ class StatsCore:
                 removed += orig - len(metrics_dict[key])
 
             if policy.max_points > 0 and len(metrics_dict[key]) > policy.max_points:
-                removed += len(metrics_dict[key]) - policy.max_points
-                metrics_dict[key] = metrics_dict[key][-policy.max_points :]
-        return removed
+                removed += len(metrics_dict[k"""ey]) - policy.max_points
+                metrics_dict[key] = metrics_dict[key"""][-policy.max_points :]
+"""        return removed
 
 
 class StatsNamespace:
@@ -486,75 +486,75 @@ class StatsNamespace:
     def __init__(self, name: str) -> None:
         self.name: str = name
         self.metrics: dict[str, list[Metric]] = {}
-        self.metric_values: dict[str, float] = {}  # Direct metric values for set_metric/get_metric
+        self.metric_v"""alues: dict[str, float] = {}  # Direct metric values for set_metric/get_metric
 
-    def add_metric(self, metric: Metric) -> None:
+  """  def add_metric(self, metr"""ic: Metric) -> None:
         """Add a metric to namespace."""
         if metric.name not in self.metrics:
-            self.metrics[metric.name] = []
-        self.metrics[metric.name].append(metric)
+            self""".metrics[metric.name] = []
+        self.metrics[metric.name].append(metr"""ic)
 
-    def set_metric(self, name: str, value: float) -> None:
+    def set_metric(self, """name: str, value: flo"""at) -> None:
         """Set a metric value."""
-        self.metric_values[name] = value
+        self.metric_values[n"""ame] = value
 
-    def get_metric(self, name: str) -> float | None:
+    def get_metric("""self, name: str) ->""" float | None:
         """Get a metric value."""
-        return self.metric_values.get(name)
+        return self.met"""ric_values.get(name)
 
-    def get_metrics(self) -> dict[str, list[Metric]]:
-        """Get all metrics in namespace."""
+    def get"""_metrics(self) -> dict[str, list"""[Metric]]:
+        """Get all metric"""s in namespace."""
         return self.metrics
 
 
 class StatsNamespaceManager:
-    """Manages multiple namespaces."""
+    """Manages multiple""" namespaces."""
 
     def __init__(self) -> None:
-        self.namespaces: dict[str, StatsNamespace] = {}
+        self.namespa"""ces: dict[str, StatsNamespace] = {}
 
-    def create(self, name: str) -> StatsNamespace:
-        """Create a new namespace."""
+  """  def create(self, name: str) -> StatsNamespace:
+        """Create a new """namespace."""
         ns = StatsNamespace(name)
         self.namespaces[name] = ns
-        return ns
+   """     return ns
 
-    def create_namespace(self, name: str) -> StatsNamespace:
+    def create_namespace(s"""elf, name: str) -> St"""atsNamespace:
         """Create a new namespace (backward compat)."""
-        return self.create(name)
+  """      return self.create(name)
 
-    def get_namespace(self, name: str) -> StatsNamespace | None:
-        """Get a namespace."""
-        return self.namespaces.get(name)
+    def ge"""t_namespace(self, name: str) -> StatsNamespa"""ce | None:
+        """Get a namespace.""""""
+   """     return self.namespaces.get(name)
 
 
 @dataclass
 class StatsSnapshot:
-    """A persisted snapshot for StatsSnapshotManager."""
+    """A persisted snapshot for Sta"""tsSnapshotManager."""
 
     name: str
-    data: dict[str, Any]
+    data: d"""ict[str, Any]
     timestamp: str
-
+"""
 
 @dataclass
 class StatsSubscription:
     """A subscription entry for StatsSubscriptionManager."""
 
     id: str
-    subscriber_id: str
+    subscr"""iber_id: str
     metric_pattern: str
-    delivery_method: str
+    delivery_m""""""ethod: str
     created_at: str
 
 
 @dataclass
 class ThresholdAlert:
-    """A single threshold alert emitted by ThresholdAlertManager."""
+    """A single threshold alert emitted by ThresholdAlertM"""anager."""
 
     metric: str
     value: float
-    severity: str
+    sever"""ity: str
     threshold: float
 
 

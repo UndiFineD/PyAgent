@@ -13,10 +13,10 @@
 # limitations under the License.
 
 """
-Refinement Engine - Improvements Agent Entrypoint
-
+Refinement Engine - Improvements Agent Entrypoint"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - As a script: python refinement_engine.py <path/to/file.improvements.md>
@@ -35,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Improvements Agent: Maintains and improves improvement suggestions.
-"""
+"""""""""
 
 from __future__ import annotations
 

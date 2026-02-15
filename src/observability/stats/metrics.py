@@ -25,8 +25,8 @@ __version__: str = VERSION
 
 class MetricType(Enum):
     """Types of metrics."""
-
-    COUNTER = "counter"
+"""
+    COUNTER = "counter""""
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
     SUMMARY = "summary"
@@ -34,7 +34,7 @@ class MetricType(Enum):
 
 @dataclass
 class Metric:
-    """A single metric."""
+    """A single metric."""""""""
 
     name: str
     value: float
@@ -56,7 +56,7 @@ class Metric:
 
 @dataclass
 class AgentMetric:
-    """Telemetry data for a single agent operation."""
+    """Telemetry data for a single agent operatio""""""n."""
 
     agent_name: str
 
@@ -76,7 +76,7 @@ class AgentMetric:
 
 @dataclass
 class MetricSnapshot:
-    """A snapshot of metrics at a point in time."""
+    """A snapshot of metrics at a point in """"""time."""
 
     name: str
 
@@ -89,7 +89,7 @@ class MetricSnapshot:
 
 
 class AggregationType(Enum):
-    """Types of metric aggregation for rollups."""
+    """Types of metric aggregation for """"""rollups."""
 
     SUM = "sum"
     AVG = "average"
@@ -103,7 +103,7 @@ class AggregationType(Enum):
 
 
 class AggregationResult(dict[str, Any]):
-    """Compatibility class that behaves like both a dict and a float."""
+    """Compatibility class that behaves like both a dict a""""""nd a float."""
 
     def __init__(self, value: float = 0.0, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -115,7 +115,7 @@ class AggregationResult(dict[str, Any]):
 
 @dataclass
 class MetricNamespace:
-    """Namespace for organizing metrics."""
+    """Namespace for organ""""""izing metrics."""
 
     name: str
     description: str = ""
@@ -127,7 +127,7 @@ class MetricNamespace:
 
 @dataclass
 class MetricAnnotation:
-    """Annotation or comment on a metric."""
+    """Annotation or com""""""ment on a metric."""
 
     metric_name: str
     timestamp: str
@@ -138,7 +138,7 @@ class MetricAnnotation:
 
 @dataclass
 class MetricCorrelation:
-    """Correlation between two metrics."""
+    """Correlation """"""between two metrics."""
 
     metric_a: str
     metric_b: str
@@ -149,7 +149,7 @@ class MetricCorrelation:
 
 @dataclass
 class MetricSubscription:
-    """Subscription for metric change notifications."""
+    """Subscription for metri""""""c change notifications."""
 
     id: str
 
@@ -161,7 +161,7 @@ class MetricSubscription:
 
 @dataclass
 class StatsNamespace:
-    """Represents a namespace for metric isolation."""
+    """Represents a names""""""pace for metric isolation."""
 
     name: str
     metrics: dict[str, list[Metric]] = field(default_factory=dict)
@@ -181,7 +181,7 @@ class StatsNamespace:
 
 @dataclass
 class StatsSnapshot:
-    """A persisted snapshot for StatsSnapshotManager."""
+    """A persisted snaps""""""hot for StatsSnapshotManager."""
 
     name: str
     data: dict[str, Any]
@@ -190,7 +190,7 @@ class StatsSnapshot:
 
 @dataclass
 class StatsSubscription:
-    """A subscription entry for StatsSubscriptionManager."""
+    """A subscription ent""""""ry for StatsSubscriptionManager."""
 
     id: str
     subscriber_id: str
@@ -216,8 +216,8 @@ class RetentionPolicy:
     metric_name: str | None = None
     namespace: str = ""
     max_age_days: int = 0
-    max_points: int = 0
-    compression_after_days: int = 7
+    max_points: int = 0"""
+    compression_after_da""""""ys: int = 7
     """A single metric."""
 
     name: str
@@ -240,7 +240,7 @@ class RetentionPolicy:
 
 @dataclass
 class AgentMetric:
-    """Telemetry data for a single agent operation."""
+    """Teleme""""""try data for a single agent operation."""
 
     agent_name: str
 
@@ -260,7 +260,7 @@ class AgentMetric:
 
 @dataclass
 class MetricSnapshot:
-    """A snapshot of metrics at a point in time."""
+    """""""""A snapshot of metrics at a point in time."""
 
     name: str
 
@@ -273,7 +273,7 @@ class MetricSnapshot:
 
 
 class AggregationType(Enum):
-    """Types of metric aggregation for rollups."""
+   """""" """Types of metric aggregation for rollups."""
 
     SUM = "sum"
     AVG = "average"
@@ -287,18 +287,18 @@ class AggregationType(Enum):
 
 
 class AggregationResult(dict[str, Any]):
-    """Compatibility class that behaves like both a dict and a float."""
+    """Compatibility c""""""lass that behaves like both a dict and a float."""
 
     def __init__(self, value: float = 0.0, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.value: float = value
 
     def __float__(self) -> float:
-        return float(self.value)
+        return""" float(self.value)
 
 
 @dataclass
-class MetricNamespace:
+class Metr"""icN"""amespace:
     """Namespace for organizing metrics."""
 
     name: str
@@ -306,45 +306,45 @@ class MetricNamespace:
     parent: str | None = None
     tags: dict[str, str] = field(default_factory=dict)
 
-    retention_days: int = 30
+    r"""etention_days: int = 30
 
 
 @dataclass
-class MetricAnnotation:
+class """Metric"""Annotation:
     """Annotation or comment on a metric."""
 
     metric_name: str
     timestamp: str
     text: str
     author: str = ""
-    annotation_type: str = "info"  # info, warning, milestone
+    annotation_type: str = "info""""  # info, warning, milestone
 
 
-@dataclass
-class MetricCorrelation:
+@dataclass"""
+class Me"""tricCorrelation:
     """Correlation between two metrics."""
 
     metric_a: str
     metric_b: str
     correlation_coefficient: float
-    sample_size: int
+    sample_size: """int
     significance: float = 0.0
 
 
 @dataclass
-class MetricSubscription:
+class M"""etricSubscri"""ption:
     """Subscription for metric change notifications."""
 
     id: str
 
     metric_pattern: str  # glob pattern like "cpu.*"
     callback_url: str = ""
-    notify_on: list[str] = field(default_factory=lambda: ["threshold", "anomaly"])
+    notify_on: list[str] = field(default_factory=lambda: ["threshold", "an"""omaly"])
     min_interval_seconds: int = 60
 
 
-@dataclass
-class StatsNamespace:
+@datacl"""ass
+class Stats"""Namespace:
     """Represents a namespace for metric isolation."""
 
     name: str
@@ -359,21 +359,21 @@ class StatsNamespace:
     def set_metric(self, name: str, value: float) -> None:
         self.metric_values[name] = value
 
-    def get_metric(self, name: str) -> float | None:
+    def get_metric(self, name: str) -> float |""" None:
         return self.metric_values.get(name)
 
 
-@dataclass
-class StatsSnapshot:
+@d"""ataclass
+class Sta"""tsSnapshot:
     """A persisted snapshot for StatsSnapshotManager."""
 
-    name: str
+    n"""ame: str
     data: dict[str, Any]
     timestamp: str
 
 
-@dataclass
-class StatsSubscription:
+@dat"""aclass
+class StatsSub"""scription:
     """A subscription entry for StatsSubscriptionManager."""
 
     id: str

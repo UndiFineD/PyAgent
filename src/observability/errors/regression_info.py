@@ -15,35 +15,40 @@
 # limitations under the License.
 
 
-"""
-RegressionInfo - Error regression metadata dataclass
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
+# RegressionInfo - Error regression metadata dataclass
+
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
 from src.core.base.regression_info import RegressionInfo
 
 # create a simple record
-ri = RegressionInfo(
-    error_id="E123",
-    original_fix_commit="abcde12345",
-    regression_commit="f67890ghij",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+# ri = RegressionInfo(
+#     error_id="E123",
+#     original_fix_commit="abcde12345",
+#     regression_commit="f67890ghij",
     occurrences=2
 )
 print(ri)
 
-WHAT IT DOES:
-Holds minimal metadata about an error regression as a plain dataclass: the error identifier, the commit that originally fixed it, the commit that reintroduced it, and a simple occurrence counter. It centralizes this small piece of state for use by higher-level error-tracking or reporting code.
+# WHAT IT DOES:
+# Holds minimal metadata about an error regression as a plain dataclass: the error identifier, the commit that originally fixed it, the commit that reintroduced it, and a simple occurrence counter. It centralizes this small piece of state for use by higher-level error-tracking or reporting code.
 
-WHAT IT SHOULD DO BETTER:
-- Add validation (e.g., commit hash format, non-empty error_id) and type enforcement to avoid silent misuse.
-- Provide serialization helpers (to/from dict or JSON) and comparison helpers to ease persistence, diffs and deduplication.
-- Consider timestamps for first/last regression, immutability (frozen dataclass) or methods to increment occurrences safely, plus unit tests and richer docstrings.
+# WHAT IT SHOULD DO BETTER:
+# - Add validation (e.g., commit hash format, non-empty error_id) and type enforcement to avoid silent misuse.
+# - Provide serialization helpers (to/from dict or JSON) and comparison helpers to ease persistence, diffs and deduplication.
+# - Consider timestamps for first/last regression, immutability (frozen dataclass) or methods to increment occurrences safely, plus unit tests and richer docstrings.
 
-FILE CONTENT SUMMARY:
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
 
 from __future__ import annotations
 
@@ -56,20 +61,20 @@ __version__ = VERSION
 
 @dataclass
 class RegressionInfo:
-    """Information about error regression.
+    Information about error regression.
 
     Attributes:
         error_id: ID of the regressed error.
         original_fix_commit: Commit that originally fixed the error.
         regression_commit: Commit that reintroduced the error.
         occurrences: Number of times this error has regressed.
-    """
+    
 
     error_id: str
-    original_fix_commit: str = ""
-    regression_commit: str = ""
+# #     original_fix_commit: str =
+# #     regression_commit: str =
     occurrences: int = 1
-"""
+
 
 from __future__ import annotations
 
@@ -82,16 +87,16 @@ __version__ = VERSION
 
 @dataclass
 class RegressionInfo:
-    """Information about error regression.
+    Information about error regression.
 
     Attributes:
         error_id: ID of the regressed error.
         original_fix_commit: Commit that originally fixed the error.
         regression_commit: Commit that reintroduced the error.
         occurrences: Number of times this error has regressed.
-    """
+    
 
     error_id: str
-    original_fix_commit: str = ""
-    regression_commit: str = ""
+# #     original_fix_commit: str =
+# #     regression_commit: str =
     occurrences: int = 1

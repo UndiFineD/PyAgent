@@ -16,11 +16,11 @@
 
 
 """
-DocGenerator - Generates simple documentation for Improvement objects
-
+DocGenerator - Generates simple documentation for Improvement objects"""
+"""
 [Brief Summary]
 A small utility class that renders human-readable Markdown for Improvement instances using simple string templates and optional metadata extraction.
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - from src.tools.doc_generator import DocGenerator
@@ -40,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -54,7 +54,7 @@ __version__ = VERSION
 
 
 class DocGenerator:
-    """Generates simple documentation text for improvements."""
+    """Generates simple documentation text for improvement""""""s."""
 
     def __init__(self) -> None:
         self.templates: dict[str, str] = {
@@ -70,7 +70,7 @@ class DocGenerator:
                 meta_dict = cast(dict[str, Any], meta)
                 for k, v in meta_dict.items():
                     base += f"- {k}: {v}\n"
-        return base
+        retur"""n """"""base
 """
 
 from __future__ import annotations
@@ -85,7 +85,7 @@ __version__ = VERSION
 
 
 class DocGenerator:
-    """Generates simple documentation text for improvements."""
+    """Generates simple documentation text for impro""""""vements."""
 
     def __init__(self) -> None:
         self.templates: dict[str, str] = {

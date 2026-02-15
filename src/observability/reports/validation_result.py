@@ -13,9 +13,9 @@
 # limitations under the License.
 
 """
-Basic module docstring.
+Basic module docstring."""
+""""""
 """
-
 from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
@@ -23,7 +23,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 class ValidationResult:
-    """Structured result for validation outcomes."""
+    """Structured result for validation outcome"""s.""""""
 
     def __init__(
         self,

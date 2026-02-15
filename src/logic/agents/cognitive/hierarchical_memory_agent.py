@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Agent specializing in Multi-Resolution Hierarchical Memory.
-Manages Short-term (Episodic), Mid-term (Working), Long-term (Semantic), and Archival storage tiers.
-"""
+# "Agent specializing in Multi-Resolution Hierarchical Memory.
+# Manages Short-term (Episodic), Mid-term (Working), Long-term (Semantic), and Archival storage tiers.
+# #
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -29,25 +29,25 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class HierarchicalMemoryAgent(BaseAgent, MemoryStorageMixin, MemoryQueryMixin):
-    """Manages memory across multiple temporal and semantic resolutions.
-    Phase 290: Integrated with 3-layer system (ShortTerm, Working, LongTerm).
-    """
+    "Manages memory across multiple temporal and semantic resolutions.
+#     Phase 290: Integrated with 3-layer system (ShortTerm, Working, LongTerm).
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.memory_root = self._workspace_root / "data" / "logs" / "memory_hierarchical"
+#         self.memory_root = self._workspace_root / "data" / "logs" / "memory_hierarchical
         # Phase 290: Standardized 3-layer tiers + Archival
         self.tiers = ["ShortTerm", "Working", "LongTerm", "Archival"]
         for tier in self.tiers:
             (self.memory_root / tier).mkdir(parents=True, exist_ok=True)
 
         self._system_prompt = (
-            "You are the Hierarchical Memory Agent. "
-            "Your role is to categorize and move information between different memory tiers. "
-            "ShortTerm memory: Recent raw telemetry and episodic events. "
-            "Working memory: Task-specific context and scratchpad data. "
-            "LongTerm memory: Distilled semantic knowledge and reusable patterns. "
-            "Archival memory: Highly compressed historical logs for auditing."
+#             "You are the Hierarchical Memory Agent.
+#             "Your role is to categorize and move information between different memory tiers.
+#             "ShortTerm memory: Recent raw telemetry and episodic events.
+#             "Working memory: Task-specific context and scratchpad data.
+#             "LongTerm memory: Distilled semantic knowledge and reusable patterns.
+#             "Archival memory: Highly compressed historical logs for auditing.
         )
 
     # Logic delegated to mixins

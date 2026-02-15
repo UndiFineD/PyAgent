@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,11 +22,10 @@ import re
 from dataclasses import dataclass
 
 try:
-    import rust_core as rc
-
+    import rust_core as rc  # type: ignore
     HAS_RUST = True
-except ImportError:
-    HAS_RUST = False
+except ImportError:  # type: ignore[assignment]
+    HAS_RUST = False  # type: ignore[assignment]
 
 
 @dataclass(frozen=True)

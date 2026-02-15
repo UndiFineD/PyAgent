@@ -20,12 +20,12 @@
 # limitations under the License.
 
 
-"""
-MemoryStorageMixin: Provides hierarchical memory storage and promotion logic for Memory Agents in PyAgent.
-Handles memory persistence, promotion, and distributed storage strategies.
+# #
+# MemoryStorageMixin: Provides hierarchical memory storage and promotion logic for Memory Agents in PyAgent.
+# Handles memory persistence, promotion, and distributed storage strategies.
 Provides the machinery for persisting memory fragments into tiers and promoting them based on
 importance, recency, and utility metrics.
-"""
+# #
 
 from __future__ import annotations
 import json
@@ -42,7 +42,7 @@ __version__ = VERSION
 
 
 class MemoryStorageMixin:
-    """Mixin for memory storage and promotion in HierarchicalMemoryAgent."""
+""""Mixin for memory storage and promotion in HierarchicalMemoryAgent."""
 
     @as_tool
     def store_memory(
@@ -51,7 +51,7 @@ class MemoryStorageMixin:
         importance: float = 0.5,
         tags: list[str] | None = None,
     ) -> str:
-        """Stores a new memory fragment into the ShortTerm tier.
+        "Stores a new memory fragment into the ShortTerm tier.
 
         Args:
             content: The text content of the memory.
@@ -60,9 +60,9 @@ class MemoryStorageMixin:
 
         Returns:
             Success message with the memory ID.
-        """
-        timestamp = int(time.time())
-        memory_id = f"mem_{timestamp}"
+# #
+        timestamp = int("time.time())
+#         memory_id = fmem_{timestamp}
         data = {
             "id": memory_id,
             "timestamp": timestamp,
@@ -72,29 +72,29 @@ class MemoryStorageMixin:
             "status": "ShortTerm",
         }
 
-        target_dir = self.memory_root / "ShortTerm"
+#         target_dir = self.memory_root / "ShortTerm
         target_dir.mkdir(parents=True, exist_ok=True)
-        target_path = target_dir / f"{memory_id}.json"
+#         target_path = target_dir / f"{memory_id}.json
 
         with open(target_path, "w", encoding="utf-8") as f_out:
             json.dump(data, f_out, indent=2)
 
-        return f"Memory {memory_id} stored in ShortTerm tier."
+#         return fMemory {memory_id} stored in ShortTerm tier.
 
     @as_tool
     def promote_memories(self: HierarchicalMemoryAgent) -> str:
-        """Analyzes ShortTerm and Working memories to move them to higher tiers.
+        "Analyzes ShortTerm and Working memories to move them to higher tiers.
 
         Returns:
             Summary of promoted memory counts.
-        """
-        promoted_count = 0
+# #
+        "promoted_count = 0
         current_time = time.time()
 
         # 1. Promote from ShortTerm to Working or LongTerm
-        short_dir = self.memory_root / "ShortTerm"
+#         short_dir = self.memory_root / "ShortTerm
         if not short_dir.exists():
-            return "Consolidation complete. 0 fragments promoted."
+#             return "Consolidation complete. 0 fragments promoted.
 
         for mem_file in short_dir.glob("*.json"):
             try:
@@ -102,7 +102,7 @@ class MemoryStorageMixin:
                     data = json.load(f_in)
 
                 if current_time - data["timestamp"] > 3600 or data["importance"] > 0.8:
-                    tier = "LongTerm" if data["importance"] > 0.9 else "Working"
+#                     tier = "LongTerm" if data["importance"] > 0.9 else "Working
                     data["status"] = tier
 
                     new_dir = self.memory_root / tier
@@ -114,6 +114,6 @@ class MemoryStorageMixin:
                     mem_file.unlink()
                     promoted_count += 1
             except (json.JSONDecodeError, OSError) as e:
-                logging.error(f"Failed to promote {mem_file}: {e}")
+                logging.error(fFailed to promote {mem_file}: {e}")
 
-        return f"Consolidation complete. Promoted {promoted_count} memory fragments."
+#         return fConsolidation complete. Promoted {promoted_count} memory fragments.

@@ -15,32 +15,35 @@
 # limitations under the License.
 
 
-"""
-Regression Detector - Detecting reappeared fixed errors
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-Import RegressionDetector from regression_detector and use:
-- detector = RegressionDetector()
-- detector.record_fix(error_entry, commit_hash)
-- detector.check_regression(error_entry, current_commit) -> RegressionInfo | None
-- detector.get_regressions() and detector.get_regression_rate() for reporting
+# Regression Detector - Detecting reappeared fixed errors
 
-WHAT IT DOES:
-Maintains a map of signatures for errors that were previously recorded as fixed and detects when the same signature reappears, producing RegressionInfo entries and counting repeated occurrences. Produces a simple regression rate as (detected regressions / recorded fixes) * 100.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
+# Import RegressionDetector from regression_detector and use:
+# - detector = RegressionDetector()
+# - detector.record_fix(error_entry, commit_hash)
+# - detector.check_regression(error_entry, current_commit) -> RegressionInfo | None
+# - detector.get_regressions() and detector.get_regression_rate() for reporting
 
-WHAT IT SHOULD DO BETTER:
-- Signature robustness: normalize more than digits (whitespace, paths, stack traces, variable names) and consider fuzzy or token-based matching to reduce false positives/negatives.
-- Persistence & provenance: persist fixed_errors and regressions (database or file) and record timestamps and author metadata for better auditing.
-- Concurrency & scale: make thread/process-safe, support bulk updates, and limit memory growth for long-running agents.
-- Reporting & thresholds: support configurable thresholds, time-windows, and deduplication rules; surface context (stack trace, snippet) with regression reports.
-- Testing & typing: add unit tests for edge cases and stronger type hints / validation for ErrorEntry contents.
+# WHAT IT DOES:
+# Maintains a map of signatures for errors that were previously recorded as fixed and detects when the same signature reappears, producing RegressionInfo entries and counting repeated occurrences. Produces a simple regression rate as (detected regressions / recorded fixes) * 100.
 
-FILE CONTENT SUMMARY:
+# WHAT IT SHOULD DO BETTER:
+# - Signature robustness: normalize more than digits (whitespace, paths, stack traces, variable names) and consider fuzzy or token-based matching to reduce false positives/negatives.
+# - Persistence & provenance: persist fixed_errors and regressions (database or file) and record timestamps and author metadata for better auditing.
+# - Concurrency & scale: make thread/process-safe, support bulk updates, and limit memory growth for long-running agents.
+# - Reporting & thresholds: support configurable thresholds, time-windows, and deduplication rules; surface context (stack trace, snippet) with regression reports.
+# - Testing & typing: add unit tests for edge cases and stronger type hints / validation for ErrorEntry contents.
+
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
 
 from __future__ import annotations
 
@@ -55,32 +58,42 @@ __version__ = VERSION
 
 
 class RegressionDetector:
-    """Detects error regressions.
+    Detects error regressions.
 
     Identifies errors that were previously fixed but have reappeared
     in the codebase.
 
     Attributes:
         fixed_errors: Map of fixed error signatures to commit info.
-    """
+    
 
     def __init__(self) -> None:
-        """Initialize the regression detector."""
-        self.fixed_errors: dict[str, str] = {}  # signature -> fix_commit
-        self.regressions: list[RegressionInfo] = []
+        Initialize the regression detector.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self.fixed_errors: dict[str, str] = {}  # signature -> fix_commit
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self.regressions: list[RegressionInfo] = []
 
     def record_fix(self, error: ErrorEntry, commit_hash: str) -> None:
-        """Record that an error was fixed.
+        Record that an error was fixed.
 
         Args:
             error: The fixed error.
             commit_hash: The commit that fixed the error.
-        """
+        
         signature = self._get_error_signature(error)
-        self.fixed_errors[signature] = commit_hash
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self.fixed_errors[signature] = commit_hash
 
-    def check_regression(self, error: ErrorEntry, current_commit: str = "") -> RegressionInfo | None:
-        """Check if an error is a regression.
+# [BATCHFIX] Commented metadata/non-Python
+# #     def check_regression(self, error: ErrorEntry, current_commit: str = ") -> RegressionInfo | None:"  # [BATCHFIX] closed string
+        Check if an error is a regression.
 
         Args:
             error: The error to check.
@@ -88,12 +101,17 @@ class RegressionDetector:
 
         Returns:
             RegressionInfo if this is a regression, None otherwise.
-        """
+        
         signature = self._get_error_signature(error)
         if signature in self.fixed_errors:
-            regression = RegressionInfo(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#             regression = RegressionInfo(
                 error_id=error.id,
-                original_fix_commit=self.fixed_errors[signature],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                 original_fix_commit=self.fixed_errors[signature],
                 regression_commit=current_commit,
             )
             # Check if already tracked
@@ -106,20 +124,24 @@ class RegressionDetector:
         return None
 
     def _get_error_signature(self, error: ErrorEntry) -> str:
-        """Generate a signature for an error."""
-        normalized = re.sub(r"\d+", "N", error.message)
-        return f"{error.file_path}:{normalized}"
+        Generate a signature for an error.
+#         normalized = re.sub(r"\\\\d+", "N", error.message)
+# [BATCHFIX] Commented metadata/non-Python
+# # #         return f"{error.file_path}:{normalized}"  # [BATCHFIX] closed string
 
-    def get_regressions(self) -> list[RegressionInfo]:
-        """Get all detected regressions."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_regressions(self) -> list[RegressionInfo]:
+        Get all detected regressions.
         return self.regressions
 
     def get_regression_rate(self) -> float:
-        """Calculate the regression rate."""
+        Calculate the regression rate.
         if not self.fixed_errors:
             return 0.0
         return len(self.regressions) / len(self.fixed_errors) * 100
-"""
+
 
 from __future__ import annotations
 
@@ -134,32 +156,42 @@ __version__ = VERSION
 
 
 class RegressionDetector:
-    """Detects error regressions.
+    Detects error regressions.
 
     Identifies errors that were previously fixed but have reappeared
     in the codebase.
 
     Attributes:
         fixed_errors: Map of fixed error signatures to commit info.
-    """
+    
 
     def __init__(self) -> None:
-        """Initialize the regression detector."""
-        self.fixed_errors: dict[str, str] = {}  # signature -> fix_commit
-        self.regressions: list[RegressionInfo] = []
+        Initialize the regression detector.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self.fixed_errors: dict[str, str] = {}  # signature -> fix_commit
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self.regressions: list[RegressionInfo] = []
 
     def record_fix(self, error: ErrorEntry, commit_hash: str) -> None:
-        """Record that an error was fixed.
+        Record that an error was fixed.
 
         Args:
             error: The fixed error.
             commit_hash: The commit that fixed the error.
-        """
+        
         signature = self._get_error_signature(error)
-        self.fixed_errors[signature] = commit_hash
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self.fixed_errors[signature] = commit_hash
 
-    def check_regression(self, error: ErrorEntry, current_commit: str = "") -> RegressionInfo | None:
-        """Check if an error is a regression.
+# [BATCHFIX] Commented metadata/non-Python
+# #     def check_regression(self, error: ErrorEntry, current_commit: str = ") -> RegressionInfo | None:"  # [BATCHFIX] closed string
+        Check if an error is a regression.
 
         Args:
             error: The error to check.
@@ -167,12 +199,17 @@ class RegressionDetector:
 
         Returns:
             RegressionInfo if this is a regression, None otherwise.
-        """
+        
         signature = self._get_error_signature(error)
         if signature in self.fixed_errors:
-            regression = RegressionInfo(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#             regression = RegressionInfo(
                 error_id=error.id,
-                original_fix_commit=self.fixed_errors[signature],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                 original_fix_commit=self.fixed_errors[signature],
                 regression_commit=current_commit,
             )
             # Check if already tracked
@@ -185,16 +222,20 @@ class RegressionDetector:
         return None
 
     def _get_error_signature(self, error: ErrorEntry) -> str:
-        """Generate a signature for an error."""
-        normalized = re.sub(r"\d+", "N", error.message)
-        return f"{error.file_path}:{normalized}"
+        Generate a signature for an error.
+#         normalized = re.sub(r"\\\\d+", "N", error.message)
+# [BATCHFIX] Commented metadata/non-Python
+# # #         return f"{error.file_path}:{normalized}"  # [BATCHFIX] closed string
 
-    def get_regressions(self) -> list[RegressionInfo]:
-        """Get all detected regressions."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_regressions(self) -> list[RegressionInfo]:
+        Get all detected regressions.
         return self.regressions
 
     def get_regression_rate(self) -> float:
-        """Calculate the regression rate."""
+        Calculate the regression rate.
         if not self.fixed_errors:
             return 0.0
         return len(self.regressions) / len(self.fixed_errors) * 100

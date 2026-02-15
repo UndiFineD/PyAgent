@@ -24,8 +24,8 @@ __version__ = VERSION
 @dataclass
 class ChangelogTemplate:
     """Template for changelog entries."""
-
-    name: str
+"""
+    name: str"""
     project_type: str
     sections: list[str] = field(
         default_factory=lambda: [

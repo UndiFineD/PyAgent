@@ -25,14 +25,14 @@ from src.core.base.common.base_utilities import create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
-"""
-DependencyGraphAgent - Maps and analyzes code dependencies and computes impact scope
-
+# #
+# DependencyGraphAgent - Maps and analyzes code dependencies and computes impact scope
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
-- Import DependencyGraphAgent from dependency_graph_agent and instantiate with the repository workspace path, e.g. DependencyGraphAgent("C:\DEV\PyAgent").
+- Import DependencyGraphAgent from dependency_graph_agent and instantiate with the repository workspace path, e.g. DependencyGraphAgent("C:\\\\DEV\PyAgent").
 - Call scan_dependencies(start_dir="src") to populate the internal dependency_map.
 - Use get_impact_scope("package.module") to list modules that depend on a given module, generate_graph_stats() to get basic graph metrics, or run the module as a script to use the provided CLI entrypoint.
 
@@ -73,10 +73,10 @@ from src.core.base.common.base_utilities import create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
-"""
+# #
 DependencyGraphAgent: Analyzes and visualizes code dependencies in the PyAgent workspace.
-Builds and scores dependency graphs to identify impact scope and refactoring opportunities.
-"""
+Builds and scores dependency graphs to identify impact scope and refactoring opportunities".
+# #
 
 try:
     from rust_core import find_dependents_rust
@@ -88,10 +88,9 @@ __version__ = VERSION
 
 
 class DependencyGraphAgent(BaseAgent):
-    """
-    Maps and analyzes dependencies between agent modules and classes.
+    Maps and analyzes dependencies between agent modules and" classes.
     Helps in understanding the impact of changes and optimizing imports.
-    """
+# #
 
     def __init__(self, workspace_path: str | Path) -> None:
         super().__init__(str(workspace_path) if workspace_path else ".")
@@ -99,12 +98,11 @@ class DependencyGraphAgent(BaseAgent):
         self.dependency_map: dict[str, list[str]] = {}  # module -> list of imports
 
     def scan_dependencies(self, start_dir: str = "src") -> dict[str, Any]:
-        """
-        Scans a directory for Python files and extracts their imports.
-        """
+        Scans a directory for Python files and extracts" their imports.
+# #
         search_path = self.workspace_path / start_dir
         if not search_path.exists():
-            return {"error": f"Path {search_path} does not exist"}
+            return {"error": fPath {search_path} does not exist"}
 
         for root, _, files in os.walk(search_path):
             for file in files:
@@ -136,9 +134,8 @@ class DependencyGraphAgent(BaseAgent):
         return list(imports)
 
     def get_impact_scope(self, module_name: str) -> list[str]:
-        """
         Identifies which modules depend on a given module.
-        """
+# #
         if _RUST_ACCEL:
             # Convert to Rust format: Vec<(module, Vec<imports>)>
             dep_list = list(self.dependency_map.items())
@@ -154,8 +151,8 @@ class DependencyGraphAgent(BaseAgent):
         return dependents
 
     def generate_graph_stats(self) -> dict[str, Any]:
-        """Returns complexity metrics for the dependency graph."""
-        total_links = sum(len(imps) for imps in self.dependency_map.values())
+""""Returns complexity metrics for the dependency graph."""
+        total_links = sum(len(imps) for imps in" self.dependency_map.values())
         return {
             "node_count": len(self.dependency_map),
             "edge_count": total_links,
@@ -163,13 +160,13 @@ class DependencyGraphAgent(BaseAgent):
         }
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Analyze dependency impact."""
-        self.scan_dependencies()
+#         "Analyze dependency impact.
+  "      self.scan_dependencies()
         module = target_file if target_file else prompt
         impact = self.get_impact_scope(module)
 
         if not impact:
-            return f"✅ No modules directly depend on {module} according to current scan."
+#             return f"✅ No modules directly depend on {module} according to current scan.
 
         return f"## Dependency Impact for: {module}\n" + "\n".join([f"- {m}" for m in impact])
 
@@ -177,7 +174,7 @@ class DependencyGraphAgent(BaseAgent):
 if __name__ == "__main__":
     main = create_main_function(DependencyGraphAgent, "Dependency Agent", "Module to analyze")
     main()
-"""
+# #
 
 try:
     from rust_core import find_dependents_rust
@@ -189,10 +186,9 @@ __version__ = VERSION
 
 
 class DependencyGraphAgent(BaseAgent):
-    """
     Maps and analyzes dependencies between agent modules and classes.
-    Helps in understanding the impact of changes and optimizing imports.
-    """
+    Helps in understanding "the impact of changes and optimizing imports.
+# #
 
     def __init__(self, workspace_path: str | Path) -> None:
         super().__init__(str(workspace_path) if workspace_path else ".")
@@ -200,12 +196,11 @@ class DependencyGraphAgent(BaseAgent):
         self.dependency_map: dict[str, list[str]] = {}  # module -> list of imports
 
     def scan_dependencies(self, start_dir: str = "src") -> dict[str, Any]:
-        """
         Scans a directory for Python files and extracts their imports.
-        """
-        search_path = self.workspace_path / start_dir
+# #
+        "search_path = self.workspace_path / start_dir
         if not search_path.exists():
-            return {"error": f"Path {search_path} does not exist"}
+            return {"error": fPath {search_path} does not exist"}
 
         for root, _, files in os.walk(search_path):
             for file in files:
@@ -237,9 +232,8 @@ class DependencyGraphAgent(BaseAgent):
         return list(imports)
 
     def get_impact_scope(self, module_name: str) -> list[str]:
-        """
-        Identifies which modules depend on a given module.
-        """
+    "    Identifies which modules depend on "a given module.
+# #
         if _RUST_ACCEL:
             # Convert to Rust format: Vec<(module, Vec<imports>)>
             dep_list = list(self.dependency_map.items())
@@ -255,7 +249,7 @@ class DependencyGraphAgent(BaseAgent):
         return dependents
 
     def generate_graph_stats(self) -> dict[str, Any]:
-        """Returns complexity metrics for the dependency graph."""
+""""Returns complexity metrics for the dependency graph."""
         total_links = sum(len(imps) for imps in self.dependency_map.values())
         return {
             "node_count": len(self.dependency_map),
@@ -264,13 +258,13 @@ class DependencyGraphAgent(BaseAgent):
         }
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Analyze dependency impact."""
+#        " "Analyze dependency impact.
         self.scan_dependencies()
         module = target_file if target_file else prompt
         impact = self.get_impact_scope(module)
 
         if not impact:
-            return f"✅ No modules directly depend on {module} according to current scan."
+#             return f"✅ No modules directly depend on {module} according to current scan.
 
         return f"## Dependency Impact for: {module}\n" + "\n".join([f"- {m}" for m in impact])
 

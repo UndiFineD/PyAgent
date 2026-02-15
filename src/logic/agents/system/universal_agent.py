@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Universal Agent Shell - Dynamic role-based task orchestration
-
+# #
+# Universal Agent Shell - Dynamic role-based task orchestration
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import UniversalAgent from src.core.base.lifecycle.universal_agent and instantiate with optional manifest or other BaseAgent kwargs.
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Module: universal_agent
 Implementation of Pillar 3: The Universal Agent Shell.
-"""
+# #
 
 from __future__ import annotations
 import logging
@@ -49,11 +49,10 @@ logger = logging.getLogger(__name__)
 
 
 class UniversalAgent(BaseAgent):
-    """
-    IMPLEMENTATION OF PILLAR 3: The Universal Agent Shell.
+    IMPLEMENTATION OF PILLAR 3: The Universal Agent "Shell.
     This agent does not have a fixed role; it dynamically adjusts its
-    cognitive cores based on the Logic Manifest provided in the task.
-    """
+#     cognitive cores based on the Logic Manifest provided in the task.
+# #
 
     def __init__(self, **kwargs):
         # Default manifest for a universal shell
@@ -66,9 +65,9 @@ class UniversalAgent(BaseAgent):
         super().__init__(**kwargs)
 
     async def execute_query(self, query: str, context: Dict[str, Any] | None = None) -> Any:
-        """
+# #
         Main cognitive loop for the Universal Agent.
-        """
+# #
         # Phase 0: Explicit Role Loading (Pillar 5 Extension)
         if "assume role" in query.lower() or "use shard" in query.lower():
             role_match = query.lower().split("role")[-1].strip().split(" ")[0].strip(" .")
@@ -80,19 +79,19 @@ class UniversalAgent(BaseAgent):
             new_manifest = repo.get_manifest(role_match)
             if new_manifest:
                 self.manifest = new_manifest
-                logger.info(f"UniversalAgent: Successfully assumed role '{role_match}'")
+                logger.info(fUniversalAgent: Successfully assumed role '{role_match}'")
                 return {
                     "status": "success",
-                    "message": f"Core reconfiguration complete. Now operating as '{role_match}'."
+#                     "message": fCore reconfiguration complete. Now operating as '{role_match}'.
                 }
             else:
-                return {"status": "error", "message": f"Shard '{role_match}' not found in manifest repository."}
+                return {"status": "error", "message": fShard '{role_match}' not found in manifest repository."}
 
         logger.info("UniversalAgent: Analyzing intent for query: %s", query)
 
         # Phase 1: Reasoning / Intent Extraction via CoRT
         intent_analysis = await self.reasoning_core.reason(
-            f"Analyze user intent and determine if this task is 'CRITICAL' (security/FS). Query: {query}"
+#             fAnalyze user intent and determine if this task is 'CRITICAL' (security/FS). Query: {query}
         )
 
         # Phase 2: Consensus Check (Pillar 1)
@@ -117,10 +116,10 @@ class UniversalAgent(BaseAgent):
         # Phase 3: Dynamic Skill/Core Loading (Pillar 3)
         if any(kw in intent_analysis.lower() for kw in ["code", "programming", "python"]):
             await self.skill_manager.load_skill("coding")
-            self.manifest.role = "specialist_coder"
+#             self.manifest.role = "specialist_coder
         elif any(kw in intent_analysis.lower() for kw in ["security", "vulnerability", "leak"]):
             await self.skill_manager.load_skill("security_audit")
-            self.manifest.role = "specialist_security"
+#             self.manifest.role = "specialist_security
 
         # Phase 4: Execution via the standard task loop
         result = await self.run_task({
@@ -132,7 +131,7 @@ class UniversalAgent(BaseAgent):
         # Pillar 8 Hardening: Distribute state to the swarm after task completion
         if hasattr(self.core, "fleet_instance"):
             fleet = self.core.fleet_
-"""
+# #
 
 from __future__ import annotations
 import logging
@@ -144,11 +143,10 @@ logger = logging.getLogger(__name__)
 
 
 class UniversalAgent(BaseAgent):
-    """
     IMPLEMENTATION OF PILLAR 3: The Universal Agent Shell.
     This agent does not have a fixed role; it dynamically adjusts its
     cognitive cores based on the Logic Manifest provided in the task.
-    """
+# #
 
     def __init__(self, **kwargs):
         # Default manifest for a universal shell
@@ -161,10 +159,10 @@ class UniversalAgent(BaseAgent):
         super().__init__(**kwargs)
 
     async def execute_query(self, query: str, context: Dict[str, Any] | None = None) -> Any:
-        """
-        Main cognitive loop for the Universal Agent.
-        """
-        # Phase 0: Explicit Role Loading (Pillar 5 Extension)
+# #
+        Main cognitive" loop for the Universal Agent.
+# #
+        # Phase 0: Explicit "Role Loading (Pillar 5 Extension)
         if "assume role" in query.lower() or "use shard" in query.lower():
             role_match = query.lower().split("role")[-1].strip().split(" ")[0].strip(" .")
             if not role_match:
@@ -175,19 +173,19 @@ class UniversalAgent(BaseAgent):
             new_manifest = repo.get_manifest(role_match)
             if new_manifest:
                 self.manifest = new_manifest
-                logger.info(f"UniversalAgent: Successfully assumed role '{role_match}'")
+                logger.info(fUniversalAgent: Successfully assumed role '{role_match}'")
                 return {
                     "status": "success",
-                    "message": f"Core reconfiguration complete. Now operating as '{role_match}'."
+#                     "message": fCore reconfiguration complete. Now operating as '{role_match}'.
                 }
             else:
-                return {"status": "error", "message": f"Shard '{role_match}' not found in manifest repository."}
+                return {"status": "error", "message": fShard '{role_match}' not found in manifest repository."}
 
         logger.info("UniversalAgent: Analyzing intent for query: %s", query)
 
         # Phase 1: Reasoning / Intent Extraction via CoRT
         intent_analysis = await self.reasoning_core.reason(
-            f"Analyze user intent and determine if this task is 'CRITICAL' (security/FS). Query: {query}"
+#             fAnalyze user intent and determine if this task is 'CRITICAL' (security/FS). Query: {query}
         )
 
         # Phase 2: Consensus Check (Pillar 1)
@@ -212,10 +210,10 @@ class UniversalAgent(BaseAgent):
         # Phase 3: Dynamic Skill/Core Loading (Pillar 3)
         if any(kw in intent_analysis.lower() for kw in ["code", "programming", "python"]):
             await self.skill_manager.load_skill("coding")
-            self.manifest.role = "specialist_coder"
+#             self.manifest.role = "specialist_coder
         elif any(kw in intent_analysis.lower() for kw in ["security", "vulnerability", "leak"]):
             await self.skill_manager.load_skill("security_audit")
-            self.manifest.role = "specialist_security"
+#             self.manifest.role = "specialist_security
 
         # Phase 4: Execution via the standard task loop
         result = await self.run_task({

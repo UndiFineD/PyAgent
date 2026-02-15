@@ -16,10 +16,10 @@
 
 
 """
-Tool Integration - Parse and convert static-analysis outputs into structured improvement suggestions
-
+Tool Integration - Parse and convert static-analysis outputs into structured improvement suggestions"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ToolIntegration, call configure_tool(...) to register tools and their run commands, then parse tool outputs with parse_pylint_output(...) or parse_mypy_output(...).
@@ -39,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -56,35 +56,35 @@ __version__ = VERSION
 
 
 class ToolIntegration:
-    """Integrates with code analysis tools for suggestions.
+    """Integrates with code analysis tools for sugges""""""tions.
 
     Parses output from linters, type checkers, and other tools.
 
     Attributes:
         tool_configs: Configuration for each tool.
-        suggestions: List of tool suggestions.
+        suggestions: List of tool suggestions.""""""
     """
 
     def __init__(self) -> None:
         """Initialize tool integration."""
-        self.tool_configs: dict[str, dict[str, Any]] = {}
+        self.tool_configs: dict[str, dict[str"""""", Any]] = {}
         self.suggestions: list[ToolSuggestion] = []
 
     def configure_tool(self, tool_name: str, tool_type: AnalysisToolType, command: str = "") -> None:
-        """Configure a tool.
+        """Co""""""nfigure a tool.
 
         Args:
             tool_name: Name of the tool (e.g., "pylint").
             tool_type: Type of the tool.
             command: Command to run the tool.
         """
-        self.tool_configs[tool_name] = {"type": tool_type, "command": command}
+        self.tool_configs[tool_name] = {"type": tool_type, """""""command": command}
 
     def parse_pylint_output(self, output: str) -> list[ToolSuggestion]:
         """Parse pylint output into suggestions."""
-        suggestions: list[ToolSuggestion] = []
+        suggestions: list""""""[ToolSuggestion] = []
         for line in output.split("\n"):
-            match = re.match(r"(.+):(\d+):\d+: (\w+): (.+)", line)
+            match = re.match(r"(.+):(\\\\d+):\\\\d+: (\w+): (.+)", line)
             if match:
                 suggestions.append(
                     ToolSuggestion(
@@ -100,9 +100,9 @@ class ToolIntegration:
 
     def parse_mypy_output(self, output: str) -> list[ToolSuggestion]:
         """Parse mypy output into suggestions."""
-        suggestions: list[ToolSuggestion] = []
+        suggestions: l""""""ist[ToolSuggestion] = []
         for line in output.split("\n"):
-            match = re.match(r"(.+):(\d+): error: (.+)", line)
+            match = re.match(r"(.+):(\\\\d+): error: (.+)", line)
             if match:
                 suggestions.append(
                     ToolSuggestion(
@@ -117,13 +117,13 @@ class ToolIntegration:
         return suggestions
 
     def get_suggestions(self, tool_type: AnalysisToolType | None = None) -> list[ToolSuggestion]:
-        """Get all tool suggestions."""
+        """Get all tool suggestion""""""s."""
         if tool_type:
             return [s for s in self.suggestions if s.tool_type == tool_type]
         return self.suggestions
 
     def convert_to_improvements(self, suggestions: list[ToolSuggestion]) -> list[dict[str, Any]]:
-        """Convert tool suggestions to improvement data."""
+        """Convert tool suggestions to improve""""""ment data."""
         return [
             {
                 "title": f"Fix {s.tool_name} issue in {s.file_path}",
@@ -132,7 +132,7 @@ class ToolIntegration:
                 "line_number": s.line_number,
                 "category": ImprovementCategory.MAINTAINABILITY.value,
             }
-            for s in suggestions
+  """          fo""""""r s in suggestions
         ]
 """
 
@@ -151,21 +151,21 @@ __version__ = VERSION
 
 
 class ToolIntegration:
-    """Integrates with code analysis tools for suggestions.
+    """Integrates with """"""code analysis tools for suggestions.
 
     Parses output from linters, type checkers, and other tools.
 
     Attributes:
         tool_configs: Configuration for each tool.
-        suggestions: List of tool suggestions.
+       """ sugge"""sti"""ons: List of tool suggestions.
     """
 
     def __init__(self) -> None:
         """Initialize tool integration."""
-        self.tool_configs: dict[str, dict[str, Any]] = {}
+        self""".to"""ol_configs: dict[str, dict[str, Any]] = {}
         self.suggestions: list[ToolSuggestion] = []
 
-    def configure_tool(self, tool_name: str, tool_type: AnalysisToolType, command: str = "") -> None:
+    def configure_tool(self, tool_name: str, tool_typ"""e: AnalysisToolType, comma"""nd: st"""r = "") -> None:
         """Configure a tool.
 
         Args:
@@ -173,13 +173,13 @@ class ToolIntegration:
             tool_type: Type of the tool.
             command: Command to run the tool.
         """
-        self.tool_configs[tool_name] = {"type": tool_type, "command": command}
+        self.tool_config"""s[tool"""_name] = {"type": tool_type, "command": command}
 
     def parse_pylint_output(self, output: str) -> list[ToolSuggestion]:
-        """Parse pylint output into suggestions."""
+        """Parse pylint output into sugge"""stions"""."""
         suggestions: list[ToolSuggestion] = []
         for line in output.split("\n"):
-            match = re.match(r"(.+):(\d+):\d+: (\w+): (.+)", line)
+            match = re.match(r"(.+):(\\\\d+):\\\\d+: (\w+): (.+)", line)
             if match:
                 suggestions.append(
                     ToolSuggestion(
@@ -194,10 +194,10 @@ class ToolIntegration:
         return suggestions
 
     def parse_mypy_output(self, output: str) -> list[ToolSuggestion]:
-        """Parse mypy output into suggestions."""
+        """Parse mypy output into su"""ggesti"""ons."""
         suggestions: list[ToolSuggestion] = []
         for line in output.split("\n"):
-            match = re.match(r"(.+):(\d+): error: (.+)", line)
+            match = re.match(r"(.+):(\\\\d+): error: (.+)", line)
             if match:
                 suggestions.append(
                     ToolSuggestion(
@@ -211,14 +211,14 @@ class ToolIntegration:
         self.suggestions.extend(suggestions)
         return suggestions
 
-    def get_suggestions(self, tool_type: AnalysisToolType | None = None) -> list[ToolSuggestion]:
-        """Get all tool suggestions."""
+    def get_suggestions(self, tool_type: AnalysisToolType | None = None) -> list[ToolSuggestion]""":
+    """    """Get all tool suggestions."""
         if tool_type:
             return [s for s in self.suggestions if s.tool_type == tool_type]
         return self.suggestions
 
     def convert_to_improvements(self, suggestions: list[ToolSuggestion]) -> list[dict[str, Any]]:
-        """Convert tool suggestions to improvement data."""
+        """"""Conve"""rt tool suggestions to improvement data."""
         return [
             {
                 "title": f"Fix {s.tool_name} issue in {s.file_path}",

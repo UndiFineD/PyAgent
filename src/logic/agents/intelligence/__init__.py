@@ -14,9 +14,9 @@
 # limitations under the License.
 
 
-"""Auto-generated module exports."""
-
-from __future__ import annotations
+# "Auto-generated module exports.
+# #
+# from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
 from .search_agent import SearchAgent

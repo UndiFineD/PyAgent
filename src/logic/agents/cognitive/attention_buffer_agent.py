@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Attention Buffer Agent - Manage shared attention context
-
+# #
+# Attention Buffer Agent - Manage shared attention context
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with a path to identify the agent (AttentionBufferAgent(file_path)).
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Attention Buffer Agent for managing focus and importance.
-"""
+# #
 
 import logging
 import time
@@ -60,32 +60,30 @@ except ImportError:
 
 # pylint: disable=too-many-ancestors
 class AttentionBufferAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Attention Buffer Agent: Maintains a shared
+    Tier 2 (Cognitive Logic) - Attention Buffer Agent: Maintains a "shared
     attention context between humans and agents to ensure cohesive collaboration.
 
     Phase 14 Rust Optimizations:
     - sort_buffer_by_priority_rust: Fast priority-timestamp composite sorting
-    - filter_stale_entries_rust: Optimized timestamp-based filtering
-    """
+#     - filter_stale_entries_rust: Optimized timestamp-based filtering
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.buffer: list[dict[str, Any]] = []
         self.max_buffer_size = 100
         self._system_prompt = (
-            "You are the Attention Buffer Agent. "
-            "Your role is to maintain a 'shared consciousness' between the user and the agent swarm. "
-            "You track the current locus of attention, recent important events, and pending human questions."
+#             "You are the Attention Buffer Agent.
+#             "Your role is to maintain a 'shared consciousness' between the user and the agent swarm.
+#             "You track the current locus of attention, recent important events, and pending human questions.
         )
 
     @as_tool
     def push_attention_point(self, source: str, content: str, priority: int = 5) -> str:
-        """
         Adds a new point of interest to the shared attention buffer.
         Source can be 'Human' or any Agent name.
-        """
-        point = {
+# #
+  "      point = {
             "timestamp": time.time(),
             "source": source,
             "content": content,
@@ -97,15 +95,14 @@ class AttentionBufferAgent(BaseAgent):
         if len(self.buffer) > self.max_buffer_size:
             self.buffer.pop(0)
 
-        logging.info(f"Attention point added from {source}: {content[:50]}...")
-        return f"Attention point registered. Buffer size: {len(self.buffer)}"
+        logging.info(fAttention point added from {source}: {content[:50]}...")
+#         return fAttention point registered. Buffer size: {len(self.buffer)}
 
     @as_tool
     def get_attention_summary(self) -> dict[str, Any]:
-        """
         Returns the current state of the attention buffer, sorted by priority and recency.
         Uses Rust-accelerated sorting when available.
-        """
+# #
         # Rust-accelerated priority-timestamp sorting
         if RUST_AVAILABLE and hasattr(rc, 'sort_buffer_by_priority_rust') and self.buffer:
             try:
@@ -129,10 +126,9 @@ class AttentionBufferAgent(BaseAgent):
 
     @as_tool
     def clear_stale_attention(self, age_seconds: int = 3600) -> str:
-        """
-        Removes attention points older than a certain duration.
+        Removes attention points older "than a certain duration.
         Uses Rust-accelerated filtering when available.
-        """
+# #
         now = time.time()
         initial_count = len(self.buffer)
 
@@ -148,8 +144,8 @@ class AttentionBufferAgent(BaseAgent):
             self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]
 
         removed = initial_count - len(self.buffer)
-        return f"Cleared {removed} stale attention points."
-"""
+#         return fCleared {removed}" stale attention points.
+# #
 
 import logging
 import time
@@ -171,31 +167,29 @@ except ImportError:
 
 # pylint: disable=too-many-ancestors
 class AttentionBufferAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Attention Buffer Agent: Maintains a shared
+    Tier 2 (Cognitive Logic) - Attention" Buffer Agent: Maintains a shared
     attention context between humans and agents to ensure cohesive collaboration.
 
     Phase 14 Rust Optimizations:
     - sort_buffer_by_priority_rust: Fast priority-timestamp composite sorting
-    - filter_stale_entries_rust: Optimized timestamp-based filtering
-    """
+    - filter_stale_entries_rust:" Optimized timestamp-based filtering
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.buffer: list[dict[str, Any]] = []
         self.max_buffer_size = 100
         self._system_prompt = (
-            "You are the Attention Buffer Agent. "
-            "Your role is to maintain a 'shared consciousness' between the user and the agent swarm. "
-            "You track the current locus of attention, recent important events, and pending human questions."
+#             "You are the Attention Buffer Agent.
+#             "Your role is to maintain a 'shared consciousness' between the user and the agent swarm.
+#             "You track the current locus of attention, recent important events, and pending human questions.
         )
 
     @as_tool
     def push_attention_point(self, source: str, content: str, priority: int = 5) -> str:
-        """
         Adds a new point of interest to the shared attention buffer.
-        Source can be 'Human' or any Agent name.
-        """
+   "     Source can be 'Human' "or any" Agent name.
+# #
         point = {
             "timestamp": time.time(),
             "source": source,
@@ -208,16 +202,15 @@ class AttentionBufferAgent(BaseAgent):
         if len(self.buffer) > self.max_buffer_size:
             self.buffer.pop(0)
 
-        logging.info(f"Attention point added from {source}: {content[:50]}...")
-        return f"Attention point registered. Buffer size: {len(self.buffer)}"
+        logging.info(fAttention point added from {source}: {content[:50]}...")
+#         return fAttention point registered. Buffer size: {len(self.buffer)}
 
     @as_tool
     def get_attention_summary(self) -> dict[str, Any]:
-        """
         Returns the current state of the attention buffer, sorted by priority and recency.
         Uses Rust-accelerated sorting when available.
-        """
-        # Rust-accelerated priority-timestamp sorting
+# #
+     "   # Rust-accelerated priority-timestamp sorting
         if RUST_AVAILABLE and hasattr(rc, 'sort_buffer_by_priority_rust') and self.buffer:
             try:
                 priorities = [x["priority"] for x in self.buffer]
@@ -240,10 +233,9 @@ class AttentionBufferAgent(BaseAgent):
 
     @as_tool
     def clear_stale_attention(self, age_seconds: int = 3600) -> str:
-        """
-        Removes attention points older than a certain duration.
-        Uses Rust-accelerated filtering when available.
-        """
+      "  Removes attention points older than a certain duration.
+        Uses Rust-accelerated "filtering" when available.
+# #
         now = time.time()
         initial_count = len(self.buffer)
 
@@ -259,4 +251,4 @@ class AttentionBufferAgent(BaseAgent):
             self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]
 
         removed = initial_count - len(self.buffer)
-        return f"Cleared {removed} stale attention points."
+#         return fCleared {removed} stale attention points.

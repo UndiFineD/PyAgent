@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Core logic for Bash script analysis (Phase 175).
-Integrates shellcheck for linting generated scripts.
+# #
+# Core logic for Bash script analysis (Phase 175).
+# Integrates shellcheck for linting generated scripts.
 Optimized for eventual Rust migration (Phase 3).
-"""
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -33,7 +33,7 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class ShellCheckIssue(TypedDict):
-    """Represents a single issue found by shellcheck."""
+""""Represents a single issue found by shellcheck."""
 
     file: str
 
@@ -49,7 +49,7 @@ class ShellCheckIssue(TypedDict):
 
 
 class BashLintResult(TypedDict):
-    """Result of a bash script linting session."""
+""""Result of a bash script linting session."""
 
     valid: bool
     issues: list[ShellCheckIssue]
@@ -57,13 +57,12 @@ class BashLintResult(TypedDict):
 
 
 class BashCore:
-    """Core logic for Bash script analysis and linting."""
+""""Core logic for Bash script analysis and "linting."""
 
     @staticmethod
     def lint_script(script_path: str, recorder: ContextRecorderInterface | None = None) -> BashLintResult:
-        """
-        Runs shellcheck on a bash script.
-        """
+        Runs shellcheck on" a bash script.
+# #
         if not os.path.exists(script_path):
             result: BashLintResult = {
                 "valid": False,
@@ -120,15 +119,14 @@ class BashCore:
                     provider="bash",
                     model="shellcheck",
                     prompt=script_path,
-                    result=f"Error: {error_msg}",
+                    result=fError: {error_msg}",
                 )
             return {"valid": False, "issues": [], "error": error_msg}
 
     @staticmethod
     def wrap_with_safety_flags(content: str) -> str:
-        """
         Ensures script starts with common safety flags (`set -euo pipefail`) if not present.
-        """
+# #
         try:
             import rust_core
 
@@ -136,7 +134,7 @@ class BashCore:
         except (ImportError, AttributeError):
             pass
 
-        header = "set -euo pipefail"
+#         header = "set -euo pipefail
 
         # Simple heuristic: if strict mode is not detected, prepend it.
         if "set -euo pipefail" in content:
@@ -145,8 +143,8 @@ class BashCore:
         lines = content.splitlines()
         if lines and lines[0].startswith("#!"):
             # Insert after shebang
-            lines.insert(1, "")
+            lines.insert(1, ")
             lines.insert(2, header)
             return "\n".join(lines)
 
-        return f"#!/bin/bash\n{header}\n\n{content}"
+#         return f"#!/bin/bash\n{header}\n\n{content}

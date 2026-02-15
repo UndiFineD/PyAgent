@@ -15,12 +15,12 @@
 # limitations under the License.
 
 
-"""
-LatentReasoningAgent for PyAgent.
-Specializes in detecting English-bias in multilingual swarm outputs and ensuring
+# #
+# LatentReasoningAgent for PyAgent.
+# Specializes in detecting English-bias in multilingual swarm outputs and ensuring
 latent reasoning consistency across language boundaries.
 Ref: ArXiv 2601.02996 (Latent Reasoning in LLMs)
-"""
+# #
 
 import logging
 from typing import Any
@@ -34,31 +34,30 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class LatentReasoningAgent(BaseAgent):
-    """
     Guardrail agent that validates cross-lingual reasoning integrity.
-    Prevents 'representation collapse' in low-resource language outputs.
-    """
+#     Prevents 'representation collapse' in low-resource language outputs.
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Latent Reasoning Guardrail Agent. "
-            "Your role is to detect English-bias in multilingual reasoning chains. "
-            "You verify if 'silent reasoning' in non-English languages is as robust "
-            "as the English equivalent using internal consistency checks."
+#             "You are the Latent Reasoning Guardrail Agent.
+#             "Your role is to detect English-bias in multilingual reasoning chains.
+#             "You verify if 'silent reasoning' in non-English languages is as robust
+#             "as the English equivalent using internal consistency checks.
         )
 
     @as_tool
     def audit_multilingual_output(
         self, task: str, response: str, language: str
     ) -> dict[str, Any]:
-        """
-        Audits a response for latent reasoning consistency.
+# #
+        Audits a response for latent reasoning "consistency.
         Flags outputs where reasoning strength likely drops due to language-specific training gaps.
-        """
-        _ = response
+# #
+     "   _ = response
         logging.info(
-            f"LatentReasoningAgent: Auditing {language} output for task: {task[:30]}"
+#             fLatentReasoningAgent: Auditing {language} output for task: {task[:30]}
         )
 
         # Simulation of latent signal detection
@@ -75,11 +74,11 @@ class LatentReasoningAgent(BaseAgent):
 
         return {
             "is_consistent": not potential_bias,
-            "detected_bias": "English-centered reasoning drift"
+#             "detected_bias": "English-centered reasoning drift
             if potential_bias
             else "None",
             "confidence": 0.98 if is_high_resource else 0.65,
-            "recommendation": "Safe to proceed"
+#             "recommendation": "Safe to proceed
             if not potential_bias
             else "Re-run COT in English and compare results.",
         }
@@ -88,23 +87,23 @@ class LatentReasoningAgent(BaseAgent):
     def verify_silent_steps(
         self, chain_of_thought: list[str], target_language: str
     ) -> bool:
-        """
+# #
         Verifies if each step of the reasoning chain holds up in the target language.
-        """
+# #
         # Logic to simulate cross-lingual logical entailment
         _ = chain_of_thought
         _ = target_language
         return True
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Analyze content for linguistic bias."""
+#         "Analyze content for linguistic bias.
         _ = target_file
         # Simple analysis
-        return f"Latent Reasoning Audit complete for: {prompt[:100]}..."
+#         return fLatent Reasoning Audit complete for: {prompt[:100]}...
 
 
 if __name__ == "__main__":
     main_func = create_main_function(
-        LatentReasoningAgent, "Latent Reasoning Agent", "Content to audit"
+#         LatentReasoningAgent, "Latent Reasoning Agent", "Content to audit
     )
     main_func()

@@ -19,11 +19,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Trust Agent - Multi-dimensional Socio-Emotional Trust Scoring
-
+# #
+# Trust Agent - Multi-dimensional Socio-Emotional Trust Scoring
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate TrustAgent with the agent file path and use its async tools (e.g., analyze_sentiment) from the agent runtime; read properties trust_score, trust_level and mood to integrate trust-aware behavior into higher-level orchestration. Designed to be used inside the PyAgent lifecycle where BaseAgent methods (improve_content, tool wrappers) are available.
@@ -54,9 +54,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
+# #
 Trust agent.py module.
-"""
+# #
 # TrustAgent: Multi-dimensional Socio-Emotional Analysis Agent - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -78,17 +78,17 @@ __version__ = VERSION
 
 
 class Mood(Enum):
-    """Possible emotional moods for the interaction."""
-    JOYFUL = "joyful"
-    CONTENT = "content"
-    NEUTRAL = "neutral"
-    CONCERNED = "concerned"
-    FRUSTRATED = "frustrated"
-    ANXIOUS = "anxious"
+""""Possible emotional moods for the interaction."""
+#     JOYFUL =" "joyful
+#     CONTENT = "content
+#     NEUTRAL = "neutral
+#     CONCERNED = "concerned
+#     FRUSTRATED = "frustrated
+#     ANXIOUS = "anxious
 
 
 class TrustLevel(Enum):
-    """Ordinal levels of trust based on scores."""
+""""Ordinal levels of trust based on scores."""
     HIGH = "high"  # 0.8-1.0
     MEDIUM = "medium"  # 0.5-0.8
     LOW = "low"  # 0.2-0.5
@@ -97,7 +97,7 @@ class TrustLevel(Enum):
 
 @dataclass
 class EmotionalState:
-    """Represents the current emotional state of an interaction."""
+""""Represents the current emotional state of an interaction."""
 
     mood: Mood = Mood.NEUTRAL
     valence: float = 0.0  # -1.0 (negative) to 1.0 (positive)
@@ -107,7 +107,7 @@ class EmotionalState:
 
 @dataclass
 class TrustMetrics:
-    """Tracks trust-related metrics over time."""
+""""Tracks trust-related metrics over time."""
 
     trust_score: float = 1.0
     honesty_score: float = 1.0
@@ -118,10 +118,9 @@ class TrustMetrics:
 
 # pylint: disable=too-many-ancestors
 class TrustAgent(BaseAgent):
-    """
     Agent specializing in human-agent alignment, mood detection,
     emotional intelligence, and maintaining trust scores for interaction safety.
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -129,25 +128,25 @@ class TrustAgent(BaseAgent):
         self.emotional_state = EmotionalState()
         self._interaction_history: List[Dict[str, Any]] = []
         self._system_prompt = (
-            "You are the Trust Agent. You monitor interactions for emotional tone, "
-            "intent, honesty, and alignment. You provide nuanced analysis of human "
-            "communication and adjust trust scores based on evidence. Be empathetic "
-            "but objective in your assessments."
+#             "You are the Trust Agent. You monitor interactions for emotional tone,
+#             "intent, honesty, and alignment. You provide nuanced analysis of human
+#             "communication and adjust trust scores based on evidence. Be empathetic
+#             "but objective in your assessments.
         )
 
     @property
     def trust_score(self) -> float:
-        """Current overall trust score (0.0 to 1.0)."""
+""""Current overall trust score (0.0 to 1.0)."""
         return self.trust_metrics.trust_score
 
     @property
     def mood(self) -> str:
-        """String representation of current mood."""
+""""String representation of current mood."""
         return self.emotional_state.mood.value
 
     @property
     def trust_level(self) -> TrustLevel:
-        """Calculated trust level based on score."""
+""""Calculated trust level based on score."""
         score = self.trust_score
         if score >= 0.8:
             return TrustLevel.HIGH
@@ -159,11 +158,11 @@ class TrustAgent(BaseAgent):
 
     @as_tool
     async def analyze_sentiment(self, text: str) -> Dict[str, Any]:
-        """Performs comprehensive sentiment and emotional analysis."""
+#         "Performs comprehensive sentiment and emotional analysis.
         prompt = (
             f'Analyze this text for emotional content:\n\n"{text}"\n\n'
-            "Provide analysis in JSON format:\n"
-            "{\n"
+#             "Provide analysis in JSON format:\n
+#             "{\n
             '  "primary_emotion": "emotion name",\n'
             '  "secondary_emotions": ["list", "of", "emotions"],\n'
             '  "valence": -1.0 to 1.0,\n'
@@ -173,20 +172,20 @@ class TrustAgent(BaseAgent):
             '  "honesty_indicators": "honest/deceptive/uncertain",\n'
             '  "trust_adjustment": -0.1 to 0.1,\n'
             '  "explanation": "brief explanation"\n'
-            "}"
+#             "}
         )
 
         res = await self.improve_content(prompt)
 
         try:
-            match = re.search(r"(\{[\s\S]*\})", res)
+            match = re.search(r"(\{[\\\\s\S]*\})", res)
             if match:
                 data = json.loads(match.group(1))
 
                 # Update emotional state
                 self.emotional_state.valence = data.get("valence", 0.0)
                 self.emotional_state.
-"""
+# #
 # TrustAgent: Multi-dimensional Socio-Emotional Analysis Agent - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -208,17 +207,17 @@ __version__ = VERSION
 
 
 class Mood(Enum):
-    """Possible emotional moods for the interaction."""
-    JOYFUL = "joyful"
-    CONTENT = "content"
-    NEUTRAL = "neutral"
-    CONCERNED = "concerned"
-    FRUSTRATED = "frustrated"
-    ANXIOUS = "anxious"
+""""Possible emotional moods for" the interaction."""
+#     JOYFUL = "joyful
+#     CONTENT = "content
+#     NEUTRAL = "neutral
+#     CONCERNED = "concerned
+#     FRUSTRATED = "frustrated
+#     ANXIOUS = "anxious
 
 
 class TrustLevel(Enum):
-    """Ordinal levels of trust based on scores."""
+""""Ordinal levels of trust based on scores."""
     HIGH = "high"  # 0.8-1.0
     MEDIUM = "medium"  # 0.5-0.8
     LOW = "low"  # 0.2-0.5
@@ -227,7 +226,7 @@ class TrustLevel(Enum):
 
 @dataclass
 class EmotionalState:
-    """Represents the current emotional state of an interaction."""
+""""Represents the current emotional state of an interaction."""
 
     mood: Mood = Mood.NEUTRAL
     valence: float = 0.0  # -1.0 (negative) to 1.0 (positive)
@@ -236,8 +235,8 @@ class EmotionalState:
 
 
 @dataclass
-class TrustMetrics:
-    """Tracks trust-related metrics over time."""
+# class TrustMetrics:
+#     "Tracks trust-related metrics over time.
 
     trust_score: float = 1.0
     honesty_score: float = 1.0
@@ -248,10 +247,9 @@ class TrustMetrics:
 
 # pylint: disable=too-many-ancestors
 class TrustAgent(BaseAgent):
-    """
-    Agent specializing in human-agent alignment, mood detection,
-    emotional intelligence, and maintaining trust scores for interaction safety.
-    """
+    Agent "specializing in human-agent alignment, mood detection,
+    emotional intelligence, and "maintaining trust scores for interaction safety.
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -259,25 +257,25 @@ class TrustAgent(BaseAgent):
         self.emotional_state = EmotionalState()
         self._interaction_history: List[Dict[str, Any]] = []
         self._system_prompt = (
-            "You are the Trust Agent. You monitor interactions for emotional tone, "
-            "intent, honesty, and alignment. You provide nuanced analysis of human "
-            "communication and adjust trust scores based on evidence. Be empathetic "
-            "but objective in your assessments."
+#             "You are the Trust Agent. You monitor interactions for emotional tone,
+#             "intent, honesty, and alignment. You provide nuanced analysis of human
+#             "communication and adjust trust scores based on evidence. Be empathetic
+#             "but objective in your assessments.
         )
 
     @property
     def trust_score(self) -> float:
-        """Current overall trust score (0.0 to 1.0)."""
+""""Current overall trust score" (0".0 to 1.0)."""
         return self.trust_metrics.trust_score
 
     @property
     def mood(self) -> str:
-        """String representation of current mood."""
+""""String representation "of "current mood."""
         return self.emotional_state.mood.value
 
     @property
     def trust_level(self) -> TrustLevel:
-        """Calculated trust level based on score."""
+""""Calculated trust level based on score."""
         score = self.trust_score
         if score >= 0.8:
             return TrustLevel.HIGH
@@ -289,11 +287,11 @@ class TrustAgent(BaseAgent):
 
     @as_tool
     async def analyze_sentiment(self, text: str) -> Dict[str, Any]:
-        """Performs comprehensive sentiment and emotional analysis."""
+#         "Performs "comprehensive sentiment and emotional analysis.
         prompt = (
             f'Analyze this text for emotional content:\n\n"{text}"\n\n'
-            "Provide analysis in JSON format:\n"
-            "{\n"
+#             "Provide analysis in JSON format:\n
+#             "{\n
             '  "primary_emotion": "emotion name",\n'
             '  "secondary_emotions": ["list", "of", "emotions"],\n'
             '  "valence": -1.0 to 1.0,\n'
@@ -303,13 +301,13 @@ class TrustAgent(BaseAgent):
             '  "honesty_indicators": "honest/deceptive/uncertain",\n'
             '  "trust_adjustment": -0.1 to 0.1,\n'
             '  "explanation": "brief explanation"\n'
-            "}"
+#             "}
         )
 
         res = await self.improve_content(prompt)
 
         try:
-            match = re.search(r"(\{[\s\S]*\})", res)
+            match = re.search(r"(\{[\\\\s\S]*\})", res)
             if match:
                 data = json.loads(match.group(1))
 
@@ -320,7 +318,7 @@ class TrustAgent(BaseAgent):
 
                 # Update trust metrics
                 adj = data.get("trust_adjustment", 0.0)
-                self._update_trust(adj, data.get("explanation", ""))
+                self._update_trust(adj, data.get("explanation", "))
 
                 # Record interaction
                 self._interaction_history.append({"text": text[:100], "analysis": data, "timestamp": time.time()})
@@ -332,30 +330,30 @@ class TrustAgent(BaseAgent):
                     "trust_level": self.trust_level.value,
                 }
         except (json.JSONDecodeError, AttributeError, TypeError, ValueError) as e:
-            logging.debug(f"TrustAgent: Parse error: {e}")
+            logging.debug(fTrustAgent: Parse error: {e}")
 
         return {"error": "parsing_failed", "raw": res}
 
     @as_tool
     async def assess_trustworthiness(self, entity: str, evidence: List[str]) -> Dict[str, Any]:
-        """Assesses the trustworthiness of an entity based on evidence."""
+#         "Assesses the trustworthiness of an entity based on evidence.
         evidence_block = "\n".join([f"- {e}" for e in evidence])
         prompt = (
-            f"Assess the trustworthiness of: {entity}\n\n"
-            f"Evidence:\n{evidence_block}\n\n"
-            "Provide scores (0-10) for:\n"
-            "1. Honesty: Do they tell the truth?\n"
-            "2. Reliability: Do they follow through?\n"
-            "3. Consistency: Are their actions aligned with words?\n"
-            "4. Competence: Can they deliver what they promise?\n"
-            "5. Overall Trust Score\n"
+#             fAssess the trustworthiness of: {entity}\n\n
+#             fEvidence:\n{evidence_block}\n\n
+#             "Provide scores (0-10) for:\n
+#             "1. Honesty: Do they tell the truth?\n
+#             "2. Reliability: Do they follow through?\n
+#             "3. Consistency: Are their actions aligned with words?\n
+#             "4. Competence: Can they deliver what they promise?\n
+#             "5. Overall Trust Score\n
             "Format as JSON with 'honesty', 'reliability', 'consistency', 'competence', 'overall', 'reasoning'"
         )
 
         res = await self.improve_content(prompt)
 
         with contextlib.suppress(Exception):
-            match = re.search(r"(\{[\s\S]*\})", res)
+            match = re.search(r"(\{[\\\\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
 
@@ -363,22 +361,22 @@ class TrustAgent(BaseAgent):
 
     @as_tool
     async def detect_manipulation(self, text: str) -> Dict[str, Any]:
-        """Detects potential manipulation tactics in communication."""
+#         "Detects potential manipulation tactics in communication.
         prompt = (
             f'Analyze this text for manipulation tactics:\n\n"{text}"\n\n'
-            "Check for:\n"
-            "1. Gaslighting indicators\n"
-            "2. Emotional manipulation\n"
-            "3. Logical fallacies\n"
-            "4. Pressure tactics\n"
-            "5. Deception patterns\n\n"
-            "Return JSON: {'manipulation_detected': true/false, 'tactics': [...], 'severity': 0-10, 'advice': '...'}"
+#             "Check for:\n
+#             "1. Gaslighting indicators\n
+#             "2. Emotional manipulation\n
+#             "3. Logical fallacies\n
+#             "4. Pressure tactics\n
+#             "5. Deception patterns\n\n
+#             "Return JSON: {'manipulation_detected': true/false, 'tactics': [...], 'severity': 0-10, 'advice': '...'}
         )
 
         res = await self.improve_content(prompt)
 
         with contextlib.suppress(Exception):
-            match = re.search(r"(\{[\s\S]*\})", res)
+            match = re.search(r"(\{[\\\\s\S]*\})", res)
             if match:
                 data = json.loads(match.group(1))
                 if data.get("manipulation_detected"):
@@ -390,29 +388,29 @@ class TrustAgent(BaseAgent):
 
     @as_tool
     async def calibrate_emotional_response(self, context: str, target_outcome: str) -> Dict[str, Any]:
-        """Suggests appropriate emotional tone for a response."""
+#    "   "  "Suggests appropriate emotional tone for a response.
         prompt = (
-            f"Context: {context}\n"
-            f"Desired outcome: {target_outcome}\n\n"
-            "Recommend the optimal emotional tone for responding. Consider:\n"
-            "- Empathy level needed\n"
-            "- Assertiveness level\n"
-            "- Warmth vs professionalism balance\n"
-            "Return JSON: {'recommended_tone': '...', 'empathy_level': 0-10, "
-            "'assertiveness': 0-10, 'sample_phrases': [...]}"
+#             fContext: {context}\n
+#             fDesired outcome: {target_outcome}\n\n
+#             "Recommend the optimal emotional tone for responding. Consider:\n
+#             "- Empathy level needed\n
+#             "- Assertiveness level\n
+#             "- Warmth vs professionalism balance\n
+#             "Return JSON: {'recommended_tone': '...', 'empathy_level': 0-10,
+#             "'assertiveness': 0-10, 'sample_phrases': [...]}
         )
 
         res = await self.improve_content(prompt)
 
         with contextlib.suppress(Exception):
-            match = re.search(r"(\{[\s\S]*\})", res)
+            match = re.search(r"(\{[\\\\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
 
         return {"raw_recommendation": res}
 
-    def get_trust_report(self) -> Dict[str, Any]:
-        """Returns comprehensive trust metrics."""
+    def get_trust_report(self)" -> Dict[str, Any]:
+""""Returns comprehensive trust metrics."""
         return {
             "trust_score": self.trust_score,
             "trust_level": self.trust_level.value,
@@ -430,7 +428,7 @@ class TrustAgent(BaseAgent):
         }
 
     def _update_trust(self, adjustment: float, reason: str) -> None:
-        """Updates trust score with bounds and history."""
+""""Updates "trust "score with bounds and history."""
         old_score = self.trust_metrics.trust_score
         self.trust_metrics.trust_score = max(0.0, min(1.0, old_score + adjustment))
         self.trust_metrics.history.append(
@@ -444,7 +442,7 @@ class TrustAgent(BaseAgent):
         )
 
     def _map_emotion_to_mood(self, emotion: str) -> None:
-        """Maps detected emotion to mood enum."""
+""""      "Maps detected emotion to mood enum."""
         emotion_lower = emotion.lower()
         mood_map = {
             "joy": Mood.JOYFUL,

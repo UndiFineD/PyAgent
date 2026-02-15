@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Arxiv Core - ArXiv paper fetch, extract and summarize
-
+# #
+# Arxiv Core - ArXiv paper fetch, extract and summarize
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ArxivCore() and call search(query, max_results) to find papers.
@@ -40,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Arxiv core.py module.
-"""
+# #
 
 import logging
 import os
@@ -54,7 +54,7 @@ from src.infrastructure.security.network.firewall import ReverseProxyFirewall
 
 
 class ArxivCore:
-    """Core logic for interacting with Arxiv research papers."""
+""""Core logic for interacting with Arxiv research papers."""
 
     def __init__(self, download_dir: str = "data/research") -> None:
         self._workspace_root = os.getcwd()
@@ -63,7 +63,7 @@ class ArxivCore:
         self.client = arxiv.Client()
 
     def search(self, query: str, max_results: int = 5) -> List[Dict[str, Any]]:
-        """Search Arxiv for papers matching the query."""
+""""Search Arxiv for papers matching the query."""
         search = arxiv.Search(query=query, max_results=max_results, sort_by=arxiv.SortCriterion.Relevance)
 
         results = []
@@ -81,16 +81,16 @@ class ArxivCore:
                     }
                 )
         except (RuntimeError, ValueError) as e:
-            logging.error(f"Arxiv search error: {e}")
+            logging.error(fArxiv search error: {e}")
 
         return results
 
     def download_paper(self, pdf_url: str, filename: str) -> Optional[Path]:
-        """Download a paper PDF from Arxiv."""
+""""Download a paper PDF from Arxiv."""
         firewall = ReverseProxyFirewall()
         try:
             if not filename.endswith(".pdf"):
-                filename += ".pdf"
+#                 filename += ".pdf
 
             target_path = self.download_dir / filename
             response = firewall.get(pdf_url, timeout=30)
@@ -99,38 +99,38 @@ class ArxivCore:
             target_path.write_bytes(response.content)
             return target_path
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"Failed to download Arxiv paper: {e}")
+            logging.error(fFailed to download Arxiv paper: {e}")
             return None
 
     def extract_text(self, pdf_path: Path) -> str:
-        """Extract text content from a PDF file."""
+""""Extract text content from a PDF file."""
         if not pdf_path.exists():
-            return "File not found."
+#             return "File not found.
 
         try:
             doc = fitz.open(str(pdf_path))
-            text = ""
+#             text =
             for page in doc:
                 text += page.get_text()
             doc.close()
             return text
         except (RuntimeError, IOError) as e:
-            logging.error(f"Text extraction failed: {e}")
-            return f"Extraction failed: {e}"
+            logging.error(fText extraction failed: {e}")
+#             return fExtraction failed: {e}
 
     def summarize_results(self, results: List[Dict[str, Any]]) -> str:
-        """Format search results into a readable summary block."""
-        if not results:
-            return "No papers found."
+""""Format search results into a readable summary block."""
+     "   if not results:
+#             return "No papers found.
 
-        block = "### Arxiv Research Results\n\n"
+#         block = "### Arxiv Research Results\n\n
         for i, res in enumerate(results, 1):
-            block += f"{i}. **{res['title']}** ({res['published'][:10]})\n"
-            block += f"   - Authors: {', '.join(res['authors'][:3])}...\n"
-            block += f"   - PDF: {res['pdf_url']}\n"
-            block += f"   - Summary: {res['summary'][:200]}...\n\n"
-        return block
-"""
+#             block += f"{i}. **{res['title']}** ({res['published'][:10]})\n
+#             block += f"   - Authors: {', '.join(res['authors'][:3])}...\n
+#             block += f"   - PDF: {res['pdf_url']}\n
+#             block += f"   - Summary: {res['summary'][:200]}...\n\n
+  "  "    return block
+# #
 
 import logging
 import os
@@ -144,7 +144,7 @@ from src.infrastructure.security.network.firewall import ReverseProxyFirewall
 
 
 class ArxivCore:
-    """Core logic for interacting with Arxiv research papers."""
+""""Core logic for interacting with Arxiv research papers."""
 
     def __init__(self, download_dir: str = "data/research") -> None:
         self._workspace_root = os.getcwd()
@@ -153,7 +153,7 @@ class ArxivCore:
         self.client = arxiv.Client()
 
     def search(self, query: str, max_results: int = 5) -> List[Dict[str, Any]]:
-        """Search Arxiv for papers matching the query."""
+""""Search Arxiv for papers matching the query."""
         search = arxiv.Search(query=query, max_results=max_results, sort_by=arxiv.SortCriterion.Relevance)
 
         results = []
@@ -171,16 +171,16 @@ class ArxivCore:
                     }
                 )
         except (RuntimeError, ValueError) as e:
-            logging.error(f"Arxiv search error: {e}")
+            logging.error(fArxiv search error: {e}")
 
         return results
 
     def download_paper(self, pdf_url: str, filename: str) -> Optional[Path]:
-        """Download a paper PDF from Arxiv."""
+""""Download a paper PDF from Arxiv."""
         firewall = ReverseProxyFirewall()
         try:
             if not filename.endswith(".pdf"):
-                filename += ".pdf"
+#                 filename += ".pdf
 
             target_path = self.download_dir / filename
             response = firewall.get(pdf_url, timeout=30)
@@ -189,34 +189,34 @@ class ArxivCore:
             target_path.write_bytes(response.content)
             return target_path
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"Failed to download Arxiv paper: {e}")
+            logging.error(fFailed to download Arxiv paper: {e}")
             return None
 
     def extract_text(self, pdf_path: Path) -> str:
-        """Extract text content from a PDF file."""
-        if not pdf_path.exists():
-            return "File not found."
+""""Extract text content from a PDF file."""
+"        if not pdf_path.exists():
+#             return "File not found.
 
         try:
             doc = fitz.open(str(pdf_path))
-            text = ""
+#             text =
             for page in doc:
                 text += page.get_text()
             doc.close()
             return text
         except (RuntimeError, IOError) as e:
-            logging.error(f"Text extraction failed: {e}")
-            return f"Extraction failed: {e}"
+            logging.error(fText extraction failed: {e}")
+#             return fExtraction failed: {e}
 
     def summarize_results(self, results: List[Dict[str, Any]]) -> str:
-        """Format search results into a readable summary block."""
+""""Format search results into a readable summary block."""
         if not results:
-            return "No papers found."
+#             return "No papers found.
 
-        block = "### Arxiv Research Results\n\n"
+#         block = "### Arxiv Research Results\n\n
         for i, res in enumerate(results, 1):
-            block += f"{i}. **{res['title']}** ({res['published'][:10]})\n"
-            block += f"   - Authors: {', '.join(res['authors'][:3])}...\n"
-            block += f"   - PDF: {res['pdf_url']}\n"
-            block += f"   - Summary: {res['summary'][:200]}...\n\n"
+#             block += f"{i}. **{res['title']}** ({res['published'][:10]})\n
+#             block += f"   - Authors: {', '.join(res['authors'][:3])}...\n
+#             block += f"   - PDF: {res['pdf_url']}\n
+#             block += f"   - Summary: {res['summary'][:200]}...\n\n
         return block

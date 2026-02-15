@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Quality scoring and refactoring suggestion logic for CoderCore.
-"""
-
+# #
+# Quality scoring and refactoring suggestion logic for CoderCore.
+# #
+# #
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -30,7 +30,7 @@ from src.core.base.common.types.quality_score import QualityScore
 
 
 class CoderQualityMixin:
-    """Mixin for computing quality scores and refactoring suggestions."""
+""""Mixin for computing quality scores and refactoring suggestions."""
 
     def calculate_quality_score(
         self,
@@ -40,7 +40,7 @@ class CoderQualityMixin:
         coverage: float,
         content: str | None = None,
     ) -> QualityScore:
-        """Aggregate all analysis into a single QualityScore."""
+#         "Aggregate all analysis into a single QualityScore.
         from src.core.rust_bridge import RustBridge
 
         score = QualityScore()
@@ -52,7 +52,7 @@ class CoderQualityMixin:
             total_debt = sum(debt_markers.values())
             score.technical_debt = max(0, 100 - total_debt * 5)
             if total_debt > 0:
-                score.issues.append(f"Tech Debt: Detected {total_debt} markers ({', '.join(debt_markers.keys())})")
+                score.issues.append(fTech Debt: Detected {total_debt} markers ({', '.join(debt_markers.keys())})")
         else:
             score.technical_debt = 100.0
 
@@ -86,15 +86,15 @@ class CoderQualityMixin:
 
         # Add primary issues
         for violation in violations[:5]:
-            score.issues.append(f"Style: {violation['message']} (line {violation['line']})")
+            score.issues.append(fStyle: {violation['message']} (line {violation['line']})")
         for smell in smells[:5]:
-            score.issues.append(f"Smell: {smell.description}")
+            score.issues.append(fSmell: {smell.description}")
 
         return score
 
     def suggest_refactorings(self, content: str) -> List[Dict[str, str]]:
-        """Suggest possible refactorings based on code analysis."""
-        suggestions: List[Dict[str, str]] = []
+""""Suggest possible refactorings based on code analysis."""
+        suggestions: List[Dict[str", str]] = []
         # Detect code smells and suggest refactorings
         smells = self.detect_code_smells(content)
         for smell in smells:
@@ -102,7 +102,7 @@ class CoderQualityMixin:
                 suggestions.append(
                     {
                         "type": "extract_method",
-                        "description": f"Extract parts of method at line {smell.line_number}",
+                        "description": fExtract parts of method at line {smell.line_number}",
                         "reason": smell.description,
                     }
                 )
@@ -110,7 +110,7 @@ class CoderQualityMixin:
                 suggestions.append(
                     {
                         "type": "introduce_parameter_object",
-                        "description": (f"Create a data class for parameters at line {smell.line_number}"),
+                        "description": (fCreate a data class for parameters at line {smell.line_number}"),
                         "reason": smell.description,
                     }
                 )
@@ -118,7 +118,7 @@ class CoderQualityMixin:
                 suggestions.append(
                     {
                         "type": "extract_class",
-                        "description": f"Split class at line {smell.line_number} into focused classes",
+                        "description": fSplit class at line {smell.line_number} into focused classes",
                         "reason": smell.description,
                     }
                 )
@@ -128,8 +128,8 @@ class CoderQualityMixin:
             suggestions.append(
                 {
                     "type": "extract_method",
-                    "description": (f"Extract {len(duplicates)} duplicate code blocks into shared methods"),
-                    "reason": f"Found {len(duplicates)} duplicate code patterns",
+                    "description": (fExtract {len(duplicates)} duplicate code blocks into shared methods"),
+                    "reason": fFound {len(duplicates)} duplicate code patterns",
                 }
             )
         return suggestions

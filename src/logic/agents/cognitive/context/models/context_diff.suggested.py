@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from dataclasses import dataclass, field
@@ -27,7 +27,7 @@ __version__ = VERSION
 
 @dataclass
 class ContextDiff:
-    """Diff between context versions.
+    "Diff between context versions.
 
     Attributes:
         version_from: Source version.
@@ -35,12 +35,12 @@ class ContextDiff:
         added_sections: List of added sections.
         removed_sections: List of removed sections.
         modified_sections: List of modified section names.
-        change_summary: Brief summary of changes.
-    """
+#         change_summary: Brief summary of changes.
+# #
 
     version_from: str
     version_to: str
     added_sections: list[str] = field(default_factory=lambda: [])
     removed_sections: list[str] = field(default_factory=lambda: [])
     modified_sections: list[str] = field(default_factory=lambda: [])
-    change_summary: str = ""
+#     change_summary: str =

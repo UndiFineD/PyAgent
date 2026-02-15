@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Search Agent - Search provider orchestration and query refinement
-
+# #
+# Search Agent - Search provider orchestration and query refinement
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate SearchAgent with a context path or context string and use it as a specialized WebIntelligenceAgent for orchestrating multiple search providers, running queries, and performing query refinement and aggregation. Typical usage: agent = SearchAgent("path_or_context"); then call inherited search orchestration methods exposed by WebIntelligenceAgent to execute and refine queries.
@@ -33,25 +33,25 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Search agent.py module.
-"""
+# #
 
 from .web_intelligence_agent import WebIntelligenceAgent
 
 
 class SearchAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-    """Agent specialized in various search provider orchestrations and query refinement."""
+""""Agent specialized in various search provider orchestrations and query refinement."""
 
     def __init__(self, context_or_path: str) -> None:
         super().__init__(context_or_path)
-        self._system_prompt = "You are the SearchAgent (via WebIntelligence core)."
-"""
+#         self._system_prompt = "You are the SearchAgent (via WebIntelligence core).
+# #
 
 from .web_intelligence_agent import WebIntelligenceAgent
 
 
 class SearchAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-    """Agent specialized in various search provider orchestrations and query refinement."""
+""""Agent specialized in various search provider orchestrations and query refinement."""
 
     def __init__(self, context_or_path: str) -> None:
         super().__init__(context_or_path)
-        self._system_prompt = "You are the SearchAgent (via WebIntelligence core)."
+#         self._system_prompt = "You are the SearchAgent (via WebIntelligence core).

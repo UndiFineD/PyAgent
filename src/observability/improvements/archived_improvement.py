@@ -16,10 +16,10 @@
 
 
 """
-ArchivedImprovement - Data container for archived improvement
-
+ArchivedImprovement - Data container for archived improvement"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import ArchivedImprovement, provide an existing Improvement instance and optional archived_date, archived_by, archive_reason; use for persistence, UI lists, or migration/cleanup tasks.
@@ -36,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -51,19 +51,19 @@ __version__ = VERSION
 
 @dataclass
 class ArchivedImprovement:
-    """An archived improvement.
+    """An archived improv""""""ement.
 
     Attributes:
         improvement: The archived improvement data.
         archived_date: When it was archived.
         archived_by: Who archived it.
-        archive_reason: Why it was archived.
+        archive_reason: Why it was archived.""""""
     """
 
     improvement: Improvement
     archived_date: str = ""
     archived_by: str = ""
-    archive_reason: str = ""
+    archive_reason:""" s""""""tr = ""
 """
 
 from __future__ import annotations
@@ -79,13 +79,13 @@ __version__ = VERSION
 
 @dataclass
 class ArchivedImprovement:
-    """An archived improvement.
+    """An archiv""""""ed improvement.
 
     Attributes:
         improvement: The archived improvement data.
         archived_date: When it was archived.
         archived_by: Who archived it.
-        archive_reason: Why it was archived.
+        archive_reason: Wh"""y it w"""as """archived.
     """
 
     improvement: Improvement

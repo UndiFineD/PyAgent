@@ -18,40 +18,74 @@ from typing import Dict, Any
 
 
 class MessengerIntelligence:
-    """
-    Handles discovery and OSINT for messenger platforms (Telegram, Discord, etc.).
-    Ported logic from various Telegram OSINT tools.
-    """
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+"""Handles discovery and OSINT for messenger platforms (Telegram, Discord, etc.)."""
+#     Ported logic from various Telegram OSINT tools.
+# #
 
-    TELEGRAM_URL_PATTERN = r"https?://t\.me/([a-zA-Z0-9_]{5,})"
-    TELEGRAM_BOT_TOKEN_PATTERN = r"\d{7,10}:[a-zA-Z0-9_-]{35}"
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # #     TELEGRAM_URL_PATTERN = rhttps?://t\.me/([a-zA-Z0-9_]{5,})
+# [BATCHFIX] Commented metadata/non-Python
+# #     TELEGRAM_BOT_TOKEN_PATTERN = r"\\\\d{7,10}:[a-zA-Z0-9_-]{35}"  # [BATCHFIX] closed string
 
-    def get_telegram_recon_endpoints(self, username: str) -> Dict[str, str]:
-        """Returns public Telegram endpoints for OSINT."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_telegram_recon_endpoints(self, username: str) -> Dict[str, str]:
+""""Returns public Telegram endpoints for OSINT."""
         return {
-            "profile": f"https://t.me/{username}",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#             "profile": fhttps://t.me/{username}","  # [BATCHFIX] closed string
             "api_info": "https://api.telegram.org/bot<token>/getMe",
             "proxy_list": "https://t.me/s/ProxyMTProto",
         }
 
-    def get_discord_patterns(self) -> Dict[str, str]:
-        """Returns patterns for Discord OSINT."""
-        return {
-            "invite": r"https?://discord\.gg/[a-zA-Z0-9]+",
-            "webhook": r"https://discord\.com/api/webhooks/\d+/[a-zA-Z0-9_-]+",
-            "token": r"[a-zA-Z0-9_-]{24}\.[a-zA-Z0-9_-]{6}\.[a-zA-Z0-9_-]{27}",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_discord_patterns(self) -> Dict[str, str]:
+""""Returns patterns for Discord OSINT."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#        " return {"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#             "invite": rhttps?://discord\.gg/[a-zA-Z0-9]+","  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#             "webhook": rhttps://discord\.com/api/webhooks/\\\\d+/[a-zA-Z0-9_-]+","  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "token": r"[a-zA-Z0-9_-]{24}\.[a-zA-Z0-9_-]{6}\.[a-zA-Z0-9_-]{27}",
         }
 
-    def get_telegram_nearby_params(self) -> Dict[str, Any]:
-        """Parameters for Telegram 'People Nearby' exploitation (trilateration)."""
-        return {
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_telegram_nearby_params(self) -> Dict[str, Any]:
+""""Parameters for Telegram 'People Nearby' exploitation (trilateration)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#     "    return {"  # [BATCHFIX] closed string
             "method": "messages.getNearbyUsers",
-            "required_fields": ["lat", "long"],
-            "description": (
-                "Used to find users within a specific radius. Can be used for trilateration by spoofing 3 locations."
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "required_fields": ["lat", "long"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#             "description": (
+# [BATCHFIX] Commented metadata/non-Python
+# #                 "Used to find users within a specific radius. Can be used for trilateration by spoofing 3 locations."  # [BATCHFIX] closed string
             ),
         }
 
     def audit_bot_token(self, token: str) -> str:
-        """Generates a command to verify a Telegram bot token."""
-        return f"curl -s https://api.telegram.org/bot{token}/getMe"
+    pass  # [BATCHFIX] inserted for empty block
+""""Generates a command to verify a Telegram bot token."""
+#         return fcurl -s https://api.telegram.org/bot{token}/getMe

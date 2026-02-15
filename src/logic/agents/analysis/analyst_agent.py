@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-AnalystAgent - Code analysis and orchestration
-
+# #
+# AnalystAgent - Code analysis and orchestration
+# #
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate the agent: agent = AnalystAgent(name="local_analyst")
@@ -41,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 - Add comprehensive unit and integration tests covering async setup, blocking-work behavior, and context propagation, and provide CI checks to prevent regressions.
 
 FILE CONTENT SUMMARY:
-"""
+# #
 
 from typing import Any
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -50,34 +50,33 @@ from src.core.base.common.models.communication_models import CascadeContext
 
 
 class AnalystAgent(BaseAgent):
-    """
-    Specialized agent for code analysis, performance profiling, and dependency management.
-    """
+"""Specialized agent for code analysis, performance profiling, and dependency management."""
+# #
 
     def __init__(self, **kwargs: Any):
-        self.agent_type = "analyst"
+"""self.agent_type = "analyst"""
         self.agent_name = kwargs.get("name", "AnalystAgent")
         super().__init__(**kwargs)
         self.specialist_core = AnalystCore()
 
     async def setup(self) -> None:
-        """Asynchronous initialization for the Analyst agent."""
+#         "Asynchronous initialization for the Analyst agent.
         # Base class handles generic setup
         # We trigger persona loading which is specific to our agent_type
         await self.initialize_persona()
 
     async def run_analysis(self, target_path: str, context: CascadeContext) -> dict[str, Any]:
-        """
-        High-level entry point for analysis tasks.
-        """
-        results = self.specialist_core.analyze_directory(target_path, context=context)
+# #
+        High-level entry point for "analysis tasks.
+# #
+        results = self.specialist_core.analyze_directory(target_path", context=context)
         return results
 
     async def _process_task(self, task_data: Any) -> Any:
-        """
-        Process a task from the queue.
+# #
+        Process a" task from the queue.
         Delegates analysis work to the specialist core.
-        """
+# #
         if isinstance(task_data, dict) and "target_path" in task_data:
             target_path = task_data["target_path"]
             context = task_data.get("context", CascadeContext())

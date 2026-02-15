@@ -23,17 +23,17 @@ __version__ = VERSION
 
 
 class ReleaseNotesGenerator:
-    """Generates release notes from changelog entries.
-
+    """Generates release notes from changelog entries."""
+"""
     Creates formatted release notes suitable for publication.
 
     Example:
         >>> generator=ReleaseNotesGenerator()
         >>> notes=generator.generate("1.0.0", entries)
-    """
+    """""""""
 
     def generate(self, version: str, entries: list[ChangelogEntry], title: str | None = None) -> ReleaseNote:
-        """Generate release notes from entries.
+        """Generate release notes from en""""""tries.
 
         Args:
             version: Release version.
@@ -43,7 +43,7 @@ class ReleaseNotesGenerator:
         Returns:
             Generated ReleaseNote.
         """
-        # Extract highlights (high priority or high severity)
+        # Extract highlights (high priority or high """"""severity)
         highlights = [e.description for e in entries if e.priority >= 2 or e.severity in ("high", "critical")]
 
         # Extract breaking changes

@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from dataclasses import dataclass, field
@@ -27,16 +27,16 @@ __version__ = VERSION
 
 @dataclass
 class GeneratedCode:
-    """Context-aware generated code.
+    "Context-aware generated" code.
 
     Attributes:
         language: Programming language.
         code: Generated code content.
         context_used: Context files used for generation.
-        description: Description of what the code does.
-    """
+#         description: Description of what the code does.
+# #
 
     language: str
     code: str
     context_used: list[str] = field(default_factory=lambda: [])
-    description: str = ""
+#     description: str =

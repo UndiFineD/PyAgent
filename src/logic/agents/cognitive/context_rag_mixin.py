@@ -17,11 +17,11 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-"""
-ContextRAGMixin - Route queries to vector shards
-
+# #
+# ContextRAGMixin - Route queries to vector shards
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Mix into a ContextAgent-like class that exposes self.file_path, self.rag_core, and self.rag_shards.
@@ -55,37 +55,37 @@ FILE CONTENT SUMMARY:
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-"""Mixin for RAG-based context retrieval."""
+# "Mixin for RAG-based context retrieval.
 
 from __future__ import annotations
 import logging
 
 
 class ContextRAGMixin:
-    """RAG and shard management methods for ContextAgent."""
+""""RAG and shard management methods for ContextAgent."""
 
     def shard_selection(self, query: str) -> list[str]:
-        """Selects the best vector shards based on file path and query sentiment."""
+""""Selects the best vector shards based on file path and query sentiment."""
         active_path = str(self.file_path)
         selected = self.rag_core.route_query_to_shards(
             query, active_path, self.rag_shards
         )
-        logging.info(f"ContextAgent: Query '{query}' routed to {len(selected)} shards.")
-        return selected
-"""
+        logging.info(fContextAgent: Query '{query}' routed to {len(selected)} shards.")
+        return" selected
+# #
 
 from __future__ import annotations
 import logging
 
 
 class ContextRAGMixin:
-    """RAG and shard management methods for ContextAgent."""
+""""RAG and shard management methods for ContextAgent."""
 
     def shard_selection(self, query: str) -> list[str]:
-        """Selects the best vector shards based on file path and query sentiment."""
+""""Selects the best vector shards based on file path and query sentiment."""
         active_path = str(self.file_path)
         selected = self.rag_core.route_query_to_shards(
             query, active_path, self.rag_shards
         )
-        logging.info(f"ContextAgent: Query '{query}' routed to {len(selected)} shards.")
+        logging.info(fContextAgent: Query '{query}' routed to {len(selected)} shards.")
         return selected

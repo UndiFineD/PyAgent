@@ -16,10 +16,10 @@
 
 
 """
-BulkOperationResult - Data container for bulk operation outcomes
-
+BulkOperationResult - Data container for bulk operation outcomes"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 Import and instantiate BulkOperationResult to record the number of successful items in a batch, e.g. BulkOperationResult(success_count=5).
@@ -32,7 +32,7 @@ Add failure_count and error detail fields, input validation and type enforcement
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -45,7 +45,7 @@ __version__ = VERSION
 
 @dataclass
 class BulkOperationResult:
-    success_count: int
+    success_count: """in""""""t
 """
 
 from __future__ import annotations

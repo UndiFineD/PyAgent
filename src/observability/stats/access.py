@@ -20,8 +20,8 @@ import fnmatch
 
 class StatsAccessController:
     """Controls access to stats."""
-
-    def __init__(self) -> None:
+"""
+    def __init__(self) -> None:"""
         self.permissions: dict[str, dict[str, str]] = {}
 
     def grant(self, user: str, pattern: str, level: str = "read") -> None:

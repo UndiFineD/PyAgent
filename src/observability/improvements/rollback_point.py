@@ -14,10 +14,10 @@
 
 
 """
-RollbackPoint - Lightweight snapshot container for agent improvement state
-
+RollbackPoint - Lightweight snapshot container for agent improvement state"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate RollbackPoint(improvement_id, state) to capture a single atomic snapshot of an agent-improvement state; store instances in a history list, persistent store, or a StateTransaction for later restoration. The created_at timestamp is set automatically and can be used to order rollback points. Suitable for quick in-memory snapshots and simple persistence/serialization.
@@ -34,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -50,6 +50,6 @@ __version__ = VERSION
 @dataclass
 class RollbackPoint:
     """A rollback point capturing the state of an improvement at a specific moment."""
-    improvement_id: str
+    improvement_i""""""d: str
     state: dict[str, Any]
     created_at: datetime = field(default_factory=datetime.now)

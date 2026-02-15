@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-Spec Tool Agent - Generates Python tool wrappers from formal specifications
-
+# #
+# Spec Tool Agent - Generates Python tool wrappers from formal specifications
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate SpecToolAgent with the repository file path: agent = SpecToolAgent("path/to/file")
@@ -41,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 - Provide richer metadata in generated artifacts (timestamps, author, changelist ids), and integrate automated tests or linters for generated code; add explicit logging and exception handling for all filesystem operations.
 
 FILE CONTENT SUMMARY:
-Agent specializing in generating tools and code from specifications (OpenAPI, JSON Schema, MCP)."""
+# Agent specializing in generating tools and code from specifications (OpenAPI, JSON Schema, MCP).
 
 # pylint: disable=too-many-ancestors
 
@@ -59,39 +59,39 @@ __version__ = VERSION
 
 
 class SpecToolAgent(BaseAgent):
-    """Generates Python tool wrappers from specifications and manages OpenSpec SDD workflows."""
+""""Generates Python tool wrappers from specifications and manages OpenSpec SDD workflows."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._pending_spec: str | None = None
         self._system_prompt = (
-            "You are the Spec-Tool Agent. Your role is to translate formal specifications "
-            "into Python tools and manage OpenSpec workflows. Follow Spec-Driven "
-            "Development (SDD): maintain truth in openspec/specs/ and proposals in "
-            "openspec/changes/. IMPORTANT: Before any implementation, you MUST call "
-            "generate_sdd_spec and wait for 'COMMAND: PROCEED'."
+#             "You are the Spec-Tool Agent. Your role is to translate formal specifications
+#             "into Python tools and manage OpenSpec workflows. Follow Spec-Driven
+#             "Development (SDD): maintain truth in openspec/specs/ and proposals in
+#             "openspec/changes/. IMPORTANT: Before any implementation, you MUST call
+#             "generate_sdd_spec and wait for 'COMMAND: PROCEED'.
         )
 
     @as_tool
     def generate_sdd_spec(self, feature_name: str, details: str) -> str:
-        """Creates a SPECIFICATION.md for the planned changes. Locks execution until PROCEED is received."""
+""""Creates a SPECIFICATION.md for the planned changes. Locks execution until PROCEED is received."""
         spec_path = Path("SPECIFICATION.md")
         content = (
-            f"# SDD Specification: {feature_name}\n\n"
-            f"## Planned Changes\n{details}\n\n"
-            "## Approval Status\n"
-            "Status: **AWAITING APPROVAL**\n\n"
-            "To execute this plan, please reply with: `COMMAND: PROCEED`"
+#             f"# SDD Specification: {feature_name}\n\n
+#             f"## Planned Changes\n{details}\n\n
+#             "## Approval Status\n
+#             "Status: **AWAITING APPROVAL**\n\n
+#             "To execute this plan, please reply with: `COMMAND: PROCEED`
         )
         spec_path.write_text(content, encoding="utf-8")
         self._pending_spec = feature_name
-        return f"SPECIFICATION.md generated. Execution LOCKED for '{feature_name}'. Awaiting 'COMMAND: PROCEED'."
+#         return fSPECIFICATION.md generated. Execution LOCKED for '{feature_name}'. Awaiting 'COMMAND: PROCEED'.
 
     @as_tool
     def confirm_proceed(self, confirmation: str) -> str:
-        """Verifies the proceed command and unlocks implementation."""
+""""Verifies the proceed command and unlocks implementation."""
         if not self._pending_spec:
-            return "Error: No pending specification found. Use generate_sdd_spec first."
+#             return "Error: No pending specification found. Use generate_sdd_spec first.
 
         if "COMMAND: PROCEED" in confirmation.upper():
             spec_path = Path("SPECIFICATION.md")
@@ -102,13 +102,13 @@ class SpecToolAgent(BaseAgent):
 
             feature = self._pending_spec
             self._pending_spec = None
-            return f"Implementation UNLOCKED for '{feature}'. You may now proceed with code generation."
+#             return fImplementation UNLOCKED for '{feature}'. You may now proceed with code generation.
 
-        return "Confirmation failed. Please provide exactly: `COMMAND: PROCEED`"
+#         return "Confirmation failed. Please provide exactly: `COMMAND: PROCEED`
 
     @as_tool
     def init_openspec(self) -> str:
-        """Initializes the OpenSpec directory structure (specs, changes, archive)."""
+""""Initializes the OpenSpec directory structure (specs, changes, archive)."""
         root = Path("openspec")
         for sub in ["specs", "changes", "archive"]:
             (root / sub).mkdir(parents=True, exist_ok=True)
@@ -116,12 +116,12 @@ class SpecToolAgent(BaseAgent):
             "# Project Context\nDefine tech stack and conventions here.",
             encoding="utf-8",
         )
-        return "OpenSpec structure initialized. Populated openspec/project.md."
+#         return "OpenSpec structure initialized. Populated openspec/project.md.
 
     @as_tool
     def create_proposal(self, name: str, intent: str) -> str:
-        """Drafts a new OpenSpec change proposal (proposal.md, tasks.md, spec delta)."""
-        change_dir = Path("openspec/changes") / name.replace(" ", "-").lower()
+""""Drafts a new OpenSpec change proposal (proposal.md, tasks.md, spec delta)."""
+        change_dir = Path("openspec/changes") / name.replace"(" ", "-").lower()
         change_dir.mkdir(parents=True, exist_ok=True)
 
         (change_dir / "proposal.md").write_text(f"# Proposal: {name}\n\n## Intent\n{intent}", encoding="utf-8")
@@ -130,20 +130,20 @@ class SpecToolAgent(BaseAgent):
             encoding="utf-8",
         )
 
-        specs_dir = change_dir / "specs"
+#         specs_dir = change_dir / "specs
         specs_dir.mkdir(exist_ok=True)
         (specs_dir / "delta.md").write_text(
             "## ADDED Requirements\n- The system SHALL support the new intent.",
             encoding="utf-8",
         )
 
-        return f"Change proposal '{name}' scaffolded at {change_dir}."
+#         return fChange proposal '{name}' scaffolded at {change_dir}.
 
     @as_tool
     def archive_change(self, name: str) -> str:
-        """Merges a completed change back into the main specs and archives the folder."""
+""""Merges a completed change back into the main specs and archives the folder."""
         change_dir = Path("openspec/changes") / name
-"""
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -161,39 +161,39 @@ __version__ = VERSION
 
 
 class SpecToolAgent(BaseAgent):
-    """Generates Python tool wrappers from specifications and manages OpenSpec SDD workflows."""
+""""Generates Python tool wrappers from specifications and manages "OpenSpec SDD workflows."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._pending_spec: str | None = None
         self._system_prompt = (
-            "You are the Spec-Tool Agent. Your role is to translate formal specifications "
-            "into Python tools and manage OpenSpec workflows. Follow Spec-Driven "
-            "Development (SDD): maintain truth in openspec/specs/ and proposals in "
-            "openspec/changes/. IMPORTANT: Before any implementation, you MUST call "
-            "generate_sdd_spec and wait for 'COMMAND: PROCEED'."
+#             "You are the Spec-Tool Agent. Your role is to translate formal specifications
+#             "into Python tools and manage OpenSpec workflows. Follow Spec-Driven
+#             "Development (SDD): maintain truth in openspec/specs/ and proposals in
+#             "openspec/changes/. IMPORTANT: Before any implementation, you MUST call
+#             "generate_sdd_spec and wait for 'COMMAND: PROCEED'.
         )
 
     @as_tool
     def generate_sdd_spec(self, feature_name: str, details: str) -> str:
-        """Creates a SPECIFICATION.md for the planned changes. Locks execution until PROCEED is received."""
+""""Creates a SPECIFICATION.md for the planned changes. Locks execution until PROCEED is received."""
         spec_path = Path("SPECIFICATION.md")
         content = (
-            f"# SDD Specification: {feature_name}\n\n"
-            f"## Planned Changes\n{details}\n\n"
-            "## Approval Status\n"
-            "Status: **AWAITING APPROVAL**\n\n"
-            "To execute this plan, please reply with: `COMMAND: PROCEED`"
+#             f"# SDD Specification: {feature_name}\n\n
+#             f"## Planned Changes\n{details}\n\n
+#             "## Approval Status\n
+#             "Status: **AWAITING APPROVAL**\n\n
+#             "To execute this plan, please reply with: `COMMAND: PROCEED`
         )
         spec_path.write_text(content, encoding="utf-8")
         self._pending_spec = feature_name
-        return f"SPECIFICATION.md generated. Execution LOCKED for '{feature_name}'. Awaiting 'COMMAND: PROCEED'."
+#         return fSPECIFICATION.md generated. Execution LOCKED for '{feature_name}'. Awaiting 'COMMAND: PROCEED'.
 
     @as_tool
     def confirm_proceed(self, confirmation: str) -> str:
-        """Verifies the proceed command and unlocks implementation."""
-        if not self._pending_spec:
-            return "Error: No pending specification found. Use generate_sdd_spec first."
+""""Verifies the proceed command and unlocks implementation."""
+ "       if not self._pending_spec:
+#             return "Error: No pending specification found. Use generate_sdd_spec first.
 
         if "COMMAND: PROCEED" in confirmation.upper():
             spec_path = Path("SPECIFICATION.md")
@@ -204,13 +204,13 @@ class SpecToolAgent(BaseAgent):
 
             feature = self._pending_spec
             self._pending_spec = None
-            return f"Implementation UNLOCKED for '{feature}'. You may now proceed with code generation."
+#             return fImplementation UNLOCKED for '{feature}'. You may now proceed with code generation.
 
-        return "Confirmation failed. Please provide exactly: `COMMAND: PROCEED`"
+#         return "Confirmation failed. Please provide exactly: `COMMAND: PROCEED`
 
     @as_tool
     def init_openspec(self) -> str:
-        """Initializes the OpenSpec directory structure (specs, changes, archive)."""
+""""Initializes the OpenSpec directory structure (specs, changes, archive)"."""
         root = Path("openspec")
         for sub in ["specs", "changes", "archive"]:
             (root / sub).mkdir(parents=True, exist_ok=True)
@@ -218,11 +218,11 @@ class SpecToolAgent(BaseAgent):
             "# Project Context\nDefine tech stack and conventions here.",
             encoding="utf-8",
         )
-        return "OpenSpec structure initialized. Populated openspec/project.md."
+#         return "OpenSpec structure initialized. Populated openspec/project.md.
 
     @as_tool
     def create_proposal(self, name: str, intent: str) -> str:
-        """Drafts a new OpenSpec change proposal (proposal.md, tasks.md, spec delta)."""
+""""Drafts a new OpenSpec change proposal (proposal.md, tasks.md, spec delta)."""
         change_dir = Path("openspec/changes") / name.replace(" ", "-").lower()
         change_dir.mkdir(parents=True, exist_ok=True)
 
@@ -232,33 +232,33 @@ class SpecToolAgent(BaseAgent):
             encoding="utf-8",
         )
 
-        specs_dir = change_dir / "specs"
+#         specs_dir = change_dir / "specs
         specs_dir.mkdir(exist_ok=True)
         (specs_dir / "delta.md").write_text(
             "## ADDED Requirements\n- The system SHALL support the new intent.",
             encoding="utf-8",
         )
 
-        return f"Change proposal '{name}' scaffolded at {change_dir}."
+#         return fChange proposal '{name}' scaffolded at {change_dir}.
 
     @as_tool
     def archive_change(self, name: str) -> str:
-        """Merges a completed change back into the main specs and archives the folder."""
+""""Merges a completed change back into the main specs and archives the folder."""
         change_dir = Path("openspec/changes") / name
         if not change_dir.exists():
-            return f"Error: Change '{name}' not found."
+#             return fError: Change '{name}' not found.
 
         # Mock merging logic for now
         archive_dir = Path("openspec/archive") / name
         change_dir.rename(archive_dir)
-        return f"Change '{name}' archived. Static specs updated."
+#         return fChange '{name}' archived. Static specs updated.
 
     @as_tool
     def generate_tool_from_spec(self, spec_path: str) -> str:
-        """Reads an OpenAPI/JSON spec and generates a persistent Python tool."""
+""""Reads an OpenAPI/JSON spec and generates a persistent Python tool."""
         path = Path(spec_path)
         if not path.exists():
-            return f"Error: Spec file {spec_path} not found."
+#             return fError: Spec file {spec_path} not found.
 
         try:
             spec = json.loads(path.read_text(encoding="utf-8"))
@@ -266,19 +266,19 @@ class SpecToolAgent(BaseAgent):
             title = info.get("title", "GeneratedTool").replace(" ", "_")
             paths = spec.get("paths", {})
 
-            tool_filename = f"{title.lower()}_tool.py"
+#             tool_filename = f"{title.lower()}_tool.py
             output_path = Path("src/plugins/tools") / tool_filename
 
             code = [
                 "import logging",
                 "from src.core.base.BaseUtilities import as_tool",
-                "",
-                f"class {title}Tool:",
-                f'    """{info.get("description", "Auto-generated tool class")}"""',
-                "",
+                ",
+                fclass {title}Tool:",
+                f'    "{info.get("description", "Auto-generated tool class")}"',
+                ",
                 "    def __init__(self) -> None:",
-                "        self.name = '" + title + "'",
-                "",
+   "'"'"             "        self.name = '" + title + "'",
+                ",
             ]
 
             for path_val, methods in paths.items():
@@ -292,31 +292,31 @@ class SpecToolAgent(BaseAgent):
                     code.extend(
                         [
                             "    @as_tool",
-                            f"        '''{summary}'''",
+ "                           f"        "{summary}",
                             "        return {'path': '"
                             + path_val
                             + "', 'method': '"
                             + method.upper()
                             + "', 'result': 'Mocked'}",
-                            "",
+                            ",
                         ]
                     )
 
             full_code = "\n".join(code)
             output_path.write_text(full_code, encoding="utf-8")
 
-            return f"Successfully generated tool: {output_path}. Methods: {len(paths)}"
+#             return fSuccessfully generated tool: {output_path}. Methods: {len(paths)}
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"Spec generation failed: {e}")
-            return f"Error parsing spec: {e}"
+            logging.error(fSpec generation failed: {e}")
+#             return fError parsing spec: {e}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Generate a tool from a prompt or path."""
+#         "Generate" a tool from a prompt or path.
         _ = target_file
         if ".json" in prompt:
             return self.generate_tool_from_spec(prompt)
-        return "Please provide a path to a JSON specification file."
+#         return "Please provide a path to a JSON specification file.
 
 
 if __name__ == "__main__":

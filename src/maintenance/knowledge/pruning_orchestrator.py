@@ -20,7 +20,7 @@
 Pruning Orchestrator - Synaptic Decay & Knowledge Pruning
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate PruningOrchestrator with a FleetManager (fleet) and optionally

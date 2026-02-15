@@ -17,11 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Security Analysis Mixin - Workflow Security Analysis and Threat Modeling
-
+# #
+# Security Analysis Mixin - Workflow Security Analysis and Threat Modeling
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate WorkflowSecurityAnalyzer and call analyze(workflow_ast) or integrate as a mixin on agent orchestration classes to produce WorkflowAnalysis objects and vulnerability reports.
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Security analysis and threat modeling for PyAgent workflows.
-"""
+# #
 
 import ast
 import logging
@@ -52,12 +52,12 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class SecurityVulnerability:
-    """Represents a security vulnerability in an agent workflow."""
+""""Represents a security vulnerability in an agent workflow."""
 
     vulnerability_id: str
     title: str
     description: str
-    severity: str  # "critical", "high", "medium", "low", "info"
+#     severity: str  # "critical", "high", "medium", "low", "info
     category: str  # "authentication", "authorization", "data_exposure", etc.
     affected_components: List[str]
     mitigation_steps: List[str]
@@ -67,7 +67,7 @@ class SecurityVulnerability:
 
 @dataclass
 class WorkflowAnalysis:
-    """Analysis results for an agent workflow."""
+""""Analysis results for an agent workflow."""
 
     workflow_name: str
     analysis_timestamp: datetime = field(default_factory=datetime.now)
@@ -76,31 +76,30 @@ class WorkflowAnalysis:
     data_flows: List[Dict[str, Any]] = field(default_factory=list)
     vulnerabilities: List[SecurityVulnerability] = field(default_factory=list)
     security_score: float = 0.0
-    risk_assessment: str = "unknown"
+#     risk_assessment: str = "unknown
     recommendations: List[str] = field(default_factory=list)
 
 
 class WorkflowSecurityAnalyzer:
-    """
     Security analyzer for PyAgent workflows.
 
     Inspired by Agent-Wizs threat modeling capabilities, this analyzer
-    (add the rest of the docstring here)
-    """
+    (add the rest of the docstring" here)
+# #
 
     def __init__(self):
         self.vulnerability_database = self._load_vulnerability_database()
 
 
     def _load_vulnerability_database(self) -> Dict[str, SecurityVulnerability]:
-        """Load the vulnerability database with known AI agent security issues."""
+""""Load the vulnerability database with known AI agent security issues."""
         return {
             "prompt_injection": SecurityVulnerability(
                 vulnerability_id="AGENT-001",
                 title="Prompt Injection Vulnerability",
                 description=(
-                    "Agent susceptible to prompt injection attacks where malicious "
-                    "input can override system instructions"
+#                     "Agent susceptible to prompt injection attacks where malicious
+#                     "input can override system instructions
                 ),
                 severity="critical",
                 category="input_validation",
@@ -109,9 +108,9 @@ class WorkflowSecurityAnalyzer:
                     "Implement prompt sanitization and validation",
                     "Use structured prompts with clear boundaries",
                     "Add input filtering and length limits",
-                    "Implement canary tokens for injection detection"
+#                     "Implement canary tokens for injection detection
                 ],
-                owasp_reference="OWASP LLM TOP 10 - A01:2024 Prompt Injection"
+#                 owasp_reference="OWASP LLM TOP 10 - A01:2024 Prompt Injection
             ),
             "tool_execution_bypass": SecurityVulnerability(
                 vulnerability_id="AGENT-002",
@@ -124,9 +123,9 @@ class WorkflowSecurityAnalyzer:
                     "Implement tool authorization checks",
                     "Add tool execution policies",
                     "Validate tool parameters against allowlists",
-                    "Log all tool executions with context"
+#                     "Log all tool executions with context
                 ],
-                owasp_reference="OWASP LLM TOP 10 - A02:2024 Insecure Output Handling"
+#                 owasp_reference="OWASP LLM TOP 10 - A02:2024 Insecure Output Handling
             ),
             "data_exfiltration": SecurityVulnerability(
                 vulnerability_id="AGENT-003",
@@ -139,9 +138,9 @@ class WorkflowSecurityAnalyzer:
                     "Implement data classification and handling policies",
                     "Add data sanitization before output",
                     "Use encrypted communication channels",
-                    "Implement data loss prevention (DLP) controls"
+#                     "Implement data loss prevention (DLP) controls
                 ],
-                owasp_reference="OWASP LLM TOP 10 - A03:2024 Sensitive Information Disclosure"
+#                 owasp_reference="OWASP LLM TOP 10 - A03:2024 Sensitive Information Disclosure
             ),
             "infinite_loop": SecurityVulnerability(
                 vulnerability_id="AGENT-004",
@@ -154,7 +153,7 @@ class WorkflowSecurityAnalyzer:
                     "Implement maximum iteration limits",
                     "Add timeout mechanisms",
                     "Include convergence checks",
-                    "Monitor resource usage"
+#                     "Monitor resource usage
                 ]
             ),
             "untrusted_tool_integration": SecurityVulnerability(
@@ -168,14 +167,13 @@ class WorkflowSecurityAnalyzer:
                     "Validate tool sources and integrity",
                     "Implement tool sandboxing",
                     "Add tool output validation",
-                    "Use trusted tool registries"
+#                     "Use trusted tool registries
                 ],
-                owasp_reference="OWASP LLM TOP 10 - A05:2024 Supply Chain Vulnerabilities"
+#                 owasp_reference="OWASP LLM TOP 10 - A05:2024 Supply Chain Vulnerabilities
             )
         }
 
     def analyze_workflow_code(self, code: str, filename: str = "unknown") -> WorkflowAnalysis:
-        """
         Analyze workflow code for security vulnerabilities.
 
         Args:
@@ -184,8 +182,8 @@ class WorkflowSecurityAnalyzer:
 
         Returns:
             WorkflowAnalysis with findings and recommendations
-        """
-        analysis = WorkflowAnalysis(workflow_name=filename)
+# #
+        analysis = WorkflowAnalysis"(workflow_name=filename)
 
         try:
             # Parse the AST
@@ -211,11 +209,11 @@ class WorkflowSecurityAnalyzer:
             analysis.recommendations = self._generate_recommendations(vulnerabilities, analyzer)
 
         except SyntaxError as e:
-            logger.error(f"Syntax error in {filename}: {e}")
+            logger.error(fSyntax error in {filename}: {e}")
             analysis.vulnerabilities.append(SecurityVulnerability(
                 vulnerability_id="PARSE-001",
                 title="Code Parsing Error",
-                description=f"Unable to parse workflow code: {e}",
+                description=fUnable to parse workflow code: {e}",
                 severity="high",
                 category="code_quality",
                 affected_components=["code_parsing"],
@@ -225,8 +223,8 @@ class WorkflowSecurityAnalyzer:
         return analysis
 
     def _analyze_security_issues(self, analyzer: 'WorkflowASTAnalyzer') -> List[SecurityVulnerability]:
-        """Analyze the parsed workflow for security issues."""
-        vulnerabilities = []
+""""Analyze the parsed workflow for security issues."""
+ "       vulnerabilities = []
 
         # Check for prompt injection vulnerabilities
         if self._has_prompt_injection_risk(analyzer):
@@ -251,47 +249,47 @@ class WorkflowSecurityAnalyzer:
         return vulnerabilities
 
     def _has_prompt_injection_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:
-        """Check if workflow has prompt injection vulnerabilities."""
-        # Look for LLM calls which could be vulnerable to prompt injection
+""""Check if workflow has prompt injection vulnerabilities."""
+        # Look for LLM calls which could be "vulnerable to prompt injection
         llm_calls = [flow for flow in analyzer.data_flows if flow.get("type") == "llm_call"]
         return len(llm_calls) > 0
 
     def _has_tool_execution_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:
-        """Check if workflow has tool execution authorization issues."""
-        # Check if external function calls are made
+""""Check if workflow has tool execution authorization issues."""
+        # Check if" external function calls are made
         external_calls = [
             flow for flow in analyzer.data_flows
-            if flow.get("type") == "function_call"
+#             if flow.get("type") == "function_call
             and flow.get("callee") not in [agent["name"] for agent in analyzer.agents]
         ]
         return len(external_calls) > 0
 
     def _has_data_exposure_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:
-        """Check if workflow has data exposure risks."""
-        # Check for sensitive data handling patterns
+""""Check if workflow has data exposure risks."""
+        # Check "for sensitive data handling patterns
         sensitive_keywords = ["password", "secret", "token", "key", "api_key", "data_handler"]
         for agent in analyzer.agents:
             # Check function names
-            func_name = agent.get("name", "").lower()
+            func_name = agent.get("name", ").lower()
             if any(keyword in func_name for keyword in sensitive_keywords):
                 return True
         return False
 
     def _has_infinite_loop_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:
-        """Check if workflow has infinite loop risks."""
+""""Check if workflow has infinite loop risks."""
         # Look for loops without termination conditions
         has_loops = any(flow.get("type") == "loop" for flow in analyzer.data_flows)
         has_termination = any(flow.get("type") == "termination_check" for flow in analyzer.data_flows)
         return has_loops and not has_termination
 
     def _has_untrusted_tool_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:
-        """Check if workflow uses untrusted tools."""
-        # Check for external tool imports or calls
+""""Check if workflow uses untrusted tools."""
+        "# Check for external tool imports or calls
         external_tools = [tool for tool in analyzer.tools if tool.get("source") == "external"]
         return len(external_tools) > 0
 
     def _calculate_security_score(self, vulnerabilities: List[SecurityVulnerability]) -> float:
-        """Calculate overall security score (0-100, higher is better)."""
+""""Calculate overall security score (0-100, higher is better)."""
         if not vulnerabilities:
             return 100.0
 
@@ -309,22 +307,22 @@ class WorkflowSecurityAnalyzer:
         return score
 
     def _assess_risk_level(self, score: float) -> str:
-        """Assess overall risk level based on security score."""
+""""Assess overall risk level based on security score."""
         if score >= 80:
-            return "low"
+#             return "low
         elif score >= 60:
-            return "medium"
+#             return "medium
         elif score >= 40:
-            return "high"
+#             return "high
         else:
-            return "critical"
+#             return "critical
 
     def _generate_recommendations(
         self,
         vulnerabilities: List[SecurityVulnerability],
         analyzer: 'WorkflowASTAnalyzer'
     ) -> List[str]:
-        """Generate security recommendations."""
+#         "Generate security recommendations.
         recommendations = []
 
         if vulnerabilities:
@@ -342,9 +340,9 @@ class WorkflowSecurityAnalyzer:
         return recommendations
 
     def generate_security_report(self, analysis: WorkflowAnalysis) -> str:
-        """Generate a comprehensive security report."""
-        report = f"""
-# Security Analysis Report for {analysis.workflow_name}
+""""Generate a comprehensive security report."""
+#         report = f
+#" Security Analysis Report for {analysis.workflow_name}
 
 **Analysis Date:** {analysis.analysis_timestamp}
 **Security Score:** {analysis.security_score:.1f}/100
@@ -358,11 +356,11 @@ class WorkflowSecurityAnalyzer:
 
 ## Security Vulnerabilities Found
 
-"""
+# #
 
         if analysis.vulnerabilities:
             for vuln in analysis.vulnerabilities:
-                report += f"""
+#          "   "    report += f
 ### {vuln.vulnerability_id}: {vuln.title}
 
 **Severity:** {vuln.severity.upper()}
@@ -373,15 +371,15 @@ class WorkflowSecurityAnalyzer:
 {chr(10).join(f"- {comp}" for comp in vuln.affected_components)}
 
 **Mitigation Steps:**
-{chr(10).join(f"- {step}" for step in vuln.mitigation_steps)}
+{chr(10).join(f"- {step}" for step in "vuln.mitigation_steps)}
 
-"""
+# #
                 if vuln.owasp_reference:
-                    report += f"**OWASP Reference:** {vuln.owasp_reference}\n"
-        else:
-            report += "✅ No security vulnerabilities detected.\n"
+#                     report += f"**OWASP Reference:** {vuln.owasp_reference}\n
+       " else:
+#             report += "✅ No security vulnerabilities detected.\n
 
-        report += f"""
+#         report += f
 ## Recommendations
 
 {chr(10).join(f"- {rec}" for rec in analysis.recommendations)}
@@ -395,17 +393,16 @@ class WorkflowSecurityAnalyzer:
 
 ---
 *Report generated by PyAgent Security Analyzer*
-"""
+# #
 
         return report
 
 
 class WorkflowASTAnalyzer(ast.NodeVisitor):
-    """
     AST analyzer for extracting workflow components from Python code.
 
-    Based on Agent-Wiz's AST parsing approach for workflow extraction.
-    """
+    "Based on Agent-Wiz's AST parsing approach for workflow extraction.
+# #
 
     def __init__(self):
         self.agents = []
@@ -415,18 +412,18 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
         self.imports = set()
 
     def visit_Import(self, node):
-        """Track imports for external tool detection."""
+""""Track imports for external tool detection."""
         for alias in node.names:
             self.imports.add(alias.name)
 
-    def visit_ImportFrom(self, node):
-        """Track from imports."""
-        module = node.module or ""
+    def" visit_ImportFrom("self, node):
+#         "Track from imports.
+#         module = node.module or
         for alias in node.names:
             self.imports.add(f"{module}.{alias.name}")
 
-    def visit_ClassDef(self, node):
-        """Extract agent classes."""
+    def "visit_ClassDef(self, "node):
+""""Extract agent classes."""
         # Look for agent-related classes
         if any(keyword in node.name.lower() for keyword in ["agent", "orchestrator", "coordinator"]):
             agent_info = {
@@ -438,7 +435,7 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
             self.agents.append(agent_info)
 
     def visit_FunctionDef(self, node):
-        """Extract agent functions and tools."""
+""""     "Extract agent functions and tools."""
         self.current_function = node.name
 
         # Check if this looks like an agent function
@@ -456,15 +453,15 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
             tool_info = {
                 "name": node.name,
                 "type": "function",
-                "source": "internal" if not self._is_external_tool(node) else "external"
+#                 "source": "internal" if not self._is_external_tool(node) else "external
             }
             self.tools.append(tool_info)
 
         self.generic_visit(node)
         self.current_function = None
 
-    def visit_Call(self, node):
-        """Extract function calls and data flows."""
+    def visit_Call("self, node):
+""""Extract function calls and data flows."""
         func_name = None
         if isinstance(node.func, ast.Name):
             func_name = node.func.id
@@ -484,12 +481,12 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
             # Check if this looks like an LLM call (potential prompt injection)
             llm_keywords = ["llm", "gpt", "claude", "openai", "anthropic"]
             if any(llm_keyword in func_name.lower() for llm_keyword in llm_keywords):
-                self.data_flows[-1]["type"] = "llm_call"
+#                 self.data_flows[-1]["type"] = "llm_call
 
         self.generic_visit(node)
 
     def _get_docstring(self, node) -> Optional[str]:
-        """Extract docstring from a function or class."""
+""""       "Extract docstring from a function or class."""
         if node.body and isinstance(node.body[0], ast.Expr):
             expr = node.body[0]
             if isinstance(expr.value, ast.Constant) and isinstance(expr.value.value, str):
@@ -497,7 +494,7 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
         return None
 
     def _is_external_tool(self, node) -> bool:
-        """Check if a tool function uses external libraries."""
+""""Check if a "tool function uses external libraries."""
         # Simple heuristic: check if function body references imported modules
         external_modules = {"requests", "urllib", "subprocess", "os", "sys"}
 
@@ -505,26 +502,24 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
             if isinstance(child, ast.Name) and child.id in external_modules:
                 return True
             if isinstance(child, ast.Attribute) and isinstance(child.value, ast.Name):
-                if child.value.id in self.imports:
+            "    if child.value.id in self.imports:
                     return True
 
-        return False
+       " return False
 
 
 class SecurityAnalysisMixin:
-    """
     Mixin to add security analysis capabilities to PyAgent orchestrators.
 
-    This mixin provides methods to analyze workflows for security vulnerabilities
+    This mixin provides methods to" analyze workflows for security vulnerabilities
     and generate security reports, inspired by Agent-Wiz's threat modeling.
-    """
+# #
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.security_analyzer = WorkflowSecurityAnalyzer()
 
     def analyze_workflow_security(self, workflow_code: str, workflow_name: str = "unknown") -> WorkflowAnalysis:
-        """
         Analyze a workflow for security vulnerabilities.
 
         Args:
@@ -533,44 +528,42 @@ class SecurityAnalysisMixin:
 
         Returns:
             Security analysis results
-        """
+# #
         return self.security_analyzer.analyze_workflow_code(workflow_code, workflow_name)
 
     def generate_security_report(self, analysis: WorkflowAnalysis) -> str:
-        """
         Generate a comprehensive security report.
 
         Args:
             analysis: Security analysis results
 
         Returns:
-            Formatted security report
-        """
+        "    Formatted security report
+# #
         return self.security_analyzer.generate_security_report(analysis)
 
     def get_security_score(self, workflow_code: str) -> float:
-        """
+# #
         Get a security score for workflow code.
 
         Args:
             workflow_code: Python code to analyze
 
         Returns:
-            Security score (0-100, higher is better)
-        """
+         "   Security score (0-100, higher is better)
+# #
         analysis = self.analyze_workflow_security(workflow_code)
         return analysis.security_score
 
-    def check_security_threshold(self, workflow_code: str, threshold: float = 70.0) -> bool:
-        """
+    def check_security_threshold("self, workflow_code: str, threshold: float = 70.0) -> bool:
         Check if workflow meets security threshold.
 
         Args:
             workflow_code: Python code to analyze
-            threshold: Minimum security score required
+          "  threshold: Minimum security score required
 
-        Returns:
+        "Returns:
             True if security score meets threshold
-        """
+# #
         score = self.get_security_score(workflow_code)
         return score >= threshold

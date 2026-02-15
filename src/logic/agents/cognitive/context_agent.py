@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-ContextAgent - Context description authoring and RAG routing
-
+# #
+# ContextAgent - Context description authoring and RAG routing
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with a Path or filename pointing at a `.description.md` file: ContextAgent("path/to/file.description.md")
@@ -83,7 +83,7 @@ class ContextAgent(
     ContextCategorizationMixin,
     ContextRAGMixin,
 ):
-    """Updates code file context descriptions using AI assistance."""
+#     "Updates code file context descriptions using AI assistance.
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -127,38 +127,38 @@ class ContextAgent(
         self._metadata: Dict[str, Any] = {}
 
     def route_query(self, query: str) -> list[str]:
-        """Selects the best vector shards based on file path and query sentiment."""
+""""Selects the best vector shards based on file path and query sentiment."""
         active_path = str(self.file_path)
         selected = self.rag_core.route_query_to_shards(
             query, active_path, self.rag_shards
         )
-        logging.info(f"ContextAgent: Query '{query}' routed to {len(selected)} shards.")
+        logging.info(fContextAgent: Query '{query}' routed to {len(selected)} shards.")
         return selected
 
     def _validate_file_extension(self) -> None:
-        """Validate that the file has the correct extension."""
+""""Validate that the file has the correct extension."""
         if not self.file_path.name.endswith(".description.md"):
             logging.warning(
-                f"File {self.file_path.name} does not end with .description.md. "
-                "Context operations may be limited."
+#                 fFile {self.file_path.name} does not end with .description.md.
+#                 "Context operations may be limited.
             )
 
     def _derive_source_path(self) -> Path | None:
-        """Derive source file path from .description.md filename."""
+""""Derive source file path from .description.md filename."""
         if self.file_path.name.endswith(".description.md"):
-            stem = self.file_path.name.replace(".description.md", "")
+            stem = self.file_path.name.replace(".description.md", ")
             # Use configurable extensions
             for ext in self.config.get("extensions", []):
-                source = self.file_path.parent / f"{stem}{ext}"
+#                 source = self.file_path.parent / f"{stem}{ext}
                 if source.exists():
                     return source
         return None
 
     # ========== Core Methods ==========
     def _get_default_content(self) -> str:
-        """Return rich, structured template for new descriptions."""
-        self.file_path.name.replace(".description.md", "")
-        return """# Description: `{filename}`
+""""Return rich, structured template for new descriptions."""
+        self.file_path.name.replace(".description.md", ")
+        return "# Description: `{filename}`
 
 ## Purpose
 [One - line purpose statement]
@@ -171,8 +171,8 @@ class ContextAgent(
 ```bash
 # Example usage
 
-"""
-"""
+# #
+# #
 
 import logging
 from pathlib import Path

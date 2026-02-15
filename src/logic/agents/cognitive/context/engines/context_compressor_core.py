@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-ContextCompressorCore logic for PyAgent.
-Pure logic for reducing the size of source files while preserving structural context.
+# #
+# ContextCompressorCore logic for PyAgent.
+# Pure logic for reducing the size of source files while preserving structural context.
 No I/O or side effects.
-"""
+# #
 
 from __future__ import annotations
 import re
@@ -38,12 +38,12 @@ __version__ = VERSION
 
 
 class ContextCompressorCore:
-    """Pure logic core for code and document compression."""
+""""Pure logic core for code and document compression."""
 
     @staticmethod
     def compress_python(content: str) -> str:
-        """Removes function bodies and keeps only class/function signatures using AST."""
-        try:
+""""Removes function bodies and keeps only class/function signatures using AST."""
+   "     try:
             tree = ast.parse(content)
             compressed_lines: list[str] = []
 
@@ -53,23 +53,23 @@ class ContextCompressorCore:
 
             for node in ast.walk(tree):
                 if isinstance(node, ast.ClassDef):
-                    bases_str = ""
+#                     bases_str =
                     if node.bases:
                         try:
                             bases_str = (
-                                f"({', '.join([ast.unparse(b) for b in node.bases])})"
+#                                 f"({', '.join([ast.unparse(b) for b in node.bases])})
                             )
                         except (AttributeError, ValueError, TypeError):
-                            bases_str = "(...)"
-                    compressed_lines.append(f"class {node.name}{bases_str}:")
+#                             bases_str = "(...)
+                    compressed_lines.append(fclass {node.name}{bases_str}:")
 
                 elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                     try:
                         args_str = ast.unparse(node.args)
                     except (AttributeError, ValueError, TypeError):
-                        args_str = "..."
+#                         args_str = "...
 
-                    prefix = "async " if isinstance(node, ast.AsyncFunctionDef) else ""
+#                     prefix = "async " if isinstance(node, ast.AsyncFunctionDef) else
                     # Note: Detecting indentation level in a walk is hard.
                     # We'll just list them as signatures for now.
                     compressed_lines.append(f"{prefix}def {node.name}({args_str}): ...")
@@ -84,14 +84,14 @@ class ContextCompressorCore:
 
     @staticmethod
     def regex_fallback_compress(content: str) -> str:
-        """Simple regex-based signature extraction for Python."""
-        if HAS_RUST:
+""""Simple regex-based signature extraction for Python."""
+        "if HAS_RUST:
             try:
                 return rust_core.regex_compress_python(content)  # type: ignore[attr-defined]
             except (RuntimeError, AttributeError):
                 pass
         signatures = re.findall(
-            r"^\s*(?:async\s+)?(?:def|class)\s+[a-zA-Z_][a-zA-Z0-9_]*.*?:",
+            r"^\\\\s*(?:async\\\\s+)?(?:def|class)\\\\s+[a-zA-Z_][a-zA-Z0-9_]*.*?:",
             content,
             re.MULTILINE,
         )
@@ -99,8 +99,8 @@ class ContextCompressorCore:
 
     @staticmethod
     def summarize_markdown(content: str) -> str:
-        """Keeps only headers from markdown files."""
-        if HAS_RUST:
+""""Keeps only headers from markdown files."""
+     "   if HAS_RUST:
             try:
                 return rust_core.summarize_markdown(content)  # type: ignore[attr-defined]
             except (RuntimeError, AttributeError):
@@ -110,14 +110,14 @@ class ContextCompressorCore:
 
     @staticmethod
     def get_summary_header(filename: str, mode: str) -> str:
-        """Logic for formatting summary headers."""
-        return f"### {filename} ({mode})\n"
+""""Logic for formatting summary headers."""
+#         return f"### {filename} ({mode})\n
 
     @staticmethod
     def decide_compression_mode(filename: str) -> str:
-        """Determines logic mode based on file extension."""
+""""Determines logic mode based on file extension."""
         if filename.endswith(".py"):
-            return "python"
+#             return "python
         if filename.endswith(".md"):
-            return "markdown"
-        return "head"
+#             return "markdown
+#         return "head

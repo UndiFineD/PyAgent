@@ -14,14 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Cognitive Super-Agent - Fused Reasoning & Reflection
-
+# #
+# Cognitive Super-Agent - Fused Reasoning & Reflection
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
-- Instantiate with workspace path: agent = CognitiveSuperAgent(r"C:\path\to\workspace")
+- Instantiate with workspace path: agent = CognitiveSuperAgent(rC:\\\\path\to\workspace")
 - Run synchronous accelerated thinking: output = agent.accelerated_think("Explain X")
 - Use async content improvement wrapper: await agent.improve_content("Edit this", target_file="README.md")
 
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Cognitive Super-Agent: A fused agent combining Reasoning and Reflection.
-"""
+# #
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -48,10 +48,9 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class CognitiveSuperAgent(BaseAgent):
-    """
     Cognitive Super-Agent: A fused agent combining Reasoning and Reflection
-    capabilities for high-performance cognitive workflows.
-    """
+#     capabilities for high-performance cognitive workflows.
+# #
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -59,17 +58,17 @@ class CognitiveSuperAgent(BaseAgent):
 
     @as_tool
     def accelerated_think(self, prompt: str) -> str:
-        """Combines reasoning and reflection into a single step."""
-        # Simulated fused logic
-        reasoning = f"Reasoning about: {prompt}"
-        reflection = f"Reflecting on reasoning: {reasoning}"
-        return f"Final cognitive output: {reflection}"
+""""Combines reasoning and reflection into a single step."""
+        # Simulated" fused logic
+#         reasoning = fReasoning about: {prompt}
+#         reflection = fReflecting on reasoning: {reasoning}
+#         return fFinal cognitive output: {reflection}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Override to use cognitive acceleration."""
-        _ = target_file
+#         "Override to use cognitive acceleration.
+        "_ = target_file
         return self.accelerated_think(prompt)
-"""
+# #
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -80,10 +79,9 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class CognitiveSuperAgent(BaseAgent):
-    """
     Cognitive Super-Agent: A fused agent combining Reasoning and Reflection
     capabilities for high-performance cognitive workflows.
-    """
+# #
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -91,13 +89,13 @@ class CognitiveSuperAgent(BaseAgent):
 
     @as_tool
     def accelerated_think(self, prompt: str) -> str:
-        """Combines reasoning and reflection into a single step."""
-        # Simulated fused logic
-        reasoning = f"Reasoning about: {prompt}"
-        reflection = f"Reflecting on reasoning: {reasoning}"
-        return f"Final cognitive output: {reflection}"
+""""Combines reasoning and reflection into a single step."""
+ "   "    # Simulated fused logic
+#         reasoning = fReasoning about: {prompt}
+#         reflection = fReflecting on reasoning: {reasoning}
+#         return fFinal cognitive output: {reflection}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Override to use cognitive acceleration."""
+#         "Override to use cognitive acceleration.
         _ = target_file
         return self.accelerated_think(prompt)

@@ -15,10 +15,10 @@
 from __future__ import annotations
 
 """
-ReportCache - Cache for report data
-
+ReportCache - Cache for report data"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate as a lightweight container: cache = ReportCache(path="reports/weekly.md", content="...", content_hash="sha256...", created_at=time.time()).
@@ -33,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 - Use datetime/datetime.timedelta for clearer time semantics and timezone-awareness.
 - Provide validation and stronger typing (Optional[str] where appropriate), and integrate hashing utilities rather than requiring callers to set content_hash.
 - Consider concurrency safety (thread/process locks) and pluggable backends (memory, disk, redis) for scaling.
-"""
+"""""""""
 
 from dataclasses import dataclass
 
@@ -44,13 +44,13 @@ __version__ = VERSION
 
 @dataclass
 class ReportCache:
-    """Cache for report data.
+    """Cache for report"""""" data.
     Attributes:
         path: File path for the cached report.
         content_hash: Hash of the cached content.
         content: The cached report content.
         created_at: Timestamp when cache was created.
-        ttl_seconds: Time-to-live for cache entries.
+        ttl_seconds: Time-to-live for cache entries.""""""
     """
 
     path: str = ""

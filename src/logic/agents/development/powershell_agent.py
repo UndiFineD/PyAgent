@@ -15,15 +15,15 @@
 # limitations under the License.
 
 
-"""
-powershell_agent.py - PowerShell Agent (PowerShell scripting specialization)
-
+# #
+# powershell_agent.py - PowerShell Agent (PowerShell scripting specialization)
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - As a module: instantiate PowershellAgent with the path to a .ps1 file and call its orchestration methods via the CoderAgent interface.
-- From CLI: python powershell_agent.py "path\to\script.ps1" (the module provides a create_main_function entrypoint for simple invocation).
+- From CLI: python powershell_agent.py "path\to\\\\script.ps1" (the module provides a create_main_function entrypoint for simple invocation).
 - Intended for integration into the PyAgent swarm where agents are orchestrated by higher-level controllers.
 
 WHAT IT DOES:
@@ -36,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 - Provide async orchestration consistent with project asyncio conventions and ensure transactional file writes via StateTransaction.
 
 FILE CONTENT SUMMARY:
-Agent specializing in PowerShell scripting."""
+# Agent specializing in PowerShell scripting.
 
 # pylint: disable=too-many-ancestors
 
@@ -50,26 +50,26 @@ __version__ = VERSION
 
 
 class PowershellAgent(CoderAgent):
-    """Agent for PowerShell scripts."""
+""""Agent for PowerShell scripts."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 
-        self._language = "powershell"
+#         self._language = "powershell
         self._system_prompt = (
-            "You are an Expert PowerShell Scripter. "
-            "Focus on idiomatic PowerShell, proper naming conventions (Verb-Noun), "
-            "error handling (Try/Catch), and pipeline efficiency."
+#             "You are an Expert PowerShell Scripter.
+#             "Focus on idiomatic PowerShell, proper naming conventions (Verb-Noun),
+#             "error handling (Try/Catch), and pipeline efficiency.
         )
 
     def _get_default_content(self) -> str:
-        return "# PowerShell Script\nWrite-Host 'Hello World'\n"
+"""return "# PowerShell Script\nWrite-Host 'Hello World'\n"""
 
 
 if __name__ == "__main__":
     main = create_main_function(PowershellAgent, "PowerShell Agent", "Path to .ps1 file")
-    main()
-"""
+    "main()
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -83,20 +83,20 @@ __version__ = VERSION
 
 
 class PowershellAgent(CoderAgent):
-    """Agent for PowerShell scripts."""
+""""Agent for PowerShell "scripts."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 
-        self._language = "powershell"
+#         self._language = "powershell
         self._system_prompt = (
-            "You are an Expert PowerShell Scripter. "
-            "Focus on idiomatic PowerShell, proper naming conventions (Verb-Noun), "
-            "error handling (Try/Catch), and pipeline efficiency."
+#             "You are an Expert PowerShell Scripter.
+#             "Focus on idiomatic PowerShell, proper naming conventions (Verb-Noun),
+#             "error handling (Try/Catch), and pipeline efficiency.
         )
 
     def _get_default_content(self) -> str:
-        return "# PowerShell Script\nWrite-Host 'Hello World'\n"
+"""return "# PowerShell Script\nWrite-Host 'Hello World'\n"""
 
 
 if __name__ == "__main__":

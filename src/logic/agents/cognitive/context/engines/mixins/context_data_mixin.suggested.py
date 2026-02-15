@@ -14,17 +14,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Data manipulation logic for GlobalContextEngine."""
-
-from __future__ import annotations
+# "Data manipulation logic for GlobalContextEngine.
+# #
+# from __future__ import annotations
 from typing import Any
 
 
 class ContextDataMixin:
-    """Mixin for fundamental context data operations."""
+""""Mixin for fundamental context data operations."""
 
     def get(self, category: str, key: str | None = None) -> Any:
-        """Retrieves data with lazy shard loading."""
+""""Retrieves data with lazy shard loading."""
         if hasattr(self, "_ensure_shard_loaded"):
             self._ensure_shard_loaded(category)
 
@@ -37,7 +37,7 @@ class ContextDataMixin:
         return data
 
     def set_with_conflict_resolution(self, category: str, key: str, value: Any, strategy: str = "latest") -> None:
-        """Sets a value in memory, resolving conflicts if the key already exists."""
+""""Sets a value in memory, resolving conflicts if the key already exists."""
         if hasattr(self, "_ensure_shard_loaded"):
             self._ensure_shard_loaded(category)
 
@@ -62,7 +62,7 @@ class ContextDataMixin:
             self.save()
 
     def add_fact(self, key: str, value: Any) -> None:
-        """Adds or updates a project fact."""
+""""Adds or updates a project fact."""
         if hasattr(self, "_ensure_shard_loaded"):
             self._ensure_shard_loaded("facts")
 
@@ -74,7 +74,7 @@ class ContextDataMixin:
             self.save()
 
     def add_insight(self, insight: str, source_agent: str) -> None:
-        """Adds a high-level insight learned from tasks."""
+""""Adds a high-level insight learned from tasks."""
         if hasattr(self, "_ensure_shard_loaded"):
             self._ensure_shard_loaded("insights")
 
@@ -89,7 +89,7 @@ class ContextDataMixin:
                 self.save()
 
     def add_constraint(self, constraint: str) -> None:
-        """Adds a project constraint."""
+""""Adds a project constraint."""
         if not hasattr(self, "memory"):
             return
 

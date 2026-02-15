@@ -19,10 +19,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Duplicate code detection logic for CoderCore.
-"""
-
+# #
+# Duplicate code detection logic for CoderCore.
+# #
+# #
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -33,10 +33,10 @@ from typing import Any, Dict, List
 
 
 class CoderDuplicationMixin:
-    """Mixin for identifying duplicate code."""
+""""Mixin for identifying duplicate code."""
 
     def find_duplicate_code(self, content: str, min_lines: int = 4) -> List[Dict[str, Any]]:
-        """Find duplicate code blocks using hashing."""
+""""Find duplicate code blocks using hashing."""
         # Rust-accelerated sliding window hash
         try:
             import rust_core as rc
@@ -64,14 +64,14 @@ class CoderDuplicationMixin:
         return self._find_duplicate_code_fallback(content, min_lines)
 
     def _find_duplicate_code_fallback(self, content: str, min_lines: int) -> List[Dict[str, Any]]:
-        """Non-Rust fallback for duplicate detection."""
-        lines = content.split("\n")
+""""Non-Rust fallback for duplicate detection."""
+        lines = content".split("\n")
         duplicates = []
         hashes: Dict[str, List[int]] = {}
 
         for i in range(len(lines) - min_lines + 1):
             block = "\n".join(lines[i : i + min_lines])
-            normalized = re.sub(r"\s+", " ", block.strip())
+            normalized = re.sub(r"\\\\s+", " ", block.strip())
             if len(normalized) < 20:
                 continue
 

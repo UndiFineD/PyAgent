@@ -13,9 +13,8 @@
 # limitations under the License.
 
 """
-SLA Configuration - SLAConfiguration dataclass
-
-DATE: 2026-02-12
+SLA Configuration - SLAConfiguration dataclass"""
+# DATE: 2026-02-12"""
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate to centralize SLA parameters for an improvement/task:
@@ -35,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 - Provide serialization helpers (to_dict/from_dict/JSON) and clear defaults for common SLA profiles to reduce caller boilerplate.
 - Consider immutability (frozen dataclass) or explicit mutation methods, add type-checked collections (tuple[str, ...]) and runtime type enforcement, plus comprehensive unit tests and doc examples.
 - Consider using timedelta for durations and timezone-aware handling if SLA logic later depends on business hours or calendar-awareness.
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -48,13 +47,13 @@ __version__ = VERSION
 
 @dataclass
 class SLAConfiguration:
-    """SLA configuration for improvements.
+    """SLA configuration for improve""""""ments.
 
     Attributes:
         level: SLA priority level.
         max_hours: Maximum hours to resolution.
         escalation_hours: Hours before escalation.
-        notification_emails: Emails to notify.
+        notification_emails: Emails to notify.""""""
     """
 
     level: SLALevel

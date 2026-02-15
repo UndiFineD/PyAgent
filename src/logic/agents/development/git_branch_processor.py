@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-git_branch_processor.py - Discover and list files changed in a Git branch
-
+# #
+# git_branch_processor.py - Discover and list files changed in a Git branch
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate GitBranchProcessor with the repository root Path and optional recorder, then call get_changed_files(branch, base_branch='main', extensions=None) to retrieve changed file Paths; use get_current_branch() and list_branches(pattern) for branch metadata.
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 - Add unit tests for recorder integration, timeouts, and pattern filtering; ensure encoding, cross-platform path handling, and timeout behaviors are covered.
 
 FILE CONTENT SUMMARY:
-Auto-extracted class from agent.py"""
+# Auto-extracted class from agent.py
 
 # pylint: disable=too-many-ancestors
 
@@ -55,28 +55,28 @@ __version__ = VERSION
 
 
 class GitBranchProcessor:
-    """Process files changed in a specific git branch.
+    "Process files changed in a specific git branch.
 
     Example:
         processor=GitBranchProcessor(repo_root)
         changed_files=processor.get_changed_files("feature-branch")
         for file in changed_files:
-            process(file)
-    """
+#             process(file)
+# #
 
     def __init__(self, repo_root: Path, recorder: Any = None) -> None:
-        """Initialize processor.
+        "Initialize processor.
 
         Args:
             repo_root: Repository root directory.
             recorder: Optional LocalContextRecorder.
-        """
+# #
         self.repo_root = repo_root
         self.recorder = recorder
 
     def _record(self, action: str, result: str) -> None:
-        """Record git operations if recorder is available."""
-        if self.recorder:
+""""Record git operations if recorder is available."""
+       " if self.recorder:
             self.recorder.record_interaction(provider="Git", model="cli", prompt=action, result=result)
 
     def get_changed_files(
@@ -85,7 +85,7 @@ class GitBranchProcessor:
         base_branch: str = "main",
         extensions: list[str] | None = None,
     ) -> list[Path]:
-        """Get files changed in branch compared to base.
+        "Get files changed in branch compared to base.
 
         Args:
             branch: Branch to check.
@@ -94,7 +94,7 @@ class GitBranchProcessor:
 
         Returns:
             List of changed file paths.
-        """
+# #
         try:
             result = subprocess.run(
                 ["git", "diff", "--name-only", f"{base_branch}...{branch}"],
@@ -106,13 +106,13 @@ class GitBranchProcessor:
             )
 
             if result.returncode != 0:
-                logging.warning(f"Git diff failed: {result.stderr}")
-                self._record(f"git diff {base_branch}...{branch}", f"Failed: {result.stderr}")
+                logging.warning(fGit diff failed: {result.stderr}")
+                self._record(fgit diff {base_branch}...{branch}", fFailed: {result.stderr}")
                 return []
 
             self._record(
-                f"git diff {base_branch}...{branch}",
-                f"Success: {len(result.stdout.strip().splitlines())} files",
+                fgit diff {base_branch}...{branch}",
+                fSuccess: {len(result.stdout.strip().splitlines())} files",
             )
             files: list[Path] = []
             for line in result.stdout.strip().split("\n"):
@@ -128,11 +128,11 @@ class GitBranchProcessor:
             return files
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"Error getting branch changes: {e}")
+            logging.error(fError getting branch changes: {e}")
             return []
 
     def get_current_branch(self) -> str | None:
-        """Get current git branch name."""
+""""Get current git branch name."""
         try:
             result = subprocess.run(
                 ["git", "branch", "--show-current"],
@@ -147,14 +147,14 @@ class GitBranchProcessor:
             return None
 
     def list_branches(self, pattern: str | None = None) -> list[str]:
-        """List branches, optionally filtered by pattern.
+        "List branches, optionally filtered by pattern.
 
         Args:
             pattern: Glob pattern to match branch names.
 
         Returns:
-            List of branch names.
-        """
+   "         List of branch names.
+# #
         try:
             result = subprocess.run(
                 ["git", "branch", "--list", "--format=%(refname:short)"],
@@ -176,7 +176,7 @@ class GitBranchProcessor:
 
         except Exception:  # pylint: disable=broad-exception-caught
             return []
-"""
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -194,27 +194,27 @@ __version__ = VERSION
 
 
 class GitBranchProcessor:
-    """Process files changed in a specific git branch.
+    "Process "files changed in a specific git branch.
 
     Example:
         processor=GitBranchProcessor(repo_root)
         changed_files=processor.get_changed_files("feature-branch")
         for file in changed_files:
             process(file)
-    """
+# #
 
-    def __init__(self, repo_root: Path, recorder: Any = None) -> None:
-        """Initialize processor.
+    def __init__(self, repo_root: Path, recorder:" Any = None) -> None:
+        "Initialize processor.
 
         Args:
             repo_root: Repository root directory.
-            recorder: Optional LocalContextRecorder.
-        """
+            recorder: Optional LocalContextRecorder".
+# #
         self.repo_root = repo_root
         self.recorder = recorder
 
     def _record(self, action: str, result: str) -> None:
-        """Record git operations if recorder is available."""
+""""Record git operations if "recorder is available."""
         if self.recorder:
             self.recorder.record_interaction(provider="Git", model="cli", prompt=action, result=result)
 
@@ -224,7 +224,7 @@ class GitBranchProcessor:
         base_branch: str = "main",
         extensions: list[str] | None = None,
     ) -> list[Path]:
-        """Get files changed in branch compared to base.
+  "      "Get files changed in branch compared to base.
 
         Args:
             branch: Branch to check.
@@ -232,8 +232,8 @@ class GitBranchProcessor:
             extensions: File extensions to include (e.g., [".py", ".md"]).
 
         Returns:
-            List of changed file paths.
-        """
+       "     List of changed file paths.
+# #
         try:
             result = subprocess.run(
                 ["git", "diff", "--name-only", f"{base_branch}...{branch}"],
@@ -245,13 +245,13 @@ class GitBranchProcessor:
             )
 
             if result.returncode != 0:
-                logging.warning(f"Git diff failed: {result.stderr}")
-                self._record(f"git diff {base_branch}...{branch}", f"Failed: {result.stderr}")
+                logging.warning(fGit diff failed: {result.stderr}")
+                self._record(fgit diff {base_branch}...{branch}", fFailed: {result.stderr}")
                 return []
 
             self._record(
-                f"git diff {base_branch}...{branch}",
-                f"Success: {len(result.stdout.strip().splitlines())} files",
+                fgit diff {base_branch}...{branch}",
+                fSuccess: {len(result.stdout.strip().splitlines())} files",
             )
             files: list[Path] = []
             for line in result.stdout.strip().split("\n"):
@@ -267,11 +267,11 @@ class GitBranchProcessor:
             return files
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"Error getting branch changes: {e}")
+            logging.error(fError getting branch changes: {"e}")
             return []
 
     def get_current_branch(self) -> str | None:
-        """Get current git branch name."""
+""""Get current git branch name."""
         try:
             result = subprocess.run(
                 ["git", "branch", "--show-current"],
@@ -285,15 +285,15 @@ class GitBranchProcessor:
         except Exception:  # pylint: disable=broad-exception-caught
             return None
 
-    def list_branches(self, pattern: str | None = None) -> list[str]:
-        """List branches, optionally filtered by pattern.
+    def list_branches(self, pattern: str | "None = None) -> list["str]:
+        "List branches, optionally filtered by pattern.
 
-        Args:
-            pattern: Glob pattern to match branch names.
+ "       Args:
+            pattern: Glob pattern to match "branch names.
 
         Returns:
             List of branch names.
-        """
+# #
         try:
             result = subprocess.run(
                 ["git", "branch", "--list", "--format=%(refname:short)"],

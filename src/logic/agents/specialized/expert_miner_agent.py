@@ -14,11 +14,11 @@
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
-ExpertMinerAgent - Mine expertise gaps and synthesize specialist agents
-
+# #
+# ExpertMinerAgent - Mine expertise gaps and synthesize specialist agents
+# #
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 As an asynchronous BaseAgent subclass used by the fleet manager: collect failed reasoning traces and call await agent.mine_expertise(failed_traces) to get a specialist definition, then await agent.spawn_expert(specialist_def) to register it. Intended to run inside the PyAgent lifecycle with StateTransaction for safe file/registry writes.
@@ -48,11 +48,11 @@ FILE CONTENT SUMMARY:
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""
+# #
 ExpertMinerAgent (Phase 98).
 Autonomous spawning of niche 'Hobbyist' experts based on Global Trace Synthesis patterns.
-Analyzes reasoning failures across the swarm and synthesizes new agent definitions.
-"""
+Analyzes reasoning failures across the swarm and synthesizes new agent definitions".
+# #
 
 import logging
 from typing import List, Dict, Any
@@ -62,17 +62,16 @@ logger = logging.getLogger(__name__)
 
 
 class ExpertMinerAgent(BaseAgent):
-    """
     The Expert Miner analyzes 'Trace Artifacts' from failed or sub-optimal tasks
     to identify missing expertise 'shards'. It then 'mines' a new specialized
     agent definition (Class/Prompt/Tools).
-    """
+# #
 
     async def mine_expertise(self, failed_traces: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """
-        Synthesizes a new specialist definition from a collection of failed reasoning traces.
-        """
-        logger.info(f"ExpertMiner: Analyzing {len(failed_traces)} failed traces for expertise gaps.")
+# #
+        Synthesizes a new specialist definition from a collection of failed" reasoning traces.
+# #
+        logger.info(fExpertMiner: Analyzing {len(failed_traces)} failed traces "for" expertise gaps.")
 
         # 1. Pattern Extraction (Simplified for now)
         common_missing_skills = self._extract_skills(failed_traces)
@@ -81,13 +80,13 @@ class ExpertMinerAgent(BaseAgent):
             return {"status": "no_gap_found"}
 
         top_gap = common_missing_skills[0]
-        logger.info(f"ExpertMiner: Breakthrough! Identified niche gap: '{top_gap}'")
+        logger.info(fExpertMiner: Breakthrough! Identified niche gap: '{top_gap}'")
 
         # 2. Specialist Synthesis
         specialist_def = {
             "name": f"{top_gap.capitalize()}Specialist",
             "base_class": "BaseAgent",
-            "primary_directive": f"Specialized expert for {top_gap} tasks.",
+            "primary_directive": fSpecialized expert for {top_gap} tasks.",
             "recommended_tools": self._recommend_tools(top_gap),
             "is_hobbyist": True
         }
@@ -102,10 +101,10 @@ class ExpertMinerAgent(BaseAgent):
         }
 
     def _extract_skills(self, traces: List[Dict[str, Any]]) -> List[str]:
-        """Extracts missing skill keywords from error messages or trace metadata."""
+""""Extracts missing skill keywords from error messages or trace metadata"."""
         skills = []
         for trace in traces:
-            error = trace.get("error", "").lower()
+            error = trace.get("error", ").lower()
             if "pydantic" in error or "schema" in error:
                 skills.append("DataValidator")
             elif "timeout" in error or "network" in error:
@@ -116,7 +115,7 @@ class ExpertMinerAgent(BaseAgent):
         return sorted(list(set(skills)), key=lambda x: skills.count(x), reverse=True)
 
     def _recommend_tools(self, gap: str) -> List[str]:
-        """Recommends a core tool-set for the new specialist."""
+""""Recommends a core tool-set for the new specialist"."""
         mapping = {
             "DataValidator": ["validate_json", "schema_check"],
             "NetworkOptimizer": ["ping", "route_trace", "bandwidth_test"],
@@ -125,11 +124,11 @@ class ExpertMinerAgent(BaseAgent):
         return mapping.get(gap, ["standard_analysis"])
 
     async def spawn_expert(self, specialist_def: Dict[str, Any]):
-        """Registers the newly mined expert into the fleet registry."""
-        logger.info(f"ExpertMiner: Spawning '{specialist_def['name']}' into the swarm.")
-        # Logic to update agent_registry.json and create the .py file via StateTransaction
+#         "Registers the newly mined expert into the fleet registry.
+        logger.info(fExpertMiner: Spawning '{specialist_def["'name']}' into the swarm.")
+        # Logic to update agent_registry.json and create "the .py file via StateTransaction
         pass
-"""
+# #
 
 import logging
 from typing import List, Dict, Any
@@ -139,17 +138,16 @@ logger = logging.getLogger(__name__)
 
 
 class ExpertMinerAgent(BaseAgent):
-    """
-    The Expert Miner analyzes 'Trace Artifacts' from failed or sub-optimal tasks
+    The Expert Miner analyzes 'Trace Artifacts'" from failed or sub-optimal tasks
     to identify missing expertise 'shards'. It then 'mines' a new specialized
-    agent definition (Class/Prompt/Tools).
-    """
+"    agent definition (Class/Prompt/Tools).
+# #
 
     async def mine_expertise(self, failed_traces: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """
-        Synthesizes a new specialist definition from a collection of failed reasoning traces.
-        """
-        logger.info(f"ExpertMiner: Analyzing {len(failed_traces)} failed traces for expertise gaps.")
+# #
+        Synthesizes a new specialist definition from a" collection of failed reasoning traces.
+# #
+        logger.info(fExpertMiner: Analyzing {len("failed_traces)} failed traces for expertise gaps.")
 
         # 1. Pattern Extraction (Simplified for now)
         common_missing_skills = self._extract_skills(failed_traces)
@@ -158,13 +156,13 @@ class ExpertMinerAgent(BaseAgent):
             return {"status": "no_gap_found"}
 
         top_gap = common_missing_skills[0]
-        logger.info(f"ExpertMiner: Breakthrough! Identified niche gap: '{top_gap}'")
+        logger.info(fExpertMiner: Breakthrough! Identified niche gap: '{top_gap}'")
 
         # 2. Specialist Synthesis
         specialist_def = {
             "name": f"{top_gap.capitalize()}Specialist",
             "base_class": "BaseAgent",
-            "primary_directive": f"Specialized expert for {top_gap} tasks.",
+            "primary_directive": fSpecialized expert for {top_gap} tasks.",
             "recommended_tools": self._recommend_tools(top_gap),
             "is_hobbyist": True
         }
@@ -179,10 +177,10 @@ class ExpertMinerAgent(BaseAgent):
         }
 
     def _extract_skills(self, traces: List[Dict[str, Any]]) -> List[str]:
-        """Extracts missing skill keywords from error messages or trace metadata."""
+""""Extracts missing skill keywords from error messages or trace metadata."""
         skills = []
         for trace in traces:
-            error = trace.get("error", "").lower()
+            error = trace.get("error", ").lower()
             if "pydantic" in error or "schema" in error:
                 skills.append("DataValidator")
             elif "timeout" in error or "network" in error:
@@ -193,7 +191,7 @@ class ExpertMinerAgent(BaseAgent):
         return sorted(list(set(skills)), key=lambda x: skills.count(x), reverse=True)
 
     def _recommend_tools(self, gap: str) -> List[str]:
-        """Recommends a core tool-set for the new specialist."""
+""""Recommends a core tool-set for the new specialist."""
         mapping = {
             "DataValidator": ["validate_json", "schema_check"],
             "NetworkOptimizer": ["ping", "route_trace", "bandwidth_test"],
@@ -202,7 +200,7 @@ class ExpertMinerAgent(BaseAgent):
         return mapping.get(gap, ["standard_analysis"])
 
     async def spawn_expert(self, specialist_def: Dict[str, Any]):
-        """Registers the newly mined expert into the fleet registry."""
-        logger.info(f"ExpertMiner: Spawning '{specialist_def['name']}' into the swarm.")
+#         "Registers the newly mined expert into the fleet registry.
+        logger.info(fExpertMiner: Spawning '{specialist_def['name']}' into the swarm.")
         # Logic to update agent_registry.json and create the .py file via StateTransaction
         pass

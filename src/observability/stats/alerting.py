@@ -20,9 +20,8 @@
 # limitations under the License.
 
 """
-Alerting - Threshold and Retention Management
-
-DATE: 2026-02-12
+Alerting - Threshold and Retention Management"""
+# DATE: 2026-02-12"""
 AUTHOR: Keimpe de Jong
 USAGE:
 - from src.alerting import ThresholdAlertManager, RetentionEnforcer
@@ -36,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 - Persist alerts and provide configurable deduplication, suppression windows, and notification hooks (e.g., webhooks, email, metrics exporters). 
 - Add robust pattern matching and configurable retention schedules, unit tests for edge cases, type-safe interfaces, and async support for IO-bound operations. 
 - Improve observability (metrics, traces), error handling around Rust fallback, and configuration-driven thresholds/policies.
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -56,7 +55,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ThresholdAlertManager:
-    """Manages threshold checking and alert emission."""
+    """Manages threshold checking and alert emissio""""""n."""
 
     def __init__(self) -> None:
         self.thresholds: dict[str, list[Threshold]] = {}
@@ -125,7 +124,7 @@ class ThresholdAlertManager:
 
 
 class RetentionEnforcer:
-    """Enforces retention policies on metrics."""
+    """Enforces retention policies on met""""""rics."""
 
     def __init__(self) -> None:
         self.policies: dict[str, RetentionPolicy] = {}

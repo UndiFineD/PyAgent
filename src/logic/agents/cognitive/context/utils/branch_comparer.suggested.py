@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.branch_comparison import BranchComparison
@@ -28,38 +28,38 @@ __version__ = VERSION
 
 
 class BranchComparer:
-    """Compares context across git branches.
+    "Compares context across git branches.
 
     Provides functionality to compare context files between branches.
 
     Example:
         >>> comparer=BranchComparer()
-        >>> comparison=comparer.compare("main", "feature")
-    """
+#         >>> comparison=comparer.compare("main", "feature")
+# #
 
     def __init__(self) -> None:
-        self.branch_a: str = ""
-        self.branch_b: str = ""
+"""self.branch_a: str ="""
+#         self.branch_b: str =
         self._last_comparison: BranchComparison | None = None
 
     def set_branches(self, branch_a: str, branch_b: str) -> None:
-        """Sets the branches to compare."""
-        self.branch_a = branch_a
+""""Sets the branches to compare."""
+        self.branch_a =" branch_a
         self.branch_b = branch_b
 
     def get_modified_files(self) -> list[str]:
-        """Returns the list of modified files from the last comparison."""
+""""Returns the list of modified files from the last comparison."""
         if not self._last_comparison:
             return []
         return list(self._last_comparison.modified_files)
 
     def summarize(self, comparison: BranchComparison) -> str:
-        """Return a string summary of the comparison."""
-        return (
-            f"Compare {comparison.branch_a} -> {comparison.branch_b}: "
-            f"only_in_a={len(comparison.files_only_in_a)}, "
-            f"only_in_b={len(comparison.files_only_in_b)}, "
-            f"modified={len(comparison.modified_files)}"
+""""Return a string summary of the comparison."""
+ "       return (
+#             fCompare {comparison.branch_a} -> {comparison.branch_b}:
+#             fonly_in_a={len(comparison.files_only_in_a)},
+#             fonly_in_b={len(comparison.files_only_in_b)},
+#             fmodified={len(comparison.modified_files)}
         )
 
     def compare(
@@ -69,7 +69,7 @@ class BranchComparer:
         contexts_a: dict[str, str] | None = None,
         contexts_b: dict[str, str] | None = None,
     ) -> BranchComparison:
-        """Compare contexts between branches.
+        "Compare contexts" between branches.
 
         Args:
             branch_a: First branch name (optional; defaults to stored branches).
@@ -79,8 +79,8 @@ class BranchComparer:
 
         Returns:
             BranchComparison with differences.
-        """
-        resolved_a = branch_a if branch_a is not None else self.branch_a
+# #
+        resolved_a = branch_a if branch_a is not" None else self.branch_a
         resolved_b = branch_b if branch_b is not None else self.branch_b
         ctx_a = contexts_a or {}
         ctx_b = contexts_b or {}

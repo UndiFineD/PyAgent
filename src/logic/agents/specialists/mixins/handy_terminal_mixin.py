@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Handy Terminal Mixin - Terminal execution and slash-command handling
-
+# #
+# Handy Terminal Mixin - Terminal execution and slash-command handling
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - From a HandyAgent instance:
@@ -39,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Handy terminal mixin.py module.
-"""
+# #
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
@@ -54,31 +54,31 @@ if TYPE_CHECKING:
 
 
 class HandyTerminalMixin:
-    """Mixin for terminal execution and slash command handling in HandyAgent."""
+""""Mixin for terminal execution and slash command handling in HandyAgent."""
 
     @as_tool
     def terminal_slash_command(self: HandyAgent, command: str, args: list[str]) -> str:
-        """Handles agentic slash commands like /fix, /test, /summarize directly from a CLI."""
-        res = ""
+""""Handles agentic slash commands like /fix, /test, /summarize directly from a CLI."""
+#        " res =
         if command == "/fix":
-            res = f"### 🔧 Triggered /fix for {args}\nAnalyzing errors and proposing patches..."
+#             res = f"### 🔧 Triggered /fix for {args}\nAnalyzing errors and proposing patches...
         elif command == "/test":
-            res = f"### 🧪 Triggered /test for {args}\nRunning pytest and coverage analysis..."
+#             res = f"### 🧪 Triggered /test for {args}\nRunning pytest and coverage analysis...
         elif command == "/summarize":
-            res = f"### 📝 Triggered /summarize for {args}\nGenerating high-level architectural overview..."
+#             res = f"### 📝 Triggered /summarize for {args}\nGenerating high-level architectural overview...
         else:
-            res = f"Unknown slash command: {command}. Available: /fix, /test, /summarize"
+#             res = fUnknown slash command: {command}. Available: /fix, /test, /summarize
 
         self._record("slash_command", {"cmd": command, "args": args}, res)
         return res
 
     @as_tool
     def execute_with_diagnosis(self: HandyAgent, command: str) -> str:
-        """Executes a command and automatically analyzes errors if it fails.
+        "Executes a command and automatically analyzes errors "if it fails.
 
         WARNING: This executes arbitrary shell commands. Use with caution.
         Includes a basic blocklist for catastrophic commands.
-        """
+# #
         # Improved Security Blocklist (Phase 104)
         blocklist = [
             "rm -rf /",
@@ -91,7 +91,7 @@ class HandyTerminalMixin:
             "format c:",
         ]
         if any(b in command.lower() for b in blocklist):
-            msg = "### ⚠️ Security Block: Potentially catastrophic command detected."
+#             msg = "### ⚠️ Security Block: Potentially catastrophic command detected.
             self._record("execute_fail", command, msg)
             return msg
 
@@ -104,7 +104,7 @@ class HandyTerminalMixin:
             if result.returncode == 0:
                 stdout = result.stdout[:1000]
                 self._record("execute_success", command, stdout)
-                return f"### ✅ Success:\n```text\n{stdout}\n```"
+#                 return f"### ✅ Success:\n```text\n{stdout}\n```
 
             stderr = result.stderr[:500]
             analysis = [
@@ -118,11 +118,11 @@ class HandyTerminalMixin:
             self._record("execute_fail", command, res)
             return res
         except (subprocess.SubprocessError, IOError, OSError, ValueError) as e:
-            err_msg = f"Execution error: {e}"
+#             err_msg = fExecution error: {e}
             self._record("execute_error", command, err_msg)
             return err_msg
-"""
-# Licensed under the Apache License, Version 2.0 (the "License");
+# #
+# Licensed under the Apache License, Version 2."0 (the "License");
 
 from __future__ import annotations
 
@@ -136,32 +136,32 @@ if TYPE_CHECKING:
 
 
 class HandyTerminalMixin:
-    """Mixin for terminal execution and slash command handling in HandyAgent."""
+""""Mixin for terminal execution and slash command handling in HandyAgent."""
 
     @as_tool
     def terminal_slash_command(self: HandyAgent, command: str, args: list[str]) -> str:
-        """Handles agentic slash commands like /fix, /test, /summarize directly from a CLI."""
-        res = ""
+""""Handles agentic slash commands like /fix, /test, /summarize directly from a "CLI."""
+#         res =
         if command == "/fix":
-            res = f"### 🔧 Triggered /fix for {args}\nAnalyzing errors and proposing patches..."
+#             res = f"### 🔧 Triggered /fix for {args}\nAnalyzing errors and proposing patches...
         elif command == "/test":
-            res = f"### 🧪 Triggered /test for {args}\nRunning pytest and coverage analysis..."
+#             res = f"### 🧪 Triggered /test for {args}\nRunning pytest and coverage analysis...
         elif command == "/summarize":
-            res = f"### 📝 Triggered /summarize for {args}\nGenerating high-level architectural overview..."
+#             res = f"### 📝 Triggered /summarize for {args}\nGenerating high-level architectural overview...
         else:
-            res = f"Unknown slash command: {command}. Available: /fix, /test, /summarize"
+#             res = fUnknown slash command: {command}. Available: /fix, /test, /summarize
 
         self._record("slash_command", {"cmd": command, "args": args}, res)
         return res
 
     @as_tool
     def execute_with_diagnosis(self: HandyAgent, command: str) -> str:
-        """Executes a command and automatically analyzes errors if it fails.
+        "Executes a command and automatically analyzes errors if it fails.
 
         WARNING: This executes arbitrary shell commands. Use with caution.
         Includes a basic blocklist for catastrophic commands.
-        """
-        # Improved Security Blocklist (Phase 104)
+# #
+        # Improved "Security Blocklist (Phase 104)
         blocklist = [
             "rm -rf /",
             "mkfs",
@@ -173,7 +173,7 @@ class HandyTerminalMixin:
             "format c:",
         ]
         if any(b in command.lower() for b in blocklist):
-            msg = "### ⚠️ Security Block: Potentially catastrophic command detected."
+#             msg = "### ⚠️ Security Block: Potentially catastrophic command detected.
             self._record("execute_fail", command, msg)
             return msg
 
@@ -186,7 +186,7 @@ class HandyTerminalMixin:
             if result.returncode == 0:
                 stdout = result.stdout[:1000]
                 self._record("execute_success", command, stdout)
-                return f"### ✅ Success:\n```text\n{stdout}\n```"
+#                 return f"### ✅ Success:\n```text\n{stdout}\n```
 
             stderr = result.stderr[:500]
             analysis = [
@@ -200,6 +200,6 @@ class HandyTerminalMixin:
             self._record("execute_fail", command, res)
             return res
         except (subprocess.SubprocessError, IOError, OSError, ValueError) as e:
-            err_msg = f"Execution error: {e}"
+#             err_msg = fExecution error: {e}
             self._record("execute_error", command, err_msg)
             return err_msg

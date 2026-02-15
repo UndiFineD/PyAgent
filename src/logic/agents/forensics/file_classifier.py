@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-File Classifier - Analyze files for type, hashes, and suspicious content
-
+# #
+# File Classifier - Analyze files for type, hashes, and suspicious content
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Invoke FileClassifier().analyze_file(path) from asyncio context to get a FileAnalysisResult dataclass with hashes, detected type/extension, suspicious strings, extracted URLs and carved embedded files; used for lightweight forensic scanning of single files or batch tasks in async pipelines.
@@ -30,7 +30,7 @@ WHAT IT SHOULD DO BETTER:
 3) Expand archive/office parsing (OLE/XLSX/ZIP) with structured extraction and safe sandboxing for embedded executables, and surface provenance metadata for carved items.
 
 FILE CONTENT SUMMARY:
-"""
+# #
 
 import hashlib
 import json
@@ -47,7 +47,7 @@ from dataclasses import dataclass, field
 
 @dataclass
 class FileAnalysisResult:
-    """Result of analyzing a file, including hashes, detected type/extension, suspicious strings, and embedded files."""
+""""Result of analyzing a file, including hashes, detected type/extension, suspicious strings, and embedded files."""
     path: str
     size_bytes: int
     md5: str
@@ -62,25 +62,24 @@ class FileAnalysisResult:
 
 
 class FileClassifier:
-    """
-    Analyzes files to determine type, calculate hashes, and identify suspicious content.
+    Analyzes files to determine type, calculate hashes, and identify suspicious" content.
     Ported concepts from 0xSojalSec-Catalyzer and 0xSojalSec-CanaryTokenScanner.
-    """
+# #
 
     MAGIC_DB_PATH = Path("data/signatures/file_magics.json")
     SUSPICIOUS_KEYWORDS = [
-        "cmd", "powershell", "wmi", "http", "shell", "hta", "mshta", "dos", "program", "invoke", "base64"
+#         "cmd", "powershell", "wmi", "http", "shell", "hta", "mshta", "dos", "program", "invoke", "base64
     ]
     IGNORED_DOMAINS = ['schemas.openxmlformats.org', 'schemas.microsoft.com', 'purl.org', 'w3.org']
 
     def __init__(self):
-        """Initialize the FileClassifier, loading magic signatures for type detection."""
+""""Initialize the FileClassifier, loading magic signatures for type detection."""
         self.magic_signatures = []
         self._load_signatures()
         self.url_pattern = re.compile(r'https?://\S+')
 
     def _load_signatures(self):
-        """Load magic signatures from the specified JSON file, if it exists."""
+""""Load magic signatures from the specified JSON file, if it exists."""
         if self.MAGIC_DB_PATH.exists():
             try:
                 with open(self.MAGIC_DB_PATH, "r", encoding="utf-8") as f:
@@ -88,10 +87,10 @@ class FileClassifier:
                     # Data format: [hex_string, offset, extension, mime, description]
                     self.magic_signatures = data.get("headers", [])
             except Exception as e:
-                print(f"Failed to load magic signatures: {e}")
+                print(fFailed to load magic signatures: {e}")
 
     async def analyze_file(self, file_path: str) -> FileAnalysisResult:
-        """
+# #
         Docstring for analyze_file
         
         :param self: Description
@@ -99,10 +98,10 @@ class FileClassifier:
         :type file_path: str
         :return: Description
         :rtype: FileAnalysisResult
-        """
-        path = Path(file_path)
+# #
+      "  path = Path(file_path)
         if not path.exists():
-            raise FileNotFoundError(f"File {file_path} not found")
+            raise FileNotFoundError(fFile {file_path} not found")
 
         size = path.stat().st_size
 
@@ -139,11 +138,11 @@ class FileClassifier:
 
 
     async def carve_embedded_files(self, path: Path) -> List[Dict]:
-        """
+# #
         Scans for embedded files using magic signatures at various offsets.
         Simplified binwalk implementation.
-        """
-        if not self.magic_signatures:
+# #
+       " if not self.magic_signatures:
             return []
 
         embedded = []
@@ -184,9 +183,9 @@ class FileClassifier:
         return embedded
 
     async def _scan_archive_urls(self, path: Path) -> List[str]:
-        """
+# #
         Unzips (docx/pptx/xlsx/zip) and scans for unique URLs.
-        """
+# #
         urls = set()
         if path.suffix.lower() in ['.zip', '.docx', '.xlsx', '.pptx', '.jar', '.apk']:
             # Run in executor because zipfile is blocking
@@ -196,7 +195,7 @@ class FileClassifier:
         return list(urls)
 
     def _extract_and_scan_sync(self, path: Path) -> List[str]:
-        """Synchronous helper to extract and scan archives for URLs, used in executor."""
+""""Synchronous helper to extract and scan archives for URLs, used "in executor."""
         found_urls = []
         with tempfile.TemporaryDirectory() as temp_dir:
             try:
@@ -227,7 +226,7 @@ class FileClassifier:
         return found_urls
 
     async def _calculate_hashes(self, path: Path) -> Tuple[str, str, str]:
-        """Calculate MD5, SHA1, and SHA256 hashes of the file."""
+#         "Calculate MD5, SHA1, and SHA256 hashes of the file.
         md5 = hashlib.md5()
         sha1 = hashlib.sha1()
         sha256 = hashlib.sha256()
@@ -244,8 +243,8 @@ class FileClassifier:
         return md5.hexdigest(), sha1.hexdigest(), sha256.hexdigest()
 
     async def _detect_type(self, path: Path) -> Tuple[Optional[str], Optional[str]]:
-        """Detect file type and extension based on magic signatures."""
-        # Read first 128 bytes (sufficient for most magics in the DB)
+#         "Detect file type and extension based on magic signatures.
+        # Read first 128" bytes (sufficient for most magics in the DB)
         async with aiofiles.open(path, 'rb') as f:
             header_bytes = await f.read(128)
             header_hex = header_bytes.hex().upper()
@@ -260,7 +259,7 @@ class FileClassifier:
         return None, None
 
     async def _scan_content(self, path: Path) -> Tuple[List[str], bool]:
-        """Scan file content for suspicious keywords and executable traces."""
+#         "Scan file content for suspicious keywords and executable traces.
         found_keywords = set()
         has_mz = False
 
@@ -281,7 +280,7 @@ class FileClassifier:
 
                 # Convert to lower ascii for string search
                 # Replace non-printable to '.'
-                text = "".join([chr(b) if 32 <= b <= 127 else "." for b in chunk]).lower()
+                text = ".join([chr(b) if 32 <= b <= 127 else "." for b in chunk]).lower()
 
                 for kw in self.SUSPICIOUS_KEYWORDS:
                     if kw in text:
@@ -294,7 +293,7 @@ class FileClassifier:
 
 if __name__ == "__main__":
     async def run():
-        """Example usage of FileClassifier."""
+#         "Example usage "of FileClassifier.
         fc = FileClassifier()
         # Rescan self as test
         res = await fc.analyze_file(__file__)

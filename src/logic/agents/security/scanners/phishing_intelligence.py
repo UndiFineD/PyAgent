@@ -19,29 +19,45 @@ from typing import List, Dict, Optional, Any
 
 
 class PhishingIntelligence:
-    """Intelligence engine for phishing site detection and simulated phishing."""
-
-    def __init__(self, session: Optional[aiohttp.ClientSession] = None):
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+""""Intelligence engine for phishing site detection and simulated phishing."""
+# #
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # #     def __init__(self, session: Optional[aiohttp.ClientSession] = None):
         self.session = session
-        self.phisherman_api = "https://api.phisherman.gg/v2/domains/check/"
+# [BATCHFIX] Commented metadata/non-Python
+# #         self.phisherman_api = "https://api.phisherman.gg/v2/domains/check/"  # [BATCHFIX] closed string
 
-    async def check_domain(self, domain: str) -> Dict[str, Any]:
-        """Check if a domain is a known phishing site using Phisherman."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     async def check_domain(self, domain: str) -> Dict[str, Any]:
+# [BATCHFIX] Commented metadata/non-Python
+# #         "Check if a domain is a known phishing site using Phisherman."  # [BATCHFIX] closed string
         if not self.session:
             self.session = aiohttp.ClientSession()
 
         try:
             async with self.session.get(f"{self.phisherman_api}{domain}", timeout=10) as resp:
                 if resp.status == 200:
-                    data: Dict[str, Any] = await resp.json()
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                     data: Dict[str, Any] = await resp.json()
                     return data
         except Exception:
             pass
         return {}
 
     @staticmethod
-    def get_phishing_templates() -> Dict[str, str]:
-        """Common phishing templates for research/simulation."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_phishing_templates() -> Dict[str, str]:
+""""Common phishing templates for research/simulation."""
         return {
             "microsoft_365": "https://login.microsoftonline.com.common-auth.io/login",
             "google_workspace": "https://accounts.google.com.security-check.net/ServiceLogin",
@@ -50,9 +66,14 @@ class PhishingIntelligence:
         }
 
     @staticmethod
-    def get_phishing_evasion_techniques() -> List[str]:
-        """Techniques used to hide phishing pages from scanners."""
-        return [
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_phishing_evasion_techniques() -> List[str]:
+""""Techniques used to hide phishing pages from scanners."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#        " return ["  # [BATCHFIX] closed string
             "User-Agent filtering (block common scanner bots)",
             "IP Geofencing (allow only target country)",
             "Browser fingerprinting (allow only real browsers)",

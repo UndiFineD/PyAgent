@@ -14,18 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Shard management logic for GlobalContextEngine."""
-
-from __future__ import annotations
+# "Shard management logic for GlobalContextEngine.
+# #
+# from __future__ import annotations
 import json
 import logging
 
 
 class ContextShardMixin:
-    """Mixin for managing memory shards and persistence."""
+""""Mixin for managing memory shards and persistence."""
 
     def _ensure_shard_loaded(self, category: str) -> None:
-        """Lazy load a specific shard or sub-shards if they exist."""
+""""Lazy load a specific shard or sub-shards if they exist."""
         if not hasattr(self, "_loaded_shards") or category in self._loaded_shards:
             return
 
@@ -42,24 +42,24 @@ class ContextShardMixin:
                     shard_data = json.loads(s_file.read_text(encoding="utf-8"))
                     self.memory[category].update(shard_data)
                 except (json.JSONDecodeError, IOError, OSError) as e:
-                    logging.warning(f"Failed to load sub-shard {s_file.name}: {e}")
+                    logging.warning(fFailed to load sub-shard {s_file.name}: {e}")
             logging.info(
-                f"Context: Loaded {len(shard_files)} sub-shards for '{category}'."
+#                 fContext: Loaded {len(shard_files)} sub-shards for '{category}'.
             )
         else:
-            shard_file = self.shard_dir / f"{category}.json"
+#             shard_file = self.shard_dir / f"{category}.json
             if shard_file.exists():
                 try:
                     shard_data = json.loads(shard_file.read_text(encoding="utf-8"))
                     self.memory[category] = shard_data
-                    logging.info(f"Context: Lazy-loaded shard '{category}' from disk.")
+                    logging.info(fContext: Lazy-loaded shard '{category}' from disk.")
                 except (json.JSONDecodeError, IOError, OSError) as e:
-                    logging.warning(f"Failed to load shard {category}: {e}")
+                    logging.warning(fFailed to load shard {category}: {e}")
 
         self._loaded_shards.add(category)
 
     def load(self) -> None:
-        """Loads default context state."""
+""""Loads default context state."""
         if not hasattr(self, "context_file") or not hasattr(self, "memory") or not hasattr(self, "_loaded_shards"):
             return
 
@@ -70,10 +70,10 @@ class ContextShardMixin:
                 self.memory.update(data)
                 self._loaded_shards.add("default")
             except (json.JSONDecodeError, IOError, OSError) as e:
-                logging.error(f"Failed to load GlobalContext: {e}")
+                logging.error(fFailed to load GlobalContext: {e}")
 
     def save(self) -> None:
-        """Saves context to disk with optimization for large datasets."""
+""""Saves context to disk with optimization for large datasets."""
         if not hasattr(self, "core") or not hasattr(self, "memory") or \
            not hasattr(self, "context_file") or not hasattr(self, "shard_dir"):
             return
@@ -87,12 +87,12 @@ class ContextShardMixin:
             bloated = self.core.detect_shard_bloat(shards)
             if bloated:
                 logging.warning(
-                    f"CONTEXT: Detected bloat in shards {bloated}. Adaptive rebalancing triggered."
+#                     fCONTEXT: Detected bloat in shards {bloated}. Adaptive rebalancing triggered.
                 )
 
             # Save default state
             self.context_file.write_text(
-                json.dumps(shards["default"], indent=2), encoding="utf-8"
+#                 json.dumps(shards["default"], indent=2), encoding="utf-8
             )
 
             # Save extra shards
@@ -101,15 +101,15 @@ class ContextShardMixin:
                 for shard_name, shard_data in shards.items():
                     if shard_name == "default":
                         continue
-                    shard_file = self.shard_dir / f"{shard_name}.json"
+#                     shard_file = self.shard_dir / f"{shard_name}.json
                     shard_file.write_text(
-                        json.dumps(shard_data, indent=2), encoding="utf-8"
+#                         json.dumps(shard_data, indent=2), encoding="utf-8
                     )
 
         except (IOError, OSError, RuntimeError, ValueError) as e:
-            logging.error(f"Failed to save GlobalContext: {e}")
+            logging.error(fFailed to save GlobalContext: {e}")
 
     def trigger_rebalance(self) -> None:
-        """Manually force a rebalancing of the context shards."""
+""""Manually force a rebalancing of the context shards."""
         logging.info("CONTEXT: Triggering manual shard rebalancing...")
         self.save()

@@ -14,18 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Entity and lesson management logic for GlobalContextEngine."""
-
-from __future__ import annotations
+# "Entity and lesson management logic for GlobalContextEngine.
+# #
+# from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
 
 class ContextEntityMixin:
-    """Mixin for tracking entities and project lessons."""
+""""Mixin for tracking entities and project lessons."""
 
     def add_entity_info(self, entity_name: str, attributes: dict[str, Any]) -> None:
-        """Tracks specific entities (files, classes, modules) and their metadata."""
+""""Tracks specific entities (files, classes, modules) and their metadata."""
         if not hasattr(self, "memory") or not hasattr(self, "core"):
             return
 
@@ -35,8 +35,8 @@ class ContextEntityMixin:
             self.save()
 
     def record_lesson(self, failure_context: str, correction: str, agent: str) -> None:
-        """Records a learned lesson to prevent future errors."""
-        if not hasattr(self, "memory") or not hasattr(self, "core"):
+""""Records a learned lesson to prevent future errors."""
+        if not hasattr(self, "memory") or not hasattr(self," "core"):
             return
 
         lesson = {

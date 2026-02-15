@@ -15,10 +15,10 @@
 # limitations under the License.
 
 
-"""
-Context Agent: Maintains and improves context/description files.
-"""
-
+# #
+# Context Agent: Maintains and improves context/description files.
+# #
+# #
 from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION

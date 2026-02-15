@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""Refactoring advice engine for Cognitive agents.
-
+# "Refactoring advice engine for Cognitive agents.
+# #
 This module analyzes agent contexts to identify potential refactoring
 opportunities and suggestions, leveraging Rust acceleration when available.
-"""
+# #
 
 from __future__ import annotations
 import re
@@ -41,31 +41,31 @@ __version__ = VERSION
 
 
 class RefactoringAdvisor:
-    """Suggests refactoring based on context analysis.
+    "Suggests refactoring based on context analysis.
 
     Analyzes context to suggest code refactoring opportunities.
 
     Example:
         >>> advisor = RefactoringAdvisor()
-        >>> suggestions = advisor.analyze(contexts)
-    """
+#         >>> suggestions = advisor.analyze(contexts)
+# #
 
     def __init__(self) -> None:
-        """Initialize refactoring advisor."""
-        self.patterns: dict[str, dict[str, str]] = {}
+""""Initialize refactoring advisor."""
+        self.patterns: dict[str, dict[str", str]] = {}
 
     def add_pattern(self, name: str, pattern: str, description: str) -> None:
-        """Add a custom refactoring pattern.
+        "Add a custom refactoring pattern.
 
         Args:
             name: Pattern identifier.
             pattern: Regex pattern to search for.
             description: Human-readable suggestion description.
-        """
+# #
         self.patterns[name] = {"pattern": pattern, "description": description}
 
     def analyze(self, contexts: Any) -> list[RefactoringSuggestion]:
-        """Analyze contexts for refactoring opportunities.
+        "Analyze contexts for refactoring opportunities.
 
         Args:
             contexts: Either a single context string or a dictionary of
@@ -73,7 +73,7 @@ class RefactoringAdvisor:
 
         Returns:
             List of refactoring suggestions.
-        """
+# #
         context_map: dict[str, str]
         if isinstance(contexts, str):
             context_map = {"inline": contexts}
@@ -95,7 +95,7 @@ class RefactoringAdvisor:
                 suggestions.append(
                     RefactoringSuggestion(
                         suggestion_type=name,
-                        description=spec.get("description", ""),
+                        description=spec.get("description", "),
                         affected_files=[path],
                         estimated_impact="low",
                     )
@@ -108,7 +108,7 @@ class RefactoringAdvisor:
                             suggestions.append(
                                 RefactoringSuggestion(
                                     suggestion_type=name,
-                                    description=spec.get("description", ""),
+                                    description=spec.get("description", "),
                                     affected_files=[path],
                                     estimated_impact="low",
                                 )
@@ -120,7 +120,7 @@ class RefactoringAdvisor:
         # Look for duplicate descriptions (indicating code duplication)
         descriptions: dict[str, list[str]] = {}
         for path, content in context_map.items():
-            purpose = re.search(r"##\s*Purpose\s*\n(.+?)(?=##|\Z)", content, re.DOTALL)
+            purpose = re.search(r"##\\\\s*Purpose\\\\s*\n(.+?)(?=##|\Z)", content, re.DOTALL)
             if purpose:
                 desc = purpose.group(1).strip()[:100]
                 if desc not in descriptions:
@@ -131,7 +131,7 @@ class RefactoringAdvisor:
                 suggestions.append(
                     RefactoringSuggestion(
                         suggestion_type="extract_common",
-                        description=f"Similar purpose found in {len(files)} files",
+                        description=fSimilar purpose found in {len(files)} files",
                         affected_files=files,
                         estimated_impact="medium",
                     )
@@ -139,14 +139,14 @@ class RefactoringAdvisor:
         return suggestions
 
     def prioritize(self, suggestions: list[RefactoringSuggestion]) -> list[RefactoringSuggestion]:
-        """Prioritize refactoring suggestions.
+        "Prioritize refactoring suggestions.
 
         Args:
             suggestions: Suggestions to prioritize.
 
         Returns:
             Suggestions sorted by estimated impact.
-        """
+# #
         impact_rank = {"high": 0, "medium": 1, "low": 2}
 
         def rank(s: RefactoringSuggestion) -> int:

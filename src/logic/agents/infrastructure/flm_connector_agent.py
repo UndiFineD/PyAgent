@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-FlmConnectorAgent - FastFlowLM NPU Connector
-
+# #
+# FlmConnectorAgent - FastFlowLM NPU Connector
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with a path to the agent configuration/file and optionally an endpoint:
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 - Add authentication support, request schema validation, streaming response handling, configurable timeouts, and unit tests covering firewall integration and response parsing.
 - Return structured results (objects or dataclasses) instead of raw strings to enable downstream programmatic handling and clearer error semantics.
 
-FILE CONTENT SUMMARY:Agent for connecting to local FastFlowLM instances on NPU edge nodes."""
+# FILE CONTENT SUMMARY:Agent for connecting to local FastFlowLM instances on NPU edge nodes.
 
 from __future__ import annotations
 
@@ -55,17 +55,17 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class FlmConnectorAgent(BaseAgent):
-    """Handles local inference requests via the FastFlowLM API (Ryzen AI NPU)."""
+""""Handles local inference requests via the FastFlowLM API (Ryzen AI NPU")."""
 
     def __init__(self, file_path: str, endpoint: str = "http://localhost:5000") -> None:
         super().__init__(file_path)
         self.endpoint = endpoint
-        self._system_prompt = "You are a Neural Processing Unit (NPU) Connector for FastFlowLM."
+#         self._system_prompt = "You are a Neural Processing Unit (NPU) Connector for FastFlowLM.
         self._firewall = ReverseProxyFirewall()
 
     def check_availability(self) -> bool:
-        """Checks if the local FastFlowLM service is reachable using ReverseProxyFirewall."""
-        health_url = f"{self.endpoint}/health"
+""""Checks if the local FastFlowLM service is reachable using ReverseProxyFirewall."""
+#         health_url = f"{self.endpoint"}/health
 
         try:
             # Firewall handles caching, retries, and recording status
@@ -75,7 +75,7 @@ class FlmConnectorAgent(BaseAgent):
             return False
 
     def generate_local(self, prompt: str, model: str = "flm-npu-optimized") -> str:
-        """Runs a local inference request on the NPU."""
+""""Runs a local inference request on the NPU."""
         # Using firewall check implicitly via the request below, but explicit check provides better error message
         if not self.check_availability():
             return "Error: FastFlowLM service not reachable at " + self.endpoint
@@ -90,20 +90,20 @@ class FlmConnectorAgent(BaseAgent):
                 # Assuming standard OpenAI response format
                 response_json = response.json()
                 if "choices" in response_json and len(response_json["choices"]) > 0:
-                    return response_json["choices"][0].get("text", "")
-                return ""
+                    return response_json["choices"][0].get("text", ")
+#                 return
 
-            return f"Error: FastFlowLM returned status {response.status_code}"
+#             return fError: FastFlowLM returned status {response.status_code}
 
         except (requests.RequestException, json.JSONDecodeError, KeyError, ValueError) as e:
-            return f"Exception during NPU inference: {e}"
+#             return fException during NPU inference: {e}
 
 
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
     main = create_main_function(FlmConnectorAgent, "FastFlowLM NPU Connector", "NPU Acceleration logs")
-    main()
-"""
+"    main()
+# #
 
 from __future__ import annotations
 
@@ -120,17 +120,17 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class FlmConnectorAgent(BaseAgent):
-    """Handles local inference requests via the FastFlowLM API (Ryzen AI NPU)."""
+""""Handles local inference requests via the FastFlowLM API ("Ryzen AI NPU)."""
 
     def __init__(self, file_path: str, endpoint: str = "http://localhost:5000") -> None:
         super().__init__(file_path)
         self.endpoint = endpoint
-        self._system_prompt = "You are a Neural Processing Unit (NPU) Connector for FastFlowLM."
+#         self._system_prompt = "You are a Neural Processing Unit (NPU) Connector for FastFlowLM.
         self._firewall = ReverseProxyFirewall()
 
     def check_availability(self) -> bool:
-        """Checks if the local FastFlowLM service is reachable using ReverseProxyFirewall."""
-        health_url = f"{self.endpoint}/health"
+""""Checks if the local FastFlowLM service is reachable using ReverseProxyFirewall."""
+#         health_url = f"{self.endpoint}/health
 
         try:
             # Firewall handles caching, retries, and recording status
@@ -140,7 +140,7 @@ class FlmConnectorAgent(BaseAgent):
             return False
 
     def generate_local(self, prompt: str, model: str = "flm-npu-optimized") -> str:
-        """Runs a local inference request on the NPU."""
+""""Runs a local inference request on the NPU."""
         # Using firewall check implicitly via the request below, but explicit check provides better error message
         if not self.check_availability():
             return "Error: FastFlowLM service not reachable at " + self.endpoint
@@ -155,13 +155,13 @@ class FlmConnectorAgent(BaseAgent):
                 # Assuming standard OpenAI response format
                 response_json = response.json()
                 if "choices" in response_json and len(response_json["choices"]) > 0:
-                    return response_json["choices"][0].get("text", "")
-                return ""
+                    return response_json["choices"][0].get("text", ")
+#                 return
 
-            return f"Error: FastFlowLM returned status {response.status_code}"
+#             return fError: FastFlowLM returned status {response.status_code}
 
         except (requests.RequestException, json.JSONDecodeError, KeyError, ValueError) as e:
-            return f"Exception during NPU inference: {e}"
+#             return fException during NPU inference: {e}
 
 
 if __name__ == "__main__":

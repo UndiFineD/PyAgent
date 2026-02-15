@@ -15,10 +15,10 @@
 # limitations under the License.
 
 """
-Notification Manager - Facade for core notification utilities
-
+Notification Manager - Facade for core notification utilities"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import the facade where a stable public API is desired:
@@ -38,11 +38,11 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Manager for improvement notifications.
 (Facade for src.core.base.common.utils.notification_manager)
-"""
+"""""""""
 
 from src.core.base.common.utils.notification_manager import NotificationManager
 
-__all__ = ["NotificationManager"]
+__all__ = ["NotificationManage"""r"""""""]
 """
 
 from src.core.base.common.utils.notification_manager import NotificationManager

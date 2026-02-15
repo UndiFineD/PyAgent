@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from dataclasses import dataclass
@@ -27,11 +27,11 @@ __version__ = VERSION
 
 @dataclass
 class ContextAnnotation:
-    """An annotation / comment on context."""
+""""An annotation / comment on context."""
 
     id: str
     line_number: int
     content: str
-    author: str = ""
-    timestamp: str = ""
+#     author: str =
+#     timestamp: str =
     resolved: bool = False

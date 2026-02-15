@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-Search Provider - Entrypoint for Workspace Search/Research Agent
-
+# #
+# Search Provider - Entrypoint for Workspace Search/Research Agent
+# #
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - As a CLI entrypoint to run the workspace research/search agent.
@@ -39,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 
 Search Agent: Perform deep research and search operations across the workspace.
-"""
+# #
 
 from __future__ import annotations
 
@@ -51,8 +51,8 @@ __version__ = VERSION
 
 if __name__ == "__main__":
     main = create_main_function(SearchAgent, "Research Agent", "Topic/File to research")
-    main()
-"""
+    main(")
+# #
 
 from __future__ import annotations
 

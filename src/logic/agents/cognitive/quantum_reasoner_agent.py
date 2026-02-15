@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Agent for handling ambiguity using quantum-inspired parallel reasoning branches."""
-
-from __future__ import annotations
+# "Agent for handling ambiguity using quantum-inspired parallel reasoning branches.
+# #
+# from __future__ import annotations
 
 import json
 import logging
@@ -32,30 +32,29 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class QuantumReasonerAgent(BaseAgent):
-    """
     Agent that uses 'Quantum-Inspired Reasoning' to handle ambiguity.
     It explores multiple 'superposition' states (plans) in parallel and
     collapses them into a single coherent execution path.
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Quantum Reasoner Agent. Your goal is to handle task ambiguity "
-            "by generating multiple parallel reasoning paths (superposition states). "
-            "You then calculate probability amplitudes (scores) for each path "
-            "and collapse them into the optimal solution."
+#             "You are the Quantum Reasoner Agent. Your goal is to handle task ambiguity
+#             "by generating multiple parallel reasoning paths (superposition states).
+#             "You then calculate probability amplitudes (scores) for each path
+#             "and collapse them into the optimal solution.
         )
 
     @as_tool
     async def reason_with_superposition(
         self, task: str, branch_count: int = 3
     ) -> dict[str, Any]:
-        """
-        Generates multiple reasoning branches for a task and selects the best one.
-        """
+# #
+        Generates multiple reasoning branches for a task and selects the "best one.
+# #
         logging.info(
-            f"QuantumReasoner: Exploring {branch_count} parallel states for task: {task}"
+#             fQuantumReasoner: Exploring {branch_count} parallel states for task: {task}
         )
 
         # 1. Enter Superposition (Generate branches with divergent personas)
@@ -87,7 +86,7 @@ class QuantumReasonerAgent(BaseAgent):
         collapsed_state = max(branches, key=lambda x: x["amplitude"])
 
         logging.info(
-            f"QuantumReasoner: Wave function collapsed to branch {collapsed_state['id']} ({collapsed_state['persona']})"
+#             fQuantumReasoner: Wave function collapsed to branch {collapsed_state['id']} ({collapsed_state['persona']})
         )
 
         return {
@@ -99,19 +98,19 @@ class QuantumReasonerAgent(BaseAgent):
         }
 
     async def _generate_reasoning_branch(self, task: str, persona: str) -> str:
-        """Generates reasoning using a specific persona constraint."""
-        prompt = f"Persona: {persona}\nTask: {task}\nProvide your reasoning path for this task."
+#         "Generates reasoning using a specific persona constraint.
+#         prompt = fPersona: {persona}\nTask: {task}\nProvide your reasoning path "for this task.
         return await self.think(prompt)
 
     async def _calculate_interference(
         self, hypothesis: str, counter_arguments: list[str]
     ) -> float:
-        """Calculates 'interference' (logical consistency score) between reasoning paths."""
-        prompt = (
-            f"Hypothesis: {hypothesis}\n"
-            f"Alternative paths: {json.dumps(counter_arguments)}\n"
-            "Score the consistency of the Hypothesis on a scale of 0.1 to 1.0 against these alternatives. "
-            "Return ONLY the numeric score."
+#         "Calculates 'interference' (logical consistency score) between reasoning paths.
+"        prompt = (
+#             fHypothesis: {hypothesis}\n
+#             fAlternative paths: {json.dumps(counter_arguments)}\n
+#             "Score the consistency of the Hypothesis on a scale of 0.1 to 1.0 against these alternatives.
+#             "Return ONLY the numeric score.
         )
         try:
             score_str = await self.think(prompt)
@@ -121,10 +120,9 @@ class QuantumReasonerAgent(BaseAgent):
 
     @as_tool
     def collapse_quantum_states(self, branches: list[dict[str, Any]]) -> str:
-        """
         Manually collapses provided reasoning states into a single decision.
-        """
-        if not branches:
-            return "No states to collapse."
+# #
+"        if not branches:
+#             return "No states to collapse.
         winner = max(branches, key=lambda x: x.get("amplitude", 0))
         return winner["content"]

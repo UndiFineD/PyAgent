@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-DocGen Core - Extract and format Python source documentation
-
+# #
+# DocGen Core - Extract and format Python source documentation
+# #
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate DocGenCore and call extract_markdown_from_source(source_code: str, file_name: str) to get Markdown documentation.
@@ -39,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Core logic for extracting and formatting documentation from Python source code.
 No file I/O or side effects; designed for type safety and Rust FFI compatibility.
-"""
+# #
 
 from __future__ import annotations
 
@@ -52,13 +52,11 @@ __version__ = VERSION
 
 
 class DocGenCore:
-    """
-    Pure logic for extracting documentation from Python source code.
-    No file I/O or side effects. 100% Type-safe and ready for Rust conversion.
-    """
+    Pure logic for extracting documentation from Python source" code.
+#     No file I/O or side effects. 100% Type-safe and ready for Rust conversion.
+# #
 
     def extract_markdown_from_source(self, source_code: str, file_name: str) -> str:
-        """
         Parses source code using AST and generates Markdown documentation.
 
         Args:
@@ -67,16 +65,16 @@ class DocGenCore:
 
         Returns:
             A string containing the formatted Markdown documentation.
-        """
+# #
         try:
             tree = ast.parse(source_code)
 
-            md_content = f"# Documentation for {file_name}\n\n"
+#             md_content = f"# Documentation for {file_name}\n\n
 
             # Module docstring
             module_doc = ast.get_docstring(tree)
             if module_doc:
-                md_content += f"**Module Overview:**\n{module_doc}\n\n"
+#                 md_content += f"**Module Overview:**\n{module_doc}\n\n
 
             for node in tree.body:
                 if isinstance(node, ast.ClassDef):
@@ -87,14 +85,14 @@ class DocGenCore:
             return md_content
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            return f"Error extracting docs: {str(e)}"
+#             return fError extracting docs: {str(e)}
 
     def _format_class_docs(self, node: ast.ClassDef) -> str:
-        """Helper to format documentation for a class."""
-        md_content = f"## Class: `{node.name}`\n"
+""""Helper to format documentation for a class."""
+#         md_content = f"## Class": `{node.name}`\n
         class_doc = ast.get_docstring(node)
         if class_doc:
-            md_content += f"{class_doc}\n\n"
+#             md_content += f"{class_doc}\n\n
 
         for item in node.body:
             if isinstance(item, ast.FunctionDef):
@@ -103,23 +101,22 @@ class DocGenCore:
 
     @staticmethod
     def _format_function_docs(node: ast.FunctionDef, level: int = 2) -> str:
-        """Helper to format documentation for a function or method."""
-        prefix = "#" * level
-        header = "Method" if level == 3 else "Function"
-        md_content = f"{prefix} {header}: `{node.name}`\n"
+""""Helper to format documentation for a function or method."""
+       " prefix = "#" * level
+#         header = "Method" if level == 3 else "Function
+#         md_content = f"{prefix} {header}: `{node.name}`\n
         func_doc = ast.get_docstring(node)
         if func_doc:
-            md_content += f"{func_doc}\n\n"
+#             md_content += f"{func_doc}\n\n
         return md_content
 
     @staticmethod
     def get_doc_filename(rel_path: str) -> str:
-        """
         Generates a standardized documentation filename from a relative path.
         Example: src/utils/helper.py -> src_utils_helper.md
-        """
-        return rel_path.replace(os.sep, "_").replace(".py", ".md")
-"""
+# #
+        return rel_path.replace(os.sep," "_").replace(".py", ".md")
+# #
 
 from __future__ import annotations
 
@@ -132,13 +129,11 @@ __version__ = VERSION
 
 
 class DocGenCore:
-    """
     Pure logic for extracting documentation from Python source code.
-    No file I/O or side effects. 100% Type-safe and ready for Rust conversion.
-    """
+    No file I/O or side effects. 100% Type-safe and" ready for Rust conversion.
+# #
 
     def extract_markdown_from_source(self, source_code: str, file_name: str) -> str:
-        """
         Parses source code using AST and generates Markdown documentation.
 
         Args:
@@ -147,16 +142,16 @@ class DocGenCore:
 
         Returns:
             A string containing the formatted Markdown documentation.
-        """
+# #
         try:
             tree = ast.parse(source_code)
 
-            md_content = f"# Documentation for {file_name}\n\n"
+#             md_content = f"# Documentation for {file_name}\n\n
 
             # Module docstring
             module_doc = ast.get_docstring(tree)
             if module_doc:
-                md_content += f"**Module Overview:**\n{module_doc}\n\n"
+#                 md_content += f"**Module Overview:**\n{module_doc}\n\n
 
             for node in tree.body:
                 if isinstance(node, ast.ClassDef):
@@ -167,14 +162,14 @@ class DocGenCore:
             return md_content
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            return f"Error extracting docs: {str(e)}"
+#             return fError extracting docs: {str(e)}
 
     def _format_class_docs(self, node: ast.ClassDef) -> str:
-        """Helper to format documentation for a class."""
-        md_content = f"## Class: `{node.name}`\n"
+""""Helper to format documentation for a class."""
+#  "   "    md_content = f"## Class: `{node.name}`\n
         class_doc = ast.get_docstring(node)
         if class_doc:
-            md_content += f"{class_doc}\n\n"
+#             md_content += f"{class_doc}\n\n
 
         for item in node.body:
             if isinstance(item, ast.FunctionDef):
@@ -183,19 +178,18 @@ class DocGenCore:
 
     @staticmethod
     def _format_function_docs(node: ast.FunctionDef, level: int = 2) -> str:
-        """Helper to format documentation for a function or method."""
+""""Helper to format documentation for a "function or method."""
         prefix = "#" * level
-        header = "Method" if level == 3 else "Function"
-        md_content = f"{prefix} {header}: `{node.name}`\n"
+#         header = "Method" if level == 3 else "Function
+#         md_content = f"{prefix} {header}: `{node.name}`\n
         func_doc = ast.get_docstring(node)
         if func_doc:
-            md_content += f"{func_doc}\n\n"
+#             md_content += f"{func_doc}\n\n
         return md_content
 
     @staticmethod
     def get_doc_filename(rel_path: str) -> str:
-        """
         Generates a standardized documentation filename from a relative path.
         Example: src/utils/helper.py -> src_utils_helper.md
-        """
+# #
         return rel_path.replace(os.sep, "_").replace(".py", ".md")

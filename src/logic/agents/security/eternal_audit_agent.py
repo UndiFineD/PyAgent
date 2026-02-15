@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,8 +15,7 @@
 """
 EternalAuditAgent - Append only verifiable audit trail
 
-[Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate EternalAuditAgent with a file path then call log_event to record critical events and verify_audit_trail to validate the chain

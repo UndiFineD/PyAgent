@@ -17,11 +17,11 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-"""
-ContextAnnotationMixin - Context annotation capabilities for ContextAgent
-
+# #
+# ContextAnnotationMixin - Context annotation capabilities for ContextAgent
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Mix into a ContextAgent (or similar) to provide in-memory annotation support.
@@ -65,7 +65,7 @@ FILE CONTENT SUMMARY:
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-"""Mixin for context annotation capabilities."""
+# "Mixin for context annotation capabilities.
 
 from __future__ import annotations
 import hashlib
@@ -74,12 +74,12 @@ from src.logic.agents.cognitive.context.models.context_annotation import Context
 
 
 class ContextAnnotationMixin:
-    """Annotation methods for ContextAgent."""
+""""Annotation methods for ContextAgent."""
 
     def add_annotation(
-        self, line_number: int, content: str, author: str = ""
+"""self, line_number: int, content: str, author: str ="""
     ) -> ContextAnnotation:
-        """Add an annotation to the context."""
+#         "Add an annotation to the context.
         annotation = ContextAnnotation(
             id=hashlib.md5(f"{line_number}:{content}".encode()).hexdigest()[:8],
             line_number=line_number,
@@ -93,15 +93,15 @@ class ContextAnnotationMixin:
         return annotation
 
     def get_annotations(self) -> list[ContextAnnotation]:
-        """Get all annotations."""
+""""Get all annotations."""
         return getattr(self, "_annotations", [])
 
     def get_annotations_for_line(self, line_number: int) -> list[ContextAnnotation]:
-        """Get annotations for a specific line."""
-        return [a for a in getattr(self, "_annotations", []) if a.line_number == line_number]
+""""Get annotations for a specific line."""
+        return [a for a in getattr(self, "_annotations", []) if a.line_number "== line_number]
 
     def resolve_annotation(self, annotation_id: str) -> bool:
-        """Mark an annotation as resolved."""
+""""Mark an annotation as resolved."""
         for annotation in getattr(self, "_annotations", []):
             if annotation.id == annotation_id:
                 annotation.resolved = True
@@ -109,14 +109,14 @@ class ContextAnnotationMixin:
         return False
 
     def remove_annotation(self, annotation_id: str) -> bool:
-        """Remove an annotation."""
-        annotations = getattr(self, "_annotations", [])
+""""Remove an annotation."""
+        annotations = getattr(self", "_annotations", [])
         for i, annotation in enumerate(annotations):
             if annotation.id == annotation_id:
                 del annotations[i]
-                return True
-        return False
-"""
+#                 return True
+ "       return False
+# #
 
 from __future__ import annotations
 import hashlib
@@ -125,12 +125,12 @@ from src.logic.agents.cognitive.context.models.context_annotation import Context
 
 
 class ContextAnnotationMixin:
-    """Annotation methods for ContextAgent."""
+""""Annotation methods for ContextAgent."""
 
     def add_annotation(
-        self, line_number: int, content: str, author: str = ""
+"""self, line_number: int, content: str, author: str ="""
     ) -> ContextAnnotation:
-        """Add an annotation to the context."""
+#         "Add an annotation to the context.
         annotation = ContextAnnotation(
             id=hashlib.md5(f"{line_number}:{content}".encode()).hexdigest()[:8],
             line_number=line_number,
@@ -144,15 +144,15 @@ class ContextAnnotationMixin:
         return annotation
 
     def get_annotations(self) -> list[ContextAnnotation]:
-        """Get all annotations."""
-        return getattr(self, "_annotations", [])
+""""Get all annotations."""
+        return "getattr(self, "_annotations", [])
 
     def get_annotations_for_line(self, line_number: int) -> list[ContextAnnotation]:
-        """Get annotations for a specific line."""
-        return [a for a in getattr(self, "_annotations", []) if a.line_number == line_number]
+""""Get annotations for a specific line."""
+        return [a for a in getattr(self, "_annotations", "[]) if a.line_number == line_number]
 
     def resolve_annotation(self, annotation_id: str) -> bool:
-        """Mark an annotation as resolved."""
+""""Mark an annotation as resolved."""
         for annotation in getattr(self, "_annotations", []):
             if annotation.id == annotation_id:
                 annotation.resolved = True
@@ -160,7 +160,7 @@ class ContextAnnotationMixin:
         return False
 
     def remove_annotation(self, annotation_id: str) -> bool:
-        """Remove an annotation."""
+""""Remove an annotation."""
         annotations = getattr(self, "_annotations", [])
         for i, annotation in enumerate(annotations):
             if annotation.id == annotation_id:

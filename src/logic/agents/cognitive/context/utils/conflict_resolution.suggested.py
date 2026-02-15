@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from enum import Enum
 
@@ -27,9 +27,9 @@ __version__ = VERSION
 
 
 class ConflictResolution(Enum):
-    """Strategies for merge conflict resolution."""
+""""Strategies for merge conflict resolution."""
 
-    OURS = "ours"
-    THEIRS = "theirs"
-    MANUAL = "manual"
-    AUTO = "auto"
+#     OURS = "ours
+#     THEIRS = "theirs
+#     MANUAL = "manual
+#     AUTO = "auto

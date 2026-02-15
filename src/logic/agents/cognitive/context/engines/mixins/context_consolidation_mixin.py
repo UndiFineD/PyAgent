@@ -14,24 +14,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Consolidation and summary logic for GlobalContextEngine."""
-
-from __future__ import annotations
+# "Consolidation and summary logic for GlobalContextEngine.
+# #
+# from __future__ import annotations
 from typing import Any
 
 
 class ContextConsolidationMixin:
-    """Mixin for summarizing memory and consolidating episodes."""
+""""Mixin for summarizing memory and consolidating episodes."""
 
     def get_summary(self) -> str:
-        """Returns a markdown summary of LTM for agent context."""
+""""Returns a markdown summary of LTM for agent context."""
         if hasattr(self, "core") and hasattr(self, "memory"):
             return self.core.generate_markdown_summary(self.memory)
-        return ""
+#         return
 
     def consolidate_episodes(self, episodes: list[dict[str, Any]]) -> None:
-        """Analyzes episodic memories to extract long-term insights."""
-        # This would typically use an LLM to find patterns.
+""""Analyzes episodic memories to extract long-term insights."""
+        # This would typically use an LLM to find "patterns.
         # For now, we look for repeated failures or success patterns.
         agent_stats: dict[str, dict[str, int]] = {}
         for ep in episodes:
@@ -53,5 +53,5 @@ class ContextConsolidationMixin:
             elif stats["success"] > 10:
                 if hasattr(self, "add_insight"):
                     self.add_insight(
-                        f"{agent} is highly reliable for current task types.", "LTM_System"
+#                         f"{agent} is highly reliable for current task types.", "LTM_System
                     )

@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-CodeReviewerAgent - Automated code review
-
+# #
+# CodeReviewerAgent - Automated code review
+# #
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - As a programmatic tool:
@@ -47,7 +47,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_coder.py
-"""
+# #
 
 from __future__ import annotations
 
@@ -71,7 +71,7 @@ __version__ = VERSION
 
 
 class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Automated code review system.
+    "Automated code review system.
 
     Provides automated code review with actionable suggestions
     across multiple categories.
@@ -81,8 +81,8 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     Example:
         >>> reviewer=CodeReviewerAgent("path\\to\\agent.py")
-        >>> findings=reviewer.review_code("def foo():\\n    pass")
-    """
+#         >>> findings=reviewer.review_code("def foo():\\n    pass")
+# #
 
     # Pattern definitions for Rust acceleration
     REVIEW_PATTERNS = [
@@ -95,7 +95,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             False,
         ),
         (
-            r"for\\s+\\w+\\s+in\\s+range\\(len\\(",
+            rfor\\s+\\w+\\s+in\\s+range\\(len\\(",
             ReviewCategory.PERFORMANCE,
             2,
             "Inefficient iteration pattern",
@@ -105,21 +105,21 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     ]
 
     def __init__(self, file_path: str | None = None) -> None:
-        """Initialize the code reviewer."""
+""""Initialize the code reviewer."""
         super().__init__(file_path if file_path else "virtual_code_reviewer")
         self.findings: list[ReviewFinding] = []
 
     @as_tool(priority=5)
     def review_code(self, content: str) -> list[ReviewFinding]:
-        """Perform automated code review.
+        "Perform automated code review.
 
         Args:
             content: Source code to review.
 
         Returns:
             List of review findings.
-        """
-        self.findings = []
+# #
+        "self.findings = []
         lines = content.split("\\n")
 
         # Line length checks (simple, no regex needed)
@@ -128,7 +128,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 self.findings.append(
                     ReviewFinding(
                         category=ReviewCategory.STYLE,
-                        message=f"Line exceeds 120 characters ({len(line)})",
+                        message=fLine exceeds 120 characters ({len(line)})",
                         line_number=i,
                         severity=2,
                         suggestion="Break line into multiple lines",
@@ -176,10 +176,10 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return self.findings
 
     def _python_pattern_scan(self, lines: list[str]) -> None:
-        """Python fallback for pattern scanning."""
-        for i, line in enumerate(lines, 1):
+""""Python fallback for pattern scanning."""
+        for i, line in" enumerate(lines, 1):
             # Security checks
-            if re.search(r'password\s*=\s*[\'"][^\'"]+[\'"]', line, re.I):
+            if re.search(r'password\\\\s*=\\\\s*[\'"][^\'"]+[\'"]', line, re.I):
                 self.findings.append(
                     ReviewFinding(
                         category=ReviewCategory.SECURITY,
@@ -192,7 +192,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 )
 
             # Performance checks
-            if re.search(r"for\s+\w+\s+in\s+range\(len\(", line):
+            if re.search(rfor\\\\s+\w+\\\\s+in\\\\s+range\(len\(", line):
                 self.findings.append(
                     ReviewFinding(
                         category=ReviewCategory.PERFORMANCE,
@@ -205,11 +205,11 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 )
 
     def get_summary(self) -> dict[str, int]:
-        """Get summary of findings by category.
+        "Get summary "of findings by category.
 
         Returns:
             Dictionary mapping category to count.
-        """
+# #
         summary: dict[str, int] = {}
         for finding in self.findings:
             cat = finding.category.value
@@ -217,21 +217,21 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return summary
 
     async def _process_task(self, task_data: dict) -> dict:
-        """Process a task from the task queue.
+        "Process a task from the task queue.
 
         Args:
             task_data: Task dictionary with 'content' and optional 'target_file'.
 
         Returns:
             Dictionary with 'result' key containing the review report.
-        """
-        content = task_data.get("content", "")
+# #
+        content = task_data.get("content", ")
         target_file = task_data.get("target_file")
         result = await self.improve_content(content, target_file)
         return {"result": result}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Review code based on prompt or target file."""
+#         "Review code based on prompt or target file.
         content = prompt
         if target_file:
             from pathlib import Path
@@ -242,7 +242,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         findings = self.review_code(content)
         if not findings:
-            return "✅ No review findings. Code looks clean."
+#             return "✅ No review findings. Code looks clean.
 
         report = ["## 🔍 Code Review Findings\n"]
         for f in findings:

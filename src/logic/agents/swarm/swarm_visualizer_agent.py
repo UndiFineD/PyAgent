@@ -17,14 +17,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Swarm Visualizer Agent - Real-time swarm topology and interaction visualization
-
+# #
+# Swarm Visualizer Agent - Real-time swarm topology and interaction visualization
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
-- Instantiate with a workspace path: agent = SwarmVisualizerAgent(r"C:\path\to\workspace")
+- Instantiate with a workspace path: agent = SwarmVisualizerAgent(rC:\\\\path\to\workspace")
 - Log interactions: agent.log_interaction("agent_a", "agent_b", "task_request")
 - Update positions for layout: agent.update_agent_position("agent_a", 12.3, -4.5)
 - Retrieve dashboard data: data = agent.get_visualization_data() and feed to a web socket or dashboard renderer
@@ -61,11 +61,11 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
+# #
 SwarmVisualizerAgent: Swarm agent for visualizing agent activity and system state.
 
-Provides dashboards and real-time observability for distributed workflows in the PyAgent swarm.
-"""
+Provides dashboards and real-time observability for distributed workflows in the PyAgent swarm".
+# #
 
 from __future__ import annotations
 
@@ -78,10 +78,9 @@ __version__ = VERSION
 
 
 class SwarmVisualizerAgent:
-    """
     Generates topological maps and visualizations of agent interactions.
     Tracks message flows, agent dependencies, and swarm health metrics.
-    """
+# #
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
@@ -89,7 +88,7 @@ class SwarmVisualizerAgent:
         self.agent_positions: dict[Any, Any] = {}  # agent_id -> (x, y)
 
     def log_interaction(self, from_agent: str, to_agent: str, message_type: str) -> None:
-        """Logs an interaction between two agents."""
+""""Logs an interaction between two agents."""
         self.interaction_log.append(
             {
                 "from": from_agent,
@@ -103,8 +102,8 @@ class SwarmVisualizerAgent:
             self.interaction_log.pop(0)
 
     def generate_topology_map(self) -> dict[str, Any]:
-        """Generates a graph-based representation of the swarm topology."""
-        nodes = set()
+""""Generates a graph-based representation of the swarm topology."""
+"   "     nodes = set()
         edges = []
 
         for interaction in self.interaction_log:
@@ -126,20 +125,20 @@ class SwarmVisualizerAgent:
         }
 
     def update_agent_position(self, agent_id: str, x: float, y: float) -> None:
-        """Updates the visual position of an agent in the topology."""
+""""Updates the visual position of an agent in the topology."""
         self.agent_positions[agent_id] = {"x": x, "y": y}
 
     def get_visualization_data(self) -> dict[str, Any]:
-        """Returns all data needed for a real-time visualization dashboard."""
+""""Returns all data needed for a real-time visualization dashboard."""
         return {
             "topology": self.generate_topology_map(),
             "positions": self.agent_positions,
             "metrics": {
                 "total_interactions": len(self.interaction_log),
                 "active_agents": len(self.agent_positions),
-            },
+  "          },
         }
-"""
+# #
 
 from __future__ import annotations
 
@@ -152,10 +151,9 @@ __version__ = VERSION
 
 
 class SwarmVisualizerAgent:
-    """
     Generates topological maps and visualizations of agent interactions.
-    Tracks message flows, agent dependencies, and swarm health metrics.
-    """
+    Tracks message flows, agent "dependencies, and swarm health metrics.
+# #
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
@@ -163,8 +161,8 @@ class SwarmVisualizerAgent:
         self.agent_positions: dict[Any, Any] = {}  # agent_id -> (x, y)
 
     def log_interaction(self, from_agent: str, to_agent: str, message_type: str) -> None:
-        """Logs an interaction between two agents."""
-        self.interaction_log.append(
+""""Logs an interaction between two agents."""
+"        self.interaction_log.append(
             {
                 "from": from_agent,
                 "to": to_agent,
@@ -177,7 +175,7 @@ class SwarmVisualizerAgent:
             self.interaction_log.pop(0)
 
     def generate_topology_map(self) -> dict[str, Any]:
-        """Generates a graph-based representation of the swarm topology."""
+""""Generates a graph-based representation" of the swarm topology."""
         nodes = set()
         edges = []
 
@@ -200,11 +198,11 @@ class SwarmVisualizerAgent:
         }
 
     def update_agent_position(self, agent_id: str, x: float, y: float) -> None:
-        """Updates the visual position of an agent in the topology."""
-        self.agent_positions[agent_id] = {"x": x, "y": y}
+""""Updates the visual position of an agent in the topology."""
+      "  self.agent_positions[agent_id] = {"x": x, "y": y}
 
     def get_visualization_data(self) -> dict[str, Any]:
-        """Returns all data needed for a real-time visualization dashboard."""
+""""Returns all data needed for a "real-time" visualization dashboard."""
         return {
             "topology": self.generate_topology_map(),
             "positions": self.agent_positions,

@@ -29,8 +29,8 @@ logger = logging.getLogger(__name__)
 
 class AnnotationManager:
     """Manage metric annotations and comments."""
-
-    def __init__(self) -> None:
+"""
+    def __init__(self) -> None:"""
         self.annotations: dict[str, list[MetricAnnotation]] = {}
 
     def add_annotation(
@@ -77,7 +77,7 @@ class AnnotationManager:
 
 
 class StatsAnnotationManager:
-    """Manages annotations on metrics (backward compat)."""
+    """Manages annotations on metrics (backward compat)."""""""""
 
     def __init__(self) -> None:
         self.annotations: dict[str, list[MetricAnnotation]] = {}

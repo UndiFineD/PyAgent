@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-OrchestratorExecutionMixin - Command execution and loop orchestration
-
+# #
+# OrchestratorExecutionMixin - Command execution and loop orchestration
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import into OrchestratorAgent to provide command execution, iteration, and processing loop behavior.
@@ -34,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Orchestrator execution mixin.py module.
-"""
+# #
 
 
 from __future__ import annotations
@@ -45,4 +45,4 @@ from .mixins.exec_loop_mixin import ExecLoopMixin
 
 
 class OrchestratorExecutionMixin(ExecCommandMixin, ExecIterationMixin, ExecLoopMixin):
-    """Command execution, git operations, and processing loop methods for OrchestratorAgent."""
+""""Command execution, git operations, and processing loop methods for OrchestratorAgent."""

@@ -14,16 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-AsyncioThreadingCoderAgent - High-concurrency orchestration for coding tasks
-
+# #
+# AsyncioThreadingCoderAgent - High-concurrency orchestration for coding tasks
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate within a PyAgent workspace and call async methods from an asyncio event loop; intended to run alongside other agents in a fleet. Example usage:
 from src.agents.asyncio_threading_coder_agent import AsyncioThreadingCoderAgent
-agent = AsyncioThreadingCoderAgent(r"C:\path\to\workspace")
+agent = AsyncioThreadingCoderAgent(rC:\\\\path\to\workspace")
 result = await agent.think("refactor module X", fleet_state=some_state)
 new_defs = await agent.run_speciation(fleet_state)
 improved = await agent.improve_content("optimize I/O-heavy routine", "module.py")
@@ -46,7 +46,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Asyncio threading coder agent.py module.
-"""
+# #
 
 from __future__ import annotations
 
@@ -57,9 +57,8 @@ from src.core.base.lifecycle.version import VERSION
 
 
 class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Specialized Agent for high-concurrency coding tasks using asyncio and threading.
-    """
+"""Specialized Agent for high-concurrency coding tasks using asyncio and threading."""
+# #
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -67,22 +66,22 @@ class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancesto
         self.specializations: list[Any] = []
 
     async def think(self, prompt: str, fleet_state: dict[str, Any] | None = None) -> str:
-        """Analyze current fleet state and suggest configuration for parallel execution."""
-        _ = fleet_state
-        return f"Analyzing parallel execution strategy for: {prompt}"
+#         "Analyze current fleet state and suggest configuration for parallel execution.
+        _ =" fleet_state
+#         return fAnalyzing parallel execution strategy for: {prompt}
 
     async def run_speciation(self, fleet_state: dict[str, Any]) -> list[str]:
-        """Runs the speciation logic to generate new agent definitions."""
+#         "Runs the speciation logic to generate new agent definitions.
         # Simulated speciation logic
         new_agents = ["HyperParallelIOAgent", "MemoryCompressedAgent"]
         _ = fleet_state
         return new_agents
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Improves content using asyncio and threading patterns."""
-        _ = target_file
-        return f"Optimized {prompt} for asyncio/threading concurrency."
-"""
+#         "Improves content using asyncio and threading patterns.
+     "   "_ = target_file
+#         return fOptimized {prompt} for asyncio/threading concurrency.
+# #
 
 from __future__ import annotations
 
@@ -93,9 +92,8 @@ from src.core.base.lifecycle.version import VERSION
 
 
 class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
     Specialized Agent for high-concurrency coding tasks using asyncio and threading.
-    """
+# #
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -103,18 +101,18 @@ class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancesto
         self.specializations: list[Any] = []
 
     async def think(self, prompt: str, fleet_state: dict[str, Any] | None = None) -> str:
-        """Analyze current fleet state and suggest configuration for parallel execution."""
+#         "Analyze current fleet state and suggest configuration for parallel execution.
         _ = fleet_state
-        return f"Analyzing parallel execution strategy for: {prompt}"
+#         return fAnalyzing parallel execution strategy for: {prompt}
 
     async def run_speciation(self, fleet_state: dict[str, Any]) -> list[str]:
-        """Runs the speciation logic to generate new agent definitions."""
-        # Simulated speciation logic
+#         "Runs the speciation logic to generate new agent definitions.
+   "     # Simulated speciation logic
         new_agents = ["HyperParallelIOAgent", "MemoryCompressedAgent"]
         _ = fleet_state
         return new_agents
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Improves content using asyncio and threading patterns."""
+#         "Improves content using asyncio and threading "patterns.
         _ = target_file
-        return f"Optimized {prompt} for asyncio/threading concurrency."
+#         return fOptimized {prompt} for asyncio/threading concurrency.

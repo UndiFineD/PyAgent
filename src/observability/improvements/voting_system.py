@@ -13,9 +13,8 @@
 # limitations under the License.
 
 """
-VotingSystem - Manage voting on improvements and prioritization
-
-DATE: 2026-02-12
+VotingSystem - Manage voting on improvements and prioritization"""
+# DATE: 2026-02-12"""
 AUTHOR: Keimpe de Jong
 USAGE:
 from voting_system import VotingSystem
@@ -35,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 - Validation & errors: validate inputs (vote_value range, id formats) and raise informative errors rather than silently coercing.  
 - API & observability: add methods to list voters, get raw vote maps, export/import (JSON), and emit events for changes; include unit tests and docstrings for public methods.  
 - Integration: expose adapter interface to plug in different backends and add optional dependency injection for better testability.
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -47,7 +46,7 @@ __version__ = VERSION
 
 
 class VotingSystem:
-    """Manages voting on improvements."""
+    """Manages voting on improvement""""""s."""
 
     def __init__(self) -> None:
         self.votes: dict[str, dict[str, int]] = {}

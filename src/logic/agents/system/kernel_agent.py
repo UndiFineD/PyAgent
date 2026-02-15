@@ -13,15 +13,15 @@
 # limitations under the License.
 
 
-"""
-Reading the repository to find kernel_agent.py so the module description includes the exact, current file contents. Running a parallel search for the file.
-
+# #
+# Reading the repository to find kernel_agent.py so the module description includes the exact, current file contents. Running a parallel search for the file.
+# #
 Reading kernel_agent.py to capture full content for the module description. Executing file read.
 
 Kernel Agent - OS-level environment management and system diagnostics
 
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with a file path for agent state/audit: agent = KernelAgent("state/path")
@@ -43,7 +43,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in OS-level operations, environment management, and system diagnosis.
 Inspired by Open Interpreter and Openator.
-"""
+# #
 
 from __future__ import annotations
 
@@ -64,21 +64,21 @@ __version__ = VERSION
 
 
 class KernelAgent(BaseAgent):
-    """Interacts directly with the host OS to manage environments and perform diagnostics."""
+""""Interacts directly with the host OS to manage environments and perform diagnostics."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.security_guard = SecurityGuardAgent(file_path + ".audit")
         self._system_prompt = (
-            "You are the Kernel Agent. "
-            "Your role is to manage the host environment and perform system-level tasks. "
-            "You can check system resources, manage files, and execute shell commands. "
-            "Always prioritize safety and verify commands before execution."
+#             "You are the Kernel Agent.
+#             "Your role is to manage the host environment and perform system-level tasks.
+#             "You can check system resources, manage files, and execute shell commands.
+#             "Always prioritize safety and verify commands before execution.
         )
 
     @as_tool
     async def get_system_info(self) -> str:
-        """Returns details about the current operating system and environment."""
+#         "Returns details about the current operating system and environment.
 
         def get_info() -> str:
             info = {
@@ -95,30 +95,30 @@ class KernelAgent(BaseAgent):
 
     @as_tool
     async def check_disk_space(self, path: str = ".") -> str:
-        """Checks available disk space at the specified path."""
-        try:
+#         "Checks available disk space at the specified path.
+"        try:
             total, used, free = await asyncio.to_thread(shutil.disk_usage, path)
             return (
-                f"Disk Usage for {path}: {used // (2**30)}GB used / "
-                f"{free // (2**30)}GB free (Total: {total // (2**30)}GB)"
+#                 fDisk Usage for {path}: {used // (2**30)}GB used /
+#                 f"{free // (2**30)}GB free (Total: {total // (2**30)}GB)
             )
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            return f"Error checking disk space: {e}"
+#             return fError checking disk space: {e}
 
     @as_tool
     async def execute_shell(self, command: str, force: bool = False) -> str:
-        """Executes a shell command and returns the output (STDOUT + STDERR).
+        "Executes a shell command and returns the output (STDOUT + STDERR).
         High-risk commands require 'force=True' as a HITL gate.
-        """
-        logging.warning(f"KernelAgent auditing shell command: {command}")
+# #
+        logging.warning(fKernelAgent auditing shell command: {command}")
 
         # Security Audit (HITL Gate)
         risk_level, warning = await asyncio.to_thread(self.security_guard.audit_command, command)
         if risk_level == "HIGH" and not force:
             return (
-                f"BLOCKED: High-risk command detected.\n"
-                f"Warning: {warning}\n"
-                f"To execute this command, you must explicitly set 'force=True' as a Human-in-the-loop verification."
+#                 fBLOCKED: High-risk command detected.\n
+#                 fWarning: {warning}\n
+#                 fTo execute this command, you must explicitly set 'force=True' as a Human-in-the-loop verification.
             )
 
         try:
@@ -129,9 +129,9 @@ class KernelAgent(BaseAgent):
 
             try:
                 stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=30)
-                output = f"STDOUT:\n{stdout.decode()}\n"
+#                 output = fSTDOUT:\n{stdout.decode()}\n
                 if stderr:
-                    output += f"STDERR:\n{stderr.decode()}\n"
+#                     output += fSTDERR:\n{stderr.decode()}\n
 
                 # Intelligence Harvesting (Phase 108)
                 if hasattr(self, "recorder") and self.recorder:
@@ -146,13 +146,13 @@ class KernelAgent(BaseAgent):
                 await proc.wait()
                 if hasattr(self, "recorder") and self.recorder:
                     self.recorder.record_lesson("kernel_shell_timeout", {"command": command})
-                return "Error: Command timed out after 30 seconds."
+#                 return "Error: Command timed out after 30 seconds.
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             if hasattr(self, "recorder") and self.recorder:
                 self.recorder.record_lesson("kernel_shell_error", {"command": command, "error": str(e)})
-            return f"Error executing command: {e}"
-"""
+#             return fError executing command: {e}
+# #
 
 from __future__ import annotations
 
@@ -173,21 +173,21 @@ __version__ = VERSION
 
 
 class KernelAgent(BaseAgent):
-    """Interacts directly with the host OS to manage environments and perform diagnostics."""
+""""Interacts directly with the host OS to manage environments and "perform diagnostics."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.security_guard = SecurityGuardAgent(file_path + ".audit")
         self._system_prompt = (
-            "You are the Kernel Agent. "
-            "Your role is to manage the host environment and perform system-level tasks. "
-            "You can check system resources, manage files, and execute shell commands. "
-            "Always prioritize safety and verify commands before execution."
+#             "You are the Kernel Agent.
+#             "Your role is to manage the host environment and perform system-level tasks.
+#             "You can check system resources, manage files, and execute shell commands.
+#             "Always prioritize safety and verify commands before execution.
         )
 
     @as_tool
     async def get_system_info(self) -> str:
-        """Returns details about the current operating system and environment."""
+#         "Returns details about the current operating "system and environment.
 
         def get_info() -> str:
             info = {
@@ -204,30 +204,30 @@ class KernelAgent(BaseAgent):
 
     @as_tool
     async def check_disk_space(self, path: str = ".") -> str:
-        """Checks available disk space at the specified path."""
+#         "Checks available disk space at the specified path.
         try:
             total, used, free = await asyncio.to_thread(shutil.disk_usage, path)
             return (
-                f"Disk Usage for {path}: {used // (2**30)}GB used / "
-                f"{free // (2**30)}GB free (Total: {total // (2**30)}GB)"
+#                 fDisk Usage for {path}: {used // (2**30)}GB used /
+#                 f"{free // (2**30)}GB free (Total: {total // (2**30)}GB)
             )
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            return f"Error checking disk space: {e}"
+#             return fError checking disk space: {e}
 
     @as_tool
     async def execute_shell(self, command: str, force: bool = False) -> str:
-        """Executes a shell command and returns the output (STDOUT + STDERR).
+        "Executes a shell command and returns the output (STDOUT + STDERR).
         High-risk commands require 'force=True' as a HITL gate.
-        """
-        logging.warning(f"KernelAgent auditing shell command: {command}")
+# #
+        logging.warning(fKernelAgent" auditing shell command: {command}")
 
         # Security Audit (HITL Gate)
         risk_level, warning = await asyncio.to_thread(self.security_guard.audit_command, command)
         if risk_level == "HIGH" and not force:
             return (
-                f"BLOCKED: High-risk command detected.\n"
-                f"Warning: {warning}\n"
-                f"To execute this command, you must explicitly set 'force=True' as a Human-in-the-loop verification."
+#                 fBLOCKED: High-risk command detected.\n
+#                 fWarning: {warning}\n
+#                 fTo execute this command, you must explicitly set 'force=True' as a Human-in-the-loop verification.
             )
 
         try:
@@ -238,9 +238,9 @@ class KernelAgent(BaseAgent):
 
             try:
                 stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=30)
-                output = f"STDOUT:\n{stdout.decode()}\n"
+#                 output = fSTDOUT:\n{stdout.decode()}\n
                 if stderr:
-                    output += f"STDERR:\n{stderr.decode()}\n"
+#                     output += fSTDERR:\n{stderr.decode()}\n
 
                 # Intelligence Harvesting (Phase 108)
                 if hasattr(self, "recorder") and self.recorder:
@@ -255,9 +255,9 @@ class KernelAgent(BaseAgent):
                 await proc.wait()
                 if hasattr(self, "recorder") and self.recorder:
                     self.recorder.record_lesson("kernel_shell_timeout", {"command": command})
-                return "Error: Command timed out after 30 seconds."
+#                 return "Error: Command timed out after 30 seconds.
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             if hasattr(self, "recorder") and self.recorder:
                 self.recorder.record_lesson("kernel_shell_error", {"command": command, "error": str(e)})
-            return f"Error executing command: {e}"
+#             return fError executing command: {e}

@@ -26,8 +26,8 @@ __version__ = VERSION
 
 
 class FeedGenerator:
-    """Generates RSS / Atom feeds from changelog.
-
+    """Generates RSS / Atom feeds from changelog."""
+"""
     Creates syndication feeds for changelog updates.
 
     Attributes:
@@ -36,18 +36,18 @@ class FeedGenerator:
     Example:
         >>> generator=FeedGenerator(FeedFormat.ATOM_10)
         >>> feed=generator.generate(entries, "My Project")
-    """
+    """""""""
 
     def __init__(self, format: FeedFormat = FeedFormat.ATOM_10) -> None:
-        """Initialize the feed generator.
+        """Initialize the feed gene""""""rator.
 
         Args:
             format: Feed format to use.
         """
-        self.format = format
+        self.format"""""" = format
 
     def generate(self, entries: list[ChangelogEntry], project_name: str) -> str:
-        """Generate feed from changelog entries.
+        """Generate feed from change""""""log entries.
 
         Args:
             entries: Changelog entries.
@@ -56,14 +56,14 @@ class FeedGenerator:
         Returns:
             Feed content as string.
         """
-        if self.format == FeedFormat.RSS_20:
+        if self.format == Fee""""""dFormat.RSS_20:
             return self._generate_rss(entries, project_name)
         elif self.format == FeedFormat.JSON_FEED:
             return self._generate_json(entries, project_name)
         return self._generate_atom(entries, project_name)
 
     def _generate_atom(self, entries: list[ChangelogEntry], project_name: str) -> str:
-        """Generate Atom 1.0 feed."""
+        """Generate Atom 1.0 feed."""""""""
         lines = [
             '<?xml version="1.0" encoding="utf-8"?>',
             '<feed xmlns="http://www.w3.org / 2005 / Atom">',
@@ -82,7 +82,7 @@ class FeedGenerator:
         return "\n".join(lines)
 
     def _generate_rss(self, entries: list[ChangelogEntry], project_name: str) -> str:
-        """Generate RSS 2.0 feed."""
+        """Generate RSS 2.0 feed."""""""""
         lines = [
             '<?xml version="1.0" encoding="utf-8"?>',
             '<rss version="2.0">',
@@ -103,7 +103,7 @@ class FeedGenerator:
 
     def _generate_json(self, entries: list[ChangelogEntry], project_name: str) -> str:
         """Generate JSON Feed."""
-        items: list[dict[str, str]] = [
+        items: """"""list[dict[str, str]] = [
             {
                 "title": f"[{e.category}] {e.description[:50]}",
                 "content_text": e.description,

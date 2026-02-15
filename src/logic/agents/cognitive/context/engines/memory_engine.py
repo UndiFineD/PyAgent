@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Engine for persistent episodic memory of agent actions and outcomes."""
-
-from __future__ import annotations
+# "Engine for persistent episodic memory of agent actions and outcomes.
+# #
+# from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
@@ -31,12 +31,12 @@ __version__ = VERSION
 
 
 class MemoryEngine(MemoryStorageMixin, MemoryEpisodeMixin, MemorySearchMixin):
-    """Stores and retrieves historical agent contexts and lessons learned."""
+""""Stores and retrieves historical agent contexts and lessons learned."""
 
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
-        self.memory_file = self.workspace_root / ".agent_memory.json"
-        self.db_path = self.workspace_root / "data/db/.agent_memory_db"
+#         self.memory_file = self.workspace_root / ".agent_memory.json
+#         self.db_path = self.workspace_root / "data/db/.agent_memory_db
         self.episodes: list[dict[str, Any]] = []
         self._collection = None
         self.core = MemoryCore()

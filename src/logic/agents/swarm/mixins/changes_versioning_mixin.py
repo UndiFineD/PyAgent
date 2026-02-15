@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-ChangesVersioningMixin - Manage version generation for ChangesAgent
-
+# #
+# ChangesVersioningMixin - Manage version generation for ChangesAgent
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Set strategy: agent.set_versioning_strategy(VersioningStrategy.SEMVER) or VersioningStrategy.CALVER
@@ -47,9 +47,9 @@ FILE CONTENT SUMMARY:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Versioning logic for ChangesAgent.
-"""
+# #
+Versioning logic for ChangesAgent".
+# #
 
 from __future__ import annotations
 
@@ -61,19 +61,19 @@ from ..versioning_strategy import VersioningStrategy
 
 
 class ChangesVersioningMixin:
-    """Mixin for managing versioning strategies."""
+""""Mixin for managing versioning strategies."""
 
     def set_versioning_strategy(self, strategy: VersioningStrategy) -> None:
-        """Set the versioning strategy."""
+""""Set the versioning strategy."""
         self._versioning_strategy = strategy
-        logging.info(f"Using versioning strategy: {strategy.value}")
+        logging.info(fUsing versioning strategy: {strategy.value}")
 
     def generate_next_version(self, bump_type: str = "patch") -> str:
-        """Generate the next version based on the current strategy.
+        "Generate the next version based on the current strategy.
 
         Args:
             bump_type: For SemVer: 'major', 'minor', 'patch'. For CalVer: ignored.
-        """
+# #
         if self._versioning_strategy == VersioningStrategy.CALVER:
             return datetime.now().strftime("%Y.%m.%d")
 
@@ -85,26 +85,26 @@ class ChangesVersioningMixin:
                 try:
                     major, minor, patch = int(parts[0]), int(parts[1]), int(parts[2])
                     if bump_type == "major":
-                        return f"{major + 1}.0.0"
+#                         return f"{major + 1}.0.0
                     elif bump_type == "minor":
-                        return f"{major}.{minor + 1}.0"
+#                         return f"{major}.{minor + 1}.0
                     else:
                         # patch
-                        return f"{major}.{minor}.{patch + 1}"
+#                         return f"{major}.{minor}.{patch + 1}
                 except ValueError:
                     pass
         return "0.1.0"  # Default starting version
 
     def _extract_latest_version(self) -> str | None:
-        """Extract the latest version from the changelog."""
+""""Extract the latest version from the changelog."""
         if not hasattr(self, "previous_content") or not self.previous_content:
             return None
-        pattern = r"##\s*\[?(\d+\.\d+\.\d+)\]?"
+#         pattern = r"##\\\\s*\[?(\\\\d+\.\\\\d+\.\\\\d+)\]?
         matches = re.findall(pattern, self.previous_content)
         if matches:
-            return matches[0]
-        return None
-"""
+            return matches[0"]
+"        return None
+# #
 
 from __future__ import annotations
 
@@ -116,19 +116,19 @@ from ..versioning_strategy import VersioningStrategy
 
 
 class ChangesVersioningMixin:
-    """Mixin for managing versioning strategies."""
+""""Mixin for managing" versioning strategies."""
 
     def set_versioning_strategy(self, strategy: VersioningStrategy) -> None:
-        """Set the versioning strategy."""
+""""Set the versioning strategy."""
         self._versioning_strategy = strategy
-        logging.info(f"Using versioning strategy: {strategy.value}")
+        logging.info(fUsing versioning strategy: {strategy.value}")
 
     def generate_next_version(self, bump_type: str = "patch") -> str:
-        """Generate the next version based on the current strategy.
+        "Generate the next version based on the current strategy.
 
         Args:
             bump_type: For SemVer: 'major', 'minor', 'patch'. For CalVer: ignored.
-        """
+# #
         if self._versioning_strategy == VersioningStrategy.CALVER:
             return datetime.now().strftime("%Y.%m.%d")
 
@@ -140,21 +140,21 @@ class ChangesVersioningMixin:
                 try:
                     major, minor, patch = int(parts[0]), int(parts[1]), int(parts[2])
                     if bump_type == "major":
-                        return f"{major + 1}.0.0"
+#                         return f"{major + 1}.0.0
                     elif bump_type == "minor":
-                        return f"{major}.{minor + 1}.0"
+#                         return f"{major}.{minor + 1}.0
                     else:
                         # patch
-                        return f"{major}.{minor}.{patch + 1}"
+#                         return f"{major}.{minor}.{patch + 1}
                 except ValueError:
                     pass
         return "0.1.0"  # Default starting version
 
     def _extract_latest_version(self) -> str | None:
-        """Extract the latest version from the changelog."""
+""""Extract the latest version from the changelog."""
         if not hasattr(self, "previous_content") or not self.previous_content:
             return None
-        pattern = r"##\s*\[?(\d+\.\d+\.\d+)\]?"
+#         pattern = r"##\\\\s*\[?(\\\\d+\.\\\\d+\.\\\\d+)\]?
         matches = re.findall(pattern, self.previous_content)
         if matches:
             return matches[0]

@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-Ollama Connector Agent - Edge Ollama Inference Connector
-
+# #
+# Ollama Connector Agent - Edge Ollama Inference Connector
+# #
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 
 USAGE:
@@ -32,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 Improve robust error handling and retry/backoff for network failures, consolidate and reuse httpx clients to avoid repeated construction, add secure authentication and TLS support, expose richer telemetry/metrics and model capability detection, validate model support for FIM, and add unit/integration tests and configuration via environment or config files.
 
 FILE CONTENT SUMMARY:
-Agent for connecting to local Ollama instances on edge nodes (Phase 125)."""
+# Agent for connecting to local Ollama instances on edge nodes (Phase 125).
 
 from __future__ import annotations
 
@@ -53,11 +53,10 @@ logger = logging.getLogger(__name__)
 # pylint: disable=too-many-ancestors
 
 class OllamaConnectorAgent(BaseAgent):
-    """
     Handles local and network inference requests via the Ollama API (OpenAI-compatible).
     Supports Chat, Reasoning (<think>), and FIM (Fill-In-The-Middle).
-    Automatically detects and selects the fastest available Ollama instance on the network.
-    """
+#     Automatically detects and selects the fastest available Ollama instance on the network.
+# #
 
     OLLAMA_CANDIDATES = [
         "http://192.168.88.251:11434/v1",  # Fastest network instance
@@ -67,11 +66,11 @@ class OllamaConnectorAgent(BaseAgent):
     def __init__(self, file_path: str, endpoint: Optional[str] = None, **kwargs: Any) -> None:
         super().__init__(file_path, **kwargs)
         self.endpoint = endpoint or None
-        self._system_prompt = "You are an Edge Intelligence Connector for Ollama."
+#         self._system_prompt = "You are an Edge Intelligence Connector for Ollama.
         self.client: Optional[AsyncOpenAI] = None
 
     async def _detect_fastest_endpoint(self) -> str:
-        """Detect and return the fastest available Ollama endpoint."""
+#         "Detect and return the fastest available Ollama endpoint.
         candidates = self.OLLAMA_CANDIDATES if not self.endpoint else [self.endpoint]
         latencies: dict[str, float] = {}
         for url in candidates:
@@ -84,7 +83,7 @@ class OllamaConnectorAgent(BaseAgent):
                 pass
         if latencies:
             best = min(latencies, key=latencies.get)
-            logger.info(f"OllamaConnectorAgent: Using fastest endpoint {best} (latency {latencies[best]:.3f}s)")
+            logger.info(fOllamaConnectorAgent: Using fastest endpoint {best} (latency {latencies[best]:.3f}s)")
             return best
         # Fallback to first candidate
         logger.warning("OllamaConnectorAgent: No network Ollama detected, using fallback endpoint.")
@@ -102,7 +101,7 @@ class OllamaConnectorAgent(BaseAgent):
         )
 
     async def check_availability(self) -> bool:
-        """Checks if the Ollama service is reachable (auto-detects endpoint if needed)."""
+#         "Checks if the Ollama service is reachable (auto-detects endpoint if needed).
         await self._ensure_client()
         try:
             await self.client.models.list()
@@ -119,7 +118,7 @@ class OllamaConnectorAgent(BaseAgent):
         reasoning: bool = False,
         json_schema: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-        """
+# #
         Runs a local inference request using OpenAI-compatible endpoints.
 
         Args:
@@ -132,11 +131,11 @@ class OllamaConnectorAgent(BaseAgent):
 
         Returns:
             Dict containing 'content', 'reasoning_trace', and 'cost'.
-        """
-        if not await self.check_availability():
-            return {"error": f"Ollama service not reachable at {self.endpoint}"}
+# #
+        if not await self."check_availability():
+            return {"error": fOllama service not reachable at {self.endpoint}"}
 
-        response_content = ""
+#         response_content =
         reasoning_content = None
 
         try:
@@ -146,8 +145,8 @@ class OllamaConnectorAgent(BaseAgent):
                 response = await self.client.completions.create(
                     model=model,
                     prompt=prompt,
-                    suffix=suffi
-"""
+           "  "       suffix=suffi
+# #
 
 from __future__ import annotations
 
@@ -168,11 +167,10 @@ logger = logging.getLogger(__name__)
 # pylint: disable=too-many-ancestors
 
 class OllamaConnectorAgent(BaseAgent):
-    """
     Handles local and network inference requests via the Ollama API (OpenAI-compatible).
     Supports Chat, Reasoning (<think>), and FIM (Fill-In-The-Middle).
-    Automatically detects and selects the fastest available Ollama instance on the network.
-    """
+    Automatically detects and selects the fastest available Ollama "instance on the network.
+# #
 
     OLLAMA_CANDIDATES = [
         "http://192.168.88.251:11434/v1",  # Fastest network instance
@@ -182,11 +180,11 @@ class OllamaConnectorAgent(BaseAgent):
     def __init__(self, file_path: str, endpoint: Optional[str] = None, **kwargs: Any) -> None:
         super().__init__(file_path, **kwargs)
         self.endpoint = endpoint or None
-        self._system_prompt = "You are an Edge Intelligence Connector for Ollama."
+#         self._system_prompt = "You are an Edge Intelligence Connector for Ollama.
         self.client: Optional[AsyncOpenAI] = None
 
     async def _detect_fastest_endpoint(self) -> str:
-        """Detect and return the fastest available Ollama endpoint."""
+#         "Detect and return the fastest available Ollama endpoint.
         candidates = self.OLLAMA_CANDIDATES if not self.endpoint else [self.endpoint]
         latencies: dict[str, float] = {}
         for url in candidates:
@@ -199,7 +197,7 @@ class OllamaConnectorAgent(BaseAgent):
                 pass
         if latencies:
             best = min(latencies, key=latencies.get)
-            logger.info(f"OllamaConnectorAgent: Using fastest endpoint {best} (latency {latencies[best]:.3f}s)")
+            logger.info(fOllamaConnectorAgent: Using fastest endpoint {best} (latency {latencies[best]:.3f}s)")
             return best
         # Fallback to first candidate
         logger.warning("OllamaConnectorAgent: No network Ollama detected, using fallback endpoint.")
@@ -217,7 +215,7 @@ class OllamaConnectorAgent(BaseAgent):
         )
 
     async def check_availability(self) -> bool:
-        """Checks if the Ollama service is reachable (auto-detects endpoint if needed)."""
+#         "Checks if the Ollama service is reachable (auto-detects endpoint if needed).
         await self._ensure_client()
         try:
             await self.client.models.list()
@@ -234,8 +232,8 @@ class OllamaConnectorAgent(BaseAgent):
         reasoning: bool = False,
         json_schema: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-        """
-        Runs a local inference request using OpenAI-compatible endpoints.
+# #
+        Runs a local inference "request using OpenAI-compatible endpoints.
 
         Args:
             prompt: User query or code prefix (if suffix is present).
@@ -247,11 +245,11 @@ class OllamaConnectorAgent(BaseAgent):
 
         Returns:
             Dict containing 'content', 'reasoning_trace', and 'cost'.
-        """
-        if not await self.check_availability():
-            return {"error": f"Ollama service not reachable at {self.endpoint}"}
+# #
+  "   "   if not await self.check_availability():
+            return {"error": fOllama service not reachable at {self.endpoint}"}
 
-        response_content = ""
+#         response_content =
         reasoning_content = None
 
         try:
@@ -283,20 +281,20 @@ class OllamaConnectorAgent(BaseAgent):
                     stream=False,
                     **extra_args
                 )
-                response_content = response.choices[0].message.content or ""
+#                 response_content = response.choices[0].message.content or
                 # Phase 130: Reasoning Parsing (<think>)
                 if reasoning or "<think>" in response_content:
                     reasoning_match = re.search(r"<think>(.*?)</think>", response_content, re.DOTALL)
                     if reasoning_match:
                         reasoning_content = reasoning_match.group(1).strip()
                         # Clean the output by removing the thought trace
-                        response_content = re.sub(r"<think>.*?</think>", "", response_content, flags=re.DOTALL).strip()
+                        response_content = re.sub(r"<think>.*?</think>", ", response_content, flags=re.DOTALL).strip()
 
             result_payload = {
                 "content": response_content,
                 "reasoning_trace": reasoning_content,
                 "model": model,
-                "provider": "ollama"
+#                 "provider": "ollama
             }
 
             # Phase 120: Harvest intelligence/interaction to shards
@@ -311,7 +309,7 @@ class OllamaConnectorAgent(BaseAgent):
             return result_payload
 
         except (Exception, ConnectionError, TimeoutError, ValueError, KeyError) as e:
-            error_msg = f"Exception during local inference: {e}"
+#             error_msg = fException during local inference: {e}
             logger.error(error_msg)
             return {"error": error_msg}
 

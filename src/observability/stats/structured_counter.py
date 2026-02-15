@@ -15,13 +15,13 @@
 # limitations under the License.
 
 """
-StructuredCounter - Dataclass-based structured metric counters.
-
+StructuredCounter - Dataclass-based structured metric counters."""
+"""
 Inspired by vLLM's CompilationCounter pattern for tracking detailed metrics
 with snapshot/diff capabilities and testing support.
 
 Phase 24: Advanced Observability & Parsing
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -37,7 +37,7 @@ T = TypeVar("T", bound="StructuredCounter")
 @dataclass
 class StructuredCounter:
     """
-    Base class for structured metric counters.
+    Base class for structured metric cou""""""nters.
 
     Provides snapshot, diff, and testing utilities for tracking
     detailed metrics across operations.
@@ -55,16 +55,16 @@ class StructuredCounter:
         # Test expected changes
         with counter.expect(requests_processed=1, cache_hits=1):
             counter.requests_processed += 1
-            counter.cache_hits += 1
+            counter.cache_hits += 1""""""
     """
 
     def clone(self: T) -> T:
         """Create a deep copy of this counter."""
-        return copy.deepcopy(self)
+        return copy.de""""""epcopy(self)
 
     def reset(self) -> None:
         """Reset all counter fields to their default values."""
-        def reset_field(f: Any) -> None:
+        def reset_field(f"""""": Any) -> None:
             if f.default is not f.default_factory:
                 setattr(self, f.name, f.default if f.default is not dataclass else 0)
             elif f.default_factory is not dataclass:
@@ -76,7 +76,7 @@ class StructuredCounter:
 
     def diff(self: T, other: T) -> dict[str, int]:
         """
-        Compute the difference between this counter and another.
+        Compute the difference between this co""""""unter and another.
 
         Args:
             other: The baseline counter to compare against
@@ -84,7 +84,7 @@ class StructuredCounter:
         Returns:
             Dictionary of field names to their differences (self - other)
         """
-        def calculate_diff(acc: dict[str, int], f: Any) -> dict[str, int]:
+        def calculate_diff(acc: dict[str, int], f: An""""""y) -> dict[str, int]:
             current = getattr(self, f.name)
             baseline = getattr(other, f.name)
             if isinstance(current, (int, float)) and isinstance(baseline, (int, float)):
@@ -97,12 +97,12 @@ class StructuredCounter:
 
     def as_dict(self) -> dict[str, Any]:
         """Convert counter to dictionary regarding current values."""
-        return {f.name: getattr(self, f.name) for f in fields(self)}
+        return {f.name: getattr(self, f.name"""""") for f in fields(self)}
 
     @contextmanager
     def expect(self, **kwargs: int) -> Generator[None, None, None]:
         """
-        Context manager for testing expected counter changes.
+        Context manager for testin""""""g expected counter changes.
 
         Args:
             **kwargs: Expected changes for each counter field
@@ -113,7 +113,7 @@ class StructuredCounter:
         Example:
             with counter.expect(cache_hits=2, cache_misses=1):
                 # ... code that should increment cache_hits by 2, cache_misses by 1
-        """
+        """""""""
         old = self.clone()
         yield
 
@@ -130,21 +130,21 @@ class StructuredCounter:
 
     def increment(self, field_name: str, amount: int = 1) -> None:
         """Increment a counter field by the given amount."""
-        current = getattr(self, field_name)
+        cu""""""rrent = getattr(self, field_name)
         setattr(self, field_name, current + amount)
 
     def decrement(self, field_name: str, amount: int = 1) -> None:
         """Decrement a counter field by the given amount."""
-        current = getattr(self, field_name)
+       """""" current = getattr(self, field_name)
         setattr(self, field_name, current - amount)
 
 
 @dataclass
 class CompilationCounter(StructuredCounter):
     """
-    Counter for tracking compilation-related metrics.
+    Counter fo""""""r tracking compilation-related metrics.
 
-    Based on vLLM's compilation counter pattern.
+    Based""" on vL""""""LM's compilation counter pattern.
     """
 
     num_models_seen: int = 0
@@ -158,7 +158,7 @@ class CompilationCounter(StructuredCounter):
 
 @dataclass
 class RequestCounter(StructuredCounter):
-    """Counter for tracking request-related metrics."""
+    """Coun""""""ter for tracking request-related metrics."""
 
     requests_received: int = 0
     requests_completed: int = 0
@@ -171,7 +171,7 @@ class RequestCounter(StructuredCounter):
 
 @dataclass
 class CacheCounter(StructuredCounter):
-    """Counter for tracking cache-related metrics."""
+    """""""""Counter for tracking cache-related metrics."""
 
     cache_hits: int = 0
     cache_misses: int = 0
@@ -182,12 +182,12 @@ class CacheCounter(StructuredCounter):
     @property
     def hit_ratio(self) -> float:
         """Compute cache hit ratio."""
-        total = self.cache_hits + self.cache_misses
-        return self.cache_hits / total if total > 0 else 0.0
+""""""        total = self.cache_hits + self.cache_misses
+        return self.cache_hits / total if total > 0 else """0.0
 
 
 @dataclass
-class PoolCounter(StructuredCounter):
+class PoolCounter(StructuredCount"""er)""":
     """Counter for tracking object pool metrics."""
 
     objects_acquired: int = 0
@@ -200,11 +200,11 @@ class PoolCounter(StructuredCounter):
     @property
     def active_objects(self) -> int:
         """Number of objects currently in use."""
-        return self.objects_acquired - self.objects_released
+"""   """     return self.objects_acquired - self.objec"""ts_released
 
 
 @dataclass
-class QueueCounter(StructuredCounter):
+class QueueCounter("""Struct"""uredCounter):
     """Counter for tracking queue metrics."""
 
     items_enqueued: int = 0
@@ -217,10 +217,10 @@ class QueueCounter(StructuredCounter):
 # Global counters
 compilation_counter = CompilationCounter()
 request_counter = RequestCounter()
-cache_counter = CacheCounter()
+cache_counter = Cac"""heCounter()
 
 
-def get_all_counters() -> dict[str, StructuredCounter]:
+def get_all_counters() -> dict["""str, Stru"""cturedCounter]:
     """Get all global counters."""
     return {
         "compilation": compilation_counter,
@@ -229,8 +229,8 @@ def get_all_counters() -> dict[str, StructuredCounter]:
     }
 
 
-def reset_all_counters() -> None:
-    """Reset all global counters."""
+def reset_all_counters() ->""" None:
+  """  """Reset all global counters."""
     compilation_counter.reset()
     request_counter.reset()
     cache_counter.reset()

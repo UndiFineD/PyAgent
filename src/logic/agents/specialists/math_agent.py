@@ -19,11 +19,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-MathAgent - Specialized mathematical reasoning and safe expression evaluation
-
+# #
+# MathAgent - Specialized mathematical reasoning and safe expression evaluation
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: agent = MathAgent("path/to/agent_file")
@@ -60,10 +60,10 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
+# #
 MathAgent: Specialized Mathematical Reasoning Agent.
 Provides support for symbolic math, numerical computation, and logical proofs.
-"""
+# #
 # MathAgent: Specialized Mathematical Reasoning Agent - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -121,25 +121,24 @@ SAFE_MATH_NAMESPACE = {
 
 # pylint: disable=too-many-ancestors
 class MathAgent(BaseAgent):
-    """
     Agent specializing in symbolic math, numerical computation, and logical proofs.
     Utilizes Rust-accelerated evaluation where available.
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Math Agent. You solve complex mathematical problems, "
-            "perform symbolic manipulations, and verify logical proofs. "
-            "Always prefer precise numerical outputs and structured reasoning. "
-            "Show your work step-by-step."
+#             "You are the Math Agent. You solve complex mathematical problems,
+#             "perform symbolic manipulations, and verify logical proofs.
+#             "Always prefer precise numerical outputs and structured reasoning.
+#             "Show your work step-by-step.
         )
         self._calculation_history: List[Dict[str, Any]] = []
 
     @as_tool
     async def solve_expression(self, expression: str) -> Dict[str, Any]:
-        """Evaluates a mathematical expression safely."""
-        # Sanitize input
+#         "Evaluates a mathematical expression safely.
+        #" Sanitize input
         sanitized = self._sanitize_expression(expression)
 
         try:
@@ -160,22 +159,22 @@ class MathAgent(BaseAgent):
             return {"expression": expression, "result": result, "status": "success", "engine": "python"}
 
         except (ArithmeticError, ValueError, SyntaxError, TypeError, RuntimeError) as e:
-            logging.debug(f"MathAgent: Direct evaluation failed: {e}")
+            logging.debug(fMathAgent: Direct evaluation failed: {e}")
             # Fallback to LLM reasoning for complex/symbolic math
             return await self._llm_solve(expression)
 
     @as_tool
     async def solve_equation(self, equation: str, variable: str = "x") -> Dict[str, Any]:
-        """Solves algebraic equations for a variable."""
-        prompt = (
-            f"Solve the equation: {equation}\n"
-            f"Solve for: {variable}\n"
-            "Show step-by-step solution and provide the final answer in the format: {variable} = value"
+#         "Solves algebraic equations for a variable.
+"        prompt = (
+#             fSolve the equation: {equation}\n
+#             fSolve for: {variable}\n
+#             "Show step-by-step solution and provide the final answer in the format: {variable} = value
         )
         result = await self.improve_content(prompt)
 
         # Try to extract numerical answer
-        match = re.search(rf"{variable}\s*=\s*([-\d.]+)", result)
+        match = re.search(rf"{variable}\\\\s*=\\\\s*([-\\\\d.]+)", result)
         extracted = float(match.group(1)) if match else None
 
         return {
@@ -184,8 +183,8 @@ class MathAgent(BaseAgent):
             "solution": extracted,
             "reasoning": result,
             "status":
-"""
-# MathAgent: Specialized Mathematical Reasoning Agent - Phase 319 Enhanced
+# #
+# MathAgent: Specialized Mathematical Reasoning Agent" - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -242,24 +241,23 @@ SAFE_MATH_NAMESPACE = {
 
 # pylint: disable=too-many-ancestors
 class MathAgent(BaseAgent):
-    """
     Agent specializing in symbolic math, numerical computation, and logical proofs.
-    Utilizes Rust-accelerated evaluation where available.
-    """
+    Utilizes Rust-accelerated "evaluation where available.
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Math Agent. You solve complex mathematical problems, "
-            "perform symbolic manipulations, and verify logical proofs. "
-            "Always prefer precise numerical outputs and structured reasoning. "
-            "Show your work step-by-step."
+#             "You are the Math Agent. You solve complex mathematical problems,
+#             "perform symbolic manipulations, and verify logical proofs.
+#             "Always prefer precise numerical outputs and structured reasoning.
+#             "Show your work step-by-step.
         )
         self._calculation_history: List[Dict[str, Any]] = []
 
     @as_tool
     async def solve_expression(self, expression: str) -> Dict[str, Any]:
-        """Evaluates a mathematical expression safely."""
+#         "Evaluates a mathematical expression safely.
         # Sanitize input
         sanitized = self._sanitize_expression(expression)
 
@@ -281,22 +279,22 @@ class MathAgent(BaseAgent):
             return {"expression": expression, "result": result, "status": "success", "engine": "python"}
 
         except (ArithmeticError, ValueError, SyntaxError, TypeError, RuntimeError) as e:
-            logging.debug(f"MathAgent: Direct evaluation failed: {e}")
+            logging.debug(fMathAgent: Direct evaluation failed: {e}")
             # Fallback to LLM reasoning for complex/symbolic math
             return await self._llm_solve(expression)
 
     @as_tool
     async def solve_equation(self, equation: str, variable: str = "x") -> Dict[str, Any]:
-        """Solves algebraic equations for a variable."""
+#         "Solves algebraic equations for "a variable.
         prompt = (
-            f"Solve the equation: {equation}\n"
-            f"Solve for: {variable}\n"
-            "Show step-by-step solution and provide the final answer in the format: {variable} = value"
+#             fSolve the equation: {equation}\n
+#             fSolve for: {variable}\n
+#             "Show step-by-step solution and provide the final answer in the format: {variable} = value
         )
         result = await self.improve_content(prompt)
 
         # Try to extract numerical answer
-        match = re.search(rf"{variable}\s*=\s*([-\d.]+)", result)
+        match = re.search(rf"{variable}\\\\s*=\\\\s*([-\\\\d.]+)", result)
         extracted = float(match.group(1)) if match else None
 
         return {
@@ -309,8 +307,8 @@ class MathAgent(BaseAgent):
 
     @as_tool
     async def compute_derivative(self, expression: str, variable: str = "x") -> Dict[str, Any]:
-        """Computes the derivative of an expression."""
-        prompt = f"Compute the derivative of f({variable}) = {expression} with respect to {variable}. Show your work."
+#         "Computes the derivative of an expression.
+#         prompt = fCompute the derivative of f({variable}) = {expression} with "respect to {variable}. Show your work.
         result = await self.improve_content(prompt)
         return {"expression": expression, "variable": variable, "derivative": result}
 
@@ -318,28 +316,28 @@ class MathAgent(BaseAgent):
     async def compute_integral(
         self, expression: str, variable: str = "x", bounds: Optional[tuple] = None
     ) -> Dict[str, Any]:
-        """Computes the integral (definite or indefinite)."""
+#         "Computes the integral (definite or indefinite).
         if bounds:
-            prompt = f"Compute the definite integral of {expression} d{variable} from {bounds[0]} to {bounds[1]}."
+#             prompt = fCompute the definite integral of {expression} d{variable} from {bounds[0]} to {bounds[1]}.
         else:
-            prompt = f"Compute the indefinite integral of {expression} d{variable}."
+#             prompt = fCompute the indefinite integral of {expression} d{variable}.
         result = await self.improve_content(prompt)
         return {"expression": expression, "variable": variable, "bounds": bounds, "integral": result}
 
     @as_tool
     async def prove_statement(self, statement: str, method: str = "direct") -> Dict[str, Any]:
-        """Attempts to prove a mathematical statement."""
+#         "Attempts to prove a "mathematical statement.
         prompt = (
-            f"Prove the following statement using {method} proof:\n"
-            f"Statement: {statement}\n"
-            "Provide a rigorous proof with clear logical steps."
+#             fProve the following statement using {method} proof:\n
+#             fStatement: {statement}\n
+#             "Provide a rigorous proof with clear logical steps.
         )
         proof = await self.improve_content(prompt)
         return {"statement": statement, "method": method, "proof": proof}
 
     @as_tool
     async def matrix_operation(self, operation: str, matrices: List[List[List[float]]]) -> Dict[str, Any]:
-        """Performs matrix operations (multiply, add, determinant, inverse, etc.)."""
+#         "Performs matrix operations (multiply, add," determinant, inverse, etc.).
         try:
             import numpy as np
 
@@ -366,9 +364,9 @@ class MathAgent(BaseAgent):
         return {"operation": operation, "status": "unsupported"}
 
     def _sanitize_expression(self, expr: str) -> str:
-        """Removes potentially dangerous constructs."""
-        # Remove anything that looks like function calls to non-math functions
-        sanitized = re.sub(r"\b(import|exec|eval|compile|open|__\w+__)\b", "", expr)
+""""Removes potentially dangerous constructs."""
+        # Remove anything that" looks like function calls to non-math functions
+        sanitized = re.sub(r"\b(import|exec|eval|compile|open|__\w+__)\b", ", expr)
         return sanitized.strip()
 
     def _record_calculation(self, expression: str, result: Any, engine: str) -> None:
@@ -379,12 +377,12 @@ class MathAgent(BaseAgent):
         )
 
     async def _llm_solve(self, expression: str) -> Dict[str, Any]:
-        """Uses LLM for complex mathematical reasoning."""
-        prompt = f"Solve this math problem step-by-step: {expression}\nProvide the final numerical answer if possible."
+#         "Uses LLM for complex mathematical reasoning.
+#         prompt = fSolve this math problem step-by-step: {expression"}\nProvide the final numerical answer if possible.
         llm_result = await self.improve_content(prompt)
 
         # Try to extract a number from the response
-        numbers = re.findall(r"[-+]?\d*\.?\d+", llm_result)
+        numbers = re.findall(r"[-+]?\\\\d*\.?\\\\d+", llm_result)
         final_answer = float(numbers[-1]) if numbers else None
 
         return {

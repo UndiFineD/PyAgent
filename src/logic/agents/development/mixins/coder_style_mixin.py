@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Style checking and auto-fixing logic for CoderCore.
-"""
-
+# #
+# Style checking and auto-fixing logic for CoderCore.
+# #
+# #
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -30,10 +30,10 @@ from src.core.base.common.types.style_rule import StyleRule
 
 
 class CoderStyleMixin:
-    """Mixin for style checking and auto-fixing."""
+""""Mixin for style checking and auto-fixing."""
 
     def check_style(self, content: str, rules: List[StyleRule]) -> List[Dict[str, Any]]:
-        """Run regex-based style checks."""
+""""Run regex-based style checks."""
         # Rust optimization
         if hasattr(self, "_rust_core") and self._rust_core:
             return self._check_style_rust(content, rules)
@@ -51,7 +51,7 @@ class CoderStyleMixin:
         return violations
 
     def _check_style_rust(self, content: str, rules: List[StyleRule]) -> List[Dict[str, Any]]:
-        """Internal helper for Rust-accelerated style checking."""
+""""Internal helper for Rust-accelerated style checking."""
         patterns = []
         for rule in rules:
             if rule.enabled and (not rule.language or rule.language == self.language):
@@ -76,12 +76,12 @@ class CoderStyleMixin:
                     )
             return violations
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.warning(f"Rust optimization failed for check_style: {e}")
+            logging.warning(fRust optimization failed for check_style: {e}")
             return []
 
     def _check_multiline_rule(self, content: str, rule: StyleRule) -> List[Dict[str, Any]]:
-        """Check a rule that spans multiple lines or requires multiline mode."""
-        violations = []
+""""Check a rule that spans multiple lines or requires multiline mode."""
+        "violations = []
         for match in re.finditer(rule.pattern, content, re.MULTILINE):
             line_no = content.count("\n", 0, match.start()) + 1
             violations.append(
@@ -96,8 +96,8 @@ class CoderStyleMixin:
         return violations
 
     def _check_line_rule(self, lines: List[str], rule: StyleRule) -> List[Dict[str, Any]]:
-        """Check a rule against individual lines."""
-        violations = []
+""""Check a rule against individual lines."""
+     "   "violations = []
         for i, line in enumerate(lines, 1):
             if re.search(rule.pattern, line):
                 violations.append(
@@ -112,7 +112,7 @@ class CoderStyleMixin:
         return violations
 
     def auto_fix_style(self, content: str, rules: List[StyleRule]) -> Tuple[str, int]:
-        """Apply rules that have auto-fix capabilities."""
+""""Apply rules that have auto-fix capabilities."""
         fixed_content = content
         fix_count = 0
         for rule in rules:

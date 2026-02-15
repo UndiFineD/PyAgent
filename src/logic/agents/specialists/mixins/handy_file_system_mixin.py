@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Handy file system mixin.py module.
-"""
-# Licensed under the Apache License, Version 2.0 (the "License");
+# #
+# Handy file system mixin.py module.
+# #
+# # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
 
@@ -32,12 +32,12 @@ if TYPE_CHECKING:
 
 
 class HandyFileSystemMixin:
-    """Mixin for file system operations in HandyAgent."""
+""""Mixin for file system operations in HandyAgent."""
 
     @as_tool
     def fast_find(self: HandyAgent, query: str, path: str = ".") -> str:
-        """Intelligently find files using system tools (find/fd or git ls-files)."""
-        try:
+""""Intelligently find files using system tools (find/fd or git ls-files)."""
+   "   "  try:
             # Check if fd is available, otherwise use find
             if shutil.which("fd"):
                 result = subprocess.check_output(["fd", query, path], text=True)
@@ -49,10 +49,10 @@ class HandyFileSystemMixin:
             else:
                 result = subprocess.check_output(["find", path, "-name", f"*{query}*"], text=True)
 
-            res = f"### 🔍 Search Results for '{query}':\n```text\n{result[:1000]}\n```"
+#             res = f"### 🔍 Search Results for '{query}':\n```text\n{result[:1000]}\n```
             self._record("fast_find", {"query": query, "path": path}, res)
             return res
         except (subprocess.SubprocessError, IOError, OSError) as e:
-            err_msg = f"Search failed: {e}"
+#             err_msg = fSearch failed: {e}
             self._record("fast_find_error", {"query": query, "path": path}, err_msg)
             return err_msg

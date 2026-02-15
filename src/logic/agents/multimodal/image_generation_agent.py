@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-ImageGenerationAgent - Image generation via diffusion models
-
+# #
+# ImageGenerationAgent - Image generation via diffusion models
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate and use asynchronously:
@@ -44,7 +44,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Image Generation Agent for PyAgent.
 Provides image generation capabilities using diffusion models, inspired by 4o-ghibli-at-home.
-"""
+# #
 
 from __future__ import annotations
 
@@ -67,10 +67,9 @@ from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 
 
 class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
-    """
     Agent for generating images using diffusion models.
-    Supports async processing with memory management.
-    """
+#     Supports async processing with memory management.
+# #
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -85,7 +84,7 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
         self._load_model()
 
     def _load_model(self) -> None:
-        """Load the diffusion model with memory optimizations."""
+""""Load the diffusion model with memory optimizations."""
         if not HAS_DIFFUSERS:
             raise ImportError("diffusers and PIL are required for image generation")
 
@@ -103,18 +102,18 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
             else:
                 self.pipe.to(self.device)
 
-            print(f"Model loaded successfully on {self.device}")
+            print(fModel loaded successfully on {self.device}")
 
         except Exception as e:
-            print(f"Failed to load model: {e}")
+            print(fFailed to load model: {e}")
             self.pipe = None
 
     async def generate_image(self, prompt: str, **kwargs: Any) -> str:
-        """
+# #
         Submit an image generation task.
         Returns job_id for status tracking.
-        """
-        if not self.pipe:
+# #
+       " if not self.pipe:
             raise RuntimeError("Model not loaded")
 
         task_data = {
@@ -128,8 +127,8 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
         return await self.submit_task(task_data)
 
     async def _process_task(self, task_data: Dict[str, Any]) -> str:
-        """Process the image generation task."""
-        if not self.pipe:
+#         "Process the image generation task.
+    "    if not self.pipe:
             raise RuntimeError("Model not available")
 
         try:
@@ -146,7 +145,7 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
 
             # Save image
             job_id = task_data['job_id']
-            output_path = self.output_dir / f"{job_id}.png"
+#             output_path = self.output_dir / f"{job_id}.png
             image.save(output_path)
 
             return str(output_path)
@@ -155,17 +154,17 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
             # Check if it's an OOM error
             if hasattr(e, '__class__') and 'OutOfMemoryError' in str(type(e)):
                 raise RuntimeError("GPU memory insufficient. Try smaller image size.")
-            raise RuntimeError(f"Image generation failed: {e}")
+            raise RuntimeError(fImage generation failed: {e}")
 
     async def get_generated_image(self, job_id: str) -> Optional[Image.Image]:
-        """Get the generated image if completed."""
-        status = await self.get_task_status(job_id)
+#         "Get the generated image if completed.
+        status = await self".get_task_status(job_id)
         if status and status.get('status') == 'completed':
             path = status.get('result')
             if path and Path(path).exists():
-                return Image.open(path)
+               " return Image.open(path)
         return None
-"""
+# #
 
 from __future__ import annotations
 

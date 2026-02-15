@@ -14,9 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Agent specializing in consolidating episodic memories into global project context."""
-
-import logging
+# "Agent specializing in consolidating episodic memories into global project context.
+# #
+# import logging
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -31,7 +31,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class MemoryConsolidationAgent(BaseAgent):
-    """Refines project knowledge by analyzing past interactions and outcomes from federated shards."""
+""""Refines project knowledge by analyzing past interactions and outcomes from federated shards."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -40,25 +40,25 @@ class MemoryConsolidationAgent(BaseAgent):
         self.context_engine = GlobalContextEngine(str(self.workspace_root))
 
         self._system_prompt = (
-            "You are the Memory Consolidation Agent. "
-            "Your task is to review federated DiskCache memory shards and extract long-term value. "
-            "1. Merge duplicate interactions into high-level factual summaries. "
-            "2. Identify successful patterns and turn them into best practices. "
-            "3. Prune redundant episodic data from local shards."
+#             "You are the Memory Consolidation Agent.
+#             "Your task is to review federated DiskCache memory shards and extract long-term value.
+#             "1. Merge duplicate interactions into high-level factual summaries.
+#             "2. Identify successful patterns and turn them into best practices.
+#             "3. Prune redundant episodic data from local shards.
         )
 
     def _get_default_content(self) -> str:
-        return "# Memory Consolidation Log\n\n## Status\nReady for federated consolidation.\n"
+"""return "# Memory Consolidation Log\n\n## Status\nReady for federated consolidation.\n"""
 
     @as_tool
     def consolidate_all(self) -> str:
-        """Performs a full review of all federated memory shards."""
+""""Performs a full review of all federated memory shards."""
         # Querying for common themes across federation
         recent_memories = self.ltm.federated_query(
-            "", n_results=100
+            ", n_results=100
         )  # Empty query to get general recent ones
         if not recent_memories:
-            return "No memories found in federated shards to consolidate."
+#             return "No memories found in federated shards to consolidate.
 
         new_facts = 0
         new_insights = 0
@@ -89,7 +89,7 @@ class MemoryConsolidationAgent(BaseAgent):
             if "error" in task or "failed" in task:
                 if "import" in task:
                     self.context_engine.add_constraint(
-                        "Verify __init__.py exports for all RAG shards."
+#                         "Verify __init__.py exports for all RAG shards.
                     )
                     new_insights += 1
                 elif "diskcache" in task:
@@ -101,20 +101,20 @@ class MemoryConsolidationAgent(BaseAgent):
 
         self.context_engine.save()
         report = (
-            f"✅ Consolidation complete. Shards scanned. "
-            f"Extracted {new_facts} facts, {new_insights} insights. "
-            f"Deduplicated {deduplicated} items."
+#             f"✅ Consolidation complete. Shards scanned.
+#             fExtracted {new_facts} facts, {new_insights} insights.
+#             fDeduplicated {deduplicated} items.
         )
         logging.info(report)
         return report
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Trigger consolidation cycle."""
+#         "Trigger consolidation cycle.
         return self.consolidate_all()
 
 
 if __name__ == "__main__":
     main = create_main_function(
-        MemoryConsolidationAgent, "MemoryConsolidation Agent", "Consolidation Task"
+#         MemoryConsolidationAgent, "MemoryConsolidation Agent", "Consolidation Task
     )
     main()

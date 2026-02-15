@@ -14,7 +14,7 @@
 # limitations under the License.
 
 """Core reporting utilities."""
-
-from .deduplication_core import DeduplicationCore
+"""
+from .deduplication_core import DeduplicationCore"""
 
 __all__ = ["DeduplicationCore"]

@@ -13,9 +13,9 @@
 # limitations under the License.
 
 
-"""Agent namespace containing specialized swarm agent implementations."""
-
-from __future__ import annotations
+# "Agent namespace containing specialized swarm agent implementations.
+# #
+# from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
 

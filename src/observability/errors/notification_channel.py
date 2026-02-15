@@ -15,32 +15,35 @@
 # limitations under the License.
 
 
-"""
-Notification Channel - Enumeration of notification channel types
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Import the enum and compare or serialize channel values.
-  Example:
+# Notification Channel - Enumeration of notification channel types
+
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
+# - Import the enum and compare or serialize channel values.
+#   Example:
     from src.core.base.notification_channel import NotificationChannel
     channel = NotificationChannel.SLACK
     if channel == NotificationChannel.SLACK:
         handle_slack(channel.value)
     # or construct from string:
-    NotificationChannel("email")
+#     NotificationChannel("email")
 
-WHAT IT DOES:
-- Defines a lightweight enum, NotificationChannel, that centralizes canonical channel identifiers used across the codebase (slack, teams, email, webhook, discord) and exposes module __version__ from the project's VERSION.
+# WHAT IT DOES:
+# - Defines a lightweight enum, NotificationChannel, that centralizes canonical channel identifiers used across the codebase (slack, teams, email, webhook, discord) and exposes module __version__ from the project's VERSION."  # [BATCHFIX] closed string"  # [BATCHFIX] closed string
 
-WHAT IT SHOULD DO BETTER:
-- Add richer metadata per channel (display name, default configuration keys, required credentials) and helper methods for normalization, validation, and serialization.
-- Provide case-insensitive construction, explicit unit tests, and documentation linking enum members to channel-specific sender implementations or configuration entries.
+# WHAT IT SHOULD DO BETTER:
+# - Add richer metadata per channel (display name, default configuration keys, required credentials) and helper methods for normalization, validation, and serialization.
+# - Provide case-insensitive construction, explicit unit tests, and documentation linking enum members to channel-specific sender implementations or configuration entries.
 
-FILE CONTENT SUMMARY:
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
 
 from __future__ import annotations
 
@@ -52,14 +55,19 @@ __version__ = VERSION
 
 
 class NotificationChannel(Enum):
-    """Notification channel types."""
+    Notification channel types.
 
-    SLACK = "slack"
-    TEAMS = "teams"
-    EMAIL = "email"
-    WEBHOOK = "webhook"
-    DISCORD = "discord"
-"""
+# [BATCHFIX] Commented metadata/non-Python
+# # #     SLACK = "slack"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     TEAMS = "teams"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     EMAIL = "email"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     WEBHOOK = "webhook"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     DISCORD = "discord"  # [BATCHFIX] closed string
+
 
 from __future__ import annotations
 
@@ -71,10 +79,15 @@ __version__ = VERSION
 
 
 class NotificationChannel(Enum):
-    """Notification channel types."""
+    Notification channel types.
 
-    SLACK = "slack"
-    TEAMS = "teams"
-    EMAIL = "email"
-    WEBHOOK = "webhook"
-    DISCORD = "discord"
+# [BATCHFIX] Commented metadata/non-Python
+# # #     SLACK = "slack"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     TEAMS = "teams"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     EMAIL = "email"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     WEBHOOK = "webhook"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # #     DISCORD = "discord"  # [BATCHFIX] closed string

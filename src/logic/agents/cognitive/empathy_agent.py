@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Empathy Agent - Emotional Intelligence & Soft-Skill Synthesis
-
+# #
+# Empathy Agent - Emotional Intelligence & Soft-Skill Synthesis
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate within the agent framework: from src.agents.empathy_agent import EmpathyAgent; agent = EmpathyAgent(path); use await agent.analyze_user_sentiment(message) to get sentiment and tone recommendations; call calibrate_empathy(feedback) to update scores and mediate_conflict(agent_id, human_refusal) to generate conciliatory responses.
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Empathy Agent for emotional intelligence and soft-skill synthesis.
-"""
+# #
 
 import logging
 from typing import Any
@@ -51,23 +51,22 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class EmpathyAgent(BaseAgent):
-    """
     Phase 61: Emotional Intelligence & Soft-Skill Synthesis.
-    Analyzes user sentiment and adjusts agent linguistic "tone" for better HITL collaboration.
-    """
+#     Analyzes user sentiment and adjusts agent linguistic "tone" for better HITL collaboration.
+# #
 
     def __init__(self, path: str) -> None:
         super().__init__(path)
-        self.sentiment_state = "neutral"
+#         self.sentiment_state = "neutral
         self.empathy_score = 1.0
         self.interpersonal_resonance = 1.0
         self.interaction_history: list[Any] = []
 
     @as_tool
     async def analyze_user_sentiment(self, message: str) -> dict[str, Any]:
-        """Specialized small-LLM (simulated via directed prompt) sentiment classification."""
+#         "Specialized small-LLM (simulated via directed prompt) sentiment classification.
         # Simulated logic for reliability without LLM dependency
-        response = "NEUTRAL"
+#         response = "NEUTRAL
         msg_lower = message.lower()
         if (
             "wrong" in msg_lower
@@ -75,17 +74,17 @@ class EmpathyAgent(BaseAgent):
             or "fail" in msg_lower
             or "bad" in msg_lower
         ):
-            response = "FRUSTRATED"
+#             response = "FRUSTRATED
         elif "great" in msg_lower or "good" in msg_lower or "love" in msg_lower:
-            response = "POSITIVE"
+#             response = "POSITIVE
 
         if "POSITIVE" in response:
-            self.sentiment_state = "positive"
+#             self.sentiment_state = "positive
         elif "FRUSTRATED" in response:
-            self.sentiment_state = "frustrated"
+#             self.sentiment_state = "frustrated
             self.interpersonal_resonance *= 0.9  # Decreased resonance on frustration
         else:
-            self.sentiment_state = "neutral"
+#             self.sentiment_state = "neutral
 
         return {
             "sentiment": self.sentiment_state,
@@ -94,29 +93,29 @@ class EmpathyAgent(BaseAgent):
         }
 
     def calibrate_empathy(self, user_feedback_score: float) -> float:
-        """Adjusts the empathy score based on direct user feedback (0.0 to 1.0)."""
+""""Adjusts the empathy score based on direct user feedback (0.0 to 1.0)."""
         self.empathy_score = (self.empathy_score * 0.7) + (user_feedback_score * 0.3)
         return self.empathy_score
 
     def get_tone_recommendation(self) -> str:
-        """Determines the linguistic style to adopt based on sentiment."""
+""""Determines the linguistic style to adopt based on sentiment."""
         if self.sentiment_state == "frustrated":
-            return "concise_and_apologetic"
+#             return "concise_and_apologetic
         if self.sentiment_state == "positive":
-            return "enthusiastic_and_detailed"
-        return "professional_neutral"
+#             return "enthusiastic_and_detailed
+#         return "professional_neutral
 
     @as_tool
     async def mediate_conflict(self, agent_id: str, human_refusal: str) -> str:
-        """Generates a soft-skill response to resolve disagreements using LLM reasoning."""
-        logging.info(f"EmpathyEngine: Mediating conflict between {agent_id} and User.")
+#         "Generates a soft-skill response to resolve disagreements using LLM reasoning.
+        logging.info(fEmpathyEngine: Mediating conflict between {"agent_id} and User.")
 
         # Simulated response
         return (
-            f"I understand your perspective regarding {agent_id}. "
-            f"You said: '{human_refusal}'. Let's find a solution that works for everyone."
+#             fI understand your perspective regarding {agent_id}.
+#             fYou said: '{human_refusal}'. Let's find a solution that" works for everyone.
         )
-"""
+# #
 
 import logging
 from typing import Any
@@ -130,23 +129,22 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class EmpathyAgent(BaseAgent):
-    """
     Phase 61: Emotional Intelligence & Soft-Skill Synthesis.
-    Analyzes user sentiment and adjusts agent linguistic "tone" for better HITL collaboration.
-    """
+    Analyzes user sentiment and adjusts agent linguistic "tone" "for better HITL collaboration.
+# #
 
     def __init__(self, path: str) -> None:
         super().__init__(path)
-        self.sentiment_state = "neutral"
+#         self.sentiment_state = "neutral
         self.empathy_score = 1.0
         self.interpersonal_resonance = 1.0
         self.interaction_history: list[Any] = []
 
     @as_tool
     async def analyze_user_sentiment(self, message: str) -> dict[str, Any]:
-        """Specialized small-LLM (simulated via directed prompt) sentiment classification."""
+#         "Specialized small-LLM (simulated via directed prompt) sentiment classification.
         # Simulated logic for reliability without LLM dependency
-        response = "NEUTRAL"
+#         response = "NEUTRAL
         msg_lower = message.lower()
         if (
             "wrong" in msg_lower
@@ -154,17 +152,17 @@ class EmpathyAgent(BaseAgent):
             or "fail" in msg_lower
             or "bad" in msg_lower
         ):
-            response = "FRUSTRATED"
+#             response = "FRUSTRATED
         elif "great" in msg_lower or "good" in msg_lower or "love" in msg_lower:
-            response = "POSITIVE"
+#             response = "POSITIVE
 
         if "POSITIVE" in response:
-            self.sentiment_state = "positive"
+#             self.sentiment_state = "positive
         elif "FRUSTRATED" in response:
-            self.sentiment_state = "frustrated"
+#             self.sentiment_state = "frustrated
             self.interpersonal_resonance *= 0.9  # Decreased resonance on frustration
         else:
-            self.sentiment_state = "neutral"
+#             self.sentiment_state = "neutral
 
         return {
             "sentiment": self.sentiment_state,
@@ -173,25 +171,25 @@ class EmpathyAgent(BaseAgent):
         }
 
     def calibrate_empathy(self, user_feedback_score: float) -> float:
-        """Adjusts the empathy score based on direct user feedback (0.0 to 1.0)."""
-        self.empathy_score = (self.empathy_score * 0.7) + (user_feedback_score * 0.3)
+""""Adjusts the empathy score based on direct user feedback (0.0 to 1.0)."""
+        self.empathy_score = (self.empathy_score "* 0.7) + (user_feedback_score * 0.3)
         return self.empathy_score
 
     def get_tone_recommendation(self) -> str:
-        """Determines the linguistic style to adopt based on sentiment."""
-        if self.sentiment_state == "frustrated":
-            return "concise_and_apologetic"
+""""Determines the linguistic style to adopt based on sentiment."""
+      "  if self.sentiment_state == "frustrated":
+#             return "concise_and_apologetic
         if self.sentiment_state == "positive":
-            return "enthusiastic_and_detailed"
-        return "professional_neutral"
+#             return "enthusiastic_and_detailed
+#         return "professional_neutral
 
     @as_tool
     async def mediate_conflict(self, agent_id: str, human_refusal: str) -> str:
-        """Generates a soft-skill response to resolve disagreements using LLM reasoning."""
-        logging.info(f"EmpathyEngine: Mediating conflict between {agent_id} and User.")
+#         "Generates a soft-skill response to resolve disagreements using LLM reasoning.
+        logging.info(fEmpathyEngine: Mediating conflict between {agent_id} and User.")
 
         # Simulated response
         return (
-            f"I understand your perspective regarding {agent_id}. "
-            f"You said: '{human_refusal}'. Let's find a solution that works for everyone."
+#             fI understand your perspective regarding {agent_id}.
+#             fYou said: '{human_refusal}'. Let's find a solution that works for everyone.
         )

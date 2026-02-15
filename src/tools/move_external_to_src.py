@@ -15,7 +15,7 @@
 """Move top-level external_candidates into src/external_candidates.
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Run from the repository root: python tools/move_external_to_src.py

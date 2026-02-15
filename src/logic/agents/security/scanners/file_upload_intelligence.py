@@ -18,10 +18,11 @@ from typing import List, Dict, Any
 
 
 class FileUploadIntelligence:
-    """
-    Consolidates logic for bypassing file upload restrictions.
-    Derived from tools like upload_bypass and manual techniques.
-    """
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+"""Consolidates logic for bypassing file upload restrictions."""
+#     Derived from tools like upload_bypass and manual techniques.
+# #
 
     PHP_EXTENSIONS = [
         ".php",
@@ -99,10 +100,19 @@ class FileUploadIntelligence:
         ".jsPf",
     ]
 
-    COLDFUSION_EXTENSIONS = [".cfm", ".cfml", ".cfc", ".dbm"]
-    PERL_EXTENSIONS = [".pl", ".cgi"]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     COLDFUSION_EXTENSIONS = [".cfm", ".cfml", ".cfc", ".dbm"]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     PERL_EXTENSIONS = [".pl", ".cgi"]
 
-    BYPASS_SUFFIXES = ["%20", "%0a", "%00", "%0d%0a", "/", ".\\", ".", "....", ".", ". ", " .", " "]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     BYPASS_SUFFIXES = ["%20", "%0a", "%00", "%0d%0a", "/", ".\\", ".", "....", ".", ". ", " .", " "]
 
     COMMON_MIME_TYPES = [
         "image/jpeg",
@@ -115,9 +125,16 @@ class FileUploadIntelligence:
     ]
 
     @staticmethod
-    async def get_extension_variants(base_extension: str) -> List[str]:
-        """Generates common bypass variants for a core extension (e.g. .php)."""
-        variants = []
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     async def get_extension_variants(base_extension: str) -> List[str]:
+# [BATCHFIX] Commented metadata/non-Python
+# #         "Generates common bypass variants for a core extension (e.g. .php)."  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         variants = []
         if "php" in base_extension.lower():
             variants.extend(FileUploadIntelligence.PHP_EXTENSIONS)
         elif "asp" in base_extension.lower():
@@ -131,11 +148,24 @@ class FileUploadIntelligence:
         return list(set(variants))
 
     @staticmethod
-    async def get_obfuscated_filenames(filename: str, allowed_ext: str) -> List[str]:
-        """Generates filenames with null bytes or multiple extensions."""
-        results = []
-        name_part = filename.split(".")[0]
-        ext_part = "." + filename.split(".")[-1]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     async def get_obfuscated_filenames(filename: str, allowed_ext: str) -> List[str]:
+# [BATCHFIX] Commented metadata/non-Python
+# #         "Generates filenames with null bytes or multiple extensions."  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         results = []
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         name_part = filename.split(".")[0]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         ext_part = "." + filename.split(".")[-1]
 
         for suffix in FileUploadIntelligence.BYPASS_SUFFIXES:
             # Null byte / suffix bypasses
@@ -145,19 +175,33 @@ class FileUploadIntelligence:
         return results
 
     @staticmethod
-    async def get_magic_bytes_headers() -> Dict[str, bytes]:
-        """Returns magic bytes for common image types to prepend to payloads."""
-        return {
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     async def get_magic_bytes_headers() -> Dict[str, bytes]:
+# [BATCHFIX] Commented metadata/non-Python
+# #         "Returns magic bytes for common image types to prepend to payloads."  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#     "    return {"  # [BATCHFIX] closed string
             "jpeg": b"\xff\xd8\xff\xe0\x00\x10\x4a\x46\x49\x46\x00\x01",
             "png": b"\x89\x50\x4e\x47\x0d\x0a\x1a\x0a",
-            "gif": b"GIF89a",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#             "gif": bGIF89a","  # [BATCHFIX] closed string
             "pdf": b"%PDF-1.4",
         }
 
     @staticmethod
-    async def get_upload_attack_vectors() -> List[Dict[str, Any]]:
-        """Returns a list of high-level attack strategies for file uploads."""
-        return [
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     async def get_upload_attack_vectors() -> List[Dict[str, Any]]:
+# [BATCHFIX] Commented metadata/non-Python
+# #         "Returns a list of high-level attack strategies for file uploads."  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#  "       return ["  # [BATCHFIX] closed string
             {"name": "Extension Bypass", "method": "Brute force alternative extensions (e.g., .phtml for .php)"},
             {"name": "MIME Type Spoofing", "method": "Set Content-Type header to image/jpeg while uploading script"},
             {"name": "Magic Bytes Prepending", "method": "Prepend JPG/PNG magic bytes to a web shell file"},

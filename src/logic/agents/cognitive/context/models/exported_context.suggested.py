@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.export_format import ExportFormat
@@ -29,16 +29,16 @@ __version__ = VERSION
 
 @dataclass
 class ExportedContext:
-    """Exported context document.
+    "Exported context document.
 
     Attributes:
         format: Export format used.
         content: Exported content.
         metadata: Export metadata.
-        created_at: Creation timestamp.
-    """
+#         created_at: Creation timestamp.
+# #
 
     format: ExportFormat
     content: str
     metadata: dict[str, Any] = field(default_factory=lambda: {})
-    created_at: str = ""
+#     created_at: str =

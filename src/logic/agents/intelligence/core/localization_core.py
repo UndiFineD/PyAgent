@@ -19,10 +19,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Localization core module.
-"""
-
+# #
+# Localization core module.
+# #
+# #
 from __future__ import annotations
 
 import re
@@ -37,10 +37,9 @@ except ImportError:
 
 
 class LocalizationCore:
-    """
     LocalizationCore handles translation logic (placeholder) and Cultural Guardrails.
-    It identifies problematic idioms or metaphors in multi-agent communication.
-    """
+#     It identifies problematic idioms or metaphors in multi-agent communication.
+# #
 
     def __init__(self) -> None:
         # List of potentially offensive or culturally insensitive metaphors/idioms
@@ -57,11 +56,10 @@ class LocalizationCore:
         ]
 
     def detect_cultural_issues(self, text: str) -> list[dict[str, Any]]:
-        """
         Detects cultural red flags in agent communication.
         Returns a list of identified issues with suggestions.
-        """
-        if HAS_RUST:
+# #
+     "   "if HAS_RUST:
             try:
                 # Rust implementation expects regex patterns
                 return rust_core.detect_cultural_issues(text, self.cultural_red_flags)  # type: ignore[attr-defined]
@@ -83,9 +81,9 @@ class LocalizationCore:
         return issues
 
     def get_supported_locales(self) -> list[str]:
-        """Returns the 12 major languages currently prioritized for translation."""
-        return ["en", "zh", "es", "hi", "ar", "bn", "pt", "ru", "ja", "de", "fr", "ko"]
+""""Returns the 12 major languages currently prioritized for translation."""
+        return ["en", "zh", "es", "hi", "ar", "bn", "pt", "ru", "ja"," "de", "fr", "ko"]
 
     def format_translation_request(self, text: str, target_lang: str) -> str:
-        """Constructs a prompt or request for an external translation service (DeepL/LLM)."""
-        return f"Translate the following technical agent comment to {target_lang}:\n\n{text}"
+""""Constructs a prompt or request for an external translation service (DeepL/LLM)."""
+#         return fTranslate the following technical agent comment to {target_lang}:\n\n{text}

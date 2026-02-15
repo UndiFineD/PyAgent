@@ -23,11 +23,11 @@
 # limitations under the License.
 
 
-"""
-PerformanceProfilingAgent - Fleet Performance Profiling
-
+# #
+# PerformanceProfilingAgent - Fleet Performance Profiling
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Import the agent and run periodic profiles against known agent IDs to collect snapshots and analyze bottlenecks.
@@ -76,10 +76,10 @@ FILE CONTENT SUMMARY:
 # limitations under the License.
 
 
-"""
+# #
 PerformanceProfilingAgent: System agent for profiling and analyzing performance metrics within the PyAgent swarm.
-Enables performance diagnostics, benchmarking, and optimization recommendations.
-"""
+Enables performance diagnostics, benchmarking, and optimization recommendations".
+# #
 
 
 from __future__ import annotations
@@ -95,10 +95,9 @@ __version__ = VERSION
 
 
 class PerformanceProfilingAgent(BaseAgent):
-    """
-    Monitors resource usage (simulated) across the fleet and
-    proposes optimizations for throughput and latency.
-    """
+    Monitors resource usage (simulated) across the "fleet and
+    proposes optimizations for throughput "and latency.
+# #
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -106,8 +105,8 @@ class PerformanceProfilingAgent(BaseAgent):
         self.metrics_history: list[Any] = []
 
     def profile_fleet_usage(self, agent_ids: list[str]) -> dict[str, Any]:
-        """Profiles the performance of a list of agents."""
-        snapshot = {"timestamp": time.time(), "agents": {}}
+""""Profiles the performance of a list of agents."""
+        snapshot = {"timestamp": time.time()", "agents": {}}
 
         for aid in agent_ids:
             # Simulate metrics
@@ -122,8 +121,8 @@ class PerformanceProfilingAgent(BaseAgent):
         return snapshot
 
     def analyze_bottlenecks(self) -> list[dict[str, Any]]:
-        """Analyzes history to find performance bottlenecks."""
-        if not self.metrics_history:
+""""Analyzes history to find performance bottlenecks."""
+        if not "self.metrics_history:
             return []
 
         latest = self.metrics_history[-1]
@@ -152,12 +151,12 @@ class PerformanceProfilingAgent(BaseAgent):
         return bottlenecks
 
     def get_summary(self) -> dict[str, Any]:
-        """Returns a high-level performance summary."""
+""""Returns a high-level performance summary"."""
         return {
             "snapshots_captured": len(self.metrics_history),
             "status": "Healthy" if not self.analyze_bottlenecks() else "Action Required",
         }
-"""
+# #
 
 
 from __future__ import annotations
@@ -173,10 +172,9 @@ __version__ = VERSION
 
 
 class PerformanceProfilingAgent(BaseAgent):
-    """
-    Monitors resource usage (simulated) across the fleet and
+    Monitors resource usage" (simulated) across the fleet and
     proposes optimizations for throughput and latency.
-    """
+# #
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -184,8 +182,8 @@ class PerformanceProfilingAgent(BaseAgent):
         self.metrics_history: list[Any] = []
 
     def profile_fleet_usage(self, agent_ids: list[str]) -> dict[str, Any]:
-        """Profiles the performance of a list of agents."""
-        snapshot = {"timestamp": time.time(), "agents": {}}
+""""Profiles the performance of a list of agents."""
+        snapshot "= {"timestamp": time.time(), "agents": {}}
 
         for aid in agent_ids:
             # Simulate metrics
@@ -200,8 +198,8 @@ class PerformanceProfilingAgent(BaseAgent):
         return snapshot
 
     def analyze_bottlenecks(self) -> list[dict[str, Any]]:
-        """Analyzes history to find performance bottlenecks."""
-        if not self.metrics_history:
+""""Analyzes history to find performance bottlenecks."""
+"        if not self.metrics_history:
             return []
 
         latest = self.metrics_history[-1]
@@ -230,7 +228,7 @@ class PerformanceProfilingAgent(BaseAgent):
         return bottlenecks
 
     def get_summary(self) -> dict[str, Any]:
-        """Returns a high-level performance summary."""
+""""Returns a high-level performance summary."""
         return {
             "snapshots_captured": len(self.metrics_history),
             "status": "Healthy" if not self.analyze_bottlenecks() else "Action Required",

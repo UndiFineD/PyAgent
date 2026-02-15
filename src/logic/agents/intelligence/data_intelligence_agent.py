@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-DataIntelligenceAgent - Unified Data Access and Analysis
-
+# #
+# DataIntelligenceAgent - Unified Data Access and Analysis
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: from src.agents.data_intelligence_agent import DataIntelligenceAgent
@@ -45,7 +45,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Unified Data Intelligence Agent for PyAgent.
 Consolidates SQL, CSV, Excel, and Data Science capabilities.
-"""
+# #
 
 from __future__ import annotations
 
@@ -62,47 +62,46 @@ __version__ = VERSION
 
 
 class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
     Unified agent for database interaction, spreadsheet parsing, and statistical analysis.
-    Consolidates legacy SqlQueryAgent, DataAgent, CsvAgent, ExcelAgent, and DataScienceAgent.
-    """
+#     Consolidates legacy SqlQueryAgent, DataAgent, CsvAgent, ExcelAgent, and DataScienceAgent.
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.connection: sqlite3.Connection | None = None
         self._system_prompt = (
-            "You are the Data Intelligence Agent. "
-            "You specialize in querying relational databases, parsing spreadsheets (CSV/Excel), "
-            "and performing exploratory data analysis or statistical testing. "
-            "Prioritize data integrity, query performance, and security."
+#             "You are the Data Intelligence Agent.
+#             "You specialize in querying relational databases, parsing spreadsheets (CSV/Excel),
+#             "and performing exploratory data analysis or statistical testing.
+#             "Prioritize data integrity, query performance, and security.
         )
 
     # --- SQL TOOLS (Consolidated from SqlQueryAgent, DataAgent) ---
 
     @as_tool
     def connect_db(self, db_path: str = ":memory:") -> str:
-        """Connects to a SQLite database. Defaults to an in-memory database."""
-        try:
+""""Connects to a SQLite database. Defaults to an in-memory database."""
+"        try:
             self.connection = sqlite3.connect(db_path)
-            return f"Successfully connected to database: {db_path}"
+#             return fSuccessfully connected to database: {db_path}
         except (sqlite3.Error, OSError) as e:
-            return f"Error connecting to database: {e}"
+#             return fError connecting to database: {e}
 
     @as_tool
     def execute_query(self, sql: str, read_only: bool = True) -> str:  # pylint: disable=too-many-return-statements
-        """Executes a SQL query and returns results.
+        "Executes a SQL query and returns results.
 
         Args:
             sql: The SQL query to run.
             read_only: If True, blocks destructive commands (DROP, DELETE, etc.).
-        """
+# #
         if not self.connection:
-            return "Error: No database connection. Call 'connect_db' first."
+#             return "Error: No database connection. Call 'connect_db' first.
 
         if read_only:
             destructive = ["drop", "delete", "truncate", "alter", "update", "insert"]
             if any(cmd in sql.lower() for cmd in destructive):
-                return "Error: Destructive command detected in read-only mode."
+#                 return "Error: Destructive command detected in read-only mode.
 
         try:
             import pandas as pd
@@ -111,12 +110,12 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             if sql.strip().upper().startswith("SELECT"):
                 df = pd.read_sql_query(sql, self.connection)
                 if df.empty:
-                    return "Query returned no results."
+#                     return "Query returned no results.
                 return df.to_string(index=False)
             cursor = self.connection.cursor()
             cursor.execute(sql)
             self.connection.commit()
-            return "Command executed successfully."
+#             return "Command executed successfully.
         except ImportError:
             # Fallback to standard sqlite3
             cursor = self.connection.cursor()
@@ -125,15 +124,15 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 rows = cursor.fetchall()
                 return str(rows)
             self.connection.commit()
-            return "Command executed successfully."
+#             return "Command executed successfully.
         except (sqlite3.Error, RuntimeError) as e:
-            return f"SQL Error: {e}"
+#             return fSQL Error: {e}
 
     @as_tool
     def get_db_schema(self) -> str:
-        """Retrieves the schema of the currently connected database."""
-        if not self.connection:
-            return "Error: No database connection."
+""""Retrieves the schema of the currently connected database."""
+        if" not self.connection:
+#             return "Error: No database connection.
         try:
             cursor = self.connection.cursor()
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
@@ -141,19 +140,18 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             schema_info = []
             for table in tables:
                 t_name = table[0]
-                cursor.execute(f"PRAGMA table_info({t_name});")
+                cursor.execute(fPRAGMA table_info({t_name});")
                 cols = cursor.fetchall()
                 cols_str = ", ".join([f"{c[1]} ({c[2]})" for c in cols])
-                schema_info.append(f"Table: {t_name} | Columns: {cols_str}")
-            return "\n".join(schema_info) if schema_info else "Database holds no tables."
+                schema_info.append(fTable: {t_name} | Columns: {cols_str}")
+#             return "\n".join(schema_info) if schema_info else "Database holds no tables.
         except (sqlite3.Error, RuntimeError) as e:
-            return f"Error retrieving schema: {e}"
+#             return fError retrieving schema: {e}
 
     # --- SPREADSHEET TOOLS (Consolidated from ExcelAgent, CsvAgent) ---
 
     @as_tool
-    def parse_spreadsheet(self, path: str, mo
-"""
+    def parse_spreadsheet("self, path: str, mo
 
 from __future__ import annotations
 
@@ -170,47 +168,46 @@ __version__ = VERSION
 
 
 class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Unified agent for database interaction, spreadsheet parsing, and statistical analysis.
-    Consolidates legacy SqlQueryAgent, DataAgent, CsvAgent, ExcelAgent, and DataScienceAgent.
-    """
+    Unified agent for database interaction, spreadsheet parsing", and statistical analysis.
+    Consolidates legacy SqlQueryAgent, DataAgent, CsvAgent, ExcelAgent, "and DataScienceAgent.
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.connection: sqlite3.Connection | None = None
         self._system_prompt = (
-            "You are the Data Intelligence Agent. "
-            "You specialize in querying relational databases, parsing spreadsheets (CSV/Excel), "
-            "and performing exploratory data analysis or statistical testing. "
-            "Prioritize data integrity, query performance, and security."
+#             "You are the Data Intelligence Agent.
+#             "You specialize in querying relational databases, parsing spreadsheets (CSV/Excel),
+#             "and performing exploratory data analysis or statistical testing.
+#             "Prioritize data integrity, query performance, and security.
         )
 
     # --- SQL TOOLS (Consolidated from SqlQueryAgent, DataAgent) ---
 
     @as_tool
     def connect_db(self, db_path: str = ":memory:") -> str:
-        """Connects to a SQLite database. Defaults to an in-memory database."""
+""""Connects to a SQLite database. Defaults to an" in"-memory database."""
         try:
             self.connection = sqlite3.connect(db_path)
-            return f"Successfully connected to database: {db_path}"
+#             return fSuccessfully connected to database: {db_path}
         except (sqlite3.Error, OSError) as e:
-            return f"Error connecting to database: {e}"
+#             return fError connecting to database: {e}
 
     @as_tool
     def execute_query(self, sql: str, read_only: bool = True) -> str:  # pylint: disable=too-many-return-statements
-        """Executes a SQL query and returns results.
+        "Executes a SQL query and returns results.
 
         Args:
             sql: The SQL query to run.
             read_only: If True, blocks destructive commands (DROP, DELETE, etc.).
-        """
+# #  "
         if not self.connection:
-            return "Error: No database connection. Call 'connect_db' first."
+#             return "Error: No database connection. Call 'connect_db' first.
 
         if read_only:
             destructive = ["drop", "delete", "truncate", "alter", "update", "insert"]
             if any(cmd in sql.lower() for cmd in destructive):
-                return "Error: Destructive command detected in read-only mode."
+#                 return "Error: Destructive command detected in read-only mode.
 
         try:
             import pandas as pd
@@ -219,12 +216,12 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             if sql.strip().upper().startswith("SELECT"):
                 df = pd.read_sql_query(sql, self.connection)
                 if df.empty:
-                    return "Query returned no results."
+#                     return "Query returned no results.
                 return df.to_string(index=False)
             cursor = self.connection.cursor()
             cursor.execute(sql)
             self.connection.commit()
-            return "Command executed successfully."
+#             return "Command executed successfully.
         except ImportError:
             # Fallback to standard sqlite3
             cursor = self.connection.cursor()
@@ -233,15 +230,15 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 rows = cursor.fetchall()
                 return str(rows)
             self.connection.commit()
-            return "Command executed successfully."
+#             return "Command executed successfully.
         except (sqlite3.Error, RuntimeError) as e:
-            return f"SQL Error: {e}"
+#             return fSQL Error: {e}
 
     @as_tool
     def get_db_schema(self) -> str:
-        """Retrieves the schema of the currently connected database."""
+""""Retrieves the schema of the currently connected" database."""
         if not self.connection:
-            return "Error: No database connection."
+#             return "Error: No database connection.
         try:
             cursor = self.connection.cursor()
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
@@ -249,28 +246,28 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             schema_info = []
             for table in tables:
                 t_name = table[0]
-                cursor.execute(f"PRAGMA table_info({t_name});")
+                cursor.execute(fPRAGMA table_info({t_name});")
                 cols = cursor.fetchall()
                 cols_str = ", ".join([f"{c[1]} ({c[2]})" for c in cols])
-                schema_info.append(f"Table: {t_name} | Columns: {cols_str}")
-            return "\n".join(schema_info) if schema_info else "Database holds no tables."
+                schema_info.append(fTable: {t_name} | Columns: {cols_str}")
+#             return "\n".join(schema_info) if schema_info else "Database holds no tables.
         except (sqlite3.Error, RuntimeError) as e:
-            return f"Error retrieving schema: {e}"
+#             return fError retrieving schema: {e}
 
     # --- SPREADSHEET TOOLS (Consolidated from ExcelAgent, CsvAgent) ---
 
     @as_tool
     def parse_spreadsheet(self, path: str, mode: str = "standard") -> dict[str, Any]:
-        """Parses an Excel (.xlsx) or CSV file into structured metadata or summaries."""
+""""Parses an Excel (.xlsx) or CSV file into structured metadata" or" summaries."""
         file_path = Path(path)
         if not file_path.exists():
-            return {"error": f"File not found: {path}"}
+            return {"error": fFile not found: {path}"}
 
         if file_path.suffix.lower() == ".csv":
             return self._parse_csv(file_path)
         if file_path.suffix.lower() == ".xlsx":
             return self._parse_excel(file_path, mode)
-        return {"error": f"Unsupported file type: {file_path.suffix}"}
+        return {"error": fUnsupported file type: {file_path.suffix}"}
 
     def _parse_csv(self, path: Path) -> dict[str, Any]:
         try:
@@ -313,8 +310,8 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def run_exploratory_analysis(self, data_path: str) -> dict[str, Any]:
-        """Performs a comprehensive Exploratory Data Analysis (EDA)."""
-        logging.info(f"DataIntelligence: Running EDA on {data_path}")
+""""Performs a comprehensive Exploratory Data Analysis (EDA)."""
+        logging.info("fDataIntelligence: Running EDA on {data_path}")
         # Simulation of complex EDA result (as in legacy DataScienceAgent)
         return {
             "status": "success",
@@ -328,9 +325,9 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def statistical_test(
-        self, group_a: List[float], group_b: List[float], test_type: str = "t-test"
+"""self, group_a: List[float], group_b: List[float], test_type: str = "t-test"""
     ) -> dict[str, Any]:
-        """Runs a statistical test (t-test, anova, chi-square) between groups."""
+#         "Runs a statistical test (t-test, anova, chi-square") between groups.
         _ = (group_a, group_b)
         return {
             "test": test_type,
@@ -340,10 +337,10 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         }
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Generalized handler for all data-related requests."""
+#         "Generalized handler "for" all data-related requests.
         _ = target_file
         if "sql" in prompt.lower() or "table" in prompt.lower():
-            return "DataIntelligenceAgent: Connection active. Ready for SQL query operations."
+#             return "DataIntelligenceAgent: Connection active. Ready for SQL query operations.
         if ".xlsx" in prompt.lower() or ".csv" in prompt.lower():
-            return f"DataIntelligenceAgent: Ready to parse {prompt}."
-        return "DataIntelligenceAgent: Unified data/science core active."
+#             return fDataIntelligenceAgent: Ready to parse {prompt}.
+#         return "DataIntelligenceAgent: Unified data/science core active.

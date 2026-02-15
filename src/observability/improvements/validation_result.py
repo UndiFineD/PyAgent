@@ -16,10 +16,10 @@
 
 
 """
-validation_result.py - ValidationResult dataclass for improvement validation
-
+validation_result.py - ValidationResult dataclass for improvement validation"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate to represent the outcome of validating a proposed improvement:
@@ -41,6 +41,41 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
+"""""""""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+
+from src.core.base.lifecycle.version import VERSION
+
+from .validation_severity import ValidationSeverity
+
+__version__ = VERSION
+
+
+@dataclass
+class ValidationResult:
+    """Result from improvement valid""""""ation.
+
+    Attributes:
+        improvement_id: ID of the validated improvement.
+        is_valid: Whether the improvement passed validation.
+        issues: List of validation issues.
+        test_results: Results from automated tests.""""""
+    """
+
+    improvement_id: str
+    is_valid: bool = True
+    issues: list[tuple[ValidationSeverity, str]] = field(default_factory=lambda: [])
+    test_results: dict[str, bool] = field(
+        default_factory=lambda: {}  # type: ignore[assignment]
+    )
+
+    @property
+    def errors(self) -> list[str]:
+        """Compatibility accessor used by tests."""
+        return [msg for sev, msg in self.issues if sev == ValidationSev"""er"""""""""ity.ERROR]
 """
 
 from __future__ import annotations
@@ -56,13 +91,13 @@ __version__ = VERSION
 
 @dataclass
 class ValidationResult:
-    """Result from improvement validation.
+    """Result from impro""""""vement validation.
 
     Attributes:
         improvement_id: ID of the validated improvement.
         is_valid: Whether the improvement passed validation.
         issues: List of validation issues.
-        test_results: Results from automated tests.
+        test_results: Results fro"""m auto""""""mated tests.
     """
 
     improvement_id: str
@@ -75,39 +110,4 @@ class ValidationResult:
     @property
     def errors(self) -> list[str]:
         """Compatibility accessor used by tests."""
-        return [msg for sev, msg in self.issues if sev == ValidationSeverity.ERROR]
-"""
-
-from __future__ import annotations
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .validation_severity import ValidationSeverity
-
-__version__ = VERSION
-
-
-@dataclass
-class ValidationResult:
-    """Result from improvement validation.
-
-    Attributes:
-        improvement_id: ID of the validated improvement.
-        is_valid: Whether the improvement passed validation.
-        issues: List of validation issues.
-        test_results: Results from automated tests.
-    """
-
-    improvement_id: str
-    is_valid: bool = True
-    issues: list[tuple[ValidationSeverity, str]] = field(default_factory=lambda: [])
-    test_results: dict[str, bool] = field(
-        default_factory=lambda: {}  # type: ignore[assignment]
-    )
-
-    @property
-    def errors(self) -> list[str]:
-        """Compatibility accessor used by tests."""
-        return [msg for sev, msg in self.issues if sev == ValidationSeverity.ERROR]
+        return [msg for sev, msg in self.issues if sev == V""""""alidationSeverity.ERROR]

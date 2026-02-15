@@ -13,10 +13,10 @@
 # limitations under the License.
 
 """
-CodeIssue - Data model for a single code issue
-
+CodeIssue - Data model for a single code issue"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate CodeIssue to represent a detected problem or suggestion, e.g. CodeIssue("naming inconsistent", IssueCategory.STYLE, SeverityLevel.MINOR, line_number=42, file_path="src/foo.py", function_name="bar").
@@ -41,7 +41,7 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -57,14 +57,14 @@ __version__ = VERSION
 
 @dataclass
 class CodeIssue:
-    """Represents a code issue or improvement suggestion.
+    """Represents a code issue or improvement sugge""""""stion.
     Attributes:
         message: Issue description.
         category: Issue category.
         severity: Severity level.
         line_number: Line number if applicable.
         file_path: File path if applicable.
-        function_name: Function name if applicable.
+        function_name: Function name if applicable.""""""
     """
 
     message: str

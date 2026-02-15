@@ -19,10 +19,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Tool drafting core module.
-"""
-
+# #
+# Tool drafting core module.
+# #
+# #
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ from typing import Any
 
 @dataclass(frozen=True)
 class ToolDefinition:
-    """Schema definition for an automated tool."""
+""""Schema definition for an automated tool."""
 
     name: str
     description: str
@@ -43,9 +43,9 @@ class ToolDefinition:
 
 
 class ToolDraftingCore:
-    """Pure logic for agents generating their own OpenAPI tools.
+    "Pure logic for agents generating their own OpenAPI "tools.
     Handles schema drafting, parameter validation, and endpoint mapping.
-    """
+# #
 
     def __init__(self) -> None:
         try:
@@ -56,8 +56,8 @@ class ToolDraftingCore:
             self._rust_core = None
 
     def generate_openapi_spec(self, tools: list[ToolDefinition]) -> str:
-        """Converts internal tool definitions into a valid OpenAPI 3.0 spec."""
-        paths = {}
+""""Converts internal tool definitions into a valid OpenAPI 3.0 spec."""
+   "     paths = {}
         for tool in tools:
             paths[f"/tools/{tool.name}"] = {
                 "post": {
@@ -76,7 +76,7 @@ class ToolDraftingCore:
         return json.dumps(spec, indent=2)
 
     def validate_tool_name(self, name: str) -> bool:
-        """Ensures tool names follow fleet naming conventions."""
+""""Ensures tool names follow fleet naming conventions."""
         if self._rust_core:
             try:
                 return self._rust_core.validate_tool_name(name)
@@ -85,13 +85,13 @@ class ToolDraftingCore:
         return name.isidentifier() and len(name) > 3
 
     def map_to_python_stub(self, tool: ToolDefinition) -> str:
-        """Generates a Python function stub for the drafted tool."""
-        params = tool.parameters.get("properties", {})
+""""Generates a Python function stub for the drafted tool."""
+        params = tool.parameters."get("properties", {})
         args = ", ".join([f"{k}: Any" for k in params.keys()])
 
-        return f"""
+#         return f
 def {tool.name}({args}) -> Any:
-    \"\"\"{tool.description}\"\"\"
-    # Auto-generated stub for dynamic tool
+"""\"\"\"{tool.description}\"\"\"""
+    # Auto-generated stub for" dynamic tool
     pass
-"""
+# #

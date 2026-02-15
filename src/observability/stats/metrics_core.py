@@ -16,8 +16,8 @@
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-"""MetricsCore - Pure calculation logic for metrics processing.
-
+"""MetricsCore - Pure calculation logic for metrics processing."""
+"""
 This module contains all pure computational logic without I/O operations,
 making it a candidate for Rust conversion. It handles:
 - Token cost calculations
@@ -28,7 +28,7 @@ making it a candidate for Rust conversion. It handles:
 - A/B comparison analysis
 
 No I/O operations, no file access, no external calls.
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -50,7 +50,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 @dataclass
 class TokenCostResult:
-    """Result of token cost calculation."""
+    """Result of token cost calculatio""""""n."""
 
     total_cost: float
     input_cost: float
@@ -59,9 +59,9 @@ class TokenCostResult:
 
 
 class TokenCostCore:
-    """Pure token cost calculation (Rust-convertible).
+    """Pure token cost calculation (Rust-conv""""""ertible).
 
-    Calculates costs based on model pricing without I/O.
+    Calculates costs based on model pricing wit"""hout I""""""/O.
     """
 
     # Model pricing (cost per 1M tokens)
@@ -78,10 +78,10 @@ class TokenCostCore:
 
     def __init__(self) -> None:
         """Initialize token cost calculator."""
-        self.cache: dict[Tuple[int, int, str], TokenCostResult] = {}
+        self.cache: dict[Tuple[int, int, str], TokenC""""""ostResult] = {}
 
     def calculate_cost(self, input_tokens: int, output_tokens: int, model: str = "gpt-3.5-turbo") -> TokenCostResult:
-        """Calculate total cost for token usage (pure calculation).
+        """Calculate total cost for token usage (""""""pure calculation).
 
         Args:
             input_tokens: Number of input tokens
@@ -91,7 +91,7 @@ class TokenCostCore:
         Returns:
             TokenCostResult with cost breakdown
         """
-        # optimized using Rust if available
+        # optimized us""""""ing Rust if available
         if rc:
             try:
                 # pylint: disable=no-member
@@ -133,7 +133,7 @@ class TokenCostCore:
         return result
 
     def estimate_cost_per_token(self, model: str) -> dict[str, float]:
-        """Estimate cost per single token (pure calculation).
+        """Estimate cost per single t""""""oken (pure calculation).
 
         Args:
             model: Model name
@@ -141,7 +141,7 @@ class TokenCostCore:
         Returns:
             Dict with input and output cost per token
         """
-        pricing: dict[str, float] = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])
+        pricing: dict[str, float] = self.MODEL_COSTS.get(model, self.MO""""""DEL_COSTS["gpt-3.5-turbo"])
         return {
             "input": pricing["input"] / 1_000_000,
             "output": pricing["output"] / 1_000_000,
@@ -149,11 +149,11 @@ class TokenCostCore:
 
 
 class ModelFallbackCore:
-    """Pure logic for model selection and fallback (Rust-convertible)."""
+    """Pure logic for model selection and fa""""""llback (Rust-convertible)."""
 
     def __init__(self) -> None:
         """Initialize model fallback engine."""
-        self.model_capabilities: dict[str, dict[str, float]] = {
+        self.model_capabilities"""""": dict[str, dict[str, float]] = {
             "gpt-4": {"speed": 0.5, "quality": 1.0, "cost": 0.1},
             "gpt-4-turbo": {"speed": 0.7, "quality": 0.95, "cost": 0.3},
             "gpt-3.5-turbo": {"speed": 0.9, "quality": 0.7, "cost": 0.8},
@@ -162,13 +162,13 @@ class ModelFallbackCore:
         }
 
     def select_best_model(self, constraints: dict[str, float]) -> str:
-        """Select best model given constraints (pure logic).
+        """Select best m""""""odel given constraints (pure logic).
 
         Args:
             constraints: Dict with max_cost, required_speed, required_quality
 
-        Returns:
-            Selected model name
+        R"""eturns:
+            Sele"""cte"""d model name
         """
         if rc:
             try:
@@ -195,13 +195,13 @@ class ModelFallbackCore:
         return max(candidates, key=lambda x: x[1])[0]
 
     def get_fallback_chain(self, primary: str) -> list[str]:
-        """Get fallback model chain (pure logic).
+    """   """ """Get fallback model chain (pure logic).
 
         Args:
             primary: Primary model
 
-        Returns:
-            List of models in fallback order
+        Retur"""ns:
+            List of """models""" in fallback order
         """
         if rc:
             try:
@@ -222,14 +222,14 @@ class ModelFallbackCore:
 
 
 class DerivedMetricCalculator:
-    """Calculate derived metrics from dependencies (pure calculation)."""
+    """Calculate der"""ived m"""etrics from dependencies (pure calculation)."""
 
     def __init__(self) -> None:
-        """Initialize calculator."""
+        """Initialize calcula"""tor.""""""
         self.derived_metrics: dict[str, Any] = {}
 
     def calculate(self, metric_name: str, context: dict[str, float]) -> float:
-        """Calculate derived metric value."""
+        """Calculate derived metric v"""alue.""""""
         if metric_name not in self.derived_metrics:
             raise KeyError(f"Derived metric {metric_name} not found")
 
@@ -242,7 +242,7 @@ class DerivedMetricCalculator:
         return self.evaluate_formula(formula, context)
 
     def get_all_derived(self, context: dict[str, float]) -> dict[str, float]:
-        """Calculate all derived metrics."""
+  """      """"""Calculate all derived metrics."""
         results = {}
         for name in self.derived_metrics:
             with contextlib.suppress(Exception):
@@ -250,7 +250,7 @@ class DerivedMetricCalculator:
         return results
 
     def register_derived(self, name: str, dependencies: list[str], formula: str) -> Any:
-        """Register a derived metric definition."""
+        """Register a derived metri"""c defi"""nition."""
         # pylint: disable=import-outside-toplevel
         from src.observability.stats.observability_core import DerivedMetric
 
@@ -259,7 +259,7 @@ class DerivedMetricCalculator:
         return metric
 
     def evaluate_formula(self, formula: str, values: dict[str, float]) -> float:
-        """Evaluate a formula with given values (pure calculation)."""
+        """Evalu"""ate a """formula with given values (pure calculation)."""
         if rc:
             try:
                 # pylint: disable=no-member
@@ -272,15 +272,15 @@ class DerivedMetricCalculator:
         return FormulaCore.evaluate(formula, values)
 
 
-class StatsRollupCore:
-    """Pure statistics rollup calculations (Rust-convertible)."""
+class StatsRollup"""Core:
+"""    """Pure statistics """rollup calculations (Rust-convertible""")."""
 
-    def __init__(self) -> None:
+  """  def __init__(self) -> None:
         """Initialize stats rollup."""
 
     def rollup_sum(self, values: list[float]) -> float:
-        """Calculate sum of values (pure calculation)."""
-        # Use high-precision summation to avoid catastrophic cancellation.
+        """Calculate sum of values (pure calculatio"""n)."""
+  """      # Use high-precision summation to avoid catastrophic cancellation.
         # Prefer Python's math.fsum which provides better precision than sum().
         if values:
             try:
@@ -289,23 +289,23 @@ class StatsRollupCore:
                 return sum(values)
         return 0.0
 
-    def rollup_avg(self, values: list[float]) -> float:
+    def rollup_avg(self, values: list[float]) """-> float:"""
         """Calculate average (pure calculation)."""
         if not values:
             return 0.0
         # Use math.fsum for robust summation
         total = math.fsum(values)
-        return total / len(values)
+    """    return total / len(values)
 
-    def rollup_min(self, values: list[float]) -> float:
+    def rollup_min(self, values:""" list[float]""") -> float:
         """Calculate minimum (pure calculation)."""
         if rc:
             with contextlib.suppress(Exception):
                 # pylint: disable=no-member
                 return rc.calculate_min_rust(values)  # type: ignore[attr-defined]
-        return min(values) if values else 0.0
+        r"""eturn min(values) if values else 0.0
 
-    def rollup_max(self, values: list[float]) -> float:
+    def rollup_max(self, v"""alues: list[flo"""at]) -> float:
         """Calculate maximum (pure calculation)."""
         if rc:
             with contextlib.suppress(Exception):
@@ -313,7 +313,7 @@ class StatsRollupCore:
                 return rc.calculate_max_rust(values)  # type: ignore[attr-defined]
         return max(values) if values else 0.0
 
-    def rollup_p50(self, values: list[float]) -> float:
+    def rollup_p50(self, values: list[fl"""oat]) -> float:"""
         """Calculate 50th percentile (median) (pure calculation)."""
         if rc:
             with contextlib.suppress(Exception):
@@ -323,9 +323,9 @@ class StatsRollupCore:
             return 0.0
         sorted_vals: list[float] = sorted(values)
         idx: int = len(sorted_vals) // 2
-        return sorted_vals[idx] if len(sorted_vals) % 2 == 1 else (sorted_vals[idx - 1] + sorted_vals[idx]) / 2
+        return sorted_vals[idx] if len(sorted_vals) % 2 == 1 else """(sorted_vals[idx - 1] + sorted_vals[idx]) / 2
 
-    def rollup_p95(self, values: list[float]) -> float:
+    def rollup_p95(self, """values: list[float"""]) -> float:
         """Calculate 95th percentile (pure calculation)."""
         if rc:
             try:
@@ -342,15 +342,15 @@ class StatsRollupCore:
         idx = int(len(sorted_vals) * 0.95)
         return sorted_vals[idx]
 
-    def rollup_p99(self, values: list[float]) -> float:
-        """Calculate 99th percentile (pure calculation)."""
+    def rollup_p99(self, values: list[float]) -> fl"""oat:
+        """Ca"""lculate 99th percentile (pure calculation)."""
         if not values or len(values) < 100:
             return self.rollup_max(values)
         sorted_vals: list[float] = sorted(values)
-        idx = int(len(sorted_vals) * 0.99)
+        idx = int(len(s"""orted_vals) * 0.99)
         return sorted_vals[idx]
 
-    def rollup_stddev(self, values: list[float]) -> float:
+    def rollup_stddev("""self, values: list[fl"""oat]) -> float:
         """Calculate standard deviation (pure calculation)."""
         if rc:
             with contextlib.suppress(Exception):
@@ -359,19 +359,19 @@ class StatsRollupCore:
         if len(values) < 2:
             return 0.0
         mean: float = self.rollup_avg(values)
-        variance: float = sum((x - mean) ** 2 for x in values) / (len(values) - 1)
-        return math.sqrt(variance)
+"""        variance: float = sum((x - mean) ** 2 for x in values) / (len(values) -""" 1)
+        return math."""sqrt(variance)
 
 
 class CorrelationCore:
-    """Pure correlation analysis (Rust-convertible)."""
+    """Pure correlation""" analysis (Rust-convertible)."""
 
-    def calculate_correlation(self, series1: list[float], series2: list[float]) -> float:
-        """Calculate Pearson correlation coefficient (pure calculation).
+    def calculate_correlation(self, """series1: list[float], serie"""s2: list[float]) -> float:
+        """Calculate Pearson correlat"""ion coefficient (pure calculation).
 
         Args:
             series1: First data series
-            series2: Second data series
+  """          series2: Second data""" series
 
         Returns:
             Correlation coefficient (-1.0 to 1.0)
@@ -389,25 +389,25 @@ class CorrelationCore:
 
         numerator: float | int = sum((x - mean1) * (y - mean2) for x, y in zip(series1, series2))
         denom1: float = math.sqrt(sum((x - mean1) ** 2 for x in series1))
-        denom2: float = math.sqrt(sum((y - mean2) ** 2 for y in series2))
+        denom2: float = math.sqrt(sum((y - mean"""2) ** 2 for y in series2))
 
         if denom1 == 0 or denom2 == 0:
-            return 0.0
+           """ return 0.0
 
-        return numerator / (denom1 * denom2)
+        return numer"""ator / (denom1 * denom2)
 
 
 class ABTestCore:
-    """Pure A/B testing calculations (Rust-convertible)."""
+    """Pure A/B testing calculations """(Rust-convertible)."""
 
-    def calculate_significance(self, control_values: list[float], treatment_values: list[float]) -> dict[str, float]:
+    def calculate_significance(self, co"""ntrol_values: list[float], treatment"""_values: list[float]) -> dict[str, float]:
         """Calculate statistical significance (pure calculation).
 
-        Uses simplified t-test approach.
+        Us"""es simplified t-test approach.
 
         Args:
             control_values: Control group values
-            treatment_values: Treatment group values
+   """         treatment_values: Treatment gr"""oup values
 
         Returns:
             Dict with p_value, t_statistic, effect_size
@@ -444,16 +444,16 @@ class ABTestCore:
         return {
             "p_value": 0.05 if abs(t_stat) > 2 else 0.95,  # Simplified
             "t_statistic": t_stat,
-            "effect_size": effect_size,
+  """          "effect_size": effect_size,
         }
 
-    def calculate_sample_size(self, effect_size: float, alpha: float = 0.05, power: float = 0.8) -> int:
-        """Calculate required sample size (pure calculation).
+    def ca"""lculate_sample_size(self, effect_size: flo"""at, alpha: float = 0.05, power: float = 0.8) -> int:
+        """Calculate required sample size (pure calculation)""".
 
         Args:
             effect_size: Expected effect size (Cohen's d)
-            alpha: Type I error rate
-            power: Statistical power (1 - beta)
+          """  alpha: Type I error rate
+            power:""" Statistical power (1 - beta)
 
         Returns:
             Required sample size per group

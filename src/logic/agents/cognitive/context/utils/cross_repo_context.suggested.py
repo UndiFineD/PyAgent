@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""Cross-repository context analysis for Cognitive agents.
-
+# "Cross-repository context analysis for Cognitive agents.
+# #
 This module provides data structures to store and manage context information
 derived from multiple repositories.
-"""
+# #
 
 from __future__ import annotations
 from dataclasses import dataclass, field
@@ -31,15 +31,15 @@ __version__ = VERSION
 
 @dataclass
 class CrossRepoContext:
-    """Context information from cross-repository analysis.
+    "Context information from cross-repository analysis.
 
     Attributes:
         repo_name: Name of the repository being analyzed.
         repo_url: URL to the repository.
         related_files: List of file paths within the repository related to the query.
         similarity_score: Quantitative measure of repository relevance.
-        common_patterns: Architectural or code patterns shared with the source repository.
-    """
+#         common_patterns: Architectural or code patterns shared with the source repository.
+# #
 
     repo_name: str
     repo_url: str

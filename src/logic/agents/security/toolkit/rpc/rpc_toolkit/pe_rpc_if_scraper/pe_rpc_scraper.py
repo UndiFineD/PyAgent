@@ -17,7 +17,9 @@
 from rpc_registration_lookup.base_rpc_registration_scraper import BaseRpcRegistrationExtractor
 from rpc_registration_lookup import disassemblers, rpc_registration_scraper_factory
 from pe_rpc_if_analysis import PeRpcInterfaceScraper
-from scraper_exceptions import (
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+# from scraper_exceptions import (
     NoRpcImportException,
     CantDetermineRpcSideException,
     DotNetPeException,
@@ -29,10 +31,14 @@ import argparse
 import json
 import os
 
-OUTPUT_FILENAME = "rpc_interfaces.json"
+# [BATCHFIX] Commented metadata/non-Python
+# # OUTPUT_FILENAME = "rpc_interfaces.json"  # [BATCHFIX] closed string
 
 
-def scrape_folder(folder_path: str, disassembler: Optional[BaseRpcRegistrationExtractor] = None) -> Dict[str, Dict]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # def scrape_folder(folder_path: str, disassembler: Optional[BaseRpcRegistrationExtractor] = None) -> Dict[str, Dict]:
     output_dict = {}
     interface_scraper = PeRpcInterfaceScraper(disassembler)
     for filename in os.listdir(folder_path):
@@ -41,29 +47,42 @@ def scrape_folder(folder_path: str, disassembler: Optional[BaseRpcRegistrationEx
         pe_path = os.path.join(folder_path, filename)
         try:
             print(filename)
-            output_dict[filename] = interface_scraper.scrape_executable(pe_path)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             output_dict[filename] = interface_scraper.scrape_executable(pe_path)
         except (NoRpcImportException, CantDetermineRpcSideException, DotNetPeException, CantFindRDataSectionException):
             pass
     return output_dict
 
 
-def scrape_file(file_path: str, disassembler: Optional[BaseRpcRegistrationExtractor] = None) -> Dict[str, Dict]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # def scrape_file(file_path: str, disassembler: Optional[BaseRpcRegistrationExtractor] = None) -> Dict[str, Dict]:
     interface_scraper = PeRpcInterfaceScraper(disassembler)
-    return {os.path.split(file_path)[1]: interface_scraper.scrape_executable(file_path)}
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     return {os.path.split(file_path)[1]: interface_scraper.scrape_executable(file_path)}
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("scrape_path", help="path we wish to scrape, could be file or folder", type=str)
     parser.add_argument("--output_path", help="path for json output file", default=OUTPUT_FILENAME, type=str)
-    parser.add_argument(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#     parser.add_argument(
         "-r",
         help="parse recursively, will only work on folder paths (obviously)",
         dest="should_recurse",
         action="store_true",
         default=False,
     )
-    parser.add_argument(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#     parser.add_argument(
         "-d",
         help="Disassembler to use for rpc registration info extraction",
         dest="disassembler",

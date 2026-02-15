@@ -16,7 +16,7 @@
 AgentChainStep - Represents a single step in an agent execution chain.
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 from src.logic.orchestration.agent_chain_step import AgentChainStep

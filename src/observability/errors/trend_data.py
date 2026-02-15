@@ -15,28 +15,31 @@
 # limitations under the License.
 
 
-"""
-TrendData - Hold trend analysis payload
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Instantiate TrendData for a tracked metric, append values/timestamps, read direction and optional prediction
-- Example: td = TrendData("cpu.load"); td.values.append(0.75); td.timestamps.append("2026-02-12T21:00:00Z"); inspect td.direction
+# TrendData - Hold trend analysis payload
 
-WHAT IT DOES:
-- Simple dataclass container for metric name, historical numeric values, timestamps, current trend direction, and an optional next-value prediction
-- Exposes typed fields and defaults suitable for lightweight error/trend reporting across the agent
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
+# - Instantiate TrendData for a tracked metric, append values/timestamps, read direction and optional prediction
+# - Example: td = TrendData("cpu.load"); td.values.append(0.75); td.timestamps.append("2026-02-12T21:00:00Z"); inspect td.direction
 
-WHAT IT SHOULD DO BETTER:
-- Validate timestamps and enforce consistent length between values and timestamps
-- Provide methods for incremental updates, windowed aggregation, statistical summaries, and serialization (to/from dict or JSON)
-- Optionally compute direction/prediction lazily from values or accept pluggable predictors
+# WHAT IT DOES:
+# - Simple dataclass container for metric name, historical numeric values, timestamps, current trend direction, and an optional next-value prediction
+# - Exposes typed fields and defaults suitable for lightweight error/trend reporting across the agent
 
-FILE CONTENT SUMMARY:
+# WHAT IT SHOULD DO BETTER:
+# - Validate timestamps and enforce consistent length between values and timestamps
+# - Provide methods for incremental updates, windowed aggregation, statistical summaries, and serialization (to/from dict or JSON)
+# - Optionally compute direction/prediction lazily from values or accept pluggable predictors
+
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
 
 from __future__ import annotations
 
@@ -51,7 +54,7 @@ __version__ = VERSION
 
 @dataclass
 class TrendData:
-    """Error trend analysis data.
+    Error trend analysis data.
 
     Attributes:
         metric_name: Name of the metric being tracked.
@@ -59,14 +62,20 @@ class TrendData:
         timestamps: Timestamps for each value.
         direction: Current trend direction.
         prediction: Predicted next value.
-    """
+    
 
     metric_name: str
-    values: list[float] = field(default_factory=lambda: [])
-    timestamps: list[str] = field(default_factory=lambda: [])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     values: list[float] = field(default_factory=lambda: [])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     timestamps: list[str] = field(default_factory=lambda: [])
     direction: TrendDirection = TrendDirection.STABLE
     prediction: float | None = None
-"""
+
 
 from __future__ import annotations
 
@@ -81,7 +90,7 @@ __version__ = VERSION
 
 @dataclass
 class TrendData:
-    """Error trend analysis data.
+    Error trend analysis data.
 
     Attributes:
         metric_name: Name of the metric being tracked.
@@ -89,10 +98,16 @@ class TrendData:
         timestamps: Timestamps for each value.
         direction: Current trend direction.
         prediction: Predicted next value.
-    """
+    
 
     metric_name: str
-    values: list[float] = field(default_factory=lambda: [])
-    timestamps: list[str] = field(default_factory=lambda: [])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     values: list[float] = field(default_factory=lambda: [])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     timestamps: list[str] = field(default_factory=lambda: [])
     direction: TrendDirection = TrendDirection.STABLE
     prediction: float | None = None

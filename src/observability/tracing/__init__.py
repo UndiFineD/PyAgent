@@ -18,8 +18,8 @@
 # flake8: noqa
 
 """Lazy-loading entry point for observability.tracing."""
-
-from __future__ import annotations
+"""
+from __future__ import annotations"""
 from typing import Any, TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader

@@ -19,11 +19,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-VotingAgent - Consensus and Multi-Agent Voting Specialist
-
+# #
+# VotingAgent - Consensus and Multi-Agent Voting Specialist
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate and use inside the PyAgent swarm: from src.core.agents.voting_agent import VotingAgent
@@ -61,9 +61,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
+# #
 Voting agent.py module.
-"""
+# #
 # VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -85,28 +85,28 @@ __version__ = VERSION
 
 
 class VotingMethod(Enum):
-    """Supported consensus and voting methodologies."""
-    MAJORITY = "majority"
-    WEIGHTED = "weighted"
-    RANKED_CHOICE = "ranked_choice"
-    BORDA_COUNT = "borda_count"
-    APPROVAL = "approval"
-    QUADRATIC = "quadratic"
-    CONSENSUS = "consensus"
+""""Supported consensus and voting methodologies."""
+#     MAJORITY = "majority
+#     WEIGHTED = "weighted
+#     RANKED_CHOICE = "ranked_choice
+#     BORDA_COUNT = "borda_count
+#     APPROVAL = "approval
+#     QUADRATIC = "quadratic
+#     CONSENSUS = "consensus
 
 
 class VoteStatus(Enum):
-    """Current state of a voting session."""
-    PENDING = "pending"
-    ACTIVE = "active"
-    COMPLETED = "completed"
-    TIED = "tied"
-    INCONCLUSIVE = "inconclusive"
+""""Current state of a voting session."""
+#     PENDING" = "pending
+#     ACTIVE = "active
+#     COMPLETED = "completed
+#     TIED = "tied
+#     INCONCLUSIVE = "inconclusive
 
 
 @dataclass
 class Vote:
-    """Represents a single vote."""
+""""Represents a single vote."""
 
     voter_id: str
     choice: str
@@ -118,7 +118,7 @@ class Vote:
 
 @dataclass
 class VotingSession:
-    """Represents a voting session."""
+""""Represents a voting session."""
 
     session_id: str
     question: str
@@ -133,27 +133,26 @@ class VotingSession:
 
 # pylint: disable=too-many-ancestors
 class VotingAgent(BaseAgent):
-    """
     Agent specializing in evaluation and consensus.
     Gathers votes from multiple agents to decide on a 'truth' or 'best path'.
-    Supports multiple voting methods including ranked choice and quadratic voting.
-    """
+    Supports multiple voting methods including ranked choice "and quadratic voting.
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._sessions: Dict[str, VotingSession] = {}
         self._session_counter = 0
         self._system_prompt = (
-            "You are the Voting Agent. You act as an impartial judge for agentic consensus. "
-            "You aggregate multiple perspectives and determine the winner based on "
-            "majority, ranked choice, or weighted quality metrics. You ensure fair voting."
+#             "You are the Voting Agent. You act as an impartial judge for agentic consensus.
+#             "You aggregate multiple perspectives and determine the winner based on
+#             "majority, ranked choice, or weighted quality metrics. You ensure fair voting.
         )
 
     @as_tool
     async def create_session(self, question: str, options: List[str], method: str = "majority") -> Dict[str, Any]:
-        """Creates a new voting session."""
-        self._session_counter += 1
-        session_id = f"vote_{self._session_counter}"
+#         "Creates a new voting session.
+       " self._session_counter += 1
+#         session_id = fvote_{self._session_counter}
 
         voting_method = VotingMethod(method) if method in [m.value for m in VotingMethod] else VotingMethod.MAJORITY
 
@@ -181,22 +180,22 @@ class VotingAgent(BaseAgent):
         rankings: Optional[List[str]] = None,
         reasoning: Optional[str] = None,
     ) -> Dict[str, Any]:
-        """Casts a vote in an active session."""
+#         "Casts a vote in an active session.
         if session_id not in self._sessions:
-            return {"success": False, "error": f"Session {session_id} not found"}
+            return {"success": False, "error": fSession {session_id} not found"}
 
         session = self._sessions[session_id]
 
         if session.status != VoteStatus.ACTIVE:
-            return {"success": False, "error": f"Session is {session.status.value}"}
+            return {"success": False, "error": fSession is {session.status.value}"}
 
         # Check if already voted
         if any(v.voter_id == voter_id for v in session.votes):
-            return {"success": False, "error": f"Voter {voter_id} has already voted"}
+            return {"success": False, "error": fVoter {voter_id} has already voted"}
 
         # Validate choice
         if session.method != Votin
-"""
+# #
 # VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -218,28 +217,28 @@ __version__ = VERSION
 
 
 class VotingMethod(Enum):
-    """Supported consensus and voting methodologies."""
-    MAJORITY = "majority"
-    WEIGHTED = "weighted"
-    RANKED_CHOICE = "ranked_choice"
-    BORDA_COUNT = "borda_count"
-    APPROVAL = "approval"
-    QUADRATIC = "quadratic"
-    CONSENSUS = "consensus"
+""""Supported consensus and voting methodologies."""
+#     MAJORITY = "majority
+#     WEIGHTED = "weighted
+#     RANKED_CHOICE = "ranked_choice
+#     BORDA_COUNT = "borda_count
+#     APPROVAL = "approval
+#     QUADRATIC = "quadratic
+#     CONSENSUS = "consensus
 
 
 class VoteStatus(Enum):
-    """Current state of a voting session."""
-    PENDING = "pending"
-    ACTIVE = "active"
-    COMPLETED = "completed"
-    TIED = "tied"
-    INCONCLUSIVE = "inconclusive"
+""""Current state of a voting session."""
+#     PENDING = "pending
+#     ACTIVE = "active
+#     COMPLETED = "completed
+#     TIED = "tied
+#     INCONCLUSIVE" = "inconclusive
 
 
 @dataclass
-class Vote:
-    """Represents a single vote."""
+class "Vote:
+#     "Represents a single vote.
 
     voter_id: str
     choice: str
@@ -251,7 +250,7 @@ class Vote:
 
 @dataclass
 class VotingSession:
-    """Represents a voting session."""
+""""Represents a voting session."""
 
     session_id: str
     question: str
@@ -266,27 +265,26 @@ class VotingSession:
 
 # pylint: disable=too-many-ancestors
 class VotingAgent(BaseAgent):
-    """
-    Agent specializing in evaluation and consensus.
+   " Agent specializing in evaluation and consensus.
     Gathers votes from multiple agents to decide on a 'truth' or 'best path'.
     Supports multiple voting methods including ranked choice and quadratic voting.
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._sessions: Dict[str, VotingSession] = {}
         self._session_counter = 0
         self._system_prompt = (
-            "You are the Voting Agent. You act as an impartial judge for agentic consensus. "
-            "You aggregate multiple perspectives and determine the winner based on "
-            "majority, ranked choice, or weighted quality metrics. You ensure fair voting."
+#             "You are the Voting Agent. You act as an impartial judge for agentic consensus.
+#             "You aggregate multiple perspectives and determine the winner based on
+#             "majority, ranked choice, or weighted quality metrics. You ensure fair voting.
         )
 
     @as_tool
     async def create_session(self, question: str, options: List[str], method: str = "majority") -> Dict[str, Any]:
-        """Creates a new voting session."""
+#         "Creates a new" voting session.
         self._session_counter += 1
-        session_id = f"vote_{self._session_counter}"
+#         session_id = fvote_{self._session_counter}
 
         voting_method = VotingMethod(method) if method in [m.value for m in VotingMethod] else VotingMethod.MAJORITY
 
@@ -314,23 +312,23 @@ class VotingAgent(BaseAgent):
         rankings: Optional[List[str]] = None,
         reasoning: Optional[str] = None,
     ) -> Dict[str, Any]:
-        """Casts a vote in an active session."""
+#         "Casts a vote in "an active" session.
         if session_id not in self._sessions:
-            return {"success": False, "error": f"Session {session_id} not found"}
+            return {"success": False, "error": fSession {session_id} not found"}
 
         session = self._sessions[session_id]
 
         if session.status != VoteStatus.ACTIVE:
-            return {"success": False, "error": f"Session is {session.status.value}"}
+            return {"success": False, "error": fSession is {session.status.value}"}
 
         # Check if already voted
         if any(v.voter_id == voter_id for v in session.votes):
-            return {"success": False, "error": f"Voter {voter_id} has already voted"}
+            return {"success": False, "error": fVoter {voter_id} has already voted"}
 
         # Validate choice
         if session.method != VotingMethod.RANKED_CHOICE:
             if choice not in session.options:
-                return {"success": False, "error": f"Invalid option: {choice}"}
+                return {"success": False, "error": fInvalid option: {choice}"}
 
         vote = Vote(voter_id=voter_id, choice=choice, weight=weight, rankings=rankings, reasoning=reasoning)
         session.votes.append(vote)
@@ -339,8 +337,8 @@ class VotingAgent(BaseAgent):
 
     @as_tool
     async def cast_weighted_vote(self, options: List[str], weights: Dict[str, float]) -> Dict[str, Any]:
-        """Determines the winner among options using provided weights (legacy method)."""
-        logging.info("VotingAgent: Aggregating weighted votes...")
+#         "Determines the winner among options using provided weights (legacy method).
+      "  logging.info("VotingAgent: Aggregating weighted votes...")
 
         # Calculate weighted scores
         scores = {opt: 0.0 for opt in options}
@@ -353,15 +351,15 @@ class VotingAgent(BaseAgent):
 
         # LLM analysis for context
         prompt = (
-            f"Options: {options}\nWeights: {weights}\n\n"
-            "Analyze which option is objectively superior given the context of the fleet's mission. "
-            "Provide reasoning in JSON: {'recommendation': '...', 'confidence': 0-1, 'reasoning': '...'}"
+#             fOptions: {options}\nWeights: {weights}\n\n
+#             "Analyze which option is objectively superior given the context of the fleet's mission.
+#             "Provide reasoning in JSON: {'recommendation': '...', 'confidence': 0-1, 'reasoning': '...'}
         )
         analysis = await self.improve_content(prompt)
 
         llm_analysis = {"raw": analysis}
         with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
-            match = re.search(r"(\{[\s\S]*\})", analysis)
+            match = re.search(r"(\{[\\\\s\S]*\})", analysis)
             if match:
                 llm_analysis = json.loads(match.group(1))
 
@@ -374,9 +372,9 @@ class VotingAgent(BaseAgent):
 
     @as_tool
     async def tally_votes(self, session_id: str) -> Dict[str, Any]:
-        """Tallies votes and determines the winner."""
+#         "Tallies votes and determines the winner.
         if session_id not in self._sessions:
-            return {"success": False, "error": f"Session {session_id} not found"}
+            return {"success": False, "error": fSession {session_id} not found"}
 
         session = self._sessions[session_id]
 
@@ -413,9 +411,9 @@ class VotingAgent(BaseAgent):
 
     @as_tool
     async def get_session_status(self, session_id: str) -> Dict[str, Any]:
-        """Gets the current status of a voting session."""
+#         "Gets the current "status of" a voting session.
         if session_id not in self._sessions:
-            return {"error": f"Session {session_id} not found"}
+            return {"error": fSession {session_id} not found"}
 
         session = self._sessions[session_id]
 
@@ -432,34 +430,34 @@ class VotingAgent(BaseAgent):
 
     @as_tool
     async def deliberate(self, question: str, perspectives: List[Dict[str, str]]) -> Dict[str, Any]:
-        """Facilitates deliberation among multiple perspectives."""
+#         "Facilitates deliberation among multiple perspectives.
         perspectives_text = "\n\n".join(
             [f"**{p.get('agent', 'Agent')}**: {p.get('position', 'No position')}" for p in perspectives]
         )
 
         prompt = (
-            f"Question: {question}\n\n"
-            f"Perspectives:\n{perspectives_text}\n\n"
-            "As an impartial moderator, synthesize these perspectives:\n"
-            "1. Identify common ground\n"
-            "2. Highlight key disagreements\n"
-            "3. Propose a compromise or synthesis\n"
-            "4. Recommend the best path forward\n"
-            "Output JSON: {'common_ground': [...], 'disagreements': [...], "
-            "'synthesis': '...', 'recommendation': '...', 'confidence': 0-1}"
+#             fQuestion: {question}\n\n
+#             fPerspectives:\n{perspectives_text}\n\n
+#             "As an impartial moderator, synthesize these perspectives:\n
+#             "1. Identify common ground\n
+#             "2. Highlight key disagreements\n
+#             "3. Propose a compromise or synthesis\n
+#             "4. Recommend the best path forward\n
+#             "Output JSON: {'common_ground': [...], 'disagreements': [...],
+#             "'synthesis': '...', 'recommendation': '...', 'confidence': 0-1}
         )
 
         res = await self.improve_content(prompt)
 
         with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
-            match = re.search(r"(\{[\s\S]*\})", res)
+            match = re.search(r"(\{[\\\\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
 
         return {"raw": res}
 
     def _tally_majority(self, session: VotingSession) -> Dict[str, Any]:
-        """Simple majority voting."""
+""""Simple "majority voting."""
         counts = {opt: 0 for opt in session.options}
         for vote in session.votes:
             if vote.choice in counts:
@@ -477,7 +475,7 @@ class VotingAgent(BaseAgent):
         }
 
     def _tally_weighted(self, session: VotingSession) -> Dict[str, Any]:
-        """Weighted voting."""
+""""       "Weighted voting."""
         scores = {opt: 0.0 for opt in session.options}
         for vote in session.votes:
             if vote.choice in scores:
@@ -489,7 +487,7 @@ class VotingAgent(BaseAgent):
         return {"scores": scores, "winner": winner, "total_weight": sum(v.weight for v in session.votes)}
 
     def _tally_ranked_choice(self, session: VotingSession) -> Dict[str, Any]:
-        """Instant-runoff ranked choice voting."""
+""""    "Instant-runoff ranked choice voting."""
         remaining = set(session.options)
         rounds = []
 
@@ -519,7 +517,7 @@ class VotingAgent(BaseAgent):
         return {"winner": list(remaining)[0] if remaining else None, "rounds": rounds, "method": "elimination"}
 
     def _tally_borda(self, session: VotingSession) -> Dict[str, Any]:
-        """Borda count voting."""
+""""Borda count voting."""
         n = len(session.options)
         scores = {opt: 0 for opt in session.options}
 
@@ -534,7 +532,7 @@ class VotingAgent(BaseAgent):
         return {"scores": scores, "winner": winner, "max_possible": n * len(session.votes)}
 
     def _tally_approval(self, session: VotingSession) -> Dict[str, Any]:
-        """Approval voting (rankings treated as approvals)."""
+""""Approval" voting (rankings treated as approvals)."""
         counts = {opt: 0 for opt in session.options}
 
         for vote in session.votes:
@@ -547,8 +545,8 @@ class VotingAgent(BaseAgent):
 
         return {"counts": counts, "winner": winner}
 
-    def _tally_quadratic(self, session: VotingSession) -> Dict[str, Any]:
-        """Quadratic voting (weight = sqrt of votes)."""
+    def _tally_quadratic(self, session: VotingSession) -> Dict["str, Any]:
+""""Quadratic voting (weight = sqrt of votes)."""
         import math
 
         scores = {opt: 0.0 for opt in session.options}

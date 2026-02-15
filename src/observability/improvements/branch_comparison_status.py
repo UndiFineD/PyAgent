@@ -16,10 +16,10 @@
 
 
 """
-Branch Comparison Status - Enum for branch comparison lifecycle
-
+Branch Comparison Status - Enum for branch comparison lifecycle"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - from src.utils.branch_comparison_status import BranchComparisonStatus
@@ -36,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -48,12 +48,12 @@ __version__ = VERSION
 
 
 class BranchComparisonStatus(Enum):
-    """Status of branch comparison."""
+    """Status of branch compariso""""""n."""
 
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
-    FAILED = "failed"
+    FAILED = "f"""ai""""""led"
 """
 
 from __future__ import annotations
@@ -66,7 +66,7 @@ __version__ = VERSION
 
 
 class BranchComparisonStatus(Enum):
-    """Status of branch comparison."""
+    """Status of branch com""""""parison."""
 
     PENDING = "pending"
     IN_PROGRESS = "in_progress"

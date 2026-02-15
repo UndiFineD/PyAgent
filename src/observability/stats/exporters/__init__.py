@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Metrics exporters for various monitoring and observability platforms.
-
+"""Metrics exporters for various monitoring and observability platforms."""
+"""
 Provides exporters for Prometheus, CloudWatch, OpenTelemetry, and other
 monitoring systems.
-"""
+"""""""""
 
 from .cloud_exporter import CloudExporter  # noqa: F401
 from .metrics_exporter import MetricsExporter  # noqa: F401

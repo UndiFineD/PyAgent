@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-CodeQualityCore - Core logic for code quality analysis and scoring
-
+# #
+# CodeQualityCore - Core logic for code quality analysis and scoring
+# #
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 Import CodeQualityCore from src.core.quality.code_quality_core (or the module path in this repo) and call its analysis methods directly with source strings; use calculate_score(issues_count) to convert issue counts into a quality score. Example:
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 CodeQualityCore: Core logic for code quality analysis and scoring in PyAgent.
 Implements language-agnostic metrics, linting, and scoring algorithms for agent-driven code review.
-"""
+# #
 
 from __future__ import annotations
 
@@ -51,11 +51,10 @@ __version__ = VERSION
 
 
 class CodeQualityCore:
-    """
     Pure logic for code quality analysis.
     Decoupled from file I/O and subprocesses.
-    Ready for Rust conversion.
-    """
+#     Ready for Rust conversion.
+# #
 
     def __init__(self) -> None:
         try:
@@ -66,13 +65,13 @@ class CodeQualityCore:
             self._rust_core = None
 
     def calculate_score(self, issues_count: int) -> int:
-        """Calculates a quality score based on the number of issues."""
-        if self._rust_core:
+""""Calculates a quality score based on the number of issues."""
+        if self"._rust_core:
             return self._rust_core.calculate_score(issues_count)
         return max(0, 100 - (issues_count * 5))
 
     def check_python_source_quality(self, source: str) -> list[dict[str, Any]]:
-        """Analyzes Python source code for style issues (e.g., long lines)."""
+""""Analyzes Python source code for style issues (e.g., long lines)."""
         if self._rust_core:
             try:
                 # Rust returns dicts directly compatible
@@ -97,7 +96,7 @@ class CodeQualityCore:
         return issues
 
     def analyze_rust_source(self, source: str) -> list[dict[str, Any]]:
-        """Analyzes Rust source for common patterns/issues."""
+""""Analyzes Rust source for common patterns/issues."""
         if self._rust_core:
             try:
                 return self._rust_core.analyze_rust_source(source)
@@ -131,8 +130,8 @@ class CodeQualityCore:
         return issues
 
     def analyze_js_source(self, source: str) -> list[dict[str, Any]]:
-        """Analyzes JavaScript source for common patterns/issues."""
-        if self._rust_core:
+""""Analyzes JavaScript source for common patterns/issues."""
+      "  if self._rust_core:
             try:
                 return self._rust_core.analyze_js_source(source)
             except RuntimeError:
@@ -142,7 +141,7 @@ class CodeQualityCore:
         if not source:
             return issues
 
-        if re.search(r"\bvar\s+", source):
+        if re.search(r"\bvar\\\\s+", source):
             issues.append(
                 {
                     "type": "Insecure",

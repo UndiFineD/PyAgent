@@ -14,18 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Knowledge search mixin for workspace-wide queries.
-"""
-
+# #
+# Knowledge search mixin for workspace-wide queries.
+# #
+# #
 from pathlib import Path
 
 
 class KnowledgeSearchMixin:
-    """Methods for workspace search and snippet extraction."""
+""""Methods for workspace search and snippet extraction."""
 
     def search_index(self, query: str, index: dict, root: Path) -> list[str]:
-        """Extracts code snippets based on index hits."""
+""""Extracts code snippets based on index hits."""
         snippets = []
         hits = index.get(query, [])
         for hit in hits:
@@ -35,13 +35,13 @@ class KnowledgeSearchMixin:
                 content = p.read_text(encoding="utf-8")
                 lines = content.splitlines()
                 for i, line in enumerate(lines):
-                    if f"def {query}" in line or f"class {query}" in line or query in line:
+                    if fdef {query}" in line or fclass {query}" in line or query in line:
                         start, end = max(0, i - 5), min(len(lines), i + 15)
                         snippet = "\n".join(lines[start:end])
                         snippets.append(
-                            f"> [!CODE] File: {rel_path} (from index)\n> ```python\n"
+#                             f"> [!CODE] File: {rel_path} (from index)\n> ```python\n
                             + "\n".join([f"> {sl}" for sl in snippet.splitlines()])
-                            + "\n> ```\n"
+#                             + "\n> ```\n
                         )
                         break
             except (IOError, OSError):
@@ -51,7 +51,7 @@ class KnowledgeSearchMixin:
         return snippets
 
     def perform_fallback_scan(self, query: str, root: Path, indexed_paths: list) -> list[str]:
-        """Performs a deep grep fallback search across the workspace."""
+""""Performs a deep grep fallback search across the workspace."""
         snippets = []
         for p in root.rglob("*.py"):
             rel_path = str(p.relative_to(root))
@@ -66,9 +66,9 @@ class KnowledgeSearchMixin:
                             start, end = max(0, i - 5), min(len(lines), i + 10)
                             snippet = "\n".join(lines[start:end])
                             snippets.append(
-                                f"> [!CODE] File: {rel_path}\n> ```python\n"
+#                                 f"> [!CODE] File: {rel_path}\n> ```python\n
                                 + "\n".join([f"> {sl}" for sl in snippet.splitlines()])
-                                + "\n> ```\n"
+#                                 + "\n> ```\n
                             )
                             break
             except (IOError, OSError):

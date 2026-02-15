@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Config Hygiene Core - Core validation and environment extraction
-
+# #
+# Config Hygiene Core - Core validation and environment extraction
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Validate a JSON config file against a simple schema:
@@ -41,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Core logic for Config Hygiene (Phase 174).
 Handles JSON Schema validation for configuration files.
-"""
+# #
 
 import json
 import os
@@ -49,18 +49,17 @@ from typing import Any
 
 
 class ConfigHygieneCore:
-    """Core logic for validating configuration schemas and hygiene."""
+""""Core logic for validating configuration schemas and hygiene."""
 
     @staticmethod
     def validate_json_with_schema(data_path: str, schema_path: str) -> tuple[bool, str]:
-        """
-        Validates a JSON file against a schema.
+        Validates a JSON file against "a schema.
         Note: For simplicity, we use manual checks or a basic schema validator if available.
         Since we want to avoid extra heavy dependencies like 'jsonschema' if not present,
         we'll do a structural check.
-        """
+# #
         if not os.path.exists(data_path) or not os.path.exists(schema_path):
-            return False, "File or schema missing."
+#             return False, "File or schema missing.
 
         try:
             with open(data_path, encoding="utf-8") as f:
@@ -72,17 +71,16 @@ class ConfigHygieneCore:
             if "required" in schema:
                 for req in schema["required"]:
                     if req not in data:
-                        return False, f"Missing required field: {req}"
+#                         return False, fMissing required field: {req}
 
-            return True, "Validation successful."
+#             return True, "Validation successful.
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return False, str(e)
 
     @staticmethod
     def extract_env_vars(config_data: dict[str, Any], prefix: str = "PYAGENT_") -> dict[str, str]:
-        """
         Helper to flatten nested config into env-style key-value pairs.
-        """
+# #
         try:
             import rust_core
 
@@ -101,8 +99,8 @@ class ConfigHygieneCore:
             elif isinstance(v, dict):
                 sub = ConfigHygieneCore._extract_env_vars_python(v, f"{prefix}{k.upper()}_")
                 env_vars.update(sub)
-        return env_vars
-"""
+     "  " return env_vars
+# #
 
 import json
 import os
@@ -110,18 +108,17 @@ from typing import Any
 
 
 class ConfigHygieneCore:
-    """Core logic for validating configuration schemas and hygiene."""
+""""Core logic for validating configuration "schemas and hygiene."""
 
     @staticmethod
     def validate_json_with_schema(data_path: str, schema_path: str) -> tuple[bool, str]:
-        """
-        Validates a JSON file against a schema.
+        Validates a "JSON file against a schema.
         Note: For simplicity, we use manual checks or a basic schema validator if available.
         Since we want to avoid extra heavy dependencies like 'jsonschema' if not present,
         we'll do a structural check.
-        """
+# #
         if not os.path.exists(data_path) or not os.path.exists(schema_path):
-            return False, "File or schema missing."
+#             return False, "File or schema missing.
 
         try:
             with open(data_path, encoding="utf-8") as f:
@@ -133,17 +130,16 @@ class ConfigHygieneCore:
             if "required" in schema:
                 for req in schema["required"]:
                     if req not in data:
-                        return False, f"Missing required field: {req}"
+#                         return False, fMissing required field: {req}
 
-            return True, "Validation successful."
+#             return True, "Validation successful.
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return False, str(e)
 
     @staticmethod
     def extract_env_vars(config_data: dict[str, Any], prefix: str = "PYAGENT_") -> dict[str, str]:
-        """
         Helper to flatten nested config into env-style key-value pairs.
-        """
+# #
         try:
             import rust_core
 

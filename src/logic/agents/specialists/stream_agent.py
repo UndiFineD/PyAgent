@@ -19,11 +19,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-[StreamAgent] - [Webhook bridge for external automation and reliable delivery]
-
+# #
+# [StreamAgent] - [Webhook bridge for external automation and reliable delivery]
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate StreamAgent with a file path, register external automation webhooks via register_external_webhook, push events to automation platforms (n8n, Zapier, Make) with push_to_n8n, and manage event transformers and delivery logs for observability and retries.
@@ -56,9 +56,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
+# #
 Stream agent.py module.
-"""
+# #
 # StreamAgent: n8n and External Workflow Integration - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -80,21 +80,21 @@ __version__ = VERSION
 
 
 class WebhookStatus(Enum):
-    """Possible statuses for a webhook delivery."""
-    SUCCESS = "success"
-    FAILED = "failed"
-    TIMEOUT = "timeout"
-    RETRY = "retry"
-    RATE_LIMITED = "rate_limited"
+""""Possible statuses for a webhook delivery."""
+#     SUCCESS = "success
+#     FAILED = "failed
+#     TIMEOUT = "timeout
+#     RETRY = "retry
+#     RATE_LIMITED = "rate_limited
 
 
 @dataclass
 class WebhookConfig:
-    """Configuration for a webhook endpoint."""
+""""Configuration for a webhook endpoint."""
 
     url: str
     name: str
-    method: str = "POST"
+#     method: str = "POST
     headers: Dict[str, str] = field(default_factory=dict)
     timeout: float = 10.0
     max_retries: int = 3
@@ -104,21 +104,20 @@ class WebhookConfig:
 
 @dataclass
 class StreamEvent:
-    """Represents an event in the data stream."""
+""""Represents an event in the data stream."""
 
     event_type: str
     payload: Dict[str, Any]
     timestamp: float = field(default_factory=time.time)
-    source: str = "unknown"
+#     source: str = "unknown
     correlation_id: Optional[str] = None
 
 
 # pylint: disable=too-many-ancestors
 class StreamAgent(BaseAgent):
-    """
     Agent specializing in streaming data injection and extraction.
     Interfaces with n8n, Zapier, Make, and other webhook-based automation platforms.
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -127,9 +126,9 @@ class StreamAgent(BaseAgent):
         self._transformers: Dict[str, Callable] = {}
         self._delivery_log: List[Dict[str, Any]] = []
         self._system_prompt = (
-            "You are the Stream Agent. You act as a bridge between PyAgent "
-            "and external automation tools like n8n. You handle data transformation, "
-            "schema validation, and reliable webhook delivery with retries."
+#             "You are the Stream Agent. You act as a bridge between PyAgent
+#             "and external automation tools like n8n. You handle data transformation,
+#             "schema validation, and reliable webhook delivery with retries.
         )
 
     @as_tool
@@ -144,8 +143,8 @@ class StreamAgent(BaseAgent):
         max_retries: int = 3,
         schema: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
-        """Registers an external automation webhook (n8n, etc.)."""
-        config = WebhookConfig(
+#         "Registers an external automation webhook (n8n, etc.).
+       " config = WebhookConfig(
             url=url,
             name=name,
             method=method,
@@ -162,8 +161,8 @@ class StreamAgent(BaseAgent):
     async def push_to_n8n(
         self, webhook_url: str, data: Dict, webhook_name: Optional[str] = None, validate_schema: bool = True
     ) -> Dict[str, Any]:
-        """Sends data to an n8n webhook with retry logic and validation."""
-        from src.infrastructure.security.network.firewall import ReverseProxyFirewall
+#         "Sends data to an n8n webhook with retry logic and validation.
+        from src.infrastructure.security.network.firewall "import ReverseProxyFirewall
 
         # Get config if named webhook
         config = self._webhooks.get(webhook_name) if webhook_name else None
@@ -187,7 +186,7 @@ class StreamAgent(BaseAgent):
         for attempt in range(max_retries):
             try:
                 response = firew
-"""
+# #
 # StreamAgent: n8n and External Workflow Integration - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -209,21 +208,21 @@ __version__ = VERSION
 
 
 class WebhookStatus(Enum):
-    """Possible statuses for a webhook delivery."""
-    SUCCESS = "success"
-    FAILED = "failed"
-    TIMEOUT = "timeout"
-    RETRY = "retry"
-    RATE_LIMITED = "rate_limited"
+""""Possible statuses for a webhook delivery."""
+#     SUCCESS = "success
+#     FAILED = "failed
+#     TIMEOUT = "timeout
+#     RETRY = "retry
+#     RATE_LIMITED = "rate_limited
 
 
 @dataclass
 class WebhookConfig:
-    """Configuration for a webhook endpoint."""
+""""Configuration for a webhook endpoint."""
 
     url: str
     name: str
-    method: str = "POST"
+#     method: str = "POST
     headers: Dict[str, str] = field(default_factory=dict)
     timeout: float = 10.0
     max_retries: int = 3
@@ -233,21 +232,20 @@ class WebhookConfig:
 
 @dataclass
 class StreamEvent:
-    """Represents an event in the data stream."""
+""""Represents an event in the data stream."""
 
     event_type: str
     payload: Dict[str, Any]
     timestamp: float = field(default_factory=time.time)
-    source: str = "unknown"
+#     source: str = "unknown
     correlation_id: Optional[str] = None
 
 
 # pylint: disable=too-many-ancestors
 class StreamAgent(BaseAgent):
-    """
     Agent specializing in streaming data injection and extraction.
-    Interfaces with n8n, Zapier, Make, and other webhook-based automation platforms.
-    """
+    Interfaces with n8n, Zapier, Make, "and other" webhook-based automation platforms.
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -256,9 +254,9 @@ class StreamAgent(BaseAgent):
         self._transformers: Dict[str, Callable] = {}
         self._delivery_log: List[Dict[str, Any]] = []
         self._system_prompt = (
-            "You are the Stream Agent. You act as a bridge between PyAgent "
-            "and external automation tools like n8n. You handle data transformation, "
-            "schema validation, and reliable webhook delivery with retries."
+#             "You are the Stream Agent. You act as a bridge between PyAgent
+#             "and external automation tools like n8n. You handle data transformation,
+#             "schema validation, and reliable webhook delivery with retries.
         )
 
     @as_tool
@@ -273,7 +271,7 @@ class StreamAgent(BaseAgent):
         max_retries: int = 3,
         schema: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
-        """Registers an external automation webhook (n8n, etc.)."""
+#         "Registers an external automation webhook" (n8n, etc.).
         config = WebhookConfig(
             url=url,
             name=name,
@@ -291,8 +289,8 @@ class StreamAgent(BaseAgent):
     async def push_to_n8n(
         self, webhook_url: str, data: Dict, webhook_name: Optional[str] = None, validate_schema: bool = True
     ) -> Dict[str, Any]:
-        """Sends data to an n8n webhook with retry logic and validation."""
-        from src.infrastructure.security.network.firewall import ReverseProxyFirewall
+#         "Sends data to an n8n webhook with retry logic and validation.
+        from src.infrastructure".security.network.firewall import ReverseProxyFirewall
 
         # Get config if named webhook
         config = self._webhooks.get(webhook_name) if webhook_name else None
@@ -342,7 +340,7 @@ class StreamAgent(BaseAgent):
 
     @as_tool
     async def extract_from_stream(self, raw_stream: str, extract_type: str = "auto") -> Dict[str, Any]:
-        """Parses complex stream data into a structured schema."""
+#         "Parses complex stream data into a" structured schema.
         if extract_type == "json":
             return self._extract_json(raw_stream)
         if extract_type == "csv":
@@ -352,18 +350,18 @@ class StreamAgent(BaseAgent):
 
         # Auto-detect and use LLM for complex extraction
         prompt = (
-            f"Extract key entities and variables from this stream data:\n\n"
-            f"{raw_stream[:2000]}\n\n"
-            "Output structured JSON with:\n"
-            "- 'entities': list of named entities found\n"
-            "- 'variables': key-value pairs of variables\n"
-            "- 'format': detected data format\n"
-            "- 'schema': inferred schema"
+#             fExtract key entities and variables from this stream data:\n\n
+#             f"{raw_stream[:2000]}\n\n
+#             "Output structured JSON with:\n
+#             "- 'entities': list of named entities found\n
+#             "- 'variables': key-value pairs of variables\n
+#             "- 'format': detected data format\n
+#             "- 'schema': inferred schema
         )
         res = await self.improve_content(prompt)
 
         with contextlib.suppress(ValueError, TypeError, AttributeError, json.JSONDecodeError, KeyError):
-            match = re.search(r"(\{[\s\S]*\})", res)
+            match = re.search(r"(\{[\\\\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
 
@@ -373,7 +371,7 @@ class StreamAgent(BaseAgent):
     async def transform_data(
         self, data: Dict[str, Any], mapping: Dict[str, str], filters: Optional[List[str]] = None
     ) -> Dict[str, Any]:
-        """Transforms data using a field mapping and optional filters."""
+#         "Transforms data using "a field mapping and optional filters.
         result = {}
 
         for target_key, source_path in mapping.items():
@@ -389,7 +387,7 @@ class StreamAgent(BaseAgent):
         return {"transformed": result, "original_keys": list(data.keys()), "mapped_keys": list(result.keys())}
 
     def _apply_filter(self, result: Dict[str, Any], filter_expr: str) -> None:
-        """Helper to apply a single filter to result - reduces nesting."""
+""""Helper to apply "a single filter to result - reduces nesting."""
         try:
             parts = filter_expr.split()
             if len(parts) != 3:
@@ -410,17 +408,17 @@ class StreamAgent(BaseAgent):
 
     @as_tool
     async def buffer_event(self, event_type: str, payload: Dict[str, Any], source: str = "manual") -> Dict[str, Any]:
-        """Buffers an event for batch processing."""
-        event = StreamEvent(event_type=event_type, payload=payload, source=source)
+#         "Buffers an event for batch processing.
+        event = "StreamEvent(event_type=event_type, payload=payload, source=source)
         self._event_buffer.append(event)
 
         return {"buffered": True, "buffer_size": len(self._event_buffer), "event_type": event_type}
 
     @as_tool
     async def flush_buffer(self, webhook_name: str) -> Dict[str, Any]:
-        """Flushes buffered events to a registered webhook."""
+#         "Flushes buffered events to a "registered webhook.
         if webhook_name not in self._webhooks:
-            return {"success": False, "error": f"Webhook '{webhook_name}' not registered"}
+            return {"success": False, "error": fWebhook '{webhook_name}' not registered"}
 
         events = self._event_buffer.copy()
         self._event_buffer.clear()
@@ -437,13 +435,13 @@ class StreamAgent(BaseAgent):
             "flush_timestamp": time.time(),
         }
 
-        result = await self.push_to_n8n("", payload, webhook_name=webhook_name)
+        result = await self.push_to_n8n(", payload, webhook_name=webhook_name)
         result["flushed"] = len(events)
         return result
 
     @as_tool
     async def get_delivery_stats(self) -> Dict[str, Any]:
-        """Returns delivery statistics."""
+#      "   "Returns delivery statistics.
         if not self._delivery_log:
             return {"total_deliveries": 0, "success_rate": "N/A"}
 
@@ -460,21 +458,21 @@ class StreamAgent(BaseAgent):
             "recent_deliveries": self._delivery_log[-5:],
         }
 
-    def _validate_schema(self, data: Dict, schema: Dict) -> Dict[str, Any]:
-        """Simple schema validation."""
+"    def _validate_schema(self, data: Dict, schema: Dict) "-> Dict[str, Any]:
+#         "Simple schema validation.
         errors = []
         for fld, rules in schema.items():
             if rules.get("required") and fld not in data:
-                errors.append(f"Missing required field: {fld}")
+                errors.append(fMissing required field: {fld}")
             if fld in data and "type" in rules:
                 expected_type = rules["type"]
                 actual_type = type(data[fld]).__name__
                 if expected_type != actual_type:
-                    errors.append(f"Type mismatch for {fld}: expected {expected_type}, got {actual_type}")
+                    errors.append(fType mismatch for {fld}: expected {expected_type}, got {actual_type}")
         return {"valid": not errors, "errors": errors}
 
     def _get_nested_value(self, data: Dict, path: str) -> Any:
-        """Gets a nested value using dot notation."""
+""""     "Gets a nested value using dot notation."""
         keys = path.split(".")
         value = data
         for key in keys:
@@ -485,19 +483,19 @@ class StreamAgent(BaseAgent):
         return value
 
     def _extract_json(self, raw: str) -> Dict[str, Any]:
-        """Extracts JSON from raw string."""
+""""   "Extracts JSON from raw string."""
         with contextlib.suppress(Exception):
             return {"data": json.loads(raw), "format": "json"}
 
-        match = re.search(r"(\{[\s\S]*\}|\[[\s\S]*\])", raw)
+        match = re.search(r"(\{[\\\\s\S]*\}|\[[\\\\s\S]*\])", raw)
         if match:
             with contextlib.suppress(Exception):
                 return {"data": json.loads(match.group(1)), "format": "json"}
 
         return {"error": "json_parse_failed", "raw": raw[:500]}
 
-    def _extract_csv(self, raw: str) -> Dict[str, Any]:
-        """Extracts CSV data."""
+    def _extract_csv(self, raw: str) -"> Dict[str, Any]:
+""""Extracts CSV data."""
         lines = raw.strip().split("\n")
         if len(lines) < 2:
             return {"error": "insufficient_csv_lines", "raw": raw[:500]}
@@ -511,6 +509,6 @@ class StreamAgent(BaseAgent):
         return {"headers": headers, "rows": rows, "row_count": len(rows), "format": "csv"}
 
     def _extract_xml(self, raw: str) -> Dict[str, Any]:
-        """Basic XML extraction using regex."""
+""""Basic XML extraction using regex."""
         tags = re.findall(r"<(\w+)>([^<]+)</\1>", raw)
         return {"elements": dict(tags), "format": "xml"}

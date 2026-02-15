@@ -27,8 +27,8 @@ logger = logging.getLogger(__name__)
 
 class StatsStream:
     """Represents a real-time stats stream."""
-
-    def __init__(self, name: str, buffer_size: int = 1000) -> None:
+"""
+    def __init__(self, name: str, buffer_size: int = 1000) -> None:"""
         self.name = name
 
         self.buffer_size = buffer_size
@@ -68,7 +68,7 @@ class StatsStreamManager:
 
 
 class StatsStreamer:
-    """Real-time stats streaming via WebSocket (simulated)."""
+    """Real-time stats streaming via WebSocket (simulated)."""""""""
 
     def __init__(self, config: StreamingConfig) -> None:
         self.config = config

@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
-
-# pylint: disable=too-many-ancestors
+# "Auto-extracted class from agent_coder.py
+# #
+# # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 
@@ -48,31 +48,31 @@ __version__ = VERSION
 
 
 class CoderAgent(BaseAgent, AgentLanguageMixin, AgentStyleMixin, AgentMetricsMixin, AgentRefactorMixin):
-    """Updates code files using AI assistance.
+    "Updates code files using AI assistance.
 
     Invariants:
     - self.file_path must point to a valid file path.
 
     - Supports Python files (.py) with syntax validation.
     - Supports multi - language code improvements.
-    """
+# #
 
     # Proactive, multi-language-aware system prompt
     _system_prompt: str = (
-        "You are the CoderAgent, an autonomous AI code specialist. "
-        "You must detect the target programming language and apply best practices for that language. "
-        "Always anticipate and fix issues before they arise: "
-        "- Add missing imports, type hints, and docstrings. "
-        "- Refactor for clarity, maintainability, and performance. "
-        "- Warn about or fix deprecated or insecure patterns. "
-        "- Ensure code is ready for CI/CD, linting, and static analysis. "
-        "- For Python, prefer Python 3.10+ idioms and typing. "
-        "- For JS/TS, prefer ES2020+ and TypeScript best practices. "
-        "- For C++/Rust/Go, use modern idioms and memory safety. "
-        "- If a file is missing tests or stubs, suggest or scaffold them. "
-        "- Proactively prepare the environment (requirements, dependencies) if needed. "
-        "- Never introduce breaking changes without clear migration notes. "
-        "- Output should be robust, readable, and ready for production or review."
+#         "You are the CoderAgent, an autonomous AI code specialist.
+#         "You must detect the target programming language and apply best practices for that language.
+#         "Always anticipate and fix issues before they arise:
+#         "- Add missing imports, type hints, and docstrings.
+#         "- Refactor for clarity, maintainability, and performance.
+#         "- Warn about or fix deprecated or insecure patterns.
+#         "- Ensure code is ready for CI/CD, linting, and static analysis.
+#         "- For Python, prefer Python 3.10+ idioms and typing.
+#         "- For JS/TS, prefer ES2020+ and TypeScript best practices.
+#         "- For C++/Rust/Go, use modern idioms and memory safety.
+#         "- If a file is missing tests or stubs, suggest or scaffold them.
+#         "- Proactively prepare the environment (requirements, dependencies) if needed.
+#         "- Never introduce breaking changes without clear migration notes.
+#         "- Output should be robust, readable, and ready for production or review.
     )
 
     # Language extension mappings
@@ -118,44 +118,44 @@ class CoderAgent(BaseAgent, AgentLanguageMixin, AgentStyleMixin, AgentMetricsMix
         self._duplicate_hashes: dict[str, list[int]] = {}
 
     def _detect_language(self) -> CodeLanguage:
-        """Detect the programming language from file extension."""
+""""Detect the programming language from file extension."""
         ext = self.file_path.suffix.lower()
         return self.LANGUAGE_EXTENSIONS.get(ext, CodeLanguage.UNKNOWN)
 
     def detect_language(self) -> CodeLanguage:
-        """Public wrapper to detect and return the file language.
+        "Public wrapper to detect and return the file language.
 
         Returns:
             The detected CodeLanguage based on file extension.
-        """
+# #
         self._language = self._detect_language()
         self.core.language = self._language  # Sync core
         return self._language
 
     # ========== Documentation Generation ==========
     def generate_documentation(self, content: str | None = None) -> str:
-        """Generate documentation from code."""
+""""Generate documentation from code."""
         if content is None:
-            content = self.current_content or self.previous_content or ""
+#             content = self.current_content or self.previous_content or
         return self.core.generate_documentation(content)
 
     # ========== Core Methods ==========
     def _get_default_content(self) -> str:
-        """Return default content for new code files."""
-        return "# Code file\n\n# Add code here\n"
+""""Return default content for new code files."""
+#         return "# Code file\"n\n# Add code here\n
 
     def _get_fallback_response(self) -> str:
-        """Return fallback response when Copilot is unavailable."""
+""""Return fallback response when Copilot is unavailable."""
         return (
-            "# AI Improvement Unavailable\n"
-            "# GitHub CLI not found. Install from https://cli.github.com/\n\n"
-            "# Original code preserved below:\n\n"
+#             "# AI Improvement Unavailable\n
+#             "# GitHub CLI not found. Install from https://cli.github.com/\n\n
+#             "# Original code preserved below:\n\n
         )
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Use AI to improve the code with specific coding suggestions."""
+#         "Use AI to improve the code with specific coding suggestions.
         actual_path = Path(target_file) if target_file else self.file_path
-        logging.info(f"Improving content for {actual_path}")
+        logging.info(fImproving content for {actual_path}")
         # Call base implementation directly to use AI backend
         new_content = await super().improve_content(prompt, target_file=target_file)
         # Validate syntax

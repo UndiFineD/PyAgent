@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Agent for managing emotional intelligence and communication style of the fleet."""
-
-from __future__ import annotations
+# "Agent for managing emotional intelligence and communication style of the fleet.
+# #
+# from __future__ import annotations
 
 import logging
 from typing import Any
@@ -31,45 +31,43 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class PersonalityCoreAgent(BaseAgent):
-    """
     Manages the 'emotional intelligence' and 'vibes' of the fleet.
     Adjusts communication style and task priorities based on user context.
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Fleet Personality Core. "
-            "Your job is to detect the user's emotional state, urgency, and technical level. "
-            "You broadcast 'vibe' signals that other agents use to adjust their tone and depth."
+#             "You are the Fleet Personality Core.
+#             "Your job is to detect the user's emotional state, urgency, and technical level.
+#             "You broadcast 'vibe' signals that other agents use to adjust their tone and depth.
         )
-        self.current_vibe = "neutral"
+#         self.current_vibe = "neutral
 
     @as_tool
     def set_vibe_track(self, user_input: str) -> dict[str, Any]:
-        """
         Analyzes user input and sets the fleet-wide emotional/operational vibe.
-        """
-        logging.info(f"PersonalityCoreAgent: Analyzing vibe for: {user_input[:50]}...")
+# #
+        logging.info(fPersonalityCoreAgent: Analyzing vibe for: {user_input[:50]}...")
 
         # In a real implementation, we'd use LLM to classify sentiment/urgency
-        # prompt = f"Analyze setiment/urgency of: {user_input}"
+#         # prompt = fAnalyze setiment/urgency of: {user_input}
         # analysis = self.think(prompt)
 
         # Simulated analysis logic
-        vibe = "professional"
-        urgency = "low"
+#         vibe = "professional
+#         urgency = "low
 
         if any(
             word in user_input.lower()
             for word in ["urgent", "asap", "emergency", "broken"]
         ):
-            urgency = "high"
-            vibe = "rapid_response"
+#             urgency = "high
+#             vibe = "rapid_response
         elif any(
             word in user_input.lower() for word in ["thanks", "great", "awesome", "fun"]
         ):
-            vibe = "friendly"
+#             vibe = "friendly
 
         self.current_vibe = vibe
 
@@ -84,14 +82,13 @@ class PersonalityCoreAgent(BaseAgent):
 
     @as_tool
     def get_track_guidance(self) -> str:
-        """
         Returns instructions for other agents on how to behave under the current vibe.
-        """
-        guidance = {
+# #
+  "      guidance = {
             "professional": "Direct, technical, and concise.",
             "friendly": "Encouraging, helpful, and personable.",
             "rapid_response": "Extremely concise, focusing on immediate fixes and safety.",
         }
         return guidance.get(
-            self.current_vibe, "Maintain standard operational parameters."
+#             self.current_vibe, "Maintain standard operational parameters.
         )

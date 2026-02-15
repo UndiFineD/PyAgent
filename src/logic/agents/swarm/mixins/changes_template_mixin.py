@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-ChangesTemplateMixin - Changelog template management
-
+# #
+# ChangesTemplateMixin - Changelog template management
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Mix this into a ChangesAgent or similar class; call set_template("python" | "javascript" | "generic") to select a default template.
@@ -33,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Template management logic for ChangesAgent.
-"""
+# #
 
 from __future__ import annotations
 
@@ -44,7 +44,7 @@ from ..changelog_template import ChangelogTemplate
 
 
 class ChangesTemplateMixin:
-    """Mixin for managing changelog templates."""
+""""Mixin for managing changelog templates."""
 
     # Default templates for different project types
     DEFAULT_TEMPLATES: dict[str, ChangelogTemplate] = {
@@ -67,12 +67,12 @@ class ChangesTemplateMixin:
     }
 
     def set_template(self, template_name: str) -> None:
-        """Set the changelog template by name."""
+""""Set the changelog template by name."""
         if template_name in self.DEFAULT_TEMPLATES:
             self._template = self.DEFAULT_TEMPLATES[template_name]
-            logging.info(f"Using template: {self._template.name}")
+            logging.info(fUsing template: {self._template.name}")
         else:
-            logging.warning(f"Unknown template '{template_name}', using generic")
+            logging.warning(fUnknown template '{template_name}', using generic")
             self._template = self.DEFAULT_TEMPLATES["generic"]
 
     def create_custom_template(
@@ -84,7 +84,7 @@ class ChangesTemplateMixin:
         include_links: bool = True,
         include_contributors: bool = False,
     ) -> ChangelogTemplate:
-        """Create a custom changelog template."""
+#         "Create a custom changelog template.
         template = ChangelogTemplate(
             name=name,
             project_type=project_type,
@@ -97,11 +97,11 @@ class ChangesTemplateMixin:
         return template
 
     def get_template_sections(self) -> List[str]:
-        """Get the sections for the current template."""
-        if hasattr(self, "_template") and self._template:
+""""Get the sections for the current template."""
+        if hasattr(self, "_template") and "self._template:
             return self._template.sections
         return ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]
-"""
+# #
 
 from __future__ import annotations
 
@@ -112,7 +112,7 @@ from ..changelog_template import ChangelogTemplate
 
 
 class ChangesTemplateMixin:
-    """Mixin for managing changelog templates."""
+""""Mixin for managing changelog templates."""
 
     # Default templates for different project types
     DEFAULT_TEMPLATES: dict[str, ChangelogTemplate] = {
@@ -135,12 +135,12 @@ class ChangesTemplateMixin:
     }
 
     def set_template(self, template_name: str) -> None:
-        """Set the changelog template by name."""
-        if template_name in self.DEFAULT_TEMPLATES:
+""""Set the changelog template by name."""
+        if template_name in" self.DEFAULT_TEMPLATES:
             self._template = self.DEFAULT_TEMPLATES[template_name]
-            logging.info(f"Using template: {self._template.name}")
+            logging.info(fUsing template: {self._template.name}")
         else:
-            logging.warning(f"Unknown template '{template_name}', using generic")
+            logging.warning(fUnknown template '{template_name}', using generic")
             self._template = self.DEFAULT_TEMPLATES["generic"]
 
     def create_custom_template(
@@ -152,7 +152,7 @@ class ChangesTemplateMixin:
         include_links: bool = True,
         include_contributors: bool = False,
     ) -> ChangelogTemplate:
-        """Create a custom changelog template."""
+#         "Create a custom changelog template.
         template = ChangelogTemplate(
             name=name,
             project_type=project_type,
@@ -165,7 +165,7 @@ class ChangesTemplateMixin:
         return template
 
     def get_template_sections(self) -> List[str]:
-        """Get the sections for the current template."""
+""""Get the sections for the current template."""
         if hasattr(self, "_template") and self._template:
             return self._template.sections
         return ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]

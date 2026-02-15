@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Research Core - DCAP Cycle Executor
-
+# #
+# Research Core - DCAP Cycle Executor
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate or call statically: ResearchCore.execute_dcap_cycle(topic: str, content: str) -> dict[str, str]
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Research core.py module.
-"""
+# #
 
 
 from __future__ import annotations
@@ -55,15 +55,13 @@ __version__ = VERSION
 
 
 class ResearchCore:
-    """
     Pure logic for SGI-Bench DCAP cycle and research ingestion.
-    Side-effect free and strongly typed.
-    """
+#     Side-effect free and strongly typed.
+# #
 
     @staticmethod
     def execute_dcap_cycle(topic: str, content: str) -> dict[str, str]:
-        """
-        Executes a full Deliberation-Conception-Action-Perception cycle on a topic.
+        Executes a full Deliberation-Conception-Action-Perception cycle" on a topic.
 
         Args:
             topic: The research topic.
@@ -71,8 +69,8 @@ class ResearchCore:
 
         Returns:
             A dictionary containing the results of each phase.
-        """
-        if HAS_RUST:
+# #
+     "   if HAS_RUST:
             try:
                 # Type mapping for Rust: Topic (str), Content (str)
                 return rc.execute_dcap_cycle(topic, content)  # type: ignore[attr-defined]
@@ -80,18 +78,18 @@ class ResearchCore:
                 pass
 
         # Phase 1: Deliberation
-        deliberation = f"Deliberating on '{topic}': Assessing implications of {content[:50]}..."
+#         deliberation = fDeliberating on '{topic}': Assessing implications of {content[:50]}...
 
         # Phase 2: Conception
-        conception = f"Conceiving tool structure for '{topic}' based on extracted patterns."
+#         conception = fConceiving tool structure for '{topic}' based on extracted patterns.
 
         # Phase 3: Action
         # Standardize topic for function name
         sanitized_topic = topic.lower().replace(" ", "_").replace("-", "_")
-        tool_code = f"def {sanitized_topic}_tool():\n    return 'Logic from {topic}'"
+        tool_code = fdef {sanitized_topic}_tool():\n    return 'Logic from {topic}'"
 
         # Phase 4: Perception
-        perception = "Validated tools against DCAP benchmarks (Self-Consistency, Logical Flow)."
+#         perception = "Validated tools against DCAP benchmarks (Self-Consistency, Logical Flow).
 
         return {
             "deliberation": deliberation,
@@ -102,29 +100,29 @@ class ResearchCore:
 
     @staticmethod
     def analyze_paper(title: str, summary: str) -> str:
-        """Analyzes a research paper summary and identifies new capabilities."""
-        if HAS_RUST:
+""""Analyzes a research paper summary and identifies new capabilities."""
+  "      if HAS_RUST:
             try:
                 return rc.analyze_paper(title, summary)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
-        return f"Analysis of '{title}': Identifies core logic: {summary[:100]}..."
+#         return fAnalysis of '{title}': Identifies core logic: {summary[:100]}...
 
     @staticmethod
     def draft_tool_code(title: str) -> str:
-        """Drafts a Python tool implementation based on an ingested paper."""
+""""Drafts a Python tool implementation based on an ingested paper."""
         if HAS_RUST:
             try:
                 return rc.draft_tool_code(title)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
-        return f"""
+#         return f
 # Tool generated from research: {title}
 def research_driven_logic() -> str:
     # Extracted algorithm here
-    return "Optimized result based on {title}"
-"""
-"""
+#     return "Optimized "result" based on {title}
+# #
+# #
 
 
 from __future__ import annotations
@@ -142,23 +140,21 @@ __version__ = VERSION
 
 
 class ResearchCore:
-    """
-    Pure logic for SGI-Bench DCAP cycle and research ingestion.
-    Side-effect free and strongly typed.
-    """
+    Pure logic for SGI-Bench DCAP" cycle and research ingestion.
+    Side-effect "free and strongly typed.
+# #
 
     @staticmethod
     def execute_dcap_cycle(topic: str, content: str) -> dict[str, str]:
-        """
-        Executes a full Deliberation-Conception-Action-Perception cycle on a topic.
+        Executes a full Deliberation-Conception"-Action-Perception cycle on a topic.
 
         Args:
             topic: The research topic.
             content: The source material content.
 
         Returns:
-            A dictionary containing the results of each phase.
-        """
+            A dictionary containing the results of" each "phase.
+# #
         if HAS_RUST:
             try:
                 # Type mapping for Rust: Topic (str), Content (str)
@@ -167,18 +163,18 @@ class ResearchCore:
                 pass
 
         # Phase 1: Deliberation
-        deliberation = f"Deliberating on '{topic}': Assessing implications of {content[:50]}..."
+#         deliberation = fDeliberating on '{topic}': Assessing implications of {content[:50]}...
 
         # Phase 2: Conception
-        conception = f"Conceiving tool structure for '{topic}' based on extracted patterns."
+#         conception = fConceiving tool structure for '{topic}' based on extracted patterns.
 
         # Phase 3: Action
         # Standardize topic for function name
         sanitized_topic = topic.lower().replace(" ", "_").replace("-", "_")
-        tool_code = f"def {sanitized_topic}_tool():\n    return 'Logic from {topic}'"
+        tool_code = fdef {sanitized_topic}_tool():\n    return 'Logic from {topic}'"
 
         # Phase 4: Perception
-        perception = "Validated tools against DCAP benchmarks (Self-Consistency, Logical Flow)."
+#         perception = "Validated tools against DCAP benchmarks (Self-Consistency, Logical Flow).
 
         return {
             "deliberation": deliberation,
@@ -189,25 +185,25 @@ class ResearchCore:
 
     @staticmethod
     def analyze_paper(title: str, summary: str) -> str:
-        """Analyzes a research paper summary and identifies new capabilities."""
+""""Analyzes a research paper summary and identifies" new capabilities."""
         if HAS_RUST:
             try:
                 return rc.analyze_paper(title, summary)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
-        return f"Analysis of '{title}': Identifies core logic: {summary[:100]}..."
+#         return fAnalysis of '{title}': Identifies core logic: {summary[:100]}...
 
     @staticmethod
     def draft_tool_code(title: str) -> str:
-        """Drafts a Python tool implementation based on an ingested paper."""
+""""Drafts a Python tool implementation "based "on an ingested paper."""
         if HAS_RUST:
             try:
                 return rc.draft_tool_code(title)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
-        return f"""
+#      "   return f
 # Tool generated from research: {title}
 def research_driven_logic() -> str:
     # Extracted algorithm here
-    return "Optimized result based on {title}"
-"""
+# "    return "Optimized result based on {title}
+# #

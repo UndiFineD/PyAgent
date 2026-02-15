@@ -22,10 +22,11 @@ from urllib.parse import quote
 
 
 class MFAIntelligence:
-    """
-    Intelligence module for MFA detection and identity service profiling.
-    Ported from MFASweep and other O365/Azure tools.
-    """
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+"""Intelligence module for MFA detection and identity service profiling."""
+#     Ported from MFASweep and other O365/Azure tools.
+# #
 
     O365_ENDPOINTS = {
         "GraphAPI": "https://graph.microsoft.com",
@@ -35,7 +36,10 @@ class MFAIntelligence:
         "WebPortal": "https://portal.office.com",
     }
 
-    def __init__(self, session: Optional[aiohttp.ClientSession] = None):
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def __init__(self, session: Optional[aiohttp.ClientSession] = None):
         self.session = session
         self._own_session = False
 
@@ -46,8 +50,10 @@ class MFAIntelligence:
         return self.session
 
     async def get_user_realm(self, username: str) -> Dict:
-        """Checks the authentication realm for a user (ADFS vs Managed)."""
-        url = f"https://login.microsoftonline.com/getuserrealm.srf?login={quote(username)}&xml=1"
+# [BATCHFIX] Commented metadata/non-Python
+# #         "Checks the authentication realm for a user (ADFS vs Managed)."  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# #         url = fhttps://login.microsoftonline.com/getuserrealm.srf?login={quote(username)}&"xml=1"  # [BATCHFIX] closed string
         try:
             session = await self.get_session()
             async with session.get(url) as response:
@@ -70,11 +76,13 @@ class MFAIntelligence:
             return {"username": username, "error": str(e)}
 
     async def check_mfa_status(self, username: str, password: str) -> Dict:
-        """
+# #
         Attempts basic authentication to multiple O365 endpoints to detect MFA.
         WARNING: May trigger lockouts.
-        """
-        results = {}
+# #
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "results = {}"  # [BATCHFIX] closed string
         session = await self.get_session()
 
         async def check_endpoint(name, url):
@@ -84,12 +92,20 @@ class MFAIntelligence:
                 async with session.get(url, auth=auth, timeout=10) as response:
                     # Logic: 401 with specific headers often indicates MFA requirement
                     # whereas 200/302 might mean successful login (MFA bypassed or not enabled)
-                    results[name] = {
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                     results[name] = {
                         "status_code": response.status,
-                        "mfa_indicator": "WAuth=wsignin1.0" in response.headers.get("WWW-Authenticate", ""),
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#                         "mfa_indicator": "WAuth=wsignin1.0" in response.headers.get("WWW-Authenticate", "),"  # [BATCHFIX] closed string
                     }
             except Exception as e:
-                results[name] = {"error": str(e)}
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                 results[name] = {"error": str(e)}
 
         await asyncio.gather(*(check_endpoint(n, u) for n, u in self.O365_ENDPOINTS.items()))
         return results

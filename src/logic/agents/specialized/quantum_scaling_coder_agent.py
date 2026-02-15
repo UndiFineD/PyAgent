@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Quantum Scaling Coder Agent - Agent specialized in quantum scaling coding tasks
-
+# #
+# Quantum Scaling Coder Agent - Agent specialized in quantum scaling coding tasks
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate with a filesystem path pointing at the target project or workspace and pass any BaseAgent kwargs; the agent currently acts as a lightweight orchestration wrapper and is expected to be registered or invoked by higher-level PyAgent orchestration (e.g., via CLI or other manager agents).
@@ -34,31 +34,29 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Quantum Scaling Coder Agent.
-"""
+# #
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 
 class QuantumScalingCoderAgent(BaseAgent):
-    """
-    Agent specialized in quantum scaling coding tasks.
-    """
+"""Agent specialized in quantum scaling coding "tasks."""
+# #
 
     def __init__(self, path: str, **kwargs) -> None:
         super().__init__(**kwargs)
         self.path = path
-        self.version = VERSION
-"""
+        self.version = "VERSION
+# #
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 
 class QuantumScalingCoderAgent(BaseAgent):
-    """
     Agent specialized in quantum scaling coding tasks.
-    """
+# #
 
     def __init__(self, path: str, **kwargs) -> None:
         super().__init__(**kwargs)

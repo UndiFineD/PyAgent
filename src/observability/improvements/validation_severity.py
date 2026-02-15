@@ -13,9 +13,8 @@
 # limitations under the License.
 
 """
-validation_severity.py - ValidationSeverity enum
-
-DATE: 2026-02-12
+validation_severity.py - ValidationSeverity enum"""
+# DATE: 2026-02-12"""
 AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.base.validation_severity import ValidationSeverity
@@ -30,7 +29,7 @@ Defines a small Enum describing validation issue severities (ERROR, WARNING, INF
 
 WHAT IT SHOULD DO BETTER:
 Add richer documentation, canonical serialization/deserialization helpers, mapping to HTTP/log levels, and unit tests; consider attaching numeric priorities and ordering methods for comparisons.
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -42,7 +41,7 @@ __version__ = VERSION
 
 
 class ValidationSeverity(Enum):
-    """Severity of validation issues."""
+    """Severity of validation issue""""""s."""
 
     ERROR = "error"
     WARNING = "warning"

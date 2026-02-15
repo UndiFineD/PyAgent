@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Shell for ContextCompressorCore, handling File I/O and orchestration."""
-
-from __future__ import annotations
+# "Shell for ContextCompressorCore, handling File I/O and orchestration.
+# #
+# from __future__ import annotations
 import logging
 from pathlib import Path
 from typing import Any
@@ -31,10 +31,10 @@ __version__ = VERSION
 
 
 class ContextCompressor:
-    """Reduces the size of source files while preserving structural context.
+    "Reduces the size of source files while preserving structural context.
 
     Acts as the I/O Shell for ContextCompressorCore.
-    """
+# #
 
     def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root: Path | None = (
@@ -43,11 +43,11 @@ class ContextCompressor:
         self.core = ContextCompressorCore()
 
     def compress_file(self, file_path_raw: Any) -> str:
-        """Determines compression strategy based on file extension and handles I/O."""
+""""Determines compression strategy based on file extension and handles I/O."""
         file_path = Path(file_path_raw)
 
         if not file_path.exists():
-            return f"Error: File {file_path} not found."
+#             return fError: File {file_path} not found.
 
         try:
             content = file_path.read_text(encoding="utf-8", errors="replace")
@@ -66,8 +66,8 @@ class ContextCompressor:
 
             return header + "\n".join(lines)
         except (IOError, OSError) as e:
-            logging.error(f"Failed to compress {file_path}: {e}")
-            return f"Error compressing {file_path.name}: {str(e)}"
+            logging.error(fFailed to compress {file_path}: {e}")
+#             return fError compressing {file_path.name}: {str(e)}
 
 
 if __name__ == "__main__":

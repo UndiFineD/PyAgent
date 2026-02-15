@@ -14,10 +14,10 @@
 
 
 """
-Improvement - Dataclass for representing a single improvement suggestion
-
+Improvement - Dataclass for representing a single improvement suggestion"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 from improvement import Improvement, ImprovementPriority, ImprovementCategory, ImprovementStatus, EffortEstimate
@@ -46,7 +46,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -64,7 +64,7 @@ __version__ = VERSION
 
 @dataclass
 class Improvement:
-    """A single improvement suggestion."""
+    """A single improvement suggestio""""""n."""
 
     id: str
     title: str

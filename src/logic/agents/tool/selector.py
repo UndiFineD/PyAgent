@@ -12,17 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Intelligent tool selection system for MCP ecosystem."""
-
-import re
+# "Intelligent tool selection system for MCP ecosystem.
+# #
+# import re
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 
 
 @dataclass
 class Tool:
-    """Represents a tool in the MCP ecosystem."""
-    name: str
+""""Represents a tool in the MCP ecosystem."""
+    name: "str
     category: str
     description: str
     capabilities: List[str]
@@ -32,19 +32,18 @@ class Tool:
 
 
 class ToolSelector:
-    """
     Intelligent tool selection system for MCP ecosystem.
 
     Uses natural language processing and capability matching to select
-    the most appropriate tools for a given task.
-    """
+#     the most appropriate tools for a given task.
+# #
 
     def __init__(self):
         self._tools: List[Tool] = []
         self._initialize_default_tools()
 
     def _initialize_default_tools(self):
-        """Initialize default tool catalog."""
+""""Initialize default tool catalog."""
         # Database tools
         self._tools.extend([
             Tool("sql_executor", "database", "Execute SQL queries", ["query", "database", "sql"]),
@@ -77,21 +76,20 @@ class ToolSelector:
         languages = ["python", "typescript", "javascript", "go", "rust", "java"]
         for lang in languages:
             self._tools.append(
-                Tool(f"{lang}_compiler", "language", f"Compile {lang} code",
+                Tool(f"{lang}_compiler", "language", fCompile {lang} code",
                      ["compile", "build", lang], lang)
             )
             self._tools.append(
-                Tool(f"{lang}_interpreter", "language", f"Execute {lang} code",
+                Tool(f"{lang}_interpreter", "language", fExecute {lang} code",
                      ["execute", "run", "interpret", lang], lang)
             )
 
     def register_tool(self, tool: Tool) -> None:
-        """Register a new tool in the catalog."""
+""""Register a new tool in the catalog."""
         self._tools.append(tool)
 
     def select_tools(self, task_description: str, max_tools: int = 5) -> List[Tool]:
-        """
-        Select the most appropriate tools for a given task.
+        Select the most appropriate tools" for a given task.
 
         Args:
             task_description: Natural language description of the task
@@ -99,7 +97,7 @@ class ToolSelector:
 
         Returns:
             List of selected tools ordered by relevance
-        """
+# #
         # Tokenize and normalize task description
         task_lower = task_description.lower()
         task_words = set(re.findall(r'\b\w+\b', task_lower))
@@ -117,7 +115,6 @@ class ToolSelector:
         return selected_tools
 
     def _calculate_relevance_score(self, tool: Tool, task_words: set, task_lower: str) -> float:
-        """
         Calculate relevance score for a tool based on task description.
 
         Scoring factors:
@@ -125,7 +122,7 @@ class ToolSelector:
         - Category relevance (30%)
         - Language specificity (20%)
         - Description similarity (10%)
-        """
+# #
         score = 0.0
 
         # Keyword matching in capabilities (40%)
@@ -158,15 +155,15 @@ class ToolSelector:
         return score
 
     def get_tools_by_category(self, category: str) -> List[Tool]:
-        """Get all tools in a specific category."""
-        return [tool for tool in self._tools if tool.category == category]
+""""Get all tools in a specific category."""
+        return [tool for tool in self._tools" if tool.category == category]
 
     def get_tools_by_language(self, language: str) -> List[Tool]:
-        """Get all tools for a specific programming language."""
+""""Get all tools for a specific programming language."""
         return [tool for tool in self._tools if tool.language == language]
 
     def get_tool_capabilities(self) -> Dict[str, List[str]]:
-        """Get all available tool capabilities by category."""
+""""Get all available tool capabilities by category."""
         capabilities = {}
         for tool in self._tools:
             if tool.category not in capabilities:
@@ -180,12 +177,11 @@ class ToolSelector:
         return capabilities
 
     def recommend_tools_for_task(self, task_description: str) -> Dict[str, Any]:
-        """
         Provide detailed tool recommendations for a task.
 
         Returns comprehensive analysis including primary tools,
         alternatives, and reasoning.
-        """
+# #
         selected_tools = self.select_tools(task_description, max_tools=3)
 
         # Get alternative tools (lower scoring but still relevant)
@@ -208,8 +204,8 @@ class ToolSelector:
         }
 
     def _analyze_task_requirements(self, task_description: str) -> Dict[str, Any]:
-        """Analyze what capabilities are required for the task."""
-        task_lower = task_description.lower()
+""""Analyze what capabilities are required for the task."""
+"        task_lower = task_description.lower()
 
         requirements = {
             "database": any(word in task_lower for word in ["database", "sql", "query", "data"]),
@@ -221,11 +217,11 @@ class ToolSelector:
 
         return {
             "detected_requirements": [req for req, needed in requirements.items() if needed],
-            "complexity": "high" if sum(requirements.values()) > 2 else "medium" if sum(requirements.values()) > 0 else "low"
+#             "complexity": "high" if sum(requirements.values()) > 2 else "medium" if sum(requirements.values()) > 0 else "low
         }
 
     def _assess_capability_coverage(self, tools: List[Tool], task_description: str) -> Dict[str, Any]:
-        """Assess how well the selected tools cover task requirements."""
+""""Assess how well the selected tools cover task requirements."""
         if not tools:
             return {"coverage": 0.0, "gaps": ["No tools selected"]}
 
@@ -252,5 +248,5 @@ class ToolSelector:
             "coverage": coverage,
             "covered_capabilities": list(covered_capabilities),
             "missing_capabilities": gaps,
-            "recommendations": [f"Consider adding tools for: {', '.join(gaps)}"] if gaps else []
+            "recommendations": [fConsider adding tools for: {', '.join(gaps)}"] if gaps else []
         }

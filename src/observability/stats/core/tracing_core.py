@@ -15,10 +15,10 @@
 # limitations under the License.
 
 """
-[Tracing Core] - [Distributed tracing and latency breakdown]
-
+[Tracing Core] - [Distributed tracing and latency breakdown]"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate TracingCore and call create_span_context(trace_id, span_id)
@@ -51,7 +51,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Tracing core.py module.
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -66,13 +66,13 @@ except ImportError:
 
 class TracingCore:
     """
-    TracingCore handles the logic for distributed tracing and latency breakdown.
-    It prepares trace data for OpenTelemetry (OTel) exporters.
+    TracingCore handles the logic for distributed tracing and latency brea""""""kdown.
+    It prepares trace data for OpenTelemetry (OTel) exporters.""""""
     """
 
     def create_span_context(self, trace_id: str, span_id: str) -> dict[str, str]:
         """Creates a standardized context for distributed tracing."""
-        if rc:
+  """"""      if rc:
             try:
                 return rc.create_span_context(trace_id, span_id)  # type: ignore[attr-defined]
             except Exception:  # pylint: disable=broad-exception-caught
@@ -81,8 +81,8 @@ class TracingCore:
 
     def calculate_latency_breakdown(self, total_time: float, network_time: float) -> dict[str, float]:
         """
-        Calculates agent thinking time vs network latency.
-        """
+        Calculates agent thinking time vs n""""""etwork latency.
+        """""""""
         if rc:
             try:
                 return rc.calculate_latency_breakdown(total_time, network_time)  # type: ignore[attr-defined]
@@ -97,7 +97,7 @@ class TracingCore:
         }
 
     def format_otel_log(self, name: str, attributes: dict[str, Any]) -> dict[str, Any]:
-        """Formats a single telemetry event for OTel ingestion."""
+        """Formats a single telemetry event for OTel ingestion""""""."""
         return {
             "timestamp": time.time_ns(),
             "name": name,

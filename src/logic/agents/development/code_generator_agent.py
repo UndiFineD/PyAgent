@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Agent specializing in code generation, refactoring, and style enforcement."""
-
-# pylint: disable=too-many-ancestors
+# "Agent specializing in code generation, refactoring, and style enforcement.
+# #
+# # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ __version__ = VERSION
 
 
 class CodeGeneratorAgent(CoderAgent):
-    """Agent specializing in code generation."""
+""""Agent specializing in code generation."""
 
 
 # Create main function using the helper

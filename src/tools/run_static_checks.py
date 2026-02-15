@@ -16,7 +16,7 @@
 run_static_checks.py - Run static-safety checks on extracted candidate packages
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
   python src/tools/run_static_checks.py src/external_candidates/auto

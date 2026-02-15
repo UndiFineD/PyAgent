@@ -15,36 +15,45 @@
 # limitations under the License.
 
 
-"""
-ExternalReportingClient - Report errors to external monitoring services
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Instantiate with an ExternalReporter enum value and an optional DSN/API key.
-- Call report(error: ErrorEntry) to send a single error (returns bool).
-- Call report_batch(list[ErrorEntry]) to send multiple errors (returns int count).
-Example:
+# ExternalReportingClient - Report errors to external monitoring services
+
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
+# - Instantiate with an ExternalReporter enum value and an optional DSN/API key.
+# - Call report(error: ErrorEntry) to send a single error (returns bool).
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # - Call report_batch(list[ErrorEntry]) to send multiple errors (returns int count).
+# Example:
 from src.integrations.external_reporting_client import ExternalReportingClient
-client = ExternalReportingClient(ExternalReporter.SENTRY, dsn="https://example")
+# client = ExternalReportingClient(ExternalReporter.SENTRY, dsn="https://example")
 client.report(error_entry)
-client.report_batch([error1, error2])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # client.report_batch([error1, error2])
 
-WHAT IT DOES:
-- Provides a lightweight client class (ExternalReportingClient) that builds a shaped payload from an ErrorEntry and logs a reporting action.
-- Supports single and batch reporting flows, and enables/disables reporting based on presence of a DSN.
-- Produces a consistent payload structure with message, severity level, tags (category, file, line) and extra (stack trace, suggested fix).
+# WHAT IT DOES:
+# - Provides a lightweight client class (ExternalReportingClient) that builds a shaped payload from an ErrorEntry and logs a reporting action.
+# - Supports single and batch reporting flows, and enables/disables reporting based on presence of a DSN.
+# - Produces a consistent payload structure with message, severity level, tags (category, file, line) and extra (stack trace, suggested fix).
 
-WHAT IT SHOULD DO BETTER:
-- Implement the actual network transport and retry/backoff logic for each supported provider (Sentry, Rollbar, Bugsnag, Datadog, NewRelic) rather than only logging.
-- Add secure DSN handling (avoid storing raw keys), validation, and provider-specific payload adaptations.
-- Improve observability (return rich result details or errors), add asynchronous reporting option, rate limiting, batching optimizations, and unit/integration tests for provider integrations.
-- Validate input ErrorEntry fields and handle partial failures in batch reporting (currently treats all as succeed on logging).
+# WHAT IT SHOULD DO BETTER:
+# - Implement the actual network transport and retry/backoff logic for each supported provider (Sentry, Rollbar, Bugsnag, Datadog, NewRelic) rather than only logging.
+# - Add secure DSN handling (avoid storing raw keys), validation, and provider-specific payload adaptations.
+# - Improve observability (return rich result details or errors), add asynchronous reporting option, rate limiting, batching optimizations, and unit/integration tests for provider integrations.
+# - Validate input ErrorEntry fields and handle partial failures in batch reporting (currently treats all as succeed on logging).
 
-FILE CONTENT SUMMARY:
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
 
 from __future__ import annotations
 
@@ -60,7 +69,7 @@ __version__ = VERSION
 
 
 class ExternalReportingClient:
-    """Reports errors to external systems.
+    Reports errors to external systems.
 
     Supports Sentry, Rollbar, Bugsnag, Datadog, and NewRelic
     integrations.
@@ -68,66 +77,74 @@ class ExternalReportingClient:
     Attributes:
         system: The external system to report to.
         dsn: Data source name or API key.
-    """
+    
 
-    def __init__(self, system: ExternalReporter, dsn: str = "") -> None:
-        """Initialize the external reporting client.
+# [BATCHFIX] Commented metadata/non-Python
+# #     def __init__(self, system: ExternalReporter, dsn: str = ") -> None:"  # [BATCHFIX] closed string
+        Initialize the external reporting client.
 
         Args:
             system: The external system type.
             dsn: Data source name or API key.
-        """
+        
         self.system = system
         self.dsn = dsn
         self.enabled = bool(dsn)
 
     def report(self, error: ErrorEntry) -> bool:
-        """Report an error to the external system.
+        Report an error to the external system.
 
         Args:
             error: The error to report.
 
         Returns:
             True if reported successfully.
-        """
+        
         if not self.enabled:
             return False
         self._build_payload(error)
-        logging.info(f"Reporting to {self.system.value}: {error.id}")
+# [BATCHFIX] Commented metadata/non-Python
+# #         logging.info(fReporting to {self.system.value}: {error.id}")"  # [BATCHFIX] closed string
         # Actual implementation would send to the service
         return True
 
-    def report_batch(self, errors: list[ErrorEntry]) -> int:
-        """Report multiple errors.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def report_batch(self, errors: list[ErrorEntry]) -> int:
+        Report multiple errors.
 
         Args:
             errors: List of errors to report.
 
         Returns:
             Number of errors successfully reported.
-        """
+        
         count = 0
         for error in errors:
             if self.report(error):
                 count += 1
         return count
 
-    def _build_payload(self, error: ErrorEntry) -> dict[str, Any]:
-        """Build the payload for the external system."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def _build_payload(self, error: ErrorEntry) -> dict[str, Any]:
+        Build the payload for the external system.
         return {
-            "message": error.message,
-            "level": error.severity.name.lower(),
-            "tags": {
-                "category": error.category.value,
-                "file": error.file_path,
-                "line": error.line_number,
+#             "message": error.message,
+#             "level": error.severity.name.lower(),
+#             "tags": {
+#                 "category": error.category.value,
+#                 "file": error.file_path,
+#                 "line": error.line_number,
             },
-            "extra": {
-                "stack_trace": error.stack_trace,
-                "suggested_fix": error.suggested_fix,
+#             "extra": {
+#                 "stack_trace": error.stack_trace,
+#                 "suggested_fix": error.suggested_fix,
             },
         }
-"""
+
 
 from __future__ import annotations
 
@@ -143,7 +160,7 @@ __version__ = VERSION
 
 
 class ExternalReportingClient:
-    """Reports errors to external systems.
+    Reports errors to external systems.
 
     Supports Sentry, Rollbar, Bugsnag, Datadog, and NewRelic
     integrations.
@@ -151,62 +168,70 @@ class ExternalReportingClient:
     Attributes:
         system: The external system to report to.
         dsn: Data source name or API key.
-    """
+    
 
-    def __init__(self, system: ExternalReporter, dsn: str = "") -> None:
-        """Initialize the external reporting client.
+# [BATCHFIX] Commented metadata/non-Python
+# #     def __init__(self, system: ExternalReporter, dsn: str = ") -> None:"  # [BATCHFIX] closed string
+        Initialize the external reporting client.
 
         Args:
             system: The external system type.
             dsn: Data source name or API key.
-        """
+        
         self.system = system
         self.dsn = dsn
         self.enabled = bool(dsn)
 
     def report(self, error: ErrorEntry) -> bool:
-        """Report an error to the external system.
+        Report an error to the external system.
 
         Args:
             error: The error to report.
 
         Returns:
             True if reported successfully.
-        """
+        
         if not self.enabled:
             return False
         self._build_payload(error)
-        logging.info(f"Reporting to {self.system.value}: {error.id}")
+# [BATCHFIX] Commented metadata/non-Python
+# #         logging.info(fReporting to {self.system.value}: {error.id}")"  # [BATCHFIX] closed string
         # Actual implementation would send to the service
         return True
 
-    def report_batch(self, errors: list[ErrorEntry]) -> int:
-        """Report multiple errors.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def report_batch(self, errors: list[ErrorEntry]) -> int:
+        Report multiple errors.
 
         Args:
             errors: List of errors to report.
 
         Returns:
             Number of errors successfully reported.
-        """
+        
         count = 0
         for error in errors:
             if self.report(error):
                 count += 1
         return count
 
-    def _build_payload(self, error: ErrorEntry) -> dict[str, Any]:
-        """Build the payload for the external system."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def _build_payload(self, error: ErrorEntry) -> dict[str, Any]:
+        Build the payload for the external system.
         return {
-            "message": error.message,
-            "level": error.severity.name.lower(),
-            "tags": {
-                "category": error.category.value,
-                "file": error.file_path,
-                "line": error.line_number,
+#             "message": error.message,
+#             "level": error.severity.name.lower(),
+#             "tags": {
+#                 "category": error.category.value,
+#                 "file": error.file_path,
+#                 "line": error.line_number,
             },
-            "extra": {
-                "stack_trace": error.stack_trace,
-                "suggested_fix": error.suggested_fix,
+#             "extra": {
+#                 "stack_trace": error.stack_trace,
+#                 "suggested_fix": error.suggested_fix,
             },
         }

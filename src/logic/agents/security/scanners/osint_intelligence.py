@@ -18,10 +18,11 @@ from typing import List, Dict
 
 
 class OsintIntelligence:
-    """
-    Consolidates Google, Shodan, and GitHub dorks for reconnaissance.
-    Ported logic from OneDorkForAll, Shodan-Dorks, and Github-Dorks.
-    """
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+"""Consolidates Google, Shodan, and GitHub dorks for reconnaissance."""
+#     Ported logic from OneDorkForAll, Shodan-Dorks, and Github-Dorks.
+# #
 
     # High-value Google Dorks
     GOOGLE_DORKS = {
@@ -50,19 +51,34 @@ class OsintIntelligence:
     ]
 
     # High-value GitHub Dorks
-    GITHUB_DORKS = ['"target.com" password', '"target.com" api_key', '"target.com" token', "filename:.env target.com"]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     GITHUB_DORKS = ['"target.com" password', '"target.com" api_key', '"target.com" token', "filename:.env target.com"]
 
     @staticmethod
-    def generate_dorks(domain: str) -> Dict[str, List[str]]:
-        """Generates domain-specific dorks."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def generate_dorks(domain: str) -> Dict[str, List[str]]:
+""""Generates domain-specific dorks."""
         results = {
-            "google": [d.replace("target.com", domain) for d in OsintIntelligence.GOOGLE_DORKS["bug_bounty"]],
-            "github": [d.replace("target.com", domain) for d in OsintIntelligence.GITHUB_DORKS],
-            "shodan": [f"hostname:{domain}", f"http.html:{domain}", f"ssl:{domain}"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "google": [d.replace("target.com", domain) for d in OsintIntelligence.GOOGLE_DORKS["bug_bounty"]],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "github": [d.replace("target.com", domain) for d in OsintIntelligence.GITHUB_DORKS],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#             "shodan": [fhostname:{domain}", fhttp.html:{domain}", fssl:{domain}"],"  # [BATCHFIX] closed string
         }
         return results
 
     @staticmethod
     def get_cxsecurity_dork_url(page: int = 1) -> str:
-        """Returns the URL for fetching dorks from CXSecurity."""
-        return f"https://cxsecurity.com/dorks/{page}"
+    pass  # [BATCHFIX] inserted for empty block
+""""Returns the URL for fetching dorks from CXSecurity."""
+#         return fhttps://cxsecurity.com/dorks/{page}

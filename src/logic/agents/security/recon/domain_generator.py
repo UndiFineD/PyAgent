@@ -14,52 +14,69 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Domain generation and typosquatting analysis."""
-
-import asyncio
+# [BATCHFIX] Commented metadata/non-Python
+# # "Domain generation and typosquatting analysis."  # [BATCHFIX] closed string
+# #
+# import asyncio
 import re
 from dataclasses import dataclass
 from typing import Protocol, Set
 
-DOMAIN_REGEX = r"(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}"
+# [BATCHFIX] Commented metadata/non-Python
+# # DOMAIN_REGEX = r"(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}"  # [BATCHFIX] closed string
 
 
 class LLMInterface(Protocol):
-    """Protocol for LLM interactions."""
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+""""Protocol for LLM interactions."""
 
     async def chat(self, prompt: str) -> str:
-        """Sends a chat prompt to the LLM."""
-        ...
+# [BATCHFIX] Commented metadata/non-Python
+# #         "Sends a chat prompt to the LLM."  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#      "   ..."  # [BATCHFIX] closed string
 
 
 @dataclass
 class DomainGenerationResult:
-    """Stores results of domain generation."""
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+""""Stores results of domain generation."""
 
     seed_domain: str
-    generated_domains: Set[str]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     generated_domains: Set[str]
     model_used: str
 
 
 class DomainGenerator:
-    """
     Generates domain variations using LLMs based on pattern recognition/fuzzing.
     Ported concepts from 0xSojalSec-cewlai.
-    """
+# #
 
     def __init__(self, llm_client: LLMInterface):
         self.llm = llm_client
         self.domain_pattern = re.compile(DOMAIN_REGEX)
 
     async def generate_permutations(self, seed_domain: str, count: int = 20) -> DomainGenerationResult:
-        """
-        Asks the LLM to generate potential phishing/typosquatting variations for a seed domain.
-        """
-        prompt = (
-            f"Generate {count} domain name variations for '{seed_domain}' that might be used for "
-            "typosquatting or phishing. Similar to tools like dnstwist but focusing on semantic variations "
-            "or visually similar characters. Output only the domain names, one per line. Do not include numbering or "
-            "explanations."
+# #
+# [BATCHFIX] Commented metadata/non-Python
+#         Asks the LLM to generate potential phishing/typosquatting variations "for a seed domain."  # [BATCHFIX] closed string
+# #
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#         prompt = (
+#             fGenerate {count} domain name variations for '{seed_domain}' that might be used for
+# [BATCHFIX] Commented metadata/non-Python
+# #             "typosquatting or phishing. Similar to tools like dnstwist but focusing on semantic variations"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# #             "or visually similar characters. Output only the domain names, one per line. Do not include numbering or"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# #             "explanations."  # [BATCHFIX] closed string
         )
 
         try:
@@ -75,7 +92,9 @@ class DomainGenerator:
                     if match:
                         found_domains.add(match.group(0))
 
-            return DomainGenerationResult(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#             return DomainGenerationResult(
                 seed_domain=seed_domain,
                 generated_domains=found_domains,
                 model_used=getattr(self.llm, "model_name", "unknown"),
@@ -83,25 +102,31 @@ class DomainGenerator:
 
         except Exception as e:
             # Fallback or error logging
-            print(f"Error generating domains: {e}")
+# [BATCHFIX] Commented metadata/non-Python
+#             print(fError generating domains: {e}")"  # [BATCHFIX] closed string
             return DomainGenerationResult(seed_domain, set(), "error")
 
 
 class MockLLM:
-    """Mock LLM for testing."""
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+""""Mock LLM for testing."""
 
     def __init__(self):
-        self.model_name = "mock"
+    pass  # [BATCHFIX] inserted for empty block
+"""self.model_name = "mock"""
 
     async def chat(self, prompt: str) -> str:
-        """Simulates a chat response."""
-        return "example-test.com\nexample-dev.com"
+# [BATCHFIX] Commented metadata/non-Python
+# #         "Simulates a chat response."  # [BATCHFIX] closed string
+#         return "example"-test.com\nexample-dev.com
 
 
 if __name__ == "__main__":
 
     async def run():
-        """Entry point for testing."""
+# [BATCHFIX] Commented metadata/non-Python
+# #         "Entry point for testing."  # [BATCHFIX] closed string
         gen = DomainGenerator(MockLLM())
         res = await gen.generate_permutations("example.com")
         print(res)

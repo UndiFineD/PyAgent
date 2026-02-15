@@ -17,7 +17,7 @@ mcp_server.py - FastAPI MCP server exposing SpecToolAgent and
 GraphMemoryAgent tools
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Run standalone: python mcp_server.py

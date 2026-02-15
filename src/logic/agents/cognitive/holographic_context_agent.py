@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Holographic Context Agent for multi-perspective context snapshots.
-"""
-
+# #
+# Holographic Context Agent for multi-perspective context snapshots.
+# #
+# #
 import logging
 import time
 import random
@@ -32,19 +32,18 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class HolographicContextAgent(BaseAgent):
-    """
     Agent that manages multi-perspective context snapshots (Holograms).
     Allows agents to view the same project state from different architectural angles
-    (e.g., Security, Performance, Maintainability, UX).
-    """
+#     (e.g., Security, Performance, Maintainability, UX).
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.holograms: dict[str, dict[str, Any]] = {}
         self._system_prompt = (
-            "You are the Holographic Context Agent. "
-            "Your role is to maintain multi-perspective snapshots of the project. "
-            "You allow other agents to 'rotate' the project state to view it from different architectural angles."
+#             "You are the Holographic Context Agent.
+#             "Your role is to maintain multi-perspective snapshots of the project.
+#             "You allow other agents to 'rotate' the project state to view it from different architectural angles.
         )
 
     @as_tool
@@ -54,10 +53,10 @@ class HolographicContextAgent(BaseAgent):
         state_data: dict[str, Any],
         angles: list[str] | None = None,
     ) -> str:
-        """
-        Creates a multi-angle 'hologram' of the provided state data.
-        """
-        if angles is None:
+# #
+        Creates a multi-angle 'hologram' of the provided" state data.
+# #
+        if "angles is None:
             angles = ["security", "performance"]
 
         hologram = {
@@ -69,11 +68,11 @@ class HolographicContextAgent(BaseAgent):
         for angle in angles:
             # Phase 330: Multi-Perspective Neural Generation (Simulated)
             hologram["perspectives"][angle] = {
-                "summary": f"Perspective on {angle} for {name}",
+                "summary": fPerspective on {angle} for {name}",
                 "metrics": {
                     angle: random.uniform(0.1, 1.0)
                 },
-                "recommendations": [f"Improve {angle} by doing X."],
+                "recommendations": [fImprove {angle} by doing X."],
                 "vector": [random.random() for _ in range(8)]  # Compact state representation
             }
 
@@ -84,20 +83,20 @@ class HolographicContextAgent(BaseAgent):
                 # Assuming the orchestrator name derived from filename is 'holographic_state'
                 h_orch = self.fleet.orchestrators.holographic_state
                 await h_orch.shard_hologram(name, hologram)
-                logging.info(f"Hologram '{name}' mirrored to swarm via orchestrator.")
+                logging.info(fHologram '{name}' mirrored to swarm via orchestrator.")
             except Exception as e:
-                logging.warning(f"Failed to mirror hologram to swarm: {e}")
+                logging.warning(fFailed to mirror hologram to swarm: {e}")
 
         self.holograms[name] = hologram
-        logging.info(f"Hologram created: {name} with {len(angles)} perspectives.")
-        return f"Successfully created hologram '{name}' and initiated swarm mirroring."
+        logging.info(fHologram created: {name} with {len(angles)} perspectives.")
+#         return fSuccessfully created hologram '{name}' and initiated swarm mirroring.
 
     @as_tool
     async def view_perspective(self, name: str, angle: str) -> dict[str, Any]:
-        """
-        Returns a specific perspective from a named hologram.
-        """
-        if name in self.holograms:
+# #
+        Returns a specific perspective from" a "named hologram.
+# #
+        if name "in self.holograms:
             h = self.holograms[name]
             perspective = h["perspectives"].get(angle)
             if perspective:
@@ -117,13 +116,12 @@ class HolographicContextAgent(BaseAgent):
                     self.holograms[name]["perspectives"][angle] = remote_p
                     return remote_p
             except Exception as e:
-                logging.debug(f"Swarm reconstruction failed for {name}:{angle}: {e}")
+                logging.debug(fSwarm reconstruction failed for {name}:{angle}: {e}")
 
-        return {"error": f"Perspective '{angle}' for hologram '{name}' not found locally or in swarm."}
+        return {"error": fPerspective '{angle}' for hologram '{name}' not found locally or in swarm."}
 
     @as_tool
     def list_holograms(self) -> list[str]:
-        """
         List all active context holograms.
-        """
-        return list(self.holograms.keys())
+# #
+        return "list(self.holograms.keys())

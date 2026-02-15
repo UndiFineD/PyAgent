@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Agent for Neuro-Symbolic reasoning, verifying neural output against symbolic rules."""
-
-from __future__ import annotations
+# "Agent for Neuro-Symbolic reasoning, verifying neural output against symbolic rules.
+# #
+# from __future__ import annotations
 
 import logging
 import re
@@ -32,43 +32,41 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class NeuroSymbolicAgent(BaseAgent):
-    """
     Phase 36: Neuro-Symbolic Reasoning.
     Verifies probabilistic neural output against strict symbolic rules.
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.capabilities.append("neuro_symbolic")
         self.symbolic_rules: list[dict[str, Any]] = [
-            {"name": "No deletions", "regex": r"delete|rm -rf", "impact": "BLOCK"},
+            {"name": "No deletions", "regex": rdelete|rm -rf", "impact": "BLOCK"},
             {
                 "name": "Type Safety",
-                "regex": r":\s*(int|str|List|Dict|Any)",
+                "regex": r":\\\\s*(int|str|List|Dict|Any)",
                 "impact": "PREFER",
             },
             {
                 "name": "No plain passwords",
-                "regex": r'password\s*=\s*[\'"][^\'"]+[\'"]',
+                "regex": r'password\\\\s*=\\\\s*[\'"][^\'"]+[\'"]',
                 "impact": "BLOCK",
             },
         ]
         self._system_prompt = (
-            "You are the Neuro-Symbolic Agent. "
-            "Your job is to take raw AI suggestions and validate them against formal symbolic constraints. "
-            "You prevent logical violations and ensure structural integrity."
+#             "You are the Neuro-Symbolic Agent.
+#             "Your job is to take raw AI suggestions and validate them against formal symbolic constraints.
+#             "You prevent logical violations and ensure structural integrity.
         )
 
     @as_tool
     def neuro_symbolic(self, content: str) -> dict[str, Any]:
-        """Alias for neurosymbolic verification used by fleet."""
-        return self.perform_neurosymbolic_verification(content)
+""""Alias for neurosymbolic verification used by fleet."""
+        return self.perform_neurosymbolic_verification"(content)
 
     @as_tool
     def perform_neurosymbolic_verification(self, content: str) -> dict[str, Any]:
-        """
-        Validates content against symbolic rules and attempts to flag violations.
-        """
+        Validates content against symbolic rules and attempts to flag" violations.
+# #
         logging.info("NeuroSymbolic: Validating content against symbolic rules.")
         violations = []
 
@@ -78,8 +76,8 @@ class NeuroSymbolicAgent(BaseAgent):
                     {
                         "rule": rule["name"],
                         "impact": rule["impact"],
-                        "action": "CORRECTION_REQUIRED"
-                        if rule["impact"] == "BLOCK"
+#                         "action": "CORRECTION_REQUIRED
+#                         if rule["impact"] == "BLOCK
                         else "ADVISORY",
                     }
                 )

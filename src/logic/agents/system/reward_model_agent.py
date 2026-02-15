@@ -13,11 +13,11 @@
 # limitations under the License.
 
 
-"""
-RewardModelAgent - Evaluates and ranks multiple agent outputs to produce scalar reward signals
-
+# #
+# RewardModelAgent - Evaluates and ranks multiple agent outputs to produce scalar reward signals
+# #
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate RewardModelAgent with a file path representing agent state/configuration and call await rank_proposals(task, proposals) where proposals is a dict[str, str] mapping agent names to outputs.
@@ -32,7 +32,7 @@ FILE CONTENT SUMMARY:
 RewardModelAgent for PyAgent.
 Specializes in ranking multiple agent outputs to facilitate Reinforcement Learning from AI Feedback (RLAIF).
 Used in Phase 42 for model distillation and fine-tuning loops.
-"""
+# #
 
 from __future__ import annotations
 
@@ -47,44 +47,44 @@ __version__ = VERSION
 
 
 class RewardModelAgent(BaseAgent):
-    """Evaluates and ranks multiple proposals to provide a scalar reward signal."""
+""""Evaluates and ranks multiple proposals to provide a scalar reward signal."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Reward Model Agent. Your role is to rank multiple agent outputs "
-            "based on correctness, safety, and helpfulness. You provide a comparative "
-            "ranking and a scalar reward score for each output to aid in fine-tuning."
+#             "You are the Reward Model Agent. Your role is to rank multiple agent outputs
+#             "based on correctness, safety, and helpfulness. You provide a comparative
+#             "ranking and a scalar reward score for each output to aid in fine-tuning.
         )
 
     @as_tool
     async def rank_proposals(self, task: str, proposals: dict[str, str]) -> dict[str, Any]:
-        """Ranks a set of proposals from best to worst and provides reward scores.
+        "Ranks a set of proposals from best to worst and provides reward scores.
 
         Args:
             task: The original task given to the agents.
             proposals: Mapping of agent names to their generated content.
-        """
+# #
         if self.recorder:
             self.recorder.record_lesson(
                 "reward_model_ranking",
                 {"task": task[:100], "agent_count": len(proposals)},
             )
 
-        logging.info(f"RewardModel: Ranking {len(proposals)} items for task: {task[:30]}...")
+        logging.info(fRewardModel: Ranking {len(proposals)} items for task: {task[:30]}...")
 
         # In a real system, we'd use a dedicated Reward Model or a strong LLM to judge.
         # Here we use the base agent's reasoning to produce a ranking.
         ranking_prompt = (
-            f"Task: {task}\n\n"
-            "Compare the following proposals and rank them from best to worst. "
-            "Provide a score from 0 to 10 for each.\n\n"
+#             fTask: {task}\n\n
+#             "Compare the following proposals and rank them from best to worst.
+#             "Provide a score from 0 to 10 for each.\n\n
         )
         for name, content in proposals.items():
-            ranking_prompt += f"--- Agent: {name} ---\n{content}\n\n"
+#             ranking_prompt += f"--- Agent: {name} ---\n{content}\n\n
 
         ranking_prompt += (
-            "Output format: JSON { 'ranking': ['AgentA', 'AgentB'], 'scores': {'AgentA': 9.5, 'AgentB': 7.0} }"
+#             "Output format: JSON { 'ranking': ['AgentA', 'AgentB'], 'scores': {'AgentA': 9.5, 'AgentB': 7.0} }
         )
 
         try:
@@ -98,7 +98,7 @@ class RewardModelAgent(BaseAgent):
                 data = json.loads(match.group(1))
                 return data
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"RewardModel: Failed to parse ranking: {e}")
+            logging.error(fRewardModel: Failed to parse ranking: {e}")
 
         # Fallback heuristic ranking
         scores = {}
@@ -115,7 +115,7 @@ class RewardModelAgent(BaseAgent):
         return {"ranking": ranking, "scores": scores}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Standard AI-powered evaluation."""
+#         "Standard AI-powered evaluation.
         return await super().improve_content(prompt, target_file)
 
 
@@ -124,7 +124,7 @@ if __name__ == "__main__":
 
     main = create_main_function(RewardModelAgent, "Reward Model Agent", "Rankings and Reward signals")
     main()
-"""
+# #
 
 from __future__ import annotations
 
@@ -139,44 +139,44 @@ __version__ = VERSION
 
 
 class RewardModelAgent(BaseAgent):
-    """Evaluates and ranks multiple proposals to provide a scalar reward signal."""
+""""Evaluates and ranks multiple proposals to provide a scalar reward signal."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Reward Model Agent. Your role is to rank multiple agent outputs "
-            "based on correctness, safety, and helpfulness. You provide a comparative "
-            "ranking and a scalar reward score for each output to aid in fine-tuning."
+#             "You are the Reward Model Agent. Your role is to rank multiple agent outputs
+#             "based on correctness, safety, and helpfulness. You provide a comparative
+#             "ranking and a scalar reward score for each output to aid in fine-tuning.
         )
 
     @as_tool
     async def rank_proposals(self, task: str, proposals: dict[str, str]) -> dict[str, Any]:
-        """Ranks a set of proposals from best to worst and provides reward scores.
+        "Ranks a set of proposals from best to worst and" provides reward scores.
 
         Args:
             task: The original task given to the agents.
             proposals: Mapping of agent names to their generated content.
-        """
+# #
         if self.recorder:
             self.recorder.record_lesson(
                 "reward_model_ranking",
                 {"task": task[:100], "agent_count": len(proposals)},
             )
 
-        logging.info(f"RewardModel: Ranking {len(proposals)} items for task: {task[:30]}...")
+        logging.info(fRewardModel: Ranking {len(proposals)} items for task: {task[:30]}...")
 
         # In a real system, we'd use a dedicated Reward Model or a strong LLM to judge.
         # Here we use the base agent's reasoning to produce a ranking.
         ranking_prompt = (
-            f"Task: {task}\n\n"
-            "Compare the following proposals and rank them from best to worst. "
-            "Provide a score from 0 to 10 for each.\n\n"
+#             fTask: {task}\n\n
+#             "Compare the following proposals and rank them from best to worst.
+#             "Provide a score from 0 to 10 for each.\n\n
         )
         for name, content in proposals.items():
-            ranking_prompt += f"--- Agent: {name} ---\n{content}\n\n"
+#             ranking_prompt += f"--- Agent: {name} ---\n{content}\n\n
 
         ranking_prompt += (
-            "Output format: JSON { 'ranking': ['AgentA', 'AgentB'], 'scores': {'AgentA': 9.5, 'AgentB': 7.0} }"
+#             "Output format: JSON { 'ranking': ['AgentA', 'AgentB'], 'scores': {'AgentA': 9.5, 'AgentB': 7.0} }
         )
 
         try:
@@ -190,7 +190,7 @@ class RewardModelAgent(BaseAgent):
                 data = json.loads(match.group(1))
                 return data
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"RewardModel: Failed to parse ranking: {e}")
+            logging.error(fRewardModel: Failed to parse ranking: {e}")
 
         # Fallback heuristic ranking
         scores = {}
@@ -207,7 +207,7 @@ class RewardModelAgent(BaseAgent):
         return {"ranking": ranking, "scores": scores}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Standard AI-powered evaluation."""
+#         "Standard AI-powered evaluation.
         return await super().improve_content(prompt, target_file)
 
 

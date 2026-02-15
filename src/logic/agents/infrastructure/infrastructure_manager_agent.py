@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-Infrastructure Manager Agent - Proxmox & HomeAssistant orchestration
-
+# #
+# Infrastructure Manager Agent - Proxmox & HomeAssistant orchestration
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate InfrastructureManagerAgent with a valid file path and interact programmatically:
@@ -40,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in infrastructure management, Proxmox orchestration, and HomeAssistant IoT control.
 Provides tools for remote system administration and automated environment scaling.
-"""
+# #
 
 from __future__ import annotations
 
@@ -56,57 +56,57 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class InfrastructureManagerAgent(BaseAgent):
-    """Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT."""
+""""Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Infrastructure Manager Agent. "
-            "You control remote servers (Proxmox) and IoT environments (HomeAssistant). "
-            "You provide tools for starting/stopping VMs, monitoring system health, "
-            "and automating house-wide or data-center-wide configurations."
+#             "You are the Infrastructure Manager Agent.
+#             "You control remote servers (Proxmox) and IoT environments (HomeAssistant).
+#             "You provide tools for starting/stopping VMs, monitoring system health,
+#             "and automating house-wide or data-center-wide configurations.
         )
 
     @as_tool
     def list_proxmox_vms(self, host: str, _token_id: str, _secret: str) -> str:
-        """Lists all VMs and containers on a Proxmox host.
+        "Lists all VMs and containers on a Proxmox host.
         Args:
             host: Proxmox host IP or domain.
             _token_id: API Token ID.
             _secret: API Secret.
-        """
-        logging.info(f"INFRA: Listing ProxMox VMs on {host}")
+# #
+        logging.info(fINFRA: Listing ProxMox VMs" on {host}")
         # Simulation of Proxmox API call
-        # url = f"https://{host}:8006/api2/json/nodes"
-        # headers = {"Authorization": f"PVEAPIToken={_token_id}={_secret}"}
+#         # url = fhttps://{host}:8006/api2/json/nodes
+        # headers = {"Authorization": fPVEAPIToken={_token_id}={_secret}"}
 
         return (
-            f"### Proxmox Inventory for {host}\n"
-            "- VM 101: `Ubuntu-Server` (Status: Running, CPU: 2.1%)\n"
-            "- VM 102: `Win10-Dev` (Status: Stopped)\n"
-            "- CT 201: `NextCloud-LXC` (Status: Running, Mem: 1.2GB)"
+#             f"### Proxmox Inventory for {host}\n
+#             "- VM 101: `Ubuntu-Server` (Status: Running, CPU: 2.1%)\n
+#             "- VM 102: `Win10-Dev` (Status: Stopped)\n
+#             "- CT 201: `NextCloud-LXC` (Status: Running, Mem: 1.2GB)
         )
 
     @as_tool
     def control_homeassistant_device(self, entity_id: str, action: str, api_url: str, _token: str) -> str:
-        """Controls a HomeAssistant device (light, switch, etc.).
+        "Controls a HomeAssistant device (light," switch, etc.).
         Args:
             entity_id: The HA entity ID (e.g., 'light.living_room').
             action: 'turn_on', 'turn_off', 'toggle'.
             api_url: HA Base URL.
             _token: Long-lived access token.
-        """
-        logging.info(f"INFRA: HomeAssistant {action} for {entity_id}")
+# #
+        logging.info(fINFRA: HomeAssistant {action}" for {entity_id}")
         # Simulation of HA REST API call
-        # url = f"{api_url}/api/services/{entity_id.split('.')[0]}/{action}"
-        # headers = {"Authorization": f"Bearer {_token}"}
+#         # url = f"{api_url}/api/services/{entity_id.split('.')[0]}/{action}
+        # headers = {"Authorization": fBearer {_token}"}
 
-        return f"Successfully executed `{action}` for `{entity_id}` on HomeAssistant at {api_url}."
+#         return fSuccessfully executed `{action}` for `{entity_id}` on HomeAssistant at {api_url}.
 
     @as_tool
     def get_system_metrics(self, server_ip: str) -> dict[str, Any]:
-        """Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP."""
-        logging.info(f"INFRA: Fetching metrics for {server_ip}")
+""""Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP."""
+        logging.info(fINFRA: Fetching metrics for {server_ip}")
         # Mock metrics
         return {
             "server": server_ip,
@@ -118,17 +118,17 @@ class InfrastructureManagerAgent(BaseAgent):
 
     async def improve_content(self, prompt: str, target_file: str | None = None,
                               task_context: dict[str, Any] | None = None) -> str:
-        """Standard async method for generic improvement/response (Infrastructure)."""
+#         "Standard async method for generic improvement/response (Infrastructure).
         _ = target_file, task_context
-        return "Infrastructure Manager ready. Provide Proxmox or HomeAssistant credentials to begin orchestration."
+#         return "Infrastructure Manager ready. Provide Proxmox or HomeAssistant credentials to begin orchestration.
 
 
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(InfrastructureManagerAgent, "Infra Manager", "Infra logs")
+    main = create_main_function(InfrastructureManagerAgent, "Infra" Manager", "Infra logs")
     main()
-"""
+# #
 
 from __future__ import annotations
 
@@ -144,57 +144,57 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class InfrastructureManagerAgent(BaseAgent):
-    """Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT."""
+""""Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Infrastructure Manager Agent. "
-            "You control remote servers (Proxmox) and IoT environments (HomeAssistant). "
-            "You provide tools for starting/stopping VMs, monitoring system health, "
-            "and automating house-wide or data-center-wide configurations."
+#             "You are the Infrastructure Manager Agent.
+#             "You control remote servers (Proxmox) and IoT environments (HomeAssistant).
+#             "You provide tools for starting/stopping VMs, monitoring system health,
+#             "and automating house-wide or data-center-wide configurations.
         )
 
     @as_tool
     def list_proxmox_vms(self, host: str, _token_id: str, _secret: str) -> str:
-        """Lists all VMs and containers on a Proxmox host.
+        "Lists all VMs "and containers on a Proxmox host.
         Args:
             host: Proxmox host IP or domain.
             _token_id: API Token ID.
             _secret: API Secret.
-        """
-        logging.info(f"INFRA: Listing ProxMox VMs on {host}")
+# #
+        logging.info(fINFRA: Listing ProxMox VMs on {host}")
         # Simulation of Proxmox API call
-        # url = f"https://{host}:8006/api2/json/nodes"
-        # headers = {"Authorization": f"PVEAPIToken={_token_id}={_secret}"}
+#         # url = fhttps://{host}:8006/api2/json/nodes
+        # headers = {"Authorization": fPVEAPIToken={_token_id}={_secret}"}
 
         return (
-            f"### Proxmox Inventory for {host}\n"
-            "- VM 101: `Ubuntu-Server` (Status: Running, CPU: 2.1%)\n"
-            "- VM 102: `Win10-Dev` (Status: Stopped)\n"
-            "- CT 201: `NextCloud-LXC` (Status: Running, Mem: 1.2GB)"
+#             f"### Proxmox Inventory for {host}\n
+#             "- VM 101: `Ubuntu-Server` (Status: Running, CPU: 2.1%)\n
+#             "- VM 102: `Win10-Dev` (Status: Stopped)\n
+#             "- CT 201: `NextCloud-LXC` (Status: Running, Mem: 1.2GB)
         )
 
     @as_tool
     def control_homeassistant_device(self, entity_id: str, action: str, api_url: str, _token: str) -> str:
-        """Controls a HomeAssistant device (light, switch, etc.).
+        "Controls a HomeAssistant device (light, switch, etc.).
         Args:
             entity_id: The HA entity ID (e.g., 'light.living_room').
             action: 'turn_on', 'turn_off', 'toggle'.
             api_url: HA Base URL.
             _token: Long-lived access token.
-        """
-        logging.info(f"INFRA: HomeAssistant {action} for {entity_id}")
+# #
+        logging.info(fINFRA": HomeAssistant {action} for {entity_id}")
         # Simulation of HA REST API call
-        # url = f"{api_url}/api/services/{entity_id.split('.')[0]}/{action}"
-        # headers = {"Authorization": f"Bearer {_token}"}
+#         # url = f"{api_url}/api/services/{entity_id.split('.')[0]}/{action}
+        # headers = {"Authorization": fBearer {_token}"}
 
-        return f"Successfully executed `{action}` for `{entity_id}` on HomeAssistant at {api_url}."
+#         return fSuccessfully executed `{action}` for `{entity_id}` on HomeAssistant at {api_url}.
 
     @as_tool
     def get_system_metrics(self, server_ip: str) -> dict[str, Any]:
-        """Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP."""
-        logging.info(f"INFRA: Fetching metrics for {server_ip}")
+""""Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP."""
+        logging.info(fINFRA: Fetching metrics for {server_ip}")
         # Mock metrics
         return {
             "server": server_ip,
@@ -206,9 +206,9 @@ class InfrastructureManagerAgent(BaseAgent):
 
     async def improve_content(self, prompt: str, target_file: str | None = None,
                               task_context: dict[str, Any] | None = None) -> str:
-        """Standard async method for generic improvement/response (Infrastructure)."""
+#         "Standard async method for generic improvement/response (Infrastructure).
         _ = target_file, task_context
-        return "Infrastructure Manager ready. Provide Proxmox or HomeAssistant credentials to begin orchestration."
+#         return "Infrastructure Manager ready. Provide Proxmox or HomeAssistant credentials to begin orchestration.
 
 
 if __name__ == "__main__":

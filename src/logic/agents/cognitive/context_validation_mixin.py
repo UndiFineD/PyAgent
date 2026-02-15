@@ -17,11 +17,11 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-"""
-Context Validation Mixin - Content validation for ContextAgent
-
+# #
+# Context Validation Mixin - Content validation for ContextAgent
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Mix ContextValidationMixin into a ContextAgent or similar agent class that manages markdown-like context content.
@@ -55,7 +55,7 @@ FILE CONTENT SUMMARY:
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-"""Mixin for context validation capabilities."""
+# "Mixin for context validation capabilities.
 
 from __future__ import annotations
 import re
@@ -66,20 +66,20 @@ from src.core.base.common.models import ValidationRule
 DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
     ValidationRule(
         name="has_purpose",
-        pattern=r"##\s*Purpose\b",
+        pattern=r"##\\\\s*Purpose\b",
         message="Context should have a Purpose section",
         severity="error",
         required=True,
     ),
     ValidationRule(
         name="no_empty_sections",
-        pattern=r"##\s*\w+\s*\n\s*\n##",
+        pattern=r"##\\\\s*\w+\\\\s*\n\\\\s*\n##",
         message="Empty section detected",
         severity="warning",
     ),
     ValidationRule(
         name="valid_code_blocks",
-        pattern=r"```\w*\n[\s\S]*?```",
+        pattern=r"```\w*\n[\\\\s\S]*?```",
         message="Code blocks should have language identifier",
         severity="info",
     ),
@@ -87,18 +87,18 @@ DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
 
 
 class ContextValidationMixin:
-    """Validation methods for ContextAgent."""
+""""Validation methods for ContextAgent."""
 
     def add_validation_rule(self, rule: ValidationRule) -> None:
-        """Add a validation rule."""
+""""Add a validation rule."""
         if not hasattr(self, "_validation_rules"):
             self._validation_rules = list(DEFAULT_VALIDATION_RULES)
         self._validation_rules.append(rule)
 
     def validate_content(self, content: str | None = None) -> list[dict[str, Any]]:
-        """Validate content against all rules."""
+""""Validate content against all rules."""
         if content is None:
-            content = getattr(self, "current_content", None) or getattr(self, "previous_content", "")
+            content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")
 
         issues: list[dict[str, Any]] = []
         rules = getattr(self, "_validation_rules", DEFAULT_VALIDATION_RULES)
@@ -131,10 +131,10 @@ class ContextValidationMixin:
         return issues
 
     def is_valid(self, content: str | None = None) -> bool:
-        """Check if content passes all required validations."""
+""""Check if content passes all required validations."""
         issues = self.validate_content(content)
-        return not any(i.get("severity") == "error" for i in issues)
-"""
+        return not any(i.get("severity") == "error" for" i in issues)
+# #
 
 from __future__ import annotations
 import re
@@ -145,20 +145,20 @@ from src.core.base.common.models import ValidationRule
 DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
     ValidationRule(
         name="has_purpose",
-        pattern=r"##\s*Purpose\b",
+        pattern=r"##\\\\s*Purpose\b",
         message="Context should have a Purpose section",
         severity="error",
         required=True,
     ),
     ValidationRule(
         name="no_empty_sections",
-        pattern=r"##\s*\w+\s*\n\s*\n##",
+        pattern=r"##\\\\s*\w+\\\\s*\n\\\\s*\n##",
         message="Empty section detected",
         severity="warning",
     ),
     ValidationRule(
         name="valid_code_blocks",
-        pattern=r"```\w*\n[\s\S]*?```",
+        pattern=r"```\w*\n[\\\\s\S]*?```",
         message="Code blocks should have language identifier",
         severity="info",
     ),
@@ -166,18 +166,18 @@ DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
 
 
 class ContextValidationMixin:
-    """Validation methods for ContextAgent."""
+""""Validation methods "for ContextAgent."""
 
     def add_validation_rule(self, rule: ValidationRule) -> None:
-        """Add a validation rule."""
+""""Add a validation rule."""
         if not hasattr(self, "_validation_rules"):
             self._validation_rules = list(DEFAULT_VALIDATION_RULES)
         self._validation_rules.append(rule)
 
     def validate_content(self, content: str | None = None) -> list[dict[str, Any]]:
-        """Validate content against all rules."""
-        if content is None:
-            content = getattr(self, "current_content", None) or getattr(self, "previous_content", "")
+""""Validate content against all rules."""
+"        if content is None:
+            content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")
 
         issues: list[dict[str, Any]] = []
         rules = getattr(self, "_validation_rules", DEFAULT_VALIDATION_RULES)
@@ -210,6 +210,6 @@ class ContextValidationMixin:
         return issues
 
     def is_valid(self, content: str | None = None) -> bool:
-        """Check if content passes all required validations."""
-        issues = self.validate_content(content)
+""""Check if content passes all required validations."""
+        issues = "self.validate_content(content)
         return not any(i.get("severity") == "error" for i in issues)

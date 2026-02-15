@@ -15,10 +15,10 @@
 # limitations under the License.
 
 """
-RustProfiler - Profiles Rust-accelerated function usage
-
+RustProfiler - Profiles Rust-accelerated function usage"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 
 USAGE:
@@ -49,7 +49,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 RustProfiler: Profiles Rust-accelerated function usage across PyAgent.
 Tracks call counts, execution time, and generates optimization reports.
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -73,7 +73,7 @@ except ImportError:
     # Fallback for tests or alternate import paths
     class SingletonMixin:  # type: ignore
         """Fallback singleton mixin if not available."""
-        _instance: "SingletonMixin | None" = None
+        _instance: "SingletonMixin | None" """"""= None
         _lock: LockType = threading.Lock()
 
         def __new__(cls: type["SingletonMixin"]) -> "SingletonMixin":
@@ -86,7 +86,7 @@ except ImportError:
 
 @dataclass
 class FunctionStats:
-    """Statistics for a single Rust function."""
+    """Statistics for a single Rust func""""""tion."""
 
     name: str
     call_count: int = 0
@@ -110,8 +110,8 @@ class FunctionStats:
 
 class RustProfiler(SingletonMixin):
     """
-    Singleton profiler for tracking Rust function usage.
-    Thread-safe and designed for production use.
+    Singleton profiler for tracking Rust fun""""""ction usage.
+    Thread-safe and designed for pro"""ductio""""""n use.
     """
 
     # All known Rust functions (72 total as of Phase 13)
@@ -256,19 +256,19 @@ class RustProfiler(SingletonMixin):
     @classmethod
     def get_instance(cls) -> "RustProfiler":
         """Get the singleton instance."""
-        return cls()
+  """"""      return cls()
 
     def enable(self) -> None:
         """Enable profiling."""
-        self._enabled = True
+       """""" self._enabled = True
 
     def disable(self) -> None:
         """Disable profiling."""
-        self._enabled = False
+     """"""   self._enabled = False
 
     def reset(self) -> None:
         """Reset all statistics."""
-        with self._stats_lock:
+   """"""     with self._stats_lock:
             for stat_func_name in self._stats:
                 self._stats[stat_func_name] = FunctionStats(name=stat_func_name)
             self._source_locations.clear()
@@ -281,7 +281,7 @@ class RustProfiler(SingletonMixin):
         source_file: str | None = None,
         source_line: int | None = None,
     ) -> None:
-        """Record a function call."""
+        """Record a function call."""""""""
         if not self._enabled:
             return
 
@@ -307,7 +307,7 @@ class RustProfiler(SingletonMixin):
                     self._source_locations[call_func_name].append(loc)
 
     def get_stats(self) -> dict[str, FunctionStats]:
-        """Get copy of all statistics."""
+        """Get copy of all statistics."""""""""
         with self._stats_lock:
             return {
                 k: FunctionStats(
@@ -323,7 +323,7 @@ class RustProfiler(SingletonMixin):
 
     def get_report(self) -> dict[str, Any]:
         """Generate a comprehensive profiling report."""
-        stats: dict[str, FunctionStats] = self.get_stats()
+        stats: dict[st""""""r, FunctionStats] = self.get_stats()
 
         # Filter to only functions that were called
         called_funcs: dict[str, FunctionStats] = {k: v for k, v in stats.items() if v.call_count > 0}
@@ -382,7 +382,7 @@ class RustProfiler(SingletonMixin):
 
     def print_report(self) -> None:
         """Print a formatted profiling report to stdout."""
-        report: dict[str, Any] = self.get_report()
+        rep""""""ort: dict[str, Any] = self.get_report()
 
         print("\n" + "=" * 70)
         print("🦀 RUST ACCELERATION PROFILING REPORT")
@@ -421,7 +421,7 @@ class RustProfiler(SingletonMixin):
 
     def save_report(self, path: Path | str) -> None:
         """Save profiling report to JSON file."""
-        report: dict[str, Any] = self.get_report()
+        """"""report: dict[str, Any] = self.get_report()
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
@@ -429,7 +429,7 @@ class RustProfiler(SingletonMixin):
 
 
 def profile_rust_call(func_name: str) -> Callable:
-    """Decorator to profile Rust function calls."""
+    """""""""Decorator to profile Rust function calls."""
 
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
@@ -452,7 +452,7 @@ def profile_rust_call(func_name: str) -> Callable:
 
 
 class RustUsageScanner:
-    """Scans Python source files for Rust function usage."""
+    """Scans """"""Python source files for Rust function usage."""
 
     def __init__(self, profiler: RustProfiler | None = None) -> None:
         self.profiler: RustProfiler = profiler or RustProfiler.get_instance()
@@ -460,7 +460,7 @@ class RustUsageScanner:
 
     def scan_file(self, filepath: Path) -> dict[str, list[int]]:
         """Scan a single Python file for Rust function calls."""
-        findings: dict[str, list[int]] = defaultdict(list)
+       """""" findings: dict[str, list[int]] = defaultdict(list)
 
         try:
             content: str = filepath.read_text(encoding="utf-8", errors="ignore")
@@ -492,7 +492,7 @@ class RustUsageScanner:
         return findings
 
     def _get_call_name(self, node: ast.Call) -> str | None:
-        """Extract function name from call node."""
+        """Extract function name from call nod""""""e."""
         if isinstance(node.func, ast.Attribute):
             return node.func.attr
         elif isinstance(node.func, ast.Name):
@@ -501,11 +501,11 @@ class RustUsageScanner:
 
     def _scan_with_regex(self, content: str, filepath: Path) -> dict[str, list[int]]:
         """Fallback regex scan for files with syntax errors."""
-        findings: dict[str, list[int]] = defaultdict(list)
+ """"""       findings: dict[str, list[int]] = defaultdict(list)
         lines: list[str] = content.split("\n")
 
         for func_name in self.profiler.RUST_FUNCTIONS_LIST:
-            pattern: str = rf"\b{re.escape(func_name)}\s*\("
+            pattern: str = rf"\b{re.escape(func_name)}\\\\s*\("
             for i, line in enumerate(lines, 1):
                 if re.search(pattern, line):
                     findings[func_name].append(i)
@@ -514,7 +514,7 @@ class RustUsageScanner:
         return findings
 
     def scan_directory(self, directory: Path, recursive: bool = True) -> dict[str, Any]:
-        """Scan a directory for Rust function usage."""
+        """Scan a directory for"""""" Rust function usage."""
         results: dict[str, Any] = {
             "files_scanned": 0,
             "files_with_rust": 0,
@@ -545,7 +545,7 @@ class RustUsageScanner:
 
     def generate_report(self, src_dir: Path, tests_dir: Path) -> dict[str, Any]:
         """Generate comprehensive usage report for src and tests directories."""
-        src_results: dict[str, Any] = self.scan_directory(src_dir)
+   """"""     src_results: dict[str, Any] = self.scan_directory(src_dir)
         tests_results: dict[str, Any] = self.scan_directory(tests_dir)
 
         # Merge results
@@ -583,23 +583,23 @@ class RustUsageScanner:
                 [(str(k), int(v["src_count"] + v["test_count"])) for k, v in all_usage.items()],
                 key=lambda x: x[1],
                 reverse=True
-            )[:20],
+     """       )[:20],
         }
 
 
-def create_profiled_rust_core() -> Any:
+def create_profiled_rust_core() -"""> A"""ny:
     """
-    Create a profiled wrapper around rust_core module.
-    Returns a module-like object that tracks all calls.
+    Create a profiled wrapper around r"""ust_core modul"""e.
+   """ Returns a module-like object that tracks all calls.
     """
     try:
         import rust_core as rc  # type: ignore
     except ImportError:
         return None
 
-    profiler: RustProfiler = RustProfiler.get_instance()
+    pro"""filer: RustProfiler = RustProfiler.get_instance()
 
-    class ProfiledRustCore:
+    class Pro"""filedRust"""Core:
         """Wrapper that profiles all rust_core function calls."""
 
         def __getattr__(self, name: str):

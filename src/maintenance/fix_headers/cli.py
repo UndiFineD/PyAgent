@@ -18,7 +18,7 @@
 Fix Headers CLI - Command-line entry point for fixing Apache 2.0 license headers
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 python -m src.maintenance.fix_headers.cli <file_or_directory>

@@ -14,9 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Reporting and recording logic for SecurityCore."""
-
-from __future__ import annotations
+# [BATCHFIX] Commented metadata/non-Python
+# # "Reporting and recording logic for SecurityCore."  # [BATCHFIX] closed string
+# #
+# from __future__ import annotations
 
 import logging
 import time
@@ -25,13 +26,18 @@ from src.core.base.common.types.security_vulnerability import SecurityVulnerabil
 
 
 class SecurityReporterMixin:
-    """Mixin for security reporting and recording findings."""
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+""""Mixin for security reporting and recording findings."""
 
     def _record_finding(self, issue_type: str, severity: str, desc: str) -> None:
-        """Records security findings for fleet intelligence (Phase 108)."""
+    pass  # [BATCHFIX] inserted for empty block
+""""Records security findings for fleet intelligence (Phase 108)."""
         if hasattr(self, "recorder") and self.recorder:
             try:
-                self.recorder.record_lesson(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#                 self.recorder.record_lesson(
                     "security_vulnerability",
                     {
                         "type": issue_type,
@@ -41,15 +47,35 @@ class SecurityReporterMixin:
                     },
                 )
             except (AttributeError, RuntimeError, TypeError) as e:
-                logging.debug(f"SecurityCore: Failed to record finding: {e}")
+# [BATCHFIX] Commented metadata/non-Python
+#                 logging.debug(fSecurityCore: Failed to record finding: {e}")"  # [BATCHFIX] closed string
 
-    def get_risk_level(self, vulnerabilities: list[SecurityVulnerability]) -> str:
-        """Determines the overall risk level for a report."""
-        severities = [v.severity for v in vulnerabilities]
-        if "critical" in severities or "CRITICAL" in [s.upper() for s in severities]:
-            return "CRITICAL"
-        if "high" in severities or "HIGH" in [s.upper() for s in severities]:
-            return "HIGH"
-        if "medium" in severities or "MEDIUM" in [s.upper() for s in severities]:
-            return "MEDIUM"
-        return "LOW"
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_risk_level(self, vulnerabilities: list[SecurityVulnerability]) -> str:
+""""Determines the overall risk level for a report."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         severities = [v.severity for v in vulnerabilities]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         if "critical" in severities or "CRITICAL" in [s.upper() for s in severities]:
+# [BATCHFIX] Commented metadata/non-Python
+# #             return "CRITICAL"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         if "high" in severities or "HIGH" in [s.upper() for s in severities]:
+# [BATCHFIX] Commented metadata/non-Python
+# #             return "HIGH"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         if "medium" in severities or "MEDIUM" in [s.upper() for s in severities]:
+# [BATCHFIX] Commented metadata/non-Python
+# #             return "MEDIUM"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# #         return "LOW"  # [BATCHFIX] closed string

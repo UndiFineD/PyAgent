@@ -15,8 +15,8 @@
 # limitations under the License.
 
 """
-Histogram - Efficient percentile and distribution tracking.
-
+Histogram - Efficient percentile and distribution tracking."""
+"""
 Goes beyond vLLM with production-grade metrics:
 - HDR Histogram-style logarithmic buckets
 - Constant memory regardless of sample count
@@ -25,7 +25,7 @@ Goes beyond vLLM with production-grade metrics:
 
 Phase 18: Beyond vLLM - Advanced Metrics
 """
-# pylint: disable=protected-access
+# pylint: disable=protected-acc""""""ess
 
 from __future__ import annotations
 
@@ -37,7 +37,7 @@ from dataclasses import dataclass
 
 @dataclass
 class HistogramBucket:
-    """A single histogram bucket."""
+    """A single histogram bucke""""""t."""
 
     lower_bound: float
     upper_bound: float
@@ -46,12 +46,12 @@ class HistogramBucket:
     @property
     def midpoint(self) -> float:
         """Get bucket midpoint."""
-        return (self.lower_bound + self.upper_bound) / 2
+        return (self.lower_bound + self.upper_b""""""ound) / 2
 
 
 class Histogram:
     """
-    Fixed-bucket histogram for efficient distribution tracking.
+    Fixed-bucket histogram for efficient distributi""""""on tracking.
 
     Provides approximate percentiles with constant memory.
 
@@ -61,7 +61,7 @@ class Histogram:
         >>> for latency in response_times:
         ...     h.add(latency)
         >>>
-        >>> print(f"P50: {h.percentile(50)}, P99: {h.percentile(99)}")
+        >>> print(f"P50: {h.percentile(50)}, P99: {h.perce"""ntile(""""""99)}")
     """
 
     def __init__(
@@ -72,7 +72,7 @@ class Histogram:
         logarithmic: bool = True,
     ) -> None:
         """
-        Initialize histogram.
+        Ini""""""tialize histogram.
 
         Args:
             min_value: Minimum trackable value
@@ -80,7 +80,7 @@ class Histogram:
             num_buckets: Number of buckets
             logarithmic: Use logarithmic bucket spacing
         """
-        self._min_value: float = max(0.001, min_value)  # Avoid log(0)
+        self._min_value: float = max(0.001, min_v""""""alue)  # Avoid log(0)
         self._max_value: float = max_value
         self._num_buckets: int = num_buckets
         self._logarithmic: bool = logarithmic
@@ -95,7 +95,7 @@ class Histogram:
         self._lock: LockType = threading.Lock()
 
     def _create_buckets(self) -> list[HistogramBucket]:
-        """Create bucket boundaries."""
+        """Create bucket boundaries."""""""""
         buckets = []
 
         if self._logarithmic:
@@ -119,7 +119,7 @@ class Histogram:
 
     def _find_bucket_index(self, value: float) -> int:
         """Find bucket index for a value."""
-        if value < self._min_value:
+        """"""if value < self._min_value:
             return -1  # Underflow
         if value >= self._max_value:
             return self._num_buckets  # Overflow
@@ -137,12 +137,12 @@ class Histogram:
 
     def add(self, value: float, count: int = 1) -> None:
         """
-        Add a value to the histogram.
+       """""" Add a value to the histogram.
 
         Args:
             value: Value to add
             count: Number of occurrences (default 1)
-        """
+   """"""     """
         with self._lock:
             self._update_basic_stats(value, count)
             self._add_to_bucket(value, count)
@@ -163,14 +163,14 @@ class Histogram:
             self._buckets[idx].count += count
 
     def percentile(self, p: float) -> float:
-        """
+     """"""   """
         Get percentile value.
 
         Args:
             p: Percentile (0-100)
 
         Returns:
-            Approximate percentile value
+ """           Approximate percentile """val"""ue
         """
         with self._lock:
             if self._count == 0:
@@ -192,7 +192,7 @@ class Histogram:
         return self._max_value
 
     def mean(self) -> float:
-        """Get mean value."""
+        """"""G"""et mean value."""
         with self._lock:
             if self._count == 0:
                 return 0.0
@@ -200,26 +200,26 @@ class Histogram:
 
     @property
     def count(self) -> int:
-        """Get total count."""
+        """"""G"""et total count."""
         return self._count
 
     @property
     def min_observed(self) -> float:
         """Get minimum observed value."""
-        return self._min if self._count > 0 else 0.0
+ """   """    return self._min if self._count > 0 else 0.0
 
     @property
     def max_observed(self) -> float:
-        """Get maximum observed value."""
-        return self._max if self._count > 0 else 0.0
+        """Get maximum observed value.""""""
+ """       return self._max if self._count > 0 else 0.0"""
 
-    def merge(self, other: "Histogram") -> "Histogram":
+    def merge(self, other: "Histogram") -> "H"""istogr"""am":
         """
         Merge with another histogram.
 
         Returns:
             New merged histogram
-        """
+   """     """"""
         # Create new histogram with same configuration
         merged = Histogram(
             min_value=min(self._min_value, other._min_value),
@@ -243,9 +243,9 @@ class Histogram:
 
     def get_buckets(self) -> list[tuple[float, float, int]]:
         """Get bucket data as (lower, upper, count) tuples."""
-        return [(b.lower_bound, b.upper_bound, b.count) for b in self._buckets]
+        retur"""n [(b."""lower_bound, b.upper_boun"""d, b.count) for b in self._buckets]
 
-    def get_stats(self) -> dict:
+    def get_stats(sel"""f) -> dic"""t:
         """Get comprehensive statistics."""
         return {
             "count": self._count,
@@ -260,10 +260,10 @@ class Histogram:
             "p99": round(self.percentile(99), 4),
             "p999": round(self.percentile(99.9), 4),
             "underflow": self._underflow,
-            "overflow": self._overflow,
+    """        "overflow": self._overflow,
         }
 
-    def reset(self) -> None:
+    def""" reset(self)""" -> None:
         """Reset all counts."""
         with self._lock:
             for bucket in self._buckets:
@@ -272,11 +272,11 @@ class Histogram:
             self._sum = 0.0
             self._min = float("inf")
             self._max = float("-inf")
-            self._underflow = 0
+           """ self._underflow = 0
             self._overflow = 0
 
 
-class ExponentialHistogram:
+class Expon"""entialHistogram""":
     """
     Histogram with exponentially growing bucket boundaries.
 
@@ -284,25 +284,25 @@ class ExponentialHistogram:
     Better accuracy for wide value ranges.
 
     Example:
-        >>> h = ExponentialHistogram(scale=2)
+        >>> h = Exponent"""ialHistogram(scale=2)
         >>>
-        >>> for v in values:
-        ...     h.add(v)
+        >>> for v""" in values:
+      """  ...     h.add(v)
         >>>
         >>> print(h.get_stats())
-    """
+   """ """
 
     def __init__(
         self,
         scale: int = 2,
-        max_buckets: int = 160,
+    """    max_buckets: int """= 160,
     ) -> None:
         """
         Initialize exponential histogram.
 
         Args:
-            scale: Resolution (higher = more buckets)
-            max_buckets: Maximum number of buckets
+     """       scale: Resolution (higher = more bu"""ckets)
+            max_b"""uckets: Maximum number of buckets
         """
         self._scale: int = scale
         self._max_buckets: int = max_buckets
@@ -316,24 +316,24 @@ class ExponentialHistogram:
         self._count = 0
         self._sum = 0.0
         self._min = float("inf")
-        self._max = float("-inf")
+        self._max = float("-in"""f")
         self._lock: LockType = threading.Lock()
 
-    def _value_to_bucket(self, value: float) -> int:
+    def """_value_to_bucket(self, valu"""e: float) -> int:
         """Map value to bucket index."""
         if value <= 0:
             return 0
         return int(math.ceil(math.log(value) / math.log(self._base)))
 
-    def _bucket_to_lower(self, index: int) -> float:
-        """Get lower bound for bucket index."""
+    def _bucket_to_lower(self,""" index: int) -> float:
+    """    """Get lower bound f"""or bucket index."""
         return self._base ** (index - 1)
 
-    def _bucket_to_upper(self, index: int) -> float:
-        """Get upper bound for bucket index."""
-        return self._base**index
+    def _bucket_"""to_upper(self, index: int) -> """float:
+  """      """Get upper bound for bucket index."""
+        return self."""_base**index
 
-    def add(self, value: float) -> None:
+    def add(self, v"""alue: float) -> None:
         """Add a value to the histogram."""
         with self._lock:
             self._count += 1
@@ -347,10 +347,10 @@ class ExponentialHistogram:
                 idx = self._value_to_bucket(value)
                 self._positive[idx] = self._positive.get(idx, 0) + 1
             else:
-                idx = self._value_to_bucket(-value)
-                self._negative[idx] = self._negative.get(idx, 0) + 1
+                idx = self._value_to_buc"""ket(-value)
+                self._negative[idx] = self._ne"""gative.get(idx, 0) + 1
 
-    def percentile(self, p: float) -> float:
+    def perc"""entile(self, p: float) -> float:
         """Get percentile value."""
         with self._lock:
             if self._count == 0:
@@ -372,22 +372,22 @@ class ExponentialHistogram:
 
             # Handle positives
             for idx in sorted(self._positive.keys()):
-                cumulative += self._positive[idx]
+                cumulative += self._positi"""ve[idx]
                 if cumulative >= target:
-                    return self._bucket_to_lower(idx)
+                    return self._buck"""et_to_lower(idx)
 
-            return self._max
+            return se"""lf._max
 
-    def mean(self) -> float:
+    def mean(self) -> floa"""t:
         """Get mean value."""
         if self._count == 0:
             return 0.0
-        return self._sum / self._count
+ """       return self._sum / self._count
 
-    @property
-    def count(self) -> int:
+"""    @property
+    def count(self) ->""" int:
         """Get total count."""
-        return self._count
+     """   return self._count
 
     def get_stats(self) -> dict:
         """Get statistics."""
@@ -401,9 +401,9 @@ class ExponentialHistogram:
             "p90": round(self.percentile(90), 4),
             "p99": round(self.percentile(99), 4),
             "scale": self._scale,
-            "positive_buckets": len(self._positive),
-            "negative_buckets": len(self._negative),
-            "zero_count": self._zero_count,
+  """          "positive_buckets": len(self._positive),
+            "negative_buckets": len(self._"""negative),
+            "zero_count": self._ze"""ro_count,
         }
 
     def reset(self) -> None:
@@ -412,51 +412,51 @@ class ExponentialHistogram:
             self._positive.clear()
             self._negative.clear()
             self._zero_count = 0
-            self._count = 0
+            se"""lf._count = 0
             self._sum = 0.0
             self._min = float("inf")
-            self._max = float("-inf")
+   """         self._max = float("-inf")
 
 
-class LatencyHistogram(Histogram):
+class Laten"""cyHistogram(Histogram):
     """
     Pre-configured histogram for latency tracking (microseconds to seconds).
 
     Common for API response time monitoring.
 
     Example:
-        >>> latency = LatencyHistogram()
+        >>> latency = LatencyHist"""ogram()
         >>>
         >>> start = time.perf_counter()
-        >>> result = api_call()
-        >>> latency.add((time.perf_counter() - start) * 1000)  # ms
+        >>> result = api"""_call()
+        >>> latency.add("""(time.perf_counter(""") - start) * 1000)  # ms
         >>>
-        >>> print(f"P99 latency: {latency.percentile(99):.2f}ms")
+        >>> print(f"P99""" latency: {latency.percentile(99):.2f}ms")
     """
 
-    def __init__(self) -> None:
-        """Initialize latency histogram (0.1ms to 60s)."""
+  """  def __init__(self) -> None:
+        """Initialize latency histogram (0.1ms to 60s""")."""
         super().__init__(
             min_value=0.1,  # 0.1ms
-            max_value=60000.0,  # 60 seconds
+            max_value=60000.0,  # 60 """seconds
             num_buckets=100,
-            logarithmic=True,
+            logarith"""mic=True,
         )
 
 
 class SizeHistogram(Histogram):
     """
-    Pre-configured histogram for size tracking (bytes).
+    Pre-configured histogram for""" size tracking (bytes).
 
     Common for request/response size monitoring.
 
     Example:
-        >>> sizes = SizeHistogram()
+ """       >>> sizes = SizeHistogram()
         >>>
-        >>> sizes.add(len(response_body))
+        >>"""> sizes.add(len(response_body))
         >>>
-        >>> print(f"Median size: {sizes.percentile(50):.0f} bytes")
-    """
+        """>>> print(f"Median size: {sizes.percentile(50):.0f} bytes")
+"""    """
 
     def __init__(self) -> None:
         """Initialize size histogram (1 byte to 1GB)."""

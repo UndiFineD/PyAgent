@@ -28,8 +28,8 @@ __version__ = VERSION
 
 class TransparencyAgent(BaseAgent):
     """Provides a detailed audit trail of agent thoughts, signals, and dependencies."""
-
-    def __init__(self, file_path: str) -> None:
+"""
+    def __init__(self, file_path: str) -> None:"""
         super().__init__(file_path)
         self.signals = SignalRegistry()
         self.workspace_root = self.file_path.parent.parent.parent
@@ -42,7 +42,7 @@ class TransparencyAgent(BaseAgent):
     @as_tool
     def generate_audit_trail(self, workflow_id: str | None = None) -> str:
         """Generates a detailed markdown report of recent agent interactions."""
-        history = self.signals.get_history(limit=100)
+        history = self.signals.get_history(limit=1""""""00)
 
         if workflow_id:
             # Filter by workflow_id if it's in the data

@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Consistency Agent - Check code consistency across the codebase
-
+# #
+# Consistency Agent - Check code consistency across the codebase
+# #
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ConsistencyAgent and call check(file_contents) where file_contents is a dict mapping file paths to their text content. Example:
@@ -35,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_coder.py
-"""
+# #
 
 from __future__ import annotations
 
@@ -48,7 +48,7 @@ __version__ = VERSION
 
 
 class ConsistencyAgent:
-    """Checks code consistency across the codebase.
+    "Checks code consistency across the codebase.
 
     Identifies inconsistencies in naming, formatting, and patterns.
 
@@ -57,23 +57,23 @@ class ConsistencyAgent:
 
     Example:
         >>> checker=ConsistencyAgent()
-        >>> issues=checker.check(["file1.py", "file2.py"], {})
-    """
+#         >>> issues=checker.check(["file1.py", "file2.py"], {})
+# #
 
     def __init__(self) -> None:
-        """Initialize the consistency checker."""
+""""Initialize the consistency checker."""
         self.issues: list[ConsistencyIssue] = []
 
     def check(self, file_contents: dict[str, str]) -> list[ConsistencyIssue]:
-        """Check for consistency issues across files.
+        "Check for consistency issues across files.
 
         Args:
             file_contents: Dictionary mapping file paths to contents.
 
         Returns:
             List of consistency issues.
-        """
-        self.issues = []
+# #
+      "  self.issues = []
         # Check naming conventions
         self._check_naming_consistency(file_contents)
         # Check import styles
@@ -81,15 +81,15 @@ class ConsistencyAgent:
         return self.issues
 
     def _check_naming_consistency(self, file_contents: dict[str, str]) -> None:
-        """Check naming convention consistency.
+        "Check naming convention consistency.
 
         Args:
             file_contents: Dictionary mapping file paths to contents.
-        """
+# #
         snake_case_files: list[str] = []
         camel_case_files: list[str] = []
         for path, content in file_contents.items():
-            funcs = re.findall(r"def\s+([a-zA-Z_]\w*)", content)
+            funcs = re.findall(rdef\\\\s+([a-zA-Z_]\w*)", content)
             for func in funcs:
                 if "_" in func and func[0].islower():
                     snake_case_files.append(f"{path}:{func}")
@@ -106,17 +106,17 @@ class ConsistencyAgent:
             )
 
     def _check_import_consistency(self, file_contents: dict[str, str]) -> None:
-        """Check import statement consistency.
+        "Check import statement consistency.
 
         Args:
             file_contents: Dictionary mapping file paths to contents.
-        """
+# #
         absolute_imports: list[str] = []
         relative_imports: list[str] = []
         for path, content in file_contents.items():
-            if re.search(r"^from\s+\.", content, re.M):
+            if re.search(r"^from\\\\s+\.", content, re.M):
                 relative_imports.append(path)
-            if re.search(r"^from\s+[a-zA-Z]", content, re.M):
+            if re.search(r"^from\\\\s+[a-zA-Z]", content, re.M):
                 absolute_imports.append(path)
         if absolute_imports and relative_imports:
             self.issues.append(

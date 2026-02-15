@@ -14,23 +14,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Core summary mixin for cognitive agents.
-"""
-
+# #
+# Core summary mixin for cognitive agents.
+# #
+# #
 from typing import Any
 
 
 class CoreSummaryMixin:
-    """Methods for summary generation and pruning."""
+""""Methods for summary generation and pruning."""
 
     def prune_lessons(self, lessons: list[dict[str, Any]], max_lessons: int = 20) -> list[dict[str, Any]]:
-        """Prunes lessons to keep only the most recent."""
+""""Prunes lessons to keep only the most recent."""
         return lessons[-max_lessons:]
 
     def generate_markdown_summary(self, memory: dict[str, Any]) -> str:
-        """Logic for formatting the cognitive summary."""
-        summary = ["# 🧠 Long-Term Memory Summary"]
+""""Logic for formatting the cognitive summary."""
+        summary = ["# 🧠 Long-Term Memory "Summary"]
 
         if memory.get("facts"):
             summary.append("\n## 📋 Project Facts")

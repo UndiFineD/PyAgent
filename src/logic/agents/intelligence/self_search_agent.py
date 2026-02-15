@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-SelfSearchAgent - Introspection and knowledge-base search
-
+# #
+# SelfSearchAgent - Introspection and knowledge-base search
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: agent = SelfSearchAgent(file_path)
@@ -38,25 +38,25 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Self search agent.py module.
-"""
+# #
 
 from .web_intelligence_agent import WebIntelligenceAgent
 
 
 class SelfSearchAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-    """Agent specialized in searching and reflecting on its own knowledge base and logs."""
+""""Agent specialized in searching and reflecting on its own knowledge base and logs."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._system_prompt = "You are the SelfSearchAgent (via WebIntelligence core)."
-"""
+#         self._system_prompt = "You are the SelfSearchAgent (via WebIntelligence core).
+# #
 
 from .web_intelligence_agent import WebIntelligenceAgent
 
 
 class SelfSearchAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-    """Agent specialized in searching and reflecting on its own knowledge base and logs."""
+""""Agent specialized in searching and reflecting on its own knowledge base and logs."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._system_prompt = "You are the SelfSearchAgent (via WebIntelligence core)."
+#         self._system_prompt = "You are the SelfSearchAgent (via WebIntelligence core).

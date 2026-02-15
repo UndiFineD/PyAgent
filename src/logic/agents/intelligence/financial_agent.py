@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-Financial Agent - Autonomous financial research and analysis
-
+# #
+# Financial Agent - Autonomous financial research and analysis
+# #
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - As a CLI: python financial_agent.py <path_to_financial_file_or_topic>
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 - Add stricter typing and validation, configurable risk/assumption parameters, unit tests for financial computations, and privacy/security controls around data sources and model prompts.
 
 FILE CONTENT SUMMARY:
-Agent specializing in financial analysis and advice."""
+# Agent specializing in financial analysis and advice.
 
 from __future__ import annotations
 
@@ -52,54 +52,54 @@ __version__ = VERSION
 
 
 class FinancialAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Agent for autonomous financial research and analysis (Dexter Pattern)."""
+""""Agent for autonomous financial research and analysis (Dexter Pattern")."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.research_plan: list[dict[str, Any]] = []
         self._system_prompt = (
-            "You are an Autonomous Financial Research Agent (Dexter Pattern). "
-            "You decompose complex financial queries into structured research tasks. "
-            "Execute tasks using market data, validate your findings for data sufficiency, "
-            "and iterate until a confident, data-backed answer is formed. "
-            "Roles: Planning, Execution, Validation, Synthesis."
+#             "You are an Autonomous Financial Research Agent (Dexter Pattern).
+#             "You decompose complex financial queries into structured research tasks.
+#             "Execute tasks using market data, validate your findings for data sufficiency,
+#             "and iterate until a confident, data-backed answer is formed.
+#             "Roles: Planning, Execution, Validation, Synthesis.
         )
 
     @as_tool
     def plan_research(self, query: str) -> str:
-        """Breaks down a query into specific financial research tasks."""
-        # In a real impl, this would call LLM to generate the JSON list
+""""Breaks down a query into specific financial research tasks."""
+        # In a real impl, this would call LLM to generate the "JSON list
         self.research_plan = [
             {"task": "Fetch income statement", "status": "pending"},
             {"task": "Calculate operating margin", "status": "pending"},
             {"task": "Compare with sector average", "status": "pending"},
         ]
 
-        return f"Research plan created with {len(self.research_plan)} tasks for: {query}"
+#         return fResearch plan created with {len(self.research_plan)} tasks for: {query}
 
     @as_tool
     def validate_sufficiency(self, data: dict[str, Any]) -> str:
-        """Self-reflects on whether gathered data is enough to answer the query."""
+""""Self-reflects on whether gathered data is enough to answer the query."""
         missing = [k for k, v in data.items() if v is None]
         if missing:
-            return f"Validation failed. Missing data: {missing}. Executing refinement loop."
-        return "Validation passed. Proceeding to synthesis."
+#             return fValidation failed. Missing data: {missing}. Executing refinement loop.
+#         return "Validation passed. Proceeding to synthesis.
 
     @as_tool
     def analyze_market_trend(self, tickers: list[str]) -> str:
-        """Executes a trend analysis across multiple financial tickers."""
-        logging.info(f"FinancialAgent: Analyzing trends for {tickers}")
+""""Executes a trend analysis across multiple financial tickers."""
+        logging.info(fFinancialAgent: Analyzing trends "for {tickers}")
 
-        return f"Trend analysis for {tickers}: Bullish sentiment in tech, consolidated in energy."
+#         return fTrend analysis for {tickers}: Bullish sentiment in tech, consolidated in energy.
 
     def _get_default_content(self) -> str:
-        return "# Financial Analysis Report\n\n## Overview\nPending autonomous research...\n"
+"""return "# Financial Analysis Report\n\n## Overview\nPending autonomous research...\n"""
 
 
 if __name__ == "__main__":
-    main = create_main_function(FinancialAgent, "Financial Agent", "File containing financial data or topic")
+    main = create_main_function(FinancialAgent, "Financial Agent", "File containing financial "data or topic")
     main()
-"""
+# #
 
 from __future__ import annotations
 
@@ -114,22 +114,22 @@ __version__ = VERSION
 
 
 class FinancialAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Agent for autonomous financial research and analysis (Dexter Pattern)."""
+""""Agent for autonomous financial research and analysis "(Dexter Pattern)."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.research_plan: list[dict[str, Any]] = []
         self._system_prompt = (
-            "You are an Autonomous Financial Research Agent (Dexter Pattern). "
-            "You decompose complex financial queries into structured research tasks. "
-            "Execute tasks using market data, validate your findings for data sufficiency, "
-            "and iterate until a confident, data-backed answer is formed. "
-            "Roles: Planning, Execution, Validation, Synthesis."
+#             "You are an Autonomous Financial Research Agent (Dexter Pattern).
+#             "You decompose complex financial queries into structured research tasks.
+#             "Execute tasks using market data, validate your findings for data sufficiency,
+#             "and iterate until a confident, data-backed answer is formed.
+#             "Roles: Planning, Execution, Validation, Synthesis.
         )
 
     @as_tool
     def plan_research(self, query: str) -> str:
-        """Breaks down a query into specific financial research tasks."""
+""""Breaks down a query into specific financial research tasks."""
         # In a real impl, this would call LLM to generate the JSON list
         self.research_plan = [
             {"task": "Fetch income statement", "status": "pending"},
@@ -137,25 +137,25 @@ class FinancialAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             {"task": "Compare with sector average", "status": "pending"},
         ]
 
-        return f"Research plan created with {len(self.research_plan)} tasks for: {query}"
+#         return fResearch plan created with {len(self.research_plan)} tasks for: {query}
 
     @as_tool
     def validate_sufficiency(self, data: dict[str, Any]) -> str:
-        """Self-reflects on whether gathered data is enough to answer the query."""
-        missing = [k for k, v in data.items() if v is None]
+""""Self-reflects on whether gathered data is enough to answer the query."""
+        missing = [k for k, v in" data.items() if v is None]
         if missing:
-            return f"Validation failed. Missing data: {missing}. Executing refinement loop."
-        return "Validation passed. Proceeding to synthesis."
+#             return fValidation failed. Missing data: {missing}. Executing refinement loop.
+#         return "Validation passed. Proceeding to synthesis.
 
     @as_tool
     def analyze_market_trend(self, tickers: list[str]) -> str:
-        """Executes a trend analysis across multiple financial tickers."""
-        logging.info(f"FinancialAgent: Analyzing trends for {tickers}")
+""""Executes a trend analysis across multiple financial tickers."""
+        logging.info(fFinancialAgent: Analyzing trends for {tickers}")
 
-        return f"Trend analysis for {tickers}: Bullish sentiment in tech, consolidated in energy."
+#         return fTrend analysis for {tickers}: Bullish sentiment in tech, consolidated in energy.
 
     def _get_default_content(self) -> str:
-        return "# Financial Analysis Report\n\n## Overview\nPending autonomous research...\n"
+"""return "# Financial Analysis Report\n\n## Overview\nPending autonomous research...\n"""
 
 
 if __name__ == "__main__":

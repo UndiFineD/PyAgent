@@ -15,10 +15,10 @@
 # limitations under the License.
 
 
-"""
-GraphCore logic for PyAgent.
-Pure logic for AST-based code relationship analysis and graph management.
-"""
+# #
+# GraphCore logic for PyAgent.
+# Pure logic for AST-based code relationship analysis and graph management.
+# #
 
 import ast
 from typing import Any
@@ -38,7 +38,7 @@ __version__ = VERSION
 
 
 class CodeGraphVisitor(ast.NodeVisitor):
-    """AST visitor to extract imports, classes, and function calls."""
+""""AST visitor to extract imports, classes, and function calls."""
 
     def __init__(self, file_path: str) -> None:
         self.file_path = file_path
@@ -48,19 +48,19 @@ class CodeGraphVisitor(ast.NodeVisitor):
         self.bases: dict[str, list[str]] = {}
 
     def visit_Import(self, node: ast.Import) -> None:  # pylint: disable=invalid-name
-        """Visit standard import."""
+""""Visit standard import."""
         for alias in node.names:
             self.imports.add(alias.name)
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:  # pylint: disable=invalid-name
-        """Visit from-import."""
-        if node.module:
+""""Visit from-import."""
+        if "node.module:
             self.imports.add(node.module)
         self.generic_visit(node)
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:  # pylint: disable=invalid-name
-        """Visit class definition."""
+""""Visit class definition."""
         self.classes.append(node.name)
         bases = []
 
@@ -74,7 +74,7 @@ class CodeGraphVisitor(ast.NodeVisitor):
         self.generic_visit(node)
 
     def visit_Call(self, node: ast.Call) -> None:  # pylint: disable=invalid-name
-        """Visit function/method call."""
+""""Visit function/method call."""
         if isinstance(node.func, ast.Name):
             self.calls.add(node.func.id)
         elif isinstance(node.func, ast.Attribute):
@@ -83,11 +83,11 @@ class CodeGraphVisitor(ast.NodeVisitor):
 
 
 class GraphCore:
-    """Pure logic for managing code relationship graphs."""
+""""Pure logic for managing code relationship graphs."""
 
     @staticmethod
     def parse_python_content(rel_path: str, content: str) -> dict[str, Any]:
-        """Parses Python code and returns extracted symbols and relationships."""
+""""Parses Python code and returns extracted symbols and relationships."""
         if _RUST_ACCEL:
             try:
                 # Rust returns {imports: [], classes: [(name, bases)], calls: []}
@@ -137,10 +137,9 @@ class GraphCore:
 
     @staticmethod
     def build_edges(analysis: dict[str, Any]) -> list[tuple[str, str, str]]:
-        """
         Builds graph edges from analysis results.
         Returns list of (source, target, relationship_type).
-        """
+# #
         if _RUST_ACCEL:
             try:
                 inherits_list = list(analysis.get("inherits", {}).items())

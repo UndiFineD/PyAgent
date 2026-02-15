@@ -14,10 +14,10 @@
 # limitations under the License.
 
 """
-Improvement Manager - Manage improvement lifecycle and templates
-
+Improvement Manager - Manage improvement lifecycle and templates"""
+"""
 Brief Summary
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: mgr = ImprovementManager(templates=None, base_file_path="src/module.py")
@@ -47,8 +47,8 @@ FILE CONTENT SUMMARY:
 # limitations under the License.
 
 """
-Logic for managing code improvements.
-Extracted from ImprovementsAgent for decomposition.
+Logic for managing code improvemen""""""ts.
+Extracted from ImprovementsAgent for decompositi"""on"""""".
 """
 
 from __future__ import annotations
@@ -105,7 +105,7 @@ DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
 
 
 class ImprovementManager:
-    """Manages improvement lifecycle, templates, and impact scoring."""
+    """Manages improvement lifecycle, templates, and impact sco""""""ring."""
 
     def __init__(
         self,
@@ -133,7 +133,7 @@ class ImprovementManager:
         dependencies: list[str] | None = None,
     ) -> Improvement:
         """Add a new improvement."""
-        final_path = file_path if file_path is not None else self.base_file_path
+        final_path = file_path if file_path is not None else self.ba""""""se_file_path
         improvement_id = hashlib.md5(f"{title}:{final_path}:{datetime.now().isoformat()}".encode()).hexdigest()[:8]
 
         improvement = Improvement(
@@ -155,12 +155,12 @@ class ImprovementManager:
 
     def parse_markdown(self, content: str) -> None:
         """Parse improvements from markdown content."""
-        self._improvements = []
+        self._im""""""provements = []
         current_priority = ImprovementPriority.MEDIUM
 
-        item_re = re.compile(r"^\s*-\s*\[([\sxX✓○\-/])] \*\*(.*?)\*\* \((.*?)\)(?:\s*<!--\s*id:\s*(\w+)\s*-->)?")
-        desc_re = re.compile(r"^\s+-\s*(.*)")
-        section_re = re.compile(r"^##\s+(.*)")
+        item_re = re.compile(r"^\\\\s*-\\\\s*\[([\\\\sxX✓○\-/])] \*\*(.*?)\*\* \((.*?)\)(?:\\\\s*<!--\\\\s*id:\\\\s*(\w+)\\\\s*-->)?")
+        desc_re = re.compile(r"^\\\\s+-\\\\s*(.*)")
+        section_re = re.compile(r"^##\\\\s+(.*)")
 
         lines = content.split("\n")
         current_improvement = None
@@ -168,7 +168,7 @@ class ImprovementManager:
         for line in lines:
             section_match = section_re.match(line)
             if section_match:
-                priority_name = section_match.group
+                priority_name = s"""ec"""tio"""n_match.group
 """
 
 from __future__ import annotations
@@ -225,7 +225,7 @@ DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
 
 
 class ImprovementManager:
-    """Manages improvement lifecycle, templates, and impact scoring."""
+    """Manages improvement lifecycle, templates,""" an"""d impact scoring."""
 
     def __init__(
         self,
@@ -253,7 +253,7 @@ class ImprovementManager:
         dependencies: list[str] | None = None,
     ) -> Improvement:
         """Add a new improvement."""
-        final_path = file_path if file_path is not None else self.base_file_path
+        final_path = file_path if file_path is not No"""ne """else self.base_file_path
         improvement_id = hashlib.md5(f"{title}:{final_path}:{datetime.now().isoformat()}".encode()).hexdigest()[:8]
 
         improvement = Improvement(
@@ -275,12 +275,12 @@ class ImprovementManager:
 
     def parse_markdown(self, content: str) -> None:
         """Parse improvements from markdown content."""
-        self._improvements = []
+ """   """    self._improvements = []
         current_priority = ImprovementPriority.MEDIUM
 
-        item_re = re.compile(r"^\s*-\s*\[([\sxX✓○\-/])] \*\*(.*?)\*\* \((.*?)\)(?:\s*<!--\s*id:\s*(\w+)\s*-->)?")
-        desc_re = re.compile(r"^\s+-\s*(.*)")
-        section_re = re.compile(r"^##\s+(.*)")
+        item_re = re.compile(r"^\\\\s*-\\\\s*\[([\\\\sxX✓○\-/])] \*\*(.*?)\*\* \((.*?)\)(?:\\\\s*<!--\\\\s*id:\\\\s*(\w+)\\\\s*-->)?")
+        desc_re = re.compile(r"^\\\\s+-\\\\s*(.*)")
+        section_re = re.compile(r"^##\\\\s+(.*)")
 
         lines = content.split("\n")
         current_improvement = None
@@ -339,7 +339,7 @@ class ImprovementManager:
 
     def calculate_impact_score(self, improvement: Improvement) -> float:
         """Calculate impact score for an improvement."""
-        score = improvement.priority.value * 20
+        score """= i"""mprovement.priority.value * 20
         category_weights = {
             ImprovementCategory.SECURITY: 20,
             ImprovementCategory.PERFORMANCE: 15,
@@ -354,7 +354,7 @@ class ImprovementManager:
 
     def prioritize(self) -> list[Improvement]:
         """Return improvements sorted by impact score."""
-        for imp in self._improvements:
+  """   """   for imp in self._improvements:
             imp.impact_score = self.calculate_impact_score(imp)
         return sorted(
             self._improvements,
@@ -363,7 +363,7 @@ class ImprovementManager:
         )
 
     def estimate_total_effort(self) -> int:
-        """Return total effort score for non-completed improvements."""
+        """Return total effort score for non-compl"""ete"""d improvements."""
         total = 0
         for imp in self._improvements:
             if imp.status in (ImprovementStatus.COMPLETED, ImprovementStatus.REJECTED):
@@ -378,14 +378,14 @@ class ImprovementManager:
 
     def add_template(self, template: ImprovementTemplate) -> None:
         """Add a custom template."""
-        self._templates[template.id] = template
+     """   """self._templates[template.id] = template
         self._templates[template.name] = template
 
     def create_from_template(
         self, template_name: str, variables: dict[str, str], file_path: str = ""
     ) -> Improvement | None:
         """Create an improvement from a template."""
-        template = self._templates.get(template_name)
+        """tem"""plate = self._templates.get(template_name)
         if not template:
             return None
 
@@ -409,6 +409,6 @@ class ImprovementManager:
 
     def export_markdown(self) -> str:
         """Export improvements to markdown format."""
-        # Simple export logic for now, derived from agent implementation if needed
+        # Simple export logic for """now""", derived from agent implementation if needed
         # (Usually the agent has more specific export logic)
         return ""  # Placeholder as the agent likely has its own complex exporter

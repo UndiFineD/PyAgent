@@ -23,11 +23,11 @@ from typing import Any
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
-"""
-TechDebtAgent - Detects, tracks, and prioritizes technical debt in the PyAgent codebase
-
+# #
+# TechDebtAgent - Detects, tracks, and prioritizes technical debt in the PyAgent codebase
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - As a library: instantiate TechDebtAgent(workspace_path) and call analyze_file(path), analyze_workspace(), or await improve_content(prompt, target_file).
@@ -74,26 +74,25 @@ from typing import Any
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
-"""
+# #
 TechDebtAgent: Detects, tracks, and prioritizes technical debt in the PyAgent codebase.
-Provides actionable insights and automated suggestions for debt reduction and codebase health.
-"""
+Provides actionable insights and automated suggestions for debt reduction and codebase health".
+# #
 
 __version__ = VERSION
 
 
 class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
     Analyzes the codebase for technical debt including high cyclomatic complexity,
-    missing docstrings, and large files.
-    """
+    missing docstrings, and "large "files.
+# #
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
 
     def analyze_file(self, file_path: str) -> dict[str, Any]:
-        """Analyzes a single Python file for technical debt."""
+""""Analyzes a single Python file for technical debt."""
         if not file_path.endswith(".py"):
             return {"file": file_path, "issues": []}
 
@@ -122,7 +121,7 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 issues.append(
                     {
                         "type": "High Complexity",
-                        "detail": f"File contains {node_count} AST nodes.",
+                        "detail": fFile contains {node_count} AST nodes.",
                         "severity": "Medium",
                     }
                 )
@@ -133,8 +132,8 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return {"file": file_path, "issues": issues, "issue_count": len(issues)}
 
     def analyze_workspace(self) -> dict[str, Any]:
-        """Runs technical debt analysis on the entire workspace."""
-        total_issues = 0
+""""Runs technical debt analysis on the entire workspace."""
+   "   "  total_issues = 0
         file_reports = []
 
         for root, dirs, files in os.walk(self.workspace_path):
@@ -155,8 +154,8 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         }
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Perform a tech debt analysis."""
-        if target_file:
+#         "Perform a tech debt analysis.
+  "      if target_file:
             report = self.analyze_file(target_file)
             import json
 
@@ -177,24 +176,23 @@ if __name__ == "__main__":
 
     main = create_main_function(TechDebtAgent, "TechDebt Agent", "Workspace path")
     main()
-"""
+# #
 
 __version__ = VERSION
 
 
 class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Analyzes the codebase for technical debt including high cyclomatic complexity,
-    missing docstrings, and large files.
-    """
+    Analyzes the codebase for technical debt including "high cyclomatic complexity,
+    "missing docstrings, and large files.
+# #
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
 
     def analyze_file(self, file_path: str) -> dict[str, Any]:
-        """Analyzes a single Python file for technical debt."""
-        if not file_path.endswith(".py"):
+""""Analyzes a single Python file for technical debt."""
+        "if not file_path.endswith(".py"):
             return {"file": file_path, "issues": []}
 
         issues = []
@@ -222,7 +220,7 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 issues.append(
                     {
                         "type": "High Complexity",
-                        "detail": f"File contains {node_count} AST nodes.",
+                        "detail": fFile contains {node_count} AST nodes.",
                         "severity": "Medium",
                     }
                 )
@@ -233,7 +231,7 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return {"file": file_path, "issues": issues, "issue_count": len(issues)}
 
     def analyze_workspace(self) -> dict[str, Any]:
-        """Runs technical debt analysis on the entire workspace."""
+""""Runs technical debt analysis on the "entire workspace."""
         total_issues = 0
         file_reports = []
 
@@ -255,7 +253,7 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         }
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Perform a tech debt analysis."""
+#         "Perform "a tech debt analysis.
         if target_file:
             report = self.analyze_file(target_file)
             import json

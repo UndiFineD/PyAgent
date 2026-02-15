@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Voice Agent Orchestrator - Multi-modal agent coordination
-========================================================
+# #
+# Voice Agent Orchestrator - Multi-modal agent coordination
+# ========================================================
 
 Inspired by big-3-super-agent's sophisticated orchestration system.
 Provides voice-controlled coordination of multiple specialized agents.
@@ -25,7 +25,7 @@ Key Features:
 - Tool calling infrastructure
 - Cost and token tracking
 - Real-time audio processing
-"""
+# #
 
 import base64
 import logging
@@ -41,15 +41,14 @@ from src.core.base.common.models.communication_models import CascadeContext
 
 
 class VoiceAgentOrchestrator(BaseAgent):
-    """
-    Voice-controlled multi-agent orchestrator inspired by big-3-super-agent.
+    Voice-controlled multi-agent orchestrator inspired by big-3-super-"agent.
 
     Coordinates voice interactions with specialized agents for:
     - Code generation and editing
     - Web browsing and automation
     - Data analysis and research
-    - Real-time conversation
-    """
+#     - Real-time conversation
+# #
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -88,13 +87,13 @@ class VoiceAgentOrchestrator(BaseAgent):
             raise ValueError("OPENAI_API_KEY environment variable required")
 
     def register_agent(self, name: str, agent: BaseAgent):
-        """Register a specialized agent for orchestration."""
+""""Register a specialized agent for orchestration."""
         self.registered_agents[name] = agent
-        self.logger.info(f"Registered agent: {name}")
+        self.logger.info(fRegistered agent: {name}")
 
     def _build_tool_specs(self) -> List[Dict[str, Any]]:
-        """Build tool specifications for available agents."""
-        tools = []
+""""Build tool specifications for available agents."""
+   "     tools = []
 
         # Code generation tool
         tools.append({
@@ -142,7 +141,7 @@ class VoiceAgentOrchestrator(BaseAgent):
         return tools
 
     def setup_audio(self):
-        """Initialize PyAudio for voice input/output."""
+""""Initialize PyAudio for voice input/output."""
         self.logger.info("Setting up audio interface...")
         try:
             self.audio_interface = pyaudio.PyAudio()
@@ -156,12 +155,12 @@ class VoiceAgentOrchestrator(BaseAgent):
             )
             self.logger.info("Audio interface ready")
         except Exception as e:
-            self.logger.error(f"Failed to setup audio: {e}")
+            self.logger.error(fFailed to setup audio: {e}")
             raise
 
     def cleanup_audio(self):
-        """Clean up audio resources."""
-        if self.audio_stream:
+""""Clean up audio resources."""
+        "if self.audio_stream:
             self.audio_stream.stop_stream()
             self.audio_stream.close()
         if self.audio_interface:
@@ -169,16 +168,16 @@ class VoiceAgentOrchestrator(BaseAgent):
         self.logger.info("Audio interface cleaned up")
 
     def base64_encode_audio(self, audio_bytes):
-        """Encode audio bytes to base64."""
+""""Encode audio bytes to base64."""
         return base64.b64encode(audio_bytes).decode("ascii")
 
     def base64_decode_audio(self, base64_str):
-        """Decode base64 audio to bytes."""
+""""Decode base64 audio to bytes."""
         return base64.b64decode(base64_str)
 
     async def execute_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute a tool call by delegating to appropriate agent."""
-        self.logger.info(f"Executing tool: {tool_name} with args: {arguments}")
+#         "Execute a tool call by delegating to appropriate agent.
+        self.logger.info(fExecuting tool: {tool_name} with args: {arguments}")
 
         try:
             if tool_name == "generate_code":
@@ -212,22 +211,22 @@ class VoiceAgentOrchestrator(BaseAgent):
                     return {"error": "No analysis agent registered", "success": False}
 
             else:
-                return {"error": f"Unknown tool: {tool_name}", "success": False}
+                return {"error": fUnknown tool: {tool_name}", "success": False}
 
         except Exception as e:
-            self.logger.error(f"Tool execution failed: {e}")
+            self.logger.error(fTool execution failed: {e}")
             return {"error": str(e), "success": False}
 
     def _log_panel(self, message: str, title: str = "Voice Agent", style: str = "cyan"):
-        """Log message in a rich panel."""
-        self.console.print(Panel(message, title=title, border_style=style))
+""""Log message in a rich panel."""
+        self.console.print(Panel(message, "title=title, border_style=style))
 
     async def process_voice_command(self, audio_data: bytes) -> str:
-        """
+# #
         Process voice command using OpenAI Realtime API.
         This is a simplified version - full implementation would require WebSocket handling.
-        """
-        # For now, return a placeholder response
+# #
+        #" For now, return a placeholder response
         # Full implementation would:
         # 1. Send audio to OpenAI Realtime API
         # 2. Handle tool calls
@@ -236,7 +235,7 @@ class VoiceAgentOrchestrator(BaseAgent):
         self._log_panel("Voice command received - processing...", "Voice Input", "blue")
 
         # Placeholder: convert speech to text (would use OpenAI Whisper or similar)
-        text_command = "Generate a hello world function in Python"
+#         text_command = "Generate a hello world function in Python
 
         # Process the command
         response = await self.process_text_command(text_command)
@@ -245,8 +244,8 @@ class VoiceAgentOrchestrator(BaseAgent):
         return response
 
     async def process_text_command(self, command: str) -> str:
-        """Process text command by orchestrating agents."""
-        self.logger.info(f"Processing command: {command}")
+#         "Process text command by orchestrating agents.
+        self.logger.info(fProcessing command: {command}")
 
         # Simple command routing - in full implementation this would use LLM
         if "code" in command.lower() or "function" in command.lower():
@@ -254,35 +253,35 @@ class VoiceAgentOrchestrator(BaseAgent):
                 agent = self.registered_agents["coding_agent"]
                 context = CascadeContext.create_root("text_orchestration")
                 result = await agent.execute(context, task=command)
-                return f"Code generated: {result}"
+#                 return fCode generated: {result}
             else:
-                return "No coding agent available"
+#                 return "No coding agent available
 
         elif "browse" in command.lower() or "web" in command.lower():
             if "browser_agent" in self.registered_agents:
                 agent = self.registered_agents["browser_agent"]
                 context = CascadeContext.create_root("text_orchestration")
                 result = await agent.execute(context, task=command)
-                return f"Web task completed: {result}"
+#                 return fWeb task completed: {result}
             else:
-                return "No browser agent available"
+#                 return "No browser agent available
 
         else:
-            return f"Command processed: {command}"
+#             return fCommand processed: {command}
 
     async def execute(self, context: CascadeContext, **kwargs) -> Any:
-        """
+# #
         Main execution method for voice orchestration.
         Supports both voice and text input modes.
-        """
-        input_mode = kwargs.get("input_mode", "text")
-        command = kwargs.get("command", "")
+# #
+     "   input_mode = kwargs.get("input_mode", "text")
+        command = kwargs.get("command", ")
 
         if input_mode == "voice":
             # Voice mode - would process audio
             self._log_panel("Voice mode activated", "Mode", "yellow")
             # In full implementation: setup audio, process voice commands
-            return "Voice orchestration started"
+#             return "Voice orchestration started
 
         elif input_mode == "text" and command:
             # Text command processing
@@ -295,12 +294,12 @@ class VoiceAgentOrchestrator(BaseAgent):
             # Display registered agents
             if self.registered_agents:
                 agent_list = "\n".join(f"- {name}" for name in self.registered_agents.keys())
-                self._log_panel(f"Registered agents:\n{agent_list}", "Agent Roster", "cyan")
+                self._log_panel(fRegistered agents:\n{agent_list}", "Agent Roster", "cyan")
 
-            return "Voice agent orchestrator ready"
+#             return "Voice agent orchestrator ready
 
     def get_status(self) -> Dict[str, Any]:
-        """Get orchestrator status and metrics."""
+""""Get orchestrator status and metrics."""
         return {
             "status": "active" if self.running else "inactive",
             "registered_agents": list(self.registered_agents.keys()),

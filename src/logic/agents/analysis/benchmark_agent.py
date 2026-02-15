@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-Benchmark Agent - Automated benchmarking of agent fleet
-
+# #
+# Benchmark Agent - Automated benchmarking of agent fleet
+# #
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate BenchmarkAgent(file_path) and invoke tools exposed as methods (decorated with @as_tool): run_sgi_benchmark(agent_name, scientific_task), validate_scientific_hypothesis(hypothesis, dataset_path), evaluate_model_on_benchmark(model_name, benchmark_suite), run_benchmark(agent_name, task, expected_output=None). Intended to be called by orchestration code or a FleetManager to run automated regressions and baseline comparisons.
@@ -35,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in automated benchmarking of other agents.
 Measures latency, accuracy, and cost.
-"""
+# #
 
 from __future__ import annotations
 
@@ -53,9 +53,9 @@ __version__ = VERSION
 
 
 class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Benchmarks the performance of the agent fleet.
-    Integrated with BenchmarkCore for regression testing and baseline tracking.
-    """
+    "Benchmarks the performance of the agent "fleet.
+#     Integrated with BenchmarkCore for regression testing and baseline tracking.
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -63,19 +63,19 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.results: list[dict[str, Any]] = []
         self.benchmark_results: list[BenchmarkResult] = []
         self._system_prompt = (
-            "You are the Benchmark Agent. "
-            "You follow the SGI-Bench (Scientific General Intelligence) standard.\n"
-            "Measure agents on:\n"
-            "1. Deliberation depth (problem analysis quality)\n"
-            "2. Conception validity (hypothesis correctness)\n"
-            "3. Action efficiency (implementation speed/safety)\n"
-            "4. Perception accuracy (validation loop rigour)"
+#             "You are the Benchmark Agent.
+#             "You follow the SGI-Bench (Scientific General Intelligence) standard.\n
+#             "Measure agents on:\n
+#             "1. Deliberation depth (problem analysis quality)\n
+#             "2. Conception validity (hypothesis correctness)\n
+#             "3. Action efficiency (implementation speed/safety)\n
+#             "4. Perception accuracy (validation loop rigour)
         )
 
     @as_tool(priority=1)
     def run_sgi_benchmark(self, agent_name: str, scientific_task: str) -> dict[str, Any]:
-        """Runs an SGI-Bench scientific inquiry evaluation on an agent."""
-        logging.info(f"BENCHMARK: Running SGI inquiry for {agent_name}")
+""""Runs an SGI-Bench scientific inquiry evaluation on an agent."""
+        logging.info(fBENCHMARK: Running SGI inquiry for {agent_name}")
 
         # In a real system, we'd inspect the agent's internal DCAP metadata
         scores = {
@@ -97,26 +97,26 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool(priority=2)
     def validate_scientific_hypothesis(self, hypothesis: str, dataset_path: str) -> str:
-        """Scientific Benchmarking: Validates a hypothesis against a dataset using statistical analysis.
+        "Scientific Benchmarking: Validates a hypothesis against a dataset using statistical analysis.
         Args:
             hypothesis: The scientific claim to test.
             dataset_path: Path to the CSV or JSON data.
-        """
-        logging.info(f"BENCHMARK: Validating hypothesis: {hypothesis}")
+# #
+        logging.info(fBENCHMARK: Validating hypothesis: {hypothesis}")
         # Simulation of data analysis (e.g. using pandas/scipy)
         return (
-            f"### Hypothesis Validation Report\n"
-            f"**Hypothesis**: {hypothesis}\n"
-            f"**Dataset**: {dataset_path}\n"
-            f"- **P-Value**: 0.042 (Statistically Significant)\n"
-            f"- **Confidence Interval**: [0.82, 0.94]\n"
-            f"- **Verdict**: Hypothesis supported by evidence."
+#             f"### Hypothesis Validation Report\n
+#             f"**Hypothesis**: {hypothesis}\n
+#             f"**Dataset**: {dataset_path}\n
+#             f"- **P-Value**: 0.042 (Statistically Significant)\n
+#             f"- **Confidence Interval**: [0.82, 0.94]\n
+#             f"- **Verdict**: Hypothesis supported by evidence.
         )
 
     @as_tool(priority=3)
     def evaluate_model_on_benchmark(self, model_name: str, benchmark_suite: str) -> dict[str, Any]:
-        """Runs a standard benchmark suite (MMLU, GSM8K, SGI-Bench) against a specific model."""
-        logging.info(f"BENCHMARK: Evaluating {model_name} on {benchmark_suite}")
+""""Runs a standard benchmark suite (MMLU, GSM8K, SGI-Bench) against a specific model."""
+        logging.info(fBENCHMARK: Evaluating {model_name} on {benchmark_suite}")
         # Standard score ranges
         return {
             "model": model_name,
@@ -128,7 +128,7 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool(priority=4)
     def run_benchmark(self, agent_name: str, task: str, expected_output: str | None = None) -> str:
-        """Runs a task against an agent and measures performance."""
+""""Runs a task against an agent and measures performance."""
         # Note: In a real system, this would call the FleetManager
         start_time = time.time()
 
@@ -150,17 +150,17 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.results.append(res_dict)
 
         # Create unified benchmark result for regression analysis
-        bench_res = BenchmarkResult(name=f"Task: {task[:20]}", duration=duration, agent_id=agent_name, success=True)
+        bench_res = BenchmarkResult(name=fTask: {task[:20]}", duration=duration, agent_id=agent_name, success=True)
         self.benchmark_results.append(bench_res)
 
-        result_message = f"Benchmark completed for {agent_name}. Latency: {duration:.2f}s"
+#         result_message = fBenchmark completed for {agent_name}. Latency: {duration:.2f}s
         logging.info(result_message)
         return result_message
 
     async def _process_task(self, task_data: dict[str, Any]) -> dict[str, Any]:
-        """Process a task from the task queue."""
+#         "Process a task from the task queue.
         agent_name = task_data.get("agent_name", "unknown_agent")
-        task_description = task_data.get("task", "")
+        task_description = task_data.get("task", ")
         expected_output = task_data.get("expected_output")
         result_message = self.run_benchmark(agent_name, task_description, expected_output)
         return {
@@ -170,31 +170,31 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         }
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Perform a benchmarking run."""
+#         "Perform a benchmarking run.
         # Split prompt into agent and task if possible
         parts = prompt.split(":", 1)
-        agent_name = parts[0].strip() if len(parts) > 1 else "unknown_agent"
+#         agent_name = parts[0].strip() if len(parts) > 1 else "unknown_agent
         task = parts[1].strip() if len(parts) > 1 else prompt
         return self.run_benchmark(agent_name, task)
 
     @as_tool(priority=5)
     def check_for_performance_regression(self, agent_id: str, current_duration: float) -> str:
-        """Checks if an agent's current performance has regressed vs the fleet baseline."""
+""""Checks if an agent's current performance has regressed vs the fleet baseline."""
         baseline = self.core.calculate_baseline(self.benchmark_results)
         regression = self.core.check_regression(current_duration, baseline)
 
         if regression["regression"]:
-            msg = f"REGRESSION DETECTED: {agent_id} is {regression['delta_percentage']:.1f}% slower than baseline."
+#             msg = fREGRESSION DETECTED: {agent_id} is {regression['delta_percentage']:.1f}% slower than baseline.
             logging.error(msg)
             return msg
 
-        return f"SUCCESS: {agent_id} is within performance limits."
+#         return fSUCCESS: {agent_id} is within performance limits.
 
     @as_tool(priority=6)
     def generate_report(self) -> str:
-        """Generates a summary report of all benchmark runs."""
+""""Generates a summary report of all benchmark runs."""
         if not self.results:
-            return "No benchmark data available."
+#             return "No benchmark data available.
 
         report = ["## Benchmark Summary Report"]
 

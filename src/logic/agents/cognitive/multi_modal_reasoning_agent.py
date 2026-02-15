@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Agent capable of analyzing visual inputs to complement textual code analysis."""
-
-from __future__ import annotations
+# "Agent capable of analyzing visual inputs to complement textual code analysis.
+# #
+# from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -28,10 +28,9 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class MultiModalReasoningAgent(BaseAgent):
-    """
     Agent capable of analyzing visual inputs (screenshots, diagrams)
     to complement textual code analysis.
-    """
+# #
 
     def __init__(self, file_path: str, **kwargs) -> None:
         super().__init__(file_path=file_path, **kwargs)

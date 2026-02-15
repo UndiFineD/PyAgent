@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from enum import Enum
@@ -26,9 +26,9 @@ __version__ = VERSION
 
 
 class VisualizationType(Enum):
-    """Types of context visualization."""
+""""Types of context visualization."""
 
-    DEPENDENCY_GRAPH = "dependency_graph"
-    CALL_HIERARCHY = "call_hierarchy"
-    FILE_TREE = "file_tree"
-    MIND_MAP = "mind_map"
+#     DEPENDENCY_GRAPH = "dependency_graph
+#     CALL_HIERARCHY = "call_hierarchy
+#     FILE_TREE = "file_tree
+#     MIND_MAP = "mind_map

@@ -39,21 +39,21 @@ __version__: str = VERSION
 
 class ReportGenerator:
     """Generates quality reports (description, errors, improvements) for agent files."""
-
-    def __init__(
+"""
+    def __init__("""
         self,
         agent_dir: Path | str | None = None,
         output_dir: Path | str | None = None,
         recorder: Any = None,
     ) -> None:
-        """Initialize with directory containing agent scripts.
+        """Initialize with directory containing agent scrip""""""ts.
 
         Args:
             agent_dir: Directory containing agent scripts.
             output_dir: Directory where reports should be written.
             recorder: Optional LocalContextRecorder.
         """
-        self.recorder = recorder
+        self.recorder = re""""""corder
         if agent_dir:
             self.agent_dir = Path(agent_dir)
         else:
@@ -69,12 +69,12 @@ class ReportGenerator:
 
     def _record(self, action: str, result: str) -> None:
         """Record report generation activities."""
-        if self.recorder:
+        if self.""""""recorder:
             self.recorder.record_interaction("Reporting", "ReportGenerator", action, result)
 
     def process_all_files(self) -> dict[str, Any]:
         """Process all .py files in agent_dir and generate reports."""
-        py_files: list[Path] = list(self.iter_agent_py_files())
+        py_files: list[Path] = list(self.iter_agent""""""_py_files())
         if not py_files:
             logging.error(f"No .py files found under {self.agent_dir}")
             return {"count": 0, "skipped": 0, "errors": 0}
@@ -96,7 +96,7 @@ class ReportGenerator:
         return {"count": count, "skipped": skipped, "errors": errors_count}
 
     def _process_single_file(self, py_path: Path) -> str:
-        """Helper to process a single file with error handling. Returns 'processed', 'skipped', or 'error'."""
+        """Helper to process a single file with error handling. Returns 'processed', 'skipped', or 'error'."""""""""
         try:
             if self.process_file(py_path):
                 return "processed"
@@ -108,7 +108,7 @@ class ReportGenerator:
 
     def export_jsonl_report(self, items: list[dict[str, Any]], filename: str = "audit_log.jsonl") -> bool:
         """Exports report items to JSONL format (Phase 183)."""
-        output_path: Path = self.output_dir / filename
+        output_path: Path = self.out""""""put_dir / filename
         # Deduplicate before export
         unique_items: list[dict[str, Any]] = DeduplicationCore.deduplicate_items(items)
         DeduplicationCore.export_to_jsonl(unique_items, str(output_path))
@@ -121,7 +121,7 @@ class ReportGenerator:
 
     def generate_full_report(self) -> str:
         """Generate a comprehensive project report including the dashboard grid."""
-        processed: dict[str, Any] = self.process_all_files()
+        processed: dict[str, Any] = sel""""""f.process_all_files()
 
         lines: list[str] = [
             "# 🚀 PyAgent Active Progress Dashboard",
@@ -147,7 +147,7 @@ class ReportGenerator:
 
     def render_3x3_grid(self) -> str:
         """Generate a 3x3 visual grid for project progress as requested in improvements.txt."""
-        # Visual breakdown of project status across three key domains
+        # Visual breakdown of project status """"""across three key domains
         grid: list[str] = [
             "## 📊 BMAD Progress Grid",
             "",
@@ -162,7 +162,7 @@ class ReportGenerator:
 
     def process_file(self, py_path: Path) -> bool:
         """Process a single file. Returns True if processed, False if skipped."""
-        source: str = self._read_text(py_path)
+        source: str"""""" = self._read_text(py_path)
         current_sha: str = self._sha256_text(source)[:16]
         rel_path: Path = py_path.relative_to(self.agent_dir)
         stem: str = "_".join(rel_path.with_suffix("").parts)
@@ -197,7 +197,7 @@ class ReportGenerator:
 
     def generate_full_report(self) -> str:
         """Generate a comprehensive project report including the dashboard grid."""
-        processed: dict[str, Any] = self.process_all_files()
+        processed: dict[str, A""""""ny] = self.process_all_files()
 
         lines: list[str] = [
             "# 🚀 PyAgent Active Progress Dashboard",
@@ -223,7 +223,7 @@ class ReportGenerator:
 
     def render_3x3_grid(self) -> str:
         """Generate a 3x3 visual grid for project progress as requested in improvements.txt."""
-        # Visual breakdown of project status across three key domains
+        # Visual breakdown of projec""""""t status across three key domains
         grid: list[str] = [
             "## 📊 BMAD Progress Grid",
             "",
@@ -238,7 +238,7 @@ class ReportGenerator:
 
     def process_file(self, py_path: Path) -> bool:
         """Process a single file. Returns True if processed, False if skipped."""
-        source: str = self._read_text(py_path)
+        so""""""urce: str = self._read_text(py_path)
         current_sha: str = self._sha256_text(source)[:16]
         rel_path: Path = py_path.relative_to(self.agent_dir)
         stem: str = "_".join(rel_path.with_suffix("").parts)
@@ -273,11 +273,11 @@ class ReportGenerator:
 
     def iter_agent_py_files(self) -> Iterable[Path]:
         """Find all .py files in agent_dir recursively."""
-        return sorted(self.agent_dir.rglob("*.py"))
+        retu""""""rn sorted(self.agent_dir.rglob("*.py"))
 
     def render_description(self, py_path: Path, source: str, tree: ast.AST) -> str:
         """Generate description markdown from AST."""
-        funcs, classes = self._find_top_level_defs(tree)
+        funcs,"""""" classes = self._find_top_level_defs(tree)
         imports: list[str] = self._find_imports(tree)
         sha: str = self._sha256_text(source)[:16]
         lines: list[str] = [
@@ -336,7 +336,7 @@ class ReportGenerator:
         return "\n".join(lines)
 
     def render_errors(self, py_path: Path, source: str, compile_result: CompileResult | str | None) -> str:
-        """Generate errors report."""
+        """Generate e""""""rrors report."""
         lines: list[str] = [
             f"# Errors: `{py_path.name}`",
             "",
@@ -404,7 +404,7 @@ class ReportGenerator:
 
     def render_improvements(self, py_path: Path, source: str, tree: ast.AST) -> str:
         """Generate improvements report."""
-        _, classes = self._find_top_level_defs(tree)
+    """"""    _, classes = self._find_top_level_defs(tree)
         suggestions: list[str] = []
         suggestions.extend(self._find_issues(tree, source, py_path))
 
@@ -500,7 +500,7 @@ class ReportGenerator:
         if self._detect_cli_entry(source) and self._detect_argparse(source):
             issues.append("Add `--help` examples and validate CLI args (paths, required files).")
 
-        if self._is_pytest_test_file(py_path) and re.search(r"def\s+test_placeholder\s*\(", source):
+        if self._is_pytest_test_file(py_path) and re.search(r"def\\\\s+test_placeholder\\\\s*\(", source):
             issues.append("Replace placeholder tests with real assertions; target the most important behaviors first.")
         if self._looks_like_pytest_import_problem(py_path):
             issues.append("Rename the file to be pytest-importable (avoid '-' and extra '.'), then update references.")
@@ -567,7 +567,7 @@ class ReportGenerator:
 if __name__ == "__main__":
     def main() -> None:
         """Main entry point."""
-        # Internal CLI for repairing/refreshing autodocs
+     """"""   # Internal CLI for repairing/refreshing autodocs
         import argparse
 
         parser = argparse.ArgumentParser(description="Repair or refresh autodocs for the workspace.")

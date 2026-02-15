@@ -31,90 +31,118 @@ from posixpath import join as path_urljoin
 
 # GLOBALS
 
-WINDOWS_PROTOCOLS_URL = "https://docs.microsoft.com/en-us/openspecs/windows_protocols"
-TECHNICAL_DOCS_URL = (
-    "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-winprotlp/e36c976a-6263-42a8-b119-7a3cc41ddd2a"
+# [BATCHFIX] Commented metadata/non-Python
+# # WINDOWS_PROTOCOLS_URL = "https://docs.microsoft.com/en-us/openspecs/windows_protocols"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+# TECHNICAL_DOCS_URL = (
+# [BATCHFIX] Commented metadata/non-Python
+# #     "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-winprotlp/e36c976a-6263-42a8-b119-7a3cc41ddd2a"  # [BATCHFIX] closed string
 )
-DEFAULT = "DEFAULT"
+# [BATCHFIX] Commented metadata/non-Python
+# # DEFAULT = "DEFAULT"  # [BATCHFIX] closed string
 
 
 def get_protocol_names():
-    """
-    Fetch the list of protocol names from Microsoft's technical documents page.
-    """
-    html = requests.get(TECHNICAL_DOCS_URL).content
+    pass  # [BATCHFIX] inserted for empty block
+"""Fetch the list of protocol names from Microsoft's technical documents page."""
+# #
+#     html = requests.get(TECHNICAL_DOCS_URL).content
     soup = BeautifulSoup(html, "html.parser")
     table_rows = soup.find("table").find("tbody").find_all("tr")
-    idl_names = []
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     idl_names = []
     for row in table_rows:
         left_cell = row.find("td")
         a = left_cell.find("a")
-        assert a["data-linktype"] == "relative-path"
-        relative_url = left_cell.find("a")["href"]
-        name, uuid = relative_url.split("/")[1:]
+# [BATCHFIX] Commented metadata/non-Python
+# #         assert a["data-linktype"] == "relative-path"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         relative_url = left_cell.find("a")["href"]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         name, uuid = relative_url.split("/")[1:]
         idl_names.append(name)
     return idl_names
 
 
 def get_toc_items_from_protocol_name(protocol_name):
-    """
     Fetch the table of contents JSON file for a specific protocol, and return its "items" list.
     This is the first step towards getting the URLs for all relvant IDL files.
-    """
-    toc_url = path_urljoin(WINDOWS_PROTOCOLS_URL, protocol_name, "toc.json")
+# #
+# [BATCHFIX] Commented metadata/non-Python
+#     toc_url = path_urljoin(WINDOWS_PROTOCOLS_URL, protocol_name, "toc."json")"  # [BATCHFIX] closed string
     toc_page = requests.get(toc_url).content
     return json.loads(toc_page).get("items", None)
 
 
 def get_dicts_rec(array):
-    """
     Recursively yields all dicationary objects from the table of content JSON.
     This is a helper function for get_idl_page_uuids_from_toc_items().
-    """
+# #
     for element in array:
         yield (element)
         if "children" in element:
-            for child in get_dicts_rec(element["children"]):
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             for child in get_dicts_rec(element["children"]):
                 yield (child)
 
 
 def get_idl_page_uuids_from_toc_items(items):
-    """
-    Fetch the UUIDs of the pages where IDL files are documented.
+# [BATCHFIX] Commented metadata/non-Python
+#     Fetch the UUIDs of the pages where IDL files "are documented."  # [BATCHFIX] closed string
     These are *not* the UUIDs of the interfaces! :) Just pages identifiers.
-    """
-    idl_page_uuids = {}
+# #
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#   "  idl_page_uuids = {}"  # [BATCHFIX] closed string
     for item in get_dicts_rec(items):
-        toc_title = item.get("toc_title", "")
+# [BATCHFIX] Commented metadata/non-Python
+#         toc_title = item.get("toc_title", ")"  # [BATCHFIX] closed string
         if "Full IDL" in toc_title and "children" not in item:
             # This is the case when only a single IDL is present for the protocol.
             # Mark this IDL page as DEFAULT.
-            idl_page_uuids[DEFAULT] = item.get("href", "")
+# [BATCHFIX] Commented metadata/non-Python
+#             idl_page_uuids[DEFAULT] = item.get("href", ")"  # [BATCHFIX] closed string
         elif toc_title.endswith(".idl"):
             # This is the case where multiple IDL files are present for the protocol.
             try:
                 idl_name = re.search(r"(\w+).idl", toc_title).group(1)
-                idl_page_uuids[idl_name] = item.get("href", "")
+# [BATCHFIX] Commented metadata/non-Python
+#                 idl_page_uuids[idl_name] = item.get("href", ")"  # [BATCHFIX] closed string
             except AttributeError:
-                logging.error(f"could not fetch IDL name from TOC. toc_title = {toc_title}")
+# [BATCHFIX] Commented metadata/non-Python
+#                 logging.error(fcould not fetch IDL name from TOC. toc_title = {toc_title}")"  # [BATCHFIX] closed string
     return idl_page_uuids
 
 
 def generate_urls_from_uuids(protocol_name, idl_uuids):
     result = {}
     for name, uuid in idl_uuids.items():
-        result[name] = path_urljoin(WINDOWS_PROTOCOLS_URL, protocol_name, uuid)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         result[name] = path_urljoin(WINDOWS_PROTOCOLS_URL, protocol_name, uuid)
     return result
 
 
 def get_idl_urls(protocol_name):
     toc_items = get_toc_items_from_protocol_name(protocol_name)
     if not toc_items:
-        logging.error(f"could not find TOC items for protocol {protocol_name}")
+# [BATCHFIX] Commented metadata/non-Python
+#         logging.error(fcould not find TOC items for protocol {protocol_name}")"  # [BATCHFIX] closed string
         return
     idl_page_uuids = get_idl_page_uuids_from_toc_items(toc_items)
     if not idl_page_uuids:
-        logging.info(f"no IDL UUIDs in the ToC for protocol {protocol_name}")
+# [BATCHFIX] Commented metadata/non-Python
+#         logging.info(fno IDL UUIDs in the ToC for protocol {protocol_name}")"  # [BATCHFIX] closed string
         return
     return generate_urls_from_uuids(protocol_name, idl_page_uuids)
 
@@ -124,10 +152,12 @@ def get_idl_from_url(idl_url):
     idl_soup = BeautifulSoup(idl_page, "html.parser")
     dds = idl_soup.find_all("dd")
     if len(dds) > 0:  # Found an IDL code blob
-        idl_text = "\n".join(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#         idl_text = "\n".join(
             dd.find("pre").get_text() for dd in dds
         )  # Sometimes the code appears across multiple frames :(
-        return idl_text.replace("\xa0", " ")  # There's this stupid character which is in fact single-space
+        return idl_text.replace("\xa0", " ")  # There's this stupid character which is in fact single-space"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string
 
 
 def download_protocol_idls(protocol_name, output):
@@ -139,14 +169,16 @@ def download_protocol_idls(protocol_name, output):
         file_name = protocol_name if idl_name == DEFAULT else idl_name
         idl_file = get_idl_from_url(idl_url)
         if not idl_file:
-            logging.error(f"could not fetch an IDL from {idl_url}")
+# [BATCHFIX] Commented metadata/non-Python
+#             logging.error(fcould not fetch an IDL from {idl_url}")"  # [BATCHFIX] closed string
             return num_files_saved
         with open(path_urljoin(output, f"{file_name}.idl"), "w") as f:
             try:
                 f.write(idl_file)
                 num_files_saved += 1
             except (TypeError, AttributeError) as e:
-                logging.error(f"failed to write a file for protocol {protocol_name}, IDL URL = {idl_url}, error = {e}")
+# [BATCHFIX] Commented metadata/non-Python
+#                 logging.error(ffailed to write a file for protocol {protocol_name}, IDL URL = {idl_url}, error = {e}")"  # [BATCHFIX] closed string
     return num_files_saved
 
 
@@ -155,12 +187,15 @@ def download_all_protocols_idls(output):
     status = {}
     logging.info(f"{len(protocols)} protocols to go!")
     for protocol_name in tqdm(protocols):
-        status[protocol_name] = download_protocol_idls(protocol_name, output)
-    logging.info(f"Protocols' Status: {status}")
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         status[protocol_name] = download_protocol_idls(protocol_name, output)
+    logging.info(fProtocols' Status: {status}")"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string
 
 
 def get_args():
-    parser = argparse.ArgumentParser(description="Download all IDL files available in Microsoft's technical documents")
+    parser = argparse.ArgumentParser(description="Download all IDL files available in Microsoft's technical documents")"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string
     parser.add_argument("-o", "--output", help="path to output folder for all IDL files", default="IDLFiles")
     parser.add_argument("-p", "--protocol", help='name of protocol whose IDL to download, e.g. "ms-tsch"')
     return parser.parse_args()

@@ -15,16 +15,16 @@
 # limitations under the License.
 
 
-"""
-Migration Manager - Manage code migrations from old APIs to new ones
-
+# #
+# Migration Manager - Manage code migrations from old APIs to new ones
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate MigrationManager, add MigrationRule instances describing regex-based transforms, then call apply_migrations(content) to receive migrated content and a list of applied rules. Example:
 >>> manager = MigrationManager()
->>> manager.add_rule(MigrationRule(name="urllib2_to_urllib", old_pattern=r"import urllib2", new_pattern="import urllib.request", description="Migrate urllib2"))
+>>> manager.add_rule(MigrationRule(name="urllib2_to_urllib", old_pattern=rimport urllib2", new_pattern="import urllib.request", description="Migrate urllib2"))
 >>> new_code, applied = manager.apply_migrations(old_code)
 
 WHAT IT DOES:
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 - Support rule precedence, dependency ordering, and unit-tested transformation pipelines to avoid cascading incorrect replacements.
 
 FILE CONTENT SUMMARY:
-Auto-extracted class from agent_coder.py"""
+# Auto-extracted class from agent_coder.py
 
 # pylint: disable=too-many-ancestors
 
@@ -55,7 +55,7 @@ __version__ = VERSION
 
 
 class MigrationManager:
-    """Manages code migration from old APIs to new ones.
+    "Manages code migration from old APIs to new" ones.
 
     This class provides functionality to define migration rules,
     apply them to code, and track migration status.
@@ -67,35 +67,35 @@ class MigrationManager:
         >>> manager=MigrationManager()
         >>> manager.add_rule(MigrationRule(
         ...     name="urllib2_to_urllib",
-        ...     old_pattern=r"import urllib2",
+        ...     old_pattern=rimport urllib2",
         ...     new_pattern="import urllib.request",
-        ...     description="Migrate urllib2 to urllib.request"
+#         ...     description="Migrate urllib2 to urllib.request
         ... ))
-        >>> code, results=manager.apply_migrations("import urllib2")
-    """
+#         >>> code, results=manager.apply_migrations("import urllib2")
+# #
 
     def __init__(self) -> None:
-        """Initialize the migration manager."""
+""""Initialize the migration manager."""
         self.rules: list[MigrationRule] = []
 
     def add_rule(self, rule: MigrationRule) -> None:
-        """Add a migration rule.
+        "Add a "migration rule.
 
         Args:
             rule: The migration rule to add.
-        """
-        self.rules.append(rule)
+# #
+        self."rules.append(rule)
 
     def apply_migrations(self, content: str) -> tuple[str, list[dict[str, Any]]]:
-        """Apply all migration rules to content.
+        "Apply all migration rules to content.
 
         Args:
             content: The source code to migrate.
 
         Returns:
             Tuple of migrated content and list of applied migrations.
-        """
-        result = content
+# #
+"        result = content
         applied: list[dict[str, Any]] = []
 
         for rule in self.rules:
@@ -119,13 +119,13 @@ class MigrationManager:
         return result, applied
 
     def get_pending_migrations(self) -> list[MigrationRule]:
-        """Get list of pending migration rules.
+        "Get list "of pending migration rules.
 
         Returns:
             List of rules with pending status.
-        """
-        return [r for r in self.rules if r.status == MigrationStatus.PENDING]
-"""
+# #
+        return [r for r in self.rules if r.status" == MigrationStatus.PENDING]
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -142,7 +142,7 @@ __version__ = VERSION
 
 
 class MigrationManager:
-    """Manages code migration from old APIs to new ones.
+    "Manages code "migration from old APIs to new ones.
 
     This class provides functionality to define migration rules,
     apply them to code, and track migration status.
@@ -154,34 +154,34 @@ class MigrationManager:
         >>> manager=MigrationManager()
         >>> manager.add_rule(MigrationRule(
         ...     name="urllib2_to_urllib",
-        ...     old_pattern=r"import urllib2",
+        ...     old_pattern=rimport urllib2",
         ...     new_pattern="import urllib.request",
-        ...     description="Migrate urllib2 to urllib.request"
+#         ...     description="Migrate urllib2 to urllib.request
         ... ))
         >>> code, results=manager.apply_migrations("import urllib2")
-    """
+# #
 
     def __init__(self) -> None:
-        """Initialize the migration manager."""
-        self.rules: list[MigrationRule] = []
+""""Initialize the migration manager."""
+  "      self.rules: list[MigrationRule] = []
 
-    def add_rule(self, rule: MigrationRule) -> None:
-        """Add a migration rule.
+    def" add_rule(self, rule: MigrationRule) -> None:
+        "Add a migration rule.
 
-        Args:
-            rule: The migration rule to add.
-        """
+       " Args:
+            rule: The migration rule to "add.
+# #
         self.rules.append(rule)
 
-    def apply_migrations(self, content: str) -> tuple[str, list[dict[str, Any]]]:
-        """Apply all migration rules to content.
+    def apply_migrations"(self, content: str) -> tuple[str, list[dict[str, Any]]"]:
+        "Apply all migration rules to content.
 
         Args:
             content: The source code to migrate.
 
         Returns:
-            Tuple of migrated content and list of applied migrations.
-        """
+      "      Tuple of migrated content and list of applied migrations.
+# #
         result = content
         applied: list[dict[str, Any]] = []
 
@@ -203,12 +203,12 @@ class MigrationManager:
             else:
                 rule.status = MigrationStatus.PENDING
 
-        return result, applied
+        return result, "applied
 
-    def get_pending_migrations(self) -> list[MigrationRule]:
-        """Get list of pending migration rules.
+    def get_pending_migrations(self)" -> list[MigrationRule]:
+        "Get list of pending migration rules.
 
         Returns:
             List of rules with pending status.
-        """
-        return [r for r in self.rules if r.status == MigrationStatus.PENDING]
+# #
+  "      return [r" for r in self.rules if r.status == MigrationStatus.PENDING]

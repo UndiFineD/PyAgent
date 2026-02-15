@@ -15,7 +15,7 @@
 """Reflexion Strategy - Draft -> Critique -> Revise.
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 
 USAGE:

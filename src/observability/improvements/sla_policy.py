@@ -16,10 +16,10 @@
 
 
 """
-SLAPolicy - Named SLA dataclass
-
+SLAPolicy - Named SLA dataclass"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import SLAPolicy from src.core.* (or from this module) and instantiate policies in tests or fixtures, e.g. SLAPolicy(name="standard", response_hours=4, resolution_hours=24).
@@ -36,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -49,11 +49,11 @@ __version__ = VERSION
 
 @dataclass
 class SLAPolicy:
-    """Named SLA policy used by tests."""
+    """Named SLA policy used by test""""""s."""
 
     name: str
     response_hours: int = 0
-    resolution_hours: int = 0
+    resolution_hours: i"""nt"""""" = 0
 """
 
 from __future__ import annotations
@@ -67,7 +67,7 @@ __version__ = VERSION
 
 @dataclass
 class SLAPolicy:
-    """Named SLA policy used by tests."""
+    """Named SLA policy used b""""""y tests."""
 
     name: str
     response_hours: int = 0

@@ -25,43 +25,79 @@ class ScanAndroidManifest(object):
         pass
 
     def extract_manifest_info(self, extracted_source_path):
-        """
-        Extracts basic information from an Android Manifest file.
-        """
-        manifest_path = os.path.join(extracted_source_path, "resources", "AndroidManifest.xml")
+    pass  # [BATCHFIX] inserted for empty block
+"""Extracts basic information from an Android Manifest file."""
+# #
+#         manifest_path = os.path.join(extracted_source_path, "resources", "AndroidManifest.xml")
 
         if not os.path.isfile(manifest_path):
-            util.mod_log(f"[-] ERROR: Manifest file {manifest_path} not found.", util.FAIL)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             util.mod_log(f"[-] ERROR: Manifest file {manifest_path} not found.", util.FAIL)
 
         etparse = ET.parse(manifest_path)
         manifest = etparse.getroot()
 
         if not manifest:
-            util.mod_log(f"[-] ERROR: Error parsing the manifest file for {extracted_source_path}.", util.FAIL)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             util.mod_log(f"[-] ERROR: Error parsing the manifest file for {extracted_source_path}.", util.FAIL)
 
-        android_namespace = "{http://schemas.android.com/apk/res/android}"
+# [BATCHFIX] Commented metadata/non-Python
+# #         android_namespace = "{http://schemas.android.com/apk/res/android}"  # [BATCHFIX] closed string
 
         components, exported_components = self.parse_android_manifest(manifest_path)
 
         data = {
             "platform_build_version_code": manifest.attrib.get("platformBuildVersionCode", "Not available"),
             "complied_sdk_version": manifest.attrib.get("compileSdkVersion", "Not available"),
-            "permissions": [elem.attrib[f"{android_namespace}name"] for elem in manifest.findall("uses-permission")],
-            "dangerous_permission": "",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "permissions": [elem.attrib[f"{android_namespace}name"] for elem in manifest.findall("uses-permission")],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#             "dangerous_permission": ","  # [BATCHFIX] closed string
             "package_name": manifest.attrib.get("package", "Not available"),
             "activities": [
-                elem.attrib[f"{android_namespace}name"] for elem in manifest.findall("application/activity")
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                 elem.attrib[f"{android_namespace}name"] for elem in manifest.findall("application/activity")
             ],
-            "exported_activity": exported_components["activity"],
-            "services": [elem.attrib[f"{android_namespace}name"] for elem in manifest.findall("application/service")],
-            "exported_service": exported_components["service"],
-            "receivers": [elem.attrib[f"{android_namespace}name"] for elem in manifest.findall("application/receiver")],
-            "exported_receiver": exported_components["receiver"],
-            "providers": [elem.attrib[f"{android_namespace}name"] for elem in manifest.findall("application/provider")],
-            "exported_provider": exported_components["provider"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "exported_activity": exported_components["activity"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "services": [elem.attrib[f"{android_namespace}name"] for elem in manifest.findall("application/service")],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "exported_service": exported_components["service"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "receivers": [elem.attrib[f"{android_namespace}name"] for elem in manifest.findall("application/receiver")],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "exported_receiver": exported_components["receiver"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "providers": [elem.attrib[f"{android_namespace}name"] for elem in manifest.findall("application/provider")],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             "exported_provider": exported_components["provider"],
         }
 
-        indent = "    "
+# #         indent =
 
         DANGEROUS_TYPES = [
             "android.permission.READ_CALENDAR",
@@ -103,82 +139,194 @@ class ScanAndroidManifest(object):
             "android.permission.CHANGE_NETWORK_STATE",
             "android.permission.ACCESS_WIFI_STATE",
         ]
-        dangerous_permissions = [perm for perm in data["permissions"] if perm in DANGEROUS_TYPES]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         dangerous_permissions = [perm for perm in data["permissions"] if perm in DANGEROUS_TYPES]
 
-        util.mod_log("[+] Package Name:", util.OKCYAN)
-        print(indent + data["package_name"] + "\n")
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         util.mod_log("[+] Package Name:", util.OKCYAN)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         print(indent + data["package_name"] + "\n")
 
-        util.mod_log("[+] Platform Build Version Code:", util.OKCYAN)
-        print(indent + str(data["platform_build_version_code"]) + "\n")
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         util.mod_log("[+] Platform Build Version Code:", util.OKCYAN)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         print(indent + str(data["platform_build_version_code"]) + "\n")
 
-        util.mod_log("[+] Compile SDK Version:", util.OKCYAN)
-        print(indent + str(data["complied_sdk_version"]) + "\n")
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         util.mod_log("[+] Compile SDK Version:", util.OKCYAN)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         print(indent + str(data["complied_sdk_version"]) + "\n")
 
-        if data["permissions"]:
-            util.mod_log("[+] Permissions:", util.OKCYAN)
-            for permission in data["permissions"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         if data["permissions"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             util.mod_log("[+] Permissions:", util.OKCYAN)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             for permission in data["permissions"]:
                 print(indent + permission)
             print()
 
         if dangerous_permissions:
-            util.mod_log("[+] Dangerous Permissions:", util.FAIL)
-            data["dangerous_permission"] = dangerous_permissions
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             util.mod_log("[+] Dangerous Permissions:", util.FAIL)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             data["dangerous_permission"] = dangerous_permissions
             for permission in dangerous_permissions:
                 print(indent + permission)
             print()
 
-        if data["activities"]:
-            util.mod_log("[+] Activities:", util.OKCYAN)
-            for activity in data["activities"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         if data["activities"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             util.mod_log("[+] Activities:", util.OKCYAN)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             for activity in data["activities"]:
                 print(indent + activity)
             print()
 
-        if data["exported_activity"]:
-            util.mod_log("[+] Exported Activities:", util.OKCYAN)
-            for activity in data["exported_activity"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         if data["exported_activity"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             util.mod_log("[+] Exported Activities:", util.OKCYAN)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             for activity in data["exported_activity"]:
                 print(indent + activity)
             print()
 
-        if data["services"]:
-            util.mod_log("[+] Services:", util.OKCYAN)
-            for service in data["services"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         if data["services"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             util.mod_log("[+] Services:", util.OKCYAN)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             for service in data["services"]:
                 print(indent + service)
             print()
 
-        if data["exported_service"]:
-            util.mod_log("[+] Exported Services:", util.OKCYAN)
-            for activity in data["exported_service"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         if data["exported_service"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             util.mod_log("[+] Exported Services:", util.OKCYAN)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             for activity in data["exported_service"]:
                 print(indent + activity)
             print()
 
-        if data["receivers"]:
-            util.mod_log("[+] Receivers:", util.OKCYAN)
-            for receiver in data["receivers"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         if data["receivers"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             util.mod_log("[+] Receivers:", util.OKCYAN)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             for receiver in data["receivers"]:
                 print(indent + receiver)
             print()
 
-        if data["exported_receiver"]:
-            util.mod_log("[+] Exported Receivers:", util.OKCYAN)
-            for activity in data["exported_receiver"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         if data["exported_receiver"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             util.mod_log("[+] Exported Receivers:", util.OKCYAN)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             for activity in data["exported_receiver"]:
                 print(indent + activity)
             print()
 
-        if data["providers"]:
-            util.mod_log("[+] Providers:", util.OKCYAN)
-            for provider in data["providers"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         if data["providers"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             util.mod_log("[+] Providers:", util.OKCYAN)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             for provider in data["providers"]:
                 print(indent + provider)
             print()
 
-        if data["exported_provider"]:
-            util.mod_log("[+] Exported Providers:", util.OKCYAN)
-            for activity in data["exported_provider"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         if data["exported_provider"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             util.mod_log("[+] Exported Providers:", util.OKCYAN)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             for activity in data["exported_provider"]:
                 print(indent + activity)
             print()
 
         return data
 
     def is_exported(self, component, ns):
-        return component.get(f"{{{ns['android']}}}exported") == "true"
+    pass  # [BATCHFIX] inserted for empty block
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # """return component.get(f"{{{ns['android']}}}exported") == "true"""
 
     def parse_android_manifest(self, manifest_path):
         ns = {"android": "http://schemas.android.com/apk/res/android"}
@@ -188,14 +336,29 @@ class ScanAndroidManifest(object):
         root = etparse.getroot()
 
         # Dictionary to hold components and exported components
-        components = {"activity": [], "service": [], "receiver": [], "provider": []}
-        exported_components = {"activity": [], "service": [], "receiver": [], "provider": []}
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         components = {"activity": [], "service": [], "receiver": [], "provider": []}
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         exported_components = {"activity": [], "service": [], "receiver": [], "provider": []}
         # Extract components and check if they are exported
         for component_type in components.keys():
             for component in root.findall(f".//{component_type}"):
-                name = component.get(f"{{{ns['android']}}}name")
-                components[component_type].append(name)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                 name = component.get(f"{{{ns['android']}}}name")
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                 components[component_type].append(name)
                 if self.is_exported(component, ns):
-                    exported_components[component_type].append(name)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                     exported_components[component_type].append(name)
 
         return components, exported_components

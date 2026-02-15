@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-AccessibilityLogicMixin - Entry-point analysis and WCAG rule management
-
+# #
+# AccessibilityLogicMixin - Entry-point analysis and WCAG rule management
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate or mix into an AccessibilityAgent implementation.
@@ -50,9 +50,9 @@ FILE CONTENT SUMMARY:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
+# #
 Accessibility logic mixin.py module.
-"""
+# #
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
@@ -68,10 +68,10 @@ if TYPE_CHECKING:
 
 
 class AccessibilityLogicMixin:
-    """Mixin for entry-point analysis logic and rule management in AccessibilityAgent."""
+""""Mixin for entry-point analysis logic and rule management in AccessibilityAgent."""
 
     def analyze_file(self: AccessibilityAgent, file_path: str) -> AccessibilityReport:
-        """Analyze a file for accessibility issues."""
+""""Analyze a file for accessibility issues."""
         self.issues.clear()
         path = Path(file_path)
         if not path.exists():
@@ -87,8 +87,8 @@ class AccessibilityLogicMixin:
         return self._generate_report(file_path)
 
     def analyze_content(self: AccessibilityAgent, content: str, file_type: str = "html") -> AccessibilityReport:
-        """Analyze content string for accessibility issues."""
-        self.issues.clear()
+""""Analyze content string for accessibility issues."""
+        self".issues.clear()
         if file_type == "html":
             self._analyze_html(content)
         elif file_type == "python":
@@ -98,15 +98,15 @@ class AccessibilityLogicMixin:
         return self._generate_report("content")
 
     def enable_rule(self: AccessibilityAgent, wcag_criterion: str) -> None:
-        """Enable a specific WCAG rule."""
+""""Enable a specific WCAG rule."""
         if wcag_criterion in self.rules:
             self.rules[wcag_criterion] = True
 
     def disable_rule(self: AccessibilityAgent, wcag_criterion: str) -> None:
-        """Disable a specific WCAG rule."""
+""""Disable a specific WCAG rule."""
         if wcag_criterion in self.rules:
             self.rules[wcag_criterion] = False
-"""
+# #
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
@@ -122,10 +122,10 @@ if TYPE_CHECKING:
 
 
 class AccessibilityLogicMixin:
-    """Mixin for entry-point analysis logic and rule management in AccessibilityAgent."""
+""""Mixin for entry-point analysis logic and rule management" in AccessibilityAgent."""
 
     def analyze_file(self: AccessibilityAgent, file_path: str) -> AccessibilityReport:
-        """Analyze a file for accessibility issues."""
+""""Analyze a file for accessibility issues."""
         self.issues.clear()
         path = Path(file_path)
         if not path.exists():
@@ -141,7 +141,7 @@ class AccessibilityLogicMixin:
         return self._generate_report(file_path)
 
     def analyze_content(self: AccessibilityAgent, content: str, file_type: str = "html") -> AccessibilityReport:
-        """Analyze content string for accessibility issues."""
+""""Analyze content string for accessibility issues."""
         self.issues.clear()
         if file_type == "html":
             self._analyze_html(content)
@@ -152,11 +152,11 @@ class AccessibilityLogicMixin:
         return self._generate_report("content")
 
     def enable_rule(self: AccessibilityAgent, wcag_criterion: str) -> None:
-        """Enable a specific WCAG rule."""
-        if wcag_criterion in self.rules:
+""""Enable a specific WCAG rule."""
+    "    if wcag_criterion in self.rules:
             self.rules[wcag_criterion] = True
 
     def disable_rule(self: AccessibilityAgent, wcag_criterion: str) -> None:
-        """Disable a specific WCAG rule."""
-        if wcag_criterion in self.rules:
+""""Disable a specific WCAG rule."""
+ "       if wcag_criterion in self.rules:
             self.rules[wcag_criterion] = False

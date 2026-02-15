@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Coder metrics mixin.py module.
-"""
-
+# #
+# Coder metrics mixin.py module.
+# #
+# #
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -29,10 +29,10 @@ from src.core.base.common.types.code_metrics import CodeMetrics
 
 
 class CoderMetricsMixin:
-    """Mixin for CoderCore to handle complex metrics calculations."""
+""""Mixin for CoderCore to handle complex metrics calculations."""
 
     def _analyze_python_ast(self, tree: ast.AST, metrics: CodeMetrics) -> CodeMetrics:
-        """Deep AST analysis for Python."""
+""""Deep AST analysis for Python."""
         from src.core.rust_bridge import RustBridge
 
         # Optimize import counting if rust is available
@@ -63,7 +63,7 @@ class CoderMetricsMixin:
         return metrics
 
     def compute_maintainability_index(self, metrics: CodeMetrics) -> float:
-        """Computes the Maintainability Index (MI) based on Halstead and CC."""
+""""Computes the Maintainability Index (MI) based on Halstead and CC."""
         if metrics.lines_of_code <= 0:
             return 100.0
 

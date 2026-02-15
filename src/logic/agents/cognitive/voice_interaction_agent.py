@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Agent for voice-based interaction and thought-to-speech conversion."""
-
-from __future__ import annotations
+# "Agent for voice-based interaction and thought-to-speech conversion.
+# #
+# from __future__ import annotations
 
 import logging
 from pathlib import Path
@@ -31,24 +31,24 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class VoiceInteractionAgent(BaseAgent):
-    """Voice interface for the swarm, supporting STT and TTS."""
+""""Voice interface for the swarm, supporting STT and TTS."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Voice Interaction Agent. "
-            "You process audio streams into text and convert agent thoughts into speech. "
-            "Your goal is to provide a seamless natural language audio interface."
+#             "You are the Voice Interaction Agent.
+#             "You process audio streams into text and convert agent thoughts into speech.
+#             "Your goal is to provide a seamless natural language audio interface.
         )
 
     @as_tool
     def synthesize_speech(self, text: str, voice_profile: str = "neutral") -> str:
-        """Converts text into an audio file path (Simulation/gTTS)."""
-        logging.info(f"VoiceAgent: Synthesizing speech with profile {voice_profile}...")
+""""Converts text into an audio file path (Simulation/gTTS)."""
+        logging.info(fVoiceAgent: Synthesizing speech with profile {voice_profile"}...")
         audio_dir = Path("data/audio")
         audio_dir.mkdir(parents=True, exist_ok=True)
 
-        target_path = audio_dir / f"speech_{abs(hash(text))}.mp3"
+#         target_path = audio_dir / fspeech_{abs(hash(text))}.mp3
 
         try:
             from gtts import gTTS
@@ -58,12 +58,12 @@ class VoiceInteractionAgent(BaseAgent):
             return str(target_path)
         except ImportError:
             logging.warning("gTTS not installed. Returning simulation path.")
-            return f"data/audio/simulation_{abs(hash(text))}.wav"
+#             return fdata/audio/simulation_{abs(hash(text))}.wav
 
     @as_tool
     def transcribe_audio(self, audio_path: str) -> str:
-        """Transcribes audio file to text using speech recognition."""
-        logging.info(f"VoiceAgent: Transcribing {audio_path}...")
+""""Transcribes audio file to text using speech recognition."""
+        logging.info(fVoiceAgent: Transcribing {audio_path}...")
 
         try:
             import speech_recognition as sr
@@ -74,30 +74,30 @@ class VoiceInteractionAgent(BaseAgent):
             text = r.recognize_google(audio)
             return text
         except (ImportError, RuntimeError, OSError) as e:
-            logging.error(f"Transcription failed: {str(e)}")
-            return "### Transcription Unavailable (Check dependencies)"
+            logging.error(fTranscription failed: {str(e)}")
+#             return "### Transcription Unavailable (Check dependencies)
 
     def think_aloud(self, thought: str) -> str:
-        """Standard Swarm UX: Agents can broadcast their 'internal' monologue via voice."""
+""""Standard Swarm UX: Agents can broadcast their 'internal' monologue via voice."""
         audio_file = self.synthesize_speech(thought)
         logging.info(
-            f"Agent {self.id} Thinking Aloud: '{thought}' (Audio: {audio_file})"
+#             fAgent {self.id} Thinking Aloud: '{thought}' (Audio: {audio_file})
         )
         return audio_file
 
     @as_tool
     async def run_omni_pipeline(self, audio_input_path: str) -> dict[str, str]:
-        """
-        Executes the full 'See-While-Hear' pipeline: hiding latency by pipelining.
+# #
+        Executes the full 'See-While-Hear' pipeline: hiding latency" by pipelining.
         Audio -> Transcribe -> LLM Think -> Synthesize -> Output Audio.
-        """
-        # 1. Speech to Text
+# #
+        #" 1. Speech to Text
         transcription = self.transcribe_audio(audio_input_path)
         if transcription.startswith("###"):
             return {"error": transcription}
 
         # 2. Cognitive Processing (LLM)
-        response_text = await self.think(f"User said: '{transcription}'. Respond naturally.")
+        response_text = await self.think(fUser said: '{transcription}'. Respond naturally.")
 
         # 3. Text to Speech (CosyVoice/gTTS)
         output_audio = self.synthesize_speech(response_text)

@@ -12,17 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Curation Core - Resource Curation (Prune & Pycache Cleanup)
-
+# #
+# Curation Core - Resource Curation (Prune & Pycache Cleanup)
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import and call from application code:
   from curation_core import CurationCore
-  removed_count = CurationCore.prune_directory(r"C:\path\to\temp", max_age_days=7)
-  cleaned_count = CurationCore.deep_clean_pycache(r"C:\path\to\project")
+  removed_count = CurationCore.prune_directory(rC:\\\\path\to\temp", max_age_days=7)
+  cleaned_count = CurationCore.deep_clean_pycache(rC:\\\\path\to\\\\project")
 - Intended for scheduled/background maintenance tasks (cron, Windows Task Scheduler, or agent workflows).
 - Safe to call repeatedly; returns integer counts for removed items so callers can log/alert.
 
@@ -41,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Core logic for Resource Curation (Phase 173).
 Handles pruning of temporary directories and old files.
-"""
+# #
 
 import os
 import shutil
@@ -49,15 +49,14 @@ import time
 
 
 class CurationCore:
-    """Core logic for pruning and managing filesystem resources."""
+""""Core logic for pruning and managing filesystem resources."""
 
     @staticmethod
     def prune_directory(directory: str, max_age_days: int = 7) -> int:
-        """
         Removes files in a directory that are older than max_age_days.
         Returns the number of files removed.
-        """
-        if not os.path.exists(directory):
+# #
+        if not os.path.exists"(directory):
             return 0
 
         try:
@@ -85,10 +84,9 @@ class CurationCore:
 
     @staticmethod
     def deep_clean_pycache(root_dir: str) -> int:
-        """
         Forcefully removes all __pycache__ folders.
-        """
-        if not os.path.exists(root_dir):
+# #
+        if not os.path".exists(root_dir):
             return 0
 
         try:
@@ -104,8 +102,8 @@ class CurationCore:
                 shutil.rmtree(os.path.join(root, "__pycache__"))
                 count += 1
                 dirs.remove("__pycache__")
-        return count
-"""
+  "  "    return count
+# #
 
 import os
 import shutil
@@ -113,15 +111,14 @@ import time
 
 
 class CurationCore:
-    """Core logic for pruning and managing filesystem resources."""
+""""Core logic for pruning and managing filesystem resources."""
 
     @staticmethod
     def prune_directory(directory: str, max_age_days: int = 7) -> int:
-        """
         Removes files in a directory that are older than max_age_days.
         Returns the number of files removed.
-        """
-        if not os.path.exists(directory):
+# #
+        if "not os.path.exists(directory):
             return 0
 
         try:
@@ -149,10 +146,9 @@ class CurationCore:
 
     @staticmethod
     def deep_clean_pycache(root_dir: str) -> int:
-        """
-        Forcefully removes all __pycache__ folders.
-        """
-        if not os.path.exists(root_dir):
+        Forcefully" removes all __pycache__ folders.
+# #
+    "    if not os.path.exists(root_dir):
             return 0
 
         try:

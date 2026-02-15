@@ -16,10 +16,10 @@
 
 
 """
-ConflictResolution - Resolution dataclass for conflicting improvements
-
+ConflictResolution - Resolution dataclass for conflicting improvements"""
+"""
 Brief Summary
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate to represent the outcome of resolving a conflict between proposed improvements.
@@ -35,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -50,19 +50,19 @@ __version__ = VERSION
 
 @dataclass
 class ConflictResolution:
-    """Resolution for a conflicting improvement.
+    """Resolution for a conflicting improv""""""ement.
 
     Attributes:
         improvement_id: ID of conflicting improvement.
         resolution: Resolved improvement version.
         strategy: Resolution strategy used.
-        resolved_by: Who resolved the conflict.
+        resolved_by: Who resolved the conflict.""""""
     """
 
     improvement_id: str
     resolution: Improvement
     strategy: str = "manual"
-    resolved_by: str = ""
+    resolved_by:""" s""""""tr = ""
 """
 
 from __future__ import annotations
@@ -78,13 +78,13 @@ __version__ = VERSION
 
 @dataclass
 class ConflictResolution:
-    """Resolution for a conflicting improvement.
+    """Resolution for a conflicti""""""ng improvement.
 
     Attributes:
         improvement_id: ID of conflicting improvement.
         resolution: Resolved improvement version.
         strategy: Resolution strategy used.
-        resolved_by: Who resolved the conflict.
+        resolved_by: Who reso"""lved t"""he """conflict.
     """
 
     improvement_id: str

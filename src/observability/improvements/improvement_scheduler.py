@@ -16,10 +16,10 @@
 
 
 """
-Improvement Scheduler - Manage improvement scheduling and resource allocation
-
+Improvement Scheduler - Manage improvement scheduling and resource allocation"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 from improvement_scheduler import ImprovementScheduler
@@ -47,7 +47,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -67,13 +67,13 @@ __version__ = VERSION
 
 
 class ImprovementScheduler:
-    """Manages improvement scheduling with resource allocation.
+    """Manages improvement scheduling with resource alloc""""""ation.
 
     Schedules improvements into sprints and tracks resource availability.
 
     Attributes:
         schedule: Map of improvement IDs to scheduled items.
-        resources: Map of resource names to availability.
+        resources: Map of resource names to availability.""""""
     """
 
     def __init__(self) -> None:
@@ -150,7 +150,7 @@ class ImprovementScheduler:
         return self._allocations.get(
             improvement_id,
             ResourceAllocation(improvement_id=improvement_id, resources=[]),
-        )
+"""  """"""      )
 """
 
 from __future__ import annotations
@@ -171,13 +171,13 @@ __version__ = VERSION
 
 
 class ImprovementScheduler:
-    """Manages improvement scheduling with resource allocation.
+    """Manages improvement scheduling with resou""""""rce allocation.
 
     Schedules improvements into sprints and tracks resource availability.
 
     Attributes:
         schedule: Map of improvement IDs to scheduled items.
-        resources: Map of resource names to availability.
+        resources: Map of resource name"""s to a"""vai"""lability.
     """
 
     def __init__(self) -> None:

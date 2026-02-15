@@ -19,18 +19,26 @@ from typing import List, Set, Dict, Optional
 
 
 class WordlistIntelligence:
-    """
-Wordlist Intelligence - Wordlist generation and transformation
-
-[Brief Summary]
-DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+"""Wordlist Intelligence - Wordlist generation and transformation"""
+# #
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # [Brief Summary]
+# DATE: 2026-02-13
+# [BATCHFIX] Commented metadata/non-Python
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the class and call static/class methods to generate permutations:
   from wordlist_intelligence import WordlistIntelligence
   WordlistIntelligence.case_transforms("password")
   WordlistIntelligence.leet_transforms("admin")
-  WordlistIntelligence.generate_personalized_wordlist(["alice","bob"], additions=["2026","!"])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #   WordlistIntelligence.generate_personalized_wordlist(["alice","bob"], additions=["2026","!"])
 - Use generate_personalized_wordlist to quickly combine user-provided basics with common paddings for targeted lists.
 
 WHAT IT DOES:
@@ -62,44 +70,81 @@ from typing import List, Set, Dict, Optional
 
 
 class WordlistIntelligence:
-    """
     Module for generating and Transforming wordlists.
     Ported concepts from 0xSojalSec-bopscrk.
-    """
+# #
 
     DEFAULT_LEET_CHARSET = {
-        "a": ["4", "@"],
-        "e": ["3"],
-        "i": ["1", "!"],
-        "o": ["0"],
-        "s": ["5", "$"],
-        "t": ["7", "+"],
-        "b": ["8"],
-        "g": ["9"],
-        "l": ["1"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "a": ["4", "@"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "e": ["3"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "i": ["1", "!"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "o": ["0"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "s": ["5", "$"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "t": ["7", "+"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "b": ["8"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "g": ["9"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "l": ["1"],
     }
 
     @staticmethod
-    def case_transforms(word: str) -> Set[str]:
-        """Generates common case permutations of a word."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def case_transforms(word: str) -> Set[str]:
+""""Generates common case permutations of a word."""
         results = {word, word.lower(), word.upper(), word.capitalize()}
 
         # Alternating case
-        alt1 = "".join(c.upper() if i % 2 == 0 else c.lower() for i, c in enumerate(word))
-        alt2 = "".join(c.lower() if i % 2 == 0 else c.upper() for i, c in enumerate(word))
+# [BATCHFIX] Commented metadata/non-Python
+#         alt1 = ".join(c.upper() if i % 2 == 0 else c.lower() for i, c in enumerate(word))"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+#         alt2 = ".join(c.lower() if i % 2 == 0 else c.upper() for i, c in enumerate(word))"  # [BATCHFIX] closed string
         results.add(alt1)
         results.add(alt2)
 
         # Vowels upper / Consonants upper
-        vowels = "aeiouAEIOU"
-        results.add("".join(c.upper() if c in vowels else c.lower() for c in word))
-        results.add("".join(c.lower() if c in vowels else c.upper() for c in word))
+# [BATCHFIX] Commented metadata/non-Python
+# #         vowels = "aeiouAEIOU"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+#         results.add(".join(c.upper() if c in vowels else c.lower() for c in word))"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+#         results.add(".join(c.lower() if c in vowels else c.upper() for c in word))"  # [BATCHFIX] closed string
 
         return results
 
     @classmethod
-    def leet_transforms(cls, word: str, charset: Optional[Dict[str, List[str]]] = None) -> Set[str]:
-        """Generates leet-speak permutations of a word."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def leet_transforms(cls, word: str, charset: Optional[Dict[str, List[str]]] = None) -> Set[str]:
+""""Generates leet-speak permutations of a word."""
         if charset is None:
             charset = cls.DEFAULT_LEET_CHARSET
 
@@ -107,18 +152,28 @@ class WordlistIntelligence:
         word_chars = list(word.lower())
 
         # Generate all possible replacements for each character
-        possibilities = []
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         possibilities = []
         for char in word_chars:
-            opts = [char]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             opts = [char]
             if char in charset:
-                opts.extend(charset[char])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                 opts.extend(charset[char])
             possibilities.append(opts)
 
         # Product of all possibilities (Warning: can be large)
         # Limit to 1000 permutations for stability
         count = 0
         for p in itertools.product(*possibilities):
-            results.add("".join(p))
+# [BATCHFIX] Commented metadata/non-Python
+#             results.add(".join(p))"  # [BATCHFIX] closed string
             count += 1
             if count > 1000:
                 break
@@ -126,10 +181,16 @@ class WordlistIntelligence:
         return results
 
     @staticmethod
-    def generate_personalized_wordlist(basics: List[str], additions: Optional[List[str]] = None) -> Set[str]:
-        """Combines basic info with common padding to generate a targeted wordlist."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def generate_personalized_wordlist(basics: List[str], additions: Optional[List[str]] = None) -> Set[str]:
+""""Combines basic info with common padding to generate a targeted wordlist."""
         if additions is None:
-            additions = ["123", "!", "2024", "2025", "2026", "123!", "321", "password"]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             additions = ["123", "!", "2024", "2025", "2026", "123!", "321", "password"]
 
         results = set()
         for base in basics:
@@ -140,61 +201,114 @@ class WordlistIntelligence:
                 results.add(f"{base}_{add}")
                 results.add(f"{add}_{base}")
 
-        return results
-"""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#        " return results"  # [BATCHFIX] closed string
+# #
 
     DEFAULT_LEET_CHARSET = {
-        "a": ["4", "@"],
-        "e": ["3"],
-        "i": ["1", "!"],
-        "o": ["0"],
-        "s": ["5", "$"],
-        "t": ["7", "+"],
-        "b": ["8"],
-        "g": ["9"],
-        "l": ["1"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "a": ["4", "@"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "e": ["3"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "i": ["1", "!"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "o": ["0"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "s": ["5", "$"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "t": ["7", "+"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "b": ["8"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "g": ["9"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "l": ["1"],
     }
 
     @staticmethod
-    def case_transforms(word: str) -> Set[str]:
-        """Generates common case permutations of a word."""
-        results = {word, word.lower(), word.upper(), word.capitalize()}
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def case_transforms(word: str) -> Set[str]:
+""""Generates common case permutations of a word."""
+# [BATCHFIX] Commented metadata/non-Python
+#         results = {word, word.lower(), word.upper("), word.capitalize()}"  # [BATCHFIX] closed string
 
         # Alternating case
-        alt1 = "".join(c.upper() if i % 2 == 0 else c.lower() for i, c in enumerate(word))
-        alt2 = "".join(c.lower() if i % 2 == 0 else c.upper() for i, c in enumerate(word))
+# [BATCHFIX] Commented metadata/non-Python
+#         alt1 = ".join(c.upper() if i % 2 == 0 else c.lower() for i, c in enumerate(word))"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+#         alt2 = ".join(c.lower() if i % 2 == 0 else c.upper() for i, c in enumerate(word))"  # [BATCHFIX] closed string
         results.add(alt1)
         results.add(alt2)
 
         # Vowels upper / Consonants upper
-        vowels = "aeiouAEIOU"
-        results.add("".join(c.upper() if c in vowels else c.lower() for c in word))
-        results.add("".join(c.lower() if c in vowels else c.upper() for c in word))
+# [BATCHFIX] Commented metadata/non-Python
+# #         vowels = "aeiouAEIOU"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+#         results.add(".join(c.upper() if c in vowels else c.lower() for c in word))"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+#         results.add(".join(c.lower() if c in vowels else c.upper() for c in word))"  # [BATCHFIX] closed string
 
         return results
 
     @classmethod
-    def leet_transforms(cls, word: str, charset: Optional[Dict[str, List[str]]] = None) -> Set[str]:
-        """Generates leet-speak permutations of a word."""
-        if charset is None:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def leet_transforms(cls, word: str, charset: Optional[Dict[str, List[str]]] = None) -> Set[str]:
+""""Generates leet-speak permutations of a word."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#    "     if charset is None:"  # [BATCHFIX] closed string
             charset = cls.DEFAULT_LEET_CHARSET
 
         results = {word}
         word_chars = list(word.lower())
 
         # Generate all possible replacements for each character
-        possibilities = []
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         possibilities = []
         for char in word_chars:
-            opts = [char]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             opts = [char]
             if char in charset:
-                opts.extend(charset[char])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                 opts.extend(charset[char])
             possibilities.append(opts)
 
         # Product of all possibilities (Warning: can be large)
         # Limit to 1000 permutations for stability
         count = 0
         for p in itertools.product(*possibilities):
-            results.add("".join(p))
+# [BATCHFIX] Commented metadata/non-Python
+#             results.add(".join(p))"  # [BATCHFIX] closed string
             count += 1
             if count > 1000:
                 break
@@ -202,10 +316,18 @@ class WordlistIntelligence:
         return results
 
     @staticmethod
-    def generate_personalized_wordlist(basics: List[str], additions: Optional[List[str]] = None) -> Set[str]:
-        """Combines basic info with common padding to generate a targeted wordlist."""
-        if additions is None:
-            additions = ["123", "!", "2024", "2025", "2026", "123!", "321", "password"]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def generate_personalized_wordlist(basics: List[str], additions: Optional[List[str]] = None) -> Set[str]:
+""""Combines basic info with common padding to generate a targeted wordlist."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#   "      if additions is None:"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             additions = ["123", "!", "2024", "2025", "2026", "123!", "321", "password"]
 
         results = set()
         for base in basics:

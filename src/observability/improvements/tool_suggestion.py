@@ -16,10 +16,10 @@
 
 
 """
-ToolSuggestion - Data container for analysis tool recommendations
-
+ToolSuggestion - Data container for analysis tool recommendations"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ToolSuggestion to represent a single suggestion produced by a static analysis or linting tool, populate its fields from analysis output, and serialize or log it for reporting, triage, or automated fix application.
@@ -34,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -49,7 +49,7 @@ __version__ = VERSION
 
 @dataclass
 class ToolSuggestion:
-    """Suggestion from a code analysis tool.
+    """Suggestion from a code analysis"""""" tool.
 
     Attributes:
         tool_type: Type of analysis tool.
@@ -57,7 +57,7 @@ class ToolSuggestion:
         file_path: File with the issue.
         line_number: Line number of the issue.
         message: Suggestion message.
-        suggested_fix: Optional code fix.
+        suggested_fix: Optional code fix.""""""
     """
 
     tool_type: AnalysisToolType
@@ -65,7 +65,7 @@ class ToolSuggestion:
     file_path: str
     line_number: int
     message: str
-    suggested_fix: str = ""
+    suggested_fix:""" s""""""tr = ""
 """
 
 from __future__ import annotations
@@ -81,7 +81,7 @@ __version__ = VERSION
 
 @dataclass
 class ToolSuggestion:
-    """Suggestion from a code analysis tool.
+    """Suggestion from a code"""""" analysis tool.
 
     Attributes:
         tool_type: Type of analysis tool.
@@ -89,7 +89,7 @@ class ToolSuggestion:
         file_path: File with the issue.
         line_number: Line number of the issue.
         message: Suggestion message.
-        suggested_fix: Optional code fix.
+        suggested_fix: """Option"""al """code fix.
     """
 
     tool_type: AnalysisToolType

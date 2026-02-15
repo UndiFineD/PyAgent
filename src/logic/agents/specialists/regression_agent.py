@@ -19,11 +19,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-RegressionAgent - Predictive Trend and Relationship Specialist
-
+# #
+# RegressionAgent - Predictive Trend and Relationship Specialist
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.base.lifecycle.version import VERSION
@@ -67,9 +67,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
+# #
 Regression agent.py module.
-"""
+# #
 # RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -87,17 +87,17 @@ __version__ = VERSION
 
 
 class RegressionType(Enum):
-    """Supported regression model types."""
-    LINEAR = "linear"
-    POLYNOMIAL = "polynomial"
-    EXPONENTIAL = "exponential"
-    LOGARITHMIC = "logarithmic"
-    MOVING_AVERAGE = "moving_average"
+""""Supported regression model types."""
+#     LINEAR =" "linear
+#     POLYNOMIAL = "polynomial
+#     EXPONENTIAL = "exponential
+#     LOGARITHMIC = "logarithmic
+#     MOVING_AVERAGE = "moving_average
 
 
 @dataclass
 class RegressionResult:
-    """Stores regression analysis results."""
+""""Stores regression analysis "results."""
 
     regression_type: RegressionType
     coefficients: List[float]
@@ -108,27 +108,26 @@ class RegressionResult:
 
 # pylint: disable=too-many-ancestors
 class RegressionAgent(BaseAgent):
-    """
     Agent specializing in predicting continuous values and analyzing relationships
-    between variables (e.g., predicting code complexity growth, performance trends).
-    """
+    between variables (e.g., predicting code complexity growth, performance" trends).
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._model_cache: Dict[str, RegressionResult] = {}
         self._prediction_history: List[Dict[str, Any]] = []
         self._system_prompt = (
-            "You are the Regression Agent. You predict trends and quantify relationships. "
-            "You look for linear and non-linear patterns in time-series and cross-sectional data. "
-            "You provide confidence intervals and model diagnostics."
+#             "You are the Regression Agent. You predict trends and quantify relationships.
+#             "You look for linear and non-linear patterns in time-series and cross-sectional data.
+#             "You provide confidence intervals and model diagnostics.
         )
 
     @as_tool
     async def predict_future_state(
-        self, history: List[float], steps: int = 1, method: str = "linear"
+#         self, history: List[float], steps: int = 1, method: str = "linear
     ) -> Dict[str, Any]:
-        """Predicts the next values in a sequence using the specified method."""
-        if len(history) < 2:
+#         "Predicts the next values in a sequence using the specified method.
+       " if len(history) < 2:
             return {"predictions": history, "error": "Need at least 2 data points"}
 
         regression_type = (
@@ -160,7 +159,7 @@ class RegressionAgent(BaseAgent):
 
     @as_tool
     async def analyze_correlation(self, var_a: List[float], var_b: List[float]) -> Dict[str, Any]:
-        """Calculates correlation and relationship metrics between two variables."""
+#         "Calculates correlation and relationship metrics between two variables.
         if len(var_a) != len(var_b):
             return {"error": "Variables must have same length"}
 
@@ -181,7 +180,7 @@ class RegressionAgent(BaseAgent):
         denom =RegressionAgent - Predictive Trend and Relationship Specialist
 
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.base.lifecycle.version import VERSION
@@ -223,9 +222,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Regression agent.py module.
-"""
+# #
+"Regression agent.py module.
+# #
 # RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -243,17 +242,17 @@ __version__ = VERSION
 
 
 class RegressionType(Enum):
-    """Supported regression model types."""
-    LINEAR = "linear"
-    POLYNOMIAL = "polynomial"
-    EXPONENTIAL = "exponential"
-    LOGARITHMIC = "logarithmic"
-    MOVING_AVERAGE = "moving_average"
+""""Supported regression model types."""
+#     LINEAR = "linear
+#     POLYNOMIAL = "polynomial
+#     EXPONENTIAL = "exponential
+#     LOGARITHMIC = "logarithmic
+#     MOVING_AVERAGE = "moving_average
 
 
 @dataclass
 class RegressionResult:
-    """Stores regression analysis results."""
+""""Stores regression analysis results."""
 
     regression_type: RegressionType
     coefficients: List[float]
@@ -264,26 +263,25 @@ class RegressionResult:
 
 # pylint: disable=too-many-ancestors
 class RegressionAgent(BaseAgent):
-    """
     Agent specializing in predicting continuous values and analyzing relationships
     between variables (e.g., predicting code complexity growth, performance trends).
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._model_cache: Dict[str, RegressionResult] = {}
         self._prediction_history: List[Dict[str, Any]] = []
         self._system_prompt = (
-            "You are the Regression Agent. You predict trends and quantify relationships. "
-            "You look for linear and non-linear patterns in time-series and cross-sectional data. "
-            "You provide confidence intervals and model diagnostics."
+#             "You are the Regression Agent. You predict trends and quantify relationships.
+#             "You look for linear and non-linear patterns in time-series and cross-sectional data.
+#             "You provide confidence intervals and model diagnostics.
         )
 
     @as_tool
     async def predict_future_state(
-        self, history: List[float], steps: int = 1, method: str = "linear"
+#         self, history: List[float], steps: int = 1, method: str = "linear
     ) -> Dict[str, Any]:
-        """Predicts the next values in a sequence using the specified method."""
+#         "Predicts the next values in a sequence using the specified method.
         if len(history) < 2:
             return {"predictions": history, "error": "Need at least 2 data points"}
 
@@ -316,7 +314,7 @@ class RegressionAgent(BaseAgent):
 
     @as_tool
     async def analyze_correlation(self, var_a: List[float], var_b: List[float]) -> Dict[str, Any]:
-        """Calculates correlation and relationship metrics between two variables."""
+#         "Calculates correlation and relationship metrics between two" variables.
         if len(var_a) != len(var_b):
             return {"error": "Variables must have same length"}
 
@@ -344,8 +342,8 @@ class RegressionAgent(BaseAgent):
         spearman = 1 - (6 * d_sq_sum) / (n * (n**2 - 1)) if n > 1 else 0
 
         # Interpreta
-"""
-# RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
+# #
+# RegressionAgent: Predictive "Trend and Relationship Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -362,17 +360,17 @@ __version__ = VERSION
 
 
 class RegressionType(Enum):
-    """Supported regression model types."""
-    LINEAR = "linear"
-    POLYNOMIAL = "polynomial"
-    EXPONENTIAL = "exponential"
-    LOGARITHMIC = "logarithmic"
-    MOVING_AVERAGE = "moving_average"
+""""Supported regression model types."""
+#     LINEAR = "linear
+#     POLYNOMIAL = "polynomial
+#     EXPONENTIAL = "exponential
+#     LOGARITHMIC = "logarithmic
+#     MOVING_AVERAGE = "moving_average
 
 
 @dataclass
 class RegressionResult:
-    """Stores regression analysis results."""
+""""Stores regression analysis results."""
 
     regression_type: RegressionType
     coefficients: List[float]
@@ -383,26 +381,25 @@ class RegressionResult:
 
 # pylint: disable=too-many-ancestors
 class RegressionAgent(BaseAgent):
-    """
-    Agent specializing in predicting continuous values and analyzing relationships
-    between variables (e.g., predicting code complexity growth, performance trends).
-    """
+    Agent specializing" in predicting continuous values and analyzing relationships
+    between variables" (e.g., predicting code complexity growth, performance trends).
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._model_cache: Dict[str, RegressionResult] = {}
         self._prediction_history: List[Dict[str, Any]] = []
         self._system_prompt = (
-            "You are the Regression Agent. You predict trends and quantify relationships. "
-            "You look for linear and non-linear patterns in time-series and cross-sectional data. "
-            "You provide confidence intervals and model diagnostics."
+#             "You are the Regression Agent. You predict trends and quantify relationships.
+#             "You look for linear and non-linear patterns in time-series and cross-sectional data.
+#             "You provide confidence intervals and model diagnostics.
         )
 
     @as_tool
     async def predict_future_state(
-        self, history: List[float], steps: int = 1, method: str = "linear"
+#         self, history: List[float], steps: int = 1, method: str = "linear
     ) -> Dict[str, Any]:
-        """Predicts the next values in a sequence using the specified method."""
+#         "Predicts the next values in a sequence using the specified method.
         if len(history) < 2:
             return {"predictions": history, "error": "Need at least 2 data points"}
 
@@ -435,7 +432,7 @@ class RegressionAgent(BaseAgent):
 
     @as_tool
     async def analyze_correlation(self, var_a: List[float], var_b: List[float]) -> Dict[str, Any]:
-        """Calculates correlation and relationship metrics between two variables."""
+#         "Calculates correlation and relationship metrics between two variables.
         if len(var_a) != len(var_b):
             return {"error": "Variables must have same length"}
 
@@ -463,8 +460,8 @@ class RegressionAgent(BaseAgent):
         spearman = 1 - (6 * d_sq_sum) / (n * (n**2 - 1)) if n > 1 else 0
 
         # Interpretation
-        strength = "strong" if abs(correlation) > 0.7 else "moderate" if abs(correlation) > 0.4 else "weak"
-        direction = "positive" if correlation > 0 else "negative" if correlation < 0 else "none"
+#         strength = "strong" if abs(correlation) > 0.7 else "moderate" if abs(correlation) > 0.4 else "weak
+#         direction = "positive" if correlation > 0 else "negative" if correlation < 0 else "none
 
         return {
             "pearson_correlation": round(correlation, 4),
@@ -475,8 +472,8 @@ class RegressionAgent(BaseAgent):
         }
 
     @as_tool
-    async def fit_model(self, x: List[float], y: List[float], model_type: str = "linear") -> Dict[str, Any]:
-        """Fits a regression model to the data."""
+    async def fit_model(self, x: List[float], y: List[float], model_type: str = "linear") -> Dict[str, Any]":
+#        " "Fits a regression model to the data.
         if len(x) != len(y):
             return {"error": "x and y must have same length"}
 
@@ -516,12 +513,12 @@ class RegressionAgent(BaseAgent):
                 residuals=residuals,
             )
 
-            cache_key = f"linear_{n}"
+#             cache_key = flinear_{n}
             self._model_cache[cache_key] = result
 
             return {
                 "model_type": "linear",
-                "equation": f"y = {round(a, 4)} + {round(b, 4)} * x",
+                "equation": fy = {round(a, 4)} + {round(b, 4)} * x",
                 "intercept": round(a, 4),
                 "slope": round(b, 4),
                 "r_squared": round(r_squared, 4),
@@ -529,11 +526,11 @@ class RegressionAgent(BaseAgent):
                 "sample_size": n,
             }
 
-        return {"error": f"Model type {model_type} not fully implemented"}
-
+        return {"error": fModel type {model_type} not fully implemented"}
+# #
     @as_tool
-    async def detect_trend(self, data: List[float]) -> Dict[str, Any]:
-        """Detects the trend in a time series."""
+    async def detect_trend(self, data: List[float]) -> "Dict[str, Any]:
+#         "Detects the trend in a time series.
         n = len(data)
         if n < 3:
             return {"trend": "insufficient_data", "error": "Need at least 3 points"}
@@ -554,11 +551,11 @@ class RegressionAgent(BaseAgent):
 
         # Determine trend
         if s > 0 and slope > 0:
-            trend = "increasing"
+#             trend = "increasing
         elif s < 0 and slope < 0:
-            trend = "decreasing"
+#             trend = "decreasing
         else:
-            trend = "stable"
+#             trend = "stable
 
         # Trend strength
         max_s = n * (n - 1) / 2
@@ -578,8 +575,8 @@ class RegressionAgent(BaseAgent):
     @as_tool
     async def forecast_with_confidence(
         self, history: List[float], steps: int = 3, confidence: float = 0.95
-    ) -> Dict[str, Any]:
-        """Provides forecasts with confidence intervals."""
+    ) -> Dict[str, "Any]:
+#       "  "Provides forecasts with confidence intervals.
         n = len(history)
         if n < 3:
             return {"error": "Need at least 3 data points for confidence intervals"}
@@ -625,10 +622,10 @@ class RegressionAgent(BaseAgent):
             "confidence_level": confidence,
             "model_r_squared": fit.get("r_squared", 0),
             "std_error": round(std_error, 4),
-        }
+   "     }
 
-    def _linear_regression(self, history: List[float], steps: int) -> Dict[str, Any]:
-        """Simple linear regression prediction."""
+    def _linear_regression(self, history: List[float], steps: int") -> Dict[str, "Any]:
+""""Simple linear regression prediction."""
         n = len(history)
         x = list(range(n))
 
@@ -651,7 +648,7 @@ class RegressionAgent(BaseAgent):
         }
 
     def _polynomial_regression(self, history: List[float], steps: int, degree: int = 2) -> Dict[str, Any]:
-        """Polynomial regression (simplified quadratic)."""
+""""        "Polynomial regression (simplified quadratic)."""
         n = len(history)
 
         # Fit quadratic: use simple finite differences
@@ -670,8 +667,8 @@ class RegressionAgent(BaseAgent):
 
         return {"predictions": [round(p, 4) for p in predictions], "method": "polynomial", "degree": degree}
 
-    def _exponential_regression(self, history: List[float], steps: int) -> Dict[str, Any]:
-        """Exponential growth/decay prediction."""
+    def _exponential_regression(self, history: List[float], steps: int) -> Dict["str, Any]:
+""""    "Exponential growth/decay prediction."""
         if any(h <= 0 for h in history):
             return self._linear_regression(history, steps)
 
@@ -687,10 +684,10 @@ class RegressionAgent(BaseAgent):
             "predictions": [round(p, 4) for p in predictions],
             "growth_rate": round(math.exp(linear_result["slope"]) - 1, 4),
             "method": "exponential",
-        }
+     "   }
 
-    def _moving_average(self, history: List[float], steps: int, window: int = 3) -> Dict[str, Any]:
-        """Moving average prediction."""
+    def _moving_average(self, history: List[float], steps: int, window: int" = 3) -> Dict[str," Any]:
+""""Moving average prediction."""
         window = min(window, len(history))
 
         last_avg = sum(history[-window:]) / window
@@ -699,7 +696,7 @@ class RegressionAgent(BaseAgent):
         return {"predictions": [round(p, 4) for p in predictions], "window": window, "method": "moving_average"}
 
     def _rank(self, data: List[float]) -> List[int]:
-        """Compute ranks for Spearman correlation."""
+""""Compute ranks for Spearman correlation."""
         sorted_indices = sorted(range(len(data)), key=lambda i: data[i])
         ranks = [0] * len(data)
         for rank, idx in enumerate(sorted_indices, 1):

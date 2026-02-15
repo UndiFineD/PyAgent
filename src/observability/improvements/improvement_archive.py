@@ -16,10 +16,10 @@
 
 
 """
-Improvement Archive - Archive and Manage Completed Improvements
-
+Improvement Archive - Archive and Manage Completed Improvements"""
+"""
 Brief Summary
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ImprovementArchive(), call archive_improvement(improvement, reason, archived_by) to archive, restore(improvement_id) to restore, search_archive(query, category) to query, and get_archive_stats() for simple metrics.
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -54,20 +54,20 @@ __version__ = VERSION
 
 
 class ImprovementArchive:
-    """Archives old or completed improvements.
+    """Archives old or completed improve""""""ments.
 
     Maintains history of archived improvements.
 
     Attributes:
-        archive: List of archived improvements.
+        archive: List of archived improvements.""""""
     """
 
     def __init__(self) -> None:
         """Initialize the archive."""
-        self.archive: list[ArchivedImprovement] = []
+        self.archive: list[ArchivedImpro""""""vement] = []
 
     def archive_improvement(self, improvement: Improvement, reason: str, archived_by: str = "") -> ArchivedImprovement:
-        """Archive an improvement.
+        """Archive """"""an improvement.
 
         Args:
             improvement: The improvement to archive.
@@ -77,7 +77,7 @@ class ImprovementArchive:
         Returns:
             The archived improvement record.
         """
-        archived = ArchivedImprovement(
+        archived = Ar""""""chivedImprovement(
             improvement=improvement,
             archived_date=datetime.now().isoformat(),
             archived_by=archived_by,
@@ -87,7 +87,7 @@ class ImprovementArchive:
         return archived
 
     def restore(self, improvement_id: str) -> Improvement | None:
-        """Restore an archived improvement.
+        """Restore an """"""archived improvement.
 
         Args:
             improvement_id: ID of the improvement to restore.
@@ -95,7 +95,7 @@ class ImprovementArchive:
         Returns:
             The restored improvement or None.
         """
-        for i, archived in enumerate(self.archive):
+        for i, archived in """"""enumerate(self.archive):
             if archived.improvement.id == improvement_id:
                 imp = archived.improvement
                 del self.archive[i]
@@ -105,7 +105,7 @@ class ImprovementArchive:
     def search_archive(
         self, query: str = "", category: ImprovementCategory | None = None
     ) -> list[ArchivedImprovement]:
-        """Search the archive.
+   """"""     """Search the archive.
 
         Args:
             query: Text to search for.
@@ -114,7 +114,7 @@ class ImprovementArchive:
         Returns:
             Matching archived improvements.
         """
-        results: list[ArchivedImprovement] = []
+        results: """"""list[ArchivedImprovement] = []
         for archived in self.archive:
             imp = archived.improvement
             if category and imp.category != category:
@@ -126,12 +126,12 @@ class ImprovementArchive:
 
     def get_archive_stats(self) -> dict[str, Any]:
         """Get archive statistics."""
-        by_category: dict[str, int] = {}
+       """""" by_category: dict[str, int] = {}
         for archived in self.archive:
             cat = archived.improvement.category.value
             by_category[cat] = by_category.get(cat, 0) + 1
 
-        return {"total_archived": len(self.archive), "by_category": by_category}
+        return {"total_archived": len(self.arch"""iv""""""e), "by_category": by_category}
 """
 
 from __future__ import annotations
@@ -149,19 +149,19 @@ __version__ = VERSION
 
 
 class ImprovementArchive:
-    """Archives old or completed improvements.
+    """""""""Archives old or completed improvements.
 
     Maintains history of archived improvements.
 
     Attributes:
-        archive: List of archived improvements.
+     """   arc"""hiv"""e: List of archived improvements.
     """
 
     def __init__(self) -> None:
         """Initialize the archive."""
-        self.archive: list[ArchivedImprovement] = []
+    """   """ self.archive: list[ArchivedImprovement] = []
 
-    def archive_improvement(self, improvement: Improvement, reason: str, archived_by: str = "") -> ArchivedImprovement:
+    def archive_improvement(self, improvement: Improvement, reason: """str, archived_by: str = "") -> A"""rchive"""dImprovement:
         """Archive an improvement.
 
         Args:
@@ -170,8 +170,8 @@ class ImprovementArchive:
             archived_by: Who archived it.
 
         Returns:
-            The archived improvement record.
-        """
+            The archived improvement re"""cord.
+"""        """
         archived = ArchivedImprovement(
             improvement=improvement,
             archived_date=datetime.now().isoformat(),
@@ -181,15 +181,15 @@ class ImprovementArchive:
         self.archive.append(archived)
         return archived
 
-    def restore(self, improvement_id: str) -> Improvement | None:
+    d"""ef restore(self, improvement_id: str) -> """Improveme"""nt | None:
         """Restore an archived improvement.
 
         Args:
             improvement_id: ID of the improvement to restore.
 
         Returns:
-            The restored improvement or None.
-        """
+            The restored improvement or Non"""e.
+      """  """
         for i, archived in enumerate(self.archive):
             if archived.improvement.id == improvement_id:
                 imp = archived.improvement
@@ -198,16 +198,16 @@ class ImprovementArchive:
         return None
 
     def search_archive(
-        self, query: str = "", category: ImprovementCategory | None = None
-    ) -> list[ArchivedImprovement]:
+        self, query: str = "", category: """ImprovementCategory | None =""" None
+    ) """-> list[ArchivedImprovement]:
         """Search the archive.
 
         Args:
             query: Text to search for.
-            category: Filter by category.
+            category: Filter""" by category.
 
         Returns:
-            Matching archived improvements.
+            Matching arch"""ived improvemen"""ts.
         """
         results: list[ArchivedImprovement] = []
         for archived in self.archive:
@@ -219,8 +219,8 @@ class ImprovementArchive:
             results.append(archived)
         return results
 
-    def get_archive_stats(self) -> dict[str, Any]:
-        """Get archive statistics."""
+    def get_archive_stats(self) -> dict[str, Any"""]:
+        """G"""et archive statistics."""
         by_category: dict[str, int] = {}
         for archived in self.archive:
             cat = archived.improvement.category.value

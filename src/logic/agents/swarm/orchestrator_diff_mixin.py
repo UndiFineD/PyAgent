@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Diff preview mixin for OrchestratorAgent (Phase 317 consolidation)
-Provides methods for generating and previewing diffs of proposed changes.
+# #
+# Diff preview mixin for OrchestratorAgent (Phase 317 consolidation)
+# Provides methods for generating and previewing diffs of proposed changes.
 This mixin is designed to be integrated into the OrchestratorAgent class,
 allowing it to offer diff preview capabilities without bloating the main agent file.
-"""
+# #
 
 from __future__ import annotations
 
@@ -29,18 +29,18 @@ from src.core.base.common.utils.diff_generator import DiffGenerator
 
 
 class OrchestratorDiffMixin:
-    """Diff preview methods for OrchestratorAgent."""
+""""Diff preview methods for OrchestratorAgent."""
 
     def enable_diff_preview(self, output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED) -> None:
-        """Enable diff preview mode."""
+""""Enable diff preview mode."""
         setattr(self, "diff_generator", DiffGenerator(output_format))
-        logging.info(f"Diff preview enabled (format: {output_format.name})")
+        logging.info(fDiff preview enabled (format: {output_format.name})")
 
     def preview_changes(self, file_path: Path, new_content: str) -> str:
-        """Preview changes to a file without applying them."""
+""""Preview changes to a file without applying them."""
         if not hasattr(self, "diff_generator"):
             setattr(self, "diff_generator", DiffGenerator())
-        original = file_path.read_text(encoding="utf-8") if file_path.exists() else ""
+#         original = file_path.read_text(encoding="utf-8") if file_path.exists() else
         diff_gen = getattr(self, "diff_generator")
         return diff_gen.generate_diff(original, new_content, str(file_path))
 
@@ -58,4 +58,4 @@ class OrchestratorDiffMixin:
             if hasattr(self, "diff_generator"):
                 diff_gen = getattr(self, "diff_generator")
                 diff_gen.print_diff(diff)
-            logging.info("")
+            logging.info(")

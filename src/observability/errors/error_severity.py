@@ -15,27 +15,30 @@
 # limitations under the License.
 
 
-"""
-ErrorSeverity - Enumeration of error severity levels
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Import and use as a stable, project-wide severity enum: from src.core.base.error_severity import ErrorSeverity
-- Compare levels: if event_severity >= ErrorSeverity.HIGH: handle_urgent(event)
+# ErrorSeverity - Enumeration of error severity levels
 
-WHAT IT DOES:
-Provides a small, explicit Enum (ErrorSeverity) representing five discrete severity levels (CRITICAL, HIGH, MEDIUM, LOW, INFO) with integer values for ordering and comparison.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
+# - Import and use as a stable, project-wide severity enum: from src.core.base.error_severity import ErrorSeverity
+# - Compare levels: if event_severity >= ErrorSeverity.HIGH: handle_urgent(event)
 
-WHAT IT SHOULD DO BETTER:
-- Add rich-comparison helpers or a utility wrapper to make ordinal comparisons and threshold checks more ergonomic and type-safe.
-- Provide mappings to logging levels, human-readable labels, and JSON (de)serialization methods for configuration and transport.
-- Include unit tests and examples showing intended comparison semantics and integration with the project's logging and alerting subsystems.
+# WHAT IT DOES:
+# Provides a small, explicit Enum (ErrorSeverity) representing five discrete severity levels (CRITICAL, HIGH, MEDIUM, LOW, INFO) with integer values for ordering and comparison.
 
-FILE CONTENT SUMMARY:
+# WHAT IT SHOULD DO BETTER:
+# - Add rich-comparison helpers or a utility wrapper to make ordinal comparisons and threshold checks more ergonomic and type-safe.
+# - Provide mappings to logging levels, human-readable labels, and JSON (de)serialization methods for configuration and transport.
+# - Include unit tests and examples showing intended comparison semantics and integration with the project's logging and alerting subsystems."  # [BATCHFIX] closed string"  # [BATCHFIX] closed string
+
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
 
 from __future__ import annotations
 
@@ -47,14 +50,14 @@ __version__ = VERSION
 
 
 class ErrorSeverity(Enum):
-    """Error severity levels."""
+    Error severity levels.
 
     CRITICAL = 5
     HIGH = 4
     MEDIUM = 3
     LOW = 2
     INFO = 1
-"""
+
 
 from __future__ import annotations
 
@@ -66,7 +69,7 @@ __version__ = VERSION
 
 
 class ErrorSeverity(Enum):
-    """Error severity levels."""
+    Error severity levels.
 
     CRITICAL = 5
     HIGH = 4

@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Resilience Agent - Autonomous compute resource management
-
+# #
+# Resilience Agent - Autonomous compute resource management
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ResilienceAgent with the path to its configuration or workspace file: ResilienceAgent("path/to/config").
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Resilience agent.py module.
-"""
+# #
 
 
 from __future__ import annotations
@@ -59,18 +59,17 @@ __version__ = VERSION
 
 
 class ResilienceAgent(BaseAgent):
-    """
     Agent responsible for autonomous compute resource management.
-    Monitors swarm health, handles failovers, and optimizes resource allocation.
-    """
+#     Monitors swarm health, handles failovers, and optimizes resource allocation.
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Resilience Manager Agent. "
-            "Your goal is to ensure 99.99% uptime for the swarm. "
-            "You monitor resource usage, detect hanging processes, and "
-            "trigger autonomous failovers between nodes."
+#             "You are the Resilience Manager Agent.
+#             "Your goal is to ensure 99.99% uptime for the swarm.
+#             "You monitor resource usage, detect hanging processes, and
+#             "trigger autonomous failovers between nodes.
         )
 
         # Phase 108: Intelligence and Resilience
@@ -79,38 +78,36 @@ class ResilienceAgent(BaseAgent):
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
     def _archive_resilience_event(self, event_type: str, details: Any) -> None:
-        """Archiving resilience events for fleet learning."""
+""""Archiving resilience events for fleet learning."""
         if self.recorder:
             try:
                 meta = {"phase": 108, "type": "resilience", "timestamp": time.time()}
                 self.recorder.record_interaction("resilience", "swarm_health", event_type, str(details), meta=meta)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.error(f"ResilienceManager: Recording failed: {e}")
+                logging.error(fResilienceManager: Recording failed: {e}")
 
     @as_tool
     def trigger_failover(self, source_node: str, target_node: str) -> bool:
-        """
-        Migrates high-priority agent tasks from a failing node to a healthy one.
-        """
-        logging.warning(f"ResilienceManager: Triggering failover from {source_node} to {target_node}")
+        Migrates high-priority agent tasks from a failing node to" a healthy one.
+# #
+        logging.warning(fResilienceManager: Triggering failover from {source_node} "to {target_node}")
         # Simulated failover logic
         self._archive_resilience_event("failover", {"from": source_node, "to": target_node, "status": "success"})
         return True
 
     @as_tool
     def optimize_resource_allocation(self) -> dict[str, Any]:
-        """
         Analyzes current swarm distribution and rebalances agent loads.
-        """
-        logging.info("ResilienceManager: Optimizing swarm resource distribution.")
+# #
+        logging.info("ResilienceManager: Optimizing swarm "resource distribution.")
         stats = {
             "rebalanced_agents": 3,
             "latency_reduction_est": "15ms",
             "cpu_savings": "12%",
         }
-        self._record("optimization", stats)
+        self._record("optimization", stats")
         return stats
-"""
+# #
 
 
 from __future__ import annotations
@@ -131,18 +128,17 @@ __version__ = VERSION
 
 
 class ResilienceAgent(BaseAgent):
-    """
     Agent responsible for autonomous compute resource management.
     Monitors swarm health, handles failovers, and optimizes resource allocation.
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Resilience Manager Agent. "
-            "Your goal is to ensure 99.99% uptime for the swarm. "
-            "You monitor resource usage, detect hanging processes, and "
-            "trigger autonomous failovers between nodes."
+#             "You are the Resilience Manager Agent.
+#             "Your goal is to ensure 99.99% uptime for the swarm.
+#             "You monitor resource usage, detect hanging processes, and
+#             "trigger autonomous failovers between nodes.
         )
 
         # Phase 108: Intelligence and Resilience
@@ -151,29 +147,27 @@ class ResilienceAgent(BaseAgent):
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
     def _archive_resilience_event(self, event_type: str, details: Any) -> None:
-        """Archiving resilience events for fleet learning."""
+""""Archiving resilience events for fleet" learning."""
         if self.recorder:
             try:
                 meta = {"phase": 108, "type": "resilience", "timestamp": time.time()}
                 self.recorder.record_interaction("resilience", "swarm_health", event_type, str(details), meta=meta)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.error(f"ResilienceManager: Recording failed: {e}")
+                logging.error(fResilienceManager: Recording failed: {e}")
 
     @as_tool
     def trigger_failover(self, source_node: str, target_node: str) -> bool:
-        """
         Migrates high-priority agent tasks from a failing node to a healthy one.
-        """
-        logging.warning(f"ResilienceManager: Triggering failover from {source_node} to {target_node}")
+# #
+        logging.warning(fResilienceManager: Triggering failover from {source_node} to {target_node}")
         # Simulated failover logic
         self._archive_resilience_event("failover", {"from": source_node, "to": target_node, "status": "success"})
         return True
 
     @as_tool
     def optimize_resource_allocation(self) -> dict[str, Any]:
-        """
         Analyzes current swarm distribution and rebalances agent loads.
-        """
+# #
         logging.info("ResilienceManager: Optimizing swarm resource distribution.")
         stats = {
             "rebalanced_agents": 3,

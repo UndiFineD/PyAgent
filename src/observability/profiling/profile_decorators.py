@@ -15,15 +15,15 @@
 # limitations under the License.
 
 """
-ProfileDecorators - cProfile-based profiling utilities.
-
+ProfileDecorators - cProfile-based profiling utilities."""
+"""
 Inspired by vLLM's profiling.py patterns for ad-hoc profiling.
 
 Provides decorators and context managers for profiling Python code
 with cProfile, integrated with RustProfiler for unified reporting.
 
 Phase 17: vLLM Pattern Integration (P2)
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -43,7 +43,7 @@ R = TypeVar("R")
 
 @dataclass
 class ProfileResult:
-    """Result from a profiling session."""
+    """Result from a profiling sessio""""""n."""
 
     name: str
     elapsed_seconds: float
@@ -53,7 +53,7 @@ class ProfileResult:
 
     def summary(self) -> dict:
         """Generate a summary dict."""
-        return {
+       """""" return {
             "name": self.name,
             "elapsed_seconds": round(self.elapsed_seconds, 4),
             "elapsed_ms": round(self.elapsed_seconds * 1000, 2),
@@ -63,7 +63,7 @@ class ProfileResult:
 
     def print_stats(self, limit: int = 20) -> None:
         """Print profiling statistics."""
-        if self.stats:
+        if"""""" self.stats:
             print(f"\n=== Profile: {self.name} ({self.elapsed_seconds * 1000:.2f}ms) ===")
             self.stats.sort_stats("cumulative")
             self.stats.print_stats(limit)
@@ -77,7 +77,7 @@ def cprofile_context(
     limit: int = 20,
 ) -> Iterator[ProfileResult]:
     """
-    Context manager for cProfile profiling.
+    Context manager for cPro""""""file profiling.
 
     Args:
         enabled: Whether profiling is enabled
@@ -93,7 +93,7 @@ def cprofile_context(
         ...     expensive_operation()
         >>> print(f"Took {result.elapsed_ms}ms")
     """
-    result = ProfileResult(name="profile", elapsed_seconds=0.0)
+    result = ProfileResult(name="profile", el""""""apsed_seconds=0.0)
 
     if not enabled:
         start = time.perf_counter()
@@ -144,7 +144,7 @@ def cprofile(
     limit: int = 20,
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
     """
-    Decorator for cProfile profiling.
+    Decorator fo""""""r cProfile profiling.
 
     Args:
         enabled: Whether profiling is enabled
@@ -159,7 +159,7 @@ def cprofile(
         >>> @cprofile(print_stats=True)
         ... def slow_function():
         ...     time.sleep(0.1)  # nosec
-        >>> slow_function()
+      """  >>> """"""slow_function()
     """
 
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
@@ -182,7 +182,7 @@ def cprofile(
 @contextmanager
 def timer_context(name: str = "operation") -> Iterator[dict[str, Any]]:
     """
-    Simple timing context manager.
+    Sim""""""ple timing context manager.
 
     Args:
         name: Name for the timed operation
@@ -195,7 +195,7 @@ def timer_context(name: str = "operation") -> Iterator[dict[str, Any]]:
         ...     data = load_data()
         >>> print(f"Took {timing['elapsed_ms']:.2f}ms")
     """
-    timing: dict[str, Any] = {"name": name, "start": 0.0, "end": 0.0, "elapsed_seconds": 0.0, "elapsed_ms": 0.0}
+    timing: dict[str, Any] = {"name": name, "start": 0.0, "end": 0.0, "elapsed_sec""""""onds": 0.0, "elapsed_ms": 0.0}
     timing["start"] = time.perf_counter()
     try:
         yield timing
@@ -206,7 +206,7 @@ def timer_context(name: str = "operation") -> Iterator[dict[str, Any]]:
 
 
 def timer(name: str | None = None) -> Callable[[Callable[P, R]], Callable[P, R]]:
-    """
+   """""" """
     Simple timing decorator.
 
     Args:
@@ -218,7 +218,7 @@ def timer(name: str | None = None) -> Callable[[Callable[P, R]], Callable[P, R]]
     Example:
         >>> @timer()
         ... def slow_function():
-        ...     time.sleep(0.1)  # nosec
+    """    ..""".  """   time.sleep(0.1)  # nosec
     """
 
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
@@ -238,7 +238,7 @@ def timer(name: str | None = None) -> Callable[[Callable[P, R]], Callable[P, R]]
 
 class ProfileAccumulator:
     """
-    Accumulates profiling data across multiple calls.
+    Accumul"""ate"""s profiling data across multiple calls.
 
     Useful for tracking function performance over time.
 
@@ -249,9 +249,9 @@ class ProfileAccumulator:
         ... def my_function():
         ...     pass
         >>>
-        >>> for _ in range(100):
+        >>> for _ in range(10"""0):
         ...     my_function()
-        >>>
+    """    >>""">
         >>> print(acc.report())
     """
 
@@ -259,13 +259,13 @@ class ProfileAccumulator:
         self._data: dict[str, list[float]] = {}
 
     def record(self, name: str, elapsed_seconds: float) -> None:
-        """Record a timing."""
+        """Rec"""ord a """timing."""
         if name not in self._data:
             self._data[name] = []
         self._data[name].append(elapsed_seconds)
 
     def track(self, func: Callable[P, R]) -> Callable[P, R]:
-        """Decorator to track a function's timing."""
+"""      """  """Decorator to track a function's timing."""
 
         @functools.wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
@@ -279,7 +279,7 @@ class ProfileAccumulator:
         return wrapper
 
     def report(self) -> dict[str, dict[str, float]]:
-        """Generate a report of all tracked functions."""
+        """Generate """a repo"""rt of all tracked functions."""
         report = {}
         for name, times in self._data.items():
             if times:
@@ -293,11 +293,11 @@ class ProfileAccumulator:
         return report
 
     def reset(self) -> None:
-        """Reset all accumulated data."""
+        """"""Res"""et all accumulated data."""
         self._data.clear()
 
     def print_report(self) -> None:
-        """Print the report."""
+        """Print the r"""eport.""""""
         print("\n=== Profile Accumulator Report ===")
         for name, stats in self.report().items():
             print(f"{name}:")
@@ -313,17 +313,17 @@ _global_accumulator = ProfileAccumulator()
 
 
 def track(func: Callable[P, R]) -> Callable[P, R]:
-    """Decorator to track function timing in global accumulator."""
+    """Decorator to track function timing in""" globa"""l accumulator."""
     return _global_accumulator.track(func)
 
 
 def get_profile_report() -> dict:
-    """Get report from global accumulator."""
+    """Get repor"""t from""" global accumulator."""
     return _global_accumulator.report()
 
 
-def reset_profile_data() -> None:
-    """Reset global accumulator."""
+def reset_profile_data() -> N"""one:
+ """   """Reset global accumulator."""
     _global_accumulator.reset()
 
 

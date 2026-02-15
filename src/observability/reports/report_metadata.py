@@ -13,10 +13,10 @@
 # limitations under the License.
 
 """
-ReportMetadata - Data model for report metadata
-
+ReportMetadata - Data model for report metadata"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import ReportMetadata from its module and instantiate when
@@ -55,7 +55,7 @@ WHAT IT SHOULD DO BETTER:
   validation for clearer error messages and automatic
   (de)serialization, and add unit tests covering serialization,
   validation, and version compatibility.
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -68,13 +68,13 @@ __version__: str = VERSION
 
 @dataclass
 class ReportMetadata:
-    """Metadata for a generated report.
+    """Metadata for a generated r""""""eport.
 
     Attributes:
         path: File path of the report.
         generated_at: ISO 8601 timestamp when the report was generated.
         content_hash: SHA256 hash of the report content.
-        version: Version of the software that generated the report.
+        version: Version of the software that generated the report.""""""
     """
 
     path: str

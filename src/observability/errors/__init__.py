@@ -16,7 +16,7 @@
 
 # ruff: noqa: F401
 
-"""Lazy-loading entry point for observability.errors."""
+# Lazy-loading entry point for observability.errors.
 
 from __future__ import annotations
 from typing import Any, TYPE_CHECKING
@@ -24,7 +24,7 @@ from src.core.base.lifecycle.version import VERSION as VERSION  # noqa: F401
 from src.core.lazy_loader import ModuleLazyLoader
 
 
-if TYPE_CHECKING:
+# if TYPE_CHECKING:
     from .auto_fix_suggester import AutoFixSuggester as AutoFixSuggester  # noqa: F401
     from .blame_info import BlameInfo as BlameInfo  # noqa: F401
     from .code_context import CodeContext as CodeContext  # noqa: F401
@@ -50,29 +50,29 @@ if TYPE_CHECKING:
     from .suggested_fix import SuggestedFix as SuggestedFix  # noqa: F401
 
 _LAZY_REGISTRY = {
-    "AutoFixSuggester": ("src.observability.errors.auto_fix_suggester", "AutoFixSuggester"),
-    "BlameInfo": ("src.observability.errors.blame_info", "BlameInfo"),
-    "CodeContext": ("src.observability.errors.code_context", "CodeContext"),
-    "ContextAggregator": ("src.observability.errors.context_aggregator", "ContextAggregator"),
-    "CustomError": ("src.observability.errors.custom_err", "CustomError"),
-    "ErrorAgent": ("src.observability.errors.error_agent", "ErrorAgent"),
-    "ErrorCategory": ("src.observability.errors.error_category", "ErrorCategory"),
-    "ErrorClassifier": ("src.observability.errors.error_classifier", "ErrorClassifier"),
-    "ErrorDatabase": ("src.observability.errors.error_database", "ErrorDatabase"),
-    "ErrorDescriptor": ("src.observability.errors.error_descriptor", "ErrorDescriptor"),
-    "ErrorHandler": ("src.observability.errors.error_handler", "ErrorHandler"),
-    "ErrorManager": ("src.observability.errors.error_manager", "ErrorManager"),
-    "ErrorPriority": ("src.observability.errors.error_priority", "ErrorPriority"),
-    "ErrorReport": ("src.observability.errors.error_report", "ErrorReport"),
-    "ErrorSeverity": ("src.observability.errors.error_severity", "ErrorSeverity"),
-    "ErrorStats": ("src.observability.errors.error_stats", "ErrorStats"),
-    "ErrorStatus": ("src.observability.errors.error_status", "ErrorStatus"),
-    "NotificationManager": ("src.observability.errors.notification_manager", "NotificationManager"),
-    "ResolutionRecommendation": ("src.observability.errors.resolution_recommendation", "ResolutionRecommendation"),
-    "RootCauseAnalysis": ("src.observability.errors.root_cause_analysis", "RootCauseAnalysis"),
-    "SolutionVerifier": ("src.observability.errors.solution_verifier", "SolutionVerifier"),
-    "SourceLocation": ("src.observability.errors.source_location", "SourceLocation"),
-    "SuggestedFix": ("src.observability.errors.suggested_fix", "SuggestedFix"),
+#     "AutoFixSuggester": ("src.observability.errors.auto_fix_suggester", "AutoFixSuggester"),
+#     "BlameInfo": ("src.observability.errors.blame_info", "BlameInfo"),
+#     "CodeContext": ("src.observability.errors.code_context", "CodeContext"),
+#     "ContextAggregator": ("src.observability.errors.context_aggregator", "ContextAggregator"),
+#     "CustomError": ("src.observability.errors.custom_err", "CustomError"),
+#     "ErrorAgent": ("src.observability.errors.error_agent", "ErrorAgent"),
+#     "ErrorCategory": ("src.observability.errors.error_category", "ErrorCategory"),
+#     "ErrorClassifier": ("src.observability.errors.error_classifier", "ErrorClassifier"),
+#     "ErrorDatabase": ("src.observability.errors.error_database", "ErrorDatabase"),
+#     "ErrorDescriptor": ("src.observability.errors.error_descriptor", "ErrorDescriptor"),
+#     "ErrorHandler": ("src.observability.errors.error_handler", "ErrorHandler"),
+#     "ErrorManager": ("src.observability.errors.error_manager", "ErrorManager"),
+#     "ErrorPriority": ("src.observability.errors.error_priority", "ErrorPriority"),
+#     "ErrorReport": ("src.observability.errors.error_report", "ErrorReport"),
+#     "ErrorSeverity": ("src.observability.errors.error_severity", "ErrorSeverity"),
+#     "ErrorStats": ("src.observability.errors.error_stats", "ErrorStats"),
+#     "ErrorStatus": ("src.observability.errors.error_status", "ErrorStatus"),
+#     "NotificationManager": ("src.observability.errors.notification_manager", "NotificationManager"),
+#     "ResolutionRecommendation": ("src.observability.errors.resolution_recommendation", "ResolutionRecommendation"),
+#     "RootCauseAnalysis": ("src.observability.errors.root_cause_analysis", "RootCauseAnalysis"),
+#     "SolutionVerifier": ("src.observability.errors.solution_verifier", "SolutionVerifier"),
+#     "SourceLocation": ("src.observability.errors.source_location", "SourceLocation"),
+#     "SuggestedFix": ("src.observability.errors.suggested_fix", "SuggestedFix"),
 }
 
 
@@ -83,4 +83,7 @@ def __getattr__(name: str) -> Any:
     return _loader.load(name)
 
 
-__all__ = ["VERSION"] + list(_LAZY_REGISTRY.keys())
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # __all__ = ["VERSION"] + list(_LAZY_REGISTRY.keys())

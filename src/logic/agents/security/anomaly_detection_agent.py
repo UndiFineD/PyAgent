@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,8 +15,7 @@
 """
 Anomaly Detection Agent - Monitor agent interactions and flag anomalous behavior
 
-[Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 This module provides an AnomalyDetectionAgent exposing tools to record agent interactions, check per-agent or global anomalies, and update baselines; it is intended to be wired into the PyAgent lifecycle so other agents or system components can call record_agent_interaction and query anomalies.

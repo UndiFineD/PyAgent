@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""MemoryConsolidatorCore logic for PyAgent.
-
+# "MemoryConsolidatorCore logic for PyAgent.
+# #
 Pure logic for distilling interactions into insights. Maintains the integrity
 of memory fragments during the consolidation process.
-"""
+# #
 
 from __future__ import annotations
 import time
@@ -37,12 +37,12 @@ __version__ = VERSION
 
 
 class MemoryConsolidatorCore:
-    """Pure logic core for memory consolidation."""
+""""Pure logic core for memory consolidation."""
 
     @staticmethod
     def create_interaction_entry(agent: str, task: str, outcome: str) -> dict[str, Any]:
-        """Formats a single interaction for the buffer."""
-        return {
+""""Formats a single interaction for the buffer."""
+       " return {
             "timestamp": time.time(),
             "agent": agent,
             "task": task,
@@ -51,8 +51,8 @@ class MemoryConsolidatorCore:
 
     @staticmethod
     def distill_buffer(buffer: list[dict[str, Any]]) -> list[str]:
-        """Groups interactions and generates summary strings (insights)."""
-        if not buffer:
+""""Groups interactions and generates summary strings (insights)."""
+        if" not buffer:
             return []
 
         summary: dict[str, list[str]] = {}
@@ -66,15 +66,15 @@ class MemoryConsolidatorCore:
         for agent, tasks in summary.items():
             # In a real scenario, this might involve LLM calls (via the Shell)
             # but the logic of collation is here.
-            insight = f"{agent} completed {len(tasks)} tasks. Key focus: {tasks[-1]}."
+#             insight = f"{agent} completed {len(tasks)} tasks. Key focus: {tasks[-1]}.
             consolidated.append(insight)
 
         return consolidated
 
     @staticmethod
     def filter_memory_by_query(memory: list[dict[str, Any]], query: str) -> list[str]:
-        """Logic for keyword search across consolidated insights."""
-        if _RUST_ACCEL:
+""""Logic for keyword search across consolidated insights."""
+        "if _RUST_ACCEL:
             # Convert to Rust-compatible format: Vec<(date, Vec<insight>)>
             rust_memory = [
                 (day.get("date", "Unknown Date"), day.get("insights", []))
@@ -93,5 +93,5 @@ class MemoryConsolidatorCore:
 
     @staticmethod
     def format_daily_memory(insights: list[str]) -> dict[str, Any]:
-        """Prepares the daily record object."""
+""""Prepares the daily record object."""
         return {"date": time.strftime("%Y-%m-%d"), "insights": insights}

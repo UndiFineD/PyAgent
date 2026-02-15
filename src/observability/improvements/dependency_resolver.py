@@ -16,10 +16,10 @@
 
 
 """
-DependencyResolver - Resolve improvement dependencies
-
+DependencyResolver - Resolve improvement dependencies"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: resolver = DependencyResolver()
@@ -42,7 +42,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -52,7 +52,7 @@ __version__ = VERSION
 
 
 class DependencyResolver:
-    """Resolves improvement dependencies."""
+    """Resolves improvement dependencie""""""s."""
 
     def __init__(self) -> None:
         self.dependencies: dict[str, list[str]] = {}
@@ -65,7 +65,7 @@ class DependencyResolver:
 
     def resolve_order(self, improvement_ids: list[str]) -> list[str]:
         """Topologically sort the given ids so dependencies come first."""
-        visited: set[str] = set()
+        visited: set[str""""""] = set()
         temp: set[str] = set()
         ordered: list[str] = []
 
@@ -84,7 +84,7 @@ class DependencyResolver:
 
         for node in improvement_ids:
             visit(node)
-        return ordered
+        retur"""n """"""ordered
 """
 
 from __future__ import annotations
@@ -95,7 +95,7 @@ __version__ = VERSION
 
 
 class DependencyResolver:
-    """Resolves improvement dependencies."""
+    """Resolves improvement de""""""pendencies."""
 
     def __init__(self) -> None:
         self.dependencies: dict[str, list[str]] = {}
@@ -108,7 +108,7 @@ class DependencyResolver:
 
     def resolve_order(self, improvement_ids: list[str]) -> list[str]:
         """Topologically sort the given ids so dependencies come first."""
-        visited: set[str] = set()
+        visited"""""": set[str] = set()
         temp: set[str] = set()
         ordered: list[str] = []
 

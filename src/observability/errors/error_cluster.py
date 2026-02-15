@@ -15,24 +15,50 @@
 # limitations under the License.
 
 
-"""
-ErrorCluster - Grouping container for similar agent errors
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
+# ErrorCluster - Grouping container for similar agent errors
+
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
 Instantiate ErrorCluster to group related error identifiers, attach a human name, matching pattern and optional description for aggregation and reporting within agent error handling
 
-WHAT IT DOES:
-Holds metadata for a cluster of similar errors: id, name, pattern, list of error_ids and an optional description used by higher-level error aggregation and diagnostics
+# WHAT IT DOES:
+# Holds metadata for a cluster of similar errors: id, name, pattern, list of error_ids and an optional description used by higher-level error aggregation and diagnostics
 
-WHAT IT SHOULD DO BETTER:
+# WHAT IT SHOULD DO BETTER:
 Document validation rules for pattern and id, provide immutability or controlled mutation methods, and add helper methods for merging, matching and serializing clusters
 
-FILE CONTENT SUMMARY:
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+@dataclass
+# class ErrorCluster:
+    A cluster of similar errors.
+
+    id: str
+    name: str
+    pattern: str
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     error_ids: list[str] = field(default_factory=lambda: [])
+# #     description: str =
+
 
 from __future__ import annotations
 
@@ -45,30 +71,13 @@ __version__ = VERSION
 
 @dataclass
 class ErrorCluster:
-    """A cluster of similar errors."""
+    A cluster of similar errors.
 
     id: str
     name: str
     pattern: str
-    error_ids: list[str] = field(default_factory=lambda: [])
-    description: str = ""
-"""
-
-from __future__ import annotations
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ErrorCluster:
-    """A cluster of similar errors."""
-
-    id: str
-    name: str
-    pattern: str
-    error_ids: list[str] = field(default_factory=lambda: [])
-    description: str = ""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     error_ids: list[str] = field(default_factory=lambda: [])
+# #     description: str =

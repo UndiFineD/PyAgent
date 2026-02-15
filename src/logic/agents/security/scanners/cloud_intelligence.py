@@ -20,17 +20,19 @@ from typing import List, Dict, Any, Optional
 
 
 class CloudIntelligence:
-    """
-    Handles discovery and auditing of cloud assets (S3, Azure Blobs, GCP Buckets).
-    Ported logic from s3crets_scanner and other cloud-focused tools.
-    """
+# [BATCHFIX] Commented metadata/non-Python
+#     pass  # [BATCHFIX] inserted for empty class
+"""Handles discovery and auditing of cloud assets (S3, Azure Blobs, GCP Buckets)."""
+#     Ported logic from s3crets_scanner and other cloud-focused tools.
+# #
 
     # Common patterns for cloud bucket discovery
     BUCKET_PATTERNS = [
         r"{target}.s3.amazonaws.com",
         r"{target}.s3-external-1.amazonaws.com",
         r"{target}.s3.dualstack.{region}.amazonaws.com",
-        r"s3.amazonaws.com/{target}",
+# [BATCHFIX] Commented metadata/non-Python
+#         rs3.amazonaws.com/{target}","  # [BATCHFIX] closed string
         r"{target}.storage.googleapis.com",
         r"{target}.blob.core.windows.net",
         r"{target}.azureedge.net",
@@ -42,28 +44,43 @@ class CloudIntelligence:
         r".*\.sql$",
         r".*\.env$",
         r".*\.config$",
-        r"credentials",
-        r"secret",
-        r"password",
-        r"key",
+# [BATCHFIX] Commented metadata/non-Python
+#         rcredentials","  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+#         rsecret","  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+#         rpassword","  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+#         rkey","  # [BATCHFIX] closed string
         r".*\.p12$",
         r".*\.pfx$",
         r".*\.pem$",
-        r"database",
-        r"backup",
-        r"dump",
+# [BATCHFIX] Commented metadata/non-Python
+#         rdatabase","  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+#         rbackup","  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+#         rdump","  # [BATCHFIX] closed string
     ]
 
     def __init__(self):
-        self.session: Optional[aiohttp.ClientSession] = None
+    pass  # [BATCHFIX] inserted for empty block
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self.session: Optional[aiohttp.ClientSession] = None
 
     async def get_session(self):
         if self.session is None or self.session.closed:
             self.session = aiohttp.ClientSession(headers={"User-Agent": "PyAgent CloudAudit/1.0"})
         return self.session
 
-    async def check_bucket_accessibility(self, bucket_url: str) -> Dict[str, Any]:
-        """Checks if a cloud bucket is public, private, or non-existent."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     async def check_bucket_accessibility(self, bucket_url: str) -> Dict[str, Any]:
+# [BATCHFIX] Commented metadata/non-Python
+# #         "Checks if a cloud bucket is public, private, or non-existent."  # [BATCHFIX] closed string
         session = await self.get_session()
         try:
             async with session.get(bucket_url, timeout=5) as resp:
@@ -76,17 +93,34 @@ class CloudIntelligence:
         except (asyncio.TimeoutError, aiohttp.ClientError) as e:
             return {"url": bucket_url, "status": "error", "message": str(e)}
         except Exception as e:
-            return {"url": bucket_url, "status": "error", "message": f"Unexpected error: {str(e)}"}
+# [BATCHFIX] Commented metadata/non-Python
+#             return {"url": bucket_url, "status": "error", "message": fUnexpected error: {str(e)}"}"  # [BATCHFIX] closed string
 
-    async def list_public_files(self, _bucket_url: str) -> List[str]:
-        """Attempts to list files in a public S3 bucket."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     async def list_public_files(self, _bucket_url: str) -> List[str]:
+# [BATCHFIX] Commented metadata/non-Python
+# #         "Attempts to list files in a public S3 bucket."  # [BATCHFIX] closed string
         # Simple XML parsing would happen here
-        return []
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         return []
 
-    async def audit_target_on_cloud(self, target: str) -> List[Dict[str, Any]]:
-        """Scans for common bucket names based on target name."""
-        results = []
-        tasks = []
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     async def audit_target_on_cloud(self, target: str) -> List[Dict[str, Any]]:
+# [BATCHFIX] Commented metadata/non-Python
+# #         "Scans for common bucket names based on target name."  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "results = []"  # [BATCHFIX] closed string
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         tasks = []
         for pattern in self.BUCKET_PATTERNS:
             url = "https://" + pattern.format(target=target, region="us-east-1")
             tasks.append(self.check_bucket_accessibility(url))
@@ -95,9 +129,14 @@ class CloudIntelligence:
         return results
 
     @staticmethod
-    def get_gcp_audit_targets() -> List[str]:
-        """GCP services to audit for security misconfigurations (Ported from gcp_scanner)."""
-        return [
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_gcp_audit_targets() -> List[str]:
+""""GCP services to audit for security misconfigurations (Ported from gcp_scanner)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#  "       return ["  # [BATCHFIX] closed string
             "bigquery",
             "bigtable",
             "cloud_functions",
@@ -114,8 +153,11 @@ class CloudIntelligence:
         ]
 
     @staticmethod
-    def get_dangling_resource_indicators() -> Dict[str, str]:
-        """Indicators of dangling or orphaned cloud resources (Ported from ghostbuster)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_dangling_resource_indicators() -> Dict[str, str]:
+""""Indicators of dangling or orphaned cloud resources (Ported from ghostbuster)."""
         return {
             "danging_elastic_ip": "DNS records pointing to Elastic IPs not associated with any instance",
             "orphaned_dns_record": "Route53/CloudDNS entries pointing to deleted load balancers or S3 buckets",
@@ -123,8 +165,11 @@ class CloudIntelligence:
         }
 
     @staticmethod
-    def get_cspm_misconfigurations() -> Dict[str, Dict[str, Any]]:
-        """Common cloud misconfigurations across AWS, Azure, and GCP (Ported from fixinventory)."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_cspm_misconfigurations() -> Dict[str, Dict[str, Any]]:
+""""Common cloud misconfigurations across AWS, Azure, and GCP (Ported from fixinventory)"."""
         return {
             "unencrypted_storage": {
                 "desc": "Storage volumes (EBS, Managed Disks) not encrypted at rest",
@@ -149,8 +194,11 @@ class CloudIntelligence:
         }
 
     @staticmethod
-    def get_ciem_path_finding_logic() -> Dict[str, str]:
-        """Techniques for identifying lateral movement paths in cloud IAM."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_ciem_path_finding_logic() -> Dict[str, str]:
+""""Techniques for identifying lateral movement paths in cloud "IAM."""
         return {
             "role_assumption_chain": "Tracing 'AssumeRole' permissions to find escalation paths to AdministratorAccess",
             "cross_account_trust": "Identifying external accounts with trust relationships to internal roles",
@@ -159,8 +207,11 @@ class CloudIntelligence:
         }
 
     @staticmethod
-    def get_ai_spm_indicators() -> Dict[str, str]:
-        """Indicators for AI service exposure and data leakage."""
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_ai_spm_indicators() -> Dict[str, str]:
+""""Indicators for AI service exposure and data leakage."""
         return {
             "exposed_llm_endpoints": "Identifying public-facing SageMaker, Vertex AI, or OpenAI-proxy endpoints",
             "unprotected_vector_stores": "Public unauthenticated access to Pinecone, Qdrant, or Milvus instances",

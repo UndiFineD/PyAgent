@@ -16,10 +16,10 @@
 
 
 """
-Improvement Priority - Defines priority levels for agent improvements
-
+Improvement Priority - Defines priority levels for agent improvements"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.base.improvement_priority import ImprovementPriority
@@ -35,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -48,7 +48,7 @@ __version__ = VERSION
 
 class ImprovementPriority(Enum):
     """Priority levels for improvements."""
-    CRITICAL = 5
+    CRITIC""""""AL = 5
     HIGH = 4
     MEDIUM = 3
     LOW = 2

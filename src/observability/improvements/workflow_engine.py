@@ -13,9 +13,8 @@
 # limitations under the License.
 
 """
-Workflow Engine - Manages improvement workflow transitions
-
-DATE: 2026-02-12
+Workflow Engine - Manages improvement workflow transitions"""
+# DATE: 2026-02-12"""
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import WorkflowEngine from workflow_engine and instantiate: engine = WorkflowEngine()
@@ -33,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 - Add concurrency and transactional safety for multi-threaded or multi-process environments and persist transitions to a durable store when used in production.
 - Improve error messaging with context, and include unit tests for edge cases (unknown statuses, no-op transitions, invalid improvement objects).
 - Consider supporting asynchronous workflows, validation hooks, and richer TransitionResult payloads (previous_status, timestamp, actor).
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -46,7 +45,7 @@ __version__ = VERSION
 
 
 class WorkflowEngine:
-    """Manages improvement workflow transitions."""
+    """Manages improvement workflow transition""""""s."""
 
     def __init__(self) -> None:
         self.states: list[str] = [

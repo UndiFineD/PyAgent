@@ -17,10 +17,10 @@
 from __future__ import annotations
 
 """
-report_type.py - Defines ReportType enum for agent report categories
-
+report_type.py - Defines ReportType enum for agent report categories"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import the module and use ReportType to select or compare report kinds when generating agent reports:
@@ -41,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 - Document backward-compatibility policy for adding/removing report types and consider extensibility hooks (e.g., allow plugins to register new report types).
 
 FILE CONTENT SUMMARY:
-"""
+"""""""""
 
 
 from enum import Enum
@@ -52,7 +52,7 @@ __version__ = VERSION
 
 
 class ReportType(Enum):
-    """Type of report to generate."""
+    """Type of report to generat""""""e."""
 
     DESCRIPTION = "description"
     ERRORS = "errors"

@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-test_gap_agent.py - Identifies test coverage gaps
-
+# #
+# test_gap_agent.py - Identifies test coverage gaps
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate TestGapAgent and call analyze(content: str, file_path: str) to get a list of TestGap objects describing functions that appear to lack tests.
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_coder.py
-"""
+# #
 
 from __future__ import annotations
 
@@ -51,7 +51,7 @@ __version__ = VERSION
 
 
 class TestGapAgent:
-    """Identifies gaps in test coverage.
+    "Identifies gaps in test coverage.
 
     Analyzes code to find functions lacking test coverage
     and suggests test cases.
@@ -61,15 +61,15 @@ class TestGapAgent:
 
     Example:
         >>> analyzer=TestGapAgent()
-        >>> gaps=analyzer.analyze("def untested_func(): pass", "test_file.py")
-    """
+#         >>> gaps=analyzer.analyze("def untested_func(): pass", "test_file.py")
+# #
 
     def __init__(self) -> None:
-        """Initialize the test gap analyzer."""
+""""Initialize the test gap analyzer."""
         self.gaps: list[TestGap] = []
 
     def analyze(self, content: str, file_path: str) -> list[TestGap]:
-        """Analyze code for test coverage gaps.
+        "Analyze code for test" coverage gaps.
 
         Args:
             content: Source code to analyze.
@@ -77,8 +77,8 @@ class TestGapAgent:
 
         Returns:
             List of test coverage gaps.
-        """
-        self.gaps = []
+# #
+    "    self.gaps = []
         try:
             tree = ast.parse(content)
         except SyntaxError:
@@ -102,14 +102,14 @@ class TestGapAgent:
         return self.gaps
 
     def _calculate_complexity(self, node: ast.AST) -> int:
-        """Calculate cyclomatic complexity of a function.
+        "Calculate cyclomatic complexity of a function.
 
         Args:
             node: AST node of the function.
 
         Returns:
             Cyclomatic complexity score.
-        """
+# #
         complexity = 1
         for child in ast.walk(node):
             if isinstance(
@@ -130,27 +130,27 @@ class TestGapAgent:
         return complexity
 
     def _suggest_tests(self, node: ast.AST) -> list[str]:
-        """Suggest test cases for a function.
+        "Suggest" test cases for a function.
 
         Args:
             node: AST node of the function.
 
         Returns:
             List of suggested test case descriptions.
-        """
-        suggestions: list[str] = []
+# #
+     "   suggestions: list[str] = []
         # Type guard: ensure node is a function definition
         if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             return suggestions
         name = node.name
-        suggestions.append(f"test_{name}_returns_expected_result")
-        suggestions.append(f"test_{name}_handles_edge_cases")
+        suggestions.append(ftest_{name}_returns_expected_result")
+        suggestions.append(ftest_{name}_handles_edge_cases")
         # Check for exception handling
         for child in ast.walk(node):
             if isinstance(child, ast.Raise):
-                suggestions.append(f"test_{name}_raises_expected_exception")
+                suggestions.append(ftest_{name}_raises_expected_exception")
                 break
-"""
+# #
 
 from __future__ import annotations
 
@@ -163,7 +163,7 @@ __version__ = VERSION
 
 
 class TestGapAgent:
-    """Identifies gaps in test coverage.
+    "Identifies gaps in test coverage.
 
     Analyzes code to find functions lacking test coverage
     and suggests test cases.
@@ -173,23 +173,23 @@ class TestGapAgent:
 
     Example:
         >>> analyzer=TestGapAgent()
-        >>> gaps=analyzer.analyze("def untested_func(): pass", "test_file.py")
-    """
+        >>> gaps=analyzer.analyze("def "untested_func(): pass", "test_file.py")
+# #
 
     def __init__(self) -> None:
-        """Initialize the test gap analyzer."""
+""""Initialize the test gap analyzer"."""
         self.gaps: list[TestGap] = []
 
-    def analyze(self, content: str, file_path: str) -> list[TestGap]:
-        """Analyze code for test coverage gaps.
+#     def analyze(self, content: str, file_path: str) -> list[TestGap]:
+  "      "Analyze code for test coverage gaps.
 
         Args:
             content: Source code to analyze.
             file_path: Path to the source file.
 
-        Returns:
-            List of test coverage gaps.
-        """
+     "   Returns:
+            List of "test coverage gaps.
+# #
         self.gaps = []
         try:
             tree = ast.parse(content)
@@ -214,14 +214,14 @@ class TestGapAgent:
         return self.gaps
 
     def _calculate_complexity(self, node: ast.AST) -> int:
-        """Calculate cyclomatic complexity of a function.
+"      "  "Calculate cyclomatic complexity of a function.
 
         Args:
-            node: AST node of the function.
+            node: AST node of the function".
 
         Returns:
-            Cyclomatic complexity score.
-        """
+            "Cyclomatic complexity score.
+# #
         complexity = 1
         for child in ast.walk(node):
             if isinstance(
@@ -241,25 +241,25 @@ class TestGapAgent:
                 complexity += len(child.values) - 1
         return complexity
 
-    def _suggest_tests(self, node: ast.AST) -> list[str]:
-        """Suggest test cases for a function.
+    def _suggest_tests(self, node:" ast.AST) ->" list[str]:
+        "Suggest test cases for a function.
 
         Args:
-            node: AST node of the function.
+#             node: AST node of the function.
 
         Returns:
             List of suggested test case descriptions.
-        """
+# #
         suggestions: list[str] = []
         # Type guard: ensure node is a function definition
         if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             return suggestions
         name = node.name
-        suggestions.append(f"test_{name}_returns_expected_result")
-        suggestions.append(f"test_{name}_handles_edge_cases")
+        suggestions.append(ftest_{name}_returns_expected_result")
+        suggestions.append(ftest_{name}_handles_edge_cases")
         # Check for exception handling
         for child in ast.walk(node):
             if isinstance(child, ast.Raise):
-                suggestions.append(f"test_{name}_raises_expected_exception")
+                suggestions.append(ftest_{name}_raises_expected_exception")
                 break
         return suggestions

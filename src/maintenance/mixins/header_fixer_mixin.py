@@ -18,7 +18,7 @@
 HeaderFixerMixin - Fix file license headers and __future__ import placement
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Mix into an agent or utility class to provide header-cleaning capability.

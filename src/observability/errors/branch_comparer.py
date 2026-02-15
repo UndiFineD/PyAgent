@@ -15,26 +15,29 @@
 # limitations under the License.
 
 
-"""
-Branch Comparer - Comparing errors across git branches
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-Instantiate BranchComparer, call set_branch_errors(branch, error_ids) for each branch, then use compare(branch_a, branch_b) or the helpers get_new_errors(base_branch, feature_branch) and get_fixed_errors(base_branch, feature_branch).
+# Branch Comparer - Comparing errors across git branches
 
-WHAT IT DOES:
-Provides a lightweight in-memory facility to record sets of error IDs per branch and compute differences: errors only in A, only in B, and common errors. Returns a BranchComparison dataclass-like object with those lists.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
+# Instantiate BranchComparer, call set_branch_errors(branch, error_ids) for each branch, then use compare(branch_a, branch_b) or the helpers get_new_errors(base_branch, feature_branch) and get_fixed_errors(base_branch, feature_branch).
 
-WHAT IT SHOULD DO BETTER:
-- Validate inputs and raise clear exceptions for unknown branches instead of silently treating them as empty sets.
-- Preserve deterministic ordering (e.g., sort returned lists) and maintain original error metadata rather than just IDs.
-- Add docstring examples, logging, and unit tests covering edge cases (empty branches, identical branches, large sets), and consider streaming/async interfaces for large datasets.
+# WHAT IT DOES:
+# Provides a lightweight in-memory facility to record sets of error IDs per branch and compute differences: errors only in A, only in B, and common errors. Returns a BranchComparison dataclass-like object with those lists.
 
-FILE CONTENT SUMMARY:
+# WHAT IT SHOULD DO BETTER:
+# - Validate inputs and raise clear exceptions for unknown branches instead of silently treating them as empty sets.
+# - Preserve deterministic ordering (e.g., sort returned lists) and maintain original error metadata rather than just IDs.
+# - Add docstring examples, logging, and unit tests covering edge cases (empty branches, identical branches, large sets), and consider streaming/async interfaces for large datasets.
+
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
 
 from __future__ import annotations
 
@@ -45,31 +48,40 @@ from .branch_comparison import BranchComparison
 __version__ = VERSION
 
 
-class BranchComparer:
-    """Compares errors across git branches.
+# class BranchComparer:
+    Compares errors across git branches.
 
     Identifies errors that exist only in specific branches
     or are common across branches.
 
     Attributes:
         branch_errors: Map of branch names to error sets.
-    """
+    
 
     def __init__(self) -> None:
-        """Initialize the branch comparer."""
-        self.branch_errors: dict[str, set[str]] = {}
+        Initialize the branch comparer.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self.branch_errors: dict[str, set[str]] = {}
 
-    def set_branch_errors(self, branch: str, error_ids: list[str]) -> None:
-        """Set errors for a branch.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def set_branch_errors(self, branch: str, error_ids: list[str]) -> None:
+        Set errors for a branch.
 
         Args:
             branch: Branch name.
             error_ids: List of error IDs in the branch.
-        """
-        self.branch_errors[branch] = set(error_ids)
+        
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self.branch_errors[branch] = set(error_ids)
 
     def compare(self, branch_a: str, branch_b: str) -> BranchComparison:
-        """Compare errors between two branches.
+        Compare errors between two branches.
 
         Args:
             branch_a: First branch name.
@@ -77,11 +89,13 @@ class BranchComparer:
 
         Returns:
             BranchComparison with differences.
-        """
+        
         errors_a = self.branch_errors.get(branch_a, set())
         errors_b = self.branch_errors.get(branch_b, set())
 
-        return BranchComparison(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#         return BranchComparison(
             branch_a=branch_a,
             branch_b=branch_b,
             errors_only_in_a=list(errors_a - errors_b),
@@ -89,8 +103,11 @@ class BranchComparer:
             common_errors=list(errors_a & errors_b),
         )
 
-    def get_new_errors(self, base_branch: str, feature_branch: str) -> list[str]:
-        """Get errors introduced in feature branch.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_new_errors(self, base_branch: str, feature_branch: str) -> list[str]:
+        Get errors introduced in feature branch.
 
         Args:
             base_branch: Base branch name (e.g., main).
@@ -98,12 +115,15 @@ class BranchComparer:
 
         Returns:
             List of error IDs only in feature branch.
-        """
+        
         comparison = self.compare(base_branch, feature_branch)
         return comparison.errors_only_in_b
 
-    def get_fixed_errors(self, base_branch: str, feature_branch: str) -> list[str]:
-        """Get errors fixed in feature branch.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_fixed_errors(self, base_branch: str, feature_branch: str) -> list[str]:
+        Get errors fixed in feature branch.
 
         Args:
             base_branch: Base branch name.
@@ -111,10 +131,10 @@ class BranchComparer:
 
         Returns:
             List of error IDs fixed in feature branch.
-        """
+        
         comparison = self.compare(base_branch, feature_branch)
         return comparison.errors_only_in_a
-"""
+
 
 from __future__ import annotations
 
@@ -126,30 +146,39 @@ __version__ = VERSION
 
 
 class BranchComparer:
-    """Compares errors across git branches.
+    Compares errors across git branches.
 
     Identifies errors that exist only in specific branches
     or are common across branches.
 
     Attributes:
         branch_errors: Map of branch names to error sets.
-    """
+    
 
     def __init__(self) -> None:
-        """Initialize the branch comparer."""
-        self.branch_errors: dict[str, set[str]] = {}
+        Initialize the branch comparer.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self.branch_errors: dict[str, set[str]] = {}
 
-    def set_branch_errors(self, branch: str, error_ids: list[str]) -> None:
-        """Set errors for a branch.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def set_branch_errors(self, branch: str, error_ids: list[str]) -> None:
+        Set errors for a branch.
 
         Args:
             branch: Branch name.
             error_ids: List of error IDs in the branch.
-        """
-        self.branch_errors[branch] = set(error_ids)
+        
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         self.branch_errors[branch] = set(error_ids)
 
     def compare(self, branch_a: str, branch_b: str) -> BranchComparison:
-        """Compare errors between two branches.
+        Compare errors between two branches.
 
         Args:
             branch_a: First branch name.
@@ -157,11 +186,13 @@ class BranchComparer:
 
         Returns:
             BranchComparison with differences.
-        """
+        
         errors_a = self.branch_errors.get(branch_a, set())
         errors_b = self.branch_errors.get(branch_b, set())
 
-        return BranchComparison(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#         return BranchComparison(
             branch_a=branch_a,
             branch_b=branch_b,
             errors_only_in_a=list(errors_a - errors_b),
@@ -169,8 +200,11 @@ class BranchComparer:
             common_errors=list(errors_a & errors_b),
         )
 
-    def get_new_errors(self, base_branch: str, feature_branch: str) -> list[str]:
-        """Get errors introduced in feature branch.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_new_errors(self, base_branch: str, feature_branch: str) -> list[str]:
+        Get errors introduced in feature branch.
 
         Args:
             base_branch: Base branch name (e.g., main).
@@ -178,12 +212,15 @@ class BranchComparer:
 
         Returns:
             List of error IDs only in feature branch.
-        """
+        
         comparison = self.compare(base_branch, feature_branch)
         return comparison.errors_only_in_b
 
-    def get_fixed_errors(self, base_branch: str, feature_branch: str) -> list[str]:
-        """Get errors fixed in feature branch.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     def get_fixed_errors(self, base_branch: str, feature_branch: str) -> list[str]:
+        Get errors fixed in feature branch.
 
         Args:
             base_branch: Base branch name.
@@ -191,6 +228,6 @@ class BranchComparer:
 
         Returns:
             List of error IDs fixed in feature branch.
-        """
+        
         comparison = self.compare(base_branch, feature_branch)
         return comparison.errors_only_in_a

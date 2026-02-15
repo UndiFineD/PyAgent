@@ -13,9 +13,8 @@
 # limitations under the License.
 
 """
-Scheduled Entry - Compatibility dataclass for scheduled improvements
-
-DATE: 2026-02-12
+Scheduled Entry - Compatibility dataclass for scheduled improvements"""
+# DATE: 2026-02-12"""
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate for tests: from scheduled_entry import ScheduledEntry
@@ -29,7 +28,7 @@ WHAT IT SHOULD DO BETTER:
 - Validate inputs (non-empty improvement_id, start_date timezone-awareness and not in the far past/future, resources elements are strings) and raise clear exceptions on invalid data.
 - Provide serialization helpers (to_dict/from_dict), richer representation, and optional immutability (frozen=True) for safer test fixtures.
 - Remove the type: ignore by using typing.List or by ensuring runtime Python compatibility, and add unit tests covering edge cases and serialization/round-trip behaviour.
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -42,7 +41,7 @@ __version__ = VERSION
 
 @dataclass
 class ScheduledEntry:
-    """Compatibility scheduled entry used by tests."""
+    """Compatibility scheduled entry used by test""""""s."""
 
     improvement_id: str
     start_date: datetime

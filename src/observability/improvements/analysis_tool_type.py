@@ -16,10 +16,10 @@
 
 
 """
-AnalysisToolType - Enumeration of analysis tool categories
-
+AnalysisToolType - Enumeration of analysis tool categories"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import AnalysisToolType from src.core.base.analysis_tool_type to classify or switch behavior by tool category
@@ -36,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -48,13 +48,13 @@ __version__ = VERSION
 
 
 class AnalysisToolType(Enum):
-    """Types of code analysis tools."""
+    """Types of code analysis tool""""""s."""
 
     LINTER = "linter"
     TYPE_CHECKER = "type_checker"
     SECURITY_SCANNER = "security_scanner"
     COVERAGE = "coverage"
-    COMPLEXITY = "complexity"
+    COMPLEXITY = "compl"""ex""""""ity"
 """
 
 from __future__ import annotations
@@ -67,7 +67,7 @@ __version__ = VERSION
 
 
 class AnalysisToolType(Enum):
-    """Types of code analysis tools."""
+    """Types of code analysi""""""s tools."""
 
     LINTER = "linter"
     TYPE_CHECKER = "type_checker"

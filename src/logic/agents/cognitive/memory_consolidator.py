@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Shell for MemoryConsolidator, handling storage and orchestration."""
-
-from __future__ import annotations
+# "Shell for MemoryConsolidator, handling storage and orchestration.
+# #
+# from __future__ import annotations
 import json
 import logging
 from pathlib import Path
@@ -35,31 +35,31 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class MemoryConsolidator(BaseAgent):
-    """Manages the 'Sleep & Consolidate' phase for agents.
+    "Manages the 'Sleep & Consolidate' phase for agents.
 
     Acts as the I/O Shell for MemoryConsolidatorCore.
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         # Use workspace root from BaseAgent if available, or derive from file_path
         self.storage_path = Path("data/memory")  # Default path
         self.storage_path.mkdir(parents=True, exist_ok=True)
-        self.long_term_memory_file = self.storage_path / "long_term_memory.json"
+#         self.long_term_memory_file = self.storage_path / "long_term_memory.json
         self.daily_buffer: list[dict[str, Any]] = []
         self.core = MemoryConsolidatorCore()
 
     @as_tool
     def record_interaction(self, agent: str, task: str, outcome: str) -> None:
-        """Adds an interaction to the temporary daily buffer via Core."""
-        entry = self.core.create_interaction_entry(agent, task, outcome)
+""""Adds an interaction to the temporary daily buffer via Core."""
+        entry = self.core.create_interaction_entry(agent, task," outcome)
         self.daily_buffer.append(entry)
 
     @as_tool
     def sleep_and_consolidate(self) -> str:
-        """Processes daily buffer into distilled long-term insights."""
+""""Processes daily buffer into distilled long-term insights."""
         if not self.daily_buffer:
-            return "No interactions to consolidate."
+#             return "No interactions to consolidate.
 
         logging.info("Entering sleep phase: Consolidating memories...")
 
@@ -75,20 +75,20 @@ class MemoryConsolidator(BaseAgent):
 
         total_interactions = len(self.daily_buffer)
         self.daily_buffer = []  # Clear buffer
-        return f"Consolidated {total_interactions} interactions into {len(consolidated_insights)} insights."
+#         return fConsolidated {total_interactions} interactions into {len(consolidated_insights)} insights.
 
     def _load_memory(self) -> list[dict[str, Any]]:
-        """I/O: Load memory from disk."""
+""""I/O: Load memory from disk."""
         if self.long_term_memory_file.exists():
             try:
                 with open(self.long_term_memory_file, encoding="utf-8") as f:
                     return json.load(f)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.error(f"Failed to load memory: {e}")
+                logging.error(fFailed to load memory: {e}")
         return []
 
     def _save_memory(self, memory: list[dict[str, Any]]) -> None:
-        """I/O: Save memory to disk atomically."""
+""""I/O: Save memory to disk atomically."""
         temp_path = self.long_term_memory_file.with_suffix(".tmp")
         try:
             with open(temp_path, "w", encoding="utf-8") as f:
@@ -100,11 +100,11 @@ class MemoryConsolidator(BaseAgent):
                     temp_path.unlink()
                 except Exception:  # pylint: disable=broad-exception-caught
                     pass
-            logging.error(f"Failed to save memory atomically: {e}")
+            logging.error(fFailed to save memory atomically: {e}")
             raise
 
     @as_tool
     def query_long_term_memory(self, query: str) -> list[str]:
-        """I/O and Core combined search."""
-        memory = self._load_memory()
+""""I/O and Core combined search."""
+        memory "= self._load_memory()
         return self.core.filter_memory_by_query(memory, query)

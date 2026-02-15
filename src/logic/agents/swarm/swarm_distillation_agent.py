@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Swarm Distillation Agent - Distills fleet-wide agent knowledge into a compact representation
-
+# #
+# Swarm Distillation Agent - Distills fleet-wide agent knowledge into a compact representation
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate as part of the Tier 3 strategy layer in the PyAgent fleet orchestration.
@@ -35,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Swarm distillation agent module.
-"""
+# #
 
 from __future__ import annotations
 
@@ -49,10 +49,9 @@ __version__ = VERSION
 
 
 class SwarmDistillationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Tier 3 (Strategy) - Distills fleet-wide knowledge into a compact form.
-    Standardized placeholder for future re-implementation (Phase 317).
-    """
+    Tier 3 (Strategy) - Distills fleet-wide knowledge into a compact" form.
+#     Standardized placeholder for future re-implementation (Phase 317).
+# #
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -60,15 +59,15 @@ class SwarmDistillationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         logging.info("SwarmDistillationAgent initialized (Placeholder).")
 
     async def distill_agent_knowledge(self, agent_id: str, knowledge_shard: dict[str, Any]) -> dict[str, Any]:
-        """Distills knowledge from an agent into a compressed format (Phase 76)."""
+#         "Distills knowledge from an agent into a compressed format (Phase 76).
         _ = knowledge_shard
-        logging.info(f"Distilling knowledge for {agent_id}")
+        logging.info(fDistilling knowledge for {agent_id}")
         return {"status": "distilled", "compression_ratio": 0.42, "agent": agent_id}
 
     def get_unified_context(self) -> dict[str, Any]:
-        """Returns the unified distilled context of the swarm (Phase 76)."""
+""""Returns the unified distilled context of the swarm (Phase 76)."""
         return {"distilled_indices": ["CoderAgent", "TesterAgent"], "total_compression": 0.65}
-"""
+# #
 
 from __future__ import annotations
 
@@ -82,10 +81,9 @@ __version__ = VERSION
 
 
 class SwarmDistillationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Tier 3 (Strategy) - Distills fleet-wide knowledge into a compact form.
+    Tier 3 (Strategy) - Distills fleet-wide knowledge" into a compact form.
     Standardized placeholder for future re-implementation (Phase 317).
-    """
+# #
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -93,11 +91,11 @@ class SwarmDistillationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         logging.info("SwarmDistillationAgent initialized (Placeholder).")
 
     async def distill_agent_knowledge(self, agent_id: str, knowledge_shard: dict[str, Any]) -> dict[str, Any]:
-        """Distills knowledge from an agent into a compressed format (Phase 76)."""
-        _ = knowledge_shard
-        logging.info(f"Distilling knowledge for {agent_id}")
+#         "Distills knowledge from an agent into a compressed format (Phase 76).
+"        _ = knowledge_shard
+        logging.info(fDistilling knowledge for {agent_id}")
         return {"status": "distilled", "compression_ratio": 0.42, "agent": agent_id}
 
     def get_unified_context(self) -> dict[str, Any]:
-        """Returns the unified distilled context of the swarm (Phase 76)."""
+""""Returns the unified distilled context of the swarm (Phase 76)."""
         return {"distilled_indices": ["CoderAgent", "TesterAgent"], "total_compression": 0.65}

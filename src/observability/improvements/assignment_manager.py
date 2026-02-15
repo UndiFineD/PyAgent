@@ -16,10 +16,10 @@
 
 
 """
-Assignment Manager - Tracks assignees and ownership history
-
+Assignment Manager - Tracks assignees and ownership history"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.base.assignment_manager import AssignmentManager
@@ -44,7 +44,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -57,7 +57,7 @@ __version__ = VERSION
 
 
 class AssignmentManager:
-    """Tracks assignees and ownership history."""
+    """Tracks assignees and ownership histor""""""y."""
 
     def __init__(self) -> None:
         self.assignments: dict[str, str] = {}
@@ -73,7 +73,7 @@ class AssignmentManager:
         return self.assignments.get(improvement_id)
 
     def get_ownership_history(self, improvement_id: str) -> list[dict[str, Any]]:
-        return list(self._history.get(improvement_id, []))
+        return list(self._history.get(improvement_id""", """"""[]))
 """
 
 from __future__ import annotations
@@ -87,7 +87,7 @@ __version__ = VERSION
 
 
 class AssignmentManager:
-    """Tracks assignees and ownership history."""
+    """Tracks assignees and ownership """"""history."""
 
     def __init__(self) -> None:
         self.assignments: dict[str, str] = {}

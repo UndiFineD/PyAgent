@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-Documentation Indexer Agent - Indexes workspace documentation and provides semantic pointers
-
+# #
+# Documentation Indexer Agent - Indexes workspace documentation and provides semantic pointers
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - As a script: python src/interface/.../documentation_indexer_agent.py "path/to/workspace" (module exposes create_main_function for CLI).
@@ -40,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 - Expose configuration (stopwords, tokenizer, embedding model, chunking strategy) and support paged/structured navigation results instead of plain strings.
 
 FILE CONTENT SUMMARY:
-Agent specializing in workspace-wide documentation indexing and retrieval (Tabby pattern)."""
+# Agent specializing in workspace-wide documentation indexing and retrieval (Tabby pattern).
 
 # pylint: disable=too-many-ancestors
 
@@ -55,18 +55,18 @@ __version__ = VERSION
 
 
 class DocumentationIndexerAgent(BaseAgent):
-    """Indexes workspace documentation and provides structured navigation/search."""
+""""Indexes workspace documentation and provides structured navigation/search."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Documentation Indexer Agent. "
-            "Your role is to crawl the workspace, build a map of all documentation, "
-            "and provide semantic pointers to relevant sections when asked."
+#             "You are the Documentation Indexer Agent.
+#             "Your role is to crawl the workspace, build a map of all documentation,
+#             "and provide semantic pointers to relevant sections when asked.
         )
 
     def build_index(self, root_path: str) -> dict[str, list[str]]:
-        """Crawls the workspace for markdown and text documentation."""
+""""Crawls the workspace for markdown and text documentation."""
         index = {"docs": [], "source_comments": [], "readmes": []}
         root = Path(root_path)
 
@@ -83,13 +83,13 @@ class DocumentationIndexerAgent(BaseAgent):
         return index
 
     def get_semantic_pointers(self, query: str) -> str:
-        """Returns pointers to documentation relevant to the query."""
+""""Returns pointers to documentation relevant to the query."""
         # This would use semantic search in a real implementation
-        return f"Searching index for: {query}... (Pointers to be generated via embeddings)"
+#         return fSearching index for: {query}... (Pointers to be generated via embeddings)
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Returns documentation snippets or paths."""
-        _ = target_file
+#         "Returns documentation snippets or paths.
+        "_ = target_file
         return self.get_semantic_pointers(prompt)
 
 
@@ -98,7 +98,7 @@ if __name__ == "__main__":
 
     main = create_main_function(DocumentationIndexerAgent, "Documentation Indexer Agent", "Path to index")
     main()
-"""
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -113,18 +113,18 @@ __version__ = VERSION
 
 
 class DocumentationIndexerAgent(BaseAgent):
-    """Indexes workspace documentation and provides structured navigation/search."""
+""""Indexes workspace documentation and provides structured navigation/search."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Documentation Indexer Agent. "
-            "Your role is to crawl the workspace, build a map of all documentation, "
-            "and provide semantic pointers to relevant sections when asked."
+#             "You are the Documentation Indexer Agent.
+#             "Your role is to crawl the workspace, build a map of all documentation,
+#             "and provide semantic pointers to relevant sections when asked.
         )
 
     def build_index(self, root_path: str) -> dict[str, list[str]]:
-        """Crawls the workspace for markdown and text documentation."""
+""""Crawls the workspace for markdown and text documentation."""
         index = {"docs": [], "source_comments": [], "readmes": []}
         root = Path(root_path)
 
@@ -141,12 +141,12 @@ class DocumentationIndexerAgent(BaseAgent):
         return index
 
     def get_semantic_pointers(self, query: str) -> str:
-        """Returns pointers to documentation relevant to the query."""
+""""Returns pointers to documentation relevant to the query."""
         # This would use semantic search in a real implementation
-        return f"Searching index for: {query}... (Pointers to be generated via embeddings)"
+#         return fSearching index for: {query}... (Pointers to be generated via embeddings)
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Returns documentation snippets or paths."""
+#         "Returns documentation snippets or paths.
         _ = target_file
         return self.get_semantic_pointers(prompt)
 

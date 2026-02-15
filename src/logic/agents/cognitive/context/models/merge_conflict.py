@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.utils.conflict_resolution import (
@@ -30,14 +30,14 @@ __version__ = VERSION
 
 @dataclass
 class MergeConflict:
-    """Merge conflict information.
+    "Merge conflict information.
 
     Attributes:
         section: Section with conflict.
         ours: Our version of content.
         theirs: Their version of content.
-        resolution: Applied resolution.
-    """
+#         resolution: Applied resolution.
+# #
 
     section: str
     ours: str

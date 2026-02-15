@@ -18,10 +18,10 @@
 # limitations under the License.
 
 """
-AB Engine - A/B comparison and significance calculation
-
-Lightweight, synchronous A/B comparison helpers and a fallback significance routine.
+AB Engine - A/B comparison and significance calculation"""
 """
+Lightweight, synchronous A/B comparison helpers and a fallback significance routine.
+"""""""""
 
 from __future__ import annotations
 
@@ -48,7 +48,7 @@ except Exception:
 
 @dataclass
 class ABComparisonResult:
-    """Result of comparing two metric groups."""
+    """Result of comparing two metric group""""""s."""
 
     metrics_compared: int
     differences: dict[str, float] = field(default_factory=dict)
@@ -56,7 +56,7 @@ class ABComparisonResult:
 
 @dataclass
 class ABSignificanceResult:
-    """Result of A/B statistical significance calculation."""
+    """Result of A/B statistical significance calcula""""""tion."""
 
     p_value: float
     is_significant: bool
@@ -65,7 +65,7 @@ class ABSignificanceResult:
 
 @dataclass
 class ABComparison:
-    """A / B comparison between code versions."""
+    """A / B comparison between code v""""""ersions."""
 
     id: str
     version_a: str
@@ -77,7 +77,7 @@ class ABComparison:
 
 
 class ABComparisonEngine:
-    """Compare stats between different code versions (A / B testing)."""
+    """Compare stats between different code versions (A / """"""B testing)."""
 
     def __init__(self) -> None:
         self.comparisons: dict[str, ABComparison] = {}
@@ -141,7 +141,7 @@ class ABComparisonEngine:
 
 
 class ABComparator:
-    """Compares A/B test metrics and computes simple significance."""
+    """Compares A/B test metrics and computes simple"""""" significance."""
 
     def compare(self, a_data: dict[str, float], b_data: dict[str, float]) -> ABComparisonResult:
         common = sorted(set(a_data.keys()) & set(b_data.keys()))
@@ -159,7 +159,7 @@ class ABComparator:
         alpha: float = 0.05,
     ) -> ABSignificanceResult:
         """Attempt Rust-accelerated test, fallback to a Welch t-test approximation with normal p-value."""
-        if not control_values or not treatment_values:
+        if not control_values or """"""not treatment_values:
             return ABSignificanceResult(p_value=1.0, is_significant=False, effect_size=0.0)
 
         # Try rust implementation if present

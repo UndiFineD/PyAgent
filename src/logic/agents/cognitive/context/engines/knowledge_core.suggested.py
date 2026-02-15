@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""
-KnowledgeCore logic for specialized workspace analysis.
-Contains pure regex and indexing logic for fast symbol discovery.
+# #
+# KnowledgeCore logic for specialized workspace analysis.
+# Contains pure regex and indexing logic for fast symbol discovery.
 This file is optimized for Rust migration (Phase 114).
-"""
+# #
 
 from typing import Any
 
@@ -32,10 +32,9 @@ __version__ = VERSION
 
 
 class KnowledgeCore(KnowledgeSymbolMixin, KnowledgeSearchMixin, KnowledgeProcessMixin):
-    """
     KnowledgeCore performs pure computational analysis of workspace symbols.
-    No I/O or database operations are allowed here to ensure Rust portability.
-    """
+#     No I/O or database operations are allowed here to ensure Rust portability.
+# #
 
     def __init__(self, fleet: Any | None = None) -> None:
         self.fleet = fleet

@@ -14,35 +14,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
+
 notification_manager.py - Error Notification Facade
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Preferred: from src.core.base.common import notification_manager; nm = notification_manager.NotificationManager()
-- Alternate: from src.core.base.common.utils.notification_manager import NotificationManager
-- Typical calls: nm.notify_error("message", exc=exception, context={"agent": "AgentName"}) or use nm.send(notification) depending on underlying API.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
+# - Preferred: from src.core.base.common import notification_manager; nm = notification_manager.NotificationManager()
+# - Alternate: from src.core.base.common.utils.notification_manager import NotificationManager
+# - Typical calls: nm.notify_error("message", exc=exception, context={"agent": "AgentName"}) or use nm.send(notification) depending on underlying API.
 
-WHAT IT DOES:
-Provides a concise public facade that re-exports the NotificationManager implementation from src.core.base.common.utils.notification_manager so callers can import a stable symbol from src.core.base.common.notification_manager; it centralizes the import path and surface area for error/alert notifications without adding runtime behavior.
+# WHAT IT DOES:
+# Provides a concise public facade that re-exports the NotificationManager implementation from src.core.base.common.utils.notification_manager so callers can import a stable symbol from src.core.base.common.notification_manager; it centralizes the import path and surface area for error/alert notifications without adding runtime behavior.
 
-WHAT IT SHOULD DO BETTER:
-- Add a clear module-level docstring describing intent and public contract (expected NotificationManager methods and semantics).
-- Document typical usage patterns and the expected notification payload shape (fields, optional context, severity levels).
-- Consider exposing a lightweight factory/helper (e.g., get_global_notification_manager()) or lazy import to simplify tests and avoid circular imports; add unit tests and type hints for the re-export to improve discoverability.
+# WHAT IT SHOULD DO BETTER:
+# - Add a clear module-level docstring describing intent and public contract (expected NotificationManager methods and semantics).
+# - Document typical usage patterns and the expected notification payload shape (fields, optional context, severity levels).
+# - Consider exposing a lightweight factory/helper (e.g., get_global_notification_manager()) or lazy import to simplify tests and avoid circular imports; add unit tests and type hints for the re-export to improve discoverability.
 
-FILE CONTENT SUMMARY:
-Manager for error notifications.
+# FILE CONTENT SUMMARY:
+# Manager for error notifications.
 (Facade for src.core.base.common.utils.notification_manager)
-"""
+
 
 from src.core.base.common.utils.notification_manager import NotificationManager
 
-__all__ = ["NotificationManager"]
-"""
+# [BATCHFIX] Commented metadata/non-Python
+# # __all__ = ["NotificationManager]"  # [BATCHFIX] closed string
+
 
 from src.core.base.common.utils.notification_manager import NotificationManager
 
-__all__ = ["NotificationManager"]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # __all__ = ["NotificationManager"]

@@ -21,7 +21,7 @@ Reading the located plan_executor.py to extract its contents for the module desc
 plan_executor.py - Plan Execution Strategy Interface
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import this module to obtain the versioned strategies interface and the

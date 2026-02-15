@@ -15,9 +15,9 @@
 from __future__ import annotations
 
 """
-Basic module docstring.
+Basic module docstring."""
+""""""
 """
-
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
@@ -25,4 +25,4 @@ __version__ = VERSION
 # Placeholder class
 class Placeholder:
     """Placeholder class."""
-    pass
+  """  p"""ass

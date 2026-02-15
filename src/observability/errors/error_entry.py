@@ -15,24 +15,24 @@
 # limitations under the License.
 
 
-"""
-ErrorEntry - Single error record representation and categorization
 
-Brief Summary
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-Instantiate ErrorEntry(message, file_path, line_number, error_type=..., severity=..., category=...) — id is auto-generated if omitted; set resolved/resolution_timestamp when fixing; tags default to an empty list.
+# ErrorEntry - Single error record representation and categorization
 
-WHAT IT DOES:
-Defines a dataclass ErrorEntry that stores common error metadata and, in __post_init__, generates a 12-char SHA256 id from a seed and infers ErrorCategory from error_type when category is OTHER.
+# Brief Summary
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
+# Instantiate ErrorEntry(message, file_path, line_number, error_type=..., severity=..., category=...) — id is auto-generated if omitted; set resolved/resolution_timestamp when fixing; tags default to an empty list.
 
-WHAT IT SHOULD DO BETTER:
-Use timezone-aware datetime types for timestamps, add validation and serialization helpers (to_dict/from_dict), accept Exception objects or richer stack trace parsing, improve category mapping, and consider a stable UUID-based id option and unit tests.
+# WHAT IT DOES:
+# Defines a dataclass ErrorEntry that stores common error metadata and, in __post_init__, generates a 12-char SHA256 id from a seed and infers ErrorCategory from error_type when category is OTHER.
 
-FILE CONTENT SUMMARY:
+# WHAT IT SHOULD DO BETTER:
+# Use timezone-aware datetime types for timestamps, add validation and serialization helpers (to_dict/from_dict), accept Exception objects or richer stack trace parsing, improve category mapping, and consider a stable UUID-based id option and unit tests.
+
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
 
 from __future__ import annotations
 
@@ -49,41 +49,47 @@ __version__ = VERSION
 
 @dataclass
 class ErrorEntry:
-    """A single error entry."""
+    A single error entry.
 
-    id: str = ""
-    message: str = ""
-    file_path: str = ""
+# #     id: str =
+# #     message: str =
+# #     file_path: str =
     line_number: int = 0
     # Compatibility: older tests/callers pass error_type.
-    error_type: str = ""
+# #     error_type: str =
     severity: ErrorSeverity = ErrorSeverity.MEDIUM
     category: ErrorCategory = ErrorCategory.OTHER
-    timestamp: str = ""
-    stack_trace: str = ""
-    suggested_fix: str = ""
+# #     timestamp: str =
+# #     stack_trace: str =
+# #     suggested_fix: str =
     resolved: bool = False
-    resolution_timestamp: str = ""
-    tags: list[str] = field(default_factory=lambda: [])
+# #     resolution_timestamp: str =
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     tags: list[str] = field(default_factory=lambda: [])
 
     def __post_init__(self) -> None:
         if not self.id:
-            seed = f"{self.error_type}|{self.message}|{self.file_path}|{self.line_number}".encode()
-            self.id = hashlib.sha256(seed).hexdigest()[:12]
+#             seed = f"{self.error_type}|{self.message}|{self.file_path}|{self.line_number}".encode()
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             self.id = hashlib.sha256(seed).hexdigest()[:12]
 
         if self.error_type and self.category == ErrorCategory.OTHER:
             et = self.error_type.lower()
-            if "security" in et or "auth" in et:
+#             if "security" in et or "auth" in et:
                 self.category = ErrorCategory.SECURITY
-            elif "type" in et:
+#             elif "type" in et:
                 self.category = ErrorCategory.TYPE
-            elif "syntax" in et:
+#             elif "syntax" in et:
                 self.category = ErrorCategory.SYNTAX
-            elif "value" in et:
+#             elif "value" in et:
                 self.category = ErrorCategory.VALUE
-            elif "import" in et:
+#             elif "import" in et:
                 self.category = ErrorCategory.IMPORT
-"""
+
 
 from __future__ import annotations
 
@@ -100,37 +106,43 @@ __version__ = VERSION
 
 @dataclass
 class ErrorEntry:
-    """A single error entry."""
+    A single error entry.
 
-    id: str = ""
-    message: str = ""
-    file_path: str = ""
+# #     id: str =
+# #     message: str =
+# #     file_path: str =
     line_number: int = 0
     # Compatibility: older tests/callers pass error_type.
-    error_type: str = ""
+# #     error_type: str =
     severity: ErrorSeverity = ErrorSeverity.MEDIUM
     category: ErrorCategory = ErrorCategory.OTHER
-    timestamp: str = ""
-    stack_trace: str = ""
-    suggested_fix: str = ""
+# #     timestamp: str =
+# #     stack_trace: str =
+# #     suggested_fix: str =
     resolved: bool = False
-    resolution_timestamp: str = ""
-    tags: list[str] = field(default_factory=lambda: [])
+# #     resolution_timestamp: str =
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     tags: list[str] = field(default_factory=lambda: [])
 
     def __post_init__(self) -> None:
         if not self.id:
-            seed = f"{self.error_type}|{self.message}|{self.file_path}|{self.line_number}".encode()
-            self.id = hashlib.sha256(seed).hexdigest()[:12]
+#             seed = f"{self.error_type}|{self.message}|{self.file_path}|{self.line_number}".encode()
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #             self.id = hashlib.sha256(seed).hexdigest()[:12]
 
         if self.error_type and self.category == ErrorCategory.OTHER:
             et = self.error_type.lower()
-            if "security" in et or "auth" in et:
+#             if "security" in et or "auth" in et:
                 self.category = ErrorCategory.SECURITY
-            elif "type" in et:
+#             elif "type" in et:
                 self.category = ErrorCategory.TYPE
-            elif "syntax" in et:
+#             elif "syntax" in et:
                 self.category = ErrorCategory.SYNTAX
-            elif "value" in et:
+#             elif "value" in et:
                 self.category = ErrorCategory.VALUE
-            elif "import" in et:
+#             elif "import" in et:
                 self.category = ErrorCategory.IMPORT

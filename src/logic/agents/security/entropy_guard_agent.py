@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,8 +15,7 @@
 """
 EntropyGuardAgent - Monitor entropy and manage post-quantum key material
 
-[Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate with a repository/path root used by BaseAgent:
@@ -47,57 +44,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 EntropyGuardAgent: Agent for monitoring entropy, randomness, and cryptographic health.
 Detects entropy depletion and enforces secure randomness policies.
-"""
-
-from __future__ import annotations
-
-import hashlib
-import logging
-import os
-
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-class EntropyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
-    Phase 60: Quantum-Resistant Cryptographic Layer.
-    Manages simulated post-quantum cryptographic (PQC) keys and entropy pools.
-    """
-
-    def __init__(self, path: str) -> None:
-        super().__init__(path)
-        self.entropy_pool = os.urandom(64)
-        self.pqc_keys: dict[str, str] = {}  # Simulated Kyber/Dilithium keys
-
-    def generate_pqc_keypair(self, fleet_id: str) -> str:
-        """Simulates the generation of a Kyber-1024 public key."""
-        # Mocking a PQC public key using a high-entropy hash
-        seed = self.entropy_pool + fleet_id.encode()
-        pqc_pub_key = hashlib.sha3_512(seed).hexdigest()
-        self.pqc_keys[fleet_id] = pqc_pub_key
-        logging.info(f"EntropyGuard: Generated PQC keypair for fleet {fleet_id}")
-        return pqc_pub_key
-
-    def simulate_quantum_safe_encrypt(self, data: str, target_fleet_id: str) -> bytes:
-        """Simulates encryption using a post-quantum algorithm."""
-        if target_fleet_id not in self.pqc_keys:
-            raise ValueError("Target fleet PQC key not found.")
-
-        # Mocking encryption: XORing with a hash derived from the PQC key
-        key = self.pqc_keys[target_fleet_id]
-        mask = hashlib.sha3_256(key.encode()).digest()
-
-        data_bytes = data.encode()
-        encrypted = bytes([b ^ mask[i % len(mask)] for i, b in enumerate(data_bytes)])
-        return encrypted
-
-    def rotate_entropy_pool(self) -> None:
-        """Refreshes the global entropy pool to maintain forward secrecy."""
-        self.entropy_pool = os.urandom(64)
-        logging.warning("EntropyGuard: Global entropy pool rotated.")
 """
 
 from __future__ import annotations

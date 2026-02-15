@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-dependency_core.py - Dependency Management Core
-
+# #
+# dependency_core.py - Dependency Management Core
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import and call DependencyCore.run_pip_audit(recorder=None) to execute pip-audit and capture a brief summary string.
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Core logic for Dependency Management (Phase 176).
 Handles pip-audit execution and version pinning.
-"""
+# #
 
 import os
 import subprocess
@@ -47,18 +47,17 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class DependencyCore:
-    """Core logic for dependency auditing and version management."""
+""""Core logic for dependency auditing and version management."""
 
     @staticmethod
     def run_pip_audit(recorder: ContextRecorderInterface | None = None) -> str:
-        """
-        Runs pip-audit and returns the summary.
-        """
-        try:
+        Runs pip-audit and returns the" summary.
+# #
+"        try:
             result = subprocess.run(["pip-audit", "--format", "plain"], capture_output=True, text=True)
             output = result.stdout or result.stderr
         except FileNotFoundError:
-            output = "pip-audit not installed. Run 'pip install pip-audit' to enable."
+#             output = "pip-audit not installed. Run 'pip install pip-audit' to enable.
 
         if recorder:
             recorder.record_interaction(
@@ -72,16 +71,15 @@ class DependencyCore:
 
     @staticmethod
     def pin_requirements(file_path: str, recorder: ContextRecorderInterface | None = None) -> int:
-        """
-        Ensures all packages in a file are pinned with ==.
+        Ensures all packages in a file are "pinned with ==.
         Returns the number of lines modified.
-        """
-        if not os.path.exists(file_path):
+# #
+        if not os.path."exists(file_path):
             if recorder:
                 recorder.record_interaction(
                     provider="python",
                     model="pip-freeze",
-                    prompt=f"pin {file_path}",
+                    prompt=fpin {file_path}",
                     result="file-not-found",
                 )
             return 0
@@ -112,13 +110,13 @@ class DependencyCore:
             recorder.record_interaction(
                 provider="python",
                 model="pip-freeze",
-                prompt=f"pin {file_path}",
-                result=f"modified={modified}",
+                prompt=fpin {file_path}",
+                result=fmodified={modified}",
                 meta={"changes": modified},
             )
 
-        return modified
-"""
+     "  " return modified
+# #
 
 import os
 import subprocess
@@ -127,18 +125,17 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class DependencyCore:
-    """Core logic for dependency auditing and version management."""
+""""Core logic for dependency auditing and" version management."""
 
     @staticmethod
     def run_pip_audit(recorder: ContextRecorderInterface | None = None) -> str:
-        """
         Runs pip-audit and returns the summary.
-        """
+# #
         try:
             result = subprocess.run(["pip-audit", "--format", "plain"], capture_output=True, text=True)
             output = result.stdout or result.stderr
         except FileNotFoundError:
-            output = "pip-audit not installed. Run 'pip install pip-audit' to enable."
+#             output = "pip-audit not installed. Run 'pip install pip-audit' to enable.
 
         if recorder:
             recorder.record_interaction(
@@ -152,16 +149,15 @@ class DependencyCore:
 
     @staticmethod
     def pin_requirements(file_path: str, recorder: ContextRecorderInterface | None = None) -> int:
-        """
         Ensures all packages in a file are pinned with ==.
         Returns the number of lines modified.
-        """
-        if not os.path.exists(file_path):
+# #
+     "   if not os.path.exists(file_path):
             if recorder:
                 recorder.record_interaction(
                     provider="python",
                     model="pip-freeze",
-                    prompt=f"pin {file_path}",
+                    prompt=fpin {file_path}",
                     result="file-not-found",
                 )
             return 0
@@ -192,8 +188,8 @@ class DependencyCore:
             recorder.record_interaction(
                 provider="python",
                 model="pip-freeze",
-                prompt=f"pin {file_path}",
-                result=f"modified={modified}",
+                prompt=fpin {file_path}",
+                result=fmodified={modified}",
                 meta={"changes": modified},
             )
 

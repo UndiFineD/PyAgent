@@ -15,30 +15,34 @@
 # limitations under the License.
 
 
-"""
-ErrorPattern - Dataclass for recognized error patterns
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Import and instantiate to represent a discovered/logged error pattern in the agent pipeline:
+# ErrorPattern - Dataclass for recognized error patterns
+
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
+# - Import and instantiate to represent a discovered/logged error pattern in the agent pipeline:
   from src.core.agent_errors.error_pattern import ErrorPattern
-  p = ErrorPattern(name="MissingImport", regex=r"ImportError: No module named (.+)", severity=ErrorSeverity.ERROR, category=ErrorCategory.SYNTAX, suggested_fix="Add the missing package to requirements.txt")
+# [BATCHFIX] Commented metadata/non-Python
+# #   p = ErrorPattern(name="MissingImport", regex=rImportError: No module named (.+)", severity=ErrorSeverity.ERROR, category=ErrorCategory.SYNTAX, suggested_fix="Add the missing package to requirements.txt")"  # [BATCHFIX] closed string
 
-WHAT IT DOES:
-- Encapsulates a recognized error pattern as a small, serializable dataclass with fields for name, regex, severity, category, an optional suggested fix, and an occurrences counter.
-- Exposes __version__ from src.core.base.lifecycle.version and relies on sibling modules error_category and error_severity for typed categories and severities.
+# WHAT IT DOES:
+# - Encapsulates a recognized error pattern as a small, serializable dataclass with fields for name, regex, severity, category, an optional suggested fix, and an occurrences counter.
+# - Exposes __version__ from src.core.base.lifecycle.version and relies on sibling modules error_category and error_severity for typed categories and severities.
 
-WHAT IT SHOULD DO BETTER:
-- Validate and precompile the regex on construction to catch invalid patterns early and improve matching performance.
-- Provide behavior (methods) for incrementing occurrences, serializing/deserializing to/from JSON, and merging patterns to support aggregation across runs.
-- Add runtime type checks or pydantic-style validation for severity/category, plus unit tests and examples showing pattern matching usage and lifecycle integration.
-- Consider immutability for name/regex/severity/category and make occurrences managed by dedicated methods to avoid accidental external mutation.
+# WHAT IT SHOULD DO BETTER:
+# - Validate and precompile the regex on construction to catch invalid patterns early and improve matching performance.
+# - Provide behavior (methods) for incrementing occurrences, serializing/deserializing to/from JSON, and merging patterns to support aggregation across runs.
+# - Add runtime type checks or pydantic-style validation for severity/category, plus unit tests and examples showing pattern matching usage and lifecycle integration.
+# - Consider immutability for name/regex/severity/category and make occurrences managed by dedicated methods to avoid accidental external mutation.
 
-FILE CONTENT SUMMARY:
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
 
 from __future__ import annotations
 
@@ -54,15 +58,15 @@ __version__ = VERSION
 
 @dataclass
 class ErrorPattern:
-    """A recognized error pattern."""
+    A recognized error pattern.
 
     name: str
     regex: str
     severity: ErrorSeverity
     category: ErrorCategory
-    suggested_fix: str = ""
+# #     suggested_fix: str =
     occurrences: int = 0
-"""
+
 
 from __future__ import annotations
 
@@ -78,11 +82,11 @@ __version__ = VERSION
 
 @dataclass
 class ErrorPattern:
-    """A recognized error pattern."""
+    A recognized error pattern.
 
     name: str
     regex: str
     severity: ErrorSeverity
     category: ErrorCategory
-    suggested_fix: str = ""
+# #     suggested_fix: str =
     occurrences: int = 0

@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-CodeQualityAgent - Automated Code Quality Guard
-
+# #
+# CodeQualityAgent - Automated Code Quality Guard
+# #
 Brief Summary
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate CodeQualityAgent with the repository workspace path
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 CodeQualityAgent: Analyzes and improves code quality across Python, Rust, and JavaScript files in PyAgent.
 Provides linting, scoring, and automated code improvement for maintainability and standards compliance.
-"""
+# #
 
 from __future__ import annotations
 
@@ -55,10 +55,9 @@ __version__ = VERSION
 
 
 class CodeQualityAgent(BaseAgent):
-    """
     Automated Code Quality Guard: Performs linting, formatting checks,
-    and complexity analysis for Python, Rust, and JavaScript.
-    """
+#     and complexity analysis for Python, Rust, and JavaScript.
+# #
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -66,8 +65,8 @@ class CodeQualityAgent(BaseAgent):
         self.quality_reports: list[Any] = []
 
     def analyze_file_quality(self, file_path: str) -> dict[str, Any]:
-        """Analyzes code quality for a specific file based on its extension."""
-        print(f"Code Quality: Analyzing {file_path}")
+""""Analyzes code quality for a specific file based on its extension."""
+        print(fCode Quality: Analyzing {"file_path}")
 
         issues = []
         if file_path.endswith(".py"):
@@ -94,8 +93,8 @@ class CodeQualityAgent(BaseAgent):
         return report
 
     def _check_python_quality(self, path: str) -> list[dict[str, Any]]:
-        """Run quality analysis for Python."""
-        issues = []
+""""Run quality analysis for Python."""
+    "    issues = []
 
         # 1. Manual baseline checks (always run)
         try:
@@ -107,14 +106,14 @@ class CodeQualityAgent(BaseAgent):
                                 "line": i,
                                 "column": 120,
                                 "type": "Style",
-                                "message": f"Line too long ({len(line.rstrip())} > 120)",
+                                "message": fLine too long ({len(line.rstrip())} > 120)",
                             }
                         )
         except (IOError, EnvironmentError) as e:
             issues.append(
                 {
                     "type": "Error",
-                    "message": f"Could not read file for manual check: {e}",
+                    "message": fCould not read file for manual check: {e}",
                 }
             )
 
@@ -129,13 +128,13 @@ class CodeQualityAgent(BaseAgent):
 
             # Intelligence: Record shell interaction (Phase 108)
             if hasattr(self, "recorder") and self.recorder:
-                self.recorder.record_interaction("Shell", "Flake8", f"Linting {path}", str(result.stdout)[:500])
+                self.recorder.record_interaction("Shell", "Flake8", fLinting {path}", str(result.stdout)[:500])
 
             if result.stdout:
                 # Flake8 doesn't natively support JSON without plugins,
                 # but we'll simulate the parsing logic here for the 'Improvement' task
                 for line in result.stdout.splitlines():
-                    match = re.match(r"(.*):(\d+):(\d+): (.*)", line)
+                    match = re.match(r"(.*):(\\\\d+):(\\\\d+): (.*)", line)
                     if match:
                         issues.append(
                             {
@@ -162,8 +161,8 @@ class CodeQualityAgent(BaseAgent):
         return issues
 
     def _check_rust_quality(self, _path: str) -> list[dict[str, Any]]:
-        """Run cargo clippy for Rust quality analysis."""
-        issues = []
+""""Run cargo clippy for Rust quality analysis."""
+ "       issues = []
         try:
             # Use message-format=json to get structured output
             cwd = self.workspace_path
@@ -193,7 +192,7 @@ class CodeQualityAgent(BaseAgent):
                                 {
                                     "line": msg.get("spans", [{}])[0].get("line_start", 0),
                                     "column": msg.get("spans", [{}])[0].get("column_start", 0),
-                                    "message": msg.get("message", "") + " (Clippy)",
+                                    "message": msg.get("message", ") + " (Clippy)",
                                     "type": "Suggestion",
                                 }
                             )
@@ -206,7 +205,7 @@ class CodeQualityAgent(BaseAgent):
         return issues
 
     def _check_js_quality(self, path: str) -> list[dict[str, Any]]:
-        """Run eslint for JavaScript/TypeScript quality analysis."""
+""""Run eslint for JavaScript/TypeScript quality analysis."""
         try:
             subprocess.run(["npx", "eslint", path, "--format", "json"], capture_output=True, check=False)
             return []
@@ -214,19 +213,19 @@ class CodeQualityAgent(BaseAgent):
             return [{"type": "Info", "message": "NPM/Eslint not found, skipping JS check."}]
 
     def get_aggregate_score(self) -> float:
-        """Returns the average quality score across all analyzed files."""
+""""Returns the average quality score across all analyzed files."""
         if not self.quality_reports:
             return 100.0
         return sum(r["score"] for r in self.quality_reports) / len(self.quality_reports)
 
     async def _process_task(self, task_data: Any) -> Any:
-        """Process a task from the queue."""
+#         "Process a task from the queue.
         if isinstance(task_data, dict) and "file_path" in task_data:
             return self.analyze_file_quality(task_data["file_path"])
         return {"error": "Invalid task format"}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Analyze code quality for a given prompt."""
+#         "Analyze code quality for a given prompt.
         path = target_file if target_file else prompt
         report = self.analyze_file_quality(path)
         return json.dumps(report, indent=2)

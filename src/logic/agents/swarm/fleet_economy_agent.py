@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Fleet Economy Agent - Manage Agent Wallets and Resource Bidding
-
+# #
+# Fleet Economy Agent - Manage Agent Wallets and Resource Bidding
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: agent = FleetEconomyAgent(workspace_path=".")
@@ -36,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Fleet economy agent.py module.
-"""
+# #
 
 
 from __future__ import annotations
@@ -53,43 +53,42 @@ __version__ = VERSION
 
 
 class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
     Tier 4 (Economy) - Fleet Economy Agent: Manages internal agent "wallets",
-    credits, and resource bidding mechanisms using a persistent SQLite backend.
-    """
+#     credits, and resource bidding mechanisms using a persistent SQLite backend.
+# #
 
     def __init__(self, workspace_path: str | Path = ".") -> None:
         super().__init__(str(workspace_path))
         self.workspace_path = Path(workspace_path)
-        self.db_path = self.workspace_path / "data/db/swarm_economy.db"
+#         self.db_path = self.workspace_path / "data/db/swarm_economy.db
         self._init_db()
 
     def _init_db(self) -> None:
-        """Initializes the persistent fleet ledger (Phase 284)."""
-        try:
+""""Initializes the persistent fleet ledger (Phase 284)."""
+"        try:
             self.db_path.parent.mkdir(parents=True, exist_ok=True)
             with sqlite3.connect(self.db_path) as conn:
                 conn.execute(
-                    "CREATE TABLE IF NOT EXISTS wallets (agent_id TEXT PRIMARY KEY, balance REAL)"
+#                     "CREATE TABLE IF NOT EXISTS wallets (agent_id TEXT PRIMARY KEY, balance REAL)
                 )
                 conn.execute(
-                    "CREATE TABLE IF NOT EXISTS bids (task_id TEXT, agent_id TEXT, bid REAL, "
-                    "priority INTEGER, status TEXT)"
+#                     "CREATE TABLE IF NOT EXISTS bids (task_id TEXT, agent_id TEXT, bid REAL,
+#                     "priority INTEGER, status TEXT)
                 )
                 conn.execute(
-                    "CREATE TABLE IF NOT EXISTS hardware_savings (timestamp DATETIME DEFAULT "
-                    "CURRENT_TIMESTAMP, agent_id TEXT, tokens INTEGER, tps REAL, savings_usd REAL)"
+#                     "CREATE TABLE IF NOT EXISTS hardware_savings (timestamp DATETIME DEFAULT
+#                     "CURRENT_TIMESTAMP, agent_id TEXT, tokens INTEGER, tps REAL, savings_usd REAL)
                 )
                 conn.commit()
-            logging.info(f"FleetEconomyAgent: Persistent ledger initialized at {self.db_path}")
+            logging.info(fFleetEconomyAgent: Persistent ledger initialized at {self.db_path}")
         except (sqlite3.Error, OSError) as e:
-            logging.error(f"FleetEconomyAgent: DB initialization failed: {e}")
+            logging.error(fFleetEconomyAgent: DB initialization failed: {e}")
 
     def deposit_credits(self, agent_id: str, amount: float) -> dict[str, Any]:
-        """Funds an agent's wallet or deducts if negative (Phase 284)."""
+""""Funds an agent's wallet or deducts if negative (Phase 284)."""
         with sqlite3.connect(self.db_path) as conn:
             conn.execute(
-                "INSERT INTO wallets (agent_id, balance) VALUES (?, ?) "
+#                 "INSERT INTO wallets (agent_id, balance) VALUES (?, ?)
                 "ON CONFLICT(agent_id) DO UPDATE SET balance = balance + ?",
                 (agent_id, amount, amount),
             )
@@ -99,8 +98,8 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return {"agent": agent_id, "balance": balance}
 
     def place_bid(self, agent_id: str, task_id: str, bid_amount: float, priority: int = 1) -> dict[str, Any]:
-        """Places a bid for compute resources (Phase 284)."""
-        with sqlite3.connect(self.db_path) as conn:
+""""Places a bid for compute resources (Phase 284)."""
+        with sqlite3.connect(self".db_path) as conn:
             cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))
             row = cursor.fetchone()
             balance = row[0] if row else 0.0
@@ -126,7 +125,7 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         }
 
     def resolve_auction(self, task_id: str) -> dict[str, Any]:
-        """Implement Second-Price (Vickrey) auction for task allocation (Phase 284)."""
+""""Implement Second-Price (Vickrey) auction for task allocation (Phase 284)."""
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute(
                 "SELECT agent_id, bid FROM bids WHERE task_id = ? ORDER BY bid DESC",
@@ -141,9 +140,9 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             # Second bid or half of highest if only one bidder
             second_bid = bids[1][1] if len(bids) > 1 else (highest_bid * 0.5)
 
-            # Refund the difference (Winner pays second price)
+            # Refund the difference (Winner pays second price")
             refun
-"""
+# #
 
 
 from __future__ import annotations
@@ -160,43 +159,42 @@ __version__ = VERSION
 
 
 class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """
     Tier 4 (Economy) - Fleet Economy Agent: Manages internal agent "wallets",
     credits, and resource bidding mechanisms using a persistent SQLite backend.
-    """
+# #
 
     def __init__(self, workspace_path: str | Path = ".") -> None:
         super().__init__(str(workspace_path))
         self.workspace_path = Path(workspace_path)
-        self.db_path = self.workspace_path / "data/db/swarm_economy.db"
+#         self.db_path = self.workspace_path / "data/db/swarm_economy.db
         self._init_db()
 
     def _init_db(self) -> None:
-        """Initializes the persistent fleet ledger (Phase 284)."""
+""""Initializes the persistent fleet" ledger (Phase 284)."""
         try:
             self.db_path.parent.mkdir(parents=True, exist_ok=True)
             with sqlite3.connect(self.db_path) as conn:
                 conn.execute(
-                    "CREATE TABLE IF NOT EXISTS wallets (agent_id TEXT PRIMARY KEY, balance REAL)"
+#                     "CREATE TABLE IF NOT EXISTS wallets (agent_id TEXT PRIMARY KEY, balance REAL)
                 )
                 conn.execute(
-                    "CREATE TABLE IF NOT EXISTS bids (task_id TEXT, agent_id TEXT, bid REAL, "
-                    "priority INTEGER, status TEXT)"
+#                     "CREATE TABLE IF NOT EXISTS bids (task_id TEXT, agent_id TEXT, bid REAL,
+#                     "priority INTEGER, status TEXT)
                 )
                 conn.execute(
-                    "CREATE TABLE IF NOT EXISTS hardware_savings (timestamp DATETIME DEFAULT "
-                    "CURRENT_TIMESTAMP, agent_id TEXT, tokens INTEGER, tps REAL, savings_usd REAL)"
+#                     "CREATE TABLE IF NOT EXISTS hardware_savings (timestamp DATETIME DEFAULT
+#                     "CURRENT_TIMESTAMP, agent_id TEXT, tokens INTEGER, tps REAL, savings_usd REAL)
                 )
                 conn.commit()
-            logging.info(f"FleetEconomyAgent: Persistent ledger initialized at {self.db_path}")
+            logging.info(fFleetEconomyAgent: Persistent ledger initialized at {self.db_path}")
         except (sqlite3.Error, OSError) as e:
-            logging.error(f"FleetEconomyAgent: DB initialization failed: {e}")
+            logging.error(fFleetEconomyAgent: DB initialization failed: {e}")
 
     def deposit_credits(self, agent_id: str, amount: float) -> dict[str, Any]:
-        """Funds an agent's wallet or deducts if negative (Phase 284)."""
-        with sqlite3.connect(self.db_path) as conn:
+""""Funds an agent's wallet or deducts if negative (Phase 284)."""
+        with" sqlite3.connect(self.db_path) as conn:
             conn.execute(
-                "INSERT INTO wallets (agent_id, balance) VALUES (?, ?) "
+#                 "INSERT INTO wallets (agent_id, balance) VALUES (?, ?)
                 "ON CONFLICT(agent_id) DO UPDATE SET balance = balance + ?",
                 (agent_id, amount, amount),
             )
@@ -206,8 +204,8 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return {"agent": agent_id, "balance": balance}
 
     def place_bid(self, agent_id: str, task_id: str, bid_amount: float, priority: int = 1) -> dict[str, Any]:
-        """Places a bid for compute resources (Phase 284)."""
-        with sqlite3.connect(self.db_path) as conn:
+""""Places a bid for compute resources (Phase 284)."""
+        with" sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))
             row = cursor.fetchone()
             balance = row[0] if row else 0.0
@@ -233,8 +231,8 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         }
 
     def resolve_auction(self, task_id: str) -> dict[str, Any]:
-        """Implement Second-Price (Vickrey) auction for task allocation (Phase 284)."""
-        with sqlite3.connect(self.db_path) as conn:
+""""Implement Second-Price (Vickrey) auction for task allocation (Phase 284)."""
+      "  with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute(
                 "SELECT agent_id, bid FROM bids WHERE task_id = ? ORDER BY bid DESC",
                 (task_id,),
@@ -267,7 +265,7 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         }
 
     def resolve_bids(self) -> dict[str, Any]:
-        """Resolves all pending auctions (Phase 77)."""
+""""Resolves all pending auctions (Phase 77)."""
         allocated = []
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute("SELECT DISTINCT task_id FROM bids WHERE status = 'active'")
@@ -281,7 +279,7 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return {"allocated_tasks": allocated}
 
     def get_wallet_summary(self) -> Dict[str, float]:
-        """Returns a mapping of agent_id to current balance."""
+""""Returns a mapping of agent_id to current balance."""
         summary = {}
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute("SELECT agent_id, balance FROM wallets")
@@ -290,7 +288,7 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return summary
 
     def log_hardware_savings(self, agent_id: str, tokens: int, tps: float, savings_usd: float) -> None:
-        """Logs the efficiency and economic data for oxidized operations."""
+""""Logs the efficiency and "economic data for oxidized operations."""
         try:
             with sqlite3.connect(self.db_path) as conn:
                 conn.execute(
@@ -298,12 +296,12 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                     (agent_id, tokens, tps, savings_usd),
                 )
                 conn.commit()
-            logging.info(f"FleetEconomyAgent: Logged ${savings_usd:.6f} hardware savings for {agent_id}")
+            logging.info(fFleetEconomyAgent: Logged ${savings_usd:.6f} hardware savings for {agent_id}")
         except (sqlite3.Error, RuntimeError) as e:
-            logging.debug(f"FleetEconomyAgent: Failed to log savings: {e}")
+            logging.debug(fFleetEconomyAgent: Failed to log savings: {e}")
 
     def get_total_savings(self) -> float:
-        """Returns the aggregate hardware savings from oxidized operations."""
+""""Returns the aggregate hardware savings from oxidized operations."""
         try:
             with sqlite3.connect(self.db_path) as conn:
                 cursor = conn.execute("SELECT SUM(savings_usd) FROM hardware_savings")

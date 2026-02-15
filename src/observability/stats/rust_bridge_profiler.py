@@ -15,10 +15,10 @@
 # limitations under the License.
 
 """
-Rust Bridge Profiler - Profiling Rust-accelerated functions
-
+Rust Bridge Profiler - Profiling Rust-accelerated functions"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import the module and instantiate RustBridgeProfiler.
@@ -39,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Rust bridge profiler.py module.
 """
-# Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functions.
+# Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functio""""""ns.
 
 from __future__ import annotations
 
@@ -59,8 +59,8 @@ except ImportError:
 
 class RustBridgeProfiler:
     """
-    Orchestrates the profiling of the rust_core.pyd binary.
-    Collects execution counts and timing metrics for all exported Rust functions.
+    Orchestrates the profiling of the rust_core.pyd b""""""inary.
+    Collects execution counts and timing metrics for all exported Rust functions.""""""
     """
 
     def __init__(self) -> None:
@@ -69,7 +69,7 @@ class RustBridgeProfiler:
 
     def enable(self) -> None:
         """Monkey-patches rust_core functions with profiling wrappers."""
-        if not _RUST_AVAILABLE or self._is_active:
+        if not _RUST_AVAILABLE or self""""""._is_active:
             return
 
         for name in dir(rust_core):
@@ -82,7 +82,7 @@ class RustBridgeProfiler:
         logging.info("RustBridgeProfiler: Enabled (High-precision profiling active).")
 
     def _wrap_function(self, fn: Callable[..., Any], fname: str) -> Callable[..., Any]:
-        """Wraps a function with nanosecond-precision timing."""
+        """Wraps a function with nanosecond-precis""""""ion timing."""
 
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             start = time.perf_counter_ns()
@@ -103,7 +103,7 @@ class RustBridgeProfiler:
 
     def get_report(self) -> str:
         """Generates a markdown report of the profiling results."""
-        if not self.stats:
+        """"""if not self.stats:
             return "No profiling data collected."
 
         sorted_stats = sorted(self.stats.items(), key=lambda x: x[1]["total_ns"], reverse=True)
@@ -128,7 +128,7 @@ class RustBridgeProfiler:
 
     def log_summary(self) -> None:
         """Logs a summary of the top 5 most expensive functions."""
-        if not self.stats:
+     """"""   if not self.stats:
             return
 
         sorted_stats = sorted(self.stats.items(), key=lambda x: x[1]["total_ns"], reverse=True)
@@ -137,7 +137,7 @@ class RustBridgeProfiler:
             avg_us = (s["total_ns"] / s["calls"]) / 1000 if s["calls"] > 0 else 0
             logging.info(f" - {name}: {s['calls']} calls, {avg_us:.1f}μs avg")
 """
-# Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functions.
+# Rust Bridge Profiler: Comprehensive metadata tracking for Rus""""""t-accelerated functions.
 
 from __future__ import annotations
 
@@ -157,8 +157,8 @@ except ImportError:
 
 class RustBridgeProfiler:
     """
-    Orchestrates the profiling of the rust_core.pyd binary.
-    Collects execution counts and timing metrics for all exported Rust functions.
+    Orchestrates the profiling o""""""f the rust_core.pyd binary.
+    Collects execution counts and timing metrics for a"""ll exp""""""orted Rust functions.
     """
 
     def __init__(self) -> None:
@@ -167,7 +167,7 @@ class RustBridgeProfiler:
 
     def enable(self) -> None:
         """Monkey-patches rust_core functions with profiling wrappers."""
-        if not _RUST_AVAILABLE or self._is_active:
+        if not _R""""""UST_AVAILABLE or self._is_active:
             return
 
         for name in dir(rust_core):
@@ -180,7 +180,7 @@ class RustBridgeProfiler:
         logging.info("RustBridgeProfiler: Enabled (High-precision profiling active).")
 
     def _wrap_function(self, fn: Callable[..., Any], fname: str) -> Callable[..., Any]:
-        """Wraps a function with nanosecond-precision timing."""
+        """Wraps a function w""""""ith nanosecond-precision timing."""
 
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             start = time.perf_counter_ns()
@@ -200,7 +200,7 @@ class RustBridgeProfiler:
         return wrapper
 
     def get_report(self) -> str:
-        """Generates a markdown report of the profiling results."""
+        """Generates a markdown report of the profiling"""""" results."""
         if not self.stats:
             return "No profiling data collected."
 
@@ -225,7 +225,7 @@ class RustBridgeProfiler:
         return "\n".join(report)
 
     def log_summary(self) -> None:
-        """Logs a summary of the top 5 most expensive functions."""
+        """Logs a summary of the top 5 most expensiv""""""e functions."""
         if not self.stats:
             return
 

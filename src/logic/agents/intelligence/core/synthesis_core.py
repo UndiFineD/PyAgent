@@ -19,10 +19,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-SynthesisCore handles synthetic data generation for fine-tuning.
-It also implements the Feature Store logic for vectorized insights.
-"""
+# #
+# SynthesisCore handles synthetic data generation for fine-tuning.
+# It also implements the Feature Store logic for vectorized insights.
+# #
 
 from __future__ import annotations
 
@@ -39,10 +39,9 @@ except ImportError:
 
 
 class SynthesisCore:
-    """
     SynthesisCore handles synthetic data generation for fine-tuning.
-    It also implements the Feature Store logic for vectorized insights.
-    """
+#     It also implements the Feature Store logic for vectorized insights.
+# #
 
     _transformer_cache: Any = None
     _rust_failed: bool = False
@@ -57,7 +56,7 @@ class SynthesisCore:
         ]
 
     def _get_transformer(self) -> Any:
-        """Lazily initializes and caches the Rust transformer."""
+""""Lazily initializes and caches the Rust transformer."""
         if not HAS_RUST or SynthesisCore._rust_failed:
             return None
 
@@ -74,19 +73,19 @@ class SynthesisCore:
                 SynthesisCore._transformer_cache = rust_core.NeuralTransformer(config)
                 logging.info("SynthesisCore: Initialized Rust transformer.")
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.warning(f"SynthesisCore: Failed to initialize Rust transformer: {e}")
+                logging.warning(fSynthesisCore: Failed to initialize Rust transformer: {e}")
                 SynthesisCore._rust_failed = True
 
         return SynthesisCore._transformer_cache
 
     def generate_python_edge_cases(self, count: int) -> list[str]:
-        """Generates synthetic Python snippets based on templates."""
-        if HAS_RUST:
+""""Generates synthetic Python snippets based on templates."""
+     "   if HAS_RUST:
             try:
                 res, stats = rust_core.generate_synthetic_snippets_with_stats(count)
                 print(
-                    f"[SynthesisCore] Generated {stats.token_count} tokens in "
-                    f"{stats.duration_ms:.2f}ms ({stats.tps:.2f} tokens/s)"
+#                     f"[SynthesisCore] Generated {stats.token_count} tokens in
+#                     f"{stats.duration_ms:.2f}ms ({stats.tps:.2f} tokens/s)
                 )
                 print(f"[SynthesisCore] Hardware Savings: ${stats.cost_usd:.6f} (@ 0.0005 cent/token)")
 
@@ -107,19 +106,18 @@ class SynthesisCore:
 
                 return res
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.debug(f"SynthesisCore: Rust generation failed: {e}")
+                logging.debug(fSynthesisCore: Rust generation failed: {e}")
 
         results = []
         for i in range(count):
             tpl = random.choice(self.edge_case_templates)
-            results.append(tpl.format(name=f"func_{i}", context=f"ctx_{i}"))
+            results.append(tpl.format(name=ffunc_{i}", context=fctx_{i}"))
         return results
 
     def vectorize_insight(self, insight: str) -> list[float]:
-        """
-        Simulated vectorization of a text insight.
+        Simulated vectorization "of a text insight.
         Returns a mock embedding vector.
-        """
+# #
         transformer = self._get_transformer()
         if transformer:
             try:
@@ -142,7 +140,7 @@ class SynthesisCore:
 
                 return vec
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.debug(f"SynthesisCore: Rust vectorization failed: {e}")
+                logging.debug(fSynthesisCore: Rust vectorization failed: {e}")
 
         # In a real scenario, this would call a local embedding model
         # Use a deterministic mock based on text length and first char
@@ -151,7 +149,7 @@ class SynthesisCore:
         return [random.uniform(-1, 1) for _ in range(128)]
 
     def merge_feature_vectors(self, vectors: list[list[float]]) -> list[float]:
-        """Averages multiple feature vectors into a single swarm insight."""
+""""Averages multiple feature vectors into a single swarm insight."""
         if HAS_RUST:
             try:
                 return rust_core.average_feature_vectors(vectors)  # type: ignore[attr-defined]

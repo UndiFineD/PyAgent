@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from typing import TYPE_CHECKING
@@ -30,15 +30,15 @@ __version__ = VERSION
 
 @dataclass
 class BranchComparison:
-    """Comparison of context across branches.
+    "Comparison of context across branches.
 
     Attributes:
         branch_a: First branch name.
         branch_b: Second branch name.
         files_only_in_a: Files only in branch A.
         files_only_in_b: Files only in branch B.
-        modified_files: Files modified between branches.
-    """
+#         modified_files: Files modified between branches.
+# #
 
     branch_a: str
     branch_b: str

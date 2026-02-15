@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Agent specializing in Swarm Knowledge Fusion.
-Consolidates individual agent memory shards into a unified global knowledge graph.
-"""
+# "Agent specializing in Swarm Knowledge Fusion.
+# Consolidates individual agent memory shards into a unified global knowledge graph.
+# #
 
 from __future__ import annotations
 import logging
@@ -34,19 +34,19 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class KnowledgeFusionAgent(BaseAgent):
-    """Fuses distributed memory shards and resolves conflicts in the collective knowledge base."""
+""""Fuses distributed memory shards and resolves conflicts in the collective knowledge base."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.fusion_dir = self._workspace_root / "data" / "logs" / "knowledge_fusion"
+#         self.fusion_dir = self._workspace_root / "data" / "logs" / "knowledge_fusion
         self.fusion_dir.mkdir(parents=True, exist_ok=True)
-        self.global_graph_path = self.fusion_dir / "global_knowledge_graph.json"
+#         self.global_graph_path = self.fusion_dir / "global_knowledge_graph.json
 
         self._system_prompt = (
-            "You are the Knowledge Fusion Agent. "
-            "Your role is to aggregate experiences and insights from all swarm members. "
-            "You identify redundant information, resolve conflicting data from different "
-            "episodes, and maintain a high-density collective knowledge graph."
+#             "You are the Knowledge Fusion Agent.
+#             "Your role is to aggregate experiences and insights from all swarm members.
+#             "You identify redundant information, resolve conflicting data from different
+#             "episodes, and maintain a high-density collective knowledge graph.
         )
 
     def _load_global_graph(self) -> dict[str, Any]:
@@ -56,7 +56,7 @@ class KnowledgeFusionAgent(BaseAgent):
         return {"nodes": [], "edges": []}
 
     def _save_global_graph(self, graph: dict[str, Any]) -> None:
-        """Saves graph atomically using temp file."""
+""""Saves graph atomically using temp file."""
         temp_path = self.global_graph_path.with_suffix(".tmp")
         try:
             with open(temp_path, "w", encoding="utf-8") as f:
@@ -68,15 +68,15 @@ class KnowledgeFusionAgent(BaseAgent):
                     temp_path.unlink()
                 except Exception:  # pylint: disable=broad-exception-caught
                     pass
-            logging.error(f"KnowledgeFusion: Atomic save failed: {e}")
+            logging.error(fKnowledgeFusion: Atomic save failed: {e}")
             raise
 
     @as_tool
     def fuse_memory_shards(self, shard_paths: list[str]) -> str:
-        """Aggregates multiple memory shards into the global knowledge graph.
+        "Aggregates multiple memory shards into the global knowledge graph.
         Args:
             shard_paths: List of file paths to agent-specific memory shards (JSON).
-        """
+# #
         graph = self._load_global_graph()
         added_nodes = 0
 
@@ -103,23 +103,23 @@ class KnowledgeFusionAgent(BaseAgent):
                         added_nodes += 1
 
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.error(f"KnowledgeFusion: Error processing shard {path}: {e}")
+                logging.error(fKnowledgeFusion: Error processing shard {path}: {e}")
 
         self._save_global_graph(graph)
-        return f"Fusion complete. Added {added_nodes} new nodes to the global knowledge graph."
+#         return fFusion complete. Added {added_nodes} new nodes to the global knowledge graph.
 
     @as_tool
     def resolve_conflicts(self, keyword: str) -> str:
-        """Scans the global graph for contradictory information regarding a specific topic."""
+""""Scans the global graph for contradictory information regarding a specific topic."""
         # Mock logic for conflict resolution
 
-        return f"Conflict resolution for '{keyword}': No critical contradictions found. Knowledge remains stable."
+#         return fConflict resolution for '{keyword}': No critical contradictions found. Knowledge remains stable.
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Optimizes fleet content based on cognitive reasoning."""
+#         "Optimizes fleet content based on cognitive reasoning.
         _ = prompt
         _ = target_file
-        return "Global knowledge fusion is optimized. Swarm shards are synchronized."
+#         return "Global knowledge fusion is optimized. Swarm shards are synchronized.
 
 
 if __name__ == "__main__":

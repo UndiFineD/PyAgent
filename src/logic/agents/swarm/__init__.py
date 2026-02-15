@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Swarm agents package."""
-
-from __future__ import annotations
+# "Swarm agents package.
+# #
+# from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
 

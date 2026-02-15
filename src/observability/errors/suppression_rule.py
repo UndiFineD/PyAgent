@@ -15,29 +15,32 @@
 # limitations under the License.
 
 
-"""
-Suppression Rule - Data model for error suppression
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Import the dataclass and instantiate a rule: from suppression_rule import SuppressionRule
-- Example: rule = SuppressionRule(id="S-001", pattern="TimeoutError:.*", reason="Transient network issue", expires="2026-03-01", created_by="ci-bot", created_at="2026-02-12T12:00:00Z")
-- Intended to be stored/loaded by higher-level components (persistence layer, config files, or rule engines) and used to suppress matching errors at runtime.
+# Suppression Rule - Data model for error suppression
 
-WHAT IT DOES:
-Defines a minimal dataclass representing a suppression rule used to silence or ignore particular errors based on a textual pattern. Fields include id, pattern (usually a regex or substring), reason, optional expiry, and simple created_by/created_at metadata. Lightweight and serializable by default via dataclasses.asdict or similar utilities.
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
+# - Import the dataclass and instantiate a rule: from suppression_rule import SuppressionRule
+# - Example: rule = SuppressionRule(id="S-001", pattern="TimeoutError:.*", reason="Transient network issue", expires="2026-03-01", created_by="ci-bot", created_at="2026-02-12T12:00:00Z")
+# - Intended to be stored/loaded by higher-level components (persistence layer, config files, or rule engines) and used to suppress matching errors at runtime.
 
-WHAT IT SHOULD DO BETTER:
-- Use explicit datetime types for expires and created_at (datetime | None) with timezone awareness instead of plain strings, and validate formats on construction.
-- Provide helper methods: matches(error_message) that compiles and caches the regex, is_expired(now) to evaluate expiry, and to_dict()/from_dict() for robust serialization.
-- Add validation for required fields (non-empty id/pattern/reason), canonicalize id format, and include unit tests and example fixtures demonstrating matching and expiry semantics.
-- Consider integration points: storage schema, versioned migrations, and clear handling of pattern types (regex vs substring) with an explicit enum.
+# WHAT IT DOES:
+# Defines a minimal dataclass representing a suppression rule used to silence or ignore particular errors based on a textual pattern. Fields include id, pattern (usually a regex or substring), reason, optional expiry, and simple created_by/created_at metadata. Lightweight and serializable by default via dataclasses.asdict or similar utilities.
 
-FILE CONTENT SUMMARY:
+# WHAT IT SHOULD DO BETTER:
+# - Use explicit datetime types for expires and created_at (datetime | None) with timezone awareness instead of plain strings, and validate formats on construction.
+# - Provide helper methods: matches(error_message) that compiles and caches the regex, is_expired(now) to evaluate expiry, and to_dict()/from_dict() for robust serialization.
+# - Add validation for required fields (non-empty id/pattern/reason), canonicalize id format, and include unit tests and example fixtures demonstrating matching and expiry semantics.
+# - Consider integration points: storage schema, versioned migrations, and clear handling of pattern types (regex vs substring) with an explicit enum.
+
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
 
 from __future__ import annotations
 
@@ -50,15 +53,15 @@ __version__ = VERSION
 
 @dataclass
 class SuppressionRule:
-    """Rule for suppressing specific errors."""
+    Rule for suppressing specific errors.
 
     id: str
     pattern: str
     reason: str
     expires: str | None = None
-    created_by: str = ""
-    created_at: str = ""
-"""
+# #     created_by: str =
+# #     created_at: str =
+
 
 from __future__ import annotations
 
@@ -71,11 +74,11 @@ __version__ = VERSION
 
 @dataclass
 class SuppressionRule:
-    """Rule for suppressing specific errors."""
+    Rule for suppressing specific errors.
 
     id: str
     pattern: str
     reason: str
     expires: str | None = None
-    created_by: str = ""
-    created_at: str = ""
+# #     created_by: str =
+# #     created_at: str =

@@ -15,9 +15,9 @@
 # limitations under the License.
 
 """
-Observability package.
+Observability package."""
+""""""
 """
-
 from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
@@ -31,6 +31,6 @@ __version__ = VERSION
 # limitations under the License.
 
 """
-Observability and reporting layer for PyAgent.
-Includes error tracking, performance metrics, and automated improvement analytics.
+Observability and reporting layer for Py"""Age"""nt.
+Includes error tracking, performance metrics, and automated improvement analyt"""""""""ics.
 """

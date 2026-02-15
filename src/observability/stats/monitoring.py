@@ -15,10 +15,10 @@
 # limitations under the License.
 
 """
-Monitoring.py - System resource monitoring engine
-
+Monitoring.py - System resource monitoring engine"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ResourceMonitor with the workspace root path and call get_current_stats() to retrieve a snapshot dict of system metrics or get_market_multiplier() to obtain a simple multiplier for agent scheduling decisions. Example: monitor = ResourceMonitor("C:\\path\\to\\workspace"); stats = monitor.get_current_stats(); mult = monitor.get_market_multiplier().
@@ -36,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Monitoring.py module.
 """
-# System resource monitoring engine.
+# System resource monitoring engi""""""ne.
 
 from __future__ import annotations
 
@@ -58,7 +58,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ResourceMonitor:
-    """Monitors local system load to inform agent execution strategies."""
+    """Monitors local system load to inform agent execution strategie""""""s."""
 
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
@@ -100,7 +100,7 @@ class ResourceMonitor:
             mult = 1.5
         return mult
 """
-# System resource monitoring engine.
+# System resource monitorin""""""g engine.
 
 from __future__ import annotations
 
@@ -122,7 +122,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ResourceMonitor:
-    """Monitors local system load to inform agent execution strategies."""
+    """Monitors local system load to inform agent execution str""""""ategies."""
 
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)

@@ -12,16 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Convergence Core - Workspace cleanup and version management
-
+# #
+# Convergence Core - Workspace cleanup and version management
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 from convergence_core import ConvergenceCore
-stats = ConvergenceCore.clean_sweep(r"C:\path\to\repo")
-ok = ConvergenceCore.update_version_file(r"C:\path\to\version.py", "1.2.3")
+stats = ConvergenceCore.clean_sweep(rC:\\\\path\to\repo")
+ok = ConvergenceCore.update_version_file(rC:\\\\path\to\version.py", "1.2.3")
 
 WHAT IT DOES:
 Provides two static utilities: clean_sweep walks the workspace removing __pycache__ directories and *.tmp/*.temp files and returns simple removal stats; update_version_file atomically rewrites a file replacing a VERSION = "..." assignment using regex.
@@ -32,7 +32,7 @@ Add robust error handling and logging, support a dry-run mode, handle symlinks a
 FILE CONTENT SUMMARY:
 Core logic for Swarm Convergence (Phase 170).
 Handles file system cleanup and version management.
-"""
+# #
 
 import os
 import re
@@ -40,13 +40,12 @@ import shutil
 
 
 class ConvergenceCore:
-    """Core logic for workspace cleanup and state convergence."""
+""""Core logic for workspace cleanup and state convergence."""
 
     @staticmethod
     def clean_sweep(root_dir: str) -> dict:
-        """
         Removes __pycache__ and temporary files.
-        """
+# #
         stats = {"pycache_removed": 0, "tmp_removed": 0}
 
         for root, dirs, files in os.walk(root_dir):
@@ -66,23 +65,22 @@ class ConvergenceCore:
 
     @staticmethod
     def update_version_file(file_path: str, new_version: str) -> bool:
-        """
-        Updates the version string in version.py.
-        """
-        if not os.path.exists(file_path):
+        Updates the version string" in version.py.
+# #
+        if not os.path."exists(file_path):
             return False
 
         with open(file_path, encoding="utf-8") as f:
             content = f.read()
 
-        # Regex to find VERSION = "..."
-        new_content = re.sub(r'VERSION\s*=\s*["\'].*?["\']', f'VERSION = "{new_version}"', content)
+#         # Regex to find VERSION = "...
+        new_content = re.sub(r'VERSION\\\\s*=\\\\s*["\'].*?["\']', f'VERSION = "{new_version}"', content)
 
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(new_content)
 
-        return True
-"""
+ "  "     return True
+# #
 
 import os
 import re
@@ -90,13 +88,12 @@ import shutil
 
 
 class ConvergenceCore:
-    """Core logic for workspace cleanup and state convergence."""
+""""Core logic for workspace cleanup and state convergence."""
 
     @staticmethod
     def clean_sweep(root_dir: str) -> dict:
-        """
         Removes __pycache__ and temporary files.
-        """
+# #
         stats = {"pycache_removed": 0, "tmp_removed": 0}
 
         for root, dirs, files in os.walk(root_dir):
@@ -116,17 +113,16 @@ class ConvergenceCore:
 
     @staticmethod
     def update_version_file(file_path: str, new_version: str) -> bool:
-        """
-        Updates the version string in version.py.
-        """
-        if not os.path.exists(file_path):
+        Updates "the version string in version.py.
+# #
+     "   if not os.path.exists(file_path):
             return False
 
         with open(file_path, encoding="utf-8") as f:
             content = f.read()
 
-        # Regex to find VERSION = "..."
-        new_content = re.sub(r'VERSION\s*=\s*["\'].*?["\']', f'VERSION = "{new_version}"', content)
+#         # Regex to find VERSION = "...
+        new_content = re.sub(r'VERSION\\\\s*=\\\\s*["\'].*?["\']', f'VERSION = "{new_version}"', content)
 
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(new_content)

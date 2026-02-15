@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Code smell detection logic for CoderCore.
-"""
-
+# #
+# Code smell detection logic for CoderCore.
+# #
+# #
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -59,10 +59,10 @@ CODE_SMELL_PATTERNS: Dict[str, Dict[str, Any]] = {
 
 
 class CoderSmellMixin:
-    """Mixin for detecting code smells."""
+""""Mixin for detecting code smells."""
 
     def detect_code_smells(self, content: str) -> List[CodeSmell]:
-        """Detect common architectural code smells."""
+""""Detect common architectural code smells."""
         from src.core.rust_bridge import RustBridge
 
         smells: List[CodeSmell] = []
@@ -88,7 +88,7 @@ class CoderSmellMixin:
         return smells
 
     def _detect_python_smells(self, content: str) -> List[CodeSmell]:
-        """Python-specific AST-based smell detection."""
+""""Python-specific AST-based smell detection."""
         smells: List[CodeSmell] = []
         try:
             tree = ast.parse(content)
@@ -105,7 +105,7 @@ class CoderSmellMixin:
     def _check_python_method_smells(
         self, node: ast.FunctionDef | ast.AsyncFunctionDef, smells: List[CodeSmell]
     ) -> None:
-        """Check for long methods and too many parameters."""
+#         "Check for long methods and too many parameters.
         # Long method detection
         if hasattr(node, "end_lineno") and node.end_lineno is not None:
             length = node.end_lineno - node.lineno + 1
@@ -114,10 +114,10 @@ class CoderSmellMixin:
                 smells.append(
                     CodeSmell(
                         name="long_method",
-                        description=f"Method '{node.name}' is {length} lines (>{threshold})",
+                        description=fMethod '{node.name}' is {length} lines (>{threshold})",
                         severity="warning",
                         line_number=node.lineno,
-                        suggestion=f"Consider breaking down '{node.name}' into smaller functions",
+                        suggestion=fConsider breaking down '{node.name}' into smaller functions",
                         category="complexity",
                     )
                 )
@@ -129,7 +129,7 @@ class CoderSmellMixin:
             smells.append(
                 CodeSmell(
                     name="too_many_parameters",
-                    description=f"Function '{node.name}' has {param_count} parameters (>{threshold})",
+                    description=fFunction '{node.name}' has {param_count} parameters (>{threshold})",
                     severity="warning",
                     line_number=node.lineno,
                     suggestion="Consider using a data class or dictionary for parameters",
@@ -138,14 +138,14 @@ class CoderSmellMixin:
             )
 
     def _check_python_class_smells(self, node: ast.ClassDef, smells: List[CodeSmell]) -> None:
-        """Check for god classes."""
+""""Check for god classes."""
         method_count = sum(1 for n in node.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)))
         threshold = CODE_SMELL_PATTERNS["god_class"]["threshold"]
         if method_count > threshold:
             smells.append(
                 CodeSmell(
                     name="god_class",
-                    description=f"Class '{node.name}' has {method_count} methods (>{threshold})",
+                    description=fClass '{node.name}' has {method_count} methods (>{threshold})",
                     severity="warning",
                     line_number=node.lineno,
                     suggestion="Consider splitting the class into smaller, more focused classes.",
@@ -154,8 +154,8 @@ class CoderSmellMixin:
             )
 
     def _detect_generic_smells(self, content: str) -> List[CodeSmell]:
-        """Language-agnostic smell detection (e.g. nesting)."""
-        smells: List[CodeSmell] = []
+""""Language-agnostic smell detection (e.g. nesting)."""
+        smells:" List[CodeSmell] = []
         lines = content.split("\n")
         # Deep nesting detection
         for i, line in enumerate(lines, 1):
@@ -166,7 +166,7 @@ class CoderSmellMixin:
                 smells.append(
                     CodeSmell(
                         name="deep_nesting",
-                        description=f"Code at line {i} has {nesting} levels of nesting (>{threshold})",
+                        description=fCode at line {i} has {nesting} levels of nesting (>{threshold})",
                         severity="info",
                         line_number=i,
                         suggestion="Consider early returns or extracting nested logic",

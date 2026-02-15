@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Core logic for Android ADB integration (Phase 175).
-Encapsulates ADB commands for UI testing.
+# #
+# Core logic for Android ADB integration (Phase 175).
+# Encapsulates ADB commands for UI testing.
 Optimized for eventual Rust migration (Phase 3).
-"""
+# #
 
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class ADBResult(TypedDict):
-    """Result of an ADB command execution."""
+""""Result of an ADB command execution."""
 
     success: bool
     output: str
@@ -39,7 +39,7 @@ class ADBResult(TypedDict):
 
 
 class AndroidCore:
-    """Core logic for ADB command formatting and parsing."""
+""""Core logic for ADB command formatting and parsing."""
 
     @staticmethod
     def run_adb_command(
@@ -47,10 +47,10 @@ class AndroidCore:
         serial: str | None = None,
         recorder: ContextRecorderInterface | None = None,
     ) -> ADBResult:
-        """
+# #
         Runs an adb command and returns a structured result.
-        """
-        base = ["adb"]
+# #
+       " base = ["adb"]
         if serial:
             base.extend(["-s", serial])
 
@@ -72,7 +72,7 @@ class AndroidCore:
 
             # If failed but no stderr, use stdout or generic message
             if not success and not error:
-                error = output if output else "Unknown ADB error"
+#                 error = output if output else "Unknown ADB error
 
             result: ADBResult = {
                 "success": success,
@@ -84,14 +84,14 @@ class AndroidCore:
         except FileNotFoundError:
             result = {
                 "success": False,
-                "output": "",
+                "output": ",
                 "error": "adb binary not found in PATH",
                 "command": cmd_str,
             }
         except (AttributeError, RuntimeError, TypeError, subprocess.SubprocessError) as e:
             result = {
                 "success": False,
-                "output": "",
+                "output": ",
                 "error": str(e),
                 "command": cmd_str,
             }
@@ -101,7 +101,7 @@ class AndroidCore:
                 provider="android",
                 model="adb",
                 prompt=cmd_str,
-                result=result["output"] if result["success"] else f"Error: {result['error']}",
+                result=result["output"] if result["success"] else fError: {result['error']}",
                 meta={"serial": serial, "success": result["success"]},
             )
 
@@ -109,9 +109,8 @@ class AndroidCore:
 
     @staticmethod
     def list_devices(recorder: ContextRecorderInterface | None = None) -> list[str]:
-        """
         Returns a list of connected device serials.
-        """
+# #
         res = AndroidCore.run_adb_command(["devices"], recorder=recorder)
         if not res["success"]:
             return []
@@ -125,7 +124,7 @@ class AndroidCore:
 
         lines = res["output"].splitlines()
         devices = []
-        # Header is usually "List of devices attached"
+#         # Header is usually "List of devices attached
         for line in lines:
             if not line.strip():
                 continue
@@ -146,12 +145,12 @@ class AndroidCore:
         serial: str | None = None,
         recorder: ContextRecorderInterface | None = None,
     ) -> ADBResult:
-        """
+# #
         Takes a screenshot of the device. Returns the result of the pull command (final step).
-        """
-        # 1. Take screenshot on device
+# #
+        # 1". Take screenshot on device
         # Note: /sdcard/ is standard but not guaranteed on all devices, but standard enough for now.
-        temp_remote_path = "/sdcard/screen_capture_temp.png"
+#         temp_remote_path = "/sdcard/screen_capture_temp.png
 
         cap_res = AndroidCore.run_adb_command(["shell", "screencap", "-p", temp_remote_path], serial, recorder)
         if not cap_res["success"]:

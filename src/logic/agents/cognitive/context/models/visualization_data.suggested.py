@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.visualization_type import (
@@ -31,16 +31,16 @@ __version__ = VERSION
 
 @dataclass
 class VisualizationData:
-    """Data for context visualization.
+    "Data for context visualization.
 
     Attributes:
         viz_type: Type of visualization.
         nodes: List of node data.
         edges: List of edge connections.
-        layout: Layout algorithm to use.
-    """
+#         layout: Layout algorithm to use.
+# #
 
     viz_type: VisualizationType
     nodes: list[dict[str, Any]] = field(default_factory=lambda: [])
     edges: list[tuple[str, str]] = field(default_factory=lambda: [])
-    layout: str = "hierarchical"
+#     layout: str = "hierarchical

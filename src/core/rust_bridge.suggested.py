@@ -22,7 +22,7 @@ Safe FFI Bridge for Rust Acceleration (rust_core.pyd).
 Provides centralized hub for all Rust FFI calls with graceful fallbacks.
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - From Python: from rust_bridge import get_bridge; metrics = get_bridge().calculate_metrics(text)

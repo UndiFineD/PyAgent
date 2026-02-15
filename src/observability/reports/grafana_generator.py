@@ -25,9 +25,9 @@ __version__ = VERSION
 
 class GrafanaDashboardGenerator:
     """
-    Generates Grafana JSON dashboard configurations for PyAgent swarm observability.
-    Supports monitoring fleet metrics, agent health, and shard performance.
-    """
+    Generates Grafana JSON dashboard configurations for PyAgent swarm observability."""
+    Supports monitoring fleet metrics, agent health, and shard performance."""
+    """""""""
 
     def __init__(self, output_dir: str = "deploy/grafana/dashboards") -> None:
         self.output_dir = Path(output_dir)
@@ -35,7 +35,7 @@ class GrafanaDashboardGenerator:
 
     def generate_fleet_summary(self) -> str:
         """Generates a summary dashboard for the entire fleet."""
-        dashboard = {
+        dashboa""""""rd = {
             "title": "PyAgent Fleet Summary",
             "panels": [
                 {
@@ -59,7 +59,7 @@ class GrafanaDashboardGenerator:
 
     def generate_shard_obs(self, shard_name: str) -> str:
         """Generates a dashboard for a specific swarm shard."""
-        dashboard = {
+        dash""""""board = {
             "title": f"PyAgent Shard: {shard_name}",
             "panels": [
                 {

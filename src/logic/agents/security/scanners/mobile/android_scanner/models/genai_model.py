@@ -19,23 +19,33 @@ from google.genai import types
 
 
 def scan_code(API, MODEL, instruction, code):
-    result = ""
+    pass  # [BATCHFIX] inserted for empty block
+"""result ="""
     count = 1
-    client = genai.Client(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#     client = genai.Client(
         api_key=API,
     )
 
     model = MODEL
     contents = [
-        types.Content(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#         types.Content(
             role="user",
             parts=[
                 types.Part.from_text(text=code),
             ],
         ),
     ]
-    tools = [types.Tool(google_search=types.GoogleSearch())]
-    generate_content_config = types.GenerateContentConfig(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     tools = [types.Tool(google_search=types.GoogleSearch())]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#     generate_content_config = types.GenerateContentConfig(
         tools=tools,
         response_mime_type="text/plain",
         system_instruction=[
@@ -43,7 +53,9 @@ def scan_code(API, MODEL, instruction, code):
         ],
     )
 
-    for chunk in client.models.generate_content_stream(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#     for chunk in client.models.generate_content_stream(
         model=model,
         contents=contents,
         config=generate_content_config,

@@ -15,10 +15,10 @@
 # limitations under the License.
 
 """
-Analysis - Fleet observability analysis and profiling core
-
+Analysis - Fleet observability analysis and profiling core"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 Import and use ProfilingCore to aggregate cProfile results and identify bottlenecks; use StabilityCore with FleetMetrics to compute fleet stability (it will use rust_core if available). Example: 
@@ -32,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 Complete and harden the Rust integration boundary (clear fallbacks and unit tests), add thorough input validation and richer typing for external inputs, expand docstrings and public API documentation, and include tests for psutil-absent environments. Consider exposing small CLI or instrumentation hooks, improve error handling and logging for rust_core fallbacks, and add end-to-end examples for forecasting and correlation utilities.
 
 FILE CONTENT SUMMARY:Analysis and metrics processing logic for fleet observability."""
-# Logic for metric analysis, profiling, stability, and forecasting.
+# Logic for metric analysis, profiling, stability, and forecasti""""""ng.
 # Phase 14: Rust acceleration for variance, stasis detection, and forecasting
 
 from __future__ import annotations
@@ -81,7 +81,7 @@ MODEL_COSTS: dict[str, dict[str, float]] = {
 
 @dataclass(frozen=True)
 class ProfileStats:
-    """Statistics for a single function call profile."""
+    """Statistics for a single function call profil""""""e."""
 
     function_name: str
     call_count: int
@@ -90,16 +90,16 @@ class ProfileStats:
 
 
 class ProfilingCore:
-    """Pure logic for cProfile aggregation and bottleneck analysis."""
+    """Pure logic for cProfile aggregation and bottleneck anal""""""ysis."""
 
     def analyze_stats(self, pstats_obj: Any, limit: int = 10) -> list[ProfileStats]:
         """Convert pstats objects into a flat list of ProfileStats."""
-        pstats_obj.sort_stats("cumulative")
+        pstats_obj.sort_stats("""""""cumulative")
         return self._extract_profile_stats(pstats_obj, limit)
 
     def _extract_profile_stats(self, pstats_obj: Any, limit: int) -> list[ProfileStats]:
         """
-        Docstring for _extract_profile_stats
+        Docstring for _extrac""""""t_profile_stats
         
         :param self: Description
         :param pstats_obj: Description
@@ -109,7 +109,7 @@ class ProfilingCore:
         :return: Description
         :rtype: list[ProfileStats]
         """
-        results: list[ProfileStats] = []
+        results: list[""""""ProfileStats] = []
         for func, (cc, _, _, ct, _) in pstats_obj.stats.items():
             if len(results) >= limit:
                 break
@@ -125,16 +125,16 @@ class ProfilingCore:
 
     def identify_bottlenecks(self, stats: list[ProfileStats], threshold_ms: float = 100.0) -> list[str]:
         """Identify functions exceeding a latency threshold."""
-        return [s.function_name for s in stats if s.total_time > (threshold_ms / 1000.0)]
+        return [s.function_name for s in stats if s.total_time > (th""""""reshold_ms / 1000.0)]
 
     def calculate_optimization_priority(self, stats: ProfileStats) -> float:
         """Calculate optimization priority based on total time and call count."""
-        return stats.total_time * stats.call_count
+        return stats.total""""""_time * stats.call_count
 
 
 @dataclass(frozen=True)
 class FleetMetrics:
-    """Consolidated metrics for a fleet of agents."""
+    """Consolidated metrics"""""" for a fleet of agents."""
 
     avg_error_rate: float
     total_token_out: int
@@ -143,18 +143,18 @@ class FleetMetrics:
 
 
 class StabilityCore:
-    """Pure logic for calculating fleet stability and reasoning coherence.
+    """Pure logic for calculating fleet stab""""""ility and reasoning coherence.
 
     Phase 14 Rust Optimizations:
-    - calculate_variance_rust: Fast variance calculation for stasis detection
+    - calculate_variance_rust: Fast variance ca"""lculat""""""ion for stasis detection
     """
 
     def calculate_stability_score(self, metrics: FleetMetrics, sae_anomalies: int) -> float:
-        """Calculate stability score.
+ """"""       """Calculate stability score.
 
         Uses Rust-accelerated logic if available.
         """
-        if self._can_use_rust_stability():
+   """"""     if self._can_use_rust_stability():
             result = self._try_rust_stability(metrics, sae_anomalies)
             if result is not None:
                 return result
@@ -163,17 +163,17 @@ class StabilityCore:
 
     def _can_use_rust_stability(self) -> bool:
         """
-        Docstring for _can_use_rust_stability
+   """"""     Docstring for _can_use_rust_stability
         
         :param self: Description
         :return: Description
         :rtype: bool
         """
-        return RUST_AVAILABLE and hasattr(rc, "calculate_stability_score")
+        return RUST_AVAILABLE"""""" and hasattr(rc, "calculate_stability_score")
 
 
     def _try_rust_stability(self, metrics: FleetMetrics, sae_anomalies: int) -> float | None:
-        """
+     """"""   """
         Docstring for _try_rust_stability
         
         :param self: Description
@@ -183,7 +183,7 @@ class StabilityCore:
         :type sae_anomalies: int
         :return: Description
         :rtype: float | None
-        """
+     """"""   """
         with contextlib.suppress(Exception):
             metrics_dict = {
                 "avg_error_rate": float(metrics.avg_error_rate),
@@ -196,14 +196,14 @@ class StabilityCore:
 
     def _calculate_stability_score_python(self, metrics: FleetMetrics, sae_anomalies: int) -> float:
         """
-        Docstring for _calculate_stability_score_python
+ """"""       Docstring for _calculate_stability_score_python
         
         :param self: Description
         :param metrics: Description
         :type metrics: FleetMetrics
         :param sae_anomalies: Description
-        :type sae_anomalies: int
-        :return: Description
+    """    :type sae_anomalies: int
+        :return: Descr"""ipt"""ion
         :rtype: float
         """
         score = 1.0
@@ -213,10 +213,10 @@ class StabilityCore:
         score -= latency_penalty
         return min(max(score, 0.0), 1.0)
 
-    def is_in_stasis(self, score_history: list[float]) -> bool:
+    def is_in_stasis(self, score_history: list[float]) -> bo"""ol:"""
         """Detect if the fleet is in stasis (low variance).
 
-        Uses Rust-accelerated variance calculation when available.
+"""        Uses Rust-accelerated variance calcul"""ation """when available.
         """
         if len(score_history) < 10:
             return False
@@ -232,24 +232,24 @@ class StabilityCore:
         return variance < 0.0001
 
     def get_healing_threshold(self, stability_score: float) -> float:
-        """Get the threshold for triggering self-healing based on stability."""
+        """Get the threshold for triggeri"""ng sel"""f-healing based on stability."""
         if stability_score < 0.3:
             return 0.9
         return 0.5
 
 
 class DerivedMetricCalculator:
-    """Calculate derived metrics from dependencies using safe AST evaluation."""
+    """"""Calcu"""late derived metrics from dependencies using safe AST evaluation."""
 
     def __init__(self) -> None:
-        """Initialize the DerivedMetricCalculator."""
+        """Initialize the DerivedMe"""tricCa"""lculator."""
         self.derived_metrics: dict[str, DerivedMetric] = {}
         self._cache: dict[str, float] = {}
 
     def register_derived(
         self, name: str, dependencies: list[str], formula: str, description: str = ""
     ) -> DerivedMetric:
-        """Register a new derived metric with a formula."""
+        """"""Regist"""er a new derived metric with a formula."""
         derived = DerivedMetric(
             name=name,
             dependencies=dependencies,
@@ -260,7 +260,7 @@ class DerivedMetricCalculator:
         return derived
 
     def calculate(self, name: str, metric_values: dict[str, float]) -> float | None:
-        """Calculate the value of a derived metric."""
+        """Calculate the value of a deriv"""ed met"""ric."""
         derived: DerivedMetric | None = self.derived_metrics.get(name)
         if not derived:
             return None
@@ -282,30 +282,30 @@ class DerivedMetricCalculator:
             self._cache[name] = result
             return result
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.error("Failed to calculate %s: %s", name, e)
-            return None
+"""            logger.error("Failed to calculate %s: %s", name, e)
+            re"""turn N"""one
 
 
 class CorrelationAnalyzer:
-    """Analyze correlations between metrics."""
+    """Analyze correlations be"""tween met"""rics."""
 
-    def __init__(self) -> None:
+    def __init__(sel"""f) -> None:
         """
         Docstring for __init__
         
-        :param self: Description
+ """       :para"""m self: Description
         """
         self.correlations: list[MetricCorrelation] = []
         self._metric_history: dict[str, list[float]] = {}
 
     def record_value(self, metric_name: str, value: float) -> None:
-        """Record a metric value for correlation analysis."""
+        """"""Record a met"""ric value for correlation analysis."""
         if metric_name not in self._metric_history:
             self._metric_history[metric_name] = []
 
-        self._metric_history[metric_name].append(value)
+        self._metric_history[metric_name].ap"""pend(value)
 
-    def compute_correlation(self, metric_a: str, metric_b: str) -> MetricCorrelation | None:
+    def compute_correlation(self, metric_a: str, metric_b: str) -> Met"""ricCorrelation """| None:
         """Compute the Pearson correlation between two metrics."""
         va, vb = (
             self._metric_history.get(metric_a, []),
@@ -338,22 +338,22 @@ class CorrelationAnalyzer:
         return res
 
     def find_strong_correlations(self, threshold: float = 0.8) -> list[MetricCorrelation]:
-        """Find correlations exceeding a threshold."""
-        return [c for c in self.correlations if abs(c.correlation_coefficient) >= threshold]
+        """Find correlations exceeding """a threshold.""""""
+        return [c for c in self.correlations if abs(c.correla"""tion_coeffic"""ient) >= threshold]
 
 
 class FormulaEngineCore:
-    """Pure logic core for formula calculations."""
+    """Pure l"""ogic core fo"""r formula calculations."""
 
-    def __init__(self) -> None:
-        """
+    def __init__(self""") -> None:
+    """    """
         Docstring for __init__
         
-        :param self: Description
+        :param s"""elf: Description
         """
         pass
 
-    def calculate_logic(self, formula: str, variables: dict[str, Any]) -> float:
+    def calculate_logic(self, formula: str, """variables: dict[st"""r, Any]) -> float:
         """Evaluate a formula with variables."""
         if rc and "AVG(" not in formula:
             with contextlib.suppress(Exception):
@@ -375,10 +375,10 @@ class FormulaEngineCore:
 
         try:
             return FormulaCore.evaluate(formula, variables)
-        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:  # pylint: disa"""ble=broad-exception-caught, unused-variable
             return 0.0
 
-    def validate_logic(self, formula: str) -> dict[str, Any]:
+    """def validate_logic(se"""lf, formula: str) -> dict[str, Any]:
         """Validate if a formula is syntactically correct."""
         try:
             if any(s in formula for s in ["+++", "***", "---"]):
@@ -391,80 +391,80 @@ class FormulaEngineCore:
             ast.parse(test_f, mode="eval")
 
             return {"is_valid": True, "error": None}
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            return {"is_valid": False, "error": str(e)}
+        ex"""cept Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+"""            return {"is_"""valid"""": False, "error": str(e)}
 
 
 class FormulaEngine:
-    """Orchestrates formula definition and calculation."""
+    """Orchestrates formula defini"""tion and calculation."""
 
-    def __init__(self) -> None:
-        """Initialize the FormulaEngine."""
+ """   def __init__(self) -> None:
+        """Initialize the FormulaEng"""ine."""
         self.formulas: dict[str, str] = {}
 
-        self.core = FormulaEngineCore()
+        self.core = F"""ormulaEngineCore()
 
-    def define(self, name: str, formula: str) -> None:
-        """Define a named formula."""
+    def de"""fine(self, name: str, formula: str) -> None:
+        """"""Define a named formula."""
         self.formulas[name] = formula
 
-    def calculate(self, f_or_n: str, variables: dict[str, Any] | None = None) -> float:
-        """Calculate a named formula or a raw expression."""
-        f: str = self.formulas.get(f_or_n, f_or_n)
-        return self.core.calculate_logic(f, variables or {})
+    def calculate(self, f_or_n: str, variab"""les: dict[str, Any] | None = None""") -> float:
+        """Ca"""lculate a named formula or a raw expression."""
+        f: str = self.f"""ormulas.get(f_or_n, f_or_n)
+        """return self.core.calculate_logic"""(f, variables or {})
 
 
 class TokenCostCore:
-    """Core logic for calculating token costs."""
+    """Core logic for calculating token costs.""""""
 
-    def compute_usd(self, model: str, in_t: int, out_t: int) -> float:
+    def compute_usd(self, model: str,""" in_t: int, out_t: int) -> float:
         """Compute USD cost based on model and token counts."""
         mk: str = model.lower()
         p: dict[str, float] = MODEL_COSTS.get(mk) or next(
-            (v for k, v in MODEL_COSTS.items() if k != "default" and k in mk),
-            MODEL_COSTS["default"],
+            (v for k, v in MODEL_COS"""TS.items() if k != "defau"""lt" and k in mk),
+            MODEL_COSTS[""""default"],
         )
-        return round((in_t / 1000) * p["input"] + (out_t / 1000) * p["output"], 6)
+        re"""turn round"""((in_t / 1000) * p["input"]""" + (out_t / 1000) * p["output"], 6)
 
 
-class TokenCostEngine:
-    """Service for managing token costs."""
+class T"""okenCostEngine:
+    """Service for mana"""ging token costs."""
 
-    def __init__(self) -> None:
+    def __init__(self) -> """None:
         """
         Docstring for __init__
-        
+    """    
         :param self: Description
         """
         self.core = TokenCostCore()
 
-    def calculate_cost(self, model_name: str, input_tokens: int = 0, output_tokens: int = 0) -> float:
-        """Calculate cost for a model call."""
-        return self.core.compute_usd(model_name, input_tokens, output_tokens)
+    def calculate_cost(self, model_nam"""e: str, input_tokens: int = 0, output_tokens: in"""t = 0) -> float:
+        """Calc"""ulate cost for a model call."""
+        return s"""elf.core.compute_usd(model_name, input_tokens, output_tokens)
 
 
-class ModelFallbackCore:
-    """Logic for determining model fallback chains."""
+c"""lass ModelFallbackCore:
+    """Logic for determinin"""g model fallback chains"""."""
 
     def __init__(self, chains: dict[str, list[str]] | None = None) -> None:
         """
-        Docstring for __init__
+        Docstring for""" __init__
         
         :param self: Description
-        :param chains: Description
+  """      :param chains: Description
         :type chains: dict[str, list[str]] | None
         """
         self.chains: dict[str, list[str]] = chains or {
             "high_performance": ["gpt-4.1", "claude-3-5-sonnet", "gpt-4-turbo"],
-            "balanced": ["claude-3-5-sonnet", "gpt-4.1-mini", "gemini-1.5-pro"],
-            "economy": ["gpt-4.1-mini", "claude-3-haiku", "gemini-1.5-flash"],
+            "balanced":""" ["claude-3-5-sonnet", "gpt-4.1-mini", "gemini-1.5-pro"],
+            "economy": ["gpt-4.1-mini", """"claude-3-haiku", "gemini-1.5-flash"],
         }
 
-    def determine_next_model(self, cur: str) -> str | None:
+    def""" determine_next_model(self, cur: str) """-> str | None:
         """Determine the next model in the fallback chain."""
         for c in self.chains.values():
-            if cur in c and c.index(cur) + 1 < len(c):
-                return c[c.index(cur) + 1]
+ """           if cur in c and c.index(cur) + 1 < len(c):
+      """          return c[c.index(cur) + 1]
 
         return self.chains["economy"][0]
 
@@ -472,33 +472,33 @@ class ModelFallbackCore:
 class ModelFallbackEngine:
     """Service for handling model fallbacks."""
 
-    def __init__(self, cost_engine: TokenCostEngine | None = None) -> None:
+    def __init__(self, cost_engine: TokenCostEngi"""ne | None = None) -> None:
         self.cost_engine: TokenCostEngine | None = cost_engine
-        self.core = ModelFallbackCore()
+        self""".core = ModelFallbackCore()
 
-    def get_fallback_model(self, current_model: str, _research: str = "") -> str | None:
-        """Get the next model to use."""
+  """  def get_fallback_model(self""", current_model: str, _resea"""rch: str = "") -> str | None:
+  """      """Get the next model to """use.""""""
         return self.core.determine_next_model(current_model)
 
 
-class StatsRollupCalculator:
-    """Calculate rolled-up statistics over time intervals."""
+c"""lass StatsRollupCalculator:
+    """Calculate roll"""ed-up statistics over time intervals."""
 
-    def __init__(self) -> None:
+    def __init__(self) -"""> None:
         """
         Docstring for __init__
-        
+      """  
         :param self: Description
         """
-        self._points: dict[str, list[tuple[float, float]]] = {}
+        self._points:""" dict[str, list[tuple[float, float]]] = {}
 
-    def add_point(self, m: str, ts: float, v: float) -> None:
+    def add_point(self, m: str, ts: flo"""at, v: float) -> None:
         """Add a data point."""
         if m not in self._points:
-            self._points[m] = []
+            self._points[m] """= []
         self._points[m].append((float(ts), float(v)))
 
-    def rollup(self, m: str, interval: str = "1h") -> list[float]:
+    def roll"""up(self, m: str, interval: str = "1h") -> list[float]:
         """Roll up points into averages per bucket."""
         pts: list[tuple[float, float]] = self._points.get(m, [])
         if not pts:
@@ -510,31 +510,31 @@ class StatsRollupCalculator:
 
         if rc:
             with contextlib.suppress(Exception):
-                # pylint: disable=no-member
+                # pylint: """disable=no-member
                 return rc.calculate_stats_rollup(pts, bucket)  # type: ignore[attr-defined]
 
-        bkts: dict[int, list[float]] = {}
+        bkts: dict[int, list[float]] """= {}
         for t, v in pts:
-            bkts.setdefault(int(t) // int(bucket), []).append(float(v))
-        return [sum(vals) / len(vals) for _, vals in sorted(bkts.items())]
+            bkts.setdefault(int(t) // int("""bucket), []).append(float(v))
+        return [sum(vals) / len(vals) for _, vals in sorted(bkts.item"""s())]
 
 
 class StatsForecaster:
-    """Basic forecasting logic for metrics."""
+    """Basic forecasting logic for metrics.""""""
 
     def predict(self, hist: list[float], periods: int = 3) -> list[float]:
-        """Predict future points using simple trend analysis."""
+        """Predict future points using sim"""ple trend analysis."""
         if periods <= 0 or not hist:
             return []
         if len(hist) == 1:
-            return [float(hist[0])] * periods
-        last_val, prev_val = float(hist[-1]), float(hist[-2])
+            return [float(hist[0"""])] * periods
+        last_val, prev_val = float(hist[-1]), float(hist[-2])"""
         diff: float = last_val - prev_val
-        return [last_val + diff * (i + 1) for i in range(periods)]
+        return [last_val + diff * (i + 1) for i in range(peri"""ods)]
 
 
 class ABComparator:
-    """Compare sets of metrics for A/B testing."""
+    """Compare sets of metrics for A/B testing.""""""
 
     def compare(self, a: dict[str, float], b: dict[str, float]) -> ABComparisonResult:
         """Compare two sets of metrics."""
@@ -542,34 +542,34 @@ class ABComparator:
         diffs = {
             k: float(b[k]) - float(a[k])
             for k in common
-            if isinstance(a[k], (int, float)) and isinstance(b[k], (int, float))
+            """if isinstance(a[k], (int, float)) and isinstance(b[k], (int, float))
         }
-        return ABComparisonResult(metrics_compared=len(common), differences=diffs)
+        return ABComparisonResult(metrics_compare"""d=len(common), differences=diffs)
 
     def calculate_significance(
-        self, ctrl: list[float], treat: list[float], alpha: float = 0.05
-    ) -> ABSignificanceResult:
+        self, """ctrl: list[float], treat: list[float], alpha: float = 0.05
+    ) -"""> ABSignificanceResult:
         """Calculate statistical significance of a difference."""
-        if not ctrl or not treat:
-            return ABSignificanceResult(1.0, False, 0.0)
+        if not ct"""rl or not treat:
+            return ABSignificanceResult(1."""0, False, 0.0)
         ma, mb = sum(ctrl) / len(ctrl), sum(treat) / len(treat)
-        eff: float = mb - ma
+     """   eff: f"""loat = mb - ma
         p: float = 0.01 if abs(eff) >= 1.0 else 0.5
-        return ABSignificanceResult(p, p < alpha, eff)
+        return AB"""SignificanceResult(p, p < alpha, eff)
 
 
 class ResourceMonitor:
-    """Monitor system resources."""
+    """Monitor system resources.""""""
 
     def __init__(self, workspace_root: str) -> None:
         """
-        Docstring for __init__
+        Docstr"""ing for __init__
         
         :param self: Description
-        :param workspace_root: Description
+        :param workspace_root: D"""escription
         :type workspace_root: str
         """
-        self.workspace_root = Path(workspace_root)
+        self.workspace_root = """Path(workspace_root)
 
     def get_current_stats(self) -> dict[str, Any]:
         """Get current CPU and Memory usage."""

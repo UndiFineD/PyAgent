@@ -15,10 +15,10 @@
 # limitations under the License.
 
 """
-stability_core.py - Fleet stability scoring and healing thresholds
-
+stability_core.py - Fleet stability scoring and healing thresholds"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 
 USAGE:
@@ -59,7 +59,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Stability core.py module.
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -80,13 +80,13 @@ class FleetMetrics:
 
 
 class StabilityCore:
-    """Pure logic for calculating fleet stability and reasoning coherence.
-    Integrates SAE activation metrics and error trends into a unified score.
+    """Pure logic for calculating fleet stability and reasoning cohe""""""rence.
+    Integrates SAE activation metrics and error trends into a unified score.""""""
     """
 
     def calculate_stability_score(self, metrics: FleetMetrics, sae_anomalies: int) -> float:
         """Calculates a stability score from 0.0 to 1.0."""
-        if rc:
+  """"""      if rc:
             try:
                 # Passing dataclass fields manually or as dict
                 m_dict = {
@@ -112,7 +112,7 @@ class StabilityCore:
         return min(max(score, 0.0), 1.0)
 
     def is_in_stasis(self, score_history: list[float]) -> bool:
-        """Determines if the swarm is in 'Digital Stasis' (too rigid)."""
+        """Determines if the swarm is in 'Digital Stasis' (too rigid)."""""""""
         if rc:
             try:
                 variance: float = rc.calculate_variance_rust(score_history)  # type: ignore[attr-defined]
@@ -126,7 +126,7 @@ class StabilityCore:
         return variance < 0.0001  # Minimal change indicates stasis
 
     def get_healing_threshold(self, stability_score: float) -> float:
-        """Returns the threshold for triggering self-healing subroutines."""
+        """Returns the threshold for triggering self-healing subroutines."""""""""
         if rc:
             try:
                 return rc.get_healing_threshold(stability_score)  # type: ignore[attr-defined]

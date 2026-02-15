@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Agent for integrating simulated logic paths into production codebases."""
-
-from __future__ import annotations
+# "Agent for integrating simulated logic paths into production codebases.
+# #
+# from __future__ import annotations
 
 import logging
 
@@ -30,40 +30,38 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class RealityGraftingAgent(BaseAgent):
-    """
     Tier 2 (Cognitive Logic) - Reality Grafting Agent: Integrates successful
     logic paths from simulations and experimental shards into production codebases.
-    """
+# #
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Reality Grafting Agent. "
-            "Your purpose is to take abstract architectural patterns discovered in simulations "
-            "and implement them as concrete Python code or agent tools."
+#             "You are the Reality Grafting Agent.
+#             "Your purpose is to take abstract architectural patterns discovered in simulations
+#             "and implement them as concrete Python code or agent tools.
         )
 
     @as_tool
     def graft_skill(self, focus_area: str, dream_output: str) -> str:
-        """
         Takes synthesized intelligence from a dream cycle and implements it.
-        """
+# #
         logging.info(
-            f"RealityGrafting: Attempting to graft skill for '{focus_area}' into reality."
+#             fRealityGrafting: Attempting to graft skill for '{focus_area}' into reality.
         )
 
         # In a production system, this would call SpecToolAgent to generate code.
         # For this implementation, we formalize the 'grafting' into a persistent log.
 
         report = (
-            f"### Reality Grafting Report\n"
-            f"- **Focus Area**: {focus_area}\n"
-            f"- **Source**: DreamState Synthesis\n"
-            f"- **Logic Grafted**: {dream_output[:100]}...\n"
-            f"- **Result**: New capability identified and prepared for deployment."
+#             f"### Reality Grafting Report\n
+#             f"- **Focus Area**: {focus_area}\n
+#             f"- **Source**: DreamState Synthesis\n
+#             f"- **Logic Grafted**: {dream_output[:100]}...\n
+#             f"- **Result**: New capability identified and prepared for deployment.
         )
 
-        logging.info(f"Grafting successful for {focus_area}")
+        logging.info(fGrafting successful for {focus_area}")
         return report
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

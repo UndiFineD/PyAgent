@@ -20,12 +20,12 @@
 # limitations under the License.
 
 
-"""
-TieredMemoryEngine: Implements a MIRIX 6-tier memory engine utilizing ChromaDB for scalable,
-multi-level memory management in PyAgent.
+# #
+# TieredMemoryEngine: Implements a MIRIX 6-tier memory engine utilizing ChromaDB for scalable,
+# multi-level memory management in PyAgent.
 Supports hierarchical storage, retrieval, and promotion of agent memory fragments across
 short, mid, long, and archival tiers.
-"""
+# #
 
 
 import logging
@@ -33,33 +33,32 @@ from typing import Any, List, Dict, Optional
 
 
 class TieredMemoryEngine:
-    """Manages the 6 memory tiers: Core, Episodic, Semantic,
-    Procedural, Resource, and Knowledge."""
+    "Manages the 6 memory tiers: Core, Episodic, Semantic,
+#     Procedural, Resource, and Knowledge.
 
     def __init__(self, db_path: str) -> None:
-        """Initialize the tiered memory engine.
+        "Initialize the tiered memory engine.
 
         Args:
             db_path: Path to the ChromaDB database.
         # ...existing code...
         self.db_path = db_path
         # Initialization logic for ChromaDB would be here
-        """
+# #
 
     def record_memory(self, tier: str, content: str, metadata: Optional[Dict[str, Any]] = None) -> None:
-        """Persists a memory fragment into the specified tier.
+        "Persists a memory fragment into the specified tier.
 
         Args:
             tier: The target memory tier.
             content: The content to record.
             metadata: Optional metadata for the memory record.
-        """
-        logging.info(f"MIRIX: Recording to {tier} tier.")
+# #
+        logging.info(fMIRIX: Recording to {tier} tier.")
         _ = (content, metadata)  # Mark as used
 
     def query_tier(self, tier: str, query: str, limit: int = 3) -> str:
-        """
-        Queries a specific memory tier.
+        Queries" a specific memory tier.
 
         Args:
             tier: The tier to query.
@@ -68,23 +67,21 @@ class TieredMemoryEngine:
 
         Returns:
             The query result as a string.
-        """
-        _ = limit  # Mark as used
-        return f"Simulated context from {tier} tier for query: {query}"
+# #
+      "  _ = limit  # Mark as used
+#         return fSimulated context from {tier} tier for query: {query}
 
     def upsert_documents(self, documents: List[str], metadatas: List[Dict[str, Any]], ids: List[str]) -> None:
-        """
         Bulk updates the vector database.
 
         Args:
             documents: List of document strings.
             metadatas: List of metadata dictionaries.
             ids: List of unique identifiers.
-        """
-        _ = (documents, metadatas, ids)  # Mark as used
+# #
+        _ = (documents", metadatas, ids)  # Mark as used
 
     def search_workspace(self, query: str, n_results: int = 3) -> List[Dict[str, Any]]:
-        """
         Performs semantic search across the workspace.
 
         Args:
@@ -93,6 +90,6 @@ class TieredMemoryEngine:
 
         Returns:
             List of dictionaries containing content and metadata.
-        """
-        _ = (query, n_results)  # Mark as used
+# #
+       " _ = (query, n_results)  # Mark as used
         return []

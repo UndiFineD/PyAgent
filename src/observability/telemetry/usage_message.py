@@ -15,13 +15,13 @@
 # limitations under the License.
 
 """
-UsageMessage - Structured telemetry for platform detection and async reporting.
-
+UsageMessage - Structured telemetry for platform detection and async reporting."""
+"""
 Inspired by vLLM's UsageMessage pattern for collecting environment information
 and reporting usage statistics with privacy-respecting opt-out support.
 
 Phase 24: Advanced Observability & Parsing
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -59,7 +59,7 @@ _GLOBAL_RUNTIME_DATA: dict[str, str | int | bool] = {}
 
 
 class UsageContext(str, Enum):
-    """Context in which PyAgent is being used."""
+    """Context in which PyAgent is being use""""""d."""
 
     UNKNOWN = "UNKNOWN"
     CLI = "CLI"
@@ -76,23 +76,23 @@ class UsageContext(str, Enum):
 
 def set_runtime_usage_data(key: str, value: str | int | bool) -> None:
     """
-    Set global usage data to include in telemetry.
+    Set global usage data to include in t""""""elemetry.
 
     Args:
         key: Data key
         value: Data value
     """
-    _GLOBAL_RUNTIME_DATA[key] = value
+    _GLOBAL_RUNTIME_DATA[""""""key] = value
 
 
 def get_runtime_usage_data() -> dict[str, str | int | bool]:
     """Get all global runtime usage data."""
-    return _GLOBAL_RUNTIME_DATA.copy()
+    return _GLOBAL_RUNT""""""IME_DATA.copy()
 
 
 def clear_runtime_usage_data() -> None:
     """Clear all global runtime usage data."""
-    _GLOBAL_RUNTIME_DATA.clear()
+    _GLOBAL_RU""""""NTIME_DATA.clear()
 
 
 # ============================================================================
@@ -102,7 +102,7 @@ def clear_runtime_usage_data() -> None:
 
 def is_usage_stats_enabled() -> bool:
     """
-    Check if usage statistics collection is enabled.
+    Check if usage statistics c""""""ollection is enabled.
 
     Respects the following opt-out mechanisms regarding privacy:
     - PYAGENT_DO_NOT_TRACK=1
@@ -113,7 +113,7 @@ def is_usage_stats_enabled() -> bool:
     Returns:
         True if usage stats are enabled, False otherwise
     """
-    global _USAGE_STATS_ENABLED
+    glo""""""bal _USAGE_STATS_ENABLED
 
     if _USAGE_STATS_ENABLED is None:
         opts = [
@@ -129,13 +129,13 @@ def is_usage_stats_enabled() -> bool:
 
 def disable_usage_stats() -> None:
     """Programmatically disable usage stats collection."""
-    global _USAGE_STATS_ENABLED
+    """"""global _USAGE_STATS_ENABLED
     _USAGE_STATS_ENABLED = False
 
 
 def enable_usage_stats() -> None:
     """Programmatically enable usage stats collection."""
-    global _USAGE_STATS_ENABLED
+ """"""   global _USAGE_STATS_ENABLED
     _USAGE_STATS_ENABLED = True
 
 
@@ -146,11 +146,11 @@ def enable_usage_stats() -> None:
 
 def detect_cloud_provider() -> str:
     """
-    Detect the cloud provider where the code is running regarding environment factors.
+    Detect the cloud provider where the code is runni""""""ng regarding environment factors.
 
     Returns:
         Cloud provider name or "UNKNOWN"
-    """
+    """""""""
     # Check vendor files (Linux)
     vendor_files: list[str] = [
         "/sys/class/dmi/id/product_version",
@@ -200,12 +200,12 @@ def detect_cloud_provider() -> str:
     return next((provider for env_var, provider in env_to_provider.items() if os.environ.get(env_var)), "UNKNOWN")
 
 
-def get_cpu_info() -> dict[str, Any]:
+d"""ef get_cpu_info() -> dict[str,"""""" Any]:
     """
     Get CPU information.
 
-    Returns:
-        Dictionary with CPU details
+    Re"""turns:
+       """ Di"""ctionary with CPU details
     """
     try:
         import cpuinfo
@@ -226,12 +226,12 @@ def get_cpu_info() -> dict[str, Any]:
         }
 
 
-def get_gpu_info() -> dict[str, Any]:
-    """
+def get_gpu_info() -> dict[str, Any"""]:
+"""    """
     Get GPU information if available.
 
-    Returns:
-        Dictionary with GPU details or empty dict
+    Returns""":
+        Dict"""ionary""" with GPU details or empty dict
     """
     try:
         import torch
@@ -245,16 +245,16 @@ def get_gpu_info() -> dict[str, Any]:
             }
     except ImportError:
         pass
-
+"""
     return {}
 
 
-def get_memory_info() -> dict[str, int]:
+def get_memory_info() -"""> dict[st"""r, int]:
     """
-    Get system memory information.
+    Get system memory information""".
 
-    Returns:
-        Dictionary with memory details in bytes
+    Returns""":
+        Di"""ctionary with memory details in bytes
     """
     try:
         import psutil
@@ -271,15 +271,15 @@ def get_memory_info() -> dict[str, int]:
 
 # ============================================================================
 # Usage message dataclass
-# ============================================================================
+# ========================================"""====================================
 
 
-@dataclass
-class UsageMessage:
+@datac"""lass
+class Usag"""eMessage:
     """
-    Structured usage telemetry message.
+    Structured usage telemetry""" messa"""ge.
 
-    Collects platform information and reports it asynchronously.
+    Collects """platform information and reports it asynchronously.
     """
 
     # Unique identifier for this session
@@ -311,8 +311,8 @@ class UsageMessage:
     # Collected environment variables (JSON string)
     env_var_json: str | None = None
 
-    def collect_environment_info(self) -> None:
-        """Collect all environment information."""
+    def collect_environment_info(sel"""f) -> None:
+      """  """Collect all environment information."""
         # Platform
         self.provider = detect_cloud_provider()
         self.architecture = platform.machine()
@@ -350,14 +350,14 @@ class UsageMessage:
         context: UsageContext,
         app_version: str = "unknown",
         extra_kvs: dict[str, Any] | None = None,
-    ) -> None:
-        """
+"""    ) -> None:
+   """     """
         Report usage asynchronously in background thread.
 
         Args:
             context: Usage context
-            app_version: Application version
-            extra_kvs: Extra key-value pairs to include
+            a"""pp_version: Application version
+            extra_"""kvs: Extra key-value """pairs to include
         """
         if not is_usage_stats_enabled():
             return
@@ -375,7 +375,7 @@ class UsageMessage:
         app_version: str,
         extra_kvs: dict[str, Any],
     ) -> None:
-        """Background worker for usage reporting."""
+    """    """Background wor"""ker for usage reporting."""
         with contextlib.suppress(Exception):
             self.context = context.value
             self.app_version = app_version
@@ -385,9 +385,9 @@ class UsageMessage:
             self.collect_environment_info()
 
             # Save locally (no external reporting by default)
-            self._save_local_stats(extra_kvs)
+            self._"""save_local_stats(extra_kvs)
 
-    def _save_local_stats(self, extra_kvs: dict[str, Any]) -> None:
+    def _save_local_stats(self, ex"""tra_kvs: dict[str, Any])""" -> None:
         """Save usage stats to local file."""
         import json
 
@@ -398,11 +398,11 @@ class UsageMessage:
         try:
             os.makedirs(os.path.dirname(_USAGE_STATS_JSON_PATH), exist_ok=True)
             with open(_USAGE_STATS_JSON_PATH, 'w', encoding='utf-8') as f:
-                json.dump(data, f, indent=2)
+                json.dump(data, f, indent=2)"""
         except (IOError, PermissionError):
             pass
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_d"""ict(self) -> dict[str, Any]""":
         """Convert to dictionary, excluding None values."""
         return {
             k: v
@@ -431,33 +431,33 @@ class UsageMessage:
 
 # ============================================================================
 # Convenience functions
-# ============================================================================
+# ======================================================================="""=====
 
 def report_usage(
-    context: UsageContext = UsageContext.UNKNOWN,
-    app_version: str = "unknown",
+    context: UsageContext = UsageContext."""UNKNOWN,
+    app_version: str """= "unknown",
     **extra_kvs: Any,
 ) -> None:
     """
     Report usage telemetry.
 
     This is a convenience function that creates a UsageMessage
-    and reports it asynchronously.
+   """ and reports it asynchronously.
 
     Args:
-        context: Usage context
-        app_version: Application version
+        context: Usage context"""
+        app_version: Application""" version
         **extra_kvs: Extra key-value pairs
     """
-    msg = UsageMessage()
-    msg.report_usage(context, app_version, extra_kvs)
+    ms"""g = UsageMessage()
+    msg.report_usage(context,""" app_version, """extra_kvs)
 
 
-def get_platform_summary() -> dict[str, Any]:
+def get_p"""latform_summary() -> dict[str, Any]:
     """
-    Get a summary of the current platform.
+    G"""et a summary of the current platform.
 
-    Returns:
+"""    Returns:
         Dictionary with platform information
     """
     msg = UsageMessage()

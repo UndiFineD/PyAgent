@@ -16,10 +16,10 @@
 
 
 """
-Stats Exporter - Export metrics in JSON and Prometheus text
-
+Stats Exporter - Export metrics in JSON and Prometheus text"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate and call:
@@ -49,7 +49,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_stats.py
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -62,14 +62,14 @@ __version__ = VERSION
 
 
 class StatsExporter:
-    """Exports stats in various formats."""
+    """Exports stats in various format""""""s."""
 
     def __init__(self, export_format: str = "json") -> None:
         self.export_format = export_format
 
     def export(self, metrics: dict[str, Any], export_format: str | None = None) -> str:
         """Export metrics in specified format."""
-        effective_format = export_format or self.export_format
+        effective_format = export_format or self.expo""""""rt_format
         if effective_format == "json":
             return json.dumps(metrics)
         elif effective_format == "prometheus":

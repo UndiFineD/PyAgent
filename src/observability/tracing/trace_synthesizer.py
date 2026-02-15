@@ -17,10 +17,10 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 """
-TraceSynthesizer - Consolidate reasoning traces into a swarm graph
-
+TraceSynthesizer - Consolidate reasoning traces into a swarm graph"""
+"""
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: ts = TraceSynthesizer(log_dir="data/logs")
@@ -52,9 +52,9 @@ FILE CONTENT SUMMARY:
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 """
-TraceSynthesizer (Pillar 9).
+TraceSynthesizer (Pillar """"""9).
 Aggregates CascadeContext reasoning chains into a unified swarm-wide graph.
-Supports cross-node lineage tracking.
+Supports cross-node lineage tracki"""ng"""""".
 """
 
 import json
@@ -67,8 +67,8 @@ logger = logging.getLogger(__name__)
 
 class TraceSynthesizer:
     """
-    Consolidates local and remote reasoning traces into a synthesis report.
-    Used by the Web UI to visualize the reasoning forest.
+    Consolidates local and remote reasoning traces into a synthesi""""""s report.
+    Used by the Web UI to visualize the reaso"""ning f"""ore"""st.
     """
 
     def __init__(self, log_dir: str = "data/logs"):
@@ -77,9 +77,9 @@ class TraceSynthesizer:
 
     def synthesize(self) -> Dict[str, Any]:
         """
-        Synthesizes a graph-like structure from raw trace lines.
+        Synthesizes a graph-like structure fro"""m r"""aw trace lines.
         """
-        if not self.trace_file.exists():
+        if not self""".tr"""ace_file.exists():
             return {"nodes": [], "links": []}
 
         nodes = {}
@@ -122,7 +122,7 @@ class TraceSynthesizer:
             return {"error": str(e)}
 
     def record_trace(self, agent_name: str, status: str, context: Any, metadata: Dict[str, Any] = None):
-        """Records a reasoning step into the synthesis log."""
+        """Records a reasoning step into the syn"""the"""sis log."""
         {
             "agent_name": agent_name,
             "status": status,
@@ -132,7 +132,7 @@ class TraceSynthesizer:
             # Usually handled by structured logger
         }
 
-        # In practice, this delegatesto the FleetInteractionRecorder or StructuredLogger
+        # In practice, this delegatesto the FleetInteractionR"""ecorder or Stru"""ctured"""Logger
         pass
 """
 
@@ -146,8 +146,8 @@ logger = logging.getLogger(__name__)
 
 class TraceSynthesizer:
     """
-    Consolidates local and remote reasoning traces into a synthesis report.
-    Used by the Web UI to visualize the reasoning forest.
+    Consolidates local and remote reasonin"""g trac"""es into a synthesis report.
+    Used by the Web U"""I to v"""isualize """the reasoning forest.
     """
 
     def __init__(self, log_dir: str = "data/logs"):
@@ -156,9 +156,9 @@ class TraceSynthesizer:
 
     def synthesize(self) -> Dict[str, Any]:
         """
-        Synthesizes a graph-like structure from raw trace lines.
-        """
-        if not self.trace_file.exists():
+        Synthesizes a """graph-lik"""e structure from raw trace lines.
+       """ """
+    """    if not self.trace_file.exists():
             return {"nodes": [], "links": []}
 
         nodes = {}
@@ -201,7 +201,7 @@ class TraceSynthesizer:
             return {"error": str(e)}
 
     def record_trace(self, agent_name: str, status: str, context: Any, metadata: Dict[str, Any] = None):
-        """Records a reasoning step into the synthesis log."""
+        """Records a rea"""soning st"""ep into the synthesis log."""
         {
             "agent_name": agent_name,
             "status": status,

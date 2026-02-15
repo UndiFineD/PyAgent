@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""Search algorithms for Cognitive agents.
-
+# "Search algorithms for Cognitive agents.
+# #
 This module defines the available algorithms for semantic and keyword-based
 search within the agent's context and memory.
-"""
+# #
 
 from __future__ import annotations
 from enum import Enum
@@ -30,9 +30,9 @@ __version__ = VERSION
 
 
 class SearchAlgorithm(Enum):
-    """Algorithms for semantic search."""
+""""Algorithms for semantic search."""
 
-    KEYWORD = "keyword"
-    FUZZY = "fuzzy"
-    SEMANTIC = "semantic"
-    HYBRID = "hybrid"
+#     KEYWORD = "keyword
+#     FUZZY = "fuzzy
+#     SEMANTIC = "semantic
+#     HYBRID = "hybrid

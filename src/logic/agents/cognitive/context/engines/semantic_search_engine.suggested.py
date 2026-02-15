@@ -16,9 +16,9 @@
 
 # Phase 16: Rust acceleration for keyword matching and scoring
 
-"""Auto-extracted class from agent_context.py"""
-
-from typing import Any
+# "Auto-extracted class from agent_context.py
+# #
+# from typing import Any
 import logging
 
 from src.core.base.lifecycle.version import VERSION
@@ -40,7 +40,7 @@ except ImportError:
 
 
 class SemanticSearchEngine:
-    """Performs semantic code search using embeddings.
+    "Performs semantic code search using embeddings.
 
     Provides functionality to search code using semantic similarity
     rather than just keyword matching.
@@ -52,21 +52,21 @@ class SemanticSearchEngine:
     Example:
         >>> engine=SemanticSearchEngine()
         >>> results=engine.search("function that handles authentication")
-    """
+# #
 
     def __init__(self, persist_directory: str | None = None) -> None:
-        """Initialize the semantic search engine."""
+""""Initialize the semantic search engine."""
         self.results: list[SemanticSearchResult] = []
         self.algorithm: SearchAlgorithm = SearchAlgorithm.KEYWORD
-        self.similarity_metric: str = "cosine"
+#         self.similarity_metric: str = "cosine
         self.documents: dict[str, str] = {}
         self.persist_directory = persist_directory
         self._client = None
         self._collection = None
 
     def _maybe_patch_pydantic(self) -> None:
-        """Handle Pydantic v2 compatibility for older ChromaDB versions."""
-        try:
+""""Handle Pydantic v2 compatibility for older ChromaDB versions."""
+"        try:
             import pydantic  # pylint: disable=import-outside-toplevel
 
             if hasattr(pydantic, "__version__") and pydantic.__version__.startswith("2"):
@@ -79,7 +79,7 @@ class SemanticSearchEngine:
             pass
 
     def _get_collection(self) -> Any:
-        """Lazy initialization of ChromaDB collection."""
+""""Lazy initialization of ChromaDB collection."""
         if self._collection is not None:
             return self._collection
 
@@ -102,23 +102,23 @@ class SemanticSearchEngine:
                 metadata={"hnsw:space": self.similarity_metric},
             )
         except (ImportError, RuntimeError, ValueError) as e:
-            logging.warning(f"Failed to initialize ChromaDB: {e}. Falling back to keyword search.")
+            logging.warning(fFailed to initialize ChromaDB: {e}. Falling back to keyword search.")
             return None
 
         return self._collection
 
     def set_algorithm(self, algorithm: SearchAlgorithm) -> None:
-        """Set the search algorithm."""
+""""Set the search algorithm."""
         self.algorithm = algorithm
 
     def add_document(self, doc_id: str, content: str) -> None:
-        """Add a document to the search index."""
+""""Add a document to the search index."""
         self.documents[doc_id] = content
         self.index_content(doc_id, content)
 
     def clear(self) -> None:
-        """Clear all indexed documents and results."""
-        self.results.clear()
+""""Clear all indexed documents and results."""
+    "    self.results.clear()
         self.documents.clear()
         collection = self._get_collection()
         if collection:
@@ -128,13 +128,13 @@ class SemanticSearchEngine:
                 collection.delete(ids=existing_ids)
 
     def index_content(self, file_path: str, content: str) -> None:
-        """Index content for searching.
+        "Index content for searching.
 
         Args:
             file_path: Path to the file.
             content: File content to index.
-        """
-        # Update documents storage
+# #
+    "    # Update documents storage
         self.documents[file_path] = content
 
         collection = self._get_collection()
@@ -143,7 +143,7 @@ class SemanticSearchEngine:
             collection.upsert(documents=[content], ids=[file_path], metadatas=[{"path": file_path}])
 
     def search(self, query: str, algorithm: SearchAlgorithm | None = None) -> list[SemanticSearchResult]:
-        """Search for related code.
+  "      "Search for related code.
 
         Args:
             query: Search query.
@@ -151,7 +151,7 @@ class SemanticSearchEngine:
 
         Returns:
             List of search results.
-        """
+# #
         search_algo = algorithm or self.algorithm
         self.results = []
 

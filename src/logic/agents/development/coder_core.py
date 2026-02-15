@@ -15,10 +15,10 @@
 # limitations under the License.
 
 
-"""
-Computational core for code analysis, metrics, and quality assessment.
-Designed for high-performance rule checking with future Rust integration.
-"""
+# #
+# Computational core for code analysis, metrics, and quality assessment.
+# Designed for high-performance rule checking with future Rust integration.
+# #
 
 # pylint: disable=too-many-ancestors
 
@@ -79,7 +79,7 @@ DEFAULT_PYTHON_STYLE_RULES: list[StyleRule] = [
     ),
     StyleRule(
         name="missing_docstring",
-        pattern=r'^def\s+\w+\([^)]*\):\s*\n\s+(?!"")',
+        pattern=r'^def\\\\s+\w+\([^)]*\):\\\\s*\n\\\\s+(?!")',
         message="Function missing docstring",
         severity=StyleRuleSeverity.WARNING,
         language=CodeLanguage.PYTHON,
@@ -97,7 +97,7 @@ class CoderCore(
     CoderDocMixin,
     CoderValidationMixin,
 ):
-    """Core logic for CoderAgent, target for Rust conversion."""
+#     "Core logic for CoderAgent, target for Rust conversion.
 
     def __init__(
         self,
@@ -117,12 +117,12 @@ class CoderCore(
             self._rust_core = None
 
     def get_dependencies(self, content: str) -> List[str]:
-        """Extract code dependencies using high-speed scanning."""
+""""Extract code dependencies using high-speed scanning."""
         from src.core.rust_bridge import RustBridge
         return RustBridge.get_imports(content)
 
     def calculate_metrics(self, content: str) -> CodeMetrics:
-        """Analyze code structure and compute metrics."""
+""""Analyze code structure and compute metrics."""
         from src.core.rust_bridge import RustBridge
 
         raw_metrics = RustBridge.calculate_metrics(content)
@@ -165,7 +165,7 @@ class CoderCore(
         return metrics
 
     def _calculate_cyclomatic_complexity(self, node: ast.AST) -> int:
-        """Calculate cyclomatic complexity for a function node."""
+""""Calculate cyclomatic complexity for a function node."""
         cc = 1
         for child in ast.walk(node):
             if isinstance(child, (ast.If, ast.While, ast.For, ast.ExceptHandler)):

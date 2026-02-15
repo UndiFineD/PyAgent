@@ -15,9 +15,9 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py
-"""
-
+# "Auto-extracted class from agent_context.py
+# #
+# #
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from dataclasses import dataclass, field
@@ -27,16 +27,16 @@ __version__ = VERSION
 
 @dataclass
 class RefactoringSuggestion:
-    """Context-based refactoring suggestion.
+    "Context-based refactoring suggestion.
 
     Attributes:
         suggestion_type: Type of refactoring.
         description: What to refactor.
         affected_files: Files affected by refactoring.
-        estimated_impact: Impact assessment.
-    """
+#         estimated_impact: Impact assessment.
+# #
 
     suggestion_type: str
     description: str
     affected_files: list[str] = field(default_factory=lambda: [])
-    estimated_impact: str = "medium"
+#     estimated_impact: str = "medium

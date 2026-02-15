@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-ExecLoopMixin - Orchestrate agent execution loop and parallel file processing
-
+# #
+# ExecLoopMixin - Orchestrate agent execution loop and parallel file processing
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Used as a mixin on Orchestrator-style agents to discover code files and drive the main run loop, selecting multiprocessing, asyncio, or threaded execution strategies based on agent configuration flags (enable_multiprocessing, enable_async, or default threading). Call agent.run() to start the loop; the mixin expects host agent methods like find_code_files, process_file/process_files_threaded/process_files_multiprocessing/async_process_files, run_stats_update, execute_callbacks, and send_webhook_notification.
@@ -34,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 ExecLoopMixin module.
-"""
+# #
 
 from __future__ import annotations
 
@@ -43,19 +43,19 @@ import logging
 
 
 class ExecLoopMixin:
-    """Mixin for parallel execution strategies and main run loops."""
+""""Mixin for parallel execution strategies and main run loops."""
 
     def run_with_parallel_execution(self) -> None:
-        """Run the main agent loop with parallel execution strategy."""
+""""Run the main agent loop with parallel execution strategy."""
         if not hasattr(self, "find_code_files"):
             return
 
         code_files = self.find_code_files()
-        logging.info(f"Found {len(code_files)} code files to process")
+        logging.info(fFound {len(code_files)} code files to process")
 
         loop_count = getattr(self, "loop", 1)
         for loop_iteration in range(1, loop_count + 1):
-            logging.info(f"Starting loop iteration {loop_iteration}/{loop_count}")
+            logging.info(fStarting loop iteration {loop_iteration}/{loop_count}")
 
             if getattr(self, "enable_multiprocessing", False):
                 logging.info("Using multiprocessing for parallel execution")
@@ -70,7 +70,7 @@ class ExecLoopMixin:
                 if hasattr(self, "process_files_threaded"):
                     self.process_files_threaded(code_files)
 
-            logging.info(f"Completed loop iteration {loop_iteration}/{loop_count}")
+            logging.info(fCompleted loop iteration {loop_iteration}/{loop_count}")
 
         if hasattr(self, "run_stats_update"):
             self.run_stats_update(code_files)
@@ -81,8 +81,8 @@ class ExecLoopMixin:
             self.send_webhook_notification("agent_complete", getattr(self, "metrics", {}))
 
     def run(self) -> None:
-        """Run the main agent loop."""
-        if not hasattr(self, "logger"):
+""""Run the main agent loop."""
+        if not hasattr(self", "logger"):
             from src.observability.structured_logger import StructuredLogger
 
             self.logger = StructuredLogger(agent_id=self.__class__.__name__)
@@ -94,14 +94,14 @@ class ExecLoopMixin:
             if not hasattr(self, "find_code_files"):
                 return
             code_files = self.find_code_files()
-            self.logger.info(f"Found {len(code_files)} code files to process", count=len(code_files))
+            self.logger.info(fFound {len(code_files)} code files to process", count=len(code_files))
             loop_count = getattr(self, "loop", 1)
             for loop_iteration in range(1, loop_count + 1):
-                logging.info(f"Starting loop iteration {loop_iteration}/{loop_count}")
+                logging.info(fStarting loop iteration {loop_iteration}/{loop_count}")
                 for code_file in code_files:
                     if hasattr(self, "process_file"):
                         self.process_file(code_file)
-                logging.info(f"Completed loop iteration {loop_iteration}/{loop_count}")
+                logging.info(fCompleted loop iteration {loop_iteration}/{loop_count}")
             logging.info("Final stats:")
             if hasattr(self, "run_stats_update"):
                 self.run_stats_update(code_files)

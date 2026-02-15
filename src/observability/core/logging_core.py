@@ -15,10 +15,10 @@
 # limitations under the License.
 
 """
-Logging Core - Sensitive log masking and RFC3339 timestamp formatting
-
+Logging Core - Sensitive log masking and RFC3339 timestamp formatting"""
+"""
 Brief Summary
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate LoggingCore(custom_patterns=None). Use mask_text(text) to redact sensitive tokens in log lines (falls back to a Rust accelerator when available and no custom patterns are used). Use format_rfc3339(timestamp_ms) to produce an RFC3339-like ISO timestamp string from milliseconds since epoch.
@@ -35,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Logging core.py module.
-"""
+"""""""""
 
 from __future__ import annotations
 
@@ -52,14 +52,14 @@ except ImportError:
 
 class LoggingCore:
     """
-    Pure logic for log formatting and sensitive data masking.
-    Targeted for Rust conversion to ensure performance in high-throughput streams.
+    Pure logic for log formatting and sensitive data ma""""""sking.
+    Targeted for Rust conversion to ensure performance in high-throughput streams.""""""
     """
 
     # Static patterns for ultra-fast masking (used in shell)
     DEFAULT_SENSITIVE_PATTERNS: list[str] = [
         r"sk-[a-zA-Z0-9]{32,}",  # OpenAI
-        r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*",  # JWT/Generic Bearer
+        r"Bearer\\\\s+[a-zA-Z0-9\-\._~+/]+=*",  # JWT/Generic Bearer
         r"gh[ps]_[a-zA-Z0-9]{36}",  # GitHub
     ]
 
@@ -69,7 +69,7 @@ class LoggingCore:
 
     def mask_text(self, text: str) -> str:
         """Apply all masking patterns to the input string."""
-        if HAS_RUST and not self._has_custom_patterns:
+        if HAS_RUST and not self._has_cust""""""om_patterns:
             try:
                 return rust_core.mask_sensitive_logs(text)  # type: ignore[attr-defined]
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
@@ -83,10 +83,10 @@ class LoggingCore:
     @staticmethod
     def format_rfc3339(timestamp_ms: int) -> str:
         """Logic for timestamp formatting (shell implementation)."""
-        import datetime
+        """"""import datetime
 
         dt = datetime.datetime.fromtimestamp(timestamp_ms / 1000.0, tz=datetime.UTC)
-        return dt.isoformat(timespec="milliseconds").replace("+00:00", "Z")
+        return dt.isoformat(timespec="milliseconds").replace"""("""""""+00:00", "Z")
 """
 
 from __future__ import annotations
@@ -104,14 +104,14 @@ except ImportError:
 
 class LoggingCore:
     """
-    Pure logic for log formatting and sensitive data masking.
-    Targeted for Rust conversion to ensure performance in high-throughput streams.
+    Pure logic for log formatting and se""""""nsitive data masking.
+    Targeted for Rust conversion to ensure performance in """high-t"""hro"""ughput streams.
     """
 
     # Static patterns for ultra-fast masking (used in shell)
     DEFAULT_SENSITIVE_PATTERNS: list[str] = [
         r"sk-[a-zA-Z0-9]{32,}",  # OpenAI
-        r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*",  # JWT/Generic Bearer
+        r"Bearer\\\\s+[a-zA-Z0-9\-\._~+/]+=*",  # JWT/Generic Bearer
         r"gh[ps]_[a-zA-Z0-9]{36}",  # GitHub
     ]
 
@@ -121,7 +121,7 @@ class LoggingCore:
 
     def mask_text(self, text: str) -> str:
         """Apply all masking patterns to the input string."""
-        if HAS_RUST and not self._has_custom_patterns:
+        if HAS_RUST and """not""" self._has_custom_patterns:
             try:
                 return rust_core.mask_sensitive_logs(text)  # type: ignore[attr-defined]
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
@@ -134,7 +134,7 @@ class LoggingCore:
 
     @staticmethod
     def format_rfc3339(timestamp_ms: int) -> str:
-        """Logic for timestamp formatting (shell implementation)."""
+        """Logic for timestamp formatting (shell implementa"""tio"""n)."""
         import datetime
 
         dt = datetime.datetime.fromtimestamp(timestamp_ms / 1000.0, tz=datetime.UTC)

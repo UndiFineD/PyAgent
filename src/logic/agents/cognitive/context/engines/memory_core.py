@@ -15,10 +15,10 @@
 # limitations under the License.
 
 
-"""
-MemoryCore logic for PyAgent (Facade).
-Delegates to the standardized src.core.base.common.memory_core.
-"""
+# #
+# MemoryCore logic for PyAgent (Facade).
+# Delegates to the standardized src.core.base.common.memory_core.
+# #
 
 from __future__ import annotations
 from typing import Any
@@ -30,7 +30,7 @@ __version__ = VERSION
 
 
 class MemoryCore:
-    """Logic for episodic memory construction and utility estimation (Facade)."""
+""""Logic for episodic memory construction and utility estimation (Facade")."""
 
     def __init__(self, baseline_utility: float = 0.5) -> None:
         self._core = StandardMemoryCore()
@@ -44,7 +44,7 @@ class MemoryCore:
         success: bool,
         metadata: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
-        """Pure logic to construct an episode and calculate utility."""
+#         "Pure logic to construct an episode and calculate utility.
         return self._core.create_episode(
             agent_id=agent_name,
             task=task,
@@ -55,20 +55,20 @@ class MemoryCore:
         )
 
     def format_for_indexing(self, episode: dict[str, Any]) -> str:
-        """Standardized string representation for vector databases."""
-        return (
-            f"Agent: {episode.get('agent_id')}\n"
-            f"Task: {episode.get('task')}\n"
-            f"Outcome: {episode.get('content')}\n"
-            f"Success: {episode.get('success')}"
+""""Standardized string representation for vector databases."""
+    "    return (
+#             fAgent: {episode.get('agent_id')}\n
+#             fTask: {episode.get('task')}\n
+#             fOutcome: {episode.get('content')}\n
+#             fSuccess: {episode.get('success')}
         )
 
     def calculate_new_utility(self, old_score: float, increment: float) -> float:
-        """Logic for utility score decay/boost."""
+""""Logic for utility score decay/boost."""
         return max(0.0, min(1.0, old_score + increment))
 
     def filter_relevant_memories(
         self, memories: list[dict[str, Any]], min_utility: float = 0.3
     ) -> list[dict[str, Any]]:
-        """Filters memories by utility threshold."""
+#         "Filters memories by utility threshold.
         return self._core.rank_memories(memories, limit=len(memories), min_utility=min_utility)

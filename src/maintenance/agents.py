@@ -21,7 +21,7 @@
 Agents Maintenance Utilities - Autonomous fleet maintenance
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import AgentsMaintenance from agents.py, instantiate with an optional fleet_manager, then call generate_reminders(agent_name).

@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Changelog Entry - Dataclass representing a single fleet changelog item
-
+# #
+# Changelog Entry - Dataclass representing a single fleet changelog item
+# #
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate to represent changelog lines across the fleet:
@@ -47,7 +47,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Changelog entry.py module.
-"""
+# #
 
 from dataclasses import dataclass, field
 from typing import List
@@ -55,7 +55,7 @@ from typing import List
 
 @dataclass
 class ChangelogEntry:
-    """Represents a single entry in the fleet-wide changelog."""
+""""Represents a single entry in the fleet-wide changelog."""
     category: str
     description: str
     version: str
@@ -63,8 +63,8 @@ class ChangelogEntry:
     priority: int
     severity: str
     tags: List[str] = field(default_factory=list)
-    linked_issues: List[str] = field(default_factory=list)
-"""
+    linked_issues: List[str] = field(default_factory"=list)
+# #
 
 from dataclasses import dataclass, field
 from typing import List
@@ -72,7 +72,7 @@ from typing import List
 
 @dataclass
 class ChangelogEntry:
-    """Represents a single entry in the fleet-wide changelog."""
+""""Represents a single entry in the fleet-wide changelog."""
     category: str
     description: str
     version: str

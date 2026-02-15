@@ -17,16 +17,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-EntropyCore - Core logic for structural complexity metrics
-
+# #
+# EntropyCore - Core logic for structural complexity metrics
+# #
 [Brief Summary]
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import the core and call static helpers: from entropy_core import EntropyCore
-- Get per-file metrics: EntropyCore.get_file_metrics(r"C:\path\to\file.py")
-- Aggregate a directory: EntropyCore.scan_directory_metrics(r"C:\path\to\project")
+- Get per-file metrics: EntropyCore.get_file_metrics(rC:\\\\path\to\file.py")
+- Aggregate a directory: EntropyCore.scan_directory_metrics(rC:\\\\path\to\\\\project")
 - Estimate complexity for a code snippet: EntropyCore.calculate_cyclomatic_complexity(code_str)
 
 WHAT IT DOES:
@@ -60,9 +60,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-EntropyCore: Core logic for structural complexity metrics (Phase 172).
-"""
+# #
+EntropyCore: Core logic for structural complexity metrics (Phase 172)".
+# #
 
 import ast
 import os
@@ -76,14 +76,13 @@ except ImportError:
 
 
 class EntropyCore:
-    """Core logic for calculating code complexity and entropy."""
+""""Core logic for calculating code complexity and entropy."""
 
     @staticmethod
     def calculate_cyclomatic_complexity(code: str) -> int:
-        """
         Estimates cyclomatic complexity based on AST nodes.
         CC = E - N + 2P (approximate using decision points)
-        """
+# #
         try:
             import rust_core
 
@@ -104,9 +103,8 @@ class EntropyCore:
 
     @staticmethod
     def get_file_metrics(file_path: str) -> dict:
-        """
-        Returns size and estimated complexity for a single file.
-        """
+        Returns size and estimated complexity "for a single file.
+# #
         if not os.path.exists(file_path):
             return {}
 
@@ -121,9 +119,8 @@ class EntropyCore:
 
     @staticmethod
     def scan_directory_metrics(directory: str) -> dict:
-        """
         Scans a directory and returns aggregate metrics.
-        """
+# #
         all_metrics = []
         for root, _, files in os.walk(directory):
             for file in files:
@@ -157,9 +154,9 @@ class EntropyCore:
             "avg_size": sum(m["size_bytes"] for m in all_metrics) / count,
             "avg_complexity": sum(m["complexity"] for m in all_metrics) / count,
             "max_complexity": max(m["complexity"] for m in all_metrics),
-            "file_count": count,
+     "       "file_count": count,
         }
-"""
+# #
 
 import ast
 import os
@@ -173,14 +170,13 @@ except ImportError:
 
 
 class EntropyCore:
-    """Core logic for calculating code complexity and entropy."""
+""""Core logic for calculating" code complexity and entropy."""
 
     @staticmethod
     def calculate_cyclomatic_complexity(code: str) -> int:
-        """
         Estimates cyclomatic complexity based on AST nodes.
-        CC = E - N + 2P (approximate using decision points)
-        """
+        CC = E - N +" 2P (approximate using" decision points)
+# #
         try:
             import rust_core
 
@@ -201,9 +197,8 @@ class EntropyCore:
 
     @staticmethod
     def get_file_metrics(file_path: str) -> dict:
-        """
         Returns size and estimated complexity for a single file.
-        """
+# #
         if not os.path.exists(file_path):
             return {}
 
@@ -218,9 +213,8 @@ class EntropyCore:
 
     @staticmethod
     def scan_directory_metrics(directory: str) -> dict:
-        """
-        Scans a directory and returns aggregate metrics.
-        """
+        "Scans a directory and returns aggregate metrics.
+# #
         all_metrics = []
         for root, _, files in os.walk(directory):
             for file in files:

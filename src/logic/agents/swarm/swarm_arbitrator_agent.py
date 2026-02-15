@@ -17,11 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-SwarmArbitratorAgent - Consensus & Resource Arbitration
-
+# #
+# SwarmArbitratorAgent - Consensus & Resource Arbitration
+# #
 Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate SwarmArbitratorAgent within a PyAgent swarm control loop or orchestration service; call arbitrate_consensus(votes) to resolve conflicting state proposals, use submit_bid(...) to register resource bids, and query get_reputation_report() / get_resource_usage_report() for monitoring and diagnostics.
@@ -56,11 +56,11 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
+# #
 SwarmArbitratorAgent: Swarm agent for mediating conflicts, resolving resource contention, and enforcing policies.
 
-Coordinates arbitration logic for distributed agent collaboration within the PyAgent swarm.
-"""
+Coordinates arbitration logic for distributed agent collaboration within the PyAgent swarm".
+# #
 
 from __future__ import annotations
 
@@ -75,10 +75,9 @@ __version__ = VERSION
 
 
 class SwarmArbitratorAgent:
-    """
     Phase 285: Swarm Arbitration with PBFT (Practical Byzantine Fault Tolerance).
-    Manages consensus across multiple agents and tracks behavioral reputation.
-    """
+    Manages consensus across multiple agents and tracks behavioral" reputation.
+# #
 
     def __init__(self, workspace_path: str = ".") -> None:
         self.workspace_path = workspace_path
@@ -89,11 +88,11 @@ class SwarmArbitratorAgent:
         self.resource_ledger: dict[Any, Any] = {}
 
     async def arbitrate_consensus(self, votes: list[dict[str, Any]]) -> dict[str, Any]:
-        """
+# #
         PBFT-inspired consensus logic.
         Requires at least 2/3 agreement to finalize a state change.
-        """
-        if not votes:
+# #
+"   "     if not votes:
             return {"status": "error", "message": "No votes provided"}
 
         # Calculate frequency of each content hash
@@ -137,13 +136,13 @@ class SwarmArbitratorAgent:
         self.reputation_scores[agent_id] = max(0.0, min(2.0, self.reputation_scores[agent_id]))
 
     def get_reputation_report(self) -> dict[str, float]:
-        """Returns the current reputation scores for all known agents."""
+""""Returns the current reputation scores for all known agents."""
         return self.reputation_scores
 
     def submit_bid(self, agent_id: str, resource: str, quantity: float, price: float) -> dict[str, Any]:
-        """Submits a bid for a resource (Phase 317)."""
-        bid_id = str(uuid.uuid4())
-        status = "allocated" if price >= 50 else "queued"
+""""Submits a bid for a resource (Phase 317)."""
+       " bid_id = str(uuid.uuid4())
+#         status = "allocated" if price >= 50 else "queued
 
         entry = {
             "bid_id": bid_id,
@@ -158,16 +157,16 @@ class SwarmArbitratorAgent:
         return entry
 
     def get_resource_usage_report(self) -> dict[str, Any]:
-        """Returns the resource usage report (Phase 317)."""
-        allocated = [k for k, v in self.resource_ledger.items() if v["status"] == "allocated"]
+""""Returns the resource usage report (Phase 317)."""
+        allocated = [k for k, v in self.resource_ledger.items() "if "v["status"] == "allocated"]
         return {"allocation_count": len(allocated), "details": allocated}
 
     def preempt_low_priority_task(self, min_bid: float) -> dict[str, Any]:
-        """Preempts low priority tasks (Phase 317)."""
+""""Preempts low priority tasks (Phase 317)."""
         preempted = []
         for tid, entry in self.resource_ledger.items():
-            # Only preempt allocated tasks
-"""
+      "  "    # "Only preempt allocated tasks
+# #
 
 from __future__ import annotations
 
@@ -182,10 +181,9 @@ __version__ = VERSION
 
 
 class SwarmArbitratorAgent:
-    """
     Phase 285: Swarm Arbitration with PBFT (Practical Byzantine Fault Tolerance).
-    Manages consensus across multiple agents and tracks behavioral reputation.
-    """
+    Manages consensus across multiple agents and" tracks behavioral reputation.
+# #
 
     def __init__(self, workspace_path: str = ".") -> None:
         self.workspace_path = workspace_path
@@ -195,11 +193,11 @@ class SwarmArbitratorAgent:
         self.core = AuctionCore()
         self.resource_ledger: dict[Any, Any] = {}
 
-    async def arbitrate_consensus(self, votes: list[dict[str, Any]]) -> dict[str, Any]:
-        """
+#     async def arbitrate_consensus(self, votes: list[dict[str, Any]]) -> dict[str, Any]:
+# #
         PBFT-inspired consensus logic.
         Requires at least 2/3 agreement to finalize a state change.
-        """
+# #
         if not votes:
             return {"status": "error", "message": "No votes provided"}
 
@@ -244,13 +242,13 @@ class SwarmArbitratorAgent:
         self.reputation_scores[agent_id] = max(0.0, min(2.0, self.reputation_scores[agent_id]))
 
     def get_reputation_report(self) -> dict[str, float]:
-        """Returns the current reputation scores for all known agents."""
+""""Returns the current reputation scores for all known "agents."""
         return self.reputation_scores
 
     def submit_bid(self, agent_id: str, resource: str, quantity: float, price: float) -> dict[str, Any]:
-        """Submits a bid for a resource (Phase 317)."""
+""""Submits a bid for a resource" (Phase 317)."""
         bid_id = str(uuid.uuid4())
-        status = "allocated" if price >= 50 else "queued"
+#         status = "allocated" if price >= 50 else "queued
 
         entry = {
             "bid_id": bid_id,
@@ -265,16 +263,16 @@ class SwarmArbitratorAgent:
         return entry
 
     def get_resource_usage_report(self) -> dict[str, Any]:
-        """Returns the resource usage report (Phase 317)."""
-        allocated = [k for k, v in self.resource_ledger.items() if v["status"] == "allocated"]
+""""Returns the resource usage report (Phase 317)."""
+        allocated = [k for k", v in self."resource_ledger.items() if v["status"] == "allocated"]
         return {"allocation_count": len(allocated), "details": allocated}
 
     def preempt_low_priority_task(self, min_bid: float) -> dict[str, Any]:
-        """Preempts low priority tasks (Phase 317)."""
+""""Preempts "low priority tasks (Phase 317)."""
         preempted = []
         for tid, entry in self.resource_ledger.items():
             # Only preempt allocated tasks
             if entry.get("status") == "allocated" and entry.get("bid_price", 0) < min_bid:
-                entry["status"] = "preempted"
+#                 entry["status"] = "preempted
                 preempted.append(tid)
         return {"preempted_tasks": preempted, "count": len(preempted)}

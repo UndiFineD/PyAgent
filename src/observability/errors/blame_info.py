@@ -15,24 +15,55 @@
 # limitations under the License.
 
 
-"""
-BlameInfo - Git blame container
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
+# BlameInfo - Git blame container
+
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
 Provide a simple dataclass carrying git blame details for an error, import and instantiate BlameInfo with error_id and optional commit fields
 
-WHAT IT DOES:
+# WHAT IT DOES:
 Encapsulates minimal blame metadata (commit hash, author, date, message) associated with an error identifier
 
-WHAT IT SHOULD DO BETTER:
+# WHAT IT SHOULD DO BETTER:
 Add validation, typing constraints, parsing helpers to construct from `git blame` or commit objects, and serialization methods (to_dict/from_dict)
 
-FILE CONTENT SUMMARY:
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
+
+@dataclass
+# class BlameInfo:
+    Git blame information for an error.
+
+#     Attributes:
+        error_id: ID of the error.
+        commit_hash: Commit that introduced the error.
+        author: Author of the commit.
+        commit_date: Date of the commit.
+        commit_message: Commit message.
+    
+
+    error_id: str
+# #     commit_hash: str =
+# #     author: str =
+# #     commit_date: str =
+# #     commit_message: str =
+
 
 from __future__ import annotations
 
@@ -45,7 +76,7 @@ __version__ = VERSION
 
 @dataclass
 class BlameInfo:
-    """Git blame information for an error.
+    Git blame information for an error.
 
     Attributes:
         error_id: ID of the error.
@@ -53,38 +84,10 @@ class BlameInfo:
         author: Author of the commit.
         commit_date: Date of the commit.
         commit_message: Commit message.
-    """
+    
 
     error_id: str
-    commit_hash: str = ""
-    author: str = ""
-    commit_date: str = ""
-    commit_message: str = ""
-"""
-
-from __future__ import annotations
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class BlameInfo:
-    """Git blame information for an error.
-
-    Attributes:
-        error_id: ID of the error.
-        commit_hash: Commit that introduced the error.
-        author: Author of the commit.
-        commit_date: Date of the commit.
-        commit_message: Commit message.
-    """
-
-    error_id: str
-    commit_hash: str = ""
-    author: str = ""
-    commit_date: str = ""
-    commit_message: str = ""
+# #     commit_hash: str =
+# #     author: str =
+# #     commit_date: str =
+# #     commit_message: str =

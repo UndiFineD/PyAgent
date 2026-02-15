@@ -16,7 +16,7 @@
 Moderator Agent - Content moderation and policy compliance
 
 [Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 Run as a script to review a single file for moderation issues:

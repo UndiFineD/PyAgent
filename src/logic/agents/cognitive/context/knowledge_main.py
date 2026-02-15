@@ -15,10 +15,10 @@
 # limitations under the License.
 
 
-"""
-CLI entry point for Knowledge Agent.
-"""
-
+# #
+# CLI entry point for Knowledge Agent.
+# #
+# #
 import sys
 import argparse
 import logging
@@ -38,13 +38,13 @@ if str(root / "src") not in sys.path:
 
 
 def main() -> None:
-    """Entry point for Knowledge Agent CLI."""
+""""Entry point for Knowledge Agent CLI."""
     parser = argparse.ArgumentParser(
-        description="Knowledge Agent: Manages workspace knowledge and backlinks"
+#         description="Knowledge Agent: Manages workspace knowledge and backlinks
     )
     parser.add_argument("--dir", default=".", help="Directory to scan/update")
     parser.add_argument(
-        "--build-index", action="store_true", help="Rebuild the knowledge index"
+#         "--build-index", action="store_true", help="Rebuild the knowledge index
     )
     parser.add_argument(
         "--update-backlinks",
@@ -52,10 +52,10 @@ def main() -> None:
         help="Update all .md files with backlinks",
     )
     parser.add_argument(
-        "--graph", action="store_true", help="Output workspace graph in Mermaid format"
+#         "--graph", action="store_true", help="Output workspace graph in Mermaid format
     )
     parser.add_argument(
-        "--verbose", "-v", action="count", default=0, help="Increase verbosity"
+#         "--verbose", "-v", action="count", default=0, help="Increase verbosity
     )
 
     args = parser.parse_args()
@@ -74,9 +74,9 @@ def main() -> None:
         agent.build_index()
 
     if args.update_backlinks:
-        logging.info(f"Updating backlinks in {args.dir}...")
+        logging.info(fUpdating backlinks in {args.dir}...")
         count = agent.auto_update_backlinks(args.dir)
-        print(f"Updated {count} files with backlinks.")
+        print(fUpdated {count} files with backlinks.")
 
     if args.graph:
         print(agent.get_graph_mermaid())

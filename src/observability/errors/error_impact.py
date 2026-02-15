@@ -15,27 +15,33 @@
 # limitations under the License.
 
 
-"""
-ErrorImpact - Impact analysis dataclass
 
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
+# ErrorImpact - Impact analysis dataclass
+
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # [Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+# USAGE:
 from src.core.base.agent_errors.error_impact import ErrorImpact
-impact = ErrorImpact(error_id="E-123", affected_files=["src/foo.py"], impact_score=42.5)
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# # # impact = ErrorImpact(error_id="E-123", affected_files=["src/foo.py"], impact_score=42.5)
 
-WHAT IT DOES:
-Defines a lightweight dataclass (ErrorImpact) that captures a simple impact analysis for a reported error: identifiers, lists of affected files/functions/downstream components, and an overall numeric impact score.
+# WHAT IT DOES:
+# Defines a lightweight dataclass (ErrorImpact) that captures a simple impact analysis for a reported error: identifiers, lists of affected files/functions/downstream components, and an overall numeric impact score.
 
-WHAT IT SHOULD DO BETTER:
-- Validate fields (e.g., enforce impact_score in 0..100), prefer typing.List from typing for older Python versions, and avoid mutable default pitfalls by using tuple or frozen dataclass when immutability is desired.
-- Add serialization (to_dict/from_dict), merging utilities, human-readable repr, and convenience methods to aggregate multiple ErrorImpact instances.
-- Document intended semantics of impact_score and downstream_effects, add unit tests, and consider richer scoring (weighted by file criticality) and provenance metadata (timestamps, analyzer id).
+# WHAT IT SHOULD DO BETTER:
+# - Validate fields (e.g., enforce impact_score in 0..100), prefer typing.List from typing for older Python versions, and avoid mutable default pitfalls by using tuple or frozen dataclass when immutability is desired.
+# - Add serialization (to_dict/from_dict), merging utilities, human-readable repr, and convenience methods to aggregate multiple ErrorImpact instances.
+# - Document intended semantics of impact_score and downstream_effects, add unit tests, and consider richer scoring (weighted by file criticality) and provenance metadata (timestamps, analyzer id).
 
-FILE CONTENT SUMMARY:
+# FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""
+
 
 from __future__ import annotations
 
@@ -47,8 +53,8 @@ __version__ = VERSION
 
 
 @dataclass
-class ErrorImpact:
-    """Impact analysis for an error.
+# class ErrorImpact:
+    Impact analysis for an error.
 
     Attributes:
         error_id: ID of the analyzed error.
@@ -56,14 +62,23 @@ class ErrorImpact:
         affected_functions: Functions impacted by the error.
         downstream_effects: Downstream components affected.
         impact_score: Overall impact score (0 - 100).
-    """
+    
 
     error_id: str
-    affected_files: list[str] = field(default_factory=lambda: [])
-    affected_functions: list[str] = field(default_factory=lambda: [])
-    downstream_effects: list[str] = field(default_factory=lambda: [])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     affected_files: list[str] = field(default_factory=lambda: [])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     affected_functions: list[str] = field(default_factory=lambda: [])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     downstream_effects: list[str] = field(default_factory=lambda: [])
     impact_score: float = 0.0
-"""
+
 
 from __future__ import annotations
 
@@ -76,7 +91,7 @@ __version__ = VERSION
 
 @dataclass
 class ErrorImpact:
-    """Impact analysis for an error.
+    Impact analysis for an error.
 
     Attributes:
         error_id: ID of the analyzed error.
@@ -84,10 +99,19 @@ class ErrorImpact:
         affected_functions: Functions impacted by the error.
         downstream_effects: Downstream components affected.
         impact_score: Overall impact score (0 - 100).
-    """
+    
 
     error_id: str
-    affected_files: list[str] = field(default_factory=lambda: [])
-    affected_functions: list[str] = field(default_factory=lambda: [])
-    downstream_effects: list[str] = field(default_factory=lambda: [])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     affected_files: list[str] = field(default_factory=lambda: [])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     affected_functions: list[str] = field(default_factory=lambda: [])
+# [BATCHFIX] Commented metadata/non-Python
+# # [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
+# #     downstream_effects: list[str] = field(default_factory=lambda: [])
     impact_score: float = 0.0
