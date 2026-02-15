@@ -14,17 +14,21 @@
 
 from src.core.base.common import base_utilities as bu
 
+
 class DummyRecorder:
     def __init__(self):
         self.calls = []
+
     def record_interaction(self, **kwargs):
         self.calls.append(kwargs)
+
 
 class DummyAgent:
     def __init__(self):
         self.__class__.__name__ = "DummyAgent"
         self.fleet = type("X", (), {})()
         self.fleet.recorder = DummyRecorder()
+
 
 def test_record_tool_execution_truncation_and_metadata():
     agent = DummyAgent()
@@ -36,12 +40,15 @@ def test_record_tool_execution_truncation_and_metadata():
     assert call["result"].endswith("... [TRUNCATED]")
     assert call["provider"] == "agent_tool"
 
+
 def test_record_tool_execution_raises_keyboardinterrupt():
     class BadRecorder(DummyRecorder):
         def record_interaction(self, **_kwargs):
             raise KeyboardInterrupt()
+
     agent = DummyAgent()
     agent.fleet.recorder = BadRecorder()
+
     try:
         bu._record_tool_execution(agent, "t", (), {}, "ok")
         assert False, "KeyboardInterrupt should be re-raised"

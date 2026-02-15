@@ -12,38 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-import shutil
+"""Pytest fixtures for test_agent_test_utils tests."""
+
 import pytest
+from typing import Any
 
-# Skip tests that reference the ingested/auto external candidates tree which
-# isn't present in local clones and causes many FileNotFoundErrors during
-# collection. Also skip network test that expects `ipconfig` when it's absent.
+# Add src to path
+import sys
+from pathlib import Path
+src_path = str(Path(__file__).parent.parent.parent.parent.parent.parent / "src")
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
 
-ROOT = os.path.abspath(os.path.dirname(__file__))
-EXTERNAL_DIR = os.path.normpath(os.path.join(ROOT, "src", "external_candidates"))
-
-
-def _is_external_candidate_test(item):
-    try:
-        path = str(item.fspath)
-    except Exception:
-        return False
-    return EXTERNAL_DIR in os.path.normpath(path)
+from tests.utils.agent_test_utils import agent_dir_on_path  # noqa: E402
 
 
-def pytest_collection_modifyitems(config, items):
-    skip_reason_external = "skip external_candidates tests (not present locally)"
-    skip_reason_ip = "skip network test: 'ipconfig' command not found"
+@pytest.fixture
+def utils_module() -> Any:
+    """Load and return the agent_test_utils module."""
+    with agent_dir_on_path():
+        import src.infrastructure.services.dev.test_utils as test_utils
 
-    ipconfig_missing = shutil.which("ipconfig") is None
-
-    for item in list(items):
-        # Skip tests under src/external_candidates
-        if _is_external_candidate_test(item):
-            item.add_marker(pytest.mark.skip(reason=skip_reason_external))
-            continue
-
-        # Skip network test that relies on ipconfig when it's not available
-        if ipconfig_missing and os.path.basename(str(item.fspath)) == "test_network.py":
-            item.add_marker(pytest.mark.skip(reason=skip_reason_ip))
+        return test_utils

@@ -16,7 +16,9 @@
 Test module for data_parsing_mixin
 """
 
+
 from src.core.base.mixins.data_parsing_mixin import DataParsingMixin
+
 
 class TestDataParsingMixin:
     """Test cases for DataParsingMixin."""

@@ -21,6 +21,7 @@ import pytest
 
 from src.core.base.mixins.crypto_mixin import CryptoMixin
 
+
 @pytest.mark.skipif(platform.system() != "Windows", reason="Windows-specific test")
 class TestCryptoMixin:
     """Test cases for CryptoMixin."""

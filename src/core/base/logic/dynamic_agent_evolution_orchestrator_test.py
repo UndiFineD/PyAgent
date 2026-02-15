@@ -177,6 +177,7 @@ class TestDynamicAgentEvolutionOrchestrator:
             complexity="simple",
             estimated_effort=1
         )
+
         agent_sheet = orchestrator.select_or_create_agent(task_analysis)
 
         assert agent_sheet.tier == AgentTier.SPECIALIZED

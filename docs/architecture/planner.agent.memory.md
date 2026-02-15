@@ -1,3 +1,17 @@
+---
+
+## Next-Phase Testing Plan for @tester (2026-02-16)
+
+- All legacy test files have been moved into src/ as *_test.py.
+- @tester is now responsible for:
+  - Generating or improving new pytest unit test files for every module in src/.
+  - Ensuring every public class and function in *.py files has corresponding, meaningful tests in *_test.py.
+  - Using pytest conventions and fixtures for maintainability and coverage.
+  - Reporting coverage gaps and prioritizing critical/core modules first.
+  - Storing rationale, coverage maps, and progress in docs/architecture/tester.agent.memory.md for traceability.
+
+**Handoff:**
+@planner recommends @tester begin automated and manual test generation, aiming for near-complete coverage and robust validation of all agent, core, and utility logic.
 # 🚀 PyAgent v4.0.0: Swarm Singularity Implementation Plan
 
 ## 🌟 High-Level Implementation Plan for PyAgent v4.0.0 Improvements
@@ -407,7 +421,37 @@ Based on the architectural documentation in `docs/architecture/`, particularly `
 - **🛡️ Intelligent Security**: AI-powered fuzzing and neural scam detection 🔄 **PLANNED**
 - **🤖 Swarm Intelligence**: Distributed checkpointing and advanced agent coordination 🏗️ **FOUNDATION READY**
 
-**The journey to Swarm Singularity continu2.1 high priority infrastructure implemented (GitHub testing ✅, TLS/SSL ✅, Userspace ✅). Phase 322 (MCP Server Ecosystem Expansion) actively in progress
+
+---
+
+# Planner Agent Documentation and Architecture Update Plan (2026-02-16)
+
+This section records the planner agent's latest documentation and architecture update plan for the PyAgent project. It is intended for agent handoff and traceability.
+
+## 1. Update Agent Role Documents
+- Update all agent role docs (planner, tester, coding, executing, gitdance) to reflect:
+  - The planner agent only creates, reviews, and updates plans—never writes or moves code.
+  - All implementation is delegated to the appropriate agent.
+  - All planning context and mappings are stored in `docs/architecture/planner.agent.memory.md`.
+
+## 2. UCP Documentation
+- Add or update `UCP_OVERVIEW.md` to reflect Universal Commerce Protocol integration, features, benefits, and references.
+
+## 3. Architecture Diagrams and Workflow
+- Update diagrams and workflow charts to show the new agent handoff pattern and memory usage.
+
+## 4. Task Completion and Migration Reports
+- Update `TASK_COMPLETION_REPORT.md` to summarize:
+  - Migration of test files from `tests/` to `src/*_test.py`.
+  - Planner agent policy and memory storage.
+  - UCP documentation and requirements.
+
+## 5. Consistency and Traceability
+- Cross-reference all memory files in relevant agent docs.
+- Document the agent handoff pattern in each agent’s documentation.
+- Ensure all new requirements (e.g., UCP, agentic commerce) are reflected in architecture and requirements docs.
+
+---
 
 ---
 *Plan updated on February 14, 2026. Phase 322 (MCP Server Ecosystem Expansion) completed with 10x tool capability achieved. All tests passing (100% success rate). Major breakthroughs in CoRT reasoning achieved. AutoMem refinement in progress. Database infrastructure operational in CI environment.*

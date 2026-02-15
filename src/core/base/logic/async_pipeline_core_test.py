@@ -23,6 +23,7 @@ from src.core.base.logic.async_pipeline_core import (
     TaskPriority
 )
 
+
 class TestAsyncPipelineCore:
     """Test cases for AsyncPipelineCore"""
 
@@ -58,6 +59,7 @@ class TestAsyncPipelineCore:
         """Test handler registration"""
         async def dummy_handler(task):
             return "success"
+
         pipeline.register_handler("test", dummy_handler)
         assert "test" in pipeline.task_handlers
 
@@ -73,6 +75,7 @@ class TestAsyncPipelineCore:
     async def test_submit_duplicate_task(self, pipeline, sample_task):
         """Test submitting duplicate task raises error"""
         await pipeline.submit_task(sample_task)
+
         with pytest.raises(ValueError, match="already exists"):
             await pipeline.submit_task(sample_task)
 
@@ -83,7 +86,9 @@ class TestAsyncPipelineCore:
         async def success_handler(task):
             await asyncio.sleep(0.1)  # Simulate work
             return "success_result"
+
         pipeline.register_handler("test", success_handler)
+
         # Submit task
         task = PipelineTask(
             task_id="success_task",
@@ -91,8 +96,10 @@ class TestAsyncPipelineCore:
             metadata={'task_type': 'test'}
         )
         await pipeline.submit_task(task)
+
         # Wait for completion
         completed_task = await pipeline.wait_for_task("success_task", timeout=5.0)
+
         assert completed_task.status == TaskStatus.COMPLETED
         assert completed_task.result == "success_result"
         assert completed_task.error is None
@@ -106,7 +113,9 @@ class TestAsyncPipelineCore:
         async def failing_handler(task):
             await asyncio.sleep(0.1)
             raise ValueError("Task failed")
+
         pipeline.register_handler("test", failing_handler)
+
         # Submit task
         task = PipelineTask(
             task_id="fail_task",
@@ -115,8 +124,10 @@ class TestAsyncPipelineCore:
             max_retries=0
         )
         await pipeline.submit_task(task)
+
         # Wait for completion
         completed_task = await pipeline.wait_for_task("fail_task", timeout=5.0)
+
         assert completed_task.status == TaskStatus.FAILED
         assert completed_task.error == "Task failed"
         assert completed_task.result is None
@@ -125,13 +136,16 @@ class TestAsyncPipelineCore:
     async def test_task_retry_logic(self, pipeline):
         """Test task retry on failure"""
         call_count = 0
+
         async def failing_handler(task):
             nonlocal call_count
             call_count += 1
             if call_count < 3:
                 raise ValueError(f"Attempt {call_count} failed")
             return "success"
+
         pipeline.register_handler("test", failing_handler)
+
         # Submit task with retry
         task = PipelineTask(
             task_id="retry_task",
@@ -140,8 +154,10 @@ class TestAsyncPipelineCore:
             metadata={'task_type': 'test'}
         )
         await pipeline.submit_task(task)
+
         # Wait for completion
         completed_task = await pipeline.wait_for_task("retry_task", timeout=10.0)
+
         assert completed_task.status == TaskStatus.COMPLETED
         assert completed_task.result == "success"
         assert completed_task.retry_count == 2  # Failed twice before success
@@ -150,29 +166,37 @@ class TestAsyncPipelineCore:
     async def test_task_dependencies(self, pipeline):
         """Test task dependency resolution"""
         results = []
+
         async def handler(task):
             results.append(task.task_id)
             return f"result_{task.task_id}"
+
         pipeline.register_handler("test", handler)
+
         # Create dependent tasks
         task1 = PipelineTask(
             task_id="dep_task_1",
             name="Dependency Task 1",
             metadata={'task_type': 'test'}
         )
+
         task2 = PipelineTask(
             task_id="dep_task_2",
             name="Dependency Task 2",
             dependencies=["dep_task_1"],
             metadata={'task_type': 'test'}
         )
+
         # Submit tasks
         await pipeline.submit_task(task1)
         await pipeline.submit_task(task2)
+
         # Wait for both to complete
         completed = await pipeline.wait_for_all(["dep_task_1", "dep_task_2"], timeout=10.0)
+
         assert len(completed) == 2
         assert all(task.status == TaskStatus.COMPLETED for task in completed)
+
         # Task 1 should complete before task 2
         assert results[0] == "dep_task_1"
         assert results[1] == "dep_task_2"
@@ -183,9 +207,12 @@ class TestAsyncPipelineCore:
         async def slow_handler(task):
             await asyncio.sleep(10)  # Much longer than timeout
             return "should_not_reach"
+
         pipeline.register_handler("test", slow_handler)
+
         # Configure short timeout
         pipeline.config.task_timeout = 0.5
+
         task = PipelineTask(
             task_id="timeout_task",
             name="Timeout Task",
@@ -193,7 +220,9 @@ class TestAsyncPipelineCore:
             max_retries=0
         )
         await pipeline.submit_task(task)
+
         completed_task = await pipeline.wait_for_task("timeout_task", timeout=5.0)
+
         assert completed_task.status == TaskStatus.FAILED
         assert "timed out" in completed_task.error.lower()
 
@@ -202,7 +231,9 @@ class TestAsyncPipelineCore:
         """Test batch task submission"""
         async def handler(task):
             return f"result_{task.task_id}"
+
         pipeline.register_handler("test", handler)
+
         # Create batch of tasks
         tasks = [
             PipelineTask(
@@ -212,12 +243,16 @@ class TestAsyncPipelineCore:
             )
             for i in range(5)
         ]
+
         # Submit batch
         task_ids = await pipeline.submit_batch(tasks)
+
         assert len(task_ids) == 5
         assert all(task_id in pipeline.tasks for task_id in task_ids)
+
         # Wait for all to complete
         completed = await pipeline.wait_for_all(task_ids, timeout=10.0)
+
         assert len(completed) == 5
         assert all(task.status == TaskStatus.COMPLETED for task in completed)
 
@@ -225,11 +260,14 @@ class TestAsyncPipelineCore:
     async def test_priority_queue(self, pipeline):
         """Test task priority ordering"""
         execution_order = []
+
         async def handler(task):
             execution_order.append(task.task_id)
             await asyncio.sleep(0.1)  # Small delay to ensure ordering
             return "done"
+
         pipeline.register_handler("test", handler)
+
         # Create tasks with different priorities
         tasks = [
             PipelineTask(
@@ -251,11 +289,14 @@ class TestAsyncPipelineCore:
                 metadata={'task_type': 'test'}
             )
         ]
+
         # Submit tasks
         for task in tasks:
             await pipeline.submit_task(task)
+
         # Wait for all to complete
         await pipeline.wait_for_all([t.task_id for t in tasks], timeout=10.0)
+
         # Critical should execute first, then high, then low
         assert execution_order[0] == "critical_priority"
         assert execution_order[1] == "high_priority"
@@ -266,24 +307,30 @@ class TestAsyncPipelineCore:
         """Test convenience methods for coding tasks"""
         async def code_handler(task):
             return f"executed_{task.metadata.get('code', 'unknown')}"
+
         async def test_handler(task):
             return f"tested_{task.metadata.get('code', 'unknown')}"
+
         pipeline.register_handler("execute_code", code_handler)
         pipeline.register_handler("run_tests", test_handler)
+
         # Test code task
         code_task_id = await pipeline.submit_code_task(
             "Compile service",
             "print('hello')",
             task_type="execute_code"
         )
+
         # Test test task
         test_task_id = await pipeline.submit_test_task(
             "Run unit tests",
             "pytest tests/"
         )
+
         # Wait for completion
         code_result = await pipeline.wait_for_task(code_task_id)
         test_result = await pipeline.wait_for_task(test_task_id)
+
         assert code_result.status == TaskStatus.COMPLETED
         assert test_result.status == TaskStatus.COMPLETED
         assert code_result.result == "executed_print('hello')"
@@ -295,18 +342,23 @@ class TestAsyncPipelineCore:
         assert len(pipeline.get_pending_tasks()) == 0
         assert len(pipeline.get_running_tasks()) == 0
         assert len(pipeline.get_completed_tasks()) == 0
+
         # Add some tasks
         task1 = PipelineTask(task_id="query_task_1", name="Query Task 1")
         task2 = PipelineTask(task_id="query_task_2", name="Query Task 2")
+
         # Manually add to test queries (normally done via submit_task)
         pipeline.tasks["query_task_1"] = task1
         pipeline.tasks["query_task_2"] = task2
+
         assert len(pipeline.get_pending_tasks()) == 2
         assert len(pipeline.get_running_tasks()) == 0
         assert len(pipeline.get_completed_tasks()) == 0
+
         # Change status
         task1.status = TaskStatus.RUNNING
         task2.status = TaskStatus.COMPLETED
+
         assert len(pipeline.get_pending_tasks()) == 0
         assert len(pipeline.get_running_tasks()) == 1
         assert len(pipeline.get_completed_tasks()) == 1

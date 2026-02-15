@@ -21,6 +21,7 @@ import pytest
 
 from src.core.base.mixins.database_access_mixin import DatabaseAccessMixin
 
+
 @pytest.mark.skipif(platform.system() != "Windows", reason="Windows-specific test")
 class TestDatabaseAccessMixin:
     """Test cases for DatabaseAccessMixin."""

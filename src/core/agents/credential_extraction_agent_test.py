@@ -21,6 +21,7 @@ import pytest
 
 from src.core.agents.credential_extraction_agent import CredentialExtractionAgent
 
+
 @pytest.mark.skipif(platform.system() != "Windows", reason="Windows-specific test")
 class TestCredentialExtractionAgent:
     """Test cases for CredentialExtractionAgent."""
