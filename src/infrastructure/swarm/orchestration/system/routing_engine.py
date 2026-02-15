@@ -55,7 +55,8 @@ class RoutingEngine(StandardRoutingCore):
                 return "openai"
 
         if task_type == "reasoning":
-            # Reasoning usually requires frontier models, prefer GitHub Models (defaulting to gpt-4o)
+            # Reasoning usually requires frontier models, 
+            # prefer GitHub Models (defaulting to gpt-4.1)
             return "github_models"
 
         return preferred

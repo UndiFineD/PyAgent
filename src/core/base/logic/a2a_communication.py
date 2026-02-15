@@ -78,7 +78,6 @@ class AgentCard(BaseModel):
     @field_validator('url')
     @classmethod
     def validate_url(cls, v: str) -> str:
-    def validate_url(cls, v):
         if not v.startswith(('http://', 'https://')):
             raise ValueError('URL must start with http:// or https://')
         return v
@@ -117,18 +116,21 @@ class A2AResponse(BaseModel):
 class AgentProtocol(Protocol):
     """Protocol that all agents must implement for A2A communication."""
 
+
     @property
     def agent_card(self) -> AgentCard:
         """Return the agent's identity card."""
-        ...
+        raise NotImplementedError()
+
 
     async def handle_message(self, message: A2AMessage) -> A2AResponse:
         """Handle incoming A2A messages."""
-        ...
+        raise NotImplementedError()
+
 
     async def send_message(self, message: A2AMessage) -> A2AResponse:
         """Send a message to another agent."""
-        ...
+        raise NotImplementedError()
 
 
 class MessageRouter:

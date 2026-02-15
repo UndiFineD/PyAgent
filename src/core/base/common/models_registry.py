@@ -64,17 +64,22 @@ class ProviderRegistry:
 
     @staticmethod
     def get_all_models() -> Dict[str, ModelSpec]:
+        """
+        Returns the full catalog of supported models.
+
+        Each model entry is represented as a dictionary containing:
+            - id (str): Unique identifier or version of the model.
+            - context_window (int): Maximum token context window supported by the model.
+            - input_price (float): Price per 1,000 input tokens (USD).
+            - output_price (float): Price per 1,000 output tokens (USD).
+            - provider (str): Name of the model provider (e.g., 'openai', 'anthropic').
+            - literals (List[str]): Alternative names or aliases for the model.
+
+        Returns:
+            Dict[str, ModelSpec]: A dictionary mapping model names to their specifications.
+        """
         """Returns the full catalog of supported models."""
         return {
-            # OpenAI
-            "gpt-4o": {
-                "id": "gpt-4o-2024-05-13",
-                "context_window": 128000,
-                "input_price": 5.0,
-                "output_price": 15.0,
-                "provider": "openai",
-                "literals": ["gpt4o", "omni"]
-            },
             "gpt-4-turbo": {
                 "id": "gpt-4-turbo-2024-04-09",
                 "context_window": 128000,
@@ -84,31 +89,31 @@ class ProviderRegistry:
                 "literals": ["gpt4t", "turbo"]
             },
             # Anthropic
-            "claude-3-5-sonnet": {
-                "id": "claude-3-5-sonnet-20240620",
-                "context_window": 200000,
-                "input_price": 3.0,
-                "output_price": 15.0,
-                "provider": "anthropic",
-                "literals": ["sonnet3.5", "claude"]
-            },
-            "claude-3-opus": {
-                "id": "claude-3-opus-20240229",
-                "context_window": 200000,
-                "input_price": 15.0,
-                "output_price": 75.0,
-                "provider": "anthropic",
-                "literals": ["opus"]
-            },
+            # "claude-3-5-sonnet": {
+            #    "id": "claude-3-5-sonnet-20240620",
+            #     "context_window": 200000,
+            #     "input_price": 3.0,
+            #     "output_price": 15.0,
+            #     "provider": "anthropic",
+            #     "literals": ["sonnet3.5", "claude"]
+            # },
+            # "claude-3-opus": {
+            #     "id": "claude-3-opus-20240229",
+            #     "context_window": 200000,
+            #     "input_price": 15.0,
+            #     "output_price": 75.0,
+            #     "provider": "anthropic",
+            #     "literals": ["opus"]
+            # },
             # Google
-            "gemini-1.5-pro": {
-                "id": "gemini-1.5-pro-latest",
-                "context_window": 2000000,
-                "input_price": 3.5,
-                "output_price": 10.5,
-                "provider": "google",
-                "literals": ["gemini1.5", "pro"]
-            },
+            # "gemini-1.5-pro": {
+            #     "id": "gemini-1.5-pro-latest",
+            #     "context_window": 2000000,
+            #     "input_price": 3.5,
+            #     "output_price": 10.5,
+            #     "provider": "google",
+            #     "literals": ["gemini1.5", "pro"]
+            # },
             "gemini-1.5-flash": {
                 "id": "gemini-1.5-flash-latest",
                 "context_window": 1000000,

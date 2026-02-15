@@ -120,7 +120,7 @@ class DialogManager:
         ttk.Combobox(
             model_label_frame,
             textvariable=model_var,
-            values=["gpt-4o", "gpt-3.5-turbo", "claude-3-5-sonnet"],
+            values=["gpt-4.1", "gpt-3.5-turbo", "claude-3-5-sonnet"],
         ).pack(side=tk.LEFT, padx=5)
 
         def on_save() -> None:

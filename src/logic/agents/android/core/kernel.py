@@ -24,7 +24,7 @@ import sanitizer
 
 # --- CONFIGURATION ---
 ADB_PATH = "adb"  # Ensure adb is in your PATH
-MODEL = "gpt-4o"  # Or "gpt-4-turbo" for faster/cheaper execution
+MODEL = "gpt-4.1"  # Or "gpt-4-turbo" for faster/cheaper execution
 SCREEN_DUMP_PATH = "/sdcard/window_dump.xml"
 LOCAL_DUMP_PATH = "window_dump.xml"
 

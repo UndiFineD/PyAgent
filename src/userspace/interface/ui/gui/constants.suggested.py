@@ -134,7 +134,7 @@ DEFAULT_INSTRUCTIONS = {
 
 # Model Token Limits (Context Window Management)
 MODEL_TOKENS = {
-    "gpt-4o": 128000,
+    "gpt-4.1": 128000,
     "gpt-3.5-turbo": 16385,
     "claude-3-5-sonnet": 200000,
     "default": 16385,

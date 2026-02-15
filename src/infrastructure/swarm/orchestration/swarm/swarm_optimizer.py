@@ -59,7 +59,7 @@ class SwarmOptimizer:
                 {
                     "type": "model_tuning",
                     "reason": "Low success rate",
-                    "action": "Shift primary agents to gpt-4o from gpt-3.5",
+                    "action": "Shift primary agents to gpt-4.1 from gpt-3.5",
                 }
             )
 

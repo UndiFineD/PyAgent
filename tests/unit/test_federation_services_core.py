@@ -12,8 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Docstring for tests.unit.test_federation_services_core
+"""
+
 import pytest
-from unittest.mock import Mock, patch, AsyncMockfrom datetime import datetime, timedelta, timezone
+from unittest.mock import Mock, patch, AsyncMock
+from datetime import datetime, timedelta, timezone
 from src.core.base.logic.core.federation_services_core import (
     FederationServicesCore,
     TokenGenerationRequest,
@@ -153,6 +158,3 @@ class TestFederationServicesCore:
         assert "active_services" in stats
         assert "recent_tokens" in stats
         assert "tokens_by_provider" in stats
-
-
-

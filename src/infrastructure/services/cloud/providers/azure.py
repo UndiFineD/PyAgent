@@ -46,7 +46,7 @@ class AzureAIConnector(CloudProviderBase):
     # Pricing per 1M tokens (input/output) - approximate (Standard Azure Pay-As-Go)
     PRICING: dict[str, dict[str, float]] = {
         "gpt-4": {"input": 30.00, "output": 60.00},
-        "gpt-4o": {"input": 5.00, "output": 15.00},
+        "gpt-4.1": {"input": 5.00, "output": 15.00},
         "gpt-35-turbo": {"input": 0.50, "output": 1.50},
         "meta-llama-3-70b-instruct": {"input": 0.65, "output": 2.75},
         "meta-llama-3-8b-instruct": {"input": 0.15, "output": 0.15},

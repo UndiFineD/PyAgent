@@ -38,7 +38,7 @@ class ConfigurationManager:
         self.config_file: str = config_file
         self.settings = {
             "github_token_file": r"C:\DEV\github-gat.txt",
-            "default_model": "gpt-4o",
+            "default_model": "gpt-4.1",
             "cache_enabled": True,
             "monitor_scaling": 1.0,
         }

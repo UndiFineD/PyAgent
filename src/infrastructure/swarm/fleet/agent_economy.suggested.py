@@ -37,7 +37,6 @@ class MarketPricingEngine:
 
     # PRICING (USD per 1K tokens) - migrated from benchmark_glm47.py
     MODEL_PRICING = {
-        "gpt-4o": {"input": 0.005, "output": 0.015},
         "gpt-3.5-turbo": {"input": 0.0005, "output": 0.0015},
         "glm-4": {"input": 0.01, "output": 0.05},
         "glm-4v": {"input": 0.02, "output": 0.10},

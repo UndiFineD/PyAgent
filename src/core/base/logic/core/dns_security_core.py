@@ -12,14 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# DNS Security Core - Network-level filtering and analysis
-# Based on patterns from AdGuard Home repository
+"""
+DNS Security Core - Network-level filtering and analysis
+Based on patterns from AdGuard Home repository
+"""
 
 import json
 import logging
 from typing import Dict, List, Optional, Any, Tuple, Set
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezonefrom enum import Enum
+from datetime import datetime, timedelta, timezone
+from enum import Enum
 import re
 from collections import deque
 import time

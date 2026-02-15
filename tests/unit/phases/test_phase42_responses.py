@@ -187,8 +187,8 @@ class TestResponseConfig:
         """Test configuration with model."""
         from src.infrastructure.services.openai_api.responses_api import ResponseConfig
 
-        config = ResponseConfig(model="gpt-4o")
-        assert config.model == "gpt-4o"
+        config = ResponseConfig(model="gpt-4.1")
+        assert config.model == "gpt-4.1"
 
     def test_config_with_options(self):
         """Test configuration with options."""

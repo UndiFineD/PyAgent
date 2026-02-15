@@ -44,8 +44,7 @@ __version__ = VERSION
 
 class ComplianceAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
-    Compliance Audit Agent: Verifies fleet operations against simulated
-    industry standards (e.g., SOC2, GDPR, HIPAA patterns).
+    Compliance Audit Agent: Verifies fleet operations against simulated industry standards (e.g., SOC2, GDPR, HIPAA patterns).
     """
 
     def __init__(self, workspace_path: str) -> None:

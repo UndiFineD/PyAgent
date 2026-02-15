@@ -38,7 +38,7 @@ class GatewayCore:
         # Interface affinity rules: interface -> model_preference
         self.interface_affinity: dict[str, str] = {
             "web_ui": "glm-4-flash",
-            "cli": "gpt-4o",
+            "cli": "gpt-4.1",
             "gui": "claude-3-haiku",
             "background": "llama-3-70b",
         }
@@ -52,7 +52,7 @@ class GatewayCore:
         Resolves the preferred LLM model based on the calling interface.
         Prioritizes speed for UI/Frontend.
         """
-        return self.interface_affinity.get(interface_type.lower(), "gpt-4o")
+        return self.interface_affinity.get(interface_type.lower(), "gpt-4.1")
 
     def format_saas_request(self, service: str, action: str, params: dict[str, Any]) -> dict[str, Any]:
         """Constructs a standardized internal request for external SaaS consumption."""

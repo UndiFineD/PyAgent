@@ -167,7 +167,7 @@ class AgentColumn:
 
         self.model_cb = ttk.Combobox(
             mini_toolbar,
-            values=["default", "gpt-4o", "gpt-3.5-turbo", "claude-3-5-sonnet"],
+            values=["default", "gpt-4.1", "gpt-3.5-turbo", "claude-3-5-sonnet"],
             width=12,
             font=("Segoe UI", 8),
         )

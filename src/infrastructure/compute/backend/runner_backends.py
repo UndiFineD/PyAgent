@@ -245,7 +245,7 @@ class BackendHandlers:
         model: str = (
             os.environ.get("DV_AGENT_MODEL")
             or os.environ.get("GITHUB_MODELS_MODEL")
-            or "gpt-4o-mini"
+            or "gpt-4.1"
         ).strip()
 
         token = BackendHandlers._get_github_token()
@@ -274,7 +274,7 @@ class BackendHandlers:
 
         api_key: str | None = os.environ.get("OPENAI_API_KEY")
         base_url: str = os.environ.get("OPENAI_BASE_URL") or "https://api.openai.com/v1"
-        model: str = os.environ.get("OPENAI_MODEL") or "gpt-4o-mini"
+        model: str = os.environ.get("OPENAI_MODEL") or "gpt-4.1-mini"
 
         if not api_key:
             logging.debug("OpenAI API skipped: No API key")
