@@ -14,11 +14,6 @@
 # limitations under the License.
 
 
-"""
-IntelligenceCore: Pure logic for Swarm Collective Intelligence.
-Handles weight calculation, insight distillation, and pattern matching.
-"""
-
 from __future__ import annotations
 
 import logging

@@ -12,25 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-OrchestratorAgent - Central coordination unit for swarm agentic workflows
-
-[Brief Summary]
-DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
-USAGE:
-Instantiate with OrchestratorAgent(file_path="path/to/repo", enable_async=True, dry_run=False) then register plugins, call from_config_file for config-driven init, and use the command_handler to dispatch agent commands
-
-WHAT IT DOES:
-Coordinates BaseAgent and OrchestratorFeatures to decompose tasks, delegate work to specialist agents, provide legacy compatibility shims such as repo_root aliasing and legacy metrics, initialize AgentCommandHandler and plugin container, and support config-file construction
-
-WHAT IT SHOULD DO BETTER:
-Remove the runtime circular import for BaseAgent by refactoring initialization to a factory or injection pattern, migrate legacy synchronous helpers to full asyncio usage for enable_async, extract metrics management to a dedicated MetricsManager, add stricter typing for plugin interfaces, and expand unit tests for lifecycle and plugin registration
-
-FILE CONTENT SUMMARY:
-OrchestratorAgent: The central coordination unit of the PyAgent swarm.
-Manages task decomposition, agent delegation, and collaborative workflow execution.
-"""
 
 from __future__ import annotations
 
@@ -38,7 +19,7 @@ import logging
 import time
 from pathlib import Path
 from typing import Any
-
+import asyncio
 from src.core.base.execution.agent_command_handler import AgentCommandHandler
 from src.core.base.lifecycle.version import VERSION
 from .orchestrator_features import OrchestratorFeatures
@@ -204,23 +185,16 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
                 return "Success"
             return "Orchestrator: No loop implementation found."
 
-        # Call modern async run via runner
-        import asyncio
-
         try:
-            # Check if there is an existing event loop
-            try:
-                loop = asyncio.get_event_loop()
-            except RuntimeError:
-                loop = None
-
-            if loop and loop.is_running():
-                # We are in an async context already (unlikely for these tests)
-                # This is a bit tricky, but for tests we'll just return a placeholder
-                return "Async execution required"
-
             # Use the new run_async method in BaseAgent
             return asyncio.run(self.run_async(prompt))
         except (RuntimeError, ValueError) as e:
             logging.error(f"Error in OrchestratorAgent.run: {e}")
             return f"Error: {e}"
+
+    async def run_async(self, prompt: str | None = None, **kwargs: Any) -> str:
+        # Async execution logic for agent
+        _ = kwargs
+        # Implement your async logic here, or call the appropriate async method from BaseAgent
+        # For now, just return a placeholder
+        return "Async execution required"

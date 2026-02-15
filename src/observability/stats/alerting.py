@@ -149,32 +149,32 @@ class RetentionEnforcer:
 
         if name not in self.data:
             self.data[name] = []
-    self.data[name].append({"timestamp": actual_ts, "value": actual_val})
+        self.data[name].append({"timestamp": actual_ts, "value": actual_val})
 
-def enforce(self) -> int:
-    removed = 0
-    now: float = datetime.now().timestamp()
-    if _RUST_ACCEL and self.policies:
-        # Use Rust for pattern matching
-        patterns: list[str] = list(self.policies.keys())
-        data_keys: list[str] = list(self.data.keys())
-        policy_matches = match_policies_rust(patterns, data_keys)
-        for pat, matching in policy_matches:
-            pol: RetentionPolicy = self.policies[pat]
-            for m in matching:
-                orig: int = len(self.data[m])
-                if pol.retention_days > 0:
-                    cutoff: float = now - (pol.retention_days * 86400)
-                    self.data[m] = [d for d in self.data[m] if d["timestamp"] > cutoff]
-                removed += orig - len(self.data[m])
-    else:
-        # Python fallback
-        for pat, pol in self.policies.items():
-            matching = [m for m in self.data if pat.replace("*", "") in m]
-            for m in matching:
-                orig = len(self.data[m])
-                if pol.retention_days > 0:
-                    cutoff = now - (pol.retention_days * 86400)
-                    self.data[m] = [d for d in self.data[m] if d["timestamp"] > cutoff]
-                removed += orig - len(self.data[m])
-    return removed
+    def enforce(self) -> int:
+        removed = 0
+        now: float = datetime.now().timestamp()
+        if _RUST_ACCEL and self.policies:
+            # Use Rust for pattern matching
+            patterns: list[str] = list(self.policies.keys())
+            data_keys: list[str] = list(self.data.keys())
+            policy_matches = match_policies_rust(patterns, data_keys)
+            for pat, matching in policy_matches:
+                pol: RetentionPolicy = self.policies[pat]
+                for m in matching:
+                    orig: int = len(self.data[m])
+                    if pol.retention_days > 0:
+                        cutoff: float = now - (pol.retention_days * 86400)
+                        self.data[m] = [d for d in self.data[m] if d["timestamp"] > cutoff]
+                    removed += orig - len(self.data[m])
+        else:
+            # Python fallback
+            for pat, pol in self.policies.items():
+                matching = [m for m in self.data if pat.replace("*", "") in m]
+                for m in matching:
+                    orig = len(self.data[m])
+                    if pol.retention_days > 0:
+                        cutoff = now - (pol.retention_days * 86400)
+                        self.data[m] = [d for d in self.data[m] if d["timestamp"] > cutoff]
+                    removed += orig - len(self.data[m])
+        return removed

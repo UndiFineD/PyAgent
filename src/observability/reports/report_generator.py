@@ -13,30 +13,6 @@
 # limitations under the License.
 
 
-"""
-Report Generator - Generate quality reports for agent source files
-
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Instantiate: rg = ReportGenerator(agent_dir="path/to/agents", output_dir="path/to/output", recorder=recorder)
-- Quick run: rg.process_all_files() → returns dict with counts
-- Full project report: html = rg.generate_full_report() (returns dashboard string)
-- Export deduplicated items: rg.export_jsonl_report(items, filename="audit_log.jsonl")
-
-WHAT IT DOES:
-- Scans a directory for agent .py files, parses and processes each file to produce quality reports, audit items and a project dashboard.
-- Deduplicates and exports findings to JSONL via DeduplicationCore and logs actions with StructuredLogger.
-- Records activity to an optional recorder and provides summary counts (processed, skipped, errors).
-
-WHAT IT SHOULD DO BETTER:
-- Improve robustness: add explicit AST-based validations, clearer exception granularity, and retry/backoff for transient IO errors.
-- Performance: support parallel file processing, incremental updates, and content-hash caching to avoid unnecessary reprocessing.
-- Reporting: include richer metadata (file version, author, module-level docstring extraction), machine-readable outputs (JSON schema), and configurable export options.
-- Observability: unify logging levels, surface metrics (time per file), and add unit/integration tests for edge cases.
-"""
-
 from __future__ import annotations
 
 from argparse import Namespace

@@ -36,6 +36,7 @@ class DirectorAgent(BaseAgent):
     """Orchestrator agent that decomposes complex tasks and delegates to specialists."""
 
     def __init__(self, file_path: str) -> None:
+        """Initializes the DirectorAgent."""
         super().__init__(file_path)
         self.status = StatusManager()
 
@@ -68,6 +69,7 @@ class DirectorAgent(BaseAgent):
         )
 
     def _get_default_content(self) -> str:
+        """Provides the default content for the DirectorAgent's log."""
         return "# Project Orchestration Plan\n\n## Goal\n[Goal here]\n\n## Sequence\n- Pending planning...\n"
 
     def _get_available_agents(self) -> list[str]:

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-SpeciationOrchestrator: Categorizes and evolves agent specialized "species".
-Analyzes task patterns to suggest when new specialized agent types should be created.
-"""
 
 from __future__ import annotations
 
@@ -38,6 +33,7 @@ class SpeciationOrchestrator:
     """
 
     def __init__(self, fleet: FleetManager) -> None:
+        """Initializes the SpeciationOrchestrator."""
         self.fleet = fleet
         self.species_map: Dict[str, List[str]] = {
             "developer": ["CoderAgent", "SandboxAgent", "GitAgent"],

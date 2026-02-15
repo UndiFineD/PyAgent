@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,35 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Utils.py - Stats Agent CLI entry point
-
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- As a CLI: python src/agent_stats.py --files src/*.py --format json
-- To export results: python src/agent_stats.py --files src/*.py --export json csv --coverage coverage.xml
-- To compare against baseline: python src/agent_stats.py --files src/*.py --baseline baseline_stats.json
-
-WHAT IT DOES:
-- Parses CLI arguments to drive the StatsAgent for reporting file update and code metrics.
-- Supports multiple output formats (text, json, csv), optional coverage tracking, exporting, baseline comparison, and optional visualization when available.
-- Sets up logging verbosity and handles common I/O and JSON errors with clear exit codes.
-
-WHAT IT SHOULD DO BETTER:
-- Move CLI wiring into a dedicated lightweight CLI module and keep utils.py limited to pure utility functions; reduce side effects at import.
-- Add unit tests around argument parsing and error paths, and validate file globs earlier with clearer user-facing messages.
-- Replace broad exception handling with more specific exceptions and ensure visualization import errors are explicitly logged at debug level rather than silently suppressed.
-
-FILE CONTENT SUMMARY:
-Utils.py module.
-"""
-
-# you may not use this file except in compliance with the License.
-# you may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
 from __future__ import annotations
 

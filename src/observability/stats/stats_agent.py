@@ -12,30 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-StatsAgent - Reports statistics on file update progress
-
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Instantiate with a list of file paths to monitor: StatsAgent(["a.txt", "b.txt"]).
-- Register custom metrics: stats.register_custom_metric("files_processed").
-- Emit metric samples: stats.add_metric("files_processed", 42).
-- Read current metric: stats.get_metric("files_processed") and gather all via stats.collect_custom_metrics().
-- Integrates with observability primitives (Metric, Alert, Threshold, RetentionPolicy) and uses StructuredLogger; optionally uses rust_core if available.
-
-WHAT IT DOES:
-- Validates and normalizes input file paths and filters out missing files.
-- Provides an API to register, add, retrieve and collect custom metrics and maintains in-memory metric history, snapshots, thresholds, retention rules and alerts.
-- Integrates with the project's observability core types (Metric, MetricSnapshot, Alert, Threshold, RetentionPolicy) and emits structured logs using StructuredLogger.
-- Optionally leverages rust_core for performance-sensitive operations when available.
-
-WHAT IT SHOULD DO BETTER:
-- Persist metrics and snapshots to durable storage and expose an API for loading/storing state (use StateTransaction for transactional FS changes).
-- Complete and document anomaly detection, threshold evaluation and retention enforcement code paths; add async support for non-blocking collection.
-- Harden error handling and validation (clearer exceptions, retry/backoff for IO), add unit tests for edge cases, and centralize namespace handling instead of embedding in tags.
-- Provide richer typing, docstrings on all public methods, and examples for alerting configuration and retention policies.
-"""
 
 from __future__ import annotations
 
@@ -58,11 +34,16 @@ except ImportError:
     HAS_RUST = False
 
 from src.core.base.lifecycle.version import VERSION
-from src.observability.stats.observability_core import (Alert, AlertSeverity,
-                                                        Metric, MetricSnapshot,
-                                                        MetricType,
-                                                        RetentionPolicy,
-                                                        StatsCore, Threshold)
+from src.observability.stats.observability_core import (
+    Alert,
+    AlertSeverity,
+    Metric,
+    MetricSnapshot,
+    MetricType,
+    RetentionPolicy,
+    StatsCore,
+    Threshold,
+)
 from src.observability.structured_logger import StructuredLogger
 
 __version__: str = VERSION
@@ -99,7 +80,6 @@ class StatsAgent:
         if not self.files:
             raise ValueError("No valid files found after filtering")
 
-    # ========== Custom Metrics ========== 
     def register_custom_metric(
         self,
         name: str,

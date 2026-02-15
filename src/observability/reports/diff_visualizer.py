@@ -12,29 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Diff Visualizer - Visualize changelog differences and render HTML views
-
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-Instantiate DiffVisualizer, call compare(old, new) to get a DiffResult, then render_html(result, DiffViewMode.<MODE>) to obtain an HTML representation.
-Example:
-visualizer = DiffVisualizer()
-result = visualizer.compare(old_content, new_content)
-html = visualizer.render_html(result, DiffViewMode.SIDE_BY_SIDE)
-
-WHAT IT DOES:
-Provides a small utility to compare two changelog-like text blobs using set-based line comparison, returning additions, deletions, unchanged count and a simple similarity score. Offers three HTML rendering modes (side-by-side, inline, unified) with minimal styling hooks (CSS classes) and concise output suitable for embedding in lightweight UIs or previews.
-
-WHAT IT SHOULD DO BETTER:
-- Preserve line order and context (current set-based approach loses ordering and duplicate lines).
-- Use a sequence-aware diff algorithm (difflib.SequenceMatcher or Myers diff) to produce aligned hunks, line numbers, and intraline changes.
-- Escape HTML and handle special characters to avoid injection; provide templating or safe markup generation.
-- Produce richer side-by-side output with aligned rows, context lines, and optional collapsing of unchanged sections.
-- Improve similarity metric to reflect edit distance rather than set intersection, and handle empty inputs consistently.
-- Add unit tests, type validations, handling of large files/streams, and performance optimizations for large diffs.
-"""
 
 from __future__ import annotations
 

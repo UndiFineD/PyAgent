@@ -12,26 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-report_utils.py - Report utilities and lightweight static analysis helpers
-
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Import and use export_to_html(markdown_content, title) to render markdown reports to standalone HTML.
-- Use the internal helpers when composing file-level reports: _read_text(path), _rel(path), and analysis helpers like _looks_like_pytest_import_problem(path) or _placeholder_test_note(path).
-- The module relies on WorkspaceCore, AnalysisCore and FileSystemCore for project-relative paths, code analysis and file I/O; these cores should be instantiated from the application context when used outside this module.
-
-WHAT IT DOES:
-- Provides small, focused utilities for reading source files, detecting common pytest import/name pitfalls, extracting top-level imports from an AST, detecting argparse usage, flagging placeholder tests, and exporting Markdown to a styled HTML document.
-- Uses AnalysisCore, FileSystemCore and WorkspaceCore to keep logic consistent with the rest of the PyAgent system and to provide project-relative path formatting via _rel.
-- Implements a lightweight _find_issues AST walker (partial in this file) to detect simple code smells such as mutable default args and placeholder tests; also includes an HTML export fallback when the markdown package is absent.
-
-WHAT IT SHOULD DO BETTER:
-- Surface a clear public API (avoid leading-underscore names for functions meant to be reused) and add lightweight, documented wrappers that validate inputs and raise informative errors rather than returning None.
-- Replace ad-hoc AST checks with a small, well-tested rule set (or delegate more checks to AnalysisCore) and expand _find_issues to cover more patterns (unused imports, shadowing, bare-except, logging practices).
-- Add unit tests for HTML export (including Markdown extension behavior), improve HTML theming/templating (support CSS override), add logging, and make markdown dependency optional with a clearer install-time message or fallback template.
-"""
 
 from __future__ import annotations
 

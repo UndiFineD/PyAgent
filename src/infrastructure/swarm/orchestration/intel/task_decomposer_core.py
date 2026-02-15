@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Task decomposer core.py module.
-"""
-
 
 from __future__ import annotations
 
@@ -25,7 +21,7 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # type: ignore[import-untyped]
 except ImportError:
     rc = None  # type: ignore[assignment]
 
@@ -122,6 +118,7 @@ class TaskDecomposerCore:
         return [self._to_dict(s) for s in steps]
 
     def _to_dict(self, step: PlanStep) -> dict[str, Any]:
+        """Helper to convert PlanStep dataclass to dict."""
         return {
             "agent": step.agent,
             "action": step.action,

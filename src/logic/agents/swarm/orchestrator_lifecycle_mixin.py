@@ -12,34 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-OrchestratorLifecycleMixin - Health checking and graceful shutdown for OrchestratorAgent
-
-[Brief Summary]
-DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
-USAGE:
-- Mix into an OrchestratorAgent class to add lifecycle utilities
-- Call enable_graceful_shutdown to install OS signal handlers and persist resume state
-- Use resume_from_shutdown to recover pending work, run_health_checks or print_health_report for diagnostics, and is_healthy to gate operations
-
-WHAT IT DOES:
-- Provides enable_graceful_shutdown to register GracefulShutdown tied to repo_root
-- Provides resume_from_shutdown to load persisted resume state and return pending file paths
-- Provides run_health_checks to execute HealthChecker run_all_checks and return AgentHealthCheck results
-- Provides is_healthy to evaluate overall health by comparing check results to HealthStatus.HEALTHY
-- Provides print_health_report to execute checks and emit a human-readable report via HealthChecker
-
-WHAT IT SHOULD DO BETTER:
-- Accept dependency injection for GracefulShutdown and HealthChecker to improve testability and avoid repeated instantiation
-- Surface exceptions and add richer logging and metrics for failure modes rather than silent returns
-- Add async variants and cancellation support to integrate with asyncio-based OrchestratorAgents
-- Improve type consistency by annotating return types uniformly and returning empty lists instead of None where appropriate
-- Add unit tests and clearer docstrings per-method and integrate CascadeContext and StateTransaction where lifecycle persistence is used
-
-FILE CONTENT SUMMARY:
-Orchestrator lifecycle mixin.py module.
-"""
 
 from __future__ import annotations
 

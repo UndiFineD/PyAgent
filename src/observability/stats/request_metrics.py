@@ -14,34 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-RequestMetrics - Comprehensive timing breakdown for request processing
-
-[Brief Summary]
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Instantiate RequestMetrics at request arrival: metrics = RequestMetrics(request_id="abc")
-- Update lifecycle events: metrics.mark_queued(), metrics.mark_scheduled(), metrics.mark_processing(), metrics.mark_first_token(), metrics.mark_token(), metrics.mark_completed() (or mark_failed/mark_cancelled)
-- Read computed metrics: metrics.time_in_queue_ms, metrics.schedule_time_ms, metrics.processing_time_ms, metrics.total_time_ms, or call metrics.summary() if implemented
-
-WHAT IT DOES:
-- Provides a dataclass (RequestMetrics) that captures epoch timestamps for key request lifecycle events and simple counters (tokens_generated, tokens_input, retry_count).
-- Exposes helper mark_* methods to record transitions and state (RequestState enum) and computed properties to return phase durations in milliseconds for latency analysis.
-- Designed to mirror vLLM-like request timing instrumentation to support production latency breakdowns and streaming first-token latency measurement.
-
-WHAT IT SHOULD DO BETTER:
-- Add a complete, robust summary() / to_dict() method that returns all computed durations, averages and safe None handling for incomplete traces.
-- Validate and normalize time arithmetic (handle monotonic clocks vs epoch time) to avoid negative durations and clock skew issues; prefer time.monotonic() for intervals.
-- Add typed unit tests, optional contextual metadata (route, client_id), and integration hooks to export metrics to observability backends (Prometheus, OpenTelemetry) with non-blocking flush.
-
-FILE CONTENT SUMMARY:
-RequestMetrics - Comprehensive timing breakdown for request processing.
-
-Inspired by vLLM's sequence.py RequestMetrics for production latency analysis.
-
-Phase 17: vLLM Pattern Integration
-"""
 
 from __future__ import annotations
 
@@ -52,7 +24,7 @@ from typing import Optional
 
 
 class RequestState(Enum):
-    """States a request can be in."""
+    """Enumeration of request processing states throughout its lifecycle."""
 
     CREATED = auto()
     QUEUED = auto()
@@ -169,149 +141,6 @@ class RequestMetrics:
         return self
 
     # Computed timing properties
-
-    @property
-    def time_in_queue_ms(self) -> Optional[float]:
-        """Time spent waiting in queue (ms)."""
-        if self.queued_time and self.first_scheduled_time:
-            return (self.first_scheduled_time - self.queued_time) * 1000
-        return None
-
-    @property
-    def schedule_time_ms(self) -> Optional[float]:
-        """Time to schedule the request (ms)."""
-        if self.first_scheduled_time and self.processing_start_time:
-            return (self.processing_start_time - self.first_scheduled_time) * 1000
-        return
-"""
-
-from __future__ import annotations
-
-import time
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Optional
-
-
-class RequestState(Enum):
-    """States a request can be in."""
-
-    CREATED = auto()
-    QUEUED = auto()
-    SCHEDULED = auto()
-    PROCESSING = auto()
-    STREAMING = auto()
-    COMPLETED = auto()
-    FAILED = auto()
-    CANCELLED = auto()
-
-
-@dataclass
-class RequestMetrics:
-    """
-    Comprehensive timing metrics for request processing.
-
-    Tracks detailed timing breakdown from arrival to completion:
-    - Queue time: How long request waited in queue
-    - Schedule time: Time to schedule/route the request
-    - Processing time: Model/compute time
-    - Total time: End-to-end latency
-
-    Example:
-        >>> metrics = RequestMetrics()
-        >>> metrics.mark_queued()
-        >>> # ... process ...
-        >>> metrics.mark_scheduled()
-        >>> metrics.mark_processing()
-        >>> metrics.mark_completed()
-        >>> print(metrics.summary())
-    """
-
-    # Request identification
-    request_id: str = ""
-
-    # Timing markers (all in seconds since epoch)
-    arrival_time: float = field(default_factory=time.time)
-    queued_time: Optional[float] = None
-    first_scheduled_time: Optional[float] = None
-    processing_start_time: Optional[float] = None
-    first_token_time: Optional[float] = None
-    last_token_time: Optional[float] = None
-    finished_time: Optional[float] = None
-
-    # State
-    state: RequestState = RequestState.CREATED
-    error: Optional[str] = None
-
-    # Counts
-    tokens_generated: int = 0
-    tokens_input: int = 0
-    retry_count: int = 0
-
-    # Additional metadata
-    model_name: str = ""
-    agent_name: str = ""
-    priority: int = 0
-
-    # Timing phase breakdowns (computed)
-    _phase_times: dict = field(default_factory=dict)
-
-    def mark_queued(self) -> "RequestMetrics":
-        """Mark request as queued."""
-        self.queued_time = time.time()
-        self.state = RequestState.QUEUED
-        return self
-
-    def mark_scheduled(self) -> "RequestMetrics":
-        """Mark request as scheduled."""
-        self.first_scheduled_time = time.time()
-        self.state = RequestState.SCHEDULED
-        return self
-
-    def mark_processing(self) -> "RequestMetrics":
-        """Mark request as processing (model forward pass)."""
-        self.processing_start_time = time.time()
-        self.state = RequestState.PROCESSING
-        return self
-
-    def mark_first_token(self) -> "RequestMetrics":
-        """Mark when first token is generated (for streaming)."""
-        self.first_token_time = time.time()
-        self.state = RequestState.STREAMING
-        return self
-
-    def mark_token(self) -> "RequestMetrics":
-        """Mark a token generated."""
-        self.last_token_time = time.time()
-        self.tokens_generated += 1
-        return self
-
-    def mark_completed(self) -> "RequestMetrics":
-        """Mark request as completed."""
-        self.finished_time = time.time()
-        self.state = RequestState.COMPLETED
-        return self
-
-    def mark_failed(self, error: str) -> "RequestMetrics":
-        """Mark request as failed."""
-        self.finished_time = time.time()
-        self.state = RequestState.FAILED
-        self.error = error
-        return self
-
-    def mark_cancelled(self) -> "RequestMetrics":
-        """Mark request as cancelled."""
-        self.finished_time = time.time()
-        self.state = RequestState.CANCELLED
-        return self
-
-    def increment_retry(self) -> "RequestMetrics":
-        """Increment retry count."""
-        self.retry_count += 1
-        return self
-
-    # Computed timing properties
-
     @property
     def time_in_queue_ms(self) -> Optional[float]:
         """Time spent waiting in queue (ms)."""
@@ -421,8 +250,10 @@ class RequestMetrics:
 
 @dataclass
 class RequestMetricsAggregator:
-    """
-    Aggregates metrics from multiple requests for analysis.
+    """Aggregates and analyzes request metrics for performance insights.
+
+    Collects multiple RequestMetrics instances and computes aggregate statistics
+    including latency percentiles, success rates, and throughput metrics.
 
     Example:
         >>> aggregator = RequestMetricsAggregator()
@@ -438,31 +269,34 @@ class RequestMetricsAggregator:
         self.metrics.append(metric)
 
     def clear(self) -> int:
-        """Clear all metrics and return count cleared."""
+        """Clear all metrics and return the count of removed items."""
         count: int = len(self.metrics)
         self.metrics.clear()
         return count
 
     @property
     def total_requests(self) -> int:
+        """Get the total number of requests in the aggregator."""
         return len(self.metrics)
 
     @property
     def completed_requests(self) -> int:
+        """Get the count of completed requests."""
         return sum(1 for m in self.metrics if m.state == RequestState.COMPLETED)
 
     @property
     def failed_requests(self) -> int:
+        """Get the count of failed requests."""
         return sum(1 for m in self.metrics if m.state == RequestState.FAILED)
 
     @property
     def success_rate(self) -> float:
+        """Get the success rate of requests (completed / total)."""
         if self.total_requests == 0:
             return 0.0
         return self.completed_requests / self.total_requests
 
     def _percentile(self, values: list[float], p: float) -> float:
-        """Calculate percentile from sorted values."""
         if not values:
             return 0.0
         sorted_vals: list[float] = sorted(values)
@@ -471,7 +305,7 @@ class RequestMetricsAggregator:
         return sorted_vals[idx]
 
     def latency_stats(self) -> dict:
-        """Calculate latency statistics."""
+        """Compute latency statistics including total time, queue time, and time-to-first-token percentiles."""
         total_times = [m.total_time_ms for m in self.metrics if m.total_time_ms]
         queue_times = [m.time_in_queue_ms for m in self.metrics if m.time_in_queue_ms]
         ttft_times = [m.time_to_first_token_ms for m in self.metrics if m.time_to_first_token_ms]
@@ -508,7 +342,7 @@ class RequestMetricsAggregator:
         }
 
     def throughput_stats(self) -> dict:
-        """Calculate throughput statistics."""
+        """Compute throughput statistics (requests/sec, tokens/sec) for completed requests."""
         completed = [m for m in self.metrics if m.is_complete]
         if not completed:
             return {"error": "no_completed_requests"}
@@ -539,7 +373,7 @@ class RequestMetricsAggregator:
         }
 
     def summary(self) -> dict:
-        """Generate complete summary."""
+        """Generate a comprehensive summary of aggregated metrics including success rate, latency, and throughput."""
         return {
             "total_requests": self.total_requests,
             "completed": self.completed_requests,

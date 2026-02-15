@@ -17,26 +17,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Self Evolution Mixin - Automatic workflow optimization for PyAgent orchestrators
-
-[Brief Summary]
-DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
-USAGE:
-Used as a mixin for orchestrator/agent classes that implement execute_with_pattern(context, pattern_name, **kwargs). Instantiate or mix into an agent class, optionally call enable_evolution(False) to disable, and use execute_with_evolution(context, pattern_name, **kwargs) in place of direct execution to get automatic iterative workflow improvements.
-
-WHAT IT DOES:
-Implements tracking and lightweight evolutionary optimization around workflow execution: records initial run metrics, decides whether evolution is warranted, attempts a bounded number of evolution iterations, records history and metrics, and returns the best-observed result. Provides configuration hooks (enable_evolution, set_evolution_params) and dataclasses (EvolutionMetrics, EvolutionHistory) to store performance, improvements, and lessons learned.
-
-WHAT IT SHOULD DO BETTER:
-- Provide typed return and error contracts for execute_with_evolution to make integration safer (e.g., a Result dataclass and explicit error handling instead of raw Dicts).
-- Persist evolution history to durable storage (StateTransaction or rust_core) and expose retrieval/query APIs to analyze long-term trends.
-- Use pluggable evolution strategies and validators (strategy pattern) rather than a single internal _evolve_workflow implementation, and add async concurrency controls, timeouts, and resource safeguards for evolved executions.
-
-FILE CONTENT SUMMARY:
-Self-evolution mixin for PyAgent orchestrators.
-"""
 
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
@@ -46,10 +26,10 @@ from datetime import datetime
 # runtime-friendly dataclass if the upstream package is not importable (useful for linting/test).
 try:
     from src.core.base.models.communication_models import CascadeContext  # type: ignore
-except Exception:
+except ImportError:
     @dataclass
     class CascadeContext:
-        """Minimal runtime CascadeContext used when the upstream communication_models package is unavailable."""
+        """Minimal runtime CascadeContext used when the upstream communication_models module is unavailable."""
         task_id: str = ""
 
 import uuid

@@ -12,26 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Feed Generator - Generate RSS/Atom/JSON feeds from changelog
-
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-Instantiate FeedGenerator with a FeedFormat and call generate(entries, project_name). Example:
-    from src.core.base.common.types.feed_format import FeedFormat
-    from src.core.base.common.types.changelog_entry import ChangelogEntry
-    gen = FeedGenerator(FeedFormat.ATOM_10)
-    feed_text = gen.generate(list_of_changelog_entries, "My Project")
-
-WHAT IT DOES:
-Produces simple Atom 1.0, RSS 2.0 or JSON Feed representations from a list of ChangelogEntry objects, limiting output to the first 20 entries and emitting minimal title/content fields.
-
-WHAT IT SHOULD DO BETTER:
-- Correct XML namespaces and version strings (current Atom/RSS/JSON strings contain spacing and formatting issues).
-- Properly escape/serialize XML content to avoid invalid feeds and XSS, and include standard feed metadata (id, updated/published timestamps, links, authors, GUIDs).
-- Support configurable item limits, pagination, richer metadata (dates, links, categories), and unit tests; prefer using a robust feed library (e.g., feedgen) for standards compliance and UTF-8 handling.
-"""
 
 from __future__ import annotations
 

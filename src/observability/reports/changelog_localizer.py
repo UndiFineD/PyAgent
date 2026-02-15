@@ -12,29 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Changelog Localizer - Localize changelog entries into multiple languages
-
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Instantiate ChangelogLocalizer(default_language=LocalizationLanguage.ENGLISH).
-- Create entries with create_entry("text") which returns a LocalizedEntry.
-- Add translations with add_translation(entry, LocalizationLanguage.SPANISH, "texto").
-- Render a localized changelog with get_localized_changelog(target_language).
-
-WHAT IT DOES:
-- Provides an in-memory container for changelog entries (LocalizedEntry objects) and a default language.
-- Allows creation of entries, adding per-language translations by language enum key, and rendering the full changelog in a requested language with graceful fallback to original text.
-- Exposes __version__ from the project's lifecycle.version and uses LocalizationLanguage enum keys for translations.
-
-WHAT IT SHOULD DO BETTER:
-- Persist entries (file/db) or accept external sources so translations survive process restarts.
-- Provide robust locale formatting (dates, lists), pluralization, and markup handling; integrate with gettext or ICU for production-grade i18n.
-- Return structured output (e.g., list/dict) alongside plain text rendering and support per-entry metadata (type, scope, severity).
-- Validate inputs and languages, surface errors for unknown entries, and document thread-safety / concurrency expectations.
-- Add optional async translation hooks, batched translation support via external services, unit tests for edge cases, and better typing (TypedDict/dataclasses) for LocalizedEntry.
-"""
 
 from __future__ import annotations
 

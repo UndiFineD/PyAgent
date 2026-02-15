@@ -14,33 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Event Correlation Agent - Correlates security events and agent interactions
-
-Brief Summary
-DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
-USAGE:
-- Instantiate EventCorrelationAgent with the agent's state file path.
-- Use add_event(event: Dict[str, Any]) to submit events into the engine.
-- Use define_correlation_rule(name, event_type, conditions, time_window=300) to register correlation rules.
-- Call run_correlation() to execute rules and return matches.
-- Call get_correlations() to retrieve accumulated correlation results.
-
-WHAT IT DOES:
-Implements an in-process event correlation engine (EventCorrelator) and an EventCorrelationAgent wrapper exposing tool-decorated methods for adding events, defining rules, running correlation, and retrieving results. Provides a simple rule model (event_type, conditions, time_window) and a proximity-based matching algorithm that groups events sharing attributes within a temporal window. Designed for detect­ing repeating patterns, anomalies or basic threat indicators across agent and security event streams.
-
-WHAT IT SHOULD DO BETTER:
-- Persist events and correlations to durable storage or the agent StateTransaction to survive restarts and support larger datasets.
-- Support richer rule languages (logical operators, regex, multi-attribute matching), chained/hierarchical rules, and weighting/scoring of correlations rather than binary matches.
-- Improve time handling (use timezone-aware datetimes), handle out-of-order timestamps, and optimize performance for high-volume streams (indexing, incremental correlation, or Rust-accelerated cores).
-- Add provenance, confidence scores, and metadata linking back to original sources; expose streaming/async APIs with asyncio for non-blocking ingestion; and include comprehensive unit tests and input validation/error handling.
-
-FILE CONTENT SUMMARY:
-Event correlation agent module.
-Correlates security events and agent interactions to identify patterns and threats.
-Inspired by AD-Canaries event correlation using KQL queries.
-"""
 
 from __future__ import annotations
 

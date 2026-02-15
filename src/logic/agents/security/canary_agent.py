@@ -12,70 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Canary Agent - Deploy and monitor decoy objects
-
-[Brief Summary]
-DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
-USAGE:
-from src.logic.agents.security.canary_agent import CanaryAgent
-agent = CanaryAgent(__file__)
-canary_id = agent.deploy_canary(
-    "example_canary",
-    obj_type="task",
-    description="Decoy task",
-)
-agent.simulate_access_attempt(
-    canary_id,
-    agent_id="suspicious_agent",
-    context={"timestamp": "2026-02-13T00:00:00Z"},
-)
-alerts = agent.get_alerts()
-
-WHAT IT DOES:
-Provides a lightweight CanaryAgent.
-It creates decoy CanaryObject instances (honeypots).
-It logs access attempts and denies access.
-It triggers alerts when canaries are touched.
-It exposes tool-wrapped methods to:
-- deploy canaries,
-- list deployed canaries,
-- inspect canary details,
-- simulate access attempts,
-- retrieve alerts,
-- remove canaries.
-Designed for embedding in the PyAgent mixin/agent lifecycle.
-Surfaces anomalous agent behavior in monitored environments.
-
-WHAT IT SHOULD DO BETTER:
-- Persist canary state to durable storage.
-  Use a database or StateTransaction so alerts
-  and canary records survive restarts.
-  This enables auditing and durability.
-- Add configurable deception strategies.
-  Examples include variable responses,
-  delayed behavior, and staged data.
-  These increase fidelity and can evade simple detection.
-- Harden logging and telemetry.
-  Use structured logs, severity levels,
-  and correlation IDs.
-  Integrate with centralized alerting (email, Slack, SIEM).
-  Add rate-limiting to reduce noisy alerts.
-- Add tests and stronger validation.
-  Provide unit and integration tests.
-  Add input validation and stronger typing.
-  Consider async interfaces (asyncio) for I/O.
-- Provide metadata and lifecycle policies.
-  Add tagging, expiration, rotation, and integrity checks
-  to avoid accidental exposure or misuse.
-
-FILE CONTENT SUMMARY:
-Canary agent module.
-Inspired by AD-Canaries.
-Creates decoy objects and tasks to detect
-unauthorized access or anomalous behavior.
-"""
 
 from __future__ import annotations
 
@@ -129,9 +65,21 @@ class CanaryAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         logging.debug("CanaryAgent._process_task handling task: %s", getattr(task_data, "id", repr(task_data)))
         try:
             # Support both object-like and dict-like task representations
-            agent_id = getattr(task_data, "agent_id", None) if not isinstance(task_data, dict) else task_data.get("agent_id")
-            canary_id = getattr(task_data, "canary_id", None) if not isinstance(task_data, dict) else task_data.get("canary_id")
-            context = getattr(task_data, "context", None) if not isinstance(task_data, dict) else task_data.get("context", {})
+            agent_id = (
+                getattr(task_data, "agent_id", None)
+                if not isinstance(task_data, dict)
+                else task_data.get("agent_id")
+            )
+            canary_id = (
+                getattr(task_data, "canary_id", None)
+                if not isinstance(task_data, dict)
+                else task_data.get("canary_id")
+            )
+            context = (
+                getattr(task_data, "context", None)
+                if not isinstance(task_data, dict)
+                else task_data.get("context", {})
+            )
 
             if canary_id and agent_id:
                 # Delegate to existing simulate_access_attempt to log/alert

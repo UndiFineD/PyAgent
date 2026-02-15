@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,31 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
-Effort Estimator - Estimate effort for improvements
-
-Brief Summary
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-from src.tools.effort_estimator import EffortEstimator
-est = EffortEstimator()
-est.add_historical_data("refactor", 4.0)
-result = est.estimate(improvement, complexity="low", category="refactor")
-print(result.hours)
-
-WHAT IT DOES:
-Provides a simple heuristic-based estimator that returns an EffortEstimateResult(hours: float) using (in order) per-category historical averages, configured base rates keyed by complexity ("low", "medium", "high"), and an optional EffortEstimate enum bias on top of the base value.
-
-WHAT IT SHOULD DO BETTER:
-- Persist and time-weight historical data (recency bias), use median and robust statistics instead of raw mean, and expose confidence/variance in the returned estimate.
-- Validate inputs and categories more strictly, accept and normalize ImprovementCategory and string categories uniformly, and surface reasons/trace for the computed hours for explainability.
-- Allow pluggable scoring (e.g., integrate static analysis complexity, team velocity) and support async/IO-friendly loading/saving of historical records (follow repository transactional FS conventions).
-
-FILE CONTENT SUMMARY:
-Auto-extracted class from agent_improvements.py
-"""
 
 from __future__ import annotations
 

@@ -14,8 +14,6 @@
 # limitations under the License.
 
 
-"""Agent that monitor inter-agent signals and coordinates responses."""
-
 from __future__ import annotations
 
 import json
@@ -34,6 +32,7 @@ class SignalAgent(BaseAgent):
     """Monitors the SignalRegistry and triggers actions based on events."""
 
     def __init__(self, file_path: str) -> None:
+        """Initializes the SignalAgent."""
         super().__init__(file_path)
         self.registry = SignalRegistry()
 
@@ -50,6 +49,7 @@ class SignalAgent(BaseAgent):
         )
 
     def _get_default_content(self) -> str:
+        """Provides the default content for the SignalAgent's log."""
         return "# Signal Observation Log\n\n## Events\nNo recent events.\n"
 
     def on_agent_fail(self, event: dict[str, Any]) -> str:

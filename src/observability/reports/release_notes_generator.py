@@ -12,28 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Release Notes Generator - Generate ReleaseNote objects from changelog entries
-
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Instantiate ReleaseNotesGenerator and call generate(version, entries, title=None).
-- Example:
-    from src.tools.release_notes_generator import ReleaseNotesGenerator
-    generator = ReleaseNotesGenerator()
-    notes = generator.generate("1.0.0", entries, title="My Release")
-
-WHAT IT DOES:
-- Aggregates provided ChangelogEntry objects into a ReleaseNote.
-- Extracts highlights (priority >= 2 or severity high/critical), detects breaking changes via tags or text, composes a short summary, groups changes by category, and formats a markdown-style full changelog.
-- Returns a ReleaseNote populated with version, title, summary, up-to-5 highlights, breaking_changes list, and full_changelog text.
-
-WHAT IT SHOULD DO BETTER:
-- Allow configurable highlight selection (weights, thresholds) and sorting (by priority/severity/date).
-- Support richer templating for output (custom markdown/HTML templates or Jinja2), localization, and inclusion of authors and dates per entry.
-- Validate and normalize tags (robust detection of "breaking"), deduplicate similar entries, handle empty or malformed entries gracefully, add logging and unit tests, and make the number of highlights configurable.
-"""
 
 from __future__ import annotations
 

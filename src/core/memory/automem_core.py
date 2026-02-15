@@ -12,14 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-AutoMemCore: graph-vector hybrid memory system (placeholder).
-
-This module provides a safe, minimal stub implementation for the
-AutoMem memory core referenced in the roadmap. The full implementation
-should provide vector indexing, graph storage, persistence, and a
-low-latency recall API.
-"""
 
 from __future__ import annotations
 
@@ -304,7 +296,6 @@ class AutoMemCore:
         import hashlib
         hash_obj = hashlib.md5(content.encode())
         hash_int = int(hash_obj.hexdigest(), 16)
-        
         # Generate pseudo-random but deterministic vector
         random.seed(hash_int)
         vector = [random.random() for _ in range(self.config.vector_dim)]
@@ -817,7 +808,6 @@ class AutoMemCore:
         """Test recall performance under load (25% of LoCoMo score)."""
         try:
             import time
-
             # Store 50 test memories
             test_memories = []
             for i in range(50):
@@ -825,43 +815,37 @@ class AutoMemCore:
                 tags = ["locomo_perf", f"batch_{i//10}"]
                 mem_id = self.store_memory(content, tags=tags)
                 test_memories.append((mem_id, content, tags))
-
             # Test recall performance
             start_time = time.time()
-
             # Test 1: Tag-based recall
             tag_results = self.recall_memories("", tags=["locomo_perf"], limit=50)
             tag_recall_time = time.time() - start_time
-
             # Test 2: Content-based search
             search_start = time.time()
             search_results = self.recall_memories("important data", limit=20)
             search_time = time.time() - search_start
-
             # Test 3: Hybrid search
             hybrid_start = time.time()
             hybrid_results = self.recall_memories("test memory", tags=["batch_0"], limit=10)
             hybrid_time = time.time() - hybrid_start
-
             # Performance scoring (faster is better, up to 2 seconds total)
             total_time = tag_recall_time + search_time + hybrid_time
             time_score = max(0, 1.0 - (total_time / 2.0))
-
             # Accuracy scoring
             expected_tag_results = len([m for m in test_memories if "locomo_perf" in m[2]])
             tag_accuracy = min(len(tag_results) / expected_tag_results, 1.0) if expected_tag_results > 0 else 1.0
-
             expected_search_results = len([m for m in test_memories if "important" in m[1]])
-            search_accuracy = min(len([r for r in search_results if "important" in r.get('content', '')]) / expected_search_results, 1.0) if expected_search_results > 0 else 1.0
-
+            matching_search = len([r for r in search_results if "important" in r.get('content', '')])
+            search_accuracy = (
+                min(matching_search / expected_search_results, 1.0)
+                if expected_search_results > 0
+                else 1.0
+            )
             accuracy_score = (tag_accuracy + search_accuracy) / 2.0
-
             # Clean up
             for mem_id, _, _ in test_memories:
                 self._graph_db.delete_node(mem_id)
-
             return (time_score * 0.6) + (accuracy_score * 0.4)
-
         except Exception as e:
             self.logger.warning(f"Recall performance test failed: {e}")
             return 0.0
@@ -870,52 +854,42 @@ class AutoMemCore:
         """Test long-term memory stability (25% of LoCoMo score)."""
         try:
             import time
-
             # Store memories with different "ages" (simulated)
             base_time = time.time()
             test_memories = []
-
             for i in range(20):
                 # Simulate different ages by adjusting importance scores
                 age_days = i * 2  # 0, 2, 4, ..., 38 days
                 content = f"Memory from {age_days} days ago: {'stable ' * (i % 3)}content"
                 importance = max(0.1, 1.0 - (age_days / 100.0))  # Decay over time
-
                 mem_id = self.store_memory(
                     content,
                     tags=["locomo_stability", f"age_{age_days}"],
                     importance=importance
                 )
                 test_memories.append((mem_id, content, age_days, importance))
-
             # Test stability by recalling memories of different ages
             stability_scores = []
-
             for age in [0, 10, 20, 30]:
                 age_tag = f"age_{age}"
                 results = self.recall_memories("", tags=[age_tag], limit=5)
-
                 # Should find the memory for this age
                 expected_content = f"Memory from {age} days ago: {'stable ' * (age//2 % 3)}content"
                 found = any(expected_content in r['content'] for r in results)
-
                 stability_scores.append(1.0 if found else 0.0)
-
+                
             # Test consolidation hasn't corrupted recent memories
             recent_results = self.recall_memories("stable content", limit=10)
             recent_accuracy = min(len(recent_results) / 10, 1.0)
-
             overall_stability = (sum(stability_scores) / len(stability_scores) + recent_accuracy) / 2.0
-
             # Clean up
             for mem_id, _, _, _ in test_memories:
                 self._graph_db.delete_node(mem_id)
-
             return overall_stability
 
         except Exception as e:
             self.logger.warning(f"Long-term stability test failed: {e}")
-            return 0.0
+        return 0.0
 
     def _test_consolidation_effectiveness(self) -> float:
         """Test consolidation effectiveness (20% of LoCoMo score)."""

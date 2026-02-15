@@ -12,27 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Report Validator - Validate report text and checksums
-
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-Instantiate ReportValidator and call validate(content) to get a ValidationResult, use verify_checksum(content, expected) to confirm integrity, example:
-validator = ReportValidator(); result = validator.validate(report_md); validator.verify_checksum(report_md, result.checksum)
-
-WHAT IT DOES:
-Facade around ValidationCore that enforces a minimal report structure, detects missing main heading and empty link targets, and computes a truncated SHA-256 checksum for quick integrity checks
-
-WHAT IT SHOULD DO BETTER:
-- Support configurable validation rules and rule_name dispatching
-- Produce richer diagnostics (line numbers, rule ids) instead of plain strings
-- Expose checksum length and algorithm as configurable options and add streaming support for large reports
-
-FILE CONTENT SUMMARY:
-Validator for report data integrity.
-(Facade for src.core.base.common.validation_core)
-"""
 
 from __future__ import annotations
 
@@ -40,7 +19,7 @@ import hashlib
 from typing import Any
 
 from src.core.base.common.validation_core import ValidationCore
-from .validation_result import ValidationResult
+from src.observability.reports.validation_result import ValidationResult
 
 
 class ReportValidator(ValidationCore):

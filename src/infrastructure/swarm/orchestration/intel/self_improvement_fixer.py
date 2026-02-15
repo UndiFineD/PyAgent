@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Self improvement fixer.py module.
-"""
-# Specialized assistant for applying autonomous fixes to the codebase.
 
 import logging
 from typing import Any, Dict, List
@@ -26,6 +21,7 @@ class SelfImprovementFixer:
     """Handles the application of patches and fixes identified during analysis."""
 
     def __init__(self, ai: Any, core: Any, workspace_root: str) -> None:
+        """Initializes the SelfImprovementFixer."""
         self.ai = ai
         self.core = core
         self.workspace_root = workspace_root

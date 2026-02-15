@@ -12,25 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Grafana generator.py - Generate Grafana JSON dashboards for PyAgent swarm observability
-
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-from src.tools.grafana_generator import GrafanaDashboardGenerator
-gen = GrafanaDashboardGenerator(output_dir="deploy/grafana/dashboards")
-gen.generate_fleet_summary()        # writes deploy/grafana/dashboards/fleet_summary.json
-gen.generate_shard_obs("shard-01")  # writes deploy/grafana/dashboards/shard_shard-01.json
-
-WHAT IT DOES:
-Creates simple, opinionated Grafana dashboard JSON files for PyAgent: a fleet summary dashboard and per-shard observability dashboards. Outputs to a configurable directory, ensures the directory exists, and writes prettified JSON files with fixed Prometheus expressions and panel types.
-
-WHAT IT SHOULD DO BETTER:
-- Parameterize metrics and panel configuration (templating, not hard-coded Prometheus expressions).
-- Validate and sanitize shard names to avoid invalid uids/file names and injection in expressions.
-- Add schema validation (Grafana/JSON schema), richer panel types, configurable UID generation, and unit tests for file I/O and generated content. Consider using Jinja2 templates, Prometheus query builder helpers, and runtime checks to avoid overwriting existing dashboards unintentionally.
-"""
 
 from __future__ import annotations
 

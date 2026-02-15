@@ -14,10 +14,6 @@
 # limitations under the License.
 
 
-"""Reinforcement Learning based tool selector.
-Optimizes tool selection by weighting success rates and historical performance.
-"""
-
 from __future__ import annotations
 
 import logging

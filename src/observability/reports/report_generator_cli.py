@@ -12,25 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Report Generator CLI - Command-line report generation for PyAgent
-
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-python report_generator_cli.py --dir <scan_directory> --output <output_directory>
-(or install as package and run via entry point; defaults: --dir . --output reports)
-
-WHAT IT DOES:
-- Prepares import path for project root and src.
-- Provides a small CLI that instantiates ReportGenerator to produce a full report, uses ReportExporter to write an HTML report, and writes a PROGRESS_DASHBOARD.md markdown copy.
-- Includes a tiny helper _sha256_text used by legacy tests and exposes __version__ from lifecycle.VERSION.
-
-WHAT IT SHOULD DO BETTER:
-- Avoid manipulating sys.path at runtime; use a proper package entry point or installable distribution (setuptools/pyproject entry_point).
-- Add robust error handling, logging, and non-zero exit codes on failure; validate inputs and fail fast on missing report components.
-- Extend CLI options (format selection, filename, verbosity, filters, concurrency), add unit tests for main behaviour, and move test helpers out of production module.
-"""
 
 from __future__ import annotations
 from argparse import Namespace

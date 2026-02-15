@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Tests for agentic patterns (sequential and parallel execution)."""
 
 import pytest
 from unittest.mock import AsyncMock
@@ -21,12 +20,10 @@ from src.logic.agents.swarm.agentic_patterns import (
     SequentialAgentPattern,
     SequentialAgentConfig
 )
-try:
-    from src.logic.agents.swarm.agentic_patterns import ParallelAgentPattern
-except Exception:
-    # Fallback minimal implementation for tests/static analysis until the real
-    # ParallelAgentPattern is implemented in src.logic.agents.swarm.agentic_patterns
-    class ParallelAgentPattern:
+
+# Fallback minimal implementation for tests/static analysis until the real
+# ParallelAgentPattern is implemented in src.logic.agents.swarm.agentic_patterns
+class ParallelAgentPattern:
         def __init__(self, orchestrator):
             self.orchestrator = orchestrator
 

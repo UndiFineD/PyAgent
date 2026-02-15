@@ -21,3 +21,18 @@ from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+class ValidationResult:
+    """Structured result for validation outcomes."""
+
+    def __init__(
+        self,
+        valid: bool,
+        errors: list[str],
+        warnings: list[str],
+        checksum: str
+    ) -> None:
+        self.valid = valid
+        self.errors = errors
+        self.warnings = warnings
+        self.checksum = checksum

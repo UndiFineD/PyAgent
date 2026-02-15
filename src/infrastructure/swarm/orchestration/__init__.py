@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Orchestration package.
-"""
 
 from __future__ import annotations
 
@@ -25,11 +22,5 @@ from . import system
 __version__ = VERSION
 __all__ = ["VERSION", "system"]
 
-
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
 """Package initialization."""

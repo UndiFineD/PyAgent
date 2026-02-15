@@ -12,20 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Access.py - Stats Access Control
-
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-Instantiate StatsAccessController(), call grant(user, pattern, level="read") to assign permissions and can_access(user, resource, required_level="read") to check access.
-
-WHAT IT DOES:
-Provides a minimal, pattern-based stats access controller using fnmatch with a permissions dict mapping users to pattern→level entries and supports read/write checks.
-
-WHAT IT SHOULD DO BETTER:
-Validate inputs and permission levels, provide explicit deny rules and logging, use enums for levels, add persistence and thread-safety, support more granular and hierarchical permission semantics, and include unit tests and documentation for edge cases.
-"""
 
 from __future__ import annotations
 

@@ -12,31 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Agents.py - Observability & Reporting Agents
-
-DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
-USAGE:
-- Import StatsAgent to compute local file metrics and record runtime metrics via StatsCore: StatsAgent(files: list[str]).
-- Instantiate ReportingAgent with a fleet object exposing telemetry.summarize_performance() to generate a simple markdown dashboard.
-- Instantiate TransparencyAgent with a file path to produce a human-readable audit trail; extend to persist or stream audit entries as needed.
-
-WHAT IT DOES:
-- Provides lightweight observability helpers for a PyAgent fleet:
-  - StatsAgent: scans a list of files, records Metric objects to a StatsCore, and summarizes file-level statistics (tests, context, changes, errors, improvements).
-  - ReportingAgent: BaseAgent subclass that renders an executive markdown dashboard from fleet telemetry.
-  - TransparencyAgent: BaseAgent subclass returning a simple audit-trail header and seed log for tracing agent signals and decisions.
-- Includes metric recording (add_metric) with timestamping and in-memory aggregation for the StatsAgent.
-
-WHAT IT SHOULD DO BETTER:
-- Persist metrics and snapshots (e.g., to disk, a time-series DB, or StatsCore-backed store) instead of keeping only in-memory lists.
-- Make file discovery and test/context heuristics configurable and robust (support globbing, configurable test file patterns, and ignore/exclude lists).
-- Improve typing and error handling: use richer type hints, validate fleet and telemetry interfaces, and handle IO exceptions when reading filesystem state.
-- Integrate with the project's StateTransaction/ CascadeContext patterns for safe filesystem changes and audit lineage, and delegate heavy computations to rust_core per architecture guidelines.
-- Expand TransparencyAgent to stream or append structured audit events (JSONL) and protect sensitive data before serialization.
-- Add unit tests for StatsAgent logic, and async implementations where IO-bound work is expected; ensure BaseAgent initialization uses consistent agent_name semantics.
-"""
 
 from __future__ import annotations
 
