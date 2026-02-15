@@ -250,77 +250,12 @@ def main():
                 h.update(chunk)
         return h.hexdigest()
 
-<<<<<<< HEAD
-    # check whether report changed since last run; if unchanged, skip batch_extract
-    report_sha_file = cache_dir / 'last_report.sha'
-    report_changed = True
-    if REPORT.exists() and report_sha_file.exists():
-        try:
-            prev = report_sha_file.read_text(encoding='utf-8').strip()
-            curh = file_sha(REPORT)
-            if prev == curh:
-                report_changed = False
-            else:
-                report_changed = True
-        except Exception:
-            report_changed = True
-    else:
-        report_changed = True
-    # 1) batch extract (permissive)
-    if report_changed:
-        extract_cmd = [
-            sys.executable, str(SCRIPTS / 'batch_extract.py'),
-            '--report', str(REPORT),
-            '--chunk-size', '500',
-            '--workers', '4',
-            '--allow-top-level',
-            '--allow-no-defs',
-            '--allow-banned-imports'
-        ]
-        run(extract_cmd)
-        # update last_report.sha
-        try:
-            if REPORT.exists():
-                report_sha_file.write_text(file_sha(REPORT), encoding='utf-8')
-        except Exception:
-            pass
-    else:
-        print('Refactor report unchanged; skipping batch_extract')
-    # collect extracted files and update refactor report
-    # Build extracted list: prefer filesystem scan only if report changed; otherwise use DB manifest
-    if report_changed:
-        files_gen = EXTRACT_TARGET.rglob('*.py') if EXTRACT_TARGET.exists() else []
-        extracted = [p for p in files_gen if not _is_init(p)]
-    else:
-        # use DB manifest (paths) to avoid expensive rglob
-        cur = None
-        try:
-            # open DB if exists
-            dbp = cache_dir / 'files.db'
-            if dbp.exists():
-                conn2 = sqlite3.connect(str(dbp))
-                cur = conn2.cursor()
-                cur.execute('SELECT path FROM files')
-                extracted = []
-                for (rel,) in cur.fetchall():
-                    p = EXTRACT_TARGET / Path(rel)
-                    if p.exists() and not _is_init(p):
-                        extracted.append(p)
-                conn2.close()
-            else:
-                extracted = []
-        except Exception:
-            files_gen = EXTRACT_TARGET.rglob('*.py') if EXTRACT_TARGET.exists() else []
-            extracted = [p for p in files_gen if not _is_init(p)]
-=======
     # Single-pass: collect all .py files under .external (excluding internal dirs)
     def _is_under_skipped(p: Path) -> bool:
         skip = {'cache', 'static_checks', 'patches', 'patches_ast'}
         return any(part in skip for part in p.parts)
 
-    extracted = [p for p in (EXTRACT_TARGET.rglob('*.py') if EXTRACT_TARGET.exists() else []) if not _is_init(p) and not _is_under_skipped(p)]
->>>>>>> copilot/sub-pr-29
-    try:
+    extracted = [p for p in (EXTRACT_TARGET.rglob('*.py') if EXTRACT_TARGET.exists() else []) if not _is_init(p) and not _is_under_skipped(p)]    try:
         update_refactor_report(REPORT, extracted)
     except Exception as e:
         print('Failed to update refactor report:', e)
@@ -692,41 +627,6 @@ def main():
 
     # Use an in-repo applier to make deterministic, safe replacements (backups created).
     if changed_files:
-<<<<<<< HEAD
-        # Instead of the previous AST pipeline, ask "Copilot" to refactor files.
-        # We implement a small, safe placeholder refactor step here: prepend a marker
-        # and write an AST-style patch file under .external/patches_ast/. This will
-        # then be applied by copying the refactored file into `src/external_candidates`.
-        patches_ast_dir = ROOT / '.external' / 'patches_ast'
-        patches_ast_dir.mkdir(parents=True, exist_ok=True)
-        for s, paths in hash_map.items():
-            rep = paths[0]
-            if _is_init(rep):
-                continue
-            rel = rep.relative_to(EXTRACT_TARGET)
-            work_file = cache_dir / 'work' / 'copilot_tmp' / rel
-            # if the file wasn't copied into tmp earlier, read original
-            if not work_file.exists():
-                work_file.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(rep, work_file)
-            # perform simple placeholder "refactor" — prepend a marker line
-            orig_text = work_file.read_text(encoding='utf-8', errors='ignore')
-            new_text = '# Refactored by Copilot placeholder\n' + orig_text
-            if new_text != orig_text:
-                # write patch file (simple full-file replacement)
-                pname = str(rel).replace("/", "_")
-                patch_path = patches_ast_dir / f'{pname}.patch'
-                patch_path.write_text(new_text, encoding='utf-8')
-                # apply to real target (backup original)
-                target_path = EXTRACT_TARGET / rel
-                if target_path.exists():
-                    backup = target_path.with_suffix(target_path.suffix + '.bak')
-                    if not backup.exists():
-                        shutil.copy2(target_path, backup)
-                target_path.parent.mkdir(parents=True, exist_ok=True)
-                target_path.write_text(new_text, encoding='utf-8')
-                print('Applied copilot-placeholder refactor to', target_path)
-=======
         try:
             from src.tools import apply_patch_proposals as _apply
             try:
@@ -735,9 +635,7 @@ def main():
                 _apply.main()
         except Exception:
             # fallback to subprocess if import fails
-            run([sys.executable, str(SCRIPTS / 'apply_patch_proposals.py')], fatal=False)
->>>>>>> copilot/sub-pr-29
-    else:
+            run([sys.executable, str(SCRIPTS / 'apply_patch_proposals.py')], fatal=False)    else:
         print('No changed files; skipping patch proposal application')
 
     # 8) after applying AST patches, re-run static checks and tests on full target (non-fatal)
@@ -782,3 +680,9 @@ def main():
 
 if __name__ == '__main__':
     raise SystemExit(main())
+
+
+
+
+
+

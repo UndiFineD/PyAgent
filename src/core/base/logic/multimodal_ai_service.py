@@ -313,3 +313,4 @@ async def translate_text(
         service = MultimodalAIService()
     result = await service.process("translation", text, provider, target_language=target_language)
     return result.get("translated_text", "")
+

@@ -27,16 +27,7 @@ def test_no_global_eval_use():
         if not p.is_file():
             continue
         # Skip generated or vendored directories if any
-<<<<<<< HEAD
-        if any(x in p.parts for x in ["generated", "rust_core", "rust_lib", "external_candidates"]):
-            continue
-        try:
-            text = p.read_text(encoding="utf-8")
-        except (PermissionError, OSError):
-=======
-        if "generated" in p.parts or "rust_core" in p.parts or "external_candidates" in p.parts:
->>>>>>> copilot/sub-pr-29
-            continue
+        if "generated" in p.parts or "rust_core" in p.parts or "external_candidates" in p.parts:            continue
         for m in PATTERN.finditer(text):
             # Record file and surrounding line
             line_no = text.count("\n", 0, m.start()) + 1
@@ -56,3 +47,6 @@ def test_no_global_eval_use():
             matches.append((str(p), line_no, snippet))
 
     assert not matches, f"Found unsafe eval usage in files: {matches}"
+
+
+

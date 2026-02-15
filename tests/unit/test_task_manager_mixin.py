@@ -37,12 +37,7 @@ class TestTaskManager:
     @pytest.fixture
     def task_manager(self, tmp_path):
         """Create a test task manager instance."""
-<<<<<<< HEAD
-        return TaskManagerMixinImpl(_workspace_root=str(tmp_path))
-=======
         return MockTaskManagerMixin(_workspace_root=str(tmp_path))
->>>>>>> copilot/sub-pr-29
-
     @pytest.fixture
     def cascade_context(self):
         """Create a test cascade context."""
@@ -237,24 +232,18 @@ class TestTaskManager:
         tmp_path / ".pyagent_tasks.json"
 
         # Create manager with persistence
-<<<<<<< HEAD
-        manager1 = TaskManagerMixinImpl(_workspace_root=str(tmp_path))
-=======
         manager1 = MockTaskManagerMixin(_workspace_root=str(tmp_path))
->>>>>>> copilot/sub-pr-29
         manager1.tasks = [
             TaskItem("Task 1", completed=True, priority=2),
             TaskItem("Task 2", completed=False, priority=1)
         ]
-        manager1._save_tasks()
+        # Use a public method to trigger saving, e.g., update_task_list or add_task
+        # Here, we simulate a no-op update to trigger persistence
+        manager1.update_task_list([t.to_dict() for t in manager1.tasks], CascadeContext(task_id="persist", agent_id="persist", workflow_id="persist"))
+
 
         # Create new manager and load
-<<<<<<< HEAD
-        manager2 = TaskManagerMixinImpl(_workspace_root=str(tmp_path))
-=======
         manager2 = MockTaskManagerMixin(_workspace_root=str(tmp_path))
->>>>>>> copilot/sub-pr-29
-
         assert len(manager2.tasks) == 2
         assert manager2.tasks[0].description == "Task 1"
         assert manager2.tasks[0].completed
@@ -279,3 +268,12 @@ class TestTaskManager:
         assert task_manager.tasks[0].description == "Task 0"
         assert task_manager.tasks[1].description == "Task 1"
         assert task_manager.tasks[2].description == "Task 2"
+
+
+
+
+
+
+
+
+

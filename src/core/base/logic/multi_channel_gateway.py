@@ -91,11 +91,7 @@ class ChannelMessage:
     content: str
     message_type: MessageType = MessageType.TEXT
     metadata: Dict[str, Any] = field(default_factory=dict)
-<<<<<<< HEAD
-    timestamp: float = field(default_factory=time.time)
-=======
     timestamp: float = field(default_factory=lambda: time.time())
->>>>>>> copilot/sub-pr-29
     thread_id: Optional[str] = None
     reply_to: Optional[str] = None
 
@@ -105,12 +101,7 @@ class GatewayPresence:
     """Presence information for gateway clients."""
     client_id: str
     status: str = "online"  # online, away, busy, offline
-<<<<<<< HEAD
-    last_seen: float = field(default_factory=time.time)
-=======
-    last_seen: float = field(default_factory=lambda: time.time())
->>>>>>> copilot/sub-pr-29
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    last_seen: float = field(default_factory=lambda: time.time())    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class ChannelProvider(ABC):
@@ -146,33 +137,18 @@ class GatewaySession(BaseModel):
     channel_id: str
     activation_mode: SessionActivationMode = SessionActivationMode.MENTION
     is_active: bool = True
-<<<<<<< HEAD
-    created_at: float = Field(default_factory=time.time)
-    last_activity: float = Field(default_factory=time.time)
-=======
     created_at: float = Field(default_factory=lambda: time.time())
-    last_activity: float = Field(default_factory=lambda: time.time())
->>>>>>> copilot/sub-pr-29
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    last_activity: float = Field(default_factory=lambda: time.time())    metadata: Dict[str, Any] = Field(default_factory=dict)
 
 
 class GatewayProtocol:
     """WebSocket protocol for gateway communication."""
 
     def __init__(self):
-<<<<<<< HEAD
-        self.clients: Dict[str, Any] = {}
-        self.presence: Dict[str, GatewayPresence] = {}
-        self.sessions: Dict[str, GatewaySession] = {}
-
-    async def handle_client(self, websocket: Any, path: str):
-=======
         self.clients: Dict[str, WebSocketServerProtocol] = {}
         self.presence: Dict[str, GatewayPresence] = {}
         self.sessions: Dict[str, GatewaySession] = {}
-    async def handle_client(self, websocket: WebSocketServerProtocol, path: str):
->>>>>>> copilot/sub-pr-29
-        """Handle a WebSocket client connection."""
+    async def handle_client(self, websocket: WebSocketServerProtocol, path: str):        """Handle a WebSocket client connection."""
         client_id = str(uuid4())
         self.clients[client_id] = websocket
 
@@ -272,12 +248,7 @@ class GatewayProtocol:
                     session.is_active = value
                 elif key == "metadata":
                     session.metadata.update(value)
-<<<<<<< HEAD
-
-=======
-        # update last_activity if present
->>>>>>> copilot/sub-pr-29
-        session.last_activity = time.time()
+        # update last_activity if present        session.last_activity = time.time()
 
         await self.send_to_client(client_id, {
             "type": "session_updated",
@@ -454,3 +425,21 @@ class MultiChannelGatewayCore:
 
         for session in sessions:
             await self.send_channel_message(session.session_id, message)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -42,24 +42,15 @@ class TestStreamManager:
     @pytest.fixture
     def stream_manager(self):
         """Create a test stream manager instance."""
-<<<<<<< HEAD
-        return StreamManagerMixinImpl()
-=======
         return MockStreamManagerMixin()
->>>>>>> copilot/sub-pr-29
-
     @pytest.fixture
     def stream_manager_with_redis(self):
         """Create a test stream manager with mocked Redis."""
         with patch('src.core.base.mixins.stream_manager_mixin.redis') as mock_redis:
             mock_client = AsyncMock()
             mock_redis.from_url.return_value = mock_client
-<<<<<<< HEAD
-            manager = StreamManagerMixinImpl(redis_url="redis://test")
-=======
             manager = MockStreamManagerMixin(redis_url="redis://test")
->>>>>>> copilot/sub-pr-29
-            return manager, mock_client
+        return manager, mock_client
 
     def test_initialization_without_redis(self, stream_manager):
         """Test initialization when Redis is not available."""
@@ -246,3 +237,9 @@ class TestStreamManager:
 
         # Verify stream was cleaned up despite exception
         assert "test_agent" not in manager.active_streams
+
+
+
+
+
+

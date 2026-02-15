@@ -3,6 +3,7 @@ name: Foreach
 description: "Iterate over an input file and treat each line or paragraph as an independent unit of work."
 author: "GitHub Copilot"
 version: "0.3"
+tools: ['read_file', 'replace_string_in_file', 'run_in_terminal', 'runTests', 'file_search', 'grep_search', 'get_errors', 'run_notebook_cell'] # Optimized for batch processing: file ops, terminal, testing, search
 capabilities:
   - iterate_lines
   - iterate_paragraphs
@@ -71,7 +72,12 @@ behavior:
        - If `branch_strategy` is `'per_batch'`, create feature branches named `foreach/<task-slug>/batch-<n>` **only with explicit user approval** (this may generate many PRs and should be used sparingly).
     8. Record telemetry for each processed unit and include a before/after diff snippet (truncated) and the unit outcome (success/fail/skip). When `auto_push` is true and PR creation is authorized, open a single consolidated PR for the run rather than multiple PRs per batch.
     9. If a change increases the number of files modified above a safety threshold (default: 50) or changes critical areas (core libs, external interfaces, rust bridge), pause and ask for explicit user confirmation before continuing.
-
+**Performance Optimizations:**
+- Limits parallel workers to max_parallel (default 4) to prevent resource contention
+- Uses batch_size for efficient commit grouping and reduced I/O
+- Implements shard locking for safe concurrent file modifications
+- Leverages StateTransaction for atomic operations and rollback capability
+- Minimizes tool usage to essential batch processing functions
 safety_checks:
   - Run `pytest` for changed parts (or CI-focused subset) before staging or pushing. If failures occur, revert the change (use `StateTransaction` rollback), annotate the failure in telemetry, and open an issue summarizing the failure.
   - If tests fail and `allow_test_modification: true`, the agent may attempt to update or generate tests and re-run the focused tests. If the tests still fail after attempts to repair them, **rollback and pause**, notify the user, and open an issue with diagnostic artifacts.

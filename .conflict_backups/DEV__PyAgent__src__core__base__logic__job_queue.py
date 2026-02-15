@@ -1,0 +1,265 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+In-Memory Job Queue System
+==========================
+
+Inspired by 4o-ghibli-at-home's job queue pattern.
+Provides thread-safe job queuing with background processing and TTL cleanup.
+"""
+
+import threading
+import time
+import uuid
+from collections import deque
+from typing import Any, Dict, Callable, Optional
+from datetime import datetime
+
+
+class JobQueue:
+    """
+    Thread-safe in-memory job queue with background processing.
+
+    Features:
+    - Thread-safe job queuing and processing
+    - Background worker threads
+    - Job status tracking
+    - TTL-based cleanup
+    - Configurable queue size limits
+    """
+
+    def __init__(
+        self,
+        max_queue_size: int = 100,
+        job_ttl_seconds: int = 3600,  # 1 hour
+        cleanup_interval_seconds: int = 300,  # 5 minutes
+        num_workers: int = 1
+    ):
+        self.max_queue_size = max_queue_size
+        self.job_ttl_seconds = job_ttl_seconds
+        self.cleanup_interval_seconds = cleanup_interval_seconds
+        self.num_workers = num_workers
+
+        # Thread-safe data structures
+        self.job_queue: deque[str] = deque()
+        self.job_results: Dict[str, Dict[str, Any]] = {}
+        self.queue_lock = threading.Lock()
+        self.queue_not_empty = threading.Condition(self.queue_lock)
+
+        # Worker management
+        self.workers: list[threading.Thread] = []
+        self.cleanup_worker: Optional[threading.Thread] = None
+        self.running = False
+
+        # Job processor function
+        self.job_processor: Optional[Callable[[str, Dict[str, Any]], Any]] = None
+
+    def set_job_processor(self, processor: Callable[[str, Dict[str, Any]], Any]):
+        """Set the function that will process jobs."""
+        self.job_processor = processor
+
+    def start(self):
+        """Start the job queue workers."""
+        if self.running:
+            return
+
+        self.running = True
+
+        # Start worker threads
+        for i in range(self.num_workers):
+            worker = threading.Thread(
+                target=self._worker_loop,
+                name=f"JobQueue-Worker-{i+1}",
+                daemon=True
+            )
+            worker.start()
+            self.workers.append(worker)
+
+        # Start cleanup worker
+        self.cleanup_worker = threading.Thread(
+            target=self._cleanup_loop,
+            name="JobQueue-Cleanup",
+            daemon=True
+        )
+        self.cleanup_worker.start()
+
+    def stop(self):
+        """Stop the job queue workers."""
+        self.running = False
+
+        # Wake up any waiting workers so they can exit
+        with self.queue_not_empty:
+            self.queue_not_empty.notify_all()
+
+        # Wait for workers to finish
+        for worker in self.workers:
+            worker.join(timeout=5.0)
+
+        if self.cleanup_worker:
+            self.cleanup_worker.join(timeout=5.0)
+
+        self.workers.clear()
+        self.cleanup_worker = None
+
+    def submit_job(self, job_data: Dict[str, Any]) -> str:
+        """
+        Submit a job to the queue.
+
+        Args:
+            job_data: Dictionary containing job parameters
+
+        Returns:
+            Job ID string
+
+        Raises:
+            RuntimeError: If queue is full
+        """
+        with self.queue_lock:
+            if len(self.job_queue) >= self.max_queue_size:
+                raise RuntimeError("Job queue is full")
+
+            job_id = str(uuid.uuid4())
+
+            self.job_results[job_id] = {
+                "status": "queued",
+                "data": job_data,
+                "submit_time": datetime.now(),
+                "queue_position": len(self.job_queue)
+            }
+
+            self.job_queue.append(job_id)
+            # Notify a waiting worker that a job is available
+            try:
+                self.queue_not_empty.notify()
+            except Exception:
+                pass
+
+        return job_id
+
+    def get_job_status(self, job_id: str) -> Optional[Dict[str, Any]]:
+        """Get the status of a job."""
+        with self.queue_lock:
+            job = self.job_results.get(job_id)
+            if not job:
+                return None
+
+            # Calculate current queue position for queued jobs
+            if job["status"] == "queued":
+                try:
+                    current_position = list(self.job_queue).index(job_id)
+                    job = job.copy()
+                    job["queue_position"] = current_position
+                except ValueError:
+                    pass  # Job might be processing
+
+            return job.copy()
+
+    def cancel_job(self, job_id: str) -> bool:
+        """Cancel a queued job."""
+        with self.queue_lock:
+            if job_id in self.job_results:
+                job = self.job_results[job_id]
+                if job["status"] == "queued":
+                    try:
+                        self.job_queue.remove(job_id)
+                        job["status"] = "cancelled"
+                        job["completion_time"] = datetime.now()
+                        return True
+                    except ValueError:
+                        pass
+
+            return False
+
+    def _worker_loop(self):
+        """Main worker loop that processes jobs."""
+        while self.running:
+            job_id = None
+
+            with self.queue_not_empty:
+                # Wait until there is a job or the queue is being stopped
+                while self.running and not self.job_queue:
+                    self.queue_not_empty.wait(timeout=0.1)
+
+                if self.job_queue:
+                    job_id = self.job_queue.popleft()
+                    if job_id in self.job_results:
+                        self.job_results[job_id]["status"] = "processing"
+                        self.job_results[job_id]["start_time"] = datetime.now()
+
+            if job_id and self.job_processor:
+                try:
+                    job_data = self.job_results[job_id]["data"]
+                    result = self.job_processor(job_id, job_data)
+
+                    with self.queue_lock:
+                        if job_id in self.job_results:
+                            self.job_results[job_id].update({
+                                "status": "completed",
+                                "result": result,
+                                "completion_time": datetime.now()
+                            })
+
+                except Exception as e:
+                    with self.queue_lock:
+                        if job_id in self.job_results:
+                            self.job_results[job_id].update({
+                                "status": "failed",
+                                "error": str(e),
+                                "completion_time": datetime.now()
+                            })
+
+            else:
+                # No jobs available, sleep briefly
+                time.sleep(0.1)
+
+    def _cleanup_loop(self):
+        """Cleanup loop that removes expired jobs."""
+        while self.running:
+            time.sleep(self.cleanup_interval_seconds)
+
+            with self.queue_lock:
+                expired_jobs = []
+                current_time = datetime.now()
+
+                for job_id, job in self.job_results.items():
+                    if job["status"] in ["completed", "failed", "cancelled"]:
+                        completion_time = job.get("completion_time")
+                        if completion_time and isinstance(completion_time, datetime):
+                            if (current_time - completion_time).total_seconds() > self.job_ttl_seconds:
+                                expired_jobs.append(job_id)
+
+                for job_id in expired_jobs:
+                    del self.job_results[job_id]
+
+    def get_stats(self) -> Dict[str, Any]:
+        """Get queue statistics."""
+        with self.queue_lock:
+            total_jobs = len(self.job_results)
+            queued_jobs = sum(1 for job in self.job_results.values() if job["status"] == "queued")
+            processing_jobs = sum(1 for job in self.job_results.values() if job["status"] == "processing")
+            completed_jobs = sum(1 for job in self.job_results.values() if job["status"] == "completed")
+            failed_jobs = sum(1 for job in self.job_results.values() if job["status"] == "failed")
+
+            return {
+                "total_jobs": total_jobs,
+                "queued_jobs": queued_jobs,
+                "processing_jobs": processing_jobs,
+                "completed_jobs": completed_jobs,
+                "failed_jobs": failed_jobs,
+                "queue_size": len(self.job_queue),
+                "max_queue_size": self.max_queue_size,
+                "workers_active": len(self.workers),
+                "running": self.running
+            }

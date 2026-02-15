@@ -437,3 +437,4 @@ class BrowserAgent(BaseAgent):
     def __del__(self):
         """Cleanup on destruction."""
         self.cleanup_browser()
+

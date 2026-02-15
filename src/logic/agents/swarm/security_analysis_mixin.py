@@ -37,125 +37,7 @@ WHAT IT SHOULD DO BETTER:
 - Harden defaults: configurable severity mapping, allowlists/denylists for tools, provenance tracking for data flows, and automated fix suggestions or CI gate integration.
 
 FILE CONTENT SUMMARY:
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
-"""Security analysis and threat modeling for PyAgent workflows."""
-
-import ast
-import logging
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, field
-from datetime import datetime
-
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
-class SecurityVulnerability:
-    """Represents a security vulnerability in an agent workflow."""
-
-    vulnerability_id: str
-    title: str
-    description: str
-    severity: str  # "critical", "high", "medium", "low", "info"
-    category: str  # "authentication", "authorization", "data_exposure", etc.
-    affected_components: List[str]
-    mitigation_steps: List[str]
-    owasp_reference: Optional[str] = None
-    cve_reference: Optional[str] = None
-
-
-@dataclass
-class WorkflowAnalysis:
-    """Analysis results for an agent workflow."""
-
-    workflow_name: str
-    analysis_timestamp: datetime = field(default_factory=datetime.now)
-    agents_identified: List[Dict[str, Any]] = field(default_factory=list)
-    tools_identified: List[Dict[str, Any]] = field(default_factory=list)
-    data_flows: List[Dict[str, Any]] = field(default_factory=list)
-    vulnerabilities: List[SecurityVulnerability] = field(default_factory=list)
-    security_score: float = 0.0
-    risk_assessment: str = "unknown"
-    recommendations: List[str] = field(default_factory=list)
-
-
-class WorkflowSecurityAnalyzer:
-    """
-    Security analyzer for PyAgent workflows.
-
-    Inspired by Agent-Wiz's threat modeling capabilities, this analyzer
-    performs static analysis of agent workflows to identify security
-    vulnerabilities and provide mitigation recommendations.
-    """
-
-    def __init__(self):
-        self.vulnerability_database = self._load_vulnerability_database()
-
-    def _load_vulnerability_database(self) -> Dict[str, SecurityVulnerability]:
-        """Load the vulnerability database with known AI agent security issues."""
-        return {
-            "prompt_injection": SecurityVulnerability(
-                vulnerability_id="AGENT-001",
-                title="Prompt Injection Vulnerability",
-                description=(
-                    "Agent susceptible to prompt injection attacks where malicious "
-                    "input can override system instructions"
-                ),
-                severity="critical",
-                category="input_validation",
-                affected_components=["agent_instruction_parsing"],
-                mitigation_steps=[
-                    "Implement prompt sanitization and validation",
-                    "Use structured prompts with clear boundaries",
-                    "Add input filtering and length limits",
-                    "Implement canary tokens for injection detection"
-                ],
-                owasp_reference="OWASP LLM TOP 10 - A01:2024 Prompt Injection"
-            ),
-            "tool_execution_bypass": SecurityVulnerability(
-                vulnerability_id="AGENT-002",
-                title="Tool Execution Authorization Bypass",
-                description="Agent can execute tools without proper authorization checks",
-                severity="high",
-                category="authorization",
-                affected_components=["tool_execution"],
-                mitigation_steps=[
-                    "Implement tool authorization checks",
-                    "Add tool execution policies",
-                    "Validate tool parameters against allowlists",
-                    "Log all tool executions with context"
-                ],
-                owasp_reference="OWASP LLM TOP 10 - A02:2024 Insecure Output Handling"
-            ),
-            "data_exfiltration": SecurityVulnerability(
-                vulnerability_id="AGENT-003",
-                title="Sensitive Data Exfiltration Risk",
-                description="Agent workflows may expose sensitive data through tool outputs or agent communications",
-                severity="high",
-                category="data_exposure",
-                affected_components=["data_handling", "agent_communication"],
-                mitigation_steps=[
-                    "Implement data classification and handling policies",
-                    "Add data sanitization befo
+Security analysis and threat modeling for PyAgent workflows.
 """
 
 import ast
@@ -202,13 +84,13 @@ class WorkflowSecurityAnalyzer:
     """
     Security analyzer for PyAgent workflows.
 
-    Inspired by Agent-Wiz's threat modeling capabilities, this analyzer
-    performs static analysis of agent workflows to identify security
-    vulnerabilities and provide mitigation recommendations.
+    Inspired by Agent-Wizs threat modeling capabilities, this analyzer
+    (add the rest of the docstring here)
     """
 
     def __init__(self):
         self.vulnerability_database = self._load_vulnerability_database()
+
 
     def _load_vulnerability_database(self) -> Dict[str, SecurityVulnerability]:
         """Load the vulnerability database with known AI agent security issues."""
@@ -612,9 +494,6 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
             expr = node.body[0]
             if isinstance(expr.value, ast.Constant) and isinstance(expr.value.value, str):
                 return expr.value.value
-            # Fallback for older Python versions
-            elif hasattr(expr.value, 's'):
-                return expr.value.s
         return None
 
     def _is_external_tool(self, node) -> bool:

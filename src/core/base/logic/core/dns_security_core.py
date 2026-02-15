@@ -19,12 +19,7 @@ import json
 import logging
 from typing import Dict, List, Optional, Any, Tuple, Set
 from dataclasses import dataclass, field
-<<<<<<< HEAD
-from datetime import datetime, timezone
-=======
-from datetime import datetime, timedelta, timezone
->>>>>>> copilot/sub-pr-29
-from enum import Enum
+from datetime import datetime, timedelta, timezonefrom enum import Enum
 import re
 from collections import deque
 import time
@@ -518,3 +513,6 @@ class DnsSecurityCore:
 
         except Exception as e:
             self.logger.error(f"Error during cleanup: {e}")
+
+
+

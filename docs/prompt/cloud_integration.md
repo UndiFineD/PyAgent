@@ -267,3 +267,20 @@ class CloudProviderBase(ABC):
 8. [ ] Comprehensive testing with mock providers
 
 ================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

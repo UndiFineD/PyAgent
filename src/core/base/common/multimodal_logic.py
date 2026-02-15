@@ -610,3 +610,4 @@ class MultimodalCore(BaseCore):
 
         processed["aligned_embeddings"].append(aligned)
         processed["text"] += f"<{m_type.capitalize()}_{m_id}>"
+

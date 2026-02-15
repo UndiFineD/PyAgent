@@ -510,61 +510,10 @@ class RAGCore(BaseCore):
         chunk_size = max(1, int(config.chunk_size))
         overlap = max(0, int(config.chunk_overlap))
 
-<<<<<<< HEAD
-        # Ensure we don't have infinite loops with bad config
-        if chunk_size <= overlap:
-            overlap = max(0, chunk_size - 1)
-
-        chunks = []
-=======
         chunks: List[Document] = []
->>>>>>> copilot/sub-pr-29
         start = 0
         content_length = len(content)
 
-<<<<<<< HEAD
-        while start < len(content):
-            # 1. Initial hard limit
-            end = min(start + chunk_size, len(content))
-
-            # Find a good break point if not at the end
-            if end < len(content):
-                # Ensure we make progress: next start should be > current start
-                # next_start = end - overlap
-                # we want end - overlap > start  =>  end > start + overlap
-                min_end = start + overlap + 1
-
-                # Check for sentence delimiters
-                # Look backwards from 'end' down to 'min_end'
-                # Limit lookback to reasonable amount (e.g. 100 chars)
-                found_break = False
-                search_end = end
-
-                # Try sentence boundaries first
-                limit = max(min_end, search_end - 100)
-                curr = search_end
-                while curr > limit:
-                    # Check character at curr-1
-                    idx = curr - 1
-                    if content[idx] in ".!?" and (curr >= len(content) or content[curr].isspace()):
-                        end = curr
-                        found_break = True
-                        break
-                    curr -= 1
-
-                if not found_break:
-                    # Try word boundaries
-                    curr = search_end
-                    while curr > min_end:
-                        if content[curr-1].isspace():
-                            end = curr
-                            found_break = True
-                            break
-                        curr -= 1
-
-                    # If still not found, we keep the hard break at 'end' (start + chunk_size)
-                    # which satisfies > start + overlap
-=======
         while start < content_length:
             end = min(start + chunk_size, content_length)
 
@@ -577,8 +526,6 @@ class RAGCore(BaseCore):
             # Ensure we make progress; if end equals start, advance by chunk_size
             if end <= start:
                 end = min(start + chunk_size, content_length)
->>>>>>> copilot/sub-pr-29
-
             chunk_content = content[start:end].strip()
             if chunk_content:
                 chunk = Document(
@@ -591,19 +538,6 @@ class RAGCore(BaseCore):
                 chunk.metadata["chunk_index"] = len(chunks)
                 chunks.append(chunk)
 
-<<<<<<< HEAD
-            # Stop if we have reached the end of content
-            if end == len(content):
-                break
-
-            # Advance start
-            next_start = end - overlap
-
-            # Absolute safety guarantee against infinite loops
-            if next_start <= start:
-                next_start = start + 1
-
-=======
             # Move start forward with overlap
             if end >= content_length:
                 break
@@ -611,9 +545,7 @@ class RAGCore(BaseCore):
             # Calculate next start ensuring it doesn't go backwards
             next_start = end - overlap
             if next_start <= start:
-                next_start = end
->>>>>>> copilot/sub-pr-29
-            start = next_start
+                next_start = end            start = next_start
 
         return chunks
 
@@ -850,3 +782,12 @@ class MockVectorStore(BaseVectorStore):
             self.documents[doc_id] = document
             return True
         return False
+
+
+
+
+
+
+
+
+

@@ -160,11 +160,6 @@ class SafeLocalInterpreter:
                 exec_code = compile(tree, filename="<string>", mode="exec")
                 exec(exec_code, self.safe_globals)
 
-<<<<<<< HEAD
-                # Evaluate the last expression
-                eval_code = compile(ast.Expression(last_expr.value), filename="<string>", mode="eval")
-                result_obj = eval(eval_code, self.safe_globals)
-=======
                 # Safely evaluate the last expression using a restricted globals map.
                 # Prefer to unparse the AST expression and use builtin eval with restricted globals.
                 try:
@@ -183,9 +178,7 @@ class SafeLocalInterpreter:
                         except Exception:
                             result_obj = None
                 else:
-                    result_obj = None
->>>>>>> copilot/sub-pr-29
-            else:
+                    result_obj = None            else:
                 exec(code, self.safe_globals)
 
         except Exception:
@@ -315,3 +308,6 @@ if __name__ == "__main__":
         print(f"Result: {res}")
 
     asyncio.run(main())
+
+
+

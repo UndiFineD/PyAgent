@@ -13,12 +13,7 @@
 # limitations under the License.
 
 import pytest
-<<<<<<< HEAD
-from unittest.mock import Mock
-=======
-from unittest.mock import Mock, patch, AsyncMock
->>>>>>> copilot/sub-pr-29
-from datetime import datetime, timedelta, timezone
+from unittest.mock import Mock, patch, AsyncMockfrom datetime import datetime, timedelta, timezone
 from src.core.base.logic.core.federation_services_core import (
     FederationServicesCore,
     TokenGenerationRequest,
@@ -158,3 +153,6 @@ class TestFederationServicesCore:
         assert "active_services" in stats
         assert "recent_tokens" in stats
         assert "tokens_by_provider" in stats
+
+
+

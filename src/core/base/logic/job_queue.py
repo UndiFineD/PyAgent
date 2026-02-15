@@ -263,3 +263,4 @@ class JobQueue:
                 "workers_active": len(self.workers),
                 "running": self.running
             }
+

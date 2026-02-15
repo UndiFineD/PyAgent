@@ -1,19 +1,4 @@
 #!/usr/bin/env python3
-<<<<<<< HEAD
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-=======
 >>>>>>> copilot/sub-pr-29
 """Apply conservative patch proposals generated from bandit findings.
 
@@ -27,22 +12,10 @@ automatically in CI or overnight runs.
 """
 <<<<<<< HEAD
 
-=======
->>>>>>> copilot/sub-pr-29
-from __future__ import annotations
+=======from __future__ import annotations
 import shutil
 import sys
 from pathlib import Path
-<<<<<<< HEAD
-
-ROOT = Path(__file__).resolve().parents[2]
-PATCH_DIR = ROOT / ".external" / "patches"
-STATIC_DIR = ROOT / ".external" / "static_checks"
-
-def main() -> int:
-    """Main function to apply conservative patch proposals from bandit findings."""
-    from . import prepare_refactor_patches as prep
-=======
 import json
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -57,8 +30,6 @@ def main() -> int:
         # fallback: try to import by path
         sys.path.insert(0, str(ROOT / 'src'))
         from tools import prepare_refactor_patches as prep
->>>>>>> copilot/sub-pr-29
-
     try:
         data = prep.load_bandit()
     except FileNotFoundError:
@@ -88,41 +59,18 @@ def main() -> int:
             orig = lines[ln - 1]
             s = orig.strip()
             # Skip risky/easily-broken contexts
-<<<<<<< HEAD
-            risky_starts = (
-                'def ', 'class ', 'assert', '@', 'return', 'yield',
-                'if ', 'for ', 'while ', 'with ', 'try:', 'except'
-            )
-            if s.startswith(risky_starts):
-=======
-            if s.startswith(('def ', 'class ', 'assert', '@', 'return', 'yield', 'if ', 'for ', 'while ', 'with ', 'try:', 'except')):
->>>>>>> copilot/sub-pr-29
-                continue
+            if s.startswith(('def ', 'class ', 'assert', '@', 'return', 'yield', 'if ', 'for ', 'while ', 'with ', 'try:', 'except')):                continue
             # Conservative application rules:
             # - comment out imports
             # - replace eval/exec/compile with a RuntimeError
             # - replace subprocess/os.system/Popen usages with a RuntimeError
             applied_here = False
             if s.startswith('import ') or s.startswith('from '):
-<<<<<<< HEAD
-                msg = f"  # PATCH_APPLIED: commented risky import ({f.get('severity')})"
-                lines[ln - 1] = '# ' + orig + msg
-=======
-                lines[ln - 1] = '# ' + orig + f"  # PATCH_APPLIED: commented risky import ({f.get('severity')})"
->>>>>>> copilot/sub-pr-29
-                applied_here = True
+                lines[ln - 1] = '# ' + orig + f"  # PATCH_APPLIED: commented risky import ({f.get('severity')})"                applied_here = True
             elif any(k in s for k in ('eval', 'exec', 'compile')):
                 # Found potential dynamic execution usage — conservatively replace.
                 # Use of eval() is highly insecure — intentional detection here
-<<<<<<< HEAD
-                lines[ln - 1] = (
-                    "raise RuntimeError('Refactor required: remove dynamic execution; "
-                    "see .external/patches')"
-                )
-=======
-                lines[ln - 1] = "raise RuntimeError('Refactor required: remove dynamic execution; see .external/patches')"
->>>>>>> copilot/sub-pr-29
-                applied_here = True
+                lines[ln - 1] = "raise RuntimeError('Refactor required: remove dynamic execution; see .external/patches')"                applied_here = True
             elif 'subprocess' in s or 'os.system' in s or 'Popen' in s:
                 lines[ln - 1] = "raise RuntimeError('Refactor required: avoid running subprocesses directly')"
                 applied_here = True
@@ -157,3 +105,21 @@ def main() -> int:
 
 if __name__ == '__main__':
     raise SystemExit(main())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
