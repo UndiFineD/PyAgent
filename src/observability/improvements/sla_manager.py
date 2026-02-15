@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
+
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,144 +31,7 @@ WHAT IT SHOULD DO BETTER:
 Validate and normalize improvement timestamps more robustly (support more formats and timezone-aware datetimes), avoid repeated datetime.now() calls in assign_sla() to ensure atomic timestamps, add persistent storage or transactional state management via StateTransaction for durability, and improve unit-test coverage around edge cases (missing created_at, non-datetime types, and DST/timezone boundary conditions).
 
 FILE CONTENT SUMMARY:
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-
-"""Auto-extracted class from agent_improvements.py"""
-
-from __future__ import annotations
-
-from datetime import datetime, timedelta
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-from .sla_configuration import SLAConfiguration
-from .sla_level import SLALevel
-from .sla_policy import SLAPolicy
-
-__version__ = VERSION
-
-
-class SLAManager:
-    """Manages SLAs for improvements.
-
-    Tracks SLA compliance and triggers escalations.
-
-    Attributes:
-        sla_configs: SLA configurations by level.
-        tracked: Map of improvement IDs to SLA tracking data.
-    """
-
-    def __init__(self) -> None:
-        """Initialize SLA manager."""
-        self.sla_configs: dict[SLALevel, SLAConfiguration] = {}
-        self.tracked: dict[str, dict[str, Any]] = {}
-        # Compatibility API expected by tests.
-        self.sla_policies: dict[str, SLAPolicy] = {}
-        self._setup_default_slas()
-
-    def set_policy(self, name: str, response_hours: int = 0, resolution_hours: int = 0) -> None:
-        """Set a named SLA policy (compatibility API)."""
-        self.sla_policies[name] = SLAPolicy(
-            name=name,
-            response_hours=int(response_hours or 0),
-            resolution_hours=int(resolution_hours or 0),
-        )
-
-    def get_policy(self, name: str) -> SLAPolicy | None:
-        """Get a named SLA policy (compatibility API)."""
-        return self.sla_policies.get(name)
-
-    def check_violations(self, improvements: list[Improvement], priority: str) -> list[Improvement]:
-        """Return improvements that violate the given named SLA policy."""
-        policy = self.sla_policies.get(priority)
-        if not policy or policy.resolution_hours <= 0:
-            return []
-
-        now = datetime.now()
-        violating: list[Improvement] = []
-        for imp in improvements:
-            created = getattr(imp, "created_at", "")
-            created_dt: datetime | None = None
-            if isinstance(created, datetime):
-                created_dt = created
-            else:
-                try:
-                    created_dt = datetime.fromisoformat(str(created))
-                except (ValueError, TypeError):
-                    created_dt = None
-
-            if not created_dt:
-                continue
-
-            age_hours = (now - created_dt).total_seconds() / 3600.0
-            if age_hours > policy.resolution_hours:
-                violating.append(imp)
-        return violating
-
-    def _setup_default_slas(self) -> None:
-        """Set up default SLA configurations."""
-        defaults = [
-            (SLALevel.P0, 24, 12),
-            (SLALevel.P1, 72, 48),
-            (SLALevel.P2, 168, 120),
-            (SLALevel.P3, 336, 240),
-            (SLALevel.P4, 720, 480),
-        ]
-        for level, max_h, esc_h in defaults:
-            self.sla_configs[level] = SLAConfiguration(level=level, max_hours=max_h, escalation_hours=esc_h)
-
-    def assign_sla(self, improvement: Improvement, level: SLALevel) -> None:
-        """Assign an SLA to an improvement.
-
-        Args:
-            improvement: The improvement to track.
-            level: SLA priority level.
-        """
-        config = self.sla_configs.get(level)
-        if not config:
-            return
-
-        self.tracked[improvement.id] = {
-            "level": level,
-            "start_time": datetime.now().isoformat(),
-            "deadline": (datetime.now() + timedelta(hours=config.max_hours)).isoformat(),
-            "escalation_time": (datetime.now() + timedelta(hours=config.escalation_hours)).isoformat(),
-        }
-
-    def check_sla_status(self, improvement_id: str) -> dict[str, Any]:
-        """Check SLA status for an improvement."""
-        if improvement_id not in self.tracked:
-            return {"status": "not_tracked"}
-
-        tracking = self.tracked[improvement_id]
-        now = datetime.now().isoformat()
-
-        if now > tracking["deadline"]:
-            return {"status": "breached", **tracking}
-        elif now > tracking["escalation_time"]:
-            return {"status": "escalation_needed", **tracking}
-        else:
-            return {"status": "on_track", **tracking}
-
-    def get_breached(self) -> list[str]:
-        """Get all breached improvement IDs."""
-        now = datetime.now().isoformat()
-        return [imp_id for imp_id, tracking in self.tracked.items() if now > tracking["deadl
+Auto-extracted class from agent_improvements.py
 """
 
 from __future__ import annotations
@@ -256,12 +119,7 @@ class SLAManager:
             self.sla_configs[level] = SLAConfiguration(level=level, max_hours=max_h, escalation_hours=esc_h)
 
     def assign_sla(self, improvement: Improvement, level: SLALevel) -> None:
-        """Assign an SLA to an improvement.
-
-        Args:
-            improvement: The improvement to track.
-            level: SLA priority level.
-        """
+        # Assign an SLA to an improvement.
         config = self.sla_configs.get(level)
         if not config:
             return
@@ -274,7 +132,7 @@ class SLAManager:
         }
 
     def check_sla_status(self, improvement_id: str) -> dict[str, Any]:
-        """Check SLA status for an improvement."""
+        # Check SLA status for an improvement.
         if improvement_id not in self.tracked:
             return {"status": "not_tracked"}
 

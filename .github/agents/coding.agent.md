@@ -2,7 +2,7 @@
 name: coding
 description: PyAgent coding expert. Implements features, fixes bugs, and ensures code follows PyAgent architecture principles for v4.0.0 improvements. Only uses free Copilot models like GPT-4.1, GPT-5 Mini, Grok Code Fast 1, Raptor Mini (preview).
 argument-hint: You are using powershell, do not use linux commands. 
-tools: [vscode/getProjectSetupInfo, vscode/installExtension, vscode/newWorkspace, vscode/openSimpleBrowser, vscode/runCommand, vscode/askQuestions, vscode/vscodeAPI, vscode/extensions, execute/runNotebookCell, execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, execute/runTests, read/getNotebookSummary, read/problems, read/readFile, read/readNotebookCellOutput, read/terminalSelection, read/terminalLastCommand, agent/runSubagent, edit/createDirectory, edit/createFile, edit/createJupyterNotebook, edit/editFiles, edit/editNotebook, search/changes, search/codebase, search/fileSearch, search/listDirectory, search/searchResults, search/textSearch, search/usages, web/fetch, web/githubRepo, microsoftdocs/mcp/microsoft_code_sample_search, microsoftdocs/mcp/microsoft_docs_fetch, microsoftdocs/mcp/microsoft_docs_search, pylance-mcp-server/pylanceDocuments, pylance-mcp-server/pylanceFileSyntaxErrors, pylance-mcp-server/pylanceImports, pylance-mcp-server/pylanceInstalledTopLevelModules, pylance-mcp-server/pylanceInvokeRefactoring, pylance-mcp-server/pylancePythonEnvironments, pylance-mcp-server/pylanceRunCodeSnippet, pylance-mcp-server/pylanceSettings, pylance-mcp-server/pylanceSyntaxErrors, pylance-mcp-server/pylanceUpdatePythonEnvironment, pylance-mcp-server/pylanceWorkspaceRoots, pylance-mcp-server/pylanceWorkspaceUserFiles, memory, ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand, ms-python.python/installPythonPackage, ms-python.python/configurePythonEnvironment, todo] # Minimal tools for efficient coding: file ops, search, terminal for builds, tests for validation
+[vscode, execute, read, agent, edit, search, web, 'microsoftdocs/mcp/*', memory, ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand, ms-python.python/installPythonPackage, ms-python.python/configurePythonEnvironment, todo] # Minimal tools for efficient coding: file ops, search, terminal for builds, tests for validation
 ---
 This agent is an expert in coding within the PyAgent multi-agent swarm system. It specializes in implementing features, fixing bugs, and ensuring all code adheres to PyAgent's architectural principles for v4.0.0 improvements.
 
@@ -26,8 +26,8 @@ This agent is an expert in coding within the PyAgent multi-agent swarm system. I
 **Workflow Integration:**
 - Reads test plans and issues from `docs/architecture/tester.agent.memory.md` before coding
 - Stores implementation details and code changes in `docs/architecture/coding.agent.memory.md`
-- Passes completed code to executing agent for validation
-- Supports PyAgent's agent handoff pattern: planner → tester → coding → executing → gitdance → planner
+- Passes completed code to /delegate @executing agent for running tests and executing code validation.
+- Supports PyAgent's agent handoff pattern: @planner → @tester → @coding → @executing → @gitdance → @planner
 - Integrates with CI/CD automation and distributed checkpointing
 
 **Performance Optimizations:**

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
+
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,22 +31,7 @@ WHAT IT SHOULD DO BETTER:
 1) Persist and calibrate reliability_scores from historical outcomes rather than using an in-memory default, 2) provide configurable committee selection policies (role-based, capability matching) beyond reliability-only selection, 3) surface richer audit trails and verifiable signatures for votes to improve forensic accountability, 4) more robust timeout and partial-commit handling, 5) stronger testing and failure-mode simulation for adversarial inputs
 
 FILE CONTENT SUMMARY:
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-
-"""ByzantineConsensusAgent for PyAgent.
+ByzantineConsensusAgent for PyAgent.
 Ensures high-integrity changes by requiring 2/3 agreement from a committee of agents.
 Used for critical infrastructure or security logic changes.
 """

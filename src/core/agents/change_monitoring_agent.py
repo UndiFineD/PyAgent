@@ -29,11 +29,10 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.base_agent import BaseAgent
 from src.core.base.mixins.data_processing_mixin import DataProcessingMixin
 
-__version__ = VERSION
+__version__ = "1.0.0"
 
 
 class ChangeDataSource(ABC):
@@ -131,14 +130,17 @@ class HistoryManager:
 
     def save_to_file(self, filepath: str) -> None:
         """Save history to JSON file."""
-        with open(filepath, 'w') as f:
+        with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(self.history, f, indent=2, default=str)
 
     def load_from_file(self, filepath: str) -> None:
         """Load history from JSON file."""
-        if Path(filepath).exists():
-            with open(filepath, 'r') as f:
-                self.history = json.load(f)
+        try:
+            if Path(filepath).exists():
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    self.history = json.load(f)
+        except (IOError, json.JSONDecodeError) as e:
+            logging.warning(f"Failed to load history from {filepath}: {e}")
 
 
 class ChangeMonitoringAgent(BaseAgent, DataProcessingMixin):
@@ -176,6 +178,28 @@ class ChangeMonitoringAgent(BaseAgent, DataProcessingMixin):
     def set_poll_interval(self, interval: int) -> None:
         """Set polling interval in seconds."""
         self.poll_interval = interval
+
+    async def _process_task(self, task_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Process a task from the task queue."""
+        task_type = task_data.get('type')
+        try:
+            if task_type == 'start_monitoring':
+                data_source_name = task_data.get('data_source_name')
+                await self.start_monitoring(data_source_name)
+                return {'status': 'success', 'message': f'Monitoring started for {data_source_name}'}
+            elif task_type == 'stop_monitoring':
+                data_source_name = task_data.get('data_source_name')
+                await self.stop_monitoring(data_source_name)
+                return {'status': 'success', 'message': f'Monitoring stopped for {data_source_name}'}
+            elif task_type == 'get_summary':
+                data_source_name = task_data.get('data_source_name')
+                summary = await self.get_change_summary(data_source_name)
+                return {'status': 'success', 'summary': summary}
+            else:
+                return {'status': 'error', 'message': f'Unknown task type: {task_type}'}
+        except Exception as e:
+            logging.error(f"Error processing task {task_type}: {e}")
+            return {'status': 'error', 'message': str(e)}
 
     async def start_monitoring(self, data_source_name: str) -> None:
         """Start monitoring a specific data source."""
@@ -247,7 +271,7 @@ class ChangeMonitoringAgent(BaseAgent, DataProcessingMixin):
         """Output changes in configured format."""
         if self.output_file:
             # Append to file
-            with open(self.output_file, 'a') as f:
+            with open(self.output_file, 'a', encoding='utf-8') as f:
                 for change in changes:
                     f.write(json.dumps(change, default=str) + '\n')
 

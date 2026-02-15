@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
+
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ import logging
 import argparse
 import time
 import xml.etree.ElementTree as ET
-from static_tools import sensitive_info_extractor, scan_android_manifest
-from report_gen import ReportGen, util
+from .static_tools import sensitive_info_extractor, scan_android_manifest
+from .report_gen import ReportGen, util as ReportGenUtil
 
 """
     Title:      APKDeepLens
@@ -41,7 +41,7 @@ from report_gen import ReportGen, util
 logging.basicConfig(level=logging.ERROR, format="%(message)s")
 
 
-class util(util):
+class UtilHelper(ReportGenUtil):
     """
     A static class for which contain some useful variables and methods
     """
@@ -54,7 +54,7 @@ class util(util):
         stack = traceback.extract_stack()
         filename, line_no, func_name, text = stack[-2]
         formatted_message = f"{filename}:{line_no}: {text_output}"
-        print(color + formatted_message + util.ENDC)
+        print(color + formatted_message + UtilHelper.ENDC)
 
     @staticmethod
     def print_logo():
@@ -62,14 +62,14 @@ class util(util):
         Logo for APKDeepLens
         """
         logo = f"""
-{util.OKGREEN} ████  █████  ██  ██    ( )                  (_ )                           {util.ENDC}
-{util.OKGREEN}██  ██ ██  ██ ██ ██    _| |  __     __  _ _   | |     __    ___    ___      {util.ENDC}
-{util.OKGREEN}██████ █████  ████   /'_` | /'_`\\ /'_`\\( '_`\\ | |    /'_`\\/' _ `\\/',__)     {util.ENDC}
-{util.OKGREEN}██  ██ ██     ██ ██ ( (_| |(  __/(  __/| (_) )| |__ (  __/| ( ) |\\__, \\     {util.ENDC}
-{util.OKGREEN}██  ██ ██     ██  ██`\\__,_)`\\___)`\\___)| ,__/'(____/`\\___)(_) (_)(____/     {util.ENDC}
-{util.OKGREEN}                                       | |                                  {util.ENDC}
-{util.OKGREEN}                                       (_)                                  {util.ENDC}
-{util.OKCYAN}                                              - Made By Deepanshu{util.ENDC}
+{UtilHelper.OKGREEN} ████  █████  ██  ██    ( )                  (_ )                           {UtilHelper.ENDC}
+{UtilHelper.OKGREEN}██  ██ ██  ██ ██ ██    _| |  __     __  _ _   | |     __    ___    ___      {UtilHelper.ENDC}
+{UtilHelper.OKGREEN}██████ █████  ████   /'_` | /'_`\\ /'_`\\( '_`\\ | |    /'_`\\/' _ `\\/',__)     {UtilHelper.ENDC}
+{UtilHelper.OKGREEN}██  ██ ██     ██ ██ ( (_| |(  __/(  __/| (_) )| |__ (  __/| ( ) |\\__, \\     {UtilHelper.ENDC}
+{UtilHelper.OKGREEN}██  ██ ██     ██  ██`\\__,_)`\\___)`\\___)| ,__/'(____/`\\___)(_) (_)(____/     {UtilHelper.ENDC}
+{UtilHelper.OKGREEN}                                       | |                                  {UtilHelper.ENDC}
+{UtilHelper.OKGREEN}                                       (_)                                  {UtilHelper.ENDC}
+{UtilHelper.OKCYAN}                                              - Made By Deepanshu{UtilHelper.ENDC}
         """
         print(logo)
 
@@ -78,11 +78,11 @@ def parse_args():
     """
     Parse command-line arguments.
     """
-    util.print_logo()
+    UtilHelper.print_logo()
 
     parser = argparse.ArgumentParser(
         description=("{BOLD}{GREEN}APKDeepLens:{ENDC} Android security insights in full spectrum. ").format(
-            BOLD=util.BOLD, GREEN=util.OKCYAN, ENDC=util.ENDC
+            BOLD=UtilHelper.BOLD, GREEN=UtilHelper.OKCYAN, ENDC=UtilHelper.ENDC
         ),
         epilog=("For more information, visit our GitHub repository - https://github.com/d78ui98/APKDeepLens"),
         formatter_class=argparse.RawTextHelpFormatter,
@@ -147,16 +147,16 @@ class AutoApkScanner(object):
             and os.path.exists(sources_path)
             and os.path.isdir(sources_path)
         ):
-            util.mod_log(
+            UtilHelper.mod_log(
                 "[+] Source code for apk - {} Already extracted. Skipping this step.".format(apk_file),
-                util.OKCYAN,
+                UtilHelper.OKCYAN,
             )
             return {"result": 0, "path": extracted_source_path}
         else:
             os.makedirs(extracted_source_path, exist_ok=True)
-            util.mod_log(
+            UtilHelper.mod_log(
                 "[+] Creating new directory for extracting apk : " + extracted_source_path,
-                util.OKCYAN,
+                UtilHelper.OKCYAN,
             )
             return {"result": 1, "path": extracted_source_path}
 
@@ -164,7 +164,7 @@ class AutoApkScanner(object):
         """
         Extracting source code with Jdax
         """
-        util.mod_log("[+] Extracting the source code to : " + target_dir, util.OKCYAN)
+        UtilHelper.mod_log("[+] Extracting the source code to : " + target_dir, UtilHelper.OKCYAN)
 
         is_windows = os.name == "nt"
         jadx_executable = "jadx.bat" if is_windows else "jadx"
@@ -201,14 +201,14 @@ if __name__ == "__main__":
             try:
                 os.environ["VIRTUAL_ENV"]
             except KeyError:
-                util.mod_log(
+                UtilHelper.mod_log(
                     "[-] ERROR: Not inside virtualenv. Do source venv/bin/activate",
-                    util.FAIL,
+                    UtilHelper.FAIL,
                 )
                 exit(1)
 
             if not args.apk:
-                util.mod_log("[-] ERROR: Please provide the apk file using the -apk flag.", util.FAIL)
+                UtilHelper.mod_log("[-] ERROR: Please provide the apk file using the -apk flag.", UtilHelper.FAIL)
                 exit(1)
 
         apk = args.apk
@@ -246,10 +246,10 @@ if __name__ == "__main__":
         obj_self = AutoApkScanner()
         apk_file_abs_path = obj_self.return_abs_path(apk_path)
         if not obj_self.apk_exists(apk_file_abs_path):
-            util.mod_log(f"[-] ERROR: {apk_file_abs_path} not found.", util.FAIL)
+            UtilHelper.mod_log(f"[-] ERROR: {apk_file_abs_path} not found.", UtilHelper.FAIL)
             exit(1)
         else:
-            util.mod_log(f"[+] {apk_file_abs_path} found!", util.OKGREEN)
+            UtilHelper.mod_log(f"[+] {apk_file_abs_path} found!", UtilHelper.OKGREEN)
         time.sleep(1)
 
         # Extracting source code
@@ -291,10 +291,10 @@ if __name__ == "__main__":
 
         # Extracting hardcoded secrets
         obj = sensitive_info_extractor.SensitiveInfoExtractor()
-        util.mod_log("[+] Reading all file paths ", util.OKCYAN)
+        UtilHelper.mod_log("[+] Reading all file paths ", UtilHelper.OKCYAN)
         file_paths = obj.get_all_file_paths(extracted_apk_path)
         relative_to = extracted_apk_path
-        util.mod_log("[+] Extracting all hardcoded secrets ", util.OKCYAN)
+        UtilHelper.mod_log("[+] Extracting all hardcoded secrets ", UtilHelper.OKCYAN)
         hardcoded_secrets_result = obj.extract_all_sensitive_info(file_paths, relative_to)
         if isinstance(hardcoded_secrets_result, list):
             results_dict["hardcoded_secrets"] = hardcoded_secrets_result
@@ -302,7 +302,7 @@ if __name__ == "__main__":
             results_dict["hardcoded_secrets"] = []
 
         # extracting insecure connections
-        util.mod_log("[+] Extracting all insecure connections ", util.OKCYAN)
+        UtilHelper.mod_log("[+] Extracting all insecure connections ", UtilHelper.OKCYAN)
         all_file_path = obj.get_all_file_paths(extracted_apk_path)
         result = obj.extract_insecure_request_protocol(all_file_path)
         print(result)
@@ -345,10 +345,10 @@ if __name__ == "__main__":
             elif args.report == "txt":
                 obj.generate_txt_report(results_dict)
             else:
-                util.mod_print("[-] Invalid Report type argument provided", util.FAIL)
+                UtilHelper.mod_print("[-] Invalid Report type argument provided", UtilHelper.FAIL)
 
     except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
         line_number = exc_traceback.tb_lineno
-        util.mod_print(f"[-] {str(e)} at line {line_number}", util.FAIL)
+        UtilHelper.mod_print(f"[-] {str(e)} at line {line_number}", UtilHelper.FAIL)
         exit(1)

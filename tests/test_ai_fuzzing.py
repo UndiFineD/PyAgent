@@ -32,14 +32,17 @@ class TestAIFuzzing:
         mock_engine = Mock()
         mock_engine.discover_paths.return_value = ["path1", "path2"]
         def fuzz_target_side_effect(target, **kwargs):
+            """Simulate fuzzing a target with optional timeout and error handling."""
             if not target:
                 raise ValueError("Invalid target")
             return {"vulnerabilities": [], "timed_out": kwargs.get("timeout", 0.001) == 0.001}
         mock_engine.fuzz_target.side_effect = fuzz_target_side_effect
         def run_cycles_side_effect(target, cycles=3):
+            """Simulate running multiple fuzzing cycles with iterative improvement."""
             return [{"cycle": i+1, "results": [], "coverage": 0.1 * (i+1)} for i in range(cycles)]
         mock_engine.run_cycles.side_effect = run_cycles_side_effect
         async def async_fuzz(target):
+            """Simulate asynchronous fuzzing operation."""
             return {"vulnerabilities": []}
         mock_engine.fuzz_async = async_fuzz
         mock_engine.get_coverage_metrics.return_value = {"code_coverage": 0.85, "path_coverage": 0.7}

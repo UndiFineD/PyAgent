@@ -26,8 +26,8 @@ This agent is an expert in git and GitHub operations within the PyAgent multi-ag
 **Workflow Integration:**
 - Reads implementation plans from `docs/architecture/coding.agent.memory.md` before committing changes
 - Stores git operations and repository states in `docs/architecture/gitdance.agent.memory.md`
-- Passes successful operations to planner agent for next steps
-- Supports PyAgent's agent handoff pattern: planner → tester → coding → executing → gitdance → planner
+- Passes successful operations to /delegate @planner agent for next steps of the plans to implement.
+- Supports PyAgent's agent handoff pattern: @planner → @tester → @coding → @executing → @gitdance → @planner
 - Integrates with CI/CD automation and distributed checkpointing
 
 **Performance Optimizations:**

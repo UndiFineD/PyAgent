@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 changelog_template.py - Changelog entry template dataclass
 
-[Brief Summary]
 DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -36,59 +32,11 @@ WHAT IT SHOULD DO BETTER:
 - Add validation (e.g., non-empty name/project_type and valid header_format placeholders), and type-safe section names.
 - Provide helper methods to render a full changelog entry to Markdown (inject version, date, links, and contributors), and utilities for semantic-version sorting and link resolution.
 - Support localization for date formatting, configurable section ordering, and optional per-section metadata (e.g., item authors, PR links).
-
-FILE CONTENT SUMMARY:
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-
-"""Auto-extracted class from agent_changes.py"""
-
-from __future__ import annotations
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class ChangelogTemplate:
-    """Template for changelog entries."""
-
-    name: str
-    project_type: str
-    sections: list[str] = field(
-        default_factory=lambda: [
-            "Added",
-            "Changed",
-            "Deprecated",
-            "Removed",
-            "Fixed",
-            "Security",
-        ]
-    )
-    header_format: str = "## [{version}] - {date}"
-    include_links: bool = True
-    include_contributors: bool = False
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION

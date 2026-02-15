@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent.py"""
+"""Auto-extracted class from agent.py
+"""
 
 from __future__ import annotations
 

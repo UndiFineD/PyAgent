@@ -123,7 +123,7 @@ class VectorStoreInterface(Protocol):
 
     async def add_documents(self, documents: List[Document]) -> List[str]:
         """Add documents to the vector store."""
-        ...
+        pass
 
     async def similarity_search(
         self,
@@ -133,15 +133,15 @@ class VectorStoreInterface(Protocol):
         **kwargs
     ) -> List[tuple[Document, float]]:
         """Perform similarity search."""
-        ...
+        pass
 
     async def delete_documents(self, doc_ids: List[str]) -> bool:
         """Delete documents from vector store."""
-        ...
+        pass
 
     async def update_document(self, doc_id: str, document: Document) -> bool:
         """Update a document in the vector store."""
-        ...
+        pass
 
 
 class BaseVectorStore:
@@ -545,7 +545,8 @@ class RAGCore(BaseCore):
             # Calculate next start ensuring it doesn't go backwards
             next_start = end - overlap
             if next_start <= start:
-                next_start = end            start = next_start
+                next_start = end
+            start = next_start
 
         return chunks
 
@@ -686,6 +687,7 @@ class QdrantVectorStore(BaseVectorStore):
     """Real vector store implementation using Qdrant."""
 
     def __init__(self, config: Dict[str, Any]):
+        """Initialize Qdrant client and collection."""
         super().__init__(config)
         try:
             from qdrant_client import QdrantClient
@@ -700,6 +702,7 @@ class QdrantVectorStore(BaseVectorStore):
             self.documents = {}
 
     async def add_documents(self, documents: List[Document]) -> List[str]:
+        """Add documents to Qdrant collection."""
         if not self._initialized:
             # Fallback mock behavior
             for doc in documents:
@@ -710,18 +713,47 @@ class QdrantVectorStore(BaseVectorStore):
         # For now, we simulate success if client is present
         return [doc.doc_id for doc in documents]
 
-    async def similarity_search(self, query: str, k: int = 5, **kwargs) -> List[tuple[Document, float]]:
+    async def similarity_search(
+        self,
+        query: str,
+        k: int = 5,
+        filters: Optional[Dict[str, Any]] = None,
+        **kwargs
+    ) -> List[tuple[Document, float]]:
+        """Perform similarity search in Qdrant."""
         if not self._initialized:
             return []
         # Real search would be:
         # self.client.search(...)
         return []
 
+    async def delete_documents(self, doc_ids: List[str]) -> bool:
+        """Delete documents from Qdrant."""
+        if not self._initialized:
+            # Fallback mock behavior
+            for doc_id in doc_ids:
+                self.documents.pop(doc_id, None)
+            return True
+        # Real Qdrant deletion would be implemented here
+        return True
+
+    async def update_document(self, doc_id: str, document: Document) -> bool:
+        """Update a document in Qdrant."""
+        if not self._initialized:
+            # Fallback mock behavior
+            if hasattr(self, 'documents'):
+                self.documents[doc_id] = document
+                return True
+            return False
+        # Real Qdrant update would be implemented here
+        return True
+
 
 class MockVectorStore(BaseVectorStore):
     """Mock vector store for testing and development."""
 
     def __init__(self, config: Dict[str, Any]):
+        """Initialize the mock vector store with in-memory storage."""
         super().__init__(config)
         self.documents: Dict[str, Document] = {}
         self.embeddings: Dict[str, List[float]] = {}

@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -47,56 +45,7 @@ WHAT IT SHOULD DO BETTER:
 - Integrate with transactional FS (StateTransaction) and CascadeContext for safe persistent updates, and add unit tests for edge cases (missing fields, invalid enums, large dependency graphs).
 
 FILE CONTENT SUMMARY:
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-
-"""Auto-extracted class from agent_improvements.py"""
-
-from __future__ import annotations
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .effort_estimate import EffortEstimate
-from .improvement_category import ImprovementCategory
-from .improvement_priority import ImprovementPriority
-from .improvement_status import ImprovementStatus
-
-__version__ = VERSION
-
-
-@dataclass
-class Improvement:
-    """A single improvement suggestion."""
-
-    id: str
-    title: str
-    description: str
-    file_path: str
-    priority: ImprovementPriority = ImprovementPriority.MEDIUM
-    category: ImprovementCategory = ImprovementCategory.OTHER
-    status: ImprovementStatus = ImprovementStatus.PROPOSED
-    effort: EffortEstimate = EffortEstimate.MEDIUM
-    impact_score: float = 50.0
-    created_at: str = ""
-    updated_at: str = ""
-    assignee: str | None = None
-    tags: list[str] = field(default_factory=list)  # type: ignore[assignment]
-    dependencies: list[str] = field(default_factory=list)  # type: ignore[assignment]
-    votes: int = 0
+Auto-extracted class from agent_improvements.py
 """
 
 from __future__ import annotations

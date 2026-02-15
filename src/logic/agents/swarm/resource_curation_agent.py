@@ -29,22 +29,7 @@ WHAT IT SHOULD DO BETTER:
 1) Replace simple JSON file storage with transactional StateTransaction-backed persistence and path configuration via the agent core; 2) Implement real extraction/parsing, async I/O, and robust error handling for network/content parsing; 3) Add unit tests, input validation, and integration hooks to push curated outputs to KnowledgeAgent and FeatureStoreAgent.
 
 FILE CONTENT SUMMARY:
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-
-"""ResourceCurationAgent for PyAgent.
+ResourceCurationAgent for PyAgent.
 Specializes in parsing, summarizing, and indexing external research links,
 blog posts, and technical papers into the agent's knowledge base.
 """

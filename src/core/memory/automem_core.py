@@ -35,7 +35,7 @@ from dataclasses import dataclass, field, fields
 from datetime import datetime, timezone
 from threading import Thread
 from typing import Any, Dict, List, Optional, Union
-from falkordb import FalkorDB
+from falkordb import FalkorDB  # type: ignore
 from qdrant_client import QdrantClient
 from qdrant_client import models as qdrant_models
 from src.core.memory.kv_cache import KVCacheManager
@@ -131,6 +131,7 @@ class AutoMemCore:
     """
 
     def __init__(self, config: Union[MemoryConfig, Dict[str, Any]]):
+        """Initialize AutoMemCore with configuration."""
         if isinstance(config, dict):
             # Filter kwargs for MemoryConfig
             valid_keys = {f.name for f in fields(MemoryConfig)}
@@ -144,12 +145,20 @@ class AutoMemCore:
         try:
             self.graph_store = FalkorDB.from_url(config.falkordb_url)
         except Exception as e:
-            self.logger.warning(f"Failed to connect to FalkorDB at {config.falkordb_url}: {e}. Memory graph features will be disabled.")
+            msg = (
+                f"Failed to connect to FalkorDB at {config.falkordb_url}: {e}. "
+                "Memory graph features will be disabled."
+            )
+            self.logger.warning(msg)
             self.graph_store = None
         try:
             self.vector_store = QdrantClient(url=config.qdrant_url)
         except Exception as e:
-            self.logger.warning(f"Failed to connect to Qdrant at {config.qdrant_url}: {e}. Vector memory features will be disabled.")
+            msg = (
+                f"Failed to connect to Qdrant at {config.qdrant_url}: {e}. "
+                "Vector memory features will be disabled."
+            )
+            self.logger.warning(msg)
             self.vector_store = None
 
         # Swarm Singularity (Pillar 2): Paged KV Cache
@@ -843,7 +852,7 @@ class AutoMemCore:
             tag_accuracy = min(len(tag_results) / expected_tag_results, 1.0) if expected_tag_results > 0 else 1.0
 
             expected_search_results = len([m for m in test_memories if "important" in m[1]])
-            search_accuracy = min(len(search_results) / expected_search_results, 1.0) if expected_search_results > 0 else 1.0
+            search_accuracy = min(len([r for r in search_results if "important" in r.get('content', '')]) / expected_search_results, 1.0) if expected_search_results > 0 else 1.0
 
             accuracy_score = (tag_accuracy + search_accuracy) / 2.0
 

@@ -32,28 +32,6 @@ class ReasonStep:
     score: float = 0.0
 
 
-class CoRTReasoningCore:
-    """Minimal recursive reasoning coordinator stub.
-
-    The real implementation should implement multiple rounds, evaluation,
-    and temperature/strategy selection. This stub provides a synchronous
-    interface for integration tests.
-    """
-
-    def __init__(self):
-        self.history: list[ReasonStep] = []
-
-    def think(self, prompt: str, rounds: int = 1) -> list[ReasonStep]:
-        """Perform `rounds` reasoning steps and return the step history.
-
-        This stub echoes the prompt as the response for now.
-        """
-        for i in range(rounds):
-            step = ReasonStep(prompt=prompt, response=f"Echo: {prompt}", score=1.0)
-            self.history.append(step)
-        return list(self.history[-rounds:])
-
-
 import logging
 import time
 from dataclasses import dataclass, field

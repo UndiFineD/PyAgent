@@ -7,6 +7,7 @@ from src.maintenance.fix_headers.fix_headers_agent import FixHeadersAgent
 
 
 def test_preserve_bom_and_encoding(tmp_path: Path):
+    """Test that BOM and encoding comments are preserved when adding headers."""
     agent = FixHeadersAgent(dry_run=True)
     content = "\ufeff# -*- coding: utf-8 -*-\nprint(\"hi\")\n"
 
@@ -19,6 +20,7 @@ def test_preserve_bom_and_encoding(tmp_path: Path):
 
 
 def test_remove_old_license_but_preserve_other_comments(tmp_path: Path):
+    """Test that old license headers are removed but other top comments are preserved."""
     agent = FixHeadersAgent(dry_run=True)
     old = (
         "#!/usr/bin/env python3\n"
@@ -36,6 +38,7 @@ def test_remove_old_license_but_preserve_other_comments(tmp_path: Path):
 
 
 def test_keep_unrelated_top_comment(tmp_path: Path):
+    """Test that unrelated top comments are kept when adding headers."""
     agent = FixHeadersAgent(dry_run=True)
     src = "# NOTE: temporary comment\nprint('x')\n"
 

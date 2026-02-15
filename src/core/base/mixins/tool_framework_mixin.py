@@ -231,6 +231,7 @@ class ToolFrameworkMixin:
         # Execute the tool
         try:
             # Build final kwargs
+            kwargs = {}
 
             # Inspect the original function signature to detect if it accepts cascade/context
             func_sig = inspect.signature(tool_def.execute_function)

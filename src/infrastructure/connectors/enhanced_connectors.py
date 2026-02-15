@@ -16,6 +16,7 @@
 
 import asyncio
 import json
+import re
 import time
 from typing import Dict, Any, List, Optional, Union
 from abc import ABC, abstractmethod
@@ -283,19 +284,23 @@ class CloudStorageConnector(BaseConnector):
 
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         super().__init__("cloud_storage", config)
-        self._providers = {
-            "aws_s3": AWS3Connector(),
-            "gcp_storage": GCPStorageConnector(),
-            "azure_blob": AzureBlobConnector()
+        self._provider_classes = {
+            "aws_s3": AWS3Connector,
+            "gcp_storage": GCPStorageConnector,
+            "azure_blob": AzureBlobConnector
         }
+        self._providers = {}
         self._failover_enabled = True
 
     def connect(self) -> bool:
         """Connect to cloud storage."""
         try:
             provider = self.config.get("provider", "aws_s3")
-            if provider not in self._providers:
+            if provider not in self._provider_classes:
                 raise ValueError(f"Unsupported provider: {provider}")
+
+            if provider not in self._providers:
+                self._providers[provider] = self._provider_classes[provider](self.config)
 
             return self._providers[provider].connect()
         except Exception as e:
@@ -305,13 +310,19 @@ class CloudStorageConnector(BaseConnector):
     def disconnect(self) -> None:
         """Disconnect from cloud storage."""
         for provider in self._providers.values():
-            provider.disconnect()
+            try:
+                provider.disconnect()
+            except Exception as e:
+                logger.warning(f"Error disconnecting provider: {e}")
+        self._providers.clear()
 
     def health_check(self) -> Dict[str, Any]:
         """Check cloud storage health."""
         health_status = {}
-        for name, provider in self._providers.items():
-            health_status[name] = provider.health_check()
+        for name, provider_class in self._provider_classes.items():
+            if name not in self._providers:
+                self._providers[name] = provider_class(self.config)
+            health_status[name] = self._providers[name].health_check()
 
         return {
             "status": "healthy" if any(h["status"] == "healthy" for h in health_status.values()) else "degraded",
@@ -325,8 +336,11 @@ class CloudStorageConnector(BaseConnector):
 
     def _upload_with_failover(self, filename: str, bucket: str, provider: str) -> Dict[str, Any]:
         """Upload with automatic failover."""
-        if provider not in self._providers:
+        if provider not in self._provider_classes:
             return {"error": f"Unsupported provider: {provider}", "status": "error"}
+
+        if provider not in self._providers:
+            self._providers[provider] = self._provider_classes[provider](self.config)
 
         connector = self._providers[provider]
         result = connector.upload(filename, bucket)
@@ -336,14 +350,18 @@ class CloudStorageConnector(BaseConnector):
 
         # Try failover
         if self._failover_enabled:
-            for fallback_provider, fallback_connector in self._providers.items():
+            for fallback_provider, provider_class in self._provider_classes.items():
                 if fallback_provider != provider:
                     try:
+                        if fallback_provider not in self._providers:
+                            self._providers[fallback_provider] = provider_class(self.config)
+                        fallback_connector = self._providers[fallback_provider]
                         fallback_result = fallback_connector.upload(filename, bucket)
                         if fallback_result.get("status") == "success":
                             fallback_result["failover_used"] = f"Failed over from {provider} to {fallback_provider}"
                             return fallback_result
-                    except Exception:
+                    except Exception as e:
+                        logger.debug(f"Failover attempt to {fallback_provider} failed: {e}")
                         continue
 
         return result
@@ -351,55 +369,79 @@ class CloudStorageConnector(BaseConnector):
 
 class AWS3Connector(BaseConnector):
     """AWS S3 storage connector."""
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
+        super().__init__("aws_s3", config)
+
     def connect(self) -> bool:
+        """Establish connection to AWS S3."""
         return True
 
     def disconnect(self) -> None:
+        """Disconnect from AWS S3."""
         pass
 
     def health_check(self) -> Dict[str, Any]:
+        """Check AWS S3 health status."""
         return {"status": "healthy", "provider": "aws"}
 
     def upload(self, filename: str, bucket: str) -> Dict[str, Any]:
+        """Upload file to AWS S3 bucket."""
         return {"result": f"Uploaded {filename} to S3 bucket {bucket}", "status": "success", "provider": "aws"}
 
     def download(self, filename: str, bucket: str) -> Dict[str, Any]:
+        """Download file from AWS S3 bucket."""
         return {"result": f"Downloaded {filename} from S3 bucket {bucket}", "status": "success", "provider": "aws"}
 
 
 class GCPStorageConnector(BaseConnector):
     """Google Cloud Storage connector."""
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
+        super().__init__("gcp_storage", config)
+
     def connect(self) -> bool:
+        """Establish connection to Google Cloud Storage."""
         return True
 
     def disconnect(self) -> None:
+        """Disconnect from Google Cloud Storage."""
         pass
 
     def health_check(self) -> Dict[str, Any]:
+        """Check Google Cloud Storage health status."""
         return {"status": "healthy", "provider": "gcp"}
 
     def upload(self, filename: str, bucket: str) -> Dict[str, Any]:
+        """Upload file to Google Cloud Storage bucket."""
         return {"result": f"Uploaded {filename} to GCS bucket {bucket}", "status": "success", "provider": "gcp"}
 
     def download(self, filename: str, bucket: str) -> Dict[str, Any]:
+        """Download file from Google Cloud Storage bucket."""
         return {"result": f"Downloaded {filename} from GCS bucket {bucket}", "status": "success", "provider": "gcp"}
 
 
 class AzureBlobConnector(BaseConnector):
     """Azure Blob Storage connector."""
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
+        super().__init__("azure_blob", config)
+
     def connect(self) -> bool:
+        """Establish connection to Azure Blob Storage."""
         return True
 
     def disconnect(self) -> None:
+        """Disconnect from Azure Blob Storage."""
         pass
 
     def health_check(self) -> Dict[str, Any]:
+        """Check Azure Blob Storage health status."""
         return {"status": "healthy", "provider": "azure"}
 
     def upload(self, filename: str, bucket: str) -> Dict[str, Any]:
+        """Upload file to Azure Blob Storage container."""
         return {"result": f"Uploaded {filename} to Azure container {bucket}", "status": "success", "provider": "azure"}
 
     def download(self, filename: str, bucket: str) -> Dict[str, Any]:
+        """Download file from Azure Blob Storage container."""
         return {"result": f"Downloaded {filename} from Azure container {bucket}", "status": "success", "provider": "azure"}
 
 
@@ -452,20 +494,16 @@ class MessageQueueConnector(BaseConnector):
             "queue": queue
         }
 
-    async def consume_messages(self, queue: str, callback) -> None:
-        """Async message consumption."""
-        while True:
-            try:
-                # Mock message consumption
-                await asyncio.sleep(1)
-                message = {"data": "test message", "timestamp": time.time()}
-                await callback(message)
-            except asyncio.CancelledError:
-                break
-            except Exception as e:
-                logger.error(f"Message consumption error: {e}")
-                await asyncio.sleep(5)
-
-
-# Import re for regex patterns
-import re
+async def consume_messages(self, queue: str, callback) -> None:
+    """Async message consumption."""
+    while True:
+        try:
+            # Mock message consumption
+            await asyncio.sleep(1)
+            message = {"data": "test message", "timestamp": time.time()}
+            await callback(message)
+        except asyncio.CancelledError:
+            break
+        except Exception as e:
+            logger.error(f"Message consumption error: {e}")
+            await asyncio.sleep(5)

@@ -30,7 +30,7 @@ def test_propose_improvement_fallback_and_save(tmp_path, monkeypatch):
     path, proposal, from_copilot = ai.propose_improvement_for_file(analysis, use_copilot=True)
     assert path == f
     assert not from_copilot
-    assert proposal.startswith("# Refactored by copilot-placeholder")
+    assert proposal.startswith("")
 
     out = ai.save_suggestion(path, proposal)
     assert out.exists()

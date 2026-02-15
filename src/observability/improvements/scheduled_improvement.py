@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 ScheduledImprovement - Scheduled improvement data model
 
-[Brief Summary]
 DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -31,63 +27,12 @@ Encapsulates the minimal schema for a scheduled improvement: an identifier, plan
 
 WHAT IT SHOULD DO BETTER:
 Use proper types for date/time (datetime with timezone) instead of plain strings; validate and normalize assigned_resources (use typing.List[str]); annotate optional fields with Optional[...] and enforce immutability or controlled mutation where appropriate. Add serialization/deserialization helpers (to/from dict/JSON), equality/hash methods if used as map keys, input validation (raise on invalid ranges), and integration with StateTransaction and CascadeContext for transactional filesystem or lineage safety per project conventions.
-
-FILE CONTENT SUMMARY:
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-
-"""Auto-extracted class from agent_improvements.py"""
-
-from __future__ import annotations
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .schedule_status import ScheduleStatus
-
-__version__ = VERSION
-
-
-@dataclass
-class ScheduledImprovement:
-    """A scheduled improvement with resource allocation.
-
-    Attributes:
-        improvement_id: ID of the scheduled improvement.
-        scheduled_start: Planned start date.
-        scheduled_end: Planned end date.
-        assigned_resources: List of assigned team members.
-        status: Current schedule status.
-        sprint_id: Optional sprint identifier.
-    """
-
-    improvement_id: str
-    scheduled_start: str = ""
-    scheduled_end: str = ""
-    assigned_resources: list[str] = field(default_factory=list)  # type: ignore[assignment]
-    status: ScheduleStatus = ScheduleStatus.UNSCHEDULED
-    sprint_id: str = ""
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-
 from src.core.base.lifecycle.version import VERSION
-
 from .schedule_status import ScheduleStatus
 
 __version__ = VERSION

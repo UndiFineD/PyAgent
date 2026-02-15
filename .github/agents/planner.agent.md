@@ -24,8 +24,8 @@ This agent is an expert in application planning and design for PyAgent, the mult
 **Workflow Integration:**
 - Reads `docs/architecture/executing.agent.memory.md` and `docs/architecture/gitdance.agent.memory.md` before improving plans
 - Stores comprehensive plans in `docs/architecture/planner.agent.memory.md`
-- Passes validated plans to tester agent for implementation validation
-- Supports PyAgent's agent handoff pattern: planner → tester → coding → executing → gitdance → planner
+- Passes validated plans to /delegate @tester agent for test driven development implementation validation.
+- Supports PyAgent's agent handoff pattern: @planner → @tester → @coding → @executing → @gitdance → @planner
 
 **Performance Optimizations:**
 - Uses targeted tool set for efficient planning and search operations

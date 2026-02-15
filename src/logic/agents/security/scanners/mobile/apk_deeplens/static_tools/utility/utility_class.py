@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
+
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,15 +35,21 @@ class Util:
     BOLD = "\033[1m"
     UNDERLINE = "\033[4m"
 
-    # @staticmethods
+    @staticmethod
     def mod_print(text_output, color):
         """
-        Better mod print. It gives the line number, file name in which error occured.
+        Better mod print. It gives the line number, 
+        file name in which error occured.
         """
         stack = traceback.extract_stack()
         filename, line_no, func_name, text = stack[-2]
         formatted_message = f"{filename}:{line_no}: {text_output}"
         print(color + formatted_message + Util.ENDC)
 
+    @staticmethod
     def mod_log(text, color):
+        """
+        Better mod log. It gives the line number, 
+        file name in which error occured.
+        """
         logging.info(color + "{}".format(text) + Util.ENDC)

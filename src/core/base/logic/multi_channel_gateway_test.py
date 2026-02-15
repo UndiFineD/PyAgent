@@ -36,7 +36,8 @@ class MockChannelProvider(ChannelProvider):
     """Mock channel provider for testing."""
 
     def __init__(self, channel_type: ChannelType):
+        """Initialize mock provider with channel type."""
         self._channel_type = channel_type
         self.sent_messages = []
-    # ...existing code...
-    pass
+        # ...existing code...
+        pass

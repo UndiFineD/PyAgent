@@ -38,10 +38,7 @@ from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
 import websockets
-import warnings
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", DeprecationWarning)
-    from websockets.server import WebSocketServerProtocol
+from websockets.server import ServerConnection
 from pydantic import BaseModel, Field
 
 
@@ -91,7 +88,7 @@ class ChannelMessage:
     content: str
     message_type: MessageType = MessageType.TEXT
     metadata: Dict[str, Any] = field(default_factory=dict)
-    timestamp: float = field(default_factory=lambda: time.time())
+    timestamp: float = field(default_factory=time.time)
     thread_id: Optional[str] = None
     reply_to: Optional[str] = None
 
@@ -101,7 +98,8 @@ class GatewayPresence:
     """Presence information for gateway clients."""
     client_id: str
     status: str = "online"  # online, away, busy, offline
-    last_seen: float = field(default_factory=lambda: time.time())    metadata: Dict[str, Any] = field(default_factory=dict)
+    last_seen: float = field(default_factory=time.time)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class ChannelProvider(ABC):
@@ -137,21 +135,23 @@ class GatewaySession(BaseModel):
     channel_id: str
     activation_mode: SessionActivationMode = SessionActivationMode.MENTION
     is_active: bool = True
-    created_at: float = Field(default_factory=lambda: time.time())
-    last_activity: float = Field(default_factory=lambda: time.time())    metadata: Dict[str, Any] = Field(default_factory=dict)
-
+    created_at: float = Field(default_factory=time.time)
+    last_activity: float = Field(default_factory=time.time)
+    metadata: Dict[str, Any] = Field(default_factory=dict)
 
 class GatewayProtocol:
     """WebSocket protocol for gateway communication."""
 
     def __init__(self):
-        self.clients: Dict[str, WebSocketServerProtocol] = {}
+        """Initialize protocol state."""
+        self.clients: Dict[str, ServerConnection] = {}
         self.presence: Dict[str, GatewayPresence] = {}
         self.sessions: Dict[str, GatewaySession] = {}
-    async def handle_client(self, websocket: WebSocketServerProtocol, path: str):        """Handle a WebSocket client connection."""
+        
+    async def handle_client(self, websocket: ServerConnection, path: str):
+        """Handle a WebSocket client connection."""
         client_id = str(uuid4())
         self.clients[client_id] = websocket
-
         try:
             # Send welcome message
             await websocket.send(json.dumps({
@@ -248,7 +248,9 @@ class GatewayProtocol:
                     session.is_active = value
                 elif key == "metadata":
                     session.metadata.update(value)
-        # update last_activity if present        session.last_activity = time.time()
+
+        # Update last_activity
+        session.last_activity = time.time()
 
         await self.send_to_client(client_id, {
             "type": "session_updated",
@@ -267,15 +269,14 @@ class GatewayProtocol:
                 "message": f"Session {session_id} not found"
             })
             return
-<<<<<<< HEAD
 
-        # Here we would route to the appropriate channel provider
-=======
->>>>>>> copilot/sub-pr-29
-        # For now, just echo back
+        # Route to appropriate channel provider
+        message_id = await self.send_channel_message(session_id, content)
+
         await self.send_to_client(client_id, {
             "type": "message_sent",
             "session_id": session_id,
+            "message_id": message_id,
             "content": content,
             "timestamp": time.time()
         })
@@ -400,10 +401,6 @@ class MultiChannelGatewayCore:
             logger.error(f"No provider for channel type: {session.channel_type}")
             return None
 
-        if not provider:
-            logger.error(f"No provider for channel type: {session.channel_type}")
-            return None
-
         try:
             return await provider.send_message(session.channel_id, content, **kwargs)
         except Exception:
@@ -411,6 +408,7 @@ class MultiChannelGatewayCore:
             return None
 
     def get_active_sessions(self) -> List[GatewaySession]:
+        """Get all active sessions."""
         return [s for s in self.protocol.sessions.values() if s.is_active]
 
     def get_sessions_by_channel(self, channel_type: ChannelType, channel_id: str) -> List[GatewaySession]:
@@ -421,25 +419,7 @@ class MultiChannelGatewayCore:
         ]
 
     async def broadcast_to_sessions(self, channel_type: ChannelType, channel_id: str, message: str):
+        """Broadcast message to all sessions in a specific channel."""
         sessions = self.get_sessions_by_channel(channel_type, channel_id)
-
         for session in sessions:
             await self.send_channel_message(session.session_id, message)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

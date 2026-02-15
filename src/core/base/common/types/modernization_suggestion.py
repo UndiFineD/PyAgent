@@ -13,7 +13,8 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
+"""Auto-extracted class from agent_coder.py
+"""
 
 from __future__ import annotations
 

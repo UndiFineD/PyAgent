@@ -17,22 +17,22 @@ Test suite for AutoMem Memory System (Phase 320)
 Tests the 9-component hybrid search algorithm and memory operations.
 """
 
-import pytest
-from unittest.mock import Mock, patch
-import asyncio
+import time
 from pathlib import Path
+from unittest.mock import Mock, patch
+
+import pytest
 
 
 class TestAutoMemMemory:
     """Test cases for AutoMem memory system implementation."""
-
     @pytest.fixture
     def automem_core(self):
         """Mock AutoMem core for testing."""
         # Always use mock for testing
         mock_core = Mock()
         mock_core._stored_memories = []
-        
+
         def mock_store_memory(content, tags=None, importance=0.5):
             memory_id = f"mem_{len(mock_core._stored_memories)}"
             mock_core._stored_memories.append({
@@ -42,7 +42,7 @@ class TestAutoMemMemory:
                 "id": memory_id
             })
             return memory_id
-        
+
         def mock_recall_memories(query, limit=5, **kwargs):
             # Simple mock that returns stored memories containing the query in content or tags
             results = []
@@ -56,7 +56,7 @@ class TestAutoMemMemory:
                         "components": {"vector": 0.5, "graph": 0.3, "temporal": 0.1}
                     })
             return results[:limit]
-        
+
         mock_core.store_memory = mock_store_memory
         mock_core.recall_memories = mock_recall_memories
         mock_core.associate_memories.return_value = True
@@ -89,7 +89,6 @@ class TestAutoMemMemory:
         memory_id = automem_core.store_memory("test content", tags=["test"], importance=0.8)
         assert memory_id is not None
         assert isinstance(memory_id, str)
-
         # Test recall
         results = automem_core.recall_memories("test content", limit=5)
         assert isinstance(results, list)
@@ -105,7 +104,6 @@ class TestAutoMemMemory:
         automem_core.store_memory("bridge concept A", tags=["concept:A"])
         automem_core.store_memory("bridge concept B", tags=["concept:B"])
         automem_core.store_memory("connecting bridge", tags=["bridge", "A", "B"])
-
         results = automem_core.recall_memories("bridge", limit=10)
         assert len(results) >= 3  # Should find all bridge-related memories
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
+
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,22 +38,7 @@ WHAT IT SHOULD DO BETTER:
 - Provide async implementations for network I/O, concurrent metric collection, and rate limiting; include observability (metrics, structured logs) and ACLs for actions.
 
 FILE CONTENT SUMMARY:
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-
-"""Agent specializing in infrastructure management, Proxmox orchestration, and HomeAssistant IoT control.
+Agent specializing in infrastructure management, Proxmox orchestration, and HomeAssistant IoT control.
 Provides tools for remote system administration and automated environment scaling.
 """
 

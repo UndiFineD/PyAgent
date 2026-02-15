@@ -37,7 +37,7 @@ from typing import Any, Dict, Optional, Callable, cast
 from src.core.base.common.formula_core import FormulaCore
 
 try:
-    import rust_core as rc
+    from rust_core import rust_core as rc  # type: ignore[import-untyped]
 except ImportError:
     rc = None
 

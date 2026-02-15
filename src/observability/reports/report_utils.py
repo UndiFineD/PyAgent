@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +15,6 @@
 """
 report_utils.py - Report utilities and lightweight static analysis helpers
 
-[Brief Summary]
 DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -34,11 +31,7 @@ WHAT IT SHOULD DO BETTER:
 - Surface a clear public API (avoid leading-underscore names for functions meant to be reused) and add lightweight, documented wrappers that validate inputs and raise informative errors rather than returning None.
 - Replace ad-hoc AST checks with a small, well-tested rule set (or delegate more checks to AnalysisCore) and expand _find_issues to cover more patterns (unused imports, shadowing, bare-except, logging practices).
 - Add unit tests for HTML export (including Markdown extension behavior), improve HTML theming/templating (support CSS override), add logging, and make markdown dependency optional with a clearer install-time message or fallback template.
-
-FILE CONTENT SUMMARY:
-Report utils.py module.
 """
-
 
 from __future__ import annotations
 
@@ -86,10 +79,7 @@ def _looks_like_pytest_import_problem(path: Path) -> str | None:
 
 def _find_imports(tree: ast.AST) -> list[str]:
     """Find all top-level imports in an AST."""
-    # Note: AnalysisCore.get_imports handles tree as well or source.
-    # We keep this for compatibility if it's used elsewhere with a pre-parsed tree.
     imports: list[str] = []
-
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for alias in node.names:
@@ -98,7 +88,6 @@ def _find_imports(tree: ast.AST) -> list[str]:
             mod: str = node.module or ""
             imports.append(mod)
     # De-dupe while preserving order
-
     seen: set[str] = set()
     out: list[str] = []
     for item in imports:
@@ -132,10 +121,10 @@ def export_to_html(content: str, title: str = "PyAgent Report") -> str:
     html_body: str = markdown.markdown(content, extensions=["extra", "codehilite"])
 
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang=\"en\">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset=\"UTF-8\">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
     <title>{title}</title>
     <style>
         body {{
@@ -177,25 +166,27 @@ def _find_issues(tree: ast.AST, source: str) -> list[str]:
     # 1. Mutable defaults
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
-            for default
-"""
-
-
-from __future__ import annotations
-
-import ast
-import re
-from pathlib import Path
-
-from src.core.base.common.analysis_core import AnalysisCore
-from src.core.base.common.file_system_core import FileSystemCore
-from src.core.base.common.workspace_core import WorkspaceCore
-from src.core.base.lifecycle.version import VERSION
-
-__version__: str = VERSION
-
-# Constants used by helpers
-_workspace = WorkspaceCore()
+            for default in node.args.defaults:
+                if isinstance(default, (ast.List, ast.Dict, ast.Set)):
+                    issues.append(f"Function `{node.name}` has a mutable default argument (list / dict / set).")
+                    break  # One per function is enough
+    # 2. Bare excepts
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ExceptHandler) and node.type is None:
+            issues.append("Contains bare `except` clause.")
+    # 3. Missing type hints
+    for node in ast.walk(tree):
+        if isinstance(node, ast.FunctionDef):
+            # Check args
+            missing_arg_type: bool = any(arg.annotation is None for arg in node.args.args if arg.arg != "self")
+            # Check return
+            missing_return_type: bool = node.returns is None
+            if missing_arg_type or missing_return_type:
+                issues.append(f"Function `{node.name}` is missing type annotations.")
+    # 4. TODOs
+    if "TODO" in source or "FIXME" in source:
+        issues.append("Contains TODO or FIXME comments.")
+    return issues
 _analysis = AnalysisCore()
 _fs = FileSystemCore()
 

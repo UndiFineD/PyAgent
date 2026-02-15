@@ -17,10 +17,11 @@ Test suite for Better-Agents Testing Framework (Phase 323)
 Tests the testing pyramid, YAML-driven scenarios, and evaluation systems.
 """
 
-import pytest
-from unittest.mock import Mock, patch
-import yaml
 import os
+from unittest.mock import Mock, patch
+
+import pytest
+import yaml
 
 
 class TestBetterAgentsTesting:

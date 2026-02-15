@@ -20,9 +20,9 @@ Provides register_tool decorator compatible with mcp.mcp_tool.
 import inspect
 from typing import Any, Callable, Dict, Optional, get_type_hints
 
-from mcp.server.fastapi import serve_app
-
-from aenv.core.tool import get_registry
+from mcp.server import Server
+# TODO: did you mean: src\core\base\registry
+from src.core.base.tool_registry import get_registry
 
 
 def register_tool(
@@ -118,15 +118,12 @@ def create_mcp_server(name: str = "aenv-server", version: str = "0.1.0"):
     registry = get_registry()
 
     # Create MCP server
-    server = serve_app(
-        name=name,
-        version=version,
-    )
+    server = Server(name=name)
 
     # Register all tools
     for tool_descriptor in registry.list_tools():
         tool_func = registry.get_tool(tool_descriptor.name)
         if tool_func:
-            server.tool()(tool_func)
+            server.define_tool(tool_descriptor.name, _generate_mcp_schema(tool_func), tool_func)
 
     return server

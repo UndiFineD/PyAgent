@@ -136,7 +136,6 @@ UNUSED = {
     "pygments",
     "pyperclip",
     "pyproject_hooks",
-    "pyreadline3",
     "pytest-anyio",
     "python-dateutil",
     "python-json-logger",

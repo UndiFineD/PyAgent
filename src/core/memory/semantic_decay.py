@@ -207,8 +207,8 @@ class SemanticCacheInvalidator:
         
         for key in stale_candidates:
             # Check if this key's semantic cluster is still relevant
-            key_fingerprint = self._get_fingerprint_for_key(key)
-            if key_fingerprint:
+            key_fingerprint: Optional[str] = self._get_fingerprint_for_key(key)
+            if key_fingerprint is not None:
                 cluster = self.semantic_clusters[key_fingerprint]
                 cluster_relevance = len(cluster & context_set) / len(cluster) if cluster else 0
                 
@@ -225,7 +225,7 @@ class SemanticCacheInvalidator:
     def _get_fingerprint_for_key(self, key: str) -> Optional[str]:
         """Get semantic fingerprint for a key (placeholder implementation)."""
         # This would integrate with the actual memory storage system
-        return None
+        return None  # Explicitly document that this returns None in current implementation
         
     def _get_key_age(self, key: str) -> float:
         """Get age of key in seconds."""
@@ -353,23 +353,6 @@ class SynapticDecay:
             "semantic_clusters": len(self.semantic_invalidator.semantic_clusters),
             "access_window_size": len(self.semantic_invalidator.access_window)
         }
-        now = time.time()
-        to_prune = []
-
-        for key in keys:
-            last_time = self.last_access.get(key, now)
-            elapsed = (now - last_time) / 3600  # hours
-
-            # Exponential weight decay
-            current_score = self.knowledge_scores.get(key, 1.0)
-            decayed_score = current_score * (2.71828 ** (-self.decay_rate * elapsed))
-
-            self.knowledge_scores[key] = decayed_score
-
-            if decayed_score < self.relevance_threshold:
-                to_prune.append(key)
-
-        return to_prune
 
     def prune_low_utility(self, cache_manager: Any):
         """Actively prunes low-utility items from a provided cache manager."""

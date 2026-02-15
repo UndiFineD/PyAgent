@@ -69,9 +69,8 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin, urlparse
 
-import requests
+import aiohttp
 from bs4 import BeautifulSoup
-
 
 logger = logging.getLogger("pyagent.security.fuzzing")
 
@@ -270,31 +269,33 @@ class AIFuzzingEngine:
             self.logger.info(f"Starting web discovery for {session.target}")
 
             # Extract links from main page
-            response = requests.get(session.target, timeout=10)
-            soup = BeautifulSoup(response.text, 'html.parser')
+            async with aiohttp.ClientSession() as client:
+                async with client.get(session.target, timeout=aiohttp.ClientTimeout(total=10)) as response:
+                    text = await response.text()
+                    soup = BeautifulSoup(text, 'html.parser')
 
-            links = []
-            for a in soup.find_all('a', href=True)[:25]:  # Limit to 25 links
-                href = a['href']
-                if href and not href.startswith(('#', 'javascript:', 'mailto:')):
-                    if href.startswith(('http://', 'https://')):
-                        href = urlparse(href).path
-                    if href.startswith('/'):
-                        href = href[1:]
-                    if href:
-                        links.append(href)
+                    links = []
+                    for a in soup.find_all('a', href=True)[:25]:  # Limit to 25 links
+                        href = a['href']
+                        if href and not href.startswith(('#', 'javascript:', 'mailto:')):
+                            if href.startswith(('http://', 'https://')):
+                                href = urlparse(href).path
+                            if href.startswith('/'):
+                                href = href[1:]
+                            if href:
+                                links.append(href)
 
-            # Create discovery results
-            for link in links:
-                result = FuzzingResult(
-                    target=urljoin(session.target, link),
-                    technique=FuzzingTechnique.PATH_TRAVERSAL,
-                    payload=link,
-                    response_code=response.status_code,
-                    response_size=len(response.text),
-                    metadata={'phase': 'discovery', 'link_count': len(links)}
-                )
-                results.append(result)
+                    # Create discovery results
+                    for link in links:
+                        result = FuzzingResult(
+                            target=urljoin(session.target, link),
+                            technique=FuzzingTechnique.PATH_TRAVERSAL,
+                            payload=link,
+                            response_code=response.status,
+                            response_size=len(text),
+                            metadata={'phase': 'discovery', 'link_count': len(links)}
+                        )
+                        results.append(result)
 
         except Exception as e:
             self.logger.error(f"Web discovery failed: {e}")
@@ -364,17 +365,19 @@ Generate payloads that might bypass security filters. Return only the payloads, 
     async def _call_ollama(self, prompt: str, model: str = "qwen2.5-coder:latest") -> str:
         """Call Ollama API for AI-generated content."""
         try:
-            response = requests.post(
-                f"{self.ollama_url}/api/generate",
-                json={
-                    "model": model,
-                    "prompt": prompt,
-                    "stream": False
-                },
-                timeout=30
-            )
-            response.raise_for_status()
-            return response.json()['response']
+            async with aiohttp.ClientSession() as client:
+                async with client.post(
+                    f"{self.ollama_url}/api/generate",
+                    json={
+                        "model": model,
+                        "prompt": prompt,
+                        "stream": False
+                    },
+                    timeout=aiohttp.ClientTimeout(total=30)
+                ) as response:
+                    response.raise_for_status()
+                    data = await response.json()
+                    return data['response']
         except Exception as e:
             self.logger.error(f"Ollama API call failed: {e}")
             return ""
@@ -431,15 +434,17 @@ Generate payloads that might bypass security filters. Return only the payloads, 
                 # For other techniques, append as query parameter
                 url = f"{target}?input={payload}"
 
-            response = requests.get(url, timeout=10)
-            result.response_code = response.status_code
-            result.response_size = len(response.text)
+            async with aiohttp.ClientSession() as client:
+                async with client.get(url, timeout=aiohttp.ClientTimeout(total=10)) as response:
+                    text = await response.text()
+                    result.response_code = response.status
+                    result.response_size = len(text)
 
-            # Store response for analysis
-            result.metadata['response_headers'] = dict(response.headers)
-            result.metadata['response_preview'] = response.text[:500]
+                    # Store response for analysis
+                    result.metadata['response_headers'] = dict(response.headers)
+                    result.metadata['response_preview'] = text[:500]
 
-        except requests.RequestException as e:
+        except aiohttp.ClientError as e:
             result.error_detected = True
             result.metadata['error'] = str(e)
 
@@ -456,16 +461,18 @@ Generate payloads that might bypass security filters. Return only the payloads, 
 
         try:
             # Send payload as JSON
-            response = requests.post(
-                target,
-                json={"input": payload},
-                timeout=10
-            )
-            result.response_code = response.status_code
-            result.response_size = len(response.text)
-            result.metadata['response'] = response.text[:500]
+            async with aiohttp.ClientSession() as client:
+                async with client.post(
+                    target,
+                    json={"input": payload},
+                    timeout=aiohttp.ClientTimeout(total=10)
+                ) as response:
+                    text = await response.text()
+                    result.response_code = response.status
+                    result.response_size = len(text)
+                    result.metadata['response'] = text[:500]
 
-        except requests.RequestException as e:
+        except aiohttp.ClientError as e:
             result.error_detected = True
             result.metadata['error'] = str(e)
 

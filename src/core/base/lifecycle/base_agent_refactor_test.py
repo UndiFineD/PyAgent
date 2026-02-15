@@ -19,7 +19,10 @@ import pytest
 from src.core.base.lifecycle.base_agent import BaseAgent
 
 def test_notify_webhooks_backoff(monkeypatch):
+    """Test that _notify_webhooks implements backoff correctly when requests.post raises an exception.
+    """
     class Dummy:
+        """Mock agent instance for testing _notify_webhooks method."""
         pass
     dummy = Dummy()
     dummy._webhooks = ["http://example.test/hook"]
@@ -29,6 +32,7 @@ def test_notify_webhooks_backoff(monkeypatch):
     # Simulate requests.post raising a RequestException
     import requests as _requests
     def fake_post(url, json=None, timeout=None):
+        """Mock requests.post that raises a RequestException to simulate a network error."""
         raise _requests.exceptions.RequestException("network error")
     monkeypatch.setattr("src.core.base.lifecycle.base_agent.requests.post", fake_post)
     # Call the method bound to our dummy instance
@@ -37,7 +41,9 @@ def test_notify_webhooks_backoff(monkeypatch):
     assert dummy.status_cache["http://example.test/hook"] > now - 1
 
 def test_notify_webhooks_no_requests(monkeypatch):
+    """Test that _notify_webhooks does not raise an exception when requests is unavailable."""
     class Dummy:
+        """Mock agent instance for testing _notify_webhooks method."""
         pass
     dummy = Dummy()
     dummy._webhooks = ["http://example.test/hook"]
@@ -52,9 +58,11 @@ def test_notify_webhooks_no_requests(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_think_importerror(monkeypatch):
+    """Test that think handles ImportError from backend.run_subagent gracefully."""
     # Patch backend.run_subagent to raise ImportError
     backend = importlib.import_module("src.infrastructure.compute.backend")
     def run_subagent(description, prompt, original_content):
+        """Mock run_subagent that raises ImportError to simulate missing backend."""
         raise ImportError("no backend available")
     monkeypatch.setattr(backend, "run_subagent", run_subagent)
     # Create an instance without full init to avoid heavy deps

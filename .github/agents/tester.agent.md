@@ -28,8 +28,8 @@ This agent is an expert in testing Python code within the PyAgent multi-agent sw
 - Reads implementation plan from `docs/architecture/planner.agent.memory.md` to align testing
 - Activates virtual environment with `& c:/DEV/PyAgent/.venv/Scripts/Activate.ps1; ` before testing
 - Stores memory and findings in `docs/architecture/tester.agent.memory.md`
-- Validates issues against plan before passing to coding agent
-- Supports PyAgent's agent handoff pattern: planner → tester → coding → executing → gitdance → planner
+- Validates issues against plan before passing to /delegate @coding agent for code implementation.
+- Supports PyAgent's agent handoff pattern: @planner → @tester → @coding → @executing → @gitdance → @planner
 - Integrates with CI/CD automation and distributed checkpointing
 
 **Performance Optimizations:**
