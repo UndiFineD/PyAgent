@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+cloud_exporter.py - Export metrics to cloud monitoring services
 
-"""
-cloud_exporter.py - Export metrics to cloud monitoring services"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 
@@ -68,7 +64,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_stats.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -85,7 +81,7 @@ __version__ = VERSION
 
 
 class CloudExporter:
-    """Export stats to cloud monitoring ser""""""vices.
+    """Export stats to cloud monitoring services.
 
     Supports exporting metrics to Datadog, Prometheus, Grafana,
     and other cloud monitoring platforms.
@@ -93,18 +89,18 @@ class CloudExporter:
     Attributes:
         destination: The export destination.
         config: Export configuration.
-        export_queue: Queued metrics for export.""""""
+        export_queue: Queued metrics for export.
     """
 
     def __init__(self, destination: ExportDestination, api_key: str = "", endpoint: str = "") -> None:
-        """Initialize clo""""""ud exporter.
+        """Initialize cloud exporter.
 
         Args:
             destination: The target cloud platform.
             api_key: API key for authentication.
             endpoint: Custom endpoint URL.
         """
-        self.destinatio""""""n = destination
+        self.destination = destination
         self.api_key = api_key
         self.endpoint = endpoint or self._get_default_endpoint()
         self.export_queue: list[Metric] = []
@@ -112,11 +108,11 @@ class CloudExporter:
         self._last_export: datetime | None = None
 
     def _get_default_endpoint(self) -> str:
-        """Get default endpoin""""""t for destination.
+        """Get default endpoint for destination.
 
         Returns:
             Default endpoint URL.
-        """""""""
+        """
         defaults = {
             ExportDestination.DATADOG: "https://api.datadoghq.com / v1 / series",
             ExportDestination.PROMETHEUS: "http://localhost:9090 / api / v1 / write",
@@ -127,20 +123,20 @@ class CloudExporter:
         return defaults.get(self.destination, "")
 
     def queue_metric(self, metric: Metric) -> None:
-        """Add"""""" metric to export queue.
+        """Add metric to export queue.
 
         Args:
             metric: The metric to queue.
         """
-        self.""""""export_queue.append(metric)
+        self.export_queue.append(metric)
 
     def export(self) -> int:
-       """""" """Export all queued metrics.
+        """Export all queued metrics.
 
         Returns:
             Number of metrics exported.
         """
-""""""        if not self.export_queue:
+        if not self.export_queue:
             return 0
         count = len(self.export_queue)
         # Format metrics for destination
@@ -157,7 +153,7 @@ class CloudExporter:
 
     def _export_datadog(self) -> None:
         """Export in Datadog format."""
-        payload:"""""" dict[str, list[dict[str, Any]]] = {
+        payload: dict[str, list[dict[str, Any]]] = {
             "series": [
                 {
                     "metric": m.name,
@@ -172,7 +168,7 @@ class CloudExporter:
 
     def _export_prometheus(self) -> None:
         """Export in Prometheus format (OpenMetrics)."""
-        metrics_f""""""ile = "data/metrics/prometheus.metrics"
+        metrics_file = "data/metrics/prometheus.metrics"
         try:
             import os
 
@@ -197,13 +193,13 @@ class CloudExporter:
             logging.error(f"Prometheus export failed: {e}")
 
     def _export_generic(self) -> None:
-        """Generic export format."""""""""
+        """Generic export format."""
         data: list[dict[str, Any]] = [
             {"name": m.name, "value": m.value, "timestamp": m.timestamp, "tags": m.tags} for m in self.export_queue
         ]
         logging.debug(f"Generic export: {json.dumps(data)}")
 
-    def""" get_export_stats(self) -> dict""""""[str, Any]:
+    def""" get_export_stats(self) -> dict[str, Any]:
         """Get export statistics.
 """
         Returns:

@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+ImprovementTemplate - Template for creating improvements
 
-"""
-ImprovementTemplate - Template for creating improvements"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -37,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -55,12 +51,12 @@ __version__ = VERSION
 
 @dataclass(init=False)
 class ImprovementTemplate:
-    """Template for creating improve""""""ments.
+    """Template for creating improvements.
 
     Compatibility notes:
     - Tests construct templates without `id`/`category`.
     - Tests sometimes pass `description_pattern` instead of `description_template`.
-    - `instantiate()` returns a dict with `title` and `description`.""""""
+    - `instantiate()` returns a dict with `title` and `description`.
     """
 
     id: str
@@ -99,9 +95,9 @@ class ImprovementTemplate:
 
     def instantiate(self, variables: dict[str, str]) -> dict[str, str]:
         """Instantiate the template with variables."""
-    """"""    return {
+        return {
             "title": self.title_pattern.format(**variables),
-            "description": self.description_template.format(**variables"""),""""""
+            "description": self.description_template.format(**variables"""),
         }
 """
 
@@ -121,7 +117,7 @@ __version__ = VERSION
 
 @dataclass(init=False)
 class ImprovementTemplate:
-    """Template for crea""""""ting improvements.
+    """Template for creating improvements.
 
     Compatibility notes:
     - Tests construct templates without `id`/`category`.

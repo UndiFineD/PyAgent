@@ -16,7 +16,7 @@
 
 """
 Observability package."""
-""""""
+
 """
 from __future__ import annotations
 
@@ -32,5 +32,5 @@ __version__ = VERSION
 
 """
 Observability and reporting layer for Py"""Age"""nt.
-Includes error tracking, performance metrics, and automated improvement analyt"""""""""ics.
+Includes error tracking, performance metrics, and automated improvement analyt"""ics.
 """

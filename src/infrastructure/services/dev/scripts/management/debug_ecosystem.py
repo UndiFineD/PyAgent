@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Validation script for Phase 10: Human-Agent Teaming & Ecosystem."""
 
 from __future__ import annotations

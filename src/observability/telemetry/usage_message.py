@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +19,7 @@ Inspired by vLLM's UsageMessage pattern for collecting environment information
 and reporting usage statistics with privacy-respecting opt-out support.
 
 Phase 24: Advanced Observability & Parsing
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -59,7 +57,7 @@ _GLOBAL_RUNTIME_DATA: dict[str, str | int | bool] = {}
 
 
 class UsageContext(str, Enum):
-    """Context in which PyAgent is being use""""""d."""
+    """Context in which PyAgent is being used."""
 
     UNKNOWN = "UNKNOWN"
     CLI = "CLI"
@@ -76,23 +74,23 @@ class UsageContext(str, Enum):
 
 def set_runtime_usage_data(key: str, value: str | int | bool) -> None:
     """
-    Set global usage data to include in t""""""elemetry.
+    Set global usage data to include in telemetry.
 
     Args:
         key: Data key
         value: Data value
     """
-    _GLOBAL_RUNTIME_DATA[""""""key] = value
+    _GLOBAL_RUNTIME_DATA[key] = value
 
 
 def get_runtime_usage_data() -> dict[str, str | int | bool]:
     """Get all global runtime usage data."""
-    return _GLOBAL_RUNT""""""IME_DATA.copy()
+    return _GLOBAL_RUNTIME_DATA.copy()
 
 
 def clear_runtime_usage_data() -> None:
     """Clear all global runtime usage data."""
-    _GLOBAL_RU""""""NTIME_DATA.clear()
+    _GLOBAL_RUNTIME_DATA.clear()
 
 
 # ============================================================================
@@ -102,7 +100,7 @@ def clear_runtime_usage_data() -> None:
 
 def is_usage_stats_enabled() -> bool:
     """
-    Check if usage statistics c""""""ollection is enabled.
+    Check if usage statistics collection is enabled.
 
     Respects the following opt-out mechanisms regarding privacy:
     - PYAGENT_DO_NOT_TRACK=1
@@ -113,7 +111,7 @@ def is_usage_stats_enabled() -> bool:
     Returns:
         True if usage stats are enabled, False otherwise
     """
-    glo""""""bal _USAGE_STATS_ENABLED
+    global _USAGE_STATS_ENABLED
 
     if _USAGE_STATS_ENABLED is None:
         opts = [
@@ -129,13 +127,13 @@ def is_usage_stats_enabled() -> bool:
 
 def disable_usage_stats() -> None:
     """Programmatically disable usage stats collection."""
-    """"""global _USAGE_STATS_ENABLED
+    global _USAGE_STATS_ENABLED
     _USAGE_STATS_ENABLED = False
 
 
 def enable_usage_stats() -> None:
     """Programmatically enable usage stats collection."""
- """"""   global _USAGE_STATS_ENABLED
+    global _USAGE_STATS_ENABLED
     _USAGE_STATS_ENABLED = True
 
 
@@ -146,11 +144,11 @@ def enable_usage_stats() -> None:
 
 def detect_cloud_provider() -> str:
     """
-    Detect the cloud provider where the code is runni""""""ng regarding environment factors.
+    Detect the cloud provider where the code is running regarding environment factors.
 
     Returns:
         Cloud provider name or "UNKNOWN"
-    """""""""
+    """
     # Check vendor files (Linux)
     vendor_files: list[str] = [
         "/sys/class/dmi/id/product_version",
@@ -200,7 +198,7 @@ def detect_cloud_provider() -> str:
     return next((provider for env_var, provider in env_to_provider.items() if os.environ.get(env_var)), "UNKNOWN")
 
 
-d"""ef get_cpu_info() -> dict[str,"""""" Any]:
+d"""ef get_cpu_info() -> dict[str, Any]:
     """
     Get CPU information.
 

@@ -12,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+RollbackPoint - Lightweight snapshot container for agent improvement state
 
-"""
-RollbackPoint - Lightweight snapshot container for agent improvement state"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -34,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -50,6 +48,6 @@ __version__ = VERSION
 @dataclass
 class RollbackPoint:
     """A rollback point capturing the state of an improvement at a specific moment."""
-    improvement_i""""""d: str
+    improvement_id: str
     state: dict[str, Any]
     created_at: datetime = field(default_factory=datetime.now)

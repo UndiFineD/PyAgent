@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -235,7 +233,7 @@ class AutoApkScanner(object):
 
     def apk_exists(self, apk_filename):
     pass  # [BATCHFIX] inserted for empty block
-"""""""
+"
         Check if the apk file exists or not.
 # #  "
         return os.path.isfile(apk_filename)

@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Script to clean up and deduplicate entries in the IMPROVEMENT_RESEARCH.md document."""
 
 from __future__ import annotations

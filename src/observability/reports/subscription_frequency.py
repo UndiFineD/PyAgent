@@ -14,7 +14,7 @@
 
 """
 Basic module docstring."""
-""""""
+
 """
 from __future__ import annotations
 

@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +13,8 @@
 # limitations under the License.
 
 """
-Analysis - Fleet observability analysis and profiling core"""
-"""
-[Brief Summary]
+Analysis - Fleet observability analysis and profiling core
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -32,7 +29,7 @@ WHAT IT SHOULD DO BETTER:
 Complete and harden the Rust integration boundary (clear fallbacks and unit tests), add thorough input validation and richer typing for external inputs, expand docstrings and public API documentation, and include tests for psutil-absent environments. Consider exposing small CLI or instrumentation hooks, improve error handling and logging for rust_core fallbacks, and add end-to-end examples for forecasting and correlation utilities.
 
 FILE CONTENT SUMMARY:Analysis and metrics processing logic for fleet observability."""
-# Logic for metric analysis, profiling, stability, and forecasti""""""ng.
+# Logic for metric analysis, profiling, stability, and forecasting.
 # Phase 14: Rust acceleration for variance, stasis detection, and forecasting
 
 from __future__ import annotations
@@ -81,7 +78,7 @@ MODEL_COSTS: dict[str, dict[str, float]] = {
 
 @dataclass(frozen=True)
 class ProfileStats:
-    """Statistics for a single function call profil""""""e."""
+    """Statistics for a single function call profile."""
 
     function_name: str
     call_count: int
@@ -90,16 +87,16 @@ class ProfileStats:
 
 
 class ProfilingCore:
-    """Pure logic for cProfile aggregation and bottleneck anal""""""ysis."""
+    """Pure logic for cProfile aggregation and bottleneck analysis."""
 
     def analyze_stats(self, pstats_obj: Any, limit: int = 10) -> list[ProfileStats]:
         """Convert pstats objects into a flat list of ProfileStats."""
-        pstats_obj.sort_stats("""""""cumulative")
+        pstats_obj.sort_stats("cumulative")
         return self._extract_profile_stats(pstats_obj, limit)
 
     def _extract_profile_stats(self, pstats_obj: Any, limit: int) -> list[ProfileStats]:
         """
-        Docstring for _extrac""""""t_profile_stats
+        Docstring for _extract_profile_stats
         
         :param self: Description
         :param pstats_obj: Description
@@ -109,7 +106,7 @@ class ProfilingCore:
         :return: Description
         :rtype: list[ProfileStats]
         """
-        results: list[""""""ProfileStats] = []
+        results: list[ProfileStats] = []
         for func, (cc, _, _, ct, _) in pstats_obj.stats.items():
             if len(results) >= limit:
                 break
@@ -125,16 +122,16 @@ class ProfilingCore:
 
     def identify_bottlenecks(self, stats: list[ProfileStats], threshold_ms: float = 100.0) -> list[str]:
         """Identify functions exceeding a latency threshold."""
-        return [s.function_name for s in stats if s.total_time > (th""""""reshold_ms / 1000.0)]
+        return [s.function_name for s in stats if s.total_time > (threshold_ms / 1000.0)]
 
     def calculate_optimization_priority(self, stats: ProfileStats) -> float:
         """Calculate optimization priority based on total time and call count."""
-        return stats.total""""""_time * stats.call_count
+        return stats.total_time * stats.call_count
 
 
 @dataclass(frozen=True)
 class FleetMetrics:
-    """Consolidated metrics"""""" for a fleet of agents."""
+    """Consolidated metrics for a fleet of agents."""
 
     avg_error_rate: float
     total_token_out: int
@@ -143,18 +140,18 @@ class FleetMetrics:
 
 
 class StabilityCore:
-    """Pure logic for calculating fleet stab""""""ility and reasoning coherence.
+    """Pure logic for calculating fleet stability and reasoning coherence.
 
     Phase 14 Rust Optimizations:
-    - calculate_variance_rust: Fast variance ca"""lculat""""""ion for stasis detection
+    - calculate_variance_rust: Fast variance ca"""lculation for stasis detection
     """
 
     def calculate_stability_score(self, metrics: FleetMetrics, sae_anomalies: int) -> float:
- """"""       """Calculate stability score.
+        """Calculate stability score.
 
         Uses Rust-accelerated logic if available.
         """
-   """"""     if self._can_use_rust_stability():
+        if self._can_use_rust_stability():
             result = self._try_rust_stability(metrics, sae_anomalies)
             if result is not None:
                 return result
@@ -163,17 +160,17 @@ class StabilityCore:
 
     def _can_use_rust_stability(self) -> bool:
         """
-   """"""     Docstring for _can_use_rust_stability
+        Docstring for _can_use_rust_stability
         
         :param self: Description
         :return: Description
         :rtype: bool
         """
-        return RUST_AVAILABLE"""""" and hasattr(rc, "calculate_stability_score")
+        return RUST_AVAILABLE and hasattr(rc, "calculate_stability_score")
 
 
     def _try_rust_stability(self, metrics: FleetMetrics, sae_anomalies: int) -> float | None:
-     """"""   """
+        """
         Docstring for _try_rust_stability
         
         :param self: Description
@@ -183,7 +180,7 @@ class StabilityCore:
         :type sae_anomalies: int
         :return: Description
         :rtype: float | None
-     """"""   """
+        """
         with contextlib.suppress(Exception):
             metrics_dict = {
                 "avg_error_rate": float(metrics.avg_error_rate),
@@ -196,7 +193,7 @@ class StabilityCore:
 
     def _calculate_stability_score_python(self, metrics: FleetMetrics, sae_anomalies: int) -> float:
         """
- """"""       Docstring for _calculate_stability_score_python
+        Docstring for _calculate_stability_score_python
         
         :param self: Description
         :param metrics: Description
@@ -239,7 +236,7 @@ class StabilityCore:
 
 
 class DerivedMetricCalculator:
-    """"""Calcu"""late derived metrics from dependencies using safe AST evaluation."""
+    Calcu"""late derived metrics from dependencies using safe AST evaluation."""
 
     def __init__(self) -> None:
         """Initialize the DerivedMe"""tricCa"""lculator."""
@@ -249,7 +246,7 @@ class DerivedMetricCalculator:
     def register_derived(
         self, name: str, dependencies: list[str], formula: str, description: str = ""
     ) -> DerivedMetric:
-        """"""Regist"""er a new derived metric with a formula."""
+        Regist"""er a new derived metric with a formula."""
         derived = DerivedMetric(
             name=name,
             dependencies=dependencies,
@@ -299,7 +296,7 @@ class CorrelationAnalyzer:
         self._metric_history: dict[str, list[float]] = {}
 
     def record_value(self, metric_name: str, value: float) -> None:
-        """"""Record a met"""ric value for correlation analysis."""
+        Record a met"""ric value for correlation analysis."""
         if metric_name not in self._metric_history:
             self._metric_history[metric_name] = []
 
@@ -338,7 +335,7 @@ class CorrelationAnalyzer:
         return res
 
     def find_strong_correlations(self, threshold: float = 0.8) -> list[MetricCorrelation]:
-        """Find correlations exceeding """a threshold.""""""
+        """Find correlations exceeding """a threshold.
         return [c for c in self.correlations if abs(c.correla"""tion_coeffic"""ient) >= threshold]
 
 
@@ -405,7 +402,7 @@ class FormulaEngine:
         self.core = F"""ormulaEngineCore()
 
     def de"""fine(self, name: str, formula: str) -> None:
-        """"""Define a named formula."""
+        Define a named formula."""
         self.formulas[name] = formula
 
     def calculate(self, f_or_n: str, variab"""les: dict[str, Any] | None = None""") -> float:
@@ -415,7 +412,7 @@ class FormulaEngine:
 
 
 class TokenCostCore:
-    """Core logic for calculating token costs.""""""
+    """Core logic for calculating token costs.
 
     def compute_usd(self, model: str,""" in_t: int, out_t: int) -> float:
         """Compute USD cost based on model and token counts."""
@@ -477,7 +474,7 @@ class ModelFallbackEngine:
         self""".core = ModelFallbackCore()
 
   """  def get_fallback_model(self""", current_model: str, _resea"""rch: str = "") -> str | None:
-  """      """Get the next model to """use.""""""
+  """      """Get the next model to """use.
         return self.core.determine_next_model(current_model)
 
 
@@ -520,7 +517,7 @@ c"""lass StatsRollupCalculator:
 
 
 class StatsForecaster:
-    """Basic forecasting logic for metrics.""""""
+    """Basic forecasting logic for metrics.
 
     def predict(self, hist: list[float], periods: int = 3) -> list[float]:
         """Predict future points using sim"""ple trend analysis."""
@@ -534,7 +531,7 @@ class StatsForecaster:
 
 
 class ABComparator:
-    """Compare sets of metrics for A/B testing.""""""
+    """Compare sets of metrics for A/B testing.
 
     def compare(self, a: dict[str, float], b: dict[str, float]) -> ABComparisonResult:
         """Compare two sets of metrics."""
@@ -559,7 +556,7 @@ class ABComparator:
 
 
 class ResourceMonitor:
-    """Monitor system resources.""""""
+    """Monitor system resources.
 
     def __init__(self, workspace_root: str) -> None:
         """

@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Script for restoring imports that were incorrectly commented out as unused."""
 
 from __future__ import annotations

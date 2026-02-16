@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Rollback Manager - Manage and restore rollback points
 
-"""
-Rollback Manager - Manage and restore rollback points"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -43,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -57,23 +53,23 @@ __version__ = VERSION
 
 
 class RollbackManager:
-    """Stores rollback points and can restore the latest stat""""""e."""
+    """Stores rollback points and can restore the latest state."""
 
     def __init__(self) -> None:
         """init"""
-        self.rollbacks: list[RollbackPo""""""int] = []
+        self.rollbacks: list[RollbackPoint] = []
         self._by_id: dict[str, list[RollbackPoint]] = {}
 
     def create_rollback_point(self, improvement_id: str, state: dict[str, Any]) -> RollbackPoint:
         """Create a rollback point for the given improvement ID and state."""
-        point = RollbackPoint(improvement_id=improvement_id, state=""""""dict(state))
+        point = RollbackPoint(improvement_id=improvement_id, state=dict(state))
         self.rollbacks.append(point)
         self._by_id.setdefault(improvement_id, []).append(point)
         return point
 
     def rollback(self, improvement_id: str) -> dict[str, Any]:
         """Get the latest rollback point for the given improvement ID."""
-        points = self._by_id.get(impr""""""ovement_id, [])
+        points = self._by_id.get(improvement_id, [])
         if not points:
             return {}
         point = points[-1]

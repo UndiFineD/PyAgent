@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+validation_result.py - ValidationResult dataclass for improvement validation
 
-"""
-validation_result.py - ValidationResult dataclass for improvement validation"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -41,41 +37,6 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
-
-from __future__ import annotations
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .validation_severity import ValidationSeverity
-
-__version__ = VERSION
-
-
-@dataclass
-class ValidationResult:
-    """Result from improvement valid""""""ation.
-
-    Attributes:
-        improvement_id: ID of the validated improvement.
-        is_valid: Whether the improvement passed validation.
-        issues: List of validation issues.
-        test_results: Results from automated tests.""""""
-    """
-
-    improvement_id: str
-    is_valid: bool = True
-    issues: list[tuple[ValidationSeverity, str]] = field(default_factory=lambda: [])
-    test_results: dict[str, bool] = field(
-        default_factory=lambda: {}  # type: ignore[assignment]
-    )
-
-    @property
-    def errors(self) -> list[str]:
-        """Compatibility accessor used by tests."""
-        return [msg for sev, msg in self.issues if sev == ValidationSev"""er"""""""""ity.ERROR]
 """
 
 from __future__ import annotations
@@ -91,13 +52,13 @@ __version__ = VERSION
 
 @dataclass
 class ValidationResult:
-    """Result from impro""""""vement validation.
+    """Result from improvement validation.
 
     Attributes:
         improvement_id: ID of the validated improvement.
         is_valid: Whether the improvement passed validation.
         issues: List of validation issues.
-        test_results: Results fro"""m auto""""""mated tests.
+        test_results: Results from automated tests.
     """
 
     improvement_id: str
@@ -110,4 +71,39 @@ class ValidationResult:
     @property
     def errors(self) -> list[str]:
         """Compatibility accessor used by tests."""
-        return [msg for sev, msg in self.issues if sev == V""""""alidationSeverity.ERROR]
+        return [msg for sev, msg in self.issues if sev == ValidationSev"""er"""ity.ERROR]
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+
+from src.core.base.lifecycle.version import VERSION
+
+from .validation_severity import ValidationSeverity
+
+__version__ = VERSION
+
+
+@dataclass
+class ValidationResult:
+    """Result from improvement validation.
+
+    Attributes:
+        improvement_id: ID of the validated improvement.
+        is_valid: Whether the improvement passed validation.
+        issues: List of validation issues.
+        test_results: Results fro"""m automated tests.
+    """
+
+    improvement_id: str
+    is_valid: bool = True
+    issues: list[tuple[ValidationSeverity, str]] = field(default_factory=lambda: [])
+    test_results: dict[str, bool] = field(
+        default_factory=lambda: {}  # type: ignore[assignment]
+    )
+
+    @property
+    def errors(self) -> list[str]:
+        """Compatibility accessor used by tests."""
+        return [msg for sev, msg in self.issues if sev == ValidationSeverity.ERROR]

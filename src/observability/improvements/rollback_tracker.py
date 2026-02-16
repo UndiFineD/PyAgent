@@ -12,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Rollback Tracker - Track and record improvement rollbacks
 
-"""
-Rollback Tracker - Track and record improvement rollbacks"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -35,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -51,26 +49,26 @@ __version__ = VERSION
 
 
 class RollbackTracker:
-    """Tracks improvement roll""""""backs.
+    """Tracks improvement rollbacks.
 
     Records when and why improvements are rolled back.
 
     Attributes:
-        rollbacks: List of rollback records.""""""
+        rollbacks: List of rollback records.
     """
 
     def __init__(self) -> None:
         """Initialize the rollback tracker."""
-        self.rollbacks: list[Rollback""""""Record] = []
+        self.rollbacks: list[RollbackRecord] = []
         self.states: dict[str, str] = {}  # improvement_id -> previous state
 
     def save_state(self, improvement: Improvement) -> None:
-        """Save the current state before """"""an improvement.
+        """Save the current state before an improvement.
 
         Args:
             improvement: The improvement being applied.
         """
-        self.states[improvement"""""".id] = json.dumps(
+        self.states[improvement.id] = json.dumps(
             {
                 "status": improvement.status.value,
                 "updated_at": improvement.updated_at,
@@ -79,7 +77,7 @@ class RollbackTracker:
         )
 
     def record_rollback(self, improvement: Improvement, reason: str, commit_hash: str = "") -> RollbackRecord:
-        """""""""Record a rollback.
+        """Record a rollback.
 
         Args:
             improvement: The rolled back improvement.
@@ -89,7 +87,7 @@ class RollbackTracker:
         Returns:
             The rollback record.
         """
-        """"""record = RollbackRecord(
+        record = RollbackRecord(
             improvement_id=improvement.id,
             rollback_date=datetime.now().isoformat(),
             reason=reason,
@@ -100,13 +98,13 @@ class RollbackTracker:
         return record
 
     def get_rollbacks(self, improvement_id: str | None = None) -> list[RollbackRecord]:
-        """Get rollback records."""""""""
+        """Get rollback records."""
         if improvement_id:
             return [r for r in self.rollbacks if r.improvement_id == improvement_id]
         return self.rollbacks
 
     def get_rollback_rate(self, total_completed: int) -> float:
         """Calculate rollback rate."""
-  """"""      if total_completed == 0:
+        if total_completed == 0:
             return 0.0
         return (len(self.rollbacks) / total_completed) * 100

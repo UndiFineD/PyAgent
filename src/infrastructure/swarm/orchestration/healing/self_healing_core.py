@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 SelfHealingCore logic for fleet resilience.
 Contains pure logic for health threshold calculation, anomaly detection,

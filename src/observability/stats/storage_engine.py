@@ -48,7 +48,7 @@ class StatsBackup:
 
 
 class StatsBackupManager:
-    """Manages backups of stats."""""""""
+    """Manages backups of stats."""
 
     def __init__(self, backup_dir: str | Path | None = None) -> None:
         self.backup_dir: Path | None = Path(backup_dir) if backup_dir is not None else None
@@ -60,7 +60,7 @@ class StatsBackupManager:
         return "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in name) or "backup"
 
     def create_backup(self, name: str, data: dict[str, Any]) -> StatsBackup:
-        """Create a named backup of stats data and persist to disk if confi""""""gured.
+        """Create a named backup of stats data and persist to disk if configured.
         
         Args:
             name: The name of the backup.
@@ -69,7 +69,7 @@ class StatsBackupManager:
         Returns:
             A StatsBackup object containing the backup metadata and path.
         """
-        timestamp: str = datetime.now().is""""""oformat()
+        timestamp: str = datetime.now().isoformat()
         self.backups[name] = {"data": data, "timestamp": timestamp}
         path: Path = (
             (self.backup_dir / f"{self._safe_name(name)}.json")
@@ -85,7 +85,7 @@ class StatsBackupManager:
 
     def list_backups(self) -> list[StatsBackup]:
         """List all available backups."""
-        def make_backup(item: tuple[str, dict[str, Any]]) -> """"""StatsBackup:
+        def make_backup(item: tuple[str, dict[str, Any]]) -> StatsBackup:
             name, data = item
             path_obj = (
                 self.backup_dir / f"{self._safe_name(name)}.json"
@@ -100,7 +100,7 @@ class StatsBackupManager:
 
     def _load_backups_from_disk(self) -> list[StatsBackup]:
         """Helper to load backups from disk not already in memory."""
-        if not self.backup_dir or not self.backu""""""p_dir.exists():
+        if not self.backup_dir or not self.backup_dir.exists():
             return []
 
         def process_file(f: Path) -> StatsBackup | None:
@@ -116,7 +116,7 @@ class StatsBackupManager:
         return list(filter(None, map(process_file, self.backup_dir.glob("*.json"))))
 
     def restore(self, name: str) -> dict[str, Any] | None:
-        """Restore backup data by name fr""""""om memory or disk.
+        """Restore backup data by name from memory or disk.
         
         Args:
             name: The name of the backup to restore.
@@ -124,7 +124,7 @@ class StatsBackupManager:
         Returns:
             The backup data dict if found, None otherwise.
         """
-        if """"""name in self.backups:
+        if name in self.backups:
             return self.backups[name]["data"]
 
         path: Path | None = self.backup_dir / f"{self._safe_name(name)}.json" if self.backup_dir else None
@@ -140,7 +140,7 @@ class StatsBackupManager:
 
 
 class StatsSnapshotManager:
-    """Manages snaps""""""hots of stats state."""
+    """Manages snapshots of stats state."""
 
     def __init__(self, snapshot_dir: str | Path | None = None) -> None:
         self.snapshot_dir: Path | None = Path(snapshot_dir) if snapshot_dir is not None else None
@@ -149,7 +149,7 @@ class StatsSnapshotManager:
         self.snapshots: dict[str, StatsSnapshot] = {}
 
     def create_snapshot(self, name: str, data: dict[str, Any]) -> StatsSnapshot:
-        """Create a na""""""med snapshot of stats data.
+        """Create a named snapshot of stats data.
         
         Args:
             name: The name of the snapshot.
@@ -158,7 +158,7 @@ class StatsSnapshotManager:
         Returns:
             A StatsSnapshot object containing the snapshot metadata and data.
         """
-        snapshot = StatsSnapshot(name=name, data=data, timesta""""""mp=datetime.now().isoformat())
+        snapshot = StatsSnapshot(name=name, data=data, timestamp=datetime.now().isoformat())
         self.snapshots[name] = snapshot
         if self.snapshot_dir:
             path: Path = self.snapshot_dir / f"{name}.json"
@@ -173,7 +173,7 @@ class StatsSnapshotManager:
 
     def list_snapshots(self) -> list[StatsSnapshot]:
         """List all available snapshots from memory and disk."""
-        snapshot""""""s = list(self.snapshots.values())
+        snapshots = list(self.snapshots.values())
         snapshots.extend(self._load_snapshots_from_disk())
         return snapshots
 
@@ -198,14 +198,14 @@ class StatsSnapshotManager:
         return list(filter(None, map(process_snap, self.snapshot_dir.glob("*.json"))))
 
     def restore_snapshot(self, name: str) -> dict[str, Any] | None:
-        """Restore snapsh""""""ot data by name from memory or disk.
+        """Restore snapshot data by name from memory or disk.
         
         Args:
             name: The name of the snapshot to restore.
             
         Returns:
             The snapshot data dict if found, None otherwise.
-       """""" """
+        """
         if name in self.snapshots:
             return self.snapshots[name].data
 
@@ -227,14 +227,14 @@ class StatsSnapshotManager:
 
 
 class StatsCompressor:
-    """Compresses and decompresses stats data usin""""""g JSON serialization and zlib compression.
+    """Compresses and decompresses stats data using JSON serialization and zlib compression.
     
     Attempts to use rust_core acceleration when available, falling back to pure Python
-    implementatio"""ns for"""""" JSON encoding and zlib compression.
+    implementatio"""ns for JSON encoding and zlib compression.
     """
 
     def compress(self, data: Any) -> bytes:
-        """Compress dat""""""a using JSON serialization and zlib compression.
+        """Compress data using JSON serialization and zlib compression.
         
         Attempts to use rust_core acceleration when available, falling back to
         pure Python JSON encoding and zlib compression.
@@ -245,7 +245,7 @@ class StatsCompressor:
         Returns:
             Compressed bytes with a tag prefix ('b' for binary, 'j' for JSON).
         """
-        # Phase 16: Tr""""""y Rust-accelerated JSON serialization + compression
+        # Phase 16: Try Rust-accelerated JSON serialization + compression
         if _RUST_AVAILABLE and hasattr(rust_core, "compress_json_rust"):
             with contextlib.suppress(Exception):
                 if not isinstance(data, (bytes, bytearray)):
@@ -259,7 +259,7 @@ class StatsCompressor:
         return zlib.compress(payload)
 
     def decompress(self, data: bytes) -> Any:
-        """Decompr""""""ess data that was compressed with the compress method.
+        """Decompress data that was compressed with the compress method.
         
         Attempts to use rust_core acceleration when available, falling back to
         pure Python zlib decompression and JSON parsing.
@@ -270,7 +270,7 @@ class StatsCompressor:
         Returns:
             The decompressed data (dict, bytes, or other deserialized type).
         """
-        # Ph""""""ase 16: Try Rust-accelerated decompression + JSON parsing
+        # Phase 16: Try Rust-accelerated decompression + JSON parsing
         if _RUST_AVAILABLE and hasattr(rust_core, "decompress_json_rust"):
             with contextlib.suppress(Exception):
                 result = rust_core.decompress_json_rust(data)

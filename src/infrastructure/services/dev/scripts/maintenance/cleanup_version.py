@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Script to remove hardcoded VERSION strings from files, preparing for dynamic versioning."""
 
 from __future__ import annotations

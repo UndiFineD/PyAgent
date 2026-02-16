@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+ToolSuggestion - Data container for analysis tool recommendations
 
-"""
-ToolSuggestion - Data container for analysis tool recommendations"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -34,38 +30,6 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
-
-from __future__ import annotations
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-from .analysis_tool_type import AnalysisToolType
-
-__version__ = VERSION
-
-
-@dataclass
-class ToolSuggestion:
-    """Suggestion from a code analysis"""""" tool.
-
-    Attributes:
-        tool_type: Type of analysis tool.
-        tool_name: Name of the specific tool.
-        file_path: File with the issue.
-        line_number: Line number of the issue.
-        message: Suggestion message.
-        suggested_fix: Optional code fix.""""""
-    """
-
-    tool_type: AnalysisToolType
-    tool_name: str
-    file_path: str
-    line_number: int
-    message: str
-    suggested_fix:""" s""""""tr = ""
 """
 
 from __future__ import annotations
@@ -81,7 +45,39 @@ __version__ = VERSION
 
 @dataclass
 class ToolSuggestion:
-    """Suggestion from a code"""""" analysis tool.
+    """Suggestion from a code analysis tool.
+
+    Attributes:
+        tool_type: Type of analysis tool.
+        tool_name: Name of the specific tool.
+        file_path: File with the issue.
+        line_number: Line number of the issue.
+        message: Suggestion message.
+        suggested_fix: Optional code fix.
+    """
+
+    tool_type: AnalysisToolType
+    tool_name: str
+    file_path: str
+    line_number: int
+    message: str
+    suggested_fix:""" str = ""
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+from src.core.base.lifecycle.version import VERSION
+
+from .analysis_tool_type import AnalysisToolType
+
+__version__ = VERSION
+
+
+@dataclass
+class ToolSuggestion:
+    """Suggestion from a code analysis tool.
 
     Attributes:
         tool_type: Type of analysis tool.

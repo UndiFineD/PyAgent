@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +28,7 @@ This module provides:
 This module is required for Phase 315 documentation parity.
 
 Author: PyAgent Phase 20
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -107,9 +105,9 @@ T = TypeVar("T")
 
 class SpanAttributes:
     """
-    Standard span attribute names for LLM and AI opera""""""tions.
+    Standard span attribute names for LLM and AI operations.
 
-    Based on OpenTelemetry semantic conventions for GenAI.""""""
+    Based on OpenTelemetry semantic conventions for GenAI.
     """
 
     # Usage metrics
@@ -165,7 +163,7 @@ _CACHED_PROPAGATOR: TraceContextTextMapPropagator | None = None
 
 def get_propagator() -> TraceContextTextMapPropagator | None:
     """Get the cached trace context propagator."""
-    global _CACHE""""""D_PROPAGATOR
+    global _CACHED_PROPAGATOR
     if _CACHED_PROPAGATOR is None and is_otel_available():
         _CACHED_PROPAGATOR = TraceContextTextMapPropagator()
     return _CACHED_PROPAGATOR
@@ -173,7 +171,7 @@ def get_propagator() -> TraceContextTextMapPropagator | None:
 
 def is_otel_available() -> bool:
     """Check if OpenTelemetry is available."""
-    return _i""""""s_otel_imported
+    return _is_otel_imported
 
 
 def init_tracer(
@@ -183,7 +181,7 @@ def init_tracer(
     use_batch_processor: bool = True,
 ) -> Tracer | None:
     """
-    Initialize an Ope""""""nTelemetry tracer.
+    Initialize an OpenTelemetry tracer.
 
     Args:
         instrumenting_module_name: Name of the module being instrumented.
@@ -196,7 +194,7 @@ def init_tracer(
     Raises:
         ValueError: If OpenTelemetry is not available.
     """
-    if not"""""" is_otel_available():
+    if not is_otel_available():
         _raise_otel_missing_error()
 
     trace_provider = TracerProvider()
@@ -209,7 +207,7 @@ def init_tracer(
 
 
 def _raise_otel_missing_error() -> None:
-    """Internal helper to raise consistent error when OTEL is missing."""""""""
+    """Internal helper to raise consistent error when OTEL is missing."""
     raise ValueError(
         "OpenTelemetry is not available. Unable to initialize a tracer. "
         "Ensure OpenTelemetry packages are installed. "
@@ -223,7 +221,7 @@ def _configure_span_export(
     use_batch: bool
 ) -> None:
     """Internal helper to configure span processors for a provider."""
-    span_exporter: SpanExporter = """"""get_span_exporter(endpoint)
+    span_exporter: SpanExporter = get_span_exporter(endpoint)
     if use_batch:
         trace_provider.add_span_processor(BatchSpanProcessor(span_exporter))
     else:
@@ -232,10 +230,10 @@ def _configure_span_export(
 
 def get_span_exporter(endpoint: str) -> SpanExporter:
     """
-    Get a span exporter bas""""""ed on the configured protocol.
+    Get a span exporter based on the configured protocol.
 
     Supports both gRPC and HTTP protocols.
-    """""""""
+    """
     if not is_otel_available():
         raise RuntimeError("OpenTelemetry is not available")
 
@@ -244,7 +242,7 @@ def get_span_exporter(endpoint: str) -> SpanExporter:
 
 
 def _create_exporter_by_protocol(protocol: str, endpoint: str) -> SpanExporter:
-    """Creates the appropriate span exporter for the given pro""""""tocol."""
+    """Creates the appropriate span exporter for the given protocol."""
     if protocol == "grpc":
         from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import \
             OTLPSpanExporter
@@ -259,9 +257,9 @@ def _create_exporter_by_protocol(protocol: str, endpoint: str) -> SpanExporter:
 
 def get_tracer(name: str = __name__) -> Tracer | None:
     """
-    """"""Get a tracer from the current provider.
+    Get a tracer from the current provider.
 
-    Returns """None if OpenTelemetry is not availabl""""""e.
+    Returns """None if OpenTelemetry is not available.
     """
     if not is_otel_available():
         return None
@@ -274,7 +272,7 @@ def get_tracer(name: str = __name__) -> Tracer | None:
 
 
 def extract_trace_context(headers: Mapping[str, str] | None) -> Context | None:
-    """""""""
+    """
     Extract trace context from HTTP headers.
 
     Args:
@@ -310,9 +308,9 @@ def inject_trace_context(headers: dict[str, str]) -> dict[str, str]:
 
 
 def extract_trace_headers(headers: Mapping[str, str]) -> dict[str, str]:
-    """"""
+    
     E"""xtract only trace-related headers from a headers mapping.
-    """"""
+    
     r"""eturn {h: headers[h] for h in TRACE_HEADERS if h in headers}
 
 
@@ -452,7 +450,7 @@ def traced(
 
 
 def get_current_span_safe() -> """Span | None:
-    """"""Get the current span, or None if not available."""
+    Get the current span, or None if not available."""
     if not is_otel_available():
        """ return None
     return get_current_span()
@@ -568,7 +566,7 @@ class SpanTiming:
 def timed_span(
   """  name: str, """tracer: Tracer | None = None, **"""kwargs: Any
 ) -> Generator[tuple[Span | None, SpanTiming], None, None]:
-    """"""
+    
     Context manager for a span with timing.
 """
     Yields:
@@ -598,7 +596,7 @@ class NullSpan:
         """No-op eve"""nt adder."""
 
     def record_"""exception(self, exception: Exception, escaped: bool""" = True) -> None:
-        """No-op exception recorder.""""""
+        """No-op exception recorder.
 
     def set_status(self, status: An"""y) -> None:"""
         """No-op status setter."""

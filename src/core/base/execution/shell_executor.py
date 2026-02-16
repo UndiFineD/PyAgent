@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Shell execution core for agents.
 Handles subprocess spawning, environment propagation, and interaction recording.

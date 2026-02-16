@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Debug script for inspecting the agent registry."""
 
 from __future__ import annotations

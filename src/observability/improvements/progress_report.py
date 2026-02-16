@@ -13,9 +13,8 @@
 # limitations under the License.
 
 """
-Progress Report - ProgressReport dataclass for improvements dashboard"""
-"""
-[Brief Summary]
+Progress Report - ProgressReport dataclass for improvements dashboard
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -34,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 

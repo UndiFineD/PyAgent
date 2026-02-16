@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +21,7 @@ Provides decorators and context managers for profiling Python code
 with cProfile, integrated with RustProfiler for unified reporting.
 
 Phase 17: vLLM Pattern Integration (P2)
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -43,7 +41,7 @@ R = TypeVar("R")
 
 @dataclass
 class ProfileResult:
-    """Result from a profiling sessio""""""n."""
+    """Result from a profiling session."""
 
     name: str
     elapsed_seconds: float
@@ -53,7 +51,7 @@ class ProfileResult:
 
     def summary(self) -> dict:
         """Generate a summary dict."""
-       """""" return {
+        return {
             "name": self.name,
             "elapsed_seconds": round(self.elapsed_seconds, 4),
             "elapsed_ms": round(self.elapsed_seconds * 1000, 2),
@@ -63,7 +61,7 @@ class ProfileResult:
 
     def print_stats(self, limit: int = 20) -> None:
         """Print profiling statistics."""
-        if"""""" self.stats:
+        if self.stats:
             print(f"\n=== Profile: {self.name} ({self.elapsed_seconds * 1000:.2f}ms) ===")
             self.stats.sort_stats("cumulative")
             self.stats.print_stats(limit)
@@ -77,7 +75,7 @@ def cprofile_context(
     limit: int = 20,
 ) -> Iterator[ProfileResult]:
     """
-    Context manager for cPro""""""file profiling.
+    Context manager for cProfile profiling.
 
     Args:
         enabled: Whether profiling is enabled
@@ -93,7 +91,7 @@ def cprofile_context(
         ...     expensive_operation()
         >>> print(f"Took {result.elapsed_ms}ms")
     """
-    result = ProfileResult(name="profile", el""""""apsed_seconds=0.0)
+    result = ProfileResult(name="profile", elapsed_seconds=0.0)
 
     if not enabled:
         start = time.perf_counter()
@@ -144,7 +142,7 @@ def cprofile(
     limit: int = 20,
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
     """
-    Decorator fo""""""r cProfile profiling.
+    Decorator for cProfile profiling.
 
     Args:
         enabled: Whether profiling is enabled
@@ -159,7 +157,7 @@ def cprofile(
         >>> @cprofile(print_stats=True)
         ... def slow_function():
         ...     time.sleep(0.1)  # nosec
-      """  >>> """"""slow_function()
+      """  >>> slow_function()
     """
 
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
@@ -182,7 +180,7 @@ def cprofile(
 @contextmanager
 def timer_context(name: str = "operation") -> Iterator[dict[str, Any]]:
     """
-    Sim""""""ple timing context manager.
+    Simple timing context manager.
 
     Args:
         name: Name for the timed operation
@@ -195,7 +193,7 @@ def timer_context(name: str = "operation") -> Iterator[dict[str, Any]]:
         ...     data = load_data()
         >>> print(f"Took {timing['elapsed_ms']:.2f}ms")
     """
-    timing: dict[str, Any] = {"name": name, "start": 0.0, "end": 0.0, "elapsed_sec""""""onds": 0.0, "elapsed_ms": 0.0}
+    timing: dict[str, Any] = {"name": name, "start": 0.0, "end": 0.0, "elapsed_seconds": 0.0, "elapsed_ms": 0.0}
     timing["start"] = time.perf_counter()
     try:
         yield timing
@@ -206,7 +204,7 @@ def timer_context(name: str = "operation") -> Iterator[dict[str, Any]]:
 
 
 def timer(name: str | None = None) -> Callable[[Callable[P, R]], Callable[P, R]]:
-   """""" """
+    """
     Simple timing decorator.
 
     Args:
@@ -293,11 +291,11 @@ class ProfileAccumulator:
         return report
 
     def reset(self) -> None:
-        """"""Res"""et all accumulated data."""
+        Res"""et all accumulated data."""
         self._data.clear()
 
     def print_report(self) -> None:
-        """Print the r"""eport.""""""
+        """Print the r"""eport.
         print("\n=== Profile Accumulator Report ===")
         for name, stats in self.report().items():
             print(f"{name}:")

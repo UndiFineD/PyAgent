@@ -15,21 +15,32 @@
 """
 Ecosystem Populator - MCP server metadata generator
 
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 from ecosystem_populator import get_expanded_ecosystem
 servers = get_expanded_ecosystem()
-# iterate servers: each is MCPServerConfig with name, description, category, server_type, capabilities, security_level
+# iterate servers: each is MCPServerConfig 
+# with name, description, category, server_type, capabilities, security_level
 
 WHAT IT DOES:
-Provides a programmatic utility that returns a large list (500+ intended) of simulated MCP server metadata configurations useful for testing, discovery, and local simulation of an MCP ecosystem; supplies representative entries across categories (database, api, development, etc.) and uses MCPServerConfig dataclass when imported standalone.
+Provides a programmatic utility that returns a large list
+(500+ intended) of simulated MCP server metadata configurations.
+Useful for testing, discovery, and local simulation of an MCP ecosystem.
+Supplies representative entries across categories
+(database, api, development, etc.) and uses MCPServerConfig dataclass
+when imported standalone.
 
 WHAT IT SHOULD DO BETTER:
-- Persist or load canonical data from an external JSON/registry instead of in-file population to avoid duplication and enable updates.
-- Provide deterministic seeding, validation, and optional filtering by category/security_level to return targeted subsets for tests.
-- Add typing and runtime checks, richer metadata (endpoints, auth requirements), and unit tests to assert expected counts and schema.
+- Persist or load canonical data from an external JSON/registry
+  instead of in-file population to avoid duplication
+  and enable updates.
+- Provide deterministic seeding, validation,
+  and optional filtering by category/security_level
+  to return targeted subsets for tests.
+- Add typing and runtime checks,
+  richer metadata (endpoints, auth requirements),
+  and unit tests to assert expected counts and schema.
 
 FILE CONTENT SUMMARY:
 Population utility for the MCP Ecosystem.
@@ -45,92 +56,7 @@ except ImportError:
 
     @dataclass
     class MCPServerConfig:
-        name: str
-        description: str
-        category: str
-        server_type: str
-        capabilities: List[str]
-        security_level: str = "medium"
-
-
-def get_expanded_ecosystem() -> List[MCPServerConfig]:
-    """Returns a list of 500+ MCP server metadata configurations."""
-    # Note: In a real implementation, this might fetch from a JSON or GitHub registry.
-    # Here we populate a representative set of high-value MCP servers.
-
-    servers = []
-
-    # DATABASE (50+)
-    db_servers = [
-        ("postgresql", "PostgreSQL database management", ["query", "schema", "optimize"]),
-        ("mongodb", "MongoDB NoSQL operations", ["find", "aggregate", "insert"]),
-        ("redis", "Redis key-value store access", ["get", "set", "pubsub"]),
-        ("pinecone", "Pinecone vector database for RAG", ["upsert", "query", "fetch"]),
-        ("milvus", "Milvus vector search engine", ["search", "insert", "index"]),
-        ("supabase", "Supabase backend-as-a-service", ["auth", "storage", "database"]),
-        ("mysql", "MySQL relational database", ["query", "manage", "backup"]),
-        ("cassandra", "Apache Cassandra wide-column store", ["cql", "cluster", "scale"]),
-        ("neo4j", "Neo4j graph database", ["cypher", "graph-analysis", "traversal"]),
-        ("clickhouse", "ClickHouse analytical DB", ["olap-query", "insert", "aggregate"]),
-        ("snowflake", "Snowflake cloud data platform", ["warehouse", "share", "query"]),
-        ("duckdb", "DuckDB analytical in-process DB", ["sql", "parquet", "csv"]),
-    ]
-    for name, desc, caps in db_servers:
-        servers.append(MCPServerConfig(
-            name=name, description=desc, category="database",
-            server_type="docker", capabilities=caps, security_level="high"
-        ))
-
-    # API (100+)
-    api_servers = [
-        ("slack", "Slack workspace integration", ["send-message", "read-channel", "users"]),
-        ("discord", "Discord bot and channel access", ["messaging", "guilds", "members"]),
-        ("github_api", "GitHub API full integration", ["repo", "pr", "issue", "workflow"]),
-        ("google_search", "Google Custom Search API", ["web-search", "images", "news"]),
-        ("brave_search", "Brave Search API integration", ["search", "local", "suggest"]),
-        ("stripe", "Stripe payment processing", ["charge", "customer", "subscription"]),
-        ("twilio", "Twilio SMS and Voice API", ["sms", "call", "whatsapp"]),
-        ("sendgrid", "SendGrid email delivery", ["send-email", "templates", "stats"]),
-        ("alpha_vantage", "Stock market and crypto data", ["quotes", "intraday", "indicators"]),
-        ("open_weather", "Real-time weather data", ["current", "forecast", "alerts"]),
-        ("yelp", "Business and reviews data", ["search", "details", "reviews"]),
-        ("spotify", "Spotify music API", ["playback", "playlists", "search"]),
-    ]
-    for name, desc, caps in api_servers:
-        servers.append(MCPServerConfig(
-            name=name, description=desc, category="api",
-            server_type="remote", capabilities=caps, security_level="medium"
-        ))
-
-    # DEVELOPMENT (80+)
-    dev_servers = [
-        ("docker_manager", "Docker container orchestration", ["containers", "images", "volumes"]),
-        ("kubernetes", "K8s cluster management", ["pods", "services", "deployments"]),
-        ("aws_cloud", "AWS service management", ["ec2", "s3", "lambda", "iam"]),
-        ("terraform", "Infrastructure as Code", ["plan", "apply", "destroy", "state"]),
-        ("jenkins", "CI/CD pipeline control", ["build", "status", "logs"]),
-        ("sonarqube", "Code quality analysis", ["analyze", "metrics", "gates"]),
-        ("ansible", "Configuration management", ["playbook", "inventory", "adhoc"]),
-        ("prometheus", "Monitoring and alerting", ["query", "targets", "rules"]),
-    ]
-    for name, desc, caps in dev_servers:
-        servers.append(MCPServerConfig(
-            name=name, description=desc, category="development",
-            server_type="native", capabilities=caps, security_level="high"
-        ))
-
-    # A
-"""
-
-from typing import List
-try:
-    from .bridge import MCPServerConfig
-except ImportError:
-    # Generic definitions if imported standalone
-    from dataclasses import dataclass
-
-    @dataclass
-    class MCPServerConfig:
+        """Dataclass representing MCP server metadata configuration."""
         name: str
         description: str
         category: str

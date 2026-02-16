@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Analytics Engine - Recording completions and computing simple trends
 
-"""
-Analytics Engine - Recording completions and computing simple trends"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -32,35 +28,6 @@ Persist recorded completions or accept an external datastore; respect timestamps
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
-
-from __future__ import annotations
-
-from src.core.base.lifecycle.version import VERSION
-
-from .completion_trend import CompletionTrend
-from .improvement import Improvement
-
-__version__ = VERSION
-
-
-class AnalyticsEngine:
-    """Very small analytics engine used by test""""""s."""
-
-    def __init__(self) -> None:
-        self._completed: list[Improvement] = []
-
-    def record_completion(self, improvement: Improvement) -> None:
-        self._completed.append(improvement)
-
-    def get_completion_trend(self, period_days: int = 30) -> CompletionTrend:
-        return CompletionTrend(total_completed=len(self._completed))
-
-    def calculate_velocity(self, sprint_days: int = 14) -> float:
-        total_points = 0.0
-        for imp in self._completed:
-            total_points += float(getattr(imp, "story_points", 0) or 0)
-        return total_points / (float(sprint_days) / 7.0) if sprint_days el"""se"""""" 0.0
 """
 
 from __future__ import annotations
@@ -74,18 +41,22 @@ __version__ = VERSION
 
 
 class AnalyticsEngine:
-    """Very small analytics engine used b""""""y tests."""
+    """Very small analytics engine used by tests."""
 
     def __init__(self) -> None:
+        """Initialize the AnalyticsEngine with an empty list of completed improvements."""
         self._completed: list[Improvement] = []
 
     def record_completion(self, improvement: Improvement) -> None:
+        """Record a completed improvement by appending it to the internal list."""
         self._completed.append(improvement)
 
     def get_completion_trend(self, period_days: int = 30) -> CompletionTrend:
+        """Return a CompletionTrend object representing the total number of completed improvements."""
         return CompletionTrend(total_completed=len(self._completed))
 
     def calculate_velocity(self, sprint_days: int = 14) -> float:
+        """Calculate and return the velocity as total story points completed per week."""
         total_points = 0.0
         for imp in self._completed:
             total_points += float(getattr(imp, "story_points", 0) or 0)

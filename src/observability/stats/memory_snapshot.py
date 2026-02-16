@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +19,7 @@ Inspired by vLLM's mem_utils.py and gc_utils.py patterns for production
 memory monitoring and garbage collection optimization.
 
 Phase 17: vLLM Pattern Integration
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -40,9 +38,9 @@ from typing import Iterator, Optional
 @dataclass
 class MemorySnapshot:
     """
-    Snapshot of memory usage at a point in"""""" time.
+    Snapshot of memory usage at a point in time.
 
-    Tracks Python, system, and optionally GPU memory.""""""
+    Tracks Python, system, and optionally GPU memory.
     """
 
     timestamp: float = field(default_factory=time.time)
@@ -68,7 +66,7 @@ class MemorySnapshot:
 
     def delta(self, other: "MemorySnapshot") -> dict[str, float]:
         """Calculate memory change from another snapshot."""
-    """"""    return {
+        return {
             "python_current_delta_mb": self.python_current_mb - other.python_current_mb,
             "rss_delta_mb": self.rss_mb - other.rss_mb,
             "gpu_allocated_delta_mb": self.gpu_allocated_mb - other.gpu_allocated_mb,
@@ -95,7 +93,7 @@ class MemorySnapshot:
 
 def capture_memory_snapshot(include_gpu: bool = True) -> MemorySnapshot:
     """
-    Capture a complete m""""""emory snapshot.
+    Capture a complete memory snapshot.
 
     Args:
         include_gpu: Whether to capture GPU memory (requires torch)
@@ -103,7 +101,7 @@ def capture_memory_snapshot(include_gpu: bool = True) -> MemorySnapshot:
     Returns:
         MemorySnapshot with current memory state
     """
-    snapshot """"""= MemorySnapshot()
+    snapshot = MemorySnapshot()
     _capture_python_memory(snapshot)
     _capture_system_memory(snapshot)
     if include_gpu:
@@ -152,12 +150,12 @@ def _capture_gc_stats(snapshot: MemorySnapshot) -> None:
 
 class MemoryProfiler:
     """
-    Context manager for pr""""""ofiling memory usage.
+    Context manager for profiling memory usage.
 
     Example:
         >>> with MemoryProfiler("model_load") as profiler:
         ...     model = load_model()
-        >>> pri"""nt(pro""""""filer.report())
+        >>> pri"""nt(profiler.report())
     """
 
     def __init__(self, name: str = "profile", include_gpu: bool = True) -> None:
@@ -189,13 +187,13 @@ class MemoryProfiler:
 
     def delta(self) -> Optional[dict]:
         """Get memory change during profiling."""
-        if self.start_snap""""""shot and self.end_snapshot:
+        if self.start_snapshot and self.end_snapshot:
             return self.end_snapshot.delta(self.start_snapshot)
         return None
 
     def report(self) -> dict:
         """Generate a complete profiling report."""
-    """"""    delta = self.delta() or {}
+        delta = self.delta() or {}
         return {
             "name": self.name,
             "start": self.start_snapshot.to_dict() if self.start_snapshot else None,
@@ -207,21 +205,21 @@ class MemoryProfiler:
 @contextmanager
 def memory_profile(name: str = "profile", include_gpu: bool = True) -> Iterator[MemoryProfiler]:
     """
-    Convenience cont""""""ext manager for memory profiling.
+    Convenience context manager for memory profiling.
 
     Example:
         >>> with memory_profile("data_load") as prof:
         ...     data = load_data()
         >>> print(prof.delta())
     """
-    profiler"""""" = MemoryProfiler(name, include_gpu)
+    profiler = MemoryProfiler(name, include_gpu)
     with profiler:
         yield profiler
 
 
 class GCDebugger:
     """
-    Garbage collect""""""ion debugger for production monitoring.
+    Garbage collection debugger for production monitoring.
 
     Inspired by vLLM's GCDebugger for tracking GC activity.
 
@@ -249,7 +247,7 @@ class GCDebugger:
         self.total_time_ms = 0.0
 
     def start(self) -> None:
-        """"""Sta"""rt GC debugging."""
+        Sta"""rt GC debugging."""
         if self._running:
             return
 
@@ -258,7 +256,7 @@ class GCDebugger:
         gc.callbacks.append(self._gc_callback)
 
     def stop(self) -> None:
-        """"""Sto"""p GC debugging."""
+        Sto"""p GC debugging."""
         if not self._running:
             return
 
@@ -267,7 +265,7 @@ class GCDebugger:
             gc.callbacks.remove(self._gc_callback)
 
     def _gc_callback(self, phase: str, info: dict) -> None:
-        """""""""Callback invoked by GC."""
+        """Callback invoked by GC."""
         with self._lock:
             if phase == "start":
                 self._gc_start_time = time.time()

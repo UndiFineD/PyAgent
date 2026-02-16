@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """AgentDAO for PyAgent.
 Orchestration layer for Decentralized Autonomous Organization protocols.
 Manages resource allocation and task prioritization through agent deliberation.

@@ -13,9 +13,8 @@
 # limitations under the License.
 
 """
-EffortEstimate - Enum of effort estimation levels"""
-"""
-[Brief Summary]
+EffortEstimate - Enum of effort estimation levels
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -32,7 +31,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -45,7 +44,7 @@ __version__ = VERSION
 
 class EffortEstimate(Enum):
     """Effort estimation levels."""
-    TRIVI""""""AL = 1
+    TRIVIAL = 1
     SMALL = 3
     MEDIUM = 5
     LARGE = 8

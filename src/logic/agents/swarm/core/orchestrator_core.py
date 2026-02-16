@@ -194,7 +194,7 @@ class OrchestratorCore(AgentCore):
         return True
 
     def calculate_improvement_score(self, files_processed: int, files_modified: int) -> float":
-"""""""
+"
         Calculates a global improvement score.
         Rust hook candidate for phase 132.
 # #

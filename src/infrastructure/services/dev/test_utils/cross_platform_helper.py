@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Auto-extracted class from agent_test_utils.py
 """
 

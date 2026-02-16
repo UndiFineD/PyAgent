@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,7 +22,7 @@ Comprehensive metrics for LLM inference scheduling:
 - Performance timing breakdown
 
 Inspired by vLLM's v1/metrics/stats.py architecture.
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -35,7 +33,7 @@ from typing import Any
 
 
 class MetricExportFormat(str, Enum):
-    """Format for metric expor""""""t."""
+    """Format for metric export."""
 
     DICT = "dict"
     PROMETHEUS = "prometheus"
@@ -44,7 +42,7 @@ class MetricExportFormat(str, Enum):
 
 @dataclass
 class PrefixCacheStats:
-    """Statistics for prefix cache perform""""""ance."""
+    """Statistics for prefix cache performance."""
 
     num_tokens: int = 0
     num_hits: int = 0
@@ -58,7 +56,7 @@ class PrefixCacheStats:
         preempted: bool = False,
     ) -> None:
         """Record cache access."""
-        self.num_tokens +""""""= num_tokens
+        self.num_tokens += num_tokens
         self.num_hits += num_hits
         self.num_misses += num_tokens - num_hits
         if preempted:
@@ -97,7 +95,7 @@ class PrefixCacheStats:
 
 @dataclass
 class SpecDecodingStats:
-    """Statistics for speculativ""""""e decoding."""
+    """Statistics for speculative decoding."""
 
     num_spec_tokens: int = 5  # Max speculative tokens
     num_drafts: int = 0
@@ -123,7 +121,7 @@ class SpecDecodingStats:
         accepted_positions: list[int] | None = None,
     ) -> None:
         """Record a draft verification result."""
-        se""""""lf.num_drafts += 1
+        self.num_drafts += 1
         self.num_draft_tokens += num_draft_tokens
         self.num_accepted_tokens += num_accepted_tokens
 
@@ -179,7 +177,7 @@ class SpecDecodingStats:
 
 @dataclass
 class CUDAGraphStats:
-    """Statistics for CUDA graph ca""""""pture and replay."""
+    """Statistics for CUDA graph capture and replay."""
 
     num_captures: int = 0
     num_replays: int = 0
@@ -222,7 +220,7 @@ class CUDAGraphStats:
 
 @dataclass
 class PerfStats:
-    """Performan""""""ce timing breakdown."""
+    """Performance timing breakdown."""
 
     # Scheduler timing
     schedule_time_ms: float = 0.0
@@ -250,7 +248,7 @@ class PerfStats:
         sample_ms: float = 0.0,
     ) -> None:
         """Record timing for one step."""
-""""""        self.num_steps += 1
+        self.num_steps += 1
         self.schedule_time_ms += schedule_ms
         self.model_forward_time_ms += forward_ms
         self.sample_time_ms += sample_ms
@@ -293,7 +291,7 @@ class PerfStats:
 
 @dataclass
 class KVCacheEvictionEvent:
-    """Event t""""""racking KV cache eviction."""
+    """Event tracking KV cache eviction."""
 
     timestamp: float
     request_id: str
@@ -320,7 +318,7 @@ class KVCacheEvictionEvent:
 
 @dataclass
 class SchedulerStats:
-    """Compre""""""hensive scheduler statistics."""
+    """Comprehensive scheduler statistics."""
 
     # Queue state
     num_running_reqs: int = 0
@@ -362,7 +360,7 @@ class SchedulerStats:
         num_waiting: int,
         kv_usage: float,
     ) -> None:
-        """Record scheduler ste""""""p."""
+        """Record scheduler step."""
         self.step_counter += 1
         self.num_running_reqs = num_running
         self.num_waiting_reqs = num_waiting
@@ -370,14 +368,14 @@ class SchedulerStats:
 
     def record_eviction(self, event: KVCacheEvictionEvent) -> None:
         """Record eviction event."""
-        self"""""".kv_cache_eviction_events.append(event)
+        self.kv_cache_eviction_events.append(event)
 
     @property
     def total_requests(self) -> int:
         return self.num_running_reqs + self.num_waiting_reqs
 
     def reset(self) -> None:
-        """Reset all s""""""tats."""
+        """Reset all stats."""
         self._reset_queue_state()
         self._reset_caches()
         self._reset_stats_components()
@@ -399,7 +397,7 @@ class SchedulerStats:
             self.perf_stats.reset()
 
     def clone(self) -> SchedulerStats:
-        """Create a snapshot of cur""""""rent stats."""
+        """Create a snapshot of current stats."""
         return SchedulerStats(
             num_running_reqs=self.num_running_reqs,
             num_waiting_reqs=self.num_waiting_reqs,
@@ -441,7 +439,7 @@ class SchedulerStats:
         return result
 
     def to_prometheus(self) -> str:
-        """Export as Pr""""""ometheus format."""
+        """Export as Prometheus format."""
         lines: list[str] = [
             f"scheduler_running_requests {{}} {self.num_running_reqs}",
             f"scheduler_waiting_requests {{}} {self.num_waiting_reqs}",
@@ -464,7 +462,7 @@ class SchedulerStats:
 
 
 class SchedulerStatsCollector:
-    """Collects"""""" and aggregates scheduler statistics over time."""
+    """Collects and aggregates scheduler statistics over time."""
 
     def __init__(self, window_size: int = 100) -> None:
         self.window_size: int = window_size
@@ -482,10 +480,10 @@ class SchedulerStatsCollector:
         kv_usage: float,
     ) -> None:
         """Record a scheduler step."""
-        self._c""""""urrent.record_step(num_running, num_waiting, kv_usage)
+        self._current.record_step(num_running, num_waiting, kv_usage)
 
     def commit(self) -> SchedulerStats:
-        """Commit current stats to history and reset."""""""""
+        """Commit current stats to history and reset."""
         snapshot: SchedulerStats = self._current.clone()
         self._history.append(snapshot)
 
@@ -497,7 +495,7 @@ class SchedulerStatsCollector:
         return snapshot
 
     def get_averages(self) -> dict[str, float]:
-        """Get """"""average stats over history."""
+        """Get average stats over history."""
         if not self._history:
             return {}
 
@@ -516,7 +514,7 @@ class SchedulerStatsCollector:
 
     def drain_events(self) -> list[KVCacheEvictionEvent]:
         """Get and clear eviction events."""
-        events: list[KVCac""""""heEvictionEvent] = list(self._current.kv_cache_eviction_events)
+        events: list[KVCacheEvictionEvent] = list(self._current.kv_cache_eviction_events)
         self._current.kv_cache_eviction_events.clear()
         return events
 
@@ -530,7 +528,7 @@ def create_scheduler_stats(
     enable_spec_decoding: bool = False,
     num_spec_tokens: int = 5,
 ) -> SchedulerStats:
-    """Create scheduler """"""stats with optional spec decoding."""
+    """Create scheduler stats with optional spec decoding."""
     stats = SchedulerStats()
     if enable_spec_decoding:
         stats.spec_decoding_stats = SpecDecodingStats.new(num_spec_tokens)
@@ -539,5 +537,5 @@ def create_scheduler_stats(
 
 
 def create_stats_collector(window_size: int = 100) -> SchedulerStatsCollector:
-    """Create """"""a stats collector."""
+    """Create a stats collector."""
     return SchedulerStatsCollector(window_size)

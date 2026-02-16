@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +13,8 @@
 # limitations under the License.
 
 """
-Deduplication Core - Similarity-based report deduplication and JSONL export"""
-"""
-[Brief Summary]
+Deduplication Core - Similarity-based report deduplication and JSONL export
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -63,7 +60,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Core logic for Report Deduplication (Phase 183).
 Handles similarity calculations and JSONL export.
-"""""""""
+"""
 
 import json
 from typing import Any
@@ -75,14 +72,14 @@ except ImportError:
 
 
 class DeduplicationCore:
-    """Core functionality for deduplicating items based on similarit""""""y."""
+    """Core functionality for deduplicating items based on similarity."""
 
     @staticmethod
     def jaccard_similarity(s1: str, s2: str) -> float:
         """
-        Calculates Jaccard similarity between two strings based """"""on words.
+        Calculates Jaccard similarity between two strings based on words.
         """
-        if rc """"""is not None:
+        if rc is not None:
             try:
                 return rc.calculate_jaccard_similarity(s1, s2)  # type: ignore[attr-defined]
             except (AttributeError, TypeError, RuntimeError, OSError):
@@ -101,9 +98,9 @@ class DeduplicationCore:
         items: list[dict[str, Any]], key: str = "message", threshold: float = 0.8
     ) -> list[dict[str, Any]]:
         """
-        Removes items that are too similar to alre""""""ady seen items.
+        Removes items that are too similar to already seen items.
         """
-        """"""if rc is not None:
+        if rc is not None:
             try:
                 messages = [item.get(key, "") for item in items]
                 unique_indices = rc.deduplicate_by_similarity(messages, threshold)  # type: ignore[attr-defined]
@@ -131,8 +128,8 @@ class DeduplicationCore:
     @staticmethod
     def export_to_jsonl(items: list[dict[str, Any]], output_path: str) -> None:
         """
-        Exports a list of d""""""icts to a JSONL file.
+        Exports a list of dicts to a JSONL file.
         """
-        with open(output_path, "w","""""" encoding="utf-8") as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             for item in items:
                 f.write(json.dumps(item) + "\n")

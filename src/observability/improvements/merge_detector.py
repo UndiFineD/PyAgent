@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+MergeDetector - Detect similar/mergeable improvements
 
-"""
-MergeDetector - Detect similar/mergeable improvements"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -36,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -57,20 +53,20 @@ __version__ = VERSION
 
 
 class MergeDetector:
-    """Detects improvements that can be m""""""erged.
+    """Detects improvements that can be merged.
 
     Finds duplicate or similar improvements across files.
 
     Attributes:
-        similarity_threshold: Threshold for considering items similar.""""""
+        similarity_threshold: Threshold for considering items similar.
     """
 
     def __init__(self, similarity_threshold: float = 0.7) -> None:
         """Initialize merge detector."""
-        self.similarity_threshold = similari""""""ty_threshold
+        self.similarity_threshold = similarity_threshold
 
     def find_similar(self, improvements: list[Improvement]) -> list[MergeCandidate]:
-        """Find similar improvements that c""""""ould be merged.
+        """Find similar improvements that could be merged.
 
         Args:
             improvements: List of improvements to analyze.
@@ -78,7 +74,7 @@ class MergeDetector:
         Returns:
             List of merge candidates.
         """
-        # Rust-accelerated O(N²) si""""""milarity detection
+        # Rust-accelerated O(N²) similarity detection
         if _RUST_AVAILABLE and len(improvements) > 2:
             try:
                 # Pack improvements for Rust: (id, title, category, file_path)
@@ -123,7 +119,7 @@ class MergeDetector:
         return candidates
 
     def _calculate_similarity(self, imp1: Improvement, imp2: Improvement) -> float:
-        """Calculate similarity between two improvements."""""""""
+        """Calculate similarity between two improvements."""
         score = 0.0
 
         # Title similarity
@@ -146,7 +142,7 @@ class MergeDetector:
 
     def _get_merge_reason(self, imp1: Improvement, imp2: Improvement) -> str:
         """Generate merge reason."""
-       """""" reasons: list[str] = []
+        reasons: list[str] = []
         if imp1.category == imp2.category:
             reasons.append(f"same category ({imp1.category.value})")
         if imp1.file_path == imp2.file_path:
@@ -154,7 +150,7 @@ class MergeDetector:
         return ", ".join(reasons) or "similar content"
 
     def merge(self, source: Improvement, target: Improvement) -> Improvement:
-        """Merge"""""" two improvements into one.
+        """Merge two improvements into one.
 
         Args:
             source: Source improvement.
@@ -163,8 +159,8 @@ class MergeDetector:
         Returns:
             The merged improvement.
         """
-""""""        # Combine descriptions
-        target""".d""""""escription = f"{target.descr
+        # Combine descriptions
+        target""".description = f"{target.descr
 """
 
 from __future__ import annotations
@@ -186,7 +182,7 @@ __version__ = VERSION
 
 
 class MergeDetector:
-    """Dete""""""cts improvements that can be merged.
+    """Detects improvements that can be merged.
 
     Finds duplicate or similar improvements across files.
 
@@ -199,7 +195,7 @@ class MergeDetector:
         sel"""f.s"""imilarity_threshold = similarity_threshold
 
     def find_similar(self, improvements: list[Improvement]) -> list[MergeCandidate]:
-        """"""Fi"""nd similar improvements that could be merged.
+        Fi"""nd similar improvements that could be merged.
 
         Args:
             improvements: List of improvements to analyze.
@@ -274,7 +270,7 @@ class MergeDetector:
         return score
 
     def _get_merge_reason(self, imp1: Improvement, imp2: Improvement) -> str:
-        """"""Gen"""erate merge reason."""
+        Gen"""erate merge reason."""
         reasons: list[str] = []
         if imp1.category == imp2.category:
             reasons.append(f"same category ({imp1.category.value})")

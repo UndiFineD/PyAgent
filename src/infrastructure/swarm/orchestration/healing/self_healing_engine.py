@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Engine for automated self-repair of agent tools and modules.
 Detects runtime errors and orchestrates CoderAgents to apply fixes.
 """

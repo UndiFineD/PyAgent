@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +13,8 @@
 # limitations under the License.
 
 """
-Improvement Validator - Validation of Improvement objects"""
-"""
-[Brief Summary]
+Improvement Validator - Validation of Improvement objects
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -41,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Validates improvements with automated testing.
 (Facade for src.core.base.common.validation_core)
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -56,39 +53,39 @@ from .validation_severity import ValidationSeverity
 
 class ImprovementValidator(ValidationCore):
     """
-    Runs validation rules and automated tests on improve""""""ments.
+    Runs validation rules and automated tests on improvements.
 
     Attributes:
-        rules: List of validation rules.""""""
+        rules: List of validation rules.
     """
 
     def __init__(self) -> None:
         """Initialize the validator."""
-        self.rules: list[Callable[[Improvement], tuple[bool,"""""" str]]] = []
+        self.rules: list[Callable[[Improvement], tuple[bool, str]]] = []
         self._setup_default_rules()
 
     def _setup_default_rules(self) -> None:
         """Set up default validation rules."""
-        self.rules.append(self._rule_h""""""as_description)
+        self.rules.append(self._rule_has_description)
         self.rules.append(self._rule_valid_effort)
 
     def _rule_has_description(self, imp: Improvement) -> tuple[bool, str]:
         """Check that improvement has a description."""
-        if not imp.description or len(imp.""""""description) < 10:
+        if not imp.description or len(imp.description) < 10:
             return False, "Description too short or missing"
         return True, ""
 
     def _rule_valid_effort(self, imp: Improvement) -> tuple[bool, str]:
         """Check that effort estimate is reasonable."""
-  """"""      return True, ""
+        return True, ""
 
     def add_rule(self, rule: Any, **kwargs: Any) -> None:
-        """""""""Add a validation rule.
+        """Add a validation rule.
 
         Compatibility:
         - Accepts a callable rule.
         - Accepts a string rule name with parameters (e.g. `min_description_length`, `min_length=50`).
-        """""""""
+        """
         if callable(rule):
             self.rules.append(rule)
             return
@@ -110,7 +107,7 @@ class ImprovementValidator(ValidationCore):
         raise TypeError("Unsupported rule type")
 
     def validate(self, improvement: Improvement) -> ValidationResult:
-     """"""   """Validate an improvement.
+        """Validate an improvement.
 
         Args:
             improvement: The improvement to validate.
@@ -118,7 +115,7 @@ class ImprovementValidator(ValidationCore):
         Returns:
             ValidationResult with issues found.
         """
-        result = ValidationResu""""""lt(improvement_id=improvement.id)
+        result = ValidationResult(improvement_id=improvement.id)
 
         for rule in self.rules:
             passed, message = rule(improvement)
@@ -130,7 +127,7 @@ class ImprovementValidator(ValidationCore):
 
     def validate_all(self, improvements: list[Improvement]) -> list[ValidationResult]:
         """Validate multiple improvements."""
-        return [self.va"""li"""""""""date(imp) for imp in improvements]
+        return [self.va"""li"""date(imp) for imp in improvements]
 """
 
 from __future__ import annotations
@@ -146,30 +143,30 @@ from .validation_severity import ValidationSeverity
 
 class ImprovementValidator(ValidationCore):
     """
-    Runs validation """"""rules and automated tests on improvements.
+    Runs validation rules and automated tests on improvements.
 
     Attributes""":
-    """"""    rules: List of validation rules.
+        rules: List of validation rules.
     """
 
     def __init__(self) -> None:
         """Initialize the validator."""
-        self.rules: list""""""[Callable[[Improvement], tuple[bool, str]]] = []
+        self.rules: list[Callable[[Improvement], tuple[bool, str]]] = []
         self._setup_default_rules()
 
     def _setup_default_rules(self) -> None:
         """Set up default validation rules."""
-  """"""      self.rules.append(self._rule_has_description)
+        self.rules.append(self._rule_has_description)
         self.rules.append(self._rule_valid_effort)
 
     def _rule_has_description(self, imp: Improvement) -> tuple[bool, str]:
         """Check that improvement has a description."""
-      """"""  if not imp.description or len(imp.description) < 10:
+        if not imp.description or len(imp.description) < 10:
             return False, "Description too short or missing"
         return True, ""
 
     def _rule_valid_effort(self, imp: Improvement) -> tuple[bool, str]:
-        """Check that """"""effort estimate is reasonable."""
+        """Check that effort estimate is reasonable."""
         return True, """""
 
     def add_rule(self, rule:""" An"""y, **kwargs: Any) -> None:

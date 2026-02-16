@@ -28,7 +28,7 @@ class TestAnomalyDetectionAgent:
         interaction = {"type": "task", "target": "file1"}
         agent.record_agent_interaction("agent1", interaction)
         # Should not detect anomaly with few interactions
-        assert len(agent.anomalies) == 0
+        assert len(agent.check_agent_anomalies("agent1")) == 0
 
     def test_detect_anomaly_new_type(self):
         """Test detecting anomaly for new interaction type."""
@@ -38,8 +38,9 @@ class TestAnomalyDetectionAgent:
             agent.record_agent_interaction("agent1", {"type": "read"})
         # New type should be anomaly
         agent.record_agent_interaction("agent1", {"type": "write"})
-        assert len(agent.anomalies) == 1
-        assert agent.anomalies[0]['agent_id'] == "agent1"
+        anomalies = agent.check_agent_anomalies("agent1")
+        assert len(anomalies) == 1
+        assert anomalies[0]['agent_id'] == "agent1"
 
     def test_check_agent_anomalies(self):
         """Test checking anomalies for specific agent."""
@@ -57,4 +58,4 @@ class TestAnomalyDetectionAgent:
             agent.record_agent_interaction("agent1", {"type": "read"})
         agent.update_baselines()
         # Should have baseline stats
-        assert "agent1" in agent.detector.baseline_stats
+        assert "agent1" in agent._detector.baseline_stats

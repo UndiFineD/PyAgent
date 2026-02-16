@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Script for pruning large research research files to keep only recent relevant findings."""
 
 from __future__ import annotations

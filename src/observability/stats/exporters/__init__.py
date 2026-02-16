@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +16,7 @@
 """
 Provides exporters for Prometheus, CloudWatch, OpenTelemetry, and other
 monitoring systems.
-"""""""""
+"""
 
 from .cloud_exporter import CloudExporter  # noqa: F401
 from .metrics_exporter import MetricsExporter  # noqa: F401

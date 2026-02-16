@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Hopper Architecture Matrix Multiplication Simulator for H100 performance estimation.
 Part of the Phase 130 performance optimization suite.

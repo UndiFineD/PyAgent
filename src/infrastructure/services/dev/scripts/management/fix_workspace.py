@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Script for reconciling workspace-wide module imports and missing __init__.py files."""
 
 from __future__ import annotations

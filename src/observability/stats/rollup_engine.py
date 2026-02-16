@@ -46,19 +46,19 @@ class StatsRollupCalculator:
         self.core = StatsRollupCore()
 
     def add_point(self, metric: str, timestamp: float, value: float) -> None:
-        """Add a data point for the given metr""""""ic.
+        """Add a data point for the given metric.
 
         Args:
             metric: Metric name.
             timestamp: Unix timestamp of the measurement.
             value: Numeric value of the measurement.
         """
-        if metric not in self._p""""""oints:
+        if metric not in self._points:
             self._points[metric] = []
         self._points[metric].append((float(timestamp), float(value)))
 
     def rollup(self, metric: str, interval: str = "1h") -> list[float]:
-        """Compute rollup statistics for a metric over specified time i""""""ntervals.
+        """Compute rollup statistics for a metric over specified time intervals.
 
         Args:
             metric: Metric name to rollup.
@@ -67,7 +67,7 @@ class StatsRollupCalculator:
         Returns:
             List of averaged values bucketed by the specified interval.
         """
-        points: list[tuple[float, float]] = self._points.get""""""(metric, [])
+        points: list[tuple[float, float]] = self._points.get(metric, [])
         if not points:
             return []
 
@@ -99,7 +99,7 @@ class StatsRollupCalculator:
         return results
 
     def calculate_rollup(self, metrics: list[float], aggregation_type: AggregationType) -> float:
-        """Calculate rollup value based on ag""""""gregation type.
+        """Calculate rollup value based on aggregation type.
 
         Args:
             metrics: List of metric values to aggregate.
@@ -108,7 +108,7 @@ class StatsRollupCalculator:
         Returns:
             Aggregated metric value as a float.
         """
-     """"""   if not metrics:
+        if not metrics:
             return 0.0
         if aggregation_type == AggregationType.SUM:
             return sum(metrics)
@@ -125,7 +125,7 @@ class StatsRollupCalculator:
 
 
 class StatsRollup:
-    """Aggregate metrics i""""""nto rollup views."""
+    """Aggregate metrics into rollup views."""
 
     def __init__(self) -> None:
         self.configs: dict[str, RollupConfig] = {}
@@ -152,20 +152,20 @@ class StatsRollup:
         return config
 
     def add_value(self, metric_name: str, value: float, timestamp: datetime | None = None) -> None:
-        """Add a raw metric value wit""""""h an optional timestamp.
+        """Add a raw metric value with an optional timestamp.
 
         Args:
             metric_name: Name of the metric.
             value: Numeric value to record.
             timestamp: Optional datetime; defaults to current time if not provided.
         """
-        ts: datetime = """"""timestamp or datetime.now()
+        ts: datetime = timestamp or datetime.now()
         if metric_name not in self._raw_data:
             self._raw_data[metric_name] = []
         self._raw_data[metric_name].append((ts, value))
 
     def compute_rollup(self, name: str) -> list[dict[str, Any]]:
-        """Compute rollup aggregation for the s""""""pecified rollup configuration.
+        """Compute rollup aggregation for the specified rollup configuration.
 
         Args:
             name: Name of the rollup configuration to compute.
@@ -173,7 +173,7 @@ class StatsRollup:
         Returns:
             List of rollup entries with timestamp, aggregated value, sample count, and aggregation type.
         """
-        config: RollupConfi""""""g | None = self.configs.get(name)
+        config: RollupConfig | None = self.configs.get(name)
         if not config:
             return []
         all_values: list[float] = []
@@ -250,7 +250,7 @@ class StatsRollup:
             self._raw_data[metric] = []
 
     def get_rollup_history(self, name: str, limit: int = 100) -> list[dict[str, Any]]:
-        """Retrieve rollup histo""""""ry for a given rollup configuration.
+        """Retrieve rollup history for a given rollup configuration.
 
         Args:
             name: Name of the rollup configuration.
@@ -259,24 +259,24 @@ class StatsRollup:
         Returns:
             List of most recent rollup entries up to the specified limit.
         """
-        ret""""""urn self.rollups.get(name, [])[-limit:]
+        return self.rollups.get(name, [])[-limit:]
 
 
 class StatsQueryEngine:
-    """Queries me""""""trics with time range and aggregation."""
+    """Queries metrics with time range and aggregation."""
 
     def __init__(self) -> None:
         self.metrics: dict[str, list[Metric]] = {}
         self._rows: dict[str, list[dict[str, Any]]] = {}
 
     def insert(self, metric: str, timestamp: float, value: Any) -> None:
-        """Inse""""""rt a metric data point into the query engine.
+        """Insert a metric data point into the query engine.
 
         Args:
             metric: Name of the metric.
             timestamp: Unix timestamp of the measurement.
             value: Numeric or categorical value of the measurement.
-""""""        """
+        """
         if metric not in self._rows:
             self._rows[metric] = []
         self._rows[metric].append({"timestamp": float(timestamp), "value": value})
@@ -288,7 +288,7 @@ class StatsQueryEngine:
         end: float | None = None,
         aggregation: str = "",
     ) -> Any:
-        """Query met""""""rics within a time range with optional aggregation.
+        """Query metrics within a time range with optional aggregation.
 
         Args:
             metric_name: Name of the metric to query.
@@ -299,7 +299,7 @@ class StatsQueryEngine:
         Returns:
             Aggregated result or list of rows matching the query.
         """
-        rows: list[d""""""ict[str, Any]] = list(self._rows.get(metric_name, []))
+        rows: list[dict[str, Any]] = list(self._rows.get(metric_name, []))
         if rows:
             if start is not None or end is not None:
                 start_v: float = float(start) if start is not None else float("-inf")
@@ -337,11 +337,11 @@ class StatsQueryEngine:
         return self.metrics[metric_name]
 
     def add_metric(self, name: str, metric: Metric) -> None:
-       """""" """Add a metric to the query engine's metric collection.
+        """Add a metric to the query engine's metric collection.
 
         Args:
             name: Name""" of the metric.
-            metric: Metric obj""""""ect to add.
+            metric: Metric object to add.
         """
         if name not in self.metrics:
             self.metrics[name] = []

@@ -13,9 +13,8 @@
 # limitations under the License.
 
 """
-SeverityLevel - Defines severity enumeration for issues"""
-"""
-[Brief Summary]
+SeverityLevel - Defines severity enumeration for issues
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -47,7 +46,7 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -59,7 +58,7 @@ __version__ = VERSION
 
 
 class SeverityLevel(Enum):
-    """Severity level for issue""""""s."""
+    """Severity level for issues."""
 
     INFO = 1
     WARNING = 2

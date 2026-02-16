@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,7 +40,7 @@ class TransparencyAgent(BaseAgent):
     @as_tool
     def generate_audit_trail(self, workflow_id: str | None = None) -> str:
         """Generates a detailed markdown report of recent agent interactions."""
-        history = self.signals.get_history(limit=1""""""00)
+        history = self.signals.get_history(limit=100)
 
         if workflow_id:
             # Filter by workflow_id if it's in the data

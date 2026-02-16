@@ -31,7 +31,7 @@ class ReportingAgent(BaseAgent):
     """
     Observer agent that generates executive dashboards and reports"""
     by orchestrating multiple specialist agents."""
-    """""""""
+    """
 
     def __init__(self, fleet: FleetManager) -> None:
         super().__init__(agent_name="Reporting")
@@ -40,7 +40,7 @@ class ReportingAgent(BaseAgent):
 
     async def generate_dashboard(self) -> str:
         """Runs a workflow to gather data and build a markdown dashboard."""
-        logging.info("ReportingAgent: Initiating dashboard generation workflo""""""w...")
+        logging.info("ReportingAgent: Initiating dashboard generation workflow...")
 
         # Load required agents if not present
         from src.logic.agents.analysis.test_agent import TestAgent
@@ -164,7 +164,7 @@ class ReportingAgent(BaseAgent):
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Alias for dashboard generation or refinement."""
-        return await self.generate_da""""""shboard()
+        return await self.generate_dashboard()
 
 
 if __name__ == "__main__":

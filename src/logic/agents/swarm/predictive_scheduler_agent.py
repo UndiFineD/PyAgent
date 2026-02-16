@@ -205,7 +205,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             self.usage_history = self.usage_history[-1000:]
 
     def forecast_usage(self) -> dict[str, Any]:
-"""""""
+"
  "       Forecasts usage for the next cycle.
         Phase 130: Weighted combination of average and trend based on neural feedback.
 # # "

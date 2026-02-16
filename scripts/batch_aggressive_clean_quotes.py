@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aggressive batch cleaner for src/observability/errors:
-- Removes all injected quote sequences (e.g., """""", '''''', etc.) from identifiers, types, and strings.
+- Removes all injected quote sequences (e.g., , '''''', etc.) from identifiers, types, and strings.
 - Repairs unterminated triple-quoted strings and docstrings.
 - Cleans up unmatched parentheses/braces caused by corruption.
 - Designed for repeated runs and large-scale corruption.

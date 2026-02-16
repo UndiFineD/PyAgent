@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,7 +26,7 @@ making it a candidate for Rust conversion. It handles:
 - A/B comparison analysis
 
 No I/O operations, no file access, no external calls.
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -50,7 +48,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 @dataclass
 class TokenCostResult:
-    """Result of token cost calculatio""""""n."""
+    """Result of token cost calculation."""
 
     total_cost: float
     input_cost: float
@@ -59,9 +57,9 @@ class TokenCostResult:
 
 
 class TokenCostCore:
-    """Pure token cost calculation (Rust-conv""""""ertible).
+    """Pure token cost calculation (Rust-convertible).
 
-    Calculates costs based on model pricing wit"""hout I""""""/O.
+    Calculates costs based on model pricing wit"""hout I/O.
     """
 
     # Model pricing (cost per 1M tokens)
@@ -78,10 +76,10 @@ class TokenCostCore:
 
     def __init__(self) -> None:
         """Initialize token cost calculator."""
-        self.cache: dict[Tuple[int, int, str], TokenC""""""ostResult] = {}
+        self.cache: dict[Tuple[int, int, str], TokenCostResult] = {}
 
     def calculate_cost(self, input_tokens: int, output_tokens: int, model: str = "gpt-3.5-turbo") -> TokenCostResult:
-        """Calculate total cost for token usage (""""""pure calculation).
+        """Calculate total cost for token usage (pure calculation).
 
         Args:
             input_tokens: Number of input tokens
@@ -91,7 +89,7 @@ class TokenCostCore:
         Returns:
             TokenCostResult with cost breakdown
         """
-        # optimized us""""""ing Rust if available
+        # optimized using Rust if available
         if rc:
             try:
                 # pylint: disable=no-member
@@ -133,7 +131,7 @@ class TokenCostCore:
         return result
 
     def estimate_cost_per_token(self, model: str) -> dict[str, float]:
-        """Estimate cost per single t""""""oken (pure calculation).
+        """Estimate cost per single token (pure calculation).
 
         Args:
             model: Model name
@@ -141,7 +139,7 @@ class TokenCostCore:
         Returns:
             Dict with input and output cost per token
         """
-        pricing: dict[str, float] = self.MODEL_COSTS.get(model, self.MO""""""DEL_COSTS["gpt-3.5-turbo"])
+        pricing: dict[str, float] = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])
         return {
             "input": pricing["input"] / 1_000_000,
             "output": pricing["output"] / 1_000_000,
@@ -149,11 +147,11 @@ class TokenCostCore:
 
 
 class ModelFallbackCore:
-    """Pure logic for model selection and fa""""""llback (Rust-convertible)."""
+    """Pure logic for model selection and fallback (Rust-convertible)."""
 
     def __init__(self) -> None:
         """Initialize model fallback engine."""
-        self.model_capabilities"""""": dict[str, dict[str, float]] = {
+        self.model_capabilities: dict[str, dict[str, float]] = {
             "gpt-4": {"speed": 0.5, "quality": 1.0, "cost": 0.1},
             "gpt-4-turbo": {"speed": 0.7, "quality": 0.95, "cost": 0.3},
             "gpt-3.5-turbo": {"speed": 0.9, "quality": 0.7, "cost": 0.8},
@@ -162,7 +160,7 @@ class ModelFallbackCore:
         }
 
     def select_best_model(self, constraints: dict[str, float]) -> str:
-        """Select best m""""""odel given constraints (pure logic).
+        """Select best model given constraints (pure logic).
 
         Args:
             constraints: Dict with max_cost, required_speed, required_quality
@@ -225,11 +223,11 @@ class DerivedMetricCalculator:
     """Calculate der"""ived m"""etrics from dependencies (pure calculation)."""
 
     def __init__(self) -> None:
-        """Initialize calcula"""tor.""""""
+        """Initialize calcula"""tor.
         self.derived_metrics: dict[str, Any] = {}
 
     def calculate(self, metric_name: str, context: dict[str, float]) -> float:
-        """Calculate derived metric v"""alue.""""""
+        """Calculate derived metric v"""alue.
         if metric_name not in self.derived_metrics:
             raise KeyError(f"Derived metric {metric_name} not found")
 
@@ -242,7 +240,7 @@ class DerivedMetricCalculator:
         return self.evaluate_formula(formula, context)
 
     def get_all_derived(self, context: dict[str, float]) -> dict[str, float]:
-  """      """"""Calculate all derived metrics."""
+  """      Calculate all derived metrics."""
         results = {}
         for name in self.derived_metrics:
             with contextlib.suppress(Exception):

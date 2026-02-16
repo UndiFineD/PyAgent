@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Utility script to rename the project from DebVisor to PyAgent across the workspace.
 """

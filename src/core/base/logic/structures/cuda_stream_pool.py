@@ -12,7 +12,6 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-
 """
 CUDA Stream Pool - Efficient pooling and management regarding torch.cuda.Stream objects.
 

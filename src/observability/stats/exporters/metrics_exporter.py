@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Metrics Exporter - Consolidate and expose fleet telemetry
 
-"""
-Metrics Exporter - Consolidate and expose fleet telemetry"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -51,7 +47,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Exporter for high-level fleet metrics.
 Sends telemetry to specialized backends like Prometheus, InfluxDB, or Grafana Cloud.
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -66,7 +62,7 @@ __version__ = VERSION
 
 
 class MetricsExporter:
-    """Consolidates all fleet telemetry and exposes it for external monitorin""""""g."""
+    """Consolidates all fleet telemetry and exposes it for external monitoring."""
 
     def __init__(self) -> None:
         self.prometheus = PrometheusExporter()
@@ -74,22 +70,22 @@ class MetricsExporter:
 
     def record_agent_call(self, agent_name: str, duration_ms: float, success: bool) -> str:
         """Records a single agent execution event."""
-        labels = {"agent": agent_name, "status": "success" if success else """""""failure"}
+        labels = {"agent": agent_name, "status": "success" if success else "failure"}
 
         self.prometheus.record_metric("agent_call_duration_ms", duration_ms, labels)
         self.prometheus.record_metric("agent_calls_total", 1.0, labels)
 
     def record_resource_usage(self, cpu_percent: float, mem_mb: float) -> str:
         """Records system resource usage for the fleet process."""
-        self.prometheus.record_metric("fleet_cpu_percent", """"""cpu_percent)
+        self.prometheus.record_metric("fleet_cpu_percent", cpu_percent)
         self.prometheus.record_metric("fleet_memory_mb", mem_mb)
 
     def get_prometheus_payload(self) -> str:
         """Returns the payload for a Prometheus scrape."""
-        return self.prometheus.generate_sc""""""rape_response()
+        return self.prometheus.generate_scrape_response()
 
     def export_to_grafana(self) -> str:
-        """Simulates pushing metrics to a Graf""""""ana Cloud API."""
+        """Simulates pushing metrics to a Grafana Cloud API."""
 
         payload = self.get_prometheus_payload()
         logging.info(f"MetricsExporter: Pushing batch to Grafana... ({len(payload)} bytes)")

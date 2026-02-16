@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Branch Comparer - Compare improvements between Git branches
 
-"""
-Branch Comparer - Compare improvements between Git branches"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -34,7 +30,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -57,7 +53,7 @@ __version__ = VERSION
 
 
 class BranchComparer:
-    """Comparer for improvements across git bra""""""nches.
+    """Comparer for improvements across git branches.
 
     Enables comparison of improvement files between branches
     to identify additions, removals, and modifications.
@@ -70,28 +66,28 @@ class BranchComparer:
         comparer=BranchComparer("/path / to / repo")
         result=comparer.compare("main", "feature / improvements")
         for diff in result.diffs:
-            print(f"{diff.diff_type.value}: {diff.improvement_id}")""""""
+            print(f"{diff.diff_type.value}: {diff.improvement_id}")
     """
 
     def __init__(self, repo_path: str | None = None, recorder: Any = None) -> None:
-        """Initialize bran""""""ch comparer.
+        """Initialize branch comparer.
 
         Args:
             repo_path: Path to git repository. Defaults to current directory.
             recorder: Optional LocalContextRecorder.
         """
-        self.repo_path = Path(repo_path) if repo_path """"""else Path.cwd()
+        self.repo_path = Path(repo_path) if repo_path else Path.cwd()
         self.recorder = recorder
         self.comparisons: list[BranchComparison] = []
 
     def _record(self, action: str, result: str) -> None:
         """Record branch comparison activities."""
-       """""" if self.recorder:
+        if self.recorder:
             self.recorder.record_interaction("Git", "BranchComparer", action, result)
         logging.debug(f"BranchComparer initialized for {self.repo_path}")
 
     def compare(self, source_branch: str, target_branch: str, file_path: str) -> BranchComparison:
-        """Compare improveme""""""nts between branches.
+        """Compare improvements between branches.
 
         Args:
             source_branch: Source branch name.
@@ -101,7 +97,7 @@ class BranchComparer:
         Returns:
             Comparison result with diffs.
         """
-        compar""""""ison = BranchComparison(
+        comparison = BranchComparison(
             source_branch=source_branch,
             target_branch=target_branch,
             file_path=file_path,
@@ -135,14 +131,14 @@ class BranchComparer:
         return comparison
 
     def _get_file_from_branch(self, branch: str, file_path: str) -> str:
-        """Get file cont""""""ent from a specific branch.
+        """Get file content from a specific branch.
 
         Args:
             branch: Branch name.
             file_path: Path to file.
 
         Returns:
-     """       File content st""""""ring.
+     """       File content string.
         """
         try:
             result = subprocess.run(

@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Script for automatically injecting missing dataclass imports where decorators are used."""
 
 from __future__ import annotations

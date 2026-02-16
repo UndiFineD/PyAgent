@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -226,7 +224,7 @@ class SemanticSearchMeshAgent:
         ]
 
     def register_shard(self, shard_id: str, metadata: dict[str, Any]) -> dict[str, Any]:
-"""""""
+"
         Registers a new vector shard in the mesh.
 # #
         self".local_indices.append({"id": shard_id, "meta": metadata})

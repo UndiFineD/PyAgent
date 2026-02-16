@@ -68,7 +68,7 @@ class StatsStreamManager:
 
 
 class StatsStreamer:
-    """Real-time stats streaming via WebSocket (simulated)."""""""""
+    """Real-time stats streaming via WebSocket (simulated)."""
 
     def __init__(self, config: StreamingConfig) -> None:
         self.config = config

@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 StructuredLogger - JSON-based structured logging for PyAgent swarm observability
 
-Brief Summary
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate and use inside agents: logger = StructuredLogger(agent_id="agent-123", trace_id=None, log_file="data/logs/structured.json")
@@ -93,6 +88,7 @@ class StructuredLogger:
         trace_id: str | None = None,
         log_file: str = "data/logs/structured.json",
     ) -> None:
+        """Initialize the StructuredLogger."""
         self.agent_id: str = agent_id
         self.trace_id: str = trace_id or f"trace_{int(time.time())}"
         self.log_file = Path(log_file)
@@ -100,6 +96,7 @@ class StructuredLogger:
         self._ensure_log_dir()
 
     def _ensure_log_dir(self) -> None:
+        """Ensures the log directory exists and handles log rotation if needed (Phase 277)."""
         self._fs.ensure_directory(self.log_file.parent)
         # Phase 277: Compress if > 100MB
         if self.log_file.exists() and self.log_file.stat().st_size > 100 * 1024 * 1024:

@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Engine for Self-Referential Swarm Optimization.
 Monitors fleet performance and suggests structural or configuration changes.
 """

@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Debug script to check for consistency in _record calls across the workspace.
 """

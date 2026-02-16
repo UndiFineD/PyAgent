@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Bench Transformer: Performance benchmarking utility for transformer models in PyAgent.
 """

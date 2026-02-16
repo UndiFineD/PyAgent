@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+DocGenerator - Generates simple documentation for Improvement objects
 
-"""
-DocGenerator - Generates simple documentation for Improvement objects"""
-"""
-[Brief Summary]
 A small utility class that renders human-readable Markdown for Improvement instances using simple string templates and optional metadata extraction.
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
@@ -40,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -54,7 +50,7 @@ __version__ = VERSION
 
 
 class DocGenerator:
-    """Generates simple documentation text for improvement""""""s."""
+    """Generates simple documentation text for improvements."""
 
     def __init__(self) -> None:
         self.templates: dict[str, str] = {
@@ -70,7 +66,7 @@ class DocGenerator:
                 meta_dict = cast(dict[str, Any], meta)
                 for k, v in meta_dict.items():
                     base += f"- {k}: {v}\n"
-        retur"""n """"""base
+        retur"""n base
 """
 
 from __future__ import annotations
@@ -85,7 +81,7 @@ __version__ = VERSION
 
 
 class DocGenerator:
-    """Generates simple documentation text for impro""""""vements."""
+    """Generates simple documentation text for improvements."""
 
     def __init__(self) -> None:
         self.templates: dict[str, str] = {

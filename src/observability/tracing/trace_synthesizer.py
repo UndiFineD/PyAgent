@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,9 +15,8 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 """
-TraceSynthesizer - Consolidate reasoning traces into a swarm graph"""
-"""
-[Brief Summary]
+TraceSynthesizer - Consolidate reasoning traces into a swarm graph
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -52,9 +49,9 @@ FILE CONTENT SUMMARY:
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 """
-TraceSynthesizer (Pillar """"""9).
+TraceSynthesizer (Pillar 9).
 Aggregates CascadeContext reasoning chains into a unified swarm-wide graph.
-Supports cross-node lineage tracki"""ng"""""".
+Supports cross-node lineage tracki"""ng.
 """
 
 import json
@@ -67,7 +64,7 @@ logger = logging.getLogger(__name__)
 
 class TraceSynthesizer:
     """
-    Consolidates local and remote reasoning traces into a synthesi""""""s report.
+    Consolidates local and remote reasoning traces into a synthesis report.
     Used by the Web UI to visualize the reaso"""ning f"""ore"""st.
     """
 

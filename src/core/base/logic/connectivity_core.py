@@ -12,7 +12,6 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Core logic regarding connectivity.
 (Facade regarding src.core.base.common.connectivity_core)

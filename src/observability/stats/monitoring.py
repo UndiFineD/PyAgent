@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +13,8 @@
 # limitations under the License.
 
 """
-Monitoring.py - System resource monitoring engine"""
-"""
-[Brief Summary]
+Monitoring.py - System resource monitoring engine
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -36,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Monitoring.py module.
 """
-# System resource monitoring engi""""""ne.
+# System resource monitoring engine.
 
 from __future__ import annotations
 
@@ -58,7 +55,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ResourceMonitor:
-    """Monitors local system load to inform agent execution strategie""""""s."""
+    """Monitors local system load to inform agent execution strategies."""
 
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
@@ -100,7 +97,7 @@ class ResourceMonitor:
             mult = 1.5
         return mult
 """
-# System resource monitorin""""""g engine.
+# System resource monitoring engine.
 
 from __future__ import annotations
 
@@ -122,7 +119,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ResourceMonitor:
-    """Monitors local system load to inform agent execution str""""""ategies."""
+    """Monitors local system load to inform agent execution strategies."""
 
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)

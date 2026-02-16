@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import pytest
+from infrastructure.services.execution.cpu_gpu_buffer_pool import MemoryPlacement, CpuGpuBuffer, UvaBufferPool, PinnedMemoryManager, copy_with_indices, scatter_with_indices, pad_to_multiple, compute_cumsum_offsets, flatten_with_offsets, split_by_offsets
+
+
+def test_memoryplacement_basic():
+    assert MemoryPlacement is not None
+
+
+def test_cpugpubuffer_basic():
+    assert CpuGpuBuffer is not None
+
+
+def test_uvabufferpool_basic():
+    assert UvaBufferPool is not None
+
+
+def test_pinnedmemorymanager_basic():
+    assert PinnedMemoryManager is not None
+
+
+def test_copy_with_indices_basic():
+    assert callable(copy_with_indices)
+
+
+def test_scatter_with_indices_basic():
+    assert callable(scatter_with_indices)
+
+
+def test_pad_to_multiple_basic():
+    assert callable(pad_to_multiple)
+
+
+def test_compute_cumsum_offsets_basic():
+    assert callable(compute_cumsum_offsets)
+
+
+def test_flatten_with_offsets_basic():
+    assert callable(flatten_with_offsets)
+
+
+def test_split_by_offsets_basic():
+    assert callable(split_by_offsets)

@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Script for standardizing the position of __future__ imports at the top of files."""
 
 from __future__ import annotations

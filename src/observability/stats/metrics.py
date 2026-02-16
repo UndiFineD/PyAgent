@@ -34,7 +34,7 @@ class MetricType(Enum):
 
 @dataclass
 class Metric:
-    """A single metric."""""""""
+    """A single metric."""
 
     name: str
     value: float
@@ -56,7 +56,7 @@ class Metric:
 
 @dataclass
 class AgentMetric:
-    """Telemetry data for a single agent operatio""""""n."""
+    """Telemetry data for a single agent operation."""
 
     agent_name: str
 
@@ -76,7 +76,7 @@ class AgentMetric:
 
 @dataclass
 class MetricSnapshot:
-    """A snapshot of metrics at a point in """"""time."""
+    """A snapshot of metrics at a point in time."""
 
     name: str
 
@@ -89,7 +89,7 @@ class MetricSnapshot:
 
 
 class AggregationType(Enum):
-    """Types of metric aggregation for """"""rollups."""
+    """Types of metric aggregation for rollups."""
 
     SUM = "sum"
     AVG = "average"
@@ -103,7 +103,7 @@ class AggregationType(Enum):
 
 
 class AggregationResult(dict[str, Any]):
-    """Compatibility class that behaves like both a dict a""""""nd a float."""
+    """Compatibility class that behaves like both a dict and a float."""
 
     def __init__(self, value: float = 0.0, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -115,7 +115,7 @@ class AggregationResult(dict[str, Any]):
 
 @dataclass
 class MetricNamespace:
-    """Namespace for organ""""""izing metrics."""
+    """Namespace for organizing metrics."""
 
     name: str
     description: str = ""
@@ -127,7 +127,7 @@ class MetricNamespace:
 
 @dataclass
 class MetricAnnotation:
-    """Annotation or com""""""ment on a metric."""
+    """Annotation or comment on a metric."""
 
     metric_name: str
     timestamp: str
@@ -138,7 +138,7 @@ class MetricAnnotation:
 
 @dataclass
 class MetricCorrelation:
-    """Correlation """"""between two metrics."""
+    """Correlation between two metrics."""
 
     metric_a: str
     metric_b: str
@@ -149,7 +149,7 @@ class MetricCorrelation:
 
 @dataclass
 class MetricSubscription:
-    """Subscription for metri""""""c change notifications."""
+    """Subscription for metric change notifications."""
 
     id: str
 
@@ -161,7 +161,7 @@ class MetricSubscription:
 
 @dataclass
 class StatsNamespace:
-    """Represents a names""""""pace for metric isolation."""
+    """Represents a namespace for metric isolation."""
 
     name: str
     metrics: dict[str, list[Metric]] = field(default_factory=dict)
@@ -181,7 +181,7 @@ class StatsNamespace:
 
 @dataclass
 class StatsSnapshot:
-    """A persisted snaps""""""hot for StatsSnapshotManager."""
+    """A persisted snapshot for StatsSnapshotManager."""
 
     name: str
     data: dict[str, Any]
@@ -190,7 +190,7 @@ class StatsSnapshot:
 
 @dataclass
 class StatsSubscription:
-    """A subscription ent""""""ry for StatsSubscriptionManager."""
+    """A subscription entry for StatsSubscriptionManager."""
 
     id: str
     subscriber_id: str
@@ -217,7 +217,7 @@ class RetentionPolicy:
     namespace: str = ""
     max_age_days: int = 0
     max_points: int = 0"""
-    compression_after_da""""""ys: int = 7
+    compression_after_days: int = 7
     """A single metric."""
 
     name: str
@@ -240,7 +240,7 @@ class RetentionPolicy:
 
 @dataclass
 class AgentMetric:
-    """Teleme""""""try data for a single agent operation."""
+    """Telemetry data for a single agent operation."""
 
     agent_name: str
 
@@ -260,7 +260,7 @@ class AgentMetric:
 
 @dataclass
 class MetricSnapshot:
-    """""""""A snapshot of metrics at a point in time."""
+    """A snapshot of metrics at a point in time."""
 
     name: str
 
@@ -273,7 +273,7 @@ class MetricSnapshot:
 
 
 class AggregationType(Enum):
-   """""" """Types of metric aggregation for rollups."""
+    """Types of metric aggregation for rollups."""
 
     SUM = "sum"
     AVG = "average"
@@ -287,7 +287,7 @@ class AggregationType(Enum):
 
 
 class AggregationResult(dict[str, Any]):
-    """Compatibility c""""""lass that behaves like both a dict and a float."""
+    """Compatibility class that behaves like both a dict and a float."""
 
     def __init__(self, value: float = 0.0, **kwargs: Any) -> None:
         super().__init__(**kwargs)

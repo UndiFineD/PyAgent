@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 MockCore for a community-submitted plugin.
 Demonstrates the 'Core/Shell' pattern for cross-language compatibility.

@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 ConsensusCore logic for multi-agent voting.
 Contains pure logic for tallying votes, handling ties, and selecting winners.

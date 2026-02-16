@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Suppression Rule - Data model for error suppression
 
-[Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Import the dataclass and instantiate a rule: from suppression_rule import SuppressionRule
@@ -34,44 +30,6 @@ WHAT IT SHOULD DO BETTER:
 - Provide helper methods: matches(error_message) that compiles and caches the regex, is_expired(now) to evaluate expiry, and to_dict()/from_dict() for robust serialization.
 - Add validation for required fields (non-empty id/pattern/reason), canonicalize id format, and include unit tests and example fixtures demonstrating matching and expiry semantics.
 - Consider integration points: storage schema, versioned migrations, and clear handling of pattern types (regex vs substring) with an explicit enum.
-
-FILE CONTENT SUMMARY:
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-
-"""Auto-extracted class from agent_errors.py"""
-
-from __future__ import annotations
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-@dataclass
-class SuppressionRule:
-    """Rule for suppressing specific errors."""
-
-    id: str
-    pattern: str
-    reason: str
-    expires: str | None = None
-    created_by: str = ""
-    created_at: str = ""
 """
 
 from __future__ import annotations

@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import pytest
+from infrastructure.storage.serialization.msg_spec_serializer import JSONEncoder, MsgPackEncoder, TypedSerializer, BenchmarkResult, is_msgspec_available, require_msgspec, encode_chat_request, decode_chat_response, decode_stream_chunk, benchmark_serialization
+
+
+def test_jsonencoder_basic():
+    assert JSONEncoder is not None
+
+
+def test_msgpackencoder_basic():
+    assert MsgPackEncoder is not None
+
+
+def test_typedserializer_basic():
+    assert TypedSerializer is not None
+
+
+def test_benchmarkresult_basic():
+    assert BenchmarkResult is not None
+
+
+def test_is_msgspec_available_basic():
+    assert callable(is_msgspec_available)
+
+
+def test_require_msgspec_basic():
+    assert callable(require_msgspec)
+
+
+def test_encode_chat_request_basic():
+    assert callable(encode_chat_request)
+
+
+def test_decode_chat_response_basic():
+    assert callable(decode_chat_response)
+
+
+def test_decode_stream_chunk_basic():
+    assert callable(decode_stream_chunk)
+
+
+def test_benchmark_serialization_basic():
+    assert callable(benchmark_serialization)

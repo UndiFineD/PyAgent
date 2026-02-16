@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Script for migrating hardcoded version strings to use the central VERSION import."""
 
 from __future__ import annotations

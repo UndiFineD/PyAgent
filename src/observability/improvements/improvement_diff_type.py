@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +13,8 @@
 # limitations under the License.
 
 """
-[ImprovementDiffType] - [Defines ImprovementDiffType enum]"""
-"""
-[Brief Summary]
+[ImprovementDiffType] - [Defines ImprovementDiffType enum]
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -31,7 +28,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -43,7 +40,7 @@ __version__ = VERSION
 
 
 class ImprovementDiffType(Enum):
-    """Types of improvement differences between branche""""""s."""
+    """Types of improvement differences between branches."""
 
     ADDED = "added"  # Improvement exists only in target branch
     REMOVED = "removed"  # Improvement exists only in source branch

@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Auto-generated module exports."""
 
 from __future__ import annotations

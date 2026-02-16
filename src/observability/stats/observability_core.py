@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +13,8 @@
 # limitations under the License.
 
 """
-Observability Core - Telemetry facade and metric models"""
-"""
-[Brief Summary]
+Observability Core - Telemetry facade and metric models
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -53,7 +50,7 @@ Prometheus, CloudWatch, and Datadog.
 FILE CONTENT SUMMARY:
 Observability core logic.
 (Facade for src.core.base.common.telemetry_core)
-"""""""""
+"""
 
 import contextlib
 import json
@@ -81,7 +78,7 @@ except ImportError:
 
 class MetricType(Enum):
     """Types of metrics for observability."""
-    COUNTER = "co""""""unter"
+    COUNTER = "counter"
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
     SUMMARY = "summary"
@@ -89,7 +86,7 @@ class MetricType(Enum):
 
 class AlertSeverity(Enum):
     """Severity levels for observability alerts."""
-    CRI""""""TICAL = 5
+    CRITICAL = 5
     HIGH = 4
     MEDIUM = 3
     LOW = 2
@@ -98,7 +95,7 @@ class AlertSeverity(Enum):
 
 @dataclass
 class Alert:
-    """Represents an observability alert."""""""""
+    """Represents an observability alert."""
     id: str
     metric_name: str
     current_value: float
@@ -111,7 +108,7 @@ class Alert:
 @dataclass
 class Threshold:
     """Defines a threshold for a metric."""
-    m""""""etric_name: str
+    metric_name: str
     min_value: float | None = None
     max_value: float | None = None
     severity: AlertSeverity | None = None
@@ -122,7 +119,7 @@ class Threshold:
 
 @dataclass
 class RetentionPolicy:
-    """Policy for d""""""ata retention."""
+    """Policy for data retention."""
 
     name: str = ""  # Changed from metric_name to name for constructor
     retention_days: int = 0
@@ -137,7 +134,7 @@ class RetentionPolicy:
 
 @dataclass
 class MetricSnapshot:
-    """A snapshot of metrics at"""""" a point in time."""
+    """A snapshot of metrics at a point in time."""
 
     name: str
     id: str
@@ -147,7 +144,7 @@ class MetricSnapshot:
 
 
 class AggregationType(Enum):
-    """Types of metric aggr""""""egation for rollups."""
+    """Types of metric aggregation for rollups."""
 
     SUM = "sum"
     AVG = "average"
@@ -162,7 +159,7 @@ class AggregationType(Enum):
 
 @dataclass
 class MetricNamespace:
-    """Namespace """"""for organizing metrics."""
+    """Namespace for organizing metrics."""
 
     name: str
     description: str = ""
@@ -173,7 +170,7 @@ class MetricNamespace:
 
 @dataclass
 class MetricAnnotation:
-    """Annotati""""""on or comment on a metric."""
+    """Annotation or comment on a metric."""
 
     metric_name: str
     timestamp: str
@@ -184,7 +181,7 @@ class MetricAnnotation:
 
 @dataclass
 class MetricCorrelation:
-    """Cor""""""relation between two metrics."""
+    """Correlation between two metrics."""
 
     metric_a: str
     metric_b: str
@@ -196,7 +193,7 @@ class MetricCorrelation:
 
 @dataclass
 class MetricSubscription:
-    """Subscription """"""for metric change notifications."""
+    """Subscription for metric change notifications."""
 
     id: str
     metric_pattern: str  # glob pattern like "cpu.*"
@@ -207,7 +204,7 @@ class MetricSubscription:
 
 
 class ExportDestination(Enum):
-    """Cl""""""oud monitoring export destinations."""
+    """Cloud monitoring export destinations."""
 
     DATADOG = "datadog"
     PROMETHEUS = "prometheus"
@@ -218,7 +215,7 @@ class ExportDestination(Enum):
 
 @dataclass
 class FederatedSource:
-    """A s""""""ource repository for stats federation."""
+    """A source repository for stats federation."""
 
     repo_url: str
     api_endpoint: str
@@ -230,7 +227,7 @@ class FederatedSource:
 
 
 class FederationMode(Enum):
-    """Fed""""""eration modes for multi-repo aggregation."""
+    """Federation modes for multi-repo aggregation."""
 
     PULL = "pull"
 
@@ -239,7 +236,7 @@ class FederationMode(Enum):
 
 
 @dataclass
-class RollupConf""""""ig:
+class RollupConfig:
     """Configuration for metric rollups."""
 
     name: str
@@ -250,7 +247,7 @@ class RollupConf""""""ig:
 
 
 class StreamingProtocol(Enum):
-""""""    """Protocols for real-time stats streaming."""
+    """Protocols for real-time stats streaming."""
 
     WEBSOCKET = "websocket"
     SSE = "server_sent_events"
@@ -260,7 +257,7 @@ class StreamingProtocol(Enum):
 
 @dataclass
 class StreamingConfig:
- """"""   """Configuration for real-time stats streaming."""
+    """Configuration for real-time stats streaming."""
 
     protocol: StreamingProtocol
     endpoint: str
@@ -270,7 +267,7 @@ class StreamingConfig:
 
 @dataclass
 class AgentMetric:
-    """Represents a metric"""""" captured from an agent operation."""
+    """Represents a metric captured from an agent operation."""
     agent_name: str
     operation: str
     duration_ms: float
@@ -369,7 +366,7 @@ class Stat"""sCore:"""
 
     @staticmethod
     def detect_anomaly(history: list[Metric], value: float, threshold_std: float = 2.0) -> tuple[bool, float]:
-        """"""Dete"""ct if a value is anomalous using standard deviation."""
+        Dete"""ct if a value is anomalous using standard deviation."""
         if len(history) < 2:
             return False, 0.0
 
@@ -524,7 +521,7 @@ class StatsNamespaceManager:
   """      return self.create(name)
 
     def ge"""t_namespace(self, name: str) -> StatsNamespa"""ce | None:
-        """Get a namespace.""""""
+        """Get a namespace.
    """     return self.namespaces.get(name)
 
 
@@ -544,7 +541,7 @@ class StatsSubscription:
     id: str
     subscr"""iber_id: str
     metric_pattern: str
-    delivery_m""""""ethod: str
+    delivery_method: str
     created_at: str
 
 

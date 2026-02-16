@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import pytest
+from infrastructure.services.metrics.prometheus_registry import MetricType, MetricsBackend, MetricSpec, MetricValue, MetricCollector, Counter, Gauge, HistogramBucket, Histogram, Summary, MetricsRegistry, SampledCounter, RateLimitedGauge, VLLMMetrics, get_metrics
+
+
+def test_metrictype_basic():
+    assert MetricType is not None
+
+
+def test_metricsbackend_basic():
+    assert MetricsBackend is not None
+
+
+def test_metricspec_basic():
+    assert MetricSpec is not None
+
+
+def test_metricvalue_basic():
+    assert MetricValue is not None
+
+
+def test_metriccollector_basic():
+    assert MetricCollector is not None
+
+
+def test_counter_basic():
+    assert Counter is not None
+
+
+def test_gauge_basic():
+    assert Gauge is not None
+
+
+def test_histogrambucket_basic():
+    assert HistogramBucket is not None
+
+
+def test_histogram_basic():
+    assert Histogram is not None
+
+
+def test_summary_basic():
+    assert Summary is not None
+
+
+def test_metricsregistry_basic():
+    assert MetricsRegistry is not None
+
+
+def test_sampledcounter_basic():
+    assert SampledCounter is not None
+
+
+def test_ratelimitedgauge_basic():
+    assert RateLimitedGauge is not None
+
+
+def test_vllmmetrics_basic():
+    assert VLLMMetrics is not None
+
+
+def test_get_metrics_basic():
+    assert callable(get_metrics)

@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Mock MCP server implementation for testing Agentic capabilities."""
 
 from __future__ import annotations

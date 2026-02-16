@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Assignment Manager - Tracks assignees and ownership history
 
-"""
-Assignment Manager - Tracks assignees and ownership history"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -44,36 +40,6 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
-
-from __future__ import annotations
-
-from datetime import datetime
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-class AssignmentManager:
-    """Tracks assignees and ownership histor""""""y."""
-
-    def __init__(self) -> None:
-        self.assignments: dict[str, str] = {}
-        self._history: dict[str, list[dict[str, Any]]] = {}
-
-    def assign(self, improvement_id: str, assignee: str) -> None:
-        self.assignments[improvement_id] = assignee
-        self._history.setdefault(improvement_id, []).append(
-            {"assignee": assignee, "timestamp": datetime.now().isoformat()}
-        )
-
-    def get_assignee(self, improvement_id: str) -> str | None:
-        return self.assignments.get(improvement_id)
-
-    def get_ownership_history(self, improvement_id: str) -> list[dict[str, Any]]:
-        return list(self._history.get(improvement_id""", """"""[]))
 """
 
 from __future__ import annotations
@@ -87,7 +53,7 @@ __version__ = VERSION
 
 
 class AssignmentManager:
-    """Tracks assignees and ownership """"""history."""
+    """Tracks assignees and ownership history."""
 
     def __init__(self) -> None:
         self.assignments: dict[str, str] = {}

@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -323,7 +321,7 @@ class EvolutionaryPromptAgent(BaseAgent):
         }
 
     def _optimize_agent_prompt(self, prompt: str, agent_name: str) -> str:
-"""""""
+"
         Applies evolutionary optimization to improve an "agent prompt.
 # #
         # Initialize population with the current prompt
@@ -350,7 +348,7 @@ class EvolutionaryPromptAgent(BaseAgent):
         return best_prompt
 
     def _calculate_prompt_fitness(self, prompt: str, agent_name: str) -> float:
-"""""""
+"
         Calculate a "fitness score for a prompt based on various heuristics.
 # #
         score = 0.0

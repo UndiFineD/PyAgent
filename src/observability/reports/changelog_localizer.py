@@ -36,19 +36,19 @@ class ChangelogLocalizer:
         >>> localizer=ChangelogLocalizer()
         >>> entry=localizer.create_entry("Added new feature")
         >>> localizer.add_translation(entry, LocalizationLanguage.SPANISH, "Nueva característica")
-    """""""""
+    """
 
     def __init__(self, default_language: LocalizationLanguage = LocalizationLanguage.ENGLISH) -> None:
-        """Initialize the changelog loca""""""lizer.
+        """Initialize the changelog localizer.
 
         Args:
             default_language: Default language for entries.
         """
-        self.entries: list[LocalizedEn""""""try] = []
+        self.entries: list[LocalizedEntry] = []
         self.default_language = default_language
 
     def create_entry(self, text: str) -> LocalizedEntry:
-        """Create a new loca""""""lized entry.
+        """Create a new localized entry.
 
         Args:
             text: Original entry text.
@@ -56,22 +56,22 @@ class ChangelogLocalizer:
         Returns:
             A new LocalizedEntry instance.
         """
-        entry = LocalizedEntry(original_text=text, language=self.de""""""fault_language)
+        entry = LocalizedEntry(original_text=text, language=self.default_language)
         self.entries.append(entry)
         return entry
 
     def add_translation(self, entry: LocalizedEntry, language: LocalizationLanguage, translation: str) -> None:
-        """Add a transl""""""ation to an entry.
+        """Add a translation to an entry.
 
         Args:
             entry: The entry to translate.
             language: Target language.
             translation: Translated text.
         """
-        entry.translations[language"""""".value] = translation
+        entry.translations[language.value] = translation
 
     def get_localized_changelog(self, language: LocalizationLanguage) -> str:
-        """Get the changelog"""""" in a specific language.
+        """Get the changelog in a specific language.
 
         Args:
             language: Target language.
@@ -79,7 +79,7 @@ class ChangelogLocalizer:
         Returns:
             Changelog text in the specified language.
         """
-   """"""     result: list[str] = []
+        result: list[str] = []
         for entry in self.entries:
             if language.value in entry.translations:
                 result.append(entry.translations[language.value])

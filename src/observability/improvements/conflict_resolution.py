@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+ConflictResolution - Resolution dataclass for conflicting improvements
 
-"""
-ConflictResolution - Resolution dataclass for conflicting improvements"""
-"""
-Brief Summary
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -35,34 +31,6 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
-
-from __future__ import annotations
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-
-__version__ = VERSION
-
-
-@dataclass
-class ConflictResolution:
-    """Resolution for a conflicting improv""""""ement.
-
-    Attributes:
-        improvement_id: ID of conflicting improvement.
-        resolution: Resolved improvement version.
-        strategy: Resolution strategy used.
-        resolved_by: Who resolved the conflict.""""""
-    """
-
-    improvement_id: str
-    resolution: Improvement
-    strategy: str = "manual"
-    resolved_by:""" s""""""tr = ""
 """
 
 from __future__ import annotations
@@ -78,13 +46,13 @@ __version__ = VERSION
 
 @dataclass
 class ConflictResolution:
-    """Resolution for a conflicti""""""ng improvement.
+    """Resolution for a conflicting improvement.
 
     Attributes:
         improvement_id: ID of conflicting improvement.
         resolution: Resolved improvement version.
         strategy: Resolution strategy used.
-        resolved_by: Who reso"""lved t"""he """conflict.
+        resolved_by: Who resolved the conflict.
     """
 
     improvement_id: str

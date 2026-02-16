@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+ImprovementDiff - Represent a single improvement difference between branches
 
-"""
-ImprovementDiff - Represent a single improvement difference between branches"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -38,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -54,7 +50,7 @@ __version__ = VERSION
 
 @dataclass(order=True)
 class ImprovementDiff:
-    """Difference in a single improvement between bra""""""nches.
+    """Difference in a single improvement between branches.
 
     Attributes:
         improvement_id: Unique improvement identifier.
@@ -63,7 +59,7 @@ class ImprovementDiff:
         target_version: Improvement in target branch (if exists).
         change_summary: Summary of changes.
     """
-    improvemen""""""t_id: str
+    improvement_id: str
     diff_type: ImprovementDiffType
     source_version: Improvement | None = None
     target_version: Improvement | None = None
@@ -79,7 +75,7 @@ class ImprovementDiff:
 
     def pretty_print(self) -> str:
         """Return a human-readable summary of the improvement diff."""
-        src = f"source: {self.source_version}" if self.source_version else "s""""""ource: None"
+        src = f"source: {self.source_version}" if self.source_version else "source: None"
         tgt = f"target: {self.target_version}" if self.target_version else "target: None"
         return (
             f"ImprovementDiff(id={self.improvement_id}, type={self.diff_type},\n  {src},\n  {tgt},\n  summary={self.change_summary})"
@@ -87,7 +83,7 @@ class ImprovementDiff:
 
     def to_dict(self) -> dict:
         """Serialize to a dictionary."""
- """"""       return {
+        return {
             "improvement_id": self.improvement_id,
             "diff_type": self.diff_type.name if hasattr(self.diff_type, "name") else str(self.diff_type),
             "source_version": self.source_version.to_dict() if self.source_version and hasattr(self.source_version, "to_dict") else None,
@@ -98,7 +94,7 @@ class ImprovementDiff:
     @classmethod
     def from_dict(cls, d: dict) -> "ImprovementDiff":
         """Deserialize from a dictionary."""
-        diff_type = ImprovementDiffType[d["diff_type"]] if isinstance(d["diff_type"], str) e""""""lse d["diff_type"]
+        diff_type = ImprovementDiffType[d["diff_type"]] if isinstance(d["diff_type"], str) else d["diff_type"]
         src = Improvement.from_dict(d["source_version"]) if d.get("source_version") else None
         tgt = Improvement.from_dict(d["target_version"]) if d.get("target_version") else None
         return cls(

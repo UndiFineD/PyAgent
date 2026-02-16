@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 APICore logic for fleet communication.
 Pure logic for OpenAPI spec generation and tool contract validation.

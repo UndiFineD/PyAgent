@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Batch fixer for PyAgent: Remove all excessive and corrupted quote sequences (e.g., """""", '''''', etc.) from all .py files in src/logic/agents and src/observability/errors.
+Batch fixer for PyAgent: Remove all excessive and corrupted quote sequences (e.g., , '''''', etc.) from all .py files in src/logic/agents and src/observability/errors.
 - Cleans up docstrings, identifiers, and code.
 - Restores valid Python syntax and docstrings.
 """

@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Bulk Manager - Applies bulk operations to improvement IDs
 
-"""
-Bulk Manager - Applies bulk operations to improvement IDs"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -41,25 +37,6 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
-
-from __future__ import annotations
-
-from src.core.base.lifecycle.version import VERSION
-
-from .bulk_operation_result import BulkOperationResult
-
-__version__ = VERSION
-
-
-class BulkManager:
-    """Applies bulk operations to improvement ID""""""s."""
-
-    def bulk_update_status(self, improvement_ids: list[str], new_status: str) -> BulkOperationResult:
-        return BulkOperationResult(success_count=len(improvement_ids))
-
-    def bulk_assign(self, improvement_ids: list[str], assignee: str) -> BulkOperationResult:
-        return BulkOperationResult(success_count=len(improvement"""_i""""""ds))
 """
 
 from __future__ import annotations
@@ -72,7 +49,7 @@ __version__ = VERSION
 
 
 class BulkManager:
-    """Applies bulk operations to improvem""""""ent IDs."""
+    """Applies bulk operations to improvement IDs."""
 
     def bulk_update_status(self, improvement_ids: list[str], new_status: str) -> BulkOperationResult:
         return BulkOperationResult(success_count=len(improvement_ids))

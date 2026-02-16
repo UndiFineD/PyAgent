@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+AccessController - Track and evaluate per-improvement permissions and roles
 
-"""
-AccessController - Track and evaluate per-improvement permissions and roles"""
-"""
-Brief Summary
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -53,7 +49,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -63,7 +59,7 @@ __version__ = VERSION
 
 
 class AccessController:
-    """Tracks per-improvement permissions and role""""""s."""
+    """Tracks per-improvement permissions and roles."""
 
     def __init__(self) -> None:
         self.permissions: dict[str, dict[str, set[str]]] = {}
@@ -86,7 +82,7 @@ class AccessController:
         role = self._assigned_roles.get(improvement_id, {}).get(user)
         if role and role in self._roles:
             return level in self._roles[role]
-        return""" F""""""alse
+        return""" False
 """
 
 from __future__ import annotations
@@ -97,7 +93,7 @@ __version__ = VERSION
 
 
 class AccessController:
-    """Tracks per-improvement permissions an""""""d roles."""
+    """Tracks per-improvement permissions and roles."""
 
     def __init__(self) -> None:
         self.permissions: dict[str, dict[str, set[str]]] = {}

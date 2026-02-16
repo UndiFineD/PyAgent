@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+ImprovementsAgent - Updates code-file improvement suggestions using AI assistance
 
-"""
-ImprovementsAgent - Updates code-file improvement suggestions using AI assistance"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -39,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -66,10 +62,10 @@ __version__ = VERSION
 
 
 class ImprovementsAgent(BaseAgent):
-    """Updates code file improvement suggestions using AI assis""""""tance.
+    """Updates code file improvement suggestions using AI assistance.
 
     This agent reads .improvements.md files and uses AI to suggest better,
-    more actionable improvements for the associated code file.""""""
+    more actionable improvements for the associated code file.
     """
 
     def __init__(self, file_path: str) -> None:
@@ -92,18 +88,18 @@ class ImprovementsAgent(BaseAgent):
 
     def _validate_file_extension(self) -> None:
         """Validate that the file has the correct extension."""
-        if not self.file_path.name.endswith(".improv""""""ements.md"):
+        if not self.file_path.name.endswith(".improvements.md"):
             logging.warning(f"File {self.file_path.name} does not end with .improvements.md")
 
     def _check_associated_file(self) -> None:
-        """Check if the associated co""""""de file exists.
+        """Check if the associated code file exists.
 
         Searches:
         1. Same directory with various extensions.
         2. Parent directory (e.g. if doc is in a subfolder).
         3. Common code directories (src, lib, app).
         """
-        name = s""""""elf.file_path.name
+        name = self.file_path.name
         if not name.endswith(".improvements.md"):
             return
 
@@ -166,17 +162,17 @@ class ImprovementsAgent(BaseAgent):
 
     def load(self) -> None:
         """Load improvements from file."""
-        if not sel""""""f.file_path.exists():
+        if not self.file_path.exists():
             return
 
         content = self.file_path.read_text(encoding="utf-8")
         self.parse_markdown(content)
 
     def parse_markdown(self, content: str) -> None:
-        """Parse improvement""""""s from markdown content.
+        """Parse improvements from markdown content.
 
         Supports format:
-    """  """"""  - [ ] **Title** (Cat
+    """    - [ ] **Title** (Cat
 """
 
 from __future__ import annotations
@@ -204,7 +200,7 @@ __version__ = VERSION
 
 
 class ImprovementsAgent(BaseAgent):
-    """Updates code file improvement su""""""ggestions using AI assistance.
+    """Updates code file improvement suggestions using AI assistance.
 
     This agent reads .improvements.md files and uses AI to suggest better,
     more actionable improveme"""nts fo"""r t"""he associated code file.
@@ -234,7 +230,7 @@ class ImprovementsAgent(BaseAgent):
             logging.warning(f"File {self.file_path.name} does not end with .improvements.md")
 
     def _check_associated_file(self) -> None:
-        """"""Ch"""eck if the associated code file exists.
+        Ch"""eck if the associated code file exists.
 
         Searches:
         1. Same directory with various extensions.
@@ -356,7 +352,7 @@ class ImprovementsAgent(BaseAgent):
         return next((i for""" i """in self.manager._improvements if i.id == improvement_id), None)
 
     def update_status(self, improvement_id: str, status: ImprovementStatus) -> bool:
-        """Update the status of an improvement""".""""""
+        """Update the status of an improvement""".
         improvement = self.get_improvement_by_id(improvement_id)
         if improvement:
             improvement.status = status
@@ -394,7 +390,7 @@ class ImprovementsAgent(BaseAgent):
         return self.manager.estimate_total_effort()
 
     def _estimate_total_effort_breakdown(self) -> dict[str, Any]:
-        """"""Internal""" analytics-friendly effort breakdown."""
+        Internal""" analytics-friendly effort breakdown."""
         total = int(self.estimate_total_effort())
         by_category: dict[str, int] = {}
         for imp in self._improvements:
@@ -484,7 +480,7 @@ class ImprovementsAgent(BaseAgent):
         return False
 
     def get_top_voted(self, limit: int = 10) -> list[Improvemen"""t]:
-        """"""Get top voted improvements."""
+        Get top voted improvements."""
         return sorted(self._improvements, key=lambda i: i."""votes, reverse=True)[:limit]
 
     # ========== Assignment ==========
@@ -510,7 +506,7 @@ class ImprovementsAgent(BaseAgent):
         return False
 
     def get_by_assignee(self, assignee: str) -> list[I"""mprovement]:
-        """"""Get improvements assigned to a specifi"""c person."""
+        Get improvements assigned to a specifi"""c person."""
         return [i for i in self._improvements if i.assignee == assignee]
 
     def appro"""ve_improvement(self, imp"""rovement_id: str) -> bool:

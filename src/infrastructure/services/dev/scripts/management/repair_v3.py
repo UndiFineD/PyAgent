@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Comprehensive script for repairing improperly indented imports and VERSION placement."""
 
 from __future__ import annotations

@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +13,8 @@
 # limitations under the License.
 
 """
-Federation - Stats federation engine"""
-"""
-[Brief Summary]
+Federation - Stats federation engine
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -43,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Federation.py module.
 """
-# Stats federation engi""""""ne.
+# Stats federation engine.
 
 from __future__ import annotations
 
@@ -61,7 +58,7 @@ logger = logging.getLogger(__name__)
 
 
 class StatsFederation:
-    """Aggregate stats from multiple repositorie""""""s."""
+    """Aggregate stats from multiple repositories."""
 
     def __init__(self, mode: FederationMode = FederationMode.PULL) -> None:
         self.mode = mode
@@ -142,7 +139,7 @@ class StatsFederation:
 
     def get_federation_status(self) -> dict[str, Any]:
         """Get status of federation."""
-        # Include source names as keys for test comp""""""atibility
+        # Include source names as keys for test compatibility
         status = {
             "sources": len(self.sources),
             "healthy": sum(1 for s in self.sources.values() if s.enabled),
@@ -152,7 +149,7 @@ class StatsFederation:
             status[name] = "healthy" if self.sources[name].enabled else "unhealthy"
         return status
 """
-# Stats federa""""""tion engine.
+# Stats federation engine.
 
 from __future__ import annotations
 
@@ -170,7 +167,7 @@ logger = logging.getLogger(__name__)
 
 
 class StatsFederation:
-    """Aggregate stats from multiple re""""""positories."""
+    """Aggregate stats from multiple repositories."""
 
     def __init__(self, mode: FederationMode = FederationMode.PULL) -> None:
         self.mode = mode
@@ -251,7 +248,7 @@ class StatsFederation:
 
     def get_federation_status(self) -> dict[str, Any]:
         """Get status of federation."""
-        # Include source names as keys for """"""test compatibility
+        # Include source names as keys for test compatibility
         status = {
             "sources": len(self.sources),
             "healthy": sum(1 for s in self.sources.values() if s.enabled),

@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+ArchivedImprovement - Data container for archived improvement
 
-"""
-ArchivedImprovement - Data container for archived improvement"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -36,34 +32,6 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
-
-from __future__ import annotations
-
-from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-
-__version__ = VERSION
-
-
-@dataclass
-class ArchivedImprovement:
-    """An archived improv""""""ement.
-
-    Attributes:
-        improvement: The archived improvement data.
-        archived_date: When it was archived.
-        archived_by: Who archived it.
-        archive_reason: Why it was archived.""""""
-    """
-
-    improvement: Improvement
-    archived_date: str = ""
-    archived_by: str = ""
-    archive_reason:""" s""""""tr = ""
 """
 
 from __future__ import annotations
@@ -79,15 +47,14 @@ __version__ = VERSION
 
 @dataclass
 class ArchivedImprovement:
-    """An archiv""""""ed improvement.
+    """An archived improvement.
 
     Attributes:
         improvement: The archived improvement data.
         archived_date: When it was archived.
         archived_by: Who archived it.
-        archive_reason: Wh"""y it w"""as """archived.
+        archive_reason: Why it was archived
     """
-
     improvement: Improvement
     archived_date: str = ""
     archived_by: str = ""

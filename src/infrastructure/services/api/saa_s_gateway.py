@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Gateway for managing multi-tenant SaaS access, API keys, and usage quotas."""
 
 from __future__ import annotations

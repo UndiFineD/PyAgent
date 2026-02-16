@@ -12,7 +12,6 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Verification logic regarding agent outputs.
 Implements Stanford Reseach 'Anchoring Strength' and Keio University 'Self-Verification' paths.

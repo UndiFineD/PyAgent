@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +13,8 @@
 # limitations under the License.
 
 """
-Profiling Core - cProfile aggregation and bottleneck analysis"""
-"""
-[Brief Summary]
+Profiling Core - cProfile aggregation and bottleneck analysis
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -62,7 +59,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Profiling core.py module.
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -87,13 +84,13 @@ class ProfileStats:
 
 
 class ProfilingCore:
-    """Pure logic for cProfile aggregation and bottleneck ana""""""lysis.
-    Identifies slow methods and calculates optimization priority.""""""
+    """Pure logic for cProfile aggregation and bottleneck analysis.
+    Identifies slow methods and calculates optimization priority.
     """
 
     def analyze_stats(self, pstats_obj: pstats.Stats, limit: int = 10) -> list[ProfileStats]:
         """Converts raw pstats into a list of pure ProfileStats dataclasses."""
-        results: li""""""st[Any] = []
+        results: list[Any] = []
         pstats_obj.sort_stats("cumulative")
 
         # pstats stores data in a complex tuple structure
@@ -114,7 +111,7 @@ class ProfilingCore:
         return results
 
     def identify_bottlenecks(self, stats: list[ProfileStats], threshold_ms: float = 100.0) -> list[str]:
-        """Identifies functions exceeding the time threshold."""""""""
+        """Identifies functions exceeding the time threshold."""
         if rc:
             try:
                 # Convert list of dataclasses to list of dicts for Rust
@@ -134,4 +131,4 @@ class ProfilingCore:
 
     def calculate_optimization_priority(self, stats: ProfileStats) -> float:
         """Heuristic for optimization: time * frequency."""
-        return stats.total_time """"""* stats.call_count
+        return stats.total_time * stats.call_count

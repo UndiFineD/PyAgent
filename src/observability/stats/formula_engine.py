@@ -23,7 +23,7 @@ Formula Engine - Formula processing and calculation"""
 Provides safe AST-based formula parsing, variable substitution for tokens like {var},
 a simple AVG aggregate handler, optional Rust acceleration via rust_core, and a small
 facade for defining and computing named formulas.
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -44,18 +44,18 @@ except ImportError:
 
 @dataclass
 class FormulaValidation:
-    """Result of a formula validation chec""""""k."""
+    """Result of a formula validation check."""
 
     is_valid: bool
     error: Optional[str] = None
 
 
 class FormulaEngineCore(FormulaCore):
-    """Extended formula core for observability specific needs (e.g. """"""AVG)."""
+    """Extended formula core for observability specific needs (e.g. AVG)."""
 
     def calculate_logic(self, formula: str, variables: Dict[str, Any]) -> float:
         """Calculate a formula result with optional rust acceleration and simple AVG support."""
-        # Prefer Rust acceleration when available and when AVG is"""""" not present
+        # Prefer Rust acceleration when available and when AVG is not present
         if rc and "AVG(" not in formula:
             with contextlib.suppress(Exception):
                 float_vars: Dict[str, float] = {
@@ -100,7 +100,7 @@ class FormulaEngineCore(FormulaCore):
             return 0.0
 
     def validate_logic(self, formula: str) -> Dict[str, Any]:
-        """Validate formula syntax and basic operator sequences."""""""""
+        """Validate formula syntax and basic operator sequences."""
         try:
             if any(seq in formula for seq in ["+++", "***", "---"]):
                 return {"is_valid": False, "error": "Invalid operator sequence"}
@@ -118,7 +118,7 @@ class FormulaEngineCore(FormulaCore):
 
 
 class FormulaEngine:
-    """Processes metric formulas and calculations using safe A""""""ST evaluation."""
+    """Processes metric formulas and calculations using safe AST evaluation."""
 
     def __init__(self) -> None:
         self.formulas: Dict[str, str] = {}
@@ -126,15 +126,15 @@ class FormulaEngine:
 
     def define(self, name: str, formula: str) -> None:
         """Define a named formula."""
-        self.for""""""mulas[name] = formula
+        self.formulas[name] = formula
 
     def define_formula(self, name: str, formula: str) -> None:
         """Alias for define."""
-        se""""""lf.define(name, formula)
+        self.define(name, formula)
 
     def calculate(self, formula_or_name: str, variables: Optional[Dict[str, Any]] = None) -> float:
         """Calculate a formula given either a raw formula or a previously defined name."""
-        """"""variables = variables or {}
+        variables = variables or {}
         formula = self.formulas.get(formula_or_name, formula_or_name)
         try:
             return float(self.core.calculate_logic(formula, variables))
@@ -144,9 +144,9 @@ class FormulaEngine:
 
     def validate(self, formula: str) -> FormulaValidation:
         """Return structured validation result for a formula."""
-        result = sel""""""f.core.validate_logic(formula)
+        result = self.core.validate_logic(formula)
         return FormulaValidation(is_valid=result["is_valid"], error=result["error"])
 
     def validate_formula(self, formula: str) -> bool:
         """Convenience boolean validation check."""
-        retur""""""n self.validate(formula).is_valid
+        return self.validate(formula).is_valid

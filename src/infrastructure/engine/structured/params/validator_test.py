@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import pytest
+from .validator import StructuredOutputValidator
+from .config import StructuredOutputConfig, ValidationResult
+
+class DummyConstraint:
+    def validate(self, text):
+        return text == "valid"
+
+@pytest.fixture
+def config():
+    cfg = StructuredOutputConfig()
+    cfg.get_all_constraints = lambda: [DummyConstraint()]
+    cfg.json_schema = None
+    cfg.json_object = None
+    cfg.regex = None
+    cfg.choices = None
+    cfg.strict_mode = True
+    return cfg
+
+@pytest.mark.parametrize("input_text,expected_valid", [
+    ("valid", True),
+    ("invalid", False),
+])
+def test_validate(config, input_text, expected_valid):
+    validator = StructuredOutputValidator(config)
+    result = validator.validate(input_text)
+    assert isinstance(result, ValidationResult)
+    assert result.valid == expected_valid
+
+@pytest.mark.parametrize("input_text", ["", "{" , "[", "1", "true", "null"])
+def test_could_be_json(config, input_text):
+    validator = StructuredOutputValidator(config)
+    assert validator._could_be_json(input_text)
+
+@pytest.mark.parametrize("input_text", ["invalid_prefix"])
+def test_validate_partial(config, input_text):
+    validator = StructuredOutputValidator(config)
+    result = validator.validate_partial(input_text)
+    assert isinstance(result, ValidationResult)
+    assert not result.valid or result.valid is False

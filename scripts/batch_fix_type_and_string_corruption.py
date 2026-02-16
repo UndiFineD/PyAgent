@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 Batch fixer for corrupted type annotations and string literals in src/observability/errors.
-- Fixes patterns like se""""""t[str], lis""""""t[str], etc.
-- Fixes corrupted string literals like "patte"""rn""""""_match", "di"""sc""""""ord", etc.
+- Fixes patterns like set[str], list[str], etc.
+- Fixes corrupted string literals like "patte"""rn_match", "di"""scord", etc.
 - Repairs docstrings split by injected quote sequences.
 - Designed to be idempotent and safe for repeated runs.
 """

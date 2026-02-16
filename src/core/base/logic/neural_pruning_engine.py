@@ -12,7 +12,6 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Engine regarding neural synaptic pruning.
 (Facade regarding src.core.base.common.pruning_core)

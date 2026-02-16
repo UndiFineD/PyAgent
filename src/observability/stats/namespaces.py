@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +13,8 @@
 # limitations under the License.
 
 """
-namespaces.py - Metric Namespace Management"""
-"""
-[Brief Summary]
+namespaces.py - Metric Namespace Management
+
 A small manager class to create, delete, and organize MetricNamespace objects and to assign metrics to namespaces for hierarchical metric organization.
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
@@ -43,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Namespaces.py module.
 """
-# Metric namespace management engi""""""ne.
+# Metric namespace management engine.
 
 from __future__ import annotations
 
@@ -53,7 +50,7 @@ from .metrics import MetricNamespace
 
 
 class MetricNamespaceManager:
-    """Manage metric namespaces for organizing large metric set""""""s."""
+    """Manage metric namespaces for organizing large metric sets."""
 
     def __init__(self) -> None:
         self.namespaces: dict[str, MetricNamespace] = {}
@@ -96,7 +93,7 @@ class MetricNamespaceManager:
             current = ns.parent if ns else None
         return " / ".join(hierarchy)
 """
-# Metric namespace managemen""""""t engine.
+# Metric namespace management engine.
 
 from __future__ import annotations
 
@@ -106,7 +103,7 @@ from .metrics import MetricNamespace
 
 
 class MetricNamespaceManager:
-    """Manage metric namespaces for organizing large metr""""""ic sets."""
+    """Manage metric namespaces for organizing large metric sets."""
 
     def __init__(self) -> None:
         self.namespaces: dict[str, MetricNamespace] = {}

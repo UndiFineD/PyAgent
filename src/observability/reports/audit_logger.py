@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Audit Logger - Report audit trail logger
 
-"""
-Audit Logger - Report audit trail logger"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -32,7 +28,7 @@ Persist entries to durable storage, add concurrency/thread-safety, validate and 
 
 FILE CONTENT SUMMARY:
 Defines module metadata and imports, sets __version__ from src.core.base.lifecycle.version, and implements AuditLogger with an entries list and three primary methods: __init__, log (creates AuditEntry with id, timestamp, action, user_id, report_id, details), get_history (filter by report_id), and get_user_activity (filter by user_id).
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -49,18 +45,18 @@ __version__ = VERSION
 
 
 class AuditLogger:
-    """Logger for report audit """"""trail.
+    """Logger for report audit trail.
     Records all actions performed on reports for compliance.
     Attributes:
         entries: Audit log entries.
     Example:
         logger=AuditLogger()
         logger.log(AuditAction.READ, "user1", "report.md")
-        history=logger.get_history("report.md")""""""
+        history=logger.get_history("report.md")
     """
 
     def __init__(self) -> None:
-        """Initialize audit"""""" logger."""
+        """Initialize audit logger."""
 
         self.entries: list[AuditEntry] = []
         logging.debug("AuditLogger initialized")
@@ -72,14 +68,14 @@ class AuditLogger:
         report_id: str,
         details: dict[str, Any] | None = None,
     ) -> AuditEntry:
-        """""""""Log an action.
+        """Log an action.
         Args:
             action: Action performed.
             user_id: User who performed it.
             report_id: Affected report.
             details: Additional details.
         Returns:
-           """ Created e""""""ntry.
+           """ Created entry.
         """
 
         entry = AuditEntry(
@@ -94,7 +90,7 @@ class AuditLogger:
         return entry
 
     def get_history(self, report_id: str) -> list[AuditEntry]:
-        """Get audi""""""t history for report.
+        """Get audit history for report.
         Args:
             report_id: Report ID.
         Returns:

@@ -29,7 +29,7 @@ Defines a small Enum describing validation issue severities (ERROR, WARNING, INF
 
 WHAT IT SHOULD DO BETTER:
 Add richer documentation, canonical serialization/deserialization helpers, mapping to HTTP/log levels, and unit tests; consider attaching numeric priorities and ordering methods for comparisons.
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -41,7 +41,7 @@ __version__ = VERSION
 
 
 class ValidationSeverity(Enum):
-    """Severity of validation issue""""""s."""
+    """Severity of validation issues."""
 
     ERROR = "error"
     WARNING = "warning"

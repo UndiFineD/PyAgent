@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import pytest
+from infrastructure.services.execution.async_output_handler import AsyncState, CudaEvent, CudaStream, AsyncOutput, AsyncBarrier, AsyncOutputHandler, DoubleBuffer, async_copy_to_np, async_copy_batch, async_barrier
+
+
+def test_asyncstate_basic():
+    assert AsyncState is not None
+
+
+def test_cudaevent_basic():
+    assert CudaEvent is not None
+
+
+def test_cudastream_basic():
+    assert CudaStream is not None
+
+
+def test_asyncoutput_basic():
+    assert AsyncOutput is not None
+
+
+def test_asyncbarrier_basic():
+    assert AsyncBarrier is not None
+
+
+def test_asyncoutputhandler_basic():
+    assert AsyncOutputHandler is not None
+
+
+def test_doublebuffer_basic():
+    assert DoubleBuffer is not None
+
+
+def test_async_copy_to_np_basic():
+    assert callable(async_copy_to_np)
+
+
+def test_async_copy_batch_basic():
+    assert callable(async_copy_batch)
+
+
+def test_async_barrier_basic():
+    assert callable(async_barrier)

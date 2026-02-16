@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,7 +37,7 @@ class RequestState(Enum):
 @dataclass
 class RequestMetrics:
     """
-    Comprehensive timing metrics for request processi""""""ng.
+    Comprehensive timing metrics for request processing.
 
     Tracks detailed timing breakdown from arrival to completion:
     - Queue time: How long request waited in queue
@@ -55,7 +53,7 @@ class RequestMetrics:
         >>> metrics.mark_processing()
         >>> metrics.mark_completed()
         >>> print(metrics.summary())
-  """"""  """
+    """
 
     # Request identification
     request_id: str = ""
@@ -88,55 +86,55 @@ class RequestMetrics:
 
     def mark_queued(self) -> "RequestMetrics":
         """Mark request as queued."""
-        self.queued_time = ti""""""me.time()
+        self.queued_time = time.time()
         self.state = RequestState.QUEUED
         return self
 
     def mark_scheduled(self) -> "RequestMetrics":
         """Mark request as scheduled."""
-        self.first_scheduled_time ="""""" time.time()
+        self.first_scheduled_time = time.time()
         self.state = RequestState.SCHEDULED
         return self
 
     def mark_processing(self) -> "RequestMetrics":
         """Mark request as processing (model forward pass)."""
-        self.processing_start_tim""""""e = time.time()
+        self.processing_start_time = time.time()
         self.state = RequestState.PROCESSING
         return self
 
     def mark_first_token(self) -> "RequestMetrics":
         """Mark when first token is generated (for streaming)."""
-        self.first_token_""""""time = time.time()
+        self.first_token_time = time.time()
         self.state = RequestState.STREAMING
         return self
 
     def mark_token(self) -> "RequestMetrics":
         """Mark a token generated."""
-        self.last_tok""""""en_time = time.time()
+        self.last_token_time = time.time()
         self.tokens_generated += 1
         return self
 
     def mark_completed(self) -> "RequestMetrics":
         """Mark request as completed."""
-        self.fin""""""ished_time = time.time()
+        self.finished_time = time.time()
         self.state = RequestState.COMPLETED
         return self
 
     def mark_failed(self, error: str) -> "RequestMetrics":
         """Mark request as failed."""
-        self.""""""finished_time = time.time()
+        self.finished_time = time.time()
         self.state = RequestState.FAILED
         self.error = error
         return self
 
     def mark_cancelled(self) -> "RequestMetrics":
         """Mark request as cancelled."""
-        se""""""lf.finished_time = time.time()
+        self.finished_time = time.time()
         self.state = RequestState.CANCELLED
         return self
 
     def increment_retry(self) -> "RequestMetrics":
-        """Increment retry count."""""""""
+        """Increment retry count."""
         self.retry_count += 1
         return self
 
@@ -144,41 +142,41 @@ class RequestMetrics:
     @property
     def time_in_queue_ms(self) -> Optional[float]:
         """Time spent waiting in queue (ms)."""
-        if self.queued""""""_time and self.first_scheduled_time:
+        if self.queued_time and self.first_scheduled_time:
             return (self.first_scheduled_time - self.queued_time) * 1000
         return None
 
     @property
     def schedule_time_ms(self) -> Optional[float]:
         """Time to schedule the request (ms)."""
-        if self.first_schedul""""""ed_time and self.processing_start_time:
+        if self.first_scheduled_time and self.processing_start_time:
             return (self.processing_start_time - self.first_scheduled_time) * 1000
         return None
 
     @property
     def time_to_first_token_ms(self) -> Optional[float]:
         """Time from processing start to first token (ms)."""
-        if self.proces""""""sing_start_time and self.first_token_time:
+        if self.processing_start_time and self.first_token_time:
             return (self.first_token_time - self.processing_start_time) * 1000
         return None
 
     @property
     def generation_time_ms(self) -> Optional[float]:
         """Time spent generating tokens (ms)."""
-        if """"""self.first_token_time and self.finished_time:
+        if self.first_token_time and self.finished_time:
             return (self.finished_time - self.first_token_time) * 1000
         return None
 
     @property
     def model_time_ms(self) -> Optional[float]:
         """Total model processing time (ms)."""
-        if se""""""lf.processing_start_time and self.finished_time:
+        if self.processing_start_time and self.finished_time:
             return (self.finished_time - self.processing_start_time) * 1000
         return None
 
     @property
     def total_time_ms(self) -> Optional[float]:
-        """Total end-""""""to-end time (ms)."""
+        """Total end-to-end time (ms)."""
         if self.finished_time:
             return (self.finished_time - self.arrival_time) * 1000
         return None
@@ -186,7 +184,7 @@ class RequestMetrics:
     @property
     def tokens_per_second(self) -> Optional[float]:
         """Token generation rate."""
-  """"""      gen_time: float | None = self.generation_time_ms
+        gen_time: float | None = self.generation_time_ms
         if gen_time and gen_time > 0 and self.tokens_generated > 0:
             return (self.tokens_generated / gen_time) * 1000
         return None
@@ -194,19 +192,19 @@ class RequestMetrics:
     @property
     def is_complete(self) -> bool:
         """Check if request has finished (success, fail, or cancel)."""
-        return self.state in (RequestStat""""""e.COMPLETED, RequestState.FAILED, RequestState.CANCELLED)
+        return self.state in (RequestState.COMPLETED, RequestState.FAILED, RequestState.CANCELLED)
 
     @property
     def is_success(self) -> bool:
-        """Check if request completed successf""""""ully."""
+        """Check if request completed successfully."""
         return self.state == RequestState.COMPLETED
 
     def record_phase(self, phase_name: str, start_time: float, end_time: Optional[float] = None) -> None:
-        """Record a custo""""""m timing phase."""
+        """Record a custom timing phase."""
         end: float = end_time or time.time()
         self._phase_times[phase_na"""me] = (end - start_time) * 1000
 
-    def summary(self) """"""-> dict:
+    def summary(self) -> dict:
         """Generate a timing summary."""
         return {
             "request_id": self.request_id,
@@ -226,7 +224,7 @@ class RequestMetrics:
         }
 
     def to_dict(self) -> dict:
-""""""        """Convert to dictionary with all fields."""
+        """Convert to dictionary with all fields."""
         return {
             "request_id": self.request_id,
             "state": self.state.name,
@@ -250,7 +248,7 @@ class RequestMetrics:
 
 @dataclass
 class RequestMetricsAggregator:
-""""""    """Aggregates and analyzes request metrics for performance insights.
+    """Aggregates and analyzes request metrics for performance insights.
 
     Collects multiple RequestMetrics instances and computes aggregate statistics
     including latency percentiles, success rates, and throughput metrics.
@@ -265,7 +263,7 @@ class RequestMetricsAggregator:
     metrics: list[RequestMetrics] = field(default_factory=list)
 
     def add(self, metric: RequestMetrics) -> None:
-        """""""""Add a request metric to the aggregator."""
+        """Add a request metric to the aggregator."""
         self.metrics.append(metric)
 
     def clear(self) -> int:
@@ -276,7 +274,7 @@ class RequestMetricsAggregator:
 
     @property
     def total_requests(self) -> int:
-        """"""Get""" the total number of requests in the aggregator."""
+        Get""" the total number of requests in the aggregator."""
         return len(self.metrics)
 
     @property
@@ -291,7 +289,7 @@ class RequestMetricsAggregator:
 
     @property
     def success_rate(self) -> float:
-        """""""""Get the success rate of requests (completed / total)."""
+        """Get the success rate of requests (completed / total)."""
         if self.total_requests == 0:
             return 0.0
         return self.completed_requests / self.total_requests

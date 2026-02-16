@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 - Persist alerts and provide configurable deduplication, suppression windows, and notification hooks (e.g., webhooks, email, metrics exporters). 
 - Add robust pattern matching and configurable retention schedules, unit tests for edge cases, type-safe interfaces, and async support for IO-bound operations. 
 - Improve observability (metrics, traces), error handling around Rust fallback, and configuration-driven thresholds/policies.
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -55,7 +53,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ThresholdAlertManager:
-    """Manages threshold checking and alert emissio""""""n."""
+    """Manages threshold checking and alert emission."""
 
     def __init__(self) -> None:
         self.thresholds: dict[str, list[Threshold]] = {}
@@ -124,7 +122,7 @@ class ThresholdAlertManager:
 
 
 class RetentionEnforcer:
-    """Enforces retention policies on met""""""rics."""
+    """Enforces retention policies on metrics."""
 
     def __init__(self) -> None:
         self.policies: dict[str, RetentionPolicy] = {}

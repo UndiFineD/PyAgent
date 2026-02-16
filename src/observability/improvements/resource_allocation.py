@@ -13,9 +13,8 @@
 # limitations under the License.
 
 """
-resource_allocation.py - Compatibility allocation dataclass"""
-"""
-[Brief Summary]
+resource_allocation.py - Compatibility allocation dataclass
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -35,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -48,7 +47,7 @@ __version__ = VERSION
 
 @dataclass
 class ResourceAllocation:
-    """Compatibility allocation record used by test""""""s."""
+    """Compatibility allocation record used by tests."""
 
     improvement_id: str
     resources: list[str] = field(default_factory=list)  # type: ignore[assignment]

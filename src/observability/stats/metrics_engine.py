@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +13,8 @@
 # limitations under the License.
 
 """
-Metrics Engine - High-performance observability & token cost aggregation"""
-"""
-[Brief Summary]
+Metrics Engine - High-performance observability & token cost aggregation
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -37,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 High-performance metrics engine for real-time observability and aggregation.
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -72,7 +69,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ObservabilityEngine:
-    """Provides telemetry and performance tracking for the agent flee""""""t."""
+    """Provides telemetry and performance tracking for the agent fleet."""
 
     def __init__(self, workspace_root: str | None = None, fleet: Any = None) -> None:
         if fleet and hasattr(fleet, "workspace_root"):
@@ -95,7 +92,7 @@ class ObservabilityEngine:
         self.load()
 
     def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:
-        """Logs a system event in a structured format"""""" for ELK.
+        """Logs a system event in a structured format for ELK.
 
         Args:
             agent_id: The ID of the agent generating the event.
@@ -103,7 +100,7 @@ class ObservabilityEngine:
             data: Payload of the event.
             level: Severity level (INFO, WARNING, ERROR, CRITICAL).
         """
-        # Noise Reduction: Only store significant events in the persistent"""""" log buffer.
+        # Noise Reduction: Only store significant events in the persistent log buffer.
         # Metrics are still recorded for everything.
         important_types: list[str] = [
             "agent_failure",
@@ -131,7 +128,7 @@ class ObservabilityEngine:
 
     def export_to_elk(self) -> str:
         """Simulates exporting log buffer to ELK stack."""
-        count: int = len(s""""""elf.log_buffer)
+        count: int = len(self.log_buffer)
         # In real scenario: push to Elasticsearch/Logstash
         json.dumps(self.log_buffer)
         self.log_buffer = []
@@ -140,12 +137,12 @@ class ObservabilityEngine:
 
     def get_metrics(self) -> str:
         """Returns Prometheus scrape response."""
-        return self.metrics_exporter.get_pr""""""ometheus_payload()
+        return self.metrics_exporter.get_prometheus_payload()
 
     def generate_dashboard(self, shard_name: str | None = None) -> str:
         """
-        Triggers Grafana JSON dashboard ge""""""neration (Phase 126).
-""""""        """
+        Triggers Grafana JSON dashboard generation (Phase 126).
+        """
         try:
             generator = GrafanaDashboardGenerator(self.workspace_root / "deploy" / "grafana")
             if shard_name:
@@ -155,7 +152,7 @@ class ObservabilityEngine:
             return f"Error: GrafanaDashboardGenerator not available: {e}"
 
     def start_trace(self, trace_id: str) -> None:
-        """Start timing an operation."""""""""""""""
+        """Start timing an operation."""
         self._start_time
 """
 
@@ -192,7 +189,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ObservabilityEngine:
-    """Provides telemetry and performance """"""tracking for the agent fleet."""
+    """Provides telemetry and performance tracking for the agent fleet."""
 
     def __init__(self, workspace_root: str | None = None, fleet: Any = None) -> None:
         if fleet and hasattr(fleet, "workspace_root"):
@@ -215,7 +212,7 @@ class ObservabilityEngine:
         self.load()
 
     def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:
-        """Logs a system e""""""vent in a structured format for ELK.
+        """Logs a system event in a structured format for ELK.
 
         Args:
             agent_id: The ID of the agent generating the event.
@@ -223,7 +220,7 @@ class ObservabilityEngine:
             data: Payload of the event.
             level: Severity level (INFO, WARNING, ERROR, CRITICAL).
         """
-        # Noise Reduction: Only store significa""""""nt events in the persistent log buffer.
+        # Noise Reduction: Only store significant events in the persistent log buffer.
         # Metrics are still recorded for everything.
         important_types: list[str] = [
             "agent_failure",
@@ -250,7 +247,7 @@ class ObservabilityEngine:
         self.metrics_exporter.record_agent_call(agent_id, 0.0, True)
 
     def export_to_elk(self) -> str:
-        """Simulates exporting log buffer to ELK stack."""""""""
+        """Simulates exporting log buffer to ELK stack."""
         count: int = len(self.log_buffer)
         # In real scenario: push to Elasticsearch/Logstash
         json.dumps(self.log_buffer)
@@ -260,11 +257,11 @@ class ObservabilityEngine:
 
     def get_metrics(self) -> str:
         """Returns Prometheus scrape response."""
-        return s""""""elf.metrics_exporter.get_prometheus_payload()
+        return self.metrics_exporter.get_prometheus_payload()
 
     def generate_dashboard(self, shard_name: str | None = None) -> str:
         """
-        Trigger"""s G"""rafana JSON dashboa""""""rd generation (Phase 126).
+        Trigger"""s G"""rafana JSON dashboard generation (Phase 126).
         """
         try:
             generator = GrafanaDashboardGenerator(self.workspace_root / "deploy" / "grafana")
@@ -275,7 +272,7 @@ class ObservabilityEngine:
             return f"Error: GrafanaDashboardGenerator not available: {e}"
 
     def start_trace(self, trace_id: str) -> None:
-        """Start timing an operation""""""."""
+        """Start timing an operation."""
         self._start_times[trace_id] = time.time()
         # Also start OTel span and store its UUID
         span_id: str = self.otel.start_span(trace_id)
@@ -292,7 +289,7 @@ class ObservabilityEngine:
         model: str = "unknown",  # noqa: ARG002
         metadata: dict[str, Any] | None = None,
     ) -> None:
-        """End timing and record metric with cost est""""""imation."""
+        """End timing and record metric with cost estimation."""
         if trace_id not in self._start_times:
             logging.warning(f"No start trace found for {trace_id}")
             return
@@ -305,7 +302,7 @@ class ObservabilityEngine:
             self.otel.end_span(otel_span_id, status=status, attributes=metadata)
 
     def consolidate_telemetry(self) -> dict[str, float]:
-        """Aggregate metrics using Rust high-throughput engine."""""""""
+        """Aggregate metrics using Rust high-throughput engine."""
         if rc and hasattr(rc, "aggregate_metrics_rust"):
             data_map = self._build_data_map()
             try:
@@ -341,11 +338,11 @@ class ObservabilityEngine:
 
     def get_reliability_weights(self, agent_names: list[str]) -> list[float]:
         """Exposes core reliability logic for consensus protocols."""
-   """"""     return self.core.calculate_reliability_scores(agent_names)
+        return self.core.calculate_reliability_scores(agent_names)
 
     def trace_workflow(self, workflow_name: str, duration: float) -> None:
         """Records a workflow trace for OpenTelemetry visualization."""
-        self.prometheus.record_metric("""""""workflow_duration_seconds", duration, {"workflow": workflow_name})
+        self.prometheus.record_metric("workflow_duration_seconds", duration, {"workflow": workflow_name})
         self.log_event(
             "system",
             "workflow_trace",
@@ -353,7 +350,7 @@ class ObservabilityEngine:
         )
 
     def get_summary(self) -> dict[str, Any]:
-        """Returns a sum""""""mary of performance and cost metrics."""
+        """Returns a summary of performance and cost metrics."""
         if not self.metrics:
             return {"status": "No data"}
 
@@ -386,7 +383,7 @@ class ObservabilityEngine:
             data["total_cost"] = roun"""d(data["cost"], 6)
         return agents
 
-    def s""""""ave(self) -> None:
+    def save(self) -> None:
         """Persist telemetry to disk."""
         try:
             data: list[dict[str, Any]] = [asdict(m) for m in self.metrics]
@@ -397,7 +394,7 @@ class ObservabilityEngine:
             traceback.print_exc()
 
     def load(self) -> None:
-     """"""   """Load telemetry from disk."""
+        """Load telemetry from disk."""
         if self.telemetry_file.exists():
             try:
                 data = json.loads(self.telemetry_file.read_text())

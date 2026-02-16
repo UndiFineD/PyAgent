@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Progress Dashboard - Generates progress reports, velocity metrics, burndown data
 
-"""
-Progress Dashboard - Generates progress reports, velocity metrics, burndown data"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -38,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -55,21 +51,21 @@ __version__ = VERSION
 
 
 class ProgressDashboard:
-    """Generates progress reports and dashboards for improve""""""ments.
+    """Generates progress reports and dashboards for improvements.
 
     Tracks completion rates, velocity, and generates burndown data.
 
     Attributes:
-        reports: List of generated reports.""""""
+        reports: List of generated reports.
     """
 
     def __init__(self) -> None:
         """Initialize the dashboard."""
-        self.reports: list[Progress""""""Report] = []
+        self.reports: list[ProgressReport] = []
         self.velocity_history: list[float] = []
 
     def generate_report(self, improvements: list[Improvement]) -> ProgressReport:
-        """Generate a p""""""rogress report.
+        """Generate a progress report.
 
         Args:
             improvements: List of all improvements.
@@ -77,7 +73,7 @@ class ProgressDashboard:
         Returns:
             ProgressReport with current metrics.
         """
-        completed = len([i for i in improvements if i.status == Improvement""""""Status.COMPLETED])
+        completed = len([i for i in improvements if i.status == ImprovementStatus.COMPLETED])
         in_progress = len([i for i in improvements if i.status == ImprovementStatus.IN_PROGRESS])
         blocked = len([i for i in improvements if i.status == ImprovementStatus.DEFERRED])
 
@@ -97,7 +93,7 @@ class ProgressDashboard:
 
     def _calculate_velocity(self) -> float:
         """Calculate velocity from recent reports."""
-        if l""""""en(self.reports) < 2:
+        if len(self.reports) < 2:
             return 0.0
         recent = self.reports[-4:]  # Last 4 reports
         if len(recent) < 2:
@@ -107,24 +103,24 @@ class ProgressDashboard:
 
     def generate_burndown(self, improvements: list[Improvement]) -> list[tuple[str, int]]:
         """Generate burndown chart data."""
-""""""        remaining = len(
+        remaining = len(
             [i for i in improvements if i.status not in [ImprovementStatus.COMPLETED, ImprovementStatus.REJECTED]]
         )
         return [(datetime.now().isoformat()[:10], remaining)]
 
     def get_completion_rate(self, improvements: list[Improvement]) -> float:
         """Calculate completion rate."""
-      """"""  total = len(improvements)
+        total = len(improvements)
         if total == 0:
             return 0.0
         completed = len([i for i in improvements if i.status == ImprovementStatus.COMPLETED])
         return (completed / total) * 100
 
     def generate_bmad_strategic_grid(self, root_path: Path) -> str:
-        """Generates a 3x3 strategic gri""""""d inspired by the BMAD Method.
+        """Generates a 3x3 strategic grid inspired by the BMAD Method.
 
         Checks for project artifacts and quality indicators.
-        """""""""
+        """
         # Planning Indicators
         has_prd = any((root_path / p).exists() for p in ["docs/PRD.md", "prd.md", "docs/stories"])
         has_arch = any(
@@ -160,7 +156,7 @@ class ProgressDashboard:
         q_health = "❌" if has_errors else "✅"
 
         grid = [
-            "## 🗺️ Strategic """De""""""velopment Grid (BMAD Pattern)",
+            "## 🗺️ Strategic """Development Grid (BMAD Pattern)",
 """
 
 from __future__ import annotations
@@ -178,7 +174,7 @@ __version__ = VERSION
 
 
 class ProgressDashboard:
-    """Generates progress r""""""eports and dashboards for improvements.
+    """Generates progress reports and dashboards for improvements.
 
     Tracks completion rates, velocity, and generates burndown data.
 
@@ -187,7 +183,7 @@ class ProgressDashboard:
     """
 
     def __init__(self) -> None:
-        """Initialize the dashboard.""""""
+        """Initialize the dashboard.
   """      self.reports: list[ProgressReport] = []
         self.velocity_history: list[float] = []
 
@@ -229,14 +225,14 @@ class ProgressDashboard:
         return sum(completions) / len(completions) if completions else 0.0
 
     def generate_burndown(self, improvements: list[Improvement]) -> list[tuple[str, int]]:
-     """   """"""Generate burndown chart data."""
+     """   Generate burndown chart data."""
         remaining = len(
             [i for i in improvements if i.status not in [ImprovementStatus.COMPLETED, ImprovementStatus.REJECTED]]
         )
         return [(datetime.now().isoformat()[:10], remaining)]
 
     def get_completion_rate(self, improvements: list[Improvement]) -> float:
-        """"""Cal"""culate completion rate."""
+        Cal"""culate completion rate."""
         total = len(improvements)
         if total == 0:
             return 0.0

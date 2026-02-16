@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Prometheus Exporter - Formats fleet telemetry into Prometheus/OpenMetrics metrics
 
-"""
-Prometheus Exporter - Formats fleet telemetry into Prometheus/OpenMetrics metrics"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -42,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Exporter for fleet metrics in Prometheus/OpenMetrics format.
 Enables real-time dashboards in Grafana and ELK stack.
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -54,14 +50,14 @@ __version__ = VERSION
 
 
 class PrometheusExporter:
-    """Formats fleet telemetry into Prometheus-compatible metric""""""s."""
+    """Formats fleet telemetry into Prometheus-compatible metrics."""
 
     def __init__(self) -> None:
         self.metrics_registry: dict[str, float] = {}
 
     def record_metric(self, name: str, value: float, labels: dict[str, str] | None = None) -> str:
         """Records a metric with optional labels."""
-        label""""""_str = ""
+        label_str = ""
         if labels:
             label_str = "{" + ",".join([f'{k}="{v}"' for k, v in labels.items()]) + "}"
 
@@ -71,7 +67,7 @@ class PrometheusExporter:
 
     def generate_scrape_response(self) -> str:
         """Generates the text response for a Prometheus scrape endpoint."""
-      """"""  lines = []
+        lines = []
         for key, value in self.metrics_registry.items():
             # Basic Prometheus format: metric_name{labels} value
             lines.append(f"pyagent_{key} {value}")
@@ -80,7 +76,7 @@ class PrometheusExporter:
 
     def get_grafana_info(self) -> dict[str, Any]:
         """Returns connection details for Grafana integration."""
- """"""       return {
+        return {
             "datasource_type": "Prometheus",
             "scrape_interval": "15s",
             "endpoint": "/metrics",

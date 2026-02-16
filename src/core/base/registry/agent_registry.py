@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 AgentRegistry: Central registry for all active agent instances.
 (Re-implemented using RegistryCore)

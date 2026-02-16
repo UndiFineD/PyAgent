@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,9 +15,8 @@
 from __future__ import annotations
 
 """
-report_type.py - Defines ReportType enum for agent report categories"""
-"""
-[Brief Summary]
+report_type.py - Defines ReportType enum for agent report categories
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -41,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 - Document backward-compatibility policy for adding/removing report types and consider extensibility hooks (e.g., allow plugins to register new report types).
 
 FILE CONTENT SUMMARY:
-"""""""""
+"""
 
 
 from enum import Enum
@@ -52,7 +49,7 @@ __version__ = VERSION
 
 
 class ReportType(Enum):
-    """Type of report to generat""""""e."""
+    """Type of report to generate."""
 
     DESCRIPTION = "description"
     ERRORS = "errors"

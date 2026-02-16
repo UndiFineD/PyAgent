@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+RollbackRecord - Data container for improvement rollback records
 
-"""
-RollbackRecord - Data container for improvement rollback records"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -36,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -49,7 +45,7 @@ __version__ = VERSION
 
 @dataclass
 class RollbackRecord:
-    """Record of an improvement rol""""""lback.
+    """Record of an improvement rollback.
 
     Attributes:
         improvement_id: ID of the rolled back improvement.
@@ -58,7 +54,7 @@ class RollbackRecord:
         previous_state: State before the improvement.
         rollback_commit: Git commit of the rollback.
     """
-    improvemen""""""t_id: str
+    improvement_id: str
     rollback_date: str = ""
     reason: str = ""
     previous_state: str = ""

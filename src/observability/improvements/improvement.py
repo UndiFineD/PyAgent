@@ -12,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Improvement - Dataclass for representing a single improvement suggestion
 
-"""
-Improvement - Dataclass for representing a single improvement suggestion"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -46,7 +44,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -64,7 +62,7 @@ __version__ = VERSION
 
 @dataclass
 class Improvement:
-    """A single improvement suggestio""""""n."""
+    """A single improvement suggestion."""
 
     id: str
     title: str

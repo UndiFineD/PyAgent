@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Mock orchestrator plugin for demonstrating community extension patterns."""
 
 from __future__ import annotations

@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Helper functions for dataclass default factories."""
 
 from __future__ import annotations

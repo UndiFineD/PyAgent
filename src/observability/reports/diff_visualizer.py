@@ -32,10 +32,10 @@ class DiffVisualizer:
         >>> visualizer=DiffVisualizer()
         >>> result=visualizer.compare("old content", "new content")
         >>> html=visualizer.render_html(result, DiffViewMode.SIDE_BY_SIDE)
-    """""""""
+    """
 
     def compare(self, old_content: str, new_content: str) -> DiffResult:
-        """Compare two changelog ver""""""sions.
+        """Compare two changelog versions.
 
         Args:
             old_content: Original changelog content.
@@ -44,7 +44,7 @@ class DiffVisualizer:
         Returns:
             DiffResult with comparison details.
         """
-        old_lines = set(old_content.spl""""""it("\n"))
+        old_lines = set(old_content.split("\n"))
         new_lines = set(new_content.split("\n"))
 
         additions = list(new_lines - old_lines)
@@ -62,7 +62,7 @@ class DiffVisualizer:
         )
 
     def render_html(self, result: DiffResult, mode: DiffViewMode) -> str:
-        """Render diff res""""""ult as HTML.
+        """Render diff result as HTML.
 
         Args:
             result: DiffResult to render.
@@ -71,7 +71,7 @@ class DiffVisualizer:
         Returns:
             HTML string representation of the diff.
         """
-        if mode == DiffViewMod""""""e.SIDE_BY_SIDE:
+        if mode == DiffViewMode.SIDE_BY_SIDE:
             return self._render_side_by_side(result)
         elif mode == DiffViewMode.INLINE:
             return self._render_inline(result)
@@ -79,7 +79,7 @@ class DiffVisualizer:
 
     def _render_unified(self, result: DiffResult) -> str:
         """Render unified diff view."""
-        lin""""""es: list[str] = []
+        lines: list[str] = []
         lines.append("<div class='diff-unified'>")
         for line in result.deletions:
             lines.append(f"<span class='deletion'>- {line}</span>")
@@ -89,7 +89,7 @@ class DiffVisualizer:
         return "\n".join(lines)
 
     def _render_side_by_side(self, result: DiffResult) -> str:
-        """Render side-by-side diff view""""""."""
+        """Render side-by-side diff view."""
         return (
             f"<div class='diff-side-by-side'>Deletions: "
             f"{len(result.deletions)}, Additions: "
@@ -98,5 +98,5 @@ class DiffVisualizer:
 
     def _render_inline(self, result: DiffResult) -> str:
         """Render inline diff view."""
-        total_changes = len(result.deletions)"""""" + len(result.additions)
+        total_changes = len(result.deletions) + len(result.additions)
         return f"<div class='diff-inline'>Changes: {total_changes}</div>"

@@ -38,10 +38,10 @@ class ChangelogSearcher:
     Example:
         >>> searcher=ChangelogSearcher()
         >>> results=searcher.search("bug fix", changelog_content)
-    """""""""
+    """
 
     def search(self, query: str, content: str) -> list[SearchResult]:
-        """Search for query in changelog co""""""ntent.
+        """Search for query in changelog content.
 
         Args:
             query: Search query string.
@@ -50,7 +50,7 @@ class ChangelogSearcher:
         Returns:
             List of search results.
         """
-        # Rust-accelerat""""""ed search
+        # Rust-accelerated search
         if _RUST_AVAILABLE:
             try:
                 # Extract versions first
@@ -106,7 +106,7 @@ class ChangelogSearcher:
 
 
     def _calculate_score(self, query: str, text: str) -> float:
-        """Calculate relevance score """"""for a match.
+        """Calculate relevance score for a match.
 
         Args:
             query: Search query.
@@ -115,7 +115,7 @@ class ChangelogSearcher:
         Returns:
             Score between 0 and 1.
         """
-        query_lower """"""= query.lower()
+        query_lower = query.lower()
         text_lower = text.lower()
         # Exact match gets highest score
         if query_lower == text_lower:

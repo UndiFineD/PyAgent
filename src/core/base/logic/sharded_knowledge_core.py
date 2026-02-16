@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Core logic for sharded knowledge management.
 (Facade for src.core.base.common.knowledge_core)

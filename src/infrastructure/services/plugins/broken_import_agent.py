@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Plugin demonstrating handling of broken imports during agent initialization."""
 
 from __future__ import annotations

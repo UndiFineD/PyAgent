@@ -211,7 +211,7 @@ class IdentityAgent(BaseAgent):
         return vc
 
     def verify_credential(self, vc: dict[str, Any]) -> dict[str, Any]:
-"""""""
+"
         Verifies the integrity of a credential.
 # #
 "   "     if "proof" not in vc or "jws" not in vc["proof"]:

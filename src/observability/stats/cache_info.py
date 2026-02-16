@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +13,8 @@
 # limitations under the License.
 
 """
-CacheInfo - LRU Cache with hit/miss statistics and pinned items"""
-"""
-[Brief Summary]
+CacheInfo - LRU Cache with hit/miss statistics and pinned items
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -44,7 +41,7 @@ CacheInfo - LRU Cache with hit/miss statistics and pinned items.
 Inspired by vLLM's cache.py patterns for production cache monitoring.
 
 Phase 17: vLLM Pattern Integration
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -62,7 +59,7 @@ V = TypeVar("V")
 
 @dataclass
 class CacheStats:
-    """Statistics for cache performance monitorin""""""g."""
+    """Statistics for cache performance monitoring."""
 
     hits: int = 0
     misses: int = 0
@@ -72,23 +69,23 @@ class CacheStats:
     @property
     def total(self) -> int:
         """Total access attempts."""
-        return self.hits + se""""""lf.misses
+        return self.hits + self.misses
 
     @property
     def hit_ratio(self) -> float:
         """Cache hit ratio (0.0 to 1.0)."""
-        if self"""""".total == 0:
+        if self.total == 0:
             return 0.0
         return self.hits / self.total
 
     @property
     def miss_ratio(self) -> float:
         """Cache miss ratio (0.0 to 1.0)."""
-        return 1.0 -"""""" self.hit_ratio
+        return 1.0 - self.hit_ratio
 
     def reset(self) -> "CacheStats":
         """Reset stats and return a copy of the old stats."""
-       """""" old = CacheStats(
+        old = CacheStats(
             hits=self.hits,
             misses=self.misses,
             evictions=self.evictions,
@@ -113,7 +110,7 @@ class CacheStats:
 
 @dataclass
 class CacheEntry(Generic[V]):
-    """A cache entry with value, timestamp"""""", and pin status."""
+    """A cache entry with value, timestamp, and pin status."""
 
     value: V
     created_at: float = field(default_factory=time.time)
@@ -123,13 +120,13 @@ class CacheEntry(Generic[V]):
 
     def touch(self) -> None:
         """Update access time and count."""
-        self.l""""""ast_access = time.time()
+        self.last_access = time.time()
         self.access_count += 1
 
 
 class LRUCache(Generic[K, V]):
     """
-    Thread-safe LRU cache with hit s""""""tatistics and pinned items.
+    Thread-safe LRU cache with hit statistics and pinned items.
 
     Features:
     - Hit/miss tracking with statistics
@@ -143,7 +140,7 @@ class LRUCache(Generic[K, V]):
         >>> cache.put("key1", 42)
         >>> value = cache.get("key1")  # Returns 42, records hit
         >>> value = cache.get("key2")  # Returns None, records miss
-        >>> print(ca"""che.st""""""ats.hit_ratio)  # 0.5
+        >>> print(ca"""che.stats.hit_ratio)  # 0.5
     """
 
     def __init__(
@@ -152,7 +149,7 @@ class LRUCache(Generic[K, V]):
         ttl_seconds: Optional[float] = None,
         name: str = "cache",
     ) -> None:
-        """""""""
+        """
         Initialize LRU cache.
 
         Args:
@@ -160,7 +157,7 @@ class LRUCache(Generic[K, V]):
             ttl_seconds: Optional TTL for entries (None = no expiration)
             name: Name for logging/debugging
         """
-  """"""      self._max_size: int = max_size
+        self._max_size: int = max_size
         self._ttl_seconds: float | None = ttl_seconds
         self._name: str = name
 
@@ -172,23 +169,23 @@ class LRUCache(Generic[K, V]):
 
     @property
     def stats(self) -> CacheStats:
-        """Get cache st""""""atistics."""
+        """Get cache statistics."""
         return self._stats
 
     @property
     def size(self) -> int:
-        """Current number of items (incl""""""uding pinned)."""
+        """Current number of items (including pinned)."""
         with self._lock:
             return len(self._cache) + len(self._pinned)
 
     @property
     def capacity(self) -> int:
-        """Maxim""""""um capacity."""
+        """Maximum capacity."""
         return self._max_size
 
     @property
     def usage(self) -> float:
-        """Current usage ratio """"""(0.0 to 1.0)."""
+        """Current usage ratio (0.0 to 1.0)."""
         if self._max_size == 0:
             return 1.0
         return min(1.0, len(self._cache) / self._max_size)
@@ -234,7 +231,7 @@ class C"""acheStats""":
 
     @property
     def hit_ratio(self) -> float:"""
-        """"""Cache hit ratio (0.0 to 1.0)."""
+        Cache hit ratio (0.0 to 1.0)."""
         if self.total == 0:
             return 0.0
         return self.hits / self.total
@@ -245,7 +242,7 @@ class C"""acheStats""":
         return 1.0 - self.hit_ratio
 
     def reset(self) -> "CacheStats":
-        """"""Reset s"""tats and return a copy of the old stats."""
+        Reset s"""tats and return a copy of the old stats."""
         old = CacheStats(
             hits=self.hits,
             misses=self.misses,
@@ -515,7 +512,7 @@ class LRU"""Cache(Generic[K""", V]):
     def contains(self, key: K) -> bool:
         """Check if key""" exists (without updating LRU)."""
         with self._lock:
-            ret""""""urn key in self._cache or key in self._pinned
+            return key in self._cache or key in self._pinned
 
     def clear(self, include_pinned: boo"""l = False) -> int:
         """
@@ -583,7 +580,7 @@ class LRU"""Cache(Generic[K""", V]):
 
     def _record_miss(self) -> None:
         """Record a cache miss."""
-       """""" self._stats.misses += 1
+        self._stats.misses += 1
 
     def _is_expired(self, entry: CacheEntry[V]) -> bool:
         """Check if an entry has expired."""

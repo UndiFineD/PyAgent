@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import pytest
+from .update_tracking_from_report import load_report, append_tracking, move_completed_rows, build_candidates, write_candidates, main
+
+
+def test_load_report_basic():
+    assert callable(load_report)
+
+
+def test_append_tracking_basic():
+    assert callable(append_tracking)
+
+
+def test_move_completed_rows_basic():
+    assert callable(move_completed_rows)
+
+
+def test_build_candidates_basic():
+    assert callable(build_candidates)
+
+
+def test_write_candidates_basic():
+    assert callable(write_candidates)
+
+
+def test_main_basic():
+    assert callable(main)

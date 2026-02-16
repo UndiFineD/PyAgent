@@ -16,7 +16,7 @@ from __future__ import annotations
 
 """
 Basic module docstring."""
-""""""
+
 """
 from src.core.base.lifecycle.version import VERSION
 

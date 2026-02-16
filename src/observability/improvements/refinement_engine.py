@@ -13,9 +13,8 @@
 # limitations under the License.
 
 """
-Refinement Engine - Improvements Agent Entrypoint"""
-"""
-[Brief Summary]
+Refinement Engine - Improvements Agent Entrypoint
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -35,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Improvements Agent: Maintains and improves improvement suggestions.
-"""""""""
+"""
 
 from __future__ import annotations
 

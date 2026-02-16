@@ -15,9 +15,8 @@
 from __future__ import annotations
 
 """
-ReportComparison - Data model for comparing two reports"""
-"""
-[Brief Summary]
+ReportComparison - Data model for comparing two reports
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -37,7 +36,7 @@ Provides a dataclass to capture the differences between two reports, including a
 
 WHAT IT SHOULD DO BETTER:
 Add methods for generating diff summaries, calculating change percentages, and serializing to/from JSON.
-"""""""""
+"""
 
 from dataclasses import dataclass, field
 from typing import List
@@ -49,7 +48,7 @@ __version__ = VERSION
 
 @dataclass
 class ReportComparison:
-    """Comparison between two re""""""ports.
+    """Comparison between two reports.
 
     Attributes:
         old_path: Path to the old report.
@@ -57,7 +56,7 @@ class ReportComparison:
         added: List of added content.
         removed: List of removed content.
         changed: List of changed content pairs (old, new).
-        unchanged_count: Number of unchanged items.""""""
+        unchanged_count: Number of unchanged items.
     """
 
     old_path: str

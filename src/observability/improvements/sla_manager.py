@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+SLA Manager - Manage SLAs for Improvements
 
-"""
-SLA Manager - Manage SLAs for Improvements"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -32,7 +28,7 @@ Validate and normalize improvement timestamps more robustly (support more format
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -50,18 +46,18 @@ __version__ = VERSION
 
 
 class SLAManager:
-    """Manages SLAs for improve""""""ments.
+    """Manages SLAs for improvements.
 
     Tracks SLA compliance and triggers escalations.
 
     Attributes:
         sla_configs: SLA configurations by level.
-        tracked: Map of improvement IDs to SLA tracking data.""""""
+        tracked: Map of improvement IDs to SLA tracking data.
     """
 
     def __init__(self) -> None:
         """Initialize SLA manager."""
-        self.sla_configs: dict[SLALevel, SLAConfigu""""""ration] = {}
+        self.sla_configs: dict[SLALevel, SLAConfiguration] = {}
         self.tracked: dict[str, dict[str, Any]] = {}
         # Compatibility API expected by tests.
         self.sla_policies: dict[str, SLAPolicy] = {}
@@ -69,7 +65,7 @@ class SLAManager:
 
     def set_policy(self, name: str, response_hours: int = 0, resolution_hours: int = 0) -> None:
         """Set a named SLA policy (compatibility API)."""
-        self.sla_policies[nam""""""e] = SLAPolicy(
+        self.sla_policies[name] = SLAPolicy(
             name=name,
             response_hours=int(response_hours or 0),
             resolution_hours=int(resolution_hours or 0),
@@ -77,11 +73,11 @@ class SLAManager:
 
     def get_policy(self, name: str) -> SLAPolicy | None:
         """Get a named SLA policy (compatibility API)."""
-        return self.sla_""""""policies.get(name)
+        return self.sla_policies.get(name)
 
     def check_violations(self, improvements: list[Improvement], priority: str) -> list[Improvement]:
         """Return improvements that violate the given named SLA policy."""
-        policy = self.sla_p""""""olicies.get(priority)
+        policy = self.sla_policies.get(priority)
         if not policy or policy.resolution_hours <= 0:
             return []
 
@@ -107,7 +103,7 @@ class SLAManager:
         return violating
 
     def _setup_default_slas(self) -> None:
-        """Set up default SLA configurations."""""""""
+        """Set up default SLA configurations."""
         defaults = [
             (SLALevel.P0, 24, 12),
             (SLALevel.P1, 72, 48),
@@ -148,11 +144,11 @@ class SLAManager:
 
     def get_breached(self) -> list[str]:
         """Get all breached improvement IDs."""
-        now ="""""" datetime.now().isoformat()
+        now = datetime.now().isoformat()
         return [imp_id for imp_id, tracking in self.tracked.items() if now > tracking["deadline"]]
 
     def get_sla_compliance_rate(self) -> float:
-        """Calculate SLA compliance rate."""""""""
+        """Calculate SLA compliance rate."""
         if not self.tracked:
             return 100.0
         breached = len(self.get_breached())

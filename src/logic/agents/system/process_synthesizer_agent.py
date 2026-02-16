@@ -181,7 +181,7 @@ class ProcessSynthesizerAgent:
         return {"workflow_id": workflow_id, "estimated_steps": len(steps)}
 
     def optimize_step(self, workflow_id: str, step_index: int) -> dict[str, Any]:
-"""""""
+"
    "     Adjusts a workflow step based on telemetry.
 # #
  "       if workflow_id not in self.active_workflows:

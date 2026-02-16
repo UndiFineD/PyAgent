@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Searching the repository for plan_executor.py to read its contents and produce the module description.
 

@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Script for ensuring __future__ imports appear before any logic category markers."""
 
 from __future__ import annotations

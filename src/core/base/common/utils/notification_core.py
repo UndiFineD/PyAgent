@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 NotificationCore logic for PyAgent.
 Pure logic for payload formatting and domain extraction.

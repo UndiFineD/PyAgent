@@ -1,18 +1,6 @@
 #!/usr/bin/env python3
->>>>>>> copilot/sub-pr-29
-"""Apply conservative patch proposals generated from bandit findings.
 
-This script re-uses the heuristics in `prepare_refactor_patches.py` to
-produce safe, text-based replacements for flagged lines (e.g. comment out
-risky imports, replace eval/exec with a RuntimeError), writes a backup
-`*.bak` and updates the target file in-place.
-
-This is intentionally conservative and deterministic so it can run
-automatically in CI or overnight runs.
-"""
-<<<<<<< HEAD
-
-=======from __future__ import annotations
+from __future__ import annotations
 import shutil
 import sys
 from pathlib import Path
@@ -59,18 +47,41 @@ def main() -> int:
             orig = lines[ln - 1]
             s = orig.strip()
             # Skip risky/easily-broken contexts
-            if s.startswith(('def ', 'class ', 'assert', '@', 'return', 'yield', 'if ', 'for ', 'while ', 'with ', 'try:', 'except')):                continue
+            if s.startswith(
+                (
+                    'def ',
+                    'class ',
+                    'assert',
+                    '@',
+                    'return',
+                    'yield',
+                    'if ',
+                    'for ',
+                    'while ',
+                    'with ',
+                    'try:',
+                    'except'
+                )
+            ):
+                continue
             # Conservative application rules:
             # - comment out imports
             # - replace eval/exec/compile with a RuntimeError
             # - replace subprocess/os.system/Popen usages with a RuntimeError
             applied_here = False
             if s.startswith('import ') or s.startswith('from '):
-                lines[ln - 1] = '# ' + orig + f"  # PATCH_APPLIED: commented risky import ({f.get('severity')})"                applied_here = True
+                lines[ln - 1] = '# ' + orig + f"  # PATCH_APPLIED: commented risky import ({f.get('severity')})"
+                applied_here = True
             elif any(k in s for k in ('eval', 'exec', 'compile')):
                 # Found potential dynamic execution usage — conservatively replace.
                 # Use of eval() is highly insecure — intentional detection here
-                lines[ln - 1] = "raise RuntimeError('Refactor required: remove dynamic execution; see .external/patches')"                applied_here = True
+                lines[ln - 1] = (
+                    "raise RuntimeError("
+                    "'Refactor required: remove dynamic execution; "
+                    "see .external/patches'"
+                    ")"
+                )
+                applied_here = True
             elif 'subprocess' in s or 'os.system' in s or 'Popen' in s:
                 lines[ln - 1] = "raise RuntimeError('Refactor required: avoid running subprocesses directly')"
                 applied_here = True

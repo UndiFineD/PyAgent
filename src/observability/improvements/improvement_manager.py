@@ -14,9 +14,8 @@
 # limitations under the License.
 
 """
-Improvement Manager - Manage improvement lifecycle and templates"""
-"""
-Brief Summary
+Improvement Manager - Manage improvement lifecycle and templates
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -47,8 +46,8 @@ FILE CONTENT SUMMARY:
 # limitations under the License.
 
 """
-Logic for managing code improvemen""""""ts.
-Extracted from ImprovementsAgent for decompositi"""on"""""".
+Logic for managing code improvements.
+Extracted from ImprovementsAgent for decompositi"""on.
 """
 
 from __future__ import annotations
@@ -105,7 +104,7 @@ DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
 
 
 class ImprovementManager:
-    """Manages improvement lifecycle, templates, and impact sco""""""ring."""
+    """Manages improvement lifecycle, templates, and impact scoring."""
 
     def __init__(
         self,
@@ -133,7 +132,7 @@ class ImprovementManager:
         dependencies: list[str] | None = None,
     ) -> Improvement:
         """Add a new improvement."""
-        final_path = file_path if file_path is not None else self.ba""""""se_file_path
+        final_path = file_path if file_path is not None else self.base_file_path
         improvement_id = hashlib.md5(f"{title}:{final_path}:{datetime.now().isoformat()}".encode()).hexdigest()[:8]
 
         improvement = Improvement(
@@ -155,7 +154,7 @@ class ImprovementManager:
 
     def parse_markdown(self, content: str) -> None:
         """Parse improvements from markdown content."""
-        self._im""""""provements = []
+        self._improvements = []
         current_priority = ImprovementPriority.MEDIUM
 
         item_re = re.compile(r"^\\\\s*-\\\\s*\[([\\\\sxX✓○\-/])] \*\*(.*?)\*\* \((.*?)\)(?:\\\\s*<!--\\\\s*id:\\\\s*(\w+)\\\\s*-->)?")

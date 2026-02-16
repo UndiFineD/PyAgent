@@ -26,7 +26,7 @@ WHAT IT SHOULD DO BETTER:
 - Implement full Mapping/MutableMapping ABC for predictable dict-like behaviour (iteration, len, keys, items). 
 - Add thread-safety or document single-threaded assumption. 
 - Provide richer docstrings, type narrowing for get default, serialization helpers, and unit tests for equality edge cases.
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -37,7 +37,7 @@ __version__ = VERSION
 
 
 class _ScheduleStore:
-    """Mapping wrapper that compares equal to {} and [] when empt""""""y."""
+    """Mapping wrapper that compares equal to {} and [] when empty."""
 
     def __init__(self) -> None:
         self._data: dict[str, ScheduledImprovement] = {}

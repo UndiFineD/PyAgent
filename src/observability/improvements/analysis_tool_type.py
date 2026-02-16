@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+AnalysisToolType - Enumeration of analysis tool categories
 
-"""
-AnalysisToolType - Enumeration of analysis tool categories"""
-"""
-[Brief Summary]
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -36,25 +32,6 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""""
-
-from __future__ import annotations
-
-from enum import Enum
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-class AnalysisToolType(Enum):
-    """Types of code analysis tool""""""s."""
-
-    LINTER = "linter"
-    TYPE_CHECKER = "type_checker"
-    SECURITY_SCANNER = "security_scanner"
-    COVERAGE = "coverage"
-    COMPLEXITY = "compl"""ex""""""ity"
 """
 
 from __future__ import annotations
@@ -65,9 +42,8 @@ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
-
 class AnalysisToolType(Enum):
-    """Types of code analysi""""""s tools."""
+    """Types of code analysis tools."""
 
     LINTER = "linter"
     TYPE_CHECKER = "type_checker"

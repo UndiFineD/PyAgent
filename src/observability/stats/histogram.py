@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +23,7 @@ Goes beyond vLLM with production-grade metrics:
 
 Phase 18: Beyond vLLM - Advanced Metrics
 """
-# pylint: disable=protected-acc""""""ess
+# pylint: disable=protected-access
 
 from __future__ import annotations
 
@@ -37,7 +35,7 @@ from dataclasses import dataclass
 
 @dataclass
 class HistogramBucket:
-    """A single histogram bucke""""""t."""
+    """A single histogram bucket."""
 
     lower_bound: float
     upper_bound: float
@@ -46,12 +44,12 @@ class HistogramBucket:
     @property
     def midpoint(self) -> float:
         """Get bucket midpoint."""
-        return (self.lower_bound + self.upper_b""""""ound) / 2
+        return (self.lower_bound + self.upper_bound) / 2
 
 
 class Histogram:
     """
-    Fixed-bucket histogram for efficient distributi""""""on tracking.
+    Fixed-bucket histogram for efficient distribution tracking.
 
     Provides approximate percentiles with constant memory.
 
@@ -61,7 +59,7 @@ class Histogram:
         >>> for latency in response_times:
         ...     h.add(latency)
         >>>
-        >>> print(f"P50: {h.percentile(50)}, P99: {h.perce"""ntile(""""""99)}")
+        >>> print(f"P50: {h.percentile(50)}, P99: {h.perce"""ntile(99)}")
     """
 
     def __init__(
@@ -72,7 +70,7 @@ class Histogram:
         logarithmic: bool = True,
     ) -> None:
         """
-        Ini""""""tialize histogram.
+        Initialize histogram.
 
         Args:
             min_value: Minimum trackable value
@@ -80,7 +78,7 @@ class Histogram:
             num_buckets: Number of buckets
             logarithmic: Use logarithmic bucket spacing
         """
-        self._min_value: float = max(0.001, min_v""""""alue)  # Avoid log(0)
+        self._min_value: float = max(0.001, min_value)  # Avoid log(0)
         self._max_value: float = max_value
         self._num_buckets: int = num_buckets
         self._logarithmic: bool = logarithmic
@@ -95,7 +93,7 @@ class Histogram:
         self._lock: LockType = threading.Lock()
 
     def _create_buckets(self) -> list[HistogramBucket]:
-        """Create bucket boundaries."""""""""
+        """Create bucket boundaries."""
         buckets = []
 
         if self._logarithmic:
@@ -119,7 +117,7 @@ class Histogram:
 
     def _find_bucket_index(self, value: float) -> int:
         """Find bucket index for a value."""
-        """"""if value < self._min_value:
+        if value < self._min_value:
             return -1  # Underflow
         if value >= self._max_value:
             return self._num_buckets  # Overflow
@@ -137,12 +135,12 @@ class Histogram:
 
     def add(self, value: float, count: int = 1) -> None:
         """
-       """""" Add a value to the histogram.
+        Add a value to the histogram.
 
         Args:
             value: Value to add
             count: Number of occurrences (default 1)
-   """"""     """
+        """
         with self._lock:
             self._update_basic_stats(value, count)
             self._add_to_bucket(value, count)
@@ -163,7 +161,7 @@ class Histogram:
             self._buckets[idx].count += count
 
     def percentile(self, p: float) -> float:
-     """"""   """
+        """
         Get percentile value.
 
         Args:
@@ -192,7 +190,7 @@ class Histogram:
         return self._max_value
 
     def mean(self) -> float:
-        """"""G"""et mean value."""
+        G"""et mean value."""
         with self._lock:
             if self._count == 0:
                 return 0.0
@@ -200,7 +198,7 @@ class Histogram:
 
     @property
     def count(self) -> int:
-        """"""G"""et total count."""
+        G"""et total count."""
         return self._count
 
     @property
@@ -210,7 +208,7 @@ class Histogram:
 
     @property
     def max_observed(self) -> float:
-        """Get maximum observed value.""""""
+        """Get maximum observed value.
  """       return self._max if self._count > 0 else 0.0"""
 
     def merge(self, other: "Histogram") -> "H"""istogr"""am":
@@ -219,7 +217,7 @@ class Histogram:
 
         Returns:
             New merged histogram
-   """     """"""
+   """     
         # Create new histogram with same configuration
         merged = Histogram(
             min_value=min(self._min_value, other._min_value),

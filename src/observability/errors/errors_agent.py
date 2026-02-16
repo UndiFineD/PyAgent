@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-# Refactored by copilot-placeholder
-# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,167 +11,26 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 """
 ErrorsAgent - Manage and analyze file-level error reports
 
-[Brief Summary]
-DATE: 2026-02-12
+# DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
-Instantiate ErrorsAgent with the path to an .errors.md file and use its methods to add errors, match patterns, cluster similar errors, and apply suppression rules.
+Instantiate ErrorsAgent with the path to an .errors.md file and use its methods to add errors, 
+match patterns, cluster similar errors, and apply suppression rules.
 
 WHAT IT DOES:
-Provides an agent for maintaining error-report files: parsing and validating error file paths, adding error entries, matching against default and custom patterns, clustering similar errors, tracking annotations and statistics, and optionally using Rust-accelerated pattern matching and suppression checks.
+Provides an agent for maintaining error-report files: parsing and validating error file paths, 
+adding error entries, matching against default and custom patterns, clustering similar errors, 
+tracking annotations and statistics, and optionally using Rust-accelerated pattern matching 
+and suppression checks.
 
 WHAT IT SHOULD DO BETTER:
-Expose clearer public APIs for clustering and suppression decision reasons, add comprehensive unit tests for Rust vs Python code paths, and improve associated-file discovery robustness and configurability.
-
-FILE CONTENT SUMMARY:
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-
-"""Auto-extracted class from agent_errors.py"""
-
-from __future__ import annotations
-
-import hashlib
-import json
-import logging
-import re
-from datetime import datetime
-from pathlib import Path
-from typing import Any
-
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-
-from .error_category import ErrorCategory
-from .error_cluster import ErrorCluster
-from .error_entry import ErrorEntry
-from .error_pattern import ErrorPattern
-from .error_severity import ErrorSeverity
-from .suppression_rule import SuppressionRule
-
-# Rust acceleration imports
-try:
-    from rust_core import check_suppression_rust, match_patterns_rust
-
-    _RUST_AVAILABLE = True
-except ImportError:
-    _RUST_AVAILABLE = False
-
-# Default error patterns
-
-DEFAULT_ERROR_PATTERNS: list[ErrorPattern] = [
-    ErrorPattern(
-        name="undefined_variable",
-        regex=r"NameError: name '(\w+)' is not defined",
-        severity=ErrorSeverity.HIGH,
-        category=ErrorCategory.RUNTIME,
-        suggested_fix="Define the variable before use or check for typos",
-    ),
-    ErrorPattern(
-        name="syntax_error",
-        regex=r"SyntaxError: (.*)",
-        severity=ErrorSeverity.CRITICAL,
-        category=ErrorCategory.SYNTAX,
-        suggested_fix="Fix the syntax according to the error message",
-    ),
-    ErrorPattern(
-        name="type_error",
-        regex=r"TypeError: (.*)",
-        severity=ErrorSeverity.HIGH,
-        category=ErrorCategory.TYPE,
-        suggested_fix="Check type compatibility of operands",
-    ),
-    ErrorPattern(
-        name="import_error",
-        regex=r"ImportError: (.*)",
-        severity=ErrorSeverity.HIGH,
-        category=ErrorCategory.RUNTIME,
-        suggested_fix="Ensure the module is installed and accessible",
-    ),
-    ErrorPattern(
-        name="attribute_error",
-        regex=r"AttributeError: (.*)",
-        severity=ErrorSeverity.MEDIUM,
-        category=ErrorCategory.RUNTIME,
-        suggested_fix="Check if the attribute exists on the object",
-    ),
-]
-
-__version__ = VERSION
-
-
-class ErrorsAgent(BaseAgent):
-    """Updates code file error reports using AI assistance."""
-
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self._validate_error_file_path()
-        self._check_associated_file()
-        # New features
-        self._errors: list[ErrorEntry] = []
-        self._clusters: dict[str, ErrorCluster] = {}
-        self._patterns: list[ErrorPattern] = list(DEFAULT_ERROR_PATTERNS)
-        self._suppression_rules: list[SuppressionRule] = []
-        self._annotations: dict[str, list[str]] = {}  # error_id -> annotations
-        self._statistics: dict[str, Any] = {}
-
-    def _validate_error_file_path(self) -> None:
-        """Validate that the file has the correct extension."""
-        if not self.file_path.name.endswith(".errors.md"):
-            logging.warning(f"File {self.file_path.name} does not end with .errors.md")
-
-    def _check_associated_file(self) -> None:
-        """Check if the associated code file exists."""
-        name = self.file_path.name
-        if name.endswith(".errors.md"):
-            base_name = name[:-10]  # len('.errors.md')
-            # Try to find the file with common extensions or exact match
-            candidate = self.file_path.parent / base_name
-            if candidate.exists():
-                return
-            # Try adding extensions
-            for ext in [".py", ".sh", ".js", ".ts", ".md"]:
-                candidate = self.file_path.parent / (base_name + ext)
-                if candidate.exists() and candidate != self.file_path:
-                    return
-            logging.warning(f"Could not find associated code file for {self.file_path.name}")
-
-    # ========== Error Management ==========
-    def add_error(
-        self,
-        message: str,
-        file_path: str,
-        line_number: int,
-        severity: ErrorSeverity = ErrorSeverity.MEDIUM,
-        category: ErrorCategory = ErrorCategory.OTHER,
-        stack_trace: str = "",
-        suggested_fix: str = "",
-    ) -> ErrorEntry:
-        """Add a new error entry."""
-        error_id = hashlib.md5(f"{message}:{file_path}:{line_number}".encode()).hexdigest()[:8]
-        error = ErrorEntry(
-            id=error_id,
-            message=message,
-            file_path=file_path,
-            line_number=line_number,
-            severity
+Expose clearer public APIs for clustering and suppression decision reasons, 
+add comprehensive unit tests for Rust vs Python code paths, 
+and improve associated-file discovery robustness and configurability.
 """
 
 from __future__ import annotations

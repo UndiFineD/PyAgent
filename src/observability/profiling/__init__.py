@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +15,7 @@
 """
 Profiling utilities for PyAgent."""
 Includes Rust acceleration profiling and performance tracking."""
-"""""""""
+"""
 
 from src.observability.profiling.profile_decorators import (ProfileAccumulator,
                                                             ProfileResult,

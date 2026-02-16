@@ -12,7 +12,6 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-
 """Logging configuration regarding PyAgent."""
 
 from __future__ import annotations

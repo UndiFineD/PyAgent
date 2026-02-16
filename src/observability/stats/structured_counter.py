@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +19,7 @@ Inspired by vLLM's CompilationCounter pattern for tracking detailed metrics
 with snapshot/diff capabilities and testing support.
 
 Phase 24: Advanced Observability & Parsing
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -37,7 +35,7 @@ T = TypeVar("T", bound="StructuredCounter")
 @dataclass
 class StructuredCounter:
     """
-    Base class for structured metric cou""""""nters.
+    Base class for structured metric counters.
 
     Provides snapshot, diff, and testing utilities for tracking
     detailed metrics across operations.
@@ -55,16 +53,16 @@ class StructuredCounter:
         # Test expected changes
         with counter.expect(requests_processed=1, cache_hits=1):
             counter.requests_processed += 1
-            counter.cache_hits += 1""""""
+            counter.cache_hits += 1
     """
 
     def clone(self: T) -> T:
         """Create a deep copy of this counter."""
-        return copy.de""""""epcopy(self)
+        return copy.deepcopy(self)
 
     def reset(self) -> None:
         """Reset all counter fields to their default values."""
-        def reset_field(f"""""": Any) -> None:
+        def reset_field(f: Any) -> None:
             if f.default is not f.default_factory:
                 setattr(self, f.name, f.default if f.default is not dataclass else 0)
             elif f.default_factory is not dataclass:
@@ -76,7 +74,7 @@ class StructuredCounter:
 
     def diff(self: T, other: T) -> dict[str, int]:
         """
-        Compute the difference between this co""""""unter and another.
+        Compute the difference between this counter and another.
 
         Args:
             other: The baseline counter to compare against
@@ -84,7 +82,7 @@ class StructuredCounter:
         Returns:
             Dictionary of field names to their differences (self - other)
         """
-        def calculate_diff(acc: dict[str, int], f: An""""""y) -> dict[str, int]:
+        def calculate_diff(acc: dict[str, int], f: Any) -> dict[str, int]:
             current = getattr(self, f.name)
             baseline = getattr(other, f.name)
             if isinstance(current, (int, float)) and isinstance(baseline, (int, float)):
@@ -97,12 +95,12 @@ class StructuredCounter:
 
     def as_dict(self) -> dict[str, Any]:
         """Convert counter to dictionary regarding current values."""
-        return {f.name: getattr(self, f.name"""""") for f in fields(self)}
+        return {f.name: getattr(self, f.name) for f in fields(self)}
 
     @contextmanager
     def expect(self, **kwargs: int) -> Generator[None, None, None]:
         """
-        Context manager for testin""""""g expected counter changes.
+        Context manager for testing expected counter changes.
 
         Args:
             **kwargs: Expected changes for each counter field
@@ -113,7 +111,7 @@ class StructuredCounter:
         Example:
             with counter.expect(cache_hits=2, cache_misses=1):
                 # ... code that should increment cache_hits by 2, cache_misses by 1
-        """""""""
+        """
         old = self.clone()
         yield
 
@@ -130,21 +128,21 @@ class StructuredCounter:
 
     def increment(self, field_name: str, amount: int = 1) -> None:
         """Increment a counter field by the given amount."""
-        cu""""""rrent = getattr(self, field_name)
+        current = getattr(self, field_name)
         setattr(self, field_name, current + amount)
 
     def decrement(self, field_name: str, amount: int = 1) -> None:
         """Decrement a counter field by the given amount."""
-       """""" current = getattr(self, field_name)
+        current = getattr(self, field_name)
         setattr(self, field_name, current - amount)
 
 
 @dataclass
 class CompilationCounter(StructuredCounter):
     """
-    Counter fo""""""r tracking compilation-related metrics.
+    Counter for tracking compilation-related metrics.
 
-    Based""" on vL""""""LM's compilation counter pattern.
+    Based""" on vLLM's compilation counter pattern.
     """
 
     num_models_seen: int = 0
@@ -158,7 +156,7 @@ class CompilationCounter(StructuredCounter):
 
 @dataclass
 class RequestCounter(StructuredCounter):
-    """Coun""""""ter for tracking request-related metrics."""
+    """Counter for tracking request-related metrics."""
 
     requests_received: int = 0
     requests_completed: int = 0
@@ -171,7 +169,7 @@ class RequestCounter(StructuredCounter):
 
 @dataclass
 class CacheCounter(StructuredCounter):
-    """""""""Counter for tracking cache-related metrics."""
+    """Counter for tracking cache-related metrics."""
 
     cache_hits: int = 0
     cache_misses: int = 0
@@ -182,7 +180,7 @@ class CacheCounter(StructuredCounter):
     @property
     def hit_ratio(self) -> float:
         """Compute cache hit ratio."""
-""""""        total = self.cache_hits + self.cache_misses
+        total = self.cache_hits + self.cache_misses
         return self.cache_hits / total if total > 0 else """0.0
 
 

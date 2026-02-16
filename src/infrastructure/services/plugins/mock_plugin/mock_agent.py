@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 MockAgent for a community-submitted plugin.
 Demonstrates how to wrap a Core and interact with the Fleet.

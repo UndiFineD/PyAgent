@@ -30,10 +30,10 @@ class ReleaseNotesGenerator:
     Example:
         >>> generator=ReleaseNotesGenerator()
         >>> notes=generator.generate("1.0.0", entries)
-    """""""""
+    """
 
     def generate(self, version: str, entries: list[ChangelogEntry], title: str | None = None) -> ReleaseNote:
-        """Generate release notes from en""""""tries.
+        """Generate release notes from entries.
 
         Args:
             version: Release version.
@@ -43,7 +43,7 @@ class ReleaseNotesGenerator:
         Returns:
             Generated ReleaseNote.
         """
-        # Extract highlights (high priority or high """"""severity)
+        # Extract highlights (high priority or high severity)
         highlights = [e.description for e in entries if e.priority >= 2 or e.severity in ("high", "critical")]
 
         # Extract breaking changes

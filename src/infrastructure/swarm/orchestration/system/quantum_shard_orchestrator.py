@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """QuantumShardOrchestrator for PyAgent.
 Simulates non-local state synchronization (Quantum Entanglement pattern).
 Provides "instant" state consistency for critical variables across distributed shards.

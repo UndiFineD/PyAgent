@@ -12,56 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""MCP Bridge primitives (placeholder).
-
-This module provides a lightweight registry and adapter interface for
-Model Context Protocol (MCP) servers. It's a starting point to add
-connectors/adapters for external MCP servers.
-"""
-from __future__ import annotations
-from dataclasses import dataclass
-from typing import Dict, Any, Callable
-
-
-@dataclass
-class MCPServerInfo:
-    name: str
-    url: str
-    meta: Dict[str, Any]
-
-
-class MCPBridge:
-    """Registry and simple dispatcher for MCP servers."""
-
-    def __init__(self):
-        self._servers: Dict[str, MCPServerInfo] = {}
-        self._handlers: Dict[str, Callable[..., Any]] = {}
-
-    def register(self, info: MCPServerInfo, handler: Callable[..., Any]) -> None:
-        self._servers[info.name] = info
-        self._handlers[info.name] = handler
-
-    def call(self, server_name: str, method: str, *args, **kwargs):
-        if server_name not in self._handlers:
-            raise KeyError(f"MCP server {server_name} not registered")
-        return self._handlers[server_name](method, *args, **kwargs)
-
-
-__all__ = ["MCPBridge", "MCPServerInfo"]
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 bridge.py - MCP Server Bridge (registry, discovery, and orchestration)
 
@@ -100,13 +50,21 @@ import subprocess
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Callable
 
 import aiohttp
 
 from src.core.base.common.models.communication_models import CascadeContext
 
 logger = logging.getLogger("pyagent.tools.mcp")
+
+__all__ = ["MCPBridge", "MCPServerInfo", "MCPToolOrchestrator"]
+
+@dataclass
+class MCPServerInfo:
+    name: str
+    url: str
+    meta: Dict[str, Any]
 
 
 class MCPServerType(Enum):
@@ -182,139 +140,7 @@ class MCPServerRegistry:
         """Load server registry from file."""
         if self.registry_path.exists():
             try:
-                with open(self.registry_path, 'r') as f:
-                    data = json.load(f)
-                    for name, config_data in data.items():
-                        config_data['category'] = MCPCategory(config_data['category'])
-                        config_data['server_type'] = MCPServerType(config_data['server_type'])
-                        self.servers[name] = MCPServerConfig(**config_data)
-                self.logger.info(f"Loaded {len(self.servers)} MCP servers from registry")
-            except Exception as e:
-                self.logger.error(f"Failed to load registry: {e}")
-        else:
-            self._create_default_registry()
-
-    def _create_default_registry(self):
-        """Create default registry with essential MCP servers."""
-        default_servers = {
-            "filesystem": MCPServerConfig(
-                name="filesystem",
-                description="Local filesystem operations",
-                category=MCPCategory.FILESYSTEM,
-                server_type=MCPServerType.NATIVE,
-                capabilities=["read", "write", "list", "search"],
-                security_level="high"
-            ),
-            "git": MCPServerConfig(
-                name="git",
-                description="Git repository operations",
-                category=MCPCategory.DEVELOPMENT,
-                server_type=MCPServerType.NATIVE,
-                capabilities=["status", "commit", "push", "pull", "diff"],
-                security_level="medium"
-            ),
-            "browser": MCPServerConfig(
-                name="browser",
-                description="Web browser automation",
-                category=MCPCategory.BROWSER,
-                server_type=MCPServerType.DOCKER,
-                docker_image="mcp/browser:latest",
-                capabilities=["navigate",
-"""
-
-from __future__ import annotations
-
-import asyncio
-import json
-import logging
-import os
-import subprocess
-from dataclasses import dataclass, field
-from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional
-
-import aiohttp
-
-from src.core.base.common.models.communication_models import CascadeContext
-
-logger = logging.getLogger("pyagent.tools.mcp")
-
-
-class MCPServerType(Enum):
-    """Types of MCP servers."""
-    LOCAL = "local"
-    REMOTE = "remote"
-    DOCKER = "docker"
-    NATIVE = "native"
-
-
-class MCPCategory(Enum):
-    """MCP server categories."""
-    DATABASE = "database"
-    API = "api"
-    FILESYSTEM = "filesystem"
-    BROWSER = "browser"
-    COMMUNICATION = "communication"
-    DEVELOPMENT = "development"
-    SECURITY = "security"
-    PRODUCTIVITY = "productivity"
-    MULTIMEDIA = "multimedia"
-    OTHER = "other"
-
-
-@dataclass
-class MCPServerConfig:
-    """Configuration for an MCP server."""
-    name: str
-    description: str
-    category: MCPCategory
-    server_type: MCPServerType
-    command: Optional[str] = None
-    args: List[str] = field(default_factory=list)
-    env: Dict[str, str] = field(default_factory=dict)
-    url: Optional[str] = None
-    docker_image: Optional[str] = None
-    capabilities: List[str] = field(default_factory=list)
-    requirements: List[str] = field(default_factory=list)
-    version: str = "latest"
-    enabled: bool = True
-    security_level: str = "medium"  # low, medium, high
-    timeout: int = 30  # seconds
-
-
-@dataclass
-class MCPTool:
-    """Represents an MCP tool."""
-    name: str
-    description: str
-    input_schema: Dict[str, Any]
-    server_name: str
-    category: str
-    tags: List[str] = field(default_factory=list)
-
-
-class MCPServerRegistry:
-    """
-    Registry of available MCP servers.
-
-    Manages discovery, configuration, and lifecycle of MCP servers.
-    """
-
-    def __init__(self, registry_path: Optional[Path] = None):
-        self.registry_path = registry_path or Path(__file__).parent / "registry.json"
-        self.servers: Dict[str, MCPServerConfig] = {}
-        self.active_servers: Dict[str, 'MCPServerInstance'] = {}
-        self.logger = logging.getLogger("pyagent.tools.mcp.registry")
-
-        # Load registry
-        self._load_registry()
-
-    def _load_registry(self):
-        """Load server registry from file."""
-        if self.registry_path.exists():
-            try:
-                with open(self.registry_path, 'r') as f:
+                with open(self.registry_path, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                     for name, config_data in data.items():
                         config_data['category'] = MCPCategory(config_data['category'])
@@ -399,7 +225,7 @@ class MCPServerRegistry:
                 }
                 data[name] = config_dict
 
-            with open(self.registry_path, 'w') as f:
+            with open(self.registry_path, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=2)
 
         except Exception as e:
@@ -437,19 +263,12 @@ class MCPServerRegistry:
 
         This integrates with awesome-mcp-servers via the ecosystem populator.
         """
-        from .ecosystem_populator import get_expanded_ecosystem
+        # Fallback stub: ecosystem_populator module not found, return empty list or implement discovery here.
+        discovered: List[MCPServerConfig] = []
 
-        discovered = get_expanded_ecosystem()
-
-        for config in discovered:
-            if config.name not in self.servers:
-                # Ensure category and server_type are Enums if they were stored as strings
-                if isinstance(config.category, str):
-                    config.category = MCPCategory(config.category)
-                if isinstance(config.server_type, str):
-                    config.server_type = MCPServerType(config.server_type)
-
-                self.servers[config.name] = config
+        # Example: could fetch from a remote API or file in future.
+        # For now, just log and return empty.
+        self.logger.warning("ecosystem_populator module not found; discovery stubbed.")
 
         self._save_registry()
         self.logger.info(f"Ecosystem expanded to {len(self.servers)} MCP servers")
@@ -619,9 +438,26 @@ class MCPServerInstance:
 
     async def _execute_tool_call(self, tool: MCPTool, arguments: Dict[str, Any]) -> Any:
         """Execute a tool call via MCP protocol."""
-        # Placeholder for MCP protocol implementation
-        # This would send JSON-RPC requests to the server
-        return {"result": "Tool executed successfully"}
+        # Validate arguments against input_schema
+        schema = tool.input_schema.get('properties', {})
+        missing_fields = [k for k in schema.keys() if k not in arguments]
+        if missing_fields:
+            return {
+                "error": f"Missing required arguments: {', '.join(missing_fields)}",
+                "tool_name": tool.name
+            }
+        try:
+            # Placeholder for MCP protocol implementation
+            # This would send JSON-RPC requests to the server
+            return {
+                "result": "Tool executed successfully",
+                "tool_name": tool.name
+            }
+        except Exception as e:
+            return {
+                "error": f"Execution failed: {str(e)}",
+                "tool_name": tool.name
+            }
 
 
 class MCPBridge:

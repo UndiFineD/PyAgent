@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +13,8 @@
 # limitations under the License.
 
 """
-api.py - Stats API server engine"""
-"""
-Brief Summary
+api.py - Stats API server engine
+
 # DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
@@ -53,7 +50,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Api.py module.
 """
-# Stats API server engi""""""ne.
+# Stats API server engine.
 
 from __future__ import annotations
 
@@ -67,7 +64,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class APIEndpoint:
-    """Stats API endpoint configuratio""""""n."""
+    """Stats API endpoint configuration."""
 
     path: str
 
@@ -78,7 +75,7 @@ class APIEndpoint:
 
 
 class StatsAPIServer:
-    """Stats API endpoint for programmatic ac""""""cess."""
+    """Stats API endpoint for programmatic access."""
 
     def __init__(self, stats_agent: Any = None) -> None:
         self.stats_agent = stats_agent
@@ -104,7 +101,7 @@ class StatsAPIServer:
         rate_limit: int = 100,
         cache_ttl: int = 60,
     ) -> APIEndpoint:
-        """Register a new A""""""PI endpoint.
+        """Register a new API endpoint.
 
         Args:
             path: The URL path for the endpoint.
@@ -116,7 +113,7 @@ class StatsAPIServer:
         Returns:
             The registered APIEndpoint instance.
         """
-        ep = APIEndpoint(path, method, auth_required, rate_li""""""mit, cache_ttl)
+        ep = APIEndpoint(path, method, auth_required, rate_limit, cache_ttl)
         self.endpoints[path] = ep
         logger.debug(
             "Registered endpoint %s %s (auth=%s, rate=%s, ttl=%s)",
@@ -129,7 +126,7 @@ class StatsAPIServer:
         return ep
 
     def handle_request(self, path: str, method: str = "GET", params: dict[str, Any] | None = None) -> dict[str, Any]:
-        """Handle an incoming API request and return a re""""""sponse dictionary.
+        """Handle an incoming API request and return a response dictionary.
 
         Args:
             path: The request path.
@@ -139,7 +136,7 @@ class StatsAPIServer:
         Returns:
             A dictionary containing response data and an HTTP status code.
         """
-        endpoint = sel""""""f.endpoints.get(path)
+        endpoint = self.endpoints.get(path)
         # acknowledge params to avoid unused-argument lint warnings; real handlers should validate/use params
         if params:
             logger.debug("handle_request received params: %s", params)
@@ -155,7 +152,7 @@ class StatsAPIServer:
 
     def get_api_docs(self) -> str:
         """Return a minimal OpenAPI-style JSON string describing registered endpoints."""
-        """"""docs: dict[str, Any] = {
+        docs: dict[str, Any] = {
             "openapi": "3.0.0",
             "info": {"title": "Stats API", "version": "1.0.0"},
             "paths": {},

@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Script for finding all legacy import patterns across the workspace."""
 
 from __future__ import annotations

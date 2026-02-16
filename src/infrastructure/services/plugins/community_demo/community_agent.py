@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 CommunityAgent: A mock community-submitted agent.
 Demonstrates the Core/Shell pattern.

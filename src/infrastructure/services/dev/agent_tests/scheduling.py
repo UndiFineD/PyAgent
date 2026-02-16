@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Cross-browser and scheduling functionality."""
 
 from __future__ import annotations

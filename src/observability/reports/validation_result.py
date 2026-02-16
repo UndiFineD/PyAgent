@@ -14,7 +14,7 @@
 
 """
 Basic module docstring."""
-""""""
+
 """
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 class ValidationResult:
-    """Structured result for validation outcome"""s.""""""
+    """Structured result for validation outcome"""s.
 
     def __init__(
         self,

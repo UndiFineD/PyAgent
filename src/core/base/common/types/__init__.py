@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """Domain types for the PyAgent core architecture."""
 
 from __future__ import annotations

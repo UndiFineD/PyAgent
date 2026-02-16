@@ -12,7 +12,6 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-
 """Centralized connectivity management with TTL-based status caching."""
 
 from __future__ import annotations
