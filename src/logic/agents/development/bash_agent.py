@@ -14,8 +14,8 @@
 
 
 # "Agent specializing in Bash and shell scripting.
-# #
-# # pylint: disable=too-many-ancestors
+"""
+""" pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 

@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # External AI Recorder Agent - Records and consolidates external AI session data
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ExternalAIRecorderAgent with the repository workspace root (pass a path used as agent file_path).
 - Call record_external_interaction(external_ai_name, prompt, context, response) to append external session records to the local archive and any configured recorder shard.
@@ -40,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in recording and consolidating knowledge from external AI sessions.
 Captures prompts, contexts, and responses provided to/from external systems like ChatGPT, Claude, etc.
-# #
+"""
 
 from __future__ import annotations
 
@@ -79,7 +78,7 @@ class ExternalAIRecorderAgent(BaseAgent):
             prompt: The user query sent to the external AI.
             context: Any supplemental context provided in the session.
             response: The full text response from the external AI.
-# #
+"""
         # Phase 105: Direct Shard Recording
         if self.recorder:
             self.recorder.record_interaction(

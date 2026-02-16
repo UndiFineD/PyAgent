@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # [BATCHFIX] Commented metadata/non-Python
-# # "Command and script auditing logic for SecurityCore."  # [BATCHFIX] closed string
-# #
+""" "Command and script auditing logic for SecurityCore."  # [BATCHFIX] closed string
+"""
 # from __future__ import annotations
 
 import re
@@ -26,9 +26,9 @@ class SecurityAuditorMixin:
 """"Mixin for command and shell script auditing."""
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def audit_command(self, command: str) -> tuple[str, str]:
+"""     def audit_command(self, command: str) -> tuple[str, str]:
 """"Audits a shell command for dangerous operations."""
         risky_patterns = [
 # [BATCHFIX] Commented metadata/non-Python
@@ -38,14 +38,14 @@ class SecurityAuditorMixin:
 # [BATCHFIX] Commented metadata/non-Python
 #             (rchmod\\\\s+777", "MEDIUM: Overly permissive permissions (world-writable)"),"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             (
 # [BATCHFIX] Commented metadata/non-Python
 #                 rcurl\|bash|wget\|sh|curl.*\|.*sh","  # [BATCHFIX] closed string
                 "HIGH: Remote script execution (pipe to shell)",
             ),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             (
 # [BATCHFIX] Commented metadata/non-Python
 #                 runset\\\\s+HISTFILE","  # [BATCHFIX] closed string
@@ -60,17 +60,17 @@ class SecurityAuditorMixin:
                 return "HIGH", warning
 
 # [BATCHFIX] Commented metadata/non-Python
-# #         return "LOW", "No obvious security risks detected in command."  # [BATCHFIX] closed string
+"""         return "LOW", "No obvious security risks detected in command."  # [BATCHFIX] closed string
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def validate_shell_script(self, script_content: str) -> list[str]:
+"""     def validate_shell_script(self, script_content: str) -> list[str]:
 """"Analyzes shell scripts for common pitfalls and security bugs."""
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         findings = []
+"""         findings = []
 
         # Unquoted variable expansion
         if re.search(r"\$[a-zA-Z_][a-zA-Z0-9_]*[^\"']", script_content):"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string
@@ -88,8 +88,8 @@ class SecurityAuditorMixin:
         # POSIX compatibility
         if "#!/bin/sh" in script_content and "[[" in script_content:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #             findings.append("SC2039: [[ .. ]] is a bash/zsh extension. Use [ .. ] for standard POSIX sh.")
+"""             findings.append("SC2039: [[ .. ]] is a bash/zsh extension. Use [ .. ] for standard POSIX sh.")
 
         return findings

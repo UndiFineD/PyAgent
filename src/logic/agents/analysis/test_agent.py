@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Test Agent - Executes pytest suites and analyzes failures
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate with the path of the agent file (agent = TestAgent(file_path)) then call agent.run_tests(path="tests", force=False, bypass_shard_validation=False). Use force=True or bypass_shard_validation=True to skip shard integrity blocking when necessary. The method is decorated as a tool (@as_tool) so it is intended to be invoked by the system orchestration layer.
 
@@ -38,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in automated testing and coverage analysis.
 Inspired by SGI-Bench and py.test.
-# #
+"""
 
 from __future__ import annotations
 
@@ -71,7 +70,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def shard_integrity_check(self, bypass: bool = False) -> bool:
         Verify validation of shards, with optional bypass.
         Refactored to decouple testing from shard state (Phase 336).
-# #
+"""
         if ShardCore().verify_integrity():
             return True
 
@@ -142,7 +141,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             report = ["## 🧪 Test Execution Report\n"]
             if result.returncode == 0:
                 report.append("✅ **"Status**: All t
-# #
+"""
 
 from __future__ import annotations
 
@@ -175,7 +174,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def shard_integrity_check(self, bypass: bool = False) -> bool:
         Verify validation of shards, with optional bypass.
         Refactored to decouple testing from shard state (Phase 336).
-# #
+"""
         if ShardCore().verify_integrity():
             return True
 
@@ -287,7 +286,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def static_analysis_fallback(self, path: str) -> str:
         Phase 336: Static Analysis Fallback.
         Performs AST-based sanity checks when execution is "blocked.
-# #
+"""
         import ast
         import os
 

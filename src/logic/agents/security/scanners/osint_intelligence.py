@@ -20,7 +20,7 @@ class OsintIntelligence:
 #     pass  # [BATCHFIX] inserted for empty class
 """Consolidates Google, Shodan, and GitHub dorks for reconnaissance."""
 #     Ported logic from OneDorkForAll, Shodan-Dorks, and Github-Dorks.
-# #
+"""
 
     # High-value Google Dorks
     GOOGLE_DORKS = {
@@ -50,27 +50,27 @@ class OsintIntelligence:
 
     # High-value GitHub Dorks
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     GITHUB_DORKS = ['"target.com" password', '"target.com" api_key', '"target.com" token', "filename:.env target.com"]
+"""     GITHUB_DORKS = ['"target.com" password', '"target.com" api_key', '"target.com" token', "filename:.env target.com"]
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def generate_dorks(domain: str) -> Dict[str, List[str]]:
+"""     def generate_dorks(domain: str) -> Dict[str, List[str]]:
 """"Generates domain-specific dorks."""
         results = {
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #             "google": [d.replace("target.com", domain) for d in OsintIntelligence.GOOGLE_DORKS["bug_bounty"]],
+"""             "google": [d.replace("target.com", domain) for d in OsintIntelligence.GOOGLE_DORKS["bug_bounty"]],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #             "github": [d.replace("target.com", domain) for d in OsintIntelligence.GITHUB_DORKS],
+"""             "github": [d.replace("target.com", domain) for d in OsintIntelligence.GITHUB_DORKS],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #             "shodan": [fhostname:{domain}", fhttp.html:{domain}", fssl:{domain}"],"  # [BATCHFIX] closed string
         }
         return results

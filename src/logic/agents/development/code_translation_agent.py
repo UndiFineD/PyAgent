@@ -22,10 +22,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# CodeTranslationAgent: Agent for translating code between languages, frameworks, and paradigms.
+"""
+CodeTranslationAgent: Agent for translating code between languages, frameworks, and paradigms.
 # Supports automated code migration, refactoring, and cross-language interoperability.
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -44,7 +44,7 @@ __version__ = VERSION
 class CodeTranslationAgent(BaseAgent):
     Handles translation of codebases between different programming languages.
 #     Supports mapping logic, syntax transformations, and multi-file translation.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -52,9 +52,9 @@ class CodeTranslationAgent(BaseAgent):
         self.translation_history: list[Any] = []
 
     async def translate_file(self, source_code: str, from_lang: str, to_lang: str) -> str:
-# #
+"""
         Translates source code from one language to another using LLM reasoning.
-# #
+"""
         logging.info(fCodeTranslationAgent: Translating code from {from_lang} "to {to_lang}.")
 
         prompt = (

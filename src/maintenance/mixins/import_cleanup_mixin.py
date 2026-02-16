@@ -17,7 +17,7 @@ ImportCleanupMixin - Automated import resolution and normalization
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Used by maintenance/refactor agents to scan a project tree, build a filesystem
 name map and update Python files' import statements to match actual module/file

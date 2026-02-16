@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Style checking and auto-fixing logic for CoderCore.
-# #
-# #
+"""
+Style checking and auto-fixing logic for CoderCore.
+"""
+"""
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations

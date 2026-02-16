@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # ContextAgent - Context description authoring and RAG routing
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with a Path or filename pointing at a `.description.md` file: ContextAgent("path/to/file.description.md")
 - Use route_query(query) to find relevant RAG shards for a query.
@@ -169,8 +168,8 @@ class ContextAgent(
 ```bash
 # Example usage
 
-# #
-# #
+"""
+"""
 
 import logging
 from pathlib import Path

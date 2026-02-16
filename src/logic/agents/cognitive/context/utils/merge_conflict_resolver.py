@@ -14,10 +14,10 @@
 
 
 # "Merge conflict resolution engine for Cognitive agents.
-# #
+"""
 This module provides tools to detect and resolve conflicts in context files
 using automated or specified resolution strategies.
-# #
+"""
 
 from __future__ import annotations
 import re
@@ -39,14 +39,14 @@ class MergeConflictResolver:
     Example:
         >>> resolver = MergeConflictResolver()
 #         >>> resolved = resolver.resolve(conflict, ConflictResolution.OURS)
-# #
+"""
 
     def __init__(self, strategy: ConflictResolution = ConflictResolution.AUTO) -> None:
         "Initialize the conflict resolver.
 
         Args:
             strategy: The default resolution strategy to use.
-# #
+"""
         self.strategy: ConflictResolution = strategy
 
     def set_strategy(self, strategy: ConflictResolution) -> None:
@@ -54,7 +54,7 @@ class MergeConflictResolver:
 
         Args:
             strategy: The conflict resolution strategy.
-# #
+"""
         self.strategy = strategy
 
     def detect_conflicts(
@@ -72,7 +72,7 @@ class MergeConflictResolver:
 
         Returns:
             List of detected MergeConflict objects.
-# #
+"""
         if theirs is None:
             content = ours
             conflicts: list[MergeConflict] = []
@@ -107,7 +107,7 @@ class MergeConflictResolver:
 
         Returns:
             Resolved content.
-# #
+"""
         effective = strategy or self.strategy
         if effective == ConflictResolution.OURS:
             conflict.resolution = effective

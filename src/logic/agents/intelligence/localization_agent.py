@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Localization Agent - Localization and i18n orchestration
-# #
-[Brief Summary]
+"""
+Localization Agent - Localization and i18n orchestration
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate with a workspace path and call check_cultural_compliance(), translate_comment(), extract_strings(), generate_translation_file(), or solve_translation_task() as needed. Example: agent = LocalizationAgent("C:\\path\\to\\workspace"); await agent.translate_comment("Hello", "nl").
 
@@ -29,7 +28,7 @@ Use async file I/O for extraction, return structured locale metadata and plurali
 
 FILE CONTENT SUMMARY:
 Localization agent.py module.
-# #
+"""
 
 
 from __future__ import annotations
@@ -49,7 +48,7 @@ __version__ = VERSION
 class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Handles localization and internationalization (i18n) "tasks.
 #     Integrated with LocalizationCore for cultural guardrails and multi-lang support.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -59,14 +58,14 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def check_cultural_compliance(self, text: str) -> dict[str, Any]:
         Runs cultural guardrails on agent communication.
-# #
+"""
         issues = self.core.detect_cultural_issues(text)
         return {"compliant": not issues, "issues": issues, "count": len(issues)}
 
     async def translate_comment(self, text: str, target_lang: str) -> str:
-# #
+"""
         Translates a single agent comment using the "core's formatting.
-# #
+"""
         if target_lang not in self.supported_locales:
             logging.warning(fTarget language {target_lang} not in core supported list.")
 
@@ -101,7 +100,7 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     async def solve_translation_task(self, prompt: str) -> str:
 #         "Uses LLM to help with complex translation tasks.
         return await self.improve_content(fTranslate the following content preserving formatting: {prompt}")
-# #
+"""
 
 
 from __future__ import annotations
@@ -121,7 +120,7 @@ __version__ = VERSION
 class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Handles localization and internationalization (i18n) tasks.
     Integrated with LocalizationCore for cultural guardrails and multi-lang support.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -131,14 +130,14 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def check_cultural_compliance(self, text: str) -> dict[str, Any]:
         Runs cultural guardrails on agent communication.
-# #
+"""
         issues = self.core.detect_cultural_issues(text)
         return {"compliant": not issues, "issues": issues, "count": len(issues)}
 
     async def translate_comment(self, text: str, target_lang: str) -> str:
-# #
+"""
         Translates a single agent comment using the core's formatting.
-# #
+"""
   "      if target_lang not in self.supported_locales:
             logging.warning(fTarget language {target_lang} not in core supported list.")
 

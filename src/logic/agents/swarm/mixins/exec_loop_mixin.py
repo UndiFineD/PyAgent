@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# ExecLoopMixin - Orchestrate agent execution loop and parallel file processing
-# #
-[Brief Summary]
+"""
+ExecLoopMixin - Orchestrate agent execution loop and parallel file processing
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Used as a mixin on Orchestrator-style agents to discover code files and drive the main run loop, selecting multiprocessing, asyncio, or threaded execution strategies based on agent configuration flags (enable_multiprocessing, enable_async, or default threading). Call agent.run() to start the loop; the mixin expects host agent methods like find_code_files, process_file/process_files_threaded/process_files_multiprocessing/async_process_files, run_stats_update, execute_callbacks, and send_webhook_notification.
 
@@ -34,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 ExecLoopMixin module.
-# #
+"""
 
 from __future__ import annotations
 

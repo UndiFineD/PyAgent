@@ -17,7 +17,7 @@ Autonomous Fleet Self-Improvement Loop
 
 scans workspace for issues and applies fixes.
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 python src/infrastructure/services/dev/scripts/analysis/run_fleet_self_improvement.py \
     --cycles 3 --delay 60 --model gpt-5-mini

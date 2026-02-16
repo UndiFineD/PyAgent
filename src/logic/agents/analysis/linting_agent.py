@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # LintingAgent - Code quality auditing and lint runner
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 # - Command line: python linting_agent.py "path/to/file_or_directory
 - Programmatic: from linting_agent import LintingAgent; agent = LintingAgent("path"); await agent.improve_content(", "path")
@@ -120,7 +120,7 @@ class LintingAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 if __name__ == "__main__":
     main = create_main_function(LintingAgent, "Linting Agent", "Path to audit")
     main()
-# #
+"""
 
 from __future__ import annotations
 

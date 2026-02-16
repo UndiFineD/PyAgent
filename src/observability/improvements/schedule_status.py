@@ -16,7 +16,7 @@
 schedule_status.py - ScheduleStatus enum for scheduled improvements
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the enum and use it to represent or check the scheduling state of an improvement or task:
   from src.core.base.schedule_status import ScheduleStatus

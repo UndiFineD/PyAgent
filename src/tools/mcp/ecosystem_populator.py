@@ -16,7 +16,7 @@
 Ecosystem Populator - MCP server metadata generator
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from ecosystem_populator import get_expanded_ecosystem
 servers = get_expanded_ecosystem()

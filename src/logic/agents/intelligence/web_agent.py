@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Web Agent - Web content extraction and scraping orchestration
-# #
+"""
+Web Agent - Web content extraction and scraping orchestration
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate where a WebIntelligence-based agent is needed by higher-level orchestrators:
   from <package>.web_agent import WebAgent
@@ -34,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 - Add comprehensive docstrings, unit tests, and example usage demonstrating orchestration with WebIntelligenceAgent features and expected lifecycle.
 FILE CONTENT SUMMARY:
 Web agent.py module.
-# #
+"""
 
 from .web_intelligence_agent import WebIntelligenceAgent
 
@@ -45,7 +45,7 @@ class WebAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the WebAgent (via WebIntelligence core).
-# #
+"""
 
 from .web_intelligence_agent import WebIntelligenceAgent
 

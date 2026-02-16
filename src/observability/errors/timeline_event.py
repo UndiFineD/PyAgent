@@ -16,7 +16,7 @@
 TimelineEvent - Simple dataclass for error timeline entries
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.base.lifecycle.timeline_event import TimelineEvent
 event = TimelineEvent(timestamp="2026-02-12T21:00:00Z", event_type="created", error_id="err-1234", details="Initial occurrence")

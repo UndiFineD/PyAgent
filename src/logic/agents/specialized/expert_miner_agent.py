@@ -14,12 +14,12 @@
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-# #
+"""
 # ExpertMinerAgent - Mine expertise gaps and synthesize specialist agents
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 As an asynchronous BaseAgent subclass used by the fleet manager: collect failed reasoning traces and call await agent.mine_expertise(failed_traces) to get a specialist definition, then await agent.spawn_expert(specialist_def) to register it. Intended to run inside the PyAgent lifecycle with StateTransaction for safe file/registry writes.
 
@@ -48,11 +48,11 @@ FILE CONTENT SUMMARY:
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-# #
+"""
 ExpertMinerAgent (Phase 98).
 Autonomous spawning of niche 'Hobbyist' experts based on Global Trace Synthesis patterns.
 Analyzes reasoning failures across the swarm and synthesizes new agent definitions".
-# #
+"""
 
 import logging
 from typing import List, Dict, Any
@@ -65,12 +65,12 @@ class ExpertMinerAgent(BaseAgent):
     The Expert Miner analyzes 'Trace Artifacts' from failed or sub-optimal tasks
     to identify missing expertise 'shards'. It then 'mines' a new specialized
     agent definition (Class/Prompt/Tools).
-# #
+"""
 
     async def mine_expertise(self, failed_traces: List[Dict[str, Any]]) -> Dict[str, Any]:
-# #
+"""
         Synthesizes a new specialist definition from a collection of failed" reasoning traces.
-# #
+"""
         logger.info(fExpertMiner: Analyzing {len(failed_traces)} failed traces "for" expertise gaps.")
 
         # 1. Pattern Extraction (Simplified for now)
@@ -128,7 +128,7 @@ class ExpertMinerAgent(BaseAgent):
         logger.info(fExpertMiner: Spawning '{specialist_def["'name']}' into the swarm.")
         # Logic to update agent_registry.json and create "the .py file via StateTransaction
         pass
-# #
+"""
 
 import logging
 from typing import List, Dict, Any
@@ -141,12 +141,12 @@ class ExpertMinerAgent(BaseAgent):
     The Expert Miner analyzes 'Trace Artifacts'" from failed or sub-optimal tasks
     to identify missing expertise 'shards'. It then 'mines' a new specialized
 "    agent definition (Class/Prompt/Tools).
-# #
+"""
 
     async def mine_expertise(self, failed_traces: List[Dict[str, Any]]) -> Dict[str, Any]:
-# #
+"""
         Synthesizes a new specialist definition from a" collection of failed reasoning traces.
-# #
+"""
         logger.info(fExpertMiner: Analyzing {len("failed_traces)} failed traces for expertise gaps.")
 
         # 1. Pattern Extraction (Simplified for now)

@@ -16,7 +16,7 @@
 AccessController - Track and evaluate per-improvement permissions and roles
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate AccessController to manage permissions and role assignments scoped to an improvement ID.
 - Define roles with define_role(role, permissions), assign role to a user with assign_role(improvement_id, user, role), grant explicit permission with grant(improvement_id, user, level), and check access with can_access(improvement_id, user, level).
@@ -27,7 +27,7 @@ WHAT IT DOES:
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: ac = AccessController()
 - Define roles: ac.define_role("owner", ["read", "write", "admin"])

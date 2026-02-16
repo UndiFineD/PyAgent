@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# BrowsingAgent - Web browsing and high-level information retrieval
-# #
-[Brief Summary]
+"""
+BrowsingAgent - Web browsing and high-level information retrieval
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - from src.agents.browsing_agent import BrowsingAgent
 - agent = BrowsingAgent(file_path="path/to/config.json")
@@ -36,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Browsing agent.py module.
-# #
+"""
 
 from .web_intelligence_agent import WebIntelligenceAgent
 
@@ -47,7 +46,7 @@ class BrowsingAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the BrowsingAgent (via WebIntelligence core).
-# #
+"""
 
 from .web_intelligence_agent import WebIntelligenceAgent
 

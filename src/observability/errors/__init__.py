@@ -82,6 +82,6 @@ def __getattr__(name: str) -> Any:
 
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# # # __all__ = ["VERSION"] + list(_LAZY_REGISTRY.keys())
+""" # __all__ = ["VERSION"] + list(_LAZY_REGISTRY.keys())

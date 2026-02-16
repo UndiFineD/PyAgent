@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Orchestrator Plugin Mixin - Plugin management for
+"""
+Orchestrator Plugin Mixin - Plugin management for
 # OrchestratorAgent
 
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Mix into an OrchestratorAgent to gain plugin
   lifecycle and execution helpers.
@@ -61,7 +61,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Orchestrator plugin mixin module.
-# #
+"""
 
 from __future__ import annotations
 

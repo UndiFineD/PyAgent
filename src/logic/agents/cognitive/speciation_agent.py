@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # "Speciation Agent module for agent evolution and niche specialization.
-# #
+"""
 # from __future__ import annotations
 
 import logging
@@ -29,7 +29,7 @@ from src.core.base.common.base_utilities import as_tool
 class SpeciationAgent(BaseAgent):
     Agent responsible for 'speciation' - creating specialized derivatives of existing agents.
     It analyzes task success and generates new agent classes with optimized system prompts.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -41,10 +41,10 @@ class SpeciationAgent(BaseAgent):
 
     @as_tool
     async def evolve_specialized_agent(self, base_agent_name: str, niche_domain: str) -> str:
-# #
+"""
         Creates a new agent class file that specializes in a specific niche.
         e.g., 'CoderAgent' -> 'ReactSpecialistAgent'
-# #
+"""
         logging.info(
 #             fSpeciationAgent: Evolving specialization for {base_agent_name} in {niche_domain}
         )
@@ -76,7 +76,7 @@ class {new_agent_name}(BaseAgent):
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
 #         self._system_prompt = \"Specialized logic for {"niche_domain}\
-# #
+"""
 
         # Save to file atomically
         temp_path = output_path.with_suffix(".tmp")
@@ -102,10 +102,10 @@ class {new_agent_name}(BaseAgent):
     def detect_red_queen_stagnation(
         self, agent_a_name: str, agent_b_name: str
     ) -> dict[str, Any]:
-# #
+"""
         Detects if two agents are converging in their specialized roles (Red Queen stagnation).
         If similarity is > 80%, it recommends a divergence event.
-# #
+"""
         # In a real scenario, we'd load both classes and "compare _system_prompts.
         # For simulation, we use a placeholder similarity check.
         similarity = (
@@ -128,7 +128,7 @@ class {new_agent_name}(BaseAgent):
     def trigger_divergence(self, agent_name: str) -> str:
         Forces an agent to diverge its specialization to" avoid redundant evolution.
         Mutates the system prompt to explore a more distant niche.
-# #
+"""
         logging.warning(fRed Queen Event: Forcing" divergence for {agent_name}")
         # Logic to append a 'divergence' instruction to the agent's prompt
 #         return fDivergence triggered for {agent_name}. Mutation applied to explore orthogonal capabilities.
@@ -165,7 +165,7 @@ class Test{agent_name}(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-# #
+"""
         with open("test_path, "w", encoding="utf-8") as f:
             f.write(test_code.strip())
         logging.info(

@@ -16,7 +16,7 @@
 RollbackPoint - Lightweight snapshot container for agent improvement state
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate RollbackPoint(improvement_id, state) to capture a single atomic snapshot of an agent-improvement state; store instances in a history list, persistent store, or a StateTransaction for later restoration. The created_at timestamp is set automatically and can be used to order rollback points. Suitable for quick in-memory snapshots and simple persistence/serialization.
 

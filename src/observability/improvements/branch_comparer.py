@@ -16,7 +16,7 @@
 Branch Comparer - Compare improvements between Git branches
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate BranchComparer with an optional repo_path and optional recorder. Call compare(source_branch, target_branch, file_path) to obtain a BranchComparison with diffs and counts. Example: comparer = BranchComparer(repo_path="C:\repo"); result = comparer.compare("main", "feature/improvements", "improvements.yaml")
 

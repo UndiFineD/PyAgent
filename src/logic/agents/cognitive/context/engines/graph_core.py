@@ -13,10 +13,10 @@
 # limitations under the License.
 
 
-# #
+"""
 # GraphCore logic for PyAgent.
 # Pure logic for AST-based code relationship analysis and graph management.
-# #
+"""
 
 import ast
 from typing import Any
@@ -134,7 +134,7 @@ class GraphCore:
     def build_edges(analysis: dict[str, Any]) -> list[tuple[str, str, str]]:
         Builds graph edges from analysis results.
         Returns list of (source, target, relationship_type).
-# #
+"""
         if _RUST_ACCEL:
             try:
                 inherits_list = list(analysis.get("inherits", {}).items())

@@ -13,10 +13,10 @@
 # limitations under the License.
 
 
-# #
+"""
 # Computational core for code analysis, metrics, and quality assessment.
 # Designed for high-performance rule checking with future Rust integration.
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 

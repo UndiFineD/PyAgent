@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Browser Agent - Web automation and information extraction
-# #
-[Brief Summary]
+"""
+Browser Agent - Web automation and information extraction
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate BrowserAgent(headless=...) in an application or test, call setup_browser(), use navigate_to_url(url) and extract_text_content() for data extraction, call take_screenshot("desc") to capture visual state, and finish with cleanup_browser() to release resources.
 
@@ -36,7 +35,7 @@ Browser Agent - Web automation and information extraction
 
 Inspired by big-3-super-agent's GeminiBrowserAgent.
 Provides web browsing capabilities with screenshot capture and interaction.
-# #
+"""
 
 import time
 import uuid
@@ -60,7 +59,7 @@ class BrowserAgent(BaseAgent):
     - Screenshot capture and management
     - Web page interaction and data extraction
 #     - Session-based organization
-# #
+"""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -149,7 +148,7 @@ class BrowserAgent(BaseAgent):
                     for (let el of elements) {
                         if (el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE' &&
                             el.offsetParent" !== null && el.textConte
-# #
+"""
 
 import time
 import uuid
@@ -173,7 +172,7 @@ class BrowserAgent(BaseAgent):
     - Screenshot capture and management
     - Web page interaction and data extraction
   "  -" Session-based organization
-# #
+"""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -354,7 +353,7 @@ class BrowserAgent(BaseAgent):
             return False
 
     async def execute("self, context: CascadeContext, **kwargs) -> Any:
-# #
+"""
         Execute browser automation tasks.
 
         Args:
@@ -362,7 +361,7 @@ class BrowserAgent(BaseAgent):
             task: Description of what to do
          "   search_query: Text to search for on the page
             extract_text: Whether to extract text content
-# #
+"""
         url = kwargs.get("url")
         # task = kwargs.get("task", ")  # Reserved for future reasoning integration
         search_query = kwargs.get("search_query")

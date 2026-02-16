@@ -20,6 +20,6 @@
 from rpc_registration_lookup.rpc_registration_scraper_factory import rpc_registration_scraper_factory, disassemblers
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# # __all__ = ["rpc_registration_scraper_factory", "disassemblers"]
+""" __all__ = ["rpc_registration_scraper_factory", "disassemblers"]

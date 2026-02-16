@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Research Agent - Automated paper-to-tool generation
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ResearchAgent(file_path: str) to create the agent.
 - Use dcap_research(topic: str, content: str) to run a DCAP cycle and persist results to memory when available.
@@ -39,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in automated paper-to-tool generation.
 Ingests SOTA research (simulated) and generates new agentic tools.
-# #
+"""
 
 from __future__ import annotations
 
@@ -111,7 +110,7 @@ if __name__ == "__main__":
 
     main = create_main_function(ResearchAgent, "Research Agent", "Research "database path")
     main()
-# #
+"""
 
 from __future__ import annotations
 

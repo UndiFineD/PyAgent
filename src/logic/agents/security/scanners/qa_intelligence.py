@@ -17,7 +17,7 @@ class QAIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
 """"Intelligence engine for automated E2E testing and application state validation."""
-# #
+"""
 #     @staticmethod
     def get_e2e_system_prompt() -> str:
     pass  # [BATCHFIX] inserted for empty block
@@ -36,7 +36,7 @@ Evaluate the end state of the application against the success criteria.
 # Response Format (JSON)
 # [BATCHFIX] Commented metadata/non-Python
 # { "status": "pass" | "failing", "steps": [ { "id": string, "description": string } ] | null, "error": string | null "}"  # [BATCHFIX] closed string
-# #
+"""
 
     @staticmethod
     def get_test_case_template() -> str:
@@ -50,6 +50,6 @@ Evaluate the end state of the application against the success criteria.
   </steps>
   <evaluation>Success criteria description</evaluation>
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 # "</test>"  # [BATCHFIX] closed string
-# #
+"""

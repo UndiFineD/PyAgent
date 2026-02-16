@@ -16,7 +16,7 @@
 notification_config.py - Defines NotificationConfig dataclass for error notification settings
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the dataclass and instantiate with desired channel, endpoint and optional settings:
   from src.core.base.errors.notification_config import NotificationConfig, NotificationChannel, ErrorSeverity

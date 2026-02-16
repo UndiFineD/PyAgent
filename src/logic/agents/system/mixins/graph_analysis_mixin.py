@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# GraphAnalysisMixin - Graph impact assessment and topological ordering
-# #
+"""
+GraphAnalysisMixin - Graph impact assessment and topological ordering
+"""
 [Brief Summary]
 Lightweight mixin adding impact-zone discovery and topological ordering utilities to TopologicalNavigator.
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Mix into src.logic.agents.system.topological_navigator.TopologicalNavigator.
 - Call find_impact_zone(entity_id, depth=2) (exposed as a tool) to list dependents within a given radius.
@@ -39,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Graph analysis mixin.py module.
-# #
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -113,7 +113,7 @@ class GraphAnalysisMixin:
             visit(node)
 
         return stack[::-1]
-# #
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 

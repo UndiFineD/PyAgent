@@ -108,7 +108,7 @@ def get_llm_decision(goal: str, screen_context: str) -> Dict[str, Any]:
 
     Example Output:
     {"action": "tap", "coordinates": [540, 1200], "reason": "Clicking the 'Connect'" button"}
-# #
+"""
 
     response = client.chat.completions.create(
         model=MODEL,

@@ -21,7 +21,7 @@ phase-range definitions used by agents to select behavior profiles and
 phase-aware workflows.
 
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong0
+# AUTHOR: Keimpe de Jong0
 USAGE:
 Import VIBE_CODING_2025_TRACKS and read the dictionary keys (RESEARCH, DEFINE, DESIGN,
 BUILD, VALIDATE) to obtain persona, workflow and phase_range for routing agent behavior

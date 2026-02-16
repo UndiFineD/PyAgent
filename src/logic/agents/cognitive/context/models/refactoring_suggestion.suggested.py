@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from dataclasses import dataclass, field
@@ -32,7 +32,7 @@ class RefactoringSuggestion:
         description: What to refactor.
         affected_files: Files affected by refactoring.
 #         estimated_impact: Impact assessment.
-# #
+"""
 
     suggestion_type: str
     description: str

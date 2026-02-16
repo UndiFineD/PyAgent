@@ -15,7 +15,7 @@
 
 # "Agent specializing in Multi-Resolution Hierarchical Memory.
 # Manages Short-term (Episodic), Mid-term (Working), Long-term (Semantic), and Archival storage tiers.
-# #
+"""
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -29,7 +29,7 @@ __version__ = VERSION
 class HierarchicalMemoryAgent(BaseAgent, MemoryStorageMixin, MemoryQueryMixin):
     "Manages memory across multiple temporal and semantic resolutions.
 #     Phase 290: Integrated with 3-layer system (ShortTerm, Working, LongTerm).
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

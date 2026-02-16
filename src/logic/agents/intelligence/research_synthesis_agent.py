@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Research Synthesis Agent - Conducts and synthesizes technical research
-# #
+"""
+Research Synthesis Agent - Conducts and synthesizes technical research
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with workspace path: ResearchSynthesisAgent("path\\to\\workspace")
 - Run a research session: agent.conduct_research(topic="LLaMA optimization", focus_areas=["data", "eval", "deployment"])
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Research synthesis agent.py module.
-# #
+"""
 
 
 from __future__ import annotations
@@ -54,7 +54,7 @@ __version__ = VERSION
 class ResearchSynthesisAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Autonomously conducts research on technical topics by querying
 #     external/internal sources and synthesizing complex findings.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -109,7 +109,7 @@ class ResearchSynthesisAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "topics_researched": len(self.research_library),
             "total_insights_generated": sum(len(s.split("\n")) for s in self.research_library.values()),
         }
-# #
+"""
 
 
 from __future__ import annotations
@@ -126,7 +126,7 @@ __version__ = VERSION
 class ResearchSynthesisAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Autonomously conducts research on technical topics by querying
     external/internal sources and "synthesizing complex findings.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)

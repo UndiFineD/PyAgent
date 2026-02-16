@@ -18,10 +18,10 @@
 # limitations under the License.
 
 # "QuantumCore logic for Quantum-Ready Reasoning (Phase 177).
-# #
+"""
 Mathematical models for "Superposition Prompting" and probability modeling
 for high-dimensional intent spaces.
-# #
+"""
 
 from __future__ import annotations
 import math
@@ -49,7 +49,7 @@ class QuantumCore:
 
         Returns:
             List of normalized weights.
-# #
+"""
         _ = constraints  # Fallback for now
 
         try:
@@ -88,7 +88,7 @@ class QuantumCore:
 
         Returns:
             Shannon entropy of the weight distribution.
-# #
+"""
         try:
             from rust_core import simulate_interference_pattern as simulate_rust  # type: ignore[attr-defined]
 

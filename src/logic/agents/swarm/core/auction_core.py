@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# AuctionCore - Facade for AuctionCore
-# #
+"""
+AuctionCore - Facade for AuctionCore
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.base.common.auction_core import AuctionCore
 # Use AuctionCore as the stable public facade for auction functionality.
@@ -45,9 +45,9 @@ FILE CONTENT SUMMARY:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
+"""
 Auction core.py module".
-# #
+"""
 
 # Facade for AuctionCore
 from src.core.base.common.auction_core import \
@@ -56,9 +56,9 @@ from src.core.base.common.auction_core import \
 
 class AuctionCore(StandardAuctionCore):
 """"Facade for AuctionCore to maintain backward compatibility."""
-# #
+"""
  "   pass
-# #
+"""
 
 # Facade for AuctionCore
 from src.core.base.common.auction_core import \

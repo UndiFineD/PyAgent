@@ -19,14 +19,14 @@ class TestHTTPServerRequestHandler(BaseHTTPRequestHandler):
     def do_print(self, method):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         print("\n\n[+] {0} request: {1}".format(method, self.path))
+"""         print("\n\n[+] {0} request: {1}".format(method, self.path))
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         print("===[HEADERS]===")
+"""         print("===[HEADERS]===")
         for name, value in sorted(self.headers.items()):
             print("\t{0}={1}".format(name, value))
 
@@ -34,9 +34,9 @@ class TestHTTPServerRequestHandler(BaseHTTPRequestHandler):
             body_len = int(self.headers.get("content-length", 0))
             if body_len > 0:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                 print("===[BODY]===\n" + self.rfile.read(body_len).decode("utf-8"))
+"""                 print("===[BODY]===\n" + self.rfile.read(body_len).decode("utf-8"))
         except Exception:
             pass
 

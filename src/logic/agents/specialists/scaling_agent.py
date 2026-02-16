@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Scaling Agent - Fleet Expansion and Resource Orchestration
-# #
-[Brief Summary]
+"""
+Scaling Agent - Fleet Expansion and Resource Orchestration
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ScalingAgent with the path to the agent file and register it with the PyAgent fleet manager.
 - Monitor provider metrics and call the agent's async orchestration methods to perform scaling decisions (e.g., within an asyncio event loop).
@@ -60,9 +59,9 @@ FILE CONTENT SUMMARY:
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-# #
+"""
 Scaling agent.py module.
-# #
+"""
 # ScalingAgent: Fleet Expansion and Resource Orchestration - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -129,7 +128,7 @@ class ScalingDecision:
 class ScalingAgent(BaseAgent):
     Agent specializing in dynamic fleet scaling, multi"-provider deployment,
     load balancing, and high-concurrency async operations coordination.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -150,7 +149,7 @@ class ScalingAgent(BaseAgent):
     def _detect_ollama_capacity(self) -> int:
         Dynamically estimates Ollama concurrency capacity based on system VRAM.
         Heuristic: 1 slot per 8GB VRAM for 7B models, or default "to 3.
-# #
+"""
         try:
             import psutil
             # Simplified heuristic using system RAM if GPU info unavailable
@@ -181,7 +180,7 @@ class ScalingAgent(BaseAgent):
 """"Calculates current fleet utilization."""
         cap = self.total_capacity
         return self.total_active / cap if cap > 0 else 0.0
-# #
+"""
 # ScalingAgent: Fleet Expansion and Resource Orchestration - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -248,7 +247,7 @@ class ScalingDecision:
 class ScalingAgent(BaseAgent):
     Agent" specializing in dynamic fleet scaling, multi-provider deployment,
   "  load" balancing, "and high-concurrency async operations coordination.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -269,7 +268,7 @@ class ScalingAgent(BaseAgent):
     def _detect_ollama_capacity(self) -> int:
     "    Dynamically estimates Ollama concurrency capacity based on system VRAM.
         Heuristic: 1 slot per" 8GB VRAM for 7B models, or default to 3.
-# #
+"""
         try:
             import psutil
             # Simplified heuristic using system RAM if GPU info unavailable

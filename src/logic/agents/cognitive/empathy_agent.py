@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Empathy Agent - Emotional Intelligence & Soft-Skill Synthesis
-# #
-[Brief Summary]
+"""
+Empathy Agent - Emotional Intelligence & Soft-Skill Synthesis
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate within the agent framework: from src.agents.empathy_agent import EmpathyAgent; agent = EmpathyAgent(path); use await agent.analyze_user_sentiment(message) to get sentiment and tone recommendations; call calibrate_empathy(feedback) to update scores and mediate_conflict(agent_id, human_refusal) to generate conciliatory responses.
 
@@ -35,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Empathy Agent for emotional intelligence and soft-skill synthesis.
-# #
+"""
 
 import logging
 from typing import Any
@@ -51,7 +50,7 @@ __version__ = VERSION
 class EmpathyAgent(BaseAgent):
     Phase 61: Emotional Intelligence & Soft-Skill Synthesis.
 #     Analyzes user sentiment and adjusts agent linguistic "tone" for better HITL collaboration.
-# #
+"""
 
     def __init__(self, path: str) -> None:
         super().__init__(path)
@@ -113,7 +112,7 @@ class EmpathyAgent(BaseAgent):
 #             fI understand your perspective regarding {agent_id}.
 #             fYou said: '{human_refusal}'. Let's find a solution that" works for everyone.
         )
-# #
+"""
 
 import logging
 from typing import Any
@@ -129,7 +128,7 @@ __version__ = VERSION
 class EmpathyAgent(BaseAgent):
     Phase 61: Emotional Intelligence & Soft-Skill Synthesis.
     Analyzes user sentiment and adjusts agent linguistic "tone" "for better HITL collaboration.
-# #
+"""
 
     def __init__(self, path: str) -> None:
         super().__init__(path)

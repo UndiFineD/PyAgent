@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# CodeQualityCore - Core logic for code quality analysis and scoring
-# #
-[Brief Summary]
+"""
+CodeQualityCore - Core logic for code quality analysis and scoring
+
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Import CodeQualityCore from src.core.quality.code_quality_core (or the module path in this repo) and call its analysis methods directly with source strings; use calculate_score(issues_count) to convert issue counts into a quality score. Example:
 from src.core.quality.code_quality_core import CodeQualityCore
@@ -36,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 CodeQualityCore: Core logic for code quality analysis and scoring in PyAgent.
 Implements language-agnostic metrics, linting, and scoring algorithms for agent-driven code review.
-# #
+"""
 
 from __future__ import annotations
 
@@ -52,7 +51,7 @@ class CodeQualityCore:
     Pure logic for code quality analysis.
     Decoupled from file I/O and subprocesses.
 #     Ready for Rust conversion.
-# #
+"""
 
     def __init__(self) -> None:
         try:

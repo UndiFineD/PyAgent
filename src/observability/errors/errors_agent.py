@@ -16,7 +16,7 @@
 ErrorsAgent - Manage and analyze file-level error reports
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ErrorsAgent with the path to an .errors.md file and use its methods to add errors, 
 match patterns, cluster similar errors, and apply suppression rules.

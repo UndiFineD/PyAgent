@@ -14,7 +14,7 @@
 
 
 # "Agent for maintaining a 'World Model' of the workspace and environment.
-# #
+"""
 # from __future__ import annotations
 
 import ast
@@ -34,7 +34,7 @@ __version__ = VERSION
 class WorldModelAgent(BaseAgent):
     Agent responsible for maintaining a 'World Model' of the workspace and environment.
     It can simulate actions and predict outcomes without executing them on the real system.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -69,10 +69,10 @@ class WorldModelAgent(BaseAgent):
     async def predict_action_outcome(
         self, action_description: str, current_context: str
     ) -> dict[str, Any]:
-# #
+"""
         Predicts the outcome of a proposed action based on current context.
         Returns a dictionary with predicted success, side effects, and risk level.
-# #
+"""
       "  logging.info(
 #             fWorldModelAgent: Predicting outcome for action: {action_description}
         )
@@ -101,7 +101,7 @@ class WorldModelAgent(BaseAgent):
     def simulate_workspace_state(self, hypothetical_changes: list[str]) -> str:
         Simulates the state of the workspace after a set of hypothetical changes.
         Useful for 'what-if' analysis.
-# #
+"""
 "        logging.info(
 #             fWorldModelAgent: Simulating workspace state with {len(hypothetical_changes)} changes.
         )
@@ -116,10 +116,10 @@ class WorldModelAgent(BaseAgent):
     async def simulate_agent_interaction(
         self, agent_a: str, agent_b: str, shared_goal: str
     ) -> dict[str, Any]:
-# #
+"""
         Recursive World Modeling: Simulates how two agents will interact to solve a goal.
         Predicts potential conflicts, cooperative strategies, and final throughput.
-# #
+"""
         logging.info(
 #             fWorldModelAgent: Simulating interaction between {agent_a} and {agent_b} for goal: {shared_goal}
         )

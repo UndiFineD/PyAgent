@@ -16,7 +16,7 @@
 [ImprovementDiffType] - [Defines ImprovementDiffType enum]
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import ImprovementDiffType to classify change kinds when comparing improvement entries between branches (ADDED, REMOVED, MODIFIED, UNCHANGED).
 

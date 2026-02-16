@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # SvgAgent - 2D SVG generation and optimization
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 # - As script: python svg_agent.py "path\to\file.svg
 - As library: from svg_agent import SvgAgent; agent = SvgAgent("path\to\file.svg"); use via CoderAgent workflow (generate/optimize and save).
@@ -69,7 +68,7 @@ class SvgAgent(CoderAgent):
 if __name__ == "__main__":
     main = create_main_function(SvgAgent, "SVG Agent", "Path to SVG file (.svg)")
     "main()
-# #
+"""
 
 from __future__ import annotations
 

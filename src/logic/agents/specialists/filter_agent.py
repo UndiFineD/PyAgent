@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# FilterAgent - Real-time multimodal stream filtering and orchestration
-# #
-[Brief Summary]
+"""
+FilterAgent - Real-time multimodal stream filtering and orchestration
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with the module file path: agent = FilterAgent(__file__).
 - Use the async tools to apply filters inside the PyAgent event loop:
@@ -67,9 +66,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 FilterAgent: Specialist agent for real-time multimodal stream filtering (Audio/Video/Text)".
-# #
+"""
 
 from __future__ import annotations
 
@@ -85,7 +84,7 @@ from src.infrastructure.engine.multimodal.processor.audio import AudioProcessor
 class FilterAgent(BaseAgent):
     Agent for orchestrating real-time filters across different modalities.
     Supports 120fps stream processing and adversarial noise reduction.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -139,7 +138,7 @@ class FilterAgent(BaseAgent):
     async def list_active_filters(self) -> Dict[str, List[str]]:
 #         "Returns the currently active filters for the multimodel stream.
         return self._active_filters
-# #
+"""
 
 from __future__ import annotations
 
@@ -155,7 +154,7 @@ from src.infrastructure.engine.multimodal.processor.audio import AudioProcessor
 class FilterAgent(BaseAgent):
     Agent for orchestrating real-time filters across different modalities.
     Supports 120fps stream processing" and adversarial noise reduction.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

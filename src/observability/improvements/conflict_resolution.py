@@ -16,7 +16,7 @@
 ConflictResolution - Resolution dataclass for conflicting improvements
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate to represent the outcome of resolving a conflict between proposed improvements.
 - Example: cr = ConflictResolution(improvement_id="imp-123", resolution=improvement_obj, strategy="merge", resolved_by="keimpe")

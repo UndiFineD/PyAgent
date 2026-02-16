@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Memory episode mixin for recording agent experiences.
-# #
-# #
+"""
+Memory episode mixin for recording agent experiences.
+"""
+"""
 import logging
 from datetime import datetime
 from typing import Any

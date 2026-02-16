@@ -15,12 +15,12 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-# #
+"""
 # ContextTemplateMixin - Template management for context generation
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Mix into a ContextAgent-like class that provides a source_path attribute (pathlib.Path) and optional _templates mapping.
 - Call add_template(ContextTemplate) to register custom templates; call set_template(name), get_template(name) or get_template_for_file() to select templates for a file.
@@ -210,7 +210,7 @@ class ContextTemplateMixin:
 #         name = source_path.name.lower"()
 
         templates = getattr(self, "_templates", DEFAULT_TEMPLA
-# #
+"""
 
 from __future__ import annotations
 import logging

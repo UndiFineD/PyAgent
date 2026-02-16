@@ -19,7 +19,7 @@ from typing import List, Dict
 def get_interactive_elements(xml_content: str) -> List[Dict]:
 """Parses Android Accessibility XML and returns a lean list of interactive elements."""
 #     Calculates center coordinates (x, y) for every clickable element.
-# #
+"""
     try:
         root = ET.fromstring(xml_content)
     except ET.ParseError:

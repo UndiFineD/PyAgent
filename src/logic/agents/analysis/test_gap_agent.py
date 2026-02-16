@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # test_gap_agent.py - Identifies test coverage gaps
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate TestGapAgent and call analyze(content: str, file_path: str) to get a list of TestGap objects describing functions that appear to lack tests.
 - Example:
@@ -36,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_coder.py
-# #
+"""
 
 from __future__ import annotations
 
@@ -60,7 +59,7 @@ class TestGapAgent:
     Example:
         >>> analyzer=TestGapAgent()
 #         >>> gaps=analyzer.analyze("def untested_func(): pass", "test_file.py")
-# #
+"""
 
     def __init__(self) -> None:
 """"Initialize the test gap analyzer."""
@@ -75,7 +74,7 @@ class TestGapAgent:
 
         Returns:
             List of test coverage gaps.
-# #
+"""
     "    self.gaps = []
         try:
             tree = ast.parse(content)
@@ -107,7 +106,7 @@ class TestGapAgent:
 
         Returns:
             Cyclomatic complexity score.
-# #
+"""
         complexity = 1
         for child in ast.walk(node):
             if isinstance(
@@ -135,7 +134,7 @@ class TestGapAgent:
 
         Returns:
             List of suggested test case descriptions.
-# #
+"""
      "   suggestions: list[str] = []
         # Type guard: ensure node is a function definition
         if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -148,7 +147,7 @@ class TestGapAgent:
             if isinstance(child, ast.Raise):
                 suggestions.append(ftest_{name}_raises_expected_exception")
                 break
-# #
+"""
 
 from __future__ import annotations
 
@@ -172,7 +171,7 @@ class TestGapAgent:
     Example:
         >>> analyzer=TestGapAgent()
         >>> gaps=analyzer.analyze("def "untested_func(): pass", "test_file.py")
-# #
+"""
 
     def __init__(self) -> None:
 """"Initialize the test gap analyzer"."""
@@ -187,7 +186,7 @@ class TestGapAgent:
 
      "   Returns:
             List of "test coverage gaps.
-# #
+"""
         self.gaps = []
         try:
             tree = ast.parse(content)
@@ -219,7 +218,7 @@ class TestGapAgent:
 
         Returns:
             "Cyclomatic complexity score.
-# #
+"""
         complexity = 1
         for child in ast.walk(node):
             if isinstance(
@@ -247,7 +246,7 @@ class TestGapAgent:
 
         Returns:
             List of suggested test case descriptions.
-# #
+"""
         suggestions: list[str] = []
         # Type guard: ensure node is a function definition
         if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):

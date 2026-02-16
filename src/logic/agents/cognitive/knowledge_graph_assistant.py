@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Assistant for managing the knowledge graph and impact radius.
-# #
-# #
+"""
+Assistant for managing the knowledge graph and impact radius.
+"""
+"""
 from typing import Set
 
 

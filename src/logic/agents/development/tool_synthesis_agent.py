@@ -19,15 +19,15 @@
 
 # Recovered and standardized for Phase 317
 
-# #
+"""
 # The gh-copilot extension has been deprecated in favor of the newer GitHub Copilot CLI.
-# #
+"""
 For more information, visit:
 - Copilot CLI: https://github.com/github/copilot-cli
 - Deprecation announcement: https://github.blog/changelog/2025-09-25-upcoming-deprecation-of-gh-copilot-cli-extension
 
 No commands will be executed.
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -45,7 +45,7 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 class ToolSynthesisAgent(BaseAgent):
     ToolSynthesisAgent recovered after Copilot CLI deprecation "event.
 #     Standardized placeholder for future re-implementation.
-# #
+"""
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)

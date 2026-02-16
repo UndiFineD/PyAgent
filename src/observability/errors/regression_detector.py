@@ -16,7 +16,7 @@
 Regression Detector - Detecting reappeared fixed errors
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Import RegressionDetector from regression_detector and use:
 - detector = RegressionDetector()

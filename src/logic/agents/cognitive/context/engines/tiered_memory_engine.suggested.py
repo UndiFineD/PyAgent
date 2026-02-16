@@ -18,12 +18,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # TieredMemoryEngine: Implements a MIRIX 6-tier memory engine utilizing ChromaDB for scalable,
 # multi-level memory management in PyAgent.
 Supports hierarchical storage, retrieval, and promotion of agent memory fragments across
 short, mid, long, and archival tiers.
-# #
+"""
 
 import logging
 from typing import Any, List, Dict, Optional
@@ -41,7 +41,7 @@ class TieredMemoryEngine:
         # ...existing code...
         self.db_path = db_path
         # Initialization logic for ChromaDB would be here
-# #
+"""
 
     def record_memory(self, tier: str, content: str, metadata: Optional[Dict[str, Any]] = None) -> None:
         "Persists a memory fragment into the specified tier.
@@ -50,7 +50,7 @@ class TieredMemoryEngine:
             tier: The target memory tier.
             content: The content to record.
             metadata: Optional metadata for the memory record.
-# #
+"""
         logging.info(fMIRIX: Recording to {tier} tier.")
         _ = (content, metadata)  # Mark as used
 
@@ -64,7 +64,7 @@ class TieredMemoryEngine:
 
         Returns:
             The query result as a string.
-# #
+"""
       "  _ = limit  # Mark as used
 #         return fSimulated context from {tier} tier for query: {query}
 
@@ -75,7 +75,7 @@ class TieredMemoryEngine:
             documents: List of document strings.
             metadatas: List of metadata dictionaries.
             ids: List of unique identifiers.
-# #
+"""
         _ = (documents", metadatas, ids)  # Mark as used
 
     def search_workspace(self, query: str, n_results: int = 3) -> List[Dict[str, Any]]:
@@ -87,6 +87,6 @@ class TieredMemoryEngine:
 
         Returns:
             List of dictionaries containing content and metadata.
-# #
+"""
        " _ = (query, n_results)  # Mark as used
         return []

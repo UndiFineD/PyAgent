@@ -17,7 +17,7 @@ Maintenance Orchestrator - Central maintenance lifecycle coordinator
 
 A small, focused coordinator that runs standardized maintenance cycles across the PyAgent fleet: dependency and lint audits, workspace cleanup, header and import hygiene, and naming checks. Designed as a synchronous top-level orchestration object that delegates most work to WorkspaceMaintenance.
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Typical usage: create an instance and run a standard cycle to collect results.
 - Example:

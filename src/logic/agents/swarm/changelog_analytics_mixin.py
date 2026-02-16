@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# ChangelogAnalyticsMixin - Calculate changelog statistics and analytics
-# #
-[Brief Summary]
+"""
+ChangelogAnalyticsMixin - Calculate changelog statistics and analytics
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Attach this mixin to an object (agent) that exposes current_content or previous_content and call calculate_statistics() to obtain a metrics dict.
 
@@ -52,9 +51,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Changelog analytics mixin.py module".
-# #
+"""
 
 from __future__ import annotations
 
@@ -100,7 +99,7 @@ class ChangelogAnalyticsMixin:
         }
         setattr(self, "_statistics", stats)
         "return stats
-# #
+"""
 
 from __future__ import annotations
 

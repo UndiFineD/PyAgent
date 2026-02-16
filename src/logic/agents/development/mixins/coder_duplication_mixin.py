@@ -17,10 +17,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Duplicate code detection logic for CoderCore.
-# #
-# #
+"""
+Duplicate code detection logic for CoderCore.
+"""
+"""
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations

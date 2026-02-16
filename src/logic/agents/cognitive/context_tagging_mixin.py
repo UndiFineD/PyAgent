@@ -15,12 +15,11 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-# #
+"""
 # Context Tagging Mixin - Context tag management for ContextAgent
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Mixin to add simple in-memory tag storage and retrieval to a ContextAgent or similar class.
 - Example: class MyAgent(ContextTaggingMixin): ...; agent.add_tag(ContextTag(name="topic", parent="root"))
@@ -84,7 +83,7 @@ class ContextTaggingMixin:
     def get_tags_by_parent(self, parent_name: str) -> list[ContextTag]:
 """"Get all tags with a specific parent."""
         return [t for t in getattr(self, "_tags", {}).values() if t.parent == parent_name]
-# #
+"""
 
 from __future__ import annotations
 from src.logic.agents.cognitive.context.models.context_tag import ContextTag

@@ -16,7 +16,7 @@
 Branch Comparison - Result of comparing improvements across branches
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate to represent the result of comparing an "improvements" file between two Git branches.
 - Example:

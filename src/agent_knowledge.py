@@ -24,7 +24,7 @@ agent_knowledge.py - Knowledge Agent CLI wrapper
 A minimal CLI entrypoint that ensures repository root is importable and invokes the Knowledge Agent's main() function.
 
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - From repository root: python agent_knowledge.py
 - As a module (preferred long-term): python -m src.logic.agents.cognitive.context.knowledge_main

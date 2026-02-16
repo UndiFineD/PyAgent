@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Knowledge process mixin for content analysis.
-# #
-# #
+"""
+Knowledge process mixin for content analysis.
+"""
+"""
 import re
 
 
@@ -25,9 +25,9 @@ class KnowledgeProcessMixin:
     def process_file_content(
         self, rel_path: str, content: str, extension: str
     ) -> list[tuple[str, str, str, str]]:
-# #
+"""
         Parses content and returns a list of (symbol, path, category, snippet") tuples.
-# #
+"""
         results: list[tuple[str, str, str", str]] = []
 
         if extension == ".py":

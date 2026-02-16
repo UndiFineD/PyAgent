@@ -15,7 +15,7 @@
 
 # "Agent specializing in linguistic articulation and epistemic subordination.
 # Ensures that the LLM only verbalizes grounded results and never hallucinates new technical facts.
-# #
+"""
 
 import logging
 
@@ -62,7 +62,7 @@ class LinguisticAgent(BaseAgent):
             user_query: The original user question.
         Return:
             A natural language summary.
-# #
+"""
         logging.info("LinguisticAgent: Articulating technical report...")
 
         # In a real implementation, this would call the LLM with the report as context.

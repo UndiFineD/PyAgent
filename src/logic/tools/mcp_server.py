@@ -18,7 +18,7 @@ GraphMemoryAgent tools
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Run standalone: python mcp_server.py
   (starts uvicorn on 0.0.0.0:8000)

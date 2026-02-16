@@ -13,10 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Context package for cognitive agents.
-# #
-# #
+"""
+Context package for cognitive agents.
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 

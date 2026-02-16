@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# SelfSearchAgent - Introspection and knowledge-base search
-# #
-[Brief Summary]
+"""
+SelfSearchAgent - Introspection and knowledge-base search
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: agent = SelfSearchAgent(file_path)
 - Use inherited WebIntelligenceAgent search and analysis methods to query, index, or reflect over local knowledge, logs or other files referenced by file_path.
@@ -36,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Self search agent.py module.
-# #
+"""
 
 from .web_intelligence_agent import WebIntelligenceAgent
 
@@ -47,7 +46,7 @@ class SelfSearchAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancesto
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the SelfSearchAgent (via WebIntelligence core).
-# #
+"""
 
 from .web_intelligence_agent import WebIntelligenceAgent
 

@@ -16,7 +16,7 @@
 improvement_category.py - ImprovementCategory Enum
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the enum and use members to classify agent improvement suggestions.
 - Example: from improvement_category import ImprovementCategory; category = ImprovementCategory.PERFORMANCE

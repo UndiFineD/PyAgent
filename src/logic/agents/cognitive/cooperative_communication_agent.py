@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Cooperative Communication Agent - Orchestrates high-speed signal synchronization
-# #
-[Brief Summary]
+"""
+Cooperative Communication Agent - Orchestrates high-speed signal synchronization
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate the agent and call its tools to coordinate inter-node communication and state alignment.
 - Example (synchronous parts):
@@ -42,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Cooperative Communication Agent for high-speed signal synchronization.
-# #
+"""
 
 import time
 import logging
@@ -59,7 +58,7 @@ __version__ = VERSION
 class CooperativeCommunicationAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Cooperative Communication Agent: Orchestrates
 #     high-speed signal synchronization and communication protocols between agent nodes.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -73,7 +72,7 @@ class CooperativeCommunicationAgent(BaseAgent):
     @as_tool
     def establish_p2p_channel(self, node_a: str, node_b: str) -> dict[str, Any]:
         Creates a dedicated sub-millisecond link between two nodes.
-# #
+"""
       "  import random
 
 #         channel_id = fchan_{node_a}_{node_b}
@@ -93,9 +92,9 @@ class CooperativeCommunicationAgent(BaseAgent):
     def broadcast_thought_packet(
         self, origin_node: str, thought_payload: Any
     ) -> dict[str, Any]:
-# #
+"""
         Multicasts a thought packet to all connected nodes.
-# #
+"""
       "  _ = thought_payload
 #         packet_id = fthought_{int(time.time() * 1000)}
         logging.info(fCOOP: Broadcasting {packet_id} from {origin_node}")
@@ -111,7 +110,7 @@ class CooperativeCommunicationAgent(BaseAgent):
     def synchronize_state(self, fleet_state: Any) -> dict[str, Any]:
         Ensures all nodes are aligned on the global fleet context.
         Uses a real hash of the provided state.
-# #
+"""
         import hashlib
 
         state_str = str(fleet_state)
@@ -133,7 +132,7 @@ class CooperativeCommunicationAgent(BaseAgent):
 #             "to minimize cross-node latency while maximizing data throughput.
         )
         return await self.think(prompt)
-# #
+"""
 
 import time
 import logging
@@ -150,7 +149,7 @@ __version__ = VERSION
 class CooperativeCommunicationAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Cooperative Communication Agent: Orchestrates
     high-speed signal synchronization and communication "protocols between agent nodes.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -164,7 +163,7 @@ class CooperativeCommunicationAgent(BaseAgent):
     @as_tool
     def establish_p2p_channel(self, node_a: str, node_b: str) -> dict[str, Any]:
         Creates a dedicated sub-millisecond link between" two nodes.
-# #
+"""
         import random
 
 #         channel_id = fchan_{node_a}_{node_b}
@@ -184,9 +183,9 @@ class CooperativeCommunicationAgent(BaseAgent):
     def broadcast_thought_packet(
         self, origin_node: str, thought_payload: Any
     ) -> dict[str, Any]:
-# #
+"""
         Multicasts a thought packet to all connected nodes.
-# #
+"""
         _ = thought_payload
 #         packet_id = fthought_{int(time.time() * 1000)}
         logging.info(fCOOP: Broadcasting {packet_id} from {origin_node}")
@@ -202,7 +201,7 @@ class CooperativeCommunicationAgent(BaseAgent):
     def synchronize_state(self, fleet_state: Any) -> dict[str, Any]:
         Ensures all nodes are aligned on the global fleet context.
         Uses a real" hash "of the provided state.
-# #
+"""
         import hashlib
 
         state_str = str(fleet_state)

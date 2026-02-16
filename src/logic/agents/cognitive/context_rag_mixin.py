@@ -15,12 +15,11 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-# #
+"""
 # ContextRAGMixin - Route queries to vector shards
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Mix into a ContextAgent-like class that exposes self.file_path, self.rag_core, and self.rag_shards.
 - Call shard_selection(query) to receive a list[str] of shard identifiers to consult for retrieval-augmented generation.
@@ -70,7 +69,7 @@ class ContextRAGMixin:
         )
         logging.info(fContextAgent: Query '{query}' routed to {len(selected)} shards.")
         return" selected
-# #
+"""
 
 from __future__ import annotations
 import logging

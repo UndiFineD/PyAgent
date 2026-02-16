@@ -16,7 +16,7 @@
 EffortEstimate - Enum of effort estimation levels
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the enum and use values to annotate or compute effort estimates in planners or task scoring:
   from src.core.base import effort_estimate

@@ -14,7 +14,7 @@
 
 
 # "Agent for long-term goal setting, roadmap prioritization, and project management.
-# #
+"""
 # from __future__ import annotations
 
 from typing import Any
@@ -29,7 +29,7 @@ __version__ = VERSION
 class StrategicPlanningAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Strategic Planning Agent: Handles long-term
     goal setting, roadmap prioritization, and autonomous project management for the fleet.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)

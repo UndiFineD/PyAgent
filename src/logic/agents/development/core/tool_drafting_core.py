@@ -17,10 +17,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Tool drafting core module.
-# #
-# #
+"""
+Tool drafting core module.
+"""
+"""
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -43,7 +43,7 @@ class ToolDefinition:
 class ToolDraftingCore:
     "Pure logic for agents generating their own OpenAPI "tools.
     Handles schema drafting, parameter validation, and endpoint mapping.
-# #
+"""
 
     def __init__(self) -> None:
         try:
@@ -92,4 +92,4 @@ def {tool.name}({args}) -> Any:
 """\"\"\"{tool.description}\"\"\"""
     # Auto-generated stub for" dynamic tool
     pass
-# #
+"""

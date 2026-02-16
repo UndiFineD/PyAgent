@@ -16,7 +16,7 @@
 ArchivedImprovement - Data container for archived improvement
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import ArchivedImprovement, provide an existing Improvement instance and optional archived_date, archived_by, archive_reason; use for persistence, UI lists, or migration/cleanup tasks.
 - Example: from src.core.agents.archived_improvement import ArchivedImprovement; archived = ArchivedImprovement(improvement=imp, archived_date="2026-02-01", archived_by="alice", archive_reason="superseded")

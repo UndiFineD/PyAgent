@@ -20,49 +20,49 @@ class BehavioralIntelligence:
 #     pass  # [BATCHFIX] inserted for empty class
 """Intelligence engine for Windows behavioral indicators and TTPs."""
 #     Ported from Fibratus rules and various EDR detection sets.
-# #
+"""
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def get_detection_rules() -> Dict[str, Any]:
+"""     def get_detection_rules() -> Dict[str, Any]:
 """"High-fidelity detection rules for Windows security events."""
         return {
             "RID Hijacking": {
                 "description": "Modification of RID (Relative ID) in SAM for low-privilege accounts.",
                 "indicators": {
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #                     "registry_path": rHKEY_LOCAL_MACHINE\SAM\SAM\\\\Domains\Account\Users\*\F","  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                     "suspicious_processes": ["!lsass.exe"],
+"""                     "suspicious_processes": ["!lsass.exe"],
                 },
             },
             "LSASS Memory Dumping": {
                 "description": "Attempting to read LSASS memory or write minidumps.",
                 "indicators": {
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #                     "target_process": rC:\Windows\System32\\\\lsass.exe","  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                     "access_mask": ["ALL_ACCESS", "VM_READ"],
+"""                     "access_mask": ["ALL_ACCESS", "VM_READ"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                     "dump_actions": ["write_minidump_file", "comsvcs.dll, MiniDump"],
+"""                     "dump_actions": ["write_minidump_file", "comsvcs.dll, MiniDump"],
                 },
             },
             "AppDomainManager Injection": {
                 "description": "Hijacking .NET CLR search order via AppDomainManager.",
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                 "indicators": {"env_vars": ["COMPlus_AppDomainManagerType", "COMPlus_AppDomainManagerAsm"]},
+"""                 "indicators": {"env_vars": ["COMPlus_AppDomainManagerType", "COMPlus_AppDomainManagerAsm"]},
             },
             "Phantom DLL Hijacking": {
                 "description": "Hijacking a DLL that is loaded but missing from disk (e.g., version.dll in some apps).",
@@ -79,24 +79,24 @@ class BehavioralIntelligence:
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def get_persistence_indicators() -> List[Dict[str, str]]:
+"""     def get_persistence_indicators() -> List[Dict[str, str]]:
 """"Registry and file system indicators for advanced persistence."""
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #        " return ["  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
 #             {"path": rHKCU\Software\Classes\*\\\\shell\open\\\\command", "name": "Registry Shell Command Hijack"},"  # [BATCHFIX] closed string
             {
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #                 "path": rHKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options","  # [BATCHFIX] closed string
                 "name": "IFEO Debugger Hijack",
             },
             {
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #                 "path": rHKLM\SYSTEM\CurrentControlSet\Control\Lsa","  # [BATCHFIX] closed string
                 "name": "Security Packages / Authentication Packages Persistence",
             },

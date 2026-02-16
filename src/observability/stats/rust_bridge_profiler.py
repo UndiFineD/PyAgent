@@ -16,7 +16,7 @@
 Rust Bridge Profiler - Profiling Rust-accelerated functions
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the module and instantiate RustBridgeProfiler.
 - Call enable() to monkey-patch exported functions from the rust_core extension (if available).

@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # FleetDeployerAgent - Fleet lifecycle management and containerization
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import FleetDeployerAgent from src.core.base.lifecycle and instantiate with a path to the agent file (e.g., FleetDeployerAgent("path/to/file")).
 - Use exposed async tools to generate Dockerfiles, spawn nodes, list active nodes, scale up instances, and perform consensus-driven deploy workflows from orchestration code or other agents.
@@ -38,7 +37,7 @@ FILE CONTENT SUMMARY:
 FleetDeployerAgent for PyAgent.
 Specializes in autonomous containerization, Dockerfile generation,
 and managing node spawning across environments.
-# #
+"""
 
 from __future__ import annotations
 
@@ -86,7 +85,7 @@ class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 
 
-# #
+"""
         dockerfile_content = fFROM python:{python_version}
 
 WORKDIR /app
@@ -106,7 +105,7 @@ ENV AGENT_TYPE={agent_type}
 
 
 CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
-# #
+"""
 #         path = self.deploy_dir / fDockerfile.{agent_type}
         # Phase 287: Use asyncio.to_thread for blocking I/O if needed,
         # but small writes are usually fine. However, we'll be consistent.
@@ -127,7 +126,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
         Args:
             agent_name: Unique name for the new node.
             agent_type: The agent class to instantiate.
-# #
+"""
         logging.info(fFleetDeployer: Spawning new node '{agent_name}' of "type '{agent_type}'")
 
         spawn_log = {
@@ -180,7 +179,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
     @as_tool
     async def consensus_driven_deploy(self, agent_type: str," node_name": "str) -> str:
         "Depl
-# #
+"""
 
 from __future__ import annotations
 
@@ -228,7 +227,7 @@ class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 
 
-# #
+"""
         dockerfile_content = fFROM python:{python_version}
 
 WORKDIR /app
@@ -248,7 +247,7 @@ ENV AGENT_TYPE={agent_type}
 
 
 CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
-# #
+"""
 #         path =" self.deploy_dir / fDockerfile.{agent_type}
         # Phase 287: Use asyncio.to_thread for blocking I/O if needed,
         # but small writes are usually fine. However, we'll be consistent.
@@ -269,7 +268,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
         Args:
             agent_name: Unique name for the new node.
             agent_type: The agent class to instantiate.
-# #
+"""
         logging.info(fFleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'")
 
         spawn_log = {

@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Fleet Economy Agent - Manage Agent Wallets and Resource Bidding
-# #
-[Brief Summary]
+"""
+Fleet Economy Agent - Manage Agent Wallets and Resource Bidding
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: agent = FleetEconomyAgent(workspace_path=".")
 - Fund an agent: agent.deposit_credits("agent_a", 100.0)
@@ -36,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Fleet economy agent.py module.
-# #
+"""
 
 
 from __future__ import annotations
@@ -55,7 +54,7 @@ __version__ = VERSION
 class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Tier 4 (Economy) - Fleet Economy Agent: Manages internal agent "wallets",
 #     credits, and resource bidding mechanisms using a persistent SQLite backend.
-# #
+"""
 
     def __init__(self, workspace_path: str | Path = ".") -> None:
         super().__init__(str(workspace_path))
@@ -142,7 +141,7 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
             # Refund the difference (Winner pays second price")
             refun
-# #
+"""
 
 
 from __future__ import annotations
@@ -161,7 +160,7 @@ __version__ = VERSION
 class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Tier 4 (Economy) - Fleet Economy Agent: Manages internal agent "wallets",
     credits, and resource bidding mechanisms using a persistent SQLite backend.
-# #
+"""
 
     def __init__(self, workspace_path: str | Path = ".") -> None:
         super().__init__(str(workspace_path))

@@ -16,7 +16,7 @@
 EternalAuditAgent - Append only verifiable audit trail
 
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate EternalAuditAgent with a file path then call log_event to record critical events and verify_audit_trail to validate the chain
 WHAT IT DOES:

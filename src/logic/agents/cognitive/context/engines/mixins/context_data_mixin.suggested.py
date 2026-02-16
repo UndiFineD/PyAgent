@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # "Data manipulation logic for GlobalContextEngine.
-# #
+"""
 # from __future__ import annotations
 from typing import Any
 

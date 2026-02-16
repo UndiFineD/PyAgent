@@ -16,7 +16,7 @@
 RollbackRecord - Data container for improvement rollback records
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate to record a rollback and its metadata, e.g.:
   from src.core.base.lifecycle.rollback_record import RollbackRecord

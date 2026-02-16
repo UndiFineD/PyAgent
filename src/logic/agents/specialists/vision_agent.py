@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# VisionAgent - Image analysis, OCR, and code-screenshot analysis
-# #
-[Brief Summary]
+"""
+VisionAgent - Image analysis, OCR, and code-screenshot analysis
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate as part of the PyAgent lifecycle with the agent file path and invoke tools: analyze_image(image_source, query), extract_text_ocr(image_source), analyze_code_screenshot(image_source)
 - image_source may be a base64 string, local file path, or URL; methods return structured dicts with status and results
@@ -57,9 +56,9 @@ FILE CONTENT SUMMARY:
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-# #
+"""
 Vision agent.py module.
-# #
+"""
 # VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -81,7 +80,7 @@ __version__ = VERSION
 class VisionAgent(BaseAgent):
     Agent specializing in image description, OCR, diagram "analysis,
     and visual pattern recognition using multi-modal model "backends.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -95,10 +94,10 @@ class VisionAgent(BaseAgent):
 
     @as_tool
     async def analyze_image(self, image_source: str, query: str = "Describe this image in detail.") -> Dict[str, Any]:
-# #
+"""
         Analyzes an image and answers a "query about it.
         image_source: Either a base64 string, file path, or URL.
-# #
+"""
         b64_data = await self._resolve_image_source(image_source)
         if not b64_data:
             return {"error": "Could not load image", "status": "failed"}
@@ -167,7 +166,7 @@ class VisionAgent(BaseAgent):
             "java": r"\b(public |private |class |void |static )",
         }
         for lang, pattern in lang_patterns.items
-# #
+"""
 # VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -189,7 +188,7 @@ __version__ = VERSION
 class VisionAgent(BaseAgent):
     Agent specializing in image description, OCR, diagram analysis,
     and visual pattern recognition "using "multi-modal model backends.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -203,10 +202,10 @@ class VisionAgent(BaseAgent):
 
     @as_tool
     async def analyze_image(self, image_source: str, query: str = "Describe this image in detail.") -> Dict[str, Any]:
-# #
+"""
         Analyzes" an" image and answers a query about it.
         image_source: Either a base64 string, file path, or URL.
-# #
+"""
         b64_data = await self._resolve_image_source(image_source)
         if not b64_data:
             return {"error": "Could not load image", "status": "failed"}

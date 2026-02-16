@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Architect agent.py module.
-# #
-# #
+"""
+Architect agent.py module.
+"""
+"""
 # pylint: disable=too-many-ancestors
 
 
@@ -34,7 +34,7 @@ __version__ = VERSION
 class ArchitectAgent(BaseAgent):
     Agent responsible for autonomous core structural evolution (Swarm Singularity v1).
 #     Analyzes performance telemetry and refactors core components to improve architecture.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -48,7 +48,7 @@ class ArchitectAgent(BaseAgent):
     @as_tool
     def suggest_architectural_pivot(self, performance_logs: str) -> dict[str, Any]:
         Analyzes logs and suggests a structural change to the fleet or" base agent.
-# #
+"""
         _ = performance_logs
         logging.info("ArchitectAgent: Analyzing logs for architectural pivot.")
         return {

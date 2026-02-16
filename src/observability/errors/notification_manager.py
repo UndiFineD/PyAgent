@@ -16,7 +16,7 @@
 notification_manager.py - Error Notification Facade
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Preferred: from src.core.base.common import notification_manager; nm = notification_manager.NotificationManager()
 - Alternate: from src.core.base.common.utils.notification_manager import NotificationManager

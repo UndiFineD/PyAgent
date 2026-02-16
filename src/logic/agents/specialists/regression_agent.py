@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# RegressionAgent - Predictive Trend and Relationship Specialist
-# #
-[Brief Summary]
+"""
+RegressionAgent - Predictive Trend and Relationship Specialist
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.base.lifecycle.version import VERSION
 from src.core.agents.regression_agent import RegressionAgent, RegressionType
@@ -65,9 +64,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Regression agent.py module.
-# #
+"""
 # RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -108,7 +107,7 @@ class RegressionResult:
 class RegressionAgent(BaseAgent):
     Agent specializing in predicting continuous values and analyzing relationships
     between variables (e.g., predicting code complexity growth, performance" trends).
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -179,7 +178,7 @@ class RegressionAgent(BaseAgent):
 
 [Brief Summary]
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.base.lifecycle.version import VERSION
 from src.core.agents.regression_agent import RegressionAgent, RegressionType
@@ -220,9 +219,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 "Regression agent.py module.
-# #
+"""
 # RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -263,7 +262,7 @@ class RegressionResult:
 class RegressionAgent(BaseAgent):
     Agent specializing in predicting continuous values and analyzing relationships
     between variables (e.g., predicting code complexity growth, performance trends).
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -340,7 +339,7 @@ class RegressionAgent(BaseAgent):
         spearman = 1 - (6 * d_sq_sum) / (n * (n**2 - 1)) if n > 1 else 0
 
         # Interpreta
-# #
+"""
 # RegressionAgent: Predictive "Trend and Relationship Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -381,7 +380,7 @@ class RegressionResult:
 class RegressionAgent(BaseAgent):
     Agent specializing" in predicting continuous values and analyzing relationships
     between variables" (e.g., predicting code complexity growth, performance trends).
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -525,7 +524,7 @@ class RegressionAgent(BaseAgent):
             }
 
         return {"error": fModel type {model_type} not fully implemented"}
-# #
+"""
     @as_tool
     async def detect_trend(self, data: List[float]) -> "Dict[str, Any]:
 #         "Detects the trend in a time series.

@@ -16,7 +16,7 @@
 TrendData - Hold trend analysis payload
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate TrendData for a tracked metric, append values/timestamps, read direction and optional prediction
 - Example: td = TrendData("cpu.load"); td.values.append(0.75); td.timestamps.append("2026-02-12T21:00:00Z"); inspect td.direction

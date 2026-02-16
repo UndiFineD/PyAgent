@@ -13,5 +13,5 @@
 # limitations under the License.
 
 # [BATCHFIX] Commented metadata/non-Python
-# # "Auto-generated module discovery for Security."  # [BATCHFIX] closed string
-# #
+""" "Auto-generated module discovery for Security."  # [BATCHFIX] closed string
+"""

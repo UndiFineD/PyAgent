@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # "Intelligent tool selection system for MCP ecosystem.
-# #
+"""
 # import re
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
@@ -36,7 +36,7 @@ class ToolSelector:
 
     Uses natural language processing and capability matching to select
 #     the most appropriate tools for a given task.
-# #
+"""
 
     def __init__(self):
         self._tools: List[Tool] = []
@@ -97,7 +97,7 @@ class ToolSelector:
 
         Returns:
             List of selected tools ordered by relevance
-# #
+"""
         # Tokenize and normalize task description
         task_lower = task_description.lower()
         task_words = set(re.findall(r'\b\w+\b', task_lower))
@@ -122,7 +122,7 @@ class ToolSelector:
         - Category relevance (30%)
         - Language specificity (20%)
         - Description similarity (10%)
-# #
+"""
         score = 0.0
 
         # Keyword matching in capabilities (40%)
@@ -181,7 +181,7 @@ class ToolSelector:
 
         Returns comprehensive analysis including primary tools,
         alternatives, and reasoning.
-# #
+"""
         selected_tools = self.select_tools(task_description, max_tools=3)
 
         # Get alternative tools (lower scoring but still relevant)

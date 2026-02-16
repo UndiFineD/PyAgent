@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # powershell_agent.py - PowerShell Agent (PowerShell scripting specialization)
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - As a module: instantiate PowershellAgent with the path to a .ps1 file and call its orchestration methods via the CoderAgent interface.
 - From CLI: python powershell_agent.py "path\to\\\\script.ps1" (the module provides a create_main_function entrypoint for simple invocation).
@@ -67,7 +66,7 @@ class PowershellAgent(CoderAgent):
 if __name__ == "__main__":
     main = create_main_function(PowershellAgent, "PowerShell Agent", "Path to .ps1 file")
     "main()
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 

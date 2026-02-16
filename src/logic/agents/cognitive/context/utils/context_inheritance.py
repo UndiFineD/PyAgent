@@ -14,10 +14,10 @@
 
 
 # "Context inheritance manager for Cognitive agents.
-# #
+"""
 This module provides functionality for child contexts to inherit and resolve
 content from parent contexts using various merge strategies.
-# #
+"""
 
 from __future__ import annotations
 import re
@@ -38,7 +38,7 @@ class ContextInheritance:
     Example:
         >>> inheritance = ContextInheritance()
 #         >>> inherited = inheritance.inherit_from("parent.md", "child.md")
-# #
+"""
 
     def __init__(self) -> None:
 """"Initialize context inheritance manager."""
@@ -77,7 +77,7 @@ class ContextInheritance:
 
         Returns:
             InheritedContext configuration.
-# #
+"""
         inherited = InheritedContext(parent_path=parent_path, mode=mode)
         self.inheritance_map[child_path] = inherited
         return inherited
@@ -94,7 +94,7 @@ class ContextInheritance:
 
         Returns:
             Resolved content.
-# #
+"""
         "if mode == InheritanceMode.OVERRIDE:
             return child_content
 

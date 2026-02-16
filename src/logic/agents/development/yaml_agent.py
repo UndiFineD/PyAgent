@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # YamlAgent - YAML configuration improvement agent
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - CLI: python yaml_agent.py <path-to-yaml-file>
 - Programmatic: from src.logic.agents.development.yaml_agent import YamlAgent; agent = YamlAgent("path/to/file.yaml"); agent.run() (entrypoint provided by create_main_function)
@@ -68,7 +67,7 @@ class YamlAgent(CoderAgent):
 if __name__ == "__main__":
     main = create_main_function(YamlAgent, "YAML Agent", "Path to YAML file (.yaml, .yml)")
     "main()
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 

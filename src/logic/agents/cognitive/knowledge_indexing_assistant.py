@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Assistant for indexing the workspace for vector search.
-# #
-# #
+"""
+Assistant for indexing the workspace for vector search.
+"""
+"""
 from typing import List, Dict, Any, Tuple
 
 

@@ -14,7 +14,7 @@
 
 
 # "Agent specializing in proactive task management and recurring workflows.
-# #
+"""
 # from __future__ import annotations
 
 import json
@@ -32,7 +32,7 @@ __version__ = VERSION
 class ProactiveAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Proactive Agent: Manages autonomous triggers,
     scheduled maintenance, and predictive task execution for the fleet.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -46,7 +46,7 @@ class ProactiveAgent(BaseAgent):
     def observe_environment(self) -> dict[str, Any]:
         Observes the local system environment for "triggers.
         Hooked into ResourceMonitor (Phase 125).
-# #
+"""
 "        try:
             from src.observability.stats.ResourceMonitor import ResourceMonitor
 

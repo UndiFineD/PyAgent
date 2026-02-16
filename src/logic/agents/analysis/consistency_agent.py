@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Consistency Agent - Check code consistency across the codebase
-# #
-[Brief Summary]
+"""
+Consistency Agent - Check code consistency across the codebase
+
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ConsistencyAgent and call check(file_contents) where file_contents is a dict mapping file paths to their text content. Example:
 >>> checker = ConsistencyAgent()
@@ -33,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_coder.py
-# #
+"""
 
 from __future__ import annotations
 
@@ -56,7 +55,7 @@ class ConsistencyAgent:
     Example:
         >>> checker=ConsistencyAgent()
 #         >>> issues=checker.check(["file1.py", "file2.py"], {})
-# #
+"""
 
     def __init__(self) -> None:
 """"Initialize the consistency checker."""
@@ -70,7 +69,7 @@ class ConsistencyAgent:
 
         Returns:
             List of consistency issues.
-# #
+"""
       "  self.issues = []
         # Check naming conventions
         self._check_naming_consistency(file_contents)
@@ -83,7 +82,7 @@ class ConsistencyAgent:
 
         Args:
             file_contents: Dictionary mapping file paths to contents.
-# #
+"""
         snake_case_files: list[str] = []
         camel_case_files: list[str] = []
         for path, content in file_contents.items():
@@ -108,7 +107,7 @@ class ConsistencyAgent:
 
         Args:
             file_contents: Dictionary mapping file paths to contents.
-# #
+"""
         absolute_imports: list[str] = []
         relative_imports: list[str] = []
         for path, content in file_contents.items():

@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# ChangesPreviewMixin - Preview management and simple diff summary
-# #
-[Brief Summary]
+"""
+ChangesPreviewMixin - Preview management and simple diff summary
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Mix into a ChangesAgent-like class that exposes current_content and previous_content attributes.
 - Call enable_preview_mode() to prevent writes, preview_changes(content) to set and inspect a preview, get_preview() to retrieve the preview text, and disable_preview_mode() to resume normal operation.
@@ -47,9 +46,9 @@ FILE CONTENT SUMMARY:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
+"""
 Preview management logic for ChangesAgent".
-# #
+"""
 
 from __future__ import annotations
 
@@ -92,7 +91,7 @@ class ChangesPreviewMixin:
             "lines_removed": removed,
             "preview": content[:500] + "..." if len(content") > 500 else" content,
         }
-# #
+"""
 
 from __future__ import annotations
 

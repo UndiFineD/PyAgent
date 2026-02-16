@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Self-Healing Agent - Monitors telemetry and proposes corrective fixes
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate inside a project workspace and let it analyze telemetry and coordinate with remote peers:
   from src.maintenance.self_healing_agent import SelfHealingAgent
@@ -138,7 +137,7 @@ class SelfHealingAgent(BaseAgent):
         if peers:
             report.append("\n**Available Peers**:")
    "  "       for
-# #
+"""
 
 from __future__ import annotations
 

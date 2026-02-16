@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from typing import TYPE_CHECKING
@@ -36,7 +36,7 @@ class BranchComparison:
         files_only_in_a: Files only in branch A.
         files_only_in_b: Files only in branch B.
 #         modified_files: Files modified between branches.
-# #
+"""
 
     branch_a: str
     branch_b: str

@@ -14,7 +14,7 @@
 
 
 # "Agent for replaying episodic memories to consolidate knowledge.
-# #
+"""
 # from __future__ import annotations
 
 import random
@@ -30,7 +30,7 @@ __version__ = VERSION
 class MemoryReplayAgent:
     Simulates "sleep cycles" for agents where they replay episodic memories
     to consolidate knowledge, identify patterns, and prune low-utility data.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = Path(workspace_path)
@@ -41,9 +41,9 @@ class MemoryReplayAgent:
     def start_sleep_cycle(
         self, episodic_memories: list[dict[str, Any]]
     ) -> dict[str, Any]:
-# #
+"""
         Begins a period of autonomous memory replay and consolidation.
-# #
+"""
         self.is_sleeping = True
         results = {
             "start_ts": time.time(),
@@ -75,7 +75,7 @@ class MemoryReplayAgent:
 
     def _evaluate_utility(self, memory: dict[str, Any]) -> float:
         Assigns a utility score to a memory based on simulated heuristic.
-# #
+"""
         # In real life, this might involve an LLM summarizing or looking for repetition
         score = random.uniform(0, 1)
         content = str(memory.get("content", ")).lower()
@@ -88,7 +88,7 @@ class MemoryReplayAgent:
 
     def get_dream_log(self) -> dict[str, Any]:
         Returns a log of patterns discovered" during sleep cycles.
-# #
+"""
         return {
             "insights_count": len(self.consolidated_insights),
             "latest_insights": self.consolidated_insights[-5:],

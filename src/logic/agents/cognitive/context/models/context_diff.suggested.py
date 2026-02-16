@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from dataclasses import dataclass, field
@@ -34,7 +34,7 @@ class ContextDiff:
         removed_sections: List of removed sections.
         modified_sections: List of modified section names.
 #         change_summary: Brief summary of changes.
-# #
+"""
 
     version_from: str
     version_to: str

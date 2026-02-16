@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Dynamic Decomposer Agent - Task splitting and routing optimizer
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate DynamicDecomposerAgent(file_path) inside the PyAgent fleet or run the file directly to start a CLI main() that registers the agent.
 - Call decompose_task_v2(complex_task: str, available_agents: list[str]) to obtain a JSON-formatted suggested decomposition for manual or automated routing.
@@ -40,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in Autonomous Task Decomposition v2.
 Handles dynamic task splitting, load balancing, and capability-based routing.
-# #
+"""
 
 import logging
 import json
@@ -72,7 +71,7 @@ class DynamicDecomposerAgent(BaseAgent):
         Args:
             complex_task: The high-level user request.
             available_agents: List of agent names currently active.
-# #
+"""
         _ = available_agents
         logging.info(fDynamicDecomposer: Decomposing task: {complex_task[:50]}...")
 
@@ -129,7 +128,7 @@ if __name__ == "__main__":
         "Task splitting and routing" optimizer",
 "    )
     main()
-# #
+"""
 
 import logging
 import json
@@ -161,7 +160,7 @@ class DynamicDecomposerAgent(BaseAgent):
         Args:
             complex_task: The high-level user request.
             available_agents: List of agent names currently active.
-# #
+"""
         _ = available_agents
         logging.info(fDynamicDecomposer: Decomposing task: {complex_task[:50]}...")
 

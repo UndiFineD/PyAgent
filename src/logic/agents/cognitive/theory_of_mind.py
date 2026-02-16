@@ -14,7 +14,7 @@
 
 
 # "Models the mental states and knowledge domains of other agents.
-# #
+"""
 # from __future__ import annotations
 
 from typing import Any
@@ -29,7 +29,7 @@ class TheoryOfMind:
     "Models the mental states and knowledge domains of other agents.
 
     Acts as the I/O Shell for TheoryOfMindCore.
-# #
+"""
 
     def __init__(self) -> None:
         self.agent_profiles: dict[str, dict[str, Any]] = {}

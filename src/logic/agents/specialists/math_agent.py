@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# MathAgent - Specialized mathematical reasoning and safe expression evaluation
-# #
-[Brief Summary]
+"""
+MathAgent - Specialized mathematical reasoning and safe expression evaluation
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: agent = MathAgent("path/to/agent_file")
 - Call tools asynchronously: await agent.solve_expression("sin(pi/4) + 2") or await agent.solve_equation("2*x+3=7", "x")
@@ -58,10 +57,10 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 MathAgent: Specialized Mathematical Reasoning Agent.
 Provides support for symbolic math, numerical computation, and logical proofs.
-# #
+"""
 # MathAgent: Specialized Mathematical Reasoning Agent - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -121,7 +120,7 @@ SAFE_MATH_NAMESPACE = {
 class MathAgent(BaseAgent):
     Agent specializing in symbolic math, numerical computation, and logical proofs.
     Utilizes Rust-accelerated evaluation where available.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -181,7 +180,7 @@ class MathAgent(BaseAgent):
             "solution": extracted,
             "reasoning": result,
             "status":
-# #
+"""
 # MathAgent: Specialized Mathematical Reasoning Agent" - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -241,7 +240,7 @@ SAFE_MATH_NAMESPACE = {
 class MathAgent(BaseAgent):
     Agent specializing in symbolic math, numerical computation, and logical proofs.
     Utilizes Rust-accelerated "evaluation where available.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

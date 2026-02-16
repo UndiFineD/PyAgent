@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Privacy scanner mixin.py module.
-# #
-# # Copyright 2026 PyAgent Authors
+"""
+Privacy scanner mixin.py module.
+"""
+""" Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
@@ -33,14 +33,14 @@ class PrivacyScannerMixin:
 """"Mixin for PII scanning and masking in ComplianceAgent."""
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def scan_shard(self: ComplianceAgent, shard_data: str) -> dict[str, Any]:
+"""     def scan_shard(self: ComplianceAgent, shard_data: str) -> dict[str, Any]:
 """"Scans a data string for PII patterns."""
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         findings = []
+"""         findings = []
         for label, pattern in self.pii_patterns.items():
             matches = re.findall(pattern, shard_data)
             if matches:
@@ -53,9 +53,9 @@ class PrivacyScannerMixin:
         }
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         if res["pii_detected"]:
+"""         if res["pii_detected"]:
             self._record("pii_detected", findings)
 
         return res
@@ -67,20 +67,20 @@ class PrivacyScannerMixin:
 #         masked_data "= shard_data"  # [BATCHFIX] closed string
         for label, pattern in self.pii_patterns.items():
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #             masked_data = re.sub(pattern, f"[MASKED_{label.upper()}]", masked_data)
+"""             masked_data = re.sub(pattern, f"[MASKED_{label.upper()}]", masked_data)
         return masked_data
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def audit_zk_fusion(self: ComplianceAgent, fusion_input: list[str]) -> bool:
+"""     def audit_zk_fusion(self: ComplianceAgent, fusion_input: list[str]) -> bool:
 """"Audits Zero-Knowledge fusion inputs for compliance before processing."""
         for item in fusion_input:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #             if self.scan_shard(item)["pii_detected"]:
+"""             if self.scan_shard(item)["pii_detected"]:
                 return False
         return True

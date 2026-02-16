@@ -14,10 +14,10 @@
 
 
 # "Refactoring advice engine for Cognitive agents.
-# #
+"""
 This module analyzes agent contexts to identify potential refactoring
 opportunities and suggestions, leveraging Rust acceleration when available.
-# #
+"""
 
 from __future__ import annotations
 import re
@@ -46,7 +46,7 @@ class RefactoringAdvisor:
     Example:
         >>> advisor = RefactoringAdvisor()
 #         >>> suggestions = advisor.analyze(contexts)
-# #
+"""
 
     def __init__(self) -> None:
 """"Initialize refactoring advisor."""
@@ -59,7 +59,7 @@ class RefactoringAdvisor:
             name: Pattern identifier.
             pattern: Regex pattern to search for.
             description: Human-readable suggestion description.
-# #
+"""
         self.patterns[name] = {"pattern": pattern, "description": description}
 
     def analyze(self, contexts: Any) -> list[RefactoringSuggestion]:
@@ -71,7 +71,7 @@ class RefactoringAdvisor:
 
         Returns:
             List of refactoring suggestions.
-# #
+"""
         context_map: dict[str, str]
         if isinstance(contexts, str):
             context_map = {"inline": contexts}
@@ -144,7 +144,7 @@ class RefactoringAdvisor:
 
         Returns:
             Suggestions sorted by estimated impact.
-# #
+"""
         impact_rank = {"high": 0, "medium": 1, "low": 2}
 
         def rank(s: RefactoringSuggestion) -> int:

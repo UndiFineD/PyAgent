@@ -22,7 +22,7 @@ Handles communication with various LLM backends.
 
 Brief Summary
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate InferenceEngine with optional model_name and config (api_key, base_url,
 local_runner), then call await engine.generate(prompt, model="model-name",

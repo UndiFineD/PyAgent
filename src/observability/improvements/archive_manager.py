@@ -16,7 +16,7 @@
 ArchiveManager - Archives completed improvements
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ArchiveManager(), call .archive(improvement) to add an Improvement to the archive, and call .restore(improvement_id) to remove and return a previously archived Improvement by its id. 
 - Expect KeyError if restore is called with a missing id.

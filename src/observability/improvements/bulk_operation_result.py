@@ -16,7 +16,7 @@
 BulkOperationResult - Data container for bulk operation outcomes
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Import and instantiate BulkOperationResult to record the number of successful items in a batch, e.g. BulkOperationResult(success_count=5).
 

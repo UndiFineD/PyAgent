@@ -16,7 +16,7 @@
 Branch Comparison Status - Enum for branch comparison lifecycle
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - from src.utils.branch_comparison_status import BranchComparisonStatus
 - Check status: if BranchComparisonStatus.PENDING: ...

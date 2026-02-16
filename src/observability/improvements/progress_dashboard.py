@@ -16,7 +16,7 @@
 Progress Dashboard - Generates progress reports, velocity metrics, burndown data
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import ProgressDashboard from progress_dashboard.py and use generate_report(improvements), generate_burndown(improvements), or get_completion_rate(improvements) to produce metrics for lists of Improvement objects. Example:
   from progress_dashboard import ProgressDashboard

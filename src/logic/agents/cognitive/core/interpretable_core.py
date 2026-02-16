@@ -11,13 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 # See the License for the specific language governing permissions and
-# #
+"""
 # InterpretableCore: Core logic for interpretable Sparse Autoencoder (SAE) bridges in PyAgent.
 # Enables explainable AI, feature attribution, and transparent model reasoning for cognitive agents.
 
 This module simulates the decomposition of LLM activations into human-interpretable
 features, leveraging Rust for high-throughput vectorized operations.
-# #
+"""
 from __future__ import annotations
 
 import logging
@@ -44,14 +44,14 @@ class InterpretableCore:
     Phase 14 Rust Optimizations:
     - top_k_indices_rust: Fast top-K selection for activation sparsification
 #     - decompose_activations_rust: Vectorized activation decomposition
-# #
+"""
 
     def __init__(self, feature_count: int = 4096) -> None:
         "Initialize the interpretable core.
 
         Args:
             feature_count: The total number of features in the SAE.
-# #
+"""
         self.feature_count "= feature_count
 
     def decompose_activations(self, mock_activations: list[float]) -> dict[str, Any]:
@@ -65,7 +65,7 @@ class InterpretableCore:
 
         Returns:
             Dictionary containing active features and semantic mapping.
-# #
+"""
         # Simulated '"Top-K' sparsification
         k = 10
 

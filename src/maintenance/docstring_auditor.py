@@ -24,7 +24,7 @@ Docstring Auditor - Parse analyzer output and generate module batches
 Parses analyzer output for missing module-level docstrings and writes a next-batch list of module
 import names.
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Call generate_next_batch(prompt_path, out_path, max_entries=20) with the analyzer text file path
 and desired output path.

@@ -17,7 +17,7 @@ Compliance Checker Agent - Validate changelog entries for security and legal com
 
 Brief Summary
 DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import and construct: from src.core.something import ComplianceChecker (or directly from file); checker = ComplianceChecker()
 - Run checks: results = checker.check_all(entries) where entries is list[ChangelogEntry]; inspect ComplianceResult items for issues and recommendations.
@@ -38,10 +38,12 @@ Auto-extracted class from agent_changes.py
 
 from __future__ import annotations
 
+
 from src.core.base.common.types.changelog_entry import ChangelogEntry
 from src.core.base.common.types.compliance_category import ComplianceCategory
 from src.core.base.common.types.compliance_result import ComplianceResult
 from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.security.compliance_assist import ComplianceCheck, ComplianceStandard
 
 __version__ = VERSION
 
@@ -57,8 +59,40 @@ class ComplianceChecker:
         >>> results=checker.check_all(entries)
     """
 
+
     SECURITY_KEYWORDS = ["vulnerability", "cve", "security", "patch", "exploit"]
     LEGAL_KEYWORDS = ["license", "copyright", "trademark", "patent"]
+
+    def __init__(self):
+        self.standards = {
+            "Security": ComplianceStandard(
+                "Security",
+                [
+                    ComplianceCheck(
+                        "Security Category Check",
+                        check_fn=self._security_category_check,
+                        recommendation="Move security-related entries to the Security section",
+                    ),
+                ],
+            ),
+            "Legal": ComplianceStandard(
+                "Legal",
+                [
+                    ComplianceCheck(
+                        "Legal Review Check",
+                        check_fn=self._legal_review_check,
+                        recommendation="Have legal team review license / copyright changes",
+                    ),
+                ],
+            ),
+        }
+
+    def _security_category_check(self) -> bool:
+        # This method should be set up with the entries context before running
+        return not self._security_issues
+
+    def _legal_review_check(self) -> bool:
+        return not self._legal_issues
 
     def check_security_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
         """Check security compliance.
@@ -69,19 +103,20 @@ class ComplianceChecker:
         Returns:
             ComplianceResult for security category.
         """
-        issues: list[str] = []
-        recommendations: list[str] = []
-        # Check for security entries without proper categorization
+        self._security_issues = []
+        self._security_recommendations = []
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.SECURITY_KEYWORDS):
                 if entry.category != "Security":
-                    issues.append(f"Security-related entry not in Security category: {entry.description[:50]}")
-                    recommendations.append("Move security-related entries to the Security section")
+                    self._security_issues.append(f"Security-related entry not in Security category: {entry.description[:50]}")
+                    self._security_recommendations.append("Move security-related entries to the Security section")
+        # Use ComplianceStandard/Check for result
+        result = self.standards["Security"].run()
         return ComplianceResult(
             category=ComplianceCategory.SECURITY,
-            passed=not issues,
-            issues=issues,
-            recommendations=recommendations,
+            passed=result["status"] == "Compliant",
+            issues=self._security_issues,
+            recommendations=self._security_recommendations,
         )
 
     def check_legal_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
@@ -93,18 +128,18 @@ class ComplianceChecker:
         Returns:
             ComplianceResult for legal category.
         """
-        issues: list[str] = []
-        recommendations: list[str] = []
-        # Check for entries that may need legal review
+        self._legal_issues = []
+        self._legal_recommendations = []
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.LEGAL_KEYWORDS):
-                issues.append(f"Entry may need legal review: {entry.description[:50]}")
-                recommendations.append("Have legal team review license / copyright changes")
+                self._legal_issues.append(f"Entry may need legal review: {entry.description[:50]}")
+                self._legal_recommendations.append("Have legal team review license / copyright changes")
+        result = self.standards["Legal"].run()
         return ComplianceResult(
             category=ComplianceCategory.LEGAL,
-            passed=not issues,
-            issues=issues,
-            recommendations=recommendations,
+            passed=result["status"] == "Compliant",
+            issues=self._legal_issues,
+            recommendations=self._legal_recommendations,
         )
 
     def check_all(self, entries: list[ChangelogEntry]) -> list[ComplianceResult]:

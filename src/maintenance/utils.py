@@ -16,7 +16,7 @@
 Maintenance Utilities - Support for filesystem cleanup, log rotation, and environment integrity checks
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import from src.utils (or repo root utils.py) and instantiate: utils = MaintenanceUtils()
 - Call maintenance helpers (intended): rotate logs, prune temporary files, run environment integrity checks

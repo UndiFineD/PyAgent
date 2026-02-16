@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Javascript Accessibility Mixin - Analyze JavaScript/React UI for accessibility issues
-# #
-[Brief Summary]
+"""
+Javascript Accessibility Mixin - Analyze JavaScript/React UI for accessibility issues
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Use as a mixin in analysis agents; call _analyze_javascript_ui(content) with JavaScript/JSX source to append AccessibilityIssue instances to self.issues.
 
@@ -52,9 +51,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Javascript accessibility mixin.py module".
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -116,7 +115,7 @@ class JavascriptAccessibilityMixin:
                         auto_fixable=False,
                     )
      "  "         )
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 

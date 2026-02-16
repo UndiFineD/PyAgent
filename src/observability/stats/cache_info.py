@@ -16,7 +16,7 @@
 CacheInfo - LRU Cache with hit/miss statistics and pinned items
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Construct an LRUCache with optional ttl: cache = LRUCache[str, int](max_size=1000, ttl_seconds=60, name="responses")
 - Put and get values: cache.put("k", value); value = cache.get("k", default=None)

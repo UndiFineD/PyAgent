@@ -14,7 +14,7 @@
 
 
 # "Shell for ContextCompressorCore, handling File I/O and orchestration.
-# #
+"""
 # from __future__ import annotations
 import logging
 from pathlib import Path
@@ -32,7 +32,7 @@ class ContextCompressor:
     "Reduces the size of source files while preserving structural context.
 
     Acts as the I/O Shell for ContextCompressorCore.
-# #
+"""
 
     def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root: Path | None = (

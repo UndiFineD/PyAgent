@@ -17,10 +17,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Accessibility report mixin.py module.
-# #
-# #
+"""
+Accessibility report mixin.py module.
+"""
+"""
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations

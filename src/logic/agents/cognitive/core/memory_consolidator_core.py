@@ -14,10 +14,10 @@
 
 
 # "MemoryConsolidatorCore logic for PyAgent.
-# #
+"""
 Pure logic for distilling interactions into insights. Maintains the integrity
 of memory fragments during the consolidation process.
-# #
+"""
 
 from __future__ import annotations
 import time

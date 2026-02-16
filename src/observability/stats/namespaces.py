@@ -17,7 +17,7 @@ namespaces.py - Metric Namespace Management
 
 A small manager class to create, delete, and organize MetricNamespace objects and to assign metrics to namespaces for hierarchical metric organization.
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.metrics.namespaces import MetricNamespaceManager
 mgr = MetricNamespaceManager()

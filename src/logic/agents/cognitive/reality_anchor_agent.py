@@ -14,7 +14,7 @@
 
 
 # "Agent specializing in zero-hallucination execution by cross-referencing factual claims.
-# #
+"""
 # from __future__ import annotations
 
 import json
@@ -33,7 +33,7 @@ class RealityAnchorAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Reality Anchor Agent: Specializes" in
     zero-hallucination execution by cross-referencing factual claims against
     verified 'Reality Graphs' (compiler outputs, documentation, tests).
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -46,10 +46,10 @@ class RealityAnchorAgent(BaseAgent):
 
     @as_tool
     async def ground_against_docs(self, claim: str, doc_url: str) -> dict[str, Any]:
-# #
+"""
         Cross-references a claim against official online documentation.
         Integrates with documentation fetching mechanisms.
-# #
+"""
         logging.info(fRealityAnchorAgent: Grounding claim against" {doc_url}")
 
         # This would typically use a tool to fetch the URL, then think() to compare
@@ -73,12 +73,12 @@ class RealityAnchorAgent(BaseAgent):
     async def check_physics_constraints(
         self, action: str, environment_state: dict[str, Any]
     ) -> dict[str, Any]:
-# #
+"""
         Validates an action against physics-based constraints (Simulated).
         Args:
             action: Description of the action (e.g., 'Agent moves 100km in 1 second').
             environment_state: Current state (gravity, boundaries, object masses).
-# #
+"""
    "     logging.info(
 #             fRealityAnchorAgent: Checking physics constraints for action: {action}
         )
@@ -103,10 +103,10 @@ class RealityAnchorAgent(BaseAgent):
     async def verify_claim(
         self, claim: str, evidence_sources: list[str]
     ) -> dict[str, Any]:
-# #
+"""
         Verifies a claim against a list of evidence sources" (files, logs, etc.).
         Returns a verdict and supporting/contradicting evidence.
-# #
+"""
         logging.info(fRealityAnchorAgent: Verifying claim: {claim}")
 
         # Simulation of verification logic
@@ -133,9 +133,9 @@ class RealityAnchorAgent(BaseAgent):
 
     @as_tool
     async def anchor_context(self, context_snippet: str) -> str:
-# #
+"""
         Strips unverified assumptions from a context snippet, leaving only grounded facts.
-# #
+"""
         logging.info("RealityAnchorAgent: Anchoring" context snippet to reality.")
 
         prompt = (

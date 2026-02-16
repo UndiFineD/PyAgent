@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# ChangesEntryMixin - Manage changelog entries
-# #
-[Brief Summary]
+"""
+ChangesEntryMixin - Manage changelog entries
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Mixin to be inherited by an agent class (e.g., ChangesAgent) to manage in-memory changelog entries.
 - Example:
@@ -48,9 +47,9 @@ FILE CONTENT SUMMARY:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
+"""
 Entry management logic for ChangesAgent".
-# #
+"""
 
 from __future__ import annotations
 
@@ -167,7 +166,7 @@ class ChangesEntryMixin:
             # Group by category
             by_category: dict[str, list[ChangelogEntry]] = {}
       "  "    for entry in entries:
-# #
+"""
 
 from __future__ import annotations
 

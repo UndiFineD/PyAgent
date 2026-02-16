@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Temporal Predictor Agent - Predictive execution and anticipatory self-healing
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.agents.temporal_predictor_agent import TemporalPredictorAgent
 agent = TemporalPredictorAgent(file_path="path/to/agent.py")
@@ -36,7 +35,7 @@ FILE CONTENT SUMMARY:
 Temporal Predictor Agent for PyAgent.
 Specializes in predictive execution and anticipatory self-healing.
 Analyzes historical patterns to forecast potential failures.
-# #
+"""
 
 from __future__ import annotations
 
@@ -142,7 +141,7 @@ class TemporalPredictorAgent(BaseAgent):
     def suggest_preemptive_fix(self, failure_prediction: str) -> str:
 """"Suggests a preemptive action to avoid a predicted failure."""
         logging.info(fTemporalPredictor: Generating preemptive "fix for: {failure_pre
-# #
+"""
 
 from __future__ import annotations
 

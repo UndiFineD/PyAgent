@@ -16,7 +16,7 @@
 cloud_exporter.py - Export metrics to cloud monitoring services
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 
 USAGE:
 Instantiate CloudExporter with the target ExportDestination

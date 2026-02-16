@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Pull Request Agent - Git PR analysis and review summarization
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate PullRequestAgent with the repository workspace file path (e.g., PullRequestAgent("path/to/repo")).
 - Call as_tool methods to generate PR diffs, summarize recent commits, or create a patch branch (subject to config).
@@ -37,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in Git operations, pull request analysis, and code review.
 Inspired by PR-Agent and GitHub CLI.
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -134,7 +133,7 @@ class PullRequestAgent(BaseAgent):
 
         Respects the policy setting `allow_branch_creation` in the agent config
         (defaults to False, requiring explicit user permission).
-# #
+"""
         # Respect configuration to avoid creating many branches/PRs by default
         allow = False
         try:

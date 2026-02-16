@@ -20,21 +20,21 @@ class PhishingIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
 """"Intelligence engine for phishing site detection and simulated phishing."""
-# #
+"""
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# # #     def __init__(self, session: Optional[aiohttp.ClientSession] = None):
+""" #     def __init__(self, session: Optional[aiohttp.ClientSession] = None):
         self.session = session
 # [BATCHFIX] Commented metadata/non-Python
-# #         self.phisherman_api = "https://api.phisherman.gg/v2/domains/check/"  # [BATCHFIX] closed string
+"""         self.phisherman_api = "https://api.phisherman.gg/v2/domains/check/"  # [BATCHFIX] closed string
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     async def check_domain(self, domain: str) -> Dict[str, Any]:
+"""     async def check_domain(self, domain: str) -> Dict[str, Any]:
 # [BATCHFIX] Commented metadata/non-Python
-# #         "Check if a domain is a known phishing site using Phisherman."  # [BATCHFIX] closed string
+"""         "Check if a domain is a known phishing site using Phisherman."  # [BATCHFIX] closed string
         if not self.session:
             self.session = aiohttp.ClientSession()
 
@@ -42,9 +42,9 @@ class PhishingIntelligence:
             async with self.session.get(f"{self.phisherman_api}{domain}", timeout=10) as resp:
                 if resp.status == 200:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                     data: Dict[str, Any] = await resp.json()
+"""                     data: Dict[str, Any] = await resp.json()
                     return data
         except Exception:
             pass
@@ -52,9 +52,9 @@ class PhishingIntelligence:
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def get_phishing_templates() -> Dict[str, str]:
+"""     def get_phishing_templates() -> Dict[str, str]:
 """"Common phishing templates for research/simulation."""
         return {
             "microsoft_365": "https://login.microsoftonline.com.common-auth.io/login",
@@ -65,12 +65,12 @@ class PhishingIntelligence:
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def get_phishing_evasion_techniques() -> List[str]:
+"""     def get_phishing_evasion_techniques() -> List[str]:
 """"Techniques used to hide phishing pages from scanners."""
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #        " return ["  # [BATCHFIX] closed string
             "User-Agent filtering (block common scanner bots)",
             "IP Geofencing (allow only target country)",

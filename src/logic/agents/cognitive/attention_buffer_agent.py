@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Attention Buffer Agent - Manage shared attention context
-# #
-[Brief Summary]
+"""
+Attention Buffer Agent - Manage shared attention context
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with a path to identify the agent (AttentionBufferAgent(file_path)).
 - Use push_attention_point(source, content, priority) to record items of interest.
@@ -36,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Attention Buffer Agent for managing focus and importance.
-# #
+"""
 
 import logging
 import time
@@ -64,7 +63,7 @@ class AttentionBufferAgent(BaseAgent):
     Phase 14 Rust Optimizations:
     - sort_buffer_by_priority_rust: Fast priority-timestamp composite sorting
 #     - filter_stale_entries_rust: Optimized timestamp-based filtering
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -80,7 +79,7 @@ class AttentionBufferAgent(BaseAgent):
     def push_attention_point(self, source: str, content: str, priority: int = 5) -> str:
         Adds a new point of interest to the shared attention buffer.
         Source can be 'Human' or any Agent name.
-# #
+"""
   "      point = {
             "timestamp": time.time(),
             "source": source,
@@ -100,7 +99,7 @@ class AttentionBufferAgent(BaseAgent):
     def get_attention_summary(self) -> dict[str, Any]:
         Returns the current state of the attention buffer, sorted by priority and recency.
         Uses Rust-accelerated sorting when available.
-# #
+"""
         # Rust-accelerated priority-timestamp sorting
         if RUST_AVAILABLE and hasattr(rc, 'sort_buffer_by_priority_rust') and self.buffer:
             try:
@@ -126,7 +125,7 @@ class AttentionBufferAgent(BaseAgent):
     def clear_stale_attention(self, age_seconds: int = 3600) -> str:
         Removes attention points older "than a certain duration.
         Uses Rust-accelerated filtering when available.
-# #
+"""
         now = time.time()
         initial_count = len(self.buffer)
 
@@ -143,7 +142,7 @@ class AttentionBufferAgent(BaseAgent):
 
         removed = initial_count - len(self.buffer)
 #         return fCleared {removed}" stale attention points.
-# #
+"""
 
 import logging
 import time
@@ -171,7 +170,7 @@ class AttentionBufferAgent(BaseAgent):
     Phase 14 Rust Optimizations:
     - sort_buffer_by_priority_rust: Fast priority-timestamp composite sorting
     - filter_stale_entries_rust:" Optimized timestamp-based filtering
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -187,7 +186,7 @@ class AttentionBufferAgent(BaseAgent):
     def push_attention_point(self, source: str, content: str, priority: int = 5) -> str:
         Adds a new point of interest to the shared attention buffer.
    "     Source can be 'Human' "or any" Agent name.
-# #
+"""
         point = {
             "timestamp": time.time(),
             "source": source,
@@ -207,7 +206,7 @@ class AttentionBufferAgent(BaseAgent):
     def get_attention_summary(self) -> dict[str, Any]:
         Returns the current state of the attention buffer, sorted by priority and recency.
         Uses Rust-accelerated sorting when available.
-# #
+"""
      "   # Rust-accelerated priority-timestamp sorting
         if RUST_AVAILABLE and hasattr(rc, 'sort_buffer_by_priority_rust') and self.buffer:
             try:
@@ -233,7 +232,7 @@ class AttentionBufferAgent(BaseAgent):
     def clear_stale_attention(self, age_seconds: int = 3600) -> str:
       "  Removes attention points older than a certain duration.
         Uses Rust-accelerated "filtering" when available.
-# #
+"""
         now = time.time()
         initial_count = len(self.buffer)
 

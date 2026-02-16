@@ -23,10 +23,11 @@ def fix_file(path: Path):
     prev_was_class_or_def = False
     for i, line in enumerate(lines):
         # If line ends with a single ", not a triple quote
-        if SINGLE_QUOTE_LINE.match(line) and not TRIPLE_QUOTE_START.match(line):
+        single_quote_match = SINGLE_QUOTE_LINE.match(line)
+        if single_quote_match and not TRIPLE_QUOTE_START.match(line):
             if i == 0 or prev_was_class_or_def:
                 # Convert to triple-quoted docstring
-                new_lines.append('"""' + SINGLE_QUOTE_LINE.match(line).group(1).strip() + '"""')
+                new_lines.append('"""' + single_quote_match.group(1).strip() + '"""')
             else:
                 # Convert to comment
                 new_lines.append('# ' + line.rstrip('"').rstrip())

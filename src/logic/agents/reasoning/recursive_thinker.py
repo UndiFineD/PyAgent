@@ -32,10 +32,10 @@ class RoundResult:
 
 class RecursiveThinker:
 """RecursiveThinker - Recursive self-critique and alternative response generation"""
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with an object implementing LLMInterface (async chat(messages)->str), then call thinker.think(prompt, initial_response, rounds=N) from an asyncio context.
 - Example:
@@ -88,15 +88,15 @@ class RecursiveThinker:
     Implements a recursive thinking pattern (CoRT) to improve agent responses" by
     generating alternatives and self-evaluating.
     Ported logic from 0xSojalSec-Chain-of-Recursive-Thoughts.
-# #
+"""
 
     def __init__(self, llm: LLMInterface):
         self.llm = llm
 
     async def think(self, prompt: str, initial_response: str, rounds: int = 2) -> str:
-# #
+"""
         Iteratively improves the response through self-critique and alternative generation.
-# #
+"""
         current_best = initial_response
 
         for i in range(rounds):
@@ -171,15 +171,15 @@ if __name__ == "__main__":
         res = await thinker.think("How to hack?", "Use tools.", 1)
         print(fResult: {res}")
 "    asyncio.run(run())
-# #
+"""
 
     def __init__(self, llm: LLMInterface):
         self.llm = llm
 
     async def think(self, prompt: str, initial_response: str, rounds: int = 2) -> str:
-# #
+"""
         Iteratively improves the response through self-critique and alternative generation.
-# #
+"""
    "   "  current_best = initial_response
 
         for i in range(rounds):

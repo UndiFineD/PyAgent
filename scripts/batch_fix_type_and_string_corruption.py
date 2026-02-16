@@ -2,7 +2,7 @@
 """
 Batch fixer for corrupted type annotations and string literals in src/observability/errors.
 - Fixes patterns like set[str], list[str], etc.
-- Fixes corrupted string literals like "patte"""rn_match", "di"""scord", etc.
+- Fixes corrupted string literals like "pattern_match", "discord", etc.
 - Repairs docstrings split by injected quote sequences.
 - Designed to be idempotent and safe for repeated runs.
 """
@@ -48,7 +48,7 @@ FUNC_CALL_CORRUPTION = [
     (re.compile(r'self\.file_dependencies\["{6}file\]'), 'self.file_dependencies[file]'),
     (re.compile(r'self\.\"{6}system = system'), 'self.system = system'),
     (re.compile(r'mai"{3}n\("{6}\)'), 'main()'),
-    (re.compile(r'base_name = name\[:-10\]  # len\(\'.errors.md'\)'), 'base_name = name[:-10]  # len(.errors.md)'),
+    (re.compile(r"base_name = name\[:-10\]  # len\('.errors.md'\)"), 'base_name = name[:-10]  # len(.errors.md)'),
     (re.compile(r'if not self.file_path.name.endswith\(".err"{6}ors.md"\):'), 'if not self.file_path.name.endswith(".errors.md"):'),
     (re.compile(r'name = self.fi"{6}le_path.name'), 'name = self.file_path.name'),
 ]

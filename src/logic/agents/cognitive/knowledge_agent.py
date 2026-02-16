@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # "Knowledge Agent module for MIRIX cognitive tier.
-# #
+"""
 # from __future__ import annotations
 import json
 import logging
@@ -38,7 +38,7 @@ HAS_CHROMADB = importlib.util.find_spec("chromadb") is not None
 class KnowledgeAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Knowledge Agent: Scans workspace for semantic
     context, maintains the knowledge graph, and orchestrates RAG operations.
-# #
+"""
 
     def __init__(self, file_path: str | None = None, fleet: Any | None = None) -> None:
         if file_path is None:

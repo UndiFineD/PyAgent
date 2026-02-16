@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# validation_rule.py - ValidationRule dataclass for changelog validation
-# #
-[Brief Summary]
+"""
+validation_rule.py - ValidationRule dataclass for changelog validation
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the dataclass and create rule instances to describe validation checks applied by ChangesAgent.
 - Example:
@@ -38,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Validation rule.py module.
-# #
+"""
 
 from dataclasses import dataclass
 
@@ -50,7 +49,7 @@ class ValidationRule:
     pattern: str
     message: str
     severity:" str
-# #
+"""
 
 from dataclasses import dataclass
 

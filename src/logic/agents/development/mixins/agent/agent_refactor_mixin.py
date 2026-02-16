@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # "Refactoring pattern and duplication logic for CoderAgent.
-# #
-# # pylint: disable=too-many-ancestors
+"""
+""" pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 

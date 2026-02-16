@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # Documentation Agent - Generates technical references and project OVERVIEW documents
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - As a script: python documentation_agent.py generate
 - From project CLI: invoke the created main entrypoint (Documentation Agent) with a task argument (e.g., "generate").
@@ -109,7 +109,7 @@ class DocumentationAgent(BaseAgent):
 if __name__ == "__main__":
     main = create_main_function(DocumentationAgent, "Documentation Agent", "Task (e.g. 'generate')")
 "    main()
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 

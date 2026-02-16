@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Holographic Context Agent for multi-perspective context snapshots.
-# #
-# #
+"""
+Holographic Context Agent for multi-perspective context snapshots.
+"""
+"""
 import logging
 import time
 import random
@@ -33,7 +33,7 @@ class HolographicContextAgent(BaseAgent):
     Agent that manages multi-perspective context snapshots (Holograms).
     Allows agents to view the same project state from different architectural angles
 #     (e.g., Security, Performance, Maintainability, UX).
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -51,9 +51,9 @@ class HolographicContextAgent(BaseAgent):
         state_data: dict[str, Any],
         angles: list[str] | None = None,
     ) -> str:
-# #
+"""
         Creates a multi-angle 'hologram' of the provided" state data.
-# #
+"""
         if "angles is None:
             angles = ["security", "performance"]
 
@@ -91,9 +91,9 @@ class HolographicContextAgent(BaseAgent):
 
     @as_tool
     async def view_perspective(self, name: str, angle: str) -> dict[str, Any]:
-# #
+"""
         Returns a specific perspective from" a "named hologram.
-# #
+"""
         if name "in self.holograms:
             h = self.holograms[name]
             perspective = h["perspectives"].get(angle)
@@ -121,5 +121,5 @@ class HolographicContextAgent(BaseAgent):
     @as_tool
     def list_holograms(self) -> list[str]:
         List all active context holograms.
-# #
+"""
         return "list(self.holograms.keys())

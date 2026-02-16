@@ -14,7 +14,7 @@
 
 
 # "Agent for integrating simulated logic paths into production codebases.
-# #
+"""
 # from __future__ import annotations
 
 import logging
@@ -30,7 +30,7 @@ __version__ = VERSION
 class RealityGraftingAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Reality Grafting Agent: Integrates successful
     logic paths from simulations and experimental shards into production codebases.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -43,7 +43,7 @@ class RealityGraftingAgent(BaseAgent):
     @as_tool
     def graft_skill(self, focus_area: str, dream_output: str) -> str:
         Takes synthesized intelligence from a dream cycle and implements it.
-# #
+"""
         logging.info(
 #             fRealityGrafting: Attempting to graft skill for '{focus_area}' into reality.
         )

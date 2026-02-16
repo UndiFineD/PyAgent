@@ -16,7 +16,7 @@
 ErrorImpact - Impact analysis dataclass
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.base.agent_errors.error_impact import ErrorImpact
 impact = ErrorImpact(error_id="E-123", affected_files=["src/foo.py"], impact_score=42.5)

@@ -13,10 +13,10 @@
 # limitations under the License.
 
 # "MIRIX memory logic for GraphMemoryAgent.
-# #
+"""
 Implements the 6-component MIRIX memory architecture for graph-based agents,
 including storage, retrieval, and temporal decay mechanisms.
-# #
+"""
 
 from __future__ import annotations
 import logging
@@ -42,7 +42,7 @@ class GraphMIRIXMixin:
 
         Returns:
             Success or error message.
-# #
+"""
         if not hasattr(self, "memory_store"):
 #             return "Error: Memory store not initialized.
 
@@ -72,7 +72,7 @@ class GraphMIRIXMixin:
 
         Returns:
             Summary of the pruned memories.
-# #
+"""
         if not hasattr(self", "memory_store"):
 #             return "Error: Memory store not initialized.
 

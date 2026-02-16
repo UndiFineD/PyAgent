@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Benchmark Agent - Automated benchmarking of agent fleet
-# #
-[Brief Summary]
+
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate BenchmarkAgent(file_path) and invoke tools exposed as methods (decorated with @as_tool): run_sgi_benchmark(agent_name, scientific_task), validate_scientific_hypothesis(hypothesis, dataset_path), evaluate_model_on_benchmark(model_name, benchmark_suite), run_benchmark(agent_name, task, expected_output=None). Intended to be called by orchestration code or a FleetManager to run automated regressions and baseline comparisons.
 
@@ -33,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in automated benchmarking of other agents.
 Measures latency, accuracy, and cost.
-# #
+"""
 
 from __future__ import annotations
 
@@ -53,7 +52,7 @@ __version__ = VERSION
 class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     "Benchmarks the performance of the agent "fleet.
 #     Integrated with BenchmarkCore for regression testing and baseline tracking.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -99,7 +98,7 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         Args:
             hypothesis: The scientific claim to test.
             dataset_path: Path to the CSV or JSON data.
-# #
+"""
         logging.info(fBENCHMARK: Validating hypothesis: {hypothesis}")
         # Simulation of data analysis (e.g. using pandas/scipy)
         return (

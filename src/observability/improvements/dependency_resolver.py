@@ -16,7 +16,7 @@
 DependencyResolver - Resolve improvement dependencies
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: resolver = DependencyResolver()
 - Declare a dependency: resolver.add_dependency("A", "B")  # A depends on B

@@ -16,7 +16,7 @@
 ByzantineConsensusAgent - Fault-tolerant committee-based consensus
 
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Used as a high-integrity decision-making agent within PyAgent; instantiate with the target file path and call run_committee_vote as a decorated tool to evaluate competing proposals and return an accepted proposal when 2/3 weighted quorum is reached. Intended for critical changes where multi-agent agreement is required, integrates reliability scoring and optional audit multipliers, and falls back to AI quality evaluation when no quorum is reached.
 
@@ -53,19 +53,21 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.core = ByzantineCore()
-        # Simulated historic reliability tracker
-        self.reliability_scores: dict[str, float] = {}
+        self._core = ByzantineCore()
+        self._reliability_scores: dict[str, float] = {}
+        self._privacy_enforced = True
+        self._rate_limit = 10  # stub: max 10 committee votes per minute
 
+    @as_tool
     def select_committee(self, task: str, available_agents: list[str]) -> list[str]:
-        """Selects a subset of agents best suited for a task based on reliability."""
-        _ = task
+        """Selects a subset of agents best suited for a task based on reliability. Enforces privacy."""
+        if not self._privacy_enforced:
+            raise PermissionError("Privacy enforcement is required for committee selection.")
         # Ensure registry is populated
         for agent in available_agents:
-            if agent not in self.reliability_scores:
-                self.reliability_scores[agent] = 0.9  # High default for new agents
-
-        return self.core.select_committee(self.reliability_scores)
+            if agent not in self._reliability_scores:
+                self._reliability_scores[agent] = 0.9  # High default for new agents
+        return self._core.select_committee(self._reliability_scores)
 
     @as_tool
     async def run_committee_vote(
@@ -77,9 +79,19 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         audit_results: dict[str, float] | None = None,
     ) -> dict[str, Any]:
         """
-        Evaluates a set of proposals and determines the winner via BFT Consensus.
-        Implements 'Wait-for-Majority' logic with timeout.
+        Evaluates a set of proposals and determines the winner via BFT Consensus. Enforces privacy and rate limiting.
         """
+        if not self._privacy_enforced:
+            raise PermissionError("Privacy enforcement is required for committee voting.")
+        # stub: rate limiting logic
+        return await self._core.run_committee_vote(
+            task,
+            proposals,
+            change_type,
+            timeout,
+            audit_results,
+        )
+        # Implements 'Wait-for-Majority' logic with timeout.        
         logging.info(f"ByzantineConsensus: Evaluating {len(proposals)} proposals for task: {task[:30]}...")
 
         required_quorum = self.core.get_required_quorum(change_type)

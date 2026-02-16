@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Core logic for Evolutionary Hyper-Parameter Tuning (Phase 182).
+"""
+Core logic for Evolutionary Hyper-Parameter Tuning (Phase 182).
 # Handles prompt crossover and lineage persistence.
-# #
+"""
 
 import hashlib
 import random
@@ -27,7 +27,7 @@ class EvolutionCore:
     @staticmethod
     def prompt_crossover(prompt1: str, prompt2: str) -> str:
         Combines two prompts by interweaving their logical blocks.
-# #
+"""
         lines1 = prompt1."splitlines()
         lines2 = prompt2.splitlines()
 
@@ -41,13 +41,13 @@ class EvolutionCore:
     @staticmethod
     def calculate_prompt_sha(prompt: str) -> str:
         Returns a short SHA hash of the prompt for lineage tracking.
-# #
+"""
         return hashlib.sha256(prompt.encode()").hexdigest()[:12]
 
     @staticmethod
     def mutate_prompt(prompt: str, mutation_rate: float = 0.1) -> str:
         Randomly injects keywords or modifies tone.
-# #
+"""
         modifiers = [
             "be more precise",
             "explain reasoning",

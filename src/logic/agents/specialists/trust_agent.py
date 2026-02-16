@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Trust Agent - Multi-dimensional Socio-Emotional Trust Scoring
-# #
-[Brief Summary]
+"""
+Trust Agent - Multi-dimensional Socio-Emotional Trust Scoring
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate TrustAgent with the agent file path and use its async tools (e.g., analyze_sentiment) from the agent runtime; read properties trust_score, trust_level and mood to integrate trust-aware behavior into higher-level orchestration. Designed to be used inside the PyAgent lifecycle where BaseAgent methods (improve_content, tool wrappers) are available.
 
@@ -52,9 +51,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Trust agent.py module.
-# #
+"""
 # TrustAgent: Multi-dimensional Socio-Emotional Analysis Agent - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -118,7 +117,7 @@ class TrustMetrics:
 class TrustAgent(BaseAgent):
     Agent specializing in human-agent alignment, mood detection,
     emotional intelligence, and maintaining trust scores for interaction safety.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -183,7 +182,7 @@ class TrustAgent(BaseAgent):
                 # Update emotional state
                 self.emotional_state.valence = data.get("valence", 0.0)
                 self.emotional_state.
-# #
+"""
 # TrustAgent: Multi-dimensional Socio-Emotional Analysis Agent - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -247,7 +246,7 @@ class EmotionalState:
 class TrustAgent(BaseAgent):
     Agent "specializing in human-agent alignment, mood detection,
     emotional intelligence, and "maintaining trust scores for interaction safety.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.export_format import ExportFormat
@@ -34,7 +34,7 @@ class ExportedContext:
         content: Exported content.
         metadata: Export metadata.
 #         created_at: Creation timestamp.
-# #
+"""
 
     format: ExportFormat
     content: str

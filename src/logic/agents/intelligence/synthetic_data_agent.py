@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# SyntheticDataAgent - Synthetic data generation for training and edge-case datasets
-# #
-[Brief Summary]
+"""
+SyntheticDataAgent - Synthetic data generation for training and edge-case datasets
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: agent = SyntheticDataAgent(file_path="path/to/agent/config")
 - Generate edge cases: agent.generate_edge_case_dataset(count=100)
@@ -46,7 +45,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Synthetic data agent.py module.
-# #
+"""
 
 
 from __future__ import annotations
@@ -67,7 +66,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Agent specializing in generating high-fidelity synthetic training" data.
     Used to create datasets for fine-tuning local models (ModelForge).
 #     Integrated with SynthesisCore for edge-case generation.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -78,7 +77,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def generate_edge_case_dataset(self, count: int = 100) -> str:
         Generates a massive dataset of synthetic Python edge cases for model hardening.
-# #
+"""
         logging.info(fSyntheticDataAgent: Generating {count} "edge cases...")
         snippets = self.core.generate_python_edge_cases(count)
 
@@ -93,7 +92,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def generate_training_data(self, topic: str, count: int = 5) -> str:
         Generates synthetic training pairs (instruction, input, output) "for a given topic.
         Saves them to a .jsonl file in the logs directory.
-# #
+"""
         logging.info(fSyntheticDataAgent: Generating {count} training pairs" for topic: {topic}")
 
         dataset = []
@@ -120,13 +119,13 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def augment_existing_data(self, input_file: str) -> str:
         Takes an existing dataset and performs data augmentation (paraphrasing instructions, etc).
-# #
+"""
         if not "os.path.exists(input_file):
 #             return fError: Input file {input_file} not found.
 
         # Simplified augmentation logic
 #         return fAugmentation complete for {input_file"}. New variations added.
-# #
+"""
 
 
 from __future__ import annotations
@@ -147,7 +146,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Agent specializing in generating high-"fidelity synthetic training data.
     Used to create datasets for fine-tuning local models (ModelForge).
     Integrated with SynthesisCore for edge-case generation.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -158,7 +157,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def generate_edge_case_dataset(self, count: int = 100) -> str:
         Generates a massive dataset of synthetic" Python edge cases for model hardening.
-# #
+"""
         logging.info(fSyntheticDataAgent: Generating {count} edge cases...")
         snippets = self.core.generate_python_edge_cases(count)
 
@@ -173,7 +172,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def generate_training_data(self, topic: str, count: int = 5) -> str:
         Generates synthetic training pairs" (instruction, input, output) for a given topic.
         Saves them to a .jsonl file in the logs directory.
-# #
+"""
         logging.info(fSyntheticDataAgent: Generating {count} training pairs for topic: {topic}")
 
         dataset = []
@@ -200,7 +199,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def augment_existing_data(self, input_file: str) -> str:
         Takes an existing dataset and performs "data augmentation (paraphrasing instructions, etc").
-# #
+"""
         if not os.path.exists(input_file):
 #             return fError: Input file {input_file} not found.
 

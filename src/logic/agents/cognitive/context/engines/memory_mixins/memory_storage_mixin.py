@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Memory storage mixin for persistent memory management.
-# #
-# #
+"""
+Memory storage mixin for persistent memory management.
+"""
+"""
 import json
 import logging
 from typing import Any

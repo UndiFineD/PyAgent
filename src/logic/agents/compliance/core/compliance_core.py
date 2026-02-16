@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Compliance core.py module.
-# #
-# #
+"""
+Compliance core.py module.
+"""
+"""
 from __future__ import annotations
 
 import re
@@ -35,7 +35,7 @@ class ComplianceIssue:
 class ComplianceCore:
     "Pure logic for continuous compliance auditing and regulatory "scanning.
     Identifies licensing conflicts, PII leaks, and dependency "risks.
-# #
+"""
 
     FORBIDDEN_KEYWORDS = [
         rpassword\\\\s*=\\\\s*['\"].+['\"]",

@@ -20,66 +20,66 @@ class MessengerIntelligence:
 #     pass  # [BATCHFIX] inserted for empty class
 """Handles discovery and OSINT for messenger platforms (Telegram, Discord, etc.)."""
 #     Ported logic from various Telegram OSINT tools.
-# #
+"""
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# # #     TELEGRAM_URL_PATTERN = rhttps?://t\.me/([a-zA-Z0-9_]{5,})
+""" #     TELEGRAM_URL_PATTERN = rhttps?://t\.me/([a-zA-Z0-9_]{5,})
 # [BATCHFIX] Commented metadata/non-Python
-# #     TELEGRAM_BOT_TOKEN_PATTERN = r"\\\\d{7,10}:[a-zA-Z0-9_-]{35}"  # [BATCHFIX] closed string
+"""     TELEGRAM_BOT_TOKEN_PATTERN = r"\\\\d{7,10}:[a-zA-Z0-9_-]{35}"  # [BATCHFIX] closed string
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def get_telegram_recon_endpoints(self, username: str) -> Dict[str, str]:
+"""     def get_telegram_recon_endpoints(self, username: str) -> Dict[str, str]:
 """"Returns public Telegram endpoints for OSINT."""
         return {
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #             "profile": fhttps://t.me/{username}","  # [BATCHFIX] closed string
             "api_info": "https://api.telegram.org/bot<token>/getMe",
             "proxy_list": "https://t.me/s/ProxyMTProto",
         }
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def get_discord_patterns(self) -> Dict[str, str]:
+"""     def get_discord_patterns(self) -> Dict[str, str]:
 """"Returns patterns for Discord OSINT."""
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #        " return {"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #             "invite": rhttps?://discord\.gg/[a-zA-Z0-9]+","  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #             "webhook": rhttps://discord\.com/api/webhooks/\\\\d+/[a-zA-Z0-9_-]+","  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #             "token": r"[a-zA-Z0-9_-]{24}\.[a-zA-Z0-9_-]{6}\.[a-zA-Z0-9_-]{27}",
+"""             "token": r"[a-zA-Z0-9_-]{24}\.[a-zA-Z0-9_-]{6}\.[a-zA-Z0-9_-]{27}",
         }
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def get_telegram_nearby_params(self) -> Dict[str, Any]:
+"""     def get_telegram_nearby_params(self) -> Dict[str, Any]:
 """"Parameters for Telegram 'People Nearby' exploitation (trilateration)."""
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #     "    return {"  # [BATCHFIX] closed string
             "method": "messages.getNearbyUsers",
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #             "required_fields": ["lat", "long"],
+"""             "required_fields": ["lat", "long"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             "description": (
 # [BATCHFIX] Commented metadata/non-Python
-# #                 "Used to find users within a specific radius. Can be used for trilateration by spoofing 3 locations."  # [BATCHFIX] closed string
+"""                 "Used to find users within a specific radius. Can be used for trilateration by spoofing 3 locations."  # [BATCHFIX] closed string
             ),
         }
 

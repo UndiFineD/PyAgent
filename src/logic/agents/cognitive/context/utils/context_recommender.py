@@ -14,10 +14,10 @@
 
 
 # "Context recommendation engine for Cognitive agents.
-# #
+"""
 This module provides tools to suggest improvements and section additions
 to context files by analyzing similar reference contexts and patterns.
-# #
+"""
 
 from __future__ import annotations
 import re
@@ -38,7 +38,7 @@ class ContextRecommender:
     Example:
         >>> recommender = ContextRecommender()
 #         >>> recommendations = recommender.recommend("auth.py", similar_contexts)
-# #
+"""
 
     def __init__(self) -> None:
 """"Initialize context recommender."""
@@ -50,7 +50,7 @@ class ContextRecommender:
         Args:
             file_name: Name of the reference file.
             content: Content of the reference file.
-# #
+"""
         self.reference_files[file_name] = content
 
     def find_similar(self, query: str) -> list[str]:
@@ -61,7 +61,7 @@ class ContextRecommender:
 
         Returns:
             List of reference file names that match the query.
-# #
+"""
         query_words = set(query.lower().split())
         matches: list[str] = []
         for name, content in self.reference_files.items():
@@ -88,7 +88,7 @@ class ContextRecommender:
 
         Returns:
             List of ContextRecommendation objects.
-# #
+"""
         corpus = (
             similar_contexts if similar_contexts is not None else self.reference_files
         )

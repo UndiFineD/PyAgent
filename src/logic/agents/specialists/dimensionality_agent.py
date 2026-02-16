@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# DimensionalityAgent - Feature Compression and Latent Space Mapping
-# #
-[Brief Summary]
+"""
+DimensionalityAgent - Feature Compression and Latent Space Mapping
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate DimensionalityAgent with the agent file path inside the PyAgent lifecycle and call its async tools (reduce_embedding_dim, batch_reduce) to compress single or batches of vector embeddings into a lower-dimensional representation; use method argument to select PCA, truncation, random projection, or fallbacks for more complex methods. Designed to be used inside the PyAgent orchestration where as_tool exposes these methods to the broader swarm.
 
@@ -56,9 +55,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Dimensionality agent.py module.
-# #
+"""
 # DimensionalityAgent: Feature Compression and Latent Space Mapping - Phase 319 Enhanced
 # Phase 16: Rust acceleration for PCA reduction, embedding stats, k-means clustering
 
@@ -114,7 +113,7 @@ class EmbeddingStats:
 class DimensionalityAgent(BaseAgent):
     Agent specializing in simplifying complex datasets and high-dimensional spaces.
     Focuses on PCA, t-SNE (simulated), UMAP, and semantic embedding compression.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -180,7 +179,7 @@ class DimensionalityAgent(BaseAgent):
         for emb in embeddings:
             result = await self.reduce_embedding_dim(emb, target_dim, method)
             reduced_all.append(
-# #
+"""
 # DimensionalityAgent: Feature Compression and Latent Space Mapping - Phase 319 Enhanced
 # Phase 16: Rust acceleration for PCA reduction, embedding stats, k-means clustering
 
@@ -236,7 +235,7 @@ class EmbeddingStats:
 class DimensionalityAgent(BaseAgent):
     Agent specializing in simplifying complex datasets and high-dimensional spaces.
     Focuses on PCA, t-SNE (simulated), UMAP, and semantic embedding compression.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

@@ -17,7 +17,7 @@ test_network_ip.py - Local IP detection test and helpers
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Execute as standalone test helper: python test_network_ip.py
 - Use programmatically: from test_network_ip import get_ip;

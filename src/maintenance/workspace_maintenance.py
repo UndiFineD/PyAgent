@@ -20,7 +20,7 @@ Workspace Maintenance - Consolidated workspace auditing and cleanup
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate WorkspaceMaintenance (workspace_root: str | Path)
   and call run_standard_cycle() for a default maintenance pass.

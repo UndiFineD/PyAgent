@@ -17,7 +17,7 @@ Core Download Agent - DownloadAgent
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with a DownloadConfig and call the appropriate 
   download_* method based on URLClassifier output.

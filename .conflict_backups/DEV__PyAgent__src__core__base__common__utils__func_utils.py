@@ -29,7 +29,7 @@ Features:
 - debounce: Delay function execution until stable
 - retry_on_exception: Retry function on specific exceptions
 
-Author: PyAgent Phase 20
+# AUTHOR: PyAgent Phase 20
 """
 
 from __future__ import annotations

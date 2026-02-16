@@ -13,10 +13,10 @@
 # limitations under the License.
 
 
-# #
+"""
 # MemoryCore logic for PyAgent (Facade).
 # Delegates to the standardized src.core.base.common.memory_core.
-# #
+"""
 
 from __future__ import annotations
 from typing import Any

@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# MergeConflictMixin - Handle merge conflict detection and resolution
-# #
-[Brief Summary]
+"""
+MergeConflictMixin - Handle merge conflict detection and resolution
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate or mix into an agent/helper class and call detect_merge_conflicts(content: str) to enumerate conflict blocks, or resolve_merge_conflict(content: str, resolution: str = "ours") to produce a merged result.
 - Example: conflicts = mixin.detect_merge_conflicts(file_text); resolved_text = mixin.resolve_merge_conflict(file_text, resolution="theirs")
@@ -56,9 +55,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Merge conflict mixin.py module".
-# #
+"""
 
 from __future__ import annotations
 
@@ -141,7 +140,7 @@ class MergeConflictMixin:
             else:
                 result.append(line)
         return "\"n".join(result)
-# #
+"""
 
 from __future__ import annotations
 

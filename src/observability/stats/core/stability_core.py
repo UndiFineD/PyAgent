@@ -16,7 +16,7 @@
 stability_core.py - Fleet stability scoring and healing thresholds
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 
 USAGE:
 - Import StabilityCore and FleetMetrics from stability_core

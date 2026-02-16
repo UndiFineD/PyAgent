@@ -16,7 +16,7 @@
 TimelineTracker - Error timeline tracking and aggregation
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.agents.timeline_tracker import TimelineTracker
 tracker = TimelineTracker()

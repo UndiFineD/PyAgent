@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # CompressionAgent - Context compression and summarization
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate as a PyAgent sub-agent to compress multi-turn conversation histories and extract concise "gists".
 - Call as async tools: compress_history(history: list[dict], target_tokens: int=500) and extract_gist(complex_report: str).
@@ -38,7 +37,7 @@ FILE CONTENT SUMMARY:
 CompressionAgent for PyAgent.
 Specializes in context window optimization, recursive summarization,
 and minimizing token usage for long-running sub-swarm dialogues.
-# #
+"""
 
 from __future__ import annotations
 
@@ -105,7 +104,7 @@ if __name__ == "__main__":
         "Token efficiency and summarization optimizer",
     ")
 "    main()
-# #
+"""
 
 from __future__ import annotations
 

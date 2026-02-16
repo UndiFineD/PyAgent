@@ -14,7 +14,7 @@
 
 
 # "Agent for voice-based interaction and thought-to-speech conversion.
-# #
+"""
 # from __future__ import annotations
 
 import logging
@@ -85,10 +85,10 @@ class VoiceInteractionAgent(BaseAgent):
 
     @as_tool
     async def run_omni_pipeline(self, audio_input_path: str) -> dict[str, str]:
-# #
+"""
         Executes the full 'See-While-Hear' pipeline: hiding latency" by pipelining.
         Audio -> Transcribe -> LLM Think -> Synthesize -> Output Audio.
-# #
+"""
         #" 1. Speech to Text
         transcription = self.transcribe_audio(audio_input_path)
         if transcription.startswith("###"):

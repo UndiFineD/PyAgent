@@ -16,7 +16,7 @@
 Logging Core - Sensitive log masking and RFC3339 timestamp formatting
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate LoggingCore(custom_patterns=None). 
 Use mask_text(text) to redact sensitive tokens in log lines 

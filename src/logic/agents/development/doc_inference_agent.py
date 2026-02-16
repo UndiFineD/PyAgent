@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # DocInferenceAgent - Layout-aware OCR and Document Reconstruction
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from doc_inference_agent import DocInferenceAgent
 agent = DocInferenceAgent("path/to/document.pdf")
@@ -36,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in layout-aware OCR and document reconstruction (Chandra Pattern).
 Converts images and PDFs into structured Markdown/JSON/HTML while preserving forms and tables.
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -80,7 +79,7 @@ class DocInferenceAgent(BaseAgent):
 
         Args:
             pdf_path: Path to the PDF file.
-# #
+"""
         if not HAS_PYPDF:
 #             return "Error: pypdf library not installed. Please install it to use this tool.
 
@@ -104,7 +103,7 @@ class DocInferenceAgent(BaseAgent):
         Args:
             doc_path: Path to the document (PDF, Image, Text).
             tags: Optional metadata tags.
-# #
+"""
         logging.info(fDocInference: Ingesting {doc_path}" into Knowledge.")
         content = (
 #             self.parse_pdf_text(doc_path) if doc_path.lower().endswith(".pdf") else "Non-PDF content raw placeholder.
@@ -155,7 +154,7 @@ class DocInferenceAgent(BaseAgent):
  "       }
 
     @as_tool
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -199,7 +198,7 @@ class DocInferenceAgent(BaseAgent):
 
         Args:
             pdf_path: Path to the PDF file.
-# #
+"""
         if not HAS_PYPDF:
 #             return "Error: pypdf library not installed. Please install it to use this tool.
 
@@ -223,7 +222,7 @@ class DocInferenceAgent(BaseAgent):
         Args:
             doc_path: Path to the document (PDF, Image, Text).
             tags: Optional metadata tags.
-# #
+"""
         logging.info(fDocInference: Ingesting {doc_path} into Knowledge.")
         content = (
 #             self.parse_pdf_text(doc_path) if doc_path.lower().endswith(".pdf") else "Non-PDF content raw placeholder.
@@ -280,9 +279,9 @@ class DocInferenceAgent(BaseAgent):
         return "Transcribed Note: 'Meeting at 5pm to discuss the new agent architecture. Don't forget the coffee.'"
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-# #
+"""
         Specialized content improvement for Documentation Inference.
-# #
+"""
         _ = target_file
         # Perform inference
         result = await self.think(prompt)

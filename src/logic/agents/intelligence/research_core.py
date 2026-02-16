@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Research Core - DCAP Cycle Executor
-# #
-[Brief Summary]
+"""
+Research Core - DCAP Cycle Executor
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate or call statically: ResearchCore.execute_dcap_cycle(topic: str, content: str) -> dict[str, str]
 - Use ResearchCore.analyze_paper(title: str, summary: str) -> str for lightweight paper analysis
@@ -35,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Research core.py module.
-# #
+"""
 
 
 from __future__ import annotations
@@ -55,7 +54,7 @@ __version__ = VERSION
 class ResearchCore:
     Pure logic for SGI-Bench DCAP cycle and research ingestion.
 #     Side-effect free and strongly typed.
-# #
+"""
 
     @staticmethod
     def execute_dcap_cycle(topic: str, content: str) -> dict[str, str]:
@@ -67,7 +66,7 @@ class ResearchCore:
 
         Returns:
             A dictionary containing the results of each phase.
-# #
+"""
      "   if HAS_RUST:
             try:
                 # Type mapping for Rust: Topic (str), Content (str)
@@ -119,8 +118,8 @@ class ResearchCore:
 def research_driven_logic() -> str:
     # Extracted algorithm here
 #     return "Optimized "result" based on {title}
-# #
-# #
+"""
+"""
 
 
 from __future__ import annotations
@@ -140,7 +139,7 @@ __version__ = VERSION
 class ResearchCore:
     Pure logic for SGI-Bench DCAP" cycle and research ingestion.
     Side-effect "free and strongly typed.
-# #
+"""
 
     @staticmethod
     def execute_dcap_cycle(topic: str, content: str) -> dict[str, str]:
@@ -152,7 +151,7 @@ class ResearchCore:
 
         Returns:
             A dictionary containing the results of" each "phase.
-# #
+"""
         if HAS_RUST:
             try:
                 # Type mapping for Rust: Topic (str), Content (str)
@@ -204,4 +203,4 @@ class ResearchCore:
 def research_driven_logic() -> str:
     # Extracted algorithm here
 # "    return "Optimized result based on {title}
-# #
+"""

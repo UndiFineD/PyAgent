@@ -18,7 +18,7 @@ from __future__ import annotations
 ReportComparison - Data model for comparing two reports
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ReportComparison to represent differences between two reports:
   comparison = ReportComparison(

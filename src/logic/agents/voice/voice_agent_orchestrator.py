@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Voice Agent Orchestrator - Multi-modal agent coordination
+"""
+Voice Agent Orchestrator - Multi-modal agent coordination
 # ========================================================
 
 Inspired by big-3-super-agent's sophisticated orchestration system.
@@ -25,7 +25,7 @@ Key Features:
 - Tool calling infrastructure
 - Cost and token tracking
 - Real-time audio processing
-# #
+"""
 
 import base64
 import logging
@@ -48,7 +48,7 @@ class VoiceAgentOrchestrator(BaseAgent):
     - Web browsing and automation
     - Data analysis and research
 #     - Real-time conversation
-# #
+"""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -222,10 +222,10 @@ class VoiceAgentOrchestrator(BaseAgent):
         self.console.print(Panel(message, "title=title, border_style=style))
 
     async def process_voice_command(self, audio_data: bytes) -> str:
-# #
+"""
         Process voice command using OpenAI Realtime API.
         This is a simplified version - full implementation would require WebSocket handling.
-# #
+"""
         #" For now, return a placeholder response
         # Full implementation would:
         # 1. Send audio to OpenAI Realtime API
@@ -270,10 +270,10 @@ class VoiceAgentOrchestrator(BaseAgent):
 #             return fCommand processed: {command}
 
     async def execute(self, context: CascadeContext, **kwargs) -> Any:
-# #
+"""
         Main execution method for voice orchestration.
         Supports both voice and text input modes.
-# #
+"""
      "   input_mode = kwargs.get("input_mode", "text")
         command = kwargs.get("command", ")
 

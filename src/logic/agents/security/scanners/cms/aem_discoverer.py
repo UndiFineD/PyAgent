@@ -26,9 +26,9 @@ import requests
 requests.packages.urllib3.disable_warnings()
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# # registered = []
+""" registered = []
 lock = Lock()
 semaphore = None
 
@@ -36,9 +36,9 @@ semaphore = None
 def error(message, **kwargs):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     print("[{}] {}".format(datetime.datetime.now().time(), message), file=sys.stderr)
+"""     print("[{}] {}".format(datetime.datetime.now().time(), message), file=sys.stderr)
     for n, a in kwargs.items():
         print("\t{}={}".format(n, a), file=sys.stderr)
 
@@ -59,13 +59,13 @@ def register(f):
 def normalize_url(base_url, path):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     if base_url[-1] == "/" and (path[0] == "/" or path[0] == "\\"):
+"""     if base_url[-1] == "/" and (path[0] == "/" or path[0] == "\\"):
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         url = base_url[:-1] + path
+"""         url = base_url[:-1] + path
     else:
         url = base_url + path
 
@@ -81,7 +81,7 @@ def http_request(url, method="GET", data=None, additional_headers=None, proxy=No
         proxy = {}
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     resp = requests.request(
         method, url, data=data, headers=headers, proxies=proxy, verify=False, timeout=15, allow_redirects=False
     )
@@ -101,9 +101,9 @@ def preflight(url, proxy=None):
 def content_type(ct):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     return ct.split(";")[0].lower().strip()
+"""     return ct.split(";")[0].lower().strip()
 
 
 @register
@@ -160,11 +160,11 @@ def by_geometrixx_page(base_url, debug, proxy=None):
 def by_get_servlet(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     GETSERVLET = itertools.product(
         ("/", "/content", "/content/dam", "/bin", "/etc", "/var"),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
             ".json",
             ".1.json",
@@ -215,9 +215,9 @@ def by_get_servlet(base_url, debug, proxy=None):
 
                 try:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                     json.loads(resp.content.decode())["jcr:primaryType"]
+"""                     json.loads(resp.content.decode())["jcr:primaryType"]
                 except Exception:
                     pass
                 else:
@@ -225,9 +225,9 @@ def by_get_servlet(base_url, debug, proxy=None):
 
                 try:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                     json.loads(resp.content.decode())["parent"]["resourceType"]
+"""                     json.loads(resp.content.decode())["parent"]["resourceType"]
                 except Exception:
                     pass
                 else:
@@ -235,9 +235,9 @@ def by_get_servlet(base_url, debug, proxy=None):
 
                 try:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                     json.loads(resp.content.decode())[0]["type"]
+"""                     json.loads(resp.content.decode())[0]["type"]
                 except Exception:
                     pass
                 else:
@@ -254,7 +254,7 @@ def by_get_servlet(base_url, debug, proxy=None):
 def by_bin_receive(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     BINRECEIVE = itertools.product(
         ("/bin/receive{0}?sling:authRequestLogin=1", "/bin/receive.servlet{0}?sling:authRequestLogin=1"),
         (".css", ".html", ".js", ".ico", ".png", ".gif", ".1.json", "...4.2.1...json"),
@@ -270,7 +270,7 @@ def by_bin_receive(base_url, debug, proxy=None):
 # [BATCHFIX] Commented metadata/non-Python
 #             header = resp.headers.get("WWW-Authenticate", ").lower()"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             if resp.status_code == 401 and (
                 "day" in header or "sling" in header or "aem" in header or "communique" in header or "adobe" in header
             ):
@@ -286,11 +286,11 @@ def by_bin_receive(base_url, debug, proxy=None):
 def by_loginstatus_servlet(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     LOGINSTATUS = itertools.product(
         ("/system/sling/loginstatus", "///system///sling///loginstatus"),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
             ".json",
             ".css",
@@ -325,11 +325,11 @@ def by_loginstatus_servlet(base_url, debug, proxy=None):
 def by_bgtest_servlet(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     TESTSERVLET = itertools.product(
         ("/system/bgservlets/test", "///system///bgservlets///test"),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
             ".json",
             ".css",
@@ -364,14 +364,14 @@ def by_bgtest_servlet(base_url, debug, proxy=None):
 def by_crx(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     CRX = itertools.product(
         ("/crx/de/index.jsp", "/crx/explorer/browser/index.jsp", "/crx/packmgr/index.jsp"),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #             ","  # [BATCHFIX] closed string
             ";%0aa.css",
             ";%0aa.html",
@@ -397,7 +397,7 @@ def by_crx(base_url, debug, proxy=None):
             resp = http_request(url, proxy=proxy)
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             if resp.status_code == 200 and (
                 "CRXDE Lite" in str(resp.content)
                 or "Content Explorer" in str(resp.content)
@@ -415,7 +415,7 @@ def by_crx(base_url, debug, proxy=None):
 def by_gql_servlet(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     GQLSERVLET = (
         "/bin/wcm/search/gql.servlet.json?query=type:base%20limit:..1&pathPrefix=",
         "/bin/wcm/search/gql.json?query=type:base%20limit:..1&pathPrefix=",
@@ -456,9 +456,9 @@ def by_gql_servlet(base_url, debug, proxy=None):
             if resp.status_code == 200:
                 try:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                     json.loads(resp.content.decode())["hits"]
+"""                     json.loads(resp.content.decode())["hits"]
                 except Exception:
                     pass
                 else:
@@ -474,7 +474,7 @@ def by_gql_servlet(base_url, debug, proxy=None):
 def by_css_js(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     CSSJS = (
         "/etc/clientlibs/wcm/foundation/main.css",
         "/etc/clientlibs/social/connect.js",
@@ -491,7 +491,7 @@ def by_css_js(base_url, debug, proxy=None):
             resp = http_request(url, proxy=proxy)
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             if resp.status_code == 200 and (
                 "ADOBE CONFIDENTIAL" in str(resp.content) or "JCR repository" in str(resp.content)
             ):
@@ -507,14 +507,14 @@ def by_css_js(base_url, debug, proxy=None):
 def by_siren_api(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     SIREN = itertools.product(
         ("/api/content.json",),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #             ","  # [BATCHFIX] closed string
             ".css",
             ".js",
@@ -554,11 +554,11 @@ def by_siren_api(base_url, debug, proxy=None):
 def by_post_servlet(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     POSTSERVLET = itertools.product(
         ("/", "/content", "/content/dam"),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
             ".json",
             ".1.json",
@@ -586,12 +586,12 @@ def by_post_servlet(base_url, debug, proxy=None):
         url = normalize_url(base_url, path)
         try:
 # [BATCHFIX] Commented metadata/non-Python
-# #             data = ":operation=nop"  # [BATCHFIX] closed string
+"""             data = ":operation=nop"  # [BATCHFIX] closed string
             headers = {"Content-Type": "application/x-www-form-urlencoded", "Referer": base_url}
             resp = http_request(url, "POST", data=data, additional_headers=headers, proxy=proxy)
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             if resp.status_code == 200 and (
                 "Null Operation Status:" in str(resp.content) or "Parent Location" in str(resp.content)
             ):
@@ -607,7 +607,7 @@ def by_post_servlet(base_url, debug, proxy=None):
 def by_swf(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     SWFS = (
         "/etc/clientlibs/foundation/video/swf/player_flv_maxi.swf",
         "/etc/clientlibs/foundation/video/swf/player_flv_maxi.swf.res",
@@ -667,15 +667,15 @@ def handle_finding(future):
 def parse_args():
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     parser = argparse.ArgumentParser(
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         description=(
 # [BATCHFIX] Commented metadata/non-Python
-# #             "AEM discoverer by @0ang3el, see the slides -"  # [BATCHFIX] closed string
+"""             "AEM discoverer by @0ang3el, see the slides -"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #             "https://speakerdeck.com/0ang3el/hunting-for-security-bugs-in-aem-webapps"  # [BATCHFIX] closed string
+"""             "https://speakerdeck.com/0ang3el/hunting-for-security-bugs-in-aem-webapps"  # [BATCHFIX] closed string
         )
     )
 
@@ -685,9 +685,9 @@ def parse_args():
     parser.add_argument("--workers", type=int, default=50, help="number of parallel workers")
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     return parser.parse_args(sys.argv[1:])
+"""     return parser.parse_args(sys.argv[1:])
 
 
 def main():
@@ -727,5 +727,5 @@ def main():
 
 if __name__ == "__main__":
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 #     main()

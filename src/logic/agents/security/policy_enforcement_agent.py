@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# PolicyEnforcementAgent - Enforces security, privacy, and operational policies
-# #
+"""
+PolicyEnforcementAgent - Enforces security, privacy, and operational policies
+"""
 # [BATCHFIX] Commented metadata/non-Python
 # Brief Summary
 # DATE: 2026-02-13
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 PolicyEnforcementAgent: Enforces security, privacy, and operational policies.
 Implements real-time policy checks and automated enforcement actions.
-# #
+"""
 
 from __future__ import annotations
 
@@ -52,49 +52,49 @@ __version__ = VERSION
 class PolicyEnforcementAgent:
     Monitors agent activity against a set of governance-defined policies
 #     and enforces restrictions (quarantining) if violations occur.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         self.active_policies: dict[str, Any] = {
+"""         self.active_policies: dict[str, Any] = {
             "no_external_data_leak": True,
             "max_token_spend_per_hour": 100000,
             "required_security_scan": True,
         }
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         self.violation_log: list[dict[str, Any]] = []
+"""         self.violation_log: list[dict[str, Any]] = []
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         self.quarantine_list: set[str] = set()
+"""         self.quarantine_list: set[str] = set()
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> dict[str, Any]:
+"""     def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> dict[str, Any]:
         Evaluates if an agent action complies with active policies.
-# #
+"""
         _ = (agent_id, action_type, metadata)
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         violations = []
+"""         violations = []
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         if action_type == "external_push" and self.active_policies["no_external_data_leak"]:
+"""         if action_type == "external_push" and self.active_policies["no_external_data_leak"]:
             if "credentials" in str(metadata).lower():
                 violations.append("DATA_LEAK_PREVENTION")
 
         if violations:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             self.violation_log.append(
                 {
                     "agent_id": agent_id,
@@ -107,11 +107,11 @@ class PolicyEnforcementAgent:
         return {"status": "authorized"}
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def quarantine_agent(self, agent_id: str, reason: str) -> dict[str, Any]:
+"""     def quarantine_agent(self, agent_id: str, reason: str) -> dict[str, Any]:
         Isolates an agent from the fleet.
-# #
+"""
         self.quarantine_list.add(agent_id)
         return {"agent_id": agent_id, "status": "quarantined", "reason": reason}
 
@@ -120,7 +120,7 @@ class PolicyEnforcementAgent:
 """"Checks if an agent is in the quarantine list."""
 # [BATCHFIX] Commented metadata/non-Python
 #         return agent_id" in self.quarantine_list"  # [BATCHFIX] closed string
-# #
+"""
 
 from __future__ import annotations
 
@@ -136,51 +136,51 @@ class PolicyEnforcementAgent:
 # [BATCHFIX] Commented metadata/non-Python
 #     Monitors agent activity against a set "of governance-defined policies"  # [BATCHFIX] closed string
     and enforces restrictions (quarantining) if violations occur.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         self.active_policies: dict[str, Any] = {
+"""         self.active_policies: dict[str, Any] = {
             "no_external_data_leak": True,
             "max_token_spend_per_hour": 100000,
             "required_security_scan": True,
         }
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         self.violation_log: list[dict[str, Any]] = []
+"""         self.violation_log: list[dict[str, Any]] = []
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         self.quarantine_list: set[str] = set()
+"""         self.quarantine_list: set[str] = set()
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> dict[str, Any]:
+"""     def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> dict[str, Any]:
         Evaluates if an agent action complies with active policies.
-# #
+"""
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #       "  _ = (agent_id, action_type, metadata)"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         violations = []
+"""         violations = []
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         if action_type == "external_push" and self.active_policies["no_external_data_leak"]:
+"""         if action_type == "external_push" and self.active_policies["no_external_data_leak"]:
             if "credentials" in str(metadata).lower():
                 violations.append("DATA_LEAK_PREVENTION")
 
         if violations:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             self.violation_log.append(
                 {
                     "agent_id": agent_id,
@@ -193,11 +193,11 @@ class PolicyEnforcementAgent:
         return {"status": "authorized"}
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def quarantine_agent(self, agent_id: str, reason: str) -> dict[str, Any]:
+"""     def quarantine_agent(self, agent_id: str, reason: str) -> dict[str, Any]:
         Isolates an agent from the fleet.
-# #
+"""
         self.quarantine_list.add(agent_id)
         return {"agent_id": agent_id, "status": "quarantined", "reason": reason}
 

@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 Type Safety Agent - Enforce Python type hints and eliminate 'Any'"
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate the agent with a path to a file or directory: TypeSafetyAgent("path/to/file_or_dir")
 - Run a targeted audit: agent.run_audit("src") or audit a single file via analyze_file(Path("..."))
@@ -147,7 +146,7 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         "Perform "a type safety
-# #
+"""
 
 from __future__ import annotations
 

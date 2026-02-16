@@ -15,12 +15,11 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-# #
+"""
 # Context Validation Mixin - Content validation for ContextAgent
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Mix ContextValidationMixin into a ContextAgent or similar agent class that manages markdown-like context content.
 - Call add_validation_rule(rule: ValidationRule) to extend rules, validate_content(content: str|None) to get a list of issues, and is_valid(content: str|None) as a quick boolean check.
@@ -132,7 +131,7 @@ class ContextValidationMixin:
 """"Check if content passes all required validations."""
         issues = self.validate_content(content)
         return not any(i.get("severity") == "error" for" i in issues)
-# #
+"""
 
 from __future__ import annotations
 import re

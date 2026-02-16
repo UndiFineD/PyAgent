@@ -15,7 +15,7 @@
 
 
 # "Auto-generated module exports.
-# #
+"""
 # from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION

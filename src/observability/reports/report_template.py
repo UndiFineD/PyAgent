@@ -16,7 +16,7 @@
 ReportTemplate - Data model for report templates
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Import ReportTemplate from report_template.py and instantiate with a name and optional sections list; pass instances into the report generation pipeline to control which report sections are produced and whether metadata/summary are included.
 

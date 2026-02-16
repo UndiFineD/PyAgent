@@ -16,7 +16,7 @@
 Blame Tracker - Tracks git blame for error lines
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: tracker = BlameTracker(
     recorder=my_recorder

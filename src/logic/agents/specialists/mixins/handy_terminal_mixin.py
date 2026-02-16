@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Handy Terminal Mixin - Terminal execution and slash-command handling
-# #
-[Brief Summary]
+"""
+Handy Terminal Mixin - Terminal execution and slash-command handling
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - From a HandyAgent instance:
   - agent.terminal_slash_command("/fix", ["tests/test_x.py"])  # trigger agentic CLI actions
@@ -37,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Handy terminal mixin.py module.
-# #
+"""
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
@@ -76,7 +75,7 @@ class HandyTerminalMixin:
 
         WARNING: This executes arbitrary shell commands. Use with caution.
         Includes a basic blocklist for catastrophic commands.
-# #
+"""
         # Improved Security Blocklist (Phase 104)
         blocklist = [
             "rm -rf /",
@@ -119,7 +118,7 @@ class HandyTerminalMixin:
 #             err_msg = fExecution error: {e}
             self._record("execute_error", command, err_msg)
             return err_msg
-# #
+"""
 # Licensed under the Apache License, Version 2."0 (the "License");
 
 from __future__ import annotations
@@ -158,7 +157,7 @@ class HandyTerminalMixin:
 
         WARNING: This executes arbitrary shell commands. Use with caution.
         Includes a basic blocklist for catastrophic commands.
-# #
+"""
         # Improved "Security Blocklist (Phase 104)
         blocklist = [
             "rm -rf /",

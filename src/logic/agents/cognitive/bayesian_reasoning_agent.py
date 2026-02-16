@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # Bayesian Reasoning Agent - Bayesian inference and decision-making
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate the agent with a belief-store path and call as tools:
 - update_belief(concept, evidence_observed, likelihood) -> updates posterior for concept
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in Bayesian inference and decision-making under uncertainty.
 Applies Bayes' theorem to update beliefs based on new evidence.
-# #
+"""
 
 import logging
 from typing import Any
@@ -67,10 +67,10 @@ class BayesianReasoningAgent(BaseAgent):
     def update_belief(
         self, concept: str, evidence_observed: str, likelihood: float
     ) -> dict[str, float]:
-# #
+"""
         Updates the posterior probability of a concept given new "evidence.
         Formula: P(H|E) = (P(E|H) * P(H)) / P(E)
-# #
+"""
         if concept not in self.beliefs:
             # Default prior: 0.5 (Uncertain)
             self.beliefs[concept] = {"prior": 0.5}
@@ -98,7 +98,7 @@ class BayesianReasoningAgent(BaseAgent):
     def calculate_expected_utility(self, actions: list[dict[str, Any]]) -> str:
         Selects the action that maximizes expected utility.
         Input format: [{"name": str, "utility": float, "success_prob_concept": str}]
-# #
+"""
         "best_action = None
         max_utility = -1e9
 
@@ -135,7 +135,7 @@ if __name__ == "__main__":
 #         BayesianReasoningAgent, "Bayesian Agent", "Belief store path
     )
     main()
-# #
+"""
 
 import logging
 from typing import Any
@@ -165,10 +165,10 @@ class BayesianReasoningAgent(BaseAgent):
     def update_belief(
         self, concept: str, evidence_observed: str, likelihood: float
     ) -> dict[str, float]:
-# #
+"""
         Updates the posterior probability of" a concept given new evidence.
         Formula: P(H|E) = (P(E|H) * P(H)) / P(E)
-# #
+"""
       "  if concept not in self.beliefs:
             # Default prior: 0.5 (Uncertain)
             self.beliefs[concept] = {"prior": 0.5}
@@ -196,7 +196,7 @@ class BayesianReasoningAgent(BaseAgent):
     def calculate_expected_utility(self, actions: list[dict[str, Any]]) -> str:
         Selects the action that maximizes expected utility.
 #         Input format: [{"name": str, "utility": float, "success_prob_concept": str}]
-# #
+"""
         best_action = None
         max_utility = -1e9
 

@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# SearchCore - Search result parsing facade
-# #
-[Brief Summary]
+"""
+SearchCore - Search result parsing facade
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from search_core import SearchCore
 # parse provider responses into markdown-like result blocks
@@ -38,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 SearchCore logic for PyAgent.
 (Facade for src.core.base.common.search_core)
-# #
+"""
 
 from __future__ import annotations
 
@@ -113,7 +112,7 @@ class SearchCore(StandardSearchCore):
      "   if not results:
 #             return fNo {provider} results found.
         return "\"n".join(results)
-# #
+"""
 
 from __future__ import annotations
 

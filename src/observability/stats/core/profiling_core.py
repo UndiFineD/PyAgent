@@ -16,7 +16,7 @@
 Profiling Core - cProfile aggregation and bottleneck analysis
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import ProfilingCore and ProfileStats from profiling_core.
 - Use ProfilingCore.analyze_stats(pstats_obj, limit=10) to convert a

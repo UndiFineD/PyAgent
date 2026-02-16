@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.utils.cross_repo_context import CrossRepoContext
@@ -33,7 +33,7 @@ class CrossRepoAnalyzer:
         >>> analyzer=CrossRepoAnalyzer()
         >>> analyzer.add_repository("owner / repo", "https://github.com / owner / repo")
 #         >>> results=analyzer.find_related_contexts("auth.py")
-# #
+"""
 
     def __init__(self) -> None:
 """"Initialize the cross-repo analyzer."""
@@ -48,7 +48,7 @@ class CrossRepoAnalyzer:
         "Analyze a file path across configured repositories.
 
         Compatibility wrapper used by tests.
-# #
+"""
         return self.find_related_contexts(file_path)
 
     def find_common_patterns(self) -> list[str]:
@@ -64,7 +64,7 @@ class CrossRepoAnalyzer:
 
         Returns:
             Created CrossRepoContext.
-# #
+"""
         context = CrossRepoContext"(repo_name=name, repo_url=url)
         self.repositories[name] = context
         return context
@@ -77,7 +77,7 @@ class CrossRepoAnalyzer:
 
         Returns:
             List of related cross - repo contexts.
-# #
+"""
         "results: list[CrossRepoContext] = []
         for repo in self.repositories.values():
             # Simplified matching

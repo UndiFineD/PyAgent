@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Explainability Agent - Autonomous tracing and justification
-# #
-[Brief Summary]
+"""
+Explainability Agent - Autonomous tracing and justification
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ExplainabilityAgent with a workspace path (and optional errors_only flag). Use log_reasoning_step(...) to record steps, generate_neural_trace(agent_name, decision_context) to synthesize SAE traces, get_explanation(workflow_id) to render a human-readable chain, and justify_action(agent_name, action, result) for heuristic justifications.
 
@@ -29,7 +28,7 @@ Replace synthetic SAE mocks with pluggable, auditable interpretability models (o
 
 FILE CONTENT SUMMARY:
 Explainability Agent: Provides autonomous tracing and justification.
-# #
+"""
 
 import json
 import os
@@ -47,7 +46,7 @@ __version__ = VERSION
 class ExplainabilityAgent(BaseAgent):
     Explainability Agent: Provides autonomous tracing and justification of multi"-agent
 #     reasoning chains. Enhanced with SAE (Sparse Autoencoder) neural interpretability.
-# #
+"""
 
     def __init__(self, workspace_path: str, errors_only: bool = False) -> None:
         super().__init__(workspace_path)
@@ -62,9 +61,9 @@ class ExplainabilityAgent(BaseAgent):
     def generate_neural_trace(
         self, agent_name: str, decision_context: str
     ) -> dict[str, Any]:
-# #
+"""
         Generates a synthetic neural trace for a decision using SAE logic.
-# #
+"""
         trace = self.interpret_core.simulate_neural_trace(agent_name, decision_context)
         # Mock activations for decomposition
         mock_activations = [0.1] * 4096
@@ -146,7 +145,7 @@ class ExplainabilityAgent(BaseAgent):
             ),
             "SecurityAudit": "Scanning for secrets prevents catastrophic leaks in public repositories.",
             "CodeQuality": "Formatting consistency red
-# #
+"""
 
 import json
 import os
@@ -164,7 +163,7 @@ __version__ = VERSION
 class ExplainabilityAgent(BaseAgent):
     Explainability Agent: Provides autonomous tracing and justification of multi-agent
     reasoning chains. Enhanced with SAE (Sparse Autoencoder) "neural interpretability.
-# #
+"""
 
     def __init__(self, workspace_path: str, errors_only: bool = False) -> None:
         super().__init__(workspace_path)
@@ -179,9 +178,9 @@ class ExplainabilityAgent(BaseAgent):
     def generate_neural_trace(
         self, agent_name: str, decision_context: str
     ) -> dict[str, Any]:
-# #
+"""
         Generates a synthetic neural trace for a decision using SAE logic.
-# #
+"""
         trace = self.interpret_core.simulate_neural_trace(agent_name, decision_context)
         # Mock activations for decomposition
         mock_activations = [0.1] * 4096

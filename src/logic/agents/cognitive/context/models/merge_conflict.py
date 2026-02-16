@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.utils.conflict_resolution import (
@@ -35,7 +35,7 @@ class MergeConflict:
         ours: Our version of content.
         theirs: Their version of content.
 #         resolution: Applied resolution.
-# #
+"""
 
     section: str
     ours: str

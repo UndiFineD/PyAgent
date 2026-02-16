@@ -17,7 +17,7 @@ PylintFixerMixin - Automated Pylint issue remediation
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Mix into a Maintenance Agent or similar tool to programmatically apply
   simple, conservative fixes for common Pylint warnings across a codebase.

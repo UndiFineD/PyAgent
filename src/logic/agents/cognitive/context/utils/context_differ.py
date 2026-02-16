@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 import re
 
@@ -33,7 +33,7 @@ class ContextDiffer:
     Example:
         >>> differ=ContextDiffer()
 #         >>> diff=differ.diff_versions(old_content, new_content)
-# #
+"""
 
     def __init__(self) -> None:
 """"Initialize context differ."""
@@ -78,7 +78,7 @@ class ContextDiffer:
 
         Returns:
             ContextDiff with changes.
-# #
+"""
   "      # Extract sections
         sections_from: set[str] = set(re.findall(r"##\\\\s+(\w+)", content_from))
         sections_to: set[str] = set(re.findall(r"##\\\\s+(\w+)", content_to))

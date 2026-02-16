@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from dataclasses import dataclass, field
@@ -32,7 +32,7 @@ class GeneratedCode:
         code: Generated code content.
         context_used: Context files used for generation.
 #         description: Description of what the code does.
-# #
+"""
 
     language: str
     code: str

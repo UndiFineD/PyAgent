@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Cognitive Super-Agent - Fused Reasoning & Reflection
-# #
-[Brief Summary]
+"""
+Cognitive Super-Agent - Fused Reasoning & Reflection
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with workspace path: agent = CognitiveSuperAgent(rC:\\\\path\to\workspace")
 - Run synchronous accelerated thinking: output = agent.accelerated_think("Explain X")
@@ -35,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Cognitive Super-Agent: A fused agent combining Reasoning and Reflection.
-# #
+"""
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -48,7 +47,7 @@ __version__ = VERSION
 class CognitiveSuperAgent(BaseAgent):
     Cognitive Super-Agent: A fused agent combining Reasoning and Reflection
 #     capabilities for high-performance cognitive workflows.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -66,7 +65,7 @@ class CognitiveSuperAgent(BaseAgent):
 #         "Override to use cognitive acceleration.
         "_ = target_file
         return self.accelerated_think(prompt)
-# #
+"""
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -79,7 +78,7 @@ __version__ = VERSION
 class CognitiveSuperAgent(BaseAgent):
     Cognitive Super-Agent: A fused agent combining Reasoning and Reflection
     capabilities for high-performance cognitive workflows.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)

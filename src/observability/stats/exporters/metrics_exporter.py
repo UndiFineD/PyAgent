@@ -16,7 +16,7 @@
 Metrics Exporter - Consolidate and expose fleet telemetry
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: exporter = MetricsExporter()
 - Record agent call: exporter.record_agent_call("AgentName", duration_ms, success_bool)

@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Resource Forecasting Agent - Predict Future Resource Needs
-# #
-[Brief Summary]
+"""
+Resource Forecasting Agent - Predict Future Resource Needs
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Import ResourceForecastingAgent from src.core... and instantiate as part of the Tier 3 strategy agents. Use log_usage_snapshot(cpu, memory, tokens) to record periodic telemetry, call predict_future_needs(horizon_hours=int) to retrieve a prediction dictionary, and call get_scaling_recommendation() to receive a simple list of recommended actions. This module is currently a standardized placeholder and safe to integrate as a stub in higher-level orchestration and testing flows.
 
@@ -29,7 +28,7 @@ Replace static, hard-coded predictions with a real forecasting pipeline (time-se
 
 FILE CONTENT SUMMARY:
 Resource forecasting agent module.
-# #
+"""
 
 from __future__ import annotations
 

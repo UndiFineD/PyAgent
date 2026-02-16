@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# CodeQualityAgent - Automated Code Quality Guard
-# #
+"""
+CodeQualityAgent - Automated Code Quality Guard
+"""
 Brief Summary
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate CodeQualityAgent with the repository workspace path
 - Call analyze_file_quality(file_path) to get a per-file report
@@ -36,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 CodeQualityAgent: Analyzes and improves code quality across Python, Rust, and JavaScript files in PyAgent.
 Provides linting, scoring, and automated code improvement for maintainability and standards compliance.
-# #
+"""
 
 from __future__ import annotations
 
@@ -55,7 +55,7 @@ __version__ = VERSION
 class CodeQualityAgent(BaseAgent):
     Automated Code Quality Guard: Performs linting, formatting checks,
 #     and complexity analysis for Python, Rust, and JavaScript.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)

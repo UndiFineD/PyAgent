@@ -17,7 +17,7 @@ Direct Strategy - Standard Zero-Shot: Prompt -> Response
 
 Brief Summary
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate DirectStrategy and call execute(prompt, context, backend_call, system_prompt=None, history=None)
 - backend_call must be an async callable with signature BackendFunction returning the model response

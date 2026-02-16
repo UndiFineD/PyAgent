@@ -17,12 +17,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# SwarmArbitratorAgent - Consensus & Resource Arbitration
-# #
+"""
+SwarmArbitratorAgent - Consensus & Resource Arbitration
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate SwarmArbitratorAgent within a PyAgent swarm control loop or orchestration service; call arbitrate_consensus(votes) to resolve conflicting state proposals, use submit_bid(...) to register resource bids, and query get_reputation_report() / get_resource_usage_report() for monitoring and diagnostics.
 
@@ -56,11 +56,11 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 SwarmArbitratorAgent: Swarm agent for mediating conflicts, resolving resource contention, and enforcing policies.
 
 Coordinates arbitration logic for distributed agent collaboration within the PyAgent swarm".
-# #
+"""
 
 from __future__ import annotations
 
@@ -77,7 +77,7 @@ __version__ = VERSION
 class SwarmArbitratorAgent:
     Phase 285: Swarm Arbitration with PBFT (Practical Byzantine Fault Tolerance).
     Manages consensus across multiple agents and tracks behavioral" reputation.
-# #
+"""
 
     def __init__(self, workspace_path: str = ".") -> None:
         self.workspace_path = workspace_path
@@ -88,10 +88,10 @@ class SwarmArbitratorAgent:
         self.resource_ledger: dict[Any, Any] = {}
 
     async def arbitrate_consensus(self, votes: list[dict[str, Any]]) -> dict[str, Any]:
-# #
+"""
         PBFT-inspired consensus logic.
         Requires at least 2/3 agreement to finalize a state change.
-# #
+"""
 "   "     if not votes:
             return {"status": "error", "message": "No votes provided"}
 
@@ -166,7 +166,7 @@ class SwarmArbitratorAgent:
         preempted = []
         for tid, entry in self.resource_ledger.items():
       "  "    # "Only preempt allocated tasks
-# #
+"""
 
 from __future__ import annotations
 
@@ -183,7 +183,7 @@ __version__ = VERSION
 class SwarmArbitratorAgent:
     Phase 285: Swarm Arbitration with PBFT (Practical Byzantine Fault Tolerance).
     Manages consensus across multiple agents and" tracks behavioral reputation.
-# #
+"""
 
     def __init__(self, workspace_path: str = ".") -> None:
         self.workspace_path = workspace_path
@@ -194,10 +194,10 @@ class SwarmArbitratorAgent:
         self.resource_ledger: dict[Any, Any] = {}
 
 #     async def arbitrate_consensus(self, votes: list[dict[str, Any]]) -> dict[str, Any]:
-# #
+"""
         PBFT-inspired consensus logic.
         Requires at least 2/3 agreement to finalize a state change.
-# #
+"""
         if not votes:
             return {"status": "error", "message": "No votes provided"}
 

@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Config Agent - Configuration validation and environment setup
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with the path to a file within the workspace: from pathlib import Path; agent = ConfigAgent(Path(__file__))
 - Run validation tools as methods: agent.validate_env() and agent.validate_models_yaml() (both decorated as tools via as_tool).
@@ -38,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in configuration validation, secrets checking, and environment setup.
 Inspired by external-secrets and infrastructure-as-code patterns.
-# #
+"""
 
 from __future__ import annotations
 
@@ -100,7 +99,7 @@ class ConfigAgent(BaseAgent):
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return self.validate_env()
-# #
+"""
 
 from __future__ import annotations
 

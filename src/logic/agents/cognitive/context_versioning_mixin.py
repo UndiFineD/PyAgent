@@ -15,12 +15,11 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-# #
+"""
 # Context Versioning Mixin - Context snapshotting and compression
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Inherit into a ContextAgent-like class.
 - Use create_version(version, changes, author) to snapshot current/previous content.
@@ -152,7 +151,7 @@ class ContextVersioningMixin:
             compressed = self.compress_content(content)
         compressed_size = len(compressed)
         return 1 - (compressed_size / original_size)
-# #
+"""
 
 from __future__ import annotations
 import hashlib

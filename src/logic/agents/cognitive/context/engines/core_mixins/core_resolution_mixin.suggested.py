@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Core resolution mixin for conflict management.
-# #
-# #
+"""
+Core resolution mixin for conflict management.
+"""
+"""
 from typing import Any
 from datetime import datetime
 

@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Resource Curation Agent - Manages parsing, summarizing, and indexing external research resources
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ResourceCurationAgent and call as_tool methods (e.g., add_resource(url, title, summary?, tags?)), use process_research_queue(urls) for bulk discovery, and await improve_content(prompt, target_file?) for asynchronous summary updates.
 
@@ -32,7 +31,7 @@ FILE CONTENT SUMMARY:
 ResourceCurationAgent for PyAgent.
 Specializes in parsing, summarizing, and indexing external research links,
 blog posts, and technical papers into the agent's knowledge base.
-# #
+"""
 
 from __future__ import annotations
 
@@ -117,7 +116,7 @@ if __name__ == "__main__":
         "Curating research and documentation",
    " )
     main()
-# #
+"""
 
 from __future__ import annotations
 

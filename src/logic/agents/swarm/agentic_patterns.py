@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Agentic Patterns - Sequential Agent Orchestration
-# #
-[Brief Summary]
+"""
+Agentic Patterns - Sequential Agent Orchestration
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate SequentialAgentPattern with an
   OrchestratorWorkPatternMixin implementation and
@@ -66,7 +65,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Sequential agent orchestration pattern.
-# #
+"""
 
 import asyncio
 import logging
@@ -78,28 +77,30 @@ if TYPE_CHECKING:
     from src.core.base.common.models.communication_models import CascadeContext, WorkState  # type: ignore
 else:
     # Runtime fallback stubs to avoid import errors when the package or stubs are not available.
-    class CascadeContext:
-        "Fallback stub for CascadeContext.
+    pass
 
-        Lightweight stub used at runtime when real CascadeContext is unavailable;
-        preserves a task_id and can create child contexts.
-# #
-        def __init__(self, *_args, task_id: str = "task", **"_kwargs):
-            self.task_id = task_id
+class CascadeContext:
+    """Fallback stub for CascadeContext.
 
-        def next_level(self, child_task_id: str = ", _agent_id: str = ") -> "CascadeContext":
-""""Return a child CascadeContext preserving or overriding task_id."""
-            # Simple passthrough stub that preserves a task_id for downstream code that uses it.
-            return CascadeContext(task_id=child_task_id or self.task_id)
+    Lightweight stub used at runtime when real CascadeContext is unavailable;
+    preserves a task_id and can create child contexts.
+    """
+    def __init__(self, *_args, task_id: str = "task", **_kwargs):
+        self.task_id = task_id
 
-    class WorkState:
-""""Fallback stub for WorkState which stores results in a dict."""
-        def "__init__(self):
-            self.results = {}
+    def next_level(self, child_task_id: str = ", _agent_id: str = ") -> "CascadeContext":
+        """Return a child CascadeContext preserving or overriding task_id."""
+        # Simple passthrough stub that preserves a task_id for downstream code that uses it.
+        return CascadeContext(task_id=child_task_id or self.task_id)
 
-        def update(self, key, value):
-""""Update the internal results mapping."""
-            self.results[key] = value
+class WorkState:
+    """Fallback stub for WorkState which stores results in a dict."""
+    def __init__(self):
+        self.results = {}
+
+    def update(self, key, value):
+        """Update the internal results mapping."""
+        self.results[key] = value
 
 from src.logic.agents.swarm.orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
 
@@ -108,7 +109,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class SequentialAgentConfig:
-""""Configuration for sequential" agent execution."""
+    """Configuration for sequential agent execution."""
 
     name: str
 #     description: str =
@@ -119,16 +120,16 @@ class SequentialAgentConfig:
 
 
 class SequentialAgentPattern:
-    Sequential "agent execution pattern.
+    """Sequential agent execution pattern.
 
     This pattern executes agents in sequence, where each agent's output
     can be used as input for subsequent agents. Inspired by agentic design
     patterns from ADK (Agentic" Design Patterns).
-# #
+    """
 
-    def __init__(self, orchestrator: OrchestratorWorkPatternMixin):
-""""Initialize the sequential agent pattern."""
-        self.orchestrator = orchestrator
+def __init__(self, orchestrator: OrchestratorWorkPatternMixin):
+    """Initialize the sequential agent pattern."""
+    self.orchestrator = orchestrator
 
     async def execute_sequential(
         self,
@@ -137,8 +138,8 @@ class SequentialAgentPattern:
         initial_input: Dict[str, Any],
         **kwargs
     ) -> Dict[str, Any]:
-# #
-  "      Execute agents in sequence.
+        """
+        Execute agents in sequence.
 
         Args:
             context: Cascade context for execution
@@ -148,8 +149,8 @@ class SequentialAgentPattern:
 
         Returns:
             Dict containing execution results
-# #
-        logger.info(fStarting sequential execution for {config.name}")
+        """
+        logger.info(f"Starting sequential execution for {config.name}")
 
         # Initialize execution state safely (WorkState API may vary)
         execution_state = WorkState()
@@ -178,8 +179,8 @@ class SequentialAgentPattern:
         current_input = initial_input
 
         for i, agent_config in enumerate(config.sub_agents):
-            agent_name = agent_config.get("name", fagent_{i}")
-            logger.info(fExecuting agent {i+1}/{len(config.sub_agents)}: {agent_name}")
+            agent_name = agent_config.get("name", f"agent_{i}")
+            logger.info(f"Executing agent {i+1}/{len(config.sub_agents)}: {agent_name}")
 
             try:
                 # Create child context for this agent
@@ -205,7 +206,7 @@ class SequentialAgentPattern:
                 })
 
                 # Update execution state with this agent's output
-                output_key = agent_config.get("output_key", fagent_{i}_output")
+                output_key = agent_config.get("output_key", f"agent_{i}_output")
                 try:
                     execution_state.update(output_key, agent_result)
                 except Exception:
@@ -220,7 +221,7 @@ class SequentialAgentPattern:
                 )
 
             except Exception as e:
-                logger.exception(fAgent {agent_name} failed")
+                logger.exception(f"Agent {agent_name} failed")
                 results.append({
                     "agent": agent_name,
                     "success": False,
@@ -229,7 +230,7 @@ class SequentialAgentPattern:
                 })
 
                 if not config.continue_on_failure:
-                    logger.error(fStopping sequential execution due to failure in {agent_name}")
+                    logger.error(f"Stopping sequential execution due to failure in {agent_name}")
                     break
 
                 # Continue with previous input for next agent
@@ -258,13 +259,19 @@ class SequentialAgentPattern:
         execution_state: WorkState,
         **kwargs
     ) -> Any:
-# #
-        Execute a single agent using the" orchestrator when available, otherwise
+        """
+        Execute a single agent using the orchestrator when available, otherwise
         provide a safe fallback result.
 
         This method intentionally attempts common orchestrator entrypoints and
         falls back to sensible defaults to avoid runtime AttributeError.
-# #
+        Args:
+            agent_context: Cascade context for the agent
+            agent_config: Configuration dict for the agent
+            current_input: Input data for the agent
+            execution_state: Current execution state to allow stateful operations
+            **kwargs: Additional parameters that may be needed for execution
+        """
         # Try execute_with_pattern first (preferred for work patterns)
         if hasattr(self.orchestrator, 'execute_with_pattern') and callable(getattr(self.orchestrator, 'execute_with_pattern')):
             try:
@@ -316,10 +323,10 @@ class SequentialAgentPattern:
         agent_result: Any,
         agent_config: Dict[str, Any]
     ) -> Dict[str, Any]:
-# #
-        Prepare the input "for the next agent in the sequence by merging
+        """
+        Prepare the input for the next agent in the sequence by merging
         dict results or storing non-dict results under an output key.
-# #
+        """
         # If agent_result is a dict, merge shallowly (agent result wins)
         if isinstance(agent_result, dict):
             merged = {}

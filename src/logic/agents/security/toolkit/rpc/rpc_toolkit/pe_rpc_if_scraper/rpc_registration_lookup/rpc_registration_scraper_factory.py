@@ -33,9 +33,9 @@ from rpc_registration_lookup.ida_rpc_registration_scraper import IdaProRpcRegist
 from rpc_registration_lookup.radare_rpc_registration_scraper import Radare2RpcRegistrationExtractor
 
 # [BATCHFIX] Commented metadata/non-Python
-# # IDA = "idapro"  # [BATCHFIX] closed string
+""" IDA = "idapro"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # RADARE = "radare"  # [BATCHFIX] closed string
+""" RADARE = "radare"  # [BATCHFIX] closed string
 
 _factory = {IDA: IdaProRpcRegistrationExtractor, RADARE: Radare2RpcRegistrationExtractor}
 disassemblers = list(_factory.keys())
@@ -51,6 +51,6 @@ def rpc_registration_scraper_factory(disassembler: str) -> BaseRpcRegistrationEx
     if disassembler not in _factory:
         raise UnsupportedDisassemblerTypeException(disassembler)
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     return _factory[disassembler]
+"""     return _factory[disassembler]

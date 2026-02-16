@@ -17,10 +17,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Localization core module.
-# #
-# #
+"""
+Localization core module.
+"""
+"""
 from __future__ import annotations
 
 import re
@@ -37,7 +37,7 @@ except ImportError:
 class LocalizationCore:
     LocalizationCore handles translation logic (placeholder) and Cultural Guardrails.
 #     It identifies problematic idioms or metaphors in multi-agent communication.
-# #
+"""
 
     def __init__(self) -> None:
         # List of potentially offensive or culturally insensitive metaphors/idioms
@@ -56,7 +56,7 @@ class LocalizationCore:
     def detect_cultural_issues(self, text: str) -> list[dict[str, Any]]:
         Detects cultural red flags in agent communication.
         Returns a list of identified issues with suggestions.
-# #
+"""
      "   "if HAS_RUST:
             try:
                 # Rust implementation expects regex patterns

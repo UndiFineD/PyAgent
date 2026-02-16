@@ -17,7 +17,7 @@
 Improvement Manager - Manage improvement lifecycle and templates
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: mgr = ImprovementManager(templates=None, base_file_path="src/module.py")
 - Add an item: mgr.add_improvement(title, description, file_path="src/x.py", priority=..., category=..., effort=...)

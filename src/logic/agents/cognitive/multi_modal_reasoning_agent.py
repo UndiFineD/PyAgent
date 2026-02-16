@@ -14,7 +14,7 @@
 
 
 # "Agent capable of analyzing visual inputs to complement textual code analysis.
-# #
+"""
 # from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
@@ -28,7 +28,7 @@ __version__ = VERSION
 class MultiModalReasoningAgent(BaseAgent):
     Agent capable of analyzing visual inputs (screenshots, diagrams)
     to complement textual code analysis.
-# #
+"""
 
     def __init__(self, file_path: str, **kwargs) -> None:
         super().__init__(file_path=file_path, **kwargs)

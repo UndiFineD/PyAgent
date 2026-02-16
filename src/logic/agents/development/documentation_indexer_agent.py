@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Documentation Indexer Agent - Indexes workspace documentation and provides semantic pointers
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - As a script: python src/interface/.../documentation_indexer_agent.py "path/to/workspace" (module exposes create_main_function for CLI).
 - As a library: from documentation_indexer_agent import DocumentationIndexerAgent; agent = DocumentationIndexerAgent(file_path); index = agent.build_index(root_path); pointers = agent.get_semantic_pointers("query").
@@ -96,7 +95,7 @@ if __name__ == "__main__":
 
     main = create_main_function(DocumentationIndexerAgent, "Documentation Indexer Agent", "Path to index")
     main()
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 

@@ -14,7 +14,7 @@
 
 
 # "Agent responsible for merging specialized agent capabilities.
-# #
+"""
 # from __future__ import annotations
 
 import logging
@@ -32,7 +32,7 @@ __version__ = VERSION
 class SynthesisAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Synthesis Agent: Responsible for Swarm Synthesis,
     merging specialized agent capabilities into optimized super-agent architectures.
-# #
+"""
 
     def __init__(self, workspace_root: str) -> None:
         # Initialize with a dummy path as base_agent needs a file path
@@ -52,13 +52,13 @@ class SynthesisAgent(BaseAgent):
     async def fuse_agents(
         self, agent_names: list[str], new_agent_name: str
     ) -> dict[str, Any]:
-# #
+"""
         Creates a new agent that combines functionalities of multiple source agents.
 
         Args:
             agent_names: List of existing agent class names to fuse.
             new_agent_name: The name of the new fused agent class.
-# #
+"""
         logging.info(fSynthesisAgent: Fusing {agent_names} into {new_agent_name}")
 
         # Step 1: Analyze the source agents (simulated)
@@ -116,9 +116,9 @@ class SynthesisAgent(BaseAgent):
     def analyze_fusion_candidates(
         self, fleet_agents: list[str]
     ) -> list[dict[str, Any]]:
-# #
+"""
         Analyzes the fleet to suggest which agents should be fused based on "usage patterns.
-# #
+"""
       "  _ = fleet_agents
         logging.info("SynthesisAgent: Analyzing fleet for fusion candidates.")
         # This would typically use telemetry to find agents that frequently call each other.

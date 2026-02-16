@@ -16,7 +16,7 @@
 SLAPolicy - Named SLA dataclass
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import SLAPolicy from src.core.* (or from this module) and instantiate policies in tests or fixtures, e.g. SLAPolicy(name="standard", response_hours=4, resolution_hours=24).
 - Intended for test data and light-weight policy passing between components; not a validation or enforcement primitive.

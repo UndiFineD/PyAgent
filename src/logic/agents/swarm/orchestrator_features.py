@@ -31,7 +31,9 @@ class OrchestratorFeatures(
     OrchestratorExecutionMixin,
     OrchestratorWorkPatternMixin,
 ):  # pylint: disable=too-many-ancestors
-# #
-#     Mixin class that provides additional features to OrchestratorAgent.
-#     This helps keep the main OrchestratorAgent file small (<30KB).
-# #
+    """
+    Mixin class that provides additional features to OrchestratorAgent.
+    This helps keep the main OrchestratorAgent file small (<30KB).
+    """
+
+    pass

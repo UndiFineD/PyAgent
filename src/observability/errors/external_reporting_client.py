@@ -16,7 +16,7 @@
 ExternalReportingClient - Report errors to external monitoring services
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with an ExternalReporter enum value and an optional DSN/API key.
 - Call report(error: ErrorEntry) to send a single error (returns bool).

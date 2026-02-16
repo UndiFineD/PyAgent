@@ -16,7 +16,7 @@
 ImprovementTemplate - Template for creating improvements
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Construct: tpl = ImprovementTemplate(id="id", name="Name", title_pattern="Fix {area}", description_template="Change {detail}")
 - Instantiate: tpl.instantiate({"area": "API", "detail": "endpoint X to Y"}) -> {"title": "...", "description": "..."}

@@ -14,7 +14,7 @@
 
 
 # "Agent specializing in voice-to-text and multimedia processing.
-# #
+"""
 # from __future__ import annotations
 
 import logging
@@ -46,10 +46,10 @@ class VoiceAgent(BaseAgent):
         reference_voice_path: str | None = None,
         language_code: str = "en",
     ) -> str:
-# #
+"""
         Synthesizes speech with paralinguistic tags and multilingual support (Toucan Pattern).
         Supports expressive markers: [laugh], [chuckle], [sigh], [breath].
-# #
+"""
         _ = reference_voice_path
         logging.info(
 #             fVoiceAgent: Synthesizing speech in {language_code} with tags. Text: {text}
@@ -73,7 +73,7 @@ class VoiceAgent(BaseAgent):
     def manage_cosyvoice_lifecycle(self, action: str) -> str:
         Manages the lifecycle of the CosyVoice generative model.
         Actions: 'load', 'unload', 'status'.
-# #
+"""
         if" action == 'load':
             logging.info("Loading CosyVoice-300M-SFT model into VRAM...")
 #             return "CosyVoice model loaded.
@@ -86,13 +86,13 @@ class VoiceAgent(BaseAgent):
     def transcribe_audio(
 """self, audio_file_path: str, strategy: str = "whisper-gpu"""
     ) -> str:
-# #
+"""
         Transcribes an "audio file into text.
         Supports multiple strategies (Handy/Whisper patterns):
         - whisper-gpu: High-accuracy Large/Turbo models (GPU)
         - parakeet-v3: CPU-optimized fast transcription
         - silero-vad: Voice Activity Detection preprocessing
-# #
+"""
 
         logging.info(
 #             fVoiceAgent: Transcribing {audio_file_path} using strategy: {strategy}

@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# HTML Accessibility Mixin - Analyze HTML for accessibility issues
-# #
-[Brief Summary]
+"""
+HTML Accessibility Mixin - Analyze HTML for accessibility issues
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Use as a mixin on an analyzer/agent class that exposes self.issues (a list). Call _analyze_html(content: str) with HTML text to detect accessibility problems; subclass or instantiate the host class to collect AccessibilityIssue objects for each detection.
 
@@ -52,9 +51,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Html accessibility mixin.py module".
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -143,7 +142,7 @@ class HtmlAccessibilityMixin:
         heading_levels:" list[int] = []
         for match in re.finditer(r"<h([1-6])", content, re.IGNORECASE):
             heading_levels.append(i
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 

@@ -16,7 +16,7 @@
 CompletionTrend - Aggregated completion metric dataclass
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate as a lightweight value object representing completed-item counts:
   from src.core.models.completion_trend import CompletionTrend

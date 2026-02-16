@@ -15,7 +15,7 @@
 
 # "Agent specializing in Swarm Knowledge Fusion.
 # Consolidates individual agent memory shards into a unified global knowledge graph.
-# #
+"""
 
 from __future__ import annotations
 import logging
@@ -74,7 +74,7 @@ class KnowledgeFusionAgent(BaseAgent):
         "Aggregates multiple memory shards into the global knowledge graph.
         Args:
             shard_paths: List of file paths to agent-specific memory shards (JSON).
-# #
+"""
         graph = self._load_global_graph()
         added_nodes = 0
 

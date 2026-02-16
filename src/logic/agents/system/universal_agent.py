@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Universal Agent Shell - Dynamic role-based task orchestration
-# #
-[Brief Summary]
+"""
+Universal Agent Shell - Dynamic role-based task orchestration
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import UniversalAgent from src.core.base.lifecycle.universal_agent and instantiate with optional manifest or other BaseAgent kwargs.
 - Use await agent.execute_query(query, context) to run a natural-language-driven task; the agent will analyze intent, optionally assume roles, trigger consensus, execute workflows, and dynamically load skills.
@@ -37,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Module: universal_agent
 Implementation of Pillar 3: The Universal Agent Shell.
-# #
+"""
 
 from __future__ import annotations
 import logging
@@ -52,7 +51,7 @@ class UniversalAgent(BaseAgent):
     IMPLEMENTATION OF PILLAR 3: The Universal Agent "Shell.
     This agent does not have a fixed role; it dynamically adjusts its
 #     cognitive cores based on the Logic Manifest provided in the task.
-# #
+"""
 
     def __init__(self, **kwargs):
         # Default manifest for a universal shell
@@ -65,9 +64,9 @@ class UniversalAgent(BaseAgent):
         super().__init__(**kwargs)
 
     async def execute_query(self, query: str, context: Dict[str, Any] | None = None) -> Any:
-# #
+"""
         Main cognitive loop for the Universal Agent.
-# #
+"""
         # Phase 0: Explicit Role Loading (Pillar 5 Extension)
         if "assume role" in query.lower() or "use shard" in query.lower():
             role_match = query.lower().split("role")[-1].strip().split(" ")[0].strip(" .")
@@ -131,7 +130,7 @@ class UniversalAgent(BaseAgent):
         # Pillar 8 Hardening: Distribute state to the swarm after task completion
         if hasattr(self.core, "fleet_instance"):
             fleet = self.core.fleet_
-# #
+"""
 
 from __future__ import annotations
 import logging
@@ -146,7 +145,7 @@ class UniversalAgent(BaseAgent):
     IMPLEMENTATION OF PILLAR 3: The Universal Agent Shell.
     This agent does not have a fixed role; it dynamically adjusts its
     cognitive cores based on the Logic Manifest provided in the task.
-# #
+"""
 
     def __init__(self, **kwargs):
         # Default manifest for a universal shell
@@ -159,9 +158,9 @@ class UniversalAgent(BaseAgent):
         super().__init__(**kwargs)
 
     async def execute_query(self, query: str, context: Dict[str, Any] | None = None) -> Any:
-# #
+"""
         Main cognitive" loop for the Universal Agent.
-# #
+"""
         # Phase 0: Explicit "Role Loading (Pillar 5 Extension)
         if "assume role" in query.lower() or "use shard" in query.lower():
             role_match = query.lower().split("role")[-1].strip().split(" ")[0].strip(" .")

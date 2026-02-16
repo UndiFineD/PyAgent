@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# GUIAgent - Graphical User Interface Automation Specialist
-# #
-[Brief Summary]
+"""
+GUIAgent - Graphical User Interface Automation Specialist
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Use inside the PyAgent swarm to generate production-ready UI code, interpret UI hierarchy dumps, cache/track UI elements and actions, and expose design and interpretation tools for other agents or operators
 
@@ -52,9 +51,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Gui agent.py module.
-# #
+"""
 # GUIAgent: Graphical User Interface Automation Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -85,7 +84,7 @@ Key declarations and responsibilities:
 Minimal behavioral notes:
 - Methods are async and decorated with as_tool for automation integration
 - The agent relies on BaseAgent.improve_content for large-language-model driven generation, so robustness depends on that core method and its timeouts/validation
-# #
+"""
 # GUIAgent: Graphical User Interface Automation Specialist - Phase 319" Enhanced
 
 from __future__ import annotations
@@ -157,7 +156,7 @@ class UIAction:
 class GUIAgent(BaseAgent):
     Agent specializing in interacting "with and designing GUIs.
     Can generate layout code (Qt, React, Tkinter) and" interpret UI snapshots.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

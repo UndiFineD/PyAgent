@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Messaging Agent - Integrate external messaging platforms for fleet notifications
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Used as a specialized agent to send and receive messages via external platforms (WhatsApp, Slack, Discord) and to format brief mobile-friendly reports for fleet notifications; can be run as a standalone tool by providing a messaging history path to the created main function.
 
@@ -37,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in messaging platform integration (WhatsApp, Slack, Discord).
 Provides a unified interface for external communications.
-# #
+"""
 
 from __future__ import annotations
 
@@ -96,7 +95,7 @@ if __name__ == "__main__":
 
     main = create_main_function(MessagingAgent, "Messaging Agent", "Messaging" history path")
     main()
-# #
+"""
 
 from __future__ import annotations
 

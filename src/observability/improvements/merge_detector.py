@@ -16,7 +16,7 @@
 MergeDetector - Detect similar/mergeable improvements
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate MergeDetector(similarity_threshold: float = 0.7) and call find_similar(improvements: list[Improvement]) to get MergeCandidate objects; call merge(source, target) to combine two Improvement instances.
 

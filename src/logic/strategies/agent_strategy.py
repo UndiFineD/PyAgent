@@ -17,7 +17,7 @@ Agent Strategy - Abstract execution strategy for agents
 
 Brief Summary
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Implement a concrete subclass of AgentStrategy and provide an async
   execute(...) method.

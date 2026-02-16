@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Swarm Distillation Agent - Distills fleet-wide agent knowledge into a compact representation
-# #
-[Brief Summary]
+"""
+Swarm Distillation Agent - Distills fleet-wide agent knowledge into a compact representation
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate as part of the Tier 3 strategy layer in the PyAgent fleet orchestration.
 - Call distill_agent_knowledge(agent_id, knowledge_shard) asynchronously to accept an agent's knowledge shard and receive a compacted summary.
@@ -35,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Swarm distillation agent module.
-# #
+"""
 
 from __future__ import annotations
 
@@ -51,7 +50,7 @@ __version__ = VERSION
 class SwarmDistillationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Tier 3 (Strategy) - Distills fleet-wide knowledge into a compact" form.
 #     Standardized placeholder for future re-implementation (Phase 317).
-# #
+"""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -67,7 +66,7 @@ class SwarmDistillationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def get_unified_context(self) -> dict[str, Any]:
 """"Returns the unified distilled context of the swarm (Phase 76)."""
         return {"distilled_indices": ["CoderAgent", "TesterAgent"], "total_compression": 0.65}
-# #
+"""
 
 from __future__ import annotations
 
@@ -83,7 +82,7 @@ __version__ = VERSION
 class SwarmDistillationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Tier 3 (Strategy) - Distills fleet-wide knowledge" into a compact form.
     Standardized placeholder for future re-implementation (Phase 317).
-# #
+"""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)

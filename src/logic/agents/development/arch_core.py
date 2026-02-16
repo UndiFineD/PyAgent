@@ -13,11 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # ArchCore logic for PyAgent.
 # Pure logic for architectural metrics and pattern analysis.
 No I/O or side effects.
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 

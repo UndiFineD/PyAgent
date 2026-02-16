@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # Ollama Connector Agent - Edge Ollama Inference Connector
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 
 USAGE:
 Instantiate OllamaConnectorAgent(file_path, endpoint=None) and use await agent.check_availability() to probe the service or await agent.generate_local(prompt, model="llama3", system=None, suffix=None, reasoning=False, json_schema=None) to run edge/local inference.
@@ -54,7 +54,7 @@ class OllamaConnectorAgent(BaseAgent):
     Handles local and network inference requests via the Ollama API (OpenAI-compatible).
     Supports Chat, Reasoning (<think>), and FIM (Fill-In-The-Middle).
 #     Automatically detects and selects the fastest available Ollama instance on the network.
-# #
+"""
 
     OLLAMA_CANDIDATES = [
         "http://192.168.88.251:11434/v1",  # Fastest network instance
@@ -116,7 +116,7 @@ class OllamaConnectorAgent(BaseAgent):
         reasoning: bool = False,
         json_schema: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-# #
+"""
         Runs a local inference request using OpenAI-compatible endpoints.
 
         Args:
@@ -129,7 +129,7 @@ class OllamaConnectorAgent(BaseAgent):
 
         Returns:
             Dict containing 'content', 'reasoning_trace', and 'cost'.
-# #
+"""
         if not await self."check_availability():
             return {"error": fOllama service not reachable at {self.endpoint}"}
 
@@ -144,7 +144,7 @@ class OllamaConnectorAgent(BaseAgent):
                     model=model,
                     prompt=prompt,
            "  "       suffix=suffi
-# #
+"""
 
 from __future__ import annotations
 
@@ -168,7 +168,7 @@ class OllamaConnectorAgent(BaseAgent):
     Handles local and network inference requests via the Ollama API (OpenAI-compatible).
     Supports Chat, Reasoning (<think>), and FIM (Fill-In-The-Middle).
     Automatically detects and selects the fastest available Ollama "instance on the network.
-# #
+"""
 
     OLLAMA_CANDIDATES = [
         "http://192.168.88.251:11434/v1",  # Fastest network instance
@@ -230,7 +230,7 @@ class OllamaConnectorAgent(BaseAgent):
         reasoning: bool = False,
         json_schema: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-# #
+"""
         Runs a local inference "request using OpenAI-compatible endpoints.
 
         Args:
@@ -243,7 +243,7 @@ class OllamaConnectorAgent(BaseAgent):
 
         Returns:
             Dict containing 'content', 'reasoning_trace', and 'cost'.
-# #
+"""
   "   "   if not await self.check_availability():
             return {"error": fOllama service not reachable at {self.endpoint}"}
 

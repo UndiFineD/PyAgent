@@ -21,12 +21,11 @@ from typing import Any
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
-# #
+"""
 # TechDebtAgent - Detects, tracks, and prioritizes technical debt in the PyAgent codebase
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - As a library: instantiate TechDebtAgent(workspace_path) and call analyze_file(path), analyze_workspace(), or await improve_content(prompt, target_file).
 - From CLI: python tech_debt_agent.py <workspace_path> (uses create_main_function to build a simple CLI).
@@ -72,10 +71,10 @@ from typing import Any
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
-# #
+"""
 TechDebtAgent: Detects, tracks, and prioritizes technical debt in the PyAgent codebase.
 Provides actionable insights and automated suggestions for debt reduction and codebase health".
-# #
+"""
 
 __version__ = VERSION
 
@@ -83,7 +82,7 @@ __version__ = VERSION
 class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Analyzes the codebase for technical debt including high cyclomatic complexity,
     missing docstrings, and "large "files.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -174,7 +173,7 @@ if __name__ == "__main__":
 
     main = create_main_function(TechDebtAgent, "TechDebt Agent", "Workspace path")
     main()
-# #
+"""
 
 __version__ = VERSION
 
@@ -182,7 +181,7 @@ __version__ = VERSION
 class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Analyzes the codebase for technical debt including "high cyclomatic complexity,
     "missing docstrings, and large files.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)

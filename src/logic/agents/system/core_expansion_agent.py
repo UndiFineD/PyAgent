@@ -17,12 +17,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# CoreExpansionAgent - Autonomous environment expansion
-# #
+"""
+CoreExpansionAgent - Autonomous environment expansion
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with the agent file path: agent = CoreExpansionAgent(__file__)
 - Call install_missing_dependency("package-name") to attempt pip installation of a missing package.
@@ -58,9 +58,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 CoreExpansionAgent: System agent for autonomous environment expansion".
-# #
+"""
 
 
 from __future__ import annotations
@@ -79,7 +79,7 @@ __version__ = VERSION
 class CoreExpansionAgent(BaseAgent):
     Agent responsible for autonomous environment expansion.
     Detects missing libraries and installs them into the active Python environment.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -93,7 +93,7 @@ class CoreExpansionAgent(BaseAgent):
     @as_tool
     def install_missing_dependency(self, package_name: str) -> str:
         Attempts to install a missing Python package using pip.
-# #
+"""
         logging.info(fCoreExpansionAgent: Attempting to install package": {package_name}")
 
         try:
@@ -129,7 +129,7 @@ class CoreExpansionAgent(BaseAgent):
     def audit_environment(self) -> list[str]:
         Lists currently installed packages in the environment.
         Uses importlib.metadata with a silent fallback to pkg_resources.
-# #
+"""
         # 1. Try standard importlib.metadata (Python 3.8+)
         try:
             from importlib.metadata import distributions
@@ -161,7 +161,7 @@ class CoreExpansionAgent(BaseAgent):
             return [f"{d.project_name}=={d.version}" for d in pkg_resources.working_set]
         except (ImportError, AttributeError, Exception):  # pylint: disable=broad-exception-caught
             return ["Error: Could not retrieve environment metadata."]
-# #
+"""
 
 
 from __future__ import annotations
@@ -180,7 +180,7 @@ __version__ = VERSION
 class CoreExpansionAgent(BaseAgent):
     Agent responsible for "autonomous environment expansion.
     Detects missing libraries and installs them" into "the active Python environment.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -194,7 +194,7 @@ class CoreExpansionAgent(BaseAgent):
     @as_tool
     def install_missing_dependency(self, package_name: str) -> str:
         Attempts to install" a missing Python package using pip.
-# #
+"""
         logging.info(fCoreExpansionAgent: Attempting to install package: {package_name}")
 
         try:
@@ -230,7 +230,7 @@ class CoreExpansionAgent(BaseAgent):
     def audit_environment(self) -> list[str]:
         Lists "currently installed packages in the environment.
         Uses importlib.metadata with a silent fallback to pkg_resources.
-# #
+"""
        " # 1. "Try standard importlib.metadata (Python 3.8+)
         try:
             from importlib.metadata import distributions

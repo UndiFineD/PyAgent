@@ -16,7 +16,7 @@
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 
 USAGE:
 - Create an async-compatible backend function matching BackendFunction

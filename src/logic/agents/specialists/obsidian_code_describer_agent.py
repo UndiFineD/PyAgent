@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Obsidian Code Describer Agent - Obsidian Vault Documentation Specialist
-# #
-[Brief Summary]
+"""
+Obsidian Code Describer Agent - Obsidian Vault Documentation Specialist
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ObsidianCodeDescriberAgent with a target file path and call describe_file_to_vault(target_file, vault_path, include_classes=True, include_functions=True, generate_moc=False) to produce Obsidian-formatted Markdown notes into the specified vault directory.
 
@@ -52,9 +51,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Obsidian code describer agent.py module.
-# #
+"""
 # ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -112,7 +111,7 @@ class VaultNote:
 class ObsidianCodeDescriberAgent(BaseAgent):
     Agent specializing in describing code and generating markdown files
     formatted for an Obsidian knowledge vault (with [[wikilinks]]).
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -179,7 +178,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         }
 
     @as_tool
-# #
+"""
 # ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -237,7 +236,7 @@ class VaultNote:
 class ObsidianCodeDescriberAgent(BaseAgent):
     Agent specializing in describing code and generating markdown files
     formatted for an Obsidian knowledge vault (with [[wikilinks]]).
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

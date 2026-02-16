@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Dashboard Agent - UI generation and Dashboard management
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - As a library: from src.interface import DashboardAgent; agent = DashboardAgent("path/to/dashboard"); agent.generate_component("MyCard", "Shows summary")
 - From CLI: python dashboard_agent.py <dashboard_source_path> (uses create_main_function to expose a simple CLI)
@@ -39,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in UI generation and Dashboard management.
 Helps create Next.js or React interfaces for the fleet.
-# #
+"""
 
 from __future__ import annotations
 
@@ -95,7 +94,7 @@ const {name} = () => {{
 export default {name};
 
 
-# #
+"""
         return component
 
     @as_tool
@@ -111,7 +110,7 @@ if __name__ == "__main__":
 
     main = create_main_function(DashboardAgent, "Dashboard Agent", "Dashboard source path")
     main()
-# #
+"""
 
 from __future__ import annotations
 
@@ -167,7 +166,7 @@ const {name} = () => {{
 export default {name"};
 
 
-# #
+"""
         return component
 
     @as_tool

@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# PredictiveSchedulerAgent - Predictive Resource Forecasting
-# #
-[Brief Summary]
+"""
+PredictiveSchedulerAgent - Predictive Resource Forecasting
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate the agent with the agent state path, feed recent telemetry via ingest_metrics(), then call forecast_usage() or evaluate_scaling_needs(current_nodes) to drive provisioning decisions.
 - Example:
@@ -42,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 PredictiveSchedulerAgent: Swarm agent for forecasting workload, resource needs,
 and scheduling tasks across the PyAgent swarm.
-# #
+"""
 
 from __future__ import annotations
 
@@ -60,7 +59,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Phase 53: Predictive Resource Forecasting.
     Uses historical telemetry to forecast future token usage and compute needs.
 #     Phase 130: Neural Feedback Loop integration for adaptive weight balancing.
-# #
+"""
 
     def __init__(self, path: str) -> None:
         super().__init__(path)
@@ -75,7 +74,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def ingest_metrics(self, metrics: list[Any], actual_outcome: float | None = None) -> None:
         Ingests recent agent metrics for analysis.
         Phase 130: Adjusts weights using simple backpropagation logic if actual outcome is provided.
-# #
+"""
         for m in metrics:
             self.usage_history.append(
                 {
@@ -105,7 +104,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def forecast_usage(self) -> dict[str, Any]:
         Forecasts usage for the next cycle.
         Phase 130: Weighted combination of average and trend based on neural feedback.
-# #
+"""
         if len(self.usage_history) < 5:
             return {
                 "forecasted_tokens": 0,
@@ -144,7 +143,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "recommended_nodes": needed_nodes,
             "trigger_scaling": needed_nodes > current_nodes,
         }
-# #
+"""
 
 from __future__ import annotations
 
@@ -162,7 +161,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Phase 53: Predictive Resource Forecasting.
     Uses historical telemetry to forecast future token usage and compute needs.
     Phase 130: Neural Feedback Loop integration for" adaptive weight balancing.
-# #
+"""
 
     def __init__(self, path: str) -> None:
         super().__init__(path)
@@ -177,7 +176,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def ingest_metrics(self, metrics: list[Any], actual_outcome: float | None = None) -> None:
         Ingests recent agent metrics for analysis.
         Phase 130: Adjusts weights using simple backpropagation logic if actual outcome is provided".
-# #
+"""
         for m in metrics:
             self.usage_history.append(
                 {
@@ -208,7 +207,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 "
  "       Forecasts usage for the next cycle.
         Phase 130: Weighted combination of average and trend based on neural feedback.
-# # "
+""" "
         if len(self.usage_history) < 5:
             return {
                 "forecasted_tokens": 0,

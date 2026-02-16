@@ -31,14 +31,14 @@ def get_available_models():
 def process_file(file_path, code_content, model_key, model_variant, input_dir, output_dir):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     print(colored(f"[+] Scanning {file_path} with model {model_key}...", "cyan"))
+"""     print(colored(f"[+] Scanning {file_path} with model {model_key}...", "cyan"))
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     result = scan_code(api_keys[model_key], model_variant, instruction, code_content)
+"""     result = scan_code(api_keys[model_key], model_variant, instruction, code_content)
 
     html_result = markdown.markdown(result)
 
@@ -48,9 +48,9 @@ def process_file(file_path, code_content, model_key, model_variant, input_dir, o
     os.makedirs(output_file_dir, exist_ok=True)
 
 # [BATCHFIX] Commented metadata/non-Python
-# #     markdown_filename = f"{os.path.splitext(os.path.basename(file_path))[0]}.md"  # [BATCHFIX] closed string
+"""     markdown_filename = f"{os.path.splitext(os.path.basename(file_path))[0]}.md"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #     html_filename = f"{os.path.splitext(os.path.basename(file_path))[0]}.html"  # [BATCHFIX] closed string
+"""     html_filename = f"{os.path.splitext(os.path.basename(file_path))[0]}.html"  # [BATCHFIX] closed string
 
     markdown_path = os.path.join(output_file_dir, markdown_filename)
     html_path = os.path.join(output_file_dir, html_filename)
@@ -62,18 +62,18 @@ def process_file(file_path, code_content, model_key, model_variant, input_dir, o
         html_file.write(html_result)
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     print(colored(f"[✓] Report saved to {markdown_path} and {html_path}", "green"))
+"""     print(colored(f"[✓] Report saved to {markdown_path} and {html_path}", "green"))
     return file_path, markdown_path, html_path
 
 
 def process_and_generate_reports(all_pathes, model_key, model_variant, input_dir, output_dir, num_threads):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     files_to_process = []
+"""     files_to_process = []
     for path in all_pathes:
         if os.path.exists(path):
             with open(path, encoding="utf-8") as f:
@@ -81,12 +81,12 @@ def process_and_generate_reports(all_pathes, model_key, model_variant, input_dir
 
     with ThreadPoolExecutor(max_workers=num_threads) as executor:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         futures = []
+"""         futures = []
         for file_path, code_content in files_to_process:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             futures.append(
                 executor.submit(process_file, file_path, code_content, model_key, model_variant, input_dir, output_dir)
             )
@@ -96,9 +96,9 @@ def process_and_generate_reports(all_pathes, model_key, model_variant, input_dir
 
     generate_index_html(output_dir)
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     print(colored(f"[✓] Index file created at {os.path.join(output_dir, 'index.html')}", "green"))
+"""     print(colored(f"[✓] Index file created at {os.path.join(output_dir, 'index.html')}", "green"))
 
 
 def main():
@@ -106,15 +106,15 @@ def main():
     parser.add_argument("--apk-path", required=True, help="Path to the APK file")
     parser.add_argument("--out-dir", required=True, help="Directory to save the decompiled files")
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     parser.add_argument(
 # [BATCHFIX] Commented metadata/non-Python
-# #         "--target-package", required=True, help="Target package name to find classes (e.g., 'jakhar.aseem.diva')"  # [BATCHFIX] closed string
+"""         "--target-package", required=True, help="Target package name to find classes (e.g., 'jakhar.aseem.diva')"  # [BATCHFIX] closed string
     )
     parser.add_argument("--model-name", required=True, help="Model key (e.g., GENEAI, OPENAI).")
     parser.add_argument("--report", required=True, help="Directory to save the reports.")
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     parser.add_argument(
         "--threads",
         type=int,
@@ -132,31 +132,31 @@ def main():
 
     if model_key not in api_keys or model_key not in Models:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         print(colored(f"[!] Invalid model key: {model_key}", "red"))
+"""         print(colored(f"[!] Invalid model key: {model_key}", "red"))
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         print(colored(f"[!] Available model keys are: {get_available_models()}", "yellow"))
+"""         print(colored(f"[!] Available model keys are: {get_available_models()}", "yellow"))
         sys.exit(1)
 
     os.makedirs(output_dir, exist_ok=True)
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     model_variant = list(Models[model_key].values())[0]
+"""     model_variant = list(Models[model_key].values())[0]
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     manifest_path, strings_path, target_classes = extract_apk_with_jadx(
         args.apk_path, args.out_dir, args.target_package
     )
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     all_pathes = []
+"""     all_pathes = []
     all_pathes.append(manifest_path)
     all_pathes.append(strings_path)
     for target_class in target_classes:
@@ -166,5 +166,5 @@ def main():
 
 if __name__ == "__main__":
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 #     main()

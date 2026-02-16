@@ -16,7 +16,7 @@
 Prometheus Exporter - Formats fleet telemetry into Prometheus/OpenMetrics metrics
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate PrometheusExporter and call record_metric(name, value, labels) as telemetry is produced.
 - Expose generate_scrape_response() on an HTTP GET /metrics endpoint for Prometheus to scrape.

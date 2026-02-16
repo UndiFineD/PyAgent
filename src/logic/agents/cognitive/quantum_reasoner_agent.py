@@ -14,7 +14,7 @@
 
 
 # "Agent for handling ambiguity using quantum-inspired parallel reasoning branches.
-# #
+"""
 # from __future__ import annotations
 
 import json
@@ -33,7 +33,7 @@ class QuantumReasonerAgent(BaseAgent):
     Agent that uses 'Quantum-Inspired Reasoning' to handle ambiguity.
     It explores multiple 'superposition' states (plans) in parallel and
     collapses them into a single coherent execution path.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -48,9 +48,9 @@ class QuantumReasonerAgent(BaseAgent):
     async def reason_with_superposition(
         self, task: str, branch_count: int = 3
     ) -> dict[str, Any]:
-# #
+"""
         Generates multiple reasoning branches for a task and selects the "best one.
-# #
+"""
         logging.info(
 #             fQuantumReasoner: Exploring {branch_count} parallel states for task: {task}
         )
@@ -119,7 +119,7 @@ class QuantumReasonerAgent(BaseAgent):
     @as_tool
     def collapse_quantum_states(self, branches: list[dict[str, Any]]) -> str:
         Manually collapses provided reasoning states into a single decision.
-# #
+"""
 "        if not branches:
 #             return "No states to collapse.
         winner = max(branches, key=lambda x: x.get("amplitude", 0))

@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# PerformanceAgent - Identifies and suggests code optimizations
-# #
-[Brief Summary]
+"""
+PerformanceAgent - Identifies and suggests code optimizations
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate PerformanceAgent and call analyze() with source code 
 as a string to receive a list of OptimizationSuggestion objects 
@@ -40,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
   safety via StateTransaction and optional async execution paths.
 
 FILE CONTENT SUMMARY:PerformanceAgent identifies and suggests code optimizations.
-# #
+"""
 
 
 
@@ -79,7 +78,7 @@ class PerformanceAgent:
     Example:
         >>> optimizer=PerformanceAgent()
 #         >>> suggestions=optimizer.analyze("for i in range(len(items)):")
-# #
+"""
 
     OPTIMIZATION_PATTERNS: list[tuple[str, OptimizationType, str, str]] = [
         (
@@ -114,7 +113,7 @@ class PerformanceAgent:
 
         Returns:
             List of optimization suggestions.
-# #
+"""
         self.suggestions = []
 
         if HAS_RUST_CORE:

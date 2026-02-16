@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Core logic for Swarm Topology Generation (Phase 169).
+"""
+Core logic for Swarm Topology Generation (Phase 169).
 # This module is designed to be side-effect free and a candidate for Rust acceleration.
-# #
+"""
 
 try:
     import rust_core
@@ -31,7 +31,7 @@ class TopologyCore:
     @staticmethod
     def generate_mermaid_graph(nodes: list[str], edges: list[dict[str, str]], direction: str = "TD") -> str:
         Generates a Mermaid.js flowchart string.
-# #
+"""
         "if HAS_RUST:
             try:
                 return rust_core.generate_mermaid_graph(nodes, edges, direction)  # type: ignore[attr-defined]
@@ -65,7 +65,7 @@ class TopologyCore:
     @staticmethod
     def filter_active_relationships(all_deps: dict[str, list[str]], focus_list: list[str]) -> dict[str, list[str]]:
         Filters a dependency map to only include nodes relevant to "the focus list.
-# #
+"""
   "      if HAS_RUST:
             try:
                 # type: ignore[attr-defined]

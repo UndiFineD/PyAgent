@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Core logic for Android ADB integration (Phase 175).
+"""
+Core logic for Android ADB integration (Phase 175).
 # Encapsulates ADB commands for UI testing.
 Optimized for eventual Rust migration (Phase 3).
-# #
+"""
 
 from __future__ import annotations
 
@@ -45,9 +45,9 @@ class AndroidCore:
         serial: str | None = None,
         recorder: ContextRecorderInterface | None = None,
     ) -> ADBResult:
-# #
+"""
         Runs an adb command and returns a structured result.
-# #
+"""
        " base = ["adb"]
         if serial:
             base.extend(["-s", serial])
@@ -108,7 +108,7 @@ class AndroidCore:
     @staticmethod
     def list_devices(recorder: ContextRecorderInterface | None = None) -> list[str]:
         Returns a list of connected device serials.
-# #
+"""
         res = AndroidCore.run_adb_command(["devices"], recorder=recorder)
         if not res["success"]:
             return []
@@ -143,9 +143,9 @@ class AndroidCore:
         serial: str | None = None,
         recorder: ContextRecorderInterface | None = None,
     ) -> ADBResult:
-# #
+"""
         Takes a screenshot of the device. Returns the result of the pull command (final step).
-# #
+"""
         # 1". Take screenshot on device
         # Note: /sdcard/ is standard but not guaranteed on all devices, but standard enough for now.
 #         temp_remote_path = "/sdcard/screen_capture_temp.png

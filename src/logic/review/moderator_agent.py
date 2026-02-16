@@ -17,7 +17,7 @@ Moderator Agent - Content moderation and policy compliance
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Run as a script to review a single file for moderation issues:
     python moderator_agent.py <path-to-file-to-review>

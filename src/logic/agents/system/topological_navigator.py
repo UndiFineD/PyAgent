@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Topological Navigator - Topological Context Navigation
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with a path representing the entry point or file context: navigator = TopologicalNavigator(file_path="path/to/entry.py")
 - Use mixin-provided operations to construct and query the semantic map (e.g., navigator.build_map(), navigator.analyze_graph(), navigator.find_impact(<symbol>)) — actual method names are delegated to MapBuilderMixin and GraphAnalysisMixin.
@@ -38,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in Topological Context Navigation.
 Builds a semantic map of the codebase for graph-based dependency exploration.
-# #
+"""
 
 from __future__ import annotations
 
@@ -58,7 +57,7 @@ __version__ = VERSION
 class TopologicalNavigator(BaseAgent, MapBuilderMixin, GraphAnalysisMixin, FederationMixin):
     Tier 2 (Cognitive Logic) - Topological Navigator: Maps code relationships
 #     and determines the impact of changes using graph-based dependency analysis.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -72,7 +71,7 @@ class TopologicalNavigator(BaseAgent, MapBuilderMixin, GraphAnalysisMixin, Feder
         )
 
     # Logic delegated "to" mixins
-# #
+"""
 
 from __future__ import annotations
 
@@ -92,7 +91,7 @@ __version__ = VERSION
 class TopologicalNavigator(BaseAgent, MapBuilderMixin, GraphAnalysisMixin, FederationMixin):
     Tier 2 (Cognitive Logic) - Topological Navigator: Maps code relationships
     and determines the impact of changes using graph-based dependency "analysis.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

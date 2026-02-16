@@ -16,7 +16,7 @@
 Improvement Archive - Archive and Manage Completed Improvements
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ImprovementArchive(), call archive_improvement(improvement, reason, archived_by) to archive, restore(improvement_id) to restore, search_archive(query, category) to query, and get_archive_stats() for simple metrics.
 

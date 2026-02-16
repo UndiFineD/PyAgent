@@ -16,7 +16,7 @@
 Improvement - Dataclass for representing a single improvement suggestion
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from improvement import Improvement, ImprovementPriority, ImprovementCategory, ImprovementStatus, EffortEstimate
 imp = Improvement(

@@ -17,7 +17,7 @@ AgentChain - Chain multiple agents for sequential execution
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Create an AgentChain, add steps with optional input/output
   transforms and conditions, and execute with an

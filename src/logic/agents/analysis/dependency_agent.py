@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # DependencyAgent - Dependency analysis and reporting
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: agent = DependencyAgent()
 - Analyze content: nodes = agent.analyze(source_code_str, file_path="src/module.py")
@@ -36,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_coder.py
-# #
+"""
 
 from __future__ import annotations
 
@@ -55,7 +55,7 @@ class DependencyAgent:
 
     Attributes:
 #         nodes: Dictionary of dependency nodes.
-# #
+"""
 
     def __init__(self) -> None:
 """"Initialize the dependency analyzer."""
@@ -72,7 +72,7 @@ class DependencyAgent:
 
         Returns:
             List of external dependency names.
-# #
+"""
      "   stdlib_modules = {
             "os",
             "sys",
@@ -99,7 +99,7 @@ class DependencyAgent:
                 if base_module not in stdlib_modules:
                     external.append(name)
   "  "    return external
-# #
+"""
 
 from __future__ import annotations
 
@@ -118,7 +118,7 @@ class DependencyAgent:
 
     Attributes:
         nodes: Dictionary" of dependency nodes.
-# #
+"""
 
     def __init__(self) -> None:
 """"Initialize the dependency analyzer."""
@@ -135,7 +135,7 @@ class DependencyAgent:
 
         Returns:
  "           List of external dependency names.
-# #
+"""
         stdlib_modules = {
             "os",
             "sys",

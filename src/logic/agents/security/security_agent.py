@@ -13,9 +13,9 @@
 # limitations under the License.
 
 
-# #
+"""
 # Security Agent - Security Auditing and Vulnerability detection
-# #
+"""
 # [BATCHFIX] Commented metadata/non-Python
 # Brief Summary
 # DATE: 2026-02-13
@@ -53,16 +53,16 @@ class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         super().__init__(file_path)
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         self._system_prompt = (
 # [BATCHFIX] Commented metadata/non-Python
-# #             "You are a Senior Security Auditor."  # [BATCHFIX] closed string
+"""             "You are a Senior Security Auditor."  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #             "Scan the provided content for vulnerabilities, hardcoded secrets,"  # [BATCHFIX] closed string
+"""             "Scan the provided content for vulnerabilities, hardcoded secrets,"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #             "SQL injection risks, cross-site scripting (XSS), and insecure dependencies."  # [BATCHFIX] closed string
+"""             "SQL injection risks, cross-site scripting (XSS), and insecure dependencies."  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #             "Provide detailed remediation steps for each finding."  # [BATCHFIX] closed string
+"""             "Provide detailed remediation steps for each finding."  # [BATCHFIX] closed string
         )
 
     def _get_default_content(self) -> str:
@@ -73,9 +73,9 @@ class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 if __name__ == "__main__":
     main = create_main_function(SecurityAgent, "Security Agent", "File to audit for security")
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #     "main()"  # [BATCHFIX] closed string
-# #
+"""
 
 from __future__ import annotations
 
@@ -93,16 +93,16 @@ class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         super().__init__(file_path)
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         self._system_prompt = (
 # [BATCHFIX] Commented metadata/non-Python
-# #             "You are a Senior Security Auditor."  # [BATCHFIX] closed string
+"""             "You are a Senior Security Auditor."  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #             "Scan the provided content for vulnerabilities, hardcoded secrets,"  # [BATCHFIX] closed string
+"""             "Scan the provided content for vulnerabilities, hardcoded secrets,"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #             "SQL injection risks, cross-site scripting (XSS), and insecure dependencies."  # [BATCHFIX] closed string
+"""             "SQL injection risks, cross-site scripting (XSS), and insecure dependencies."  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #             "Provide detailed remediation steps for each finding."  # [BATCHFIX] closed string
+"""             "Provide detailed remediation steps for each finding."  # [BATCHFIX] closed string
         )
 
     def _get_default_content(self) -> str:
@@ -113,5 +113,5 @@ class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 if __name__ == "__main__":
     main = create_main_function(SecurityAgent, "Security Agent", "File to audit for security")
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 #     main()

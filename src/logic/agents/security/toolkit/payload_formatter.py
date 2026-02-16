@@ -20,46 +20,46 @@ class PayloadFormatter:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
 """"Formats parameter lists into various HTTP request body formats."""
-# #
+"""
 #     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def to_json(params: List[str], value: str = "null") -> str:
+"""     def to_json(params: List[str], value: str = "null") -> str:
         return json.dumps({p: value for p in params}, indent=4)
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def to_form_urlencoded(params: List[str], value: str = "null") -> str:
+"""     def to_form_urlencoded(params: List[str], value: str = "null") -> str:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         return "&".join([f"{p}={value}" for p in params])
+"""         return "&".join([f"{p}={value}" for p in params])
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def to_xml(params: List[str], value: str = "null") -> str:
+"""     def to_xml(params: List[str], value: str = "null") -> str:
 """xml = "<parameters>\n"""
         for p in params:
 # [BATCHFIX] Commented metadata/non-Python
-# #             xml += f"  <{p}>{value}</{p}>\n"  # [BATCHFIX] closed string
+"""             xml += f"  <{p}>{value}</{p}>\n"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         xml += "</parameters>"  # [BATCHFIX] closed string
+"""         xml += "</parameters>"  # [BATCHFIX] closed string
         return xml
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def to_multipart(params: List[str], value: str = "null", boundary: str = "PyAgentBoundary") -> str:
+"""     def to_multipart(params: List[str], value: str = "null", boundary: str = "PyAgentBoundary") -> str:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         lines = []
+"""         lines = []
         for p in params:
             lines.append(f"--{boundary}")
             lines.append(f'Content-Disposition: form-data; name="{p}"')

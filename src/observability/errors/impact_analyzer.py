@@ -16,7 +16,7 @@
 ImpactAnalyzer - Analyze error impact across files and functions
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ImpactAnalyzer, populate with add_dependency(file, depends_on) and add_functions(file, functions), then call analyze(error: ErrorEntry) to receive an ErrorImpact describing affected files, functions, downstream effects and an impact_score. Example:
 analyzer = ImpactAnalyzer()

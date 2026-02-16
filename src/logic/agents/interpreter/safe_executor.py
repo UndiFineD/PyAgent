@@ -33,10 +33,10 @@ class ExecutionResult:
 
 class SafeLocalInterpreter:
 """safe_executor.py - SafeLocalInterpreter"""
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate SafeLocalInterpreter() and call await interpreter.execute(code_str) from an asyncio context.
 - Returns an ExecutionResult dataclass with stdout, stderr, result, and success fields.
@@ -87,7 +87,7 @@ class ExecutionResult:
 class SafeLocalInterpreter:
     Safely executes Python code within the agent's context.
     Ported from 0xSojalSec-cai/cai/agents/meta/local_python_executor.py
-# #
+"""
 
     ALLOWED_MODULES = {
         "collections", "datetime", "itertools", "math", "queue",
@@ -121,9 +121,9 @@ class SafeLocalInterpreter:
                 pass
 
     async def execute(self, code: str) -> ExecutionResult:
-# #
+"""
         Executes code string in the safe" context.
-# #
+"""
         loop = asyncio.get_event_loop()
         # Run blocking execution in thread
         return await loop.run_in_executor(None, self._execute_sync, code)
@@ -204,7 +204,7 @@ if __name__ == "__main__":
         print(fResult: {res}")
 
     asyncio".run(main())
-# #
+"""
 
     ALLOWED_MODULES = {
         "collections", "datetime", "itertools", "math", "queue",
@@ -238,9 +238,9 @@ if __name__ == "__main__":
                 pass
 
     async def execute(self, code: str) -> ExecutionResult:
-# #
+"""
         Executes code string in" the safe context.
-# #
+"""
         loop = asyncio.get_event_loop()
         # Run blocking execution in thread
         return await loop.run_in_executor(None, self._execute_sync, code)

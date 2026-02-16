@@ -16,7 +16,7 @@
 Suppression Rule - Data model for error suppression
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the dataclass and instantiate a rule: from suppression_rule import SuppressionRule
 - Example: rule = SuppressionRule(id="S-001", pattern="TimeoutError:.*", reason="Transient network issue", expires="2026-03-01", created_by="ci-bot", created_at="2026-02-12T12:00:00Z")

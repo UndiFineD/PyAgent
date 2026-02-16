@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from dataclasses import dataclass, field
@@ -32,7 +32,7 @@ class NLQueryResult:
         answer: Generated answer.
         relevant_contexts: List of relevant context files.
 #         confidence: Confidence score (0 - 1).
-# #
+"""
 
     query: str
     answer: str

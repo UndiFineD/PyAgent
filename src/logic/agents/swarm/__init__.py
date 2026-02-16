@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # "Swarm agents package.
-# #
+"""
 # from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION

@@ -16,7 +16,7 @@
 Compliance audit agent for performing detailed compliance audits and reporting.
 
 DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate with a workspace path and call run_compliance_check("GDPR") or generate_audit_report() to obtain
 simulated audit results and a textual report.
@@ -33,7 +33,9 @@ and include richer telemetry and remediation tracking.
 
 from __future__ import annotations
 
+
 from typing import Any
+from src.logic.agents.security.compliance_assist import ComplianceCheck, ComplianceStandard
 
 from src.core.base.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
@@ -42,62 +44,56 @@ from src.observability.structured_logger import StructuredLogger
 __version__ = VERSION
 
 
+
 class ComplianceAuditAgent(BaseAgent):
     """Compliance Audit Agent: Verifies fleet operations against simulated industry standards.
 
     Supports standards like SOC2, GDPR, and HIPAA patterns.
     """
 
-    def __init__(self, workspace_path: str) -> None:
-        super().__init__(workspace_path)
+    def __init__(
+        self,
+        workspace_path: str,
+        test_mode: bool = False,
+        memory_core: Any = None,
+        inference_engine: Any = None,
+        reasoning_core: Any = None,
+        recorder: Any = None,
+        logger: Any = None,
+    ) -> None:
+        """Initializes the ComplianceAuditAgent with optional test mode and dependencies."""
+        if test_mode:
+            # Do not initialize BaseAgent's backend dependencies
+            super().__init__(file_path=workspace_path, memory_core=memory_core, inference_engine=inference_engine, reasoning_core=reasoning_core, recorder=recorder, test_mode=True)
+        else:
+            super().__init__(file_path=workspace_path, recorder=recorder)
         self.workspace_path = workspace_path
-        self.logger = StructuredLogger(agent_id="ComplianceAuditAgent")
+        self.logger = logger or StructuredLogger(agent_id="ComplianceAuditAgent")
         self.standards = {
-            "GDPR": [
-                "PII Data Encryption",
-                "Right to be Forgotten API",
-                "Data Portability Export",
-            ],
-            "SOC2": [
-                "Audit Trail Logging",
-                "Access Control Verification",
-                "Encryption at Rest",
-            ],
+            "GDPR": ComplianceStandard(
+                "GDPR",
+                [
+                    ComplianceCheck("PII Data Encryption"),
+                    ComplianceCheck("Right to be Forgotten API", check_fn=lambda: False),
+                    ComplianceCheck("Data Portability Export"),
+                ],
+            ),
+            "SOC2": ComplianceStandard(
+                "SOC2",
+                [
+                    ComplianceCheck("Audit Trail Logging"),
+                    ComplianceCheck("Access Control Verification"),
+                    ComplianceCheck("Encryption at Rest"),
+                ],
+            ),
         }
 
     def run_compliance_check(self, standard: str) -> dict[str, Any]:
-        """Runs a simulated compliance check for a specific standard."""
+        """Runs a compliance check for a specific standard using ComplianceStandard."""
         self.logger.info(f"Compliance: Auditing against {standard}...")
-
         if standard not in self.standards:
             return {"status": "Error", "message": f"Standard {standard} not supported."}
-
-        findings = []
-        passed_checks = 0
-        total_checks = len(self.standards[standard])
-
-        for check in self.standards[standard]:
-            # Simulate check logic
-            passed = self._simulate_check(check)
-            if passed:
-                passed_checks += 1
-            else:
-                findings.append(
-                    {
-                        "check": check,
-                        "status": "FAIL",
-                        "recommendation": f"Implement {check} immediately to meet {standard} requirements.",
-                    }
-                )
-
-        score = (passed_checks / total_checks) * 100
-        res = {
-            "standard": standard,
-            "score": score,
-            "status": "Compliant" if score == 100 else "Non-Compliant",
-            "failed_checks": findings,
-        }
-        # Phase 108: Intelligence Recording
+        res = self.standards[standard].run()
         self._record(
             f"Compliance check: {standard}",
             str(res),
@@ -119,16 +115,11 @@ class ComplianceAuditAgent(BaseAgent):
             except (AttributeError, RuntimeError, TypeError):
                 pass  # Silently ignore if recorder is unavailable
 
-    def _simulate_check(self, check_name: str) -> bool:
-        """Simulates the result of a specific compliance check."""
-        # For simplicity, we pass most checks but fail a few to demonstrate logic
-        if "Right to be Forgotten" in check_name:
-            return False  # Simulate a gap in GPDR
-        return True
+    # _simulate_check is now handled by ComplianceCheck/check_fn for zero trust modularity
 
     def get_compliance_inventory(self) -> dict[str, list[str]]:
         """Returns the list of supported standards and their associated checks."""
-        return self.standards
+        return {k: [chk.name for chk in v.checks] for k, v in self.standards.items()}
 
     def generate_audit_report(self) -> str:
         """Generates a summary report for all standards."""

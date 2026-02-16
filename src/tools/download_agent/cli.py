@@ -17,7 +17,7 @@ Download Agent CLI - Command-line interface for orchestrating downloads
 
 Brief Summary
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Run default processing of the repo URLs list:
   python -m src.tools.download_agent.cli

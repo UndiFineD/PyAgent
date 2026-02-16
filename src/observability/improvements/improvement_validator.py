@@ -16,7 +16,7 @@
 Improvement Validator - Validation of Improvement objects
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import ImprovementValidator from the module and call validate(improvement) to receive a ValidationResult, or validate_all(list_of_improvements) to validate multiple.
 - Use add_rule(callable_or_named_rule, ...) to extend or override validation behavior; supports callable rules or the built-in "min_description_length" rule with min_length parameter.

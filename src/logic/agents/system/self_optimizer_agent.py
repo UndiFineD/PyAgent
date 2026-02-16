@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # SelfOptimizerAgent - Self-optimization and roadmap refinement
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Programmatic: from src.agents.self_optimizer_agent import SelfOptimizerAgent; agent = SelfOptimizerAgent(__file__); await agent.improve_content("Optimize test coverage")
 - CLI: run the module directly; it exposes a create_main_function entrypoint that accepts a single "Query/Topic to optimize" argument
@@ -135,7 +135,7 @@ class SelfOptimizerAgent(BaseAgent):
 if __name__ == "__main__":
     main = create_main_function(SelfOptimizerAgent, "SelfOptimizer Agent", "Query/Topic to optimize")
 "    main()
-# #
+"""
 
 from __future__ import annotations
 

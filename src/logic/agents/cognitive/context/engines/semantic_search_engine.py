@@ -15,7 +15,7 @@
 # Phase 16: Rust acceleration for keyword matching and scoring
 
 # "Auto-extracted class from agent_context.py
-# #
+"""
 # from typing import Any
 import logging
 
@@ -49,7 +49,7 @@ class SemanticSearchEngine:
     Example:
         >>> engine=SemanticSearchEngine()
         >>> results=engine.search("function that handles authentication")
-# #
+"""
 
     def __init__(self, persist_directory: str | None = None) -> None:
 """"Initialize the semantic search engine."""
@@ -134,7 +134,7 @@ class SemanticSearchEngine:
         Args:
             file_path: Path to the file.
             content: File content to index.
-# #
+"""
     "    # Update documents storage
         self.documents[file_path] = content
 
@@ -156,7 +156,7 @@ class SemanticSearchEngine:
 
         Returns:
             List of search results.
-# #
+"""
         search_algo = algorithm or self.algorithm
         self.results = []
 

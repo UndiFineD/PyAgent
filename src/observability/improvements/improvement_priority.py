@@ -16,7 +16,7 @@
 Improvement Priority - Defines priority levels for agent improvements
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.base.improvement_priority import ImprovementPriority
 # use as ImprovementPriority.CRITICAL, .HIGH, etc., or compare by value

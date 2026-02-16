@@ -17,7 +17,7 @@ ErrorEntry - Single error record representation and categorization
 
 Brief Summary
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ErrorEntry(message, file_path, line_number, error_type=..., severity=..., category=...) — id is auto-generated if omitted; set resolved/resolution_timestamp when fixing; tags default to an empty list.
 

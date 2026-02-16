@@ -13,13 +13,13 @@
 # limitations under the License.
 
 
-# #
+"""
 # SecurityCore - Core security and safety validation
-# #
+"""
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# # [Brief Summary]
+""" [Brief Summary]
 # DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
 # AUTHOR: Keimpe de Jong
@@ -46,7 +46,7 @@ FILE CONTENT SUMMARY:
 SecurityCore logic for workspace safety.
 Combines scanning for secrets, command auditing, shell script analysis, and injection detection.
 This is designed for high-performance static analysis and future Rust migration.
-# #
+"""
 
 from __future__ import annotations
 
@@ -70,11 +70,11 @@ class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterM
 """"Pure logic core for security and safety validation."""
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [
+"""     SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
             r'(?i)(password|secret|key|token|auth|pwd)\\\\s*[:=]\\\\s*[\'"][^\'"]{8,}[\'"]',"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string
             SecurityIssueType.HARDCODED_SECRET,
@@ -83,19 +83,19 @@ class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterM
             "Use environment variables or a secure vault (e.g., Azure Key Vault).",
         ),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #             r'(?i)(api[_-]?key|access[_-]?key)\\\\s*[:=]\\\\s*[\'"][A-Za-z0-9/+=]{16,}[\'"]',
+"""             r'(?i)(api[_-]?key|access[_-]?key)\\\\s*[:=]\\\\s*[\'"][A-Za-z0-9/+=]{16,}[\'"]',
             SecurityIssueType.HARDCODED_SECRET,
             "high",
             "Hardcoded API key detected",
             "Rotate the key and move it to a secure configuration provider.",
         ),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
 # [BATCHFIX] Commented metadata/non-Python
 #             ros\.system\\\\s*\([^)]*\+","  # [BATCHFIX] closed string
@@ -105,10 +105,10 @@ class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterM
             "Use subprocess with shell=False and pass arguments as a list.",
         ),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             rev" + ral\\\\s*\(",
             SecurityIssueType.INSECURE_DESERIALIZATION,
             "critical",
@@ -116,7 +116,7 @@ class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterM
             "Use ast.literal_eval() for safe parsing or json.loads() for data.",
         ),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
 # [BATCHFIX] Commented metadata/non-Python
 #             rrandom\.(random|randint|choice)\\\\s*\(","  # [BATCHFIX] closed string
@@ -126,7 +126,7 @@ class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterM
             "Use the 'secrets' module for cryptographically strong random numbers.",
         ),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
 # [BATCHFIX] Commented metadata/non-Python
 #             ropen\\\\s*\([^)]*\+","  # [BATCHFIX] closed string
@@ -141,7 +141,7 @@ class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterM
         self.workspace_root = workspace_root
 # [BATCHFIX] Commented metadata/non-Python
 #         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else "None"  # [BATCHFIX] closed string
-# #
+"""
 
 from __future__ import annotations
 
@@ -165,11 +165,11 @@ class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterM
 """"Pure logic core for security and safety validation."""
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [
+"""     SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
             r'(?i)(password|secret|key|token|auth|pwd)\\\\s*[:=]\\\\s*[\'"][^\'"]{8,}[\'"]',"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string
             SecurityIssueType.HARDCODED_SECRET,
@@ -178,19 +178,19 @@ class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterM
             "Use environment variables or a secure vault (e.g., Azure Key Vault).",
         ),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #             r'(?i)(api[_-]?key|access[_-]?key)\\\\s*[:=]\\\\s*[\'"][A-Za-z0-9/+=]{16,}[\'"]',
+"""             r'(?i)(api[_-]?key|access[_-]?key)\\\\s*[:=]\\\\s*[\'"][A-Za-z0-9/+=]{16,}[\'"]',
             SecurityIssueType.HARDCODED_SECRET,
             "high",
             "Hardcoded API key detected",
             "Rotate the key and move it to a secure configuration provider.",
         ),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
 # [BATCHFIX] Commented metadata/non-Python
 #             ros\.system\\\\s*\([^)]*\+","  # [BATCHFIX] closed string
@@ -200,10 +200,10 @@ class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterM
             "Use subprocess with shell=False and pass arguments as a list.",
         ),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             rev" + ral\\\\s*\(",
             SecurityIssueType.INSECURE_DESERIALIZATION,
             "critical",
@@ -211,7 +211,7 @@ class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterM
             "Use ast.literal_eval() for safe parsing or json.loads() for data.",
         ),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
 # [BATCHFIX] Commented metadata/non-Python
 #             rrandom\.(random|randint|choice)\\\\s*\(","  # [BATCHFIX] closed string
@@ -221,7 +221,7 @@ class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterM
             "Use the 'secrets' module for cryptographically strong random numbers.",
         ),
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         (
 # [BATCHFIX] Commented metadata/non-Python
 #             ropen\\\\s*\([^)]*\+","  # [BATCHFIX] closed string

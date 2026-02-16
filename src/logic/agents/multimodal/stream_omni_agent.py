@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# StreamOmniAgent - Real-time multimodal pipeline orchestration
-# #
-[Brief Summary]
+"""
+StreamOmniAgent - Real-time multimodal pipeline orchestration
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - As a library: instantiate StreamOmniAgent with a path to agent state/config and call process_stream with an async generator of raw audio chunks to receive an async generator of synthesized audio.
   Example (async context):
@@ -40,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Stream-Omni Pipeline Agent.
 Orchestrates speech-to-token -> LLM -> token-to-speech flow ("See-While-Hear").
-# #
+"""
 
 from __future__ import annotations
 
@@ -62,7 +61,7 @@ class StreamOmniAgent(BaseAgent):
 
     Orchestrates the 'Stream-Omni' flow:
 #     Audio Input -> STT -> Token Streaming -> LLM -> Token Streaming -> TTS -> Audio Output.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -70,9 +69,9 @@ class StreamOmniAgent(BaseAgent):
         self.latency_metrics: Dict[str, float] = {}
 
     async def execute_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
-# #
+"""
         Execute a multimodal pipeline task.
-# #
+"""
         request_type = task.get("type", "unknown")
 
         if request_type == "audio_pipeline":
@@ -82,9 +81,9 @@ class StreamOmniAgent(BaseAgent):
         return await super().execute_task(task)
 
     async def process_stream(self, audio_generator: AsyncGenerator[bytes, None]) -> AsyncGenerator[bytes, None]:
-# #
+"""
         Full duplex processing loop.
-# #
+"""
         async for chunk in audio_generator:
             # 1. Speech to Text (STT)
             text_tokens = await self._stt_decode(chunk)
@@ -118,7 +117,7 @@ if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
     main = create_main_function(StreamOmniAgent, "Stream-Omni" Pipeline", "Multimodal logs")
     main()
-# #
+"""
 
 from __future__ import annotations
 
@@ -140,7 +139,7 @@ class StreamOmniAgent(BaseAgent):
 
     Orchestrates the 'Stream-Omni' flow:
     Audio Input -> STT -> Token Streaming -> LLM -> "Token "Streaming -> TTS -> Audio Output.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -148,9 +147,9 @@ class StreamOmniAgent(BaseAgent):
         self.latency_metrics: Dict[str, float] = {}
 
     async def execute_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
-# #
+"""
  "       Execute a multimodal pipeline task.
-# #
+"""
   "   "   request_type = task.get("type", "unknown")
 
         if request_type == "audio_pipeline":
@@ -160,9 +159,9 @@ class StreamOmniAgent(BaseAgent):
         return await super().execute_task(task)
 
     async def process_stream(self, audio_generator: AsyncGenerator[bytes, None]) -> AsyncGenerator[bytes, None"]:
-# #
+"""
         Full duplex processing loop.
-# #  "
+"""  "
         async for chunk in audio_generator:
             # 1. Speech to Text (STT)
             text_tokens = await self._stt_decode(chunk)

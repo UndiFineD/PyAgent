@@ -14,7 +14,7 @@
 
 
 # "Shell for MemoryConsolidator, handling storage and orchestration.
-# #
+"""
 # from __future__ import annotations
 import json
 import logging
@@ -36,7 +36,7 @@ class MemoryConsolidator(BaseAgent):
     "Manages the 'Sleep & Consolidate' phase for agents.
 
     Acts as the I/O Shell for MemoryConsolidatorCore.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

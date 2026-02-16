@@ -24,7 +24,7 @@ class TestAnomalyDetectionAgent:
 
     def test_record_interaction(self):
         """Test recording agent interactions."""
-        agent = AnomalyDetectionAgent("test_path")
+        agent = AnomalyDetectionAgent("test_path", memory_core=None, test_mode=True)
         interaction = {"type": "task", "target": "file1"}
         agent.record_agent_interaction("agent1", interaction)
         # Should not detect anomaly with few interactions
@@ -32,7 +32,7 @@ class TestAnomalyDetectionAgent:
 
     def test_detect_anomaly_new_type(self):
         """Test detecting anomaly for new interaction type."""
-        agent = AnomalyDetectionAgent("test_path")
+        agent = AnomalyDetectionAgent("test_path", memory_core=None, test_mode=True)
         # Build baseline
         for _ in range(10):
             agent.record_agent_interaction("agent1", {"type": "read"})
@@ -44,7 +44,7 @@ class TestAnomalyDetectionAgent:
 
     def test_check_agent_anomalies(self):
         """Test checking anomalies for specific agent."""
-        agent = AnomalyDetectionAgent("test_path")
+        agent = AnomalyDetectionAgent("test_path", memory_core=None, test_mode=True)
         for _ in range(10):
             agent.record_agent_interaction("agent1", {"type": "read"})
         agent.record_agent_interaction("agent1", {"type": "write"})
@@ -53,7 +53,7 @@ class TestAnomalyDetectionAgent:
 
     def test_update_baselines(self):
         """Test updating baselines."""
-        agent = AnomalyDetectionAgent("test_path")
+        agent = AnomalyDetectionAgent("test_path", memory_core=None, test_mode=True)
         for _ in range(15):
             agent.record_agent_interaction("agent1", {"type": "read"})
         agent.update_baselines()

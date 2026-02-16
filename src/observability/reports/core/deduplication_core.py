@@ -16,7 +16,7 @@
 Deduplication Core - Similarity-based report deduplication and JSONL export
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Use DeduplicationCore.jaccard_similarity(s1, s2) to compute word-level
   Jaccard similarity between two strings.

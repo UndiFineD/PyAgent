@@ -16,7 +16,7 @@
 Federation - Stats federation engine
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate StatsFederation(mode=FederationMode.PULL or PUSH).
 - Add remote sources via add_source(name, endpoint=..., data=..., healthy=...).

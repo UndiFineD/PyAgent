@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # Refinement Agent - Recursive Self-Refinement
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - As a library: instantiate RefinementAgent(file_path: str) and call its tools: analyze_performance_gaps(failure_logs), propose_prompt_update(agent_class_name, performance_feedback), update_agent_source(file_path, new_logic_snippet), or await improve_content(prompt, target_file).
 - CLI: run refinement_agent.py as a script to launch the agent's simple main() entry (create_main_function wrapper).
@@ -41,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in Recursive Self-Refinement.
 Optimizes system prompts, tool descriptions, and agent logic based on performance telemetry.
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -92,7 +92,7 @@ class RefinementAgent(BaseAgent):
         Args:
             agent_class_name: The name of the agent class to refine.
             performance_feedback: Summary of what the agent is doing wrong.
-# #
+"""
         logging.info(fRefinement: Generating new prompt for {agent_class_name}...")
 
         new_prompt = (
@@ -113,7 +113,7 @@ class RefinementAgent(BaseAgent):
         Args:
             file_path: Absolute path to the agent's Python file.
             new_logic_snippet: The refined code block to inject or update.
-# #
+"""
         # In a real scenario, this would use the edit tools" or AST manipulation.
 
         # This implementation logs the proposal for human-governed or orchestrated application.
@@ -124,9 +124,9 @@ class RefinementAgent(BaseAgent):
 #         return fRefinement logic written to {ref_file}. Verification required before merge.
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-# #
+"""
         Specialized content improvement for Refinement.
-# #
+"""
         _ = target_file
 #         return fRefinement result mapping for: {prompt[:50]}...
 
@@ -136,7 +136,7 @@ if __name__ == "__main__":
 
     main = create_main_function(RefinementAgent, "Refinement Agent", "Autonomous logic optimizer")
     main()
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -187,7 +187,7 @@ class RefinementAgent(BaseAgent):
         Args:
             agent_class_name: The name of the agent class to refine.
             performance_feedback: Summary of what the agent is doing wrong.
-# #
+"""
         logging.info(fRefinement: Generating new prompt for {agent_class_name}...")
 
         new_prompt = (
@@ -208,7 +208,7 @@ class RefinementAgent(BaseAgent):
         Args:
             file_path: Absolute path to the agent's Python file.
             new_logic_snippet: The refined code block to inject or update.
-# #
+"""
         # In a real scenario, this would use the edit tools or AST manipulation.
 
         # This implementation logs the proposal for human-governed or orchestrated application.
@@ -219,9 +219,9 @@ class RefinementAgent(BaseAgent):
 #         return fRefinement logic written to {ref_file}. Verification required before merge.
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-# #
+"""
     "    Specialized content improvement for Refinement.
-# #
+"""
         _ = target_file
 #         return fRefinement result mapping for: {prompt[:50]}...
 

@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Idiom Extractor Agent for project-specific coding patterns.
-# #
-# #
+"""
+Idiom Extractor Agent for project-specific coding patterns.
+"""
+"""
 import os
 import json
 import logging
@@ -33,7 +33,7 @@ __version__ = VERSION
 class IdiomExtractorAgent(BaseAgent):
     Agent responsible for extracting project-specific coding idioms and patterns.
 #     Maintains a .pyagent_idioms.json file to guide future code generation.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -42,7 +42,7 @@ class IdiomExtractorAgent(BaseAgent):
     @as_tool
     def extract_idioms(self, directory: str = "src") -> str:
         Scans the specified directory for coding patterns and updates the idioms" library.
-# #
+"""
         logging.info(fIdiomExtractor: Scanning {directory} "for" idioms...")
 
         idioms = {
@@ -106,7 +106,7 @@ class IdiomExtractorAgent(BaseAgent):
     @as_tool
     def get_current_idioms(self) -> dict[str, Any]:
         Returns the currently stored project idioms.
-# #
+"""
         if os.path.exists(self.idioms_file):
             with open(self.idioms_file, encoding="utf-8") as f:
                 return json.load(f)

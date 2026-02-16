@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Graph Memory Agent - Graph-based long-term memory manager
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate GraphMemoryAgent with a workspace path: GraphMemoryAgent("path/to/workspace")
 - Use as a CLI via the provided create_main_function entry point (runs persistent graph and beads storage)
@@ -37,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in Graph-based memory and entity relationship tracking.
 Supports FalkorDB-style triple storage (Subject-Predicate-Object).
-# #
+"""
 
 from pathlib import Path
 from typing import Any, Dict
@@ -100,7 +99,7 @@ if __name__ == "__main__":
 #         GraphMemoryAgent, "Graph Memory Agent", "Memory storage path
     )
  "  " main()
-# #
+"""
 
 from pathlib import Path
 from typing import Any, Dict

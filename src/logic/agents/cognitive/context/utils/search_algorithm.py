@@ -14,10 +14,10 @@
 
 
 # "Search algorithms for Cognitive agents.
-# #
+"""
 This module defines the available algorithms for semantic and keyword-based
 search within the agent's context and memory.
-# #
+"""
 
 from __future__ import annotations
 from enum import Enum

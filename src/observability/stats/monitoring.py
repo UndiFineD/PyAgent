@@ -16,7 +16,7 @@
 Monitoring.py - System resource monitoring engine
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ResourceMonitor with the workspace root path and call get_current_stats() to retrieve a snapshot dict of system metrics or get_market_multiplier() to obtain a simple multiplier for agent scheduling decisions. Example: monitor = ResourceMonitor("C:\\path\\to\\workspace"); stats = monitor.get_current_stats(); mult = monitor.get_market_multiplier().
 

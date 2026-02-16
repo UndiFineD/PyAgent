@@ -17,7 +17,7 @@ DocGenerator - Generates simple documentation for Improvement objects
 
 A small utility class that renders human-readable Markdown for Improvement instances using simple string templates and optional metadata extraction.
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - from src.tools.doc_generator import DocGenerator
 - gen = DocGenerator()

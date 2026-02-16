@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.generated_code import GeneratedCode
@@ -31,7 +31,7 @@ class CodeGenerator:
     Example:
         >>> generator=CodeGenerator()
 #         >>> code=generator.generate("Create a login function", context)
-# #
+"""
 
     def __init__(self) -> None:
 """self.language: str = "python"""
@@ -72,7 +72,7 @@ class CodeGenerator:
 
         Newer API (used by tests):
             set_language(...), add_context(...), generate(prompt, context_files=[...])
-# #
+"""
 #         resolved_language = language or self".language or "python
 
         used_contexts: list[str] = []

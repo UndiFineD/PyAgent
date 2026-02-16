@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# OrchestratorDelegates - Delegation methods for OrchestratorAgent
-# #
-[Brief Summary]
+"""
+OrchestratorDelegates - Delegation methods for OrchestratorAgent
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Mixin attached to an OrchestratorAgent providing thin delegation wrappers to file, update, notification, core and parallel processing managers; import and include in OrchestratorAgent class composition so the agent can call concise methods (e.g., create_file_snapshot, update_code, async_process_files).
 
@@ -29,7 +28,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 OrchestratorDelegates: Delegation methods for OrchestratorAgent.
-# #
+"""
 
 from __future__ import annotations
 
@@ -41,7 +40,7 @@ from typing import Any
 class OrchestratorDelegates:
     Mixin class that provides delegation methods for OrchestratorAgent.
 #     This helps keep the main OrchestratorAgent file small (<30KB).
-# #
+"""
 
     def create_file_snapshot(self, file_path: Path) -> str | None:
 """"Delegates to AgentFileManager."""
@@ -106,7 +105,7 @@ class OrchestratorDelegates:
     def process_files_threaded(self, files: list[Path]) -> list[Path]:
 """"Delegates to ParallelProcessor."""
         return getattr(self, "parallel_processor").process_files_threaded(files, getattr(self, "process_file"))
-# #
+"""
 
 from __future__ import annotations
 
@@ -118,7 +117,7 @@ from typing import Any
 class OrchestratorDelegates:
     Mixin class that provides delegation methods for OrchestratorAgent.
     This helps keep the main OrchestratorAgent file small (<30KB).
-# #
+"""
 
     def create_file_snapshot(self, file_path: Path) -> str | None:
 """"Delegates to AgentFileManager."""

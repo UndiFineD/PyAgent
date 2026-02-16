@@ -13,10 +13,10 @@
 # limitations under the License.
 
 # "Storage logic for GraphMemoryAgent.
-# #
+"""
 Handles the persistence and retrieval of graph data (entities, relationships)
 and 'bead' tasks from filesystem storage.
-# #
+"""
 
 from __future__ import annotations
 import json

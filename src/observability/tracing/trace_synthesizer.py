@@ -18,7 +18,7 @@
 TraceSynthesizer - Consolidate reasoning traces into a swarm graph
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: ts = TraceSynthesizer(log_dir="data/logs")
 - Synthesize graph: report = ts.synthesize()  # returns {"nodes": [...], "links": [...]}

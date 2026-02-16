@@ -16,7 +16,7 @@
 classifiers.py - URL classification for the Download Agent
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Use URLClassifier.classify_url(url: str)
   -> (type: str, metadata: Dict)

@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from dataclasses import dataclass, field
@@ -32,7 +32,7 @@ class ContextRecommendation:
         suggested_sections: Sections to add.
         reason: Why this recommendation was made.
 #         confidence: Recommendation confidence.
-# #
+"""
 
     source_file: str
     suggested_sections: list[str] = field(default_factory=lambda: [])

@@ -16,7 +16,7 @@
 trend_direction.py - TrendDirection Enum
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Minimal import: from trend_direction import TrendDirection
 - When used inside package: from src.core.base.agent_errors.trend_direction import TrendDirection

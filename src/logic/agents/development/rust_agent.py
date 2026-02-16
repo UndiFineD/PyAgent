@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # Rust Agent - Rust code improvement and auditing
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Command line: python rust_agent.py path\to\file.rs
 - As a module: from src.logic.agents.development.rust_agent import RustAgent; agent = RustAgent("path\\to\\file.rs"); agent.run()  # run() per CoderAgent interface
@@ -66,7 +66,7 @@ class RustAgent(CoderAgent):
 if __name__ == "__main__":
     main = create_main_function(RustAgent, "Rust Agent", "Path to Rust file (.rs)")
     "main()
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 

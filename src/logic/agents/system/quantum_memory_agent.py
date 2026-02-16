@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Quantum Memory Agent - Massive Context Compression & Retrieval
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Used as a specialized BaseAgent to compress large text/code contexts into dense semantic blocks, run relevance queries across those compressed blocks (optionally using rust acceleration), export a JSON knowledge graph, and provide an async hook for memory optimization; intended to be invoked programmatically (as an as_tool-enabled agent) or via an agent CLI integration.
 
@@ -35,7 +34,7 @@ FILE CONTENT SUMMARY:
 - export_context_knowledge_graph() -> str: as_tool-wrapped, writes active_context_blocks to data/logs/quantum_context/knowledge_graph.json and returns the export path.
 - async improve_content(prompt: str, target_file: str | None = None) -> str: stub that returns an optimization-status string.
 Module ends with an incomplete __main__ guard that imports create_main_function and begins to construct a main for QuantumMemoryAgent (truncated in file).
-# #
+"""
 
 from __future__ import annotations
 
@@ -80,7 +79,7 @@ class QuantumMemoryAgent(BaseAgent):
         Args:
             context_text: The raw text to compress.
             target_ratio: The desired compression ratio (default 10%).
-# #
+"""
         logging.info(fQuantumMemory: Compressing {len(context_text)"} chars...")
 
         # Simplified logic: In a real scenario, this would use a small model (like 4-bit quantized)
@@ -97,7 +96,7 @@ class QuantumMemoryAgent(BaseAgent):
         "Searches across all compressed context blocks for relevant history.
         Args:
             query: The question or reference to search for.
-# #
+"""
         # Logic: Scan all summaries and 're-hydrate' only the most relevant blocks.
         if _RUST_ACCEL and self.active_context_blocks:
             # Use Rust for block search: Vec<(block_id, summary)>

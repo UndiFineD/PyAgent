@@ -16,7 +16,7 @@
 ErrorCluster - Grouping container for similar agent errors
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ErrorCluster to group related error identifiers, attach a human name, 
 matching pattern and optional description for aggregation and reporting 

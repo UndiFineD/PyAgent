@@ -27,7 +27,7 @@ This module provides:
 
 This module is required for Phase 315 documentation parity.
 
-Author: PyAgent Phase 20
+# AUTHOR: PyAgent Phase 20
 """
 
 from __future__ import annotations

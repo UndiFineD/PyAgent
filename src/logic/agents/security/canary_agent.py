@@ -76,7 +76,7 @@ class CanaryAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 else task_data.get("canary_id")
             )
             context = (
-                getattr(task_data, "context", None)
+                getattr(task_data, "context", {})
                 if not isinstance(task_data, dict)
                 else task_data.get("context", {})
             )
@@ -94,6 +94,36 @@ class CanaryAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.canaries[canary.id] = canary
         logging.info(f"Deployed canary: {name} ({obj_type})")
         return canary.id
+
+        @as_tool
+        def list_canaries(self) -> List[Dict[str, Any]]:
+            """List deployed canaries. Enforces privacy."""
+            if not self._privacy_enforced:
+                raise PermissionError("Privacy enforcement is required for canary listing.")
+            return [
+                {"id": c.id, "name": c.name, "type": c.type, "description": c.description}
+                for c in self._canaries.values()
+            ]
+
+        @as_tool
+        def attempt_access(self, canary_id: str, agent_id: str, context: Dict[str, Any]) -> bool:
+            """Attempt access to a canary object. Enforces privacy and logs alerts."""
+            if not self._privacy_enforced:
+                raise PermissionError("Privacy enforcement is required for canary access.")
+            canary = self._canaries.get(canary_id)
+            if not canary:
+                return False
+            result = canary.attempt_access(agent_id, context)
+            if not result:
+                self._alerts.append({"canary_id": canary_id, "agent_id": agent_id, "context": context})
+            return result
+
+        @as_tool
+        def get_alerts(self) -> List[Dict[str, Any]]:
+            """Get all canary alerts. Enforces privacy."""
+            if not self._privacy_enforced:
+                raise PermissionError("Privacy enforcement is required for alert access.")
+            return self._alerts
 
     @as_tool()
     def list_canaries(self) -> List[Dict[str, Any]]:

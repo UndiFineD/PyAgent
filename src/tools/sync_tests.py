@@ -16,7 +16,7 @@
 sync_tests.py - Synchronize test files with cleaned modules
 
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Execute as standalone script: python sync_tests.py
 - Synchronizes test files in the tests/unit directory with modules in the cleaned directory

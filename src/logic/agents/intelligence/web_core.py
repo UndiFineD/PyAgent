@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # web_core.py - Web content cleaning and link extraction
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.web_core import WebCore
 cleaned = WebCore().clean_html(html_string)
@@ -44,7 +43,7 @@ FILE CONTENT SUMMARY:
 WebCore logic for PyAgent.
 Pure logic for cleaning and processing web content.
 No I/O or side effects.
-# #
+"""
 
 from __future__ import annotations
 
@@ -116,7 +115,7 @@ class WebCore:
                 href = urllib.parse.urljoin(base_url, href)
             links.append(href)
         return list(set(links))
-# #
+"""
 
 from __future__ import annotations
 

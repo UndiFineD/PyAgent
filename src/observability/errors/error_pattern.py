@@ -16,7 +16,7 @@
 ErrorPattern - Dataclass for recognized error patterns
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate to represent a discovered/logged error pattern in the agent pipeline:
   from src.core.agent_errors.error_pattern import ErrorPattern

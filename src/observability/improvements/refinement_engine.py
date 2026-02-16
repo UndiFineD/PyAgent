@@ -16,7 +16,7 @@
 Refinement Engine - Improvements Agent Entrypoint
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - As a script: python refinement_engine.py <path/to/file.improvements.md>
 - From project root (module import): python -m src.observability.improvements.refinement_engine <path/to/file.improvements.md>

@@ -31,7 +31,7 @@ Features:
 - ZMQ utilities: Socket helpers for ZeroMQ
 - Port scanning and discovery
 
-Author: PyAgent Phase 20
+# AUTHOR: PyAgent Phase 20
 """
 
 from __future__ import annotations

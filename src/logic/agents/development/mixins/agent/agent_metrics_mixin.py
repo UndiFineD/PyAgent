@@ -18,8 +18,8 @@
 # limitations under the License.
 
 # "Code metrics and quality logic for CoderAgent.
-# #
-# # pylint: disable=too-many-ancestors
+"""
+""" pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 

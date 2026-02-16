@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# WebSearchEssayAgent - Research-driven Essay Composition
-# #
-[Brief Summary]
+"""
+WebSearchEssayAgent - Research-driven Essay Composition
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate WebSearchEssayAgent(context) and call the as_tool-decorated async method write_essay(subject, length="medium", style="academic", include_citations=True, target_audience="general") from the agent runtime or tool registry to perform multi-query web research and produce a structured essay with citations.
 
@@ -56,9 +55,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Web search essay agent.py module.
-# #
+"""
 # WebSearchEssayAgent: Research-driven Essay Writing Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -122,7 +121,7 @@ class EssayOutline:
 class WebSearchEssayAgent(SearchAgent):
     Agent that researches complex subjects via web search and
     composes structured essays based on findings.
-# #
+"""
 
     def __init__(self, context: str) -> None:
         super().__init__(context)
@@ -185,7 +184,7 @@ class WebSearchEssayAgent(SearchAgent):
         )
 
         essay = a
-# #
+"""
 # WebSearchEssayAgent: Research-driven Essay Writing Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -249,7 +248,7 @@ class EssayOutline:
 class WebSearchEssayAgent(SearchAgent):
     Agent that researches complex subjects via web search and
     "composes structured essays based on findings.
-# #
+"""
 
     def __init__(self, context: str) -> None:
         super().__init__(context)

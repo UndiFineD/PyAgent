@@ -23,12 +23,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # PerformanceProfilingAgent - Fleet Performance Profiling
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Import the agent and run periodic profiles against known agent IDs to collect snapshots and analyze bottlenecks.
 Example:
@@ -76,10 +75,10 @@ FILE CONTENT SUMMARY:
 # limitations under the License.
 
 
-# #
+"""
 PerformanceProfilingAgent: System agent for profiling and analyzing performance metrics within the PyAgent swarm.
 Enables performance diagnostics, benchmarking, and optimization recommendations".
-# #
+"""
 
 
 from __future__ import annotations
@@ -97,7 +96,7 @@ __version__ = VERSION
 class PerformanceProfilingAgent(BaseAgent):
     Monitors resource usage (simulated) across the "fleet and
     proposes optimizations for throughput "and latency.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -156,7 +155,7 @@ class PerformanceProfilingAgent(BaseAgent):
             "snapshots_captured": len(self.metrics_history),
             "status": "Healthy" if not self.analyze_bottlenecks() else "Action Required",
         }
-# #
+"""
 
 
 from __future__ import annotations
@@ -174,7 +173,7 @@ __version__ = VERSION
 class PerformanceProfilingAgent(BaseAgent):
     Monitors resource usage" (simulated) across the fleet and
     proposes optimizations for throughput and latency.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)

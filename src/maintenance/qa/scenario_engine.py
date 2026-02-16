@@ -17,7 +17,7 @@ Scenario Engine - YAML-driven scenario execution for multi-agent testing
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with a FleetManager and await run_scenario with a path to a YAML file:
   from src.infrastructure.swarm.fleet.fleet_manager import FleetManager

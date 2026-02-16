@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# AsyncioThreadingCoderAgent - High-concurrency orchestration for coding tasks
-# #
-[Brief Summary]
+"""
+AsyncioThreadingCoderAgent - High-concurrency orchestration for coding tasks
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate within a PyAgent workspace and call async methods from an asyncio event loop; intended to run alongside other agents in a fleet. Example usage:
 from src.agents.asyncio_threading_coder_agent import AsyncioThreadingCoderAgent
@@ -44,7 +43,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Asyncio threading coder agent.py module.
-# #
+"""
 
 from __future__ import annotations
 
@@ -56,7 +55,7 @@ from src.core.base.lifecycle.version import VERSION
 
 class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """Specialized Agent for high-concurrency coding tasks using asyncio and threading."""
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -79,7 +78,7 @@ class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancesto
 #         "Improves content using asyncio and threading patterns.
      "   "_ = target_file
 #         return fOptimized {prompt} for asyncio/threading concurrency.
-# #
+"""
 
 from __future__ import annotations
 
@@ -91,7 +90,7 @@ from src.core.base.lifecycle.version import VERSION
 
 class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Specialized Agent for high-concurrency coding tasks using asyncio and threading.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)

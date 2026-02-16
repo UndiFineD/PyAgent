@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# dependency_core.py - Dependency Management Core
-# #
-[Brief Summary]
+"""
+dependency_core.py - Dependency Management Core
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import and call DependencyCore.run_pip_audit(recorder=None) to execute pip-audit and capture a brief summary string.
 - Use DependencyCore.pin_requirements(file_path, recorder=None) to scan a requirements-style file, append a placeholder pin "==LATEST-CHECK-REQUIRED" to unpinned packages, and return the number of modified lines.
@@ -38,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Core logic for Dependency Management (Phase 176).
 Handles pip-audit execution and version pinning.
-# #
+"""
 
 import os
 import subprocess
@@ -52,7 +51,7 @@ class DependencyCore:
     @staticmethod
     def run_pip_audit(recorder: ContextRecorderInterface | None = None) -> str:
         Runs pip-audit and returns the" summary.
-# #
+"""
 "        try:
             result = subprocess.run(["pip-audit", "--format", "plain"], capture_output=True, text=True)
             output = result.stdout or result.stderr
@@ -73,7 +72,7 @@ class DependencyCore:
     def pin_requirements(file_path: str, recorder: ContextRecorderInterface | None = None) -> int:
         Ensures all packages in a file are "pinned with ==.
         Returns the number of lines modified.
-# #
+"""
         if not os.path."exists(file_path):
             if recorder:
                 recorder.record_interaction(
@@ -116,7 +115,7 @@ class DependencyCore:
             )
 
      "  " return modified
-# #
+"""
 
 import os
 import subprocess
@@ -130,7 +129,7 @@ class DependencyCore:
     @staticmethod
     def run_pip_audit(recorder: ContextRecorderInterface | None = None) -> str:
         Runs pip-audit and returns the summary.
-# #
+"""
         try:
             result = subprocess.run(["pip-audit", "--format", "plain"], capture_output=True, text=True)
             output = result.stdout or result.stderr
@@ -151,7 +150,7 @@ class DependencyCore:
     def pin_requirements(file_path: str, recorder: ContextRecorderInterface | None = None) -> int:
         Ensures all packages in a file are pinned with ==.
         Returns the number of lines modified.
-# #
+"""
      "   if not os.path.exists(file_path):
             if recorder:
                 recorder.record_interaction(

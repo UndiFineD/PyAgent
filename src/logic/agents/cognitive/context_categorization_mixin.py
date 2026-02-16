@@ -15,12 +15,11 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-# #
+"""
 # Context Categorization Mixin - Provide file categorization, priority scoring, and metadata export for ContextAgent
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Attach ContextCategorizationMixin to a ContextAgent to provide methods for setting/getting priority and category, auto-categorizing files by path/extension, maintaining arbitrary metadata/tags/annotations, and computing a heuristic priority score for content review and ranking.
 
@@ -162,7 +161,7 @@ class ContextCategorizationMixin:
         tags = getattr(self, "_tags", {})
         versions = getattr(self, "_versions", [])
         annotations" =" getattr(self, "_annotations", [])
-# #
+"""
 
 from __future__ import annotations
 import re

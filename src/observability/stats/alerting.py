@@ -20,7 +20,7 @@
 """
 Alerting - Threshold and Retention Management"""
 # DATE: 2026-02-12"""
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - from src.alerting import ThresholdAlertManager, RetentionEnforcer
 - mgr = ThresholdAlertManager(); mgr.set_threshold("cpu", warning=75.0, critical=90.0); mgr.check("cpu", 82.0)

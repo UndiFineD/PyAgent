@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.sharing_permission import (
@@ -36,7 +36,7 @@ class SharedContext:
         shared_with: List of usernames shared with.
         permission: Permission level.
 #         last_sync: Last synchronization timestamp.
-# #
+"""
 
     context_id: str
     owner: str

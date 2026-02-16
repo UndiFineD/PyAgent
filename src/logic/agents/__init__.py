@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
-# "Agent namespace containing specialized swarm agent implementations.
-# #
+# Agent namespace containing specialized swarm agent implementations.
+"""
+# This module provides the agent namespace for specialized swarm agent implementations.
+"""
 # from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION

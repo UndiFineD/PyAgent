@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # [BATCHFIX] Commented metadata/non-Python
-# # "Reporting and recording logic for SecurityCore."  # [BATCHFIX] closed string
-# #
+""" "Reporting and recording logic for SecurityCore."  # [BATCHFIX] closed string
+"""
 # from __future__ import annotations
 
 import logging
@@ -34,7 +34,7 @@ class SecurityReporterMixin:
         if hasattr(self, "recorder") and self.recorder:
             try:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #                 self.recorder.record_lesson(
                     "security_vulnerability",
                     {
@@ -49,31 +49,31 @@ class SecurityReporterMixin:
 #                 logging.debug(fSecurityCore: Failed to record finding: {e}")"  # [BATCHFIX] closed string
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def get_risk_level(self, vulnerabilities: list[SecurityVulnerability]) -> str:
+"""     def get_risk_level(self, vulnerabilities: list[SecurityVulnerability]) -> str:
 """"Determines the overall risk level for a report."""
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         severities = [v.severity for v in vulnerabilities]
+"""         severities = [v.severity for v in vulnerabilities]
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         if "critical" in severities or "CRITICAL" in [s.upper() for s in severities]:
+"""         if "critical" in severities or "CRITICAL" in [s.upper() for s in severities]:
 # [BATCHFIX] Commented metadata/non-Python
-# #             return "CRITICAL"  # [BATCHFIX] closed string
+"""             return "CRITICAL"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         if "high" in severities or "HIGH" in [s.upper() for s in severities]:
+"""         if "high" in severities or "HIGH" in [s.upper() for s in severities]:
 # [BATCHFIX] Commented metadata/non-Python
-# #             return "HIGH"  # [BATCHFIX] closed string
+"""             return "HIGH"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         if "medium" in severities or "MEDIUM" in [s.upper() for s in severities]:
+"""         if "medium" in severities or "MEDIUM" in [s.upper() for s in severities]:
 # [BATCHFIX] Commented metadata/non-Python
-# #             return "MEDIUM"  # [BATCHFIX] closed string
+"""             return "MEDIUM"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# #         return "LOW"  # [BATCHFIX] closed string
+"""         return "LOW"  # [BATCHFIX] closed string

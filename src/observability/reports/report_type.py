@@ -18,7 +18,7 @@ from __future__ import annotations
 report_type.py - Defines ReportType enum for agent report categories
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the module and use ReportType to select or compare report kinds when generating agent reports:
   from src.interface.reports.report_type import ReportType

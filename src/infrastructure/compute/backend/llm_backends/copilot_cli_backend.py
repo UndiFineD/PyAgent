@@ -17,7 +17,7 @@ Copilot CLI LLM Backend - Local AI Execution
 
 Native interface for the GitHub Copilot CLI to provide local-first AI capabilities.
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Invoked through the LLMBackend factory to provide chat and architectural insights using the local 'copilot' command.
 

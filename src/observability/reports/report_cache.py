@@ -18,7 +18,7 @@ from __future__ import annotations
 ReportCache - Cache for report data
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate as a lightweight container: cache = ReportCache(path="reports/weekly.md", content="...", content_hash="sha256...", created_at=time.time()).
 - Check expiry: expired = (time.time() - cache.created_at) > cache.ttl_seconds.

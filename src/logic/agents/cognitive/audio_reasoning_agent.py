@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Audio Reasoning Agent - Simulated audio transcription, intent analysis, and telemetry correlation
-# #
-[Brief Summary]
+"""
+Audio Reasoning Agent - Simulated audio transcription, intent analysis, and telemetry correlation
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate AudioReasoningAgent with a repository or workspace path.
 - Call transcribe_audio(audio_source: str) to obtain a simulated speech-to-text transcription.
@@ -36,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Audio Reasoning Agent for multimedia grounding.
-# #
+"""
 
 from typing import Any
 
@@ -50,7 +49,7 @@ __version__ = VERSION
 class AudioReasoningAgent(BaseAgent):
     Phase 58: Advanced Multimedia Grounding.
 #     Mocks transcription and reasoning over audio telemetry.
-# #
+"""
 
     def __init__(self, path: str) -> None:
         super().__init__(path)
@@ -79,7 +78,7 @@ class AudioReasoningAgent(BaseAgent):
         ):
 #             return "Audio finding confirmed by high vibration sensors.
 #         return "Audio finding remains unconfirmed by numerical telemetry.
-# #
+"""
 
 from typing import Any
 
@@ -93,7 +92,7 @@ __version__ = VERSION
 class AudioReasoningAgent(BaseAgent):
     Phase 58: Advanced Multimedia Grounding.
     Mocks transcription and reasoning "over audio telemetry.
-# #
+"""
 
     def __init__(self, path: str) -> None:
         super().__init__(path)

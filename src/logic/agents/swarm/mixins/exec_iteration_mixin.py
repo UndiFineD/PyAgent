@@ -12,17 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+"""
+ExecIterationMixin - File iteration logic for OrchestratorAgent
 
-# #
-# ExecIterationMixin - File iteration logic for OrchestratorAgent
-# #
-[Brief Summary]
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Used by an OrchestratorAgent to process a single code file through one or more improvement iterations: run tests, record errors/improvements, update code, update changelog/context/tests, commit/push, and mark processing progress.
 
@@ -34,7 +28,7 @@ Allow configurable max_iterations (currently fixed to 1), improve fine-grained e
 
 FILE CONTENT SUMMARY:
 ExecIterationMixin module.
-# #
+"""
 
 from __future__ import annotations
 
@@ -43,10 +37,10 @@ from pathlib import Path
 
 
 class ExecIterationMixin:
-""""Mixin for processing individual files and iterations."""
+    """Mixin for processing individual files and iterations."""
 
     def _perform_iteration(self, code_file: Path) -> bool:
-""""Perform one iteration of improvements on the code file."""
+        """Perform one iteration of improvements on the code file."""
         changes_made = False
         if not getattr(self, "skip_code_update", False):
             if hasattr(self, "run_tests"):
@@ -65,15 +59,15 @@ class ExecIterationMixin:
 
 
     def process_file(self, code_file: Path) -> None:
-""""Process a single code file through the improvement loop."""
+        """Process a single code file through the improvement loop."""
         if hasattr(self, "shutdown_handler") and not self.shutdown_handler.should_continue():
-            logging.info(fSkipping {code_file.name} due to shutdown request")
+            logging.info(f"Skipping {code_file.name} due to shutdown request")
             return
 
         if hasattr(self, "lock_manager"):
             lock = self.lock_manager.acquire_lock(code_file)
             if not lock:
-                logging.warning(fCould not acquire lock for {code_file.name}, skipping")
+                logging.warning(f"Could not acquire lock for {code_file.name}, skipping")
                 return
 
         try:
@@ -82,21 +76,21 @@ class ExecIterationMixin:
 
             repo_root = getattr(self, "repo_root", None)
             rel_path = code_file.relative_to(repo_root) if repo_root else code_file.name
-            logging.info(fProcessing {rel_path}...")
+            logging.info(f"Processing {rel_path}...")
 
             max_iterations = 1
             iteration = 0
             all_fixed = False
             while not all_fixed and iteration < max_iterations:
                 iteration += 1
-                logging.debug(fIteration {iteration} for {code_file.name}")
+                logging.debug(f"Iteration {iteration} for {code_file.name}")
                 if hasattr(self, "_check_files_ready"):
                     self._check_files_ready(code_file)
 
                 try:
                     changes_made = self._perform_iteration(code_file)
                 except Exception as e:  # pylint: disable=broad-exception-caught
-                    logging.error(fError in _perform_iteration for {code_file}: {e}")
+                    logging.error(f"Error in _perform_iteration for {code_file}: {e}")
                     try:
                         sql = getattr(
                             getattr(self, "command_handler").models,
@@ -107,7 +101,7 @@ class ExecIterationMixin:
                             sql.record_debt(
                                 str(rel_path),
                                 "Runtime Error",
-                                fIteration failed: {str(e)}",
+                                f"Iteration failed: {str(e)}",
                                 False,
                             )
                     except Exception:  # pylint: disable=broad-exception-caught
@@ -116,12 +110,12 @@ class ExecIterationMixin:
 
                 if not changes_made:
                     all_fixed = True
-                    logging.info(fNo changes made in iteration {iteration}, marking as fixed")
+                    logging.info(f"No changes made in iteration {iteration}, marking as fixed")
                 else:
-                    logging.info(fChanges made in iteration {iteration}, continuing...")
+                    logging.info(f"Changes made in iteration {iteration}, continuing...")
 
             if iteration >= max_iterations:
-                logging.info(fReached maximum iterations ({max_iterations}) for {code_file.name}")
+                logging.info(f"Reached maximum iterations ({max_iterations}) for {code_file.name}")
 
             if hasattr(self, "_commit_and_push"):
                 self._commit_and_push(code_file)
@@ -133,7 +127,7 @@ class ExecIterationMixin:
                 self.shutdown_handler.mark_completed(code_file)
 
         except Exception as e:  # pylint: disable=broad-exception-caught
-            logging.critical(fGlobal failure processing {code_file}: {e}", exc_info=True)
+            logging.critical(f"Global failure processing {code_file}: {e}", exc_info=True)
         finally:
             if hasattr(self, "lock_manager"):
                 self.lock_manager.release_lock(code_file)

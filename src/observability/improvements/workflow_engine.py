@@ -15,7 +15,7 @@
 """
 Workflow Engine - Manages improvement workflow transitions"""
 # DATE: 2026-02-12"""
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import WorkflowEngine from workflow_engine and instantiate: engine = WorkflowEngine()
 - Use engine.transition(improvement, from_status, to_status) to attempt a state change; it returns a TransitionResult indicating success and an optional message.

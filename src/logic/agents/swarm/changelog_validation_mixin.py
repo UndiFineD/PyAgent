@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Changelog Validation Mixin - Validate changelog entries and content
-# #
-[Brief Summary]
+"""
+Changelog Validation Mixin - Validate changelog entries and content
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Inherit ChangelogValidationMixin into a class that supplies a _validation_rules sequence and optionally a _template object then call validate_entry(entry) to validate a ChangelogEntry or validate_changelog(content) to validate whole changelog content
 
@@ -45,7 +44,7 @@ Class ChangelogValidationMixin with methods:
   - if self has _template and it is truthy then iterates template.sections and appends warning-type missing_section issues when "### {section}" and "## {section}" are not present in content
 
 END OF MODULE DESCRIPTION
-# #
+"""
 
 from __future__ import annotations
 

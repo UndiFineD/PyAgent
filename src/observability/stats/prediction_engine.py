@@ -21,7 +21,7 @@ Prediction Engine - Forecasting & Change Detection
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate StatsChangeDetector to monitor numeric metrics and trigger listeners when metrics change beyond a relative threshold.
 - Instantiate StatsForecaster to maintain simple history-based forecasts, request point predictions, multi-step predictions, and basic confidence intervals; optionally uses rust_core for optimized confidence computations.

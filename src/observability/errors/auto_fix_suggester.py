@@ -16,7 +16,7 @@
 AutoFixSuggester - Generate automated fix suggestions for runtime errors
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.tools.auto_fix_suggester import AutoFixSuggester
 suggester = AutoFixSuggester()

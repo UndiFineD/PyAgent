@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # HandyAgent - Terminal-native context-aware shell agent
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with the repository or target file path: HandyAgent("C:\\path\\to\\repo")
 - Use agent methods (delegated to mixins) to perform intelligent file searches, record local context, and execute or simulate shell commands within the codebase context.
@@ -37,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in terminal-native interactions and context-aware shell execution.
 Inspired by the Handy pattern (Rust terminal agent) and GitHub Copilot CLI.
-# #
+"""
 
 from __future__ import annotations
 
@@ -73,7 +72,7 @@ class HandyAgent(BaseAgent, HandyFileSystemMixin, HandyTerminalMixin, HandyCoreM
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
     # Methods delegated to "mixins
-# #
+"""
 
 from __future__ import annotations
 

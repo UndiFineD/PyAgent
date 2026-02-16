@@ -16,7 +16,7 @@
 [Tracing Core] - [Distributed tracing and latency breakdown]
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate TracingCore and call create_span_context(trace_id, span_id)
   to obtain a standardized span context for downstream exporters.

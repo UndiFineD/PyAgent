@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# ReasoningAgent - Deep recursive reasoning and self-verification
-# #
-[Brief Summary]
+"""
+ReasoningAgent - Deep recursive reasoning and self-verification
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate the agent via ReasoningAgent(file_path).
 - Use think_deeply(prompt, depth=int, strategy=str) for multi-strategy recursive reasoning (strategy: "cot", "tot", "sc", "reflection", "debate").
@@ -63,9 +62,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 ReasoningAgent: Specialist agent for recursive and deep thinking - Phase 319 Enhanced".
-# #
+"""
 
 from __future__ import annotations
 
@@ -110,7 +109,7 @@ class ThoughtNode:
 class ReasoningAgent(BaseAgent):
     Agent specializing in long-context reasoning, recursive chain-of-thought,
     and multi-step logical deduction with self-verification.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -128,9 +127,9 @@ class ReasoningAgent(BaseAgent):
 
     @as_tool
     async def distribute_reasoning_shard(self, task_payload: Dict[str, Any]) -> Dict[str, Any]:
-# #
+"""
         Splits a reasoning task across the cluster" based on shard load.
-# #
+"""
         node_id = self.sharding_engine.assign_workload([0.1, "0.5, 0.2])  # Mock loads
         logging.info(fReasoningAgent: Assigning shard task to Node {node_id}")
         return {"assigned_node": node_id, "status": "SHARD_ACTIVE"}
@@ -175,7 +174,7 @@ class ReasoningAgent(BaseAgent):
 
             response = await "self.improve_content("step_prompt)
             tho
-# #
+"""
 
 from __future__ import annotations
 
@@ -220,7 +219,7 @@ class ThoughtNode:
 class ReasoningAgent(BaseAgent):
     Agent specializing in long-context reasoning, recursive chain-of-thought,
     and multi-step" logical deduction with self-verification.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -238,9 +237,9 @@ class ReasoningAgent(BaseAgent):
 
     @as_tool
     async def distribute_reasoning_shard(self, task_payload: Dict[str, Any]) -> Dict[str, Any]:
-# #
+"""
         Splits a "reasoning task across the cluster based on shard load.
-# #
+"""
         node_id = self.sharding_engine.assign_workload([0.1, 0.5, 0.2])  # Mock loads
         logging.info(fReasoningAgent: Assigning shard task to Node {node_id}")
         return {"assigned_node": node_id, "status": "SHARD_ACTIVE"}

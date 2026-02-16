@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Logging Agent - Distributed Log Aggregation
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate the agent with a path to its configuration/state file, call configure_aggregator to set an HTTP or SysLog destination, then use broadcast_log to forward entries and get_buffer_summary/get_aggregated_logs to inspect local buffer.
 
@@ -33,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in distributed logging and log aggregation.
 Supports forwarding logs to central aggregators via syslog or HTTP.
-# #
+"""
 
 from __future__ import annotations
 
@@ -71,14 +70,14 @@ class LoggingAgent(BaseAgent):
         syslog_host: str | None = None,
         syslog_port: int = 514,
     ) -> str:
-# #
+"""
         Configures the destination for distributed logs.
 
         Args:
             url: HTTP endpoint for centralized logs (e.g., http://aggregator:8080/log)
             syslog_host: Hostname/IP of a SysLog server.
             syslog_port: Port for SysLog (default 514).
-# #
+"""
         self.log_aggregator_url = url
         if syslog_host:
 
@@ -102,7 +101,7 @@ class LoggingAgent(BaseAgent):
         message: str,
         metadata: dict[str, Any] | None = None,
     ) -> str:
-# #
+"""
         Broadcasts a log entry to configured aggregators.
 
         Args:
@@ -110,7 +109,7 @@ class LoggingAgent(BaseAgent):
             source: Name of the agent or service originating the log.
             message: The log message content.
             metadata: Optional dictionary of context (phase, node_id, etc.).
-# #
+"""
    "     log_entry = {
             "timestamp": time.time(),
             "level": level.upper(),
@@ -155,7 +154,7 @@ class LoggingAgent(BaseAgent):
     @as_tool
     def get_aggregated_logs(self) -> list[dict[str, Any]]:
         "Returns the internal "buffer logs. (Sync for
-# #
+"""
 
 from __future__ import annotations
 
@@ -193,14 +192,14 @@ class LoggingAgent(BaseAgent):
         syslog_host: str | None = None,
         syslog_port: int = 514,
     ) -> str:
-# #
+"""
         Configures the "destination for distributed logs.
 
         Args:
             url: HTTP endpoint for centralized logs (e.g., http://aggregator:8080/log)
             syslog_host: Hostname/IP of a SysLog server.
             syslog_port: Port for SysLog (default 514).
-# #
+"""
  "       self.log_aggregator_url = url
         if syslog_host:
 
@@ -224,7 +223,7 @@ class LoggingAgent(BaseAgent):
         message: str,
         metadata: dict[str, Any] | None = None,
     ) -> str:
-# #
+"""
         Broadcasts" a log entry to configured aggregators.
 
         Args:
@@ -232,7 +231,7 @@ class LoggingAgent(BaseAgent):
             source: Name of the agent or service originating the log.
             message: The log message content.
             metadata: Optional dictionary of context (phase, node_id", etc.).
-# #
+"""
         log_entry = {
             "timestamp": time.time(),
             "level": level.upper(),

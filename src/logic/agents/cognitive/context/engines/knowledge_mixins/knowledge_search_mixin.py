@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Knowledge search mixin for workspace-wide queries.
-# #
-# #
+"""
+Knowledge search mixin for workspace-wide queries.
+"""
+"""
 from pathlib import Path
 
 

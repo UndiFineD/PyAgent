@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Arxiv Core - ArXiv paper fetch, extract and summarize
-# #
-[Brief Summary]
+"""
+Arxiv Core - ArXiv paper fetch, extract and summarize
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ArxivCore() and call search(query, max_results) to find papers.
 - Use download_paper(pdf_url, filename) to fetch PDFs into data/research.
@@ -38,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Arxiv core.py module.
-# #
+"""
 
 import logging
 import os
@@ -128,7 +127,7 @@ class ArxivCore:
 #             block += f"   - PDF: {res['pdf_url']}\n
 #             block += f"   - Summary: {res['summary'][:200]}...\n\n
   "  "    return block
-# #
+"""
 
 import logging
 import os

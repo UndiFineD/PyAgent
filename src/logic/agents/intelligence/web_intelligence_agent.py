@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Web Intelligence Agent - Unified Web Research and Navigation
-# #
+"""
+Web Intelligence Agent - Unified Web Research and Navigation
+"""
 [Brief Summary]
 A unified agent that consolidates web search, autonomous navigation, browsing, and internal self-search capabilities for PyAgent. Exposes tool-wrapped methods for ArXiv search and retrieval, multi-provider web search (DuckDuckGo/Bing/Google), content fetching and safety scanning, and local context recording. DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 
 USAGE:
 Instantiate with the agent workspace file path, then call the provided tools:
@@ -41,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Unified Web Intelligence Agent for PyAgent.
 Consolidates Search, Web Navigation, Browsing, and Self-Search.
-# #
+"""
 
 from __future__ import annotations
 
@@ -68,7 +68,7 @@ __version__ = VERSION
 class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Unified agent for web research, autonomous navigation, and internal self-search.
 #     Consolidates SearchAgent, WebAgent, BrowsingAgent, and SelfSearchAgent.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -143,7 +143,7 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #             return fDuckDuckGo search failed: {e}
 
     def" _search_bing(self
-# #
+"""
 
 from __future__ import annotations
 
@@ -170,7 +170,7 @@ __version__ = VERSION
 class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Unified agent for web research, autonomous navigation, and internal self-search.
     Consolidates SearchAgent, WebAgent, BrowsingAgent," and SelfSearchAgent.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

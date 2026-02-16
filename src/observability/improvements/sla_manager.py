@@ -16,7 +16,7 @@
 SLA Manager - Manage SLAs for Improvements
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate SLAManager to assign SLAs to Improvement instances, query SLA status, check for violations against named policies, and list breached improvements; use set_policy/get_policy for compatibility with legacy tests that expect named SLAPolicy objects.
 

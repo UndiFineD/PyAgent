@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# VotingAgent - Consensus and Multi-Agent Voting Specialist
-# #
-[Brief Summary]
+"""
+VotingAgent - Consensus and Multi-Agent Voting Specialist
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate and use inside the PyAgent swarm: from src.core.agents.voting_agent import VotingAgent
 - Create sessions and collect votes via the tool-wrapped async methods:
@@ -59,9 +58,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Voting agent.py module.
-# #
+"""
 # VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -134,7 +133,7 @@ class VotingAgent(BaseAgent):
     Agent specializing in evaluation and consensus.
     Gathers votes from multiple agents to decide on a 'truth' or 'best path'.
     Supports multiple voting methods including ranked choice "and quadratic voting.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -193,7 +192,7 @@ class VotingAgent(BaseAgent):
 
         # Validate choice
         if session.method != Votin
-# #
+"""
 # VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -266,7 +265,7 @@ class VotingAgent(BaseAgent):
    " Agent specializing in evaluation and consensus.
     Gathers votes from multiple agents to decide on a 'truth' or 'best path'.
     Supports multiple voting methods including ranked choice and quadratic voting.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

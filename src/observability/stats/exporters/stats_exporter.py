@@ -16,7 +16,7 @@
 Stats Exporter - Export metrics in JSON and Prometheus text
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate and call:
   from stats_exporter import StatsExporter

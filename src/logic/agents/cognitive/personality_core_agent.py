@@ -14,7 +14,7 @@
 
 
 # "Agent for managing emotional intelligence and communication style of the fleet.
-# #
+"""
 # from __future__ import annotations
 
 import logging
@@ -31,7 +31,7 @@ __version__ = VERSION
 class PersonalityCoreAgent(BaseAgent):
     Manages the 'emotional intelligence' and 'vibes' of the fleet.
     Adjusts communication style and task priorities based on user context.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -45,7 +45,7 @@ class PersonalityCoreAgent(BaseAgent):
     @as_tool
     def set_vibe_track(self, user_input: str) -> dict[str, Any]:
         Analyzes user input and sets the fleet-wide emotional/operational vibe.
-# #
+"""
         logging.info(fPersonalityCoreAgent: Analyzing vibe for: {user_input[:50]}...")
 
         # In a real implementation, we'd use LLM to classify sentiment/urgency
@@ -81,7 +81,7 @@ class PersonalityCoreAgent(BaseAgent):
     @as_tool
     def get_track_guidance(self) -> str:
         Returns instructions for other agents on how to behave under the current vibe.
-# #
+"""
   "      guidance = {
             "professional": "Direct, technical, and concise.",
             "friendly": "Encouraging, helpful, and personable.",

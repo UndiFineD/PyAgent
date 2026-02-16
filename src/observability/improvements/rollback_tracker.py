@@ -16,7 +16,7 @@
 Rollback Tracker - Track and record improvement rollbacks
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate RollbackTracker(), call save_state(improvement) before applying an Improvement, call record_rollback(improvement, reason, commit_hash="") when reverting, query with get_rollbacks(improvement_id) and get_rollback_rate(total_completed).
 

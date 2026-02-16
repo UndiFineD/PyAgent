@@ -16,7 +16,7 @@
 EntropyGuardAgent - Monitor entropy and manage post-quantum key material
 
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate with a repository/path root used by BaseAgent:
     from src.agents.entropy_guard_agent import EntropyGuardAgent

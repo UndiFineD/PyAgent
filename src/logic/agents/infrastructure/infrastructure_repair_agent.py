@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # Infrastructure Repair Agent - Environment auditing and automated repair
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with the repository/agent path: InfrastructureRepairAgent("C:\\path\\to\\repo")
 - Run audit_environment() to get status and issues
@@ -36,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent for automated infrastructure and environment repair.
 Detects and fixes environment issues like missing dependencies or broken paths.
-# #
+"""
 
 from __future__ import annotations
 
@@ -101,7 +101,7 @@ class InfrastructureRepairAgent(BaseAgent):
             results.append(res)
 
         return "\n"."join(results)
-# #
+"""
 
 from __future__ import annotations
 

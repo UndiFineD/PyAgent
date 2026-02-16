@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# DocGen Core - Extract and format Python source documentation
-# #
+"""
+DocGen Core - Extract and format Python source documentation
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate DocGenCore and call extract_markdown_from_source(source_code: str, file_name: str) to get Markdown documentation.
 - Use get_doc_filename(rel_path: str) to produce a standardized .md filename from a relative .py path.
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Core logic for extracting and formatting documentation from Python source code.
 No file I/O or side effects; designed for type safety and Rust FFI compatibility.
-# #
+"""
 
 from __future__ import annotations
 
@@ -52,7 +52,7 @@ __version__ = VERSION
 class DocGenCore:
     Pure logic for extracting documentation from Python source" code.
 #     No file I/O or side effects. 100% Type-safe and ready for Rust conversion.
-# #
+"""
 
     def extract_markdown_from_source(self, source_code: str, file_name: str) -> str:
         Parses source code using AST and generates Markdown documentation.
@@ -63,7 +63,7 @@ class DocGenCore:
 
         Returns:
             A string containing the formatted Markdown documentation.
-# #
+"""
         try:
             tree = ast.parse(source_code)
 
@@ -112,9 +112,9 @@ class DocGenCore:
     def get_doc_filename(rel_path: str) -> str:
         Generates a standardized documentation filename from a relative path.
         Example: src/utils/helper.py -> src_utils_helper.md
-# #
+"""
         return rel_path.replace(os.sep," "_").replace(".py", ".md")
-# #
+"""
 
 from __future__ import annotations
 
@@ -129,7 +129,7 @@ __version__ = VERSION
 class DocGenCore:
     Pure logic for extracting documentation from Python source code.
     No file I/O or side effects. 100% Type-safe and" ready for Rust conversion.
-# #
+"""
 
     def extract_markdown_from_source(self, source_code: str, file_name: str) -> str:
         Parses source code using AST and generates Markdown documentation.
@@ -140,7 +140,7 @@ class DocGenCore:
 
         Returns:
             A string containing the formatted Markdown documentation.
-# #
+"""
         try:
             tree = ast.parse(source_code)
 
@@ -189,5 +189,5 @@ class DocGenCore:
     def get_doc_filename(rel_path: str) -> str:
         Generates a standardized documentation filename from a relative path.
         Example: src/utils/helper.py -> src_utils_helper.md
-# #
+"""
         return rel_path.replace(os.sep, "_").replace(".py", ".md")

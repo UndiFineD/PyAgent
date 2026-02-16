@@ -16,7 +16,7 @@
 Improvement Dashboard - Renders a lightweight improvements dashboard and emits update callbacks
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ImprovementDashboard()
 - Register listeners with on_update(callback: Callable[[], None])

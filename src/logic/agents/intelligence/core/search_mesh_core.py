@@ -17,10 +17,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Search mesh core module.
-# #
-# #
+"""
+Search mesh core module.
+"""
+"""
 from __future__ import annotations
 
 from typing import Any
@@ -36,7 +36,7 @@ except ImportError:
 class SearchMeshCore:
     SearchMeshCore implements federated search result aggregation and ranking.
 #     It synthesizes results from multiple providers (Google, Bing, Perplexity, Tavily).
-# #
+"""
 
     def __init__(self, weights: dict[str, float] | None = None) -> None:
         # Default relevance weights for different providers
@@ -51,7 +51,7 @@ class SearchMeshCore:
     def aggregate_results(self, raw_results: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:
         Takes raw results from multiple providers and merges them into a "ranked list.
         Each result should have: 'title', 'url', 'snippet', 'score' (optional).
-# #
+"""
      "   "if HAS_RUST:
             try:
                 return rust_core.aggregate_search_results(raw_results, self.weights)  # type: ignore[attr-defined]
@@ -99,13 +99,13 @@ class SearchMeshCore:
 
     def filter_redundant(self, results: list[dict[str, Any]], remembered_urls: set[str]) -> list[dict[str, Any]]:
         Filters out results that have already been seen in previous search research sessions (MemoRAG integration).
-# #
+"""
         return [res for res in results if res["url"] not in remembered_urls]
 
     async def parallel_search_placeholder(self, providers: list[str], query: str) -> dict[str, list[dict[str, Any]]]:
-# #
+"""
         Generic structure for the Mesh agent to invoke search providers in parallel.
         (The Shell agent will provide the actual API implementation callbacks).
-# #
+"""
         # This logic stays in the shell, but the core defines" the expected structure.
         return {}

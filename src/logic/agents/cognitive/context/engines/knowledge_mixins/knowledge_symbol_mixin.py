@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Knowledge symbol mixin for symbol extraction logic.
-# #
-# #
+"""
+Knowledge symbol mixin for symbol extraction logic.
+"""
+"""
 import re
 from typing import Any
 

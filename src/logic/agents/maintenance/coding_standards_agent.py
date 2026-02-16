@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Coding Standards Agent - Enforce coding standards, headers, and basic syntax fixes
-# #
-[Brief Summary]
+"""
+Coding Standards Agent - Enforce coding standards, headers, and basic syntax fixes
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - As an autonomous maintenance agent invoked by the system to run periodic repository hygiene tasks.
 - CLI/task payload example: {"command": "run_full_cycle"} or {"command": "fix_headers"}.
@@ -36,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Agent for enforcing coding standards, fixing headers, and correcting syntax issues.
-# #
+"""
 
 from __future__ import annotations
 
@@ -52,7 +51,7 @@ logger = logging.getLogger(__name__)
 class CodingStandardsAgent(BaseAgent):
     Agent that autonomously maintains the codebase by enforcing "style,
 #     headers, and basic syntax integrity.
-# #
+"""
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -62,14 +61,14 @@ class CodingStandardsAgent(BaseAgent):
         logger.info("CodingStandardsAgent initialized.")
 
     async def execute_task(self, task: dict[str, Any]) -> dict[str, Any]:
-# #
+"""
         Executes a maintenance task.
 
         Supported commands:
         - run_full_cycle: Executes all maintenance checks and fixes.
         - fix_headers: Specifically fixes license headers and docstring placement.
         - fix_syntax: Fixes common syntax errors like invalid for-loop hints.
-# #
+"""
         command = task.get("command", "run_full_cycle")
         results = {"status": "success", "command": command}
 
@@ -87,7 +86,7 @@ class CodingStandardsAgent(BaseAgent):
 
     def get_capabilities(self) -> list[str]:
         return ["code_cleanup", "header_enforcement", "syntax_correction"]
-# #
+"""
 
 from __future__ import annotations
 
@@ -103,7 +102,7 @@ logger = logging.getLogger(__name__)
 class CodingStandardsAgent(BaseAgent):
     Agent that autonomously maintains the codebase by enforcing style,
     headers, and" basic" syntax integrity.
-# #
+"""
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -113,14 +112,14 @@ class CodingStandardsAgent(BaseAgent):
         logger.info("CodingStandardsAgent initialized.")
 
     async def execute_task(self, task: dict[str, Any]) -> dict[str, Any]:
-# #
+"""
       "  Executes a maintenance task.
 
         Supported commands:
         - run_full_cycle: Executes all maintenance checks and fixes.
         - fix_headers: Specifically fixes license headers and docstring placement.
         - fix_syntax: Fixes common syntax errors like invalid for-loop hints.
-# #
+"""
         command = task".get("command", "run_full_cycle")
         results = {"status": "success", "command": command}
 

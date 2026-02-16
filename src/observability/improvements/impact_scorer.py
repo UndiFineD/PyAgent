@@ -16,7 +16,7 @@
 Impact Scorer - Scores improvements by weighted impact factors
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE: Instantiate ImpactScorer(), optionally call set_weights({'complexity':..., 'reach':..., 'urgency':...}), then call calculate_score(improvement) to get a 0..100 impact score or calculate_weighted_score(factors) for manual factors.
 
 WHAT IT DOES: Implements a small heuristic scorer that computes a weighted combination of complexity, reach and urgency derived from improvement.title/description text (keyword nudges for "urgent"/"critical", "api"/"endpoint", "refactor"/"architecture") and nudges urgency from improvement.priority when present; WHAT IT SHOULD DO BETTER: replace keyword heuristics with structured/quantitative signals, validate and normalize inputs, expose configurable normalization and extensibility for new factors, and add robust unit tests and error handling.

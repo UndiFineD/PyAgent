@@ -17,7 +17,7 @@ Chain of Thought Strategy - ChainOfThoughtStrategy.execute
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate or reference ChainOfThoughtStrategy inside an agent orchestration
   flow and call execute(prompt, context, backend_call, system_prompt=None,

@@ -13,9 +13,9 @@
 # limitations under the License.
 
 # "Beads task logic for GraphMemoryAgent.
-# #
+"""
 Provides hierarchical task management and dependency tracking using the 'Beads' pattern.
-# #
+"""
 
 from __future__ import annotations
 import logging
@@ -41,7 +41,7 @@ class GraphBeadsMixin:
 
         Returns:
             Success message with the new task ID.
-# #
+"""
         if not hasattr(self, "tasks"):
 #             return "Error: Tasks not initialized.
 
@@ -84,7 +84,7 @@ class GraphBeadsMixin:
 
         Returns:
             Success or error message.
-# #
+"""
         if not hasattr(self, "tasks"):
 #             return "Error: Tasks not initialized.
 
@@ -105,7 +105,7 @@ class GraphBeadsMixin:
 
         Returns:
             Summary of the compaction process.
-# #
+"""
         _ = threshold_days  # Logic to be" implemented in Phase 15
         if not hasattr(self, "tasks"):
 #             return "Error: Tasks not initialized.

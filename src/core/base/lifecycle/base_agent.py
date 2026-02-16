@@ -17,7 +17,7 @@ Base Agent Interface - Principal PyAgent Abstract Base
 
 Principal agent interface for PyAgent, supporting mixin-based architecture.
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Subclassed by specialized agents (e.g., CoderAgent, ResearchAgent) to provide core orchestration,
 state management, and tool-use capabilities.
@@ -159,7 +159,7 @@ class BaseAgent(
         """Get a registered plugin."""
         return cls._plugins.get(name)
 
-    def __init__(self, file_path: str = ".", **kwargs: Any) -> None:
+    def __init__(self, file_path: str = ".", memory_core: Any = None, inference_engine: Any = None, reasoning_core: Any = None, test_mode: bool = False, **kwargs: Any) -> None:
         """Initialize the BaseAgent with decentralized initialization."""
         # Extract arguments consumed by BaseAgent to prevent leaking them to object.__init__
         inference_engine = kwargs.pop("inference_engine", "gemini-3-flash")
@@ -180,64 +180,88 @@ class BaseAgent(
         self.scam_detector = ScamDetector()
 
         # Initialize Cognitive Core Components
-        if isinstance(memory_config, dict) and "workspace_root" not in memory_config:
-            memory_config["workspace_root"] = str(self._workspace_root)
-        self.memory_core = AutoMemCore(config=memory_config)
-        
-        # Determine inference engine (handle string vs object)
-        from src.inference.engine import InferenceEngine
-        if isinstance(inference_engine, str):
-            self.inference_engine = InferenceEngine(model_name=inference_engine)
-        else:
+
+        # Allow test injection or disablement of backend dependencies
+        self.test_mode = test_mode
+        if test_mode:
+            self.memory_core = memory_core
             self.inference_engine = inference_engine
-            
-        self.reasoning_core = CoRTCore(inference_engine=self.inference_engine)
+            self.reasoning_core = reasoning_core
+        else:
+            if memory_core is not None:
+                self.memory_core = memory_core
+            else:
+                if isinstance(memory_config, dict) and "workspace_root" not in memory_config:
+                    memory_config["workspace_root"] = str(self._workspace_root)
+                self.memory_core = AutoMemCore(config=memory_config)
+
+            from src.inference.engine import InferenceEngine
+            if inference_engine is not None:
+                self.inference_engine = inference_engine
+            else:
+                if isinstance(inference_engine, str):
+                    self.inference_engine = InferenceEngine(model_name=inference_engine)
+                else:
+                    self.inference_engine = InferenceEngine(model_name="gemini-3-flash")
+
+            if reasoning_core is not None:
+                self.reasoning_core = reasoning_core
+            else:
+                self.reasoning_core = CoRTCore(inference_engine=self.inference_engine)
 
         self.previous_content = ""
         self.current_content = ""
 
-        # Decentralized Mixin Initialization
-        # Restore popped kwargs for manual mixin initialization if needed
-        full_kwargs = kwargs.copy()
-        full_kwargs.update({
-            "inference_engine": inference_engine, 
-            "manifest": manifest_data,
-            "repo_root": repo_root,
-            "memory_config": memory_config
-        })
+        if not test_mode:
+            # Decentralized Mixin Initialization
+            # Restore popped kwargs for manual mixin initialization if needed
+            full_kwargs = kwargs.copy()
+            full_kwargs.update({
+                "inference_engine": inference_engine, 
+                "manifest": manifest_data,
+                "repo_root": repo_root,
+                "memory_config": memory_config
+            })
+        
+            IdentityMixin.__init__(self, **full_kwargs)
+            PersistenceMixin.__init__(self, **full_kwargs)
+            KnowledgeMixin.__init__(
+                self,
+                agent_name=self.manifest.role,
+                workspace_root=Path(self._workspace_root),
+                **full_kwargs,
+            )
+            OrchestrationMixin.__init__(self, **full_kwargs)
+            ReflectionMixin.__init__(self, **full_kwargs)
+            MultimodalMixin.__init__(self, **full_kwargs)
+            SecurityMixin.__init__(self, **full_kwargs)
+            TaskQueueMixin.__init__(self, **full_kwargs)
+            StreamManagerMixin.__init__(self, **kwargs)
+            TaskManagerMixin.__init__(self, **kwargs)
+            ToolFrameworkMixin.__init__(self, **kwargs)
+            PromptLoaderMixin.__init__(self, **kwargs)
+            StreamingMixin.__init__(self, **kwargs)
 
-        IdentityMixin.__init__(self, **full_kwargs)
-        PersistenceMixin.__init__(self, **full_kwargs)
-        KnowledgeMixin.__init__(
-            self,
-            agent_name=self.manifest.role,
-            workspace_root=Path(self._workspace_root),
-            **full_kwargs,
-        )
-        OrchestrationMixin.__init__(self, **full_kwargs)
-        ReflectionMixin.__init__(self, **full_kwargs)
-        MultimodalMixin.__init__(self, **full_kwargs)
-        SecurityMixin.__init__(self, **full_kwargs)
-        TaskQueueMixin.__init__(self, **full_kwargs)
-        StreamManagerMixin.__init__(self, **kwargs)
-        TaskManagerMixin.__init__(self, **kwargs)
-        ToolFrameworkMixin.__init__(self, **kwargs)
-        PromptLoaderMixin.__init__(self, **kwargs)
-        StreamingMixin.__init__(self, **kwargs)
+            self._config = self.agent_logic_core.load_config_from_env()
+            GovernanceMixin.__init__(self, config=self._config, **kwargs)
 
-        self._config = self.agent_logic_core.load_config_from_env()
-        GovernanceMixin.__init__(self, config=self._config, **kwargs)
-
-        # Post-init setup
-        self._register_capabilities()
-        self._token_usage = 0
-        self._state_data: dict[str, Any] = {}
-        self._post_processors: list[collections.abc.Callable[[str], str]] = []
-        self._model: str | None = kwargs.get("model")
-        self.recorder = kwargs.get("recorder")
-        self.logger = logging.getLogger(self.__class__.__name__)
-
-        # Load system prompt from file if available, otherwise use default
+            # Post-init setup
+            self._register_capabilities()
+            self._token_usage = 0
+            self._state_data: dict[str, Any] = {}
+            self._post_processors: list[collections.abc.Callable[[str], str]] = []
+            self._model: str | None = kwargs.get("model")
+            self.recorder = kwargs.get("recorder")
+            self.logger = logging.getLogger(self.__class__.__name__)
+        else:
+            # Minimal init for test mode
+            self._config = {}
+            self._token_usage = 0
+            self._state_data = {}
+            self._post_processors = []
+            self._model = None
+            self.recorder = kwargs.get("recorder")
+            self.logger = logging.getLogger(self.__class__.__name__)
         self._system_prompt: str = self._load_system_prompt()
 
         self.status_cache: dict[str, float] = {}

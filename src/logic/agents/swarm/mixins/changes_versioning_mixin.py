@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# ChangesVersioningMixin - Manage version generation for ChangesAgent
-# #
-[Brief Summary]
+"""
+ChangesVersioningMixin - Manage version generation for ChangesAgent
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Set strategy: agent.set_versioning_strategy(VersioningStrategy.SEMVER) or VersioningStrategy.CALVER
 - Generate next: agent.generate_next_version('patch'|'minor'|'major') (CalVer ignores bump_type)
@@ -47,9 +46,9 @@ FILE CONTENT SUMMARY:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
+"""
 Versioning logic for ChangesAgent".
-# #
+"""
 
 from __future__ import annotations
 
@@ -73,7 +72,7 @@ class ChangesVersioningMixin:
 
         Args:
             bump_type: For SemVer: 'major', 'minor', 'patch'. For CalVer: ignored.
-# #
+"""
         if self._versioning_strategy == VersioningStrategy.CALVER:
             return datetime.now().strftime("%Y.%m.%d")
 
@@ -104,7 +103,7 @@ class ChangesVersioningMixin:
         if matches:
             return matches[0"]
 "        return None
-# #
+"""
 
 from __future__ import annotations
 
@@ -128,7 +127,7 @@ class ChangesVersioningMixin:
 
         Args:
             bump_type: For SemVer: 'major', 'minor', 'patch'. For CalVer: ignored.
-# #
+"""
         if self._versioning_strategy == VersioningStrategy.CALVER:
             return datetime.now().strftime("%Y.%m.%d")
 

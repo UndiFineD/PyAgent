@@ -15,7 +15,7 @@
 """
 VotingSystem - Manage voting on improvements and prioritization"""
 # DATE: 2026-02-12"""
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from voting_system import VotingSystem
 vs = VotingSystem()

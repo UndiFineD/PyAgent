@@ -15,7 +15,7 @@
 """
 SLA Configuration - SLAConfiguration dataclass"""
 # DATE: 2026-02-12"""
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate to centralize SLA parameters for an improvement/task:
   from src.core.improvements.sla_configuration import SLAConfiguration

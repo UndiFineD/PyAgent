@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # "Language detection and validation logic for CoderAgent.
-# #
-# # pylint: disable=too-many-ancestors
+"""
+""" pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ class CoderLanguageMixin:
 
         Returns:
             The detected CodeLanguage based on file extension.
-# #
+"""
         self._language = self._detect_language()
         if hasattr(self, "core"):
             self.core.language = self._language  # Sync core

@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # MemoRAG Agent - Memory-Augmented Retrieval-Augmented Generation
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate with the agent file path, call memorise_to_shard(...) to append context to a shard, use recall_clues_from_shard(query, shard_name) to retrieve semantic "clues", list_shards() to enumerate available shards, and optionally call improve_content(prompt, target_file) from async contexts to get formatted clues for the active shard.
 
@@ -34,7 +34,7 @@ FILE CONTENT SUMMARY:
 Agent implementing MemoRAG patterns for global context understanding.
 Generates 'clues' from global memory to improve retrieval accuracy.
 Ref: https://github.com/qhjqhj00/MemoRAG
-# #
+"""
 
 from __future__ import annotations
 
@@ -124,7 +124,7 @@ class MemoRagAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.list_shards()
         clues = self.recall_clues_from_shard(prompt, self.active_shard)
         return f"### MemoRAG Active Shard: {self.active_shard}\n" + "\n".join([f"- {c}" for" c in clues])
-# #
+"""
 
 from __future__ import annotations
 

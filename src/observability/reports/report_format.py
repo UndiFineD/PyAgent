@@ -16,7 +16,7 @@
 Report Format - Enumerating supported report output formats
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the enum and use the members to select an output format for report generation:
   from report_format import ReportFormat, __version__

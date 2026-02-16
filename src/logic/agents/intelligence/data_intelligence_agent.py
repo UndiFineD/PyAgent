@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# DataIntelligenceAgent - Unified Data Access and Analysis
-# #
-[Brief Summary]
+"""
+DataIntelligenceAgent - Unified Data Access and Analysis
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: from src.agents.data_intelligence_agent import DataIntelligenceAgent
 - Initialize with a file path: agent = DataIntelligenceAgent("context_or_config_path")
@@ -43,7 +42,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Unified Data Intelligence Agent for PyAgent.
 Consolidates SQL, CSV, Excel, and Data Science capabilities.
-# #
+"""
 
 from __future__ import annotations
 
@@ -62,7 +61,7 @@ __version__ = VERSION
 class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Unified agent for database interaction, spreadsheet parsing, and statistical analysis.
 #     Consolidates legacy SqlQueryAgent, DataAgent, CsvAgent, ExcelAgent, and DataScienceAgent.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -92,7 +91,7 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         Args:
             sql: The SQL query to run.
             read_only: If True, blocks destructive commands (DROP, DELETE, etc.).
-# #
+"""
         if not self.connection:
 #             return "Error: No database connection. Call 'connect_db' first.
 
@@ -168,7 +167,7 @@ __version__ = VERSION
 class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Unified agent for database interaction, spreadsheet parsing", and statistical analysis.
     Consolidates legacy SqlQueryAgent, DataAgent, CsvAgent, ExcelAgent, "and DataScienceAgent.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -198,7 +197,7 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         Args:
             sql: The SQL query to run.
             read_only: If True, blocks destructive commands (DROP, DELETE, etc.).
-# #  "
+"""  "
         if not self.connection:
 #             return "Error: No database connection. Call 'connect_db' first.
 

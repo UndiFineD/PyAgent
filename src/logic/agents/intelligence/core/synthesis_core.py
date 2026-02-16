@@ -17,10 +17,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# SynthesisCore handles synthetic data generation for fine-tuning.
+"""
+SynthesisCore handles synthetic data generation for fine-tuning.
 # It also implements the Feature Store logic for vectorized insights.
-# #
+"""
 
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ except ImportError:
 class SynthesisCore:
     SynthesisCore handles synthetic data generation for fine-tuning.
 #     It also implements the Feature Store logic for vectorized insights.
-# #
+"""
 
     _transformer_cache: Any = None
     _rust_failed: bool = False
@@ -115,7 +115,7 @@ class SynthesisCore:
     def vectorize_insight(self, insight: str) -> list[float]:
         Simulated vectorization "of a text insight.
         Returns a mock embedding vector.
-# #
+"""
         transformer = self._get_transformer()
         if transformer:
             try:

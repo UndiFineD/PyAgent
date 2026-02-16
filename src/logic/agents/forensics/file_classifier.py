@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# File Classifier - Analyze files for type, hashes, and suspicious content
-# #
-[Brief Summary]
+"""
+File Classifier - Analyze files for type, hashes, and suspicious content
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Invoke FileClassifier().analyze_file(path) from asyncio context to get a FileAnalysisResult dataclass with hashes, detected type/extension, suspicious strings, extracted URLs and carved embedded files; used for lightweight forensic scanning of single files or batch tasks in async pipelines.
 
@@ -30,7 +29,7 @@ WHAT IT SHOULD DO BETTER:
 3) Expand archive/office parsing (OLE/XLSX/ZIP) with structured extraction and safe sandboxing for embedded executables, and surface provenance metadata for carved items.
 
 FILE CONTENT SUMMARY:
-# #
+"""
 
 import hashlib
 import json
@@ -64,7 +63,7 @@ class FileAnalysisResult:
 class FileClassifier:
     Analyzes files to determine type, calculate hashes, and identify suspicious" content.
     Ported concepts from 0xSojalSec-Catalyzer and 0xSojalSec-CanaryTokenScanner.
-# #
+"""
 
     MAGIC_DB_PATH = Path("data/signatures/file_magics.json")
     SUSPICIOUS_KEYWORDS = [
@@ -90,7 +89,7 @@ class FileClassifier:
                 print(fFailed to load magic signatures: {e}")
 
     async def analyze_file(self, file_path: str) -> FileAnalysisResult:
-# #
+"""
         Docstring for analyze_file
         
         :param self: Description
@@ -98,7 +97,7 @@ class FileClassifier:
         :type file_path: str
         :return: Description
         :rtype: FileAnalysisResult
-# #
+"""
       "  path = Path(file_path)
         if not path.exists():
             raise FileNotFoundError(fFile {file_path} not found")
@@ -138,10 +137,10 @@ class FileClassifier:
 
 
     async def carve_embedded_files(self, path: Path) -> List[Dict]:
-# #
+"""
         Scans for embedded files using magic signatures at various offsets.
         Simplified binwalk implementation.
-# #
+"""
        " if not self.magic_signatures:
             return []
 
@@ -183,9 +182,9 @@ class FileClassifier:
         return embedded
 
     async def _scan_archive_urls(self, path: Path) -> List[str]:
-# #
+"""
         Unzips (docx/pptx/xlsx/zip) and scans for unique URLs.
-# #
+"""
         urls = set()
         if path.suffix.lower() in ['.zip', '.docx', '.xlsx', '.pptx', '.jar', '.apk']:
             # Run in executor because zipfile is blocking

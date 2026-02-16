@@ -14,7 +14,7 @@
 
 
 # "Metacognitive Monitor for handling logging and alerting.
-# #
+"""
 # from __future__ import annotations
 
 import logging
@@ -31,7 +31,7 @@ __version__ = VERSION
 class MetacognitiveMonitor(BaseAgent):
     Tier 2 (Cognitive Logic) - Metacognitive Monitor: Evaluates the internal
     consistency and certainty of agent reasoning.
-# #
+"""
 
     def __init__(self, workspace_root: str = ".") -> None:
         super().__init__(workspace_root)

@@ -16,7 +16,7 @@
 Analytics Engine - Recording completions and computing simple trends
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Used by tests and simple workflows to record completed Improvement objects and to retrieve a completion trend or compute sprint velocity
 

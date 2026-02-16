@@ -16,7 +16,7 @@
 ReportMetadata - Data model for report metadata
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import ReportMetadata from its module and instantiate when
   generating or embedding metadata for report files:

@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Sandbox Agent - Secure sandboxed code execution
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - As a library: from src.agents.sandbox_agent import SandboxAgent; sa = SandboxAgent(__file__); sa.run_python_sandboxed(code)
 - For safety checks: call sa.dry_run_prediction(code) before executing untrusted code
@@ -36,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in secure code execution and sandboxed prototyping.
 Prevents side effects on the host system by using containerized or WASM environments.
-# #
+"""
 
 from __future__ import annotations
 
@@ -65,7 +64,7 @@ class SandboxAgent(BaseAgent):
     def run_python_sandboxed(self, code: str) -> str:
         "Executes Python code in a simulated" sandbox.
         In production, this would use a Docker container or gVisor.
-# #
+"""
         logging.info("Executing code in "sandbox...")
 
         # Phase 108: Record sandboxed execution intent
@@ -99,7 +98,7 @@ if __name__ == "__main__":
 
     main = create_main_function(SandboxAgent, "Sandbox Agent", "Sandboxed execution tool")
     main()
-# #
+"""
 
 from __future__ import annotations
 
@@ -128,7 +127,7 @@ class SandboxAgent(BaseAgent):
     def run_python_sandboxed(self, code: str) -> str:
         "Executes Python code in a simulated sandbox.
         In production, this would use a Docker container or gVisor.
-# #
+"""
         logging.info("Executing code in sandbox...")
 
         # Phase 108: Record sandboxed execution intent

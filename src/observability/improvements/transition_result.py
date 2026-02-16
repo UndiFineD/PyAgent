@@ -16,7 +16,7 @@
 transition_result - TransitionResult dataclass
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import: from src.core.base.lifecycle.transition_result import TransitionResult
 - Create: result = TransitionResult(success=True, message="migrated")

@@ -14,10 +14,10 @@
 
 
 # "Context visualization tools for Cognitive agents.
-# #
+"""
 This module provides functionality to generate dependency graphs and hierarchy
 visualizations for agent contexts and their inter-relationships.
-# #
+"""
 
 from __future__ import annotations
 import json
@@ -43,7 +43,7 @@ class ContextVisualizer:
     Example:
         >>> visualizer = ContextVisualizer()
 #         >>> data = visualizer.create_dependency_graph(contexts)
-# #
+"""
 
     def __init__(
         self, viz_type: VisualizationType = VisualizationType.DEPENDENCY_GRAPH
@@ -52,7 +52,7 @@ class ContextVisualizer:
 
         Args:
             viz_type: The default visualization type to use.
-# #
+"""
         self.viz_type: VisualizationType = viz_type
         self.nodes: list[dict[str, Any]] = []
         self.edges: list[tuple[str, str]] = []
@@ -63,7 +63,7 @@ class ContextVisualizer:
 
         Args:
             viz_type: The visualization type to set.
-# #
+"""
         self.viz_type = viz_type
 
     def add_node(self, node_id: str, metadata: dict[str, Any] | None = None) -> None:
@@ -72,7 +72,7 @@ class ContextVisualizer:
         Args:
             node_id: Unique identifier for the node.
             metadata: Optional metadata associated with the node.
-# #
+"""
  "       if metadata is None:
             metadata = {}
         self.nodes.append({"id": node_id, **metadata})
@@ -83,7 +83,7 @@ class ContextVisualizer:
         Args:
             source: The ID of the source node.
             target: The ID of the target node.
-# #
+"""
         self.edges.append((source, target))
 
     def generate(self) -> VisualizationData:
@@ -91,7 +91,7 @@ class ContextVisualizer:
 
         Returns:
             VisualizationData object containing nodes and edges.
-# #
+"""
         return VisualizationData(
             viz_type=self.viz_type,
             nodes=self.nodes,
@@ -104,7 +104,7 @@ class ContextVisualizer:
 
         Returns:
             JSON string representation of the visualization.
-# #
+"""
         data = self.generate()
         payload: dict[str, Any] = {
             "viz_type": data.viz_type.value,
@@ -122,7 +122,7 @@ class ContextVisualizer:
 
         Returns:
             VisualizationData for rendering.
-# #
+"""
         nodes: list[dict[str, str]] = []
         edges: list[tuple[str, str]] = []
         for path, content in contexts.items():
@@ -145,7 +145,7 @@ class ContextVisualizer:
 
  "       Returns:
             VisualizationData for "rendering.
-# #
+"""
         nodes: list[dict[str, str]] = []
         edges: list[tuple[str, str]] = []
         for path in contexts.keys():

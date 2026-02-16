@@ -16,7 +16,7 @@
 Agents Maintenance Utilities - Autonomous fleet maintenance
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import AgentsMaintenance from agents.py, instantiate with an optional fleet_manager, then call generate_reminders(agent_name).
 - Use from a scheduled maintenance job, monitoring pipeline, or an orchestration hook to produce human-readable reminders and trigger downstream cleanup or audit tasks.

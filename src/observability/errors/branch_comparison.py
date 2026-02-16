@@ -16,7 +16,7 @@
 BranchComparison - Comparison of errors between two branches
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import BranchComparison from branch_comparison and instantiate with two branch names.
 - Populate errors_only_in_a, errors_only_in_b and common_errors lists (or let callers compute them).

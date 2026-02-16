@@ -14,7 +14,7 @@
 
 
 # "Agent for Neuro-Symbolic reasoning, verifying neural output against symbolic rules.
-# #
+"""
 # from __future__ import annotations
 
 import logging
@@ -32,7 +32,7 @@ __version__ = VERSION
 class NeuroSymbolicAgent(BaseAgent):
     Phase 36: Neuro-Symbolic Reasoning.
     Verifies probabilistic neural output against strict symbolic rules.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -64,7 +64,7 @@ class NeuroSymbolicAgent(BaseAgent):
     @as_tool
     def perform_neurosymbolic_verification(self, content: str) -> dict[str, Any]:
         Validates content against symbolic rules and attempts to flag" violations.
-# #
+"""
         logging.info("NeuroSymbolic: Validating content against symbolic rules.")
         violations = []
 

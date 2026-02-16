@@ -13,16 +13,16 @@
 # limitations under the License.
 
 
-# #
+"""
 # Reading the repository to find kernel_agent.py so the module description includes the exact, current file contents. Running a parallel search for the file.
-# #
+"""
 Reading kernel_agent.py to capture full content for the module description. Executing file read.
 
 Kernel Agent - OS-level environment management and system diagnostics
 
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with a file path for agent state/audit: agent = KernelAgent("state/path")
 - Call tools from async context: await agent.get_system_info(); await agent.check_disk_space("."); await agent.execute_shell("ls -la", force=False)
@@ -43,7 +43,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in OS-level operations, environment management, and system diagnosis.
 Inspired by Open Interpreter and Openator.
-# #
+"""
 
 from __future__ import annotations
 
@@ -109,7 +109,7 @@ class KernelAgent(BaseAgent):
     async def execute_shell(self, command: str, force: bool = False) -> str:
         "Executes a shell command and returns the output (STDOUT + STDERR).
         High-risk commands require 'force=True' as a HITL gate.
-# #
+"""
         logging.warning(fKernelAgent auditing shell command: {command}")
 
         # Security Audit (HITL Gate)
@@ -152,7 +152,7 @@ class KernelAgent(BaseAgent):
             if hasattr(self, "recorder") and self.recorder:
                 self.recorder.record_lesson("kernel_shell_error", {"command": command, "error": str(e)})
 #             return fError executing command: {e}
-# #
+"""
 
 from __future__ import annotations
 
@@ -218,7 +218,7 @@ class KernelAgent(BaseAgent):
     async def execute_shell(self, command: str, force: bool = False) -> str:
         "Executes a shell command and returns the output (STDOUT + STDERR).
         High-risk commands require 'force=True' as a HITL gate.
-# #
+"""
         logging.warning(fKernelAgent" auditing shell command: {command}")
 
         # Security Audit (HITL Gate)

@@ -16,7 +16,7 @@
 ImprovementsAgent - Updates code-file improvement suggestions using AI assistance
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from improvements_agent import ImprovementsAgent
 agent = ImprovementsAgent(r"C:\\\\path\to\\\\module.improvements.md")

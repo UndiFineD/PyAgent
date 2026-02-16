@@ -71,12 +71,12 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
 
     @property
     def metrics(self) -> dict[str, Any]:
-""""Provides access to agent metrics."""
-#         return self._metrics
-# #
+        """Provides access to agent metrics."""
+        return self._metrics
+
     @metrics.setter
     def metrics(self, value: dict[str, Any]) -> None:
-""""Sets agent metrics."""
+        """Sets agent metrics."""
         self._metrics = value
 
     def register_plugin(
@@ -84,10 +84,10 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         name_or_plugin: Any,
         plugin: Any | None = None
     ) -> None:  # pylint: disable=arguments-renamed
-# #
+        """
         Registers a plugin. Overrides BaseAgent classmethod
         to use OrchestratorPluginMixin instance method.
-# #
+        """
         # Ensure plugins dict exists on" instance
         if not hasattr(self, "plugins"):
             self.plugins = {}
@@ -103,22 +103,22 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
 
     @property
     def repo_root(self) -> str:
-""""Alias for _workspace_root for legacy compatibility."""
+        """Alias for _workspace_root for legacy compatibility."""
         return str(self._workspace_root)
 
     @repo_root.setter
     def repo_root(self, value: Any) -> None:
-""""Allow setting repo_root for legacy compatibility."""
+        """Allow setting repo_root for legacy compatibility."""
         self._workspace_root = str(value)
 
     @classmethod
     def from_config_file(cls, config_path: Path | str) -> OrchestratorAgent:
-        # Creates an OrchestratorAgent from a configuration file
+        """Creates an OrchestratorAgent from a configuration file."""
         import json
 
         config_path = Path(config_path)
         if not config_path.exists():
-            raise FileNotFoundError(fConfig file not found: {config_path}")
+            raise FileNotFoundError(f"Config file not found: {config_path}")
 
         with open(config_path, "r", encoding="utf-8") as f:
             config = json.load(f)
@@ -128,7 +128,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
 
 
     def generate_improvement_report(self) -> dict[str, Any]:
-        # Generates a summary of changes and improvements made
+        """Generates a summary of changes and improvements made."""
         processed = self._metrics.get("files_processed", 0)
         modified = self._metrics.get("files_modified", 0)
         rate = (modified / processed * 100.0) if processed > 0 else 0.0
@@ -158,43 +158,43 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
             "currency": "USD",
         }
 
-    def update_code(self, target: Path) -> str:
-        # Stub for update_code which was used in older integration tests
-        logging.info(fOrchestrator: Updating code for {target}")
+def update_code(self, target: Path) -> str:
+    """Stub for update_code which was used in older integration tests."""
+    logging.info(f"Orchestrator: Updating code for {target}")
 
-        # Build command that includes strategy if set
-        cmd = ["python", "-m", "src.main", str(target)]
-        if hasattr(self, "strategy") and self.strategy:
-            cmd.extend(["--strategy", self.strategy])
+    # Build command that includes strategy if set
+    cmd = ["python", "-m", "src.main", str(target)]
+    if hasattr(self, "strategy") and self.strategy:
+        cmd.extend(["--strategy", self.strategy])
 
-        # Call command_handler to satisfy test mocks
-        result = self.command_handler.run_command(cmd)
+    # Call command_handler to satisfy test mocks
+    result = self.command_handler.run_command(cmd)
 
-        if result.returncode == 0:
-#             return "Success
-#         return fError: {result.stderr}
+    if result.returncode == 0:
+        return "Success"
+    return f"Error: {result.stderr}"
 
-    def run(self, prompt: str | None = None, **kwargs: Any) -> str:
-        # Synchronous wrapper for agent execution
-        _ = kwargs
-        if prompt is None:
-            # Legacy loop-based mode (Phase 5/6)
-            logging.info("Orchestrator: Starting processing loop (legacy mode)")
-            if hasattr(self, "run_with_parallel_execution"):
-                getattr(self, "run_with_parallel_execution")()
-#                 return "Success
-#             return "Orchestrator: No loop implementation found.
+def run(self, prompt: str | None = None, **kwargs: Any) -> str:
+    """Synchronous wrapper for agent execution."""
+    _ = kwargs
+    if prompt is None:
+        # Legacy loop-based mode (Phase 5/6)
+        logging.info("Orchestrator: Starting processing loop (legacy mode)")
+    if hasattr(self, "run_with_parallel_execution"):
+        getattr(self, "run_with_parallel_execution")()
+        return "Success"
+    return "Orchestrator: No loop implementation found."
 
-        try:
-            # Use the new run_async method in BaseAgent
-            return asyncio.run(self.run_async(prompt))
-        except (RuntimeError, ValueError) as e:
-            logging.error(fError in OrchestratorAgent.run: {e}")
-#             return fError: {e}
+    try:
+        # Use the new run_async method in BaseAgent
+        return asyncio.run(self.run_async(prompt))
+    except (RuntimeError, ValueError) as e:
+        logging.error(f"Error in OrchestratorAgent.run: {e}")
+        return f"Error: {e}"
 
-    async def run_async(self, prompt: str | None = None, **kwargs: Any) -> str:
-        # Async execution logic for agent
-        _ = kwargs
-        # Implement your async logic here, or call the appropriate async method from BaseAgent
-        # For now, just return a placeholder
-#         return "Async execution required
+async def run_async(self, prompt: str | None = None, **kwargs: Any) -> str:
+    # Async execution logic for agent
+    _ = kwargs
+    # Implement your async logic here, or call the appropriate async method from BaseAgent
+    # For now, just return a placeholder
+    return "Async execution required"

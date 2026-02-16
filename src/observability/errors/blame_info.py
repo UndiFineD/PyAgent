@@ -16,7 +16,7 @@
 BlameInfo - Git blame container
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Provide a simple dataclass carrying git blame details for an error, import and instantiate BlameInfo with error_id and optional commit fields
 

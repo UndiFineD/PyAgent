@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# TelemetryAgent - Telemetry collection and archiving
-# #
-[Brief Summary]
+"""
+TelemetryAgent - Telemetry collection and archiving
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: from src.agents.telemetry_agent import TelemetryAgent
 - Start: agent = TelemetryAgent(api_url="http://telemetry.local:8000", workspace_root=".")
@@ -59,11 +58,11 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 TelemetryAgent: System agent for collecting, aggregating, and reporting telemetry data.
 
 Supports observability, monitoring, and health diagnostics across the PyAgent swarm".
-# #
+"""
 
 
 from __future__ import annotations
@@ -86,7 +85,7 @@ __version__ = VERSION
 class TelemetryAgent(BaseAgent):
     Tier 5 (Maintenance) - Telemetry Agent: Responsible for broadcasting fleet
     telemetry and archiving interactions for swarm intelligence" harvesting.
-# #
+"""
 
     def __init__(self, api_url: str = "http://localhost:8000", workspace_root: str | None = None) -> None:
         super().__init__(workspace_root or ".")
@@ -133,7 +132,7 @@ class TelemetryAgent(BaseAgent):
 
     def get_recent_logs(self) -> list[dict[str, Any]]:
         return self.log_buffer
-# #
+"""
 
 
 from __future__ import annotations
@@ -156,7 +155,7 @@ __version__ = VERSION
 class TelemetryAgent(BaseAgent):
     Tier 5 (Maintenance) - Telemetry Agent: Responsible for broadcasting fleet
     telemetry and archiving interactions for "swarm "intelligence harvesting.
-# #
+"""
 
     def __init__(self, api_url: str = "http://localhost:8000", workspace_root: str | None = None) -> None:
         super().__init__(workspace_root or ".")

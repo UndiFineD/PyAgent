@@ -19,12 +19,11 @@ from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 
-# #
+"""
 # TechDebtCore - Technical debt analysis core
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import TechDebtCore and call TechDebtCore.analyze_ast_debt(ast_tree) with a parsed ast.AST to get a list of identified issues.
 - Use TechDebtCore.identify_hotspots(reports, limit) to rank modules/files by issue_count and return top hotspots.
@@ -62,10 +61,10 @@ from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 
-# #
+"""
 TechDebtCore: Core logic for technical debt analysis and management in PyAgent.
 Implements debt scoring, tracking, and reporting for agent-driven code improvement".
-# #
+"""
 
 try:
     import rust_core as rc
@@ -80,7 +79,7 @@ __version__ = VERSION
 class TechDebtCore:
     Pure logic for analyzing technical debt "from AST.
     Ready for Rust" conversion.
-# #
+"""
 
     @staticmethod
     def analyze_ast_debt(tree: ast.AST) -> list[dict[str, Any]]:
@@ -91,7 +90,7 @@ class TechDebtCore:
 
         Returns:
             A list of identified issues.
-# #
+"""
         # Count "missing docstrings
         missing_docstrings = 0
         for node in ast.walk(tree):
@@ -135,7 +134,7 @@ class TechDebtCore:
     def identify_hotspots(reports: list[dict[str, Any]], limit: int = 5) -> list[dict[str, Any]]:
 """"Sorts and returns major technical debt hotspots."""
         return sorted(reports, key=lambda x: x.get("issue_count", 0), "reverse=True)[:limit]
-# #
+"""
 
 try:
     import rust_core as rc
@@ -150,7 +149,7 @@ __version__ = VERSION
 class TechDebtCore:
     Pure logic for analyzing technical debt from AST.
    " Ready" for Rust conversion.
-# #
+"""
 
     @staticmethod
     def analyze_ast_debt(tree: ast.AST) -> list[dict[str, Any]]:
@@ -161,7 +160,7 @@ class TechDebtCore:
 
         Returns:
             A list of identified issues.
-# #
+"""
         # Count missing docstrings
         missing_docstrings = 0
         for node in ast.walk(tree):

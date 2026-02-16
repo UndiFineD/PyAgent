@@ -17,7 +17,7 @@
 DependencyCore
 
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
     from src.core.base.dependency_core import DependencyCore
     # parse a Python file content to obtain dependency nodes keyed by dependency name

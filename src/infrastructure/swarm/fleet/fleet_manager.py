@@ -17,7 +17,7 @@ Fleet Manager - Primary Swarm Coordinator
 
 Coordinator for deploying and aggregating results from multiple agents.
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Typically initialized within the system lifecycle or via management scripts to orchestrate agent tasks.
 

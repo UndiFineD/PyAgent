@@ -16,7 +16,7 @@
 validation_result.py - ValidationResult dataclass for improvement validation
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate to represent the outcome of validating a proposed improvement:
   result = ValidationResult(improvement_id="chg-123", is_valid=False)

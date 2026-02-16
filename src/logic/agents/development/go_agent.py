@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # GoAgent - Go code improvement and auditing
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 python go_agent.py <path\to\file.go>
 or as library: from src.logic.agents.development.go_agent import GoAgent; GoAgent("path/to/file.go")
@@ -67,7 +66,7 @@ class GoAgent(CoderAgent):
 if __name__ == "__main__":
     main = create_main_function(GoAgent, "Go Agent", "Path to Go file (.go)")
     "main()
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 

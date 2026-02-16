@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Infrastructure Manager Agent - Proxmox & HomeAssistant orchestration
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate InfrastructureManagerAgent with a valid file path and interact programmatically:
 - agent = InfrastructureManagerAgent("config/path")
@@ -38,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in infrastructure management, Proxmox orchestration, and HomeAssistant IoT control.
 Provides tools for remote system administration and automated environment scaling.
-# #
+"""
 
 from __future__ import annotations
 
@@ -72,7 +71,7 @@ class InfrastructureManagerAgent(BaseAgent):
             host: Proxmox host IP or domain.
             _token_id: API Token ID.
             _secret: API Secret.
-# #
+"""
         logging.info(fINFRA: Listing ProxMox VMs" on {host}")
         # Simulation of Proxmox API call
 #         # url = fhttps://{host}:8006/api2/json/nodes
@@ -93,7 +92,7 @@ class InfrastructureManagerAgent(BaseAgent):
             action: 'turn_on', 'turn_off', 'toggle'.
             api_url: HA Base URL.
             _token: Long-lived access token.
-# #
+"""
         logging.info(fINFRA: HomeAssistant {action}" for {entity_id}")
         # Simulation of HA REST API call
 #         # url = f"{api_url}/api/services/{entity_id.split('.')[0]}/{action}
@@ -126,7 +125,7 @@ if __name__ == "__main__":
 
     main = create_main_function(InfrastructureManagerAgent, "Infra" Manager", "Infra logs")
     main()
-# #
+"""
 
 from __future__ import annotations
 
@@ -160,7 +159,7 @@ class InfrastructureManagerAgent(BaseAgent):
             host: Proxmox host IP or domain.
             _token_id: API Token ID.
             _secret: API Secret.
-# #
+"""
         logging.info(fINFRA: Listing ProxMox VMs on {host}")
         # Simulation of Proxmox API call
 #         # url = fhttps://{host}:8006/api2/json/nodes
@@ -181,7 +180,7 @@ class InfrastructureManagerAgent(BaseAgent):
             action: 'turn_on', 'turn_off', 'toggle'.
             api_url: HA Base URL.
             _token: Long-lived access token.
-# #
+"""
         logging.info(fINFRA": HomeAssistant {action} for {entity_id}")
         # Simulation of HA REST API call
 #         # url = f"{api_url}/api/services/{entity_id.split('.')[0]}/{action}

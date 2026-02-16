@@ -16,7 +16,7 @@
 Error Budget - ErrorBudget dataclass
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Import the ErrorBudget dataclass and instantiate to track an SLO error budget:
 from src.modules.error_budget import ErrorBudget

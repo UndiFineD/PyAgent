@@ -15,12 +15,11 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 
-# #
+"""
 # ContextAnnotationMixin - Context annotation capabilities for ContextAgent
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Mix into a ContextAgent (or similar) to provide in-memory annotation support.
 - Example:
@@ -114,7 +113,7 @@ class ContextAnnotationMixin:
                 del annotations[i]
 #                 return True
  "       return False
-# #
+"""
 
 from __future__ import annotations
 import hashlib

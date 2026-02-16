@@ -16,7 +16,7 @@
 Progress Report - ProgressReport dataclass for improvements dashboard
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the dataclass and instantiate with report_date and counts:
   from src.interface.models.progress_report import ProgressReport

@@ -16,7 +16,7 @@
 Notification Manager - Facade for core notification utilities
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the facade where a stable public API is desired:
   from notification_manager import NotificationManager

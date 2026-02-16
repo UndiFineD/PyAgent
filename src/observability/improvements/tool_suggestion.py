@@ -16,7 +16,7 @@
 ToolSuggestion - Data container for analysis tool recommendations
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ToolSuggestion to represent a single suggestion produced by a static analysis or linting tool, populate its fields from analysis output, and serialize or log it for reporting, triage, or automated fix application.
 

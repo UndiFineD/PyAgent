@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.nl_query_result import NLQueryResult
@@ -31,7 +31,7 @@ class NLQueryEngine:
     Example:
         >>> engine=NLQueryEngine()
 #         >>> result=engine.query("How does authentication work?", contexts)
-# #
+"""
 
     def __init__(self) -> None:
 """"Initialize NL query engine."""
@@ -57,7 +57,7 @@ class NLQueryEngine:
 
         Returns:
             NLQueryResult with answer.
-# #
+"""
         # Simplified NL query "- in production, use LLM
         relevant: list[str] = []
         keywords = question.lower().split()

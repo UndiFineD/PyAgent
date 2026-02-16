@@ -16,7 +16,7 @@
 # "Advanced Long-Term Memory (LTM) for agents.
 # Consolidates episodic memories into semantic knowledge and persistent preferences.
 Inspired by mem0 and BabyAGI patterns.
-# #
+"""
 
 from __future__ import annotations
 from pathlib import Path
@@ -37,10 +37,10 @@ __version__ = VERSION
 class GlobalContextEngine(
     ContextShardMixin, ContextDataMixin, ContextEntityMixin, ContextConsolidationMixin
 ):
-# #
+"""
     Manages persistent project-wide knowledge and agent preferences.
 #     Shell for GlobalContextCore.
-# #
+"""
 
     def __init__(self, workspace_root: str | None = None, fleet: Any = None) -> None:
         if fleet and hasattr(fleet, "workspace_root"):

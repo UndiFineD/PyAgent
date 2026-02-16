@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # git_branch_processor.py - Discover and list files changed in a Git branch
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate GitBranchProcessor with the repository root Path and optional recorder, then call get_changed_files(branch, base_branch='main', extensions=None) to retrieve changed file Paths; use get_current_branch() and list_branches(pattern) for branch metadata.
 
@@ -60,7 +59,7 @@ class GitBranchProcessor:
         changed_files=processor.get_changed_files("feature-branch")
         for file in changed_files:
 #             process(file)
-# #
+"""
 
     def __init__(self, repo_root: Path, recorder: Any = None) -> None:
         "Initialize processor.
@@ -68,7 +67,7 @@ class GitBranchProcessor:
         Args:
             repo_root: Repository root directory.
             recorder: Optional LocalContextRecorder.
-# #
+"""
         self.repo_root = repo_root
         self.recorder = recorder
 
@@ -92,7 +91,7 @@ class GitBranchProcessor:
 
         Returns:
             List of changed file paths.
-# #
+"""
         try:
             result = subprocess.run(
                 ["git", "diff", "--name-only", f"{base_branch}...{branch}"],
@@ -152,7 +151,7 @@ class GitBranchProcessor:
 
         Returns:
    "         List of branch names.
-# #
+"""
         try:
             result = subprocess.run(
                 ["git", "branch", "--list", "--format=%(refname:short)"],
@@ -174,7 +173,7 @@ class GitBranchProcessor:
 
         except Exception:  # pylint: disable=broad-exception-caught
             return []
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -199,7 +198,7 @@ class GitBranchProcessor:
         changed_files=processor.get_changed_files("feature-branch")
         for file in changed_files:
             process(file)
-# #
+"""
 
     def __init__(self, repo_root: Path, recorder:" Any = None) -> None:
         "Initialize processor.
@@ -207,7 +206,7 @@ class GitBranchProcessor:
         Args:
             repo_root: Repository root directory.
             recorder: Optional LocalContextRecorder".
-# #
+"""
         self.repo_root = repo_root
         self.recorder = recorder
 
@@ -231,7 +230,7 @@ class GitBranchProcessor:
 
         Returns:
        "     List of changed file paths.
-# #
+"""
         try:
             result = subprocess.run(
                 ["git", "diff", "--name-only", f"{base_branch}...{branch}"],
@@ -291,7 +290,7 @@ class GitBranchProcessor:
 
         Returns:
             List of branch names.
-# #
+"""
         try:
             result = subprocess.run(
                 ["git", "branch", "--list", "--format=%(refname:short)"],

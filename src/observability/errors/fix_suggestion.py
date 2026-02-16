@@ -16,7 +16,7 @@
 FixSuggestion - Data model for automated fix suggestions
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the dataclass and construct suggestions for downstream tools or UIs.
 - Example: from src.core.base.agent_errors.fix_suggestion import FixSuggestion

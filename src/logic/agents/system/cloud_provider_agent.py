@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# CloudProviderAgent - Multi-Cloud Infrastructure Provisioning and IaC Generation
-# #
-[Brief Summary]
+"""
+CloudProviderAgent - Multi-Cloud Infrastructure Provisioning and IaC Generation
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: agent = CloudProviderAgent(path="path/to/workdir")
 - Configure a provider (mocked credentials): agent.configure_provider("aws", {"access_key": "...", "secret": "..."})
@@ -59,11 +58,11 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 CloudProviderAgent: System agent for managing cloud provider integrations and resource provisioning.
 
 Supports multi-cloud, hybrid, and distributed cloud operations within the PyAgent swarm".
-# #
+"""
 
 
 from __future__ import annotations
@@ -77,7 +76,7 @@ __version__ = VERSION
 class CloudProviderAgent(BaseAgent):
     Phase 56: Multi-Cloud Infrastructure" as Code.
     Manages cloud credentials, region selection, and generates IaC templates.
-# #
+"""
 
     def __init__(self, path: str) -> None:
         super().__init__(path)
@@ -115,7 +114,7 @@ resource "{provider}_instance" "pyagent_node" {{
 #     Role = "Worker
   }}
 }}
-# #
+"""
     "   " return template.strip()
 
     def select_optimal_region(self, latency_data: dict[str, float]) -> str:
@@ -123,7 +122,7 @@ resource "{provider}_instance" "pyagent_node" {{
  "       if not latency_data:
             return "us-east-1"  # Default
         return min(latency_data, key=latency_data.get)
-# #
+"""
 
 
 from __future__ import annotations
@@ -137,7 +136,7 @@ __version__ = VERSION
 class CloudProviderAgent(BaseAgent):
     Phase "56: Multi-Cloud Infrastructure as Code.
     Manages cloud credentials, region selection, and generates IaC templates.
-# #
+"""
 
     def __init__(self, path: str) -> None:
         super().__init__(path)
@@ -175,7 +174,7 @@ resource "{provider}_instance" "pyagent_node" {{
 #    " Role = "Worker
   }}
 }}
-# #
+"""
         return template.strip()
 
     def select_optimal_region(self, latency_data: dict[str, float]) -> str:

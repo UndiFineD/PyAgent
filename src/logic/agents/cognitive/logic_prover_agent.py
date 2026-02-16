@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Logic Prover Agent for formal verification of reasoning chains.
-# #
-# #
+"""
+Logic Prover Agent for formal verification of reasoning chains.
+"""
+"""
 from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
@@ -26,7 +26,7 @@ __version__ = VERSION
 class LogicProverAgent:
     Formally verifies agent reasoning chains and solves complex
 #     spatial/temporal constraints.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
@@ -34,9 +34,9 @@ class LogicProverAgent:
     def verify_reasoning_step(
         self, hypothesis: str, evidence: list[str], conclusion: str
     ) -> dict[str, Any]:
-# #
+"""
         Simulates formal logic verification "(TPTP-like).
-# #
+"""
         # Crude simulation of logical" consistency
         if not evidence:
             return {"status": "unproven", "error": "Missing evidence for conclusion"}
@@ -51,9 +51,9 @@ class LogicProverAgent:
     def solve_scheduling_constraints(
         self, tasks: list[str], deadlines: dict[str, float]
     ) -> dict[str, Any]:
-# #
+"""
         Solves for an optimal schedule using simulated constraint satisfaction (CSP).
-# #
+"""
 "   "     schedule = []
         # Sort by deadline (Earliest Deadline First simulation)
         sorted_tasks = sorted(tasks, key=lambda x: deadlines.get(x, 9999999999))
@@ -77,9 +77,9 @@ class LogicProverAgent:
     def generate_formal_proof_log(
         self, reasoning_chain: list[dict[str, Any]]
     ) -> dict[str, Any]:
-# #
+"""
         Exports a log of verified steps for auditing.
-# #
+"""
         import datetime
         return {
             "chain_id": "logic_v1_001",

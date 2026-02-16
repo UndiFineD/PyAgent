@@ -36,11 +36,11 @@ import json
 import os
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# # SCRIPT_PATH = os.path.join(os.path.split(__file__)[0], "dism_scripts", "radare2.py")
+""" SCRIPT_PATH = os.path.join(os.path.split(__file__)[0], "dism_scripts", "radare2.py")
 # [BATCHFIX] Commented metadata/non-Python
-# # TEMP_OUTPUT_FILE = "radare2_rpc_reg_info.tmp"  # [BATCHFIX] closed string
+""" TEMP_OUTPUT_FILE = "radare2_rpc_reg_info.tmp"  # [BATCHFIX] closed string
 
 
 class Radare2RpcRegistrationExtractor(BaseRpcRegistrationExtractor):
@@ -49,13 +49,13 @@ class Radare2RpcRegistrationExtractor(BaseRpcRegistrationExtractor):
 """_default_dism_path: str = "r2"""
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def _get_rpc_registration_info(self, pe_path: str) -> Dict[str, Dict[str, List]]:
+"""     def _get_rpc_registration_info(self, pe_path: str) -> Dict[str, Dict[str, List]]:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         p = subprocess.run([self._dism_path, "-q", "-i", SCRIPT_PATH, pe_path], stdout=subprocess.PIPE)
+"""         p = subprocess.run([self._dism_path, "-q", "-i", SCRIPT_PATH, pe_path], stdout=subprocess.PIPE)
         if p.returncode != 0:
             raise DismExtractorFailue(p.returncode)
 

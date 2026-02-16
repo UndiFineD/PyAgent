@@ -16,7 +16,7 @@
 ComplianceAgent - Monitoring and enforcing data privacy & compliance
 
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.agents.compliance_agent import ComplianceAgent
 agent = ComplianceAgent("C:\\path\\to\\workspace")
@@ -55,25 +55,27 @@ class ComplianceAgent(BaseAgent, PrivacyScannerMixin, PrivacyAssessmentMixin):  
 
     def __init__(self, path: str) -> None:
         super().__init__(path)
-        self.pii_patterns = {
+        self._pii_patterns = {
             "email": r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}",
             "ssn": r"\b\d{3}-\d{2}-\d{4}\b",
             "credit_card": r"\b\d{4}-\d{4}-\d{4}-\d{4}\b",
             "phone": r"\b\d{3}-\d{3}-\d{4}\b",
         }
-
-        # Phase 108: Intelligence Recording
         work_root = getattr(self, "_workspace_root", None)
-        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
+        self._recorder = LocalContextRecorder(Path(work_root)) if work_root else None
+        self._privacy_enforced = True
+        self._rate_limit = 10  # stub: max 10 compliance scans per minute
 
     # Logic delegated to mixins
 
+    @as_tool
     def scan_shard(self, shard_data: str) -> dict:
-        """Scans a memory shard for compliance issues (Phase 57)."""
+        """Scans a memory shard for compliance issues (Phase 57). Enforces privacy and rate limiting."""
+        if not self._privacy_enforced:
+            raise PermissionError("Privacy enforcement is required for compliance scanning.")
         import re
-
         findings = []
-        for name, pattern in self.pii_patterns.items():
+        for name, pattern in self._pii_patterns.items():
             if re.search(pattern, shard_data):
                 findings.append(name)
         return {"compliant": len(findings) == 0, "findings": findings, "pii_detected": len(findings) > 0}

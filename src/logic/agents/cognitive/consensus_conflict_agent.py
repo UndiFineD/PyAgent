@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Consensus Conflict Agent - Multi-agent arbitration and voting
-# #
-[Brief Summary]
+"""
+Consensus Conflict Agent - Multi-agent arbitration and voting
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.agents.consensus_conflict_agent import ConsensusConflictAgent
 agent = ConsensusConflictAgent(workspace_path="C:\\path\\to\\workspace")
@@ -37,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Consensus Conflict Agent for multi-agent arbitration and voting.
-# #
+"""
 
 import time
 from typing import Any
@@ -52,7 +51,7 @@ __version__ = VERSION
 class ConsensusConflictAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Consensus Conflict Agent: Arbitrates disagreements
 #     and resolves conflicts between agents in the swarm using voting systems.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -129,7 +128,7 @@ class ConsensusConflictAgent(BaseAgent):
                 [d for d in self.active_disputes.values() if d["status"] == "voting"]
      "       ),
         }
-# #
+"""
 
 import time
 from typing import Any
@@ -144,7 +143,7 @@ __version__ = VERSION
 class ConsensusConflictAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Consensus Conflict Agent: Arbitrates disagreements
     and resolves conflicts between agents in the swarm "using voting systems.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)

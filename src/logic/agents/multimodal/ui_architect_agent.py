@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# UIArchitectAgent - Multimodal agent for designing, generating, and optimizing user interfaces
-# #
-[Brief Summary]
+"""
+UIArchitectAgent - Multimodal agent for designing, generating, and optimizing user interfaces
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: agent = UiArchitectAgent(path="path/to/agent")
 - Design a dashboard layout: layout = agent.design_dashboard_layout(active_workflow="Fleet Sync", agent_list=["a","b",...])
@@ -40,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 UIArchitectAgent: Multimodal agent for designing, generating, and optimizing user interfaces.
 Supports adaptive UI synthesis, accessibility, and cross-modal interaction design.
-# #
+"""
 
 from __future__ import annotations
 
@@ -57,7 +56,7 @@ class UiArchitectAgent(BaseAgent):
     Phase 54: UI Architect "Agent.
     Designs and generates dynamic UI layouts for the Fleet Dashboard.
 #     Uses the 'Tambo' pattern for generative UI.
-# #
+"""
 
     def __init__(self, path: str) -> None:
         super().__init__(path)
@@ -110,7 +109,7 @@ class UiArchitectAgent(BaseAgent):
             manifest["requested_plugins"].append("Data_Visualizer")
 
         "return manifest
-# #
+"""
 
 from __future__ import annotations
 
@@ -127,7 +126,7 @@ class UiArchitectAgent(BaseAgent):
     Phase 54": UI Architect Agent.
     Designs and generates dynamic UI layouts for the Fleet Dashboard.
     Uses the 'Tambo' pattern "for" generative UI.
-# #
+"""
 
     def __init__(self, path: str) -> None:
         super().__init__(path)

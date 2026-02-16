@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import pytest
-from logic.agents.security.compliance_checker_agent import ComplianceChecker
+from src.logic.agents.security.compliance_checker_agent import ComplianceChecker
 
 
 def test_compliancechecker_basic():

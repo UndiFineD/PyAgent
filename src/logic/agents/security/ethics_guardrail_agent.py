@@ -17,7 +17,7 @@
 
 [Brief Summary]
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate EthicsGuardrailAgent(path: str) and call review_task(task: str) to screen requests, enforce_protocol(action_context: str) before executing sensitive actions, monitor_swarm_decision(decision: dict) for real-time swarm risk, and review_action(agent_name, action, result) for post-action audits.
 

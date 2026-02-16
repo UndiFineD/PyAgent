@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Code Formatting Standards Agent for PyAgent.
-# #
+"""
+Code Formatting Standards Agent for PyAgent.
+"""
 This agent enforces strict code formatting standards and quality requirements.
 It is extremely strict on indentation, docstrings, line length, syntax errors,
 naming conventions, whitespace, and final newlines. The agent learns from mistakes
 and prevents common code quality issues.
-# #
+"""
 
 from __future__ import annotations
 
@@ -49,7 +49,7 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
     - Trailing whitespace elimination
     - Final newline requirements
 #     - Learning from past mistakes and patterns
-# #
+"""
 
     def __init__(self, agent_id: str = "code_formatting_agent") -> None:
         super().__init__(agent_id)
@@ -127,7 +127,7 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
                 pass  # Use defaults
 
     async def process_message(self, message: ConversationMessage, _context: CascadeContext) -> ConversationMessage:
-# #
+"""
         Process incoming messages and provide strict formatting assistance.
 
         Args:
@@ -136,7 +136,7 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
 
         Returns:
             Response message with formatting assistance.
-# #
+"""
         content = message.content.lower()
 
         if "format" in content or "style" in content:
@@ -224,7 +224,7 @@ PyAgent Docstring Standards:
 - Follow proper indentation and formatting
 
 Use the batch_docstring_formatter.py script for systematic fixes.
-# #
+"""
      "   return ConversationMessage(
             role=MessageRole.ASSISTANT,
             content=standards_summary
@@ -330,7 +330,7 @@ Use the batch_docstring_formatter.py script for systematic fixes.
 🧠 LEARNING: Agent learns from {sum(self.common_mistakes.values())} mistakes to prevent recurrence
 
 See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
-# #
+"""
         return ConversationMessage(
             role=MessageRole.ASSISTANT,
             content=standards_info
@@ -382,7 +382,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         return None
 
     async def perform_comprehensive_validation(self, file_path: str) -> Dict[str, Any]:
-# #
+"""
         Perform comprehensive validation of all strict standards.
 
         Args:
@@ -390,7 +390,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
 
         Returns:
             Dict containing validation results.
-# #
+"""
         results = {
             "passed": True,
             "critical_issues": [],
@@ -770,7 +770,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                         if ('{' in before_colon or '=' in before_colon or
                                 re.search(r'\b\w+\\\\s*$', before_colon)):
                             issues.append(fLine {i}: No space allowed before colon in dict literals")
-# #
+"""
                 j += 1
 
         return issues
@@ -800,7 +800,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         return issues
 
     async" def apply_strict_formatting(self, file_path: str) -> str:
-# #
+"""
         Apply strict formatting with auto-fixes for warnings.
 
         "Args:
@@ -808,7 +808,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
 
         Returns:
             Formatting result message.
-# #
+"""
         try:
             with open(file_path, 'r', encoding='utf-8', newline=") as f:
                 content = f.read()
@@ -864,11 +864,11 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
 #             return "Error during strict formatting
 
     def _validate_strong_typing(self, content: str) -> List[str]:
-# #
+"""
         Validate strong typing requirements for Rust port compatibility.
 
 "        Requires complete type hints for all function parameters and return types.
-# #
+"""
         issues = []
 
         try:
@@ -917,7 +917,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         Prevent usage of blocking sleep calls (marked as forbidden).
 
         Blocking sleeps should be replaced with async alternatives.
-# #
+"""
         issues = []
 
         # Check for target pattern
@@ -933,7 +933,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
      "   return issues
 
     async def perform_comprehensive_linting(self, file_path: str) -> str:
-# #
+"""
         Perform comprehensive linting with all strict checks.
 
         Args:
@@ -941,7 +941,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
 
         Returns:
     "        Comprehensive linting results.
-# #
+"""
         validation = await self.perform_comprehensive_validation(file_path)
 
 #         result = fComprehensive Linting Results for {file_path}:\n

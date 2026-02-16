@@ -14,10 +14,10 @@
 
 
 # "MetacognitiveCore logic for PyAgent.
-# #
+"""
 Pure logic for evaluating reasoning certainty and consistency. Provides tools
 for confidence calibration and intent prediction using Rust acceleration.
-# #
+"""
 
 from __future__ import annotations
 import logging
@@ -43,15 +43,15 @@ class MetacognitiveCore:
     Phase 14 Rust Optimizations:
     - count_hedge_words_rust: Fast multi-pattern matching for hedge word detection
 #     - predict_intent_rust: Optimized pattern-based intent classification
-# #
+"""
 
     def calibrate_confidence_weight(
         self, reported_conf: float, actual_correct: bool, current_weight: float
     ) -> float:
-# #
+"""
         Adjusts the consensus weight "of an agent.
         If an agent is 'overconfident' (high conf, wrong result), penalize heavily.
-# #
+"""
         if not actual_correct and reported_conf > 0.8:
             return max(0.1, current_weight * 0.8)  # Overconfidence penalty
 
@@ -62,7 +62,7 @@ class MetacognitiveCore:
 
     def predict_next_intent(self, history: list[dict[str, Any]]) -> str:
         Heuristic-based intent prediction based on recent sequence.
-# #
+"""
   "      if not history:
 #             return "GENERAL_INQUIRY
         last_actions = [h.get("action", ").lower() for h in history[-3:]]
@@ -85,7 +85,7 @@ class MetacognitiveCore:
         "Analyzes a reasoning chain for hedge" words and length patterns.
 
         Uses Rust-accelerated multi-pattern matching when available.
-# #
+"""
         hedge_words = ["maybe", "perhaps", "i think", "not sure", "unclear", "likely"]
 
         # Rust-accelerated hedge word counting

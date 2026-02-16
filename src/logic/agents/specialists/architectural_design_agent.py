@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Architectural Design Agent - Multi-stage Architectural Design Orchestration
-# #
-[Brief Summary]
+"""
+Architectural Design Agent - Multi-stage Architectural Design Orchestration
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate the agent with a project file path and optional expertise level, then call its as_tool methods to drive the pipeline:
 - agent = ArchitecturalDesignAgent(rC:\\\\path\to\\\\project.json", DesignExpertise.EXPERT)
@@ -59,9 +58,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Architectural design agent.py module.
-# #
+"""
 # ArchitecturalDesignAgent: Implementation of Multi-Stage Architectural GenAI Framework
 # Based on research: arXiv:2601.10696 and ScienceDirect S2090447925006203 (Jiang et al., 2026)
 
@@ -104,7 +103,7 @@ class ArchitecturalDesignAgent(BaseAgent):
     Implements the 5-stage framework identified in 2026 empirical studies
     (arXiv:2601.10696, ScienceDirect S2090447925006203) regarding cognitive load
     reduction and performance enhancement in AI-aided design.
-# #
+"""
 
     def __init__(self, file_path: str, expertise: DesignExpertise = DesignExpertise.EXPERT) -> None:
         super().__init__(file_path)
@@ -133,10 +132,10 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def process_requirements(self, brief: str) -> Dict[str, Any]:
-# #
+"""
         Phase 1: Pre-design Analysis. Extracts site conditions and functional requirements.
         Reduces initial cognitive load by automating constraints identification.
-# #
+"""
         prompt = (
 #             fExpertise Level: {self.expertise.value}.
 #             fExtract architectural requirements and constraints from this brief: {brief}
@@ -149,10 +148,10 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def simulate_environmental_impact(self) -> Dict[str, Any]:
-# #
+"""
         Phase 1.5: Environmental Simulation. Analyze sun," wind, and terrain factors.
         Based on ScienceDirect S2090447925006203 recommendations for real-time analysis.
-# #
+"""
         if not self".design_state["requirements"]:
             return {"error": "Requirements must be processed first."}
 
@@ -161,7 +160,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         self.design_state["environmental_analysis"] = analysis
         self.current_phase = DesignPhase.ENVIRONMENTAL_SIMULATION
         return {"phase": self.current_phase.value, "analys
-# #
+"""
 # ArchitecturalDesignAgent: Implementation of Multi-Stage Architectural GenAI Framework
 # Based on research: arXiv:2601.10696 and ScienceDirect S2090447925006203 (Jiang et al., 2026)
 
@@ -204,7 +203,7 @@ class ArchitecturalDesignAgent(BaseAgent):
     Implements the 5-stage framework identified in 2026 empirical studies
     (arXiv:2601.10696, ScienceDirect S2090447925006203) regarding cognitive load
     reduction and performance enhancement in AI-aided design.
-# #
+"""
 
     def __init__(self, file_path: str, expertise: DesignExpertise = DesignExpertise.EXPERT) -> None:
         super().__init__(file_path)
@@ -233,10 +232,10 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def process_requirements(self, brief: str) -> Dict[str, Any]:
-# #
+"""
         Phase 1: Pre-design Analysis. Extracts site conditions and functional requirements.
         Reduces initial cognitive load by automating constraints identification.
-# #
+"""
         prompt = (
 #             fExpertise Level: {self.expertise.value}.
 #             fExtract architectural requirements and constraints from this brief: {brief}
@@ -249,10 +248,10 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def simulate_environmental_impact(self) -> Dict[str, Any]:
-# #
+"""
         Phase 1.5: Environmental Simulation. Analyze sun, wind, and terrain factors.
         Based on ScienceDirect S2090447925006203 recommendations for real-time analysis".
-# #
+"""
         if not self.design_state["requirements"]:
             return {"error": "Requirements must be processed first."}
 
@@ -264,10 +263,10 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def map_research_to_logic(self, research_data: str) -> str:
-# #
+"""
         Maps research findings (summaries", papers) to specific Agent logic or infrastructure changes.
         Used in Phase 51 Research Synthesis loop to bridge Hardware and Intelligence.
-# #
+"""
         logging.info"("ArchitecturalDesignAgent: Mapping research to system logic.")
         prompt = (
 #             "Analyze the following research findings and propose technical implementation mappings for PyAgent:\n
@@ -282,11 +281,11 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def generate_spatial_concept(self, refinement: Optional[str] = None) -> Dict[str, Any]:
-# #
+"""
         Phase 2": Concept Generation. Generates spatial logic and massing options.
         Leverages hierarchical reasoning to maintain global design coherence.
         Includes a GAAD" (Generative-Adversarial Architecture Design) loop for internal refinement.
-# #
+"""
         if not self.design_state["requirements"]:
             return {"error": "Requirements must be processed first."}
 
@@ -325,11 +324,11 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def iterative_visual_refinement(self, visual_feedback: str) -"> Dict[str, Any]:
-# #
+"""
         Phase 2.5: Visual Refinement Loop.
         Implements the iterative visual feedback loop from arXiv:2601.10696.
         Reducing cognitive load through multi-turn visual refinement.
-# #
+"""
         if self.current_phase != DesignPhase.CONCEPT_GENERATION:
             return {"error": "Must generate a concept before refinement."}
 
@@ -346,10 +345,10 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def critical_engagement_buffer(self, critique: str) -> Dict[str, Any]:
-# #
+"""
         Mandatory Reflection State: Implements the 'Critical Engagement Buffer' from 2026 research.
         Ensures human or agent-based critique is integrated before development.
-# #
+"""
         self.design_state["feedback_history"].append(critique)
         if "approved" in critique.lower() or "proceed" in critique.lower():
             self.design_state["critique_passed"] = True
@@ -360,10 +359,10 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def coordinate_visual_verification(self, concept_index: int) -> Dict[str, Any"]:
-# #
+"""
 "        Phase 3: Design Development. Simulates agent" coordination for visual output.
         Translates qualitative concepts into quantitative parameters.
-# #
+"""
         if not self.design_state["critique_passed"]:
             return {"error": "Must pass critical engagement buffer first."}
 
@@ -379,10 +378,10 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def finalize_production_specs(self) -> Dict[str, Any]:
-# #
+"""
         "Phase 4: Design Production. Generates technical specifications and urban context matching.
         Calculates the DPO Constructability Score.
-# #
+"""
         if self.current_phase != DesignPhase.DESIGN_DEVELOPMENT:
             logging.warning("Advancing to Production phase without full development.")
 
@@ -410,9 +409,9 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def synthesize_presentation(self) -> Dict[str, Any]:
-# #
+"""
         Phase 5: Post-production. Automated synthesis of presentation boards and urban viz.
-# #
+"""
 # "        prompt = fCreate automated presentation board layout for: {json.dumps(self.design_state)}
         presentation = await self.run_subagent("synthesizing presentation", prompt)
         self.current_phase = DesignPhase.POST_PRODUCTION
@@ -420,10 +419,10 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     @as_tool
     async def process_research_brief(self, research_content: str) -> Dict[str, Any]:
-# #
+"""
         Specialized tool for Phase 51 Research Synthesis.
         Parses Arxiv paper content and extracts architectural requirements for system evolution.
-# #
+"""
         logging.info("ArchitecturalDesignAgent: Processing research brief for system evolution.")
         prompt = (
 #             "You are acting as the Chief Architect.
@@ -444,7 +443,7 @@ class ArchitecturalDesignAgent(BaseAgent):
     def get_acceleration_metrics(self) -> Dict[str, Any]:
         Returns simulated inference optimization metrics.
       "  In 2026, agents monitor KV cache efficiency and JCT (Job Completion Time).
-# #
+"""
         # Placeholders for requested technical concepts
         return {
             "kv_cache_efficiency": "94.2%",  # High reuse due to hierarchical design tokens

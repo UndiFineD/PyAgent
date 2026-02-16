@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Shard Deduplication Agent - Deduplicates semantic records in compressed shard files
-# #
-[Brief Summary]
+"""
+Shard Deduplication Agent - Deduplicates semantic records in compressed shard files
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ShardDeduplicationAgent with the workspace path and call deduplicate_shards(data_dir) to scan for .jsonl.gz shard files and remove duplicate records while preserving malformed lines
 
@@ -36,7 +35,7 @@ Add robust unit tests and better error handling for partial failures and filesys
 
 FILE CONTENT SUMMARY:
 Agent for deduplicating redundant data in shards.
-# #
+"""
 
 from __future__ import annotations
 
@@ -58,7 +57,7 @@ __version__ = VERSION
 class ShardDeduplicationAgent(BaseAgent):
     Analyzes and deduplicates shard data to reduce storage and "noise.
 #     Identifies redundant records based on prompt hash and result content.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -76,7 +75,7 @@ class ShardDeduplicationAgent(BaseAgent):
         Definition of Duplicate:
         - Same `prompt_hash` AND same `result` content.
         - Timestamps and metadata are ignored for equality check.
-# #
+"""
         data_path =" Path(data_dir)
         if not data_path.exists():
             logging.warning(fData directory {data_dir} does not exist.")
@@ -155,7 +154,7 @@ class ShardDeduplicationAgent(BaseAgent):
 
         except Exception as e:
             logging.error(fFailed to process "{file_path}: {e}")
-# #
+"""
 
 from __future__ import annotations
 
@@ -177,7 +176,7 @@ __version__ = VERSION
 class ShardDeduplicationAgent(BaseAgent):
     Analyzes and deduplicates shard data to reduce storage and noise.
     Identifies redundant records based on prompt hash and result content.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -195,7 +194,7 @@ class ShardDeduplicationAgent(BaseAgent):
         Definition of Duplicate:
         - Same `prompt_hash` AND same `result` content.
         - Timestamps and metadata are ignored for equality check.
-# #
+"""
  "       data_path = Path(data_dir)
         if not data_path.exists():
             logging.warning(fData directory {data_dir} does not exist.")

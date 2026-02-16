@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# ExcelAgent - Excel spreadsheet processing and data extraction
-# #
-[Brief Summary]
+"""
+ExcelAgent - Excel spreadsheet processing and data extraction
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with a path to an Excel file and call the DataIntelligenceAgent interface to extract tables, metadata, or run analysis pipelines.
 - Example (conceptual): from src.agents.excel_agent import ExcelAgent
@@ -37,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Excel agent.py module.
-# #
+"""
 
 from .data_intelligence_agent import DataIntelligenceAgent
 
@@ -48,7 +47,7 @@ class ExcelAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the ExcelAgent (via DataIntelligence core).
-# #
+"""
 
 from .data_intelligence_agent import DataIntelligenceAgent
 

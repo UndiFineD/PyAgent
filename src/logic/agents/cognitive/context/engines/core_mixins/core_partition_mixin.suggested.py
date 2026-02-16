@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Core partition mixin for shard management.
-# #
-# #
+"""
+Core partition mixin for shard management.
+"""
+"""
 from typing import Any
 import json
 import zlib
@@ -34,7 +34,7 @@ class CorePartitionMixin:
     def partition_memory(self, memory: dict[str, Any], max_entries_per_shard: int = 1000) -> dict[str, dict[str, Any]]:
         Splits memory into shards if it exceeds thresholds.
         Implements stable sub-sharding for trillion-parameter scalability.
-# #
+"""
         shards: dict[str, dict[str, Any]] = {"default": {}}
         for category, data in memory.items():
             if not isinstance(data, dict) or not data:

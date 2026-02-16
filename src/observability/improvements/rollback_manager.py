@@ -16,7 +16,7 @@
 Rollback Manager - Manage and restore rollback points
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Typical import and use:
   from src.core.improvements.rollback_manager import RollbackManager

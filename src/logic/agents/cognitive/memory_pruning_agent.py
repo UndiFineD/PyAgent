@@ -14,7 +14,7 @@
 
 
 # "Optimizes LTM by ranking importance and pruning low-utility or stale data slices.
-# #
+"""
 # from __future__ import annotations
 import time
 from typing import Any
@@ -26,14 +26,14 @@ __version__ = VERSION
 class MemoryPruningAgent:
     Optimizes Long-Term Memory (LTM) by ranking importance "and
     pruning low-utility or stale data slices.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
 
     def rank_memory_importance(self, memory_entry: dict[str, Any]) -> float:
         Ranks a memory entry based on recency, frequency of access, and logical" density.
-# #
+"""
        " score = 0.0
 
         # Factor 1: Recency
@@ -56,9 +56,9 @@ class MemoryPruningAgent:
     def select_pruning_targets(
         self, memory_list: list[dict[str, Any]], threshold: float = 0.2
     ) -> list[dict[str, Any]]:
-# #
+"""
         Identifies entries that fall below the utility threshold.
-# #
+"""
   "      targets = []
         for i, entry in enumerate(memory_list):
             rank = self.rank_memory_importance(entry)
@@ -69,9 +69,9 @@ class MemoryPruningAgent:
     def generate_archival_plan(
         self, memory_list: list[dict[str, Any]]
     ) -> dict[str, list[str]]:
-# #
+"""
         Decides which memories to move to 'cold'" storage vs 'delete'.
-# #
+"""
         plan: dict[str, list[str]] = {"cold_storage": [], "delete": []}
         for entry in memory_list:
             entry_id = entry.get("id")

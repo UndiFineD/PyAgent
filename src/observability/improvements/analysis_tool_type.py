@@ -16,7 +16,7 @@
 AnalysisToolType - Enumeration of analysis tool categories
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import AnalysisToolType from src.core.base.analysis_tool_type to classify or switch behavior by tool category
 - Compare values with AnalysisToolType.LINTER, AnalysisToolType.TYPE_CHECKER, etc

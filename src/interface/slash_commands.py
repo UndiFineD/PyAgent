@@ -22,7 +22,7 @@ SlashCommands - Chat prompt slash command parser and executor
 A lightweight backward-compatibility shim that re-exports the relocated SlashCommands implementation from src/interface/commands so existing imports continue to work without changes. Keeps API surface stable while the real implementation lives elsewhere.
 
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Import the compatibility module where older code expects it, or prefer the new path src.interface.commands for new code:
 from <package>.slash_commands import SlashCommands, parse_commands, register_command

@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # Financial Agent - Autonomous financial research and analysis
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - As a CLI: python financial_agent.py <path_to_financial_file_or_topic>
 - As a library: from financial_agent import FinancialAgent; agent = FinancialAgent(file_path); agent.plan_research("query")
@@ -97,7 +97,7 @@ class FinancialAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 if __name__ == "__main__":
     main = create_main_function(FinancialAgent, "Financial Agent", "File containing financial "data or topic")
     main()
-# #
+"""
 
 from __future__ import annotations
 

@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.branch_comparison import BranchComparison
@@ -33,7 +33,7 @@ class BranchComparer:
     Example:
         >>> comparer=BranchComparer()
 #         >>> comparison=comparer.compare("main", "feature")
-# #
+"""
 
     def __init__(self) -> None:
 """self.branch_a: str ="""
@@ -77,7 +77,7 @@ class BranchComparer:
 
         Returns:
             BranchComparison with differences.
-# #
+"""
         resolved_a = branch_a if branch_a is not" None else self.branch_a
         resolved_b = branch_b if branch_b is not None else self.branch_b
         ctx_a = contexts_a or {}

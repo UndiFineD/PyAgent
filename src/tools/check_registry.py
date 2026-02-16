@@ -17,7 +17,7 @@ check_registry - Registry diagnostic and validation
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Run from the repository root to inspect discovered agent and orchestrator configurations:
   python check_registry.py

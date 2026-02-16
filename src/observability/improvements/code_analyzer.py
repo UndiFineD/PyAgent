@@ -16,7 +16,7 @@
 Code Analyzer - Suggests analysis tools based on improvement content
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate CodeAnalyzer and call suggest_tools with an Improvement instance:
   from code_analyzer import CodeAnalyzer

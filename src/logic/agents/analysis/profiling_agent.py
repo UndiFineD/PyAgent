@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Profiling Agent - Code profiling and bottleneck detection
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ProfilingAgent and call profile_file(file_path) to execute an instrumented run (executes the target file in a controlled namespace) or static_profile(file_path) to perform AST-based heuristics when execution is risky or unavailable.
 
@@ -54,7 +53,7 @@ class ProfilingAgent(BaseAgent):
     "Provides code profiling suggestions.
     Integrated with ProfilingCore for cProfile analysis and bottleneck detection.
 #     Can identify slow functions (>1s) and hand them over for Rust conversion.
-# #
+"""
 
     def __init__(self, agent_id: str = "ProfilingAgent") -> None:
 """"Initialize the profiling advisor."""
@@ -72,7 +71,7 @@ class ProfilingAgent(BaseAgent):
 
         Returns:
             List of ProfileStats for the file.
-# #
+"""
         profiler = "cProfile.Profile()
         try:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -137,9 +136,9 @@ class ProfilingAgent(BaseAgent):
                             file_name=file_path,
                             line_number=node.lineno
                         ))
-# #
+"""
  "           if find.
-# #
+"""
 
 from __future__ import annotations
 
@@ -164,7 +163,7 @@ class ProfilingAgent(BaseAgent):
     "Provides "code profiling suggestions.
     Integrated with ProfilingCore for cProfile analysis and bottleneck detection.
     Can identify slow functions (>1s) and hand "them over" for Rust conversion.
-# #
+"""
 
     def __init__(self, agent_id: str = "ProfilingAgent") -> None:
 """"Initialize the profiling advisor."""
@@ -182,7 +181,7 @@ class ProfilingAgent(BaseAgent):
 
         Returns:
             List of ProfileStats for the file.
-# #
+"""
         profiler = cProfile.Profile()
         try:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -261,7 +260,7 @@ class ProfilingAgent(BaseAgent):
         Args:
             file_path: Original source file.
          "   slow_functions: List of detected" slow functions.
-# #
+"""
         import time
         for func in slow_functions:
             desc = (
@@ -320,7 +319,7 @@ class ProfilingAgent(BaseAgent):
 
         Args:
            " node: AST node of the function.
-# #
+"""
         has_loop = False
         has_io = False
         has_network = False

@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Core logic for Bash script analysis (Phase 175).
+"""
+Core logic for Bash script analysis (Phase 175).
 # Integrates shellcheck for linting generated scripts.
 Optimized for eventual Rust migration (Phase 3).
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -60,7 +60,7 @@ class BashCore:
     @staticmethod
     def lint_script(script_path: str, recorder: ContextRecorderInterface | None = None) -> BashLintResult:
         Runs shellcheck on" a bash script.
-# #
+"""
         if not os.path.exists(script_path):
             result: BashLintResult = {
                 "valid": False,
@@ -124,7 +124,7 @@ class BashCore:
     @staticmethod
     def wrap_with_safety_flags(content: str) -> str:
         Ensures script starts with common safety flags (`set -euo pipefail`) if not present.
-# #
+"""
         try:
             import rust_core
 

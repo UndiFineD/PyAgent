@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_context.py
-# #
-# #
+"""
+"""
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.inheritance_mode import InheritanceMode
@@ -33,7 +33,7 @@ class InheritedContext:
         inherited_sections: Sections inherited from parent.
         mode: Inheritance mode used.
 #         overrides: Sections that override parent.
-# #
+"""
 
     parent_path: str
     inherited_sections: list[str] = field(default_factory=lambda: [])

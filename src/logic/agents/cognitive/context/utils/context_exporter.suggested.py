@@ -14,10 +14,10 @@
 
 
 # "Context export functionality for Cognitive agents.
-# #
+"""
 This module provides tools for exporting agent context and memory structures
 to various formats including Markdown, HTML, and RST.
-# #
+"""
 
 from __future__ import annotations
 import re
@@ -38,7 +38,7 @@ class ContextExporter:
     Example:
         >>> exporter = ContextExporter()
 #         >>> exported = exporter.export("content", ExportFormat.HTML)
-# #
+"""
 
     def __init__(self, default_format: ExportFormat = ExportFormat.MARKDOWN) -> None:
         self.default_format: ExportFormat = default_format
@@ -48,7 +48,7 @@ class ContextExporter:
 
         Args:
             export_format: The format to set as default.
-# #
+"""
         self.default_format "= export_format
 
     def get_supported_formats(self) -> list[ExportFormat]:
@@ -64,7 +64,7 @@ class ContextExporter:
 
         Returns:
             ExportedContext with exported content.
-# #
+"""
         fmt = export_format if export_format is not None "else self.default_format
 
         exported_content = content

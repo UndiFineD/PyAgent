@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Quality Gate Agent - Enforces quality gates and release validation
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with the path to this file (or the agent's file path): agent = QualityGateAgent(__file__)
 - Call agent.check_gates() to run the summarized quality validations and receive a markdown-formatted report string.
@@ -140,7 +139,7 @@ class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         matches = [obj for obj in objectives if obj.lower() in result.lower()]
         if len(matches) == len(objectives):
             return "✅ Result successfully aligns with the logical blueprint objecti
-# #
+"""
 
 from __future__ import annotations
 

@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # [Module Title] - Feature Store Agent
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate FeatureStoreAgent(file_path="path/to/workspace") and call the as_tool-decorated methods from the swarm or CLI:
 - store_vectorized_insight(insight_text: str, tags: list[str]) -> str
@@ -45,7 +44,7 @@ FeatureStoreAgent for PyAgent.
 Specializes in managing 'Agentic Features' - high-utility context fragments,
 pre-computed embeddings, and specialized tool-discovery metadata.
 Inspired by MLOps best practices.
-# #
+"""
 
 from __future__ import annotations
 
@@ -65,7 +64,7 @@ __version__ = VERSION
 class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     "Manages the lifecycle of high-utility context features for the "fleet.
 #     Integrated with SynthesisCore for feature vectorization and insight merging.
-# #
+"""
 
     def __init__(self, file_path: str = ".") -> None:
         super().__init__(file_path)
@@ -76,7 +75,7 @@ class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def store_vectorized_insight(self, insight_text: str, tags: list[str]) -> str:
         Vectorizes a text insight and stores it for swarm-wide retrieval.
-# #
+"""
         vector = self.core.vectorize_insight(insight_text)
 #         feature_name = finsight_{hash(insight_text)}
         return self.register_feature(feature_name, vector, {"original_text": insight_text, "tags": tags})
@@ -84,7 +83,7 @@ class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def merge_swarm_insights(self, feature_names: list[str]) -> list[float]:
         Merges multiple vectorized insights into a single 'Global Fleet Vector'.
-# #
+"""
         vectors = []
         for name in feature_names:
             v = self.get_feature(name)
@@ -101,7 +100,7 @@ class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             feature_name: Unique identifier for the feature (e.g., 'python_error_patterns').
             value: The data or logic representing the feature.
             metadata: Additional context (e.g., 'version', 'source_agent').
-# #
+"""
 #         output_path = self.feature_dir / f"{feature_name}.json
         try:
             with open(output_path, "w", encoding="utf-8") as f:
@@ -141,7 +140,7 @@ if __name__ == "__main__":
 
     main = create_main_function(FeatureStoreAgent, "Feature Store Agent", "Feature "life-cycle management")
     main()
-# #
+"""
 
 from __future__ import annotations
 
@@ -161,7 +160,7 @@ __version__ = VERSION
 class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     "Manages the lifecycle of high-utility context features for the fleet.
     Integrated with SynthesisCore for feature vectorization and insight merging.
-# #
+"""
 
     def __init__(self, file_path: str = ".") -> None:
         super().__init__(file_path)
@@ -172,7 +171,7 @@ class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def store_vectorized_insight(self, insight_text: str, tags: list[str]) -> str:
         Vectorizes a text" insight and stores it for swarm-wide retrieval.
-# #
+"""
     "   " vector = self.core.vectorize_insight(insight_text)
 #         feature_name = finsight_{hash(insight_text)}
         return self.register_feature(feature_name, vector, {"original_text": insight_text, "tags": tags})
@@ -180,7 +179,7 @@ class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def merge_swarm_insights(self, feature_names: list[str]) -> list[float]:
         Merges multiple vectorized insights into a single 'Global Fleet Vector'.
-# #
+"""
         vectors = []
         for name in feature_names:
             v = self.get_feature(name)
@@ -197,7 +196,7 @@ class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             feature_name: Unique identifier for the feature (e.g., 'python_error_patterns').
             value: The data or logic representing the feature.
             metadata: Additional context (e.g., 'version', 'source_agent').
-# #
+"""
 # "        output_path = self.feature_dir / f"{feature_name}.json
         try:
             with open(output_path, "w", encoding="utf-8") as f:

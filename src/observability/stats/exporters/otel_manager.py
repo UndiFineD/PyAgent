@@ -19,7 +19,7 @@ Allows visualization of agent chains and request propagation across nodes.
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 
 USAGE:
   Instantiate OTelManager in agents or services to start and end spans.

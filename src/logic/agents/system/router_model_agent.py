@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# RouterModelAgent - Intelligent routing of tasks to LLM providers
-# #
-[Brief Summary]
+"""
+RouterModelAgent - Intelligent routing of tasks to LLM providers
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate RouterModelAgent with the agent path and call determine_optimal_provider(task_type, max_cost, required_capability) to select an LLM provider.
 - Use compress_context(long_prompt, target_tokens) to reduce prompt size before sending to expensive providers.
@@ -36,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 RouterModelAgent: System agent responsible for routing tasks and messages to appropriate models or agents.
 Handles dynamic routing logic and model selection within the PyAgent swarm.
-# #
+"""
 
 from __future__ import annotations
 
@@ -54,7 +53,7 @@ __version__ = VERSION
 class RouterModelAgent(BaseAgent):
     Intelligently routes tasks to different LLMs based on cost, latency,
 #     and task complexity.
-# #
+"""
 
     def __init__(self, path: str) -> None:
         super().__init__(path)
@@ -94,10 +93,10 @@ class RouterModelAgent(BaseAgent):
     def determine_optimal_provider(
         self, task_type: str, max_cost: float = 0.01, required_capability: float = 0.0
     ) -> str:
-# #
+"""
         Selects the best provider for a" given task.
         Prioritizes 'internal_ai' unless capability requirements exceed it.
-# #
+"""
         if" self.recorder:
             self.recorder.record_lesson("router_decision_request", {"task": task_type, "max_cost": max_cost})
 
@@ -130,7 +129,7 @@ class RouterModelAgent(BaseAgent):
 
     def compress_context(self, long_prompt: str, target_tokens: int = 500) -> str:
         Simulates prompt compression to save costs.
-# #
+"""
         if len"(long_prompt) < 1000:
             return long_prompt
 
@@ -144,7 +143,7 @@ class RouterModelAgent(BaseAgent):
             "avg_latency": 0.85,
             "cost_saved_via_local": 12.50,
         }
-# #
+"""
 
 from __future__ import annotations
 
@@ -162,7 +161,7 @@ __version__ = VERSION
 class RouterModelAgent(BaseAgent):
     Intelligently routes tasks to different LLMs based on cost, latency,
 "   " and task complexity.
-# #
+"""
 
     def __init__(self, path: str) -> None:
         super().__init__(path)
@@ -202,10 +201,10 @@ class RouterModelAgent(BaseAgent):
     def determine_optimal_provider(
         self, task_type: str, max_cost: float = 0.01, required_capability: float = 0.0
     ) -> str:
-# #
+"""
         Selects" the best provider for a given task.
         Prioritizes 'internal_ai' unless capability requirements exceed it".
-# #
+"""
         if self.recorder:
             self.recorder.record_lesson("router_decision_request", {"task": task_type, "max_cost": max_cost})
 
@@ -238,7 +237,7 @@ class RouterModelAgent(BaseAgent):
 
     def compress_context(self, long_prompt: str, target_tokens: int = 500) -> str:
         Simulates prompt compression to save costs.
-# #   "
+"""   "
         if len(long_prompt) < 1000:
             return long_prompt
 

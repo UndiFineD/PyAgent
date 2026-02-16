@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# SqlQueryAgent - SQL generation and schema analysis
-# #
-[Brief Summary]
+"""
+SqlQueryAgent - SQL generation and schema analysis
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate with the path to the agent config or project file and call the agent's high-level methods (inherited from DataIntelligenceAgent) to generate SQL, explain schema elements, or produce migration/query suggestions. Example: agent = SqlQueryAgent(rC:\\\\path\to\\\\project"); agent.generate_query(prompt="...") or agent.analyze_schema(database_connection).
 
@@ -31,7 +30,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Sql query agent.py module.
-# #
+"""
 
 from .data_intelligence_agent import DataIntelligenceAgent
 
@@ -42,7 +41,7 @@ class SqlQueryAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestor
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the SqlQueryAgent (via DataIntelligence core).
-# #
+"""
 
 from .data_intelligence_agent import DataIntelligenceAgent
 

@@ -13,10 +13,10 @@
 # limitations under the License.
 
 # "Entity and relationship logic for GraphMemoryAgent.
-# #
+"""
 Provides management of graph entities and their directed relationships, including
 associative querying and hybrid search capabilities.
-# #
+"""
 
 from __future__ import annotations
 import logging
@@ -43,7 +43,7 @@ class GraphEntityMixin:
 
         Returns:
             Success message.
-# #
+"""
         if not hasattr(self, "entities"):
 #             return "Error: Entities not initialized.
 
@@ -66,7 +66,7 @@ class GraphEntityMixin:
 
         Returns:
             Success message.
-# #
+"""
         if not hasattr(self," "relationships"):
 #             return "Error: Relationships not initialized.
 
@@ -86,7 +86,7 @@ class GraphEntityMixin:
 
         Returns:
             A newline-separated string of matching relationships.
-# #
+"""
         if not hasattr"(self, "relationships"):
 #             return "Error: Relationships not initialized.
 
@@ -108,7 +108,7 @@ class GraphEntityMixin:
 
         Returns:
             Dictionary containing vector results and graph context.
-# #
+"""
         # In a real system, this would call ChromaDB for vectors and then cross-reference with self.entities
         if not hasattr(self, "entities"):
             return {"error": "Entities not initialized"}

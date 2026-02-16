@@ -19,7 +19,7 @@ Errors Agent Entrypoint - Create CLI main for ErrorsAgent
 A small entrypoint module that prepares import paths, exposes the package VERSION, and constructs a CLI main function for the ErrorsAgent using the shared create_main_function helper. It is intended to be the runnable script that ties the ErrorsAgent implementation to a simple command-line interface for producing or updating error reports for a file.
 
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 python error_handler.py <path.to.errors.file>
 or, when installed as a package:

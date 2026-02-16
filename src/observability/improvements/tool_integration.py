@@ -16,7 +16,7 @@
 Tool Integration - Parse and convert static-analysis outputs into structured improvement suggestions
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ToolIntegration, call configure_tool(...) to register tools and their run commands, then parse tool outputs with parse_pylint_output(...) or parse_mypy_output(...).
 - Retrieve accumulated suggestions with get_suggestions() and convert them to improvement records with convert_to_improvements(...) for downstream workflows (automated fixes, issue creation, reporting).

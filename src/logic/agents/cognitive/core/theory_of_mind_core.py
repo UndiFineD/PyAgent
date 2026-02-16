@@ -14,10 +14,10 @@
 
 
 # "TheoryOfMindCore logic for PyAgent.
-# #
+"""
 Pure logic for modeling agent mental states and capabilities. Analyzes agent
 profiles and observations to maintain a model of the swarm's collective intelligence.
-# #
+"""
 
 from __future__ import annotations
 from typing import Any

@@ -16,7 +16,7 @@
 ImprovementDiff - Represent a single improvement difference between branches
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Import the dataclass and instantiate as a lightweight container for a diff between two branches' improvements:
 from src.improvements.improvement_diff import ImprovementDiff

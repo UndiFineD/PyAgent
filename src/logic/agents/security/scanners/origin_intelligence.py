@@ -22,46 +22,46 @@ class OriginRecon:
 #     pass  # [BATCHFIX] inserted for empty class
 """Attempts to find the origin IP of a website behind a CDN."""
 #     Ported from Origin_Recon.
-# #
+"""
 
     def __init__(self):
         self.resolver = dns.asyncresolver.Resolver()
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         self.resolver.nameservers = ["1.1.1.1", "8.8.8.8"]
+"""         self.resolver.nameservers = ["1.1.1.1", "8.8.8.8"]
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     async def get_subdomains_from_crt(self, domain: str, session: aiohttp.ClientSession) -> List[str]:
+"""     async def get_subdomains_from_crt(self, domain: str, session: aiohttp.ClientSession) -> List[str]:
 #         url = fhttps://crt.sh/?q=%.{domain}&output=json
         try:
             async with session.get(url, timeout=20) as resp:
                 if resp.status == 200:
                     data = await resp.json()
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                     return list({entry["name_value"].lower().strip() for entry in data})
+"""                     return list({entry["name_value"].lower().strip() for entry in data})
         except Exception:
             pass
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         return []
+"""         return []
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     async def check_ip_origin(self, domain: str, ip: str, session: aiohttp.ClientSession) -> Dict[str, Any]:
-# #
+"""     async def check_ip_origin(self, domain: str, ip: str, session: aiohttp.ClientSession) -> Dict[str, Any]:
+"""
         Compares the Target Domain (CDN) with the direct IP response.
-# #
+"""
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         results: Dict[str, Any] = {"ip": ip, "reasons": [], "is_origin": False}
+"""         results: Dict[str, Any] = {"ip": ip, "reasons": [], "is_origin": False}
 
         try:
             # Check for high TTL on the domain itself (CDN check)
@@ -73,7 +73,7 @@ class OriginRecon:
             # Direct IP request
             headers = {"Host": domain}
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             async with session.get(
 # [BATCHFIX] Commented metadata/non-Python
 #                 fhttp://{ip}", headers=headers, timeout=5, ssl=False, allow_redirects=False"  # [BATCHFIX] closed string
@@ -86,23 +86,23 @@ class OriginRecon:
 # [BATCHFIX] Commented metadata/non-Python
 #                     results["reasons"].append(fDirect Server Banner: {server_header}")"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                     results["is_origin"] = True
+"""                     results["is_origin"] = True
 
                 # Check for sensitive headers usually stripped by CDNs
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                 if any(h in resp.headers for h in ["X-Powered-By", "X-AspNet-Version", "X-Runtime"]):
+"""                 if any(h in resp.headers for h in ["X-Powered-By", "X-AspNet-Version", "X-Runtime"]):
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                     results["reasons"].append("Leaked Backend Technology Headers")
+"""                     results["reasons"].append("Leaked Backend Technology Headers")
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                     results["is_origin"] = True
+"""                     results["is_origin"] = True
 
         except Exception:
             pass

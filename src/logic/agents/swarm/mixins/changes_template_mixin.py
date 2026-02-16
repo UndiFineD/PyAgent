@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# ChangesTemplateMixin - Changelog template management
-# #
-[Brief Summary]
+"""
+ChangesTemplateMixin - Changelog template management
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Mix this into a ChangesAgent or similar class; call set_template("python" | "javascript" | "generic") to select a default template.
 - Use create_custom_template(...) to define and activate a bespoke template.
@@ -33,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Template management logic for ChangesAgent.
-# #
+"""
 
 from __future__ import annotations
 
@@ -101,7 +100,7 @@ class ChangesTemplateMixin:
         if hasattr(self, "_template") and "self._template:
             return self._template.sections
         return ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]
-# #
+"""
 
 from __future__ import annotations
 

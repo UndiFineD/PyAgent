@@ -21,7 +21,7 @@ plan_executor.py - Plan Execution Strategy Interface
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import this module to obtain the versioned strategies interface and the
   BackendFunction type alias.

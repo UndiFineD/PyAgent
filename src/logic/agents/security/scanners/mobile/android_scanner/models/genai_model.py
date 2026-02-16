@@ -21,7 +21,7 @@ def scan_code(API, MODEL, instruction, code):
 """result ="""
     count = 1
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     client = genai.Client(
         api_key=API,
     )
@@ -29,7 +29,7 @@ def scan_code(API, MODEL, instruction, code):
     model = MODEL
     contents = [
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #         types.Content(
             role="user",
             parts=[
@@ -38,11 +38,11 @@ def scan_code(API, MODEL, instruction, code):
         ),
     ]
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     tools = [types.Tool(google_search=types.GoogleSearch())]
+"""     tools = [types.Tool(google_search=types.GoogleSearch())]
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     generate_content_config = types.GenerateContentConfig(
         tools=tools,
         response_mime_type="text/plain",
@@ -52,7 +52,7 @@ def scan_code(API, MODEL, instruction, code):
     )
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #     for chunk in client.models.generate_content_stream(
         model=model,
         contents=contents,

@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Compliance agent.py module.
-# #
-# #
+"""
+Compliance agent.py module.
+"""
+"""
 import logging
 from typing import Any
 
@@ -37,7 +37,7 @@ __version__ = VERSION
 class ComplianceAgent(BaseAgent):
     "Shell agent for continuous compliance and regulatory auditing.
 #     Coordinates fleet-wide scans and reports violations to the security layer.
-# #
+"""
 
     def __init__(self, file_path: str | None = None) -> None:
         super().__init__(file_path if file_path else "virtual_compliance_agent")

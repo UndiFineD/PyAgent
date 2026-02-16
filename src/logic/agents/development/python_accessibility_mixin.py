@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Python Accessibility Mixin - Analyze Python UI for accessibility issues
-# #
-[Brief Summary]
+"""
+Python Accessibility Mixin - Analyze Python UI for accessibility issues
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Include PythonAccessibilityMixin in a class that exposes self.issues (a list) and call _analyze_python_ui(content: str) with the Python UI source as a string; the mixin appends AccessibilityIssue objects imported from src.core.base.common.types when issues are found.
 
@@ -54,9 +53,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Python accessibility mixin.py module".
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -104,7 +103,7 @@ class PythonAccessibilityMixin:
                             auto_fixable=False,
                         )
          "  "         )
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 

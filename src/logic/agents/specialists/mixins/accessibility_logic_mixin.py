@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# AccessibilityLogicMixin - Entry-point analysis and WCAG rule management
-# #
-[Brief Summary]
+"""
+AccessibilityLogicMixin - Entry-point analysis and WCAG rule management
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate or mix into an AccessibilityAgent implementation.
 - Call analyze_file(file_path: str) to scan a file on disk and receive an AccessibilityReport.
@@ -48,9 +47,9 @@ FILE CONTENT SUMMARY:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
+"""
 Accessibility logic mixin.py module.
-# #
+"""
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
@@ -104,7 +103,7 @@ class AccessibilityLogicMixin:
 """"Disable a specific WCAG rule."""
         if wcag_criterion in self.rules:
             self.rules[wcag_criterion] = False
-# #
+"""
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations

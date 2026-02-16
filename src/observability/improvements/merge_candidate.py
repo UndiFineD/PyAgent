@@ -16,7 +16,7 @@
 MergeCandidate - Dataclass for representing a merge candidate between two improvements
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.improvements.merge_candidate import MergeCandidate
 mc = MergeCandidate(source_id="imp-123", target_id="imp-456", similarity_score=0.87, merge_reason="overlapping scope")

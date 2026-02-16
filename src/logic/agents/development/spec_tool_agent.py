@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Spec Tool Agent - Generates Python tool wrappers from formal specifications
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate SpecToolAgent with the repository file path: agent = SpecToolAgent("path/to/file")
 - Use tools via their decorated methods:
@@ -141,7 +140,7 @@ class SpecToolAgent(BaseAgent):
     def archive_change(self, name: str) -> str:
 """"Merges a completed change back into the main specs and archives the folder."""
         change_dir = Path("openspec/changes") / name
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 

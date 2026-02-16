@@ -22,7 +22,7 @@ Rust acceleration and refactors) by delegating tasks to the fleet's
 coder/orchestrators.
 
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 
 USAGE:
 - Instantiate EvolutionLoop with a FleetManager implementation:

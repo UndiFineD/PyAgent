@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Config Hygiene Core - Core validation and environment extraction
-# #
-[Brief Summary]
+"""
+Config Hygiene Core - Core validation and environment extraction
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Validate a JSON config file against a simple schema:
   ok, msg = ConfigHygieneCore.validate_json_with_schema("config.json", "schema.json")
@@ -41,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Core logic for Config Hygiene (Phase 174).
 Handles JSON Schema validation for configuration files.
-# #
+"""
 
 import json
 import os
@@ -57,7 +56,7 @@ class ConfigHygieneCore:
         Note: For simplicity, we use manual checks or a basic schema validator if available.
         Since we want to avoid extra heavy dependencies like 'jsonschema' if not present,
         we'll do a structural check.
-# #
+"""
         if not os.path.exists(data_path) or not os.path.exists(schema_path):
 #             return False, "File or schema missing.
 
@@ -80,7 +79,7 @@ class ConfigHygieneCore:
     @staticmethod
     def extract_env_vars(config_data: dict[str, Any], prefix: str = "PYAGENT_") -> dict[str, str]:
         Helper to flatten nested config into env-style key-value pairs.
-# #
+"""
         try:
             import rust_core
 
@@ -100,7 +99,7 @@ class ConfigHygieneCore:
                 sub = ConfigHygieneCore._extract_env_vars_python(v, f"{prefix}{k.upper()}_")
                 env_vars.update(sub)
      "  " return env_vars
-# #
+"""
 
 import json
 import os
@@ -116,7 +115,7 @@ class ConfigHygieneCore:
         Note: For simplicity, we use manual checks or a basic schema validator if available.
         Since we want to avoid extra heavy dependencies like 'jsonschema' if not present,
         we'll do a structural check.
-# #
+"""
         if not os.path.exists(data_path) or not os.path.exists(schema_path):
 #             return False, "File or schema missing.
 
@@ -139,7 +138,7 @@ class ConfigHygieneCore:
     @staticmethod
     def extract_env_vars(config_data: dict[str, Any], prefix: str = "PYAGENT_") -> dict[str, str]:
         Helper to flatten nested config into env-style key-value pairs.
-# #
+"""
         try:
             import rust_core
 

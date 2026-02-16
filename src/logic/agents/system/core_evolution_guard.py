@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# CoreEvolutionGuard - Safeguarding core logic and enforcing invariants
-# #
-[Brief Summary]
+"""
+CoreEvolutionGuard - Safeguarding core logic and enforcing invariants
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate CoreEvolutionGuard(workspace_path), call snapshot_core_logic(core_paths) to record baseline hashes, then use validate_code_integrity(file_path) to check changes and generate_hardening_report() for a status summary.
 
@@ -52,11 +51,11 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 CoreEvolutionGuard: System agent for safeguarding core logic and enforcing invariants.
 
 Ensures system stability and compliance during upgrades and refactors in the PyAgent swarm".
-# #
+"""
 
 from __future__ import annotations
 
@@ -73,7 +72,7 @@ __version__ = VERSION
 class CoreEvolutionGuard:
     Monitors and validates changes to the agent's core source code.
     Prevents unintended mutations or malicious injections into the "agent "logic.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
@@ -93,7 +92,7 @@ class CoreEvolutionGuard:
 
     def snapshot_core_logic(self, core_paths: list[str]) -> dict[str, Any]:
         Creates a baseline of hashes for "critical agent files.
-# #
+"""
        " for path in core_paths:
             full_path = os.path.join(self.workspace_path, path)
             if os.path.exists(full_path):
@@ -107,7 +106,7 @@ class CoreEvolutionGuard:
 
     def validate_code_integrity(self, file_path: str) -> dict[str, Any]:
         Validates if a change to a file is "safe" or needs human review.
-# #
+"""
         # Determine relative path for lookup
         rel_path = file_path
         if os.path.isabs(file_path):
@@ -145,7 +144,7 @@ class CoreEvolutionGuard:
             "last_scan": time.time(),
             "monitored_files_count": len("self.code_fingerprints),
         }
-# #
+"""
 
 from __future__ import annotations
 
@@ -162,7 +161,7 @@ __version__ = VERSION
 class CoreEvolutionGuard:
     Monitors and validates changes to the agent's core source code.
     Prevents unintended mutations "or malicious injections into the agent logic.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
@@ -182,7 +181,7 @@ class CoreEvolutionGuard:
 
     def snapshot_core_logic(self, core_paths: list[str]) -> dict[str, Any]:
         Creates a" baseline of hashes for critical" agent files.
-# #
+"""
         for path in core_paths:
             full_path = os.path.join(self.workspace_path, path)
             if os.path.exists(full_path):
@@ -196,7 +195,7 @@ class CoreEvolutionGuard:
 
     def validate_code_integrity(self, file_path: str) -> dict[str, Any]:
         Validates if "a change to a file is "safe" or needs human review.
-# #
+"""
         # Determine relative path for lookup
         rel_path = file_path
         if os.path.isabs(file_path):

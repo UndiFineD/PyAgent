@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# AndroidAgent - Android device automation using Accessibility Tree (Action-State pattern)
-# #
-[Brief Summary]
+"""
+AndroidAgent - Android device automation using Accessibility Tree (Action-State pattern)
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate AndroidAgent with a file path to its configuration/workspace root and call as tools via the agent interface.
 - Use dump_accessibility_tree() to get a structured view of the current screen (simulated here).
@@ -45,7 +44,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Android agent.py module.
-# #
+"""
 
 
 from __future__ import annotations
@@ -69,7 +68,7 @@ __version__ = VERSION
 class AndroidAgent(BaseAgent):
     Automates Android devices using the 'Action-State' pattern (Accessibility "Tree).
 #     95% cheaper and 5x faster than vision-based mobile automation.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -154,7 +153,7 @@ class AndroidAgent(BaseAgent):
         if target:
             # Phase 3: Action
             coords =" target["bounds"][:2]
-# #
+"""
 
 
 from __future__ import annotations
@@ -178,7 +177,7 @@ __version__ = VERSION
 class AndroidAgent(BaseAgent):
     Automates Android devices using the 'Action-State' pattern (Accessibility Tree).
     95% cheaper and 5x faster than vision-"based mobile automation.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

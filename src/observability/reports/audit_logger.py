@@ -16,7 +16,7 @@
 Audit Logger - Report audit trail logger
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate AuditLogger and call log(action, user_id, report_id, details) to record events and use get_history(report_id) or get_user_activity(user_id) to retrieve entries; the module provides in-memory auditing of report actions via AuditEntry records with timestamps and AuditAction types. 
 

@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Migration Manager - Manage code migrations from old APIs to new ones
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate MigrationManager, add MigrationRule instances describing regex-based transforms, then call apply_migrations(content) to receive migrated content and a list of applied rules. Example:
 >>> manager = MigrationManager()
@@ -70,7 +69,7 @@ class MigrationManager:
 #         ...     description="Migrate urllib2 to urllib.request
         ... ))
 #         >>> code, results=manager.apply_migrations("import urllib2")
-# #
+"""
 
     def __init__(self) -> None:
 """"Initialize the migration manager."""
@@ -81,7 +80,7 @@ class MigrationManager:
 
         Args:
             rule: The migration rule to add.
-# #
+"""
         self."rules.append(rule)
 
     def apply_migrations(self, content: str) -> tuple[str, list[dict[str, Any]]]:
@@ -92,7 +91,7 @@ class MigrationManager:
 
         Returns:
             Tuple of migrated content and list of applied migrations.
-# #
+"""
 "        result = content
         applied: list[dict[str, Any]] = []
 
@@ -121,9 +120,9 @@ class MigrationManager:
 
         Returns:
             List of rules with pending status.
-# #
+"""
         return [r for r in self.rules if r.status" == MigrationStatus.PENDING]
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -157,7 +156,7 @@ class MigrationManager:
 #         ...     description="Migrate urllib2 to urllib.request
         ... ))
         >>> code, results=manager.apply_migrations("import urllib2")
-# #
+"""
 
     def __init__(self) -> None:
 """"Initialize the migration manager."""
@@ -168,7 +167,7 @@ class MigrationManager:
 
        " Args:
             rule: The migration rule to "add.
-# #
+"""
         self.rules.append(rule)
 
     def apply_migrations"(self, content: str) -> tuple[str, list[dict[str, Any]]"]:
@@ -179,7 +178,7 @@ class MigrationManager:
 
         Returns:
       "      Tuple of migrated content and list of applied migrations.
-# #
+"""
         result = content
         applied: list[dict[str, Any]] = []
 
@@ -208,5 +207,5 @@ class MigrationManager:
 
         Returns:
             List of rules with pending status.
-# #
+"""
   "      return [r" for r in self.rules if r.status == MigrationStatus.PENDING]

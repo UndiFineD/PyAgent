@@ -16,7 +16,7 @@
 Anomaly Detection Agent - Monitor agent interactions and flag anomalous behavior
 
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 This module provides an AnomalyDetectionAgent exposing tools to record agent interactions, check per-agent or global anomalies, and update baselines; it is intended to be wired into the PyAgent lifecycle so other agents or system components can call record_agent_interaction and query anomalies.
 
@@ -42,8 +42,10 @@ from collections import defaultdict, deque
 from typing import Any, Dict, List
 
 from src.core.base.common.base_utilities import as_tool
+
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.security.compliance_assist import ComplianceCheck, ComplianceStandard
 
 __version__ = VERSION
 
@@ -98,8 +100,8 @@ class AnomalyDetectionAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Inspired by AD-Canaries event monitoring and correlation.
     """
 
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
+    def __init__(self, file_path: str, memory_core=None, test_mode: bool = False):
+        super().__init__(file_path, memory_core=memory_core, test_mode=test_mode)
         self._detector = AnomalyDetector()
         self._anomalies: List[Dict[str, Any]] = []
         self._system_prompt = (
@@ -109,6 +111,31 @@ class AnomalyDetectionAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         )
         self._privacy_enforced = True
         self._rate_limit = 10  # stub: max 10 anomaly checks per minute
+
+        # Viral enforcement: use ComplianceStandard/Check for anomaly checks
+        self.anomaly_standard = ComplianceStandard(
+            "Agent Anomaly Detection",
+            [
+                ComplianceCheck(
+                    "Interaction Frequency Anomaly",
+                    check_fn=self._check_interaction_frequency,
+                    recommendation="Investigate agent for abnormal interaction frequency.",
+                ),
+                ComplianceCheck(
+                    "Unknown Interaction Type",
+                    check_fn=self._check_unknown_type,
+                    recommendation="Review new or unknown interaction types for risk.",
+                ),
+            ],
+        )
+
+    def _check_interaction_frequency(self) -> bool:
+        # Example: always pass in this stub, real logic would analyze self._detector
+        return True
+
+    def _check_unknown_type(self) -> bool:
+        # Example: always pass in this stub, real logic would analyze self._detector
+        return True
 
     @as_tool
     def record_agent_interaction(self, agent_id: str, interaction: Dict[str, Any]) -> None:

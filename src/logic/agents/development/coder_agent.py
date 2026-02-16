@@ -14,8 +14,8 @@
 
 
 # "Auto-extracted class from agent_coder.py
-# #
-# # pylint: disable=too-many-ancestors
+"""
+""" pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 
@@ -53,7 +53,7 @@ class CoderAgent(BaseAgent, AgentLanguageMixin, AgentStyleMixin, AgentMetricsMix
 
     - Supports Python files (.py) with syntax validation.
     - Supports multi - language code improvements.
-# #
+"""
 
     # Proactive, multi-language-aware system prompt
     _system_prompt: str = (
@@ -125,7 +125,7 @@ class CoderAgent(BaseAgent, AgentLanguageMixin, AgentStyleMixin, AgentMetricsMix
 
         Returns:
             The detected CodeLanguage based on file extension.
-# #
+"""
         self._language = self._detect_language()
         self.core.language = self._language  # Sync core
         return self._language

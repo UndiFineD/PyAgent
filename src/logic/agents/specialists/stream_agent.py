@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# [StreamAgent] - [Webhook bridge for external automation and reliable delivery]
-# #
-[Brief Summary]
+"""
+[StreamAgent] - [Webhook bridge for external automation and reliable delivery]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate StreamAgent with a file path, register external automation webhooks via register_external_webhook, push events to automation platforms (n8n, Zapier, Make) with push_to_n8n, and manage event transformers and delivery logs for observability and retries.
 
@@ -54,9 +53,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Stream agent.py module.
-# #
+"""
 # StreamAgent: n8n and External Workflow Integration - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -115,7 +114,7 @@ class StreamEvent:
 class StreamAgent(BaseAgent):
     Agent specializing in streaming data injection and extraction.
     Interfaces with n8n, Zapier, Make, and other webhook-based automation platforms.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -184,7 +183,7 @@ class StreamAgent(BaseAgent):
         for attempt in range(max_retries):
             try:
                 response = firew
-# #
+"""
 # StreamAgent: n8n and External Workflow Integration - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -243,7 +242,7 @@ class StreamEvent:
 class StreamAgent(BaseAgent):
     Agent specializing in streaming data injection and extraction.
     Interfaces with n8n, Zapier, Make, "and other" webhook-based automation platforms.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

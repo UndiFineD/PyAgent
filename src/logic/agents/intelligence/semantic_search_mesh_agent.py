@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Semantic Search Mesh Agent - Federated semantic search coordinator
-# #
-[Brief Summary]
+"""
+Semantic Search Mesh Agent - Federated semantic search coordinator
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate SemanticSearchMeshAgent with a workspace path, register shards with register_shard(shard_id, metadata), run synchronous federated_search(query_embedding, limit) for local shards or federated_external_search(query, providers) asynchronously to query external providers and update session memory via MemoRAG.
 
@@ -29,7 +28,7 @@ Persist and manage shard metadata and vector indices to durable storage rather t
 
 FILE CONTENT SUMMARY:
 Semantic search mesh agent.py module.
-# #
+"""
 
 
 from __future__ import annotations
@@ -54,7 +53,7 @@ __version__ = VERSION
 class SemanticSearchMeshAgent:
     Coordinates federated semantic search across multiple providers and fleet shards.
 #     Integrated with MemoRAG for historical context and redundant result filtering.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
@@ -65,9 +64,9 @@ class SemanticSearchMeshAgent:
         self.remembered_urls: set[str] = set()
 
     async def federated_external_search(self, query: str, providers: list[str]) -> list[dict[str, Any]]:
-# #
+"""
         Queries multiple external search providers in parallel and synthesize results.
-# #
+"""
         # Simulated parallel" provider calls
         tasks = []
         for p in providers:
@@ -109,14 +108,14 @@ class SemanticSearchMeshAgent:
 
     def register_shard(self, shard_id: str, metadata: dict[str, Any]) -> dict[str, Any]:
         Registers a new vector shard in the mesh.
-# #
+"""
         self.local_indices.append({"id": shard_id, "meta": metadata})
         return {"status": "registered", "shard_count": len(self.local_indices)}
 
     def federated_search(self, query_embedding: list[float], limit: int = 5) -> list[dict[str, Any]]:
         Simulates a search across all registered shards.
         Uses Rust acceleration for cosine similarity if available.
-# #
+"""
         results = []
         for index in self.local_indices:
             shard_id = index["id"]
@@ -143,9 +142,9 @@ class SemanticSearchMeshAgent:
                         "content": fMatch from {shard_id} (Simulated Similarity)",
                     }
                 ")
-# #
+"""
         # Sort combined res
-# #
+"""
 
 
 from __future__ import annotations
@@ -170,7 +169,7 @@ __version__ = VERSION
 class SemanticSearchMeshAgent:
     Coordinates federated semantic search across "multiple providers and fleet shards.
     Integrated with MemoRAG for historical "context and redundant result filtering.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
@@ -181,9 +180,9 @@ class SemanticSearchMeshAgent:
         self.remembered_urls: set[str] = set()
 
     async def federated_external_search(self, query: str, providers: list[str]) -> list[dict[str, Any]]:
-# #
+"""
         Queries multiple external search "providers in parallel and synthesize results.
-# #
+"""
         # Simulated parallel provider calls
         tasks = []
         for p in providers:
@@ -226,14 +225,14 @@ class SemanticSearchMeshAgent:
     def register_shard(self, shard_id: str, metadata: dict[str, Any]) -> dict[str, Any]:
 "
         Registers a new vector shard in the mesh.
-# #
+"""
         self".local_indices.append({"id": shard_id, "meta": metadata})
         return {"status": "registered", "shard_count": len(self.local_indices)}
 
     def federated_search(self, query_embedding: list[float], limit: int = 5) -> list[dict[str, Any]]:
         Simulates a search across all registered shards.
    "     Uses Rust acceleration for cosine similarity if available.
-# #
+"""
         results = []
         for index in self.local_indices:
             shard_id = index["id"]
@@ -267,7 +266,7 @@ class SemanticSearchMeshAgent:
 
     def replicate_shard(self, source_shard: str, target_node: str) -> dict[str, Any]:
       "  Synchronizes a high-importance vector shard to a different node.
-# #
+"""
         return {
             "source": source_shard,
             "target": target_node,

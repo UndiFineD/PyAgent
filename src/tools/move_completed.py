@@ -19,7 +19,7 @@ move_completed.py - Move completed rows from .external/tracking.md to .external/
 Small utility that scans a markdown table in .external/tracking.md, detects rows whose status column indicates completion, appends those rows to .external/completed.md (avoiding duplicates), and rewrites tracking.md without the moved rows. Runs idempotently and stamps the completed file with an ISO UTC timestamp.
 
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Run from the repository root where move_completed.py lives: python move_completed.py
 - Intended as a simple one-off or cron-style utility; no CLI flags currently implemented.

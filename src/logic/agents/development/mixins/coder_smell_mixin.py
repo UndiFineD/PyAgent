@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Code smell detection logic for CoderCore.
-# #
-# #
+"""
+Code smell detection logic for CoderCore.
+"""
+"""
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations

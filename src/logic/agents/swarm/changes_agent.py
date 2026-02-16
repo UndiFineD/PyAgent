@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # ChangesAgent - Changelog management for code files with AI assistance
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with path to a .changes.md file and use improve_content to generate or refine changelog text; use update_file() to persist unless preview mode is enabled.
 - Example:
@@ -41,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_changes.py
-# #
+"""
 
 from __future__ import annotations
 
@@ -86,7 +85,7 @@ class ChangesAgent(
     - Merge conflict detection and resolution
     - Entry validation with customizable rules
 #     - Statistics and analytics
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -148,7 +147,7 @@ class ChangesAgent(
 #         description = fImprove the changelog for {self.file_path.stem.replace('.changes', ")}
         # For changelog improvement, provide specific change tracking suggestions
         if any(keyword in prompt.lower() for keyword in ["improve", "change", "log"])
-# #
+"""
 
 from __future__ import annotations
 
@@ -193,7 +192,7 @@ class ChangesAgent(
     - Merge conflict detection and resolution
     - Entry validation with customizable rules
 "    - "Statistics and analytics
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

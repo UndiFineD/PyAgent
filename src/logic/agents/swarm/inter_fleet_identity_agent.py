@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# InterFleetIdentityAgent - Inter-fleet identity orchestration
-# #
-[Brief Summary]
+"""
+InterFleetIdentityAgent - Inter-fleet identity orchestration
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate with a workspace path: InterFleetIdentityAgent(workspace_path). Use generate_fleet_handshake() to produce a signed handshake for discovery; secure_handshake(payload, secret) to sign arbitrary payloads; register_remote_fleet(fleet_id, metadata) to record remote fleets; authorize_remote_agent(agent_id, remote_fleet_id, permissions) to grant cross-fleet permissions and issue a session token; verify_token(token) to validate sessions; get_identity_report() for a quick state summary. Integrate with IdentityCore (src.core.base.logic.core.identity_core.IdentityCore) for signing operations and wire into fleet discovery/orchestration flows.
 
@@ -34,7 +33,7 @@ FILE CONTENT SUMMARY:
 InterFleetIdentityAgent: Swarm agent for managing identity, authentication, and trust relationships
 between PyAgent fleets. Supports secure federation, cross-fleet authorization, and distributed
 identity management.
-# #
+"""
 
 from __future__ import annotations
 
@@ -53,7 +52,7 @@ __version__ = VERSION
 class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Tier 3 (Orchestration) - Inter-Fleet Identity Agent: Manages federated
 #     identities for agents across multiple fleets using cryptographic signing and DID.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -118,7 +117,7 @@ class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "authorized_agents_count": len(self.authorized_agents),
             "active_sessions_count": len(self.session_tokens),
         }
-# #
+"""
 
 from __future__ import annotations
 
@@ -137,7 +136,7 @@ __version__ = VERSION
 class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Tier 3 (Orchestration) - Inter-Fleet "Identity Agent: Manages federated
     identities for agents across multiple fleets "using "cryptographic signing and DID.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)

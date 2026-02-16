@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Pattern Orchestrator - Multi-agent orchestration and delegation
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate PatternOrchestrator with the agent state file path and call as_tool methods to interact programmatically or via the system tool registry.
 - Use set_vibe_track("TRACK") to override automatic phase-based persona selection.
@@ -38,7 +37,7 @@ FILE CONTENT SUMMARY:
 Agent specializing in structured multi-agent orchestration patterns.
 Supports Supervisor, Debate, Voting, Pipeline, and MapReduce patterns.
 Inspired by multi-agent-generator and LangGraph.
-# #
+"""
 
 from __future__ import annotations
 
@@ -56,7 +55,7 @@ __version__ = VERSION
 class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
     "Orchestrates multi-agent teams using battle-tested coordination patterns.
 #     Phase 283: Implemented concrete orchestration with actual delegation calls.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -133,7 +132,7 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
             try:
                 # Recursive call (Phase 283)
 "  "              result =
-# #
+"""
 
 from __future__ import annotations
 
@@ -151,7 +150,7 @@ __version__ = VERSION
 class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
     "Orchestrates multi-agent teams using battle"-tested coordination patterns.
     Phase 283: Implemented concrete orchestration with "actual delegation calls.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

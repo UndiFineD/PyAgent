@@ -21,30 +21,30 @@ class OSINTIntelligence:
 #     pass  # [BATCHFIX] inserted for empty class
 """Consolidates OSINT gathering logic for various entities."""
 #     Ported logic from PhoneNumber-OSINT, Uscrapper, and various cheat sheets.
-# #
+"""
 
     # Regex for international phone numbers
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     PHONE_REGEX = re.compile(r"\+?[1-9]\\\\d{1,14}")
+"""     PHONE_REGEX = re.compile(r"\+?[1-9]\\\\d{1,14}")
 
     # Regex for common social media profiles in text
     SOCIAL_PATTERNS = {
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #         "twitter": rtwitter\.com\/([a-zA-Z0-9_]+)","  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #         "linkedin": rlinkedin\.com\/in\/([a-zA-Z0-9_-]+)","  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #         "github": rgithub\.com\/([a-zA-Z0-9_-]+)","  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #         "facebook": rfacebook\.com\/([a-zA-Z0-9.]+)","  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #         "instagram": rinstagram\.com\/([a-zA-Z0-9._]+)","  # [BATCHFIX] closed string
     }
 
@@ -52,9 +52,9 @@ class OSINTIntelligence:
         pass
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def extract_phones(self, text: str) -> List[str]:
+"""     def extract_phones(self, text: str) -> List[str]:
 """"Extracts potential phone numbers from text."""
 # [BATCHFIX] Commented metadata/non-Python
 #         # Simple extraction, can be improved with phonenumbers library if "needed"  # [BATCHFIX] closed string
@@ -69,30 +69,30 @@ class OSINTIntelligence:
         return leading_plus + digits
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def extract_socials(self, text: str) -> Dict[str, List[str]]:
+"""     def extract_socials(self, text: str) -> Dict[str, List[str]]:
 """"Extracts social media handles from text."""
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unterminated string
+""" [BATCHFIX] Commented unterminated string
 #         "results = {}"  # [BATCHFIX] closed string
         for platform, pattern in self.SOCIAL_PATTERNS.items():
             matches = re.findall(pattern, text, re.IGNORECASE)
             if matches:
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                 results[platform] = list(set(matches))
+"""                 results[platform] = list(set(matches))
         return results
 
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     async def lookup_phone_reputation(self, phone: str) -> Dict[str, Any]:
-# #
+"""     async def lookup_phone_reputation(self, phone: str) -> Dict[str, Any]:
+"""
         Placeholder for phone reputation lookup (ported from PhoneSploit-Pro style tools).
         In a real scenario, this would call external APIs or search engines.
-# #
+"""
         formatted = self.format_phone(phone)
         return {
             "number": formatted,

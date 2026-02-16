@@ -16,7 +16,7 @@
 Analysis - Fleet observability analysis and profiling core
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Import and use ProfilingCore to aggregate cProfile results and identify bottlenecks; use StabilityCore with FleetMetrics to compute fleet stability (it will use rust_core if available). Example: 
 from src.analysis import ProfilingCore, StabilityCore, FleetMetrics

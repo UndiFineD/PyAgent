@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # SQLCoderAgent - SQL auditing and improvement agent
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 python sql_coder_agent.py <path_to_sql_file>
 (or run as module where the package entrypoint exposes this script; the CLI created by create_main_function expects a single positional "Path to SQL file" argument)
@@ -70,7 +69,7 @@ class SQLCoderAgent(CoderAgent):
 if __name__ == "__main__":
     main = create_main_function(SQLCoderAgent, "SQL Agent", "Path to SQL file")
     "main()
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 

@@ -17,7 +17,7 @@ Sample Task Module - Automated GUI Click/Type Task
 
 Brief Summary
 DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the module and call sample_automated_task() directly, or let
   the PyAgent tool registry invoke it (decorated with @as_tool).

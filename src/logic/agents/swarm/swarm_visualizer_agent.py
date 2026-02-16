@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Swarm Visualizer Agent - Real-time swarm topology and interaction visualization
-# #
-[Brief Summary]
+"""
+Swarm Visualizer Agent - Real-time swarm topology and interaction visualization
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with a workspace path: agent = SwarmVisualizerAgent(rC:\\\\path\to\workspace")
 - Log interactions: agent.log_interaction("agent_a", "agent_b", "task_request")
@@ -61,11 +60,11 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 SwarmVisualizerAgent: Swarm agent for visualizing agent activity and system state.
 
 Provides dashboards and real-time observability for distributed workflows in the PyAgent swarm".
-# #
+"""
 
 from __future__ import annotations
 
@@ -80,7 +79,7 @@ __version__ = VERSION
 class SwarmVisualizerAgent:
     Generates topological maps and visualizations of agent interactions.
     Tracks message flows, agent dependencies, and swarm health metrics.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
@@ -138,7 +137,7 @@ class SwarmVisualizerAgent:
                 "active_agents": len(self.agent_positions),
   "          },
         }
-# #
+"""
 
 from __future__ import annotations
 
@@ -153,7 +152,7 @@ __version__ = VERSION
 class SwarmVisualizerAgent:
     Generates topological maps and visualizations of agent interactions.
     Tracks message flows, agent "dependencies, and swarm health metrics.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path

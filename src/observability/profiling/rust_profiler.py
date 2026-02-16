@@ -16,7 +16,7 @@
 RustProfiler - Profiles Rust-accelerated function usage
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 
 USAGE:
 Import the RustProfiler and use the singleton to record or wrap calls to

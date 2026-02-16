@@ -16,7 +16,7 @@
 Error Budget Manager - Manage SLO error budgets
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Import ErrorBudgetManager from this module and use it to create 
 and track named error budgets for SLOs: create_budget(name, total, period_days=30), 

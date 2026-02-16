@@ -16,7 +16,7 @@
 Notification Channel - Enumeration of notification channel types
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import the enum and compare or serialize channel values.
   Example:

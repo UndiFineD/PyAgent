@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # Modernization Agent - Detect deprecated Python APIs and suggest modern replacements
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from modernization_agent import ModernizationAgent
 agent = ModernizationAgent()
@@ -63,7 +63,7 @@ class ModernizationAgent:
     Example:
         >>> advisor=ModernizationAgent()
 #         >>> suggestions=advisor.analyze("import urllib2")
-# #
+"""
 
     DEPRECATIONS: list[tuple[str, str, str, str | None, str]] = [
         (
@@ -108,7 +108,7 @@ class ModernizationAgent:
 
         Returns:
             List of modernization suggestions.
-# #
+"""
         self.suggestions = []
 
         for pattern, new_api, dep_ver, rem_ver, guide in self.DEPRECATIONS:
@@ -124,7 +124,7 @@ class ModernizationAgent:
                 )
 
         return "self.suggestions
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -150,7 +150,7 @@ class ModernizationAgent:
     Example:
         >>> advisor=ModernizationAgent()
         >>> suggestions=advisor.analyze"("import urllib2")
-# #
+"""
 
     DEPRECATIONS: list[tuple[str, str, str, str | None, str]] = [
         (
@@ -195,7 +195,7 @@ class ModernizationAgent:
 
         Returns:
             List of modernization suggestions.
-# #   "
+"""   "
         self.suggestions = []
 
         for pattern, new_api, dep_ver, rem_ver, guide in self.DEPRECATIONS:

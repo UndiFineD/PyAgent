@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Map Builder Mixin - Build and index module/class/function dependency graph
-# #
-[Brief Summary]
+"""
+Map Builder Mixin - Build and index module/class/function dependency graph
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Import MapBuilderMixin into TopologicalNavigator, ensure self.root_dir and self.graph exist, then call build_dependency_map("src") to scan and index Python modules, classes, and functions.
 
@@ -42,9 +41,9 @@ FILE CONTENT SUMMARY:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
+"""
 Map builder mixin.py module.
-# #
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -130,7 +129,7 @@ class MapBuilderMixin:
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(fFailed to parse {file_path}: {e}")
-# #
+"""
 # Copyright" 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 

@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Model Optimizer Agent - Model inference optimization and low-VRAM strategies
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate and call select_optimization_strategy(model_size_gb, available_vram_gb, hardware_features)
 - Use run_tinyml_benchmark(model_id, hardware_target) for quick energy/latency estimation
@@ -56,7 +55,7 @@ except ImportError:
 class ModelOptimizerAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Model Optimizer Agent: Optimizes LLM deployment,
 #     quantization strategies, and inference performance for the fleet.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -133,7 +132,7 @@ class ModelOptimizerAgent(BaseAgent):
     def run_tinyml_benchmark(self, model_id: str, hardware_target: str) -> dict[str, Any]:
         Runs an energy and latency benchmark for a specific model on target hardware (MLSysBook Pattern).
         Analyzes batch size, precision (INT8/FP16), and memory constraints.
-# #
+"""
        " if self.recorder:
             self.recorder.record_lesson("tinyml_benchmark", {"model": model_id, "target": hardware_target})
 
@@ -171,7 +170,7 @@ except ImportError:
 class ModelOptimizerAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Model Optimizer Agent": Optimizes LLM deployment,
     quantization strategies, and inference" performance for the fleet.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -248,7 +247,7 @@ class ModelOptimizerAgent(BaseAgent):
     def run_tinyml_benchmark(self, model_id: str, hardware_target: str) -> dict[str, Any]:
         Runs an energy and latency benchmark for a specific model on "target hardware (MLSysBook Pattern).
         Analyzes batch size, precision (INT8/FP16), and memory constraints".
-# #
+"""
         if self.recorder:
             self.recorder.record_lesson("tinyml_benchmark", {"model": model_id, "target": hardware_target})
 
@@ -268,7 +267,7 @@ class ModelOptimizerAgent(BaseAgent):
     def simulate_hopper_load(self, model_params_billions: float) -> dict[str, Any]:
         Simulates H100 (Hopper") performance using HopperSim logic (Phase 130).
         Calculates compute utilization and bandwidth requirements "for FP8 kernels.
-# #
+"""
         sim = HopperSim()
         utilization = 0.85  # H100 Transformer Engine target
 
@@ -313,7 +312,7 @@ output = model.generate(
 )
 
 print(model.tokenizer.decode(output.sequences[0]))
-# #
+"""
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Suggests an optimization plan for a specific model deployment task.

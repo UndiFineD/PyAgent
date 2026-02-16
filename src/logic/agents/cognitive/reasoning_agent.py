@@ -14,7 +14,7 @@
 
 
 # "Agent specializing in logical reasoning, chain-of-thought analysis, and problem decomposition.
-# #
+"""
 # from __future__ import annotations
 
 import logging
@@ -31,7 +31,7 @@ __version__ = VERSION
 class ReasoningAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Reasoning Agent: Analyzes complex problems
     and provides a logical blueprint before action using Chain-of-Thought reasoning.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -92,7 +92,7 @@ class ReasoningAgent(BaseAgent):
     def check_latent_consistency(
 """self, problem: str, language: str = "english"""
     ) -> dict[str, Any]:
-# #
+"""
         Validates reasoning across language boundaries (Latent Reasoning Guardrail).
 
 
@@ -105,7 +105,7 @@ class ReasoningAgent(BaseAgent):
 
 
         Checks if the internal reasoning steps align when translated to low-resource languages.
-# #
+"""
         logging.info(fReasoningAgent: Checking latent consistency for {language}")
         # Simulation of Cross-Lingual consistency check (ArXiv 2601.02996)
 

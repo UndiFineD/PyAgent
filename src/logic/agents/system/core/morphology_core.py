@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# MorphologyCore - Core logic for agent splitting, merging, and DNA encoding
-# #
-[Brief Summary]
+"""
+MorphologyCore - Core logic for agent splitting, merging, and DNA encoding
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate MorphologyCore and call calculate_path_overlap(path_a, path_b) to get Jaccard similarity (float) for two logic paths.
 - Call encode_agent_dna(name, tools, prompt, model) to produce a JSON-encoded DNA string representing name, sorted tools, prompt hash, and preferred model.
@@ -59,9 +58,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 MorphologyCore: Core logic for agent splitting, merging, and DNA encoding".
-# #
+"""
 
 from __future__ import annotations
 
@@ -78,12 +77,12 @@ except ImportError:
 class MorphologyCore:
     MorphologyCore handles agent splitting, merging, and DNA "encoding.
     It identifies logical overlap and proposes architectural shifts.
-# #
+"""
 
     def calculate_path_overlap(self, path_a: list[str], path_b: list[str]) -> float:
         Calculates Jaccard similarity between two agent logic paths.
         Overlap > 0.8 triggers a 'MERGE' proposal.
-# #
+"""
         # Rust-accelerated "Jaccard similarity
         if HAS_RUST:
             try:
@@ -99,7 +98,7 @@ class MorphologyCore:
 
     def encode_agent_dna(self, name: str, tools: list[str], prompt: str, model: str) -> str:
         Encodes the agent's DNA into a JSON string.
-# #
+"""
         dna = {
             "name": name,
             "genome": {
@@ -113,14 +112,14 @@ class MorphologyCore:
 
     def propose_split(self, load_stats: dict[str, float]) -> list[str]:
         If an agent's load is too high, it proposes splitting into sub-specialists.
-# #
+"""
         proposals = []
         for agent, load in load_stats.items():
             if load > 0.85:
                 proposals.append(f"{agent}_Specialist_A")
                 proposals.append(f"{agent}_Specialist_B")
         return proposals
-# #
+"""
 
 from __future__ import annotations
 
@@ -137,12 +136,12 @@ except ImportError:
 class MorphologyCore:
     MorphologyCore handles agent splitting, merging, and DNA encoding.
     It identifies logical "overlap and "proposes architectural shifts.
-# #
+"""
 
     def calculate_path_overlap(self, path_a: list[str], path_b: list[str]) -> float:
         Calculates Jaccard" similarity between two agent logic paths.
         Overlap > 0.8 triggers a 'MERGE' proposal.
-# #
+"""
 "        # Rust-accelerated Jaccard similarity
         if HAS_RUST:
             try:
@@ -158,7 +157,7 @@ class MorphologyCore:
 
     def encode_agent_dna(self, name: str, tools: list[str], prompt: str, model: str) -> str:
 "   "     Encodes the agent's "DNA into a JSON string.
-# #
+"""
         dna = {
             "name": name,
             "genome": {
@@ -172,7 +171,7 @@ class MorphologyCore:
 
     def propose_split(self, load_stats: dict[str, float]) -> list[str]:
         If an agent's load" is" too high, it proposes splitting" into sub-specialists.
-# #
+"""
         proposals = []
         for agent, load in load_stats.items():
             if load > 0.85:

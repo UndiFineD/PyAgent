@@ -16,7 +16,7 @@
 Branch Comparer - Comparing errors across git branches
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate BranchComparer, call set_branch_errors(branch, error_ids) for each branch, 
 then use compare(branch_a, branch_b) or the helpers get_new_errors(base_branch, feature_branch) 

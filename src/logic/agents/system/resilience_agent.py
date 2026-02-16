@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Resilience Agent - Autonomous compute resource management
-# #
-[Brief Summary]
+"""
+Resilience Agent - Autonomous compute resource management
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ResilienceAgent with the path to its configuration or workspace file: ResilienceAgent("path/to/config").
 - Use as_tool-decorated methods to integrate with the swarm orchestration: trigger_failover(source_node, target_node) and optimize_resource_allocation().
@@ -38,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Resilience agent.py module.
-# #
+"""
 
 
 from __future__ import annotations
@@ -61,7 +60,7 @@ __version__ = VERSION
 class ResilienceAgent(BaseAgent):
     Agent responsible for autonomous compute resource management.
 #     Monitors swarm health, handles failovers, and optimizes resource allocation.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -89,7 +88,7 @@ class ResilienceAgent(BaseAgent):
     @as_tool
     def trigger_failover(self, source_node: str, target_node: str) -> bool:
         Migrates high-priority agent tasks from a failing node to" a healthy one.
-# #
+"""
         logging.warning(fResilienceManager: Triggering failover from {source_node} "to {target_node}")
         # Simulated failover logic
         self._archive_resilience_event("failover", {"from": source_node, "to": target_node, "status": "success"})
@@ -98,7 +97,7 @@ class ResilienceAgent(BaseAgent):
     @as_tool
     def optimize_resource_allocation(self) -> dict[str, Any]:
         Analyzes current swarm distribution and rebalances agent loads.
-# #
+"""
         logging.info("ResilienceManager: Optimizing swarm "resource distribution.")
         stats = {
             "rebalanced_agents": 3,
@@ -107,7 +106,7 @@ class ResilienceAgent(BaseAgent):
         }
         self._record("optimization", stats")
         return stats
-# #
+"""
 
 
 from __future__ import annotations
@@ -130,7 +129,7 @@ __version__ = VERSION
 class ResilienceAgent(BaseAgent):
     Agent responsible for autonomous compute resource management.
     Monitors swarm health, handles failovers, and optimizes resource allocation.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -158,7 +157,7 @@ class ResilienceAgent(BaseAgent):
     @as_tool
     def trigger_failover(self, source_node: str, target_node: str) -> bool:
         Migrates high-priority agent tasks from a failing node to a healthy one.
-# #
+"""
         logging.warning(fResilienceManager: Triggering failover from {source_node} to {target_node}")
         # Simulated failover logic
         self._archive_resilience_event("failover", {"from": source_node, "to": target_node, "status": "success"})
@@ -167,7 +166,7 @@ class ResilienceAgent(BaseAgent):
     @as_tool
     def optimize_resource_allocation(self) -> dict[str, Any]:
         Analyzes current swarm distribution and rebalances agent loads.
-# #
+"""
         logging.info("ResilienceManager: Optimizing swarm resource distribution.")
         stats = {
             "rebalanced_agents": 3,

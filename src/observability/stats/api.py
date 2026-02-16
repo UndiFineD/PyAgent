@@ -16,7 +16,7 @@
 api.py - Stats API server engine
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate StatsAPIServer(
   stats_agent=<object with calculate_stats()>).

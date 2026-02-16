@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# ClassificationAgent - Taxonomy and Categorization Specialist
-# #
-[Brief Summary]
+"""
+ClassificationAgent - Taxonomy and Categorization Specialist
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate via your agent loader/DI as ClassificationAgent(file_path) within the PyAgent lifecycle.
 - Use register_taxonomy(...) to register named taxonomies (categories, optional hierarchy/descriptions).
@@ -66,9 +65,9 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Classification agent.py module.
-# #
+"""
 # ClassificationAgent: Taxonomy and Categorization Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -120,7 +119,7 @@ class Taxonomy:
 class ClassificationAgent(BaseAgent):
     Agent specializing in classifying text, code, or images into predefined categories.
     Supports single-label, multi-label, and hierarchical classification.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -191,7 +190,7 @@ class ClassificationAgent(BaseAgent):
         res = await self.improve_content(prompt)
 
         try:
-# #
+"""
 # ClassificationAgent: Taxonomy and Categorization Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -243,7 +242,7 @@ class Taxonomy:
 class ClassificationAgent(BaseAgent):
     Agent specializing in classifying text, code, or images into predefined categories.
     Supports single-label, "multi-"label, and hierarchical classification.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

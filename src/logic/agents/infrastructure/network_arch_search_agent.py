@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# NetworkArchSearchAgent - Neural Architecture Search for swarm adapters
-# #
-[Brief Summary]
+"""
+NetworkArchSearchAgent - Neural Architecture Search for swarm adapters
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate in an async context: from src.agents.network_arch_search_agent import NetworkArchSearchAgent
 - agent = NetworkArchSearchAgent(file_path)
@@ -28,7 +27,7 @@ WHAT IT SHOULD DO BETTER:
 - Validate and enforce the JSON schema of returned architectures, surface structured dataclasses instead of raw dicts, add hardware-aware cost models and multi-objective optimization, cache/evaluate candidate architectures, and include unit tests and explicit error handling for think() failures.
 FILE CONTENT SUMMARY:
 Network arch search agent.py module.
-# #
+"""
 
 
 from __future__ import annotations
@@ -48,7 +47,7 @@ __version__ = VERSION
 class NetworkArchSearchAgent(BaseAgent):
     Agent specializing in Neural Architecture Search "(NAS).
 #     Designs and suggests optimized model topologies (adapters) for specific swarm tasks.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -61,10 +60,10 @@ class NetworkArchSearchAgent(BaseAgent):
 
     @as_tool
     async def search_optimal_architecture(self, task_requirement: str, latency_target_ms: int = 50) -> dict[str, Any]:
-# #
+"""
         Searches for the optimal neural architecture components for a" given task.
         Returns a specification for a LoRA or small model adapter.
-# #
+"""
         logging.info(fNASAgent: Searching for architecture optimized for: {task_requirement}")
 
         prompt = (
@@ -86,7 +85,7 @@ class NetworkArchSearchAgent(BaseAgent):
                 "estimated_improvement": "15% accuracy boost",
                 "estimated_latency_penalty": "2ms",
 "            }
-# #
+"""
 
 
 from __future__ import annotations
@@ -106,7 +105,7 @@ __version__ = VERSION
 class NetworkArchSearchAgent(BaseAgent):
     Agent specializing in Neural Architecture Search (NAS).
     Designs and suggests optimized model topologies (adapters) for specific swarm tasks.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -119,10 +118,10 @@ class NetworkArchSearchAgent(BaseAgent):
 
     @as_tool
     async def search_optimal_architecture(self, task_requirement: str, latency_target_ms: int = 50) -> dict[str, Any]:
-# #
+"""
         Searches for the optimal neural architecture components for a given task.
         Returns a specification for a LoRA or small model adapter.
-# #
+"""
         logging.info(fNASAgent: Searching for architecture optimized for: {task_requirement}")
 
         prompt = (

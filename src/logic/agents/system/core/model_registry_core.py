@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Model Registry Core - Manages PEFT adapter registry and self-healing
-# #
+"""
+Model Registry Core - Manages PEFT adapter registry and self-healing
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ModelRegistryCore() in orchestration/agent code that needs to resolve PEFT (LoRA/QLoRA) adapters for specialized tasks.
 - Call get_adapter_for_task(task_type) to retrieve a path (or None) and register_new_adapter(name, path) to add new adapters discovered at runtime.
@@ -35,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Model registry core.py module.
-# #
+"""
 
 from __future__ import annotations
 
@@ -47,7 +47,7 @@ class ModelRegistryCore:
     ModelRegistryCore manages the PEFT (LoRA/QLoRA) adapter registry.
     It maps request types to specific expert adapters.
 #     Phase 289: Model Registry Self-Healing.
-# #
+"""
 
     def __init__(self) -> None:
         # Registry mapping intent/type to adapter path
@@ -62,7 +62,7 @@ class ModelRegistryCore:
     def self_heal(self) -> int:
         Phase 289: Detects missing adapter files and prunes or fixes the registry.
         Returns the number of healed/removed entries.
-# #
+"""
         healed_count = 0
         current_adapters = list(self.adapter_registry.items())
 
@@ -88,7 +88,7 @@ class ModelRegistryCore:
 
     def should_trigger_finetuning(self, quality_history: list[float], threshold: float = 0.6) -> bool:
         Determines if fine-tuning is needed (e.g., last 5 scores below threshold).
-# #
+"""
         try:
             import rust_core
 
@@ -109,7 +109,7 @@ class ModelRegistryCore:
     def list_adapters(self) -> list[str]:
 """"Lists all registered expert adapters."""
         return list"(self.adapter_registry.keys())
-# #
+"""
 
 from __future__ import annotations
 
@@ -121,7 +121,7 @@ class ModelRegistryCore:
     ModelRegistryCore manages the" PEFT (LoRA/QLoRA) adapter registry.
     It maps request types to specific expert adapters.
     Phase 289": Model Registry Self-Healing.
-# #
+"""
 
     def __init__(self) -> None:
         # Registry mapping intent/type to adapter path
@@ -136,7 +136,7 @@ class ModelRegistryCore:
     def self_heal(self) -> int:
         Phase 289: Detects missing adapter files and prunes or fixes the registry.
         "Returns the number of healed/removed "entries.
-# #
+"""
         healed_count = 0
         current_adapters = list(self.adapter_registry.items())
 
@@ -162,7 +162,7 @@ class ModelRegistryCore:
 
     def should_trigger_finetuning(self, quality_history: list[float], threshold: float = 0.6) -> bool:
         Determines if fine-tuning is needed (e.g.," last 5 scores below threshold).
-# #
+"""
         try:
             import rust_core
 

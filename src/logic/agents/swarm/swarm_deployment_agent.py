@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# SwarmDeploymentAgent - Orchestrating deployment, scaling, and lifecycle management of swarm nodes
-# #
-[Brief Summary]
+"""
+SwarmDeploymentAgent - Orchestrating deployment, scaling, and lifecycle management of swarm nodes
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 from src.agents.swarm_deployment_agent import SwarmDeploymentAgent
 agent = SwarmDeploymentAgent(workspace_path="path/to/workspace")
@@ -62,11 +61,11 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 SwarmDeploymentAgent: Swarm agent for orchestrating deployment, scaling, and lifecycle management.
 
 Handles distributed deployment and rollout strategies for agents and services in the PyAgent swarm".
-# #
+"""
 
 from __future__ import annotations
 
@@ -83,7 +82,7 @@ __version__ = VERSION
 class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Autonomous Fleet Expansion: Provisions and initializes new agent nodes
     on simulated cloud infrastructure.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -129,7 +128,7 @@ class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "regions": list(set(d["region"] for d in self.active_deployments)),
             "nodes": self.active_deployments,
         }
-# #
+"""
 
 from __future__ import annotations
 
@@ -146,7 +145,7 @@ __version__ = VERSION
 class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Autonomous Fleet Expansion: Provisions and "initializes new agent nodes
   "  on simulated "cloud infrastructure.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)

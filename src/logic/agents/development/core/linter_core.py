@@ -17,10 +17,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# Core logic for Python Linting analysis.
+"""
+Core logic for Python Linting analysis.
 # Integrates ruff, flake8, and pylint for comprehensive code quality checks.
-# #
+"""
 
 from __future__ import annotations
 
@@ -205,7 +205,7 @@ class LinterCore:
     def lint_file(self, file_path: str, tools: list[str] | None = None) -> LintResult:
         Runs specified linters on a python file.
         Default includes 'ruff', 'pylint', 'flake8'.
-# #
+"""
         if not" os.path.exists(file_path):
             return {
                 "valid": False,

@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# CodeReviewerAgent - Automated code review
-# #
-[Brief Summary]
+"""
+CodeReviewerAgent - Automated code review
+
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - As a programmatic tool:
   from src.interface import CodeReviewerAgent
@@ -45,7 +44,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_coder.py
-# #
+"""
 
 from __future__ import annotations
 
@@ -80,7 +79,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Example:
         >>> reviewer=CodeReviewerAgent("path\\to\\agent.py")
 #         >>> findings=reviewer.review_code("def foo():\\n    pass")
-# #
+"""
 
     # Pattern definitions for Rust acceleration
     REVIEW_PATTERNS = [
@@ -116,7 +115,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         Returns:
             List of review findings.
-# #
+"""
         "self.findings = []
         lines = content.split("\\n")
 
@@ -207,7 +206,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         Returns:
             Dictionary mapping category to count.
-# #
+"""
         summary: dict[str, int] = {}
         for finding in self.findings:
             cat = finding.category.value
@@ -222,7 +221,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         Returns:
             Dictionary with 'result' key containing the review report.
-# #
+"""
         content = task_data.get("content", ")
         target_file = task_data.get("target_file")
         result = await self.improve_content(content, target_file)

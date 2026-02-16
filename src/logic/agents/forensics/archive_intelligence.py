@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# ArchiveIntelligence - Safe archive analysis
-# #
-[Brief Summary]
+"""
+ArchiveIntelligence - Safe archive analysis
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Use ArchiveIntelligence to perform an asynchronous static analysis of local archive files; call ArchiveIntelligence.analyze_zip(path) for ZIP archives and ArchiveIntelligence.analyze_tar(path) for TAR/TAR.GZ/TAR.BZ2 streams from an async context, then inspect the returned dict for "vulnerabilities", "files", and optional "error".
 
@@ -28,7 +27,7 @@ WHAT IT SHOULD DO BETTER:
 Add strict path normalization and sandbox-safe extraction simulation to avoid false negatives on obfuscated traversal paths, compute and compare aggregate compressed vs uncompressed sizes for more reliable zip-bomb detection, throttle analysis for very large archives and stream reads to limit memory usage, escalate logging and provide structured vulnerability codes and metadata for programmatic remediation workflows.
 
 FILE CONTENT SUMMARY:
-# #
+"""
 
 import zipfile
 import tarfile
@@ -38,7 +37,7 @@ from typing import Any
 class ArchiveIntelligence:
     Refactored logic from Archive Alchemist for safe archive analysis.
 #     Focuses on detecting malicious patterns like ZipSlip or massive compression ratios.
-# #
+"""
 
     @staticmethod
     async def analyze_zip(file_path: str) -> dict:

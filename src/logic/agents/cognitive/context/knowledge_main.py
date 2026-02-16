@@ -13,10 +13,10 @@
 # limitations under the License.
 
 
-# #
+"""
 # CLI entry point for Knowledge Agent.
-# #
-# #
+"""
+"""
 import sys
 import argparse
 import logging

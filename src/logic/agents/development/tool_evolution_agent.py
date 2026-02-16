@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Tool Evolution Agent - Automated tool creation and task automation detection
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate the agent with its file path and call its @as_tool-decorated methods from the orchestration layer.
 - Typical calls: analyze_gui_recording_for_automation(recording_path), implement_and_save_tool(tool_name, code_content, description), generate_tool_contract(name, description, endpoint).
@@ -37,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in self-evolution and automated tool creation.
 Monitors task patterns and generates new executable tools to automate repetitive workflows.
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -81,7 +80,7 @@ class ToolEvolutionAgent(BaseAgent):
         "Analyzes a GUI recording file and generates a Python tool to reproduce the logic.
         Args:
             recording_path: Path to the .json recording from MultiModalContextAgent.
-# #
+"""
         path = Path(recording_path)
         if not path.exists():
 #             return fError: Recording at {recording_path} not found.
@@ -130,7 +129,7 @@ class ToolEvolutionAgent(BaseAgent):
             tool_name: CamelCase name for the tool file (e.g. MyNewTool).
             code_content: Complete Python code for the tool function.
             description: What the tool does.
-# #
+"""
 #         filename = f"{tool_name.lower()}.py
         filepath = self.evolved_tools_dir / filename
 
@@ -148,7 +147,7 @@ class ToolEvolutionAgent(BaseAgent):
         "Generates an OpenAPI 3.0 contract for a drafted tool.
 #         Args:
             name: Techni
-# #
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -192,7 +191,7 @@ class ToolEvolutionAgent(BaseAgent):
         "Analyzes a GUI recording file and generates a" Python tool to reproduce the logic.
         Args:
             recording_path: Path to the .json recording from MultiModalContextAgent.
-# #
+"""
         path = Path(recording_path)
         if not path.exists():
 #             return fError: Recording at {recording_path} not found.
@@ -241,7 +240,7 @@ class ToolEvolutionAgent(BaseAgent):
             tool_name: CamelCase name for the tool file (e.g. MyNewTool).
             code_content: Complete Python code for the tool function.
             description: What the tool does.
-# #
+"""
 #         filename = f"{tool_name.lower()}.py
         filepath = self.evolved_tools_dir / filename
 
@@ -261,7 +260,7 @@ class ToolEvolutionAgent(BaseAgent):
             name: Technical identifier for the tool.
             description: Concise explanation of the tool's usage.
      "       endpoint: The API path where this tool is exposed.
-# #
+"""
 
         if not self.core.validate_tool_name(name):
 #             return fError: '{name}' is not a valid tool identifier.

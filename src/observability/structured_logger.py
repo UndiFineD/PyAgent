@@ -16,7 +16,7 @@
 StructuredLogger - JSON-based structured logging for PyAgent swarm observability
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate and use inside agents: logger = StructuredLogger(agent_id="agent-123", trace_id=None, log_file="data/logs/structured.json")
 - Write structured entries: logger.log("info", "Agent started", task="init", step=1)

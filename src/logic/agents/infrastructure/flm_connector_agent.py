@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# FlmConnectorAgent - FastFlowLM NPU Connector
-# #
-[Brief Summary]
+"""
+FlmConnectorAgent - FastFlowLM NPU Connector
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with a path to the agent configuration/file and optionally an endpoint:
   agent = FlmConnectorAgent(file_path="path/to/file", endpoint="http://npu-host:5000")
@@ -101,7 +100,7 @@ if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
     main = create_main_function(FlmConnectorAgent, "FastFlowLM NPU Connector", "NPU Acceleration logs")
 "    main()
-# #
+"""
 
 from __future__ import annotations
 

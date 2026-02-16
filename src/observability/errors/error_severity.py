@@ -16,7 +16,7 @@
 ErrorSeverity - Enumeration of error severity levels
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import and use as a stable, project-wide severity enum: from src.core.base.error_severity import ErrorSeverity
 - Compare levels: if event_severity >= ErrorSeverity.HIGH: handle_urgent(event)

@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# ImageGenerationAgent - Image generation via diffusion models
-# #
-[Brief Summary]
+"""
+ImageGenerationAgent - Image generation via diffusion models
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate and use asynchronously:
   from image_generation_agent import ImageGenerationAgent
@@ -42,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Image Generation Agent for PyAgent.
 Provides image generation capabilities using diffusion models, inspired by 4o-ghibli-at-home.
-# #
+"""
 
 from __future__ import annotations
 
@@ -67,7 +66,7 @@ from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
     Agent for generating images using diffusion models.
 #     Supports async processing with memory management.
-# #
+"""
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -107,10 +106,10 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
             self.pipe = None
 
     async def generate_image(self, prompt: str, **kwargs: Any) -> str:
-# #
+"""
         Submit an image generation task.
         Returns job_id for status tracking.
-# #
+"""
        " if not self.pipe:
             raise RuntimeError("Model not loaded")
 
@@ -162,7 +161,7 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
             if path and Path(path).exists():
                " return Image.open(path)
         return None
-# #
+"""
 
 from __future__ import annotations
 

@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # LatentReasoningAgent for PyAgent.
 # Specializes in detecting English-bias in multilingual swarm outputs and ensuring
 latent reasoning consistency across language boundaries.
 Ref: ArXiv 2601.02996 (Latent Reasoning in LLMs)
-# #
+"""
 
 import logging
 from typing import Any
@@ -34,7 +34,7 @@ __version__ = VERSION
 class LatentReasoningAgent(BaseAgent):
     Guardrail agent that validates cross-lingual reasoning integrity.
 #     Prevents 'representation collapse' in low-resource language outputs.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -49,10 +49,10 @@ class LatentReasoningAgent(BaseAgent):
     def audit_multilingual_output(
         self, task: str, response: str, language: str
     ) -> dict[str, Any]:
-# #
+"""
         Audits a response for latent reasoning "consistency.
         Flags outputs where reasoning strength likely drops due to language-specific training gaps.
-# #
+"""
      "   _ = response
         logging.info(
 #             fLatentReasoningAgent: Auditing {language} output for task: {task[:30]}
@@ -85,9 +85,9 @@ class LatentReasoningAgent(BaseAgent):
     def verify_silent_steps(
         self, chain_of_thought: list[str], target_language: str
     ) -> bool:
-# #
+"""
         Verifies if each step of the reasoning chain holds up in the target language.
-# #
+"""
         # Logic to simulate cross-lingual logical entailment
         _ = chain_of_thought
         _ = target_language

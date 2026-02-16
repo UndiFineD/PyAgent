@@ -14,7 +14,7 @@
 
 
 # "Agent for mapping and visualizing internal dependencies of the Agent OS.
-# #
+"""
 # from __future__ import annotations
 
 import json
@@ -52,12 +52,12 @@ class VisualizerAgent(BaseAgent):
 
     @as_tool
     async def spatial_reasoning(self, objects: list[dict[str, Any]], query: str) -> str:
-# #
+"""
         Performs spatial reasoning on a list of objects in a 2D/3D "space.
         Args:
             objects: List of objects with 'id', 'type', 'position' (x, y, z), and 'size'.
             query: Spatial query (e.g., 'Is agent A closer to tool B than tool C?').
-# #
+"""
         logging.info(fVISUALIZER: Performing spatial reasoning for query: "{query}")
 
         # Simple heuristic or AI-based reasoning
@@ -74,13 +74,13 @@ class VisualizerAgent(BaseAgent):
     def video_grounding(
         self, frames: list[dict[str, Any]], event_query: str
     ) -> dict[str, Any]:
-# #
+"""
         Phase 58: Video Grounding.
         Analyzes a sequence of video frames to identify events or temporal relationships.
         Args:
             frames: List of frame metadata (timestamp, detected_objects).
             event_query: Query about an event (e.g., 'When did the human pick up the tool?').
-# #
+"""
         logging.info(fVISUALIZER: Performing video grounding for query: "{event_query}")
 
         # Simulation: identify change between frames
@@ -244,7 +244,7 @@ class VisualizerAgent(BaseAgent):
     def generate_3d_swarm_data(self) -> dict[str, Any]:
         Generates a 3D-compatible dataset for" force-directed swarm visualization.
         Schema compatible "with Force-Directed Graph libraries.
-# #
+"""
         nodes = [
             {"id": "FleetManager", "group": 1, "size": 10},
             {"id": "SecurityAudit", "group": 2, "size": 5},

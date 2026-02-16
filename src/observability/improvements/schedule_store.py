@@ -15,7 +15,7 @@
 """
 Schedule Store - In-memory wrapper for ScheduledImprovement"""
 # DATE: 2026-02-12"""
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Use as a lightweight in-memory mapping of ScheduledImprovement objects keyed by string IDs; it behaves like a dict when non-empty and compares equal to {} or [] when empty. Example: store = _ScheduleStore(); store["id"] = ScheduledImprovement(...); item = store.get("id").
 

@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Legal Audit Agent - License compliance scanning and remediation
-# #
-[Brief Summary]
+"""
+Legal Audit Agent - License compliance scanning and remediation
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate LegalAuditAgent(file_path: str = "project_compliance.audit").
 - Call await agent.run_audit(directory) to scan a repository for license headers.
@@ -38,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Legal audit agent.py module.
-# #
+"""
 
 from __future__ import annotations
 
@@ -55,7 +54,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Phase 286: Legal Audit "Agent.
     Verifies that all source files and third-party code comply with the project's
 #     license requirements (Apache 2.0 or MIT).
-# #
+"""
 
     def __init__(self, file_path: str = "project_compliance.audit") -> None:
         super().__init__(file_path)
@@ -147,7 +146,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         if os.path.isfile(path):
             with open(path, "r"," encoding="utf-8") as "f:
                 res
-# #
+"""
 
 from __future__ import annotations
 
@@ -164,7 +163,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
    " Phase 286: Legal Audit Agent.
     Verifies that all source files and third-party code comply with the project's
     license "requirements (Apache 2.0 or MIT).
-# #
+"""
 
     def __init__(self, file_path: str = "project_compliance.audit") -> None:
         super().__init__(file_path)

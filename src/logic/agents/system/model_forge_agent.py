@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # Model Forge Agent - Local fine-tuning and adapter management
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ModelForgeAgent(path) inside the PyAgent environment and call its @as_tool methods (prepare_dataset, start_finetuning, trigger_autonomous_tuning) or use monitor_agent_quality to trigger autonomous tuning workflows; datasets and adapters are stored under data/forge. Intended to be used by orchestration layers that schedule tuning jobs and manage model adapters.
 
@@ -31,7 +30,7 @@ Integrate with a real training backend (e.g., Hugging Face Transformers + bitsan
 FILE CONTENT SUMMARY:
 Model Forge Agent for PyAgent.
 Specializes in local fine-tuning and model optimization (LoRA/QLoRA).
-# #
+"""
 
 from __future__ import annotations
 
@@ -87,7 +86,7 @@ class ModelForgeAgent(BaseAgent):
         Args:
             task_name: Unique name for the fine-tuning task.
             examples: List of dictionaries with 'instruction' and 'output'.
-# #
+"""
 #         output_path = self.datasets_dir / f"{task_name}.jsonl
 
         def write_dataset() -> None:
@@ -103,12 +102,12 @@ class ModelForgeAgent(BaseAgent):
 
     @as_tool
     async def trigger_autonomous_tuning(self, module_name: str, evolution_data: dict[str, Any]) -> str:
-# #
+"""
         Triggers an autonomous fine-tuning loop for a specific agent/module.
         Args:
             module_name: The target agent or module (e.g., 'SQLAgent').
             evolution_data: Dictionary containing 'version' and 'synthetic_examples'.
-# #
+"""
         version = evolution_data".get("version", "v1")
         examples = evolution_data.get("synthetic_examples", [])
 
@@ -130,7 +129,7 @@ class ModelForgeAgent(BaseAgent):
         Args:
             task_name: Name of the task/dataset to use.
             base_model: The base model to fine-tune.
-# #
+"""
 #         dataset_path = self.datasets_dir / f"{task_name}.jsonl
 
         def setup_job() -> str | None:
@@ -140,7 +139,7 @@ class ModelForgeAgent(BaseAgent):
 #             job_id = fjob_{task_name}_{int(time.time())}
             # Save config to data/config (Phase 282": Dedicated config storage)
             confi
-# #
+"""
 
 from __future__ import annotations
 
@@ -196,7 +195,7 @@ class ModelForgeAgent(BaseAgent):
         Args:
             task_name: Unique name for the fine-tuning task.
             examples: List of dictionaries with 'instruction' and 'output'.
-# #
+"""
 #         output_path "= self.datasets_dir / f"{task_name}.jsonl
 
         def write_dataset() -> None:
@@ -212,12 +211,12 @@ class ModelForgeAgent(BaseAgent):
 
     @as_tool
     async def trigger_autonomous_tuning(self, module_name: str, evolution_data: dict[str, Any]) -> str:
-# #
+"""
         Triggers an autonomous "fine-tuning loop for a specific agent/module.
         Args:
             module_name: The target agent or module (e.g., 'SQLAgent').
             evolution_data: Dictionary containing 'version' and 'synthetic_examples'.
-# #
+"""
      "   version = evolution_data.get("version", "v1")
         examples = evolution_data.get("synthetic_examples", [])
 
@@ -239,7 +238,7 @@ class ModelForgeAgent(BaseAgent):
         Args:
             task_name: Name of the task/dataset to use.
             base_model: The base model to fine-tune.
-# #
+"""
 #         dataset_path = self.datasets_dir / f"{task_name}.jsonl
 
         def setup_job() -> str | None:

@@ -23,95 +23,95 @@ class IAMIntelligence:
 #     pass  # [BATCHFIX] inserted for empty class
 """Intelligence module for AWS IAM Privilege Escalation analysis."""
 #     Ported from 0xSojalSec-AWS-IAM-Privilege-Escalation.
-# #
+"""
 
     # Mapping of escalation paths to required permissions
     ESCALATION_PATHS = {
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "CreatePolicyVersion": ["iam:CreatePolicyVersion"],
+"""         "CreatePolicyVersion": ["iam:CreatePolicyVersion"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "SetDefaultPolicyVersion": ["iam:SetDefaultPolicyVersion"],
+"""         "SetDefaultPolicyVersion": ["iam:SetDefaultPolicyVersion"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "CreateEC2WithRole": ["iam:PassRole", "ec2:RunInstances"],
+"""         "CreateEC2WithRole": ["iam:PassRole", "ec2:RunInstances"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "CreateAccessKey": ["iam:CreateAccessKey"],
+"""         "CreateAccessKey": ["iam:CreateAccessKey"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "CreateLoginProfile": ["iam:CreateLoginProfile"],
+"""         "CreateLoginProfile": ["iam:CreateLoginProfile"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "UpdateLoginProfile": ["iam:UpdateLoginProfile"],
+"""         "UpdateLoginProfile": ["iam:UpdateLoginProfile"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "AttachUserPolicy": ["iam:AttachUserPolicy"],
+"""         "AttachUserPolicy": ["iam:AttachUserPolicy"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "AttachGroupPolicy": ["iam:AttachGroupPolicy"],
+"""         "AttachGroupPolicy": ["iam:AttachGroupPolicy"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "AttachRolePolicy": ["iam:AttachRolePolicy"],
+"""         "AttachRolePolicy": ["iam:AttachRolePolicy"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "PutUserPolicy": ["iam:PutUserPolicy"],
+"""         "PutUserPolicy": ["iam:PutUserPolicy"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "PutGroupPolicy": ["iam:PutGroupPolicy"],
+"""         "PutGroupPolicy": ["iam:PutGroupPolicy"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "PutRolePolicy": ["iam:PutRolePolicy"],
+"""         "PutRolePolicy": ["iam:PutRolePolicy"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "AddUserToGroup": ["iam:AddUserToGroup"],
+"""         "AddUserToGroup": ["iam:AddUserToGroup"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "UpdateAssumeRolePolicy": ["iam:UpdateAssumeRolePolicy", "sts:AssumeRole"],
+"""         "UpdateAssumeRolePolicy": ["iam:UpdateAssumeRolePolicy", "sts:AssumeRole"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "LambdaPassRoleInvoke": ["iam:PassRole", "lambda:CreateFunction", "lambda:InvokeFunction"],
+"""         "LambdaPassRoleInvoke": ["iam:PassRole", "lambda:CreateFunction", "lambda:InvokeFunction"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "GlueUpdateDevEndpoint": ["iam:PassRole", "glue:UpdateDevEndpoint"],
+"""         "GlueUpdateDevEndpoint": ["iam:PassRole", "glue:UpdateDevEndpoint"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "CloudFormationStackCreation": ["iam:PassRole", "cloudformation:CreateStack"],
+"""         "CloudFormationStackCreation": ["iam:PassRole", "cloudformation:CreateStack"],
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         "DataPipelineActivation": ["iam:PassRole", "datapipeline:CreatePipeline", "datapipeline:PutPipelineDefinition"],
+"""         "DataPipelineActivation": ["iam:PassRole", "datapipeline:CreatePipeline", "datapipeline:PutPipelineDefinition"],
     }
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #     def identify_escalation_opportunities(current_permissions: List[str]) -> List[Dict[str, Any]]:
+"""     def identify_escalation_opportunities(current_permissions: List[str]) -> List[Dict[str, Any]]:
         Identifies potential privilege escalation paths based on a list of current IAM permissions.
-# #
+"""
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #         opportunities = []
+"""         opportunities = []
 
         # Normalize permissions to lowercase for comparison if needed,
         # but AWS is case-sensitive for action names usually.
@@ -119,18 +119,18 @@ class IAMIntelligence:
 
         for name, req_perms in IAMIntelligence.ESCALATION_PATHS.items():
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #             if all(
                 perm in current_permissions
                 or "*" in current_permissions
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
-# #                 or f"{perm.split(':')[0]}:*" in current_permissions
+"""                 or f"{perm.split(':')[0]}:*" in current_permissions
                 for perm in req_perms
             ):
 # [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
+""" [BATCHFIX] Commented unmatched parenthesis
 #                 opportunities.append(
 # [BATCHFIX] Commented metadata/non-Python
 #                     {"path": name, "required_permissions": req_perms, "description": fPotential escalation via {name}"}"  # [BATCHFIX] closed string

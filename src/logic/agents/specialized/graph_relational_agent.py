@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Graph Relational Agent - Manage entities and relations with hybrid vector/graph indexing
-# #
-[Brief Summary]
+"""
+Graph Relational Agent - Manage entities and relations with hybrid vector/graph indexing
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate GraphRelationalAgent with a workspace root and use its as_tool-wrapped methods to build and query a simple in-memory knowledge graph:
 - add_entity(name, type_, props) to register nodes
@@ -36,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Graph relational agent.py module.
-# #
+"""
 
 from __future__ import annotations
 
@@ -49,7 +48,7 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 class GraphRelationalAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     GraphRelationalAgent for PyAgent.
 #     Implements hybrid indexing using vector embeddings and structured knowledge graphs.
-# #
+"""
 
     def __init__(self, workspace_root: str) -> None:
         super().__init__(workspace_root)
@@ -79,7 +78,7 @@ class GraphRelationalAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #         "Query and improve content using graph correlations.
   "      _ = target_file
 #         return fGraph-enriched view for: {prompt}. Found {len(self."entities)} entities.
-# #
+"""
 
 from __future__ import annotations
 
@@ -92,7 +91,7 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 class GraphRelationalAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     GraphRelationalAgent for PyAgent.
     Implements hybrid indexing using vector embeddings and structured knowledge graphs.
-# #
+"""
 
     def __init__(self, workspace_root: str) -> None:
         super().__init__(workspace_root)

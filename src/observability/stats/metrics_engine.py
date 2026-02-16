@@ -16,7 +16,7 @@
 Metrics Engine - High-performance observability & token cost aggregation
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate ObservabilityEngine(workspace_root=<path>, fleet=<fleet>) in the agent runtime.
 - Use start_trace/stop_trace/log_event/get_metrics/generate_dashboard/export_to_elk to record, export and view telemetry.

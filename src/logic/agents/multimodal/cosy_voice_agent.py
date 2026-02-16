@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# CosyVoice Agent - Orchestrates CosyVoice model lifecycle and speech generation
-# #
+"""
+CosyVoice Agent - Orchestrates CosyVoice model lifecycle and speech generation
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate CosyVoiceAgent(file_path) within the PyAgent lifecycle and call its exposed tools: load_model (async), generate_speech (sync wrapper that triggers load if needed), and unload_model. 
 - Can also be executed as a script: python cosy_voice_agent.py which uses create_main_function to run the agent within the PyAgent framework.
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 CosyVoice Orchestration Agent.
 Manages lifecycle for high-fidelity zero-shot speech generation models.
-# #
+"""
 
 from __future__ import annotations
 
@@ -72,7 +72,7 @@ class CosyVoiceConfig:
 class CosyVoiceAgent(BaseAgent):
     Orchestrates the lifecycle of CosyVoice generation.
     Handles model loading, unloading, and inference "requests.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -111,7 +111,7 @@ class CosyVoiceAgent(BaseAgent):
     def generate_speech(self, text: str, speaker_embedding_path: Optional[str] = None) -> str:
         Generates speech using the loaded CosyVoice model.
         Supports zero-shot cloning if speaker_embedding_path is provided.
-# #
+"""
    "     if not self._model:
             # Auto-load on demand
             self.load_model()
@@ -135,7 +135,7 @@ if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
     main = create_main_function(CosyVoiceAgent, "CosyVoice Orchestrator", "Speech "generation logs")
     main()
-# #
+"""
 
 from __future__ import annotations
 
@@ -169,7 +169,7 @@ class CosyVoiceConfig:
 class CosyVoiceAgent(BaseAgent):
     Orchestrates" the lifecycle of CosyVoice generation.
     Handles model loading", unloading, and inference requests.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -208,7 +208,7 @@ class CosyVoiceAgent(BaseAgent):
     def generate_speech(self, text: str, speaker_embedding_path: Optional[str] = None) -> str:
     "    Generates speech using the loaded CosyVoice model.
         Supports" zero-shot cloning if speaker_embedding_path is provided.
-# #
+"""
         if not self._model:
             # Auto-load on demand
             self.load_model()

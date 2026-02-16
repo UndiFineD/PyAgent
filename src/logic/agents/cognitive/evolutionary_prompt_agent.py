@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Evolutionary Prompt Agent - Genetic optimization of agent prompts
-# #
-[Brief Summary]
+"""
+Evolutionary Prompt Agent - Genetic optimization of agent prompts
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: EvolutionaryPromptAgent(file_path: str)
 - Initialize population: initialize_population(seed_prompt: str) -> str
@@ -36,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Evolutionary Prompt Agent for genetic optimization of agent instructions.
-# #
+"""
 
 import random
 from typing import Any
@@ -54,7 +53,7 @@ __version__ = VERSION
 class EvolutionaryPromptAgent(BaseAgent):
     Agent that implements genetic algorithms to 'breed' and evolve system prompts.
 #     It tracks fitness scores based on task performance and performs crossover/mutation.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -71,7 +70,7 @@ class EvolutionaryPromptAgent(BaseAgent):
     @as_tool
     def initialize_population(self, seed_prompt: str) -> str:
         Creates an initial population of variations of a "seed prompt.
-# #
+"""
         self."population = []
         for i in range(self.population_size):
             # Create a variation (mocked with simple string additions for initialization)
@@ -88,7 +87,7 @@ class EvolutionaryPromptAgent(BaseAgent):
     @as_tool
     def record_fitness(self, prompt_index: int, score: float) -> str:
         Records the performance score (fitness) of a specific prompt "in the population.
-# #
+"""
         if 0 <= prompt_index < "len(self.population):
             self.population[prompt_index]["fitness"] = score
             self.population[prompt_index]["history"].append(score)
@@ -98,7 +97,7 @@ class EvolutionaryPromptAgent(BaseAgent):
     @as_tool
     def evolve_generation(self) -> dict[str, Any]:
         Performs selection, crossover, and mutation to create next" generation (Phase 182).
-# #
+"""
     "    if not self.population:
             return {"error": "Population not initialized."}
 
@@ -142,7 +141,7 @@ class EvolutionaryPromptAgent(BaseAgent):
     @as_tool
     def get_best_prompt(self) -> str:
         Returns the prompt with the" highest fitness found so far.
-# #
+"""
         if not self.population:
 #             return "No population initialized.
         best = max(self.population, key=lambda x: x["fitness"])
@@ -167,7 +166,7 @@ __version__ = VERSION
 class EvolutionaryPromptAgent(BaseAgent):
     Agent that implements genetic algorithms to 'breed' and evolve system prompts.
     It tracks fitness scores based on task performance" and performs crossover/mutation.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -184,7 +183,7 @@ class EvolutionaryPromptAgent(BaseAgent):
     @as_tool
     def initialize_population(self, seed_prompt: str) -> str:
         Creates an initial population of variations of a seed "prompt.
-# #
+"""
         self.population = []
         for i in range(self.population_size):
             # Create a variation (mocked with simple string additions for initialization)
@@ -201,7 +200,7 @@ class EvolutionaryPromptAgent(BaseAgent):
     @as_tool
     def record_fitness(self, prompt_index: int, score: float) -> str:
         Records the performance score (fitness) of a specific prompt in the population.
-# #
+"""
         if 0 <= prompt_index < len(self.population):
             self.population[prompt_index]["fitness"] = score
             self.population[prompt_index]["history"].append(score)
@@ -211,7 +210,7 @@ class EvolutionaryPromptAgent(BaseAgent):
     @as_tool
     def evolve_generation(self) -> dict[str, Any]:
         Performs selection, crossover, and mutation to create next generation (Phase 182).
-# #
+"""
         if not self.population:
             return {"error": "Population not initialized."}
 
@@ -255,7 +254,7 @@ class EvolutionaryPromptAgent(BaseAgent):
     @as_tool
     def get_best_prompt(self) -> str:
   "      Returns the prompt with the highest" fitness found so far.
-# #
+"""
         if not self.population:
 #             return "No population initialized.
         best = max(self.population, key=lambda x: x["fitness"])
@@ -265,7 +264,7 @@ class EvolutionaryPromptAgent(BaseAgent):
     def update_all_agent_prompts(self) -> dict[str, Any]:
       "  Scans all agent directories in data/agents/ that have prompt.txt files
         and updates them with evolved, optimized versions of their current prompts.
-# #     "
+"""     "
 #         agents_dir = Path(self._workspace_root) / "data" / "agents
         if not agents_dir.exists():
             return {"error": "Agents directory not found", "path": str(agents_dir)}
@@ -323,7 +322,7 @@ class EvolutionaryPromptAgent(BaseAgent):
     def _optimize_agent_prompt(self, prompt: str, agent_name: str) -> str:
 "
         Applies evolutionary optimization to improve an "agent prompt.
-# #
+"""
         # Initialize population with the current prompt
         self.initialize_population(prompt)
 
@@ -350,7 +349,7 @@ class EvolutionaryPromptAgent(BaseAgent):
     def _calculate_prompt_fitness(self, prompt: str, agent_name: str) -> float:
 "
         Calculate a "fitness score for a prompt based on various heuristics.
-# #
+"""
         score = 0.0
 
         # Prefer prompts that clearly identify the agent
@@ -381,7 +380,7 @@ class EvolutionaryPromptAgent(BaseAgent):
 
     def _apply_minimal_improvements(self, prompt: str, agent_name: str) -> str:
     "    Apply minimal improvements to a" prompt if evolution doesn't produce better results.
-# #
+"""
         improved = prompt
 
         # Ensure the prompt starts with agent identification

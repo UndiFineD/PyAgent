@@ -17,7 +17,7 @@ bridge.py - MCP Server Bridge (registry, discovery, and orchestration)
 
 [Brief Summary]
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate MCPServerRegistry(registry_path=Path("path\\to\\registry.json")) and inspect registry.servers or call registry._create_default_registry() to seed defaults.
 - Use MCPServerConfig and MCPTool dataclasses to define new servers/tools and register them in registry.json.

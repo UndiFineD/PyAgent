@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-# #
+"""
 # RewardModelAgent - Evaluates and ranks multiple agent outputs to produce scalar reward signals
-# #
+"""
 Brief Summary
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate RewardModelAgent with a file path representing agent state/configuration and call await rank_proposals(task, proposals) where proposals is a dict[str, str] mapping agent names to outputs.
 
@@ -32,7 +32,7 @@ FILE CONTENT SUMMARY:
 RewardModelAgent for PyAgent.
 Specializes in ranking multiple agent outputs to facilitate Reinforcement Learning from AI Feedback (RLAIF).
 Used in Phase 42 for model distillation and fine-tuning loops.
-# #
+"""
 
 from __future__ import annotations
 
@@ -64,7 +64,7 @@ class RewardModelAgent(BaseAgent):
         Args:
             task: The original task given to the agents.
             proposals: Mapping of agent names to their generated content.
-# #
+"""
         if self.recorder:
             self.recorder.record_lesson(
                 "reward_model_ranking",
@@ -124,7 +124,7 @@ if __name__ == "__main__":
 
     main = create_main_function(RewardModelAgent, "Reward Model Agent", "Rankings and Reward signals")
     main()
-# #
+"""
 
 from __future__ import annotations
 
@@ -156,7 +156,7 @@ class RewardModelAgent(BaseAgent):
         Args:
             task: The original task given to the agents.
             proposals: Mapping of agent names to their generated content.
-# #
+"""
         if self.recorder:
             self.recorder.record_lesson(
                 "reward_model_ranking",

@@ -16,7 +16,7 @@
 CodeIssue - Data model for a single code issue
 
 # DATE: 2026-02-12
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate CodeIssue to represent a detected problem or suggestion, e.g. CodeIssue("naming inconsistent", IssueCategory.STYLE, SeverityLevel.MINOR, line_number=42, file_path="src/foo.py", function_name="bar").
 

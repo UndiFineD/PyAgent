@@ -15,7 +15,7 @@
 """
 Scheduled Entry - Compatibility dataclass for scheduled improvements"""
 # DATE: 2026-02-12"""
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate for tests: from scheduled_entry import ScheduledEntry
 - Example: ScheduledEntry(improvement_id="IMP-123", start_date=datetime.now(), resources=["doc.md", "patch.diff"])

@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-# #
+"""
 # NetworkContextAgent - Build code relationship graph
-# #
-[Brief Summary]
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with the path to a project file (an anchor file within the repo): agent = NetworkContextAgent(rC:\\\\DEV\PyAgent\\\\src\\\\some\file.py")
 - Run a full scan: agent.scan_project()
@@ -136,7 +135,7 @@ class NetworkContextAgent(BaseAgent):
         else:
             report.append(fFound {len(impacted_nodes)} potentially impacted entities within 3 hops:")
             for node in sorted(list(impacted_nodes)):
-# #
+"""
 
 from __future__ import annotations
 

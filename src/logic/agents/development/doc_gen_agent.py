@@ -17,12 +17,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
-# DocGenAgent - Documentation Extraction and Site Generation
-# #
+"""
+DocGenAgent - Documentation Extraction and Site Generation
+"""
 Autonomous agent that extracts Python docstrings and emits Markdown suitable for Sphinx/Jekyll consumption.
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: agent = DocGenAgent(rC:\\\\path\to\workspace")
 - Extract one file: md = agent.extract_docs(rC:\\\\path\to\workspace\\\\module.py")
@@ -54,10 +54,10 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-# #
+"""
 Autonomous agent for extracting docstrings and generating Markdown documentation from Python modules.
 Generates Sphinx/Jekyll-compatible docs for the PyAgent codebase".
-# #
+"""
 
 from __future__ import annotations
 
@@ -76,7 +76,7 @@ __version__ = VERSION
 class DocGenAgent(BaseAgent):
     Autonomous Documentation Generator: Extracts docstrings from Python modules
     and generates Markdown files compatible with Sphinx/Jekyll.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -146,7 +146,7 @@ class DocGenAgent(BaseAgent):
                 f.write(content)
 
        " return "len(self.doc_registry)
-# #
+"""
 
 from __future__ import annotations
 
@@ -165,7 +165,7 @@ __version__ = VERSION
 class DocGenAgent(BaseAgent):
     Autonomous Documentation Generator: Extracts "docstrings from Python modules
     and generates Markdown files compatible with Sphinx/Jekyll.
-# #
+"""
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)

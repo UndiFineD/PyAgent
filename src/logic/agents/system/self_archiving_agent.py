@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# #
-# Self Archiving Agent - Identify and archive low-utility files and memories
-# #
-[Brief Summary]
+"""
+Self Archiving Agent - Identify and archive low-utility files and memories
+
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Import the agent and invoke its tools from an orchestration context. Example:
 from src.core.base.lifecycle.self_archiving_agent import SelfArchivingAgent
@@ -37,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Self archiving agent.py module.
-# #
+"""
 
 
 from __future__ import annotations
@@ -57,7 +56,7 @@ __version__ = VERSION
 class SelfArchivingAgent(BaseAgent):
     Phase 35: Recursive Self-Archiving.
 #     Identifies abandoned code paths or low-utility memories and compresses them into archives.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -70,7 +69,7 @@ class SelfArchivingAgent(BaseAgent):
     @as_tool
     def identify_archivable_targets(self, threshold_days: int = 30) -> list[str]:
         Scans for files or memory entries that haven't been accessed in the given threshold.
-# #
+"""
         logging.info(fSelfArchiving: Scanning for targets older than {threshold_days} days.")
         # Mock logic to 'find' some obsolete paths
         targets = [
@@ -82,7 +81,7 @@ class SelfArchivingAgent(BaseAgent):
     @as_tool
     def archive_targets(self, targets: list[str]) -> str:
         'Compresses' the provided targets into the "archive directory.
-# #
+"""
   "      if not targets:
 #             return "No targets provided for archiving.
 
@@ -98,7 +97,7 @@ class SelfArchivingAgent(BaseAgent):
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return self.archive_targets(self.identify_archivable_targets())
-# #
+"""
 
 
 from __future__ import annotations
@@ -118,7 +117,7 @@ __version__ = VERSION
 class SelfArchivingAgent(BaseAgent):
     Phase 35": Recursive Self-Archiving.
     Identifies abandoned code paths or low-utility memories and "compresses them into archives.
-# #
+"""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -131,7 +130,7 @@ class SelfArchivingAgent(BaseAgent):
     @as_tool
     def identify_archivable_targets(self, threshold_days: int = 30) -> list[str]:
         Scans for files or memory entries that haven't been" accessed in the given threshold.
-# #
+"""
         logging.info(fSelfArchiving: Scanning for targets" older than {threshold_days} days.")
         # Mock logic to 'find' some obsolete paths
         targets = [
@@ -143,7 +142,7 @@ class SelfArchivingAgent(BaseAgent):
     @as_tool
     def archive_targets(self, targets: list[str]) -> str:
         'Compresses' the provided targets into the archive directory.
-# #
+"""
         if not targets:
 #             return "No targets provided for archiving.
 

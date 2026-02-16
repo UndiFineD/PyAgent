@@ -16,7 +16,7 @@
 FirewallAgent - Gatekeeper for agent actions
 
 # DATE: 2026-02-13
-AUTHOR: Keimpe de Jong
+# AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate FirewallAgent in the swarm orchestration layer (provide workspace path if needed). It subscribes to the SignalRegistry "thought_stream" and asynchronously evaluates agent thoughts via _analyze_thought, granting or denying clearance and emitting logs/signals for the fleet. Optionally enable rust_core for accelerated analysis and maintain a JSON whitelist at data\config\whitelist-domains.json.
 
