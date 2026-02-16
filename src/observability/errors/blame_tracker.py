@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-
-
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,185 +15,45 @@
 # limitations under the License.
 
 
+"""
+Blame Tracker - Tracks git blame for error lines
 
-# Blame Tracker - Tracks git blame for error lines
+Brief Summary
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate: tracker = BlameTracker(recorder=my_recorder) where recorder implements record_interaction(source, category, action, result).
+- Single error: blame = tracker.get_blame(error) — expects error: ErrorEntry with id, file_path, line_number.
+- Aggregate: top = tracker.get_top_contributors(errors_list, limit=5).
 
-# Brief Summary
-# DATE: 2026-02-12
-# AUTHOR: Keimpe de Jong
-# USAGE:
-# - Instantiate: tracker = BlameTracker(recorder=my_recorder) where recorder implements record_interaction(source, category, action, result).
-# - Single error: blame = tracker.get_blame(error) — expects error: ErrorEntry with id, file_path, line_number.
-# - Aggregate: top = tracker.get_top_contributors(errors_list, limit=5).
+WHAT IT DOES:
+- Runs a git blame subprocess for a single line (timeout 10s), parses porcelain output into a BlameInfo (commit_hash, author, commit_date, commit_message), caches results per file:line, and records interactions via an optional recorder.
+- Gracefully ignores failures when git is missing or blame times out and returns an empty BlameInfo for those cases.
+- Aggregates author frequencies across a list of ErrorEntry objects to return top contributors.
 
-# WHAT IT DOES:
-# - Runs a git blame subprocess for a single line (timeout 10s), parses porcelain output into a BlameInfo (commit_hash, author, commit_date, commit_message), caches results per file:line, and records interactions via an optional recorder.
-# - Gracefully ignores failures when git is missing or blame times out and returns an empty BlameInfo for those cases.
-# - Aggregates author frequencies across a list of ErrorEntry objects to return top contributors.
+WHAT IT SHOULD DO BETTER:
+- Resolve repository root and ensure file paths are relative to the repo; currently it assumes git can blame the provided path.
+- Improve robustness: use a native git library (GitPython/pygit2) or more careful subprocess handling, better parsing for merge/renamed lines, and handle uncommitted/unstaged changes.
+- Add configurable timeout, async support, explicit logging (instead of silent pass), cache invalidation, and unit tests covering Windows and non-git environments.
+- Surface errors to callers when appropriate (or provide richer telemetry) rather than silently swallowing subprocess failures.
 
-# WHAT IT SHOULD DO BETTER:
-# - Resolve repository root and ensure file paths are relative to the repo; currently it assumes git can blame the provided path.
-# - Improve robustness: use a native git library (GitPython/pygit2) or more careful subprocess handling, better parsing for merge/renamed lines, and handle uncommitted/unstaged changes.
-# - Add configurable timeout, async support, explicit logging (instead of silent pass), cache invalidation, and unit tests covering Windows and non-git environments.
-# - Surface errors to callers when appropriate (or provide richer telemetry) rather than silently swallowing subprocess failures.
-
-# FILE CONTENT SUMMARY:
-Auto-extracted class from agent_errors.py
-
-
-from __future__ import annotations
-
-import subprocess
-from datetime import datetime
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .blame_info import BlameInfo
-from .error_entry import ErrorEntry
-
-__version__ = VERSION
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 
-class BlameTracker:
-    Tracks git blame information for errors.
-
-    Uses git integration to identify who introduced errors
-    and when.
-
-    Attributes:
-        blame_cache: Cache of blame information.
-    
-
-    def __init__(self, recorder: Any = None) -> None:
-        Initialize the blame tracker.
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         self.blame_cache: dict[str, BlameInfo] = {}
-        self.recorder = recorder
-
-    def _record(self, action: str, result: str) -> None:
-        Record blame operations.
-        if self.recorder:
-#             self.recorder.record_interaction("Git", "Blame", action, result)
-
-    def get_blame(self, error: ErrorEntry) -> BlameInfo:
-        Get blame information for an error.
-
-        Args:
-            error: The error to get blame for.
-
-        Returns:
-            BlameInfo with commit and author details.
-        
-# [BATCHFIX] Commented metadata/non-Python
-# # #         cache_key = f"{error.file_path}:{error.line_number}"  # [BATCHFIX] closed string
-        if cache_key in self.blame_cache:
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #             return self.blame_cache[cache_key]
-
-        blame_info = BlameInfo(error_id=error.id)
-
-        try:
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
-#             result = subprocess.run(
-                [
-#                     "git",
-#                     "blame",
-#                     "-L",
-#                     f"{error.line_number},{error.line_number}",
-#                     "--porcelain",
-                    error.file_path,
-                ],
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-            if result.returncode == 0:
-                blame_info = self._parse_blame_output(error.id, result.stdout)
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            pass
-
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         self.blame_cache[cache_key] = blame_info
-        return blame_info
-
-    def _parse_blame_output(self, error_id: str, output: str) -> BlameInfo:
-        Parse git blame output.
-#         lines = output.strip().split("\n")
-        info = BlameInfo(error_id=error_id)
-
-        if lines:
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #             parts = lines[0].split()
-            if parts:
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #                 info.commit_hash = parts[0]
-
-        for line in lines:
-#             if line.startswith("author "):
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #                 info.author = line[7:]
-#             elif line.startswith("author-time "):
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #                 timestamp = int(line[12:])
-                info.commit_date = datetime.fromtimestamp(timestamp).isoformat()
-#             elif line.startswith("summary "):
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #                 info.commit_message = line[8:]
-
-        return info
-
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #     def get_top_contributors(self, errors: list[ErrorEntry], limit: int = 5) -> list[tuple[str, int]]:
-        Get top contributors to errors.
-
-        Args:
-            errors: List of errors to analyze.
-            limit: Maximum number of contributors to return.
-
-        Returns:
-            List of (author, count) tuples.
-        
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         author_counts: dict[str, int] = {}
-        for error in errors:
-            blame = self.get_blame(error)
-            if blame.author:
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #                 author_counts[blame.author] = author_counts.get(blame.author, 0) + 1
-
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         sorted_authors = sorted(author_counts.items(), key=lambda x: x[1], reverse=True)
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         return sorted_authors[:limit]
-
+"""Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
 
@@ -210,57 +70,48 @@ __version__ = VERSION
 
 
 class BlameTracker:
-    Tracks git blame information for errors.
+    """Tracks git blame information for errors.
 
     Uses git integration to identify who introduced errors
     and when.
 
     Attributes:
         blame_cache: Cache of blame information.
-    
+    """
 
     def __init__(self, recorder: Any = None) -> None:
-        Initialize the blame tracker.
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         self.blame_cache: dict[str, BlameInfo] = {}
+        """Initialize the blame tracker."""
+        self.blame_cache: dict[str, BlameInfo] = {}
         self.recorder = recorder
 
     def _record(self, action: str, result: str) -> None:
-        Record blame operations.
+        """Record blame operations."""
         if self.recorder:
-#             self.recorder.record_interaction("Git", "Blame", action, result)
+            self.recorder.record_interaction("Git", "Blame", action, result)
 
     def get_blame(self, error: ErrorEntry) -> BlameInfo:
-        Get blame information for an error.
+        """Get blame information for an error.
 
         Args:
             error: The error to get blame for.
 
         Returns:
             BlameInfo with commit and author details.
-        
-# [BATCHFIX] Commented metadata/non-Python
-# # #         cache_key = f"{error.file_path}:{error.line_number}"  # [BATCHFIX] closed string
+        """
+        cache_key = f"{error.file_path}:{error.line_number}"
         if cache_key in self.blame_cache:
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #             return self.blame_cache[cache_key]
+            return self.blame_cache[cache_key]
 
         blame_info = BlameInfo(error_id=error.id)
 
         try:
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
-#             result = subprocess.run(
+            result = subprocess.run(
                 [
-#                     "git",
-#                     "blame",
-#                     "-L",
-#                     f"{error.line_number},{error.line_number}",
-#                     "--porcelain",
+                    "git",
+                    "blame",
+                    "-L",
+                    f"{error.line_number},{error.line_number}",
+                    "--porcelain",
                     error.file_path,
                 ],
                 capture_output=True,
@@ -272,53 +123,32 @@ class BlameTracker:
         except (subprocess.TimeoutExpired, FileNotFoundError):
             pass
 
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         self.blame_cache[cache_key] = blame_info
+        self.blame_cache[cache_key] = blame_info
         return blame_info
 
     def _parse_blame_output(self, error_id: str, output: str) -> BlameInfo:
-        Parse git blame output.
-#         lines = output.strip().split("\n")
+        """Parse git blame output."""
+        lines = output.strip().split("\n")
         info = BlameInfo(error_id=error_id)
 
         if lines:
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #             parts = lines[0].split()
+            parts = lines[0].split()
             if parts:
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #                 info.commit_hash = parts[0]
+                info.commit_hash = parts[0]
 
         for line in lines:
-#             if line.startswith("author "):
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #                 info.author = line[7:]
-#             elif line.startswith("author-time "):
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #                 timestamp = int(line[12:])
+            if line.startswith("author "):
+                info.author = line[7:]
+            elif line.startswith("author-time "):
+                timestamp = int(line[12:])
                 info.commit_date = datetime.fromtimestamp(timestamp).isoformat()
-#             elif line.startswith("summary "):
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #                 info.commit_message = line[8:]
+            elif line.startswith("summary "):
+                info.commit_message = line[8:]
 
         return info
 
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #     def get_top_contributors(self, errors: list[ErrorEntry], limit: int = 5) -> list[tuple[str, int]]:
-        Get top contributors to errors.
+    def get_top_contributors(self, errors: list[ErrorEntry], limit: int = 5) -> list[tuple[str, int]]:
+        """Get top contributors to errors.
 
         Args:
             errors: List of errors to analyze.
@@ -326,24 +156,124 @@ class BlameTracker:
 
         Returns:
             List of (author, count) tuples.
-        
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         author_counts: dict[str, int] = {}
+        """
+        author_counts: dict[str, int] = {}
         for error in errors:
             blame = self.get_blame(error)
             if blame.author:
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #                 author_counts[blame.author] = author_counts.get(blame.author, 0) + 1
+                author_counts[blame.author] = author_counts.get(blame.author, 0) + 1
 
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         sorted_authors = sorted(author_counts.items(), key=lambda x: x[1], reverse=True)
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         return sorted_authors[:limit]
+        sorted_authors = sorted(author_counts.items(), key=lambda x: x[1], reverse=True)
+        return sorted_authors[:limit]
+"""
+
+from __future__ import annotations
+
+import subprocess
+from datetime import datetime
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .blame_info import BlameInfo
+from .error_entry import ErrorEntry
+
+__version__ = VERSION
+
+
+class BlameTracker:
+    """Tracks git blame information for errors.
+
+    Uses git integration to identify who introduced errors
+    and when.
+
+    Attributes:
+        blame_cache: Cache of blame information.
+    """
+
+    def __init__(self, recorder: Any = None) -> None:
+        """Initialize the blame tracker."""
+        self.blame_cache: dict[str, BlameInfo] = {}
+        self.recorder = recorder
+
+    def _record(self, action: str, result: str) -> None:
+        """Record blame operations."""
+        if self.recorder:
+            self.recorder.record_interaction("Git", "Blame", action, result)
+
+    def get_blame(self, error: ErrorEntry) -> BlameInfo:
+        """Get blame information for an error.
+
+        Args:
+            error: The error to get blame for.
+
+        Returns:
+            BlameInfo with commit and author details.
+        """
+        cache_key = f"{error.file_path}:{error.line_number}"
+        if cache_key in self.blame_cache:
+            return self.blame_cache[cache_key]
+
+        blame_info = BlameInfo(error_id=error.id)
+
+        try:
+            result = subprocess.run(
+                [
+                    "git",
+                    "blame",
+                    "-L",
+                    f"{error.line_number},{error.line_number}",
+                    "--porcelain",
+                    error.file_path,
+                ],
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            if result.returncode == 0:
+                blame_info = self._parse_blame_output(error.id, result.stdout)
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pass
+
+        self.blame_cache[cache_key] = blame_info
+        return blame_info
+
+    def _parse_blame_output(self, error_id: str, output: str) -> BlameInfo:
+        """Parse git blame output."""
+        lines = output.strip().split("\n")
+        info = BlameInfo(error_id=error_id)
+
+        if lines:
+            parts = lines[0].split()
+            if parts:
+                info.commit_hash = parts[0]
+
+        for line in lines:
+            if line.startswith("author "):
+                info.author = line[7:]
+            elif line.startswith("author-time "):
+                timestamp = int(line[12:])
+                info.commit_date = datetime.fromtimestamp(timestamp).isoformat()
+            elif line.startswith("summary "):
+                info.commit_message = line[8:]
+
+        return info
+
+    def get_top_contributors(self, errors: list[ErrorEntry], limit: int = 5) -> list[tuple[str, int]]:
+        """Get top contributors to errors.
+
+        Args:
+            errors: List of errors to analyze.
+            limit: Maximum number of contributors to return.
+
+        Returns:
+            List of (author, count) tuples.
+        """
+        author_counts: dict[str, int] = {}
+        for error in errors:
+            blame = self.get_blame(error)
+            if blame.author:
+                author_counts[blame.author] = author_counts.get(blame.author, 0) + 1
+
+        sorted_authors = sorted(author_counts.items(), key=lambda x: x[1], reverse=True)
+        return sorted_authors[:limit]

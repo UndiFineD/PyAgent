@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-
-
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,34 +15,45 @@
 # limitations under the License.
 
 
+"""
+AutoFixSuggester - Generate automated fix suggestions for runtime errors
 
-# AutoFixSuggester - Generate automated fix suggestions for runtime errors
-
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# # # [Brief Summary]
-# DATE: 2026-02-12
-# AUTHOR: Keimpe de Jong
-# USAGE:
+[Brief Summary]
+DATE: 2026-02-12
+AUTHOR: Keimpe de Jong
+USAGE:
 from src.tools.auto_fix_suggester import AutoFixSuggester
 suggester = AutoFixSuggester()
 suggestion = suggester.suggest(error_entry)  # returns FixSuggestion or None
 # use suggest_all(list_of_errors) to get multiple suggestions
 
-# WHAT IT DOES:
-# - Maintains a registry of regex-based error patterns mapped to human-readable fix templates
-# - Matches incoming ErrorEntry.message values against patterns and returns a FixSuggestion with a confidence score when matched
-# - Supports adding new patterns at runtime via add_pattern
+WHAT IT DOES:
+- Maintains a registry of regex-based error patterns mapped to human-readable fix templates
+- Matches incoming ErrorEntry.message values against patterns and returns a FixSuggestion with a confidence score when matched
+- Supports adding new patterns at runtime via add_pattern
 
-# WHAT IT SHOULD DO BETTER:
-# - Provide richer, context-aware suggestions that inspect stack frames, file paths, and types for higher accuracy
-# - Expose configurable confidence scoring and multiple candidate suggestions per error rather than a single fixed-confidence result
-# - Support localization, package-manager detection (pip/conda), and safe automated patch generation (with transactional rollback)
+WHAT IT SHOULD DO BETTER:
+- Provide richer, context-aware suggestions that inspect stack frames, file paths, and types for higher accuracy
+- Expose configurable confidence scoring and multiple candidate suggestions per error rather than a single fixed-confidence result
+- Support localization, package-manager detection (pip/conda), and safe automated patch generation (with transactional rollback)
 
-# FILE CONTENT SUMMARY:
-Auto-extracted class from agent_errors.py
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
+
+"""Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
 
@@ -57,89 +68,68 @@ __version__ = VERSION
 
 
 class AutoFixSuggester:
-    Generates automated fix suggestions for errors.
+    """Generates automated fix suggestions for errors.
 
     Uses pattern matching and common fixes to suggest
     resolutions for errors.
 
     Attributes:
         fix_patterns: Map of error patterns to fix templates.
-    
+    """
 
     def __init__(self) -> None:
-        Initialize the auto-fix suggester.
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         self.fix_patterns: dict[str, str] = {
-# [BATCHFIX] Commented metadata/non-Python
-# #             rNameError: name '(\w+)' is not defined": "Define variable '{0}' before use or import it","  # [BATCHFIX] closed string
-# [BATCHFIX] Commented metadata/non-Python
-# #             rImportError: No module named '(\w+)'": "Install module with: pip install {0}","  # [BATCHFIX] closed string
-# [BATCHFIX] Commented metadata/non-Python
-# #             rTypeError: unsupported operand type": "Check operand types and convert if necessary","  # [BATCHFIX] closed string
-# [BATCHFIX] Commented metadata/non-Python
-# #             rAttributeError: '(\w+)' object has no attribute '(\w+)'": ("  # [BATCHFIX] closed string
-# [BATCHFIX] Commented metadata/non-Python
-# # #                 "Check if '{1}' exists on {0} object or use hasattr()"  # [BATCHFIX] closed string
+        """Initialize the auto-fix suggester."""
+        self.fix_patterns: dict[str, str] = {
+            r"NameError: name '(\w+)' is not defined": "Define variable '{0}' before use or import it",
+            r"ImportError: No module named '(\w+)'": "Install module with: pip install {0}",
+            r"TypeError: unsupported operand type": "Check operand types and convert if necessary",
+            r"AttributeError: '(\w+)' object has no attribute '(\w+)'": (
+                "Check if '{1}' exists on {0} object or use hasattr()"
             ),
-# [BATCHFIX] Commented metadata/non-Python
-# #             rIndexError: list index out of range": "Check list bounds before accessing index","  # [BATCHFIX] closed string
-# [BATCHFIX] Commented metadata/non-Python
-# #             rKeyError: '(\w+)'": "Use .get('{0}', default) or check key existence","  # [BATCHFIX] closed string
+            r"IndexError: list index out of range": "Check list bounds before accessing index",
+            r"KeyError: '(\w+)'": "Use .get('{0}', default) or check key existence",
         }
 
     def add_pattern(self, pattern: str, fix_template: str) -> None:
-        Add a fix pattern.
+        """Add a fix pattern.
 
         Args:
             pattern: Regex pattern to match errors.
             fix_template: Template for the fix suggestion.
-        
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         self.fix_patterns[pattern] = fix_template
+        """
+        self.fix_patterns[pattern] = fix_template
 
     def suggest(self, error: ErrorEntry) -> FixSuggestion | None:
-        Generate a fix suggestion for an error.
+        """Generate a fix suggestion for an error.
 
         Args:
             error: The error to fix.
 
         Returns:
             FixSuggestion if a fix is available, None otherwise.
-        
+        """
         for pattern, template in self.fix_patterns.items():
             match = re.search(pattern, error.message)
             if match:
                 groups = match.groups()
                 suggestion = template.format(*groups) if groups else template
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
-#                 return FixSuggestion(
+                return FixSuggestion(
                     error_id=error.id,
                     suggestion=suggestion,
                     confidence=0.8,
-#                     source="pattern_match",
+                    source="pattern_match",
                 )
         return None
 
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #     def suggest_all(self, errors: list[ErrorEntry]) -> list[FixSuggestion]:
-        Generate suggestions for multiple errors.
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         suggestions: list[FixSuggestion] = []
+    def suggest_all(self, errors: list[ErrorEntry]) -> list[FixSuggestion]:
+        """Generate suggestions for multiple errors."""
+        suggestions: list[FixSuggestion] = []
         for error in errors:
             sugg = self.suggest(error)
             if sugg:
                 suggestions.append(sugg)
         return suggestions
-
+"""
 
 from __future__ import annotations
 
@@ -154,83 +144,62 @@ __version__ = VERSION
 
 
 class AutoFixSuggester:
-    Generates automated fix suggestions for errors.
+    """Generates automated fix suggestions for errors.
 
     Uses pattern matching and common fixes to suggest
     resolutions for errors.
 
     Attributes:
         fix_patterns: Map of error patterns to fix templates.
-    
+    """
 
     def __init__(self) -> None:
-        Initialize the auto-fix suggester.
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         self.fix_patterns: dict[str, str] = {
-# [BATCHFIX] Commented metadata/non-Python
-# #             rNameError: name '(\w+)' is not defined": "Define variable '{0}' before use or import it","  # [BATCHFIX] closed string
-# [BATCHFIX] Commented metadata/non-Python
-# #             rImportError: No module named '(\w+)'": "Install module with: pip install {0}","  # [BATCHFIX] closed string
-# [BATCHFIX] Commented metadata/non-Python
-# #             rTypeError: unsupported operand type": "Check operand types and convert if necessary","  # [BATCHFIX] closed string
-# [BATCHFIX] Commented metadata/non-Python
-# #             rAttributeError: '(\w+)' object has no attribute '(\w+)'": ("  # [BATCHFIX] closed string
-# [BATCHFIX] Commented metadata/non-Python
-# # #                 "Check if '{1}' exists on {0} object or use hasattr()"  # [BATCHFIX] closed string
+        """Initialize the auto-fix suggester."""
+        self.fix_patterns: dict[str, str] = {
+            r"NameError: name '(\w+)' is not defined": "Define variable '{0}' before use or import it",
+            r"ImportError: No module named '(\w+)'": "Install module with: pip install {0}",
+            r"TypeError: unsupported operand type": "Check operand types and convert if necessary",
+            r"AttributeError: '(\w+)' object has no attribute '(\w+)'": (
+                "Check if '{1}' exists on {0} object or use hasattr()"
             ),
-# [BATCHFIX] Commented metadata/non-Python
-# #             rIndexError: list index out of range": "Check list bounds before accessing index","  # [BATCHFIX] closed string
-# [BATCHFIX] Commented metadata/non-Python
-# #             rKeyError: '(\w+)'": "Use .get('{0}', default) or check key existence","  # [BATCHFIX] closed string
+            r"IndexError: list index out of range": "Check list bounds before accessing index",
+            r"KeyError: '(\w+)'": "Use .get('{0}', default) or check key existence",
         }
 
     def add_pattern(self, pattern: str, fix_template: str) -> None:
-        Add a fix pattern.
+        """Add a fix pattern.
 
         Args:
             pattern: Regex pattern to match errors.
             fix_template: Template for the fix suggestion.
-        
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         self.fix_patterns[pattern] = fix_template
+        """
+        self.fix_patterns[pattern] = fix_template
 
     def suggest(self, error: ErrorEntry) -> FixSuggestion | None:
-        Generate a fix suggestion for an error.
+        """Generate a fix suggestion for an error.
 
         Args:
             error: The error to fix.
 
         Returns:
             FixSuggestion if a fix is available, None otherwise.
-        
+        """
         for pattern, template in self.fix_patterns.items():
             match = re.search(pattern, error.message)
             if match:
                 groups = match.groups()
                 suggestion = template.format(*groups) if groups else template
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented unmatched parenthesis
-#                 return FixSuggestion(
+                return FixSuggestion(
                     error_id=error.id,
                     suggestion=suggestion,
                     confidence=0.8,
-#                     source="pattern_match",
+                    source="pattern_match",
                 )
         return None
 
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #     def suggest_all(self, errors: list[ErrorEntry]) -> list[FixSuggestion]:
-        Generate suggestions for multiple errors.
-# [BATCHFIX] Commented metadata/non-Python
-# # [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-# #         suggestions: list[FixSuggestion] = []
+    def suggest_all(self, errors: list[ErrorEntry]) -> list[FixSuggestion]:
+        """Generate suggestions for multiple errors."""
+        suggestions: list[FixSuggestion] = []
         for error in errors:
             sugg = self.suggest(error)
             if sugg:

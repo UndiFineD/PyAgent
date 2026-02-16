@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-
-
-
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
+# Refactored by copilot-placeholder
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@
 
 
 """
-StructuredLogger - JSON-based structured logging for PyAgent swarm observability"""
-"""
+StructuredLogger - JSON-based structured logging for PyAgent swarm observability
+
 Brief Summary
-# DATE: 2026-02-12
+DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate and use inside agents: logger = StructuredLogger(agent_id="agent-123", trace_id=None, log_file="data/logs/structured.json")
@@ -46,7 +46,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 StructuredLogger: JSON-based logging for Phase 144 observability.
 Ensures machine-readable logs with mandatory AgentID and TraceID fields.
-"""""""""
+"""
 
 from __future__ import annotations
 
@@ -76,14 +76,14 @@ __version__: str = VERSION
 
 
 class StructuredLogger:
-    """JSON logger for PyAgent swarm observab""""""ility.
-    Phase 277: Added log hygiene with automated GZIP compression.""""""
+    """JSON logger for PyAgent swarm observability.
+    Phase 277: Added log hygiene with automated GZIP compression.
     """
 
     # regex for sensitive data masking (Phase 227)
     SENSITIVE_PATTERNS: list[Pattern[str]] = [
         re.compile(r"sk-[a-zA-Z0-9]{32,}"),  # OpenAI Keys
-        re.compile(r"Bearer\\\\s+[a-zA-Z0-9\-\._~+/]+=*"),  # Bearer Tokens
+        re.compile(r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*"),  # Bearer Tokens
         re.compile(r"gh[ps]_[a-zA-Z0-9]{36}"),  # GitHub Tokens
     ]
 
@@ -107,7 +107,7 @@ class StructuredLogger:
 
     def _compress_logs(self) -> None:
         """Compresses current log file to .json.gz (Phase 277)."""
-        timestamp: str = datetime.now().strftime("%Y%""""""m%d_%H%M%S")
+        timestamp: str = datetime.now().strftime("%Y%m%d_%H%M%S")
         compressed_file: Path = self.log_file.with_name(f"{self.log_file.stem}_{timestamp}.json.gz")
         logging.info(f"StructuredLogger: Compressing log file ({self.log_file.name}) to {compressed_file.name}")
 
@@ -123,7 +123,7 @@ class StructuredLogger:
 
     def _mask_sensitive(self, text: str) -> str:
         """Automated masking for API keys and tokens (Phase 227)."""
-        # Python fallback (Rust acceleration for masking not y""""""et implemented)
+        # Python fallback (Rust acceleration for masking not yet implemented)
         masked: str = text
         for pattern in self.SENSITIVE_PATTERNS:
             masked = pattern.sub("[REDACTED]", masked)
@@ -131,7 +131,7 @@ class StructuredLogger:
 
     def log(self, level: str, message: str, **kwargs: Any) -> None:
         """Log a structured entry."""
-        timestamp: str = datetime.now(timezone.utc).isoformat().repl""""""ace("+00:00", "Z")
+        timestamp: str = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         std_logger: logging.Logger = logging.getLogger(f"PyAgent.{self.agent_id}")
         log_func: Any | Callable[..., None] = getattr(std_logger, level.lower(), std_logger.info)
 
@@ -161,64 +161,20 @@ class StructuredLogger:
     # Convenience level helpers (kept for backwards compatibility)
     def info(self, message: str, **kwargs: Any) -> None:
         """Log an info-level message."""
-        self.log("info""""""", message, **kwargs)
+        self.log("info", message, **kwargs)
 
     def warning(self, message: str, **kwargs: Any) -> None:
         """Log a warning-level message."""
-        self.log("warn""""""ing", message, **kwargs)
+        self.log("warning", message, **kwargs)
 
     def error(self, message: str, **kwargs: Any) -> None:
         """Log an error-level message."""
-        self.log("""""""error", message, **kwargs)
+        self.log("error", message, **kwargs)
 
     def debug(self, message: str, **kwargs: Any) -> None:
         """Log a debug-level message."""
-        self.l""""""og("debug", message, **kwargs)
+        self.log("debug", message, **kwargs)
 
     def success(self, message: str, **kwargs: Any) -> None:
         """Log a success/info-level message."""
-        se""""""lf.log("info", message, **kwargs)
-
-def _cleanup_closed_handlers(self):
-    try:
-        for h in list(self._logger.handlers):
-            try:
-                if hasattr(h, "stream") and getattr(h.stream, "closed", False):
-                    try:
-                        self._logger.removeHandler(h)
-                    except Exception:
-                        pass
-            except Exception:
-                pass
-    except Exception:
-        pass
-
-def log(self, level: str, message: str, **kwargs) -> None:
-    masked_message = self._mask_sensitive(message)
-    log_func = getattr(self._logger, level, None)
-    if log_func is None:
-        return
-
-    entry = f"[{self.agent_id}] {masked_message[:200]}"
-
-    try:
-        log_func(entry)
-    except (ValueError, OSError) as e:
-        # Likely a handler with a closed stream — remove it and retry once.
-        self._cleanup_closed_handlers()
-        try:
-            log_func(entry)
-        except Exception:
-            # Last-resort fallback: print to stderr so we don't silently lose logs.
-            try:
-                import sys
-                print(entry, file=sys.stderr)
-            except Exception:
-                pass
-    except Exception:
-        # Non-fatal: fallback to stderr
-        try:
-            import sys
-            print(entry, file=sys.stderr)
-        except Exception:
-            pass
+        self.log("info", message, **kwargs)
