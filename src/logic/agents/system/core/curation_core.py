@@ -1,35 +1,29 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Curation Core - Resource Curation (Prune & Pycache Cleanup)
+"""""""Curation Core - Resource Curation (Prune & Pycache Cleanup)
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Import and call from application code:
   from curation_core import CurationCore
-  removed_count = CurationCore.prune_directory(rC:\\\\path\to\temp", max_age_days=7)
-  cleaned_count = CurationCore.deep_clean_pycache(rC:\\\\path\to\\\\project")
-- Intended for scheduled/background maintenance tasks (cron, Windows Task Scheduler, or agent workflows).
+  removed_count = CurationCore.prune_directory(rC:\\\\path\\to\\temp", max_age_days=7)"  cleaned_count = CurationCore.deep_clean_pycache(rC:\\\\path\\to\\\\project")"- Intended for scheduled/background maintenance tasks (cron, Windows Task Scheduler, or agent workflows).
 - Safe to call repeatedly; returns integer counts for removed items so callers can log/alert.
 
 WHAT IT DOES:
 - Provides core filesystem maintenance utilities used in Phase 173 of the curation pipeline.
 - prune_directory(directory, max_age_days): removes files older than max_age_days; prefers rust_core implementation if present for performance, falls back to a safe Python implementation that walks the directory tree and removes stale files while skipping items that raise OSErrors.
-- deep_clean_pycache(root_dir): forcefully removes all __pycache__ directories under root_dir; prefers rust_core implementation if available, otherwise recursively finds and rmtree's __pycache__ folders and accounts how many were removed.
-- Minimal, dependency-light implementation intended for simple, robust cleanup without external state.
+- deep_clean_pycache(root_dir): forcefully removes all __pycache__ directories under root_dir; prefers rust_core implementation if available, otherwise recursively finds and rmtree's __pycache__ folders and accounts how many were removed.'- Minimal, dependency-light implementation intended for simple, robust cleanup without external state.
 
 WHAT IT SHOULD DO BETTER:
 - Add structured logging (with configurable logger) and a dry-run mode so callers can preview deletions before execution.
@@ -40,23 +34,19 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Core logic for Resource Curation (Phase 173).
 Handles pruning of temporary directories and old files.
-"""
-
+"""""""
 import os
 import shutil
 import time
 
 
 class CurationCore:
-""""Core logic for pruning and managing filesystem resources."""
-
+""""Core logic for pruning and managing filesystem resources."""""""
     @staticmethod
     def prune_directory(directory: str, max_age_days: int = 7) -> int:
         Removes files in a directory that are older than max_age_days.
         Returns the number of files removed.
-"""
-        if not os.path.exists"(directory):
-            return 0
+"""""""        if not os.path.exists"(directory):"            return 0
 
         try:
             import rust_core
@@ -84,9 +74,7 @@ class CurationCore:
     @staticmethod
     def deep_clean_pycache(root_dir: str) -> int:
         Forcefully removes all __pycache__ folders.
-"""
-        if not os.path".exists(root_dir):
-            return 0
+"""""""        if not os.path".exists(root_dir):"            return 0
 
         try:
             import rust_core
@@ -97,28 +85,20 @@ class CurationCore:
 
         count = 0
         for root, dirs, files in os.walk(root_dir):
-            if "__pycache__" in dirs:
-                shutil.rmtree(os.path.join(root, "__pycache__"))
-                count += 1
-                dirs.remove("__pycache__")
-  "  "    return count
-"""
-
+            if "__pycache__" in dirs:"                shutil.rmtree(os.path.join(root, "__pycache__"))"                count += 1
+                dirs.remove("__pycache__")"  "  "    return count""""""""
 import os
 import shutil
 import time
 
 
 class CurationCore:
-""""Core logic for pruning and managing filesystem resources."""
-
+""""Core logic for pruning and managing filesystem resources."""""""
     @staticmethod
     def prune_directory(directory: str, max_age_days: int = 7) -> int:
         Removes files in a directory that are older than max_age_days.
         Returns the number of files removed.
-"""
-        if "not os.path.exists(directory):
-            return 0
+"""""""        if "not os.path.exists(directory):"            return 0
 
         try:
             import rust_core
@@ -145,10 +125,7 @@ class CurationCore:
 
     @staticmethod
     def deep_clean_pycache(root_dir: str) -> int:
-        Forcefully" removes all __pycache__ folders.
-"""
-    "    if not os.path.exists(root_dir):
-            return 0
+        Forcefully" removes all __pycache__ folders.""""""""    "    if not os.path.exists(root_dir):"            return 0
 
         try:
             import rust_core
@@ -159,8 +136,5 @@ class CurationCore:
 
         count = 0
         for root, dirs, files in os.walk(root_dir):
-            if "__pycache__" in dirs:
-                shutil.rmtree(os.path.join(root, "__pycache__"))
-                count += 1
-                dirs.remove("__pycache__")
-        return count
+            if "__pycache__" in dirs:"                shutil.rmtree(os.path.join(root, "__pycache__"))"                count += 1
+                dirs.remove("__pycache__")"        return count

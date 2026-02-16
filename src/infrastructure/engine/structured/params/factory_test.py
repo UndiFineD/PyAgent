@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
+# Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
+
 from .factory import (
     create_json_constraint,
     create_regex_constraint,
@@ -22,25 +22,33 @@ from .factory import (
 from .config import StructuredOutputConfig
 from .enums import StructuredOutputType
 
+
 def test_create_json_constraint():
+    """Test creating a JSON schema constraint using the factory function."""
     config = create_json_constraint()
     assert isinstance(config, StructuredOutputConfig)
     assert config.output_type == StructuredOutputType.JSON_SCHEMA
     assert config.json_schema["type"] == "object"
 
+
 def test_create_regex_constraint():
+    """Test creating a regex constraint using the factory function."""
     config = create_regex_constraint("^abc$")
     assert isinstance(config, StructuredOutputConfig)
     assert config.output_type == StructuredOutputType.REGEX
     assert config.regex == "^abc$"
 
+
 def test_create_choice_constraint():
+    """Test creating a choice constraint using the factory function."""
     config = create_choice_constraint(["a", "b", "c"])
     assert isinstance(config, StructuredOutputConfig)
     assert config.output_type == StructuredOutputType.CHOICE
     assert config.choices == ["a", "b", "c"]
 
+
 def test_combine_constraints():
+    """Test combining two constraints into a composite constraint."""
     c1 = create_json_constraint()
     c2 = create_regex_constraint("^abc$")
     combined = combine_constraints(c1, c2)

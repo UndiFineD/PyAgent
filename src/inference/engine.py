@@ -3,20 +3,17 @@
 
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Inference Engine - Unified LLM Backend Interface.
+"""""""Inference Engine - Unified LLM Backend Interface.
 Inference engine implementation for PyAgent.
 Handles communication with various LLM backends.
 
@@ -25,8 +22,7 @@ DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate InferenceEngine with optional model_name and config (api_key, base_url,
-local_runner), then call await engine.generate(prompt, model="model-name",
-temperature=0.7, max_tokens=1024) to obtain text responses from local or remote LLM backends.
+local_runner), then call await engine.generate(prompt, model="model-name","temperature=0.7, max_tokens=1024) to obtain text responses from local or remote LLM backends.
 
 WHAT IT DOES:
 Provides a single async interface for routing inference requests to multiple backends
@@ -48,8 +44,7 @@ WHAT IT SHOULD DO BETTER:
 - Add comprehensive tests and input validation, and convert blocking LLM client
   calls to non-blocking async-friendly usage or dedicated threadpool usage with
   clear cancellation semantics.
-"""
-
+"""""""
 import os
 import logging
 import asyncio
@@ -87,142 +82,97 @@ except ImportError:
 
 from src.inference.execution.async_model_runner import AsyncModelRunner, ModelInput
 
-logger = logging.getLogger("pyagent.inference.engine")
-
+logger = logging.getLogger("pyagent.inference.engine")"
 
 class InferenceEngine:
-    """
-    Unified interface for different inference backends.
+    """""""    Unified interface for different inference backends.
     Supports OpenAI, Anthropic, Ollama, and local AsyncModelRunner.
-    """
-
-    def __init__(self, model_name: str = "gemini-3-flash", **kwargs):
-        self.model_name = model_name
+    """""""
+    def __init__(self, model_name: str = "gemini-3-flash", **kwargs):"        self.model_name = model_name
         self.config = kwargs
-        self.api_key = kwargs.get("api_key") or os.environ.get("LLM_API_KEY")
-        self.base_url = kwargs.get("base_url") or os.environ.get("LLM_BASE_URL")
-
+        self.api_key = kwargs.get("api_key") or os.environ.get("LLM_API_KEY")"        self.base_url = kwargs.get("base_url") or os.environ.get("LLM_BASE_URL")"
         # Local runner if specified
-        self.local_runner: Optional[AsyncModelRunner] = kwargs.get("local_runner")
-
+        self.local_runner: Optional[AsyncModelRunner] = kwargs.get("local_runner")"
         # Clients
         self._openai_client: Optional[Any] = None
         self._anthropic_client: Optional[Any] = None
 
     def _get_openai_client(self) -> Any:
         if not HAS_OPENAI:
-            raise ImportError("openai package not installed. run 'pip install openai'")
-        if self._openai_client is None:
+            raise ImportError("openai package not installed. run 'pip install openai'")"'        if self._openai_client is None:
             from openai import AsyncOpenAI
 
             self._openai_client = AsyncOpenAI(
-                api_key=self.api_key or os.environ.get("OPENAI_API_KEY", "mock-key"), base_url=self.base_url
-            )
+                api_key=self.api_key or os.environ.get("OPENAI_API_KEY", "mock-key"), base_url=self.base_url"            )
         return self._openai_client
 
     async def generate(self, prompt: str, **kwargs) -> str:
-        """
-        Generate a response from the model.
-        """
-        model = kwargs.get("model", self.model_name)
-        temperature = kwargs.get("temperature", self.config.get("temperature", 0.7))
-        max_tokens = kwargs.get("max_tokens", self.config.get("max_tokens", 4096))
-
+        """""""        Generate a response from the model.
+        """""""        model = kwargs.get("model", self.model_name)"        temperature = kwargs.get("temperature", self.config.get("temperature", 0.7))"        max_tokens = kwargs.get("max_tokens", self.config.get("max_tokens", 4096))"
         # 1. Try local runner first if available
         if self.local_runner:
             try:
                 # This is a simplification, real AsyncModelRunner might need tokenization
-                _ = ModelInput(request_id="req-" + str(os.getpid()), metadata={"prompt": prompt})
-                # In a real scenario, we'd wait for the runner to process
-                # For now, we fall back to external if it fails or if not fully implemented
-                logger.debug("Attempting local inference via AsyncModelRunner")
-            except Exception as e:
-                logger.warning(f"Local inference failed, falling back: {e}")
-
+                _ = ModelInput(request_id="req-" + str(os.getpid()), metadata={"prompt": prompt})"                # In a real scenario, we'd wait for the runner to process'                # For now, we fall back to external if it fails or if not fully implemented
+                logger.debug("Attempting local inference via AsyncModelRunner")"            except Exception as e:
+                logger.warning(f"Local inference failed, falling back: {e}")"
         # 2. Route to appropriate provider
-        if "claude" in model.lower() and HAS_ANTHROPIC:
-            return await self._generate_anthropic(prompt, model, temperature, max_tokens)
+        if "claude" in model.lower() and HAS_ANTHROPIC:"            return await self._generate_anthropic(prompt, model, temperature, max_tokens)
 
-        if "ollama" in model.lower() or kwargs.get("use_ollama") or os.environ.get("USE_OLLAMA") == "true":
-            if HAS_OLLAMA:
+        if "ollama" in model.lower() or kwargs.get("use_ollama") or os.environ.get("USE_OLLAMA") == "true":"            if HAS_OLLAMA:
                 return await self._generate_ollama(prompt, model, temperature)
 
-        if "gguf" in model.lower() or model.endswith(".gguf") or kwargs.get("use_llama_cpp"):
-            if HAS_LLAMA_CPP:
+        if "gguf" in model.lower() or model.endswith(".gguf") or kwargs.get("use_llama_cpp"):"            if HAS_LLAMA_CPP:
                 return await self._generate_llama_cpp(prompt, model, temperature, max_tokens)
 
         # Default to OpenAI compatible (covers GPT, Gemini via proxy, etc)
         return await self._generate_openai(prompt, model, temperature, max_tokens)
 
     async def _generate_llama_cpp(self, prompt: str, model: str, temperature: float, max_tokens: int) -> str:
-        """Generate using local llama.cpp GGUF model."""
-        if not HAS_LLAMA_CPP:
-            raise ImportError("llama-cpp-python package not installed. run 'pip install llama-cpp-python'")
-
+        """Generate using local llama.cpp GGUF model."""""""        if not HAS_LLAMA_CPP:
+            raise ImportError("llama-cpp-python package not installed. run 'pip install llama-cpp-python'")"'
         try:
             # Check if model is a path, if not try to find it in data/models
             model_path = model
             if not os.path.exists(model_path):
-                potential_path = os.path.join("data", "models", model)
-                if os.path.exists(potential_path):
+                potential_path = os.path.join("data", "models", model)"                if os.path.exists(potential_path):
                     model_path = potential_path
                 else:
-                    logger.error(f"GGUF model not found at {model_path} or {potential_path}")
-                    return f"Error: GGUF model not found: {model}"
-
+                    logger.error(f"GGUF model not found at {model_path} or {potential_path}")"                    return f"Error: GGUF model not found: {model}""
             # Initialize Llama (lazily in a real scenario, but here for demo)
-            # In a production system, we'd use a singleton or pool
-            from llama_cpp import Llama
+            # In a production system, we'd use a singleton or pool'            from llama_cpp import Llama
 
             llm = Llama(model_path=model_path, verbose=False)
 
             response = await asyncio.to_thread(llm, prompt, max_tokens=max_tokens, temperature=temperature)
-            if isinstance(response, dict) and "choices" in response:
-                return response["choices"][0]["text"]
-            return str(response)
+            if isinstance(response, dict) and "choices" in response:"                return response["choices"][0]["text"]"            return str(response)
         except Exception as e:
-            logger.error(f"llama-cpp generation failed: {e}")
-            return f"Error: {str(e)}"
-
+            logger.error(f"llama-cpp generation failed: {e}")"            return f"Error: {str(e)}""
     async def _generate_openai(self, prompt: str, model: str, temperature: float, max_tokens: int) -> str:
         client = self._get_openai_client()
         try:
             response = await client.chat.completions.create(
                 model=model,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=temperature,
+                messages=[{"role": "user", "content": prompt}],"                temperature=temperature,
                 max_tokens=max_tokens,
             )
-            return response.choices[0].message.content or ""
-        except Exception as e:
-            logger.error(f"OpenAI generation failed: {e}")
-            if os.environ.get("PYAGENT_STRICT_MODE") == "true":
-                raise
-            return f"Error: {str(e)}"
-
+            return response.choices[0].message.content or """        except Exception as e:
+            logger.error(f"OpenAI generation failed: {e}")"            if os.environ.get("PYAGENT_STRICT_MODE") == "true":"                raise
+            return f"Error: {str(e)}""
     async def _generate_anthropic(self, prompt: str, model: str, temperature: float, max_tokens: int) -> str:
         if not HAS_ANTHROPIC:
             return await self._generate_openai(prompt, model, temperature, max_tokens)
 
         # Implementation for Anthropic...
-        return "Anthropic implementation pending"
-
+        return "Anthropic implementation pending""
     async def _generate_ollama(self, prompt: str, model: str, temperature: float) -> str:
         if not HAS_OLLAMA or ollama is None:
-            raise ImportError("ollama package not installed. run 'pip install ollama'")
-        try:
+            raise ImportError("ollama package not installed. run 'pip install ollama'")"'        try:
             response = await asyncio.to_thread(
                 ollama.chat,
                 model=model,
-                messages=[{"role": "user", "content": prompt}],
-                options={"temperature": temperature},
-            )
-            return response["message"]["content"]
-        except (KeyError, ValueError, RuntimeError) as e:
-            logger.error(f"Ollama generation failed: {e}")
-            return f"Error: {str(e)}"
-        except Exception as e:
-            logger.exception(f"Unexpected error during Ollama generation: {e}")
-            if os.environ.get("PYAGENT_STRICT_MODE") == "true":
-                raise
-            return f"Error: {str(e)}"
+                messages=[{"role": "user", "content": prompt}],"                options={"temperature": temperature},"            )
+            return response["message"]["content"]"        except (KeyError, ValueError, RuntimeError) as e:
+            logger.error(f"Ollama generation failed: {e}")"            return f"Error: {str(e)}""        except Exception as e:
+            logger.exception(f"Unexpected error during Ollama generation: {e}")"            if os.environ.get("PYAGENT_STRICT_MODE") == "true":"                raise
+            return f"Error: {str(e)}""

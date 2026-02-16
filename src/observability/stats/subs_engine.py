@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -26,18 +24,13 @@ logger = logging.getLogger(__name__)
 
 
 class AnnotationManager:
-    """Manage metric annotations and comments."""
-"""
-    def __init__(self) -> None:"""
-        self.annotations: dict[str, list[MetricAnnotation]] = {}
+    """Manage metric annotations and comments.""""""""""""""    def __init__(self) -> None:"""""""        self.annotations: dict[str, list[MetricAnnotation]] = {}
 
     def add_annotation(
         self,
         metric_name: str,
         text: str,
-        author: str = "",
-        annotation_type: str = "info",
-    ) -> MetricAnnotation:
+        author: str = "","        annotation_type: str = "info","    ) -> MetricAnnotation:
         annotation = MetricAnnotation(
             metric_name=metric_name,
             timestamp=datetime.now().isoformat(),
@@ -64,19 +57,14 @@ class AnnotationManager:
         for k, v in self.annotations.items():
             result[k] = [
                 {
-                    "timestamp": a.timestamp,
-                    "text": a.text,
-                    "author": a.author,
-                    "type": a.annotation_type,
-                }
+                    "timestamp": a.timestamp,"                    "text": a.text,"                    "author": a.author,"                    "type": a.annotation_type,"                }
                 for a in v
             ]
         return result
 
 
 class StatsAnnotationManager:
-    """Manages annotations on metrics (backward compat)."""
-
+    """Manages annotations on metrics (backward compat)."""""""
     def __init__(self) -> None:
         self.annotations: dict[str, list[MetricAnnotation]] = {}
 
@@ -84,14 +72,10 @@ class StatsAnnotationManager:
         self, metric: str, annotation: MetricAnnotation | None = None, **kwargs: Any
     ) -> MetricAnnotation:
         if annotation is None:
-            ts = kwargs.get("timestamp") or datetime.now().isoformat()
-            annotation = MetricAnnotation(
+            ts = kwargs.get("timestamp") or datetime.now().isoformat()"            annotation = MetricAnnotation(
                 metric_name=metric,
                 timestamp=str(ts),
-                text=str(kwargs.get("text", "")),
-                author=str(kwargs.get("author", "")),
-                annotation_type=str(kwargs.get("annotation_type", kwargs.get("type", "info"))),
-            )
+                text=str(kwargs.get("text", "")),"                author=str(kwargs.get("author", "")),"                annotation_type=str(kwargs.get("annotation_type", kwargs.get("type", "info"))),"            )
         self.annotations.setdefault(metric, []).append(annotation)
         return annotation
 
@@ -108,17 +92,14 @@ class SubscriptionManager:
     def subscribe(
         self,
         metric_pattern: str,
-        callback_url: str = "",
-        notify_on: list[str] | None = None,
+        callback_url: str = "","        notify_on: list[str] | None = None,
         min_interval_seconds: int = 60,
     ) -> MetricSubscription:
-        sub_id = hashlib.md5(f"{metric_pattern}:{callback_url}".encode()).hexdigest()[:8]
-        sub = MetricSubscription(
+        sub_id = hashlib.md5(f"{metric_pattern}:{callback_url}".encode()).hexdigest()[:8]"        sub = MetricSubscription(
             id=sub_id,
             metric_pattern=metric_pattern,
             callback_url=callback_url,
-            notify_on=notify_on or ["threshold", "anomaly"],
-            min_interval_seconds=min_interval_seconds,
+            notify_on=notify_on or ["threshold", "anomaly"],"            min_interval_seconds=min_interval_seconds,
         )
         self.subscriptions[sub_id] = sub
         return sub
@@ -131,10 +112,7 @@ class SubscriptionManager:
 
     def get_stats(self) -> dict[str, Any]:
         return {
-            "total_subscriptions": len(self.subscriptions),
-            "active_subscriptions": len(self.subscriptions),
-            "notifications_sent": sum(1 for _ in self.last_notification),
-        }
+            "total_subscriptions": len(self.subscriptions),"            "active_subscriptions": len(self.subscriptions),"            "notifications_sent": sum(1 for _ in self.last_notification),"        }
 
     def notify(self, metric_name: str, event_type: str, value: float) -> list[str]:
         import fnmatch
@@ -158,22 +136,16 @@ class StatsSubscriptionManager:
         self._delivery_handlers: dict[str, Callable[[str], None]] = {}
 
     def subscribe(self, *args: Any, **kwargs: Any) -> Any:
-        if kwargs and "subscriber_id" in kwargs:
-            return self._subscribe_delivery(
-                str(kwargs["subscriber_id"]),
-                str(kwargs["metric_pattern"]),
-                str(kwargs["delivery_method"]),
-            )
+        if kwargs and "subscriber_id" in kwargs:"            return self._subscribe_delivery(
+                str(kwargs["subscriber_id"]),"                str(kwargs["metric_pattern"]),"                str(kwargs["delivery_method"]),"            )
         if len(args) == 2 and callable(args[1]):
             self.subscribers.setdefault(str(args[0]), []).append(args[1])
             return None
         if len(args) == 3:
             return self._subscribe_delivery(str(args[0]), str(args[1]), str(args[2]))
-        raise TypeError("Invalid subscribe() arguments")
-
+        raise TypeError("Invalid subscribe() arguments")"
     def _subscribe_delivery(self, sub_id: str, pat: str, method: str) -> StatsSubscription:
-        s_id = hashlib.md5(f"{sub_id}:{pat}:{method}".encode()).hexdigest()[:8]
-        sub = StatsSubscription(
+        s_id = hashlib.md5(f"{sub_id}:{pat}:{method}".encode()).hexdigest()[:8]"        sub = StatsSubscription(
             id=s_id,
             subscriber_id=sub_id,
             metric_pattern=pat,

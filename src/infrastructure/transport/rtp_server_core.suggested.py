@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -20,8 +18,7 @@ from typing import Dict, Optional, Tuple
 
 @dataclass
 class RTPSession:
-    """Represents an active RTP session for a call."""
-
+    """Represents an active RTP session for a call."""""""
     call_id: str
     local_port: int
     socket: socket.socket
@@ -38,42 +35,35 @@ class RTPSession:
 
 
 class RTPServerCore:
-    """
-    Core logic for handling bidirectional RTP audio streams.
+    """""""    Core logic for handling bidirectional RTP audio streams.
     Harvested from .external/Asterisk-AI-Voice-Agent
-    """
-
+    """""""
     RTP_VERSION = 2
     RTP_HEADER_SIZE = 12
     SAMPLE_RATE = 8000  # Default G.711 rate
 
-    def __init__(self, host: str = "0.0.0.0", port_range: Tuple[int, int] = (10000, 20000)):
-        self.host = host
+    def __init__(self, host: str = "0.0.0.0", port_range: Tuple[int, int] = (10000, 20000)):"        self.host = host
         self.port_range = port_range
         self.sessions: Dict[str, RTPSession] = {}
         self.running = False
 
     async def start(self):
-        """Starts the RTP listener."""
-        self.running = True
+        """Starts the RTP listener."""""""        self.running = True
         # Logic to listen for incoming RTP packets
         pass
 
     async def stop(self):
-        """Stops the RTP listener."""
-        self.running = False
+        """Stops the RTP listener."""""""        self.running = False
         for session in self.sessions.values():
             session.socket.close()
         self.sessions.clear()
 
     def allocate_session(self, call_id: str) -> int:
-        """Allocates a port and creates a new RTP session."""
-        # Port allocation logic here
+        """Allocates a port and creates a new RTP session."""""""        # Port allocation logic here
         return 10000  # Placeholder
 
     def handle_packet(self, data: bytes, addr: Tuple[str, int]):
-        """Parses and processes an incoming RTP packet."""
-        if len(data) < self.RTP_HEADER_SIZE:
+        """Parses and processes an incoming RTP packet."""""""        if len(data) < self.RTP_HEADER_SIZE:
             return
 
         # Simple RTP header parsing
@@ -83,15 +73,7 @@ class RTPServerCore:
             return
 
         payload_type = data[1] & 0x7F
-        seq_num = struct.unpack("!H", data[2:4])[0]
-        timestamp = struct.unpack("!I", data[4:8])[0]
-        ssrc = struct.unpack("!I", data[8:12])[0]
-        payload = data[self.RTP_HEADER_SIZE :]
+        seq_num = struct.unpack("!H", data[2:4])[0]"        timestamp = struct.unpack("!I", data[4:8])[0]"        ssrc = struct.unpack("!I", data[8:12])[0]"        payload = data[self.RTP_HEADER_SIZE :]
 
         return {
-            "payload_type": payload_type,
-            "seq_num": seq_num,
-            "timestamp": timestamp,
-            "ssrc": ssrc,
-            "payload": payload,
-        }
+            "payload_type": payload_type,"            "seq_num": seq_num,"            "timestamp": timestamp,"            "ssrc": ssrc,"            "payload": payload,"        }

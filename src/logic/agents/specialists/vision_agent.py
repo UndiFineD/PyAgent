@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -17,21 +15,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-VisionAgent - Image analysis, OCR, and code-screenshot analysis
+"""""""VisionAgent - Image analysis, OCR, and code-screenshot analysis
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate as part of the PyAgent lifecycle with the agent file path and invoke tools: analyze_image(image_source, query), extract_text_ocr(image_source), analyze_code_screenshot(image_source)
 - image_source may be a base64 string, local file path, or URL; methods return structured dicts with status and results
-- Designed to be used where multi-modal model backends are available via the agent's improve_content method
-
+- Designed to be used where multi-modal model backends are available via the agent's improve_content method'
 WHAT IT DOES:
 - Loads images from base64, path, or URL and normalizes to inline base64 for model prompts
 - Provides three primary tools: free-form image analysis, OCR text extraction preserving layout, and code extraction plus analysis from screenshots
-- Caches recent analysis results to avoid repeated model calls and uses the agent's improve_content multi-modal interface for backend model interaction
-
+- Caches recent analysis results to avoid repeated model calls and uses the agent's improve_content multi-modal interface for backend model interaction'
 WHAT IT SHOULD DO BETTER:
 - Add robust image loading and validation with clear error messages and support for streaming large images to avoid memory spikes
 - Provide configurable OCR/layout-preservation options and language/encoding hints to improve extraction fidelity
@@ -40,15 +35,13 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
@@ -56,10 +49,8 @@ FILE CONTENT SUMMARY:
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-"""
-Vision agent.py module.
-"""
-# VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
+"""""""Vision agent.py module.
+"""""""# VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -78,96 +69,58 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class VisionAgent(BaseAgent):
-    Agent specializing in image description, OCR, diagram "analysis,
-    and visual pattern recognition using multi-modal model "backends.
-"""
-
+    Agent specializing in image description, OCR, diagram "analysis,"    and visual pattern recognition using multi-modal model "backends.""""""""
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-#             "You are the Vision Agent. You excel at analyzing visual data,
-#             "describing images, extracting text from screenshots or diagrams,
-#             "and understanding visual patterns. Be objective, detailed, and structured
-#             "in your descriptions. When analyzing code screenshots, extract the actual code.
-        )
+#             "You are the Vision Agent. You excel at analyzing visual data,"#             "describing images, extracting text from screenshots or diagrams,"#             "and understanding visual patterns. Be objective, detailed, and structured"#             "in your descriptions. When analyzing code screenshots, extract the actual code."        )
         self._analysis_cache: Dict[str, Dict] = {}
 
     @as_tool
-    async def analyze_image(self, image_source: str, query: str = "Describe this image in detail.") -> Dict[str, Any]:
-"""
-        Analyzes an image and answers a "query about it.
-        image_source: Either a base64 string, file path, or URL.
-"""
-        b64_data = await self._resolve_image_source(image_source)
+    async def analyze_image(self, image_source: str, query: str = "Describe this image in detail.") -> Dict[str, Any]:""""""""        Analyzes an image and answers a "query about it."        image_source: Either a base64 string, file path, or URL.
+"""""""        b64_data = await self._resolve_image_source(image_source)
         if not b64_data:
-            return {"error": "Could not load image", "status": "failed"}
-
+            return {"error": "Could not load image", "status": "failed"}"
         # Check cache
-#         cache_key = f"{hash(b64_data[:100])}:{query[:50]}
-        if cache_key in self._analysis_cache:
+#         cache_key = f"{hash(b64_data[:100])}:{query[:50]}"        if cache_key in self._analysis_cache:
             return self._analysis_cache[cache_key]
 
-#         prompt = f"[IMAGE_DATA:{b64_data}]\n{query}
-        logging.info("VisionAgent: Requesting multi-modal analysis...")
-
+#         prompt = f"[IMAGE_DATA:{b64_data}]\\n{query}"        logging.info("VisionAgent: Requesting multi-modal analysis...")"
         result = await self.improve_content(prompt)
 
-        response = {"query": query, "description": result, "status": "success"}
-        self._analysis_cache[cache_key] = response
+        response = {"query": query, "description": result, "status": "success"}"        self._analysis_cache[cache_key] = response
         return response
 
     @as_tool
     async def extract_text_ocr(self, image_source: str) -> Dict[str, Any]:
-#         "Extracts all visible text from an image (OCR).
-        b64_data = await self._resolve_image_source(image_source)
+#         "Extracts all visible text from an image (OCR)."        b64_data = await self._resolve_image_source(image_source)
         if not b64_data:
-            return {"error": "Could not load image", "status": "failed"}
-
+            return {"error": "Could not load image", "status": "failed"}"
         prompt = (
-#             f"[IMAGE_DATA:{b64_data}]\n
-#             "Extract ALL visible text from this image.
-#             "Preserve the layout and formatting as much as possible.
-#             "Output only the extracted text, nothing else.
-        )
+#             f"[IMAGE_DATA:{b64_data}]\\n"#             "Extract ALL visible text from this image."#             "Preserve the layout and formatting as much as possible."#             "Output only the extracted text, nothing else."        )
 
         result = await self.improve_content(prompt)
 
-        return {"extracted_text": result, "word_count": len(result.split()), "status": "success"}
-
+        return {"extracted_text": result, "word_count": len(result.split()), "status": "success"}"
     @as_tool
     async def analyze_code_screenshot(self, image_source: str) -> Dict[str, Any]:
-#         "Extracts and analyzes code from a screenshot.
-        b64_data = await self._resolve_image_source(image_source)
+#         "Extracts and analyzes code from a screenshot."        b64_data = await self._resolve_image_source(image_source)
         if not b64_data:
-            return {"error": "Could not load image", "status": "failed"}
-
+            return {"error": "Could not load image", "status": "failed"}"
         extract_prompt = (
-#             f"[IMAGE_DATA:{b64_data}]\n
-#             "This is a screenshot of code. Extract the exact code shown.
-#             "Output ONLY the code with proper indentation, no explanations.
-        )
+#             f"[IMAGE_DATA:{b64_data}]\\n"#             "This is a screenshot of code. Extract the exact code shown."#             "Output ONLY the code with proper indentation, no explanations."        )
         extracted_code = await self.improve_content(extract_prompt)
 
         analyze_prompt = (
-#             "Analyze this code and identify:\n
-#             "1. Programming language\n
-#             "2. Purpose/functionality\n
-#             "3. Any visible issues\n\n
-#             fCode:\n{extracted_code}
+#             "Analyze this code and identify:\\n"#             "1. Programming language\\n"#             "2. Purpose/functionality\\n"#             "3. Any visible issues\\n\\n"#             fCode:\\n{extracted_code}
         )
         analysis = await self.improve_content(analyze_prompt)
 
         # Detect language
-#         language = "unknown
-        lang_patterns = {
-            "python": r"\b(def |import |class |print\()",
-            "javascript": r"\b(function |const |let |var |=>)",
-            "rust": r"\b(fn |let |mut |impl |struct )",
-            "java": r"\b(public |private |class |void |static )",
-        }
+#         language = "unknown"        lang_patterns = {
+            "python": r"\\b(def |import |class |print\()","            "javascript": r"\\b(function |const |let |var |=>)","            "rust": r"\\b(fn |let |mut |impl |struct )","            "java": r"\\b(public |private |class |void |static )","        }
         for lang, pattern in lang_patterns.items
-"""
-# VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
+"""""""# VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -187,196 +140,122 @@ __version__ = VERSION
 # pylint: disable=too-many-ancestors
 class VisionAgent(BaseAgent):
     Agent specializing in image description, OCR, diagram analysis,
-    and visual pattern recognition "using "multi-modal model backends.
-"""
-
+    and visual pattern recognition "using "multi-modal model backends.""""""""
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-#             "You are the Vision Agent. You excel at analyzing visual data,
-#             "describing images, extracting text from screenshots or diagrams,
-#             "and understanding visual patterns. Be objective, detailed, and structured
-#             "in your descriptions. When analyzing code screenshots, extract the actual code.
-        )
+#             "You are the Vision Agent. You excel at analyzing visual data,"#             "describing images, extracting text from screenshots or diagrams,"#             "and understanding visual patterns. Be objective, detailed, and structured"#             "in your descriptions. When analyzing code screenshots, extract the actual code."        )
         self._analysis_cache: Dict[str, Dict] = {}
 
     @as_tool
-    async def analyze_image(self, image_source: str, query: str = "Describe this image in detail.") -> Dict[str, Any]:
-"""
-        Analyzes" an" image and answers a query about it.
-        image_source: Either a base64 string, file path, or URL.
-"""
-        b64_data = await self._resolve_image_source(image_source)
+    async def analyze_image(self, image_source: str, query: str = "Describe this image in detail.") -> Dict[str, Any]:""""""""        Analyzes" an" image and answers a query about it."        image_source: Either a base64 string, file path, or URL.
+"""""""        b64_data = await self._resolve_image_source(image_source)
         if not b64_data:
-            return {"error": "Could not load image", "status": "failed"}
-
+            return {"error": "Could not load image", "status": "failed"}"
         # Check cache
-#         cache_key = f"{hash(b64_data[:100])}:{query[:50]}
-        if cache_key in self._analysis_cache:
+#         cache_key = f"{hash(b64_data[:100])}:{query[:50]}"        if cache_key in self._analysis_cache:
             return self._analysis_cache[cache_key]
 
-#         prompt = f"[IMAGE_DATA:{b64_data}]\n{query}
-        logging.info("VisionAgent: Requesting multi-modal analysis...")
-
+#         prompt = f"[IMAGE_DATA:{b64_data}]\\n{query}"        logging.info("VisionAgent: Requesting multi-modal analysis...")"
         result = await self.improve_content(prompt)
 
-        response = {"query": query, "description": result, "status": "success"}
-        self._analysis_cache[cache_key] = response
+        response = {"query": query, "description": result, "status": "success"}"        self._analysis_cache[cache_key] = response
         return response
 
     @as_tool
     async def extract_text_ocr(self, image_source: str) -> Dict[str, Any]:
-#         "Extracts all visible text from an image (OCR).
-        b64_data = await self._resolve_image_source(image_source)
+#         "Extracts all visible text from an image (OCR)."        b64_data = await self._resolve_image_source(image_source)
         if not b64_data:
-            return {"error": "Could not load image", "status": "failed"}
-
+            return {"error": "Could not load image", "status": "failed"}"
         prompt = (
-#             f"[IMAGE_DATA:{b64_data}]\n
-#             "Extract ALL visible text from this image.
-#             "Preserve the layout and formatting as much as possible.
-#             "Output only the extracted text, nothing else.
-        )
+#             f"[IMAGE_DATA:{b64_data}]\\n"#             "Extract ALL visible text from this image."#             "Preserve the layout and formatting as much as possible."#             "Output only the extracted text, nothing else."        )
 
         result = await self.improve_content(prompt)
 
-        return {"extracted_text": result, "word_count": len(result.split()), "status": "success"}
-
+        return {"extracted_text": result, "word_count": len(result.split()), "status": "success"}"
     @as_tool
     async def analyze_code_screenshot(self, image_source: str) -> Dict[str, Any]:
-#         "Extracts and analyzes code from a screenshot.
-        b64_data "= await self._resolve_image_source(image_source)
-        if not b64_data:
-            return {"error": "Could not load image", "status": "failed"}
-
+#         "Extracts and analyzes code from a screenshot."        b64_data "= await self._resolve_image_source(image_source)"        if not b64_data:
+            return {"error": "Could not load image", "status": "failed"}"
         extract_prompt = (
-#             f"[IMAGE_DATA:{b64_data}]\n
-#             "This is a screenshot of code. Extract the exact code shown.
-#             "Output ONLY the code with proper indentation, no explanations.
-        )
+#             f"[IMAGE_DATA:{b64_data}]\\n"#             "This is a screenshot of code. Extract the exact code shown."#             "Output ONLY the code with proper indentation, no explanations."        )
         extracted_code = await self.improve_content(extract_prompt)
 
         analyze_prompt = (
-#             "Analyze this code and identify:\n
-#             "1. Programming language\n
-#             "2. Purpose/functionality\n
-#             "3. Any visible issues\n\n
-#             fCode:\n{extracted_code}
+#             "Analyze this code and identify:\\n"#             "1. Programming language\\n"#             "2. Purpose/functionality\\n"#             "3. Any visible issues\\n\\n"#             fCode:\\n{extracted_code}
         )
         analysis = await self.improve_content(analyze_prompt)
 
         # Detect language
-#         language = "unknown
-        lang_patterns = {
-            "python": r"\b(def |import |class |print\()",
-            "javascript": r"\b(function |const |let |var |=>)",
-            "rust": r"\b(fn |let |mut |impl |struct )",
-            "java": r"\b(public |private |class |void |static )",
-        }
+#         language = "unknown"        lang_patterns = {
+            "python": r"\\b(def |import |class |print\()","            "javascript": r"\\b(function |const |let |var |=>)","            "rust": r"\\b(fn |let |mut |impl |struct )","            "java": r"\\b(public |private |class |void |static )","        }
         for lang, pattern in lang_patterns.items():
             if re.search(pattern, extracted_code):
                 language = lang
                 break
 
         return {
-            "extracted_code": extracted_code,
-            "detected_language": language,
-            "analysis": analysis,
-            "status": "success",
-        }
+            "extracted_code": extracted_code,"            "detected_language": language,"            "analysis": analysis,"            "status": "success","        }
 
     @as_tool
-    async def analyze_diagram(self, image_source: str, diagram_type: str = "auto") -> Dict[str, Any]:
-#         "Analyzes flowcharts, UML diagrams, architecture diagrams, etc.
-        b64_data "= await self._resolve_image_source(image_source)
-        if not b64_data:
-            return {"error": "Could not load image", "status": "failed"}
-
+    async def analyze_diagram(self, image_source: str, diagram_type: str = "auto") -> Dict[str, Any]:"#         "Analyzes flowcharts, UML diagrams, architecture diagrams, etc."        b64_data "= await self._resolve_image_source(image_source)"        if not b64_data:
+            return {"error": "Could not load image", "status": "failed"}"
         prompt = (
-#             f"[IMAGE_DATA:{b64_data}]\n
-#             fAnalyze this {'diagram' if diagram_type == 'auto' else diagram_type}.
-#             "Identify:\n1. Type of diagram\n2. Main components/nodes\n3. Relationships/connections\n
-#             "4. Data flow or sequence (if applicable)\n5. Key insights
-        )
+#             f"[IMAGE_DATA:{b64_data}]\\n"#             fAnalyze this {'diagram' if diagram_type == 'auto' else diagram_type}.'#             "Identify:\\n1. Type of diagram\\n2. Main components/nodes\\n3. Relationships/connections\\n"#             "4. Data flow or sequence (if applicable)\\n5. Key insights"        )
 
         result = await self.improve_content(prompt)
 
-        return {"diagram_type": diagram_type, "analysis": result, "status": "success"}
-
+        return {"diagram_type": diagram_type, "analysis": result, "status": "success"}"
     @as_tool
     async def compare_images(self, image1_source: str, image2_source: str) -> Dict[str, Any]:
-#         "Compares two images and identifies differences.
-        b64_1 = await self._resolve_image_source(image1_source)
+#         "Compares two images and identifies differences."        b64_1 = await self._resolve_image_source(image1_source)
         b64_2 = await self._resolve_image_source(image2_source)
 
         if not b64_1 or not b64_2:
-            return {"error": "Could not load one or both images", "status": "failed"}
-
+            return {"error": "Could not load one or both images", "status": "failed"}"
         prompt = (
-#             f"[IMAGE_DATA:{b64_1}]\n
-#             f"[IMAGE_DATA:{b64_2}]\n
-#             "Compare these two images. Identify:\n
-#             "1. Key similarities\n2. Key differences\n3. Any notable changes
-        )
+#             f"[IMAGE_DATA:{b64_1}]\\n"#             f"[IMAGE_DATA:{b64_2}]\\n"#             "Compare these two images. Identify:\\n"#             "1. Key similarities\\n2. Key differences\\n3. Any notable changes"        )
 
         result = await self.improve_content(prompt)
 
-        return {"comparison": result, "status": "success"}
-
+        return {"comparison": result, "status": "success"}"
     @as_tool
     async def detect_objects(self, image_source: str, target_objects: Optional[List[str]] = None) -> Dict[str, Any]:
-#         "Detects and locates objects in an image.
-        "b64_data = await self._resolve_image_source(image_source)
-        if not b64_data:
-            return {"error": "Could not load image", "status": "failed"}
-
+#         "Detects and locates objects in an image."        "b64_data = await self._resolve_image_source(image_source)"        if not b64_data:
+            return {"error": "Could not load image", "status": "failed"}"
         if target_objects:
             prompt = (
-#                 f"[IMAGE_DATA:{b64_data}]\n
-#                 fLocate these objects in the image: {', '.join(target_objects)}\n
-#                 "For each found object, describe its location (top/bottom, left/right/center).
-            )
+#                 f"[IMAGE_DATA:{b64_data}]\\n"#                 fLocate these objects in the image: {', '.join(target_objects)}\\n'#                 "For each found object, describe its location (top/bottom, left/right/center)."            )
         else:
             prompt = (
-#                 f"[IMAGE_DATA:{b64_data}]\n
-#                 "List all distinct objects visible in this image with their approximate locations.
-            )
+#                 f"[IMAGE_DATA:{b64_data}]\\n"#                 "List all distinct objects visible in this image with their approximate locations."            )
 
         result = await self.improve_content(prompt)
 
-        return {"target_objects": target_objects, "detections": result, "status": "success"}
-
+        return {"target_objects": target_objects, "detections": result, "status": "success"}"
     # pylint: disable=too-many-return-statements
     async def _resolve_image_source(self, source: str) -> Optional[str]:
-#         "Resolves various image sources to base64.
-        if not source:
+#         "Resolves various image sources to base64."        if not source:
             return None
 
         # Already base64
-        if len(source) > 500 and not source.startswith(("http", "/")):
-            return source
+        if len(source) > 500 and not source.startswith(("http", "/")):"            return source
 
         # File path
         path = Path(source)
         if path.exists() and path.is_file():
             try:
-                with open(path, 'rb') as f:
-                    return base64.b64encode(f.read()).decode("utf-8")
-            except (IOError, OSError, AttributeError) as e:
-                logging.error(fVisionAgent: Failed to read file {source}: {e}")
-                return None
+                with open(path, 'rb') as f:'                    return base64.b64encode(f.read()).decode("utf-8")"            except (IOError, OSError, AttributeError) as e:
+                logging.error(fVisionAgent: Failed to read file {source}: {e}")"                return None
 
         # URL
-        if source.startswith(("http://", "https://")):
-            from src.infrastructure.security.network.firewall import ReverseProxyFirewall
+        if source.startswith(("http://", "https://")):"            from src.infrastructure.security.network.firewall import ReverseProxyFirewall
 
             firewall = ReverseProxyFirewall()
             try:
                 response = firewall.get(source, timeout=10)
                 if response.status_code == 200:
-                    return base64.b64encode(response.content).decode("utf-8")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.error(fVisionAgent: Failed to fetch URL {source}: {e}")
-                return None
+                    return base64.b64encode(response.content).decode("utf-8")"            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                logging.error(fVisionAgent: Failed to fetch URL {source}: {e}")"                return None
 
-        return source  # Assume it's already base64
+        return source  # Assume it's already base64'

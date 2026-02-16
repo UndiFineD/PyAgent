@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Models and configuration for LoRA adapters.
-"""
-
+"""""""Models and configuration for LoRA adapters.
+"""""""
 import hashlib
 import logging
 import time
@@ -38,8 +34,7 @@ logger = logging.getLogger(__name__)
 
 
 class AdapterState(Enum):
-    """State of a LoRA adapter."""
-
+    """State of a LoRA adapter."""""""
     UNLOADED = auto()
     LOADING = auto()
     LOADED = auto()
@@ -49,16 +44,14 @@ class AdapterState(Enum):
 
 @dataclass
 class LoraConfig:
-    """Configuration for LoRA loading and management."""
-
+    """Configuration for LoRA loading and management."""""""
     # Model settings
     max_lora_rank: int = 64
     max_loras: int = 4  # Max concurrent adapters
     max_cpu_loras: Optional[int] = None
 
     # Memory management
-    lora_dtype: str = "auto"
-    enable_lora_bias: bool = False
+    lora_dtype: str = "auto""    enable_lora_bias: bool = False
 
     # Caching
     cache_enabled: bool = True
@@ -71,10 +64,8 @@ class LoraConfig:
 
 @dataclass
 class LoraAdapter:
-    """
-    Represents a LoRA adapter.
-    """
-
+    """""""    Represents a LoRA adapter.
+    """""""
     adapter_id: int
     name: str
     path: str
@@ -96,17 +87,13 @@ class LoraAdapter:
 
     @property
     def hash(self) -> str:
-        """Get unique hash for this adapter."""
-        if self._hash is None:
-            content = f"{self.name}:{self.path}:{self.rank}:{self.alpha}"
-            self._hash = hashlib.md5(content.encode()).hexdigest()[:12]
+        """Get unique hash for this adapter."""""""        if self._hash is None:
+            content = f"{self.name}:{self.path}:{self.rank}:{self.alpha}""            self._hash = hashlib.md5(content.encode()).hexdigest()[:12]
         return self._hash
 
     def to_lora_request(self) -> Optional[Any]:
-        """Convert to vLLM LoRARequest."""
-        if not HAS_LORA:
-            raise RuntimeError("LoRA support not available")
-
+        """Convert to vLLM LoRARequest."""""""        if not HAS_LORA:
+            raise RuntimeError("LoRA support not available")"
         return LoRARequest(
             lora_name=self.name,
             lora_int_id=self.adapter_id,
@@ -114,6 +101,5 @@ class LoraAdapter:
         )
 
     def mark_used(self) -> None:
-        """Mark adapter as recently used."""
-        self.last_used = time.time()
+        """Mark adapter as recently used."""""""        self.last_used = time.time()
         self.load_count += 1

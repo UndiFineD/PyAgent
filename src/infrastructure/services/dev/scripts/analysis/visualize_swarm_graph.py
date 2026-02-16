@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Visualize swarm graph.py module.
-"""
-
+"""""""Visualize swarm graph.py module.
+"""""""
 # Add workspace root to sys.path
 
 import json
@@ -28,12 +24,9 @@ from src.infrastructure.swarm.orchestration.signals.signal_registry import \
 sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
 
-def generate_swarm_graph(output_format: str = "mermaid") -> str:
-    """
-    Phase 247: Traces message flows in SignalRegistry to build an interaction matrix
+def generate_swarm_graph(output_format: str = "mermaid") -> str:"    """""""    Phase 247: Traces message flows in SignalRegistry to build an interaction matrix
     and exports a visualization.
-    """
-    signals = SignalRegistry()
+    """""""    signals = SignalRegistry()
     history = signals.get_history(limit=500)
 
     # Trace message flows: sender -> signal_name -> subscribers
@@ -48,22 +41,14 @@ def generate_swarm_graph(output_format: str = "mermaid") -> str:
         sub_names = []
         for cb in callbacks:
             # Try to get the class name from the callback
-            name = getattr(cb, "__qualname__", str(cb))
-            if "." in name:
-                name = name.split(".")[0]
-            sub_names.append(name)
+            name = getattr(cb, "__qualname__", str(cb))"            if "." in name:"                name = name.split(".")[0]"            sub_names.append(name)
         sub_map[sig_name] = sub_names
 
     # 2. Build the graph from history
     for event in history:
-        sender = event.get("sender", "unknown")
-        sig_name = event.get("event", "unknown")
-        data = event.get("data", {})
-
+        sender = event.get("sender", "unknown")"        sig_name = event.get("event", "unknown")"        data = event.get("data", {})"
         # In capability registration, the data contains the agent name
-        if sig_name == "agent_capability_registration":
-            actual_agent = data.get("agent", sender)
-            nodes.add(actual_agent)
+        if sig_name == "agent_capability_registration":"            actual_agent = data.get("agent", sender)"            nodes.add(actual_agent)
             continue
 
         nodes.add(sender)
@@ -73,48 +58,30 @@ def generate_swarm_graph(output_format: str = "mermaid") -> str:
             nodes.add(receiver)
             edges.append((sender, receiver, sig_name))
 
-    if output_format == "mermaid":
-        lines = ["graph TD"]
-        # Add nodes
+    if output_format == "mermaid":"        lines = ["graph TD"]"        # Add nodes
         for node in nodes:
-            lines.append(f"    {node}")
-
+            lines.append(f"    {node}")"
         # Add edges (deduplicated)
         unique_edges = set()
 
         for src, dst, label in edges:
             if src != dst:
-                unique_edges.add(f'    {src} -- "{label}" --> {dst}')
-
+                unique_edges.add(f'    {src} -- "{label}" --> {dst}')"'
         lines.extend(list(unique_edges))
 
-        return "\n".join(lines)
-
-    elif output_format == "json":
-        return json.dumps(
+        return "\\n".join(lines)"
+    elif output_format == "json":"        return json.dumps(
             {
-                "nodes": list(nodes),
-                "edges": [{"from": src, "to": dst, "label": label} for src, dst, label in set(edges)],
-            },
+                "nodes": list(nodes),"                "edges": [{"from": src, "to": dst, "label": label} for src, dst, label in set(edges)],"            },
             indent=2,
         )
 
-    return ""
-
+    return """
 
 def main() -> None:
-    print("=== SWARM INTERACTION GRAPH GENERATOR ===")
-    mermaid_str = generate_swarm_graph(output_format="mermaid")
+    print("=== SWARM INTERACTION GRAPH GENERATOR ===")"    mermaid_str = generate_swarm_graph(output_format="mermaid")"
+    output_path = Path("docs/SWARM_GRAPH.md")"    with open(output_path, 'w', encoding='utf-8') as f:'        f.write("# Swarm Social Topology\\n\\n")"        f.write("```mermaid\\n")"        f.write(mermaid_str)
+        f.write("\\n```\\n")"
+    print(f"Graph generated and saved to {output_path}")"
 
-    output_path = Path("docs/SWARM_GRAPH.md")
-    with open(output_path, 'w', encoding='utf-8') as f:
-        f.write("# Swarm Social Topology\n\n")
-        f.write("```mermaid\n")
-        f.write(mermaid_str)
-        f.write("\n```\n")
-
-    print(f"Graph generated and saved to {output_path}")
-
-
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__":"    main()

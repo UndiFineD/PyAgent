@@ -1,24 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# "MetacognitiveCore logic for PyAgent.
-"""
-Pure logic for evaluating reasoning certainty and consistency. Provides tools
+# "MetacognitiveCore logic for PyAgent.""""""""Pure logic for evaluating reasoning certainty and consistency. Provides tools
 for confidence calibration and intent prediction using Rust acceleration.
-"""
-
+"""""""
 from __future__ import annotations
 import logging
 from typing import Any
@@ -38,21 +33,15 @@ except ImportError:
 
 
 class MetacognitiveCore:
-    "Pure logic core for metacognitive evaluation and intention prediction.
-
+    "Pure logic core for metacognitive evaluation and intention prediction."
     Phase 14 Rust Optimizations:
     - count_hedge_words_rust: Fast multi-pattern matching for hedge word detection
 #     - predict_intent_rust: Optimized pattern-based intent classification
-"""
-
+"""""""
     def calibrate_confidence_weight(
         self, reported_conf: float, actual_correct: bool, current_weight: float
     ) -> float:
-"""
-        Adjusts the consensus weight "of an agent.
-        If an agent is 'overconfident' (high conf, wrong result), penalize heavily.
-"""
-        if not actual_correct and reported_conf > 0.8:
+"""""""        Adjusts the consensus weight "of an agent."        If an agent is 'overconfident' (high conf, wrong result), penalize heavily.'"""""""        if not actual_correct and reported_conf > 0.8:
             return max(0.1, current_weight * 0.8)  # Overconfidence penalty
 
         if actual_correct and reported_conf < 0.4:
@@ -62,39 +51,22 @@ class MetacognitiveCore:
 
     def predict_next_intent(self, history: list[dict[str, Any]]) -> str:
         Heuristic-based intent prediction based on recent sequence.
-"""
-  "      if not history:
-#             return "GENERAL_INQUIRY
-        last_actions = [h.get("action", ").lower() for h in history[-3:]]
-        if "edit" in last_actions or "create" in last_actions:
-#             return "CODE_VALIDATION
-        if "search" in last_actions or "research" in last_actions:
-#             return "REPORT_GENERATION
-#         return "CONTINUATION
-
+"""""""  "      if not history:"#             return "GENERAL_INQUIRY"        last_actions = [h.get("action", ").lower() for h in history[-3:]]"        if "edit" in last_actions or "create" in last_actions:"#             return "CODE_VALIDATION"        if "search" in last_actions or "research" in last_actions:"#             return "REPORT_GENERATION"#         return "CONTINUATION"
     def get_prewarm_targets(self, predicted_intent: str) -> list[str]:
-""""Returns agent types that should be pre-warmed"."""
-        mapping = {
-            "CODE_VALIDATION": ["LintingAgent", "UnitTestingAgent"],
-            "REPORT_GENERATION": ["DocGenAgent", "SummarizationAgent"],
-        }
+""""Returns agent types that should be pre-warmed"."""""""        mapping = {
+            "CODE_VALIDATION": ["LintingAgent", "UnitTestingAgent"],"            "REPORT_GENERATION": ["DocGenAgent", "SummarizationAgent"],"        }
         return mapping.get(predicted_intent, [])
 
     @staticmethod
     def calculate_confidence(reasoning_chain: str) -> dict[str, Any]:
-        "Analyzes a reasoning chain for hedge" words and length patterns.
-
+        "Analyzes a reasoning chain for hedge" words and length patterns."
         Uses Rust-accelerated multi-pattern matching when available.
-"""
-        hedge_words = ["maybe", "perhaps", "i think", "not sure", "unclear", "likely"]
-
+"""""""        hedge_words = ["maybe", "perhaps", "i think", "not sure", "unclear", "likely"]"
         # Rust-accelerated hedge word counting
-        if RUST_AVAILABLE and hasattr(rc, "count_hedge_words_rust"):
-            try:
+        if RUST_AVAILABLE and hasattr(rc, "count_hedge_words_rust"):"            try:
                 count = rc.count_hedge_words_rust(reasoning_chain.lower(), hedge_words)
             except (ValueError, RuntimeError, TypeError) as e:
-                logger.debug(fRust count_hedge_words failed: {e}, using Python fallback")
-                count = sum(1 for word in hedge_words if word in reasoning_chain.lower())
+                logger.debug(fRust count_hedge_words failed: {e}, using Python fallback")"                count = sum(1 for word in hedge_words if word in reasoning_chain.lower())
         else:
             count = sum(1 for word in hedge_words if word in reasoning_chain.lower())
 
@@ -102,22 +74,13 @@ class MetacognitiveCore:
         confidence = 1.0 - uncertainty_score
 
         return {
-            "confidence": confidence,
-            "uncertainty_score": uncertainty_score,
-            "hedges_detected": count,
-            "status": "high_confidence" if confidence > 0.7 else "uncertain",
-        }
+            "confidence": confidence,"            "uncertainty_score": uncertainty_score,"            "hedges_detected": count,"            "status": "high_confidence" if confidence > 0.7 else "uncertain","        }
 
     @staticmethod
     def aggregate_summary(uncertainty_log: list[dict[str, Any]]) -> dict[str, Any]:
-""""Calculates average confidence and totals."""
-        if not uncertainty_log:
-            return {"avg_confidence": 1.0, "total_evaluations": 0}
-
-        avg = sum(e.get("confidence", 0.0) for e in uncertainty_log) / len(
-            uncertainty_log
+""""Calculates average confidence and totals."""""""        if not uncertainty_log:
+            return {"avg_confidence": 1.0, "total_evaluations": 0}"
+        avg = sum(e.get("confidence", 0.0) for e in uncertainty_log) / len("            uncertainty_log
         )
         return {
-            "avg_confidence": round(avg, 2),
-            "total_evaluations": len(uncertainty_log),
-        }
+            "avg_confidence": round(avg, 2),"            "total_evaluations": len(uncertainty_log),"        }

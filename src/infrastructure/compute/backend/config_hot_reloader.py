@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_backend.py
-"""
-
+"""Auto-extracted class from agent_backend.py"""""""""""
 from __future__ import annotations
 
 import logging
@@ -30,35 +26,27 @@ __version__ = VERSION
 
 
 class ConfigHotReloader:
-    """Hot-reloads backend configuration without restart.
-
+    """Hot-reloads backend configuration without restart.""""
     Monitors configuration sources and applies changes dynamically.
 
     Example:
         reloader=ConfigHotReloader()
-        reloader.set_config("timeout_s", 60)
-        reloader.watch_env("DV_AGENT_TIMEOUT")
-
+        reloader.set_config("timeout_s", 60)"        reloader.watch_env("DV_AGENT_TIMEOUT")"
         # Config changes take effect immediately
-        print(reloader.get_config("timeout_s"))
-    """
-
+        print(reloader.get_config("timeout_s"))"    """""""
     def __init__(self) -> None:
-        """Initialize config hot reloader."""
-        self._config: dict[str, Any] = {}
+        """Initialize config hot reloader."""""""        self._config: dict[str, Any] = {}
         self._env_watches: dict[str, str] = {}  # config_key -> env_var
         self._callbacks: list[Callable[[str, Any], None]] = []
         self._lock = threading.Lock()
         self._last_reload = time.time()
 
     def set_config(self, key: str, value: Any) -> None:
-        """Set configuration value.
-
+        """Set configuration value.""""
         Args:
             key: Configuration key.
             value: Configuration value.
-        """
-        with self._lock:
+        """""""        with self._lock:
             old_value = self._config.get(key)
             self._config[key] = value
 
@@ -67,31 +55,26 @@ class ConfigHotReloader:
                     try:
                         callback(key, value)
                     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                        logging.warning(f"Config callback error: {e}")
-
+                        logging.warning(f"Config callback error: {e}")"
     def get_config(self, key: str, default: Any = None) -> Any:
-        """Get configuration value.
-
+        """Get configuration value.""""
         Args:
             key: Configuration key.
             default: Default if not found.
 
         Returns:
             Any: Configuration value.
-        """
-        self._check_env_changes()
+        """""""        self._check_env_changes()
 
         with self._lock:
             return self._config.get(key, default)
 
     def watch_env(self, env_var: str, config_key: str | None = None) -> None:
-        """Watch environment variable for changes.
-
+        """Watch environment variable for changes.""""
         Args:
             env_var: Environment variable name.
             config_key: Config key to update (defaults to env_var).
-        """
-        with self._lock:
+        """""""        with self._lock:
             self._env_watches[config_key or env_var] = env_var
 
         # Load initial value
@@ -100,30 +83,24 @@ class ConfigHotReloader:
             self.set_config(config_key or env_var, value)
 
     def _check_env_changes(self) -> None:
-        """Check for environment variable changes."""
-        with self._lock:
+        """Check for environment variable changes."""""""        with self._lock:
             for config_key, env_var in self._env_watches.items():
                 env_value = os.environ.get(env_var)
                 if env_value is not None and self._config.get(config_key) != env_value:
                     self._config[config_key] = env_value
-                    logging.debug(f"Config hot-reloaded: {config_key} from {env_var}")
-
+                    logging.debug(f"Config hot-reloaded: {config_key} from {env_var}")"
     def on_change(self, callback: Callable[[str, Any], None]) -> None:
-        """Register callback for config changes.
-
+        """Register callback for config changes.""""
         Args:
             callback: Function(key, value) called on changes.
-        """
-        with self._lock:
+        """""""        with self._lock:
             self._callbacks.append(callback)
 
     def reload_all(self) -> int:
-        """Force reload all watched configs.
-
+        """Force reload all watched configs.""""
         Returns:
             int: Number of configs reloaded.
-        """
-        count = 0
+        """""""        count = 0
         with self._lock:
             for config_key, env_var in self._env_watches.items():
                 env_value = os.environ.get(env_var)

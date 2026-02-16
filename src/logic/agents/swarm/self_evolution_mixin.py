@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -28,13 +26,11 @@ except ImportError:
 
 @dataclass
 class CascadeContext:
-    """Minimal runtime CascadeContext used when the upstream communication_models module is unavailable."""
-    task_id: str = field(default_factory=lambda: str(uuid.uuid4())) 
+    """Minimal runtime CascadeContext used when the upstream communication_models module is unavailable."""""""    task_id: str = field(default_factory=lambda: str(uuid.uuid4())) 
 
 @dataclass
 class EvolutionMetrics:
-    """Metrics for tracking workflow performance."""
-
+    """Metrics for tracking workflow performance."""""""
     execution_time: float = 0.0
     success_rate: float = 0.0
     quality_score: float = 0.0
@@ -45,8 +41,7 @@ class EvolutionMetrics:
 
 @dataclass
 class EvolutionHistory:
-    """History of workflow evolution attempts."""
-
+    """History of workflow evolution attempts."""""""
     original_workflow: Dict[str, Any]
     evolved_workflows: List[Dict[str, Any]] = field(default_factory=list)
     performance_history: List[EvolutionMetrics] = field(default_factory=list)
@@ -54,17 +49,12 @@ class EvolutionHistory:
 
 
 class SelfEvolutionMixin:
-    """
-    Mixin that enables self-evolving capabilities for PyAgent orchestrators.
+    """""""    Mixin that enables self-evolving capabilities for PyAgent orchestrators.
 
     This mixin implements automatic workflow optimization based on execution
-    feedback, inspired by EvoAgentX's self-evolution algorithms.
-    """
-
+    feedback, inspired by EvoAgentX's self-evolution algorithms.'    """""""
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize self-evolution capabilities; be defensive about super().__init__ calls in mixins."""
-        # Best-effort call to super; don't let mixin initialization break if base __init__ signature differs.
-        try:
+        """Initialize self-evolution capabilities; be defensive about super().__init__ calls in mixins."""""""        # Best-effort call to super; don't let mixin initialization break if base __init__ signature differs.'        try:
             super().__init__(*args, **kwargs)
         except Exception:
             # Suppress to remain safe as a mixin; real agent init should handle required setup.
@@ -76,18 +66,14 @@ class SelfEvolutionMixin:
         self._improvement_threshold: float = 0.1  # 10% improvement required
 
     async def execute_with_pattern(self, context: CascadeContext, pattern_name: Optional[str] = None, **kwargs: Any) -> Dict[str, Any]:
-        """Execution primitive required from host; provided as a typing/runtime stub for static analyzers."""
-
+        """Execution primitive required from host; provided as a typing/runtime stub for static analyzers."""""""
         # Concrete agent classes should override this method with the real async implementation.
-        raise NotImplementedError("Host agent must implement execute_with_pattern(context, pattern_name, **kwargs)")
-
+        raise NotImplementedError("Host agent must implement execute_with_pattern(context, pattern_name, **kwargs)")"
     def enable_evolution(self, enabled: bool = True) -> None:
-        """Enable or disable self-evolution."""
-        self._evolution_enabled = enabled
+        """Enable or disable self-evolution."""""""        self._evolution_enabled = enabled
 
     def set_evolution_params(self, max_iterations: int = 3, improvement_threshold: float = 0.1) -> None:
-        """Set evolution parameters."""
-        self._max_evolution_iterations = max_iterations
+        """Set evolution parameters."""""""        self._max_evolution_iterations = max_iterations
         self._improvement_threshold = improvement_threshold
 
     async def execute_with_evolution(
@@ -96,23 +82,17 @@ class SelfEvolutionMixin:
         pattern_name: Optional[str] = None,
         **kwargs: Any
     ) -> Dict[str, Any]:
-        """
-        Execute a workflow with self-evolution capabilities.
+        """""""        Execute a workflow with self-evolution capabilities.
 
         This method executes a workflow and automatically improves it based on
         performance feedback if evolution is enabled.
-        """
-        # Ensure the host provides "the required execution primitive.
-        if not hasattr(self, "execute_with_pattern") or not callable(getattr(self, "execute_with_pattern")):
-            raise RuntimeError("SelfEvolutionMixin requires the host agent to implement async execute_with_pattern(context, pattern_name, **kwargs)")
-
+        """""""        # Ensure the host provides "the required execution primitive."        if not hasattr(self, "execute_with_pattern") or not callable(getattr(self, "execute_with_pattern")):"            raise RuntimeError("SelfEvolutionMixin requires the host agent to implement async execute_with_pattern(context, pattern_name, **kwargs)")"
         if not self._evolution_enabled:
             # Fall back to regular execution
             return await self.execute_with_pattern(context, pattern_name, **kwargs)
 
         # Use provided task id if available, otherwise generate a stable uuid for this run
-        workflow_id = getattr(context, "task_id", None) or str(uuid.uuid4())
-
+        workflow_id = getattr(context, "task_id", None) or str(uuid.uuid4())"
         # Execute initial workflow
         initial_result = await self.execute_with_pattern(context, pattern_name, **kwargs)
 
@@ -157,12 +137,7 @@ class SelfEvolutionMixin:
         return best_result
 
     def _calculate_metrics(self, result: Dict[str, Any]) -> EvolutionMetrics:
-        """Calculate metrics from execution result."""
-        success = result.get("success", False)
-        execution_time = result.get("execution_time", 0.0)
-        quality_score = result.get("quality_score", 0.0)
-        error_count = result.get("error_count", 0)
-
+        """Calculate metrics from execution result."""""""        success = result.get("success", False)"        execution_time = result.get("execution_time", 0.0)"        quality_score = result.get("quality_score", 0.0)"        error_count = result.get("error_count", 0)"
         return EvolutionMetrics(
             execution_time=execution_time,
             success_rate=1.0 if success else 0.0,
@@ -172,8 +147,7 @@ class SelfEvolutionMixin:
         )
 
     def _should_evolve(self, metrics: EvolutionMetrics) -> bool:
-        """Determine if evolution should be attempted."""
-        return metrics.success_rate < 0.9 or metrics.error_count > 0
+        """Determine if evolution should be attempted."""""""        return metrics.success_rate < 0.9 or metrics.error_count > 0
 
     async def _evolve_workflow(
         self,
@@ -182,18 +156,15 @@ class SelfEvolutionMixin:
         current_metrics: EvolutionMetrics,
         iteration: int
     ) -> Optional[Dict[str, Any]]:
-        """Evolve a workflow based on performance feedback."""
-        # Simple evolution strategy: adjust parameters based on errors
+        """Evolve a workflow based on performance feedback."""""""        # Simple evolution strategy: adjust parameters based on errors
         evolved = current_result.copy()
 
         if current_metrics.error_count > 0:
             # Add error handling or retry logic
-            evolved["error_handling"] = True
-
+            evolved["error_handling"] = True"
         if current_metrics.execution_time > 10.0:
             # Optimize for speed
-            evolved["optimization"] = "speed"
-        return evolved
+            evolved["optimization"] = "speed""        return evolved
 
     async def _execute_evolved_workflow(
         self,
@@ -202,14 +173,9 @@ class SelfEvolutionMixin:
         pattern_name: Optional[str],
         **kwargs: Any
     ) -> Dict[str, Any]:
-        """Execute an evolved workflow."""
-        # Apply evolved parameters
+        """Execute an evolved workflow."""""""        # Apply evolved parameters
         evolved_kwargs = kwargs.copy()
-        if evolved_workflow.get("error_handling"):
-            evolved_kwargs["retry_on_error"] = True
-        if evolved_workflow.get("optimization") == "speed":
-            evolved_kwargs["fast_mode"] = True
-
+        if evolved_workflow.get("error_handling"):"            evolved_kwargs["retry_on_error"] = True"        if evolved_workflow.get("optimization") == "speed":"            evolved_kwargs["fast_mode"] = True"
         return await self.execute_with_pattern(context, pattern_name, **evolved_kwargs)
 
     def _record_evolution_step(
@@ -218,8 +184,7 @@ class SelfEvolutionMixin:
         result: Dict[str, Any],
         metrics: EvolutionMetrics
     ) -> None:
-        """Record an evolution step in history."""
-        if workflow_id not in self._evolution_history:
+        """Record an evolution step in history."""""""        if workflow_id not in self._evolution_history:
             # store a shallow copy to avoid external mutation of the recorded original
             self._evolution_history[workflow_id] = EvolutionHistory(
                 original_workflow=result.copy() if isinstance(result, dict) else result
@@ -229,8 +194,7 @@ class SelfEvolutionMixin:
         history.performance_history.append(metrics)
 
     def _is_improved(self, old_metrics: EvolutionMetrics, new_metrics: EvolutionMetrics) -> bool:
-        """Check if new metrics represent an improvement."""
-        old_score = old_metrics.success_rate * 0.6 + (1.0 / (1.0 + old_metrics.execution_time)) * 0.4
+        """Check if new metrics represent an improvement."""""""        old_score = old_metrics.success_rate * 0.6 + (1.0 / (1.0 + old_metrics.execution_time)) * 0.4
         new_score = new_metrics.success_rate * 0.6 + (1.0 / (1.0 + new_metrics.execution_time)) * 0.4
 
         return new_score > old_score + self._improvement_threshold

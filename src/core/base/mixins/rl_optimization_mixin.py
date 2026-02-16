@@ -1,22 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-RL Optimization Mixin.
+"""""""RL Optimization Mixin.
 Allows agents to record and learn from decision-making using Markov Decision Processes (MDP).
-"""
-
+"""""""
 from __future__ import annotations
 import logging
 from typing import Any, Optional, TYPE_CHECKING
@@ -29,24 +25,18 @@ logger = logging.getLogger(__name__)
 
 
 class RLOptimizationMixin:
-    """
-    Mixin for Reinforcement Learning based agent optimization.
+    """""""    Mixin for Reinforcement Learning based agent optimization.
     Enables tracking of State, Action, and Rewards to optimize cognitive paths.
-    """
-
+    """""""
     def __init__(self, **kwargs):
-        gamma = kwargs.get("rl_gamma", 0.95)
-        self.mdp = MDP(gamma=gamma)
+        gamma = kwargs.get("rl_gamma", 0.95)"        self.mdp = MDP(gamma=gamma)
         self.current_state: Optional[Any] = None
         self.last_action: Optional[Any] = None
-        if hasattr(super(), "__init__"):
-            super().__init__(**kwargs)
+        if hasattr(super(), "__init__"):"            super().__init__(**kwargs)
 
     def record_step(self, action: Any, reward: float, next_state: Any, done: bool = False):
-        """Records a transition in the agent's internal MDP."""
-        if self.current_state is None:
-            self.current_state = "initial"
-
+        """Records a transition in the agent's internal MDP."""""""'        if self.current_state is None:
+            self.current_state = "initial""
         self.mdp.add_transition(
             state=self.current_state,
             action=action,
@@ -58,19 +48,14 @@ class RLOptimizationMixin:
         self.last_action = action
 
     def get_best_action(self, state: Any) -> Optional[Any]:
-        """Queries the MDP policy for the best action in the given state."""
-        # Value iteration or simple policy lookup
+        """Queries the MDP policy for the best action in the given state."""""""        # Value iteration or simple policy lookup
         return self.mdp.policy.get(state)
 
     def optimize_policy(self):
-        """Triggers value iteration on the gathered experiences."""
-        logger.info("RLOptimization: Optimizing agent policy via value iteration...")
-        # Placeholder for complex value iteration if implemented in MDP
-        # For now, we'll just use the best-observed action per state
-        for state in self.mdp.states:
+        """Triggers value iteration on the gathered experiences."""""""        logger.info("RLOptimization: Optimizing agent policy via value iteration...")"        # Placeholder for complex value iteration if implemented in MDP
+        # For now, we'll just use the best-observed action per state'        for state in self.mdp.states:
             best_action = None
-            max_reward = -float('inf')
-
+            max_reward = -float('inf')'
             # Simple greedy policy update
             for action in self.mdp.actions:
                 reward = self.mdp.get_expected_reward(state, action)

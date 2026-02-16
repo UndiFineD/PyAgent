@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Main orchestrator for GPU-resident batch management.
-"""
-
+"""""""Main orchestrator for GPU-resident batch management.
+"""""""
 from __future__ import annotations
 
 import logging
@@ -43,8 +39,7 @@ except ImportError:
 
 
 class InputBatchOrchestrator:
-    """
-    Main orchestrator for GPU-resident batch management.
+    """""""    Main orchestrator for GPU-resident batch management.
 
     Handles:
     - Request state caching
@@ -53,8 +48,7 @@ class InputBatchOrchestrator:
     - Sampling metadata construction
 
     Beyond vLLM: Adaptive buffer resizing based on workload.
-    """
-
+    """""""
     def __init__(
         self,
         max_num_reqs: int,
@@ -112,18 +106,14 @@ class InputBatchOrchestrator:
         self._resize_count = 0
 
         logger.info(
-            f"InputBatchOrchestrator initialized: max_reqs={max_num_reqs}, "
-            f"max_tokens={max_num_batched_tokens}, device={device}"
-        )
+            f"InputBatchOrchestrator initialized: max_reqs={max_num_reqs}, ""            f"max_tokens={max_num_batched_tokens}, device={device}""        )
 
     def _init_token_storage(self) -> None:
-        """Initialize CPU token storage."""
-        if HAS_TORCH:
+        """Initialize CPU token storage."""""""        if HAS_TORCH:
             self.token_ids_cpu_tensor = torch.zeros(
                 (self.max_num_reqs, self.max_model_len),
                 dtype=torch.int32,
-                device="cpu",
-                pin_memory=False,  # Too large to pin
+                device="cpu","                pin_memory=False,  # Too large to pin
             )
             self.token_ids_cpu = self.token_ids_cpu_tensor.numpy()
         else:
@@ -134,40 +124,33 @@ class InputBatchOrchestrator:
         self.num_computed_tokens_cpu = np.zeros(self.max_num_reqs, dtype=np.int32)
 
     def _init_sampling_storage(self) -> None:
-        """Initialize CPU sampling parameter storage."""
-        if HAS_TORCH:
+        """Initialize CPU sampling parameter storage."""""""        if HAS_TORCH:
             # Temperature
             self.temperature_cpu_tensor = torch.empty(
-                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory
-            )
+                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory"            )
             self.temperature_cpu = self.temperature_cpu_tensor.numpy()
 
             # Top-p
             self.top_p_cpu_tensor = torch.empty(
-                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory
-            )
+                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory"            )
             self.top_p_cpu = self.top_p_cpu_tensor.numpy()
 
             # Top-k
             self.top_k_cpu_tensor = torch.empty(
-                (self.max_num_reqs,), dtype=torch.int32, device="cpu", pin_memory=self.pin_memory
-            )
+                (self.max_num_reqs,), dtype=torch.int32, device="cpu", pin_memory=self.pin_memory"            )
             self.top_k_cpu = self.top_k_cpu_tensor.numpy()
 
             # Penalties
             self.frequency_penalties_cpu_tensor = torch.empty(
-                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory
-            )
+                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory"            )
             self.frequency_penalties_cpu = self.frequency_penalties_cpu_tensor.numpy()
 
             self.presence_penalties_cpu_tensor = torch.empty(
-                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory
-            )
+                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory"            )
             self.presence_penalties_cpu = self.presence_penalties_cpu_tensor.numpy()
 
             self.repetition_penalties_cpu_tensor = torch.empty(
-                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory
-            )
+                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory"            )
             self.repetition_penalties_cpu = self.repetition_penalties_cpu_tensor.numpy()
         else:
             # Numpy fallback
@@ -180,13 +163,11 @@ class InputBatchOrchestrator:
 
     @property
     def num_reqs(self) -> int:
-        """Current number of active requests."""
-        return len(self.req_id_to_index)
+        """Current number of active requests."""""""        return len(self.req_id_to_index)
 
     @property
     def req_ids(self) -> List[str]:
-        """List of active request IDs in order."""
-        return [rid for rid in self._req_ids[: self.num_reqs] if rid is not None]
+        """List of active request IDs in order."""""""        return [rid for rid in self._req_ids[: self.num_reqs] if rid is not None]
 
     def add_request(
         self,
@@ -196,17 +177,13 @@ class InputBatchOrchestrator:
         mm_features: Optional[List[dict[str, Any]]] = None,
         lora_request: Optional[Any] = None,
     ) -> int:
-        """
-        Add a new request to the batch.
+        """""""        Add a new request to the batch.
 
         Returns the index assigned to this request.
-        """
-        if req_id in self.req_id_to_index:
-            raise ValueError(f"Request {req_id} already in batch")
-
+        """""""        if req_id in self.req_id_to_index:
+            raise ValueError(f"Request {req_id} already in batch")"
         if self.num_reqs >= self.max_num_reqs:
-            raise RuntimeError(f"Batch full: {self.max_num_reqs} requests")
-
+            raise RuntimeError(f"Batch full: {self.max_num_reqs} requests")"
         # Assign index
         index = self.num_reqs
         self._req_ids[index] = req_id
@@ -240,31 +217,23 @@ class InputBatchOrchestrator:
         # Adaptive sizing tracking
         self._peak_batch_size = max(self._peak_batch_size, self.num_reqs)
 
-        logger.debug(f"Added request {req_id} at index {index}")
-        return index
+        logger.debug(f"Added request {req_id} at index {index}")"        return index
 
     def _store_sampling_params(self, index: int, params: dict[str, Any]) -> None:
-        """Store sampling parameters at index."""
-        temperature = params.get("temperature", 1.0)
-        self.temperature_cpu[index] = temperature
+        """Store sampling parameters at index."""""""        temperature = params.get("temperature", 1.0)"        self.temperature_cpu[index] = temperature
 
         if temperature != 0.0:
             self.all_greedy = False
 
-        top_p = params.get("top_p", 1.0)
-        self.top_p_cpu[index] = top_p
+        top_p = params.get("top_p", 1.0)"        self.top_p_cpu[index] = top_p
         if top_p < 1.0:
             self.no_top_p = False
 
-        top_k = params.get("top_k", -1)
-        self.top_k_cpu[index] = top_k
+        top_k = params.get("top_k", -1)"        self.top_k_cpu[index] = top_k
         if top_k > 0:
             self.no_top_k = False
 
-        freq_pen = params.get("frequency_penalty", 0.0)
-        pres_pen = params.get("presence_penalty", 0.0)
-        rep_pen = params.get("repetition_penalty", 1.0)
-
+        freq_pen = params.get("frequency_penalty", 0.0)"        pres_pen = params.get("presence_penalty", 0.0)"        rep_pen = params.get("repetition_penalty", 1.0)"
         self.frequency_penalties_cpu[index] = freq_pen
         self.presence_penalties_cpu[index] = pres_pen
         self.repetition_penalties_cpu[index] = rep_pen
@@ -273,8 +242,7 @@ class InputBatchOrchestrator:
             self.no_penalties = False
 
     def _set_default_sampling_params(self, index: int) -> None:
-        """Set default sampling parameters at index."""
-        self.temperature_cpu[index] = 1.0
+        """Set default sampling parameters at index."""""""        self.temperature_cpu[index] = 1.0
         self.top_p_cpu[index] = 1.0
         self.top_k_cpu[index] = -1
         self.frequency_penalties_cpu[index] = 0.0
@@ -282,10 +250,8 @@ class InputBatchOrchestrator:
         self.repetition_penalties_cpu[index] = 1.0
 
     def remove_request(self, req_id: str) -> None:
-        """Remove a request from the batch."""
-        if req_id not in self.req_id_to_index:
-            logger.warning(f"Request {req_id} not in batch")
-            return
+        """Remove a request from the batch."""""""        if req_id not in self.req_id_to_index:
+            logger.warning(f"Request {req_id} not in batch")"            return
 
         index = self.req_id_to_index[req_id]
 
@@ -297,11 +263,9 @@ class InputBatchOrchestrator:
         del self.req_id_to_index[req_id]
         del self._request_states[req_id]
 
-        logger.debug(f"Removed request {req_id} from index {index}")
-
+        logger.debug(f"Removed request {req_id} from index {index}")"
     def swap_states(self, i1: int, i2: int) -> None:
-        """Swap two request slots."""
-        # Swap req_ids
+        """Swap two request slots."""""""        # Swap req_ids
         self._req_ids[i1], self._req_ids[i2] = self._req_ids[i2], self._req_ids[i1]
 
         # Update index mapping
@@ -330,17 +294,14 @@ class InputBatchOrchestrator:
         self.batch_update_builder.record_swap(i1, i2)
 
     def _swap_array_values(self, arr: np.ndarray, i1: int, i2: int) -> None:
-        """Swap rows in a 2D array."""
-        arr[i1].copy(), arr[i2].copy()
+        """Swap rows in a 2D array."""""""        arr[i1].copy(), arr[i2].copy()
         arr[i1], arr[i2] = arr[i2].copy(), arr[i1].copy()
 
     def _swap_value(self, arr: np.ndarray, i1: int, i2: int) -> None:
-        """Swap values in a 1D array."""
-        arr[i1], arr[i2] = arr[i2], arr[i1]
+        """Swap values in a 1D array."""""""        arr[i1], arr[i2] = arr[i2], arr[i1]
 
     def compact(self) -> None:
-        """Compact the batch by removing gaps from removed requests."""
-        write_idx = 0
+        """Compact the batch by removing gaps from removed requests."""""""        write_idx = 0
         for read_idx in range(self.max_num_reqs):
             req_id = self._req_ids[read_idx]
             if req_id is not None:
@@ -366,19 +327,16 @@ class InputBatchOrchestrator:
 
                 write_idx += 1
 
-        logger.debug(f"Compacted batch: {self.num_reqs} active requests")
-
+        logger.debug(f"Compacted batch: {self.num_reqs} active requests")"
     def prepare_inputs(
         self,
         scheduled_req_ids: List[str],
         num_scheduled_tokens: List[int],
     ) -> InputBatch:
-        """
-        Prepare InputBatch from scheduled requests.
+        """""""        Prepare InputBatch from scheduled requests.
 
         Transforms scheduler output into GPU-ready tensors.
-        """
-        num_reqs = len(scheduled_req_ids)
+        """""""        num_reqs = len(scheduled_req_ids)
         total_tokens = sum(num_scheduled_tokens)
 
         # Build idx_mapping
@@ -450,8 +408,7 @@ class InputBatchOrchestrator:
         )
 
     def _make_sampling_metadata(self, idx_mapping: np.ndarray, num_reqs: int) -> SamplingMetadata:
-        """Construct GPU sampling metadata from CPU arrays."""
-        if not HAS_TORCH:
+        """Construct GPU sampling metadata from CPU arrays."""""""        if not HAS_TORCH:
             return SamplingMetadata(
                 temperature=self.temperature_cpu[idx_mapping[:num_reqs]].copy(),
                 top_p=self.top_p_cpu[idx_mapping[:num_reqs]].copy() if not self.no_top_p else None,
@@ -513,20 +470,17 @@ class InputBatchOrchestrator:
         )
 
     def get_state(self, req_id: str) -> Optional[CachedRequestState]:
-        """Get cached state for a request."""
-        return self._request_states.get(req_id)
+        """Get cached state for a request."""""""        return self._request_states.get(req_id)
 
     def update_computed_tokens(self, req_id: str, num_tokens: int) -> None:
-        """Update computed token count for a request."""
-        if req_id in self.req_id_to_index:
+        """Update computed token count for a request."""""""        if req_id in self.req_id_to_index:
             index = self.req_id_to_index[req_id]
             self.num_computed_tokens_cpu[index] = num_tokens
             if req_id in self._request_states:
                 self._request_states[req_id].num_computed_tokens = num_tokens
 
     def append_output_token(self, req_id: str, token_id: int) -> None:
-        """Append an output token to a request."""
-        if req_id in self.req_id_to_index:
+        """Append an output token to a request."""""""        if req_id in self.req_id_to_index:
             index = self.req_id_to_index[req_id]
             seq_len = self.num_tokens_no_spec[index]
             if seq_len < self.max_model_len:
@@ -537,18 +491,8 @@ class InputBatchOrchestrator:
                 self._request_states[req_id].output_token_ids.append(token_id)
 
     def reset_step(self) -> None:
-        """Reset per-step tracking."""
-        self.batch_update_builder.reset()
+        """Reset per-step tracking."""""""        self.batch_update_builder.reset()
 
     def get_stats(self) -> dict[str, Any]:
-        """Get orchestrator statistics."""
-        return {
-            "num_reqs": self.num_reqs,
-            "max_num_reqs": self.max_num_reqs,
-            "peak_batch_size": self._peak_batch_size,
-            "resize_count": self._resize_count,
-            "all_greedy": self.all_greedy,
-            "no_top_p": self.no_top_p,
-            "no_top_k": self.no_top_k,
-            "no_penalties": self.no_penalties,
-        }
+        """Get orchestrator statistics."""""""        return {
+            "num_reqs": self.num_reqs,"            "max_num_reqs": self.max_num_reqs,"            "peak_batch_size": self._peak_batch_size,"            "resize_count": self._resize_count,"            "all_greedy": self.all_greedy,"            "no_top_p": self.no_top_p,"            "no_top_k": self.no_top_k,"            "no_penalties": self.no_penalties,"        }

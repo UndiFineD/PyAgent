@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Advanced request scheduler coordinator."""
-
+"""Advanced request scheduler coordinator."""""""
 import threading
 import time
 import uuid
@@ -28,11 +25,9 @@ from .request import ScheduledRequest
 
 
 class AdvancedRequestScheduler:
-    """Advanced request scheduler with priority and preemption."""
-
+    """Advanced request scheduler with priority and preemption."""""""
     def __init__(self, config: SchedulerConfig | None = None) -> None:
-        """Initialize scheduler."""
-        self.config = config or SchedulerConfig()
+        """Initialize scheduler."""""""        self.config = config or SchedulerConfig()
 
         # Request queues
         self.waiting = PriorityRequestQueue(enable_starvation_prevention=self.config.starvation_prevention)
@@ -59,8 +54,7 @@ class AdvancedRequestScheduler:
         request_id: str | None = None,
         prompt_tokens: int | None = None,
     ) -> ScheduledRequest:
-        """Add a new request to the scheduler."""
-        if request_id is None:
+        """Add a new request to the scheduler."""""""        if request_id is None:
             request_id = str(uuid.uuid4())[:8]
 
         if prompt_tokens is None:
@@ -84,8 +78,7 @@ class AdvancedRequestScheduler:
         return request
 
     def schedule(self) -> list[ScheduledRequest]:
-        """Select requests for the next execution batch."""
-        with self._lock:
+        """Select requests for the next execution batch."""""""        with self._lock:
             batch: list[ScheduledRequest] = []
             token_budget = self.config.max_tokens_per_batch - self._running_tokens
 
@@ -98,8 +91,7 @@ class AdvancedRequestScheduler:
             return batch
 
     def _resume_preempted(self, batch: list[ScheduledRequest], token_budget: int) -> int:
-        """Resume preempted requests if budget allows."""
-        preempted_ids = list(self.preempted.keys())
+        """Resume preempted requests if budget allows."""""""        preempted_ids = list(self.preempted.keys())
         for req_id in preempted_ids:
             if len(batch) >= self.config.max_running_requests - len(self.running):
                 break
@@ -116,8 +108,7 @@ class AdvancedRequestScheduler:
         return token_budget
 
     def _schedule_waiting(self, batch: list[ScheduledRequest], token_budget: int) -> int:
-        """Schedule waiting requests based on priority and budget."""
-        initial_running = len(self.running)
+        """Schedule waiting requests based on priority and budget."""""""        initial_running = len(self.running)
         while len(batch) + initial_running < self.config.max_running_requests:
             if token_budget <= 0:
                 break
@@ -151,8 +142,7 @@ class AdvancedRequestScheduler:
         incoming: ScheduledRequest,
         available_budget: int,
     ) -> bool:
-        """Decide whether to preempt running requests."""
-        if not self.config.preemption_enabled:
+        """Decide whether to preempt running requests."""""""        if not self.config.preemption_enabled:
             return False
 
         if incoming.priority.value >= RequestPriority.NORMAL.value:
@@ -178,8 +168,7 @@ class AdvancedRequestScheduler:
         return False
 
     def _preempt_for_request(self, incoming: ScheduledRequest) -> int:
-        """Preempt running requests to make room."""
-        preemptible = [
+        """Preempt running requests to make room."""""""        preemptible = [
             r for r in self.running.values() if r.is_preemptible and r.priority.value > incoming.priority.value
         ]
 
@@ -207,8 +196,7 @@ class AdvancedRequestScheduler:
         reason: PreemptionReason,
         saved_state: Any | None = None,
     ) -> bool:
-        """Preempt a specific request."""
-        if request_id not in self.running:
+        """Preempt a specific request."""""""        if request_id not in self.running:
             return False
 
         request = self.running.pop(request_id)
@@ -224,13 +212,11 @@ class AdvancedRequestScheduler:
         reason: PreemptionReason = PreemptionReason.MEMORY_PRESSURE,
         saved_state: Any | None = None,
     ) -> bool:
-        """Public API for preempting a request."""
-        with self._lock:
+        """Public API for preempting a request."""""""        with self._lock:
             return self._preempt_request(request_id, reason, saved_state)
 
     def resume_request(self, request_id: str) -> bool:
-        """Resume a preempted request."""
-        with self._lock:
+        """Resume a preempted request."""""""        with self._lock:
             if request_id not in self.preempted:
                 return False
 
@@ -244,8 +230,7 @@ class AdvancedRequestScheduler:
         request_id: str,
         generated_tokens: int = 0,
     ) -> bool:
-        """Mark a request as completed."""
-        with self._lock:
+        """Mark a request as completed."""""""        with self._lock:
             if request_id not in self.running:
                 return False
 
@@ -261,8 +246,7 @@ class AdvancedRequestScheduler:
             return True
 
     def abort_request(self, request_id: str) -> bool:
-        """Abort a request."""
-        with self._lock:
+        """Abort a request."""""""        with self._lock:
             if request_id in self.running:
                 request = self.running.pop(request_id)
                 request.state = RequestState.ABORTED
@@ -282,8 +266,7 @@ class AdvancedRequestScheduler:
             return False
 
     def get_request(self, request_id: str) -> ScheduledRequest | None:
-        """Get request by ID."""
-        with self._lock:
+        """Get request by ID."""""""        with self._lock:
             if request_id in self.running:
                 return self.running[request_id]
             if request_id in self.preempted:
@@ -294,23 +277,12 @@ class AdvancedRequestScheduler:
 
     @property
     def stats(self) -> dict:
-        """Get scheduler statistics."""
-        with self._lock:
+        """Get scheduler statistics."""""""        with self._lock:
             return {
-                "waiting": len(self.waiting),
-                "running": len(self.running),
-                "preempted": len(self.preempted),
-                "completed": len(self.completed),
-                "running_tokens": self._running_tokens,
-                "total_scheduled": self._total_scheduled,
-                "total_completed": self._total_completed,
-                "total_preemptions": self._total_preemptions,
-                "token_budget_used": self._running_tokens / self.config.max_tokens_per_batch,
-            }
+                "waiting": len(self.waiting),"                "running": len(self.running),"                "preempted": len(self.preempted),"                "completed": len(self.completed),"                "running_tokens": self._running_tokens,"                "total_scheduled": self._total_scheduled,"                "total_completed": self._total_completed,"                "total_preemptions": self._total_preemptions,"                "token_budget_used": self._running_tokens / self.config.max_tokens_per_batch,"            }
 
     def clear_completed(self, older_than: float = 0) -> int:
-        """Clear completed requests older than threshold."""
-        with self._lock:
+        """Clear completed requests older than threshold."""""""        with self._lock:
             if older_than <= 0:
                 count = len(self.completed)
                 self.completed.clear()
@@ -330,8 +302,7 @@ def create_scheduler(
     max_requests: int = 32,
     preemption: bool = True,
 ) -> AdvancedRequestScheduler:
-    """Create a scheduler with common settings."""
-    config = SchedulerConfig(
+    """Create a scheduler with common settings."""""""    config = SchedulerConfig(
         max_running_requests=max_requests,
         max_tokens_per_batch=max_tokens,
         preemption_enabled=preemption,
@@ -340,12 +311,6 @@ def create_scheduler(
 
 
 def priority_from_string(s: str) -> RequestPriority:
-    """Convert string to RequestPriority."""
-    mapping = {
-        "critical": RequestPriority.CRITICAL,
-        "high": RequestPriority.HIGH,
-        "normal": RequestPriority.NORMAL,
-        "low": RequestPriority.LOW,
-        "background": RequestPriority.BACKGROUND,
-    }
+    """Convert string to RequestPriority."""""""    mapping = {
+        "critical": RequestPriority.CRITICAL,"        "high": RequestPriority.HIGH,"        "normal": RequestPriority.NORMAL,"        "low": RequestPriority.LOW,"        "background": RequestPriority.BACKGROUND,"    }
     return mapping.get(s.lower(), RequestPriority.NORMAL)

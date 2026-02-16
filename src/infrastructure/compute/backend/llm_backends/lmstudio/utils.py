@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Convenience functions for LM Studio.
-"""
-
+"""""""Convenience functions for LM Studio.
+"""""""
 import logging
 from typing import Iterator
 
@@ -26,12 +22,9 @@ logger = logging.getLogger(__name__)
 
 def lmstudio_chat(
     prompt: str,
-    model: str = "",
-    system_prompt: str = "You are a helpful assistant.",
-    **_kwargs,
+    model: str = "","    system_prompt: str = "You are a helpful assistant.","    **_kwargs,
 ) -> str:
-    """Convenience function for quick LM Studio chat."""
-    try:
+    """Convenience function for quick LM Studio chat."""""""    try:
         import lmstudio
 
         llm = lmstudio.llm(model) if model else lmstudio.llm()
@@ -42,17 +35,12 @@ def lmstudio_chat(
         return str(result)
 
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-        logger.error(f"lmstudio_chat error: {e}")
-        return ""
-
+        logger.error(f"lmstudio_chat error: {e}")"        return """
 
 def lmstudio_stream(
     prompt: str,
-    model: str = "",
-    system_prompt: str = "You are a helpful assistant.",
-) -> Iterator[str]:
-    """Convenience function for streaming LM Studio chat."""
-    try:
+    model: str = "","    system_prompt: str = "You are a helpful assistant.",") -> Iterator[str]:
+    """Convenience function for streaming LM Studio chat."""""""    try:
         import lmstudio
 
         llm = lmstudio.llm(model) if model else lmstudio.llm()
@@ -63,28 +51,21 @@ def lmstudio_stream(
             yield str(fragment)
 
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-        logger.error(f"lmstudio_stream error: {e}")
-
+        logger.error(f"lmstudio_stream error: {e}")"
 
 async def lmstudio_chat_async(
     prompt: str,
-    model: str = "",
-    system_prompt: str = "You are a helpful assistant.",
-    host: str = "localhost:1234",
-) -> str:
-    """Async convenience function for LM Studio chat.
-
+    model: str = "","    system_prompt: str = "You are a helpful assistant.","    host: str = "localhost:1234",") -> str:
+    """Async convenience function for LM Studio chat.""""
     This function is robust to different SDK shapes for `client.llm`.
-    """
-    try:
+    """""""    try:
         import lmstudio
         import inspect
 
         async with lmstudio.AsyncClient(host) as client:
             llm_accessor = client.llm
 
-            if hasattr(llm_accessor, "get"):
-                llm = await (llm_accessor.get(model) if model else llm_accessor.get())
+            if hasattr(llm_accessor, "get"):"                llm = await (llm_accessor.get(model) if model else llm_accessor.get())
             else:
                 if callable(llm_accessor):
                     maybe = llm_accessor(model) if model else llm_accessor()
@@ -103,5 +84,4 @@ async def lmstudio_chat_async(
             return str(result)
 
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-        logger.error(f"lmstudio_chat_async error: {e}")
-        return ""
+        logger.error(f"lmstudio_chat_async error: {e}")"        return """

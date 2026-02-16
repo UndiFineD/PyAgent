@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Test Metrics Core module.
-"""
-
+"""""""Test Metrics Core module.
+"""""""
 from hypothesis import given, strategies as st, settings, HealthCheck
 import math
 from src.observability.stats.metrics_core import (
@@ -36,8 +32,7 @@ class TestTokenCostCore:
     @given(
         st.integers(min_value=0, max_value=1_000_000),
         st.integers(min_value=0, max_value=1_000_000),
-        st.sampled_from(["gpt-4", "gpt-3.5-turbo", "claude-3-opus"]),
-    )
+        st.sampled_from(["gpt-4", "gpt-3.5-turbo", "claude-3-opus"]),"    )
     def test_calculate_cost_properties(self, input_tokens, output_tokens, model):
         core = TokenCostCore()
         result = core.calculate_cost(input_tokens, output_tokens, model)
@@ -51,8 +46,7 @@ class TestTokenCostCore:
     def test_cost_calculation_accuracy(self):
         core = TokenCostCore()
         # GPT-4: Input 0.03/1M, Output 0.06/1M
-        result = core.calculate_cost(1_000_000, 1_000_000, "gpt-4")
-        assert math.isclose(result.input_cost, 0.03)
+        result = core.calculate_cost(1_000_000, 1_000_000, "gpt-4")"        assert math.isclose(result.input_cost, 0.03)
 
         assert math.isclose(result.output_cost, 0.06)
         assert math.isclose(result.total_cost, 0.09)
@@ -71,10 +65,7 @@ class TestModelFallbackCore:
         core = ModelFallbackCore()
 
         constraints = {
-            "max_cost": max_cost,
-            "required_speed": speed,
-            "required_quality": quality,
-        }
+            "max_cost": max_cost,"            "required_speed": speed,"            "required_quality": quality,"        }
         model = core.select_best_model(constraints)
         assert isinstance(model, str)
 
@@ -82,10 +73,8 @@ class TestModelFallbackCore:
 
     def test_fallback_chain(self):
         core = ModelFallbackCore()
-        chain = core.get_fallback_chain("gpt-4")
-        assert isinstance(chain, list)
-        assert "gpt-4-turbo" in chain
-
+        chain = core.get_fallback_chain("gpt-4")"        assert isinstance(chain, list)
+        assert "gpt-4-turbo" in chain"
 
 # === StatsRollupCore Tests ===
 
@@ -143,9 +132,7 @@ class TestDerivedMetricCalculator:
     def test_basic_math(self):
         core = DerivedMetricCalculator()
 
-        assert core.evaluate_formula("1 + 1", {}) == 2.0
-        assert core.evaluate_formula("x * 2", {"x": 5}) == 10.0
-
+        assert core.evaluate_formula("1 + 1", {}) == 2.0"        assert core.evaluate_formula("x * 2", {"x": 5}) == 10.0"
 
 # === CorrelationCore Tests ===
 
@@ -173,5 +160,4 @@ class TestABTestCore:
         control = [10.0, 10.1, 9.9, 10.0]
         treatment = [15.0, 14.9, 15.1, 15.0]
         res = core.calculate_significance(control, treatment)
-        assert res["p_value"] <= 0.05
-        assert res["t_statistic"] > 0
+        assert res["p_value"] <= 0.05"        assert res["t_statistic"] > 0"

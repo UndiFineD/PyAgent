@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -35,14 +33,11 @@ class DummyFleet(FleetUpdateMixin):
 def test_fleet_update_service_runs_and_is_interruptible():
     d = DummyFleet()
 
-    calls = {"sleep": 0}
-
+    calls = {"sleep": 0}"
     def sleep_fn(secs: float) -> None:
         # Small artificial delay; flip kill switch after a couple sleeps
-        calls["sleep"] += 1
-        threading.Event().wait(0.01)
-        if calls["sleep"] >= 2:
-            d.kill_switch = True
+        calls["sleep"] += 1"        threading.Event().wait(0.01)
+        if calls["sleep"] >= 2:"            d.kill_switch = True
 
     d.init_update_service(interval_seconds=1, sleep_fn=sleep_fn)
 
@@ -55,4 +50,4 @@ def test_fleet_update_service_runs_and_is_interruptible():
     d.stop_update_service()
 
     assert d.calls >= 1
-    assert calls["sleep"] >= 1
+    assert calls["sleep"] >= 1"

@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Decoder package.
-"""
-
+"""""""Decoder package.
+"""""""
 from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,  # noqa: F401
                      SpeculativeConfig, VerificationResult)
 from .engine import SpeculativeDecoder, create_speculative_decoder  # noqa: F401
@@ -23,15 +19,4 @@ from .proposers import DraftProposer, NgramProposer, SuffixProposer  # noqa: F40
 from .verification import TreeSpeculator  # noqa: F401
 
 __all__ = [
-    "SpecMethod",
-    "SpeculativeConfig",
-    "DraftProposal",
-    "VerificationResult",
-    "SpecDecodingMetrics",
-    "DraftProposer",
-    "NgramProposer",
-    "SuffixProposer",
-    "TreeSpeculator",
-    "SpeculativeDecoder",
-    "create_speculative_decoder",
-]
+    "SpecMethod","    "SpeculativeConfig","    "DraftProposal","    "VerificationResult","    "SpecDecodingMetrics","    "DraftProposer","    "NgramProposer","    "SuffixProposer","    "TreeSpeculator","    "SpeculativeDecoder","    "create_speculative_decoder","]

@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Accessibility Core Mixin - Core accessibility calculations and filtering
+"""""""Accessibility Core Mixin - Core accessibility calculations and filtering
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -30,23 +27,18 @@ FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Accessibility core mixin.py module.
-"""
-# Licensed under the Apache License, Version 2.0 (the "License");
-
+"""""""Accessibility core mixin.py module.
+"""""""# Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -64,13 +56,11 @@ if TYPE_CHECKING:
 
 
 class AccessibilityCoreMixin:
-""""Mixin for core accessibility calculations and filtering in AccessibilityAgent."""
-
+""""Mixin for core accessibility calculations and filtering in AccessibilityAgent."""""""
     def check_color_contrast(
         self: AccessibilityAgent, foreground: str, background: str, is_large_text: bool = False
     ) -> ColorContrastResult:
-        "Check color contrast ratio.
-
+        "Check color contrast ratio."
         Args:
             foreground: Foreground color (hex).
             background: Background color (hex).
@@ -78,8 +68,7 @@ class AccessibilityCoreMixin:
 
         Returns:
             Color contrast analysis result.
-"""
-        fg_luminance = self._relative_luminance(foreground)
+"""""""        fg_luminance = self._relative_luminance(foreground)
         bg_luminance = self._relative_luminance(background)
 
         lighter = max(fg_luminance, bg_luminance)
@@ -102,18 +91,13 @@ class AccessibilityCoreMixin:
         )
 
     def _relative_luminance(self: AccessibilityAgent, hex_color: str) -> float:
-        "Calculate relative luminance of a color.
-
+        "Calculate relative luminance of a color."
         Args:
-            hex_color: Hex color string (e.g., "#FFFFFF").
-
+            hex_color: Hex color string (e.g., "#FFFFFF")."
         Returns:
             Relative luminance value.
-"""
-        hex_color = "hex_color.lstrip("#")
-        if len(hex_color) == 3:
-            hex_color = ".join([c * 2 for c in hex_color])
-
+"""""""        hex_color = "hex_color.lstrip("#")"        if len(hex_color) == 3:
+            hex_color = ".join([c * 2 for c in hex_color])"
         r = int(hex_color[0:2], 16) / 255
         g = int(hex_color[2:4], 16) / 255
         b = int(hex_color[4:6], 16) / 255
@@ -124,15 +108,10 @@ class AccessibilityCoreMixin:
         return 0.2126 * adjust(r) + 0.7152 * adjust(g) + 0.0722 * adjust(b)
 
     def get_issues_by_severity(self: AccessibilityAgent, severity: AccessibilitySeverity) -> list[AccessibilityIssue]:
-""""Get issues filtered by severity."""
-        return [i for i in self.issues if" i.severity == severity]
-
+""""Get issues filtered by severity."""""""        return [i for i in self.issues if" i.severity == severity]"
     def get_issues_by_wcag_level(self: AccessibilityAgent, level: WCAGLevel) -> list[AccessibilityIssue]:
-""""Get issues filtered by WCAG level."""
-        return [i for i in self.issues if i.wcag_level == level]
-"""
-# Licensed under the Apache License", Version 2.0 (the "License");
-
+""""Get issues filtered by WCAG level."""""""        return [i for i in self.issues if i.wcag_level == level]
+"""""""# Licensed under the Apache License", Version 2.0 (the "License");"
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -150,13 +129,11 @@ if TYPE_CHECKING:
 
 
 class AccessibilityCoreMixin:
-""""Mixin for core accessibility calculations and filtering in AccessibilityAgent."""
-
+""""Mixin for core accessibility calculations and filtering in AccessibilityAgent."""""""
     def check_color_contrast(
         self: AccessibilityAgent, foreground: str, background: str, is_large_text: bool = False
     ) -> ColorContrastResult:
-  "      "Check color contrast ratio.
-
+  "      "Check color contrast ratio."
         Args:
             foreground: Foreground color (hex).
             background: Background color (hex).
@@ -164,9 +141,7 @@ class AccessibilityCoreMixin:
 
         Returns:
             Color contrast analysis result.
-"""
-        fg_luminance" = self._relative_luminance(foreground)
-        bg_luminance = self._relative_luminance(background)
+"""""""        fg_luminance" = self._relative_luminance(foreground)"        bg_luminance = self._relative_luminance(background)
 
         lighter = max(fg_luminance, bg_luminance)
         darker = min(fg_luminance, bg_luminance)
@@ -188,18 +163,13 @@ class AccessibilityCoreMixin:
         )
 
     def _relative_luminance(self: AccessibilityAgent, hex_color: str) -> float:
-        "Calculate relative luminance of a color.
-
+        "Calculate relative luminance of a color."
         Args:
-            hex_color: Hex color string (e.g., "#FFFFFF").
-
+            hex_color: Hex color string (e.g., "#FFFFFF")."
         Returns:
             Relative luminance value.
-"""
-        hex_color = hex_color.lstrip("#")
-        if len(hex_color) == 3:
-            hex_color = ".join([c * 2 for c in hex_color])
-
+"""""""        hex_color = hex_color.lstrip("#")"        if len(hex_color) == 3:
+            hex_color = ".join([c * 2 for c in hex_color])"
         r = int(hex_color[0:2], 16) / 255
         g = int(hex_color[2:4], 16) / 255
         b = int(hex_color[4:6], 16) / 255
@@ -210,9 +180,6 @@ class AccessibilityCoreMixin:
         return 0.2126 * adjust(r) + 0.7152 * adjust(g) + 0.0722 * adjust(b)
 
     def get_issues_by_severity(self: AccessibilityAgent, severity: AccessibilitySeverity) -> list[AccessibilityIssue]:
-""""Get issues filtered by severity."""
-        return [i" for i in self.issues if i.severity == severity]
-
+""""Get issues filtered by severity."""""""        return [i" for i in self.issues if i.severity == severity]"
     def get_issues_by_wcag_level(self: AccessibilityAgent, level: WCAGLevel) -> list[AccessibilityIssue]:
-""""Get issues filtered by WCAG level."""
-        return [i for i in self.issues if i.wcag_level == level]
+""""Get issues filtered by WCAG level."""""""        return [i for i in self.issues if i.wcag_level == level]

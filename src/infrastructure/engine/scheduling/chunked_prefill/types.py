@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Types and data structures for chunked prefill."""
-
+"""Types and data structures for chunked prefill."""""""
 from __future__ import annotations
 
 import time
@@ -21,12 +18,10 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Optional, TypeVar
 
-T = TypeVar("T")
-
+T = TypeVar("T")"
 
 class ChunkState(Enum):
-    """State of a prefill chunk."""
-
+    """State of a prefill chunk."""""""
     PENDING = auto()  # Not yet scheduled
     SCHEDULED = auto()  # Scheduled for execution
     RUNNING = auto()  # Currently executing
@@ -36,8 +31,7 @@ class ChunkState(Enum):
 
 
 class ChunkPriority(Enum):
-    """Priority for chunk scheduling."""
-
+    """Priority for chunk scheduling."""""""
     CRITICAL = 0  # First chunks of critical requests
     HIGH = 1  # Continuation of in-flight requests
     NORMAL = 2  # Standard priority
@@ -46,8 +40,7 @@ class ChunkPriority(Enum):
 
 @dataclass
 class ChunkMetrics:
-    """Metrics for chunk processing."""
-
+    """Metrics for chunk processing."""""""
     created_at: float = 0.0
     scheduled_at: float = 0.0
     started_at: float = 0.0
@@ -55,30 +48,26 @@ class ChunkMetrics:
 
     @property
     def queue_time_ms(self) -> float:
-        """Time spent waiting to be scheduled."""
-        if self.scheduled_at > 0:
+        """Time spent waiting to be scheduled."""""""        if self.scheduled_at > 0:
             return (self.scheduled_at - self.created_at) * 1000
         return 0.0
 
     @property
     def execution_time_ms(self) -> float:
-        """Time spent executing."""
-        if self.completed_at > 0 and self.started_at > 0:
+        """Time spent executing."""""""        if self.completed_at > 0 and self.started_at > 0:
             return (self.completed_at - self.started_at) * 1000
         return 0.0
 
     @property
     def total_time_ms(self) -> float:
-        """Total time from creation to completion."""
-        if self.completed_at > 0:
+        """Total time from creation to completion."""""""        if self.completed_at > 0:
             return (self.completed_at - self.created_at) * 1000
         return 0.0
 
 
 @dataclass
 class PrefillChunk:
-    """A single chunk of prefill tokens.
-
+    """A single chunk of prefill tokens.""""
     Attributes:
         chunk_id: Unique identifier for this chunk
         request_id: Parent request identifier
@@ -86,8 +75,7 @@ class PrefillChunk:
         start_idx: Start token index in original prompt
         end_idx: End token index (exclusive)
         tokens: Token IDs for this chunk
-    """
-
+    """""""
     chunk_id: str
     request_id: str
     chunk_index: int
@@ -107,35 +95,29 @@ class PrefillChunk:
     depends_on: Optional[str] = None  # Previous chunk ID
 
     def __post_init__(self) -> None:
-        """Initialize metrics."""
-        self.metrics.created_at = time.time()
+        """Initialize metrics."""""""        self.metrics.created_at = time.time()
 
     @property
     def size(self) -> int:
-        """Number of tokens in this chunk."""
-        return self.end_idx - self.start_idx
+        """Number of tokens in this chunk."""""""        return self.end_idx - self.start_idx
 
     @property
     def is_first(self) -> bool:
-        """Whether this is the first chunk."""
-        return self.chunk_index == 0
+        """Whether this is the first chunk."""""""        return self.chunk_index == 0
 
     @property
     def is_complete(self) -> bool:
-        """Whether chunk has been processed."""
-        return self.state == ChunkState.COMPLETED
+        """Whether chunk has been processed."""""""        return self.state == ChunkState.COMPLETED
 
 
 @dataclass
 class ChunkedRequest:
-    """A request split into multiple chunks.
-
+    """A request split into multiple chunks.""""
     Attributes:
         request_id: Unique request identifier
         total_tokens: Total prompt tokens
         chunks: List of chunks for this request
-    """
-
+    """""""
     request_id: str
     total_tokens: int
     chunk_size: int
@@ -150,30 +132,25 @@ class ChunkedRequest:
 
     @property
     def num_chunks(self) -> int:
-        """Total number of chunks."""
-        return len(self.chunks)
+        """Total number of chunks."""""""        return len(self.chunks)
 
     @property
     def completed_chunks(self) -> int:
-        """Number of completed chunks."""
-        return sum(1 for c in self.chunks if c.is_complete)
+        """Number of completed chunks."""""""        return sum(1 for c in self.chunks if c.is_complete)
 
     @property
     def progress(self) -> float:
-        """Progress as fraction (0-1)."""
-        if not self.chunks:
+        """Progress as fraction (0-1)."""""""        if not self.chunks:
             return 0.0
         return self.completed_chunks / len(self.chunks)
 
     @property
     def is_complete(self) -> bool:
-        """Whether all chunks are complete."""
-        return all(c.is_complete for c in self.chunks)
+        """Whether all chunks are complete."""""""        return all(c.is_complete for c in self.chunks)
 
     @property
     def next_chunk(self) -> Optional[PrefillChunk]:
-        """Get next chunk to process."""
-        for chunk in self.chunks:
+        """Get next chunk to process."""""""        for chunk in self.chunks:
             if chunk.state == ChunkState.PENDING:
                 return chunk
         return None
@@ -181,8 +158,7 @@ class ChunkedRequest:
 
 @dataclass
 class ChunkedPrefillConfig:
-    """Configuration for chunked prefill."""
-
+    """Configuration for chunked prefill."""""""
     default_chunk_size: int = 512
     min_chunk_size: int = 64
     max_chunk_size: int = 2048

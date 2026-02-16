@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Config.py module.
-"""
-
+"""""""Config.py module.
+"""""""
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -28,11 +24,8 @@ from .enums import InstanceRole, SchedulingPolicy
 
 @dataclass
 class InstanceInfo:
-    """Information about a vLLM instance.
-
-    Inspired by vLLM's proxy server patterns.
-    """
-
+    """Information about a vLLM instance.""""
+    Inspired by vLLM's proxy server patterns.'    """""""
     instance_id: str
     role: InstanceRole
     host: str
@@ -55,29 +48,21 @@ class InstanceInfo:
 
     @property
     def base_url(self) -> str:
-        """Get the HTTP base URL for this instance."""
-        return f"http://{self.host}:{self.http_port}"
-
+        """Get the HTTP base URL for this instance."""""""        return f"http://{self.host}:{self.http_port}""
     @property
     def kv_address(self) -> Optional[str]:
-        """Get the KV transfer address."""
-        if self.kv_port:
-            return f"{self.host}:{self.kv_port}"
-        return None
+        """Get the KV transfer address."""""""        if self.kv_port:
+            return f"{self.host}:{self.kv_port}""        return None
 
     @property
     def load_score(self) -> float:
-        """Calculate load score (lower is better)."""
-        return self.num_running_requests + self.num_waiting_requests * 0.5
+        """Calculate load score (lower is better)."""""""        return self.num_running_requests + self.num_waiting_requests * 0.5
 
 
 @dataclass
 class DCPConfig:
-    """Configuration for disaggregated prefill-decode.
-
-    Inspired by vLLM's kv_transfer configuration.
-    """
-
+    """Configuration for disaggregated prefill-decode.""""
+    Inspired by vLLM's kv_transfer configuration.'    """""""
     enabled: bool = False
 
     # Instance configuration
@@ -89,10 +74,8 @@ class DCPConfig:
     decode_policy: SchedulingPolicy = SchedulingPolicy.LEAST_LOADED
 
     # KV transfer configuration
-    kv_connector: str = "NixlConnector"
-    kv_buffer_size: int = int(1e10)  # 10GB
-    kv_buffer_device: str = "cuda"
-
+    kv_connector: str = "NixlConnector""    kv_buffer_size: int = int(1e10)  # 10GB
+    kv_buffer_device: str = "cuda""
     # Health check configuration
     health_check_interval: float = 5.0
     health_check_timeout: float = 2.0
@@ -110,11 +93,8 @@ class DCPConfig:
 
 @dataclass
 class KVTransferParams:
-    """Parameters for KV cache transfer between instances.
-
-    Inspired by vLLM's kv_transfer_params dict structure.
-    """
-
+    """Parameters for KV cache transfer between instances.""""
+    Inspired by vLLM's kv_transfer_params dict structure.'    """""""
     do_remote_prefill: bool = False
     do_remote_decode: bool = False
 
@@ -134,43 +114,17 @@ class KVTransferParams:
     remote_dp_rank: Optional[int] = None
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for request body."""
-        return {
-            "do_remote_prefill": self.do_remote_prefill,
-            "do_remote_decode": self.do_remote_decode,
-            "remote_engine_id": self.remote_engine_id,
-            "remote_host": self.remote_host,
-            "remote_port": self.remote_port,
-            "remote_block_ids": self.remote_block_ids,
-            "remote_handshake_port": self.remote_handshake_port,
-            "remote_notify_port": self.remote_notify_port,
-            "remote_tp_size": self.remote_tp_size,
-            "remote_dp_size": self.remote_dp_size,
-            "remote_dp_rank": self.remote_dp_rank,
-        }
+        """Convert to dictionary for request body."""""""        return {
+            "do_remote_prefill": self.do_remote_prefill,"            "do_remote_decode": self.do_remote_decode,"            "remote_engine_id": self.remote_engine_id,"            "remote_host": self.remote_host,"            "remote_port": self.remote_port,"            "remote_block_ids": self.remote_block_ids,"            "remote_handshake_port": self.remote_handshake_port,"            "remote_notify_port": self.remote_notify_port,"            "remote_tp_size": self.remote_tp_size,"            "remote_dp_size": self.remote_dp_size,"            "remote_dp_rank": self.remote_dp_rank,"        }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "KVTransferParams":
-        """Create from dictionary."""
-        return cls(
-            do_remote_prefill=data.get("do_remote_prefill", False),
-            do_remote_decode=data.get("do_remote_decode", False),
-            remote_engine_id=data.get("remote_engine_id"),
-            remote_host=data.get("remote_host"),
-            remote_port=data.get("remote_port"),
-            remote_block_ids=data.get("remote_block_ids"),
-            remote_handshake_port=data.get("remote_handshake_port"),
-            remote_notify_port=data.get("remote_notify_port"),
-            remote_tp_size=data.get("remote_tp_size", 1),
-            remote_dp_size=data.get("remote_dp_size", 1),
-            remote_dp_rank=data.get("remote_dp_rank"),
-        )
+    def from_dict(cls, data: Dict[str, Any]) -> "KVTransferParams":"        """Create from dictionary."""""""        return cls(
+            do_remote_prefill=data.get("do_remote_prefill", False),"            do_remote_decode=data.get("do_remote_decode", False),"            remote_engine_id=data.get("remote_engine_id"),"            remote_host=data.get("remote_host"),"            remote_port=data.get("remote_port"),"            remote_block_ids=data.get("remote_block_ids"),"            remote_handshake_port=data.get("remote_handshake_port"),"            remote_notify_port=data.get("remote_notify_port"),"            remote_tp_size=data.get("remote_tp_size", 1),"            remote_dp_size=data.get("remote_dp_size", 1),"            remote_dp_rank=data.get("remote_dp_rank"),"        )
 
 
 @dataclass
 class ScheduledRequest:
-    """A request scheduled for processing."""
-
+    """A request scheduled for processing."""""""
     request_id: str
     prompt: str
     max_tokens: int

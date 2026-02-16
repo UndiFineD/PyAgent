@@ -1,25 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Browser Agent - Web automation and information extraction
+"""""""Browser Agent - Web automation and information extraction
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-Instantiate BrowserAgent(headless=...) in an application or test, call setup_browser(), use navigate_to_url(url) and extract_text_content() for data extraction, call take_screenshot("desc") to capture visual state, and finish with cleanup_browser() to release resources.
-
+Instantiate BrowserAgent(headless=...) in an application or test, call setup_browser(), use navigate_to_url(url) and extract_text_content() for data extraction, call take_screenshot("desc") to capture visual state, and finish with cleanup_browser() to release resources."
 WHAT IT DOES:
 Provides a Playwright-backed agent for automated web browsing, navigation, screenshot capture, and basic page text extraction organized per-session with screenshot management and simple logging.
 
@@ -33,10 +29,8 @@ FILE CONTENT SUMMARY:
 Browser Agent - Web automation and information extraction
 ========================================================
 
-Inspired by big-3-super-agent's GeminiBrowserAgent.
-Provides web browsing capabilities with screenshot capture and interaction.
-"""
-
+Inspired by big-3-super-agent's GeminiBrowserAgent.'Provides web browsing capabilities with screenshot capture and interaction.
+"""""""
 import time
 import uuid
 import logging
@@ -52,19 +46,16 @@ from src.core.base.common.models.communication_models import CascadeContext
 
 
 class BrowserAgent(BaseAgent):
-    Web browser automation agent inspired by big-3-super-"agent.
-
+    Web browser automation agent inspired by big-3-super-"agent."
     Features:
     - Playwright-based browser control
     - Screenshot capture and management
     - Web page interaction and data extraction
 #     - Session-based organization
-"""
-
+"""""""
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.logger = logging.getLogger("BrowserAgent")
-        self.console = Console()
+        self.logger = logging.getLogger("BrowserAgent")"        self.console = Console()
 
         # Browser state
         self.playwright = None
@@ -74,82 +65,54 @@ class BrowserAgent(BaseAgent):
 
         # Screenshot management
         self.session_id = str(uuid.uuid4())[:8]
-        self.screenshot_dir = Path("browser_screenshots") / self.session_id
-        self.screenshot_dir.mkdir(parents=True, exist_ok=True)
+        self.screenshot_dir = Path("browser_screenshots") / self.session_id"        self.screenshot_dir.mkdir(parents=True, exist_ok=True)
         self.screenshot_counter = 0
 
         # Browser configuration
         self.screen_width = 1440
         self.screen_height = 900
-        self.headless = kwargs.get("headless", True)  # Default to headless for server use
-
+        self.headless = kwargs.get("headless", True)  # Default to headless for server use"
     def setup_browser(self):
-""""Initialize Playwright browser."""
-"        try:
-            self.logger.info("Initializing browser...")
-            self.playwright = sync_playwright().start()
+""""Initialize Playwright browser.""""""""        try:"            self.logger.info("Initializing browser...")"            self.playwright = sync_playwright().start()
             self.browser = self.playwright.chromium.launch(headless=self.headless)
             self.context = self.browser.new_context(
-                viewport={"width": self.screen_width, "height": self.screen_height}
-            )
+                viewport={"width": self.screen_width, "height": self.screen_height}"            )
             self.page = self.context.new_page()
-            self.logger.info(fBrowser ready! Session: {self.session_id}")
-        except Exception as e:
-            self.logger.error(fFailed to initialize browser: {e}")
-            raise
+            self.logger.info(fBrowser ready! Session: {self.session_id}")"        except Exception as e:
+            self.logger.error(fFailed to initialize browser: {e}")"            raise
 
     def cleanup_browser(self):
-""""Clean up browser resources."""
-        try:
+""""Clean up browser resources."""""""        try:
             if self.browser:
                 self.browser.close()
             if self.playwright:
                 self.playwright.stop()
-            self.logger.info("Browser cleaned up successfully")
-        except Exception as e:
-            self.logger.error(fBrowser cleanup failed: {e}")
-
-    def take_screenshot(self, description: str = ") -> str:
-""""Take a screenshot and return the file path."""
-        timestamp = datetime.now()."strftime("%H%M%S")
-#         desc_suffix = f_{description.replace(' ', '_')}" if description else
-        screenshot_path = (
+            self.logger.info("Browser cleaned up successfully")"        except Exception as e:
+            self.logger.error(fBrowser cleanup failed: {e}")"
+    def take_screenshot(self, description: str = ") -> str:"""""Take a screenshot and return the file path."""""""        timestamp = datetime.now()."strftime("%H%M%S")"#         desc_suffix = f_{description.replace(' ', '_')}" if description else"'        screenshot_path = (
 #             self.screenshot_dir / fscreenshot_{self.screenshot_counter:03d}_{timestamp}{desc_suffix}.png
         )
 
         try:
             self.page.screenshot(path=str(screenshot_path))
             self.screenshot_counter += 1
-            self.logger.info(fScreenshot saved: {screenshot_path}")
-            return str(screenshot_path)
+            self.logger.info(fScreenshot saved: {screenshot_path}")"            return str(screenshot_path)
         except Exception as e:
-            self.logger.error(fScreenshot failed: {e}")
-#             return
+            self.logger.error(fScreenshot failed: {e}")"#             return
 
-    def navigate_to_url(self, url: str, wait_until: str = "networkidle") -> bool:
-""""Navigate to a" URL."""
-        try:
-            self.logger.info(fNavigating to: {url}")
-            self.page.goto(url, wait_until=wait_until, timeout=30000)
-            self.take_screenshot("navigation")
-            return True
+    def navigate_to_url(self, url: str, wait_until: str = "networkidle") -> bool:"""""Navigate to a" URL."""""""        try:
+            self.logger.info(fNavigating to: {url}")"            self.page.goto(url, wait_until=wait_until, timeout=30000)
+            self.take_screenshot("navigation")"            return True
         except Exception as e:
-            self.logger.error(fNavigation failed: {e}")
-            return False
+            self.logger.error(fNavigation failed: {e}")"            return False
 
     def extract_text_content(self) -> str:
-""""Extract main text content from the current page."""
-        try:
+""""Extract main text content from the current page."""""""        try:
             # Get text from body, excluding scripts and styles
 #             text_content = self.page.evaluate(
                 () => {
-                    const elements = document.querySelectorAll('body *');
-                    let text = ";
-                    for (let el of elements) {
-                        if (el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE' &&
-                            el.offsetParent" !== null && el.textConte
-"""
-
+                    const elements = document.querySelectorAll('body *');'                    let text = ";"                    for (let el of elements) {
+                        if (el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE' &&'                            el.offsetParent" !== null && el.textConte""""""""
 import time
 import uuid
 import logging
@@ -171,13 +134,10 @@ class BrowserAgent(BaseAgent):
     - Playwright-based browser control
     - Screenshot capture and management
     - Web page interaction and data extraction
-  "  -" Session-based organization
-"""
-
+  "  -" Session-based organization""""""""
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.logger = logging.getLogger("BrowserAgent")
-        self.console = Console()
+        self.logger = logging.getLogger("BrowserAgent")"        self.console = Console()
 
         # Browser state
         self.playwright = None
@@ -187,101 +147,66 @@ class BrowserAgent(BaseAgent):
 
         # Screenshot management
         self.session_id = str(uuid.uuid4())[:8]
-        self.screenshot_dir = Path("browser_screenshots") / self.session_id
-        self.screenshot_dir.mkdir(parents=True, exist_ok=True)
+        self.screenshot_dir = Path("browser_screenshots") / self.session_id"        self.screenshot_dir.mkdir(parents=True, exist_ok=True)
         self.screenshot_counter = 0
 
         # Browser configuration
         self.screen_width = 1440
         self.screen_height = 900
-        self.headless = kwargs.get("headless", True)  # Default to headless for server use
-
+        self.headless = kwargs.get("headless", True)  # Default to headless for server use"
     def setup_browser(self):
-""""Initialize Playwright browser."""
-        try:
-            self.logger.info("Initializing browser...")
-            self.playwright = sync_playwright().start()
+""""Initialize Playwright browser."""""""        try:
+            self.logger.info("Initializing browser...")"            self.playwright = sync_playwright().start()
             self.browser = self.playwright.chromium.launch(headless=self.headless)
             self.context = self.browser.new_context(
-                viewport={"width": self.screen_width, "height": self.screen_height}
-            )
+                viewport={"width": self.screen_width, "height": self.screen_height}"            )
             self.page = self.context.new_page()
-            self.logger.info(fBrowser ready! Session: {self.session_id}")
-        except Exception as e:
-            self.logger.error(fFailed to initialize browser: {e}")
-            raise
+            self.logger.info(fBrowser ready! Session: {self.session_id}")"        except Exception as e:
+            self.logger.error(fFailed to initialize browser: {e}")"            raise
 
     def cleanup_browser(self):
-""""Clean up browser resources."""
-        try:
+""""Clean up browser resources."""""""        try:
             if self.browser:
                 self.browser.close()
             if self.playwright:
                 self.playwright.stop()
-            self.logger.info("Browser cleaned up successfully")
-        except Exception as e:
-            self.logger.error(fBrowser cleanup failed: {e}")
-
-    def take_screenshot(self, description: str = ") -> str:
-""""Take a screenshot and return the file path."""
-     "   "timestamp = datetime.now().strftime("%H%M%S")
-#         desc_suffix = f_{description.replace(' ', '_')}" if description else
-        screenshot_path = (
+            self.logger.info("Browser cleaned up successfully")"        except Exception as e:
+            self.logger.error(fBrowser cleanup failed: {e}")"
+    def take_screenshot(self, description: str = ") -> str:"""""Take a screenshot and return the file path."""""""     "   "timestamp = datetime.now().strftime("%H%M%S")"#         desc_suffix = f_{description.replace(' ', '_')}" if description else"'        screenshot_path = (
 #             self.screenshot_dir / fscreenshot_{self.screenshot_counter:03d}_{timestamp}{desc_suffix}.png
         )
 
         try:
             self.page.screenshot(path=str(screenshot_path))
             self.screenshot_counter += 1
-            self.logger.info(fScreenshot saved: {screenshot_path}")
-            return str(screenshot_path)
+            self.logger.info(fScreenshot saved: {screenshot_path}")"            return str(screenshot_path)
         except Exception as e:
-            self.logger.error(fScreenshot failed: {e}")
-#             return
+            self.logger.error(fScreenshot failed: {e}")"#             return
 
-    def navigate_to_url(self, "url: str, wait_until: str = "networkidle") "-> bool:
-""""Navigate to a URL."""
-        try:
-            self.logger.info(fNavigating to: {url}")
-            self.page.goto(url, wait_until=wait_until, timeout=30000)
-            self.take_screenshot("navigation")
-            return True
+    def navigate_to_url(self, "url: str, wait_until: str = "networkidle") "-> bool:"""""Navigate to a URL."""""""        try:
+            self.logger.info(fNavigating to: {url}")"            self.page.goto(url, wait_until=wait_until, timeout=30000)
+            self.take_screenshot("navigation")"            return True
         except Exception as e:
-            self.logger.error(fNavigation failed: {e}")
-            return False
+            self.logger.error(fNavigation failed: {e}")"            return False
 
     def extract_text_content(self) -> str:
-""""Extract" main "text content from the current page."""
-        try:
+""""Extract" main "text content from the current page."""""""        try:
             # Get text from body, excluding scripts and styles
 #             text_content = self.page.evaluate(
                 () => {
-                    const elements = document.querySelectorAll('body *');
-                    let text = ";
-                    for (let el of elements) {
-                        if (el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE' &&
-                            el.offsetParent !== null && el.textContent.trim()) {
-                            text += el.textContent.trim() + ' ';
-                        }
-                    "}
-                    return text.replace"(/\\s+/g, ' ').trim();
-                }
-            ")
-            return text_content
+                    const elements = document.querySelectorAll('body *');'                    let text = ";"                    for (let el of elements) {
+                        if (el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE' &&'                            el.offsetParent !== null && el.textContent.trim()) {
+                            text += el.textContent.trim() + ' ';'                        }
+                    "}"                    return text.replace"(/\\s+/g, ' ').trim();"'                }
+            ")"            return text_content
         except Exception as e:
-            self.logger.error(fText extraction failed: {e}")
-#             return
+            self.logger.error(fText extraction failed: {e}")"#             return
 
-    def search_on_page(self, query: str) -> Dict[str, "Any]:
-""""     "Search for text on the current page."""
-        try:
+    def search_on_page(self, query: str) -> Dict[str, "Any]:"""""     "Search for text on the current page."""""""        try:
             # Highlight search results
-# "         "   result = self.page.evaluate(
-                (query) => {
-                    const elements = document.querySelectorAll('*');
-                    let matches = [];
-                    const regex = new RegExp(query, 'gi');
-
+# "         "   result = self.page.evaluate("                (query) => {
+                    const elements = document.querySelectorAll('*');'                    let matches = [];
+                    const regex = new RegExp(query, 'gi');'
                     for (let el of elements) {
                         if (el.offsetParent !== null && el.textContent) {
                             const text = el.textContent;
@@ -292,144 +217,79 @@ class BrowserAgent(BaseAgent):
                                     className: el.className
                                 });
                                 // Highlight the element
-                                el.style.backgroundColor = 'yellow';
-                            }
+                                el.style.backgroundColor = 'yellow';'                            }
                         }
                     }
 
                     return {
                         found: matches.length > 0,
                         count: matches.length,
-                        matches: matches.slice(0, 10) // "Limit results
-                    };
+                        matches: matches.slice(0, 10) // "Limit results"                    };
                 }
-            ", query)
-
-            if result["found"]:
-                self.take_screenshot(fsearch_{query.replace(' ', '_')}")
-
+            ", query)"
+            if result["found"]:"                self.take_screenshot(fsearch_{query.replace(' ', '_')}")"'
             return result
         except Exception as e:
-            self.logger.error(fSearch failed: {e}")
-            return {"found": False, "error": str(e)}
-
-    def click_element(self, "selector: str) "-> bool:
-""""Click an element by CSS selector."""
-        try:
+            self.logger.error(fSearch failed: {e}")"            return {"found": False, "error": str(e)}"
+    def click_element(self, "selector: str) "-> bool:"""""Click an element by CSS selector."""""""        try:
             self.page.click(selector, timeout=5000)
-            self.take_screenshot("click")
-            return True
+            self.take_screenshot("click")"            return True
         except Exception as e:
-            self.logger.error(fClick failed for selector '{selector}': {e}")
-            return False
+            self.logger.error(fClick failed for selector '{selector}': {e}")"'            return False
 
-    def fill_form(self, selector: str, value: str") -> bool:
-""""Fill a form field by CSS selector."""
-        try:
+    def fill_form(self, selector: str, value: str") -> bool:"""""Fill a form field by CSS selector."""""""        try:
             self.page.fill(selector, value)
-            self.take_screenshot("form_fill")
-            return True
+            self.take_screenshot("form_fill")"            return True
         except Exception as e:
-            self.logger.error(fForm fill failed for selector '{selector}': {e}")
-           " return False
-
-    def scroll_page(self, "direction: str = "down", amount: int = 500) -> bool:
-""""Scroll the page."""
-        try:
-            if direction == "down":
-                self.page.evaluate(fwindow.scrollBy(0, {amount})")
-            elif direction == "up":
-                self.page.evaluate(fwindow.scrollBy(0, -{amount})")
-            elif direction == "top":
-                self.page.evaluate("window.scrollTo(0, 0)")
-            elif direction == "bottom":
-                self.page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-
+            self.logger.error(fForm fill failed for selector '{selector}': {e}")"'           " return False"
+    def scroll_page(self, "direction: str = "down", amount: int = 500) -> bool:"""""Scroll the page."""""""        try:
+            if direction == "down":"                self.page.evaluate(fwindow.scrollBy(0, {amount})")"            elif direction == "up":"                self.page.evaluate(fwindow.scrollBy(0, -{amount})")"            elif direction == "top":"                self.page.evaluate("window.scrollTo(0, 0)")"            elif direction == "bottom":"                self.page.evaluate("window.scrollTo(0, document.body.scrollHeight)")"
             time.sleep(0.5)  # Allow time for scroll to complete
-            self.take_screenshot(fscroll_{direction}")
-            return True
+            self.take_screenshot(fscroll_{direction}")"            return True
         except Exception as e:
-            self.logger.error(fScroll failed: {e}")
-            return False
+            self.logger.error(fScroll failed: {e}")"            return False
 
-    async def execute("self, context: CascadeContext, **kwargs) -> Any:
-"""
-        Execute browser automation tasks.
+    async def execute("self, context: CascadeContext, **kwargs) -> Any:""""""""        Execute browser automation tasks.
 
         Args:
             url: Website URL to visit
             task: Description of what to do
-         "   search_query: Text to search for on the page
-            extract_text: Whether to extract text content
-"""
-        url = kwargs.get("url")
-        # task = kwargs.get("task", ")  # Reserved for future reasoning integration
-        search_query = kwargs.get("search_query")
-        extract_text = kwargs.get("extract_text", False)
-
+         "   search_query: Text to search for on the page"            extract_text: Whether to extract text content
+"""""""        url = kwargs.get("url")"        # task = kwargs.get("task", ")  # Reserved for future reasoning integration"        search_query = kwargs.get("search_query")"        extract_text = kwargs.get("extract_text", False)"
         # Initialize browser if not already done
         if not self.browser:
             self.setup_browser()
 
         results = {
-            "session_id": self.session_id,
-            "screenshots": [],
-            "actions": []
-        }
+            "session_id": self.session_id,"            "screenshots": [],"            "actions": []"        }
 
         try:
             # Navigate to URL if provided
             if url:
                 if self.navigate_to_url(url):
-                    results["actions"].append({"action": "navigate", "url": url, "success": True})
-                    current_url = self.page.url
-                    results["current_url"] = current_url
-                else:
-#                     results["error"] = fFailed to navigate to {url}
-                    return results
+                    results["actions"].append({"action": "navigate", "url": url, "success": True})"                    current_url = self.page.url
+                    results["current_url"] = current_url"                else:
+#                     results["error"] = fFailed to navigate to {url}"                    return results
 
             # Search for text if requested
             if search_query:
                 search_results = self.search_on_page(search_query)
-                results["search_results"] = search_results
-                results["actions"].append({
-                    "action": "search",
-                    "query": search_query,
-                    "found": search_results.get("found", False)
-                })
+                results["search_results"] = search_results"                results["actions"].append({"                    "action": "search","                    "query": search_query,"                    "found": search_results.get("found", False)"                })
 
             # Extract text content if requested
             if extract_text:
                 text_content = self.extract_text_content()
-                results["text_content"] = text_content[:5000]  # Limit content length
-                results["actions"].append({"action": "extract_text", "length": len(text_content)})
-
+                results["text_content"] = text_content[:5000]  # Limit content length"                results["actions"].append({"action": "extract_text", "length": len(text_content)})"
             # Take final screenshot
-            final_screenshot = self.take_screenshot("final")
-            results["screenshots"].append(final_screenshot)
-
-            results["success"] = True
-#             results["message"] = fBrowser task completed. Session: {self.session_id}
-
+            final_screenshot = self.take_screenshot("final")"            results["screenshots"].append(final_screenshot)"
+            results["success"] = True"#             results["message"] = fBrowser task completed. Session: {self.session_id}"
         except Exception as e:
-            self.logger.error(fBrowser task failed: {e}")
-            results["success"] = False
-            results["error"] = str(e)
-
+            self.logger.error(fBrowser task failed: {e}")"            results["success"] = False"            results["error"] = str(e)"
         return results
 
     def get_status(self) -> Dict[str, Any]:
-""""Get browser agent status."""
-        return {
-            "browser_active": self.browser is not None,
-            "page_loaded": self.page is not None,
-            "session_id": self.session_id,
-            "screenshots_taken": self.screenshot_counter,
-            "screenshot_dir": str(self.screenshot_dir),
-            "current_url": self.page.url if self.page else None
-        }
+""""Get browser agent status."""""""        return {
+            "browser_active": self.browser is not None,"            "page_loaded": self.page is not None,"            "session_id": self.session_id,"            "screenshots_taken": self.screenshot_counter,"            "screenshot_dir": str(self.screenshot_dir),"            "current_url": self.page.url if self.page else None"        }
 
-    "def __del__(self):
-#         "Cleanup on destruction.
-        self.cleanup_browser()
+    "def __del__(self):"#         "Cleanup on destruction."        self.cleanup_browser()
 

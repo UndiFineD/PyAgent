@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Utility and convenience functions for chat templates."""
-
+"""Utility and convenience functions for chat templates."""""""
 import logging
 from typing import Any, Dict, List, Optional
 
@@ -33,16 +30,14 @@ _DEFAULT_RESOLVER: Optional[TemplateResolver] = None
 
 
 def _get_registry() -> ChatTemplateRegistry:
-    """Get default registry."""
-    global _DEFAULT_REGISTRY  # pylint: disable=global-statement
+    """Get default registry."""""""    global _DEFAULT_REGISTRY  # pylint: disable=global-statement
     if _DEFAULT_REGISTRY is None:
         _DEFAULT_REGISTRY = ChatTemplateRegistry()
     return _DEFAULT_REGISTRY
 
 
 def _get_resolver() -> TemplateResolver:
-    """Get default resolver."""
-    global _DEFAULT_RESOLVER  # pylint: disable=global-statement
+    """Get default resolver."""""""    global _DEFAULT_RESOLVER  # pylint: disable=global-statement
     if _DEFAULT_RESOLVER is None:
         _DEFAULT_RESOLVER = TemplateResolver()
     return _DEFAULT_RESOLVER
@@ -54,8 +49,7 @@ def register_template(
     template_type: TemplateType = TemplateType.CUSTOM,
     model_patterns: Optional[List[str]] = None,
 ) -> ChatTemplate:
-    """Register a custom template."""
-    config = TemplateConfig(
+    """Register a custom template."""""""    config = TemplateConfig(
         template_type=template_type,
         template_string=template_string,
     )
@@ -66,8 +60,7 @@ def get_template(
     model_name: str,
     tokenizer: Optional[Any] = None,
 ) -> ChatTemplate:
-    """Get template for a model."""
-    if tokenizer:
+    """Get template for a model."""""""    if tokenizer:
         return _get_registry().resolve(model_name, tokenizer)
     return _get_resolver().resolve(model_name)
 
@@ -79,8 +72,7 @@ def render_template(
     template_string: Optional[str] = None,
     add_generation_prompt: bool = True,
 ) -> str:
-    """Render messages using a template."""
-    # Get template
+    """Render messages using a template."""""""    # Get template
     if template is None:
         if template_string:
             config = TemplateConfig(
@@ -99,8 +91,7 @@ def render_template(
 
 
 def detect_template_type(model_name: str) -> TemplateType:
-    """Detect template type from model name."""
-    model_lower = model_name.lower()
+    """Detect template type from model name."""""""    model_lower = model_name.lower()
 
     for pattern, template_type in MODEL_TEMPLATE_MAP.items():
         if pattern in model_lower:
@@ -114,8 +105,7 @@ def _try_rust_render_template(
     messages: List[Dict[str, Any]],
     add_generation_prompt: bool,
 ) -> Optional[str]:
-    """Try Rust-accelerated template rendering."""
-    try:
+    """Try Rust-accelerated template rendering."""""""    try:
         from rust_core import render_jinja_template_rust
 
         return render_jinja_template_rust(
@@ -128,8 +118,7 @@ def _try_rust_render_template(
 
 
 def _try_rust_detect_template(model_name: str) -> Optional[str]:
-    """Try Rust-accelerated template detection."""
-    try:
+    """Try Rust-accelerated template detection."""""""    try:
         from rust_core import detect_chat_template_rust
 
         return detect_chat_template_rust(model_name)

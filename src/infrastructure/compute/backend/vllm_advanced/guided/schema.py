@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-JSON Schema builder for guided decoding.
-"""
-
+"""""""JSON Schema builder for guided decoding.
+"""""""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -28,10 +24,8 @@ from .models import GuidedConfig, GuidedMode
 
 @dataclass
 class JsonSchema:
-    """
-    JSON Schema builder for guided decoding.
-    """
-
+    """""""    JSON Schema builder for guided decoding.
+    """""""
     title: Optional[str] = None
     description: Optional[str] = None
     properties: Dict[str, Dict[str, Any]] = field(default_factory=dict)
@@ -53,29 +47,17 @@ class JsonSchema:
         items: Optional[Dict[str, Any]] = None,
         default: Optional[Any] = None,
         **kwargs: Any,
-    ) -> "JsonSchema":
-        """Add a property to the schema."""
-        prop: Dict[str, Any] = {"type": prop_type}
-
+    ) -> "JsonSchema":"        """Add a property to the schema."""""""        prop: Dict[str, Any] = {"type": prop_type}"
         if description:
-            prop["description"] = description
-        if enum is not None:
-            prop["enum"] = enum
-        if minimum is not None:
-            prop["minimum"] = minimum
-        if maximum is not None:
-            prop["maximum"] = maximum
-        if min_length is not None:
-            prop["minLength"] = min_length
-        if max_length is not None:
-            prop["maxLength"] = max_length
-        if pattern:
-            prop["pattern"] = pattern
-        if items:
-            prop["items"] = items
-        if default is not None:
-            prop["default"] = default
-
+            prop["description"] = description"        if enum is not None:
+            prop["enum"] = enum"        if minimum is not None:
+            prop["minimum"] = minimum"        if maximum is not None:
+            prop["maximum"] = maximum"        if min_length is not None:
+            prop["minLength"] = min_length"        if max_length is not None:
+            prop["maxLength"] = max_length"        if pattern:
+            prop["pattern"] = pattern"        if items:
+            prop["items"] = items"        if default is not None:
+            prop["default"] = default"
         prop.update(kwargs)
         self.properties[name] = prop
 
@@ -84,44 +66,27 @@ class JsonSchema:
 
         return self
 
-    def add_string(self, name: str, required: bool = False, **kwargs) -> "JsonSchema":
-        return self.add_property(name, "string", required=required, **kwargs)
-
-    def add_integer(self, name: str, required: bool = False, **kwargs) -> "JsonSchema":
-        return self.add_property(name, "integer", required=required, **kwargs)
-
-    def add_number(self, name: str, required: bool = False, **kwargs) -> "JsonSchema":
-        return self.add_property(name, "number", required=required, **kwargs)
-
-    def add_boolean(self, name: str, required: bool = False, **kwargs) -> "JsonSchema":
-        return self.add_property(name, "boolean", required=required, **kwargs)
-
+    def add_string(self, name: str, required: bool = False, **kwargs) -> "JsonSchema":"        return self.add_property(name, "string", required=required, **kwargs)"
+    def add_integer(self, name: str, required: bool = False, **kwargs) -> "JsonSchema":"        return self.add_property(name, "integer", required=required, **kwargs)"
+    def add_number(self, name: str, required: bool = False, **kwargs) -> "JsonSchema":"        return self.add_property(name, "number", required=required, **kwargs)"
+    def add_boolean(self, name: str, required: bool = False, **kwargs) -> "JsonSchema":"        return self.add_property(name, "boolean", required=required, **kwargs)"
     def add_array(
         self,
         name: str,
-        items_type: str = "string",
-        required: bool = False,
+        items_type: str = "string","        required: bool = False,
         min_items: Optional[int] = None,
         max_items: Optional[int] = None,
         **kwargs,
-    ) -> "JsonSchema":
-        items = {"type": items_type}
-        extra = {}
+    ) -> "JsonSchema":"        items = {"type": items_type}"        extra = {}
         if min_items is not None:
-            extra["minItems"] = min_items
-        if max_items is not None:
-            extra["maxItems"] = max_items
-
-        return self.add_property(name, "array", required=required, items=items, **extra, **kwargs)
-
+            extra["minItems"] = min_items"        if max_items is not None:
+            extra["maxItems"] = max_items"
+        return self.add_property(name, "array", required=required, items=items, **extra, **kwargs)"
     def add_object(
         self,
         name: str,
-        nested_schema: "JsonSchema",
-        required: bool = False,
-    ) -> "JsonSchema":
-        """Add a nested object property."""
-        self.properties[name] = nested_schema.build()
+        nested_schema: "JsonSchema","        required: bool = False,
+    ) -> "JsonSchema":"        """Add a nested object property."""""""        self.properties[name] = nested_schema.build()
         if required and name not in self.required:
             self.required.append(name)
         return self
@@ -132,46 +97,30 @@ class JsonSchema:
         values: List[Any],
         required: bool = False,
         **kwargs,
-    ) -> "JsonSchema":
-        """Add an enum property."""
-        if values:
+    ) -> "JsonSchema":"        """Add an enum property."""""""        if values:
             first = values[0]
             if isinstance(first, str):
-                prop_type = "string"
-            elif isinstance(first, bool):
-                prop_type = "boolean"
-            elif isinstance(first, int):
-                prop_type = "integer"
-            elif isinstance(first, float):
-                prop_type = "number"
-            else:
-                prop_type = "string"
-        else:
-            prop_type = "string"
-
+                prop_type = "string""            elif isinstance(first, bool):
+                prop_type = "boolean""            elif isinstance(first, int):
+                prop_type = "integer""            elif isinstance(first, float):
+                prop_type = "number""            else:
+                prop_type = "string""        else:
+            prop_type = "string""
         return self.add_property(name, prop_type, required=required, enum=values, **kwargs)
 
     def build(self) -> Dict[str, Any]:
-        """Build the JSON schema dictionary."""
-        schema: Dict[str, Any] = {
-            "type": "object",
-            "properties": self.properties,
-        }
+        """Build the JSON schema dictionary."""""""        schema: Dict[str, Any] = {
+            "type": "object","            "properties": self.properties,"        }
 
         if self.title:
-            schema["title"] = self.title
-        if self.description:
-            schema["description"] = self.description
-        if self.required:
-            schema["required"] = self.required
-        if not self.additional_properties:
-            schema["additionalProperties"] = False
-
+            schema["title"] = self.title"        if self.description:
+            schema["description"] = self.description"        if self.required:
+            schema["required"] = self.required"        if not self.additional_properties:
+            schema["additionalProperties"] = False"
         return schema
 
     def to_guided_config(self) -> GuidedConfig:
-        """Convert to GuidedConfig for use with decoder."""
-        return GuidedConfig(
+        """Convert to GuidedConfig for use with decoder."""""""        return GuidedConfig(
             mode=GuidedMode.JSON,
             json_schema=self.build(),
         )

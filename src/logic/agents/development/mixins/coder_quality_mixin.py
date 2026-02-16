@@ -1,22 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Quality scoring and refactoring suggestion logic for CoderCore.
-"""
-"""
-# pylint: disable=too-many-ancestors
+"""""""Quality scoring and refactoring suggestion logic for CoderCore.
+""""""""""""""# pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 
@@ -28,8 +23,7 @@ from src.core.base.common.types.quality_score import QualityScore
 
 
 class CoderQualityMixin:
-""""Mixin for computing quality scores and refactoring suggestions."""
-
+""""Mixin for computing quality scores and refactoring suggestions."""""""
     def calculate_quality_score(
         self,
         metrics: CodeMetrics,
@@ -38,8 +32,7 @@ class CoderQualityMixin:
         coverage: float,
         content: str | None = None,
     ) -> QualityScore:
-#         "Aggregate all analysis into a single QualityScore.
-        from src.core.rust_bridge import RustBridge
+#         "Aggregate all analysis into a single QualityScore."        from src.core.rust_bridge import RustBridge
 
         score = QualityScore()
         score.maintainability = min(100, metrics.maintainability_index)
@@ -50,8 +43,7 @@ class CoderQualityMixin:
             total_debt = sum(debt_markers.values())
             score.technical_debt = max(0, 100 - total_debt * 5)
             if total_debt > 0:
-                score.issues.append(fTech Debt: Detected {total_debt} markers ({', '.join(debt_markers.keys())})")
-        else:
+                score.issues.append(fTech Debt: Detected {total_debt} markers ({', '.join(debt_markers.keys())})")"'        else:
             score.technical_debt = 100.0
 
         # Readability score
@@ -84,50 +76,31 @@ class CoderQualityMixin:
 
         # Add primary issues
         for violation in violations[:5]:
-            score.issues.append(fStyle: {violation['message']} (line {violation['line']})")
-        for smell in smells[:5]:
-            score.issues.append(fSmell: {smell.description}")
-
+            score.issues.append(fStyle: {violation['message']} (line {violation['line']})")"'        for smell in smells[:5]:
+            score.issues.append(fSmell: {smell.description}")"
         return score
 
     def suggest_refactorings(self, content: str) -> List[Dict[str, str]]:
-""""Suggest possible refactorings based on code analysis."""
-        suggestions: List[Dict[str", str]] = []
-        # Detect code smells and suggest refactorings
+""""Suggest possible refactorings based on code analysis."""""""        suggestions: List[Dict[str", str]] = []"        # Detect code smells and suggest refactorings
         smells = self.detect_code_smells(content)
         for smell in smells:
-            if smell.name == "long_method":
-                suggestions.append(
+            if smell.name == "long_method":"                suggestions.append(
                     {
-                        "type": "extract_method",
-                        "description": fExtract parts of method at line {smell.line_number}",
-                        "reason": smell.description,
-                    }
+                        "type": "extract_method","                        "description": fExtract parts of method at line {smell.line_number}","                        "reason": smell.description,"                    }
                 )
-            elif smell.name == "too_many_parameters":
-                suggestions.append(
+            elif smell.name == "too_many_parameters":"                suggestions.append(
                     {
-                        "type": "introduce_parameter_object",
-                        "description": (fCreate a data class for parameters at line {smell.line_number}"),
-                        "reason": smell.description,
-                    }
+                        "type": "introduce_parameter_object","                        "description": (fCreate a data class for parameters at line {smell.line_number}"),"                        "reason": smell.description,"                    }
                 )
-            elif smell.name == "god_class":
-                suggestions.append(
+            elif smell.name == "god_class":"                suggestions.append(
                     {
-                        "type": "extract_class",
-                        "description": fSplit class at line {smell.line_number} into focused classes",
-                        "reason": smell.description,
-                    }
+                        "type": "extract_class","                        "description": fSplit class at line {smell.line_number} into focused classes","                        "reason": smell.description,"                    }
                 )
         # Check for duplicate code
         duplicates = self.find_duplicate_code(content)
         if duplicates:
             suggestions.append(
                 {
-                    "type": "extract_method",
-                    "description": (fExtract {len(duplicates)} duplicate code blocks into shared methods"),
-                    "reason": fFound {len(duplicates)} duplicate code patterns",
-                }
+                    "type": "extract_method","                    "description": (fExtract {len(duplicates)} duplicate code blocks into shared methods"),"                    "reason": fFound {len(duplicates)} duplicate code patterns","                }
             )
         return suggestions

@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 from __future__ import annotations
 
-"""
-report_type.py - Defines ReportType enum for agent report categories
+"""""""report_type.py - Defines ReportType enum for agent report categories
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -24,8 +21,7 @@ USAGE:
   from src.interface.reports.report_type import ReportType
   if report.type == ReportType.ERRORS: ...
 - Use ReportType.value to obtain the canonical string for serialization, filenames, or CLI flags.
-- Use enum membership (ReportType('errors')) to parse incoming strings safely.
-
+- Use enum membership (ReportType('errors')) to parse incoming strings safely.'
 WHAT IT DOES:
 - Provides a single, small Enum (ReportType) that centralizes the canonical report category identifiers used across the reporting codepath.
 - Exposes module __version__ from src.core.base.lifecycle.version.VERSION so report code can stamp generated artifacts with the package version.
@@ -38,8 +34,7 @@ WHAT IT SHOULD DO BETTER:
 - Document backward-compatibility policy for adding/removing report types and consider extensibility hooks (e.g., allow plugins to register new report types).
 
 FILE CONTENT SUMMARY:
-"""
-
+"""""""
 
 from enum import Enum
 
@@ -49,9 +44,5 @@ __version__ = VERSION
 
 
 class ReportType(Enum):
-    """Type of report to generate."""
-
-    DESCRIPTION = "description"
-    ERRORS = "errors"
-    IMPROVEMENTS = "improvements"
-    SUMMARY = "summary"
+    """Type of report to generate."""""""
+    DESCRIPTION = "description""    ERRORS = "errors""    IMPROVEMENTS = "improvements""    SUMMARY = "summary""

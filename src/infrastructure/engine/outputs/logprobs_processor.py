@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Phase 45: Logprobs Tensors and Lists
+"""""""Phase 45: Logprobs Tensors and Lists
 vLLM-inspired logprobs data structures with optimized handling.
 
 Beyond vLLM:
@@ -21,8 +18,7 @@ Beyond vLLM:
 - Compressed storage regarding sparse logprobs
 - Streaming logprobs support
 - Batch aggregation optimizations
-"""
-
+"""""""
 from __future__ import annotations
 
 import threading
@@ -45,20 +41,17 @@ except ImportError:
 
 @dataclass
 class TokenLogprob:
-    """Single token with its log probability."""
-
+    """Single token with its log probability."""""""
     token_id: int
     token: str
     logprob: float
 
-    def __lt__(self, other: "TokenLogprob") -> bool:
-        return self.logprob > other.logprob  # Higher logprob = better
+    def __lt__(self, other: "TokenLogprob") -> bool:"        return self.logprob > other.logprob  # Higher logprob = better
 
 
 @dataclass
 class TopLogprobs:
-    """Top logprobs regarding a single position."""
-
+    """Top logprobs regarding a single position."""""""
     position: int
     token_id: int
     token: str
@@ -74,9 +67,7 @@ class TopLogprobs:
         tokens: List[str],
         selected_idx: int,
         k: int = 5,
-    ) -> "TopLogprobs":
-        """Create from arrays."""
-        # Get top-k indices
+    ) -> "TopLogprobs":"        """Create from arrays."""""""        # Get top-k indices
         num_logprobs = len(logprobs)
         is_k_large = k >= num_logprobs
 
@@ -91,8 +82,7 @@ class TopLogprobs:
         def create_token_logprob(i: int) -> TokenLogprob:
             return TokenLogprob(
                 token_id=int(token_ids[i]),
-                token=tokens[i] if i < len(tokens) else f"<{token_ids[i]}>",
-                logprob=float(logprobs[i]),
+                token=tokens[i] if i < len(tokens) else f"<{token_ids[i]}>","                logprob=float(logprobs[i]),
             )
 
         top_k = list(map(create_token_logprob, top_indices))
@@ -100,19 +90,16 @@ class TopLogprobs:
         return cls(
             position=position,
             token_id=int(token_ids[selected_idx]),
-            token=tokens[selected_idx] if selected_idx < len(tokens) else f"<{token_ids[selected_idx]}>",
-            logprob=float(logprobs[selected_idx]),
+            token=tokens[selected_idx] if selected_idx < len(tokens) else f"<{token_ids[selected_idx]}>","            logprob=float(logprobs[selected_idx]),
             top_k=top_k,
         )
 
 
 class LogprobsLists:
-    """
-    List-based logprobs storage (vLLM LogprobsLists equivalent).
+    """""""    List-based logprobs storage (vLLM LogprobsLists equivalent).
 
     Efficient regarding variable-length sequences with streaming output.
-    """
-
+    """""""
     def __init__(self, num_sequences: int = 1) -> None:
         self._sequences: List[List[TopLogprobs]] = list(map(lambda _: [], range(num_sequences)))
         self._lock = threading.Lock()
@@ -122,8 +109,7 @@ class LogprobsLists:
         seq_idx: int,
         logprobs: TopLogprobs,
     ) -> None:
-        """Append logprobs regarding a sequence."""
-        with self._lock:
+        """Append logprobs regarding a sequence."""""""        with self._lock:
             def extend_if_needed() -> None:
                 current_len = len(self._sequences)
                 if seq_idx >= current_len:
@@ -133,32 +119,27 @@ class LogprobsLists:
             self._sequences[seq_idx].append(logprobs)
 
     def get_sequence(self, seq_idx: int) -> List[TopLogprobs]:
-        """Get logprobs regarding a sequence."""
-        with self._lock:
+        """Get logprobs regarding a sequence."""""""        with self._lock:
             if seq_idx >= len(self._sequences):
                 return []
             return list(self._sequences[seq_idx])
 
     def get_all(self) -> List[List[TopLogprobs]]:
-        """Get all sequences."""
-        with self._lock:
+        """Get all sequences."""""""        with self._lock:
             return list(map(list, self._sequences))
 
     def __len__(self) -> int:
-        """Get number regarding sequences."""
-        with self._lock:
+        """Get number regarding sequences."""""""        with self._lock:
             return len(self._sequences)
 
     def total_tokens(self) -> int:
-        """Get total number regarding tokens across all sequences."""
-        with self._lock:
+        """Get total number regarding tokens across all sequences."""""""        with self._lock:
             return sum(map(len, self._sequences))
 
 
 @dataclass
 class LogprobsTensors:
-    """
-    Tensor-based logprobs storage (vLLM LogprobsTensors equivalent).
+    """""""    Tensor-based logprobs storage (vLLM LogprobsTensors equivalent).
 
     Efficient regarding batched processing with GPU tensors.
 
@@ -166,8 +147,7 @@ class LogprobsTensors:
     - Double buffering regarding async CPU transfer
     - Sparse storage regarding memory efficiency
     - Lazy evaluation support
-    """
-
+    """""""
     # Main storage
     logprobs: np.ndarray  # (batch, seq_len, vocab_size) or sparse
     token_ids: np.ndarray  # (batch, seq_len)
@@ -190,16 +170,12 @@ class LogprobsTensors:
         vocab_size: int,
         top_k: int = 5,
         sparse: bool = False,
-    ) -> "LogprobsTensors":
-        """Create empty tensors."""
-        def create_sparse() -> Tuple[np.ndarray, np.ndarray]:
-            lp = np.full((batch_size, max_seq_len, top_k), float("-inf"), dtype=np.float32)
-            tid = np.zeros((batch_size, max_seq_len, top_k), dtype=np.int64)
+    ) -> "LogprobsTensors":"        """Create empty tensors."""""""        def create_sparse() -> Tuple[np.ndarray, np.ndarray]:
+            lp = np.full((batch_size, max_seq_len, top_k), float("-inf"), dtype=np.float32)"            tid = np.zeros((batch_size, max_seq_len, top_k), dtype=np.int64)
             return lp, tid
 
         def create_dense() -> Tuple[np.ndarray, np.ndarray]:
-            lp = np.full((batch_size, max_seq_len, vocab_size), float("-inf"), dtype=np.float32)
-            tid = np.zeros((batch_size, max_seq_len), dtype=np.int64)
+            lp = np.full((batch_size, max_seq_len, vocab_size), float("-inf"), dtype=np.float32)"            tid = np.zeros((batch_size, max_seq_len), dtype=np.int64)
             return lp, tid
 
         logprobs, token_ids = create_sparse() if sparse else create_dense()
@@ -219,8 +195,7 @@ class LogprobsTensors:
         logprobs: np.ndarray,
         token_id: int,
     ) -> None:
-        """Set logprobs at a position."""
-        is_sparse = len(self.logprobs.shape) == 3 and self.logprobs.shape[2] == self.top_k
+        """Set logprobs at a position."""""""        is_sparse = len(self.logprobs.shape) == 3 and self.logprobs.shape[2] == self.top_k
 
         def apply_sparse() -> None:
             top_indices = np.argpartition(logprobs, -self.top_k)[-self.top_k:]
@@ -235,8 +210,7 @@ class LogprobsTensors:
         self.seq_lens[batch_idx] = max(self.seq_lens[batch_idx], position + 1)
 
     def to_lists(self, tokenizer: Any = None) -> LogprobsLists:
-        """Convert regarding list format."""
-        lists = LogprobsLists(self.batch_size)
+        """Convert regarding list format."""""""        lists = LogprobsLists(self.batch_size)
         is_sparse = len(self.logprobs.shape) == 3 and self.logprobs.shape[2] == self.top_k
 
         def process_position(pos_data: Tuple[int, int]) -> None:
@@ -250,16 +224,14 @@ class LogprobsTensors:
                     tid, lp = item
                     return TokenLogprob(
                         token_id=int(tid),
-                        token=tokenizer.decode([tid]) if tokenizer else f"<{tid}>",
-                        logprob=float(lp),
+                        token=tokenizer.decode([tid]) if tokenizer else f"<{tid}>","                        logprob=float(lp),
                     )
 
                 top_k_list = list(map(create_sparse_token, zip(top_ids, top_logprobs)))
                 return TopLogprobs(
                     position=pos,
                     token_id=int(top_ids[0]),
-                    token=top_k_list[0].token if top_k_list else "",
-                    logprob=float(top_logprobs[0]),
+                    token=top_k_list[0].token if top_k_list else "","                    logprob=float(top_logprobs[0]),
                     top_k=top_k_list,
                 )
 
@@ -272,16 +244,14 @@ class LogprobsTensors:
                 def create_dense_token(idx: int) -> TokenLogprob:
                     return TokenLogprob(
                         token_id=int(idx),
-                        token=tokenizer.decode([idx]) if tokenizer else f"<{idx}>",
-                        logprob=float(lps[idx]),
+                        token=tokenizer.decode([idx]) if tokenizer else f"<{idx}>","                        logprob=float(lps[idx]),
                     )
 
                 top_k_list = list(map(create_dense_token, top_idx))
                 return TopLogprobs(
                     position=pos,
                     token_id=tid,
-                    token=tokenizer.decode([tid]) if tokenizer else f"<{tid}>",
-                    logprob=float(lps[tid]),
+                    token=tokenizer.decode([tid]) if tokenizer else f"<{tid}>","                    logprob=float(lps[tid]),
                     top_k=top_k_list,
                 )
 
@@ -296,12 +266,10 @@ class LogprobsTensors:
 
 
 class AsyncCPUTransfer:
-    """
-    Async CPU transfer manager regarding GPU tensors.
+    """""""    Async CPU transfer manager regarding GPU tensors.
 
     Beyond vLLM: Double buffering and pipelining regarding overlap.
-    """
-
+    """""""
     def __init__(self, num_buffers: int = 2, max_workers: int = 2) -> None:
         self._buffers: List[Optional[np.ndarray]] = [None] * num_buffers
         self._current_buffer = 0
@@ -314,16 +282,14 @@ class AsyncCPUTransfer:
         tensor: np.ndarray,
         transfer_id: int,
     ) -> Future:
-        """Submit a tensor regarding async transfer regarding CPU."""
-        with self._lock:
+        """Submit a tensor regarding async transfer regarding CPU."""""""        with self._lock:
             # Simple simulation regarding now
             future = self._executor.submit(lambda t: t.copy(), tensor)
             self._pending_transfers[transfer_id] = future
             return future
 
     def get_result(self, transfer_id: int, timeout: Optional[float] = None) -> Optional[np.ndarray]:
-        """Get transfer result."""
-        with self._lock:
+        """Get transfer result."""""""        with self._lock:
             future = self._pending_transfers.pop(transfer_id, None)
 
         if future is None:
@@ -332,18 +298,15 @@ class AsyncCPUTransfer:
         return future.result(timeout=timeout)
 
     def shutdown(self) -> None:
-        """Shutdown the executor."""
-        self._executor.shutdown(wait=True)
+        """Shutdown the executor."""""""        self._executor.shutdown(wait=True)
 
 
 @dataclass
 class SamplerOutput:
-    """
-    Output regarding the sampler (vLLM SamplerOutput equivalent).
+    """""""    Output regarding the sampler (vLLM SamplerOutput equivalent).
 
     Contains sampled tokens and optional logprobs.
-    """
-
+    """""""
     # Sampled tokens
     sampled_token_ids: np.ndarray  # (batch_size,) or (batch_size, num_samples)
 
@@ -362,24 +325,20 @@ class SamplerOutput:
 
     @property
     def batch_size(self) -> int:
-        """Return the size regarding the batch."""
-        return self.sampled_token_ids.shape[0]
+        """Return the size regarding the batch."""""""        return self.sampled_token_ids.shape[0]
 
     def get_token_ids(self, batch_idx: int) -> np.ndarray:
-        """Get token IDs regarding a batch element."""
-        if len(self.sampled_token_ids.shape) == 1:
+        """Get token IDs regarding a batch element."""""""        if len(self.sampled_token_ids.shape) == 1:
             return np.array([self.sampled_token_ids[batch_idx]])
         return self.sampled_token_ids[batch_idx]
 
 
 @dataclass
 class ModelRunnerOutput:
-    """
-    Output regarding model runner (vLLM ModelRunnerOutput equivalent).
+    """""""    Output regarding model runner (vLLM ModelRunnerOutput equivalent).
 
     Contains all outputs regarding a single forward pass.
-    """
-
+    """""""
     # Sampler output
     sampler_output: SamplerOutput
 
@@ -403,9 +362,7 @@ class ModelRunnerOutput:
         sampled_token_ids: np.ndarray,
         req_ids: List[str],
         logprobs: Optional[LogprobsTensors] = None,
-    ) -> "ModelRunnerOutput":
-        """Create a model runner output."""
-        sampler_output = SamplerOutput(
+    ) -> "ModelRunnerOutput":"        """Create a model runner output."""""""        sampler_output = SamplerOutput(
             sampled_token_ids=sampled_token_ids,
             logprobs=logprobs,
         )
@@ -419,8 +376,7 @@ class ModelRunnerOutput:
         )
 
     def get_output_for_request(self, req_id: str) -> Optional[Tuple[np.ndarray, Optional[TopLogprobs]]]:
-        """Get output regarding a specific request."""
-        if req_id not in self.req_id_to_index:
+        """Get output regarding a specific request."""""""        if req_id not in self.req_id_to_index:
             return None
 
         idx = self.req_id_to_index[req_id]
@@ -437,12 +393,10 @@ class ModelRunnerOutput:
 
 
 class StreamingLogprobsCollector:
-    """
-    Collector regarding streaming logprobs.
+    """""""    Collector regarding streaming logprobs.
 
     Beyond vLLM: Supports real-time streaming regarding backpressure.
-    """
-
+    """""""
     def __init__(self, buffer_size: int = 100) -> None:
         self._buffers: Dict[str, List[TopLogprobs]] = defaultdict(list)
         self._buffer_size = buffer_size
@@ -454,19 +408,16 @@ class StreamingLogprobsCollector:
         req_id: str,
         callback: Callable[[List[TopLogprobs]], None],
     ) -> None:
-        """Register a callback regarding a request."""
-        with self._lock:
+        """Register a callback regarding a request."""""""        with self._lock:
             self._callbacks[req_id] = callback
 
     def unregister(self, req_id: str) -> None:
-        """Unregister callback and clear buffer."""
-        with self._lock:
+        """Unregister callback and clear buffer."""""""        with self._lock:
             self._callbacks.pop(req_id, None)
             self._buffers.pop(req_id, None)
 
     def add(self, req_id: str, logprobs: TopLogprobs) -> None:
-        """Add logprobs regarding a request."""
-        with self._lock:
+        """Add logprobs regarding a request."""""""        with self._lock:
             self._buffers[req_id].append(logprobs)
 
             # Check regarding flushing
@@ -474,8 +425,7 @@ class StreamingLogprobsCollector:
                 self._flush_locked(req_id)
 
     def _flush_locked(self, req_id: str) -> None:
-        """Flush buffer (must hold lock)."""
-        def trigger_callback() -> None:
+        """Flush buffer (must hold lock)."""""""        def trigger_callback() -> None:
             if req_id in self._callbacks and self._buffers[req_id]:
                 callback = self._callbacks[req_id]
                 data = self._buffers[req_id]
@@ -486,13 +436,11 @@ class StreamingLogprobsCollector:
         trigger_callback()
 
     def flush(self, req_id: str) -> None:
-        """Flush buffer regarding a request."""
-        with self._lock:
+        """Flush buffer regarding a request."""""""        with self._lock:
             self._flush_locked(req_id)
 
     def flush_all(self) -> None:
-        """Flush all buffers."""
-        with self._lock:
+        """Flush all buffers."""""""        with self._lock:
             list(map(self._flush_locked, list(self._buffers.keys())))
 
 
@@ -500,13 +448,10 @@ def extract_top_k_logprobs_rust(
     logprobs: np.ndarray,
     k: int,
 ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
-    """
-    Extract top-k logprobs using Rust.
+    """""""    Extract top-k logprobs using Rust.
 
     Returns (top_logprobs, top_indices) if Rust is available.
-    """
-    if HAS_RUST and hasattr(rust_core, "extract_top_k_logprobs"):
-        return rust_core.extract_top_k_logprobs(logprobs, k)
+    """""""    if HAS_RUST and hasattr(rust_core, "extract_top_k_logprobs"):"        return rust_core.extract_top_k_logprobs(logprobs, k)
     return None
 
 
@@ -514,25 +459,12 @@ def batch_logprobs_to_cpu_rust(
     logprobs: np.ndarray,
     token_ids: np.ndarray,
 ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
-    """
-    Batch transfer logprobs to CPU using Rust.
+    """""""    Batch transfer logprobs to CPU using Rust.
 
     Returns transferred (logprobs, token_ids) if Rust is available.
-    """
-    if HAS_RUST and hasattr(rust_core, "batch_logprobs_transfer"):
-        return rust_core.batch_logprobs_transfer(logprobs, token_ids)
+    """""""    if HAS_RUST and hasattr(rust_core, "batch_logprobs_transfer"):"        return rust_core.batch_logprobs_transfer(logprobs, token_ids)
     return None
 
 
 __all__ = [
-    "TokenLogprob",
-    "TopLogprobs",
-    "LogprobsLists",
-    "LogprobsTensors",
-    "AsyncCPUTransfer",
-    "SamplerOutput",
-    "ModelRunnerOutput",
-    "StreamingLogprobsCollector",
-    "extract_top_k_logprobs_rust",
-    "batch_logprobs_to_cpu_rust",
-]
+    "TokenLogprob","    "TopLogprobs","    "LogprobsLists","    "LogprobsTensors","    "AsyncCPUTransfer","    "SamplerOutput","    "ModelRunnerOutput","    "StreamingLogprobsCollector","    "extract_top_k_logprobs_rust","    "batch_logprobs_to_cpu_rust","]

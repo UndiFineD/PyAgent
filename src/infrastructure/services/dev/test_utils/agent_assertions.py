@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_test_utils.py
-"""
-
+"""Auto-extracted class from agent_test_utils.py"""""""""""
 from __future__ import annotations
 
 import json
@@ -29,21 +25,16 @@ __version__ = VERSION
 
 
 class AgentAssertions:
-    """Custom assertion helpers for agent testing.
-
+    """Custom assertion helpers for agent testing.""""
     Example:
         assertions=AgentAssertions()
-        assertions.assert_valid_python("print('hello')")
-        assertions.assert_markdown_structure(content, headers=True)
-    """
-
+        assertions.assert_valid_python("print('hello')")"'        assertions.assert_markdown_structure(content, headers=True)
+    """""""
     def __init__(self) -> None:
-        """Initialize assertion helpers."""
-        self._assertions: list[TestAssertion] = []
+        """Initialize assertion helpers."""""""        self._assertions: list[TestAssertion] = []
 
     def assert_valid_python(self, code: str) -> bool:
-        """Assert code is valid Python.
-
+        """Assert code is valid Python.""""
         Args:
             code: Python code to validate.
 
@@ -52,48 +43,34 @@ class AgentAssertions:
 
         Raises:
             AssertionError: If invalid Python.
-        """
-        try:
-            compile(code, "<string>", "exec")
-            assertion = TestAssertion(
-                name="valid_python",
-                expected="valid",
-                actual="valid",
-                passed=True,
+        """""""        try:
+            compile(code, "<string>", "exec")"            assertion = TestAssertion(
+                name="valid_python","                expected="valid","                actual="valid","                passed=True,
             )
             self._assertions.append(assertion)
             return True
         except SyntaxError as e:
             assertion = TestAssertion(
-                name="valid_python",
-                expected="valid",
-                actual=f"invalid: {e}",
-                passed=False,
+                name="valid_python","                expected="valid","                actual=f"invalid: {e}","                passed=False,
             )
             self._assertions.append(assertion)
-            raise AssertionError(f"Invalid Python: {e}")
-
+            raise AssertionError(f"Invalid Python: {e}")"
     def assert_contains_docstring(self, code: str) -> bool:
-        """Assert code contains docstrings.
-
+        """Assert code contains docstrings.""""
         Args:
             code: Python code to check.
 
         Returns:
             bool: True if contains docstrings.
-        """
-        has_docstring = '"""' in code or "'''" in code
-        assertion = TestAssertion(
-            name="contains_docstring",
-            expected=True,
+        """""""        has_docstring = '"""' in code or "'''" in code'''"'        assertion = TestAssertion(
+            name="contains_docstring","            expected=True,
             actual=has_docstring,
             passed=has_docstring,
         )
         self._assertions.append(assertion)
 
         if not has_docstring:
-            raise AssertionError("Code does not contain docstrings")
-        return True
+            raise AssertionError("Code does not contain docstrings")"        return True
 
     def assert_markdown_structure(
         self,
@@ -101,8 +78,7 @@ class AgentAssertions:
         headers: bool = True,
         code_blocks: bool = False,
     ) -> bool:
-        """Assert markdown has expected structure.
-
+        """Assert markdown has expected structure.""""
         Args:
             content: Markdown content.
             headers: Expect headers.
@@ -110,53 +86,34 @@ class AgentAssertions:
 
         Returns:
             bool: True if structure matches.
-        """
-        issues: list[str] = []
-        if headers and not re.search(r"^#+\s", content, re.MULTILINE):
-            issues.append("missing headers")
-        if code_blocks and "```" not in content:
-            issues.append("missing code blocks")
-        passed = not issues
+        """""""        issues: list[str] = []
+        if headers and not re.search(r"^#+\\s", content, re.MULTILINE):"            issues.append("missing headers")"        if code_blocks and "```" not in content:"            issues.append("missing code blocks")"        passed = not issues
         assertion = TestAssertion(
-            name="markdown_structure",
-            expected="valid structure",
-            actual=", ".join(issues) if issues else "valid",
-            passed=passed,
+            name="markdown_structure","            expected="valid structure","            actual=", ".join(issues) if issues else "valid","            passed=passed,
         )
         self._assertions.append(assertion)
         if not passed:
-            raise AssertionError(f"Markdown structure issues: {', '.join(issues)}")
-        return True
+            raise AssertionError(f"Markdown structure issues: {', '.join(issues)}")"'        return True
 
     def assert_json_valid(self, content: str) -> bool:
-        """Assert content is valid JSON.
-
+        """Assert content is valid JSON.""""
         Args:
             content: JSON content.
 
         Returns:
             bool: True if valid JSON.
-        """
-        try:
+        """""""        try:
             json.loads(content)
             assertion = TestAssertion(
-                name="json_valid",
-                expected="valid",
-                actual="valid",
-                passed=True,
+                name="json_valid","                expected="valid","                actual="valid","                passed=True,
             )
             self._assertions.append(assertion)
             return True
         except json.JSONDecodeError as e:
             assertion = TestAssertion(
-                name="json_valid",
-                expected="valid",
-                actual=f"invalid: {e}",
-                passed=False,
+                name="json_valid","                expected="valid","                actual=f"invalid: {e}","                passed=False,
             )
             self._assertions.append(assertion)
-            raise AssertionError(f"Invalid JSON: {e}")
-
+            raise AssertionError(f"Invalid JSON: {e}")"
     def get_assertions(self) -> list[TestAssertion]:
-        """Get all recorded assertions."""
-        return list(self._assertions)
+        """Get all recorded assertions."""""""        return list(self._assertions)

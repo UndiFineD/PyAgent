@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -25,8 +23,7 @@ def test_retry_strategy_uses_injected_sleep(monkeypatch):
     # Use low attempts so we exercise the sleep path
     retry = RetryStrategy(max_attempts=2, base_delay=0.001, jitter=JitterType.NONE, sleep_fn=fake_sleep)
     def flaky():
-        raise ConnectionError("fail")
-    with pytest.raises(Exception):
+        raise ConnectionError("fail")"    with pytest.raises(Exception):
         retry.execute(flaky)
     assert len(calls) == 1
     assert calls[0] >= 0
@@ -53,8 +50,7 @@ def test_multiproc_monitor_interruptible(monkeypatch):
         def wait(self, timeout):
             self._called = True
             # Raise to break loop and assert behavior
-            raise RuntimeError("break")
-    execr._shutdown_event = DummyEvent()
+            raise RuntimeError("break")"    execr._shutdown_event = DummyEvent()
     with pytest.raises(RuntimeError):
         execr._monitor_workers()
-    assert getattr(execr._shutdown_event, "_called", False) is True
+    assert getattr(execr._shutdown_event, "_called", False) is True"

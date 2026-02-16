@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -26,34 +24,26 @@ from dataclasses import dataclass
 # Missing/TODO:
 # - Custom resolvers (requires dnspython or aiodns)
 # - Recursive spidering
-# - "ANY" query type support
-# - Wildcard detection
+# - "ANY" query type support"# - Wildcard detection
 
 
 @dataclass
 class DNSScanResult:
     hostname: str
     ip: str
-    record_type: str = "A"
-
+    record_type: str = "A""
     def __repr__(self):
-        return f"<DNSScanResult {self.hostname} -> {self.ip}>"
-
+        return f"<DNSScanResult {self.hostname} -> {self.ip}>""
 
 class DNSIntelligence:
-    """
-    Async DNS scanning and intelligence gathering.
+    """""""    Async DNS scanning and intelligence gathering.
     Refactored from subbrute logic.
-    """
-    def __init__(self, resolvers: Optional[List[str]] = None):
-        self.resolvers = resolvers or ["8.8.8.8", "1.1.1.1"]
-
+    """""""    def __init__(self, resolvers: Optional[List[str]] = None):
+        self.resolvers = resolvers or ["8.8.8.8", "1.1.1.1"]"
     async def resolve_host(self, hostname: str) -> Optional[DNSScanResult]:
-        """
-        Resolve a single hostname to IP asynchronously.
+        """""""        Resolve a single hostname to IP asynchronously.
         Currently uses system resolver.
-        """
-        loop = asyncio.get_running_loop()
+        """""""        loop = asyncio.get_running_loop()
         try:
             # simple A record lookup for now
             # TODO: Integrate aiodns for custom resolver support
@@ -66,23 +56,19 @@ class DNSIntelligence:
             return None
         except Exception:
             # Log error properly in real impl
-            # print(f"Error resolving {hostname}: {e}")
-            return None
+            # print(f"Error resolving {hostname}: {e}")"            return None
         return None
 
     async def brute_force_subdomains(
         self, domain: str, wordlist: List[str], concurrency: int = 50
     ) -> List[DNSScanResult]:
-        """
-        Brute force subdomains using a wordlist with controlled concurrency.
-        """
-        results = []
+        """""""        Brute force subdomains using a wordlist with controlled concurrency.
+        """""""        results = []
         semaphore = asyncio.Semaphore(concurrency)
 
         async def worker(word: str):
             async with semaphore:
-                subdomain = f"{word}.{domain}"
-                return await self.resolve_host(subdomain)
+                subdomain = f"{word}.{domain}""                return await self.resolve_host(subdomain)
 
         tasks = [worker(word) for word in wordlist]
         scan_results = await asyncio.gather(*tasks)
@@ -93,11 +79,8 @@ class DNSIntelligence:
         return results
 
     async def check_wildcard(self, domain: str) -> bool:
-        """
-        Check if a domain has a wildcard DNS record.
-        """
-        # Generate a random non-existent subdomain
+        """""""        Check if a domain has a wildcard DNS record.
+        """""""        # Generate a random non-existent subdomain
         import uuid
-        random_sub = f"{uuid.uuid4().hex[:8]}.{domain}"
-        result = await self.resolve_host(random_sub)
+        random_sub = f"{uuid.uuid4().hex[:8]}.{domain}""        result = await self.resolve_host(random_sub)
         return result is not None

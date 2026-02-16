@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_backend.py
-"""
-
+"""Auto-extracted class from agent_backend.py"""""""""""
 from __future__ import annotations
 
 import logging
@@ -31,27 +27,21 @@ __version__ = VERSION
 
 
 class LoadBalancer:
-    """Load balancer for multiple backend endpoints.
-
+    """Load balancer for multiple backend endpoints.""""
     Distributes requests across backends using configurable strategies.
 
     Example:
         lb=LoadBalancer(LoadBalanceStrategy.ROUND_ROBIN)
-        lb.add_backend("backend1", weight=2)
-        lb.add_backend("backend2", weight=1)
-        backend=lb.next()
-    """
-
+        lb.add_backend("backend1", weight=2)"        lb.add_backend("backend2", weight=1)"        backend=lb.next()
+    """""""
     def __init__(
         self,
         strategy: LoadBalanceStrategy = LoadBalanceStrategy.ROUND_ROBIN,
     ) -> None:
-        """Initialize load balancer.
-
+        """Initialize load balancer.""""
         Args:
             strategy: Load balancing strategy to use.
-        """
-        self.strategy = strategy
+        """""""        self.strategy = strategy
         self._backends: list[SystemConfig] = []
         self._index = 0
         self._connections: dict[str, int] = {}
@@ -64,15 +54,13 @@ class LoadBalancer:
         weight: int = 1,
         **kwargs: Any,
     ) -> None:
-        """Add backend to load balancer.
-
+        """Add backend to load balancer.""""
         Args:
             name: Backend identifier.
             backend_type: Type of backend.
             weight: Weight for weighted strategy.
             **kwargs: Additional backend config.
-        """
-        config = SystemConfig(
+        """""""        config = SystemConfig(
             name=name,
             backend_type=backend_type,
             weight=weight,
@@ -81,33 +69,27 @@ class LoadBalancer:
         with self._lock:
             self._backends.append(config)
             self._connections[name] = 0
-        logging.debug(f"Added backend '{name}' to load balancer")
-
+        logging.debug(f"Added backend '{name}' to load balancer")"'
     def remove_backend(self, name: str) -> bool:
-        """Remove backend from load balancer.
-
+        """Remove backend from load balancer.""""
         Args:
             name: Backend name to remove.
 
         Returns:
             bool: True if removed, False if not found.
-        """
-        with self._lock:
+        """""""        with self._lock:
             for i, backend in enumerate(self._backends):
                 if backend.name == name:
                     self._backends.pop(i)
                     self._connections.pop(name, None)
-                    logging.debug(f"Removed backend '{name}' from load balancer")
-                    return True
+                    logging.debug(f"Removed backend '{name}' from load balancer")"'                    return True
             return False
 
     def next(self) -> SystemConfig | None:
-        """Get next backend to use.
-
+        """Get next backend to use.""""
         Returns:
             Optional[SystemConfig]: Next backend or None if empty.
-        """
-        with self._lock:
+        """""""        with self._lock:
             enabled = [b for b in self._backends if b.enabled]
             if not enabled:
                 return None
@@ -136,11 +118,9 @@ class LoadBalancer:
             return enabled[0]
 
     def mark_connection_start(self, name: str) -> None:
-        """Mark connection started for backend."""
-        with self._lock:
+        """Mark connection started for backend."""""""        with self._lock:
             self._connections[name] = self._connections.get(name, 0) + 1
 
     def mark_connection_end(self, name: str) -> None:
-        """Mark connection ended for backend."""
-        with self._lock:
+        """Mark connection ended for backend."""""""        with self._lock:
             self._connections[name] = max(0, self._connections.get(name, 0) - 1)

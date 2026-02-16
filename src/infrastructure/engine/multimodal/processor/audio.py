@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Audio.py module.
-"""
-
+"""""""Audio.py module.
+"""""""
 from typing import Any, Dict, Optional, Tuple
 
 import numpy as np
@@ -24,8 +20,7 @@ from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
 
 
 class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
-    """Processor for audio inputs."""
-
+    """Processor for audio inputs."""""""
     modality = ModalityType.AUDIO
 
     def __init__(
@@ -48,9 +43,7 @@ class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
         waveform, sample_rate = data
-        target_sr = kwargs.get("target_sample_rate", self.target_sample_rate)
-        max_len = kwargs.get("max_length_seconds", self.max_length_seconds)
-
+        target_sr = kwargs.get("target_sample_rate", self.target_sample_rate)"        max_len = kwargs.get("max_length_seconds", self.max_length_seconds)"
         if waveform.ndim > 1:
             waveform = waveform.mean(axis=-1) if waveform.shape[-1] < waveform.shape[0] else waveform.mean(axis=0)
 
@@ -74,13 +67,7 @@ class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
                 features[i, 0] = np.sqrt(np.mean(segment**2))
 
         metadata = {
-            "original_sample_rate": sample_rate,
-            "original_length": original_length,
-            "processed_length": len(waveform),
-            "num_frames": num_frames,
-            "feature_size": self.feature_size,
-            "duration_seconds": len(waveform) / sample_rate,
-        }
+            "original_sample_rate": sample_rate,"            "original_length": original_length,"            "processed_length": len(waveform),"            "num_frames": num_frames,"            "feature_size": self.feature_size,"            "duration_seconds": len(waveform) / sample_rate,"        }
 
         return features, metadata
 
@@ -90,9 +77,7 @@ class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
         **kwargs: Any,
     ) -> int:
         waveform, sample_rate = data
-        target_sr = kwargs.get("target_sample_rate", self.target_sample_rate)
-        max_len = kwargs.get("max_length_seconds", self.max_length_seconds)
-
+        target_sr = kwargs.get("target_sample_rate", self.target_sample_rate)"        max_len = kwargs.get("max_length_seconds", self.max_length_seconds)"
         duration = min(len(waveform) / sample_rate, max_len)
         num_samples = int(duration * target_sr)
         num_frames = max(1, num_samples // self.hop_length)

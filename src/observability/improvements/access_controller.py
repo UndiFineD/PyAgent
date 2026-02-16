@@ -1,27 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-AccessController - Track and evaluate per-improvement permissions and roles
+"""""""AccessController - Track and evaluate per-improvement permissions and roles
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate AccessController to manage permissions and role assignments scoped to an improvement ID.
 - Define roles with define_role(role, permissions), assign role to a user with assign_role(improvement_id, user, role), grant explicit permission with grant(improvement_id, user, level), and check access with can_access(improvement_id, user, level).
-- Typical flow: ac = AccessController(); ac.define_role("reviewer", ["read","comment"]); ac.assign_role("imp-123", "alice", "reviewer"); ac.can_access("imp-123","alice","read")
-
+- Typical flow: ac = AccessController(); ac.define_role("reviewer", ["read","comment"]); ac.assign_role("imp-123", "alice", "reviewer"); ac.can_access("imp-123","alice","read")"
 WHAT IT DOES:
 - Maintains in-memory mapping of per-improvement permissions (permissions[improvement_id][user] -> set(levels)), declared roles (role -> list(permissions)), and assigned roles (assigned_roles[AccessController - per-improvement permission and role management
 
@@ -30,11 +26,7 @@ WHAT IT DOES:
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: ac = AccessController()
-- Define roles: ac.define_role("owner", ["read", "write", "admin"])
-- Assign role: ac.assign_role("impr_123", "alice", "owner")
-- Grant direct permission: ac.grant("impr_123", "bob", "read")
-- Check access: ac.can_access("impr_123", "alice", "write")  # True via role
-
+- Define roles: ac.define_role("owner", ["read", "write", "admin"])"- Assign role: ac.assign_role("impr_123", "alice", "owner")"- Grant direct permission: ac.grant("impr_123", "bob", "read")"- Check access: ac.can_access("impr_123", "alice", "write")  # True via role"
 WHAT IT DOES:
 - Provides an in-memory mapping of permissions and roles scoped per improvement (improvement_id).
 - Supports defining roles (role -> list of permission levels), assigning roles to users per improvement, granting per-user explicit permission levels, and checking whether a user has a given permission level either directly or via an assigned role.
@@ -49,8 +41,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
-
+"""""""
 from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
@@ -59,8 +50,7 @@ __version__ = VERSION
 
 
 class AccessController:
-    """Tracks per-improvement permissions and roles."""
-
+    """Tracks per-improvement permissions and roles."""""""
     def __init__(self) -> None:
         self.permissions: dict[str, dict[str, set[str]]] = {}
         self._roles: dict[str, list[str]] = {}
@@ -82,9 +72,7 @@ class AccessController:
         role = self._assigned_roles.get(improvement_id, {}).get(user)
         if role and role in self._roles:
             return level in self._roles[role]
-        return""" False
-"""
-
+        return""" False"""""""""""
 from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
@@ -93,8 +81,7 @@ __version__ = VERSION
 
 
 class AccessController:
-    """Tracks per-improvement permissions and roles."""
-
+    """Tracks per-improvement permissions and roles."""""""
     def __init__(self) -> None:
         self.permissions: dict[str, dict[str, set[str]]] = {}
         self._roles: dict[str, list[str]] = {}

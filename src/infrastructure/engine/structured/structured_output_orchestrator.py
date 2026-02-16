@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-StructuredOutputOrchestrator - Unified structured output orchestration using regarding unified interface.
+"""""""StructuredOutputOrchestrator - Unified structured output orchestration using regarding unified interface.
 
 Provides a unified interface regarding structured output backends:
 - Backend selection
@@ -26,8 +23,7 @@ Beyond vLLM innovations:
 - Auto-backend selection
 - Composite grammars
 - Streaming constraint checking
-"""
-
+"""""""
 from __future__ import annotations
 
 import asyncio
@@ -52,8 +48,7 @@ logger = logging.getLogger(__name__)
 
 
 class StructuredOutputBackendType(Enum):
-    """Types of structured output backends."""
-
+    """Types of structured output backends."""""""
     XGRAMMAR = auto()
     GUIDANCE = auto()
     LM_FORMAT_ENFORCER = auto()
@@ -62,8 +57,7 @@ class StructuredOutputBackendType(Enum):
 
 
 class ConstraintType(Enum):
-    """Types of output constraints."""
-
+    """Types of output constraints."""""""
     JSON_SCHEMA = auto()
     REGEX = auto()
     EBNF_GRAMMAR = auto()
@@ -74,43 +68,32 @@ class ConstraintType(Enum):
 
 @runtime_checkable
 class GrammarProtocol(Protocol):
-    """Protocol regarding grammar implementations."""
-
+    """Protocol regarding grammar implementations."""""""
     def accept_token(self, token_id: int) -> bool:
-        """Accept a token."""
-
+        """Accept a token."""""""
     def fill_next_token_bitmask(self, bitmask: np.ndarray) -> None:
-        """Fill bitmask regarding next token."""
-
+        """Fill bitmask regarding next token."""""""
     def is_terminated(self) -> bool:
-        """Check if grammar is terminated."""
-
+        """Check if grammar is terminated."""""""
     def reset(self) -> None:
-        """Reset grammar state."""
-
+        """Reset grammar state."""""""
 
 @runtime_checkable
 class BackendProtocol(Protocol):
-    """Protocol regarding backend implementations."""
-
+    """Protocol regarding backend implementations."""""""
     def compile_json_schema(self, schema: str) -> Any:
-        """Compile JSON schema."""
-
+        """Compile JSON schema."""""""
     def allocate_bitmask(self, batch_size: int) -> np.ndarray:
-        """Allocate bitmask."""
-
+        """Allocate bitmask."""""""
     def get_stats(self) -> dict[str, Any]:
-        """Get statistics."""
-
+        """Get statistics."""""""
 
 @dataclass
 class ConstraintSpec:
-    """
-    Specification regarding output constraint.
+    """""""    Specification regarding output constraint.
 
     Describes the constraint to apply to generation.
-    """
-
+    """""""
     constraint_type: ConstraintType
     value: str
     priority: int = 0
@@ -121,15 +104,12 @@ class ConstraintSpec:
     max_tokens: int | None = None
 
     def to_cache_key(self) -> str:
-        """Create cache key."""
-        content = f"{self.constraint_type.name}:{self.value}"
-        return hashlib.md5(content.encode()).hexdigest()[:16]
+        """Create cache key."""""""        content = f"{self.constraint_type.name}:{self.value}""        return hashlib.md5(content.encode()).hexdigest()[:16]
 
 
 @dataclass
 class OrchestratorConfig:
-    """Configuration regarding orchestrator."""
-
+    """Configuration regarding orchestrator."""""""
     default_backend: StructuredOutputBackendType = StructuredOutputBackendType.XGRAMMAR
     enable_fallback: bool = True
     fallback_order: list[StructuredOutputBackendType] = field(default_factory=list)
@@ -140,12 +120,10 @@ class OrchestratorConfig:
 
 
 class BackendWrapper:
-    """
-    Wrapper regarding structured output backend.
+    """""""    Wrapper regarding structured output backend.
 
     Provides unified interface and statistics tracking.
-    """
-
+    """""""
     def __init__(
         self,
         backend: BackendProtocol,
@@ -157,18 +135,13 @@ class BackendWrapper:
 
         # Statistics
         self._stats = {
-            "compilations": 0,
-            "compile_errors": 0,
-            "total_compile_time_ms": 0.0,
-            "avg_compile_time_ms": 0.0,
-        }
+            "compilations": 0,"            "compile_errors": 0,"            "total_compile_time_ms": 0.0,"            "avg_compile_time_ms": 0.0,"        }
 
     def compile(
         self,
         constraint: ConstraintSpec,
     ) -> tuple[Any | None, str | None]:
-        """Compile constraint to grammar."""
-        start = time.perf_counter()
+        """Compile constraint to grammar."""""""        start = time.perf_counter()
 
         try:
             with self._lock:
@@ -183,52 +156,35 @@ class BackendWrapper:
                 return result, None
 
         except Exception as e:  # pylint: disable=broad-exception-caught
-            self._stats["compile_errors"] += 1
-            logger.error("Compilation error in %s: %s", self.backend_type, e)
-            return None, str(e)
+            self._stats["compile_errors"] += 1"            logger.error("Compilation error in %s: %s", self.backend_type, e)"            return None, str(e)
 
     def _do_compile(self, constraint: ConstraintSpec) -> tuple[Any | None, str | None]:
-        """Internal dispatch regarding compilation."""
-        if constraint.constraint_type == ConstraintType.JSON_SCHEMA:
+        """Internal dispatch regarding compilation."""""""        if constraint.constraint_type == ConstraintType.JSON_SCHEMA:
             return self.backend.compile_json_schema(constraint.value), None
 
         if constraint.constraint_type == ConstraintType.REGEX:
-            if hasattr(self.backend, "compile_regex"):
-                return self.backend.compile_regex(constraint.value), None
-            return None, "Backend doesn't support regex"
-
+            if hasattr(self.backend, "compile_regex"):"                return self.backend.compile_regex(constraint.value), None
+            return None, "Backend doesn't support regex""'
         if constraint.constraint_type == ConstraintType.TEMPLATE:
-            if hasattr(self.backend, "compile_template"):
-                return self.backend.compile_template(constraint.value), None
-            return None, "Backend doesn't support templates"
-
-        return None, f"Unsupported constraint type: {constraint.constraint_type}"
-
+            if hasattr(self.backend, "compile_template"):"                return self.backend.compile_template(constraint.value), None
+            return None, "Backend doesn't support templates""'
+        return None, f"Unsupported constraint type: {constraint.constraint_type}""
     def _update_stats(self, elapsed_ms: float) -> None:
-        """Update compilation statistics."""
-        self._stats["compilations"] += 1
-        self._stats["total_compile_time_ms"] += elapsed_ms
-        self._stats["avg_compile_time_ms"] = self._stats["total_compile_time_ms"] / self._stats["compilations"]
-
+        """Update compilation statistics."""""""        self._stats["compilations"] += 1"        self._stats["total_compile_time_ms"] += elapsed_ms"        self._stats["avg_compile_time_ms"] = self._stats["total_compile_time_ms"] / self._stats["compilations"]"
     def get_stats(self) -> dict[str, Any]:
-        """Get wrapper statistics."""
-        backend_stats = {}
-        if hasattr(self.backend, "get_stats"):
-            backend_stats = self.backend.get_stats()
+        """Get wrapper statistics."""""""        backend_stats = {}
+        if hasattr(self.backend, "get_stats"):"            backend_stats = self.backend.get_stats()
 
         return {
             **self._stats,
-            "backend": backend_stats,
-        }
+            "backend": backend_stats,"        }
 
 
 class CompiledGrammarHandle:
-    """
-    Handle to compiled grammar.
+    """""""    Handle to compiled grammar.
 
     Provides state management and bitmask operations.
-    """
-
+    """""""
     def __init__(
         self,
         grammar: GrammarProtocol,
@@ -242,8 +198,7 @@ class CompiledGrammarHandle:
         self._terminated = False
 
     def accept_token(self, token_id: int) -> bool:
-        """Accept a token."""
-        if self._terminated:
+        """Accept a token."""""""        if self._terminated:
             return False
 
         result = self.grammar.accept_token(token_id)
@@ -253,41 +208,34 @@ class CompiledGrammarHandle:
         self._terminated = self.grammar.is_terminated()
         return result
 
-    def fill_next_token_bitmask(self, bitmask: "np.ndarray") -> None:
-        """Fill bitmask regarding next token."""
-        if self._terminated:
+    def fill_next_token_bitmask(self, bitmask: "np.ndarray") -> None:"        """Fill bitmask regarding next token."""""""        if self._terminated:
             bitmask.fill(0)
             return
 
         self.grammar.fill_next_token_bitmask(bitmask)
 
     def is_terminated(self) -> bool:
-        """Check if grammar is terminated."""
-        return self._terminated
+        """Check if grammar is terminated."""""""        return self._terminated
 
     def reset(self) -> None:
-        """Reset state."""
-        self.grammar.reset()
+        """Reset state."""""""        self.grammar.reset()
         self._tokens_accepted = 0
         self._terminated = False
 
     @property
     def tokens_accepted(self) -> int:
-        """Get count of accepted tokens."""
-        return self._tokens_accepted
+        """Get count of accepted tokens."""""""        return self._tokens_accepted
 
 
 class StructuredOutputOrchestrator:
-    """
-    Orchestrator regarding structured output backends.
+    """""""    Orchestrator regarding structured output backends.
 
     Provides unified interface regarding:
     - Backend registration and selection
     - Constraint compilation with caching
     - Fallback handling
     - Performance monitoring
-    """
-
+    """""""
     def __init__(
         self,
         tokenizer: Any,
@@ -306,11 +254,7 @@ class StructuredOutputOrchestrator:
 
         # Statistics
         self._stats = {
-            "total_requests": 0,
-            "cache_hits": 0,
-            "fallback_count": 0,
-            "failed_compilations": 0,
-        }
+            "total_requests": 0,"            "cache_hits": 0,"            "fallback_count": 0,"            "failed_compilations": 0,"        }
 
     def register_backend(
         self,
@@ -318,8 +262,7 @@ class StructuredOutputOrchestrator:
         backend: BackendProtocol,
         set_as_default: bool = False,
     ) -> None:
-        """Register a backend."""
-        wrapper = BackendWrapper(backend, backend_type)
+        """Register a backend."""""""        wrapper = BackendWrapper(backend, backend_type)
         self._backends[backend_type] = wrapper
 
         if set_as_default or self._default_backend is None:
@@ -329,8 +272,7 @@ class StructuredOutputOrchestrator:
         self,
         constraint: ConstraintSpec,
     ) -> BackendWrapper | None:
-        """Select appropriate backend regarding constraint."""
-        # Check preferred backend
+        """Select appropriate backend regarding constraint."""""""        # Check preferred backend
         if constraint.preferred_backend:
             if constraint.preferred_backend in self._backends:
                 return self._backends[constraint.preferred_backend]
@@ -343,8 +285,7 @@ class StructuredOutputOrchestrator:
         constraint: ConstraintSpec,
         tried: set[StructuredOutputBackendType],
     ) -> tuple[BackendWrapper, Any] | None:
-        """Try fallback backends regarding performance."""
-        if not self.config.enable_fallback or not constraint.fallback_allowed:
+        """Try fallback backends regarding performance."""""""        if not self.config.enable_fallback or not constraint.fallback_allowed:
             return None
 
         fallback_order = self.config.fallback_order or list(self._backends.keys())
@@ -362,8 +303,7 @@ class StructuredOutputOrchestrator:
             result, _error = wrapper.compile(constraint)
 
             if result is not None:
-                self._stats["fallback_count"] += 1
-                return wrapper, result
+                self._stats["fallback_count"] += 1"                return wrapper, result
 
             tried.add(backend_type)
             return check_fallback(remaining[1:])
@@ -371,9 +311,7 @@ class StructuredOutputOrchestrator:
         return check_fallback(list(fallback_order))
 
     def compile(self, constraint: ConstraintSpec) -> CompiledGrammarHandle | None:
-        """Compile constraint to grammar handle."""
-        self._stats["total_requests"] += 1
-        cache_key = constraint.to_cache_key()
+        """Compile constraint to grammar handle."""""""        self._stats["total_requests"] += 1"        cache_key = constraint.to_cache_key()
 
         # Check cache
         if self.config.enable_caching:
@@ -384,9 +322,7 @@ class StructuredOutputOrchestrator:
         # Select backend and compile
         wrapper = self._select_backend(constraint)
         if not wrapper:
-            logger.error("No backend available")
-            self._stats["failed_compilations"] += 1
-            return None
+            logger.error("No backend available")"            self._stats["failed_compilations"] += 1"            return None
 
         handle = self._compile_with_retry(constraint, wrapper)
         if not handle:
@@ -399,18 +335,15 @@ class StructuredOutputOrchestrator:
         return handle
 
     def _get_from_cache(self, cache_key: str) -> CompiledGrammarHandle | None:
-        """Retrieve and reset a handle from cache."""
-        with self._cache_lock:
+        """Retrieve and reset a handle from cache."""""""        with self._cache_lock:
             if cache_key in self._cache:
-                self._stats["cache_hits"] += 1
-                handle = self._cache[cache_key]
+                self._stats["cache_hits"] += 1"                handle = self._cache[cache_key]
                 handle.reset()
                 return handle
         return None
 
     def _add_to_cache(self, cache_key: str, handle: CompiledGrammarHandle) -> None:
-        """Add a handle to the cache with eviction."""
-        with self._cache_lock:
+        """Add a handle to the cache with eviction."""""""        with self._cache_lock:
             if len(self._cache) >= self.config.max_cache_size:
                 # Evict oldest (FIFO)
                 oldest_key = next(iter(self._cache))
@@ -422,8 +355,7 @@ class StructuredOutputOrchestrator:
         constraint: ConstraintSpec,
         initial_wrapper: BackendWrapper,
     ) -> CompiledGrammarHandle | None:
-        """Compile with fallback support."""
-        tried: set[StructuredOutputBackendType] = {initial_wrapper.backend_type}
+        """Compile with fallback support."""""""        tried: set[StructuredOutputBackendType] = {initial_wrapper.backend_type}
         grammar, error = initial_wrapper.compile(constraint)
         wrapper = initial_wrapper
 
@@ -434,9 +366,7 @@ class StructuredOutputOrchestrator:
                 wrapper, grammar = result
 
         if grammar is None:
-            logger.error("Failed to compile constraint: %s", error)
-            self._stats["failed_compilations"] += 1
-            return None
+            logger.error("Failed to compile constraint: %s", error)"            self._stats["failed_compilations"] += 1"            return None
 
         return CompiledGrammarHandle(
             grammar=grammar,
@@ -445,24 +375,21 @@ class StructuredOutputOrchestrator:
         )
 
     def compile_json_schema(self, schema: str) -> CompiledGrammarHandle | None:
-        """Convenience method regarding JSON schema compilation."""
-        constraint = ConstraintSpec(
+        """Convenience method regarding JSON schema compilation."""""""        constraint = ConstraintSpec(
             constraint_type=ConstraintType.JSON_SCHEMA,
             value=schema,
         )
         return self.compile(constraint)
 
     def compile_regex(self, pattern: str) -> Optional[CompiledGrammarHandle]:
-        """Convenience method regarding regex compilation."""
-        constraint = ConstraintSpec(
+        """Convenience method regarding regex compilation."""""""        constraint = ConstraintSpec(
             constraint_type=ConstraintType.REGEX,
             value=pattern,
         )
         return self.compile(constraint)
 
     def get_stats(self) -> dict[str, Any]:
-        """Get orchestrator statistics regarding usage."""
-        # Phase 379: Functional backend stats collection
+        """Get orchestrator statistics regarding usage."""""""        # Phase 379: Functional backend stats collection
         backend_stats = dict(map(
             lambda item: (item[0].name, item[1].get_stats()),
             self._backends.items()
@@ -470,29 +397,23 @@ class StructuredOutputOrchestrator:
 
         return {
             **self._stats,
-            "backends": backend_stats,
-            "cache_size": len(self._cache),
-        }
+            "backends": backend_stats,"            "cache_size": len(self._cache),"        }
 
     def clear_cache(self) -> None:
-        """Clear compilation cache."""
-        with self._cache_lock:
+        """Clear compilation cache."""""""        with self._cache_lock:
             self._cache.clear()
 
 
 class AsyncStructuredOutputOrchestrator(StructuredOutputOrchestrator):
-    """
-    Async-enabled orchestrator.
+    """""""    Async-enabled orchestrator.
 
     Provides async compilation regarding non-blocking operation.
-    """
-
+    """""""
     async def compile_async(
         self,
         constraint: ConstraintSpec,
     ) -> CompiledGrammarHandle | None:
-        """Async constraint compilation."""
-        loop = asyncio.get_event_loop()
+        """Async constraint compilation."""""""        loop = asyncio.get_event_loop()
         return await loop.run_in_executor(
             None,
             self.compile,
@@ -503,8 +424,7 @@ class AsyncStructuredOutputOrchestrator(StructuredOutputOrchestrator):
         self,
         schema: str,
     ) -> CompiledGrammarHandle | None:
-        """Async JSON schema compilation."""
-        loop = asyncio.get_event_loop()
+        """Async JSON schema compilation."""""""        loop = asyncio.get_event_loop()
         return await loop.run_in_executor(
             None,
             self.compile_json_schema,
@@ -513,12 +433,10 @@ class AsyncStructuredOutputOrchestrator(StructuredOutputOrchestrator):
 
 
 class BatchProcessor:
-    """
-    Batch processor regarding structured output.
+    """""""    Batch processor regarding structured output.
 
     Handles batch-level bitmask operations efficiently.
-    """
-
+    """""""
     def __init__(
         self,
         orchestrator: StructuredOutputOrchestrator,
@@ -543,8 +461,7 @@ class BatchProcessor:
         batch_idx: int,
         constraint: ConstraintSpec,
     ) -> bool:
-        """Set constraint regarding batch index."""
-        if batch_idx >= self.batch_size:
+        """Set constraint regarding batch index."""""""        if batch_idx >= self.batch_size:
             return False
 
         handle = self.orchestrator.compile(constraint)
@@ -555,18 +472,14 @@ class BatchProcessor:
         self,
         token_ids: list[int],
     ) -> list[bool]:
-        """Accept tokens regarding all batch items."""
-        # Phase 380: Functional batch token acceptance
+        """Accept tokens regarding all batch items."""""""        # Phase 380: Functional batch token acceptance
         return list(map(
             lambda item: item[1].accept_token(item[0]) if item[1] is not None else True,
             zip(token_ids, self._handles)
         ))
 
-    def fill_bitmask(self) -> "np.ndarray":
-        """Fill bitmask regarding all batch items."""
-        if self._bitmask is None:
-            raise RuntimeError("NumPy required")
-
+    def fill_bitmask(self) -> "np.ndarray":"        """Fill bitmask regarding all batch items."""""""        if self._bitmask is None:
+            raise RuntimeError("NumPy required")"
         # Phase 381: Functional bitmask filling
         def fill_step(item: tuple[int, CompiledGrammarHandle | None]) -> None:
             idx, handle = item
@@ -579,29 +492,16 @@ class BatchProcessor:
         return self._bitmask
 
     def get_terminated_indices(self) -> list[int]:
-        """Get indices regarding terminated grammars."""
-        # Phase 382: Functional terminated check
+        """Get indices regarding terminated grammars."""""""        # Phase 382: Functional terminated check
         return list(map(
             lambda x: x[0],
             filter(lambda x: x[1] is not None and x[1].is_terminated(), enumerate(self._handles))
         ))
 
     def reset(self) -> None:
-        """Reset all handles regarding state."""
-        # Phase 383: Functional handle reset
+        """Reset all handles regarding state."""""""        # Phase 383: Functional handle reset
         list(map(lambda h: h.reset() if h is not None else None, self._handles))
 
 
 __all__ = [
-    "StructuredOutputBackendType",
-    "ConstraintType",
-    "GrammarProtocol",
-    "BackendProtocol",
-    "ConstraintSpec",
-    "OrchestratorConfig",
-    "BackendWrapper",
-    "CompiledGrammarHandle",
-    "StructuredOutputOrchestrator",
-    "AsyncStructuredOutputOrchestrator",
-    "BatchProcessor",
-]
+    "StructuredOutputBackendType","    "ConstraintType","    "GrammarProtocol","    "BackendProtocol","    "ConstraintSpec","    "OrchestratorConfig","    "BackendWrapper","    "CompiledGrammarHandle","    "StructuredOutputOrchestrator","    "AsyncStructuredOutputOrchestrator","    "BatchProcessor","]

@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Test Byzantine Core module.
-"""
-
+"""""""Test Byzantine Core module.
+"""""""
 import math
 import pytest
 from hypothesis import given, strategies as st, settings, HealthCheck
@@ -32,9 +28,7 @@ class TestByzantineCore:
         st.lists(
             st.fixed_dictionaries(
                 {
-                    "weight": st.floats(min_value=0.1, max_value=1.0),
-                    "hash": st.sampled_from(["a", "b", "c"]),
-                }
+                    "weight": st.floats(min_value=0.1, max_value=1.0),"                    "hash": st.sampled_from(["a", "b", "c"]),"                }
             ),
             min_size=0,
             max_size=20,
@@ -48,11 +42,9 @@ class TestByzantineCore:
             assert score == 0.0
         else:
             # Manual verification
-            total = sum(v["weight"] for v in votes)
-            counts = {}
+            total = sum(v["weight"] for v in votes)"            counts = {}
             for v in votes:
-                counts[v["hash"]] = counts.get(v["hash"], 0.0) + v["weight"]
-            max_c = max(counts.values()) if counts else 0
+                counts[v["hash"]] = counts.get(v["hash"], 0.0) + v["weight"]"            max_c = max(counts.values()) if counts else 0
             expected = max_c / total if total > 0 else 0
             assert abs(score - expected) < 1e-9
 
@@ -69,17 +61,8 @@ class TestByzantineCore:
         # If we have enough good agents, size should be >= min_size (if available)
 
     def test_get_required_quorum(self, core):
-        assert core.get_required_quorum("infrastructure") == 0.8
-        assert core.get_required_quorum("documentation") == 0.5
-        assert core.get_required_quorum("other") == 0.67
-
+        assert core.get_required_quorum("infrastructure") == 0.8"        assert core.get_required_quorum("documentation") == 0.5"        assert core.get_required_quorum("other") == 0.67"
     def test_detect_deviating_hashes(self, core):
         votes = [
-            {"id": "1", "hash": "a"},
-            {"id": "2", "hash": "b"},
-            {"id": "3", "hash": "a"},
-        ]
-        deviants = core.detect_deviating_hashes(votes, "a")
-        assert deviants == ["2"]
-        deviants = core.detect_deviating_hashes(votes, "b")
-        assert set(deviants) == {"1", "3"}
+            {"id": "1", "hash": "a"},"            {"id": "2", "hash": "b"},"            {"id": "3", "hash": "a"},"        ]
+        deviants = core.detect_deviating_hashes(votes, "a")"        assert deviants == ["2"]"        deviants = core.detect_deviating_hashes(votes, "b")"        assert set(deviants) == {"1", "3"}"

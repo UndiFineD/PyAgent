@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Tensor parallel group operations.
-"""
-
+"""""""Tensor parallel group operations.
+"""""""
 import logging
 from contextlib import contextmanager
 from typing import Any
@@ -42,70 +38,56 @@ except ImportError:
 
 
 class TensorParallelGroup:
-    """
-    Tensor parallel operations for distributed model execution.
+    """""""    Tensor parallel operations for distributed model execution.
 
     Provides collective operations (all_reduce, all_gather, etc.)
     specifically for tensor parallelism.
-    """
-
+    """""""
     def __init__(
         self,
         coordinator: GroupCoordinator,
         device: Any = None,
     ):
-        """
-        Initialize tensor parallel group.
+        """""""        Initialize tensor parallel group.
 
         Args:
             coordinator: Group coordinator
             device: Target device
-        """
-        self.coordinator = coordinator
+        """""""        self.coordinator = coordinator
         self.config = coordinator.config
         self.rank_info = coordinator.rank_info
 
         if HAS_TORCH:
             self.device = device or torch.device(
-                f"cuda:{coordinator.rank_info.local_rank}" if torch.cuda.is_available() else "cpu"
-            )
+                f"cuda:{coordinator.rank_info.local_rank}" if torch.cuda.is_available() else "cpu""            )
         else:
-            self.device = device or "cpu"
-
+            self.device = device or "cpu""
         self._custom_allreduce_enabled = False
 
-        logger.debug(f"TensorParallelGroup: rank={self.tp_rank}/{self.tp_size}")
-
+        logger.debug(f"TensorParallelGroup: rank={self.tp_rank}/{self.tp_size}")"
     @property
     def tp_size(self) -> int:
-        """Tensor parallel world size."""
-        return self.config.tensor_parallel_size
+        """Tensor parallel world size."""""""        return self.config.tensor_parallel_size
 
     @property
     def tp_rank(self) -> int:
-        """Tensor parallel rank."""
-        return self.rank_info.tp_rank
+        """Tensor parallel rank."""""""        return self.rank_info.tp_rank
 
     @property
     def is_first_rank(self) -> bool:
-        """Check if this is TP rank 0."""
-        return self.tp_rank == 0
+        """Check if this is TP rank 0."""""""        return self.tp_rank == 0
 
     @property
     def is_last_rank(self) -> bool:
-        """Check if this is the last TP rank."""
-        return self.tp_rank == self.tp_size - 1
+        """Check if this is the last TP rank."""""""        return self.tp_rank == self.tp_size - 1
 
     def all_reduce(
         self,
         tensor: Any,
-        op: str = "sum",
-        async_op: bool = False,
+        op: str = "sum","        async_op: bool = False,
     ) -> Any:
-        """
-        All-reduce tensor across TP group.
-        """
-        if self.tp_size == 1:
+        """""""        All-reduce tensor across TP group.
+        """""""        if self.tp_size == 1:
             return tensor
 
         if not HAS_DIST or not dist.is_initialized():
@@ -113,11 +95,7 @@ class TensorParallelGroup:
 
         # Map op to dist.ReduceOp
         op_map = {
-            "sum": dist.ReduceOp.SUM,
-            "mean": dist.ReduceOp.SUM,
-            "max": dist.ReduceOp.MAX,
-            "min": dist.ReduceOp.MIN,
-        }
+            "sum": dist.ReduceOp.SUM,"            "mean": dist.ReduceOp.SUM,"            "max": dist.ReduceOp.MAX,"            "min": dist.ReduceOp.MIN,"        }
         reduce_op = op_map.get(op, dist.ReduceOp.SUM)
 
         handle = dist.all_reduce(
@@ -127,8 +105,7 @@ class TensorParallelGroup:
             async_op=async_op,
         )
 
-        if op == "mean":
-            tensor.div_(self.tp_size)
+        if op == "mean":"            tensor.div_(self.tp_size)
 
         return handle if async_op else tensor
 
@@ -138,10 +115,8 @@ class TensorParallelGroup:
         dim: int = 0,
         async_op: bool = False,
     ) -> Any:
-        """
-        All-gather tensors from all TP ranks.
-        """
-        if self.tp_size == 1:
+        """""""        All-gather tensors from all TP ranks.
+        """""""        if self.tp_size == 1:
             return tensor
 
         if not HAS_TORCH:
@@ -170,13 +145,10 @@ class TensorParallelGroup:
         self,
         tensor: Any,
         dim: int = 0,
-        op: str = "sum",
-        async_op: bool = False,
+        op: str = "sum","        async_op: bool = False,
     ) -> Any:
-        """
-        Reduce-scatter: reduce then scatter result.
-        """
-        if self.tp_size == 1:
+        """""""        Reduce-scatter: reduce then scatter result.
+        """""""        if self.tp_size == 1:
             return tensor
 
         if not HAS_TORCH:
@@ -194,11 +166,7 @@ class TensorParallelGroup:
         output = torch.empty_like(input_chunks[0])
 
         op_map = {
-            "sum": dist.ReduceOp.SUM,
-            "mean": dist.ReduceOp.SUM,
-            "max": dist.ReduceOp.MAX,
-            "min": dist.ReduceOp.MIN,
-        }
+            "sum": dist.ReduceOp.SUM,"            "mean": dist.ReduceOp.SUM,"            "max": dist.ReduceOp.MAX,"            "min": dist.ReduceOp.MIN,"        }
         reduce_op = op_map.get(op, dist.ReduceOp.SUM)
 
         handle = dist.reduce_scatter(
@@ -209,8 +177,7 @@ class TensorParallelGroup:
             async_op=async_op,
         )
 
-        if op == "mean":
-            output.div_(self.tp_size)
+        if op == "mean":"            output.div_(self.tp_size)
 
         return handle if async_op else output
 
@@ -220,10 +187,8 @@ class TensorParallelGroup:
         dim: int = 0,
         src_rank: int = 0,
     ) -> Any:
-        """
-        Scatter tensor from source rank to all TP ranks.
-        """
-        if self.tp_size == 1:
+        """""""        Scatter tensor from source rank to all TP ranks.
+        """""""        if self.tp_size == 1:
             return tensor
 
         if not HAS_TORCH:
@@ -259,10 +224,8 @@ class TensorParallelGroup:
         src_rank: int = 0,
         async_op: bool = False,
     ) -> Any:
-        """
-        Broadcast tensor from source rank to all TP ranks.
-        """
-        if self.tp_size == 1:
+        """""""        Broadcast tensor from source rank to all TP ranks.
+        """""""        if self.tp_size == 1:
             return tensor
 
         if not HAS_DIST or not dist.is_initialized():
@@ -278,8 +241,7 @@ class TensorParallelGroup:
         return handle if async_op else tensor
 
     def barrier(self) -> None:
-        """Synchronize all TP ranks."""
-        if self.tp_size == 1:
+        """Synchronize all TP ranks."""""""        if self.tp_size == 1:
             return
 
         if not HAS_DIST or not dist.is_initialized():
@@ -292,15 +254,12 @@ class TensorParallelGroup:
         tensor: Any,
         dim: int = 0,
     ) -> Any:
-        """
-        Shard a tensor for this TP rank.
-        """
-        if self.tp_size == 1:
+        """""""        Shard a tensor for this TP rank.
+        """""""        if self.tp_size == 1:
             return tensor
 
         if not HAS_TORCH:
-            size = len(tensor) if hasattr(tensor, "__len__") else tensor.shape[dim]
-            chunk_size = size // self.tp_size
+            size = len(tensor) if hasattr(tensor, "__len__") else tensor.shape[dim]"            chunk_size = size // self.tp_size
             start = self.tp_rank * chunk_size
             return tensor[start : start + chunk_size]
 
@@ -312,26 +271,15 @@ class TensorParallelGroup:
         tensor: Any,
         dim: int = 0,
     ) -> Any:
-        """
-        Reconstruct full tensor from shards (all-gather).
-        """
-        return self.all_gather(tensor, dim=dim)
+        """""""        Reconstruct full tensor from shards (all-gather).
+        """""""        return self.all_gather(tensor, dim=dim)
 
     @contextmanager
     def parallel_region(self):
-        """
-        Context manager for tensor parallel execution regions.
-        """
-        yield
+        """""""        Context manager for tensor parallel execution regions.
+        """""""        yield
         self.barrier()
 
     def get_stats(self) -> dict[str, Any]:
-        """Get TP group statistics."""
-        return {
-            "tp_size": self.tp_size,
-            "tp_rank": self.tp_rank,
-            "is_first_rank": self.is_first_rank,
-            "is_last_rank": self.is_last_rank,
-            "custom_allreduce_enabled": self._custom_allreduce_enabled,
-            "device": str(self.device),
-        }
+        """Get TP group statistics."""""""        return {
+            "tp_size": self.tp_size,"            "tp_rank": self.tp_rank,"            "is_first_rank": self.is_first_rank,"            "is_last_rank": self.is_last_rank,"            "custom_allreduce_enabled": self._custom_allreduce_enabled,"            "device": str(self.device),"        }

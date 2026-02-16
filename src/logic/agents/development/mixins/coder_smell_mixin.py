@@ -1,22 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Code smell detection logic for CoderCore.
-"""
-"""
-# pylint: disable=too-many-ancestors
+"""""""Code smell detection logic for CoderCore.
+""""""""""""""# pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 
@@ -28,40 +23,18 @@ from src.core.base.common.types.code_smell import CodeSmell
 
 # Common code smells patterns (Imported from CoderCore or redefined if constants)
 CODE_SMELL_PATTERNS: Dict[str, Dict[str, Any]] = {
-    "long_method": {
-        "threshold": 50,
-        "message": "Method is too long (>{threshold} lines)",
-        "category": "complexity",
-    },
-    "too_many_parameters": {
-        "threshold": 5,
-        "message": "Function has too many parameters (>{threshold})",
-        "category": "complexity",
-    },
-    "duplicate_code": {
-        "threshold": 3,
-        "message": "Duplicate code detected ({count} occurrences)",
-        "category": "duplication",
-    },
-    "deep_nesting": {
-        "threshold": 4,
-        "message": "Code is too deeply nested (>{threshold} levels)",
-        "category": "complexity",
-    },
-    "god_class": {
-        "threshold": 20,
-        "message": "Class has too many methods (>{threshold})",
-        "category": "design",
-    },
+    "long_method": {"        "threshold": 50,"        "message": "Method is too long (>{threshold} lines)","        "category": "complexity","    },
+    "too_many_parameters": {"        "threshold": 5,"        "message": "Function has too many parameters (>{threshold})","        "category": "complexity","    },
+    "duplicate_code": {"        "threshold": 3,"        "message": "Duplicate code detected ({count} occurrences)","        "category": "duplication","    },
+    "deep_nesting": {"        "threshold": 4,"        "message": "Code is too deeply nested (>{threshold} levels)","        "category": "complexity","    },
+    "god_class": {"        "threshold": 20,"        "message": "Class has too many methods (>{threshold})","        "category": "design","    },
 }
 
 
 class CoderSmellMixin:
-""""Mixin for detecting code smells."""
-
+""""Mixin for detecting code smells."""""""
     def detect_code_smells(self, content: str) -> List[CodeSmell]:
-""""Detect common architectural code smells."""
-        from src.core.rust_bridge import RustBridge
+""""Detect common architectural code smells."""""""        from src.core.rust_bridge import RustBridge
 
         smells: List[CodeSmell] = []
 
@@ -70,13 +43,7 @@ class CoderSmellMixin:
         for match in opt_matches:
             smells.append(
                 CodeSmell(
-                    name="optimization_opportunity",
-                    description=match["pattern"],
-                    severity="info",
-                    line_number=match["line"],
-                    suggestion="Refactor to use high-performance primitives or non-blocking logic.",
-                    category="performance",
-                )
+                    name="optimization_opportunity","                    description=match["pattern"],"                    severity="info","                    line_number=match["line"],"                    suggestion="Refactor to use high-performance primitives or non-blocking logic.","                    category="performance","                )
             )
 
         if self.language == CodeLanguage.PYTHON:
@@ -86,8 +53,7 @@ class CoderSmellMixin:
         return smells
 
     def _detect_python_smells(self, content: str) -> List[CodeSmell]:
-""""Python-specific AST-based smell detection."""
-        smells: List[CodeSmell] = []
+""""Python-specific AST-based smell detection."""""""        smells: List[CodeSmell] = []
         try:
             tree = ast.parse(content)
         except SyntaxError:
@@ -103,72 +69,42 @@ class CoderSmellMixin:
     def _check_python_method_smells(
         self, node: ast.FunctionDef | ast.AsyncFunctionDef, smells: List[CodeSmell]
     ) -> None:
-#         "Check for long methods and too many parameters.
-        # Long method detection
-        if hasattr(node, "end_lineno") and node.end_lineno is not None:
-            length = node.end_lineno - node.lineno + 1
-            threshold = CODE_SMELL_PATTERNS["long_method"]["threshold"]
-            if length > threshold:
+#         "Check for long methods and too many parameters."        # Long method detection
+        if hasattr(node, "end_lineno") and node.end_lineno is not None:"            length = node.end_lineno - node.lineno + 1
+            threshold = CODE_SMELL_PATTERNS["long_method"]["threshold"]"            if length > threshold:
                 smells.append(
                     CodeSmell(
-                        name="long_method",
-                        description=fMethod '{node.name}' is {length} lines (>{threshold})",
-                        severity="warning",
-                        line_number=node.lineno,
-                        suggestion=fConsider breaking down '{node.name}' into smaller functions",
-                        category="complexity",
-                    )
+                        name="long_method","                        description=fMethod '{node.name}' is {length} lines (>{threshold})","'                        severity="warning","                        line_number=node.lineno,
+                        suggestion=fConsider breaking down '{node.name}' into smaller functions","'                        category="complexity","                    )
                 )
 
         # Too many parameters
         param_count = len(node.args.args)
-        threshold = CODE_SMELL_PATTERNS["too_many_parameters"]["threshold"]
-        if param_count > threshold:
+        threshold = CODE_SMELL_PATTERNS["too_many_parameters"]["threshold"]"        if param_count > threshold:
             smells.append(
                 CodeSmell(
-                    name="too_many_parameters",
-                    description=fFunction '{node.name}' has {param_count} parameters (>{threshold})",
-                    severity="warning",
-                    line_number=node.lineno,
-                    suggestion="Consider using a data class or dictionary for parameters",
-                    category="complexity",
-                )
+                    name="too_many_parameters","                    description=fFunction '{node.name}' has {param_count} parameters (>{threshold})","'                    severity="warning","                    line_number=node.lineno,
+                    suggestion="Consider using a data class or dictionary for parameters","                    category="complexity","                )
             )
 
     def _check_python_class_smells(self, node: ast.ClassDef, smells: List[CodeSmell]) -> None:
-""""Check for god classes."""
-        method_count = sum(1 for n in node.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)))
-        threshold = CODE_SMELL_PATTERNS["god_class"]["threshold"]
-        if method_count > threshold:
+""""Check for god classes."""""""        method_count = sum(1 for n in node.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)))
+        threshold = CODE_SMELL_PATTERNS["god_class"]["threshold"]"        if method_count > threshold:
             smells.append(
                 CodeSmell(
-                    name="god_class",
-                    description=fClass '{node.name}' has {method_count} methods (>{threshold})",
-                    severity="warning",
-                    line_number=node.lineno,
-                    suggestion="Consider splitting the class into smaller, more focused classes.",
-                    category="design",
-                )
+                    name="god_class","                    description=fClass '{node.name}' has {method_count} methods (>{threshold})","'                    severity="warning","                    line_number=node.lineno,
+                    suggestion="Consider splitting the class into smaller, more focused classes.","                    category="design","                )
             )
 
     def _detect_generic_smells(self, content: str) -> List[CodeSmell]:
-""""Language-agnostic smell detection (e.g. nesting)."""
-        smells:" List[CodeSmell] = []
-        lines = content.split("\n")
-        # Deep nesting detection
+""""Language-agnostic smell detection (e.g. nesting)."""""""        smells:" List[CodeSmell] = []"        lines = content.split("\\n")"        # Deep nesting detection
         for i, line in enumerate(lines, 1):
             indent = len(line) - len(line.lstrip())
             nesting = indent // 4
-            threshold = CODE_SMELL_PATTERNS["deep_nesting"]["threshold"]
-            if nesting > threshold and line.strip():
+            threshold = CODE_SMELL_PATTERNS["deep_nesting"]["threshold"]"            if nesting > threshold and line.strip():
                 smells.append(
                     CodeSmell(
-                        name="deep_nesting",
-                        description=fCode at line {i} has {nesting} levels of nesting (>{threshold})",
-                        severity="info",
-                        line_number=i,
-                        suggestion="Consider early returns or extracting nested logic",
-                        category="complexity",
-                    )
+                        name="deep_nesting","                        description=fCode at line {i} has {nesting} levels of nesting (>{threshold})","                        severity="info","                        line_number=i,
+                        suggestion="Consider early returns or extracting nested logic","                        category="complexity","                    )
                 )
         return smells

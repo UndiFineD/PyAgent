@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Phase 45: KV Transfer Connector Types
+"""""""Phase 45: KV Transfer Connector Types
 Shared types and configurations for KV transfer connectors.
-"""
-
+"""""""
 from __future__ import annotations
 
 import logging
@@ -30,16 +26,14 @@ logger = logging.getLogger(__name__)
 
 
 class KVConnectorRole(Enum):
-    """Role of the KV connector in disaggregated inference."""
-
+    """Role of the KV connector in disaggregated inference."""""""
     PRODUCER = auto()  # Prefill instance that produces KV cache
     CONSUMER = auto()  # Decode instance that consumes KV cache
     BOTH = auto()  # Can both produce and consume
 
 
 class KVTransferMode(Enum):
-    """Transfer mode for KV cache data."""
-
+    """Transfer mode for KV cache data."""""""
     PUSH = auto()  # Producer pushes to consumer (async)
     PULL = auto()  # Consumer pulls from producer (sync)
     HYBRID = auto()  # Adaptive based on network conditions
@@ -48,17 +42,13 @@ class KVTransferMode(Enum):
 
 @dataclass
 class KVTransferConfig:
-    """Configuration for KV transfer operations."""
-
-    kv_connector: str = "DecodeBenchConnector"
-    kv_role: KVConnectorRole = KVConnectorRole.BOTH
+    """Configuration for KV transfer operations."""""""
+    kv_connector: str = "DecodeBenchConnector""    kv_role: KVConnectorRole = KVConnectorRole.BOTH
     kv_rank: int = 0
     kv_parallel_size: int = 1
-    kv_ip: str = "127.0.0.1"
-    kv_port: int = 14579
+    kv_ip: str = "127.0.0.1""    kv_port: int = 14579
     kv_buffer_size: int = int(1e9)  # 1GB default
-    kv_buffer_device: str = "cuda"
-    extra_config: Dict[str, Any] = field(default_factory=dict)
+    kv_buffer_device: str = "cuda""    extra_config: Dict[str, Any] = field(default_factory=dict)
 
     # Advanced configuration
     retry_attempts: int = 3
@@ -80,8 +70,7 @@ class KVTransferConfig:
 
 @dataclass
 class KVConnectorMetadata:
-    """Metadata for KV transfer operations."""
-
+    """Metadata for KV transfer operations."""""""
     reqs_to_fill: Dict[str, Tuple[Tuple[List[int], ...], int]] = field(default_factory=dict)
     reqs_to_send: Dict[str, List[int]] = field(default_factory=dict)
     reqs_to_recv: Dict[str, List[int]] = field(default_factory=dict)
@@ -90,8 +79,7 @@ class KVConnectorMetadata:
 
 @dataclass
 class KVCacheBlocks:
-    """Represents allocated KV cache blocks for a request."""
-
+    """Represents allocated KV cache blocks for a request."""""""
     block_ids: List[List[int]] = field(default_factory=list)
     num_blocks: int = 0
     block_size: int = 16
@@ -110,16 +98,14 @@ class KVCacheBlocks:
 
 @runtime_checkable
 class ForwardContext(Protocol):
-    """Protocol for forward context during model execution."""
-
+    """Protocol for forward context during model execution."""""""
     @property
     def attn_metadata(self) -> Any: ...
 
 
 @runtime_checkable
 class Request(Protocol):
-    """Protocol for request objects."""
-
+    """Protocol for request objects."""""""
     @property
     def request_id(self) -> str: ...
     @property

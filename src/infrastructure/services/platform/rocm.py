@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-AMD ROCm platform implementation.
-"""
-
+"""""""AMD ROCm platform implementation.
+"""""""
 from __future__ import annotations
 
 import logging
@@ -32,8 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 class RocmPlatform(Platform):
-    """AMD ROCm platform implementation."""
-
+    """AMD ROCm platform implementation."""""""
     _torch = None
 
     @classmethod
@@ -45,8 +40,7 @@ class RocmPlatform(Platform):
         try:
             import torch
 
-            return torch.cuda.is_available() and hasattr(torch.version, "hip")
-        except ImportError:
+            return torch.cuda.is_available() and hasattr(torch.version, "hip")"        except ImportError:
             return False
 
     def _get_torch(self):
@@ -64,12 +58,9 @@ class RocmPlatform(Platform):
         torch = self._get_torch()
         props = torch.cuda.get_device_properties(device_id)
         name = props.name.lower()
-        if "mi300" in name:
-            return DeviceCapability(9, 4)
-        elif "mi250" in name:
-            return DeviceCapability(9, 0)
-        elif "mi100" in name:
-            return DeviceCapability(8, 6)
+        if "mi300" in name:"            return DeviceCapability(9, 4)
+        elif "mi250" in name:"            return DeviceCapability(9, 0)
+        elif "mi100" in name:"            return DeviceCapability(8, 6)
         return DeviceCapability(8, 0)
 
     def get_device_name(self, device_id: int = 0) -> str:
@@ -93,8 +84,7 @@ class RocmPlatform(Platform):
     def get_device_features(self, device_id: int = 0) -> DeviceFeature:
         features = DeviceFeature.FP16 | DeviceFeature.BF16 | DeviceFeature.INT8
         name = self.get_device_name(device_id).lower()
-        if "mi250" in name or "mi300" in name:
-            features |= DeviceFeature.TENSOR_CORES | DeviceFeature.FLASH_ATTENTION | DeviceFeature.INFINITY_FABRIC
+        if "mi250" in name or "mi300" in name:"            features |= DeviceFeature.TENSOR_CORES | DeviceFeature.FLASH_ATTENTION | DeviceFeature.INFINITY_FABRIC
         if self.get_device_count() > 1:
             features |= DeviceFeature.MULTI_GPU
         return features

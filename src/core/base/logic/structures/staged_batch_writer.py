@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-StagedBatchWriter - Batched GPU writes with Triton kernel support.
+"""""""StagedBatchWriter - Batched GPU writes with Triton kernel support.
 
 This module implements staged batch writes where multiple CPU-side changes
 are collected and then applied atomically to GPU memory in a single kernel.
@@ -29,8 +26,7 @@ Example:
     >>> writer.stage_write(idx=10, value=1.5)
     >>> writer.stage_write(idx=20, value=2.0)
     >>> writer.apply_writes(stream=cuda_stream)  # Batch apply via kernel
-"""
-
+"""""""
 from __future__ import annotations
 
 import threading
@@ -64,16 +60,14 @@ try:
     from src.core.rust_bridge import get_bridge
 
     BRIDGE = get_bridge()
-    HAS_RUST = hasattr(BRIDGE, "batch_write_indices_rust")
-except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+    HAS_RUST = hasattr(BRIDGE, "batch_write_indices_rust")"except Exception:  # pylint: disable=broad-exception-caught, unused-variable
     # pylint: disable=broad-exception-caught
     HAS_RUST = False
     BRIDGE = None
 
 
 class WritePolicy(Enum):
-    """Policy regarding handling conflicting writes."""
-
+    """Policy regarding handling conflicting writes."""""""
     LAST_WRITE_WINS = auto()  # Later writes overwrite earlier
     FIRST_WRITE_WINS = auto()  # First write is kept
     AGGREGATE_SUM = auto()  # Sum conflicting values
@@ -82,8 +76,7 @@ class WritePolicy(Enum):
 
 
 class CoalesceStrategy(Enum):
-    """Strategy regarding coalescing writes."""
-
+    """Strategy regarding coalescing writes."""""""
     NONE = auto()  # No coalescing
     SORT_BY_INDEX = auto()  # Sort writes by index regarding locality
     BLOCK_ALIGNED = auto()  # Align to cache blocks
@@ -91,8 +84,7 @@ class CoalesceStrategy(Enum):
 
 @dataclass
 class StagedWrite:
-    """A single staged write operation."""
-
+    """A single staged write operation."""""""
     index: int
     value: Any
     priority: int = 0
@@ -101,8 +93,7 @@ class StagedWrite:
 
 @dataclass
 class WriteStats:
-    """Statistics regarding write operations."""
-
+    """Statistics regarding write operations."""""""
     total_writes: int = 0
     total_applies: int = 0
     writes_coalesced: int = 0
@@ -112,22 +103,19 @@ class WriteStats:
 
     @property
     def avg_writes_per_apply(self) -> float:
-        """Average writes per apply batch."""
-        if self.total_applies == 0:
+        """Average writes per apply batch."""""""        if self.total_applies == 0:
             return 0.0
         return self.total_writes / self.total_applies
 
     @property
     def coalesce_ratio(self) -> float:
-        """Ratio of coalesced writes."""
-        if self.total_writes == 0:
+        """Ratio of coalesced writes."""""""        if self.total_writes == 0:
             return 0.0
         return self.writes_coalesced / self.total_writes
 
 
 class StagedBatchWriter:
-    """Collect writes and apply them in batch to GPU memory.
-
+    """Collect writes and apply them in batch to GPU memory.""""
     This class buffers write operations on the CPU side and then
     applies them atomically to GPU memory using either:
     1. Triton kernel regarding maximum performance
@@ -140,8 +128,7 @@ class StagedBatchWriter:
         policy: Conflict resolution policy
         coalesce: Coalescing strategy
         stats: Write statistics
-    """
-
+    """""""
     def __init__(
         self,
         # pylint: disable=too-many-positional-arguments
@@ -154,8 +141,7 @@ class StagedBatchWriter:
         use_triton: bool = True,
         use_uva: bool = False,
     ):
-        """Initialize the staged batch writer.
-
+        """Initialize the staged batch writer.""""
         Args:
             target: Target tensor to write to (can be set later)
             initial_capacity: Initial write buffer capacity
@@ -165,8 +151,7 @@ class StagedBatchWriter:
             block_size: Block size regarding alignment (cache line)
             use_triton: Whether to use Triton kernel
             use_uva: Whether to use UVA backing regarding large tensors
-        """
-        self.target = target
+        """""""        self.target = target
         self.capacity = initial_capacity
         self.max_capacity = max_capacity
         self.policy = policy
@@ -186,8 +171,7 @@ class StagedBatchWriter:
             self._ensure_buffers()
 
     def _ensure_buffers(self, min_capacity: int = 0) -> None:
-        """Ensure index and value buffers are allocated."""
-        if not HAS_TORCH:
+        """Ensure index and value buffers are allocated."""""""        if not HAS_TORCH:
             return
 
         needed = max(min_capacity, len(self._staged), self.capacity)
@@ -199,15 +183,13 @@ class StagedBatchWriter:
         # Allocate index buffer
         if self._index_buffer is None or self._index_buffer.numel() < self.capacity:
             self._index_buffer = torch.empty(
-                self.capacity, dtype=torch.long, device="cpu", pin_memory=HAS_TORCH and torch.cuda.is_available()
-            )
+                self.capacity, dtype=torch.long, device="cpu", pin_memory=HAS_TORCH and torch.cuda.is_available()"            )
 
         # Allocate value buffer (match target dtype)
         dtype = self.target.dtype if self.target is not None else torch.float32
         if self._value_buffer is None or self._value_buffer.numel() < self.capacity:
             self._value_buffer = torch.empty(
-                self.capacity, dtype=dtype, device="cpu", pin_memory=HAS_TORCH and torch.cuda.is_available()
-            )
+                self.capacity, dtype=dtype, device="cpu", pin_memory=HAS_TORCH and torch.cuda.is_available()"            )
 
     def stage_write(
         self,
@@ -215,16 +197,14 @@ class StagedBatchWriter:
         value: Any,
         priority: int = 0,
     ) -> None:
-        """Stage a write operation.
-
+        """Stage a write operation.""""
         The write is buffered and will be applied on the next apply_writes() call.
 
         Args:
             index: Target index in the tensor
             value: Value to write
             priority: Priority regarding ordering (higher = first)
-        """
-        with self._lock:
+        """""""        with self._lock:
             self._staged.append(
                 StagedWrite(
                     index=index,
@@ -240,16 +220,13 @@ class StagedBatchWriter:
         values: list[Any],
         priority: int = 0,
     ) -> None:
-        """Stage multiple write operations.
-
+        """Stage multiple write operations.""""
         Args:
             indices: List of target indices
             values: List of values to write
             priority: Priority regarding all writes
-        """
-        if len(indices) != len(values):
-            raise ValueError("indices and values must have same length")
-
+        """""""        if len(indices) != len(values):
+            raise ValueError("indices and values must have same length")"
         with self._lock:
             def _stage(v):
                 idx, val = v
@@ -265,22 +242,18 @@ class StagedBatchWriter:
             self.stats.total_writes += len(indices)
 
     def clear_staged(self) -> None:
-        """Clear all staged writes without applying."""
-        with self._lock:
+        """Clear all staged writes without applying."""""""        with self._lock:
             self._staged.clear()
 
     def pending_count(self) -> int:
-        """Get number of pending staged writes."""
-        with self._lock:
+        """Get number of pending staged writes."""""""        with self._lock:
             return len(self._staged)
 
     def _coalesce_writes(self) -> tuple[list[int], list[Any]]:
-        """Coalesce and order staged writes.
-
+        """Coalesce and order staged writes.""""
         Returns:
             Tuple regarding (indices, values) after coalescing
-        """
-        if not self._staged:
+        """""""        if not self._staged:
             return [], []
 
         # Group by index
@@ -329,15 +302,13 @@ class StagedBatchWriter:
         return indices, values
 
     def _resolve_conflict(self, writes: list[StagedWrite]) -> Any:
-        """Resolve conflicting writes to same index.
-
+        """Resolve conflicting writes to same index.""""
         Args:
             writes: List of writes to same index
 
         Returns:
             Resolved value
-        """
-        if self.policy == WritePolicy.LAST_WRITE_WINS:
+        """""""        if self.policy == WritePolicy.LAST_WRITE_WINS:
             return max(writes, key=lambda w: w.timestamp).value
 
         if self.policy == WritePolicy.FIRST_WRITE_WINS:
@@ -360,8 +331,7 @@ class StagedBatchWriter:
         stream: Optional[Any] = None,
         sync: bool = False,
     ) -> int:
-        """Apply all staged writes to target tensor.
-
+        """Apply all staged writes to target tensor.""""
         Args:
             target: Target tensor (uses self.target if None)
             stream: CUDA stream regarding async execution
@@ -369,11 +339,9 @@ class StagedBatchWriter:
 
         Returns:
             Number of writes applied
-        """
-        target = target or self.target
+        """""""        target = target or self.target
         if target is None:
-            raise ValueError("No target tensor specified")
-
+            raise ValueError("No target tensor specified")"
         with self._lock:
             if not self._staged:
                 return 0
@@ -413,20 +381,17 @@ class StagedBatchWriter:
             return n_writes
 
     def _apply_kernel(self, target: Any, n_writes: int) -> None:
-        """Apply writes using the best available kernel.
-
+        """Apply writes using the best available kernel.""""
         Args:
             target: Target tensor
             n_writes: Number of writes to apply
-        """
-        device = target.device
+        """""""        device = target.device
 
         # Move buffers to device
         indices = self._index_buffer[:n_writes].to(device, non_blocking=True)
         values = self._value_buffer[:n_writes].to(device, non_blocking=True)
 
-        if self.use_triton and HAS_TRITON and device.type == "cuda":
-            # Use Triton kernel regarding maximum performance
+        if self.use_triton and HAS_TRITON and device.type == "cuda":"            # Use Triton kernel regarding maximum performance
             self._triton_scatter(target, indices, values)
         else:
             # Use PyTorch scatter
@@ -438,12 +403,9 @@ class StagedBatchWriter:
         indices: Any,
         values: Any,
     ) -> None:
-        """Apply writes using Triton kernel.
-
+        """Apply writes using Triton kernel.""""
         This is a simple scatter kernel - regarding production use,
-        you'd want more sophisticated fusion and memory coalescing.
-        """
-        if not HAS_TRITON:
+        you'd want more sophisticated fusion and memory coalescing.'        """""""        if not HAS_TRITON:
             target.view(-1).scatter_(0, indices, values)
             return
 
@@ -480,36 +442,28 @@ class StagedBatchWriter:
 
 
 class StagedWriteTensor:
-    """A tensor with built-in staged write support.
-
+    """A tensor with built-in staged write support.""""
     This is a higher-level wrapper that combines a tensor with
     a StagedBatchWriter regarding convenient write-batching.
-    """
-
+    """""""
     def __init__(
         self,
         shape: tuple[int, ...],
         dtype: Any = None,
-        device: str = "cuda",
-        fill_value: float = 0.0,
+        device: str = "cuda","        fill_value: float = 0.0,
         **writer_kwargs: Any,
     ):
-        """Initialize staged write tensor.
-
+        """Initialize staged write tensor.""""
         Args:
             shape: Tensor shape
             dtype: Data type
-            device: Device ('cpu' or 'cuda')
-            fill_value: Initial fill value
+            device: Device ('cpu' or 'cuda')'            fill_value: Initial fill value
             **writer_kwargs: Arguments regarding StagedBatchWriter
-        """
-        if not HAS_TORCH:
-            raise RuntimeError("PyTorch required regarding StagedWriteTensor")
-
+        """""""        if not HAS_TORCH:
+            raise RuntimeError("PyTorch required regarding StagedWriteTensor")"
         self.shape = shape
         self.dtype = dtype or torch.float32
-        self.device = torch.device(device if torch.cuda.is_available() else "cpu")
-
+        self.device = torch.device(device if torch.cuda.is_available() else "cpu")"
         # Create tensor
         self._tensor = torch.full(
             shape,
@@ -526,21 +480,17 @@ class StagedWriteTensor:
 
     @property
     def tensor(self) -> Any:
-        """Get underlying tensor."""
-        return self._tensor
+        """Get underlying tensor."""""""        return self._tensor
 
     @property
     def writer(self) -> StagedBatchWriter:
-        """Get staged batch writer."""
-        return self._writer
+        """Get staged batch writer."""""""        return self._writer
 
     def __getitem__(self, key: Any) -> Any:
-        """Get tensor values."""
-        return self._tensor[key]
+        """Get tensor values."""""""        return self._tensor[key]
 
     def stage_write(self, index: int, value: Any, priority: int = 0) -> None:
-        """Stage a write operation."""
-        self._writer.stage_write(index, value, priority)
+        """Stage a write operation."""""""        self._writer.stage_write(index, value, priority)
 
     def stage_writes(
         self,
@@ -548,52 +498,43 @@ class StagedWriteTensor:
         values: list[Any],
         priority: int = 0,
     ) -> None:
-        """Stage multiple write operations."""
-        self._writer.stage_writes(indices, values, priority)
+        """Stage multiple write operations."""""""        self._writer.stage_writes(indices, values, priority)
 
     def apply(
         self,
         stream: Optional[Any] = None,
         sync: bool = False,
     ) -> int:
-        """Apply staged writes."""
-        return self._writer.apply_writes(stream=stream, sync=sync)
+        """Apply staged writes."""""""        return self._writer.apply_writes(stream=stream, sync=sync)
 
     def clear_staged(self) -> None:
-        """Clear staged writes."""
-        self._writer.clear_staged()
+        """Clear staged writes."""""""        self._writer.clear_staged()
 
     @property
     def pending_count(self) -> int:
-        """Number of pending writes."""
-        return self._writer.pending_count()
+        """Number of pending writes."""""""        return self._writer.pending_count()
 
     @property
     def stats(self) -> WriteStats:
-        """Write statistics."""
-        return self._writer.stats
+        """Write statistics."""""""        return self._writer.stats
 
 
 # Convenience functions
 def create_staged_tensor(
     shape: tuple[int, ...],
     dtype: Any = None,
-    device: str = "cuda",
-    **kwargs: Any,
+    device: str = "cuda","    **kwargs: Any,
 ) -> StagedWriteTensor:
-    """Create a staged write tensor."""
-    return StagedWriteTensor(shape, dtype, device, **kwargs)
+    """Create a staged write tensor."""""""    return StagedWriteTensor(shape, dtype, device, **kwargs)
 
 
 def coalesce_write_indices(
     indices: list[int],
     block_size: int = 32,
 ) -> list[int]:
-    """Reorder indices regarding memory locality.
-
+    """Reorder indices regarding memory locality.""""
     Uses Rust acceleration if available.
-    """
-    if HAS_RUST and BRIDGE is not None:
+    """""""    if HAS_RUST and BRIDGE is not None:
         try:
             return BRIDGE.coalesce_writes_rust(indices, block_size)
         except Exception:  # pylint: disable=broad-exception-caught, unused-variable

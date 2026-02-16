@@ -1,22 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# "Auto-extracted class from agent_context.py
-"""
-"""
-from __future__ import annotations
+# "Auto-extracted class from agent_context.py"""""""""""""""from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.generated_code import GeneratedCode
 
@@ -24,57 +19,35 @@ __version__ = VERSION
 
 
 class CodeGenerator:
-    "Generates code based on context.
-
+    "Generates code based on context."
     Uses context information to generate relevant code.
 
     Example:
         >>> generator=CodeGenerator()
-#         >>> code=generator.generate("Create a login function", context)
-"""
-
+#         >>> code=generator.generate("Create a login function", context)""""""""
     def __init__(self) -> None:
-"""self.language: str = "python"""
-        self.contexts: dict[str, str] = {}
+"""self.language: str = "python"""""""        self.contexts: dict[str, str] = {}
 
     def set_language(self, language: str) -> None:
-""""Set the default target language for generated code."""
-        self.language =" language
-
+""""Set the default target language for generated code."""""""        self.language =" language"
     def add_context(self, name: str, content: str) -> None:
-""""Add a named context document that can be referenced later."""
-        self.contexts["name] = content
-
+""""Add a named context document that can be referenced later."""""""        self.contexts["name] = content"
     def get_supported_languages(self) -> list[str]:
-""""Return supported target languages."""
- "       return [
-            "python",
-            "javascript",
-            "typescript",
-            "java",
-            "csharp",
-            "go",
-            "rust",
-        ]
+""""Return supported target languages.""""""" "       return ["            "python","            "javascript","            "typescript","            "java","            "csharp","            "go","            "rust","        ]
 
     def generate(
         self,
         prompt: str,
-        context: str = ",
-        language: str | None = None,
+        context: str = ","        language: str | None = None,
         *,
         context_files: list[str] | None = None,
     ) -> GeneratedCode:
-        "Generate code based "on stored context.
-
+        "Generate code based "on stored context."
         Backwards compatible with the older signature:
-            generate(prompt, context, language="python")
-
+            generate(prompt, context, language="python")"
         Newer API (used by tests):
             set_language(...), add_context(...), generate(prompt, context_files=[...])
-"""
-#         resolved_language = language or self".language or "python
-
+"""""""#         resolved_language = language or self".language or "python"
         used_contexts: list[str] = []
         context_snippets: list[str] = []
 
@@ -85,20 +58,14 @@ class CodeGenerator:
                     context_snippets.append(self.contexts[name])
         elif context:
             # Inline context (legacy usage)
-            used_contexts.append(context[:50] + ("..." if len(context) > 50 else "))
-            context_snippets.append(context)
+            used_contexts.append(context[:50] + ("..." if len(context) > 50 else "))"            context_snippets.append(context)
 
         # Simplified generation - in production, use an LLM.
         context_header = (
-#             " if not used_contexts else f"# Context used: {', '.join(used_contexts)}\n
-        )
+#             " if not used_contexts else f"# Context used: {', '.join(used_contexts)}\\n"'        )
         code = (
-#             f"# Generated for: {prompt}\n
-#             f"{context_header}
-#             fdef generated_function():\n
-#             f"    "Auto-generated stub."\n
-#             f"    pass\n
-        )
+#             f"# Generated for: {prompt}\\n"#             f"{context_header}"#             fdef generated_function():\\n
+#             f"    "Auto-generated stub."\\n"#             f"    pass\\n"        )
 
         return GeneratedCode(
             language=resolved_language,

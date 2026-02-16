@@ -1,5 +1,41 @@
 ---
 
+## Test File Error Prioritization and Action Plan for @tester/@coding (2026-02-16)
+
+### 1. Critical: Core and Base Logic
+- src/core/base/common/test_base_utilities_test.py
+- src/core/base/common/types/test_gap_test.py
+- src/core/base/common/utils/test_runner_test.py
+- src/core/base/logic/test_task_prioritization_test.py
+
+### 2. High: Infrastructure and Agent Test Utilities
+- src/infrastructure/services/dev/agent_tests/test_generation_test.py
+- src/infrastructure/services/dev/agent_tests/test_management_test.py
+- src/infrastructure/services/dev/agent_tests/test_runner_test.py
+- src/infrastructure/services/dev/scripts/maintenance/test_copilot_backend_test.py
+- src/infrastructure/services/dev/test_utils/test_utils_legacy_test.py
+
+### 3. High: Analysis Agents
+- src/logic/agents/analysis/test_agent.py
+- src/logic/agents/analysis/test_agent_test.py
+- src/logic/agents/analysis/test_gap_agent.py
+- src/logic/agents/analysis/test_gap_agent_test.py
+
+### 4. Medium: Tools and Network
+- src/tools/test_network_ip_test.py
+
+---
+
+### Action Plan for @tester/@coding
+
+- Step 1: Investigate and resolve errors in the critical/core files first, as failures here can block or invalidate other tests.
+- Step 2: Address infrastructure and agent test utility errors to restore test generation and management capabilities.
+- Step 3: Fix analysis agent test errors to ensure agentic reasoning and analysis are validated.
+- Step 4: Resolve tool/network test errors for full system integration.
+
+For each file, ensure that all dependencies, imports, and test fixtures are correct after the move. Update or regenerate tests as needed to match the current codebase. Document fixes and rationale in docs/architecture/tester.agent.memory.md for traceability.
+---
+
 ## Next-Phase Testing Plan for @tester (2026-02-16)
 
 - All legacy test files have been moved into src/ as *_test.py.

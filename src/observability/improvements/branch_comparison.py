@@ -1,28 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Branch Comparison - Result of comparing improvements across branches
+"""""""Branch Comparison - Result of comparing improvements across branches
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-- Instantiate to represent the result of comparing an "improvements" file between two Git branches.
-- Example:
+- Instantiate to represent the result of comparing an "improvements" file between two Git branches."- Example:
     from branch_comparison import BranchComparison, BranchComparisonStatus, ImprovementDiff
-    bc = BranchComparison(source_branch="feature", target_branch="main", file_path="improvements.yaml")
-    # populate bc.diffs with ImprovementDiff instances and set status/counts accordingly
+    bc = BranchComparison(source_branch="feature", target_branch="main", file_path="improvements.yaml")"    # populate bc.diffs with ImprovementDiff instances and set status/counts accordingly
 - Use for reporting, serialization, or higher-level orchestration that decides how to merge or apply improvements.
 
 WHAT IT DOES:
@@ -37,8 +32,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
-
+"""""""
 from __future__ import annotations
 
 import time
@@ -54,8 +48,7 @@ __version__ = VERSION
 
 @dataclass
 class BranchComparison:
-    """Result of comparing improvements across branches.
-
+    """Result of comparing improvements across branches.""""
     Attributes:
         source_branch: Source branch name.
         target_branch: Target branch name.
@@ -66,8 +59,7 @@ class BranchComparison:
         removed_count: Number of improvements removed.
         modified_count: Number of improvements modified.
         compared_at: Comparison timestamp.
-    """
-
+    """""""
     source_branch: str
     target_branch: str
     file_path: str
@@ -76,9 +68,7 @@ class BranchComparison:
     added_count: int = 0
     removed_count: int = 0
     modified_count: int = 0
-    compared_at: float = field(default_factory=t"""ime.time)
-"""
-
+    compared_at: float = field(default_factory=t"""ime.time)"""""""""""
 from __future__ import annotations
 
 import time
@@ -94,8 +84,7 @@ __version__ = VERSION
 
 @dataclass
 class BranchComparison:
-    """Result of comparing improvements across branches.
-
+    """Result of comparing improvements across branches.""""
     Attributes:
         source_branch: Source branch name.
         target_branch: Target branch name.
@@ -105,9 +94,7 @@ class BranchComparison:
         added_count: Number of improvements added.
         removed_count: Number of improvements removed.
         modified_count: Number of improvements modified.
-        compared_at: Com"""pariso"""n t"""imestamp.
-    """
-
+        compared_at: Com"""pariso"""n t"""imestamp.""""    """""""
     source_branch: str
     target_branch: str
     file_path: str

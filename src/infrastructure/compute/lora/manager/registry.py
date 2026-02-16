@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Registry.py module.
-"""
-
+"""""""Registry.py module.
+"""""""
 from __future__ import annotations
 
 from _thread import RLock
@@ -28,28 +24,23 @@ from .config import LoRAConfig
 
 
 class LoRARegistry:
-    """Registry for LoRA adapters with caching."""
-
+    """Registry for LoRA adapters with caching."""""""
     def __init__(self, max_cached: int = 32) -> None:
         self._adapters: OrderedDict[str, LoRAAdapter] = OrderedDict()
         self._max_cached: int = max_cached
         self._lock: RLock = threading.RLock()
-        self._stats: Dict[str, int] = {"loads": 0, "cache_hits": 0, "evictions": 0}
-
+        self._stats: Dict[str, int] = {"loads": 0, "cache_hits": 0, "evictions": 0}"
     def register(self, config: LoRAConfig) -> LoRAAdapter:
         with self._lock:
             if config.adapter_name in self._adapters:
-                self._stats["cache_hits"] += 1
-                self._adapters.move_to_end(config.adapter_name)
+                self._stats["cache_hits"] += 1"                self._adapters.move_to_end(config.adapter_name)
                 return self._adapters[config.adapter_name]
             while len(self._adapters) >= self._max_cached:
                 self._adapters.popitem(last=False)
-                self._stats["evictions"] += 1
-            adapter = LoRAAdapter(config)
+                self._stats["evictions"] += 1"            adapter = LoRAAdapter(config)
             adapter.load()
             self._adapters[config.adapter_name] = adapter
-            self._stats["loads"] += 1
-            return adapter
+            self._stats["loads"] += 1"            return adapter
 
     def get(self, adapter_name: str) -> Optional[LoRAAdapter]:
         with self._lock:
@@ -71,4 +62,4 @@ class LoRARegistry:
 
     def get_stats(self) -> Dict[str, Any]:
         with self._lock:
-            return {**self._stats, "cached": len(self._adapters), "max_cached": self._max_cached}
+            return {**self._stats, "cached": len(self._adapters), "max_cached": self._max_cached}"

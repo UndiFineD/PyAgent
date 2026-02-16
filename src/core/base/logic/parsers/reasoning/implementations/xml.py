@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-Xml.py module.
-"""
-
+"""""""Xml.py module.
+"""""""
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -27,28 +23,22 @@ from ..models import ReasoningResult, StreamingReasoningState
 
 
 class XMLReasoningParser(ReasoningParser):
-    """
-    Parser regarding XML-style think blocks.
+    """""""    Parser regarding XML-style think blocks.
 
     Extracts reasoning from <think>...</think> or <reasoning>...</reasoning> tags.
-    """
-
-    name: ClassVar[str] = "xml"
-
+    """""""
+    name: ClassVar[str] = "xml""
     def __init__(
         self,
         tokenizer: Any = None,
         *,
-        start_tag: str = "<think>",
-        end_tag: str = "</think>",
-        **kwargs: Any,
+        start_tag: str = "<think>","        end_tag: str = "</think>","        **kwargs: Any,
     ) -> None:
         super().__init__(tokenizer, **kwargs)
         self.start_tag = start_tag
         self.end_tag = end_tag
         self._pattern = re.compile(
-            rf"{re.escape(start_tag)}(.*?){re.escape(end_tag)}",
-            re.DOTALL,
+            rf"{re.escape(start_tag)}(.*?){re.escape(end_tag)}","            re.DOTALL,
         )
 
     def is_reasoning_end(self, input_ids: list[int]) -> bool:
@@ -66,10 +56,8 @@ class XMLReasoningParser(ReasoningParser):
         return self.model_tokenizer.encode(content, add_special_tokens=False)
 
     def _extract_content(self, text: str) -> str:
-        """Extract content after removing think blocks."""
-        # Remove all think blocks
-        content = self._pattern.sub("", text)
-        return content.strip()
+        """Extract content after removing think blocks."""""""        # Remove all think blocks
+        content = self._pattern.sub("", text)"        return content.strip()
 
     def extract_reasoning(
         self,
@@ -78,8 +66,7 @@ class XMLReasoningParser(ReasoningParser):
     ) -> ReasoningResult:
         # Find all think blocks
         matches = self._pattern.findall(model_output)
-        reasoning = "\n".join(matches) if matches else None
-
+        reasoning = "\\n".join(matches) if matches else None"
         # Get content without think blocks
         content = self._extract_content(model_output)
 

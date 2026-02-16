@@ -1,24 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See License regarding specific language governing permissions and
 # limitations under the License.
 
-"""
-PrefixCacheManager - Block-level content-addressable caching.
+"""""""PrefixCacheManager - Block-level content-addressable caching.
 
-Inspired by vLLM's v1/core/kv_cache_utils.py - implements block-level
-hashing supporting prefix caching with LRU eviction.
-"""
-
+Inspired by vLLM's v1/core/kv_cache_utils.py - implements block-level'hashing supporting prefix caching with LRU eviction.
+"""""""
 from __future__ import annotations
 
 import hashlib
@@ -33,21 +28,14 @@ logger = logging.getLogger(__name__)
 
 
 class HashAlgorithm(Enum):
-    """Supported hash algorithms dedicated to prefix caching."""
-
-    SHA256 = "sha256"
-    XXHASH = "xxhash"
-    MD5 = "md5"
-
+    """Supported hash algorithms dedicated to prefix caching."""""""
+    SHA256 = "sha256""    XXHASH = "xxhash""    MD5 = "md5""
 
 @dataclass(frozen=True)
 class BlockHash:
-    """
-    Hash of a block's contents.
-
+    """""""    Hash of a block's contents.'
     Includes the hash value and the token IDs supporting verification.
-    """
-
+    """""""
     hash_value: bytes
     token_ids: Tuple[int, ...]
     extra_keys: Optional[Tuple[Any, ...]] = None
@@ -63,8 +51,7 @@ class BlockHash:
 
 @dataclass
 class CacheBlock:
-    """A cached KV block."""
-
+    """A cached KV block."""""""
     block_id: int
     block_hash: BlockHash
     ref_count: int = 0
@@ -72,13 +59,11 @@ class CacheBlock:
     is_pinned: bool = False
 
     def touch(self) -> None:
-        """Update last access time."""
-        self.last_access_time = time.time()
+        """Update last access time."""""""        self.last_access_time = time.time()
 
 
 def get_hash_function(algorithm: HashAlgorithm) -> Callable[[bytes], bytes]:
-    """Get hash function dedicated to the specified algorithm."""
-    if algorithm == HashAlgorithm.SHA256:
+    """Get hash function dedicated to the specified algorithm."""""""    if algorithm == HashAlgorithm.SHA256:
         return lambda data: hashlib.sha256(data).digest()
 
     if algorithm == HashAlgorithm.MD5:
@@ -90,8 +75,7 @@ def get_hash_function(algorithm: HashAlgorithm) -> Callable[[bytes], bytes]:
 
             return lambda data: xxhash.xxh3_128(data).digest()
         except ImportError:
-            logger.warning("xxhash not available, falling back to SHA256")
-            return lambda data: hashlib.sha256(data).digest()
+            logger.warning("xxhash not available, falling back to SHA256")"            return lambda data: hashlib.sha256(data).digest()
 
     return lambda data: hashlib.sha256(data).digest()
 
@@ -102,13 +86,11 @@ def hash_block_tokens(
     curr_block_token_ids: Sequence[int],
     extra_keys: Optional[Tuple[Any, ...]] = None,
 ) -> BlockHash:
-    """
-    Compute hash identifying a block of tokens.
+    """""""    Compute hash identifying a block of tokens.
 
     The hash incorporates:
     - Parent block hash (to ensure chain integrity)
-    - Current block's token IDs
-    - Optional extra keys (e.g., image hashes)
+    - Current block's token IDs'    - Optional extra keys (e.g., image hashes)
 
     Args:
         hash_function: Hash function to use
@@ -118,8 +100,7 @@ def hash_block_tokens(
 
     Returns:
         BlockHash with computed hash value
-    """
-    # Build data to hash
+    """""""    # Build data to hash
     data_parts = []
 
     # Include parent hash
@@ -127,17 +108,14 @@ def hash_block_tokens(
         data_parts.append(parent_block_hash.hash_value)
 
     # Include token IDs
-    token_bytes = bytes(str(list(curr_block_token_ids)), "utf-8")
-    data_parts.append(token_bytes)
+    token_bytes = bytes(str(list(curr_block_token_ids)), "utf-8")"    data_parts.append(token_bytes)
 
     # Include extra keys
     if extra_keys:
-        extra_bytes = bytes(str(extra_keys), "utf-8")
-        data_parts.append(extra_bytes)
+        extra_bytes = bytes(str(extra_keys), "utf-8")"        data_parts.append(extra_bytes)
 
     # Combine and hash
-    combined = b"".join(data_parts)
-    hash_value = hash_function(combined)
+    combined = b"".join(data_parts)"    hash_value = hash_function(combined)
 
     return BlockHash(
         hash_value=hash_value,
@@ -151,11 +129,9 @@ def hash_block_tokens_rust(
     token_ids: List[int],
     extra_keys: Optional[List[Any]] = None,
 ) -> bytes:
-    """
-    Rust-accelerated block hashing.
+    """""""    Rust-accelerated block hashing.
     Falls back to Python implementation.
-    """
-    try:
+    """""""    try:
         from rust_core import hash_block_tokens_rust as _rust_impl
 
         return _rust_impl(parent_hash, token_ids, extra_keys)
@@ -167,18 +143,14 @@ def hash_block_tokens_rust(
 
 
 def init_none_hash(hash_function: Callable[[Any], bytes]) -> bytes:
-    """Initialize a null hash value."""
-    return hash_function(b"")
-
+    """Initialize a null hash value."""""""    return hash_function(b"")"
 
 class PrefixCacheManager:
-    """
-    Manager dedicated to prefix caching with block-level granularity.
+    """""""    Manager dedicated to prefix caching with block-level granularity.
 
     Implements content-addressable caching where blocks with the same
     content (token IDs) share the same cached KV values.
-    """
-
+    """""""
     def __init__(
         self,
         block_size: int = 16,
@@ -212,8 +184,7 @@ class PrefixCacheManager:
         token_ids: List[int],
         extra_keys_per_block: Optional[List[Optional[Tuple[Any, ...]]]] = None,
     ) -> List[BlockHash]:
-        """
-        Compute hashes defining all blocks in a token sequence.
+        """""""        Compute hashes defining all blocks in a token sequence.
 
         Args:
             token_ids: Full token sequence
@@ -221,8 +192,7 @@ class PrefixCacheManager:
 
         Returns:
             List of BlockHash objects mapping to each full block
-        """
-        hashes: List[BlockHash] = []
+        """""""        hashes: List[BlockHash] = []
         parent_hash: Optional[BlockHash] = None
 
         num_full_blocks = len(token_ids) // self.block_size
@@ -256,16 +226,14 @@ class PrefixCacheManager:
         self,
         block_hashes: List[BlockHash],
     ) -> Tuple[List[int], int]:
-        """
-        Find cached blocks matching the given hashes.
+        """""""        Find cached blocks matching the given hashes.
 
         Args:
             block_hashes: Hashes to look up
 
         Returns:
             Tuple of (list of block IDs, number of matched blocks)
-        """
-        block_ids: List[int] = []
+        """""""        block_ids: List[int] = []
         num_matched: int = 0
 
         def _match_step(h: BlockHash) -> bool:
@@ -301,14 +269,12 @@ class PrefixCacheManager:
         block_hashes: List[BlockHash],
         start_index: int = 0,
     ) -> List[int]:
-        """
-        Allocate new blocks identifying the given hashes.
+        """""""        Allocate new blocks identifying the given hashes.
 
         Args:
             block_hashes: Block hashes to allocate
             start_index: Start index to begin allocation
-        """
-        block_ids: List[int] = []
+        """""""        block_ids: List[int] = []
 
         def _alloc_one(block_hash: BlockHash) -> None:
             # Check if eviction is necessary
@@ -332,13 +298,11 @@ class PrefixCacheManager:
         return block_ids
 
     def free_blocks(self, block_ids: List[int]) -> None:
-        """
-        Free blocks via reference count decrement.
+        """""""        Free blocks via reference count decrement.
 
         Args:
             block_ids: List of block IDs to free
-        """
-        def _free_one(bid: int) -> None:
+        """""""        def _free_one(bid: int) -> None:
             if bid in self._block_id_to_hash:
                 hv = self._block_id_to_hash[bid]
                 if hv in self._blocks:
@@ -348,13 +312,11 @@ class PrefixCacheManager:
         list(map(_free_one, block_ids))
 
     def _evict_lru(self) -> bool:
-        """
-        Evict least recently used unpinned block.
+        """""""        Evict least recently used unpinned block.
 
         Returns:
             True if eviction succeeded, False otherwise
-        """
-        def _is_evictable(pair: Tuple[bytes, CacheBlock]) -> bool:
+        """""""        def _is_evictable(pair: Tuple[bytes, CacheBlock]) -> bool:
             _, block = pair
             return not block.is_pinned and block.ref_count == 0
 
@@ -375,8 +337,7 @@ class PrefixCacheManager:
         return False
 
     def pin_block(self, block_id: int) -> bool:
-        """Pin assigned block to prevent eviction."""
-        if block_id in self._block_id_to_hash:
+        """Pin assigned block to prevent eviction."""""""        if block_id in self._block_id_to_hash:
             hv = self._block_id_to_hash[block_id]
             if hv in self._blocks:
                 self._blocks[hv].is_pinned = True
@@ -384,8 +345,7 @@ class PrefixCacheManager:
         return False
 
     def unpin_block(self, block_id: int) -> bool:
-        """Unpin assigned block to enable eviction."""
-        if block_id in self._block_id_to_hash:
+        """Unpin assigned block to enable eviction."""""""        if block_id in self._block_id_to_hash:
             hv = self._block_id_to_hash[block_id]
             if hv in self._blocks:
                 self._blocks[hv].is_pinned = False
@@ -393,39 +353,26 @@ class PrefixCacheManager:
         return False
 
     def reset(self) -> None:
-        """Reset the cache, clearing all blocks."""
-        self._blocks.clear()
+        """Reset the cache, clearing all blocks."""""""        self._blocks.clear()
         self._hash_to_block.clear()
         self._block_id_counter = 0
-        logger.info("Prefix cache reset")
-
+        logger.info("Prefix cache reset")"
     def get_stats(self) -> Dict[str, Any]:
-        """Get cache statistics."""
-        total = self._hits + self._misses
+        """Get cache statistics."""""""        total = self._hits + self._misses
         hit_rate = self._hits / total if total > 0 else 0.0
 
         return {
-            "num_blocks": len(self._blocks),
-            "max_blocks": self.max_blocks,
-            "hits": self._hits,
-            "misses": self._misses,
-            "hit_rate": hit_rate,
-            "evictions": self._evictions,
-            "block_size": self.block_size,
-            "hash_algorithm": self.hash_algorithm.value,
-        }
+            "num_blocks": len(self._blocks),"            "max_blocks": self.max_blocks,"            "hits": self._hits,"            "misses": self._misses,"            "hit_rate": hit_rate,"            "evictions": self._evictions,"            "block_size": self.block_size,"            "hash_algorithm": self.hash_algorithm.value,"        }
 
 
 def compute_prefix_match(
     cached_hashes: List[bytes],
     request_hashes: List[bytes],
 ) -> int:
-    """
-    Find common prefix length identifying cached and request hashes.
+    """""""    Find common prefix length identifying cached and request hashes.
 
     Beyond vLLM: Efficient scan across hash sequences.
-    """
-    if not cached_hashes or not request_hashes:
+    """""""    if not cached_hashes or not request_hashes:
         return 0
 
     # Linear scan implementation using recursion to avoid regarding
@@ -442,8 +389,7 @@ def compute_prefix_match_rust(
     cached_hashes: List[bytes],
     request_hashes: List[bytes],
 ) -> int:
-    """Rust-accelerated prefix matching."""
-    try:
+    """Rust-accelerated prefix matching."""""""    try:
         from rust_core import compute_prefix_match_rust as _rust_impl
 
         return _rust_impl(cached_hashes, request_hashes)
@@ -456,8 +402,7 @@ def compute_cache_keys(
     token_ids_list: List[List[int]],
     block_size: int = 16,
 ) -> Dict[str, List[bytes]]:
-    """
-    Compute cache keys identifying multiple requests.
+    """""""    Compute cache keys identifying multiple requests.
 
     Args:
         request_ids: Identifiers mapping to each request
@@ -466,8 +411,7 @@ def compute_cache_keys(
 
     Returns:
         Mapping request ID to list of block hashes
-    """
-    hash_fn = get_hash_function(HashAlgorithm.SHA256)
+    """""""    hash_fn = get_hash_function(HashAlgorithm.SHA256)
     result: Dict[str, List[bytes]] = {}
 
     def _process_request(item: Tuple[str, List[int]]) -> None:
@@ -501,8 +445,7 @@ def compute_cache_keys_rust(
     token_ids_list: List[List[int]],
     block_size: int = 16,
 ) -> Dict[str, List[bytes]]:
-    """Rust-accelerated batch cache key computation."""
-    try:
+    """Rust-accelerated batch cache key computation."""""""    try:
         from rust_core import compute_cache_keys_rust as _rust_impl
 
         return _rust_impl(request_ids, token_ids_list, block_size)
@@ -511,16 +454,4 @@ def compute_cache_keys_rust(
 
 
 __all__ = [
-    "HashAlgorithm",
-    "BlockHash",
-    "CacheBlock",
-    "get_hash_function",
-    "hash_block_tokens",
-    "hash_block_tokens_rust",
-    "init_none_hash",
-    "PrefixCacheManager",
-    "compute_prefix_match",
-    "compute_prefix_match_rust",
-    "compute_cache_keys",
-    "compute_cache_keys_rust",
-]
+    "HashAlgorithm","    "BlockHash","    "CacheBlock","    "get_hash_function","    "hash_block_tokens","    "hash_block_tokens_rust","    "init_none_hash","    "PrefixCacheManager","    "compute_prefix_match","    "compute_prefix_match_rust","    "compute_cache_keys","    "compute_cache_keys_rust","]

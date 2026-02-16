@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Phase 45: Decode Bench KV Connector
+"""""""Phase 45: Decode Bench KV Connector
 KV Connector for decode instance benchmarking.
-"""
-
+"""""""
 from __future__ import annotations
 
 import logging
@@ -36,8 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 class DecodeBenchConnector(KVConnectorBase):
-    """KV Connector for decode instance benchmarking."""
-
+    """KV Connector for decode instance benchmarking."""""""
     def __init__(
         self,
         config: KVTransferConfig,
@@ -46,9 +41,7 @@ class DecodeBenchConnector(KVConnectorBase):
         super().__init__(config, kv_cache_config)
 
         # Fill parameters from extra config
-        self.fill_mean = config.get_from_extra_config("fill_mean", 0.015)
-        self.fill_std = config.get_from_extra_config("fill_std", 0.0)
-        self.block_size = 16  # Default block size
+        self.fill_mean = config.get_from_extra_config("fill_mean", 0.015)"        self.fill_std = config.get_from_extra_config("fill_std", 0.0)"        self.block_size = 16  # Default block size
 
         # Scheduler-side state
         self._filled_requests: set[str] = set()
@@ -58,8 +51,7 @@ class DecodeBenchConnector(KVConnectorBase):
         self.group_to_layers: Optional[Dict[int, List[str]]] = None
 
     def _init_group_mapping(self) -> None:
-        """Initialize mapping from KV cache groups to layer names."""
-        if self._kv_caches and self.group_to_layers is None:
+        """Initialize mapping from KV cache groups to layer names."""""""        if self._kv_caches and self.group_to_layers is None:
             # For standard attention, all layers are in group 0
             self.group_to_layers = {0: list(self._kv_caches.keys())}
 
@@ -70,29 +62,24 @@ class DecodeBenchConnector(KVConnectorBase):
         forward_context: ForwardContext,
         **kwargs: Any,
     ) -> None:
-        """Start filling KV cache with dummy values."""
-        metadata = kwargs.get("metadata")
-        if metadata is not None and isinstance(metadata, KVConnectorMetadata):
+        """Start filling KV cache with dummy values."""""""        metadata = kwargs.get("metadata")"        if metadata is not None and isinstance(metadata, KVConnectorMetadata):
             self._start_fill_kv(metadata)
 
     def _start_fill_kv(self, metadata: KVConnectorMetadata) -> None:
-        """Fill the allocated KV cache blocks with dummy values."""
-        if not metadata.reqs_to_fill:
+        """Fill the allocated KV cache blocks with dummy values."""""""        if not metadata.reqs_to_fill:
             return
 
         self._init_group_mapping()
 
         if self._kv_caches is None or self.group_to_layers is None:
-            logger.warning("KV caches not registered, cannot fill")
-            return
+            logger.warning("KV caches not registered, cannot fill")"            return
 
         for req_id, (block_ids_per_group, num_tokens) in metadata.reqs_to_fill.items():
             for group_idx, block_ids in enumerate(block_ids_per_group):
                 self._fill_blocks(group_idx, block_ids, num_tokens)
 
             logger.debug(
-                "DecodeBenchConnector: Filled %d blocks (%d tokens) for request %s",
-                len(block_ids_per_group[0]) if block_ids_per_group else 0,
+                "DecodeBenchConnector: Filled %d blocks (%d tokens) for request %s","                len(block_ids_per_group[0]) if block_ids_per_group else 0,
                 num_tokens,
                 req_id,
             )
@@ -103,8 +90,7 @@ class DecodeBenchConnector(KVConnectorBase):
         block_ids: List[int],
         num_tokens: int,
     ) -> None:
-        """Fill specific blocks with dummy values."""
-        if self.group_to_layers is None:
+        """Fill specific blocks with dummy values."""""""        if self.group_to_layers is None:
             return
 
         layer_names = self.group_to_layers.get(group_idx, [])
@@ -116,15 +102,13 @@ class DecodeBenchConnector(KVConnectorBase):
 
             # Fill with dummy values
             logger.debug(
-                "Filling layer %s blocks %s with %d tokens",
-                layer_name,
+                "Filling layer %s blocks %s with %d tokens","                layer_name,
                 block_ids[:3],  # Log first 3 for brevity
                 num_tokens,
             )
 
     def wait_for_layer_load(self, layer_name: str) -> None:
-        """No-op for benchmark connector - fills are synchronous."""
-        pass
+        """No-op for benchmark connector - fills are synchronous."""""""        pass
 
     def save_kv_layer(
         self,
@@ -133,8 +117,7 @@ class DecodeBenchConnector(KVConnectorBase):
         attn_metadata: Any,
         **kwargs: Any,
     ) -> None:
-        """No-op for benchmark connector - no actual saving."""
-        pass
+        """No-op for benchmark connector - no actual saving."""""""        pass
 
     # Scheduler-side methods
 
@@ -143,8 +126,7 @@ class DecodeBenchConnector(KVConnectorBase):
         request: Request,
         num_computed_tokens: int,
     ) -> Tuple[int, bool]:
-        """Return number of tokens to fill with dummy KV cache."""
-        req_id = request.request_id
+        """Return number of tokens to fill with dummy KV cache."""""""        req_id = request.request_id
 
         # Only fill once per request on first scheduling
         if req_id in self._filled_requests:
@@ -152,8 +134,7 @@ class DecodeBenchConnector(KVConnectorBase):
 
         # Get prompt length from request
         params = request.kv_transfer_params or {}
-        prompt_len = params.get("prompt_length", 0)
-
+        prompt_len = params.get("prompt_length", 0)"
         if prompt_len <= 1:
             return 0, False
 
@@ -167,8 +148,7 @@ class DecodeBenchConnector(KVConnectorBase):
         blocks: KVCacheBlocks,
         num_external_tokens: int,
     ) -> None:
-        """Track blocks to fill for the request."""
-        if num_external_tokens <= 0:
+        """Track blocks to fill for the request."""""""        if num_external_tokens <= 0:
             return
 
         req_id = request.request_id
@@ -183,8 +163,7 @@ class DecodeBenchConnector(KVConnectorBase):
         self,
         scheduler_output: Any,
     ) -> KVConnectorMetadata:
-        """Build metadata with pending fills."""
-        metadata = KVConnectorMetadata()
+        """Build metadata with pending fills."""""""        metadata = KVConnectorMetadata()
 
         # Move pending fills to metadata and clear
         for req_id, (block_ids, num_tokens) in self._pending_fills.items():
@@ -201,8 +180,7 @@ class DecodeBenchConnector(KVConnectorBase):
         request: Request,
         block_ids: List[int],
     ) -> Tuple[bool, Optional[Dict[str, Any]]]:
-        """Clean up state when request finishes."""
-        req_id = request.request_id
+        """Clean up state when request finishes."""""""        req_id = request.request_id
         self._filled_requests.discard(req_id)
         self._pending_fills.pop(req_id, None)
         return True, None

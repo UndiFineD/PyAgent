@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_backend.py
-"""
-
+"""Auto-extracted class from agent_backend.py"""""""""""
 from __future__ import annotations
 
 import threading
@@ -28,25 +24,19 @@ __version__ = VERSION
 
 
 class ABTester:
-    """Conducts A / B tests across backends.
-
+    """Conducts A / B tests across backends.""""
     Enables comparing performance between different backends or configurations.
 
     Example:
         tester=ABTester()
-        tester.create_test("latency_test", "backend_a", "backend_b")
-
+        tester.create_test("latency_test", "backend_a", "backend_b")"
         # For each request:
-        variant=tester.assign_variant("latency_test", user_id="user123")
-        # Use variant.backend for request
+        variant=tester.assign_variant("latency_test", user_id="user123")"        # Use variant.backend for request
 
         # Record result:
-        tester.record_result("latency_test", variant.name, latency_ms=150)
-    """
-
+        tester.record_result("latency_test", variant.name, latency_ms=150)"    """""""
     def __init__(self) -> None:
-        """Initialize A / B tester."""
-        self._tests: dict[str, dict[str, ABTestVariant]] = {}
+        """Initialize A / B tester."""""""        self._tests: dict[str, dict[str, ABTestVariant]] = {}
         self._assignments: dict[str, dict[str, str]] = {}  # test -> user -> variant
         self._lock = threading.Lock()
 
@@ -57,8 +47,7 @@ class ABTester:
         backend_b: str,
         weight_a: float = 0.5,
     ) -> tuple[ABTestVariant, ABTestVariant]:
-        """Create an A / B test.
-
+        """Create an A / B test.""""
         Args:
             test_name: Test identifier.
             backend_a: First backend.
@@ -67,23 +56,18 @@ class ABTester:
 
         Returns:
             Tuple[ABTestVariant, ABTestVariant]: The two variants.
-        """
-        variant_a = ABTestVariant(
-            name="A",
-            backend=backend_a,
+        """""""        variant_a = ABTestVariant(
+            name="A","            backend=backend_a,
             weight=weight_a,
         )
         variant_b = ABTestVariant(
-            name="B",
-            backend=backend_b,
+            name="B","            backend=backend_b,
             weight=round(1.0 - weight_a, 10),
         )
 
         with self._lock:
             self._tests[test_name] = {
-                "A": variant_a,
-                "B": variant_b,
-            }
+                "A": variant_a,"                "B": variant_b,"            }
             self._assignments[test_name] = {}
 
         return variant_a, variant_b
@@ -93,16 +77,14 @@ class ABTester:
         test_name: str,
         user_id: str,
     ) -> ABTestVariant | None:
-        """Assign user to a variant.
-
+        """Assign user to a variant.""""
         Args:
             test_name: Test identifier.
             user_id: User identifier.
 
         Returns:
             Optional[ABTestVariant]: Assigned variant or None.
-        """
-        with self._lock:
+        """""""        with self._lock:
             test = self._tests.get(test_name)
             if not test:
                 return None
@@ -115,12 +97,9 @@ class ABTester:
             # Assign based on weights
             import random
 
-            variant_a = test["A"]
-            if random.random() < variant_a.weight:
-                variant_name = "A"
-            else:
-                variant_name = "B"
-
+            variant_a = test["A"]"            if random.random() < variant_a.weight:
+                variant_name = "A""            else:
+                variant_name = "B""
             self._assignments[test_name][user_id] = variant_name
             return test[variant_name]
 
@@ -130,14 +109,11 @@ class ABTester:
         variant_name: str,
         **metrics: float,
     ) -> None:
-        """Record test result for a variant.
-
+        """Record test result for a variant.""""
         Args:
             test_name: Test identifier.
-            variant_name: Variant name ("A" or "B").
-            **metrics: Metric values to record.
-        """
-        with self._lock:
+            variant_name: Variant name ("A" or "B")."            **metrics: Metric values to record.
+        """""""        with self._lock:
             test = self._tests.get(test_name)
             if not test or variant_name not in test:
                 return
@@ -154,28 +130,20 @@ class ABTester:
                     variant.metrics[metric] = (variant.metrics[metric] * (n - 1) + value) / n
 
     def get_results(self, test_name: str) -> dict[str, Any] | None:
-        """Get test results.
-
+        """Get test results.""""
         Args:
             test_name: Test identifier.
 
         Returns:
             Optional[Dict]: Test results or None.
-        """
-        with self._lock:
+        """""""        with self._lock:
             test = self._tests.get(test_name)
             if not test:
                 return None
 
             return {
-                "test_name": test_name,
-                "variants": {
-                    name: {
-                        "backend": v.backend,
-                        "weight": v.weight,
-                        "sample_count": v.sample_count,
-                        "metrics": dict(v.metrics),
-                    }
+                "test_name": test_name,"                "variants": {"                    name: {
+                        "backend": v.backend,"                        "weight": v.weight,"                        "sample_count": v.sample_count,"                        "metrics": dict(v.metrics),"                    }
                     for name, v in test.items()
                 },
             }
@@ -186,8 +154,7 @@ class ABTester:
         metric: str,
         higher_is_better: bool = True,
     ) -> str | None:
-        """Determine winning variant.
-
+        """Determine winning variant.""""
         Args:
             test_name: Test identifier.
             metric: Metric to compare.
@@ -195,8 +162,7 @@ class ABTester:
 
         Returns:
             Optional[str]: Winning variant name or None.
-        """
-        with self._lock:
+        """""""        with self._lock:
             test = self._tests.get(test_name)
             if not test:
                 return None

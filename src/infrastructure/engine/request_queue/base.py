@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Base.py module.
-"""
-
+"""""""Base.py module.
+"""""""
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -24,40 +20,31 @@ from typing import Generic, Iterator, TypeVar
 
 from .models import QueuedRequest
 
-T = TypeVar("T", bound=QueuedRequest)
-
+T = TypeVar("T", bound=QueuedRequest)"
 
 class RequestQueue(ABC, Generic[T]):
-    """Abstract base class for request queues."""
-
+    """Abstract base class for request queues."""""""
     @abstractmethod
     def add(self, request: T) -> None:
-        """Add a request to the queue."""
-
+        """Add a request to the queue."""""""
     @abstractmethod
     def pop(self) -> T:
-        """Pop the next request from the queue."""
-
+        """Pop the next request from the queue."""""""
     @abstractmethod
     def peek(self) -> T:
-        """Peek at the next request without removing."""
-
+        """Peek at the next request without removing."""""""
     @abstractmethod
     def prepend(self, request: T) -> None:
-        """Add request to front (for preemption)."""
-
+        """Add request to front (for preemption)."""""""
     @abstractmethod
     def remove(self, value: T) -> bool:
-        """Remove a specific request."""
-
+        """Remove a specific request."""""""
     @abstractmethod
     def __len__(self) -> int:
-        """Get queue length."""
-
+        """Get queue length."""""""
     @abstractmethod
     def __bool__(self) -> bool:
-        """Check if queue is not empty."""
-
+        """Check if queue is not empty."""""""
     @abstractmethod
     def __iter__(self) -> Iterator[T]:
-        """Iterate over queued requests."""
+        """Iterate over queued requests."""""""

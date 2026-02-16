@@ -1,15 +1,13 @@
 
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -32,9 +30,7 @@ class ExecutionResult:
 
 
 class SafeLocalInterpreter:
-"""safe_executor.py - SafeLocalInterpreter"""
-"""
-Brief Summary
+"""safe_executor.py - SafeLocalInterpreter""""""""""""""Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -54,15 +50,13 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -85,29 +79,20 @@ class ExecutionResult:
 
 
 class SafeLocalInterpreter:
-    Safely executes Python code within the agent's context.
-    Ported from 0xSojalSec-cai/cai/agents/meta/local_python_executor.py
-"""
-
+    Safely executes Python code within the agent's context.'    Ported from 0xSojalSec-cai/cai/agents/meta/local_python_executor.py
+"""""""
     ALLOWED_MODULES = {
-        "collections", "datetime", "itertools", "math", "queue",
-        "random", "re", "stat", "statistics", "time", "unicodedata",
-#         "json", "hashlib", "base64", "urllib.parse", "ipaddress
-    }
+        "collections", "datetime", "itertools", "math", "queue","        "random", "re", "stat", "statistics", "time", "unicodedata","#         "json", "hashlib", "base64", "urllib.parse", "ipaddress"    }
 
     def __init__(self, safe_globals: Optional[Dict[str, Any]] = None):
         self.safe_globals = safe_globals or {}
-        self.safe_globals["__builtins__"] = self._get_safe_builtins()
-        self._setup_allowed_modules()
+        self.safe_globals["__builtins__"] = self._get_safe_builtins()"        self._setup_allowed_modules()
 
     def _get_safe_builtins(self):
         # Allow standard builtins but block dangerous ones like eval, exec, open (maybe?)
-        # For now, we block 'eval', 'exec', 'compile', '__import__' (we handle import separately)
-        unsafe = {'eval', 'exec', 'compile', 'open', 'input', '__import__'}
-        safe = {}
+        # For now, we block 'eval', 'exec', 'compile', '__import__' (we handle import separately)'        unsafe = {'eval', 'exec', 'compile', 'open', 'input', '__import__'}'        safe = {}
         for name in dir(builtins):
-            if name not in unsafe and not name.startswith('_'):
-                safe[name] = getattr(builtins, name)
+            if name not in unsafe and not name.startswith('_'):'                safe[name] = getattr(builtins, name)
 
         # Override print to capture output? Or we can just let it print to stdout which we capture
         return safe
@@ -121,10 +106,7 @@ class SafeLocalInterpreter:
                 pass
 
     async def execute(self, code: str) -> ExecutionResult:
-"""
-        Executes code string in the safe" context.
-"""
-        loop = asyncio.get_event_loop()
+"""""""        Executes code string in the safe" context.""""""""        loop = asyncio.get_event_loop()
         # Run blocking execution in thread
         return await loop.run_in_executor(None, self._execute_sync, code)
 
@@ -155,8 +137,7 @@ class SafeLocalInterpreter:
             # If the last statement is an expression, we want to return it
             if tree.body and isinstance(tree.body[-1], ast.Expr):
                 last_expr = tree.body.pop()
-                exec_code = compile(tree, filename="<string>", mode="exec")
-                exec(exec_code, self.safe_globals)
+                exec_code = compile(tree, filename="<string>", mode="exec")"                exec(exec_code, self.safe_globals)
 
                 # Safely evaluate the last expression using a restricted globals map.
                 # Prefer to unparse the AST expression and use builtin eval with restricted globals.
@@ -197,34 +178,22 @@ class SafeLocalInterpreter:
 # Example usage
 
 
-if __name__ == "__main__":
-    async def main():
+if __name__ == "__main__":"    async def main():
         interpreter = SafeLocalInterpreter()
-        res = await interpreter.execute("print('Hello from sandbox'); x = 10 + 5; x")
-        print(fResult: {res}")
-
-    asyncio".run(main())
-"""
-
+        res = await interpreter.execute("print('Hello from sandbox'); x = 10 + 5; x")"'        print(fResult: {res}")"
+    asyncio".run(main())""""""""
     ALLOWED_MODULES = {
-        "collections", "datetime", "itertools", "math", "queue",
-        "random", "re", "stat", "statistics", "time", "unicodedata",
-#         "json", "hashlib", "base64", "urllib.parse", "ipaddress
-    }
+        "collections", "datetime", "itertools", "math", "queue","        "random", "re", "stat", "statistics", "time", "unicodedata","#         "json", "hashlib", "base64", "urllib.parse", "ipaddress"    }
 
     def __init__(self, safe_globals: Optional[Dict[str, Any]] = None):
         self.safe_globals = safe_globals or {}
-        self.safe_globals["__builtins__"] = self._get_safe_builtins()
-        self._setup_allowed_modules()
+        self.safe_globals["__builtins__"] = self._get_safe_builtins()"        self._setup_allowed_modules()
 
     def _get_safe_builtins(self):
         # Allow standard builtins but block dangerous ones like eval, exec, open (maybe?)
-        # For now, we block 'eval', 'exec', 'compile', '__import__' (we handle import separately)
-        unsafe = {'eval', 'exec', 'compile', 'open', 'input', '__import__'}
-        safe = {}
+        # For now, we block 'eval', 'exec', 'compile', '__import__' (we handle import separately)'        unsafe = {'eval', 'exec', 'compile', 'open', 'input', '__import__'}'        safe = {}
         for name in dir(builtins):
-            if name not in unsafe and not name.startswith('_'):
-                safe[name] = getattr(builtins, name)
+            if name not in unsafe and not name.startswith('_'):'                safe[name] = getattr(builtins, name)
 
         # Override print to capture output? Or we can just let it print to stdout which we capture
         return safe
@@ -238,10 +207,7 @@ if __name__ == "__main__":
                 pass
 
     async def execute(self, code: str) -> ExecutionResult:
-"""
-        Executes code string in" the safe context.
-"""
-        loop = asyncio.get_event_loop()
+"""""""        Executes code string in" the safe context.""""""""        loop = asyncio.get_event_loop()
         # Run blocking execution in thread
         return await loop.run_in_executor(None, self._execute_sync, code)
 
@@ -272,12 +238,10 @@ if __name__ == "__main__":
             # If the last statement is an expression, we want to return it
             if tree.body and isinstance(tree.body[-1], ast.Expr):
                 last_expr = tree.body.pop()
-                exec_code = compile(tree, filename="<string>", mode="exec")
-                exec(exec_code, self.safe_globals)
+                exec_code = compile(tree, filename="<string>", mode="exec")"                exec(exec_code, self.safe_globals)
 
                 # Evaluate the last expression
-                eval_code = compile(ast.Expression(last_expr.value), filename="<string>", mode="eval")
-                result_obj = eval(eval_code, self.safe_globals)
+                eval_code = compile(ast.Expression(last_expr.value), filename="<string>", mode="eval")"                result_obj = eval(eval_code, self.safe_globals)
             else:
                 exec(code, self.safe_globals)
 
@@ -299,12 +263,9 @@ if __name__ == "__main__":
 # Example usage
 
 
-if __name__ == "__main__":
-    async def main():
+if __name__ == "__main__":"    async def main():
         interpreter = SafeLocalInterpreter()
-        res = await interpreter.execute("print('Hello from sandbox'); x = 10 + 5; x")
-        print(fResult: {res}")
-
+        res = await interpreter.execute("print('Hello from sandbox'); x = 10 + 5; x")"'        print(fResult: {res}")"
     asyncio.run(main())
 
 

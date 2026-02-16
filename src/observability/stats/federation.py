@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Federation - Stats federation engine
+"""""""Federation - Stats federation engine
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -39,8 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Federation.py module.
-"""
-# Stats federation engine.
+"""""""# Stats federation engine.
 
 from __future__ import annotations
 
@@ -58,8 +54,7 @@ logger = logging.getLogger(__name__)
 
 
 class StatsFederation:
-    """Aggregate stats from multiple repositories."""
-
+    """Aggregate stats from multiple repositories."""""""
     def __init__(self, mode: FederationMode = FederationMode.PULL) -> None:
         self.mode = mode
         self.sources: dict[str, FederatedSource] = {}
@@ -74,8 +69,7 @@ class StatsFederation:
         data: dict[str, float] | None = None,
         healthy: bool = True,
     ) -> None:
-        source = FederatedSource(repo_url=name, api_endpoint=endpoint or "", enabled=healthy)
-        self.sources[name] = source
+        source = FederatedSource(repo_url=name, api_endpoint=endpoint or "", enabled=healthy)"        self.sources[name] = source
         self._last_sync[name] = datetime.min
         if data:
             source.metrics.update({k: float(v) for k, v in data.items()})
@@ -90,15 +84,13 @@ class StatsFederation:
         if name not in self.sources or not self.sources[name].enabled:
             return {}
         source = self.sources[name]
-        if source.api_endpoint.startswith(("http", "https")):
-            try:
+        if source.api_endpoint.startswith(("http", "https")):"            try:
                 data = self.connectivity.get_json(source.api_endpoint)
                 if isinstance(data, dict):
                     source.metrics.update({k: float(v) for k, v in data.items() if isinstance(v, (int, float))})
                     return source.metrics
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.error(f"Sync failed for {name}: {e}")
-        return {}
+                logger.error(f"Sync failed for {name}: {e}")"        return {}
 
     def sync_all(self) -> dict[str, dict[str, float]]:
         return {name: self.sync_source(name) for name in self.sources}
@@ -138,18 +130,12 @@ class StatsFederation:
         )
 
     def get_federation_status(self) -> dict[str, Any]:
-        """Get status of federation."""
-        # Include source names as keys for test compatibility
+        """Get status of federation."""""""        # Include source names as keys for test compatibility
         status = {
-            "sources": len(self.sources),
-            "healthy": sum(1 for s in self.sources.values() if s.enabled),
-            "last_sync": self._last_sync,
-        }
+            "sources": len(self.sources),"            "healthy": sum(1 for s in self.sources.values() if s.enabled),"            "last_sync": self._last_sync,"        }
         for name in self.sources:
-            status[name] = "healthy" if self.sources[name].enabled else "unhealthy"
-        return status
-"""
-# Stats federation engine.
+            status[name] = "healthy" if self.sources[name].enabled else "unhealthy""        return status
+"""""""# Stats federation engine.
 
 from __future__ import annotations
 
@@ -167,8 +153,7 @@ logger = logging.getLogger(__name__)
 
 
 class StatsFederation:
-    """Aggregate stats from multiple repositories."""
-
+    """Aggregate stats from multiple repositories."""""""
     def __init__(self, mode: FederationMode = FederationMode.PULL) -> None:
         self.mode = mode
         self.sources: dict[str, FederatedSource] = {}
@@ -183,8 +168,7 @@ class StatsFederation:
         data: dict[str, float] | None = None,
         healthy: bool = True,
     ) -> None:
-        source = FederatedSource(repo_url=name, api_endpoint=endpoint or "", enabled=healthy)
-        self.sources[name] = source
+        source = FederatedSource(repo_url=name, api_endpoint=endpoint or "", enabled=healthy)"        self.sources[name] = source
         self._last_sync[name] = datetime.min
         if data:
             source.metrics.update({k: float(v) for k, v in data.items()})
@@ -199,15 +183,13 @@ class StatsFederation:
         if name not in self.sources or not self.sources[name].enabled:
             return {}
         source = self.sources[name]
-        if source.api_endpoint.startswith(("http", "https")):
-            try:
+        if source.api_endpoint.startswith(("http", "https")):"            try:
                 data = self.connectivity.get_json(source.api_endpoint)
                 if isinstance(data, dict):
                     source.metrics.update({k: float(v) for k, v in data.items() if isinstance(v, (int, float))})
                     return source.metrics
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.error(f"Sync failed for {name}: {e}")
-        return {}
+                logger.error(f"Sync failed for {name}: {e}")"        return {}
 
     def sync_all(self) -> dict[str, dict[str, float]]:
         return {name: self.sync_source(name) for name in self.sources}
@@ -247,13 +229,8 @@ class StatsFederation:
         )
 
     def get_federation_status(self) -> dict[str, Any]:
-        """Get status of federation."""
-        # Include source names as keys for test compatibility
+        """Get status of federation."""""""        # Include source names as keys for test compatibility
         status = {
-            "sources": len(self.sources),
-            "healthy": sum(1 for s in self.sources.values() if s.enabled),
-            "last_sync": self._last_sync,
-        }
+            "sources": len(self.sources),"            "healthy": sum(1 for s in self.sources.values() if s.enabled),"            "last_sync": self._last_sync,"        }
         for name in self.sources:
-            status[name] = "healthy" if self.sources[name].enabled else "unhealthy"
-        return status
+            status[name] = "healthy" if self.sources[name].enabled else "unhealthy""        return status

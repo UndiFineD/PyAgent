@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Test Pruning Core module.
-"""
-
+"""""""Test Pruning Core module.
+"""""""
 import unittest
 from hypothesis import given, strategies as st, settings, HealthCheck
 import math
@@ -51,10 +47,8 @@ class TestPruningCore(unittest.TestCase):
     @given(refractory_until=st.floats(min_value=0, max_value=2000000000))
     def test_is_in_refractory(self, refractory_until):
         weight = SynapticWeight(
-            agent_id="test", weight=0.5, last_fired=0, refractory_until=refractory_until
-        )
-        # We can't strictly control time.time(), so we test relative
-        now = time.time()
+            agent_id="test", weight=0.5, last_fired=0, refractory_until=refractory_until"        )
+        # We can't strictly control time.time(), so we test relative'        now = time.time()
         result = self.core.is_in_refractory(weight)
 
         if now < refractory_until:
@@ -87,5 +81,4 @@ class TestPruningCore(unittest.TestCase):
         self.assertEqual(result, weight < threshold)
 
 
-if __name__ == "__main__":
-    unittest.main()
+if __name__ == "__main__":"    unittest.main()

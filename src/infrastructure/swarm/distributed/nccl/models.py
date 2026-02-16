@@ -1,31 +1,26 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Models and configuration for NCCL communication.
-"""
-
+"""""""Models and configuration for NCCL communication.
+"""""""
 from dataclasses import dataclass
 from enum import Enum, auto
 
 
 class ReduceOp(Enum):
-    """NCCL reduction operations."""
-
+    """NCCL reduction operations."""""""
     SUM = auto()
     PROD = auto()
     MAX = auto()
@@ -35,10 +30,8 @@ class ReduceOp(Enum):
 
 @dataclass
 class NCCLConfig:
-    """
-    Configuration for NCCL communicator.
-    """
-
+    """""""    Configuration for NCCL communicator.
+    """""""
     # Timeout settings
     timeout_seconds: float = 1800.0  # 30 minutes default
     timeout_per_step: float = 60.0  # Per-operation timeout
@@ -62,8 +55,7 @@ class NCCLConfig:
 
 @dataclass
 class NCCLStats:
-    """Statistics for NCCL operations."""
-
+    """Statistics for NCCL operations."""""""
     all_reduce_count: int = 0
     all_gather_count: int = 0
     reduce_scatter_count: int = 0

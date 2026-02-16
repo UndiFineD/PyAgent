@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-PerformanceAgent - Identifies and suggests code optimizations
+"""""""PerformanceAgent - Identifies and suggests code optimizations
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -39,8 +36,7 @@ WHAT IT SHOULD DO BETTER:
   safety via StateTransaction and optional async execution paths.
 
 FILE CONTENT SUMMARY:PerformanceAgent identifies and suggests code optimizations.
-"""
-
+"""""""
 
 
 from __future__ import annotations
@@ -67,8 +63,7 @@ __version__ = VERSION
 
 
 class PerformanceAgent:
-    "Identifies and suggests code optimizations.
-
+    "Identifies and suggests code optimizations."
     Analyzes code for performance bottlenecks and suggests
     improvements.
 
@@ -77,44 +72,30 @@ class PerformanceAgent:
 
     Example:
         >>> optimizer=PerformanceAgent()
-#         >>> suggestions=optimizer.analyze("for i in range(len(items)):")
-"""
-
+#         >>> suggestions=optimizer.analyze("for i in range(len(items)):")""""""""
     OPTIMIZATION_PATTERNS: list[tuple[str, OptimizationType, str, str]] = [
         (
-            rfor\\\\s+\w+\\\\s+in\\\\s+range\(len\((\w+)\)\)",
-            OptimizationType.ALGORITHMIC,
-            "Use enumerate() instead of range(len())",
-            "for idx, item in enumerate({0}):",
-        ),
+            rfor\\\\s+\\w+\\\\s+in\\\\s+range\(len\((\\w+)\)\)","            OptimizationType.ALGORITHMIC,
+            "Use enumerate() instead of range(len())","            "for idx, item in enumerate({0}):","        ),
         (
-            r"\+=\\\\s*.*?for\\\\s+",
-            OptimizationType.MEMORY,
-            "String concatenation in loop is inefficient",
-            "Use ".join() or list comprehension",
-        ),
+            r"\+=\\\\s*.*?for\\\\s+","            OptimizationType.MEMORY,
+            "String concatenation in loop is inefficient","            "Use ".join() or list comprehension","        ),
         (
-            rtime\.sleep\(\\\\d+\)",
-            OptimizationType.CONCURRENCY,
-            "Blocking sleep may hurt performance",
-            "Consider asyncio.sleep() for async code",
-        ),
+            rtime\\.sleep\(\\\\d+\)","            OptimizationType.CONCURRENCY,
+            "Blocking sleep may hurt performance","            "Consider asyncio.sleep() for async code","        ),
     ]
 
     def __init__(self) -> None:
-""""Initialize the performance optimizer."""
-        self.suggestions: list[OptimizationSuggestion] = []
+""""Initialize the performance optimizer."""""""        self.suggestions: list[OptimizationSuggestion] = []
 
     def analyze(self, content: str) -> list[OptimizationSuggestion]:
-        "Analyze code for optimization" opportunities.
-
+        "Analyze code for optimization" opportunities."
         Args:
             content: Source code to analyze.
 
         Returns:
             List of optimization suggestions.
-"""
-        self.suggestions = []
+"""""""        self.suggestions = []
 
         if HAS_RUST_CORE:
             try:
@@ -127,19 +108,14 @@ class PerformanceAgent:
                                 OptimizationSuggestion(
                                     type=opt_type,
                                     description=desc,
-                                    impact="medium",
-                                    code_location=fline {line_num}",
-                                    before_snippet=",
-                                    after_snippet=fix.format(*groups) if groups else fix,
+                                    impact="medium","                                    code_location=fline {line_num}","                                    before_snippet=","                                    after_snippet=fix.format(*groups) if groups else fix,
                                 )
                             )
                     return self.suggestions
             except (ImportError, AttributeError, RuntimeError) as e:
-                logger.debug("Rust acceleration failed: %s", e)
-
+                logger.debug("Rust acceleration failed: %s", e)"
         # Fallback to Python implementation
-        lines = content.split("\n")
-        for i, line in enumerate(lines, 1):
+        lines = content.split("\\n")"        for i, line in enumerate(lines, 1):
             for pattern, opt_type, desc, fix in self.OPTIMIZATION_PATTERNS:
                 match = re.search(pattern, line)
                 if match:
@@ -147,9 +123,7 @@ class PerformanceAgent:
                         OptimizationSuggestion(
                             type=opt_type,
                             description=desc,
-                            impact="medium",
-                            code_location=fline {i}",
-                            before_snippet=line.strip(),
+                            impact="medium","                            code_location=fline {i}","                            before_snippet=line.strip(),
                             after_snippet=fix.format(*match.groups()) if match.groups() else fix,
                         )
                     )

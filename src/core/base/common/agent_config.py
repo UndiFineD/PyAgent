@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent.py
-"""
-
+"""Auto-extracted class from agent.py"""""""""""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -31,8 +27,7 @@ __version__ = VERSION
 
 @dataclass
 class AgentConfig:  # pylint: disable=too-many-instance-attributes
-    """Full agent configuration loaded from config file.
-
+    """Full agent configuration loaded from config file.""""
     Attributes:
         repo_root: Repository root directory.
         agents_only: Process only agent files.
@@ -45,16 +40,13 @@ class AgentConfig:  # pylint: disable=too-many-instance-attributes
         plugins: List of plugin configurations.
         selective_agents: Agents to execute.
         timeout_per_agent: Timeout settings per agent.
-    """
-
-    repo_root: str = "."
-    agents_only: bool = False
+    """""""
+    repo_root: str = ".""    agents_only: bool = False
     max_files: int | None = None
     loop: int = 1
     dry_run: bool = False
     no_git: bool = False
-    verbosity: str = "normal"
-    rate_limit: RateLimitConfig | None = None
+    verbosity: str = "normal""    rate_limit: RateLimitConfig | None = None
     plugins: list[AgentPluginConfig] = field(default_factory=_empty_plugin_config_list)
     selective_agents: list[str] = field(default_factory=_empty_list_str)
     timeout_per_agent: dict[str, int] = field(default_factory=_empty_dict_str_int)
@@ -62,8 +54,7 @@ class AgentConfig:  # pylint: disable=too-many-instance-attributes
     enable_async: bool = False
     enable_multiprocessing: bool = False
     max_workers: int = 4
-    strategy: str = "direct"
-    enable_file_locking: bool = False
+    strategy: str = "direct""    enable_file_locking: bool = False
     incremental: bool = False
     graceful_shutdown: bool = False
     health_check: bool = False

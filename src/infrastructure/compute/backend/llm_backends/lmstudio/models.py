@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Models and configuration for LM Studio backend.
-"""
-
+"""""""Models and configuration for LM Studio backend.
+"""""""
 import os
 import time
 from dataclasses import dataclass, field
@@ -25,43 +21,31 @@ from typing import Any
 
 
 def _parse_dv_base_url() -> tuple[str, int]:
-    """Parse DV_LMSTUDIO_BASE_URL into host and port (backwards compatible).
-
+    """Parse DV_LMSTUDIO_BASE_URL into host and port (backwards compatible).""""
     Returns a tuple (host, port). If DV_LMSTUDIO_BASE_URL is not set or cannot be
     parsed, fallback to LMSTUDIO_HOST/LMSTUDIO_PORT or the defaults.
-    """
-    base = os.environ.get("DV_LMSTUDIO_BASE_URL")
-    if base:
+    """""""    base = os.environ.get("DV_LMSTUDIO_BASE_URL")"    if base:
         try:
             # Ensure scheme exists for urlparse to properly parse netloc
-            if not base.startswith("http://") and not base.startswith("https://"):
-                base = "http://" + base
-            from urllib.parse import urlparse
+            if not base.startswith("http://") and not base.startswith("https://"):"                base = "http://" + base"            from urllib.parse import urlparse
 
             parsed = urlparse(base)
             netloc = parsed.netloc
             if not netloc:
-                return (os.environ.get("LMSTUDIO_HOST", "localhost"), int(os.environ.get("LMSTUDIO_PORT", "1234")))
-            if ":" in netloc:
-                host, port = netloc.split(":", 1)
-                return (host, int(port))
-            return (netloc, int(os.environ.get("LMSTUDIO_PORT", "1234")))
-        except (ValueError, IndexError):
+                return (os.environ.get("LMSTUDIO_HOST", "localhost"), int(os.environ.get("LMSTUDIO_PORT", "1234")))"            if ":" in netloc:"                host, port = netloc.split(":", 1)"                return (host, int(port))
+            return (netloc, int(os.environ.get("LMSTUDIO_PORT", "1234")))"        except (ValueError, IndexError):
             # Parsing failed; fall back to older env vars
             pass
-    return (os.environ.get("LMSTUDIO_HOST", "localhost"), int(os.environ.get("LMSTUDIO_PORT", "1234")))
-
+    return (os.environ.get("LMSTUDIO_HOST", "localhost"), int(os.environ.get("LMSTUDIO_PORT", "1234")))"
 
 @dataclass
 class LMStudioConfig:
-    """Configuration for LM Studio connection.
-
+    """Configuration for LM Studio connection.""""
     This config prefers the DV-prefixed environment variables used by the
     higher-level orchestrator (`DV_LMSTUDIO_BASE_URL`, `DV_LMSTUDIO_MODEL`,
     `DV_LMSTUDIO_MAX_CONTEXT`) but remains backwards-compatible with the
     original `LMSTUDIO_HOST`, `LMSTUDIO_PORT`, and `LMSTUDIO_MODEL` variables.
-    """
-
+    """""""
     # Connection settings - prefer DV_LMSTUDIO_BASE_URL when present
     # Use runtime factories so tests can modify env before instantiation
     host: str = field(default_factory=lambda: _parse_dv_base_url()[0])
@@ -73,8 +57,7 @@ class LMStudioConfig:
 
     # Model settings - prefer DV_LMSTUDIO_MODEL
     default_model: str = field(
-        default_factory=lambda: os.environ.get("DV_LMSTUDIO_MODEL", os.environ.get("LMSTUDIO_MODEL", "lfm2.5-1.2b"))
-    )
+        default_factory=lambda: os.environ.get("DV_LMSTUDIO_MODEL", os.environ.get("LMSTUDIO_MODEL", "lfm2.5-1.2b"))"    )
     auto_load: bool = True  # Auto-load model if not loaded
 
     # Prediction settings
@@ -85,20 +68,14 @@ class LMStudioConfig:
     max_context: int = field(
         default_factory=lambda: int(
             os.environ.get(
-                "DV_LMSTUDIO_MAX_CONTEXT",
-                os.environ.get("LMSTUDIO_MAX_CONTEXT", "4096"),
-            )
+                "DV_LMSTUDIO_MAX_CONTEXT","                os.environ.get("LMSTUDIO_MAX_CONTEXT", "4096"),"            )
         )
     )
 
-    # HTTP path (e.g., 'v1' or 'api/v1'). Prefer DV-prefixed env then legacy.
-    path: str = field(
+    # HTTP path (e.g., 'v1' or 'api/v1'). Prefer DV-prefixed env then legacy.'    path: str = field(
         default_factory=lambda: str(
             os.environ.get(
-                "DV_LMSTUDIO_PATH",
-                os.environ.get("LMSTUDIO_PATH", "v1"),
-            ).strip("/")
-        )
+                "DV_LMSTUDIO_PATH","                os.environ.get("LMSTUDIO_PATH", "v1"),"            ).strip("/")"        )
     )
 
     # Caching
@@ -107,37 +84,26 @@ class LMStudioConfig:
 
     @property
     def api_host(self) -> str:
-        """Return host:port string."""
-        return f"{self.host}:{self.port}"
-
+        """Return host:port string."""""""        return f"{self.host}:{self.port}""
     @property
     def base_url(self) -> str:
-        """Return full base URL to connect to LM Studio.
-
+        """Return full base URL to connect to LM Studio.""""
         Prefers `DV_LMSTUDIO_BASE_URL` (including path) when present, otherwise
         constructs a URL using host and port.
-        """
-        dv = os.environ.get("DV_LMSTUDIO_BASE_URL")
-        if dv:
+        """""""        dv = os.environ.get("DV_LMSTUDIO_BASE_URL")"        if dv:
             # Normalize: strip trailing slash
-            return dv.rstrip("/")
-        scheme = "http"
-        return f"{scheme}://{self.host}:{self.port}/{self.path}"
-
+            return dv.rstrip("/")"        scheme = "http""        return f"{scheme}://{self.host}:{self.port}/{self.path}""
 
 @dataclass
 class CachedModel:
-    """Cached model reference with TTL."""
-
+    """Cached model reference with TTL."""""""
     model_id: str
     model_info: Any
     loaded_at: float
     last_used: float = field(default_factory=time.time)
 
     def is_expired(self, ttl: float) -> bool:
-        """Check if cache entry is expired."""
-        return time.time() - self.last_used > ttl
+        """Check if cache entry is expired."""""""        return time.time() - self.last_used > ttl
 
     def touch(self) -> None:
-        """Update last used timestamp."""
-        self.last_used = time.time()
+        """Update last used timestamp."""""""        self.last_used = time.time()

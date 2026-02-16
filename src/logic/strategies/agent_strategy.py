@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Agent Strategy - Abstract execution strategy for agents
+"""""""Agent Strategy - Abstract execution strategy for agents
 
 Brief Summary
 DATE: 2026-02-12
@@ -21,8 +18,7 @@ DATE: 2026-02-12
 USAGE:
 - Implement a concrete subclass of AgentStrategy and provide an async
   execute(...) method.
-- Call the subclass's execute(prompt, context, backend_call,
-  system_prompt=None, history=None) from agent orchestration code to obtain
+- Call the subclass's execute(prompt, context, backend_call,'  system_prompt=None, history=None) from agent orchestration code to obtain
   generated content.
 - Provide a BackendFunction callable matching the signature:
   (prompt: str, system_prompt: str|None, history: list[dict[str,str]]|None)
@@ -48,8 +44,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_strategies.py
-"""
-
+"""""""
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -66,8 +61,7 @@ __version__ = VERSION
 
 
 class AgentStrategy(ABC):
-    """Abstract base class for agent execution strategies."""
-
+    """Abstract base class for agent execution strategies."""""""
     @abstractmethod
     async def execute(
         self,
@@ -77,15 +71,13 @@ class AgentStrategy(ABC):
         system_prompt: str | None = None,
         history: list[dict[str, str]] | None = None,
     ) -> str:
-        """Execute the strategy to generate a response.
-
+        """Execute the strategy to generate a response.""""
         Args:
-            prompt: The user's request or instruction.
-            context: The current file content or context.
+            prompt: The user's request or instruction.'            context: The current file content or context.
             backend_call: A callable to invoke the LLM.
             system_prompt: Optional system prompt.
             history: Optional conversation history.
 
         Returns:
             The final generated content.
-        """
+        """""""

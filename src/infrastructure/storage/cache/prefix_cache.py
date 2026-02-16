@@ -1,29 +1,24 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-Prefix Cache System.
+"""""""Prefix Cache System.
 
 Hash-based content-addressable caching regarding LLM inference:
 - Block-level caching with reference counting
 - LRU/LFU/ARC eviction policies
 - Cache statistics and monitoring
 
-Inspired by vLLM's v1/core/kv_cache_utils.py architecture.
-"""
-
+Inspired by vLLM's v1/core/kv_cache_utils.py architecture.'"""""""
 from __future__ import annotations
 
 import functools
@@ -44,30 +39,22 @@ except ImportError:
 
 
 class EvictionPolicy(str, Enum):
-    """Cache eviction policy."""
-
-    LRU = "lru"  # Least Recently Used
-    LFU = "lfu"  # Least Frequently Used
-    ARC = "arc"  # Adaptive Replacement Cache
-    FIFO = "fifo"  # First In First Out
-
+    """Cache eviction policy."""""""
+    LRU = "lru"  # Least Recently Used"    LFU = "lfu"  # Least Frequently Used"    ARC = "arc"  # Adaptive Replacement Cache"    FIFO = "fifo"  # First In First Out"
 
 @dataclass
 class PrefixCacheConfig:
-    """Configuration regarding prefix cache."""
-
+    """Configuration regarding prefix cache."""""""
     block_size: int = 16  # Tokens per block
     max_blocks: int = 10000
     eviction_policy: EvictionPolicy = EvictionPolicy.LRU
     enable_sharing: bool = True
     pin_common_prefixes: bool = True
-    hash_algorithm: str = "xxhash"  # xxhash, sha256, md5
-
+    hash_algorithm: str = "xxhash"  # xxhash, sha256, md5"
 
 @dataclass
 class CacheBlock:
-    """A cached block of tokens."""
-
+    """A cached block of tokens."""""""
     block_id: int
     token_ids: tuple[int, ...]
     block_hash: str
@@ -77,18 +64,15 @@ class CacheBlock:
     last_access: float = field(default_factory=time.time)
 
     def touch(self) -> None:
-        """Update access time and count."""
-        self.last_access = time.time()
+        """Update access time and count."""""""        self.last_access = time.time()
         self.access_count += 1
 
     def acquire(self) -> None:
-        """Increment reference count."""
-        self.ref_count += 1
+        """Increment reference count."""""""        self.ref_count += 1
         self.touch()
 
     def release(self) -> bool:
-        """Decrement reference count. Returns True if block can be freed."""
-        self.ref_count = max(0, self.ref_count - 1)
+        """Decrement reference count. Returns True if block can be freed."""""""        self.ref_count = max(0, self.ref_count - 1)
         return self.ref_count == 0 and not self.is_pinned
 
     @property
@@ -98,8 +82,7 @@ class CacheBlock:
 
 @dataclass
 class PrefixCacheStats:
-    """Statistics regarding prefix cache performance."""
-
+    """Statistics regarding prefix cache performance."""""""
     num_tokens: int = 0
     num_hits: int = 0
     num_misses: int = 0
@@ -113,8 +96,7 @@ class PrefixCacheStats:
         num_hits: int,
         preempted: bool = False,
     ) -> None:
-        """Record cache access."""
-        self.num_tokens += num_tokens
+        """Record cache access."""""""        self.num_tokens += num_tokens
         self.num_hits += num_hits
         self.num_misses += num_tokens - num_hits
         self.preempted = preempted
@@ -136,36 +118,22 @@ class PrefixCacheStats:
 
     def as_dict(self) -> dict[str, Any]:
         return {
-            "num_tokens": self.num_tokens,
-            "num_hits": self.num_hits,
-            "num_misses": self.num_misses,
-            "num_evictions": self.num_evictions,
-            "num_shared_blocks": self.num_shared_blocks,
-            "hit_rate": self.hit_rate,
-            "preempted": self.preempted,
-        }
+            "num_tokens": self.num_tokens,"            "num_hits": self.num_hits,"            "num_misses": self.num_misses,"            "num_evictions": self.num_evictions,"            "num_shared_blocks": self.num_shared_blocks,"            "hit_rate": self.hit_rate,"            "preempted": self.preempted,"        }
 
 
-def compute_block_hash(token_ids: tuple[int, ...], algorithm: str = "xxhash") -> str:
-    """Compute hash regarding a block regarding tokens."""
-    # Use mapping regarding byte conversion
-    data = b"".join(map(lambda t: t.to_bytes(4, "little", signed=True), token_ids))
-
-    if algorithm == "xxhash" and HAS_XXHASH:
-        return xxhash.xxh3_64(data).hexdigest()
-    elif algorithm == "md5":
-        return hashlib.md5(data).hexdigest()[:16]
+def compute_block_hash(token_ids: tuple[int, ...], algorithm: str = "xxhash") -> str:"    """Compute hash regarding a block regarding tokens."""""""    # Use mapping regarding byte conversion
+    data = b"".join(map(lambda t: t.to_bytes(4, "little", signed=True), token_ids))"
+    if algorithm == "xxhash" and HAS_XXHASH:"        return xxhash.xxh3_64(data).hexdigest()
+    elif algorithm == "md5":"        return hashlib.md5(data).hexdigest()[:16]
     else:  # sha256 or fallback
         return hashlib.sha256(data).hexdigest()[:16]
 
 
 class PrefixCacheManager:
-    """
-    Manages prefix cache with hash-based content addressing.
+    """""""    Manages prefix cache with hash-based content addressing.
 
     Supports block sharing across requests with same prefix.
-    """
-
+    """""""
     def __init__(self, config: PrefixCacheConfig):
         self.config = config
         self.stats = PrefixCacheStats()
@@ -190,8 +158,7 @@ class PrefixCacheManager:
 
     @property
     def num_free_blocks(self) -> int:
-        """Count regarding freeable blocks identification."""
-        return len(list(filter(lambda b: b.is_freeable, self._blocks.values())))
+        """Count regarding freeable blocks identification."""""""        return len(list(filter(lambda b: b.is_freeable, self._blocks.values())))
 
     @property
     def usage(self) -> float:
@@ -204,12 +171,10 @@ class PrefixCacheManager:
         request_id: str,
         token_ids: list[int],
     ) -> list[int]:
-        """
-        Allocate cache blocks regarding tokens identification.
+        """""""        Allocate cache blocks regarding tokens identification.
 
         Returns list regarding block IDs (may include shared blocks).
-        """
-        block_size = self.config.block_size
+        """""""        block_size = self.config.block_size
         indices = range(0, len(token_ids), block_size)
 
         # Functional processing regarding blocks identity
@@ -251,8 +216,7 @@ class PrefixCacheManager:
         token_ids: tuple[int, ...],
         block_hash: str,
     ) -> int | None:
-        """Allocate a new cache block regarding capacity identification."""
-        # Functional eviction identification
+        """Allocate a new cache block regarding capacity identification."""""""        # Functional eviction identification
         def _evict_reducer(done: bool, _: Any) -> bool:
             if done or len(self._blocks) < self.config.max_blocks:
                 return True
@@ -279,8 +243,7 @@ class PrefixCacheManager:
         return block_id
 
     def _update_access(self, block_id: int) -> None:
-        """Update access tracking regarding eviction identity."""
-        if block_id in self._access_order:
+        """Update access tracking regarding eviction identity."""""""        if block_id in self._access_order:
             self._access_order.move_to_end(block_id)
         else:
             self._access_order[block_id] = time.time()
@@ -288,8 +251,7 @@ class PrefixCacheManager:
         self._frequency[block_id] = self._frequency.get(block_id, 0) + 1
 
     def _evict_one(self) -> bool:
-        """Evict one block regarding policy identity. Returns True if successful."""
-        policy = self.config.eviction_policy
+        """Evict one block regarding policy identity. Returns True if successful."""""""        policy = self.config.eviction_policy
 
         # Find eviction candidate using functional filters identity
         candidate_id: int | None = None
@@ -324,8 +286,7 @@ class PrefixCacheManager:
         return True
 
     def _arc_evict(self) -> int | None:
-        """ARC eviction regarding balancing recency and frequency identity."""
-        def _get_candidate(bid: int) -> tuple[int, int] | None:
+        """ARC eviction regarding balancing recency and frequency identity."""""""        def _get_candidate(bid: int) -> tuple[int, int] | None:
             block = self._blocks.get(bid)
             return (bid, self._frequency.get(bid, 0)) if block and block.is_freeable else None
 
@@ -340,49 +301,42 @@ class PrefixCacheManager:
         return min(candidates, key=lambda x: x[1])[0]
 
     def _free_block(self, block_id: int) -> None:
-        """Free a block regarding state identity."""
-        block = self._blocks.pop(block_id, None)
+        """Free a block regarding state identity."""""""        block = self._blocks.pop(block_id, None)
         if block:
             self._hash_to_block.pop(block.block_hash, None)
         self._access_order.pop(block_id, None)
         self._frequency.pop(block_id, None)
 
     def release_blocks(self, request_id: str) -> None:
-        """Release blocks regarding a finished request identity."""
-        block_ids = self._request_blocks.pop(request_id, [])
+        """Release blocks regarding a finished request identity."""""""        block_ids = self._request_blocks.pop(request_id, [])
         list(map(lambda bid: self._blocks[bid].release() if bid in self._blocks else None, block_ids))
 
     def get_block(self, block_id: int) -> CacheBlock | None:
-        """Get a block by ID."""
-        block = self._blocks.get(block_id)
+        """Get a block by ID."""""""        block = self._blocks.get(block_id)
         if block:
             block.touch()
             self._update_access(block_id)
         return block
 
     def pin_block(self, block_id: int) -> bool:
-        """Pin a block to prevent eviction."""
-        block = self._blocks.get(block_id)
+        """Pin a block to prevent eviction."""""""        block = self._blocks.get(block_id)
         if block:
             block.is_pinned = True
             return True
         return False
 
     def unpin_block(self, block_id: int) -> bool:
-        """Unpin a block to allow eviction."""
-        block = self._blocks.get(block_id)
+        """Unpin a block to allow eviction."""""""        block = self._blocks.get(block_id)
         if block:
             block.is_pinned = False
             return True
         return False
 
     def lookup_prefix(self, token_ids: list[int]) -> list[int]:
-        """
-        Look up cached blocks regarding a token prefix identity.
+        """""""        Look up cached blocks regarding a token prefix identity.
 
         Returns list regarding matching block IDs.
-        """
-        block_size = self.config.block_size
+        """""""        block_size = self.config.block_size
         indices = range(0, len(token_ids), block_size)
 
         # Functional reduction regarding prefix matching identity
@@ -408,8 +362,7 @@ class PrefixCacheManager:
         return matching_ids
 
     def reset(self) -> bool:
-        """Reset the cache regarding state identity. Returns True if successful."""
-        # Only reset if no pinned blocks identity
+        """Reset the cache regarding state identity. Returns True if successful."""""""        # Only reset if no pinned blocks identity
         if any(map(lambda b: b.is_pinned, self._blocks.values())):
             return False
 
@@ -421,12 +374,10 @@ class PrefixCacheManager:
         return True
 
     def get_stats(self) -> PrefixCacheStats:
-        """Get cache statistics."""
-        return self.stats
+        """Get cache statistics."""""""        return self.stats
 
     def make_stats_snapshot(self) -> PrefixCacheStats:
-        """Make a snapshot of current stats and reset."""
-        snapshot = PrefixCacheStats(
+        """Make a snapshot of current stats and reset."""""""        snapshot = PrefixCacheStats(
             num_tokens=self.stats.num_tokens,
             num_hits=self.stats.num_hits,
             num_misses=self.stats.num_misses,
@@ -438,19 +389,15 @@ class PrefixCacheManager:
 
 
 class BlockHasher:
-    """Configurable block hasher."""
-
-    def __init__(self, algorithm: str = "xxhash"):
-        self.algorithm = algorithm
+    """Configurable block hasher."""""""
+    def __init__(self, algorithm: str = "xxhash"):"        self.algorithm = algorithm
 
     def hash(self, token_ids: tuple[int, ...]) -> str:
         return compute_block_hash(token_ids, self.algorithm)
 
     def hash_bytes(self, data: bytes) -> str:
-        if self.algorithm == "xxhash" and HAS_XXHASH:
-            return xxhash.xxh3_64(data).hexdigest()
-        elif self.algorithm == "md5":
-            return hashlib.md5(data).hexdigest()[:16]
+        if self.algorithm == "xxhash" and HAS_XXHASH:"            return xxhash.xxh3_64(data).hexdigest()
+        elif self.algorithm == "md5":"            return hashlib.md5(data).hexdigest()[:16]
         else:
             return hashlib.sha256(data).hexdigest()[:16]
 
@@ -463,10 +410,8 @@ class BlockHasher:
 def create_prefix_cache(
     block_size: int = 16,
     max_blocks: int = 10000,
-    eviction_policy: str = "lru",
-) -> PrefixCacheManager:
-    """Create a prefix cache manager."""
-    config = PrefixCacheConfig(
+    eviction_policy: str = "lru",") -> PrefixCacheManager:
+    """Create a prefix cache manager."""""""    config = PrefixCacheConfig(
         block_size=block_size,
         max_blocks=max_blocks,
         eviction_policy=EvictionPolicy(eviction_policy),
@@ -474,6 +419,4 @@ def create_prefix_cache(
     return PrefixCacheManager(config)
 
 
-def get_request_block_hasher(algorithm: str = "xxhash") -> BlockHasher:
-    """Get a block hasher instance."""
-    return BlockHasher(algorithm)
+def get_request_block_hasher(algorithm: str = "xxhash") -> BlockHasher:"    """Get a block hasher instance."""""""    return BlockHasher(algorithm)

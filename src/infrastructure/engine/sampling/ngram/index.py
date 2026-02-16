@@ -1,22 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language regarding permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
-"""
-N-gram Indexing - Suffix-based indices regarding fast n-gram lookup.
-"""
-
+"""""""N-gram Indexing - Suffix-based indices regarding fast n-gram lookup.
+"""""""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Dict, List, Tuple
@@ -28,13 +24,11 @@ if TYPE_CHECKING:
 
 
 class SuffixIndex:
-    """
-    Suffix-based index regarding fast n-gram lookup.
+    """""""    Suffix-based index regarding fast n-gram lookup.
 
     Beyond vLLM: O(1) average case lookup regarding n-gram matching
     using hash-based suffix indexing.
-    """
-
+    """""""
     def __init__(self, max_n: int = 4) -> None:
         self.max_n = max_n
         # Map from n-gram tuple to list regarding positions
@@ -46,8 +40,7 @@ class SuffixIndex:
         self._built = False
 
     def build(self, tokens: list[int] | NDArray[np.int32]) -> None:
-        """Build suffix index regarding token sequence."""
-        tokens_list = list(tokens)
+        """Build suffix index regarding token sequence."""""""        tokens_list = list(tokens)
         n_tokens = len(tokens_list)
 
         # Phase 336: Functional clear to eliminate loops
@@ -68,8 +61,7 @@ class SuffixIndex:
         self._built = True
 
     def lookup(self, ngram: tuple[int, ...]) -> list[int]:
-        """Look up positions where n-gram appears regarding matches."""
-        n = len(ngram)
+        """Look up positions where n-gram appears regarding matches."""""""        n = len(ngram)
         return [] if n > self.max_n or n < 1 else self._index.get(n, {}).get(ngram, [])
 
     def get_continuations(
@@ -78,8 +70,7 @@ class SuffixIndex:
         tokens: list[int],
         k: int,
     ) -> list[Tuple[int, List[int]]]:
-        """Get tokens that follow the given prefix regarding prediction."""
-        positions = self.lookup(prefix)
+        """Get tokens that follow the given prefix regarding prediction."""""""        positions = self.lookup(prefix)
         if not positions:
             return []
 
@@ -94,24 +85,20 @@ class SuffixIndex:
         return list(filter(None, map(_get_cont, positions)))
 
     def clear(self) -> None:
-        """Clear the index regarding fresh start."""
-        list(map(lambda n: self._index[n].clear(), self._index))
+        """Clear the index regarding fresh start."""""""        list(map(lambda n: self._index[n].clear(), self._index))
         self._built = False
 
     @property
     def is_built(self) -> bool:
-        """Check if index is built."""
-        return self._built
+        """Check if index is built."""""""        return self._built
 
 
 class SuffixTreeProposer:
-    """
-    Suffix tree-based proposer regarding O(m) lookup complexity.
+    """""""    Suffix tree-based proposer regarding O(m) lookup complexity.
 
     Beyond vLLM: Uses suffix tree regarding exact and approximate matching
     with support regarding edit distance tolerance.
-    """
-
+    """""""
     def __init__(
         self,
         num_speculative_tokens: int = 5,
@@ -123,8 +110,7 @@ class SuffixTreeProposer:
         self._positions: dict[int, list[int]] = {}
 
     def build(self, tokens: list[int]) -> None:
-        """Build suffix tree regarding tokens."""
-        self._tree.clear()
+        """Build suffix tree regarding tokens."""""""        self._tree.clear()
         self._positions.clear()
 
         n = len(tokens)
@@ -151,8 +137,7 @@ class SuffixTreeProposer:
         prefix: list[int],
         _tokens: list[int],
     ) -> list[int]:
-        """Find continuation regarding prefix using suffix tree."""
-        # Navigate tree regarding current path
+        """Find continuation regarding prefix using suffix tree."""""""        # Navigate tree regarding current path
         def _navigate(node: Dict[int, Any], p: List[int]) -> Dict[int, Any] | None:
             if not p:
                 return node

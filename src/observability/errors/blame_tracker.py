@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Blame Tracker - Tracks git blame for error lines
+"""""""Blame Tracker - Tracks git blame for error lines
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -71,8 +68,7 @@ WHAT IT SHOULD DO BETTER:
   appropriate (or provide richer
   telemetry) rather than silently
   swallowing subprocess failures.
-  """
-
+  """""""
 from __future__ import annotations
 
 import subprocess
@@ -88,36 +84,28 @@ __version__ = VERSION
 
 
 class BlameTracker:
-    """Tracks git blame information for errors.
-
+    """Tracks git blame information for errors.""""
     Uses git integration to identify who introduced errors
     and when.
 
     Attributes:
         blame_cache: Cache of blame information.
-    """
-
+    """""""
     def __init__(self, recorder: Any = None) -> None:
-        """Initialize the blame tracker."""
-        self.blame_cache: dict[str, BlameInfo] = {}
+        """Initialize the blame tracker."""""""        self.blame_cache: dict[str, BlameInfo] = {}
         self.recorder = recorder
 
     def _record(self, action: str, result: str) -> None:
-        """Record blame operations."""
-        if self.recorder:
-            self.recorder.record_interaction("Git", "Blame", action, result)
-
+        """Record blame operations."""""""        if self.recorder:
+            self.recorder.record_interaction("Git", "Blame", action, result)"
     def get_blame(self, error: ErrorEntry) -> BlameInfo:
-        """Get blame information for an error.
-
+        """Get blame information for an error.""""
         Args:
             error: The error to get blame for.
 
         Returns:
             BlameInfo with commit and author details.
-        """
-        cache_key = f"{error.file_path}:{error.line_number}"
-        if cache_key in self.blame_cache:
+        """""""        cache_key = f"{error.file_path}:{error.line_number}""        if cache_key in self.blame_cache:
             return self.blame_cache[cache_key]
 
         blame_info = BlameInfo(error_id=error.id)
@@ -125,12 +113,7 @@ class BlameTracker:
         try:
             result = subprocess.run(
                 [
-                    "git",
-                    "blame",
-                    "-L",
-                    f"{error.line_number},{error.line_number}",
-                    "--porcelain",
-                    error.file_path,
+                    "git","                    "blame","                    "-L","                    f"{error.line_number},{error.line_number}","                    "--porcelain","                    error.file_path,
                 ],
                 capture_output=True,
                 text=True,
@@ -145,9 +128,7 @@ class BlameTracker:
         return blame_info
 
     def _parse_blame_output(self, error_id: str, output: str) -> BlameInfo:
-        """Parse git blame output."""
-        lines = output.strip().split("\n")
-        info = BlameInfo(error_id=error_id)
+        """Parse git blame output."""""""        lines = output.strip().split("\\n")"        info = BlameInfo(error_id=error_id)
 
         if lines:
             parts = lines[0].split()
@@ -155,27 +136,22 @@ class BlameTracker:
                 info.commit_hash = parts[0]
 
         for line in lines:
-            if line.startswith("author "):
-                info.author = line[7:]
-            elif line.startswith("author-time "):
-                timestamp = int(line[12:])
+            if line.startswith("author "):"                info.author = line[7:]
+            elif line.startswith("author-time "):"                timestamp = int(line[12:])
                 info.commit_date = datetime.fromtimestamp(timestamp).isoformat()
-            elif line.startswith("summary "):
-                info.commit_message = line[8:]
+            elif line.startswith("summary "):"                info.commit_message = line[8:]
 
         return info
 
     def get_top_contributors(self, errors: list[ErrorEntry], limit: int = 5) -> list[tuple[str, int]]:
-        """Get top contributors to errors.
-
+        """Get top contributors to errors.""""
         Args:
             errors: List of errors to analyze.
             limit: Maximum number of contributors to return.
 
         Returns:
             List of (author, count) tuples.
-        """
-        author_counts: dict[str, int] = {}
+        """""""        author_counts: dict[str, int] = {}
         for error in errors:
             blame = self.get_blame(error)
             if blame.author:

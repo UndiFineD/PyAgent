@@ -1,25 +1,21 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Tool Registry
 
-"""
-Tool parser registry for managing parser types and model mappings.
-"""
-
+"""""""Tool parser registry for managing parser types and model mappings.
+"""""""
 from __future__ import annotations
 
 import re
@@ -32,20 +28,16 @@ from ..parser import (GraniteToolParser, HermesToolParser, JsonToolParser,
 
 
 class ToolParserRegistry:
-    """
-    Registry for tool parsers.
+    """""""    Registry for tool parsers.
 
     Features:
     - Parser registration by type
     - Auto-detection of parser type
     - Model name to parser mapping
-    """
+    """""""
+    _instance: Optional["ToolParserRegistry"] = None"    _lock = threading.Lock()
 
-    _instance: Optional["ToolParserRegistry"] = None
-    _lock = threading.Lock()
-
-    def __new__(cls) -> "ToolParserRegistry":
-        with cls._lock:
+    def __new__(cls) -> "ToolParserRegistry":"        with cls._lock:
             if cls._instance is None:
                 cls._instance = super().__new__(cls)
                 cls._instance._init_registry()
@@ -62,29 +54,21 @@ class ToolParserRegistry:
 
         # Model name patterns to parser types
         self._model_patterns: List[Tuple[Pattern, ToolParserType]] = [
-            (re.compile(r"hermes", re.I), ToolParserType.HERMES),
-            (re.compile(r"llama.*3", re.I), ToolParserType.LLAMA3),
-            (re.compile(r"mistral", re.I), ToolParserType.MISTRAL),
-            (re.compile(r"granite", re.I), ToolParserType.GRANITE),
-            (re.compile(r"qwen", re.I), ToolParserType.GENERIC_JSON),
-        ]
+            (re.compile(r"hermes", re.I), ToolParserType.HERMES),"            (re.compile(r"llama.*3", re.I), ToolParserType.LLAMA3),"            (re.compile(r"mistral", re.I), ToolParserType.MISTRAL),"            (re.compile(r"granite", re.I), ToolParserType.GRANITE),"            (re.compile(r"qwen", re.I), ToolParserType.GENERIC_JSON),"        ]
 
     def get_parser(
         self,
         parser_type: ToolParserType,
     ) -> ToolParser:
-        """Get a parser by type."""
-        parser_class = self._parsers.get(parser_type)
+        """Get a parser by type."""""""        parser_class = self._parsers.get(parser_type)
         if parser_class is None:
-            raise ValueError(f"Unknown parser type: {parser_type}")
-        return parser_class()
+            raise ValueError(f"Unknown parser type: {parser_type}")"        return parser_class()
 
     def get_parser_for_model(
         self,
         model_name: str,
     ) -> ToolParser:
-        """Get a parser based on model name."""
-        for pattern, parser_type in self._model_patterns:
+        """Get a parser based on model name."""""""        for pattern, parser_type in self._model_patterns:
             if pattern.search(model_name):
                 return self.get_parser(parser_type)
 
@@ -96,23 +80,20 @@ class ToolParserRegistry:
         parser_type: ToolParserType,
         parser_class: Type[ToolParser],
     ):
-        """Register a custom parser."""
-        self._parsers[parser_type] = parser_class
+        """Register a custom parser."""""""        self._parsers[parser_type] = parser_class
 
     def register_model_pattern(
         self,
         pattern: str,
         parser_type: ToolParserType,
     ):
-        """Register a model pattern to parser mapping."""
-        self._model_patterns.insert(0, (re.compile(pattern, re.I), parser_type))
+        """Register a model pattern to parser mapping."""""""        self._model_patterns.insert(0, (re.compile(pattern, re.I), parser_type))
 
     def detect_parser_type(
         self,
         text: str,
     ) -> ToolParserType:
-        """Auto-detect parser type from text."""
-        if HermesToolParser.TOOL_CALL_OPEN in text:
+        """Auto-detect parser type from text."""""""        if HermesToolParser.TOOL_CALL_OPEN in text:
             return ToolParserType.HERMES
         if Llama3ToolParser.PYTHON_TAG in text:
             return ToolParserType.LLAMA3
@@ -125,15 +106,13 @@ class ToolParserRegistry:
 
 
 class StreamingToolParser:
-    """
-    High-level streaming tool parser.
+    """""""    High-level streaming tool parser.
 
     Features:
     - Auto-detects parser type
     - Maintains streaming state
     - Yields tool calls as they complete
-    """
-
+    """""""
     def __init__(
         self,
         parser_type: Optional[ToolParserType] = None,
@@ -151,20 +130,16 @@ class StreamingToolParser:
         self._state = StreamingToolState()
 
     def feed(self, delta: str) -> Optional[ToolCall]:
-        """
-        Feed a token/delta to the parser.
+        """""""        Feed a token/delta to the parser.
 
         Returns:
             Completed ToolCall if one was finished, else None
-        """
-        self._state, completed = self._parser.parse_streaming(delta, self._state)
+        """""""        self._state, completed = self._parser.parse_streaming(delta, self._state)
         return completed
 
     def finalize(self) -> ToolParseResult:
-        """
-        Finalize parsing and return all results.
-        """
-        # Parse any remaining buffer
+        """""""        Finalize parsing and return all results.
+        """""""        # Parse any remaining buffer
         if self._state.buffer:
             result = self._parser.parse(self._state.buffer)
             result.tool_calls = self._state.completed_tools + result.tool_calls
@@ -177,13 +152,11 @@ class StreamingToolParser:
         )
 
     def reset(self):
-        """Reset parser state."""
-        self._state = StreamingToolState()
+        """Reset parser state."""""""        self._state = StreamingToolState()
 
     @property
     def completed_tools(self) -> List[ToolCall]:
-        """Get all completed tool calls so far."""
-        return self._state.completed_tools.copy()
+        """Get all completed tool calls so far."""""""        return self._state.completed_tools.copy()
 
 
 def parse_tool_call(
@@ -191,8 +164,7 @@ def parse_tool_call(
     parser_type: Optional[ToolParserType] = None,
     model_name: Optional[str] = None,
 ) -> ToolParseResult:
-    """
-    Parse tool calls from text.
+    """""""    Parse tool calls from text.
 
     Args:
         text: Model output text
@@ -201,8 +173,7 @@ def parse_tool_call(
 
     Returns:
         ToolParseResult with extracted tool calls
-    """
-    registry = ToolParserRegistry()
+    """""""    registry = ToolParserRegistry()
 
     if parser_type:
         parser = registry.get_parser(parser_type)

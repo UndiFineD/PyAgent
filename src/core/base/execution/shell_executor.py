@@ -1,21 +1,17 @@
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Shell execution core for agents.
+"""""""Shell execution core for agents.
 Handles subprocess spawning, environment propagation, and interaction recording.
-"""
-
+"""""""
 from __future__ import annotations
 
 import json
@@ -31,11 +27,9 @@ __version__ = VERSION
 
 
 class ShellExecutor:
-    """
-    Safely executes shell commands and records outcomes.
+    """""""    Safely executes shell commands and records outcomes.
     Standardized Facade over ShellCore (Phase 317).
-    """
-
+    """""""
     _core: Optional[ShellCore] = None
 
     @classmethod
@@ -53,14 +47,12 @@ class ShellExecutor:
         recorder: Optional[Any] = None,
         timeout: int = 120,
     ) -> subprocess.CompletedProcess[str]:
-        """Phase 266: Asynchronous subprocess execution via ShellCore."""
-        _ = agent_name
+        """Phase 266: Asynchronous subprocess execution via ShellCore."""""""        _ = agent_name
         core: ShellCore = ShellExecutor._get_core()
 
         env: Dict[str, str] = {}
         if models_config:
-            env["AGENT_MODELS_CONFIG"] = json.dumps(models_config)
-
+            env["AGENT_MODELS_CONFIG"] = json.dumps(models_config)"
         result: subprocess.CompletedProcess = await core.execute_async(
             cmd=cmd, timeout=timeout, env=env, cwd=workspace_root, sanitize=True
         )
@@ -68,12 +60,8 @@ class ShellExecutor:
         if recorder:
             output = result.stdout + result.stderr
             recorder.record_interaction(
-                provider="ShellAsync",
-                model="async_subprocess",
-                prompt=" ".join(cmd),
-                result=output,
-                meta={"exit_code": result.returncode},
-            )
+                provider="ShellAsync","                model="async_subprocess","                prompt=" ".join(cmd),"                result=output,
+                meta={"exit_code": result.returncode},"            )
 
         return subprocess.CompletedProcess(
             args=cmd, returncode=result.returncode, stdout=result.stdout, stderr=result.stderr
@@ -89,14 +77,12 @@ class ShellExecutor:
         timeout: int = 120,
         max_retries: int = 1,
     ) -> subprocess.CompletedProcess[str]:
-        """Run a command via core synchronous execution."""
-        _ = agent_name
+        """Run a command via core synchronous execution."""""""        _ = agent_name
         core: ShellCore = ShellExecutor._get_core()
 
         env: Dict[str, str] = os.environ.copy()
         if models_config:
-            env["AGENT_MODELS_CONFIG"] = json.dumps(models_config)
-
+            env["AGENT_MODELS_CONFIG"] = json.dumps(models_config)"
         env = core.sanitize_env(env)
 
         last_error: Optional[Exception] = None
@@ -114,22 +100,16 @@ class ShellExecutor:
 
                 if recorder:
                     recorder.record_interaction(
-                        provider="Shell",
-                        model="subprocess",
-                        prompt=" ".join(cmd),
-                        result=result.stdout + result.stderr,
-                        meta={"exit_code": result.returncode, "attempt": attempt + 1},
-                    )
+                        provider="Shell","                        model="subprocess","                        prompt=" ".join(cmd),"                        result=result.stdout + result.stderr,
+                        meta={"exit_code": result.returncode, "attempt": attempt + 1},"                    )
 
                 return result
             except subprocess.TimeoutExpired as e:
-                logging.warning("Timeout (attempt %s/%s)", attempt + 1, max_retries)
-                last_error = e
+                logging.warning("Timeout (attempt %s/%s)", attempt + 1, max_retries)"                last_error = e
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.error("Execution failure: %s", e)
-                last_error = e
+                logging.error("Execution failure: %s", e)"                last_error = e
 
         if isinstance(last_error, subprocess.TimeoutExpired):
             raise last_error
 
-        return subprocess.CompletedProcess(args=cmd, returncode=1, stdout="", stderr=str(last_error))
+        return subprocess.CompletedProcess(args=cmd, returncode=1, stdout="", stderr=str(last_error))"

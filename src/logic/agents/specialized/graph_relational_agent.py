@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Graph Relational Agent - Manage entities and relations with hybrid vector/graph indexing
+"""""""Graph Relational Agent - Manage entities and relations with hybrid vector/graph indexing
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -35,8 +32,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Graph relational agent.py module.
-"""
-
+"""""""
 from __future__ import annotations
 
 from typing import Any
@@ -48,8 +44,7 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 class GraphRelationalAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     GraphRelationalAgent for PyAgent.
 #     Implements hybrid indexing using vector embeddings and structured knowledge graphs.
-"""
-
+"""""""
     def __init__(self, workspace_root: str) -> None:
         super().__init__(workspace_root)
         self.entities: dict[str, Any] = {}
@@ -57,29 +52,19 @@ class GraphRelationalAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     async def add_entity(self, name: str, type_: str, props: dict[str, Any] | None = None) -> str:
-#         "Add an entity to the knowledge graph.
-        if props is None:
+#         "Add an entity to the knowledge graph."        if props is None:
             props = {}
-        self.entities[name] = {"type": type_, "props": props}
-#         return fEntity {name} established
+        self.entities[name] = {"type": type_, "props": props}"#         return fEntity {name} established
 
     @as_tool
     async def add_relation(self, source: str, type_: str, target: str) -> str:
-#         "Add a directed relationship between two entities.
-        self.relations.append({"source": source, "type": type_, "target": target})
-#         return fRelation {source}->{target} established
+#         "Add a directed relationship between two entities."        self.relations.append({"source": source, "type": type_, "target": target})"#         return fRelation {source}->{target} established
 
     @as_tool
     async def query_relationships(self, source: str) -> list[dict[str, Any]]:
-#         "Retrieve all relationships for a given source entity.
-        return [r for r in self.relations if r["source"] == source]
-
+#         "Retrieve all relationships for a given source entity."        return [r for r in self.relations if r["source"] == source]"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-#         "Query and improve content using graph correlations.
-  "      _ = target_file
-#         return fGraph-enriched view for: {prompt}. Found {len(self."entities)} entities.
-"""
-
+#         "Query and improve content using graph correlations."  "      _ = target_file"#         return fGraph-enriched view for: {prompt}. Found {len(self."entities)} entities.""""""""
 from __future__ import annotations
 
 from typing import Any
@@ -91,8 +76,7 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 class GraphRelationalAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     GraphRelationalAgent for PyAgent.
     Implements hybrid indexing using vector embeddings and structured knowledge graphs.
-"""
-
+"""""""
     def __init__(self, workspace_root: str) -> None:
         super().__init__(workspace_root)
         self.entities: dict[str, Any] = {}
@@ -100,24 +84,17 @@ class GraphRelationalAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     async def add_entity(self, name: str, type_: str, props: dict[str, Any] | None = None) -> str:
-#         "Add an entity to the knowledge" graph.
-        if props is None:
+#         "Add an entity to the knowledge" graph."        if props is None:
             props = {}
-        self.entities[name] = {"type": type_, "props": props}
-#         return fEntity {name} established
+        self.entities[name] = {"type": type_, "props": props}"#         return fEntity {name} established
 
     @as_tool
     async def add_relation(self, source: str, type_: str, target: str) -> str:
-#         "Add a directed relationship between two entities.
-        self.relations.append({"source": source, "type": type_, "target": target})
-#         return fRelation {source}->{target} established
+#         "Add a directed relationship between two entities."        self.relations.append({"source": source, "type": type_, "target": target})"#         return fRelation {source}->{target} established
 
     @as_tool
     async def query_relationships(self, source: str) -> list[dict[str, Any]]:
-#         "Retrieve all relationships for a given source entity.
-        return [r for r in self.relations if r["source"] == source]
-
+#         "Retrieve all relationships for a given source entity."        return [r for r in self.relations if r["source"] == source]"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-#         "Query and improve content using graph correlations.
-        _ = target_file
+#         "Query and improve content using graph correlations."        _ = target_file
 #         return fGraph-enriched view for: {prompt}. Found {len(self.entities)} entities.

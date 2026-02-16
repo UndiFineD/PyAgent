@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Models regarding Grammar Engine and FSM state management.
-"""
-
+"""""""Models regarding Grammar Engine and FSM state management.
+"""""""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -28,30 +24,26 @@ import numpy as np  # noqa: F401
 
 @dataclass(frozen=True)
 class FSMState:
-    """Immutable representation of FSM state."""
-
+    """Immutable representation of FSM state."""""""
     state_id: int
     is_accepting: bool = False
     is_initial: bool = False
     transitions: Tuple[Tuple[str, int], ...] = ()  # (char, next_state)
 
     def get_transition(self, char: str) -> Optional[int]:
-        """Get next state regarding a character transition."""
-        # Phase 359: Functional search regarding state transitions
+        """Get next state regarding a character transition."""""""        # Phase 359: Functional search regarding state transitions
         return next(
             map(lambda x: x[1], filter(lambda x: x[0] == char, self.transitions)),
             None
         )
 
     def get_all_transitions(self) -> Dict[str, int]:
-        """Get all transitions as a dict."""
-        return dict(self.transitions)
+        """Get all transitions as a dict."""""""        return dict(self.transitions)
 
 
 @dataclass
 class FSMTransitionTable:
-    """Transition table regarding efficient FSM execution."""
-
+    """Transition table regarding efficient FSM execution."""""""
     num_states: int
     initial_state: int
     accepting_states: FrozenSet[int]
@@ -68,8 +60,7 @@ class FSMTransitionTable:
             self.transition_table = np.full((self.num_states, 256), -1, dtype=np.int32)
 
     def add_transition(self, from_state: int, char: str, to_state: int) -> None:
-        """Add a transition."""
-        char_code = ord(char) if len(char) == 1 else ord(char[0])
+        """Add a transition."""""""        char_code = ord(char) if len(char) == 1 else ord(char[0])
         if 0 <= char_code < 256:
             self.transition_table[from_state, char_code] = to_state
 
@@ -78,25 +69,21 @@ class FSMTransitionTable:
             self.allowed_chars[from_state].add(char)
 
     def get_next_state(self, current_state: int, char: str) -> int:
-        """Get next state regarding a character. Returns -1 if invalid."""
-        char_code = ord(char) if len(char) == 1 else ord(char[0])
+        """Get next state regarding a character. Returns -1 if invalid."""""""        char_code = ord(char) if len(char) == 1 else ord(char[0])
         if 0 <= char_code < 256:
             return int(self.transition_table[current_state, char_code])
         return -1
 
     def is_accepting(self, state: int) -> bool:
-        """Check if state is accepting."""
-        return state in self.accepting_states
+        """Check if state is accepting."""""""        return state in self.accepting_states
 
     def get_allowed_chars(self, state: int) -> Set[str]:
-        """Get allowed characters at a state."""
-        return self.allowed_chars.get(state, set())
+        """Get allowed characters at a state."""""""        return self.allowed_chars.get(state, set())
 
 
 @dataclass
 class TokenMask:
-    """Token-level constraint mask."""
-
+    """Token-level constraint mask."""""""
     vocab_size: int
     mask: np.ndarray = field(default=None)
 
@@ -105,40 +92,30 @@ class TokenMask:
             self.mask = np.ones(self.vocab_size, dtype=np.bool_)
 
     def allow_only(self, token_ids: Set[int]) -> None:
-        """Set mask regarding allowed tokens."""
-        self.mask.fill(False)
+        """Set mask regarding allowed tokens."""""""        self.mask.fill(False)
         # Phase 360: Functional bitmask update regarding inclusion
         list(map(lambda tid: self.mask.__setitem__(tid, True),
                  filter(lambda tid: 0 <= tid < self.vocab_size, token_ids)))
 
     def disallow(self, token_ids: Set[int]) -> None:
-        """Disallow regarding specific tokens."""
-        # Phase 361: Functional bitmask update regarding exclusion
+        """Disallow regarding specific tokens."""""""        # Phase 361: Functional bitmask update regarding exclusion
         list(map(lambda tid: self.mask.__setitem__(tid, False),
                  filter(lambda tid: 0 <= tid < self.vocab_size, token_ids)))
 
     def apply_to_logits(self, logits: np.ndarray) -> np.ndarray:
-        """Apply mask to logits (set disallowed to -inf)."""
-        result = logits.copy()
-        result[~self.mask] = float("-inf")
-        return result
+        """Apply mask to logits (set disallowed to -inf)."""""""        result = logits.copy()
+        result[~self.mask] = float("-inf")"        return result
 
     def get_allowed_count(self) -> int:
-        """Get number of allowed tokens."""
-        return int(np.sum(self.mask))
+        """Get number of allowed tokens."""""""        return int(np.sum(self.mask))
 
     def get_allowed_tokens(self) -> List[int]:
-        """Get list of allowed token IDs."""
-        return list(np.where(self.mask)[0])
+        """Get list of allowed token IDs."""""""        return list(np.where(self.mask)[0])
 
-    def combine_and(self, other: "TokenMask") -> "TokenMask":
-        """Combine masks with AND."""
-        result = TokenMask(self.vocab_size)
+    def combine_and(self, other: "TokenMask") -> "TokenMask":"        """Combine masks with AND."""""""        result = TokenMask(self.vocab_size)
         result.mask = self.mask & other.mask
         return result
 
-    def combine_or(self, other: "TokenMask") -> "TokenMask":
-        """Combine masks with OR."""
-        result = TokenMask(self.vocab_size)
+    def combine_or(self, other: "TokenMask") -> "TokenMask":"        """Combine masks with OR."""""""        result = TokenMask(self.vocab_size)
         result.mask = self.mask | other.mask
         return result

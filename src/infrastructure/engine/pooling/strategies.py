@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Strategy-based poolers for sequence representations.
-"""
-
+"""""""Strategy-based poolers for sequence representations.
+"""""""
 from __future__ import annotations
 
 import math
@@ -29,28 +25,16 @@ import numpy as np
 from .models import PoolingConfig
 
 __all__ = [
-    "BasePooler",
-    "MeanPooler",
-    "CLSPooler",
-    "LastTokenPooler",
-    "MaxPooler",
-    "AttentionPooler",
-    "WeightedMeanPooler",
-    "MatryoshkaPooler",
-    "MultiVectorPooler",
-    "StepPooler",
-]
+    "BasePooler","    "MeanPooler","    "CLSPooler","    "LastTokenPooler","    "MaxPooler","    "AttentionPooler","    "WeightedMeanPooler","    "MatryoshkaPooler","    "MultiVectorPooler","    "StepPooler","]
 
 
 class BasePooler(ABC):
-    """Abstract base for pooling operations."""
-
+    """Abstract base for pooling operations."""""""
     def __init__(self, config: PoolingConfig) -> None:
         self.config = config
 
     def pool_and_process(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
-        """Pool inputs and apply normalization/truncation based on config."""
-        emb = self.pool(hidden_states, attention_mask)
+        """Pool inputs and apply normalization/truncation based on config."""""""        emb = self.pool(hidden_states, attention_mask)
         if self.config.truncate_dim:
             emb = self.truncate(emb, self.config.truncate_dim)
         if self.config.normalize:
@@ -59,27 +43,21 @@ class BasePooler(ABC):
 
     @abstractmethod
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
-        """Pool hidden states to fixed representation."""
-        raise NotImplementedError("Subclasses must implement pool()")
-
+        """Pool hidden states to fixed representation."""""""        raise NotImplementedError("Subclasses must implement pool()")"
     def normalize(self, embeddings: np.ndarray) -> np.ndarray:
-        """L2 normalize embeddings."""
-        norm = np.linalg.norm(embeddings, axis=-1, keepdims=True)
+        """L2 normalize embeddings."""""""        norm = np.linalg.norm(embeddings, axis=-1, keepdims=True)
         return embeddings / (norm + 1e-9)
 
     def truncate(self, embeddings: np.ndarray, dim: int) -> np.ndarray:
-        """Truncate embeddings to specified dimension (Matryoshka)."""
-        if dim >= embeddings.shape[-1]:
+        """Truncate embeddings to specified dimension (Matryoshka)."""""""        if dim >= embeddings.shape[-1]:
             return embeddings
         return embeddings[..., :dim]
 
 
 class MeanPooler(BasePooler):
-    """Mean pooling over sequence."""
-
+    """Mean pooling over sequence."""""""
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
-        """Compute mean of hidden states with optional masking."""
-        if attention_mask is None:
+        """Compute mean of hidden states with optional masking."""""""        if attention_mask is None:
             return hidden_states.mean(axis=1)
 
         mask = attention_mask[:, :, np.newaxis].astype(hidden_states.dtype)
@@ -89,15 +67,13 @@ class MeanPooler(BasePooler):
 
 
 class CLSPooler(BasePooler):
-    """First token ([CLS]) pooling."""
-
+    """First token ([CLS]) pooling."""""""
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
         return hidden_states[:, 0, :]
 
 
 class LastTokenPooler(BasePooler):
-    """Last token pooling."""
-
+    """Last token pooling."""""""
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
         if attention_mask is None:
             return hidden_states[:, -1, :]
@@ -109,8 +85,7 @@ class LastTokenPooler(BasePooler):
 
 
 class MaxPooler(BasePooler):
-    """Max pooling over sequence."""
-
+    """Max pooling over sequence."""""""
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
         if attention_mask is None:
             return hidden_states.max(axis=1)
@@ -121,27 +96,23 @@ class MaxPooler(BasePooler):
 
 
 class AttentionPooler(BasePooler):
-    """Attention-weighted pooling."""
-
+    """Attention-weighted pooling."""""""
     def __init__(self, config: PoolingConfig, hidden_dim: int = 768) -> None:
         super().__init__(config)
         self.hidden_dim = hidden_dim
         self.query = np.random.randn(hidden_dim).astype(np.float32) / math.sqrt(hidden_dim)
 
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
-        scores = np.einsum("bsh,h->bs", hidden_states, self.query)
-        if attention_mask is not None:
+        scores = np.einsum("bsh,h->bs", hidden_states, self.query)"        if attention_mask is not None:
             scores = np.where(attention_mask.astype(bool), scores, -1e9)
 
         scores = scores - scores.max(axis=1, keepdims=True)
         weights = np.exp(scores)
         weights = weights / (weights.sum(axis=1, keepdims=True) + 1e-9)
-        return np.einsum("bs,bsh->bh", weights, hidden_states)
-
+        return np.einsum("bs,bsh->bh", weights, hidden_states)"
 
 class WeightedMeanPooler(BasePooler):
-    """IDF-weighted mean pooling."""
-
+    """IDF-weighted mean pooling."""""""
     def __init__(self, config: PoolingConfig, token_weights: Optional[Dict[int, float]] = None) -> None:
         super().__init__(config)
         self.token_weights = token_weights or {}
@@ -169,11 +140,9 @@ class WeightedMeanPooler(BasePooler):
 
 
 class MatryoshkaPooler(BasePooler):
-    """
-    Matryoshka Representation Learning (MRL) pooler.
+    """""""    Matryoshka Representation Learning (MRL) pooler.
     Allows for truncate-able embeddings.
-    """
-
+    """""""
     def __init__(self, config: PoolingConfig, supported_dims: Optional[list[int]] = None) -> None:
         super().__init__(config)
         self.supported_dims = supported_dims or [64, 128, 256, 512, 768, 1024]
@@ -184,15 +153,12 @@ class MatryoshkaPooler(BasePooler):
         return self.fallback_pooler.pool(hidden_states, attention_mask)
 
     def get_dimension(self, dim: int) -> int:
-        """Returns the nearest supported dimension."""
-        return min(self.supported_dims, key=lambda x: abs(x - dim))
+        """Returns the nearest supported dimension."""""""        return min(self.supported_dims, key=lambda x: abs(x - dim))
 
 
 class MultiVectorPooler(BasePooler):
-    """
-    Pooler that preserves multiple vectors per sequence (e.g., ColBERT style).
-    """
-
+    """""""    Pooler that preserves multiple vectors per sequence (e.g., ColBERT style).
+    """""""
     def __init__(self, config: PoolingConfig, compression_dim: Optional[int] = None) -> None:
         super().__init__(config)
         self.compression_dim = compression_dim
@@ -206,17 +172,13 @@ class MultiVectorPooler(BasePooler):
         return hidden_states
 
     def maxsim_score(self, query_vectors: np.ndarray, doc_vectors: np.ndarray) -> float:
-        """MaxSim score between query and document vectors."""
-        # query: (q_len, dim), doc: (d_len, dim)
+        """MaxSim score between query and document vectors."""""""        # query: (q_len, dim), doc: (d_len, dim)
         scores = np.dot(query_vectors, doc_vectors.T)  # (q_len, d_len)
         return float(np.sum(np.max(scores, axis=1)))
 
 
 class StepPooler(BasePooler):
-    """
-    Pooler that extracts specific 'step' tokens (e.g., for Chain of Thought).
-    """
-
+    """""""    Pooler that extracts specific 'step' tokens (e.g., for Chain of Thought).'    """""""
     def __init__(self, config: PoolingConfig, step_token_ids: Optional[list[int]] = None) -> None:
         super().__init__(config)
         self.step_token_ids = step_token_ids or []

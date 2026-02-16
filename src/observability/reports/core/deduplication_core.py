@@ -1,27 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Deduplication Core - Similarity-based report deduplication and JSONL export
+"""""""Deduplication Core - Similarity-based report deduplication and JSONL export
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Use DeduplicationCore.jaccard_similarity(s1, s2) to compute word-level
   Jaccard similarity between two strings.
-- Use DeduplicationCore.deduplicate_items(items, key='message',
-  threshold=0.8) to remove near-duplicate dict entries (keeps first-seen).
+- Use DeduplicationCore.deduplicate_items(items, key='message','  threshold=0.8) to remove near-duplicate dict entries (keeps first-seen).
 - Use DeduplicationCore.export_to_jsonl(items, output_path) to write a
   list of dicts as JSONL to disk.
 - The module will attempt to use an optional rust_core extension for
@@ -60,8 +56,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Core logic for Report Deduplication (Phase 183).
 Handles similarity calculations and JSONL export.
-"""
-
+"""""""
 import json
 from typing import Any
 
@@ -72,14 +67,11 @@ except ImportError:
 
 
 class DeduplicationCore:
-    """Core functionality for deduplicating items based on similarity."""
-
+    """Core functionality for deduplicating items based on similarity."""""""
     @staticmethod
     def jaccard_similarity(s1: str, s2: str) -> float:
-        """
-        Calculates Jaccard similarity between two strings based on words.
-        """
-        if rc is not None:
+        """""""        Calculates Jaccard similarity between two strings based on words.
+        """""""        if rc is not None:
             try:
                 return rc.calculate_jaccard_similarity(s1, s2)  # type: ignore[attr-defined]
             except (AttributeError, TypeError, RuntimeError, OSError):
@@ -95,15 +87,11 @@ class DeduplicationCore:
 
     @staticmethod
     def deduplicate_items(
-        items: list[dict[str, Any]], key: str = "message", threshold: float = 0.8
-    ) -> list[dict[str, Any]]:
-        """
-        Removes items that are too similar to already seen items.
-        """
-        if rc is not None:
+        items: list[dict[str, Any]], key: str = "message", threshold: float = 0.8"    ) -> list[dict[str, Any]]:
+        """""""        Removes items that are too similar to already seen items.
+        """""""        if rc is not None:
             try:
-                messages = [item.get(key, "") for item in items]
-                unique_indices = rc.deduplicate_by_similarity(messages, threshold)  # type: ignore[attr-defined]
+                messages = [item.get(key, "") for item in items]"                unique_indices = rc.deduplicate_by_similarity(messages, threshold)  # type: ignore[attr-defined]
                 return [items[i] for i in unique_indices]
             except (AttributeError, TypeError, RuntimeError, OSError):
                 pass
@@ -112,8 +100,7 @@ class DeduplicationCore:
         seen_messages: list[str] = []
 
         for item in items:
-            msg = item.get(key, "")
-            is_duplicate = False
+            msg = item.get(key, "")"            is_duplicate = False
             for seen in seen_messages:
                 if DeduplicationCore.jaccard_similarity(msg, seen) > threshold:
                     is_duplicate = True
@@ -127,9 +114,6 @@ class DeduplicationCore:
 
     @staticmethod
     def export_to_jsonl(items: list[dict[str, Any]], output_path: str) -> None:
-        """
-        Exports a list of dicts to a JSONL file.
-        """
-        with open(output_path, "w", encoding="utf-8") as f:
-            for item in items:
-                f.write(json.dumps(item) + "\n")
+        """""""        Exports a list of dicts to a JSONL file.
+        """""""        with open(output_path, "w", encoding="utf-8") as f:"            for item in items:
+                f.write(json.dumps(item) + "\\n")"

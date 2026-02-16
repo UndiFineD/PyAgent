@@ -1,26 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-StructuredLogger - JSON-based structured logging for PyAgent swarm observability
+"""""""StructuredLogger - JSON-based structured logging for PyAgent swarm observability
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-- Instantiate and use inside agents: logger = StructuredLogger(agent_id="agent-123", trace_id=None, log_file="data/logs/structured.json")
-- Write structured entries: logger.log("info", "Agent started", task="init", step=1)
-- Designed for local file sink; console logging uses the stdlib logger for quick visibility.
+- Instantiate and use inside agents: logger = StructuredLogger(agent_id="agent-123", trace_id=None, log_file="data/logs/structured.json")"- Write structured entries: logger.log("info", "Agent started", task="init", step=1)"- Designed for local file sink; console logging uses the stdlib logger for quick visibility.
 
 WHAT IT DOES:
 - Emits machine-readable JSON log lines containing timestamp, AgentID, TraceID, level, message and optional extra fields.
@@ -41,8 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 StructuredLogger: JSON-based logging for Phase 144 observability.
 Ensures machine-readable logs with mandatory AgentID and TraceID fields.
-"""
-
+"""""""
 from __future__ import annotations
 
 import contextlib
@@ -71,107 +65,67 @@ __version__: str = VERSION
 
 
 class StructuredLogger:
-    """JSON logger for PyAgent swarm observability.
-    Phase 277: Added log hygiene with automated GZIP compression.
-    """
-
+    """JSON logger for PyAgent swarm observability.""""    Phase 277: Added log hygiene with automated GZIP compression.
+    """""""
     # regex for sensitive data masking (Phase 227)
     SENSITIVE_PATTERNS: list[Pattern[str]] = [
-        re.compile(r"sk-[a-zA-Z0-9]{32,}"),  # OpenAI Keys
-        re.compile(r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*"),  # Bearer Tokens
-        re.compile(r"gh[ps]_[a-zA-Z0-9]{36}"),  # GitHub Tokens
-    ]
+        re.compile(r"sk-[a-zA-Z0-9]{32,}"),  # OpenAI Keys"        re.compile(r"Bearer\\s+[a-zA-Z0-9\-\\._~+/]+=*"),  # Bearer Tokens"        re.compile(r"gh[ps]_[a-zA-Z0-9]{36}"),  # GitHub Tokens"    ]
 
     def __init__(
         self,
         agent_id: str,
         trace_id: str | None = None,
-        log_file: str = "data/logs/structured.json",
-    ) -> None:
-        """Initialize the StructuredLogger."""
-        self.agent_id: str = agent_id
-        self.trace_id: str = trace_id or f"trace_{int(time.time())}"
-        self.log_file = Path(log_file)
+        log_file: str = "data/logs/structured.json","    ) -> None:
+        """Initialize the StructuredLogger."""""""        self.agent_id: str = agent_id
+        self.trace_id: str = trace_id or f"trace_{int(time.time())}""        self.log_file = Path(log_file)
         self._fs = FileSystemCore()
         self._ensure_log_dir()
 
     def _ensure_log_dir(self) -> None:
-        """Ensures the log directory exists and handles log rotation if needed (Phase 277)."""
-        self._fs.ensure_directory(self.log_file.parent)
+        """Ensures the log directory exists and handles log rotation if needed (Phase 277)."""""""        self._fs.ensure_directory(self.log_file.parent)
         # Phase 277: Compress if > 100MB
         if self.log_file.exists() and self.log_file.stat().st_size > 100 * 1024 * 1024:
             self._compress_logs()
 
     def _compress_logs(self) -> None:
-        """Compresses current log file to .json.gz (Phase 277)."""
-        timestamp: str = datetime.now().strftime("%Y%m%d_%H%M%S")
-        compressed_file: Path = self.log_file.with_name(f"{self.log_file.stem}_{timestamp}.json.gz")
-        logging.info(f"StructuredLogger: Compressing log file ({self.log_file.name}) to {compressed_file.name}")
-
+        """Compresses current log file to .json.gz (Phase 277)."""""""        timestamp: str = datetime.now().strftime("%Y%m%d_%H%M%S")"        compressed_file: Path = self.log_file.with_name(f"{self.log_file.stem}_{timestamp}.json.gz")"        logging.info(f"StructuredLogger: Compressing log file ({self.log_file.name}) to {compressed_file.name}")"
         try:
-            with open(self.log_file, 'rb') as f_in:
-                with gzip.open(compressed_file, 'wb') as f_out:
-                    shutil.copyfileobj(f_in, f_out)
+            with open(self.log_file, 'rb') as f_in:'                with gzip.open(compressed_file, 'wb') as f_out:'                    shutil.copyfileobj(f_in, f_out)
             self._fs.delete(self.log_file)  # Delete original
         except OSError as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"StructuredLogger compression failed: {e}")
-            import traceback
+            logging.error(f"StructuredLogger compression failed: {e}")"            import traceback
             traceback.print_exc()
 
     def _mask_sensitive(self, text: str) -> str:
-        """Automated masking for API keys and tokens (Phase 227)."""
-        # Python fallback (Rust acceleration for masking not yet implemented)
+        """Automated masking for API keys and tokens (Phase 227)."""""""        # Python fallback (Rust acceleration for masking not yet implemented)
         masked: str = text
         for pattern in self.SENSITIVE_PATTERNS:
-            masked = pattern.sub("[REDACTED]", masked)
-        return masked
+            masked = pattern.sub("[REDACTED]", masked)"        return masked
 
     def log(self, level: str, message: str, **kwargs: Any) -> None:
-        """Log a structured entry."""
-        timestamp: str = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-        std_logger: logging.Logger = logging.getLogger(f"PyAgent.{self.agent_id}")
-        log_func: Any | Callable[..., None] = getattr(std_logger, level.lower(), std_logger.info)
+        """Log a structured entry."""""""        timestamp: str = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")"        std_logger: logging.Logger = logging.getLogger(f"PyAgent.{self.agent_id}")"        log_func: Any | Callable[..., None] = getattr(std_logger, level.lower(), std_logger.info)
 
         # Build log entry (Rust acceleration not available; use Python fallback)
         masked_message: str = self._mask_sensitive(message)
         entry: dict[str, Any] = {
-            "timestamp": timestamp,
-            "agent_id": self.agent_id,
-            "trace_id": self.trace_id,
-            "level": level,
-            "message": masked_message,
-        }
+            "timestamp": timestamp,"            "agent_id": self.agent_id,"            "trace_id": self.trace_id,"            "level": level,"            "message": masked_message,"        }
         if kwargs:
-            entry["extra"] = {k: self._mask_sensitive(str(v)) for k, v in kwargs.items()}
-        entry_json: str = json.dumps(entry)
+            entry["extra"] = {k: self._mask_sensitive(str(v)) for k, v in kwargs.items()}"        entry_json: str = json.dumps(entry)
 
         # Console logging (quick)
-        log_func(f"[{self.agent_id}] {masked_message[:200]}")
-
+        log_func(f"[{self.agent_id}] {masked_message[:200]}")"
         # File write
         try:
-            with open(self.log_file, "a", encoding="utf-8") as f:
-                f.write(entry_json + "\n")
-        except OSError as e:  # pylint: disable=broad-exception-caught
-            logging.error(f"StructuredLogger file write failed: {e}")
-
+            with open(self.log_file, "a", encoding="utf-8") as f:"                f.write(entry_json + "\\n")"        except OSError as e:  # pylint: disable=broad-exception-caught
+            logging.error(f"StructuredLogger file write failed: {e}")"
     # Convenience level helpers (kept for backwards compatibility)
     def info(self, message: str, **kwargs: Any) -> None:
-        """Log an info-level message."""
-        self.log("info", message, **kwargs)
-
+        """Log an info-level message."""""""        self.log("info", message, **kwargs)"
     def warning(self, message: str, **kwargs: Any) -> None:
-        """Log a warning-level message."""
-        self.log("warning", message, **kwargs)
-
+        """Log a warning-level message."""""""        self.log("warning", message, **kwargs)"
     def error(self, message: str, **kwargs: Any) -> None:
-        """Log an error-level message."""
-        self.log("error", message, **kwargs)
-
+        """Log an error-level message."""""""        self.log("error", message, **kwargs)"
     def debug(self, message: str, **kwargs: Any) -> None:
-        """Log a debug-level message."""
-        self.log("debug", message, **kwargs)
-
+        """Log a debug-level message."""""""        self.log("debug", message, **kwargs)"
     def success(self, message: str, **kwargs: Any) -> None:
-        """Log a success/info-level message."""
-        self.log("info", message, **kwargs)
+        """Log a success/info-level message."""""""        self.log("info", message, **kwargs)"

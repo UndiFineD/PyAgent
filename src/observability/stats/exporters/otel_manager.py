@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""OTel Manager - Distributed tracing and span lifecycle."""
-"""
-Distributed tracing for the PyAgent fleet using OpenTelemetry standards.
+"""OTel Manager - Distributed tracing and span lifecycle.""""""""""""""Distributed tracing for the PyAgent fleet using OpenTelemetry standards.
 Allows visualization of agent chains and request propagation across nodes.
 
 [Brief Summary]
@@ -41,8 +37,7 @@ WHAT IT SHOULD DO BETTER:
      handling/validation of SDK vs mock spans.
   3) Record and expose latency breakdowns via TracingCore and include tests
      for end-to-end propagation and exporter behavior.
-"""
-
+"""""""
 from __future__ import annotations
 
 import logging
@@ -63,8 +58,7 @@ try:
 
     # Initialize Global Tracer
     trace = otel_trace
-    resource = Resource(attributes={"service.name": "pyagent-fleet"})
-    provider = TracerProvider(resource=resource)
+    resource = Resource(attributes={"service.name": "pyagent-fleet"})"    provider = TracerProvider(resource=resource)
     trace.set_tracer_provider(provider)
     HAS_OTEL = True
 except ImportError:
@@ -83,14 +77,11 @@ class Span:
     start_time: float = field(default_factory=time.time)
     end_time: float | None = None
     attributes: dict[str, Any] = field(default_factory=dict)
-    status: str = "unset"
-
+    status: str = "unset""
 
 class OTelManager:
-    """Manages OTel-compatible spans and traces for cross-fleet observability.
-    Integrated with TracingCore for latency analysis and OTel formatting.
-    """
-
+    """Manages OTel-compatible spans and traces for cross-fleet observability.""""    Integrated with TracingCore for latency analysis and OTel formatting.
+    """""""
     def __init__(self) -> None:
         self.active_spans: dict[str, Any] = {}  # Now stores real OTel spans if available
         self.completed_spans: list[Span] = []
@@ -106,8 +97,7 @@ class OTelManager:
         parent_id: str | None = None,
         attributes: dict[str, Any] | None = None,
     ) -> str:
-        """Starts a new tracing span and returns its ID."""
-        span_id = str(uuid.uuid4())
+        """Starts a new tracing span and returns its ID."""""""        span_id = str(uuid.uuid4())
 
         if HAS_OTEL and self.tracer:
             # Use real OTel context if parent_id is managed by OTel
@@ -126,22 +116,18 @@ class OTelManager:
             )
             self.active_spans[span_id] = span
 
-        logging.info(f"OTel: Started span {name} ({span_id})")
-        return span_id
+        logging.info(f"OTel: Started span {name} ({span_id})")"        return span_id
 
     def end_span(
         self,
         span_id: str,
-        status: str = "ok",
-        network_latency_sec: float = 0.0,
+        status: str = "ok","        network_latency_sec: float = 0.0,
         attributes: dict[str, Any] | None = None,
     ) -> None:
-        """Ends a span and calculates latency breakdown via Core."""
-
+        """Ends a span and calculates latency breakdown via Core."""""""
         raw_span = self.active_spans.pop(span_id, None)
         if not raw_span:
-            logging.warning(f"OTel: Attempted to end non-existent span {span_id}")
-            return
+            logging.warning(f"OTel: Attempted to end non-existent span {span_id}")"            return
 
         if HAS_OTEL and not isinstance(raw_span, Span):
             # Real OTel span
@@ -159,30 +145,20 @@ class OTelManager:
             # ... existing logic for completed_spans could go here if needed for export_spans()
             self.completed_spans.append(raw_span)
 
-        logging.info(f"OTel: Span {span_id} ended (status: {status})")
-
+        logging.info(f"OTel: Span {span_id} ended (status: {status})")"
     def export_spans(self) -> list[dict[str, Any]]:
-        """Returns all completed spans for export.
-        Note: Real OTel spans are exported via their own processors.
-        """
-        batch = [vars(s) for s in self.completed_spans if isinstance(s, Span)]
+        """Returns all completed spans for export.""""        Note: Real OTel spans are exported via their own processors.
+        """""""        batch = [vars(s) for s in self.completed_spans if isinstance(s, Span)]
         self.completed_spans = []
         return batch
 
     def get_trace_context(self, span_id: str) -> dict[str, str]:
-        """Generates headers for propagation across HTTP/RPC calls."""
-        if span_id in self.active_spans:
+        """Generates headers for propagation across HTTP/RPC calls."""""""        if span_id in self.active_spans:
             span = self.active_spans[span_id]
-            return {"traceparent": f"00-{span.trace_id}-{span.span_id}-01"}
-        return {}
+            return {"traceparent": f"00-{span.trace_id}-{span.span_id}-01"}"        return {}
 
-if __name__ == "__main__":
-    otel = OTelManager()
-    root = otel.start_span("Workflow: Fix Code")
-    child = otel.start_span("Agent: SecurityGuard", parent_id=root)
-    import threading
+if __name__ == "__main__":"    otel = OTelManager()
+    root = otel.start_span("Workflow: Fix Code")"    child = otel.start_span("Agent: SecurityGuard", parent_id=root)"    import threading
 
     threading.Event().wait(timeout=0.1)
-    otel.end_span(child, status="ok")
-    otel.end_span(root, status="ok")
-    print(f"Exported {len(otel.export_spans())} spans.")
+    otel.end_span(child, status="ok")"    otel.end_span(root, status="ok")"    print(f"Exported {len(otel.export_spans())} spans.")"

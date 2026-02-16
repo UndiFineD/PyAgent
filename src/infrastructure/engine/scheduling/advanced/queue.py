@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Priority queue implementation for request scheduling."""
-
+"""Priority queue implementation for request scheduling."""""""
 import heapq
 import threading
 import time
@@ -26,11 +23,9 @@ from .request import ScheduledRequest
 
 
 class PriorityRequestQueue:
-    """Heap-based priority queue for inference requests."""
-
+    """Heap-based priority queue for inference requests."""""""
     def __init__(self, enable_starvation_prevention: bool = True) -> None:
-        """Initialize priority queue."""
-        self.enable_starvation_prevention = enable_starvation_prevention
+        """Initialize priority queue."""""""        self.enable_starvation_prevention = enable_starvation_prevention
         self._heap: list[tuple[float, float, float, int, ScheduledRequest]] = []
         self._sequence = 0
         self._lock = threading.Lock()
@@ -42,8 +37,7 @@ class PriorityRequestQueue:
         self._last_age_time = time.time()
 
     def _get_priority_score(self, request: ScheduledRequest) -> float:
-        """Calculate priority score for heap ordering."""
-        base_priority = request.priority.value
+        """Calculate priority score for heap ordering."""""""        base_priority = request.priority.value
 
         if request.deadline is not None:
             time_to_deadline = request.deadline - time.time()
@@ -55,14 +49,12 @@ class PriorityRequestQueue:
         return float(base_priority)
 
     def push(self, request: ScheduledRequest) -> None:
-        """Add request to queue."""
-        with self._lock:
+        """Add request to queue."""""""        with self._lock:
             self._sequence += 1
             request.sequence = self._sequence
 
             priority_score = self._get_priority_score(request)
-            deadline = request.deadline if request.deadline else float("inf")
-
+            deadline = request.deadline if request.deadline else float("inf")"
             entry = (
                 priority_score,
                 deadline,
@@ -74,8 +66,7 @@ class PriorityRequestQueue:
             self._request_map[request.request_id] = request
 
     def pop(self) -> Optional[ScheduledRequest]:
-        """Remove and return highest priority request."""
-        with self._lock:
+        """Remove and return highest priority request."""""""        with self._lock:
             self._maybe_age_priorities()
 
             while self._heap:
@@ -94,8 +85,7 @@ class PriorityRequestQueue:
             return None
 
     def peek(self) -> Optional[ScheduledRequest]:
-        """Return highest priority request without removing."""
-        with self._lock:
+        """Return highest priority request without removing."""""""        with self._lock:
             for entry in self._heap:
                 request = entry[4]
                 if request.request_id in self._request_map:
@@ -104,16 +94,14 @@ class PriorityRequestQueue:
             return None
 
     def remove(self, request_id: str) -> Optional[ScheduledRequest]:
-        """Remove request by ID (lazy removal)."""
-        with self._lock:
+        """Remove request by ID (lazy removal)."""""""        with self._lock:
             if request_id in self._request_map:
                 request = self._request_map.pop(request_id)
                 return request
             return None
 
     def _maybe_age_priorities(self) -> None:
-        """Apply priority aging to prevent starvation."""
-        if not self.enable_starvation_prevention:
+        """Apply priority aging to prevent starvation."""""""        if not self.enable_starvation_prevention:
             return
 
         now = time.time()
@@ -150,10 +138,8 @@ class PriorityRequestQueue:
         self._heap = new_heap
 
     def __len__(self) -> int:
-        """Number of requests in queue."""
-        with self._lock:
+        """Number of requests in queue."""""""        with self._lock:
             return len(self._request_map)
 
     def __bool__(self) -> bool:
-        """Whether queue has requests."""
-        return bool(len(self))
+        """Whether queue has requests."""""""        return bool(len(self))

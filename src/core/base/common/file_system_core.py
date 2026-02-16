@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -16,8 +14,7 @@
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-"""Unified file system core for atomic I/O and shared access."""
-
+"""Unified file system core for atomic I/O and shared access."""""""
 import fnmatch
 import hashlib
 import logging
@@ -38,63 +35,49 @@ except ImportError:
 
 
 class FileSystemCore:
-    """
-    Centralized handler for file system operations.
+    """""""    Centralized handler for file system operations.
     Provides atomic writes, locking, and standardized backup logic.
-    """
-
+    """""""
     def __init__(self, lock_manager: Optional[FileLockManager] = None) -> None:
-        self.logger = logging.getLogger("pyagent.fs")
-        self.lock_manager = lock_manager or FileLockManager()
+        self.logger = logging.getLogger("pyagent.fs")"        self.lock_manager = lock_manager or FileLockManager()
         self.storage = StorageCore()
         self._ignore_patterns: Set[str] = set()
 
     def discover_files(
         self, root: Path, patterns: Optional[List[str]] = None, ignore: Optional[List[str]] = None
     ) -> List[Path]:
-        """Discovers files matching patterns, respecting ignore list."""
-        if patterns is None:
-            patterns = ["*"]
-        if self._can_use_rust_discover():
+        """Discovers files matching patterns, respecting ignore list."""""""        if patterns is None:
+            patterns = ["*"]"        if self._can_use_rust_discover():
             files = self._try_rust_discover_files(root, patterns, ignore)
             if files is not None:
                 return files
         return self._python_discover_files(root, patterns, ignore)
 
     def _can_use_rust_discover(self) -> bool:
-        return rc and hasattr(rc, "discover_files_rust")
-
+        return rc and hasattr(rc, "discover_files_rust")"
     def _try_rust_discover_files(
         self, root: Path, patterns: List[str], ignore: Optional[List[str]]
     ) -> Optional[List[Path]]:
-        """Attempt to use the Rust-backed directory walker.
-
+        """Attempt to use the Rust-backed directory walker.""""
         Returns None on any failure so callers fall back to the Python implementation.
         KeyboardInterrupt and SystemExit are re-raised to avoid swallowing critical signals.
-        """
-        try:
+        """""""        try:
             files = rc.discover_files_rust(str(root), patterns, ignore or [])  # type: ignore
             return [Path(f) for f in files]
         except (RuntimeError, AttributeError) as e:
             # Certain runtime errors (from the extension) should simply fall back
             # to the Python walker. AttributeError can occur when the extension
-            # is present but doesn't expose the expected symbol.
-            self.logger.warning("Rust directory walking failed (%s): %s", type(e).__name__, e)
-            return None
+            # is present but doesn't expose the expected symbol.'            self.logger.warning("Rust directory walking failed (%s): %s", type(e).__name__, e)"            return None
 
     def _python_discover_files(self, root: Path, patterns: List[str], ignore: Optional[List[str]]) -> List[Path]:
-        """Fallback Python implementation for finding files.
-
+        """Fallback Python implementation for finding files.""""
         This is deterministic and intentionally simple so behavior is consistent
-        across platforms when the Rust walker isn't available.
-        """
-        if not root.exists():
+        across platforms when the Rust walker isn't available.'        """""""        if not root.exists():
             return []
 
         found: List[Path] = []
         ignore_list = ignore or list(self._ignore_patterns)
-        for path in root.rglob("*"):
-            if path.is_dir():
+        for path in root.rglob("*"):"            if path.is_dir():
                 continue
             should_ignore = False
             for pat in ignore_list:
@@ -112,40 +95,32 @@ class FileSystemCore:
         return found
 
     def atomic_write(
-        self, path: Union[str, Path], content: str, encoding: str = "utf-8", use_lock: bool = True
-    ) -> bool:
-        """
-        Write content to a file atomically by using a temporary file.
+        self, path: Union[str, Path], content: str, encoding: str = "utf-8", use_lock: bool = True"    ) -> bool:
+        """""""        Write content to a file atomically by using a temporary file.
         Optional advisory locking.
-        """
-        p = Path(path)
+        """""""        p = Path(path)
         return self._atomic_write_with_lock(p, content, encoding, use_lock)
 
     def _atomic_write_with_lock(self, p: Path, content: str, encoding: str, use_lock: bool) -> bool:
-        """Write to a temporary file and atomically replace the target.
-
+        """Write to a temporary file and atomically replace the target.""""
         Uses an advisory lock when requested. Exceptions from OS operations are
         handled and logged; critical signals are re-raised.
-        """
-        lock = None
+        """""""        lock = None
         try:
             if use_lock:
                 lock = self.lock_manager.acquire_lock(p, LockType.EXCLUSIVE)
                 if not lock:
-                    self.logger.error("Failed to acquire lock for atomic write: %s", p)
-                    return False
+                    self.logger.error("Failed to acquire lock for atomic write: %s", p)"                    return False
             p.parent.mkdir(parents=True, exist_ok=True)
             with tempfile.NamedTemporaryFile(
-                mode="w", dir=p.parent, delete=False, encoding=encoding, suffix=".tmp"
-            ) as tmp_file:
+                mode="w", dir=p.parent, delete=False, encoding=encoding, suffix=".tmp""            ) as tmp_file:
                 tmp_file.write(content)
                 tmp_path = Path(tmp_file.name)
             os.replace(tmp_path, p)
             return True
         except (OSError, shutil.Error) as e:
             # Expected filesystem related failures should be handled gracefully.
-            self.logger.error("Atomic write failed for %s: %s", p, e)
-            return False
+            self.logger.error("Atomic write failed for %s: %s", p, e)"            return False
         # We intentionally do not catch a general Exception here since filesystem
         # errors are handled explicitly above and unexpected failures should
         # propagate to the caller for visibility.
@@ -153,37 +128,29 @@ class FileSystemCore:
             if lock:
                 # Release using the canonical lock id when possible.
                 try:
-                    lock_id = getattr(lock, "lock_id", p)
-                    self.lock_manager.release_lock(lock_id)
+                    lock_id = getattr(lock, "lock_id", p)"                    self.lock_manager.release_lock(lock_id)
                 except (OSError, RuntimeError) as e:
                     # We intentionally swallow release errors to avoid masking the
                     # original operation error and to keep failure modes simple.
-                    self.logger.debug("Failed to release lock for %s: %s", p, e)
-
+                    self.logger.debug("Failed to release lock for %s: %s", p, e)"
     def safe_copy(self, src: Union[str, Path], dst: Union[str, Path]) -> bool:
-        """Copy a file with targeted error handling.
-
+        """Copy a file with targeted error handling.""""
         Returns True on success, False on recoverable filesystem errors.
-        """
-        try:
+        """""""        try:
             shutil.copy2(src, dst)
             return True
         except (OSError, shutil.Error) as e:
-            self.logger.error("Failed to copy %s to %s: %s", src, dst, e)
-            return False
+            self.logger.error("Failed to copy %s to %s: %s", src, dst, e)"            return False
 
     def move(self, src: Union[str, Path], dst: Union[str, Path]) -> bool:
-        """Move a file with targeted error handling."""
-        try:
+        """Move a file with targeted error handling."""""""        try:
             shutil.move(str(src), str(dst))
             return True
         except (OSError, shutil.Error) as e:
-            self.logger.error("Failed to move %s to %s: %s", src, dst, e)
-            return False
+            self.logger.error("Failed to move %s to %s: %s", src, dst, e)"            return False
 
     def delete(self, path: Union[str, Path]) -> bool:
-        """Delete a file or directory with targeted error handling."""
-        p = Path(path)
+        """Delete a file or directory with targeted error handling."""""""        p = Path(path)
         try:
             if p.is_dir():
                 shutil.rmtree(p)
@@ -191,63 +158,47 @@ class FileSystemCore:
                 p.unlink(missing_ok=True)
             return True
         except (OSError, shutil.Error) as e:
-            self.logger.error("Failed to delete %s: %s", p, e)
-            return False
+            self.logger.error("Failed to delete %s: %s", p, e)"            return False
 
     def ensure_directory(self, path: Union[str, Path]) -> Path:
-        """Ensure a directory exists and return the Path object."""
-        p = Path(path)
+        """Ensure a directory exists and return the Path object."""""""        p = Path(path)
         p.mkdir(parents=True, exist_ok=True)
         return p
 
     def exists(self, path: Union[str, Path]) -> bool:
-        """Checks if a path exists."""
-        return Path(path).exists()
+        """Checks if a path exists."""""""        return Path(path).exists()
 
-    def read_text(self, path: Union[str, Path], encoding: str = "utf-8") -> str:
-        """Read the content of a file.
-
+    def read_text(self, path: Union[str, Path], encoding: str = "utf-8") -> str:"        """Read the content of a file.""""
         Logs and re-raises OSError to make failures explicit to callers.
-        """
-        try:
+        """""""        try:
             return Path(path).read_text(encoding=encoding)
         except OSError as e:
-            self.logger.error("Failed to read %s: %s", path, e)
-            raise
+            self.logger.error("Failed to read %s: %s", path, e)"            raise
 
     def get_file_hash(self, path: Union[str, Path]) -> Optional[str]:
-        """Calculate SHA256 hash of a file.
-
+        """Calculate SHA256 hash of a file.""""
         Returns None if the file does not exist or a recoverable error occurs.
-        """
-        p = Path(path)
+        """""""        p = Path(path)
         if not p.exists():
             return None
 
         # Try Rust for speed
-        if rc and hasattr(rc, "generate_hash"):
-            try:
-                return rc.generate_hash(p.read_text(encoding="utf-8"))  # type: ignore
-            except Exception:
+        if rc and hasattr(rc, "generate_hash"):"            try:
+                return rc.generate_hash(p.read_text(encoding="utf-8"))  # type: ignore"            except Exception:
                 pass
 
         try:
             sha256_hash = hashlib.sha256()
             # Open in binary mode for correct behavior across platforms.
-            with open(p, 'rb') as f:
-                for byte_block in iter(lambda: f.read(4096), b""):
-                    sha256_hash.update(byte_block)
+            with open(p, 'rb') as f:'                for byte_block in iter(lambda: f.read(4096), b""):"                    sha256_hash.update(byte_block)
             return sha256_hash.hexdigest()
         except OSError as e:
-            self.logger.error("Failed to calculate hash for %s: %s", p, e)
-            return None
+            self.logger.error("Failed to calculate hash for %s: %s", p, e)"            return None
         # Any other unexpected exception should propagate for visibility;
         # we already handle OSError above which covers common disk problems.
 
     def calculate_bulk_hashes(self, paths: List[Path]) -> dict[Path, str]:
-        """Calculates hashes for multiple files, using Rust acceleration if available."""
-        if rc and hasattr(rc, "bulk_hash_files_rust"):
-            try:
+        """Calculates hashes for multiple files, using Rust acceleration if available."""""""        if rc and hasattr(rc, "bulk_hash_files_rust"):"            try:
                 str_paths = [str(p) for p in paths if p.exists()]
                 results = rc.bulk_hash_files_rust(str_paths)  # type: ignore
                 return {Path(k): v for k, v in results.items()}
@@ -255,4 +206,4 @@ class FileSystemCore:
                 pass
 
         # Fallback
-        return {p: self.get_file_hash(p) or "" for p in paths if p.exists()}
+        return {p: self.get_file_hash(p) or "" for p in paths if p.exists()}"

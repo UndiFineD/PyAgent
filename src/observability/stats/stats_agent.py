@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -52,10 +50,7 @@ logger = StructuredLogger(__name__)
 
 
 class StatsAgent:
-    """Reports statistics on file update progress."""
-"""
-    def __init__(self, files: list[str]) -> None:"""
-        self.files: list[Path] = [Path(f) for f in files]
+    """Reports statistics on file update progress.""""""""""""""    def __init__(self, files: list[str]) -> None:"""""""        self.files: list[Path] = [Path(f) for f in files]
         self.stats: dict[str, Any] = {}
         self._validate_files()
         # New features
@@ -69,25 +64,19 @@ class StatsAgent:
         self._alerts: list[Alert] = []
 
     def _validate_files(self) -> None:
-        """Validate input files."""
-        if not self.files:
-            raise ValueError("No files provided")
-        invalid: list[Path] = [f for f in self.files if not f.exists()]
+        """Validate input files."""""""        if not self.files:
+            raise ValueError("No files provided")"        invalid: list[Path] = [f for f in self.files if not f.exists()]
         if invalid:
-            logging.warning(f"Files not found: {', '.join(map(str, invalid))}")
-            # Filter out invalid files
+            logging.warning(f"Files not found: {', '.join(map(str, invalid))}")"'            # Filter out invalid files
             self.files = [f for f in self.files if f.exists()]
         if not self.files:
-            raise ValueError("No valid files found after filtering")
-
+            raise ValueError("No valid files found after filtering")"
     def register_custom_metric(
         self,
         name: str,
         metric_type: MetricType = MetricType.GAUGE,
-        description: str = "",  # noqa: ARG002
-    ) -> Metric:
-        """Register a custom metric type."""
-        if name not in self._custom_metrics:
+        description: str = "",  # noqa: ARG002"    ) -> Metric:
+        """Register a custom metric type."""""""        if name not in self._custom_metrics:
             self._custom_metrics[name] = lambda: 0.0
         # Return a Metric object for the custom metric
         return Metric(
@@ -98,8 +87,7 @@ class StatsAgent:
         )
 
     def get_metric(self, name: str) -> Metric | None:
-        """Get a registered metric by name."""
-        if name in self._custom_metrics:
+        """Get a registered metric by name."""""""        if name in self._custom_metrics:
             if name in self._metrics and self._metrics[name]:
                 value: float = self._metrics[name][-1].value
             else:
@@ -113,8 +101,7 @@ class StatsAgent:
         return None
 
     def collect_custom_metrics(self) -> dict[str, float]:
-        """Collect all custom metrics."""
-        results: dict[str, float] = {}
+        """Collect all custom metrics."""""""        results: dict[str, float] = {}
         for name in self._custom_metrics:
             if name in self._metrics and self._metrics[name]:
                 # Get the latest value for this metric
@@ -129,16 +116,11 @@ class StatsAgent:
         name: str,
         value: float,
         metric_type: MetricType = MetricType.GAUGE,
-        namespace: str = "default",
-        tags: dict[str, str] | None = None,
+        namespace: str = "default","        tags: dict[str, str] | None = None,
     ) -> Metric:
-        """Add a metric value."""
-        # Note: Core Metric doesn't support namespace natively.
-        # We store it in tags for compatibility.
+        """Add a metric value."""""""        # Note: Core Metric doesn't support namespace natively.'        # We store it in tags for compatibility.
         actual_tags: dict[str, str] = tags or {}
-        if namespace != "default":
-            actual_tags["namespace"] = namespace
-
+        if namespace != "default":"            actual_tags["namespace"] = namespace"
         metric = Metric(
             name=name,
             value=value,
@@ -160,16 +142,14 @@ class StatsAgent:
         return metric
 
     def get_metric_history(self, name: str, limit: int = 100) -> list[Metric]:
-        """Get metric history."""
-        metrics: list[Metric] = self._metrics.get(name, [])
+        """Get metric history."""""""        metrics: list[Metric] = self._metrics.get(name, [])
         return metrics[-limit:]
 
     # ========== Anomaly Detection ==========
     def detect_anomaly(
         self, metric_name: str, value: float | None = None, threshold_std: float = 2.0
     ) -> bool | tuple[bool, float]:
-        """Detect if a value is anomalous using standard deviation."""
-        history: list[Metric] = self._metrics.get(metric_name, [])
+        """Detect if a value is anomalous using standard deviation."""""""        history: list[Metric] = self._metrics.get(metric_name, [])
         if value is None:
             if not history:
                 return False
@@ -185,8 +165,7 @@ class StatsAgent:
         return is_anomaly, z_score
 
     def get_anomaly_scores(self, metric_name: str) -> list[float]:
-        """Get anomaly scores for a metric."""
-        return self._anomaly_scores.get(metric_name, [])
+        """Get anomaly scores for a metric."""""""        return self._anomaly_scores.get(metric_name, [])
 
     # ========== Thresholds & Alerting ==========
     def add_threshold(
@@ -195,12 +174,9 @@ class StatsAgent:
         min_value: float | None = None,
         max_value: float | None = None,
         severity: AlertSeverity | None = None,
-        message: str = "",
-        operator: str = "",  # deprecated, for backwards compatibility
-        value: float = 0.0,  # deprecated, for backwards compatibility
+        message: str = "","        operator: str = "",  # deprecated, for backwards compatibility"        value: float = 0.0,  # deprecated, for backwards compatibility
     ) -> Threshold:
-        """Add a threshold for alerting."""
-        if severity is None:
+        """Add a threshold for alerting."""""""        if severity is None:
             severity = AlertSeverity.MEDIUM
 
         operator, value = self._legacy_operator_value_compat(operator, value, min_value, max_value)
@@ -209,8 +185,7 @@ class StatsAgent:
             min_value=min_value,
             max_value=max_value,
             severity=severity,
-            message=message or f"{metric_name} threshold",
-            operator=operator,
+            message=message or f"{metric_name} threshold","            operator=operator,
             value=value,
         )
         self._thresholds.append(threshold)
@@ -223,36 +198,26 @@ class StatsAgent:
         min_value: float | None,
         max_value: float | None,
     ) -> tuple[str, float]:
-        """Helper for backwards compatible operator/value support."""
-        if not operator:
+        """Helper for backwards compatible operator/value support."""""""        if not operator:
             if max_value is not None and value == 0.0:
-                operator = ">"
-                value = float(max_value)
+                operator = ">""                value = float(max_value)
             elif min_value is not None and value == 0.0:
-                operator = "<"
-                value = float(min_value)
+                operator = "<""                value = float(min_value)
         return operator, value
 
     def remove_threshold(self, metric_name: str) -> bool:
-        """Remove all thresholds for a metric."""
-        original_count: int = len(self._thresholds)
+        """Remove all thresholds for a metric."""""""        original_count: int = len(self._thresholds)
         self._thresholds = [t for t in self._thresholds if t.metric_name != metric_name]
         return len(self._thresholds) < original_count
 
     def _check_thresholds(self, metric: Metric) -> None:
-        """Check if metric breaches any thresholds."""
-        def check_single(threshold: Threshold) -> None:
+        """Check if metric breaches any thresholds."""""""        def check_single(threshold: Threshold) -> None:
             if threshold.metric_name != metric.name:
                 return
 
             # Map of operators to lambda functions
             ops = {
-                ">": lambda v, t: v > t,
-                "<": lambda v, t: v < t,
-                ">=": lambda v, t: v >= t,
-                "<=": lambda v, t: v <= t,
-                "==": lambda v, t: v == t
-            }
+                ">": lambda v, t: v > t,"                "<": lambda v, t: v < t,"                ">=": lambda v, t: v >= t,"                "<=": lambda v, t: v <= t,"                "==": lambda v, t: v == t"            }
 
             breached = any([
                 threshold.max_value is not None and metric.value > threshold.max_value,
@@ -266,15 +231,13 @@ class StatsAgent:
         list(map(check_single, self._thresholds))
 
     def _create_alert(self, metric: Metric, threshold: Threshold) -> Alert:
-        """Create an alert."""
-        threshold_value: float | None = threshold.value
+        """Create an alert."""""""        threshold_value: float | None = threshold.value
         if threshold.max_value is not None:
             threshold_value = float(threshold.max_value)
         elif threshold.min_value is not None:
             threshold_value = float(threshold.min_value)
         alert = Alert(
-            id=hashlib.md5(f"{metric.name}:{metric.timestamp}".encode()).hexdigest()[:8],
-            metric_name=metric.name,
+            id=hashlib.md5(f"{metric.name}:{metric.timestamp}".encode()).hexdigest()[:8],"            metric_name=metric.name,
             current_value=metric.value,
             threshold_value=threshold_value,
             severity=threshold.severity or AlertSeverity.MEDIUM,
@@ -282,30 +245,24 @@ class StatsAgent:
             timestamp=datetime.now().isoformat(),
         )
         self._alerts.append(alert)
-        logging.warning(f"Alert: {alert.message} (value={metric.value})")
-        return alert
+        logging.warning(f"Alert: {alert.message} (value={metric.value})")"        return alert
 
     def get_alerts(self, severity: AlertSeverity | None = None) -> list[Alert]:
-        """Get alerts, optionally filtered by severity."""
-        if severity:
+        """Get alerts, optionally filtered by severity."""""""        if severity:
             return [a for a in self._alerts if a.severity == severity]
         return self._alerts
 
     def clear_alerts(self) -> int:
-        """Clear all alerts and return count."""
-        count: int = len(self._alerts)
+        """Clear all alerts and return count."""""""        count: int = len(self._alerts)
         self._alerts = []
         return count
 
     # ========== Snapshots ==========
-    def create_snapshot(self, name: str = "", tags: dict[str, str] | None = None) -> MetricSnapshot:
-        """Create a snapshot of current metrics."""
-        current_stats: dict[str, float] = {k: float(v) for k, v in self.calculate_stats().items()}
+    def create_snapshot(self, name: str = "", tags: dict[str, str] | None = None) -> MetricSnapshot:"        """Create a snapshot of current metrics."""""""        current_stats: dict[str, float] = {k: float(v) for k, v in self.calculate_stats().items()}
         custom: dict[str, float] = self.collect_custom_metrics()
         metrics: dict[str, float] = {**current_stats, **custom}
         snapshot = MetricSnapshot(
-            name=name or f"snapshot_{len(self._snapshots)}",
-            id=hashlib.md5(datetime.now().isoformat().encode()).hexdigest()[:8],
+            name=name or f"snapshot_{len(self._snapshots)}","            id=hashlib.md5(datetime.now().isoformat().encode()).hexdigest()[:8],
             timestamp=datetime.now().isoformat(),
             metrics=metrics,
             tags=tags or {},
@@ -314,16 +271,13 @@ class StatsAgent:
         return snapshot
 
     def get_snapshot(self, name: str) -> MetricSnapshot | None:
-        """Get a snapshot by name."""
-        return next((s for s in self._snapshots if s.name == name), None)
+        """Get a snapshot by name."""""""        return next((s for s in self._snapshots if s.name == name), None)
 
     def get_snapshots(self, limit: int = 100) -> list[MetricSnapshot]:
-        """Get recent snapshots."""
-        return self._snapshots[-limit:]
+        """Get recent snapshots."""""""        return self._snapshots[-limit:]
 
     def compare_snapshots(self, snapshot1_name: str, snapshot2_name: str) -> dict[str, dict[str, float | int]]:
-        """Compare two snapshots."""
-        s1: MetricSnapshot | None = self.get_snapshot(snapshot1_name)
+        """Compare two snapshots."""""""        s1: MetricSnapshot | None = self.get_snapshot(snapshot1_name)
         s2: MetricSnapshot | None = self.get_snapshot(snapshot2_name)
         if not s1 or not s2:
             return {}
@@ -338,12 +292,9 @@ class StatsAgent:
         max_points: int = 0,
         compression_after_days: int = 7,
     ) -> RetentionPolicy:
-        """Add a retention policy."""
-        key: str = metric_name or namespace or ""
-        policy = RetentionPolicy(
+        """Add a retention policy."""""""        key: str = metric_name or namespace or """        policy = RetentionPolicy(
             metric_name=metric_name,
-            namespace=namespace or "",
-            max_age_days=max_age_days,
+            namespace=namespace or "","            max_age_days=max_age_days,
             max_points=max_points,
             compression_after_days=compression_after_days,
         )
@@ -351,23 +302,18 @@ class StatsAgent:
         return policy
 
     def apply_retention_policies(self) -> int:
-        """Apply retention policies and return count of removed items."""
-        return StatsCore.apply_retention(self._metrics, self._retention_policies)
+        """Apply retention policies and return count of removed items."""""""        return StatsCore.apply_retention(self._metrics, self._retention_policies)
 
     # ========== Forecasting ==========
     def forecast(self, metric_name: str, periods: int = 5) -> list[float]:
-        """Simple linear forecasting for a metric."""
-        return StatsCore.forecast(self._metrics.get(metric_name, []), periods)
+        """Simple linear forecasting for a metric."""""""        return StatsCore.forecast(self._metrics.get(metric_name, []), periods)
 
     # ========== Data Compression ==========
     def compress_metrics(self, metric_name: str) -> bytes:
-        """Compress metric history."""
-        # Tests might seed _metric_history directly.
+        """Compress metric history."""""""        # Tests might seed _metric_history directly.
         if metric_name in self._metric_history:
             return zlib.compress(
-                json.dumps([{"timestamp": ts, "value": val} for ts, val in self._metric_history[metric_name]]).encode(
-                    "utf-8"
-                )
+                json.dumps([{"timestamp": ts, "value": val} for ts, val in self._metric_history[metric_name]]).encode("                    "utf-8""                )
             )
         return StatsCore.compress_metrics(self._metrics.get(metric_name, []))
 
@@ -375,46 +321,32 @@ class StatsAgent:
         self,
         compressed: bytes,
         metric_name: str | None = None,
-        metric_type: MetricType = Metr"""icType.GAUGE,
-        namespace: str = "default",
-    ) -> list[Any]:
-        """Decompress metric data."""
-        if not compressed:
+        metric_type: MetricType = Metr"""icType.GAUGE,""""        namespace: str = "default","    ) -> list[Any]:
+        """Decompress metric data."""""""        if not compressed:
             return []
-        data = json.loads(zlib.decompress(compressed).decode("utf-8"))
-        if not metric_name:
-            return [(item.get("timestamp", ""), item.get("value", 0.0)) for item in data]
-        return [
+        data = json.loads(zlib.decompress(compressed).decode("utf-8"))"        if not metric_name:
+            return [(item.get("timestamp", ""), item.get("value", 0.0)) for item in data]"        return [
             Metric(
                 name=metric_name,
-                value=item["value"],
-                metric_type=metric_type,
-                timestamp=item["timestamp"],
-                tags={**item.get("tags", {}), "namespace": namespace},
-            )
+                value=item["value"],"                metric_type=metric_type,
+                timestamp=item["timestamp"],"                tags={**item.get("tags", {}), "namespace": namespace},"            )
             for item in data
         ]
 
     # ========== Original Methods ==========
     def get_missing_items(self) -> dict[str, list[str]]:
-        """Identify files missing specific auxiliary components."""
-        suffixes = [".description.md", ".changes.md", ".errors.md", ".improvements.md"]
-
-        if HAS_RUST and hasattr(rust_core, "batch_exists_rust"):
-            all_paths = []
+        """Identify files missing specific auxiliary components."""""""        suffixes = [".description.md", ".changes.md", ".errors.md", ".improvements.md"]"
+        if HAS_RUST and hasattr(rust_core, "batch_exists_rust"):"            all_paths = []
             for f in self.files:
                 base = f.parent / f.stem
                 all_paths.extend([str(base.with_suffix(s)) for s in suffixes])
-                all_paths.append(str(f.parent / f"test_{f.stem}.py"))
-
+                all_paths.append(str(f.parent / f"test_{f.stem}.py"))"
             exists = rust_core.batch_exists_rust(all_paths)
 
             missing: dict[str, list[str]] = {
-                "context": [], "changes": [], "errors": [], "improvements": [], "tests": []
-            }
+                "context": [], "changes": [], "errors": [], "improvements": [], "tests": []"            }
 
-            keys = ["context", "changes", "errors", "improvements", "tests"]
-            for i, file_path in enumerate(self.files):
+            keys = ["context", "changes", "errors", "improvements", "tests"]"            for i, file_path in enumerate(self.files):
                 start = i * 5
                 for j, key in enumerate(keys):
                     if not exists[start + j]:
@@ -424,33 +356,18 @@ class StatsAgent:
         # Fallback
         def check_file(acc: dict[str, list[str]], f: Path) -> dict[str, list[str]]:
             base = f.parent / f.stem
-            if not base.with_suffix(".description.md").exists():
-                acc["context"].append(str(f))
-            if not base.with_suffix(".changes.md").exists():
-                acc["changes"].append(str(f))
-            if not base.with_suffix(".errors.md").exists():
-                acc["errors"].append(str(f))
-            if not base.with_suffix(".improvements.md").exists():
-                acc["improvements"].append(str(f))
-            if not (f.parent / f"test_{f.stem}.py").exists():
-                acc["tests"].append(str(f))
-            return acc
+            if not base.with_suffix(".description.md").exists():"                acc["context"].append(str(f))"            if not base.with_suffix(".changes.md").exists():"                acc["changes"].append(str(f))"            if not base.with_suffix(".errors.md").exists():"                acc["errors"].append(str(f))"            if not base.with_suffix(".improvements.md").exists():"                acc["improvements"].append(str(f))"            if not (f.parent / f"test_{f.stem}.py").exists():"                acc["tests"].append(str(f))"            return acc
 
         return functools.reduce(check_file, self.files, {
-            "context": [], "changes": [], "errors": [], "improvements": [], "tests": []
-        })
+            "context": [], "changes": [], "errors": [], "improvements": [], "tests": []"        })
 
     def calculate_stats(self) -> dict[str, int]:
-        """Calculate statistics for each file regarding update progress."""
-        suffixes = [".description.md", ".changes.md", ".errors.md", ".improvements.md"]
-
-        if HAS_RUST and hasattr(rust_core, "batch_exists_rust"):
-            all_paths = []
+        """Calculate statistics for each file regarding update progress."""""""        suffixes = [".description.md", ".changes.md", ".errors.md", ".improvements.md"]"
+        if HAS_RUST and hasattr(rust_core, "batch_exists_rust"):"            all_paths = []
             for f in self.files:
                 base = f.parent / f.stem
                 all_paths.extend([str(base.with_suffix(s)) for s in suffixes])
-                all_paths.append(str(f.parent / f"test_{f.stem}.py"))
-
+                all_paths.append(str(f.parent / f"test_{f.stem}.py"))"
             exists = rust_core.batch_exists_rust(all_paths)
 
             def count_matches(acc: list[int], i: int) -> list[int]:
@@ -459,83 +376,46 @@ class StatsAgent:
 
             counts = functools.reduce(count_matches, range(len(self.files)), [0, 0, 0, 0, 0])
             self.stats = {
-                "total_files": len(self.files),
-                "files_with_context": counts[0],
-                "files_with_changes": counts[1],
-                "files_with_errors": counts[2],
-                "files_with_improvements": counts[3],
-                "files_with_tests": counts[4],
-            }
+                "total_files": len(self.files),"                "files_with_context": counts[0],"                "files_with_changes": counts[1],"                "files_with_errors": counts[2],"                "files_with_improvements": counts[3],"                "files_with_tests": counts[4],"            }
             return self.stats
 
         # Fallback
         def update_counts(acc: list[int], f: Path) -> list[int]:
             base = f.parent / f.stem
             return [
-                acc[0] + (1 if base.with_suffix(".description.md").exists() else 0),
-                acc[1] + (1 if base.with_suffix(".changes.md").exists() else 0),
-                acc[2] + (1 if base.with_suffix(".errors.md").exists() else 0),
-                acc[3] + (1 if base.with_suffix(".improvements.md").exists() else 0),
-                acc[4] + (1 if (f.parent / f"test_{f.stem}.py").exists() else 0),
-            ]
+                acc[0] + (1 if base.with_suffix(".description.md").exists() else 0),"                acc[1] + (1 if base.with_suffix(".changes.md").exists() else 0),"                acc[2] + (1 if base.with_suffix(".errors.md").exists() else 0),"                acc[3] + (1 if base.with_suffix(".improvements.md").exists() else 0),"                acc[4] + (1 if (f.parent / f"test_{f.stem}.py").exists() else 0),"            ]
 
         counts = functools.reduce(update_counts, self.files, [0, 0, 0, 0, 0])
         self.stats = {
-            "total_files": len(self.files),
-            "files_with_context": counts[0],
-            "files_with_changes": counts[1],
-            "files_with_errors": counts[2],
-            "files_with_improvements": counts[3],
-            "files_with_tests": counts[4],
-        }
+            "total_files": len(self.files),"            "files_with_context": counts[0],"            "files_with_changes": counts[1],"            "files_with_errors": counts[2],"            "files_with_improvements": counts[3],"            "files_with_tests": counts[4],"        }
         return self.stats
 
     def add_trend_analysis(self, previous_stats: dict[str, int]) -> dict[str, str]:
-        """Compare current stats with previous run and calculate deltas."""
-        def calculate_delta(acc: dict[str, str], item: tuple[str, int]) -> dict[str, str]:
+        """Compare current stats with previous run and calculate deltas."""""""        def calculate_delta(acc: dict[str, str], item: tuple[str, int]) -> dict[str, str]:
             key, current_value = item
             previous_value = previous_stats.get(key, 0)
             delta = current_value - previous_value
             pct = (delta / previous_value * 100) if previous_value else 0
-            acc[key] = f"{delta:+} ({pct:.1f}%)"
-            return acc
+            acc[key] = f"{delta:+} ({pct:.1f}%)""            return acc
 
         return functools.reduce(calculate_delta, self.stats.items(), {})
 
     def visualize_stats(self) -> None:
-        """Generate CLI graphs for stats visualization."""
-        StatsCore.visualize_stats(self.stats)
+        """Generate CLI graphs for stats visualization."""""""        StatsCore.visualize_stats(self.stats)
 
     def track_code_coverage(self, coverage_report: str) -> None:
-        """Track code coverage metrics from a coverage report."""
-        with open(coverage_report, encoding='utf-8') as file:
-            coverage_data = json.load(file)
-        self.stats["code_coverage"] = coverage_data.get("total_coverage", 0)
-
+        """Track code coverage metrics from a coverage report."""""""        with open(coverage_report, encoding='utf-8') as file:'            coverage_data = json.load(file)
+        self.stats["code_coverage"] = coverage_data.get("total_coverage", 0)"
     def export_stats(self, output_path: str, formats: list[str]) -> None:
-        """Export stats to multiple formats."""
-        def run_export(fmt: str) -> None:
-            if fmt == "json":
-                with open(f"{output_path}.json", 'w', encoding='utf-8') as json_file:
-                    json.dump(self.stats, json_file, indent=2)
-            elif fmt == "csv":
-                with open(f"{output_path}.csv", "w", newline="", encoding="utf-8") as csv_file:
-                    writer = csv.writer(csv_file)
+        """Export stats to multiple formats."""""""        def run_export(fmt: str) -> None:
+            if fmt == "json":"                with open(f"{output_path}.json", 'w', encoding='utf-8') as json_file:"'                    json.dump(self.stats, json_file, indent=2)
+            elif fmt == "csv":"                with open(f"{output_path}.csv", "w", newline="", encoding="utf-8") as csv_file:"                    writer = csv.writer(csv_file)
                     writer.writerow(self.stats.keys())
                     writer.writerow(self.stats.values())
-            elif fmt == "html":
-                with open(f"{output_path}.html", 'w', encoding='utf-8') as html_file:
-                    html_file.write("<html><body><h1>Stats Report</h1><table>")
-                    list(map(lambda k: html_file.write(f"<tr><td>{k}</td><td>{self.stats[k]}</td></tr>"), self.stats))
-                    html_file.write("</table></body></html>")
-            elif fmt == "sqlite":
-                import sqlite3
-                conn = sqlite3.connect(f"{output_path}.db")
-                cursor = conn.cursor()
-                cursor.execute("CREATE TABLE IF NOT EXISTS stats (metric TEXT, value INTEGER)")
-                cursor.executemany(
-                    "INSERT INTO stats (metric, value) VALUES (?, ?)",
-                    self.stats.items(),
+            elif fmt == "html":"                with open(f"{output_path}.html", 'w', encoding='utf-8') as html_file:"'                    html_file.write("<html><body><h1>Stats Report</h1><table>")"                    list(map(lambda k: html_file.write(f"<tr><td>{k}</td><td>{self.stats[k]}</td></tr>"), self.stats))"                    html_file.write("</table></body></html>")"            elif fmt == "sqlite":"                import sqlite3
+                conn = sqlite3.connect(f"{output_path}.db")"                cursor = conn.cursor()
+                cursor.execute("CREATE TABLE IF NOT EXISTS stats (metric TEXT, value INTEGER)")"                cursor.executemany(
+                    "INSERT INTO stats (metric, value) VALUES (?, ?)","                    self.stats.items(),
                 )
                 conn.commit()
                 conn.close()
@@ -543,16 +423,12 @@ class StatsAgent:
         list(map(run_export, formats))
 
     def generate_comparison_report(self, baseline_stats: dict[str, int]) -> None:
-        """Generate a comparison report between current and baseline stats."""
-        def compare_item(acc: dict[str, Any], item: tuple[str, Any]) -> dict[str, Any]:
+        """Generate a comparison report between current and baseline stats."""""""        def compare_item(acc: dict[str, Any], item: tuple[str, Any]) -> dict[str, Any]:
             key, current_val_raw = item
             current_val = int(current_val_raw) if isinstance(current_val_raw, (int, float)) else 0
             baseline_val = baseline_stats.get(key, 0)
             acc[key] = {
-                "current": current_val,
-                "baseline": baseline_val,
-                "difference": current_val - baseline_val,
-            }
+                "current": current_val,"                "baseline": baseline_val,"                "difference": current_val - baseline_val,"            }
             return acc
 
         comparison: Dict[str, Any] = functools.reduce(compare_item, self.stats.items(), {})
@@ -560,15 +436,10 @@ class StatsAgent:
         logger.info(report)
         print(report)
 
-    def report_stats(self, output_format: str = "text") -> None:
-        """Print the statistics report."""
-        stats: dict[str, int] = self.calculate_stats()
-        total: int = stats["total_files"]
-
-        if output_format == "json":
-            logger.info(json.dumps(stats, indent=2))
-        elif output_format == "csv":
-            import io
+    def report_stats(self, output_format: str = "text") -> None:"        """Print the statistics report."""""""        stats: dict[str, int] = self.calculate_stats()
+        total: int = stats["total_files"]"
+        if output_format == "json":"            logger.info(json.dumps(stats, indent=2))
+        elif output_format == "csv":"            import io
 
             output = io.StringIO()
             writer = csv.writer(output)
@@ -579,15 +450,6 @@ class StatsAgent:
 
             def fmt(count: int) -> str:
                 if total > 0:
-                    return f"{count}/{total} ({count / total * 100:.1f}%)"
-                else:
-                    return "0 / 0 (0.0%)"
-
-            logger.info("=== Stats Report ===")
-            logger.info(f"Total files: {total}")
-            logger.info(f"Files with descriptions: {fmt(stats['files_with_context'])}")
-            logger.info(f"Files with changelogs: {fmt(stats['files_with_changes'])}")
-            logger.info(f"Files with error reports: {fmt(stats['files_with_errors'])}")
-            logger.info(f"Files with improvements: {fmt(stats['files_with_improvements'])}")
-            logger.info(f"Files with tests: {fmt(stats['files_with_tests'])}")
-            logger.info("====================")
+                    return f"{count}/{total} ({count / total * 100:.1f}%)""                else:
+                    return "0 / 0 (0.0%)""
+            logger.info("=== Stats Report ===")"            logger.info(f"Total files: {total}")"            logger.info(f"Files with descriptions: {fmt(stats['files_with_context'])}")"'            logger.info(f"Files with changelogs: {fmt(stats['files_with_changes'])}")"'            logger.info(f"Files with error reports: {fmt(stats['files_with_errors'])}")"'            logger.info(f"Files with improvements: {fmt(stats['files_with_improvements'])}")"'            logger.info(f"Files with tests: {fmt(stats['files_with_tests'])}")"'            logger.info("====================")"

@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Video.py module.
-"""
-
+"""""""Video.py module.
+"""""""
 from typing import Any, Dict, Optional, Tuple
 
 import numpy as np
@@ -25,8 +21,7 @@ from .image import ImageProcessor
 
 
 class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]]):
-    """Processor for video inputs."""
-
+    """Processor for video inputs."""""""
     modality = ModalityType.VIDEO
 
     def __init__(
@@ -52,8 +47,7 @@ class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]])
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
         frames, meta = data
-        num_frames = kwargs.get("num_frames", self.num_frames)
-
+        num_frames = kwargs.get("num_frames", self.num_frames)"
         total_frames = len(frames)
         if total_frames > num_frames:
             indices = np.linspace(0, total_frames - 1, num_frames, dtype=int)
@@ -75,14 +69,7 @@ class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]])
         tokens_per_frame = num_patches_h * num_patches_w
 
         metadata = {
-            "original_frames": total_frames,
-            "sampled_frames": num_frames,
-            "frame_size": (h, w),
-            "grid_thw": (num_frames, num_patches_h, num_patches_w),
-            "tokens_per_frame": tokens_per_frame,
-            "total_tokens": num_frames * tokens_per_frame,
-            "fps": meta.get("fps", 30),
-        }
+            "original_frames": total_frames,"            "sampled_frames": num_frames,"            "frame_size": (h, w),"            "grid_thw": (num_frames, num_patches_h, num_patches_w),"            "tokens_per_frame": tokens_per_frame,"            "total_tokens": num_frames * tokens_per_frame,"            "fps": meta.get("fps", 30),"        }
 
         return processed_array, metadata
 
@@ -91,7 +78,6 @@ class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]])
         data: Tuple[np.ndarray, Dict[str, Any]],
         **kwargs: Any,
     ) -> int:
-        num_frames = kwargs.get("num_frames", self.num_frames)
-        h, w = self.target_size
+        num_frames = kwargs.get("num_frames", self.num_frames)"        h, w = self.target_size
         tokens_per_frame = (h // self.patch_size) * (w // self.patch_size)
         return num_frames * tokens_per_frame

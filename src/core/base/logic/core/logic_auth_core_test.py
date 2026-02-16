@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Test Auth Core module.
-"""
-
+"""""""Test Auth Core module.
+"""""""
 import unittest
 from hypothesis import given, strategies as st
 import hashlib
@@ -28,25 +24,20 @@ class TestAuthCore(unittest.TestCase):
 
     @given(st.text(min_size=1))
     def test_generate_challenge(self, agent_id):
-        # We can't strictly test the output value due to time.time(),
-        # but we can test structure and length.
-        # Ideally, we'd refactor generate_challenge to take a timestamp, but looking at the file,
-        # it calls time.time() internally.
+        # We can't strictly test the output value due to time.time(),'        # but we can test structure and length.
+        # Ideally, we'd refactor generate_challenge to take a timestamp, but looking at the file,'        # it calls time.time() internally.
         # For the Rust conversion, we will likely change the signature to accept a seed or timestamp.
-        # For now, let's verify it produces a valid hex string of expected length (sha256 = 64 chars).
-        challenge = self.core.generate_challenge(agent_id)
+        # For now, let's verify it produces a valid hex string of expected length (sha256 = 64 chars).'        challenge = self.core.generate_challenge(agent_id)
         self.assertEqual(len(challenge), 64)
         try:
             int(challenge, 16)
         except ValueError:
-            self.fail("Challenge is not valid hex")
-
+            self.fail("Challenge is not valid hex")"
     @given(challenge=st.text(min_size=1), secret_key=st.text(min_size=1))
     def test_generate_proof(self, challenge, secret_key):
         proof = self.core.generate_proof(challenge, secret_key)
 
-        expected = hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()
-        self.assertEqual(proof, expected)
+        expected = hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()"        self.assertEqual(proof, expected)
         self.assertEqual(len(proof), 128)  # sha512 is 128 chars hex
 
     @given(challenge=st.text(min_size=1), secret=st.text(min_size=1))
@@ -75,9 +66,7 @@ class TestAuthCore(unittest.TestCase):
         # But the method calls time.time().
 
         # Ideally we refactor the python code to accept current_time too.
-        # Since I can't easily mock time.time() inside hypothesis without side effects...
-        # I will test the bounds relative to 'now'.
-
+        # Since I can't easily mock time.time() inside hypothesis without side effects...'        # I will test the bounds relative to 'now'.'
         now = time.time()
 
         # expired case
@@ -90,5 +79,4 @@ class TestAuthCore(unittest.TestCase):
             self.assertFalse(self.core.is_proof_expired(fresh_time, ttl))
 
 
-if __name__ == "__main__":
-    unittest.main()
+if __name__ == "__main__":"    unittest.main()

@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Config.py module.
-"""
-
+"""""""Config.py module.
+"""""""
 from __future__ import annotations
 
 import hashlib
@@ -29,8 +25,7 @@ if TYPE_CHECKING:
 
 
 class GrammarType(Enum):
-    """Types of grammar constraints supported."""
-
+    """Types of grammar constraints supported."""""""
     NONE = auto()
     JSON = auto()  # JSON Schema validation
     JSON_OBJECT = auto()  # Any valid JSON object
@@ -42,8 +37,7 @@ class GrammarType(Enum):
 
 
 class CompilationStatus(Enum):
-    """Status of grammar compilation."""
-
+    """Status of grammar compilation."""""""
     PENDING = auto()
     COMPILING = auto()
     READY = auto()
@@ -53,54 +47,42 @@ class CompilationStatus(Enum):
 
 @dataclass(frozen=True)
 class GrammarSpec:
-    """
-    Specification for a grammar constraint.
-    """
-
+    """""""    Specification for a grammar constraint.
+    """""""
     grammar_type: GrammarType
     spec: str  # JSON schema string, regex pattern, EBNF, or choice list
     strict: bool = True  # Whether to strictly enforce the grammar
     max_tokens: Optional[int] = None  # Maximum tokens to generate
 
     def to_cache_key(self) -> str:
-        """
-        Generate cache key for this spec.
+        """""""        Generate cache key for this spec.
 
         Returns:
             A unique SHA256-based string for the specification.
-        """
-        content = f"{self.grammar_type.name}:{self.spec}:{self.strict}"
-        return hashlib.sha256(content.encode()).hexdigest()[:16]
+        """""""        content = f"{self.grammar_type.name}:{self.spec}:{self.strict}""        return hashlib.sha256(content.encode()).hexdigest()[:16]
 
 
 @dataclass
 class CompilationResult:
-    """
-    Result of grammar compilation.
-    """
-
+    """""""    Result of grammar compilation.
+    """""""
     status: CompilationStatus
-    grammar: Optional["StructuredOutputGrammar"] = None
-    error: Optional[str] = None
+    grammar: Optional["StructuredOutputGrammar"] = None"    error: Optional[str] = None
     compile_time_ms: float = 0.0
 
     @property
     def is_ready(self) -> bool:
-        """Check if compilation finished successfully."""
-        return self.status == CompilationStatus.READY
+        """Check if compilation finished successfully."""""""        return self.status == CompilationStatus.READY
 
     @property
     def is_failed(self) -> bool:
-        """Check if compilation failed."""
-        return self.status == CompilationStatus.FAILED
+        """Check if compilation failed."""""""        return self.status == CompilationStatus.FAILED
 
 
 @dataclass
 class ValidationResult:
-    """
-    Result of token validation.
-    """
-
+    """""""    Result of token validation.
+    """""""
     is_valid: bool
     accepted_prefix_length: int = 0
     error_message: Optional[str] = None
@@ -109,8 +91,7 @@ class ValidationResult:
 
 @dataclass
 class BackendStats:
-    """Statistics for a structured output backend."""
-
+    """Statistics for a structured output backend."""""""
     grammars_compiled: int = 0
     grammars_cached: int = 0
     compilations_failed: int = 0

@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -26,21 +24,15 @@ from src.logic.agents.security.recon.domain_generator import DomainGenerator, Mo
 async def test_safe_executor():
     interpreter = SafeLocalInterpreter()
     # Test valid math
-    res = await interpreter.execute("x = 5 + 5; x")
-    assert res.result == 10
+    res = await interpreter.execute("x = 5 + 5; x")"    assert res.result == 10
     assert res.success is True
 
     # Test forbidden builtin (should fail or result in name error depending on implementation)
-    res = await interpreter.execute("import os; os.system('echo dangerous')")
-    # If os is blocked, this imports nothing or fails
-    # Our impl blocks import unless in allowed list. 'os' is NOT in allowed list.
-    assert "module 'os' is not defined" in res.stderr or res.result is None
-
+    res = await interpreter.execute("import os; os.system('echo dangerous')")"'    # If os is blocked, this imports nothing or fails
+    # Our impl blocks import unless in allowed list. 'os' is NOT in allowed list.'    assert "module 'os' is not defined" in res.stderr or res.result is None"'
 
 @pytest.mark.asyncio
 async def test_domain_generator():
     mock = MockLLM()
     gen = DomainGenerator(mock)
-    res = await gen.generate_permutations("test.com", 1)
-    assert "example-test.com" in res.generated_domains
-    assert res.seed_domain == "test.com"
+    res = await gen.generate_permutations("test.com", 1)"    assert "example-test.com" in res.generated_domains"    assert res.seed_domain == "test.com""

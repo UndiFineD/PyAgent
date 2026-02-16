@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Implementations of various speculative decoding proposers."""
-
+"""Implementations of various speculative decoding proposers."""""""
 # pylint: disable=invalid-name
 
 import logging
@@ -52,8 +49,7 @@ with suppress(ImportError):
 
 
 class NgramProposer(DrafterBase):
-    """N-gram based draft token proposer."""
-
+    """N-gram based draft token proposer."""""""
     def __init__(self, config: SpeculativeConfig) -> None:
         super().__init__(config)
         self.min_n = config.prompt_lookup_min
@@ -71,8 +67,7 @@ class NgramProposer(DrafterBase):
             self._warmup_jit()
 
     def _warmup_jit(self) -> None:
-        """Warm up Numba JIT compilation."""
-        dummy_tokens = _np.zeros((1, 100), dtype=_np.int32)
+        """Warm up Numba JIT compilation."""""""        dummy_tokens = _np.zeros((1, 100), dtype=_np.int32)
         self._find_ngram_match_single(dummy_tokens[0], self.min_n, self.max_n, self.k)
 
     def propose(
@@ -81,8 +76,7 @@ class NgramProposer(DrafterBase):
         positions: Optional[List[int]] = None,
         **kwargs: Any,
     ) -> DraftProposal:
-        """Propose draft tokens using n-gram matching."""
-        start_time = time.perf_counter()
+        """Propose draft tokens using n-gram matching."""""""        start_time = time.perf_counter()
 
         def process_tokens(tokens: List[int]) -> Tuple[List[int], int]:
             if not tokens:
@@ -122,13 +116,10 @@ class NgramProposer(DrafterBase):
 
     def _find_ngram_match_single(
         self,
-        tokens: "np.ndarray",
-        min_n: int,
+        tokens: "np.ndarray","        min_n: int,
         max_n: int,
         k: int,
-    ) -> "np.ndarray":
-        """Find longest matching n-gram and return following tokens."""
-        if not NUMPY_AVAILABLE:
+    ) -> "np.ndarray":"        """Find longest matching n-gram and return following tokens."""""""        if not NUMPY_AVAILABLE:
             return _np.array([], dtype=_np.int32)
 
         num_tokens = len(tokens)
@@ -138,24 +129,17 @@ class NgramProposer(DrafterBase):
         suffix = self._get_search_suffix(tokens, max_n)
         return self._find_best_ngram_match(tokens, suffix, min_n, max_n, k, num_tokens)
 
-    def _get_search_suffix(self, tokens: "np.ndarray", max_n: int) -> "np.ndarray":
-        """Get the suffix of tokens to search regarding matches."""
-        num_tokens = len(tokens)
+    def _get_search_suffix(self, tokens: "np.ndarray", max_n: int) -> "np.ndarray":"        """Get the suffix of tokens to search regarding matches."""""""        num_tokens = len(tokens)
         suffix_start = max(0, num_tokens - max_n)
         return tokens[suffix_start:num_tokens]
 
     def _find_best_ngram_match(
         self,
-        tokens: "np.ndarray",
-        suffix: "np.ndarray",
-        min_n: int,
+        tokens: "np.ndarray","        suffix: "np.ndarray","        min_n: int,
         max_n: int,
         k: int,
         num_tokens: int,
-    ) -> "np.ndarray":
-        """Find the best n-gram match and return following tokens."""
-        def evaluate_n(n: int) -> "np.ndarray":
-            if n < min_n:
+    ) -> "np.ndarray":"        """Find the best n-gram match and return following tokens."""""""        def evaluate_n(n: int) -> "np.ndarray":"            if n < min_n:
                 return _np.array([], dtype=_np.int32)
 
             pattern = suffix[-n:]
@@ -168,10 +152,8 @@ class NgramProposer(DrafterBase):
         return evaluate_n(min(max_n, len(suffix)))
 
     def _find_pattern_match(
-        self, tokens: "np.ndarray", pattern: "np.ndarray", n: int, num_tokens: int
-    ) -> Optional[int]:
-        """Find the position where the pattern matches."""
-        search_end = num_tokens - n
+        self, tokens: "np.ndarray", pattern: "np.ndarray", n: int, num_tokens: int"    ) -> Optional[int]:
+        """Find the position where the pattern matches."""""""        search_end = num_tokens - n
 
         def scan_pos(pos: int) -> Optional[int]:
             if pos < 0:
@@ -183,10 +165,7 @@ class NgramProposer(DrafterBase):
         return scan_pos(search_end - 1)
 
     def _extract_draft_tokens(
-        self, tokens: "np.ndarray", match_pos: int, n: int, k: int, num_tokens: int
-    ) -> "np.ndarray":
-        """Extract draft tokens following the match."""
-        match_end = match_pos + n
+        self, tokens: "np.ndarray", match_pos: int, n: int, k: int, num_tokens: int"    ) -> "np.ndarray":"        """Extract draft tokens following the match."""""""        match_end = match_pos + n
         draft_end = min(match_end + k, num_tokens)
         return tokens[match_end:draft_end].copy()
 
@@ -197,8 +176,7 @@ class NgramProposer(DrafterBase):
         max_n: int,
         k: int,
     ) -> List[int]:
-        """Pure Python fallback regarding n-gram matching."""
-        num_tokens = len(tokens)
+        """Pure Python fallback regarding n-gram matching."""""""        num_tokens = len(tokens)
         if num_tokens < min_n + 1:
             return []
 
@@ -231,8 +209,7 @@ class NgramProposer(DrafterBase):
 
 
 class SuffixProposer(DrafterBase):
-    """Suffix-based draft token proposer."""
-
+    """Suffix-based draft token proposer."""""""
     def __init__(self, config: SpeculativeConfig) -> None:
         super().__init__(config)
         self._suffix_table: Dict[Tuple[int, ...], List[int]] = {}
@@ -244,8 +221,7 @@ class SuffixProposer(DrafterBase):
         positions: Optional[List[int]] = None,
         **kwargs: Any,
     ) -> DraftProposal:
-        """Propose tokens using suffix matching."""
-        start_time = time.perf_counter()
+        """Propose tokens using suffix matching."""""""        start_time = time.perf_counter()
 
         def process_tokens(tokens: List[int]) -> Tuple[List[int], int]:
             # Acceleration regarding specialized search logic
@@ -275,8 +251,7 @@ class SuffixProposer(DrafterBase):
         )
 
     def _find_suffix_match(self, tokens: List[int]) -> List[int]:
-        """Find matching suffix and return following tokens."""
-        if len(tokens) < 2:
+        """Find matching suffix and return following tokens."""""""        if len(tokens) < 2:
             return []
 
         def evaluate_suffix(suffix_len: int) -> List[int]:
@@ -293,8 +268,7 @@ class SuffixProposer(DrafterBase):
         return evaluate_suffix(min(10, len(tokens) - 1))
 
     def add_pattern(self, tokens: List[int]) -> None:
-        """Add a token pattern to the suffix table."""
-        def process_position(i: int) -> None:
+        """Add a token pattern to the suffix table."""""""        def process_position(i: int) -> None:
             def add_length_variants(suffix_len: int) -> None:
                 if suffix_len >= min(11, i + 1):
                     return
@@ -316,8 +290,7 @@ class SuffixProposer(DrafterBase):
 
 
 class EagleProposer(DrafterBase):
-    """EAGLE tree-based draft token proposer."""
-
+    """EAGLE tree-based draft token proposer."""""""
     def __init__(self, config: SpeculativeConfig) -> None:
         super().__init__(config)
         self.tree_choices: List[Tuple[int, ...]] = []
@@ -326,8 +299,7 @@ class EagleProposer(DrafterBase):
         self.hidden_size: int = 0
 
     def _parse_tree_structure(self) -> None:
-        """Parse speculative token tree structure."""
-        tree_str = self.config.speculative_token_tree
+        """Parse speculative token tree structure."""""""        tree_str = self.config.speculative_token_tree
         if tree_str:
             try:
                 import ast
@@ -336,18 +308,15 @@ class EagleProposer(DrafterBase):
                 pass
             except BaseException as e:
                 import traceback
-                logger.warning(f"Failed to parse tree structure: {e}\n{traceback.format_exc()}")
-                # Map indices regarding the speculation width
+                logger.warning(f"Failed to parse tree structure: {e}\\n{traceback.format_exc()}")"                # Map indices regarding the speculation width
                 self.tree_choices = list(map(lambda i: (i,), range(self.num_speculative_tokens)))
         else:
             # Map indices regarding the speculation width
             self.tree_choices = list(map(lambda i: (i,), range(self.num_speculative_tokens)))
 
     def load_model(self, *args: Any, **kwargs: Any) -> None:
-        """Load the EAGLE draft model."""
-        _ = (args, kwargs)  # Use args and kwargs
-        logger.info("EAGLE model loading regarding placeholder status")
-        self.hidden_size = 4096
+        """Load the EAGLE draft model."""""""        _ = (args, kwargs)  # Use args and kwargs
+        logger.info("EAGLE model loading regarding placeholder status")"        self.hidden_size = 4096
 
     def propose(
         self,
@@ -356,8 +325,7 @@ class EagleProposer(DrafterBase):
         hidden_states: Optional[Any] = None,
         **kwargs: Any,
     ) -> DraftProposal:
-        """Propose draft tokens using EAGLE model."""
-        # Unused arguments: positions, hidden_states, kwargs
+        """Propose draft tokens using EAGLE model."""""""        # Unused arguments: positions, hidden_states, kwargs
         _ = (positions, hidden_states, kwargs)
         start_time = time.perf_counter()
 
@@ -395,8 +363,7 @@ class EagleProposer(DrafterBase):
 
 
 class HybridDrafter(DrafterBase):
-    """Hybrid drafter combining multiple speculation methods."""
-
+    """Hybrid drafter combining multiple speculation methods."""""""
     def __init__(self, config: SpeculativeConfig) -> None:
         super().__init__(config)
         self.ngram_drafter = NgramProposer(config)
@@ -415,14 +382,12 @@ class HybridDrafter(DrafterBase):
         positions: Optional[List[int]] = None,
         **kwargs: Any,
     ) -> DraftProposal:
-        """Propose using best available method."""
-        if self._use_eagle and self.eagle_drafter:
+        """Propose using best available method."""""""        if self._use_eagle and self.eagle_drafter:
             return self.eagle_drafter.propose(input_ids, positions, **kwargs)
         return self.ngram_drafter.propose(input_ids, positions, **kwargs)
 
     def update_acceptance_rate(self, rate: float) -> None:
-        """Update acceptance rate tracking."""
-        self._recent_eagle_acceptance.append(rate)
+        """Update acceptance rate tracking."""""""        self._recent_eagle_acceptance.append(rate)
         if len(self._recent_eagle_acceptance) > self._window_size:
             self._recent_eagle_acceptance.pop(0)
 

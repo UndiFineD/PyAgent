@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Deadline.py module.
-"""
-
+"""""""Deadline.py module.
+"""""""
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -29,19 +25,15 @@ from typing import Callable, List, Optional, Tuple, TypeVar
 from .enums import TaskPriority, TaskState
 from .models import ScheduledTask, TaskStats
 
-R = TypeVar("R")
-
+R = TypeVar("R")"
 
 class DeadlineScheduler:
-    """
-    Earliest-deadline-first (EDF) scheduler.
+    """""""    Earliest-deadline-first (EDF) scheduler.
 
     Always executes the task with the nearest deadline first.
-    """
-
+    """""""
     def __init__(self, workers: int = 4) -> None:
-        """Initialize EDF scheduler."""
-        self._workers: int = workers
+        """Initialize EDF scheduler."""""""        self._workers: int = workers
         self._queue: List[Tuple[float, int, ScheduledTask]] = []
         self._lock: LockType = threading.Lock()
         self._not_empty = threading.Condition(self._lock)
@@ -51,8 +43,7 @@ class DeadlineScheduler:
 
         self._executor = ThreadPoolExecutor(
             max_workers=workers,
-            thread_name_prefix="edf",
-        )
+            thread_name_prefix="edf","        )
 
         for _ in range(workers):
             self._executor.submit(self._worker_loop)
@@ -63,8 +54,7 @@ class DeadlineScheduler:
         deadline_ms: float,
         task_id: Optional[str] = None,
     ) -> Future[R]:
-        """
-        Submit task with deadline.
+        """""""        Submit task with deadline.
 
         Args:
             func: Function to execute
@@ -73,8 +63,7 @@ class DeadlineScheduler:
 
         Returns:
             Future for result
-        """
-        now: float = time.monotonic()
+        """""""        now: float = time.monotonic()
         deadline: float = now + deadline_ms / 1000.0
 
         future: Future[R] = Future()
@@ -86,8 +75,7 @@ class DeadlineScheduler:
                 priority_value=0,
                 deadline=deadline,
                 sequence=self._sequence,
-                id=task_id or f"task-{self._sequence}",
-                func=func,
+                id=task_id or f"task-{self._sequence}","                func=func,
                 priority=TaskPriority.NORMAL,
                 created_at=now,
                 future=future,
@@ -100,8 +88,7 @@ class DeadlineScheduler:
         return future
 
     def _worker_loop(self) -> None:
-        """Worker thread loop."""
-        while self._running:
+        """Worker thread loop."""""""        while self._running:
             with self._not_empty:
                 while self._running and not self._queue:
                     self._not_empty.wait(timeout=0.1)
@@ -130,13 +117,11 @@ class DeadlineScheduler:
                     self._stats.failed += 1
 
     def shutdown(self, wait: bool = True) -> None:
-        """Shutdown scheduler."""
-        self._running = False
+        """Shutdown scheduler."""""""        self._running = False
         with self._not_empty:
             self._not_empty.notify_all()
         self._executor.shutdown(wait=wait)
 
     @property
     def stats(self) -> TaskStats:
-        """Scheduler statistics."""
-        return self._stats
+        """Scheduler statistics."""""""        return self._stats

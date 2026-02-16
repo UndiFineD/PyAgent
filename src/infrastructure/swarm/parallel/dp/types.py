@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""
-Types and configuration for data parallel coordination.
-"""
-
+"""""""Types and configuration for data parallel coordination.
+"""""""
 from __future__ import annotations
 
 import time
@@ -28,16 +24,14 @@ from typing import Any, Optional
 
 
 class DPRole(Enum):
-    """Data parallel role."""
-
+    """Data parallel role."""""""
     MASTER = auto()  # Coordinates workers
     WORKER = auto()  # Executes work
     HYBRID = auto()  # Both roles
 
 
 class WorkerHealth(Enum):
-    """Worker health status."""
-
+    """Worker health status."""""""
     HEALTHY = auto()
     DEGRADED = auto()
     RECOVERING = auto()
@@ -45,8 +39,7 @@ class WorkerHealth(Enum):
 
 
 class LoadBalanceStrategy(Enum):
-    """Load balancing strategy."""
-
+    """Load balancing strategy."""""""
     ROUND_ROBIN = auto()
     LEAST_LOADED = auto()
     P2C = auto()  # Power of Two Choices
@@ -55,8 +48,7 @@ class LoadBalanceStrategy(Enum):
 
 @dataclass
 class DPConfig:
-    """Configuration for data parallel coordinator."""
-
+    """Configuration for data parallel coordinator."""""""
     num_workers: int = 1
     dp_rank: int = 0
     dp_size: int = 1
@@ -71,8 +63,7 @@ class DPConfig:
 
 @dataclass
 class WorkerState:
-    """State of a DP worker."""
-
+    """State of a DP worker."""""""
     worker_id: int
     dp_rank: int
     health: WorkerHealth = WorkerHealth.HEALTHY
@@ -85,14 +76,12 @@ class WorkerState:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def update_latency(self, latency_ms: float) -> None:
-        """Update average latency with EMA."""
-        self.avg_latency_ms = 0.9 * self.avg_latency_ms + 0.1 * latency_ms
+        """Update average latency with EMA."""""""        self.avg_latency_ms = 0.9 * self.avg_latency_ms + 0.1 * latency_ms
 
 
 @dataclass
 class StepState:
-    """State for a single step."""
-
+    """State for a single step."""""""
     step_id: int
     wave_id: int
     request_count: int = 0
@@ -112,8 +101,7 @@ class StepState:
 
 @dataclass
 class WaveState:
-    """State for an execution wave."""
-
+    """State for an execution wave."""""""
     wave_id: int
     num_steps: int = 0
     completed_steps: int = 0

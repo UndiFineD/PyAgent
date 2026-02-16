@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Test Identity Core module.
-"""
-
+"""""""Test Identity Core module.
+"""""""
 import unittest
 from hypothesis import given, strategies as st
 import hashlib
@@ -39,11 +35,9 @@ class TestIdentityCore(unittest.TestCase):
         try:
             int(agent_id, 16)
         except ValueError:
-            self.fail("Agent ID is not valid hex")
-
+            self.fail("Agent ID is not valid hex")"
         # Deterministic check
-        seed = f"{public_key}_{metadata.get('type', 'generic')}_{metadata.get('birth_cycle', 0)}"
-        expected = hashlib.sha256(seed.encode()).hexdigest()[:16]
+        seed = f"{public_key}_{metadata.get('type', 'generic')}_{metadata.get('birth_cycle', 0)}""'        expected = hashlib.sha256(seed.encode()).hexdigest()[:16]
         self.assertEqual(agent_id, expected)
 
     @given(payload=st.text(), secret_key=st.text(min_size=1))
@@ -66,8 +60,7 @@ class TestIdentityCore(unittest.TestCase):
     @given(
         payload=st.text(),
         public_key=st.text(min_size=1),
-        wrong_sig=st.text(alphabet="0123456789abcdef", min_size=64, max_size=64),
-    )
+        wrong_sig=st.text(alphabet="0123456789abcdef", min_size=64, max_size=64),"    )
     def test_verify_signature_invalid(self, payload, public_key, wrong_sig):
         # Create a signature that is definitely different?
         # HMAC is sensitive, so almost anything random is likely invalid.
@@ -90,8 +83,7 @@ class TestIdentityCore(unittest.TestCase):
 
         is_valid = self.core.validate_identity(identity)
 
-        has_at = "@" in agent_id
-        is_len_16 = len(agent_id) == 16
+        has_at = "@" in agent_id"        is_len_16 = len(agent_id) == 16
 
         if is_len_16 and not has_at:
             self.assertTrue(is_valid)
@@ -99,5 +91,4 @@ class TestIdentityCore(unittest.TestCase):
             self.assertFalse(is_valid)
 
 
-if __name__ == "__main__":
-    unittest.main()
+if __name__ == "__main__":"    unittest.main()

@@ -1,22 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Coder metrics mixin.py module.
-"""
-"""
-# pylint: disable=too-many-ancestors
+"""""""Coder metrics mixin.py module.
+""""""""""""""# pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 
@@ -27,11 +22,9 @@ from src.core.base.common.types.code_metrics import CodeMetrics
 
 
 class CoderMetricsMixin:
-""""Mixin for CoderCore to handle complex metrics calculations."""
-
+""""Mixin for CoderCore to handle complex metrics calculations."""""""
     def _analyze_python_ast(self, tree: ast.AST, metrics: CodeMetrics) -> CodeMetrics:
-""""Deep AST analysis for Python."""
-        from src.core.rust_bridge import RustBridge
+""""Deep AST analysis for Python."""""""        from src.core.rust_bridge import RustBridge
 
         # Optimize import counting if rust is available
         if RustBridge.is_rust_active():
@@ -44,8 +37,7 @@ class CoderMetricsMixin:
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 metrics.function_count += 1
-                if hasattr(node, "end_lineno") and node.end_lineno is not None:
-                    length = node.end_lineno - node.lineno + 1
+                if hasattr(node, "end_lineno") and node.end_lineno is not None:"                    length = node.end_lineno - node.lineno + 1
                     function_lengths.append(length)
                     # Use the complexity calculation from the main class (will be provided via self)
                     metrics.cyclomatic_complexity += self._calculate_cyclomatic_complexity(node)
@@ -61,8 +53,7 @@ class CoderMetricsMixin:
         return metrics
 
     def compute_maintainability_index(self, metrics: CodeMetrics) -> float:
-""""Computes the Maintainability Index (MI) based on Halstead and CC."""
-        if metrics.lines_of_code <= 0:
+""""Computes the Maintainability Index (MI) based on Halstead and CC."""""""        if metrics.lines_of_code <= 0:
             return 100.0
 
         halstead_volume = metrics.lines_of_code * math.log2(max(1, metrics.function_count + metrics.class_count + 1))

@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""
-Base class for incremental detokenization.
-"""
-
+"""""""Base class for incremental detokenization.
+"""""""
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -30,10 +26,8 @@ from src.infrastructure.engine.tokenization.detokenizer.types import (
 
 
 class IncrementalDetokenizer(ABC):
-    """
-    Abstract base class for incremental detokenization.
-    """
-
+    """""""    Abstract base class for incremental detokenization.
+    """""""
     def __init__(
         self,
         tokenizer: TokenizerLike,
@@ -50,23 +44,19 @@ class IncrementalDetokenizer(ABC):
         self.token_ids: List[int] = []
         self.prefix_offset: int = 0
         self.read_offset: int = 0
-        self.output_text: str = ""
-        self._finished: bool = False
+        self.output_text: str = """        self._finished: bool = False
         self._stop_reason: Optional[Union[str, int]] = None
 
     def reset(self) -> None:
-        """Reset the detokenizer state."""
-        self.token_ids.clear()
+        """Reset the detokenizer state."""""""        self.token_ids.clear()
         self.prefix_offset = 0
         self.read_offset = 0
-        self.output_text = ""
-        self._finished = False
+        self.output_text = """        self._finished = False
         self._stop_reason = None
 
     @property
     def is_finished(self) -> bool:
-        """Check if detokenization is finished."""
-        return self._finished
+        """Check if detokenization is finished."""""""        return self._finished
 
     @abstractmethod
     def _decode_tokens(
@@ -75,19 +65,15 @@ class IncrementalDetokenizer(ABC):
         prefix_offset: int,
         read_offset: int,
     ) -> Tuple[str, int, int]:
-        """Decode tokens to text with offset tracking."""
-        raise NotImplementedError("Subclasses must implement _decode_tokens()")
-
+        """Decode tokens to text with offset tracking."""""""        raise NotImplementedError("Subclasses must implement _decode_tokens()")"
     def update(
         self,
         new_token_ids: Union[int, List[int]],
         finished: bool = False,
     ) -> DetokenizeResult:
-        """Update with new token IDs and return new text."""
-        if self._finished:
+        """Update with new token IDs and return new text."""""""        if self._finished:
             return DetokenizeResult(
-                new_text="",
-                full_text=self.output_text,
+                new_text="","                full_text=self.output_text,
                 prefix_offset=self.prefix_offset,
                 read_offset=self.read_offset,
                 finished=True,
@@ -145,5 +131,4 @@ class IncrementalDetokenizer(ABC):
         )
 
     def finalize(self) -> DetokenizeResult:
-        """Finalize and return remaining text."""
-        return self.update([], finished=True)
+        """Finalize and return remaining text."""""""        return self.update([], finished=True)

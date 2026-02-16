@@ -1,20 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""
-# Sandbox Agent - Secure sandboxed code execution
+"""""""# Sandbox Agent - Secure sandboxed code execution
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -35,8 +32,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in secure code execution and sandboxed prototyping.
 Prevents side effects on the host system by using containerized or WASM environments.
-"""
-
+"""""""
 from __future__ import annotations
 
 import logging
@@ -49,57 +45,34 @@ __version__ = VERSION
 
 
 class SandboxAgent(BaseAgent):
-""""Executes untrusted code in a controlled environment."""
-
+""""Executes untrusted code in a controlled environment."""""""
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-#             "You are the Sandbox Agent.
-#             "Your role is to run code snippets safely.
-#             "You must ensure that no code has access to sensitive host resources.
-#             "Use virtualization or container headers to enforce isolation.
-        )
+#             "You are the Sandbox Agent."#             "Your role is to run code snippets safely."#             "You must ensure that no code has access to sensitive host resources."#             "Use virtualization or container headers to enforce isolation."        )
 
     @as_tool
     def run_python_sandboxed(self, code: str) -> str:
-        "Executes Python code in a simulated" sandbox.
-        In production, this would use a Docker container or gVisor.
-"""
-        logging.info("Executing code in "sandbox...")
-
+        "Executes Python code in a simulated" sandbox."        In production, this would use a Docker container or gVisor.
+"""""""        logging.info("Executing code in "sandbox...")"
         # Phase 108: Record sandboxed execution intent
         self._record(
-            fSandbox run: {code[:100]}",
-            "Simulated Success",
-            provider="Sandbox",
-            model="Docker-Mock",
-        )
+            fSandbox run: {code[:100]}","            "Simulated Success","            provider="Sandbox","            model="Docker-Mock","        )
 
         # Simulated execution
-#         return "Execution Output: Success\n(Simulated Output)
-
+#         return "Execution Output: Success\\n(Simulated Output)"
     @as_tool
     def dry_run_prediction(self, code: str) -> str:
-""""Simulates the outcome of code execution without actually running it."""
-        logging.info("Performing dry-run "prediction...")
-
+""""Simulates the outcome of code execution without actually running it."""""""        logging.info("Performing dry-run "prediction...")"
         # Mental model logic: Analyze imports and side effects
-        if "os.remove" in code or "shutil.rmtree" in code:
-#             return "Prediction: DANGER. Code attempts to delete files.
-#         return "Prediction: SAFE. Code appears to be computational.
-
+        if "os.remove" in code or "shutil.rmtree" in code:"#             return "Prediction: DANGER. Code attempts to delete files."#         return "Prediction: SAFE. Code appears to be computational."
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-#         "Sandboxing helper.
-#         return "I am ready to execute code. Use 'run_python_sandboxed' to begin.
+#         "Sandboxing helper."#         return "I am ready to execute code. Use 'run_python_sandboxed' to begin."'
 
+if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
-if __name__ == "__main__":
-    from src.core.base.common.base_utilities import create_main_function
-
-    main = create_main_function(SandboxAgent, "Sandbox Agent", "Sandboxed execution tool")
-    main()
-"""
-
+    main = create_main_function(SandboxAgent, "Sandbox Agent", "Sandboxed execution tool")"    main()
+"""""""
 from __future__ import annotations
 
 import logging
@@ -112,52 +85,30 @@ __version__ = VERSION
 
 
 class SandboxAgent(BaseAgent):
-""""Executes untrusted code in a controlled environment."""
-
+""""Executes untrusted code in a controlled environment."""""""
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-#             "You are the Sandbox Agent.
-#             "Your role is to run code snippets safely.
-#             "You must ensure that no code has access to sensitive host resources.
-#             "Use virtualization or container headers to enforce isolation.
-        )
+#             "You are the Sandbox Agent."#             "Your role is to run code snippets safely."#             "You must ensure that no code has access to sensitive host resources."#             "Use virtualization or container headers to enforce isolation."        )
 
     @as_tool
     def run_python_sandboxed(self, code: str) -> str:
-        "Executes Python code in a simulated sandbox.
-        In production, this would use a Docker container or gVisor.
-"""
-        logging.info("Executing code in sandbox...")
-
+        "Executes Python code in a simulated sandbox."        In production, this would use a Docker container or gVisor.
+"""""""        logging.info("Executing code in sandbox...")"
         # Phase 108: Record sandboxed execution intent
         self._record(
-            fSandbox run: {code[:100]}",
-            "Simulated Success",
-            provider="Sandbox",
-            model="Docker-Mock",
-        )
+            fSandbox run: {code[:100]}","            "Simulated Success","            provider="Sandbox","            model="Docker-Mock","        )
 
         # Simulated execution
-#         return "Execution Output: Success\n(Simulated Output)
-
+#         return "Execution Output: Success\\n(Simulated Output)"
     @as_tool
     def dry_run_prediction(self, code: str) -> str:
-""""Simulates the outcome of code execution without actually running it."""
-        logging.info("Performing dry-run prediction...")
-
+""""Simulates the outcome of code execution without actually running it."""""""        logging.info("Performing dry-run prediction...")"
         # Mental model logic: Analyze imports and side effects
-        if "os.remove" in code or "shutil.rmtree" in code:
-#             return "Prediction: DANGER. Code attempts to delete files.
-#         return "Prediction: SAFE. Code appears to be computational.
-
+        if "os.remove" in code or "shutil.rmtree" in code:"#             return "Prediction: DANGER. Code attempts to delete files."#         return "Prediction: SAFE. Code appears to be computational."
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-#         "Sandboxing helper.
-#         return "I am ready to execute code. Use 'run_python_sandboxed' to begin.
+#         "Sandboxing helper."#         return "I am ready to execute code. Use 'run_python_sandboxed' to begin."'
 
+if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
-if __name__ == "__main__":
-    from src.core.base.common.base_utilities import create_main_function
-
-    main = create_main_function(SandboxAgent, "Sandbox Agent", "Sandboxed execution tool")
-    main()
+    main = create_main_function(SandboxAgent, "Sandbox Agent", "Sandboxed execution tool")"    main()

@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -18,14 +16,12 @@
 # limitations under the License.
 
 
-"""
-# VisionCore: Core logic for visual processing and perception in PyAgent.
+"""""""# VisionCore: Core logic for visual processing and perception in PyAgent.
 # Supports image analysis, feature extraction, and multimodal reasoning for cognitive agents.
 
 Provides logic for image hashing, glitch detection, and visual signature extraction
 from GUI screenshots and other visual data sources.
-"""
-
+"""""""
 from __future__ import annotations
 import hashlib
 
@@ -37,22 +33,18 @@ __version__ = VERSION
 class VisionCore:
     Pure logic for visual processing, signature extraction,
 #     and glitch detection in GUI screenshots.
-"""
-
+"""""""
     def calculate_image_hash(self, image_bytes: bytes) -> str:
-        "Deterministic hash of" image data.
-
+        "Deterministic hash of" image data."
         Args:
             image_bytes: The raw image bytes.
 
         Returns:
             The MD5 hexadecimal hash.
-"""
-        return hashlib.md5(image_bytes).hexdigest()
+"""""""        return hashlib.md5(image_bytes).hexdigest()
 
     def detect_glitch_patterns(self, pixel_data: list[int]) -> bool:
-        Heuristic-based" glitch detection.
-
+        Heuristic-based" glitch detection."
         Checks for uniformity and low entropy which may indicate rendering failures.
 
         Args:
@@ -60,9 +52,7 @@ class VisionCore:
 
         Returns:
             True if a glitch or corrupted state is detected.
-"""
-     "   if not pixel_data:
-            return True
+"""""""     "   if not pixel_data:"            return True
 
         count = len(pixel_data)
         if count < 64:  # Arbitrary small threshold

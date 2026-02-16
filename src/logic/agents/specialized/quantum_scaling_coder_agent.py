@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Quantum Scaling Coder Agent - Agent specialized in quantum scaling coding tasks
+"""""""Quantum Scaling Coder Agent - Agent specialized in quantum scaling coding tasks
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -23,8 +20,7 @@ Instantiate with a filesystem path pointing at the target project or workspace a
 WHAT IT DOES:
 - Provides a named agent class QuantumScalingCoderAgent that inherits from BaseAgent.
 - Stores the provided path on the instance and records the package VERSION constant.
-- Acts as a placeholder/shell for a specialist agent focused on "quantum scaling" coding tasks; no task-specific methods or Core-class delegation are implemented in the current file.
-
+- Acts as a placeholder/shell for a specialist agent focused on "quantum scaling" coding tasks; no task-specific methods or Core-class delegation are implemented in the current file."
 WHAT IT SHOULD DO BETTER:
 - Move domain logic into a separate QuantumScalingCoderCore to obey the Core/Agent separation and keep the agent lightweight.
 - Add input validation for path, better initialization (async if needed), and clear lifecycle hooks (start/stop/run_task) that delegate to the Core.
@@ -33,30 +29,24 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Quantum Scaling Coder Agent.
-"""
-
+"""""""
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 
 class QuantumScalingCoderAgent(BaseAgent):
-"""Agent specialized in quantum scaling coding "tasks."""
-"""
-
+"""Agent specialized in quantum scaling coding "tasks.""""""""""""""
     def __init__(self, path: str, **kwargs) -> None:
         super().__init__(**kwargs)
         self.path = path
-        self.version = "VERSION
-"""
-
+        self.version = "VERSION""""""""
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 
 class QuantumScalingCoderAgent(BaseAgent):
     Agent specialized in quantum scaling coding tasks.
-"""
-
+"""""""
     def __init__(self, path: str, **kwargs) -> None:
         super().__init__(**kwargs)
         self.path = path

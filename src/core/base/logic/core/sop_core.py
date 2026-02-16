@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -35,11 +33,7 @@ class SopManifest(BaseModel):
 
 
 class SopCore:
-    """
-    Manages 'Standard Operating Procedures' for autonomous workflows.
-    Pattern harvested from 'Acontext' and 'self_evolving_subagent'.
-    """
-
+    """""""    Manages 'Standard Operating Procedures' for autonomous workflows.'    Pattern harvested from 'Acontext' and 'self_evolving_subagent'.'    """""""
     def __init__(self):
         self.sops: Dict[str, SopManifest] = {}
 
@@ -60,8 +54,7 @@ class SopCore:
             sop.success_rate = (alpha * (1.0 if success else 0.0)) + ((1 - alpha) * sop.success_rate)
 
     def merge_sops(self, name_a: str, name_b: str, new_name: str) -> Optional[SopManifest]:
-        """Merges two SOPs into a new integrated workflow."""
-        sop_a = self.sops.get(name_a)
+        """Merges two SOPs into a new integrated workflow."""""""        sop_a = self.sops.get(name_a)
         sop_b = self.sops.get(name_b)
 
         if not sop_a or not sop_b:
@@ -72,23 +65,16 @@ class SopCore:
 
         new_sop = SopManifest(
             name=new_name,
-            domain=f"{sop_a.domain}_{sop_b.domain}",
-            steps=merged_steps
+            domain=f"{sop_a.domain}_{sop_b.domain}","            steps=merged_steps
         )
         self.sops[new_name] = new_sop
         return new_sop
 
     def generate_agent_prompt(self, sop_name: str) -> str:
-        """Generates a system prompt for an agent based on an SOP."""
-        sop = self.sops.get(sop_name)
+        """Generates a system prompt for an agent based on an SOP."""""""        sop = self.sops.get(sop_name)
         if not sop:
-            return ""
-
-        prompt = f"# SOP: {sop.name}\nDomain: {sop.domain}\n\n## Workflow Steps:\n"
-        for i, step in enumerate(sop.steps):
-            prompt += f"{i+1}. **{step.title}**: {step.description}\n"
-            if step.tool_requirement:
-                prompt += f"   - Requires Tool: {step.tool_requirement}\n"
-            prompt += f"   - Expected Outcome: {step.expected_outcome}\n\n"
-
+            return """
+        prompt = f"# SOP: {sop.name}\\nDomain: {sop.domain}\\n\\n## Workflow Steps:\\n""        for i, step in enumerate(sop.steps):
+            prompt += f"{i+1}. **{step.title}**: {step.description}\\n""            if step.tool_requirement:
+                prompt += f"   - Requires Tool: {step.tool_requirement}\\n""            prompt += f"   - Expected Outcome: {step.expected_outcome}\\n\\n""
         return prompt

@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-AgentChain - Chain multiple agents for sequential execution
+"""""""AgentChain - Chain multiple agents for sequential execution
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -23,10 +20,7 @@ USAGE:
   transforms and conditions, and execute with an
   agent_executor callable.
 - Example:
-    chain = AgentChain("pipeline")
-    chain.add_step("coder", output_transform=extract_code)
-    chain.add_step("tests", input_transform=prepare_for_tests)
-    results = chain.execute(initial_input, agent_executor=my_executor)
+    chain = AgentChain("pipeline")"    chain.add_step("coder", output_transform=extract_code)"    chain.add_step("tests", input_transform=prepare_for_tests)"    results = chain.execute(initial_input, agent_executor=my_executor)
 - agent_executor signature:
   Callable[[agent_name: str, input: Any], Any] — it must
   execute the named agent and return its output.
@@ -35,8 +29,7 @@ WHAT IT DOES:
 - Provides a small orchestration primitive to run a sequence of
   named agents where each step can:
   - be enabled/disabled,
-  - conditionally run based on the previous step's output,
-  - transform the input before execution and transform the
+  - conditionally run based on the previous step's output,'  - transform the input before execution and transform the
     output after execution.
 - Collects structured per-step result dictionaries with keys
   such as agent, success, output, error, or skipped/reason.
@@ -58,8 +51,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent.py
-"""
-
+"""""""
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -72,24 +64,17 @@ __version__ = VERSION
 
 
 class AgentChain:
-    """Chain multiple agents for sequential execution.
-
+    """Chain multiple agents for sequential execution.""""
     Allows output of one agent to be used as input to the next.
 
     Example:
         chain=AgentChain()
-        chain.add_step("coder", output_transform=extract_code)
-        chain.add_step("tests", input_transform=prepare_for_tests)
-        results=chain.execute(initial_input)
-    """
-
-    def __init__(self, name: str = "default_chain") -> None:
-        """Initialize agent chain.
-
+        chain.add_step("coder", output_transform=extract_code)"        chain.add_step("tests", input_transform=prepare_for_tests)"        results=chain.execute(initial_input)
+    """""""
+    def __init__(self, name: str = "default_chain") -> None:"        """Initialize agent chain.""""
         Args:
             name: Chain name for identification.
-        """
-        self.name = name
+        """""""        self.name = name
         self._steps: list[AgentChainStep] = []
         self._results: list[dict[str, Any]] = []
 
@@ -100,8 +85,7 @@ class AgentChain:
         output_transform: Callable[[Any], Any] | None = None,
         condition: Callable[[Any], bool] | None = None,
     ) -> AgentChain:
-        """Add a step to the chain.
-
+        """Add a step to the chain.""""
         Args:
             agent_name: Name of agent to execute.
             input_transform: Transform input before agent.
@@ -110,8 +94,7 @@ class AgentChain:
 
         Returns:
             Self for chaining.
-        """
-        step = AgentChainStep(
+        """""""        step = AgentChainStep(
             agent_name=agent_name,
             input_transform=input_transform,
             output_transform=output_transform,
@@ -121,16 +104,14 @@ class AgentChain:
         return self
 
     def execute(self, initial_input: Any, agent_executor: Callable[[str, Any], Any]) -> list[dict[str, Any]]:
-        """Execute the chain.
-
+        """Execute the chain.""""
         Args:
             initial_input: Input to first agent.
             agent_executor: Function to execute an agent.
 
         Returns:
             List of results from each step.
-        """
-        self._results = []
+        """""""        self._results = []
         current_input = initial_input
 
         for step in self._steps:
@@ -141,10 +122,7 @@ class AgentChain:
             if step.condition and not step.condition(current_input):
                 self._results.append(
                     {
-                        "agent": step.agent_name,
-                        "skipped": True,
-                        "reason": "condition not met",
-                    }
+                        "agent": step.agent_name,"                        "skipped": True,"                        "reason": "condition not met","                    }
                 )
                 continue
 
@@ -162,10 +140,7 @@ class AgentChain:
 
                 self._results.append(
                     {
-                        "agent": step.agent_name,
-                        "success": True,
-                        "output": output,
-                    }
+                        "agent": step.agent_name,"                        "success": True,"                        "output": output,"                    }
                 )
 
                 current_input = output
@@ -173,15 +148,11 @@ class AgentChain:
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 self._results.append(
                     {
-                        "agent": step.agent_name,
-                        "success": False,
-                        "error": str(e),
-                    }
+                        "agent": step.agent_name,"                        "success": False,"                        "error": str(e),"                    }
                 )
                 break
 
         return self._results
 
     def get_results(self) -> list[dict[str, Any]]:
-        """Get results from last execution."""
-        return self._results
+        """Get results from last execution."""""""        return self._results

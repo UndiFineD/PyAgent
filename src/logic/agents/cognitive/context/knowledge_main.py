@@ -1,23 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""
-# CLI entry point for Knowledge Agent.
-"""
-"""
-import sys
+"""""""# CLI entry point for Knowledge Agent.
+""""""""""""""import sys
 import argparse
 import logging
 from pathlib import Path
@@ -31,30 +26,19 @@ __version__ = VERSION
 root = Path(__file__).parent.parent
 if str(root) not in sys.path:
     sys.path.append(str(root))
-if str(root / "src") not in sys.path:
-    sys.path.append(str(root / "src"))
-
+if str(root / "src") not in sys.path:"    sys.path.append(str(root / "src"))"
 
 def main() -> None:
-""""Entry point for Knowledge Agent CLI."""
-    parser = argparse.ArgumentParser(
-#         description="Knowledge Agent: Manages workspace knowledge and backlinks
-    )
-    parser.add_argument("--dir", default=".", help="Directory to scan/update")
+""""Entry point for Knowledge Agent CLI."""""""    parser = argparse.ArgumentParser(
+#         description="Knowledge Agent: Manages workspace knowledge and backlinks"    )
+    parser.add_argument("--dir", default=".", help="Directory to scan/update")"    parser.add_argument(
+#         "--build-index", action="store_true", help="Rebuild the knowledge index"    )
     parser.add_argument(
-#         "--build-index", action="store_true", help="Rebuild the knowledge index
-    )
+        "--update-backlinks","        action="store_true","        help="Update all .md files with backlinks","    )
     parser.add_argument(
-        "--update-backlinks",
-        action="store_true",
-        help="Update all .md files with backlinks",
-    )
+#         "--graph", action="store_true", help="Output workspace graph in Mermaid format"    )
     parser.add_argument(
-#         "--graph", action="store_true", help="Output workspace graph in Mermaid format
-    )
-    parser.add_argument(
-#         "--verbose", "-v", action="count", default=0, help="Increase verbosity
-    )
+#         "--verbose", "-v", action="count", default=0, help="Increase verbosity"    )
 
     args = parser.parse_args()
 
@@ -63,19 +47,15 @@ def main() -> None:
     if args.verbose >= 1:
         level = logging.DEBUG
 
-    logging.basicConfig(level=level, format="%(levelname)s: %(message)s")
-
+    logging.basicConfig(level=level, format="%(levelname)s: %(message)s")"
     agent = KnowledgeAgent(args.dir)
 
     if args.build_index:
-        logging.info("Building knowledge index...")
-        agent.build_index()
+        logging.info("Building knowledge index...")"        agent.build_index()
 
     if args.update_backlinks:
-        logging.info(fUpdating backlinks in {args.dir}...")
-        count = agent.auto_update_backlinks(args.dir)
-        print(fUpdated {count} files with backlinks.")
-
+        logging.info(fUpdating backlinks in {args.dir}...")"        count = agent.auto_update_backlinks(args.dir)
+        print(fUpdated {count} files with backlinks.")"
     if args.graph:
         print(agent.get_graph_mermaid())
 
@@ -83,5 +63,4 @@ def main() -> None:
         parser.print_help()
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__":"    main()

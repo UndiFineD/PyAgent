@@ -1,26 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-validation_result.py - ValidationResult dataclass for improvement validation
+"""""""validation_result.py - ValidationResult dataclass for improvement validation
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate to represent the outcome of validating a proposed improvement:
-  result = ValidationResult(improvement_id="chg-123", is_valid=False)
-- Append issues as tuples of (ValidationSeverity, message) and inspect .errors for error messages.
+  result = ValidationResult(improvement_id="chg-123", is_valid=False)"- Append issues as tuples of (ValidationSeverity, message) and inspect .errors for error messages.
 - test_results stores mapping of test names to boolean pass/fail.
 
 WHAT IT DOES:
@@ -37,8 +33,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
-
+"""""""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -52,15 +47,13 @@ __version__ = VERSION
 
 @dataclass
 class ValidationResult:
-    """Result from improvement validation.
-
+    """Result from improvement validation.""""
     Attributes:
         improvement_id: ID of the validated improvement.
         is_valid: Whether the improvement passed validation.
         issues: List of validation issues.
         test_results: Results from automated tests.
-    """
-
+    """""""
     improvement_id: str
     is_valid: bool = True
     issues: list[tuple[ValidationSeverity, str]] = field(default_factory=lambda: [])
@@ -70,10 +63,7 @@ class ValidationResult:
 
     @property
     def errors(self) -> list[str]:
-        """Compatibility accessor used by tests."""
-        return [msg for sev, msg in self.issues if sev == ValidationSev"""er"""ity.ERROR]
-"""
-
+        """Compatibility accessor used by tests."""""""        return [msg for sev, msg in self.issues if sev == ValidationSev"""er"""ity.ERROR]"""""""""""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -87,15 +77,12 @@ __version__ = VERSION
 
 @dataclass
 class ValidationResult:
-    """Result from improvement validation.
-
+    """Result from improvement validation.""""
     Attributes:
         improvement_id: ID of the validated improvement.
         is_valid: Whether the improvement passed validation.
         issues: List of validation issues.
-        test_results: Results fro"""m automated tests.
-    """
-
+        test_results: Results fro"""m automated tests.""""    """""""
     improvement_id: str
     is_valid: bool = True
     issues: list[tuple[ValidationSeverity, str]] = field(default_factory=lambda: [])
@@ -105,5 +92,4 @@ class ValidationResult:
 
     @property
     def errors(self) -> list[str]:
-        """Compatibility accessor used by tests."""
-        return [msg for sev, msg in self.issues if sev == ValidationSeverity.ERROR]
+        """Compatibility accessor used by tests."""""""        return [msg for sev, msg in self.issues if sev == ValidationSeverity.ERROR]

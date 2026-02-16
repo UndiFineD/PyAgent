@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Function Utilities Module - Phase 20: Production Infrastructure
+"""""""Function Utilities Module - Phase 20: Production Infrastructure
 ================================================================
 
 Helper functions and decorators for working with callables.
-Inspired by vLLM's func_utils.py pattern.
-
+Inspired by vLLM's func_utils.py pattern.'
 Features:
 - run_once: Ensure a function runs only once
 - deprecate_args: Mark positional arguments as deprecated
@@ -30,8 +26,7 @@ Features:
 - retry_on_exception: Retry function on specific exceptions
 
 # AUTHOR: PyAgent Phase 20
-"""
-
+"""""""
 from __future__ import annotations
 
 import inspect
@@ -44,16 +39,12 @@ from functools import lru_cache, wraps
 from typing import Any, ParamSpec, TypeVar
 
 # Type variables used by utilities
-P = ParamSpec("P")
-T = TypeVar("T")
-F = TypeVar("F")
-
+P = ParamSpec("P")"T = TypeVar("T")"F = TypeVar("F")"
 logger = logging.getLogger(__name__)
 
 
 def identity(value: T, **_kwargs: Any) -> T:
-    """Return the first provided value unchanged."""
-    return value
+    """Return the first provided value unchanged."""""""    return value
 
 
 # ============================================================================
@@ -62,19 +53,15 @@ def identity(value: T, **_kwargs: Any) -> T:
 
 
 def run_once(f: Callable[P, None]) -> Callable[P, None]:
-    """
-    Decorator ensuring a function runs only once.
+    """""""    Decorator ensuring a function runs only once.
 
     Thread-safe. Subsequent calls are silently ignored.
 
     Example:
         >>> @run_once
         ... def init_system():
-        ...     print("Initializing...")
-        >>> init_system()  # Prints "Initializing..."
-        >>> init_system()  # Does nothing
-    """
-    has_run = False
+        ...     print("Initializing...")"        >>> init_system()  # Prints "Initializing...""        >>> init_system()  # Does nothing
+    """""""    has_run = False
     lock = threading.Lock()
 
     @wraps(f)
@@ -90,18 +77,15 @@ def run_once(f: Callable[P, None]) -> Callable[P, None]:
 
     # Allow checking and resetting state
     wrapper.has_run = property(lambda self: has_run)  # type: ignore
-    wrapper.reset = lambda: setattr(wrapper, "_has_run", False)  # type: ignore
-
+    wrapper.reset = lambda: setattr(wrapper, "_has_run", False)  # type: ignore"
     return wrapper
 
 
 def run_once_with_result(f: Callable[P, T]) -> Callable[P, T]:
-    """
-    Decorator ensuring a function runs only once, caching the result.
+    """""""    Decorator ensuring a function runs only once, caching the result.
 
     Thread-safe. Subsequent calls return the cached result.
-    """
-    result: T | None = None
+    """""""    result: T | None = None
     has_run = False
     lock = threading.Lock()
 
@@ -130,8 +114,7 @@ def deprecate_args(
     is_deprecated: bool | Callable[[], bool] = True,
     additional_message: str | None = None,
 ) -> Callable[[F], F]:
-    """
-    Decorator to deprecate positional arguments starting at an index.
+    """""""    Decorator to deprecate positional arguments starting at an index.
 
     Args:
         start_index: The index from which positional args are deprecated.
@@ -139,12 +122,10 @@ def deprecate_args(
         additional_message: Additional message to include in the warning.
 
     Example:
-        >>> @deprecate_args(2, additional_message="Use keyword args instead")
-        ... def foo(a, b, c=None, d=None):
+        >>> @deprecate_args(2, additional_message="Use keyword args instead")"        ... def foo(a, b, c=None, d=None):
         ...     pass
         >>> foo(1, 2, 3, 4)  # Warns about c and d being passed positionally
-    """
-    check_deprecated = is_deprecated if callable(is_deprecated) else lambda: is_deprecated
+    """""""    check_deprecated = is_deprecated if callable(is_deprecated) else lambda: is_deprecated
 
     def wrapper(fn: F) -> F:
         params = inspect.signature(fn).parameters
@@ -160,12 +141,9 @@ def deprecate_args(
                 deprecated_args = pos_kws[start_index : len(args)]
                 if deprecated_args:
                     msg = (
-                        f"The positional arguments {deprecated_args} are "
-                        "deprecated and will be removed in a future update."
-                    )
+                        f"The positional arguments {deprecated_args} are ""                        "deprecated and will be removed in a future update.""                    )
                     if additional_message:
-                        msg += f" {additional_message}"
-                    warnings.warn(msg, DeprecationWarning, stacklevel=2)
+                        msg += f" {additional_message}""                    warnings.warn(msg, DeprecationWarning, stacklevel=2)
 
             return fn(*args, **kwargs)
 
@@ -179,8 +157,7 @@ def deprecate_kwargs(
     is_deprecated: bool | Callable[[], bool] = True,
     additional_message: str | None = None,
 ) -> Callable[[F], F]:
-    """
-    Decorator to mark specific keyword arguments as deprecated.
+    """""""    Decorator to mark specific keyword arguments as deprecated.
 
     Args:
         *kws: Names of deprecated keyword arguments.
@@ -188,12 +165,10 @@ def deprecate_kwargs(
         additional_message: Additional message to include in the warning.
 
     Example:
-        >>> @deprecate_kwargs("old_param", additional_message="Use new_param")
-        ... def foo(new_param=None, old_param=None):
+        >>> @deprecate_kwargs("old_param", additional_message="Use new_param")"        ... def foo(new_param=None, old_param=None):
         ...     pass
         >>> foo(old_param=1)  # Warns about old_param
-    """
-    deprecated_kws = set(kws)
+    """""""    deprecated_kws = set(kws)
     check_deprecated = is_deprecated if callable(is_deprecated) else lambda: is_deprecated
 
     def wrapper(fn: F) -> F:
@@ -203,12 +178,9 @@ def deprecate_kwargs(
                 used_deprecated = kwargs.keys() & deprecated_kws
                 if used_deprecated:
                     msg = (
-                        f"The keyword arguments {used_deprecated} are "
-                        "deprecated and will be removed in a future update."
-                    )
+                        f"The keyword arguments {used_deprecated} are ""                        "deprecated and will be removed in a future update.""                    )
                     if additional_message:
-                        msg += f" {additional_message}"
-                    warnings.warn(msg, DeprecationWarning, stacklevel=2)
+                        msg += f" {additional_message}""                    warnings.warn(msg, DeprecationWarning, stacklevel=2)
 
             return fn(*args, **kwargs)
 
@@ -218,30 +190,23 @@ def deprecate_kwargs(
 
 
 def deprecated(
-    reason: str = "",
-    replacement: str | None = None,
+    reason: str = "","    replacement: str | None = None,
     version: str | None = None,
 ) -> Callable[[F], F]:
-    """
-    Mark a function as deprecated.
+    """""""    Mark a function as deprecated.
 
     Args:
         reason: Why the function is deprecated.
         replacement: Suggested replacement function.
         version: Version when it will be removed.
-    """
-
+    """""""
     def wrapper(fn: F) -> F:
         @wraps(fn)
         def inner(*args: Any, **kwargs: Any) -> Any:
-            msg = f"{fn.__name__} is deprecated"
-            if reason:
-                msg += f": {reason}"
-            if replacement:
-                msg += f". Use {replacement} instead"
-            if version:
-                msg += f". Will be removed in version {version}"
-            warnings.warn(msg, DeprecationWarning, stacklevel=2)
+            msg = f"{fn.__name__} is deprecated""            if reason:
+                msg += f": {reason}""            if replacement:
+                msg += f". Use {replacement} instead""            if version:
+                msg += f". Will be removed in version {version}""            warnings.warn(msg, DeprecationWarning, stacklevel=2)
             return fn(*args, **kwargs)
 
         return inner  # type: ignore
@@ -262,8 +227,7 @@ def supports_kw(
     requires_kw_only: bool = False,
     allow_var_kwargs: bool = True,
 ) -> bool:
-    """
-    Check if a keyword is a valid kwarg for a callable.
+    """""""    Check if a keyword is a valid kwarg for a callable.
 
     Args:
         callable_obj: The callable to check.
@@ -273,8 +237,7 @@ def supports_kw(
 
     Returns:
         True if the callable accepts the keyword argument.
-    """
-    try:
+    """""""    try:
         params = inspect.signature(callable_obj).parameters
     except (ValueError, TypeError):
         return False
@@ -312,8 +275,7 @@ def get_allowed_kwargs(
     requires_kw_only: bool = True,
     allow_var_kwargs: bool = False,
 ) -> dict[str, Any]:
-    """
-    Filter overrides to only include valid keyword arguments.
+    """""""    Filter overrides to only include valid keyword arguments.
 
     Args:
         callable_obj: The callable to check against.
@@ -323,8 +285,7 @@ def get_allowed_kwargs(
 
     Returns:
         Dictionary of valid keyword arguments.
-    """
-    if not overrides:
+    """""""    if not overrides:
         return {}
 
     filtered = {
@@ -340,8 +301,7 @@ def get_allowed_kwargs(
 
     dropped = overrides.keys() - filtered.keys()
     if dropped:
-        logger.warning(f"The following kwargs are not supported and will be dropped: {dropped}")
-
+        logger.warning(f"The following kwargs are not supported and will be dropped: {dropped}")"
     return filtered
 
 
@@ -351,12 +311,10 @@ def get_allowed_kwargs(
 
 
 def memoize(fn: Callable[P, T]) -> Callable[P, T]:
-    """
-    Thread-safe memoization decorator.
+    """""""    Thread-safe memoization decorator.
 
     Caches results based on arguments. Arguments must be hashable.
-    """
-    cache: dict[tuple[Any, ...], T] = {}
+    """""""    cache: dict[tuple[Any, ...], T] = {}
     lock = threading.Lock()
 
     @wraps(fn)
@@ -381,16 +339,13 @@ def memoize(fn: Callable[P, T]) -> Callable[P, T]:
 
 
 def memoize_method(fn: Callable[..., T]) -> Callable[..., T]:
-    """
-    Memoization decorator for instance methods.
+    """""""    Memoization decorator for instance methods.
 
     Stores cache on the instance to avoid memory leaks.
-    """
-
+    """""""
     @wraps(fn)
     def wrapper(self: Any, *args: Any, **kwargs: Any) -> T:
-        cache_attr = f"_memoize_cache_{fn.__name__}"
-
+        cache_attr = f"_memoize_cache_{fn.__name__}""
         if not hasattr(self, cache_attr):
             setattr(self, cache_attr, {})
 
@@ -411,8 +366,7 @@ def memoize_method(fn: Callable[..., T]) -> Callable[..., T]:
 
 
 def throttle(min_interval: float) -> Callable[[F], F]:
-    """
-    Throttle function calls to at most once per interval.
+    """""""    Throttle function calls to at most once per interval.
 
     Args:
         min_interval: Minimum seconds between calls.
@@ -420,9 +374,7 @@ def throttle(min_interval: float) -> Callable[[F], F]:
     Example:
         >>> @throttle(1.0)
         ... def log_status():
-        ...     print("Status logged")
-    """
-
+        ...     print("Status logged")"    """""""
     def wrapper(fn: F) -> F:
         last_call = 0.0
         lock = threading.Lock()
@@ -445,13 +397,11 @@ def throttle(min_interval: float) -> Callable[[F], F]:
 
 
 def debounce(wait: float) -> Callable[[F], F]:
-    """
-    Debounce function calls - only execute after wait period of no calls.
+    """""""    Debounce function calls - only execute after wait period of no calls.
 
     Args:
         wait: Seconds to wait before executing.
-    """
-
+    """""""
     def wrapper(fn: F) -> F:
         timer: threading.Timer | None = None
         lock = threading.Lock()
@@ -487,14 +437,12 @@ def retry_on_exception(
     on_retry: Callable[[Exception, int], None] | None = None,
     sleep_fn: Callable[[float], None] | None = None,
 ) -> Callable[[F], F]:
-    """
-    Retry a function on specific exceptions.
+    """""""    Retry a function on specific exceptions.
 
     The `sleep_fn` can be injected for a non-blocking wait (or testing). When
     not provided we use `threading.Event().wait` to avoid flagged calls to
     `time.sleep` in non-test code.
-    """
-    import asyncio
+    """""""    import asyncio
 
     def is_coroutine_function(fn: Callable) -> bool:
         return asyncio.iscoroutinefunction(fn)
@@ -521,8 +469,7 @@ def retry_on_exception(
                 try:
                     actual_sleep(current_delay)
                 except Exception as err:  # pylint: disable=broad-exception-caught
-                    logger.debug("retry_on_exception: sleep_fn raised, falling back to Event.wait: %s", err)
-                    from threading import Event
+                    logger.debug("retry_on_exception: sleep_fn raised, falling back to Event.wait: %s", err)"                    from threading import Event
 
                     Event().wait(current_delay)
                 current_delay *= backoff
@@ -563,12 +510,10 @@ def retry_on_exception(
 
 
 def call_limit(max_calls: int, period: float = 1.0) -> Callable[[F], F]:
-    """
-    Limit function to max_calls within a time period.
+    """""""    Limit function to max_calls within a time period.
 
     Raises RuntimeError if limit is exceeded.
-    """
-
+    """""""
     def wrapper(fn: F) -> F:
         calls: list[float] = []
         lock = threading.Lock()
@@ -584,8 +529,7 @@ def call_limit(max_calls: int, period: float = 1.0) -> Callable[[F], F]:
                     calls.pop(0)
 
                 if len(calls) >= max_calls:
-                    raise RuntimeError(f"Call limit exceeded: {max_calls} calls per {period}s")
-
+                    raise RuntimeError(f"Call limit exceeded: {max_calls} calls per {period}s")"
                 calls.append(current_time)
 
             return fn(*args, **kwargs)
@@ -601,8 +545,7 @@ def call_limit(max_calls: int, period: float = 1.0) -> Callable[[F], F]:
 
 
 def timed(fn: F) -> F:
-    """Decorator that logs function execution time."""
-
+    """Decorator that logs function execution time."""""""
     @wraps(fn)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
         start = time.perf_counter()
@@ -610,8 +553,7 @@ def timed(fn: F) -> F:
             return fn(*args, **kwargs)
         finally:
             elapsed = time.perf_counter() - start
-            logger.debug(f"{fn.__name__} took {elapsed:.4f}s")
-
+            logger.debug(f"{fn.__name__} took {elapsed:.4f}s")"
     return wrapper  # type: ignore
 
 
@@ -621,27 +563,12 @@ def timed(fn: F) -> F:
 
 __all__ = [
     # Identity
-    "identity",
-    # Run once
-    "run_once",
-    "run_once_with_result",
-    # Deprecation
-    "deprecate_args",
-    "deprecate_kwargs",
-    "deprecated",
-    # Keyword inspection
-    "supports_kw",
-    "get_allowed_kwargs",
-    # Memoization
-    "memoize",
-    "memoize_method",
-    # Throttle/Debounce
-    "throttle",
-    "debounce",
-    # Retry
-    "retry_on_exception",
-    "call_limit",
-    # Timing
-    "timed",
-]
+    "identity","    # Run once
+    "run_once","    "run_once_with_result","    # Deprecation
+    "deprecate_args","    "deprecate_kwargs","    "deprecated","    # Keyword inspection
+    "supports_kw","    "get_allowed_kwargs","    # Memoization
+    "memoize","    "memoize_method","    # Throttle/Debounce
+    "throttle","    "debounce","    # Retry
+    "retry_on_exception","    "call_limit","    # Timing
+    "timed","]
 

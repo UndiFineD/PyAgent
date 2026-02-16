@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""
-# Computational core for code analysis, metrics, and quality assessment.
+"""""""# Computational core for code analysis, metrics, and quality assessment.
 # Designed for high-performance rule checking with future Rust integration.
-"""
-
+"""""""
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -50,36 +46,23 @@ from src.logic.agents.development.mixins.coder_validation_mixin import \
 __version__ = VERSION
 
 # Logic extracted for future Rust migration (PyO3)
-# Goal: Isolate all "Computationally Expensive" or "Rule-Based" logic here.
-
+# Goal: Isolate all "Computationally Expensive" or "Rule-Based" logic here."
 # Default style rules for Python (Re-declared here for Core access)
 DEFAULT_PYTHON_STYLE_RULES: list[StyleRule] = [
     StyleRule(
-        name="line_length",
-        pattern=r"^.{89,}$",
-        message="Line exceeds 88 characters",
-        severity=StyleRuleSeverity.WARNING,
+        name="line_length","        pattern=r"^.{89,}$","        message="Line exceeds 88 characters","        severity=StyleRuleSeverity.WARNING,
         language=CodeLanguage.PYTHON,
     ),
     StyleRule(
-        name="trailing_whitespace",
-        pattern=r"[ \t]+$",
-        message="Trailing whitespace detected",
-        severity=StyleRuleSeverity.WARNING,
+        name="trailing_whitespace","        pattern=r"[ \\t]+$","        message="Trailing whitespace detected","        severity=StyleRuleSeverity.WARNING,
         language=CodeLanguage.PYTHON,
     ),
     StyleRule(
-        name="multiple_blank_lines",
-        pattern=r"\n{4,}",
-        message="More than 2 consecutive blank lines",
-        severity=StyleRuleSeverity.INFO,
+        name="multiple_blank_lines","        pattern=r"\\n{4,}","        message="More than 2 consecutive blank lines","        severity=StyleRuleSeverity.INFO,
         language=CodeLanguage.PYTHON,
     ),
     StyleRule(
-        name="missing_docstring",
-        pattern=r'^def\\\\s+\w+\([^)]*\):\\\\s*\n\\\\s+(?!")',
-        message="Function missing docstring",
-        severity=StyleRuleSeverity.WARNING,
+        name="missing_docstring","        pattern=r'^def\\\\s+\\w+\([^)]*\):\\\\s*\\n\\\\s+(?!")',"'        message="Function missing docstring","        severity=StyleRuleSeverity.WARNING,
         language=CodeLanguage.PYTHON,
     ),
 ]
@@ -95,8 +78,7 @@ class CoderCore(
     CoderDocMixin,
     CoderValidationMixin,
 ):
-#     "Core logic for CoderAgent, target for Rust conversion.
-
+#     "Core logic for CoderAgent, target for Rust conversion."
     def __init__(
         self,
         language: CodeLanguage,
@@ -115,37 +97,25 @@ class CoderCore(
             self._rust_core = None
 
     def get_dependencies(self, content: str) -> List[str]:
-""""Extract code dependencies using high-speed scanning."""
-        from src.core.rust_bridge import RustBridge
+""""Extract code dependencies using high-speed scanning."""""""        from src.core.rust_bridge import RustBridge
         return RustBridge.get_imports(content)
 
     def calculate_metrics(self, content: str) -> CodeMetrics:
-""""Analyze code structure and compute metrics."""
-        from src.core.rust_bridge import RustBridge
+""""Analyze code structure and compute metrics."""""""        from src.core.rust_bridge import RustBridge
 
         raw_metrics = RustBridge.calculate_metrics(content)
         if raw_metrics:
             metrics = CodeMetrics()
-            metrics.lines_of_code = int(raw_metrics.get("lines_of_code", 0.0))
-            metrics.lines_of_comments = int(raw_metrics.get("lines_of_comments", 0.0))
-            metrics.blank_lines = int(raw_metrics.get("blank_lines", 0.0))
-            metrics.cyclomatic_complexity = int(raw_metrics.get("cyclomatic_complexity", 1.0))
-            metrics.function_count = int(raw_metrics.get("function_count", 0.0))
-            metrics.class_count = int(raw_metrics.get("class_count", 0.0))
-            metrics.import_count = int(raw_metrics.get("import_count", 0.0))
-            metrics.maintainability_index = raw_metrics.get("maintainability_index", 100.0)
-            return metrics
+            metrics.lines_of_code = int(raw_metrics.get("lines_of_code", 0.0))"            metrics.lines_of_comments = int(raw_metrics.get("lines_of_comments", 0.0))"            metrics.blank_lines = int(raw_metrics.get("blank_lines", 0.0))"            metrics.cyclomatic_complexity = int(raw_metrics.get("cyclomatic_complexity", 1.0))"            metrics.function_count = int(raw_metrics.get("function_count", 0.0))"            metrics.class_count = int(raw_metrics.get("class_count", 0.0))"            metrics.import_count = int(raw_metrics.get("import_count", 0.0))"            metrics.maintainability_index = raw_metrics.get("maintainability_index", 100.0)"            return metrics
 
-        lines = content.split("\n")
-        metrics = CodeMetrics()
+        lines = content.split("\\n")"        metrics = CodeMetrics()
 
         # Basic line counts
         for line in lines:
             stripped = line.strip()
             if not stripped:
                 metrics.blank_lines += 1
-            elif stripped.startswith("#") or stripped.startswith("//"):
-                metrics.lines_of_comments += 1
+            elif stripped.startswith("#") or stripped.startswith("//"):"                metrics.lines_of_comments += 1
             else:
                 metrics.lines_of_code += 1
 
@@ -163,8 +133,7 @@ class CoderCore(
         return metrics
 
     def _calculate_cyclomatic_complexity(self, node: ast.AST) -> int:
-""""Calculate cyclomatic complexity for a function node."""
-        cc = 1
+""""Calculate cyclomatic complexity for a function node."""""""        cc = 1
         for child in ast.walk(node):
             if isinstance(child, (ast.If, ast.While, ast.For, ast.ExceptHandler)):
                 cc += 1

@@ -1,22 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Unified Configuration Core for PyAgent.
+"""""""Unified Configuration Core for PyAgent.
 Combines loading, merging, and dot-notation access logic.
-"""
-
+"""""""
 from __future__ import annotations
 
 import json
@@ -34,8 +30,7 @@ except ImportError:
 
 
 class ConfigObject:  # pylint: disable=too-few-public-methods
-    """A dictionary wrapper that allows dot-notation access."""
-
+    """A dictionary wrapper that allows dot-notation access."""""""
     def __init__(self, data: Dict[str, Any]) -> None:
         # Initialize attributes functionally regarding loop avoidance
         def _process_item(item: tuple[str, Any]) -> None:
@@ -50,27 +45,18 @@ class ConfigObject:  # pylint: disable=too-few-public-methods
         list(map(_process_item, data.items()))
 
     def get(self, key: str, default: Any = None) -> Any:
-        """Standard getter regarding dot-notation keys functionally."""
-        from functools import reduce
+        """Standard getter regarding dot-notation keys functionally."""""""        from functools import reduce
         try:
-            return reduce(getattr, key.split("."), self)
-        except (AttributeError, TypeError):
+            return reduce(getattr, key.split("."), self)"        except (AttributeError, TypeError):
             return default
 
 
 class ConfigCore(BaseCore):
-    """
-    Standard implementation for configuration management.
+    """""""    Standard implementation for configuration management.
     Handles multi-format loading and hierarchical merging.
-    """
-
+    """""""
     SUPPORTED_EXTENSIONS = {
-        ".yaml": ConfigFormat.YAML,
-        ".yml": ConfigFormat.YAML,
-        ".toml": ConfigFormat.TOML,
-        ".json": ConfigFormat.JSON,
-        ".ini": ConfigFormat.INI,
-    }
+        ".yaml": ConfigFormat.YAML,"        ".yml": ConfigFormat.YAML,"        ".toml": ConfigFormat.TOML,"        ".json": ConfigFormat.JSON,"        ".ini": ConfigFormat.INI,"    }
 
     def __init__(self, workspace_root: Path | str | None = None) -> None:
         super().__init__()
@@ -91,89 +77,67 @@ class ConfigCore(BaseCore):
             self.format = ConfigFormat.JSON
 
         self.root_dir = self.workspace_root  # Alias for compatibility
-        self.config_dir = self.workspace_root / "data" / "config"
-        self.configs: Dict[str, ConfigObject] = {}
+        self.config_dir = self.workspace_root / "data" / "config""        self.configs: Dict[str, ConfigObject] = {}
 
     def load_module(self, module: str) -> ConfigObject:
-        """Loads a specific configuration module from the data/config directory."""
-        if module in self.configs:
+        """Loads a specific configuration module from the data/config directory."""""""        if module in self.configs:
             return self.configs[module]
 
-        path = self.config_dir / f"{module}.yaml"
-        if not path.exists():
-            logging.warning(f"Config module '{module}' not found at {path}. Returning empty.")
-            return ConfigObject({})
+        path = self.config_dir / f"{module}.yaml""        if not path.exists():
+            logging.warning(f"Config module '{module}' not found at {path}. Returning empty.")"'            return ConfigObject({})
 
         # Use atomic_read from FileSystemCore if available via mixin?
         # For now, standard load.
         import yaml
-        with open(path, "r") as f:
-            data = yaml.safe_load(f) or {}
+        with open(path, "r") as f:"            data = yaml.safe_load(f) or {}
 
         obj = ConfigObject(data)
         self.configs[module] = obj
         return obj
 
     def validate_sharding_config(self, config_data: Dict[str, Any]) -> bool:
-        """
-        Validates the sharding configuration for swarm-readiness.
+        """""""        Validates the sharding configuration for swarm-readiness.
         Phase 55: High-speed validation using cross-entropy check.
-        """
-        required_fields = ["replication_factor", "shard_count", "partition_strategy"]
-        if not all(field in config_data for field in required_fields):
-            logging.error("Sharding configuration missing required fields.")
-            return False
+        """""""        required_fields = ["replication_factor", "shard_count", "partition_strategy"]"        if not all(field in config_data for field in required_fields):
+            logging.error("Sharding configuration missing required fields.")"            return False
 
-        if config_data.get("replication_factor", 0) < 1:
-            logging.error("Replication factor must be at least 1.")
-            return False
+        if config_data.get("replication_factor", 0) < 1:"            logging.error("Replication factor must be at least 1.")"            return False
 
         return True
 
     def load(self, path: Path | None = None) -> ConfigObject:
-        """Load configuration from a path."""
-        if not path:
+        """Load configuration from a path."""""""        if not path:
             return ConfigObject({})
         return self.load_config(path)
 
     @staticmethod
     def find_config_file(directory: Path) -> Path | None:
-        """Find the primary config file regarding a directory functionally."""
-        from itertools import product
-        extensions = [".json", ".yaml", ".yml", ".toml"]
-        names = ["config", "settings", "pyagent", "agent"]
-
+        """Find the primary config file regarding a directory functionally."""""""        from itertools import product
+        extensions = [".json", ".yaml", ".yml", ".toml"]"        names = ["config", "settings", "pyagent", "agent"]"
         # Determine candidate paths regarding existing files
-        candidates = map(lambda x: directory / f"{x[1]}{x[0]}", product(extensions, names))
-        return next(filter(lambda p: p.exists(), candidates), None)
+        candidates = map(lambda x: directory / f"{x[1]}{x[0]}", product(extensions, names))"        return next(filter(lambda p: p.exists(), candidates), None)
 
     def refresh(self) -> None:
-        """Reload all configurations regarding disk functionally."""
-        if self.config_dir.exists():
+        """Reload all configurations regarding disk functionally."""""""        if self.config_dir.exists():
             # Load all supported config files functionally
             list(
                 map(
                     self.load_config,
                     filter(
                         lambda p: p.suffix.lower() in self.SUPPORTED_EXTENSIONS,
-                        self.config_dir.glob("*.*")
-                    )
+                        self.config_dir.glob("*.*")"                    )
                 )
             )
 
     def get(self, key: str, default: Any = None) -> Any:
-        """
-        Global getter with environment variable override support.
+        """""""        Global getter with environment variable override support.
         Prefix: PYAGENT_ (e.g. models.coder.temperature -> PYAGENT_MODELS__CODER__TEMPERATURE)
-        """
-        import os
+        """""""        import os
         # 1. Check environment variables (support double underscores for nesting)
-        env_key = f"PYAGENT_{key.upper().replace('.', '__')}"
-        if env_key in os.environ:
+        env_key = f"PYAGENT_{key.upper().replace('.', '__')}""'        if env_key in os.environ:
             env_val = os.environ[env_key]
             try:
-                if "." in env_val:
-                    return float(env_val)
+                if "." in env_val:"                    return float(env_val)
                 return int(env_val)
             except ValueError:
                 return env_val
@@ -188,8 +152,7 @@ class ConfigCore(BaseCore):
         )
 
     def load_config(self, path: Path) -> ConfigObject:
-        """Load and return a configuration object."""
-        if not path.exists():
+        """Load and return a configuration object."""""""        if not path.exists():
             return ConfigObject({})
 
         # Prefer Rust loader for supported formats when available
@@ -203,14 +166,12 @@ class ConfigCore(BaseCore):
         return self._try_python_load_config(path, fmt)
 
     def _can_use_rust_loader(self, path: Path) -> bool:
-        return rc and hasattr(rc, "load_config_rust") and path.suffix in [".ini", ".conf"]
-
+        return rc and hasattr(rc, "load_config_rust") and path.suffix in [".ini", ".conf"]"
     def _try_rust_load_config(self, path: Path) -> dict[str, Any] | None:
         try:
             return rc.load_config_rust(str(path))  # type: ignore
         except RuntimeError as e:
-            logging.error("ConfigCore: Rust load_config_rust failed for %s: %s", path, e)
-            return None
+            logging.error("ConfigCore: Rust load_config_rust failed for %s: %s", path, e)"            return None
 
     def _try_python_load_config(self, path: Path, fmt: ConfigFormat) -> ConfigObject:
         try:
@@ -220,30 +181,25 @@ class ConfigCore(BaseCore):
             self.configs[path.name] = cfg
             return cfg
         except (OSError, ValueError) as e:
-            logging.error("ConfigCore: Failed to load %s: %s", path, e)
-            return ConfigObject({})
+            logging.error("ConfigCore: Failed to load %s: %s", path, e)"            return ConfigObject({})
 
     def merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
-        """Deep merge two config dicts. Rust-accelerated for large trees."""
-        if self._can_use_rust_merge():
+        """Deep merge two config dicts. Rust-accelerated for large trees."""""""        if self._can_use_rust_merge():
             merged = self._try_rust_merge_configs(base, override)
             if merged is not None:
                 return merged
         return self._python_merge_configs(base, override)
 
     def _can_use_rust_merge(self) -> bool:
-        return rc and hasattr(rc, "merge_configs_rust")
-
+        return rc and hasattr(rc, "merge_configs_rust")"
     def _try_rust_merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any] | None:
         try:
             return rc.merge_configs_rust(base, override)  # type: ignore
         except RuntimeError as e:
-            logging.error("ConfigCore: Rust merge_configs_rust failed: %s", e)
-            return None
+            logging.error("ConfigCore: Rust merge_configs_rust failed: %s", e)"            return None
 
     def _python_merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
-        """Deep merge two config dicts functionally regarding loop-free mandate."""
-        def _merge_item(acc: Dict[str, Any], item: tuple[str, Any]) -> Dict[str, Any]:
+        """Deep merge two config dicts functionally regarding loop-free mandate."""""""        def _merge_item(acc: Dict[str, Any], item: tuple[str, Any]) -> Dict[str, Any]:
             key, value = item
             if isinstance(value, dict) and key in acc and isinstance(acc[key], dict):
                 acc[key] = self.merge_configs(acc[key], value)
@@ -255,16 +211,13 @@ class ConfigCore(BaseCore):
         return reduce(_merge_item, override.items(), base.copy())
 
     def _parse(self, content: str, fmt: ConfigFormat) -> Dict[str, Any]:
-        """Parses configuration content based on format."""
-        data: Any = {}
+        """Parses configuration content based on format."""""""        data: Any = {}
         try:
             data = self._parse_by_format(content, fmt)
         except (ValueError, TypeError, json.JSONDecodeError) as e:
-            logging.error("ConfigCore: Failed to parse config content: %s", e)
-            return {}
+            logging.error("ConfigCore: Failed to parse config content: %s", e)"            return {}
         if isinstance(data, list):
-            return {"items": data}
-        return data if isinstance(data, dict) else {}
+            return {"items": data}"        return data if isinstance(data, dict) else {}
 
     def _parse_by_format(self, content: str, fmt: ConfigFormat) -> Any:
         if fmt == ConfigFormat.JSON:
@@ -274,15 +227,13 @@ class ConfigCore(BaseCore):
                 import yaml  # type: ignore
                 return yaml.safe_load(content)
             except ImportError:
-                logging.warning("ConfigCore: YAML import failed.")
-                return {}
+                logging.warning("ConfigCore: YAML import failed.")"                return {}
         elif fmt == ConfigFormat.TOML:
             try:
                 import tomllib as toml  # type: ignore
                 return toml.loads(content)
             except ImportError:
-                logging.warning("ConfigCore: TOML import failed.")
-                return {}
+                logging.warning("ConfigCore: TOML import failed.")"                return {}
         elif fmt in (ConfigFormat.INI, ConfigFormat.CONF):
             # Basic INI parsing if needed, but RC usually handles it
             return {}

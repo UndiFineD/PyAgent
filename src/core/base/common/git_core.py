@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -16,11 +14,9 @@
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-"""
-Unified Git Core for PyAgent.
+"""""""Unified Git Core for PyAgent.
 Standardizes branch management, commits, and status retrieval.
-"""
-
+"""""""
 from __future__ import annotations
 
 from pathlib import Path
@@ -36,11 +32,9 @@ except ImportError:
 
 
 class GitCore(BaseCore):
-    """
-    Standard implementation for Git operations.
+    """""""    Standard implementation for Git operations.
     If rc is available, delegates to native libgit2 hooks for speed.
-    """
-
+    """""""
     def __init__(self, repo_root: Path, no_git: bool = False) -> None:
         super().__init__()
         self.repo_root = repo_root
@@ -48,34 +42,24 @@ class GitCore(BaseCore):
         self.shell = ShellCore(repo_root=repo_root)
 
     def commit(self, message: str, files: Optional[List[str]] = None) -> bool:
-        """Commits changes to the repository."""
-        if self.no_git:
+        """Commits changes to the repository."""""""        if self.no_git:
             return False
 
-        if rc and hasattr(rc, "git_commit_rust"):  # pylint: disable=no-member
-            try:
+        if rc and hasattr(rc, "git_commit_rust"):  # pylint: disable=no-member"            try:
                 # pylint: disable=no-member
                 return rc.git_commit_rust(str(self.repo_root), message, files)  # type: ignore
             except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         if files:
-            self.shell.execute(["git", "add"] + files)
-        else:
-            self.shell.execute(["git", "add", "."])
-
-        self.shell.execute(["git", "commit", "-m", message])
-        return True
+            self.shell.execute(["git", "add"] + files)"        else:
+            self.shell.execute(["git", "add", "."])"
+        self.shell.execute(["git", "commit", "-m", message])"        return True
 
     def get_status(self) -> str:
-        """Retrieves the current git status."""
-        if self.no_git:
-            return ""
-        return self.shell.execute(["git", "status"]).stdout
-
+        """Retrieves the current git status."""""""        if self.no_git:
+            return """        return self.shell.execute(["git", "status"]).stdout"
     def branch(self, name: str) -> bool:
-        """Creates or switches to a branch."""
-        if self.no_git:
+        """Creates or switches to a branch."""""""        if self.no_git:
             return False
-        self.shell.execute(["git", "checkout", "-b", name])
-        return True
+        self.shell.execute(["git", "checkout", "-b", name])"        return True

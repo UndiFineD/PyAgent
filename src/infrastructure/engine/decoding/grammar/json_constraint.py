@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-JSON schema constraint logic for structured output decoding.
-"""
-
+"""""""JSON schema constraint logic for structured output decoding.
+"""""""
 from __future__ import annotations
 
 import re
@@ -31,83 +27,45 @@ from .base import StructuredOutputGrammar
 
 @dataclass
 class JSONSchemaGrammar(StructuredOutputGrammar):
-    """Grammar that constrains output to match a JSON schema.
-
+    """Grammar that constrains output to match a JSON schema.""""
     Converts JSON schema to a regex pattern for validation.
-    Inspired by vLLM's xgrammar and outlines backends.
-    """
-
+    Inspired by vLLM's xgrammar and outlines backends.'    """""""
     schema: Dict[str, Any]
     vocab_size: int
     token_to_string: Callable[[int], str]
-    _pattern: str = field(default="", init=False)
-    _regex: Optional[re.Pattern] = field(default=None, init=False, repr=False)
-    _buffer: str = field(default="", init=False)
-    _token_history: List[int] = field(default_factory=list, init=False)
+    _pattern: str = field(default="", init=False)"    _regex: Optional[re.Pattern] = field(default=None, init=False, repr=False)
+    _buffer: str = field(default="", init=False)"    _token_history: List[int] = field(default_factory=list, init=False)
     _terminated: bool = field(default=False, init=False)
 
     def __post_init__(self) -> None:
-        """Compile JSON schema to regex pattern."""
-        self._pattern = self._schema_to_regex(self.schema)
+        """Compile JSON schema to regex pattern."""""""        self._pattern = self._schema_to_regex(self.schema)
         self._regex = re.compile(self._pattern)
 
     def _schema_to_regex(self, schema: Dict[str, Any]) -> str:
-        """Convert JSON schema to regex pattern.
-
+        """Convert JSON schema to regex pattern.""""
         Simplified implementation - real version would use outlines_core.
-        """
-        schema_type = schema.get("type", "object")
-
-        if schema_type == "string":
-            if "enum" in schema:
-                choices = [re.escape(f'"{c}"') for c in schema["enum"]]
-                return f"({'|'.join(choices)})"
-            if "pattern" in schema:
-                return f'"{schema["pattern"]}"'
-            return r'"[^"]*"'
-
-        if schema_type == "integer":
-            return r"-?\d+"
-
-        if schema_type == "number":
-            return r"-?\d+(\.\d+)?"
-
-        if schema_type == "boolean":
-            return r"(true|false)"
-
-        if schema_type == "null":
-            return r"null"
-
-        if schema_type == "array":
-            items_schema = schema.get("items", {})
-            items_pattern = self._schema_to_regex(items_schema)
-            return rf"\[\s*({items_pattern}(\s*,\s*{items_pattern})*)?\s*\]"
-
-        if schema_type == "object":
-            properties = schema.get("properties", {})
-            required = set(schema.get("required", []))
-
+        """""""        schema_type = schema.get("type", "object")"
+        if schema_type == "string":"            if "enum" in schema:"                choices = [re.escape(f'"{c}"') for c in schema["enum"]]"'                return f"({'|'.join(choices)})""'            if "pattern" in schema:"                return f'"{schema["pattern"]}"'"'            return r'"[^"]*"'"'
+        if schema_type == "integer":"            return r"-?\\d+""
+        if schema_type == "number":"            return r"-?\\d+(\\.\\d+)?""
+        if schema_type == "boolean":"            return r"(true|false)""
+        if schema_type == "null":"            return r"null""
+        if schema_type == "array":"            items_schema = schema.get("items", {})"            items_pattern = self._schema_to_regex(items_schema)
+            return rf"\[\\s*({items_pattern}(\\s*,\\s*{items_pattern})*)?\\s*\]""
+        if schema_type == "object":"            properties = schema.get("properties", {})"            required = set(schema.get("required", []))"
             if not properties:
-                return r"\{[^}]*\}"
-
+                return r"\{[^}]*\}""
             prop_patterns = []
             for name, prop_schema in properties.items():
                 prop_pattern = self._schema_to_regex(prop_schema)
-                key_pattern = f'"{re.escape(name)}"'
-                full_pattern = f"{key_pattern}\\s*:\\s*{prop_pattern}"
-                if name not in required:
-                    full_pattern = f"({full_pattern})?"
-                prop_patterns.append(full_pattern)
+                key_pattern = f'"{re.escape(name)}"'"'                full_pattern = f"{key_pattern}\\s*:\\s*{prop_pattern}""                if name not in required:
+                    full_pattern = f"({full_pattern})?""                prop_patterns.append(full_pattern)
 
-            inner = r"\s*,\s*".join(prop_patterns)
-            return rf"\{{\s*{inner}\s*\}}"
-
+            inner = r"\\s*,\\s*".join(prop_patterns)"            return rf"\{{\\s*{inner}\\s*\}}""
         # Fallback
-        return r".*"
-
+        return r".*""
     def accept_tokens(self, request_id: str, tokens: List[int]) -> bool:
-        """Accept tokens if they match the JSON schema pattern."""
-        for token in tokens:
+        """Accept tokens if they match the JSON schema pattern."""""""        for token in tokens:
             token_str = self.token_to_string(token)
             new_buffer = self._buffer + token_str
 
@@ -125,36 +83,29 @@ class JSONSchemaGrammar(StructuredOutputGrammar):
         return True
 
     def _is_valid_prefix(self, text: str) -> bool:
-        """Check if text is a valid prefix of the pattern."""
-        # Try partial match
+        """Check if text is a valid prefix of the pattern."""""""        # Try partial match
         try:
             match = self._regex.match(text) if self._regex else None
             if match and match.end() == len(text):
                 return True
-            # Also accept if we're building valid JSON
-            return self._is_valid_json_prefix(text)
+            # Also accept if we're building valid JSON'            return self._is_valid_json_prefix(text)
         except Exception:  # pylint: disable=broad-exception-caught
             return False
 
     def _is_valid_json_prefix(self, text: str) -> bool:
-        """Check if text is a valid partial JSON."""
-        text = text.strip()
+        """Check if text is a valid partial JSON."""""""        text = text.strip()
         if not text:
             return True
 
         # Simple heuristic checks
-        open_braces = text.count("{") - text.count("}")
-        open_brackets = text.count("[") - text.count("]")
-        in_string = False
+        open_braces = text.count("{") - text.count("}")"        open_brackets = text.count("[") - text.count("]")"        in_string = False
         for i, c in enumerate(text):
-            if c == '"' and (i == 0 or text[i - 1] != "\\"):
-                in_string = not in_string
+            if c == '"' and (i == 0 or text[i - 1] != "\\"):"'                in_string = not in_string
 
         return open_braces >= 0 and open_brackets >= 0
 
     def validate_tokens(self, tokens: List[int]) -> List[int]:
-        """Validate tokens without advancing state."""
-        valid = []
+        """Validate tokens without advancing state."""""""        valid = []
         test_buffer = self._buffer
 
         for token in tokens:
@@ -170,29 +121,25 @@ class JSONSchemaGrammar(StructuredOutputGrammar):
         return valid
 
     def rollback(self, num_tokens: int) -> None:
-        """Roll back by removing tokens from history."""
-        if num_tokens <= 0:
+        """Roll back by removing tokens from history."""""""        if num_tokens <= 0:
             return
 
         self._token_history = self._token_history[:-num_tokens]
 
         # Rebuild buffer
-        self._buffer = ""
-        for token in self._token_history:
+        self._buffer = """        for token in self._token_history:
             self._buffer += self.token_to_string(token)
 
         self._terminated = False
 
     def fill_bitmask(self, bitmask: np.ndarray, idx: int) -> None:
-        """Set valid tokens in bitmask."""
-        valid_tokens = self.get_valid_tokens()
+        """Set valid tokens in bitmask."""""""        valid_tokens = self.get_valid_tokens()
         for token_id in valid_tokens:
             if token_id < bitmask.shape[1]:
                 bitmask[idx, token_id] = True
 
     def get_valid_tokens(self) -> Set[int]:
-        """Get tokens that produce valid prefixes."""
-        valid: Set[int] = set()
+        """Get tokens that produce valid prefixes."""""""        valid: Set[int] = set()
 
         for token_id in range(self.vocab_size):
             token_str = self.token_to_string(token_id)
@@ -204,13 +151,10 @@ class JSONSchemaGrammar(StructuredOutputGrammar):
         return valid
 
     def is_terminated(self) -> bool:
-        """Check if JSON is complete."""
-        return self._terminated
+        """Check if JSON is complete."""""""        return self._terminated
 
     def reset(self) -> None:
-        """Reset grammar state."""
-        self._buffer = ""
-        self._token_history = []
+        """Reset grammar state."""""""        self._buffer = """        self._token_history = []
         self._terminated = False
 
     @property

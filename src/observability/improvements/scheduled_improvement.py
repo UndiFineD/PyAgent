@@ -1,33 +1,26 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-ScheduledImprovement - Scheduled improvement data model"""
-# DATE: 2026-02-12"""
-# AUTHOR: Keimpe de Jong
+"""""""ScheduledImprovement - Scheduled improvement data model"""""""# DATE: 2026-02-12"""""""# AUTHOR: Keimpe de Jong
 USAGE:
 Create and inspect ScheduledImprovement instances as a lightweight data container for scheduling agent improvements. Example:
 from scheduled_improvement import ScheduledImprovement, ScheduleStatus
-s = ScheduledImprovement(improvement_id="IMP-123", scheduled_start="2026-03-01", scheduled_end="2026-03-07", assigned_resources=["alice","bob"], status=ScheduleStatus.SCHEDULED, sprint_id="S-12")
-
+s = ScheduledImprovement(improvement_id="IMP-123", scheduled_start="2026-03-01", scheduled_end="2026-03-07", assigned_resources=["alice","bob"], status=ScheduleStatus.SCHEDULED, sprint_id="S-12")"
 WHAT IT DOES:
 Encapsulates the minimal schema for a scheduled improvement: an identifier, planned start/end dates (strings), a list of assigned resources, a status drawn from ScheduleStatus, and an optional sprint identifier. Intended as a simple dataclass to carry scheduling metadata between components.
 
 WHAT IT SHOULD DO BETTER:
 Use proper types for date/time (datetime with timezone) instead of plain strings; validate and normalize assigned_resources (use typing.List[str]); annotate optional fields with Optional[...] and enforce immutability or controlled mutation where appropriate. Add serialization/deserialization helpers (to/from dict/JSON), equality/hash methods if used as map keys, input validation (raise on invalid ranges), and integration with StateTransaction and CascadeContext for transactional filesystem or lineage safety per project conventions.
-"""
-
+"""""""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -39,8 +32,7 @@ __version__ = VERSION
 
 @dataclass
 class ScheduledImprovement:
-    """A scheduled improvement with resource allocation.
-
+    """A scheduled improvement with resource allocation.""""
     Attributes:
         improvement_id: ID of the scheduled improvement.
         scheduled_start: Planned start date.
@@ -48,11 +40,8 @@ class ScheduledImprovement:
         assigned_resources: List of assigned team members.
         status: Current schedule status.
         sprint_id: Optional sprint identifier.
-    """
-
+    """""""
     improvement_id: str
-    scheduled_start: str = ""
-    scheduled_end: str = ""
-    assigned_resources: list[str] = field(default_factory=list)  # type: ignore[assignment]
+    scheduled_start: str = """    scheduled_end: str = """    assigned_resources: list[str] = field(default_factory=list)  # type: ignore[assignment]
     status: ScheduleStatus = ScheduleStatus.UNSCHEDULED
-    sprint_id: str = ""
+    sprint_id: str = """

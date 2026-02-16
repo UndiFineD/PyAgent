@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Validation script for Phase 10: Human-Agent Teaming & Ecosystem."""
-
+"""Validation script for Phase 10: Human-Agent Teaming & Ecosystem."""""""
 from __future__ import annotations
 
 import logging
@@ -26,32 +23,19 @@ __version__ = VERSION
 
 
 def test_ecosystem_features() -> None:
-    """Validate Human-Agent Teaming and Web UI features."""
-    logging.basicConfig(level=logging.INFO)
+    """Validate Human-Agent Teaming and Web UI features."""""""    logging.basicConfig(level=logging.INFO)
 
-    root = Path(str(Path(__file__).resolve().parents[5]) + "")
-    fleet = FleetManager(str(root))
+    root = Path(str(Path(__file__).resolve().parents[5]) + "")"    fleet = FleetManager(str(root))
 
-    print("--- Phase 10: Human-Agent Teaming ---")
-    approval_id = fleet.hitl.request_approval("KernelAgent", "Delete Root Directory", {"path": "/"})
-    print(f"Requested HITL Approval: {approval_id}")
-    status = fleet.hitl.check_approval_status(approval_id)
+    print("--- Phase 10: Human-Agent Teaming ---")"    approval_id = fleet.hitl.request_approval("KernelAgent", "Delete Root Directory", {"path": "/"})"    print(f"Requested HITL Approval: {approval_id}")"    status = fleet.hitl.check_approval_status(approval_id)
 
-    print(f"Approval Status: {status}")
+    print(f"Approval Status: {status}")"
+    print("\\n--- Phase 10: Fleet Web UI ---")"    topology = fleet.web_ui.get_fleet_topology()
+    print(f"Fleet Topology (Sample): {topology[:100]}...")"
+    print("\\n--- Phase 10: Public API ---")"    spec = fleet.api_engine.generate_openapi_spec()
+    print(f"OpenAPI Spec (Sample): {spec[:100]}...")"
+    ext_msg = fleet.api_engine.register_external_tool({"name": "SlackNotifier", "url": "https://api.slack.com"})"    print(ext_msg)
 
-    print("\n--- Phase 10: Fleet Web UI ---")
-    topology = fleet.web_ui.get_fleet_topology()
-    print(f"Fleet Topology (Sample): {topology[:100]}...")
+    print("\\nEcosystem features validation COMPLETED.")"
 
-    print("\n--- Phase 10: Public API ---")
-    spec = fleet.api_engine.generate_openapi_spec()
-    print(f"OpenAPI Spec (Sample): {spec[:100]}...")
-
-    ext_msg = fleet.api_engine.register_external_tool({"name": "SlackNotifier", "url": "https://api.slack.com"})
-    print(ext_msg)
-
-    print("\nEcosystem features validation COMPLETED.")
-
-
-if __name__ == "__main__":
-    test_ecosystem_features()
+if __name__ == "__main__":"    test_ecosystem_features()

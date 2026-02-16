@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Improvement Scheduler - Manage improvement scheduling and resource allocation
+"""""""Improvement Scheduler - Manage improvement scheduling and resource allocation
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -21,10 +18,8 @@ USAGE:
 from improvement_scheduler import ImprovementScheduler
 sched = ImprovementScheduler()
 # legacy: pass Improvement instance + ISO date string
-sched.schedule_improvement(improvement_obj, "2026-02-15", resources=["alice"], sprint_id="sprint-1")
-# newer: pass improvement id + datetime (or parseable string)
-sched.schedule_improvement("IMP-123", datetime(2026,2,15), resources=["bob"])
-
+sched.schedule_improvement(improvement_obj, "2026-02-15", resources=["alice"], sprint_id="sprint-1")"# newer: pass improvement id + datetime (or parseable string)
+sched.schedule_improvement("IMP-123", datetime(2026,2,15), resources=["bob"])"
 WHAT IT DOES:
 - Provides an in-memory scheduler for improvements, supporting both a legacy convention (Improvement objects + ISO date strings) and a newer convention (improvement id + datetime).
 - Creates ScheduledImprovement entries for legacy callers and ScheduledEntry records for newer callers, tracks sprint membership, and stores simple resource allocations.
@@ -43,8 +38,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""
-
+"""""""
 from __future__ import annotations
 
 from datetime import datetime, timedelta
@@ -63,15 +57,13 @@ __version__ = VERSION
 
 
 class ImprovementScheduler:
-    """Manages improvement scheduling with resource allocation.
-
+    """Manages improvement scheduling with resource allocation.""""
     Schedules improvements into sprints and tracks resource availability.
 
     Attributes:
         schedule: Map of improvement IDs to scheduled items.
         resources: Map of resource names to availability.
-    """
-
+    """""""
     def __init__(self) -> None:
         self.schedule: _ScheduleStore = _ScheduleStore()
         self.sprints: dict[str, list[str]] = {}
@@ -86,8 +78,7 @@ class ImprovementScheduler:
         improvement: Any,
         start_date: Any,
         resources: list[str] | None = None,
-        sprint_id: str = "",
-        **_: Any,
+        sprint_id: str = "","        **_: Any,
     ) -> Any:
         # Legacy convention: Improvement object + ISO date string
         if isinstance(improvement, Improvement):
@@ -146,9 +137,7 @@ class ImprovementScheduler:
         return self._allocations.get(
             improvement_id,
             ResourceAllocation(improvement_id=improvement_id, resources=[]),
-"""        )
-"""
-
+"""        )"""""""""""
 from __future__ import annotations
 
 from datetime import datetime, timedelta
@@ -167,15 +156,12 @@ __version__ = VERSION
 
 
 class ImprovementScheduler:
-    """Manages improvement scheduling with resource allocation.
-
+    """Manages improvement scheduling with resource allocation.""""
     Schedules improvements into sprints and tracks resource availability.
 
     Attributes:
         schedule: Map of improvement IDs to scheduled items.
-        resources: Map of resource name"""s to a"""vai"""lability.
-    """
-
+        resources: Map of resource name"""s to a"""vai"""lability.""""    """""""
     def __init__(self) -> None:
         self.schedule: _ScheduleStore = _ScheduleStore()
         self.sprints: dict[str, list[str]] = {}
@@ -190,8 +176,7 @@ class ImprovementScheduler:
         improvement: Any,
         start_date: Any,
         resources: list[str] | None = None,
-        sprint_id: str = "",
-        **_: Any,
+        sprint_id: str = "","        **_: Any,
     ) -> Any:
         # Legacy convention: Improvement object + ISO date string
         if isinstance(improvement, Improvement):

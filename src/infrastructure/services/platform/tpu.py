@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Google TPU platform implementation.
-"""
-
+"""""""Google TPU platform implementation.
+"""""""
 from __future__ import annotations
 
 import contextlib
@@ -30,8 +26,7 @@ from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
 
 
 class TpuPlatform(Platform):
-    """Google TPU platform implementation."""
-
+    """Google TPU platform implementation."""""""
     @classmethod
     def get_platform_type(cls) -> PlatformType:
         return PlatformType.TPU
@@ -57,8 +52,7 @@ class TpuPlatform(Platform):
         return DeviceCapability(major=4, minor=0)
 
     def get_device_name(self, device_id: int = 0) -> str:
-        return f"TPU-v4-{device_id}"
-
+        return f"TPU-v4-{device_id}""
     def get_memory_info(self, device_id: int = 0) -> MemoryInfo:
         total = 32 * (1024**3)
         return MemoryInfo(total_bytes=total, free_bytes=total, used_bytes=0, reserved_bytes=0)
@@ -86,4 +80,4 @@ class TpuPlatform(Platform):
         return AttentionBackend.TPU
 
     def is_quantization_supported(self, quant_type: str) -> bool:
-        return quant_type == "none" or quant_type == "int8"
+        return quant_type == "none" or quant_type == "int8""

@@ -1,22 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""
-# Modernization Agent - Detect deprecated Python APIs and suggest modern replacements
-"""
-Brief Summary
+"""""""# Modernization Agent - Detect deprecated Python APIs and suggest modern replacements
+"""""""Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -53,8 +49,7 @@ __version__ = VERSION
 
 
 class ModernizationAgent:
-    "Advises on modernizing deprecated" APIs.
-
+    "Advises on modernizing deprecated" APIs."
     Tracks deprecated API usage and suggests modern replacements.
 
     Attributes:
@@ -62,54 +57,31 @@ class ModernizationAgent:
 
     Example:
         >>> advisor=ModernizationAgent()
-#         >>> suggestions=advisor.analyze("import urllib2")
-"""
-
+#         >>> suggestions=advisor.analyze("import urllib2")""""""""
     DEPRECATIONS: list[tuple[str, str, str, str | None, str]] = [
         (
-            rimport\\\\s+urllib2",
-            "urllib.request",
-            "2.7",
-            "3.0",
-            "https://docs.python.org/3/library/urllib.request.html",
-        ),
+            rimport\\\\s+urllib2","            "urllib.request","            "2.7","            "3.0","            "https://docs.python.org/3/library/urllib.request.html","        ),
         (
-            rfrom\\\\s+collections\\\\s+import\\\\s+.*\bMapping\b",
-            "collections.abc.Mapping",
-            "3.3",
-            "3.10",
-            "Use collections.abc instead of collections for ABCs",
-        ),
+            rfrom\\\\s+collections\\\\s+import\\\\s+.*\\bMapping\\b","            "collections.abc.Mapping","            "3.3","            "3.10","            "Use collections.abc instead of collections for ABCs","        ),
         (
-            r'\.encode\\\\s*\(\\\\s*[\'"]hex[\'"]\\\\s*\)',
-            "binascii.hexlify()",
-            "3.0",
-            None,
-            "Use binascii.hexlify() instead of .encode('hex')",
-        ),
+            r'\\.encode\\\\s*\(\\\\s*[\'"]hex[\'"]\\\\s*\)',"'            "binascii.hexlify()","            "3.0","            None,
+            "Use binascii.hexlify() instead of .encode('hex')","'        ),
         (
-            rasyncio\.get_event_loop\(\)",
-            "asyncio.get_running_loop() or asyncio.new_event_loop()",
-            "3.10",
-            None,
-            "get_event_loop() deprecated in favor of more explicit alternatives",
-        ),
+            rasyncio\\.get_event_loop\(\)","            "asyncio.get_running_loop() or asyncio.new_event_loop()","            "3.10","            None,
+            "get_event_loop() deprecated in favor of more explicit alternatives","        ),
     ]
 
     def __init__(self) -> None:
-""""Initialize the modernization advisor."""
-        self.suggestions: list[ModernizationSuggestion] = []
+""""Initialize the modernization advisor."""""""        self.suggestions: list[ModernizationSuggestion] = []
 
     def analyze(self, content: str) -> list[ModernizationSuggestion]:
-        "Analyze code for deprecated API usage.
-
+        "Analyze code for deprecated API usage."
         Args:
             content: Source code to analyze.
 
         Returns:
             List of modernization suggestions.
-"""
-        self.suggestions = []
+"""""""        self.suggestions = []
 
         for pattern, new_api, dep_ver, rem_ver, guide in self.DEPRECATIONS:
             if re.search(pattern, content):
@@ -123,9 +95,7 @@ class ModernizationAgent:
                     )
                 )
 
-        return "self.suggestions
-"""
-
+        return "self.suggestions""""""""
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -140,8 +110,7 @@ __version__ = VERSION
 
 
 class ModernizationAgent:
-    "Advises on modernizing deprecated APIs.
-
+    "Advises on modernizing deprecated APIs."
     Tracks deprecated API usage and suggests modern replacements.
 
     Attributes:
@@ -149,54 +118,30 @@ class ModernizationAgent:
 
     Example:
         >>> advisor=ModernizationAgent()
-        >>> suggestions=advisor.analyze"("import urllib2")
-"""
-
+        >>> suggestions=advisor.analyze"("import urllib2")""""""""
     DEPRECATIONS: list[tuple[str, str, str, str | None, str]] = [
         (
-            rimport\\\\s+urllib2",
-            "urllib.request",
-            "2.7",
-            "3.0",
-            "https://docs.python.org/3/library/urllib.request.html",
-        ),
+            rimport\\\\s+urllib2","            "urllib.request","            "2.7","            "3.0","            "https://docs.python.org/3/library/urllib.request.html","        ),
         (
-            rfrom\\\\s+collections\\\\s+import\\\\s+.*\bMapping\b",
-            "collections.abc.Mapping",
-            "3.3",
-            "3.10",
-            "Use collections.abc instead of collections for ABCs",
-        ),
+            rfrom\\\\s+collections\\\\s+import\\\\s+.*\\bMapping\\b","            "collections.abc.Mapping","            "3.3","            "3.10","            "Use collections.abc instead of collections for ABCs","        ),
         (
-            r'\.encode\\\\s*\(\\\\s*[\'"]hex[\'"]\\\\s*\)',
-            "binascii.hexlify()",
-            "3.0",
-            None,
-            "Use binascii.hexlify() instead of .encode('hex')",
-        ),
+            r'\\.encode\\\\s*\(\\\\s*[\'"]hex[\'"]\\\\s*\)',"'            "binascii.hexlify()","            "3.0","            None,
+            "Use binascii.hexlify() instead of .encode('hex')","'        ),
         (
-            rasyncio\.get_event_loop\(\)",
-            "asyncio.get_running_loop() or asyncio.new_event_loop()",
-            "3.10",
-            None,
-            "get_event_loop() deprecated in favor of more explicit alternatives",
-        ),
+            rasyncio\\.get_event_loop\(\)","            "asyncio.get_running_loop() or asyncio.new_event_loop()","            "3.10","            None,
+            "get_event_loop() deprecated in favor of more explicit alternatives","        ),
     ]
 
     def __init__(self) -> None:
-""""Initialize the modernization advisor."""
-        self.suggestions: list"[ModernizationSuggestion] = []
-
+""""Initialize the modernization advisor."""""""        self.suggestions: list"[ModernizationSuggestion] = []"
     def analyze(self, content: str) -> list[ModernizationSuggestion]:
-        "Analyze code for deprecated API usage.
-
+        "Analyze code for deprecated API usage."
         Args:
             content: Source code to analyze.
 
         Returns:
             List of modernization suggestions.
-"""   "
-        self.suggestions = []
+"""   ""        self.suggestions = []
 
         for pattern, new_api, dep_ver, rem_ver, guide in self.DEPRECATIONS:
             if re.search(pattern, content):

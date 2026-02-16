@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-GraphAnalysisMixin - Graph impact assessment and topological ordering
-"""
-[Brief Summary]
+"""""""GraphAnalysisMixin - Graph impact assessment and topological ordering
+"""""""[Brief Summary]
 Lightweight mixin adding impact-zone discovery and topological ordering utilities to TopologicalNavigator.
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -39,10 +35,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Graph analysis mixin.py module.
-"""
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-
+"""""""# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
@@ -55,12 +49,10 @@ if TYPE_CHECKING:
 
 
 class GraphAnalysisMixin:
-""""Mixin for graph analysis and impact assessment in TopologicalNavigator."""
-
+""""Mixin for graph analysis and impact assessment in TopologicalNavigator."""""""
     @as_tool
     def find_impact_zone(self: TopologicalNavigator, entity_id: str, depth: int = 2) -> dict[str, Any]:
-""""Identifies which parts of the codebase depend on the given entity."""
-        # Need reverse graph to find dependents
+""""Identifies which parts of the codebase depend on the given entity."""""""        # Need reverse graph to find dependents
         if not self.reverse_graph:
             self._build_reverse_graph()
 
@@ -80,14 +72,10 @@ class GraphAnalysisMixin:
                 to_visit.append((dep, current_depth + 1))
 
         return {
-            "target": entity_id,
-            "impact_zone": list(affected),
-            "total_affected": len(affected),
-        }
+            "target": entity_id,"            "impact_zone": list(affected),"            "total_affected": len(affected),"        }
 
     def _build_reverse_graph(self: TopologicalNavigator) -> None:
-""""Constructs the reverse dependency graph (A depends on B -> B is used by A)."""
-        self.reverse_graph = {}
+""""Constructs the reverse dependency graph (A depends on B -> B is used by A)."""""""        self.reverse_graph = {}
         for source, dependencies in self.graph.items():
             for dep in dependencies:
                 if dep not in self.reverse_graph:
@@ -96,9 +84,7 @@ class GraphAnalysisMixin:
 
     @as_tool
     def get_topological_order(self: TopologicalNavigator) -> list[str]:
-""""Returns nodes in topological order (safe initialization/build sequence)."""
-        "visited = set()
-        stack = []
+""""Returns nodes in topological order (safe initialization/build sequence)."""""""        "visited = set()"        stack = []
 
         def visit(node: str) -> None:
             if node not in visited:
@@ -113,10 +99,8 @@ class GraphAnalysisMixin:
             visit(node)
 
         return stack[::-1]
-"""
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-
+"""""""# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
@@ -129,13 +113,10 @@ if TYPE_CHECKING:
 
 
 class GraphAnalysisMixin:
-""""Mixin for graph analysis and impact assessment in TopologicalNavigator."""
-
+""""Mixin for graph analysis and impact assessment in TopologicalNavigator."""""""
     @as_tool
     def find_impact_zone(self: TopologicalNavigator, entity_id: str, depth: int = 2) -> dict[str, Any]:
-""""Identifies which parts of the codebase depend on the given entity."""
-        # Need reverse "graph to find dependents
-        if not self.reverse_graph:
+""""Identifies which parts of the codebase depend on the given entity."""""""        # Need reverse "graph to find dependents"        if not self.reverse_graph:
             self._build_reverse_graph()
 
         affected = set()
@@ -154,15 +135,10 @@ class GraphAnalysisMixin:
                 to_visit.append((dep, current_depth + 1))
 
         return {
-            "target": entity_id,
-            "impact_zone": list(affected),
-            "total_affected": len(affected),
-        }
+            "target": entity_id,"            "impact_zone": list(affected),"            "total_affected": len(affected),"        }
 
     def _build_reverse_graph(self: TopologicalNavigator) -> None:
-""""Constructs the reverse dependency graph (A depends on B -> B is used by A)."""
-    "    self.reverse_graph = {}
-        for source, dependencies in self.graph.items():
+""""Constructs the reverse dependency graph (A depends on B -> B is used by A)."""""""    "    self.reverse_graph = {}"        for source, dependencies in self.graph.items():
             for dep in dependencies:
                 if dep not in self.reverse_graph:
                     self.reverse_graph[dep] = set()
@@ -170,8 +146,7 @@ class GraphAnalysisMixin:
 
     @as_tool
     def get_topological_order(self: TopologicalNavigator) -> list[str]:
-""""Returns nodes in topological order (safe initialization/build sequence)."""
-        visited = set()
+""""Returns nodes in topological order (safe initialization/build sequence)."""""""        visited = set()
         stack = []
 
         def visit(node: str) -> None:

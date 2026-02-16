@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -17,18 +15,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-FilterAgent - Real-time multimodal stream filtering and orchestration
+"""""""FilterAgent - Real-time multimodal stream filtering and orchestration
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate with the module file path: agent = FilterAgent(__file__).
 - Use the async tools to apply filters inside the PyAgent event loop:
-  - await agent.apply_vision_filter(frame_data, filter_type="detect_objects")
-  - await agent.apply_audio_filter(audio_data, filter_type="pitch_shift")
-  - await agent.apply_text_filter(text, filter_type="sentiment_lock")
-- Call list_active_filters() to inspect configured filters.
+  - await agent.apply_vision_filter(frame_data, filter_type="detect_objects")"  - await agent.apply_audio_filter(audio_data, filter_type="pitch_shift")"  - await agent.apply_text_filter(text, filter_type="sentiment_lock")"- Call list_active_filters() to inspect configured filters.
 - Designed to be used inside the PyAgent swarm pipeline or invoked by higher-level orchestration components; methods are decorated with @as_tool for registration.
 
 WHAT IT DOES:
@@ -49,15 +43,13 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -66,10 +58,7 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-FilterAgent: Specialist agent for real-time multimodal stream filtering (Audio/Video/Text)".
-"""
-
+"""""""FilterAgent: Specialist agent for real-time multimodal stream filtering (Audio/Video/Text)".""""""""
 from __future__ import annotations
 
 import logging
@@ -84,62 +73,36 @@ from src.infrastructure.engine.multimodal.processor.audio import AudioProcessor
 class FilterAgent(BaseAgent):
     Agent for orchestrating real-time filters across different modalities.
     Supports 120fps stream processing and adversarial noise reduction.
-"""
-
+"""""""
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.video_processor = VideoProcessor()
         self.audio_processor = AudioProcessor()
         self._active_filters: Dict[str, List[str]] = {
-            "TEXT": [],
-            "AUDIO": ["noise_reduction"],
-            "VIDEO": ["upscale_2x"]
-        }
+            "TEXT": [],"            "AUDIO": ["noise_reduction"],"            "VIDEO": ["upscale_2x"]"        }
 
     @as_tool
-    async def apply_vision_filter(self, frame_data: Any, filter_type: str = "detect_objects") -> Dict[str, Any]:
-#         "Applies a vision-based filter to the stream (e.g., OCR, Object Detection, Depth).
-        logging.info(fApplying vision filter: "{filter_type}")
-
+    async def apply_vision_filter(self, frame_data: Any, filter_type: str = "detect_objects") -> Dict[str, Any]:"#         "Applies a vision-based filter to the stream (e.g., OCR, Object Detection, Depth)."        logging.info(fApplying vision filter: "{filter_type}")"
         # In a real scenario, this would call the VideoProcessor with specific weights
-        res, meta = self.video_processor.process((frame_data, {"type": "raw"}))
-
+        res, meta = self.video_processor.process((frame_data, {"type": "raw"}))"
         return {
-            "status": "filtered",
-            "type": filter_type,
-            "metadata": meta,
-            "frames": len(res)
-        }
+            "status": "filtered","            "type": filter_type,"            "metadata": meta,"            "frames": len(res)"        }
 
     @as_tool
-    async def apply_audio_filter(self, audio_data: Any, filter_type: str = "pitch_shift") -> Dict[str, Any]:
-#         "Applies an audio-based filter (e.g., Echo cancellation, Voice cloning, EQ).
-        logging.info(fApplying audio filter: {filter_type}")
-
+    async def apply_audio_filter(self, audio_data: Any, filter_type: str = "pitch_shift") -> Dict[str, Any]:"#         "Applies an audio-based filter (e.g., Echo cancellation, Voice cloning, EQ)."        logging.info(fApplying audio filter: {filter_type}")"
         features, meta = self.audio_processor.process((audio_data, 16000))
 
         return {
-            "status": "filtered",
-            "type": filter_type,
-            "metadata": meta,
-            "duration": meta.get("duration_seconds", 0)
-        }
+            "status": "filtered","            "type": filter_type,"            "metadata": meta,"            "duration": meta.get("duration_seconds", 0)"        }
 
     @as_tool
-    async def apply_text_filter(self, text: str, filter_type: str = "sentiment_lock") -> str:
-#         "Applies a text-based filter (e.g., PII removal, Sentiment neutralization, Summarization).
-        if "filter_type == "PII":
-#             return "[REDACTED]
-
-#         prompt = fApply a '{filter_type}' filter to this text output:\n\n{text}
-        return await self.improve_content(prompt)
+    async def apply_text_filter(self, text: str, filter_type: str = "sentiment_lock") -> str:"#         "Applies a text-based filter (e.g., PII removal, Sentiment neutralization, Summarization)."        if "filter_type == "PII":"#             return "[REDACTED]"
+#         prompt = fApply a '{filter_type}' filter to this text output:\\n\\n{text}'        return await self.improve_content(prompt)
 
     @as_tool
     async def list_active_filters(self) -> Dict[str, List[str]]:
-#         "Returns the currently active filters for the multimodel stream.
-        return self._active_filters
-"""
-
+#         "Returns the currently active filters for the multimodel stream."        return self._active_filters
+"""""""
 from __future__ import annotations
 
 import logging
@@ -153,58 +116,32 @@ from src.infrastructure.engine.multimodal.processor.audio import AudioProcessor
 
 class FilterAgent(BaseAgent):
     Agent for orchestrating real-time filters across different modalities.
-    Supports 120fps stream processing" and adversarial noise reduction.
-"""
-
+    Supports 120fps stream processing" and adversarial noise reduction.""""""""
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.video_processor = VideoProcessor()
         self.audio_processor = AudioProcessor()
         self._active_filters: Dict[str, List[str]] = {
-            "TEXT": [],
-            "AUDIO": ["noise_reduction"],
-            "VIDEO": ["upscale_2x"]
-        }
+            "TEXT": [],"            "AUDIO": ["noise_reduction"],"            "VIDEO": ["upscale_2x"]"        }
 
     @as_tool
-    async def apply_vision_filter(self, frame_data: Any, filter_type: str = "detect_objects") -> Dict[str, Any]:
-#         "Applies a vision-based filter to the stream (e.g., OCR, Object Detection, Depth).
-        logging.info(fApplying vision filter: {filter_type}")
-
+    async def apply_vision_filter(self, frame_data: Any, filter_type: str = "detect_objects") -> Dict[str, Any]:"#         "Applies a vision-based filter to the stream (e.g., OCR, Object Detection, Depth)."        logging.info(fApplying vision filter: {filter_type}")"
         # In a real scenario, this would call the VideoProcessor with specific weights
-        res, meta = self.video_processor.process((frame_data, {"type": "raw"}))
-
+        res, meta = self.video_processor.process((frame_data, {"type": "raw"}))"
         return {
-            "status": "filtered",
-            "type": filter_type,
-            "metadata": meta,
-            "frames": len(res)
-        }
+            "status": "filtered","            "type": filter_type,"            "metadata": meta,"            "frames": len(res)"        }
 
     @as_tool
-    async def apply_audio_filter(self, audio_data: Any, filter_type: str = "pitch_shift") -> Dict[str, Any]:
-#         "Applies an audio-based filter (e.g., Echo cancellation, Voice cloning, EQ).
-        logging.info(fApplying audio filter: {filter_type}")
-
+    async def apply_audio_filter(self, audio_data: Any, filter_type: str = "pitch_shift") -> Dict[str, Any]:"#         "Applies an audio-based filter (e.g., Echo cancellation, Voice cloning, EQ)."        logging.info(fApplying audio filter: {filter_type}")"
         features, meta = self.audio_processor.process((audio_data, 16000))
 
         return {
-            "status": "filtered",
-            "type": filter_type,
-            "metadata": meta,
-            "duration": meta.get("duration_seconds", 0)
-        }
+            "status": "filtered","            "type": filter_type,"            "metadata": meta,"            "duration": meta.get("duration_seconds", 0)"        }
 
     @as_tool
-    async def apply_text_filter(self, text: str, filter_type: str = "sentiment_lock") -> str:
-#         "Applies a text-based filter (e.g., PII removal, Sentiment neutralization, Summarization).
-        if filter_type == "PII":
-#             return "[REDACTED]
-
-#         prompt = fApply a '{filter_type}' filter to this text output:\n\n{text}
-        return await self.improve_content(prompt)
+    async def apply_text_filter(self, text: str, filter_type: str = "sentiment_lock") -> str:"#         "Applies a text-based filter (e.g., PII removal, Sentiment neutralization, Summarization)."        if filter_type == "PII":"#             return "[REDACTED]"
+#         prompt = fApply a '{filter_type}' filter to this text output:\\n\\n{text}'        return await self.improve_content(prompt)
 
     @as_tool
     async def list_active_filters(self) -> Dict[str, List[str]]:
-#         "Returns the currently active filters for the multimodel stream.
-        return self._active_filters
+#         "Returns the currently active filters for the multimodel stream."        return self._active_filters

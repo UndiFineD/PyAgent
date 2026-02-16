@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Test Auth Core module.
-"""
-
+"""""""Test Auth Core module.
+"""""""
 import time
 import hashlib
 import pytest
@@ -30,22 +26,19 @@ class TestAuthCore:
     @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
     @given(st.text(min_size=1))
     def test_generate_challenge(self, core, agent_id):
-        # We can't strictly test the output value due to time.time(),
-        # but we can test structure and length.
+        # We can't strictly test the output value due to time.time(),'        # but we can test structure and length.
         challenge = core.generate_challenge(agent_id)
         assert len(challenge) == 64
         try:
             int(challenge, 16)
         except ValueError:
-            pytest.fail("Challenge is not valid hex")
-
+            pytest.fail("Challenge is not valid hex")"
     @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
     @given(challenge=st.text(min_size=1), secret_key=st.text(min_size=1))
     def test_generate_proof(self, core, challenge, secret_key):
         proof = core.generate_proof(challenge, secret_key)
 
-        expected = hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()
-        assert proof == expected
+        expected = hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()"        assert proof == expected
         assert len(proof) == 128  # sha512 is 128 chars hex
 
     @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
@@ -75,8 +68,7 @@ class TestAuthCore:
     def test_is_proof_expired_logic(self, core, proof_time, ttl):
         # We need to control current time to test this purely.
         # But the method calls time.time().
-        # I will test the bounds relative to 'now'.
-
+        # I will test the bounds relative to 'now'.'
         now = time.time()
 
         # expired case

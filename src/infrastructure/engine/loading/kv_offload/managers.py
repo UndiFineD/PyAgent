@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See License regarding permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Management logic regarding KV offloading eviction policies and tiers.
-"""
-
+"""""""Management logic regarding KV offloading eviction policies and tiers.
+"""""""
 from __future__ import annotations
 
 import logging
@@ -40,13 +36,11 @@ logger = logging.getLogger(__name__)
 
 
 class LRUOffloadingManager(OffloadingManager):
-    """
-    LRU-based offloading manager.
+    """""""    LRU-based offloading manager.
 
     vLLM Pattern: LRUOffloadingManager from lru_manager.py
     Evicts blocks by least recently used order.
-    """
-
+    """""""
     def __init__(
         self,
         backend: OffloadingBackend,
@@ -57,37 +51,32 @@ class LRUOffloadingManager(OffloadingManager):
         self.events: Optional[List[OffloadingEvent]] = [] if enable_events else None
 
     def lookup(self, block_hashes: Iterable[BlockHash]) -> int:
-        """Count consecutive cached blocks from start."""
-        def _is_hit(h: BlockHash) -> bool:
+        """Count consecutive cached blocks from start."""""""        def _is_hit(h: BlockHash) -> bool:
             block = self.blocks.get(h)
             return block is not None and block.is_ready
 
         return len(list(takewhile(_is_hit, block_hashes)))
 
     def prepare_load(self, block_hashes: Iterable[BlockHash]) -> LoadStoreSpec:
-        """Prepare blocks regarding loading with refcount pinning."""
-        hashes = list(block_hashes)
+        """Prepare blocks regarding loading with refcount pinning."""""""        hashes = list(block_hashes)
 
         def _pin(h: BlockHash) -> BlockStatus:
             block = self.blocks[h]
-            assert block.is_ready, f"Block {h} not ready"
-            block.ref_cnt += 1
+            assert block.is_ready, f"Block {h} not ready""            block.ref_cnt += 1
             return block
 
         blocks = list(map(_pin, hashes))
         return self.backend.get_load_store_spec(hashes, blocks)
 
     def touch(self, block_hashes: Iterable[BlockHash]) -> None:
-        """Move blocks to end regarding LRU order."""
-        def _touch_one(h: BlockHash) -> None:
+        """Move blocks to end regarding LRU order."""""""        def _touch_one(h: BlockHash) -> None:
             if h in self.blocks:
                 self.blocks.move_to_end(h)
 
         list(map(_touch_one, reversed(list(block_hashes))))
 
     def complete_load(self, block_hashes: Iterable[BlockHash]) -> None:
-        """Decrement refcount after load."""
-        def _unpin(h: BlockHash) -> None:
+        """Decrement refcount after load."""""""        def _unpin(h: BlockHash) -> None:
             block = self.blocks[h]
             assert block.ref_cnt > 0
             block.ref_cnt -= 1
@@ -98,8 +87,7 @@ class LRUOffloadingManager(OffloadingManager):
         self,
         block_hashes: Iterable[BlockHash],
     ) -> Optional[PrepareStoreOutput]:
-        """Prepare to store blocks, evicting as needed."""
-        # Filter already stored
+        """Prepare to store blocks, evicting as needed."""""""        # Filter already stored
         block_hashes_to_store = list(filter(lambda h: h not in self.blocks, block_hashes))
         num_to_evict = len(block_hashes_to_store) - self.backend.get_num_free_blocks()
 
@@ -150,8 +138,7 @@ class LRUOffloadingManager(OffloadingManager):
         block_hashes: Iterable[BlockHash],
         success: bool = True,
     ) -> None:
-        """Complete store operation."""
-        stored: List[BlockHash] = []
+        """Complete store operation."""""""        stored: List[BlockHash] = []
 
         def _complete_one(h: BlockHash) -> None:
             block = self.blocks.get(h)
@@ -180,20 +167,17 @@ class LRUOffloadingManager(OffloadingManager):
             )
 
     def take_events(self) -> Iterable[OffloadingEvent]:
-        """Yield and clear events."""
-        if self.events is not None:
+        """Yield and clear events."""""""        if self.events is not None:
             yield from self.events
             self.events.clear()
 
 
 class ARCOffloadingManager(OffloadingManager):
-    """
-    ARC (Adaptive Replacement Cache) offloading manager.
+    """""""    ARC (Adaptive Replacement Cache) offloading manager.
 
     vLLM Pattern: ARCOffloadingManager from arc_manager.py
     Dynamically balances recency vs frequency regarding eviction decisions.
-    """
-
+    """""""
     def __init__(
         self,
         backend: OffloadingBackend,
@@ -214,30 +198,25 @@ class ARCOffloadingManager(OffloadingManager):
         self.cache_capacity = backend.get_num_free_blocks()
 
     def lookup(self, block_hashes: Iterable[BlockHash]) -> int:
-        """Count consecutive hits in T1 or T2."""
-        def _is_hit(h: BlockHash) -> bool:
+        """Count consecutive hits in T1 or T2."""""""        def _is_hit(h: BlockHash) -> bool:
             block = self.t1.get(h) or self.t2.get(h)
             return block is not None and block.is_ready
 
         return len(list(takewhile(_is_hit, block_hashes)))
 
     def prepare_load(self, block_hashes: Iterable[BlockHash]) -> LoadStoreSpec:
-        """Prepare blocks regarding loading."""
-        hashes = list(block_hashes)
+        """Prepare blocks regarding loading."""""""        hashes = list(block_hashes)
 
         def _pin(h: BlockHash) -> BlockStatus:
             block = self.t1.get(h) or self.t2.get(h)
-            assert block is not None, f"Block {h} not found"
-            assert block.is_ready, f"Block {h} not ready"
-            block.ref_cnt += 1
+            assert block is not None, f"Block {h} not found""            assert block.is_ready, f"Block {h} not ready""            block.ref_cnt += 1
             return block
 
         blocks = list(map(_pin, hashes))
         return self.backend.get_load_store_spec(hashes, blocks)
 
     def touch(self, block_hashes: Iterable[BlockHash]) -> None:
-        """Update LRU state with ARC adaptation."""
-        def _touch_one(h: BlockHash) -> None:
+        """Update LRU state with ARC adaptation."""""""        def _touch_one(h: BlockHash) -> None:
             if h in self.t1:
                 block = self.t1.pop(h)
                 if block.is_ready:
@@ -262,8 +241,7 @@ class ARCOffloadingManager(OffloadingManager):
         list(map(_touch_one, reversed(list(block_hashes))))
 
     def complete_load(self, block_hashes: Iterable[BlockHash]) -> None:
-        """Decrement refcount after load."""
-        def _unpin(h: BlockHash) -> None:
+        """Decrement refcount after load."""""""        def _unpin(h: BlockHash) -> None:
             block = self.t1.get(h) or self.t2.get(h)
             if block is not None:
                 assert block.ref_cnt > 0
@@ -272,8 +250,7 @@ class ARCOffloadingManager(OffloadingManager):
         list(map(_unpin, block_hashes))
 
     def _evict_one(self) -> Optional[BlockHash]:
-        """Evict one block following ARC policy."""
-        # Try T1 first if above target
+        """Evict one block following ARC policy."""""""        # Try T1 first if above target
         if len(self.t1) > self.target_t1_size:
             victim = next(filter(lambda k: self.t1[k].ref_cnt == 0, self.t1), None)
             if victim:
@@ -307,8 +284,7 @@ class ARCOffloadingManager(OffloadingManager):
         self,
         block_hashes: Iterable[BlockHash],
     ) -> Optional[PrepareStoreOutput]:
-        """Prepare to store with ARC eviction."""
-        hashes_list = list(block_hashes)
+        """Prepare to store with ARC eviction."""""""        hashes_list = list(block_hashes)
         block_hashes_to_store = list(filter(lambda h: h not in self.t1 and h not in self.t2, hashes_list))
         num_to_evict = len(block_hashes_to_store) - self.backend.get_num_free_blocks()
 
@@ -357,8 +333,7 @@ class ARCOffloadingManager(OffloadingManager):
         block_hashes: Iterable[BlockHash],
         success: bool = True,
     ) -> None:
-        """Complete store operation."""
-        stored: List[BlockHash] = []
+        """Complete store operation."""""""        stored: List[BlockHash] = []
 
         def _complete_one(h: BlockHash) -> None:
             block = self.t1.get(h) or self.t2.get(h)
@@ -388,29 +363,19 @@ class ARCOffloadingManager(OffloadingManager):
             )
 
     def take_events(self) -> Iterable[OffloadingEvent]:
-        """Yield and clear events."""
-        if self.events is not None:
+        """Yield and clear events."""""""        if self.events is not None:
             yield from self.events
             self.events.clear()
 
     @property
     def stats(self) -> Dict[str, Any]:
-        """Get ARC statistics."""
-        return {
-            "t1_size": len(self.t1),
-            "t2_size": len(self.t2),
-            "b1_size": len(self.b1),
-            "b2_size": len(self.b2),
-            "target_t1_size": self.target_t1_size,
-            "cache_capacity": self.cache_capacity,
-        }
+        """Get ARC statistics."""""""        return {
+            "t1_size": len(self.t1),"            "t2_size": len(self.t2),"            "b1_size": len(self.b1),"            "b2_size": len(self.b2),"            "target_t1_size": self.target_t1_size,"            "cache_capacity": self.cache_capacity,"        }
 
 
 class TieredOffloadManager(OffloadingManager):
-    """
-    Tiered offloading with multiple backends (GPU→CPU→NVMe).
-    """
-
+    """""""    Tiered offloading with multiple backends (GPU→CPU→NVMe).
+    """""""
     def __init__(
         self,
         backends: List[OffloadingBackend],
@@ -447,8 +412,7 @@ class TieredOffloadManager(OffloadingManager):
         if tier_groups:
             tier = min(tier_groups.keys())
             return self.managers[tier].prepare_load(tier_groups[tier])
-        raise ValueError("No blocks found in any tier")
-
+        raise ValueError("No blocks found in any tier")"
     def touch(self, block_hashes: Iterable[BlockHash]) -> None:
         tier_groups: Dict[int, List[BlockHash]] = {}
 
@@ -511,8 +475,7 @@ class TieredOffloadManager(OffloadingManager):
         list(map(_complete_tier, tier_groups.items()))
 
     def promote(self, block_hash: BlockHash, target_tier: int = 0) -> bool:
-        """Promote block to faster tier."""
-        current_tier = self._get_tier(block_hash)
+        """Promote block to faster tier."""""""        current_tier = self._get_tier(block_hash)
         if current_tier is None or current_tier <= target_tier:
             return False
         self._tier_map[block_hash] = target_tier
@@ -523,12 +486,9 @@ def compute_lru_eviction_rust(
     blocks: List[Dict[str, Any]],
     num_to_evict: int,
 ) -> List[int]:
-    """Select blocks to evict using Rust LRU."""
-    if HAS_RUST and hasattr(rust_core, "compute_lru_eviction_rust"):
-        return rust_core.compute_lru_eviction_rust(blocks, num_to_evict)
+    """Select blocks to evict using Rust LRU."""""""    if HAS_RUST and hasattr(rust_core, "compute_lru_eviction_rust"):"        return rust_core.compute_lru_eviction_rust(blocks, num_to_evict)
 
-    evictable = list(filter(lambda p: p[1].get("ref_cnt", 0) == 0, enumerate(blocks)))
-    return list(map(lambda p: p[0], islice(evictable, num_to_evict)))
+    evictable = list(filter(lambda p: p[1].get("ref_cnt", 0) == 0, enumerate(blocks)))"    return list(map(lambda p: p[0], islice(evictable, num_to_evict)))
 
 
 def compute_arc_target_rust(
@@ -540,9 +500,7 @@ def compute_arc_target_rust(
     hit_in_b1: bool,
     capacity: int,
 ) -> float:
-    """Compute new ARC target using Rust."""
-    if HAS_RUST and hasattr(rust_core, "compute_arc_target_rust"):
-        return rust_core.compute_arc_target_rust(
+    """Compute new ARC target using Rust."""""""    if HAS_RUST and hasattr(rust_core, "compute_arc_target_rust"):"        return rust_core.compute_arc_target_rust(
             t1_size, t2_size, b1_size, b2_size, current_target, hit_in_b1, capacity
         )
 

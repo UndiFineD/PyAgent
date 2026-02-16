@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""
-Load balancing strategies for Data Parallel coordination.
-"""
-
+"""""""Load balancing strategies for Data Parallel coordination.
+"""""""
 from __future__ import annotations
 
 from _thread import LockType
@@ -31,10 +27,8 @@ from src.infrastructure.swarm.parallel.dp.types import (WorkerHealth,
 
 
 class P2CLoadBalancer:
-    """
-    Power of Two Choices load balancer.
-    """
-
+    """""""    Power of Two Choices load balancer.
+    """""""
     def __init__(self, workers: list[WorkerState], sample_size: int = 2, enable_locality: bool = True) -> None:
         self._workers: list[WorkerState] = workers
         self._sample_size: int = min(sample_size, len(workers))
@@ -42,8 +36,7 @@ class P2CLoadBalancer:
         self._lock: LockType = threading.Lock()
 
     def select_worker(self, locality_group: Optional[int] = None) -> WorkerState:
-        """Select best worker using P2C algorithm."""
-        with self._lock:
+        """Select best worker using P2C algorithm."""""""        with self._lock:
             # Filter healthy workers
             healthy: list[WorkerState] = [
                 w for w in self._workers
@@ -72,6 +65,5 @@ class P2CLoadBalancer:
             return best
 
     def update_workers(self, workers: list[WorkerState]) -> None:
-        """Update worker list."""
-        with self._lock:
+        """Update worker list."""""""        with self._lock:
             self._workers: list[WorkerState] = workers

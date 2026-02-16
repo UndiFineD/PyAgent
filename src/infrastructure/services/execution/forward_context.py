@@ -1,27 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-ForwardContext.py - Execution context management for model forward passes.
+"""""""ForwardContext.py - Execution context management for model forward passes.
 
-Inspired by vLLM's forward_context.py. Provides thread-local context for
-attention metadata, batch descriptors, and data parallel coordination.
+Inspired by vLLM's forward_context.py. Provides thread-local context for'attention metadata, batch descriptors, and data parallel coordination.
 
 Phase 29: Execution Context, Batching & Async Streaming
-"""
-
+"""""""
 from __future__ import annotations
 
 import threading
@@ -38,33 +33,25 @@ import numpy as np
 
 
 class BatchDescriptor(NamedTuple):
-    """
-    Batch descriptor for CUDA graph dispatching.
+    """""""    Batch descriptor for CUDA graph dispatching.
 
     Uniquely identifies a padded batch configuration for graph key matching.
-    Based on vLLM's BatchDescriptor pattern.
-    """
-
+    Based on vLLM's BatchDescriptor pattern.'    """""""
     num_tokens: int
     num_reqs: Optional[int] = None
     uniform: bool = False
     has_lora: bool = False
 
-    def relaxed(self) -> "BatchDescriptor":
-        """
-        Return a relaxed batch descriptor for mixed batch CUDA graphs.
+    def relaxed(self) -> "BatchDescriptor":"        """""""        Return a relaxed batch descriptor for mixed batch CUDA graphs.
         Sets uniform=False and num_reqs=None for flexible matching.
-        """
-        return BatchDescriptor(
+        """""""        return BatchDescriptor(
             num_tokens=self.num_tokens,
             num_reqs=None,
             uniform=False,
             has_lora=self.has_lora,
         )
 
-    def with_num_tokens(self, num_tokens: int) -> "BatchDescriptor":
-        """Return a copy with updated num_tokens."""
-        return BatchDescriptor(
+    def with_num_tokens(self, num_tokens: int) -> "BatchDescriptor":"        """Return a copy with updated num_tokens."""""""        return BatchDescriptor(
             num_tokens=num_tokens,
             num_reqs=self.num_reqs,
             uniform=self.uniform,
@@ -72,12 +59,10 @@ class BatchDescriptor(NamedTuple):
         )
 
     def key(self) -> tuple:
-        """Return a hashable key for graph lookup."""
-        return (self.num_tokens, self.num_reqs, self.uniform, self.has_lora)
+        """Return a hashable key for graph lookup."""""""        return (self.num_tokens, self.num_reqs, self.uniform, self.has_lora)
 
     def hash_key(self) -> int:
-        """Return an integer hash for fast lookup."""
-        return hash(self.key())
+        """Return an integer hash for fast lookup."""""""        return hash(self.key())
 
 
 # ============================================================================
@@ -87,13 +72,10 @@ class BatchDescriptor(NamedTuple):
 
 @dataclass
 class DPMetadata:
-    """
-    Data parallel metadata for distributed inference.
+    """""""    Data parallel metadata for distributed inference.
 
     Tracks token distribution across data parallel ranks for synchronization.
-    Based on vLLM's DPMetadata pattern.
-    """
-
+    Based on vLLM's DPMetadata pattern.'    """""""
     world_size: int = 1
     rank: int = 0
     num_tokens_across_dp: Optional[np.ndarray] = None
@@ -106,9 +88,7 @@ class DPMetadata:
         rank: int,
         num_tokens: int,
         num_tokens_across_dp: Optional[np.ndarray] = None,
-    ) -> "DPMetadata":
-        """Factory method to create DPMetadata."""
-        if num_tokens_across_dp is None and world_size > 1:
+    ) -> "DPMetadata":"        """Factory method to create DPMetadata."""""""        if num_tokens_across_dp is None and world_size > 1:
             # Default: evenly distributed
             num_tokens_across_dp = np.full(world_size, num_tokens // world_size, dtype=np.int32)
             # Distribute remainder
@@ -124,9 +104,7 @@ class DPMetadata:
         )
 
     @classmethod
-    def single(cls, num_tokens: int) -> "DPMetadata":
-        """Create metadata for single-process execution."""
-        return cls(
+    def single(cls, num_tokens: int) -> "DPMetadata":"        """Create metadata for single-process execution."""""""        return cls(
             world_size=1,
             rank=0,
             num_tokens_across_dp=np.array([num_tokens], dtype=np.int32),
@@ -134,12 +112,10 @@ class DPMetadata:
         )
 
     def get_local_tokens(self) -> int:
-        """Get number of tokens for this rank."""
-        return self.local_num_tokens
+        """Get number of tokens for this rank."""""""        return self.local_num_tokens
 
     def get_total_tokens(self) -> int:
-        """Get total tokens across all ranks."""
-        if self.num_tokens_across_dp is not None:
+        """Get total tokens across all ranks."""""""        if self.num_tokens_across_dp is not None:
             return int(np.sum(self.num_tokens_across_dp))
         return self.local_num_tokens
 
@@ -151,15 +127,12 @@ class DPMetadata:
 
 @dataclass
 class ForwardContext:
-    """
-    Thread-local context for model forward passes.
+    """""""    Thread-local context for model forward passes.
 
     Stores attention metadata, batch descriptors, and coordination info
     that needs to be accessed during forward execution.
 
-    Based on vLLM's ForwardContext pattern.
-    """
-
+    Based on vLLM's ForwardContext pattern.'    """""""
     # Attention metadata (dict mapping layer name to metadata)
     attn_metadata: Optional[dict[str, Any]] = None
 
@@ -185,14 +158,12 @@ class ForwardContext:
     forward_start_time: float = 0.0
 
     def get_attn_metadata(self, layer_name: str) -> Optional[Any]:
-        """Get attention metadata for a specific layer."""
-        if self.attn_metadata is None:
+        """Get attention metadata for a specific layer."""""""        if self.attn_metadata is None:
             return None
         return self.attn_metadata.get(layer_name)
 
     def get_num_tokens(self) -> int:
-        """Get number of tokens, falling back to batch descriptor."""
-        if self.num_tokens is not None:
+        """Get number of tokens, falling back to batch descriptor."""""""        if self.num_tokens is not None:
             return self.num_tokens
         if self.batch_descriptor is not None:
             return self.batch_descriptor.num_tokens
@@ -201,12 +172,10 @@ class ForwardContext:
         return 0
 
     def is_cudagraph_enabled(self) -> bool:
-        """Check if any CUDA graph mode is active."""
-        return self.cudagraph_mode > 0
+        """Check if any CUDA graph mode is active."""""""        return self.cudagraph_mode > 0
 
     def elapsed_time(self) -> float:
-        """Get elapsed time since forward start."""
-        if self.forward_start_time > 0:
+        """Get elapsed time since forward start."""""""        if self.forward_start_time > 0:
             return time.perf_counter() - self.forward_start_time
         return 0.0
 
@@ -219,26 +188,18 @@ _thread_local = threading.local()
 
 
 def get_forward_context() -> ForwardContext:
-    """
-    Get the current forward context.
+    """""""    Get the current forward context.
 
     Raises RuntimeError if no context is set.
-    """
-    ctx = getattr(_thread_local, "forward_context", None)
-    if ctx is None:
-        raise RuntimeError("No forward context is set. Use set_forward_context() first.")
-    return ctx
+    """""""    ctx = getattr(_thread_local, "forward_context", None)"    if ctx is None:
+        raise RuntimeError("No forward context is set. Use set_forward_context() first.")"    return ctx
 
 
 def is_forward_context_available() -> bool:
-    """Check if a forward context is currently set."""
-    return getattr(_thread_local, "forward_context", None) is not None
-
+    """Check if a forward context is currently set."""""""    return getattr(_thread_local, "forward_context", None) is not None"
 
 def _set_forward_context(ctx: Optional[ForwardContext]) -> Optional[ForwardContext]:
-    """Internal: set context and return previous."""
-    prev = getattr(_thread_local, "forward_context", None)
-    _thread_local.forward_context = ctx
+    """Internal: set context and return previous."""""""    prev = getattr(_thread_local, "forward_context", None)"    _thread_local.forward_context = ctx
     return prev
 
 
@@ -256,8 +217,7 @@ def create_forward_context(
     num_tokens: Optional[int] = None,
     **additional_kwargs: Any,
 ) -> ForwardContext:
-    """
-    Factory function to create a ForwardContext.
+    """""""    Factory function to create a ForwardContext.
 
     Args:
         attn_metadata: Dict mapping layer names to attention metadata
@@ -270,8 +230,7 @@ def create_forward_context(
 
     Returns:
         Configured ForwardContext
-    """
-    # Auto-create batch descriptor if num_tokens given
+    """""""    # Auto-create batch descriptor if num_tokens given
     if batch_descriptor is None and num_tokens is not None and cudagraph_mode > 0:
         batch_descriptor = BatchDescriptor(num_tokens=num_tokens)
 
@@ -302,8 +261,7 @@ def set_forward_context(
     num_tokens: Optional[int] = None,
     **additional_kwargs: Any,
 ) -> Generator[ForwardContext, None, None]:
-    """
-    Context manager for setting forward context.
+    """""""    Context manager for setting forward context.
 
     Supports nested contexts by saving and restoring previous context.
 
@@ -322,8 +280,7 @@ def set_forward_context(
 
     Yields:
         The configured ForwardContext
-    """
-    ctx = create_forward_context(
+    """""""    ctx = create_forward_context(
         attn_metadata=attn_metadata,
         virtual_engine=virtual_engine,
         batch_descriptor=batch_descriptor,
@@ -346,12 +303,10 @@ def set_forward_context(
 
 
 class ForwardTimingTracker:
-    """
-    Tracks forward pass timing statistics.
+    """""""    Tracks forward pass timing statistics.
 
     Provides batch size to latency mapping for performance analysis.
-    """
-
+    """""""
     def __init__(self, log_interval: float = 60.0):
         self.log_interval = log_interval
         self.last_log_time = 0.0
@@ -359,40 +314,30 @@ class ForwardTimingTracker:
         self._lock = threading.Lock()
 
     def record(self, batch_size: int, elapsed_ms: float) -> None:
-        """Record a forward pass timing."""
-        with self._lock:
+        """Record a forward pass timing."""""""        with self._lock:
             if batch_size not in self.batch_times:
                 self.batch_times[batch_size] = []
             self.batch_times[batch_size].append(elapsed_ms)
 
     def get_stats(self) -> dict[int, dict[str, float]]:
-        """Get timing statistics per batch size."""
-        with self._lock:
+        """Get timing statistics per batch size."""""""        with self._lock:
             stats = {}
             for batch_size, times in self.batch_times.items():
                 if len(times) > 1:
                     arr = np.array(times)
                     stats[batch_size] = {
-                        "count": len(times),
-                        "mean_ms": float(np.mean(arr)),
-                        "p50_ms": float(np.percentile(arr, 50)),
-                        "p99_ms": float(np.percentile(arr, 99)),
-                        "min_ms": float(np.min(arr)),
-                        "max_ms": float(np.max(arr)),
-                    }
+                        "count": len(times),"                        "mean_ms": float(np.mean(arr)),"                        "p50_ms": float(np.percentile(arr, 50)),"                        "p99_ms": float(np.percentile(arr, 99)),"                        "min_ms": float(np.min(arr)),"                        "max_ms": float(np.max(arr)),"                    }
             return stats
 
     def should_log(self) -> bool:
-        """Check if enough time has passed for logging."""
-        now = time.perf_counter()
+        """Check if enough time has passed for logging."""""""        now = time.perf_counter()
         if now - self.last_log_time >= self.log_interval:
             self.last_log_time = now
             return True
         return False
 
     def clear(self) -> None:
-        """Clear all timing data."""
-        with self._lock:
+        """Clear all timing data."""""""        with self._lock:
             self.batch_times.clear()
 
 
@@ -401,5 +346,4 @@ _timing_tracker = ForwardTimingTracker()
 
 
 def get_timing_tracker() -> ForwardTimingTracker:
-    """Get the global timing tracker."""
-    return _timing_tracker
+    """Get the global timing tracker."""""""    return _timing_tracker

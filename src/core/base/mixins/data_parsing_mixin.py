@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Module: data_parsing_mixin
+"""""""Module: data_parsing_mixin
 Data parsing mixin for BaseAgent, implementing XML and HTML parsing patterns.
 Inspired by ADSyncDump-BOF XML parsing techniques.
-"""
-
+"""""""
 from __future__ import annotations
 
 from typing import Any, Optional
@@ -26,19 +22,15 @@ from src.core.base.logic.processing.data_parsing_core import DataParsingCore
 
 
 class DataParsingMixin:
-    """Mixin providing data parsing features for structured data."""
-
+    """Mixin providing data parsing features for structured data."""""""
     def __init__(self, **kwargs: Any) -> None:
         self.parsing_core = DataParsingCore()
 
     def html_unescape(self, text: str) -> str:
-        """Unescape HTML entities in text."""
-        return self.parsing_core.html_unescape(text)
+        """Unescape HTML entities in text."""""""        return self.parsing_core.html_unescape(text)
 
     def extract_xml_value(self, xml: str, tag_pattern: str) -> Optional[str]:
-        """Extract value from XML using tag pattern."""
-        return self.parsing_core.extract_xml_value(xml, tag_pattern)
+        """Extract value from XML using tag pattern."""""""        return self.parsing_core.extract_xml_value(xml, tag_pattern)
 
     def find_pattern(self, haystack: str, needle: str) -> Optional[str]:
-        """Find pattern in text using simple string scanning."""
-        return self.parsing_core.find_pattern(haystack, needle)
+        """Find pattern in text using simple string scanning."""""""        return self.parsing_core.find_pattern(haystack, needle)

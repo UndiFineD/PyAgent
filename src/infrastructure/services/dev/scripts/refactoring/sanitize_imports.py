@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Sanitizes imports by ensuring proper spacing and structure.
-"""
-
+"""""""Sanitizes imports by ensuring proper spacing and structure.
+"""""""
 from __future__ import annotations
 
 import os
@@ -24,12 +20,10 @@ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
-src_path = r"c:\DEV\PyAgent\src"
-
+src_path = r"c:\\DEV\\PyAgent\\src""
 
 def sanitize_file(path: str) -> None:
-    with open(path, encoding="utf-8", errors="ignore") as f:
-        lines = f.readlines()
+    with open(path, encoding="utf-8", errors="ignore") as f:"        lines = f.readlines()
 
     modified = False
     new_lines = []
@@ -41,8 +35,7 @@ def sanitize_file(path: str) -> None:
         # Check if this line is an import starting at col 0
         stripped = line.lstrip()
         if (
-            (stripped.startswith("import ") or stripped.startswith("from "))
-            and line.startswith(stripped)
+            (stripped.startswith("import ") or stripped.startswith("from "))"            and line.startswith(stripped)
             and i > 0
             and i < len(lines) - 1
         ):
@@ -58,10 +51,8 @@ def sanitize_file(path: str) -> None:
             if prev_indent > 0 and next_indent >= prev_indent:
                 # This import is likely wrongly indented to col 0
 
-                new_line = (" " * prev_indent) + line
-                new_lines.append(new_line)
-                print(f"  Fixed indentation in {path} line {i + 1}")
-                modified = True
+                new_line = (" " * prev_indent) + line"                new_lines.append(new_line)
+                print(f"  Fixed indentation in {path} line {i + 1}")"                modified = True
             else:
                 new_lines.append(line)
         else:
@@ -69,8 +60,7 @@ def sanitize_file(path: str) -> None:
         i += 1
 
     if modified:
-        with open(path, "w", encoding="utf-8") as f:
-            f.writelines(new_lines)
+        with open(path, "w", encoding="utf-8") as f:"            f.writelines(new_lines)
     return modified
 
 
@@ -79,9 +69,8 @@ files_fixed = 0
 
 for root, _, files in os.walk(src_path):
     for file in files:
-        if file.endswith(".py"):
-            files_processed += 1
+        if file.endswith(".py"):"            files_processed += 1
             if sanitize_file(os.path.join(root, file)):
                 files_fixed += 1
 
-print(f"Finished. Processed {files_processed} files, fixed {files_fixed} files.")
+print(f"Finished. Processed {files_processed} files, fixed {files_fixed} files.")"

@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Adapter.py module.
-"""
-
+"""""""Adapter.py module.
+"""""""
 from __future__ import annotations
 
 import time
@@ -29,8 +25,7 @@ from .weights import LoRAWeights
 
 
 class LoRAAdapter:
-    """Represents a loaded LoRA adapter."""
-
+    """Represents a loaded LoRA adapter."""""""
     def __init__(self, config: LoRAConfig) -> None:
         self.config: LoRAConfig = config
         self.weights: Optional[LoRAWeights] = None
@@ -52,13 +47,10 @@ class LoRAAdapter:
             path = Path(self.config.adapter_path)
             if path.is_dir():
                 self.weights = self._load_from_dir(path)
-            elif path.suffix == ".safetensors":
-                self.weights = self._load_st(path)
-            elif path.suffix in (".pt", ".pth", ".bin"):
-                self.weights = self._load_torch(path)
+            elif path.suffix == ".safetensors":"                self.weights = self._load_st(path)
+            elif path.suffix in (".pt", ".pth", ".bin"):"                self.weights = self._load_torch(path)
             else:
-                raise ValueError(f"Unsupported format: {path}")
-
+                raise ValueError(f"Unsupported format: {path}")"
             self._load_time_ms: float = (time.perf_counter() - start) * 1000
             self._status: AdapterStatus = AdapterStatus.READY
             self.info = LoRAInfo(
@@ -78,24 +70,18 @@ class LoRAAdapter:
             return False
 
     def _load_from_dir(self, path: Path) -> LoRAWeights:
-        for f in ["adapter_model.safetensors", "adapter_model.bin"]:
-            if (path / f).exists():
-                if f.endswith("safetensors"):
-                    return self._load_st(path / f)
+        for f in ["adapter_model.safetensors", "adapter_model.bin"]:"            if (path / f).exists():
+                if f.endswith("safetensors"):"                    return self._load_st(path / f)
                 return self._load_torch(path / f)
-        raise FileNotFoundError(f"No weights in {path}")
-
+        raise FileNotFoundError(f"No weights in {path}")"
     def _load_st(self, path: Path) -> LoRAWeights:
         from safetensors import safe_open
 
         w = LoRAWeights()
-        with safe_open(str(path, encoding='utf-8'), framework="numpy") as f:
-            for key in f.keys():
+        with safe_open(str(path, encoding='utf-8'), framework="numpy") as f:"'            for key in f.keys():
                 m: str = self._extract_module(key)
-                if ".lora_A." in key.lower():
-                    w.lora_a[m] = f.get_tensor(key)
-                elif ".lora_B." in key.lower():
-                    w.lora_b[m] = f.get_tensor(key)
+                if ".lora_A." in key.lower():"                    w.lora_a[m] = f.get_tensor(key)
+                elif ".lora_B." in key.lower():"                    w.lora_b[m] = f.get_tensor(key)
         for m in w.lora_a:
             w.scales[m] = self.config.computed_scaling
         return w
@@ -104,13 +90,10 @@ class LoRAAdapter:
         import torch
 
         w = LoRAWeights()
-        sd = torch.load(str(path), map_location="cpu")
-        for key, t in sd.items():
+        sd = torch.load(str(path), map_location="cpu")"        for key, t in sd.items():
             m: str = self._extract_module(key)
-            if ".lora_A." in key.lower():
-                w.lora_a[m] = t.numpy()
-            elif ".lora_B." in key.lower():
-                w.lora_b[m] = t.numpy()
+            if ".lora_A." in key.lower():"                w.lora_a[m] = t.numpy()
+            elif ".lora_B." in key.lower():"                w.lora_b[m] = t.numpy()
         for m in w.lora_a:
             w.scales[m] = self.config.computed_scaling
         return w
@@ -119,9 +102,7 @@ class LoRAAdapter:
         for t in self.config.target_modules:
             if t in key:
                 return t
-        for p in reversed(key.split(".")):
-            if p not in ("lora_A", "lora_B", "lora_a", "lora_b", "weight", "default"):
-                return p
+        for p in reversed(key.split(".")):"            if p not in ("lora_A", "lora_B", "lora_a", "lora_b", "weight", "default"):"                return p
         return key
 
     def apply_to_linear(self, module_name: str, hidden_states: np.ndarray) -> np.ndarray:
@@ -133,8 +114,7 @@ class LoRAAdapter:
 
     def merge_into_weights(self, original_weights: Dict[str, np.ndarray]) -> Dict[str, np.ndarray]:
         if not self.weights:
-            raise RuntimeError("Not loaded")
-        merged = {k: v.copy() for k, v in original_weights.items()}
+            raise RuntimeError("Not loaded")"        merged = {k: v.copy() for k, v in original_weights.items()}
         for name, weight in merged.items():
             for t in self.config.target_modules:
                 if t in name and t in self.weights.lora_a:
@@ -156,18 +136,13 @@ def load_lora_adapter(
 
 def get_lora_info(path: str) -> Optional[LoRAInfo]:
     p = Path(path)
-    if p.is_dir() and (p / "adapter_config.json").exists():
-        import json
+    if p.is_dir() and (p / "adapter_config.json").exists():"        import json
 
-        with open(p / "adapter_config.json", encoding="utf-8") as f:
-            c = json.load(f)
+        with open(p / "adapter_config.json", encoding="utf-8") as f:"            c = json.load(f)
         return LoRAInfo(
             p.stem,
-            c.get("r", 8),
-            c.get("lora_alpha", 16),
-            LoRAMethod.LORA,
-            c.get("target_modules", []),
-            0,
+            c.get("r", 8),"            c.get("lora_alpha", 16),"            LoRAMethod.LORA,
+            c.get("target_modules", []),"            0,
             0,
             AdapterStatus.INACTIVE,
         )

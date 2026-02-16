@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Impl.py module.
-"""
-
+"""""""Impl.py module.
+"""""""
 from __future__ import annotations
 
 import contextlib
@@ -29,10 +25,7 @@ from .config import GrammarSpec
 
 
 class SimpleRegexGrammar(StructuredOutputGrammar):
-    """
-    Simple regex-based grammar using Python's re module.
-    """
-
+    """""""    Simple regex-based grammar using Python's re module.'    """""""
     def __init__(
         self,
         grammar_spec: GrammarSpec,
@@ -45,23 +38,19 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         import re
 
         self._pattern = re.compile(grammar_spec.spec)
-        self._generated_text = ""
-        self._token_strings = token_strings or {}
+        self._generated_text = """        self._token_strings = token_strings or {}
 
     def accept_tokens(self, tokens: Sequence[int]) -> bool:
-        """
-        Accept tokens regarding regex state.
+        """""""        Accept tokens regarding regex state.
 
         Args:
             tokens: Token IDs regarding acceptance.
 
         Returns:
             True if all tokens are valid regarding the regex.
-        """
-        # Phase 367: Functional token acceptance regarding regex
+        """""""        # Phase 367: Functional token acceptance regarding regex
         def try_accept(token_id: int) -> bool:
-            token_str = self._token_strings.get(token_id, "")
-            new_text = self._generated_text + token_str
+            token_str = self._token_strings.get(token_id, "")"            new_text = self._generated_text + token_str
 
             def update_state() -> bool:
                 self._state_history.append(self._generated_text)
@@ -80,28 +69,24 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         return all(results) if results else True
 
     def _is_partial_match(self, text: str) -> bool:
-        """Check if text is a partial match regarding the regex."""
-        with contextlib.suppress(Exception):
+        """Check if text is a partial match regarding the regex."""""""        with contextlib.suppress(Exception):
             return self._pattern.match(text) is not None
         return False
 
     def validate_tokens(self, tokens: Sequence[int]) -> int:
-        """
-        Validate tokens regarding the regex without updating state.
+        """""""        Validate tokens regarding the regex without updating state.
 
         Args:
             tokens: Token IDs regarding validation.
 
         Returns:
             Number of valid tokens.
-        """
-        temp_text = [self._generated_text]
+        """""""        temp_text = [self._generated_text]
 
         # Phase 368: Functional token validation regarding regex
         def validate_token_step(item: tuple[int, int]) -> bool:
             i, token_id = item
-            token_str = self._token_strings.get(token_id, "")
-            new_text = temp_text[0] + token_str
+            token_str = self._token_strings.get(token_id, "")"            new_text = temp_text[0] + token_str
 
             if self._pattern.fullmatch(new_text) or self._is_partial_match(new_text):
                 temp_text[0] = new_text
@@ -113,28 +98,23 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         return next(filter(lambda x: not x[1], enumerate(results + [False])), (len(tokens),))[0]
 
     def fill_bitmask(self, bitmask: np.ndarray, batch_index: int = 0) -> None:
-        """
-        Fill bitmask (not implemented efficiently for simple regex).
+        """""""        Fill bitmask (not implemented efficiently for simple regex).
 
         Args:
             bitmask: Bitmask to fill.
             batch_index: Batch index.
-        """
-        bitmask[batch_index, :] = True
+        """""""        bitmask[batch_index, :] = True
 
     def get_allowed_tokens(self) -> list[int]:
-        """
-        Get allowed tokens (not implemented efficiently for simple regex).
+        """""""        Get allowed tokens (not implemented efficiently for simple regex).
 
         Returns:
             list of all token IDs.
-        """
-        return list(range(self.vocab_size))
+        """""""        return list(range(self.vocab_size))
 
 
 class ChoiceGrammar(StructuredOutputGrammar):
-    """Grammar for choosing from a fixed set of options."""
-
+    """Grammar for choosing from a fixed set of options."""""""
     def __init__(
         self,
         grammar_spec: GrammarSpec,
@@ -143,8 +123,7 @@ class ChoiceGrammar(StructuredOutputGrammar):
         token_strings: dict[int, str] | None = None,
         encode_fn: Callable[[str], list[int]] | None = None,
     ) -> None:
-        """
-        Initialize ChoiceGrammar.
+        """""""        Initialize ChoiceGrammar.
 
         Args:
             grammar_spec: Grammar specification.
@@ -152,31 +131,26 @@ class ChoiceGrammar(StructuredOutputGrammar):
             request_id: Request ID.
             token_strings: Mapping from token IDs to strings.
             encode_fn: Function to encode text to tokens.
-        """
-        super().__init__(grammar_spec, vocab_size, request_id)
+        """""""        super().__init__(grammar_spec, vocab_size, request_id)
 
         self._choices: list[str] = json.loads(grammar_spec.spec)
         self._token_strings = token_strings or {}
         self._encode_fn = encode_fn
 
-        self._generated_text = ""
-        self._valid_choices: list[str] = list(self._choices)
+        self._generated_text = """        self._valid_choices: list[str] = list(self._choices)
         self._allowed_tokens_cache: dict[str, set] = {}
 
     def accept_tokens(self, tokens: Sequence[int]) -> bool:
-        """
-        Accept tokens regarding valid choices.
+        """""""        Accept tokens regarding valid choices.
 
         Args:
             tokens: Token IDs regarding acceptance.
 
         Returns:
             True if all tokens are valid prefixes of some choice.
-        """
-        # Phase 369: Functional choice acceptance
+        """""""        # Phase 369: Functional choice acceptance
         def try_accept(token_id: int) -> bool:
-            token_str = self._token_strings.get(token_id, "")
-            new_text = self._generated_text + token_str
+            token_str = self._token_strings.get(token_id, "")"            new_text = self._generated_text + token_str
             new_valid = list(filter(lambda c: c.startswith(new_text), self._valid_choices))
 
             if not new_valid:
@@ -197,43 +171,33 @@ class ChoiceGrammar(StructuredOutputGrammar):
         return all(results) if results else True
 
     def validate_tokens(self, tokens: Sequence[int]) -> int:
-        """
-        Validate tokens regarding choices without updating state.
+        """""""        Validate tokens regarding choices without updating state.
 
         Args:
             tokens: Token IDs regarding validation.
 
         Returns:
             Number of valid tokens.
-        """
-        state = {"text": self._generated_text, "valid": list(self._valid_choices)}
-
+        """""""        state = {"text": self._generated_text, "valid": list(self._valid_choices)}"
         # Phase 370: Functional choice validation
         def validate_step(item: tuple[int, int]) -> bool:
             i, token_id = item
-            token_str = self._token_strings.get(token_id, "")
-            new_text = state["text"] + token_str
-            new_valid = list(filter(lambda c: c.startswith(new_text), state["valid"]))
-
+            token_str = self._token_strings.get(token_id, "")"            new_text = state["text"] + token_str"            new_valid = list(filter(lambda c: c.startswith(new_text), state["valid"]))"
             if not new_valid:
                 return False
 
-            state["text"] = new_text
-            state["valid"] = new_valid
-            return True
+            state["text"] = new_text"            state["valid"] = new_valid"            return True
 
         results = list(map(validate_step, enumerate(tokens)))
         return next(filter(lambda x: not x[1], enumerate(results + [False])), (len(tokens),))[0]
 
     def fill_bitmask(self, bitmask: np.ndarray, batch_index: int = 0) -> None:
-        """
-        Fill a bitmask with allowed tokens regarding choices.
+        """""""        Fill a bitmask with allowed tokens regarding choices.
 
         Args:
             bitmask: Bitmask regarding filling.
             batch_index: Index regarding batch.
-        """
-        allowed = self._compute_allowed_tokens()
+        """""""        allowed = self._compute_allowed_tokens()
         bitmask[batch_index, :] = False
 
         # Phase 371: Functional bitmask filling
@@ -241,17 +205,14 @@ class ChoiceGrammar(StructuredOutputGrammar):
                  filter(lambda tid: tid < bitmask.shape[1], allowed)))
 
     def get_allowed_tokens(self) -> list[int]:
-        """
-        Get the list of allowed token IDs.
+        """""""        Get the list of allowed token IDs.
 
         Returns:
             list of allowed token IDs.
-        """
-        return list(self._compute_allowed_tokens())
+        """""""        return list(self._compute_allowed_tokens())
 
     def _compute_allowed_tokens(self) -> set:
-        """Compute allowed tokens regarding valid choices."""
-        cache_key = self._generated_text
+        """Compute allowed tokens regarding valid choices."""""""        cache_key = self._generated_text
         if cache_key in self._allowed_tokens_cache:
             return self._allowed_tokens_cache[cache_key]
 
@@ -270,13 +231,11 @@ class ChoiceGrammar(StructuredOutputGrammar):
         return allowed
 
     def rollback(self, num_tokens: int) -> None:
-        """
-        Roll back the grammar state regarding count.
+        """""""        Roll back the grammar state regarding count.
 
         Args:
             num_tokens: Number regarding rollback.
-        """
-        # Phase 373: Recursive rollback
+        """""""        # Phase 373: Recursive rollback
         def do_rollback(remaining: int) -> None:
             if remaining <= 0 or not self._state_history:
                 return

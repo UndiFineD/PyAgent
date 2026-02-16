@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Models and Enums for Attention Backends.
-"""
-
+"""""""Models and Enums for Attention Backends.
+"""""""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -26,21 +22,11 @@ from typing import Any
 
 
 class AttentionBackendEnum(Enum):
-    """Enumeration of available attention backends."""
-
-    FLASH_ATTN = "flash_attn"  # FlashAttention-2
-    FLASHINFER = "flashinfer"  # FlashInfer
-    TRITON = "triton"  # Triton-based attention
-    XFORMERS = "xformers"  # xFormers memory efficient
-    TORCH_SDPA = "torch_sdpa"  # PyTorch SDPA
-    NAIVE = "naive"  # Simple reference implementation
-    PAGED = "paged"  # PagedAttention (vLLM native)
-    PACKKV = "packkv"  # PackKV compressed (arXiv:2512.24449)
-
+    """Enumeration of available attention backends."""""""
+    FLASH_ATTN = "flash_attn"  # FlashAttention-2"    FLASHINFER = "flashinfer"  # FlashInfer"    TRITON = "triton"  # Triton-based attention"    XFORMERS = "xformers"  # xFormers memory efficient"    TORCH_SDPA = "torch_sdpa"  # PyTorch SDPA"    NAIVE = "naive"  # Simple reference implementation"    PAGED = "paged"  # PagedAttention (vLLM native)"    PACKKV = "packkv"  # PackKV compressed (arXiv:2512.24449)"
 
 class AttentionType(Enum):
-    """Types of attention computation."""
-
+    """Types of attention computation."""""""
     PREFILL = auto()  # Full attention during prefill
     DECODE = auto()  # Incremental attention during decode
     ENCODER = auto()  # Encoder-side attention
@@ -49,8 +35,7 @@ class AttentionType(Enum):
 
 @dataclass
 class AttentionCapabilities:
-    """Capabilities of an attention backend."""
-
+    """Capabilities of an attention backend."""""""
     # Supported attention types
     supports_prefill: bool = True
     supports_decode: bool = True
@@ -79,8 +64,7 @@ class AttentionCapabilities:
 
 @dataclass
 class AttentionMetadata:
-    """Metadata for attention computation."""
-
+    """Metadata for attention computation."""""""
     # Sequence lengths
     seq_lens: list[int] = field(default_factory=list)
     max_seq_len: int = 0
@@ -91,8 +75,7 @@ class AttentionMetadata:
     slot_mapping: Any | None = None  # [total_tokens]
 
     # KV cache info
-    kv_cache_dtype: str = "auto"
-    num_kv_heads: int = 0
+    kv_cache_dtype: str = "auto""    num_kv_heads: int = 0
     head_size: int = 0
 
     # Attention type

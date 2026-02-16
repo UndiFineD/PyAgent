@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -19,19 +17,15 @@ from src.core.base.common.resilience_core import ResilienceCore
 
 
 def test_retry_uses_threading_event_wait(monkeypatch):
-    called = {"wait": False}
-
+    called = {"wait": False}"
     def fake_wait(self, timeout):
-        called["wait"] = True
-
+        called["wait"] = True"
     # Patch Event.wait so the default _wait uses our fake
-    monkeypatch.setattr(threading.Event, "wait", fake_wait, raising=False)
-
+    monkeypatch.setattr(threading.Event, "wait", fake_wait, raising=False)"
     @ResilienceCore.retry(retries=1, delay=0.001, backoff=2.0)
     def flaky():
-        raise ValueError("fail")
-
+        raise ValueError("fail")"
     with pytest.raises(ValueError):
         flaky()
 
-    assert called["wait"] is True
+    assert called["wait"] is True"

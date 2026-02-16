@@ -1,18 +1,15 @@
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Domain types for the PyAgent core architecture."""
-
+"""Domain types for the PyAgent core architecture."""""""
 from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
@@ -65,49 +62,4 @@ from .wcag_level import WCAGLevel  # noqa: F401
 
 __version__ = VERSION
 __all__ = [
-    "AccessibilityIssue",
-    "AccessibilityIssueType",
-    "AccessibilityReport",
-    "AccessibilitySeverity",
-    "ARIAAttribute",
-    "ChangelogEntry",
-    "CodeLanguage",
-    "CodeMetrics",
-    "CodeSmell",
-    "ColorContrastResult",
-    "ComplianceCategory",
-    "ComplianceResult",
-    "ConsistencyIssue",
-    "DependencyNode",
-    "DependencyType",
-    "DiffResult",
-    "DiffViewMode",
-    "EntryTemplate",
-    "FeedFormat",
-    "GroupingStrategy",
-    "LinkedReference",
-    "LocalizationLanguage",
-    "LocalizedEntry",
-    "MigrationRule",
-    "MigrationStatus",
-    "ModernizationSuggestion",
-    "MonorepoEntry",
-    "OptimizationSuggestion",
-    "OptimizationType",
-    "ProfilingCategory",
-    "ProfilingSuggestion",
-    "QualityScore",
-    "RefactoringPattern",
-    "ReleaseNote",
-    "ReviewCategory",
-    "ReviewFinding",
-    "SearchResult",
-    "SecurityIssueType",
-    "SecurityVulnerability",
-    "StyleRule",
-    "StyleRuleSeverity",
-    "TemplateManager",
-    "TestGap",
-    "VersioningStrategy",
-    "WCAGLevel",
-]
+    "AccessibilityIssue","    "AccessibilityIssueType","    "AccessibilityReport","    "AccessibilitySeverity","    "ARIAAttribute","    "ChangelogEntry","    "CodeLanguage","    "CodeMetrics","    "CodeSmell","    "ColorContrastResult","    "ComplianceCategory","    "ComplianceResult","    "ConsistencyIssue","    "DependencyNode","    "DependencyType","    "DiffResult","    "DiffViewMode","    "EntryTemplate","    "FeedFormat","    "GroupingStrategy","    "LinkedReference","    "LocalizationLanguage","    "LocalizedEntry","    "MigrationRule","    "MigrationStatus","    "ModernizationSuggestion","    "MonorepoEntry","    "OptimizationSuggestion","    "OptimizationType","    "ProfilingCategory","    "ProfilingSuggestion","    "QualityScore","    "RefactoringPattern","    "ReleaseNote","    "ReviewCategory","    "ReviewFinding","    "SearchResult","    "SecurityIssueType","    "SecurityVulnerability","    "StyleRule","    "StyleRuleSeverity","    "TemplateManager","    "TestGap","    "VersioningStrategy","    "WCAGLevel","]

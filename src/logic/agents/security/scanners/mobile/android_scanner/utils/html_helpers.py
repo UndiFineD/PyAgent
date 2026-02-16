@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -21,18 +19,12 @@ init(autoreset=True)
 
 def generate_index_html(output_dir):
     pass  # [BATCHFIX] inserted for empty block
-"""Generates an index.html file that links to all the HTML reports in the output directory"""
-#     with a table structure to display the folder and file hierarchy.
-"""
-    # Create an index.html file
-    index_file_path = os.path.join(output_dir, "index.html")
-    with open(index_file_path, "w", encoding="utf-8") as index_file:
-        # Start the HTML structure
+"""Generates an index.html file that links to all the HTML reports in the output directory"""""""#     with a table structure to display the folder and file hierarchy.
+"""""""    # Create an index.html file
+    index_file_path = os.path.join(output_dir, "index.html")"    with open(index_file_path, "w", encoding="utf-8") as index_file:"        # Start the HTML structure
 #         index_file.write(
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string
-#         "<html>"  # [BATCHFIX] closed string
-        <head>
+""" [BATCHFIX] Commented unterminated string""""#         "<html>"  # [BATCHFIX] closed string"        <head>
             <title>Code Scan Reports</title>
             <style>
                 table {
@@ -61,8 +53,7 @@ def generate_index_html(output_dir):
                     <th>File</th>
                     <th>Link</th>
                 </tr>
-   "     ")
-
+   "     ")"
         # Walk through the output directory and create a table row for each HTML file
         for root, _, files in os.walk(output_dir):
             # Skip the root directory itself
@@ -70,8 +61,7 @@ def generate_index_html(output_dir):
                 continue
 
             for file in files:
-                if file.endswith(".html"):
-                    # Get the folder and file name
+                if file.endswith(".html"):"                    # Get the folder and file name
                     folder = os.path.relpath(root, output_dir)
                     file_name = file
 
@@ -81,25 +71,15 @@ def generate_index_html(output_dir):
                     # Write the row to the index file
 #                     index_file.write(f
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string
-#             "        <tr>"  # [BATCHFIX] closed string
-                        <td>{folder}</td>
+""" [BATCHFIX] Commented unterminated string""""#             "        <tr>"  # [BATCHFIX] closed string"                        <td>{folder}</td>
                         <td>{file_name}</td>
-                        <td><a href="{file_link}">{file_name}</a></td>
-                    </tr>
-         "           ")
-
+                        <td><a href="{file_link}">{file_name}</a></td>"                    </tr>
+         "           ")"
         # Close the table and HTML structure
 #         index_file.write(
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string
-#   "          </table>"  # [BATCHFIX] closed string
-        </body>
+""" [BATCHFIX] Commented unterminated string""""#   "          </table>"  # [BATCHFIX] closed string"        </body>
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string
-#        " </html>"  # [BATCHFIX] closed string
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string
-#         ")"  # [BATCHFIX] closed string
-
-    print(f"{Fore.GREEN}Index file created at {index_file_path}{Style.RESET_ALL}")
+""" [BATCHFIX] Commented unterminated string""""#        " </html>"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""#         ")"  # [BATCHFIX] closed string"
+    print(f"{Fore.GREEN}Index file created at {index_file_path}{Style.RESET_ALL}")"

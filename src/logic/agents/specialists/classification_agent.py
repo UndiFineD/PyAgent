@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -17,25 +15,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-ClassificationAgent - Taxonomy and Categorization Specialist
+"""""""ClassificationAgent - Taxonomy and Categorization Specialist
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate via your agent loader/DI as ClassificationAgent(file_path) within the PyAgent lifecycle.
 - Use register_taxonomy(...) to register named taxonomies (categories, optional hierarchy/descriptions).
-- Call classify(content, taxonomy_name=..., classification_type="single_label"|"multi_label"|"hierarchical"|"binary", top_k=3) from async code to get a classification response; methods are decorated with as_tool so they can be invoked by the agent tool registry.
-- Example (async):
-  taxonomy = await agent.register_taxonomy("sentiment", ["positive","negative","neutral"])
-  result = await agent.classify("This is great", taxonomy_name="sentiment", classification_type="single_label")
-
+- Call classify(content, taxonomy_name=..., classification_type="single_label"|"multi_label"|"hierarchical"|"binary", top_k=3) from async code to get a classification response; methods are decorated with as_tool so they can be invoked by the agent tool registry."- Example (async):
+  taxonomy = await agent.register_taxonomy("sentiment", ["positive","negative","neutral"])"  result = await agent.classify("This is great", taxonomy_name="sentiment", classification_type="single_label")"
 WHAT IT DOES:
 - Provides an agent (ClassificationAgent) specialized for mapping text (and potentially other modalities) to predefined category taxonomies.
 - Supports multiple classification modes: single-label, multi-label, hierarchical, and binary via an internal ClassificationType enum.
 - Stores registered Taxonomy objects (categories, optional parent->children hierarchy and descriptions) for reuse.
-- Builds prompts tailored to the requested classification type and delegates reasoning/generation to the agent's improve_content pipeline, returning structured ClassificationResult-like payloads with category, confidence, and hierarchical context.
-- Tracks classification history and exposes a configurable confidence threshold and system prompt to guide behavior.
+- Builds prompts tailored to the requested classification type and delegates reasoning/generation to the agent's improve_content pipeline, returning structured ClassificationResult-like payloads with category, confidence, and hierarchical context.'- Tracks classification history and exposes a configurable confidence threshold and system prompt to guide behavior.
 
 WHAT IT SHOULD DO BETTER:
 - Replace prompt-only classification with an explicit pluggable model abstraction (local or remote ML models) so decisions are reproducible and testable.
@@ -48,15 +41,13 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -65,10 +56,8 @@ FILE CONTENT SUMMARY:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""
-Classification agent.py module.
-"""
-# ClassificationAgent: Taxonomy and Categorization Specialist - Phase 319 Enhanced
+"""""""Classification agent.py module.
+"""""""# ClassificationAgent: Taxonomy and Categorization Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -88,17 +77,11 @@ __version__ = VERSION
 
 
 class ClassificationType(Enum):
-""""Types of classification supported by the agent."""
-#     SINGLE_LABEL = "single_label
-#     MULTI_LABEL = "multi_label
-#     HIERARCHICAL = "hierarchical
-#     BINARY = "binary
-
+""""Types of classification supported by the agent."""""""#     SINGLE_LABEL = "single_label"#     MULTI_LABEL = "multi_label"#     HIERARCHICAL = "hierarchical"#     BINARY = "binary"
 
 @dataclass
 class ClassificationResult:
-""""Represents a classification result with confidence."""
-
+""""Represents a classification result with confidence."""""""
     category: str
     confidence: float
     parent_category: Optional[str] = None
@@ -107,8 +90,7 @@ class ClassificationResult:
 
 @dataclass
 class Taxonomy:
-""""Represents a hierarchical category taxonomy."""
-
+""""Represents a hierarchical category taxonomy."""""""
     name: str
     categories: List[str]
     hierarchy: Dict[str, List[str]] = field(default_factory=dict)  # parent -> children
@@ -119,18 +101,14 @@ class Taxonomy:
 class ClassificationAgent(BaseAgent):
     Agent specializing in classifying text, code, or images into predefined categories.
     Supports single-label, multi-label, and hierarchical classification.
-"""
-
+"""""""
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._taxonomies: Dict[str, Taxonomy] = {}
         self._classification_history: List[Dict[str, Any]] = []
         self._confidence_threshold = 0.5
         self._system_prompt = (
-#             "You are the Classification Agent. Categorize the input into the most
-#             "relevant taxonomy labels provided. Be precise and avoid ambiguous mapping.
-#             "Always provide confidence scores and explain your reasoning.
-        )
+#             "You are the Classification Agent. Categorize the input into the most"#             "relevant taxonomy labels provided. Be precise and avoid ambiguous mapping."#             "Always provide confidence scores and explain your reasoning."        )
 
     @as_tool
     async def register_taxonomy(
@@ -140,18 +118,12 @@ class ClassificationAgent(BaseAgent):
         hierarchy: Optional[Dict[str, List[str]]] = None,
         descriptions: Optional[Dict[str, str]] = None,
     ) -> Dict[str, Any]:
-#         "Registers a taxonomy for reuse.
-    "    taxonomy = Taxonomy(
-            name=name, categories=categories, hierarchy=hierarchy or {}, descriptions=descriptions or {}
+#         "Registers a taxonomy for reuse."    "    taxonomy = Taxonomy("            name=name, categories=categories, hierarchy=hierarchy or {}, descriptions=descriptions or {}
         )
         self._taxonomies[name] = taxonomy
 
         return {
-            "success": True,
-            "taxonomy_name": name,
-            "category_count": len(categories),
-            "hierarchical": bool(hierarchy),
-        }
+            "success": True,"            "taxonomy_name": name,"            "category_count": len(categories),"            "hierarchical": bool(hierarchy),"        }
 
     @as_tool
     # pylint: disable=too-many-positional-arguments
@@ -160,19 +132,15 @@ class ClassificationAgent(BaseAgent):
         content: str,
         categories: Optional[List[str]] = None,
         taxonomy_name: Optional[str] = None,
-        classification_type: str = "single_label",
-        top_k: int = 3,
+        classification_type: str = "single_label","        top_k: int = 3,
     ) -> Dict[str, Any]:
-#         "Classifies content into one or more categories.
-        # Get categories" from taxonomy or parameter
-        if taxonomy_name and taxonomy_name in self._taxonomies:
+#         "Classifies content into one or more categories."        # Get categories" from taxonomy or parameter"        if taxonomy_name and taxonomy_name in self._taxonomies:
             tax = self._taxonomies[taxonomy_name]
             cats = tax.categories
             hierarchy = tax.hierarchy
             descriptions = tax.descriptions
         else:
-            cats = categories or ["positive", "negative", "neutral"]
-            hierarchy = {}
+            cats = categories or ["positive", "negative", "neutral"]"            hierarchy = {}
             descriptions = {}
 
         cls_type = ClassificationType(classification_type)
@@ -190,8 +158,7 @@ class ClassificationAgent(BaseAgent):
         res = await self.improve_content(prompt)
 
         try:
-"""
-# ClassificationAgent: Taxonomy and Categorization Specialist - Phase 319 Enhanced
+"""""""# ClassificationAgent: Taxonomy and Categorization Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -211,17 +178,11 @@ __version__ = VERSION
 
 
 class ClassificationType(Enum):
-""""Types of classification supported by the agent."""
-# "    SINGLE_LABEL = "single_label
-#     MULTI_LABEL = "multi_label
-#     HIERARCHICAL = "hierarchical
-#     BINARY = "binary
-
+""""Types of classification supported by the agent."""""""# "    SINGLE_LABEL = "single_label"#     MULTI_LABEL = "multi_label"#     HIERARCHICAL = "hierarchical"#     BINARY = "binary"
 
 @dataclass
 class ClassificationResult:
-""""Represents a classification result with confidence."""
-
+""""Represents a classification result with confidence."""""""
     category: str
     confidence: float
     parent_category: Optional[str] = None
@@ -230,8 +191,7 @@ class ClassificationResult:
 
 @dataclass
 class Taxonomy:
-""""Represents a hierarchical category taxonomy."""
-
+""""Represents a hierarchical category taxonomy."""""""
     name: str
     categories: List[str]
     hierarchy: Dict[str, List[str]] = field(default_factory=dict)  # parent -> children
@@ -241,19 +201,14 @@ class Taxonomy:
 # pylint: disable=too-many-ancestors
 class ClassificationAgent(BaseAgent):
     Agent specializing in classifying text, code, or images into predefined categories.
-    Supports single-label, "multi-"label, and hierarchical classification.
-"""
-
+    Supports single-label, "multi-"label, and hierarchical classification.""""""""
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._taxonomies: Dict[str, Taxonomy] = {}
         self._classification_history: List[Dict[str, Any]] = []
         self._confidence_threshold = 0.5
         self._system_prompt = (
-#             "You are the Classification Agent. Categorize the input into the most
-#             "relevant taxonomy labels provided. Be precise and avoid ambiguous mapping.
-#             "Always provide confidence scores and explain your reasoning.
-        )
+#             "You are the Classification Agent. Categorize the input into the most"#             "relevant taxonomy labels provided. Be precise and avoid ambiguous mapping."#             "Always provide confidence scores and explain your reasoning."        )
 
     @as_tool
     async def register_taxonomy(
@@ -263,18 +218,13 @@ class ClassificationAgent(BaseAgent):
         hierarchy: Optional[Dict[str, List[str]]] = None,
         descriptions: Optional[Dict[str, str]] = None,
     ) -> Dict[str, Any]:
-#         "Registers a "taxonomy for reuse.
-        taxonomy = Taxonomy(
+#         "Registers a "taxonomy for reuse."        taxonomy = Taxonomy(
             name=name, categories=categories, hierarchy=hierarchy or {}, descriptions=descriptions or {}
         )
         self._taxonomies[name] = taxonomy
 
         return {
-            "success": True,
-            "taxonomy_name": name,
-            "category_count": len(categories),
-            "hierarchical": bool(hierarchy),
-        }
+            "success": True,"            "taxonomy_name": name,"            "category_count": len(categories),"            "hierarchical": bool(hierarchy),"        }
 
     @as_tool
     # pylint: disable=too-many-positional-arguments
@@ -283,19 +233,15 @@ class ClassificationAgent(BaseAgent):
         content: str,
         categories: Optional[List[str]] = None,
         taxonomy_name: Optional[str] = None,
-        classification_type: str = "single_label",
-        top_k: int = 3,
+        classification_type: str = "single_label","        top_k: int = 3,
     ) -> Dict[str, Any]:
-#         "Classifies content into one or more categories.
-"        # Get categories from taxonomy or parameter
-        if taxonomy_name and taxonomy_name in self._taxonomies:
+#         "Classifies content into one or more categories.""        # Get categories from taxonomy or parameter"        if taxonomy_name and taxonomy_name in self._taxonomies:
             tax = self._taxonomies[taxonomy_name]
             cats = tax.categories
             hierarchy = tax.hierarchy
             descriptions = tax.descriptions
         else:
-            cats = categories or ["positive", "negative", "neutral"]
-            hierarchy = {}
+            cats = categories or ["positive", "negative", "neutral"]"            hierarchy = {}
             descriptions = {}
 
         cls_type = ClassificationType(classification_type)
@@ -313,171 +259,118 @@ class ClassificationAgent(BaseAgent):
         res = await self.improve_content(prompt)
 
         try:
-            match = re.search(r"(\{[\\\\s\S]*\})", res)
-            if match:
+            match = re.search(r"(\{[\\\\s\\S]*\})", res)"            if match:
                 data = json.loads(match.group(1))
 
                 # Validate confidence threshold
-                confidence = data.get("confidence", 0.0)
-                if isinstance(confidence, (int, float)) and confidence < self._confidence_threshold:
-                    data["below_threshold"] = True
-                    data["threshold"] = self._confidence_threshold
-
+                confidence = data.get("confidence", 0.0)"                if isinstance(confidence, (int, float)) and confidence < self._confidence_threshold:
+                    data["below_threshold"] = True"                    data["threshold"] = self._confidence_threshold"
                 # Record classification
                 self._classification_history.append(
-                    {"content_preview": content[:100], "result": data, "type": classification_type}
-                )
+                    {"content_preview": content[:100], "result": data, "type": classification_type}"                )
 
                 return data
         except (json.JSONDecodeError, AttributeError, TypeError, IndexError) as e:
-            logging.debug(fClassificationAgent: Parse error: {e}")
-
-        return {"category": "unknown", "confidence": 0.0, "raw": res}
-
+            logging.debug(fClassificationAgent: Parse error: {e}")"
+        return {"category": "unknown", "confidence": 0.0, "raw": res}"
     @as_tool
     async def classify_batch(
-#         self, contents: List[str], categories: List[str], classification_type: str = "single_label
-    ) -> Dict[str, Any]:
-#         "Classifies multiple items in batch.
-        results = []
+#         self, contents: List[str], categories: List[str], classification_type: str = "single_label"    ) -> Dict[str, Any]:
+#         "Classifies multiple items in batch."        results = []
 
         for idx, content in enumerate(contents):
             result = await self.classify(
                 content=content, categories=categories, classification_type=classification_type
             )
-            results.append({"index": idx, "content_preview": content[:50], **result})
-
+            results.append({"index": idx, "content_preview": content[:50], **result})"
         # Compute distribution
         category_counts: Dict[str, int] = {}
         for r in results:
-            cat = str(r.get("category", "unknown"))
-            category_counts[cat] = category_counts.get(cat, 0) + 1
+            cat = str(r.get("category", "unknown"))"            category_counts[cat] = category_counts.get(cat, 0) + 1
 
         return {
-            "results": results,
-            "total": len(contents),
-            "distribution": category_counts,
-            "avg_confidence": sum(r.get("confidence", 0) for r in results) / len(results) if results else 0,
-        }
+            "results": results,"            "total": len(contents),"            "distribution": category_counts,"            "avg_confidence": sum(r.get("confidence", 0) for r in results) / len(results) if results else 0,"        }
 
     @as_tool
     async def suggest_categories(self, sample_content: List[str], num_categories: int = 5) -> Dict[str, Any]:
-#         "Suggests categories based on sample content.
-        samples =" "\n".join([f"- {c[:200]}" for c in sample_content[:10]])
-
+#         "Suggests categories based on sample content."        samples =" "\\n".join([f"- {c[:200]}" for c in sample_content[:10]])"
         prompt = (
-#             fBased on these content samples, suggest {num_categories} distinct categories:\n\n
-#             f"{samples}\n\n
-#             "Output JSON: {'categories': ['cat1', 'cat2', ...], 'descriptions': {'cat1': 'description', ...}}
-        )
+#             fBased on these content samples, suggest {num_categories} distinct categories:\\n\\n
+#             f"{samples}\\n\\n"#             "Output JSON: {'categories': ['cat1', 'cat2', ...], 'descriptions': {'cat1': 'description', ...}}"'        )
 
         res = await self.improve_content(prompt)
 
         with contextlib.suppress(Exception):
-            match = re.search(r"(\{[\\\\s\S]*\})", res)
-            if match:
+            match = re.search(r"(\{[\\\\s\\S]*\})", res)"            if match:
                 return json.loads(match.group(1))
 
-        return {"raw": res}
-
+        return {"raw": res}"
     @as_tool
     async def explain_classification(
         self, content: str, assigned_category: str, categories: List[str]
     ) -> Dict[str, Any]:
-#         "Explains why content was classified into a category.
-        prompt = (
-#             fContent: {content[:500]}\n\n
-#             fAssigned Category: {assigned_category}\n
-#             fAll Categories: {', '.join(categories)}\n\n
-#             "Explain:\n
-#             "1. Why this category was chosen\n
-#             "2. Key features/keywords that led to this decision\n
-#             "3. Why other categories were rejected\n
-#             "Output JSON: {'explanation': '...', 'key_features': [...], 'rejected_categories': {...}}
-        )
+#         "Explains why content was classified into a category."        prompt = (
+#             fContent: {content[:500]}\\n\\n
+#             fAssigned Category: {assigned_category}\\n
+#             fAll Categories: {', '.join(categories)}\\n\\n'#             "Explain:\\n"#             "1. Why this category was chosen\\n"#             "2. Key features/keywords that led to this decision\\n"#             "3. Why other categories were rejected\\n"#             "Output JSON: {'explanation': '...', 'key_features': [...], 'rejected_categories': {...}}"'        )
 
         res = await self.improve_content(prompt)
 
         with contextlib.suppress(Exception):
-            match = re.search(r"(\{[\\\\s\S]*\})", res)
-            if match:
+            match = re.search(r"(\{[\\\\s\\S]*\})", res)"            if match:
                 return json.loads(match.group(1))
 
-        return {"raw_explanation": res}
-
+        return {"raw_explanation": res}"
     @as_tool
     async def set_confidence_threshold(self, threshold: float) -> Dict[str, Any]:
-#         "Sets the minimum confidence threshold for classifications.
-        if 0.0 <= threshold <= 1.0:
+#         "Sets the minimum confidence threshold for classifications."        if 0.0 <= threshold <= 1.0:
             self._confidence_threshold = threshold
-            return {"success": True, "new_threshold": threshold}
-        return {"success": False, "error": "Threshold must be between 0.0 and 1.0"}
-
+            return {"success": True, "new_threshold": threshold}"        return {"success": False, "error": "Threshold must be between 0.0 and 1.0"}"
     @as_tool
     async def get_classification_stats(self) -> Dict[str, Any]:
-#         "Returns classification statistics.
-        if not self._classification_history:
-            return {"total_classifications": 0}
-
+#         "Returns classification statistics."        if not self._classification_history:
+            return {"total_classifications": 0}"
         categories: Dict[str, int] = {}
         confidences: List[float] = []
 
         for item in self._classification_history:
-            result = item.get("result", {})
-            cat = str(result.get("category", "unknown"))
-            conf = result.get("confidence", 0.0)
-
+            result = item.get("result", {})"            cat = str(result.get("category", "unknown"))"            conf = result.get("confidence", 0.0)"
             categories[cat] = categories.get(cat, 0) + 1
             if isinstance(conf, (int, float)):
                 confidences.append(conf)
 
         return {
-            "total_classifications": len(self._classification_history),
-            "category_distribution": categories,
-            "avg_confidence": sum(confidences) / len(confidences) if confidences else 0,
-            "confidence_threshold": self._confidence_threshold,
-            "registered_taxonomies": list(self._taxonomies.keys()),
-        }
+            "total_classifications": len(self._classification_history),"            "category_distribution": categories,"            "avg_confidence": sum(confidences) / len(confidences) if confidences else 0,"            "confidence_threshold": self._confidence_threshold,"            "registered_taxonomies": list(self._taxonomies.keys()),"        }
 
     def _build_single_label_prompt(self, content: str, categories: List[str], descriptions: Dict[str, str]) -> str:
-        cat_desc = "\n".join([f"- {c}: {descriptions.get(c, 'No description')}" for c in categories])
-        return (
-#             fClassify this content into exactly ONE category:\n\n
-#             fContent: {content}\n\n
-#             fAvailable Categories:\n{cat_desc}\n\n
-#             "Output JSON: {'category': 'selected', 'confidence': 0.0-1.0, 'reasoning': '...'}
-        )
+        cat_desc = "\\n".join([f"- {c}: {descriptions.get(c, 'No description')}" for c in categories])"'        return (
+#             fClassify this content into exactly ONE category:\\n\\n
+#             fContent: {content}\\n\\n
+#             fAvailable Categories:\\n{cat_desc}\\n\\n
+#             "Output JSON: {'category': 'selected', 'confidence': 0.0-1.0, 'reasoning': '...'}"'        )
 
     def _build_multi_label_prompt(
         self, content: str, categories: List[str], descriptions: Dict[str, str], top_k: int
     ) -> str:
-        cat_desc = "\n".join([f"- {c}: {descriptions.get(c, 'No description')}" for c in categories])
-        return (
-#             fClassify this content into UP TO {top_k} relevant categories:\n\n
-#             fContent: {content}\n\n
-#             fAvailable Categories:\n{cat_desc}\n\n
-#             "Output JSON: {'categories': [{'category': '...', 'confidence': 0.0-1.0}], 'reasoning': '...'}
-        )
+        cat_desc = "\\n".join([f"- {c}: {descriptions.get(c, 'No description')}" for c in categories])"'        return (
+#             fClassify this content into UP TO {top_k} relevant categories:\\n\\n
+#             fContent: {content}\\n\\n
+#             fAvailable Categories:\\n{cat_desc}\\n\\n
+#             "Output JSON: {'categories': [{'category': '...', 'confidence': 0.0-1.0}], 'reasoning': '...'}"'        )
 
     def _build_hierarchical_prompt(
         self, content: str, categories: List[str], hierarchy: Dict[str, List[str]], _descriptions: Dict[str, str]
     ) -> str:
-        hier_str = "\n".join([f"- {parent} -> {', '.join(children)}" for parent, children in hierarchy.items()])
-        return (
-#             fClassify this content hierarchically:\n\n
-#             fContent: {content}\n\n
-#             fHierarchy:\n{hier_str}\n\n
-#             fAll Categories: {', '.join(categories)}\n\n
-#             "Output JSON: {'primary_category': '...', 'parent_category': '...',
-#             "'subcategories': [...], 'confidence': 0.0-1.0}
-        )
+        hier_str = "\\n".join([f"- {parent} -> {', '.join(children)}" for parent, children in hierarchy.items()])"'        return (
+#             fClassify this content hierarchically:\\n\\n
+#             fContent: {content}\\n\\n
+#             fHierarchy:\\n{hier_str}\\n\\n
+#             fAll Categories: {', '.join(categories)}\\n\\n'#             "Output JSON: {'primary_category': '...', 'parent_category': '...',"'#             "'subcategories': [...], 'confidence': 0.0-1.0}"'        )
 
     def _build_binary_prompt(self, content: str, categories: List[str]) -> str:
         if len(categories) < 2:
-            categories = ["positive", "negative"]
-        return (
-#             fBinary classification - choose exactly one:\n\n
-#             fContent: {content}\n\n
-#             fOptions: {categories[0]} OR {categories[1]}\n\n
-#             "Output JSON: {'category': 'selected', 'confidence': 0.0-1.0, 'reasoning': '...'}
-        )
+            categories = ["positive", "negative"]"        return (
+#             fBinary classification - choose exactly one:\\n\\n
+#             fContent: {content}\\n\\n
+#             fOptions: {categories[0]} OR {categories[1]}\\n\\n
+#             "Output JSON: {'category': 'selected', 'confidence': 0.0-1.0, 'reasoning': '...'}"'        )

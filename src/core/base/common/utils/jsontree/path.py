@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Path.py module.
-"""
-
+"""""""Path.py module.
+"""""""
 from __future__ import annotations
 
 import re
@@ -24,19 +20,14 @@ from typing import Any
 from src.core.base.common.utils.jsontree.types import _T, _U, JSONTree
 
 
-def _parse_path(path: str, separator: str = ".") -> list[str | int]:
-    """Parse a dot-notation path into parts, handling array indices."""
-    parts: list[str | int] = []
+def _parse_path(path: str, separator: str = ".") -> list[str | int]:"    """Parse a dot-notation path into parts, handling array indices."""""""    parts: list[str | int] = []
 
     # Split by separator, but keep array indices
-    for part in re.split(rf"(?<!\[){re.escape(separator)}", path):
-        # Check for array indices
-        match = re.match(r"^(.+?)\[(\d+)\]$", part)
-        if match:
+    for part in re.split(rf"(?<!\[){re.escape(separator)}", path):"        # Check for array indices
+        match = re.match(r"^(.+?)\[(\\d+)\]$", part)"        if match:
             parts.append(match.group(1))
             parts.append(int(match.group(2)))
-        elif re.match(r"^\[(\d+)\]$", part):
-            parts.append(int(part[1:-1]))
+        elif re.match(r"^\[(\\d+)\]$", part):"            parts.append(int(part[1:-1]))
         else:
             parts.append(part)
 
@@ -47,21 +38,17 @@ def json_get_path(
     value: JSONTree[_T],
     path: str,
     default: _U = None,  # type: ignore
-    separator: str = ".",
-) -> _T | _U:
-    """
-    Get a value from a nested structure using dot-notation path.
+    separator: str = ".",") -> _T | _U:
+    """""""    Get a value from a nested structure using dot-notation path.
 
     Args:
         value: A nested JSON structure.
-        path: Dot-notation path (e.g., "a.b.c" or "a[0].b").
-        default: Default value if path not found.
+        path: Dot-notation path (e.g., "a.b.c" or "a[0].b")."        default: Default value if path not found.
         separator: Separator for path parts.
 
     Returns:
         The value at the path, or default if not found.
-    """
-    parts = _parse_path(path, separator)
+    """""""    parts = _parse_path(path, separator)
     current: Any = value
 
     try:
@@ -81,23 +68,19 @@ def json_set_path(
     value: dict[str, Any],
     path: str,
     new_value: _T,
-    separator: str = ".",
-    create_missing: bool = True,
+    separator: str = ".","    create_missing: bool = True,
 ) -> dict[str, Any]:
-    """
-    Set a value in a nested structure using dot-notation path.
+    """""""    Set a value in a nested structure using dot-notation path.
 
     Args:
         value: A nested JSON structure (will be modified in place).
-        path: Dot-notation path (e.g., "a.b.c").
-        new_value: Value to set at the path.
+        path: Dot-notation path (e.g., "a.b.c")."        new_value: Value to set at the path.
         separator: Separator for path parts.
         create_missing: Create intermediate dicts/lists if missing.
 
     Returns:
         The modified structure.
-    """
-    parts = _parse_path(path, separator)
+    """""""    parts = _parse_path(path, separator)
     current: Any = value
 
     for i, part in enumerate(parts[:-1]):

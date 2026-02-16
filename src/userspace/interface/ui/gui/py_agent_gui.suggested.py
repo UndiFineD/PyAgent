@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-GUI Agent: Provides a graphical user interface for PyAgent.
-"""
-
+"""""""GUI Agent: Provides a graphical user interface for PyAgent.
+"""""""
 from __future__ import annotations
 
 import sys
@@ -40,14 +36,10 @@ def main() -> None:
     from tkinter import messagebox
 
     messagebox.showwarning(
-        "Deprecation Warning",
-        "The Tkinter GUI is deprecated as of v4.0.0 and will be removed in a future release. "
-        "Please use the Web UI (launch_web_interface.py) for the full Swarm Singularity experience.",
-    )
+        "Deprecation Warning","        "The Tkinter GUI is deprecated as of v4.0.0 and will be removed in a future release. ""        "Please use the Web UI (launch_web_interface.py) for the full Swarm Singularity experience.","    )
     root.deiconify()  # Show it for now if they really want it
     PyAgentGUI(root)
     root.mainloop()
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__":"    main()

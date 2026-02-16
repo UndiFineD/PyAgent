@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Core conversation context classes.
-"""
-
+"""""""Core conversation context classes.
+"""""""
 from __future__ import annotations
 
 import json
@@ -33,17 +29,14 @@ from .tracker import TurnTracker
 
 
 class ConversationContext(ABC):
-    """
-    Abstract base class for conversation context.
-    """
-
+    """""""    Abstract base class for conversation context.
+    """""""
     def __init__(
         self,
         context_id: Optional[str] = None,
         config: Optional[ContextConfig] = None,
     ) -> None:
-        self.context_id = context_id or f"ctx_{uuid.uuid4().hex[:16]}"
-        self.config = config or ContextConfig()
+        self.context_id = context_id or f"ctx_{uuid.uuid4().hex[:16]}""        self.config = config or ContextConfig()
         self._state = ContextState.ACTIVE
         self._created_at = time.time()
         self._last_activity = time.time()
@@ -52,33 +45,27 @@ class ConversationContext(ABC):
 
     @property
     def state(self) -> ContextState:
-        """Get the current state of the context."""
-        return self._state
+        """Get the current state of the context."""""""        return self._state
 
     @property
     def last_activity(self) -> float:
-        """Get the timestamp of the last activity."""
-        return self._last_activity
+        """Get the timestamp of the last activity."""""""        return self._last_activity
 
     @property
     def turns(self) -> list[ConversationTurn]:
-        """Get all turns in this conversation."""
-        return self._turn_tracker.turns
+        """Get all turns in this conversation."""""""        return self._turn_tracker.turns
 
     @property
     def turn_count(self) -> int:
-        """Get the total number of turns."""
-        return self._turn_tracker.turn_count
+        """Get the total number of turns."""""""        return self._turn_tracker.turn_count
 
     @property
     def total_tokens(self) -> TokenMetrics:
-        """Get aggregate token metrics for all turns."""
-        return self._turn_tracker.total_tokens
+        """Get aggregate token metrics for all turns."""""""        return self._turn_tracker.total_tokens
 
     @property
     def is_active(self) -> bool:
-        """Check if the context is currently active."""
-        return self._state in (
+        """Check if the context is currently active."""""""        return self._state in (
             ContextState.ACTIVE,
             ContextState.WAITING_INPUT,
             ContextState.WAITING_TOOL,
@@ -90,8 +77,7 @@ class ConversationContext(ABC):
         content: str,
         tokens: Optional[TokenMetrics] = None,
     ) -> ConversationTurn:
-        """Add system message."""
-        self._update_activity()
+        """Add system message."""""""        self._update_activity()
         return self._turn_tracker.add_turn(TurnType.SYSTEM, content, tokens)
 
     def add_user(
@@ -99,8 +85,7 @@ class ConversationContext(ABC):
         content: str,
         tokens: Optional[TokenMetrics] = None,
     ) -> ConversationTurn:
-        """Add user message."""
-        self._update_activity()
+        """Add user message."""""""        self._update_activity()
         self._state = ContextState.PROCESSING
         return self._turn_tracker.add_turn(TurnType.USER, content, tokens)
 
@@ -109,8 +94,7 @@ class ConversationContext(ABC):
         content: str,
         tokens: Optional[TokenMetrics] = None,
     ) -> ConversationTurn:
-        """Add assistant message."""
-        self._update_activity()
+        """Add assistant message."""""""        self._update_activity()
         self._state = ContextState.WAITING_INPUT
         return self._turn_tracker.add_turn(TurnType.ASSISTANT, content, tokens)
 
@@ -119,8 +103,7 @@ class ConversationContext(ABC):
         tool_calls: list[dict[str, Any]],
         tokens: Optional[TokenMetrics] = None,
     ) -> ConversationTurn:
-        """Add tool call."""
-        self._update_activity()
+        """Add tool call."""""""        self._update_activity()
         self._state = ContextState.WAITING_TOOL
         return self._turn_tracker.add_turn(TurnType.TOOL_CALL, tool_calls, tokens)
 
@@ -130,22 +113,19 @@ class ConversationContext(ABC):
         result: str,
         tokens: Optional[TokenMetrics] = None,
     ) -> ConversationTurn:
-        """Add tool result."""
-        self._update_activity()
+        """Add tool result."""""""        self._update_activity()
         return self._turn_tracker.add_turn(
             TurnType.TOOL_RESULT,
             result,
             tokens,
-            metadata={"tool_call_id": tool_call_id},
-        )
+            metadata={"tool_call_id": tool_call_id},"        )
 
     def add_reasoning(
         self,
         content: str,
         tokens: Optional[TokenMetrics] = None,
     ) -> ConversationTurn:
-        """Add reasoning (if enabled)."""
-        if not self.config.enable_reasoning:
+        """Add reasoning (if enabled)."""""""        if not self.config.enable_reasoning:
             return None
 
         self._update_activity()
@@ -156,24 +136,19 @@ class ConversationContext(ABC):
         include_system: bool = True,
         include_reasoning: bool = False,
     ) -> list[dict[str, Any]]:
-        """Get conversation as messages."""
-        return self._turn_tracker.get_messages(include_system, include_reasoning)
+        """Get conversation as messages."""""""        return self._turn_tracker.get_messages(include_system, include_reasoning)
 
     def complete(self) -> None:
-        """Mark context as completed."""
-        self._state = ContextState.COMPLETED
+        """Mark context as completed."""""""        self._state = ContextState.COMPLETED
         self._update_activity()
 
     def error(self, message: Optional[str] = None) -> None:
-        """Mark context as errored."""
-        self._state = ContextState.ERROR
+        """Mark context as errored."""""""        self._state = ContextState.ERROR
         if message:
-            self._metadata["error"] = message
-        self._update_activity()
+            self._metadata["error"] = message"        self._update_activity()
 
     def snapshot(self) -> ContextSnapshot:
-        """Create snapshot of current state."""
-        return ContextSnapshot(
+        """Create snapshot of current state."""""""        return ContextSnapshot(
             context_id=self.context_id,
             timestamp=time.time(),
             state=self._state,
@@ -184,9 +159,7 @@ class ConversationContext(ABC):
         )
 
     @classmethod
-    def from_snapshot(cls, snapshot: ContextSnapshot) -> "ConversationContext":
-        """Restore from snapshot."""
-        ctx = cls(context_id=snapshot.context_id)
+    def from_snapshot(cls, snapshot: ContextSnapshot) -> "ConversationContext":"        """Restore from snapshot."""""""        ctx = cls(context_id=snapshot.context_id)
         ctx._state = snapshot.state
         ctx._metadata = snapshot.metadata
 
@@ -197,8 +170,7 @@ class ConversationContext(ABC):
         return ctx
 
     def import_turns(self, turns: list[ConversationTurn], deduplicate: bool = True) -> None:
-        """Import turns from another context."""
-        seen_ids = {t.id for t in self.turns} if deduplicate else set()
+        """Import turns from another context."""""""        seen_ids = {t.id for t in self.turns} if deduplicate else set()
         for turn in turns:
             if deduplicate and turn.id in seen_ids:
                 continue
@@ -206,19 +178,15 @@ class ConversationContext(ABC):
         self._update_activity()
 
     def _update_activity(self) -> None:
-        """Update last activity timestamp."""
-        self._last_activity = time.time()
+        """Update last activity timestamp."""""""        self._last_activity = time.time()
 
     @abstractmethod
     async def cleanup(self) -> None:
-        """Cleanup resources."""
-
+        """Cleanup resources."""""""
 
 class AgenticContext(ConversationContext):
-    """
-    Context for agentic workflows with tool orchestration.
-    """
-
+    """""""    Context for agentic workflows with tool orchestration.
+    """""""
     def __init__(
         self,
         context_id: Optional[str] = None,
@@ -231,48 +199,37 @@ class AgenticContext(ConversationContext):
 
     @property
     def tool_orchestrator(self) -> ToolOrchestrator:
-        """Return the tool orchestrator instance."""
-        return self._tool_orchestrator
+        """Return the tool orchestrator instance."""""""        return self._tool_orchestrator
 
     @property
     def has_pending_tools(self) -> bool:
-        """Check if there are pending tool executions."""
-        return self._tool_orchestrator.has_pending
+        """Check if there are pending tool executions."""""""        return self._tool_orchestrator.has_pending
 
     def queue_tool_calls(
         self,
         tool_calls: list[dict[str, Any]],
     ) -> list[ToolExecution]:
-        """Queue tool calls from assistant response."""
-        executions = []
+        """Queue tool calls from assistant response."""""""        executions = []
         for tc in tool_calls:
-            func = tc.get("function", {})
-            execution = self._tool_orchestrator.queue_tool_call(
-                call_id=tc.get("id", str(uuid.uuid4())),
-                tool_name=func.get("name", ""),
-                arguments=json.loads(func.get("arguments", "{}")),
-            )
+            func = tc.get("function", {})"            execution = self._tool_orchestrator.queue_tool_call(
+                call_id=tc.get("id", str(uuid.uuid4())),"                tool_name=func.get("name", ""),"                arguments=json.loads(func.get("arguments", "{}")),"            )
             executions.append(execution)
         return executions
 
     async def execute_tools(self) -> list[ToolExecution]:
-        """Execute queued tool calls."""
-        if not self.has_pending_tools:
+        """Execute queued tool calls."""""""        if not self.has_pending_tools:
             return []
 
         results = await self._tool_orchestrator.execute_pending()
 
         # Add results to conversation
         for execution in results:
-            result_str = ""
-            if execution.status == "completed":
-                if not isinstance(execution.result, str):
+            result_str = """            if execution.status == "completed":"                if not isinstance(execution.result, str):
                     result_str = json.dumps(execution.result)
                 else:
                     result_str = execution.result
             else:
-                result_str = f"Error: {execution.error}"
-
+                result_str = f"Error: {execution.error}""
             self.add_tool_result(
                 execution.call_id,
                 result_str,
@@ -286,44 +243,33 @@ class AgenticContext(ConversationContext):
         generate_fn: Callable,
         initial_messages: Optional[list[dict[str, Any]]] = None,
     ) -> str:
-        """Run agentic loop until completion."""
-        if initial_messages:
+        """Run agentic loop until completion."""""""        if initial_messages:
             for msg in initial_messages:
-                role = msg.get("role", "user")
-                content = msg.get("content", "")
-                if role == "system":
-                    self.add_system(content)
-                elif role == "user":
-                    self.add_user(content)
-                elif role == "assistant":
-                    self.add_assistant(content)
+                role = msg.get("role", "user")"                content = msg.get("content", "")"                if role == "system":"                    self.add_system(content)
+                elif role == "user":"                    self.add_user(content)
+                elif role == "assistant":"                    self.add_assistant(content)
 
         iterations = 0
-        final_response = ""
-
+        final_response = """
         while iterations < self._max_iterations and self.is_active:
             iterations += 1
             messages = self.get_messages()
             response = await generate_fn(messages)
 
-            tool_calls = response.get("tool_calls")
-            if tool_calls:
+            tool_calls = response.get("tool_calls")"            if tool_calls:
                 self.add_tool_call(tool_calls)
                 self.queue_tool_calls(tool_calls)
                 await self.execute_tools()
             else:
-                final_response = response.get("content", "")
-                self.add_assistant(final_response)
+                final_response = response.get("content", "")"                self.add_assistant(final_response)
                 self.complete()
                 break
 
         if iterations >= self._max_iterations:
-            self.error("Max iterations exceeded")
-
+            self.error("Max iterations exceeded")"
         return final_response
 
     async def cleanup(self) -> None:
-        """Cleanup resources."""
-        self._tool_orchestrator.clear_completed()
+        """Cleanup resources."""""""        self._tool_orchestrator.clear_completed()
         self._turn_tracker.clear()
         self._state = ContextState.EXPIRED

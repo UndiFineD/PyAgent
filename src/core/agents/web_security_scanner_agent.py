@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Module: web_security_scanner_agent
+"""""""Module: web_security_scanner_agent
 Agent for web application security scanning, refactored from aem-eye patterns.
 Implements multi-agent coordination for distributed scanning tasks.
-"""
-
+"""""""
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
@@ -30,26 +26,21 @@ from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 
 
 class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, TaskQueueMixin):
-    """Agent for web security scanning using patterns from aem-eye."""
-
+    """Agent for web security scanning using patterns from aem-eye."""""""
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         SecurityMixin.__init__(self, **kwargs)
         TaskQueueMixin.__init__(self, **kwargs)
 
         self.scanner_core = WebSecurityScannerCore(
-            timeout=kwargs.get('timeout', 10),
-            concurrency=kwargs.get('concurrency', 10),
-            rate_limit=kwargs.get('rate_limit', 100)
-        )
+            timeout=kwargs.get('timeout', 10),'            concurrency=kwargs.get('concurrency', 10),'            rate_limit=kwargs.get('rate_limit', 100)'        )
 
     async def scan_for_vulnerabilities(
         self,
         hosts: List[str],
         custom_patterns: Optional[Dict[str, str]] = None
     ) -> Dict[str, Any]:
-        """
-        Scan hosts for security vulnerabilities using pattern matching.
+        """""""        Scan hosts for security vulnerabilities using pattern matching.
 
         Args:
             hosts: List of hosts/URLs to scan
@@ -57,15 +48,10 @@ class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, Tas
 
         Returns:
             Scan results with detected patterns
-        """
-        # Use default CMS patterns if none provided
+        """""""        # Use default CMS patterns if none provided
         if custom_patterns is None:
             custom_patterns = {
-                'aem': r'href="/content/dam|/etc/clientlibs',
-                'wordpress': r'wp-content|wp-includes',
-                'drupal': r'Drupal|drupal',
-                'joomla': r'Joomla|joomla',
-            }
+                'aem': r'href="/content/dam|/etc/clientlibs',"'                'wordpress': r'wp-content|wp-includes','                'drupal': r'Drupal|drupal','                'joomla': r'Joomla|joomla','            }
 
         # Distribute scanning across multiple worker tasks
         results = await self._coordinate_scanning(hosts, custom_patterns)
@@ -74,15 +60,10 @@ class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, Tas
         analysis = await self._analyze_scan_results(results)
 
         return {
-            'scan_results': results,
-            'analysis': analysis,
-            'total_hosts_scanned': len(hosts),
-            'vulnerable_hosts': len(results)
-        }
+            'scan_results': results,'            'analysis': analysis,'            'total_hosts_scanned': len(hosts),'            'vulnerable_hosts': len(results)'        }
 
     async def _coordinate_scanning(self, hosts: List[str], patterns: Dict[str, str]) -> Dict[str, List[str]]:
-        """Coordinate scanning using task queue pattern similar to aem-eye's job system."""
-        # Split hosts into batches for distributed processing
+        """Coordinate scanning using task queue pattern similar to aem-eye's job system."""""""'        # Split hosts into batches for distributed processing
         batch_size = 50
         all_results = {}
 
@@ -91,10 +72,7 @@ class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, Tas
 
             # Create scanning task
             task_id = await self.create_task({
-                'type': 'scan_batch',
-                'hosts': batch,
-                'patterns': patterns
-            })
+                'type': 'scan_batch','                'hosts': batch,'                'patterns': patterns'            })
 
             # Execute batch scan
             batch_results = await self.scanner_core.scan_hosts(batch, patterns)
@@ -106,8 +84,7 @@ class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, Tas
         return all_results
 
     async def _analyze_scan_results(self, results: Dict[str, List[str]]) -> Dict[str, Any]:
-        """Analyze scan results for security insights."""
-        pattern_counts = {}
+        """Analyze scan results for security insights."""""""        pattern_counts = {}
         host_counts = {}
 
         for host, patterns in results.items():
@@ -118,25 +95,18 @@ class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, Tas
                 host_counts[pattern].append(host)
 
         return {
-            'pattern_distribution': pattern_counts,
-            'hosts_by_pattern': host_counts,
-            'total_matches': sum(pattern_counts.values())
-        }
+            'pattern_distribution': pattern_counts,'            'hosts_by_pattern': host_counts,'            'total_matches': sum(pattern_counts.values())'        }
 
     async def detect_cms_instances(self, hosts: List[str]) -> Dict[str, Any]:
-        """
-        Detect CMS instances across hosts.
+        """""""        Detect CMS instances across hosts.
 
         Args:
             hosts: List of hosts to scan
 
         Returns:
             CMS detection results
-        """
-        results = await self.scanner_core.detect_cms_fingerprints(hosts)
+        """""""        results = await self.scanner_core.detect_cms_fingerprints(hosts)
         analysis = await self._analyze_scan_results(results)
 
         return {
-            'cms_detections': results,
-            'analysis': analysis
-        }
+            'cms_detections': results,'            'analysis': analysis'        }

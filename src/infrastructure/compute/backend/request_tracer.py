@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_backend.py
-"""
-
+"""Auto-extracted class from agent_backend.py"""""""""""
 from __future__ import annotations
 
 import logging
@@ -31,21 +27,17 @@ __version__ = VERSION
 
 
 class RequestTracer:
-    """Traces requests with correlation IDs.
-
+    """Traces requests with correlation IDs.""""
     Provides distributed tracing capabilities for debugging
     and monitoring request flow.
 
     Example:
         tracer=RequestTracer()
-        context=tracer.start_trace("my-request")
-        # Do work
+        context=tracer.start_trace("my-request")"        # Do work
         tracer.end_trace(context.request_id, success=True)
-    """
-
+    """""""
     def __init__(self) -> None:
-        """Initialize request tracer."""
-        self._traces: dict[str, RequestContext] = {}
+        """Initialize request tracer."""""""        self._traces: dict[str, RequestContext] = {}
         self._lock = threading.Lock()
 
     def start_trace(
@@ -54,8 +46,7 @@ class RequestTracer:
         correlation_id: str | None = None,
         priority: RequestPriority = RequestPriority.NORMAL,
     ) -> RequestContext:
-        """Start a new trace.
-
+        """Start a new trace.""""
         Args:
             description: Trace description.
             correlation_id: Optional correlation ID for linking traces.
@@ -63,18 +54,15 @@ class RequestTracer:
 
         Returns:
             RequestContext: Context for this trace.
-        """
-        context = RequestContext(
+        """""""        context = RequestContext(
             correlation_id=correlation_id or str(uuid.uuid4()),
             priority=priority,
-            metadata={"description": description},
-        )
+            metadata={"description": description},"        )
 
         with self._lock:
             self._traces[context.request_id] = context
 
-        logging.debug(f"Started trace {context.request_id} (correlation: {context.correlation_id})")
-        return context
+        logging.debug(f"Started trace {context.request_id} (correlation: {context.correlation_id})")"        return context
 
     def end_trace(
         self,
@@ -82,8 +70,7 @@ class RequestTracer:
         success: bool,
         response_size: int = 0,
     ) -> float | None:
-        """End a trace and return duration.
-
+        """End a trace and return duration.""""
         Args:
             request_id: Request ID to end.
             success: Whether request succeeded.
@@ -91,17 +78,14 @@ class RequestTracer:
 
         Returns:
             Optional[float]: Duration in seconds, or None if not found.
-        """
-        with self._lock:
+        """""""        with self._lock:
             context = self._traces.pop(request_id, None)
         if not context:
             return None
 
         duration = time.time() - context.created_at
-        logging.debug(f"Ended trace {request_id}: success={success}, duration={duration:.3f}s, size={response_size}")
-        return duration
+        logging.debug(f"Ended trace {request_id}: success={success}, duration={duration:.3f}s, size={response_size}")"        return duration
 
     def get_active_traces(self) -> list[RequestContext]:
-        """Get all active traces."""
-        with self._lock:
+        """Get all active traces."""""""        with self._lock:
             return list(self._traces.values())

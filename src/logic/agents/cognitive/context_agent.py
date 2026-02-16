@@ -1,33 +1,27 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""
-# ContextAgent - Context description authoring and RAG routing
+"""""""# ContextAgent - Context description authoring and RAG routing
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-- Instantiate with a Path or filename pointing at a `.description.md` file: ContextAgent("path/to/file.description.md")
-- Use route_query(query) to find relevant RAG shards for a query.
-- Read/write the .description.md file content via the agent's BaseAgent APIs and use mixin methods to manage templates, tags, versions, validation, annotations, categorization and RAG operations.
-
+- Instantiate with a Path or filename pointing at a `.description.md` file: ContextAgent("path/to/file.description.md")"- Use route_query(query) to find relevant RAG shards for a query.
+- Read/write the .description.md file content via the agent's BaseAgent APIs and use mixin methods to manage templates, tags, versions, validation, annotations, categorization and RAG operations.'
 WHAT IT DOES:
 - Provides an orchestrating agent that updates and manages code/file description documents (.description.md) using multiple context-related mixins and a local RAG core.
 - Routes natural-language queries to the best vector shards, derives the source file corresponding to a description file, and initializes configurable templates, tags, versions, validation rules, annotations, priority, category, and metadata.
-- Warns if the filename doesn't follow the expected `.description.md` pattern and attempts to locate the original source file by checking configured extensions.
-
+- Warns if the filename doesn't follow the expected `.description.md` pattern and attempts to locate the original source file by checking configured extensions.'
 WHAT IT SHOULD DO BETTER:
 - More robust extension and filename handling (config-driven suffixes and stricter validation) and clearer error semantics when the source file cannot be derived.
 - Expose and document the mixin APIs and lifecycle hooks (e.g., when templates/tags/versions are mutated) and add unit tests for _derive_source_path and route_query behavior.
@@ -36,15 +30,13 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -80,8 +72,7 @@ class ContextAgent(
     ContextCategorizationMixin,
     ContextRAGMixin,
 ):
-#     "Updates code file context descriptions using AI assistance.
-
+#     "Updates code file context descriptions using AI assistance."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.rag_core = LocalRAGCore()
@@ -89,24 +80,7 @@ class ContextAgent(
 
         # Configuration
         self.config = {
-            "extensions": [
-                ".py",
-                ".js",
-                ".ts",
-                ".go",
-                ".rs",
-                ".java",
-                ".sh",
-                ".json",
-                ".yaml",
-                ".yml",
-                ".toml",
-                ".ini",
-                ".cfg",
-                ".md",
-                ".rst",
-                ".txt",
-            ]
+            "extensions": ["                ".py","                ".js","                ".ts","                ".go","                ".rs","                ".java","                ".sh","                ".json","                ".yaml","                ".yml","                ".toml","                ".ini","                ".cfg","                ".md","                ".rst","                ".txt","            ]
         }
 
         self._validate_file_extension()
@@ -124,39 +98,26 @@ class ContextAgent(
         self._metadata: Dict[str, Any] = {}
 
     def route_query(self, query: str) -> list[str]:
-""""Selects the best vector shards based on file path and query sentiment."""
-        active_path = str(self.file_path)
+""""Selects the best vector shards based on file path and query sentiment."""""""        active_path = str(self.file_path)
         selected = self.rag_core.route_query_to_shards(
             query, active_path, self.rag_shards
         )
-        logging.info(fContextAgent: Query '{query}' routed to {len(selected)} shards.")
-        return selected
+        logging.info(fContextAgent: Query '{query}' routed to {len(selected)} shards.")"'        return selected
 
     def _validate_file_extension(self) -> None:
-""""Validate that the file has the correct extension."""
-        if not self.file_path.name.endswith(".description.md"):
-            logging.warning(
+""""Validate that the file has the correct extension."""""""        if not self.file_path.name.endswith(".description.md"):"            logging.warning(
 #                 fFile {self.file_path.name} does not end with .description.md.
-#                 "Context operations may be limited.
-            )
+#                 "Context operations may be limited."            )
 
     def _derive_source_path(self) -> Path | None:
-""""Derive source file path from .description.md filename."""
-        if self.file_path.name.endswith(".description.md"):
-            stem = self.file_path.name.replace(".description.md", ")
-            # Use configurable extensions
-            for ext in self.config.get("extensions", []):
-#                 source = self.file_path.parent / f"{stem}{ext}
-                if source.exists():
+""""Derive source file path from .description.md filename."""""""        if self.file_path.name.endswith(".description.md"):"            stem = self.file_path.name.replace(".description.md", ")"            # Use configurable extensions
+            for ext in self.config.get("extensions", []):"#                 source = self.file_path.parent / f"{stem}{ext}"                if source.exists():
                     return source
         return None
 
     # ========== Core Methods ==========
     def _get_default_content(self) -> str:
-""""Return rich, structured template for new descriptions."""
-        self.file_path.name.replace(".description.md", ")
-        return "# Description: `{filename}`
-
+""""Return rich, structured template for new descriptions."""""""        self.file_path.name.replace(".description.md", ")"        return "# Description: `{filename}`"
 ## Purpose
 [One - line purpose statement]
 
@@ -168,9 +129,7 @@ class ContextAgent(
 ```bash
 # Example usage
 
-"""
-"""
-
+""""""""""""""
 import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional

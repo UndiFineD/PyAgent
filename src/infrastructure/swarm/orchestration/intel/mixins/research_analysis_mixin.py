@@ -1,23 +1,18 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Research analysis mixin.py module.
-"""
-# Licensed under the Apache License, Version 2.0 (the "License");
-
+"""""""Research analysis mixin.py module.
+"""""""# Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
 import contextlib
@@ -31,59 +26,37 @@ if TYPE_CHECKING:
 
 
 class ResearchAnalysisMixin:
-    """Mixin for research report updates and lesson harvesting in SelfImprovementAnalysis."""
-
+    """Mixin for research report updates and lesson harvesting in SelfImprovementAnalysis."""""""
     def update_research_report(
         self: SelfImprovementAnalysis, results: dict[str, Any], lessons: list[str] | None = None
     ) -> None:
-        """Updates the IMPROVEMENT_RESEARCH.md based on latest scan findings."""
-        if not os.path.exists(os.path.dirname(self.research_doc)):
+        """Updates the IMPROVEMENT_RESEARCH.md based on latest scan findings."""""""        if not os.path.exists(os.path.dirname(self.research_doc)):
             os.makedirs(os.path.dirname(self.research_doc), exist_ok=True)
 
         # Generate a summary section
-        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-        summary = f"\n### Latest Autonomous Scan ({timestamp})\n"
-        summary += f"- **Files Scanned**: {results['files_scanned']}\n"
-        summary += f"- **Issues Identified**: {results['issues_found']}\n"
-        summary += f"- **Fixes Applied**: {results['fixes_applied']}\n"
-
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")"        summary = f"\\n### Latest Autonomous Scan ({timestamp})\\n""        summary += f"- **Files Scanned**: {results['files_scanned']}\\n""'        summary += f"- **Issues Identified**: {results['issues_found']}\\n""'        summary += f"- **Fixes Applied**: {results['fixes_applied']}\\n""'
         if lessons:
-            summary += "\n**Lessons Learned from Interaction Shards:**\n"
-            for lesson in lessons:
-                summary += f"- {lesson}\n"
-
+            summary += "\\n**Lessons Learned from Interaction Shards:**\\n""            for lesson in lessons:
+                summary += f"- {lesson}\\n""
         with contextlib.suppress(Exception):
-            content = ""
-            if os.path.exists(self.research_doc):
-                with open(self.research_doc, "r", encoding="utf-8") as f:
-                    content = f.read()
+            content = """            if os.path.exists(self.research_doc):
+                with open(self.research_doc, "r", encoding="utf-8") as f:"                    content = f.read()
 
-            with open(self.research_doc, "w", encoding="utf-8") as f:
-                f.write(summary + "\n" + content)
-
+            with open(self.research_doc, "w", encoding="utf-8") as f:"                f.write(summary + "\\n" + content)"
     def review_ai_lessons(self: SelfImprovementAnalysis, fleet: Any, ai: Any) -> list[str]:
-        """Reviews local interaction shards for patterns of success/failure."""
-        lessons: list[str] = []
-        shard_path = os.path.join(self.workspace_root, "data/memory/shards")
-
-        # Phase 317: Look for "Shard 220" or Copilot CLI patterns
-        if os.path.exists(shard_path):
+        """Reviews local interaction shards for patterns of success/failure."""""""        lessons: list[str] = []
+        shard_path = os.path.join(self.workspace_root, "data/memory/shards")"
+        # Phase 317: Look for "Shard 220" or Copilot CLI patterns"        if os.path.exists(shard_path):
             for root, dirs, files in os.walk(shard_path):
                 for file in files:
-                    if file.endswith(".json") or file.endswith(".jsonl"):
-                        try:
+                    if file.endswith(".json") or file.endswith(".jsonl"):"                        try:
                             # In Phase 317, we specifically check for Copilot CLI deprecation patterns
                             # mentioned in Shard 220.
-                            with open(os.path.join(root, file), "r", encoding="utf-8", errors="ignore") as f:
-                                content = f.read()
-                                if "Copilot CLI" in content and "deprecated" in content:
-                                    lessons.append("Identified GitHub Copilot CLI deprecation pattern in Shard 220.")
-                        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+                            with open(os.path.join(root, file), "r", encoding="utf-8", errors="ignore") as f:"                                content = f.read()
+                                if "Copilot CLI" in content and "deprecated" in content:"                                    lessons.append("Identified GitHub Copilot CLI deprecation pattern in Shard 220.")"                        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                             continue
 
         # If no shards found, simulate ingestion of Shard 220 manually for Phase 317 parity
         if not lessons:
-            lessons.append("Ingested Shard 220 patterns: GitHub Copilot CLI extension is deprecated.")
-            lessons.append("Action: Standardized connectivity orchestrators to replace legacy extension logic.")
-
+            lessons.append("Ingested Shard 220 patterns: GitHub Copilot CLI extension is deprecated.")"            lessons.append("Action: Standardized connectivity orchestrators to replace legacy extension logic.")"
         return list(set(lessons))

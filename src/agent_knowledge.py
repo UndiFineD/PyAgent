@@ -5,24 +5,20 @@
 
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-agent_knowledge.py - Knowledge Agent CLI wrapper
+"""""""agent_knowledge.py - Knowledge Agent CLI wrapper
 
 [Brief Summary]
-A minimal CLI entrypoint that ensures repository root is importable and invokes the Knowledge Agent's main() function.
-
+A minimal CLI entrypoint that ensures repository root is importable and invokes the Knowledge Agent's main() function.'
 DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -39,15 +35,12 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Wrapper for Knowledge Agent CLI.
-"""
-
+"""""""
 import os
 import sys
 
 # Ensure the root directory is in sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))"
 from src.logic.agents.cognitive.context.knowledge_main import main  # noqa: E402
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__":"    main()

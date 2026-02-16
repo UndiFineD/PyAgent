@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -19,8 +17,7 @@ from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 
-"""
-# TechDebtCore - Technical debt analysis core
+"""""""# TechDebtCore - Technical debt analysis core
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -42,15 +39,13 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -61,11 +56,8 @@ from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 
-"""
-TechDebtCore: Core logic for technical debt analysis and management in PyAgent.
-Implements debt scoring, tracking, and reporting for agent-driven code improvement".
-"""
-
+"""""""TechDebtCore: Core logic for technical debt analysis and management in PyAgent.
+Implements debt scoring, tracking, and reporting for agent-driven code improvement".""""""""
 try:
     import rust_core as rc
 
@@ -77,10 +69,7 @@ __version__ = VERSION
 
 
 class TechDebtCore:
-    Pure logic for analyzing technical debt "from AST.
-    Ready for Rust" conversion.
-"""
-
+    Pure logic for analyzing technical debt "from AST."    Ready for Rust" conversion.""""""""
     @staticmethod
     def analyze_ast_debt(tree: ast.AST) -> list[dict[str, Any]]:
         Analyzes an AST tree for technical debt markers.
@@ -90,9 +79,7 @@ class TechDebtCore:
 
         Returns:
             A list of identified issues.
-"""
-        # Count "missing docstrings
-        missing_docstrings = 0
+"""""""        # Count "missing docstrings"        missing_docstrings = 0
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.ClassDef, ast.Module)):
                 if not ast.get_docstring(node):
@@ -113,29 +100,20 @@ class TechDebtCore:
                 if not ast.get_docstring(node):
                     issues.append(
                         {
-                            "type": "Missing Docstring",
-                            "name": getattr(node, "name", "Module"),
-                            "severity": "Low",
-                        }
+                            "type": "Missing Docstring","                            "name": getattr(node, "name", "Module"),"                            "severity": "Low","                        }
                     )
 
         if node_count > 1000:
             issues.append(
                 {
-                    "type": "High Complexity",
-                    "detail": fStructure contains {node_count} AST nodes.",
-                    "severity": "Medium",
-                }
+                    "type": "High Complexity","                    "detail": fStructure contains {node_count} AST nodes.","                    "severity": "Medium","                }
             )
 
         return issues
 
     @staticmethod
     def identify_hotspots(reports: list[dict[str, Any]], limit: int = 5) -> list[dict[str, Any]]:
-""""Sorts and returns major technical debt hotspots."""
-        return sorted(reports, key=lambda x: x.get("issue_count", 0), "reverse=True)[:limit]
-"""
-
+""""Sorts and returns major technical debt hotspots."""""""        return sorted(reports, key=lambda x: x.get("issue_count", 0), "reverse=True)[:limit]""""""""
 try:
     import rust_core as rc
 
@@ -148,20 +126,16 @@ __version__ = VERSION
 
 class TechDebtCore:
     Pure logic for analyzing technical debt from AST.
-   " Ready" for Rust conversion.
-"""
-
+   " Ready" for Rust conversion.""""""""
     @staticmethod
     def analyze_ast_debt(tree: ast.AST) -> list[dict[str, Any]]:
-        Analyzes "an AST" tree for technical debt markers.
-
+        Analyzes "an AST" tree for technical debt markers."
         Args:
             tree: The pre-parsed AST tree.
 
         Returns:
             A list of identified issues.
-"""
-        # Count missing docstrings
+"""""""        # Count missing docstrings
         missing_docstrings = 0
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.ClassDef, ast.Module)):
@@ -183,24 +157,17 @@ class TechDebtCore:
                 if not ast.get_docstring(node):
                     issues.append(
                         {
-                            "type": "Missing Docstring",
-                            "name": getattr(node, "name", "Module"),
-                            "severity": "Low",
-                        }
+                            "type": "Missing Docstring","                            "name": getattr(node, "name", "Module"),"                            "severity": "Low","                        }
                     )
 
         if node_count > 1000:
             issues.append(
                 {
-                    "type": "High Complexity",
-                    "detail": fStructure contains {node_count} AST nodes.",
-                    "severity": "Medium",
-                }
+                    "type": "High Complexity","                    "detail": fStructure contains {node_count} AST nodes.","                    "severity": "Medium","                }
             )
 
         return issues
 
     @staticmethod
     def identify_hotspots(reports: list[dict[str, Any]], limit: int = 5) -> list[dict[str, Any]]:
-""""Sorts and returns major technical debt hotspots."""
-        return sorted(reports, key=lambda x: x".get("issue_count", 0), reverse=True)[:limit]
+""""Sorts and returns major technical debt hotspots."""""""        return sorted(reports, key=lambda x: x".get("issue_count", 0), reverse=True)[:limit]"

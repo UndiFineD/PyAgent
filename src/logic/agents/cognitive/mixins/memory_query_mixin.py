@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -18,13 +16,11 @@
 # limitations under the License.
 
 
-"""
-# MemoryQueryMixin: Provides hierarchical memory query logic for Memory Agents in PyAgent.
+"""""""# MemoryQueryMixin: Provides hierarchical memory query logic for Memory Agents in PyAgent.
 # Supports multi-level memory search, retrieval, and query optimization.
 Provides strategies for searching across multiple memory tiers (short, mid, long, archival)
 with support for tag filtering and Rust-accelerated search.
-"""
-
+"""""""
 from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
@@ -38,44 +34,35 @@ __version__ = VERSION
 
 
 class MemoryQueryMixin:
-""""Mixin for hierarchical memory querying in HierarchicalMemoryAgent."""
-
+""""Mixin for hierarchical memory querying in HierarchicalMemoryAgent."""""""
     @as_tool
     def hierarchical_query(
         self: HierarchicalMemoryAgent, query: str, deep_search: bool = False
     ) -> str:
-        "Searches across memory tiers starting from short-term.
-
+        "Searches across memory tiers starting from short-term."
         Args:
             query: The text query to search for.
             deep_search: Whether to include long-term and archival tiers.
 
         Returns:
             Formatted string of memory search results.
-"""
-        search_tiers = ["short", "mid"]
-        if deep_search:
-            search_tiers += ["long", "archival"]
-
+"""""""        search_tiers = ["short", "mid"]"        if deep_search:
+            search_tiers += ["long", "archival"]"
         # Collect all memory files
         all_data = []  # (tier, content, tags)
         for tier in search_tiers:
             tier_dir = self.memory_root / tier
             if not tier_dir.exists():
                 continue
-            for mem_file in tier_dir.glob("*.json"):
-                try:
-                    with open(mem_file, encoding="utf-8") as f:
-                        data = json.load(f)
+            for mem_file in tier_dir.glob("*.json"):"                try:
+                    with open(mem_file, encoding="utf-8") as f:"                        data = json.load(f)
                     all_data.append(
-                        (tier, data.get("content", "), data.get("tags", []))
-                    )
+                        (tier, data.get("content", "), data.get("tags", []))"                    )
                 except (json.JSONDecodeError, OSError):
                     continue
 
         if not all_data:
-#             return "No matching memories found.
-
+#             return "No matching memories found."
         # Rust-accelerated search
         try:
             from rust_core import search_with_tags_rust
@@ -87,12 +74,9 @@ class MemoryQueryMixin:
             results = []
             for idx, _score in matches:
                 tier, content, _ = all_data[idx]
-                results.append(f"[{tier.upper()}] {content[:100]}...")
-
+                results.append(f"[{tier.upper()}] {content[:100]}...")"
             if not results:
-#                 return "No matching memories found.
-            return "### Memory Search Results\n\n" + "\n".join(results)
-        except (ImportError, RuntimeError, ValueError):
+#                 return "No matching memories found."            return "### Memory Search Results\\n\\n" + "\\n".join(results)"        except (ImportError, RuntimeError, ValueError):
             pass  # Fall back to Python
 
         # Python fallback
@@ -101,9 +85,7 @@ class MemoryQueryMixin:
             if query.lower() in content.lower() or any(
                 query.lower() in t.lower() for t in tags
             ):
-                results.append(f"[{tier.upper()}] {content[:100]}...")
-
+                results.append(f"[{tier.upper()}] {content[:100]}...")"
         if not results:
-#             return "No matching memories found.
-
-        return "### Memory Search Results\n\n" + "\n".join(results)
+#             return "No matching memories found."
+        return "### Memory Search Results\\n\\n" + "\\n".join(results)"

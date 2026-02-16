@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Module: crypto_core
+"""""""Module: crypto_core
 Core logic for cryptographic operations.
 Implements DPAPI and AES decryption patterns from ADSyncDump-BOF.
-"""
-
+"""""""
 from __future__ import annotations
 
 import base64
@@ -41,41 +37,24 @@ CALG_AES_256 = 0x00006610
 
 class DATA_BLOB(ctypes.Structure):
     _fields_ = [
-        ("cbData", wintypes.DWORD),
-        ("pbData", ctypes.POINTER(ctypes.c_byte))
-    ]
+        ("cbData", wintypes.DWORD),"        ("pbData", ctypes.POINTER(ctypes.c_byte))"    ]
 
 
 class CREDENTIALW(ctypes.Structure):
     _fields_ = [
-        ("Flags", wintypes.DWORD),
-        ("Type", wintypes.DWORD),
-        ("TargetName", wintypes.LPWSTR),
-        ("Comment", wintypes.LPWSTR),
-        ("LastWritten", wintypes.FILETIME),
-        ("CredentialBlobSize", wintypes.DWORD),
-        ("CredentialBlob", ctypes.POINTER(ctypes.c_byte)),
-        ("Persist", wintypes.DWORD),
-        ("AttributeCount", wintypes.DWORD),
-        ("Attributes", ctypes.c_void_p),
-        ("TargetAlias", wintypes.LPWSTR),
-        ("UserName", wintypes.LPWSTR)
-    ]
+        ("Flags", wintypes.DWORD),"        ("Type", wintypes.DWORD),"        ("TargetName", wintypes.LPWSTR),"        ("Comment", wintypes.LPWSTR),"        ("LastWritten", wintypes.FILETIME),"        ("CredentialBlobSize", wintypes.DWORD),"        ("CredentialBlob", ctypes.POINTER(ctypes.c_byte)),"        ("Persist", wintypes.DWORD),"        ("AttributeCount", wintypes.DWORD),"        ("Attributes", ctypes.c_void_p),"        ("TargetAlias", wintypes.LPWSTR),"        ("UserName", wintypes.LPWSTR)"    ]
 
 
 class CryptoCore:
-    """Core class for cryptographic operations."""
-
+    """Core class for cryptographic operations."""""""
     def __init__(self) -> None:
         try:
             self.crypt32 = ctypes.windll.crypt32
             self.advapi32 = ctypes.windll.advapi32
         except Exception as e:
-            raise RuntimeError(f"Crypto libraries not available: {e}")
-
+            raise RuntimeError(f"Crypto libraries not available: {e}")"
     def decrypt_dpapi_blob(self, encrypted_data: bytes, entropy: Optional[bytes] = None) -> Optional[bytes]:
-        """Decrypt data using Windows DPAPI."""
-        try:
+        """Decrypt data using Windows DPAPI."""""""        try:
             # Prepare input blob
             in_blob = DATA_BLOB()
             in_blob.cbData = len(encrypted_data)
@@ -113,8 +92,7 @@ class CryptoCore:
             return None
 
     def decrypt_aes_cbc(self, key: bytes, iv: bytes, encrypted_data: bytes) -> Optional[bytes]:
-        """Decrypt data using AES-CBC."""
-        try:
+        """Decrypt data using AES-CBC."""""""        try:
             # Acquire crypto context
             hProv = wintypes.HANDLE()
             if not self.advapi32.CryptAcquireContextW(
@@ -125,8 +103,7 @@ class CryptoCore:
             # Import key
             hKey = wintypes.HANDLE()
             key_blob = (ctypes.c_byte * (len(key) + 8))()
-            key_blob[0:8] = b'\x08\x00\x00\x00\x01\x00\x00\x00'  # BLOBHEADER for AES
-            key_blob[8:] = key
+            key_blob[0:8] = b'\\x08\\x00\\x00\\x00\\x01\\x00\\x00\\x00'  # BLOBHEADER for AES'            key_blob[8:] = key
 
             if not self.advapi32.CryptImportKey(
                 hProv, key_blob, len(key_blob), None, 0, ctypes.byref(hKey)
@@ -168,21 +145,18 @@ class CryptoCore:
             return None
 
     def base64_decode(self, encoded_data: str) -> Optional[bytes]:
-        """Decode base64 string to bytes."""
-        try:
+        """Decode base64 string to bytes."""""""        try:
             return base64.b64decode(encoded_data)
         except Exception:
             return None
 
     def read_windows_credential(self, target_name: str) -> Optional[bytes]:
-        """Read encrypted credential blob from Windows Credential Manager."""
-        try:
+        """Read encrypted credential blob from Windows Credential Manager."""""""        try:
             cred = CREDENTIALW()
             cred_ptr = ctypes.POINTER(CREDENTIALW)()
 
             if self.advapi32.CredReadW(
-                target_name.encode('utf-16le'), 1, 0, ctypes.byref(cred_ptr)
-            ):
+                target_name.encode('utf-16le'), 1, 0, ctypes.byref(cred_ptr)'            ):
                 cred = cred_ptr.contents
                 blob_data = bytes((ctypes.c_byte * cred.CredentialBlobSize).from_address(
                     ctypes.addressof(cred.CredentialBlob.contents)

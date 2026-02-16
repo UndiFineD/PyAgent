@@ -12,11 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
+
 from .config import StructuredOutputConfig, ValidationResult
 from .enums import StructuredOutputType, GuidedDecodingBackend, WhitespacePattern
 
+
 def test_structured_output_config_to_dict():
+    """Test that StructuredOutputConfig.to_dict() returns the correct dictionary representation."""
     config = StructuredOutputConfig(
         output_type=StructuredOutputType.JSON_SCHEMA,
         json_schema={"type": "object"},
@@ -41,7 +43,9 @@ def test_structured_output_config_to_dict():
     assert d["whitespace"] == "MINIMAL"
     assert d["strict_mode"] is True
 
+
 def test_structured_output_config_from_dict():
+    """Test that StructuredOutputConfig.from_dict() correctly creates an instance from a dictionary."""
     data = {
         "output_type": "JSON_SCHEMA",
         "json_schema": {"type": "object"},
@@ -66,7 +70,9 @@ def test_structured_output_config_from_dict():
     assert config.whitespace == WhitespacePattern.MINIMAL
     assert config.strict_mode is True
 
+
 def test_validation_result_properties():
+    """Test that ValidationResult properties has_errors and has_warnings work correctly."""
     result = ValidationResult(valid=True, errors=["e1"], warnings=["w1"])
     assert result.has_errors is True
     assert result.has_warnings is True

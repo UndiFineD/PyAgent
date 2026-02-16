@@ -1,60 +1,42 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-sync_tests.py - Synchronize test files with cleaned modules
+"""""""sync_tests.py - Synchronize test files with cleaned modules
 
 DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Execute as standalone script: python sync_tests.py
 - Synchronizes test files in the tests/unit directory with modules in the cleaned directory
-"""
-
+"""""""
 import glob
 from pathlib import Path
 
 
-CLEANED_DIR = Path(r"C:\DEV\PyAgent\src\external_candidates\cleaned")
-TESTS_DIR = Path(r"C:\DEV\PyAgent\tests\unit")
-
+CLEANED_DIR = Path(r"C:\\DEV\\PyAgent\\src\\external_candidates\\cleaned")"TESTS_DIR = Path(r"C:\\DEV\\PyAgent\\tests\\unit")"
 
 def main():
-    """Synchronize test files with cleaned modules."""
-    modules = glob.glob(str(CLEANED_DIR / "*.py"))
-    print(f"Found {len(modules)} modules in cleaned.")
-
+    """Synchronize test files with cleaned modules."""""""    modules = glob.glob(str(CLEANED_DIR / "*.py"))"    print(f"Found {len(modules)} modules in cleaned.")"
     for mod_path in modules:
         mod_name = Path(mod_path).name
-        test_path = TESTS_DIR / f"test_auto_{mod_name}"
-
-        # Simple test content pointing to 'cleaned'
-        content = f'''
-import importlib.util
+        test_path = TESTS_DIR / f"test_auto_{mod_name}""
+        # Simple test content pointing to 'cleaned''        content = f'''''''import importlib.util
 from pathlib import Path
 
-p = Path(r"{mod_path}")
-spec = importlib.util.spec_from_file_location('mod_under_test', p)
-mod = importlib.util.module_from_spec(spec)
+p = Path(r"{mod_path}")"spec = importlib.util.spec_from_file_location('mod_under_test', p)'mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
-'''
-        # Write the test file
-        with open(test_path, 'w', encoding='utf-8') as f:
-            f.write(content)
+'''''''        # Write the test file
+        with open(test_path, 'w', encoding='utf-8') as f:'            f.write(content)
 
-    print("Regenerated all tests.")
+    print("Regenerated all tests.")"
 
-
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__":"    main()

@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 40: Pooling Engine Tests
 
-"""
-Tests for PoolingEngine - embedding pooling strategies.
-"""
-
+"""""""Tests for PoolingEngine - embedding pooling strategies.
+"""""""
 import pytest
 import numpy as np
 
@@ -47,18 +43,15 @@ def default_config(strategy=PoolingStrategy.MEAN, normalize=True, truncate_dim=N
 
 
 class TestEnums:
-    """Test enum values."""
-
+    """Test enum values."""""""
     def test_pooling_task_values(self):
-        """Test PoolingTask enum."""
-        assert PoolingTask.EMBED is not None
+        """Test PoolingTask enum."""""""        assert PoolingTask.EMBED is not None
         assert PoolingTask.CLASSIFY is not None
         assert PoolingTask.SCORE is not None
         assert PoolingTask.RERANK is not None
 
     def test_pooling_strategy_values(self):
-        """Test PoolingStrategy enum."""
-        assert PoolingStrategy.MEAN is not None
+        """Test PoolingStrategy enum."""""""        assert PoolingStrategy.MEAN is not None
         assert PoolingStrategy.CLS is not None
         assert PoolingStrategy.LAST is not None
         assert PoolingStrategy.MAX is not None
@@ -66,11 +59,9 @@ class TestEnums:
 
 
 class TestPoolingConfig:
-    """Test PoolingConfig dataclass."""
-
+    """Test PoolingConfig dataclass."""""""
     def test_create_config(self):
-        """Test creating PoolingConfig."""
-        config = PoolingConfig(
+        """Test creating PoolingConfig."""""""        config = PoolingConfig(
             task=PoolingTask.EMBED,
             strategy=PoolingStrategy.MEAN,
         )
@@ -78,8 +69,7 @@ class TestPoolingConfig:
         assert config.strategy == PoolingStrategy.MEAN
 
     def test_config_with_normalize(self):
-        """Test config with normalize flag."""
-        config = PoolingConfig(
+        """Test config with normalize flag."""""""        config = PoolingConfig(
             task=PoolingTask.EMBED,
             strategy=PoolingStrategy.CLS,
             normalize=True,
@@ -88,19 +78,16 @@ class TestPoolingConfig:
 
 
 class TestEmbeddingOutput:
-    """Test EmbeddingOutput dataclass."""
-
+    """Test EmbeddingOutput dataclass."""""""
     def test_create_embedding_output(self):
-        """Test creating EmbeddingOutput."""
-        emb = np.array([0.1, 0.2, 0.3])
+        """Test creating EmbeddingOutput."""""""        emb = np.array([0.1, 0.2, 0.3])
         output = EmbeddingOutput(embedding=emb, tokens_used=3)
 
         assert output.embedding is not None
         assert len(output.embedding) == 3
 
     def test_embedding_to_list(self):
-        """Test embedding to_list method."""
-        emb = np.array([0.1, 0.2])
+        """Test embedding to_list method."""""""        emb = np.array([0.1, 0.2])
 
         output = EmbeddingOutput(
             embedding=emb,
@@ -110,11 +97,9 @@ class TestEmbeddingOutput:
 
 
 class TestMeanPooler:
-    """Test mean pooling."""
-
+    """Test mean pooling."""""""
     def test_mean_pool(self):
-        """Test mean pooling computation."""
-        config = PoolingConfig(strategy=PoolingStrategy.MEAN)
+        """Test mean pooling computation."""""""        config = PoolingConfig(strategy=PoolingStrategy.MEAN)
         pooler = MeanPooler(config)
 
         # Need 3D input: (batch, seq_len, hidden_dim)
@@ -130,8 +115,7 @@ class TestMeanPooler:
         np.testing.assert_array_almost_equal(result, expected)
 
     def test_mean_pool_with_mask(self):
-        """Test mean pooling with attention mask."""
-        config = PoolingConfig(strategy=PoolingStrategy.MEAN)
+        """Test mean pooling with attention mask."""""""        config = PoolingConfig(strategy=PoolingStrategy.MEAN)
         pooler = MeanPooler(config)
 
         # Need 3D input: (batch, seq_len, hidden_dim)
@@ -149,11 +133,9 @@ class TestMeanPooler:
 
 
 class TestCLSPooler:
-    """Test CLS token pooling."""
-
+    """Test CLS token pooling."""""""
     def test_cls_pool(self):
-        """Test CLS pooling extracts first token."""
-        config = PoolingConfig(strategy=PoolingStrategy.CLS)
+        """Test CLS pooling extracts first token."""""""        config = PoolingConfig(strategy=PoolingStrategy.CLS)
         pooler = CLSPooler(config)
 
         # 3D input: (batch, seq_len, hidden_dim)
@@ -169,11 +151,9 @@ class TestCLSPooler:
 
 
 class TestLastTokenPooler:
-    """Test last token pooling."""
-
+    """Test last token pooling."""""""
     def test_last_token_pool(self):
-        """Test last token pooling."""
-        config = PoolingConfig(strategy=PoolingStrategy.LAST)
+        """Test last token pooling."""""""        config = PoolingConfig(strategy=PoolingStrategy.LAST)
         pooler = LastTokenPooler(config)
 
         # 3D input: (batch, seq_len, hidden_dim)
@@ -190,8 +170,7 @@ class TestLastTokenPooler:
         np.testing.assert_array_almost_equal(result, expected)
 
     def test_last_token_with_mask(self):
-        """Test last token pooling with padded sequence."""
-        config = PoolingConfig(strategy=PoolingStrategy.LAST)
+        """Test last token pooling with padded sequence."""""""        config = PoolingConfig(strategy=PoolingStrategy.LAST)
         pooler = LastTokenPooler(config)
 
         # 3D input: (batch, seq_len, hidden_dim)
@@ -209,11 +188,9 @@ class TestLastTokenPooler:
 
 
 class TestMaxPooler:
-    """Test max pooling."""
-
+    """Test max pooling."""""""
     def test_max_pool(self):
-        """Test max pooling."""
-        config = PoolingConfig(strategy=PoolingStrategy.MAX)
+        """Test max pooling."""""""        config = PoolingConfig(strategy=PoolingStrategy.MAX)
         pooler = MaxPooler(config)
 
         # 3D input: (batch, seq_len, hidden_dim)
@@ -230,11 +207,9 @@ class TestMaxPooler:
 
 
 class TestAttentionPooler:
-    """Test attention-weighted pooling."""
-
+    """Test attention-weighted pooling."""""""
     def test_attention_pool(self):
-        """Test attention pooling."""
-        config = PoolingConfig(strategy=PoolingStrategy.ATTENTION)
+        """Test attention pooling."""""""        config = PoolingConfig(strategy=PoolingStrategy.ATTENTION)
         pooler = AttentionPooler(config, hidden_dim=2)
 
         # 3D input: (batch, seq_len, hidden_dim)
@@ -252,11 +227,9 @@ class TestAttentionPooler:
 
 
 class TestWeightedMeanPooler:
-    """Test weighted mean pooling."""
-
+    """Test weighted mean pooling."""""""
     def test_weighted_mean_pool(self):
-        """Test weighted mean pooling."""
-        config = PoolingConfig(strategy=PoolingStrategy.WEIGHTED_MEAN)
+        """Test weighted mean pooling."""""""        config = PoolingConfig(strategy=PoolingStrategy.WEIGHTED_MEAN)
         pooler = WeightedMeanPooler(config)
 
         # 3D input: (batch, seq_len, hidden_dim)
@@ -275,11 +248,9 @@ class TestWeightedMeanPooler:
 
 
 class TestMatryoshkaPooler:
-    """Test Matryoshka dimensionality reduction."""
-
+    """Test Matryoshka dimensionality reduction."""""""
     def test_matryoshka_truncation(self):
-        """Test Matryoshka embedding truncation."""
-        config = PoolingConfig(strategy=PoolingStrategy.MEAN, truncate_dim=128)
+        """Test Matryoshka embedding truncation."""""""        config = PoolingConfig(strategy=PoolingStrategy.MEAN, truncate_dim=128)
         pooler = MatryoshkaPooler(config, supported_dims=[64, 128, 256, 512])
 
         # BasePooler.truncate works on embeddings
@@ -290,8 +261,7 @@ class TestMatryoshkaPooler:
         assert len(result) == 128
 
     def test_matryoshka_with_normalize(self):
-        """Test Matryoshka with normalization."""
-        config = PoolingConfig(strategy=PoolingStrategy.MEAN, normalize=True, truncate_dim=2)
+        """Test Matryoshka with normalization."""""""        config = PoolingConfig(strategy=PoolingStrategy.MEAN, normalize=True, truncate_dim=2)
         pooler = MatryoshkaPooler(config)
 
         # 3D input for pool method: (batch, seq_len, hidden_dim)
@@ -306,11 +276,9 @@ class TestMatryoshkaPooler:
 
 
 class TestMultiVectorPooler:
-    """Test ColBERT-style multi-vector pooling."""
-
+    """Test ColBERT-style multi-vector pooling."""""""
     def test_multi_vector_pool(self):
-        """Test multi-vector pooling."""
-        config = PoolingConfig(strategy=PoolingStrategy.MEAN)
+        """Test multi-vector pooling."""""""        config = PoolingConfig(strategy=PoolingStrategy.MEAN)
         pooler = MultiVectorPooler(config, compression_dim=64)
 
         # 3D input: (batch, seq_len, hidden_dim)
@@ -323,8 +291,7 @@ class TestMultiVectorPooler:
         assert result.shape[2] == 64  # compressed dim
 
     def test_multi_vector_maxsim_score(self):
-        """Test MaxSim scoring."""
-        config = PoolingConfig(strategy=PoolingStrategy.MEAN)
+        """Test MaxSim scoring."""""""        config = PoolingConfig(strategy=PoolingStrategy.MEAN)
         pooler = MultiVectorPooler(config, compression_dim=64)
 
         query_vectors = np.random.randn(5, 64)
@@ -336,11 +303,9 @@ class TestMultiVectorPooler:
 
 
 class TestStepPooler:
-    """Test step-based pooling."""
-
+    """Test step-based pooling."""""""
     def test_step_pool(self):
-        """Test step pooling."""
-        config = PoolingConfig(strategy=PoolingStrategy.MEAN)
+        """Test step pooling."""""""        config = PoolingConfig(strategy=PoolingStrategy.MEAN)
         step_token_ids = [2]  # Token ID 2 is a step marker
         pooler = StepPooler(config, step_token_ids=step_token_ids)
 
@@ -361,16 +326,13 @@ class TestStepPooler:
 
 
 class TestPoolingEngine:
-    """Test unified pooling engine."""
-
+    """Test unified pooling engine."""""""
     def test_create_engine(self):
-        """Test creating pooling engine."""
-        engine = PoolingEngine(hidden_dim=768)
+        """Test creating pooling engine."""""""        engine = PoolingEngine(hidden_dim=768)
         assert engine is not None
 
     def test_engine_with_config(self):
-        """Test engine with config."""
-        config = PoolingConfig(
+        """Test engine with config."""""""        config = PoolingConfig(
             task=PoolingTask.EMBED,
             strategy=PoolingStrategy.MEAN,
         )
@@ -378,8 +340,7 @@ class TestPoolingEngine:
         assert engine is not None
 
     def test_pool_embeddings(self):
-        """Test pooling through engine."""
-        engine = create_pooling_engine(
+        """Test pooling through engine."""""""        engine = create_pooling_engine(
             strategy=PoolingStrategy.MEAN,
             hidden_dim=768,
         )
@@ -394,8 +355,7 @@ class TestPoolingEngine:
         assert result.embeddings.shape[-1] == 768
 
     def test_pool_with_different_strategies(self):
-        """Test pooling with different strategies."""
-        # 3D input: (batch, seq_len, hidden_dim)
+        """Test pooling with different strategies."""""""        # 3D input: (batch, seq_len, hidden_dim)
         embeddings = np.random.randn(1, 10, 768)
         mask = np.ones((1, 10))
 
@@ -405,8 +365,7 @@ class TestPoolingEngine:
             assert result.embeddings is not None
 
     def test_classification_output(self):
-        """Test classification pooling."""
-        engine = create_pooling_engine(
+        """Test classification pooling."""""""        engine = create_pooling_engine(
             strategy=PoolingStrategy.CLS,
             hidden_dim=768,
             task=PoolingTask.CLASSIFY,
@@ -421,21 +380,17 @@ class TestPoolingEngine:
 
 
 class TestFactoryFunction:
-    """Test factory function."""
-
+    """Test factory function."""""""
     def test_create_mean_engine(self):
-        """Test creating mean pooling engine."""
-        engine = create_pooling_engine(strategy=PoolingStrategy.MEAN)
+        """Test creating mean pooling engine."""""""        engine = create_pooling_engine(strategy=PoolingStrategy.MEAN)
         assert engine is not None
 
     def test_create_cls_engine(self):
-        """Test creating CLS pooling engine."""
-        engine = create_pooling_engine(strategy=PoolingStrategy.CLS)
+        """Test creating CLS pooling engine."""""""        engine = create_pooling_engine(strategy=PoolingStrategy.CLS)
         assert engine is not None
 
     def test_create_with_truncate_dim(self):
-        """Test creating engine with Matryoshka dimension truncation."""
-        engine = create_pooling_engine(
+        """Test creating engine with Matryoshka dimension truncation."""""""        engine = create_pooling_engine(
             strategy=PoolingStrategy.MEAN,
             truncate_dim=128,
         )
@@ -443,5 +398,4 @@ class TestFactoryFunction:
 
 
 # Run pytest if executed directly
-if __name__ == "__main__":
-    pytest.main([__file__, "-v"])
+if __name__ == "__main__":"    pytest.main([__file__, "-v"])"

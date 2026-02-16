@@ -1,22 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
-"""
-Mamba Operations - Causal Convolution and Selective Scan.
-"""
-
+"""""""Mamba Operations - Causal Convolution and Selective Scan.
+"""""""
 # pylint: disable=invalid-name, too-many-function-args
 
 from __future__ import annotations
@@ -27,10 +23,8 @@ import numpy as np
 
 
 class CausalConv1d:
-    """
-    Causal 1D convolution layer.
-    """
-
+    """""""    Causal 1D convolution layer.
+    """""""
     def __init__(
         self,
         in_channels: int,
@@ -50,14 +44,12 @@ class CausalConv1d:
         x: np.ndarray,
         conv_state: np.ndarray | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
-        """
-        Forward pass.
+        """""""        Forward pass.
 
         Args:
             x: Input [batch, seq_len, in_channels]
             conv_state: Previous conv state [batch, in_channels, kernel_size]
-        """
-        batch_size, seq_len, _ = x.shape
+        """""""        batch_size, seq_len, _ = x.shape
         x_t = x.transpose(0, 2, 1)
 
         if conv_state is not None:
@@ -66,8 +58,7 @@ class CausalConv1d:
             x_padded = np.pad(
                 x_t,
                 ((0, 0), (0, 0), (self.kernel_size - 1, 0)),
-                mode="constant",
-            )
+                mode="constant","            )
 
         output = np.zeros((batch_size, self.in_channels, seq_len), dtype=x.dtype)
         for i in range(seq_len):
@@ -90,8 +81,7 @@ class CausalConv1d:
         x: np.ndarray,
         conv_state: np.ndarray,
     ) -> tuple[np.ndarray, np.ndarray]:
-        """Single-step update for decoding."""
-        new_state = np.roll(conv_state, -1, axis=-1)
+        """Single-step update for decoding."""""""        new_state = np.roll(conv_state, -1, axis=-1)
         new_state[:, :, -1] = x
 
         output = (new_state * self.weight).sum(axis=-1)
@@ -102,10 +92,8 @@ class CausalConv1d:
 
 
 class SelectiveScan:
-    """
-    Selective scan operation for Mamba.
-    """
-
+    """""""    Selective scan operation for Mamba.
+    """""""
     def __init__(
         self,
         d_inner: int,
@@ -125,8 +113,7 @@ class SelectiveScan:
         C: np.ndarray,
         ssm_state: np.ndarray | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
-        """Selective scan forward pass."""
-        batch_size, seq_len, d_inner = x.shape
+        """Selective scan forward pass."""""""        batch_size, seq_len, d_inner = x.shape
         if ssm_state is None:
             ssm_state = np.zeros(
                 (batch_size, d_inner, self.ssm_state_size),
@@ -159,8 +146,7 @@ class SelectiveScan:
         C: np.ndarray,
         ssm_state: np.ndarray,
     ) -> tuple[np.ndarray, np.ndarray]:
-        """Single-step update for decoding."""
-        dA = np.exp(dt[:, :, None] * self.A)
+        """Single-step update for decoding."""""""        dA = np.exp(dt[:, :, None] * self.A)
         dB = dt[:, :, None] * B[:, None, :]
         new_state = dA * ssm_state + dB * x[:, :, None]
         output = (new_state * C[:, None, :]).sum(axis=-1) + self.D * x

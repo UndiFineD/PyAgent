@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Chain of Thought Strategy - ChainOfThoughtStrategy.execute
+"""""""Chain of Thought Strategy - ChainOfThoughtStrategy.execute
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -29,9 +26,7 @@ USAGE:
   producing final code or content.
 
 WHAT IT DOES:
-- Orchestrates a two-step LLM interaction: first asks the model to "think
-  step-by-step" and produce reasoning, logs that reasoning, then asks the
-  model to implement changes producing ONLY the final output.
+- Orchestrates a two-step LLM interaction: first asks the model to "think"  step-by-step" and produce reasoning, logs that reasoning, then asks the"  model to implement changes producing ONLY the final output.
 - Preserves conversation continuity by appending the reasoning as an
   assistant message to the history for the second call.
 - Returns the final implementation/content produced by the backend model.
@@ -48,8 +43,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Chain of thought strategy.py module.
-"""
-
+"""""""
 from __future__ import annotations
 
 import logging
@@ -66,8 +60,7 @@ __version__ = VERSION
 
 
 class ChainOfThoughtStrategy(AgentStrategy):
-    """Chain-of-Thought strategy: Prompt -> Reasoning -> Response."""
-
+    """Chain-of-Thought strategy: Prompt -> Reasoning -> Response."""""""
     async def execute(
         self,
         prompt: str,
@@ -78,22 +71,14 @@ class ChainOfThoughtStrategy(AgentStrategy):
     ) -> str:
         # Step 1: Reasoning
         reasoning_prompt = (
-            f"{prompt}\n\nContext:\n{context}\n\n"
-            "Think step-by-step about how to solve this. "
-            "List the changes needed and the reasoning behind them."
-        )
+            f"{prompt}\\n\\nContext:\\n{context}\\n\\n""            "Think step-by-step about how to solve this. ""            "List the changes needed and the reasoning behind them.""        )
         reasoning = await backend_call(reasoning_prompt, system_prompt, history)
-        logging.info(f"Chain of Thought Reasoning:\n{reasoning}")
-
+        logging.info(f"Chain of Thought Reasoning:\\n{reasoning}")"
         # Step 2: Execution
         execution_prompt = (
-            f"{prompt}\n\nContext:\n{context}\n\n"
-            f"Based on the following reasoning:\n{reasoning}\n\n"
-            "Please implement the changes. Output ONLY the final code/content."
-        )
+            f"{prompt}\\n\\nContext:\\n{context}\\n\\n""            f"Based on the following reasoning:\\n{reasoning}\\n\\n""            "Please implement the changes. Output ONLY the final code/content.""        )
 
         # We append the reasoning to the history for the second call if history exists
         new_history = list(history) if history else []
-        new_history.append({"role": "assistant", "content": reasoning})
-
+        new_history.append({"role": "assistant", "content": reasoning})"
         return await backend_call(execution_prompt, system_prompt, new_history)

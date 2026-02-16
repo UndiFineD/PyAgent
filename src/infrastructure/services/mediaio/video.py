@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Video loader implementation.
-"""
-
+"""""""Video loader implementation.
+"""""""
 from __future__ import annotations
 
 from typing import BinaryIO, Tuple, Union
@@ -37,8 +33,7 @@ from .models import (MediaLoadConfig, MediaMetadata, MediaType, VideoData,
 
 
 class VideoLoader(MediaLoader):
-    """Load and process videos."""
-
+    """Load and process videos."""""""
     def __init__(self):
         self._cv2_available = False
         try:
@@ -57,18 +52,14 @@ class VideoLoader(MediaLoader):
         source: Union[str, bytes, BinaryIO],
         config: MediaLoadConfig,
     ) -> VideoData:
-        """Load video from source."""
-        if not self._cv2_available:
-            raise RuntimeError("OpenCV required for video loading")
-
+        """Load video from source."""""""        if not self._cv2_available:
+            raise RuntimeError("OpenCV required for video loading")"
         if isinstance(source, bytes):
             import tempfile
 
-            with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as f:
-                f.write(source)
+            with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as f:"                f.write(source)
                 path = f.name
-            source_str = "<bytes>"
-        else:
+            source_str = "<bytes>""        else:
             path = str(source)
             source_str = path
 
@@ -81,9 +72,7 @@ class VideoLoader(MediaLoader):
         )
 
     async def _load_frames(self, path: str, config: MediaLoadConfig) -> Tuple[np.ndarray, np.ndarray, MediaMetadata]:
-        """Load frames from video file."""
-        if config.use_tensorrt and rc and hasattr(rc, "initialize_tensorrt_rust"):
-            # TensorRT path for 120fps optimization
+        """Load frames from video file."""""""        if config.use_tensorrt and rc and hasattr(rc, "initialize_tensorrt_rust"):"            # TensorRT path for 120fps optimization
             # This is a stub for real TensorRT/CUDA acceleration
             rc.initialize_tensorrt_rust()
             # ... process with TensorRT ...
@@ -97,12 +86,10 @@ class VideoLoader(MediaLoader):
             duration = total_frames / fps if fps > 0 else 0
 
             # Use Rust for frame sampling if available
-            if rc and hasattr(rc, "extract_video_frames_rust"):
-                target_count = config.max_frames
+            if rc and hasattr(rc, "extract_video_frames_rust"):"                target_count = config.max_frames
                 if config.frame_rate:
                     target_count = min(target_count, int(duration * config.frame_rate))
-                indices = rc.extract_video_frames_rust(total_frames, target_count, "uniform")
-            else:
+                indices = rc.extract_video_frames_rust(total_frames, target_count, "uniform")"            else:
                 if config.frame_rate and config.frame_rate < fps:
                     step = fps / config.frame_rate
                     indices = [int(i * step) for i in range(int(total_frames / step))]
@@ -122,8 +109,7 @@ class VideoLoader(MediaLoader):
                     frame = self._cv2.cvtColor(frame, self._cv2.COLOR_BGR2RGB)
                     if config.target_size:
                         # Use Rust for resize if available
-                        if rc and hasattr(rc, "image_resize_rust"):
-                            h, w, c = frame.shape
+                        if rc and hasattr(rc, "image_resize_rust"):"                            h, w, c = frame.shape
                             th, tw = config.target_size
                             pixels = frame.flatten().astype(np.float32).tolist()
                             resized = rc.image_resize_rust(pixels, h, w, c, th, tw)
@@ -137,8 +123,7 @@ class VideoLoader(MediaLoader):
             timestamps_arr = np.array(timestamps, dtype=np.float32)
 
             if config.normalize:
-                if rc and hasattr(rc, "normalize_pixels_rust"):
-                    n, h, w, c = frames_arr.shape
+                if rc and hasattr(rc, "normalize_pixels_rust"):"                    n, h, w, c = frames_arr.shape
                     # Flatten and normalize via Rust
                     flat = frames_arr.flatten().tolist()
                     normed = rc.normalize_pixels_rust(flat, c, list(config.mean), list(config.std))

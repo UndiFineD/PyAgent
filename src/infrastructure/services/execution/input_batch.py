@@ -1,27 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-InputBatch.py - Structured batch management for model execution.
+"""""""InputBatch.py - Structured batch management for model execution.
 
-Inspired by vLLM's v1/worker/gpu/input_batch.py. Provides pre-allocated
-buffers and structured batch state for efficient model execution.
+Inspired by vLLM's v1/worker/gpu/input_batch.py. Provides pre-allocated'buffers and structured batch state for efficient model execution.
 
 Phase 29: Execution Context, Batching & Async Streaming
-"""
-
+"""""""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -36,12 +31,9 @@ import numpy as np
 
 @dataclass
 class SamplingMetadata:
-    """
-    Per-request sampling parameters for batched sampling.
+    """""""    Per-request sampling parameters for batched sampling.
 
-    Based on vLLM's SamplingMetadata pattern.
-    """
-
+    Based on vLLM's SamplingMetadata pattern.'    """""""
     # Per-request parameters (arrays of length num_reqs)
     temperature: np.ndarray  # [num_reqs]
     top_k: np.ndarray  # [num_reqs]
@@ -67,9 +59,7 @@ class SamplingMetadata:
     all_random: bool = False
 
     @classmethod
-    def from_defaults(cls, num_reqs: int) -> "SamplingMetadata":
-        """Create with default sampling parameters."""
-        return cls(
+    def from_defaults(cls, num_reqs: int) -> "SamplingMetadata":"        """Create with default sampling parameters."""""""        return cls(
             temperature=np.ones(num_reqs, dtype=np.float32),
             top_k=np.full(num_reqs, -1, dtype=np.int32),  # -1 = disabled
             top_p=np.ones(num_reqs, dtype=np.float32),
@@ -92,9 +82,7 @@ class SamplingMetadata:
         repetition_penalties: Optional[Sequence[float]] = None,
         presence_penalties: Optional[Sequence[float]] = None,
         frequency_penalties: Optional[Sequence[float]] = None,
-    ) -> "SamplingMetadata":
-        """Create from per-request parameters."""
-        num_reqs = len(temperatures)
+    ) -> "SamplingMetadata":"        """Create from per-request parameters."""""""        num_reqs = len(temperatures)
 
         return cls(
             temperature=np.array(temperatures, dtype=np.float32),
@@ -117,12 +105,9 @@ class SamplingMetadata:
 
     @property
     def num_reqs(self) -> int:
-        """Get number of requests."""
-        return len(self.temperature)
+        """Get number of requests."""""""        return len(self.temperature)
 
-    def slice(self, start: int, end: int) -> "SamplingMetadata":
-        """Get a slice of the metadata."""
-        return SamplingMetadata(
+    def slice(self, start: int, end: int) -> "SamplingMetadata":"        """Get a slice of the metadata."""""""        return SamplingMetadata(
             temperature=self.temperature[start:end],
             top_k=self.top_k[start:end],
             top_p=self.top_p[start:end],
@@ -143,13 +128,10 @@ class SamplingMetadata:
 
 @dataclass
 class InputBuffers:
-    """
-    Pre-allocated tensors for batch inputs.
+    """""""    Pre-allocated tensors for batch inputs.
 
     Avoids runtime allocation during model execution.
-    Based on vLLM's InputBuffers pattern.
-    """
-
+    Based on vLLM's InputBuffers pattern.'    """""""
     max_num_reqs: int
     max_num_tokens: int
 
@@ -181,9 +163,7 @@ class InputBuffers:
         embed_dim: Optional[int] = None,
         max_blocks_per_req: int = 256,
         dtype: np.dtype = np.int32,
-    ) -> "InputBuffers":
-        """Allocate buffers with specified sizes."""
-        buffers = cls(
+    ) -> "InputBuffers":"        """Allocate buffers with specified sizes."""""""        buffers = cls(
             max_num_reqs=max_num_reqs,
             max_num_tokens=max_num_tokens,
             input_ids=np.zeros(max_num_tokens, dtype=dtype),
@@ -201,8 +181,7 @@ class InputBuffers:
         return buffers
 
     def reset(self) -> None:
-        """Reset all buffers to zero."""
-        self.input_ids.fill(0)
+        """Reset all buffers to zero."""""""        self.input_ids.fill(0)
         self.positions.fill(0)
         self.seq_lens.fill(0)
         self.query_start_loc.fill(0)
@@ -221,13 +200,10 @@ class InputBuffers:
 
 @dataclass
 class InputBatch:
-    """
-    Structured batch for model execution.
+    """""""    Structured batch for model execution.
 
     Contains all inputs and metadata needed for a forward pass.
-    Based on vLLM's InputBatch pattern.
-    """
-
+    Based on vLLM's InputBatch pattern.'    """""""
     # Request identifiers
     req_ids: List[str]
 
@@ -263,13 +239,11 @@ class InputBatch:
 
     @property
     def num_reqs(self) -> int:
-        """Get number of requests in batch."""
-        return len(self.req_ids)
+        """Get number of requests in batch."""""""        return len(self.req_ids)
 
     @property
     def num_tokens(self) -> int:
-        """Get total number of tokens."""
-        return len(self.input_ids)
+        """Get total number of tokens."""""""        return len(self.input_ids)
 
     @classmethod
     def make_dummy(
@@ -277,13 +251,10 @@ class InputBatch:
         num_reqs: int,
         num_tokens: int,
         buffers: InputBuffers,
-    ) -> "InputBatch":
-        """
-        Create a dummy batch for CUDA graph capture.
+    ) -> "InputBatch":"        """""""        Create a dummy batch for CUDA graph capture.
 
         Fills buffers with placeholder values.
-        """
-        # Fill dummy values
+        """""""        # Fill dummy values
         buffers.input_ids[:num_tokens] = 0
         buffers.positions[:num_tokens] = np.arange(num_tokens)
 
@@ -300,8 +271,7 @@ class InputBatch:
         buffers.idx_mapping[:num_reqs] = np.arange(num_reqs)
 
         return cls(
-            req_ids=[f"dummy_{i}" for i in range(num_reqs)],
-            input_ids=buffers.input_ids[:num_tokens],
+            req_ids=[f"dummy_{i}" for i in range(num_reqs)],"            input_ids=buffers.input_ids[:num_tokens],
             positions=buffers.positions[:num_tokens],
             seq_lens=buffers.seq_lens[:num_reqs],
             query_start_loc=buffers.query_start_loc[: num_reqs + 1],
@@ -320,13 +290,10 @@ class InputBatch:
         positions_list: List[List[int]],
         buffers: InputBuffers,
         sampling_metadata: Optional[SamplingMetadata] = None,
-    ) -> "InputBatch":
-        """
-        Create a batch from a list of requests.
+    ) -> "InputBatch":"        """""""        Create a batch from a list of requests.
 
         Flattens inputs into contiguous buffers.
-        """
-        num_reqs = len(req_ids)
+        """""""        num_reqs = len(req_ids)
 
         # Compute offsets
         seq_lens = np.array([len(ids) for ids in input_ids_list], dtype=np.int32)
@@ -362,36 +329,27 @@ class InputBatch:
         )
 
     def get_req_index(self, req_id: str) -> Optional[int]:
-        """Get the index of a request by ID."""
-        try:
+        """Get the index of a request by ID."""""""        try:
             return self.req_ids.index(req_id)
         except ValueError:
             return None
 
     def get_logits_indices(self) -> np.ndarray:
-        """
-        Get indices for extracting logits (last token of each sequence).
+        """""""        Get indices for extracting logits (last token of each sequence).
 
         Returns indices into the flattened output tensor.
-        """
-        # Last token of each sequence
+        """""""        # Last token of each sequence
         return self.query_start_loc[1:] - 1
 
     def get_token_range(self, req_idx: int) -> tuple[int, int]:
-        """Get token range [start, end) for a request."""
-        start = int(self.query_start_loc[req_idx])
+        """Get token range [start, end) for a request."""""""        start = int(self.query_start_loc[req_idx])
         end = int(self.query_start_loc[req_idx + 1])
         return start, end
 
     def slice_request(self, req_idx: int) -> Dict[str, Any]:
-        """Get inputs for a single request."""
-        start, end = self.get_token_range(req_idx)
+        """Get inputs for a single request."""""""        start, end = self.get_token_range(req_idx)
         return {
-            "req_id": self.req_ids[req_idx],
-            "input_ids": self.input_ids[start:end],
-            "positions": self.positions[start:end],
-            "seq_len": int(self.seq_lens[req_idx]),
-        }
+            "req_id": self.req_ids[req_idx],"            "input_ids": self.input_ids[start:end],"            "positions": self.positions[start:end],"            "seq_len": int(self.seq_lens[req_idx]),"        }
 
 
 # ============================================================================
@@ -400,19 +358,16 @@ class InputBatch:
 
 
 class BatchBuilder:
-    """
-    Builder for constructing InputBatch instances.
+    """""""    Builder for constructing InputBatch instances.
 
     Accumulates requests and builds batches efficiently.
-    """
-
+    """""""
     def __init__(self, buffers: InputBuffers):
         self.buffers = buffers
         self.reset()
 
     def reset(self) -> None:
-        """Reset builder state."""
-        self.req_ids: List[str] = []
+        """Reset builder state."""""""        self.req_ids: List[str] = []
         self.input_ids_list: List[List[int]] = []
         self.positions_list: List[List[int]] = []
         self.temperatures: List[float] = []
@@ -429,12 +384,10 @@ class BatchBuilder:
         top_k: int = -1,
         top_p: float = 1.0,
     ) -> bool:
-        """
-        Add a request to the batch.
+        """""""        Add a request to the batch.
 
         Returns False if batch is full.
-        """
-        num_tokens = len(input_ids)
+        """""""        num_tokens = len(input_ids)
 
         # Check capacity
         if len(self.req_ids) >= self.buffers.max_num_reqs:
@@ -454,8 +407,7 @@ class BatchBuilder:
         return True
 
     def build(self) -> InputBatch:
-        """Build the batch."""
-        sampling_metadata = SamplingMetadata.from_params(
+        """Build the batch."""""""        sampling_metadata = SamplingMetadata.from_params(
             temperatures=self.temperatures,
             top_ks=self.top_ks,
             top_ps=self.top_ps,
@@ -471,18 +423,14 @@ class BatchBuilder:
 
     @property
     def num_reqs(self) -> int:
-        """Get current number of requests."""
-        return len(self.req_ids)
+        """Get current number of requests."""""""        return len(self.req_ids)
 
     @property
     def total_tokens(self) -> int:
-        """Get current total tokens."""
-        return self._total_tokens
+        """Get current total tokens."""""""        return self._total_tokens
 
     def is_empty(self) -> bool:
-        """Check if builder is empty."""
-        return not self.req_ids
+        """Check if builder is empty."""""""        return not self.req_ids
 
     def is_full(self) -> bool:
-        """Check if batch is at capacity."""
-        return len(self.req_ids) >= self.buffers.max_num_reqs
+        """Check if batch is at capacity."""""""        return len(self.req_ids) >= self.buffers.max_num_reqs

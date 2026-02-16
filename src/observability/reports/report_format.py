@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Report Format - Enumerating supported report output formats
+"""""""Report Format - Enumerating supported report output formats
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -26,29 +23,24 @@ USAGE:
 
 WHAT IT DOES:
 - Declares a small, explicit Enum (ReportFormat) that centralizes the supported output formats for the reporting subsystem (markdown, json, html).
-- Exposes a __version__ value sourced from the project's lifecycle version for consistent version tagging.
-
+- Exposes a __version__ value sourced from the project's lifecycle version for consistent version tagging.'
 WHAT IT SHOULD DO BETTER:
-- Provide mappings to MIME types, file extensions, or serializer functions so consumers don't duplicate format-to-handler logic.
-- Add unit tests and examples showing how to use the enum with the report generator, and include docstrings explaining intended semantics (e.g., whether HTML includes full pages or fragments).
+- Provide mappings to MIME types, file extensions, or serializer functions so consumers don't duplicate format-to-handler logic.'- Add unit tests and examples showing how to use the enum with the report generator, and include docstrings explaining intended semantics (e.g., whether HTML includes full pages or fragments).
 - Consider adding a fallback/unknown member or a factory that returns a renderer object (strategy pattern) to decouple format selection from serialization logic.
 
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-
+"""""""
 from __future__ import annotations
 
 from enum import Enum
@@ -59,8 +51,5 @@ __version__ = VERSION
 
 
 class ReportFormat(Enum):
-    """Output format for reports."""
-
-    MARKDOWN = "markdown"
-    JSON = "json"
-    HTML = "html"
+    """Output format for reports."""""""
+    MARKDOWN = "markdown""    JSON = "json""    HTML = "html""

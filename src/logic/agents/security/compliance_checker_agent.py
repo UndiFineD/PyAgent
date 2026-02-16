@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Compliance Checker Agent - Validate changelog entries for security and legal compliance
+"""""""Compliance Checker Agent - Validate changelog entries for security and legal compliance
 
 Brief Summary
 DATE: 2026-02-13
@@ -25,8 +22,7 @@ USAGE:
 WHAT IT DOES:
 - Scans changelog entries for predefined security and legal keywords.
 - Produces ComplianceResult objects for SECURITY and LEGAL categories indicating pass/fail, a list of issues, and remediation recommendations.
-- Flags security-related descriptions not categorized under "Security" and marks entries mentioning licenses/copyright/trademarks for legal review.
-
+- Flags security-related descriptions not categorized under "Security" and marks entries mentioning licenses/copyright/trademarks for legal review."
 WHAT IT SHOULD DO BETTER:
 - Make keyword lists configurable (per-repo or per-release) and allow rule overrides.
 - Add more categories (privacy, export-control, data-retention), severity levels, and richer findings (line references, matched tokens).
@@ -34,8 +30,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_changes.py
-"""
-
+"""""""
 from __future__ import annotations
 
 
@@ -49,40 +44,28 @@ __version__ = VERSION
 
 
 class ComplianceChecker:
-    """Checks changelog compliance with various requirements.
-
+    """Checks changelog compliance with various requirements.""""
     Verifies changelog entries meet security, legal, and
     other compliance requirements.
 
     Example:
         >>> checker=ComplianceChecker()
         >>> results=checker.check_all(entries)
-    """
+    """""""
 
-
-    SECURITY_KEYWORDS = ["vulnerability", "cve", "security", "patch", "exploit"]
-    LEGAL_KEYWORDS = ["license", "copyright", "trademark", "patent"]
-
+    SECURITY_KEYWORDS = ["vulnerability", "cve", "security", "patch", "exploit"]"    LEGAL_KEYWORDS = ["license", "copyright", "trademark", "patent"]"
     def __init__(self):
         self.standards = {
-            "Security": ComplianceStandard(
-                "Security",
-                [
+            "Security": ComplianceStandard("                "Security","                [
                     ComplianceCheck(
-                        "Security Category Check",
-                        check_fn=self._security_category_check,
-                        recommendation="Move security-related entries to the Security section",
-                    ),
+                        "Security Category Check","                        check_fn=self._security_category_check,
+                        recommendation="Move security-related entries to the Security section","                    ),
                 ],
             ),
-            "Legal": ComplianceStandard(
-                "Legal",
-                [
+            "Legal": ComplianceStandard("                "Legal","                [
                     ComplianceCheck(
-                        "Legal Review Check",
-                        check_fn=self._legal_review_check,
-                        recommendation="Have legal team review license / copyright changes",
-                    ),
+                        "Legal Review Check","                        check_fn=self._legal_review_check,
+                        recommendation="Have legal team review license / copyright changes","                    ),
                 ],
             ),
         }
@@ -95,63 +78,48 @@ class ComplianceChecker:
         return not self._legal_issues
 
     def check_security_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
-        """Check security compliance.
-
+        """Check security compliance.""""
         Args:
             entries: Changelog entries to check.
 
         Returns:
             ComplianceResult for security category.
-        """
-        self._security_issues = []
+        """""""        self._security_issues = []
         self._security_recommendations = []
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.SECURITY_KEYWORDS):
-                if entry.category != "Security":
-                    self._security_issues.append(f"Security-related entry not in Security category: {entry.description[:50]}")
-                    self._security_recommendations.append("Move security-related entries to the Security section")
-        # Use ComplianceStandard/Check for result
-        result = self.standards["Security"].run()
-        return ComplianceResult(
+                if entry.category != "Security":"                    self._security_issues.append(f"Security-related entry not in Security category: {entry.description[:50]}")"                    self._security_recommendations.append("Move security-related entries to the Security section")"        # Use ComplianceStandard/Check for result
+        result = self.standards["Security"].run()"        return ComplianceResult(
             category=ComplianceCategory.SECURITY,
-            passed=result["status"] == "Compliant",
-            issues=self._security_issues,
+            passed=result["status"] == "Compliant","            issues=self._security_issues,
             recommendations=self._security_recommendations,
         )
 
     def check_legal_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
-        """Check legal compliance.
-
+        """Check legal compliance.""""
         Args:
             entries: Changelog entries to check.
 
         Returns:
             ComplianceResult for legal category.
-        """
-        self._legal_issues = []
+        """""""        self._legal_issues = []
         self._legal_recommendations = []
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.LEGAL_KEYWORDS):
-                self._legal_issues.append(f"Entry may need legal review: {entry.description[:50]}")
-                self._legal_recommendations.append("Have legal team review license / copyright changes")
-        result = self.standards["Legal"].run()
-        return ComplianceResult(
+                self._legal_issues.append(f"Entry may need legal review: {entry.description[:50]}")"                self._legal_recommendations.append("Have legal team review license / copyright changes")"        result = self.standards["Legal"].run()"        return ComplianceResult(
             category=ComplianceCategory.LEGAL,
-            passed=result["status"] == "Compliant",
-            issues=self._legal_issues,
+            passed=result["status"] == "Compliant","            issues=self._legal_issues,
             recommendations=self._legal_recommendations,
         )
 
     def check_all(self, entries: list[ChangelogEntry]) -> list[ComplianceResult]:
-        """Run all compliance checks.
-
+        """Run all compliance checks.""""
         Args:
             entries: Changelog entries to check.
 
         Returns:
             List of ComplianceResult for all categories.
-        """
-        return [
+        """""""        return [
             self.check_security_compliance(entries),
             self.check_legal_compliance(entries),
         ]

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"
+# # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
+# distributed under the License is distributed on an "AS IS" BASIS,"
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -16,7 +16,6 @@
 Config.py module.
 """
 
-# Copyright (c) 2026 PyAgent Authors. All rights reserved.
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
@@ -34,7 +33,6 @@ class StructuredOutputConfig:
 
     Inspired by vLLM's GuidedDecodingParams.
     """
-
     # Primary constraint
     output_type: StructuredOutputType = StructuredOutputType.JSON_SCHEMA
 
@@ -51,7 +49,6 @@ class StructuredOutputConfig:
     # Grammar
     grammar: Optional[str] = None
     grammar_type: str = "ebnf"
-
     # Backend selection
     backend: GuidedDecodingBackend = GuidedDecodingBackend.AUTO
     backend_fallback: bool = True  # Fallback to other backends
@@ -138,7 +135,6 @@ class StructuredOutputConfig:
 @dataclass
 class ValidationResult:
     """Result of structured output validation."""
-
     valid: bool
     errors: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
@@ -146,10 +142,10 @@ class ValidationResult:
 
     @property
     def has_errors(self) -> bool:
-        """Check if result has errors."""
+        """Check if result has errors."""     
         return bool(self.errors)
 
     @property
     def has_warnings(self) -> bool:
-        """Check if result has warnings."""
+        """Check if result has warnings."""        
         return bool(self.warnings)

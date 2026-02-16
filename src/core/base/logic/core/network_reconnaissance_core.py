@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -33,8 +31,7 @@ from src.core.base.common.base_core import BaseCore
 
 @dataclass
 class AssetDiscoveryResult:
-    """Result of network asset discovery operations."""
-    domain: str
+    """Result of network asset discovery operations."""""""    domain: str
     subdomains: Set[str] = field(default_factory=set)
     ip_addresses: Set[str] = field(default_factory=set)
     certificates: List[Dict[str, Any]] = field(default_factory=list)
@@ -47,13 +44,11 @@ class AssetDiscoveryResult:
 
 @dataclass
 class ReconnaissanceConfig:
-    """Configuration for reconnaissance operations."""
-    max_dns_queries: int = 1000
+    """Configuration for reconnaissance operations."""""""    max_dns_queries: int = 1000
     rate_limit_delay: float = 0.1
     timeout: int = 10
     max_concurrent_requests: int = 50
-    user_agent: str = "PyAgent-NetworkRecon/1.0"
-    follow_redirects: bool = True
+    user_agent: str = "PyAgent-NetworkRecon/1.0""    follow_redirects: bool = True
     verify_ssl: bool = False
     brute_force_subdomains: bool = True
     certificate_analysis: bool = True
@@ -62,8 +57,7 @@ class ReconnaissanceConfig:
 
 
 class NetworkReconnaissanceCore(BaseCore):
-    """
-    Network Reconnaissance Core implementing comprehensive asset discovery patterns.
+    """""""    Network Reconnaissance Core implementing comprehensive asset discovery patterns.
 
     Inspired by OWASP Amass, this core provides:
     - DNS enumeration and subdomain discovery
@@ -71,8 +65,7 @@ class NetworkReconnaissanceCore(BaseCore):
     - Web asset discovery and crawling
     - API endpoint detection
     - Passive and active reconnaissance techniques
-    """
-
+    """""""
     def __init__(self, config: Optional[ReconnaissanceConfig] = None):
         super().__init__()
         self.config = config or ReconnaissanceConfig()
@@ -83,25 +76,14 @@ class NetworkReconnaissanceCore(BaseCore):
 
         # Common subdomain wordlists for brute force
         self.subdomain_wordlist = {
-            'www', 'mail', 'ftp', 'admin', 'api', 'dev', 'test', 'staging',
-            'blog', 'shop', 'store', 'app', 'mobile', 'web', 'secure', 'ssl',
-            'portal', 'login', 'auth', 'oauth', 'sso', 'vpn', 'remote', 'cloud',
-            'aws', 'azure', 'gcp', 'cdn', 'static', 'assets', 'media', 'files',
-            'download', 'upload', 'backup', 'db', 'database', 'sql', 'mysql',
-            'postgres', 'mongo', 'redis', 'cache', 'session', 'api', 'rest',
-            'graphql', 'soap', 'ws', 'websocket', 'socket', 'tcp', 'udp'
-        }
+            'www', 'mail', 'ftp', 'admin', 'api', 'dev', 'test', 'staging','            'blog', 'shop', 'store', 'app', 'mobile', 'web', 'secure', 'ssl','            'portal', 'login', 'auth', 'oauth', 'sso', 'vpn', 'remote', 'cloud','            'aws', 'azure', 'gcp', 'cdn', 'static', 'assets', 'media', 'files','            'download', 'upload', 'backup', 'db', 'database', 'sql', 'mysql','            'postgres', 'mongo', 'redis', 'cache', 'session', 'api', 'rest','            'graphql', 'soap', 'ws', 'websocket', 'socket', 'tcp', 'udp''        }
 
         # Certificate transparency logs
         self.ct_logs = [
-            "https://crt.sh/",
-            "https://certspotter.com/api/v1/issuances",
-            "https://transparencyreport.google.com/transparencyreport/api/v1.0/certificates/list"
-        ]
+            "https://crt.sh/","            "https://certspotter.com/api/v1/issuances","            "https://transparencyreport.google.com/transparencyreport/api/v1.0/certificates/list""        ]
 
     async def initialize(self) -> None:
-        """Initialize the reconnaissance core."""
-        if self.session is None:
+        """Initialize the reconnaissance core."""""""        if self.session is None:
             connector = aiohttp.TCPConnector(
                 limit=self.config.max_concurrent_requests,
                 ttl_dns_cache=300,
@@ -109,27 +91,23 @@ class NetworkReconnaissanceCore(BaseCore):
             )
             self.session = aiohttp.ClientSession(
                 connector=connector,
-                headers={'User-Agent': self.config.user_agent},
-                timeout=aiohttp.ClientTimeout(total=self.config.timeout)
+                headers={'User-Agent': self.config.user_agent},'                timeout=aiohttp.ClientTimeout(total=self.config.timeout)
             )
 
     async def cleanup(self) -> None:
-        """Clean up resources."""
-        if self.session:
+        """Clean up resources."""""""        if self.session:
             await self.session.close()
             self.session = None
 
     async def discover_assets(self, domain: str) -> AssetDiscoveryResult:
-        """
-        Perform comprehensive asset discovery for a domain.
+        """""""        Perform comprehensive asset discovery for a domain.
 
         Args:
             domain: Target domain to analyze
 
         Returns:
             AssetDiscoveryResult with all discovered assets
-        """
-        await self.initialize()
+        """""""        await self.initialize()
 
         result = AssetDiscoveryResult(domain=domain)
 
@@ -164,9 +142,7 @@ class NetworkReconnaissanceCore(BaseCore):
         return result
 
     async def _enumerate_dns(self, domain: str, result: AssetDiscoveryResult) -> None:
-        """Perform DNS enumeration and record collection."""
-        record_types = ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'SRV', 'NS', 'SOA']
-
+        """Perform DNS enumeration and record collection."""""""        record_types = ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'SRV', 'NS', 'SOA']'
         for record_type in record_types:
             try:
                 answers = await asyncio.get_event_loop().run_in_executor(
@@ -175,8 +151,7 @@ class NetworkReconnaissanceCore(BaseCore):
 
                 records = []
                 for answer in answers:
-                    if record_type in ['A', 'AAAA']:
-                        result.ip_addresses.add(str(answer))
+                    if record_type in ['A', 'AAAA']:'                        result.ip_addresses.add(str(answer))
                     records.append(str(answer))
 
                 if records:
@@ -188,19 +163,15 @@ class NetworkReconnaissanceCore(BaseCore):
             except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer, dns.exception.Timeout):
                 continue
             except Exception as e:
-                self.logger.warning(f"DNS enumeration error for {domain} {record_type}: {e}")
-
+                self.logger.warning(f"DNS enumeration error for {domain} {record_type}: {e}")"
     async def _brute_force_subdomains(self, domain: str, result: AssetDiscoveryResult) -> None:
-        """Brute force subdomain discovery."""
-        semaphore = asyncio.Semaphore(self.config.max_concurrent_requests)
+        """Brute force subdomain discovery."""""""        semaphore = asyncio.Semaphore(self.config.max_concurrent_requests)
 
         async def check_subdomain(subdomain: str):
             async with semaphore:
-                full_domain = f"{subdomain}.{domain}"
-                try:
+                full_domain = f"{subdomain}.{domain}""                try:
                     answers = await asyncio.get_event_loop().run_in_executor(
-                        None, self.dns_resolver.resolve, full_domain, 'A'
-                    )
+                        None, self.dns_resolver.resolve, full_domain, 'A''                    )
 
                     if answers:
                         result.subdomains.add(full_domain)
@@ -219,8 +190,7 @@ class NetworkReconnaissanceCore(BaseCore):
         await asyncio.gather(*tasks, return_exceptions=True)
 
     async def _analyze_certificates(self, domain: str, result: AssetDiscoveryResult) -> None:
-        """Analyze SSL/TLS certificates for subdomains."""
-        try:
+        """Analyze SSL/TLS certificates for subdomains."""""""        try:
             # Get certificate from direct connection
             context = ssl.create_default_context()
             context.check_hostname = False
@@ -232,69 +202,41 @@ class NetworkReconnaissanceCore(BaseCore):
 
                     if cert:
                         cert_info = {
-                            'subject': dict(x[0] for x in cert.get('subject', [])),
-                            'issuer': dict(x[0] for x in cert.get('issuer', [])),
-                            'version': cert.get('version'),
-                            'serial_number': str(cert.get('serialNumber', '')),
-                            'not_before': cert.get('notBefore'),
-                            'not_after': cert.get('notAfter'),
-                            'subject_alt_names': cert.get('subjectAltName', [])
-                        }
+                            'subject': dict(x[0] for x in cert.get('subject', [])),'                            'issuer': dict(x[0] for x in cert.get('issuer', [])),'                            'version': cert.get('version'),'                            'serial_number': str(cert.get('serialNumber', '')),'                            'not_before': cert.get('notBefore'),'                            'not_after': cert.get('notAfter'),'                            'subject_alt_names': cert.get('subjectAltName', [])'                        }
                         result.certificates.append(cert_info)
 
                         # Extract subdomains from SAN
-                        for san_type, san_value in cert.get('subjectAltName', []):
-                            if san_type == 'DNS' and san_value.endswith(f'.{domain}'):
-                                result.subdomains.add(san_value)
+                        for san_type, san_value in cert.get('subjectAltName', []):'                            if san_type == 'DNS' and san_value.endswith(f'.{domain}'):'                                result.subdomains.add(san_value)
 
         except Exception as e:
-            self.logger.debug(f"Certificate analysis failed for {domain}: {e}")
-
+            self.logger.debug(f"Certificate analysis failed for {domain}: {e}")"
     async def _discover_web_assets(self, domain: str, result: AssetDiscoveryResult) -> None:
-        """Discover web assets through crawling and analysis."""
-        if not self.session:
+        """Discover web assets through crawling and analysis."""""""        if not self.session:
             return
 
         try:
             # Check main domain
-            url = f"https://{domain}"
-            async with self.session.get(url, allow_redirects=self.config.follow_redirects) as response:
+            url = f"https://{domain}""            async with self.session.get(url, allow_redirects=self.config.follow_redirects) as response:
                 if response.status == 200:
-                    content_type = response.headers.get('Content-Type', '')
-                    result.web_assets.append({
-                        'url': str(response.url),
-                        'status_code': response.status,
-                        'content_type': content_type,
-                        'server': response.headers.get('Server', ''),
-                        'last_modified': response.headers.get('Last-Modified', ''),
-                        'content_length': response.headers.get('Content-Length', '')
-                    })
+                    content_type = response.headers.get('Content-Type', '')'                    result.web_assets.append({
+                        'url': str(response.url),'                        'status_code': response.status,'                        'content_type': content_type,'                        'server': response.headers.get('Server', ''),'                        'last_modified': response.headers.get('Last-Modified', ''),'                        'content_length': response.headers.get('Content-Length', '')'                    })
 
-                    # Extract links from HTML if it's HTML content
-                    if 'text/html' in content_type:
-                        html = await response.text()
+                    # Extract links from HTML if it's HTML content'                    if 'text/html' in content_type:'                        html = await response.text()
                         links = self._extract_links_from_html(html, domain)
                         result.api_endpoints.update(links)
 
         except Exception as e:
-            self.logger.debug(f"Web asset discovery failed for {domain}: {e}")
-
+            self.logger.debug(f"Web asset discovery failed for {domain}: {e}")"
     async def _discover_api_endpoints(self, domain: str, result: AssetDiscoveryResult) -> None:
-        """Discover API endpoints through common patterns."""
-        common_endpoints = [
-            '/api', '/api/v1', '/api/v2', '/api/v3',
-            '/graphql', '/rest', '/soap',
-            '/swagger', '/swagger.json', '/openapi.json',
-            '/docs', '/documentation', '/api-docs'
-        ]
+        """Discover API endpoints through common patterns."""""""        common_endpoints = [
+            '/api', '/api/v1', '/api/v2', '/api/v3','            '/graphql', '/rest', '/soap','            '/swagger', '/swagger.json', '/openapi.json','            '/docs', '/documentation', '/api-docs''        ]
 
         if not self.session:
             return
 
         for endpoint in common_endpoints:
             try:
-                url = f"https://{domain}{endpoint}"
-                async with self.session.get(url, allow_redirects=False) as response:
+                url = f"https://{domain}{endpoint}""                async with self.session.get(url, allow_redirects=False) as response:
                     if response.status in [200, 401, 403]:  # API endpoints often return auth errors
                         result.api_endpoints.add(url)
 
@@ -304,24 +246,18 @@ class NetworkReconnaissanceCore(BaseCore):
                 continue
 
     def _extract_links_from_html(self, html: str, domain: str) -> Set[str]:
-        """Extract links from HTML content."""
-        links = set()
+        """Extract links from HTML content."""""""        links = set()
 
         # Simple regex patterns for common link extraction
         patterns = [
-            r'href=["\']([^"\']+)["\']',
-            r'src=["\']([^"\']+)["\']',
-            r'action=["\']([^"\']+)["\']'
-        ]
+            r'href=["\']([^"\']+)["\']',"'            r'src=["\']([^"\']+)["\']',"'            r'action=["\']([^"\']+)["\']'"'        ]
 
         for pattern in patterns:
             matches = re.findall(pattern, html, re.IGNORECASE)
             for match in matches:
                 try:
                     # Convert relative URLs to absolute
-                    if not match.startswith(('http://', 'https://')):
-                        match = urljoin(f"https://{domain}", match)
-
+                    if not match.startswith(('http://', 'https://')):'                        match = urljoin(f"https://{domain}", match)"
                     parsed = urlparse(match)
                     if parsed.netloc.endswith(domain):
                         links.add(match)
@@ -332,8 +268,7 @@ class NetworkReconnaissanceCore(BaseCore):
         return links
 
     def _calculate_confidence_score(self, result: AssetDiscoveryResult) -> float:
-        """Calculate confidence score based on discovery results."""
-        score = 0.0
+        """Calculate confidence score based on discovery results."""""""        score = 0.0
 
         # Base score for DNS resolution
         if result.ip_addresses:
@@ -358,16 +293,14 @@ class NetworkReconnaissanceCore(BaseCore):
         return min(score, 1.0)
 
     async def passive_reconnaissance(self, domain: str) -> AssetDiscoveryResult:
-        """
-        Perform passive reconnaissance using certificate transparency and DNS.
+        """""""        Perform passive reconnaissance using certificate transparency and DNS.
 
         Args:
             domain: Target domain
 
         Returns:
             AssetDiscoveryResult with passive findings
-        """
-        result = AssetDiscoveryResult(domain=domain)
+        """""""        result = AssetDiscoveryResult(domain=domain)
 
         # Certificate transparency analysis
         if self.config.certificate_analysis:
@@ -380,16 +313,14 @@ class NetworkReconnaissanceCore(BaseCore):
         return result
 
     async def active_reconnaissance(self, domain: str) -> AssetDiscoveryResult:
-        """
-        Perform active reconnaissance including brute force and web crawling.
+        """""""        Perform active reconnaissance including brute force and web crawling.
 
         Args:
             domain: Target domain
 
         Returns:
             AssetDiscoveryResult with active findings
-        """
-        result = AssetDiscoveryResult(domain=domain)
+        """""""        result = AssetDiscoveryResult(domain=domain)
 
         # Run all active discovery methods
         tasks = [
@@ -404,23 +335,12 @@ class NetworkReconnaissanceCore(BaseCore):
         return result
 
     def get_discovery_summary(self, result: AssetDiscoveryResult) -> Dict[str, Any]:
-        """
-        Generate a summary of discovery results.
+        """""""        Generate a summary of discovery results.
 
         Args:
             result: AssetDiscoveryResult to summarize
 
         Returns:
             Dictionary with summary statistics
-        """
-        return {
-            'domain': result.domain,
-            'total_subdomains': len(result.subdomains),
-            'total_ip_addresses': len(result.ip_addresses),
-            'total_certificates': len(result.certificates),
-            'total_web_assets': len(result.web_assets),
-            'total_api_endpoints': len(result.api_endpoints),
-            'confidence_score': result.confidence_score,
-            'discovered_at': result.discovered_at.isoformat(),
-            'dns_record_types': list(result.dns_records.keys())
-        }
+        """""""        return {
+            'domain': result.domain,'            'total_subdomains': len(result.subdomains),'            'total_ip_addresses': len(result.ip_addresses),'            'total_certificates': len(result.certificates),'            'total_web_assets': len(result.web_assets),'            'total_api_endpoints': len(result.api_endpoints),'            'confidence_score': result.confidence_score,'            'discovered_at': result.discovered_at.isoformat(),'            'dns_record_types': list(result.dns_records.keys())'        }

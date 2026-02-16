@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_backend.py
-"""
-
+"""Auto-extracted class from agent_backend.py"""""""""""
 from __future__ import annotations
 
 import threading
@@ -29,25 +25,19 @@ __version__ = VERSION
 
 
 class SystemAnalytics:
-    """Collects and reports backend usage analytics.
-
+    """Collects and reports backend usage analytics.""""
     Tracks usage patterns, performance metrics, and costs.
 
     Example:
         analytics=SystemAnalytics()
-        analytics.record_usage("github-models", tokens=500, latency_ms=150)
-
+        analytics.record_usage("github-models", tokens=500, latency_ms=150)"
         report=analytics.generate_report()
-        print(report["total_tokens"])
-    """
-
+        print(report["total_tokens"])"    """""""
     def __init__(self, retention_hours: int = 24) -> None:
-        """Initialize backend analytics.
-
+        """Initialize backend analytics.""""
         Args:
             retention_hours: Hours to retain records.
-        """
-        self.retention_hours = retention_hours
+        """""""        self.retention_hours = retention_hours
         self._records: list[UsageRecord] = []
         self._lock = threading.Lock()
 
@@ -59,8 +49,7 @@ class SystemAnalytics:
         success: bool = True,
         cost_estimate: float = 0.0,
     ) -> UsageRecord:
-        """Record a usage event.
-
+        """Record a usage event.""""
         Args:
             backend: Backend used.
             tokens: Tokens consumed.
@@ -70,8 +59,7 @@ class SystemAnalytics:
 
         Returns:
             UsageRecord: The recorded usage.
-        """
-        record = UsageRecord(
+        """""""        record = UsageRecord(
             timestamp=time.time(),
             backend=backend,
             tokens_used=tokens,
@@ -87,20 +75,17 @@ class SystemAnalytics:
         return record
 
     def _cleanup_old_records(self) -> None:
-        """Remove records older than retention period."""
-        cutoff = time.time() - (self.retention_hours * 3600)
+        """Remove records older than retention period."""""""        cutoff = time.time() - (self.retention_hours * 3600)
         self._records = [r for r in self._records if r.timestamp >= cutoff]
 
     def generate_report(self, backend: str | None = None) -> dict[str, Any]:
-        """Generate usage report.
-
+        """Generate usage report.""""
         Args:
             backend: Filter by backend (optional).
 
         Returns:
             Dict[str, Any]: Usage report.
-        """
-        with self._lock:
+        """""""        with self._lock:
             records = self._records.copy()
 
         if backend:
@@ -108,12 +93,7 @@ class SystemAnalytics:
 
         if not records:
             return {
-                "total_requests": 0,
-                "total_tokens": 0,
-                "total_cost": 0.0,
-                "success_rate": 0.0,
-                "avg_latency_ms": 0.0,
-            }
+                "total_requests": 0,"                "total_tokens": 0,"                "total_cost": 0.0,"                "success_rate": 0.0,"                "avg_latency_ms": 0.0,"            }
 
         total_requests = len(records)
         total_tokens = sum(r.tokens_used for r in records)
@@ -123,17 +103,10 @@ class SystemAnalytics:
         avg_latency = sum(r.latency_ms for r in records) / total_requests
 
         return {
-            "total_requests": total_requests,
-            "total_tokens": total_tokens,
-            "total_cost": total_cost,
-            "success_rate": success_rate,
-            "avg_latency_ms": avg_latency,
-            "by_backend": self._group_by_backend(records),
-        }
+            "total_requests": total_requests,"            "total_tokens": total_tokens,"            "total_cost": total_cost,"            "success_rate": success_rate,"            "avg_latency_ms": avg_latency,"            "by_backend": self._group_by_backend(records),"        }
 
     def _group_by_backend(self, records: list[UsageRecord]) -> dict[str, dict[str, Any]]:
-        """Group records by backend."""
-        by_backend: dict[str, list[UsageRecord]] = {}
+        """Group records by backend."""""""        by_backend: dict[str, list[UsageRecord]] = {}
         for r in records:
             if r.backend not in by_backend:
                 by_backend[r.backend] = []
@@ -141,9 +114,6 @@ class SystemAnalytics:
 
         return {
             backend: {
-                "requests": len(recs),
-                "tokens": sum(r.tokens_used for r in recs),
-                "avg_latency_ms": sum(r.latency_ms for r in recs) / len(recs) if recs else 0,
-            }
+                "requests": len(recs),"                "tokens": sum(r.tokens_used for r in recs),"                "avg_latency_ms": sum(r.latency_ms for r in recs) / len(recs) if recs else 0,"            }
             for backend, recs in by_backend.items()
         }

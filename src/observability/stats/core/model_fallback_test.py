@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Test Model Fallback Core module.
-"""
-
+"""""""Test Model Fallback Core module.
+"""""""
 import pytest
 from hypothesis import given, strategies as st, settings, HealthCheck
 from src.observability.stats.metrics_core import ModelFallbackCore
@@ -33,10 +29,7 @@ class TestModelFallbackCore:
     )
     def test_select_best_model(self, core, max_cost, req_speed, req_quality):
         constraints = {
-            "max_cost": max_cost,
-            "required_speed": req_speed,
-            "required_quality": req_quality,
-        }
+            "max_cost": max_cost,"            "required_speed": req_speed,"            "required_quality": req_quality,"        }
         model = core.select_best_model(constraints)
         assert isinstance(model, str)
         assert model in core.model_capabilities
@@ -46,16 +39,11 @@ class TestModelFallbackCore:
         # Models with cost <= 0.2: gpt-4 (0.1), claude-3-opus (0.15).
         # Assuming current logic semantics (0.1 = better/cheaper/higher-score? Actually see thought process)
         # Replicating old test logic:
-        constraints = {"max_cost": 0.2}
-        model = core.select_best_model(constraints)
-        assert model in ["gpt-4", "claude-3-opus"]
-
+        constraints = {"max_cost": 0.2}"        model = core.select_best_model(constraints)
+        assert model in ["gpt-4", "claude-3-opus"]"
     def test_get_fallback_chain_known(self, core):
-        chain = core.get_fallback_chain("gpt-4")
-        assert chain == ["gpt-4-turbo", "gpt-3.5-turbo", "claude-3-opus"]
-
+        chain = core.get_fallback_chain("gpt-4")"        assert chain == ["gpt-4-turbo", "gpt-3.5-turbo", "claude-3-opus"]"
     def test_get_fallback_chain_unknown(self, core):
-        chain = core.get_fallback_chain("unknown-model")
-        # Should return all keys
+        chain = core.get_fallback_chain("unknown-model")"        # Should return all keys
         assert len(chain) == 5
-        assert "gpt-4" in chain
+        assert "gpt-4" in chain"

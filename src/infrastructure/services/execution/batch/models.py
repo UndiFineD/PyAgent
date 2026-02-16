@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Data models for batch orchestration.
-"""
-
+"""""""Data models for batch orchestration.
+"""""""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -29,18 +25,14 @@ import numpy as np
 
 
 class MoveDirectionality(Enum):
-    """Direction of request movement in batch."""
-
+    """Direction of request movement in batch."""""""
     SWAP = auto()  # Bidirectional swap
     MOVE_TO = auto()  # Unidirectional move
 
 
 @dataclass
 class CachedRequestState:
-    """
-    Per-request state cache matching vLLM's CachedRequestState.
-    """
-
+    """""""    Per-request state cache matching vLLM's CachedRequestState.'    """""""
     req_id: str
     prompt_token_ids: Optional[List[int]] = None
     mm_features: List[dict[str, Any]] = field(default_factory=list)
@@ -69,46 +61,37 @@ class CachedRequestState:
 
     @property
     def num_tokens(self) -> int:
-        """Total number of tokens (prompt + generated)."""
-        prompt_len = len(self.prompt_token_ids) if self.prompt_token_ids else 0
+        """Total number of tokens (prompt + generated)."""""""        prompt_len = len(self.prompt_token_ids) if self.prompt_token_ids else 0
         return prompt_len + len(self.output_token_ids)
 
 
 @dataclass
 class BatchUpdateBuilder:
-    """
-    Tracks request movements within a batch for logits processors.
-    """
-
+    """""""    Tracks request movements within a batch for logits processors.
+    """""""
     moved: List[Tuple[int, int, MoveDirectionality]] = field(default_factory=list)
     added: List[Tuple[str, int]] = field(default_factory=list)  # (req_id, index)
     removed: List[Tuple[str, int]] = field(default_factory=list)  # (req_id, index)
 
     def reset(self) -> None:
-        """Reset for new step."""
-        self.moved.clear()
+        """Reset for new step."""""""        self.moved.clear()
         self.added.clear()
         self.removed.clear()
 
     def record_swap(self, i1: int, i2: int) -> None:
-        """Record a bidirectional swap."""
-        self.moved.append((i1, i2, MoveDirectionality.SWAP))
+        """Record a bidirectional swap."""""""        self.moved.append((i1, i2, MoveDirectionality.SWAP))
 
     def record_add(self, req_id: str, index: int) -> None:
-        """Record a request addition."""
-        self.added.append((req_id, index))
+        """Record a request addition."""""""        self.added.append((req_id, index))
 
     def record_remove(self, req_id: str, index: int) -> None:
-        """Record a request removal."""
-        self.removed.append((req_id, index))
+        """Record a request removal."""""""        self.removed.append((req_id, index))
 
 
 @dataclass
 class SamplingMetadata:
-    """
-    GPU-resident sampling parameters for a batch.
-    """
-
+    """""""    GPU-resident sampling parameters for a batch.
+    """""""
     temperature: Any  # torch.Tensor | None
     top_p: Any  # torch.Tensor | None
     top_k: Any  # torch.Tensor | None
@@ -126,10 +109,8 @@ class SamplingMetadata:
 
 @dataclass
 class InputBatch:
-    """
-    Complete batch representation for model execution.
-    """
-
+    """""""    Complete batch representation for model execution.
+    """""""
     req_ids: List[str]
     num_reqs: int
     idx_mapping: Any  # torch.Tensor - request index to batch position

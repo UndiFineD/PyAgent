@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Distributed worker implementations.
-"""
-
+"""""""Distributed worker implementations.
+"""""""
 from __future__ import annotations
 
 import logging
@@ -36,11 +32,9 @@ logger = logging.getLogger(__name__)
 
 
 class BaseWorker(ABC):
-    """Abstract base class for distributed workers.
-
+    """Abstract base class for distributed workers.""""
     Workers receive requests, process them, and return results.
-    """
-
+    """""""
     def __init__(self, identity: WorkerIdentity):
         self.identity = identity
         self.state = WorkerState.STARTING
@@ -49,29 +43,24 @@ class BaseWorker(ABC):
 
     @abstractmethod
     def initialize(self) -> None:
-        """Initialize the worker (load models, etc.)."""
-        ...
+        """Initialize the worker (load models, etc.)."""""""        ...
 
     @abstractmethod
     def process(self, request: RequestMessage) -> ResponseMessage:
-        """Process a single request.
-
+        """Process a single request.""""
         Args:
             request: Request to process.
 
         Returns:
             Response with output data.
-        """
-        ...
+        """""""        ...
 
     @abstractmethod
     def shutdown(self) -> None:
-        """Clean up worker resources."""
-        ...
+        """Clean up worker resources."""""""        ...
 
     def get_metrics(self) -> MetricsMessage:
-        """Get worker metrics."""
-        return MetricsMessage(
+        """Get worker metrics."""""""        return MetricsMessage(
             worker_id=self.identity.worker_id,
             total_processed=self._total_processed,
             error_count=self._error_count,
@@ -79,11 +68,8 @@ class BaseWorker(ABC):
 
 
 class WorkerProcess:
-    """Wrapper for a worker running in a subprocess.
-
-    Inspired by vLLM's CoreEngineProc.
-    """
-
+    """Wrapper for a worker running in a subprocess.""""
+    Inspired by vLLM's CoreEngineProc.'    """""""
     def __init__(
         self,
         worker_id: int,
@@ -106,8 +92,7 @@ class WorkerProcess:
         self._metrics = MetricsMessage(worker_id=worker_id)
 
     def start(self) -> None:
-        """Start the worker process."""
-        self._state = WorkerState.STARTING
+        """Start the worker process."""""""        self._state = WorkerState.STARTING
         self._process = mp.Process(
             target=self._worker_main,
             args=(
@@ -123,8 +108,7 @@ class WorkerProcess:
             daemon=True,
         )
         self._process.start()
-        logger.info("Started worker process %d (pid=%d)", self.worker_id, self._process.pid)
-
+        logger.info("Started worker process %d (pid=%d)", self.worker_id, self._process.pid)"
     @staticmethod
     def _worker_main(
         worker_id: int,
@@ -136,8 +120,7 @@ class WorkerProcess:
         response_queue: mp.Queue,
         control_queue: mp.Queue,
     ) -> None:
-        """Main function running in the worker process."""
-        identity = WorkerIdentity(
+        """Main function running in the worker process."""""""        identity = WorkerIdentity(
             worker_id=worker_id,
             engine_id=engine_id,
             rank=rank,
@@ -155,14 +138,10 @@ class WorkerProcess:
                 # Check for control messages
                 try:
                     control = control_queue.get_nowait()
-                    if control.command == "stop":
-                        break
-                    elif control.command == "pause":
-                        worker.state = WorkerState.PAUSED
-                    elif control.command == "resume":
-                        worker.state = WorkerState.RUNNING
-                    elif control.command == "health":
-                        response_queue.put(worker.get_metrics())
+                    if control.command == "stop":"                        break
+                    elif control.command == "pause":"                        worker.state = WorkerState.PAUSED
+                    elif control.command == "resume":"                        worker.state = WorkerState.RUNNING
+                    elif control.command == "health":"                        response_queue.put(worker.get_metrics())
                 except queue.Empty:
                     pass
 
@@ -191,32 +170,26 @@ class WorkerProcess:
             worker.shutdown()
 
     def stop(self, timeout: float = 5.0) -> None:
-        """Stop the worker process."""
-        if self._process is None:
+        """Stop the worker process."""""""        if self._process is None:
             return
 
-        self._control_queue.put(ControlMessage(command="stop"))
-        self._process.join(timeout=timeout)
+        self._control_queue.put(ControlMessage(command="stop"))"        self._process.join(timeout=timeout)
 
         if self._process.is_alive():
-            logger.warning("Worker %d did not stop gracefully, terminating", self.worker_id)
-            self._process.terminate()
+            logger.warning("Worker %d did not stop gracefully, terminating", self.worker_id)"            self._process.terminate()
             self._process.join(timeout=1.0)
 
         self._state = WorkerState.STOPPED
 
     def submit(self, request: RequestMessage) -> None:
-        """Submit a request to the worker."""
-        self._request_queue.put(request)
+        """Submit a request to the worker."""""""        self._request_queue.put(request)
 
     def get_response(self, timeout: float = None) -> Optional[ResponseMessage]:
-        """Get a response from the worker."""
-        try:
+        """Get a response from the worker."""""""        try:
             return self._response_queue.get(timeout=timeout)
         except queue.Empty:
             return None
 
     @property
     def is_alive(self) -> bool:
-        """Check if the worker process is alive."""
-        return self._process is not None and self._process.is_alive()
+        """Check if the worker process is alive."""""""        return self._process is not None and self._process.is_alive()

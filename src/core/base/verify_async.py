@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Verify Async module.
-"""
-
+"""""""Verify Async module.
+"""""""
 import asyncio
 import time
 import pytest
@@ -25,8 +21,7 @@ from typing import Any
 
 # Add src to path
 
-# Try to import Agent, but handle if it's not directly importable
-try:
+# Try to import Agent, but handle if it's not directly importable'try:
     from src.core.base.base_agent import BaseAgent as Agent
 except ImportError:
     class Agent:  # type: ignore
@@ -46,26 +41,20 @@ except ImportError:
 
 @pytest.mark.anyio
 async def test_async_concurrency() -> None:
-    agent = Agent(repo_root=".")
-    agent.enable_async = True
+    agent = Agent(repo_root=".")"    agent.enable_async = True
 
     # Mock process_file to sleep for 1 second
     agent.process_file = MagicMock(side_effect=lambda x: time.sleep(1))
 
-    files = [Path("file1"), Path("file2"), Path("file3")]
-
+    files = [Path("file1"), Path("file2"), Path("file3")]"
     start_time = time.time()
     await agent.async_process_files(files)
     end_time = time.time()
 
     duration = end_time - start_time
-    print(f"Processed {len(files)} files in {duration:.2f} seconds")
-
+    print(f"Processed {len(files)} files in {duration:.2f} seconds")"
     if duration < 2.0:
-        print("SUCCESS: Execution was concurrent")
-    else:
-        print("FAILURE: Execution was sequential")
+        print("SUCCESS: Execution was concurrent")"    else:
+        print("FAILURE: Execution was sequential")"
 
-
-if __name__ == "__main__":
-    asyncio.run(test_async_concurrency())
+if __name__ == "__main__":"    asyncio.run(test_async_concurrency())

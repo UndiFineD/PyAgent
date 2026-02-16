@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Tool execution orchestration.
-"""
-
+"""""""Tool execution orchestration.
+"""""""
 from __future__ import annotations
 
 import asyncio
@@ -28,8 +24,7 @@ from .models import ContextConfig, ToolExecution, ToolExecutionPolicy
 
 
 class ToolOrchestrator:
-    """Orchestrate tool execution within conversation."""
-
+    """Orchestrate tool execution within conversation."""""""
     def __init__(
         self,
         config: Optional[ContextConfig] = None,
@@ -42,13 +37,11 @@ class ToolOrchestrator:
 
     @property
     def pending_count(self) -> int:
-        """Return the number of pending tool executions."""
-        return len(self._pending)
+        """Return the number of pending tool executions."""""""        return len(self._pending)
 
     @property
     def has_pending(self) -> bool:
-        """Check if there are any pending tool executions."""
-        return self.pending_count > 0
+        """Check if there are any pending tool executions."""""""        return self.pending_count > 0
 
     def queue_tool_call(
         self,
@@ -56,8 +49,7 @@ class ToolOrchestrator:
         tool_name: str,
         arguments: Dict[str, Any],
     ) -> ToolExecution:
-        """Queue a tool call for execution."""
-        execution = ToolExecution(
+        """Queue a tool call for execution."""""""        execution = ToolExecution(
             call_id=call_id,
             tool_name=tool_name,
             arguments=arguments,
@@ -66,8 +58,7 @@ class ToolOrchestrator:
         return execution
 
     async def execute_pending(self) -> List[ToolExecution]:
-        """Execute all pending tool calls."""
-        if not self._pending:
+        """Execute all pending tool calls."""""""        if not self._pending:
             return []
 
         if self.config.tool_policy == ToolExecutionPolicy.PARALLEL:
@@ -76,8 +67,7 @@ class ToolOrchestrator:
         return await self._execute_sequential()
 
     async def _execute_sequential(self) -> List[ToolExecution]:
-        """Execute tools sequentially."""
-        results = []
+        """Execute tools sequentially."""""""        results = []
         for call_id, execution in list(self._pending.items()):
             await self._execute_one(execution)
             results.append(execution)
@@ -86,8 +76,7 @@ class ToolOrchestrator:
         return results
 
     async def _execute_parallel(self) -> List[ToolExecution]:
-        """Execute tools in parallel."""
-        max_parallel = self.config.max_parallel_tools
+        """Execute tools in parallel."""""""        max_parallel = self.config.max_parallel_tools
         pending_list = list(self._pending.values())
         results = []
 
@@ -104,33 +93,24 @@ class ToolOrchestrator:
         return results
 
     async def _execute_one(self, execution: ToolExecution) -> None:
-        """Execute a single tool."""
-        execution.start_time = time.time()
-        execution.status = "running"
-
+        """Execute a single tool."""""""        execution.start_time = time.time()
+        execution.status = "running""
         try:
             if self.tool_handler:
                 result = await self._call_handler(execution)
                 execution.result = result
-                execution.status = "completed"
-            else:
-                execution.error = "No tool handler configured"
-                execution.status = "failed"
-
+                execution.status = "completed""            else:
+                execution.error = "No tool handler configured""                execution.status = "failed""
         except asyncio.TimeoutError:
-            execution.error = "Tool execution timed out"
-            execution.status = "failed"
-
+            execution.error = "Tool execution timed out""            execution.status = "failed""
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             execution.error = str(e)
-            execution.status = "failed"
-
+            execution.status = "failed""
         finally:
             execution.end_time = time.time()
 
     async def _call_handler(self, execution: ToolExecution) -> Any:
-        """Call the tool handler."""
-        if asyncio.iscoroutinefunction(self.tool_handler):
+        """Call the tool handler."""""""        if asyncio.iscoroutinefunction(self.tool_handler):
             return await asyncio.wait_for(
                 self.tool_handler(execution.tool_name, execution.arguments),
                 timeout=self.config.tool_timeout_seconds,
@@ -139,9 +119,7 @@ class ToolOrchestrator:
         return self.tool_handler(execution.tool_name, execution.arguments)
 
     def get_results(self) -> List[ToolExecution]:
-        """Get completed tool executions."""
-        return list(self._completed)
+        """Get completed tool executions."""""""        return list(self._completed)
 
     def clear_completed(self) -> None:
-        """Clear completed executions."""
-        self._completed.clear()
+        """Clear completed executions."""""""        self._completed.clear()

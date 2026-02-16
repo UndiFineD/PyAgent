@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Base class for tokenizers.
-"""
-
+"""""""Base class for tokenizers.
+"""""""
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -27,8 +23,7 @@ from .models import TokenizerConfig, TokenizeResult, TokenizerInfo
 
 
 class BaseTokenizer(ABC):
-    """Abstract base class for tokenizers."""
-
+    """Abstract base class for tokenizers."""""""
     def __init__(self, config: TokenizerConfig) -> None:
         self.config = config
         self._info: Optional[TokenizerInfo] = None
@@ -36,60 +31,46 @@ class BaseTokenizer(ABC):
     @property
     @abstractmethod
     def vocab_size(self) -> int:
-        """Size of the vocabulary."""
-        raise NotImplementedError("Subclasses must implement vocab_size")
-
+        """Size of the vocabulary."""""""        raise NotImplementedError("Subclasses must implement vocab_size")"
     @property
     @abstractmethod
     def bos_token_id(self) -> Optional[int]:
-        """Beginning of sequence token ID."""
-        raise NotImplementedError("Subclasses must implement bos_token_id")
-
+        """Beginning of sequence token ID."""""""        raise NotImplementedError("Subclasses must implement bos_token_id")"
     @property
     @abstractmethod
     def eos_token_id(self) -> Optional[int]:
-        """End of sequence token ID."""
-        raise NotImplementedError("Subclasses must implement eos_token_id")
-
+        """End of sequence token ID."""""""        raise NotImplementedError("Subclasses must implement eos_token_id")"
     @property
     @abstractmethod
     def pad_token_id(self) -> Optional[int]:
-        """Padding token ID."""
-        raise NotImplementedError("Subclasses must implement pad_token_id")
-
+        """Padding token ID."""""""        raise NotImplementedError("Subclasses must implement pad_token_id")"
     @abstractmethod
     def encode(
         self,
         text: str,
         add_special_tokens: bool = True,
     ) -> List[int]:
-        """Encode text to token IDs."""
-        raise NotImplementedError("Subclasses must implement encode()")
-
+        """Encode text to token IDs."""""""        raise NotImplementedError("Subclasses must implement encode()")"
     @abstractmethod
     def decode(
         self,
         token_ids: Sequence[int],
         skip_special_tokens: bool = True,
     ) -> str:
-        """Decode token IDs to text."""
-        raise NotImplementedError("Subclasses must implement decode()")
-
+        """Decode token IDs to text."""""""        raise NotImplementedError("Subclasses must implement decode()")"
     def batch_encode(
         self,
         texts: List[str],
         add_special_tokens: bool = True,
     ) -> List[List[int]]:
-        """Batch encode multiple texts."""
-        return [self.encode(text, add_special_tokens) for text in texts]
+        """Batch encode multiple texts."""""""        return [self.encode(text, add_special_tokens) for text in texts]
 
     def batch_decode(
         self,
         token_ids_list: List[Sequence[int]],
         skip_special_tokens: bool = True,
     ) -> List[str]:
-        """Batch decode multiple token sequences."""
-        return [self.decode(ids, skip_special_tokens) for ids in token_ids_list]
+        """Batch decode multiple token sequences."""""""        return [self.decode(ids, skip_special_tokens) for ids in token_ids_list]
 
     def tokenize(
         self,
@@ -97,8 +78,7 @@ class BaseTokenizer(ABC):
         add_special_tokens: bool = True,
         return_offsets: bool = False,
     ) -> TokenizeResult:
-        """Full tokenization with metadata."""
-        _ = return_offsets  # Not supported by base implementation
+        """Full tokenization with metadata."""""""        _ = return_offsets  # Not supported by base implementation
         input_ids = self.encode(text, add_special_tokens)
         return TokenizeResult(
             input_ids=input_ids,
@@ -107,8 +87,7 @@ class BaseTokenizer(ABC):
         )
 
     def get_info(self) -> TokenizerInfo:
-        """Get tokenizer information."""
-        if self._info is None:
+        """Get tokenizer information."""""""        if self._info is None:
             self._info = TokenizerInfo(
                 backend=self.config.backend,
                 vocab_size=self.vocab_size,
@@ -121,5 +100,4 @@ class BaseTokenizer(ABC):
         return self._info
 
     def estimate_tokens(self, text: str) -> int:
-        """Fast token count estimation without full tokenization."""
-        return max(1, len(text) // 4)
+        """Fast token count estimation without full tokenization."""""""        return max(1, len(text) // 4)

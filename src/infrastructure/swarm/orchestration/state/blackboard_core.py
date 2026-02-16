@@ -1,21 +1,17 @@
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Blackboard core.py module.
-"""
-
+"""""""Blackboard core.py module.
+"""""""
 
 from __future__ import annotations
 
@@ -27,20 +23,16 @@ __version__ = VERSION
 
 
 class BlackboardCore:
-    """
-    Pure logic for Blackboard operations.
+    """""""    Pure logic for Blackboard operations.
     Handles data indexing and history tracking.
-    """
-
+    """""""
     def __init__(self) -> None:
         self.data: dict[str, Any] = {}
         self.history: list[dict[str, Any]] = []
 
     def process_post(self, key: str, value: Any, agent_name: str) -> dict[str, Any]:
-        """Core logic for posting data."""
-        self.data[key] = value
-        entry = {"agent": agent_name, "key": key, "value": value}
-        self.history.append(entry)
+        """Core logic for posting data."""""""        self.data[key] = value
+        entry = {"agent": agent_name, "key": key, "value": value}"        self.history.append(entry)
         return entry
 
     def get_value(self, key: str) -> Any:

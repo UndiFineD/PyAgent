@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Learning algorithms.py module.
-"""
-# Reinforcement Learning Algorithms Implementation - Phase 319 Enhanced
+"""""""Learning algorithms.py module.
+"""""""# Reinforcement Learning Algorithms Implementation - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -31,8 +27,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class PolicyGradientBuffer:
-    """Stores trajectory data for policy gradient methods."""
-
+    """Stores trajectory data for policy gradient methods."""""""
     states: List[Any] = field(default_factory=list)
     actions: List[Any] = field(default_factory=list)
     rewards: List[float] = field(default_factory=list)
@@ -47,8 +42,7 @@ class PolicyGradientBuffer:
         self.values.clear()
 
     def compute_returns(self, gamma: float = 0.99) -> List[float]:
-        """Computes discounted returns."""
-        returns = []
+        """Computes discounted returns."""""""        returns = []
         G = 0
         for r in reversed(self.rewards):
             G = r + gamma * G
@@ -56,8 +50,7 @@ class PolicyGradientBuffer:
         return returns
 
     def compute_advantages(self, gamma: float = 0.99, lam: float = 0.95) -> List[float]:
-        """Computes GAE (Generalized Advantage Estimation)."""
-        advantages = []
+        """Computes GAE (Generalized Advantage Estimation)."""""""        advantages = []
         gae = 0
         values = self.values + [0]  # Bootstrap with 0
         for t in reversed(range(len(self.rewards))):
@@ -68,8 +61,7 @@ class PolicyGradientBuffer:
 
 
 class LearningAlgorithms:
-    """Standard RL algorithms for agent policy improvement."""
-
+    """Standard RL algorithms for agent policy improvement."""""""
     @staticmethod
     def q_learning_update(
         q_table: Dict[Tuple[str, str], float],
@@ -81,8 +73,7 @@ class LearningAlgorithms:
         alpha: float = 0.1,
         gamma: float = 0.99,
     ) -> float:
-        """Standard Q-Learning update: Q(s,a) <- Q(s,a) + α[r + γ max_a' Q(s',a') - Q(s,a)]"""
-        old_val = q_table.get((state, action), 0.0)
+        """Standard Q-Learning update: Q(s,a) <- Q(s,a) + α[r + γ max_a' Q(s',a') - Q(s,a)]"""""""'        old_val = q_table.get((state, action), 0.0)
         next_max = max([q_table.get((next_state, a), 0.0) for a in actions], default=0.0)
         new_val = old_val + alpha * (reward + gamma * next_max - old_val)
         q_table[(state, action)] = new_val
@@ -99,8 +90,7 @@ class LearningAlgorithms:
         alpha: float = 0.1,
         gamma: float = 0.99,
     ) -> float:
-        """SARSA update: Q(s,a) <- Q(s,a) + α[r + γ Q(s',a') - Q(s,a)]"""
-        old_val = q_table.get((state, action), 0.0)
+        """SARSA update: Q(s,a) <- Q(s,a) + α[r + γ Q(s',a') - Q(s,a)]"""""""'        old_val = q_table.get((state, action), 0.0)
         next_val = q_table.get((next_state, next_action), 0.0)
         new_val = old_val + alpha * (reward + gamma * next_val - old_val)
         q_table[(state, action)] = new_val
@@ -118,8 +108,7 @@ class LearningAlgorithms:
         alpha: float = 0.1,
         gamma: float = 0.99,
     ) -> Tuple[float, float]:
-        """Double Q-Learning to reduce overestimation bias."""
-        if random.random() < 0.5:
+        """Double Q-Learning to reduce overestimation bias."""""""        if random.random() < 0.5:
             # Update Q1 using Q2 for evaluation
             best_action = max(actions, key=lambda a: q1.get((next_state, a), 0.0))
             target = reward + gamma * q2.get((next_state, best_action), 0.0)
@@ -135,8 +124,7 @@ class LearningAlgorithms:
 
     @staticmethod
     def epsilon_greedy(q_table: Dict[Tuple[str, str], float], state: str, actions: List[str], epsilon: float) -> str:
-        """ε-greedy exploration strategy."""
-        if random.random() < epsilon:
+        """ε-greedy exploration strategy."""""""        if random.random() < epsilon:
             return random.choice(actions)
         return max(actions, key=lambda a: q_table.get((state, a), 0.0))
 
@@ -144,8 +132,7 @@ class LearningAlgorithms:
     def softmax_policy(
         q_table: Dict[Tuple[str, str], float], state: str, actions: List[str], temperature: float = 1.0
     ) -> str:
-        """Boltzmann/Softmax exploration."""
-        q_values = np.array([q_table.get((state, a), 0.0) for a in actions])
+        """Boltzmann/Softmax exploration."""""""        q_values = np.array([q_table.get((state, a), 0.0) for a in actions])
         exp_q = np.exp((q_values - np.max(q_values)) / temperature)  # Stability trick
         probs = exp_q / np.sum(exp_q)
         return actions[np.random.choice(len(actions), p=probs)]
@@ -159,8 +146,7 @@ class LearningAlgorithms:
         total_visits: int,
         c: float = 2.0,
     ) -> str:
-        """Upper Confidence Bound action selection."""
-        ucb_values = []
+        """Upper Confidence Bound action selection."""""""        ucb_values = []
         for a in actions:
             q = q_table.get((state, a), 0.0)
             n = visit_counts.get((state, a), 1)
@@ -182,8 +168,7 @@ class LearningAlgorithms:
         gamma: float = 0.99,
         lam: float = 0.9,
     ) -> None:
-        """TD(λ) with eligibility traces."""
-        # Compute TD error
+        """TD(λ) with eligibility traces."""""""        # Compute TD error
         delta = reward + gamma * q_table.get((next_state, next_action), 0.0) - q_table.get((state, action), 0.0)
 
         # Update eligibility trace
@@ -198,19 +183,15 @@ class LearningAlgorithms:
 
 
 class PolicyOptimizer:
-    """High-level policy optimization utilities."""
-
+    """High-level policy optimization utilities."""""""
     @staticmethod
     def decay_epsilon(epsilon: float, min_epsilon: float = 0.01, decay_rate: float = 0.995) -> float:
-        """Exponential epsilon decay."""
-        return max(min_epsilon, epsilon * decay_rate)
+        """Exponential epsilon decay."""""""        return max(min_epsilon, epsilon * decay_rate)
 
     @staticmethod
     def linear_epsilon_schedule(episode: int, total_episodes: int, start: float = 1.0, end: float = 0.01) -> float:
-        """Linear epsilon schedule."""
-        return start - (start - end) * min(1.0, episode / total_episodes)
+        """Linear epsilon schedule."""""""        return start - (start - end) * min(1.0, episode / total_episodes)
 
     @staticmethod
     def cosine_annealing_lr(step: int, total_steps: int, lr_max: float, lr_min: float = 0.0) -> float:
-        """Cosine annealing learning rate schedule."""
-        return lr_min + 0.5 * (lr_max - lr_min) * (1 + np.cos(np.pi * step / total_steps))
+        """Cosine annealing learning rate schedule."""""""        return lr_min + 0.5 * (lr_max - lr_min) * (1 + np.cos(np.pi * step / total_steps))

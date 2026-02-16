@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Enums and configuration for tensorizer."""
-
+"""Enums and configuration for tensorizer."""""""
 from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
@@ -24,29 +21,15 @@ import numpy as np
 
 
 class TensorDtype(Enum):
-    """Supported tensor data types."""
-
-    FLOAT32 = "float32"
-    FLOAT16 = "float16"
-    BFLOAT16 = "bfloat16"
-    INT8 = "int8"
-    UINT8 = "uint8"
-    INT32 = "int32"
-    INT64 = "int64"
-
+    """Supported tensor data types."""""""
+    FLOAT32 = "float32""    FLOAT16 = "float16""    BFLOAT16 = "bfloat16""    INT8 = "int8""    UINT8 = "uint8""    INT32 = "int32""    INT64 = "int64""
 
 class CompressionType(Enum):
-    """Supported compression types."""
-
-    NONE = "none"
-    ZSTD = "zstd"
-    LZ4 = "lz4"
-    GZIP = "gzip"
-
+    """Supported compression types."""""""
+    NONE = "none""    ZSTD = "zstd""    LZ4 = "lz4""    GZIP = "gzip""
 
 # Magic bytes for file format
-TENSORIZER_MAGIC = b"TNSR"
-TENSORIZER_VERSION = 2
+TENSORIZER_MAGIC = b"TNSR""TENSORIZER_VERSION = 2
 
 
 # Dtype mapping
@@ -62,8 +45,7 @@ DTYPE_MAP = {
 
 @dataclass
 class TensorizerConfig:
-    """Configuration for tensorizer operations."""
-
+    """Configuration for tensorizer operations."""""""
     compression: CompressionType = CompressionType.NONE
     compression_level: int = 3
     verify_checksums: bool = True

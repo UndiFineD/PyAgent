@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Layer.py module.
-"""
-
+"""""""Layer.py module.
+"""""""
 from __future__ import annotations
 
 import threading
@@ -30,8 +26,7 @@ from .utils import determine_expert_map
 
 
 class FusedMoELayer:
-    """Fused Mixture of Experts layer."""
-
+    """Fused Mixture of Experts layer."""""""
     def __init__(
         self,
         config: FusedMoEConfig,
@@ -103,17 +98,12 @@ class FusedMoELayer:
     def get_expert_utilization(self) -> dict[str, Any]:
         with self._lock:
             if self._total_tokens == 0:
-                return {"utilization": np.zeros(self.config.num_experts)}
-
+                return {"utilization": np.zeros(self.config.num_experts)}"
             expected = self._total_tokens * self.config.top_k / self.config.num_experts
             utilization = self._expert_counts / expected
 
             return {
-                "utilization": utilization.tolist(),
-                "total_tokens": self._total_tokens,
-                "expert_counts": self._expert_counts.tolist(),
-                "load_balance_loss": self._compute_load_balance_loss(),
-            }
+                "utilization": utilization.tolist(),"                "total_tokens": self._total_tokens,"                "expert_counts": self._expert_counts.tolist(),"                "load_balance_loss": self._compute_load_balance_loss(),"            }
 
     def _compute_load_balance_loss(self) -> float:
         if self._total_tokens == 0:

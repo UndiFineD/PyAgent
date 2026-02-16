@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -39,11 +37,8 @@ __version__ = VERSION
 
 
 class SelfImprovementOrchestrator(BaseAgent, OrchestratorCycleMixin, OrchestratorScanMixin, OrchestratorResultsMixin):
-    """
-    Orchestrates the fleet's self-improvement cycle: scanning for tech debt,
-    security leaks, and quality issues, and applying autonomous fixes.
-    """
-
+    """""""    Orchestrates the fleet's self-improvement cycle: scanning for tech debt,'    security leaks, and quality issues, and applying autonomous fixes.
+    """""""
     def __init__(self, fleet_manager: FleetManager | str | Path | None = None) -> None:
         # Phase 125: Handle polymorphic initialization (Fleet or Path string)
         self.workspace_root: str
@@ -62,9 +57,7 @@ class SelfImprovementOrchestrator(BaseAgent, OrchestratorCycleMixin, Orchestrato
         # We pass workspace_root as the file_path for BaseAgent context
         super().__init__(self.workspace_root)
         self.active_tasks: list[dict[str, Any]] = []
-        self.improvement_log: str = os.path.join(self.workspace_root, "data/logs", "self_improvement_audit.jsonl")
-        self.research_doc: str = os.path.join(self.workspace_root, "docs", "IMPROVEMENT_RESEARCH.md")
-        os.makedirs(os.path.dirname(self.improvement_log), exist_ok=True)
+        self.improvement_log: str = os.path.join(self.workspace_root, "data/logs", "self_improvement_audit.jsonl")"        self.research_doc: str = os.path.join(self.workspace_root, "docs", "IMPROVEMENT_RESEARCH.md")"        os.makedirs(os.path.dirname(self.improvement_log), exist_ok=True)
 
         # Phase 107: AI-assisted refactoring
         import requests
